@@ -1,0 +1,31 @@
+<?php
+
+
+        include ("../../GameEngine/Database.php");
+        include ("../../GameEngine/Admin/database.php");
+        include ("../../GameEngine/config.php");
+        include ("../../GameEngine/Lang/" . LANG . ".php");
+
+        mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+        mysql_select_db(SQL_DB);
+
+        if(isset($_POST['mhpw'])) {
+        	$password = $_POST['mhpw'];
+        	mysql_query("UPDATE " . TB_PREFIX . "users SET password = '" . md5($password) . "' WHERE username = 'Multihunter'");
+        	$wid = $admin->getWref(0, 0);
+        	$uid = 5;
+        	$status = $database->getVillageState($wid);
+        	if($status == 0) {
+        		$database->setFieldTaken($wid);
+        		$database->addVillage($wid, $uid, 'Multihunter', '5');
+        		$database->addResourceFields($wid, $database->getVillageType($wid));
+        		$database->addUnits($wid);
+        		$database->addTech($wid);
+        		$database->addABTech($wid);
+        	}
+        }
+
+
+        header("Location: ../index.php?s=5");
+
+?>

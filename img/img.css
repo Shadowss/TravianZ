@@ -1,0 +1,499 @@
+@CHARSET "UTF-8";
+
+#header {background:url(un/l/mw.gif) repeat-x 0px -28px;}
+#mid {background:url(un/a/rand.gif) repeat-y 130px 0px;}
+#footer {background:url(un/a/btm.gif) repeat-x;}
+
+/* general icons */
+.help {background:url(un/a/help.gif) no-repeat;}
+.add {background:url(un/f/plus.gif) no-repeat;}
+.mad img {background:url(un/f/mad.gif) no-repeat;}
+.bau {background:url(un/a/bau.gif) no-repeat;}
+.external {background:url(un/a/external.gif) no-repeat;}
+.point {background:url(un/u/point.gif) no-repeat;}
+.firefox {background:url(un/a/firefox.gif) no-repeat;}
+.opera {background:url(un/a/opera.gif) no-repeat;}
+.ie {background:url(un/a/ie.gif) no-repeat;}
+.unknown {background:url(un/a/unknown.gif) no-repeat;}
+
+/* dynamic header */
+#dynamic_header {background-image:url(un/l/dyn_bg1.jpg); background-repeat: no-repeat; background-position: -80px -50px;}
+.mod1 #dynamic_header, .mod2 #dynamic_header {background-image:none;} 
+.mod1 #dynamic_header div.dyn1 {background:url(un/l/ad1.jpg) no-repeat -20px 0;}
+.mod1 #dynamic_header div.dyn2 {background:url(un/l/ad2.jpg) no-repeat;}
+.mod2 #dynamic_header div.dyn1 {background:url(un/l/bigsize_bg.jpg) no-repeat -100px 0;;}
+.mod3 #dynamic_header div.dyn1 {background:url(un/l/skyscraper_bg.gif) no-repeat;}
+
+/* navi_menue */
+#n1 img, #n2 img, #n3 img, #n4 img, #n5 {background-position:0px -21px; background-repeat:no-repeat;}
+#n1 img {background-image:url(un/l/n1.gif);}
+#n2 img {background-image:url(un/l/n2.gif);}
+#n3 img {background-image:url(un/l/n3.gif);}
+#n4 img {background-image:url(un/l/n4.gif);}
+#n1:hover img, #n2:hover img, #n3:hover img, #n4:hover img {background-position:0px -121px;}
+.i1 {background-image:url(un/l/m1.gif);}
+.i2 {background-image:url(un/l/m2.gif);}
+.i3 {background-image:url(un/l/m3.gif);}
+.i4 {background-image:url(un/l/m4.gif);}
+#plus img {background:url(de/a/plus.gif) no-repeat 0px -21px;}
+
+/* left menue */
+#sleft a:hover {background:url(un/a/n12.gif) no-repeat;}
+#sleft #logo:hover {background:none;}
+
+/* right menue */
+#sright #vlswitch, #sright #llswitch {background:url(un/g/s/glvlm.gif) no-repeat;}
+#sright #vlswitch.off, #sright #llswitch.off {background:url(un/g/s/glvlp.gif) no-repeat; }
+
+/* signup */
+.roman {background:url(http://img.travian.org/img/de/temp/roemer.gif) no-repeat;}
+
+/* manual */
+.popup3 {background:url(un/a/anl.gif) no-repeat;}
+.manual .troops {background:url(un/a/troops.gif) no-repeat;}
+.manual .buildings {background:url(un/a/buildings.gif) no-repeat;}
+.manual .navi {background:url(un/a/navi.gif) no-repeat;}
+
+
+/* plus features */
+.plus .p1_25 {background:url(un/p/p1_25.jpg) no-repeat;}
+.plus .p2_25 {background:url(un/p/p2_25.jpg) no-repeat;}
+.plus .p3_25 {background:url(un/p/p3_25.jpg) no-repeat;}
+.plus .p4_25 {background:url(un/p/p4_25.jpg) no-repeat;}
+.plus .off10 {background:url(un/p/off10.jpg) no-repeat;}
+.plus .plus .def10 {background:url(un/p/def10.jpg) no-repeat;}
+.plus .bau0 {background:url(un/p/bau0.jpg) no-repeat;}
+.plus .npc {background:url(un/p/npc.jpg) no-repeat;}
+
+
+/* medals & noob */
+.t1_1 {background:url(un/t/t1_1.jpg) no-repeat;}
+.t1_2 {background:url(un/t/t1_2.jpg) no-repeat;}
+.t1_3 {background:url(un/t/t1_3.jpg) no-repeat;}
+.t1_4 {background:url(un/t/t1_4.jpg) no-repeat;}
+.t1_5 {background:url(un/t/t1_5.jpg) no-repeat;}
+.t1_6 {background:url(un/t/t1_6.jpg) no-repeat;}
+.t1_7 {background:url(un/t/t1_7.jpg) no-repeat;}
+.t1_8 {background:url(un/t/t1_8.jpg) no-repeat;}
+.t1_9 {background:url(un/t/t1_9.jpg) no-repeat;}
+.t1_10 {background:url(un/t/t1_10.jpg) no-repeat;}
+.t100_1 {background:url(un/t/t100_1.jpg) no-repeat;}
+.t101_1 {background:url(un/t/t101_1.jpg) no-repeat;}
+.t102_1 {background:url(un/t/t102_1.jpg) no-repeat;}
+.t110_1 {background:url(un/t/t110_1.jpg) no-repeat;}
+.t111_1 {background:url(un/t/t111_1.jpg) no-repeat;}
+.t112_1 {background:url(un/t/t112_1.jpg) no-repeat;}
+.t120_1 {background:url(un/t/t120_1.jpg) no-repeat;}
+.t121_1 {background:url(un/t/t121_1.jpg) no-repeat;}
+.t122_1 {background:url(un/t/t122_1.jpg) no-repeat;}
+.t130_1 {background:url(un/t/t130_1.jpg) no-repeat;}
+.t131_1 {background:url(un/t/t131_1.jpg) no-repeat;}
+.t132_1 {background:url(un/t/t132_1.jpg) no-repeat;}
+.t140_1 {background:url(un/t/t140_1.jpg) no-repeat;}
+.t141_1 {background:url(un/t/t141_1.jpg) no-repeat;}
+.t142_1 {background:url(un/t/t142_1.jpg) no-repeat;}
+.t150_1 {background:url(un/t/t150_1.jpg) no-repeat;}
+.t151_1 {background:url(un/t/t151_1.jpg) no-repeat;}
+.t152_1 {background:url(un/t/t152_1.jpg) no-repeat;}
+.t160_1 {background:url(un/t/t160_1.jpg) no-repeat;}
+.t161_1 {background:url(un/t/t161_1.jpg) no-repeat;}
+.t162_1 {background:url(un/t/t162_1.jpg) no-repeat;}
+.t170_1 {background:url(un/t/t170_1.jpg) no-repeat;}
+.t171_1 {background:url(un/t/t171_1.jpg) no-repeat;}
+.t172_1 {background:url(un/t/t172_1.jpg) no-repeat;}
+.t180_1 {background:url(un/t/t180_1.jpg) no-repeat;}
+.t181_1 {background:url(un/t/t181_1.jpg) no-repeat;}
+.t182_1 {background:url(un/t/t182_1.jpg) no-repeat;}
+.t190_1 {background:url(un/t/t190_1.jpg) no-repeat;}
+.t191_1 {background:url(un/t/t191_1.jpg) no-repeat;}
+.t192_1 {background:url(un/t/t192_1.jpg) no-repeat;}
+.t2_1 {background:url(un/t/t2_1.jpg) no-repeat;}
+.t2_2 {background:url(un/t/t2_2.jpg) no-repeat;}
+.t2_3 {background:url(un/t/t2_3.jpg) no-repeat;}
+.t2_4 {background:url(un/t/t2_4.jpg) no-repeat;}
+.t2_5 {background:url(un/t/t2_5.jpg) no-repeat;}
+.t2_6 {background:url(un/t/t2_6.jpg) no-repeat;}
+.t2_7 {background:url(un/t/t2_7.jpg) no-repeat;}
+.t2_8 {background:url(un/t/t2_8.jpg) no-repeat;}
+.t2_9 {background:url(un/t/t2_9.jpg) no-repeat;}
+.t2_10 {background:url(un/t/t2_10.jpg) no-repeat;}
+.t200_1 {background:url(un/t/t200_1.jpg) no-repeat;}
+.t201_1 {background:url(un/t/t201_1.jpg) no-repeat;}
+.t202_1 {background:url(un/t/t202_1.jpg) no-repeat;}
+.t210_1 {background:url(un/t/t210_1.jpg) no-repeat;}
+.t211_1 {background:url(un/t/t211_1.jpg) no-repeat;}
+.t212_1 {background:url(un/t/t212_1.jpg) no-repeat;}
+.t220_1 {background:url(un/t/t220_1.jpg) no-repeat;}
+.t221_1 {background:url(un/t/t221_1.jpg) no-repeat;}
+.t222_1 {background:url(un/t/t222_1.jpg) no-repeat;}
+.t3_1 {background:url(un/t/t3_1.jpg) no-repeat;}
+.t3_2 {background:url(un/t/t3_2.jpg) no-repeat;}
+.t3_3 {background:url(un/t/t3_3.jpg) no-repeat;}
+.t3_4 {background:url(un/t/t3_4.jpg) no-repeat;}
+.t3_5 {background:url(un/t/t3_5.jpg) no-repeat;}
+.t3_6 {background:url(un/t/t3_6.jpg) no-repeat;}
+.t3_7 {background:url(un/t/t3_7.jpg) no-repeat;}
+.t3_8 {background:url(un/t/t3_8.jpg) no-repeat;}
+.t3_9 {background:url(un/t/t3_9.jpg) no-repeat;}
+.t3_10 {background:url(un/t/t3_10.jpg) no-repeat;}
+.t4_1 {background:url(un/t/t4_1.jpg) no-repeat;}
+.t4_2 {background:url(un/t/t4_2.jpg) no-repeat;}
+.t4_3 {background:url(un/t/t4_3.jpg) no-repeat;}
+.t4_4 {background:url(un/t/t4_4.jpg) no-repeat;}
+.t4_5 {background:url(un/t/t4_5.jpg) no-repeat;}
+.t4_6 {background:url(un/t/t4_6.jpg) no-repeat;}
+.t4_7 {background:url(un/t/t4_7.jpg) no-repeat;}
+.t4_8 {background:url(un/t/t4_8.jpg) no-repeat;}
+.t4_9 {background:url(un/t/t4_9.jpg) no-repeat;}
+.t4_10 {background:url(un/t/t4_10.jpg) no-repeat;}
+.t5_1 {background:url(un/t/t5_1.jpg) no-repeat;}
+.t5_2 {background:url(un/t/t5_2.jpg) no-repeat;}
+.t5_3 {background:url(un/t/t5_3.jpg) no-repeat;}
+.t5_4 {background:url(un/t/t5_4.jpg) no-repeat;}
+.t5_5 {background:url(un/t/t5_5.jpg) no-repeat;}
+.t5_6 {background:url(un/t/t5_6.jpg) no-repeat;}
+.t5_7 {background:url(un/t/t5_7.jpg) no-repeat;}
+.t5_8 {background:url(un/t/t5_8.jpg) no-repeat;}
+.t5_9 {background:url(un/t/t5_9.jpg) no-repeat;}
+.t5_10 {background:url(un/t/t5_10.jpg) no-repeat;}
+.t6_1 {background:url(un/t/t6_1.jpg) no-repeat;}
+.t6_2 {background:url(un/t/t6_2.jpg) no-repeat;}
+.t6_3 {background:url(un/t/t6_3.jpg) no-repeat;}
+.t6_4 {background:url(un/t/t6_4.jpg) no-repeat;}
+.t6_5 {background:url(un/t/t6_5.jpg) no-repeat;}
+.t6_6 {background:url(un/t/t6_6.jpg) no-repeat;}
+.t6_7 {background:url(un/t/t6_7.jpg) no-repeat;}
+.t6_8 {background:url(un/t/t6_8.jpg) no-repeat;}
+.t6_9 {background:url(un/t/t6_9.jpg) no-repeat;}
+.t6_10 {background:url(un/t/t6_10.jpg) no-repeat;}
+.tn {background:url(un/t/tn.gif) no-repeat;}
+.tnd {background:url(un/t/tnd.gif) no-repeat;}
+
+/* medals for allies */
+.a1_1 {background:url(un/t/a1_1.jpg) no-repeat;}
+.a1_10 {background:url(un/t/a1_10.jpg) no-repeat;}
+.a1_2 {background:url(un/t/a1_2.jpg) no-repeat;}
+.a1_3 {background:url(un/t/a1_3.jpg) no-repeat;}
+.a1_4 {background:url(un/t/a1_4.jpg) no-repeat;}
+.a1_5 {background:url(un/t/a1_5.jpg) no-repeat;}
+.a1_6 {background:url(un/t/a1_6.jpg) no-repeat;}
+.a1_7 {background:url(un/t/a1_7.jpg) no-repeat;}
+.a1_8 {background:url(un/t/a1_8.jpg) no-repeat;}
+.a1_9 {background:url(un/t/a1_9.jpg) no-repeat;}
+.a2_1 {background:url(un/t/a2_1.jpg) no-repeat;}
+.a2_10 {background:url(un/t/a2_10.jpg) no-repeat;}
+.a2_2 {background:url(un/t/a2_2.jpg) no-repeat;}
+.a2_3 {background:url(un/t/a2_3.jpg) no-repeat;}
+.a2_4 {background:url(un/t/a2_4.jpg) no-repeat;}
+.a2_5 {background:url(un/t/a2_5.jpg) no-repeat;}
+.a2_6 {background:url(un/t/a2_6.jpg) no-repeat;}
+.a2_7 {background:url(un/t/a2_7.jpg) no-repeat;}
+.a2_8 {background:url(un/t/a2_8.jpg) no-repeat;}
+.a2_9 {background:url(un/t/a2_9.jpg) no-repeat;}
+.a3_1 {background:url(un/t/a3_1.jpg) no-repeat;}
+.a3_10 {background:url(un/t/a3_10.jpg) no-repeat;}
+.a3_2 {background:url(un/t/a3_2.jpg) no-repeat;}
+.a3_3 {background:url(un/t/a3_3.jpg) no-repeat;}
+.a3_4 {background:url(un/t/a3_4.jpg) no-repeat;}
+.a3_5 {background:url(un/t/a3_5.jpg) no-repeat;}
+.a3_6 {background:url(un/t/a3_6.jpg) no-repeat;}
+.a3_7 {background:url(un/t/a3_7.jpg) no-repeat;}
+.a3_8 {background:url(un/t/a3_8.jpg) no-repeat;}
+.a3_9 {background:url(un/t/a3_9.jpg) no-repeat;}
+.a4_1 {background:url(un/t/a4_1.jpg) no-repeat;}
+.a4_10 {background:url(un/t/a4_10.jpg) no-repeat;}
+.a4_2 {background:url(un/t/a4_2.jpg) no-repeat;}
+.a4_3 {background:url(un/t/a4_3.jpg) no-repeat;}
+.a4_4 {background:url(un/t/a4_4.jpg) no-repeat;}
+.a4_5 {background:url(un/t/a4_5.jpg) no-repeat;}
+.a4_6 {background:url(un/t/a4_6.jpg) no-repeat;}
+.a4_7 {background:url(un/t/a4_7.jpg) no-repeat;}
+.a4_8 {background:url(un/t/a4_8.jpg) no-repeat;}
+.a4_9 {background:url(un/t/a4_9.jpg) no-repeat;}
+
+
+
+/* ressource fields */
+.village1 .f1, .map .f1 {background:url(un/g/f1.jpg) no-repeat;}
+.village1 .f2, .map .f2 {background:url(un/g/f2.jpg) no-repeat;}
+.village1 .f3, .map .f3 {background:url(un/g/f3.jpg) no-repeat;}
+.village1 .f4, .map .f4 {background:url(un/g/f4.jpg) no-repeat;}
+.village1 .f5, .map .f5 {background:url(un/g/f5.jpg) no-repeat;}
+.village1 .f6, .map .f6 {background:url(un/g/f6.jpg) no-repeat;}
+.village1 .f7, .map .f7 {background:url(un/g/f7.jpg) no-repeat;}
+.village1 .f8, .map .f8 {background:url(un/g/f8.jpg) no-repeat;}
+.village1 .f9, .map .f9 {background:url(un/g/f9.jpg) no-repeat;}
+.village1 .f10, .map .f10 {background:url(un/g/f10.jpg) no-repeat;}
+.village1 .f11, .map .f11 {background:url(un/g/f11.jpg) no-repeat;}
+.village1 .f12, .map .f12 {background:url(un/g/f12.jpg) no-repeat;}
+.village1 .f99, .map .f99 {background:url(un/g/f99.jpg) no-repeat;}
+
+/* ressource level */
+.reslevel {background-repeat: no-repeat;}
+.level1, .level2, .level3, .level4, .level5, .level6, .level7, .level8, .level9, .level10 {background-image:url(un/g/s/lvl1_10.gif);}
+.level11, .level12, .level13, .level14, .level15, .level16, .level17, .level18, .level19, .level20 {background-image:url(un/g/s/lvl11_20.gif);}
+.level21, .level22, .level23, .level24, .level25 {background-image:url(un/g/s/lvl21_30.gif);}
+
+.level1, .level11, .level21 {background-position:      0 0;}
+.level2, .level12, .level22 {background-position:  -17px 0;}
+.level3, .level13, .level23 {background-position:  -34px 0;}
+.level4, .level14, .level24 {background-position:  -51px 0;}
+.level5, .level15, .level25 {background-position:  -68px 0;}
+.level6, .level16 {background-position:  -85px 0;}
+.level7, .level17 {background-position: -102px 0;}
+.level8, .level18 {background-position: -119px 0;}
+.level9, .level19 {background-position: -136px 0;}
+.level10, .level20 {background-position: -153px 0;}
+
+/* oases */
+.map .w1 {background:url(un/m/w1.jpg) no-repeat;}
+.map .w2 {background:url(un/m/w2.jpg) no-repeat;}
+.map .w3 {background:url(un/m/w3.jpg) no-repeat;}
+.map .w4 {background:url(un/m/w4.jpg) no-repeat;}
+.map .w5 {background:url(un/m/w5.jpg) no-repeat;}
+.map .w6 {background:url(un/m/w6.jpg) no-repeat;}
+.map .w7 {background:url(un/m/w7.jpg) no-repeat;}
+.map .w8 {background:url(un/m/w8.jpg) no-repeat;}
+.map .w9 {background:url(un/m/w9.jpg) no-repeat;}
+.map .w10 {background:url(un/m/w10.jpg) no-repeat;}
+.map .w11 {background:url(un/m/w11.jpg) no-repeat;}
+.map .w12 {background:url(un/m/w12.jpg) no-repeat;}
+
+/* village center map */
+.d2_0 {background:url(un/g/bg0.jpg) no-repeat;}
+.d2_1 {background:url(un/g/bg1.jpg) no-repeat;}
+.d2_11 {background:url(un/g/bg11.jpg) no-repeat;}
+.d2_12 {background:url(un/g/bg12.jpg) no-repeat;}
+.village2 #lswitch {background:url(un/g/s/glvlp.gif) no-repeat; }
+.village2 #lswitch.on {background:url(un/g/s/glvlm.gif) no-repeat;}
+.village2 #levels div {background:url(un/g/s/glvl.gif) no-repeat;}
+
+/* buildings */
+.iso {background:url(un/g/iso.gif) no-repeat;}
+.g5 {background:url(un/g/g5.gif) no-repeat;}
+.g5b {background:url(un/g/g5b.gif) no-repeat;}
+.g6 {background:url(un/g/g6.gif) no-repeat;}
+.g6b {background:url(un/g/g6b.gif) no-repeat;}
+.g7 {background:url(un/g/g7.gif) no-repeat;}
+.g7b {background:url(un/g/g7b.gif) no-repeat;}
+.g8 {background:url(un/g/g8.gif) no-repeat;}
+.g8b {background:url(un/g/g8b.gif) no-repeat;}
+.g9 {background:url(un/g/g9.gif) no-repeat;}
+.g9b {background:url(un/g/g9b.gif) no-repeat;}
+.g10 {background:url(un/g/g10.gif) no-repeat;}
+.g10b {background:url(un/g/g10b.gif) no-repeat;}
+.g11 {background:url(un/g/g11.gif) no-repeat;}
+.g11b {background:url(un/g/g11b.gif) no-repeat;}
+.g12 {background:url(un/g/g12.gif) no-repeat;}
+.g12b {background:url(un/g/g12b.gif) no-repeat;}
+.g13 {background:url(un/g/g13.gif) no-repeat;}
+.g13b {background:url(un/g/g13b.gif) no-repeat;}
+.g14 {background:url(un/g/g14.gif) no-repeat;}
+.g14b {background:url(un/g/g14b.gif) no-repeat;}
+.g15 {background:url(un/g/g15.gif) no-repeat;}
+.g15b {background:url(un/g/g15b.gif) no-repeat;}
+.g16 {background:url(un/g/g16.gif) no-repeat;}
+.g17 {background:url(un/g/g17.gif) no-repeat;}
+.g17b {background:url(un/g/g17b.gif) no-repeat;}
+.g18 {background:url(un/g/g18.gif) no-repeat;}
+.g18b {background:url(un/g/g18b.gif) no-repeat;}
+.g19 {background:url(un/g/g19.gif) no-repeat;}
+.g19b {background:url(un/g/g19b.gif) no-repeat;}
+.g20 {background:url(un/g/g20.gif) no-repeat;}
+.g20b {background:url(un/g/g20b.gif) no-repeat;}
+.g21 {background:url(un/g/g21.gif) no-repeat;}
+.g21b {background:url(un/g/g21b.gif) no-repeat;}
+.g22 {background:url(un/g/g22.gif) no-repeat;}
+.g22b {background:url(un/g/g22b.gif) no-repeat;}
+.g23 {background:url(un/g/g23.gif) no-repeat;}
+.g23b {background:url(un/g/g23b.gif) no-repeat;}
+.g24 {background:url(un/g/g24.gif) no-repeat;}
+.g24b {background:url(un/g/g24b.gif) no-repeat;}
+.g25 {background:url(un/g/g25.gif) no-repeat;}
+.g25b {background:url(un/g/g25b.gif) no-repeat;}
+.g26 {background:url(un/g/g26.gif) no-repeat;}
+.g26b {background:url(un/g/g26b.gif) no-repeat;}
+.g27 {background:url(un/g/g27.gif) no-repeat;}
+.g27b {background:url(un/g/g27b.gif) no-repeat;}
+.g28 {background:url(un/g/g28.gif) no-repeat;}
+.g28b {background:url(un/g/g28b.gif) no-repeat;}
+.g29 {background:url(un/g/g29.gif) no-repeat;}
+.g29b {background:url(un/g/g29b.gif) no-repeat;}
+.g30 {background:url(un/g/g30.gif) no-repeat;}
+.g30b {background:url(un/g/g30b.gif) no-repeat;}
+.g34 {background:url(un/g/g34.gif) no-repeat;}
+.g34b {background:url(un/g/g34b.gif) no-repeat;}
+.g35 {background:url(un/g/g35.gif) no-repeat;}
+.g35b {background:url(un/g/g35b.gif) no-repeat;}
+.g36 {background:url(un/g/g36.gif) no-repeat;}
+.g36b {background:url(un/g/g36b.gif) no-repeat;}
+.g37 {background:url(un/g/g37.gif) no-repeat;}
+.g37b {background:url(un/g/g37b.gif) no-repeat;}
+.g38 {background:url(un/g/g38.gif) no-repeat;}
+.g38b {background:url(un/g/g38b.gif) no-repeat;}
+.g39 {background:url(un/g/g39.gif) no-repeat;}
+.g39b {background:url(un/g/g39b.gif) no-repeat;}
+.g40 {background:url(un/g/g40.gif) no-repeat;}
+.g40_1 {background:url(un/g/g40_1.gif) no-repeat;}
+.g40_2 {background:url(un/g/g40_2.gif) no-repeat;}
+.g40_3 {background:url(un/g/g40_3.gif) no-repeat;}
+.g40_4 {background:url(un/g/g40_4.gif) no-repeat;}
+.g40_5 {background:url(un/g/g40_5.gif) no-repeat;}
+.g41 {background:url(un/g/g41.gif) no-repeat;}
+.g41b {background:url(un/g/g41b.gif) no-repeat;}
+.g42 {background:url(un/g/g42.gif) no-repeat;}
+.g42b {background:url(un/g/g42b.gif) no-repeat;}
+.g43 {background:url(un/g/g43.gif) no-repeat;}
+.g43b {background:url(un/g/g43b.gif) no-repeat;}
+.g44 {background:url(un/g/g44.gif) no-repeat;}
+.g44b {background:url(un/g/g44b.gif) no-repeat;}
+
+/*hero's mansion*/
+.bar {background:url(un/a/c3.gif) repeat-x;}
+
+/* big units */
+#big_unit.u1 {background:url(un/u2/u1.gif) no-repeat;}
+#big_unit.u2 {background:url(un/u2/u2.gif) no-repeat;}
+#big_unit.u3 {background:url(un/u2/u3.gif) no-repeat;}
+#big_unit.u4 {background:url(un/u2/u4.gif) no-repeat;}
+#big_unit.u5 {background:url(un/u2/u5.gif) no-repeat;}
+#big_unit.u6 {background:url(un/u2/u6.gif) no-repeat;}
+#big_unit.u7 {background:url(un/u2/u7.gif) no-repeat;}
+#big_unit.u8 {background:url(un/u2/u8.gif) no-repeat;}
+#big_unit.u9 {background:url(un/u2/u9.gif) no-repeat;}
+#big_unit.u10 {background:url(un/u2/u10.gif) no-repeat;}
+#big_unit.u11 {background:url(un/u2/u11.gif) no-repeat;}
+#big_unit.u12 {background:url(un/u2/u12.gif) no-repeat;}
+#big_unit.u13 {background:url(un/u2/u13.gif) no-repeat;}
+#big_unit.u14 {background:url(un/u2/u14.gif) no-repeat;}
+#big_unit.u15 {background:url(un/u2/u15.gif) no-repeat;}
+#big_unit.u16 {background:url(un/u2/u16.gif) no-repeat;}
+#big_unit.u17 {background:url(un/u2/u17.gif) no-repeat;}
+#big_unit.u18 {background:url(un/u2/u18.gif) no-repeat;}
+#big_unit.u19 {background:url(un/u2/u19.gif) no-repeat;}
+#big_unit.u20 {background:url(un/u2/u20.gif) no-repeat;}
+#big_unit.u21 {background:url(un/u2/u21.gif) no-repeat;}
+#big_unit.u22 {background:url(un/u2/u22.gif) no-repeat;}
+#big_unit.u23 {background:url(un/u2/u23.gif) no-repeat;}
+#big_unit.u24 {background:url(un/u2/u24.gif) no-repeat;}
+#big_unit.u25 {background:url(un/u2/u25.gif) no-repeat;}
+#big_unit.u26 {background:url(un/u2/u26.gif) no-repeat;}
+#big_unit.u27 {background:url(un/u2/u27.gif) no-repeat;}
+#big_unit.u28 {background:url(un/u2/u28.gif) no-repeat;}
+#big_unit.u29 {background:url(un/u2/u29.gif) no-repeat;}
+#big_unit.u30 {background:url(un/u2/u30.gif) no-repeat;}
+
+/* attack - def */
+.att_all {background:url(un/a/att_all.gif) no-repeat;}
+.att1 {background:url(un/a/att1.gif) no-repeat;}
+.att2 {background:url(un/a/att2.gif) no-repeat;}
+.att3 {background:url(un/a/att3.gif) no-repeat;}
+.def1 {background:url(un/a/def1.gif) no-repeat;}
+.def2 {background:url(un/a/def2.gif) no-repeat;}
+.def3 {background:url(un/a/def3.gif) no-repeat;}
+.def_c {background:url(un/a/def_c.gif) no-repeat;}
+.def_i {background:url(un/a/def_i.gif) no-repeat;}
+
+/* online buttons */
+.online1, .online2, .online3, .online4, .online5 {background-image:url(un/a/online.gif); background-repeat:no-repeat;}
+.online1 {background-position:  0px 0px;}
+.online2 {background-position:-15px 0px;}
+.online3 {background-position:-30px 0px;}
+.online4 {background-position:-45px 0px;}
+.online5 {background-position:-60px 0px;}
+
+/* statistics */
+.statistics #submenu img {background-repeat:no-repeat; background-position:left 0px;}
+.statistics #submenu .btn_def {background-image:url(un/s/def.gif);}
+.statistics #submenu .btn_off {background-image:url(un/s/off.gif);}
+.statistics #submenu .btn_top10 {background-image:url(un/s/top10.gif);}
+.statistics #submenu .active {background-position:right 0px;}
+
+/* ------------------ map ------------------*/
+/* Overlay */
+#map_content .m3 {background:url(un/m/matt.gif) no-repeat;}
+#map_content .m4 {background:url(un/m/matt.gif) no-repeat;}
+#map_content .m5 {background:url(un/m/msup.gif) no-repeat;}
+#map_content .m6 {background:url(un/m/mspy.gif?a) no-repeat;}
+#map_content .m9 {background:url(un/m/mret.gif) no-repeat;}
+
+/* VillageFields */
+#map_content .b00 {background-image:url(un/m/d00.gif)}
+#map_content .b01 {background-image:url(un/m/d01.gif)}
+#map_content .b02 {background-image:url(un/m/d02.gif?a)}
+#map_content .b03 {background-image:url(un/m/d03.gif)}
+#map_content .b04 {background-image:url(un/m/d04.gif)}
+#map_content .b05 {background-image:url(un/m/d05.gif)}
+#map_content .b06 {background-image:url(un/m/d06.gif)}
+#map_content .b07 {background-image:url(un/m/d07.gif)}
+#map_content .b08 {background-image:url(un/m/d08.gif)}
+#map_content .b09 {background-image:url(un/m/d09.gif)}
+#map_content .b10 {background-image:url(un/m/d10.gif)}
+#map_content .b11 {background-image:url(un/m/d11.gif)}
+#map_content .b12 {background-image:url(un/m/d12.gif?a)}
+#map_content .b13 {background-image:url(un/m/d13.gif)}
+#map_content .b14 {background-image:url(un/m/d14.gif)}
+#map_content .b15 {background-image:url(un/m/d15.gif)}
+#map_content .b16 {background-image:url(un/m/d16.gif)}
+#map_content .b17 {background-image:url(un/m/d17.gif)}
+#map_content .b18 {background-image:url(un/m/d18.gif)}
+#map_content .b19 {background-image:url(un/m/d19.gif)}
+#map_content .b20 {background-image:url(un/m/d20.gif)}
+#map_content .b21 {background-image:url(un/m/d21.gif)}
+#map_content .b22 {background-image:url(un/m/d22.gif?a)}
+#map_content .b23 {background-image:url(un/m/d23.gif)}
+#map_content .b24 {background-image:url(un/m/d24.gif)}
+#map_content .b25 {background-image:url(un/m/d25.gif)}
+#map_content .b26 {background-image:url(un/m/d26.gif)}
+#map_content .b27 {background-image:url(un/m/d27.gif)}
+#map_content .b28 {background-image:url(un/m/d28.gif)}
+#map_content .b29 {background-image:url(un/m/d29.gif)}
+#map_content .b30 {background-image:url(un/m/d30.gif)}
+#map_content .b31 {background-image:url(un/m/d31.gif)}
+#map_content .b32 {background-image:url(un/m/d32.gif?a)}
+#map_content .b33 {background-image:url(un/m/d33.gif)}
+#map_content .b34 {background-image:url(un/m/d34.gif)}
+#map_content .b35 {background-image:url(un/m/d35.gif)}
+
+/* OasisFields */
+#map_content .o0 {background-image:url(un/m/o0.gif)}
+#map_content .o1 {background-image:url(un/m/o1.gif)}
+#map_content .o2 {background-image:url(un/m/o2.gif)}
+#map_content .o3 {background-image:url(un/m/o3.gif)}
+#map_content .o4 {background-image:url(un/m/o4.gif)}
+#map_content .o5 {background-image:url(un/m/o5.gif)}
+#map_content .o6 {background-image:url(un/m/o6.gif)}
+#map_content .o7 {background-image:url(un/m/o7.gif)}
+#map_content .o8 {background-image:url(un/m/o8.gif)}
+#map_content .o9 {background-image:url(un/m/o9.gif)}
+#map_content .o10 {background-image:url(un/m/o10.gif)}
+#map_content .o11 {background-image:url(un/m/o11.gif)}
+#map_content .o12 {background-image:url(un/m/o12.gif)}
+#map_content .o99 {background-image:url(un/m/o99.gif)}
+
+/* EmptyFields */
+#map_content .t0 {background-image:url(un/m/t0.gif)}
+#map_content .t1 {background-image:url(un/m/t1.gif)}
+#map_content .t2 {background-image:url(un/m/t2.gif)}
+#map_content .t3 {background-image:url(un/m/t3.gif)}
+#map_content .t4 {background-image:url(un/m/t4.gif)}
+#map_content .t5 {background-image:url(un/m/t5.gif)}
+#map_content .t6 {background-image:url(un/m/t6.gif)}
+#map_content .t7 {background-image:url(un/m/t7.gif)}
+#map_content .t8 {background-image:url(un/m/t8.gif)}
+#map_content .t9 {background-image:url(un/m/t9.gif)}
+/* ------------------ map ------------------*/
+
+/* rockets */
+.tur {background:url(un/special/NewyearRocket_turquoise_1a.gif) no-repeat;}
+.purp {background:url(un/special/NewyearRocket_purple_1a.gif) no-repeat;;}
+.yell {background:url(un/special/NewyearRocket_yellow_1a.gif) no-repeat;;}
+.oran {background:url(un/special/NewyearRocket_orange_1a.gif) no-repeat;;}
+.green {background:url(un/special/NewyearRocket_green_1a.gif) no-repeat;;}
+.red {background:url(un/special/NewyearRocket_red_1a.gif) no-repeat;;}
+
+/* error pages */
+.e403 {background:url(un/misc/403.gif) no-repeat;}
+.e404 {background:url(un/misc/404.gif) no-repeat;}
+.e500 {background:url(un/misc/500.gif) no-repeat;}
+

@@ -1,0 +1,264 @@
+
+a.rn1 {}
+table.rn1 {border: 1px solid #00BC00;}
+
+a.rn2 {color: #0070C0;}
+table.rn2 {border: 1px solid #0070C0;}
+input.rn2 {border: 1px solid #0070C0;}
+span.rn2 {color: #0070C0;}
+
+a.rn3 {color: #FF8000;}
+table.rn3 {border: 1px solid #FF8000;}
+input.rn3 {border: 1px solid #FF8000;}
+span.rn3 {color: #FF8000;}
+
+#btn_ok {width:50px; height:20px; background-image: url(b/ok1.gif);}
+
+
+.z_TRUE {background-color:#CFC;}
+.z_FALSE {background-color:#FCC;}
+
+td.gbg {
+	background: url(img/admin/c4.gif) top repeat-x;
+	font-weight: bold;
+}
+
+tr.noedit td {
+	color: #808080;
+}
+td.cng {
+	background-color: #59D75A;
+}
+
+div .acp_cat {
+	background-color: #000;
+	border: 2px solid #FF8000;
+	position: relative;
+	height: 8px;
+	width: 8px;
+	float: left;
+	margin-left: 2px;
+}
+
+div .cat_plus {
+	background-color:#71D02B;
+}
+
+#s_nav1,#s_nav2,#s_nav3,#s_nav4,#s_nav5 {
+	border: 1px solid #C0C0C0;
+	margin-bottom: 1px;
+	position: relative;
+	min-height: 20px;
+}
+
+#s_nav1 {
+	padding: 2px 2px 0 5px;
+	height: 20px;
+}
+
+#s_nav2 {
+	padding: 2px 2px 0 27px;
+	background: url(img/admin/icon/nav_arrow_gray.gif) no-repeat;
+	background-position: 6px 0px;
+}
+
+.change {
+	position: absolute;
+	right: 3px;
+	bottom: 2px;
+	z-index: 5;
+}
+.change a {
+	color: #999;
+}
+
+.change ul {
+	list-style: none;
+}
+.change ul li {
+	float: left;
+	width: 20px;
+	border: 1px solid #ccc;
+	text-align: center;
+	margin-left:3px;
+}
+.change ul li img {
+	display: block;
+}
+
+table.artef td {
+    font-size: 0.8em;
+    font-weight: normal;
+}
+
+table.artef td input {
+    font-size: 0.8em;
+    font-weight: normal;
+    width:80px;
+}
+
+.artef_check {
+    font-size: 0.8em;
+    font-weight: normal;
+    color:green;   
+    margin-left:50px;
+}
+
+.artef_save {
+    font-size: 0.8em;
+    font-weight: normal;   
+    color:red;
+}
+
+.artef_small {
+    font-size: 0.6em;
+    font-weight: normal;   
+}
+
+.simple {
+	position: absolute;
+	font-size: 0.8em;
+	z-index: 30;
+	right: 30px;
+	font-weight: normal;
+}
+.simple a {
+	font-weight: normal;
+}
+
+optgroup option {
+	background-color: #FCED90;
+}
+
+
+#s_nav3 {
+	padding: 2px 2px 0 27px;
+	background-position: 26px 0px;
+}
+
+#s_nav4 {
+	padding: 2px 2px 0 47px;
+	background: url(img/admin/icon/nav_arrow_gray.gif) no-repeat;
+	background-position: 26px 0px;
+}
+
+#s_nav5 {
+	padding: 2px 0 0 47px;
+	background-position: 26px 0px;
+}
+
+div.navsub {
+	position: absolute;
+	top: 1px;
+	right: 2px;
+}
+
+div.navsub a {
+	font-size: 0.8em;
+}
+
+.h {
+	cursor: pointer;
+}
+
+.c7 {
+	color: #666;
+}
+
+td.deltext,
+td.email {
+	text-align:left;
+}
+
+td.email {
+	font-size: 9px;
+}
+
+
+/* --------------------- kampfberichte backport von den graphik packs ------------------------------------ */
+#report_content .none, #report_content .none2 {color:#C0C0C0;}
+#report_content .none {text-align:center;}
+#report_content .none2 {font-weight:bold;}
+
+#report_content .units th {
+    color:#000;
+    background-color:#fff;
+    background-image:none;
+}
+
+#report_content .infos th, #report_content .goods th  {
+    color:#000;
+    background-color:#f3f3f3;
+    background-image:none;
+}
+
+#report_content table {border-collapse:collapse; line-height:20px; width:100%; margin:0px; text-align:left;}
+#report_content table td, #report_content table th {padding:1px 2px; font-weight:normal; text-align:left; vertical-align:middle; border:1px solid silver; font-size:13px;}
+#report_content table thead th, #report_content table tfoot th {font-weight:bold; text-align:center; background:url(un/a/c2.gif) repeat;}
+#report_content table thead td, #report_content table tfoot td {text-align:center; background-color:#F3F3F3;}
+
+#report_content table td, #report_content, table th {
+    border:1px solid silver;
+    font-size:13px;
+    font-weight:normal;
+    text-align:left;
+    vertical-align:middle;
+}
+
+/* read report - content */
+#report_content {padding:15px 2px 0px;}
+#report_content table {margin-bottom:15px;}
+#report_content thead td, .reports #report_surround .report_content tbody th {text-align:center;}
+#report_content thead .role {font-weight:bold;}
+#report_content tbody th {width:20%;}
+#report_content tbody.units td {text-align:center;}
+#report_content tbody.infos tr,
+	#report_content tbody.goods tr,
+	#report_content tbody.res tr,
+	#report_content tbody.regards tr {background:#F3F3F3;}
+
+/* report types */
+#reinforcement .role {color:#71D000;}
+#attacker .role {color:#FF8000;}
+#attacker tbody.goods .res {float:left;}
+#attacker tbody.goods .car {height:12px; width:18px; background:url(../un/a/car.gif) no-repeat;}
+#attacker tbody.goods .carry {float:right; margin-left:20px;}
+.defender .role {color:#71D000;}
+
+/* units */
+.u1, .u2, .u3, .u4, .u5, .u6, .u7, .u8, .u9, .u10          {background-image:url(../un/u/v1_romans2.gif); background-repeat: no-repeat;}
+.u11, .u12, .u13, .u14, .u15, .u16, .u17, .u18, .u19, .u20 {background-image:url(../un/u/v2_teutons2.gif); background-repeat: no-repeat;}
+.u21, .u22, .u23, .u24, .u25, .u26, .u27, .u28, .u29, .u30 {background-image:url(../un/u/v3_gauls2.gif); background-repeat: no-repeat;}
+.u31, .u32, .u33, .u34, .u35, .u36, .u37, .u38, .u39, .u40 {background-image:url(../un/u/v4_nature2.gif); background-repeat: no-repeat;}
+.u41, .u42, .u43, .u44, .u45, .u46, .u47, .u48, .u49, .u50 {background-image:url(../un/u/v5_natars2.gif); background-repeat: no-repeat;}
+.u51, .u52, .u53, .u54, .u55, .u56, .u57, .u58, .u59, .u60 {background-image:url(../un/u/v6_monsters2.gif); background-repeat: no-repeat;}
+.uhab, .ucata, .ustock, .uwall, .ubarr, .upal, .ugeb, .uhero, .uunits
+{background-image:url(../un/u/specials.gif); background-repeat: no-repeat;}
+
+.u1, .u11, .u21, .u31, .u41, .u51, .uhab {background-position:      0 0;}
+.u2, .u12, .u22, .u32, .u42, .u52, .ucata {background-position:  -19px 0;}
+.u3, .u13, .u23, .u33, .u43, .u53, .ustock {background-position:  -38px 0;}
+.u4, .u14, .u24, .u34, .u44, .u54, .uwall {background-position:  -57px 0;}
+.u5, .u15, .u25, .u35, .u45, .u55, .ubarr {background-position:  -76px 0;}
+.u6, .u16, .u26, .u36, .u46, .u56, .upal {background-position:  -95px 0;}
+.u7, .u17, .u27, .u37, .u47, .u57, .ugeb {background-position: -114px 0;}
+.u8, .u18, .u28, .u38, .u48, .u58, .uhero {background-position: -133px 0;}
+.u9, .u19, .u29, .u39, .u49, .u59, .uunits {background-position: -152px 0;}
+.u10, .u20, .u30, .u40, .u50, .u60 {background-position:-171px 0;}
+
+.u98 {background:url(../un/u/98.gif) no-repeat;}
+.u99 {background:url(../un/u/99.gif) no-repeat;}
+
+/*ressources*/
+.r1, .r2, .r3, .r4, .r5 {height:12px; width:18px; background-image:url(../un/a/res2.gif); background-repeat: no-repeat;}
+.r1 {background-position:    0 0;}
+.r2 {background-position:-21px 0;}
+.r3 {background-position:-42px 0;}
+.r4 {background-position:-63px 0;}
+.r5 {background-position:-84px 0;}
+
+input.give_gold{border:1px solid #71D000;width:45px;margin-right:8px;text-align:center;}
+input.addTroops{border:1px solid #71D000;text-align:center;width:80px;margin-right:8px;}
+table td.addTroops{width:150px;}
+input.hidden{overflow:hidden;}
+thead td.id{width:20px;}
