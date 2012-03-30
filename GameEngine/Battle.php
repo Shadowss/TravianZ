@@ -372,8 +372,12 @@ class Battle {
                                 $moralbonus = min(1.5, pow($attpop / $defpop, (0.2*($rap/$rdp))));
                         }
                         else {
+						if($defpop==0){
+                                $moralbonus = min(1.5, pow($attpop, 0.2));
+                        }else{
                                 $moralbonus = min(1.5, pow($attpop / $defpop, 0.2));
-                        }
+						}
+						}
                 }
                 else {
                         $moralbonus = 1.0;
