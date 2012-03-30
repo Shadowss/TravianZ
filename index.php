@@ -159,7 +159,7 @@
 
                                     <td><?php
 
-                                           $active = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (3600*24)"));
+                                           $active = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (3600*24) AND tribe!=5 AND tribe!=0"));
                                            echo $active;
 
                                     ?></td>
@@ -174,7 +174,7 @@
 
                                     <td><?php
 
-                                           $online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*5)"));
+                                           $online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*5) AND tribe!=5 AND tribe!=0"));
                                            echo $online;
 
                                     ?></td>
