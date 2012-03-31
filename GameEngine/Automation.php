@@ -18,6 +18,18 @@ class Automation {
     private $bountyOproduction = array();
     private $bountyOpop = 1;
 
+		public function isWinner() { 
+		global $database, $technology; 
+		$q = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100'"); 
+		$isThere = mysql_num_rows($q); 
+		if($isThere > 0) 
+		{ 
+        header('Location: /winner.php'); 
+		}else{ 
+        ## there is no winner 
+		} 
+	}
+	
         public function procResType($ref) {
         global $session;
         switch($ref) {

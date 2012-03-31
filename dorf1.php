@@ -9,8 +9,6 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
-
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['ok'])){
@@ -21,6 +19,10 @@ if(isset($_GET['newdid'])) {
 }
 else {
 	$building->procBuild($_GET);
+}
+if(isset($_GET['a'])) 
+{ 
+    $automation->isWinner(); 
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
