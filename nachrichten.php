@@ -17,6 +17,7 @@ $message->procMessage($_POST);
 if(isset($_GET['t'])){
 $automation->isWinner();
 }
+if(($_GET['id'])==5 or $session->access!=BANNED){ //replace 5 with your admin's id
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -127,3 +128,8 @@ echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 <div id="ce"></div>
 </body>
 </html>
+<?php
+}else{
+	header("Location: banned.php");
+}
+?>

@@ -64,7 +64,6 @@ include("Templates/Admin/ban_msg.tpl");
 include("Templates/quest.tpl");
 include("Templates/news.tpl");
 include("Templates/multivillage.tpl");
-include("Templates/links.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -74,7 +73,6 @@ include("Templates/links.tpl");
 
 <?php 
 include("Templates/footer.tpl"); 
-include("Templates/res.tpl"); 
 ?>
 <div id="stime">
 <div id="ltime">
