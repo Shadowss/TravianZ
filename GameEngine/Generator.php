@@ -69,7 +69,11 @@ class Generator {
 				$speed = $distance <= TS_THRESHOLD ? $speed : $speed * ( ( TS_THRESHOLD + ( $distance - TS_THRESHOLD ) * $bid14[$building->gettypeLevel(14)]['attri'] / 100 ) / $distance ) ;
 			}
 		}
+		if($speed!=0){
 		return round(($distance/$speed) * 3600 / INCREASE_SPEED);
+		}else{
+		return round($distance * 3600 / INCREASE_SPEED);
+		}
 	}
    
    public function getTimeFormat($time) {
