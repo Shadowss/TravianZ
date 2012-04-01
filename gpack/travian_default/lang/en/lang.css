@@ -1,18 +1,82 @@
-@CHARSET "UTF-8";
-
-/*
- *------------------------------------------------------------------------------
- * LANG is used to define the language-specific images and settings.
- *
- * Contains:
- * width, height, background-image, background-repeat, background-position
- *------------------------------------------------------------------------------
- */
-  
-@import "../../modules/new_layout_ltr.css";
-
-/* --- Colors ------------------------- */
-@import "../../modules/new_colors.css";
-
-/* --- Icons, Images and Backgrounds ---------- */
-@import "../../modules/new_images.css";input#btn_login {width:97px; background-image: url(b/login.gif);}input#btn_signup {width:97px; background-image: url(b/signup.gif);}input#btn_ok {width:47px; background-image: url(b/ok.gif);}input#btn_reply {width:97px; background-image: url(b/reply.gif);}input#btn_send {width:97px; background-image: url(b/send.gif);}input#btn_save {width:97px; background-image: url(b/save.gif);}input#btn_delete {width:97px; background-image: url(b/delete.gif);}input#btn_archiv {width:97px; background-image: url(b/archiv.gif);}input#btn_back {width:97px; background-image: url(b/zurueck.html);}input#btn_train {width:97px; background-image: url(b/train.gif);}input#btn_back {width:97px; background-image: url(b/back.gif);}input#btn_forward {width:97px; background-image: url(b/forward.gif);}input#btn_demolish {width:97px; background-image: url(b/demolish.gif);}input#btn_search {width:97px; background-image: url(b/search.gif);}/* Ally Forum */div.forum input#fbtn_ok {width:47px; background-image:url(b/ok.gif);}div.forum input#fbtn_vote {width:97px; background-image:url(f/vote.gif);}div.forum input#fbtn_result {width:97px; background-image:url(f/result.gif);}div.forum input#fbtn_voting {width:97px; background-image:url(f/voting.gif);}div.forum img#fbtn_reply {width:97px; background-image:url(f/reply.gif);}div.forum img#fbtn_post {width:97px; background-image:url(f/post.gif);}div.forum img#fbtn_newforum {width:97px; background-image:url(f/newforum.gif);}/* ------------------- Texts ------------------- *//* --------------------------------------------- *//* news */div#side_info h5 img {width:160px; height:15px;}/* login */div.login h1 img.img_login {width:468px; height:60px; background-image:url(t1/login.gif);}div.login h5 img.img_u04 {width:160px; height:15px; background-image:url(t2/u04.gif);}/* signup */div.signup h1 img.anmelden {width:468px; height:60px; background-image:url(t1/anmelden.gif);}div.signup h5 img.img_u05 {width:160px; height:15px; background-image:url(t2/u05.gif);}div.signup img.img_u06 {width:160px; height:15px; background-image:url(t2/u06.gif);}div.signup img.img_u07 {width:160px; height:15px; background-image:url(t2/u07.gif);}/* activate */div.activate h1 img.passwort {width:468px; height:60px; background-image:url(t1/passwort.gif);}div.activate h5 img.img_u22 {width:160px; height:15px; background-image:url(t2/u22.gif);}/* read/write message */div.messages div.msg_content img#label {width:77px; height:34px;}div.messages div.msg_content img.send {background-image:url(msg/block_bg24b.gif);}div.messages div.msg_content img.read {background-image:url(msg/block_bg24a.gif);}/* ------------------- Images ------------------- *//* ---------------------------------------------- *//* travian logo */div#side_navi a#logo img {width:116px; height:60px; background-image:url(a/travian0.gif);}div#side_navi a#logo img.logo_plus {background-image:url(a/travian1.gif);}/* plus previews */div.plus table#plus_features td.preview img.autovv {width:200px; height:56px; background-image:url(p/autovv.gif);}div.plus table#plus_features td.preview img.bfilter {width:200px; height:45px; background-image:url(p/bfilter.gif);}div.plus table#plus_features td.preview img.dorf3 {width:200px; height:186px; background-image:url(p/dorf3.jpg);}div.plus table#plus_features td.preview img.p1 {width:179px; height:29px; background-image:url(p/p1.gif);}div.plus table#plus_features td.preview img.p3 {width:163px; height:120px; background-image:url(p/p3.gif);}div.plus table#plus_features td.preview img.p4 {width:197px; height:41px; background-image:url(p/p4.gif);}div.plus table#plus_features td.preview img.p5 {width:132px; height:51px; background-image:url(p/p5.gif);}div.plus table#plus_features td.preview img.p6 {width:111px; height:29px; background-image:url(p/p6.gif);}div.plus table#plus_features td.preview img.p7 {width:61px; height:86px; background-image:url(p/p7.gif);}div.plus table#plus_features td.preview img.p8 {width:117px; height:121px; background-image:url(p/p8.gif);}div.plus table#plus_features td.preview img.sort {width:200px; height:38px; background-image:url(p/sort.jpg);}div.plus table#plus_features td.preview img.st1 {width:200px; height:90px; background-image:url(p/st1.gif);}div.plus table#plus_features td.preview img.xxl_map {width:146px; height:112px; background-image:url(p/xxl_map.gif);}input#btn_search {width:97px; background-image: url(b/search.gif);}
+@CHARSET "UTF-8";
+/*
+ *------------------------------------------------------------------------------
+ * LANG is used to define the language-specific images and settings.
+ *
+ * Contains:
+ * width, height, background-image, background-repeat, background-position
+ *------------------------------------------------------------------------------
+ */
+@import "../../modules/new_layout_ltr.css";
+/* --- Colors ------------------------- */
+@import "../../modules/new_colors.css";
+/* --- Icons, Images and Backgrounds ---------- */
+@import "../../modules/new_images.css";
+input#btn_login {width:97px; background-image: url(b/login.gif);}
+input#btn_signup {width:97px; background-image: url(b/signup.gif);}
+input#btn_ok {width:47px; background-image: url(b/ok.gif);}
+input#btn_reply {width:97px; background-image: url(b/reply.gif);}
+input#btn_send {width:97px; background-image: url(b/send.gif);}
+input#btn_save {width:97px; background-image: url(b/save.gif);}
+input#btn_delete {width:97px; background-image: url(b/delete.gif);}
+input#btn_archiv {width:97px; background-image: url(b/archiv.gif);}
+input#btn_back {width:97px; background-image: url(b/zurueck.html);}
+input#btn_train {width:97px; background-image: url(b/train.gif);}
+input#btn_back {width:97px; background-image: url(b/back.gif);}
+input#btn_forward {width:97px; background-image: url(b/forward.gif);}
+input#btn_demolish {width:97px; background-image: url(b/demolish.gif);}
+input#btn_search {width:97px; background-image: url(b/search.gif);}
+
+/* Ally Forum */
+div.forum input#fbtn_ok {width:47px; background-image:url(b/ok.gif);}
+div.forum input#fbtn_vote {width:97px; background-image:url(f/vote.gif);}
+div.forum input#fbtn_result {width:97px; background-image:url(f/result.gif);}
+div.forum input#fbtn_voting {width:97px; background-image:url(f/voting.gif);}
+div.forum img#fbtn_reply {width:97px; background-image:url(f/reply.gif);}
+div.forum img#fbtn_post {width:97px; background-image:url(f/post.gif);}
+div.forum img#fbtn_newforum {width:97px; background-image:url(f/newforum.gif);}
+
+/* ------------------- Texts ------------------- */
+/* news */
+div#side_info h5 img {width:160px; height:15px;}
+
+/* login */
+div.login h1 img.img_login {width:468px; height:60px; background-image:url(t1/login.gif);}
+div.login h5 img.img_u04 {width:160px; height:15px; background-image:url(t2/u04.gif);}
+
+/* signup */
+div.signup h1 img.anmelden {width:468px; height:60px; background-image:url(t1/anmelden.gif);}
+div.signup h5 img.img_u05 {width:160px; height:15px; background-image:url(t2/u05.gif);}
+div.signup img.img_u06 {width:160px; height:15px; background-image:url(t2/u06.gif);}
+div.signup img.img_u07 {width:160px; height:15px; background-image:url(t2/u07.gif);}
+
+/* activate */
+div.activate h1 img.passwort {width:468px; height:60px; background-image:url(t1/passwort.gif);}
+div.activate h5 img.img_u22 {width:160px; height:15px; background-image:url(t2/u22.gif);}
+
+/* read/write message */
+div.messages div.msg_content img#label {width:77px; height:34px;}
+div.messages div.msg_content img.send {background-image:url(msg/block_bg24b.gif);}
+div.messages div.msg_content img.read {background-image:url(msg/block_bg24a.gif);}
+
+/* ------------------- Images ------------------- */
+/* ---------------------------------------------- */
+/* travian logo */
+div#side_navi a#logo img {width:116px; height:60px; background-image:url(a/travian0.gif);}
+div#side_navi a#logo img.logo_plus {background-image:url(a/travian1.gif);}
+
+/* plus previews */
+div.plus table#plus_features td.preview img.autovv {width:200px; height:56px; background-image:url(p/autovv.gif);}
+div.plus table#plus_features td.preview img.bfilter {width:200px; height:45px; background-image:url(p/bfilter.gif);}
+div.plus table#plus_features td.preview img.dorf3 {width:200px; height:186px; background-image:url(p/dorf3.jpg);}
+div.plus table#plus_features td.preview img.p1 {width:179px; height:29px; background-image:url(p/p1.gif);}
+div.plus table#plus_features td.preview img.p3 {width:163px; height:120px; background-image:url(p/p3.gif);}
+div.plus table#plus_features td.preview img.p4 {width:197px; height:41px; background-image:url(p/p4.gif);}
+div.plus table#plus_features td.preview img.p5 {width:132px; height:51px; background-image:url(p/p5.gif);}
+div.plus table#plus_features td.preview img.p6 {width:111px; height:29px; background-image:url(p/p6.gif);}
+div.plus table#plus_features td.preview img.p7 {width:61px; height:86px; background-image:url(p/p7.gif);}
+div.plus table#plus_features td.preview img.p8 {width:117px; height:121px; background-image:url(p/p8.gif);}
+div.plus table#plus_features td.preview img.sort {width:200px; height:38px; background-image:url(p/sort.jpg);}
+div.plus table#plus_features td.preview img.st1 {width:200px; height:90px; background-image:url(p/st1.gif);}
+div.plus table#plus_features td.preview img.xxl_map {width:146px; height:112px; background-image:url(p/xxl_map.gif);}
+input#btn_search {width:97px; background-image: url(b/search.gif);}

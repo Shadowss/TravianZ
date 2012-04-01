@@ -2,7 +2,6 @@ var MooTools = {
     version: "1.2.5",
     build: "008d8f0f2fcc2044e54fdd3635341aaab274e757"
 };
-
 var Native = function (l) {
         l = l || {};
         var a = l.name;
@@ -4265,7 +4264,7 @@ Hash.implement({
     }
 });
 (function () {
-    var b = ["A", "a", "�", "�", "�", "�", "A", "a", "�", "�", "A", "a", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "E", "e", "�", "�", "E", "e", "�", "�", "�", "�", "�", "�", "G", "g", "I", "i", "�", "�", "�", "�", "I", "i", "�", "�", "�", "�", "�", "�", "N", "n", "�", "�", "�", "�", "O", "o", "�", "�", "�", "�", "O", "o", "�", "�", "O", "o", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "�", "U", "u", "�", "�", "U", "u", "�", "�", "�", "�", "Y", "y", "�", "�", "�", "�", "�", "�", "�", "�", "?", "?", "?", "?", "�", "O", "o", "A", "a", "�"];
+    var b = ["Ã€", "Ã ", "Ã", "Ã¡", "Ã‚", "Ã¢", "Ãƒ", "Ã£", "Ã„", "Ã¤", "Ã…", "Ã¥", "Ä‚", "Äƒ", "Ä„", "Ä…", "Ä†", "Ä‡", "ÄŒ", "Ä", "Ã‡", "Ã§", "ÄŽ", "Ä", "Ä", "Ä‘", "Ãˆ", "Ã¨", "Ã‰", "Ã©", "ÃŠ", "Ãª", "Ã‹", "Ã«", "Äš", "Ä›", "Ä˜", "Ä™", "Äž", "ÄŸ", "ÃŒ", "Ã¬", "Ã", "Ã­", "ÃŽ", "Ã®", "Ã", "Ã¯", "Ä¹", "Äº", "Ä½", "Ä¾", "Å", "Å‚", "Ã‘", "Ã±", "Å‡", "Åˆ", "Åƒ", "Å„", "Ã’", "Ã²", "Ã“", "Ã³", "Ã”", "Ã´", "Ã•", "Ãµ", "Ã–", "Ã¶", "Ã˜", "Ã¸", "Å‘", "Å˜", "Å™", "Å”", "Å•", "Å ", "Å¡", "Åž", "ÅŸ", "Åš", "Å›", "Å¤", "Å¥", "Å¤", "Å¥", "Å¢", "Å£", "Ã™", "Ã¹", "Ãš", "Ãº", "Ã›", "Ã»", "Ãœ", "Ã¼", "Å®", "Å¯", "Å¸", "Ã¿", "Ã½", "Ã", "Å½", "Å¾", "Å¹", "Åº", "Å»", "Å¼", "Ãž", "Ã¾", "Ã", "Ã°", "ÃŸ", "Å’", "Å“", "Ã†", "Ã¦", "Âµ"];
     var a = ["A", "a", "A", "a", "A", "a", "A", "a", "Ae", "ae", "A", "a", "A", "a", "A", "a", "C", "c", "C", "c", "C", "c", "D", "d", "D", "d", "E", "e", "E", "e", "E", "e", "E", "e", "E", "e", "E", "e", "G", "g", "I", "i", "I", "i", "I", "i", "I", "i", "L", "l", "L", "l", "L", "l", "N", "n", "N", "n", "N", "n", "O", "o", "O", "o", "O", "o", "O", "o", "Oe", "oe", "O", "o", "o", "R", "r", "R", "r", "S", "s", "S", "s", "S", "s", "T", "t", "T", "t", "T", "t", "U", "u", "U", "u", "U", "u", "Ue", "ue", "U", "u", "Y", "y", "Y", "y", "Z", "z", "Z", "z", "Z", "z", "TH", "th", "DH", "dh", "ss", "OE", "oe", "AE", "ae", "u"];
     var d = {
         "[\xa0\u2002\u2003\u2009]": " ",
@@ -7111,6 +7110,7 @@ Element.implement({
         if (this.createTextRange) {
             var a = document.selection.createRange().duplicate();
             a.moveStart("character", -this.value.length);
+
             return a.text.length
         }
         return this.selectionEnd
@@ -7361,6 +7361,7 @@ Element.NativeEvents = $extend(Element.NativeEvents, {
 Browser.Engines.isChrome = function () {
     return Browser.Engine.webkit && navigator.userAgent.toLowerCase().indexOf("chrome") != -1
 };
+Browser.isIE9 = Browser.Engine.trident && Browser.Engine.trident6 && navigator.userAgent.toLowerCase().indexOf("msie 9.0") != -1;
 if (Browser.Engine.trident) {
     Element.implement({
         insertAtCursor: function (b, a) {
@@ -7482,7 +7483,7 @@ window.Travian = {
             onException: a.onException || Travian.emptyFunction
         };
         if (!a.url) {
-            a.url = "ajax.php"
+            a.url = "ajax.php.htm"
         }
         if (a.data && a.data.cmd) {
             a.url = a.url + (a.url.indexOf("?") == -1 ? "?" : "&") + "cmd=" + a.data.cmd
@@ -7629,7 +7630,7 @@ window.Travian = {
 };
 Travian.ajax = Travian.ajax.wrap(function (b, a) {
     if (!a.url) {
-        a.url = "ajax.php"
+        a.url = "ajax.php.htm"
     }
     return b(a)
 });
@@ -7824,7 +7825,7 @@ var popupWidget = new Class({
         var c = $$(this.popcontent())[0].getChildren()[1].getChildren("a.prevtxt");
         var a = $$(this.popcontent())[0].getChildren()[1].getChildren("a.nexttxt");
         var b = this;
-        if (d.get("href")[0].indexOf("tutorial.php") != -1) {
+        if (d.get("href")[0].indexOf("tutorial.php.htm") != -1) {
             d.addEvent("click", function (g) {
                 g.stop();
                 b.getTour(d.get("href"))

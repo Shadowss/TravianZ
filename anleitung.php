@@ -48,15 +48,15 @@ include("GameEngine/Lang/".LANG.".php");
 
 		<td><a href="anleitung.php"><span>Manual</span></a></td>
 
-		<td><a href="http://forum.horeca-spel.nl/" target="_blank"><span>Forum</span></a></td>
+		<td><a href="http://forum.travian.com/" target="_blank"><span>Forum</span></a></td>
 
 		
 
 		
 
-		<td><a href="anmelden.php"><span>Register</span></a></td>
+		<td><a href="index.php?signup"><span>Register</span></a></td>
 
-		<td><a href="login.php"><span>Login</span></a></td>
+		<td><a href="index.php?login"><span>Login</span></a></td>
 
 </tr>
 
