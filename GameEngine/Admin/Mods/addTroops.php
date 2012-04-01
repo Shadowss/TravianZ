@@ -1,13 +1,20 @@
 <?php
-
 #################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+##                                                                             ##
+##              -= YOU MUST NOT REMOVE OR CHANGE THIS NOTICE =-                ##
+##                                                                             ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       addTroops.php                                               ##
-##  Developed by:  Dzoki & Advocatie                                           ##
-##  License:       TravianX Project                                            ##
+##                                                                             ##
+##  Project:       ZravianX                                                    ##
+##  Version:       2011.11.05                                                  ##
+##  Filename:      GameEngine/Admin/Mods/addTroops.php                         ##
+##  Developed by:  Dzoki & Advocaite                                           ##
 ##  Thanks to:     Dzoki & itay2277 (edit troops)                              ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Edited by:     ZZJHONS                                                     ##
+##  License:       Creative Commons BY-NC-SA 3.0                               ##
+##  Copyright:     ZravianX (c) 2011 - All rights reserved                     ##
+##  URLs:          http://zravianx.zzjhons.com                                 ##
+##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
 ##                                                                             ##
 #################################################################################
 
@@ -101,6 +108,6 @@ mysql_query($q);
 
 mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Changed troop anmount in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
 
-header("Location: ../../../Admin/admin.php?p=addTroops&did=".$id."&d");
+header("Location: ../../../admin.php?p=addTroops&did=".$id."&d");
 
 ?>

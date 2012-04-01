@@ -1,16 +1,24 @@
 <?php
 #################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+##                                                                             ##
+##              -= YOU MUST NOT REMOVE OR CHANGE THIS NOTICE =-                ##
+##                                                                             ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       database.php                                                ##
+##                                                                             ##
+##  Project:       ZravianX                                                    ##
+##  Version:       2011.11.07                                                  ##
+##  Filename:      GameEngine/Admin/database.php                               ##
 ##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Edited by:     ZZJHONS                                                     ##
+##  License:       Creative Commons BY-NC-SA 3.0                               ##
+##  Copyright:     ZravianX (c) 2011 - All rights reserved                     ##
+##  URLs:          http://zravianx.zzjhons.com                                 ##
+##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
 ##                                                                             ##
 #################################################################################
 
-include("../GameEngine/config.php");
-include("../GameEngine/Data/buidata.php");
+include("GameEngine/config.php");
+include("GameEngine/Data/buidata.php");
 
 class adm_DB {
 	var $connection;
@@ -21,7 +29,7 @@ class adm_DB {
 		mysql_select_db(SQL_DB, $this->connection) or die(mysql_error()); 	            		
 	}
 	
-	function Login($username,$password) {
+	function Login($username,$password){
 		$q = "SELECT password FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
 		$result = mysql_query($q, $this->connection);
 		$dbarray = mysql_fetch_array($result);

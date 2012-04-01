@@ -41,6 +41,6 @@ Search
 <br>
 <?php
 if($_GET['search'] or $_GET['search_in']){
-  include('templates/admin/results.tpl');
+  include('Templates/Admin/backup/results.tpl');
 }
 ?>

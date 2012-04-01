@@ -12,7 +12,7 @@
 class funct {   
   
   function CheckLogin(){
-    if($_SESSION['access'] >= MULTIHUNTER && isset($_SESSION['id'])){
+    if($_SESSION['access'] >= MULTIHUNTER and $_SESSION['id']){
       return true;
     }else{
       return false;

@@ -14,7 +14,7 @@ font-family: Verdana, Arial, Helvetica, sans-serif;
     color:#C0C0C0;
 }
 
-/*fix*/
+/* Fix */
 .online1, .online2, .online3, .online4, .online5 {width:12px; height:12px;}
 /* Oberer Layer mit Menue ohne Werbung */
 #ltop1 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
@@ -520,5 +520,3 @@ table#member td.ra {width:5%; text-align:right;}
 table#member td.hab {width:25%; text-align:center;}
 table#member td.vil {width:20%; text-align:center;}
 table#member td.on {width:5%; text-align:center;}
-
-

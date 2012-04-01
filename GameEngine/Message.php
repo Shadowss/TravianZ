@@ -33,29 +33,51 @@
         	}
 
         	public function procMessage($post) {
+			global $session;
         		if(isset($post['ft'])) {
         			switch($post['ft']) {
         				case "m1":
+						if($session->access!=BANNED){
         					$this->quoteMessage($post['id']);
+						}else{
+						header("Location: banned.php");
+						}
         					break;
         				case "m2":
+						if($session->access!=BANNED or $post['an']==strtolower("multihunter")){
                         if ($post['an'] == "[ally]"){
                         $this->sendAMessage($post['an'],$post['be'],$post['message']);
                         }else{
                         $this->sendMessage($post['an'],$post['be'],$post['message']);
-                        }header("Location: nachrichten.php?t=2");
+                        }
+						header("Location: nachrichten.php?t=2");
+						}else{
+						header("Location: banned.php");
+						}
         					break;
         				case "m3":
         				case "m4":
         				case "m5":
         					if(isset($post['delmsg_x'])) {
+							if($session->access!=BANNED){
         						$this->removeMessage($post);
+						}else{
+						header("Location: banned.php");
+						}
         					}
         					if(isset($post['archive_x'])) {
+							if($session->access!=BANNED){
         						$this->archiveMessage($post);
+						}else{
+						header("Location: banned.php");
+						}
         					}
         					if(isset($post['start_x'])) {
+							if($session->access!=BANNED){
         						$this->unarchiveMessage($post);
+						}else{
+						header("Location: banned.php");
+						}
         					}
         					break;
         				case "m6":
@@ -63,7 +85,7 @@
         					break;
         			}
         		}
-        	}
+			}
 
         	public function noticeType($get) {
         		global $session, $database;
@@ -94,13 +116,25 @@
 
         	public function procNotice($post) {
         		if(isset($post["del_x"])) {
+				if($session->access != BANNED){
         			$this->removeNotice($post);
+						}else{
+						header("Location: banned.php");
+						}
         		}
         		if(isset($post['archive_x'])) {
+				if($session->access != BANNED){
         			$this->archiveNotice($post);
+						}else{
+						header("Location: banned.php");
+						}
         		}
         		if(isset($post['start_x'])) {
+				if($session->access != BANNED){
         			$this->unarchiveNotice($post);
+						}else{
+						header("Location: banned.php");
+						}
         		}
         	}
 

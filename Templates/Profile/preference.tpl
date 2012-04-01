@@ -43,9 +43,12 @@ if($_POST) {
 	if(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) == '') {
 	    // Add new link
 	    $userid = $session->uid;
-	    
+	    if($session->access!=BANNED){
 	    $query = mysql_query('INSERT INTO `' . TB_PREFIX . 'links` (`userid`, `name`, `url`, `pos`) VALUES (' . $userid . ', \'' . $link['linkname'] . '\', \'' . $link['linkziel'] . '\', ' . $link['nr'] . ')');
-	} elseif(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) != '') {
+		}else{
+		header("Location: banned.php");
+		}
+		} elseif(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) != '') {
 	    // Update link
 	    $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
 	    $data = mysql_fetch_assoc($query);

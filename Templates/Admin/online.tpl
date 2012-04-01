@@ -45,6 +45,10 @@ foreach($varray as $vil) {
 		$tribe = "Teuton";
 		} else if($active[$i]['tribe'] == 3){
 		$tribe = "Gaul";
+		} else if($active[$i]['tribe'] == 4){
+		$tribe = "Nature";
+		} else if($active[$i]['tribe'] == 5){
+		$tribe = "Natar";
 		}
 echo '
     <tr>
@@ -53,7 +57,7 @@ echo '
         <td>'.$tribe.'</td>
         <td>'.$totalpop.'</td>
         <td>'.count($varray).'</td>
-        <td><img src="../img/admin/gold.gif" class="gold" alt="Gold" title="This user has: '.$active[$i]['gold'].' gold"/> '.$active[$i]['gold'].'</td>
+        <td><img src="img/admin/gold.gif" class="gold" alt="Gold" title="This user has: '.$active[$i]['gold'].' gold"/> '.$active[$i]['gold'].'</td>
     </tr>  
 '; 
 } 

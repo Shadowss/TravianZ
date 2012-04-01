@@ -8,11 +8,11 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-?>
-<?php 
+
 if($_GET['aid']){
 $alidata = $database->getAlliance($_GET['aid']);
 $aliusers = $database->getAllMember($_GET['aid']);
+$alirank = $ranking/* ->getAllianceRank($_GET['aid']) */;
 if($alidata and $aliusers){
 
 foreach($aliusers as $member) {
@@ -51,7 +51,7 @@ foreach($aliusers as $member) {
 			</tr>
 			<tr>
 				<th>Rank</th>
-				<td>???</td>
+				<td><?php /* echo $alirank; */ ?>?</td>
 			</tr>
 			<tr>
 				<th>Points</th>
@@ -112,20 +112,19 @@ foreach($aliusers as $user) {
 	echo "	<td class=hab>".$TotalUserPop."</td>"; 
 	echo "	<td class=vil>".count($TotalVillages)."</td>";
 	
-    if($aid == $session->alliance){	
-    	if ((time()-600) < $user['timestamp']){ // 0 Min - 10 Min
-    		echo "	<td class=on><img class=online1 src=img/x.gif title=now online alt=now online /></td>";
-    	}elseif ((time()-86400) < $user['timestamp'] && (time()-600) > $user['timestamp']){ // 10 Min - 1 Days
-    		echo "	<td class=on><img class=online2 src=img/x.gif title=now online alt=now online /></td>";              
-   	 	}elseif ((time()-259200) < $user['timestamp'] && (time()-86400) > $user['timestamp']){ // 1-3 Days
-    		echo "	<td class=on><img class=online3 src=img/x.gif title=now online alt=now online /></td>";    
-    	}elseif ((time()-604800) < $user['timestamp'] && (time()-259200) > $user['timestamp']){
-    		echo "	<td class=on><img class=online4 src=img/x.gif title=now online alt=now online /></td>";    
-    	}else{
-     		echo "	<td class=on><img class=online5 src=img/x.gif title=now online alt=now online /></td>";   
-    	}
+    if($aid == $session->alliance){    
+        if ((time()-600) < $member['timestamp']){ // 0 Min - 10 Min
+            echo "<td class=on><img class=online1 src=img/x.gif title='Online' alt='Online' /></td>";
+        }elseif ((time()-86400) < $member['timestamp'] && (time()-600) > $member['timestamp']){ // 10 Min - 1 Days
+            echo "<td class=on><img class=online2 src=img/x.gif title='Max. 24 hours' alt='Max. 24 hours' /></td>";              
+            }elseif ((time()-259200) < $member['timestamp'] && (time()-86400) > $member['timestamp']){ // 1-3 Days
+            echo "<td class=on><img class=online3 src=img/x.gif title='Last 3 days' alt='Last 3 days' /></td>";    
+        }elseif ((time()-604800) < $member['timestamp'] && (time()-259200) > $member['timestamp']){ // 3-7 Days
+            echo "<td class=on><img class=online4 src=img/x.gif title='Last 7 days' alt='Last 7 days' /></td>";    
+        }else{ // More than 7 days
+             echo "<td class=on><img class=online5 src=img/x.gif title='Offline' alt='Offline' /></td>";   
+        }
 	}
-    
     echo "	</tr>";    
 }
 ?> 

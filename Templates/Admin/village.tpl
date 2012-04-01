@@ -113,11 +113,11 @@ if($village and $user){
 
             if($i != 3){
 
-              echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif">| ';
+              echo $typ[$i].'x <img src="img/admin/r/'.$a.'.gif">| ';
 
             }else{
 
-              echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif"> ';
+              echo $typ[$i].'x <img src="img/admin/r/'.$a.'.gif"> ';
 
             }               
 
@@ -156,7 +156,7 @@ if($village and $user){
 
     <tr>
 
-        <td><img src="../img/admin/r/1.gif"> Lumber</td>
+        <td><img src="img/admin/r/1.gif"> Lumber</td>
 
         <td class="hab"><?php echo floor($village['wood']);?></td>
 
@@ -166,7 +166,7 @@ if($village and $user){
 
     <tr>
 
-        <td><img src="../img/admin/r/2.gif"> Clay</td>
+        <td><img src="img/admin/r/2.gif"> Clay</td>
 
         <td class="hab"><?php echo floor($village['clay']);?></td>
       
@@ -175,7 +175,7 @@ if($village and $user){
 
     <tr>
 
-        <td><img src="../img/admin/r/3.gif"> Iron</td>
+        <td><img src="img/admin/r/3.gif"> Iron</td>
 
         <td class="hab"><?php echo floor($village['iron']);?></td>    
 
@@ -183,7 +183,7 @@ if($village and $user){
 
     <tr>
 
-        <td><img src="../img/admin/r/4.gif"> Crop</td>
+        <td><img src="img/admin/r/4.gif"> Crop</td>
 
         <td class="hab"><?php echo floor($village['crop']);?></td>
 
@@ -230,7 +230,7 @@ if($village and $user){
 
     <tr>
 
-        <td><a href="?delOas&oid=" onClick="return del(\'oas\','.$varray[$i]['wref'].');"><img src="../img/admin/del.gif"></a></td>
+        <td><a href="?delOas&oid=" onClick="return del(\'oas\','.$varray[$i]['wref'].');"><img src="img/admin/del.gif"></a></td>
 
         <td class="hab">Cooming soon</td>
 

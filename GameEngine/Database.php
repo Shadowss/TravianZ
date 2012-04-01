@@ -2,6 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
+##  Edited by:     ZZJHONS                                                     ##
 ##  Filename       Database.php                                                ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##

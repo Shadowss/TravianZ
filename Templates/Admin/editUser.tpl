@@ -17,7 +17,7 @@ $varray = $database->getProfileVillages($id);
 $varmedal = $database->getProfileMedal($id);
 ?>
 <br />
-<form action="../GameEngine/Admin/Mods/editUser.php" method="POST">
+<form action="GameEngine/Admin/Mods/editUser.php" method="POST">
     <input type="hidden" name="uid" value="<?php echo $uid; ?>" />
     <input type="hidden" name="id" value="<?php echo $id; ?>" />
 <table id="profile" cellpadding="1" cellspacing="1" >

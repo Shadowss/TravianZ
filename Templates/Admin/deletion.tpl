@@ -89,10 +89,10 @@ for ($i = 0; $i <= count($varray)-1; $i++) {
 $coorproc = $database->getCoor($varray[$i]['wref']);
 if($varray[$i]['capital']){
 $capital = '<span class="c">(Capital)</span>';
-$delLink = '<a href="?action=delVil&did='.$varray[$i]['wref'].'" onClick="return del(\'did\','.$varray[$i]['wref'].');"><img src="../img/Admin/del.gif" class="del"></a>';
+$delLink = '<a href="?action=delVil&did='.$varray[$i]['wref'].'" onClick="return del(\'did\','.$varray[$i]['wref'].');"><img src="img/admin/del.gif" class="del"></a>';
 }else{
 $capital = '';
-$delLink = '<a href="?action=delVil&did='.$varray[$i]['wref'].'" onClick="return del(\'did\','.$varray[$i]['wref'].');"><img src="../img/Admin/del.gif" class="del"></a>';
+$delLink = '<a href="?action=delVil&did='.$varray[$i]['wref'].'" onClick="return del(\'did\','.$varray[$i]['wref'].');"><img src="img/admin/del.gif" class="del"></a>';
   
 }
 

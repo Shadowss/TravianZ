@@ -127,32 +127,16 @@ if(isset($_GET['uid'])) {
 }
 else if (isset($_GET['s'])) {
 	if($_GET['s'] == 1) {
-	if($session->access!=BANNED){
 		include("Templates/Profile/profile.tpl");
-	}else{
-	header("Location: banned.php");
-	}
 	}
 	if($_GET['s'] == 2) {
-	if($session->access!=BANNED){
 		include("Templates/Profile/preference.tpl");
-	}else{
-	header("Location: banned.php");
-	}
 	}
 	if($_GET['s'] == 3) {
-	if($session->access!=BANNED){
 		include("Templates/Profile/account.tpl");
-	}else{
-	header("Location: banned.php");
-	}
 	}
 	if($_GET['s'] == 4) {
-	if($session->access!=BANNED){
 		include("Templates/Profile/graphic.tpl");
-	}else{
-	header("Location: banned.php");
-	}
 	}
 }
 ?>
