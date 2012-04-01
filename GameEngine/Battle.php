@@ -142,7 +142,7 @@ class Battle {
 
                 $scout = 1;
                 for($i=$start;$i<=($start+9);$i++) {
-                        if($i == 4 || $i == 14 || $i == 23 || $i == 34 || $i == 44)
+                        if($i == 4 || $i == 14 || $i == 23 || $i == 44)
                         {}
                         else{
                                 if($attacker['u'.$i]>0) {
@@ -275,7 +275,7 @@ class Battle {
                 if($type == 1)
                 {
                         for($y=4;$y<=44;$y++) {
-                                if($y == 4 || $y == 14 || $y == 23 || $y == 34 || $y == 44)
+                                if($y == 4 || $y == 14 || $y == 23 || $y == 44)
                                 {
                                         global ${'u'.$y};
                                         if($y >= $start && $y <= ($end-2) && $def_ab['b'.$abcount] > 0) {

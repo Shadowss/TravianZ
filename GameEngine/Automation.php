@@ -615,7 +615,7 @@ private function loyaltyRegeneration() {
                                             $catapult = array(8,18,28,38,48);
                                             $ram = array(7,17,27,37,47);
                                             $chief = array(9,19,29,39,49);
-                                            $spys = array(4,14,23,34,44);
+                                            $spys = array(4,14,23,44);
                                         for($i=$start;$i<=$end;$i++) {
                                             $y = $i-$u;
                                             $Attacker['u'.$i] = $dataarray[0]['t'.$y];
@@ -806,7 +806,7 @@ private function loyaltyRegeneration() {
                                             $catapult = array(8,18,28,38,48);
                                             $ram = array(7,17,27,37,47);
                                             $chief = array(9,19,29,39,49);
-                                            $spys = array(4,14,23,34,44);
+                                            $spys = array(4,14,23,44);
                                         for($i=$start;$i<=$end;$i++) {
                                             $y = $i-$u;
                                             $Attacker['u'.$i] = $dataarray[0]['t'.$y];
