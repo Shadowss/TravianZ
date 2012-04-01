@@ -27,9 +27,8 @@ $wwname = $database->getWWName($vref);
 if($village->resarray['f99'] < 0){
 echo 'You need to have World Wonder level 1 to be able to change its name.
 			<center><br />World Wonder name: <input class="text" name="wwname" id="wwname" disabled="disabled" value="'.$wwname.'" maxlength="20"></center><p class="btn"><input type="image" value="" tabindex="9" name="s1" disabled="disabled" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>';
-} else if($village->resarray['f99'] > 0 and < 11) {
+} else if($village->resarray['f99'] > 0 and $village->resarray['f99'] < 11) {
 echo '<center><br />World Wonder name: <input class="text" name="wwname" id="wwname" value="'.$wwname.'" maxlength="20"></center><p class="btn"><input type="image" value="" tabindex="9" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>'; 
-}
 } else if ($village->resarray['f99'] < 0){
 echo 'You can not change the name of the World Wonder after level 10.
 			<center><br />World Wonder name: <input class="text" name="wwname" id="wwname" disabled="disabled" value="'.$wwname.'" maxlength="20"></center><p class="btn"><input type="image" value="" tabindex="9" name="s1" disabled="disabled" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>';
