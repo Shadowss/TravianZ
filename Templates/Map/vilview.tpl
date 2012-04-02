@@ -140,11 +140,12 @@ $landd = explode("-",$tt);?> />
 		<tbody>
 		<?php
 if($session->uid == $database->getVillage($_GET['d'])){
-	$limit = "ntype=0 and ntype=1 and ntype=2 and ntype=3 and ntype=4 and ntype=5 and ntype=6 and ntype=7";
+	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7";
 }else{
 	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14";
     }
 $toWref = $_GET['d'];
+if($session->alliance!=0){
 $result = mysql_query("SELECT * FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysql_num_rows($result);
 if($query != 0){
@@ -163,12 +164,31 @@ while($row = mysql_fetch_array($result)){
 <br>information available.</td>
 				</tr>
 
-<?php } ?>
+<?php }
+}else{
+$result = mysql_query("SELECT * FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$query = mysql_num_rows($result);
+if($query != 0){
+while($row = mysql_fetch_array($result)){
+	$dataarray = explode(",",$row['data']);
+	$type = $row['ntype'];
+	echo "<tr><td>";
+    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+    $date = $generator->procMtime($row['time']);
+    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "</td></tr>";
+}
+}else{ ?>
+							<tr>
+					<td>There is no
+<br>information available.</td>
+				</tr>
+
+<?php }} ?>
 					</tbody>
 	</table>
 <?php
-}
-else if (!$basearray['occupied']) {
+}else if (!$basearray['occupied']) {
 ?>
 	<table cellpadding="1" cellspacing="1" id="distribution" class="tableNone">
 
@@ -232,7 +252,7 @@ else if (!$basearray['occupied']) {
 		</tr></tbody>
 	</table>
  
-	<table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone rep">
+<table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone rep">
 		<thead><tr>
 			<th>Reports:</th>
 		</tr></thead>
@@ -244,6 +264,7 @@ if($session->uid == $database->getVillage($_GET['d'])){
 	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14";
     }
 $toWref = $_GET['d'];
+if($session->alliance!=0){
 $result = mysql_query("SELECT * FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysql_num_rows($result);
 if($query != 0){
@@ -262,7 +283,27 @@ while($row = mysql_fetch_array($result)){
 <br>information available.</td>
 				</tr>
 
-<?php } ?>
+<?php }
+}else{
+$result = mysql_query("SELECT * FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$query = mysql_num_rows($result);
+if($query != 0){
+while($row = mysql_fetch_array($result)){
+	$dataarray = explode(",",$row['data']);
+	$type = $row['ntype'];
+	echo "<tr><td>";
+    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+    $date = $generator->procMtime($row['time']);
+    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "</td></tr>";
+}
+}else{ ?>
+							<tr>
+					<td>There is no
+<br>information available.</td>
+				</tr>
+
+<?php }} ?>
 					</tbody>
 	</table>
     <?php } ?>

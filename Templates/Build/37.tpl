@@ -73,8 +73,8 @@
 				   echo "<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u1\" src=\"img/x.gif\" alt=\"Legionnaire\" title=\"Legionnaire\" />
-						Legionnaire ($name1)
+						<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$name."\" title=\"".$name."\" />
+						$name ($name1)
 					</div>"
 			?>
 			

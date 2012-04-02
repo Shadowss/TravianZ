@@ -450,31 +450,48 @@ private function loyaltyRegeneration() {
                     if($indi['type'] == 10) {
                       $max=$database->getVillageField($indi['wid'],"maxstore");
                       if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
-                      $max-=$bid10[$level-1]['attri']*STORAGE_MULTIPLIER;
-                      $max+=$bid10[$level]['attri']*STORAGE_MULTIPLIER;
+					if($level!=1){
+                    $max-=$bid10[$level-1]['attri']*STORAGE_MULTIPLIER;
+                    $max+=$bid10[$level]['attri']*STORAGE_MULTIPLIER;
+					}else{
+					$max=$bid10[$level]['attri']*STORAGE_MULTIPLIER;
+					}
                       $database->setVillageField($indi['wid'],"maxstore",$max);
                     }
 
                     if($indi['type'] == 11) {
                       $max=$database->getVillageField($indi['wid'],"maxcrop");
                       if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
-                      $max-=$bid11[$level-1]['attri']*STORAGE_MULTIPLIER;
-					  $max+=$bid11[$level]['attri']*STORAGE_MULTIPLIER;
+					if($level!=1){
+                    $max-=$bid11[$level-1]['attri']*STORAGE_MULTIPLIER;
+                    $max+=$bid11[$level]['attri']*STORAGE_MULTIPLIER;
+					}else{
+					$max=$bid11[$level]['attri']*STORAGE_MULTIPLIER;
+					}
                       $database->setVillageField($indi['wid'],"maxcrop",$max);
                     }
+					
                     if($indi['type'] == 38) {
                     $max=$database->getVillageField($indi['wid'],"maxstore");
                     if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
+					if($level!=1){
                     $max-=$bid38[$level-1]['attri']*STORAGE_MULTIPLIER;
                     $max+=$bid38[$level]['attri']*STORAGE_MULTIPLIER;
+					}else{
+					$max=$bid38[$level]['attri']*STORAGE_MULTIPLIER;
+					}
                     $database->setVillageField($indi['wid'],"maxstore",$max);
                     }
 
                     if($indi['type'] == 39) {
 					$max=$database->getVillageField($indi['wid'],"maxcrop");
                     if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
+					if($level!=1){
                     $max-=$bid39[$level-1]['attri']*STORAGE_MULTIPLIER;
                     $max+=$bid39[$level]['attri']*STORAGE_MULTIPLIER;
+					}else{
+					$max=$bid39[$level]['attri']*STORAGE_MULTIPLIER;
+					}
                     $database->setVillageField($indi['wid'],"maxcrop",$max);
                     }
 
@@ -880,7 +897,7 @@ private function loyaltyRegeneration() {
 
         }
             $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel);
-			$ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
+
             //units attack string for battleraport
             $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
 
@@ -889,19 +906,23 @@ private function loyaltyRegeneration() {
                 $unitssend_def[2] = ''.$Defender['u11'].','.$Defender['u12'].','.$Defender['u13'].','.$Defender['u14'].','.$Defender['u15'].','.$Defender['u16'].','.$Defender['u17'].','.$Defender['u18'].','.$Defender['u19'].','.$Defender['u20'].'';
                 $unitssend_def[3] = ''.$Defender['u21'].','.$Defender['u22'].','.$Defender['u23'].','.$Defender['u24'].','.$Defender['u25'].','.$Defender['u26'].','.$Defender['u27'].','.$Defender['u28'].','.$Defender['u29'].','.$Defender['u30'].'';
                 $unitssend_def[4] = ''.$Defender['u31'].','.$Defender['u32'].','.$Defender['u33'].','.$Defender['u34'].','.$Defender['u35'].','.$Defender['u36'].','.$Defender['u37'].','.$Defender['u38'].','.$Defender['u39'].','.$Defender['u40'].'';
-				$unitssend_def[5] = ''.$Defender['u41'].','.$Defender['u42'].','.$Defender['u43'].','.$Defender['u44'].','.$Defender['u45'].','.$Defender['u46'].','.$Defender['u47'].','.$Defender['u48'].','.$Defender['u49'].','.$Defender['u50'].'';
-                $unitssend_def[6] = ''.$Defender['hero'].'';
-				$unitssend_deff[1] = '?,?,?,?,?,?,?,?,?,?,';
+                $unitssend_def[5] = ''.$Defender['u41'].','.$Defender['u42'].','.$Defender['u43'].','.$Defender['u44'].','.$Defender['u45'].','.$Defender['u46'].','.$Defender['u47'].','.$Defender['u48'].','.$Defender['u49'].','.$Defender['u50'].'';
+                $unitssend_deff[1] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[2] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[3] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[4] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[5] = '?,?,?,?,?,?,?,?,?,?,';
             //how many troops died? for battleraport
-for($i=1;$i<=10;$i++){
-if($battlepart['casualties_attacker'][$i] <= 0) { ${dead.$i} = 0; }elseif($battlepart['casualties_attacker'][$i] > $data['t'.$i]){
-${dead.$i}=$data['t'.$i];
-}else { ${dead.$i} = $battlepart['casualties_attacker'][$i]; }
-}  
+            if($battlepart['casualties_attacker'][1] == 0) { $dead1 = 0; } else { $dead1 = $battlepart['casualties_attacker'][1]; }
+            if($battlepart['casualties_attacker'][2] == 0) { $dead2 = 0; } else { $dead2 = $battlepart['casualties_attacker'][2]; }
+            if($battlepart['casualties_attacker'][3] == 0) { $dead3 = 0; } else { $dead3 = $battlepart['casualties_attacker'][3]; }
+            if($battlepart['casualties_attacker'][4] == 0) { $dead4 = 0; } else { $dead4 = $battlepart['casualties_attacker'][4]; }
+            if($battlepart['casualties_attacker'][5] == 0) { $dead5 = 0; } else { $dead5 = $battlepart['casualties_attacker'][5]; }
+            if($battlepart['casualties_attacker'][6] == 0) { $dead6 = 0; } else { $dead6 = $battlepart['casualties_attacker'][6]; }
+            if($battlepart['casualties_attacker'][7] == 0) { $dead7 = 0; } else { $dead7 = $battlepart['casualties_attacker'][7]; }
+            if($battlepart['casualties_attacker'][8] == 0) { $dead8 = 0; } else { $dead8 = $battlepart['casualties_attacker'][8]; }
+            if($battlepart['casualties_attacker'][9] == 0) { $dead9 = 0; } else { $dead9 = $battlepart['casualties_attacker'][9]; }
+            if($battlepart['casualties_attacker'][10] == 0) { $dead10 = 0; } else { $dead10 = $battlepart['casualties_attacker'][10]; }
 
 
                     //kill own defence
@@ -915,9 +936,6 @@ ${dead.$i}=$data['t'.$i];
                                 if($unitlist){
                                     $dead[$i]+=round($battlepart[2]*$unitlist[0]['u'.$i]);
                                     $database->modifyUnit($data['to'],array($i),array(round($battlepart[2]*$unitlist[0]['u'.$i])),array(0));
-									if($dead[$i] > $Defender[$i]){
-									$dead[$i] = $Defender[$i];
-								}
                                 }
                             }
             //kill other defence in village
@@ -1242,12 +1260,8 @@ ${dead.$i}=$data['t'.$i];
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-		if($bid34[$stonemason] == 0){
-		$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
-		}else{
                 $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-		}
-                if ($battlepart[4]>$needed_cata and $rand!=0)
+                if ($battlepart[4]>$needed_cata)
                 {
                     $info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
                     $database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -1395,12 +1409,8 @@ ${dead.$i}=$data['t'.$i];
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason] == 0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
-				}else{
                 $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-				}
-                if (($battlepart[4]/2)>$needed_cata and $rand!=0)
+                if (($battlepart[4]/2)>$needed_cata)
                 {
                     $info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
                     $database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -1545,12 +1555,8 @@ ${dead.$i}=$data['t'.$i];
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason] == 0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
-				}else{
                 $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-				}
-                if (($battlepart[4]/2)>$needed_cata and $rand!=0)
+                if (($battlepart[4]/2)>$needed_cata)
                 {
                     $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
                     <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid)." destroyed.</td></tr></tbody>";
@@ -1717,41 +1723,94 @@ ${dead.$i}=$data['t'.$i];
             }
         }
 
-####Hero claim artifact fixed by advocaite
-		if($data['t11'] > 0){
-            if ($isoasis != 0) {
-                if ($database->canConquerOasis($data['from'],$data['to'])) {
-                    $database->conquerOasis($data['from'],$data['to']);
-                    $info_chief = $hero_pic." Your hero has conquered this oasis and gained ".$heroxp." XP";
-                } else {
-                    $OasisInfo = $database->getOasisInfo($data['to']);
-                    if ($OasisInfo['conqured'] != 0) {
-                        $Oloyaltybefore =  $OasisInfo['loyalty'];
-                        $database->modifyOasisLoyalty($data['to']);
-                        $OasisInfo = $database->getOasisInfo($data['to']);
-                        $Oloyaltynow =  $OasisInfo['loyalty'];
-                        $info_chief = $hero_pic." Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP";
-                    } else {
-                        if ($heroxp == 0) {
-                            $info_chief = $hero_pic." Your hero had nothing to kill therfore gains no XP at all";
-                        } else {
-                            $info_chief = $hero_pic." Your hero gained ".$heroxp." XP";
-                        }
+  if($data['t11']>0)
+{
+    if ($isoasis != 0)
+    {
+        if (abs($tocoor['x']-$fromcoor['x'])<=3 && abs($tocoor['y']-$fromcoor['y'])<=3)
+        {
+            //count oasis troops: $troops_o
+            $troops_o=0;
+            $o_unit2=mysql_query("select * from ".TB_PREFIX."units where `vref`='".$data['to']."'");
+            $o_unit=mysql_fetch_array($o_unit2);
+
+            for ($i=1;$i<51;$i++)
+            {
+                $troops_o+=$o_unit[$i];
+            }
+            $troops_o+=$o_unit['hero'];
+
+            $o_unit2=mysql_query("select * from ".TB_PREFIX."enforcement where `vref`='".$data['to']."'");
+            while ($o_unit=@mysql_fetch_array($o_unit2))
+            {
+                for ($i=1;$i<51;$i++)
+                {
+                    $troops_o+=$o_unit[$i];
+                }
+                $troops_o+=$o_unit['hero'];
+            }
+
+
+            if ($troops_o<=0)
+            {
+                //check hero mansion level
+                $hero_mansion_level=0;
+                $dbo2=mysql_query("select * from ".TB_PREFIX."fdata where `vref`='".$data['from']."'");
+                $dbo=mysql_fetch_array($dbo2);
+                for ($i=19;$i<=40;$i++)
+                {
+                    if ($dbo['f'.$i.'t']==37)
+                    {
+                        $hero_mansion_level=$dbo['f'.$i];
                     }
                 }
-            } else {
-                        $artifact = $database->getOwnArtefactInfo($data['to']);
-                        if ($artifact['vref'] == $data['to']){
-                        if($database->canClaimArtifact($artifact['vref'],$artifact['size'])) {
-                         $database->claimArtefact($data['to'],$data['to'],$database->getVillageField($data['from'],"owner"));
-                          $info_chief = $hero_pic." Your hero is carrying home a artifact, and gained ".$heroxp." XP from the battle";  
-                        }else{
-                         $info_chief = $hero_pic." Your hero could not claim the artifact, and gained ".$heroxp." XP from the battle";  
-                           
+
+                //check number of occupied oasis
+                $dbo2=mysql_query("select * from ".TB_PREFIX."odata where `conqured`='".$data['from']."'");
+                $number_o=mysql_num_rows($dbo2);
+
+                if ($number_o<3)
+                {
+                    $needed_hero_mansion_level=$number_o*5+10;
+                    if ($hero_mansion_level>=$needed_hero_mansion_level)
+                    {
+                        $dbo2=mysql_query("select * from ".TB_PREFIX."odata where `wref`='".$data['to']."'");
+                        $dbo=mysql_fetch_array($dbo2);
+                        $o_owner=$dbo['owner'];
+                        $o_conqured=$dbo['conqured'];
+                        $o_loyalty=$dbo['loyalty'];
+                        if ($o_conqured==""||$o_conqured=='0'||($o_loyalty<=25&&$o_conqured!=$data['from']))
+                        {
+                            @mysql_query("update ".TB_PREFIX."odata set `conqured`='".$data['from']."', `owner`='".$a_uid."', `name`='Occupied Oasis', `lastupdated`='".time()."', `loyalty`='100' where `wref`='".$data['to']."' ");
+                            @mysql_query("update ".TB_PREFIX."wdata set `occupied`='1' where `id`='".$data['to']."' ");
+                            $info_chief = "".$hero_pic.", The hero has occupied this oasis and gained ".$heroxp." XP";
                         }
+                        else
+                        {
+                            if ($o_conqured!=$data['from'])
+                            {
+                                $o_loyalty=$o_loyalty-25;
+                                @mysql_query("update ".TB_PREFIX."odata set `lastupdated`='".time()."', `loyalty`='".$o_loyalty."' where `wref`='".$data['to']."' ");
+                                $info_chief = "".$hero_pic.", The hero gained ".$heroxp." XP. The loyalty of this oasis is ".$o_loyalty."%";
+                            }
                         }
+                    }
+                    else
+                    {
+                        $info_chief = "".$hero_pic.", The hero gained ".$heroxp." XP. To occupy this oasis you need a Hero Mansion Level ".$needed_hero_mansion_level;
+                    }
+                }
+                else
+                {
+                    $info_chief = "".$hero_pic.", The hero has occupied maximun of 3 oases already. Hero gained ".$heroxp." XP";
+                }
+
             }
         }
+
+    }
+
+}
 
                 if($scout){
                 if ($data['spy'] == 1){
@@ -1804,10 +1863,10 @@ ${dead.$i}=$data['t'.$i];
 
                 }
 
-                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.','.$unitsdead_def[6].'';
+                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.'';
             }
             else{
-                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.','.$unitsdead_def[6].'';
+                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.'';
             }
 
 

@@ -22,7 +22,7 @@
 	   if(isset($_GET['s'])){
 		$automation->isWinner();
 		}
-if($_GET['aid']!=0 or $session->alliance!=0){
+if($_GET['aid']==0 or $session->alliance!=0){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
