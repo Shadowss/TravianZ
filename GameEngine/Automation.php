@@ -2664,35 +2664,35 @@ private function starvation() {
             { 
                 if ($row['f' . $i . 't'] == 10) 
                 { 
-                    $ress += $bid10[$row['f' . $i]]['attri']; 
+                    $ress += $bid10[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER; 
                 } 
                  
                 if ($row['f' . $i . 't'] == 38) 
                 { 
-                    $ress += $bid38[$row['f' . $i]]['attri']; 
+                    $ress += $bid38[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER; 
                 } 
                  
                  
                  
                 if ($row['f' . $i . 't'] == 11) 
                 { 
-                    $crop += $bid11[$row['f' . $i]]['attri']; 
+                    $crop += $bid11[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER; 
                 } 
                  
                 if ($row['f' . $i . 't'] == 39) 
                 { 
-                    $crop += $bid39[$row['f' . $i]]['attri']; 
+                    $crop += $bid39[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER; 
                 }                 
             } 
              
             if ($ress == 0) 
             { 
-                $ress = 800; 
+                $ress = 800 * STORAGE_MULTIPLIER; 
             } 
              
             if ($crop == 0) 
             { 
-                $crop = 800; 
+                $crop = 800 * STORAGE_MULTIPLIER; 
             } 
 
             mysql_query('UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . $ress . ', `maxcrop` = ' . $crop . ' WHERE `wref` = ' . $row['vref']) or die(mysql_error()); 
