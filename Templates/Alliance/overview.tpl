@@ -7,11 +7,12 @@ $aid = $session->alliance;
 }
 $varmedal = $database->getProfileMedalAlly($aid);  
 
-
 $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
 $totalpop = 0;
-
+if($allianceinfo['tag']==""){
+header("Location: allianz.php");
+}
 foreach($memberlist as $member) {
     $totalpop += $database->getVSumField($member['id'],"pop");
 }

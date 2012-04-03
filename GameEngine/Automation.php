@@ -1260,7 +1260,11 @@ private function loyaltyRegeneration() {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-                $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				if($bid34[$stonemason]==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+				}else{
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				}
                 if ($battlepart[4]>$needed_cata)
                 {
                     $info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
@@ -1409,7 +1413,11 @@ private function loyaltyRegeneration() {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-                $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				if($bid34[$stonemason]==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+				}else{
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				}
                 if (($battlepart[4]/2)>$needed_cata)
                 {
                     $info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
@@ -1555,7 +1563,11 @@ private function loyaltyRegeneration() {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-                $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				if($bid34[$stonemason]==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+				}else{
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				}
                 if (($battlepart[4]/2)>$needed_cata)
                 {
                     $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
@@ -1723,94 +1735,40 @@ private function loyaltyRegeneration() {
             }
         }
 
-  if($data['t11']>0)
-{
-    if ($isoasis != 0)
-    {
-        if (abs($tocoor['x']-$fromcoor['x'])<=3 && abs($tocoor['y']-$fromcoor['y'])<=3)
-        {
-            //count oasis troops: $troops_o
-            $troops_o=0;
-            $o_unit2=mysql_query("select * from ".TB_PREFIX."units where `vref`='".$data['to']."'");
-            $o_unit=mysql_fetch_array($o_unit2);
-
-            for ($i=1;$i<51;$i++)
-            {
-                $troops_o+=$o_unit[$i];
-            }
-            $troops_o+=$o_unit['hero'];
-
-            $o_unit2=mysql_query("select * from ".TB_PREFIX."enforcement where `vref`='".$data['to']."'");
-            while ($o_unit=@mysql_fetch_array($o_unit2))
-            {
-                for ($i=1;$i<51;$i++)
-                {
-                    $troops_o+=$o_unit[$i];
-                }
-                $troops_o+=$o_unit['hero'];
-            }
-
-
-            if ($troops_o<=0)
-            {
-                //check hero mansion level
-                $hero_mansion_level=0;
-                $dbo2=mysql_query("select * from ".TB_PREFIX."fdata where `vref`='".$data['from']."'");
-                $dbo=mysql_fetch_array($dbo2);
-                for ($i=19;$i<=40;$i++)
-                {
-                    if ($dbo['f'.$i.'t']==37)
-                    {
-                        $hero_mansion_level=$dbo['f'.$i];
-                    }
-                }
-
-                //check number of occupied oasis
-                $dbo2=mysql_query("select * from ".TB_PREFIX."odata where `conqured`='".$data['from']."'");
-                $number_o=mysql_num_rows($dbo2);
-
-                if ($number_o<3)
-                {
-                    $needed_hero_mansion_level=$number_o*5+10;
-                    if ($hero_mansion_level>=$needed_hero_mansion_level)
-                    {
-                        $dbo2=mysql_query("select * from ".TB_PREFIX."odata where `wref`='".$data['to']."'");
-                        $dbo=mysql_fetch_array($dbo2);
-                        $o_owner=$dbo['owner'];
-                        $o_conqured=$dbo['conqured'];
-                        $o_loyalty=$dbo['loyalty'];
-                        if ($o_conqured==""||$o_conqured=='0'||($o_loyalty<=25&&$o_conqured!=$data['from']))
-                        {
-                            @mysql_query("update ".TB_PREFIX."odata set `conqured`='".$data['from']."', `owner`='".$a_uid."', `name`='Occupied Oasis', `lastupdated`='".time()."', `loyalty`='100' where `wref`='".$data['to']."' ");
-                            @mysql_query("update ".TB_PREFIX."wdata set `occupied`='1' where `id`='".$data['to']."' ");
-                            $info_chief = "".$hero_pic.", The hero has occupied this oasis and gained ".$heroxp." XP";
-                        }
-                        else
-                        {
-                            if ($o_conqured!=$data['from'])
-                            {
-                                $o_loyalty=$o_loyalty-25;
-                                @mysql_query("update ".TB_PREFIX."odata set `lastupdated`='".time()."', `loyalty`='".$o_loyalty."' where `wref`='".$data['to']."' ");
-                                $info_chief = "".$hero_pic.", The hero gained ".$heroxp." XP. The loyalty of this oasis is ".$o_loyalty."%";
-                            }
-                        }
-                    }
-                    else
-                    {
-                        $info_chief = "".$hero_pic.", The hero gained ".$heroxp." XP. To occupy this oasis you need a Hero Mansion Level ".$needed_hero_mansion_level;
-                    }
-                }
-                else
-                {
-                    $info_chief = "".$hero_pic.", The hero has occupied maximun of 3 oases already. Hero gained ".$heroxp." XP";
-                }
-
-            }
+ if($data['t11'] > 0){ 
+            if ($isoasis != 0) { 
+                if ($database->canConquerOasis($data['from'],$data['to'])) { 
+                    $database->conquerOasis($data['from'],$data['to']); 
+                    $info_chief = $hero_pic." Your hero has conquered this oasis and gained ".$heroxp." XP"; 
+                } else { 
+                    $OasisInfo = $database->getOasisInfo($data['to']); 
+                    if ($OasisInfo['conqured'] != 0) { 
+                        $Oloyaltybefore =  $OasisInfo['loyalty']; 
+                        $database->modifyOasisLoyalty($data['to']); 
+                        $OasisInfo = $database->getOasisInfo($data['to']); 
+                        $Oloyaltynow =  $OasisInfo['loyalty']; 
+                        $info_chief = $hero_pic." Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP"; 
+                    } else { 
+                        if ($heroxp == 0) { 
+                            $info_chief = $hero_pic." Your hero had nothing to kill therfore gains no XP at all"; 
+                        } else { 
+                            $info_chief = $hero_pic." Your hero gained ".$heroxp." XP"; 
+                        } 
+                    } 
+                } 
+            } else { 
+                        $artifact = $database->getOwnArtefactInfo($data['to']); 
+                        if ($artifact['vref'] == $data['to']){ 
+                        if($database->canClaimArtifact($artifact['vref'],$artifact['size'])) { 
+                         $database->claimArtefact($data['to'],$data['to'],$database->getVillageField($data['from'],"owner")); 
+                          $info_chief = $hero_pic." Your hero is carrying home a artifact, and gained ".$heroxp." XP from the battle";   
+                        }else{ 
+                         $info_chief = $hero_pic." Your hero could not claim the artifact, and gained ".$heroxp." XP from the battle";   
+                            
+                        } 
+                        } 
+            } 
         }
-
-    }
-
-}
 
                 if($scout){
                 if ($data['spy'] == 1){

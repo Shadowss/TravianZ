@@ -34,10 +34,18 @@ $uprequire = $building->resourceRequired($id,$bid);
     	echo "<span class=\"none\">Enough resources ".$neededtime[0]." at  ".$neededtime[1]."</span>";
      }
      else if($bindicator == 8) {
+	 if($session->access!=BANNED){
      	echo "<a class=\"build\" href=\"dorf2.php?a=$bid&id=$id&c=".$session->checker."\">Construct building.</a>";
+	 }else{
+		echo "<a class=\"build\" href=\"banned.php\">Construct building.</a>";
+	 }
      }
      else if($bindicator == 9) {
+	 if($session->access!=BANNED){
      	echo "<a class=\"build\" href=\"dorf2.php?a=$bid&id=$id&c=".$session->checker."\">Construct building. (waiting loop)</a>";
+	 }else{
+		echo "<a class=\"build\" href=\"banned.php?a=$bid&id=$id&c=".$session->checker."\">Construct building. (waiting loop)</a>";
+	 }
      }
             ?>	
 </td>

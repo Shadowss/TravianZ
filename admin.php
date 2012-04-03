@@ -20,9 +20,7 @@
 session_start();
 include("GameEngine/Database.php");
 include("GameEngine/Admin/database.php");  
-
-        if($session->access < ADMIN)
-        	die("Access Denied: You are not Admin!");
+		
 ?>                                             
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

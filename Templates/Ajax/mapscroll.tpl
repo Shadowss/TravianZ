@@ -49,42 +49,42 @@ header("Content-Type: application/json;");
 $maparray = (substr($maparray, 0, -1));
 
 $query2 = "SELECT
-					s1_wdata.id AS map_id,
-					s1_wdata.fieldtype AS map_fieldtype,
-					s1_wdata.oasistype AS map_oasis,
-					s1_wdata.x AS map_x,
-					s1_wdata.y AS map_y,
-					s1_wdata.occupied AS map_occupied,
-					s1_wdata.image AS map_image,
+					".TB_PREFIX."wdata.id AS map_id,
+					".TB_PREFIX."wdata.fieldtype AS map_fieldtype,
+					".TB_PREFIX."wdata.oasistype AS map_oasis,
+					".TB_PREFIX."wdata.x AS map_x,
+					".TB_PREFIX."wdata.y AS map_y,
+					".TB_PREFIX."wdata.occupied AS map_occupied,
+					".TB_PREFIX."wdata.image AS map_image,
 
-					s1_odata.conqured AS oasis_conqured,
+					".TB_PREFIX."odata.conqured AS oasis_conqured,
 					info_user_oasis.username AS oasis_user,
 					info_user_oasis.tribe AS oasis_tribe,
 					info_alliance_oasis.tag AS oasis_alli_name,
 
-					s1_vdata.wref AS ville_id,
-					s1_vdata.owner AS ville_user,
-					s1_vdata.name AS ville_name,
-					s1_vdata.capital AS ville_capital,
-					s1_vdata.pop AS ville_pop,
+					".TB_PREFIX."vdata.wref AS ville_id,
+					".TB_PREFIX."vdata.owner AS ville_user,
+					".TB_PREFIX."vdata.name AS ville_name,
+					".TB_PREFIX."vdata.capital AS ville_capital,
+					".TB_PREFIX."vdata.pop AS ville_pop,
 
-					s1_users.id AS user_id,
-					s1_users.username AS user_username,
-					s1_users.tribe AS user_tribe,
-					s1_users.alliance AS user_alliance,
+					".TB_PREFIX."users.id AS user_id,
+					".TB_PREFIX."users.username AS user_username,
+					".TB_PREFIX."users.tribe AS user_tribe,
+					".TB_PREFIX."users.alliance AS user_alliance,
 
-					s1_alidata.id AS aliance_id,
-					s1_alidata.tag AS aliance_name
+					".TB_PREFIX."alidata.id AS aliance_id,
+					".TB_PREFIX."alidata.tag AS aliance_name
 
-				FROM ((((((s1_wdata
-					LEFT JOIN s1_vdata ON s1_vdata.wref = s1_wdata.id )
-					LEFT JOIN s1_odata ON s1_odata.wref = s1_wdata.id )
-					LEFT JOIN s1_users AS info_user_oasis ON info_user_oasis.id = s1_odata.owner )
-					LEFT JOIN s1_alidata AS info_alliance_oasis ON info_alliance_oasis.id = info_user_oasis.alliance )
-					LEFT JOIN s1_users ON s1_users.id = s1_vdata.owner )
-					LEFT JOIN s1_alidata ON s1_alidata.id = s1_users.alliance )
-			where s1_wdata.id IN ($maparray)
-			ORDER BY FIND_IN_SET(s1_wdata.id,'$maparray2')";
+				FROM ((((((".TB_PREFIX."wdata
+					LEFT JOIN ".TB_PREFIX."vdata ON ".TB_PREFIX."vdata.wref = ".TB_PREFIX."wdata.id )
+					LEFT JOIN ".TB_PREFIX."odata ON ".TB_PREFIX."odata.wref = ".TB_PREFIX."wdata.id )
+					LEFT JOIN ".TB_PREFIX."users AS info_user_oasis ON info_user_oasis.id = ".TB_PREFIX."odata.owner )
+					LEFT JOIN ".TB_PREFIX."alidata AS info_alliance_oasis ON info_alliance_oasis.id = info_user_oasis.alliance )
+					LEFT JOIN ".TB_PREFIX."users ON ".TB_PREFIX."users.id = ".TB_PREFIX."vdata.owner )
+					LEFT JOIN ".TB_PREFIX."alidata ON ".TB_PREFIX."alidata.id = ".TB_PREFIX."users.alliance )
+			where ".TB_PREFIX."wdata.id IN ($maparray)
+			ORDER BY FIND_IN_SET(".TB_PREFIX."wdata.id,'$maparray2')";
 $result2 = mysql_query($query2) or die(mysql_error());
 
 $targetalliance = array();

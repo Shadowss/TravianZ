@@ -93,8 +93,8 @@ include ("GameEngine/Lang/".LANG.".php");
 
                                     <td><?php
 
-                                           $users = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users"));
-                                           echo ($users)-4;
+                                           $users = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5"));
+                                           echo $users;
 
                                     ?></td>
                                 </tr>
@@ -108,7 +108,7 @@ include ("GameEngine/Lang/".LANG.".php");
 
                                     <td><?php
 
-                                           $active = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (3600*24) AND tribe!=5 AND tribe!=0"));
+                                           $active = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (3600*24) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
                                            echo $active;
 
                                     ?></td>
@@ -123,7 +123,7 @@ include ("GameEngine/Lang/".LANG.".php");
 
                                     <td><?php
 
-                                           $online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*5) AND tribe!=5 AND tribe!=0"));
+                                           $online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*5) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
                                            echo $online;
 
                                     ?></td>
@@ -185,10 +185,10 @@ include ("GameEngine/Lang/".LANG.".php");
             <a href="#" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
             <ul class="world_list">
                 <li class="w_big c3" style="background-image:url('img/en/welten/en1_big_g.jpg');">
-                	<a href="login.php"><img class="w_button" src="img/un/x.gif" alt="World" title="<?php echo $users-4; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
+                	<a href="login.php"><img class="w_button" src="img/un/x.gif" alt="World" title="<?php echo $users; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
                     <div class="label_players c0"><?php echo PLAYERS; ?>:</div>
                     <div class="label_online c0"><?php echo ONLINE; ?>:</div>
-                    <div class="players c1"><?php echo $users-4; ?></div>
+                    <div class="players c1"><?php echo $users; ?></div>
                     <div class="online c1"><?php echo $online; ?></div>
                 </li>
             </ul>
@@ -205,7 +205,7 @@ include ("GameEngine/Lang/".LANG.".php");
                     <a href="anmelden.php"><img class="w_button" src="img/un/x.gif" alt="World" title="<?php echo $users; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
                     <div class="label_players c0"><?php echo PLAYERS; ?>:</div>
                     <div class="label_online c0"><?php echo ONLINE; ?>:</div>
-                    <div class="players c1"><?php echo $users-4; ?></div>
+                    <div class="players c1"><?php echo $users; ?></div>
                     <div class="online c1"><?php echo $online; ?></div>
                 </li>
             </ul>
