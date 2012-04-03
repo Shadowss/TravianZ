@@ -14,6 +14,16 @@ include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 $message->noticeType($_GET);
 $message->procNotice($_POST);
+if(isset($_GET['newdid'])) {
+	$_SESSION['wid'] = $_GET['newdid'];
+if(isset($_GET['t'])) {
+	header("Location: ".$_SERVER['PHP_SELF']."?t=".$_GET['t']);
+}else if(isset($_GET['id'])) {
+	header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
+}else{
+	header("Location: ".$_SERVER['PHP_SELF']);
+}
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
