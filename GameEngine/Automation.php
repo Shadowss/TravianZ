@@ -129,9 +129,11 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/cleardeleting.txt") or time()-filemtime("GameEngine/Prevention/cleardeleting.txt")>10) {
             $this->clearDeleting();
         }
-        if(!file_exists("GameEngine/Prevention/build.txt") or time()-filemtime("GameEngine/Prevention/build.txt")>10) {
-            $this->buildComplete();
-        }
+        if (! file_exists("GameEngine/Prevention/build.txt") or time() - filemtime("GameEngine/Prevention/build.txt") > 10) 
+        { 
+            $this->buildComplete(); 
+        } 
+        $this->updateStore();  
         if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>10) {
             $this->marketComplete();
         }
@@ -159,9 +161,11 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/celebration.txt") or time()-filemtime("GameEngine/Prevention/celebration.txt")>10) {
             $this->celebrationComplete();
         }
-        if(!file_exists("GameEngine/Prevention/demolition.txt") or time()-filemtime("GameEngine/Prevention/demolition.txt")>10) {
-            $this->demolitionComplete();
-        }
+        if (! file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt") > 10) 
+        { 
+            $this->demolitionComplete(); 
+        } 
+        $this->updateStore();  
     }
 
 private function loyaltyRegeneration() {
@@ -2646,6 +2650,54 @@ private function starvation() {
 
     
 }
+
+    // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > 
+    private function updateStore() 
+    {       
+        global $bid10, $bid38, $bid11, $bid39; 
+         
+        $result = mysql_query('SELECT * FROM `' . TB_PREFIX . 'fdata`'); 
+        while ($row = mysql_fetch_assoc($result)) 
+        { 
+            $ress = $crop = 0; 
+            for ($i = 19; $i < 40; ++$i) 
+            { 
+                if ($row['f' . $i . 't'] == 10) 
+                { 
+                    $ress += $bid10[$row['f' . $i]]['attri']; 
+                } 
+                 
+                if ($row['f' . $i . 't'] == 38) 
+                { 
+                    $ress += $bid38[$row['f' . $i]]['attri']; 
+                } 
+                 
+                 
+                 
+                if ($row['f' . $i . 't'] == 11) 
+                { 
+                    $crop += $bid11[$row['f' . $i]]['attri']; 
+                } 
+                 
+                if ($row['f' . $i . 't'] == 39) 
+                { 
+                    $crop += $bid39[$row['f' . $i]]['attri']; 
+                }                 
+            } 
+             
+            if ($ress == 0) 
+            { 
+                $ress = 800; 
+            } 
+             
+            if ($crop == 0) 
+            { 
+                $crop = 800; 
+            } 
+
+            mysql_query('UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . $ress . ', `maxcrop` = ' . $crop . ' WHERE `wref` = ' . $row['vref']) or die(mysql_error()); 
+        }         
+    }  
 }
 $automation = new Automation;
 ?>
