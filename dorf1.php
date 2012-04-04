@@ -12,13 +12,13 @@
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['ok'])){
-	$database->updateUserField($session->username,'ok','0','0'); $_SESSION['ok'] = '0'; }
+$database->updateUserField($session->username,'ok','0','0'); $_SESSION['ok'] = '0';
+}
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF']);
-}
-else {
-	$building->procBuild($_GET);
+}else{
+$building->procBuild($_GET);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

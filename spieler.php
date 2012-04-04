@@ -10,14 +10,20 @@
 ##                                                                             ##
 #################################################################################
 
-ob_start();
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 $profile->procProfile($_POST);
 $profile->procSpecial($_GET);
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
+	if(isset($_GET['s'])){
+	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
+	}else{
 	header("Location: ".$_SERVER['PHP_SELF']);
+}
+}
+else {
+	$building->procBuild($_GET);
 }
 if(isset($_GET['s'])){
 $automation->isWinner();

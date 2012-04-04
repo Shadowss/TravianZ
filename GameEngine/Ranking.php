@@ -46,7 +46,7 @@
 				WHERE " . TB_PREFIX . "vdata.owner = userid
 				)totalpop
 				FROM " . TB_PREFIX . "users
-				WHERE " . TB_PREFIX . "users.id != 0 and id != 1 and id != 2 and id != 3 and id != 4 and id != 5
+				WHERE " . TB_PREFIX . "users.id != 0 and id != 1 and id != 2 and id != 4 and id != 5
 				ORDER BY totalpop DESC, userid ASC";
 				$result = mysql_query($q);
 				$i = 1;

@@ -19,6 +19,17 @@
        include ("GameEngine/Chat.php");
        $start = $generator->pageLoadTimeStart();
        $alliance->procAlliance($_GET);
+if(isset($_GET['newdid'])) {
+	$_SESSION['wid'] = $_GET['newdid'];
+	if(isset($_GET['s'])){
+	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
+	}else if(isset($_GET['aid'])){
+	header("Location: ".$_SERVER['PHP_SELF']."?aid=".$_GET['aid']);
+	}
+	else{
+	header("Location: ".$_SERVER['PHP_SELF']);
+}
+}
 	   if(isset($_GET['s'])){
 		$automation->isWinner();
 		}

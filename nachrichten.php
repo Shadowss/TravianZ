@@ -21,7 +21,7 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 if(isset($_GET['t'])) {
 	header("Location: ".$_SERVER['PHP_SELF']."?t=".$_GET['t']);
-}else if(isset($_GET['id'])) {
+}else if($_GET['id']!=0) {
 	header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
 }else{
 	header("Location: ".$_SERVER['PHP_SELF']);
