@@ -9,7 +9,7 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
+ob_start();
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 $profile->procProfile($_POST);
@@ -18,6 +18,8 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	if(isset($_GET['s'])){
 	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
+	}else if(isset($_GET['uid'])){
+	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$_GET['uid']);
 	}else{
 	header("Location: ".$_SERVER['PHP_SELF']);
 }
@@ -144,6 +146,8 @@ else if (isset($_GET['s'])) {
 	if($_GET['s'] == 4) {
 		include("Templates/Profile/graphic.tpl");
 	}
+}else{
+header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
 }
 ?>
 </div>
