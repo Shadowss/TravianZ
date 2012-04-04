@@ -60,7 +60,8 @@
         				case "m5":
         					if(isset($post['delmsg_x'])) {
 							if($session->access!=BANNED){
-        						$this->removeMessage($post);
+							$this->removeMessage($post);
+							$this->header($get);
 						}else{
 						header("Location: banned.php");
 						}
@@ -115,6 +116,7 @@
         	}
 
         	public function procNotice($post) {
+			global $session;
         		if(isset($post["del_x"])) {
 				if($session->access != BANNED){
         			$this->removeNotice($post);

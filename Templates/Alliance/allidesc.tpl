@@ -94,7 +94,7 @@ INDELING CATEGORIEEN:
         $titel="Defender of the Week";
         break;
     case "3":
-        $titel="Pop Climber of the week";
+        $titel="Climber of the week";
         break;
     case "4":
         $titel="Robber of the week";

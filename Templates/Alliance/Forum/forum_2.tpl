@@ -4,6 +4,16 @@ if($session->access!=BANNED){
 $displayarray = $database->getUserArray($session->uid,1);
 $forumcat = $database->ForumCat(htmlspecialchars($displayarray['alliance']));
 $forum_cat = $database->ForumCat;
+$ally = $session->alliance;
+$public = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 1");
+$public1 = mysql_num_rows($public);
+$cofederation = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2");
+$cofederation1 = mysql_num_rows($cofederation);
+$alliance = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0");
+$alliance1 = mysql_num_rows($alliance);
+$closed = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3");
+$closed1 = mysql_num_rows($closed);
+if($public1 != 0){
 ?>
 <table cellpadding="1" cellspacing="1" id="public"><thead>
 		<tr>
@@ -53,6 +63,9 @@ echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$ai
 }
 ?>
 		</tbody></table>
+<?php
+}if($cofederation1 != 0){
+?>
 <table cellpadding="1" cellspacing="1" id="confederation"><thead>
 		<tr>
 	        <th colspan="4">Confederation Forum</th>
@@ -101,6 +114,9 @@ echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$ai
 }
 ?>
 		</tbody></table>
+<?php
+}if($alliance1 != 0){
+?>
 <table cellpadding="1" cellspacing="1" id="alliance"><thead>
 		<tr>
 	        <th colspan="4">Alliance Forum</th>
@@ -149,6 +165,9 @@ echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$ai
 }
 ?>
 		</tbody></table>
+<?php
+}if($closed1 != 0){
+?>
 <table cellpadding="1" cellspacing="1" id="closed"><thead>
 		<tr>
 	        <th colspan="4">Closed Forum</th>
@@ -196,7 +215,11 @@ echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$ai
 }
 }
 ?>
-		</tbody></table><p>
+		</tbody></table>
+		<?php
+		}
+		?>
+		<p>
 		<?php
 			$opt = $database->getAlliPermissions($session->uid, $aid);
 			if($opt['opt5'] == 1){
