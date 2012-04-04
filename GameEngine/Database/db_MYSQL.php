@@ -729,11 +729,13 @@
         		return $this->mysql_fetch_all($result);
         	}
 
-        	function getCoor($wref) {
-        		$q = "SELECT x,y FROM " . TB_PREFIX . "wdata where id = $wref";
-        		$result = mysql_query($q, $this->connection);
-        		return mysql_fetch_array($result);
-        	}
+			function getCoor($wref) { 
+				if ($wref !=""){ 
+				$q = "SELECT x,y FROM " . TB_PREFIX . "wdata where id = $wref"; 
+				$result = mysql_query($q, $this->connection); 
+				return mysql_fetch_array($result); 
+				} 
+			}
 
         	function CheckForum($id) {
         		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id'";
