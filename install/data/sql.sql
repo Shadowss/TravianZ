@@ -1234,6 +1234,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `desc1` text NOT NULL,
   `desc2` text NOT NULL,
   `plus` int(10) unsigned NOT NULL DEFAULT '0',
+  `goldclub` int(10) unsigned NOT NULL DEFAULT '0',
   `b1` int(10) unsigned NOT NULL DEFAULT '0',
   `b2` int(10) unsigned NOT NULL DEFAULT '0',
   `b3` int(10) unsigned NOT NULL DEFAULT '0',

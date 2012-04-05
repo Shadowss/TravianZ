@@ -111,7 +111,10 @@ include("Templates/Plus/13.tpl");
 if ($id == 14) {
 include("Templates/Plus/14.tpl");
 }
-if ($id > 14) {
+if ($id == 15) {
+include("Templates/Plus/15.tpl");
+}
+if ($id > 15) {
 include("Templates/Plus/3.tpl");
 }
 ?>

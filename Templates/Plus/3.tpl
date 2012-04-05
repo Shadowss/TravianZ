@@ -455,4 +455,54 @@ if (mysql_num_rows($MyGold)) {
 
         </tbody>
     </table>
+    <table class="plusFunctions" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <th colspan="5">Travian Gold Club</th>
+            </tr>
+            <tr>
+                <td></td>
+
+                <td>Description</td>
+                <td>Duration</td>
+                <td>Gold</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+
+        <tr>
+            <td class="man"></td>
+            <td class="desc">
+<b>Gold Club</b></br>
+<font size="2">Gold Club including: farmlist, merchants run three times, crop finder, master builder, trade routes and automatic send away troops before an attack.</font>
+        <span class="run">
+    </span>
+            </td>
+            <td class="dur">Active for the current round of the game, not including bouns production or plus additions.
+            </td>
+            <td class="cost"><img src="img/x.gif" class="gold" alt="Gold" title="Gold" alt="Gold" title="Gold" />100</td>
+            <td class="act">
+
+<?php
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $golds = mysql_fetch_array($MyGold);
+
+if (mysql_num_rows($MyGold)) {
+	if($golds['goldclub']==0){
+    if($golds['gold'] > 99) {
+    echo '
+                <a href="plus.php?id=15"><span>Activate';
+}else{
+    echo '
+                <a href="plus.php?s=1"><span class="none">too little gold';
+
+}} else {
+    echo '<a href="plus.php?id=3"><span class="none">On';}
+}
+ ?>
+    </span></a></td>
+        </tr>
+        </tbody>
+    </table>
 </div>

@@ -10,7 +10,7 @@
 
    include ("GameEngine/Village.php");
 
-   if($session->plus == 0) {
+   if($session->goldclub == 0) {
        header("Location: plus.php?id=3");
    }
 

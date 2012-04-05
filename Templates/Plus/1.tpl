@@ -437,5 +437,3 @@ if($session->access != BANNED){
 <div style="padding: 10px 10px; font-style: italic; font-size: 10px;">All prices listed are final sales amounts.</div>
 <?php } ?>
 </div>
-
-</div>

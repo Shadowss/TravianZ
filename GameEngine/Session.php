@@ -138,6 +138,7 @@ class Session {
         		$this->gpack = $this->userarray['gpack'];
         		$this->access = $this->userarray['access'];
         		$this->plus = ($this->userarray['plus'] > $this->time);
+				$this->goldclub = $this->userarray['goldclub'];
         		$this->villages = $database->getVillagesID($this->uid);
         		$this->tribe = $this->userarray['tribe'];
         		$this->isAdmin = $this->access >= MODERATOR;
