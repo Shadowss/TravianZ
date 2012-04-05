@@ -233,6 +233,10 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<tr>	<td><span class="f9 c6">Error Reporting:</span></td><td><select name="error">
 	  <option value="error_reporting (E_ALL ^ E_NOTICE);" selected="selected">Yes</option>
 	  <option value="error_reporting (0);">No</option>
+	</select></td></tr><tr>
+	<td><span class="f9 c6">T4 is Coming screen:</span></td><td><select name="t4_coming">
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr>
 	</table>
 	</p>

@@ -1,0 +1,129 @@
+@CHARSET "UTF-8";
+
+/*
+ *------------------------------------------------------------------------------
+ * LANG is used to define the language-specific images.
+ *
+ * Contains:
+ * width, height, background-image, background-repeat, background-position
+ *------------------------------------------------------------------------------
+ */
+ 
+/* ------------------- Buttons ------------------- */
+/* ----------------------------------------------- */
+/* Ally Forum */
+div.forum input#fbtn_ok {
+	width: 47px;
+	background-image: url(b/ok.html);
+}
+
+div.forum input#fbtn_vote {
+	width: 97px;
+	background-image: url(f/vote.html);
+}
+
+div.forum input#fbtn_result {
+	width: 97px;
+	background-image: url(f/result.html);
+}
+
+div.forum input#fbtn_voting {
+	width: 97px;
+	background-image: url(f/voting.html);
+}
+
+div.forum img#fbtn_reply {
+	width: 97px;
+	background-image: url(f/reply.html);
+}
+
+div.forum img#fbtn_post {
+	width: 97px;
+	background-image: url(f/post.html);
+}
+
+div.forum img#fbtn_newforum {
+	width: 97px;
+	background-image: url(f/newforum.html);
+}
+
+/* ------------------- Images ------------------- */
+/* ---------------------------------------------- */
+/* plus previews */
+div.plus table#plus_features td.preview img.autovv {
+	width: 200px;
+	background-image: url(p/autovv.html);
+	height: 56px;
+}
+
+div.plus table#plus_features td.preview img.bfilter {
+	width: 200px;
+	background-image: url(p/bfilter.html);
+	height: 45px;
+}
+
+div.plus table#plus_features td.preview img.dorf3 {
+	width: 200px;
+	background-image: url(p/dorf3.html);
+	height: 186px;
+}
+
+div.plus table#plus_features td.preview img.p1 {
+	width: 179px;
+	background-image: url(p/p1.html);
+	height: 29px;
+}
+
+div.plus table#plus_features td.preview img.p3 {
+	width: 163px;
+	background-image: url(p/p3.html);
+	height: 120px;
+}
+
+div.plus table#plus_features td.preview img.p4 {
+	width: 197px;
+	background-image: url(p/p4.html);
+	height: 41px;
+}
+
+div.plus table#plus_features td.preview img.p5 {
+	width: 132px;
+	background-image: url(p/p5.html);
+	height: 51px;
+}
+
+div.plus table#plus_features td.preview img.p6 {
+	width: 111px;
+	background-image: url(p/p6.html);
+	height: 29px;
+}
+
+div.plus table#plus_features td.preview img.p7 {
+	width: 61px;
+	background-image: url(p/p7.html);
+	height: 86px;
+}
+
+div.plus table#plus_features td.preview img.p8 {
+	width: 117px;
+	background-image: url(p/p8.html);
+	height: 121px;
+}
+
+div.plus table#plus_features td.preview img.sort {
+	width: 200px;
+	background-image: url(p/sort.html);
+	height: 38px;
+}
+
+div.plus table#plus_features td.preview img.st1 {
+	width: 200px;
+	background-image: url(p/st1.html);
+	height: 90px;
+}
+
+div.plus table#plus_features td.preview img.xxl_map {
+	width: 146px;
+	background-image: url(p/xxl_map.html);
+	height: 112px;
+}

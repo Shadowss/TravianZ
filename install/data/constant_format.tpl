@@ -88,6 +88,9 @@ define("PROTECTION","%BEGINNER%");
 // ***** Enable WW Statistics
 define("WW",%WW%);
 
+// ***** Enable T4 is Coming screen
+define("T4_COMING",%T4_COMING%);
+
 // ***** Activation Mail
 // true = activation mail will be sent, users will have to finish registration
 //        by clicking on link recieved in mail.

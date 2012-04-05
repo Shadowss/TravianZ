@@ -69,6 +69,15 @@ include ("GameEngine/Lang/".LANG.".php");
                 </tr>
             </table>
         </div>
+		<?php
+		if(T4_COMING==true){
+		?>
+		<div id="t4play">
+		<a href="notification/">
+		<img src="img/t4n/Teaser_Prelandingpage_EN.png" alt="Travian 4" />
+		</a>
+		</div>
+		<?php } ?>
         <div id="register_now">
             <a href="?signup" class="signup_link"><?php echo $lang['register']; ?></a>
             <span><?php echo PLAY_NOW; ?></span>

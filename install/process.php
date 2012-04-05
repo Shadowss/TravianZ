@@ -88,6 +88,7 @@
         		$text = preg_replace("'%GREAT_WKS%'", $_POST['great_wks'], $text);
         		$text = preg_replace("'%TS_THRESHOLD%'", $_POST['ts_threshold'], $text);
         		$text = preg_replace("'%WW%'", $_POST['ww'], $text);
+				$text = preg_replace("'%T4_COMING%'", $_POST['t4_coming'], $text);
 
         		fwrite($fh, $text);
 
