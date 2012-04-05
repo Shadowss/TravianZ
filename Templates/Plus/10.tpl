@@ -21,19 +21,14 @@ if (mysql_num_rows($MyGold)) {
 
 if (mysql_num_rows($MyGold)) {
 
-if($golds['14'] <= time()) {
-mysql_query("UPDATE ".TB_PREFIX."users set b2 = '0' where `username`='".$session->username."'") or die(mysql_error());
-}
-
-
-if($golds['14'] == 0) {
+if($golds['b2'] == 0) {
 mysql_query("UPDATE ".TB_PREFIX."users set b2 = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+".PLUS_PRODUCTION." where `username`='".$session->username."'") or die(mysql_error());
 } else {
-mysql_query("UPDATE ".TB_PREFIX."users set b2 = '".($golds['14']+PLUS_PRODUCTION)."' where `username`='".$session->username."'") or die(mysql_error());
+mysql_query("UPDATE ".TB_PREFIX."users set b2 = '".($golds['b2']+PLUS_PRODUCTION)."' where `username`='".$session->username."'") or die(mysql_error());
 }
 
 
-$done1 = "+25%  Production: Clay";
+$done1 = "+25% Production: Clay";
     mysql_query("UPDATE ".TB_PREFIX."users set gold = ".($session->gold-5)." where `username`='".$session->username."'") or die(mysql_error());
     mysql_query("INSERT INTO ".TB_PREFIX."gold_fin_log VALUES ('".(mysql_num_rows($goldlog)+1)."', '".$village->wid."', '+25%  Production: Clay')") or die(mysql_error());
 

@@ -32,9 +32,9 @@ $ckey= $generator->generateRandStr(6);
  $totalunits =$process['t1']+$process['t2']+$process['t3']+$process['t5']+$process['t6']+$process['t7']+$process['t8']+$process['t9']+$process['t10']+$process['t11'];
  }
  if ($scout==1 && $totalunits==0) {
-
+if ($process['c'] != 2){
 $process['c'] = 1;
-
+}
 }
     $id = $database->addA2b($ckey,time(),$process['0'],$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,$process['c']);
 

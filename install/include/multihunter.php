@@ -17,7 +17,7 @@
         	$status = $database->getVillageState($wid);
         	if($status == 0) {
         		$database->setFieldTaken($wid);
-        		$database->addVillage($wid, $uid, 'Multihunter', '5');
+        		$database->addVillage($wid, $uid, 'Multihunter', '0');
         		$database->addResourceFields($wid, $database->getVillageType($wid));
         		$database->addUnits($wid);
         		$database->addTech($wid);

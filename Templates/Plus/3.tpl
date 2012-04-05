@@ -3,26 +3,6 @@
     $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
-if($golds['13'] <= time()) {
-mysql_query("UPDATE ".TB_PREFIX."users set b1 = '0' where `username`='".$session->username."'") or die(mysql_error());
-}
-
-if($golds['14'] <= time()) {
-mysql_query("UPDATE ".TB_PREFIX."users set b2 = '0' where `username`='".$session->username."'") or die(mysql_error());
-}
-if($golds['15'] <= time()) {
-mysql_query("UPDATE ".TB_PREFIX."users set b3 = '0' where `username`='".$session->username."'") or die(mysql_error());
-}
-
-if($golds['16'] <= time()) {
-mysql_query("UPDATE ".TB_PREFIX."users set b4 = '0' where `username`='".$session->username."'") or die(mysql_error());
-}
-
-
-
-
-
-
 include("Templates/Plus/pmenu.tpl");
 
 
