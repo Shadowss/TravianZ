@@ -78,7 +78,7 @@ if($wall == 0) {
     include("avaliable/citywall.tpl");
     }
 }
-if(($warehouse == 0 || $warehouse == 20) && $id != 39 && $id != 40) {
+if(($warehouse == 0 || $warehouse == 20) && $mainbuilding >= 1 && $id != 39 && $id != 40) {
 include("avaliable/warehouse.tpl");
 }
 if($mainbuilding >= 10 && $village->capital == 0 && $largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid ) {
