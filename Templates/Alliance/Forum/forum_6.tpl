@@ -28,7 +28,7 @@ if($displayarray['tribe'] == 1) {
 }
 $input = $arr['post'];
 $bbcoded = $input;
-include("GameEngine/bbcode.php");
+include("GameEngine/BBCode.php");
 $bbcode_topic = nl2br($bbcoded);
 ?>
 <h4><a href="allianz.php?s=2&pid=<?php echo $arr['alliance']; ?>">Alliance</a> -> <a href="allianz.php?s=2&pid=<?php echo $arr['alliance']; ?>&fid=<?php echo $arr['cat']; ?>"><?php echo $CatName; ?></a></h4><table cellpadding="1" cellspacing="1" id="posts"><thead>
