@@ -94,11 +94,11 @@ else if(isset($_GET['uid'])) {
 			<td class="aligned_coords"><div class="cox">('.$returnVillageArray[$i-1]['x'].'</div><div class="pi">|</div><div class="coy">'.$returnVillageArray[$i-1]['y'].')</div></td></tr>';
 	}
 }
-else{
+else if(isset($_GET['vill']) && isset($_GET['id'])) {
 		for($i=1;$i<=count($session->villages);++$i){echo'
 		<tr>
 			<td class="dot '.(($_SESSION['wid'] == $returnVillageArray[$i-1]['wref'] ) ? 'hl':'').'">●</td>
-			<td class="link"><a href="?newdid='.$returnVillageArray[$i-1]['wref'].(($id>=19) ? "&id=".$id : "&id=".$_GET['id']).'">'.htmlspecialchars($returnVillageArray[$i-1]['name']).'</a></td>
+			<td class="link"><a href="?newdid='.$returnVillageArray[$i-1]['wref'].(($id>=19) ? "&id=".$id : "&id=".$_GET['id'])."&vill=".$_GET['vill'].'">'.htmlspecialchars($returnVillageArray[$i-1]['name']).'</a></td>
 			<td class="aligned_coords"><div class="cox">('.$returnVillageArray[$i-1]['x'].'</div><div class="pi">|</div><div class="coy">'.$returnVillageArray[$i-1]['y'].')</div></td></tr>';
 	}}?>
 	</tbody>

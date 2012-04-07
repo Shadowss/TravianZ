@@ -1437,6 +1437,13 @@
         		$result = mysql_query($q, $this->connection);
         		return $this->mysql_fetch_all($result);
         	}
+			
+			function getNotice2($id, $field) {
+        		$q = "SELECT ".$field." FROM " . TB_PREFIX . "ndata where `id` = '$id'";
+        		$result = mysql_query($q, $this->connection);
+        		$dbarray = mysql_fetch_array($result);
+        		return $dbarray[$field];
+        	}
 
         	function addBuilding($wid, $field, $type, $loop, $time) {
         		$x = "UPDATE " . TB_PREFIX . "fdata SET f" . $field . "t=" . $type . " WHERE vref=" . $wid;

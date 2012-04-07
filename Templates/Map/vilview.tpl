@@ -162,7 +162,7 @@ while($row = mysql_fetch_array($result)){
 	echo "<tr><td>";
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
     $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
 }
 }else{ ?>
@@ -182,7 +182,7 @@ while($row = mysql_fetch_array($result)){
 	echo "<tr><td>";
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
     $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
 }
 }else{ ?>
@@ -253,7 +253,7 @@ while($row = mysql_fetch_array($result)){
 	echo "<tr><td>";
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
     $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
 }
 }else{ ?>
@@ -273,7 +273,7 @@ while($row = mysql_fetch_array($result)){
 	echo "<tr><td>";
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
     $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
 }
 }else{ ?>
@@ -371,7 +371,7 @@ while($row = mysql_fetch_array($result)){
 	echo "<tr><td>";
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
     $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
 }
 }else{ ?>
@@ -391,7 +391,7 @@ while($row = mysql_fetch_array($result)){
 	echo "<tr><td>";
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
     $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
 }
 }else{ ?>

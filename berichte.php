@@ -18,6 +18,8 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 if(isset($_GET['t'])) {
 	header("Location: ".$_SERVER['PHP_SELF']."?t=".$_GET['t']);
+}else if(isset($_GET['vill']) && isset($_GET['id'])) {
+	header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']."&vill=".$_GET['vill']."");
 }else if($_GET['id']!=0) {
 	header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
 }else{
@@ -82,13 +84,43 @@ if(isset($_GET['t'])) {
  ?>
 </div>
 <?php 
-if(isset($_GET['id'])) {
-	$type = ($message->readingNotice['ntype'] == 5)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
-	include("Templates/Notice/".$type.".tpl");
-}
-else {
-	include("Templates/Notice/all.tpl");
-}
+if(isset($_GET['aid'])){
+	if($session->alliance==$_GET['aid']){
+		
+		if(isset($_GET['id'])) {
+		$ally = $database->getNotice2($_GET['id'], 'ally');
+		if($session->alliance==$ally){
+			$type = $database->getNotice2($_GET['id'], 'ntype');
+		if($type==0 or $type==1 or $type==2 or $type==3 or $type==4 or $type==5 or $type==6 or $type==7 or $type==9){
+			include("Templates/Notice/".$type."x.tpl");
+		}
+		}
+		}
+	}
+	
+}else if(isset($_GET['vill'])){
+		
+		if(isset($_GET['id'])) {
+		$ally = $database->getNotice2($_GET['id'], 'ally');
+		if($database->getNotice2($_GET['id'], 'uid') == $session->uid){
+		$type = ($message->readingNotice['ntype'] == 5)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
+		include("Templates/Notice/".$type.".tpl");
+		}else if($session->alliance==$ally){
+		$type = $database->getNotice2($_GET['id'], 'ntype');
+		if($type==0 or $type==1 or $type==2 or $type==3 or $type==4 or $type==5 or $type==6 or $type==7 or $type==9){
+			include("Templates/Notice/".$type."x.tpl");
+		}
+		}
+		}
+		
+	}else if(isset($_GET['id'])) {
+		if($database->getNotice2($_GET['id'], 'uid') == $session->uid){
+		$type = ($message->readingNotice['ntype'] == 5)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
+		include("Templates/Notice/".$type.".tpl");
+		}
+	} else {
+		include("Templates/Notice/all.tpl");
+	}
 ?>
 </div>
  
