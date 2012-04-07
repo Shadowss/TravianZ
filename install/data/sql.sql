@@ -948,6 +948,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   `from` int(11) unsigned NOT NULL DEFAULT '0',
   `to` int(11) unsigned NOT NULL DEFAULT '0',
   `ref` int(11) unsigned NOT NULL DEFAULT '0',
+  `starttime` int(11) unsigned NOT NULL DEFAULT '0',
   `endtime` int(11) unsigned NOT NULL DEFAULT '0',
   `proc` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`moveid`)
