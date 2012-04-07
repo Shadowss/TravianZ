@@ -22,12 +22,6 @@ if ($isoasis ==0){
 $to = $database->getMInfo($units[$y]['to']);
 } else {
 $to = $database->getOMInfo($units[$y]['to']);}
-
-if (($units[$y]['starttime']+60)>time()){
-
-$canceltroops='<div class="abort"><a href="build.php?id='.$_GET['id'].'&mode=troops&cancel=1&moveid='.$units[$y]['moveid'].'"><img src="img/x.gif" class="del" /></a>';
-
-}else{$canceltroops="";}
 ?>
 <table class="troop_details" cellpadding="1" cellspacing="1">            
 	<thead>
@@ -77,8 +71,10 @@ $canceltroops='<div class="abort"><a href="build.php?id='.$_GET['id'].'&mode=tro
 				    echo "on ".$datetime[0]." ";
 				    }
 				    echo "at ".$datetime[1]."</div>";
-    		?>
-					<!--<div class="abort"><a href="build.php?id=39&a=4&t=5360004"><img src="img/x.gif" class="del" title="Annuleren" alt="Annuleren" /></a>-->
+					if (($units[$y]['starttime']+90)>time()){
+				?>
+                    <div class="abort"><a href="build.php?id=<?php echo $_GET['id']."&mode=troops&cancel=1&moveid=".$units[$y]['moveid']; ?>"><img src="img/x.gif" class="del" /></a></div>
+					<?php } ?>
 					</div>
 				</td>
 			</tr>
@@ -141,8 +137,10 @@ $timer += 1;
                     echo "on ".$datetime[0]." ";
                     }
                     echo "at ".$datetime[1]."</div>";
-            ?>
-                    <!--<div class="abort"><a href="build.php?id=39&a=4&t=5360004"><img src="img/x.gif" class="del" title="Annuleren" alt="Annuleren" /></a>-->
+					if (($units[$y]['starttime']+90)>time()){
+				?>
+                    <div class="abort"><a href="build.php?id=<?php echo $_GET['id']."&mode=troops&cancel=1&moveid=".$units[$y]['moveid']; ?>"><img src="img/x.gif" class="del" /></a></div>
+					<?php } ?>
                     </div>
                 </td>
             </tr>

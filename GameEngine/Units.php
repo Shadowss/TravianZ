@@ -284,7 +284,7 @@ class Units {
         if (isset($post['spy'])){$post['spy'] = $post['spy'];}else{ $post['spy'] = 0;} 
 		$abdata = $database->getABTech($village->wid);
 		$reference = $database->addAttack(($village->wid),$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],$data['type'],$post['ctar1'],$post['ctar2'],$post['spy'],$abdata['b1'],$abdata['b2'],$abdata['b3'],$abdata['b4'],$abdata['b5'],$abdata['b6'],$abdata['b7'],$abdata['b8']);
-  		$database->addMovement(3,$village->wid,$data['to_vid'],$reference,($time+time()));
+  		$database->addMovement(3,$village->wid,$data['to_vid'],$reference,time(),($time+time()));
    
 		if($form->returnErrors() > 0) {
 			$_SESSION['errorarray'] = $form->getErrors();
@@ -363,7 +363,7 @@ class Units {
 				}
 				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],0,2,0,0,0,0);
-				$database->addMovement(4,$village->wid,$enforce['from'],$reference,($time+time()));
+				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
 				$technology->checkReinf($post['ckey']);
 
 						header("Location: build.php?id=39");
@@ -392,7 +392,7 @@ class Units {
       
 		  $database->modifyResource($village->wid,750,750,750,750,0);
 		  $database->modifyUnit($village->wid,array($unit),array(3),array(0));
-		  $database->addMovement(5,$village->wid,$post['s'],0,$post['timestamp']);
+		  $database->addMovement(5,$village->wid,$post['s'],0,time(),$post['timestamp']);
 		  header("Location: build.php?id=39");
 		
 		  if($form->returnErrors() > 0) {

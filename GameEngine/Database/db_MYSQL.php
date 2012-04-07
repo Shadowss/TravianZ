@@ -1743,8 +1743,8 @@
         		}
         	}
 
-        	function addMovement($type, $from, $to, $ref, $endtime) {
-        		$q = "INSERT INTO " . TB_PREFIX . "movement values (0,$type,$from,$to,$ref,$endtime,0)";
+        	function addMovement($type, $from, $to, $ref, $time, $endtime) {
+        		$q = "INSERT INTO " . TB_PREFIX . "movement values (0,$type,$from,$to,$ref,$time,$endtime,0)";
         		return mysql_query($q, $this->connection);
         	}
 

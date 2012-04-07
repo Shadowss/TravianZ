@@ -545,7 +545,7 @@ private function loyaltyRegeneration() {
             $fromcoor = $database->getCoor($data['to']);
             $targettribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
             $endtime = $this->procDistanceTime($tocoor,$fromcoor,$targettribe,0) + $data['endtime'];
-            $database->addMovement(2,$data['to'],$data['from'],$data['merchant'],$endtime);
+            $database->addMovement(2,$data['to'],$data['from'],$data['merchant'],time(),$endtime);
             $database->setMovementProc($data['moveid']);
         }
         $q = "UPDATE ".TB_PREFIX."movement set proc = 1 where endtime < $time and sort_type = 2";
@@ -1877,14 +1877,14 @@ if($data['t11'] > 0){
                 }
 
                 $database->setMovementProc($data['moveid']);
-                $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$endtime);
+                $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
 
                 // send the bounty on type 6.
                 if($type !== 1)
                 {
                     $reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
                     $database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
-                    $database->addMovement(6,$to['wref'],$from['wref'],$reference,$endtime);
+                    $database->addMovement(6,$to['wref'],$from['wref'],$reference,time(),$endtime);
                     //$database->updateVillage($to['wref']);
                     $totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
                     $totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));

@@ -51,7 +51,7 @@ if ($_GET['mode']=='troops'&&$_GET['cancel']==1){
 
 $oldmovement=$database->getMovementById($_GET['moveid']);
 $now=time();
-if (($now-$oldmovement[0]['starttime'])<60){
+if (($now-$oldmovement[0]['starttime'])<90){
 
 $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$_GET['moveid'];
 $resultc=$database->query($qc) or die(mysql_error());
@@ -67,10 +67,10 @@ $resultc=$database->query($qc) or die(mysql_error());
 	$newid=$lastid['id']+1;
 	$q2 = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
 	$database->query($q2);
-	$database->addMovement(4,$oldmovement[0]['to'],$oldmovement[0]['from'],$oldmovement[0]['ref'],$end);
+	$database->addMovement(4,$oldmovement[0]['to'],$oldmovement[0]['from'],$oldmovement[0]['ref'],$oldmovement[0]['starttime'],$end);
 
 
-	$database->addMovement(6,$oldmovement[0]['to'],$oldmovement[0]['from'],$newid,$end);
+	$database->addMovement(6,$oldmovement[0]['to'],$oldmovement[0]['from'],$newid,$oldmovement[0]['strattime'],$end);
 	}
 }
 header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
