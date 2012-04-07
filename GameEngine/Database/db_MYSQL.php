@@ -2403,67 +2403,63 @@
         		$result = mysql_query($q, $this->connection);
         		return mysql_fetch_array($result);
         	}
-        	function claimArtefact($vref, $ovref, $id) {
-        		$time = time();
-        		$q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id WHERE vref = $ovref";
-        		$result = mysql_query($q, $this->connection);
-        		return mysql_fetch_array($result);
-        	}
 			
-## Hero Claim artifact by advocaite
-			public function canClaimArtifact ($vref,$type) {
-              $DefenderFields = $this->getResourceLevel($vref);
-                for($i=19;$i<=38;$i++) {
+			function claimArtefact($vref, $ovref, $id) { 
+                $time = time(); 
+                $q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id, conquered = $time WHERE vref = $ovref"; 
+                return mysql_query($q, $this->connection); 
+            }
+			
+            public function canClaimArtifact($from,$vref,$type) { 
+                $DefenderFields = $this->getResourceLevel($vref); 
+                $defcanclaim = TRUE;   
+                for($i=19;$i<=38;$i++) { 
+                    if($DefenderFields['f'.$i.'t'] == 27) {  
+                        $defTresuaryLevel = $DefenderFields['f'.$i]; 
+                        if($defTresuaryLevel > 0) {  
+                            $defcanclaim = FALSE; 
+                        } else { 
+                            $defcanclaim = TRUE;   
+                        } 
+                    } 
+                }  
+                $AttackerFields = $this->getResourceLevel($from); 
+                for($i=19;$i<=38;$i++) { 
                     if($AttackerFields['f'.$i.'t'] == 27) { 
-                        $defcanclaim = FALSE;
-                        $defTresuaryLevel = $AttackerFields['f'.$i]; 
-                    } else
-                    {
-                        $defcanclaim = TRUE;  
-                    }
+                        $attTresuaryLevel = $AttackerFields['f'.$i];  
+                        if ($attTresuaryLevel >= 10) { 
+                            $villageartifact = TRUE; 
+                        } else { 
+                            $villageartifact = FALSE; 
+                        } 
+                        if ($attTresuaryLevel >= 20){ 
+                            $accountartifact = TRUE; 
+                        } else { 
+                            $accountartifact = FALSE; 
+                        } 
+                    } 
                 } 
-                $AttackerFields = $this->getResourceLevel($vref);
-                for($i=19;$i<=38;$i++) {
-                    if($AttackerFields['f'.$i.'t'] == 27) {
-                     $attTresuaryLevel = $AttackerFields['f'.$i]; 
-                     if ($attTresuaryLevel >= 10){
-                         $villageartifact = TRUE;
-                     }else{
-                         $villageartifact = FALSE;
-                     }
-                     if ($attTresuaryLevel == 20){
-                         $accountartifact = TRUE;
-                     }else{
-                         $accountartifact = FALSE;
-                     }
-                    }
-                }
-                
-                if ($type == 1)
-                {
-                if ($defcanclaim == TRUE && $villageartifact == TRUE)    
-                {
-                     return TRUE;
-                }
-                
-                }else if($type == 2)
-                {
-                 if ($defcanclaim == TRUE && $accountartifact == TRUE)    
-                {
-                     return TRUE;
-                }   
-                }else if($type == 3)
-                {
-                 if ($defcanclaim == TRUE && $accountartifact == TRUE)    
-                {
-                     return TRUE;
-                }   
-                }else
-                {
-                    return FALSE;
+                if ($type == 1) { 
+                    if ($defcanclaim == TRUE && $villageartifact == TRUE) { 
+                        return TRUE; 
+                    } else { 
+                        return FALSE; 
+                    } 
+                } else if ($type == 2) { 
+                    if ($defcanclaim == TRUE && $accountartifact == TRUE) { 
+                        return TRUE; 
+                    } else { 
+                        return FALSE; 
+                    }    
+                } else if ($type == 3) { 
+                    if ($defcanclaim == TRUE && $accountartifact == TRUE) { 
+                        return TRUE; 
+                    } else { 
+                        return FALSE; 
+                    }    
+                } else { 
+                    return FALSE; 
                 } 
-                
-               
             }
 
         	function getArtefactDetails($id) {
