@@ -23,7 +23,11 @@ $to = $database->getMInfo($units[$y]['to']);
 } else {
 $to = $database->getOMInfo($units[$y]['to']);}
 
+if (($units[$y]['starttime']+60)>time()){
 
+$canceltroops='<div class="abort"><a href="build.php?id='.$_GET['id'].'&mode=troops&cancel=1&moveid='.$units[$y]['moveid'].'"><img src="img/x.gif" class="del" /></a>';
+
+}else{$canceltroops="";}
 ?>
 <table class="troop_details" cellpadding="1" cellspacing="1">            
 	<thead>
