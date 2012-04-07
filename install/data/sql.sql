@@ -557,6 +557,24 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
 -- Dumping data for table `%prefix%enforcement`
 --
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%farmlist`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `wref` int(10) unsigned NOT NULL,
+  `owner` int(10) unsigned NOT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%farmlist`
+--
+
 
 -- --------------------------------------------------------
 
@@ -1007,6 +1025,36 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
 
 --
 -- Dumping data for table `%prefix%online`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%raidlist`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lid` int(10) NOT NULL,
+  `towref` int(10) unsigned NOT NULL,
+  `x` int(11) NOT NULL,
+  `y` int(11) NOT NULL,
+  `distance` varchar(5) NOT NULL DEFAULT '0',
+  `t1` int(11) unsigned NOT NULL,
+  `t2` int(11) unsigned NOT NULL,
+  `t3` int(11) unsigned NOT NULL,
+  `t4` int(11) unsigned NOT NULL,
+  `t5` int(11) unsigned NOT NULL,
+  `t6` int(11) unsigned NOT NULL,
+  `t7` int(11) unsigned NOT NULL,
+  `t8` int(11) unsigned NOT NULL,
+  `t9` int(11) unsigned NOT NULL,
+  `t10` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%raidlist`
 --
 
 

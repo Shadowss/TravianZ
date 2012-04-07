@@ -1,4 +1,8 @@
 <?php 
+if(isset($_GET['del'])){
+	$database->removeLinks($_GET['del']);
+	header("Location: spieler.php?s=2");
+}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -90,10 +94,10 @@ while($data = mysql_fetch_assoc($query)) {
   <table cellpadding="1" cellspacing="1" id="links">
     <thead>
       <tr>
-	<th><img class="help" src="img/x.gif" /></th>
-	<th colspan="2">Direct links</th>
+	<th colspan="4">Direct links</th>
       </tr>
       <tr>
+	<td>Delete</td>
 	<td>No.</td>
 	<td>Link name</td>
 	<td>Link target</td>
@@ -102,18 +106,22 @@ while($data = mysql_fetch_assoc($query)) {
     <tbody>
 	  <?php $i = 0; foreach($links as $link): ?>
       <tr>
+	  <td>
+	  <a href="spieler.php?del=<?php echo $link['id']; ?>&s=2"><img class="del" src="img/x.gif" alt="delete" title="delete"></a>
+	  </td>
 	 <td class="nr"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="nr<?php print $i; ?>" value="<?php print $link['pos']; ?>" size="1" maxlength="3" /><input type="hidden" name="id<?php print $i; ?>" value="<?php print $link['id']; ?>" /></td>
 	 <td class="nam"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkname<?php print $i; ?>" value="<?php print $link['name']; ?>" maxlength="30" /></td>
 	 <td class="link"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="<?php print $link['url']; ?>" maxlength="255" /></td>          
       </tr>
       <?php ++$i; $last_pos = $link['pos']; endforeach; ?>
       <tr>
+	<td></td>
 	<td class="nr"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="nr<?php print $i; ?>" value="<?php print ($last_pos + 1); ?>" size="1" maxlength="3"></td>
 	<td class="nam"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkname<?php print $i; ?>" value="" maxlength="30"></td>
 	<td class="link"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="" maxlength="255"></td>
       </tr>
       <tr>
-       <td colspan="3"><input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></td>
+       <td colspan="4"><input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></td>
       </tr>
     </tbody>
   </table>

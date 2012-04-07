@@ -3,7 +3,10 @@
 	Copyright: Travianx Project */
 
 	$oasisarray = $database->getOasis($village->wid);
-
+if($_GET['gid']==37 && isset($_GET['del'])){
+	$database->removeOases($_GET['del']);
+	header("Location: build.php?id=".$id."&land");
+}
 ?>
 <table id="oases" cellpadding="1" cellspacing="1">
 <thead><tr>
@@ -24,7 +27,7 @@
 ?>
 <tr>
 <td class="nam">
-<!-- a href="build.php?a=37&gid=37&c=016&del=374&land" --><img class="del" src="img/x.gif" alt="delete" title="delete"></a>
+<a href="build.php?gid=37&c=<?php echo $generator->getMapCheck($oasisarray[$i]['wref']); ?>&del=<?php echo $oasisarray[$i]['wref']; ?>&land"><img class="del" src="img/x.gif" alt="delete" title="delete"></a>
 <a href="karte.php?d=<?php echo $oasisarray[$i]['wref']; ?>&c=<?php echo $generator->getMapCheck($oasisarray[$i]['wref']) ?>"><?php echo $oasisarray[$i]['name']; ?></a>
 </td>
 <td class="aligned_coords">

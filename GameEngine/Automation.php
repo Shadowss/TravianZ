@@ -780,7 +780,7 @@ private function loyaltyRegeneration() {
             --------------------------------*/
             }else{
             $Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
-            $Defender['id'] = 3;
+            $Defender['id'] = 2;
 
             $owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
             $targettribe = 4;
@@ -1849,9 +1849,9 @@ private function loyaltyRegeneration() {
                 }
             }
             else {
-			if($unitssend_def[1] == 0 and $unitssend_def[2] == 0 and $unitssend_def[3] == 0 and $unitssend_def[4] == 0 and $unitssend_def[5] == 0 and $unitssend_def[6] == 0){
+			if($unitssend_def[1] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[2] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[3] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[4] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[5] == '0,0,0,0,0,0,0,0,0,0'){
 			$database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-            }else if($totaldead_def == 0){
+            }else if($totaldead_def == '0,0,0,0,0,0,0,0,0,0'){
             $database->addNotice($to['owner'],$to['wref'],$targetally,4,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
             }else if($unitssend_def > $totaldead_def){
             $database->addNotice($to['owner'],$to['wref'],$targetally,5,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
