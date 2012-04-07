@@ -2471,6 +2471,13 @@
         		$result = mysql_query($q, $this->connection);
         		return mysql_fetch_array($result);
         	}
+        	  
+        	  function getMovementById($id){
+      $q="SELECT * FROM ".TB_PREFIX."movement where moveid = ".$id;
+      $result=mysql_query($q);
+      $array=$this->mysql_fetch_all($result);
+      return $array;
+   }
 
             function getLinks($id){
                 $q = 'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . $id . ' ORDER BY `pos` ASC';
