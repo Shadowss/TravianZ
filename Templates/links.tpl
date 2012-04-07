@@ -30,7 +30,9 @@ foreach($links as $link) {
    }
 
    echo '<tr><td class="dot">●</td><td class="link">'; 
+ if($session->plus == 0) { echo  "buy Plus"; } else {
    echo '<a href="' . $link['url'] . '"' . $target . '>' . $link['name'] . $external . '</a></td></tr>';
+}
 }
 print '</tbody></table>';
 }
