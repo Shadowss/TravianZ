@@ -365,23 +365,24 @@ class Technology {
             break;
 		}	
 		for($i=$start;$i<=$end;$i++) {
-			$hdt = 0;
-			if($i>=4 && $i<=6) {
-				for($j=19;$j<=38;$j++) {
-					if($buildarray['f'.$j.'t'] == 41) { 
-						$hdt = 1;
-					}
-				}
-			}
 			$unit = "u".$i;
 			global $$unit;
 			$dataarray = $$unit;
-			$upkeep += ($dataarray['pop'] - $hdt) * $array[$unit];
+			for($j=19;$j<=38;$j++) {
+			if($buildarray['f'.$j.'t'] == 41) { 
+			$horsedrinking = $j;
+			}
+			}
+			if($i>=4 && $i<=6 && $dataarray['drinking'] <= $buildarray['f'.$horsedrinking]) {
+			$upkeep += ($dataarray['pop']-1) * $array[$unit];
+			}else{
+			$upkeep += $dataarray['pop'] * $array[$unit];
+			}
 		}
          //   $unit = "hero";
          //   global $$unit;
          //   $dataarray = $$unit; 
-            $upkeep += $array['hero'] * 6;
+           $upkeep += $array['hero'] * 6;
 		return $upkeep;
 	}
 
