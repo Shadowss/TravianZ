@@ -85,6 +85,7 @@ if(isset($_GET['t'])) {
 </div>
 <?php 
 if(isset($_GET['aid'])){
+if($_GET['aid']!=0){
 	if($session->alliance==$_GET['aid']){
 		
 		if(isset($_GET['id'])) {
@@ -97,7 +98,7 @@ if(isset($_GET['aid'])){
 		}
 		}
 	}
-	
+}	
 }else if(isset($_GET['vill'])){
 		
 		if(isset($_GET['id'])) {
