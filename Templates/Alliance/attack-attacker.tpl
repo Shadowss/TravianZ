@@ -1,6 +1,6 @@
 <?php
 $prefix = "".TB_PREFIX."ndata";
-$limit = "ntype!=4 AND ntype!=5 AND ntype!=6 AND ntype!=7 AND ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15";
+$limit = "ntype!=0 AND ntype!=4 AND ntype!=5 AND ntype!=6 AND ntype!=7 AND ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15";
 $sql = mysql_query("SELECT * FROM $prefix WHERE ally = $session->alliance AND $limit ORDER BY time DESC LIMIT 20");
 $query = mysql_num_rows($sql);
 $outputList = '';
@@ -38,11 +38,7 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
        
     $outputList .= $nn;
     $outputList .= $database->getUserField($dataarray[28],username,0);
-    if($ntype==0 or $ntype==1 or $ntype==2 or $ntype==3){ 
-    	$getUserAlly = $database->getUserField($dataarray[0],alliance,0);
-    }else{
-    	$getUserAlly = $database->getUserField($dataarray[30],alliance,0);
-    }
+    $getUserAlly = $database->getUserField($dataarray[28],alliance,0);
     $getAllyName = $database->getAllianceName($getUserAlly);
     
     if($getUserAlly==$session->alliance || !$getUserAlly){
