@@ -277,5 +277,5 @@ if($_GET['aid'] or $session->alliance!=0){
 </html>
 <?php
 }else{
-header("Location: dorf1.php");
+header("Location: spieler.php?uid=".$session->uid);
 }

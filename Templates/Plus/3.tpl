@@ -455,7 +455,7 @@ if (mysql_num_rows($MyGold)) {
             <td class="man"></td>
             <td class="desc">
 <b>Gold Club</b></br>
-<font size="2">Gold Club including: farmlist, merchants run three times, crop finder, master builder, trade routes and automatic send away troops before an attack.</font>
+<font size="2">Gold Club including: farmlist, merchants run three times, crop finder, master builder, trade routes, raid statistics and automatic send away troops before an attack.</font>
         <span class="run">
     </span>
             </td>

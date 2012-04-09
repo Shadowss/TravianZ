@@ -180,6 +180,8 @@ if(isset($_GET['id'])) {
 			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
 		}
 	}
+}else{
+header("Location: dorf1.php");
 }
 ?>
 
