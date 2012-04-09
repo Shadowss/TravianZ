@@ -536,7 +536,7 @@ private function loyaltyRegeneration() {
 
             $to = $database->getMInfo($data['to']);
             $from = $database->getMInfo($data['from']);
-            $database->addNotice($to['owner'],$to['wref'],$tragetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
+            $database->addNotice($to['owner'],$to['wref'],$targetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             if($from['owner'] != $to['owner']) {
                 $database->addNotice($from['owner'],$to['wref'],$ownally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             }
@@ -780,12 +780,12 @@ private function loyaltyRegeneration() {
             --------------------------------*/
             }else{
             $Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
-            $Defender['id'] = 2;
+            $Defender['id'] = $database->getUserField($database->getOasisField($data['to'],"owner"),"id",0);
 
             $owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
             $targettribe = 4;
             $ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
-            $targetally = 0;
+            $targetally = $database->getUserField($database->getOasisField($data['to'],"owner"),"alliance",0);
             $to = $database->getOMInfo($data['to']);
             $from = $database->getMInfo($data['from']);
             $toF = $database->getOasisV($data['to']);
