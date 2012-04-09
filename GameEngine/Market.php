@@ -107,7 +107,7 @@ class Market {
 					$timetaken = $generator->procDistanceTime($coor,$village->coor,$session->tribe,0); 
 	                $reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0); 
 		            $database->modifyResource($village->wid,$resource[0],$resource[1],$resource[2],$resource[3],0); 
-			        $database->addMovement(0,$village->wid,$id,$reference,time()+$timetaken); 
+			        $database->addMovement(0,$village->wid,$id,$reference,time(),time()+$timetaken); 
 				    $logging->addMarketLog($village->wid,1,array($resource[0],$resource[1],$resource[2],$resource[3],$id));
 				}
         } 
@@ -169,8 +169,8 @@ class Market {
             $mytime = $generator->procDistanceTime($hiscoor,$village->coor,$session->tribe,0); 
             $targettribe = $database->getUserField($database->getVillageField($infoarray['vref'],"owner"),"tribe",0); 
             $histime = $generator->procDistanceTime($village->coor,$hiscoor,$targettribe,0); 
-            $database->addMovement(0,$village->wid,$infoarray['vref'],$mysendid,$mytime+time()); 
-            $database->addMovement(0,$infoarray['vref'],$village->wid,$hissendid,$histime+time()); 
+            $database->addMovement(0,$village->wid,$infoarray['vref'],$mysendid,time(),$mytime+time()); 
+            $database->addMovement(0,$infoarray['vref'],$village->wid,$hissendid,time(),$histime+time()); 
             $resource = array(1=>0,0,0,0); 
             $resource[$infoarray['wtype']] = $infoarray['wamt']; 
             $database->modifyResource($village->wid,$resource[1],$resource[2],$resource[3],$resource[4],0); 

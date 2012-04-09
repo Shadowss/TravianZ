@@ -1742,8 +1742,10 @@ private function loyaltyRegeneration() {
 if($data['t11'] > 0){ 
             if ($isoasis != 0) { 
                 if ($database->canConquerOasis($data['from'],$data['to'])) { 
+				if($unitssend_def[1] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[2] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[3] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[4] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[5] == '0,0,0,0,0,0,0,0,0,0'){
                     $database->conquerOasis($data['from'],$data['to']); 
-                    $info_chief = $hero_pic.",Your hero has conquered this oasis and gained ".$heroxp." XP"; 
+                    $info_chief = $hero_pic.",Your hero has conquered this oasis"; 
+				}
                 } else { 
                     $OasisInfo = $database->getOasisInfo($data['to']); 
                     if ($OasisInfo['conqured'] != 0) { 

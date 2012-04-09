@@ -7,9 +7,10 @@
 <div id="textmenu">
 		<a href="build.php?id=<?php echo $id; ?>">Overview</a> |
 		<a href="a2b.php">Send troops</a> |
-		<a href="warsim.php">Combat Simulator</a></div> <?php if($session->goldclub==1){ ?>|
+		<a href="warsim.php">Combat Simulator</a> <?php if($session->goldclub==1){ ?>|
 		<a href="build.php?id=<?php echo $id; ?>&amp;t=99">Farmlist</a>
 		<?php } ?>
+		</div>
 <?php
 $units_type = $database->getMovement("34",$village->wid,1);
 

@@ -43,6 +43,26 @@ if(isset($_GET['id'])) {
 		$technology->procTechno($_GET);
 	}
 }
+if($session->goldclub){
+		if(isset($_GET['t'])==99) {
+			
+			if($_GET['action'] == 'addList') {
+				include("Templates/goldClub/farmlist_add.tpl");
+			}
+			if($_GET['action'] == 'showSlot' && $_GET['lid']) {
+				include("Templates/goldClub/farmlist_addraid.tpl");
+			}elseif($_GET['action'] == 'showSlot' && $_GET['eid']) {
+				include("Templates/goldClub/farmlist_editraid.tpl");
+			}
+			if($_GET['action'] == 'deleteList') {
+				$database->delFarmList($_GET['lid'], $session->uid);
+    			header("Location: build.php?id=39&t=99");
+			}elseif($_GET['action'] == 'deleteSlot') {
+				$database->delSlotFarm($_GET['eid']);
+   				header("Location: build.php?id=39&t=99");
+    		}
+		}
+	}
 
 if (isset($_POST['a']) == 533374 && isset($_POST['id']) == 39){  
 	$units->Settlers($_POST);

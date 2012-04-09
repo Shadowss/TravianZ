@@ -291,8 +291,9 @@ for($i=$start;$i<=$end;$i++){
 											</div>
 			</div>
 <?php } }?>
+</br>
 <div class="options">
-	<a class="arrow" href="build.php?gid=16&t=99&action=addList">ایجاد لیست جدید</a>
+	<a class="arrow" href="build.php?gid=16&t=99&action=addList">» create new list</a>
 </div>
 <?php
 }

@@ -76,6 +76,7 @@ if(!isset($_GET['admin'])) {
 	$_GET['admin'] = null;
 }
 if($_GET['admin']== "switch_admin"){
+if($opt['opt5'] == 1){
 	if($database->CheckResultEdit($aid) != 1){
 		$database->CreatResultEdit($aid,1);
 	}else{
@@ -85,6 +86,7 @@ if($_GET['admin']== "switch_admin"){
 			$database->UpdateResultEdit($aid,1);
 		}
 	}
+}
 }
 if($_GET['admin']== "pin"){
 	$database->StickTopic($_GET[idt],1); // stick topic

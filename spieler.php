@@ -146,8 +146,9 @@ else if (isset($_GET['s'])) {
 	if($_GET['s'] == 4) {
 		include("Templates/Profile/graphic.tpl");
 	}
-}else{
-header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
+	if($_GET['s'] > 4) {
+	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
+	}
 }
 ?>
 </div>
