@@ -39,6 +39,7 @@ while($row = mysql_fetch_array($sql)){
 	$dataarray = explode(",",$row['data']);
     $id = $row["id"];
     $uid = $row["uid"];
+	$toWref = $row["toWref"];
     $ally = $row["ally"];
     $topic = $row["topic"];
     $ntype = $row["ntype"];
@@ -65,10 +66,17 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
        
     $outputList .= $nn;
     $outputList .= $database->getUserField($dataarray[28],username,0);
-    if($ntype==0 or $ntype==1 or $ntype==2 or $ntype==3){ 
-    	$getUserAlly = $database->getUserField($dataarray[0],alliance,0);
+	if($ntype==0){ 
+	if($toWref != $village->wid){
+		$getUser = $database->getVillageField($toWref,owner);
+		}else{
+		$getUser = $database->getVillageField($dataarray[1],owner);
+		}
+    	$getUserAlly = $database->getUserField($getUser,alliance,0);
+    }else if($ntype==1 or $ntype==2 or $ntype==3){ 
+    	$getUserAlly = $database->getUserField($dataarray[28],alliance,0);
     }else{
-    	$getUserAlly = $database->getUserField($dataarray[30],alliance,0);
+    	$getUserAlly = $database->getUserField($dataarray[0],alliance,0);
     }
     $getAllyName = $database->getAllianceName($getUserAlly);
     
