@@ -1819,11 +1819,10 @@ if($data['t11'] > 0){
                         $walllevel =0;
                         $rplevel =0;
                     }
-
-
-
-                $info_spy = "".$spy_pic.",Residance/Palace Level : ".$rplevel.".
-                <br>Wall Level : ".$walllevel.".<br>Cranny Level : ".$crannylevel.".";
+$palaceimg = "<img src=\"gpack/travian_default/img/g/g26.gif\" height=\"30\" width=\"24\" alt=\"Palace\" title=\"Palace\" />";
+$crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" width=\"24\" alt=\"Cranny\" title=\"Cranny\" />";
+                $info_spy = "".$spy_pic.",".$palaceimg." Residance/Palace Level : ".$rplevel."
+				<br>".$crannyimg." Cranny level: ".$crannylevel."<br><br>Wall Level : ".$walllevel."";
 
                 }
 
