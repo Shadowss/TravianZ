@@ -1,3 +1,7 @@
+<?php
+	$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
+	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
+?>
 <div id="build" class="gid4"><a href="#" onClick="return Popup(4,4);" class="build_logo">
 	<img class="building g4" src="img/x.gif" alt="<?php echo B4; ?>" title="<?php echo B4; ?>" />
 </a>
@@ -11,14 +15,39 @@
 	</tr>
 	<tr>
 	 <?php 
-   	 if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-    	?>
+    if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+	$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild;
+	if($village->capital == 1) {
+	if($next<=20){
+    ?>
 	<tr>
-		<th><?php echo NEXT_PROD; echo $village->resarray['f'.$id]+1; ?>:</th>
-		<td><b><?php echo $bid4[$village->resarray['f'.$id]+1]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
+		<th><?php echo NEXT_PROD; echo $next; ?>:</th>
+		<td><b><?php echo $bid4[$next]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
 	</tr>
     <?php 
-    }
+    }else{
+	?>
+	<tr>
+		<th><?php echo NEXT_PROD; echo 20; ?>:</th>
+		<td><b><?php echo $bid4[20]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
+	</tr>	
+	<?php
+	}}else{
+	if($next<=10){
+    ?>
+	<tr>
+		<th><?php echo NEXT_PROD; echo $next; ?>:</th>
+		<td><b><?php echo $bid4[$next]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
+	</tr>
+    <?php 
+    }else{
+	?>
+	<tr>
+		<th><?php echo NEXT_PROD; echo 10; ?>:</th>
+		<td><b><?php echo $bid4[10]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
+	</tr>	
+	<?php
+	}}}
     ?>
 	</tr>
 </table>

@@ -1,3 +1,7 @@
+<?php
+	$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
+	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
+?>
 <div id="build" class="gid35"><a href="#" onClick="return Popup(35,4);" class="build_logo">
 	<img class="building g35" src="img/x.gif" alt="Brewery" title="Brewery" />
 </a>
@@ -13,11 +17,18 @@
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild;
+		if($next<=10){
         ?>
-			<th>Bonus at level <?php echo $village->resarray['f'.$id]+1; ?>:</th>
-			<td><b><?php echo $bid35[$village->resarray['f'.$id]+1]['attri']; ?></b> Percent</td>
+			<th>Bonus at level <?php echo $next; ?>:</th>
+			<td><b><?php echo $bid35[$next]['attri']; ?></b> Percent</td>
             <?php
-            }
+            }else{
+        ?>
+			<th>Bonus at level 10:</th>
+			<td><b><?php echo $bid35[10]['attri']; ?></b> Percent</td>
+            <?php
+			}}
             ?>
 		</tr>
 	</table>

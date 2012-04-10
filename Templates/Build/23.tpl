@@ -1,3 +1,7 @@
+<?php
+	$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
+	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
+?>
 <div id="build" class="gid23"><a href="#" onClick="return Popup(23,4);" class="build_logo">
 	<img class="building g23" src="img/x.gif" alt="Cranny" title="Cranny" />
 </a>
@@ -9,35 +13,11 @@
 	<tr>
 		<th>Currently hidden units per resource:</th>
 <?php
-		if($session->tribe == 1) {
-		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']; ?></b> units</td>
-		<?php
-			}
-		?>
-<?php
-		if($session->tribe == 2) {
-		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']; ?></b> units</td>
-		<?php
-			}
-		?>
-<?php
 		if($session->tribe == 3) {
 		?>
 		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*2; ?></b> units</td>
 		<?php
-			}
-		?>
-<?php
-		if($session->tribe == 4) {
-		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']; ?></b> units</td>
-		<?php
-			}
-		?>
-<?php
-		if($session->tribe == 5) {
+			}else{
 		?>
 		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']; ?></b> units</td>
 		<?php
@@ -47,46 +27,32 @@
 	<tr>
 <?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		if($next<=10){
         ?>
-		<th>Hidden units per resource at level <?php echo $village->resarray['f'.$id]+1; ?>:</th>
-<?php
-		if($session->tribe == 1) {
-		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1]['attri']; ?></b> units</td>
-		<?php
-			}
-		?>
-<?php
-		if($session->tribe == 2) {
-		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1]['attri']; ?></b> units</td>
-		<?php
-			}
-		?>
+		<th>Hidden units per resource at level <?php echo $village->resarray['f'.$id]+1+$loopsame+$doublebuild; ?>:</th>
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1]['attri']*2; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild]['attri']*2; ?></b> units</td>
 		<?php
-			}
+			}else{
 		?>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild]['attri']; ?></b> units</td>
+		<?php
+			}}else{
+        ?>
+		<th>Hidden units per resource at level 20:</th>
 <?php
-		if($session->tribe == 4) {
+		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1]['attri']; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*2; ?></b> units</td>
 		<?php
-			}
+			}else{
 		?>
-<?php
-		if($session->tribe == 5) {
-		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1]['attri']; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']; ?></b> units</td>
 		<?php
-			}
-		?>
-        <?php
-            }
-            ?>
+			}}}
+        ?>
 	</tr>
 	</table>
 <?php 

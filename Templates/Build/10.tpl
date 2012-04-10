@@ -1,3 +1,7 @@
+<?php
+	$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
+	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
+?>
 <div id="build" class="gid10"><a href="#" onClick="return Popup(10,4);" class="build_logo">
 	<img class="building g10" src="img/x.gif" alt="Warehouse" title="Warehouse" />
 </a>
@@ -13,12 +17,20 @@
 	<tr>
 <?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild;
+		if($next<=20){
         ?>
-		<th>Capacity at level <?php echo $village->resarray['f'.$id]+1; ?>:</th>
-		<td><b><?php echo $bid10[$village->resarray['f'.$id]+1]['attri']*STORAGE_MULTIPLIER; ?></b> units</td>
+		<th>Capacity at level <?php echo $next ?>:</th>
+		<td><b><?php echo $bid10[$next]['attri']*STORAGE_MULTIPLIER; ?></b> units</td>
         <?php
-            }
-            ?>
+            }else{
+		?>
+		<th>Capacity at level 20:</th>
+		<td><b><?php echo $bid10[20]['attri']*STORAGE_MULTIPLIER; ?></b> units</td>
+		<?php
+			}
+			}
+        ?>
 	</tr>
 	</table>
  <?php 
