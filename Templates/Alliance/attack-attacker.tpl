@@ -1,6 +1,6 @@
 <?php
 $prefix = "".TB_PREFIX."ndata";
-$limit = "ntype!=0 AND ntype!=4 AND ntype!=5 AND ntype!=6 AND ntype!=7 AND ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15";
+$limit = "ntype!=0 AND ntype!=4 AND ntype!=5 AND ntype!=6 AND ntype!=7 AND ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17 AND ntype!=20 AND ntype!=21";
 $sql = mysql_query("SELECT * FROM $prefix WHERE ally = $session->alliance AND $limit ORDER BY time DESC LIMIT 20");
 $query = mysql_num_rows($sql);
 $outputList = '';
@@ -29,7 +29,11 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
 }
 	$outputList .= "<a href=\"allianz.php?s=3&f=".$type2."\">";
     $type = (isset($_GET['t']) && $_GET['t'] == 5)? $archive : $ntype;
+	if($type==18 or $type==19){
+    $outputList .= "<img src=\"gpack/travian_default/img/scouts/$type.gif\" title=\"".$topic."\" />";
+	  }else{
     $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$topic."\">";
+	}
     $outputList .= "</a>";
     $outputList .= "<div><a href=\"berichte.php?id=".$id."&aid=".$ally."\">";
     if($ntype==0){ $nn = " scouts "; }else{ $nn = " attacks "; }

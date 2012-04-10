@@ -1,5 +1,5 @@
 <?php 
-$noticeClass = array("Scout Report","Won as attacker without losses","Won as attacker with losses","Lost as attacker with losses","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Lost as defender without losses","Reinforcement arrived","","Wood Delivered","Clay Delivered","Iron Delivered","Crop Delivered","","Reinforcement Attacked");
+$noticeClass = array("Scout Report","Won as attacker without losses","Won as attacker with losses","Lost as attacker with losses","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Lost as defender without losses","Reinforcement arrived","","Wood Delivered","Clay Delivered","Iron Delivered","Crop Delivered","","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Won scouting as attacker","Lost scouting as attacker","Won scouting as defender","Lost scouting as defender");
 ?>
 <form method="post" action="berichte.php" name="msg">
 <table cellpadding="1" cellspacing="1" id="overview"
@@ -68,7 +68,14 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
     echo "<tr><td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->noticearray[$i-1]['id']."\" /></td>
 		<td class=\"sub\">";
         $type = (isset($_GET['t']) && $_GET['t'] == 5)? $message->noticearray[$i-1]['archive'] : $message->noticearray[$i-1]['ntype'];
+		if($type==15 or $type==16 or $type==17){
+		$type = $type-11;
       echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
+	  }else if($type==18 or $type==19 or $type==20 or $type==21){
+      echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
+	  }else{
+      echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
+	  }
      echo "<div><a href=\"berichte.php?id=".$message->noticearray[$i-1]['id']."\">".$message->noticearray[$i-1]['topic']."</a> ";
     if($message->noticearray[$i-1]['viewed'] == 0) {
     echo "(new)";

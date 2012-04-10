@@ -92,7 +92,7 @@ if($_GET['aid']!=0){
 		$ally = $database->getNotice2($_GET['id'], 'ally');
 		if($session->alliance==$ally){
 			$type = $database->getNotice2($_GET['id'], 'ntype');
-		if($type==0 or $type==1 or $type==2 or $type==3 or $type==4 or $type==5 or $type==6 or $type==7 or $type==9){
+		if($type!=10 or $type!=11 or $type!=12 or $type!=13	or $type!=14 or $type!=15 or $type!=16 or $type!=17){
 			include("Templates/Notice/".$type."x.tpl");
 		}
 		}
@@ -108,7 +108,7 @@ if($_GET['aid']!=0){
 		include("Templates/Notice/".$type.".tpl");
 		}else if($session->alliance==$ally){
 		$type = $database->getNotice2($_GET['id'], 'ntype');
-		if($type==0 or $type==1 or $type==2 or $type==3 or $type==4 or $type==5 or $type==6 or $type==7 or $type==9){
+		if($type!=10 or $type!=11 or $type!=12 or $type!=13	or $type!=14 or $type!=15 or $type!=16 or $type!=17){
 			include("Templates/Notice/".$type."x.tpl");
 		}
 		}

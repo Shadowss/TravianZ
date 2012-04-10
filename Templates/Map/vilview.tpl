@@ -149,7 +149,7 @@ if($oasis['owner'] == 2){
 if($session->uid == $database->getVillage($_GET['d'])){
 	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7";
 }else{
-	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14";
+	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17";
     }
 $toWref = $_GET['d'];
 if($session->alliance!=0){
@@ -160,7 +160,11 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
+if($type==18 or $type==19 or $type==20 or $type==21){
+    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
+	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+	}
     $date = $generator->procMtime($row['time']);
     echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
@@ -180,7 +184,11 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
+if($type==18 or $type==19 or $type==20 or $type==21){
+    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
+	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+	}
     $date = $generator->procMtime($row['time']);
     echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
@@ -238,9 +246,9 @@ while($row = mysql_fetch_array($result)){
 		<tbody>
 		<?php
 if($session->uid == $database->getVillage($_GET['d'])){
-	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7";
+	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7 and ntype=20 and ntype=21";
 }else{
-	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14";
+	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14 and ntype!=15 and ntype!=16 and ntype!=17";
     }
 $toWref = $_GET['d'];
 if($session->alliance!=0){
@@ -251,7 +259,11 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
+if($type==18 or $type==19 or $type==20 or $type==21){
+    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
+	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+	}
     $date = $generator->procMtime($row['time']);
     echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
@@ -271,7 +283,11 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
+if($type==18 or $type==19 or $type==20 or $type==21){
+    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
+	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+	}
     $date = $generator->procMtime($row['time']);
     echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
@@ -358,7 +374,7 @@ while($row = mysql_fetch_array($result)){
 if($session->uid == $database->getVillage($_GET['d'])){
 	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7";
 }else{
-	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14";
+	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17";
     }
 $toWref = $_GET['d'];
 if($session->alliance!=0){
@@ -369,7 +385,24 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
+if($type==18 or $type==19 or $type==20 or $type==21){
+    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
+	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+	}
+    $date = $generator->procMtime($row['time']);
+    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
+    echo "</td></tr>";
+}
+while($row = mysql_fetch_array($result)){
+	$dataarray = explode(",",$row['data']);
+	$type = $row['ntype'];
+	echo "<tr><td>";
+if($type==18 or $type==19 or $type==20 or $type==21){
+    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
+	}else{
+    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+	}
     $date = $generator->procMtime($row['time']);
     echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
@@ -389,7 +422,11 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
+if($type==18 or $type==19 or $type==20 or $type==21){
+    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
+	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
+	}
     $date = $generator->procMtime($row['time']);
     echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
     echo "</td></tr>";
