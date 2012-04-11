@@ -1,5 +1,5 @@
   <?php
- 
+ if(WW==True){
     $result = mysql_query("select ".TB_PREFIX."users.id, ".TB_PREFIX."users.username,".TB_PREFIX."users.alliance, ".TB_PREFIX."fdata.wwname, ".TB_PREFIX."fdata.f99, ".TB_PREFIX."vdata.name
                         FROM ".TB_PREFIX."users 
                         INNER JOIN ".TB_PREFIX."vdata ON ".TB_PREFIX."users.id = ".TB_PREFIX."vdata.owner
@@ -39,5 +39,7 @@
                 
 
         </tr>
-        <?php }
+        <?php }}else{
+		header("Location: statistiken.php");
+		}
         ?>
