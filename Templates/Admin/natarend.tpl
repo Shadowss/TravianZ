@@ -36,7 +36,7 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 
 <center><b>Create World Wonder villages?</b></center>
 
-<center><br /><input class="give_gold" name="vill_amount" id="vill_amount" value="10" maxlength="4">&nbsp;<img src="http://forum.ragezone.com/f583/img/admin/gold.gif" class="gold" alt="gold" title="gold"/>&nbsp;&nbsp;<font color="gray" size="1">insert number of Wonders and press 'enter'</center></form>
+<center><br /><input class="give_gold" name="vill_amount" id="vill_amount" value="10" maxlength="4">&nbsp;<font color="gray" size="1">insert number of Wonders and press 'enter'</center></form>
 
 <?php
 
