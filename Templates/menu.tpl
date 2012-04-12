@@ -40,10 +40,10 @@ div.c1 {text-align: center}
 
                     echo "<a href=\"Admin/admin.php\"><font color=\"Blue\">Multihunter Panel</font></a>";
                     } ?> <?php if($session->access == ADMIN) {
-                    echo "<a href=\"admin.php\"><font color=\"Red\"><?php echo ADMIN_PANEL; ?></font></a>";
-                    echo "<a href=\"massmessage.php\"><?php echo MASS_MESSAGE; ?></a>";
-                    echo "<a href=\"medals.php\"><?php echo UPDATE_T_10; ?></a>";
-                    echo "<a href=\"sysmsg.php\"><?php echo SYSTEM_MESSAGE; ?></a>";
+                    echo "<a href=\"admin.php\"><font color=\"Red\">".ADMIN_PANEL."</font></a>";
+                    echo "<a href=\"massmessage.php\">".MASS_MESSAGE."</a>";
+                    echo "<a href=\"medals.php\">".UPDATE_T_10."</a>";
+                    echo "<a href=\"sysmsg.php\">".SYSTEM_MESSAGE."</a>";
 					echo "<a href=\"create_account.php\">Create Natars</a>";
                     } ?> <a href="logout.php"><?php echo LOGOUT; ?></a></p>
 
