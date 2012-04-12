@@ -222,7 +222,7 @@ class Building {
 			case 40: $build = $lang['buildings'][40]; break;
 			case 41: $build = $lang['buildings'][41]; break;
 			case 42: $build = $lang['buildings'][42]; break;
-			default: $build = $lang['buildings'][43];; break;
+			default: $build = $lang['buildings'][43]; break;
 		}
 		return $build;
 	}
