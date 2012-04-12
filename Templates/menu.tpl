@@ -40,30 +40,30 @@ div.c1 {text-align: center}
 
                     echo "<a href=\"Admin/admin.php\"><font color=\"Blue\">Multihunter Panel</font></a>";
                     } ?> <?php if($session->access == ADMIN) {
-                    echo "<a href=\"admin.php\"><font color=\"Red\">Admin Panel</font></a>";
-                    echo "<a href=\"massmessage.php\">Mass Message</a>";
-                    echo "<a href=\"medals.php\">Update Top 10</a>";
-                    echo "<a href=\"sysmsg.php\">System message</a>";
+                    echo "<a href=\"admin.php\"><font color=\"Red\"><?php echo ADMIN_PANEL; ?></font></a>";
+                    echo "<a href=\"massmessage.php\"><?php echo MASS_MESSAGE; ?></a>";
+                    echo "<a href=\"medals.php\"><?php echo UPDATE_T_10; ?></a>";
+                    echo "<a href=\"sysmsg.php\"><?php echo SYSTEM_MESSAGE; ?></a>";
 					echo "<a href=\"create_account.php\">Create Natars</a>";
                     } ?> <a href="logout.php"><?php echo LOGOUT; ?></a></p>
 
 		<a href="rules.php"><b>Game Rules</b></a> 
         <p><a href="plus.php?id=3">Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
-                    <a href="spieler.php?uid=0"><b>Support</b></a> 
+                    <a href="spieler.php?uid=0"><b><?php echo SUPPORT; ?></b></a> 
         <br></p>
     </div><?php
     if($_SESSION['ok']=='1'){
     ?>
 
     <div id="content" class="village1">
-        <h1>Announcement</h1>
+        <h1><?php echo ANNOUNCEMENT; ?></h1>
 
         <h2>Hi <?php echo $session->username; ?>,</h2>
         <br>
         <?php include("Templates/text.tpl"); ?>
 
         <div class="c1">
-            <h2><a href="dorf1.php?ok">&raquo; Go to my village</a></h2>
+            <h2><a href="dorf1.php?ok">&raquo; <?php echo GO2MY_VILLAGE; ?></a></h2>
         </div>
     </div>
 
@@ -88,11 +88,11 @@ div.c1 {text-align: center}
     <div id="stime">
         <div id="ltime">
             <div id="ltimeWrap">
-                Calculated in <b><?php
+                <?php echo CALCULATED_IN; ?><b><?php
                 echo round(($generator->pageLoadTimeEnd()-$start)*1000);
                 ?></b> ms
                 <br>
-                Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+                <?php echo SERVER_TIME; ?><span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
             </div>
         </div>
     </div>
