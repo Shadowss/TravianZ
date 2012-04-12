@@ -107,6 +107,7 @@ define("CANCEL","отмена");
 define("LOYALTY","Лояльность:"); 
 define("CALCULATED_IN","Создана за");
 define("SEVER_TIME","Время сервера:");  
+define("MILISECS","мс");
 
 //QUEST
 define("Q_CONTINUE","Перейти к следующему заданию.");
@@ -357,7 +358,7 @@ define("MASS_SENT","Mass IGM was sent");
 |   top_menu 
 |--------------------------------------------------------------------------
 */
-		$lang['top_menu'] = array (
+		$lang['header'] = array (
 							0 => 'Обзор деревни',
 							1 => 'Центр деревни',
 							2 => 'Карта',
