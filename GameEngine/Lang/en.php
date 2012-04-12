@@ -416,9 +416,12 @@ define("MASS_SENT","Mass IGM was sent");
 						43 => "Error");
 		
 		$lang['fields'] = array (
-							0 => '&nbsp;Level&nbsp;',
+							0 => '&nbsp;Level',
 							1 => 'Woodcutter Level',
 							2 => 'Clay Pit Level',
 							3 => 'Iron Mine Level',
-							4 => 'Cropland Level');
+							4 => 'Cropland Level',
+							5 => 'Outer building site',
+							6 => 'Building site',
+							7 => 'Rally Point building site');
 ?>
