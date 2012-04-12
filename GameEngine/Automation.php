@@ -1705,6 +1705,7 @@ private function loyaltyRegeneration() {
             $varray = $database->getProfileVillages($to['owner']);
             //kijken of laatste dorp is, of hoofddorp
             if(count($varray)!='1' AND $to['capital']!='1'){
+			if($to['owenr']!=3 AND $to['name']!='WW Buildingplan'){
                 //if there is no Palace/Residence
                 for ($i=18; $i<39; $i++){
                     if ($database->getFieldLevel($data['to'],"".$i."t")==25 or $database->getFieldLevel($data['to'],"".$i."t")==26){
@@ -1759,6 +1760,9 @@ private function loyaltyRegeneration() {
 
                     }
                 }
+            } else {
+                $info_chief = "".$chief_pic.",You cant take over this village.";
+            }
             } else {
                 $info_chief = "".$chief_pic.",You cant take over this village.";
             }

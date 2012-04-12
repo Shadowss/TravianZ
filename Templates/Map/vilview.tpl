@@ -1,6 +1,7 @@
 <div id="content"  class="map">
 <?php 
 $basearray = $database->getMInfo($_GET['d']);
+$uinfo = $database->getVillage($basearray['id']);
 $oasis1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysql_escape_string($_GET['d']));
 $oasis = mysql_fetch_assoc($oasis1);
 ?>
@@ -9,8 +10,11 @@ echo !$basearray['occupied']? $basearray['fieldtype']? "Abandoned valley" : "Uno
 }else{
 echo $oasis['name']; echo " (".$basearray['x']."|".$basearray['y'].")";
 } ?></h1>
-<?php if($basearray['occupied'] && $basearray['capital']) { echo "<div id=\"dmain\">(capital)</div>"; } ?>
-
+<?php if($basearray['occupied'] && $basearray['capital']) { echo "<div id=\"dmain\">(capital)</div>"; }
+if($uinfo['owner']==3 && $uinfo['name']=='WW Buildingplan'){
+?>
+<img src="img/x.gif" id="detailed_map" class="f99" alt="WW buildingplan" />
+<?php }else{ ?>
 <img src="img/x.gif" id="detailed_map" class="<?php echo ($basearray['fieldtype'] == 0)? 'w'.$basearray['oasistype'] : 'f'.$basearray['fieldtype'] ?>" alt="<?php 
 switch($basearray['fieldtype']) {
 case 1:
@@ -95,7 +99,7 @@ break;
 }
 echo $tt."\"";
 $landd = explode("-",$tt);?> />
-
+<?php } ?>
 <div id="map_details">
 <?php if($basearray['fieldtype'] == 0) {
 if($oasis['owner'] == 2){
