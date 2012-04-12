@@ -352,5 +352,19 @@ define("MASS_SENT","Mass IGM was sent");
        $lang['register'] = "Register";
        $lang['login'] = "Login";
 
+/*
+|--------------------------------------------------------------------------
+|   top_menu 
+|--------------------------------------------------------------------------
+*/
+		$lang['top_menu'] = array (
+							0 => 'Village overview',
+							1 => 'Vilage centre',
+							2 => 'Map',
+							3 => 'Statistics',
+							4 => 'Reports',
+							5 => 'Messages',
+							6 => 'Plus menu');
+
 
 ?>

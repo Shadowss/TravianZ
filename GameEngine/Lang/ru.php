@@ -28,7 +28,7 @@ define("LOGOUT","Выйти");
 define("PROFILE","Профиль");
 define("SUPPORT","Поддержка");
 define("UPDATE_T_10","Обновить  ТОП 10");
-define("SYSTEM_MESSAGE","Системное сообщение");
+define("SYSTEM_MESSAGE","Сист. сообщение");
 define("TRAVIAN_PLUS","Травиан <b><span class=\"plus_g\">P</span><span class=\"plus_o\">l</span><span class=\"plus_g\">u</span><span class=\"plus_o\">s</span></span></span></b>");
 define("CONTACT","Связь с нами!");
 
@@ -352,5 +352,17 @@ define("MASS_SENT","Mass IGM was sent");
        $lang['register'] = "Регистрация";
        $lang['login'] = "Login";
 
-
+/*
+|--------------------------------------------------------------------------
+|   top_menu 
+|--------------------------------------------------------------------------
+*/
+		$lang['top_menu'] = array (
+							0 => 'Обзор деревни',
+							1 => 'Центр деревни',
+							2 => 'Карта',
+							3 => 'Статистика',
+							4 => 'Отчеты',
+							5 => 'Сообщения',
+							6 => 'Plus меню');
 ?>
