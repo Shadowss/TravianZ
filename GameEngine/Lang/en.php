@@ -23,6 +23,8 @@ define("TRIBE6","Monsters");
 define("HOME","Homepage"); 
 define("INSTRUCT","Instructions");
 define("ADMIN_PANEL","Admin Panel");
+define("MULTIHUNTER_PAN","Multihunter Panel");
+define("CREATE_NAT","Create Natars");
 define("MASS_MESSAGE","Mass Message");
 define("LOGOUT","Logout");
 define("PROFILE","Profile");
@@ -31,6 +33,7 @@ define("UPDATE_T_10","Update Top 10");
 define("SYSTEM_MESSAGE","System message");
 define("TRAVIAN_PLUS","Travian <b><span class=\"plus_g\">P</span><span class=\"plus_o\">l</span><span class=\"plus_g\">u</span><span class=\"plus_o\">s</span></span></span></b>");
 define("CONTACT","Contact us!");
+define("GAME_RULES","Game Rules");
 
 //MENU
 define("REG","Register");
@@ -366,6 +369,56 @@ define("MASS_SENT","Mass IGM was sent");
 							4 => 'Reports',
 							5 => 'Messages',
 							6 => 'Plus menu');
-
-
+		
+		$lang['buildings'] = array (
+						1 => "Woodcutter",
+						2 => "Clay Pit",
+						3 => "Iron Mine",
+						4 => "Cropland",
+						5 => "Sawmill",
+						6 => "Brickyard",
+						7 => "Iron Foundry",
+						8 => "Grain Mill",
+						9 => "Bakery",
+						10 => "Warehouse",
+						11 => "Granary",
+						12 => "Blacksmith",
+						13 => "Armoury",
+						14 => "Tournament Square",
+						15 => "Main Building",
+						16 => "Rally Point",
+						17 => "Marketplace",
+						18 => "Embassy",
+						19 => "Barracks",
+						20 => "Stable",
+						21 => "Workshop",
+						22 => "Academy",
+						23 => "Cranny",
+						24 => "Town Hall",
+						25 => "Residence",
+						26 => "Palace",
+						27 => "Treasury",
+						28 => "Trade Office",
+						29 => "Great Barracks",
+						30 => "Great Stable",
+						31 => "City Wall",
+						32 => "Earth Wall",
+						33 => "Palisade",
+						34 => "Stonemason's Lodge",
+						35 => "Brewery",
+						36 => "Trapper",
+						37 => "Hero's Mansion",
+						38 => "Great Warehouse",
+						39 => "Great Granary",
+						40 => "Wonder of the World",
+						41 => "Horse Drinking Trough",
+						42 => "Great Workshop",
+						43 => "Error");
+		
+		$lang['fields'] = array (
+							0 => '&nbsp;Level&nbsp;',
+							1 => 'Woodcutter Level',
+							2 => 'Clay Pit Level',
+							3 => 'Iron Mine Level',
+							4 => 'Cropland Level');
 ?>

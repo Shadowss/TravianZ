@@ -38,16 +38,16 @@ div.c1 {text-align: center}
 
         <p><a href="<?php echo HOMEPAGE; ?>"><?php echo HOME; ?></a> <a href="spieler.php?uid=<?php echo $session->uid; ?>"><?php echo PROFILE; ?></a> <a href="#" onclick="return Popup(0,0,1);"><?php echo INSTRUCT; ?></a> <?php if($session->access == MULTIHUNTER) {
 
-                    echo "<a href=\"Admin/admin.php\"><font color=\"Blue\">Multihunter Panel</font></a>";
+                    echo "<a href=\"Admin/admin.php\"><font color=\"Blue\">".MULTIHUNTER_PAN."</font></a>";
                     } ?> <?php if($session->access == ADMIN) {
                     echo "<a href=\"admin.php\"><font color=\"Red\">".ADMIN_PANEL."</font></a>";
                     echo "<a href=\"massmessage.php\">".MASS_MESSAGE."</a>";
                     echo "<a href=\"medals.php\">".UPDATE_T_10."</a>";
                     echo "<a href=\"sysmsg.php\">".SYSTEM_MESSAGE."</a>";
-					echo "<a href=\"create_account.php\">Create Natars</a>";
+					echo "<a href=\"create_account.php\">".CREATE_NAT."</a>";
                     } ?> <a href="logout.php"><?php echo LOGOUT; ?></a></p>
 
-		<a href="rules.php"><b>Game Rules</b></a> 
+		<a href="rules.php"><b><?php echo GAME_RULES; ?></b></a> 
         <p><a href="plus.php?id=3">Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
                     <a href="spieler.php?uid=0"><b><?php echo SUPPORT; ?></b></a> 
         <br></p>
@@ -83,19 +83,9 @@ div.c1 {text-align: center}
     <div class="clear"></div><?php 
     include("Templates/footer.tpl"); 
     include("Templates/res.tpl"); 
+	include("Templates/serv_time.tpl"); 
     ?>
 
-    <div id="stime">
-        <div id="ltime">
-            <div id="ltimeWrap">
-                <?php echo CALCULATED_IN; ?><b><?php
-                echo round(($generator->pageLoadTimeEnd()-$start)*1000);
-                ?></b> ms
-                <br>
-                <?php echo SERVER_TIME; ?><span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
-            </div>
-        </div>
-    </div>
 
     <div id="ce"></div><?php
     die();

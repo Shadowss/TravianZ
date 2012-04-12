@@ -23,6 +23,8 @@ define("TRIBE6","Монстры");
 define("HOME","Главная"); 
 define("INSTRUCT","Инструкции");
 define("ADMIN_PANEL","Админка");
+define("MULTIHUNTER_PAN","Мультих. панель");
+define("CREATE_NAT","Создать Натар");
 define("MASS_MESSAGE","Сообщение всем");
 define("LOGOUT","Выйти");
 define("PROFILE","Профиль");
@@ -31,6 +33,7 @@ define("UPDATE_T_10","Обновить  ТОП 10");
 define("SYSTEM_MESSAGE","Сист. сообщение");
 define("TRAVIAN_PLUS","Травиан <b><span class=\"plus_g\">P</span><span class=\"plus_o\">l</span><span class=\"plus_g\">u</span><span class=\"plus_o\">s</span></span></span></b>");
 define("CONTACT","Связь с нами!");
+define("GAME_RULES","Правила игры");
 
 //MENU
 define("REG","Регистрация");
@@ -366,4 +369,57 @@ define("MASS_SENT","Mass IGM was sent");
 							4 => 'Отчеты',
 							5 => 'Сообщения',
 							6 => 'Plus меню');
+							
+		$lang['buildings'] = array (
+						1 => "Лесопилка",
+						2 => "Глиняный карьер",
+						3 => "Железный рудник",
+						4 => "Ферма",
+						5 => "Лесопильный завод",
+						6 => "Кирпичный завод",
+						7 => "Сталелитейный завод",
+						8 => "Grain Mill",
+						9 => "Bakery",
+						10 => "Warehouse",
+						11 => "Granary",
+						12 => "Blacksmith",
+						13 => "Armoury",
+						14 => "Tournament Square",
+						15 => "Main Building",
+						16 => "Rally Point",
+						17 => "Marketplace",
+						18 => "Embassy",
+						19 => "Barracks",
+						20 => "Stable",
+						21 => "Workshop",
+						22 => "Academy",
+						23 => "Cranny",
+						24 => "Town Hall",
+						25 => "Residence",
+						26 => "Palace",
+						27 => "Treasury",
+						28 => "Trade Office",
+						29 => "Great Barracks",
+						30 => "Great Stable",
+						31 => "City Wall",
+						32 => "Earth Wall",
+						33 => "Palisade",
+						34 => "Stonemason's Lodge",
+						35 => "Brewery",
+						36 => "Trapper",
+						37 => "Hero's Mansion",
+						38 => "Great Warehouse",
+						39 => "Great Granary",
+						40 => "Wonder of the World",
+						41 => "Horse Drinking Trough",
+						42 => "Great Workshop",
+						43 => "Error");
+		
+							
+		$lang['fields'] = array (
+							0 => '&nbsp;Уровень&nbsp;',
+							1 => 'Лесопилка уровень',
+							2 => 'Глиняный карьер уровень ',
+							3 => 'Железный рудник уровень',
+							4 => 'Ферма уровень');
 ?>

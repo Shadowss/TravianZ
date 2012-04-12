@@ -16,10 +16,10 @@ $arrayVillage = $village->resarray;
 ?>
 <map name="rx" id="rx">
 <?php 
-for($i=1;$i<=18;$i++) {echo "	<area href=\"build.php?id=$i\" coords=\"$coorarray[$i]\" shape=\"circle\" title=\"".$building->procResType($arrayVillage['f'.$i.'t'])." Level ".$arrayVillage['f'.$i]."\"/>\r\n";
+for($i=1;$i<=18;$i++) {echo "	<area href=\"build.php?id=$i\" coords=\"$coorarray[$i]\" shape=\"circle\" title=\"".$building->procResType($arrayVillage['f'.$i.'t']).$lang['fields'][0].$arrayVillage['f'.$i]."\"/>\r\n";
 }
 ?>
-	<area href="dorf2.php" coords="144,131,36" shape="circle" title="Village centre" alt="" />
+	<area href="dorf2.php" coords="144,131,36" shape="circle" title="<?php echo $lang['header'][1]; ?>" alt="" />
 </map>
 
 <div id="village_map" class="f<?php echo $village->type; ?>">
@@ -28,10 +28,10 @@ for($i=1;$i<=18;$i++) {
 	if($arrayVillage['f'.$i.'t'] != 0) {
 		$text = "";
 		switch($i){
-			case 1:$text = "Woodcutter Level";break;
-			case 2:$text = "Clay Pit Level";break;
-			case 3:$text = "Iron Mine Level";break;
-			case 4:$text = "Cropland Level";break;
+			case 1:$text = $lang['fileds'][1];break;
+			case 2:$text = $lang['fileds'][2];break;
+			case 3:$text = $lang['fileds'][3];break;
+			case 4:$text = $lang['fileds'][4];break;
 		}
 		echo "<img src=\"img/x.gif\" class=\"reslevel rf$i level".$arrayVillage['f'.$i]."\" alt=\"$text ".$arrayVillage['f'.$i]."\" />";
 	}
