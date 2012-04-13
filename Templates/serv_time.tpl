@@ -6,7 +6,7 @@
 echo CALCULATED_IN."&nbsp;<b>";
 echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 echo "</b>&nbsp;".MILISECS."<br />\n";
-echo SERVER_TIME.'<span id="tp1" class="b">'.date('H:i:s').'</span>';
+echo SERVER_TIME.'&nbsp;<span id="tp1" class="b">'.date('H:i:s').'</span>';
 ?>
 </div>
 	</div>

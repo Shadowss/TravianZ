@@ -96,6 +96,7 @@ define("IRON","Iron");
 define("CROP","Crop");
 define("LEVEL","Level");
 define("CROP_COM",CROP." consumption");
+define("DURATION","duration");
 define("PER_HR","per hour");
 define("PROD_HEADER","Production");
 define("MULTI_V_HEADER","Villages");
@@ -104,7 +105,7 @@ define("GO2MY_VILLAGE","Go to my village");
 define("VILLAGE_CENTER","Village centre");
 define("FINISH_GOLD","Finish all construction and research orders in this village immediately for 2 Gold?");
 define("WAITING_LOOP","(waiting loop)");
-define("HRS","(hrs.)");
+define("HRS","hrs.");
 define("DONE_AT","done at");
 define("CANCEL","cancel");
 define("LOYALTY","Loyalty:"); 
@@ -371,49 +372,50 @@ define("MASS_SENT","Mass IGM was sent");
 							6 => 'Plus menu');
 		
 		$lang['buildings'] = array (
-						1 => "Woodcutter",
-						2 => "Clay Pit",
-						3 => "Iron Mine",
-						4 => "Cropland",
-						5 => "Sawmill",
-						6 => "Brickyard",
-						7 => "Iron Foundry",
-						8 => "Grain Mill",
-						9 => "Bakery",
-						10 => "Warehouse",
-						11 => "Granary",
-						12 => "Blacksmith",
-						13 => "Armoury",
-						14 => "Tournament Square",
-						15 => "Main Building",
-						16 => "Rally Point",
-						17 => "Marketplace",
-						18 => "Embassy",
-						19 => "Barracks",
-						20 => "Stable",
-						21 => "Workshop",
-						22 => "Academy",
-						23 => "Cranny",
-						24 => "Town Hall",
-						25 => "Residence",
-						26 => "Palace",
-						27 => "Treasury",
-						28 => "Trade Office",
-						29 => "Great Barracks",
-						30 => "Great Stable",
-						31 => "City Wall",
-						32 => "Earth Wall",
-						33 => "Palisade",
-						34 => "Stonemason's Lodge",
-						35 => "Brewery",
-						36 => "Trapper",
-						37 => "Hero's Mansion",
-						38 => "Great Warehouse",
-						39 => "Great Granary",
-						40 => "Wonder of the World",
-						41 => "Horse Drinking Trough",
-						42 => "Great Workshop",
-						43 => "Error");
+							1 => "Woodcutter",
+							2 => "Clay Pit",
+							3 => "Iron Mine",
+							4 => "Cropland",
+							5 => "Sawmill",
+							6 => "Brickyard",
+							7 => "Iron Foundry",
+							8 => "Grain Mill",
+							9 => "Bakery",
+							10 => "Warehouse",
+							11 => "Granary",
+							12 => "Blacksmith",
+							13 => "Armoury",
+							14 => "Tournament Square",
+							15 => "Main Building",
+							16 => "Rally Point",
+							17 => "Marketplace",
+							18 => "Embassy",
+							19 => "Barracks",
+							20 => "Stable",
+							21 => "Workshop",
+							22 => "Academy",
+							23 => "Cranny",
+							24 => "Town Hall",
+							25 => "Residence",
+							26 => "Palace",
+							27 => "Treasury",
+							28 => "Trade Office",
+							29 => "Great Barracks",
+							30 => "Great Stable",
+							31 => "City Wall",
+							32 => "Earth Wall",
+							33 => "Palisade",
+							34 => "Stonemason's Lodge",
+							35 => "Brewery",
+							36 => "Trapper",
+							37 => "Hero's Mansion",
+							38 => "Great Warehouse",
+							39 => "Great Granary",
+							40 => "Wonder of the World",
+							41 => "Horse Drinking Trough",
+							42 => "Great Workshop",
+							43 => "Error",
+							44 => "&nbsp;(Level&nbsp;");
 		
 		$lang['fields'] = array (
 							0 => '&nbsp;Level',
@@ -424,4 +426,27 @@ define("MASS_SENT","Mass IGM was sent");
 							5 => 'Outer building site',
 							6 => 'Building site',
 							7 => 'Rally Point building site');
+							
+		$lang['npc'] = array (
+							0 => 'NPC trade');
+		
+		$lang['upgrade'] = array (
+							0 => 'Building already at max level',
+							1 => 'Building max level under construction',
+							2 => 'Building presently being demolished',
+							3 => '<b>Costs</b> for upgrading to level&nbsp;',
+							4 => 'The workers are already at work.',
+							5 => 'Not enough food. Expand cropland.',
+							6 => 'Upgrade Warehouse.',
+							7 => 'Upgrade Granary.',
+							8 => 'Enough resources&nbsp;',
+							9 => '&nbsp;at&nbsp;&nbsp;',
+							10 => 'Upgrade to level&nbsp;');
+		
+		$lang['movement'] = array (
+							0 => 'in&nbsp;');
+		
+		$lang['troops'] = array (
+							0 => 'none',
+							1 => 'Hero');
 ?>
