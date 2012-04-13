@@ -441,7 +441,9 @@ define("MASS_SENT","Mass IGM was sent");
 							7 => 'Upgrade Granary.',
 							8 => 'Enough resources&nbsp;',
 							9 => '&nbsp;at&nbsp;&nbsp;',
-							10 => 'Upgrade to level&nbsp;');
+							10 => 'Upgrade to level&nbsp;',
+							11 => 'today',
+							12 => 'yesterday');
 		
 		$lang['movement'] = array (
 							0 => 'in&nbsp;');
