@@ -78,6 +78,50 @@ if($_GET['aid'] or $session->alliance!=0){
 	<script type="text/javascript">
 
 		window.addEvent('domready', start);
+				function getMouseCoords(e) {
+					var coords = {};
+					if (!e) var e = window.event;
+					if (e.pageX || e.pageY) 	{
+						coords.x = e.pageX;
+						coords.y = e.pageY;
+					}
+					else if (e.clientX || e.clientY) 	{
+						coords.x = e.clientX + document.body.scrollLeft
+							+ document.documentElement.scrollLeft;
+						coords.y = e.clientY + document.body.scrollTop
+							+ document.documentElement.scrollTop;
+					}
+					return coords;
+				}
+
+				function med_mouseMoveHandler(e, desc_string){
+					var coords = getMouseCoords(e);
+					med_showDescription(coords, desc_string);
+				}
+
+				function med_closeDescription(){
+					var layer = document.getElementById("medal_mouseover");
+					layer.className = "hide";
+				}
+
+				function init_local(){
+					med_init();
+				}
+
+				function med_init(){
+					layer = document.createElement("div");
+					layer.id = "medal_mouseover";
+					layer.className = "hide";
+					document.body.appendChild(layer);
+				}
+
+				function med_showDescription(coords, desc_string){
+					var layer = document.getElementById("medal_mouseover");
+					layer.style.top = (coords.y + 25)+ "px";
+					layer.style.left = (coords.x - 20) + "px";
+					layer.className = "";
+					layer.innerHTML = desc_string;
+				}
 	</script>
 </head>
  

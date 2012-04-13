@@ -42,7 +42,7 @@ include_once ("GameEngine/Ranking.php");
                 <a href="massmessage.php">Mass message</a>
                 <a href="sysmsg.php">System message</a>
                 <a href="medals.php">Update top 10</a>
-				<a href="?p=natarend">Add WW Villages</a>
+				<a href="?p=natarbuildingplan">Add WW Buildingplan Villages</a>
         </p>
         <p>
             <a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a>
