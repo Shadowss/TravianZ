@@ -3,7 +3,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       massmessage.php                                                 ##
+##  Filename       massmessage.php                                             ##
 ##  Developed by:  Dzoki                                                       ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
@@ -71,94 +71,8 @@ if (isset($_GET['send']) && isset($_GET['from']))
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-	<head>
-		<title><?php echo SERVER_NAME; ?></title>
-        <link REL="shortcut icon" HREF="favicon.ico"/>
-        <style>
-        .fm {
-        border:1px solid #71D000;
-        font-size:8pt;
-        padding-bottom:2px;
-        padding-left:3px;
-        padding-top:2px;
-        }
-        .tbg {
-        background-color:#C0C0C0;
-        font-size:10pt;
-        text-align:center;
-        width:100%;
-        }
-        
-        
-        .uu1 {background-image: url(img/u2/u1.gif);}
-        .uu2 {background-image: url(img/u2/u2.gif);}
-        .uu3 {background-image: url(img/u2/u3.gif);}
-        .uu4 {background-image: url(img/u2/u4.gif);}
-        .uu5 {background-image: url(img/u2/u5.gif);}
-        .uu6 {background-image: url(img/u2/u6.gif);}
-        .uu7 {background-image: url(img/u2/u7.gif);}
-        .uu8 {background-image: url(img/u2/u8.gif);}
-        .uu9 {background-image: url(img/u2/u9.gif);}
-        .uu10 {background-image: url(img/u2/u10.gif);}
-        .uu11 {background-image: url(img/u2/u11.gif);}
-        .uu12 {background-image: url(img/u2/u12.gif);}
-        .uu13 {background-image: url(img/u2/u13.gif);}
-        .uu14 {background-image: url(img/u2/u14.gif);}
-        .uu15 {background-image: url(img/u2/u15.gif);}
-        .uu16 {background-image: url(img/u2/u16.gif);}
-        .uu17 {background-image: url(img/u2/u17.gif);}
-        .uu18 {background-image: url(img/u2/u18.gif);}
-        .uu19 {background-image: url(img/u2/u19.gif);}
-        .uu20 {background-image: url(img/u2/u20.gif);}
-        .uu21 {background-image: url(img/u2/u21.gif);}
-        .uu22 {background-image: url(img/u2/u22.gif);}
-        .uu23 {background-image: url(img/u2/u23.gif);}
-        .uu24 {background-image: url(img/u2/u24.gif);}
-        .uu25 {background-image: url(img/u2/u25.gif);}
-        .uu26 {background-image: url(img/u2/u26.gif);}
-        .uu27 {background-image: url(img/u2/u27.gif);}
-        .uu28 {background-image: url(img/u2/u28.gif);}
-        .uu29 {background-image: url(img/u2/u29.gif);}
-        .uu30 {background-image: url(img/u2/u30.gif);}
-	.uu1, .uu2, .uu3, .uu4, .uu5, .uu6, .uu7, .uu8, .uu9, .uu10, u11, .uu12, .uu13, .uu14, .uu15, .uu16, .uu17, .uu18, .uu19, .uu20, .uu21, .uu22, .uu23, .uu24, .uu25, .uu26, .uu27, .uu28, .uu29, .uu30
-	{
-	    height: 150px;
-	    width: 150px;
-	}
-	
-	div.messages div#message_container div#message_toolbarWindows div, div#text_container div#text_toolbarWindows div {
-	background:none repeat scroll 0 0 #EFEFEF;
-	border:1px solid #71D000;
-	/*display:none;*/
-	left:180px;
-	margin-top:5px;
-	max-width:240px;
-	padding:5px;
-	position:absolute;
-	}
-	.uu19 {width: 150px;}
-	.uu20 {width: 150px;}
-	.uu17 {width: 150px;}
-
-
-        </style>
-<script language="javascript" type="text/javascript">
-function smilie(text) {
-    document.myform.message.value += text;
-    }
-    </script>
-
-<script language="javascript">
-function toggleDisplay(e){
-    element = document.getElementById(e).style;
-    element.display == 'none' ? element.display = 'block' :
-    element.display='none';
-}
-</script>
     
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
@@ -185,6 +99,21 @@ function toggleDisplay(e){
 	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
 	}
 	?>
+	
+	<script language="javascript" type="text/javascript">
+	function smilie(text) {
+		document.myform.message.value += text;
+	}
+    </script>
+
+	<script language="javascript">
+	function toggleDisplay(e){
+		element = document.getElementById(e).style;
+		element.display == 'none' ? element.display = 'block' :
+		element.display='none';
+	}
+	</script>
+	
 	<script type="text/javascript">
 
 		window.addEvent('domready', start);
