@@ -28,10 +28,10 @@ for($i=1;$i<=18;$i++) {
 	if($arrayVillage['f'.$i.'t'] != 0) {
 		$text = "";
 		switch($i){
-			case 1:$text = $lang['fileds'][1];break;
-			case 2:$text = $lang['fileds'][2];break;
-			case 3:$text = $lang['fileds'][3];break;
-			case 4:$text = $lang['fileds'][4];break;
+			case 1:$text = $lang['fields'][1];break;
+			case 2:$text = $lang['fields'][2];break;
+			case 3:$text = $lang['fields'][3];break;
+			case 4:$text = $lang['fields'][4];break;
 		}
 		echo "<img src=\"img/x.gif\" class=\"reslevel rf$i level".$arrayVillage['f'.$i]."\" alt=\"$text ".$arrayVillage['f'.$i]."\" />";
 	}
