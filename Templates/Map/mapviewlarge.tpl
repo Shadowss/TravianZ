@@ -177,11 +177,71 @@ $coorarray = array(
 );
 
 while ($donnees = mysql_fetch_assoc($result2)){
-	$targetalliance = $donnees['user_alliance'];
-	$neutralarray = array();
-	$friendarray = array();
-	$enemyarray = array();
-	$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $session->uid)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? (in_array($targetalliance,$friendarray)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : (in_array($targetalliance,$enemyarray)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : (in_array($targetalliance,$neutralarray)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $session->alliance? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
+        $targetalliance = $donnees['user_alliance']; 
+              if(count($database->diplomacyExistingRelationships($targetalliance))){ 
+            foreach($database->diplomacyExistingRelationships($targetalliance) as $key => $row9){ 
+            if($row9['alli1'] == $session->alliance){ 
+                if($row9['type'] == 1){ 
+                $neutralarray = 0; 
+                $friendarray = 1; 
+                $enemyarray = 0; 
+                } else if($row9['type'] == 2){ 
+                $neutralarray = 1; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+                } else if($row9['type'] == 3){ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 1; 
+                 
+                } 
+                }else{ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+                } 
+                } 
+            }elseif(count($database->diplomacyExistingRelationships2($targetalliance))){ 
+            foreach($database->diplomacyExistingRelationships2($targetalliance) as $key => $row9){ 
+            if($row9['alli1'] == $session->alliance){ 
+                if($row9['type'] == 1){ 
+                $neutralarray = 0; 
+                $friendarray = 1; 
+                $enemyarray = 0; 
+                 
+                } else if($row9['type'] == 2){ 
+                $neutralarray = 1; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                
+                } else if($row9['type'] == 3){ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 1; 
+                 
+                } 
+                }else{ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+                } 
+                } 
+            }else{ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+            } 
+             
+            if ($targetalliance == 1) { 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+              }  
+	$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $session->uid)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? (($friendarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : (($enemyarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : (($neutralarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $session->alliance? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
 
 	// Map content
 	if($donnees['ville_user']==3 && $donnees['ville_name']=='WW Buildingplan'){
@@ -271,7 +331,7 @@ while ($donnees = mysql_fetch_assoc($result2)){
 					<img id="map_links" src="img/x.gif" usemap="#map_overlay_large">
 					<script type="text/javascript">
 						m_c.az = {"n1":<?php echo $generator->getBaseID($x,$yp1) ?>,"n1p7":<?php echo $generator->getBaseID($x,$yp7) ?>,"n2":<?php echo $generator->getBaseID($xp1,$y) ?>,"n2p7":<?php echo $generator->getBaseID($xm7,$y) ?>,"n3":<?php echo $generator->getBaseID($x,$ym1) ?>,"n3p7":<?php echo $generator->getBaseID($x,$ym7) ?>,"n4":<?php echo $generator->getBaseID($xm1,$y) ?>,"n4p7":<?php echo $generator->getBaseID($xp7,$y) ?>};
-						m_c.ad = [<?php echo $map_js?>];
+						m_c.ad = [[<?php echo $map_js?>];
 						m_c.z = {"x":<?php echo $x ?>,"y":<?php echo $y ?>};
 						m_c.size = 13;
 						var mdim = {"x":13,"y":13,"rad":6}
