@@ -24,13 +24,13 @@ for($i=1;$i<=50;$i++) {
 	}
 }
 if($troops['hero'] > 0) {
-		echo "<tr><td class=\"ico\"><a href=\"build.php?id=39\"><img class=\"unit uhero\" src=\"img/x.gif\" alt=\"Hero\" title=\"Hero\" /></a></td>";
-		echo "<td class=\"num\">".$troops['hero']."</td><td class=\"un\">Hero</td></tr>";
+		echo "<tr><td class=\"ico\"><a href=\"build.php?id=39\"><img class=\"unit uhero\" src=\"img/x.gif\" alt=\"".$lang['troops'][1]."\" title=\"".$lang['troops'][1]."\" /></a></td>";
+		echo "<td class=\"num\">".$troops['hero']."</td><td class=\"un\">".$lang['troops'][1]."</td></tr>";
 		$TroopsPresent = True;
 }
 $units = $technology->getUnitList($village->wid);
 if(!$TroopsPresent) {
-	echo "<tr><td>none</td></tr>";
+	echo "<tr><td>".$lang['troops'][0]."</td></tr>";
 }
 ?>
 	</tbody></table>

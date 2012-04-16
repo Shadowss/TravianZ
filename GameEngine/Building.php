@@ -9,7 +9,7 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
+include ("./GameEngine/Lang/".LANG.".php");
 
 class Building {	
 
@@ -178,51 +178,51 @@ class Building {
 	}
 	
 	public function procResType($ref) {
-		global $session;
+		global $session, $lang;
 		switch($ref) {
-			case 1: $build = "Woodcutter"; break;
-			case 2: $build = "Clay Pit"; break;
-			case 3: $build = "Iron Mine"; break;
-			case 4: $build = "Cropland"; break;
-			case 5: $build = "Sawmill"; break;
-			case 6: $build = "Brickyard"; break;
-			case 7: $build = "Iron Foundry"; break;
-			case 8: $build = "Grain Mill"; break;
-			case 9: $build = "Bakery"; break;
-			case 10: $build = "Warehouse"; break;
-			case 11: $build = "Granary"; break;
-			case 12: $build = "Blacksmith"; break;
-			case 13: $build = "Armoury"; break;
-			case 14: $build = "Tournament Square"; break;
-			case 15: $build = "Main Building"; break;
-			case 16: $build = "Rally Point"; break;
-			case 17: $build = "Marketplace"; break;
-			case 18: $build = "Embassy"; break;
-			case 19: $build = "Barracks"; break;
-			case 20: $build = "Stable"; break;
-			case 21: $build = "Workshop"; break;
-			case 22: $build = "Academy"; break;
-			case 23: $build = "Cranny"; break;
-			case 24: $build = "Town Hall"; break;
-			case 25: $build = "Residence"; break;
-			case 26: $build = "Palace"; break;
-			case 27: $build = "Treasury"; break;
-			case 28: $build = "Trade Office"; break;
-			case 29: $build = "Great Barracks"; break;
-			case 30: $build = "Great Stable"; break;
-			case 31: $build = "City Wall"; break;
-			case 32: $build = "Earth Wall"; break;
-			case 33: $build = "Palisade"; break;
-			case 34: $build = "Stonemason's Lodge"; break;
-			case 35: $build = "Brewery"; break;
-			case 36: $build = "Trapper"; break;
-			case 37: $build = "Hero's Mansion"; break;
-			case 38: $build = "Great Warehouse"; break;
-			case 39: $build = "Great Granary"; break;
-			case 40: $build = "Wonder of the World"; break;
-			case 41: $build = "Horse Drinking Trough"; break;
-			case 42: $build = "Great Workshop"; break;
-			default: $build = "Error"; break;
+			case 1: $build = $lang['buildings'][1]; break;
+			case 2: $build = $lang['buildings'][2]; break;
+			case 3: $build = $lang['buildings'][3]; break;
+			case 4: $build = $lang['buildings'][4]; break;
+			case 5: $build = $lang['buildings'][5]; break;
+			case 6: $build = $lang['buildings'][6]; break;
+			case 7: $build = $lang['buildings'][7]; break;
+			case 8: $build = $lang['buildings'][8]; break;
+			case 9: $build = $lang['buildings'][9]; break;
+			case 10: $build = $lang['buildings'][10]; break;
+			case 11: $build = $lang['buildings'][11]; break;
+			case 12: $build = $lang['buildings'][12]; break;
+			case 13: $build = $lang['buildings'][13]; break;
+			case 14: $build = $lang['buildings'][14]; break;
+			case 15: $build = $lang['buildings'][15]; break;
+			case 16: $build = $lang['buildings'][16]; break;
+			case 17: $build = $lang['buildings'][17]; break;
+			case 18: $build = $lang['buildings'][18]; break;
+			case 19: $build = $lang['buildings'][19]; break;
+			case 20: $build = $lang['buildings'][20]; break;
+			case 21: $build = $lang['buildings'][21]; break;
+			case 22: $build = $lang['buildings'][22]; break;
+			case 23: $build = $lang['buildings'][23]; break;
+			case 24: $build = $lang['buildings'][24]; break;
+			case 25: $build = $lang['buildings'][25]; break;
+			case 26: $build = $lang['buildings'][26]; break;
+			case 27: $build = $lang['buildings'][27]; break;
+			case 28: $build = $lang['buildings'][28]; break;
+			case 29: $build = $lang['buildings'][29]; break;
+			case 30: $build = $lang['buildings'][30]; break;
+			case 31: $build = $lang['buildings'][31]; break;
+			case 32: $build = $lang['buildings'][32]; break;
+			case 33: $build = $lang['buildings'][33]; break;
+			case 34: $build = $lang['buildings'][34]; break;
+			case 35: $build = $lang['buildings'][35]; break;
+			case 36: $build = $lang['buildings'][36]; break;
+			case 37: $build = $lang['buildings'][37]; break;
+			case 38: $build = $lang['buildings'][38]; break;
+			case 39: $build = $lang['buildings'][39]; break;
+			case 40: $build = $lang['buildings'][40]; break;
+			case 41: $build = $lang['buildings'][41]; break;
+			case 42: $build = $lang['buildings'][42]; break;
+			default: $build = $lang['buildings'][43]; break;
 		}
 		return $build;
 	}
