@@ -271,7 +271,7 @@ while ($donnees = mysql_fetch_assoc($result2)){
 					<img id="map_links" src="img/x.gif" usemap="#map_overlay_large">
 					<script type="text/javascript">
 						m_c.az = {"n1":<?php echo $generator->getBaseID($x,$yp1) ?>,"n1p7":<?php echo $generator->getBaseID($x,$yp7) ?>,"n2":<?php echo $generator->getBaseID($xp1,$y) ?>,"n2p7":<?php echo $generator->getBaseID($xm7,$y) ?>,"n3":<?php echo $generator->getBaseID($x,$ym1) ?>,"n3p7":<?php echo $generator->getBaseID($x,$ym7) ?>,"n4":<?php echo $generator->getBaseID($xm1,$y) ?>,"n4p7":<?php echo $generator->getBaseID($xp7,$y) ?>};
-						m_c.ad = [[<?php echo $map_js?>];
+						m_c.ad = [<?php echo $map_js?>];
 						m_c.z = {"x":<?php echo $x ?>,"y":<?php echo $y ?>};
 						m_c.size = 13;
 						var mdim = {"x":13,"y":13,"rad":6}
