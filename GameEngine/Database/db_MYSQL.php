@@ -1216,7 +1216,7 @@
         	}
 
         	function diplomacyCancelExistingRelationship($id, $session_alliance) {
-        		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $session_alliance";
+        		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $session_alliance OR id = $id AND alli1 = $session_alliance";
         		return mysql_query($q, $this->connection);
         	}
 

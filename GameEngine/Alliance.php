@@ -348,6 +348,14 @@
        				if($aType >= 1 and $aType <= 3) {
        					if(!$database->diplomacyInviteCheck($database->getAllianceID($aName), $session->alliance)) {
        						$database->diplomacyInviteAdd($session->alliance, $database->getAllianceID($aName), $aType);
+							if($aType == 1){
+							$notice = "offer a confederation to";
+							}else if($aType == 2){
+							$notice = "offer non-aggression pact to";
+							}else if($aType == 3){
+							$notice = "declare war on";
+							}
+							$database->insertAlliNotice($session->alliance, '<a href="allianz.php?aid=' . $session->alliance . '">' . $database->getAllianceName($session->alliance) . '</a> '. $notice .' <a href="allianz.php?aid=' . $database->getAllianceID($aName) . '">' . $aName . '</a>.');
        						$form->addError("name", "Invite sended");
        					} else {
        						$form->addError("name", "You have already sended them a invite");
