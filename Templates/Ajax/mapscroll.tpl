@@ -92,12 +92,66 @@ $i=0;
 $yrow = 0;
 
 $map_js ='';
-while ($donnees = mysql_fetch_assoc($result2)){	
+while ($donnees = mysql_fetch_assoc($result2)){
 $targetalliance = $donnees['user_alliance'];
-$neutralarray = array();
-$friendarray = array();
-$enemyarray = array();
-$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $_SESSION['id_user'])? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? (in_array($targetalliance,$friendarray)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : (in_array($targetalliance,$enemyarray)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : (in_array($targetalliance,$neutralarray)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $_SESSION['alliance_user']? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
+              if(count($database->diplomacyExistingRelationships($targetalliance))){ 
+            foreach($database->diplomacyExistingRelationships($targetalliance) as $key => $row9){ 
+            if($row9['alli1'] == $_SESSION['alliance_user']){ 
+                if($row9['type'] == 1){ 
+                $neutralarray = 0; 
+                $friendarray = 1; 
+                $enemyarray = 0; 
+                } else if($row9['type'] == 2){ 
+                $neutralarray = 1; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+                } else if($row9['type'] == 3){ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 1; 
+                 
+                } 
+                }else{ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+                } 
+                } 
+            }elseif(count($database->diplomacyExistingRelationships2($targetalliance))){ 
+            foreach($database->diplomacyExistingRelationships2($targetalliance) as $key => $row9){ 
+            if($row9['alli2'] == $_SESSION['alliance_user']){ 
+                if($row9['type'] == 1){ 
+                $neutralarray = 0; 
+                $friendarray = 1; 
+                $enemyarray = 0; 
+                 
+                } else if($row9['type'] == 2){ 
+                $neutralarray = 1; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                
+                } else if($row9['type'] == 3){ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 1; 
+                 
+                } 
+                }else{ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+                } 
+                } 
+            }else{ 
+                $neutralarray = 0; 
+                $friendarray = 0; 
+                $enemyarray = 0; 
+                 
+            } 
+$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $_SESSION['id_user'])? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? (($friendarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : (($enemyarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : (($neutralarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $_SESSION['alliance_user']? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
 
 	//Javascript map info
 	if($yrow!=7){
