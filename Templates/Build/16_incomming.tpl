@@ -27,8 +27,7 @@ if ($units[$y]['sort_type']==3){
                   }
                   echo "</tr><tr><th>Troops</th>";
                   for($i=$start;$i<=($end);$i++) {
-				  $tribe1 = $tribe-1;
-				  $totalunits = $units[$y]['t'.$tribe1*10+1]+$units[$y]['t'.$tribe1*10+2]+$units[$y]['t'.$tribe1*10+3]+$units[$y]['t'.$tribe1*10+4]+$units[$y]['t'.$tribe1*10+5]+$units[$y]['t'.$tribe1*10+6]+$units[$y]['t'.$tribe1*10+7]+$units[$y]['t'.$tribe1*10+8]+$units[$y]['t'.$tribe1*10+9]+$units[$y]['t'.$tribe1*10+10];
+				  $totalunits = $units[$y]['t1']+$units[$y]['2']+$units[$y]['3']+$units[$y]['4']+$units[$y]['5']+$units[$y]['6']+$units[$y]['7']+$units[$y]['8']+$units[$y]['9']+$units[$y]['10']+$units[$y]['t11'];
 				  if($totalunits > $building->getTypeLevel(16)){
                  		echo "<td class=\"none\">?</td>";
                   }else{
@@ -96,14 +95,18 @@ $to = $database->getMInfo($units[$y]['vref']);
  <tr><th>Troops</th>
             <?php
             for($i=1;$i<($units[$y]['t11'] != 0?12:11);$i++) {
+			if($units[$y]['attack_type']!=2){
             	if($units[$y]['t'.$i] == 0) {
-                	echo "<td class=\"none\">?</td>";
+                	echo "<td class=\"none\">0</td>";
                 }
                 else {
                 echo "<td>";
-                }
                 echo $units[$y]['t'.$i]."</td>";
-            }
+                }
+            }else{
+                	echo "<td class=\"none\">?</td>";
+			}
+			}
             ?>
            </tr></tbody>
 		<tbody class="infos">
@@ -130,5 +133,4 @@ $to = $database->getMInfo($units[$y]['vref']);
 	
 	}
 
-//}
 		?>

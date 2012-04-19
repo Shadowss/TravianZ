@@ -16,7 +16,7 @@
 			<?php
             
             if($session->gold >= 2) {
-            ?> <a href="?buildingFinish=1" onclick="return confirm('<?php echo FINISH_GOLD; ?>');" title="<?php echo FINISH_GOLD; ?>"><img class="clock" alt="<?php echo FINISH_GOLD; ?>" src="img/x.gif"/></a>
+            ?> <a href="?buildingFinish=1" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="Finish all construction and research orders in this village immediately for 2 Gold?"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
 		<?php
             }
             ?>
@@ -40,16 +40,16 @@
 		$BuildingList = array();
         foreach($building->buildArray as $jobs) {
         	echo "<tr><td class=\"ico\"><a href=\"?d=".$jobs['id']."&a=0&c=$session->checker\">";
-            echo "<img src=\"img/x.gif\" class=\"del\" title=\"".CANCEL."\" alt=\"".CANCEL."\" /></a></td><td>";
-			echo $building->procResType($jobs['type']).$lang['buildings'][44].($village->resarray['f'.$jobs['field']]+(in_array($jobs['field'],$BuildingList)?2:1 )).")";
+            echo "<img src=\"img/x.gif\" class=\"del\" title=\"cancel\" alt=\"cancel\" /></a></td><td>";
+			echo $building->procResType($jobs['type'])." (Level ".($village->resarray['f'.$jobs['field']]+(in_array($jobs['field'],$BuildingList)?2:1 )).")";
 			if($jobs['loopcon'] == 0) { $BuildingList[] = $jobs['field']; }
             if($jobs['loopcon'] == 1) {
-            	echo "&nbsp;".WAITING_LOOP;
+            	echo " (waiting loop)";
             }
             echo "</td><td><span id=\"timer".$timer."\">";
             echo $generator->getTimeFormat($jobs['timestamp']-time());
-            echo "</span>&nbsp;".HRS."</td>";
-            echo "<td>".DONE_AT."&nbsp;".date('H:i', $jobs['timestamp'])."</td></tr>";
+            echo "</span> hrs.</td>";
+            echo "<td>done at ".date('H:i', $jobs['timestamp'])."</td></tr>";
             $timer +=1;
       	}
         ?>

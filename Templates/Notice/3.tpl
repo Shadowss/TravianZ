@@ -5,6 +5,7 @@
 ##                  GIT HUB REV                           ##  
 ############################################################
 $dataarray = explode(",",$message->readingNotice['data']);
+if($dataarray[147]!='' or $dataarray!=0){$colspan="11";}else{$colspan="10";}
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
 			<thead>
@@ -26,7 +27,7 @@ $dataarray = explode(",",$message->readingNotice['data']);
 		<table cellpadding="1" cellspacing="1" id="attacker"><thead>
 <tr>
 <td class="role">Attacker</td>
-<td colspan="10"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[0],"id",0); ?>"><?php echo $database->getUserField($dataarray[0],"username",0); ?></a> from the village <a href="karte.php?d=<?php echo $dataarray[1]."&amp;c=".$generator->getMapCheck($dataarray[1]); ?>"><?php echo $database->getVillageField($dataarray[1],"name"); ?></a></td>
+<td colspan="<?php echo $colspan; ?>"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[0],"id",0); ?>"><?php echo $database->getUserField($dataarray[0],"username",0); ?></a> from the village <a href="karte.php?d=<?php echo $dataarray[1]."&amp;c=".$generator->getMapCheck($dataarray[1]); ?>"><?php echo $database->getVillageField($dataarray[1],"name"); ?></a></td>
 </tr>
 </thead>
 <tbody class="units">
@@ -37,7 +38,9 @@ $start = $dataarray[2] == 1? 1 : (($dataarray[2] == 2)? 11 : (($dataarray[2] == 
 for($i=$start;$i<=($start+9);$i++) {
 	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
 }
-echo "<td><img src=\"img/x.gif\" class=\"unit hero\" title=\"Hero\" /></td>";
+if ($dataarray[147]!="" or $dataarray[147]!=0){
+	echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
+}
 echo "</tr><tr><th>Troops</th>";
 for($i=3;$i<=12;$i++) {
 	if($dataarray[$i] == 0) {
@@ -46,6 +49,9 @@ for($i=3;$i<=12;$i++) {
     else {
     	echo "<td>".$dataarray[$i]."</td>";
     }
+}
+if ($dataarray[147]!="" or $dataarray[147]!=0){
+	echo "<td>$dataarray[147]</td>";
 }
 echo "<tr><th>Casualties</th>";
 for($i=13;$i<=22;$i++) {
@@ -56,7 +62,10 @@ for($i=13;$i<=22;$i++) {
     	echo "<td>".$dataarray[$i]."</td>";
     }
 }
-
+if ($dataarray[147]!="" or $dataarray[147]!=0){
+	if ($dataarray[148]==0){$tdclass='class="none"';}
+	echo "<td $tdclass>$dataarray[148]</td>";
+}
 echo "</tr></tbody>"; ?>
 </td></tr></tbody></table>
 	

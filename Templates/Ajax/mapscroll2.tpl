@@ -4,6 +4,7 @@ include('GameEngine/config.php');
 mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
 mysql_select_db(SQL_DB) or die(mysql_error());
 include("GameEngine/Generator.php");
+include("GameEngine/Database/db_MYSQL.php");
 header("Content-Type: application/json;");
 
 //include("GameEngine/Session.php");
@@ -99,6 +100,7 @@ $query2 = "SELECT
 					LEFT JOIN ".TB_PREFIX."alidata ON ".TB_PREFIX."alidata.id = ".TB_PREFIX."users.alliance )
 			where ".TB_PREFIX."wdata.id IN ($maparray)
 			ORDER BY FIND_IN_SET(".TB_PREFIX."wdata.id,'$maparray2')";
+
 //echo $query2;
 $result2 = mysql_query($query2) or die(mysql_error());
 
@@ -110,79 +112,26 @@ $coorindex = 0;
 $map_js ='';
 
 while ($donnees = mysql_fetch_assoc($result2)){
-$targetalliance = $donnees['user_alliance'];
-$targetalliance = $donnees['user_alliance'];
-              if(count($database->diplomacyExistingRelationships($targetalliance))){ 
-            foreach($database->diplomacyExistingRelationships($targetalliance) as $key => $row9){ 
-            if($row9['alli1'] == $_SESSION['alliance_user']){ 
-                if($row9['type'] == 1){ 
-                $neutralarray = 0; 
-                $friendarray = 1; 
-                $enemyarray = 0; 
-                } else if($row9['type'] == 2){ 
-                $neutralarray = 1; 
-                $friendarray = 0; 
-                $enemyarray = 0; 
-                 
-                } else if($row9['type'] == 3){ 
-                $neutralarray = 0; 
-                $friendarray = 0; 
-                $enemyarray = 1; 
-                 
-                } 
-                }else{ 
-                $neutralarray = 0; 
-                $friendarray = 0; 
-                $enemyarray = 0; 
-                 
-                } 
-                } 
-            }elseif(count($database->diplomacyExistingRelationships2($targetalliance))){ 
-            foreach($database->diplomacyExistingRelationships2($targetalliance) as $key => $row9){ 
-            if($row9['alli2'] == $_SESSION['alliance_user']){ 
-                if($row9['type'] == 1){ 
-                $neutralarray = 0; 
-                $friendarray = 1; 
-                $enemyarray = 0; 
-                 
-                } else if($row9['type'] == 2){ 
-                $neutralarray = 1; 
-                $friendarray = 0; 
-                $enemyarray = 0; 
-                
-                } else if($row9['type'] == 3){ 
-                $neutralarray = 0; 
-                $friendarray = 0; 
-                $enemyarray = 1; 
-                 
-                } 
-                }else{ 
-                $neutralarray = 0; 
-                $friendarray = 0; 
-                $enemyarray = 0; 
-                 
-                } 
-                } 
-            }else{ 
-                $neutralarray = 0; 
-                $friendarray = 0; 
-                $enemyarray = 0; 
-                 
-            } 
-$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $_SESSION['id_user'])? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? (($friendarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : (($enemyarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : (($neutralarray == 1)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $_SESSION['alliance_user']? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
+
+$targetalliance=$donnees["aliance_id"];
+$friendarray=$database->getAllianceAlly($donnees["aliance_id"],1);
+$neutralarray=$database->getAllianceAlly($donnees["aliance_id"],2);
+$enemyarray=$database->getAllianceWar2($donnees["aliance_id"]);
+
+$friend = (($friendarray[0]['alli1']>0 and $friendarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($friendarray[0]['alli1']==$_SESSION['alliance_user'] or $friendarray[0]['alli2']==$_SESSION['alliance_user']) and ($_SESSION['alliance_user'] != $targetalliance and $_SESSION['alliance_user'] and $targetalliance)) ? '1':'0';
+
+$war = (($enemyarray[0]['alli1']>0 and $enemyarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($enemyarray[0]['alli1']==$_SESSION['alliance_user'] or $enemyarray[0]['alli2']==$_SESSION['alliance_user']) and ($_SESSION['alliance_user'] != $targetalliance and $_SESSION['alliance_user'] and $targetalliance)) ? '1':'0';
+
+$neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($neutralarray[0]['alli1']==$_SESSION['alliance_user'] or $neutralarray[0]['alli2']==$_SESSION['alliance_user']) and ($_SESSION['alliance_user'] != $targetalliance and $_SESSION['alliance_user'] and $targetalliance)) ? '1':'0';
 
 
-
+$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $_SESSION['id_user'])? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? ($friend==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : ($war==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : ($neutral==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $_SESSION['alliance_user']? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
 	//Javascript map info
 	if($yrow!=13){
-		if($donnees['ville_user']==3 && $donnees['ville_name']=='WW Buildingplan'){
-		$map_js .= "[".$donnees['map_x'].",".$donnees['map_y'].",".$donnees['map_fieldtype'].",". ((!empty($donnees['map_oasis'])) ? $donnees['map_oasis'] : 0) .",\"d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."\",\"o99\"";
-	}else{
 		$map_js .= "[".$donnees['map_x'].",".$donnees['map_y'].",".$donnees['map_fieldtype'].",". ((!empty($donnees['map_oasis'])) ? $donnees['map_oasis'] : 0) .",\"d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."\",\"".$image."\"";
-	}
 		if($donnees['map_occupied']){
 			if($donnees['map_fieldtype'] != 0){
-				$map_js.= ",\"".$donnees['ville_name']."\",\"".$donnees['user_username']."\",\"".$donnees['ville_pop']."\",\"".$donnees['aliance_name']."\",\"".$donnees['user_tribe']."\"]\n";
+				$map_js.= ",\"".htmlspecialchars($donnees['ville_name'])."\",\"".htmlspecialchars($donnees['user_username'])."\",\"".$donnees['ville_pop']."\",\"".htmlspecialchars($donnees['aliance_name'])."\",\"".$donnees['user_tribe']."\"]\n";
 			}
 		}
 		elseif($donnees['map_oasis'] != 0){

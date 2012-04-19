@@ -92,13 +92,16 @@
         		global $session, $database;
         		if(isset($get['t'])) {
 					if($get['t'] == 1) {
-						$type = array(8, 15);
+						$type = array(8, 15, 16, 17);
 					}
 					if($get['t'] == 2) {
 						$type = array(10, 11, 12, 13);
 					}
         			if($get['t'] == 3) {
         				$type = array(1, 2, 3, 4, 5, 6, 7);
+        			}
+        			if($get['t'] == 4) {
+        				$type = array(0, 18, 19, 20, 21);
         			}
         			if($get['t'] == 5) {
 						if(!$session->plus){

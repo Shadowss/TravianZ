@@ -98,7 +98,6 @@ class Generator {
    }
 
 public function procMtime($time, $pref = 3) {
-	global $lang;
         /*
         $timezone = 7;
         switch($timezone) {
@@ -112,9 +111,9 @@ public function procMtime($time, $pref = 3) {
 
 $today = date('d',time())-1; 
 if (date('Ymd',time()) == date('Ymd',$time)) { 
-    $day = $lang['upgrade'][11]; //today
+    $day = "today"; 
     }elseif($today == date('d',$time)){ 
-    $day = $lang['upgrade'][12]; //yesterday
+    $day = "yesterday"; 
     }
         else {            
             switch($pref) {

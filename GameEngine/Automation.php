@@ -155,9 +155,6 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/settlers.txt") or time()-filemtime("GameEngine/Prevention/settlers.txt")>10) {
             $this->sendSettlersComplete();
         }
-         if(!file_exists("GameEngine/Prevention/starvation.txt") or time()-filemtime("GameEngine/Prevention/starvation.txt")>50) {
-	        $this->starvation();
-		}
         if(!file_exists("GameEngine/Prevention/celebration.txt") or time()-filemtime("GameEngine/Prevention/celebration.txt")>10) {
             $this->celebrationComplete();
         }
@@ -167,7 +164,117 @@ class Automation {
         } 
         $this->updateStore();  
     }
+   function activeCropDead(){
+	   global $session,$village,$database,$_SESSION, $allcrop;
+  // var_dump($session);
+  // var_dump($village);
+  // echo"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";'
 
+  //echo $session->villages;
+   $this->updateRes($_SESSION['wid'],$session->uid);
+   $allcrop=$this->bountyproduction['crop'];
+   $allUnitInTown=$database->getUnit($_SESSION['wid']);
+   $allEnforceInTown=$database->getEnforceVillage($_SESSION['wid'],0);
+   $checkcrop=$database->getVillageField($_SESSION['wid'],'crop');
+   $cropProd=$this->bountyGetCropProd();
+
+// $time = time();
+// var_dump($session);
+// echo $checkcrop;
+// echo $allcrop;
+
+if ($allcrop<0&&$checkcrop<0){
+	$loops=0;
+	while ($loops<1){
+   if ($checkcrop < 0){
+   
+	//   array_shift($allUnitInTown);
+	//   rsort($allUnitInTown);
+	   //rsort($allEnforceIntown);
+	//   echo $numEnforce=count($allEnforceInTown);
+
+		if (!empty($allEnforceInTown)){
+			arsort($allEnforceInTown);
+			$unitarr=array();
+		   foreach ($allEnforceInTown as $enforceInTown){
+		//var_dump($enforceInTown);
+		//   array_shift($enforceInTown);array_pop($enforceInTown);array_pop($enforceInTown);
+		//   array_splice($enforceInTown,count($enforceInTown)+1,2);
+	//	   $enforceInTown=rsort($enforceInTown);
+			for ($i=1;$i<51;$i++){
+				$unitarr['u'.$i]=$enforceInTown['u'.$i];
+			}
+				$unitarr['hero']=$enforceInTown['hero'];
+			
+//var_dump($enforceInTown);
+if (array_sum($unitarr)>0){
+			arsort($unitarr);
+			$keydel=key($unitarr);
+			$keydel2=substr($keydel,1);
+//			echo $keydel."|||".$keydel2."|||";
+			global ${$keydel};
+	//		echo ${$keydel}['crop'];
+	//		$newtroop=$unitarr[$keydel]-1;
+
+			$database->modifyEnforce($enforceInTown['id'],$keydel2,1,0);
+//				$cropupdate=$checkcrop+${$keydel}['crop'];
+				$q = "UPDATE ".TB_PREFIX."vdata set `crop` = `crop` +".${$keydel}['crop']." WHERE wref =".$_SESSION['wid'];
+				$database->query($q);
+//			echo$q;
+}else{
+				$database->deleteReinf($enforceInTown["id"]);
+}
+	//	   var_dump($enforceInTown);
+	//	   	   var_dump($unitarr);
+
+	/*		$allkey=array_keys($enforceInTown));
+			$checkar=array();
+			foreach ($allkey as $value){
+				if ($enforceInTown[$value]>0){
+					$checkar[]=$value;
+				}
+			}*/
+		   }
+		}else{
+			$unitarr=array();
+			for ($i=1;$i<51;$i++){
+				$unitarr['u'.$i]=$allUnitInTown['u'.$i];
+			}
+				$unitarr['hero']=$allUnitInTown['hero'];
+			arsort($unitarr);
+if (array_sum($unitarr)>0){
+			$keydel=key($unitarr);
+			$keydel2=substr($keydel,1);
+			global ${$keydel};
+			$database->modifyUnit($allUnitInTown['vref'],$keydel2,1,0);
+
+				$q = "UPDATE ".TB_PREFIX."vdata set `crop` = `crop`+".${$keydel}['crop']." WHERE wref =".$_SESSION['wid'];
+				$database->query($q);
+//			echo$q;
+}
+	   }
+   $this->updateRes($_SESSION['wid'],$session->uid);
+   $allcrop=$this->bountyproduction['crop'];
+   $allUnitInTown=$database->getUnit($_SESSION['wid']);
+   $allEnforceInTown=$database->getEnforceVillage($_SESSION['wid'],0);
+   $checkcrop=$database->getVillageField($_SESSION['wid'],'crop');
+//echo $allcrop."|||".$checkcrop;
+		if ($allcrop>=0){
+			$q = "UPDATE ".TB_PREFIX."vdata set `crop` = 0 WHERE wref =".$_SESSION['wid'];
+			$database->query($q);
+			$loops++;
+		}elseif ($checkcrop>0){
+			$loops++;
+		}
+	}
+
+}
+//	   var_dump($allUnitInTown);
+	   //var_dump($allEnforceIntown);
+//	   echo $allcrop;
+	   }
+
+   }
 private function loyaltyRegeneration() {
         global $database;
         $array = array();
@@ -904,7 +1011,12 @@ private function loyaltyRegeneration() {
 
             //units attack string for battleraport
             $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
-
+			$herosend_att = $data['t11'];
+			if ($herosend_att>0){
+				$unitssend_att_check=$unitssend_att.','.$data['t11'];
+			}else{
+				$unitssend_att_check=$unitssend_att;
+			}
             //units defence string for battleraport
                 $unitssend_def[1] = ''.$Defender['u1'].','.$Defender['u2'].','.$Defender['u3'].','.$Defender['u4'].','.$Defender['u5'].','.$Defender['u6'].','.$Defender['u7'].','.$Defender['u8'].','.$Defender['u9'].','.$Defender['u10'].'';
                 $unitssend_def[2] = ''.$Defender['u11'].','.$Defender['u12'].','.$Defender['u13'].','.$Defender['u14'].','.$Defender['u15'].','.$Defender['u16'].','.$Defender['u17'].','.$Defender['u18'].','.$Defender['u19'].','.$Defender['u20'].'';
@@ -925,19 +1037,13 @@ private function loyaltyRegeneration() {
                 $unitssend_deff[3] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[4] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[5] = '?,?,?,?,?,?,?,?,?,?,';
-            //how many troops died? for battleraport
-            if($battlepart['casualties_attacker'][1] == 0) { $dead1 = 0; } else { $dead1 = $battlepart['casualties_attacker'][1]; }
-            if($battlepart['casualties_attacker'][2] == 0) { $dead2 = 0; } else { $dead2 = $battlepart['casualties_attacker'][2]; }
-            if($battlepart['casualties_attacker'][3] == 0) { $dead3 = 0; } else { $dead3 = $battlepart['casualties_attacker'][3]; }
-            if($battlepart['casualties_attacker'][4] == 0) { $dead4 = 0; } else { $dead4 = $battlepart['casualties_attacker'][4]; }
-            if($battlepart['casualties_attacker'][5] == 0) { $dead5 = 0; } else { $dead5 = $battlepart['casualties_attacker'][5]; }
-            if($battlepart['casualties_attacker'][6] == 0) { $dead6 = 0; } else { $dead6 = $battlepart['casualties_attacker'][6]; }
-            if($battlepart['casualties_attacker'][7] == 0) { $dead7 = 0; } else { $dead7 = $battlepart['casualties_attacker'][7]; }
-            if($battlepart['casualties_attacker'][8] == 0) { $dead8 = 0; } else { $dead8 = $battlepart['casualties_attacker'][8]; }
-            if($battlepart['casualties_attacker'][9] == 0) { $dead9 = 0; } else { $dead9 = $battlepart['casualties_attacker'][9]; }
-            if($battlepart['casualties_attacker'][10] == 0) { $dead10 = 0; } else { $dead10 = $battlepart['casualties_attacker'][10]; }
-
-
+				//how many troops died? for battleraport
+for($i=1;$i<=11;$i++){
+if($battlepart['casualties_attacker'][$i] <= 0) { ${dead.$i} = 0; }elseif($battlepart['casualties_attacker'][$i] > $data['t'.$i]){
+${dead.$i}=$data['t'.$i];
+}else { ${dead.$i} = $battlepart['casualties_attacker'][$i]; }
+}
+            $heroAttackDead=$dead11;
                     //kill own defence
                     $q = "SELECT * FROM ".TB_PREFIX."units WHERE vref='".$data['to']."'";
                     $unitlist = $database->query_return($q);
@@ -1029,9 +1135,14 @@ private function loyaltyRegeneration() {
             $database->modifyAttack($data['ref'],8,$dead8);
             $database->modifyAttack($data['ref'],9,$dead9);
             $database->modifyAttack($data['ref'],10,$dead10);
-
+			$database->modifyAttack($data['ref'],11,$dead11);
 
             $unitsdead_att = ''.$dead1.','.$dead2.','.$dead3.','.$dead4.','.$dead5.','.$dead6.','.$dead7.','.$dead8.','.$dead9.','.$dead10.'';
+			if ($herosend_att>0){
+				$unitsdead_att_check = $unitsdead_att.','.$dead11;
+			}else{
+				$unitsdead_att_check = $unitsdead_att;
+			}
             //$unitsdead_def = ''.$dead11.','.$dead12.','.$dead13.','.$dead14.','.$dead15.','.$dead16.','.$dead17.','.$dead18.','.$dead19.','.$dead20.'';
 
 
@@ -1187,7 +1298,14 @@ private function loyaltyRegeneration() {
                 $speeds[] = $unitarray['speed'];
                  }
             }
-
+			if ($herosend_att>0){
+                $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner'].""; 
+                $resulth = mysql_query($qh); 
+                $hero_f=mysql_fetch_array($resulth); 
+                $hero_unit=$hero_f['unit']; 
+				//echo "///".$GLOBALS['u'.$hero_unit]['speed']."///";
+                $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
+			}
 
 // Data for when troops return.
 
@@ -1855,10 +1973,10 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
 
                 }
 
-                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.'';
+                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.',,';
             }
             else{
-                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.'';
+                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.',,';
             }
 
 
@@ -1866,7 +1984,7 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
 
 
             // When all troops die, sends no info.
-            $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,';
+            $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.',,';
 
             //Undetected and detected in here.
             if($scout){
@@ -1900,7 +2018,7 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
             //to here
 
             // If the dead units not equal the ammount sent they will return and report
-            if($unitsdead_att != $unitssend_att)
+            if($unitsdead_att != $unitssend_att or $dead11 != $herosend_att)
             {
                 $endtime = $this->procDistanceTime($from,$to,min($speeds),1) + $AttackArrivalTime;
                 //$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
@@ -2627,34 +2745,6 @@ private function demolitionComplete() {
             @unlink("GameEngine/Prevention/demolition.txt");
         }
     }
-	
-private function starvation() {
-		global $database,$technology;
-		$TroopStarvesEvery = 100;
-        $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE crop<0";
-        $array = $database->query_return($q);
-		if(!empty($array)) {
-	        foreach($array as $village) {
-				$TroopsStarved = floor($village['crop'] / $TroopStarvesEvery) + 1;
-				$ownunit = $database->getUnit($base);
-				$TopUnit = $TopUnitCount = 0;
-				for($i=1;$i<=50;$i++) {
-					if($ownunit['u'.$i] > $TopUnitCount) { $TopUnit = $i; $TopUnitCount = $ownunit['u'.$i]; }
-				}
-				if($TopUnitCount > 0) {
-					// Remove TroopsStarved from TopUnit
-				} else {
-					// Repeat check for reinforcements
-				}
-				$q = "UPDATE ".TB_PREFIX."vdata set `crop` = 100 WHERE wref=".$village['wref'];
-				$database->query($q);
-			}
-		}
-
-		if(file_exists("GameEngine/Prevention/starvation.txt")) {
-            @unlink("GameEngine/Prevention/starvation.txt");
-        }
-	}
 	
     private function updateHero() { 
         global $database,$hero_levels;

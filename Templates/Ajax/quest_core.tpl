@@ -99,7 +99,7 @@ if (isset($qact)){
 	//Get 200 Crop	
 	$database->modifyResource($session->villages[0],0,0,0,-200,1);		
 	//Give Reward
-	$database->modifyUnit($village->wid,array($unit),array(3),array(0));
+	$database->modifyUnit($session->villages[0],array(31),array(1),array(1));
 	} else{
 	$NoCrop="No Enough Crop!";
 	}

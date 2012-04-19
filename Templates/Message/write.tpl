@@ -41,7 +41,7 @@ include("menu.tpl");
 	</script>
 <div id="write_head" class="msg_head"></div>
 <div id="write_content" class="msg_content">
-	<form method="post" action="nachrichten.php" accept-charset="utf8" name="msg">
+	<form method="post" action="nachrichten.php" accept-charset="UTF-8" name="msg">
 	<input type="hidden" name="c" value="3e9" />
 	<input type="hidden" name="p" value="" />
 		<img src="img/x.gif" id="label" class="send" alt="" />

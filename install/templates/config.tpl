@@ -31,7 +31,6 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<td><span class="f9 c6">Language:</span></td><td>
 				<select name="lang">
 				<option value="en" selected="selected">English</option>
-				<option value="ru">Russian</option>
 				</select>
 		</td></tr><tr></tr>
 	<td><span class="f9 c6">Beginners protection length:</span></td><td>
