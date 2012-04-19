@@ -1,9 +1,15 @@
 <?php
+include_once("GameEngine/Data/unitdata.php");
 
 $units = $database->getMovement("34",$village->wid,1);
 $total_for = count($units);
-
+$send = $database->getMovement("1",$village->wid,1);
+$total_for2 = count($send);
 for($y=0;$y < $total_for;$y++){
+for($i=0;$i < $total_for2;$i++){
+$res1 = mysql_query("SELECT * FROM " . TB_PREFIX . "send where id = ".$send[$i]['ref']."");
+$res = mysql_fetch_array($res1);
+}
 $timer = $y+1;
 if ($units[$y]['sort_type']==3){
 	if ($units[$y]['attack_type']==3){
@@ -27,7 +33,7 @@ if ($units[$y]['sort_type']==3){
                   }
                   echo "</tr><tr><th>Troops</th>";
                   for($i=$start;$i<=($end);$i++) {
-				  $totalunits = $units[$y]['t1']+$units[$y]['2']+$units[$y]['3']+$units[$y]['4']+$units[$y]['5']+$units[$y]['6']+$units[$y]['7']+$units[$y]['8']+$units[$y]['9']+$units[$y]['10']+$units[$y]['t11'];
+				  $totalunits = $units[$y]['t1']+$units[$y]['t2']+$units[$y]['t3']+$units[$y]['t4']+$units[$y]['t5']+$units[$y]['t6']+$units[$y]['t7']+$units[$y]['t8']+$units[$y]['t9']+$units[$y]['t10']+$units[$y]['t11'];
 				  if($totalunits > $building->getTypeLevel(16)){
                  		echo "<td class=\"none\">?</td>";
                   }else{
@@ -108,7 +114,21 @@ $to = $database->getMInfo($units[$y]['vref']);
 			}
 			}
             ?>
-           </tr></tbody>
+           </tr>
+            <?php
+			if($units[$y]['attack_type']!=2 and $units[$y]['attack_type']!=1){?>
+ <tr><th>Bounty</th>
+
+			<td colspan="<?php if($units[$y]['t11'] == 0) {echo"10";}else{echo"11";}?>">
+			<?php
+			$totalres = $res['wood']+$res['clay']+$res['iron']+$res['crop'];
+			$totalcarry = $units[$y]['t1']*${'u'.$start.''}['cap']+$units[$y]['t2']*${'u'.($start+1).''}['cap']+$units[$y]['t3']*${'u'.($start+2).''}['cap']+$units[$y]['t4']*${'u'.($start+3).''}['cap']+$units[$y]['t5']*${'u'.($start+4).''}['cap']+$units[$y]['t6']*${'u'.($start+5).''}['cap']+$units[$y]['t7']*${'u'.($start+6).''}['cap']+$units[$y]['t8']*${'u'.($start+7).''}['cap']+$units[$y]['t9']*${'u'.($start+8).''}['cap']+$units[$y]['t10']*${'u'.($start+9).''}['cap'];
+			echo "<div class=\"in small\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".$res['wood']."<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".$res['clay']."<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".$res['iron']."<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$res['crop']."</div>";
+			echo "<div class=\"in small\"><img class=\"car\" src=\"gpack/travian_default/img/a/car.gif\" alt=\"carry\" title=\"carry\"/>".$totalres."/".$totalcarry."</div>";
+            ?>
+           </tr>
+		   <?php } ?>
+		   				    
 		<tbody class="infos">
 			<tr>
 				<th>Arrival</th>
