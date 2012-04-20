@@ -100,7 +100,7 @@ if (isset($qact)){
 	$database->modifyResource($session->villages[0],0,0,0,-200,1);		
 	//Give Reward
     $attack = $database->addAttack(0,1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0);
-    $database->addMovement(3,0,$session->villages[0],$attack,time(),time()+12600/INCREASE_SPEED);
+    $database->addMovement(3,0,$session->villages[0],$attack,time(),time()+43200/INCREASE_SPEED);
 	} else{
 	$NoCrop="No Enough Crop!";
 	}
