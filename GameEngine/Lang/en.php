@@ -232,6 +232,7 @@ define("U60","Monster Settler");
 //INDEX.php
 define("LOGIN","Login");
 define("PLAYERS","Players");
+define("ACTIVE","Active");
 define("ONLINE","Online");
 define("TUTORIAL","Tutorial");
 define("PLAYER_STATISTICS","Player statistics");
