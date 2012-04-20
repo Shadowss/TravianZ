@@ -508,7 +508,7 @@ class Battle {
             $hero_health=$fdb['health'];
             $damage_health=round(100*$result[1]);
             //exit($damage_health."|".$hero_health."|".$atkhero['heroid']);
-            if ($hero_health<=$damage_health)
+            if ($hero_health<=$damage_health or $damage_health>90)
             {
                 //hero die
                 $result['casualties_attacker']['11'] = 1; 

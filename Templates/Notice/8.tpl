@@ -1,5 +1,6 @@
 <?php
 $dataarray = explode(",",$message->readingNotice['data']);
+if($dataarray[13]!='' or $dataarray!=0){$colspan="11";}else{$colspan="10";}
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
 			<thead>
@@ -21,7 +22,7 @@ $dataarray = explode(",",$message->readingNotice['data']);
 		<table cellpadding="1" cellspacing="1" id="reinforcement">
 		
 <thead><tr>
-<td class="role">sender</td><td colspan="11"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[1],"id",0); ?>"><?php echo ($dataarray[1] == 0)? "taskmaster" : $database->getUserField($dataarray[1],"username",0); ?></a> from the village <?php echo ($dataarray[0] == 0)? "village of the elders" : "<a href='karte.php?d=".$dataarray[0]."&amp;c=".$generator->getMapCheck($dataarray[0])."'>".$database->getVillageField($dataarray[0],name)."</a>"; ?></td></tr></thead>
+<td class="role">sender</td><td colspan="<?php echo $colspan; ?>"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[1],"id",0); ?>"><?php echo ($dataarray[1] == 0)? "taskmaster" : $database->getUserField($dataarray[1],"username",0); ?></a> from the village <?php echo ($dataarray[0] == 0)? "village of the elders" : "<a href='karte.php?d=".$dataarray[0]."&amp;c=".$generator->getMapCheck($dataarray[0])."'>".$database->getVillageField($dataarray[0],name)."</a>"; ?></td></tr></thead>
 <tbody class="units"><tr>
 <td>&nbsp;</td>
 <?php
@@ -30,7 +31,9 @@ $start = ($tribe-1)*10+1;
 for($i=$start;$i<=($start+9);$i++) {
 	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
 }
+if($dataarray[13]!=0){
 echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" /></td>";
+}
 echo "</tr><tr><th>Troops</th>";
 for($i=3;$i<13;$i++) {
 $unitarray['u'.($i-3+$start).''] = $dataarray[$i];
@@ -41,9 +44,7 @@ $unitarray['u'.($i-3+$start).''] = $dataarray[$i];
     echo "<td>".$dataarray[$i]."</td>";
     }
 }
-if($dataarray[13] == 0) {
-	echo "<td class=\"none\">0</td>";
-} else {
+if($dataarray[13] != 0) {
 	echo "<td>".$dataarray[13]."</td>";
 	$unitarray['hero'] = 1;
 }

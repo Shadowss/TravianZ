@@ -2086,8 +2086,16 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
             @fclose($ourFileHandle);
         $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
         $dataarray = $database->query_return($q);
-
         foreach($dataarray as $data) {
+		if($data['from']==0){
+		$to = $database->getMInfo($data['to']);
+		$database->addEnforce($data);
+		$reinf = $database->getEnforce($data['to'],$data['from']);
+		$database->modifyEnforce($reinf['id'],31,1,1);
+		$data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
+		$database->addNotice($to['owner'],$to['wref'],$targetally,8,'village of the elders reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
+        $database->setMovementProc($data['moveid']);
+		}else{
             //set base things
             $owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
             $targettribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
@@ -2133,7 +2141,7 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
 			}
             //update status
             $database->setMovementProc($data['moveid']);
-
+			}
         }
 		if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
                 @unlink("GameEngine/Prevention/sendreinfunits.txt");
