@@ -1082,6 +1082,18 @@ ${dead.$i}=$data['t'.$i];
 						$life1 = $enforce['u'.$start.'']+$enforce['u'.($start+1).'']+$enforce['u'.($start+2).'']+$enforce['u'.($start+3).'']+$enforce['u'.($start+4).'']+$enforce['u'.($start+5).'']+$enforce['u'.($start+6).'']+$enforce['u'.($start+7).'']+$enforce['u'.($start+8).'']+$enforce['u'.($start+9).''];
                         //NEED TO SEND A RAPPORTAGE!!!
                         $data2 = ''.$database->getVillageField($enforce['from'],"owner").','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.'';
+						if($scout){
+						for($i=1;$i<=10;$i++)
+						{
+						if($battlepart['casualties_attacker'][$i]){
+						if($unitsdead_att == $unitssend_att){
+                        $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+						}else{
+						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+						}
+						}
+						}
+						}else{
 						if($notlife == 0){
                         $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
 						}else if($life1 > $notlife1){
@@ -1091,6 +1103,7 @@ ${dead.$i}=$data['t'.$i];
 						}
                         //delete reinf sting when its killed all.
                         if($wrong=='0'){ $database->deleteReinf($enforce['id']); }
+						}
                 }
             }
                 $unitsdead_def[1] = ''.$dead['1'].','.$dead['2'].','.$dead['3'].','.$dead['4'].','.$dead['5'].','.$dead['6'].','.$dead['7'].','.$dead['8'].','.$dead['9'].','.$dead['10'].'';

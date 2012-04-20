@@ -30,7 +30,8 @@ if($dataarray[147]!='' or $dataarray!=0){$colspan="11";}else{$colspan="10";}
 <tr>
 <td>&nbsp;</td>
 <?php
-$start = $dataarray[2] == 1? 1 : (($dataarray[2] == 2)? 11 : (($dataarray[2] == 3)? 21 : 31));
+$tribe = $dataarray[2];
+$start = ($tribe-1)*10+1;
 for($i=$start;$i<=($start+9);$i++) {
 	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
 }

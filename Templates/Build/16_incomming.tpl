@@ -101,7 +101,7 @@ $to = $database->getMInfo($units[$y]['vref']);
  <tr><th>Troops</th>
             <?php
             for($i=1;$i<($units[$y]['t11'] != 0?12:11);$i++) {
-			if($units[$y]['attack_type']!=2){
+			if($units[$y]['attack_type']!=2 or $units[$y]['from']==$village->wid){
             	if($units[$y]['t'.$i] == 0) {
                 	echo "<td class=\"none\">0</td>";
                 }
