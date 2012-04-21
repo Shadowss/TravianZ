@@ -169,7 +169,11 @@ class Technology {
 		$woodcalc = floor($res['wood'] / ($unitarray['wood'] * ($great?3:1)));
 		$claycalc = floor($res['clay'] / ($unitarray['clay'] * ($great?3:1)));
 		$ironcalc = floor($res['iron'] / ($unitarray['iron'] * ($great?3:1)));
+		if($res['crop']>0){
 		$cropcalc = floor($res['crop'] / ($unitarray['crop'] * ($great?3:1)));
+		}else{
+		$cropcalc = 0;
+		}
 		$popcalc = floor($village->getProd("crop")/$unitarray['pop']);
 		return min($woodcalc,$claycalc,$ironcalc,$cropcalc);
 	}
