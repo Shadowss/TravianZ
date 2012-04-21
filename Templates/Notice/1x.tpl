@@ -220,86 +220,6 @@ for($i=87;$i<=96;$i++) {
 </tr></tbody></table>
 
 <?php }
-if($dataarray[98]==1 and $dataarray[31]!=4){
-if ($dataarray[97]=='1'){ 
-$start=31; ?>	
-	<table cellpadding="1" cellspacing="1" class="defender">
-	<thead>
-	<tr>
-	<td class="role">Defender</th>
-	<td colspan="10"><?php if($targettribe=='4'){ echo'<a href="spieler.php?uid='.$database->getUserField($dataarray[28],"id",0).'">'.$database->getUserField($dataarray[28],"username",0).'</a> from the village <a href="karte.php?d='.$dataarray[29].'&amp;c='.$generator->getMapCheck($dataarray[29]).'">'.stripslashes($dataarray[30]).'</a>'; } else { echo"Reinforcement"; } ?></td>
-	</tr></thead>
-	<tbody class="units">
-	<tr>
-	<td>&nbsp;</td>
-	
-	
-	<?php
-for($i=$start;$i<=($start+9);$i++) {
-	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
-}
-echo "</tr><tr><th>Troops</th>";
-for($i=98;$i<=107;$i++) {
-	if($dataarray[$i] == 0) {
-    	echo "<td class=\"none\">0</td>";
-    }
-    else {
-    	echo "<td>".$dataarray[$i]."</td>";
-    }
-}
-echo "<tr><th>Casualties</th>";
-for($i=118;$i<=127;$i++) {
-	if($dataarray[$i] == 0) {
-    	echo "<td class=\"none\">0</td>";
-    }
-    else {
-    	echo "<td>".$dataarray[$i]."</td>";
-    }
-}
-?>
-</tr></tbody></table>
-
-<?php } ?>
-<?php  if ($dataarray[128]=='1'){
-$start=41; ?>	
-	<table cellpadding="1" cellspacing="1" class="defender">
-	<thead>
-	<tr>
-	<td class="role">Defender</th>
-	<td colspan="10"><?php if($targettribe=='5'){ echo'<a href="spieler.php?uid='.$database->getUserField($dataarray[28],"id",0).'">'.$database->getUserField($dataarray[28],"username",0).'</a> from the village <a href="karte.php?d='.$dataarray[29].'&amp;c='.$generator->getMapCheck($dataarray[29]).'">'.stripslashes($dataarray[30]).'</a>'; } else { echo"Reinforcement"; } ?></td>
-	</tr></thead>
-	<tbody class="units">
-	<tr>
-	<td>&nbsp;</td>
-	
-	
-	<?php
-for($i=$start;$i<=($start+9);$i++) {
-	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
-}
-echo "</tr><tr><th>Troops</th>";
-for($i=129;$i<=138;$i++) {
-	if($dataarray[$i] == 0) {
-    	echo "<td class=\"none\">0</td>";
-    }
-    else {
-    	echo "<td>".$dataarray[$i]."</td>";
-    }
-}
-echo "<tr><th>Casualties</th>";
-for($i=139;$i<=148;$i++) {
-	if($dataarray[$i] == 0) {
-    	echo "<td class=\"none\">0</td>";
-    }
-    else {
-    	echo "<td>".$dataarray[$i]."</td>";
-    }
-}
-?>
-</tr></tbody></table>
-
-<?php }
-	}else{
 if ($dataarray[97]=='1'){ 
 $start=31; ?>	
 	<table cellpadding="1" cellspacing="1" class="defender">
@@ -377,5 +297,5 @@ for($i=129;$i<=138;$i++) {
 ?>
 </tr></tbody></table>
 
-<?php }} ?>
+<?php } ?>
 </td></tr></tbody></table>

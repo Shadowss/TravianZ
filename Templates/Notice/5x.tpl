@@ -287,7 +287,7 @@ for($i=129;$i<=138;$i++) {
     }
 }
 echo "<tr><th>Casualties</th>";
-for($i=129;$i<=138;$i++) {
+for($i=139;$i<=148;$i++) {
 	if($dataarray[$i] == 0) {
     	echo "<td class=\"none\">0</td>";
     }
