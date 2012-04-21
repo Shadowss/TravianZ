@@ -69,7 +69,7 @@ if ($units[$y]['sort_type']==3){
                   <td colspan=\"10\">";
                   echo "<a>Taskmaster's troops</a>";
                   echo "</td></tr></thead><tbody class=\"units\">";
-                  $tribe = 4;
+                  $tribe = $session->tribe;
                   $start = ($tribe-1)*10+1;
                   $end = ($tribe*10);
                   echo "<tr><th>&nbsp;</th>";
@@ -78,16 +78,7 @@ if ($units[$y]['sort_type']==3){
                   }
                   echo "</tr><tr><th>Troops</th>";
                   for($i=$start;$i<=($end);$i++) {
-				  $totalunits = $units[$y]['t1']+$units[$y]['t2']+$units[$y]['t3']+$units[$y]['t4']+$units[$y]['t5']+$units[$y]['t6']+$units[$y]['t7']+$units[$y]['t8']+$units[$y]['t9']+$units[$y]['t10']+$units[$y]['t11'];
-				  if($totalunits > $building->getTypeLevel(16)){
                  		echo "<td class=\"none\">?</td>";
-                  }else{
-				  if($units[$y]['t'.$i] == 0) {
-                    echo "<td class=\"none\">0</td>";
-				  }else{
-					echo "<td>?</td>";
-                  }	
-				  }
 				  }
                   echo "</tr></tbody>";
                   echo '
