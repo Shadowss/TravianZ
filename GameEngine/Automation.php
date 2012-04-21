@@ -1851,7 +1851,7 @@ ${dead.$i}=$data['t'.$i];
                     }
                     //loyalty is more than 0
                     if(($toF['loyalty']-$rand)>0){
-                        $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".$toF['loyalty']."</b> to <b>".($toF['loyalty']-$rand)."</b>.";
+                        $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty']-$rand)."</b>.";
                         $database->setVillageField($data['to'],loyalty,($toF['loyalty']-$rand));
                     } else {
                     //you took over the village
@@ -1860,8 +1860,28 @@ ${dead.$i}=$data['t'.$i];
                         if ($artifact['vref'] == $data['to']){
                          $database->claimArtefact($data['to'],$data['to'],$database->getVillageField($data['from'],"owner"));
                         }
-                        $database->setVillageField($data['to'],loyalty,33);
+                        $database->setVillageField($data['to'],loyalty,100);
                         $database->setVillageField($data['to'],owner,$database->getVillageField($data['from'],"owner"));
+						//delete upgrades in armory and blacksmith
+						$q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref=".$data['to'];
+                        $database->query($q);
+						$database->addABTech($data['to']);
+						//delete researches in academy
+						$q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref=".$data['to'];
+                        $database->query($q);
+						$database->addTech($data['to']);
+						$pop1 = $database->getVillageField($data['from'],"pop");
+						$pop2 = $database->getVillageField($data['to'],"pop");
+						if($pop1 > $pop2){
+						$buildlevel = $database->getResourceLevel($data['to']);
+						for ($i=0; $i<=99; $i++){
+						if($buildlevel['f'.$i]!=0){
+						$buildlevel2 = $buildlevel['f'.$i];
+						$q = "UPDATE ".TB_PREFIX."fdata SET `".$buildlevel2."`='".$buildlevel2."' - 1 WHERE vref=".$data['to'];
+                        $database->query($q);
+						}
+						}
+						}
                         //destroy wall
                         $database->setVillageLevel($data['to'],"f40",0);
                         $database->setVillageLevel($data['to'],"f40t",0);
