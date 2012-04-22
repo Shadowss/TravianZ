@@ -1478,6 +1478,7 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
                                 $database->query($q);
+								$database->clearExpansionSlot($data['to']);
                                 $logging->VillageDestroyCatalog($data['to']);
                         }
                     }
