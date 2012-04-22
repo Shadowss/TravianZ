@@ -1,3 +1,4 @@
+
 <?php
 
 #################################################################################
@@ -14,58 +15,59 @@ ob_start();
 include_once("GameEngine/Village.php");
 include_once("GameEngine/Units.php");
 if(isset($_GET['newdid'])) {
-	$_SESSION['wid'] = $_GET['newdid'];
-	header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
+    $_SESSION['wid'] = $_GET['newdid'];
+    header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
 }
 $start = $generator->pageLoadTimeStart();
 $alliance->procAlliForm($_POST);
 $technology->procTech($_POST);
-$market->procMarket($_POST);	
+$market->procMarket($_POST);    
 if(isset($_GET['gid'])) {
-	$_GET['id'] = strval($building->getTypeField($_GET['gid']));
+    $_GET['id'] = strval($building->getTypeField($_GET['gid']));
 } else if(isset($_POST['id'])) {
-	$_GET['id'] = $_POST['id'];
+    $_GET['id'] = $_POST['id'];
 }
 if(isset($_POST['t'])){
-	$_GET['t'] = $_POST['t'];
+    $_GET['t'] = $_POST['t'];
 }
 if(isset($_GET['id'])) {
-	if (!ctype_digit($_GET['id'])){
+    if (!ctype_digit($_GET['id'])){
         $_GET['id'] = "1";
     }
-	if($village->resarray['f'.$_GET['id'].'t'] == 17) {
-		$market->procRemove($_GET);
-	}
-	if($village->resarray['f'.$_GET['id'].'t'] == 18) {
-		$alliance->procAlliance($_GET);
-	}
-	if($village->resarray['f'.$_GET['id'].'t'] == 12 || $village->resarray['f'.$_GET['id'].'t'] == 13 || $village->resarray['f'.$_GET['id'].'t'] == 22) {
-		$technology->procTechno($_GET);
-	}
+    if($village->resarray['f'.$_GET['id'].'t'] == 17) {
+        $market->procRemove($_GET);
+    }
+    if($village->resarray['f'.$_GET['id'].'t'] == 18) {
+        $alliance->procAlliance($_GET);
+    }
+    if($village->resarray['f'.$_GET['id'].'t'] == 12 || $village->resarray['f'.$_GET['id'].'t'] == 13 || $village->resarray['f'.$_GET['id'].'t'] == 22) {
+        $technology->procTechno($_GET);
+    }
 }
 if($session->goldclub){
-		if(isset($_GET['t'])==99) {
-			
-			if($_GET['action'] == 'addList') {
-				include("Templates/goldClub/farmlist_add.tpl");
-			}
-			if($_GET['action'] == 'showSlot' && $_GET['lid']) {
-				include("Templates/goldClub/farmlist_addraid.tpl");
-			}elseif($_GET['action'] == 'showSlot' && $_GET['eid']) {
-				include("Templates/goldClub/farmlist_editraid.tpl");
-			}
-			if($_GET['action'] == 'deleteList') {
-				$database->delFarmList($_GET['lid'], $session->uid);
-    			header("Location: build.php?id=39&t=99");
-			}elseif($_GET['action'] == 'deleteSlot') {
-				$database->delSlotFarm($_GET['eid']);
-   				header("Location: build.php?id=39&t=99");
-    		}
-		}
-	}
+        if(isset($_GET['t'])==99) {
+            
+            if($_GET['action'] == 'addList') {
+                include("Templates/goldClub/farmlist_add.tpl");
+            }
+            
+            if($_GET['action'] == 'addraid') {
+                include("Templates/goldClub/farmlist_addraid.tpl");
+                }
+            }elseif($_GET['action'] == 'showSlot' && $_GET['eid']) {
+                include("Templates/goldClub/farmlist_editraid.tpl");
+            }
+            if($_GET['action'] == 'deleteList') {
+                $database->delFarmList($_GET['lid'], $session->uid);
+                header("Location: build.php?id=39&t=99");
+            }elseif($_GET['action'] == 'deleteSlot') {
+                $database->delSlotFarm($_GET['eid']);
+                   header("Location: build.php?id=39&t=99");
+            }
+    }
 
 if (isset($_POST['a']) == 533374 && isset($_POST['id']) == 39){  
-	$units->Settlers($_POST);
+    $units->Settlers($_POST);
 }
 if ($_GET['mode']=='troops'&&$_GET['cancel']==1){
 
@@ -76,22 +78,22 @@ if (($now-$oldmovement[0]['starttime'])<90){
 $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$_GET['moveid'];
 $resultc=$database->query($qc) or die(mysql_error());
 
-	if (mysql_num_rows($resultc)==1){
+    if (mysql_num_rows($resultc)==1){
 
-	$q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$_GET['moveid'];
-	$database->query($q);
-	$end=$now+($now-$oldmovement[0]['starttime']);
-	//echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;
-	$q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
-	$lastid=mysql_fetch_array(mysql_query($q2));
-	$newid=$lastid['id']+1;
-	$q2 = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
-	$database->query($q2);
-	$database->addMovement(4,$oldmovement[0]['to'],$oldmovement[0]['from'],$oldmovement[0]['ref'],$oldmovement[0]['starttime'],$end);
+    $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$_GET['moveid'];
+    $database->query($q);
+    $end=$now+($now-$oldmovement[0]['starttime']);
+    //echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;
+    $q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
+    $lastid=mysql_fetch_array(mysql_query($q2));
+    $newid=$lastid['id']+1;
+    $q2 = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
+    $database->query($q2);
+    $database->addMovement(4,$oldmovement[0]['to'],$oldmovement[0]['from'],$oldmovement[0]['ref'],$oldmovement[0]['starttime'],$end);
 
 
-	$database->addMovement(6,$oldmovement[0]['to'],$oldmovement[0]['from'],$newid,$oldmovement[0]['strattime'],$end);
-	}
+    $database->addMovement(6,$oldmovement[0]['to'],$oldmovement[0]['from'],$newid,$oldmovement[0]['strattime'],$end);
+    }
 }
 header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
 }
@@ -102,34 +104,34 @@ $automation->isWinner();
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title><?php echo SERVER_NAME; ?></title>
+    <title><?php echo SERVER_NAME; ?></title>
     <link REL="shortcut icon" HREF="favicon.ico"/>
-	<meta http-equiv="cache-control" content="max-age=0" />
-	<meta http-equiv="pragma" content="no-cache" />
-	<meta http-equiv="expires" content="0" />
-	<meta http-equiv="imagetoolbar" content="no" />
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="imagetoolbar" content="no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
-	<script src="mt-full.js?ebe79" type="text/javascript"></script>
-	<script src="unx.js?ebe79" type="text/javascript"></script>
-	<script src="new.js?ebe79" type="text/javascript"></script>
-	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
-	<?php
-	if($session->gpack == null || GP_ENABLE == false) {
-	echo "
-	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
-	} else {
-	echo "
-	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
-	}
-	?>
-	<script type="text/javascript">
+    <script src="mt-full.js?ebe79" type="text/javascript"></script>
+    <script src="unx.js?ebe79" type="text/javascript"></script>
+    <script src="new.js?ebe79" type="text/javascript"></script>
+    <link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+    <link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+    <?php
+    if($session->gpack == null || GP_ENABLE == false) {
+    echo "
+    <link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
+    <link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+    } else {
+    echo "
+    <link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
+    <link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+    }
+    ?>
+    <script type="text/javascript">
 
-		window.addEvent('domready', start);
-	</script>
+        window.addEvent('domready', start);
+    </script>
 </head>
  
  
@@ -137,49 +139,49 @@ $automation->isWinner();
 <div class="wrapper">
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
-	</div>
+    </div>
 <?php include("Templates/header.tpl"); ?>
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 <div id="content"  class="build">
 <?php
 if(isset($_GET['id'])) {
-	if(isset($_GET['s']))
-	{
-		if (!ctype_digit($_GET['s'])) {
-			$_GET['s'] = null;
-		}
-	}
-	if(isset($_GET['t']))
-	{
-		if (!ctype_digit($_GET['t'])) {
-			$_GET['t'] = null;
-		}
-	}
-	if (!ctype_digit($_GET['id'])) {
-		$_GET['id'] = "1";
-	}
-	$id = $_GET['id'];
-	if($id=='99' AND $village->resarray['f99t'] == 40){
-	include("Templates/Build/ww.tpl");
-	} else
-	if($village->resarray['f'.$_GET['id'].'t'] == 0 && $_GET['id'] >= 19) {
-		include("Templates/Build/avaliable.tpl");
-	}
-	else {
-		if(isset($_GET['t'])) {
-			if($_GET['t'] == 1) {
-			$_SESSION['loadMarket'] = 1;
-			}
-			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['t'].".tpl");
-		} else
-		if(isset($_GET['s'])) {
-			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['s'].".tpl");
-		}
-		else {
-			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
-		}
-	}
+    if(isset($_GET['s']))
+    {
+        if (!ctype_digit($_GET['s'])) {
+            $_GET['s'] = null;
+        }
+    }
+    if(isset($_GET['t']))
+    {
+        if (!ctype_digit($_GET['t'])) {
+            $_GET['t'] = null;
+        }
+    }
+    if (!ctype_digit($_GET['id'])) {
+        $_GET['id'] = "1";
+    }
+    $id = $_GET['id'];
+    if($id=='99' AND $village->resarray['f99t'] == 40){
+    include("Templates/Build/ww.tpl");
+    } else
+    if($village->resarray['f'.$_GET['id'].'t'] == 0 && $_GET['id'] >= 19) {
+        include("Templates/Build/avaliable.tpl");
+    }
+    else {
+        if(isset($_GET['t'])) {
+            if($_GET['t'] == 1) {
+            $_SESSION['loadMarket'] = 1;
+            }
+            include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['t'].".tpl");
+        } else
+        if(isset($_GET['s'])) {
+            include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['s'].".tpl");
+        }
+        else {
+            include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
+        }
+    }
 }else{
 header("Location: dorf1.php");
 }
@@ -213,9 +215,9 @@ echo round(($generator->pageLoadTimeEnd()-$start)*1000);
  
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
-	</div>
+    </div>
 </div>
 
-<div id="ce">	</div>
+<div id="ce">    </div>
 </body>
 </html>

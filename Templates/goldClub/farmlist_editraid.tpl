@@ -16,13 +16,13 @@ $vdata = $database->getVillage($Wref);
 $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+".$_POST['t5']."+".$_POST['t6']."+".$_POST['t7']."+".$_POST['t8']."+".$_POST['t9']."+".$_POST['t10']."";
 
     if(!$_POST['x'] && !$_POST['y']){
-    	$errormsg .= "مختصات را وارد کنید.";
+    	$errormsg .= "Enter coordinates.";
     }elseif(!$_POST['x'] || !$_POST['y']){
-    	$errormsg .= "مختصات را صحیح وارد کنید.";
+    	$errormsg .= "Enter the correct coordinates.";
     }elseif($oasistype == 0 && $vdata == 0){
-    	$errormsg .= "در این مختصات دهکده ای وجود ندارد.";
+    	$errormsg .= "There is no village on those coordinates.";
     }elseif($troops == 0){
-     	$errormsg .= "هیچ نیرویی انتخاب نشده.";
+     	$errormsg .= "No troops has been selected.";
     }else{
     
 		$Wref = $database->getVilWref($_POST['y'], $_POST['x']);
@@ -61,7 +61,7 @@ $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+"
 
 		var option = new Element('option',
 		{
-			'html': 'دهکده‌ای انتخاب کنید'
+			'html': 'Select village'
 		});
 		targetId.insert(option);
 
@@ -137,7 +137,7 @@ $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+"
 </script>
 
 <div id="raidListSlot">
-	<h4>افزودن غارت</h4>
+	<h4>Add Slot</h4>
 <font color="#FF0000"><b>    
 <?php echo $errormsg; ?>
 </b></font>
@@ -155,7 +155,7 @@ $lid2 = $getlid['lid'];
 			
 			<table cellpadding="1" cellspacing="1" class="transparent">
 				<tbody><tr>
-					<th>لیست فارم‌ها:</th><?php echo $_GET["lid"]; ?>
+					<th>Farm Name:</th><?php echo $_GET["lid"]; ?>
 					<td>
 						<select onchange="getTargetsByLid();" id="lid" name="lid">
 <?php
@@ -175,7 +175,7 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 					</td>
 				</tr>
 				<tr>
-					<th>هدفی انتخاب کنید:</th>
+					<th>Select target:</th>
 					<td class="target">
 						
 			<div class="coordinatesInput">
@@ -190,9 +190,9 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 				<div class="clear"></div>
 			</div>
 								<div class="targetSelect">
-							<label class="lastTargets" for="last_targets">آخرین هدف‌ها:</label>
+							<label class="lastTargets" for="last_targets">Last targets:</label>
 							<select id="target_id" name="target_id" onchange="selectCoordinates()">
-								<option value="">دهکده‌ای انتخاب کنید</option>
+								<option value="">Select village</option>
 							</select>
 						</div>
 						<div class="clear"></div>
@@ -204,9 +204,9 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 		<?php include "Templates/goldClub/trooplist.tpl"; ?>
 
 		
-<button type="submit" value="ذخیره" name="save" id="save"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">ذخیره</div></div></button>&nbsp;
-<button type="button" value="حذف" name="delete" id="delete" onclick="return (function(){
-				('واقعاً حذف شود؟').dialog(
+<button type="submit" value="save" name="save" id="save"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Save</div></div></button>&nbsp;
+<button type="button" value="delete" name="delete" id="delete" onclick="return (function(){
+				('Are you sure that you want to delete this list?').dialog(
 				{
 					onOkay: function(dialog, contentElement)
 					{
@@ -214,6 +214,6 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 				});
 				return false;
 			})()">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">حذف</div></div></button>
+<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Delete</div></div></button>
 </form>
 </div>
