@@ -529,10 +529,10 @@ function getVilWref($x, $y) {
             }
             
             function populateOasisUnitsHigh() {
-                $q2 = "SELECT * FROM " . TB_PREFIX . "odata where conqured = 0";
+                $q2 = "SELECT * FROM " . TB_PREFIX . "wdata where oasistype != 0";
                 $result2 = mysql_query($q2, $this->connection);
                 while($row = mysql_fetch_array($result2)) {
-                    $wid = $row['wref'];
+                    $wid = $row['id'];
                     $basearray = $this->getMInfo($wid);
                     //each Troop is a Set for oasis type like mountains have rats spiders and snakes fields tigers elphants clay wolves so on stonger one more not so less
                     switch($basearray['oasistype']) {
