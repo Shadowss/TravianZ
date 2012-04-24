@@ -200,12 +200,12 @@ $end = ($tribe*10);
                                 <option value="24">Townhall</option>
                                 <option value="25">Residence</option>
                                 <option value="26">Palace</option>
-                                
                                 <option value="27">Treasury</option>
                                 <option value="28">Trade office</option>
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
+                                <option value="40">Wonder of the World</option>  
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
@@ -261,7 +261,7 @@ $end = ($tribe*10);
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
-								<option value="40">WW</option>
+								<option value="40">Wonder of the World</option>  
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
