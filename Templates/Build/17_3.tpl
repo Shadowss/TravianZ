@@ -166,14 +166,16 @@ function testSum() {
 			<input type="hidden" name="id" value="<?php echo $id; ?>" /> 
 			<input type="hidden" name="ft" value="mk3" /> 
 			<input type="hidden" name="t" value="3" /> 
-
+	<?php
+		$wwvillage = $database->getResourceLevel($village->wid);
+		if($wwvillage['f99t']!=40){
+	?>
 		<table id="npc" cellpadding="1" cellspacing="1"> 
 			<thead> 
 				<tr> 
 					<th colspan="5">NPC Trade</th> 
 				</tr> 
-				<tr> 
-	
+				<tr>
 			<td class="all"> 
 				<a href="javascript:fillup(0);"><img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /></a> 
 				<span id="org0"><?php echo floor($village->awood); ?></span> 
@@ -255,5 +257,8 @@ function testSum() {
 			testSum();
 		</script> 
         
-		<?php } ?>
+		<?php }else{ ?>
+		</br></br>
+		<?php echo "You can't use NPC trade in WW village.";
+		}} ?>
 	</div>

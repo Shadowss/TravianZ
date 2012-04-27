@@ -455,24 +455,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `%prefix%destroy_log`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%destroy_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `wid` int(10) unsigned NOT NULL,
-  `log` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `%prefix%destroy_log`
---
-
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `%prefix%diplomacy`
 --
 
@@ -1329,29 +1311,28 @@ INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `ac
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
-  `wref` int(10) unsigned NOT NULL,
-  `owner` int(10) unsigned NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `capital` tinyint(1) unsigned NOT NULL,
-  `pop` int(10) unsigned NOT NULL,
-  `cp` int(10) unsigned NOT NULL,
-  `celebration` int(10) NOT NULL DEFAULT '0',
-  `type` int(10) NOT NULL DEFAULT '0',
-  `wood` float(12,2) NOT NULL,
-  `clay` float(12,2) NOT NULL,
-  `iron` float(12,2) NOT NULL,
-  `maxstore` int(10) unsigned NOT NULL,
-  `crop` float(12,2) NOT NULL,
-  `maxcrop` int(10) unsigned NOT NULL,
-  `lastupdate` int(11) unsigned NOT NULL,
-  `loyalty` float(9,6) unsigned NOT NULL DEFAULT '100',
-  `exp1` int(10) NOT NULL,
-  `exp2` int(10) NOT NULL,
-  `exp3` int(10) NOT NULL,
-  `created` int(11) NOT NULL,
-  PRIMARY KEY (`wref`),
-  KEY `wref` (`wref`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+`wref` int(10) unsigned NOT NULL,
+`owner` int(10) unsigned NOT NULL,
+`name` varchar(45) NOT NULL,
+`capital` tinyint(1) unsigned NOT NULL,
+`pop` int(10) unsigned NOT NULL,
+`cp` int(10) unsigned NOT NULL,
+`celebration` int(10) NOT NULL DEFAULT '0',
+`type` int(10) NOT NULL DEFAULT '0',
+`wood` float(12,2) NOT NULL,
+`clay` float(12,2) NOT NULL,
+`iron` float(12,2) NOT NULL,
+`maxstore` int(10) unsigned NOT NULL,
+`crop` float(12,2) NOT NULL,
+`maxcrop` int(10) unsigned NOT NULL,
+`lastupdate` int(11) unsigned NOT NULL,
+`loyalty` float(9,6) unsigned NOT NULL DEFAULT '100',
+`exp1` int(10) NOT NULL,
+`exp2` int(10) NOT NULL,
+`exp3` int(10) NOT NULL,
+`created` int(11) NOT NULL,
+PRIMARY KEY (`wref`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `%prefix%vdata`

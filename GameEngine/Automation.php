@@ -75,7 +75,7 @@ class Automation {
             case 40: $build = "Wonder of the World"; break;
             case 41: $build = "Horse Drinking Trough"; break;
             case 42: $build = "Great Workshop"; break;
-            default: $build = "Error"; break;
+            default: $build = "Nothing had"; break;
         }
         return $build;
     }
@@ -116,7 +116,9 @@ class Automation {
 
         $this->ClearUser();
         $this->ClearInactive();
+		$this->oasisResoucesProduce();
         $this->pruneResource();
+        $this->pruneOResource();
         if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time()-filemtime("GameEngine/Prevention/culturepoints.txt")>10) {
             $this->culturePoints();
         }
@@ -133,7 +135,7 @@ class Automation {
         { 
             $this->buildComplete(); 
         } 
-        $this->updateStore();  
+        $this->updateStore();
         if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>10) {
             $this->marketComplete();
         }
@@ -162,8 +164,9 @@ class Automation {
         { 
             $this->demolitionComplete(); 
         } 
-        $this->updateStore();  
+        $this->updateStore();
     }
+
    function activeCropDead(){
 	   global $session,$village,$database,$_SESSION, $allcrop;
   // var_dump($session);
@@ -384,31 +387,31 @@ private function loyaltyRegeneration() {
             foreach($needDelete as $need) {
                 $needVillage = $database->getVillagesID($need['uid']); //wref
                 foreach($needVillage as $village) {
-                    $q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."enforcement where vref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."enforcement where vref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."movement where to = ".$village['wref']." or from = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."movement where to = ".$village." or from = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."research where vref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."research where vref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."tdata where vref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."tdata where vref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."training where vref =".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."training where vref =".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."units where vref =".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."units where vref =".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$village['wref'];
+                    $q = "DELETE FROM ".TB_PREFIX."vdata where owner = ".$village;
                     $database->query($q);
-                    $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village['wref'];
+                    $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village;
                     $database->query($q);
                 }
                 $q = "DELETE FROM ".TB_PREFIX."mdata where target = ".$need['uid']." or owner = ".$need['uid'];
@@ -492,9 +495,6 @@ private function loyaltyRegeneration() {
         }
     }
 
-
-
-
     private function culturePoints() {
         global $database,$session;
         $time = time()-600;
@@ -515,28 +515,6 @@ private function loyaltyRegeneration() {
             @unlink("GameEngine/Prevention/culturepoints.txt");
         }
 }
-
-   # private function culturePoints() {
-   #     global $database;
-   #     $ourFileHandle = @fopen("GameEngine/Prevention/culturepoints.txt", 'w');
-   #     @fclose($ourFileHandle);
-   #     $time = time()-84600;
-   #     $array = array();
-   #     $q = "SELECT id, lastupdate FROM ".TB_PREFIX."users where lastupdate < $time";
-   #     $array = $database->query_return($q);
-#
- #       foreach($array as $indi) {
- #           if($indi['lastupdate'] < $time){
-  #              $cp = $database->getVSumField($indi['id'], 'cp');
-   #             $newupdate = time();
-    #            $q = "UPDATE ".TB_PREFIX."users set cp = cp + 2000, lastupdate = $newupdate where id = '".$indi['id']."'";
-               # $database->query($q);
-            #}
-        #}
-        #if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
-        #    @unlink("GameEngine/Prevention/culturepoints.txt");
-        #}
-    #}
 
     private function buildComplete() {
         global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
@@ -1315,8 +1293,7 @@ ${dead.$i}=$data['t'.$i];
                 $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner'].""; 
                 $resulth = mysql_query($qh); 
                 $hero_f=mysql_fetch_array($resulth); 
-                $hero_unit=$hero_f['unit']; 
-				//echo "///".$GLOBALS['u'.$hero_unit]['speed']."///";
+                $hero_unit=$hero_f['unit'];
                 $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
 			}
 
@@ -1354,8 +1331,8 @@ ${dead.$i}=$data['t'.$i];
 {
     if ($catp!='0')
     {
-
-        if($toF['pop']<=0)
+	$villpop=$this->recountPop($data['to']);
+        if($villpop<=0)
         {
             $info_cat = ",".$catp_pic.", Village already destroyed.";
         }
@@ -1462,7 +1439,7 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
                                 $database->query($q);
-                                $q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
+								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
                                 $database->query($q);
@@ -1479,7 +1456,6 @@ ${dead.$i}=$data['t'.$i];
                                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
                                 $database->query($q);
 								$database->clearExpansionSlot($data['to']);
-                                $logging->VillageDestroyCatalog($data['to']);
                         }
                     }
                 }
@@ -1616,7 +1592,7 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
                                 $database->query($q);
-                                $q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
+								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
                                 $database->query($q);
@@ -1632,7 +1608,7 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
                                 $database->query($q);
-                                $logging->VillageDestroyCatalog($data['to']);
+								$database->clearExpansionSlot($data['to']);
                         }
                     }
                 }
@@ -1767,7 +1743,7 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
                                 $database->query($q);
-                                $q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
+								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
                                 $database->query($q);
@@ -1783,7 +1759,7 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
                                 $database->query($q);
-                                $logging->VillageDestroyCatalog($data['to']);
+								$database->clearExpansionSlot($data['to']);
                         }
                     }
                 }
@@ -1875,12 +1851,15 @@ ${dead.$i}=$data['t'.$i];
 						$pop2 = $database->getVillageField($data['to'],"pop");
 						if($pop1 > $pop2){
 						$buildlevel = $database->getResourceLevel($data['to']);
-						for ($i=0; $i<=99; $i++){
+						for ($i=1; $i<=39; $i++){
 						if($buildlevel['f'.$i]!=0){
-						$buildlevel2 = $buildlevel['f'.$i];
-						$q = "UPDATE ".TB_PREFIX."fdata SET `".$buildlevel2."`='".$buildlevel2."' - 1 WHERE vref=".$data['to'];
-                        $database->query($q);
+						$leveldown = $buildlevel['f'.$i]-1;
+						$database->setVillageLevel($data['to'],"f".$i,$leveldown);
 						}
+						}
+						if($buildlevel['f99']!=0){
+						$leveldown = $buildlevel['f99']-1;
+						$database->setVillageLevel($data['to'],"f99",$leveldown);
 						}
 						}
                         //destroy wall
@@ -1908,7 +1887,7 @@ ${dead.$i}=$data['t'.$i];
                             $value = $data['to'];
                         }
                         $database->setVillageField($data['from'],$exp,$value);
-
+						$chiefing_village = 1;
 
                     }
                 }
@@ -2067,13 +2046,37 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
                 }
 
                 $database->setMovementProc($data['moveid']);
+				if($chiefing_village != 1){
                 $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
-
+				}else{
+				$villreinf = $database->addEnforce($data);
+				$villtribe = $database->getUserField($from['owner'],"tribe",0);
+				$unittribe = $villtribe-1;
+				if($unittribe == 0){
+				$unittribe = "";
+				}
+				$database->modifyEnforce($villreinf,$unittribe.'1',$data['t1']-$dead1,1);
+				$database->modifyEnforce($villreinf,$unittribe.'2',$data['t2']-$dead2,1);
+				$database->modifyEnforce($villreinf,$unittribe.'3',$data['t3']-$dead3,1);
+				$database->modifyEnforce($villreinf,$unittribe.'4',$data['t4']-$dead4,1);
+				$database->modifyEnforce($villreinf,$unittribe.'5',$data['t5']-$dead5,1);
+				$database->modifyEnforce($villreinf,$unittribe.'6',$data['t6']-$dead6,1);
+				$database->modifyEnforce($villreinf,$unittribe.'7',$data['t7']-$dead7,1);
+				$database->modifyEnforce($villreinf,$unittribe.'8',$data['t8']-$dead8,1);
+				$database->modifyEnforce($villreinf,$unittribe.'9',$data['t9']-$dead9-1,1);
+				$database->modifyEnforce($villreinf,$unittribe.'10',$data['t10']-$dead10,1);
+				$database->modifyEnforce($villreinf,$unittribe.'11',$data['t11']-$dead11,1);
+				}
                 // send the bounty on type 6.
                 if($type !== 1)
                 {
                     $reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
+					$isoasis1 = $database->isVillageOases($to['wref']);
+					if ($isoasis1 == 0){
                     $database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
+					}else{
+					$database->modifyOasisResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
+					}
                     $database->addMovement(6,$to['wref'],$from['wref'],$reference,time(),$endtime);
                     //$database->updateVillage($to['wref']);
                     $totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
@@ -2132,6 +2135,8 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
 					if($NonHeroPresent == 0 && $this->getTypeLevel(37,$data['to']) > 0) {
 						//don't reinforce, addunit instead
 						$database->modifyUnit($data['to'],array("hero"),array(1),array(1));
+						$heroid = $database->getHero($database->getVillageField($data['from'],"owner"),1);
+						$database->modifyHero("wref",$data['to'],$heroid,0);
 						$HeroTransfer = 1;
 					}
 				}
@@ -2822,8 +2827,7 @@ private function demolitionComplete() {
 }
 
     // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > 
-    private function updateStore() 
-    {       
+    private function updateStore() {       
         global $bid10, $bid38, $bid11, $bid39; 
          
         $result = mysql_query('SELECT * FROM `' . TB_PREFIX . 'fdata`'); 
@@ -2867,7 +2871,23 @@ private function demolitionComplete() {
 
             mysql_query('UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . $ress . ', `maxcrop` = ' . $crop . ' WHERE `wref` = ' . $row['vref']) or die(mysql_error()); 
         }         
-    }  
+    }
+
+    private function oasisResoucesProduce() {
+        global $database;
+		$time = time();
+        $q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood < 800 OR clay < 800 OR iron < 800 OR crop < 800";
+        $array = $database->query_return($q);
+	    foreach($array as $getoasis) {
+		$oasiswood = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		$oasisclay = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		$oasisiron = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		$oasiscrop = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		$database->modifyOasisResource($getoasis['wref'],$oasiswood,$oasisclay,$oasisiron,$oasiscrop,1);
+		$database->updateOasis($getoasis['wref']);
+		}
+    }
+
 }
 $automation = new Automation;
 ?>

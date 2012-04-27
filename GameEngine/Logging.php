@@ -83,15 +83,6 @@ class Logging {
 			$database->query($q);
 		}
 	}
-
-	public function VillageDestroyCatalog($wid) {
-		global $database;
-		if(LOG_GOLD_FIN) {
-			$log = "Village destroyed";
-			$q = "Insert into ".TB_PREFIX."destroy_log values (0,$wid,'$log')";
-			$database->query($q);
-		}
-	}
 	
 	public function addWarLog() {
 		global $database;

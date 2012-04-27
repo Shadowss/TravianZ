@@ -28,6 +28,10 @@ define("SERVER_NAME","%SERVERNAME%");
 // Defines when has server started.
 define("COMMENCE","%STARTTIME%");
 
+// ***** Server Start Date / Time
+define("START_DATE", "%SSTARTDATE%");
+define("START_TIME", "%SSTARTTIME%");
+
 // ***** Language
 // Choose your server language.
 define("LANG","%LANG%");

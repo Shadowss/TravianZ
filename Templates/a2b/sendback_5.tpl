@@ -103,6 +103,12 @@ $tocoor = $database->getCoor($enforce['vref']);
 		<td class="line-last large"><img class="unit u46" src="img/x.gif" title="Natarian Knight" alt="Natarian Knight"> <input class="text" <?php if ($enforce['u6']<=0) {echo ' disabled="disabled"';}?> name="t6" value="<?php echo $enforce['u6']; ?>" maxlength="6" type="text">
 		<?php 
        	echo"<span class=\"none\">(".$enforce['u6'].")</span></td>";
+		if($enforce['hero']>0){
+        ?>
+		<td class="line-last large"><img class="unit uhero" src="img/x.gif" title="Hero" alt="Hero"> <input class="text" name="hero" value="<?php echo $enforce['hero']; ?>" maxlength="6" type="text">
+		<?php 
+       	echo"<span class=\"none\">(".$enforce['hero'].")</span></td>";
+		}
         ?>
 		<td class="line-last regular"></td>
 			<td class="line-last column-last"></td>		</tr>
@@ -130,6 +136,13 @@ $tocoor = $database->getCoor($enforce['vref']);
                         }
                     }
                 }
+			if ($enforce['hero']>0){
+                $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$to['owner'].""; 
+                $resulth = mysql_query($qh); 
+                $hero_f=mysql_fetch_array($resulth); 
+                $hero_unit=$hero_f['unit'];
+                $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
+			}
 				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
 
 			?>

@@ -243,6 +243,8 @@ class Market {
      
     private function tradeResource($post) { 
         global $session,$database,$village; 
+		$wwvillage = $database->getResourceLevel($village->wid);
+		if($wwvillage['f99t']!=40){
         if($session->userinfo['gold'] >= 3) { 
             //kijken of ze niet meer gs invoeren dan ze hebben 
 			if($session->access == BANNED){
@@ -259,7 +261,8 @@ class Market {
             } 
         } else {         
             header("Location: build.php?id=".$post['id']."&t=3"); 
-        } 
+        }
+	}
     } 
      
 }; 

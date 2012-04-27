@@ -29,16 +29,6 @@
 		</tr></thead>
 		<tbody>
         <?php 
-        if($_GET['buildingFinish'] == 1 AND $session->gold >= 2) {
-		if($session->access!=BANNED){
-        	$gold=$database->getUserField($_SESSION['username'],'gold','username');
-		      $gold-=2;
-		      $database->updateUserField($_SESSION['username'],'gold',$gold,0);
-        }else{
-		header("Location: banned.php");
-		}
-		}
-        
         if(!isset($timer)) {
         $timer = 1;
         }

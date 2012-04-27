@@ -36,6 +36,8 @@
         		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: install\include\constant.php");
         		$text = file_get_contents("data/constant_format.tpl");
         		$text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);
+				$text = preg_replace("'%SSTARTDATE%'", $_POST['start_date'], $text);
+				$text = preg_replace("'%SSTARTTIME%'", $_POST['start_time'], $text);
         		$text = preg_replace("'%LANG%'", $_POST['lang'], $text);
         		$text = preg_replace("'%SPEED%'", $_POST['speed'], $text);
         		$text = preg_replace("'%INCSPEED%'", $_POST['incspeed'], $text);

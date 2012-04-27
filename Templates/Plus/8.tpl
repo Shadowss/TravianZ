@@ -44,11 +44,9 @@ $done1 = "nothing has been done";
 }
 
 
-print "<BR><BR><BR><BR>";
 
-echo $done1;
 
-print "<BR>";
+
 
 include("Templates/Plus/3.tpl");
 }else{

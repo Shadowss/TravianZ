@@ -323,6 +323,21 @@ class Units {
 						$post['t'.$i.'']='0';
 						}											
 					}
+						if(isset($post['t11'])){
+								if ($post['t11'] > $enforce['hero'])
+								{
+									$form->addError("error","You can't send more units than you have");
+									break;
+								}
+								
+								if($post['t11']<0)
+								{
+									$form->addError("error","You can't send negative units.");
+									break;
+								}
+						} else {
+						$post['t11']='0';
+						}	
 				
 				if($form->returnErrors() > 0) {
 					$_SESSION['errorarray'] = $form->getErrors();
@@ -340,6 +355,7 @@ class Units {
 					}
 				
 						//get cord 
+						$from = $database->getVillage($enforce['from']);
 						$fromcoor = $database->getCoor($enforce['from']);
 						$tocoor = $database->getCoor($enforce['vref']);
 						$fromCor = array('x'=>$tocoor['x'], 'y'=>$tocoor['y']);
@@ -361,8 +377,21 @@ class Units {
 						$post['t'.$i.'']='0';
 					}
 				}
+					if (isset($post['t11'])){
+						if( $post['t11'] != '' && $post['t11'] > 0){
+						$qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner'].""; 
+						$resulth = mysql_query($qh); 
+						$hero_f=mysql_fetch_array($resulth); 
+						$hero_unit=$hero_f['unit'];
+						$speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
+                    } else {
+						$post['t11']='0';
+						}
+					} else {
+						$post['t11']='0';
+					}
 				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
-				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],0,2,0,0,0,0);
+				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
 				$technology->checkReinf($post['ckey']);
 
