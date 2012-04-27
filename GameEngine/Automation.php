@@ -1429,6 +1429,7 @@ ${dead.$i}=$data['t'.$i];
                     {
                         $varray = $database->getProfileVillages($to['owner']);
                         if(count($varray)!='1' AND $to['capital']!='1'){
+								$database->clearExpansionSlot($data['to']);
                                 $q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
@@ -1438,8 +1439,6 @@ ${dead.$i}=$data['t'.$i];
                                 $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
-                                $database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
                                 $database->query($q);
@@ -1455,7 +1454,8 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
                                 $database->query($q);
-								$database->clearExpansionSlot($data['to']);
+								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
+                                $database->query($q);
                         }
                     }
                 }
@@ -1582,6 +1582,7 @@ ${dead.$i}=$data['t'.$i];
                     {
                         $varray = $database->getProfileVillages($to['owner']);
                         if(count($varray)!='1' AND $to['capital']!='1'){
+								$database->clearExpansionSlot($data['to']);
                                 $q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
@@ -1591,8 +1592,6 @@ ${dead.$i}=$data['t'.$i];
                                 $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
-                                $database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
                                 $database->query($q);
@@ -1608,7 +1607,8 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
                                 $database->query($q);
-								$database->clearExpansionSlot($data['to']);
+								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
+                                $database->query($q);
                         }
                     }
                 }
@@ -1733,6 +1733,7 @@ ${dead.$i}=$data['t'.$i];
                     {
                         $varray = $database->getProfileVillages($to['owner']);
                         if(count($varray)!='1' AND $to['capital']!='1'){
+								$database->clearExpansionSlot($data['to']);
                                 $q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
@@ -1742,8 +1743,6 @@ ${dead.$i}=$data['t'.$i];
                                 $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
-                                $database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
                                 $database->query($q);
                                 $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
                                 $database->query($q);
@@ -1759,7 +1758,8 @@ ${dead.$i}=$data['t'.$i];
                                 $database->query($q);
                                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
                                 $database->query($q);
-								$database->clearExpansionSlot($data['to']);
+								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
+                                $database->query($q);
                         }
                     }
                 }
