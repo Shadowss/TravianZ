@@ -12,8 +12,98 @@
 var haendler = <?php echo $market->merchantAvail(); ?>;
 var carry = <?php echo $market->maxcarry; ?>;
 //-->
-</script><form method="POST" name="snd" action="build.php"> 
+</script>
+<?php
+$allres = "".$_POST['r1']."+".$_POST['r2']."+".$_POST['r3']."+".$_POST['r4']."";
+if($_POST['x']!="" && $_POST['y']!=""){
+	$getwref = $database->getVilWref($_POST['x'],$_POST['y']);
+	$checkexist = $database->checkVilExist($getwref);
+}
+else if($_POST['dname']!=""){
+	$getwref = $database->getVillageByName($_POST['dname']);
+	$checkexist = $database->checkVilExist($getwref);
+}
+if(isset($_POST['ft'])=='check' && $allres!=0 && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist){
+?>
+<form method="POST" name="snd" action="build.php"> 
 <input type="hidden" name="ft" value="mk1">
+<input type="hidden" name="id" value="<?php echo $id; ?>">
+<input type="hidden" name="x" value="<?php echo $_POST['x']; ?>">
+<input type="hidden" name="y" value="<?php echo $_POST['y']; ?>">
+<table id="send_select" class="send_res" cellpadding="1" cellspacing="1">
+	<tr>
+		<td class="ico"><img class="r1" src="img/x.gif" alt="Fa" title="Fa" /></td> 
+		<td class="nam"> Wood</td> 
+		<td class="val"><input class="text disabled" type="text" name="r1" id="r1" value="<?php echo $_POST['r1']; ?>" readonly="readonly"></td> 
+		<td class="max"> / <span class="none"><B><?php echo $market->maxcarry; ?></B></span> </td> 
+	</tr>
+    <tr> 
+		<td class="ico"><img class="r2" src="img/x.gif" alt="Agyag" title="Agyag" /></td> 
+		<td class="nam"> Clay</td> 
+		<td class="val"><input class="text disabled" type="text" name="r2" id="r2" value="<?php echo $_POST['r2']; ?>" readonly="readonly"></td> 
+		<td class="max"> / <span class="none"><b><?php echo$market->maxcarry; ?></b></span> </td> 
+	</tr>
+    <tr> 
+		<td class="ico"><img class="r3" src="img/x.gif" alt="Vas?rc" title="Vas?rc" /></td> 
+		<td class="nam"> Iron</td> 
+		<td class="val"><input class="text disabled" type="text" name="r3" id="r3" value="<?php echo $_POST['r3']; ?>" readonly="readonly"> 
+		</td> 
+		<td class="max"> / <span class="none"><b><?php echo $market->maxcarry; ?></b></span> </td> 
+	</tr>
+    <tr> 
+		<td class="ico"><img class="r4" src="img/x.gif" alt="B?za" title="B?za" /></td> 
+		<td class="nam"> Wheat</td> 
+		<td class="val"> <input class="text disabled" type="text" name="r4" id="r4" value="<?php echo $_POST['r4']; ?>" readonly="readonly"> 
+		</td> 
+		<td class="max"> / <span class="none"><B><?php echo $market->maxcarry; ?></B></span></td> 
+	</tr></table> 
+<table id="target_validate" class="res_target" cellpadding="1" cellspacing="1">
+	<tbody><tr>
+		<th>Coordinates:</th>
+        <?php
+		if($_POST['x']!="" && $_POST['y']!=""){
+        $getwref = $database->getVilWref($_POST['x'],$_POST['y']);
+		$getvilname = $database->getVillageField($getwref, "name");
+		$getvilowner = $database->getVillageField($getwref, "owner");
+		$getvilcoor['y'] = $_POST['y'];
+		$getvilcoor['x'] = $_POST['x'];
+		}
+		else if($_POST['dname']!=""){
+		$getwref = $database->getVillageByName($_POST['dname']);
+		$getvilcoor = $database->getCoor($getwref);
+		$getvilname = $database->getVillageField($getwref, "name");
+		$getvilowner = $database->getVillageField($getwref, "owner");
+		}
+        ?>
+		<td><?php echo $getvilname; ?>(<?php echo $getvilcoor['y']; ?>|<?php echo $getvilcoor['x']; ?>)<span class="clear"></span></td>
+	</tr>
+	<tr>
+		<th>Player:</th>
+		<td><a href="spieler.php?uid=<?php echo $getvilowner; ?>"><?php echo $database->getUserField($getvilowner,username,0); ?></a></td>
+	</tr>
+	<tr>
+		<th>duration:</th>
+		<td>-</td>
+	</tr>
+	<tr>
+		<th>Merchants:</th>
+		<td><?php
+        $resource = array($_POST['r1'],$_POST['r2'],$_POST['r3'],$_POST['r4']); 
+        echo ceil((array_sum($resource)-0.1)/$market->maxcarry); ?></td>
+	</tr>
+
+	<tr>
+		<td colspan="2">
+					</td>
+	</tr>
+
+</tbody></table>
+<div class="clear"></div>
+<p>
+<div class="clear"></div><p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p></form>
+<?php }else{ ?>
+<form method="POST" name="snd" action="build.php"> 
+<input type="hidden" name="ft" value="check">
 <input type="hidden" name="id" value="<?php echo $id; ?>"> 
 <table id="send_select" class="send_res" cellpadding="1" cellspacing="1"><tr> 
 		<td class="ico"> 
@@ -97,11 +187,25 @@ $coor['y'] = "";
       </td> 
    </tr> 
 </table> 
-<div class="clear"></div><p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></form></p><script language="JavaScript" type="text/javascript"> 
-//<!--
-document.snd.r1.focus();
-//-->
-</script>
+<div class="clear"></div><p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p></form>
+<?php
+$error = '';
+if(isset($_POST['ft'])=='check'){
+
+	if(!$checkexist){
+		$error = '<span class="error"><b>No Coordinates selected</b></span>';
+    }elseif($_POST['r1']==0){
+		$error = '<span class="error"><b>Resources not selected.</b></span>';
+    }elseif(!$_POST['x'] && !$_POST['y'] && !$_POST['dname']){
+		$error = '<span class="error"><b>Enter the coordinates.</b></span>';
+    }elseif($_POST['x']==0 && $_POST['y']==0 && !$_POST['dname']){
+		$error = '<span class="error"><b>Enter the coordinates.</b></span>';
+    }
+    echo $error;
+}
+?>
+<p>
+<?php } ?>
 <p>Each merchant can carry <b><?php echo $market->maxcarry; ?></b> units of resource</p>
 <?php
 $timer = 1;

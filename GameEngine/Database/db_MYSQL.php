@@ -114,7 +114,7 @@
                 return $this->mysql_fetch_all($result);
             }
 
-function getVilWref($x, $y) {
+			function getVilWref($x, $y) {
                 $q = "SELECT * FROM " . TB_PREFIX . "wdata where x = $x AND y = $y";
                 $result = mysql_query($q, $this->connection);
                 $dbarray = mysql_fetch_array($result);
@@ -299,8 +299,8 @@ function getVilWref($x, $y) {
                 }
             }
 
-    function generateBase($sector) { 
-        switch($sector) { 
+			function generateBase($sector) { 
+			switch($sector) { 
             case 1: 
             $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and x < 0 and y > 0 and occupied = 0"; 
             break; 
@@ -313,13 +313,13 @@ function getVilWref($x, $y) {
             case 4: 
             $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and x > 0 and y < 0 and occupied = 0"; 
             break; 
-        } 
+			} 
             $result = mysql_query($q, $this->connection); 
             $num_rows = mysql_num_rows($result); 
             $result = $this->mysql_fetch_all($result); 
             $base = rand(0, ($num_rows-1)); 
             return $result[$base]['id']; 
-    }  
+			}  
 
             function setFieldTaken($id) {
                 $q = "UPDATE " . TB_PREFIX . "wdata set occupied = 1 where id = $id";
@@ -883,21 +883,20 @@ function getVilWref($x, $y) {
                 return mysql_query($q, $this->connection);
             }
 
-function getVillageType2($wref) {
+			function getVillageType2($wref) {
                 $q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $wref";
-//$q = "SELECT * FROM " . TB_PREFIX . "units where id = $wref";
                 $result = mysql_query($q, $this->connection);
                 $dbarray = mysql_fetch_array($result);
                 return $dbarray['oasistype'];
             }
 
-function getFLData($id) {
+			function getFLData($id) {
                 $q = "SELECT * FROM " . TB_PREFIX . "farmlist where id = $id";
                 $result = mysql_query($q, $this->connection);
                 return mysql_fetch_array($result);
             }
 
-function checkVilExist($wref) {
+			function checkVilExist($wref) {
                 $q = "SELECT * FROM " . TB_PREFIX . "vdata where wref = '$wref'";
                 $result = mysql_query($q, $this->connection);
                 if(mysql_num_rows($result)) {

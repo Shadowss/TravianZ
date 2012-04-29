@@ -385,7 +385,7 @@ private function loyaltyRegeneration() {
         $needDelete = $database->getNeedDelete();
         if(count($needDelete) > 0) {
             foreach($needDelete as $need) {
-                $needVillage = $database->getVillagesID($need['uid']); //wref
+                $needVillage = $database->getVillagesID($need['uid']);
                 foreach($needVillage as $village) {
                     $q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$village;
                     $database->query($q);
@@ -409,7 +409,7 @@ private function loyaltyRegeneration() {
                     $database->query($q);
                     $q = "DELETE FROM ".TB_PREFIX."units where vref =".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."vdata where owner = ".$village;
+                    $q = "DELETE FROM ".TB_PREFIX."vdata where vref = ".$village;
                     $database->query($q);
                     $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village;
                     $database->query($q);
@@ -1331,8 +1331,8 @@ ${dead.$i}=$data['t'.$i];
 {
     if ($catp!='0')
     {
-	$villpop=$this->recountPop($data['to']);
-        if($villpop<=0)
+		$pop=$this->recountPop($data['to']);
+        if($pop<=0)
         {
             $info_cat = ",".$catp_pic.", Village already destroyed.";
         }
