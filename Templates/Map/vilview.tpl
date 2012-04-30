@@ -419,7 +419,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 
 <?php }
 }else{
-$result = mysql_query("SELECT * FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysql_query("SELECT * FROM ".TB_PREFIX."ndata WHERE $limit AND uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysql_num_rows($result);
 if($query != 0){
 while($row = mysql_fetch_array($result)){
