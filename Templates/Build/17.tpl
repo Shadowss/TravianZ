@@ -75,7 +75,7 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && ($_POST['x']!="" && $_POST['y']
 		$getvilowner = $database->getVillageField($getwref, "owner");
 		}
         ?>
-		<td><?php echo $getvilname; ?>(<?php echo $getvilcoor['y']; ?>|<?php echo $getvilcoor['x']; ?>)<span class="clear"></span></td>
+		<td><a href="karte.php?d=<?php echo $getwref; ?>&c=<?php echo $generator->getMapCheck($getwref); ?>"><?php echo $getvilname; ?>(<?php echo $getvilcoor['y']; ?>|<?php echo $getvilcoor['x']; ?>)<span class="clear"></span></a></td>
 	</tr>
 	<tr>
 		<th>Player:</th>
@@ -194,12 +194,10 @@ if(isset($_POST['ft'])=='check'){
 
 	if(!$checkexist){
 		$error = '<span class="error"><b>No Coordinates selected</b></span>';
-    }elseif($_POST['r1']==0){
+    }elseif($_POST['r1']==0 && $_POST['r2']==0 && $_POST['r3']==0 && $_POST['r4']==0){
 		$error = '<span class="error"><b>Resources not selected.</b></span>';
     }elseif(!$_POST['x'] && !$_POST['y'] && !$_POST['dname']){
-		$error = '<span class="error"><b>Enter the coordinates.</b></span>';
-    }elseif($_POST['x']==0 && $_POST['y']==0 && !$_POST['dname']){
-		$error = '<span class="error"><b>Enter the coordinates.</b></span>';
+		$error = '<span class="error"><b>Enter coordinates or village name.</b></span>';
     }
     echo $error;
 }

@@ -1485,7 +1485,7 @@
             }
 
             function removeNotice($id) {
-                $q = "DELETE FROM " . TB_PREFIX . "ndata where id = $id";
+                $q = "UPDATE " . TB_PREFIX . "ndata set del = 1 where id = $id";
                 return mysql_query($q, $this->connection);
             }
 
