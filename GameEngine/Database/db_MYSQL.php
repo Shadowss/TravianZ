@@ -1507,6 +1507,12 @@
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
             }
+			
+            function getDelNotice($uid) {
+                $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 1 ORDER BY time DESC";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
             
             function getNotice2($id, $field) {
                 $q = "SELECT ".$field." FROM " . TB_PREFIX . "ndata where `id` = '$id'";

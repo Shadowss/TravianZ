@@ -84,12 +84,10 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
     }
     $date = $generator->procMtime($message->noticearray[$i-1]['time']);
 	echo "</div></td><td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
-        }else{
-		$count =+ 1;
-		}}
+        }}
         $name++;
     }
-    if(count($message->noticearray) == $count) {
+    if(count($message->noticearray)-count($message->delnoticearray) == 0) {
      echo "<td colspan=\"3\" class=\"none\">There are no reports available.</td></tr>";
     } 
     ?>
