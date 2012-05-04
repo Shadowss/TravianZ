@@ -22,7 +22,7 @@ if(isset($dataarray[147]) and $dataarray[147] != 0){$colspan="11";}else{$colspan
         <table cellpadding="1" cellspacing="1" id="attacker"><thead>
 <tr>
 <td class="role">Attacker</td>
-<td colspan="10"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[0],"id",0); ?>"><?php echo $database->getUserField($dataarray[0],"username",0); ?></a> from the village <a href="karte.php?d=<?php echo $dataarray[1]."&amp;c=".$generator->getMapCheck($dataarray[1]); ?>"><?php echo $database->getVillageField($dataarray[1],"name"); ?></a></td>
+<td colspan="<?php echo $colspan; ?>"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[0],"id",0); ?>"><?php echo $database->getUserField($dataarray[0],"username",0); ?></a> from the village <a href="karte.php?d=<?php echo $dataarray[1]."&amp;c=".$generator->getMapCheck($dataarray[1]); ?>"><?php echo $database->getVillageField($dataarray[1],"name"); ?></a></td>
 </tr>
 </thead>
 <tbody class="units">
@@ -65,33 +65,33 @@ if (isset($dataarray[147]) and $dataarray[147] != 0){
 echo "</tr></tbody>";
 if ($dataarray[139]!='' and $dataarray[140]!=''){ //ram
 ?>
-    <tbody class="goods"><tr><th>Information</th><td colspan="10">
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
     <img class="unit u<?php echo $dataarray[139]; ?>" src="img/x.gif" alt="Ram" title="Ram" />
     <?php echo $dataarray[140]; ?>
     </td></tr></tbody>
 <?php } 
 if ($dataarray[141]!='' and $dataarray[142]!=''){ //cata
 ?>
-    <tbody class="goods"><tr><th>Information</th><td colspan="10">
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
     <img class="unit u<?php echo $dataarray[141]; ?>" src="img/x.gif" alt="Catapult" title="Catapult" />
     <?php echo $dataarray[142]; ?>
     </td></tr></tbody>
 <?php }
 if ($dataarray[143]!='' and $dataarray[144]!=''){ //chief
 ?>
-    <tbody class="goods"><tr><th>Information</th><td colspan="10">
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
     <img class="unit u<?php echo $dataarray[143]; ?>" src="img/x.gif" alt="Chief" title="Chief" />
     <?php echo $dataarray[144]; ?>
     </td></tr></tbody>
 <?php } ?>
 <?php if ($dataarray[145]!='' and $dataarray[146]!=''){ //spy
 ?>
-    <tbody class="goods"><tr><th>Information</th><td colspan="10">
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
     
     <?php echo $dataarray[146]; ?>
     </td></tr></tbody>
 <?php } ?>
-    <tbody class="goods"><tr><th>Bounty</th><td colspan="10">
+    <tbody class="goods"><tr><th>Bounty</th><td colspan="<?php echo $colspan; ?>">
     <div class="res"><img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /><?php echo $dataarray[23]; ?> | <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $dataarray[24]; ?> | <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $dataarray[25]; ?> | <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $dataarray[26]; ?></div><div class="carry"><img class="car" src="img/x.gif" alt="carry" title="carry" /><?php echo ($dataarray[23]+$dataarray[24]+$dataarray[25]+$dataarray[26])."/".$dataarray[27]; ?></div>
     </td></tr></tbody></table>
     
