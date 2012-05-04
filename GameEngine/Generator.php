@@ -65,8 +65,8 @@ class Generator {
 		}
 		else {
 			$speed = $ref;
-			if($building->getTypeLevel(14) != 0) {
-				$speed = $distance <= TS_THRESHOLD ? $speed : $speed * ( ( TS_THRESHOLD + ( $distance - TS_THRESHOLD ) * $bid14[$building->gettypeLevel(14)]['attri'] / 100 ) / $distance ) ;
+			if($building->getTypeLevel(14) != 0 && $distance >= TS_THRESHOLD) {
+				$speed = $speed * ($bid14[$building->gettypeLevel(14)]['attri']/100) ;
 			}
 		}
 		if($speed!=0){

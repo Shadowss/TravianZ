@@ -641,7 +641,7 @@ private function loyaltyRegeneration() {
     }
 
     private function sendunitsComplete() {
-        global $bid23,$database,$battle,$village,$technology,$logging;
+        global $bid23,$bid34,$database,$battle,$village,$technology,$logging;
          $ourFileHandle = @fopen("GameEngine/Prevention/sendunits.txt", 'w');
             @fclose($ourFileHandle);
         $time = time();
@@ -2683,13 +2683,17 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
         }
         else {
             $speed = $ref;
-            if($this->getsort_typeLevel(14,$resarray) != 0) {
-                $speed = $distance <= TS_THRESHOLD ? $speed : $speed * ( ( TS_THRESHOLD + ( $distance - TS_THRESHOLD ) * $bid14[$this->getsort_typeLevel(14,$resarray)]['attri'] / 100 ) / $distance ) ;
+            if($this->getsort_typeLevel(14,$resarray) != 0 && $distance >= TS_THRESHOLD) {
+                $speed = $speed * ($bid14[$this->getsort_typeLevel(14,$resarray)]['attri']/100) ;
             }
         }
 
 
-        return round(($distance/$speed) * 3600 / INCREASE_SPEED);
+		if($speed!=0){
+		return round(($distance/$speed) * 3600 / INCREASE_SPEED);
+		}else{
+		return round($distance * 3600 / INCREASE_SPEED);
+		}
 
     }
 
