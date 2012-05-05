@@ -624,8 +624,9 @@ class Building {
 		if($session->gold >= 2){
 		foreach($this->buildArray as $jobs) {
 		if($jobs['wid']==$village->wid){
+		for ($i = 1; $i <= 40; $i++) {
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
-		if($wwvillage['f99t']!=40){
+		if($wwvillage['f99t']!=40 and $wwvillage['f'.$i.'t']!=40){
 			$level = $database->getFieldLevel($jobs['wid'],$jobs['field']);
 			$level = ($level == -1) ? 0 : $level;
 			if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
@@ -677,6 +678,7 @@ class Building {
 				}
 				if(($jobs['field'] >= 19 && ($session->tribe == 1 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1)) { $innertimestamp = $jobs['timestamp']; }
 			}
+		}
 		}
 		}
 		}

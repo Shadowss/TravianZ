@@ -109,7 +109,7 @@ $q = "
     } 
 
     ## Get WW Winner Details 
-    $sql = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100'")or die(mysql_error()); 
+	$sql = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40' OR f1 = '100' and f1t = '40' OR f2 = '100' and f2t = '40' OR f3 = '100' and f3t = '40' OR f4 = '100' and f4t = '40' OR f5 = '100' and f5t = '40' OR f6 = '100' and f6t = '40' OR f7 = '100' and f7t = '40' OR f8 = '100' and f8t = '40' OR f9 = '100' and f9t = '40' OR f10 = '100' and f10t = '40' OR f11 = '100' and f11t = '40' OR f12 = '100' and f12t = '40' OR f13 = '100' and f13t = '40' OR f14 = '100' and f14t = '40' OR f15 = '100' and f15t = '40' OR f16 = '100' and f16t = '40' OR f17 = '100' and f17t = '40' OR f18 = '100' and f18t = '40' OR f19 = '100' and f19t = '40' OR f20 = '100' and f20t = '40' OR f21 = '100' and f21t = '40' OR f22 = '100' and f22t = '40' OR f23 = '100' and f23t = '40' OR f24 = '100' and f24t = '40' OR f25 = '100' and f25t = '40' OR f26 = '100' and f26t = '40' OR f27 = '100' and f27t = '40' OR f28 = '100' and f28t = '40' OR f29 = '100' and f29t = '40' OR f30 = '100' and f30t = '40' OR f31 = '100' and f31t = '40' OR f32 = '100' and f32t = '40' OR f33 = '100' and f33t = '40' OR f34 = '100' and f34t = '40' OR f35 = '100' and f35t = '40' OR f36 = '100' and f36t = '40' OR f37 = '100' and f37t = '40' OR f38 = '100' and f38t = '40' OR f39 = '100' and f39t = '40' OR f40 = '100' and f40t = '40'")or die(mysql_error()); 
     $vref = mysql_result($sql, 0); 
      
     $sql = mysql_query("SELECT name FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysql_error()); 
@@ -130,7 +130,7 @@ $q = "
     $sql = mysql_query("SELECT tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysql_error()); 
     $winningalliancetag = mysql_result($sql, 0); 
 	
-	$sql = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100'")or die(mysql_error()); 
+	$sql = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40' OR f1 = '100' and f1t = '40' OR f2 = '100' and f2t = '40' OR f3 = '100' and f3t = '40' OR f4 = '100' and f4t = '40' OR f5 = '100' and f5t = '40' OR f6 = '100' and f6t = '40' OR f7 = '100' and f7t = '40' OR f8 = '100' and f8t = '40' OR f9 = '100' and f9t = '40' OR f10 = '100' and f10t = '40' OR f11 = '100' and f11t = '40' OR f12 = '100' and f12t = '40' OR f13 = '100' and f13t = '40' OR f14 = '100' and f14t = '40' OR f15 = '100' and f15t = '40' OR f16 = '100' and f16t = '40' OR f17 = '100' and f17t = '40' OR f18 = '100' and f18t = '40' OR f19 = '100' and f19t = '40' OR f20 = '100' and f20t = '40' OR f21 = '100' and f21t = '40' OR f22 = '100' and f22t = '40' OR f23 = '100' and f23t = '40' OR f24 = '100' and f24t = '40' OR f25 = '100' and f25t = '40' OR f26 = '100' and f26t = '40' OR f27 = '100' and f27t = '40' OR f28 = '100' and f28t = '40' OR f29 = '100' and f29t = '40' OR f30 = '100' and f30t = '40' OR f31 = '100' and f31t = '40' OR f32 = '100' and f32t = '40' OR f33 = '100' and f33t = '40' OR f34 = '100' and f34t = '40' OR f35 = '100' and f35t = '40' OR f36 = '100' and f36t = '40' OR f37 = '100' and f37t = '40' OR f38 = '100' and f38t = '40' OR f39 = '100' and f39t = '40' OR f40 = '100' and f40t = '40'")or die(mysql_error()); 
 	$winner = mysql_num_rows($sql);
 	
 	if($winner!=0){
