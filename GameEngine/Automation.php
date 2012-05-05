@@ -31,37 +31,6 @@ class Automation {
 		}
 	}
 	
-		public function gameWinner() { 
-		for ($i = 1; $i <= 40; $i++) {
-		$q = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40' or f".$i." = '100' and f".$i."t = '40'"); 
-		$vref = mysql_result($q, 0); 
-		}
-	
-		$q = mysql_query("SELECT name FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysql_error()); 
-		$winningvillagename = mysql_result($q, 0); 
-
-		$q = mysql_query("SELECT owner FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysql_error()); 
-		$owner = mysql_result($q, 0); 
-
-		$q = mysql_query("SELECT username FROM ".TB_PREFIX."users WHERE id = '$owner'")or die(mysql_error()); 
-		$username = mysql_result($q, 0); 
-
-		$q = mysql_query("SELECT alliance FROM ".TB_PREFIX."users WHERE id = '$owner'")or die(mysql_error()); 
-		$allianceid = mysql_result($q, 0); 
-
-		$q = mysql_query("SELECT name, tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysql_error()); 
-		$winningalliance = mysql_result($q, 0); 
-
-		$q = mysql_query("SELECT tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysql_error()); 
-		$winningalliancetag = mysql_result($q, 0); 
-
-		for ($i = 1; $i <= 40; $i++) {
-		$q = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40' or f".$i." = '100' and f".$i."t = '40'"); 
-		$winner = mysql_num_rows($q);
-		}
-
-		}
-	
         public function procResType($ref) {
         global $session;
         switch($ref) {
