@@ -29,7 +29,7 @@ $search = $_SESSION['search'];
 			$start = 20*$multiplier-19;
 			} else { $start = ($_SESSION['start']+1); }
 		} else { $start = ($_SESSION['start']+1); }
-        if(count($ranking->getRank()) > 0) {
+        if(count($database->getUserByTribe(1)) > 0) {
         	$ranking = $ranking->getRank(); 
             for($i=$start;$i<($start+20);$i++) {
             	if(isset($ranking[$i]['username'])  && $ranking[$i] != "pad") {

@@ -13,13 +13,13 @@
              
     mysql_select_db($db_name, $con);
 
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 3 AND tribe<=3 ORDER BY ap DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY ap DESC Limit 10");
     $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE username = '".$session->username."' ORDER BY ap DESC Limit 1");
 	?>
 	<table cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
-			<th>Top 10 players<div id="submenu"><a title="Top 10" href="statistiken.php?id=1"><img class="active btn_top10" src="img/x.gif" alt="Top 10"></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender"></a><a title="attacker" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="attacker"></a></div><div id="submenu2"><a title="Romans" href="statistiken.php?id=11"><img class="btn_v1" src="img/x.gif" alt="attacker"></a><a title="Teutons" href="statistiken.php?id=12"><img class="btn_v2" src="img/x.gif" alt="attacker"></a><a title="Gauls" href="statistiken.php?id=13"><img class="btn_v3" src="img/x.gif" alt="attacker"></a></div></th>
+			<th>Top 10 players<div id="submenu"><a title="Top 10" href="statistiken.php?id=7"><img class="active btn_top10" src="img/x.gif" alt="Top 10"></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender"></a><a title="attacker" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="attacker"></a></div><div id="submenu2"><a title="Romans" href="statistiken.php?id=11"><img class="btn_v1" src="img/x.gif" alt="attacker"></a><a title="Teutons" href="statistiken.php?id=12"><img class="btn_v2" src="img/x.gif" alt="attacker"></a><a title="Gauls" href="statistiken.php?id=13"><img class="btn_v3" src="img/x.gif" alt="attacker"></a></div></th>
 		</tr>
 	</thead>
 </table>
@@ -71,7 +71,7 @@
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 3 AND tribe<=3 ORDER BY dp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY dp DESC Limit 10");
     $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE username = '".$session->username."' ORDER BY dp DESC Limit 1");
 ?>
 <table cellpadding="1" cellspacing="1" id="top10_defs" class="top10 row_table_data">
@@ -122,7 +122,7 @@
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 3 AND tribe<=3 ORDER BY clp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY clp DESC Limit 10");
     $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE username = '".$session->username."' ORDER BY clp DESC Limit 1");
 ?>
 <div class="clear"></div>
@@ -171,7 +171,7 @@
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 3 AND tribe<=3 ORDER BY RR DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY RR DESC Limit 10");
     $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE username = '".$session->username."' ORDER BY RR DESC Limit 1");
 ?>
 <table cellpadding="1" cellspacing="1" id="top10_raiders" class="top10 row_table_data">
@@ -191,12 +191,14 @@
 <?php
     while($row = mysql_fetch_array($result))
       {
+	  if($row['RR'] >= 0) {
 	  if($row['username']==$session->username) {
 	  echo "<tr class=\"own hl\">"; } else { echo "<tr>"; }
       echo "<td>".$i++.".&nbsp;</td>";
       echo "<td><a href='spieler.php?uid=".$row['id']."'>".$row['username']."</a></td>";
       echo "<td>".$row['RR']."</td>";
       echo "</tr>";
+	  }
       }
 ?>
 		 <tr>

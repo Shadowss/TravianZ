@@ -1862,7 +1862,13 @@
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
             }
-
+			
+			function getUserByTribe($tribe){
+			    $q = "SELECT * FROM " . TB_PREFIX . "users where tribe = $tribe";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+			}
+			
             function getHeroRanking() {
                 $q = "SELECT * FROM " . TB_PREFIX . "hero WHERE dead = 0";
                 $result = mysql_query($q, $this->connection);

@@ -10,7 +10,7 @@ $search = $_SESSION['search'];
 			<thead>
 				<tr>
 					<th colspan="5">
-						The most successful attackers						<div id="submenu"><a title="Top 10" href="statistiken.php?id=7"><img class="btn_top10" src="img/x.gif" alt="Top 10" /></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender" /></a><a title="attacker" href="statistiken.php?id=1"><img class="active btn_off" src="img/x.gif" alt="attacker" /></a></div>		    
+						The most successful attackers						<div id="submenu"><a title="Top 10" href="statistiken.php?id=7"><img class="btn_top10" src="img/x.gif" alt="Top 10" /></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender" /></a><a title="attacker" href="statistiken.php?id=31"><img class="active btn_off" src="img/x.gif" alt="attacker" /></a></div>		    
 					</th>
 				</tr>
 		<tr><td></td><td>Player</td><td>Population</td><td>Villages</td><td>Points</td></tr>

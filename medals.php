@@ -55,7 +55,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	
 
 	//Aanvallers v/d Week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     $i=0; 	while($row = mysql_fetch_array($result)){
 	$i++;	$img="t2_".($i)."";
 	$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '1', '".($i)."', '".$week."', '".$row['ap']."', '".$img."')";
@@ -63,7 +63,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	}
 
 	//Verdediger v/d Week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
     $i=0; 	while($row = mysql_fetch_array($result)){
 	$i++;	$img="t3_".($i)."";
 	$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '2', '".($i)."', '".$week."', '".$row['dp']."', '".$img."')";
@@ -71,7 +71,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	}	
     
     //Rank climbers of the week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY clp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC Limit 10");
     $i=0;     while($row = mysql_fetch_array($result)){
     $i++;    $img="t1_".($i)."";
     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '10', '".($i)."', '".$week."', '".$row['clp']."', '".$img."')";
@@ -79,20 +79,22 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     }    
 
 	//Overvallers v/d Week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY RR DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC Limit 10");
     $i=0; 	while($row = mysql_fetch_array($result)){
+	if($row['RR'] >= 0){
 	$i++;	$img="t4_".($i)."";
 	$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$week."', '".$row['RR']."', '".$img."')";
-	$resul=mysql_query($quer);	  
+	$resul=mysql_query($quer);
+	}
 	}	
 	
 	//deel de bonus voor aanval+defence top 10 uit
 	//Pak de top10 aanvallers
-        $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+        $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     while($row = mysql_fetch_array($result)){
     
          //Pak de top10 verdedigers
-        $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+        $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
         while($row2 = mysql_fetch_array($result2)){
             if($row['id']==$row2['id']){
             
@@ -123,7 +125,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	
 	//je staat voor 3e / 5e / 10e keer in de top 3 aanvallers 
 	//Pak de top10 aanvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
 	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=3";
@@ -153,7 +155,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	}
 	//je staat voor 3e / 5e / 10e keer in de top 10 aanvallers 
     //Pak de top10 aanvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=10";
@@ -183,7 +185,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     }
 	//je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
 	//Pak de top10 verdedigers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
 	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=3";
@@ -213,7 +215,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	}
     //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
     //Pak de top10 verdedigers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=10";
@@ -244,7 +246,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 
 	//je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
 	//Pak de top10 klimmers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY Rc DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY Rc DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
 	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=3";
@@ -272,7 +274,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 		}
 	}//je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
     //Pak de top10 klimmers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY Rc DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY Rc DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=10";
@@ -302,7 +304,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     
     //je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
     //Pak de top3 rank climbers 
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY clp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=3";
@@ -331,7 +333,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     }
     //je staat voor 3e / 5e / 10e keer in de top 10klimmers 
     //Pak de top3 rank climbers 
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY clp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=10";
@@ -361,7 +363,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 
 	//je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
 	//Pak de top10 overvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY RR DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
 	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=3";
@@ -389,7 +391,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 		}
 	} //je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
     //Pak de top10 overvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY RR DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=10";
@@ -418,7 +420,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     }
 	
 	//Zet alle waardens weer op 0
-	 $query="SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY id+0 DESC";
+	 $query="SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY id+0 DESC";
 	 $result=mysql_query($query);
 	 for ($i=0; $row=mysql_fetch_row($result); $i++){
 	 mysql_query("UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id = ".$row[0]."");
@@ -445,9 +447,11 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
       //Overvallers v/d Week
     $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY RR DESC Limit 10");
     $i=0;     while($row = mysql_fetch_array($result)){
+	if($row['RR'] >= 0){
     $i++;    $img="a4_".($i)."";
     $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$allyweek."', '".$row['RR']."', '".$img."')";
-    $resul=mysql_query($quer);      
+    $resul=mysql_query($quer); 
+	}
     }
     
     //Rank climbers of the week
