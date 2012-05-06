@@ -192,6 +192,7 @@
 <?php
     while($row = mysql_fetch_array($result))
       {
+	  if($row['id'] >= 0){
 	  if($row['id']==$session->alliance) {
 	  echo "<tr class=\"own hl\">"; } else { echo "<tr>"; }
       echo "<td class=\"ra fc\">".$i++.".&nbsp;</td>";
@@ -199,6 +200,7 @@
       echo "<td class=\"val lc\">".$row['RR']."</td>";
       echo "</tr>";
       }
+	  }
 ?>
 		 <tr>
 			<td colspan="3" class="empty"></td>
