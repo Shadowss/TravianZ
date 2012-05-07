@@ -319,6 +319,16 @@
        			//header("Location: build.php?id=".$post['id']);
        		}
        	}
+		/*****************************************
+       	Function to set forum link
+       	*****************************************/
+       	public function setForumLink($post) {
+       		global $database, $session;
+       			if(isset($post['f_link'])){
+       			$database->setAlliForumLink($session->alliance, $post['f_link']);
+				header("Location: allianz.php?s=5");
+				}
+       	}
        	/*****************************************
        	Function to quit from alliance
        	*****************************************/

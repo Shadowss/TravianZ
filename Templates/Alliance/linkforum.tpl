@@ -22,7 +22,7 @@ if($session->access!=BANNED){
 </thead><tbody>
 
 <tr><th>URL</th>
-<td><input class="link text" type="text" name="f_link" value="" maxlength="200"></td>
+<td><input class="link text" type="text" name="f_link" value="<?php echo $allianceinfo['forumlink']; ?>" maxlength="200"></td>
 </tr>
 
 <tr>

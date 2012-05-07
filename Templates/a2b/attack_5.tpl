@@ -67,7 +67,7 @@ $actionType = "Raid";
 
 						<th>Destination:</th>
 
-						<td><a href="karte.php?d=&amp;c="><?php echo $process[1]; ?> (<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</a></td>
+                        <td><a href="karte.php?d=<?php echo $process[0]; ?>&c=<?php echo $generator->getMapCheck($process[0]); ?>"><?php echo $process[1]; ?> (<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</a></td>
 
 					</tr>
 
@@ -209,6 +209,7 @@ $actionType = "Raid";
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
+								<option value="40">Wonder of the World</option> 
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
@@ -262,6 +263,7 @@ $actionType = "Raid";
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
+								<option value="40">Wonder of the World</option> 
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
@@ -371,8 +373,8 @@ $actionType = "Raid";
 			<td colspan="10">
 
 			<div class="in">in <?php echo $generator->getTimeFormat($time); ?></div>
-
-			<div class="at">at <span id="tp2"> <?php echo date("H:i:s",time()+$time)?></span><span> hours</span></div>
+			
+            <div class="at">at <span id="tp2"> <?php echo $generator->procMtime(date('U')+$time,9)?></span><span> hours</span></div>
 
 			</td>
 

@@ -95,13 +95,12 @@ class Market {
         $reqMerc = ceil((array_sum($resource)-0.1)/$this->maxcarry); 
 
         if($this->merchantAvail() != 0 && $reqMerc <= $this->merchantAvail()) { 
-                if(isset($post['dname']) && $post['dname'] != "") { 
-                    $id = $database->getVillageByName($post['dname']); 
-                    $coor = $database->getCoor($id); 
-                } 
                 if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") { 
                     $coor = array('x'=>$post['x'], 'y'=>$post['y']); 
                     $id = $generator->getBaseID($coor['x'],$coor['y']); 
+                }else if(isset($post['dname']) && $post['dname'] != "") { 
+                    $id = $database->getVillageByName($post['dname']); 
+                    $coor = $database->getCoor($id); 
                 } 
                 if($database->getVillageState($id)) {
 					$timetaken = $generator->procDistanceTime($coor,$village->coor,$session->tribe,0); 
@@ -243,8 +242,9 @@ class Market {
      
     private function tradeResource($post) { 
         global $session,$database,$village; 
+		for($i = 1; $i <= 40; $i++){
 		$wwvillage = $database->getResourceLevel($village->wid);
-		if($wwvillage['f99t']!=40){
+		if($wwvillage['f99t']!=40 and $wwvillage['f'.$i.'t']!=40){
         if($session->userinfo['gold'] >= 3) { 
             //kijken of ze niet meer gs invoeren dan ze hebben 
 			if($session->access == BANNED){
@@ -264,6 +264,7 @@ class Market {
         }
 	}
     } 
+	}
      
 }; 
 $market = new Market; 

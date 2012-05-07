@@ -208,6 +208,7 @@ if($_GET['aid'] or $session->alliance!=0){
        			}
        			break;
        		case 5:
+				$alliance->setForumLink($_POST);
        			include ("Templates/Alliance/linkforum.tpl");
        			break;
        		case 6:

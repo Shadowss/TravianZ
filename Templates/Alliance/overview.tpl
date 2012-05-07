@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if(isset($_GET['aid'])) {
 $aid = $_GET['aid'];
 }
@@ -87,10 +87,17 @@ include("alli_menu.tpl");
                 echo "<td><a href='spieler.php?uid=".$member['id']."'>".$name."</td>";
                 echo "</tr>";
                 } 
-                }?>
+				}
+			if($allianceinfo['forumlink'] != ''){
+                echo "<tr>";
+                echo "<td><a href='".$allianceinfo['forumlink']."'>» to the forum</td>";
+                echo "</tr>";
+                }else{
+			?>
                 <tr>
                 <td colspan="2" class="emmty"></td>
             </tr>
+			<?php } ?>
             <tr>
                 <td class="desc2" colspan="2"><?php echo nl2br($profiel[0]); ?>
                 </td>

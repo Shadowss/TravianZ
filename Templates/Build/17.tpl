@@ -30,6 +30,7 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && ($_POST['x']!="" && $_POST['y']
 <input type="hidden" name="id" value="<?php echo $id; ?>">
 <input type="hidden" name="x" value="<?php echo $_POST['x']; ?>">
 <input type="hidden" name="y" value="<?php echo $_POST['y']; ?>">
+<input type="hidden" name="dname" value="<?php echo $_POST['dname']; ?>">
 <table id="send_select" class="send_res" cellpadding="1" cellspacing="1">
 	<tr>
 		<td class="ico"><img class="r1" src="img/x.gif" alt="Fa" title="Fa" /></td> 
@@ -67,15 +68,17 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && ($_POST['x']!="" && $_POST['y']
 		$getvilowner = $database->getVillageField($getwref, "owner");
 		$getvilcoor['y'] = $_POST['y'];
 		$getvilcoor['x'] = $_POST['x'];
+		$time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
 		}
 		else if($_POST['dname']!=""){
 		$getwref = $database->getVillageByName($_POST['dname']);
 		$getvilcoor = $database->getCoor($getwref);
 		$getvilname = $database->getVillageField($getwref, "name");
 		$getvilowner = $database->getVillageField($getwref, "owner");
+		$time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
 		}
         ?>
-		<td><a href="karte.php?d=<?php echo $getwref; ?>&c=<?php echo $generator->getMapCheck($getwref); ?>"><?php echo $getvilname; ?>(<?php echo $getvilcoor['y']; ?>|<?php echo $getvilcoor['x']; ?>)<span class="clear"></span></a></td>
+		<td><a href="karte.php?d=<?php echo $getwref; ?>&c=<?php echo $generator->getMapCheck($getwref); ?>"><?php echo $getvilname; ?>(<?php echo $getvilcoor['x']; ?>|<?php echo $getvilcoor['y']; ?>)<span class="clear"></span></a></td>
 	</tr>
 	<tr>
 		<th>Player:</th>
@@ -83,7 +86,7 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && ($_POST['x']!="" && $_POST['y']
 	</tr>
 	<tr>
 		<th>duration:</th>
-		<td>-</td>
+		<td><?php echo $generator->getTimeFormat($time); ?></td>
 	</tr>
 	<tr>
 		<th>Merchants:</th>
@@ -163,7 +166,6 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && ($_POST['x']!="" && $_POST['y']
 	<tr> 
 		<td class="mer">Merchants <?php echo $market->merchantAvail(); ?>/<?php echo $market->merchant; ?></td> 
 	</tr> 
-	<tr> 
 		<td class="vil"> 
 			<span>Villages:</span> 
 			<input class="text" type="text" name="dname" value="" maxlength="20" tabindex="5"> 

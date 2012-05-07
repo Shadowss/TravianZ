@@ -1075,7 +1075,7 @@
             References: 
             *****************************************/
             function createAlliance($tag, $name, $uid, $max) {
-                $q = "INSERT into " . TB_PREFIX . "alidata values (0,'$name','$tag',$uid,0,0,0,'','',$max,'','','','','','','','')";
+                $q = "INSERT into " . TB_PREFIX . "alidata values (0,'$name','$tag',$uid,0,0,0,'','',$max,'','','','','','','','','')";
                 mysql_query($q, $this->connection);
                 return mysql_insert_id($this->connection);
             }
@@ -1285,6 +1285,11 @@
                 return mysql_query($q, $this->connection);
             }
 
+            function setAlliForumLink($aid, $link) {
+                $q = "UPDATE " . TB_PREFIX . "alidata SET `forumlink` = '$link' WHERE id = $aid";
+                return mysql_query($q, $this->connection);
+            }
+			
             function getUserAlliance($id) {
                 $q = "SELECT " . TB_PREFIX . "alidata.tag from " . TB_PREFIX . "users join " . TB_PREFIX . "alidata where " . TB_PREFIX . "users.alliance = " . TB_PREFIX . "alidata.id and " . TB_PREFIX . "users.id = $id";
                 $result = mysql_query($q, $this->connection);
@@ -1485,7 +1490,7 @@
             }
 
             function removeNotice($id) {
-                $q = "UPDATE " . TB_PREFIX . "ndata set del = 1 where id = $id";
+                $q = "UPDATE " . TB_PREFIX . "ndata set del = 1,viewed = 1 where id = $id";
                 return mysql_query($q, $this->connection);
             }
 
