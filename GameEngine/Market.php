@@ -242,9 +242,8 @@ class Market {
      
     private function tradeResource($post) { 
         global $session,$database,$village; 
-		for($i = 1; $i <= 40; $i++){
 		$wwvillage = $database->getResourceLevel($village->wid);
-		if($wwvillage['f99t']!=40 and $wwvillage['f'.$i.'t']!=40){
+		if($wwvillage['f99t']!=40 && $wwvillage['f1t']!=40 && $wwvillage['f2t']!=40 && $wwvillage['f3t']!=40 && $wwvillage['f4t']!=40 && $wwvillage['f5t']!=40 && $wwvillage['f6t']!=40 && $wwvillage['f7t']!=40 && $wwvillage['f8t']!=40 && $wwvillage['f9t']!=40 && $wwvillage['f10t']!=40 && $wwvillage['f11t']!=40 && $wwvillage['f12t']!=40 && $wwvillage['f13t']!=40 && $wwvillage['f14t']!=40 && $wwvillage['f15t']!=40 && $wwvillage['f16t']!=40 && $wwvillage['f17t']!=40 && $wwvillage['f18t']!=40 && $wwvillage['f19t']!=40 && $wwvillage['f20t']!=40 && $wwvillage['f21t']!=40 && $wwvillage['f22t']!=40 && $wwvillage['f23t']!=40 && $wwvillage['f24t']!=40 && $wwvillage['f25t']!=40 && $wwvillage['f26t']!=40 && $wwvillage['f27t']!=40 && $wwvillage['f28t']!=40 && $wwvillage['f29t']!=40 && $wwvillage['f30t']!=40 && $wwvillage['f31t']!=40 && $wwvillage['f32t']!=40 && $wwvillage['f33t']!=40 && $wwvillage['f34t']!=40 && $wwvillage['f35t']!=40 && $wwvillage['f36t']!=40 && $wwvillage['f37t']!=40 && $wwvillage['f38t']!=40 && $wwvillage['f39t']!=40 && $wwvillage['f40t']!=40){
         if($session->userinfo['gold'] >= 3) { 
             //kijken of ze niet meer gs invoeren dan ze hebben 
 			if($session->access == BANNED){
@@ -263,7 +262,6 @@ class Market {
             header("Location: build.php?id=".$post['id']."&t=3"); 
         }
 	}
-    } 
 	}
      
 }; 
