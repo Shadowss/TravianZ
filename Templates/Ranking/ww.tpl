@@ -1,10 +1,10 @@
   <?php
  if(WW==True){
-    $result = mysql_query("select ".TB_PREFIX."users.id, ".TB_PREFIX."users.username,".TB_PREFIX."users.alliance, ".TB_PREFIX."fdata.wwname, ".TB_PREFIX."fdata.f99, ".TB_PREFIX."vdata.name, ".TB_PREFIX."fdata.vref 
+    $result = mysql_query("select ".TB_PREFIX."users.id, ".TB_PREFIX."users.username,".TB_PREFIX."users.alliance, ".TB_PREFIX."fdata.wwname, ".TB_PREFIX."fdata.wwlevel, ".TB_PREFIX."vdata.name, ".TB_PREFIX."fdata.vref 
                         FROM ".TB_PREFIX."users 
                         INNER JOIN ".TB_PREFIX."vdata ON ".TB_PREFIX."users.id = ".TB_PREFIX."vdata.owner
                         INNER JOIN ".TB_PREFIX."fdata ON ".TB_PREFIX."fdata.vref = ".TB_PREFIX."vdata.wref
-                        WHERE ".TB_PREFIX."fdata.f99t = 40 ORDER BY ".TB_PREFIX."fdata.f99 Desc ");
+                        WHERE ".TB_PREFIX."fdata.wwlevel > 0 ORDER BY ".TB_PREFIX."fdata.wwlevel Desc ");
 
 ?>
 <table cellpadding="1" cellspacing="1" id="villages" class="row_table_data">
@@ -43,7 +43,7 @@
                 </td>
                 <td><?php echo $row['wwname'];?></td>
                 <td><a href="allianz.php?aid=<?php echo $ally['id'];?>"><?php echo $ally['tag'];?></a></td>
-                <td><?php echo $row['f99'];?></td>
+                <td><?php echo $row['wwlevel'];?></td>
                 
 
         </tr>

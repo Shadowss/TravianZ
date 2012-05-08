@@ -2150,13 +2150,15 @@
             ***************************/
 
             function getWW() {
-                $q = "SELECT * FROM " . TB_PREFIX . "fdata WHERE f99t = 40";
+			 for($i=1; $i<=40; $i++) {
+                $q = "SELECT * FROM " . TB_PREFIX . "fdata WHERE f99t = 40 or f".$i."t = 40";
                 $result = mysql_query($q, $this->connection);
                 if(mysql_num_rows($result)) {
                     return true;
                 } else {
                     return false;
                 }
+			}
             }
 
             /***************************
@@ -2165,10 +2167,10 @@
             ***************************/
 
             function getWWLevel($vref) {
-                $q = "SELECT f99 FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
+                $q = "SELECT wwlevel FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
                 $result = mysql_query($q, $this->connection) or die(mysql_error());
                 $dbarray = mysql_fetch_array($result);
-                return $dbarray['f99'];
+                return $dbarray['wwlevel'];
             }
 
             /***************************

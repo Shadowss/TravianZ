@@ -31,6 +31,20 @@ class Automation {
 		}
 	}
 	
+		private function getWWRankInfo() { 
+		global $database;
+		for ($i = 1; $i <= 40; $i++) {
+		$q = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE f99t = '40' or f".$i."t = '40'");
+		$ww = mysql_fetch_array($q);
+		if($ww['f99'] > 0){
+		$i = 99;
+		}
+		if(mysql_num_rows($q) > 0){
+		$database->setVillageLevel($ww['vref'], "wwlevel", $ww['f'.$i]);
+		}
+		}
+	}
+	
         public function procResType($ref) {
         global $session;
         switch($ref) {
@@ -166,6 +180,7 @@ class Automation {
             $this->demolitionComplete(); 
         } 
         $this->updateStore();
+		$this->getWWRankInfo();
     }
 
    function activeCropDead(){
