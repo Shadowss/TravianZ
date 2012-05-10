@@ -2,28 +2,31 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       cp.php                                                      ##
+##  Filename       oasis.tpl                                                   ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
-include_once("../../config.php");
-
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
-
-$id = $_POST['id'];
-$admid = $_POST['admid'];
-
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$admid."");
-$access = mysql_fetch_array($sql);
-$sessionaccess = $access['access'];
-
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
-
-mysql_query("UPDATE ".TB_PREFIX."users SET cp = cp + ".$_POST['cp']." WHERE id = ".$id."");
-
-header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");
+?>
+<form action="../GameEngine/Admin/Mods/mainteneceResetGold.php" method="POST">
+	<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
+	<table id="member" cellpadding="1" cellspacing="1" >
+		<thead>
+			<tr>
+				<th colspan="2">Reset All Players Gold</th>
+			</tr> 
+		</thead>
+		<tbody> 
+			<tr>
+				<td class="hab" colspan="2"><center><input type="image" src="../img/admin/b/ok1.gif" value="submit"></center></td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+<?php
+if(isset($_GET['g']))
+{
+	echo '<font color="red">All Players Gold Reset</font>';
+}
 ?>

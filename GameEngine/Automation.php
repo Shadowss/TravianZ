@@ -45,6 +45,19 @@ class Automation {
 		}
 	}
 	
+		private function checkWWLevel() { 
+		global $database;
+		$q = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE wwlevel != 0");
+		$ww = mysql_fetch_array($q);
+		for ($i = 1; $i <= 40; $i++) {
+		if(mysql_num_rows($q) > 0){
+		if($ww['f99t'] != 40 && $ww['f'.$i.'t'] != 40){
+		$database->setVillageLevel($ww['vref'], "wwlevel", 0);
+		}
+		}
+		}
+	}
+	
         public function procResType($ref) {
         global $session;
         switch($ref) {
@@ -181,6 +194,7 @@ class Automation {
         } 
         $this->updateStore();
 		$this->getWWRankInfo();
+		$this->checkWWLevel();
     }
 
    function activeCropDead(){
