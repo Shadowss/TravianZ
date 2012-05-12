@@ -73,7 +73,11 @@
 			</div>
 			</td>
 			<?php
-			$max = $bid36[$village->resarray['f'.$id]]['attri'] - $village->unitarray['u99'];
+			$trainlist = $technology->getTrainingList(8);
+			foreach($trainlist as $train) {
+			$train_amt += $train['amt'];
+			}
+			$max = $bid36[$village->resarray['f'.$id]]['attri'] - ($village->unitarray['u99'] + $train_amt);
 			if($max < 0){
 			$max = 0;
 			}
@@ -88,7 +92,6 @@
 	} else {
 		echo "<b>Training can commence when trapper are completed.</b><br>\n";
 	}
-    $trainlist = $technology->getTrainingList(8);
     if(count($trainlist) > 0) {
     	echo "
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
