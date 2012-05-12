@@ -2000,10 +2000,11 @@
                     $stables = array(4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46);
                     $workshop = array(7, 8, 17, 18, 27, 28, 37, 38, 47, 48);
                     $residence = array(9, 10, 19, 20, 29, 30, 39, 40, 49, 50);
-     $greatstables = array(64,65,66,75,76,83,84,85,86,95,96,105,106,);
-     $greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,101,102,103,104,111,112,113,114);
-     $greatworkshop = array(67,68,77,78,87,88,97,98,107,108);
-     
+					$greatstables = array(64,65,66,75,76,83,84,85,86,95,96,105,106,);
+					$greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,101,102,103,104,111,112,113,114);
+					$greatworkshop = array(67,68,77,78,87,88,97,98,107,108);
+					$trapper = array(99);
+					
                     if(in_array($unit, $barracks)) {
                         $queued = $technology->getTrainingList(1);
                     } elseif(in_array($unit, $stables)) {
@@ -2013,12 +2014,14 @@
                     } elseif(in_array($unit, $residence)) {
                         $queued = $technology->getTrainingList(4);
                     } elseif(in_array($unit, $greatstables)) {
-            $queued = $technology->getTrainingList(6);
-           } elseif(in_array($unit, $greatbarracks)) {
-            $queued = $technology->getTrainingList(5);
-           } elseif(in_array($unit, $greatworkshop)) {
-            $queued = $technology->getTrainingList(7);
-           }
+						$queued = $technology->getTrainingList(6);
+					} elseif(in_array($unit, $greatbarracks)) {
+						$queued = $technology->getTrainingList(5);
+					} elseif(in_array($unit, $greatworkshop)) {
+						$queued = $technology->getTrainingList(7);
+					} elseif(in_array($unit, $trapper)) {
+						$queued = $technology->getTrainingList(8);
+					}
                     if(count($queued) > 0) {
                         $time = $queued[count($queued) - 1]['commence'] + $queued[count($queued) - 1]['eachtime'] * $queued[count($queued) - 1]['amt'];
                     }

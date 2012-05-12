@@ -192,6 +192,7 @@ define("U27","Ram");
 define("U28","Trebuchet");
 define("U29","Chieftain");
 define("U30","Settler");
+define("U99","Trap");
 
 //NATURE UNITS
 define("U31","Rat");

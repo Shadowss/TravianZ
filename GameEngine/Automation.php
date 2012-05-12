@@ -2666,7 +2666,11 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
                     if($trained >= $train['amt']) {
                         $trained = $train['amt'];
                     }
-                    $database->modifyUnit($train['vref'],array(($train['unit']>60?$train['unit']-60:$train['unit'])),array($trained),array(1));
+					if($train['unit']>60 && $train['unit']!=99){
+                    $database->modifyUnit($train['vref'],array($train['unit']-60),array($trained),array(1));
+					}else{
+					$database->modifyUnit($train['vref'],array($train['unit']),array($trained),array(1));
+					}
                     if($train['amt']-$trained <= 0) {
                         $database->trainUnit($train['id'],0,0,0,0,1,1);
                     }

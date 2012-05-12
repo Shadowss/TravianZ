@@ -1239,6 +1239,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%units` (
   `u48` int(11) unsigned NOT NULL DEFAULT '0',
   `u49` int(11) unsigned NOT NULL DEFAULT '0',
   `u50` int(11) unsigned NOT NULL DEFAULT '0',
+  `u99` int(11) unsigned NOT NULL DEFAULT '0',
+  `u99o` int(11) unsigned NOT NULL DEFAULT '0',
   `hero` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
