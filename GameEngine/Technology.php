@@ -451,7 +451,7 @@ private function trainUnit($unit,$amt,$great=false) {
 				if($unit%10 == 9 && $slots['chiefs'] <= $amt) { $amt = $slots['chiefs']; }
 			} else {
 			if($unit != 99){
-				if($this->maxUnit($unit,$great) <= $amt) {
+				if($this->maxUnit($unit,$great) < $amt) {
 					$amt = 0;
 				}
 			}else{
@@ -460,7 +460,7 @@ private function trainUnit($unit,$amt,$great=false) {
 			$train_amt += $train['amt'];
 			}
 			$max = $bid36[$village->resarray['f'.$id]]['attri'] - ($village->unitarray['u99'] + $train_amt);
-				if($max <= $amt) {
+				if($max < $amt) {
 					$amt = 0;
 				}
 			}
