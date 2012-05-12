@@ -455,6 +455,10 @@ private function trainUnit($unit,$amt,$great=false) {
 					$amt = 0;
 				}
 			}else{
+			$trainlist = $this->getTrainingList(8);
+			foreach($trainlist as $train) {
+			$train_amt += $train['amt'];
+			}
 			$max = $bid36[$village->resarray['f'.$id]]['attri'] - ($village->unitarray['u99'] + $train_amt);
 				if($max <= $amt) {
 					$amt = 0;
