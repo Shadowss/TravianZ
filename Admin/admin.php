@@ -101,8 +101,7 @@ $timeformat = new timeFormatGenerator;
 												<a href="?p=notregistered">Players Not Activated</a>
 												<br />
 												<a href="?p=search"><b>Search</b></a>
-												<a href="?p=message">Search Messages</a>
-												<a href="?p=message">Search Battle Reports</a>
+												<a href="?p=message">Search Messages/Battle Reports</a>
 												<br />
 												<a href="#"><b>Ban</b></a>
 												<a href="?p=ban">Ban/Unban Players</a>
