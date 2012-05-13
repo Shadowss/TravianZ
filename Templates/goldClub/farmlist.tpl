@@ -24,16 +24,7 @@ while($row = mysql_fetch_array($sql)){
 					<input type="hidden" name="direction" value="asc">
 					<input type="hidden" name="lid" value="<?php echo $lid; ?>">
                         <div class="listTitleText">
-                            <img alt="del" class="del" src="img/x.gif" onclick="dialog(
-                                'Are you sure that you want to delete this list?'.
-                                {
-                                    onOkay: function(dialog, contentElement)
-                                    {
-                                        window.location = 'build.php?id=39&t=99&action=deleteList&lid=<?php echo $lid; ?>';
-                                    }
-                                });
-                                event.stop();
-                            ">
+							<a href="build.php?gid=16&t=99&action=deleteList&lid=<?php echo $lid; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></a>
                             <?php echo $lvname; ?> - <?php echo $lname; ?>
                             <img alt="Loading..." class="loading hide" src="img/x.gif" align="absmiddle">
                         </div>
@@ -267,16 +258,7 @@ for($i=$start;$i<=$end;$i++){
 <div id="list<?php echo $lid; ?>" class="listEntry">
 <div class="round spacer listTitle" onclick="Travian.Game.RaidList.toggleList(<?php echo $lid; ?>);">
                         <div class="listTitleText">
-                            <img alt="del" class="del" src="img/x.gif" onclick="
-                                'Are you sure that you want to delete this list?'.dialog(
-                                {
-                                    onOkay: function(dialog, contentElement)
-                                    {
-                                        window.location = 'build.php?gid=16&t=99&action=deleteList&lid=<?php echo $lid; ?>';
-                                    }
-                                });
-                                event.stop();
-                            ">
+						<a href="build.php?gid=16&t=99&action=deleteList&lid=<?php echo $lid; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></a>
                             <?php echo $lvname; ?> - <?php echo $lname; ?>
                             <img alt="Loading..." class="loading hide" src="img/x.gif" align="absmiddle">
                         </div>
@@ -498,7 +480,9 @@ $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+"
     var lid = <?php echo $_GET['lid']; ?>;targets[lid] = {};
 
 </script>
-
+<?php if($create == 1){
+include("Templates/goldClub/farmlist_add.tpl");
+}else if($query > 1){ ?>
 <div id="raidListSlot">
     <h4>Add Raid</h4>
 <font color="#FF0000"><b>    
@@ -583,3 +567,4 @@ $lvname1 = $database->getVillageField($row1["wref"], 'name');
         
 </form>
 </div>
+<?php } ?>

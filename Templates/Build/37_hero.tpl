@@ -42,7 +42,12 @@ include_once("GameEngine/Data/hero_full.php");
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=off\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -57,7 +62,11 @@ include_once("GameEngine/Data/hero_full.php");
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=deff\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -72,7 +81,12 @@ include_once("GameEngine/Data/hero_full.php");
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=obonus\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -87,7 +101,12 @@ include_once("GameEngine/Data/hero_full.php");
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=dbonus\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -102,7 +121,12 @@ include_once("GameEngine/Data/hero_full.php");
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=reg\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -143,7 +167,12 @@ include_once("GameEngine/Data/hero_full.php");
         <?php 
         if($hero_info['attack'] < 100){ 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=off\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -162,7 +191,12 @@ include_once("GameEngine/Data/hero_full.php");
         <?php 
         if($hero_info['defence'] < 100){ 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=deff\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -181,7 +215,12 @@ include_once("GameEngine/Data/hero_full.php");
         <?php 
         if($hero_info['attackbonus'] < 100){ 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=obonus\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -200,7 +239,12 @@ include_once("GameEngine/Data/hero_full.php");
         <?php 
         if($hero_info['defencebonus'] < 100){ 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=dbonus\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 
@@ -219,7 +263,12 @@ include_once("GameEngine/Data/hero_full.php");
         <?php 
         if($hero_info['regeneration'] < 100){ 
         if($hero_info['points'] > 0){ 
+		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=reg\">(<b>+</b>)</a>"; 
+		}else{
+		header("Location: banned.php"); 
+		}
+
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
         } 

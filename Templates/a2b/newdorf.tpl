@@ -51,7 +51,7 @@ echo '</pre>';
 		<tr>
 			<th>Resources</th>
 				<td colspan="10">
-				<img class="r1" src="img/x.gif" alt="Wood" title="Wood" />750 | 
+				<img class="r1" src="img/x.gif" alt="Lumber" title="Wood" />750 | 
 				<img class="r2" src="img/x.gif" alt="Clay" title="Clay" />750 | 
 				<img class="r3" src="img/x.gif" alt="Iron" title="Iron" />750 | 
 				<img class="r4" src="img/x.gif" alt="Crop" title="Crop" />750</td>

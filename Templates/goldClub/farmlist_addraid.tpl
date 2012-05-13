@@ -11,13 +11,13 @@ $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+"
         $vdata = $database->getVillage($Wref);
     }
     if(!$_POST['x'] && !$_POST['y']){
-        $errormsg .= "مختصات را وارد کنید.";
+    	$errormsg .= "Enter coordinates.";
     }elseif(!$_POST['x'] || !$_POST['y']){
-        $errormsg .= "مختصات را صحیح وارد کنید.";
+    	$errormsg .= "Enter the correct coordinates.";
     }elseif($oasistype == 0 && $vdata == 0){
-        $errormsg .= "در این مختصات دهکده ای وجود ندارد.";
+    	$errormsg .= "There is no village on those coordinates.";
     }elseif($troops == 0){
-         $errormsg .= "هیچ نیرویی انتخاب نشده.";
+     	$errormsg .= "No troops has been selected.";
     }else{
     
         $Wref = $database->getVilWref($_POST['y'], $_POST['x']);

@@ -4,8 +4,12 @@
 
 	$oasisarray = $database->getOasis($village->wid);
 if($_GET['gid']==37 && isset($_GET['del'])){
+if($session->access != BANNED){
 	$database->removeOases($_GET['del']);
 	header("Location: build.php?id=".$id."&land");
+}else{
+	header("Location: banned.php");
+}
 }
 ?>
 <table id="oases" cellpadding="1" cellspacing="1">

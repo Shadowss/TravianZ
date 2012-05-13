@@ -1,4 +1,3 @@
-
 <?php
 
 #################################################################################
@@ -48,8 +47,10 @@ if($session->goldclub){
         if(isset($_GET['t'])==99) {
             
             if($_GET['action'] == 'addList') {
-                include("Templates/goldClub/farmlist_add.tpl");
-            }
+                $create = 1;
+            }else{
+			    $create = 0;
+			}
             
             if($_GET['action'] == 'addraid') {
                 include("Templates/goldClub/farmlist_addraid.tpl");
@@ -64,13 +65,19 @@ if($session->goldclub){
                 $database->delSlotFarm($_GET['eid']);
                    header("Location: build.php?id=39&t=99");
             }
-    }
+}else{
+$create = 0;
+}
 
 if (isset($_POST['a']) == 533374 && isset($_POST['id']) == 39){  
+if($session->access != BANNED){
     $units->Settlers($_POST);
+}else{
+header("Location: banned.php"); 
+}
 }
 if ($_GET['mode']=='troops'&&$_GET['cancel']==1){
-
+if($session->access != BANNED){
 $oldmovement=$database->getMovementById($_GET['moveid']);
 $now=time();
 if (($now-$oldmovement[0]['starttime'])<90){
@@ -96,6 +103,9 @@ $resultc=$database->query($qc) or die(mysql_error());
     }
 }
 header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
+}else{
+header("Location: banned.php"); 
+}
 }
 if(isset($_GET['id'])){
 $automation->isWinner();

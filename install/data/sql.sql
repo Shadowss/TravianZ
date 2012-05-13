@@ -890,6 +890,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
   `archived` tinyint(1) unsigned NOT NULL,
   `send` tinyint(1) unsigned NOT NULL,
   `time` int(11) unsigned NOT NULL DEFAULT '0',
+  `deltarget` int(10) unsigned NOT NULL,
+  `delowner` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

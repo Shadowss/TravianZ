@@ -159,7 +159,7 @@ if (!$test){
 if($blacksmith == 0 && $academy >= 3 && $mainbuilding >= 3 && $id != 39 && $id != 40) {
 include("avaliable/blacksmith.tpl");
 }
-if($stonemasonslodge == 0 && $palace >= 3 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
+if($stonemasonslodge == 0 && $palace >= 3 && $mainbuilding >= 5 && $id != 39 && $id != 40 && $village->capital == 1) {
 include("avaliable/stonemason.tpl");
 }
 if($stable == 0 && $blacksmith >= 3 && $academy >= 5 && $id != 39 && $id != 40) {
@@ -343,7 +343,7 @@ if($greatworkshop == 0 && $workshop >= 18 && $village->capital == 0 && GREAT_WKS
     if($blacksmith == 0 && ($academy == 0 || $mainbuilding == 1)) {
     include("soon/blacksmith.tpl");
     }
-    if($stonemason == 0 && ($palace == 0 || $mainbuilding <= 2) && $residence == 0) {
+    if($stonemason == 0 && ($palace == 0 || $mainbuilding <= 2) && $residence == 0 && $village->capital == 1) {
     include("soon/stonemason.tpl");
     }
     if($stable == 0 && ($blacksmith == 0 || $academy <= 2)) {

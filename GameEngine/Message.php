@@ -220,10 +220,18 @@
         	}
 
         	private function removeMessage($post) {
-        		global $database;
+        		global $database,$session;
         		for($i = 1; $i <= 10; $i++) {
         			if(isset($post['n' . $i])) {
+					$message1 = mysql_query("SELECT * FROM " . TB_PREFIX . "mdata where id = ".$post['n' . $i]."");
+					$message = mysql_fetch_array($message1);
+					if($message['target'] == $session->uid && $message['owner'] == $session->uid){
+        				$database->getMessage($post['n' . $i], 8);
+					}else if($message['target'] == $session->uid){
         				$database->getMessage($post['n' . $i], 5);
+					}else if($message['owner'] == $session->uid){
+        				$database->getMessage($post['n' . $i], 7);
+					}
         			}
         		}
         		header("Location: nachrichten.php");

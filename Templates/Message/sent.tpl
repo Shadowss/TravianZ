@@ -30,17 +30,17 @@
 		<input class="check" type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);" />
 		<?php } ?></th>
 	<th colspan="2" class="buttons"><input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" /></th><th class="navi"><?php 
-     if(!isset($_GET['s']) && count($message->sent) < 10) {
+     if(!isset($_GET['s']) && count($message->sent)-count($database->getDelSent($session->uid)) < 10) {
     echo "&laquo;&raquo;";
     }
-    else if (!isset($_GET['s']) && count($message->sent) > 10) {
+    else if (!isset($_GET['s']) && count($message->sent)-count($database->getDelSent($session->uid)) > 10) {
     echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
     }
-    else if(isset($_GET['s']) && count($message->sent) > $_GET['s']) {
-    	if(count($message->sent) > ($_GET['s']+10) && $_GET['s']-10 < count($message->sent) && $_GET['s'] != 0) {
+    else if(isset($_GET['s']) && count($message->sent)-count($database->getDelSent($session->uid)) > $_GET['s']) {
+    	if(count($message->sent)-count($database->getDelSent($session->uid)) > ($_GET['s']+10) && $_GET['s']-10 < count($message->sent)-count($database->getDelSent($session->uid)) && $_GET['s'] != 0) {
          echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
-         else if(count($message->sent) > $_GET['s']+10) {
+         else if(count($message->sent)-count($database->getDelSent($session->uid)) > $_GET['s']+10) {
          	echo "&laquo;<a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
         else {
@@ -58,7 +58,7 @@
     }
     $name = 1;
     for($i=(1+$s);$i<=(10+$s);$i++) {
-    if(count($message->sent) >= $i) {
+    if(count($message->sent)-count($database->getDelSent($session->uid)) >= $i) {
     if($message->sent[$i-1]['target'] == 0) {
     echo "<tr class=\"sup\">";
     }
@@ -76,7 +76,7 @@
         }
         $name++;
     }
-    if(count($message->sent) == 0) {
+    if(count($message->sent)-count($database->getDelSent($session->uid)) == 0) {
     echo "<td colspan=\"4\" class=\"none\">There are no sent messages available.</td></tr>";
     }
     ?>

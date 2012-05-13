@@ -34,8 +34,11 @@ include("menu.tpl"); ?>
     <th>Birthday</th><td class="birth"><input tabindex="1" class="text day" type="text" name="tag" value="<?php echo $bday[2]; ?>" maxlength="2" /> <select tabindex="2" name="monat" size="" class="dropdown">
 
                 <option value="0"></option><option value="1" <?php if($bday[1] == 1) { echo "selected"; } ?>>Jan</option><option value="2"<?php if($bday[1] == 2) { echo "selected"; } ?>>Feb</option><option value="3"<?php if($bday[1] == 3) { echo "selected"; } ?>>Mar</option><option value="4"<?php if($bday[1] == 4) { echo "selected"; } ?>>Apr</option><option value="5"<?php if($bday[1] == 5) { echo "selected"; } ?>>May</option><option value="6"<?php if($bday[1] == 6) { echo "selected"; } ?>>June</option><option value="7"<?php if($bday[1] == 7) { echo "selected"; } ?>>July</option><option value="8"<?php if($bday[1] == 8) { echo "selected"; } ?>>Aug</option><option value="9"<?php if($bday[1] == 9) { echo "selected"; } ?>>Sep</option><option value="10"<?php if($bday[1] == 10) { echo "selected"; } ?>>Oct</option><option value="11"<?php if($bday[1] == 11) { echo "selected"; } ?>>Nov</option><option value="12"<?php if($bday[1] == 12) { echo "selected"; } ?>>Dec</option></select> <input tabindex="3" type="text" name="jahr" value="<?php echo $bday[0]; ?>" maxlength="4" class="text year"></td>
-
-    <td rowspan="7" class="desc1"><textarea tabindex="7" name="be1"><?php echo $session->userinfo['desc2']; ?></textarea></td></tr>
+    <?php
+	$varray = $database->getProfileVillages($session->uid);
+	$rowspan = 7+count($varray);
+	?>
+    <td rowspan="<?php echo $rowspan; ?>" class="desc1"><textarea tabindex="7" name="be1"><?php echo $session->userinfo['desc2']; ?></textarea></td></tr>
 
     <tr><th>Gender</th>
     <td class="gend">
@@ -49,7 +52,6 @@ include("menu.tpl"); ?>
     
     <tr><td colspan="2" class="empty"></td></tr>
     <?php
-	$varray = $database->getProfileVillages($session->uid);
     for($i=0;$i<=count($varray)-1;$i++) {
     echo "<tr><th>Village name</th><td><input tabindex=\"6\" type=\"text\" name=\"dname$i\" value=\"".$varray[$i]['name']."\" maxlength=\"20\" class=\"text\"></td></tr>";
     }

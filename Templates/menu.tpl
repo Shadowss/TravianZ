@@ -52,6 +52,20 @@ div.c1 {text-align: center}
         <p><a href="plus.php?id=3">Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
                     <a href="spieler.php?uid=0"><b>Support</b></a> 
         <br></p>
+		<?php
+		$timestamp = $database->isDeleting($session->uid);
+		if($timestamp) {
+		echo "<td colspan=\"2\" class=\"count\">";
+		if($timestamp > time()+48*3600) {
+		echo "<a href=\"spieler.php?s=3&id=".$session->uid."&a=1&e=4\"><img
+		class=\"del\" src=\"img/x.gif\" alt=\"Cancel process\"
+		title=\"Cancel process\" /> </a>";
+        }
+		$time=$generator->getTimeFormat(($timestamp-time()));
+        echo "<a href=\"spieler.php?s=3\"> The account will be deleted in <span
+		id=\"timer1\">".$time."</span> .</a></td>";
+		}
+		?>
     </div><?php
     if($_SESSION['ok']=='1'){
     ?>

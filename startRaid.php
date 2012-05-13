@@ -1,4 +1,5 @@
 <?php
+if($session->access != BANNED){
         include ("GameEngine/Data/unitdata.php");
         include ("GameEngine/Database.php");
         include ("GameEngine/Generator.php");
@@ -115,4 +116,7 @@
     }
 	}
 header("Location: build.php?id=39&t=99");
+}else{
+header("Location: banned.php"); 
+}
 ?>

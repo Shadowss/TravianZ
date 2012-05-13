@@ -485,7 +485,7 @@ private function loyaltyRegeneration() {
             $database->query($q);
             $q = "UPDATE ".TB_PREFIX."odata set `crop` = `maxcrop` WHERE `crop` > `maxcrop`";
             $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `crop` = 100 WHERE `crop` < 0";
+            $q = "UPDATE ".TB_PREFIX."odata set `crop` = 0 WHERE `crop` < 0";
             $database->query($q);
             $q = "UPDATE ".TB_PREFIX."odata set `wood` = 0 WHERE `wood` < 0";
             $database->query($q);
@@ -509,8 +509,6 @@ private function loyaltyRegeneration() {
             $q = "UPDATE ".TB_PREFIX."vdata set `iron` = `maxstore` WHERE `iron` > `maxstore`";
             $database->query($q);
             $q = "UPDATE ".TB_PREFIX."vdata set `crop` = `maxcrop` WHERE `crop` > `maxcrop`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `crop` = 100 WHERE `crop` < 0";
             $database->query($q);
             $q = "UPDATE ".TB_PREFIX."vdata set `wood` = 0 WHERE `wood` < 0";
             $database->query($q);

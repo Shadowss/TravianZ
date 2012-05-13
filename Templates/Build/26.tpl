@@ -26,12 +26,17 @@ if($_POST AND $_GET['action'] == 'change_capital') {
           $query3 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . $data2['vref']) or die(mysql_error());
         }
       }
+	  
+	  for($i=19; $i<=40; ++$i) {
+        if($data2['f' . $i . 't'] == 29 or $data2['f' . $i . 't'] == 30 or $data2['f' . $i . 't'] == 38 or $data2['f' . $i . 't'] == 39 or $data2['f' . $i . 't'] == 42) {
+          $query3 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . $village->wid) or die(mysql_error());
+        }
+      }
       
       $query3 = mysql_query('UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 0 WHERE `wref` = ' . $data1['wref']);
       $query4 = mysql_query('UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 1 WHERE `wref` = ' . $village->wid);
     }
-    #print '<script language="javascript">location.href="build.php?id=' . $building->getTypeField(26) . '";</script>';
-  } else {
+	} else {
     $error = '<br /><font color="red">password is wrong</font><br />';
     $_SESSION['error_p'] = $error;
     $_SESSION['time_p'] = time();

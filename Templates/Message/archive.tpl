@@ -15,17 +15,17 @@ include("menu.tpl");
 	<th colspan="2" class="buttons">
 		<input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" /> <input name="start" type="image" value="Back" alt="Back" id="btn_back" class="dynamic_img" src="img/x.gif" /></th>
         <th class="navi"><?php 
-    if(!isset($_GET['s']) && count($message->archived) < 10) {
+    if(!isset($_GET['s']) && count($message->archived)-count($database->getDelArchive($session->uid)) < 10) {
     echo "&laquo;&raquo;";
     }
-    else if (!isset($_GET['s']) && count($message->archived) > 10) {
+    else if (!isset($_GET['s']) && count($message->archived)-count($database->getDelArchive($session->uid)) > 10) {
     echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
     }
-    else if(isset($_GET['s']) && count($message->archived) > $_GET['s']) {
-    	if(count($message->archived) > ($_GET['s']+10) && $_GET['s']-10 < count($message->archived) && $_GET['s'] != 0) {
+    else if(isset($_GET['s']) && count($message->archived)-count($database->getDelArchive($session->uid)) > $_GET['s']) {
+    	if(count($message->archived)-count($database->getDelArchive($session->uid)) > ($_GET['s']+10) && $_GET['s']-10 < count($message->archived)-count($database->getDelArchive($session->uid)) && $_GET['s'] != 0) {
          echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
-         else if(count($message->archived) > $_GET['s']+10) {
+         else if(count($message->archived)-count($database->getDelArchive($session->uid)) > $_GET['s']+10) {
          	echo "&laquo;<a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
         else {
@@ -42,7 +42,7 @@ include("menu.tpl");
     }
       $name = 1;
     for($i=(1+$s);$i<=(10+$s);$i++) {
-    if(count($message->archived) >= $i) {
+    if(count($message->archived)-count($database->getDelArchive($session->uid)) >= $i) {
     if($message->archived[$i-1]['owner'] == 0) {
     echo "<tr class=\"sup\">";
     }
@@ -60,7 +60,7 @@ include("menu.tpl");
         }
         $name++;
     }
-    if(count($message->archived) == 0) {
+    if(count($message->archived)-count($database->getDelArchive($session->uid)) == 0) {
     echo "<td colspan=\"4\" class=\"none\">There are no messages available in the archive.</td></tr>";
     }
     ?>

@@ -56,7 +56,7 @@ if($session->access == BANNED){
 <?php include("Templates/menu.tpl"); ?>
 <div id="content"  class="village1">
 <?php
-include("Templates/Admin/ban_msg.tpl");
+include("Admin/Templates/ban_msg.tpl");
 ?>
 </div>
 <div id="side_info">

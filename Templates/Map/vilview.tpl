@@ -460,7 +460,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 			<td class="none"><?php 
       $mode = CP; 
       $total = count($database->getProfileVillages($session->uid)); 
-      $need_cps = ${'cp'.$mode}[$total+1]; 
+      $need_cps = ${'cp'.$mode}[$total]; 
       $cps = floor($database->getUserField($session->uid, 'cp',0));      
       
       if($cps >= $need_cps) {
