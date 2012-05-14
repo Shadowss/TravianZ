@@ -141,11 +141,11 @@ include ("GameEngine/Lang/".LANG.".php");
                         </table>
                     </div>
                     <div id="about_the_game">
-                        <h2>About the game:</h2>
+                        <h2><?php echo $lang['index'][0][10]; ?>:</h2>
                         <ul>
-                            <li><?php echo $lang['index'][0][10]; ?></li>
                             <li><?php echo $lang['index'][0][11]; ?></li>
                             <li><?php echo $lang['index'][0][12]; ?></li>
+                            <li><?php echo $lang['index'][0][13]; ?></li>
                         </ul>
                     </div>
                 </div>
