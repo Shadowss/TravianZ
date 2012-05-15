@@ -1,6 +1,5 @@
 <?php
-	$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
-	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
+include("next.tpl");
 ?>
 <div id="build" class="gid35"><a href="#" onClick="return Popup(35,4);" class="build_logo">
 	<img class="building g35" src="img/x.gif" alt="Brewery" title="Brewery" />
@@ -17,7 +16,7 @@
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild;
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
 		if($next<=10){
         ?>
 			<th>Bonus at level <?php echo $next; ?>:</th>

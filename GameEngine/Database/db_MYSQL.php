@@ -1498,7 +1498,8 @@
 			
             function getDelArchive($uid) {
                 $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $uid and archived = 1 and deltarget = 1 OR owner = $uid and archived = 1 and delowner = 1 ORDER BY time DESC";
-				return mysql_query($q, $this->connection);
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
             }
 			
             function unarchiveNotice($id) {
@@ -1548,10 +1549,10 @@
                 return $dbarray[$field];
             }
 
-            function addBuilding($wid, $field, $type, $loop, $time) {
+            function addBuilding($wid, $field, $type, $loop, $time, $master, $level) {
                 $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $field . "t=" . $type . " WHERE vref=" . $wid;
                 mysql_query($x, $this->connection) or die(mysql_error());
-                $q = "INSERT into " . TB_PREFIX . "bdata values (0,$wid,$field,$type,$loop,$time)";
+                $q = "INSERT into " . TB_PREFIX . "bdata values (0,$wid,$field,$type,$loop,$time,$master,$level)";
                 return mysql_query($q, $this->connection);
             }
 
@@ -1567,6 +1568,9 @@
                     if($jobs[$i]['loopcon'] == 1) {
                         $jobLoopconID = $i;
                     }
+                    if($jobs[$i]['master'] == 1) {
+                        $jobMaster = $i;
+                    }
                 }
                 if(count($jobs) > 1 && ($jobs[0]['field'] == $jobs[1]['field'])) {
                     $SameBuildCount = 1;
@@ -1577,10 +1581,26 @@
                 if(count($jobs) > 2 && ($jobs[1]['field'] == $jobs[2]['field'])) {
                     $SameBuildCount = 3;
                 }
+				if(count($jobs) > 2 && ($jobs[0]['field'] == ($jobs[1]['field'] == $jobs[2]['field']))) {
+                    $SameBuildCount = 4;
+                }
 
                 if($SameBuildCount > 0) {
-                    if($d == $jobs[floor($SameBuildCount / 3)]['id'] || $d == $jobs[floor($SameBuildCount / 2) + 1]['id']) {
-                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,timestamp=" . $jobs[floor($SameBuildCount / 3)]['timestamp'] . " WHERE ID=" . $jobs[floor($SameBuildCount / 3)]['id'] . " OR ID=" . $jobs[floor($SameBuildCount / 2) + 1]['id'];
+					if($SameBuildCount == 4){
+					if($jobDeleted == 0){
+					$uprequire = $building->resourceRequired($jobs[1]['field'],$jobs[1]['type'],1);
+					$time = $uprequire['time'];
+					$timestamp = $time+time();
+					$q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=".$timestamp." WHERE id=".$jobs[1]['id']."";
+                        mysql_query($q, $this->connection);
+					}
+					$uprequire1 = $building->resourceRequired($jobs[$jobMaster]['field'],$jobs[$jobMaster]['type'],2);
+					$time1 = $uprequire1['time'];
+					$timestamp1 = $time1;
+					$q1 = "UPDATE " . TB_PREFIX . "bdata SET level=level-1,timestamp=".$timestamp1." WHERE id=".$jobs[$jobMaster]['id']."";
+                        mysql_query($q1, $this->connection);
+					}else if($d == $jobs[floor($SameBuildCount / 3)]['id'] || $d == $jobs[floor($SameBuildCount / 2) + 1]['id']) {
+                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . $jobs[floor($SameBuildCount / 3)]['timestamp'] . " WHERE master = 0 AND id > ".$d." and (ID=" . $jobs[floor($SameBuildCount / 3)]['id'] . " OR ID=" . $jobs[floor($SameBuildCount / 2) + 1]['id'] . ")";
                         mysql_query($q, $this->connection);
                     }
                 } else {
@@ -1596,7 +1616,7 @@
                     if(($jobLoopconID >= 0) && ($jobs[$jobDeleted]['loopcon'] != 1)) {
                         if(($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19)) {
                             $uprequire = $building->resourceRequired($jobs[$jobLoopconID]['field'], $jobs[$jobLoopconID]['type']);
-                            $x = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,timestamp=" . (time() + $uprequire['time']) . " WHERE wid=" . $jobs[$jobDeleted]['wid'] . " AND loopcon=1";
+                            $x = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,timestamp=" . (time() + $uprequire['time']) . " WHERE wid=" . $jobs[$jobDeleted]['wid'] . " AND loopcon=1 AND master=0";
                             mysql_query($x, $this->connection) or die(mysql_error());
                         }
                     }
@@ -1640,9 +1660,50 @@
             }
 
             function getJobs($wid) {
-                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by timestamp ASC";
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
+            }
+			
+            function getMasterJobs($wid) {
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and master = 1 order by master,timestamp ASC";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+			
+            function getMasterJobsByField($wid,$field) {
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 1 order by master,timestamp ASC";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+
+            function getBuildingByField($wid,$field) {
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+
+            function getBuildingByType($wid,$type) {
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+
+            function getDorf1Building($wid) {
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field < 19 and master = 0";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+
+            function getDorf2Building($wid) {
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field > 18 and master = 0";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+
+            function updateBuildingWithMaster($id, $time,$loop) {
+                $q = "UPDATE " . TB_PREFIX . "bdata SET master = 0, timestamp = ".$time.",loopcon = ".$loop." WHERE id = ".$id."";
+                return mysql_query($q, $this->connection);
             }
 
             function getVillageByName($name) {
@@ -2175,15 +2236,13 @@
             ***************************/
 
             function getWW() {
-			 for($i=1; $i<=40; $i++) {
-                $q = "SELECT * FROM " . TB_PREFIX . "fdata WHERE f99t = 40 or f".$i."t = 40";
+                $q = "SELECT * FROM " . TB_PREFIX . "fdata WHERE f99t = 40";
                 $result = mysql_query($q, $this->connection);
                 if(mysql_num_rows($result)) {
                     return true;
                 } else {
                     return false;
                 }
-			}
             }
 
             /***************************
@@ -2192,10 +2251,10 @@
             ***************************/
 
             function getWWLevel($vref) {
-                $q = "SELECT wwlevel FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
+                $q = "SELECT f99 FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
                 $result = mysql_query($q, $this->connection) or die(mysql_error());
                 $dbarray = mysql_fetch_array($result);
-                return $dbarray['wwlevel'];
+                return $dbarray['f99'];
             }
 
             /***************************

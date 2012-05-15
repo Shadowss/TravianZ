@@ -370,6 +370,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
   `type` tinyint(2) unsigned NOT NULL,
   `loopcon` tinyint(1) unsigned NOT NULL,
   `timestamp` int(10) unsigned NOT NULL,
+  `master` tinyint(1) unsigned NOT NULL,
+  `level` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -650,7 +652,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
   `f99` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `f99t` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `wwname` varchar(25) NOT NULL DEFAULT 'World Wonder',
-  `wwlevel` tinyint(2) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 
@@ -1338,6 +1339,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
 `exp2` int(10) NOT NULL,
 `exp3` int(10) NOT NULL,
 `created` int(11) NOT NULL,
+`natar` tinyint(1) unsigned NOT NULL,
 PRIMARY KEY (`wref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

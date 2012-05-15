@@ -1,6 +1,5 @@
 <?php
-	$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
-	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
+include("next.tpl");
 ?>
 <div id="build" class="gid23"><a href="#" onClick="return Popup(23,4);" class="build_logo">
 	<img class="building g23" src="img/x.gif" alt="Cranny" title="Cranny" />
@@ -29,15 +28,15 @@
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
 		if($next<=10){
         ?>
-		<th>Hidden units per resource at level <?php echo $village->resarray['f'.$id]+1+$loopsame+$doublebuild; ?>:</th>
+		<th>Hidden units per resource at level <?php echo $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master; ?>:</th>
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild]['attri']*2; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild]['attri']; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']; ?></b> units</td>
 		<?php
 			}}else{
         ?>

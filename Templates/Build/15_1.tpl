@@ -1,17 +1,25 @@
 <?php
 
 if($_REQUEST["cancel"] == "1") {
+if($session->access != BANNED){
 	$database->delDemolition($village->wid);
 	header("Location: build.php?gid=15&amp;cancel=0&amp;demolish=0");
+}else{
+header("Location: banned.php"); 
+}
 }
 
 if(!empty($_REQUEST["demolish"]) && $_REQUEST["c"] == $session->mchecker) {
+if($session->access != BANNED){
 	if($_REQUEST["type"] != null) 	{
 		$type = $_REQUEST['type'];
 		$database->addDemolition($village->wid,$type);
 		$session->changeChecker();
 		header("Location: build.php?gid=15&amp;cancel=0&amp;demolish=0");
 	}
+}else{
+header("Location: banned.php"); 
+}
 }
 
 if($village->resarray['f'.$id] >= DEMOLISH_LEVEL_REQ) {

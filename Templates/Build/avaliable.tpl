@@ -42,6 +42,8 @@ $herosmansion = $building->getTypeLevel(37);
 $greatwarehouse = $building->getTypeLevel(38);
 $greatgranary = $building->getTypeLevel(39);  
 $greatworkshop = $building->getTypeLevel(42);
+$ww = $building->getTypeLevel(40);
+$wwinbuild = count($database->getBuildingByType($village->wid,40));
 
 foreach ($database->getJobs($_SESSION['wid']) as $bdata) {
     $UnderConstruction = strtolower(str_replace(array(" ","'"),"",$building->procResType($bdata['type'])));
@@ -52,6 +54,9 @@ foreach ($database->getJobs($_SESSION['wid']) as $bdata) {
 ?>
 <div id="build" class="gid0"><h1>Construct new building</h1>
 <?php
+if($ww == 0 && $wwinbuild == 0 && $village->natar == 1){ //need to check if have ww buildplan too
+    include("avaliable/ww.tpl");
+}
 if($mainbuilding == 0 && $id != 39  && $id != 40) {
     include("avaliable/mainbuilding.tpl");
 }
@@ -391,6 +396,7 @@ if($greatworkshop == 0 && $workshop >= 18 && $village->capital == 0 && GREAT_WKS
     if($greatworkshop == 0 && $workshop >= 15 && $village->capital == 0 && GREAT_WKS) {
         include("soon/greatworkshop.tpl");
     }
+	}
     ?>
     </div><script language="JavaScript" type="text/javascript">
 function show_build_list(list) {
@@ -429,7 +435,4 @@ function show_build_list(list) {
     }
 }
 </script>
-<?php 
-}
-?>
 </div>

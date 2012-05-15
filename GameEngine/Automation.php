@@ -19,42 +19,13 @@ class Automation {
     private $bountyOpop = 1;
 
 		public function isWinner() { 
-		for ($i = 1; $i <= 40; $i++) {
-		$q = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40' or f".$i." = '100' and f".$i."t = '40'"); 
+		$q = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'"); 
 		$isThere = mysql_num_rows($q); 
 		if($isThere > 0) 
 		{ 
         header('Location: /winner.php'); 
 		}else{ 
         ## there is no winner 
-		} 
-		}
-	}
-	
-		private function getWWRankInfo() { 
-		global $database;
-		for ($i = 1; $i <= 40; $i++) {
-		$q = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE f99t = '40' or f".$i."t = '40'");
-		$ww = mysql_fetch_array($q);
-		if($ww['f99'] > 0){
-		$i = 99;
-		}
-		if(mysql_num_rows($q) > 0){
-		$database->setVillageLevel($ww['vref'], "wwlevel", $ww['f'.$i]);
-		}
-		}
-	}
-	
-		private function checkWWLevel() { 
-		global $database;
-		$q = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE wwlevel != 0");
-		$ww = mysql_fetch_array($q);
-		for ($i = 1; $i <= 40; $i++) {
-		if(mysql_num_rows($q) > 0){
-		if($ww['f99t'] != 40 && $ww['f'.$i.'t'] != 40){
-		$database->setVillageLevel($ww['vref'], "wwlevel", 0);
-		}
-		}
 		}
 	}
 	
@@ -147,6 +118,7 @@ class Automation {
 		$this->oasisResoucesProduce();
         $this->pruneResource();
         $this->pruneOResource();
+        $this->MasterBuilder();
         if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time()-filemtime("GameEngine/Prevention/culturepoints.txt")>10) {
             $this->culturePoints();
         }
@@ -193,8 +165,6 @@ class Automation {
             $this->demolitionComplete(); 
         } 
         $this->updateStore();
-		$this->getWWRankInfo();
-		$this->checkWWLevel();
     }
 
    function activeCropDead(){
@@ -548,10 +518,10 @@ private function loyaltyRegeneration() {
         global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
         $time = time();
         $array = array();
-        $q = "SELECT * FROM ".TB_PREFIX."bdata where timestamp < $time";
+        $q = "SELECT * FROM ".TB_PREFIX."bdata where timestamp < $time and master = 0";
         $array = $database->query_return($q);
         foreach($array as $indi) {
-            $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = f".$indi['field']." + 1, f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
+            $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
             if($database->query($q)) {
                 $level = $database->getFieldLevel($indi['wid'],$indi['field']);
                 $pop = $this->getPop($indi['type'],($level-1));
@@ -1894,8 +1864,6 @@ ${dead.$i}=$data['t'.$i];
                         $database->setVillageLevel($data['to'],"f40",0);
                         $database->setVillageLevel($data['to'],"f40t",0);
                         $database->clearExpansionSlot($data['to']);
-                        //kill a chief
-                        $database->modifyAttack($data['ref'],9,1);
 
 
                         $exp1 = $database->getVillageField($data['from'],'exp1');
@@ -2921,6 +2889,62 @@ private function demolitionComplete() {
 		$oasiscrop = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
 		$database->modifyOasisResource($getoasis['wref'],$oasiswood,$oasisclay,$oasisiron,$oasiscrop,1);
 		$database->updateOasis($getoasis['wref']);
+		}
+    }
+	
+    private function MasterBuilder() {
+        global $database;
+        $q = "SELECT * FROM ".TB_PREFIX."bdata WHERE master = 1";
+        $array = $database->query_return($q);
+	    foreach($array as $master) {
+		$villwood = $database->getVillageField($master['wid'],'wood');
+		$villclay = $database->getVillageField($master['wid'],'clay');
+		$villiron = $database->getVillageField($master['wid'],'iron');
+		$villcrop = $database->getVillageField($master['wid'],'crop');
+		$type = $master['type'];
+		$level = $master['level'];
+		$buildarray = $GLOBALS["bid".$type];
+		$buildwood = $buildarray[$level]['wood'];
+		$buildclay = $buildarray[$level]['clay'];
+		$buildiron = $buildarray[$level]['iron'];
+		$buildcrop = $buildarray[$level]['crop'];
+        $ww = count($database->getBuildingByType($master['wid'],40));
+		if($master['field'] < 19){
+		$bdata = count($database->getDorf1Building($master['wid']));
+		$bbdata = count($database->getDorf2Building($master['wid']));
+		$bdata1 = $database->getDorf1Building($master['wid']);
+		}else{
+		$bdata = count($database->getDorf2Building($master['wid']));
+		$bbdata = count($database->getDorf1Building($master['wid']));
+		$bdata1 = $database->getDorf2Building($master['wid']);
+		}
+		$owner = $database->getVillageField($master['wid'],'owner');
+		if($database->getUserField($owner,'plus',0) > time() or $ww > 0){
+		if($bbdata < 2){
+		$inbuild = 2;
+		}else{
+		$inbuild = 1;
+		}
+		}else{
+		$inbuild = 1;
+		}
+		if($bdata < $inbuild && $buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop){
+		$time = $master['timestamp']+time();
+		if(!empty($bdata1)){
+	    foreach($bdata1 as $master1) {
+		$time += ($master1['timestamp']-time());
+		}
+		}
+		if($bdata == 0){
+		$database->updateBuildingWithMaster($master['id'],$time,0);
+		}else{
+		$database->updateBuildingWithMaster($master['id'],$time,1);
+		}
+		$usergold = $database->getUserField($owner,'gold',0);
+		$gold = $usergold;
+		$database->updateUserField($owner,'gold',$gold,1);
+		$database->modifyResource($master['wid'],$buildwood,$buildclay,$buildiron,$buildcrop,0);
+		}
 		}
     }
 

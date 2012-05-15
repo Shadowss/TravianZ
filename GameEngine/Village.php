@@ -19,7 +19,7 @@ class Village {
 	public $type;
 	public $coor = array();
 	public $awood,$aclay,$airon,$acrop,$pop,$maxstore,$maxcrop;
-	public $wid,$vname,$capital;
+	public $wid,$vname,$capital,$natar,$master;
 	public $resarray = array();
 	public $unitarray,$techarray,$unitall,$researching,$abarray = array();
 	private $infoarray = array();
@@ -72,6 +72,7 @@ class Village {
 		$this->researching = $database->getResearching($this->wid);
 		
 		$this->capital = $this->infoarray['capital'];
+		$this->natar = $this->infoarray['natar'];
 		$this->currentcel = $this->infoarray['celebration'];
 		$this->wid = $this->infoarray['wref'];
 		$this->vname = $this->infoarray['name'];
@@ -84,6 +85,7 @@ class Village {
 		$this->maxcrop = $this->infoarray['maxcrop'];
 		$this->allcrop = $this->getCropProd();
 		$this->loyalty = $this->infoarray['loyalty'];
+		$this->master = count($database->getMasterJobs($this->wid));
 		//de gs in town, zetten op max pakhuisinhoud
 		if($this->awood>$this->maxstore){ $this->awood=$this->maxstore; $database->updateResource($this->wid,'wood',$this->maxstore); }
 		if($this->aclay>$this->maxstore){ $this->aclay=$this->maxstore; $database->updateResource($this->wid,'clay',$this->maxstore); }

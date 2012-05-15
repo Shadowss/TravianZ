@@ -260,7 +260,9 @@ class Building {
 			if($jobs['id'] == $d) {
 				$uprequire = $this->resourceRequired($jobs['field'],$jobs['type']);
 				if($database->removeBuilding($d)) {
+				if($jobs['master'] == 0){
 					$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],1);
+					}
 					if($jobs['field'] >= 19) {
 						header("Location: dorf2.php");
 					}
@@ -307,7 +309,8 @@ class Building {
 					$time = $this->buildArray[0]['timestamp'] + $uprequire['time'];
 				}
 			}
-			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time+($loop==1?ceil(60/SPEED):0))) {
+			$level = $database->getResourceLevel($village->wid);
+			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time+($loop==1?ceil(60/SPEED):0),0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]+($loopsame>0?2:1)),0);
 				if($id >= 19) {
@@ -347,7 +350,8 @@ class Building {
 					$time = $this->buildArray[0]['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
 				}
 			}
-			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time,0)) {
+			$level = $database->getResourceLevel($village->wid);
+			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time,0,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]-1),2);
 				header("Location: dorf2.php");
 			}
@@ -377,7 +381,8 @@ class Building {
 				}
 			}
 			if($this->meetRequirement($tid)) {
-				if($database->addBuilding($village->wid,$id,$tid,$loop,$time)) {
+			$level = $database->getResourceLevel($village->wid);
+				if($database->addBuilding($village->wid,$id,$tid,$loop,$time,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 					$logging->addBuildLog($village->wid,$this->procResType($tid),($village->resarray['f'.$id]+1),1);
 					$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
 					header("Location: dorf2.php");
@@ -486,7 +491,8 @@ class Building {
             if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
             break;  
 			case 40:
-			return false; //not implemented
+			//need to check if have ww buildplan too
+            if($village->natar == 1) { return true; } else { return false; }
 			break;
 			case 41:
 			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20) { return true; } else { return false; }
@@ -625,8 +631,8 @@ class Building {
 		foreach($this->buildArray as $jobs) {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
-		if($wwvillage['f99t']!=40 && $wwvillage['f1t']!=40 && $wwvillage['f2t']!=40 && $wwvillage['f3t']!=40 && $wwvillage['f4t']!=40 && $wwvillage['f5t']!=40 && $wwvillage['f6t']!=40 && $wwvillage['f7t']!=40 && $wwvillage['f8t']!=40 && $wwvillage['f9t']!=40 && $wwvillage['f10t']!=40 && $wwvillage['f11t']!=40 && $wwvillage['f12t']!=40 && $wwvillage['f13t']!=40 && $wwvillage['f14t']!=40 && $wwvillage['f15t']!=40 && $wwvillage['f16t']!=40 && $wwvillage['f17t']!=40 && $wwvillage['f18t']!=40 && $wwvillage['f19t']!=40 && $wwvillage['f20t']!=40 && $wwvillage['f21t']!=40 && $wwvillage['f22t']!=40 && $wwvillage['f23t']!=40 && $wwvillage['f24t']!=40 && $wwvillage['f25t']!=40 && $wwvillage['f26t']!=40 && $wwvillage['f27t']!=40 && $wwvillage['f28t']!=40 && $wwvillage['f29t']!=40 && $wwvillage['f30t']!=40 && $wwvillage['f31t']!=40 && $wwvillage['f32t']!=40 && $wwvillage['f33t']!=40 && $wwvillage['f34t']!=40 && $wwvillage['f35t']!=40 && $wwvillage['f36t']!=40 && $wwvillage['f37t']!=40 && $wwvillage['f38t']!=40 && $wwvillage['f39t']!=40 && $wwvillage['f40t']!=40){
-			$level = $database->getFieldLevel($jobs['wid'],$jobs['field']);
+		if($wwvillage['f99t']!=40){
+		$level = $database->getFieldLevel($jobs['wid'],$jobs['field']);
 			$level = ($level == -1) ? 0 : $level;
 			if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
 			$gold=$database->getUserField($_SESSION['username'],'gold','username');

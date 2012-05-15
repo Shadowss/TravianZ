@@ -39,5 +39,5 @@ for($i=1;$i<=$amt;$i++) {
     mysql_query("Insert into ".TB_PREFIX."admin_log values (0,$id,'Added <b>$amt</b> WW Buildingplan Villages',".time().")");
 
 
-header("Location: ../../../admin.php?p=natarbuildingplan&g");
+header("Location: ../../../Admin/admin.php?p=natarbuildingplan&g");
 ?>
