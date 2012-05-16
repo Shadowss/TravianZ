@@ -2941,7 +2941,7 @@ private function demolitionComplete() {
 		$database->updateBuildingWithMaster($master['id'],$time,1);
 		}
 		$usergold = $database->getUserField($owner,'gold',0);
-		$gold = $usergold;
+		$gold = $usergold-1;
 		$database->updateUserField($owner,'gold',$gold,1);
 		$database->modifyResource($master['wid'],$buildwood,$buildclay,$buildiron,$buildcrop,0);
 		}
