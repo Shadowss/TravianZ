@@ -1584,15 +1584,42 @@
 				if(count($jobs) > 2 && ($jobs[0]['field'] == ($jobs[1]['field'] == $jobs[2]['field']))) {
                     $SameBuildCount = 4;
                 }
+				if(count($jobs) > 2 && ($jobs[0]['field'] == ($jobs[1]['field'] == $jobs[3]['field']))) {
+                    $SameBuildCount = 5;
+                }
+				if(count($jobs) > 2 && ($jobs[0]['field'] == ($jobs[2]['field'] == $jobs[3]['field']))) {
+                    $SameBuildCount = 6;
+                }
+				if(count($jobs) > 2 && ($jobs[1]['field'] == ($jobs[2]['field'] == $jobs[3]['field']))) {
+                    $SameBuildCount = 7;
+                }
 
                 if($SameBuildCount > 0) {
-					if($SameBuildCount == 4){
+					if($SameBuildCount > 3){
+					if($SameBuildCount == 4 or $SameBuildCount == 5){
 					if($jobDeleted == 0){
 					$uprequire = $building->resourceRequired($jobs[1]['field'],$jobs[1]['type'],1);
 					$time = $uprequire['time'];
 					$timestamp = $time+time();
 					$q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=".$timestamp." WHERE id=".$jobs[1]['id']."";
                         mysql_query($q, $this->connection);
+					}
+					}else if($SameBuildCount == 6){
+					if($jobDeleted == 0){
+					$uprequire = $building->resourceRequired($jobs[2]['field'],$jobs[2]['type'],1);
+					$time = $uprequire['time'];
+					$timestamp = $time+time();
+					$q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=".$timestamp." WHERE id=".$jobs[2]['id']."";
+                        mysql_query($q, $this->connection);
+					}
+					}else if($SameBuildCount == 7){
+					if($jobDeleted == 1){
+					$uprequire = $building->resourceRequired($jobs[2]['field'],$jobs[2]['type'],1);
+					$time = $uprequire['time'];
+					$timestamp = $time+time();
+					$q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=".$timestamp." WHERE id=".$jobs[2]['id']."";
+                        mysql_query($q, $this->connection);
+					}
 					}
 					$uprequire1 = $building->resourceRequired($jobs[$jobMaster]['field'],$jobs[$jobMaster]['type'],2);
 					$time1 = $uprequire1['time'];
