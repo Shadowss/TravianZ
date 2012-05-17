@@ -64,7 +64,9 @@ class Building {
 			return 10;
 		} else if($this->isMax($tid,$id,2) && $this->isLoop($id) && $this->isCurrent($id)) {
 			return 10;
-		} 
+		} else if($this->isMax($tid,$id,3) && $this->isLoop($id) && $this->isCurrent($id) && count($database->getMasterJobs($village->wid)) > 0) {
+			return 10;
+		}
 		else {
 			if($this->allocated <= $this->maxConcurrent) {
 				$resRequired = $this->resourceRequired($id,$village->resarray['f'.$id.'t']);
@@ -392,7 +394,7 @@ class Building {
 	}
 	
 	private function meetRequirement($id) {
-		global $village;
+		global $village,$database;
 		switch($id) {
 			case 1:
 			case 2:
@@ -491,8 +493,8 @@ class Building {
             if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
             break;  
 			case 40:
-			//need to check if have ww buildplan too
-            if($village->natar == 1) { return true; } else { return false; }
+			$wwbuildingplan = count($database->getOwnArtefactInfoByType2($village->wid,11));
+            if($village->natar == 1 && $wwbuildingplan > 0) { return true; } else { return false; }
 			break;
 			case 41:
 			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20) { return true; } else { return false; }

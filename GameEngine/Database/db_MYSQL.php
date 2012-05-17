@@ -1999,6 +1999,12 @@
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
 			}
+
+			function getUserByAlliance($aid){
+			    $q = "SELECT * FROM " . TB_PREFIX . "users where alliance = $aid";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+			}
 			
             function getHeroRanking() {
                 $q = "SELECT * FROM " . TB_PREFIX . "hero WHERE dead = 0";
@@ -2612,11 +2618,19 @@
                 $result = mysql_query($q, $this->connection);
                 return mysql_fetch_array($result);
             }
+
             function getOwnArtefactInfoByType($vref, $type) {
                 $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type";
                 $result = mysql_query($q, $this->connection);
                 return mysql_fetch_array($result);
             }
+
+            function getOwnArtefactInfoByType2($vref, $type) {
+                $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type";
+				$result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+
             function getOwnUniqueArtefactInfo($id, $type, $size) {
                 $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size";
                 $result = mysql_query($q, $this->connection);

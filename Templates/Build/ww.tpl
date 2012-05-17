@@ -42,6 +42,6 @@ echo 'You can not change the name of the World Wonder after level 10.
 		  ?>
 
 <?php
-include("upgrade.tpl");
+include("wwupgrade.tpl");
 ?>
 </p></div>

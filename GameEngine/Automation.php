@@ -118,7 +118,6 @@ class Automation {
 		$this->oasisResoucesProduce();
         $this->pruneResource();
         $this->pruneOResource();
-        $this->MasterBuilder();
         if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time()-filemtime("GameEngine/Prevention/culturepoints.txt")>10) {
             $this->culturePoints();
         }
@@ -165,6 +164,7 @@ class Automation {
             $this->demolitionComplete(); 
         } 
         $this->updateStore();
+		$this->MasterBuilder();
     }
 
    function activeCropDead(){
@@ -2928,7 +2928,8 @@ private function demolitionComplete() {
 		}else{
 		$inbuild = 1;
 		}
-		if($bdata < $inbuild && $buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop){
+		$usergold = $database->getUserField($owner,'gold',0);
+		if($bdata < $inbuild && $buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop && $usergold > 0){
 		$time = $master['timestamp']+time();
 		if(!empty($bdata1)){
 	    foreach($bdata1 as $master1) {
@@ -2940,7 +2941,6 @@ private function demolitionComplete() {
 		}else{
 		$database->updateBuildingWithMaster($master['id'],$time,1);
 		}
-		$usergold = $database->getUserField($owner,'gold',0);
 		$gold = $usergold-1;
 		$database->updateUserField($owner,'gold',$gold,1);
 		$database->modifyResource($master['wid'],$buildwood,$buildclay,$buildiron,$buildcrop,0);
