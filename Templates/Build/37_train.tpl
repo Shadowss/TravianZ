@@ -21,8 +21,8 @@ if($session->tribe == 1) {
     $output.=" <tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u1\" src=\"img/x.gif\" alt=\"Legionnaire\" title=\"Legionnaire\" />
-						Legionnaire
+						<img class=\"unit u1\" src=\"img/x.gif\" alt=\"".U1."\" title=\"".U1."\" />
+						".U1."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u1['wood']."|
@@ -54,8 +54,8 @@ if($session->tribe == 1) {
         $output.="<tr>
                     <td class=\"desc\">
         				<div class=\"tit\">
-        					<img class=\"unit u2\" src=\"img/x.gif\" alt=\"Praetorian\" title=\"Praetorian\" />
-        					Praetorian
+        					<img class=\"unit u2\" src=\"img/x.gif\" alt=\"".U2."\" title=\"".U2."\" />
+        					".U2."
         				</div>
         				<div class=\"details\">
         					<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u2['wood']."|
@@ -87,8 +87,8 @@ if($session->tribe == 1) {
         $output.="<tr>
                         <td class=\"desc\">
         					<div class=\"tit\">
-        						<img class=\"unit u3\" src=\"img/x.gif\" alt=\"Imperian\" title=\"Imperian\" />
-        						Imperian
+        						<img class=\"unit u3\" src=\"img/x.gif\" alt=\"".U3."\" title=\"".U3."\" />
+        						".U3."
         					</div>
         					<div class=\"details\">
         						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u3['wood']."|
@@ -120,8 +120,8 @@ if($session->tribe == 1) {
         $output.= "<tr>
                     <td class=\"desc\">
     					<div class=\"tit\">
-    						<img class=\"unit u5\" src=\"img/x.gif\" alt=\"Equites Imperatoris\" title=\"Equites Imperatoris\" />
-    						Equites Imperatoris
+    						<img class=\"unit u5\" src=\"img/x.gif\" alt=\"".U5."\" title=\"".U5."\" />
+    						".U5."
     					</div>
     					<div class=\"details\">
     						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u5['wood']."|
@@ -151,8 +151,8 @@ if($session->tribe == 1) {
         $output.="<tr>
                     <td class=\"desc\">
     					<div class=\"tit\">
-    						<img class=\"unit u6\" src=\"img/x.gif\" alt=\"Equites Caesaris\" title=\"Equites Caesaris\" />
-    						Equites Caesaris
+    						<img class=\"unit u6\" src=\"img/x.gif\" alt=\"".U6."\" title=\"".U6."\" />
+    						".U6."
     					</div>
     					<div class=\"details\">
     						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u6['wood']."|
@@ -185,8 +185,8 @@ if($session->tribe == 2) {
 $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u11\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u11\" src=\"img/x.gif\" alt=\"".U11."\" title=\"".U11."\" />
+						".U11."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u11['wood']."|
@@ -216,8 +216,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u12\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u12\" src=\"img/x.gif\" alt=\"".U12."\" title=\"".U12."\" />
+						".U12."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u12['wood']."|
@@ -248,8 +248,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u13\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u13\" src=\"img/x.gif\" alt=\"".U13."\" title=\"".U13."\" />
+						".U13."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u13['wood']."|
@@ -279,8 +279,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u15\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u15\" src=\"img/x.gif\" alt=\"".U15."\" title=\"".U15."\" />
+						".U15."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u15['wood']."|
@@ -311,8 +311,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u16\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u16\" src=\"img/x.gif\" alt=\"".U16."\" title=\"".U16."\" />
+						".U16."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u16['wood']."|
@@ -345,8 +345,8 @@ if($session->tribe == 3) {
 $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u21\" src=\"img/x.gif\" alt=\"Phalanx\" title=\"Phalanx\" />
-						Phalanx
+						<img class=\"unit u21\" src=\"img/x.gif\" alt=\"".U21."\" title=\"".U21."\" />
+						".U21."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u21['wood']."|
@@ -376,8 +376,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u22\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u22\" src=\"img/x.gif\" alt=\"".U22."\" title=\"".U22."\" />
+						".U22."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u22['wood']."|
@@ -408,8 +408,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u24\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u24\" src=\"img/x.gif\" alt=\"".U24."\" title=\"".U24."\" />
+						".U24."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u24['wood']."|
@@ -439,8 +439,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u25\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u25\" src=\"img/x.gif\" alt=\"".U25."\" title=\"".U25."\" />
+						".U25."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u25['wood']."|
@@ -471,8 +471,8 @@ $output.="<tr>
         $output.="<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u26\" src=\"img/x.gif\" alt=\"Clubswinger\" title=\"Clubswinger\" />
-						Clubswinger
+						<img class=\"unit u26\" src=\"img/x.gif\" alt=\"".U26."\" title=\"".U26."\" />
+						".U26."
 					</div>
 					<div class=\"details\">
 						<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".$u26['wood']."|

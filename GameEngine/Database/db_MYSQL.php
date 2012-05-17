@@ -21,7 +21,7 @@
             function register($username, $password, $email, $tribe, $locate, $act) {
                 $time = time();
                 $timep = (time() + PROTECTION);
-                $q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,location,act,protect,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, $locate, '$act', $timep, $time)";
+                $q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,location,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, $locate, '$act', $timep, $time, $time)";
                 if(mysql_query($q, $this->connection)) {
                     return mysql_insert_id($this->connection);
                 } else {

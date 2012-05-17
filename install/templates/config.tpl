@@ -36,12 +36,12 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<td><span class="f9 c6">Beginners protection length:</span></td><td>
 				<select name="beginner">
 				<option value="0">None (0 hours)</option>
-				<option value="3600*6">6 hours</option>
-				<option value="3600*12" selected="selected">12 hours</option>
-				<option value="3600*24">24 hours</option>
-				<option value="3600*36">36 hours</option>
-				<option value="3600*48">48 hours</option>
-				<option value="3600*72">72 hours</option>
+				<option value="21600">6 hours</option>
+				<option value="43200" selected="selected">12 hours</option>
+				<option value="86400">24 hours</option>
+				<option value="129600">36 hours</option>
+				<option value="172800">48 hours</option>
+				<option value="259200">72 hours</option>
 				</select>
 		</td></tr><tr></tr>	
 	<td><span class="f9 c6">Plus account length:</span></td><td>

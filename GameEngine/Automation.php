@@ -124,9 +124,6 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/updatehero.txt") or time()-filemtime("GameEngine/Prevention/updatehero.txt")>50) {
 	        $this->updateHero();
 		}
-        if(!file_exists("GameEngine/Prevention/research.txt") or time()-filemtime("GameEngine/Prevention/research.txt")>10) {
-            $this->researchComplete();
-        }
         if(!file_exists("GameEngine/Prevention/cleardeleting.txt") or time()-filemtime("GameEngine/Prevention/cleardeleting.txt")>10) {
             $this->clearDeleting();
         }
@@ -134,17 +131,28 @@ class Automation {
         { 
             $this->buildComplete(); 
         } 
+		$this->MasterBuilder();
+		if (! file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt") > 10) 
+        { 
+            $this->demolitionComplete(); 
+        }
         $this->updateStore();
         if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>10) {
             $this->marketComplete();
         }
+		if(!file_exists("GameEngine/Prevention/research.txt") or time()-filemtime("GameEngine/Prevention/research.txt")>10) {
+            $this->researchComplete();
+        }
         if(!file_exists("GameEngine/Prevention/training.txt") or time()-filemtime("GameEngine/Prevention/training.txt")>10) {
             $this->trainingComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/celebration.txt") or time()-filemtime("GameEngine/Prevention/celebration.txt")>10) {
+            $this->celebrationComplete();
         }
         if(!file_exists("GameEngine/Prevention/sendunits.txt") or time()-filemtime("GameEngine/Prevention/sendunits.txt")>10) {
             $this->sendunitsComplete();
         }
-          if(!file_exists("GameEngine/Prevention/loyalty.txt") or time()-filemtime("GameEngine/Prevention/loyalty.txt")>50) {
+        if(!file_exists("GameEngine/Prevention/loyalty.txt") or time()-filemtime("GameEngine/Prevention/loyalty.txt")>50) {
 	        $this->loyaltyRegeneration();
 		}
         if(!file_exists("GameEngine/Prevention/sendreinfunits.txt") or time()-filemtime("GameEngine/Prevention/sendreinfunits.txt")>10) {
@@ -156,15 +164,7 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/settlers.txt") or time()-filemtime("GameEngine/Prevention/settlers.txt")>10) {
             $this->sendSettlersComplete();
         }
-        if(!file_exists("GameEngine/Prevention/celebration.txt") or time()-filemtime("GameEngine/Prevention/celebration.txt")>10) {
-            $this->celebrationComplete();
-        }
-        if (! file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt") > 10) 
-        { 
-            $this->demolitionComplete(); 
-        } 
         $this->updateStore();
-		$this->MasterBuilder();
     }
 
    function activeCropDead(){
@@ -278,7 +278,7 @@ if (array_sum($unitarr)>0){
 	   }
 
    }
-private function loyaltyRegeneration() {
+	private function loyaltyRegeneration() {
         global $database;
         $array = array();
         $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE loyalty<>100";
@@ -501,7 +501,7 @@ private function loyaltyRegeneration() {
         $array = $database->query_return($q);
         
         foreach($array as $indi) {
-            if($indi['lastupdate'] <= $time){
+            if($indi['lastupdate'] <= $time && $indi['lastupdate'] > 0){
                 $cp = $database->getVSumField($indi['id'], 'cp') * (time()-$indi['lastupdate'])/86400;
 
                 $newupdate = time();

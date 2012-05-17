@@ -630,6 +630,7 @@ class Building {
 		global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
 		if($session->access!=BANNED){
 		if($session->gold >= 2){
+		
 		foreach($this->buildArray as $jobs) {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
@@ -637,8 +638,7 @@ class Building {
 		$level = $database->getFieldLevel($jobs['wid'],$jobs['field']);
 			$level = ($level == -1) ? 0 : $level;
 			if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
-			$gold=$database->getUserField($_SESSION['username'],'gold','username');
-			$gold-=2;
+			$finish = 1;
 			$database->updateUserField($_SESSION['username'],'gold',$gold,0);
 				$resource = $this->resourceRequired($jobs['field'],$jobs['type']);
 				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = f".$jobs['field']." + 1, f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
@@ -685,6 +685,10 @@ class Building {
 				}
 				if(($jobs['field'] >= 19 && ($session->tribe == 1 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1)) { $innertimestamp = $jobs['timestamp']; }
 			}
+		if($finish == 1){
+		$gold=$database->getUserField($_SESSION['username'],'gold','username');
+		$gold-=2;
+		}
 		}
 		}
 		}
