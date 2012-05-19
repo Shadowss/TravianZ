@@ -2092,7 +2092,25 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
                     $database->addNotice($from['owner'],$to['wref'],$ownally,3,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
                     }
             }
-
+            unset($Attacker);
+            unset($Defender);
+            unset($Enforce);
+            unset($unitssend_att);
+            unset($unitssend_def);
+            unset($battlepart);
+            unset($unitsdead_def);
+            unset($dead);
+            unset($steal);
+            unset($from);
+            unset($data);
+            unset($data2);
+            unset($to);
+            unset($artifact);
+            unset($artifactBig);
+            unset($canclaim);
+            unset($data_fail);
+            unset($owntribe);
+            unset($unitsdead_att);
            }
             if(file_exists("GameEngine/Prevention/sendunits.txt")) {
                 @unlink("GameEngine/Prevention/sendunits.txt");
