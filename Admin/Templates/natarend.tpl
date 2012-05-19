@@ -6,7 +6,7 @@
 
 ## --------------------------------------------------------------------------- ##
 
-## Filename natarend.php ##
+## Filename natarend.tpl ##
 
 ## Developed by: advocaite ##
 

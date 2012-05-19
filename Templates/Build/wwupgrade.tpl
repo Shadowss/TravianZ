@@ -9,7 +9,7 @@ $needed_plan = 0;
 }
 $alli_users = $database->getUserByAlliance($session->alliance);
 $wwbuildingplan = 0;
-if(!empty(($alli_users))){
+if(!empty($alli_users)){
 foreach($alli_users as $users){
 $villages = $database->getVillageID($users['id']);
 foreach($villages as $village){

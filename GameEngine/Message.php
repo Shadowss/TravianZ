@@ -13,7 +13,7 @@
 
         	public $unread, $nunread = false;
         	public $note;
-        	public $inbox, $sent, $reading, $reply, $archived, $noticearray, $delnoticearray, $readingNotice = array();
+        	public $inbox, $inbox1, $sent, $sent1, $reading, $reply, $archived, $archived1, $noticearray, $notice, $readingNotice = array();
         	private $totalMessage, $totalNotice;
         	private $allNotice = array();
 
@@ -91,7 +91,7 @@
         			}
 					if (!is_array($type)) { $type = array($type); }
 					$this->noticearray = $this->filter_by_value($database->getNotice($session->uid), "ntype", $type);
-					$this->delnoticearray = $this->filter_by_value($database->getDelNotice($session->uid), "ntype", $type);
+					$this->notice = $this->filter_by_value($database->getNotice3($session->uid), "ntype", $type);
         		}
         		if(isset($get['id'])) {
         			$this->readingNotice = $this->getReadNotice($get['id']);
@@ -179,9 +179,9 @@
 
         	private function getNotice() {
         		global $database, $session;
-        		$this->allNotice = $database->getNotice($session->uid);
-        		$this->noticearray = $this->filter_by_value_except($this->allNotice, "ntype", 9);
-				$this->delnoticearray = $this->filter_by_value_except($database->getDelNotice($session->uid), "ntype", 9);
+        		$this->allNotice = $database->getNotice3($session->uid);
+        		$this->noticearray = $this->filter_by_value_except($database->getNotice($session->uid), "ntype", 9);
+				$this->notice = $this->filter_by_value_except($this->allNotice, "ntype", 9);
         		$this->totalNotice = count($this->allNotice);
         	}
 
@@ -285,8 +285,11 @@
         		global $database, $session;
         		$this->inbox = $database->getMessage($session->uid, 1);
         		$this->sent = $database->getMessage($session->uid, 2);
+        		$this->inbox1 = $database->getMessage($session->uid, 9);
+        		$this->sent1 = $database->getMessage($session->uid, 10);
         		if($session->plus) {
         			$this->archived = $database->getMessage($session->uid, 6);
+        			$this->archived1 = $database->getMessage($session->uid, 11);
         		}
         		$this->totalMessage = count($this->inbox) + count($this->sent);
         	}

@@ -139,6 +139,26 @@
                 return $dbarray[$field];
             }
 
+            function getVrefField($ref, $field){
+                    $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = '$ref'";
+                    $result = mysql_query($q, $this->connection) or die(mysql_error());
+                    $dbarray = mysql_fetch_array($result);
+                    return $dbarray[$field];
+            }
+
+            function getVrefCapital($ref){
+                $q = "SELECT * FROM " . TB_PREFIX . "vdata where owner = '$ref' and capital = 1";
+                $result = mysql_query($q, $this->connection) or die(mysql_error());
+                $dbarray = mysql_fetch_array($result);
+                return $dbarray;
+            }
+
+			function getStarvation(){
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata where starv != 0";
+                    $result = mysql_query($q, $this->connection);
+                    return $this->mysql_fetch_all($result);
+            }
+
             function getActivateField($ref, $field, $mode) {
                 if(!$mode) {
                     $q = "SELECT $field FROM " . TB_PREFIX . "activate where id = '$ref'";
@@ -1475,8 +1495,17 @@
                     case 8:
                         $q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,delowner = 1,viewed = 1 where id = $id";
                         break;
+                    case 9:
+                        $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $id and send = 0 and archived = 0 and deltarget = 0 ORDER BY time DESC";
+                        break;
+                    case 10:
+                        $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner = $id and delowner = 0 ORDER BY time DESC";
+                        break;
+                    case 11:
+                        $q = "SELECT * FROM " . TB_PREFIX . "mdata where target = $id and send = 0 and archived = 1 and deltarget = 0";
+                        break;
                 }
-                if($mode <= 3 || $mode == 6) {
+                if($mode <= 3 || $mode == 6 || $mode > 8) {
                     $result = mysql_query($q, $this->connection);
                     return $this->mysql_fetch_all($result);
                 } else {
@@ -1531,13 +1560,7 @@
             }
 
             function getNotice($uid) {
-                $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
-                $result = mysql_query($q, $this->connection);
-                return $this->mysql_fetch_all($result);
-            }
-			
-            function getDelNotice($uid) {
-                $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 1 ORDER BY time DESC";
+                $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 0 ORDER BY time DESC";
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
             }
@@ -1547,6 +1570,12 @@
                 $result = mysql_query($q, $this->connection);
                 $dbarray = mysql_fetch_array($result);
                 return $dbarray[$field];
+            }
+			
+            function getNotice3($uid) {
+                $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
             }
 
             function addBuilding($wid, $field, $type, $loop, $time, $master, $level) {
@@ -2062,6 +2091,17 @@
                     $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column + $value WHERE heroid = $heroid";
                 } else {
                     $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column - $value WHERE heroid = $heroid";
+                }
+                return mysql_query($q, $this->connection);
+            }
+			
+            function modifyHeroByOwner($column,$value,$uid,$mode=0) {
+                if(!$mode) {
+                    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $value WHERE uid = $uid";
+                } elseif($mode=1) {
+                    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column + $value WHERE uid = $uid";
+                } else {
+                    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column - $value WHERE uid = $uid";
                 }
                 return mysql_query($q, $this->connection);
             }
@@ -2768,19 +2808,16 @@
             }
             
             function editSlotFarm($eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
-                
                 $q = "UPDATE " . TB_PREFIX . "raidlist set lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6', t7 = '$t7', t8 = '$t8', t9 = '$t9', t10 = '$t10' WHERE id = $eid";
                 return mysql_query($q, $this->connection);
-
             }
             
-        function getArrayMemberVillage($uid){
-
-        $q = 'SELECT a.wref, a.name, b.x, b.y from '.TB_PREFIX.'vdata AS a left join '.TB_PREFIX.'wdata AS b ON b.id = a.wref where owner = '.$uid.' order by capital DESC,pop DESC';
-        $result = mysql_query($q, $this->connection);
-        $array = $this->mysql_fetch_all($result);
-        return $array;
-        }
+			function getArrayMemberVillage($uid){
+				$q = 'SELECT a.wref, a.name, b.x, b.y from '.TB_PREFIX.'vdata AS a left join '.TB_PREFIX.'wdata AS b ON b.id = a.wref where owner = '.$uid.' order by capital DESC,pop DESC';
+				$result = mysql_query($q, $this->connection);
+				$array = $this->mysql_fetch_all($result);
+				return $array;
+			}
 
             function addPassword($uid, $npw, $cpw){
                 $q = "REPLACE INTO `" . TB_PREFIX . "password`(uid, npw, cpw) VALUES ($uid, '$npw', '$cpw')";
@@ -2801,6 +2838,77 @@
 
                 return false;
             }
+
+            function getCropProdstarv($wref) {
+			global $bid4,$bid8,$bid9,$sesion,$technology;
+
+				$basecrop = $grainmill = $bakery = 0;
+                $owner = $this->getVrefField($wref, 'owner');
+                $bonus = $this->getUserField($owner, b4, 0);  
+
+                $buildarray = $this->getResourceLevel($wref);
+				$cropholder = array();
+				for($i=1;$i<=38;$i++) {
+                    if($buildarray['f'.$i.'t'] == 4) {
+                        array_push($cropholder,'f'.$i);
+                    }
+                    if($buildarray['f'.$i.'t'] == 8) {
+                        $grainmill = $buildarray['f'.$i];
+                    }
+                    if($buildarray['f'.$i.'t'] == 9) {
+                        $bakery = $buildarray['f'.$i];
+                    }
+				}
+                $q = "SELECT type FROM `" . TB_PREFIX . "odata` WHERE conqured = $wref";
+                $result = mysql_query($q, $this->connection) or die(mysql_error());
+                $oasis = mysql_fetch_array($result);
+				foreach($oasis as $oa){
+                    switch($oa['type']) {
+                        case 1:
+                        case 2:
+                        $wood += 1;
+                        break;
+                        case 3:
+                        $wood += 1;
+                        $cropo += 1;
+                        break;
+                        case 4:
+                        case 5:
+                        $clay += 1;
+                        break;
+                        case 6:
+                        $clay += 1;
+                        $cropo += 1;
+                        break;
+                        case 7:
+                        case 8:
+                        $iron += 1;
+                        break;
+                        case 9:
+                        $iron += 1;
+                        $cropo += 1;
+                        break;
+                        case 10:
+                        case 11:
+                        $cropo += 1;
+                        break;
+                        case 12:
+                        $cropo += 2;
+                        break;
+                    }
+				}
+				for($i=0;$i<=count($cropholder)-1;$i++) { $basecrop+= $bid4[$buildarray[$cropholder[$i]]]['prod']; }
+				$crop = $basecrop + $basecrop * 0.25 * $cropo;
+				if($grainmill >= 1 || $bakery >= 1) {
+                    $crop += $basecrop /100 * ($bid8[$grainmill]['attri'] + $bid9[$bakery]['attri']);
+				}
+				if($bonus > time()) {
+                    $crop *= 1.25;
+				}
+				$crop *= SPEED;
+				return $crop;
+            }
+
         }
         ;
 

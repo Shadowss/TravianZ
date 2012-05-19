@@ -66,7 +66,6 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
 	  $count = 0;
     for($i=(1+$s);$i<=(10+$s);$i++) {
     if(count($message->noticearray) >= $i) {
-	if($message->noticearray[$i-1]['del'] == 0){
     echo "<tr><td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->noticearray[$i-1]['id']."\" /></td>
 		<td class=\"sub\">";
         $type = (isset($_GET['t']) && $_GET['t'] == 5)? $message->noticearray[$i-1]['archive'] : $message->noticearray[$i-1]['ntype'];
@@ -84,10 +83,10 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
     }
     $date = $generator->procMtime($message->noticearray[$i-1]['time']);
 	echo "</div></td><td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
-        }}
+        }
         $name++;
     }
-    if(count($message->noticearray)-count($message->delnoticearray) == 0) {
+    if(count($message->noticearray) == 0) {
      echo "<td colspan=\"3\" class=\"none\">There are no reports available.</td></tr>";
     } 
     ?>

@@ -24,17 +24,17 @@ include("menu.tpl");
         <?php if($session->plus) { echo "<input name=\"archive\" value=\"Archive\" type=\"image\" id=\"btn_archiv\" class=\"dynamic_img\" src=\"img/x.gif\" alt=\"Archive\" />"; } ?>
         <input name="ft" value="m3" type="hidden" />
 	</th><th class="navi"><?php 
-    if(!isset($_GET['s']) && count($message->inbox)-count($database->getDelInbox($session->uid)) < 10) {
+    if(!isset($_GET['s']) && count($message->inbox1) < 10) {
     echo "&laquo;&raquo;";
     }
-    else if (!isset($_GET['s']) && count($message->inbox)-count($database->getDelInbox($session->uid)) > 10) {
+    else if (!isset($_GET['s']) && count($message->inbox1) > 10) {
     echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
     }
-    else if(isset($_GET['s']) && count($message->inbox)-count($database->getDelInbox($session->uid)) > $_GET['s']) {
-    	if(count($message->inbox)-count($database->getDelInbox($session->uid)) > ($_GET['s']+10) && $_GET['s']-10 < count($message->inbox)-count($database->getDelInbox($session->uid)) && $_GET['s'] != 0) {
+    else if(isset($_GET['s']) && count($message->inbox1) > $_GET['s']) {
+    	if(count($message->inbox1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->inbox1) && $_GET['s'] != 0) {
          echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
-         else if(count($message->inbox)-count($database->getDelInbox($session->uid)) > $_GET['s']+10) {
+         else if(count($message->inbox1) > $_GET['s']+10) {
          	echo "&laquo;<a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
         else {
@@ -51,31 +51,31 @@ include("menu.tpl");
     }
       $name = 1;
     for($i=(1+$s);$i<=(10+$s);$i++) {
-    if(count($message->inbox)-count($database->getDelInbox($session->uid)) >= $i) {
-    if($message->inbox[$i-1]['owner'] <= 1) {
+    if(count($message->inbox1) >= $i) {
+    if($message->inbox1[$i-1]['owner'] <= 1) {
     echo "<tr class=\"sup\">";
     }
     else {
     echo "<tr>";
     }
-    echo "<td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->inbox[$i-1]['id']."\" /></td>
-		<td class=\"top\"><a href=\"nachrichten.php?id=".$message->inbox[$i-1]['id']."\">".$message->inbox[$i-1]['topic']."</a> ";
-    if($message->inbox[$i-1]['viewed'] == 0) {
+    echo "<td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->inbox1[$i-1]['id']."\" /></td>
+		<td class=\"top\"><a href=\"nachrichten.php?id=".$message->inbox1[$i-1]['id']."\">".$message->inbox1[$i-1]['topic']."</a> ";
+    if($message->inbox1[$i-1]['viewed'] == 0) {
     echo "(new)";
     }
-    $date = $generator->procMtime($message->inbox[$i-1]['time']);
-    if($message->inbox[$i-1]['owner'] <= 1) {
-    echo "</td><td class=\"send\"><a><u>".$database->getUserField($message->inbox[$i-1]['owner'],'username',0)."</u></a></td>
+    $date = $generator->procMtime($message->inbox1[$i-1]['time']);
+    if($message->inbox1[$i-1]['owner'] <= 1) {
+    echo "</td><td class=\"send\"><a><u>".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</u></a></td>
 		<td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
     }
     else {
-    echo "</td><td class=\"send\"><a href=\"spieler.php?uid=".$message->inbox[$i-1]['owner']."\">".$database->getUserField($message->inbox[$i-1]['owner'],'username',0)."</a></td>
+    echo "</td><td class=\"send\"><a href=\"spieler.php?uid=".$message->inbox1[$i-1]['owner']."\">".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</a></td>
 		<td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
         }
         }
         $name++;
     }
-    if(count($message->inbox)-count($database->getDelInbox($session->uid)) == 0) {
+    if(count($message->inbox1) == 0) {
     echo "<td colspan=\"4\" class=\"none\">There are no messages available.</td></tr>";
     }
     ?>

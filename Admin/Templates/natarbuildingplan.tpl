@@ -6,7 +6,7 @@
 
 ## --------------------------------------------------------------------------- ##
 
-## Filename natarbuildingplan.php ##
+## Filename natarbuildingplan.tpl ##
 
 ## Developed by: advocaite ##
 

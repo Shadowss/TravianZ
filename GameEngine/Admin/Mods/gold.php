@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       gold_1.php                                                  ##
+##  Filename       gold.php                                         	       ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
