@@ -754,7 +754,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
 CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `casualties` int(10) unsigned NOT NULL,
-  `time` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `time` int(10) unsigned NOT NULL,
   `shown` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
