@@ -107,7 +107,7 @@ $tocoor = $database->getCoor($enforce['vref']);
        	echo"<span class=\"none\">(".$enforce['u36'].")</span></td>";
 		if($enforce['hero']>0){
         ?>
-		<td class="line-last large"><img class="unit uhero" src="img/x.gif" title="Hero" alt="Hero"> <input class="text" name="hero" value="<?php echo $enforce['hero']; ?>" maxlength="6" type="text">
+		<td class="line-last large"><img class="unit uhero" src="img/x.gif" title="Hero" alt="Hero"> <input class="text" name="t11" value="<?php echo $enforce['hero']; ?>" maxlength="6" type="text">
 		<?php 
        	echo"<span class=\"none\">(".$enforce['hero'].")</span></td>";
 		}
