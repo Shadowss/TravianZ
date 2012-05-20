@@ -25,6 +25,7 @@
         <td>Name</td>
         <td>Population</td>
         <td>Coordinates</td>
+		<td>Add Troops</td>
 		<td></td>
     </tr>
 <?php         
@@ -41,12 +42,13 @@ $delLink = '<a href="?action=delVil&did='.$varray[$i]['wref'].'" onClick="return
   $delLink = '<a href="#"><img src="../img/Admin/del_g.gif" class="del"></a>';
 	}
 }
-
+$addTroops = '<a href="?p=addTroops&did='.$varray[$i]['wref'].'"> Edit Troops</a>';
 echo '
     <tr>
         <td><a href="?p=village&did='.$varray[$i]['wref'].'">'.$varray[$i]['name'].'</a> '.$capital.'</td>
         <td>'.$varray[$i]['pop'].' <a href="?action=recountPop&did='.$varray[$i]['wref'].'">Recount<a/></td>
         <td>('.$coorproc['x'].'|'.$coorproc['y'].')</td>
+		<td>'.$addTroops.' </td>
 		<td>'.$delLink.' </td>
     </tr>  
 '; 

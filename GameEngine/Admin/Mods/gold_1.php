@@ -25,5 +25,5 @@ if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not 
 
 mysql_query("UPDATE ".TB_PREFIX."users SET gold = gold + ".$_POST['gold']." WHERE id = ".$id."");
 
-header("Location: ../../../Admin/admin.php?p=player&uid=".$id."&g=ok");
+header("Location: ../../../Admin/admin.php?p=usergold&g");
 ?>

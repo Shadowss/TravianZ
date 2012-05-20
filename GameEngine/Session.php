@@ -8,7 +8,7 @@ ob_start();
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if(!file_exists('GameEngine/config.php') && !file_exists('../../GameEngine/config.php')) {header("Location: install/");}
+if(!file_exists('GameEngine/config.php') && !file_exists('../../GameEngine/config.php') && !file_exists('../../config.php')) {header("Location: install/");}
 
 $script_name = ($_SERVER['REQUEST_URI'] == 'karte.php') ? 'karte' : $_SERVER['REQUEST_URI'];
 include ("Battle.php");

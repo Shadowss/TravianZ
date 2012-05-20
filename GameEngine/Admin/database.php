@@ -196,25 +196,25 @@ class adm_DB {
   }
 	
 	function DelVillage($wref){
-	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 1;";
+	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
 	  $result = mysql_query($q, $this->connection);    	  
     if(mysql_num_rows($result) > 0){ 
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
-    $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 1;";
+    $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
 	  mysql_query($q, $this->connection);
-    $q = "DELETE FROM ".TB_PREFIX."units WHERE `vref` = $wref;";
+    $q = "DELETE FROM ".TB_PREFIX."units WHERE `vref` = $wref";
     mysql_query($q, $this->connection);  
-    $q = "DELETE FROM ".TB_PREFIX."bdata WHERE `wid` = $wref;";
+    $q = "DELETE FROM ".TB_PREFIX."bdata WHERE `wid` = $wref";
     mysql_query($q, $this->connection); 
-    $q = "DELETE FROM ".TB_PREFIX."abdata WHERE `wid` = $wref;";
+    $q = "DELETE FROM ".TB_PREFIX."abdata WHERE `wid` = $wref";
     mysql_query($q, $this->connection);    
-    $q = "DELETE FROM ".TB_PREFIX."fdata WHERE `vref` = $wref;";
+    $q = "DELETE FROM ".TB_PREFIX."fdata WHERE `vref` = $wref";
     mysql_query($q, $this->connection);
-    $q = "DELETE FROM ".TB_PREFIX."training WHERE `vref` = $wref;";
+    $q = "DELETE FROM ".TB_PREFIX."training WHERE `vref` = $wref";
     mysql_query($q, $this->connection); 
-    $q = "DELETE FROM ".TB_PREFIX."movement WHERE `from` = $wref;";
+    $q = "DELETE FROM ".TB_PREFIX."movement WHERE `from` = $wref";
     mysql_query($q, $this->connection);       
-    $q = "UPDATE ".TB_PREFIX."wdata SET `occupied` = '0' WHERE `id` = $wref;";
+    $q = "UPDATE ".TB_PREFIX."wdata SET `occupied` = '0' WHERE `id` = $wref";
     mysql_query($q, $this->connection);  
     }
   }

@@ -100,7 +100,8 @@ $timeformat = new timeFormatGenerator;
 												<a href="?p=online">Online Users</a>
 												<a href="?p=notregistered">Players Not Activated</a>
 												<br />
-												<a href="?p=search"><b>Search</b></a>
+												<a href="#"><b>Search</b></a>
+												<a href="?p=search">Search Players/Alliances/Villages/E-mails/IPs/Deleted Players</a>
 												<a href="?p=message">Search Messages/Battle Reports</a>
 												<br />
 												<a href="#"><b>Ban</b></a>
@@ -109,6 +110,7 @@ $timeformat = new timeFormatGenerator;
 												<br />
 												<a href="#"><b>Gold</b></a>
 												<a href="?p=gold">Give All Free Gold</a>
+												<a href="?p=usergold">Give Free Gold To Specific User</a>
 												<a href="?p=maintenenceResetGold">Reset Gold</a>
 												<br />
 												<a href="#"><b>Medals</b></a>
