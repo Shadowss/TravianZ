@@ -1,9 +1,9 @@
 <?php
 
-
+        
+        include ("../../GameEngine/config.php");
         include ("../../GameEngine/Database.php");
         include ("../../GameEngine/Admin/database.php");
-        include ("../../GameEngine/config.php");
         
 
         mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
