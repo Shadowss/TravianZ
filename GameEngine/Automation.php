@@ -1191,7 +1191,14 @@ class Automation {
                     }
                 }
             }
-
+            
+            if ($isoasis == 0) {
+            	$database->modifyResource($data["to"], $steal[0], $steal[1], $steal[2], $steal[3], false);
+                $this->pruneResource();
+            } else {
+                $database->modifyOasisResource($data["to"], $steal[0], $steal[1], $steal[2], $steal[3], false);
+                $this->pruneOResource();
+            }
 
             //work out time of return
             $start = ($owntribe-1)*10+1;
@@ -1996,9 +2003,9 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
                     $reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
 					$isoasis1 = $database->isVillageOases($to['wref']);
 					if ($isoasis1 == 0){
-                    $database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
+                    //$database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
 					}else{
-					$database->modifyOasisResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
+					//$database->modifyOasisResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
 					}
                     $database->addMovement(6,$to['wref'],$from['wref'],$reference,time(),$endtime);
                     //$database->updateVillage($to['wref']);
