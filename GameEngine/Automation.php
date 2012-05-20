@@ -167,6 +167,7 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/settlers.txt") or time()-filemtime("GameEngine/Prevention/settlers.txt")>10) {
             $this->sendSettlersComplete();
         }
+        $this->updateGeneralAttack();
         $this->updateStore();
     }
 
@@ -537,7 +538,7 @@ class Automation {
         $time = time();
         $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type != '2' and endtime < $time ORDER BY endtime ASC";
         $dataarray = $database->query_return($q);
-
+		$totalattackdead = 0;
         foreach($dataarray as $data) {
             //set base things
 			//$battle->resolveConflict($data);
@@ -1027,6 +1028,7 @@ class Automation {
                 $totaldead_alldef[5] = $dead['41']+$dead['42']+$dead['43']+$dead['44']+$dead['45']+$dead['46']+$dead['47']+$dead['48']+$dead['49']+$dead['50'];
 				
 				$totaldead_alldef =  $totaldead_alldef[1]+$totaldead_alldef[2]+$totaldead_alldef[3]+$totaldead_alldef[4]+$totaldead_alldef[5]+$deadhero;
+				$totalattackdead += $totaldead_alldef;
             /*
             if($battlepart['casualties_defender'][1] == 0) { $dead11 = 0; } else { $dead11 = $battlepart['casualties_defender'][1]; }
             if($battlepart['casualties_defender'][2] == 0) { $dead12 = 0; } else { $dead12 = $battlepart['casualties_defender'][2]; }
@@ -1063,7 +1065,8 @@ class Automation {
 
 
             //top 10 attack and defence update
-            $totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10;
+            $totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
+			$totalattackdead += $totaldead_att;
             for($i=1;$i<=50;$i++) {
             $totaldead_def += $dead[''.$i.''];
             }
@@ -2019,7 +2022,10 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
                     $database->addNotice($from['owner'],$to['wref'],$ownally,3,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
                     }
             }
-            unset($Attacker);
+			if($type == 3 or $type == 4){
+			$database->addGeneralAttack($totalattackdead);
+			}
+			unset($Attacker);
             unset($Defender);
             unset($Enforce);
             unset($unitssend_att);
@@ -2041,8 +2047,15 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
 			unset($dead11);
 			unset($herosend_def);
 			unset($deadhero);
+			unset($heroxp);
+			unset($dead11);
 			unset($AttackerID);
 			unset($DefenderID);
+			unset($totalsend_alldef);
+			unset($totaldead_att);
+			unset($totaldead_def);
+			unset($unitsdead_att_check);
+			unset($totalattackdead);
            }
             if(file_exists("GameEngine/Prevention/sendunits.txt")) {
                 @unlink("GameEngine/Prevention/sendunits.txt");
@@ -2835,6 +2848,18 @@ private function demolitionComplete() {
 		$oasiscrop = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
 		$database->modifyOasisResource($getoasis['wref'],$oasiswood,$oasisclay,$oasisiron,$oasiscrop,1);
 		$database->updateOasis($getoasis['wref']);
+		}
+    }
+	
+    private function updateGeneralAttack() {
+        global $database;
+		$time = time();
+        $q = "SELECT * FROM ".TB_PREFIX."general WHERE shown = 1";
+        $array = $database->query_return($q);
+	    foreach($array as $general) {
+		if(time() - (86400*8) > $general['time']){
+			mysql_query("UPDATE ".TB_PREFIX."general SET shown = 0 WHERE id = ".$general['id'].""); 
+		}
 		}
     }
 	

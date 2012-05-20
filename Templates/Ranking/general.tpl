@@ -100,4 +100,80 @@
                    echo "%"; ?></td>
             </tr>
         </tbody>
-    </table>       
+    </table>
+	
+    <table cellpadding="1" cellspacing="1" id="world_tribes" class="world">
+        <thead>
+            <tr>
+                <th colspan="3">Miscellaneous</th>
+            </tr>
+
+            <tr>
+                <td>Attacks</td>
+
+                <td>Casualties</td>
+
+                <td>Date</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td><?php echo $database->getAttackByDate(time()); ?></td>
+
+                <td><?php echo $database->getAttackCasualties(time()); ?></td>
+
+                <td><?php echo date("j. M"); ?></td>
+            </tr>
+			
+            <tr>
+                <td><?php echo $database->getAttackByDate(time()-(86400*1)); ?></td>
+
+                <td><?php echo $database->getAttackCasualties(time()-(86400*1)); ?></td>
+
+                <td><?php echo date("j. M",time()-(86400*1)); ?></td>
+            </tr>
+
+            <tr>
+                <td><?php echo $database->getAttackByDate(time()-(86400*2)); ?></td>
+
+                <td><?php echo $database->getAttackCasualties(time()-(86400*2)); ?></td>
+
+                <td><?php echo date("j. M",time()-(86400*2)); ?></td>
+            </tr>
+
+            <tr>
+                <td><?php echo $database->getAttackByDate(time()-(86400*3)); ?></td>
+
+                <td><?php echo $database->getAttackCasualties(time()-(86400*3)); ?></td>
+
+                <td><?php echo date("j. M",time()-(86400*3)); ?></td>
+            </tr>
+            <tr>
+                <td><?php echo $database->getAttackByDate(time()-(86400*4)); ?></td>
+
+                <td><?php echo $database->getAttackCasualties(time()-(86400*4)); ?></td>
+
+                <td><?php echo date("j. M",time()-(86400*4)); ?></td>
+            </tr>
+
+            <tr>
+                <td><?php echo $database->getAttackByDate(time()-(86400*5)); ?></td>
+
+                <td><?php echo $database->getAttackCasualties(time()-(86400*5)); ?></td>
+
+                <td><?php echo date("j. M",time()-(86400*5)); ?></td>
+            </tr>
+
+            <tr>
+                <td><?php echo $database->getAttackByDate(time()-(86400*6)); ?></td>
+
+                <td><?php echo $database->getAttackCasualties(time()-(86400*6)); ?></td>
+
+                <td><?php echo date("j. M",time()-(86400*6)); ?></td>
+            </tr>
+        </tbody>
+    </table>
+	<?php  ?>
+	
+<table cellpadding="1" cellspacing="1" id="search_navi"> <?php //fix the problem with footer.php, don't change or remove it ?>
