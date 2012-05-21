@@ -196,7 +196,7 @@ class adm_DB {
   }
 	
 	function DelVillage($wref){
-	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
+	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
 	  $result = mysql_query($q, $this->connection);    	  
     if(mysql_num_rows($result) > 0){ 
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
