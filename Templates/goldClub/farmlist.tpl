@@ -37,7 +37,7 @@ while($row = mysql_fetch_array($sql)){
         <thead>
             <tr>
                 <td class="checkbox edit"></td>
-                <td class="village sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'village');">Villiage</td>
+                <td class="village sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'village');">Village</td>
                 <td class="ew sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'ew');">Ew</td>
                 <td class="distance sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'distance');">Distance</td>
                 <td class="troops sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'troops');">Troops</td>
