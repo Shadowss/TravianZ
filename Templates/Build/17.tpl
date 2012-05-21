@@ -14,7 +14,7 @@ var carry = <?php echo $market->maxcarry; ?>;
 //-->
 </script>
 <?php
-$allres = "".$_POST['r1']."+".$_POST['r2']."+".$_POST['r3']."+".$_POST['r4']."";
+$allres = $_POST['r1']+$_POST['r2']+$_POST['r3']+$_POST['r4'];
 if($_POST['x']!="" && $_POST['y']!=""){
 	$getwref = $database->getVilWref($_POST['x'],$_POST['y']);
 	$checkexist = $database->checkVilExist($getwref);
@@ -23,7 +23,7 @@ else if($_POST['dname']!=""){
 	$getwref = $database->getVillageByName($_POST['dname']);
 	$checkexist = $database->checkVilExist($getwref);
 }
-if(isset($_POST['ft'])=='check' && $allres!=0 && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist){
+if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $market->maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist){
 ?>
 <form method="POST" name="snd" action="build.php"> 
 <input type="hidden" name="ft" value="mk1">
@@ -201,6 +201,10 @@ if(isset($_POST['ft'])=='check'){
     }elseif(!$_POST['x'] && !$_POST['y'] && !$_POST['dname']){
 		$error = '<span class="error"><b>Enter coordinates or village name.</b></span>';
     }
+    }elseif($allres <= $market->maxcarry){
+		$error = '<span class="error"><b>Too few merchants.</b></span>';
+    }
+	$allres <= $market->maxcarry
     echo $error;
 }
 ?>
