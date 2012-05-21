@@ -204,7 +204,6 @@ if(isset($_POST['ft'])=='check'){
     }elseif($allres <= $market->maxcarry){
 		$error = '<span class="error"><b>Too few merchants.</b></span>';
     }
-	$allres <= $market->maxcarry
     echo $error;
 }
 ?>
