@@ -47,7 +47,7 @@ $done1 = "nothing has been done";
 
 
 
-include("Templates/Plus/3.tpl");
+header("Location: plus.php?id=3");
 }else{
 header("Location: banned.php");
 }
