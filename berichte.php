@@ -104,7 +104,7 @@ if($_GET['aid']!=0){
 		if(isset($_GET['id'])) {
 		$ally = $database->getNotice2($_GET['id'], 'ally');
 		if($database->getNotice2($_GET['id'], 'uid') == $session->uid){
-		$type = ($message->readingNotice['ntype'] == 5)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
+		$type = ($message->readingNotice['ntype'] == 9)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
 		include("Templates/Notice/".$type.".tpl");
 		}else if($session->alliance==$ally){
 		$type = $database->getNotice2($_GET['id'], 'ntype');
@@ -116,7 +116,7 @@ if($_GET['aid']!=0){
 		
 	}else if(isset($_GET['id'])) {
 		if($database->getNotice2($_GET['id'], 'uid') == $session->uid){
-		$type = ($message->readingNotice['ntype'] == 5)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
+		$type = ($message->readingNotice['ntype'] == 9)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
 		include("Templates/Notice/".$type.".tpl");
 		}
 	} else {
