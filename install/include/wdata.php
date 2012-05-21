@@ -19,6 +19,10 @@ $y=(WORLD_MAX-$i);
 	$x=((WORLD_MAX*-1)+$j);
 	
 	//choose a field type
+	if($x == 0 & $y == 0){
+		$typ='3';
+		$otype='0';
+	}else{
 	$rand=rand(1, 1000);
 		if("10" >= $rand){
 		$typ='1';
@@ -93,7 +97,7 @@ $y=(WORLD_MAX-$i);
 		$typ='0';
 		$otype='12';
 		}
-	
+	}
 	//image pick
 	if($otype=='0'){
 		$image="t".rand(0,9)."";
