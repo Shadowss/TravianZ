@@ -27,6 +27,12 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="400">400x400</option>
 				</select> 
 		</td></tr><tr></tr>
+	<td><span class="f9 c6">Register Open:</span></td><td>
+				<select name="reg_open">
+				<option value="True" selected="selected">True</option>
+				<option value="False">False</option>
+				</select>
+		</td></tr><tr></tr>		
 	<td><span class="f9 c6">Homepage:</span></td><td><input name="homepage" type="text" id="homepage" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/"></td></tr><tr></tr>
 	<td><span class="f9 c6">Language:</span></td><td>
 				<select name="lang">
@@ -46,40 +52,40 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 		</td></tr><tr></tr>	
 	<td><span class="f9 c6">Plus account length:</span></td><td>
 				<select name="plus_time">
-				<option value="3600*12">12 hours</option>
-				<option value="3600*24">1 day</option>
-				<option value="3600*24*2">2 days</option>
-				<option value="3600*24*3">3 days</option>
-				<option value="3600*24*4">4 days</option>
-				<option value="3600*24*5" selected="selected">5 days</option>
-				<option value="3600*24*6">6 days</option>
-				<option value="3600*24*7">7 days</option>
+				<option value="(3600*12)">12 hours</option>
+				<option value="(3600*24)">1 day</option>
+				<option value="(3600*24*2)">2 days</option>
+				<option value="(3600*24*3)">3 days</option>
+				<option value="(3600*24*4)">4 days</option>
+				<option value="(3600*24*5)">5 days</option>
+				<option value="(3600*24*6)">6 days</option>
+				<option value="(3600*24*7)" selected="selected">7 days</option>
 				</select>
 		</td></tr><tr></tr>		
 	<td><span class="f9 c6">+25% production length:</span></td><td>
 				<select name="plus_production">
-				<option value="3600*12">12 hours</option>
-				<option value="3600*24">1 day</option>
-				<option value="3600*24*2">2 days</option>
-				<option value="3600*24*3">3 days</option>
-				<option value="3600*24*4">4 days</option>
-				<option value="3600*24*5" selected="selected">5 days</option>
-				<option value="3600*24*6">6 days</option>
-				<option value="3600*24*7">7 days</option>
+				<option value="(3600*12)">12 hours</option>
+				<option value="(3600*24)">1 day</option>
+				<option value="(3600*24*2)">2 days</option>
+				<option value="(3600*24*3)">3 days</option>
+				<option value="(3600*24*4)">4 days</option>
+				<option value="(3600*24*5)">5 days</option>
+				<option value="(3600*24*6)">6 days</option>
+				<option value="(3600*24*7)" selected="selected">7 days</option>
 				</select>
 		</td></tr><tr></tr>	
 	<td><span class="f9 c6">Storage Multipler:</span></td><td width="140"><input type="text" name="storage_multiplier" id="storage_multiplier" value="1"></td></tr><tr>
 	<td><span class="f9 c6">Tourn Threshold:</span></td><td width="140"><input type="text" name="ts_threshold" id="ts_threshold" value="20"></td></tr><tr>
 	<td><span class="f9 c6">Great Workshop:</span></td><td>
 				<select name="great_wks">
-				<option value="True" selected="selected">True</option>
-				<option value="False">False</option>
+				<option value="True">True</option>
+				<option value="False" selected="selected">False</option>
 				</select>
 		</td></tr><tr></tr>		
 	<td><span class="f9 c6">ww:</span></td><td>
 				<select name="ww">
-				<option value="True" selected="selected">True</option>
-				<option value="False">False</option>
+				<option value="True">True</option>
+				<option value="False" selected="selected">False</option>
 				</select>
 		</td></tr><tr></tr>			
 		</table>
@@ -93,8 +99,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 
 	<td><span class="f9 c6">Show admin in stats:</span></td><td>
 				<select name="admin_rank">
-				<option value="True" selected="selected">True</option>
-				<option value="False">False</option>
+				<option value="True">True</option>
+				<option value="False" selected="selected">False</option>
 				</select>
 		</td></tr><tr></tr>
 	</table>
@@ -211,8 +217,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	  <option value="false">No</option>
 	</select></td></tr><tr>
 	<td><span class="f9 c6">Activate:</span></td><td><select name="activate">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr><tr>
 	<td><span class="f9 c6">Limit Mailbox:</span></td><td><select name="limit_mailbox">
 	  <option value="true" selected="selected">Yes</option>
@@ -227,8 +233,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 			<option value="20">20</option>
 	</select></td></tr>
 	<tr>	<td><span class="f9 c6">Village Expand:</span></td><td><select name="village_expand">
-	  <option value="1">Slow</option>
-	  <option value="0" selected="selected">Fast</option>
+	  <option value="1" selected="selected">Slow</option>
+	  <option value="0">Fast</option>
 	</select></td></tr>
 	<tr>	<td><span class="f9 c6">Error Reporting:</span></td><td><select name="error">
 	  <option value="error_reporting (E_ALL ^ E_NOTICE);" selected="selected">Yes</option>

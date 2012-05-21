@@ -38,7 +38,8 @@ include('GameEngine/Account.php');
 </div>
 <div id="header"></div>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("Templates/menu.tpl"); 
+if(REG_OPEN == true){ ?>
 <div id="content"  class="signup">
 
 <h1><img src="img/x.gif" class="anmelden" alt="register for the game"></h1>
@@ -115,6 +116,15 @@ echo $form->getError('agree');
 
 <p class="info"><?php echo ONE_PER_SERVER; ?></p>
 </div>
+<?php }else{ ?>
+<div id="content"  class="signup">
+
+<h1><img src="img/x.gif" class="anmelden" alt="register for the game"></h1>
+<h5><img src="img/x.gif" class="img_u05" alt="registration"/></h5>
+
+<p><?php echo REGISTER_CLOSED; ?></p>
+</div>
+<?php } ?>
 <div id="side_info" class="outgame">
 <?php
 if(NEWSBOX1) { include("Templates/News/newsbox1.tpl"); }

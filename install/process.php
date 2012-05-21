@@ -91,6 +91,7 @@
         		$text = preg_replace("'%TS_THRESHOLD%'", $_POST['ts_threshold'], $text);
         		$text = preg_replace("'%WW%'", $_POST['ww'], $text);
 				$text = preg_replace("'%T4_COMING%'", $_POST['t4_coming'], $text);
+				$text = preg_replace("'%REG_OPEN%'", $_POST['reg_open'], $text);
 
         		fwrite($fh, $text);
 

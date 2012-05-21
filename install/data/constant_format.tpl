@@ -111,6 +111,9 @@ define("GREAT_WKS",%GREAT_WKS%);
 // ***** Tourn threshold
 define("TS_THRESHOLD",%TS_THRESHOLD%);  
 
+// ***** Register open/close
+define("REG_OPEN",%REG_OPEN%);
+
 
 
 //////////////////////////////////
