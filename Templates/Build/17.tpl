@@ -200,7 +200,6 @@ if(isset($_POST['ft'])=='check'){
 		$error = '<span class="error"><b>Resources not selected.</b></span>';
     }elseif(!$_POST['x'] && !$_POST['y'] && !$_POST['dname']){
 		$error = '<span class="error"><b>Enter coordinates or village name.</b></span>';
-    }
     }elseif($allres <= $market->maxcarry){
 		$error = '<span class="error"><b>Too few merchants.</b></span>';
     }
