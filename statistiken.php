@@ -12,7 +12,7 @@
 
 
 include("GameEngine/Village.php");
-$start = $generator->pageLoadTimeStart();
+$__start = $generator->pageLoadTimeStart();
 if(isset($_GET['rank'])){ $_POST['rank']==$_GET['rank']; }
 $ranking->procRankReq($_GET);
 $ranking->procRank($_POST);
@@ -157,7 +157,7 @@ include("Templates/res.tpl");
 <div id="ltime">
 <div id="ltimeWrap">
 Calculated in <b><?php
-echo round(($generator->pageLoadTimeEnd()-$start)*1000);
+echo round(($generator->pageLoadTimeEnd()-$__start)*1000);
 ?></b> ms
  
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
