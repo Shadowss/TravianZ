@@ -80,7 +80,7 @@ $nummedals = mysql_num_rows($sql);
 				echo "<tr>
 				<td>$newweek</td>
 				<td>$tot</td>
-				<td><input type=\"image\" name=\"deleteweek\" value=\"".$newweek."\" style=\"background-image: url('../gpack/travian_default/img/a/del.gif'); height: 12px; width: 12px;\" src=\"../gpack/travian_default/img/a/x.gif\"></td>";
+				<td><input type=\"image\" name=\"deleteweek\" value=\"".$newweek."\" style=\"background-image: url('../<?php echo GP_LOCATE; ?>img/a/del.gif'); height: 12px; width: 12px;\" src=\"../<?php echo GP_LOCATE; ?>img/a/x.gif\"></td>";
 			}
 		?>
 	</tbody>
@@ -139,7 +139,7 @@ $nummedals = mysql_num_rows($sql);
 				<tr>
 					<td>$i</td>
 					<td>[#$bb]</td>
-					<td><img src=\"../../gpack/travian_default/img/t/".$row['img'].".jpg\"></td>
+					<td><img src=\"../../<?php echo GP_LOCATE; ?>img/t/".$row['img'].".jpg\"></td>
 					<td>$alliance</td>
 					<td>$rank</td>
 					<td>$week</td>

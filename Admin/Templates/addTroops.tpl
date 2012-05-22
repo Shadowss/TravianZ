@@ -190,104 +190,104 @@ if(isset($id))
     else if($user['tribe'] == 4){ ?>
     </tr></thead><tbody> 
         <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/31.gif"></img> <?php echo U31; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/31.gif"></img> <?php echo U31; ?></td>
         <td class="addTroops"><input class="addTroops" name="u31" id="u31" value="<?php echo $units['u31']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u31']; ?></td>
     </tr>
     
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/32.gif"></img> <?php echo U32; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/32.gif"></img> <?php echo U32; ?></td>
         <td><input class="addTroops" name="u32" id="u32" value="<?php echo $units['u32']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u32']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/33.gif"></img> <?php echo U33; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/33.gif"></img> <?php echo U33; ?></td>
         <td><input class="addTroops" name="u33" id="u33" value="<?php echo $units['u33']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u33']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/34.gif"></img> <?php echo U34; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/34.gif"></img> <?php echo U34; ?></td>
         <td><input class="addTroops" name="u34" id="u34" value="<?php echo $units['u34']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u34']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/35.gif"></img> <?php echo U35; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/35.gif"></img> <?php echo U35; ?></td>
         <td><input class="addTroops" name="u35" id="u35" value="<?php echo $units['u35']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u35']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/36.gif"></img> <?php echo U36; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/36.gif"></img> <?php echo U36; ?></td>
         <td><input class="addTroops" name="u36" id="u36" value="<?php echo $units['u36']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u36']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/37.gif"></img> <?php echo U37; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/37.gif"></img> <?php echo U37; ?></td>
         <td><input class="addTroops" name="u37" id="u37" value="<?php echo $units['u37']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u37']; ?></td>
     </tr>
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/38.gif"></img> <?php echo U38; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/38.gif"></img> <?php echo U38; ?></td>
         <td><input class="addTroops" name="u38" id="u38" value="<?php echo $units['u38']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u38']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/39.gif"></img> <?php echo U39; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/39.gif"></img> <?php echo U39; ?></td>
         <td><input class="addTroops" name="u39" id="u39" value="<?php echo $units['u39']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u39']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/40.gif"></img> <?php echo U40; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/40.gif"></img> <?php echo U40; ?></td>
         <td><input class="addTroops" name="u40" id="u40" value="<?php echo $units['u40']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u40']; ?></td>
     </tr>
       <?php }
     else if($user['tribe'] == 5){ ?>
     </tr></thead><tbody> 
         <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/41.gif"></img> <?php echo U41; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/41.gif"></img> <?php echo U41; ?></td>
         <td class="addTroops"><input class="addTroops" name="u41" id="u41" value="<?php echo $units['u41']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u41']; ?></td>
     </tr>
     
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/42.gif"></img> <?php echo U42; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/42.gif"></img> <?php echo U42; ?></td>
         <td><input class="addTroops" name="u42" id="u42" value="<?php echo $units['u42']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u42']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/43.gif"></img> <?php echo U43; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/43.gif"></img> <?php echo U43; ?></td>
         <td><input class="addTroops" name="u43" id="u43" value="<?php echo $units['u43']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u43']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/44.gif"></img> <?php echo U44; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/44.gif"></img> <?php echo U44; ?></td>
         <td><input class="addTroops" name="u44" id="u44" value="<?php echo $units['u44']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u44']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/45.gif"></img> <?php echo U45; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/45.gif"></img> <?php echo U45; ?></td>
         <td><input class="addTroops" name="u45" id="u45" value="<?php echo $units['u45']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u45']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/46.gif"></img> <?php echo U46; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/46.gif"></img> <?php echo U46; ?></td>
         <td><input class="addTroops" name="u46" id="u46" value="<?php echo $units['u46']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u46']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/47.gif"></img> <?php echo U47; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/47.gif"></img> <?php echo U47; ?></td>
         <td><input class="addTroops" name="u47" id="u47" value="<?php echo $units['u47']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u47']; ?></td>
     </tr>
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/48.gif"></img> <?php echo U48; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/48.gif"></img> <?php echo U48; ?></td>
         <td><input class="addTroops" name="u48" id="u48" value="<?php echo $units['u48']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u48']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/49.gif"></img> <?php echo U49; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/49.gif"></img> <?php echo U49; ?></td>
         <td><input class="addTroops" name="u49" id="u49" value="<?php echo $units['u49']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u49']; ?></td>
     </tr>
     
     <tr>
-        <td class="addTroops"><img src="../gpack/travian_default/img/u/50.gif"></img> <?php echo U50; ?></td>
+        <td class="addTroops"><img src="../<?php echo GP_LOCATE; ?>img/u/50.gif"></img> <?php echo U50; ?></td>
         <td><input class="addTroops" name="u50" id="u50" value="<?php echo $units['u50']; ?>" maxlength="10">&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b><?php echo $units['u50']; ?></td>
     </tr>
 	<?php } ?>

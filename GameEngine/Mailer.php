@@ -33,8 +33,28 @@ Greetings,
 TravianX";
 
 		$headers = "From: Mailer@".SERVER_NAME."\n";
-		//$headers .= 'MIME-Version: 1.0' . "\r\n";
-		//$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+		mail($email, $subject, $message, $headers);
+	}
+	
+	function sendInvite($email,$uid,$text) {
+
+		$subject = "".SERVER_NAME." registeration";
+
+		$message = "Hello ".$username."
+
+Try the new ".SERVER_NAME."!
+
+
+Link: ".SERVER."anmelden.php?id=".$uid."
+
+".$text."
+
+
+Greetings,
+TravianX";
+
+		$headers = "From: Mailer@".SERVER_NAME."\n";
 
 		mail($email, $subject, $message, $headers);
 	}

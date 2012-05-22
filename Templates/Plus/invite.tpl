@@ -13,8 +13,11 @@ include("Templates/Plus/pmenu.tpl");
 
     <h3>1) Invite your friends via Email</h3>
 <?php if($session->access != BANNED){ ?>
-    <p><a href="plus.php?id=5&amp;a=1&amp;mail">&raquo; Invite by e-mail</a></p>
-
+	<form action="plus.php" method="POST">
+    <p><input class="mail" name="mail" value=""></p>
+	<p>Own text:</p>
+	<p><textarea id="text" name="text"></textarea></p>
+	</form>
 <?php }else{ ?>
     <p><a href="banned.php">&raquo; Invite by e-mail</a></p>
 <?php } ?>
@@ -24,7 +27,7 @@ include("Templates/Plus/pmenu.tpl");
 
     <h3>Progress of your invited friends</h3>
 
-    <p>As soon as a player you invited has found his <b>2</b> village, you will be credited with <b>50</b> gold.</p>
+    <p>As soon as a player you invited has found his <b>2</b>. village, you will be credited with <b>50</b> gold.</p>
 
     <table id="brought_in" cellpadding="1" cellspacing="1">
         <thead>
@@ -33,6 +36,10 @@ include("Templates/Plus/pmenu.tpl");
             </tr>
 
             <tr>
+                <td></td>
+
+                <td>World</td>
+
                 <td>UID</td>
 
                 <td>Member since</td>
@@ -69,6 +76,5 @@ include("Templates/Plus/pmenu.tpl");
             <td class="none" colspan="6">You have not brought in any new players yet.</td>
         </tr>
 		<?php } ?>
-		</tbody>
         </table>
 </div>

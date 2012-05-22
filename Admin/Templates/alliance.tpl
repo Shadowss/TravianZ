@@ -271,8 +271,8 @@ if($_GET['aid'])
 						if($row['type'] == 1) { $type = 'Confederation Pact'; }
 						if($row['type'] == 2) { $type = 'Non Agression Pact'; }
 						if($row['type'] == 3) { $type = 'Declaration of War'; }
-						if($row['accepted'] == 0) { $accepted = "<img src=\"../../gpack/travian_default/img/a/del.gif\">"; }
-						if($row['accepted'] ==1) { $accepted = "<img src=\"../../gpack/travian_default/img/a/acc.gif\">"; }
+						if($row['accepted'] == 0) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/del.gif\">"; }
+						if($row['accepted'] ==1) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/acc.gif\">"; }
 					
 						$ally = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
 						echo '
@@ -306,8 +306,8 @@ if($_GET['aid'])
 						if($row['type'] == 1) { $type = 'Confederation Pact'; }
 						if($row['type'] == 2) { $type = 'Non Agression Pact'; }
 						if($row['type'] == 3) { $type = 'Declaration of War'; }
-						if($row['accepted'] == 0) { $accepted = "<img src=\"../../gpack/travian_default/img/a/del.gif\">"; }
-						if($row['accepted'] ==1) { $accepted = "<img src=\"../../gpack/travian_default/img/a/acc.gif\">"; }
+						if($row['accepted'] == 0) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/del.gif\">"; }
+						if($row['accepted'] ==1) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/acc.gif\">"; }
 					
 						$ally = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
 						echo '
@@ -342,8 +342,8 @@ if($_GET['aid'])
 						if($row['type'] == 1) { $type = 'Confederation Pact'; }
 						if($row['type'] == 2) { $type = 'Non Agression Pact'; }
 						if($row['type'] == 3) { $type = 'Declaration of War'; }
-						if($row['accepted'] == 0) { $accepted = "<img src=\"../../gpack/travian_default/img/a/del.gif\">"; }
-						if($row['accepted'] == 1) { $accepted = "<img src=\"../../gpack/travian_default/img/a/acc.gif\">"; }
+						if($row['accepted'] == 0) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/del.gif\">"; }
+						if($row['accepted'] == 1) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/acc.gif\">"; }
 					
 						$ally1 = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
 						$ally2 = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
@@ -351,7 +351,7 @@ if($_GET['aid'])
 						<tr>
 							<td><a href="admin.php?p=alliance&aid='.$row['alli1'].'">'.$ally1['tag'].'</a> & <a href="admin.php?p=alliance&aid='.$row['alli2'].'">'.$ally2['tag'].'</a></td>
 							<td>'.$type.'</td>
-							<td><img src="../../gpack/travian_default/img/a/acc.gif"></td>
+							<td><img src="../../<?php echo GP_LOCATE; ?>img/a/acc.gif"></td>
 						</tr>';
 					}
 				?>

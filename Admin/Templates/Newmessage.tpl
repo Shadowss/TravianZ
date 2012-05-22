@@ -19,7 +19,7 @@ if(isset($id))
 	$varray = $database->getProfileVillages($id);
 	$varmedal = $database->getProfileMedal($id); ?>
 
-	<link href="../gpack/travian_default/lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
+	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
 	<style type="text/css">
 		input.dynamic_img, img.dynamic_img 
 		{
@@ -29,7 +29,7 @@ if(isset($id))
 		input#btn_send 
 		{
 			width: 97px;
-			background-image: url(../gpack/travian_default/lang/en/b/send.gif);
+			background-image: url(../<?php echo GP_LOCATE; ?>lang/en/b/send.gif);
 		}
 		div.messages div#write_content #heading input 
 		{
@@ -43,12 +43,12 @@ if(isset($id))
 	<div id="content" class="messages">
 		<div id="read_head" class="msg_head"></div>
 		<div id="read_content" class="msg_content">
-			<img src="../../gpack/travian_default/lang/en/msg/block_bg24b.gif" id="label" class="read" alt="">
+			<img src="../../<?php echo GP_LOCATE; ?>lang/en/msg/block_bg24b.gif" id="label" class="read" alt="">
 			
 			<div id="heading">
 				<input type="hidden" name="uid" value="<?php echo $id; ?>">
 				<div><a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo $user['username']; ?></a></div>
-				<div><input type="text" value="Message From Admin" name="topic" id="subject" value="" maxlength="35" style="background-image: url('../gpack/travian_default/img/msg/underline.gif'); background-position: left -2px; background-repeat: repeat-x; outline: none; border: medium none; width: 267px; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 11px;"></div>
+				<div><input type="text" value="Message From Admin" name="topic" id="subject" value="" maxlength="35" style="background-image: url('../<?php echo GP_LOCATE; ?>img/msg/underline.gif'); background-position: left -2px; background-repeat: repeat-x; outline: none; border: medium none; width: 267px; font-family: Verdana,Arial,Helvetica,sans-serif; font-size: 11px;"></div>
 			</div>
 			<div id="time">
 				<div><?php echo date('d.m.y'); ?></div>
@@ -57,7 +57,7 @@ if(isset($id))
 			<div class="clear"></div>				
 			<div class="line"></div>
 			<div class="message" style="margin-top: 10px;">
-				<textarea id="message" name="message" style="background-image: url('../gpack/travian_default/img/msg/underline.gif'); background-repeat: repeat; font-size: 12px; border: medium none; height: 258px; line-height: 16px; width: 412px; font-family: Verdana,Arial,Helvetica,sans-serif;">Message Here</textarea>
+				<textarea id="message" name="message" style="background-image: url('../<?php echo GP_LOCATE; ?>img/msg/underline.gif'); background-repeat: repeat; font-size: 12px; border: medium none; height: 258px; line-height: 16px; width: 412px; font-family: Verdana,Arial,Helvetica,sans-serif;">Message Here</textarea>
 			</div>
 			<p class="btn">
 				<input type="image" value="submit" name="s1" id="btn_send" class="dynamic_img clicked" src="../img/admin/x.gif" alt="send" tabindex="4;">

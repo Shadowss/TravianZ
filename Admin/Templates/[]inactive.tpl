@@ -65,11 +65,11 @@ error_reporting(0);
 				<tr>
 					<td><a href=\"?p=player&uid=".$uid."\">".$active[$i]['username']." [".$active[$i]['access']."]</a></td>
 					<td>".date("H:i:s",$active[$i]['timestamp'])."</td>
-					<td><img src=\"../../gpack/travian_default/img/u/".$img."9.gif\" title=\"$tribe\" alt=\"$tribe\"></td>
+					<td><img src=\"../../<?php echo GP_LOCATE; ?>img/u/".$img."9.gif\" title=\"$tribe\" alt=\"$tribe\"></td>
 					<td>".$totalpop."</td>
 					<td>".count($varray)."</td>
 					<td><img src=\"../img/admin/gold.gif\" class=\"gold\" alt=\"Gold\" title=\"This user has: ".$active[$i]['gold']." gold\"/> ".$active[$i]['gold']."</td>
-					<td><img src=\"../gpack/travian_default/img/a/online1.gif\"></td>
+					<td><img src=\"../<?php echo GP_LOCATE; ?>img/a/online1.gif\"></td>
 				</tr>"; 
 			} 
 		?>  

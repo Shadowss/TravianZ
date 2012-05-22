@@ -19,7 +19,7 @@ $fdata = $database->getResourceLevel($village['wref']);
 if(isset($id))
 {
 	include("search2.tpl"); ?>
-	<link href="../gpack/travian_default/lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
+	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
 	<form action="../GameEngine/Admin/Mods/editBuildings.php" method="POST">
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="id" value="<?php echo $_GET['did']; ?>" />

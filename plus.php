@@ -84,7 +84,9 @@ include("Templates/Plus/3.tpl");
 if ($id == 4) {
 include("Templates/Plus/4.tpl");
 }
-if ($id == 5) {
+if (isset($_GET['mail']) && $id == 5){
+include("Templates/Plus/invite.tpl");
+}else if ($id == 5) {
 include("Templates/Plus/5.tpl");
 }
 if ($id == 7) {
@@ -116,6 +118,9 @@ include("Templates/Plus/15.tpl");
 }
 if ($id > 15) {
 include("Templates/Plus/3.tpl");
+}
+if(isset($_POST['mail'])) {
+$mailer->sendInvite($_POST['mail'],$session->uid,$_POST['text']);
 }
 ?>
 

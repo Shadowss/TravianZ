@@ -1318,6 +1318,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `clp` bigint(255) NOT NULL DEFAULT '0',
   `oldrank` bigint(255) unsigned NOT NULL DEFAULT '0',
   `regtime` int(10) unsigned NOT NULL DEFAULT '0',
+  `invited` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 

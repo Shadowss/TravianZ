@@ -243,7 +243,7 @@ define("COOKIE_PATH", "/");
 ////////////////////////////////////////////
 define("DOMAIN", "%DOMAIN%");
 define("HOMEPAGE", "%HOMEPAGE%");
-define("SERVER", "%DOMAIN%");
+define("SERVER", "%SERVER%");
 
 $requse = 0;
 

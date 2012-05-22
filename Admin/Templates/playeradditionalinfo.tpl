@@ -50,7 +50,7 @@
 										<td>Give how much Gold?</td>
 										<td>
 											<input class="give_gold" name="gold" value="0">
-											<input type="image" src="../gpack/travian_default/img/new/tick.png" value="submit">
+											<input type="image" src="../<?php echo GP_LOCATE; ?>img/new/tick.png" value="submit">
 											<a href="admin.php?p=player&uid=<?php echo $id; ?>"><img src="../img/admin/del.gif" title="Cancel"></a></td>
 									</tr>
 								</form><?php 
@@ -118,7 +118,7 @@
 								{
 									$tsdiffact = $datetime - $now;
 									$timetoecho = $timeformat->getTimeFormat($tsdiffact);
-									echo '<img src="../gpack/travian_default/img/new/tick.png" title="Ends: '.date('d.m.Y H:i',$user['protect']+3600*2).'">';
+									echo '<img src="../<?php echo GP_LOCATE; ?>img/new/tick.png" title="Ends: '.date('d.m.Y H:i',$user['protect']+3600*2).'">';
 									echo "<font color=\"blue\"> $timetoecho</font>";
 								}
 							}
@@ -172,7 +172,7 @@
 										<td>Add how many CP?</td>
 										<td>
 											<input class="give_gold" name="cp" value="0">
-											<input type="image" src="../gpack/travian_default/img/new/tick.png" value="submit">
+											<input type="image" src="../<?php echo GP_LOCATE; ?>img/new/tick.png" value="submit">
 											<a href="admin.php?p=player&uid=<?php echo $id; ?>"><img src="../img/admin/del.gif" title="Cancel"></a>
 										</td>
 									</tr>

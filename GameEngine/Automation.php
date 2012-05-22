@@ -168,6 +168,7 @@ class Automation {
             $this->sendSettlersComplete();
         }
         $this->updateGeneralAttack();
+		$this->checkInvitedPlayes();
         $this->updateStore();
     }
 
@@ -1912,8 +1913,8 @@ if($data['t11'] > 0){
                         $walllevel =0;
                         $rplevel =0;
                     }
-$palaceimg = "<img src=\"gpack/travian_default/img/g/g26.gif\" height=\"30\" width=\"24\" alt=\"Palace\" title=\"Palace\" />";
-$crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" width=\"24\" alt=\"Cranny\" title=\"Cranny\" />";
+$palaceimg = "<img src=\"<?php echo GP_LOCATE; ?>img/g/g26.gif\" height=\"30\" width=\"24\" alt=\"Palace\" title=\"Palace\" />";
+$crannyimg = "<img src=\"<?php echo GP_LOCATE; ?>img/g/g23.gif\" height=\"30\" width=\"24\" alt=\"Cranny\" title=\"Cranny\" />";
                 $info_spy = "".$spy_pic.",".$palaceimg." Residance/Palace Level : ".$rplevel."
 				<br>".$crannyimg." Cranny level: ".$crannylevel."<br><br>Wall Level : ".$walllevel."";
 
@@ -2731,7 +2732,7 @@ $crannyimg = "<img src=\"gpack/travian_default/img/g/g23.gif\" height=\"30\" wid
         }
     }
 
-private function demolitionComplete() {
+	private function demolitionComplete() {
         global $building,$database;
         $ourFileHandle = @fopen("GameEngine/Prevention/demolition.txt", 'w');
         @fclose($ourFileHandle);
@@ -2855,6 +2856,21 @@ private function demolitionComplete() {
 		$oasiscrop = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
 		$database->modifyOasisResource($getoasis['wref'],$oasiswood,$oasisclay,$oasisiron,$oasiscrop,1);
 		$database->updateOasis($getoasis['wref']);
+		}
+    }
+	
+    private function checkInvitedPlayes() {
+        global $database;
+        $q = "SELECT * FROM ".TB_PREFIX."users WHERE invited != 0";
+        $array = $database->query_return($q);
+	    foreach($array as $user) {
+		$varray = count($database->getProfileVillages($user['id']));
+		if($varray > 1){
+		$usergold = $database->getUserField($user['invited'],"gold",0);
+		$gold = $usergold+50;
+        $database->updateUserField($user['invited'],"gold",$gold,1); 
+        $database->updateUserField($user['id'],"invited",0,1); 
+		}
 		}
     }
 	

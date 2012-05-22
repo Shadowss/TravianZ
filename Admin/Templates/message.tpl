@@ -12,7 +12,7 @@
 <style>
 	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);} 
 </style>
-<link href="../gpack/travian_default/lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
+<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
 <table id="member" style="width:225px">
   <thead>
     <tr>

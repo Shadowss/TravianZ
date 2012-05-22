@@ -33,6 +33,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="False">False</option>
 				</select>
 		</td></tr><tr></tr>		
+	<td><span class="f9 c6">Server:</span></td><td><input name="server" type="text" id="homepage" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/"></td></tr><tr></tr>
+	<td><span class="f9 c6">Domain:</span></td><td><input name="domain" type="text" id="homepage" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/"></td></tr><tr></tr>
 	<td><span class="f9 c6">Homepage:</span></td><td><input name="homepage" type="text" id="homepage" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/"></td></tr><tr></tr>
 	<td><span class="f9 c6">Language:</span></td><td>
 				<select name="lang">

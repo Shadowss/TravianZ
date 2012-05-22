@@ -76,6 +76,7 @@
         		$text = preg_replace("'%STARTTIME%'", time(), $text);
         		$text = preg_replace("'%DOMAIN%'", $_POST['domain'], $text);
         		$text = preg_replace("'%HOMEPAGE%'", $_POST['homepage'], $text);
+				$text = preg_replace("'%SERVER%'", $_POST['server'], $text);
         		$text = preg_replace("'%LIMIT_MAILBOX%'", $_POST['limit_mailbox'], $text);
         		$text = preg_replace("'%MAX_MAILS%'", $_POST['max_mails'], $text);
         		$text = preg_replace("'%DEMOLISH%'", $_POST['demolish'], $text);

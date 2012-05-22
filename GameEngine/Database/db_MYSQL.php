@@ -138,6 +138,12 @@
                 $dbarray = mysql_fetch_array($result);
                 return $dbarray[$field];
             }
+			
+            function getInvitedUser($uid) {
+                $q = "SELECT * FROM " . TB_PREFIX . "users where invited = $uid order by regtime desc";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
 
             function getVrefField($ref, $field){
                     $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = '$ref'";

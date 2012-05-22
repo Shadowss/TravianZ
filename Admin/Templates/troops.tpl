@@ -207,16 +207,16 @@
 							echo '
 							</tr></thead><tbody> 
 							<tr>
-								<td><center /><img src="../gpack/travian_default/img/u/31.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/32.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/33.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/34.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/35.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/36.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/37.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/38.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/39.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/40.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/31.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/32.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/33.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/34.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/35.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/36.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/37.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/38.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/39.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/40.gif"></img></td>
 							</tr>
 						   <tr>
 								<td><center />'.$u31.'</td>
@@ -237,16 +237,16 @@
 							echo '
 							</tr></thead><tbody> 
 							<tr>
-								<td><center /><img src="../gpack/travian_default/img/u/41.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/42.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/43.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/44.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/45.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/46.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/47.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/48.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/49.gif"></img></td>
-								<td><center /><img src="../gpack/travian_default/img/u/50.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/41.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/42.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/43.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/44.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/45.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/46.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/47.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/48.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/49.gif"></img></td>
+								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/50.gif"></img></td>
 							</tr>
 							   
 						   
