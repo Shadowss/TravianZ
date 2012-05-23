@@ -86,7 +86,7 @@ include("next.tpl");
 		</tr>
 	</tbody>
 </table>
-	<p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" onclick="this.disabled=true;this.form.submit();"/></form></p>
+	<p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" onclick="this.disabled=true;this.form.submit();"/></p></form>
 	<?php
 	} else {
 		echo "<b>Training can commence when trapper are completed.</b><br>\n";

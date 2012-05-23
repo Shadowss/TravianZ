@@ -573,12 +573,10 @@ $output.="<tr>
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".$u6['clay']." WHERE `wref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `iron` = `wood` - ".$u6['iron']." WHERE `wref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `crop` = `wood` - ".$u6['crop']." WHERE `wref` = '" . $village->wid . "'");
-					header("Location: build.php?id=".$id."");
-					}else{
-					header("Location: banned.php"); 
+					
 					}
-					}
-            }      
+				}      
+			}	
         if($session->tribe == 2){
                 if($_GET['train'] == 11){
 				if($session->access != BANNED){
@@ -590,7 +588,10 @@ $output.="<tr>
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".$u11['clay']." WHERE `wref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `iron` = `wood` - ".$u11['iron']." WHERE `wref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `crop` = `wood` - ".$u11['crop']." WHERE `wref` = '" . $village->wid . "'");
-                    header("Location: build.php?id=".$id.""); 
+                    header("Location: build.php?id=".$id."");
+					}else{
+					header("Location: banned.php"); 
+					}
                 }
                 if($_GET['train'] == 12){
 				if($session->access != BANNED){
@@ -730,7 +731,7 @@ $output.="<tr>
 					}
 					}
 			}
-            }
+            
         
         
 

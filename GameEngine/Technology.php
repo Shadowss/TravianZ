@@ -459,7 +459,7 @@ private function trainUnit($unit,$amt,$great=false) {
 			foreach($trainlist as $train) {
 			$train_amt += $train['amt'];
 			}
-			$max = $bid36[$village->resarray['f'.$id]]['attri'] - ($village->unitarray['u99'] + $train_amt);
+			$max = $bid36[$building->getTypeLevel(36)]['attri'] - ($village->unitarray['u99'] + $train_amt);
 				if($max < $amt) {
 					$amt = 0;
 				}

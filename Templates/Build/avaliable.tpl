@@ -44,7 +44,13 @@ $greatgranary = $building->getTypeLevel(39);
 $greatworkshop = $building->getTypeLevel(42);
 $ww = $building->getTypeLevel(40);
 $wwinbuild = count($database->getBuildingByType($village->wid,40));
-$wwbuildingplan = count($database->getOwnArtefactInfoByType2($village->wid,11));
+$wwvillages = $database->getVillagesID($session->uid);
+foreach($wwvillages as $wwvillage){
+$plan = count($database->getOwnArtefactInfoByType2($wwvillage,11));
+if($plan > 0){
+$wwbuildingplan += 1;
+}
+}
 
 foreach ($database->getJobs($_SESSION['wid']) as $bdata) {
     $UnderConstruction = strtolower(str_replace(array(" ","'"),"",$building->procResType($bdata['type'])));

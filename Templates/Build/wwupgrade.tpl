@@ -2,25 +2,25 @@
 $bid = $village->resarray['f'.$id.'t'];
 $bindicate = $building->canBuild($id,$bid);
 $wwlevel = $village->resarray['f'.$id];
-if($wwlevel > 49){
+if($wwlevel > 50){
 $needed_plan = 1;
 }else{
 $needed_plan = 0;
 }
 $alli_users = $database->getUserByAlliance($session->alliance);
 $wwbuildingplan = 0;
-if(!empty($alli_users)){
+
 foreach($alli_users as $users){
-$villages = $database->getVillageID($users['id']);
-foreach($villages as $village){
-$plan = count($database->getOwnArtefactInfoByType2($village,11));
+$villages = $database->getVillagesID($users['id']);
+foreach($villages as $village1){
+$plan = count($database->getOwnArtefactInfoByType2($village1,11));
 if($plan > 0){
 $wwbuildingplan += 1;
 }
 }
 }
-}
-if($wwbuildingplan == $needed_plan){
+
+if($wwbuildingplan > $needed_plan){
 if($bindicate == 1) {
 	echo "<p><span class=\"none\">Building already at max level</span></p>";
 } else if($bindicate == 10) {
@@ -150,7 +150,11 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
     }
 }
 	}else{
+	if($needed_plan == 0){
+    	echo "<span class=\"none\">Need WW construction plan.</span>";
+	}else{
     	echo "<span class=\"none\">Need more WW construction plan.</span>";
+	}
 	}
 
 ?>

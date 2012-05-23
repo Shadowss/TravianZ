@@ -8,7 +8,7 @@
 ##                                                                             ##
 #################################################################################
 $time = time();
-$ban = mysql_query("SELECT * FROM ".TB_PREFIX."banlist WHERE `uid` = '".$session->uid."' and `end` < '".$time."'");
+$ban = mysql_query("SELECT * FROM ".TB_PREFIX."banlist WHERE `uid` = '".$session->uid."' and `end` < '".$time."' and active = 1");
 $ban1 = mysql_fetch_array($ban);
 ?>
 

@@ -1,5 +1,8 @@
-<?php if(!is_numeric($_SESSION['search'])) {
-	echo "<p class=\"error\">The user <b>".$_SESSION['search']."</b> does not exist.</p>";
+<?php 
+if(!is_numeric($_SESSION['search'])) {
+?>
+	<center><font color=orange size=2><p class=\"error\">The user <b>"<?php echo $_SESSION['search']; ?>"</b> does not exist.</p></font></center>
+<?php
     $search = 0;
 }
 else {

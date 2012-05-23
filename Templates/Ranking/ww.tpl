@@ -4,7 +4,7 @@
                         FROM ".TB_PREFIX."users 
                         INNER JOIN ".TB_PREFIX."vdata ON ".TB_PREFIX."users.id = ".TB_PREFIX."vdata.owner
                         INNER JOIN ".TB_PREFIX."fdata ON ".TB_PREFIX."fdata.vref = ".TB_PREFIX."vdata.wref
-                        WHERE ".TB_PREFIX."fdata.f99 > 0 ORDER BY ".TB_PREFIX."fdata.f99 Desc ");
+                        WHERE ".TB_PREFIX."fdata.f99t = 40 ORDER BY ".TB_PREFIX."fdata.f99 Desc ");
 
 ?>
 <table cellpadding="1" cellspacing="1" id="villages" class="row_table_data">

@@ -17,6 +17,12 @@ if(isset($_GET['newdid'])) {
     $_SESSION['wid'] = $_GET['newdid'];
     header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
 }
+if(isset($_GET['buildingFinish'])) {
+	if($session->gold >= 2) {
+		$building->finishAll();
+		header("Location: build.php?gid=15");
+	}
+}
 $start = $generator->pageLoadTimeStart();
 $alliance->procAlliForm($_POST);
 $technology->procTech($_POST);

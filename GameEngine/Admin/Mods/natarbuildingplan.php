@@ -37,7 +37,7 @@ for($i=1;$i<=$amt;$i++) {
         $q = "UPDATE ".TB_PREFIX."units SET u41 = u41 + '150000', u42 = u42 + '150000', u43 = u43 + '150000', u44 = u44 + '150000', u45 = u45 + '150000', u46 = u46 + '150000', u47 = u47 + '150000', u48 = u48 + '150000' , u49 = u49 + '150000', u50 = u50 + '150000' WHERE vref = '".$wid."'"; 
         mysql_query($q);
         $desc = 'With this ancient construction plan you will able to build World Wonder to level 50. to build further, your alliance must hold at least two plans.';
-		$database->addArtefact($wid, 3, 11, 3, 'Ancient Construction Plan', $desc, 0, 'typeww.gif');
+		$database->addArtefact($wid, 3, 11, 1, 'Ancient Construction Plan', $desc, '', 'typeww.gif');
 }
 
     

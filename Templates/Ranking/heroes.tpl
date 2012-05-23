@@ -6,11 +6,12 @@
 | Released by:   Dzoki < dzoki.travian@gmail.com >        |
 | Copyright:     TravianX Project All rights reserved     |
 \** --------------------------------------------------- **/
-
-        if(!is_numeric($_SESSION['search'])) {
-        	echo "<p class=\"error\">The user <b>" . $_SESSION['search'] . "</b> does not exist or has no hero.</p>";
-        	$search = 0;
-        } else {
+		if(!is_numeric($_SESSION['search'])) {
+		?>
+			<center><font color=orange size=2><p class=\"error\">The user <b>"<?php echo $_SESSION['search']; ?>"</b> does not exist or has no hero.</p></font></center>
+		<?php
+			$search = 0;
+		} else {
         	$search = $_SESSION['search'];
         }
 

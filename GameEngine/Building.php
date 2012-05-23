@@ -394,7 +394,7 @@ class Building {
 	}
 	
 	private function meetRequirement($id) {
-		global $village,$database;
+		global $village,$session,$database;
 		switch($id) {
 			case 1:
 			case 2:
@@ -493,8 +493,20 @@ class Building {
             if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
             break;  
 			case 40:
-			$wwbuildingplan = count($database->getOwnArtefactInfoByType2($village->wid,11));
-            if($village->natar == 1 && $wwbuildingplan > 0) { return true; } else { return false; }
+			$wwlevel = $village->resarray['f'.$id];
+			if($wwlevel > 50){
+			$needed_plan = 1;
+			}else{
+			$needed_plan = 0;
+			}
+			$wwvillages = $database->getVillagesID($session->uid);
+			foreach($wwvillages as $wwvillage){
+			$plan = count($database->getOwnArtefactInfoByType2($wwvillage,11));
+			if($plan > 0){
+			$wwbuildingplan += 1;
+			}
+			}
+            if($village->natar == 1 && $wwbuildingplan > $needed_plan) { return true; } else { return false; }
 			break;
 			case 41:
 			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20) { return true; } else { return false; }
@@ -626,7 +638,7 @@ class Building {
 		return false;
 	}
 	
-	private function finishAll() {
+	public function finishAll() {
 		global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
 		if($session->access!=BANNED){		
 		foreach($this->buildArray as $jobs) {
@@ -638,11 +650,10 @@ class Building {
 			if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
 			$finish = 1;
 				$resource = $this->resourceRequired($jobs['field'],$jobs['type']);
-				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = f".$jobs['field']." + 1, f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
+				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
 			  	if($database->query($q)) {
 					$database->modifyPop($jobs['wid'],$resource['pop'],0);
 					$database->addCP($jobs['wid'],$resource['cp']);
-					$database->finishDemolition($village->wid);
 					$q = "DELETE FROM ".TB_PREFIX."bdata where id = ".$jobs['id'];
 					$database->query($q);
 					if($jobs['type'] == 18) {
@@ -650,41 +661,14 @@ class Building {
 						$max = $bid18[$level]['attri'];
 						$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
 						$database->query($q);
-					}
-					if($jobs['type'] == 10) {
-						$max=$database->getVillageField($jobs['wid'],"maxstore");
-						if($level=='0' && $this->getTypeLevel(10) != 20){ $max-=STORAGE_BASE; }
-						$max-=$bid10[$level]['attri']*STORAGE_MULTIPLIER; 
-						$max+=$bid10[$level+1]['attri']*STORAGE_MULTIPLIER;
-						$database->setVillageField($jobs['wid'],"maxstore",$max);
-					}
-					if($jobs['type'] == 11) {
-						$max=$database->getVillageField($jobs['wid'],"maxcrop");
-						if($level=='0' && $this->getTypeLevel(11) != 20){ $max-=STORAGE_BASE; }
-						$max-=$bid11[$level]['attri']*STORAGE_MULTIPLIER;
-						$max+=$bid11[$level+1]['attri']*STORAGE_MULTIPLIER;
-						$database->setVillageField($jobs['wid'],"maxcrop",$max);
-					}
-                    if($jobs['type'] == 38) {
-						$max=$database->getVillageField($jobs['wid'],"maxstore");
-						if($level=='0' && $this->getTypeLevel(38) != 20){ $max-=STORAGE_BASE; }
-						$max-=$bid38[$level]['attri']*STORAGE_MULTIPLIER;
-						$max+=$bid38[$level+1]['attri']*STORAGE_MULTIPLIER;
-						$database->setVillageField($jobs['wid'],"maxstore",$max);
-                    }
-                    if($jobs['type'] == 39) {
-						$max=$database->getVillageField($jobs['wid'],"maxcrop");
-						if($level=='0' && $this->getTypeLevel(39) != 20){ $max-=STORAGE_BASE; }
-						$max-=$bid39[$level]['attri']*STORAGE_MULTIPLIER;
-						$max+=$bid39[$level+1]['attri']*STORAGE_MULTIPLIER;
-						$database->setVillageField($jobs['wid'],"maxcrop",$max);
-                    }  			
+					}		
 				}
 				if(($jobs['field'] >= 19 && ($session->tribe == 1 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1)) { $innertimestamp = $jobs['timestamp']; }
 			}
 		}
 		}
 		}
+		$database->finishDemolition($village->wid);
 		$technology->finishTech();
 		$logging->goldFinLog($village->wid);
 		$database->modifyGold($session->uid,2,0);

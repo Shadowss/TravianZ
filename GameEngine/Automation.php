@@ -1075,6 +1075,22 @@ class Automation {
              $heroxp = $totaldead_def;
              $database->modifyHeroXp("experience",$heroxp,$from['owner']);
             }
+            $Defender1 = $database->getUnit($data['to']);
+				if($Defender1['hero'] > 0){
+				$defheroowner = $database->getVillageField($Defender1['vref'],"owner");
+				$defheroxp = $totaldead_att;
+				$database->modifyHeroXp("experience",$defheroxp,$defheroowner);
+				}
+            $enforcementarray1 = $database->getEnforceVillage($data['to'],0);
+            if(count($enforcementarray1) > 0) {
+            foreach($enforcementarray1 as $enforce1) {
+							if($enforce1['hero'] > 0){
+							$enforceowner = $database->getVillageField($enforce1['from'],"owner");
+							$reinfheroxp = $totaldead_att;
+							$database->modifyHeroXp("experience",$reinfheroxp,$enforceowner);
+							}
+            }
+                        }
             $database->modifyPoints($toF['owner'],'dpall',$totaldead_att );
             $database->modifyPoints($from['owner'],'apall',$totaldead_def);
             $database->modifyPoints($toF['owner'],'dp',$totaldead_att );
@@ -1913,8 +1929,8 @@ if($data['t11'] > 0){
                         $walllevel =0;
                         $rplevel =0;
                     }
-$palaceimg = "<img src=\"<?php echo GP_LOCATE; ?>img/g/g26.gif\" height=\"30\" width=\"24\" alt=\"Palace\" title=\"Palace\" />";
-$crannyimg = "<img src=\"<?php echo GP_LOCATE; ?>img/g/g23.gif\" height=\"30\" width=\"24\" alt=\"Cranny\" title=\"Cranny\" />";
+$palaceimg = "<img src=\"".GP_LOCATE."img/g/g26.gif\" height=\"20\" width=\"15\" alt=\"Palace\" title=\"Palace\" />";
+$crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\" alt=\"Cranny\" title=\"Cranny\" />";
                 $info_spy = "".$spy_pic.",".$palaceimg." Residance/Palace Level : ".$rplevel."
 				<br>".$crannyimg." Cranny level: ".$crannylevel."<br><br>Wall Level : ".$walllevel."";
 
@@ -2035,7 +2051,7 @@ $crannyimg = "<img src=\"<?php echo GP_LOCATE; ?>img/g/g23.gif\" height=\"30\" w
 			}
 			unset($Attacker);
             unset($Defender);
-            unset($Enforce);
+            unset($enforce);
             unset($unitssend_att);
             unset($unitssend_def);
             unset($battlepart);
@@ -2056,7 +2072,6 @@ $crannyimg = "<img src=\"<?php echo GP_LOCATE; ?>img/g/g23.gif\" height=\"30\" w
 			unset($herosend_def);
 			unset($deadhero);
 			unset($heroxp);
-			unset($dead11);
 			unset($AttackerID);
 			unset($DefenderID);
 			unset($totalsend_alldef);
@@ -2064,6 +2079,12 @@ $crannyimg = "<img src=\"<?php echo GP_LOCATE; ?>img/g/g23.gif\" height=\"30\" w
 			unset($totaldead_def);
 			unset($unitsdead_att_check);
 			unset($totalattackdead);
+            unset($Defender1);
+            unset($enforce1);
+			unset($defheroowner);
+			unset($enforceowner);
+			unset($defheroxp);
+            unset($reinfheroxp);
            }
             if(file_exists("GameEngine/Prevention/sendunits.txt")) {
                 @unlink("GameEngine/Prevention/sendunits.txt");
