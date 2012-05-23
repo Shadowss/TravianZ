@@ -154,14 +154,14 @@ class Battle {
                 }
 
                 if(!$scout)
-                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab,$post['kata'],1);
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab,$post['kata'],1,0,0,0);
                 else
-                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab,$post['kata'],1);
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab,$post['kata'],1,0,0,0);
         }
 
 
         //1 raid 0 normal
-        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID) {
+        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref) {
                 global $database,$bid34;
                 // Definieer de array met de eenheden
                 $calvary = array(4,5,6,15,16,23,24,25,26,35,36,45,46);
@@ -349,7 +349,7 @@ class Battle {
                 //
                 // Formule voor het berekenen van punten aanvallers (Infanterie & Cavalry)
                 //
-                        $rap = $ap+$cap;
+                        $rap = ($ap+$cap)+(($ap+$cap)/100*$bid35[$automation->getTypeLevel(35,$AttackerWref)]['attri']);
                 //
                 // Formule voor de berekening van Defensive Punten
                 //

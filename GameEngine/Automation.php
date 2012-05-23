@@ -547,6 +547,7 @@ class Automation {
             $fromcoor = $database->getCoor($data['to']);
             $isoasis = $database->isVillageOases($data['to']);
             $AttackArrivalTime = $data['endtime'];
+			$AttackerWref = $data['from'];
             if ($isoasis == 0){
             $Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
             $Defender['id'] = $database->getUserField($database->getVillageField($data['to'],"owner"),"id",0);
@@ -895,7 +896,7 @@ class Automation {
                                         $stonemason = "1";
 
         }
-            $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID);
+            $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref);
 
             //units attack string for battleraport
             $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -1775,9 +1776,15 @@ class Automation {
                 }
                 if(!isset($nochiefing)){
                     //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
+					if($this->getTypeLevel(37,$data['to']) > 0){
                     for ($i=0; $i<($data['t9']-$dead9); $i++){
                     $rand+=rand(15,25);
                     }
+					}else{
+                    for ($i=0; $i<($data['t9']-$dead9); $i++){
+                    $rand+=rand(5,15);
+					}
+					}
                     //loyalty is more than 0
                     if(($toF['loyalty']-$rand)>0){
                         $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty']-$rand)."</b>.";
@@ -2085,6 +2092,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			unset($enforceowner);
 			unset($defheroxp);
             unset($reinfheroxp);
+            unset($AttackerWref);
            }
             if(file_exists("GameEngine/Prevention/sendunits.txt")) {
                 @unlink("GameEngine/Prevention/sendunits.txt");
