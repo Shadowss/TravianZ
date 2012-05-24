@@ -1777,13 +1777,20 @@ class Automation {
         if(($data['t9']-$dead9)>0){
 
 		    $palacelevel = $database->getResourceLevel($from['wref']);
-            if($palacelevel < 10){
+			for($i=1;$i<=40;$i++) {
+			if($palacelevel['f'.$i.'t'] == 26){
+			$plevel = $i;
+			}else if($palacelevel['f'.$i.'t'] == 25){
+			$plevel = $i;
+			}
+			}
+            if($palacelevel['f'.$plevel] < 10){
                $canconquer = 0;
             }
-            elseif($palacelevel < 15){
+            elseif($palacelevel['f'.$plevel] < 15){
                $canconquer = 1;
             }
-            elseif($palacelevel < 20){
+            elseif($palacelevel['f'.$plevel] < 20){
                $canconquer = 2;
             }
             else{
@@ -1808,7 +1815,8 @@ class Automation {
             $varray = $database->getProfileVillages($to['owner']);
 			$varray1 = count($database->getProfileVillages($from['owner']));
 			$mode = CP; 
-			$need_cps = ${'cp'.$mode}[$varray1];
+			$cp_mode = $GLOBALS['cp'.$mode];
+			$need_cps = $cp_mode[$varray1];
 			$user_cps = $database->getUserField($from['owner'],"cp",0);
             //kijken of laatste dorp is, of hoofddorp
 			if($user_cps >= $need_cps){
@@ -1904,6 +1912,7 @@ class Automation {
             } else {
                 $info_chief = "".$chief_pic.",Not enough culture points.";
             }
+			unset($plevel);
         }
 
 if($data['t11'] > 0){ 
