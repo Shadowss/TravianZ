@@ -1813,7 +1813,7 @@ class Automation {
             //kijken of laatste dorp is, of hoofddorp
 			if($user_cps >= $need_cps){
             if(count($varray)!='1' AND $to['capital']!='1' AND $villexp < $canconquer){
-			if($to['owenr']!=3 OR $to['name']!='WW Buildingplan'){
+			if($to['owner']!=3 OR $to['name']!='WW Buildingplan'){
                 //if there is no Palace/Residence
                 for ($i=18; $i<39; $i++){
                     if ($database->getFieldLevel($data['to'],"".$i."t")==25 or $database->getFieldLevel($data['to'],"".$i."t")==26){
