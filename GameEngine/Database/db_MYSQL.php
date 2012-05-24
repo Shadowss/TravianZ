@@ -2259,6 +2259,31 @@
                 $this->modifyEnforce($id,'hero',$data['t11'],1);
                 return mysql_insert_id($this->connection);
             }
+			
+            function addEnforce2($data,$tribe,$dead1,$dead2,$dead3,$dead4,$dead5,$dead6,$dead7,$dead8,$dead9,$dead10,$dead11) {
+                $q = "INSERT into " . TB_PREFIX . "enforcement (vref,`from`) values (" . $data['to'] . "," . $data['from'] . ")";
+                mysql_query($q, $this->connection);
+                $id = mysql_insert_id($this->connection);
+                $owntribe = $this->getUserField($this->getVillageField($data['from'], "owner"), "tribe", 0);
+                $start = ($owntribe - 1) * 10 + 1;
+                $end = ($owntribe * 10);
+                $start2 = ($tribe - 1) * 10 + 1;
+				$start3 = ($tribe - 1) * 10;
+				if($start3 == 0){
+				$start3 = "";
+				}
+                $end2 = ($tribe * 10);
+                //add unit
+                $j = '1';
+                for($i = $start; $i <= $end; $i++) {
+                    $this->modifyEnforce($id, $i, $data['t' . $j . ''], 1);
+                    $this->modifyEnforce($id, $i, ${dead.$j}, 0);
+                    $j++;
+                }
+                $this->modifyEnforce($id,'hero',$data['t11'],1);
+				$this->modifyEnforce($id,'hero',$dead11,0);
+                return mysql_insert_id($this->connection);
+            }
 
             function modifyEnforce($id, $unit, $amt, $mode) {
                 if($unit != 'hero') { $unit = 'u' . $unit; }

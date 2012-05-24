@@ -159,10 +159,56 @@ class Battle {
                         return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab,$post['kata'],1,0,0,0);
         }
 
+     public function getTypeLevel($tid,$vid) {
+        global $village,$database;
+        $keyholder = array();
 
+            $resourcearray = $database->getResourceLevel($vid);
+
+        foreach(array_keys($resourcearray,$tid) as $key) {
+            if(strpos($key,'t')) {
+                $key = preg_replace("/[^0-9]/", '', $key);
+                array_push($keyholder, $key);
+            }
+        }
+        $element = count($keyholder);
+        if($element >= 2) {
+            if($tid <= 4) {
+                $temparray = array();
+                for($i=0;$i<=$element-1;$i++) {
+                    array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
+                }
+                foreach ($temparray as $key => $val) {
+                    if ($val == max($temparray))
+                    $target = $key;
+                }
+            }
+            else {
+                $target = 0;
+                for($i=1;$i<=$element-1;$i++) {
+                    if($resourcearray['f'.$keyholder[$i]] > $resourcearray['f'.$keyholder[$target]]) {
+                        $target = $i;
+                    }
+                }
+            }
+        }
+        else if($element == 1) {
+            $target = 0;
+        }
+        else {
+            return 0;
+        }
+        if($keyholder[$target] != "") {
+            return $resourcearray['f'.$keyholder[$target]];
+        }
+        else {
+            return 0;
+        }
+    }
+	
         //1 raid 0 normal
         function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref) {
-                global $database,$bid34;
+                global $database,$bid34,$bid35;
                 // Definieer de array met de eenheden
                 $calvary = array(4,5,6,15,16,23,24,25,26,35,36,45,46);
                 $catapult = array(8,18,28,38,48);
@@ -349,7 +395,7 @@ class Battle {
                 //
                 // Formule voor het berekenen van punten aanvallers (Infanterie & Cavalry)
                 //
-                        $rap = ($ap+$cap)+(($ap+$cap)/100*$bid35[$automation->getTypeLevel(35,$AttackerWref)]['attri']);
+                        $rap = ($ap+$cap)+(($ap+$cap)/100*$bid35[$this->getTypeLevel(35,$AttackerWref)]['attri']);
                 //
                 // Formule voor de berekening van Defensive Punten
                 //
