@@ -51,7 +51,6 @@ if(isset($_GET['o'])) {
     if($too['conqured'] == 0){$disabledr ="disabled=disabled";}else{
     $disabledr ="";
     }
-    $disabled ="disabled=disabled";
     $checked  ="checked=checked";
 }
 	$process = $units->procUnits($_POST);	

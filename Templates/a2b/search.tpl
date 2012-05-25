@@ -16,7 +16,7 @@
     <tr>
         <td class="sel">
             <label>
-                <input class="radio" name="c" value="3" type="radio" <?php echo $disabled ?>>
+                <input class="radio" name="c" value="3" type="radio" <?php echo $disabledr ?>>
                 Normal attack
             </label>
         </td>
