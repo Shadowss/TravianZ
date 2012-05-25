@@ -14,7 +14,7 @@
 |   TravianX All rights reserved
 |
 */
-if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) die('Attempt of sql injection blocked');
+if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) header("Location: allianz.php");;
        include ("GameEngine/Village.php");
        include ("GameEngine/Chat.php");
        $start = $generator->pageLoadTimeStart();
