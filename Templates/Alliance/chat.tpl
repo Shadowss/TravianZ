@@ -1,6 +1,6 @@
 <?php
 ////////////// made by TTMTT //////////////
-ob_start();
+
 if(isset($aid)) {
 $aid = $aid;
 }
@@ -20,14 +20,17 @@ function show_data_cb(text) { document.getElementById("masnun").innerHTML = text
 function start_it() { x_get_data(show_data_cb); setTimeout("start_it()",1000); }
 function add_cb() {}
 function send_data() {
+//alert( document.form1.msg.value);
 msg = document.form1.msg.value;
-x_add_data(name +"|"+msg,add_cb); }
+//alert(msg);
+//x_add_data(name +"|"+msg,add_cb); 
+x_add_data(msg,add_cb); 
+document.form1.msg.value="";
+}
 
 </script>
 
-<?php
-if($session->access!=BANNED){
-?>
+
 <body onload="start_it()">
 <form name="form1" onSubmit="send_data()">
 	<div id="TitleName" class="chatHeader">Ally-Chat</div>
@@ -52,8 +55,3 @@ if($session->access!=BANNED){
 </body> 
 			<div id="rooms">
 			</div>
-<?php
-}else{
-	header("Location: banned.php");
-}
-?>

@@ -100,7 +100,7 @@ if (!isset($SAJAX_INCLUDED)) {
 			else
 				$args = array();
 		}
-		
+
 		if (! in_array($func_name, $sajax_export_list))
 			echo "-:$func_name not callable";
 		else {
@@ -175,7 +175,7 @@ if (!isset($SAJAX_INCLUDED)) {
 			var uri;
 			var post_data;
 			var target_id;
-			
+
 			sajax_debug("in sajax_do_call().." + sajax_request_type + "/" + sajax_target_id);
 			target_id = sajax_target_id;
 			if (typeof(sajax_request_type) == "undefined" || sajax_request_type == "") 
@@ -183,7 +183,7 @@ if (!isset($SAJAX_INCLUDED)) {
 			
 			uri = "<?php echo $sajax_remote_uri; ?>";
 			if (sajax_request_type == "GET") {
-			
+//										alert(args);
 				if (uri.indexOf("?") == -1) 
 					uri += "?rs=" + escape(func_name);
 				else
@@ -191,16 +191,16 @@ if (!isset($SAJAX_INCLUDED)) {
 				uri += "&rst=" + escape(sajax_target_id);
 				uri += "&rsrnd=" + new Date().getTime();
 				
-				for (i = 0; i < args.length-1; i++) 
-					uri += "&rsargs[]=" + escape(args[i]);
-
+				for (i = 0; i < args.length-1; i++) {
+					uri += "&rsargs[]=" + args[i];
+					}
 				post_data = null;
 			} 
 			else if (sajax_request_type == "POST") {
 				post_data = "rs=" + escape(func_name);
 				post_data += "&rst=" + escape(sajax_target_id);
 				post_data += "&rsrnd=" + new Date().getTime();
-				
+
 				for (i = 0; i < args.length-1; i++) 
 					post_data = post_data + "&rsargs[]=" + escape(args[i]);
 			}
@@ -352,13 +352,15 @@ if (!isset($SAJAX_INCLUDED)) {
 	function add_data($data) {
 		global $session,$database;
 
-		$data = explode("|",$data);
+		//$data = explode("|",$data);
+		if (is_array($data)){$msg = htmlspecialchars($data[1]);}else{$msg = htmlspecialchars($data);};
+//		$msg=htmlspecialchars($msg);
 		$name = $session->username;
-		$msg = htmlspecialchars($data[1]);
+		
 		$id_user = $session->uid;
 		$alliance = $session->alliance;
 		$now = time();
-			$q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ('$id_user','$name','$alliance','$now','$msg')";
+			echo $q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ('$id_user','$name','$alliance','$now','$msg')";
 			mysql_query($q, $database->connection);
 	}
 
