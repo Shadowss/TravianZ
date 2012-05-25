@@ -430,12 +430,13 @@ class Battle {
                         $moralbonus = 1.0;
                 }
 
-                if($involve >= 1000) {
-                        $Mfactor = round(2*(1.8592-pow($involve,0.015)),4);
-                }
-                else {
-                        $Mfactor = 1.5;
-                }
+				if($involve >= 1000) {
+					$Mfactor = round(2*(1.8592-pow($involve,0.015)),4);
+				}
+				else {
+					$Mfactor = 1.5;
+				}
+				if ($Mfactor < 1.25778){$Mfactor=1.25778;}elseif ($Mfactor > 1.5){$Mfactor=1.5;}
                 // Formule voor het berekenen verloren drives
                 // $type = 1 Raid, 0 Normal
                 if($type == 1)

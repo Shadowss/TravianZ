@@ -963,7 +963,8 @@ class Automation {
                             if($enforce['u'.$i]>'0'){
                                 $database->modifyEnforce($enforce['id'],$i,round($battlepart[2]*$enforce['u'.$i]),0);
                                 $dead[$i]+=round($battlepart[2]*$enforce['u'.$i]);
-                                    if($dead[$i]!=$enforce['u'.$i]){
+								$checkpoint=round($battlepart[2]*$enforce['u'.$i]);
+                                    if($checkpoint!=$enforce['u'.$i]){
                                     $wrong='1';
                                     }
                             } else {
