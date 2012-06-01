@@ -16,7 +16,7 @@ $uprequire = $building->resourceRequired(99,$bid);
 <?php
      if($bindicator == 2) {
      echo "<span class=\"none\">The workers are already at work.</span>";
-	if($session->goldclub){
+	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($session->gold >= 1){
@@ -30,7 +30,7 @@ $uprequire = $building->resourceRequired(99,$bid);
      }
      else if($bindicator == 3) {
      echo "<span class=\"none\">The workers are already at work. (waiting loop)</span>";
-	if($session->goldclub){
+	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($session->gold >= 1){
@@ -54,7 +54,7 @@ $uprequire = $building->resourceRequired(99,$bid);
      else if($bindicator == 7) {
     	$neededtime = $building->calculateAvaliable(99,$bid);
     	echo "<span class=\"none\">Enough resources ".$neededtime[0]." at  ".$neededtime[1]."</span>";
-	if($session->goldclub){
+	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($session->gold >= 1){

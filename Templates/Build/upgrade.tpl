@@ -22,7 +22,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
 <?php
     if($bindicate == 2) {
    		echo "<span class=\"none\">The workers are already at work.</span>";
-	if($session->goldclub){
+	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($id <= 18) {
@@ -46,7 +46,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
     }
     else if($bindicate == 3) {
     	echo "<span class=\"none\">The workers are already at work. (waiting loop)</span>";
-	if($session->goldclub){
+	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($id <= 18) {
@@ -80,7 +80,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
     else if($bindicate == 7) {
     	$neededtime = $building->calculateAvaliable($id,$village->resarray['f'.$id.'t'],1+$loopsame+$doublebuild+$master);
     	echo "<span class=\"none\">Enough resources ".$neededtime[0]." at  ".$neededtime[1]."</span>";
-	if($session->goldclub){
+	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($id <= 18) {

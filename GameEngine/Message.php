@@ -347,7 +347,7 @@
         		$welcomemsg = preg_replace("'%USER%'", $username, $welcomemsg);
         		$welcomemsg = preg_replace("'%START%'", date("y.m.d", COMMENCE), $welcomemsg);
         		$welcomemsg = preg_replace("'%TIME%'", date("H:i", COMMENCE), $welcomemsg);
-        		$welcomemsg = preg_replace("'%PLAYERS%'", $database->countUser(), $welcomemsg);
+        		$welcomemsg = preg_replace("'%PLAYERS%'", $database->countUser()-4, $welcomemsg);
         		$welcomemsg = preg_replace("'%ALLI%'", $database->countAlli(), $welcomemsg);
         		return $database->sendMessage($uid, 5, WEL_TOPIC, $welcomemsg, 0);
         	}

@@ -48,10 +48,21 @@ if(isset($_GET['o'])) {
     $o = $_GET['o'];
     $oid = $_GET['z'];
     $too = $database->getOasisField($oid,"conqured");
-    if($too['conqured'] == 0){$disabledr ="disabled=disabled";}else{
+    if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
     $disabledr ="";
+	if($session->sit == 0){
+	$disabled ="";
+	}else{
+	$disabled ="disabled=disabled";
+	}
     }
     $checked  ="checked=checked";
+}else{
+	if($session->sit == 0){
+	$disabled ="";
+	}else{
+	$disabled ="disabled=disabled";
+	}
 }
 	$process = $units->procUnits($_POST);	
     $automation->isWinner(); 

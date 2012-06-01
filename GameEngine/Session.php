@@ -146,6 +146,7 @@ class Session {
         		$this->alliance = $_SESSION['alliance_user'] = $this->userarray['alliance'];
         		$this->checker = $_SESSION['checker'];
         		$this->mchecker = $_SESSION['mchecker'];
+				$this->sit = $database->GetOnline($this->uid);
 				$this->sit1 = $this->userarray['sit1'];
 				$this->sit2 = $this->userarray['sit2'];
 				$this->cp = floor($this->userarray['cp']);

@@ -48,7 +48,7 @@ class Building {
 			$this->constructBuilding($get['id'],$get['a']);
 		}
 		if(isset($get['buildingFinish'])) {
-			if($session->gold >= 2) {
+			if($session->gold >= 2 && $session->sit == 0) {
 				$this->finishAll();
 			}
 		}

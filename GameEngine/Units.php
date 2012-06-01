@@ -26,7 +26,7 @@ class Units {
 				break;
 					
 				case "2":
-				if (isset($post['a'])&& $post['a']==533374){
+				if (isset($post['a'])&& $post['a']==533374 && $post['disabledr'] == ""){
 				$this->sendTroops($post);
 				}else{
 				$post = $this->loadUnits($post);
@@ -39,7 +39,7 @@ class Units {
 				break;	
 				
 				case "3":
-				if (isset($post['a'])&& $post['a']==533374){
+				if (isset($post['a'])&& $post['a']==533374 && $post['disabled'] == ""){
 				$this->sendTroops($post);
 				}else{
 				$post = $this->loadUnits($post);
@@ -70,6 +70,12 @@ class Units {
 		global $database,$village,$session,$generator,$logging,$form;
 				// Busqueda por nombre de pueblo
 				// Confirmamos y buscamos las coordenadas por nombre de pueblo
+				if($post['disabledr'] != ""){
+				$form->addError("error","You can't reinforce this village/oasis");				
+				}
+				if($post['disabled'] != ""){
+				$form->addError("error","You can't attack this village/oasis with normal attack");				
+				}
 				if(	!$post['t1'] && !$post['t2'] && !$post['t3'] && !$post['t4'] && !$post['t5'] && 
 					!$post['t6'] && !$post['t7'] && !$post['t8'] && !$post['t9'] && !$post['t10'] && !$post['t11']){
 				$form->addError("error","You need to mark min. one troop");				

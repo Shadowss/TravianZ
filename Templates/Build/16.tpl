@@ -105,7 +105,7 @@ if($units_incoming >= 1){
 					echo "<td>".$enforce['hero']."</td>";
 				  }
                   echo "</tr></tbody>
-            <tbody class=\"infos\"><tr><th>Upkeep</th><td colspan=\"$colspan\"><div class='sup'>".$technology->getUpkeep($enforce,$tribe)."<img class=\"r4\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" />per hour</div><div class='sback'><a href='a2b.php?w=".$enforce['id']."'>Send back</a></div></td></tr>";
+            <tbody class=\"infos\"><tr><th>Upkeep</th><td colspan=\"$colspan\"><div class='sup'>".$technology->getUpkeep($enforce,$tribe)."<img class=\"r4\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" />per hour</div><div class='sback'><span class=none><b>Send back</b></span></div></td></tr>";
             
                   echo "</tbody></table>";
 			}

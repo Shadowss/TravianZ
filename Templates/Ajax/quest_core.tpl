@@ -51,13 +51,7 @@ if (isset($qact)){
 	$database->updateUserField($_SESSION['username'],'quest','2',0);		
 	$_SESSION['qst']= 2;	
 	//Give Reward
-	if(!$session->plus){
-		mysql_query("UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$_SESSION['username']."'") or die(mysql_error());
-	} else {
-		$plus=$database->getUserField($_SESSION['username'],'plus','username');
-		$plus+=86400;
-		$database->updateUserField($_SESSION['username'],'plus',$plus,0);
-	}
+	$database->FinishWoodcutter($session->villages[0]);	
 	break;
 
 	case '3':
@@ -65,7 +59,13 @@ if (isset($qact)){
 	$_SESSION['qst']= 3;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],50,60,30,10,1);	
+	if(!$session->plus){
+		mysql_query("UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$_SESSION['username']."'") or die(mysql_error());
+	} else {
+		$plus=$database->getUserField($_SESSION['username'],'plus','username');
+		$plus+=86400;
+		$database->updateUserField($_SESSION['username'],'plus',$plus,0);
+	}
 	break;
 
 	case '4':

@@ -1027,7 +1027,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
   `name` varchar(32) NOT NULL,
+  `uid` int(10) unsigned NOT NULL,
   `time` varchar(32) NOT NULL,
+  `sit` tinyint(1) unsigned NOT NULL,
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

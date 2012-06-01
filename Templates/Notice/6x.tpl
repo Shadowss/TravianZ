@@ -152,8 +152,8 @@ for($i=45;$i<=54;$i++) {
     }
 }
 if($targettribe == '1' and isset($dataarray[149]) and $dataarray[149]!=0){
-	if ($dataarray[150]==0){$tdclass='class="none"';}
-	echo "<td $tdclass>$dataarray[150]</td>";
+	if ($dataarray[150]==0){$tdclass1='class="none"';}
+	echo "<td $tdclass1>$dataarray[150]</td>";
 }
 ?>
 </tr></tbody></table>
@@ -207,8 +207,8 @@ for($i=66;$i<=75;$i++) {
     }
 }
 if($targettribe == '2' and isset($dataarray[149]) and $dataarray[149]!=0){
-	if ($dataarray[150]==0){$tdclass='class="none"';}
-	echo "<td $tdclass>$dataarray[150]</td>";
+	if ($dataarray[150]==0){$tdclass1='class="none"';}
+	echo "<td $tdclass1>$dataarray[150]</td>";
 }
 ?>
 </tr></tbody></table>
@@ -261,8 +261,8 @@ for($i=87;$i<=96;$i++) {
     }
 }
 if($targettribe == '3' and isset($dataarray[149]) and $dataarray[149]!=0){
-	if ($dataarray[150]==0){$tdclass='class="none"';}
-	echo "<td $tdclass>$dataarray[150]</td>";
+	if ($dataarray[150]==0){$tdclass1='class="none"';}
+	echo "<td $tdclass1>$dataarray[150]</td>";
 }
 ?>
 </tr></tbody></table>
@@ -316,8 +316,8 @@ for($i=108;$i<=117;$i++) {
     }
 }
 if($targettribe == '4' and isset($dataarray[149]) and $dataarray[149]!=0){
-	if ($dataarray[150]==0){$tdclass='class="none"';}
-	echo "<td $tdclass>$dataarray[150]</td>";
+	if ($dataarray[150]==0){$tdclass1='class="none"';}
+	echo "<td $tdclass1>$dataarray[150]</td>";
 }
 ?>
 </tr></tbody></table>
@@ -371,8 +371,8 @@ for($i=129;$i<=138;$i++) {
     }
 }
 if($targettribe == '5' and isset($dataarray[149]) and $dataarray[149]!=0){
-	if ($dataarray[150]==0){$tdclass='class="none"';}
-	echo "<td $tdclass>$dataarray[150]</td>";
+	if ($dataarray[150]==0){$tdclass1='class="none"';}
+	echo "<td $tdclass1>$dataarray[150]</td>";
 }
 ?>
 </tr></tbody></table>

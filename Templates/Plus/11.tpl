@@ -15,7 +15,7 @@ if($session->access != BANNED){
     $goldlog = mysql_query("SELECT * FROM ".TB_PREFIX."gold_fin_log") or die(mysql_error());
 
         $today = date("mdHi");
-
+if($session->sit == 0) {
 if (mysql_num_rows($MyGold)) {
 	if($golds['6'] > 2) {
 
@@ -39,6 +39,7 @@ $done1 = "nothing has been done";
 }
 } else {
 		$done1 = "You need more gold";
+}
 }
 }
 

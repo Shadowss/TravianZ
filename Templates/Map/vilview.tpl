@@ -389,7 +389,7 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21){
+if($type==18 or $type==19 or $type==20 or $type==21 or $type==22){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
@@ -402,7 +402,7 @@ while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21){
+if($type==18 or $type==19 or $type==20 or $type==21 or $type==22){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";

@@ -18,10 +18,10 @@
                 mysql_select_db(SQL_DB, $this->connection) or die(mysql_error());
             }
 
-            function register($username, $password, $email, $tribe, $locate, $act) {
+            function register($username, $password, $email, $tribe, $act) {
                 $time = time();
                 $timep = (time() + PROTECTION);
-                $q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,location,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, $locate, '$act', $timep, $time, $time)";
+                $q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
                 if(mysql_query($q, $this->connection)) {
                     return mysql_insert_id($this->connection);
                 } else {
@@ -203,12 +203,12 @@
                     $q2 = "SELECT password FROM " . TB_PREFIX . "users where id = " . $dbarray['sit1'] . " and access != " . BANNED;
                     $result2 = mysql_query($q2, $this->connection);
                     $dbarray2 = mysql_fetch_array($result2);
-                } else
-                    if($dbarray['sit2'] != 0) {
+                }
+                if($dbarray['sit2'] != 0) {
                         $q3 = "SELECT password FROM " . TB_PREFIX . "users where id = " . $dbarray['sit2'] . " and access != " . BANNED;
                         $result3 = mysql_query($q3, $this->connection);
                         $dbarray3 = mysql_fetch_array($result3);
-                    }
+                }
                 if($dbarray['sit1'] != 0 || $dbarray['sit2'] != 0) {
                     if($dbarray2['password'] == md5($password) || $dbarray3['password'] == md5($password)) {
                         return true;
@@ -314,10 +314,20 @@
                 return mysql_query($q, $this->connection);
             }
 
-            function UpdateOnline($mode, $name = "", $time = "") {
+            function GetOnline($uid) {
+                $q = "SELECT sit FROM " . TB_PREFIX . "online where uid = $uid";
+                $result = mysql_query($q, $this->connection);
+                $dbarray = mysql_fetch_array($result);
+				return $dbarray['sit'];
+            }
+
+            function UpdateOnline($mode, $name = "", $time = "", $uid = 0) {
                 global $session;
                 if($mode == "login") {
-                    $q = "INSERT IGNORE INTO " . TB_PREFIX . "online (name, time) VALUES ('$name', " . time() . ")";
+                    $q = "INSERT IGNORE INTO " . TB_PREFIX . "online (name, uid, time, sit) VALUES ('$name', '$uid', " . time() . ", 0)";
+                    return mysql_query($q, $this->connection);
+                } else if($mode == "sitter") {
+                    $q = "INSERT IGNORE INTO " . TB_PREFIX . "online (name, uid, time, sit) VALUES ('$name', '$uid', " . time() . ", 1)";
                     return mysql_query($q, $this->connection);
                 } else {
                     $q = "DELETE FROM " . TB_PREFIX . "online WHERE name ='" . $session->username . "'";
@@ -1692,7 +1702,7 @@
                         }
                     }
                     if(($jobLoopconID >= 0) && ($jobs[$jobDeleted]['loopcon'] != 1)) {
-                        if(($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19)) {
+                        if(($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19) || sizeof($jobs) < 3) {
                             $uprequire = $building->resourceRequired($jobs[$jobLoopconID]['field'], $jobs[$jobLoopconID]['type']);
                             $x = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,timestamp=" . (time() + $uprequire['time']) . " WHERE wid=" . $jobs[$jobDeleted]['wid'] . " AND loopcon=1 AND master=0";
                             mysql_query($x, $this->connection) or die(mysql_error());
@@ -1741,6 +1751,15 @@
                 $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
+            }
+			
+            function FinishWoodcutter($wid) {
+				$time = time()-1;
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by timestamp ASC";
+                $result = mysql_query($q);
+				$dbarray = mysql_fetch_array($result);
+				$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
+                $this->query($q);
             }
 			
             function getMasterJobs($wid) {

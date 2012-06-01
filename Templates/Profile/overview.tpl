@@ -27,8 +27,15 @@ foreach($varray as $vil) {
 ?>
 <h1>Player profile</h1>
 
-<?php 
-if($_GET['uid'] == $session->uid) { include("menu.tpl"); } ?>
+<?php
+if($_GET['uid'] == $session->uid) {
+if($session->sit == 0){
+include("menu.tpl");
+}else{
+include("menu2.tpl");
+}
+}
+?>
 <table id="profile" cellpadding="1" cellspacing="1" >
     <thead>
     <tr>
@@ -118,7 +125,11 @@ if($_GET['uid'] == $session->uid) { include("menu.tpl"); } ?>
             </tr>
             <tr>
 				<?php if($_GET['uid'] == $session->uid) {
+				if($session->sit == 0){
                 echo "<td colspan=\"2\"> <a href=\"spieler.php?s=1\">&raquo; Change profile</a></td>";
+				}else{
+                echo "<td colspan=\"2\"> <span class=none><b>&raquo; Change profile</b></span></td>";
+				}
                 } else {
              echo "<td colspan=\"2\"> <a href=\"nachrichten.php?t=1&amp;id=".$_GET['uid']."\">&raquo; Write message</a></td>";
 			 }

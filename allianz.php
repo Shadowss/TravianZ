@@ -168,6 +168,7 @@ if($_GET['aid'] or $session->alliance!=0){
        }
 
        if(isset($_GET['s'])) {
+	   if($_GET['s'] != 5 or $session->sit == 0){
        	switch($_GET['s']) {
        		case 2:
        			include ("Templates/Alliance/forum.tpl");
@@ -190,7 +191,9 @@ if($_GET['aid'] or $session->alliance!=0){
        			break;
        	}
        	// Options
-       } elseif(isset($_POST['o'])) {
+       }else{
+		header("Location: allianz.php");
+	   }} elseif(isset($_POST['o'])) {
        	switch($_POST['o']) {
        		case 1:
        			if(isset($_POST['s']) == 5 && isset($_POST['a_user'])) {

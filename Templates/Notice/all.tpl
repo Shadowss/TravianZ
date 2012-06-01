@@ -1,5 +1,5 @@
 <?php 
-$noticeClass = array("Scout Report","Won as attacker without losses","Won as attacker with losses","Lost as attacker with losses","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Lost as defender without losses","Reinforcement arrived","","Wood Delivered","Clay Delivered","Iron Delivered","Crop Delivered","","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Won scouting as attacker","Lost scouting as attacker","Won scouting as defender","Lost scouting as defender");
+$noticeClass = array("Scout Report","Won as attacker without losses","Won as attacker with losses","Lost as attacker with losses","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Lost as defender without losses","Reinforcement arrived","","Wood Delivered","Clay Delivered","Iron Delivered","Crop Delivered","","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Won scouting as attacker","Lost scouting as attacker","Won scouting as defender","Lost scouting as defender","Scout Report");
 ?>
 <form method="post" action="berichte.php" name="msg">
 <table cellpadding="1" cellspacing="1" id="overview"
@@ -72,7 +72,7 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
 		if($type==15 or $type==16 or $type==17){
 		$type = $type-11;
       echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
-	  }else if($type==18 or $type==19 or $type==20 or $type==21){
+	  }else if($type==18 or $type==19 or $type==20 or $type==21 or $type==22){
       echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
 	  }else{
       echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";

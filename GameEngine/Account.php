@@ -109,7 +109,7 @@ class Account {
                 } 
             } 
             else { 
-                $uid = $database->register($_POST['name'],md5($_POST['pw']),$_POST['email'],$_POST['vid'],$_POST['kid'],$act); 
+                $uid = $database->register($_POST['name'],md5($_POST['pw']),$_POST['email'],$_POST['vid'],$act); 
                 if($uid) { 
                     setcookie("COOKUSR",$_POST['name'],time()+COOKIE_EXPIRE,COOKIE_PATH); 
                     setcookie("COOKEMAIL",$_POST['email'],time()+COOKIE_EXPIRE,COOKIE_PATH); 
@@ -131,7 +131,7 @@ class Account {
             $result = mysql_query($q, $database->connection); 
             $dbarray = mysql_fetch_array($result); 
             if($dbarray['act'] == $_POST['id']) { 
-                $uid = $database->register($dbarray['username'],$dbarray['password'],$dbarray['email'],$dbarray['tribe'],$dbarray['location'],""); 
+                $uid = $database->register($dbarray['username'],$dbarray['password'],$dbarray['email'],$dbarray['tribe'],""); 
                 if($uid) { 
                 $database->unreg($dbarray['username']); 
                 $this->generateBase($dbarray['kid'],$uid,$dbarray['username']); 
@@ -188,8 +188,13 @@ class Account {
             header("Location: login.php"); 
         } 
         else { 
+		$userid = $database->getUserArray($_POST['user'], 0);
+		if($database->login($_POST['user'],$_POST['pw'])){
+			$database->UpdateOnline("login" ,$_POST['user'],time(),$userid['id']);
+		}else if($database->sitterLogin($_POST['user'],$_POST['pw'])){
+			$database->UpdateOnline("sitter" ,$_POST['user'],time(),$userid['id']);
+		}
             setcookie("COOKUSR",$_POST['user'],time()+COOKIE_EXPIRE,COOKIE_PATH); 
-            $database->UpdateOnline("login" ,$_POST['user'],time()); 
             $session->login($_POST['user']); 
         } 
     } 

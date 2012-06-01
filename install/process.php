@@ -93,6 +93,7 @@
         		$text = preg_replace("'%WW%'", $_POST['ww'], $text);
 				$text = preg_replace("'%T4_COMING%'", $_POST['t4_coming'], $text);
 				$text = preg_replace("'%REG_OPEN%'", $_POST['reg_open'], $text);
+				$text = preg_replace("'%PEACE%'", $_POST['peace'], $text);
 
         		fwrite($fh, $text);
 

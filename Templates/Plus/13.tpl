@@ -20,6 +20,7 @@
 		<tr>
 			<td align="center">
 <?php
+if($session->sit == 0) {
 	/* $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
@@ -35,6 +36,7 @@
 	echo "<input type='text' name='T4' size='6' value=".$quart."></td>";
 mysql_query("UPDATE ".TB_PREFIX."users set gold = ".($session->gold-1)." where `username`='".$session->username."'") or die(mysql_error());
  */
+}
 ?>
 		</tr>
 		<tr>

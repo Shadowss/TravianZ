@@ -548,6 +548,7 @@ class Automation {
             $isoasis = $database->isVillageOases($data['to']);
             $AttackArrivalTime = $data['endtime'];
 			$AttackerWref = $data['from'];
+			$DefenderWref =	$data['to'];
             if ($isoasis == 0){
             $Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
             $Defender['id'] = $database->getUserField($database->getVillageField($data['to'],"owner"),"id",0);
@@ -810,7 +811,7 @@ class Automation {
                                 if(!isset($Defender['hero'])){
                                     $Defender['hero'] = '0';
                                 } else {
-                                 if($Defender['hero']=='' or $Defender['hero']<='0'){
+                                 if($Defender['hero']=='' or $Defender['hero']<'0'){
                                     $Defender['hero'] = '0';
                                  }
                                 }
@@ -896,7 +897,8 @@ class Automation {
                                         $stonemason = "1";
 
         }
-            $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref);
+		if(PEACE == False || $targettribe == 4 || $targettribe == 5){
+            $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref);
 
             //units attack string for battleraport
             $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -948,8 +950,8 @@ class Automation {
                             }
                                 $dead['hero']='0';
                                 if($unitlist){
-                                    $dead['hero']+=round($battlepart[2]*$unitlist[0]['hero']);
-                                    $database->modifyUnit($data['to'],array("hero"),array(round($battlepart[2]*$unitlist[0]['hero'])),array(0));
+                                    $dead['hero']+=$battlepart['deadherodef'];
+                                    $database->modifyUnit($data['to'],array("hero"),array($battlepart['deadherodef']),array(0));
                                 }
             //kill other defence in village
             if(count($database->getEnforceVillage($data['to'],0)) > 0) {
@@ -971,8 +973,8 @@ class Automation {
                                 $dead[$i]='0';
                             }
                             if($enforce['hero']>'0'){
-                                $database->modifyEnforce($enforce['id'],"hero",round($battlepart[2]*$enforce['hero']),0);
-                                $dead['hero']+=round($battlepart[2]*$enforce['hero']);
+                                $database->modifyEnforce($enforce['id'],"hero",$battlepart['deadheroref'][$enforce['id']],0);
+                                $dead['hero']+=$battlepart['deadheroref'][$enforce['id']];
                                     if($dead['hero']!=$enforce['hero']){
                                     $wrong='1';
                                     }
@@ -1089,13 +1091,13 @@ class Automation {
              $heroxp = $totaldead_def;
              $database->modifyHeroXp("experience",$heroxp,$from['owner']);
             }
-            $Defender1 = $database->getUnit($data['to']);
+            $Defender1 = $database->getUnit($to['wref']);
 				if($Defender1['hero'] > 0){
-				$defheroowner = $database->getVillageField($Defender1['vref'],"owner");
+				$defheroowner = $database->getVillageField($to['wref'],"owner");
 				$defheroxp = $totaldead_att;
 				$database->modifyHeroXp("experience",$defheroxp,$defheroowner);
 				}
-            $enforcementarray1 = $database->getEnforceVillage($data['to'],0);
+            $enforcementarray1 = $database->getEnforceVillage($to['wref'],0);
             if(count($enforcementarray1) > 0) {
             foreach($enforcementarray1 as $enforce1) {
 							if($enforce1['hero'] > 0){
@@ -2100,6 +2102,42 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			if($type == 3 or $type == 4){
 			$database->addGeneralAttack($totalattackdead);
 			}
+			}else{
+			//units attack string for battleraport
+            $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
+			$herosend_att = $data['t11'];
+			if ($herosend_att>0){
+				$unitssend_att_check=$unitssend_att.','.$data['t11'];
+			}else{
+				$unitssend_att_check=$unitssend_att;
+			}
+
+			$speeds = array();
+
+            //find slowest unit.
+            for($i=1;$i<=10;$i++)
+            {
+                if ($data['t'.$i] > 0) {
+                if($unitarray) { reset($unitarray); }
+                $unitarray = $GLOBALS["u".(($owntribe-1)*10+$i)];
+                $speeds[] = $unitarray['speed'];
+                 }
+            }
+			if ($herosend_att>0){
+                $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner'].""; 
+                $resulth = mysql_query($qh); 
+                $hero_f=mysql_fetch_array($resulth); 
+                $hero_unit=$hero_f['unit'];
+                $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
+			}
+			$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
+			    $database->setMovementProc($data['moveid']);
+                $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
+
+                        $data2 = ''.$from['owner'].','.$from['wref'].','.$to['owner'].','.$owntribe.','.$unitssend_att_check.'';
+                        $database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
+						$database->addNotice($to['owner'],$to['wref'],$targetally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
+			}
 			unset($Attacker);
             unset($Defender);
             unset($enforce);
@@ -2119,7 +2157,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             unset($data_fail);
             unset($owntribe);
             unset($unitsdead_att);
-			unset($dead11);
 			unset($herosend_def);
 			unset($deadhero);
 			unset($heroxp);
@@ -2137,6 +2174,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			unset($defheroxp);
             unset($reinfheroxp);
             unset($AttackerWref);
+            unset($DefenderWref);
             unset($troopsdead1);
             unset($troopsdead2);
             unset($troopsdead3);

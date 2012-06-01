@@ -1,4 +1,6 @@
 <table id="coords" cellpadding="1" cellspacing="1">
+<input type="hidden" name="disabledr" value="<?php echo $disabledr; ?>">
+<input type="hidden" name="disabled" value="<?php echo $disabled; ?>">
     <tbody><tr>
         <td class="sel">
 
@@ -16,7 +18,7 @@
     <tr>
         <td class="sel">
             <label>
-                <input class="radio" name="c" value="3" type="radio" <?php echo $disabledr ?>>
+                <input class="radio" name="c" value="3" type="radio" <?php echo $disabled; ?>>
                 Normal attack
             </label>
         </td>
@@ -27,7 +29,7 @@
     <tr>
         <td class="sel">
             <label>
-                <input class="radio" name="c" <?php echo $checked ?> value="4" type="radio">
+                <input class="radio" name="c" <?php echo $checked; ?> value="4" type="radio">
                 Raid
             </label>
         </td>

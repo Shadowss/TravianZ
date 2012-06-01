@@ -79,7 +79,7 @@ define("NEXT_PROD","Production at level ");
 
 //BUILDINGS
 define("B1","Woodcutter");
-define("B1_DESC","The Woodcutter cuts down trees in order to produce lumber. The further you extend the bid1 the more lumber is produced by him.");
+define("B1_DESC","The Woodcutter cuts down trees in order to produce lumber. The further you extend the woodcutter the more lumber is produced by him.");
 define("B2","Clay Pit");
 define("B2_DESC","Clay is produced here. By increasing its level you increase its clay production.");
 define("B3","Iron Mine");

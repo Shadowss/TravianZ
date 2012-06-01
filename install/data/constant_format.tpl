@@ -114,7 +114,8 @@ define("TS_THRESHOLD",%TS_THRESHOLD%);
 // ***** Register open/close
 define("REG_OPEN",%REG_OPEN%);
 
-
+// ***** Peace system
+define("PEACE",%PEACE%);
 
 //////////////////////////////////
 //    **** LOG SETTINGS  ****   //
