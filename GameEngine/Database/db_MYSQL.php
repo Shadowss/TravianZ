@@ -941,6 +941,16 @@
                     return false;
                 }
             }
+			
+			function checkOasisExist($wref) {
+                $q = "SELECT * FROM " . TB_PREFIX . "odata where wref = '$wref'";
+                $result = mysql_query($q, $this->connection);
+                if(mysql_num_rows($result)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             function UpdateEditTopic($id, $title, $cat) {
                 $q = "UPDATE " . TB_PREFIX . "forum_topic set title = '$title', cat = '$cat' where id = $id";
