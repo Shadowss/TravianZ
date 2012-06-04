@@ -2013,8 +2013,8 @@
                 }
             }
 
-            function addMovement($type, $from, $to, $ref, $time, $endtime) {
-                $q = "INSERT INTO " . TB_PREFIX . "movement values (0,$type,$from,$to,$ref,$time,$endtime,0)";
+            function addMovement($type, $from, $to, $ref, $time, $endtime, $send = 1, $wood = 0, $clay = 0, $iron = 0, $crop = 0) {
+                $q = "INSERT INTO " . TB_PREFIX . "movement values (0,$type,$from,$to,$ref,$time,$endtime,0,$send,$wood,$clay,$iron,$crop)";
                 return mysql_query($q, $this->connection);
             }
 
@@ -2797,12 +2797,12 @@
                 return mysql_fetch_array($result);
             }
               
-              function getMovementById($id){
-      $q="SELECT * FROM ".TB_PREFIX."movement where moveid = ".$id;
-      $result=mysql_query($q);
-      $array=$this->mysql_fetch_all($result);
-      return $array;
-   }
+            function getMovementById($id){
+				$q = "SELECT * FROM ".TB_PREFIX."movement WHERE moveid = ".$id."";
+				$result = mysql_query($q);
+				$array = $this->mysql_fetch_all($result);
+				return $array;
+			}
 
             function getLinks($id){
                 $q = 'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . $id . ' ORDER BY `pos` ASC';

@@ -70,10 +70,29 @@ class Units {
 		global $database,$village,$session,$generator,$logging,$form;
 				// Busqueda por nombre de pueblo
 				// Confirmamos y buscamos las coordenadas por nombre de pueblo
-				if($post['disabledr'] != ""){
+					$oid = $database->getVilWref($post['x'],$post['y']);
+					if($database->isVillageOases($oid) != 0){
+				    $too = $database->getOasisField($oid,"conqured");
+					if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
+					$disabledr ="";
+					if($session->sit == 0){
+					$disabled ="";
+					}else{
+					$disabled ="disabled=disabled";
+					}
+					}
+					}else{
+					$disabledr ="";
+					if($session->sit == 0){
+					$disabled ="";
+					}else{
+					$disabled ="disabled=disabled";
+					}
+					}
+				if($disabledr != "" && $post['c'] == 2){
 				$form->addError("error","You can't reinforce this village/oasis");				
 				}
-				if($post['disabled'] != ""){
+				if($disabled != "" && $post['c'] == 3){
 				$form->addError("error","You can't attack this village/oasis with normal attack");				
 				}
 				if(	!$post['t1'] && !$post['t2'] && !$post['t3'] && !$post['t4'] && !$post['t5'] && 
@@ -290,7 +309,11 @@ class Units {
         if (isset($post['spy'])){$post['spy'] = $post['spy'];}else{ $post['spy'] = 0;} 
 		$abdata = $database->getABTech($village->wid);
 		$reference = $database->addAttack(($village->wid),$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],$data['type'],$post['ctar1'],$post['ctar2'],$post['spy'],$abdata['b1'],$abdata['b2'],$abdata['b3'],$abdata['b4'],$abdata['b5'],$abdata['b6'],$abdata['b7'],$abdata['b8']);
-  		$database->addMovement(3,$village->wid,$data['to_vid'],$reference,time(),($time+time()));
+  		$checkexist = $database->checkVilExist($data['to_vid']);
+  		$checkoexist = $database->checkOasisExist($data['to_vid']);
+		if($checkexist or $checkoexist){
+		$database->addMovement(3,$village->wid,$data['to_vid'],$reference,time(),($time+time()));
+		}
    
 		if($form->returnErrors() > 0) {
 			$_SESSION['errorarray'] = $form->getErrors();
@@ -416,7 +439,7 @@ class Units {
 	
 	public function Settlers($post) {
 		global $form, $database, $village, $session;
-		
+		if($session->access != BANNED){
     $mode = CP; 
     $total = count($database->getProfileVillages($session->uid)); 
     $need_cps = ${'cp'.$mode}[$total];
@@ -437,7 +460,10 @@ class Units {
 		  }
     } else {
       header("Location: build.php?id=39");
-    }	
+    }
+	}else{
+		header("Location: banned.php");
+	}
 	}
 
 	public function Hero($uid) {

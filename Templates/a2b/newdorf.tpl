@@ -8,12 +8,9 @@ $to = array('x'=>$newvillage['x'], 'y'=>$newvillage['y']);
 $time = $generator->procDistanceTime($from,$to,300,0);
 
 echo '<pre>';
-//print_r($founder);
 echo '</pre>';
 ?>
-
 <h1>Found new village</h1>
-<!--<p>De kolonisten kunnen nog niet vertrekken.<br> Voor het stichten van een nieuw dorp is er nog 750 grondstoffen hout, klei, ijzer en graan nodig.</p>-->
 				<form method="POST" action="build.php">
 				<input type="hidden" name="a" value="new" />
 				<input type="hidden" name="c" value="5" />

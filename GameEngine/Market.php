@@ -108,7 +108,7 @@ class Market {
 					if($res!=0){
 	                $reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0); 
 		            $database->modifyResource($village->wid,$resource[0],$resource[1],$resource[2],$resource[3],0); 
-			        $database->addMovement(0,$village->wid,$id,$reference,time(),time()+$timetaken); 
+			        $database->addMovement(0,$village->wid,$id,$reference,time(),time()+$timetaken,$post['send3']); 
 				    $logging->addMarketLog($village->wid,1,array($resource[0],$resource[1],$resource[2],$resource[3],$id));
 					}
 				}

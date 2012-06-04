@@ -957,6 +957,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   `starttime` int(11) unsigned NOT NULL DEFAULT '0',
   `endtime` int(11) unsigned NOT NULL DEFAULT '0',
   `proc` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `send` tinyint(1) unsigned NOT NULL,
+  `wood` int(11) unsigned NOT NULL,
+  `clay` int(11) unsigned NOT NULL,
+  `iron` int(11) unsigned NOT NULL,
+  `crop` int(11) unsigned NOT NULL,
   PRIMARY KEY (`moveid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

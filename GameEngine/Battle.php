@@ -208,7 +208,7 @@ class Battle {
 	
         //1 raid 0 normal
         function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
-                global $database,$bid34,$bid35;
+                global $bid34,$bid35,$database;
                 // Definieer de array met de eenheden
                 $calvary = array(4,5,6,15,16,23,24,25,26,35,36,45,46);
                 $catapult = array(8,18,28,38,48);

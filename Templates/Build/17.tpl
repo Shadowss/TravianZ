@@ -33,6 +33,7 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST
 <input type="hidden" name="x" value="<?php echo $_POST['x']; ?>">
 <input type="hidden" name="y" value="<?php echo $_POST['y']; ?>">
 <input type="hidden" name="dname" value="<?php echo $_POST['dname']; ?>">
+<input type="hidden" name="send3" value="<?php echo $_POST['send3']; ?>">
 <table id="send_select" class="send_res" cellpadding="1" cellspacing="1">
 	<tr>
 		<td class="ico"><img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /></td> 
@@ -190,8 +191,12 @@ $coor['y'] = "";
          <span>Y:</span><input class="text" type="text" name="y" value="<?php echo $coor['y']; ?>" maxlength="4" tabindex="7"> 
       </td> 
    </tr> 
-</table> 
-<div class="clear"></div><p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p></form>
+</table>
+<div class="clear"></div>
+<?php if($session->goldclub == 1){?>
+<p><select name="send3"><option value="1" selected="selected">1x</option><option value="2">2x</option><option value="3">3x</option></select>go</p>
+<?php } ?>
+<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p></form>
 <?php
 $error = '';
 if(isset($_POST['ft'])=='check'){
