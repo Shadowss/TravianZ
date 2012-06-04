@@ -70,7 +70,11 @@ class Units {
 		global $database,$village,$session,$generator,$logging,$form;
 				// Busqueda por nombre de pueblo
 				// Confirmamos y buscamos las coordenadas por nombre de pueblo
+					if($post['x']!="" && $post['y']!=""){
 					$oid = $database->getVilWref($post['x'],$post['y']);
+					}else if($post['dname']!=""){
+					$oid = $database->getVillageByName($post['dname']);
+					}
 					if($database->isVillageOases($oid) != 0){
 				    $too = $database->getOasisField($oid,"conqured");
 					if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
