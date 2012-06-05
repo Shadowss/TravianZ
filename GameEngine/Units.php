@@ -448,7 +448,8 @@ class Units {
     $total = count($database->getProfileVillages($session->uid)); 
     $need_cps = ${'cp'.$mode}[$total];
     $cps = $session->cp;
-
+	$rallypoint = $database->getResourceLevel($village->wid);
+	if($rallypoint['f39'] > 0){
     if($cps >= $need_cps) {
      $unit = ($session->tribe*10);
       
@@ -465,6 +466,9 @@ class Units {
     } else {
       header("Location: build.php?id=39");
     }
+	}else{
+      header("Location: dorf1.php");
+	}
 	}else{
 		header("Location: banned.php");
 	}

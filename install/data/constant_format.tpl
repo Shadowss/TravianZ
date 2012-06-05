@@ -115,6 +115,11 @@ define("TS_THRESHOLD",%TS_THRESHOLD%);
 define("REG_OPEN",%REG_OPEN%);
 
 // ***** Peace system
+// 0 = None
+// 1 = Normal
+// 2 = Christmas
+// 3 = New Year
+// 4 = Easter
 define("PEACE",%PEACE%);
 
 //////////////////////////////////

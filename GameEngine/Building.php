@@ -645,13 +645,28 @@ class Building {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
 		if($wwvillage['f99t']!=40){
-		$level = $database->getFieldLevel($jobs['wid'],$jobs['field']);
-			$level = ($level == -1) ? 0 : $level;
+			$level = $jobs['level'];
 			if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
 			$finish = 1;
 				$resource = $this->resourceRequired($jobs['field'],$jobs['type']);
+				if($jobs['master'] == 0){
 				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
-			  	if($database->query($q)) {
+			  	}else{
+				$villwood = $database->getVillageField($jobs['wid'],'wood');
+				$villclay = $database->getVillageField($jobs['wid'],'clay');
+				$villiron = $database->getVillageField($jobs['wid'],'iron');
+				$villcrop = $database->getVillageField($jobs['wid'],'crop');
+				$type = $jobs['type'];
+				$buildarray = $GLOBALS["bid".$type];
+				$buildwood = $buildarray[$level]['wood'];
+				$buildclay = $buildarray[$level]['clay'];
+				$buildiron = $buildarray[$level]['iron'];
+				$buildcrop = $buildarray[$level]['crop'];
+				if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop){
+				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
+				}
+				}
+				if($database->query($q)) {
 					$database->modifyPop($jobs['wid'],$resource['pop'],0);
 					$database->addCP($jobs['wid'],$resource['cp']);
 					$q = "DELETE FROM ".TB_PREFIX."bdata where id = ".$jobs['id'];

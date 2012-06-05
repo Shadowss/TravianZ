@@ -1,7 +1,24 @@
 <?php
-//reinforcement is underattack
 $dataarray = explode(",",$message->readingNotice['data']);
 if(isset($dataarray[14]) and $dataarray[14]!=0){$colspan="11";}else{$colspan="10";}
+if(PEACE == 1){
+$image = "peace";
+}else if(PEACE == 2){
+$image = "xmas";
+}else if(PEACE == 3){
+$image = "newy";
+}else{
+$image = "easter";
+}
+if(PEACE == 1){
+$message1 = "".$database->getUserField($dataarray[0],"username",0)." visited ".$database->getUserField($dataarray[2],"username",0)."'s troops";
+}else if(PEACE == 2){
+$message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Merry Christmas";
+}else if(PEACE == 3){
+$message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Happy New Year";
+}else{
+$message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Happy Easter";
+}
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
 			<thead>
@@ -53,8 +70,8 @@ if(isset($dataarray[14]) and $dataarray[14]!=0){
 ?>
 </tbody>
 	<tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-	<img src="<?php echo GP_LOCATE; ?>img/r/xmas.gif" alt="Peace" title="Peace" />
-	<?php echo "".$database->getUserField($dataarray[0],"username",0)." visited ".$database->getUserField($dataarray[2],"username",0)."'s troops" ?>
+	<img src="<?php echo GP_LOCATE; ?>img/r/<?php echo $image; ?>.gif" alt="Peace" title="Peace" />
+	<?php echo $message1; ?>
     </td></tr></tbody>
 </table>
 </td></tr></tbody></table>

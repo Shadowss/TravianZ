@@ -92,8 +92,11 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 		</td></tr><tr></tr>
 	<td><span class="f9 c6">Peace system:</span></td><td>
 				<select name="peace">
-				<option value="True">True</option>
-				<option value="False" selected="selected">False</option>
+				<option value="0" selected="selected">None</option>
+				<option value="1">Normal</option>
+				<option value="2">Christmas</option>
+				<option value="3">New Year</option>
+				<option value="4">Easter</option>				
 				</select>
 		</td></tr><tr></tr>
 		</table>

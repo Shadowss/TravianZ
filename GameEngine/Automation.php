@@ -939,7 +939,7 @@ class Automation {
                                         $stonemason = "1";
 
         }
-		if(PEACE == False || $targettribe == 4 || $targettribe == 5){
+		if(PEACE == 0 || $targettribe == 4 || $targettribe == 5){
             $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref);
 
             //units attack string for battleraport
@@ -1122,7 +1122,7 @@ class Automation {
 			$troopsdead6 = $dead6;
 			$troopsdead7 = $dead7;
 			$troopsdead8 = $dead8;
-			$troopsdead9 = $dead9;
+			$troopsdead9 = $dead9-1;
 			$troopsdead10 = $dead10;
 			$troopsdead11 = $dead11;
             for($i=1;$i<=50;$i++) {
@@ -1814,29 +1814,39 @@ class Automation {
                         $database->setVillageField($data['to'],loyalty,($toF['loyalty']-$rand));
                     } else {
                     //you took over the village
+						$villname = $database->getVillageField($data['to'],"name");
                         $artifact = $database->getOwnArtefactInfo($data['to']);
-                        $info_chief = "".$chief_pic.",Inhabitants decided to join your empire.";
+                        $info_chief = "".$chief_pic.",Inhabitants of ".$villname." village decided to join your empire.";
                         if ($artifact['vref'] == $data['to']){
                          $database->claimArtefact($data['to'],$data['to'],$database->getVillageField($data['from'],"owner"));
                         }
-                        $database->setVillageField($data['to'],loyalty,100);
+                        $database->setVillageField($data['to'],loyalty,0);
                         $database->setVillageField($data['to'],owner,$database->getVillageField($data['from'],"owner"));
 						//delete upgrades in armory and blacksmith
-						$q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref=".$data['to'];
+						$q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref = ".$data['to']."";
                         $database->query($q);
 						$database->addABTech($data['to']);
 						//delete researches in academy
-						$q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref=".$data['to'];
+						$q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref = ".$data['to']."";
                         $database->query($q);
 						$database->addTech($data['to']);
+						//delete reinforcement
+						$q = "DELETE FROM ".TB_PREFIX."enforcement WHERE from = ".$data['to'],"";
+                        $database->query($q);
+						// check buildings
 						$pop1 = $database->getVillageField($data['from'],"pop");
 						$pop2 = $database->getVillageField($data['to'],"pop");
 						if($pop1 > $pop2){
 						$buildlevel = $database->getResourceLevel($data['to']);
 						for ($i=1; $i<=39; $i++){
 						if($buildlevel['f'.$i]!=0){
+						if($buildlevel['f'.$i."t"]!=35 && $buildlevel['f'.$i."t"]!=36 && $buildlevel['f'.$i."t"]!=41){
 						$leveldown = $buildlevel['f'.$i]-1;
 						$database->setVillageLevel($data['to'],"f".$i,$leveldown);
+						}else{
+						$database->setVillageLevel($data['to'],"f".$i,0);
+						$database->setVillageLevel($data['to'],"f".$i."t",0);
+						}
 						}
 						}
 						if($buildlevel['f99']!=0){
@@ -2188,6 +2198,110 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                 @unlink("GameEngine/Prevention/sendunits.txt");
             }
     }
+	
+	private function sendTroopsBack($post) {
+		global $form, $database, $village, $generator, $session, $technology;
+
+		$enforce=$database->getEnforceArray($post['ckey'],0);
+			$to = $database->getVillage($enforce['from']);
+			$Gtribe = "";
+			if ($database->getUserField($to['owner'],'tribe',0) == '2'){ $Gtribe = "1"; } else if ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe = "2"; } else if ($database->getUserField($to['owner'],'tribe',0) == '4'){ $Gtribe = "3"; }else if ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe = "4"; }  
+		
+					for($i=1; $i<10; $i++){
+						if(isset($post['t'.$i])){
+							if($i!=10){
+								if ($post['t'.$i] > $enforce['u'.$Gtribe.$i])
+								{
+									$form->addError("error","You can't send more units than you have");
+									break;
+								}
+								
+								if($post['t'.$i]<0)
+								{
+									$form->addError("error","You can't send negative units.");
+									break;
+								}
+							}
+						} else {
+						$post['t'.$i.'']='0';
+						}											
+					}
+						if(isset($post['t11'])){
+								if ($post['t11'] > $enforce['hero'])
+								{
+									$form->addError("error","You can't send more units than you have");
+									break;
+								}
+								
+								if($post['t11']<0)
+								{
+									$form->addError("error","You can't send negative units.");
+									break;
+								}
+						} else {
+						$post['t11']='0';
+						}	
+				
+				if($form->returnErrors() > 0) {
+					$_SESSION['errorarray'] = $form->getErrors();
+					$_SESSION['valuearray'] = $_POST;
+					header("Location: a2b.php");		
+				} else {
+					
+					//change units
+                    $start = ($database->getUserField($to['owner'],'tribe',0)-1)*10+1;
+                    $end = ($database->getUserField($to['owner'],'tribe',0)*10);
+					
+                    $j='1';
+					for($i=$start;$i<=$end;$i++){
+						$database->modifyEnforce($post['ckey'],$i,$post['t'.$j.''],0); $j++;
+					}
+				
+						//get cord 
+						$from = $database->getVillage($enforce['from']);
+						$fromcoor = $database->getCoor($enforce['from']);
+						$tocoor = $database->getCoor($enforce['vref']);
+						$fromCor = array('x'=>$tocoor['x'], 'y'=>$tocoor['y']);
+						$toCor = array('x'=>$fromcoor['x'], 'y'=>$fromcoor['y']);
+		
+				$speeds = array();
+
+				//find slowest unit.
+				for($i=1;$i<=10;$i++){
+					if (isset($post['t'.$i])){
+						if( $post['t'.$i] != '' && $post['t'.$i] > 0){
+                        if($unitarray) { reset($unitarray); }
+                        $unitarray = $GLOBALS["u".(($session->tribe-1)*10+$i)];
+                        $speeds[] = $unitarray['speed'];
+                    } else {
+						$post['t'.$i.'']='0';
+						}
+					} else {
+						$post['t'.$i.'']='0';
+					}
+				}
+					if (isset($post['t11'])){
+						if( $post['t11'] != '' && $post['t11'] > 0){
+						$qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner'].""; 
+						$resulth = mysql_query($qh); 
+						$hero_f=mysql_fetch_array($resulth); 
+						$hero_unit=$hero_f['unit'];
+						$speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
+                    } else {
+						$post['t11']='0';
+						}
+					} else {
+						$post['t11']='0';
+					}
+				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
+				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
+				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
+				$technology->checkReinf($post['ckey']);
+
+						header("Location: build.php?id=39");
+
+				}
+	}
 
     private function sendreinfunitsComplete() {
         global $bid23,$database,$battle;

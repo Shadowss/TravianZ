@@ -195,7 +195,13 @@ $coor['y'] = "";
 <div class="clear"></div>
 <?php if($session->goldclub == 1){?>
 <p><select name="send3"><option value="1" selected="selected">1x</option><option value="2">2x</option><option value="3">3x</option></select>go</p>
-<?php } ?>
+<?php
+}else{
+?>
+<input type="hidden" name="send3" value="1">
+<?php
+}
+?>
 <p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p></form>
 <?php
 $error = '';
