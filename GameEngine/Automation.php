@@ -98,6 +98,26 @@ class Automation {
         return $popTot;
 
     }
+	
+    function recountCP($vid){
+    global $database;
+        $fdata = $database->getResourceLevel($vid);
+        $popTot = 0;
+
+        for ($i = 1; $i <= 40; $i++) {
+            $lvl = $fdata["f".$i];
+            $building = $fdata["f".$i."t"];
+            if($building){
+                $popTot += $this->buildingCP($building,$lvl);
+            }
+        }
+
+        $q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
+        mysql_query($q);
+
+        return $popTot;
+
+    }
 
     function buildingPOP($f,$lvl){
     $name = "bid".$f;
@@ -107,6 +127,18 @@ class Automation {
 
         for ($i = 0; $i <= $lvl; $i++) {
             $popT += $dataarray[$i]['pop'];
+        }
+    return $popT;
+    }
+	
+    function buildingCP($f,$lvl){
+    $name = "bid".$f;
+    global $$name;
+        $popT = 0;
+        $dataarray = $$name;
+
+        for ($i = 0; $i <= $lvl; $i++) {
+            $popT += $dataarray[$i]['cp'];
         }
     return $popT;
     }
@@ -1122,7 +1154,7 @@ class Automation {
 			$troopsdead6 = $dead6;
 			$troopsdead7 = $dead7;
 			$troopsdead8 = $dead8;
-			$troopsdead9 = $dead9-1;
+			$troopsdead9 = $dead9+1;
 			$troopsdead10 = $dead10;
 			$troopsdead11 = $dead11;
             for($i=1;$i<=50;$i++) {

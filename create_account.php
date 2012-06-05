@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 /** --------------------------------------------------- **\
 | ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
@@ -19,12 +19,59 @@
 /**
  * If user is not administrator, access is denied!
  */
-        if($session->access < ADMIN)
+        if($session->access < ADMIN){
         	die("Access Denied: You are not Admin!");
+			}else{
 
+$start = $generator->pageLoadTimeStart();
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title><?php echo SERVER_NAME ?></title>
+    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<script src="mt-full.js?0faaa" type="text/javascript"></script>
+	<script src="unx.js?0faaa" type="text/javascript"></script>
+	<script src="new.js?0faaa" type="text/javascript"></script>
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?e21d2" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?e21d2" rel="stylesheet" type="text/css" />
+	<?php
+	if($session->gpack == null || GP_ENABLE == false) {
+	echo "
+	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	} else {
+	echo "
+	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	}
+	?>
+	<script type="text/javascript">
+	window.addEvent('domready', start);
+	</script>
+</head>
+
+ 
+<body class="v35 ie ie8">
+<div class="wrapper">
+<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
+<div id="dynamic_header">
+	</div>
+<?php include("Templates/header.tpl"); ?>
+<div id="mid">
+<?php include("Templates/menu.tpl"); ?>
+<div id="content"  class="village1">
+<?php
 /**
  * Functions
  */
+if($_POST['password'] != ""){
         function generateBase($kid, $uid, $username) {
         	global $database, $message;
         	if($kid == 0) {
@@ -48,7 +95,7 @@
  * Creating account & capital village
  */
         $username = "Natars";
-        $password = md5('013ab00e4' . rand(999999999999, 9999999999999999999999999) . 'f248588ed');
+        $password = md5($_POST['password']);
         $email = "natars@travianx.com";
         $tribe = 5;
         $desc = "********************
@@ -370,8 +417,56 @@
         	Artefact($uid, 8, 3, 'Artefact of the unique fool', '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
         }
         
-        
-/**
- * Done?
- */
+
         echo "Done"; 
+}else{
+?>
+<form action="create_account.php" method="post">
+   
+<p>
+	<span>Choose Password</span>
+		<table>
+			<tr><td>Password:</td><td><input type="text" name="password" value=""></td></tr>
+		</table>
+</p>
+
+   	<center>
+    <input type="submit" name="Submit" id="Submit" value="Submit"></center>
+</form>
+<?php } ?>
+</div>
+<div id="side_info">
+<?php
+include("Templates/quest.tpl");
+include("Templates/news.tpl");
+include("Templates/multivillage.tpl");
+include("Templates/links.tpl");
+?>
+</div>
+<div class="clear"></div>
+</div>
+<div class="footer-stopper"></div>
+<div class="clear"></div>
+
+<?php 
+include("Templates/footer.tpl");
+include("Templates/res.tpl")
+?>
+<div id="stime">
+<div id="ltime">
+<div id="ltimeWrap">
+<?php echo CALCULATED_IN;?> <b><?php
+echo round(($generator->pageLoadTimeEnd()-$start)*1000);
+?></b> ms
+ 
+<br /><?php echo SEVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+</div>
+	</div>
+</div>
+
+<div id="ce"></div>
+</body>
+</html>
+<?php
+}
+?>
