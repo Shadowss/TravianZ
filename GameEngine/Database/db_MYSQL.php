@@ -613,7 +613,7 @@
                             break;
                         case 12:
                             //+50% crop per hour
-                            $q = "UPDATE " . TB_PREFIX . "units SET u33 = u33 + '".rand(0,20)."', u37 = u37 + '".rand(0,10)."', u38 = u38 + '".rand(0,10)."', u39 = u39 + '".rand(0,10)."' WHERE vref = '" . $wid . "' AND u33 <= '10' AND u37 <= '10' AND u38 <='10'AND u38 <='10'";
+                            $q = "UPDATE " . TB_PREFIX . "units SET u33 = u33 + '".rand(0,20)."', u37 = u37 + '".rand(0,10)."', u38 = u38 + '".rand(0,10)."', u39 = u39 + '".rand(0,10)."' WHERE vref = '" . $wid . "' AND u33 <= '10' AND u37 <= '10' AND u38 <='10'AND u39 <='10'";
                             $result = mysql_query($q, $this->connection);
                             break;
                     }

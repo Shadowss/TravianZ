@@ -1831,7 +1831,7 @@ class Automation {
                         $database->query($q);
 						$database->addTech($data['to']);
 						//delete reinforcement
-						$q = "DELETE FROM ".TB_PREFIX."enforcement WHERE from = ".$data['to'],"";
+						$q = "DELETE FROM ".TB_PREFIX."enforcement WHERE from = ".$data['to']."";
                         $database->query($q);
 						// check buildings
 						$pop1 = $database->getVillageField($data['from'],"pop");
