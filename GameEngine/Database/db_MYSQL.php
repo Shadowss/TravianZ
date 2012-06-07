@@ -565,13 +565,11 @@
             }
             
             function populateOasisUnitsHigh() {
-                $q2 = "SELECT * FROM " . TB_PREFIX . "wdata where oasistype != 0";
-                $result2 = mysql_query($q2, $this->connection);
-                while($row = mysql_fetch_array($result2)) {
-                    $wid = $row['id'];
-                    $basearray = $this->getMInfo($wid);
-                    //each Troop is a Set for oasis type like mountains have rats spiders and snakes fields tigers elphants clay wolves so on stonger one more not so less
-                    switch($basearray['oasistype']) {
+			$q2 = "SELECT * FROM " . TB_PREFIX . "wdata where oasistype != 0";
+			$result2 = mysql_query($q2, $this->connection);
+			while($row = mysql_fetch_array($result2)) {
+				$wid = $row['id'];
+				switch($row['oasistype']) {
                         case 1:
                         case 2:
                             //+25% lumber per hour
@@ -1602,6 +1600,48 @@
                 $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
+            }
+			
+            function createTradeRoute($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time) {
+			$x = "UPDATE " . TB_PREFIX . "users SET gold = gold - 2 WHERE id = ".$uid."";
+                mysql_query($x, $this->connection);
+				$timeleft = time()+604800;
+			$q = "INSERT into " . TB_PREFIX . "route values (0,$uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time,$timeleft)";
+                return mysql_query($q, $this->connection);
+            }
+			
+            function getTradeRoute($uid) {
+                $q = "SELECT * FROM " . TB_PREFIX . "route where uid = $uid ORDER BY timestamp ASC";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+			
+            function getTradeRoute2($id) {
+                $q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
+				$result = mysql_query($q, $this->connection) or die(mysql_error());
+                $dbarray = mysql_fetch_array($result);
+                return $dbarray;
+            }
+			
+            function getTradeRouteUid($id) {
+                $q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
+				$result = mysql_query($q, $this->connection) or die(mysql_error());
+                $dbarray = mysql_fetch_array($result);
+                return $dbarray['uid'];
+            }
+			
+            function editTradeRoute($id,$column,$value,$mode) {
+			if(!$mode){
+                $q = "UPDATE " . TB_PREFIX . "route set $column = $value where id = $id";
+			}else{
+                $q = "UPDATE " . TB_PREFIX . "route set $column = $column + $value where id = $id";
+			}
+                return mysql_query($q, $this->connection);
+            }
+			
+            function deleteTradeRoute($id) {
+                $q = "DELETE FROM " . TB_PREFIX . "route where id = $id";
+                return mysql_query($q, $this->connection);
             }
 
             function addBuilding($wid, $field, $type, $loop, $time, $master, $level) {
@@ -2720,7 +2760,7 @@
             }
 
             function getOwnArtefactInfoByType($vref, $type) {
-                $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type";
+                $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type order by size";
                 $result = mysql_query($q, $this->connection);
                 return mysql_fetch_array($result);
             }
@@ -2735,6 +2775,15 @@
                 $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size";
                 $result = mysql_query($q, $this->connection);
                 return mysql_fetch_array($result);
+            }
+
+            function getOwnUniqueArtefactInfo2($id, $type, $size, $mode) {
+			if(!$mode){
+                $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size";
+			}else{
+                $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $id AND type = $type AND size=$size";
+			}
+                return mysql_query($q, $this->connection);
             }
 
             function getArtefactInfo() {

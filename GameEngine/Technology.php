@@ -401,7 +401,18 @@ class Technology {
          //   $unit = "hero";
          //   global $$unit;
          //   $dataarray = $$unit; 
-           $upkeep += $array['hero'] * 6;
+			$upkeep += $array['hero'] * 6;
+			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,4,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($vid,4,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,4,2,0));
+			if($artefact > 0){
+			$upkeep /= 2;
+			}else if($artefact1 > 1){
+			$upkeep /= 2;
+			}else if($artefact2 > 1){
+			$upkeep /= 4;
+			$upkeep *= 3;
+			}
 		return $upkeep;
 	}
 

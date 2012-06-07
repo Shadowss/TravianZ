@@ -1,20 +1,20 @@
 <?php
 $dataarray = explode(",",$message->readingNotice['data']);
 if(isset($dataarray[14]) and $dataarray[14]!=0){$colspan="11";}else{$colspan="10";}
-if(PEACE == 1){
+if($dataarray[15] == 1){
 $image = "peace";
-}else if(PEACE == 2){
+}else if($dataarray[15] == 2){
 $image = "xmas";
-}else if(PEACE == 3){
+}else if($dataarray[15] == 3){
 $image = "newy";
 }else{
 $image = "easter";
 }
-if(PEACE == 1){
+if($dataarray[15] == 1){
 $message1 = "".$database->getUserField($dataarray[0],"username",0)." visited ".$database->getUserField($dataarray[2],"username",0)."'s troops";
-}else if(PEACE == 2){
+}else if($dataarray[15] == 2){
 $message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Merry Christmas";
-}else if(PEACE == 3){
+}else if($dataarray[15] == 3){
 $message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Happy New Year";
 }else{
 $message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Happy Easter";

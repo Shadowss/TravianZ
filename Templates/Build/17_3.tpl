@@ -1,3 +1,4 @@
+<?php if($session->gold > 2){ ?>
 <div id="build" class="gid17"><a href="#" onClick="return Popup(17,4);" class="build_logo"> 
 	<img class="building g17" src="img/x.gif" alt="Marketplace" title="Marketplace" /> 
 </a> 
@@ -263,3 +264,8 @@ function testSum() {
 		<?php echo "You can't use NPC trade in WW village.";
 		}} ?>
 	</div>
+<?php
+}else{
+header("Location: build.php?id=".$_GET['id']."");
+}
+?>

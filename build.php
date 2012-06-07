@@ -49,7 +49,121 @@ if(isset($_GET['id'])) {
         $technology->procTechno($_GET);
     }
 }
-if($session->goldclub){
+if($session->goldclub == 1 && count($session->villages) > 1){
+	if(isset($_GET['routeid'])){
+	$routeid = $_GET['routeid'];
+	}
+if($routeaccess = 1){
+		if(isset($_POST['action']) && $_POST['action'] == 'addRoute') {
+		if($session->access != BANNED){
+		if($session->gold >= 2) {
+			for($i=1;$i<=4;$i++){
+			if($_POST['r'.$i] == ""){
+			$_POST['r'.$i] = 0;
+			}
+			}
+			$totalres = $_POST['r1']+$_POST['r2']+$_POST['r3']+$_POST['r4'];
+			$reqMerc = ceil(($totalres-0.1)/$market->maxcarry);
+			$second = date("s");
+			$minute = date("i");
+			$hour = date("G")-$_POST['start'];
+			if(date("G") > $_POST['start']){
+			$day = 1;
+			}else{
+			$day = 0;
+			}
+			$timestamp = strtotime("-$hour hours -$second second -$minute minutes +$day day");
+			if($totalres > 0){
+				$database->createTradeRoute($session->uid,$_POST['tvillage'],$village->wid,$_POST['r1'],$_POST['r2'],$_POST['r3'],$_POST['r4'],$_POST['start'],$_POST['deliveries'],$reqMerc,$timestamp);
+				header("Location: build.php?gid=17&t=4");
+				$route = 1;
+			}else{
+				header("Location: build.php?gid=17&t=4&create");
+				$route = 1;
+			}
+		}
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
+		if(isset($_GET['action']) && $_GET['action'] == 'extendRoute') {
+		if($session->access != BANNED){
+		if($session->gold >= 2) {
+		$traderoute = $database->getTradeRouteUid($_GET['routeid']);
+		if($traderoute == $session->uid){
+		$database->editTradeRoute($_GET['routeid'],"timeleft",604800,1);
+		$newgold = $session->gold-2;
+		$database->updateUserField($session->uid,'gold',$newgold,1);
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}else{
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}
+		}else{
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		}
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
+		if(isset($_POST['action']) && $_POST['action'] == 'editRoute') {
+		if($session->access != BANNED){
+		$totalres = $_POST['r1']+$_POST['r2']+$_POST['r3']+$_POST['r4'];
+		$reqMerc = ceil(($totalres-0.1)/$market->maxcarry);
+		if($totalres > 0){
+		$database->editTradeRoute($_POST['routeid'],"wood",$_POST['r1'],0);
+		$database->editTradeRoute($_POST['routeid'],"clay",$_POST['r2'],0);
+		$database->editTradeRoute($_POST['routeid'],"iron",$_POST['r3'],0);
+		$database->editTradeRoute($_POST['routeid'],"crop",$_POST['r4'],0);
+		$database->editTradeRoute($_POST['routeid'],"start",$_POST['start'],0);
+		$database->editTradeRoute($_POST['routeid'],"deliveries",$_POST['deliveries'],0);
+		$database->editTradeRoute($_POST['routeid'],"merchant",$reqMerc,0);
+		$second = date("s");
+		$minute = date("i");
+		$hour = date("G")-$_POST['start'];
+		if(date("G") > $_POST['start']){
+		$day = 1;
+		}else{
+		$day = 0;
+		}
+		$timestamp = strtotime("-$hour hours -$second seconds -$minute minutes +$day day");
+		$database->editTradeRoute($_POST['routeid'],"timestamp",$timestamp,0);
+		}
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
+		if(isset($_GET['action']) && $_GET['action'] == 'delRoute') {
+		if($session->access != BANNED){
+		$traderoute = $database->getTradeRouteUid($_GET['routeid']);
+		if($traderoute == $session->uid){
+		$database->deleteTradeRoute($_GET['routeid']);
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}else{
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
+}
+}
+if($session->goldclub == 1 && $session->access != BANNED){
         if(isset($_GET['t'])==99) {
             
             if($_GET['action'] == 'addList') {
@@ -73,6 +187,9 @@ if($session->goldclub){
             }
 }else{
 $create = 0;
+if($session->access == BANNED){
+header("Location: banned.php"); 
+}
 }
 
 if (isset($_POST['a']) == 533374 && isset($_POST['id']) == 39){  
@@ -161,7 +278,7 @@ $automation->isWinner();
 <?php include("Templates/menu.tpl"); ?>
 <div id="content"  class="build">
 <?php
-if(isset($_GET['id'])) {
+if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['routeid'])) {
     if(isset($_GET['s']))
     {
         if (!ctype_digit($_GET['s'])) {

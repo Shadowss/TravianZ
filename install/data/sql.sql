@@ -789,14 +789,14 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
-  `heroid` smallint(2) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` smallint(2) unsigned NOT NULL,
+  `heroid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
   `unit` smallint(2) unsigned NOT NULL,
   `name` tinytext NOT NULL,
   `wref` mediumint(3) unsigned NOT NULL,
   `level` tinyint(1) unsigned NOT NULL,
-  `points` smallint(2) unsigned NOT NULL,
-  `experience` mediumint(3) NOT NULL,
+  `points` mediumint(3) unsigned NOT NULL,
+  `experience` int(11) NOT NULL,
   `dead` tinyint(1) unsigned NOT NULL,
   `health` float(12,9) unsigned NOT NULL,
   `attack` tinyint(1) unsigned NOT NULL,
@@ -1089,6 +1089,34 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
 
 --
 -- Dumping data for table `%prefix%research`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%route`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
+  `wid` int(11) unsigned NOT NULL,
+  `from` int(11) unsigned NOT NULL,
+  `wood` int(5) unsigned NOT NULL,
+  `clay` int(5) unsigned NOT NULL,
+  `iron` int(5) unsigned NOT NULL,
+  `crop` int(5) unsigned NOT NULL,
+  `start` tinyint(2) unsigned NOT NULL,
+  `deliveries` tinyint(1) unsigned NOT NULL,
+  `merchant` int(11) unsigned NOT NULL,
+  `timestamp` int(11) unsigned NOT NULL,
+  `timeleft` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%route`
 --
 
 

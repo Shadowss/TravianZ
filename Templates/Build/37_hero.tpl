@@ -21,7 +21,6 @@ include_once("GameEngine/Data/hero_full.php");
 
 ?> 
     <?php if ($hero_info['experience'] >= 495000) {
-    mysql_query("UPDATE ".TB_PREFIX."hero SET `level` = 100 where `uid`='".$session->uid."'"); 
     ?> 
     <table id="distribution" cellpadding="1" cellspacing="1"> 
     <thead><tr> 

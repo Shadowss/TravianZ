@@ -169,6 +169,8 @@ class Automation {
             $this->demolitionComplete(); 
         }
         $this->updateStore();
+		$this->delTradeRoute();
+		$this->TradeRoute();
         if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>10) {
             $this->marketComplete();
         }
@@ -528,9 +530,28 @@ class Automation {
         $cp = $dataarray[($level+1)]['cp'];
         return array($pop,$cp);
     }
+	
+    private function delTradeRoute() {
+        global $database;
+        $time = time();
+        $q = "DELETE from ".TB_PREFIX."route where timeleft < $time";
+        $database->query($q);
+    }
+	
+    private function TradeRoute() {
+        global $database;
+            $time = time();
+            $q = "SELECT * FROM ".TB_PREFIX."route where timestamp < $time";
+			$dataarray = $database->query_return($q);
+			foreach($dataarray as $data) {
+			$targettribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
+			$this->sendResource2($data['wood'],$data['clay'],$data['iron'],$data['crop'],$data['from'],$data['wid'],$targettribe,$data['deliveries']);
+			$database->editTradeRoute($data['id'],"timestamp",86400,1);
+			}
+    }
 
     private function marketComplete() {
-        global $database,$generator;
+        global $database;
         $ourFileHandle = @fopen("GameEngine/Prevention/market.txt", 'w');
         @fclose($ourFileHandle);
         $time = time();
@@ -2143,13 +2164,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 						}
 			}else{
 			//units attack string for battleraport
-            $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
+            $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
 			$herosend_att = $data['t11'];
-			if ($herosend_att>0){
-				$unitssend_att_check=$unitssend_att.','.$data['t11'];
-			}else{
-				$unitssend_att_check=$unitssend_att;
-			}
+				$unitssend_att= $unitssend_att1.','.$herosend_att;
 
 			$speeds = array();
 
@@ -2172,8 +2189,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
 			    $database->setMovementProc($data['moveid']);
                 $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
-
-                        $data2 = ''.$from['owner'].','.$from['wref'].','.$to['owner'].','.$owntribe.','.$unitssend_att_check.'';
+				$peace = PEACE;
+                        $data2 = ''.$from['owner'].','.$from['wref'].','.$to['owner'].','.$owntribe.','.$unitssend_att.','.$peace.'';
                         $database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 						$database->addNotice($to['owner'],$to['wref'],$targetally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 			}
@@ -3049,7 +3066,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 						}
                     $database->modifyHero("lastupdate",time(),$hdata['heroid']); 
 					}
-					if ($hdata['experience'] > $hero_levels[$hdata['level']+1]) { 
+					if ($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100) { 
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET level = level + 1 WHERE heroid = '".$hdata['heroid']."'"); 
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET points = points + 5 WHERE heroid = '".$hdata['heroid']."'"); 
 					}
