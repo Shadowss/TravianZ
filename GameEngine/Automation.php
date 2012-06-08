@@ -2080,7 +2080,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             // If the dead units not equal the ammount sent they will return and report
             if($unitsdead_att != $unitssend_att or $dead11 != $herosend_att)
             {
-                $endtime = $this->procDistanceTime($from,$to,min($speeds),1) + $AttackArrivalTime;
+			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 1){
+			$fastertroops = 2;
+			}else if($artefact2 > 1){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+                $endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + $AttackArrivalTime;
                 //$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
                 if($type == 1) {
                     $database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
@@ -2186,7 +2198,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                 $hero_unit=$hero_f['unit'];
                 $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
 			}
-			$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
+			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 1){
+			$fastertroops = 2;
+			}else if($artefact2 > 1){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+			$endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + time();
 			    $database->setMovementProc($data['moveid']);
                 $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
 				$peace = PEACE;
@@ -2342,7 +2366,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					} else {
 						$post['t11']='0';
 					}
-				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
+			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 1){
+			$fastertroops = 2;
+			}else if($artefact2 > 1){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+				$time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),1)/$fastertroops);
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
 				$technology->checkReinf($post['ckey']);

@@ -306,8 +306,19 @@ class Units {
 				$speeds[] = $herodata['speed'];
 			}
 		}
-				
-		$time = $generator->procDistanceTime($from,$to,min($speeds),1);
+      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 1){
+			$fastertroops = 2;
+			}else if($artefact2 > 1){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+		$time = round($generator->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
         if (isset($post['ctar1'])){$post['ctar1'] = $post['ctar1'];}else{ $post['ctar1'] = 0;}
         if (isset($post['ctar2'])){$post['ctar2'] = $post['ctar2'];}else{ $post['ctar2'] = 0;}  
         if (isset($post['spy'])){$post['spy'] = $post['spy'];}else{ $post['spy'] = 0;} 
@@ -423,7 +434,19 @@ class Units {
 					} else {
 						$post['t11']='0';
 					}
-				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
+      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 1){
+			$fastertroops = 2;
+			}else if($artefact2 > 1){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+				$time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),1)/$fastertroops);
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
 				$technology->checkReinf($post['ckey']);
@@ -452,10 +475,21 @@ class Units {
 	if($rallypoint['f39'] > 0){
     if($cps >= $need_cps) {
      $unit = ($session->tribe*10);
-      
+      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 1){
+			$fastertroops = 2;
+			}else if($artefact2 > 1){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
 		  $database->modifyResource($village->wid,750,750,750,750,0);
 		  $database->modifyUnit($village->wid,array($unit),array(3),array(0));
-		  $database->addMovement(5,$village->wid,$post['s'],0,time(),$post['timestamp']);
+		  $database->addMovement(5,$village->wid,$post['s'],0,time(),round(($post['timestamp']-time())/$fastertroops)+time());
 		  header("Location: build.php?id=39");
 		
 		  if($form->returnErrors() > 0) {
