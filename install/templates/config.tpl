@@ -178,47 +178,44 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	</p>
 	
 	<p>
-	<span class="f10 c">LOG RELATED</span>
+	<span class="f10 c">LOG RELATED (You should disable them)</span>
 	<table><tr>
-  	<td><span style="red"><b>WARNING:</b></span> May increase some preformence (Higher CPU/RAM usage, More lag)</td>
-	</tr>
-	<tr>
 	<td><span class="f9 c6">Log Building:</span></td><td><select name="log_build">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr><tr>
 	<td><span class="f9 c6">Log Tech:</span></td><td><select name="log_tech">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr><tr>
 	<td><span class="f9 c6">Log Login:</span></td><td><select name="log_login">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr>
  	 <tr>
 	<td><span class="f9 c6">Log Gold:</span></td><td><select name="log_gold_fin">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr>
 	<tr>	<td><span class="f9 c6">Log Admin:</span></td><td><select name="log_admin">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr>
 	<tr>	<td><span class="f9 c6">Log War:</span></td><td><select name="log_war">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr><tr>
 	<td><span class="f9 c6">Log Market:</span></td><td><select name="log_market">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr><tr>
 	<td><span class="f9 c6">Log Illegal:</span></td><td><select name="log_illegal">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr><tr>
 	<td><span class="f9 c6">Log :</span></td><td><select name="">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
+	  <option value="true">Yes</option>
+	  <option value="false" selected="selected">No</option>
 	</select></td></tr>
 	</table>
 	</p>
