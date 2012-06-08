@@ -311,9 +311,9 @@ class Units {
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
 			if($artefact > 0){
 			$fastertroops = 3;
-			}else if($artefact1 > 1){
+			}else if($artefact1 > 0){
 			$fastertroops = 2;
-			}else if($artefact2 > 1){
+			}else if($artefact2 > 0){
 			$fastertroops = 1.5;
 			}else{
 			$fastertroops = 1;
@@ -439,9 +439,9 @@ class Units {
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
 			if($artefact > 0){
 			$fastertroops = 3;
-			}else if($artefact1 > 1){
+			}else if($artefact1 > 0){
 			$fastertroops = 2;
-			}else if($artefact2 > 1){
+			}else if($artefact2 > 0){
 			$fastertroops = 1.5;
 			}else{
 			$fastertroops = 1;
@@ -475,21 +475,9 @@ class Units {
 	if($rallypoint['f39'] > 0){
     if($cps >= $need_cps) {
      $unit = ($session->tribe*10);
-      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
-			if($artefact > 0){
-			$fastertroops = 3;
-			}else if($artefact1 > 1){
-			$fastertroops = 2;
-			}else if($artefact2 > 1){
-			$fastertroops = 1.5;
-			}else{
-			$fastertroops = 1;
-			}
 		  $database->modifyResource($village->wid,750,750,750,750,0);
 		  $database->modifyUnit($village->wid,array($unit),array(3),array(0));
-		  $database->addMovement(5,$village->wid,$post['s'],0,time(),round(($post['timestamp']-time())/$fastertroops)+time());
+		  $database->addMovement(5,$village->wid,$post['s'],0,time(),$post['timestamp']);
 		  header("Location: build.php?id=39");
 		
 		  if($form->returnErrors() > 0) {

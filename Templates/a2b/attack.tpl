@@ -7,7 +7,19 @@ $from = array('x'=>$eigen['x'], 'y'=>$eigen['y']);
 
 $to = array('x'=>$coor['x'], 'y'=>$coor['y']);
 
-$time = $generator->procDistanceTime($from,$to,300,0);
+      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 0){
+			$fastertroops = 2;
+			}else if($artefact2 > 0){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+$time = round($generator->procDistanceTime($from,$to,300,0)/$fastertroops);
 
 // Temp
 
@@ -368,8 +380,19 @@ $end = ($tribe*10);
 
                 $process['c'] = 1;
 
-                
-                $time = $generator->procDistanceTime($from,$to,min($speeds),1);
+            $artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 0){
+			$fastertroops = 2;
+			}else if($artefact2 > 0){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+                $time = round($generator->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
 
             ?>
 

@@ -408,10 +408,10 @@ class Technology {
 			if($artefact > 0){
 			$upkeep /= 2;
 			$upkeep = round($upkeep);
-			}else if($artefact1 > 1){
+			}else if($artefact1 > 0){
 			$upkeep /= 2;
 			$upkeep = round($upkeep);
-			}else if($artefact2 > 1){
+			}else if($artefact2 > 0){
 			$upkeep /= 4;
 			$upkeep = round($upkeep);
 			$upkeep *= 3;

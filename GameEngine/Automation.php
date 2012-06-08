@@ -2085,9 +2085,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
 			if($artefact > 0){
 			$fastertroops = 3;
-			}else if($artefact1 > 1){
+			}else if($artefact1 > 0){
 			$fastertroops = 2;
-			}else if($artefact2 > 1){
+			}else if($artefact2 > 0){
 			$fastertroops = 1.5;
 			}else{
 			$fastertroops = 1;
@@ -2203,9 +2203,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
 			if($artefact > 0){
 			$fastertroops = 3;
-			}else if($artefact1 > 1){
+			}else if($artefact1 > 0){
 			$fastertroops = 2;
-			}else if($artefact2 > 1){
+			}else if($artefact2 > 0){
 			$fastertroops = 1.5;
 			}else{
 			$fastertroops = 1;
@@ -2371,9 +2371,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
 			if($artefact > 0){
 			$fastertroops = 3;
-			}else if($artefact1 > 1){
+			}else if($artefact1 > 0){
 			$fastertroops = 2;
-			}else if($artefact2 > 1){
+			}else if($artefact2 > 0){
 			$fastertroops = 1.5;
 			}else{
 			$fastertroops = 1;

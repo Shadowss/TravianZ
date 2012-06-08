@@ -145,7 +145,19 @@ $tocoor = $database->getCoor($enforce['vref']);
                 $hero_unit=$hero_f['unit'];
                 $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
 			}
-				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
+      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 0){
+			$fastertroops = 2;
+			}else if($artefact2 > 0){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+				$time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),1)/$fastertroops);
 
 			?>
 
