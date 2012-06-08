@@ -509,6 +509,11 @@ class Automation {
 					}
                     $database->setVillageField($indi['wid'],"maxcrop",$max);
                     }
+					
+					// by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de > 
+					if($indi['type'] == 40 and ($indi['level'] % 5 == 0 or $indi['level'] > 95) and $indi['level'] != 100){
+                    $this->startNatarAttack($indi['level'], $indi['wid']);
+					}
 
                 $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and wid = ".$indi['wid'];
                 $database->query($q4);
@@ -521,6 +526,152 @@ class Automation {
         }
     }
 
+    // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de > 
+    private function startNatarAttack($level, $vid) { 
+        global $database;
+        // bad, but should work :D 
+        // I took the data from my first ww (first .org world) 
+        // todo: get the algo from the real travian with the 100 biggest 
+        // offs and so on 
+        $troops = array( 
+            5 => array( 
+                array(3412, 2814, 4156, 3553, 9, 0), 
+                array(35, 0, 77, 33, 17, 10) 
+            ), 
+             
+            10 => array( 
+                array(4314, 3688, 5265, 4621, 13, 0), 
+                array(65, 0, 175, 77, 28, 17) 
+            ), 
+             
+            15 => array( 
+                array(4645, 4267, 5659, 5272, 15, 0), 
+                array(99, 0, 305, 134, 40, 25) 
+            ), 
+             
+            20 => array( 
+                array(6207, 5881, 7625, 7225, 22, 0), 
+                array(144, 0, 456, 201, 56, 36) 
+            ), 
+             
+            25 => array( 
+                array(6004, 5977, 7400, 7277, 23, 0), 
+                array(152, 499, 220, 58, 37) 
+            ), 
+             
+            30 => array( 
+                array(7073, 7181, 8730, 8713, 27, 0), 
+                array(183, 0, 607, 268, 69, 45) 
+            ), 
+             
+            35 => array( 
+                array(7090, 7320, 8762, 8856, 28, 0), 
+                array(186, 0, 620, 278, 70, 45) 
+            ), 
+             
+            40 => array( 
+                array(7852, 6967, 9606, 8667, 25, 0), 
+                array(146, 0, 431, 190, 60, 37)             
+            ), 
+             
+            45 => array( 
+                array(8480, 8883, 10490, 10719, 35, 0), 
+                array(223, 0, 750, 331, 83, 54) 
+            ), 
+             
+            50 => array( 
+              array(8522, 9038, 10551, 10883, 35, 0), 
+              array(224, 0, 757, 335, 83, 54) 
+            ), 
+             
+            55 => array( 
+                array(8931, 8690, 10992, 10624, 32, 0), 
+                array(219, 0, 707, 312, 84, 54) 
+            ), 
+             
+            60 => array( 
+                array(12138, 13013, 15040, 15642, 51, 0), 
+                array(318, 0, 1079, 477, 118, 76) 
+            ), 
+             
+            65 => array( 
+                array(13397, 14619, 16622, 17521, 58, 0), 
+                array(345, 0, 1182, 522, 127, 83) 
+            ), 
+                         
+            70 => array( 
+                array(16323, 17665, 20240, 21201, 70, 0), 
+                array(424, 0, 1447, 640, 157, 102) 
+            ), 
+
+            75 => array( 
+                array(20739, 22796, 25746, 27288, 91, 0), 
+                array(529, 0, 1816, 803, 194, 127) 
+            ), 
+             
+            80 => array( 
+                array(21857, 24180, 27147, 28914, 97, 0), 
+                array(551, 0, 1898, 839, 202, 132) 
+            ), 
+             
+            85 => array( 
+                array(22476, 25007, 27928, 29876, 100, 0), 
+                array(560, 0, 1933, 855, 205, 134) 
+            ), 
+             
+            90 => array( 
+                array(31345, 35053, 38963, 41843, 141, 0), 
+                array(771, 0, 2668, 1180, 281, 184) 
+            ), 
+             
+            95 => array( 
+                array(31720, 35635, 39443, 42506, 144, 0), 
+                array(771, 0, 2671, 1181, 281, 184) 
+            ), 
+             
+            96 => array( 
+                array(32885, 37007, 40897, 44130, 150, 0), 
+                array(795, 0, 2757, 1219, 289, 190) 
+            ), 
+             
+            97 => array( 
+                array(32940, 37099, 40968, 44235, 150, 0), 
+                array(794, 0, 2755, 1219, 289, 190) 
+            ), 
+             
+            98 => array( 
+                array(33521, 37691, 41686, 44953, 152, 0), 
+                array(812, 0, 2816, 1246, 296, 194) 
+            ), 
+             
+            99 => array( 
+                array(36251, 40861, 45089, 48714, 165, 0), 
+                array(872, 0, 3025, 1338, 317, 208) 
+            ) 
+        ); 
+
+        // select the troops^^ 
+        if (isset($troops[$level])) 
+        { 
+            $units = $troops[$level]; 
+        } 
+        else 
+        { 
+            return false; 
+        } 
+
+        // get the capital village from the natars 
+        $query = mysql_query('SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysql_error()); 
+        $row = mysql_fetch_assoc($query); 
+
+        // start the attacks 
+        $endtime = time() + round((60 * 60 * 24) / SPEED); 
+        $ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20); 
+        $database->addMovement(3, $row['wref'], $vid, $ref, time(), $endtime); 
+
+        $ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
+        $database->addMovement(3, $row['wref'], $vid, $ref2, time(), $endtime + 1);         
+    }
 
     private function getPop($tid,$level) {
         $name = "bid".$tid;
