@@ -1438,3 +1438,23 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%password` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`uid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
+--
+-- Dumping data for table `%prefix%password`
+--
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `%prefix%ww_attacks`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%ww_attacks` (
+  `vid` int(25) NOT NULL,
+  `attack_time` int(25) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;
+
+--
+-- Dumping data for table `%prefix%password`
+--
+
+-- --------------------------------------------------------

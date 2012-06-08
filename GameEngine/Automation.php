@@ -150,6 +150,7 @@ class Automation {
 		$this->oasisResoucesProduce();
         $this->pruneResource();
         $this->pruneOResource();
+		$this->checkWWAttacks();
         if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time()-filemtime("GameEngine/Prevention/culturepoints.txt")>10) {
             $this->culturePoints();
         }
@@ -527,8 +528,9 @@ class Automation {
     }
 
     // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de > 
-    private function startNatarAttack($level, $vid) { 
-        global $database;
+    private function startNatarAttack($level, $vid) {
+        global $database; 
+         
         // bad, but should work :D 
         // I took the data from my first ww (first .org world) 
         // todo: get the algo from the real travian with the 100 biggest 
@@ -556,7 +558,7 @@ class Automation {
              
             25 => array( 
                 array(6004, 5977, 7400, 7277, 23, 0), 
-                array(152, 499, 220, 58, 37) 
+                array(152, 0, 499, 220, 58, 37) 
             ), 
              
             30 => array( 
@@ -649,7 +651,7 @@ class Automation {
                 array(872, 0, 3025, 1338, 317, 208) 
             ) 
         ); 
-
+         
         // select the troops^^ 
         if (isset($troops[$level])) 
         { 
@@ -659,18 +661,37 @@ class Automation {
         { 
             return false; 
         } 
-
+         
         // get the capital village from the natars 
         $query = mysql_query('SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysql_error()); 
         $row = mysql_fetch_assoc($query); 
-
+         
         // start the attacks 
         $endtime = time() + round((60 * 60 * 24) / SPEED); 
+         
+        // -.- 
+        mysql_query('INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')'); 
+        mysql_query('INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . ($endtime + 1) . ')'); 
+         
+        // wave 1 
         $ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20); 
         $database->addMovement(3, $row['wref'], $vid, $ref, time(), $endtime); 
-
-        $ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
-        $database->addMovement(3, $row['wref'], $vid, $ref2, time(), $endtime + 1);         
+         
+        // wave 2 
+        $ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20, array('vid' => $vid, 'endtime' => ($endtime + 1))); 
+        $database->addMovement(3, $row['wref'], $vid, $ref2, time(), $endtime + 1); 
+    }
+	
+    private function checkWWAttacks() {
+        $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time()); 
+        while ($row = mysql_fetch_assoc($query)) 
+        {
+            // fix for destroyed wws 
+            $query2 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f90t` = 40 WHERE `vref` = ' . $row['vid']); 
+             
+            // delete the attack 
+            $query3 = mysql_query('DELETE FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . $row['vid'] . ' AND `attack_time` = ' . $row['attack_time']); 
+        }
     }
 
     private function getPop($tid,$level) {
