@@ -268,9 +268,9 @@ define("CHOOSE","Please choose a server.");
 define("STARTED"," The server started ". round((time()-COMMENCE)/86400) ." days ago.");
 
 //ANMELDEN.php
-define("NICKNAME","Nickname [a-z, A-Z, 0-9 , _, -]");
+define("NICKNAME","Nickname");
 define("EMAIL","Email");
-define("PASSWORD","Password [a-z, A-Z, 0-9]");
+define("PASSWORD","Password");
 define("ROMANS","Romans");
 define("TEUTONS","Teutons");
 define("GAULS","Gauls");
