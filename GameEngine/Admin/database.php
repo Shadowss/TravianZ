@@ -17,8 +17,8 @@
 ##                                                                             ##
 #################################################################################
 
-include("../GameEngine/config.php");
-include("../GameEngine/Data/buidata.php");
+include("../../GameEngine/config.php");
+include("../../GameEngine/Data/buidata.php");
 
 class adm_DB {
 	var $connection;
