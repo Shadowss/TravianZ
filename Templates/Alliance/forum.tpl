@@ -2,10 +2,14 @@
 //////////////// made by TTMTT ////////////////
 if(isset($aid)) {
 $aid = $aid;
-}
-else {
+}else if($_GET['fid']){
+$aid = $database->ForumCatAlliance($_GET['fid']);
+}else if($_GET['fid2']){
+$aid = $database->ForumCatAlliance($_GET['fid2']);
+}else{
 $aid = $session->alliance;
 }
+
 $allianceinfo = $database->getAlliance($aid);
 $opt = $database->getAlliPermissions($session->uid, $aid);
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
@@ -55,9 +59,10 @@ if(isset($_POST['newpost'])){
 	$post = htmlspecialchars($post);
 	$tids = $_POST['tid'];
 	$owner = $session->uid;
-	
+	if($post != ""){
 	$database->UpdatePostDate($tids);
 	$database->CreatPost($post,$tids,$owner);
+	}
 }
 if(isset($_POST['editans'])){
 	$post = $_POST['text'];

@@ -863,6 +863,13 @@
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
             }
+			
+			function ForumCatAlliance($id) {
+                $q = "SELECT alliance from " . TB_PREFIX . "forum_cat where id = $id";
+                $result = mysql_query($q, $this->connection);
+                $dbarray = mysql_fetch_array($result);
+                return $dbarray['alliance'];
+            }
 
             function ForumCatName($id) {
                 $q = "SELECT forum_name from " . TB_PREFIX . "forum_cat where id = $id";

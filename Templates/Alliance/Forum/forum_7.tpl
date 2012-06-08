@@ -7,7 +7,7 @@ foreach($topics as $arr) {
 	$title = $arr['title'];
 }
 ?>
-<form method="post" name="post" action="allianz.php?s=2&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['tid']; ?>">
+<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['tid']; ?>">
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="pid" value="<?php echo $_GET['pid']; ?>">
 	<input type="hidden" name="tid" value="<?php echo $_GET['tid']; ?>">

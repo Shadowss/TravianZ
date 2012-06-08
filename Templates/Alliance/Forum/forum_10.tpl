@@ -12,7 +12,7 @@ foreach($posts as $pos) {
 	$poss = $pos['post'];
 }
 ?>
-<form method="post" name="post" action="allianz.php?s=2&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['idt']; ?>">
+<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="pod" value="<?php echo $_GET['pod']; ?>">
 	<input type="hidden" name="editpost" value="1">

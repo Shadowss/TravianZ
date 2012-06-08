@@ -96,7 +96,7 @@ echo '<div class="clear dotted"></div><div class="text">'.$bbcode_post.'</div></
 	</tbody></table><div style="margin-top: 15px;">
 	<?php
 	if(empty($arr[close])){
-		echo '<a href="allianz.php?s=2&pid='.$arr['alliance'].'&tid='.$arr['id'].'&ac=newpost"><img id="fbtn_reply" class="dynamic_img"src="img/x.gif" alt="Replies" /></a>';
+		echo '<a href="allianz.php?s=2&fid2='.$arr['cat'].'&pid='.$arr['alliance'].'&tid='.$arr['id'].'&ac=newpost"><img id="fbtn_reply" class="dynamic_img"src="img/x.gif" alt="Replies" /></a>';
 	}
 	if($opt[opt5] == 1){
 		echo '<a href="allianz.php?s=2&pid='.$aid.'&tid='.$arr['id'].'&admin=switch_admin" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
