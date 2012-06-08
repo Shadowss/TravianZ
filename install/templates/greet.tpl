@@ -19,6 +19,16 @@
 	<li>Last but not least, Enjoy.</li>
     </ul>
 
+	<ul>
+
+	<li><h4>CHMOD:</h4></li>
+	<li>install to 777</li>
+	<li>GameEngine to 777</li>
+	<li><h4>After CHMOD:</h4></li>
+	<li>Delete install folder</li>
+	<li>Change CHMOD GameEngine back to 644 and CHMOD 777: Prevention, Notes</li>
+	</ul>
+
     <div class="lbox">
 	TravianX Team
     </div>

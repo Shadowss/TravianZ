@@ -5,14 +5,14 @@
 ##                                                                             ##
 ## --------------------------------------------------------------------------- ##
 ##                                                                             ##
-##  Project:       ZravianX                                                    ##
+##  Project:       ZravianX & TravianZ                                         ##
 ##  Version:       2011.11.02                                                  ##
 ##  Filename:      notification/lang/en.php                                    ##
-##  Developed by:  ZZJHONS                                                     ##
+##  Developed by:  ZZJHONS & Songeriux                                         ##
 ##  License:       Creative Commons BY-NC-SA 3.0                               ##
 ##  Copyright:     ZravianX (c) 2011 - All rights reserved                     ##
 ##  URLs:          http://zravianx.zzjhons.com                                 ##
-##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
+##  Source code:   http://www.github.com/songeriux/TravianZ                    ##
 ##                                                                             ##
 #################################################################################
 
@@ -23,7 +23,7 @@ $lang['notification']['notify_me'] = "Please notify me when TRAVIAN 4 begins";
 $lang['notification']['email'] = "Email address";
 $lang['notification']['send'] = "Send";
 $lang['notification']['error'] = "Sorry, but this don't work now.";
-$lang['notification']['i_agree'] = "I agree that ZravianX can inform me about interesting news and game related information.";
+$lang['notification']['i_agree'] = "I agree that TRAVIAN can inform me about interesting news and game related information.";
 $lang['notification']['facebook_page'] = "http%3A%2F%2Fwww.facebook.com%2Ftravianx";
 $lang['notification']['see_features'] = "See the new features of TRAVIAN 4";
 $lang['notification']['screenshots'] = "Screenshots";
