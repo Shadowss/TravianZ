@@ -407,11 +407,15 @@ class Technology {
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,4,2,0));
 			if($artefact > 0){
 			$upkeep /= 2;
+			$upkeep = round($upkeep);
 			}else if($artefact1 > 1){
 			$upkeep /= 2;
+			$upkeep = round($upkeep);
 			}else if($artefact2 > 1){
 			$upkeep /= 4;
+			$upkeep = round($upkeep);
 			$upkeep *= 3;
+			$upkeep = round($upkeep);
 			}
 		return $upkeep;
 	}
