@@ -22,10 +22,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
-  `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `ckey` varchar(255) NOT NULL,
-  `time_check` int(255) unsigned NOT NULL DEFAULT '0',
-  `to_vid` int(255) unsigned NOT NULL,
+  `time_check` int(11) unsigned NOT NULL DEFAULT '0',
+  `to_vid` int(11) unsigned NOT NULL,
   `u1` int(11) unsigned NOT NULL,
   `u2` int(11) unsigned NOT NULL,
   `u3` int(11) unsigned NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `%PREFIX%links` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
-  `vref` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vref` int(10) unsigned NOT NULL,
   `a1` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `a2` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `a3` tinyint(2) unsigned NOT NULL DEFAULT '0',
@@ -443,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%deleting` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
-  `vref` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vref` int(10) unsigned NOT NULL,
   `buildnumber` int(10) unsigned NOT NULL DEFAULT '0',
   `lvl` int(10) unsigned NOT NULL DEFAULT '0',
   `timetofinish` int(11) NOT NULL,
