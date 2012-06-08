@@ -506,8 +506,24 @@ class Battle {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
             $wctp *= $catp;
-
-            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+			$artowner = $database->getVillageField($DefenderWref,"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+			if($stonemason==0){
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / $strongerbuildings)) + 0.5);
+            }else{
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+			}
             // Aantal katapulten om het gebouw neer te halen
             $result[3] = $need;
             // Aantal Katapulten die handeling
@@ -519,9 +535,25 @@ class Battle {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
             $wctp *= $ram;
-
-            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-            // Aantal katapulten om het gebouw neer te halen
+			$artowner = $database->getVillageField($DefenderWref,"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+			if($stonemason==0){
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / $strongerbuildings)) + 0.5);
+            }else{
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+			}
+			// Aantal katapulten om het gebouw neer te halen
             $result[7] = $need;
 
             // Aantal Katapulten die handeling

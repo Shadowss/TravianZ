@@ -1547,10 +1547,23 @@ class Automation {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason]==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+			$artowner = $database->getVillageField($data['to'],"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+				if($stonemason==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
 				}
                 if ($battlepart[4]>$needed_cata)
                 {
@@ -1671,10 +1684,23 @@ class Automation {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason]==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+			$artowner = $database->getVillageField($data['to'],"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+				if($stonemason==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
 				}
                 if (($battlepart[4]/2)>$needed_cata)
                 {
@@ -1795,10 +1821,23 @@ class Automation {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason]==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+			$artowner = $database->getVillageField($data['to'],"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+				if($stonemason==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
 				}
                 if (($battlepart[4]/2)>$needed_cata)
                 {
