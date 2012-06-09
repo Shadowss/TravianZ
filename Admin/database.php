@@ -16,10 +16,13 @@
 ##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
 ##                                                                             ##
 #################################################################################
-
+if(!file_exists('GameEngine/config.php') && !file_exists('../../GameEngine/config.php') && !file_exists('../../config.php')){
+include("../../GameEngine/config.php");
+include("../../GameEngine/Data/buidata.php");
+}else{
 include("../GameEngine/config.php");
 include("../GameEngine/Data/buidata.php");
-
+}
 class adm_DB {
 	var $connection;
 	
