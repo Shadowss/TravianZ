@@ -67,7 +67,7 @@ echo "re1:".$message->reply['topic']; }} ?>" maxlength="35" onkeyup="copyElement
 					<a href="javascript:void(0);" bbType="d" bbTag="u" ><div title="underline" alt="underline" class="bbButton bbUnderscore"></div></a>
 					<a href="javascript:void(0);" bbType="d" bbTag="alliance" ><div title="alliance" alt="alliance" class="bbButton bbAlliance"></div></a>
 					<a href="javascript:void(0);" bbType="d" bbTag="player" ><div title="player" alt="player" class="bbButton bbPlayer"></div></a>
-					<a href="javascript:void(0);" bbType="d" bbTag="x|y" ><div title="coordinates" alt="coordinates" class="bbButton bbCoordinate"></div></a>
+					<a href="javascript:void(0);" bbType="d" bbTag="coor" ><div title="coordinates" alt="coordinates" class="bbButton bbCoordinate"></div></a>
 					<a href="javascript:void(0);" bbType="d" bbTag="report" ><div title="report" alt="report" class="bbButton bbReport"></div></a>
 					<a href="javascript:void(0);" bbWin="resources" id="message_resourceButton"><div title="resources" alt="resources" class="bbButton bbResource"></div></a>
 					<a href="javascript:void(0);" bbWin="smilies" id="message_smilieButton"><div title="smilies" alt="smilies" class="bbButton bbSmilie"></div></a>

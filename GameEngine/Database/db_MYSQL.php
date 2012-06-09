@@ -930,6 +930,13 @@
                 $dbarray = mysql_fetch_array($result);
                 return $dbarray['oasistype'];
             }
+			
+			function getVillageType3($wref) {
+                $q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $wref";
+                $result = mysql_query($q, $this->connection);
+                $dbarray = mysql_fetch_array($result);
+                return $dbarray;
+            }
 
 			function getFLData($id) {
                 $q = "SELECT * FROM " . TB_PREFIX . "farmlist where id = $id";
@@ -1605,6 +1612,12 @@
 			
             function getNotice3($uid) {
                 $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+			
+            function getNotice4($id) {
+                $q = "SELECT * FROM " . TB_PREFIX . "ndata where id = $id ORDER BY time DESC";
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
             }

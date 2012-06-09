@@ -33,11 +33,7 @@ if(isset($_GET['newdid'])) {
 	   if(isset($_GET['s'])){
 		$automation->isWinner();
 		}
-if(isset($_GET['aname'])){
-$aname = $database->getAllianceID($_GET['aname']);
-$_GET['aid'] = $aname;
-header("Location: ".$_SERVER['PHP_SELF']."?aid=".$aname);
-}
+
 if(isset($_GET['fid'])){
 $fid = $_GET['fid'];
 $forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
