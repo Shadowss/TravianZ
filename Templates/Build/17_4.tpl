@@ -1,4 +1,4 @@
-﻿<?php if($session->goldclub == 1 && $database->getProfileVillages($session->uid) > 1) { ?>
+﻿<?php if($session->goldclub == 1 && count($database->getProfileVillages($session->uid)) > 1) { ?>
 <div id="build" class="gid17"><a href="#" onClick="return Popup(17,4);" class="build_logo"> 
 	<img class="building g17" src="img/x.gif" alt="Marketplace" title="Marketplace" /> 
 </a> 
