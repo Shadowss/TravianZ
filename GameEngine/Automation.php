@@ -1296,9 +1296,8 @@ class Automation {
             }
             $Defender1 = $database->getUnit($to['wref']);
 				if($Defender1['hero'] > 0){
-				$defheroowner = $database->getVillageField($to['wref'],"owner");
 				$defheroxp = $totaldead_att;
-				$database->modifyHeroXp("experience",$defheroxp,$defheroowner);
+				$database->modifyHeroXp("experience",$defheroxp,$toF['owner']);
 				}
             $enforcementarray1 = $database->getEnforceVillage($to['wref'],0);
             if(count($enforcementarray1) > 0) {
