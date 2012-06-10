@@ -307,6 +307,7 @@
                 if($topic == "") {
                 $topic = "No subject";
                 }
+				$text = "[message]".$text."[/message]";
                 if($permission[opt7]==1){  
                 if ($userally != 0) {
                 while ($allmembers = mysql_fetch_array($allmembersQ)) {
@@ -326,6 +327,7 @@
         		if($topic == "") {
         			$topic = "No subject";
         		}
+				$text = "[message]".$text."[/message]";
         		//if to multihunter
         		if($user == "0") {
         			//make mail server
@@ -349,6 +351,7 @@
         		$welcomemsg = preg_replace("'%TIME%'", date("H:i", COMMENCE), $welcomemsg);
         		$welcomemsg = preg_replace("'%PLAYERS%'", $database->countUser()-4, $welcomemsg);
         		$welcomemsg = preg_replace("'%ALLI%'", $database->countAlli(), $welcomemsg);
+				$welcomemsg = "[message]".$welcomemsg."[/message]";
         		return $database->sendMessage($uid, 5, WEL_TOPIC, $welcomemsg, 0);
         	}
 
