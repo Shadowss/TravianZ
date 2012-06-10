@@ -1334,8 +1334,20 @@ class Automation {
             //cranny efficiency
             $atk_bonus = ($owntribe == 2)? (4/5) : 1;
             $def_bonus = ($targettribe == 3)? 2 : 1;
-
-            $cranny_eff = ($cranny * $atk_bonus)*$def_bonus;
+			$to_owner = $database->getVillageField($data['to'],"owner");
+      		$artefact_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,3,0));
+			$artefact1_2 = count($database->getOwnUniqueArtefactInfo2($data['to'],7,1,1));
+			$artefact2_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,2,0));
+			if($artefact_2 > 0){
+			$artefact_bouns = 6;
+			}else if($artefact1_2 > 0){
+			$artefact_bouns = 3;
+			}else if($artefact2_2 > 0){
+			$artefact_bouns = 2;
+			}else{
+			$artefact_bouns = 1;
+			}
+            $cranny_eff = ($cranny * $atk_bonus)*$def_bonus*$artefact_bouns;
 
             // work out available resources.
             $this->updateRes($data['to'],$to['owner']);

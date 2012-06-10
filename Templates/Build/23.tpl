@@ -1,5 +1,17 @@
 <?php
 include("next.tpl");
+      		$artefact_2 = count($database->getOwnUniqueArtefactInfo2($session->uid,7,3,0));
+			$artefact1_2 = count($database->getOwnUniqueArtefactInfo2($village->wid,7,1,1));
+			$artefact2_2 = count($database->getOwnUniqueArtefactInfo2($session->uid,7,2,0));
+			if($artefact_2 > 0){
+			$artefact_bouns = 6;
+			}else if($artefact1_2 > 0){
+			$artefact_bouns = 3;
+			}else if($artefact2_2 > 0){
+			$artefact_bouns = 2;
+			}else{
+			$artefact_bouns = 1;
+			}
 ?>
 <div id="build" class="gid23"><a href="#" onClick="return Popup(23,4);" class="build_logo">
 	<img class="building g23" src="img/x.gif" alt="Cranny" title="Cranny" />
@@ -32,11 +44,11 @@ include("next.tpl");
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2*$artefact_bouns; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*$artefact_bouns; ?></b> units</td>
 		<?php
 			}}else{
         ?>
@@ -44,11 +56,11 @@ include("next.tpl");
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[10]['attri']*2; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*2*$artefact_bouns; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[10]['attri']; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*$artefact_bouns; ?></b> units</td>
 		<?php
 			}}}
         ?>
