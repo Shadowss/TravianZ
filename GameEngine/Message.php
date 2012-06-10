@@ -63,6 +63,9 @@
         				case "m6":
         					$this->createNote($post);
         					break;
+        				case "m7":
+        					$this->addFriends($post);
+        					break;
         			}
         		}
 			}
@@ -307,14 +310,16 @@
                 if($topic == "") {
                 $topic = "No subject";
                 }
+				if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
 				$text = "[message]".$text."[/message]";
                 if($permission[opt7]==1){  
                 if ($userally != 0) {
                 while ($allmembers = mysql_fetch_array($allmembersQ)) {
                 $database->sendMessage($allmembers[id],$session->uid,$topic,$text,0);
-                }        
+                }
                     }
                     }
+				}
             }
             
         	private function sendMessage($recieve, $topic, $text) {
@@ -327,6 +332,7 @@
         		if($topic == "") {
         			$topic = "No subject";
         		}
+				if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
 				$text = "[message]".$text."[/message]";
         		//if to multihunter
         		if($user == "0") {
@@ -335,6 +341,7 @@
         			} else {
         			$database->sendMessage($user, $session->uid, $topic, $text, 0);
         			}
+				}
         	}
 
         	//7 = village, attacker, att tribe, u1 - u10, lost %, w,c,i,c , cap
@@ -406,6 +413,33 @@
         			}
         		}
         		return false;
+        	}
+
+        	public function addFriends($post) {
+        		global $database;
+        		for($i=0;$i<19;$i++) {
+        		if($post['addfriends'.$i] != ""){
+				$uid = $database->getUserField($post['addfriends'.$i], "id", 1);
+				$added = 0;
+				for($j=0;$j<=$i;$j++) {
+				if($added == 0){
+				$user = $database->getUserField($post['myid'], "friend".$j, 0);
+				$exist = 0;
+				for($k=0;$k<=19;$k++){
+				$user1 = $database->getUserField($post['myid'], "friend".$k, 0);
+				if($user1 == $uid or $user1 == $post['myid']){
+				$exist = 1;
+				}
+				}
+				if($user == 0 && $exist == 0){
+				$database->addFriend($post['myid'],"friend".$j,$uid);
+				$added = 1;
+				}
+				}
+        		}
+				}
+				}
+				header("Location: nachrichten.php?t=1");
         	}
 
         }

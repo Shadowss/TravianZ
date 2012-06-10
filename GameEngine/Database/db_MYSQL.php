@@ -3090,6 +3090,15 @@
 				}
 				return $casualties;
             }
+			
+            function addFriend($uid, $column, $friend) {
+                $q = "UPDATE " . TB_PREFIX . "users SET $column = $friend WHERE id = $uid";
+                return mysql_query($q, $this->connection);
+            }
+            function deleteFriend($uid, $column) {
+                $q = "UPDATE " . TB_PREFIX . "users SET $column = 0 WHERE id = $uid";
+                return mysql_query($q, $this->connection);
+            }
         }
         ;
 

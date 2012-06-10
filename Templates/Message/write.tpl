@@ -2,6 +2,7 @@
 <h1>Messages</h1>
 <?php 
 include("menu.tpl");
+$user = $database->getUserArray($session->uid, 1);
 ?>
 <script language="JavaScript" type="text/javascript">
 		function setReceiver(name) {
@@ -97,101 +98,43 @@ Reply:
 	</p>
 	</form>
 	<div id="adressbook" class="hide"><h2>Addressbook</h2>
-    <form method="post" name="abform" action="nachrichten.php" accept-charset="UTF-8">
- <input type="hidden" name="a" value="3e9" />
- <input type="hidden" name="t" value="1" />
- <input type="hidden" id="copy_receiver" name="copy_receiver" value="" />
- <input type="hidden" id="copy_subject" name="copy_subject" value="" />
- <input type="hidden" id="copy_igm" name="copy_igm" value="" />
- <input type="hidden" name="sbmtype" value="default" />
- <input type="hidden" name="sbmvalue" value="" />
- 
- <table cellpadding="1" cellspacing="1" id="friendlist"><tr><td class="end"></td>
+    <form method="post" action="nachrichten.php">
+	<input type="hidden" name="ft" value="m7" />
+	<input type="hidden" name="myid" value="<?php echo $session->uid; ?>" />
+ <table cellpadding="1" cellspacing="1" id="friendlist">
+<?php for($i=0;$i<20;$i++) {
+if($user['friend'.$i] == 0){
+if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"></td>
   <td class="pla">
-    <input class="text" type="text" name="addfriends[0]" value="" maxlength="15" />
+    <input class="text" type="text" name="addfriends<?php echo $i; ?>" value="" maxlength="15" />
   </td>
-  <td class="on"></td><td></td><td class="end"></td>
+  <td class="on"></td><?php if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}}else{
+if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
   <td class="pla">
-    <input class="text" type="text" name="addfriends[1]" value="" maxlength="15" />
+  <?php echo "<a href=\"spieler.php?uid=".$user['friend'.$i]."\">".$database->getUserField($user['friend'.$i],"username",0)."</a>"; ?>
   </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[2]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[3]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[4]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[5]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[6]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[7]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[8]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[9]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[10]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[11]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[12]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[13]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[14]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[15]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[16]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[17]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr><tr><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[18]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td><td></td><td class="end"></td>
-  <td class="pla">
-    <input class="text" type="text" name="addfriends[19]" value="" maxlength="15" />
-  </td>
-  <td class="on"></td></tr></table>
+		<?php
+		$friend = $database->getUserArray($user['friend'.$i], 1);
+		if ((time()-600) < $friend['timestamp']){ // 0 Min - 10 Min
+            echo "    <td class=on><img class=online1 src=img/x.gif title='Now online' alt='Now online' /></td>";
+        }elseif ((time()-86400) < $friend['timestamp'] && (time()-600) > $friend['timestamp']){ // 10 Min - 1 Days
+            echo "    <td class=on><img class=online2 src=img/x.gif title='Offline' alt='Offline' /></td>";              
+            }elseif ((time()-259200) < $friend['timestamp'] && (time()-86400) > $friend['timestamp']){ // 1-3 Days
+            echo "    <td class=on><img class=online3 src=img/x.gif title='Last 3 days' alt='Last 3 days' /></td>";    
+        }elseif ((time()-604800) < $friend['timestamp'] && (time()-259200) > $friend['timestamp']){
+            echo "    <td class=on><img class=online4 src=img/x.gif title='Last 7 days' alt='Last 7 days' /></td>";    
+        }else{
+             echo "    <td class=on><img class=online5 src=img/x.gif title=now online alt=now online /></td>";   
+        }
+if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}
+  }} ?>
+  </tr></table>
   <p class="btn">
   <input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" />  
   </p>
   </form><a href="#" onclick="closeFriendsList(); return false;"><img src="img/x.gif" id="close" alt="close adressbook" title="close adressbook"/></a></div></div>
 <div id="write_foot" class="msg_foot">
 </div>
- <br />
+<br />
+<span style="color: #DD0000"><b>Warning:</b> you can't use the values <b>[message]</b> or <b>[/message]</b> in your message because it can cause problem with bbcode system.</span>
 </div>
