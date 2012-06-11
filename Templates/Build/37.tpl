@@ -57,30 +57,7 @@
         	$name = "Haeduan";
         }
         $name1 = $hero_info['name'];
-        	if($hero_info['trainingtime'] > time()) {
-        		$timeleft = $generator->getTimeFormat($hero_info['trainingtime'] - time());
-                
-?>
-    <table id="distribution" cellpadding="1" cellspacing="1">
-        <thead>
-            <tr>
-            <?php echo "<tr class='next'><th>Hero will be ready in <span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
-            </tr>
-        </thead>
-            
-            <tr>
-			<?php
-				   echo "<tr>
-                <td class=\"desc\">
-					<div class=\"tit\">
-						<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$name."\" title=\"".$name."\" />
-						$name ($name1)
-					</div>"
-			?>
-			
-            </tr>
-    </table>
-	<?php }else{
+
 		if(isset($_GET['land'])) {
 			include("37_land.tpl");
 		} else {
@@ -94,7 +71,6 @@
             include("37_hero.tpl");
         }
         }
-		}
         include ("upgrade.tpl"); ?>
         
     </div>

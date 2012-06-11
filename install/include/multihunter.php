@@ -1,5 +1,5 @@
 <?php
-
+$gameinstall = 1;
         
         include ("../../GameEngine/config.php");
         include ("../../GameEngine/Database.php");
@@ -25,7 +25,7 @@
         	}
         }
 
-
+$gameinstall = 0;
         header("Location: ../index.php?s=5");
 
 ?>

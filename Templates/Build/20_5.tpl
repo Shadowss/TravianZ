@@ -1,4 +1,20 @@
-<?php 
+<?php
+			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,5,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,5,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,5,2,0));
+			if($artefact > 0){
+			$artefact_bonus = 2;
+			$artefact_bonus2 = 1;
+			}else if($artefact1 > 0){
+			$artefact_bonus = 2;
+			$artefact_bonus2 = 1;
+			}else if($artefact2 > 0){
+			$artefact_bonus = 4;
+			$artefact_bonus2 = 3;
+			}else{
+			$artefact_bonus = 1;
+			$artefact_bonus2 = 1;
+			}
 $success = 0;
 for($i=45;$i<=46;$i++) {
 	if($technology->getTech($i)) {
@@ -6,7 +22,7 @@ for($i=45;$i<=46;$i++) {
 		<a href=\"#\" onClick=\"return Popup($i,1);\">".$technology->getUnitName($i)."</a> <span class=\"info\">(Avaliable: ".$village->unitarray['u'.$i].")</span></div>";
         echo "<div class=\"details\">
 							<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".${'u'.$i}['crop']."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />".${'u'.$i}['pop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />";
-        echo $generator->getTimeFormat(round(${'u'.$i}['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100) / SPEED));
+        echo $generator->getTimeFormat(round(${'u'.$i}['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100) / SPEED * $artefact_bonus2 / $artefact_bonus));
         echo "</div></td>
 					<td class=\"val\">
 						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"$i\">

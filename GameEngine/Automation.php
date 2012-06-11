@@ -2592,8 +2592,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					if($NonHeroPresent == 0 && $this->getTypeLevel(37,$data['to']) > 0) {
 						//don't reinforce, addunit instead
 						$database->modifyUnit($data['to'],array("hero"),array(1),array(1));
-						$heroid = $database->getHero($database->getVillageField($data['from'],"owner"),1);
 						$database->modifyHero("wref",$data['to'],$heroid,0);
+						$heroid = $database->getHero($database->getVillageField($data['from'],"owner"),1);
 						$HeroTransfer = 1;
 					}
 				}
@@ -3243,12 +3243,12 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
     private function updateHero() { 
         global $database,$hero_levels;
         $harray = $database->getHero(); 
-        if(!empty($harray)) { 
-            foreach($harray as $hdata) { 
-                if((time()-$hdata['lastupdate'])>=1) { 
-                    if($hdata['health']<100 and $hdata['health']>0) { 
+        if(!empty($harray)){ 
+            foreach($harray as $hdata){ 
+                if((time()-$hdata['lastupdate'])>=1){ 
+                    if($hdata['health']<100 and $hdata['health']>0){ 
 					$reg = $hdata['health']+$hdata['regeneration']*5*SPEED/86400*(time()-$hdata['lastupdate']);
-					if($reg <= 100) {
+					if($reg <= 100){
                         $database->modifyHero("health",$reg,$hdata['heroid']); 
                     }else{
 						$database->modifyHero("health",100,$hdata['heroid']);
@@ -3256,9 +3256,17 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 						}
                     $database->modifyHero("lastupdate",time(),$hdata['heroid']); 
 					}
-					if ($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100) { 
+					if($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100){ 
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET level = level + 1 WHERE heroid = '".$hdata['heroid']."'"); 
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET points = points + 5 WHERE heroid = '".$hdata['heroid']."'"); 
+					}
+					$villunits = $database->getUnit($hdata['wref']);
+					if($hero_info['dead'] == 1 or $villunits['hero'] == 1){
+					mysql_query("UPDATE " . TB_PREFIX . "hero SET nothome = 0 WHERE heroid = ".$hdata['heroid']."");
+					}
+					if($villunits['hero'] == 0 && $hero_info['trainingtime'] < time() && $hero_info['nothome'] == 0){
+					mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$hdata['wref']."");
+					mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `health` = '100' WHERE `uid` = '".$hdata['uid']."'");
 					}
             }
         } 

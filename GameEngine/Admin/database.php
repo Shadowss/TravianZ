@@ -16,19 +16,22 @@
 ##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
 ##                                                                             ##
 #################################################################################
-
+if($gameinstall == 1){
 include("../../GameEngine/config.php");
 include("../../GameEngine/Data/buidata.php");
-
+}else{
+include("../GameEngine/config.php");
+include("../GameEngine/Data/buidata.php");
+}
 class adm_DB {
 	var $connection;
-	
+
   function adm_DB(){
     global $database;
 		$this->connection = mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
 		mysql_select_db(SQL_DB, $this->connection) or die(mysql_error()); 	            		
 	}
-	
+
 	function Login($username,$password){
 		$q = "SELECT password FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
 		$result = mysql_query($q, $this->connection);
@@ -42,7 +45,7 @@ class adm_DB {
 			return false;
 		}
 	}
-	
+
 	function recountPopUser($uid){
 	 global $database;
 	 $villages = $database->getProfileVillages($uid);
@@ -51,7 +54,7 @@ class adm_DB {
       $this->recountPop($vid);
     }
   }
-	
+
 	function recountPop($vid){
     global $database;
     $fdata = $database->getResourceLevel($vid); 
@@ -77,14 +80,14 @@ class adm_DB {
     }
     return $popT;
   }
-	
+
 	function getWref($x,$y) {
 		$q = "SELECT id FROM ".TB_PREFIX."wdata where x = $x and y = $y";      
 		$result = mysql_query($q, $this->connection);
 		$r = mysql_fetch_array($result);
 		return $r['id'];
 	}
-	
+
 	function AddVillage($post){
 	global $database;
 	  $wid = $this->getWref($post['x'],$post['y']);
@@ -101,7 +104,7 @@ class adm_DB {
 		  $database->addABTech($wid);       
     } 
   }
-	
+
 	function Punish($post){
 	 global $database;  
 	   $villages = $database->getProfileVillages($post['uid']);
@@ -115,7 +118,7 @@ class adm_DB {
               $pop = floor(($popOld/100)*($proc));
                 if($pop <= 1 ){$pop = 2;}
                 $this->PunishBuilding($vid,$proc,$pop);   
-				
+
             }  
             if($post['del_troop']){
                 if($user['tribe'] == 1) {
@@ -161,7 +164,7 @@ class adm_DB {
       $q = "UPDATE ".TB_PREFIX."units SET `u$unit` = '0' WHERE `vref` = $vid;";
       mysql_query($q, $this->connection); 
   }
-	
+
 	function DelPlayer($uid,$pass){
 	 global $database;  
     $ID = $_SESSION['id'];//$database->getUserField($_SESSION['username'],'id',1);	 
@@ -194,7 +197,7 @@ class adm_DB {
       return false;
     }
   }
-	
+
 	function DelVillage($wref){
 	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
 	  $result = mysql_query($q, $this->connection);    	  
@@ -218,7 +221,7 @@ class adm_DB {
     mysql_query($q, $this->connection);  
     }
   }
-	
+
 	function DelBan($uid,$id){
 	 global $database;
 	$name = $database->getUserField($uid,"username",0);
@@ -295,12 +298,12 @@ class adm_DB {
 		return $all;
 		}
 	}
-	
+
 	function query_return($q) {
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
-	
+
 	/***************************
 	Function to do free query
 	References: Query
@@ -308,8 +311,8 @@ class adm_DB {
 	function query($query) {
 		return mysql_query($query, $this->connection);
 	}
-	
-	
+
+
 };
 
 $admin = new adm_DB;

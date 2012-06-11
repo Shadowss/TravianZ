@@ -3,7 +3,22 @@
 + Travian File: 37_train.tpl  +
 + Developed by vnnbot.net     +
 +=============================*/
-
+			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,5,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,5,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,5,2,0));
+			if($artefact > 0){
+			$artefact_bonus = 2;
+			$artefact_bonus2 = 1;
+			}else if($artefact1 > 0){
+			$artefact_bonus = 2;
+			$artefact_bonus2 = 1;
+			}else if($artefact2 > 0){
+			$artefact_bonus = 4;
+			$artefact_bonus2 = 3;
+			}else{
+			$artefact_bonus = 1;
+			$artefact_bonus2 = 1;
+			}
 
 //check if there is unit needed in the village
 
@@ -31,7 +46,7 @@ if($session->tribe == 1) {
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u1['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />";
-     $output.=$generator->getTimeFormat(round($u1['time'] / SPEED)*3);
+     $output.=$generator->getTimeFormat(round($u1['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
      $output.="</div>
 				</td>
 				
@@ -64,7 +79,7 @@ if($session->tribe == 1) {
                             <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u2['crop']."|
                             <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                             <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />";
-        $output.=$generator->getTimeFormat(round($u2['time'] / SPEED)*3);
+        $output.=$generator->getTimeFormat(round($u2['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
         
         $output.="</div>
         				</td>
@@ -98,7 +113,7 @@ if($session->tribe == 1) {
                                 <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                                 <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />";
                                 
-         $output.=  $generator->getTimeFormat(round($u3['time'] / SPEED)*3);
+         $output.=  $generator->getTimeFormat(round($u3['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
         
         $output.= "</div>
         				</td>
@@ -130,7 +145,7 @@ if($session->tribe == 1) {
                             <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u5['crop']."|
                             <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                             <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-    				        $generator->getTimeFormat(round($u5['time'] / SPEED)*3)."
+    				        $generator->getTimeFormat(round($u5['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                         </div>
     				</td>
     				
@@ -161,7 +176,7 @@ if($session->tribe == 1) {
                             <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u6['crop']."|
                             <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                             <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-    				        $generator->getTimeFormat(round($u6['time'] / SPEED)*3)."
+    				        $generator->getTimeFormat(round($u6['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                         </div>
     				</td>
     				
@@ -195,7 +210,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u11['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u11['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u11['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -226,7 +241,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u12['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u12['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u12['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -258,7 +273,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u13['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u13['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u13['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -289,7 +304,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u15['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u15['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u15['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -321,7 +336,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u16['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u16['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u16['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -355,7 +370,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u21['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u21['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u21['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -386,7 +401,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u22['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u22['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u22['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -418,7 +433,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u24['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u24['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u24['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -449,7 +464,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u25['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u25['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u25['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
@@ -481,7 +496,7 @@ $output.="<tr>
                         <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$u26['crop']."|
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />".
-				        $generator->getTimeFormat(round($u26['time'] / SPEED)*3)."
+				        $generator->getTimeFormat(round($u26['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3)."
                     </div>
 				</td>
 				
