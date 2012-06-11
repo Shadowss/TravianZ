@@ -46,7 +46,7 @@ TravianX";
 Try the new ".SERVER_NAME."!
 
 
-Link: ".SERVER."anmelden.php?id=".$uid."
+Link: <a href=".SERVER."anmelden.php?id=".$uid.">".SERVER_NAME."</a>
 
 ".$text."
 
