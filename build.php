@@ -165,19 +165,24 @@ if($routeaccess = 1){
 }
 if($session->goldclub == 1 && $session->access != BANNED){
         if(isset($_GET['t'])==99) {
-            
+
             if($_GET['action'] == 'addList') {
                 $create = 1;
-            }else{
-			    $create = 0;
+            }else if($_GET['action'] == 'addraid') {
+                $create = 2;
+            }else if($_GET['action'] == 'showSlot' && $_GET['eid']) {
+			    $create = 3;
+			}else{
+				$create = 0;
 			}
-            
-            if($_GET['action'] == 'addraid') {
-                include("Templates/goldClub/farmlist_addraid.tpl");
-                }
-            }elseif($_GET['action'] == 'showSlot' && $_GET['eid']) {
-                include("Templates/goldClub/farmlist_editraid.tpl");
+			
+			if($_GET['slid']) {
+			$FLData = $database->getFLData($_GET['slid']);
+			if($FLData['owner'] == $session->uid){
+			$checked[$_GET['slid']] = 1;
+			}
             }
+
             if($_GET['action'] == 'deleteList') {
                 $database->delFarmList($_GET['lid'], $session->uid);
                 header("Location: build.php?id=39&t=99");
@@ -185,6 +190,7 @@ if($session->goldclub == 1 && $session->access != BANNED){
                 $database->delSlotFarm($_GET['eid']);
                    header("Location: build.php?id=39&t=99");
             }
+		}
 }else{
 $create = 0;
 if($session->access == BANNED){

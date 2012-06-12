@@ -4,30 +4,50 @@ $eiddata = $database->getRaidList($_GET['eid']);
 $x = $eiddata['x'];
 $y = $eiddata['y'];
 $t1 = $eiddata['t1'];$t2 = $eiddata['t2'];$t3 = $eiddata['t3'];$t4 = $eiddata['t4'];$t5 = $eiddata['t5'];$t6 = $eiddata['t6'];$t7 = $eiddata['t7'];$t8 = $eiddata['t8'];$t9 = $eiddata['t9'];$t10 = $eiddata['t10'];
+$FLData = $database->getFLData($eiddata['lid']);
 }
 
 if(isset($_POST['action']) == 'editSlot' && $_POST['eid']) {
-
-$Wref = $database->getVilWref($_POST['y'], $_POST['x']);
+if($_POST['target_id'] != ""){
+$Wref = $_POST['target_id'];
+$WrefCoor = $database->getCoor($Wref);
+$WrefX = $WrefCoor['x'];
+$WrefY = $WrefCoor['y'];
 $type = $database->getVillageType2($Wref);
 $oasistype = $type['oasistype'];
 $vdata = $database->getVillage($Wref);
-
+}elseif($_POST['x'] && $_POST['y']){
+$Wref = $database->getVilWref($_POST['x'], $_POST['y']);
+$WrefX = $_POST['x'];
+$WrefY = $_POST['y'];
+$type = $database->getVillageType2($Wref);
+$oasistype = $type['oasistype'];
+$vdata = $database->getVillage($Wref);
+}
 $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+".$_POST['t5']."+".$_POST['t6']."+".$_POST['t7']."+".$_POST['t8']."+".$_POST['t9']."+".$_POST['t10']."";
 
-    if(!$_POST['x'] && !$_POST['y']){
+    if(!$_POST['x'] && !$_POST['y'] && $_POST['target_id'] == ""){
     	$errormsg .= "Enter coordinates.";
-    }elseif(!$_POST['x'] || !$_POST['y']){
+    }elseif((!$_POST['x'] || !$_POST['y']) && $_POST['target_id'] == ""){
     	$errormsg .= "Enter the correct coordinates.";
     }elseif($oasistype == 0 && $vdata == 0){
     	$errormsg .= "There is no village on those coordinates.";
     }elseif($troops == 0){
      	$errormsg .= "No troops has been selected.";
     }else{
-    
-		$Wref = $database->getVilWref($_POST['y'], $_POST['x']);
+
+		if($_POST['target_id'] != ""){
+		$Wref = $_POST['target_id'];
+		$WrefCoor = $database->getCoor($Wref);
+		$WrefX = $WrefCoor['x'];
+		$WrefY = $WrefCoor['y'];
+		}else{
+		$Wref = $database->getVilWref($_POST['x'], $_POST['y']);
+		$WrefX = $_POST['x'];
+		$WrefY = $_POST['y'];
+		}
 		$coor = $database->getCoor($village->wid);
-			
+
             function getDistance($coorx1, $coory1, $coorx2, $coory2) {
    				$max = 2 * WORLD_MAX + 1;
    				$x1 = intval($coorx1);
@@ -39,102 +59,16 @@ $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+"
    				$dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
    				return round($dist, 1);
    			}
-            $distance = getDistance($coor['x'], $coor['y'], $_POST['y'], $_POST['x']);
+            $distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);
             
-		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $Wref, $_POST['x'], $_POST['y'], $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
+		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
         
         header("Location: build.php?id=39&t=99");
 }
 }
 
-
+if($FLData['owner'] == $session->uid){
 ?>
-
-<script type="text/javascript">
-	var targets = {};
-
-	function fillTargets()
-	{
-		var targetId = $('target_id');
-
-		targetId.empty();
-
-		var option = new Element('option',
-		{
-			'html': 'Select village'
-		});
-		targetId.insert(option);
-
-		$each(targets[lid], function(data)
-		{
-			var option = new Element('option',
-			{
-				'value': data.did,
-				'html': data.name
-			});
-			targetId.insert(option);
-		});
-	}
-
-	function getTargetsByLid()
-	{
-		var lidSelect = $('lid');
-		lid = lidSelect.getSelected()[0].value;
-
-		if (targets[lid])
-		{
-			fillTargets();
-		}
-		else
-		{
-			Travian.ajax(
-			{
-				data:
-				{
-					cmd: 'raidListTargets',
-					'lid': lid
-				},
-				onSuccess: function(data)
-				{
-					targets[data.lid] = data.targets;
-					fillTargets();
-				}
-			});
-
-		}
-	}
-
-	function selectCoordinates()
-	{
-		var targetId = $('target_id');
-		var did = targetId.getSelected()[0].value;
-
-		if (did == '')
-		{
-			$('xCoordInput').value = '';
-			$('yCoordInput').value = '';
-		}
-		else
-		{
-			var array;
-			$each(targets[lid], function(data)
-			{
-				if (data.did == did)
-				{
-					array = data;
-					return;
-				}
-			});
-
-
-			$('xCoordInput').value = array.x;
-			$('yCoordInput').value = array.y;
-		}
-	}
-
-	var lid = <?php echo $_GET['lid']; ?>;targets[lid] = {};
-
-</script>
 
 <div id="raidListSlot">
 	<h4>Add Slot</h4>
@@ -190,9 +124,31 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 				<div class="clear"></div>
 			</div>
 								<div class="targetSelect">
-							<label class="lastTargets" for="last_targets">Last targets:</label>
-							<select id="target_id" name="target_id" onchange="selectCoordinates()">
-								<option value="">Select village</option>
+							<label class="lastTargets">Last targets:</label>
+							<select name="target_id">
+<?php
+$getwref = "SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = $lid2";
+$arraywref = $database->query_return($getwref);
+	echo '<option value="">Select village</option>';
+if(mysql_num_rows(mysql_query($getwref)) != 0){
+foreach($arraywref as $row){
+$towref = $row["towref"];
+$tocoor = $database->getCoor($towref);
+$totype = $database->getVillageType2($towref);
+$tooasistype = $totype['oasistype'];
+if($tooasistype == 0){
+$tovname = $database->getVillageField($towref, 'name');
+}else{
+$tovname = $database->getOasisField($towref, 'name');
+}
+if($row["id"] == $_GET['eid']){ $selected = 'selected=""'; }else{ $selected = ''; }
+if($vill[$towref] == 0){
+	echo '<option value="'.$towref.'" '.$selected.'>'.$tovname.'('.$tocoor['x'].'|'.$tocoor['y'].')</option>';
+}
+$vill[$towref] = 1;
+}
+}
+?>
 							</select>
 						</div>
 						<div class="clear"></div>
@@ -205,15 +161,11 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 
 		
 <button type="submit" value="save" name="save" id="save"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Save</div></div></button>&nbsp;
-<button type="button" value="delete" name="delete" id="delete" onclick="return (function(){
-				('Are you sure that you want to delete this list?').dialog(
-				{
-					onOkay: function(dialog, contentElement)
-					{
-						window.location.href = 'build.php?id=39&t=99&action=deleteSlot&eid=<?php echo $_GET['eid']; ?>'}
-				});
-				return false;
-			})()">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Delete</div></div></button>
+<button type="button" value="delete" name="delete" id="delete" onclick="window.location.href = '?gid=16&t=99&action=deleteSlot&eid=<?php echo $_GET["eid"]; ?>';"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Delete</div></div></button>
 </form>
 </div>
+<?php
+}else{
+header("Location: build.php?id=39&t=99");
+}
+?>

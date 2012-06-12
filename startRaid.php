@@ -43,16 +43,17 @@ if($session->access != BANNED){
     $getFLData = $database->getFLData($lid);
     $unitslist = $database->getFLData($lid);
     $sql = mysql_query("SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".$lid."");
-	$sql1 = mysql_query("SELECT * FROM ".TB_PREFIX."units WHERE vref = ".$getFLData['wref']);
+	$sql1 = mysql_fetch_array(mysql_query("SELECT * FROM ".TB_PREFIX."units WHERE vref = ".$getFLData['wref']));
     while($row = mysql_fetch_array($sql)){
         $sid = $row['id'];
         $wref = $row['towref'];
         $t1 = $row['t1'];$t2 = $row['t2'];$t3 = $row['t3'];$t4 = $row['t4'];$t5 = $row['t5'];
         $t6 = $row['t6'];$t7 = $row['t7'];$t8 = $row['t8'];$t9 = $row['t9'];$t10 = $row['t10'];
         $t11 = 0;
-		if($tribe == 1){ $u = ""; } elseif($tribe == 2){ $u = "1"; } elseif($tribe == 3){ $u = "2"; }elseif($tribe == 4){ $u = "3"; }else {$u = "4"; }
-        if($sql[$u.'1']>=$t1 && $sql[$u.'2']>=$t2 && $sql[$u.'3']>=$t3 && $sql[$u.'4']>=$t4 && $sql[$u.'5']>=$t5 && $sql[$u.'6']>=$t6 && $sql[$u.'7']>=$t7 && $sql[$u.'8']>=$t8 && $sql[$u.'9']>=$t9 && $sql[$u.'10']>=$t10 && $sql['hero']>=$t11){
-        if($slots[$sid]=='on'){
+		if($tribe == 1){ $u = "u"; } elseif($tribe == 2){ $u = "u1"; } elseif($tribe == 3){ $u = "u2"; }elseif($tribe == 4){ $u = "u3"; }else {$u = "u4"; }
+		if($tribe == 1){ $u1 = "u1"; } elseif($tribe == 2){ $u1 = "u2"; } elseif($tribe == 3){ $u1 = "u3"; }elseif($tribe == 4){ $u1 = "u4"; }else {$u1 = "u5"; }
+		if($tribe == 1){ $u2 = ""; } elseif($tribe == 2){ $u2 = "1"; } elseif($tribe == 3){ $u2 = "2"; }elseif($tribe == 4){ $u2 = "3"; }else {$u2 = "4"; }
+        if($sql1[$u.'1']>=$t1 && $sql1[$u.'2']>=$t2 && $sql1[$u.'3']>=$t3 && $sql1[$u.'4']>=$t4 && $sql1[$u.'5']>=$t5 && $sql1[$u.'6']>=$t6 && $sql1[$u.'7']>=$t7 && $sql1[$u.'8']>=$t8 && $sql1[$u.'9']>=$t9 && $sql1[$u1.'0']>=$t10 && $sql1['hero']>=$t11){        if($slots[$sid]=='on'){
             $ckey = $generator->generateRandStr(6);
             $id = $database->addA2b($ckey,time(),$wref,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,4);
             
@@ -99,19 +100,19 @@ if($session->access != BANNED){
             $abdata = $database->getABTech($getFLData['wref']);
             $reference = $database->addAttack(($getFLData['wref']),$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],$data['type'],$ctar1,$ctar2,0,$abdata['b1'],$abdata['b2'],$abdata['b3'],$abdata['b4'],$abdata['b5'],$abdata['b6'],$abdata['b7'],$abdata['b8']);
             $totalunits = $data['u1']+$data['u2']+$data['u3']+$data['u4']+$data['u5']+$data['u6']+$data['u7']+$data['u8']+$data['u9']+$data['u10']+$data['u11'];
-			$database->modifyUnit($getFLData['wref'], array($u.'1'), array($data['u1']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'2'), array($data['u2']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'3'), array($data['u3']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'4'), array($data['u4']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'5'), array($data['u5']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'6'), array($data['u6']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'7'), array($data['u7']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'8'), array($data['u8']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'9'), array($data['u9']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($u.'10'), array($data['u10']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'1'), array($data['u1']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'2'), array($data['u2']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'3'), array($data['u3']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'4'), array($data['u4']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'5'), array($data['u5']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'6'), array($data['u6']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'7'), array($data['u7']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'8'), array($data['u8']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'9'), array($data['u9']), array(0));
+			$database->modifyUnit($getFLData['wref'], array($u2.'10'), array($data['u10']), array(0));
 			$database->modifyUnit($getFLData['wref'], array('hero'), array($data['u11']), array(0));
 
-			$database->addMovement(3,$getFLData['wref'],$data['to_vid'],$reference,0,($time+time()));
+			$database->addMovement(3,$getFLData['wref'],$data['to_vid'],$reference,time(),($time+time()));
         }    
     }
 	}

@@ -2,13 +2,15 @@
 
 if(isset($_GET['t'])==99 && isset($_GET['action'])==0) {
 
-if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList'){
+if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList' && $_POST['did']!="" && $_POST['name']!=""){
     $database->createFarmList($_POST['did'], $session->uid, $_POST['name']);
+}else if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList'){
+	header("Location: build.php?gid=16&t=99&action=addList");
 }
 
 $sql = mysql_query("SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = $session->uid ORDER BY wref = $village->wid DESC");
 $query = mysql_num_rows($sql);
-while($row = mysql_fetch_array($sql)){ 
+while($row = mysql_fetch_array($sql)){
     $lid = $row["id"];
     $lname = $row["name"];
     $lowner = $row["owner"];
@@ -68,9 +70,12 @@ $vdata = $database->getVillage($towref);
 ?>
 <tr class="slotRow">
 <td class="checkbox">
-
+				<?php if($checked[$lid] == 0){ ?>
                 <input id="slot<?php echo $id; ?>" name="slot[<?php echo $id; ?>]" type="checkbox" class="markSlot" onclick="Travian.Game.RaidList.markSlotForRaid(<?php echo $lid; ?>, <?php echo $id; ?>, this.checked);">
-            </td>
+				<?php }else{ ?>
+                <input id="slot<?php echo $id; ?>" name="slot[<?php echo $id; ?>]" type="checkbox" class="markSlot" checked>
+				<?php } ?>
+			</td>
             <td class="village">
             <?php
 
@@ -96,9 +101,9 @@ $vdata = $database->getVillage($towref);
                 <span class="coordinates coordinatesWithText">
                 <span class="coordText">Oasis</span>
                 <span class="coordinatesWrapper">
-                <span class="coordinateY"><?php echo $y; ?>)</span>
+                <span class="coordinateY">(<?php echo $x; ?></span>
                 <span class="coordinatePipe">|</span>
-                <span class="coordinateX">(<?php echo $x; ?></span>
+                <span class="coordinateX"><?php echo $y; ?>)</span>
                 </span></span>
                 <?php }else{ ?>
                 <span class="coordinates coordinatesWithText">
@@ -109,7 +114,7 @@ $vdata = $database->getVillage($towref);
                 <span class="clear">‎</span>
                 </label>
             </td>
-            <td class="ew"><?php echo $vdata['pop']; ?></td>
+            <td class="ew"><?php if($oasistype == 0){ echo $vdata['pop']; }else{ echo "<center>-</center>"; }; ?></td>
             <td class="distance"><?php echo $distance; ?></td>
             <td class="troops">
 
@@ -187,9 +192,9 @@ $vdata = $database->getVillage($towref);
             <td class="lastRaid">
 <?php
 $noticeClass = array("Scout Report","Won as attacker without losses","Won as attacker with losses","Lost as attacker with losses","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Lost as defender without losses","Reinforcement arrived","","Wood Delivered","Clay Delivered","Iron Delivered","Crop Delivered","","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Won scouting as attacker","Lost scouting as attacker","Won scouting as defender","Lost scouting as defender");
-$limits = "ntype!=4 and ntype!=5 and ntype!=6 and ntype!=7";
+$limits = "(ntype=1 or ntype=2 or ntype=3 or ntype=18 or ntype=19 or ntype=22)";
 $getnotice = mysql_query("SELECT * FROM ".TB_PREFIX."ndata WHERE $limits AND toWref = ".$towref." ORDER BY time DESC Limit 1");
-
+if(mysql_num_rows($getnotice) > 0){
 while($row2 = mysql_fetch_array($getnotice)){
     $dataarray = explode(",",$row2['data']);
     $type2 = $row2['ntype'];
@@ -211,11 +216,12 @@ while($row2 = mysql_fetch_array($getnotice)){
     $date = $generator->procMtime($row2['time']);
     echo "<a href=\"berichte.php?id=".$row2['id']."\">".$date[0]." ".date('H:i',$row2['time'])."</a> ";
 }
+}
 ?>
                 <div class="clear"></div>
             </td>
             <td class="action">
-                <a class="arrow" href="#" onclick="Travian.Game.RaidList.editSlot(<?php echo $lid; ?>, <?php echo $id; ?>); return false;">edit</a>
+                <a class="arrow" href="build.php?id=39&t=99&action=showSlot&eid=<?php echo $id; ?>">edit</a>
             </td>
             </tr>
 <?php
@@ -226,12 +232,16 @@ while($row2 = mysql_fetch_array($getnotice)){
 </tbody>
     </table>
     <div class="markAll">
-        <input type="checkbox" id="raidListMarkAll<?php echo $lid; ?>" class="markAll" onclick="Travian.Game.RaidList.markAllSlotsOfAListForRaid(<?php echo $lid; ?>, this.checked);">
+		<?php if($checked[$lid] == 0){ ?>
+		<input type="checkbox" id="raidListMarkAll<?php echo $lid; ?>" class="markAll" onclick="window.location.href = '?gid=16&t=99&slid=<?php echo $lid; ?>';">
+		<?php }else{ ?>
+        <input type="checkbox" id="raidListMarkAll<?php echo $lid; ?>" class="markAll" onclick="window.location.href = '?gid=16&t=99';" checked>
+		<?php } ?>
         <label for="raidListMarkAll<?php echo $lid; ?>">Select All</label>
     </div>
 
     <div class="addSlot">
-<a href="build.php?id=39&t=99&action=showSlot&lid=">Add Raid</a>
+<a href="build.php?id=39&t=99&action=addraid&lid=<?php echo $lid; ?>">Add Raid</a>
 </div>
 <div class="clear"></div>
 
@@ -253,7 +263,7 @@ for($i=$start;$i<=$end;$i++){
 <button type="submit" value="Start Raid"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Start Raid</div></div></button>                                            </div>
 </form>
 
-</div>
+
 <?php }else{ ?>
 <div id="list<?php echo $lid; ?>" class="listEntry">
 <div class="round spacer listTitle" onclick="Travian.Game.RaidList.toggleList(<?php echo $lid; ?>);">
@@ -349,222 +359,10 @@ $NUM1++;
 </script>
     <?php } ?>
 
-<?php
-    
-if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
-
-$troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+".$_POST['t5']."+".$_POST['t6']."+".$_POST['t7']."+".$_POST['t8']."+".$_POST['t9']."+".$_POST['t10']."";
-    
-    if($_POST['x'] && $_POST['y']){
-        $Wref = $database->getVilWref($_POST['y'], $_POST['x']);
-        $type = $database->getVillageType2($Wref);
-        $oasistype = $type['oasistype'];
-        $vdata = $database->getVillage($Wref);
-    }
-    if(!$_POST['x'] && !$_POST['y']){
-        $errormsg .= "Enter coordinates.";
-    }elseif(!$_POST['x'] || !$_POST['y']){
-        $errormsg .= "Enter the correct coordinates.";
-    }elseif($oasistype == 0 && $vdata == 0){
-        $errormsg .= "In this village there are no coordinates.";
-    }elseif($troops == 0){
-         $errormsg .= "No troops has been selected.";
-    }else{
-    
-        $Wref = $database->getVilWref($_POST['y'], $_POST['x']);
-        $coor = $database->getCoor($village->wid);
-            
-            function getDistance($coorx1, $coory1, $coorx2, $coory2) {
-                   $max = 2 * WORLD_MAX + 1;
-                   $x1 = intval($coorx1);
-                   $y1 = intval($coory1);
-                   $x2 = intval($coorx2);
-                   $y2 = intval($coory2);
-                   $distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
-                   $distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
-                   $dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
-                   return round($dist, 1);
-               }
-            
-        $distance = getDistance($coor['x'], $coor['y'], $_POST['y'], $_POST['x']);
-            
-        $database->addSlotFarm($_POST['lid'], $Wref, $_POST['x'], $_POST['y'], $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
-        
-        header("Location: build.php?id=39&t=99");
-}
-}
-?>
-
-<script type="text/javascript">
-    var targets = {};
-
-    function fillTargets()
-    {
-        var targetId = $('target_id');
-
-        targetId.empty();
-
-        var option = new Element('option',
-        {
-            'html': 'Choose a village'
-        });
-        targetId.insert(option);
-
-        $each(targets[lid], function(data)
-        {
-            var option = new Element('option',
-            {
-                'value': data.did,
-                'html': data.name
-            });
-            targetId.insert(option);
-        });
-    }
-
-    function getTargetsByLid()
-    {
-        var lidSelect = $('lid');
-        lid = lidSelect.getSelected()[0].value;
-
-        if (targets[lid])
-        {
-            fillTargets();
-        }
-        else
-        {
-            Travian.ajax(
-            {
-                data:
-                {
-                    cmd: 'raidListTargets',
-                    'lid': lid
-                },
-                onSuccess: function(data)
-                {
-                    targets[data.lid] = data.targets;
-                    fillTargets();
-                }
-            });
-
-        }
-    }
-
-    function selectCoordinates()
-    {
-        var targetId = $('target_id');
-        var did = targetId.getSelected()[0].value;
-
-        if (did == '')
-        {
-            $('xCoordInput').value = '';
-            $('yCoordInput').value = '';
-        }
-        else
-        {
-            var array;
-            $each(targets[lid], function(data)
-            {
-                if (data.did == did)
-                {
-                    array = data;
-                    return;
-                }
-            });
-
-
-            $('xCoordInput').value = array.x;
-            $('yCoordInput').value = array.y;
-        }
-    }
-
-    var lid = <?php echo $_GET['lid']; ?>;targets[lid] = {};
-
-</script>
 <?php if($create == 1){
 include("Templates/goldClub/farmlist_add.tpl");
-}else if($query > 1){ ?>
-<div id="raidListSlot">
-    <h4>Add Raid</h4>
-<font color="#FF0000"><b>    
-<?php echo $errormsg; ?>
-</b></font>
-    
-    <form action="build.php?id=39&t=99&action=showSlot&lid=<?php echo $_GET['lid']; ?>" method="post">
-        <div class="boxes boxesColor gray"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents cf">
-        
-        <input type="hidden" name="action" value="addSlot">
-        <input type="hidden" name="lid" value="<?php echo $_GET['lid']; ?>">
-        
-            
-            <table cellpadding="1" cellspacing="1" class="transparent">
-                <tbody><tr>
-                    <th>From List</th>
-                    <td>
-                        <select onchange="getTargetsByLid();" id="lid" name="lid">
-<?php
-
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = $session->uid ORDER BY name ASC");
-while($row = mysql_fetch_array($sql)){ 
-$lid = $row["id"];
-$lname = $row["name"];
-$lowner = $row["owner"];
-$lwref = $row["wref"];
-$lvname = $database->getVillageField($row["wref"], 'name');
-    if($_GET['lid']==$lid){
-        $selected = 'selected=""';
-        }else{ $selected = ''; }
-    echo '<option value="'.$lid.'" '.$selected.'>'.$lvname.' - '.$lname.'</option>';
+}else if($create == 2){
+include("Templates/goldClub/farmlist_addraid.tpl");
+}else if($create == 3){
+include("Templates/goldClub/farmlist_editraid.tpl");
 }
-?>    
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Coordinates:</th>
-                    <td class="target">
-                        
-            <div class="coordinatesInput">
-                <div class="xCoord">
-                    <label for="xCoordInput">X:</label>
-                    <input value="<?php echo $_POST['y']; ?>" name="y" id="xCoordInput" class="text coordinates y ">
-                </div>
-                <div class="yCoord">
-                    <label for="yCoordInput">Y:</label>
-                    <input value="<?php echo $_POST['x']; ?>" name="x" id="yCoordInput" class="text coordinates x ">
-                </div>
-                <div class="clear"></div>
-            </div>
-                                <div class="targetSelect">
-                            <label class="lastTargets" for="last_targets">Villiages</label>
-                            <select id="target_id" name="target_id" onchange="selectCoordinates()">
-<?php
-
-$sql1 = mysql_query("SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = $session->uid ORDER BY name ASC");
-while($row1 = mysql_fetch_array($sql1)){ 
-$lid1 = $row1["id"];
-$lname1 = $row1["name"];
-$lowner1 = $row1["owner"];
-$lwref1 = $row1["wref"];
-$lvname1 = $database->getVillageField($row1["wref"], 'name');
-    if($_GET['lid']==$lid){
-        $selected = 'selected=""';
-        }else{ $selected = ''; }
-    echo '<option value="'.$lwref1.'" '.$selected1.'>'.$lvname1.'</option>';
-}
-?>    
-                            </select>
-                        </div>
-                        <div class="clear"></div>
-                    </td>
-                </tr>
-            </tbody></table>
-            </div>
-                </div>
-        <?php include "Templates/goldClub/trooplist.tpl"; ?>
-
-        
-<button type="submit" value="Add" name="save" id="save"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Add</div></div></button>
-        
-</form>
-</div>
-<?php } ?>
