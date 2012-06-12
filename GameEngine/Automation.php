@@ -3261,12 +3261,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET points = points + 5 WHERE heroid = '".$hdata['heroid']."'"); 
 					}
 					$villunits = $database->getUnit($hdata['wref']);
-					if($hero_info['dead'] == 1 or $villunits['hero'] == 1){
-					mysql_query("UPDATE " . TB_PREFIX . "hero SET nothome = 0 WHERE heroid = ".$hdata['heroid']."");
-					}
-					if($villunits['hero'] == 0 && $hero_info['trainingtime'] < time() && $hero_info['nothome'] == 0){
+					if($villunits['hero'] == 0 && $hero_info['trainingtime'] < time() && $hero_info['inrevive'] == 1){
 					mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$hdata['wref']."");
-					mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `health` = '100' WHERE `uid` = '".$hdata['uid']."'");
+					mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100' WHERE `uid` = '".$hdata['uid']."'");
 					}
             }
         } 

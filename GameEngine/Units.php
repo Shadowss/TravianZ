@@ -332,10 +332,6 @@ class Units {
   		$checkoexist = $database->checkOasisExist($data['to_vid']);
 		if($checkexist or $checkoexist){
 		$database->addMovement(3,$village->wid,$data['to_vid'],$reference,time(),($time+time()));
-		if($data['u11'] > 0){
-		$heroid = $database->getHero($session->uid);
-		mysql_query("UPDATE " . TB_PREFIX . "hero SET nothome = 1 WHERE heroid = ".$heroid."");
-		}
 		}
    
 		if($form->returnErrors() > 0) {

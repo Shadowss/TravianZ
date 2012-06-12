@@ -71,7 +71,7 @@
         </thead>
     
     <?php
-	if($hero_info['trainingtime'] > time()) {
+	if($hero_info['inrevive'] == 1) {
     $timeleft = $generator->getTimeFormat($hero_info['trainingtime'] - time());
                 
 ?>
@@ -161,9 +161,9 @@
 
     <?php
     
-    if($_GET['revive'] == 1){
+    if($_GET['revive'] == 1 && $hero_info['inrevive'] == 0){
 			if($session->access != BANNED){
-            mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `health` = '100', `trainingtime` = '".$training_time2."' WHERE `uid` = '".$session->uid."'");
+            mysql_query("UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".$training_time2."' WHERE `uid` = '".$session->uid."'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$wood." WHERE `wref` = '" . $village->wid . "'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".$clay." WHERE `wref` = '" . $village->wid . "'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `iron` = `wood` - ".$iron." WHERE `wref` = '" . $village->wid . "'");
@@ -173,10 +173,7 @@
 			header("Location: banned.php"); 
 			}
     }
-if($hero_info['trainingtime'] < time() && $hero_info['dead'] == 0 && $hero_info['nothome'] == 0){
-mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$village->wid."");
-}
-	if($hero_info['trainingtime'] < time()) {
+	if($hero_info['inrevive'] == 0) {
             include ("37_train.tpl");
 	}
     ?>
