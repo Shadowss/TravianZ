@@ -392,7 +392,6 @@ class Technology {
 			$horsedrinking = $j;
 			}
 			}
-			if($i>=4 && $i<=6 && $dataarray['drinking'] <= $buildarray['f'.$horsedrinking]) {
 			if(isset($horsedrinking)){
 			if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
 			|| ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
@@ -401,9 +400,6 @@ class Technology {
 			} else {
 			$upkeep += $dataarray['pop'] * $array[$unit];
 			}}else{
-			$upkeep += $dataarray['pop'] * $array[$unit];
-			}
-			}else{
 			$upkeep += $dataarray['pop'] * $array[$unit];
 			}
 		}
