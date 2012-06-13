@@ -36,17 +36,17 @@ $building->procBuild($_GET);
 }
 
 if(isset($_GET['id'])) {
-	$id = $_GET['id'];
+	$id = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']);
 }
 if(isset($_GET['w'])) {
-	$w = $_GET['w'];
+	$w = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['w']);
 }
 if(isset($_GET['r'])) {
-	$r = $_GET['r'];
+	$r = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['r']);
 }
 if(isset($_GET['o'])) {
-    $o = $_GET['o'];
-    $oid = $_GET['z'];
+    $o = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['o']);
+    $oid = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['z']);
     $too = $database->getOasisField($oid,"conqured");
     if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
     $disabledr ="";

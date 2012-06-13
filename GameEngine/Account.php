@@ -42,7 +42,7 @@ class Account {
      
     private function Signup() { 
         global $database,$form,$mailer,$generator,$session; 
-        if(!isset($_POST['name']) || $_POST['name'] == "") { 
+        if(!isset($_POST['name']) || trim($_POST['name']) == "") { 
             $form->addError("name",USRNM_EMPTY); 
         } 
         else { 
@@ -60,7 +60,7 @@ class Account {
             }
              
         } 
-        if(!isset($_POST['pw']) || $_POST['pw'] == "") { 
+        if(!isset($_POST['pw']) || trim($_POST['pw']) == "") { 
             $form->addError("pw",PW_EMPTY); 
         } 
         else { 

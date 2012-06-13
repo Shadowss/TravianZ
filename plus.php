@@ -65,7 +65,7 @@ $automation->isWinner();
 <?php include("Templates/menu.tpl"); ?>
 <?php
 if(isset($_GET['id'])) {
-$id = $_GET['id'];
+$id = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']);
 } else {
 $id = "";
 }

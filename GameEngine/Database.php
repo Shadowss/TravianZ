@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Edited by:     ZZJHONS                                                     ##
+##  Edited by:     ZZJHONS, songeriux                                          ##
 ##  Filename       Database.php                                                ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
@@ -21,5 +21,11 @@ switch(DB_TYPE) {
 	default:
 	include("Database/db_MYSQL.php");
 	break;
+}
+## Security
+if($_GET['s'] == 6 && $_SERVER['PHP_SELF'] == "/allianz.php"){
+include("Protection.php");
+}else{
+include("Protection2.php");
 }
 ?>

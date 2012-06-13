@@ -1,2 +1,2 @@
-<h1>Player profile</h1>
-<p>No player found</p>
+<?php
+header("Location: dorf1.php");

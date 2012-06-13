@@ -10,6 +10,7 @@
 #################################################################################
 
 $ranking->procRankReq($_GET);
+$_GET['uid'] = preg_replace("/[^0-9]/","",$_GET['uid']);
 $displayarray = $database->getUserArray($_GET['uid'],1);
  
 
@@ -124,7 +125,7 @@ include("menu2.tpl");
                 <td colspan="2" class="empty"></td>
             </tr>
             <tr>
-				<?php if($_GET['uid'] == $session->uid) {
+				<?php if(preg_replace("/[^0-9]/","",$_GET['uid']) == $session->uid) {
 				if($session->sit == 0){
                 echo "<td colspan=\"2\"> <a href=\"spieler.php?s=1\">&raquo; Change profile</a></td>";
 				}else{

@@ -17,12 +17,12 @@
         mysql_select_db(SQL_DB);
 
 if($session->access==ADMIN){
-		
+
 //controllo
 	if(isset($_GET['giveout'])){
 
         $database->populateOasisUnitsLow();
-		
+
 		}
         
        
@@ -94,7 +94,7 @@ Click <a href="?giveout">here</a>, to populate oasis <br/>WARNING: Loading next 
 <div id="ce"></div>
 </body>
 </html>
-<?php @mysql_close(); 
+<?php mysql_close(); 
 }else{
 header("Location: dorf1.php");
 }?>

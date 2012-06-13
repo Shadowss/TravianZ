@@ -1,19 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-|   PLEASE DO NOT REMOVE THIS COPYRIGHT NOTICE!
-|--------------------------------------------------------------------------  
-|
-|   Project owner:   Dzoki < dzoki.travian@gmail.com >
-|  
-|   This script is property of TravianX Project. You are allowed to change
-|   its source and release it under own name, not under name `TravianX`. 
-|   You have no rights to remove copyright notices.
-|
-|   TravianX All rights reserved
-|
-*/
 if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) header("Location: allianz.php");;
        include ("GameEngine/Village.php");
        include ("GameEngine/Chat.php");
@@ -22,9 +8,9 @@ if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) header("Location: allianz.p
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	if(isset($_GET['s'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
+	header("Location: ".$_SERVER['PHP_SELF']."?s=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s'));
 	}else if(isset($_GET['aid'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?aid=".$_GET['aid']);
+	header("Location: ".$_SERVER['PHP_SELF']."?aid=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['aid']));
 	}
 	else{
 	header("Location: ".$_SERVER['PHP_SELF']);
@@ -35,7 +21,7 @@ if(isset($_GET['newdid'])) {
 		}
 
 if(isset($_GET['fid'])){
-$fid = $_GET['fid'];
+$fid = preg_replace("/[^0-9]/","",$_GET['fid']);
 $forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
 $forum_type = mysql_fetch_array($forum);
 if($forum_type['forum_name'] != "" && $forum_type['forum_area'] != 1){
@@ -54,7 +40,7 @@ if($forum_type['alliance'] != $session->alliance){
 }
 }
 }else if(isset($_GET['fid2'])){
-$fid = $_GET['fid2'];
+$fid = preg_replace("/[^0-9]/","",$_GET['fid2']);
 $forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
 $forum_type = mysql_fetch_array($forum);
 if($forum_type['forum_name'] != "" && $forum_type['forum_area'] != 1){
@@ -284,25 +270,25 @@ if($_GET['aid'] or $_GET['fid'] or $_GET['fid2'] or $session->alliance!=0){
        			}
        			break;
        		case 101:
-       			$post = $_POST['id'];
+       			$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
        			$database->diplomacyCancelOffer($post);
        			include ("Templates/Alliance/chgdiplo.tpl");
        			break;
        		case 102:
-       			$post = $_POST['id'];
-       			$post2 = $_POST['alli2'];
+       			$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
+       			$post2 = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['alli2']);
        			$database->diplomacyInviteDenied($post, $post2);
        			include ("Templates/Alliance/chgdiplo.tpl");
        			break;
        		case 103:
-       			$post = $_POST['id'];
-       			$post2 = $_POST['alli2'];
+       			$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
+       			$post2 = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['alli2']);
        			$database->diplomacyInviteAccept($post, $post2);
        			include ("Templates/Alliance/chgdiplo.tpl");
        			break;
        		case 104:
-       			$post = $_POST['id'];
-       			$post2 = $_POST['alli2'];
+       			$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
+       			$post2 = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['alli2']);
        			$database->diplomacyCancelExistingRelationship($post, $post2);
        			include ("Templates/Alliance/chgdiplo.tpl");
        	}

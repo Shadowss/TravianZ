@@ -11,10 +11,10 @@
 
 switch($_GET['f']) {
 	case 'k7':
-		$x = $_GET['x'];
-		$y = $_GET['y'];
-		$xx = $_GET['xx'];
-		$yy = $_GET['yy'];
+		$x = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['x']);
+		$y = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['y']);
+		$xx = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['xx']);
+		$yy = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['yy']);
 		$howmany = $x - $xx;
 		if($howmany == 12 || $howmany == -12) {
 			include("Templates/Ajax/mapscroll2.tpl");
@@ -24,18 +24,18 @@ switch($_GET['f']) {
 		}
 		break;
 	case 'kp':
-		$z = $_GET['z'];
+		$z = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['z']);
 		//include("Templates/Ajax/plusmap.tpl");
 		break;
 	case 'qst':
-	
+
 	if (isset($_GET['qact'])){
-	$qact=$_GET['qact'];
+	$qact=preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['qact']);
 	}else {
 	$qact=null;
 	}
 	if (isset($_GET['qact2'])){
-	$qact2=$_GET['qact2'];
+	$qact2=preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['qact2']);
 	}else {
 	$qact2=null;
 	}

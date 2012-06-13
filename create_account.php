@@ -96,7 +96,7 @@ if($_POST['password'] != ""){
  */
         $username = "Natars";
         $password = md5($_POST['password']);
-        $email = "natars@travianx.com";
+        $email = "natars@noreply.com";
         $tribe = 5;
         $desc = "********************
                     [#natars]

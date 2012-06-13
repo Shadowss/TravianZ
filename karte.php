@@ -16,10 +16,10 @@ $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 if(isset($_GET['d']) && isset($_GET['c'])){
-		header("Location: ".$_SERVER['PHP_SELF']."?d=".$_GET['d']."&c=".$_GET['c']);
+		header("Location: ".$_SERVER['PHP_SELF']."?d=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['d'])."&c=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['c']));
 }
 else if(isset($_GET['d'])){
-		header("Location: ".$_SERVER['PHP_SELF']."?d=".$_GET['d']);
+		header("Location: ".$_SERVER['PHP_SELF']."?d=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['d']));
 }
 else{
 	header("Location: ".$_SERVER['PHP_SELF']);

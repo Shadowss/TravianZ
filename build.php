@@ -28,15 +28,15 @@ $alliance->procAlliForm($_POST);
 $technology->procTech($_POST);
 $market->procMarket($_POST);    
 if(isset($_GET['gid'])) {
-    $_GET['id'] = strval($building->getTypeField($_GET['gid']));
+    $_GET['id'] = strval($building->getTypeField(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['gid'])));
 } else if(isset($_POST['id'])) {
-    $_GET['id'] = $_POST['id'];
+    $_GET['id'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']); // WTF is this?
 }
 if(isset($_POST['t'])){
-    $_GET['t'] = $_POST['t'];
+    $_GET['t'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['t']);
 }
 if(isset($_GET['id'])) {
-    if (!ctype_digit($_GET['id'])){
+    if (!ctype_digit(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']))){
         $_GET['id'] = "1";
     }
     if($village->resarray['f'.$_GET['id'].'t'] == 17) {
@@ -62,7 +62,7 @@ if($routeaccess = 1){
 			$_POST['r'.$i] = 0;
 			}
 			}
-			$totalres = $_POST['r1']+$_POST['r2']+$_POST['r3']+$_POST['r4'];
+			$totalres = preg_replace("/[^0-9]/","",$_POST['r1'])+preg_replace("/[^0-9]/","",$_POST['r2'])+preg_replace("/[^0-9]/","",$_POST['r3'])+preg_replace("/[^0-9]/","",$_POST['r4']);
 			$reqMerc = ceil(($totalres-0.1)/$market->maxcarry);
 			$second = date("s");
 			$minute = date("i");
@@ -175,7 +175,7 @@ if($session->goldclub == 1 && $session->access != BANNED){
 			}else{
 				$create = 0;
 			}
-			
+
 			if($_GET['slid']) {
 			$FLData = $database->getFLData($_GET['slid']);
 			if($FLData['owner'] == $session->uid){

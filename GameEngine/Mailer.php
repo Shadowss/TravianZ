@@ -30,13 +30,13 @@ Click the following link in order to activate your account:
 ".SERVER."activate.php?code=".$act."
 
 Greetings,
-TravianX";
+Travian adminision";
 
-		$headers = "From: Mailer@".SERVER_NAME."\n";
+		$headers = "From: ".ADMIN_EMAIL."\n";
 
 		mail($email, $subject, $message, $headers);
 	}
-	
+
 	function sendInvite($email,$uid,$text) {
 
 		$subject = "".SERVER_NAME." registeration";
@@ -52,9 +52,9 @@ Link: <a href=".SERVER."anmelden.php?id=".$uid.">".SERVER_NAME."</a>
 
 
 Greetings,
-TravianX";
+Travian";
 
-		$headers = "From: Mailer@".SERVER_NAME."\n";
+		$headers = "From: ".ADMIN_EMAIL."\n";
 
 		mail($email, $subject, $message, $headers);
 	}
@@ -82,10 +82,10 @@ on tab \"account\".
 
 In case you did not request a new password you may ignore this email.
 
-TravianX
+Travian
 ";
 
-		$headers = "From: Mailer@".SERVER_NAME."\n";
+		$headers = "From: ".ADMIN_EMAIL."\n";
 
 		mail($email, $subject, $message, $headers);
 	}

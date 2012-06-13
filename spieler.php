@@ -17,9 +17,9 @@ $profile->procSpecial($_GET);
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	if(isset($_GET['s'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
+	header("Location: ".$_SERVER['PHP_SELF']."?s=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s']));
 	}else if(isset($_GET['uid'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$_GET['uid']);
+	header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['uid']));
 	}else{
 	header("Location: ".$_SERVER['PHP_SELF']);
 }
@@ -122,7 +122,7 @@ $automation->isWinner();
 <?php
 if(isset($_GET['uid'])) {
 	if($_GET['uid'] >= 2) {
-		$user = $database->getUserArray($_GET['uid'],1);
+		$user = $database->getUserArray(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['uid']),1);
 		if(isset($user['id'])){
 			include("Templates/Profile/overview.tpl");
 		} else {
@@ -147,7 +147,7 @@ else if (isset($_GET['s'])) {
 		include("Templates/Profile/graphic.tpl");
 	}
 	if($_GET['s'] > 4 or $session->sit == 1) {
-	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
+	header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$session->uid));
 	}
 }
 ?>

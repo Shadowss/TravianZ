@@ -54,13 +54,13 @@ else if (isset($_GET['typ']) && $_GET['typ'] == 5 && $_GET['s'] == 3) {
 }
 else {
 	if(isset($_GET['gid'])) {
-		include("Templates/Manual/".$_GET['typ'].($_GET['gid']).".tpl");
+		include("Templates/Manual/".$_GET['typ'].(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['gid'])).".tpl");
 	}
 	else {
 		if($_GET['typ'] == 4 && $_GET['s'] == 0) {
 			$_GET['s'] = 1;
 		}
-	include("Templates/Manual/".$_GET['typ'].$_GET['s'].".tpl");
+	include("Templates/Manual/".$_GET['typ'].preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s']).".tpl");
 	}
 }
 ?>

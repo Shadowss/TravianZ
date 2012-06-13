@@ -87,7 +87,7 @@ if(isset($_POST['result'])) {
 $target = isset($_POST['target'])? $_POST['target'] : array();
 $tribe = isset($_POST['mytribe'])? $_POST['mytribe'] : $session->tribe;
 if(count($target) > 0) {
-    include("Templates/Simulator/att_".$tribe.".tpl");
+    include("Templates/Simulator/att_".preg_replace("/[^a-zA-Z0-9_-]/","",$tribe).".tpl");
     echo "<table id=\"defender\" class=\"fill_in\" cellpadding=\"1\" cellspacing=\"1\">
 
     <thead>

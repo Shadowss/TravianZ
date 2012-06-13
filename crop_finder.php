@@ -15,11 +15,11 @@
    }
 
    if($_POST['type'] == 15) {
-       header("Location: ".$_SERVER['PHP_SELF']."?s=1&x=" . $_POST['x'] . '&y=' . $_POST['y']);
+       header("Location: ".$_SERVER['PHP_SELF']."?s=1&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
    } elseif($_POST['type'] == 9) {
-       header("Location: ".$_SERVER['PHP_SELF']."?s=2&x=" . $_POST['x'] . '&y=' . $_POST['y']);
+       header("Location: ".$_SERVER['PHP_SELF']."?s=2&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
    } elseif($_POST['type'] == 'both') {
-       header("Location: ".$_SERVER['PHP_SELF']."?s=3&x=" . $_POST['x'] . '&y=' . $_POST['y']);
+       header("Location: ".$_SERVER['PHP_SELF']."?s=3&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
    }
 
 ?>
@@ -87,8 +87,8 @@
    include ("Templates/menu.tpl");
 
    if(is_numeric($_GET['x']) AND is_numeric($_GET['y'])) {
-       $coor2['x'] = $_GET['x'];
-       $coor2['y'] = $_GET['y'];       
+       $coor2['x'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['x']);
+       $coor2['y'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['y']);       
    } else {
        $wref2 = $village->wid;
        $coor2 = $database->getCoor($wref2);      
