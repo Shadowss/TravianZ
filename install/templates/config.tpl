@@ -9,7 +9,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<p>
 	<span class="f10 c">SERVER RELATED</span>
 	<table><tr>
-	<td><span class="f9 c6">Server name:</span></td><td width="140"><input type="text" name="servername" id="servername" value="TravianX"></td></tr><tr>
+	<td><span class="f9 c6">Server name:</span></td><td width="140"><input type="text" name="servername" id="servername" value="TravianZ"></td></tr><tr>
 	<td><span class="f9 c6">Server speed:</span></td><td><input name="speed" type="text" id="speed" value="1" size="2"></td></tr><tr>
 	<td><span class="f9 c6">Troop speed:</span></td><td width="140"><input type="text" name="incspeed" id="incspeed" value="2" size="2"></td></tr><tr>
 	<td><span class="f9 c6">Trader capacity (1 = 1x...):</span></td><td width="140"><input type="text" name="tradercap" id="tradercap" value="1" size="2"></td></tr><tr>
