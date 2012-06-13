@@ -23,9 +23,5 @@ switch(DB_TYPE) {
 	break;
 }
 ## Security
-if($_GET['s'] == 6 && $_SERVER['PHP_SELF'] == "/allianz.php"){
 include("Protection.php");
-}else{
-include("Protection2.php");
-}
 ?>
