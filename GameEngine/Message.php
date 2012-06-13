@@ -358,6 +358,7 @@
         		$welcomemsg = preg_replace("'%TIME%'", date("H:i", COMMENCE), $welcomemsg);
         		$welcomemsg = preg_replace("'%PLAYERS%'", $database->countUser()-4, $welcomemsg);
         		$welcomemsg = preg_replace("'%ALLI%'", $database->countAlli(), $welcomemsg);
+				$welcomemsg = preg_replace("'%SERVER_NAME%'", SERVER_NAME, $welcomemsg);
 				$welcomemsg = "[message]".$welcomemsg."[/message]";
         		return $database->sendMessage($uid, 5, WEL_TOPIC, $welcomemsg, 0);
         	}
