@@ -2592,8 +2592,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					if($NonHeroPresent == 0 && $this->getTypeLevel(37,$data['to']) > 0) {
 						//don't reinforce, addunit instead
 						$database->modifyUnit($data['to'],array("hero"),array(1),array(1));
-						$database->modifyHero("wref",$data['to'],$heroid,0);
 						$heroid = $database->getHero($database->getVillageField($data['from'],"owner"),1);
+						$database->modifyHero("wref",$data['to'],$heroid,0);
 						$HeroTransfer = 1;
 					}
 				}
