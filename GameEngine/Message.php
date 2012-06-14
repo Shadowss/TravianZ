@@ -418,22 +418,33 @@
 
         	public function addFriends($post) {
         		global $database;
-        		for($i=0;$i<19;$i++) {
+        		for($i=0;$i<=19;$i++) {
         		if($post['addfriends'.$i] != ""){
 				$uid = $database->getUserField($post['addfriends'.$i], "id", 1);
 				$added = 0;
 				for($j=0;$j<=$i;$j++) {
 				if($added == 0){
 				$user = $database->getUserField($post['myid'], "friend".$j, 0);
+				$userwait = $database->getUserField($post['myid'], "friend".$j."wait", 0);
 				$exist = 0;
 				for($k=0;$k<=19;$k++){
 				$user1 = $database->getUserField($post['myid'], "friend".$k, 0);
-				if($user1 == $uid or $user1 == $post['myid']){
+				if($user1 == $uid or $uid == $post['myid']){
 				$exist = 1;
 				}
 				}
-				if($user == 0 && $exist == 0){
+				if($user == 0 && $userwait == 0 && $exist == 0){
+				$added1 = 0;
+				for($l=0;$l<=19;$l++){
+				$user2 = $database->getUserField($uid, "friend".$l, 0);
+				$userwait2 = $database->getUserField($uid, "friend".$l."wait", 0);
+				if($user2 == 0 && $userwait2 == 0 && $added1 == 0){
+				$database->addFriend($uid,"friend".$l."wait",$post['myid']);
+				$added1 = 1;
+				}
+				}
 				$database->addFriend($post['myid'],"friend".$j,$uid);
+				$database->addFriend($post['myid'],"friend".$j."wait",$uid);
 				$added = 1;
 				}
 				}

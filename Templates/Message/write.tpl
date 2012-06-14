@@ -103,12 +103,12 @@ Reply:
 	<input type="hidden" name="myid" value="<?php echo $session->uid; ?>" />
  <table cellpadding="1" cellspacing="1" id="friendlist">
 <?php for($i=0;$i<20;$i++) {
-if($user['friend'.$i] == 0){
+if($user['friend'.$i] == 0 && $user['friend'.$i.'wait'] == 0){
 if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"></td>
   <td class="pla">
     <input class="text" type="text" name="addfriends<?php echo $i; ?>" value="" maxlength="15" />
   </td>
-  <td class="on"></td><?php if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}}else{
+  <td class="on"></td><?php if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}}else if($user['friend'.$i.'wait'] == 0){
 if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
   <td class="pla">
   <?php echo "<a href=\"spieler.php?uid=".$user['friend'.$i]."\">".$database->getUserField($user['friend'.$i],"username",0)."</a>"; ?>
@@ -127,6 +127,32 @@ if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delf
              echo "    <td class=on><img class=online5 src=img/x.gif title=now online alt=now online /></td>";   
         }
 if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}
+  }else{
+$friend = $database->getUserArray($user['friend'.$i.'wait'], 1);
+$friendwait = 0;
+for($j=0;$j<20;$j++) {
+if($friend['friend'.$j.'wait'] == $session->uid){
+$wait = $friend['friend'.$j];
+$friendwait = $friend['id'];
+}
+}
+if($wait == 0){
+if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
+  <td class="pla">
+  <?php echo "<img src=\"../../".GP_LOCATE."img/a/clock-inactive.gif\" alt=\"wait for confirm\" title=\"wait for confirm\"><a href=\"spieler.php?uid=".$user['friend'.$i]."\"> ".$database->getUserField($user['friend'.$i],"username",0)."</a>"; ?>
+  </td>
+		<?php
+            echo "<td class=on></td>";
+if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}
+}else{
+if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
+  <td class="pla">
+  <?php echo "<a href=\"spieler.php?uid=".$friendwait."\">".$database->getUserField($friendwait,"username",0)."</a>"; ?>
+  </td>		
+            <td class="on"><a href="nachrichten.php?confirm=<?php echo $i; ?>"><img src="../../<?php echo GP_LOCATE; ?>img/a/online6.gif" alt="confirm" title="confirm"></a></td>
+<?php
+if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}
+}
   }} ?>
   </tr></table>
   <p class="btn">

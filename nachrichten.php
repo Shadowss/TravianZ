@@ -28,7 +28,36 @@ if(isset($_GET['t'])) {
 }
 }
 if(isset($_GET['delfriend']) && is_numeric($_GET['delfriend'])){
+$friend = $database->getUserField($session->uid, "friend".$_GET['delfriend'], 0);
+for($i=0;$i<=19;$i++) {
+$friend1 = $database->getUserField($friend, "friend".$i, 0);
+if($friend1 == $session->uid){
+$database->deleteFriend($friend,"friend".$i);
+}
+$friendwait1 = $database->getUserField($friend, "friend".$i."wait", 0);
+if($friendwait1 == $session->uid){
+$database->deleteFriend($friend,"friend".$i."wait");
+}
+$database->checkFriends($friend);
+}
 $database->deleteFriend($session->uid,"friend".$_GET['delfriend']);
+$database->deleteFriend($session->uid,"friend".$_GET['delfriend']."wait");
+$database->checkFriends($session->uid);
+header("Location: ".$_SERVER['PHP_SELF']."?t=1");
+}
+if(isset($_GET['confirm']) && is_numeric($_GET['confirm'])){
+$myid = $database->getUserArray($session->uid, 1);
+$wait = $database->getUserArray($myid['friend'.$_GET['confirm'].'wait'], 1);
+$added = 0;
+for($i=0;$i<20;$i++) {
+$user = $database->getUserField($wait['id'], "friend".$i, 0);
+if($user == $session->uid && $added == 0){
+$database->addFriend($wait['id'],"friend".$i."wait",0);
+$added = 1;
+}
+}
+$database->addFriend($session->uid,"friend".$_GET['confirm'],$wait['id']);
+$database->addFriend($session->uid,"friend".$_GET['confirm']."wait",0);
 header("Location: ".$_SERVER['PHP_SELF']."?t=1");
 }
 ?>

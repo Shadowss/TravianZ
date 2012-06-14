@@ -3100,6 +3100,27 @@
                 $q = "UPDATE " . TB_PREFIX . "users SET $column = 0 WHERE id = $uid";
                 return mysql_query($q, $this->connection);
             }
+			
+			function checkFriends($uid) {
+				$user = $this->getUserArray($uid, 1);
+				for($i=0;$i<=19;$i++) {
+				if($user['friend'.$i] == 0 && $user['friend'.$i.'wait'] == 0){
+				for($j=$i+1;$j<=19;$j++) {
+				$k = $j-1;
+				if($user['friend'.$j] != 0){
+				$friend = $this->getUserField($uid, "friend".$j, 0);
+				$this->addFriend($uid,"friend".$k,$friend);
+				$this->deleteFriend($uid,"friend".$j);
+				}
+				if($user['friend'.$j.'wait'] == 0){
+				$friendwait = $this->getUserField($uid, "friend".$j."wait", 0);
+				$this->addFriend($sessionuid,"friend".$k."wait",$friendwait);
+				$this->deleteFriend($uid,"friend".$j."wait");
+				}
+				}
+				}
+				}
+    }
 
         }
         ;
