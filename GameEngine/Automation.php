@@ -381,50 +381,148 @@ class Automation {
     }
     private function pruneOResource() {
         global $database;
-        if(!ALLOW_BURST) {
-            $q = "UPDATE ".TB_PREFIX."odata set `wood` = `maxstore` WHERE `wood` > `maxstore`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `clay` = `maxstore` WHERE `clay` > `maxstore`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `iron` = `maxstore` WHERE `iron` > `maxstore`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `crop` = `maxcrop` WHERE `crop` > `maxcrop`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `crop` = 0 WHERE `crop` < 0";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `wood` = 0 WHERE `wood` < 0";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `clay` = 0 WHERE `clay` < 0";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `iron` = 0 WHERE `iron` < 0";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `maxstore` = 800 WHERE `maxstore` <= 800";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."odata set `maxcrop` = 800 WHERE `maxcrop` <= 800";
-            $database->query($q);
+		if(!ALLOW_BURST) {
+		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE maxstore < 800 OR maxcrop < 800";
+        $array = $database->query_return($q);
+	    foreach($array as $getoasis) {
+		if($getoasis['maxstore'] < 800){
+		$maxstore = 800;
+		}else{
+		$maxstore = $getoasis['maxstore'];
+		}
+		if($getoasis['maxcrop'] < 800){
+		$maxcrop = 800;
+		}else{
+		$maxcrop = $getoasis['maxcrop'];
+		}
+		$q = "UPDATE " . TB_PREFIX . "odata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getoasis['wref']."";
+		$database->query($q);
+		}
+        $q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxstore";
+        $array = $database->query_return($q);
+	    foreach($array as $getoasis) {
+		if($getoasis['wood'] > $getoasis['maxstore']){
+		$wood = $getoasis['maxstore'];
+		}else{
+		$wood = $getoasis['wood'];
+		}
+		if($getoasis['clay'] > $getoasis['maxstore']){
+		$clay = $getoasis['maxstore'];
+		}else{
+		$clay = $getoasis['clay'];
+		}
+		if($getoasis['iron'] > $getoasis['maxstore']){
+		$iron = $getoasis['maxstore'];
+		}else{
+		$iron = $getoasis['iron'];
+		}
+		if($getoasis['crop'] > $getoasis['maxstore']){
+		$crop = $getoasis['maxstore'];
+		}else{
+		$crop = $getoasis['crop'];
+		}
+		$q = "UPDATE " . TB_PREFIX . "odata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getoasis['wref']."";
+		$database->query($q);
+		}
+		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
+        $array = $database->query_return($q);
+	    foreach($array as $getoasis) {
+		if($getoasis['wood'] < 0){
+		$wood = 0;
+		}else{
+		$wood = $getoasis['wood'];
+		}
+		if($getoasis['clay'] < 0){
+		$clay = 0;
+		}else{
+		$clay = $getoasis['clay'];
+		}
+		if($getoasis['iron'] < 0){
+		$iron = 0;
+		}else{
+		$iron = $getoasis['iron'];
+		}
+		if($getoasis['crop'] < 0){
+		$crop = 0;
+		}else{
+		$crop = $getoasis['crop'];
+		}
+		$q = "UPDATE " . TB_PREFIX . "odata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getoasis['wref']."";
+		$database->query($q);
+		}
         }
     }
     private function pruneResource() {
         global $database;
-        if(!ALLOW_BURST) {
-            $q = "UPDATE ".TB_PREFIX."vdata set `wood` = `maxstore` WHERE `wood` > `maxstore`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `clay` = `maxstore` WHERE `clay` > `maxstore`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `iron` = `maxstore` WHERE `iron` > `maxstore`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `crop` = `maxcrop` WHERE `crop` > `maxcrop`";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `wood` = 0 WHERE `wood` < 0";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `clay` = 0 WHERE `clay` < 0";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `iron` = 0 WHERE `iron` < 0";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `maxstore` = 800 WHERE `maxstore` <= 800";
-            $database->query($q);
-            $q = "UPDATE ".TB_PREFIX."vdata set `maxcrop` = 800 WHERE `maxcrop` <= 800";
-            $database->query($q);
+		if(!ALLOW_BURST) {
+		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE maxstore < 800 OR maxcrop < 800";
+        $array = $database->query_return($q);
+	    foreach($array as $getvillage) {
+		if($getvillage['maxstore'] < 800){
+		$maxstore = 800;
+		}else{
+		$maxstore = $getvillage['maxstore'];
+		}
+		if($getvillage['maxcrop'] < 800){
+		$maxcrop = 800;
+		}else{
+		$maxcrop = $getvillage['maxcrop'];
+		}
+		$q = "UPDATE " . TB_PREFIX . "vdata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getvillage['wref']."";
+		$database->query($q);
+		}
+        $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxstore";
+        $array = $database->query_return($q);
+	    foreach($array as $getvillage) {
+		if($getvillage['wood'] > $getvillage['maxstore']){
+		$wood = $getvillage['maxstore'];
+		}else{
+		$wood = $getvillage['wood'];
+		}
+		if($getvillage['clay'] > $getvillage['maxstore']){
+		$clay = $getvillage['maxstore'];
+		}else{
+		$clay = $getvillage['clay'];
+		}
+		if($getvillage['iron'] > $getvillage['maxstore']){
+		$iron = $getvillage['maxstore'];
+		}else{
+		$iron = $getvillage['iron'];
+		}
+		if($getvillage['crop'] > $getvillage['maxstore']){
+		$crop = $getvillage['maxstore'];
+		}else{
+		$crop = $getvillage['crop'];
+		}
+		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getvillage['wref']."";
+		$database->query($q);
+		}
+		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
+        $array = $database->query_return($q);
+	    foreach($array as $getvillage) {
+		if($getvillage['wood'] < 0){
+		$wood = 0;
+		}else{
+		$wood = $getvillage['wood'];
+		}
+		if($getvillage['clay'] < 0){
+		$clay = 0;
+		}else{
+		$clay = $getvillage['clay'];
+		}
+		if($getvillage['iron'] < 0){
+		$iron = 0;
+		}else{
+		$iron = $getvillage['iron'];
+		}
+		if($getvillage['crop'] < 0){
+		$crop = 0;
+		}else{
+		$crop = $getvillage['crop'];
+		}
+		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getvillage['wref']."";
+		$database->query($q);
+		}
         }
     }
 
