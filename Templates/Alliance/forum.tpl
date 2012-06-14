@@ -52,7 +52,10 @@ if(isset($_POST['newtopic'])){
 		}else{
 			$ends = '';
 		}
+	if(!preg_match('/\[message\]/',$post) && !preg_match('/\[\/message\]/',$post)){
+	$post = "[message]".$post."[/message]";
 	$database->CreatTopic($title,$post,$cat,$owner,$alli,$ends);
+	}
 }
 if(isset($_POST['newpost'])){
 	$post = $_POST['text'];
@@ -60,22 +63,29 @@ if(isset($_POST['newpost'])){
 	$tids = $_POST['tid'];
 	$owner = $session->uid;
 	if($post != ""){
+	if(!preg_match('/\[message\]/',$post) && !preg_match('/\[\/message\]/',$post)){
+	$post = "[message]".$post."[/message]";
 	$database->UpdatePostDate($tids);
 	$database->CreatPost($post,$tids,$owner);
+	}
 	}
 }
 if(isset($_POST['editans'])){
 	$post = $_POST['text'];
 	$topic_id = $_POST['tid'];
 
+	if(!preg_match('/\[message\]/',$post) && !preg_match('/\[\/message\]/',$post)){
+	$post = "[message]".$post."[/message]";
 	$database->EditUpdateTopic($topic_id,$post);
+	}
 }
 if(isset($_POST['editpost'])){
 	$post = $_POST['text'];
-	$post = htmlspecialchars($post);
 	$posts_id = $_POST['pod'];
-
+	if(!preg_match('/\[message\]/',$post) && !preg_match('/\[\/message\]/',$post)){
+	$post = "[message]".$post."[/message]";
 	$database->EditUpdatePost($posts_id,$post);
+	}
 }
 if(!isset($_GET['admin'])) {
 	$_GET['admin'] = null;
