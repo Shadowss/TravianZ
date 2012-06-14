@@ -19,46 +19,16 @@
         	}
 			
 			public function getUserRank($username) {
-			if(INCLUDE_ADMIN==true){
-        		$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, (
-
-				SELECT SUM( " . TB_PREFIX . "vdata.pop ) 
-				FROM " . TB_PREFIX . "vdata
-				WHERE " . TB_PREFIX . "vdata.owner = userid
-				)totalpop
-				FROM " . TB_PREFIX . "users
-				ORDER BY totalpop DESC, userid ASC";
-				$result = mysql_query($q);
-				$i = 1;
-				$myrank = 0;
-				while($row = mysql_fetch_array($result)) {
-					if($row['username'] == $username){
-						$myrank = $i;
-					}
-					$i++;
-				}
+			$ranking = $this->getRank();
+			$start = $_SESSION['start']+1;
+			if(count($ranking) > 0) {
+            for($i=$start;$i<($start+20);$i++) {
+			if($ranking[$i]['username'] == $username && $ranking[$i] != "pad") {
+			$myrank = $i;
+			}
+			}
+			}
 				return $myrank;
-			}else{
-        		$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, (
-
-				SELECT SUM( " . TB_PREFIX . "vdata.pop ) 
-				FROM " . TB_PREFIX . "vdata
-				WHERE " . TB_PREFIX . "vdata.owner = userid
-				)totalpop
-				FROM " . TB_PREFIX . "users
-				WHERE " . TB_PREFIX . "users.id != 0 and id != 1 and id != 2 and id != 4 and id != 5
-				ORDER BY totalpop DESC, userid ASC";
-				$result = mysql_query($q);
-				$i = 1;
-				$myrank = 0;
-				while($row = mysql_fetch_array($result)) {
-					if($row['username'] == $username){
-						$myrank = $i;
-					}
-					$i++;
-				}
-				return $myrank;
-				}
         	}
 
         	public function procRankReq($get) {
