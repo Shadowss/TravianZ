@@ -1825,7 +1825,7 @@
 			
             function FinishWoodcutter($wid) {
 				$time = time()-1;
-                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by timestamp ASC";
+                $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC";
                 $result = mysql_query($q);
 				$dbarray = mysql_fetch_array($result);
 				$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
