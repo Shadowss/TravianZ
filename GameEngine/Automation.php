@@ -1318,16 +1318,13 @@ class Automation {
 						$notlifehero = $dead['hero'];
 						$totallife = $enforce['hero']+$life1;
 						$totalnotlife = $dead['hero']+$notlife1;
-                        //NEED TO SEND A RAPPORTAGE!!!
+						$totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
+                        $totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
+						//NEED TO SEND A RAPPORTAGE!!!
                         $data2 = ''.$database->getVillageField($enforce['from'],"owner").','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.'';
 						if($scout){
-						for($i=1;$i<=10;$i++){
-						if($battlepart['casualties_attacker'][$i] > 0){
-						$casualites = 1;
-						}
-						}
-						if($casualites > 0){
-						if($unitsdead_att == $totalsend_att){
+						if($totaldead_att > 0){
+						if($totaldead_att == $totalsend_att){
                         $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
 						}else{
 						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
@@ -2455,7 +2452,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
 			$herosend_att = $data['t11'];
 			$unitssend_att= $unitssend_att1.','.$herosend_att;
-			$totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
 
 			$speeds = array();
 
@@ -2530,6 +2526,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			,$heroxp 
 			,$AttackerID 
 			,$DefenderID 
+			,$totalsend_att
 			,$totalsend_alldef 
 			,$totaldead_att 
 			,$totaldead_def 
