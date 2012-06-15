@@ -13,6 +13,8 @@ $WrefY = $WrefCoor['y'];
 $type = $database->getVillageType2($Wref);
 $oasistype = $type['oasistype'];
 $vdata = $database->getVillage($Wref);
+$villageOwner = $database->getVillageField($Wref,'owner');
+$userAccess = $database->getUserField($villageOwner,'access',0);
 }elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
 $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
 $WrefX = $_POST['x'];
@@ -20,11 +22,15 @@ $WrefY = $_POST['y'];
 $type = $database->getVillageType2($Wref);
 $oasistype = $type['oasistype'];
 $vdata = $database->getVillage($Wref);
+$villageOwner = $database->getVillageField($Wref,'owner');
+$userAccess = $database->getUserField($villageOwner,'access',0);
 }
-    if(!$_POST['x'] && !$_POST['y'] && $_POST['target_id'] == ""){
+    if($_POST['x']=="" && $_POST['y']=="" && $_POST['target_id'] == ""){
     	$errormsg .= "Enter coordinates.";
-    }elseif((!$_POST['x'] || !$_POST['y']) && $_POST['target_id'] == ""){
+    }elseif(($_POST['x']=="" || $_POST['y']=="") && $_POST['target_id'] == ""){
     	$errormsg .= "Enter the correct coordinates.";
+	}elseif($userAccess == '9'){
+		$errormsg .= "Player is Admin. You can't attack him.";
     }elseif($oasistype == 0 && $vdata == 0){
     	$errormsg .= "There is no village on those coordinates.";
     }elseif($troops == 0){
