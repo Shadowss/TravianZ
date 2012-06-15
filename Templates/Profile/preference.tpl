@@ -1,5 +1,5 @@
 <?php 
-if(isset($_GET['del'])){
+if(isset($_GET['del']) && is_numeric($_GET['del'])){
 	$database->removeLinks($_GET['del'],$session->uid);
 	header("Location: spieler.php?s=2");
 }
