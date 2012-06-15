@@ -2896,7 +2896,7 @@
                 $result = mysql_query($q, $this->connection);
                 return mysql_fetch_array($result);
             }
-              
+
             function getMovementById($id){
 				$q = "SELECT * FROM ".TB_PREFIX."movement WHERE moveid = ".$id."";
 				$result = mysql_query($q);
@@ -2906,27 +2906,25 @@
 
             function getLinks($id){
                 $q = 'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . $id . ' ORDER BY `pos` ASC';
-                return mysql_query($q, $this->connection);                
-                            
+                return mysql_query($q, $this->connection);
             }  
-            
-             function removeLinks($id){
-                $q = "DELETE FROM " . TB_PREFIX . "links WHERE `id` = ".$id."";
-                return mysql_query($q, $this->connection);                
-                            
-            }  
-            
+
+            function removeLinks($id,$uid){
+                $q = "DELETE FROM " . TB_PREFIX . "links WHERE `id` = ".$id." and `userid` = ".$uid."";
+                return mysql_query($q, $this->connection);
+            }
+
             function getVilFarmlist($wref){
                 $q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE wref = ' . $wref . ' ORDER BY wref ASC';
                 $result = mysql_query($q, $this->connection);
                 $dbarray = mysql_fetch_array($result);
-                
+
                 if($dbarray['id']!=0) {
                         return true;
                     } else {
                         return false;
                     }
-                            
+
             }
             
             function getRaidList($id) {
@@ -2934,34 +2932,32 @@
                 $result = mysql_query($q, $this->connection);
                 return mysql_fetch_array($result);
             }
-            
+
             function delFarmList($id, $owner) {
                 $q = "DELETE FROM " . TB_PREFIX . "farmlist where id = $id and owner = $owner";
                 return mysql_query($q, $this->connection);
             }
-            
-            
+
             function delSlotFarm($id) {
                 $q = "DELETE FROM " . TB_PREFIX . "raidlist where id = $id";
                 return mysql_query($q, $this->connection);
             }
-            
-            
+
             function createFarmList($wref, $owner, $name) {
                 $q = "INSERT INTO " . TB_PREFIX . "farmlist (`wref`, `owner`, `name`) VALUES ('$wref', '$owner', '$name')";
                 return mysql_query($q, $this->connection);
             }
-            
+
             function addSlotFarm($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
                 $q = "INSERT INTO " . TB_PREFIX . "raidlist (`lid`, `towref`, `x`, `y`, `distance`, `t1`, `t2`, `t3`, `t4`, `t5`, `t6`, `t7`, `t8`, `t9`, `t10`) VALUES ('$lid', '$towref', '$x', '$y', '$distance', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6', '$t7', '$t8', '$t9', '$t10')";
                 return mysql_query($q, $this->connection);
             }
-            
+
             function editSlotFarm($eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
                 $q = "UPDATE " . TB_PREFIX . "raidlist set lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6', t7 = '$t7', t8 = '$t8', t9 = '$t9', t10 = '$t10' WHERE id = $eid";
                 return mysql_query($q, $this->connection);
             }
-            
+
 			function getArrayMemberVillage($uid){
 				$q = 'SELECT a.wref, a.name, b.x, b.y from '.TB_PREFIX.'vdata AS a left join '.TB_PREFIX.'wdata AS b ON b.id = a.wref where owner = '.$uid.' order by capital DESC,pop DESC';
 				$result = mysql_query($q, $this->connection);
