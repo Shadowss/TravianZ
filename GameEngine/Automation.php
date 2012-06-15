@@ -1321,14 +1321,16 @@ class Automation {
                         //NEED TO SEND A RAPPORTAGE!!!
                         $data2 = ''.$database->getVillageField($enforce['from'],"owner").','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.'';
 						if($scout){
-						for($i=1;$i<=10;$i++)
-						{
-						if($battlepart['casualties_attacker'][$i]){
+						for($i=1;$i<=10;$i++){
+						if($battlepart['casualties_attacker'][$i] > 0){
+						$casualites = 1;
+						}
+						}
+						if($casualites > 0){
 						if($unitsdead_att == $unitssend_att){
                         $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
 						}else{
 						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
-						}
 						}
 						}
 						}else{
