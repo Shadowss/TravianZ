@@ -13,7 +13,7 @@ $WrefY = $WrefCoor['y'];
 $type = $database->getVillageType2($Wref);
 $oasistype = $type['oasistype'];
 $vdata = $database->getVillage($Wref);
-}elseif($_POST['x'] && $_POST['y']){
+}elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
 $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
 $WrefX = $_POST['x'];
 $WrefY = $_POST['y'];

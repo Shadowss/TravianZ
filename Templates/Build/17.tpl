@@ -15,7 +15,7 @@ var carry = <?php echo $market->maxcarry; ?>;
 </script>
 <?php
 $allres = $_POST['r1']+$_POST['r2']+$_POST['r3']+$_POST['r4'];
-if($_POST['x']!="" && $_POST['y']!=""){
+if($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
 	$getwref = $database->getVilWref($_POST['x'],$_POST['y']);
 	$checkexist = $database->checkVilExist($getwref);
 }
@@ -65,7 +65,7 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST
 	<tbody><tr>
 		<th>Coordinates:</th>
         <?php
-		if($_POST['x']!="" && $_POST['y']!=""){
+		if($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
         $getwref = $database->getVilWref($_POST['x'],$_POST['y']);
 		$getvilname = $database->getVillageField($getwref, "name");
 		$getvilowner = $database->getVillageField($getwref, "owner");
