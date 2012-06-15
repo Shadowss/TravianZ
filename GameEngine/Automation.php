@@ -1327,7 +1327,7 @@ class Automation {
 						}
 						}
 						if($casualites > 0){
-						if($unitsdead_att == $unitssend_att){
+						if($unitsdead_att == $totalsend_att){
                         $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
 						}else{
 						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
@@ -2454,7 +2454,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			//units attack string for battleraport
             $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
 			$herosend_att = $data['t11'];
-				$unitssend_att= $unitssend_att1.','.$herosend_att;
+			$unitssend_att= $unitssend_att1.','.$herosend_att;
+			$totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
 
 			$speeds = array();
 
