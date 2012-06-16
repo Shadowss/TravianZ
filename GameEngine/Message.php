@@ -40,7 +40,7 @@
         					break;
         				case "m2":
                         if ($post['an'] == "[ally]"){
-                        $this->sendAMessage($post['an'],$post['be'],$post['message']);
+                        $this->sendAMessage($post['be'],$post['message']);
                         }else{
                         $this->sendMessage($post['an'],$post['be'],$post['message']);
                         }
@@ -299,10 +299,10 @@
         		$this->totalMessage = count($this->inbox) + count($this->sent);
         	}
             
-            private function sendAMessage($recieve,$topic,$text) {
+            private function sendAMessage($topic,$text) {
                 global $session,$database;
                 $allmembersQ = mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE alliance='".$session->alliance."'");
-                $userally = $database->getUserField($recieve,"alliance",1);
+                $userally = $database->getUserField($session->uid,"alliance",0);
                 $permission=mysql_fetch_array(mysql_query("SELECT opt7 FROM ".TB_PREFIX."ali_permission WHERE uid='".$session->uid."'"));
        
                 if(WORD_CENSOR) {
