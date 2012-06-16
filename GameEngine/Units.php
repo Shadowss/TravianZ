@@ -401,7 +401,7 @@ class Units {
 					for($i=$start;$i<=$end;$i++){
 						$database->modifyEnforce($post['ckey'],$i,$post['t'.$j.''],0); $j++;
 					}
-				
+						$database->modifyEnforce($post['ckey'],'hero',$post['t11'],0); $j++;
 						//get cord 
 						$from = $database->getVillage($enforce['from']);
 						$fromcoor = $database->getCoor($enforce['from']);
