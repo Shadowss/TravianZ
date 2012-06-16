@@ -228,10 +228,10 @@ $resultc=$database->query($qc) or die(mysql_error());
     $newid=$lastid['id']+1;
     $q2 = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
     $database->query($q2);
-    $database->addMovement(4,$oldmovement[0]['to'],$oldmovement[0]['from'],$oldmovement[0]['ref'],$oldmovement[0]['starttime'],$end);
+    $database->addMovement(4,$oldmovement[0]['to'],$oldmovement[0]['from'],$oldmovement[0]['ref'],$now,$end);
 
 
-    $database->addMovement(6,$oldmovement[0]['to'],$oldmovement[0]['from'],$newid,$oldmovement[0]['strattime'],$end);
+    $database->addMovement(6,$oldmovement[0]['to'],$oldmovement[0]['from'],$newid,$now,$end);
     }
 }
 header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);

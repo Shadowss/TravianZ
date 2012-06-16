@@ -2374,7 +2374,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}else{
 			$fastertroops = 1;
 			}
-                $endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + $AttackArrivalTime;
+                $endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + time();
                 //$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
                 if($type == 1) {
                     $database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
