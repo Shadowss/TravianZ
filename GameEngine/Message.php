@@ -116,6 +116,8 @@
         	public function quoteMessage($id) {
         		foreach($this->inbox as $message) {
         			if($message['id'] == $id) {
+					$message = preg_replace('/\[message\]/', '', $message);
+					$message = preg_replace('/\[\/message\]/', '', $message);
         				$this->reply = $_SESSION['reply'] = $message;
         				header("Location: nachrichten.php?t=1&id=" . $message['owner']);
         			}
