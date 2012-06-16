@@ -18,7 +18,7 @@ while($row = mysql_fetch_array($sql)){
     $lvname = $database->getVillageField($row["wref"], 'name');
     if($lwref == $village->wid){
 ?>
-				<form action="startRaid.php?id=39&t=99&action=startRaid" method="post">
+				<form action="build.php?id=39&t=99&action=startRaid" method="post">
 					<input type="hidden" name="action" value="startRaid">
 					<input type="hidden" name="a" value="c35">
 					<input type="hidden" name="sort" value="distance">
@@ -71,9 +71,9 @@ $vdata = $database->getVillage($towref);
 <tr class="slotRow">
 <td class="checkbox">
 				<?php if($checked[$lid] == 0){ ?>
-                <input id="slot<?php echo $id; ?>" name="slot[<?php echo $id; ?>]" type="checkbox" class="markSlot" onclick="Travian.Game.RaidList.markSlotForRaid(<?php echo $lid; ?>, <?php echo $id; ?>, this.checked);">
+                <input id="slot<?php echo $id; ?>" name="slot<?php echo $id; ?>" type="checkbox" class="markSlot" onclick="Travian.Game.RaidList.markSlotForRaid(<?php echo $lid; ?>, <?php echo $id; ?>, this.checked);">
 				<?php }else{ ?>
-                <input id="slot<?php echo $id; ?>" name="slot[<?php echo $id; ?>]" type="checkbox" class="markSlot" checked>
+                <input id="slot<?php echo $id; ?>" name="slot<?php echo $id; ?>" type="checkbox" class="markSlot" checked>
 				<?php } ?>
 			</td>
             <td class="village">

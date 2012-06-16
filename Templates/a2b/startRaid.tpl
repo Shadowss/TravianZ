@@ -1,45 +1,8 @@
 <?php
-if($session->access != BANNED){
-        include ("GameEngine/Data/unitdata.php");
-        include ("GameEngine/Database.php");
-        include ("GameEngine/Generator.php");
-    function procDistanceTime2($coor,$thiscoor,$ref,$mode) {
-        $xdistance = ABS($thiscoor['x'] - $coor['x']);
-        if($xdistance > WORLD_MAX) {
-            $xdistance = (2 * WORLD_MAX + 1) - $xdistance;
-        }
-        $ydistance = ABS($thiscoor['y'] - $coor['y']);
-        if($ydistance > WORLD_MAX) {
-            $ydistance = (2 * WORLD_MAX + 1) - $ydistance;
-        }
-        $distance = SQRT(POW($xdistance,2)+POW($ydistance,2));
-        if(!$mode) {
-            if($ref == 1) {
-                $speed = 16;
-            }
-            else if($ref == 2) {
-                $speed = 12;
-            }
-            else if($ref == 3) {
-                $speed = 24; 
-            }
-            else if($ref == 300) {
-                $speed = 5;
-            }
-            else {
-                $speed = 1;
-            }
-        }
-        else {
-            $speed = $ref;
-        }
-        return round(($distance/$speed) * 3600 / INCREASE_SPEED);
-    }    
 
     $slots = $_POST['slot'];
     $lid = $_POST['lid'];
     $tribe = $_POST['tribe'];
-    $enforce = $database->getEnforceArray($r, 0);
     $getFLData = $database->getFLData($lid);
     $unitslist = $database->getFLData($lid);
     $sql = mysql_query("SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".$lid."");
@@ -53,7 +16,8 @@ if($session->access != BANNED){
 		if($tribe == 1){ $u = "u"; } elseif($tribe == 2){ $u = "u1"; } elseif($tribe == 3){ $u = "u2"; }elseif($tribe == 4){ $u = "u3"; }else {$u = "u4"; }
 		if($tribe == 1){ $u1 = "u1"; } elseif($tribe == 2){ $u1 = "u2"; } elseif($tribe == 3){ $u1 = "u3"; }elseif($tribe == 4){ $u1 = "u4"; }else {$u1 = "u5"; }
 		if($tribe == 1){ $u2 = ""; } elseif($tribe == 2){ $u2 = "1"; } elseif($tribe == 3){ $u2 = "2"; }elseif($tribe == 4){ $u2 = "3"; }else {$u2 = "4"; }
-        if($sql1[$u.'1']>=$t1 && $sql1[$u.'2']>=$t2 && $sql1[$u.'3']>=$t3 && $sql1[$u.'4']>=$t4 && $sql1[$u.'5']>=$t5 && $sql1[$u.'6']>=$t6 && $sql1[$u.'7']>=$t7 && $sql1[$u.'8']>=$t8 && $sql1[$u.'9']>=$t9 && $sql1[$u1.'0']>=$t10 && $sql1['hero']>=$t11){        if($slots[$sid]=='on'){
+        if($sql1[$u.'1']>=$t1 && $sql1[$u.'2']>=$t2 && $sql1[$u.'3']>=$t3 && $sql1[$u.'4']>=$t4 && $sql1[$u.'5']>=$t5 && $sql1[$u.'6']>=$t6 && $sql1[$u.'7']>=$t7 && $sql1[$u.'8']>=$t8 && $sql1[$u.'9']>=$t9 && $sql1[$u1.'0']>=$t10 && $sql1['hero']>=$t11){
+        if($_POST['slot'.$sid]=='on'){
             $ckey = $generator->generateRandStr(6);
             $id = $database->addA2b($ckey,time(),$wref,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,4);
             
@@ -93,7 +57,19 @@ if($session->access != BANNED){
                 }
             }
             
-            $time = procDistanceTime2($from,$to,min($speeds),1);
+            $artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 0){
+			$fastertroops = 2;
+			}else if($artefact2 > 0){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+			$time = round($generator->procDistanceTime($from,$to,min($speeds),0)/$fastertroops);
             
             $ctar1 = 0;
             $ctar2 = 0; 
@@ -117,7 +93,4 @@ if($session->access != BANNED){
     }
 	}
 header("Location: build.php?id=39&t=99");
-}else{
-header("Location: banned.php"); 
-}
 ?>
