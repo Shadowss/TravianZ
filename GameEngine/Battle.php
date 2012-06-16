@@ -223,17 +223,26 @@ class Battle {
 
         //exit($type);
 
-        if ($Attacker['uhero'] != 0)
+        if($Attacker['uhero'] != 0)
         {
             //exit($AttackerID);
-          $atkhero= $this->getBattleHero($AttackerID);
+          $atkhero = $this->getBattleHero($AttackerID);
         }
 		
-		        if ($Defender['hero'] != 0)
+		if($Defender['hero'] != 0)
         {
             //exit($DefenderID);
-        $defhero= $this->getBattleHero($DefenderID);        
+        $defhero[$DefenderWref] = $this->getBattleHero($DefenderID);        
 		}
+		
+		$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+		if(!empty($DefendersAll)){
+        foreach($DefendersAll as $defenders) {
+		$fromvillage = $defenders['from'];
+		$reinfowner = $database->getVillageField($fromvillage,"owner");
+		$defhero[$fromvillage] = $this->getBattleHero($reinfowner);  
+        }
+        }
         // Berekenen het totaal aantal punten van Aanvaller
         $start = ($att_tribe-1)*10+1;
         $end = ($att_tribe*10);
@@ -335,8 +344,16 @@ class Battle {
                                         $units['Def_unit'][$y] = $Defender['u'.$y];
                                 }
 							if ($Defender['hero'] != 0){
-							$dp += $defhero['di'] * 35;
-							$dp = $dp * $defhero['db'];
+							$dp += $defhero[$DefenderWref]['di'] * 35;
+							$dp = $dp * $defhero[$DefenderWref]['db'];
+							}
+							$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+							if(!empty($DefendersAll)){
+							foreach($DefendersAll as $defenders) {
+							$fromvillage = $defenders['from'];
+							$dp += $defhero[$fromvillage]['di'] * 35;
+							$dp = $dp * $defhero[$fromvillage]['db']; 
+							}
 							}
                         }
                 }
@@ -357,14 +374,24 @@ class Battle {
                                 $involve += $Defender['u'.$y];
                                 $units['Def_unit'][$y] = $Defender['u'.$y];
                         }
-			    if ($Defender['hero'] != 0)
+			if($Defender['hero'] != 0)
             {
                 $units['Def_unit']['hero'] = $Defender['hero'];
-                $cdp += $Defender['hero']*$defhero['dc'];
-                $dp += $Defender['hero']*$defhero['di'];
-                $dp = $dp * $defhero['db'];
-                $cdp = $cdp * $defhero['db'];
+                $cdp += $defhero[$DefenderWref]['dc'];
+                $dp += $defhero[$DefenderWref]['di'];
+                $dp = $dp * $defhero[$DefenderWref]['db'];
+                $cdp = $cdp * $defhero[$DefenderWref]['db'];
             }
+			$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+			if(!empty($DefendersAll)){
+			foreach($DefendersAll as $defenders) {
+				$fromvillage = $defenders['from'];
+                $cdp += $defhero[$fromvillage]['dc'];
+                $dp += $defhero[$fromvillage]['di'];
+                $dp = $dp * $defhero[$fromvillage]['db'];
+                $cdp = $cdp * $defhero[$fromvillage]['db'];
+			}
+			}
                 }
 
                 //
@@ -600,7 +627,7 @@ class Battle {
         if ($units['Def_unit']['hero']>0)
         {
 
-            $_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$defhero['heroid']."'");
+            $_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$defhero[$DefenderWref]['heroid']."'");
             $fdb = mysql_fetch_array($_result);
             $hero_id=$fdb['heroid'];
             $hero_health=$fdb['health'];
@@ -608,21 +635,22 @@ class Battle {
             if ($hero_health<=$damage_health or $damage_health>90)
             {
                 //hero die
-                $result['deadherodef'] = 1;
+                $result['deadherodef'][$defhero[$DefenderWref]['uid']] = 1;
                 mysql_query("update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
 				mysql_query("update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
             }
             else
             {
-				$result['deadherodef'] = 0;
+				$result['deadherodef'][$defhero[$DefenderWref]['uid']] = 0;
                 mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
             }
+		}
 			unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 
 			$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
 			if(!empty($DefendersAll)){
             foreach($DefendersAll as $defenders) {
-				if($defenders['hero'] == 1) {
+				if($defenders['hero']>0) {
 					if(!empty($heroarray)) { reset($heroarray); }
 							$ReinforcerData = $database->getVillageBattleData($defenders['from']);
 							$heroarraydefender = $this->getBattleHero($ReinforcerData['id']);
@@ -645,8 +673,6 @@ class Battle {
             }
                         }
             }
-        }
-
         }
             unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 		

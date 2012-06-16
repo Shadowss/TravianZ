@@ -73,7 +73,7 @@ class Units {
 					if($post['x']!="" && $post['y']!=""){
 					$oid = $database->getVilWref($post['x'],$post['y']);
 					}else if($post['dname']!=""){
-					$oid = $database->getVillageByName($post['dname']);
+					$oid = $database->getVillageByName(stripslashes($post['dname']));
 					}
 					if($database->isVillageOases($oid) != 0){
 				    $too = $database->getOasisField($oid,"conqured");

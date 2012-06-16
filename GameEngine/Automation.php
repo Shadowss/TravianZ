@@ -955,7 +955,6 @@ class Automation {
                                 for($i=1;$i<=50;$i++) {
                                     $Defender['u'.$i] += $enforce['u'.$i];
                                 }
-									$Defender['hero'] += $enforce['hero'];
                             }
                         }
                             for($i=1;$i<=50;$i++){
@@ -1231,6 +1230,12 @@ class Automation {
 				$unitssend_att_check=$unitssend_att;
 			}
             //units defence string for battleraport
+			            $enforcementarray2 = $database->getEnforceVillage($data['to'],0);
+                        if(count($enforcementarray2) > 0) {
+                            foreach($enforcementarray2 as $enforce2) {
+									$Defender['hero'] += $enforce2['hero'];
+                            }
+                        }
                 $unitssend_def[1] = ''.$Defender['u1'].','.$Defender['u2'].','.$Defender['u3'].','.$Defender['u4'].','.$Defender['u5'].','.$Defender['u6'].','.$Defender['u7'].','.$Defender['u8'].','.$Defender['u9'].','.$Defender['u10'].'';
                 $unitssend_def[2] = ''.$Defender['u11'].','.$Defender['u12'].','.$Defender['u13'].','.$Defender['u14'].','.$Defender['u15'].','.$Defender['u16'].','.$Defender['u17'].','.$Defender['u18'].','.$Defender['u19'].','.$Defender['u20'].'';
                 $unitssend_def[3] = ''.$Defender['u21'].','.$Defender['u22'].','.$Defender['u23'].','.$Defender['u24'].','.$Defender['u25'].','.$Defender['u26'].','.$Defender['u27'].','.$Defender['u28'].','.$Defender['u29'].','.$Defender['u30'].'';
@@ -1280,7 +1285,7 @@ class Automation {
                             }
                                 $dead['hero']='0';
                                 if($unitlist){
-                                    $dead['hero']+=$battlepart['deadherodef'];
+                                    $dead['hero']+=$battlepart['deadherodef'][$DefenderID];
                                     $database->modifyUnit($data['to'],array("hero"),array($battlepart['deadherodef']),array(0));
                                 }
             //kill other defence in village
@@ -1302,6 +1307,7 @@ class Automation {
                             } else {
                                 $dead[$i]='0';
                             }
+                        }
                             if($enforce['hero']>'0'){
                                 $database->modifyEnforce($enforce['id'],"hero",$battlepart['deadheroref'][$enforce['id']],0);
                                 $dead['hero']+=$battlepart['deadheroref'][$enforce['id']];
@@ -1309,7 +1315,6 @@ class Automation {
                                     $wrong='1';
                                     }
                             }
-                        }
 						$notlife= ''.$dead[$start].','.$dead[$start+1].','.$dead[$start+2].','.$dead[$start+3].','.$dead[$start+4].','.$dead[$start+5].','.$dead[$start+6].','.$dead[$start+7].','.$dead[$start+8].','.$dead[$start+9].'';
 						$notlife1 = $dead[$start]+$dead[$start+1]+$dead[$start+2]+$dead[$start+3]+$dead[$start+4]+$dead[$start+5]+$dead[$start+6]+$dead[$start+7]+$dead[$start+8]+$dead[$start+9];
 						$life= ''.$enforce['u'.$start.''].','.$enforce['u'.($start+1).''].','.$enforce['u'.($start+2).''].','.$enforce['u'.($start+3).''].','.$enforce['u'.($start+4).''].','.$enforce['u'.($start+5).''].','.$enforce['u'.($start+6).''].','.$enforce['u'.($start+7).''].','.$enforce['u'.($start+8).''].','.$enforce['u'.($start+9).''].'';
