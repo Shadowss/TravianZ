@@ -190,6 +190,9 @@ if($session->goldclub == 1 && $session->access != BANNED){
                 $database->delSlotFarm($_GET['eid']);
                    header("Location: build.php?id=39&t=99");
             }
+			if($_POST['action'] == 'startRaid'){
+			include ("Templates/a2b/startRaid.tpl");
+			}
 		}
 }else{
 $create = 0;
