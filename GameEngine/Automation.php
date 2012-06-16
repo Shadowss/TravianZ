@@ -1292,7 +1292,11 @@ class Automation {
             if(count($database->getEnforceVillage($data['to'],0)) > 0) {
                 foreach($database->getEnforceVillage($data['to'],0) as $enforce) {
                     $life='';    $notlife=''; $wrong='0';
+					if($enforce['from'] != 0){
                     $tribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
+					}else{
+					$tribe = 4;
+					}
                     $start = ($tribe-1)*10+1;
 
                     if($tribe == 1){ $rom='1'; } else if($tribe == 2){ $ger='1'; }else if($tribe == 3){ $gal='1'; }else if($tribe == 4){ $nat='1'; } else { $natar='1'; }
