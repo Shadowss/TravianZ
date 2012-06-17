@@ -2289,10 +2289,8 @@
 					} elseif(in_array($unit, $trapper)) {
 						$queued = $technology->getTrainingList(8);
 					}
-                    if(count($queued) > 0) {
-                        $time = $queued[count($queued) - 1]['commence'] + $queued[count($queued) - 1]['eachtime'] * $queued[count($queued) - 1]['amt'];
-                    }
-                    $now = time();
+					$now = time();
+
 			$uid = $this->getVillageField($vid, "owner");
 			
 			$artefact = count($this->getOwnUniqueArtefactInfo2($uid,5,3,0));
@@ -2313,7 +2311,11 @@
 			$each *= 3;
 			$each = round($each);
 			}
-                    $q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$now,$each,$time)";
+			if($each == 0){ $each = 1; }
+			if(count($queued) > 0) {
+            $time += $queued[count($queued) - 1]['timestamp'] - $now;
+            }
+                    $q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$time,$each)";
                 } else {
                     $q = "DELETE FROM " . TB_PREFIX . "training where id = $vid";
                 }
@@ -2321,8 +2323,7 @@
             }
 
             function updateTraining($id, $trained) {
-                $time = time();
-                $q = "UPDATE " . TB_PREFIX . "training set amt = amt - $trained, timestamp = $time where id = $id";
+                $q = "UPDATE " . TB_PREFIX . "training set amt = amt - $trained where id = $id";
                 return mysql_query($q, $this->connection);
             }
 
@@ -2574,13 +2575,6 @@
                 $q = "UPDATE " . TB_PREFIX . "alidata set Rc = Rc - '$cp' where id = $user";
                 return mysql_query($q, $this->connection);
             }
-
-            function modifyCommence($id) {
-                $time = time();
-                $q = "UPDATE " . TB_PREFIX . "training set commence = $time WHERE id=$id";
-                return mysql_query($q, $this->connection);
-            }
-
 
             function getTrainingList() {
                 $q = "SELECT * FROM " . TB_PREFIX . "training where vref != ''";

@@ -490,9 +490,9 @@ private function trainUnit($unit,$amt,$great=false) {
             $iron = ${'u'.$unit}['iron'] * $amt * ($great?3:1);
             $crop = ${'u'.$unit}['crop'] * $amt * ($great?3:1);
 			$each = ($each == 0) ? 1 : $each;
-
+			$time = $each*$amt;
             if($database->modifyResource($village->wid,$wood,$clay,$iron,$crop,0) && $amt > 0) {
-                $database->trainUnit($village->wid,$unit+($great?60:0),$amt,${'u'.$unit}['pop'],$each,time(),0);
+                $database->trainUnit($village->wid,$unit+($great?60:0),$amt,${'u'.$unit}['pop'],$each,time()+$time,0);
             }
         }
     } 	

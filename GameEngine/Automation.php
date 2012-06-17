@@ -3199,6 +3199,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             unlink("GameEngine/Prevention/training.txt");
         }
         global $database;
+		$time = time();
         $ourFileHandle = fopen("GameEngine/Prevention/training.txt", 'w');
         fclose($ourFileHandle);
         $trainlist = $database->getTrainingList();
@@ -3206,26 +3207,20 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             foreach($trainlist as $train) {
                 $database->updateTraining($train['id'],0);
                 $trained = 0;
-                if($train['eachtime'] == 0) { $train['eachtime'] = 1; }
-                $timepast = $train['timestamp'] - $train['commence'];
-                if ($timepast >= 0) {
-                    $trained = floor($timepast/$train['eachtime']);
-                    $pop = $train['pop'] * $trained;
-                    if($trained >= $train['amt']) {
-                        $trained = $train['amt'];
-                    }
+                
+                $timepast = $train['timestamp'] - $time;
+                    $trained = $timepast-($train['amt']-1)*$train['eachtime'];
+                    $pop = $train['pop'];
+					if($trained <= 0){
 					if($train['unit']>60 && $train['unit']!=99){
-                    $database->modifyUnit($train['vref'],array($train['unit']-60),array($trained),array(1));
+                    $database->modifyUnit($train['vref'],array($train['unit']-60),array(1),array(1));
 					}else{
-					$database->modifyUnit($train['vref'],array($train['unit']),array($trained),array(1));
+					$database->modifyUnit($train['vref'],array($train['unit']),array(1),array(1));
 					}
-                    if($train['amt']-$trained <= 0) {
-                        $database->trainUnit($train['id'],0,0,0,0,1,1);
-                    }
-                    if($trained > 0) {
-                        $database->modifyCommence($train['id']);
-                    }
-                    $database->updateTraining($train['id'],$trained);
+                    $database->updateTraining($train['id'],1);
+					}
+				if($timepast < 0) {
+                    $database->trainUnit($train['id'],0,0,0,0,1,1);
                 }
             }
         }

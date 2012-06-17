@@ -104,13 +104,13 @@
 			echo "<img class=\"unit u".$train['unit']."\" src=\"img/x.gif\" alt=\"".$train['name']."\" title=\"".$train['name']."\" />";
 			echo $train['amt']." ".$train['name']."</td><td class=\"dur\">";
 			if ($TrainCount == 1 ) {
-				$NextFinished = $generator->getTimeFormat(($train['commence']+$train['eachtime'])-time());
-				echo "<span id=timer1>".$generator->getTimeFormat(($train['commence']+($train['eachtime']*$train['amt']))-time())."</span>";
+				$NextFinished = $generator->getTimeFormat(($train['timestamp']-time())-($train['amt']-1)*$train['eachtime']);
+				echo "<span id=timer1>".$generator->getTimeFormat($train['timestamp']-time())."</span>";
 			} else {
 				echo $generator->getTimeFormat($train['eachtime']*$train['amt']);
 			}
 			echo "</td><td class=\"fin\">";
-			$time = $generator->procMTime($train['commence']+($train['eachtime']*$train['amt']));
+			$time = $generator->procMTime($train['timestamp']);
 			if($time[0] != "today") {
 				echo "on ".$time[0]." at ";
             }
