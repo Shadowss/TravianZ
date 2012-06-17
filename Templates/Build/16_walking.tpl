@@ -97,7 +97,7 @@ $timer += 1;
     <thead>
         <tr>
             <td class="role"><a href="karte.php?d=<?php echo $village->wid."&c=".$generator->getMapCheck($village->wid); ?>"><?php echo $village->vname; ?></a></td>
-            <td colspan="10"><a href="karte.php?d=<?php echo $settlers[$y]['to']."&c=".$generator->getMapCheck($settlers[$y]['to']); ?>">Found new village.</a></td>
+            <td colspan="10"><a href="karte.php?d=<?php echo $settlers[$y]['to']."&c=".$generator->getMapCheck($settlers[$y]['to']); ?>">Found new village</a></td>
         </tr>
     </thead>
     <tbody class="units">
@@ -113,15 +113,18 @@ $timer += 1;
             </tr>
  <tr><th>Troops</th>
             <?php
+			for($x=1;$x<=9;$x++) {
+			$units[$y]['t'.$x]=0;
+			}
             $units[$y]['t10']=3;
             for($i=1;$i<=10;$i++) {
                 if($units[$y]['t'.$i] == 0) {
-                    echo "<td class=\"none\">";
+                    echo "<td class=\"none\">0</td>";
                 }
                 else {
                 echo "<td>";
-                }
                 echo $units[$y]['t'.$i]."</td>";
+				}
             }
             ?>
            </tr></tbody>

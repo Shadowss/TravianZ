@@ -2083,6 +2083,7 @@ class Automation {
 			$plevel = $i;
 			}
 			}
+			if($palacelevel['f'.$plevel.'t'] == 26){
             if($palacelevel['f'.$plevel] < 10){
                $canconquer = 0;
             }
@@ -2095,6 +2096,17 @@ class Automation {
             else{
                $canconquer = 3;
             }
+			}else if($palacelevel['f'.$i.'t'] == 25){
+            if($palacelevel['f'.$plevel] < 10){
+               $canconquer = 0;
+            }
+            elseif($palacelevel['f'.$plevel] < 20){
+               $canconquer = 1;
+            }
+            else{
+               $canconquer = 2;
+            }
+			}
 
 		    $exp1 = $database->getVillageField($from['wref'],'exp1');
             $exp2 = $database->getVillageField($from['wref'],'exp2');
@@ -2105,7 +2117,7 @@ class Automation {
             elseif($exp2 == 0){
                $villexp = 1;
             }
-            elseif($exp2 == 0){
+            elseif($exp3 == 0){
                $villexp = 2;
             }
             else{
@@ -2803,6 +2815,17 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
         }
         $this->pruneResource();
 
+		// Settlers
+		
+		$q = "SELECT * FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
+        $dataarray = $database->query_return($q);
+        foreach($dataarray as $data) {
+
+        $tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
+
+        $database->modifyUnit($data['to'],array($tribe."0"),array(3),array(1));
+        $database->setMovementProc($data['moveid']);
+        }
 
         if(file_exists("GameEngine/Prevention/returnunits.txt")) {
             unlink("GameEngine/Prevention/returnunits.txt");
@@ -2823,7 +2846,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                     $to = $database->getMInfo($data['from']);
                     $user =    $database->getUserField($to['owner'],'username',0);
                     $taken = $database->getVillageState($data['to']);
-                    if($taken['occupied'] == 0){
+                    if($taken != 1){
                         $database->setFieldTaken($data['to']);
                         $database->addVillage($data['to'],$to['owner'],$user,'0');
                         $database->addResourceFields($data['to'],$database->getVillageType($data['to']));
@@ -2852,7 +2875,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                     }
                     else{
                         // here must come movement from returning settlers
-                        $database->setMovementProc($data['moveid']);
+						$database->addMovement(4,$data['to'],$data['from'],$data['ref'],$time,$time+($time-$data['starttime']));
+						$database->setMovementProc($data['moveid']);
                     }
             }
             if(file_exists("GameEngine/Prevention/settlers.txt")) {

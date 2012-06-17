@@ -28,7 +28,7 @@ echo '</pre>';
 				<input type="hidden" name="c" value="5" />
 				<input type="hidden" name="s" value="<?php echo $_GET['id']; ?>" />
 				<input type="hidden" name="id" value="39" />
-				<input type="hidden" name="timestamp" value="<?php echo time()+$time ?>" />
+				<input type="hidden" name="timestamp" value="<?php echo $time; ?>" />
 		<table class="troop_details" cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>

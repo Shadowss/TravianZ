@@ -481,7 +481,7 @@ class Units {
      $unit = ($session->tribe*10);
 		  $database->modifyResource($village->wid,750,750,750,750,0);
 		  $database->modifyUnit($village->wid,array($unit),array(3),array(0));
-		  $database->addMovement(5,$village->wid,$post['s'],0,time(),$post['timestamp']);
+		  $database->addMovement(5,$village->wid,$post['s'],0,time(),time()+$post['timestamp']);
 		  header("Location: build.php?id=39");
 		
 		  if($form->returnErrors() > 0) {
