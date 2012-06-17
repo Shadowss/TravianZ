@@ -2162,7 +2162,7 @@ class Automation {
 			$varray1 = count($database->getProfileVillages($from['owner']));
 			$mode = CP; 
 			$cp_mode = $GLOBALS['cp'.$mode];
-			$need_cps = $cp_mode[$varray1];
+			$need_cps = $cp_mode[$varray1+1];
 			$user_cps = $database->getUserField($from['owner'],"cp",0);
             //kijken of laatste dorp is, of hoofddorp
 			if($user_cps >= $need_cps){

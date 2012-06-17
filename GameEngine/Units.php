@@ -473,7 +473,7 @@ class Units {
 		if($session->access != BANNED){
     $mode = CP; 
     $total = count($database->getProfileVillages($session->uid)); 
-    $need_cps = ${'cp'.$mode}[$total];
+    $need_cps = ${'cp'.$mode}[$total+1];
     $cps = $session->cp;
 	$rallypoint = $database->getResourceLevel($village->wid);
 	if($rallypoint['f39'] > 0){
