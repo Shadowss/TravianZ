@@ -163,7 +163,7 @@
     
     if($_GET['revive'] == 1 && $hero_info['inrevive'] == 0){
 			if($session->access != BANNED){
-            mysql_query("UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".$training_time2."' WHERE `uid` = '".$session->uid."'");
+            mysql_query("UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".$training_time2."', `wref` = '".$village->wid."' WHERE `uid` = '".$session->uid."'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$wood." WHERE `wref` = '" . $village->wid . "'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".$clay." WHERE `wref` = '" . $village->wid . "'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `iron` = `wood` - ".$iron." WHERE `wref` = '" . $village->wid . "'");

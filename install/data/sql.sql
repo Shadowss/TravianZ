@@ -1230,7 +1230,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
   `pop` int(10) unsigned NOT NULL,
   `timestamp` int(10) unsigned NOT NULL,
   `eachtime` int(10) unsigned NOT NULL,
-  `commence` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
