@@ -97,7 +97,7 @@ class Profile {
 		}else{
 		header("Location: banned.php");
 		}
-	}	
+	}
 	private function updateAccount($post) {
 		global $database,$session,$form;
 		if($post['pw2'] == $post['pw3']) {

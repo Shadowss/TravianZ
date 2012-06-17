@@ -12,20 +12,20 @@
 
 
 		include_once ("GameEngine/Account.php");
-        
-        mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-        mysql_select_db(SQL_DB);
+
+		mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+		mysql_select_db(SQL_DB);
 
 if($session->access==ADMIN){
 
 //controllo
 	if(isset($_GET['giveout'])){
 
-        $database->populateOasisUnitsLow();
+		$database->populateOasisUnitsLow();
 
 		}
-        
-       
+
+
 
 ?>
 
@@ -33,7 +33,7 @@ if($session->access==ADMIN){
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
-    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<link REL="shortcut icon" HREF="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -60,7 +60,7 @@ if($session->access==ADMIN){
 
 		window.addEvent('domready', start);
 	</script>
-</head> 
+</head>
 <body class="v35 ie ie8">
 <div class="wrapper">
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
@@ -88,13 +88,13 @@ Click <a href="?giveout">here</a>, to populate oasis <br/>WARNING: Loading next 
 			</div>
 
 			<div class="footer-stopper outgame"></div>
-            <div class="clear"></div>
-            
+			<div class="clear"></div>
+
 <?php include("Templates/footer.tpl"); ?>
 <div id="ce"></div>
 </body>
 </html>
-<?php mysql_close(); 
+<?php mysql_close();
 }else{
 header("Location: dorf1.php");
 }?>

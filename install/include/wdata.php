@@ -17,7 +17,7 @@ $y=(WORLD_MAX-$i);
 
 	for($j=0; $j<$xyas; $j++){
 	$x=((WORLD_MAX*-1)+$j);
-	
+
 	//choose a field type
 	if($x == 0 & $y == 0){
 		$typ='3';
@@ -104,7 +104,7 @@ $y=(WORLD_MAX-$i);
 	} else {
 		$image="o".$otype."";
 	}
-		
+
 		//into database
 		$q = "INSERT into ".TB_PREFIX."wdata values (0,'".$typ."','".$otype."','".$x."','".$y."',0,'".$image."')";
 		$database->query($q);

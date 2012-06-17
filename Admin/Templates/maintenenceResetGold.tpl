@@ -15,9 +15,9 @@
 		<thead>
 			<tr>
 				<th colspan="2">Reset All Players Gold</th>
-			</tr> 
+			</tr>
 		</thead>
-		<tbody> 
+		<tbody>
 			<tr>
 				<td class="hab" colspan="2"><center><input type="image" src="../img/admin/b/ok1.gif" value="submit"></center></td>
 			</tr>

@@ -12,7 +12,7 @@
 
 
 <form action="include/multihunter.php" method="post" id="dataform">
-   
+
 <p>
 	<span class="f10 c">Create Multihunter account</span>
 		<table>
@@ -22,8 +22,8 @@
 		</table>
 </p>
 
-   	<center>
-    <input type="submit" name="Submit" id="Submit" value="Submit"></center>
+	<center>
+	<input type="submit" name="Submit" id="Submit" value="Submit"></center>
 </form>
-    
+
 </div>

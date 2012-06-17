@@ -9,8 +9,8 @@
 ##                                                                             ##
 #################################################################################
 
-include ("../../Database.php"); 
-include ("../../Admin/database.php"); 
+include ("../../Database.php");
+include ("../../Admin/database.php");
 include ("../../config.php");
 
 $database->populateOasisUnitsLow();

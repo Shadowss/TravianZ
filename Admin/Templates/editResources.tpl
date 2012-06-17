@@ -11,11 +11,11 @@
 
 $id = $_GET['did'];
 $village = $database->getVillage($id);
-$user = $database->getUserArray($village['owner'],1);  
-$coor = $database->getCoor($village['wref']); 
-$varray = $database->getProfileVillages($village['owner']); 
+$user = $database->getUserArray($village['owner'],1);
+$coor = $database->getCoor($village['wref']);
+$varray = $database->getProfileVillages($village['owner']);
 $type = $database->getVillageType($village['wref']);
-$fdata = $database->getResourceLevel($village['wref']); 
+$fdata = $database->getResourceLevel($village['wref']);
 if(isset($id))
 {
 	include("search2.tpl"); ?>
@@ -24,19 +24,19 @@ if(isset($id))
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="did" id="did" value="<?php echo $_GET['did']; ?>">
 		<br />
-		
+
 		<table id="member" cellpadding="1" cellspacing="1" >
 			<thead>
 				<tr>
 					<th colspan="4">Modify Resources</th>
-				</tr> 
+				</tr>
 				<tr>
 					<td class="on">Resource</td>
 					<td class="hab">Amount</td>
 					<td class="hab">Maximum Capacity</td>
 				</tr>
 			</thead>
-			<tbody> 
+			<tbody>
 				<tr>
 					<td class="on"><img src="../img/admin/r/1.gif"> Wood</td>
 					<td class="hab"><input class="fm" name="wood" value="<?php echo round($village['wood'], 0); ?>"></td>
@@ -68,7 +68,7 @@ if(isset($id))
 				</tr>
 			</tbody>
 		</table>
-		
+
 		<br /><br />
 		<center><input type="image" src="../img/admin/b/ok1.gif" value="submit"></center>
 	</form><?php

@@ -1,13 +1,13 @@
 <?php###################################################################################              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 #### --------------------------------------------------------------------------- ####  Filename       admin.php                                                   ####  Developed by:  Dzoki                                                       ####  License:       TravianX Project                                            ####  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ####                                                                             ###################################################################################
 session_start();
 include("../GameEngine/Database.php");
-include("../GameEngine/Admin/database.php");  
-?>                                             
+include("../GameEngine/Admin/database.php");
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <link REL="shortcut icon" HREF="favicon.ico"/>
-	<title>Admin Control Panel - TravianX</title>    
+	<title>Admin Control Panel - TravianX</title>
 	<link rel=stylesheet type="text/css" href="../img/admin/admin.css">
 	<link rel=stylesheet type="text/css" href="../img/admin/acp.css">
 	<link rel=stylesheet type="text/css" href="../img/../img.css">
@@ -24,9 +24,9 @@ function aktiv() {this.srcElement.className='fl1'; }
 function inaktiv() {event.srcElement.className='fl2'; }
 
 function del(e,id){
-if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); } 
-if(e == 'unban'){ var conf = confirm('Dou you really want unban player '+id+'?'); } 
-if(e == 'stopDel'){ var conf = confirm('Dou you really want stop deleting user '+id+'?'); } 
+if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); }
+if(e == 'unban'){ var conf = confirm('Dou you really want unban player '+id+'?'); }
+if(e == 'stopDel'){ var conf = confirm('Dou you really want stop deleting user '+id+'?'); }
 if(conf){return true;}else{return false;}
 }
 
@@ -46,16 +46,16 @@ if(conf){return true;}else{return false;}
 <table id="navi_table" cellspacing="0" cellpadding="0">
 <tr>
 <td class="menu">
-<?php     
+<?php
   if($funct->CheckLogin()){?>
-	  <a href="admin.php">ACP Home</a> 				  <a href="<?php echo HOMEPAGE; ?>">Homepage</a>	  	  <a href="#"></a><a href="#"></a>	  <a href="?p=server_info">Server Info</a>
-      <a href="?p=online">Online users</a>     
-      <a href="?p=search">Search</a>
-      <a href="?p=message">Msg/Rep</a>
-      <a href="?p=ban">Ban</a>
-      <a href="?p=config">Config</a>
-	  <a href="?p=config_editor">Config Editor</a>	  	  <a href="#"></a><a href="#"></a><a href="#"></a>
-      <a href="?action=logout">Logout</a>
+	  <a href="admin.php">ACP Home</a>	  <a href="<?php echo HOMEPAGE; ?>">Homepage</a>	  <a href="#"></a><a href="#"></a>	  <a href="?p=server_info">Server Info</a>
+	  <a href="?p=online">Online users</a>
+	  <a href="?p=search">Search</a>
+	  <a href="?p=message">Msg/Rep</a>
+	  <a href="?p=ban">Ban</a>
+	  <a href="?p=config">Config</a>
+	  <a href="?p=config_editor">Config Editor</a>	  <a href="#"></a><a href="#"></a><a href="#"></a>
+	  <a href="?action=logout">Logout</a>
 <?php }?>
 </td>
 </tr>
@@ -63,43 +63,43 @@ if(conf){return true;}else{return false;}
 <div id="lmid1">
 <div id="lmid3">
 
-<?php     
+<?php
 
-  if($funct->CheckLogin()){            
-    if($_POST or $_GET){  
-      if($_GET['p'] and $_GET['p']!="search"){
-          $filename = '../Templates/Admin/'.$_GET['p'].'.tpl';
-          if(file_exists($filename)){
-            include($filename);
-          }else{
-            include('../Templates/Admin/404.tpl');
-          }
-      }else{
-        include('../Templates/Admin/search.tpl');
-      }  
-      if($_POST['p'] and $_POST['s']){
-        $filename = '../Templates/Admin/results_'.$_POST['p'].'.tpl';
-          if(file_exists($filename)){
-            include($filename);
-          }else{
-            include('../Templates/Admin/404.tpl');
-          }        
-      }
-    }else{
-      include('../Templates/Admin/home.tpl');  
-    }
-  }else{           
-    include('../Templates/Admin/login.tpl');
-  }    
+  if($funct->CheckLogin()){
+	if($_POST or $_GET){
+	  if($_GET['p'] and $_GET['p']!="search"){
+		  $filename = '../Templates/Admin/'.$_GET['p'].'.tpl';
+		  if(file_exists($filename)){
+			include($filename);
+		  }else{
+			include('../Templates/Admin/404.tpl');
+		  }
+	  }else{
+		include('../Templates/Admin/search.tpl');
+	  }
+	  if($_POST['p'] and $_POST['s']){
+		$filename = '../Templates/Admin/results_'.$_POST['p'].'.tpl';
+		  if(file_exists($filename)){
+			include($filename);
+		  }else{
+			include('../Templates/Admin/404.tpl');
+		  }
+	  }
+	}else{
+	  include('../Templates/Admin/home.tpl');
+	}
+  }else{
+	include('../Templates/Admin/login.tpl');
+  }
 ?>
 
-</div>  
+</div>
 </div>
 
-</div>  
+</div>
 <div id="lright1"></div>
 
-<div id="ce"></div>  
+<div id="ce"></div>
 
 
 

@@ -93,17 +93,17 @@ header("Location: ".$_SERVER['PHP_SELF']."?t=1");
 		window.addEvent('domready', start);
 	</script>
 </head>
- 
- 
+
+
 <body class="v35 ie ie8">
 <div class="wrapper">
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
 <?php include("Templates/header.tpl"); ?>
- 
+
 <div id="mid">
-<?php include("Templates/menu.tpl"); 
+<?php include("Templates/menu.tpl");
 if(isset($_GET['id']) && !isset($_GET['t'])) {
 	$message->loadMessage($_GET['id']);
 	include("Templates/Message/read.tpl");
@@ -139,7 +139,7 @@ else {
 	include("Templates/Message/inbox.tpl");
 }
 			?>
-            
+
 <div id="side_info">
 <?php
 include("Templates/quest.tpl");
@@ -152,9 +152,9 @@ include("Templates/links.tpl");
 </div>
 <div class="footer-stopper"></div>
 <div class="clear"></div>
-<?php 
-include("Templates/footer.tpl"); 
-include("Templates/res.tpl"); 
+<?php
+include("Templates/footer.tpl");
+include("Templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">
@@ -162,7 +162,7 @@ include("Templates/res.tpl");
 Calculated in <b><?php
 echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 ?></b> ms
- 
+
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
 	</div>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -16,12 +16,12 @@ if($msg)
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>travian.css?e21d2" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?e21d2" rel="stylesheet" type="text/css">
-	
-	
+
+
 	<br />
-	
+
 	<span class="b">Send To</span>: <?php echo $database->getUserField($msg[0]['target'],'username',0);?><br />
-	
+
 	<div id="content" class="messages">
 		<h1>Messages</h1>
 		<div id="read_head" class="msg_head"></div>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -13,8 +13,8 @@ $active = $admin->getUserActive();
 ?>
 
 <style>
-	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);} 
-</style>  
+	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
+</style>
 
 <form method="post" action="admin.php">
 	<input name="action" type="hidden" value="punish">
@@ -77,7 +77,7 @@ $active = $admin->getUserActive();
 				<input name="uid" type="hidden" value="<?php echo $user['id'];?>">
 				<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 				<td colspan="1" style="text-align: center;">
-					<input type="checkbox" name="clean_ware" value="1"> Empty Warehouses 
+					<input type="checkbox" name="clean_ware" value="1"> Empty Warehouses
 				</td>
 			</tr>
 			<tr>

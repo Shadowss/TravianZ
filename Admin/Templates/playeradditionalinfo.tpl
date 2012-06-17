@@ -1,4 +1,4 @@
-		<table id="member"> 
+		<table id="member">
 			<thead>
 				<tr>
 					<th colspan="2">Additional Information</th>
@@ -8,7 +8,7 @@
 				<tr>
 					<td>Access</td>
 					<td>
-						<?php 
+						<?php
 							if($user['access'] == 0)
 							{
 								echo "Banned";
@@ -32,7 +32,7 @@
 					<td>Gold</td>
 					<td><img src="../img/admin/gold.gif"> <?php echo $user['gold']; ?> <a href='admin.php?p=player&uid=<?php echo $id; ?>&g'><img src="../img/admin/edit.gif" title="Give Gold"></a>
 				</tr>
-				<?php 	
+				<?php
 					if($_SESSION['access'] == ADMIN)
 					{
 						if($_GET['g'] == 'ok')
@@ -53,9 +53,9 @@
 											<input type="image" src="../<?php echo GP_LOCATE; ?>img/new/tick.png" value="submit">
 											<a href="admin.php?p=player&uid=<?php echo $id; ?>"><img src="../img/admin/del.gif" title="Cancel"></a></td>
 									</tr>
-								</form><?php 
-							} 
-						} 
+								</form><?php
+							}
+						}
 					}
 				?>
 				<tr>
@@ -64,12 +64,12 @@
 				</tr>
 				<tr>
 					<td>Sitter 1</td>
-					<td><a href="?p=editSitter&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Sitters"></a> 
+					<td><a href="?p=editSitter&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Sitters"></a>
 						<?php
 							if($user['sit1'] >= 1)
 							{
 								echo '<a href="admin.php?p=player&uid='.$user['sit1'].'">'.$database->getUserField($user['sit1'],"username",0).'</a>';
-							} 
+							}
 							else if($user['sit1'] == 0)
 							{
 								echo 'No Sitter';
@@ -79,12 +79,12 @@
 				</tr>
 				<tr>
 					<td>Sitter 2</td>
-					<td><a href="?p=editSitter&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Sitters"></a> 
+					<td><a href="?p=editSitter&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Sitters"></a>
 						<?php
 							if($user['sit2'] >= 1)
 							{
 								echo '<a href="admin.php?p=player&uid='.$user['sit2'].'">'.$database->getUserField($user['sit2'],"username",0).'</a>';
-							} 
+							}
 							else if($user['sit2'] == 0)
 							{
 								echo 'No Sitter';
@@ -145,22 +145,22 @@
 				<tr>
 					<td>Culture Points</td>
 					<td><a href='admin.php?p=player&uid=<?php echo $id; ?>&cp'><img src="../img/admin/edit.gif" title="Edit Culture Points"></a>
-						<?php 
+						<?php
 							echo round($user['cp'], 0);
 							if($_SESSION['access'] == ADMIN)
 							{ ?>
-								<a href='admin.php?p=player&uid=<?php echo $id; ?>&cp'><?php 
-							} 
+								<a href='admin.php?p=player&uid=<?php echo $id; ?>&cp'><?php
+							}
 						?>
 					</td>
 				</tr>
-				<?php 
+				<?php
 					if($_SESSION['access'] == ADMIN)
 					{
 						if($_GET['cp'] == 'ok')
 						{
 							echo '';
-						} 
+						}
 						else
 						{
 							if(isset($_GET['cp']))
@@ -176,15 +176,15 @@
 											<a href="admin.php?p=player&uid=<?php echo $id; ?>"><img src="../img/admin/del.gif" title="Cancel"></a>
 										</td>
 									</tr>
-								</form><?php 
-							} 
-						} 
+								</form><?php
+							}
+						}
 					}
 				?>
 				<tr>
 					<td>Last Activity</td>
 					<td>
-						<?php 
+						<?php
 							echo ''.date('d.m.Y H:i',$user['timestamp']+3600*2).'';
 						?>
 					</td>
@@ -224,7 +224,7 @@
 				<tr>
 					<td>Total Attack Points</td>
 					<td><a href="admin.php?p=editOverall&uid=<?php echo $id; ?>"><img src="../img/admin/edit.gif" title="Edit Overall Points"></a>
-						<?php	
+						<?php
 							echo $user['apall'];
 						?>
 					</td>

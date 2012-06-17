@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -13,7 +13,7 @@ $sql = "SELECT * FROM ".TB_PREFIX."ndata WHERE id = ".$_GET['bid']."";
 $result = mysql_query($sql);
 $rep = mysql_fetch_assoc($result);
 if($rep)
-{ 
+{
 	$att = $database->getUserArray($rep['uid'],1);
 	?>
 	<h1>Under Construction</h1>

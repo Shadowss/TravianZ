@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -17,9 +17,9 @@
 			<tr>
 				<th colspan="3">Search v1.0</th>
 			</tr>
-		</thead> 
+		</thead>
 		<tr class="slr3">
-			<td> 
+			<td>
 				<select name="p" size="1" class="slr3">
 					<option value="player" <?php if($_POST['p']=='player'){echo "selected";}?>>Search Players</option>
 					<option value="alliances" <?php if($_POST['p']=='alliances'){echo "selected";}?>>Search Alliances</option>

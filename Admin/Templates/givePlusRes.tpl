@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -37,7 +37,7 @@ $id = $_SESSION['id']; ?>
 					</center>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<td>
 					<center>
@@ -50,7 +50,7 @@ $id = $_SESSION['id']; ?>
 					</center>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<td>
 					<center>
@@ -63,7 +63,7 @@ $id = $_SESSION['id']; ?>
 					</center>
 				</td>
 			</tr>
-			
+
 			<tr>
 				<td>
 					<center>
@@ -88,7 +88,7 @@ $id = $_SESSION['id']; ?>
 </form>
 
 <?php
-    if(isset($_GET['g']))
+	if(isset($_GET['g']))
 	{
 		echo '<br /><br /><font color="Red"><b>Resource Bonuses Given</font></b>';
 	}

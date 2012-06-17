@@ -2,7 +2,7 @@
 			<thead>
 				<tr>
 					<th colspan="2">Player <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo $user['username'];?></a></th>
-				</tr>                                       
+				</tr>
 				<tr>
 					<td>Details</td>
 					<td>Description</td>
@@ -23,11 +23,11 @@
 								<th>Tribe</th>
 								<td>
 									<?php
-										if($user['tribe'] == 1) 
+										if($user['tribe'] == 1)
 										{
 											echo "Roman";
 										}
-										else if($user['tribe'] == 2) 
+										else if($user['tribe'] == 2)
 										{
 											echo "Teutons";
 										}
@@ -38,7 +38,7 @@
 										else if($user['tribe'] == 4)
 										{
 											echo "Natars";
-										} 
+										}
 										else if($user['tribe'] == 5)
 										{
 											echo "Nature";
@@ -46,7 +46,7 @@
 									?>
 								</td>
 							</tr>
-							<tr>	
+							<tr>
 								<th>Alliance</th>
 								<td>
 									<?php
@@ -72,8 +72,8 @@
 							<tr>
 								<th>Age</td>
 								<td>
-									<?php 
-										if(isset($user['birthday']) && $user['birthday'] != 0) 
+									<?php
+										if(isset($user['birthday']) && $user['birthday'] != 0)
 										{
 											$age = date("Y")-substr($user['birthday'],0,4);
 											echo $age;
@@ -101,7 +101,7 @@
 									?>
 								</td>
 							</tr>
-							
+
 							<tr>
 								<th>Username</th>
 								<td>
@@ -111,21 +111,21 @@
 										<input type="text" style="width: 80%;" class="fm" name="username" value="<?php echo $user['username']; ?>"> <input type="image" value="submit" src="../img/admin/edit.gif" title="Edit Username"></a>
 								</td>
 							</tr>
-							
+
 							<tr>
 								<th>Location</th>
 								<td>
 									<input type="text" style="width: 80%;" disabled="disabled" class="fm" name="location" value="<?php echo $user['location']; ?>">  <a href="admin.php?p=editUser&uid=<?php echo $id; ?>"><img src="../img/admin/edit.gif" title="Edit Location"></a>
 								</td>
 							</tr>
-							
+
 							<tr>
 								<th>Password</th>
 								<td>
 									Change <a href="admin.php?p=editPassword&uid=<?php echo $id; ?>"><img src="../img/admin/edit.gif" title="Change Password"></a>
 								</td>
 							</tr>
-							
+
 							<tr>
 								<?php include("playerplusbonus.tpl"); ?>
 							<tr>
@@ -140,7 +140,7 @@
 								<td>
 									<?php
 										$link = "<a href=\"mailto:".$user['email']."\">".$user['email']."</a>";
-										echo $link; 
+										echo $link;
 									?>
 								</td>
 							</tr> */ ?>
@@ -185,7 +185,7 @@
 							<tr>
 								<td colspan="2" class="empty"></td>
 							</tr>
-							
+
 							<?php
 								if($_SESSION['access'] == ADMIN)
 								{
@@ -195,7 +195,7 @@
 											<a href="?p=editUser&uid='.$user['id'].'"><font color="blue">&raquo;</font> Edit User</a>
 										</td>
 									</tr>';
-								} 
+								}
 								else if($_SESSION['access'] == MULTIHUNTER)
 								{
 									echo '';
@@ -208,41 +208,41 @@
 											<a class="rn3" href="?p=deletion&uid='.$user['id'].'"><font color="red">&raquo;</font> Delete User</a>
 										</td>
 									</tr>';
-								} 
+								}
 								else if($_SESSION['access'] == MULTIHUNTER)
 								{
 									echo '';
 								}
 							?>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=ban&uid=<?php echo $user['id']; ?>">&raquo; Ban User</a></td>
 							</tr>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=Newmessage&uid=<?php echo $user['id']; ?>">&raquo; Send Message</a></td>
 							</tr>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=editPlus&uid=<?php echo $user['id']; ?>">&raquo; Edit Plus & Bonus</a></td>
 							</tr>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=editSitter&uid=<?php echo $user['id']; ?>">&raquo; Edit Sitters</a></td>
 							</tr>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=editWeek&uid=<?php echo $user['id']; ?>">&raquo; Edit Overall Off & Def</a></td>
 							</tr>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=editOverall&uid=<?php echo $user['id']; ?>">&raquo; Edit Weekly Off, Def, Raid</a></td>
 							</tr>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=userlogin&uid=<?php echo $user['id']; ?>">&raquo; User Login Log</a></td>
 							</tr>
-							
+
 							<tr>
 								<td colspan="2"><a href="?p=userillegallog&uid=<?php echo $user['id']; ?>">&raquo; User Illegal Log</a></td>
 							</tr>

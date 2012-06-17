@@ -44,8 +44,8 @@ if(isset($_GET['g'])) {
 
 
 
-          echo '<br /><br /><font color="Red"><b>WW Buidingplan villages Added</font></b>';
+		  echo '<br /><br /><font color="Red"><b>WW Buidingplan villages Added</font></b>';
 
-          }
+		  }
 
 ?>

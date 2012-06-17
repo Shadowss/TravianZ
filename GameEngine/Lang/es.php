@@ -7,9 +7,9 @@
 //                              - TravianX = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-                                    //                         //
+									//                         //
 									//         SPANISH         //
-			                        //     author: Thyphoon    //
+									//     author: Thyphoon    //
 									/////////////////////////////
 
 //MAIN MENU

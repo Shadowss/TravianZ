@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -49,7 +49,7 @@ $id = $_SESSION['id']; ?>
 </form>
 
 <?php
-    if(isset($_GET['g']))
+	if(isset($_GET['g']))
 	{
 		echo '<br /><br /><font color="Red"><b>Plus Given</font></b>';
 	}

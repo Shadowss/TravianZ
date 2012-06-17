@@ -66,7 +66,7 @@
 					else if($units['u29'] > 0){$u29 = '<font color="black">'.$units['u29'].'';}
 					if($units['u30'] == 0){$u30 = '<font color="gray">'.$units['u30'].'';}
 					else if($units['u30'] > 0){$u30 = '<font color="black">'.$units['u30'].'';}
-					## Nature 
+					## Nature
 					if($units['u31'] == 0){$u31 = '<font color="gray">'.$units['u31'].'';}
 					else if($units['u31'] > 0){$u31 = '<font color="black">'.$units['u31'].'';}
 					if($units['u32'] == 0){$u32 = '<font color="gray">'.$units['u32'].'';}
@@ -85,7 +85,7 @@
 					else if($units['u38'] > 0){$u38 = '<font color="black">'.$units['u38'].'';}
 					if($units['u39'] == 0){$u39 = '<font color="gray">'.$units['u39'].'';}
 					else if($units['u39'] > 0){$u39 = '<font color="black">'.$units['u39'].'';}
-					## Natars 
+					## Natars
 					if($units['u40'] == 0){$u40 = '<font color="gray">'.$units['u40'].'';}
 					else if($units['u40'] > 0){$u40 = '<font color="black">'.$units['u40'].'';}
 					if($units['u41'] == 0){$u41 = '<font color="gray">'.$units['u41'].'';}
@@ -108,12 +108,12 @@
 					else if($units['u49'] > 0){$u49 = '<font color="black">'.$units['u49'].'';}
 					if($units['u50'] == 0){$u50 = '<font color="gray">'.$units['u50'].'';}
 					else if($units['u50'] > 0){$u50 = '<font color="black">'.$units['u50'].'';}
-					if($_SESSION['access'] == ADMIN) 
+					if($_SESSION['access'] == ADMIN)
 					{
 						if($user['tribe'] == 1)
 						{
 							echo '
-							</tr></thead><tbody> 
+							</tr></thead><tbody>
 							<tr>
 								<td><center /><img src="../img/un/u/1.gif"></img></td>
 								<td><center /><img src="../img/un/u/2.gif"></img></td>
@@ -143,7 +143,7 @@
 						else if($user['tribe'] == 2)
 						{
 							echo '
-							</tr></thead><tbody> 
+							</tr></thead><tbody>
 							<tr>
 								<td><center /><img src="../img/un/u/11.gif"></img></td>
 								<td><center /><img src="../img/un/u/12.gif"></img></td>
@@ -173,7 +173,7 @@
 						else if($user['tribe'] == 3)
 						{
 							echo '
-							</tr></thead><tbody> 
+							</tr></thead><tbody>
 							<tr>
 								<td><center /><img src="../img/un/u/21.gif"></img></td>
 							<td><center /><img src="../img/un/u/22.gif"></img></td>
@@ -186,8 +186,8 @@
 								<td><center /><img src="../img/un/u/29.gif"></img></td>
 								<td><center /><img src="../img/un/u/30.gif"></img></td>
 							</tr>
-							
-					   
+
+
 							<tr>
 								<td><center />'.$u21.'</td>
 								<td><center />'.$u22.'</td>
@@ -205,7 +205,7 @@
 						else if($user['tribe'] == 4)
 						{
 							echo '
-							</tr></thead><tbody> 
+							</tr></thead><tbody>
 							<tr>
 								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/31.gif"></img></td>
 								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/32.gif"></img></td>
@@ -235,7 +235,7 @@
 						else if($user['tribe'] == 5)
 						{
 							echo '
-							</tr></thead><tbody> 
+							</tr></thead><tbody>
 							<tr>
 								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/41.gif"></img></td>
 								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/42.gif"></img></td>
@@ -248,8 +248,8 @@
 								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/49.gif"></img></td>
 								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/50.gif"></img></td>
 							</tr>
-							   
-						   
+
+
 						   <tr>
 								<td><center />'.$u41.'</td>
 								<td><center />'.$u42.'</td>
@@ -270,7 +270,7 @@
 	<?php
 		if($_SESSION['access'] == ADMIN)
 		{
-			echo '<a href="admin.php?p=addTroops&did='.$_GET['did'].'">Edit Troops</a>'; 
-		} 
+			echo '<a href="admin.php?p=addTroops&did='.$_GET['did'].'">Edit Troops</a>';
+		}
 
 	?>

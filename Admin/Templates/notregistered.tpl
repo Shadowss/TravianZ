@@ -14,7 +14,7 @@
 			<td class="on">Time</td>
 		</tr>
 	</thead>
-	<tbody>  
+	<tbody>
 		<?php
 			$sql = "SELECT * FROM ".TB_PREFIX."activate";
 			$result = mysql_query($sql);

@@ -32,7 +32,7 @@ else{
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
-    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<link REL="shortcut icon" HREF="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -60,8 +60,8 @@ else{
 		window.addEvent('domready', start);
 	</script>
 </head>
- 
- 
+
+
 <body class="v35 ie ie8">
 <div class="wrapper">
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
@@ -69,7 +69,7 @@ else{
 	</div>
 <?php include("Templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); 
+<?php include("Templates/menu.tpl");
 if(isset($_GET['d']) && isset($_GET['c'])) {
 	if($generator->getMapCheck($_GET['d']) == $_GET['c']) {
 	include("Templates/Map/vilview.tpl");
@@ -77,7 +77,7 @@ if(isset($_GET['d']) && isset($_GET['c'])) {
 	else {
 		header("Location: dorf1.php");
 	}
-} 
+}
 else {
 	include("Templates/Map/mapview.tpl");
 }
@@ -95,9 +95,9 @@ include("Templates/links.tpl");
 <div class="footer-stopper"></div>
 <div class="clear"></div>
 
-<?php 
-include("Templates/footer.tpl"); 
-include("Templates/res.tpl"); 
+<?php
+include("Templates/footer.tpl");
+include("Templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">
@@ -105,7 +105,7 @@ include("Templates/res.tpl");
 Calculated in <b><?php
 echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 ?></b> ms
- 
+
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
 	</div>

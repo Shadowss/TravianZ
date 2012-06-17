@@ -17,7 +17,7 @@ include("GameEngine/config.php");
 <html>
 	<head>
 	<title><?php echo SERVER_NAME; ?></title>
-        <link REL="shortcut icon" HREF="favicon.ico"/>
+		<link REL="shortcut icon" HREF="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="imagetoolbar" content="no" />
@@ -26,12 +26,12 @@ include("GameEngine/config.php");
 	<script src="mt-more.js?0faaa" type="text/javascript"></script>
 	<script src="unx.js?0faaa" type="text/javascript"></script>
 	<script src="new.js?0faaa" type="text/javascript"></script>
-   	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
-   	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
 	<link href="<?php echo GP_LOCATE; ?>travian.css?f4b7c" rel="stylesheet" type="text/css" />
-    	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css" rel="stylesheet" type="text/css" />	
-       </head>
-    <body class="manual">
+		<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css" rel="stylesheet" type="text/css" />
+	   </head>
+	<body class="manual">
 <?php
 
 if (!ctype_digit($_GET['s'])) {

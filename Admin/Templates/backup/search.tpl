@@ -1,4 +1,4 @@
-<?php 
+<?php
 if($_GET['search_in']){
 if(!$_GET['sort']){$sort = $_GET['search_in'];}
 else{
@@ -17,8 +17,8 @@ Search
 </th></tr>
 </thead>
 <tbody>
-<tr>                   
-<td>    
+<tr>
+<td>
 <select class="dropdown" name="search_in">
 <option value="player" <?php if($_GET['search_in']=="player"){echo "selected";}?>>Search player</option>
 <option value="village" <?php if($_GET['search_in']=="village"){echo "selected";}?>>Search villages</option>

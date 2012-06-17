@@ -3,7 +3,7 @@
 
   <link REL="shortcut icon" HREF="favicon.ico"/>
 
-	<title><?php if($_SESSION['access'] == ADMIN){ echo 'Admin Control Panel - TravianX'; } else if($_SESSION['access'] == MULTIHUNTER){ echo 'Multihunter Control Panel - TravianX'; } ?></title>    
+	<title><?php if($_SESSION['access'] == ADMIN){ echo 'Admin Control Panel - TravianX'; } else if($_SESSION['access'] == MULTIHUNTER){ echo 'Multihunter Control Panel - TravianX'; } ?></title>
 
 	<link rel=stylesheet type="text/css" href="../img/admin/admin.css">
 
@@ -22,7 +22,7 @@
 	<meta http-equiv="imagetoolbar" content="no">
 
 </head>
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -36,7 +36,7 @@
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!"); ?>
 
 <?php
-		
+
 		$no = count($database->getAdminLog());
 		$log = $database->getAdminLog();
 		for($i=0;$i<$no;$i++) {
@@ -50,7 +50,6 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!"); ?>
 			?><br />
 		<b>Log:</b> <?php echo $log[$i]['log']; ?><br />
 		<b>Date:</b> <?php echo date("d.m.Y H:i:s",$log[$i]['time']+3600*2); ?><br />
-	
-	
+
+
 	<?php }  ?>
-		 

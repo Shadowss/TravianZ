@@ -4,7 +4,7 @@
 <form action="../GameEngine/Admin/Mods/delallymedal.php" method="POST">
 	<input type="hidden" name="aid" value="<?php echo $_GET['aid']; ?>">
 	<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
-	<table id="profile"> 
+	<table id="profile">
 		<thead>
 			<tr>
 				<th colspan="6">Alliance Medals (<?php echo sizeof($varmedal); ?>)</th>
@@ -21,14 +21,14 @@
 			<?php
 				if(sizeof($varmedal) ==0)
 				{ ?>
-					<td colspan="5"><center>This alliance has no medals yet</center></td><?php 
+					<td colspan="5"><center>This alliance has no medals yet</center></td><?php
 				}
 				elseif(sizeof($varmedal) >0)
 				{
-					foreach($varmedal as $medal) 
+					foreach($varmedal as $medal)
 					{
 						$titel="Bonus";
-						switch ($medal['categorie']) 
+						switch ($medal['categorie'])
 						{
 							case "1": 	$titel="Attackers"; break;
 							case "2": 	$titel="Defenders"; break;
@@ -41,7 +41,7 @@
 						$week = $medal['week'];
 						$points = $medal['points'];
 						if($points == '') { $points = "<p>Bonus</p>"; } else { $points = $points; }
-						
+
 						echo"
 							<tr>
 								<td>$title</td>
@@ -54,7 +54,7 @@
 								</td>
 							</tr>";
 						}
-						
+
 						$averagerank = 0;
 						foreach($varmedal as $medal)
 						{
@@ -73,7 +73,7 @@
 							}
 						}
 						$average = $averagerank / $i;
-						echo "</form><tr><td><b>Average Rank</b></td><td>$average</td><td></td><td></td><td>Delete All</td>"; 
+						echo "</form><tr><td><b>Average Rank</b></td><td>$average</td><td></td><td></td><td>Delete All</td>";
 					}
 				?>
 				<td>

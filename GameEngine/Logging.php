@@ -10,7 +10,7 @@
 #################################################################################
 
 class Logging {
-	
+
 	public function addIllegal($uid,$ref,$type) {
 		global $database;
 		if(LOG_ILLEGAL) {
@@ -24,7 +24,7 @@ class Logging {
 			$database->query($q);
 		}
 	}
-	
+
 	public function addLoginLog($id,$ip) {
 		global $database;
 		if(LOG_LOGIN) {
@@ -32,7 +32,7 @@ class Logging {
 			$database->query($q);
 		}
 	}
-	
+
 	public function addBuildLog($wid,$building,$level,$type) {
 		global $database;
 		if(LOG_BUILD) {
@@ -47,7 +47,7 @@ class Logging {
 			$database->query($q);
 		}
 	}
-	
+
 	public function addTechLog($wid,$tech,$level) {
 		global $database;
 		if(LOG_TECH) {
@@ -56,7 +56,7 @@ class Logging {
 			$database->query($q);
 		}
 	}
-	
+
 	public function goldFinLog($wid) {
 		global $database;
 		if(LOG_GOLD_FIN) {
@@ -65,11 +65,11 @@ class Logging {
 			$database->query($q);
 		}
 	}
-	
+
 	public function addAdminLog() {
 		global $database;
 	}
-	
+
 	public function addMarketLog($wid,$type,$data) {
 		global $database;
 		if(LOG_MARKET) {
@@ -83,11 +83,11 @@ class Logging {
 			$database->query($q);
 		}
 	}
-	
+
 	public function addWarLog() {
 		global $database;
 	}
-	
+
 	public function clearLogs() {
 		global $database;
 	}
