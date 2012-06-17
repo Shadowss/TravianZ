@@ -208,11 +208,11 @@ if($session->access != BANNED){
 header("Location: banned.php"); 
 }
 }
-if ($_GET['mode']=='troops'&&$_GET['cancel']==1){
+if($_GET['mode']=='troops' && $_GET['cancel']==1){
 if($session->access != BANNED){
 $oldmovement=$database->getMovementById($_GET['moveid']);
 $now=time();
-if (($now-$oldmovement[0]['starttime'])<90){
+if(($now-$oldmovement[0]['starttime'])<90 && $oldmovement[0]['from'] == $village->wid){
 
 $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$_GET['moveid'];
 $resultc=$database->query($qc) or die(mysql_error());
