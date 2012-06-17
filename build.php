@@ -193,6 +193,26 @@ if($session->goldclub == 1 && $session->access != BANNED){
 			if($_POST['action'] == 'startRaid'){
 			include ("Templates/a2b/startRaid.tpl");
 			}
+			
+			if(isset($_GET['slid']) && is_numeric($_GET['slid'])) {
+			$FLData = $database->getFLData($_GET['slid']);
+			if($FLData['owner'] == $session->uid){
+			$checked[$_GET['slid']] = 1;
+			}
+            }
+			
+			if(isset($_GET['evasion']) && is_numeric($_GET['evasion'])) {
+			$evasionvillage = $database->getVillage($_GET['evasion']);
+			if($evasionvillage['owner'] == $session->uid){
+			$database->setVillageEvasion($_GET['evasion']);
+			}
+			header("Location: build.php?id=39&t=99");
+            }
+			
+			if(isset($_POST['maxevasion']) && is_numeric($_POST['maxevasion'])) {
+			$database->updateUserField($session->uid, "maxevasion", $_POST['maxevasion'], 1);
+			header("Location: build.php?id=39&t=99");
+            }
 		}
 }else{
 $create = 0;

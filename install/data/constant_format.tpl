@@ -57,6 +57,9 @@ define("GP_LOCATE", "gpack/travian_default/");
 // Values: 1 (normal), 3 (3x speed) etc...
 define("INCREASE_SPEED","%INCSPEED%");
 
+// ***** Evasion Speed
+define("EVASION_SPEED","%EVASIONSPEED%");
+
 // ***** Trader capacity
 // Values: 1 (normal), 3 (3x speed) etc...
 define("TRADER_CAPACITY","%TRADERCAP%");

@@ -420,7 +420,6 @@ class Technology {
 			$upkeep /= 4;
 			$upkeep = round($upkeep);
 			$upkeep *= 3;
-			$upkeep = round($upkeep);
 			}
 		return $upkeep;
 	}

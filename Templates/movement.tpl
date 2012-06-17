@@ -9,7 +9,7 @@
 ##                                                                             ##
 #################################################################################
 
-$aantal=(count($database->getMovement(4,$village->wid,1))+count($database->getMovement(4,$village->wid,0))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0)));
+$aantal=(count($database->getMovement(4,$village->wid,1))+count($database->getMovement(4,$village->wid,0))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0))+count($database->getMovement(7,$village->wid,1)));
 if($aantal > 0){
 	echo	'<table id="movements" cellpadding="1" cellspacing="1"><thead><tr><th colspan="3">'.TROOP_MOVEMENTS.'</th></tr></thead><tbody>';
 }
@@ -19,6 +19,22 @@ $NextArrival = array();
 /* Units coming back from Reinf,attack,raid */
 $aantal = count($database->getMovement(4,$village->wid,1));
 $aantal2 = $database->getMovement(4,$village->wid,1);
+if($aantal > 0){
+	foreach($aantal2 as $receive) {
+		$action = 'def1';
+		$aclass = 'd1';
+		$title = ''.ARRIVING_REINF_TROOPS.'';
+		$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
+		$NextArrival[] = $receive['endtime'];
+	}
+	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+	$timer += 1;
+}
+
+/* Units coming back from evasion */
+$aantal = count($database->getMovement(7,$village->wid,1));
+$aantal2 = $database->getMovement(7,$village->wid,1);
 if($aantal > 0){
 	foreach($aantal2 as $receive) {
 		$action = 'def1';

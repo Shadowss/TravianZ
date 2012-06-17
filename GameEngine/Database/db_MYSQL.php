@@ -2061,6 +2061,9 @@
                     case 7:
                         $q = "SELECT * FROM " . TB_PREFIX . "movement where " . TB_PREFIX . "movement." . $where . " = $village and sort_type = 4 and ref = 0 and proc = 0 ORDER BY endtime ASC";
                         break;
+                    case 8:
+                        $q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement." . $where . " = $village and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 4 OR " . TB_PREFIX . "movement." . $where . " = $village and sort_type = 4 and ref = 0 and proc = 0 ORDER BY endtime ASC";
+                        break;
                     case 34:
                         $q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement." . $where . " = $village and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 or " . TB_PREFIX . "movement." . $where . " = $village and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 4 ORDER BY endtime ASC";
                         break;
@@ -2158,6 +2161,31 @@
                 } else {
                     return NULL;
                 }
+            }
+			
+			function getUnitsNumber($vid) {
+                $q = "SELECT * from " . TB_PREFIX . "units where vref = $vid";
+                $result = mysql_query($q, $this->connection);
+                $dbarray = mysql_fetch_assoc($result);
+				$totalunits = 0;
+				$movingunits = $this->getVillageMovement($vid);
+				for($i=1;$i<=50;$i++){
+				$totalunits += $dbarray['u'.$i];
+				}
+				$totalunits += $dbarray['hero'];
+				$movingunits = $this->getVillageMovement($vid);
+				$reinforcingunits = $this->getEnforceArray($vid,1);
+				$owner = $this->getVillageField($vid,"owner");
+				$ownertribe = $this->getUserField($owner,"tribe",0);
+				$start = ($ownertribe-1)*10+1;
+                $end = ($ownertribe*10);
+				for($i=$start;$i<=$end;$i++){
+				$totalunits += $movingunits['u'.$i];
+				$totalunits += $reinforcingunits['u'.$i];
+				}
+				$totalunits += $movingunits['hero'];
+				$totalunits += $reinforcingunits['hero'];
+				return $totalunits;
             }
 
             function getHero($uid=0,$all=0) {
@@ -2295,7 +2323,7 @@
 					$now = time();
 
 			$uid = $this->getVillageField($vid, "owner");
-			
+			$oldeach = $each;
 			$artefact = count($this->getOwnUniqueArtefactInfo2($uid,5,3,0));
 			$artefact1 = count($this->getOwnUniqueArtefactInfo2($vid,5,1,1));
 			$artefact2 = count($this->getOwnUniqueArtefactInfo2($uid,5,2,0));
@@ -2315,18 +2343,25 @@
 			$each = round($each);
 			}
 			if($each == 0){ $each = 1; }
+			$time2 = $now+$each;
 			if(count($queued) > 0) {
             $time += $queued[count($queued) - 1]['timestamp'] - $now;
+			$time2 += $queued[count($queued) - 1]['timestamp'] - $now;
             }
-                    $q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$time,$each)";
+			if($queued[count($queued) - 1]['unit'] == $unit){
+			$time = $amt*$oldeach;
+					$q = "UPDATE " . TB_PREFIX . "training SET amt = amt + $amt, timestamp = timestamp + $time WHERE id = ".$queued[count($queued) - 1]['id']."";
+			}else{
+                    $q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$time,$each,$time2)";
+			}
                 } else {
                     $q = "DELETE FROM " . TB_PREFIX . "training where id = $vid";
                 }
                 return mysql_query($q, $this->connection);
             }
 
-            function updateTraining($id, $trained) {
-                $q = "UPDATE " . TB_PREFIX . "training set amt = amt - $trained where id = $id";
+            function updateTraining($id, $trained, $each) {
+                $q = "UPDATE " . TB_PREFIX . "training set amt = amt - $trained,timestamp2 = timestamp2 + $each where id = $id";
                 return mysql_query($q, $this->connection);
             }
 
@@ -3084,6 +3119,8 @@
 				return $casualties;
             }
 			
+			//end general statistics
+			
             function addFriend($uid, $column, $friend) {
                 $q = "UPDATE " . TB_PREFIX . "users SET $column = $friend WHERE id = $uid";
                 return mysql_query($q, $this->connection);
@@ -3113,8 +3150,17 @@
 				}
 				}
 				}
-    }
+			}
 
+            function setVillageEvasion($vid) {
+                $village = $this->getVillage($vid);
+				if($village['evasion'] == 0){
+				$q = "UPDATE " . TB_PREFIX . "vdata SET evasion = 1 WHERE wref = $vid";
+				}else{
+				$q = "UPDATE " . TB_PREFIX . "vdata SET evasion = 0 WHERE wref = $vid";
+				}
+                return mysql_query($q, $this->connection);
+            }
         }
         ;
 

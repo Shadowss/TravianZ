@@ -39,7 +39,7 @@
             echo "<img class=\"unit u".$train['unit']."\" src=\"img/x.gif\" alt=\"".$train['name']."\" title=\"".$train['name']."\" />";
             echo $train['amt']." ".$train['name']."</td><td class=\"dur\">";
             if ($TrainCount == 1 ) {
-                $NextFinished = $generator->getTimeFormat(($train['timestamp']-time())-($train['amt']-1)*$train['eachtime']);
+                $NextFinished = $generator->getTimeFormat($train['timestamp2']-time());
                 echo "<span id=timer1>".$generator->getTimeFormat($train['timestamp']-time())."</span>";
             } else {
                 echo $generator->getTimeFormat($train['eachtime']*$train['amt']);

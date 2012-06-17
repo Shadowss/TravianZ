@@ -1230,6 +1230,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
   `pop` int(10) unsigned NOT NULL,
   `timestamp` int(10) unsigned NOT NULL,
   `eachtime` int(10) unsigned NOT NULL,
+  `timestamp2` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1394,6 +1395,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `friend17wait` int(10) unsigned NOT NULL,
   `friend18wait` int(10) unsigned NOT NULL,
   `friend19wait` int(10) unsigned NOT NULL,
+  `maxevasion` mediumint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
@@ -1436,6 +1438,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
 `created` int(11) NOT NULL,
 `natar` tinyint(1) unsigned NOT NULL,
 `starv` int(10) unsigned NOT NULL,
+`evasion` tinyint(1) unsigned NOT NULL,
 PRIMARY KEY (`wref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 

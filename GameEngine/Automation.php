@@ -946,6 +946,41 @@ class Automation {
             $toF = $database->getVillage($data['to']);
             $fromF = $database->getVillage($data['from']);
 
+                        $DefenderUnit = array();
+                        $DefenderUnit = $database->getUnit($data['to']);
+						$evasion = $database->getVillageField($data['to'],"evasion");
+						$maxevasion = $database->getUserField($DefenderID,"maxevasion",0);
+						$gold = $database->getUserField($DefenderID,"gold",0);
+						$playerunit = ($targettribe-1)*10;
+						$cannotsend = 0;
+						$movements = $database->getMovement("34",$data['to'],1);
+						for($y=0;$y < count($movements);$y++){
+						$returntime = $units[$y]['endtime']-time();
+						if($units[$y]['sort_type'] == 4 && $units[$y]['from'] != 0 && $returntime <= 10){
+						$cannotsend = 1;
+						}
+						}
+						if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0){
+						$totaltroops = 0;
+						for($i=1;$i<=10;$i++){
+						$playerunit += $i;
+						$data['u'.$i] = $DefenderUnit['u'.$playerunit];
+						$database->modifyUnit($data['to'],array($playerunit),array($DefenderUnit['u'.$playerunit]),array(0));
+						$playerunit -= $i;
+						$totaltroops += $data['u'.$i];
+						}
+						$data['u11'] = $DefenderUnit['hero'];
+						$totaltroops += $data['u11'];
+						if($totaltroops > 0){
+						$database->modifyUnit($data['to'],array("hero"),array($DefenderUnit['hero']),array(0));
+						$attackid = $database->addAttack($data['to'],$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],4,0,0,0,0,0,0,0,0,0,0,0);
+						$database->addMovement(4,0,$data['to'],$attackid,time(),time()+(180/EVASION_SPEED));
+						$newgold = $gold-2;
+						$newmaxevasion = $maxevasion-1;
+						$database->updateUserField($DefenderID, "gold", $newgold, 1);
+						$database->updateUserField($DefenderID, "maxevasion", $newmaxevasion, 1);
+						}
+						}
                         //get defence units
                         $Defender = array();    $rom = $ger = $gal = $nat = $natar = 0;
                         $Defender = $database->getUnit($data['to']);
@@ -2571,7 +2606,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             ,$troopsdead8 
             ,$troopsdead9 
             ,$troopsdead10 
-            ,$troopsdead11);
+            ,$troopsdead11
+			,$DefenderUnit);
 
 				#################################################
 
@@ -3227,25 +3263,21 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
         $ourFileHandle = fopen("GameEngine/Prevention/training.txt", 'w');
         fclose($ourFileHandle);
         $trainlist = $database->getTrainingList();
-        if(count($trainlist) > 0) {
-            foreach($trainlist as $train) {
-                $database->updateTraining($train['id'],0);
-                $trained = 0;
-                
-                $timepast = $train['timestamp'] - $time;
-                    $trained = $timepast-($train['amt']-1)*$train['eachtime'];
+        if(count($trainlist) > 0){
+            foreach($trainlist as $train){
+					$timepast = $train['timestamp2'] - $time;
                     $pop = $train['pop'];
-					if($trained <= 0){
+					if($timepast <= 0 && $train['amt'] > 0) {
 					if($train['unit']>60 && $train['unit']!=99){
                     $database->modifyUnit($train['vref'],array($train['unit']-60),array(1),array(1));
 					}else{
 					$database->modifyUnit($train['vref'],array($train['unit']),array(1),array(1));
 					}
-                    $database->updateTraining($train['id'],1);
+                    $database->updateTraining($train['id'],1,$train['eachtime']);
 					}
-				if($timepast < 0) {
-                    $database->trainUnit($train['id'],0,0,0,0,1,1);
-                }
+					if($train['amt'] == 0){
+					$database->trainUnit($train['id'],0,0,0,0,1,1);
+					}
             }
         }
         if(file_exists("GameEngine/Prevention/training.txt")) {

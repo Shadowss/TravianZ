@@ -41,6 +41,7 @@
         		$text = preg_replace("'%LANG%'", $_POST['lang'], $text);
         		$text = preg_replace("'%SPEED%'", $_POST['speed'], $text);
         		$text = preg_replace("'%INCSPEED%'", $_POST['incspeed'], $text);
+				$text = preg_replace("'%EVASIONSPEED%'", $_POST['evasionspeed'], $text);
         		$text = preg_replace("'%TRADERCAP%'", $_POST['tradercap'], $text);
         		$text = preg_replace("'%STORAGE_MULTIPLIER%'", $_POST['storage_multiplier'], $text);
         		$text = preg_replace("'%UTRACK%'", $_POST['trackusers'], $text);

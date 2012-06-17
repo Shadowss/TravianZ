@@ -76,7 +76,7 @@ $cps = $session->cp;
 
 if($cps >= $need_cps) {
 ?>
-<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img"  alt="OK" src="img/x.gif" />
+<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img"  alt="OK" src="img/x.gif" onclick="this.disabled=true;this.form.submit();"/>
 <?php
 } else {
   print "$cps/$need_cps culture points";
