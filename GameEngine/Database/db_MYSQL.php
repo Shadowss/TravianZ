@@ -2855,9 +2855,9 @@ class MYSQL_DB {
 
 	function getOwnUniqueArtefactInfo2($id, $type, $size, $mode) {
 	if(!$mode){
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND owner != 3 AND type = $type AND size=$size";
 	}else{
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $id AND type = $type AND size=$size";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $id AND owner != 3 AND type = $type AND size=$size";
 	}
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
