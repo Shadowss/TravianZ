@@ -10,21 +10,21 @@
 #################################################################################
 
 class multiSort {
-	
+
 	function sorte($array)
 	{
 		for($i = 1; $i < func_num_args(); $i += 3)
 		{
 			$key = func_get_arg($i);
-		   
+
 			$order = true;
 			if($i + 1 < func_num_args())
 				$order = func_get_arg($i + 1);
-		   
+
 			$type = 0;
 			if($i + 2 < func_num_args())
 				$type = func_get_arg($i + 2);
-	
+
 			switch($type)
 			{
 				case 1: // Case insensitive natural.
@@ -44,7 +44,7 @@ class multiSort {
 					break;
 			}
 			usort($array, create_function('$a, $b', 'return ' . ($order ? '' : '-') . '(' . $t . ');'));
-			
+
 		}
 		return $array;
 	}

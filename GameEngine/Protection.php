@@ -11,7 +11,7 @@
 #################################################################################
 
 //heef npc uitzondering omdat die met speciaal $_post werken
-if(isset($_POST)){ 
+if(isset($_POST)){
 	if(!isset($_POST['ft'])){
 	$_POST = @array_map('mysql_real_escape_string', $_POST);
 	$_POST = array_map('htmlspecialchars', $_POST);

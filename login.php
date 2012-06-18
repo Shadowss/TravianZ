@@ -25,7 +25,7 @@ if(!isset($_COOKIE['COOKUSR'])) {
 <html>
 	<head>
 	<title><?php echo SERVER_NAME; ?></title>
-        <link REL="shortcut icon" HREF="favicon.ico"/>
+		<link REL="shortcut icon" HREF="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="imagetoolbar" content="no" />
@@ -34,11 +34,11 @@ if(!isset($_COOKIE['COOKUSR'])) {
 	<script src="mt-more.js?0faaa" type="text/javascript"></script>
 	<script src="unx.js?0faaa" type="text/javascript"></script>
 	<script src="new.js?0faaa" type="text/javascript"></script>
-   	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
-   	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
 	<link href="<?php echo GP_LOCATE ?>travian.css?f4b7c" rel="stylesheet" type="text/css" />
-    	<link href="<?php echo GP_LOCATE ?>lang/en/lang.css" rel="stylesheet" type="text/css" />	
-       </head>
+		<link href="<?php echo GP_LOCATE ?>lang/en/lang.css" rel="stylesheet" type="text/css" />
+	   </head>
 
 <body class="v35 ie ie7" onload="initCounter()">
 
@@ -79,14 +79,14 @@ FinishMessage = "START NOW";
 function calcage(secs, num1, num2) {
   s = ((Math.floor(secs/num1))%num2).toString();
   if (LeadingZero && s.length < 2)
-    s = "0" + s;
+	s = "0" + s;
   return "" + s + "";
 }
 
 function CountBack(secs) {
   if (secs < 0) {
-    document.getElementById("cntdwn").innerHTML = FinishMessage;
-    return;
+	document.getElementById("cntdwn").innerHTML = FinishMessage;
+	return;
   }
   DisplayStr = DisplayFormat.replace(/%%D%%/g, calcage(secs,86400,100000));
   DisplayStr = DisplayStr.replace(/%%H%%/g, calcage(secs,3600,24));
@@ -95,7 +95,7 @@ function CountBack(secs) {
 
   document.getElementById("cntdwn").innerHTML = DisplayStr;
   if (CountActive)
-    setTimeout("CountBack(" + (secs+CountStepper) + ")", SetTimeOutPeriod);
+	setTimeout("CountBack(" + (secs+CountStepper) + ")", SetTimeOutPeriod);
 }
 
 function putspan(backcolor, forecolor) {
@@ -137,7 +137,7 @@ CountBack(gsecs);
 </script>
 <?php
 }elseif(START_DATE == date('m/d/Y')){
-	
+
 	if(START_TIME > date('H:i')){
 ?>
 <br/><center><big>Server will start in: </big></center>
@@ -152,14 +152,14 @@ FinishMessage = "START NOW";
 function calcage(secs, num1, num2) {
   s = ((Math.floor(secs/num1))%num2).toString();
   if (LeadingZero && s.length < 2)
-    s = "0" + s;
+	s = "0" + s;
   return "" + s + "";
 }
 
 function CountBack(secs) {
   if (secs < 0) {
-    document.getElementById("cntdwn").innerHTML = FinishMessage;
-    return;
+	document.getElementById("cntdwn").innerHTML = FinishMessage;
+	return;
   }
   DisplayStr = DisplayFormat.replace(/%%D%%/g, calcage(secs,86400,100000));
   DisplayStr = DisplayStr.replace(/%%H%%/g, calcage(secs,3600,24));
@@ -168,7 +168,7 @@ function CountBack(secs) {
 
   document.getElementById("cntdwn").innerHTML = DisplayStr;
   if (CountActive)
-    setTimeout("CountBack(" + (secs+CountStepper) + ")", SetTimeOutPeriod);
+	setTimeout("CountBack(" + (secs+CountStepper) + ")", SetTimeOutPeriod);
 }
 
 function putspan(backcolor, forecolor) {
@@ -334,8 +334,8 @@ if(NEWSBOX3) { include("Templates/News/newsbox3.tpl"); }
 			</div>
 
 			<div class="footer-stopper outgame"></div>
-            <div class="clear"></div>
-            
+			<div class="clear"></div>
+
 <?php include("Templates/footer.tpl"); ?>
 <div id="ce"></div>
 </body>

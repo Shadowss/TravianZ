@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -14,7 +14,7 @@ if(isset($id))
 {
 	include("../GameEngine/Ranking.php");
 	$varmedal = $database->getProfileMedal($id);
-	$user = $database->getUserArray($id,1);    
+	$user = $database->getUserArray($id,1);
 	$varray = $database->getProfileVillages($id);
 	$refreshicon  = "<img src=\"data:image/png;base64,
 	iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAIAAADpZ+PpAAAAAXNSR0IArs4c6QAAAARnQU1BAACx
@@ -35,18 +35,18 @@ if(isset($id))
 		echo "<br />";
 		$deletion = false;
 		if($deletion)
-		{  
+		{
 			include("playerdeletion.tpl");
-		} 
+		}
 
 		include("playerinfo.tpl");
 		include("playeradditionalinfo.tpl");
 		echo "<br />";
 		include("playermedals.tpl");
 		include ("villages.tpl"); ?>
-		
+
 		<div style="float: left;">
-			<?php 
+			<?php
 				include ('punish.tpl');
 			?>
 		</div>
@@ -55,7 +55,7 @@ if(isset($id))
 				include ('add_village.tpl');
 			?>
 		</div>
-		
+
 		<?php
 			$sql = "SELECT * FROM ".TB_PREFIX."banlist WHERE uid = ".$id."";
 			$numbans = mysql_num_rows(mysql_query($sql));

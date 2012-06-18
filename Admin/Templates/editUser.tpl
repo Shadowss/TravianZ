@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -12,11 +12,11 @@
 
 $id = $_GET['uid'];
 if(isset($id))
-{        
-	$user = $database->getUserArray($id,1);    
+{
+	$user = $database->getUserArray($id,1);
 	$varray = $database->getProfileVillages($id);
 	$varmedal = $database->getProfileMedal($id); ?>
-	
+
 	<style type="text/css">
 		select.dropdown
 		{
@@ -34,7 +34,7 @@ if(isset($id))
 			<thead>
 			<tr>
 				<th colspan="2">Player <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo $user['username']; ?></a></th>
-			</tr>                                       
+			</tr>
 			<tr>
 				<td>Details</td>
 				<td>Description</td>
@@ -64,7 +64,7 @@ if(isset($id))
 							<td></td>
 							<td></td>
 						</tr>
-						
+
 						<tr>
 							<th>Location</th>
 							<td><input class="fm" name="location" value="<?php echo $user['location']; ?>"></td>
@@ -115,7 +115,7 @@ if(isset($id))
 				foreach($varmedal as $medal)
 				{
 					$titel="Bonus";
-					switch ($medal['categorie']) 
+					switch ($medal['categorie'])
 					{
 						case "1":
 							$titel="Attacker of the Week";
@@ -129,7 +129,7 @@ if(isset($id))
 						case "4":
 							$titel="Robber of the week";
 						break;
-					}			
+					}
 					echo"
 					<tr>
 						<td> ".$titel."</td>
@@ -137,7 +137,7 @@ if(isset($id))
 						<td>".$medal['week']."</td>
 						<td>[#".$medal['id']."]</td>
 					</tr>";
-				} 
+				}
 			?>
 			<tr>
 				<td>Beginners Protection</td>
@@ -162,10 +162,10 @@ if(isset($id))
 			</tr>
 		</tfoot>
 	</table>
-	</form><?php 
+	</form><?php
 }
 else
 {
 	echo "<br /><br />Not found. <a href=\"javascript: history.go(-1)\"> Go Back</a>";
-} 
+}
 ?>

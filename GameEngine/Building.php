@@ -11,7 +11,7 @@
 #################################################################################
 
 
-class Building {	
+class Building {
 
 	public $NewBuilding = false;
 	private $maxConcurrent;
@@ -29,10 +29,10 @@ class Building {
 			$this->maxConcurrent += PLUS_MAX;
 		}
 		$this->LoadBuilding();
-		
+
 	}
-	
-	public function procBuild($get) { 
+
+	public function procBuild($get) {
 		global $session;
 		if(isset($get['a']) && $get['c'] == $session->checker && !isset($get['id'])) {
 			if($get['a'] == 0) {
@@ -53,7 +53,7 @@ class Building {
 			}
 		}
 	}
-	
+
 	public function canBuild($id,$tid) {
 		global $village,$session,$database;
 		$demolition = $database->getDemolition($village->wid);
@@ -112,7 +112,7 @@ class Building {
 											return 3;
 										}
 									}
-									else { 
+									else {
 										return 2;
 									}
 								}
@@ -169,7 +169,7 @@ class Building {
 		}
 		return false;
 	}
-	
+
 	public function rallying() {
 		foreach($this->buildArray as $job) {
 			if($job['type'] == 16) {
@@ -178,7 +178,7 @@ class Building {
 		}
 		return false;
 	}
-	
+
 	public function procResType($ref) {
 		global $session;
 		switch($ref) {
@@ -228,7 +228,7 @@ class Building {
 		}
 		return $build;
 	}
-	
+
 	private function loadBuilding() {
 		global $database,$village,$session;
 		$this->buildArray = $database->getJobs($village->wid);
@@ -255,7 +255,7 @@ class Building {
 			$this->NewBuilding = true;
 		}
 	}
-	
+
 	private function removeBuilding($d) {
 		global $database,$village;
 		foreach($this->buildArray as $jobs) {
@@ -275,7 +275,7 @@ class Building {
 			}
 		}
 	}
-	
+
 	private function upgradeBuilding($id) {
 		global $database,$village,$session,$logging;
 		if($this->allocated < $this->maxConcurrent) {
@@ -324,7 +324,7 @@ class Building {
 			}
 		}
 	}
-	
+
 		private function downgradeBuilding($id) {
 		global $database,$village,$session,$logging;
 		if($this->allocated < $this->maxConcurrent) {
@@ -346,7 +346,7 @@ class Building {
 								$time = $build['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
 							}
 						}
-					}					
+					}
 				}
 				else {
 					$time = $this->buildArray[0]['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
@@ -357,11 +357,11 @@ class Building {
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]-1),2);
 				header("Location: dorf2.php");
 			}
-		}	
+		}
 	}
-	
-	
-	
+
+
+
 	private function constructBuilding($id,$tid) {
 		global $database,$village,$session,$logging;
 		if($this->allocated < $this->maxConcurrent) {
@@ -392,7 +392,7 @@ class Building {
 			}
 		}
 	}
-	
+
 	private function meetRequirement($id) {
 		global $village,$session,$database;
 		switch($id) {
@@ -486,12 +486,12 @@ class Building {
 			case 37:
 			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(16) >= 1) { return true; } else { return false; }
 			break;
-            case 38:
-            if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
-            break;
-            case 39:
-            if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
-            break;  
+			case 38:
+			if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
+			break;
+			case 39:
+			if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
+			break;
 			case 40:
 			$wwlevel = $village->resarray['f'.$id];
 			if($wwlevel > 50){
@@ -506,7 +506,7 @@ class Building {
 			$wwbuildingplan += 1;
 			}
 			}
-            if($village->natar == 1 && $wwbuildingplan > $needed_plan) { return true; } else { return false; }
+			if($village->natar == 1 && $wwbuildingplan > $needed_plan) { return true; } else { return false; }
 			break;
 			case 41:
 			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20) { return true; } else { return false; }
@@ -516,7 +516,7 @@ class Building {
 			break;
 		}
 	}
-	
+
 	private function checkResource($tid,$id) {
 		$name = "bid".$tid;
 		global $village,$$name,$database;
@@ -553,7 +553,7 @@ class Building {
 			}
 		}
 	}
-	
+
 	public function isMax($id,$field,$loop=0) {
 		$name = "bid".$id;
 		global $$name,$village;
@@ -570,7 +570,7 @@ class Building {
 			return ($village->resarray['f'.$field] == count($dataarray) - $loop);
 		}
 	}
-	
+
 	public function getTypeLevel($tid,$vid=0) {
 		global $village,$database;
 		$keyholder = array();
@@ -583,7 +583,7 @@ class Building {
 			if(strpos($key,'t')) {
 				$key = preg_replace("/[^0-9]/", '', $key);
 				array_push($keyholder, $key);
-			}	 
+			}
 		}
 		$element = count($keyholder);
 		if($element >= 2) {
@@ -593,8 +593,8 @@ class Building {
 					array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
 				}
 				foreach ($temparray as $key => $val) {
-					if ($val == max($temparray)) 
-					$target = $key; 
+					if ($val == max($temparray))
+					$target = $key;
 				}
 			}
 			else {
@@ -619,8 +619,8 @@ class Building {
 			return 0;
 		}
 	}
-	
-	
+
+
 	public function isCurrent($id) {
 		foreach($this->buildArray as $build) {
 			if($build['field'] == $id && $build['loopcon'] <> 1) {
@@ -628,7 +628,7 @@ class Building {
 			}
 		}
 	}
-	
+
 	public function isLoop($id=0) {
 		foreach($this->buildArray as $build) {
 			if(($build['field'] == $id && $build['loopcon']) || ($build['loopcon'] == 1 && $id == 0)) {
@@ -637,10 +637,10 @@ class Building {
 		}
 		return false;
 	}
-	
+
 	public function finishAll() {
 		global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
-		if($session->access!=BANNED){		
+		if($session->access!=BANNED){
 		foreach($this->buildArray as $jobs) {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
@@ -651,7 +651,7 @@ class Building {
 				$resource = $this->resourceRequired($jobs['field'],$jobs['type']);
 				if($jobs['master'] == 0){
 				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
-			  	}else{
+				}else{
 				$villwood = $database->getVillageField($jobs['wid'],'wood');
 				$villclay = $database->getVillageField($jobs['wid'],'clay');
 				$villiron = $database->getVillageField($jobs['wid'],'iron');
@@ -676,7 +676,7 @@ class Building {
 						$max = $bid18[$level]['attri'];
 						$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
 						$database->query($q);
-					}		
+					}
 				}
 				if(($jobs['field'] >= 19 && ($session->tribe == 1 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1)) { $innertimestamp = $jobs['timestamp']; }
 			}
@@ -699,7 +699,7 @@ class Building {
 		header("Location: banned.php");
 		}
 	}
-	
+
 	public function resourceRequired($id,$tid,$plus=1) {
 		$name = "bid".$tid;
 		global $$name,$village,$bid15;
@@ -728,7 +728,7 @@ class Building {
 		$cp = $dataarray[$village->resarray['f'.$id]+$plus]['cp'];
 		return array("wood"=>$wood,"clay"=>$clay,"iron"=>$iron,"crop"=>$crop,"pop"=>$pop,"time"=>$time,"cp"=>$cp);
 	}
-	
+
 	public function getTypeField($type) {
 		global $village;
 		for($i=19;$i<=40;$i++) {
@@ -737,7 +737,7 @@ class Building {
 			}
 		}
 	}
-	
+
 	public function calculateAvaliable($id,$tid,$plus=1) {
 		global $village,$generator;
 		$uprequire = $this->resourceRequired($id,$tid,$plus);

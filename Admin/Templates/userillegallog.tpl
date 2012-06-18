@@ -15,7 +15,7 @@ if(isset($id))
 				<td>Description</td>
 			</tr>
 		</thead>
-		<tbody>  
+		<tbody>
 			<?php
 				$sql = "SELECT * FROM ".TB_PREFIX."illegal_log WHERE user = $id";
 				$result = mysql_query($sql);

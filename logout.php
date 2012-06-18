@@ -45,8 +45,8 @@ $start = $generator->pageLoadTimeStart();
 		window.addEvent('domready', start);
 	</script>
 </head>
- 
- 
+
+
 <body class="v35 ie ie8">
 <div class="wrapper">
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
@@ -72,8 +72,8 @@ include("Templates/news.tpl");
 <div class="footer-stopper"></div>
 <div class="clear"></div>
 
-<?php 
-include("Templates/footer.tpl"); 
+<?php
+include("Templates/footer.tpl");
 ?>
 <div id="stime">
 <div id="ltime">
@@ -81,7 +81,7 @@ include("Templates/footer.tpl");
 Calculated in <b><?php
 echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 ?></b> ms
- 
+
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
 	</div>

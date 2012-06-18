@@ -44,8 +44,8 @@ if(isset($_GET['g'])) {
 
 
 
-          echo '<br /><br /><font color="Red"><b>World Wonders Added</font></b>';
+		  echo '<br /><br /><font color="Red"><b>World Wonders Added</font></b>';
 
-          }
+		  }
 
 ?>

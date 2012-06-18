@@ -21,12 +21,12 @@ function template($filepath, $subs)
 		print "File '$filepath' not found";
 		return false;
 	}
-	
+
 	foreach($subs as $sub => $repl)
 	{
 		$text = str_replace($sub, $repl, $text);
 	}
-	
+
 	ob_start();
 		eval("?>".$text);
 		$text = ob_get_contents();

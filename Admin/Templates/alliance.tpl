@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -20,7 +20,7 @@ if($_GET['aid'])
 		{
 			$totalpop += $database->getVSumField($member['id'],"pop");
 		} ?>
-	
+
 		<br>
 		<table id="profile" cellpadding="1" cellspacing="1">
 			<thead>
@@ -65,7 +65,7 @@ if($_GET['aid'])
 									<td><?php echo count($aliusers); ?></td>
 								</tr>
 								<tr>
-									<td colspan="2" class="empty"></td>  
+									<td colspan="2" class="empty"></td>
 								</tr>
 								<tr>
 									<th>Alliance Founder</th>
@@ -74,7 +74,7 @@ if($_GET['aid'])
 								<tr>
 									<td colspan="2"><b>Alliance Positions</b></td>
 								</tr>
-								
+
 								<?php
 									error_reporting(0);
 									$sql = "SELECT * FROM ".TB_PREFIX."ali_permission WHERE alliance = ".$_GET['aid']."";
@@ -90,7 +90,7 @@ if($_GET['aid'])
 										if($row['opt6'] == 1) { $position6 = "Alliance Diplomacy"; } else { $position6 = "No Diplomacy"; }
 										if($row['opt7'] == 1) { $position7 = "Mass IGMs (MMs)"; } else { $position7 = "No MMs"; }
 										if($row['opt8'] == 1) { $position8 = "???"; } else { $position8 = "No ???"; }
-										
+
 										echo '
 										<tr>
 											<td>Position:</td>
@@ -111,7 +111,7 @@ if($_GET['aid'])
 										';
 									}
 								?>
-								
+
 								<tr>
 									<th>Capacity</th>
 									<td>
@@ -167,8 +167,8 @@ if($_GET['aid'])
 				</tr>
 			</tbody>
 		</table>
-		
-		
+
+
 		<table id="member" cellpadding="1" cellspacing="1">
 			<thead>
 				<tr>
@@ -188,11 +188,11 @@ if($_GET['aid'])
 					$TotalVillages = $database->getProfileVillages($user['id']);
 					echo "<tr>";
 					echo "<td class=ra>".$rank.".</td>";
-					echo "<td class=pla><a href=spieler.php?uid=".$user['id'].">".$user['username']."</a></td>"; 
-					echo "<td class=hab>".$TotalUserPop."</td>"; 
+					echo "<td class=pla><a href=spieler.php?uid=".$user['id'].">".$user['username']."</a></td>";
+					echo "<td class=hab>".$TotalUserPop."</td>";
 					echo "<td class=vil>".count($TotalVillages)."</td>";
 					if($aid == $session->alliance)
-					{	
+					{
 						if ((time()-600) < $user['timestamp'])
 						{
 							// 0 Min - 10 Min
@@ -201,29 +201,29 @@ if($_GET['aid'])
 						elseif ((time()-86400) < $user['timestamp'] && (time()-600) > $user['timestamp'])
 						{
 							// 10 Min - 1 Days
-							echo "<td class=on><img class=online2 src=img/x.gif title=now online alt=now online /></td>";              
+							echo "<td class=on><img class=online2 src=img/x.gif title=now online alt=now online /></td>";
 						}
 						elseif ((time()-259200) < $user['timestamp'] && (time()-86400) > $user['timestamp'])
-						{ 
+						{
 							// 1-3 Days
-							echo "<td class=on><img class=online3 src=img/x.gif title=now online alt=now online /></td>";    
+							echo "<td class=on><img class=online3 src=img/x.gif title=now online alt=now online /></td>";
 						}
 						elseif ((time()-604800) < $user['timestamp'] && (time()-259200) > $user['timestamp'])
 						{
-							echo "<td class=on><img class=online4 src=img/x.gif title=now online alt=now online /></td>";    
+							echo "<td class=on><img class=online4 src=img/x.gif title=now online alt=now online /></td>";
 						}
 						else
 						{
-							echo "<td class=on><img class=online5 src=img/x.gif title=now online alt=now online /></td>";   
+							echo "<td class=on><img class=online5 src=img/x.gif title=now online alt=now online /></td>";
 						}
 					}
-					echo "	</tr>";    
+					echo "	</tr>";
 				}
-			?> 
+			?>
 			</tbody>
 		</table>
 		<br /><br />
-		
+
 		<table id="profile">
 			<thead>
 				<tr>
@@ -249,7 +249,7 @@ if($_GET['aid'])
 			</thead>
 		</table>
 		<br /><br />
-		
+
 		<h3>Not Sure this Diplomacy is correct, but I think it is</h3>
 		<br />
 		<table id="profile">
@@ -273,7 +273,7 @@ if($_GET['aid'])
 						if($row['type'] == 3) { $type = 'Declaration of War'; }
 						if($row['accepted'] == 0) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/del.gif\">"; }
 						if($row['accepted'] ==1) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/acc.gif\">"; }
-					
+
 						$ally = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
 						echo '
 						<tr>
@@ -286,7 +286,7 @@ if($_GET['aid'])
 			</thead>
 		</table>
 		<br /><br />
-		
+
 		<table id="profile">
 			<thead>
 				<tr>
@@ -308,7 +308,7 @@ if($_GET['aid'])
 						if($row['type'] == 3) { $type = 'Declaration of War'; }
 						if($row['accepted'] == 0) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/del.gif\">"; }
 						if($row['accepted'] ==1) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/acc.gif\">"; }
-					
+
 						$ally = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
 						echo '
 						<tr>
@@ -320,9 +320,9 @@ if($_GET['aid'])
 				?>
 			</thead>
 		</table>
-		
+
 		<br /><br />
-		
+
 		<table id="profile">
 			<thead>
 				<tr>
@@ -344,7 +344,7 @@ if($_GET['aid'])
 						if($row['type'] == 3) { $type = 'Declaration of War'; }
 						if($row['accepted'] == 0) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/del.gif\">"; }
 						if($row['accepted'] == 1) { $accepted = "<img src=\"../../<?php echo GP_LOCATE; ?>img/a/acc.gif\">"; }
-					
+
 						$ally1 = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
 						$ally2 = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
 						echo '
@@ -357,9 +357,9 @@ if($_GET['aid'])
 				?>
 			</thead>
 		</table>
-		
+
 		<br /><br />
-		
+
 		<?php
 		include("allymedals.tpl");
 	}

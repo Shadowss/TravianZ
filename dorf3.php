@@ -1,4 +1,4 @@
-<?php  
+<?php
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -27,7 +27,7 @@ if(isset($_GET['newdid'])) {
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
-    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<link REL="shortcut icon" HREF="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -54,8 +54,8 @@ if(isset($_GET['newdid'])) {
 		window.addEvent('domready', start);
 	</script>
 </head>
- 
- 
+
+
 <body class="v35 ie ie8">
 <div class="wrapper">
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
@@ -66,25 +66,25 @@ if(isset($_GET['newdid'])) {
 <?php include("Templates/menu.tpl"); ?>
 <div id="content"  class="village3">
 
-<?php 
+<?php
 if($session->plus){
   if(isset($_GET['s'])){
-    if($_GET['s'] == 2){
-      include("Templates/dorf3/2.tpl");   
-    }elseif($_GET['s'] == 3){
-      include("Templates/dorf3/3.tpl");   
-    }elseif($_GET['s'] == 4){
-      include("Templates/dorf3/4.tpl");   
-    }elseif($_GET['s'] == 5){
-      include("Templates/dorf3/5.tpl");   
-    }
+	if($_GET['s'] == 2){
+	  include("Templates/dorf3/2.tpl");
+	}elseif($_GET['s'] == 3){
+	  include("Templates/dorf3/3.tpl");
+	}elseif($_GET['s'] == 4){
+	  include("Templates/dorf3/4.tpl");
+	}elseif($_GET['s'] == 5){
+	  include("Templates/dorf3/5.tpl");
+	}
   }else{
-    include("Templates/dorf3/1.tpl");     
-  } 
+	include("Templates/dorf3/1.tpl");
+  }
 }else{
-  include("Templates/dorf3/noplus.tpl"); 
-}     
-?>           
+  include("Templates/dorf3/noplus.tpl");
+}
+?>
 </div>
 
 <div id="side_info">
@@ -98,9 +98,9 @@ include("Templates/links.tpl");
 </div>
 <div class="footer-stopper"></div>
 <div class="clear"></div>
-<?php 
-include("Templates/footer.tpl"); 
-include("Templates/res.tpl"); 
+<?php
+include("Templates/footer.tpl");
+include("Templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">
@@ -108,7 +108,7 @@ include("Templates/res.tpl");
 Calculated in <b><?php
 echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 ?></b> ms
- 
+
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
 	</div>

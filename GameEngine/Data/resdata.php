@@ -25,7 +25,7 @@ $r15=array('wood'=>2320,'clay'=>1180,'iron'=>2520,'crop'=>610,'time'=>9000);
 $r16=array('wood'=>2800,'clay'=>2160,'iron'=>4040,'crop'=>640,'time'=>10680);
 $r17=array('wood'=>6100,'clay'=>1300,'iron'=>3000,'crop'=>580,'time'=>14400);
 $r18=array('wood'=>5500,'clay'=>4900,'iron'=>5000,'crop'=>520,'time'=>28800);
-$r19=array('wood'=>18250,'clay'=>13500,'iron'=>20400,'crop'=>16480,'time'=>19425);		
+$r19=array('wood'=>18250,'clay'=>13500,'iron'=>20400,'crop'=>16480,'time'=>19425);
 $r22=array('wood'=>940,'clay'=>700,'iron'=>1680,'crop'=>520,'time'=>6120);
 $r23=array('wood'=>1120,'clay'=>700,'iron'=>360,'crop'=>400,'time'=>5880);
 $r24=array('wood'=>2200,'clay'=>1900,'iron'=>2040,'crop'=>520,'time'=>9240);
@@ -41,7 +41,7 @@ $r35=array('wood'=>2320,'clay'=>1180,'iron'=>2520,'crop'=>610,'time'=>9000);
 $r36=array('wood'=>2800,'clay'=>2160,'iron'=>4040,'crop'=>640,'time'=>10680);
 $r37=array('wood'=>6100,'clay'=>1300,'iron'=>3000,'crop'=>580,'time'=>14400);
 $r38=array('wood'=>5500,'clay'=>4900,'iron'=>5000,'crop'=>520,'time'=>28800);
-$r39=array('wood'=>18250,'clay'=>13500,'iron'=>20400,'crop'=>16480,'time'=>19425);        
+$r39=array('wood'=>18250,'clay'=>13500,'iron'=>20400,'crop'=>16480,'time'=>19425);
 $r42=array('wood'=>970,'clay'=>380,'iron'=>880,'crop'=>400,'time'=>5160);
 $r43=array('wood'=>880,'clay'=>580,'iron'=>1560,'crop'=>580,'time'=>5400);
 $r44=array('wood'=>1060,'clay'=>500,'iron'=>600,'crop'=>460,'time'=>5160);
@@ -49,7 +49,7 @@ $r45=array('wood'=>2320,'clay'=>1180,'iron'=>2520,'crop'=>610,'time'=>9000);
 $r46=array('wood'=>2800,'clay'=>2160,'iron'=>4040,'crop'=>640,'time'=>10680);
 $r47=array('wood'=>6100,'clay'=>1300,'iron'=>3000,'crop'=>580,'time'=>14400);
 $r48=array('wood'=>5500,'clay'=>4900,'iron'=>5000,'crop'=>520,'time'=>28800);
-$r49=array('wood'=>18250,'clay'=>13500,'iron'=>20400,'crop'=>16480,'time'=>19425);        
+$r49=array('wood'=>18250,'clay'=>13500,'iron'=>20400,'crop'=>16480,'time'=>19425);
 
 //Armoury
 //Blacksmith

@@ -4,131 +4,131 @@
 
 window
 
-    .addEvent('domready', function()
+	.addEvent('domready', function()
 
-    {
+	{
 
 
 
-        $$('*.dynamic_img').addEvents(
+		$$('*.dynamic_img').addEvents(
 
-        {
+		{
 
-            'mouseenter': function()
+			'mouseenter': function()
 
-            {
+			{
 
-                this.addClass('over');
+				this.addClass('over');
 
-            },
+			},
 
-            'mouseleave': function()
+			'mouseleave': function()
 
-            {
+			{
 
-                this.removeClass('over');
+				this.removeClass('over');
 
-                this.removeClass('clicked');
+				this.removeClass('clicked');
 
-            },
+			},
 
-            'mousedown': function()
+			'mousedown': function()
 
-            {
+			{
 
-                this.removeClass('over');
+				this.removeClass('over');
 
-                this.addClass('clicked');
+				this.addClass('clicked');
 
-            }
+			}
 
-        });
+		});
 
 
 
-        $$('img.tSwitch')
+		$$('img.tSwitch')
 
-            .addEvents(
+			.addEvents(
 
-            {
+			{
 
-                'mousedown': function()
+				'mousedown': function()
 
-                {
+				{
 
-                    var tbody = this.getParent('thead').getNext('tbody');
+					var tbody = this.getParent('thead').getNext('tbody');
 
-                    tbody.toggleClass('hide');
+					tbody.toggleClass('hide');
 
-                    if (tbody.hasClass('hide'))
+					if (tbody.hasClass('hide'))
 
-                    {
+					{
 
-                        document.cookie = 't3' + this.getParent('table')
+						document.cookie = 't3' + this.getParent('table')
 
-                            .getProperty('id') + '=1; expires=Wed, 1 Jan 2020 00:00:00 GMT';
+							.getProperty('id') + '=1; expires=Wed, 1 Jan 2020 00:00:00 GMT';
 
-                        this.removeClass('opened');
+						this.removeClass('opened');
 
-                        this.addClass('closed');
+						this.addClass('closed');
 
-                    }
+					}
 
-                    else
+					else
 
-                    {
+					{
 
-                        document.cookie = 't3' + this.getParent('table')
+						document.cookie = 't3' + this.getParent('table')
 
-                            .getProperty('id') + '=1; expires=Thu, 01-Jan-1970 00:00:01 GMT';
+							.getProperty('id') + '=1; expires=Thu, 01-Jan-1970 00:00:01 GMT';
 
-                        this.removeClass('closed');
+						this.removeClass('closed');
 
-                        this.addClass('opened');
+						this.addClass('opened');
 
-                    }
+					}
 
-                }
+				}
 
-            });
+			});
 
 
 
-        $$('table.row_table_data tbody tr').addEvents(
+		$$('table.row_table_data tbody tr').addEvents(
 
-        {
+		{
 
-            'mouseenter': function()
+			'mouseenter': function()
 
-            {
+			{
 
-                this.addClass('hlight');
+				this.addClass('hlight');
 
-            },
+			},
 
-            'mouseleave': function()
+			'mouseleave': function()
 
-            {
+			{
 
-                this.removeClass('hlight');
+				this.removeClass('hlight');
 
-            },
+			},
 
-            'mousedown': function()
+			'mousedown': function()
 
-            {
+			{
 
-                this.toggleClass('marked');
+				this.toggleClass('marked');
 
-            }
+			}
 
-        });
+		});
 
 
 
-    });
+	});
 
-    
+
 
 // IE MooTools Fix
 
@@ -136,493 +136,493 @@ if (Browser.Engine.trident) // für IE
 
 {
 
-    /**
+	/**
 
-     * Element Erweiterungen
+	 * Element Erweiterungen
 
-     *
+	 *
 
-     */
+	 */
 
-    Element.implement(
+	Element.implement(
 
-    {
+	{
 
-        insertAtCursor: function(value, select)
+		insertAtCursor: function(value, select)
 
-        {
+		{
 
-            var pos = this.getSelectedRange();
+			var pos = this.getSelectedRange();
 
 
 
-            // IE fix BEGIN
+			// IE fix BEGIN
 
-            if (pos.start == 0 && pos.end == 0)
+			if (pos.start == 0 && pos.end == 0)
 
-            {
+			{
 
-                this.focus();
+				this.focus();
 
-                sel = document.selection.createRange();
+				sel = document.selection.createRange();
 
-                sel.text = value;
+				sel.text = value;
 
-                this.focus();
+				this.focus();
 
-                return this;
+				return this;
 
-            }
+			}
 
-            // IE fix END
+			// IE fix END
 
 
 
-            var text = this.get('value');
+			var text = this.get('value');
 
-            this.set('value', text.substring(0, pos.start) + value + text.substring(pos.end, text.length));
+			this.set('value', text.substring(0, pos.start) + value + text.substring(pos.end, text.length));
 
-            if ($pick(select, true))
+			if ($pick(select, true))
 
-            {
+			{
 
-                this.selectRange(pos.start, pos.start + value.length);
+				this.selectRange(pos.start, pos.start + value.length);
 
-            }
+			}
 
-            else
+			else
 
-            {
+			{
 
-                this.setCaretPosition(pos.start + value.length);
+				this.setCaretPosition(pos.start + value.length);
 
-            }
+			}
 
 
 
-            return this;
+			return this;
 
-        },
+		},
 
 
 
-        insertAroundCursor: function(options, select)
+		insertAroundCursor: function(options, select)
 
-        {
+		{
 
-            options = $extend(
+			options = $extend(
 
-            {
+			{
 
-                before: '',
+				before: '',
 
-                defaultMiddle: '',
+				defaultMiddle: '',
 
-                after: ''
+				after: ''
 
-            }, options);
+			}, options);
 
 
 
-            var value = this.getSelectedText() || options.defaultMiddle;
+			var value = this.getSelectedText() || options.defaultMiddle;
 
-            var pos = this.getSelectedRange();
+			var pos = this.getSelectedRange();
 
 
 
-            // IE fix BEGIN
+			// IE fix BEGIN
 
-            if (pos.start == 0 && pos.end == 0)
+			if (pos.start == 0 && pos.end == 0)
 
-            {
+			{
 
-                this.focus();
+				this.focus();
 
-                sel = document.selection.createRange();
+				sel = document.selection.createRange();
 
-                sel.text = options.before + options.after;
+				sel.text = options.before + options.after;
 
-                this.focus();
+				this.focus();
 
-                return this;
+				return this;
 
-            }
+			}
 
-            // IE fix END
+			// IE fix END
 
 
 
-            var text = this.get('value');
+			var text = this.get('value');
 
-            if (pos.start == pos.end)
+			if (pos.start == pos.end)
 
-            {
+			{
 
-                this.set('value', text.substring(0, pos.start) + options.before + value + options.after + text.substring(pos.end, text.length));
+				this.set('value', text.substring(0, pos.start) + options.before + value + options.after + text.substring(pos.end, text.length));
 
-                this.selectRange(pos.start + options.before.length, pos.end + options.before.length + value.length);
+				this.selectRange(pos.start + options.before.length, pos.end + options.before.length + value.length);
 
-            }
+			}
 
-            else
+			else
 
-            {
+			{
 
-                var current = text.substring(pos.start, pos.end);
+				var current = text.substring(pos.start, pos.end);
 
-                this.set('value', text.substring(0, pos.start) + options.before + current + options.after + text.substring(pos.end, text.length));
+				this.set('value', text.substring(0, pos.start) + options.before + current + options.after + text.substring(pos.end, text.length));
 
-                var selStart = pos.start + options.before.length;
+				var selStart = pos.start + options.before.length;
 
 
 
-                if ($pick(select, true))
+				if ($pick(select, true))
 
-                {
+				{
 
-                    this.selectRange(selStart, selStart + current.length);
+					this.selectRange(selStart, selStart + current.length);
 
-                }
+				}
 
-                else
+				else
 
-                {
+				{
 
-                    this.setCaretPosition(selStart + text.length);
+					this.setCaretPosition(selStart + text.length);
 
-                }
+				}
 
-            }
+			}
 
-            return this;
+			return this;
 
-        }
+		}
 
-    });
+	});
 
 }
 
-    
+
 
 var BBEditor = new Class ({
 
-    preview: null,
+	preview: null,
 
-    textArea: null,
+	textArea: null,
 
-    id: null,
+	id: null,
 
 
 
-    Binds: ['fetchPreview', 'showToolbarWindow', 'insertTag', 'insertSingleTag', 'insertSmilieTag', 'hideToolbarWindow', 'showPreview', 'hidePreview'],
+	Binds: ['fetchPreview', 'showToolbarWindow', 'insertTag', 'insertSingleTag', 'insertSmilieTag', 'hideToolbarWindow', 'showPreview', 'hidePreview'],
 
 
 
-    /**
+	/**
 
-     * Initialisiert den Editor
+	 * Initialisiert den Editor
 
-     */
+	 */
 
-    initialize: function(textAreaId) {
+	initialize: function(textAreaId) {
 
 
 
-        //connect elements
+		//connect elements
 
-        this.id = textAreaId;
+		this.id = textAreaId;
 
-        this.textArea = $(textAreaId);
+		this.textArea = $(textAreaId);
 
-        this.toolbar = $(textAreaId + '_toolbar');
+		this.toolbar = $(textAreaId + '_toolbar');
 
-        this.preview = $(textAreaId + '_preview');
+		this.preview = $(textAreaId + '_preview');
 
 
 
-        //init elements
+		//init elements
 
-        this.preview.setStyle('display', 'none');
+		this.preview.setStyle('display', 'none');
 
 
 
-        //add Events
+		//add Events
 
-        $(textAreaId + '_previewButton').addEvent('click', this.fetchPreview);
+		$(textAreaId + '_previewButton').addEvent('click', this.fetchPreview);
 
-        $(textAreaId + '_resourceButton').addEvent('click', this.showToolbarWindow);
+		$(textAreaId + '_resourceButton').addEvent('click', this.showToolbarWindow);
 
-        $(textAreaId + '_smilieButton').addEvent('click', this.showToolbarWindow);
+		$(textAreaId + '_smilieButton').addEvent('click', this.showToolbarWindow);
 
-        $(textAreaId + '_troopButton').addEvent('click', this.showToolbarWindow);
+		$(textAreaId + '_troopButton').addEvent('click', this.showToolbarWindow);
 
-        $(textAreaId).addEvent('click', this.hideToolbarWindow);
+		$(textAreaId).addEvent('click', this.hideToolbarWindow);
 
-        this.addEvent($(textAreaId + '_toolbar'), this.insertTag);
+		this.addEvent($(textAreaId + '_toolbar'), this.insertTag);
 
-        this.addEvent($(textAreaId + '_resources'), this.insertTag);
+		this.addEvent($(textAreaId + '_resources'), this.insertTag);
 
-        this.addEvent($(textAreaId + '_smilies'), this.insertTag);
+		this.addEvent($(textAreaId + '_smilies'), this.insertTag);
 
-        this.addEvent($(textAreaId + '_troops'), this.insertTag);
+		this.addEvent($(textAreaId + '_troops'), this.insertTag);
 
-    },
+	},
 
 
 
-    /**
+	/**
 
-     * Fügt den klickbaren Objekten die Events hinzu
+	 * Fügt den klickbaren Objekten die Events hinzu
 
-     *
+	 *
 
-     * @param object containerObjekt
+	 * @param object containerObjekt
 
-     * @param string callback
+	 * @param string callback
 
-     */
+	 */
 
-    addEvent: function(div, call) {
+	addEvent: function(div, call) {
 
-        var childen =  div.getChildren();
+		var childen =  div.getChildren();
 
-        for (i = 0; i < childen.length; i++) {
+		for (i = 0; i < childen.length; i++) {
 
-            if ($(childen[i]).get('bbTag')) {
+			if ($(childen[i]).get('bbTag')) {
 
-                $(childen[i]).addEvent('click', call);
+				$(childen[i]).addEvent('click', call);
 
-            }
+			}
 
-        }
+		}
 
-    },
+	},
 
 
 
-    /**
+	/**
 
-     * Fügt einen ausgewählten Tag in die
+	 * Fügt einen ausgewählten Tag in die
 
-     * Textarea ein
+	 * Textarea ein
 
-     *
+	 *
 
-     * @param Object
+	 * @param Object
 
-     */
+	 */
 
-    insertTag: function(Event) {
+	insertTag: function(Event) {
 
-        this.hidePreview();
+		this.hidePreview();
 
-        var link = $(Event.target.parentNode);
+		var link = $(Event.target.parentNode);
 
-        var tag = link.get('bbTag');
+		var tag = link.get('bbTag');
 
 
 
-        switch (link.get('bbType')) {
+		switch (link.get('bbType')) {
 
-            //double tag
+			//double tag
 
-            case 'd':
+			case 'd':
 
-                this.textArea.insertAroundCursor({before: '[' + tag + ']', after: '[/' + tag + ']'});
+				this.textArea.insertAroundCursor({before: '[' + tag + ']', after: '[/' + tag + ']'});
 
-                break;
+				break;
 
-            //smilie
+			//smilie
 
-            case 's':
+			case 's':
 
-                this.textArea.insertAtCursor(tag, false);
+				this.textArea.insertAtCursor(tag, false);
 
-                break;
+				break;
 
-            //once
+			//once
 
-            case 'o':
+			case 'o':
 
-                this.textArea.insertAtCursor('[' + link.get('bbTag') + ']', false);
+				this.textArea.insertAtCursor('[' + link.get('bbTag') + ']', false);
 
-                break;
+				break;
 
-        }
+		}
 
-    },
+	},
 
 
 
-    /**
+	/**
 
-     * Zeigt ein Unterfenster der Toolbar
+	 * Zeigt ein Unterfenster der Toolbar
 
-     * an
+	 * an
 
-     *
+	 *
 
-     * @param Object
+	 * @param Object
 
-     */
+	 */
 
-    showToolbarWindow: function(Event) {
+	showToolbarWindow: function(Event) {
 
-        var targetDiv = Event.target.parentNode;
+		var targetDiv = Event.target.parentNode;
 
-        var window = $(this.id + '_' +  targetDiv.get('bbWin'));
+		var window = $(this.id + '_' +  targetDiv.get('bbWin'));
 
 
 
-        var show = true;
+		var show = true;
 
-        if (window.getStyle('display') == 'block') {
+		if (window.getStyle('display') == 'block') {
 
-            show = false;
+			show = false;
 
-        }
+		}
 
 
 
-        this.hideToolbarWindow();
+		this.hideToolbarWindow();
 
 
 
-        if (show) {
+		if (show) {
 
-            window.fade('hide').fade('in');
+			window.fade('hide').fade('in');
 
-            window.setStyle('display', 'block');
+			window.setStyle('display', 'block');
 
-        }
+		}
 
-    },
+	},
 
 
 
-    /**
+	/**
 
-     * Versteckt die Fenster der Toolbar
+	 * Versteckt die Fenster der Toolbar
 
-     *
+	 *
 
-     * @param Object
+	 * @param Object
 
-     */
+	 */
 
-    hideToolbarWindow: function() {
+	hideToolbarWindow: function() {
 
-        var childen =  $(this.id + '_toolbarWindows').getChildren();
+		var childen =  $(this.id + '_toolbarWindows').getChildren();
 
-        for (i = 0; i < childen.length; i++) {
+		for (i = 0; i < childen.length; i++) {
 
-            $(childen[i]).setStyle('display', 'none');
+			$(childen[i]).setStyle('display', 'none');
 
-        }
+		}
 
-    },
+	},
 
 
 
-    /**
+	/**
 
-     * Holt die Vorschau vom Server
+	 * Holt die Vorschau vom Server
 
-     *
+	 *
 
-     * @param Object
+	 * @param Object
 
-     */
+	 */
 
-    fetchPreview: function(Event) {
+	fetchPreview: function(Event) {
 
-        if (this.textArea.getStyle('display') == 'none' || this.textArea.value.length < 1) {
+		if (this.textArea.getStyle('display') == 'none' || this.textArea.value.length < 1) {
 
-            this.hidePreview();
+			this.hidePreview();
 
-            return;
+			return;
 
-        }
+		}
 
 
 
-        var jsonRequest = new Request.JSON({
+		var jsonRequest = new Request.JSON({
 
-            method: 'post',
+			method: 'post',
 
-            url: 'ajax.php?f=bb',
+			url: 'ajax.php?f=bb',
 
-            data:
+			data:
 
-            {
+			{
 
-                nl2br:  1,
+				nl2br:  1,
 
-                target: this.id,
+				target: this.id,
 
-                text:   this.textArea.value
+				text:   this.textArea.value
 
-            },
+			},
 
-            onSuccess: this.showPreview
+			onSuccess: this.showPreview
 
-        });
+		});
 
-        jsonRequest.post();
+		jsonRequest.post();
 
-    },
+	},
 
 
 
-    /**
+	/**
 
-     * Zeigt die Vorschau
+	 * Zeigt die Vorschau
 
-     *
+	 *
 
-     * @param string textAreaId
+	 * @param string textAreaId
 
-     */
+	 */
 
-    showPreview: function(data) {
+	showPreview: function(data) {
 
-        if (data.error == true) {
+		if (data.error == true) {
 
-            alert(data.errorMsg);
+			alert(data.errorMsg);
 
-            return;
+			return;
 
-        } else {
+		} else {
 
-            this.preview.innerHTML = data.text;
+			this.preview.innerHTML = data.text;
 
-            this.preview.setStyle('display','block');
+			this.preview.setStyle('display','block');
 
-            this.textArea.setStyle('display','none');
+			this.textArea.setStyle('display','none');
 
-        }
+		}
 
-    },
+	},
 
 
 
-    /**
+	/**
 
-     * Versteckt die Vorschau
+	 * Versteckt die Vorschau
 
-     *
+	 *
 
-     * @param string textAreaId
+	 * @param string textAreaId
 
-     */
+	 */
 
-    hidePreview: function() {
+	hidePreview: function() {
 
-        this.preview.setStyle('display','none');
+		this.preview.setStyle('display','none');
 
-        this.textArea.setStyle('display','inline');
+		this.textArea.setStyle('display','inline');
 
-    }
+	}
 
 });
 
@@ -640,75 +640,75 @@ function getAttackSymbolState(id)
 
 {
 
-    var state = attackSysbolState[id];
+	var state = attackSysbolState[id];
 
 
 
-    if (!state)
+	if (!state)
 
-    {
+	{
 
-        state = new Object();
-
-
-
-        var type = 0;
+		state = new Object();
 
 
 
-        var imgClass = $('markSybol_'+id).get('class');
+		var type = 0;
 
 
 
-        var color = imgClass.substr(imgClass.lastIndexOf('_')+1, 11);
+		var imgClass = $('markSybol_'+id).get('class');
 
 
 
-        switch (color)
-
-        {
-
-            case 'green':
-
-                type = 1;
-
-                break;
-
-            case 'yellow':
-
-                type = 2;
-
-                break;
-
-            case 'red':
-
-                type = 3;
-
-                break;
-
-            default:
-
-                type = 0;
-
-                break;
-
-        }
-
-        state.type = type;
-
-        state.oldType = type;
+		var color = imgClass.substr(imgClass.lastIndexOf('_')+1, 11);
 
 
 
+		switch (color)
+
+		{
+
+			case 'green':
+
+				type = 1;
+
+				break;
+
+			case 'yellow':
+
+				type = 2;
+
+				break;
+
+			case 'red':
+
+				type = 3;
+
+				break;
+
+			default:
+
+				type = 0;
+
+				break;
+
+		}
+
+		state.type = type;
+
+		state.oldType = type;
 
 
-        attackSysbolState[id] = state;
-
-    }
 
 
 
-    return state;
+		attackSysbolState[id] = state;
+
+	}
+
+
+
+	return state;
 
 }
 
@@ -718,59 +718,59 @@ function drawAttackSymbol(id)
 
 {
 
-    var state = getAttackSymbolState(id);
+	var state = getAttackSymbolState(id);
 
 
 
-    if (state.type == 4)
+	if (state.type == 4)
 
-    {
+	{
 
-        state.type = 0;
+		state.type = 0;
 
-    }
+	}
 
 
 
-    switch (state.type)
+	switch (state.type)
 
-    {
+	{
 
-        case 1:
+		case 1:
 
-            img = 'img/green.gif';
+			img = 'img/green.gif';
 
-            color = 'green';
+			color = 'green';
 
-            break;
+			break;
 
-        case 2:
+		case 2:
 
-            img = 'img/yellow.gif';
+			img = 'img/yellow.gif';
 
-            color = 'yellow';
+			color = 'yellow';
 
-            break;
+			break;
 
-        case 3:
+		case 3:
 
-            img = 'img/red.gif';
+			img = 'img/red.gif';
 
-            color = 'red';
+			color = 'red';
 
-            break;
+			break;
 
-        default:
+		default:
 
-            img = 'img/grey.gif';
+			img = 'img/grey.gif';
 
-            color = 'grey';
+			color = 'grey';
 
-            break;
+			break;
 
-    }
+	}
 
-    $('markSybol_'+id).set('class', 'attack_symbol_'+color);
+	$('markSybol_'+id).set('class', 'attack_symbol_'+color);
 
 }
 
@@ -782,83 +782,83 @@ function markAttackSymbol(id)
 
 
 
-    var state = getAttackSymbolState(id);
+	var state = getAttackSymbolState(id);
 
-    state.type ++ ;
-
-
-
-    drawAttackSymbol(id);
+	state.type ++ ;
 
 
 
-    if (state.isSaving != true)
-
-    {
-
-        state.isSaving = true;
+	drawAttackSymbol(id);
 
 
 
-        (function()
+	if (state.isSaving != true)
 
-        {
+	{
 
-            if (state.type != state.oldType)
-
-            {
-
-                var jsonRequest = new Request.JSON(
-
-                {
-
-                   method: 'post',
-
-                   url: 'ajax.php?f=vp&id='+id+'&state='+state.type,
-
-                   onSuccess: function(data)
-
-                   {
-
-                        var state = getAttackSymbolState(data.id);
+		state.isSaving = true;
 
 
 
-                        state.isSaving = false;
+		(function()
+
+		{
+
+			if (state.type != state.oldType)
+
+			{
+
+				var jsonRequest = new Request.JSON(
+
+				{
+
+				   method: 'post',
+
+				   url: 'ajax.php?f=vp&id='+id+'&state='+state.type,
+
+				   onSuccess: function(data)
+
+				   {
+
+						var state = getAttackSymbolState(data.id);
 
 
 
-                        state.type = data.type;
-
-                        state.oldType = data.type;
+						state.isSaving = false;
 
 
 
-                        drawAttackSymbol(data.id);
+						state.type = data.type;
 
-                   }
-
-                });
-
-                jsonRequest.post();
-
-            }
-
-            else
-
-            {
-
-                state.isSaving = false;
+						state.oldType = data.type;
 
 
 
-            }
+						drawAttackSymbol(data.id);
+
+				   }
+
+				});
+
+				jsonRequest.post();
+
+			}
+
+			else
+
+			{
+
+				state.isSaving = false;
 
 
 
-         }).delay(1000);
+			}
 
-    }
+
+
+		 }).delay(1000);
+
+	}
 
 
 

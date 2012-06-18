@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -12,10 +12,10 @@
 error_reporting(0);
 ?>
 <style>
-	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);} 
-</style>  
+	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
+</style>
 
-<table id="member"> 
+<table id="member">
 	<thead>
 		<tr>
 			<th colspan="7">Inactive users</th>
@@ -33,10 +33,10 @@ error_reporting(0);
 	<tbody>
 		<?php
 			$inactivei = time() - 86400;
-			$q = "SELECT * FROM ".TB_PREFIX."users where timestamp < $inactivei AND access=2";   		
+			$q = "SELECT * FROM ".TB_PREFIX."users where timestamp < $inactivei AND access=2";
 			$result = mysql_query($q);
 			$active = mysql_fetch_assoc($result);
-			
+
 			for ($i = 0; $i <= count($active)-1; $i++)
 			{
 				$uid = $database->getUserField($active[$i]['username'],'id',1);
@@ -70,8 +70,8 @@ error_reporting(0);
 					<td>".count($varray)."</td>
 					<td><img src=\"../img/admin/gold.gif\" class=\"gold\" alt=\"Gold\" title=\"This user has: ".$active[$i]['gold']." gold\"/> ".$active[$i]['gold']."</td>
 					<td><img src=\"../<?php echo GP_LOCATE; ?>img/a/online1.gif\"></td>
-				</tr>"; 
-			} 
-		?>  
+				</tr>";
+			}
+		?>
 	</tbody>
 </table>

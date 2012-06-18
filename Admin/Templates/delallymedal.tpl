@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -25,7 +25,7 @@ $nummedals = mysql_num_rows($sql);
 		<tr>
 			<th>Medal Information</th>
 		</tr>
-	</thead> 
+	</thead>
 </table>
 <table id="profile">
 	<thead>
@@ -60,7 +60,7 @@ $nummedals = mysql_num_rows($sql);
 		<tr>
 			<th>Medal Week by Week</th>
 		</tr>
-	</thead> 
+	</thead>
 </table>
 <table id="profile">
 	<thead>
@@ -94,7 +94,7 @@ $nummedals = mysql_num_rows($sql);
 		<tr>
 			<th>All Medals (<?php echo $nummedals; ?>)</th>
 		</tr>
-	</thead> 
+	</thead>
 </table>
 <table id="profile">
 	<thead>
@@ -116,7 +116,7 @@ $nummedals = mysql_num_rows($sql);
 			{
 				$i = $i + 1;
 				$titel="Bonus";
-				switch ($row['categorie']) 
+				switch ($row['categorie'])
 				{
 					case "1": 	$titel="Attackers"; break;
 					case "2": 	$titel="Defenders"; break;
@@ -129,11 +129,11 @@ $nummedals = mysql_num_rows($sql);
 				$points = $row['points'];
 				$bb = $row['id'];
 				$allyid = $row['allyid'];
-				
+
 				$unq = "SELECT name FROM ".TB_PREFIX."alidata WHERE id = ".$allyid."";
 				$user = mysql_result(mysql_query($unq), 0);
 				$allyname = $user;
-				
+
 				$alliance = '<a href="admin.php?p=alliance&aid='.$allyid.'">'.$allyname.'</a>';
 				echo"
 				<tr>

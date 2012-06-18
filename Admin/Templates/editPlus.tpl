@@ -11,7 +11,7 @@
 
 $id = $_GET['uid'];
 $uid = $_GET['uid'];
-$user = $database->getUserArray($id,1); 
+$user = $database->getUserArray($id,1);
 if(isset($id))
 {
 	?>
@@ -20,7 +20,7 @@ if(isset($id))
 		<input type="hidden" name="uid" value="<?php echo $uid; ?>" />
 		<input type="hidden" name="id" value="<?php echo $id; ?>" />
 			<br /><br />
-			
+
 			<table id="profile">
 				<tbody>
 					<td class="details">

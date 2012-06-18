@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -35,15 +35,15 @@ $result = $admin->search_village($_POST['s']);
 		<tr>
 			<td style="background-color: #F3F3F3;">ID</th>
 			<td style="background-color: #F3F3F3;">Village Name</th>
-			<td style="background-color: #F3F3F3;">Village Owner</th>         
+			<td style="background-color: #F3F3F3;">Village Owner</th>
 			<td style="background-color: #F3F3F3;">Population</th>
 			<td style="background-color: #F3F3F3;"></th>
 		</tr>
 	</thead>
 	<tbody>
-		<?php      
+		<?php
 			if($result)
-			{  
+			{
 				for ($i = 0; $i <= count($result)-1; $i++)
 				{
 					$delLink = '<a href="?action=delVil&did='.$result[$i]['wref'].'" onClick="return del(\'did\','.$result[$i]['wref'].');"><img src="../img/Admin/del.gif" class="del"></a>';
@@ -54,7 +54,7 @@ $result = $admin->search_village($_POST['s']);
 						<td><a href="?p=player&uid='.$result[$i]["owner"].'">'.$database->getUserField($result[$i]["owner"],'username',0).'</a></td>
 						<td>'.$result[$i]["pop"].'</td>
 						<td>'.$delLink.'</td>
-					</tr>'; 
+					</tr>';
 				}
 				echo '
 					<tr>
@@ -71,7 +71,7 @@ $result = $admin->search_village($_POST['s']);
 					</tr>';
 			}
 			else
-			{  
+			{
 				echo '
 					<tr>
 						<td></td>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -11,8 +11,8 @@
 
 if($_GET['uid'])
 {
-	$user = $database->getUserArray($_GET['uid'],1);  
-	$varray = $database->getProfileVillages($_GET['uid']);                
+	$user = $database->getUserArray($_GET['uid'],1);
+	$varray = $database->getProfileVillages($_GET['uid']);
 	if($user)
 	{
 		$totalpop = 0;
@@ -21,13 +21,13 @@ if($_GET['uid'])
 			$totalpop += $vil['pop'];
 		} ?>
 		<style>
-			.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);} 
-		</style>  
+			.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
+		</style>
 		<form action="" method="post">
 			<input type="hidden" name="action" value="DelPlayer">
 			<input type="hidden" name="uid" value="<?php echo $user['id'];?>">
 			<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
-			<table id="member">    
+			<table id="member">
 				<thead>
 					<tr>
 						<th colspan="4">Delete player</th>
@@ -57,12 +57,12 @@ if($_GET['uid'])
 						</td>
 						<td><b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b>:</td>
 						<td>
-							<?php 
+							<?php
 								$plus = date('d.m.Y H:i',$user['plus']);
 								echo $plus;
 							?>
 						</td>
-					</tr> 
+					</tr>
 					<tr>
 						<td>Alliance:</td>
 						<td><?php echo $database->getAllianceName($user['alliance']);?></td>
@@ -80,7 +80,7 @@ if($_GET['uid'])
 				</tbody>
 			</table>
 			<br /><br /><font color="Red"><b>NOTICE: DELETE ALL PLAYER VILLAGES BELLOW BEFORE DELETING PLAYER!</font></b><br /><br />
-		
+
 			<table id="profile">
 				<thead>
 					<tr>
@@ -89,7 +89,7 @@ if($_GET['uid'])
 						<th>Coordinates</th>
 						<th></th>
 					</tr>
-					<?php         
+					<?php
 						for ($i = 0; $i <= count($varray)-1; $i++)
 						{
 							$coorproc = $database->getCoor($varray[$i]['wref']);
@@ -108,8 +108,8 @@ if($_GET['uid'])
 								<td>'.$varray[$i]['pop'].' <a href="?action=recountPop&did='.$varray[$i]['wref'].'">Check<a/></td>
 								<td>('.$coorproc['x'].'|'.$coorproc['y'].')</td>
 								<td>'.$delLink.' </td>
-							</tr>'; 
-						}  
+							</tr>';
+						}
 					?>
 				</thead>
 			</table>

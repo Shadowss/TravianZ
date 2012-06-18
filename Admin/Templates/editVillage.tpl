@@ -11,11 +11,11 @@
 
 $id = $_GET['did'];
 $village = $database->getVillage($id);
-$user = $database->getUserArray($village['owner'],1);  
-$coor = $database->getCoor($village['wref']); 
-$varray = $database->getProfileVillages($village['owner']); 
+$user = $database->getUserArray($village['owner'],1);
+$coor = $database->getCoor($village['wref']);
+$varray = $database->getProfileVillages($village['owner']);
 $type = $database->getVillageType($village['wref']);
-$fdata = $database->getResourceLevel($village['wref']); 
+$fdata = $database->getResourceLevel($village['wref']);
 if(isset($id))
 {
 	include("search2.tpl"); ?>
@@ -24,7 +24,7 @@ if(isset($id))
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="id" value="<?php echo $_GET['did']; ?>" />
 		<br />
-		
+
 		<a href="#" onclick="showStuff('instructions'); return false;">Show Instructions</a>
 		<span id="instructions" style="display: none;">
 			<h4>Building ID's (Position)</h4>
@@ -40,13 +40,13 @@ if(isset($id))
 					?>
 				</div>
 			</div>
-			
+
 			<div id="content" class="village2" style="padding: 0; margin-left: -20px;">
 				<div id="village_map" class="d2_0">
 					<?php
 					for($b =1; $b <21; $b++)
 					{
-						
+
 						echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">";
 					}
 					?>
@@ -60,7 +60,7 @@ if(isset($id))
 					</div>
 				</div>
 			</div>
-			
+
 			<table id="member">
 				<thead>
 					<tr>
@@ -91,14 +91,14 @@ if(isset($id))
 			</table>
 			<a href="#" onclick="hideStuff('instructions'); return false;">Hide Instructions</a>
 		</span>
-		
+
 		<br />
-		
+
 		<table id="member" cellpadding="1" cellspacing="1" >
 			<thead>
 				<tr>
 					<th colspan="4">Modify Buildings</th>
-				</tr> 
+				</tr>
 				<tr>
 					<td class="on">ID</td>
 					<td class="on">GID</td>
@@ -106,7 +106,7 @@ if(isset($id))
 					<td class="on">Level</td>
 				</tr>
 			</thead>
-			<tbody> 
+			<tbody>
 				<?php
 				for ($i = 1; $i <= 40; $i++)
 				{
@@ -122,17 +122,17 @@ if(isset($id))
 						<tr>
 							<td class="on">'.$i.'</td>
 							<td class="on"><input class="fm" name="id'.$i.'gid" value="'.$fdata['f'.$i.'t'].'"></td>
-							<td class="hab">'.$bu.'</td>   
-							<td class="on"><input class="fm" name="id'.$i.'level" value="'.$fdata['f'.$i].'"></td>    
+							<td class="hab">'.$bu.'</td>
+							<td class="on"><input class="fm" name="id'.$i.'level" value="'.$fdata['f'.$i].'"></td>
 						</tr>';
 				}
 				?>
 			</tbody>
 		</table>
-		
+
 		<br /><br />
 		<center><input type="image" src="../img/admin/b/ok1.gif" value="submit"></center>
-		
+
 		<br />
 		<div id="content" class="village1" style="min-height: 264px;">
 			<div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>" style="float: left;">
@@ -148,9 +148,9 @@ if(isset($id))
 		</div>
 		</div>
 		<br />
-		
+
 		<br /><br />
-		
+
 		<div id="content" class="village2">
 		<h1><?php echo $village['name']; ?></h1>
 		<div id="village_map" class="d2_0">

@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -20,23 +20,23 @@ comming soon
 <?php
 function line($x,$W){
 $a = 0;
-for ($i = 0; $i <= $x; $i++) {   
+for ($i = 0; $i <= $x; $i++) {
 $X = $W.'-'.$i;
-$c += 25; 
-$d = $W*25+25;   
-$b = 25*($W-1);    
-echo '<area shape="rect" coords="'.$a.','.$b.','.$c.','.$d.'" href="?x='.$W.'&y='.$i.'" alt="frames">';  
-$a += 25; 
+$c += 25;
+$d = $W*25+25;
+$b = 25*($W-1);
+echo '<area shape="rect" coords="'.$a.','.$b.','.$c.','.$d.'" href="?x='.$W.'&y='.$i.'" alt="frames">';
+$a += 25;
 }
 }
 
-function map($x,$y){          
-for ($i = 0; $i <= $y; $i++) {    
-line($x,$i);    
+function map($x,$y){
+for ($i = 0; $i <= $y; $i++) {
+line($x,$i);
 }
 }
 
- 
+
 map(20,20);
 
 

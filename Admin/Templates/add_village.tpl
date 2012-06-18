@@ -10,17 +10,17 @@
 #################################################################################
 ?>
 <style>
-	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);} 
-</style>  
+	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
+</style>
 <form method="post" action="admin.php">
 	<input name="action" type="hidden" value="addVillage">
 	<input name="uid" type="hidden" value="<?php echo $user['id'];?>">
-	<table id="member" style="width: 125px;"> 
+	<table id="member" style="width: 125px;">
 		<thead>
 			<tr>
 				<th colspan="2">Add Village</th>
 			</tr>
-		</thead>   
+		</thead>
 		<tbody>
 			<tr>
 				<td colspan="2"><center>Coordinates (<b>X</b>|<b>Y</b>)</center></td>

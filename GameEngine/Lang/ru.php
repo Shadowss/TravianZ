@@ -7,20 +7,20 @@
 //                              - TravianX = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-                                    //                         //
+									//                         //
 									//         Русский         //
-			                        //   Author: kylesv (sV)   //
+									//   Author: kylesv (sV)   //
 									/////////////////////////////
 
 //MAIN MENU
-define("TRIBE1","Римляне"); 
+define("TRIBE1","Римляне");
 define("TRIBE2","Германцы");
-define("TRIBE3","Галлы"); 
-define("TRIBE4","Природа"); 
+define("TRIBE3","Галлы");
+define("TRIBE4","Природа");
 define("TRIBE5","Натары");
 define("TRIBE6","Монстры");
- 
-define("HOME","Главная"); 
+
+define("HOME","Главная");
 define("INSTRUCT","Инструкции");
 define("ADMIN_PANEL","Админка");
 define("MULTIHUNTER_PAN","Мультих. панель");
@@ -108,9 +108,9 @@ define("WAITING_LOOP","(очередь)");
 define("HRS","ч.");
 define("DONE_AT","будет завершено в");
 define("CANCEL","отмена");
-define("LOYALTY","Лояльность:"); 
+define("LOYALTY","Лояльность:");
 define("CALCULATED_IN","Создана за");
-define("SEVER_TIME","Время сервера:");  
+define("SEVER_TIME","Время сервера:");
 define("MILISECS","мс");
 
 //QUEST
@@ -333,33 +333,33 @@ define("MASS_SENT","Mass IGM was sent");
 
 /*
 |--------------------------------------------------------------------------
-|   Index 
+|   Index
 |--------------------------------------------------------------------------
 */
 
-       $lang['index'][0][1] = "Welcome to " . SERVER_NAME . "";
-       $lang['index'][0][2] = "Manual";
-       $lang['index'][0][3] = "Play now, for free!";
-       $lang['index'][0][4] = "What is " . SERVER_NAME . "";
-       $lang['index'][0][5] = "" . SERVER_NAME . " is a <b>browser game</b> featuring an engaging ancient world with thousands of other real players.</p><p>It`s <strong>free to play</strong> and requires <strong>no downloads</strong>.";
-       $lang['index'][0][6] = "Click here to play " . SERVER_NAME . "";
-       $lang['index'][0][7] = "Total players";
-       $lang['index'][0][8] = "Players active";
-       $lang['index'][0][9] = "Players online";
-       $lang['index'][0][10] = "About the game";
-       $lang['index'][0][11] = "You will begin as the chief of a tiny village and will embark on an exciting quest.";
-       $lang['index'][0][12] = "Build up villages, wage wars or establish trade routes with your neighbours.";
-       $lang['index'][0][13] = "Play with and against thousands of other real players and conquer the the world of Travian.";
-       $lang['index'][0][14] = "News";
-       $lang['index'][0][15] = "FAQ";
-       $lang['index'][0][16] = "Screenshots";
-       $lang['forum'] = "Forum";
-       $lang['register'] = "Регистрация";
-       $lang['login'] = "Login";
+	   $lang['index'][0][1] = "Welcome to " . SERVER_NAME . "";
+	   $lang['index'][0][2] = "Manual";
+	   $lang['index'][0][3] = "Play now, for free!";
+	   $lang['index'][0][4] = "What is " . SERVER_NAME . "";
+	   $lang['index'][0][5] = "" . SERVER_NAME . " is a <b>browser game</b> featuring an engaging ancient world with thousands of other real players.</p><p>It`s <strong>free to play</strong> and requires <strong>no downloads</strong>.";
+	   $lang['index'][0][6] = "Click here to play " . SERVER_NAME . "";
+	   $lang['index'][0][7] = "Total players";
+	   $lang['index'][0][8] = "Players active";
+	   $lang['index'][0][9] = "Players online";
+	   $lang['index'][0][10] = "About the game";
+	   $lang['index'][0][11] = "You will begin as the chief of a tiny village and will embark on an exciting quest.";
+	   $lang['index'][0][12] = "Build up villages, wage wars or establish trade routes with your neighbours.";
+	   $lang['index'][0][13] = "Play with and against thousands of other real players and conquer the the world of Travian.";
+	   $lang['index'][0][14] = "News";
+	   $lang['index'][0][15] = "FAQ";
+	   $lang['index'][0][16] = "Screenshots";
+	   $lang['forum'] = "Forum";
+	   $lang['register'] = "Регистрация";
+	   $lang['login'] = "Login";
 
 /*
 |--------------------------------------------------------------------------
-|   top_menu 
+|   top_menu
 |--------------------------------------------------------------------------
 */
 		$lang['header'] = array (
@@ -370,7 +370,7 @@ define("MASS_SENT","Mass IGM was sent");
 							4 => 'Отчеты',
 							5 => 'Сообщения',
 							6 => 'Plus меню');
-							
+
 		$lang['buildings'] = array (
 							1 => "Лесопилка",
 							2 => "Глиняный карьер",
@@ -416,7 +416,7 @@ define("MASS_SENT","Mass IGM was sent");
 							42 => "Большая мастерская",
 							43 => "Ошибка",
 							44 => "&nbsp;(уровень&nbsp;");
-		
+
 		$lang['fields'] = array (
 							0 => '&nbsp;уровень',
 							1 => 'Лесопилка уровень',
@@ -429,7 +429,7 @@ define("MASS_SENT","Mass IGM was sent");
 
 		$lang['npc'] = array (
 							0 => 'NPC торговец');
-		
+
 		$lang['upgrade'] = array (
 							0 => 'Здание уже на максимальном уровне',
 							1 => 'Максимальный уровень здания строится',
@@ -444,10 +444,10 @@ define("MASS_SENT","Mass IGM was sent");
 							10 => 'Улучшить до уровня&nbsp;',
 							11 => 'сегодня',
 							12 => 'завтра');
-		
+
 		$lang['movement'] = array (
 							0 => 'в&nbsp;');
-		
+
 		$lang['troops'] = array (
 							0 => 'нет',
 							1 => 'Герой');

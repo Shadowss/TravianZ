@@ -15,7 +15,7 @@ if(isset($id))
 				<td>IP</td>
 			</tr>
 		</thead>
-		<tbody>  
+		<tbody>
 			<?php
 				$sql = "SELECT * FROM ".TB_PREFIX."login_log WHERE uid = $id";
 				$result = mysql_query($sql);

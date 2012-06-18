@@ -5,12 +5,12 @@ if(isset($_GET['uid']))
 	<form action="../GameEngine/Admin/Mods/editPassword.php" method="POST">
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="uid" id="uid" value="<?php echo $_GET['uid']; ?>">
-		
+
 		<table id="profile" cellpadding="1" cellspacing="1" >
 			<thead>
 				<tr>
 					<th colspan="2">Player <a href="admin.php?p=player&uid=<?php echo $user['id'];?>"><?php echo $user['username'];?></a></th>
-				</tr>                                       
+				</tr>
 				<tr>
 					<td></td>
 					<td>New Password</td>

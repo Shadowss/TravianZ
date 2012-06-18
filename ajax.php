@@ -39,7 +39,7 @@ switch($_GET['f']) {
 	}else {
 	$qact2=null;
 	}
-		include("Templates/Ajax/quest_core.tpl");		
+		include("Templates/Ajax/quest_core.tpl");
 		break;
 }
 ?>

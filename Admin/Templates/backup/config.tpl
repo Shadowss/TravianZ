@@ -7,7 +7,7 @@ $database->reload('admin.php?page=1');
 <form action="" method="post">
 <table id="del_acc" class="account" cellpadding="1" cellspacing="1"><thead>
 <tr>
-    <th colspan="2">Server Settings</th>
+	<th colspan="2">Server Settings</th>
 </tr>
 </thead><tbody>
 
@@ -20,18 +20,18 @@ $database->reload('admin.php?page=1');
   <td>
   <select class="dropdown" name="LANG"">
 <?php
-$handle=opendir('GameEngine/lang'); 
-while (false!==($file = readdir($handle))) 
-{ 
-    if (similar_text(".",$file)<1) 
-    { 
-        if(LANG==$file){$sel = "selected";}else{$sel = "";}
-        echo '<option value="'.$file.'"'.$sel.'>'.$file.'</option>\n'; 
-   } 
+$handle=opendir('GameEngine/lang');
+while (false!==($file = readdir($handle)))
+{
+	if (similar_text(".",$file)<1)
+	{
+		if(LANG==$file){$sel = "selected";}else{$sel = "";}
+		echo '<option value="'.$file.'"'.$sel.'>'.$file.'</option>\n';
+   }
 }
-closedir($handle); 
+closedir($handle);
 ?>
-        </select>
+		</select>
 
   </td>
 </tr>
@@ -54,7 +54,7 @@ closedir($handle);
 </tr>
 <tr>
   <th>Server online:</th>
-  <td>  
+  <td>
   <input class="checkbox" name="active" value="1" <?php if(active==1){echo 'checked';}?> type="radio"> On
   <input class="checkbox" name="active" value="0" <?php if(active==0){echo 'checked';}?> type="radio"> Off
   </td>
@@ -62,8 +62,8 @@ closedir($handle);
 <tr>
   <th>Censored:</th>
   <td>
-    <input class="checkbox" name="WORD_CENSOR" value="1" <?php if(WORD_CENSOR==1){echo 'checked';}?> type="radio"> On 
-    <input class="checkbox" name="WORD_CENSOR" value="0" <?php if(WORD_CENSOR==0){echo 'checked';}?> type="radio"> Off
+	<input class="checkbox" name="WORD_CENSOR" value="1" <?php if(WORD_CENSOR==1){echo 'checked';}?> type="radio"> On
+	<input class="checkbox" name="WORD_CENSOR" value="0" <?php if(WORD_CENSOR==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
@@ -72,63 +72,63 @@ closedir($handle);
 </tr>
 <tr>
   <th>Log build:</th>
-  <td>  
-  <input class="radio" name="LOG_BUILD" value="1" <?php if(LOG_BUILD==1){echo 'checked';}?> type="radio"> On 
+  <td>
+  <input class="radio" name="LOG_BUILD" value="1" <?php if(LOG_BUILD==1){echo 'checked';}?> type="radio"> On
   <input class="radio" name="LOG_BUILD" value="0" <?php if(LOG_BUILD==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Log Technology:</th>
-  <td>  
+  <td>
   <input class="radio" name="LOG_TECH" value="1" <?php if(LOG_TECH==1){echo 'checked';}?> type="radio"> On
   <input class="radio" name="LOG_TECH" value="0" <?php if(LOG_TECH==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Log Login:</th>
-  <td>  
+  <td>
   <input class="radio" name="LOG_LOGIN" value="1" <?php if(LOG_LOGIN==1){echo 'checked';}?> type="radio"> On
   <input class="radio" name="LOG_LOGIN" value="0" <?php if(LOG_LOGIN==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Log Gold:</th>
-  <td>  
+  <td>
   <input class="radio" name="LOG_GOLD_FIN" value="1" <?php if(LOG_GOLD_FIN==1){echo 'checked';}?> type="radio"> On
   <input class="radio" name="LOG_GOLD_FIN" value="0" <?php if(LOG_GOLD_FIN==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Log Admin:</th>
-  <td>  
+  <td>
   <input class="radio" name="LOG_ADMIN" value="1" <?php if(LOG_ADMIN==1){echo 'checked';}?> type="radio"> On
   <input class="radio" name="LOG_ADMIN" value="0" <?php if(LOG_ADMIN==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Log War:</th>
-  <td>  
+  <td>
   <input class="radio" name="LOG_WAR" value="1" <?php if(LOG_WAR==1){echo 'checked';}?> type="radio"> On
   <input class="radio" name="LOG_WAR" value="0" <?php if(LOG_WAR==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Log Market:</th>
-  <td>  
+  <td>
   <input class="radio" name="LOG_MARKET" value="1" <?php if(LOG_MARKET==1){echo 'checked';}?> type="radio"> On
   <input class="radio" name="LOG_MARKET" value="0" <?php if(LOG_MARKET==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Log Illegal:</th>
-  <td>  
+  <td>
   <input class="checkbox" name="LOG_ILLEGAL" value="1" <?php if(LOG_ILLEGAL==1){echo 'checked';}?> type="radio"> On
   <input class="checkbox" name="LOG_ILLEGAL" value="0" <?php if(LOG_ILLEGAL==0){echo 'checked';}?> type="radio"> Off
   </td>
 </tr>
 <tr>
   <th>Bug Report:</th>
-  <td>  
+  <td>
   <input class="checkbox" name="BUG_REPORT" value="1" <?php if(BUG_REPORT==1){echo 'checked';}?> type="radio"> On
   <input class="checkbox" name="BUG_REPORT" value="0" <?php if(BUG_REPORT==0){echo 'checked';}?> type="radio"> Off
   </td>

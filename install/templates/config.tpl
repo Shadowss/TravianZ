@@ -26,14 +26,14 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="300">300x300</option>
 				<option value="350">350x350</option>
 				<option value="400">400x400</option>
-				</select> 
+				</select>
 		</td></tr><tr></tr>
 	<td><span class="f9 c6">Register Open:</span></td><td>
 				<select name="reg_open">
 				<option value="True" selected="selected">True</option>
 				<option value="False">False</option>
 				</select>
-		</td></tr><tr></tr>		
+		</td></tr><tr></tr>
 	<td><span class="f9 c6">Server:</span></td><td><input name="server" type="text" id="homepage" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/"></td></tr><tr></tr>
 	<td><span class="f9 c6">Domain:</span></td><td><input name="domain" type="text" id="homepage" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/"></td></tr><tr></tr>
 	<td><span class="f9 c6">Homepage:</span></td><td><input name="homepage" type="text" id="homepage" value="http://<?php echo $_SERVER['HTTP_HOST']; ?>/"></td></tr><tr></tr>
@@ -52,7 +52,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="172800">48 hours</option>
 				<option value="259200">72 hours</option>
 				</select>
-		</td></tr><tr></tr>	
+		</td></tr><tr></tr>
 	<td><span class="f9 c6">Plus account length:</span></td><td>
 				<select name="plus_time">
 				<option value="(3600*12)">12 hours</option>
@@ -64,7 +64,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="(3600*24*6)">6 days</option>
 				<option value="(3600*24*7)" selected="selected">7 days</option>
 				</select>
-		</td></tr><tr></tr>		
+		</td></tr><tr></tr>
 	<td><span class="f9 c6">+25% production length:</span></td><td>
 				<select name="plus_production">
 				<option value="(3600*12)">12 hours</option>
@@ -76,7 +76,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="(3600*24*6)">6 days</option>
 				<option value="(3600*24*7)" selected="selected">7 days</option>
 				</select>
-		</td></tr><tr></tr>	
+		</td></tr><tr></tr>
 	<td><span class="f9 c6">Storage Multipler:</span></td><td width="140"><input type="text" name="storage_multiplier" id="storage_multiplier" value="1"></td></tr><tr>
 	<td><span class="f9 c6">Tourn Threshold:</span></td><td width="140"><input type="text" name="ts_threshold" id="ts_threshold" value="20"></td></tr><tr>
 	<td><span class="f9 c6">Great Workshop:</span></td><td>
@@ -84,7 +84,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="True">True</option>
 				<option value="False" selected="selected">False</option>
 				</select>
-		</td></tr><tr></tr>		
+		</td></tr><tr></tr>
 	<td><span class="f9 c6">ww:</span></td><td>
 				<select name="ww">
 				<option value="True">True</option>
@@ -97,12 +97,12 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="1">Normal</option>
 				<option value="2">Christmas</option>
 				<option value="3">New Year</option>
-				<option value="4">Easter</option>				
+				<option value="4">Easter</option>
 				</select>
 		</td></tr><tr></tr>
 		</table>
 	</p>
-	
+
 		<p>
 	<span class="f10 c">ADMIN ACCOUNT</span>
 	<table>
@@ -117,7 +117,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 		</td></tr><tr></tr>
 	</table>
 	</p>
-	
+
 	<p>
 	<span class="f10 c">SQL RELATED</span>
 	<table><tr>
@@ -133,7 +133,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	</table>
 	</p>
 
-<!-- <LEFT BOX - ADMIN RELATED> 
+<!-- <LEFT BOX - ADMIN RELATED>
 
 	<span><center><strong>ADMIN RELATED</strong></center></span><br />
 	<span class="f9 c6 cc2">Admin Name:</span><span class="cc3"><input type="text" name="aname" id="aname"></span><br /><br />
@@ -144,22 +144,22 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 
 <!-- </LEFT BOX - ADMIN RELATED> -->
 
-<!-- <RIGHT BOX - GPACK RELATED> 
+<!-- <RIGHT BOX - GPACK RELATED>
 
 	<span><center><strong>GPACK RELATED</strong></center></span><br />
 
-	
+
 	<span class="f9 c6 c2">GPack:</span><span class="c3"><select name="gpack">
 	  <option value="false" selected="selected">No</option>
 	  <option value="true" disabled="disabled">Yes</option></select></span><br /><br />
 	<span class="f9 c6 c2">GPack Design:</span><span class="c3"><select name="gp_locate">
 	  <option value="gpack/travian_default/" selected="selected">Travian Default
 	  <option value="gpack/travianx_v1/">TravianX v1 by Dzoki</option></select></span><br /><br />
-	
+
 -->
 <!-- </RIGHT BOX - GPACK RELATED> -->
 
-	 
+
 	<p>
 	<span class="f10 c">NEWSBOX OPTIONS</span>
 	<table><tr>
@@ -177,7 +177,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	</select></td></tr>
 	</table>
 	</p>
-	
+
 	<p>
 	<span class="f10 c">LOG RELATED (You should disable them)</span>
 	<table><tr>

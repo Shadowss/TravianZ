@@ -368,11 +368,11 @@ return bi;}
 function fi(qact,qact2){
 if(qact===undefined){
 qact=false;
-} 
+}
 
 if(qact2===undefined){
 qact2=false;
-} 
+}
 
 var gi='ajax.php?f=qst';var ci=(Math.abs(quest.number)+1)/(Math.abs(quest.last)+1);return gi+'&cr='+bi(4,ci)+'&qact='+qact+'&qact2='+qact2;}
 

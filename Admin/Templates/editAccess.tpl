@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -10,7 +10,7 @@
 #################################################################################
 
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
-$id = $_SESSION['id']; 
+$id = $_SESSION['id'];
 if(isset($_GET['uid']))
 {
 	$sql = mysql_query("SELECT access FROM ".TB_PREFIX."users WHERE id = ".$_GET['uid']."");
@@ -59,7 +59,7 @@ if(isset($_GET['uid']))
 			</tbody>
 		</table>
 	</form><?php
-    if(isset($_GET['g']))
+	if(isset($_GET['g']))
 	{
 		echo '<br /><br /><font color="Red"><b>Players Access Changed</font></b>';
 	}

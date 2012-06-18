@@ -16,7 +16,7 @@ include('GameEngine/Account.php');
 <html>
 	<head>
 	<title><?php echo SERVER_NAME; ?></title>
-        <link REL="shortcut icon" HREF="favicon.ico"/>
+		<link REL="shortcut icon" HREF="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="imagetoolbar" content="no" />
@@ -25,11 +25,11 @@ include('GameEngine/Account.php');
 	<script src="mt-more.js?0faaa" type="text/javascript"></script>
 	<script src="unx.js?0faaa" type="text/javascript"></script>
 	<script src="new.js?0faaa" type="text/javascript"></script>
-   	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
-   	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
 	<link href="<?php echo GP_LOCATE ?>travian.css?f4b7c" rel="stylesheet" type="text/css" />
-    	<link href="<?php echo GP_LOCATE ?>lang/en/lang.css" rel="stylesheet" type="text/css" />	
-       </head>
+		<link href="<?php echo GP_LOCATE ?>lang/en/lang.css" rel="stylesheet" type="text/css" />
+	   </head>
 
 <body class="v35 ie ie7" onload="initCounter()">
 
@@ -38,7 +38,7 @@ include('GameEngine/Account.php');
 </div>
 <div id="header"></div>
 <div id="mid">
-<?php include("Templates/menu.tpl"); 
+<?php include("Templates/menu.tpl");
 if(REG_OPEN == true){ ?>
 <div id="content"  class="signup">
 
@@ -86,12 +86,12 @@ if(REG_OPEN == true){ ?>
 			<td class="nat"><label><input class="radio" type="radio" name="vid" value="1" <?php echo $form->getRadio('vid',1); ?>>&nbsp;<?php echo ROMANS; ?></label></td>
 			&nbsp;<td class="pos1"><label><input class="radio" type="radio" name="kid" value="0" checked>&nbsp;<?php echo RANDOM; ?></label></td>
 			<td class="pos2">&nbsp;</td>
-		</tr>		
+		</tr>
 		<tr>
 			<td><label><input class="radio" type="radio" name="vid" value="2" <?php echo $form->getRadio('vid',2); ?>>&nbsp;<?php echo TEUTONS; ?></label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="1" <?php echo $form->getRadio('kid',1); ?>>&nbsp;<?php echo NW; ?> <b>(-|+)</b>&nbsp;</label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="2" <?php echo $form->getRadio('kid',2); ?>>&nbsp;<?php echo NE; ?> <b>(+|+)</b></label></td>
-		</tr>		
+		</tr>
 		<tr class="btm">
 			<td><label><input class="radio" type="radio" name="vid" value="3" <?php echo $form->getRadio('vid',3); ?>>&nbsp;<?php echo GAULS; ?></label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="3" <?php echo $form->getRadio('kid',3); ?>>&nbsp;<?php echo SW; ?> <b>(-|-)</b></label></td>
@@ -138,8 +138,8 @@ if(NEWSBOX3) { include("Templates/News/newsbox3.tpl"); }
 			</div>
 
 			<div class="footer-stopper outgame"></div>
-            <div class="clear"></div>
-            
+			<div class="clear"></div>
+
 <?php include("Templates/footer.tpl"); ?>
 <div id="ce"></div>
 </body>

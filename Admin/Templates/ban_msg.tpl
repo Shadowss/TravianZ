@@ -1,4 +1,4 @@
-﻿<?php    	
+﻿<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -32,8 +32,8 @@ Heed the following advice when writing your message:
 ● Multihunters can review enormous amounts of information about accounts. <u>Stick to the truth</u> and do not make excuses to justify your violation of the rules.
 </br>
 ● Be cooperative and insightful, this might reduce the punishment.
-</br>	
+</br>
 ● If the Multihunter does not answer immediately, then he/she is probably not online. The issue will not be resolved any faster by sending multiple messages, especially if he/she did not even read the first one yet.
-</br>	
+</br>
 ● If you have really been banned unjustly, try to stay <u>calm and polite</u> while talking to the Multihunter and telling him/her about your point of view.
 </p>

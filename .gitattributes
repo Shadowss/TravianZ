@@ -1,0 +1,18 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+
+# Files which should be always normalized
+*.php text
+*.js text
+*.css text
+*.htaccess text
+*.tpl text
+*.html text
+
+# Binaries
+*.png binary
+*.jpg binary
+*.ico binary
+*.gif binary
+*.zip binary

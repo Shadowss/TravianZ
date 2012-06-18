@@ -19,10 +19,10 @@ mysql_select_db(SQL_DB);
 if ($session->access < ADMIN) die("Access Denied: You are not Admin!");
 
 $id = $_POST['id'];
-$village = $database->getVillage($id);  
-$user = $database->getUserArray($village['owner'],1);  
-$coor = $database->getCoor($village['wref']); 
-$varray = $database->getProfileVillages($village['owner']); 
+$village = $database->getVillage($id);
+$user = $database->getUserArray($village['owner'],1);
+$coor = $database->getCoor($village['wref']);
+$varray = $database->getProfileVillages($village['owner']);
 $type = $database->getVillageType($village['wref']);
 $fdata = $database->getResourceLevel($village['wref']);
 $units = $database->getUnit($village['wref']);

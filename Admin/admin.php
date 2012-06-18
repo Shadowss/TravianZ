@@ -18,7 +18,7 @@ include("../GameEngine/Data/buidata.php");
 
 class timeFormatGenerator
 {
-	public function getTimeFormat($time) 
+	public function getTimeFormat($time)
 	{
 		$min = 0;
 		$hr = 0;
@@ -38,12 +38,12 @@ class timeFormatGenerator
 	}
 };
 $timeformat = new timeFormatGenerator;
-?>                                             
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<link REL="shortcut icon" HREF="favicon.ico"/>
-		<title>Admin Panel</title>    
+		<title>Admin Panel</title>
 		<link rel=stylesheet type="text/css" href="../img/admin/admin.css">
 		<link rel=stylesheet type="text/css" href="../img/admin/acp.css">
 		<link rel=stylesheet type="text/css" href="../img/img.css">
@@ -58,9 +58,9 @@ $timeformat = new timeFormatGenerator;
 			function inaktiv() {event.srcElement.className='fl2'; }
 
 			function del(e,id){
-			if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); } 
-			if(e == 'unban'){ var conf = confirm('Dou you really want unban player '+id+'?'); } 
-			if(e == 'stopDel'){ var conf = confirm('Dou you really want stop deleting user '+id+'?'); } 
+			if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); }
+			if(e == 'unban'){ var conf = confirm('Dou you really want unban player '+id+'?'); }
+			if(e == 'stopDel'){ var conf = confirm('Dou you really want stop deleting user '+id+'?'); }
 			if(conf){return true;}else{return false;}
 			}
 		</script>
@@ -84,10 +84,10 @@ $timeformat = new timeFormatGenerator;
 						<table id="navi_table" cellspacing="0" cellpadding="0" style="width: 150px;">
 							<tr>
 								<td class="menu">
-									<?php     
+									<?php
 										if($funct->CheckLogin())
 										{?>
-											<?php 
+											<?php
 											if($_SESSION['access'] == ADMIN)
 											{ ?>
 												<a href="<?php echo HOMEPAGE; ?>">Server Homepage</a>
@@ -133,21 +133,21 @@ $timeformat = new timeFormatGenerator;
 												<a href="#"><b>Admin:</b></a>
 												<a href="?p=admin_log"><font color="Red"><b>Admin Log</font></b></a>
 												<a href="?p=config">Server Settings</a>
-												<?php 
-											} 
+												<?php
+											}
 											else if($_SESSION['access'] == MULTIHUNTER)
 											{ ?>
-												<a href="admin.php">MCP Home</a> 
+												<a href="admin.php">MCP Home</a>
 												<a href="<?php echo HOMEPAGE; ?>">Homepage</a>
 												<a href="#"></a><a href="#"></a>
 												<a href="?p=server_info">Server Info</a>
-												<a href="?p=online">Online users</a>    
+												<a href="?p=online">Online users</a>
 												<a href="?p=search">Search</a>
 												<a href="?p=message">Msg/Rep</a>
 												<a href="?p=ban">Ban</a>
 												<a href="#"></a><a href="#"></a><a href="#"></a>
 												<a href="?action=logout">Logout</a><?php
-											} 
+											}
 										}
 									?>
 								</td>
@@ -158,9 +158,9 @@ $timeformat = new timeFormatGenerator;
 						<div id="lmid3">
 							<?php
 								if($funct->CheckLogin())
-								{            
+								{
 									if($_POST or $_GET)
-									{  
+									{
 										if($_GET['p'] and $_GET['p']!="search")
 										{
 											$filename = 'Templates/'.$_GET['p'].'.tpl';
@@ -176,7 +176,7 @@ $timeformat = new timeFormatGenerator;
 										else
 										{
 											include('Templates/search.tpl');
-										}  
+										}
 										if($_POST['p'] and $_POST['s'])
 										{
 											$filename = 'Templates/results_'.$_POST['p'].'.tpl';
@@ -187,22 +187,22 @@ $timeformat = new timeFormatGenerator;
 											else
 											{
 												include('Templates/404.tpl');
-											}        
+											}
 										}
 									}
 									else
 									{
-										include('Templates/home.tpl');  
+										include('Templates/home.tpl');
 									}
 								}
 								else
-								{           
+								{
 									include('Templates/login.tpl');
-								}    
+								}
 							?>
-						</div>  
+						</div>
 					</div>
-				</div>  
+				</div>
 			<div id="lright1"></div>
 			<div id="ce"></div>
 		</div>

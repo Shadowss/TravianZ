@@ -66,7 +66,7 @@
 										}
 										else
 										{
-											echo "".date('d.m.Y H:i',$user['b1']+3600*2)."</tr></th>"; 
+											echo "".date('d.m.Y H:i',$user['b1']+3600*2)."</tr></th>";
 										} */
 									?>
 								 <a href="admin.php?p=editPlus&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Plus and Bonus"></a></td>
@@ -104,7 +104,7 @@
 										}
 										else
 										{
-											echo "".date('d.m.Y H:i',$user['b2']+3600*2)."</tr></th>"; 
+											echo "".date('d.m.Y H:i',$user['b2']+3600*2)."</tr></th>";
 										} */
 									?>
 								 <a href="admin.php?p=editPlus&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Plus and Bonus"></a></td>
@@ -142,7 +142,7 @@
 										}
 										else
 										{
-											echo "".date('d.m.Y H:i',$user['b3']+3600*2)."</tr></th>"; 
+											echo "".date('d.m.Y H:i',$user['b3']+3600*2)."</tr></th>";
 										} */
 									?>
 								 <a href="admin.php?p=editPlus&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Plus and Bonus"></a></td>
@@ -180,7 +180,7 @@
 										}
 										else
 										{
-											echo "".date('d.m.Y H:i',$user['b4']+3600*2)."</tr></th>"; 
+											echo "".date('d.m.Y H:i',$user['b4']+3600*2)."</tr></th>";
 										} */
 									?>
 								 <a href="admin.php?p=editPlus&uid=<?php echo $user['id']; ?>"><img src="../img/admin/edit.gif" title="Edit Plus and Bonus"></a></td>
