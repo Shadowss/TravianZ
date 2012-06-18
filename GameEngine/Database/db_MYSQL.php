@@ -2323,7 +2323,6 @@ class MYSQL_DB {
 			$now = time();
 
 	$uid = $this->getVillageField($vid, "owner");
-	$oldeach = $each;
 	$artefact = count($this->getOwnUniqueArtefactInfo2($uid,5,3,0));
 	$artefact1 = count($this->getOwnUniqueArtefactInfo2($vid,5,1,1));
 	$artefact2 = count($this->getOwnUniqueArtefactInfo2($uid,5,2,0));
@@ -2349,7 +2348,7 @@ class MYSQL_DB {
 	$time2 += $queued[count($queued) - 1]['timestamp'] - $now;
 	}
 	if($queued[count($queued) - 1]['unit'] == $unit){
-	$time = $amt*$oldeach;
+	$time = $amt*$queued[count($queued) - 1]['each'];
 			$q = "UPDATE " . TB_PREFIX . "training SET amt = amt + $amt, timestamp = timestamp + $time WHERE id = ".$queued[count($queued) - 1]['id']."";
 	}else{
 			$q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$time,$each,$time2)";
