@@ -3833,6 +3833,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				global $database, $ranking;
 					$users = "SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5";
 					$array = $database->query_return($users);
+					if(mysql_num_rows(mysql_query($users)) > 0){
 					$ranking->procRankArray();
 					foreach($array as $session){
 					$oldrank = $ranking->searchRank($session['username'], "username");
@@ -3881,6 +3882,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->removeclimberrankpopAlly($ally['id'], $totalpoints);
 								$database->updateoldrankAlly($ally['id'], $oldrank);
 							}
+					}
 					}
 					}
 			}
