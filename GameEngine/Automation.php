@@ -143,7 +143,7 @@ class Automation {
 	return $popT;
 	}
 
-	 public function Automation() {
+	public function Automation() {
 
 		$this->ClearUser();
 		$this->ClearInactive();
@@ -205,6 +205,7 @@ class Automation {
 		$this->updateGeneralAttack();
 		$this->checkInvitedPlayes();
 		$this->updateStore();
+		$this->procClimbers();
 	}
 
 	private function loyaltyRegeneration() {
@@ -3828,6 +3829,61 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		}
 	}
 
+			private function procClimbers() {
+				global $database, $ranking;
+					$users = "SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5";
+					$array = $database->query_return($users);
+					$ranking->procRankArray();
+					foreach($array as $session){
+					$oldrank = $ranking->searchRank($session['username'], "username");
+					$q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
+					$result = mysql_query($q);
+					if(mysql_num_rows($result)) {
+						$row=mysql_fetch_assoc($result);
+						$week=($row['week']+1);
+					} else {
+						$week='1';
+					}
+					if($week > 1){
+					if($session['oldrank'] > $oldrank) {
+						$totalpoints = $session['oldrank'] - $oldrank;
+						$database->addclimberrankpop($session['id'], $totalpoints);
+						$database->updateoldrank($session['id'], $oldrank);
+					} else
+						if($session['oldrank'] < $oldrank) {
+							$totalpoints = $oldrank - $session['oldrank'];
+							$database->removeclimberrankpop($session['id'], $session['oldrank']);
+							$database->updateoldrank($session['id'], $oldrank);
+						}
+					}else{
+						$totalpoints = count($ranking->getRank()) - $oldrank;
+						$database->setclimberrankpop($session['id'], $totalpoints);
+						$database->updateoldrank($session['id'], $oldrank);
+					}
+					$database->updateoldrank($session['id'], $oldrank);
+					}
+					$countally = count($database->countAlli());
+					if($countally > 0){
+					for($i=1;$i<=$countally;$i++){
+					$memberlist = $database->getAllMember($i);
+					$oldrank = 0;
+					foreach($memberlist as $member) {
+						$oldrank += $database->getVSumField($member['id'],"pop");
+					}
+						$ally = $database->getAlliance($i);
+						if($ally['oldrank'] < $oldrank) {
+							$totalpoints = $oldrank - $ally['oldrank'];
+							$database->addclimberrankpopAlly($ally['id'], $totalpoints);
+							$database->updateoldrankAlly($ally['id'], $oldrank);
+						} else
+							if($ally['oldrank'] > $oldrank) {
+								$totalpoints = $ally['oldrank'] - $oldrank;
+								$database->removeclimberrankpopAlly($ally['id'], $totalpoints);
+								$database->updateoldrankAlly($ally['id'], $oldrank);
+							}
+					}
+					}
+			}
 }
 $automation = new Automation;
 ?>

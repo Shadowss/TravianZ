@@ -21,6 +21,7 @@ if(!$session->goldclub) {
 			<?php  include "Templates/goldClub/farmlist.tpl"; ?>
 		</div>
 <br />
+<?php if($hideevasion == 0){ ?>
 <table cellpadding="1" cellspacing="1">
         <thead>
             <tr>
@@ -72,5 +73,6 @@ if(!$session->goldclub) {
 <div class="clear"></div><p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p></form>
 </tr>
 </form>
+<?php } ?>
 	</div>
 <?php } ?>

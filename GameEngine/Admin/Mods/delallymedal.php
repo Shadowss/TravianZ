@@ -24,7 +24,7 @@ $sessionaccess = $access['access'];
 
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
-mysql_query("DELETE FROM ".TB_PREFIX."allimedal WHERE id = ".$delete."");
+mysql_query("UPDATE ".TB_PREFIX."allimedal set del = 1 WHERE id = ".$delete."");
 
 header("Location: ../../../Admin/admin.php?p=alliance&aid=".$aid."");
 ?>

@@ -19,7 +19,7 @@ if ($session->access < ADMIN) die("Access Denied: You are not Admin!");
 $medalid = $_POST['medalid'];
 $uid = $_POST['uid'];
 
-mysql_query("DELETE FROM ".TB_PREFIX."medal WHERE id = ".$medalid."");
+mysql_query("UPDATE ".TB_PREFIX."medal set del = 1 WHERE id = ".$medalid."");
 
 $name = mysql_query("SELECT name FROM ".TB_PREFIX."users WHERE id= ".$uid."");
 $name = mysql_result($name, 0);
@@ -28,7 +28,7 @@ mysql_query("Insert into ".TB_PREFIX."admin_log values (0,$admid,'Deleted medal 
 
 
 $deleteweek = $_POST['medalweek'];
-mysql_query("DELETE FROM ".TB_PREFIX."medal WHERE week = ".$deleteweek."");
+mysql_query("UPDATE ".TB_PREFIX."medal set del = 1 WHERE week = ".$deleteweek."");
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$uid."");
 ?>

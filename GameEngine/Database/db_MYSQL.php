@@ -659,14 +659,14 @@ class MYSQL_DB {
 	}
 
 	function getProfileMedal($uid) {
-		$q = "SELECT id,categorie,plaats,week,img,points from " . TB_PREFIX . "medal where userid = $uid order by id desc";
+		$q = "SELECT id,categorie,plaats,week,img,points from " . TB_PREFIX . "medal where userid = $uid and del = 0 order by id desc";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 
 	}
 
 	function getProfileMedalAlly($uid) {
-		$q = "SELECT id,categorie,plaats,week,img,points from " . TB_PREFIX . "allimedal where allyid = $uid order by id desc";
+		$q = "SELECT id,categorie,plaats,week,img,points from " . TB_PREFIX . "allimedal where allyid = $uid and del = 0 order by id desc";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 
@@ -2582,6 +2582,10 @@ class MYSQL_DB {
 	}
 	function removeclimberrankpop($user, $cp) {
 		$q = "UPDATE " . TB_PREFIX . "users set clp = clp - '$cp'' where id = $user";
+		return mysql_query($q, $this->connection);
+	}
+	function setclimberrankpop($user, $cp) {
+		$q = "UPDATE " . TB_PREFIX . "users set clp = '$cp' where id = $user";
 		return mysql_query($q, $this->connection);
 	}
 	function updateoldrank($user, $cp) {

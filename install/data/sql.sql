@@ -167,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
   `week` int(11) NOT NULL,
   `points` bigint(255) NOT NULL,
   `img` varchar(255) NOT NULL,
+  `del` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -935,6 +936,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
   `week` int(10) unsigned NOT NULL,
   `points` varchar(15) NOT NULL,
   `img` varchar(10) NOT NULL,
+  `del` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

@@ -66,21 +66,6 @@
 								$this->getStart(1);
 							} else {
 								$this->getStart($this->searchRank($session->alliance, "id"));
-								$oldrank = $this->searchRank($session->alliance, "id");
-
-
-								$ally = $database->getAlliance($session->alliance);
-								if($ally['oldrank'] > $oldrank) {
-									$totalpoints = $ally['oldrank'] - $oldrank;
-									$database->addclimberrankpopAlly($ally['id'], $totalpoints);
-									$database->updateoldrankAlly($ally['id'], $oldrank);
-								} else
-									if($ally['oldrank'] < $oldrank) {
-										$totalpoints = $oldrank - $ally['oldrank'];
-										$database->removeclimberrankpopAlly($ally['id'], $totalpoints);
-										$database->updateoldrankAlly($ally['id'], $oldrank);
-									}
-								$database->updateoldrankAlly($ally['id'], $oldrank);
 							}
 							break;
 						case 41:
@@ -103,18 +88,6 @@
 				} else {
 					$this->procRankArray();
 					$this->getStart($this->searchRank($session->username, "username"));
-					$oldrank = $this->searchRank($session->username, "username");
-					if($session->oldrank > $oldrank) {
-						$totalpoints = $session->oldrank - $oldrank;
-						$database->addclimberrankpop($session->uid, $totalpoints);
-						$database->updateoldrank($session->uid, $oldrank);
-					} else
-						if($session->oldrank < $oldrank) {
-							$totalpoints = $oldrank - $session->oldrank;
-							$database->removeclimberrankpop($session->uid, $session->oldrank);
-							$database->updateoldrank($session->uid, $oldrank);
-						}
-					$database->updateoldrank($session->uid, $oldrank);
 				}
 			}
 
@@ -198,7 +171,7 @@
 				}
 			}
 
-			private function procRankArray() {
+			public function procRankArray() {
 				global $database, $multisort;
 				//$array = $database->getRanking();
 				$holder = array();

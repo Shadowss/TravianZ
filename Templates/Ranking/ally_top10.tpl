@@ -136,7 +136,7 @@
 		<tr>
 			<td>No.</td>
 			<td>Alliance</td>
-			<td>Ranks</td>
+			<td>Population</td>
 		</tr>
 	</thead>
 	<tbody>

@@ -13,6 +13,9 @@
         $t1 = $row['t1'];$t2 = $row['t2'];$t3 = $row['t3'];$t4 = $row['t4'];$t5 = $row['t5'];
         $t6 = $row['t6'];$t7 = $row['t7'];$t8 = $row['t8'];$t9 = $row['t9'];$t10 = $row['t10'];
         $t11 = 0;
+		$villageOwner = $database->getVillageField($wref,'owner');
+		$userAccess = $database->getUserField($villageOwner,'access',0);
+		if($userAccess != '0' && $userAccess != '8' && $userAccess != '9'){
 		if($tribe == 1){ $uname = "u"; } elseif($tribe == 2){ $uname = "u1"; } elseif($tribe == 3){ $uname = "u2"; }elseif($tribe == 4){ $uname = "u3"; }else {$uname = "u4"; }
 		if($tribe == 1){ $uname1 = "u1"; } elseif($tribe == 2){ $uname1 = "u2"; } elseif($tribe == 3){ $uname1 = "u3"; }elseif($tribe == 4){ $uname1 = "u4"; }else {$uname1 = "u5"; }
 		if($tribe == 1){ $uname2 = ""; } elseif($tribe == 2){ $uname2 = "1"; } elseif($tribe == 3){ $uname2 = "2"; }elseif($tribe == 4){ $uname2 = "3"; }else {$uname2 = "4"; }
@@ -78,6 +81,7 @@
 			$database->addMovement(3,$getFLData['wref'],$data['to_vid'],$reference,time(),($time+time()));
         }    
     }
+	}
 	}
 header("Location: build.php?id=39&t=99");
 ?>

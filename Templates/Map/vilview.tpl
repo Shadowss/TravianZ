@@ -504,12 +504,8 @@ if($type==18 or $type==19 or $type==20 or $type==21){
           $data1 = mysql_fetch_assoc($query1);
           $query2 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
           $data2 = mysql_fetch_assoc($query2);
-           if($data2['access']=='0') {
-           echo "&raquo; Send troops. (Player is banned)";
-		   }  else if($data2['access']=='8') {
-            echo "&raquo; Send Troops. (Moderator)";
-           }  else if($data2['access']=='9') {
-            echo "&raquo; Send Troops. (Administrator)";
+			if($data2['access']=='0' or $data2['access']=='8' or $data2['access']=='9') {
+			echo "&raquo; Send troops. (Player is banned)";
           } else if($data2['protect'] < time()) {
             echo $village->resarray['f39']? "<a href=\"a2b.php?z=".$_GET['d']."\">&raquo; Send troops." : "&raquo; Send troops. (build a rally point)"; 
           } else {
@@ -517,11 +513,18 @@ if($type==18 or $type==19 or $type==20 or $type==21){
           }
           ?>
           </td>
-          
-          
 				</tr>
 					    	<tr>
-					<td class="none"><?php echo $building->getTypeLevel(17)? "<a href=\"build.php?z=".$_GET['d']."&id=" . $building->getTypeField(17) . "\">&raquo; Send merchant(s)." : "&raquo; Send merchant(s). (build marketplace)"; ?></td>
+					<td class="none">
+					<?php
+			if($data2['access']=='0' or $data2['access']=='8' or $data2['access']=='9') {
+			echo "&raquo; Send merchant(s). (banned)";
+          } else {
+            echo $building->getTypeLevel(17)? "<a href=\"build.php?z=".$_GET['d']."&id=" . $building->getTypeField(17) . "\">&raquo; Send merchant(s)." : "&raquo; Send merchant(s). (build marketplace)"; 
+          }
+
+		  ?>
+		  </td>
 				</tr>
                 <?php } ?>
 		</tbody>

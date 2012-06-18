@@ -524,11 +524,9 @@ Done:<br />
 -Top 10 Alliance Attacker<br />
 -Top 10 Alliance Defencer<br />
 -Top 10 Alliance Robbers<br />
--Top 10 Alliance Climbers(Rank)<br />
--Top 10 Pop Climbers<br />
+-Top 10 Alliance Climbers<br />
 -Top 10 Rank Climbers<br />
 -Bonus: Attacker AND Defender<br />
--Bonus: 3/5/10 times in a row top 3 Pop Climbers<br />
 -Bonus: 3/5/10 times in a row top 3 Rank Climbers<br />
 -Bonus: 3/5/10 times top 3 Attack<br />
 -Bonus: 3/5/10 times top 3 Defence<br />
@@ -536,7 +534,6 @@ Done:<br />
 
 -Bonus: 3/5/10 times in a row top 10 Attack<br />
 -Bonus: 3/5/10 times in a row top 10 Defence<br />
--Bonus: 3/5/10 times in a row top 10 Pop Climbers<br />
 -Bonus: 3/5/10 times in a row top 10 Rank Climbers<br />
 -Bonus: 3/5/10 times in a row top 10 Robber<br />
 

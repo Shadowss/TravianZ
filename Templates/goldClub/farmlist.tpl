@@ -360,9 +360,12 @@ $NUM1++;
     <?php } ?>
 
 <?php if($create == 1){
+$hideevasion = 1;
 include("Templates/goldClub/farmlist_add.tpl");
 }else if($create == 2){
+$hideevasion = 1;
 include("Templates/goldClub/farmlist_addraid.tpl");
 }else if($create == 3){
+$hideevasion = 1;
 include("Templates/goldClub/farmlist_editraid.tpl");
 }

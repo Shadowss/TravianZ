@@ -161,18 +161,11 @@ class Units {
 					$form->addError("error","Player is under beginners protection. You can't attack him");
 				}
 
-				//check if banned:
+				//check if banned/admin:
 				$villageOwner = $database->getVillageField($id,'owner');
 				$userAccess = $database->getUserField($villageOwner,'access',0);
-					if($userAccess == '0'){
+					if($userAccess == '0' or $userAccess == '8' or $userAccess == '9'){
 								$form->addError("error","Player is Banned. You can't attack him");
-								//break;
-					}
-				//check if admin:
-				$villageOwner = $database->getVillageField($id,'owner');
-				$userAccess = $database->getUserField($villageOwner,'access',0);
-					if($userAccess == '9'){
-								$form->addError("error","Player is Admin. You can't attack him");
 								//break;
 					}
 
