@@ -91,21 +91,7 @@ if(!isset($_GET['s'])) {
 
 		<div class="clear"></div>
 
-		<div id="footer">
-			<div class="footer-menu c3" id="mfoot">
-				<br />
-
-				<div class="copyright">
-					&copy; 2010 - 2011 TravianX All rights reserved
-				</div>
-
-				<div class="copyright">
-					Server running on: <b><font color="red">v6.0.0</font></b>
-				</div>
-			</div>
-
-			<div id="cfoot"></div>
-		</div>
+<?php include("../Templates/footer.tpl"); ?>
 	</div>
 
 	<div id="ce"></div>

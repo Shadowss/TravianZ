@@ -21,7 +21,7 @@
 
 									<div class="copyright">&copy; 2010 - 2011 TravianX All rights reserved</div>
 
-									<div class="copyright">Server running on: <b><font color="Red">v6.0.0</font></b>
+									<div class="copyright">Server running on: <b><font color="Red">TravianZ (improved by yi12345)</font></b>
 </div>
 
 													</div>

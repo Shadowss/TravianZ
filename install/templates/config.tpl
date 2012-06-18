@@ -164,16 +164,16 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<span class="f10 c">NEWSBOX OPTIONS</span>
 	<table><tr>
 	<td><span class="f9 c6">Newsbox 1:</span></td><td><select name="box1">
-	  <option value="true" selected="selected">Enabled</option>
-	  <option value="false">Disabled</option>
+	  <option value="true">Enabled</option>
+	  <option value="false" selected="selected">Disabled</option>
 	</select></td></tr>
 	<td><span class="f9 c6">Newsbox 2:</span></td><td><select name="box2">
-	  <option value="true" selected="selected">Enabled</option>
-	  <option value="false">Disabled</option>
+	  <option value="true">Enabled</option>
+	  <option value="false" selected="selected">Disabled</option>
 	</select></td></tr>
 	<td><span class="f9 c6">Newsbox 3:</span></td><td><select name="box3">
-	  <option value="true" selected="selected">Enabled</option>
-	  <option value="false">Disabled</option>
+	  <option value="true">Enabled</option>
+	  <option value="false" selected="selected">Disabled</option>
 	</select></td></tr>
 	</table>
 	</p>
