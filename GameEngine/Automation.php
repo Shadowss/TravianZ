@@ -3542,12 +3542,17 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$q = "SELECT * FROM ".TB_PREFIX."users WHERE invited != 0";
 		$array = $database->query_return($q);
 		foreach($array as $user) {
+		$numusers = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$user['invited']);
+		if(mysql_num_rows($numusers) > 0){
+		$database->updateUserField($user['id'],"invited",0,1);
+		}else{
 		$varray = count($database->getProfileVillages($user['id']));
 		if($varray > 1){
 		$usergold = $database->getUserField($user['invited'],"gold",0);
 		$gold = $usergold+50;
 		$database->updateUserField($user['invited'],"gold",$gold,1);
 		$database->updateUserField($user['id'],"invited",0,1);
+		}
 		}
 		}
 	}
