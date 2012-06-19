@@ -23,8 +23,10 @@ else if($_POST['dname']!=""){
 	$getwref = $database->getVillageByName($_POST['dname']);
 	$checkexist = $database->checkVilExist($getwref);
 }
+if($checkexist){
 $villageOwner = $database->getVillageField($getwref,'owner');
 $userAccess = $database->getUserField($villageOwner,'access',0);
+}
 $maxcarry = $market->maxcarry;
 $maxcarry *= $market->merchantAvail();
 if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist){
