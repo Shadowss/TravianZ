@@ -2631,7 +2631,7 @@ class MYSQL_DB {
 	}
 
 	function countUser() {
-		$q = "SELECT count(id) FROM " . TB_PREFIX . "users where id != 0";
+		$q = "SELECT count(id) FROM " . TB_PREFIX . "users where id > 5";
 		$result = mysql_query($q, $this->connection);
 		$row = mysql_fetch_row($result);
 		return $row[0];

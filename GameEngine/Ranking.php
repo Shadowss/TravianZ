@@ -173,12 +173,8 @@
 
 			public function procRankArray() {
 				global $database, $multisort;
-				//$array = $database->getRanking();
+				if($database->countUser() > 0){
 				$holder = array();
-				//$value['totalvillage'] = count($database->getVillagesID($value['id']));
-				//$value['totalvillage'] = count($database->getVillagesID($value['id']));
-				//$value['totalpop'] = $database->getVSumField($value['id'],"pop");
-				//$value['aname'] = $database->getAllianceName($value['alliance']);
 				$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
 
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
@@ -207,23 +203,21 @@
 				}
 
 				foreach($datas as $result) {
-					//$value = $array[$result['userid']];
 					$value['userid'] = $result['userid'];
 					$value['username'] = $result['username'];
 					$value['alliance'] = $result['alliance'];
 					$value['aname'] = $result['allitag'];
 					$value['totalpop'] = $result['totalpop'];
 					$value['totalvillage'] = $result['totalvillages'];
-					//SELECT (SELECT SUM(".TB_PREFIX."vdata.pop) FROM ".TB_PREFIX."vdata WHERE ".TB_PREFIX."vdata.owner = 2)  totalpop, (SELECT COUNT(".TB_PREFIX."vdata.wref) FROM ".TB_PREFIX."vdata WHERE ".TB_PREFIX."vdata.owner = 2) totalvillages, (SELECT ".TB_PREFIX."alidata.tag FROM ".TB_PREFIX."alidata WHERE ".TB_PREFIX."alidata.id = ".TB_PREFIX."users.alliance AND ".TB_PREFIX."users.id = 2);
 					array_push($holder, $value);
 				}
 
-				//$holder = $multisort->sorte($holder, "'totalvillage'", false, 2, "'totalpop'", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
 				}
 				$this->rankarray = $newholder;
+			}
 			}
 
 			private function procRankRaceArray($race) {
