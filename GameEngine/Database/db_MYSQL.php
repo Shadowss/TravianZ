@@ -2119,7 +2119,7 @@ class MYSQL_DB {
 	}
 
 	function getARanking() {
-		$q = "SELECT id,name,tag FROM " . TB_PREFIX . "alidata where id != ''";
+		$q = "SELECT id,name,tag FROM " . TB_PREFIX . "alidata where id != '' ORDER BY id DESC";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}

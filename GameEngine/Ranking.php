@@ -198,7 +198,7 @@
 			)allitag
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			ORDER BY totalpop DESC, totalvillages DESC, username ASC";
+			ORDER BY totalpop DESC, totalvillages DESC";
 
 
 				$result = (mysql_query($q));
@@ -253,7 +253,7 @@
 			)allitag
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.tribe = $race AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			ORDER BY totalpop DESC, totalvillages DESC, username ASC";
+			ORDER BY totalpop DESC, totalvillages DESC";
 
 
 				$result = (mysql_query($q));
@@ -312,7 +312,7 @@
 			)pop
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.apall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
-			ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC, username ASC";
+			ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC";
 				$result = mysql_query($q) or die(mysql_error());
 				while($row = mysql_Fetch_assoc($result)) {
 					$datas[] = $row;
@@ -355,7 +355,7 @@
 			)pop
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC, username ASC";
+			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC";
 				$result = mysql_query($q) or die(mysql_error());
 				while($row = mysql_Fetch_assoc($result)) {
 					$datas[] = $row;
@@ -401,7 +401,7 @@
 				$this->rankarray = $newholder;
 			}
 
-			private function procARankArray() {
+			public function procARankArray() {
 				global $database, $multisort;
 				$array = $database->getARanking();
 				$holder = array();

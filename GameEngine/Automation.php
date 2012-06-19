@@ -3831,12 +3831,10 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 
 			private function procClimbers() {
 				global $database, $ranking;
-					$users = "SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5";
+					$users = "SELECT * FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8") . "";
 					$array = $database->query_return($users);
-					if(mysql_num_rows(mysql_query($users)) > 0){
 					$ranking->procRankArray();
-					foreach($array as $session){
-					$oldrank = $ranking->searchRank($session['username'], "username");
+					if(count($ranking->getRank()) > 0){
 					$q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
 					$result = mysql_query($q);
 					if(mysql_num_rows($result)) {
@@ -3845,6 +3843,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					} else {
 						$week='1';
 					}
+					foreach($array as $session){
+					$oldrank = $ranking->searchRank($session['username'], "username");
 					if($week > 1){
 					if($session['oldrank'] > $oldrank) {
 						$totalpoints = $session['oldrank'] - $oldrank;
@@ -3863,15 +3863,16 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					}
 					$database->updateoldrank($session['id'], $oldrank);
 					}
-					$countally = count($database->countAlli());
-					if($countally > 0){
-					for($i=1;$i<=$countally;$i++){
-					$memberlist = $database->getAllMember($i);
+					}
+					$alliance = $database->getARanking();
+					$ranking->procARankArray();
+					if(count($ranking->getRank()) > 0){
+					foreach($alliance as $ally){
+					$memberlist = $database->getAllMember($ally['id']);
 					$oldrank = 0;
 					foreach($memberlist as $member) {
 						$oldrank += $database->getVSumField($member['id'],"pop");
 					}
-						$ally = $database->getAlliance($i);
 						if($ally['oldrank'] < $oldrank) {
 							$totalpoints = $oldrank - $ally['oldrank'];
 							$database->addclimberrankpopAlly($ally['id'], $totalpoints);
@@ -3882,7 +3883,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->removeclimberrankpopAlly($ally['id'], $totalpoints);
 								$database->updateoldrankAlly($ally['id'], $oldrank);
 							}
-					}
 					}
 					}
 			}
