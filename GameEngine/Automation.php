@@ -2435,29 +2435,22 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				}
 
 				$database->setMovementProc($data['moveid']);
-				if($chiefing_village != 1){
+				if($chiefing_village != 1 && $village_destroyed != 1){
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
-				}else{
-				$database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
-				}
 				// send the bounty on type 6.
 				if($type !== 1)
 				{
 					$reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
-					$isoasis1 = $database->isVillageOases($to['wref']);
-					if ($isoasis1 == 0){
-					//$database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
-					}else{
-					//$database->modifyOasisResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
-					}
-					$database->addMovement(6,$to['wref'],$from['wref'],$reference,time(),$endtime);
-					//$database->updateVillage($to['wref']);
+					$database->addMovement(6,$to['wref'],$from['wref'],$reference,time(),$endtime,1,0,0,0,0,$data['ref']);
 					$totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
 					$totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
 					$database->modifyPoints($from['owner'],'RR',$totalstolengain);
 					$database->modifyPoints($to['owner'],'RR',$totalstolentaken);
 					$database->modifyPointsAlly($targetally,'RR',$totalstolentaken );
 					$database->modifyPointsAlly($ownally,'RR',$totalstolengain);
+				}
+				}else if($chiefing_village == 1){
+				$database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
 				}
 			}
 			else //else they die and don't return or report.
@@ -2500,7 +2493,14 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->query($q);
 								$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
 								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$data['to']." or from = ".$data['to'];
+								$getmovement = $database->getMovement(3,$data['to'],1);
+								foreach($getmovement as $movedata) {
+								$time = time();
+								$time2 = $time - $movedata['starttime'];
+								$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
+								$database->setMovementProc($movedata['moveid']);
+								}
+								$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to'];
 								$database->query($q);
 						}
 						}

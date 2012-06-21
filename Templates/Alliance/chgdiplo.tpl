@@ -40,7 +40,7 @@
                 <tr>
                     <th>Alliance</th>
 
-                    <td><input class="ally text" type="text" name="a_name" maxlength="8"></td>
+                    <td><input class="ally text" type="text" name="a_name" maxlength="15"></td>
                 </tr>
 
                 <tr>

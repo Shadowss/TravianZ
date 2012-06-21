@@ -270,26 +270,19 @@ if($_GET['aid'] or $_GET['fid'] or $_GET['fid2'] or $session->alliance!=0){
 				}
 				break;
 			case 101:
-				$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
-				$database->diplomacyCancelOffer($post);
+				$database->diplomacyCancelOffer($_POST['id']);
 				include ("Templates/Alliance/chgdiplo.tpl");
 				break;
 			case 102:
-				$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
-				$post2 = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['alli2']);
-				$database->diplomacyInviteDenied($post, $post2);
+				$database->diplomacyInviteDenied($_POST['id'], $_POST['alli2']);
 				include ("Templates/Alliance/chgdiplo.tpl");
 				break;
 			case 103:
-				$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
-				$post2 = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['alli2']);
-				$database->diplomacyInviteAccept($post, $post2);
+				$database->diplomacyInviteAccept($_POST['id'], $_POST['alli2']);
 				include ("Templates/Alliance/chgdiplo.tpl");
 				break;
 			case 104:
-				$post = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['id']);
-				$post2 = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['alli2']);
-				$database->diplomacyCancelExistingRelationship($post, $post2);
+				$database->diplomacyCancelExistingRelationship($_POST['id'], $_POST['alli2']);
 				include ("Templates/Alliance/chgdiplo.tpl");
 		}
 	   } else {

@@ -9,7 +9,7 @@
 	<tbody><tr>
 		<th>Tag</th>
 		<td class="tag">
-			<input class="text" name="ally1" value="<?php echo $form->getValue("ally1"); ?>" maxlength="8">
+			<input class="text" name="ally1" value="<?php echo $form->getValue("ally1"); ?>" maxlength="15">
 			<span class="error"><?php echo $form->getError("ally1"); ?></span>
 
 		</td>
@@ -17,7 +17,7 @@
 	<tr>
 		<th>Name</th>
 		<td class="nam">
-			<input class="text" name="ally2" value="<?php echo $form->getValue("ally2"); ?>" maxlength="25">
+			<input class="text" name="ally2" value="<?php echo $form->getValue("ally2"); ?>" maxlength="50">
 			<span class="error"><?php echo $form->getError("ally2"); ?></span>
 		</td>
 

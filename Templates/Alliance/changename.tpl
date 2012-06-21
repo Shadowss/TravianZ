@@ -21,13 +21,13 @@ if($session->access!=BANNED){
 </tr></thead>
 <tbody><tr>
 <th>Tag</th>
-<td><input class="tag text" name="ally1" value="<?php echo $allianceinfo['tag']; ?>" maxlength="8">
+<td><input class="tag text" name="ally1" value="<?php echo $allianceinfo['tag']; ?>" maxlength="15">
 <span class="error2"></span></td>
 </tr>
 
 <tr>
 <th>Name</th>
-<td><input class="name text" name="ally2" value="<?php echo $allianceinfo['name']; ?>" maxlength="25">
+<td><input class="name text" name="ally2" value="<?php echo $allianceinfo['name']; ?>" maxlength="50">
 <span class="error2"></span></td>
 </tr></tbody></table>
 
