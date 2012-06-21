@@ -50,7 +50,7 @@ div.c1 {text-align: center}
 
 		<a href="rules.php"><b>Game Rules</b></a> 
         <p><a href="plus.php?id=3">Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
-                    <a href="spieler.php?uid=0"><b>Support</b></a> 
+                    <a href="support.php"><b>Support</b></a> 
         <br></p>
 		<?php
 		$timestamp = $database->isDeleting($session->uid);
