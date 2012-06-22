@@ -2016,19 +2016,6 @@ class MYSQL_DB {
 		return $row[0] + $row2[0] + $row3[0];
 	}
 
-	/***************************
-	Function to retrieve movement of village
-	Type 0: Send Resource
-	Type 1: Send Merchant
-	Type 2: Return Resource
-	Type 3: Attack
-	Type 4: Return
-	Type 5: Settler
-	Type 6: Bounty        Type 7: Reinf.
-	Mode 0: Send/Out
-	Mode 1: Recieve/In
-	References: Type, Village, Mode
-	***************************/
 	function getMovement($type, $village, $mode) {
 		$time = time();
 		if(!$mode) {
@@ -2060,6 +2047,9 @@ class MYSQL_DB {
 				break;
 			case 7:
 				$q = "SELECT * FROM " . TB_PREFIX . "movement where " . TB_PREFIX . "movement." . $where . " = $village and sort_type = 4 and ref = 0 and proc = 0 ORDER BY endtime ASC";
+				break;
+			case 8:
+				$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement." . $where . " = $village and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 1 ORDER BY endtime ASC";
 				break;
 			case 34:
 				$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement." . $where . " = $village and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 or " . TB_PREFIX . "movement." . $where . " = $village and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 4 ORDER BY endtime ASC";

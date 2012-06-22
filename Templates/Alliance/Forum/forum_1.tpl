@@ -55,16 +55,16 @@ function showCheckList() {
 			newTD1.className = 'ally';
 			newTD2.className = 'tag';
 			newTD3.className = 'ad';
-			newTD1.innerHTML = html_input_1 + 'id="allys_by_id_'+num_fields+'" class="text" maxlength="8" name="allys_by_id['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'allys\')">';
-			newTD2.innerHTML = html_input_1 + 'id="allys_by_name_'+num_fields+'" class="text" maxlength="8" name="allys_by_name['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'allys\')">';
+			newTD1.innerHTML = html_input_1 + 'id="allys_by_id_'+num_fields+'" class="text" maxlength="15" name="allys_by_id['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'allys\')">';
+			newTD2.innerHTML = html_input_1 + 'id="allys_by_name_'+num_fields+'" class="text" maxlength="15" name="allys_by_name['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'allys\')">';
 		}
 
 		if(element_id == 'user_list') {
 			newTD1.className = 'id';
 			newTD2.className = 'pla';
 			newTD3.className = 'ad';
-			newTD1.innerHTML = html_input_1 + 'id="users_by_id_'+num_fields+'" class="text" maxlength="8" name="users_by_id['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'users\')">';
-			newTD2.innerHTML = html_input_1 + 'id="users_by_name_'+num_fields+'" class="text" maxlength="15" name="users_by_name['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'users\')">';
+			newTD1.innerHTML = html_input_1 + 'id="users_by_id_'+num_fields+'" class="text" maxlength="15" name="users_by_id['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'users\')">';
+			newTD2.innerHTML = html_input_1 + 'id="users_by_name_'+num_fields+'" class="text" maxlength="50" name="users_by_name['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'users\')">';
 		}
 
 		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow(\''+element_id+'\')">';
@@ -139,10 +139,10 @@ function showCheckList() {
 	</thead><tbody>
 	<tr>
 		<td class="ally">
-			<input class="text" type="text" id="allys_by_id_0" maxlength="8" name="allys_by_id[0]" onkeyup="checkInputs(0,'allys');" />
+			<input class="text" type="text" id="allys_by_id_0" maxlength="15" name="allys_by_id[0]" onkeyup="checkInputs(0,'allys');" />
 		</td>
 		<td class="tag">
-			<input class="text" type="text" id="allys_by_name_0" maxlength="8" name="allys_by_name[0]" onkeyup="checkInputs(0,'allys');" />
+			<input class="text" type="text" id="allys_by_name_0" maxlength="15" name="allys_by_name[0]" onkeyup="checkInputs(0,'allys');" />
 		</td>
 		<td class="ad">
 
@@ -162,11 +162,11 @@ function showCheckList() {
 	</thead><tbody>
 	<tr>
 		<td class="id">
-			<input class="text" type="text" id="users_by_id_0" maxlength="8" name="users_by_id[0]" onkeyup="checkInputs(0,'users');" />
+			<input class="text" type="text" id="users_by_id_0" maxlength="15" name="users_by_id[0]" onkeyup="checkInputs(0,'users');" />
 		</td>
 
 		<td class="pla">
-			<input class="text" type="text" id="users_by_name_0" maxlength="15" name="users_by_name[0]" onkeyup="checkInputs(0,'users');" />
+			<input class="text" type="text" id="users_by_name_0" maxlength="50" name="users_by_name[0]" onkeyup="checkInputs(0,'users');" />
 		</td>
 		<td class="ad">
 			<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow('user_list')" />
