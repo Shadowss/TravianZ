@@ -1480,9 +1480,9 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 
-	function sendMessage($client, $owner, $topic, $message, $send) {
+	function sendMessage($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) {
 		$time = time();
-		$q = "INSERT INTO " . TB_PREFIX . "mdata values (0,$client,$owner,'$topic',\"$message\",0,0,$send,$time,0,0)";
+		$q = "INSERT INTO " . TB_PREFIX . "mdata values (0,$client,$owner,'$topic',\"$message\",0,0,$send,$time,0,0,$alliance,$player,$coor,$report)";
 		return mysql_query($q, $this->connection);
 	}
 

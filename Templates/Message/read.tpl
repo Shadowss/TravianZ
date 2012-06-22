@@ -1,5 +1,9 @@
 <?php
 $input = $message->reading['message'];
+$alliance = $message->reading['alliance'];
+$player = $message->reading['player'];
+$coor = $message->reading['coor'];
+$report = $message->reading['report'];
 include("GameEngine/BBCode.php");
 ?>
 <div id="content"  class="messages">

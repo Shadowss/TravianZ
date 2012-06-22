@@ -31,10 +31,10 @@ if($session->access!=BANNED){
 					<a href="javascript:void(0);" bbType="d" bbTag="b" ><div title="bold" alt="bold" class="bbButton bbBold"></div></a>
 					<a href="javascript:void(0);" bbType="d" bbTag="i" ><div title="italic" alt="italic" class="bbButton bbItalic"></div></a>
 					<a href="javascript:void(0);" bbType="d" bbTag="u" ><div title="underlined" alt="underlined" class="bbButton bbUnderscore"></div></a>
-					<a href="javascript:void(0);" bbType="d" bbTag="alliance" ><div title="Alliance" alt="Alliance" class="bbButton bbAlliance"></div></a>
-					<a href="javascript:void(0);" bbType="d" bbTag="Player" ><div title="Player" alt="Player" class="bbButton bbPlayer"></div></a>
-					<a href="javascript:void(0);" bbType="d" bbTag="coor" ><div title="Coordinates" alt="Coordinates" class="bbButton bbCoordinate"></div></a>
-					<a href="javascript:void(0);" bbType="d" bbTag="report" ><div title="Report" alt="Report" class="bbButton bbReport"></div></a>
+					<a href="javascript:void(0);" bbType="d" bbTag="alliance0" ><div title="Alliance" alt="Alliance" class="bbButton bbAlliance"></div></a>
+					<a href="javascript:void(0);" bbType="d" bbTag="player0" ><div title="Player" alt="Player" class="bbButton bbPlayer"></div></a>
+					<a href="javascript:void(0);" bbType="d" bbTag="coor0" ><div title="Coordinates" alt="Coordinates" class="bbButton bbCoordinate"></div></a>
+					<a href="javascript:void(0);" bbType="d" bbTag="report0" ><div title="Report" alt="Report" class="bbButton bbReport"></div></a>
 					<a href="javascript:void(0);" bbWin="resources" id="text_resourceButton"><div title="Resources" alt="Resources" class="bbButton bbResource"></div></a>
 
 					<a href="javascript:void(0);" bbWin="smilies" id="text_smilieButton"><div title="Smilies" alt="Smilies" class="bbButton bbSmilie"></div></a>

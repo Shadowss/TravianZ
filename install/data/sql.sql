@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
   `b7` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `b8` tinyint(2) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `%PREFIX%abdata`
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
   `effect` varchar(100) NOT NULL,
   `img` varchar(20) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MYISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Table structure for table `s1_artefacts`
@@ -914,6 +914,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
   `time` int(11) unsigned NOT NULL DEFAULT '0',
   `deltarget` int(11) unsigned NOT NULL,
   `delowner` int(11) unsigned NOT NULL,
+  `alliance` int(11) unsigned NOT NULL,
+  `player` int(11) unsigned NOT NULL,
+  `coor` int(11) unsigned NOT NULL,
+  `report` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

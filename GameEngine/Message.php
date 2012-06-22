@@ -314,10 +314,63 @@ class Message {
 		}
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
 		$text = "[message]".$text."[/message]";
+		$alliance = $player = $coor = $report = 0;
+		for($i=0;$i<=$alliance;$i++){
+		if(preg_match('/\[alliance'.$i.'\]/',$text) && preg_match('/\[\/alliance'.$i.'\]/',$text)){
+		$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
+		if(preg_match('/\[alliance'.$i.'\]/',$alliance1) && preg_match('/\[\/alliance'.$i.'\]/',$alliance1)){
+		$j = $i+1;
+		$alliance2 = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '[alliance'.$j.']', $alliance1);
+		$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance'.$j.']', $alliance1);
+		$text = $alliance2."[/alliance".$i."]".$alliance1;
+		$alliance += 1;
+		}
+		}
+		}
+		for($i=0;$i<=$player;$i++){
+		if(preg_match('/\[player'.$i.'\]/',$text) && preg_match('/\[\/player'.$i.'\]/',$text)){
+		$player1 = preg_replace('/\[message\](.*?)\[\/player'.$i.'\]/is', '', $text);
+		if(preg_match('/\[player'.$i.'\]/',$player1) && preg_match('/\[\/player'.$i.'\]/',$player1)){
+		$j = $i+1;
+		$player2 = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$player1 = preg_replace('/\[player'.$i.'\]/', '[player'.$j.']', $player1);
+		$player1 = preg_replace('/\[\/player'.$i.'\]/', '[/player'.$j.']', $player1);
+		$text = $player2."[/player".$i."]".$player1;
+		$player += 1;
+		}
+		}
+		}
+		for($i=0;$i<=$coor;$i++){
+		if(preg_match('/\[coor'.$i.'\]/',$text) && preg_match('/\[\/coor'.$i.'\]/',$text)){
+		$coor1 = preg_replace('/\[message\](.*?)\[\/coor'.$i.'\]/is', '', $text);
+		if(preg_match('/\[coor'.$i.'\]/',$coor1) && preg_match('/\[\/coor'.$i.'\]/',$coor1)){
+		$j = $i+1;
+		$coor2 = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$coor1 = preg_replace('/\[coor'.$i.'\]/', '[coor'.$j.']', $coor1);
+		$coor1 = preg_replace('/\[\/coor'.$i.'\]/', '[/coor'.$j.']', $coor1);
+		$text = $coor2."[/coor".$i."]".$coor1;
+		$coor += 1;
+		}
+		}
+		}
+		for($i=0;$i<=$report;$i++){
+		if(preg_match('/\[report'.$i.'\]/',$text) && preg_match('/\[\/report'.$i.'\]/',$text)){
+		$report1 = preg_replace('/\[message\](.*?)\[\/report'.$i.'\]/is', '', $text);
+		if(preg_match('/\[report'.$i.'\]/',$report1) && preg_match('/\[\/report'.$i.'\]/',$report1)){
+		$j = $i+1;
+		$report2 = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$report1 = preg_replace('/\[report'.$i.'\]/', '[report'.$j.']', $report1);
+		$report1 = preg_replace('/\[\/report'.$i.'\]/', '[/report'.$j.']', $report1);
+		$text = $report2."[/report".$i."]".$report1;
+		$report += 1;
+		}
+		}
+		}
 		if($permission[opt7]==1){
 		if ($userally != 0) {
 		while ($allmembers = mysql_fetch_array($allmembersQ)) {
-		$database->sendMessage($allmembers[id],$session->uid,$topic,$text,0);
+		$database->sendMessage($allmembers[id],$session->uid,$topic,$text,0,$alliance,$player,$coor,$report);
 		}
 			}
 			}
@@ -336,13 +389,72 @@ class Message {
 		}
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
 		$text = "[message]".$text."[/message]";
-		//if to multihunter
-		if($user == "0") {
-			//make mail server
-			$database->sendMessage($user, $session->uid, $topic, $text, 0);
-			} else {
-			$database->sendMessage($user, $session->uid, $topic, $text, 0);
-			}
+		$alliance = $player = $coor = $report = 0;
+		for($i=0;$i<=$alliance;$i++){
+		if(preg_match('/\[alliance'.$i.'\]/',$text) && preg_match('/\[\/alliance'.$i.'\]/',$text)){
+		$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '', $input);
+		$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '', $alliance1);
+		if(preg_match('/\[alliance'.$i.'\]/',$alliance1) && preg_match('/\[\/alliance'.$i.'\]/',$alliance1)){
+		$j = $i+1;
+		$text = preg_replace('/\[alliance'.$i.'\]/', '/\[alliance'.$j.'\]/', $text);
+		$text = preg_replace('/\[\/alliance'.$i.'\]/', '/\[\/alliance'.$j.'\]/', $text);
+		$alliance += 1;
+		}
+		}
+		}
+		for($i=0;$i<=$alliance;$i++){
+		if(preg_match('/\[alliance'.$i.'\]/',$text) && preg_match('/\[\/alliance'.$i.'\]/',$text)){
+		$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
+		if(preg_match('/\[alliance'.$i.'\]/',$alliance1) && preg_match('/\[\/alliance'.$i.'\]/',$alliance1)){
+		$j = $i+1;
+		$alliance2 = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '[alliance'.$j.']', $alliance1);
+		$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance'.$j.']', $alliance1);
+		$text = $alliance2."[/alliance".$i."]".$alliance1;
+		$alliance += 1;
+		}
+		}
+		}
+		for($i=0;$i<=$player;$i++){
+		if(preg_match('/\[player'.$i.'\]/',$text) && preg_match('/\[\/player'.$i.'\]/',$text)){
+		$player1 = preg_replace('/\[message\](.*?)\[\/player'.$i.'\]/is', '', $text);
+		if(preg_match('/\[player'.$i.'\]/',$player1) && preg_match('/\[\/player'.$i.'\]/',$player1)){
+		$j = $i+1;
+		$player2 = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$player1 = preg_replace('/\[player'.$i.'\]/', '[player'.$j.']', $player1);
+		$player1 = preg_replace('/\[\/player'.$i.'\]/', '[/player'.$j.']', $player1);
+		$text = $player2."[/player".$i."]".$player1;
+		$player += 1;
+		}
+		}
+		}
+		for($i=0;$i<=$coor;$i++){
+		if(preg_match('/\[coor'.$i.'\]/',$text) && preg_match('/\[\/coor'.$i.'\]/',$text)){
+		$coor1 = preg_replace('/\[message\](.*?)\[\/coor'.$i.'\]/is', '', $text);
+		if(preg_match('/\[coor'.$i.'\]/',$coor1) && preg_match('/\[\/coor'.$i.'\]/',$coor1)){
+		$j = $i+1;
+		$coor2 = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$coor1 = preg_replace('/\[coor'.$i.'\]/', '[coor'.$j.']', $coor1);
+		$coor1 = preg_replace('/\[\/coor'.$i.'\]/', '[/coor'.$j.']', $coor1);
+		$text = $coor2."[/coor".$i."]".$coor1;
+		$coor += 1;
+		}
+		}
+		}
+		for($i=0;$i<=$report;$i++){
+		if(preg_match('/\[report'.$i.'\]/',$text) && preg_match('/\[\/report'.$i.'\]/',$text)){
+		$report1 = preg_replace('/\[message\](.*?)\[\/report'.$i.'\]/is', '', $text);
+		if(preg_match('/\[report'.$i.'\]/',$report1) && preg_match('/\[\/report'.$i.'\]/',$report1)){
+		$j = $i+1;
+		$report2 = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $text);
+		$report1 = preg_replace('/\[report'.$i.'\]/', '[report'.$j.']', $report1);
+		$report1 = preg_replace('/\[\/report'.$i.'\]/', '[/report'.$j.']', $report1);
+		$text = $report2."[/report".$i."]".$report1;
+		$report += 1;
+		}
+		}
+		}
+		$database->sendMessage($user, $session->uid, $topic, $text, 0, $alliance, $player, $coor, $report);
 		}
 	}
 
@@ -362,7 +474,7 @@ class Message {
 		$welcomemsg = preg_replace("'%ALLI%'", $database->countAlli(), $welcomemsg);
 		$welcomemsg = preg_replace("'%SERVER_NAME%'", SERVER_NAME, $welcomemsg);
 		$welcomemsg = "[message]".$welcomemsg."[/message]";
-		return $database->sendMessage($uid, 5, WEL_TOPIC, $welcomemsg, 0);
+		return $database->sendMessage($uid, 5, WEL_TOPIC, $welcomemsg, 0, 0, 0, 0, 0);
 	}
 
 	private function wordCensor($text) {
