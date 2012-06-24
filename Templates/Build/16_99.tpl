@@ -70,7 +70,7 @@ if(!$session->goldclub) {
 					
 </tr>
 <tr>
-<div class="clear"></div><p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK" <?php if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p></form>
+<div class="clear"></div><p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" tabindex="8" alt="OK"/></p></form>
 </tr>
 </form>
 <?php } ?>

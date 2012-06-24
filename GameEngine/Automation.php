@@ -2197,7 +2197,7 @@ class Automation {
 						$database->setVillageField($data['to'],loyalty,($toF['loyalty']-$rand));
 					} else {
 					//you took over the village
-						$villname = $database->getVillageField($data['to'],"name");
+						$villname = addslashes($database->getVillageField($data['to'],"name"));
 						$artifact = $database->getOwnArtefactInfo($data['to']);
 						$info_chief = "".$chief_pic.",Inhabitants of ".$villname." village decided to join your empire.";
 						if ($artifact['vref'] == $data['to']){
