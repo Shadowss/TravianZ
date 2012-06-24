@@ -42,7 +42,7 @@
             if($jobs['loopcon'] == 1) {
             	echo " (waiting loop)";
             }
-            echo "</td><td><span id=\"timer".$timer."\">";
+            echo "</td><td><in span id=\"timer".$timer."\">";
             echo $generator->getTimeFormat($jobs['timestamp']-time());
             echo "</span> hrs.</td>";
             echo "<td>done at ".date('H:i', $jobs['timestamp'])."</td></tr>";
