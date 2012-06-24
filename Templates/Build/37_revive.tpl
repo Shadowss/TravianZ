@@ -161,7 +161,7 @@
 
     <?php
     
-    if($_GET['revive'] == 1 && $hero_info['inrevive'] == 0){
+    if($_GET['revive'] == 1 && $hero_info['inrevive'] == 0 && $hero_info['dead'] == 1){
 			if($session->access != BANNED){
             mysql_query("UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".$training_time2."', `wref` = '".$village->wid."' WHERE `uid` = '".$session->uid."'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$wood." WHERE `wref` = '" . $village->wid . "'");
