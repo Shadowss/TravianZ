@@ -82,7 +82,7 @@ if ($units[$y]['sort_type']==3){
 										    if($datetime[0] != "today") {
 										    echo "on ".$datetime[0]." ";
 										    }
-										    echo "at ".$datetime[1]." hours""</div>
+										    echo "at ".$datetime[1]." hours</div>
 											</div>
 										</td>
 									</tr>
