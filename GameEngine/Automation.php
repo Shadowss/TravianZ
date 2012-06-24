@@ -206,6 +206,7 @@ class Automation {
 		$this->checkInvitedPlayes();
 		$this->updateStore();
 		$this->procClimbers();
+		$this->CheckBan();
 	}
 
 	private function loyaltyRegeneration() {
@@ -3834,8 +3835,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		}
 	}
 
-			private function procClimbers() {
-				global $database, $ranking;
+	private function procClimbers() {
+			global $database, $ranking;
 					$users = "SELECT * FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8") . "";
 					$array = $database->query_return($users);
 					$ranking->procRankArray();
@@ -3890,7 +3891,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 							}
 					}
 					}
-			}
+	}
+			
+	private function checkBan() {
+		global $database;
+		$time = time();
+		$q = "SELECT * FROM ".TB_PREFIX."banlist WHERE active = 1 and end < $time";
+		$array = $database->query_return($q);
+		foreach($array as $banlist) {
+			mysql_query("UPDATE ".TB_PREFIX."banlist SET active = 0 WHERE id = ".$banlist['id']."");
+			mysql_query("UPDATE ".TB_PREFIX."users SET access = 2 WHERE id = ".$banlist['uid']."");
+		}
+	}
+
 }
 $automation = new Automation;
 ?>

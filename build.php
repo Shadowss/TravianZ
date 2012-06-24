@@ -163,7 +163,7 @@ if($routeaccess = 1){
 		}
 }
 }
-if($session->goldclub == 1 && $session->access != BANNED){
+if($session->goldclub == 1){
 		if(isset($_GET['t'])==99) {
 
 			if($_GET['action'] == 'addList') {
@@ -191,7 +191,11 @@ if($session->goldclub == 1 && $session->access != BANNED){
 				   header("Location: build.php?id=39&t=99");
 			}
 			if($_POST['action'] == 'startRaid'){
+			if($session->access != BANNED){
 			include ("Templates/a2b/startRaid.tpl");
+			}else{
+			header("Location: banned.php");
+			}
 			}
 
 			if(isset($_GET['slid']) && is_numeric($_GET['slid'])) {
@@ -216,9 +220,6 @@ if($session->goldclub == 1 && $session->access != BANNED){
 		}
 }else{
 $create = 0;
-if($session->access == BANNED){
-header("Location: banned.php");
-}
 }
 
 if (isset($_POST['a']) == 533374 && isset($_POST['id']) == 39){

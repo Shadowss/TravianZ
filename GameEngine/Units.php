@@ -250,6 +250,7 @@ class Units {
 					header("Location: a2b.php");
 				} else {
 
+if($session->access != BANNED){
 
 		 if($session->tribe == 1){ $u = ""; } elseif($session->tribe == 2){ $u = "1"; } elseif($session->tribe == 3){ $u = "2"; }elseif($session->tribe == 4){ $u = "3"; }else {$u = "4"; }
 
@@ -334,11 +335,14 @@ class Units {
 		}
 		header("Location: build.php?id=39");
 
+}else{
+header("Location: banned.php");
+}
 	}}
 
 	private function sendTroopsBack($post) {
 		global $form, $database, $village, $generator, $session, $technology;
-
+if($session->access != BANNED){
 		$enforce=$database->getEnforceArray($post['ckey'],0);
 		if(($enforce['from']==$village->wid) || ($enforce['vref']==$village->wid)){
 			$to = $database->getVillage($enforce['from']);
@@ -459,6 +463,9 @@ class Units {
 					header("Location: a2b.php");
 				}
 		}
+}else{
+header("Location: banned.php");
+}
 	}
 
 	public function Settlers($post) {

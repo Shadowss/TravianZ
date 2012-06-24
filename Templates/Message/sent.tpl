@@ -20,7 +20,7 @@
             <th></th>
             <th>Subject</th>
             <th>Recipient</th>
-            <th class="sent"><a href="nachrichten.php?s=0&amp;t=2&amp;o=1">Sent</a></th>
+            <th class="sent"><a href="nachrichten.php?t=2&s=0&amp;t=2&amp;o=1">Sent</a></th>
             </tr></thead><tfoot><tr><th><?php
 		$MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
 		$golds = mysql_fetch_array($MyGold);
@@ -34,17 +34,17 @@
     echo "&laquo;&raquo;";
     }
     else if (!isset($_GET['s']) && count($message->sent1) > 10) {
-    echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
+    echo "&laquo;<a href=\"?t=2&s=10&o=0\">&raquo;</a>";
     }
     else if(isset($_GET['s']) && count($message->sent1) > $_GET['s']) {
     	if(count($message->sent1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->sent1) && $_GET['s'] != 0) {
-         echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?t=2&s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
          else if(count($message->sent1) > $_GET['s']+10) {
-         	echo "&laquo;<a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         	echo "&laquo;<a href=\"?t=2&s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
         else {
-        echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+        echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
         }
     }
     ?></th></tr></tfoot>

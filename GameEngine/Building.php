@@ -312,6 +312,7 @@ class Building {
 				}
 			}
 			$level = $database->getResourceLevel($village->wid);
+			if($session->access!=BANNED){
 			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time+($loop==1?ceil(60/SPEED):0),0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]+($loopsame>0?2:1)),0);
@@ -321,6 +322,9 @@ class Building {
 				else {
 					header("Location: dorf1.php");
 				}
+			}
+			}else{
+			header("Location: banned.php");
 			}
 		}
 	}
@@ -352,10 +356,14 @@ class Building {
 					$time = $this->buildArray[0]['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
 				}
 			}
+			if($session->access!=BANNED){
 			$level = $database->getResourceLevel($village->wid);
 			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time,0,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]-1),2);
 				header("Location: dorf2.php");
+			}
+			}else{
+			header("Location: banned.php");
 			}
 		}
 	}
@@ -383,12 +391,16 @@ class Building {
 				}
 			}
 			if($this->meetRequirement($tid)) {
+			if($session->access!=BANNED){
 			$level = $database->getResourceLevel($village->wid);
 				if($database->addBuilding($village->wid,$id,$tid,$loop,$time,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 					$logging->addBuildLog($village->wid,$this->procResType($tid),($village->resarray['f'.$id]+1),1);
 					$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
 					header("Location: dorf2.php");
 				}
+			}else{
+			header("Location: banned.php");
+			}
 			}
 		}
 	}
