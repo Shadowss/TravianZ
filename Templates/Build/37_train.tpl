@@ -523,7 +523,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '1', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '1', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50')");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `u1` = `u1` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u1['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -540,7 +540,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '1', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '1', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u2` = `u2` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u2['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -556,7 +556,7 @@ $output.="<tr>
                 if($_GET['train'] == 3){
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '3', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u3['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '3', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u3['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u3` = `u3` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u3['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -572,7 +572,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '5', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u5['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '5', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u5['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u5` = `u5` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u5['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -589,7 +589,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '6', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u6['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '6', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u6['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u6` = `u6` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u6['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -608,7 +608,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '11', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u11['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '11', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u11['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u11` = `u11` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u11['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -625,7 +625,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '12', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u12['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '12', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u12['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u12` = `u12` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u12['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -642,7 +642,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '13', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u13['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '13', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u13['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u13` = `u13` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u13['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -659,7 +659,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '15', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u15['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '15', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u15['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u15` = `u15` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u15['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -676,7 +676,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '16', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u16['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '16', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u16['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u16` = `u16` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u16['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -695,7 +695,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '21', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u21['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '21', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u21['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u21` = `u21` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u21['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -712,7 +712,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '22', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u22['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '22', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u22['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u22` = `u22` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u22['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -729,7 +729,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '24', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u24['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '24', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u24['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u24` = `u24` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u24['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -746,7 +746,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '25', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u25['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '25', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u25['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u25` = `u25` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u25['wood']." WHERE `wref` = '" . $village->wid . "'");
@@ -763,7 +763,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysql_query("DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $session->uid . "'");
 					if($count_hero == 0){
-					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '26', '".$session->username."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u26['time'] / SPEED)*3))."', '50')");
+					mysql_query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`) VALUES ('".$session->uid."', '" . $village->wid . "', '0', '26', '".addslashes($session->username)."', '0', '10', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u26['time'] / SPEED)*3))."', '50')");
                     mysql_query("UPDATE " . TB_PREFIX . "units SET `u26` = `u26` - 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "units SET `hero` = 1 WHERE `vref` = '" . $village->wid . "'");
 					mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$u26['wood']." WHERE `wref` = '" . $village->wid . "'");

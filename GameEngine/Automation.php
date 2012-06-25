@@ -1322,7 +1322,7 @@ class Automation {
 							}
 								$dead['hero']='0';
 								if($unitlist){
-									$dead['hero']+=$battlepart['deadherodef'][$DefenderID];
+									$dead['hero']+=$battlepart['deadherodef'];
 									$database->modifyUnit($data['to'],array("hero"),array($battlepart['deadherodef']),array(0));
 								}
 			//kill other defence in village
@@ -1335,7 +1335,11 @@ class Automation {
 					$tribe = 4;
 					}
 					$start = ($tribe-1)*10+1;
-
+					$totalreinfunits = 0;
+						for($i=1;$i<=50;$i++) {
+							$totalreinfunits += $enforce['u'.$i];
+						}
+					if($totalreinfunits > 0){
 					if($tribe == 1){ $rom='1'; } else if($tribe == 2){ $ger='1'; }else if($tribe == 3){ $gal='1'; }else if($tribe == 4){ $nat='1'; } else { $natar='1'; }
 						for($i=$start;$i<=($start+9);$i++) {
 							if($enforce['u'.$i]>'0'){
@@ -1349,6 +1353,7 @@ class Automation {
 								$dead[$i]='0';
 							}
 						}
+					}
 							if($enforce['hero']>'0'){
 								$database->modifyEnforce($enforce['id'],"hero",$battlepart['deadheroref'][$enforce['id']],0);
 								$dead['hero']+=$battlepart['deadheroref'][$enforce['id']];

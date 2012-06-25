@@ -111,7 +111,7 @@ if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"></td>
   <td class="on"></td><?php if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}}else if($user['friend'.$i.'wait'] == 0){
 if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
   <td class="pla">
-  <?php echo "<a href=\"spieler.php?uid=".$user['friend'.$i]."\">".$database->getUserField($user['friend'.$i],"username",0)."</a>"; ?>
+  <?php echo "<a href=\"nachrichten.php?t=1&id=".$user['friend'.$i]."\">".$database->getUserField($user['friend'.$i],"username",0)."</a>"; ?>
   </td>
 		<?php
 		$friend = $database->getUserArray($user['friend'.$i], 1);
@@ -139,7 +139,7 @@ $friendwait = $friend['id'];
 if($wait == 0){
 if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
   <td class="pla">
-  <?php echo "<img src=\"../../".GP_LOCATE."img/a/clock-inactive.gif\" alt=\"wait for confirm\" title=\"wait for confirm\"><a href=\"spieler.php?uid=".$user['friend'.$i]."\"> ".$database->getUserField($user['friend'.$i],"username",0)."</a>"; ?>
+  <?php echo "<img src=\"../../".GP_LOCATE."img/a/clock-inactive.gif\" alt=\"wait for confirm\" title=\"wait for confirm\"><a href=\"nachrichten.php?t=1&id=".$user['friend'.$i]."\"> ".$database->getUserField($user['friend'.$i],"username",0)."</a>"; ?>
   </td>
 		<?php
             echo "<td class=on></td>";
@@ -147,7 +147,7 @@ if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}
 }else{
 if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
   <td class="pla">
-  <?php echo "<a href=\"spieler.php?uid=".$friendwait."\">".$database->getUserField($friendwait,"username",0)."</a>"; ?>
+  <?php echo "<a href=\"nachrichten.php?t=1&id=".$friendwait."\">".$database->getUserField($friendwait,"username",0)."</a>"; ?>
   </td>		
             <td class="on"><a href="nachrichten.php?confirm=<?php echo $i; ?>"><img src="../../<?php echo GP_LOCATE; ?>img/a/online6.gif" alt="confirm" title="confirm"></a></td>
 <?php

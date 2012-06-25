@@ -12,7 +12,7 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
 		</tr>
 	</thead><tfoot>
 		<tr><th><?php
-		$MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+		$MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 		$golds = mysql_fetch_array($MyGold);
 		$date2=strtotime("NOW");
 		if ($golds['plus'] <= $date2) { ?>

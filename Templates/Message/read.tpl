@@ -26,7 +26,7 @@ include("menu.tpl");
 	</div>
 	<div class="clear"></div>
 	<div class="line"></div>
-	<div class="message"><?php echo nl2br($bbcoded); ?></div> 
+	<div class="message"><?php echo stripslashes(nl2br($bbcoded)); ?></div> 
 	<input type="hidden" name="id" value="<?php echo $message->reading['id']; ?>" />
     <input type="hidden" name="ft" value="m1" />
 	<input type="hidden" name="t" value="1" />

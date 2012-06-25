@@ -40,9 +40,9 @@ class Message {
 					break;
 				case "m2":
 				if ($post['an'] == "[ally]"){
-				$this->sendAMessage($post['be'],$post['message']);
+				$this->sendAMessage($post['be'],addslashes($post['message']));
 				}else{
-				$this->sendMessage($post['an'],$post['be'],$post['message']);
+				$this->sendMessage($post['an'],$post['be'],addslashes($post['message']));
 				}
 				header("Location: nachrichten.php?t=2");
 					break;
@@ -474,7 +474,7 @@ class Message {
 		$welcomemsg = preg_replace("'%ALLI%'", $database->countAlli(), $welcomemsg);
 		$welcomemsg = preg_replace("'%SERVER_NAME%'", SERVER_NAME, $welcomemsg);
 		$welcomemsg = "[message]".$welcomemsg."[/message]";
-		return $database->sendMessage($uid, 5, WEL_TOPIC, $welcomemsg, 0, 0, 0, 0, 0);
+		return $database->sendMessage($uid, 5, WEL_TOPIC, addslashes($welcomemsg), 0, 0, 0, 0, 0);
 	}
 
 	private function wordCensor($text) {

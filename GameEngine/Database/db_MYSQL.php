@@ -330,7 +330,7 @@ class MYSQL_DB {
 			$q = "INSERT IGNORE INTO " . TB_PREFIX . "online (name, uid, time, sit) VALUES ('$name', '$uid', " . time() . ", 1)";
 			return mysql_query($q, $this->connection);
 		} else {
-			$q = "DELETE FROM " . TB_PREFIX . "online WHERE name ='" . $session->username . "'";
+			$q = "DELETE FROM " . TB_PREFIX . "online WHERE name ='" . addslashes($session->username) . "'";
 			return mysql_query($q, $this->connection);
 		}
 	}

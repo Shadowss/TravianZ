@@ -10,16 +10,16 @@
 </tr></thead><tbody>
 <tr>
     <th>Old password</th>
-    <td><input class="text" type="password" name="pw1" maxlength="20" /></td>
+    <td><input class="text" type="password" name="pw1" maxlength="30" /></td>
 </tr>
 
 <tr>
     <th>New password</th>
-    <td><input class="text" type="password" name="pw2" maxlength="20" /></td>
+    <td><input class="text" type="password" name="pw2" maxlength="30" /></td>
 </tr>
 <tr>
     <th>New password</th>
-    <td><input class="text" type="password" name="pw3" maxlength="20" /></td>
+    <td><input class="text" type="password" name="pw3" maxlength="30" /></td>
 </tr></tbody></table>
 <?php
 if($form->getError("pw") != "") {
@@ -34,12 +34,12 @@ echo "<span class=\"error\">".$form->getError('pw')."</span>";
         <td class="note" colspan="2">Please enter your old and your new e-mail addresses. You will then receive a code snippet at both e-mail addresses which you have to enter here.</td></tr>
     <tr>
         <th>Old email</th>
-        <td><input class="text" type="text" name="email_alt" maxlength="50" /></td>
+        <td><input class="text" type="text" name="email_alt" /></td>
     </tr>
     <tr>
 
         <th>New email</th>
-        <td><input class="text" type="text" name="email_neu" maxlength="50" /></td>
+        <td><input class="text" type="text" name="email_neu" /></td>
     </tr></tbody></table>
 <?php
 if($form->getError("email") != "") {

@@ -203,7 +203,7 @@ class Account {
 	private function Logout() {
 		global $session,$database;
 		unset($_SESSION['wid']);
-		$database->activeModify($session->username,1);
+		$database->activeModify(addslashes($session->username),1);
 		$database->UpdateOnline("logout") or die(mysql_error());
 		$session->Logout();
 	}
