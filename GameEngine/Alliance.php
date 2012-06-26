@@ -180,17 +180,28 @@
 		Function to accept an invitation
 		*****************************************/
 		private function acceptInvite($get) {
-			global $database, $session;
+			global $form, $database, $session;
 			foreach($this->inviteArray as $invite) {
 				if($invite['id'] == $get['d']) {
+				$memberlist = $database->getAllMember($invite['alliance']);
+				$alliance_info = $database->getAlliance($invite['alliance']);
+				if(count($memberlist) < $alliance_info['max']){
 					$database->removeInvitation($database->RemoveXSS($get['d']));
 					$database->updateUserField($database->RemoveXSS($invite['uid']), "alliance", $database->RemoveXSS($invite['alliance']), 1);
 					$database->createAlliPermissions($database->RemoveXSS($invite['uid']), $database->RemoveXSS($invite['alliance']), '', '0', '0', '0', '0', '0', '0', '0', '0');
 					// Log the notice
 					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . $session->username . '</a> has joined the alliance.');
+				}else{
+				$accept_error = 1;
+				$max = $alliance_info['max'];
+				}
 				}
 			}
+			if($accept_error == 1){
+			$form->addError("ally_accept", "The alliance can contain only ".$max." peoples right now.");
+			}else{
 			header("Location: build.php?id=" . $get['id']);
+			}
 		}
 
 		/*****************************************

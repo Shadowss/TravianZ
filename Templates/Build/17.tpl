@@ -211,6 +211,8 @@ if(isset($_POST['ft'])=='check'){
 
 	if(!$checkexist){
 		$error = '<span class="error"><b>No Coordinates selected</b></span>';
+	}elseif($getwref == $village->wid){
+		$error = '<span class="error"><b>You cannot send resources to the same village</b></span>';
 	}elseif($userAccess == '0' or $userAccess == '8' or $userAccess == '9'){
 		$error = '<span class="error"><b>Player is Banned. You cannot send resources to him.</b></span>';
     }elseif($_POST['r1']==0 && $_POST['r2']==0 && $_POST['r3']==0 && $_POST['r4']==0){
