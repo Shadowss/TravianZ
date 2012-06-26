@@ -69,6 +69,11 @@ define("ATAG_EXIST","Tag taken");
 define("ANAME_EXIST","Name taken");
 define("NOT_OPENED_YET","Server not started yet.");
 define("REGISTER_CLOSED","The register is closed. You can't register to this server.");
+define("NAME_EMPTY","Please insert name");
+define("NAME_NO_EXIST","There is no user with the name ");
+define("SAME_NAME","You can't invite yourself");
+define("ALREADY_INVITED"," already invited");
+define("ALREADY_IN_ALLY"," already in this alliance");
 
 //COPYRIGHT
 define("TRAVIAN_COPYRIGHT","TravianZ 100% Open Source Travian Clone.");

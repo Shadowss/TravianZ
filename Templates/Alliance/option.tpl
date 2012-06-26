@@ -82,4 +82,4 @@ if ($alliance->userPermArray['opt5']==1){
         </tbody>
 	</table>
 
-	<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
+	<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" onclick="this.disabled=true;this.form.submit();"/></form></p>

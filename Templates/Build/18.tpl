@@ -46,15 +46,9 @@ echo "
 	<?php
     if($alliance->gotInvite) {
     	foreach($alliance->inviteArray as $invite) {
-		if($session->access!=BANNED){
         	 echo "<td class=\"abo\"><a href=\"build.php?id=".$id."&a=2&d=".$invite['id']."\"><img class=\"del\" src=\"img/x.gif\" alt=\"refuse\" title=\"refuse\" /></a></td>
         <td class=\"nam\"><a href=\"allianz.php?aid=".$invite['alliance']."\">&nbsp;".$database->getAllianceName($invite['alliance'])."</a></td>
-        <td class=\"acc\"><a href=\"build.php?id=".$id."&a=3&d=".$invite['id']."\">&nbsp;accept</a></td>";
-		}else{
-		        	 echo "<td class=\"abo\"><a href=\"banned.php\"><img class=\"del\" src=\"img/x.gif\" alt=\"refuse\" title=\"refuse\" /></a></td>
-        <td class=\"nam\"><a href=\"banned.php\">&nbsp;".$database->getAllianceName($invite['alliance'])."</a></td>
-        <td class=\"acc\"><a href=\"banned.php\">&nbsp;accept</a></td>";
-		}
+        <td class=\"acc\"><a href=\"build.php?id=".$id."&a=3&d=".$invite['id']."\">&nbsp;accept</a></td><tr>";
         }
         }
     else {

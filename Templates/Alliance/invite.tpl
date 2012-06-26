@@ -9,7 +9,6 @@ $allianceinfo = $database->getAlliance($aid);
 $allianceInvitations = $database->getAliInvitations($aid);
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
-if($session->access!=BANNED){
 ?>
 
 <table cellpadding="1" cellspacing="1" id="invite" class="small_option"><thead>
@@ -27,7 +26,7 @@ if($session->access!=BANNED){
 <td><input class="name text" type="text" name="a_name" maxlength="20"><span class="error"></span></td>
 </tr>
 </tbody></table>
-<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form> </p>
+<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" onclick="this.disabled=true;this.form.submit();"/></form> </p>
 
 <p class="error"><?php echo $form->getError("name1"); ?><br /><?php echo $form->getError("name2"); ?><br /><?php echo $form->getError("name3"); ?><br /><?php echo $form->getError("name4"); ?><br /><?php echo $form->getError("name5"); ?><br /><?php echo $form->getError("perm"); ?></p><br />
 <table cellpadding="1" cellspacing="1" id="invitations" class="small_option"><thead>
@@ -54,8 +53,3 @@ if (count($allianceInvitations) == 0) {
 ?>
 </tbody>
 </table>
-<?php
-}else{
-	header("Location: banned.php");
-}
-?>

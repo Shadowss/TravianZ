@@ -164,7 +164,7 @@ if($_GET['aid'] or $_GET['fid'] or $_GET['fid2'] or $session->alliance!=0){
 ?>
 <div id="mid">
 <?php
-
+$invite_permission = $database->getAlliancePermission($session->uid, "opt4", 0);
 	   include ("Templates/menu.tpl");
 
 	   if(isset($_GET['s']) && $_GET['s'] == 2) {
@@ -199,7 +199,9 @@ if($_GET['aid'] or $_GET['fid'] or $_GET['fid2'] or $session->alliance!=0){
 		// Options
 	   }else{
 		header("Location: ".$_SERVER['PHP_SELF']);
-	   }} elseif(isset($_POST['o'])) {
+	   }}else if(isset($_GET['delinvite']) && $invite_permission == 1){
+		include ("Templates/Alliance/invite.tpl");
+	    } elseif(isset($_POST['o'])) {
 		switch($_POST['o']) {
 			case 1:
 				if(isset($_POST['s']) == 5 && isset($_POST['a_user'])) {
@@ -285,10 +287,9 @@ if($_GET['aid'] or $_GET['fid'] or $_GET['fid2'] or $session->alliance!=0){
 				$database->diplomacyCancelExistingRelationship($_POST['id'], $_POST['alli2']);
 				include ("Templates/Alliance/chgdiplo.tpl");
 		}
-	   } else {
-
+		} else {
 		include ("Templates/Alliance/overview.tpl");
-	   }
+		}
 
 ?>
 </div>

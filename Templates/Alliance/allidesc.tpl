@@ -15,8 +15,7 @@ foreach($memberlist as $member) {
 }
 
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
-include("alli_menu.tpl");  
-if($session->access!=BANNED){
+include("alli_menu.tpl");
 ?>
 <table cellpadding="1" cellspacing="1" id="edit"><thead>
 <form method="post" action="allianz.php">
@@ -135,8 +134,3 @@ INDELING CATEGORIEEN:
 </table>
 
 <p class="btn"><input tabindex="3" type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" /></p></form>
-<?php
-}else{
-	header("Location: banned.php");
-}
-?>
