@@ -22,6 +22,24 @@ header("Location: install/");
 }
 
 include ("GameEngine/config.php");
+ //Change it to your own domain
+if($_SERVER['HTTP_HOST'] != 'www.travianix.co.cc')
+{
+    header('location: http://www.travianix.co.cc');
+    exit;
+}
+
+error_reporting(E_ALL || E_NOTICE);
+
+if(file_exists('Security/Security.class.php'))
+{
+    require 'Security/Security.class.php';
+    Security::instance();
+}
+else
+{
+    die('Security: Please activate security class!');
+}
 include ("GameEngine/Database.php");
 include ("GameEngine/Lang/".LANG.".php");
 ?>
