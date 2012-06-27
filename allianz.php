@@ -1,6 +1,6 @@
 <?php
 
-if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) header("Location: allianz.php");;
+if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) die('Hacking Attemp');
 	   include ("GameEngine/Village.php");
 	   include ("GameEngine/Chat.php");
 	   $start = $generator->pageLoadTimeStart();
