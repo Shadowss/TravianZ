@@ -39,7 +39,7 @@ if (mysql_num_rows($MyGold)) {
         <tbody>
 
         <tr>
-            <td class="man"></td>
+            <td class="man"><a href="#" onClick="return Popup(0,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
             <td class="desc">
                 <b><font color="#71D000">P</font><font color="#FF6F0F">l</font><font color="#71D000">u</font><font color="#FF6F0F">s</font></b> Account<br />
         <span class="run">
@@ -111,7 +111,7 @@ if (mysql_num_rows($MyGold)) {
 
         </tr>
         <tr>
-            <td class="man"></a></td>
+            <td class="man"><a href="#" onClick="return Popup(1,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
             <td class="desc">
                 +<b>25</b>% <img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /> Production: Lumber<br />
                 <span class="run">
@@ -172,11 +172,11 @@ if (mysql_num_rows($MyGold)) {
 }
 }
 ?>
-    </span></a></td>
+   </span></a></td>
         </tr>
 
         <tr>
-            <td class="man"></td>
+            <td class="man"><a href="#" onClick="return Popup(2,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
 
             <td class="desc">
                 +<b>25</b>% <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /> Production: Clay<br />
@@ -242,7 +242,7 @@ if (mysql_num_rows($MyGold)) {
         </tr>
 
         <tr>
-            <td class="man"></td>
+            <td class="man"><a href="#" onClick="return Popup(3,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
             <td class="desc">
                 +<b>25</b>% <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /> Production: Iron<br />
                 <span class="run">
@@ -307,7 +307,7 @@ if (mysql_num_rows($MyGold)) {
 
         <tr>
 
-            <td class="man"></a></td>
+            <td class="man"><a href="#" onClick="return Popup(4,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
             <td class="desc">
                 +<b>25</b>% <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /> Production: Crop<br />
                 <span class="run">
@@ -372,7 +372,7 @@ if (mysql_num_rows($MyGold)) {
         </tr>
         <tr>
 
-            <td class="man"></td>
+            <td class="man"><a href="#" onClick="return Popup(7,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
             <td class="desc">Complete construction orders and researches in this village now (does not work for Palace and Residence).</td>
             <td class="dur">now</td>
             <td class="cost"><img src="img/x.gif" class="gold" alt="Gold" title="Gold" />2</td>
@@ -403,7 +403,7 @@ if (mysql_num_rows($MyGold)) {
         </tr>
 
         <tr>
-            <td class="man"></td>
+            <td class="man"><a href="#" onClick="return Popup(8,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
             <td class="desc">1:1 Trade with the NPC merchant</td>
             <td class="dur">now</td>
             <td class="cost"><img src="img/x.gif" class="gold" alt="Gold" title="Gold" />3</td>
@@ -452,14 +452,13 @@ if (mysql_num_rows($MyGold)) {
         <tbody>
 
         <tr>
-            <td class="man"></td>
+            <td class="man"><a href="#" onClick="return Popup(9,6);"><img class="help" src="img/x.gif" alt="" title="" /></a></td>
             <td class="desc">
 <b>Gold Club</b></br>
-<font size="2">Gold Club including: farmlist, merchants run three times, crop finder, master builder, trade routes, raid statistics and automatic send away troops before an attack.</font>
         <span class="run">
     </span>
             </td>
-            <td class="dur">Active for the current round of the game, not including bouns production or plus additions.
+            <td class="dur">Whole game round
             </td>
             <td class="cost"><img src="img/x.gif" class="gold" alt="Gold" title="Gold" alt="Gold" title="Gold" />100</td>
             <td class="act">
