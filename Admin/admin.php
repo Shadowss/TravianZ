@@ -126,8 +126,7 @@ $timeformat = new timeFormatGenerator;
 												<a href="?p=givePlusRes">Give All Res Bonus</a>
 												<a href="?p=maintenenceResetPlusBonus">Reset Res Bonus</a>
 												<br />
-												<a href="#"><b>Natars & Nature</b></a>
-												<a href="?p=oasis">Populate Oases</b>
+												<a href="#"><b>Natars</b></a>
 												<a href="?p=natarend">Add WW Villages</a>
 												<a href="?p=natarbuildingplan">Add WW Buildingplan Villages</a>
 												<br />

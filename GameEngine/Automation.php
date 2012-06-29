@@ -207,6 +207,7 @@ class Automation {
 		$this->updateStore();
 		$this->procClimbers();
 		$this->CheckBan();
+		$this->regenerateOasisTroops();
 	}
 
 	private function loyaltyRegeneration() {
@@ -3909,6 +3910,26 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		}
 	}
 
+	private function regenerateOasisTroops() {
+		global $database;
+		$time = time();
+		$max = rand(1,4);
+		if($max == 1){
+		$max2 = 3600;
+		}elseif($max == 2){
+		$max2 = 21600;
+		}elseif($max == 3){
+		$max2 = 43200;
+		}elseif($max == 4){
+		$max2 = 86400;
+		}
+		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = 0 and $time - lastupdated > $max2";
+		$array = $database->query_return($q);
+		foreach($array as $oasis) {
+			$database->populateOasisUnits($oasis['wref'],$oasis['high']);
+			$database->updateOasis($oasis['wref']);
+		}
+	}
 }
 $automation = new Automation;
 ?>

@@ -1024,6 +1024,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
   `loyalty` int(11) NOT NULL DEFAULT '100',
   `owner` int(11) unsigned NOT NULL DEFAULT '2',
   `name` varchar(32) NOT NULL DEFAULT 'Unoccupied Oasis',
+  `high` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`wref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
