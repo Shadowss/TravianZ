@@ -23,11 +23,15 @@ header("Location: install/");
 
 include ("GameEngine/config.php");
  //Change it to your own domain
-if($_SERVER['HTTP_HOST'] != 'www.travianix.co.cc')
+/*
+if($_SERVER['HTTP_HOST'] != 'YOUR_DOMAIN')
 {
-    header('location: http://www.travianix.co.cc');
+    header('location: YOUR_DOMAIN');
     exit;
 }
+*/
+
+// delete the /* and the */ if you not use localhost. then, change "YOUR_DOMAIN" to you domain.
 
 error_reporting(E_ALL || E_NOTICE);
 
