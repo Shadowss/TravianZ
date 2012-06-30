@@ -128,8 +128,7 @@ function chkFormular () {
         </table>
         </div>		
 		</form>	
-
-</div>  
+ 
 </div>
 <div id="side_info" class="outgame">
 <?php
