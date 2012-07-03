@@ -1054,6 +1054,35 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `%PREFIX%prisoners`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%prisoners` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `wref` int(11) unsigned NOT NULL,
+  `from` int(11) unsigned NOT NULL,
+  `t1` int(11) unsigned NOT NULL,
+  `t2` int(11) unsigned NOT NULL,
+  `t3` int(11) unsigned NOT NULL,
+  `t4` int(11) unsigned NOT NULL,
+  `t5` int(11) unsigned NOT NULL,
+  `t6` int(11) unsigned NOT NULL,
+  `t7` int(11) unsigned NOT NULL,
+  `t8` int(11) unsigned NOT NULL,
+  `t9` int(11) unsigned NOT NULL,
+  `t10` int(11) unsigned NOT NULL,
+  `t11` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%PREFIX%prisoners`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `%prefix%raidlist`
 --
 

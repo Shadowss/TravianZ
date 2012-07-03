@@ -83,7 +83,7 @@ include("alli_menu.tpl");
                 //if there is user rank defined, user will be printed
                 else if($rank != ''){
                 echo "<tr>";
-                echo "<th>".$rank."</th>";
+                echo "<th>".stripslashes($rank)."</th>";
                 echo "<td><a href='spieler.php?uid=".$member['id']."'>".$name."</td>";
                 echo "</tr>";
                 } 

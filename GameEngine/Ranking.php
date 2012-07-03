@@ -18,12 +18,12 @@
 				return $this->rankarray;
 			}
 
-			public function getUserRank($username) {
+			public function getUserRank($id) {
 			$ranking = $this->getRank();
 			$start = $_SESSION['start']+1;
 			if(count($ranking) > 0) {
 			for($i=$start;$i<($start+20);$i++) {
-			if($ranking[$i]['username'] == $username && $ranking[$i] != "pad") {
+			if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
 			$myrank = $i;
 			}
 			}
@@ -87,7 +87,7 @@
 					}
 				} else {
 					$this->procRankArray();
-					$this->getStart($this->searchRank($session->username, "username"));
+					$this->getStart($this->searchRank($session->uid, "userid"));
 				}
 			}
 
@@ -194,7 +194,7 @@
 			)allitag
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			ORDER BY totalpop DESC, totalvillages DESC";
+			ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 
 
 				$result = (mysql_query($q));
@@ -247,7 +247,7 @@
 			)allitag
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.tribe = $race AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			ORDER BY totalpop DESC, totalvillages DESC";
+			ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 
 
 				$result = (mysql_query($q));
@@ -306,7 +306,7 @@
 			)pop
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.apall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
-			ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC";
+			ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC, userid DESC";
 				$result = mysql_query($q) or die(mysql_error());
 				while($row = mysql_Fetch_assoc($result)) {
 					$datas[] = $row;
@@ -349,7 +349,7 @@
 			)pop
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC";
+			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC, userid DESC";
 				$result = mysql_query($q) or die(mysql_error());
 				while($row = mysql_Fetch_assoc($result)) {
 					$datas[] = $row;

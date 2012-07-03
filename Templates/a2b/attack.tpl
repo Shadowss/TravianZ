@@ -170,7 +170,7 @@ $end = ($tribe*10);
                 <tbody class="options">
         <tr>
             <th>Options</th>
-            <td colspan="10"><input class="radio" name="spy" value="1" checked="checked" type="radio">Scout resources and troops<br>
+            <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>"><input class="radio" name="spy" value="1" checked="checked" type="radio">Scout resources and troops<br>
             <input class="radio" name="spy" value="2" type="radio">Scout defences and troops                                            </td>
         </tr>
     </tbody>
@@ -182,7 +182,7 @@ $end = ($tribe*10);
             <?php if($process['c']=='3'){ ?><tbody class="cata">
                 <tr>
                     <th>Destination:</th>
-                    <td colspan="10">
+                    <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
                     
                         <select name="ctar1" class="dropdown">
                             <option value="0">Random</option>
@@ -305,7 +305,7 @@ $end = ($tribe*10);
                 ?><tbody class="infos">  
                 <th>Destination:</th>
 
-            <td colspan="10">
+            <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
                 <?PHP
                 
                 echo"Warning: Catapult will <b>ONLY</b> shoot with a normal attack (they dont shoot with raids!)";

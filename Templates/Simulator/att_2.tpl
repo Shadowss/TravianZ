@@ -19,7 +19,7 @@
 							<td class="desc">
 								Clubswinger
 							</td><td class="value">
-									<input class="text" type="text" name="a1_1" value="<?php echo $form->getValue('a1_1'); ?>" maxlength="7" title="Number Clubswinger" />
+									<input class="text" type="text" name="a1_1" value="<?php echo $form->getValue('a1_1'); ?>" maxlength="10" title="Number Clubswinger" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f1_1" value="<?php echo $form->getValue('f1_1'); ?>"  maxlength="2" title="Level Blacksmith Clubswinger" />
@@ -31,7 +31,7 @@
 							<td class="desc">
 								Spearman
 							</td><td class="value">
-									<input class="text" type="text" name="a1_2" value="<?php echo $form->getValue('a1_2'); ?>" maxlength="7" title="Number Spearman" />
+									<input class="text" type="text" name="a1_2" value="<?php echo $form->getValue('a1_2'); ?>" maxlength="10" title="Number Spearman" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f1_2" value="<?php echo $form->getValue('f1_2'); ?>"  maxlength="2" title="Level Blacksmith Spearman" />
@@ -43,7 +43,7 @@
 							<td class="desc">
 								Axeman
 							</td><td class="value">
-									<input class="text" type="text" name="a1_3" value="<?php echo $form->getValue('a1_3'); ?>" maxlength="7" title="Number Axeman" />
+									<input class="text" type="text" name="a1_3" value="<?php echo $form->getValue('a1_3'); ?>" maxlength="10" title="Number Axeman" />
 								</td>
 
 								<td class="research">
@@ -56,7 +56,7 @@
 								Scout
 							</td><td class="value">
 
-									<input class="text" type="text" name="a1_4" value="<?php echo $form->getValue('a1_4'); ?>" maxlength="7" title="Number Scout" />
+									<input class="text" type="text" name="a1_4" value="<?php echo $form->getValue('a1_4'); ?>" maxlength="10" title="Number Scout" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f1_4" value="<?php echo $form->getValue('f1_4'); ?>"  maxlength="2" title="Level Blacksmith Scout" />
@@ -68,7 +68,7 @@
 
 								Paladin
 							</td><td class="value">
-									<input class="text" type="text" name="a1_5" value="<?php echo $form->getValue('a1_5'); ?>" maxlength="7" title="Number Paladin" />
+									<input class="text" type="text" name="a1_5" value="<?php echo $form->getValue('a1_5'); ?>" maxlength="10" title="Number Paladin" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f1_5" value="<?php echo $form->getValue('f1_5'); ?>"  maxlength="2" title="Level Blacksmith Paladin" />
@@ -80,7 +80,7 @@
 							<td class="desc">
 								Teutonic Knight
 							</td><td class="value">
-									<input class="text" type="text" name="a1_6" value="<?php echo $form->getValue('a1_6'); ?>" maxlength="7" title="Number Teutonic Knight" />
+									<input class="text" type="text" name="a1_6" value="<?php echo $form->getValue('a1_6'); ?>" maxlength="10" title="Number Teutonic Knight" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f1_6" value="<?php echo $form->getValue('f1_6'); ?>"  maxlength="2" title="Level Blacksmith Teutonic Knight" />
@@ -92,7 +92,7 @@
 							<td class="desc">
 								Ram
 							</td><td class="value">
-									<input class="text" type="text" name="a1_7" value="<?php echo $form->getValue('a1_7'); ?>" maxlength="7" title="Number Ram" />
+									<input class="text" type="text" name="a1_7" value="<?php echo $form->getValue('a1_7'); ?>" maxlength="10" title="Number Ram" />
 								</td>
 								<td class="research">
 
@@ -104,7 +104,7 @@
 							<td class="desc">
 								Catapult
 							</td><td class="value">
-									<input class="text" type="text" name="a1_8" value="<?php echo $form->getValue('a1_8'); ?>" maxlength="7" title="Number Catapult" />
+									<input class="text" type="text" name="a1_8" value="<?php echo $form->getValue('a1_8'); ?>" maxlength="10" title="Number Catapult" />
 
 								</td>
 								<td class="research">

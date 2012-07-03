@@ -29,7 +29,11 @@ class Building {
 			$this->maxConcurrent += PLUS_MAX;
 		}
 		$this->LoadBuilding();
-
+		foreach($this->buildArray as $build) {
+		if($build['master']==1){
+		$this->maxConcurrent += 1;
+		}
+		}
 	}
 
 	public function procBuild($get) {

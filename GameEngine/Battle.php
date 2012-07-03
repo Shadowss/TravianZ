@@ -82,13 +82,11 @@ class Battle {
 				// Establecemos los arrays con las unidades del atacante y defensor
 				$attacker = array('u1'=>0,'u2'=>0,'u3'=>0,'u4'=>0,'u5'=>0,'u6'=>0,'u7'=>0,'u8'=>0,'u9'=>0,'u10'=>0,'u11'=>0,'u12'=>0,'u13'=>0,'u14'=>0,'u15'=>0,'u16'=>0,'u17'=>0,'u18'=>0,'u19'=>0,'u20'=>0,'u21'=>0,'u22'=>0,'u23'=>0,'u24'=>0,'u25'=>0,'u26'=>0,'u27'=>0,'u28'=>0,'u29'=>0,'u30'=>0,'u31'=>0,'u32'=>0,'u33'=>0,'u34'=>0,'u35'=>0,'u36'=>0,'u37'=>0,'u38'=>0,'u39'=>0,'u40'=>0,'u41'=>0,'u42'=>0,'u43'=>0,'u44'=>0,'u45'=>0,'u46'=>0,'u47'=>0,'u48'=>0,'u49'=>0,'u50'=>0);
 				$start = ($post['a1_v']-1)*10+1;
-				$att_ab = array('a1'=>0,'a2'=>0,'a3'=>0,'a4'=>0,'a5'=>0,'a6'=>0,'a7'=>0,'a8'=>0);
-				$def_ab = array('b1'=>0,'b2'=>0,'b3'=>0,'b4'=>0,'b5'=>0,'b6'=>0,'b7'=>0,'b8'=>0);
 				$index = 1;
 				for($i=$start;$i<=($start+9);$i++) {
 						$attacker['u'.$i] = $post['a1_'.$index];
 						if($index <=8) {
-								$att_ab['a'.$index] = $post['f1_'.$index];
+								${att_ab.$index} = $post['f1_'.$index];
 						}
 						$index += 1;
 				}
@@ -106,33 +104,28 @@ class Battle {
 				switch($deftribe) {
 						case 1:
 						for($i=1;$i<=8;$i++) {
-								$def_ab['b'.$i] = $post['f2_'.$i];
+								${def_ab.$i} = $post['f2_'.$i];
 						}
-						$wall = $post['wall1'];
 						break;
 						case 2:
 						for($i=11;$i<=18;$i++) {
-								$def_ab['b'.$i] = $post['f2_'.$i];
+								${def_ab.$i-10} = $post['f2_'.$i];
 						}
-						$wall = $post['wall2'];
 						break;
 						case 3:
 						for($i=21;$i<=28;$i++) {
-								$def_ab['b'.$i] = $post['f2_'.$i];
+								${def_ab.$i-20} = $post['f2_'.$i];
 						}
-						$wall = $post['wall3'];
 						break;
 			case 4:
 			for($i=31;$i<=38;$i++) {
-				$def_ab['b'.$i] = $post['f2_'.$i];
+				${def_ab.$i-30} = $post['f2_'.$i];
 			}
-			$wall = $post['wall4'];
 			break;
 			case 5:
 			for($i=41;$i<=48;$i++) {
-				$def_ab['b'.$i] = $post['f2_'.$i];
+				${def_ab.$i-40} = $post['f2_'.$i];
 			}
-			$wall = $post['wall5'];
 			break;
 				}
 				if($post['kata'] == "") {
@@ -152,11 +145,27 @@ class Battle {
 								}
 						}
 				}
-
+				if($post['wall1'] != 0){
+				$walllevel = $post['wall1'];
+				}elseif($post['wall2'] != 0){
+				$walllevel = $post['wall2'];
+				}elseif($post['wall3'] != 0){
+				$walllevel = $post['wall3'];
+				}elseif($post['wall4'] != 0){
+				$walllevel = $post['wall4'];
+				}elseif($post['wall5'] != 0){
+				$walllevel = $post['wall5'];
+				}else{
+				$walllevel = 0;
+				}
+				if($walllevel > 20){
+				$walllevel = 0;
+				}
+				$wall = $walllevel;
 				if(!$scout)
-						return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab,$post['kata'],1,0,0,0,0);
+						return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
 				else
-						return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab,$post['kata'],1,0,0,0,0);
+						return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
 		}
 
 	 public function getTypeLevel($tid,$vid) {
@@ -207,7 +216,7 @@ class Battle {
 	}
 
 		//1 raid 0 normal
-		function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
+		function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
 				global $bid34,$bid35,$database;
 				// Definieer de array met de eenheden
 				$calvary = array(4,5,6,15,16,23,24,25,26,35,36,45,46);
@@ -222,7 +231,30 @@ class Battle {
 				$cap = $ap = $dp = $cdp = $rap = $rdp = 0;
 
 		//exit($type);
-
+			$att_artefact = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,3,0));
+			$att_artefact1 = count($database->getOwnUniqueArtefactInfo2($AttackerWref,3,1,1));
+			$att_artefact2 = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,2,0));
+			if($att_artefact > 0){
+			$attacker_artefact = 10;
+			}else if($att_artefact1 > 0){
+			$attacker_artefact = 5;
+			}else if($att_artefact2 > 0){
+			$attacker_artefact = 3;
+			}else{
+			$attacker_artefact = 1;
+			}
+			$def_artefact = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,3,0));
+			$def_artefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,3,1,1));
+			$def_artefact2 = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,2,0));
+			if($def_artefact > 0){
+			$defender_artefact = 10;
+			}else if($att_artefact1 > 0){
+			$defender_artefact = 5;
+			}else if($def_artefact2 > 0){
+			$defender_artefact = 3;
+			}else{
+			$defender_artefact = 1;
+			}
 		if($Attacker['uhero'] != 0)
 		{
 			//exit($AttackerID);
@@ -246,24 +278,26 @@ class Battle {
 		// Berekenen het totaal aantal punten van Aanvaller
 		$start = ($att_tribe-1)*10+1;
 		$end = ($att_tribe*10);
-
-				$abcount = 1;
-
+		if($att_tribe == 3){
+		$abcount = 3;
+		}else{
+		$abcount = 4;
+		}
+		
 				if($type == 1)
 				{
 						for($i=$start;$i<=$end;$i++) {
 								global ${'u'.$i};
+								$j = $i-$start+1;
+								if($abcount <= 8 && ${att_ab.$abcount} > 0) {
 
-								if($abcount <= 8 && $att_ab['a'.$abcount] > 0) {
-
-										$ap += (35 + ( 35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, $att_ab['a'.$abcount]) - 1)) * $Attacker['u'.$i];
+										$ap += (35 + ( 35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i] * $attacker_artefact;
 
 								}
 								else {
-										$ap += $Attacker['u'.$i] * 35;
+										$ap += ($Attacker['u'.$i] * $Attacker['u'.$i] * $Attacker['u'.$i])/3;
 								}
 
-								$abcount +=1;
 
 								$units['Att_unit'][$i] = $Attacker['u'.$i];
 						}
@@ -274,15 +308,16 @@ class Battle {
 				}
 				else
 				{
+				$abcount = 1;
 						for($i=$start;$i<=$end;$i++) {
 								global ${'u'.$i};
-
-								if($abcount <= 8 && $att_ab['a'.$abcount] > 0) {
+								$j = $i-$start+1;
+								if($abcount <= 8 && ${att_ab.$abcount} > 0) {
 										if(in_array($i,$calvary)) {
-												$cap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, $att_ab['a'.$abcount]) - 1)) * $Attacker['u'.$i];
+												$cap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
 										}
 										else {
-												$ap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, $att_ab['a'.$abcount]) - 1)) * $Attacker['u'.$i];
+												$ap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
 										}
 								}
 								else {
@@ -334,15 +369,16 @@ class Battle {
 								if($y == 4 || $y == 14 || $y == 23 || $y == 44)
 								{
 										global ${'u'.$y};
-										if($y >= $start && $y <= ($end-2) && $def_ab['b'.$abcount] > 0) {
-												$dp +=  (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab['b'.$y]) - 1)) * $Defender['u'.$y];
+										if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
+												$dp +=  (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * (($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4) * $defender_artefact;
 												$abcount +=1;
 										}
 										else {
-												$dp += $Defender['u'.$y]*20;
+												$dp += ($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4;
 										}
 										$units['Def_unit'][$y] = $Defender['u'.$y];
 								}
+						}
 							if ($Defender['hero'] != 0){
 							$dp += $defenderhero['di'] * 35;
 							$dp = $dp * $defenderhero['db'];
@@ -355,17 +391,15 @@ class Battle {
 							$dp = $dp * $defhero[$fromvillage]['db'];
 							}
 							}
-						}
 				}
 
 				else
 				{
 						for($y=1;$y<=50;$y++) {
 								global ${'u'.$y};
-								if($y >= $start && $y <= ($end-2) && $def_ab['b'.$abcount] > 0) {
-										$dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab['b'.$y]) - 1)) * $Defender['u'.$y];
-										$cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab['b'.$y]) - 1)) * $Defender['u'.$y];
-										$abcount +=1;
+								if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
+										$dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * $Defender['u'.$y];
+										$cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * $Defender['u'.$y];
 								}
 								else {
 										$dp += $Defender['u'.$y]*${'u'.$y}['di'];
@@ -373,6 +407,7 @@ class Battle {
 								}
 								$involve += $Defender['u'.$y];
 								$units['Def_unit'][$y] = $Defender['u'.$y];
+								$abcount +=1;
 						}
 			if($Defender['hero'] != 0)
 			{
@@ -404,13 +439,13 @@ class Battle {
 						// Factor = 1025 Wall Galliers
 						$factor = ($def_tribe == 1)? 1.030 : (($def_tribe == 2)? 1.020 : 1.025);
 						// Defense Infanterie = infanterie * Muur (%)
-						$dp *= pow($factor,$def_wall);
+						$dp *= pow($factor,$def_wall)*2;
 						// Defensa Cavelerie = Cavelerie * Muur (%)
-						$cdp *= pow($factor,$def_wall);
+						$cdp *= pow($factor,$def_wall)*2;
 
 						// Berekening van de Basic defence bonus "Residence"
-						$dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)));
-						$cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)));
+						$dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)))*0.5;
+						$cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)))*0.5;
 				}
 				else
 		{
@@ -422,7 +457,11 @@ class Battle {
 				//
 				// Formule voor het berekenen van punten aanvallers (Infanterie & Cavalry)
 				//
+				if($AttackerWref != 0){
 						$rap = ($ap+$cap)+(($ap+$cap)/100*$bid35[$this->getTypeLevel(35,$AttackerWref)]['attri']);
+				}else{
+						$rap = $ap+$cap;
+				}
 				//
 				// Formule voor de berekening van Defensive Punten
 				//
@@ -561,7 +600,7 @@ class Battle {
 		if($ram > 0 && $walllevel != 0) {
 			$wctp = pow(($rap/$rdp),1.5);
 			$wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-			$wctp *= $ram;
+			$wctp *= $ram/2;
 			$artowner = $database->getVillageField($DefenderWref,"owner");
 			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
 			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
@@ -684,6 +723,7 @@ class Battle {
 		$max_bounty = 0;
 
 				for($i=$start;$i<=$end;$i++) {
+				$j = $i-$start+1;
 			$y = $i-(($att_tribe-1)*10);
 
 						$max_bounty += ($Attacker['u'.$i]-$result['casualties_attacker'][$y])*${'u'.$i}['cap'];

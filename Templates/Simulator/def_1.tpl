@@ -13,7 +13,7 @@
 								<td class="desc">
 									Legionnaire
 								</td><td class="value">
-									<input class="text" type="text" name="a2_1" value="<?php echo $form->getValue('a2_1'); ?>" maxlength="7" title="Number Legionnaire" />
+									<input class="text" type="text" name="a2_1" value="<?php echo $form->getValue('a2_1'); ?>" maxlength="10" title="Number Legionnaire" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f2_1" value="<?php echo $form->getValue('f2_1'); ?>" maxlength="2" title="Level Armoury Legionnaire" />
@@ -25,7 +25,7 @@
 								<td class="desc">
 									Praetorian
 								</td><td class="value">
-									<input class="text" type="text" name="a2_2" value="<?php echo $form->getValue('a2_2'); ?>" maxlength="7" title="Number Praetorian" />
+									<input class="text" type="text" name="a2_2" value="<?php echo $form->getValue('a2_2'); ?>" maxlength="10" title="Number Praetorian" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f2_2" value="<?php echo $form->getValue('f2_2'); ?>" maxlength="2" title="Level Armoury Praetorian" />
@@ -37,7 +37,7 @@
 								<td class="desc">
 									Imperian
 								</td><td class="value">
-									<input class="text" type="text" name="a2_3" value="<?php echo $form->getValue('a2_3'); ?>" maxlength="7" title="Number Imperian" />
+									<input class="text" type="text" name="a2_3" value="<?php echo $form->getValue('a2_3'); ?>" maxlength="10" title="Number Imperian" />
 								</td>
 
 								<td class="research">
@@ -50,7 +50,7 @@
 									Equites Legati
 								</td><td class="value">
 
-									<input class="text" type="text" name="a2_4" value="<?php echo $form->getValue('a2_4'); ?>" maxlength="7" title="Number Equites Legati" />
+									<input class="text" type="text" name="a2_4" value="<?php echo $form->getValue('a2_4'); ?>" maxlength="10" title="Number Equites Legati" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f2_4" value="<?php echo $form->getValue('f2_4'); ?>" maxlength="2" title="Level Armoury Equites Legati" />
@@ -62,7 +62,7 @@
 
 									Equites Imperatoris
 								</td><td class="value">
-									<input class="text" type="text" name="a2_5" value="<?php echo $form->getValue('a2_5'); ?>" maxlength="7" title="Number Equites Imperatoris" />
+									<input class="text" type="text" name="a2_5" value="<?php echo $form->getValue('a2_5'); ?>" maxlength="10" title="Number Equites Imperatoris" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f2_5" value="<?php echo $form->getValue('f2_5'); ?>" maxlength="2" title="Level Armoury Equites Imperatoris" />
@@ -74,7 +74,7 @@
 								<td class="desc">
 									Equites Caesaris
 								</td><td class="value">
-									<input class="text" type="text" name="a2_6" value="<?php echo $form->getValue('a2_6'); ?>" maxlength="7" title="Number Equites Caesaris" />
+									<input class="text" type="text" name="a2_6" value="<?php echo $form->getValue('a2_6'); ?>" maxlength="10" title="Number Equites Caesaris" />
 								</td>
 								<td class="research">
 									<input class="text" type="text" name="f2_6" value="<?php echo $form->getValue('f2_6'); ?>" maxlength="2" title="Level Armoury Equites Caesaris" />
@@ -86,7 +86,7 @@
 								<td class="desc">
 									Battering Ram
 								</td><td class="value">
-									<input class="text" type="text" name="a2_7" value="<?php echo $form->getValue('a2_7'); ?>" maxlength="7" title="Number Battering Ram" />
+									<input class="text" type="text" name="a2_7" value="<?php echo $form->getValue('a2_7'); ?>" maxlength="10" title="Number Battering Ram" />
 								</td>
 								<td class="research">
 
@@ -98,7 +98,7 @@
 								<td class="desc">
 									Fire Catapult
 								</td><td class="value">
-									<input class="text" type="text" name="a2_8" value="<?php echo $form->getValue('a2_8'); ?>" maxlength="7" title="Number Fire Catapult" />
+									<input class="text" type="text" name="a2_8" value="<?php echo $form->getValue('a2_8'); ?>" maxlength="10" title="Number Fire Catapult" />
 
 								</td>
 								<td class="research">

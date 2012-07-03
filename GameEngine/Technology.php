@@ -226,6 +226,20 @@ class Technology {
 				$ownunit['hero'] += $enforce['hero'];
 			}
 		}
+		$prisoners = $database->getPrisoners($base);
+		if(!empty($prisoners)) {
+		foreach($prisoners as $prisoner){
+			$owner = $database->getVillageField($base,"owner");
+			$ownertribe = $database->getUserField($owner,"tribe",0);
+			$start = ($ownertribe-1)*10+1;
+			$end = ($ownertribe*10);
+			for($i=$start;$i<=$end;$i++) {
+			$j = $i-$start+1;
+			$ownunit['u'.$i] += $prisoner['t'.$j];
+			}
+			$ownunit['hero'] += $prisoner['t11'];
+		}
+		}
 		if(!$InVillageOnly) {
 			$movement = $database->getVillageMovement($base);
 			if(!empty($movement)) {
@@ -351,7 +365,7 @@ class Technology {
 	}
 	}
 
-	public function getUpkeep($array,$type,$vid=0) {
+	public function getUpkeep($array,$type,$vid=0,$prisoners=0) {
 		global $database,$session,$village;
 		if($vid==0) { $vid=$village->wid; }
 		$buildarray = array();
@@ -384,7 +398,9 @@ class Technology {
 			break;
 		}
 		for($i=$start;$i<=$end;$i++) {
+			$k = $i-$start+1;
 			$unit = "u".$i;
+			$unit2 = "t".$k;
 			global $$unit;
 			$dataarray = $$unit;
 			for($j=19;$j<=38;$j++) {
@@ -392,6 +408,7 @@ class Technology {
 			$horsedrinking = $j;
 			}
 			}
+			if($prisoners == 0){
 			if(isset($horsedrinking)){
 			if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
 			|| ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
@@ -402,11 +419,27 @@ class Technology {
 			}}else{
 			$upkeep += $dataarray['pop'] * $array[$unit];
 			}
+			}else{
+			if(isset($horsedrinking)){
+			if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
+			|| ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
+			|| ($i==6 && $buildarray['f'.$horsedrinking] == 20)) {
+			$upkeep += ($dataarray['pop']-1) * $array[$unit2];
+			} else {
+			$upkeep += $dataarray['pop'] * $array[$unit2];
+			}}else{
+			$upkeep += $dataarray['pop'] * $array[$unit2];
+			}
+			}
 		}
 		 //   $unit = "hero";
 		 //   global $$unit;
 		 //   $dataarray = $$unit;
+		 if($prisoners == 0){
 			$upkeep += $array['hero'] * 6;
+		 }else{
+			$upkeep += $array['t11'] * 6;
+		 }
 			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,4,3,0));
 			$artefact1 = count($database->getOwnUniqueArtefactInfo2($vid,4,1,1));
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,4,2,0));

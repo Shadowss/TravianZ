@@ -107,7 +107,7 @@ $actionType = "Raid";
 
 						<td><?php echo $process[1]; ?></td>
 
-						<td colspan="10"><?php echo $actionType." to ".$process['1']; ?></td>
+						<td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>"><?php echo $actionType." to ".$process['1']; ?></td>
 
 					</tr>
 
@@ -174,7 +174,7 @@ $actionType = "Raid";
                 <tbody class="options">
         <tr>
             <th>Options</th>
-            <td colspan="10"><input class="radio" name="spy" value="1" checked="checked" type="radio">Scout resources and troops<br>
+            <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>"><input class="radio" name="spy" value="1" checked="checked" type="radio">Scout resources and troops<br>
             <input class="radio" name="spy" value="2" type="radio">Scout defences and troops                                            </td>
         </tr>
     </tbody>
@@ -186,7 +186,7 @@ $actionType = "Raid";
             <?php if($process['c']=='3'){ ?><tbody class="cata">
                 <tr>
                     <th>Destination:</th>
-                    <td colspan="10">
+                    <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
                     <?php if($building->getTypeLevel(16) == 20) { ?>
                      <select name="ctar2" class="dropdown">
                             <option value="0">Random</option>
@@ -305,7 +305,7 @@ $actionType = "Raid";
                 ?><tbody class="infos">  
                 <th>Destination:</th>
 
-            <td colspan="10">
+            <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
                 <?PHP
                 
                 echo"Warning: Catapult will <b>ONLY</b> shoot with a normal attack (they dont shoot with raids!)";
@@ -393,7 +393,7 @@ $actionType = "Raid";
 
 			
 
-			<td colspan="10">
+			<td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
 
 			<div class="in">in <?php echo $generator->getTimeFormat($time); ?></div>
 			

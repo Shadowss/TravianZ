@@ -13,7 +13,7 @@
 							<td class="desc">
 								Phalanx
 							</td><td class="value">
-								<input class="text" type="text" name="a2_21" value="<?php echo $form->getValue('a2_21'); ?>" maxlength="7" title="Number Phalanx" />
+								<input class="text" type="text" name="a2_21" value="<?php echo $form->getValue('a2_21'); ?>" maxlength="10" title="Number Phalanx" />
 							</td>
 							<td class="research">
 								<input class="text" type="text" name="f2_21" value="<?php echo $form->getValue('f2_21'); ?>" maxlength="2" title="Level Armoury Phalanx" />
@@ -25,7 +25,7 @@
 							<td class="desc">
 								Swordsman
 							</td><td class="value">
-								<input class="text" type="text" name="a2_22" value="<?php echo $form->getValue('a2_22'); ?>" maxlength="7" title="Number Swordsman" />
+								<input class="text" type="text" name="a2_22" value="<?php echo $form->getValue('a2_22'); ?>" maxlength="10" title="Number Swordsman" />
 							</td>
 							<td class="research">
 								<input class="text" type="text" name="f2_22" value="<?php echo $form->getValue('f2_22'); ?>" maxlength="2" title="Level Armoury Swordsman" />
@@ -37,7 +37,7 @@
 							<td class="desc">
 								Pathfinder
 							</td><td class="value">
-								<input class="text" type="text" name="a2_23" value="<?php echo $form->getValue('a2_23'); ?>" maxlength="7" title="Number Pathfinder" />
+								<input class="text" type="text" name="a2_23" value="<?php echo $form->getValue('a2_23'); ?>" maxlength="10" title="Number Pathfinder" />
 							</td>
 
 							<td class="research">
@@ -50,7 +50,7 @@
 								Theutates Thunder
 							</td><td class="value">
 
-								<input class="text" type="text" name="a2_24" value="<?php echo $form->getValue('a2_24'); ?>" maxlength="7" title="Number Theutates Thunder" />
+								<input class="text" type="text" name="a2_24" value="<?php echo $form->getValue('a2_24'); ?>" maxlength="10" title="Number Theutates Thunder" />
 							</td>
 							<td class="research">
 								<input class="text" type="text" name="f2_24" value="<?php echo $form->getValue('a2_24'); ?>" maxlength="2" title="Level Armoury Theutates Thunder" />
@@ -62,7 +62,7 @@
 
 								Druidrider
 							</td><td class="value">
-								<input class="text" type="text" name="a2_25" value="<?php echo $form->getValue('a2_25'); ?>" maxlength="7" title="Number Druidrider" />
+								<input class="text" type="text" name="a2_25" value="<?php echo $form->getValue('a2_25'); ?>" maxlength="10" title="Number Druidrider" />
 							</td>
 							<td class="research">
 								<input class="text" type="text" name="f2_25" value="<?php echo $form->getValue('f2_25'); ?>" maxlength="2" title="Level Armoury Druidrider" />
@@ -74,7 +74,7 @@
 							<td class="desc">
 								Haeduan
 							</td><td class="value">
-								<input class="text" type="text" name="a2_26" value="<?php echo $form->getValue('a2_26'); ?>" maxlength="7" title="Number Haeduan" />
+								<input class="text" type="text" name="a2_26" value="<?php echo $form->getValue('a2_26'); ?>" maxlength="10" title="Number Haeduan" />
 							</td>
 							<td class="research">
 								<input class="text" type="text" name="f2_26" value="<?php echo $form->getValue('f2_27'); ?>" maxlength="2" title="Level Armoury Haeduan" />
@@ -86,7 +86,7 @@
 							<td class="desc">
 								Ram
 							</td><td class="value">
-								<input class="text" type="text" name="a2_27" value="<?php echo $form->getValue('a2_27'); ?>" maxlength="7" title="Number Ram" />
+								<input class="text" type="text" name="a2_27" value="<?php echo $form->getValue('a2_27'); ?>" maxlength="10" title="Number Ram" />
 							</td>
 							<td class="research">
 
@@ -98,7 +98,7 @@
 							<td class="desc">
 								Trebuchet
 							</td><td class="value">
-								<input class="text" type="text" name="a2_28" value="<?php echo $form->getValue('a2_28'); ?>" maxlength="7" title="Number Trebuchet" />
+								<input class="text" type="text" name="a2_28" value="<?php echo $form->getValue('a2_28'); ?>" maxlength="10" title="Number Trebuchet" />
 
 							</td>
 							<td class="research">

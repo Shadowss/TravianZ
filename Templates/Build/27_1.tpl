@@ -1,10 +1,9 @@
 <?php
 
-        $artefact = $database->getOwnArtefactInfo($village->wid);
+        $artefact1 = $database->getOwnArtefactInfo2($village->wid);
         $result = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = " . $village->wid . ""));
         $wref = $village->wid;
        $coor = $database->getCoor($wref); 
-       $coor2= $database->getCoor($artefact['vref']); 
         function getDistance($coorx1, $coory1, $coorx2, $coory2) {
    $max = 2 * WORLD_MAX + 1;
    $x1 = intval($coorx1);
@@ -33,12 +32,13 @@
         </thead>
 
         <tbody>
-            <tr>
             <?php
 
         if($result == 0) {
-        	echo '<td colspan="4" class="none">You do not own any artefacts.</td>';
+        	echo '<tr><td colspan="4" class="none">You do not own any artefacts.</td></tr>';
         } else {
+		foreach($artefact1 as $artefact){
+		$coor2 = $database->getCoor($artefact['vref']); 
         	if($artefact['size'] == 1) {
         		$reqlvl = 10;
         		$effect = "village";
@@ -46,7 +46,7 @@
         		$reqlvl = 20;
         		$effect = "account";
         	}
-        	echo '<td class="icon"><img class="artefact_icon_' . $artefact['type'] . '" src="img/x.gif"></td>';
+        	echo '<tr><td class="icon"><img class="artefact_icon_' . $artefact['type'] . '" src="img/x.gif"></td>';
         	echo '<td class="nam">
                             <a href="build.php?id=' . $id . '&show='.$artefact['id'].'">' . $artefact['name'] . '</a> <span class="bon">' . $artefact['effect'] . '</span>
                             <div class="info">
@@ -54,11 +54,11 @@
                             </div>
                         </td>';
         	echo '<td class="pla"><a href="karte.php?d=' . $artefact['vref'] . '&c=' . $generator->getMapCheck($artefact['vref']) . '">' . $database->getVillageField($artefact['vref'], "name") . '</a></td>';
-        	echo '<td class="dist">' . date("d/m/Y H:i", $artefact['conquered']) . '</td>';
+        	echo '<td class="dist">' . date("d/m/Y H:i", $artefact['conquered']) . '</td></tr>';
         }
+		}
 
 ?>
-            </tr>
         </tbody>
     </table>
 

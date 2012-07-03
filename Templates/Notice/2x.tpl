@@ -68,6 +68,21 @@ if (isset($dataarray[147]) and $dataarray[147] != 0){
 	if ($dataarray[148]==0){$tdclass='class="none"';}
 	echo "<td $tdclass>$dataarray[148]</td>";
 }
+if($dataarray[151] != 0 or $dataarray[152] != 0 or $dataarray[153] != 0 or $dataarray[154] != 0 or $dataarray[155] != 0 or $dataarray[156] != 0 or $dataarray[157] != 0 or $dataarray[158] != 0 or $dataarray[159] != 0 or $dataarray[160] != 0){
+echo "</tr><tr><th>Prisoners</th>";
+for($i=151;$i<=160;$i++) {
+	if($dataarray[$i] == 0) {
+    	echo "<td class=\"none\">0</td>";
+    }
+    else {
+    	echo "<td>".$dataarray[$i]."</td>";
+    }
+}
+if(isset($dataarray[161]) and $dataarray[161]!=0){
+	if ($dataarray[161]==0){$tdclass='class="none"';}
+	echo "<td $tdclass>$dataarray[161]</td>";
+}
+}
 echo "</tr></tbody>";
 if ($dataarray[139]!='' and $dataarray[140]!=''){ //ram
 ?>
@@ -89,8 +104,15 @@ if ($dataarray[143]!='' and $dataarray[144]!=''){ //chief
 	<img class="unit u<?php echo $dataarray[143]; ?>" src="img/x.gif" alt="Chief" title="Chief" />
 	<?php echo $dataarray[144]; ?>
     </td></tr></tbody>
-<?php } ?>
-<?php if ($dataarray[145]!='' and $dataarray[146]!=''){ //spy
+<?php }
+if ($dataarray[145]!='' and $dataarray[146]!=''){ //spy
+?>
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
+    
+    <?php echo $dataarray[146]; ?>
+    </td></tr></tbody>
+<?php }
+if ($dataarray[162]!='' and $dataarray[162]!=''){ //release prisoners
 ?>
     <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
     

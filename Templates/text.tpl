@@ -22,5 +22,4 @@ $txt = preg_replace("/\[\/u\]/is",'</u>', $txt);
 
 //nl2br = enter
 echo nl2br($txt);
-
 ?>

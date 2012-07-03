@@ -22,16 +22,15 @@ header("Location: install/");
 }
 
 include ("GameEngine/config.php");
- //Change it to your own domain
 /*
 if($_SERVER['HTTP_HOST'] != 'YOUR_DOMAIN')
 {
-    header('location: YOUR_DOMAIN');
+    header('location: '.SERVER.'');
     exit;
 }
 */
 
-// delete the /* and the */ if you not use localhost. then, change "YOUR_DOMAIN" to you domain.
+// delete the /* and the */ if you not use localhost.
 
 error_reporting(E_ALL || E_NOTICE);
 

@@ -1761,18 +1761,6 @@ class MYSQL_DB {
 		if(count($jobs) > 2 && ($jobs[1]['field'] == $jobs[2]['field'])) {
 			$SameBuildCount = 3;
 		}
-		if(count($jobs) > 2 && ($jobs[0]['field'] == ($jobs[1]['field'] == $jobs[2]['field']))) {
-			$SameBuildCount = 4;
-		}
-		if(count($jobs) > 3 && ($jobs[0]['field'] == ($jobs[1]['field'] == $jobs[3]['field']))) {
-			$SameBuildCount = 5;
-		}
-		if(count($jobs) > 3 && ($jobs[0]['field'] == ($jobs[2]['field'] == $jobs[3]['field']))) {
-			$SameBuildCount = 6;
-		}
-		if(count($jobs) > 3 && ($jobs[1]['field'] == ($jobs[2]['field'] == $jobs[3]['field']))) {
-			$SameBuildCount = 7;
-		}
 		if(count($jobs) > 3 && ($jobs[0]['field'] == $jobs[3]['field'])) {
 			$SameBuildCount = 8;
 		}
@@ -1781,6 +1769,18 @@ class MYSQL_DB {
 		}
 		if(count($jobs) > 3 && ($jobs[2]['field'] == $jobs[3]['field'])) {
 			$SameBuildCount = 10;
+		}
+		if(count($jobs) > 2 && ($jobs[0]['field'] == $jobs[1]['field'] && $jobs[1]['field'] == $jobs[2]['field'])) {
+			$SameBuildCount = 4;
+		}
+		if(count($jobs) > 3 && ($jobs[0]['field'] == $jobs[1]['field'] && $jobs[1]['field'] == $jobs[3]['field'])) {
+			$SameBuildCount = 5;
+		}
+		if(count($jobs) > 3 && ($jobs[0]['field'] == $jobs[2]['field'] && $jobs[2]['field'] == $jobs[3]['field'])) {
+			$SameBuildCount = 6;
+		}
+		if(count($jobs) > 3 && ($jobs[1]['field'] == $jobs[2]['field'] && $jobs[2]['field'] == $jobs[3]['field'])) {
+			$SameBuildCount = 7;
 		}
 		if($SameBuildCount > 0) {
 			if($SameBuildCount > 3){
@@ -2155,6 +2155,12 @@ class MYSQL_DB {
 	function modifyAttack($aid, $unit, $amt) {
 		$unit = 't' . $unit;
 		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit - $amt where id = $aid";
+		return mysql_query($q, $this->connection);
+	}
+	
+	function modifyAttack2($aid, $unit, $amt) {
+		$unit = 't' . $unit;
+		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit + $amt where id = $aid";
 		return mysql_query($q, $this->connection);
 	}
 
@@ -2877,7 +2883,7 @@ class MYSQL_DB {
 	}
 
 	function addArtefact($vref, $owner, $type, $size, $name, $desc, $effect, $img) {
-		$q = "INSERT INTO `" . TB_PREFIX . "artefacts` (`vref`, `owner`, `type`, `size`, `conquered`, `name`, `desc`, `effect`, `img`) VALUES ('$vref', '$owner', '$type', '$size', '" . time() . "', '$name', '$desc', '$effect', '$img')";
+		$q = "INSERT INTO `" . TB_PREFIX . "artefacts` (`vref`, `owner`, `type`, `size`, `conquered`, `name`, `desc`, `effect`, `img`, `active`) VALUES ('$vref', '$owner', '$type', '$size', '" . time() . "', '$name', '$desc', '$effect', '$img', '0')";
 		return mysql_query($q, $this->connection);
 	}
 
@@ -2885,6 +2891,18 @@ class MYSQL_DB {
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
 		$result = mysql_query($q, $this->connection);
 		return mysql_fetch_array($result);
+	}
+	
+	function getOwnArtefactInfo2($vref) {
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
+	}
+	
+	function getOwnArtefactInfo3($uid) {
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $uid";
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
 	}
 
 	function getOwnArtefactInfoByType($vref, $type) {
@@ -2907,9 +2925,9 @@ class MYSQL_DB {
 
 	function getOwnUniqueArtefactInfo2($id, $type, $size, $mode) {
 	if(!$mode){
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND owner != 3 AND type = $type AND size=$size";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND active = 1 AND type = $type AND size=$size";
 	}else{
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $id AND owner != 3 AND type = $type AND size=$size";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $id AND active = 1 AND type = $type AND size=$size";
 	}
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
@@ -2923,11 +2941,19 @@ class MYSQL_DB {
 
 	function claimArtefact($vref, $ovref, $id) {
 		$time = time();
-		$q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id, conquered = $time WHERE vref = $ovref";
+		$q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id, conquered = $time, active = 1 WHERE vref = $ovref";
 		return mysql_query($q, $this->connection);
 	}
 
-	public function canClaimArtifact($from,$vref,$type) {
+	public function canClaimArtifact($from,$vref,$type,$kind) {
+	$type2 = $type3 = 0;
+	if(count($this->getOwnUniqueArtefactInfo2($this->getVillagefield($from,"owner"),2,2,0)) > 0 && $type == 2){
+	$type2 = 1;
+	}
+	if(count($this->getOwnUniqueArtefactInfo2($this->getVillagefield($from,"owner"),2,3,0)) > 0 && $type == 3){
+	$type3 = 1;
+	}
+	if((count($this->getOwnArtefactInfo2($from)) < 3 && $type2 == 0 && $type3 == 0) or $kind == 11){
 		$DefenderFields = $this->getResourceLevel($vref);
 		$defcanclaim = TRUE;
 		for($i=19;$i<=38;$i++) {
@@ -2975,6 +3001,9 @@ class MYSQL_DB {
 				return FALSE;
 			}
 		} else {
+			return FALSE;
+		}
+		}else{
 			return FALSE;
 		}
 	}
@@ -3216,6 +3245,46 @@ class MYSQL_DB {
 		$q = "UPDATE " . TB_PREFIX . "vdata SET evasion = 0 WHERE wref = $vid";
 		}
 		return mysql_query($q, $this->connection);
+	}
+	
+	function addPrisoners($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) {
+		$q = "INSERT INTO " . TB_PREFIX . "prisoners values (0,$wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11)";
+		mysql_query($q, $this->connection);
+		return mysql_insert_id($this->connection);
+	}
+	
+	function updatePrisoners($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) {
+		$q = "UPDATE " . TB_PREFIX . "prisoners set t1 = t1 + $t1, t2 = t2 + $t2, t3 = t3 + $t3, t4 = t4 + $t4, t5 = t5 + $t5, t6 = t6 + $t6, t7 = t7 + $t7, t8 = t8 + $t8, t9 = t9 + $t9, t10 = t10 + $t10, t11 = t11 + $t11 where wid = $wid and from = $from";
+		return mysql_query($q, $this->connection) or die(mysql_error());
+	}
+	
+	function getPrisoners($wid) {
+		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid";
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
+	}
+
+	function getPrisoners2($wid,$from) {
+		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid and " . TB_PREFIX . "prisoners.from = $from";
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
+	}
+	
+	function getPrisonersByID($id) {
+		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where id = $id";
+		$result = mysql_query($q, $this->connection);
+		return mysql_fetch_array($result);
+	}
+	
+	function getPrisoners3($from) {
+		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
+	}
+	
+	function deletePrisoners($id) {
+		$q = "DELETE from " . TB_PREFIX . "prisoners where id = '$id'";
+		mysql_query($q, $this->connection);
 	}
 };
 

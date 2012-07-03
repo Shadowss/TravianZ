@@ -38,7 +38,15 @@ if($msg)
 			<div class="clear"></div>
 			<div class="line"></div>
 			<div class="message" style="min-height: 10px;">
-				<?php echo $msg[0]['message'];?>
+<?php 
+$input = $msg[0]['message'];
+$alliance = $msg[0]['alliance'];
+$player = $msg[0]['player'];
+$coor = $msg[0]['coor'];
+$report = $msg[0]['report'];
+include("../GameEngine/BBCode.php");
+				echo stripslashes(nl2br($bbcoded));
+?>
 			</div>
 	</div>
 	<div id="read_foot" class="msg_foot"></div>

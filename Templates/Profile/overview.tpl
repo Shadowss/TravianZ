@@ -60,7 +60,7 @@ include("menu2.tpl");
 			<tr>
 
                 <th>Rank</th>
-                <td><?php echo $ranking->getUserRank($displayarray['username']); ?></td>
+                <td><?php echo $ranking->getUserRank($displayarray['id']); ?></td>
             </tr>
             <tr>
                 <th>Tribe</th>

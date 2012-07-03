@@ -67,8 +67,25 @@ if(isset($dataarray[151]) and $dataarray[151]!=0){
 	if ($dataarray[152]==0){$tdclass='class="none"';}
 	echo "<td $tdclass>$dataarray[152]</td>";
 }
+if($dataarray[153] != 0 or $dataarray[154] != 0 or $dataarray[155] != 0 or $dataarray[156] != 0 or $dataarray[157] != 0 or $dataarray[158] != 0 or $dataarray[159] != 0 or $dataarray[160] != 0 or $dataarray[161] != 0 or $dataarray[162] != 0){
+echo "</tr><tr><th>Prisoners</th>";
+for($i=153;$i<=162;$i++) {
+	if($dataarray[$i] == 0) {
+    	echo "<td class=\"none\">0</td>";
+    }
+    else {
+    	echo "<td>".$dataarray[$i]."</td>";
+    }
+}
+if(isset($dataarray[163]) and $dataarray[163]!=0){
+	if ($dataarray[163]==0){$tdclass='class="none"';}
+	echo "<td $tdclass>$dataarray[163]</td>";
+}
+}
 echo "</tr></tbody>"; ?>
-</td></tr></tbody></table>
+</td></tr></tbody>
+
+</table>
 	
 <?php
 $targettribe=$dataarray['31'];
