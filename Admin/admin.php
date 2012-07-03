@@ -107,6 +107,7 @@ $timeformat = new timeFormatGenerator;
 												<br />
 												<a href="#"><b>Ban</b></a>
 												<a href="?p=ban">Ban/Unban Players</a>
+												<a href="?p=maintenence">Server Maintenence</a>
 												<a href="?p=cleanban">Clean Banlist Data</a>
 												<br />
 												<a href="#"><b>Gold</b></a>
