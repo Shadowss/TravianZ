@@ -280,7 +280,9 @@ $invite_permission = $database->getAlliancePermission($session->uid, "opt4", 0);
 				include ("Templates/Alliance/chgdiplo.tpl");
 				break;
 			case 103:
+			if($database->checkDiplomacyInviteAccept($session->alliance, $_POST['type'])){
 				$database->diplomacyInviteAccept($_POST['id'], $_POST['alli2']);
+			}
 				include ("Templates/Alliance/chgdiplo.tpl");
 				break;
 			case 104:

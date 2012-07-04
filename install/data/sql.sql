@@ -467,7 +467,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%diplomacy` (
   `alli1` int(11) unsigned NOT NULL,
   `alli2` int(11) unsigned NOT NULL,
   `type` tinyint(1) unsigned NOT NULL,
-  `accepted` int(1) NOT NULL,
+  `accepted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 --
