@@ -164,6 +164,12 @@ class MYSQL_DB {
 			$result = mysql_query($q, $this->connection);
 			return $this->mysql_fetch_all($result);
 	}
+	
+	function getUnstarvation(){
+			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv = 0 and starvupdate = 0";
+			$result = mysql_query($q, $this->connection);
+			return $this->mysql_fetch_all($result);
+	}
 
 	function getActivateField($ref, $field, $mode) {
 		if(!$mode) {
@@ -3123,8 +3129,7 @@ class MYSQL_DB {
 			}
 		}
 		$q = "SELECT type FROM `" . TB_PREFIX . "odata` WHERE conqured = $wref";
-		$result = mysql_query($q, $this->connection) or die(mysql_error());
-		$oasis = mysql_fetch_array($result);
+		$oasis = $this->query_return($q);
 		foreach($oasis as $oa){
 			switch($oa['type']) {
 				case 1:
