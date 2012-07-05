@@ -1,10 +1,10 @@
 <?php
 //////////////     made by alq0rsan MADE BETER BY advocaite   /////////////////////////
 if($session->access != BANNED){
-    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
-    $MyId = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $MyId = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $uuid = mysql_fetch_array($MyId);
 
 
@@ -29,7 +29,7 @@ mysql_query("UPDATE ".TB_PREFIX."research set timestamp = '1' where vref = '".$v
 
 
 $done1 = "&nbsp;&nbsp; All construction orders and Researches in this village has been Completed";
-    mysql_query("UPDATE ".TB_PREFIX."users set gold = ".($session->gold-2)." where `username`='".$session->username."'") or die(mysql_error());
+    mysql_query("UPDATE ".TB_PREFIX."users set gold = ".($session->gold-2)." where `id`='".$session->uid."'") or die(mysql_error());
     mysql_query("INSERT INTO ".TB_PREFIX."gold_fin_log VALUES ('".(mysql_num_rows($goldlog)+1)."', '".$village->wid."', 'Finish construction and research with gold')") or die(mysql_error());
 
 } else {

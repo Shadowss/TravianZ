@@ -1,12 +1,12 @@
 <?php
 
-    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
 include("Templates/Plus/pmenu.tpl");
 
 
-    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
         $today = date("mdHi");
@@ -60,7 +60,7 @@ $date2=strtotime("NOW");
     }else
  if ($datetimep <= $date2) {
      print "Your PLUS advantage has ended.<br>";
-mysql_query("UPDATE ".TB_PREFIX."users set plus = '0' where `username`='".$session->username."'") or die(mysql_error());
+mysql_query("UPDATE ".TB_PREFIX."users set plus = '0' where `id`='".$session->uid."'") or die(mysql_error());
      } else {
 
 $holdtotmin=(($datetimep-$date2)/60);
@@ -87,7 +87,7 @@ $holdmr=intval($holdtotmin-(($holdhr*60)+($holdtotday*1440)));
             <td class="act">
 
 <?php
-    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
 if (mysql_num_rows($MyGold)) {
@@ -464,7 +464,7 @@ if (mysql_num_rows($MyGold)) {
             <td class="act">
 
 <?php
-    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
 if (mysql_num_rows($MyGold)) {

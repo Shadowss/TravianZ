@@ -50,7 +50,7 @@ EOT;
     $plusTime = 604800; // 7 days
     $time = time();
     $giveplus = ($time + $plustime);
-    $accountCheck = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $accountCheck = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     if(mysql_num_rows($accountCheck) <= 0){
         echo "<b>ERROR:</b><br />";
         echo "The account name you entered does not exist.";
@@ -61,7 +61,7 @@ EOT;
     $valid=TRUE;
     $acc = mysql_fetch_array($accountCheck);
 
-    $plusCheck = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $plusCheck = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $pluss = mysql_fetch_array($plusCheck);
 
     switch($reward){
@@ -103,11 +103,11 @@ echo' Please select the option you wish to activate or extend.<br>';
 
     if(mysql_num_rows($plusCheck) > 0){ 
         if($time > $pluss[$key] ){
-            $editplus = mysql_query("UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` + ('".$time."'+'".$plusTime."'),  `gold` =  `gold` - {$gldz}   WHERE `username`='".$session->username."'") or die(mysql_error());
+            $editplus = mysql_query("UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` + ('".$time."'+'".$plusTime."'),  `gold` =  `gold` - {$gldz}   WHERE `id`='".$session->uid."'") or die(mysql_error());
             echo "<META HTTP-EQUIV=Refresh CONTENT=\"2; {$url}\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
        }else
         if($time < $pluss[$key]){
-            $editplus = mysql_query("UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` +'".$plusTime."',  `gold` =  `gold` - {$gldz}  WHERE `username`='".$session->username."'") or die(mysql_error());
+            $editplus = mysql_query("UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` +'".$plusTime."',  `gold` =  `gold` - {$gldz}  WHERE `id`='".$session->uid."'") or die(mysql_error());
             echo "<META HTTP-EQUIV=Refresh CONTENT=\"2; {$url}\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
        
        }
