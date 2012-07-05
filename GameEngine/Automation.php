@@ -3434,12 +3434,17 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$timepast = $train['timestamp2'] - $time;
 					$pop = $train['pop'];
 					if($timepast <= 0 && $train['amt'] > 0) {
-					if($train['unit']>60 && $train['unit']!=99){
-					$database->modifyUnit($train['vref'],array($train['unit']-60),array(1),array(1));
-					}else{
-					$database->modifyUnit($train['vref'],array($train['unit']),array(1),array(1));
+					$timepast2 = $time - $train['timestamp2'];
+					$trained = round($timepast2/$train['eachtime']);
+					if($trained > $train['amt']){
+					$trained = $train['amt'];
 					}
-					$database->updateTraining($train['id'],1,$train['eachtime']);
+					if($train['unit']>60 && $train['unit']!=99){
+					$database->modifyUnit($train['vref'],array($train['unit']-60),array($trained),array(1));
+					}else{
+					$database->modifyUnit($train['vref'],array($train['unit']),array($trained),array(1));
+					}
+					$database->updateTraining($train['id'],$trained,$trained*$train['eachtime']);
 					}
 					if($train['amt'] == 0){
 					$database->trainUnit($train['id'],0,0,0,0,1,1);
