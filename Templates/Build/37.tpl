@@ -63,11 +63,34 @@
 		} else {
 		if(mysql_num_rows($hero) == 0){
             include("37_train.tpl");
-        }
-        if(mysql_num_rows($hero) != 0 AND $hero_info['dead'] == 1){
+        }elseif($hero_info['intraining'] == 1){
+		$timeleft = $generator->getTimeFormat($hero_info['trainingtime'] - time());
+		?>
+	<table id="distribution" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+            <?php echo "<tr class='next'><th>Hero will be ready in <span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
+            </tr>
+        </thead>
+            
+            <tr>
+			<?php
+				   echo "<tr>
+                <td class=\"desc\">
+					<div class=\"tit\">
+						<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$name."\" title=\"".$name."\" />
+						$name ($name1)
+					</div>"
+			?>
+			
+            </tr>
+    </table>
+		<?php
+		}
+        if(mysql_num_rows($hero) != 0 AND $hero_info['dead'] == 1 AND $hero_info['intraining'] == 0){
             include("37_revive.tpl");
         }
-        if(mysql_num_rows($hero) != 0 AND $hero_info['dead'] == 0 AND $hero_info['trainingtime'] <= time()){
+        if(mysql_num_rows($hero) != 0 AND $hero_info['dead'] == 0 AND $hero_info['trainingtime'] <= time() AND $hero_info['inrevive'] == 0 AND $hero_info['intraining'] == 0){
             include("37_hero.tpl");
         }
         }

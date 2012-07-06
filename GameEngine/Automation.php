@@ -3636,6 +3636,10 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$hdata['wref']."");
 					mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100' WHERE `uid` = '".$hdata['uid']."'");
 					}
+					if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
+					mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$hdata['wref']."");
+					mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `intraining` = '0', `health` = '100' WHERE `uid` = '".$hdata['uid']."'");
+					}
 			}
 		}
 		if(file_exists("GameEngine/Prevention/updatehero.txt")) {

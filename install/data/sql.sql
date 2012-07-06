@@ -808,6 +808,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
   `autoregen` int(2) NOT NULL,
   `trainingtime` int(11) unsigned NOT NULL,
   `inrevive` tinyint(1) unsigned NOT NULL,
+  `intraining` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`heroid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
