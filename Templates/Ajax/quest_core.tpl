@@ -93,7 +93,7 @@ if (isset($qact)){
 	$_SESSION['qst']= 6;
 	$Subject="Message From The Taskmaster";
 	$Message="You are to be informed that a nice reward is waiting for you at the taskmaster.<br /><br />Hint: The message has been generated automatically. An answer is not necessary.";
-	$database->sendMessage($session->userinfo['id'],4,$Subject,$Message,0);
+	$database->sendMessage($session->userinfo['id'],4,$Subject,$Message,0,0,0,0,0);
 	$RB=true;
 		
 	//Give Reward
