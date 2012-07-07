@@ -23,7 +23,7 @@ header("Location: install/");
 
 include ("GameEngine/config.php");
 /*
-if($_SERVER['HTTP_HOST'] != 'YOUR_DOMAIN')
+if($_SERVER['HTTP_HOST'] != '.SERVER.')
 {
     header('location: '.SERVER.'');
     exit;

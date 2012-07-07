@@ -124,11 +124,11 @@ $mailer->sendInvite($_POST['mail'],$session->uid,$_POST['text']);
 }
 ?>
 
-<div id="side_info">
+</br></br><div id="side_info">
 <?php
+include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");
 include("Templates/news.tpl");
-include("Templates/multivillage.tpl");
 include("Templates/links.tpl");
 ?>
 </div>

@@ -4008,7 +4008,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 						$database->setclimberrankpop($session['id'], $totalpoints+1);
 						$database->updateoldrank($session['id'], $oldrank);
 					}
-					$database->updateoldrank($session['id'], $oldrank);
 					}
 					}
 					$alliance = $database->getARanking();

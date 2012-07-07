@@ -62,7 +62,7 @@ $start = $generator->pageLoadTimeStart();
 		<p>If other people use this computer too, you should delete your cookies for your own safety:<br /><a href="login.php?del_cookie">&raquo; delete cookies</a></p>
 </div>
 
-<div id="side_info">
+</br></br><div id="side_info">
 <?php
 include("Templates/news.tpl");
 ?>
