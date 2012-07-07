@@ -515,11 +515,26 @@ class Building {
 			}else{
 			$needed_plan = 0;
 			}
-			$wwvillages = $database->getVillagesID($session->uid);
-			foreach($wwvillages as $wwvillage){
-			$plan = count($database->getOwnArtefactInfoByType2($wwvillage,11));
+			$wwbuildingplan = 0;
+			$villages = $database->getVillagesID($session->uid);
+			foreach($villages as $village1){
+			$plan = count($database->getOwnArtefactInfoByType2($village1,11));
+			if($plan > 0){
+			$wwbuildingplan = 1;
+			}
+			}
+			if($session->alliance != 0){
+			$alli_users = $database->getUserByAlliance($session->alliance);
+			foreach($alli_users as $users){
+			$villages = $database->getVillagesID($users['id']);
+			if($users['id'] != $session->uid){
+			foreach($villages as $village1){
+			$plan = count($database->getOwnArtefactInfoByType2($village1,11));
 			if($plan > 0){
 			$wwbuildingplan += 1;
+			}
+			}
+			}
 			}
 			}
 			if($village->natar == 1 && $wwbuildingplan > $needed_plan) { return true; } else { return false; }
