@@ -2647,7 +2647,7 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 	function removeclimberrankpop($user, $cp) {
-		$q = "UPDATE " . TB_PREFIX . "users set clp = clp - '$cp'' where id = $user";
+		$q = "UPDATE " . TB_PREFIX . "users set clp = clp - '$cp' where id = $user";
 		return mysql_query($q, $this->connection);
 	}
 	function setclimberrankpop($user, $cp) {
