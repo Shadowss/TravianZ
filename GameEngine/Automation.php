@@ -1266,6 +1266,16 @@ class Automation {
 		}
 
 		if(PEACE == 0 || $targettribe == 4 || $targettribe == 5){
+		if($targettribe == 1){
+		$def_spy = $Defender['u4'];
+		}elseif($targettribe == 2){
+		$def_spy = $Defender['u14'];
+		}elseif($targettribe == 3){
+		$def_spy = $Defender['u23'];
+		}elseif($targettribe == 5){
+		$def_spy = $Defender['u54'];
+		}
+		if(!$scout or $def_spy > 0){
 				$traps = $Defender['u99']-$Defender['u99o'];
 				for($i=1;$i<=11;$i++){
 				$traps1 = $traps;
@@ -1290,6 +1300,7 @@ class Automation {
 				$database->updatePrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
 				}
 				}
+		}
 			$battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref);
 
 			//units attack string for battleraport
