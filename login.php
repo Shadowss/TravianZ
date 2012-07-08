@@ -241,11 +241,11 @@ Element.implement({
 	<tbody>
 		<tr class="top">
 			<th><?php echo NAME; ?></th>
-			<td><input class="text" type="text" name="user" value="<?php echo $form->getDiff("user",$_COOKIE['COOKUSR']); ?>" maxlength="15" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
+			<td><input class="text" type="text" name="user" value="<?php echo stripslashes($form->getDiff("user",$_COOKIE['COOKUSR'])); ?>" maxlength="15" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
 		</tr>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>
-			<td><input class="text" type="password" name="pw" value="<?php echo $form->getValue("pw");?>" maxlength="20" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
+			<td><input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue("pw"));?>" maxlength="20" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
 		</tr>
 	</tbody>
 </table>
@@ -289,7 +289,7 @@ Element.implement({
 	<tbody>
 		<tr class="top">
 			<th><?php echo NAME; ?></th>
-			<td><input class="text" type="text" name="user" value="<?php echo $form->getDiff("user",$_COOKIE['COOKUSR']); ?>" maxlength="15" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
+			<td><input class="text" type="text" name="user" value="<?php echo stripslashes($form->getDiff("user",$_COOKIE['COOKUSR'])); ?>" maxlength="15" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
 		</tr>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>

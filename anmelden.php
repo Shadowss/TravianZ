@@ -62,14 +62,14 @@ if(REG_OPEN == true){ ?>
 		<tr>
 			<th><?php echo EMAIL; ?></th>
 			<td>
-				<input class="text" type="text" name="email" value="<?php echo $form->getValue('email'); ?>" />
+				<input class="text" type="text" name="email" value="<?php echo stripslashes($form->getValue('email')); ?>" />
 				<span class="error"><?php echo $form->getError('email'); ?></span>
 				</td>
 			</tr>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>
 			<td>
-				<input class="text" type="password" name="pw" value="<?php echo $form->getValue('pw'); ?>" maxlength="30" />
+				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="30" />
 				<span class="error"><?php echo $form->getError('pw'); ?></span>
 			</td>
 		</tr>

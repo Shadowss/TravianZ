@@ -101,7 +101,7 @@
 								$this->getStart($post['rank']);
 							}
 							if(isset($post['name']) && $post['name'] != "") {
-								$this->getStart($this->searchRank($post['name'], "username"));
+								$this->getStart($this->searchRank(stripslashes($post['name']), "username"));
 							}
 							break;
 						case "r2":
@@ -112,7 +112,7 @@
 								$this->getStart($post['rank']);
 							}
 							if(isset($post['name']) && $post['name'] != "") {
-								$this->getStart($this->searchRank($post['name'], "name"));
+								$this->getStart($this->searchRank(stripslashes($post['name']), "name"));
 							}
 							break;
 					}
