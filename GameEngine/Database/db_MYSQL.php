@@ -2415,7 +2415,7 @@ class MYSQL_DB {
 	$time2 += $queued[count($queued) - 1]['timestamp'] - $now;
 	}
 	if($queued[count($queued) - 1]['unit'] == $unit){
-	$time = $amt*$queued[count($queued) - 1]['each'];
+	$time = $amt*$queued[count($queued) - 1]['eachtime'];
 			$q = "UPDATE " . TB_PREFIX . "training SET amt = amt + $amt, timestamp = timestamp + $time WHERE id = ".$queued[count($queued) - 1]['id']."";
 	}else{
 			$q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$time,$each,$time2)";
@@ -2427,7 +2427,7 @@ class MYSQL_DB {
 	}
 
 	function updateTraining($id, $trained, $each) {
-		$q = "UPDATE " . TB_PREFIX . "training set amt = amt - $trained,timestamp2 = timestamp2 + $each where id = $id";
+		$q = "UPDATE " . TB_PREFIX . "training set amt = amt - $trained, timestamp2 = timestamp2 + $each where id = $id";
 		return mysql_query($q, $this->connection);
 	}
 

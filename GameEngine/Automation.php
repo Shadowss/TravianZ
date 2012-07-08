@@ -3446,7 +3446,11 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$pop = $train['pop'];
 					if($timepast <= 0 && $train['amt'] > 0) {
 					$timepast2 = $time - $train['timestamp2'];
-					$trained = round($timepast2/$train['eachtime']);
+					$trained = 1;
+					while($timepast2 >= $train['eachtime']){
+					$timepast2 -= $train['eachtime'];
+					$trained += 1;
+					}
 					if($trained > $train['amt']){
 					$trained = $train['amt'];
 					}
