@@ -335,8 +335,6 @@ class Automation {
 					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."market where vref = ".$village;
 					$database->query($q);
-					$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$village." or from = ".$village;
-					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$village;
 					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."research where vref = ".$village;
@@ -350,6 +348,36 @@ class Automation {
 					$q = "DELETE FROM ".TB_PREFIX."vdata where vref = ".$village;
 					$database->query($q);
 					$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village;
+					$database->query($q);
+					$getmovement = $database->getMovement(0,$village,1);
+					foreach($getmovement as $movedata) {
+					$time = time();
+					$time2 = $time - $movedata['starttime'];
+					$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
+					$database->setMovementProc($movedata['moveid']);
+					}
+					$getmovement1 = $database->getMovement(1,$village,1);
+					foreach($getmovement1 as $movedata1) {
+					$time = time();
+					$time2 = $time - $movedata1['starttime'];
+					$database->addMovement(4,$movedata1['to'],$movedata1['from'],$movedata1['ref'],$time,$time+$time2);
+					$database->setMovementProc($movedata1['moveid']);
+					}
+					$getmovement2 = $database->getMovement(2,$village,1);
+					foreach($getmovement2 as $movedata2) {
+					$time = time();
+					$time2 = $time - $movedata2['starttime'];
+					$database->addMovement(4,$movedata2['to'],$movedata2['from'],$movedata2['ref'],$time,$time+$time2);
+					$database->setMovementProc($movedata2['moveid']);
+					}
+					$getmovement3 = $database->getMovement(3,$village,1);
+					foreach($getmovement3 as $movedata3) {
+					$time = time();
+					$time2 = $time - $movedata3['starttime'];
+					$database->addMovement(4,$movedata3['to'],$movedata3'from'],$movedata3['ref'],$time,$time+$time2);
+					$database->setMovementProc($movedata3['moveid']);
+					}
+					$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$village." and sort_type != 4 or to = ".$village." and sort_type = 4";
 					$database->query($q);
 				}
 				$q = "DELETE FROM ".TB_PREFIX."mdata where target = ".$need['uid']." or owner = ".$need['uid'];
@@ -2285,6 +2313,10 @@ class Automation {
 						//delete reinforcement
 						$q = "DELETE FROM ".TB_PREFIX."enforcement WHERE from = ".$data['to']."";
 						$database->query($q);
+						// reset units
+						$q = "DELETE FROM ".TB_PREFIX."units WHERE vref = ".$data['to']."";
+						$database->query($q);
+						$database->addUnits($data['to']);
 						// check buildings
 						$pop1 = $database->getVillageField($data['from'],"pop");
 						$pop2 = $database->getVillageField($data['to'],"pop");
@@ -2654,14 +2686,35 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->query($q);
 								$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
 								$database->query($q);
-								$getmovement = $database->getMovement(3,$data['to'],1);
+								$getmovement = $database->getMovement(0,$data['to'],1);
 								foreach($getmovement as $movedata) {
 								$time = time();
 								$time2 = $time - $movedata['starttime'];
 								$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
 								$database->setMovementProc($movedata['moveid']);
 								}
-								$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to'];
+								$getmovement1 = $database->getMovement(1,$data['to'],1);
+								foreach($getmovement1 as $movedata1) {
+								$time = time();
+								$time2 = $time - $movedata1['starttime'];
+								$database->addMovement(4,$movedata1['to'],$movedata1['from'],$movedata1['ref'],$time,$time+$time2);
+								$database->setMovementProc($movedata1['moveid']);
+								}
+								$getmovement2 = $database->getMovement(2,$data['to'],1);
+								foreach($getmovement2 as $movedata2) {
+								$time = time();
+								$time2 = $time - $movedata2['starttime'];
+								$database->addMovement(4,$movedata2['to'],$movedata2['from'],$movedata2['ref'],$time,$time+$time2);
+								$database->setMovementProc($movedata2['moveid']);
+								}
+								$getmovement3 = $database->getMovement(3,$data['to'],1);
+								foreach($getmovement3 as $movedata3) {
+								$time = time();
+								$time2 = $time - $movedata3['starttime'];
+								$database->addMovement(4,$movedata3['to'],$movedata3'from'],$movedata3['ref'],$time,$time+$time2);
+								$database->setMovementProc($movedata3['moveid']);
+								}
+								$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to']." and sort_type != 4 or to = ".$data['to']." and sort_type = 4";
 								$database->query($q);
 						}
 						}
