@@ -335,6 +335,8 @@ class Automation {
 					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."market where vref = ".$village;
 					$database->query($q);
+					$q = "DELETE FROM ".TB_PREFIX."movement where to = ".$village." or from = ".$village;
+					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$village;
 					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."research where vref = ".$village;
@@ -348,36 +350,6 @@ class Automation {
 					$q = "DELETE FROM ".TB_PREFIX."vdata where vref = ".$village;
 					$database->query($q);
 					$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village;
-					$database->query($q);
-					$getmovement = $database->getMovement(0,$village,1);
-					foreach($getmovement as $movedata) {
-					$time = time();
-					$time2 = $time - $movedata['starttime'];
-					$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
-					$database->setMovementProc($movedata['moveid']);
-					}
-					$getmovement1 = $database->getMovement(1,$village,1);
-					foreach($getmovement1 as $movedata1) {
-					$time = time();
-					$time2 = $time - $movedata1['starttime'];
-					$database->addMovement(4,$movedata1['to'],$movedata1['from'],$movedata1['ref'],$time,$time+$time2);
-					$database->setMovementProc($movedata1['moveid']);
-					}
-					$getmovement2 = $database->getMovement(2,$village,1);
-					foreach($getmovement2 as $movedata2) {
-					$time = time();
-					$time2 = $time - $movedata2['starttime'];
-					$database->addMovement(4,$movedata2['to'],$movedata2['from'],$movedata2['ref'],$time,$time+$time2);
-					$database->setMovementProc($movedata2['moveid']);
-					}
-					$getmovement3 = $database->getMovement(3,$village,1);
-					foreach($getmovement3 as $movedata3) {
-					$time = time();
-					$time2 = $time - $movedata3['starttime'];
-					$database->addMovement(4,$movedata3['to'],$movedata3'from'],$movedata3['ref'],$time,$time+$time2);
-					$database->setMovementProc($movedata3['moveid']);
-					}
-					$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$village." and sort_type != 4 or to = ".$village." and sort_type = 4";
 					$database->query($q);
 				}
 				$q = "DELETE FROM ".TB_PREFIX."mdata where target = ".$need['uid']." or owner = ".$need['uid'];
@@ -671,6 +643,15 @@ class Automation {
 				$q = "DELETE FROM ".TB_PREFIX."bdata where id = ".$indi['id'];
 				$database->query($q);
 			}
+				$crop = $database->getCropProdstarv($indi['wid']);
+				$unitarrays = $this->getAllUnits($indi['wid']);
+				$village = $database->getVillage($indi['wid']);
+				$upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
+				if ($crop < $upkeep){
+					// add starv data
+					$database->setVillageField($indi['wid'], 'starv', $upkeep);
+					$database->setVillageField($indi['wid'], 'starvupdate', $time);
+				}
 		}
 		if(file_exists("GameEngine/Prevention/build.txt")) {
 			unlink("GameEngine/Prevention/build.txt");
@@ -2313,10 +2294,6 @@ class Automation {
 						//delete reinforcement
 						$q = "DELETE FROM ".TB_PREFIX."enforcement WHERE from = ".$data['to']."";
 						$database->query($q);
-						// reset units
-						$q = "DELETE FROM ".TB_PREFIX."units WHERE vref = ".$data['to']."";
-						$database->query($q);
-						$database->addUnits($data['to']);
 						// check buildings
 						$pop1 = $database->getVillageField($data['from'],"pop");
 						$pop2 = $database->getVillageField($data['to'],"pop");
@@ -2686,35 +2663,14 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->query($q);
 								$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
 								$database->query($q);
-								$getmovement = $database->getMovement(0,$data['to'],1);
+								$getmovement = $database->getMovement(3,$data['to'],1);
 								foreach($getmovement as $movedata) {
 								$time = time();
 								$time2 = $time - $movedata['starttime'];
 								$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
 								$database->setMovementProc($movedata['moveid']);
 								}
-								$getmovement1 = $database->getMovement(1,$data['to'],1);
-								foreach($getmovement1 as $movedata1) {
-								$time = time();
-								$time2 = $time - $movedata1['starttime'];
-								$database->addMovement(4,$movedata1['to'],$movedata1['from'],$movedata1['ref'],$time,$time+$time2);
-								$database->setMovementProc($movedata1['moveid']);
-								}
-								$getmovement2 = $database->getMovement(2,$data['to'],1);
-								foreach($getmovement2 as $movedata2) {
-								$time = time();
-								$time2 = $time - $movedata2['starttime'];
-								$database->addMovement(4,$movedata2['to'],$movedata2['from'],$movedata2['ref'],$time,$time+$time2);
-								$database->setMovementProc($movedata2['moveid']);
-								}
-								$getmovement3 = $database->getMovement(3,$data['to'],1);
-								foreach($getmovement3 as $movedata3) {
-								$time = time();
-								$time2 = $time - $movedata3['starttime'];
-								$database->addMovement(4,$movedata3['to'],$movedata3'from'],$movedata3['ref'],$time,$time+$time2);
-								$database->setMovementProc($movedata3['moveid']);
-								}
-								$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to']." and sort_type != 4 or to = ".$data['to']." and sort_type = 4";
+								$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to'];
 								$database->query($q);
 						}
 						}
@@ -2762,6 +2718,16 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 						$database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 						$database->addNotice($to['owner'],$to['wref'],$targetally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 			}
+				$crop = $database->getCropProdstarv($to['wref']);
+				$unitarrays = $this->getAllUnits($to['wref']);
+				$getvillage = $database->getVillage($to['wref']);
+				$village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
+				if ($crop < $village_upkeep){
+					// add starv data
+					$database->setVillageField($to['wref'], 'starv', $village_upkeep);
+					$database->setVillageField($to['wref'], 'starvupdate', time());
+				}
+				unset($crop,$unitarrays,$getvillage,$village_upkeep);
 
 				#################################################
 				################FIXED BY SONGER################
@@ -3517,6 +3483,15 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					if($train['amt'] == 0){
 					$database->trainUnit($train['id'],0,0,0,0,1,1);
 					}
+				$crop = $database->getCropProdstarv($train['vref']);
+				$unitarrays = $this->getAllUnits($train['vref']);
+				$village = $database->getVillage($train['vref']);
+				$upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
+				if ($crop < $upkeep){
+					// add starv data
+					$database->setVillageField($train['vref'], 'starv', $upkeep);
+					$database->setVillageField($train['vref'], 'starvupdate', $time);
+				}
 			}
 		}
 		if(file_exists("GameEngine/Prevention/training.txt")) {
@@ -4025,18 +4000,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				}
 			}
 			unset ($starv,$unitarray,$enforcearray,$enforce,$starvarray);
-		}
-		$getvillage = $database->getUnstarvation();
-		foreach($getvillage as $village){
-		$time2 = time();
-				$crop2 = $database->getCropProdstarv($village['wref']);
-				$unitarrays2 = $this->getAllUnits($village['wref']);
-				$upkeep2 = $village['pop'] + $this->getUpkeep($unitarrays2, 0);
-				if ($crop2 < $upkeep2){
-					// add starv data
-					$database->setVillageField($village['wref'], 'starv', $upkeep2);
-					$database->setVillageField($village['wref'], 'starvupdate', $time2);
-				}
 		}
 
 		if(file_exists("GameEngine/Prevention/starvation.txt")) {
