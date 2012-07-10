@@ -188,6 +188,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
   `desc` text NOT NULL,
   `effect` varchar(100) NOT NULL,
   `img` varchar(20) NOT NULL,
+  `active` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MYISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
