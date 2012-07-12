@@ -437,9 +437,9 @@ class Battle {
 						// Factor = 1030 Romeinse muur
 						// Factor = 1020 Wall Germanen
 						// Factor = 1025 Wall Galliers
-						$factor = ($def_tribe == 1)? 1.030 : (($def_tribe == 2)? 1.020 : 1.025);
-						// Defense Infanterie = infanterie * Muur (%)
-						$dp *= pow($factor,$def_wall)*2;
+						$dp *= pow($factor,$def_wall)*1.08;
+						// Defensa Cavelerie = Cavelerie * Muur (%)
+						$cdp *= pow($factor,$def_wall)*1.08;
 						// Defensa Cavelerie = Cavelerie * Muur (%)
 						$cdp *= pow($factor,$def_wall)*2;
 
