@@ -1,5 +1,13 @@
 <?php
-###################################################################################              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 #### --------------------------------------------------------------------------- ####  Filename       sysmsg.php                                                  ####  Developed by:  Dixie                                                       ####  License:       TravianX Project                                            ####  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ####                                                                             ###################################################################################
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       sysmsg.php                                                  ##
+##  Developed by:  Dixie                                                       ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 
 include_once("GameEngine/Account.php");
 $max_per_pass = 1000;
@@ -145,7 +153,7 @@ if (@isset($_POST['confirm']))
 			  </tbody>
 			</table>
 </form>
-Example: (BBCode doesn't work over here!)
+Example: (BBCode or quotation marks (" ") doesn't work over here!)
 <?php
 $txt=$_SESSION['m_message'];
 $txt = preg_replace("/\[b\]/is",'<b>', $txt);
