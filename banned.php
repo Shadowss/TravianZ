@@ -59,7 +59,7 @@ if($session->access == BANNED){
 include("Admin/Templates/ban_msg.tpl");
 ?>
 </div>
-</br></br><div id="side_info">
+</br></br></br></br><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

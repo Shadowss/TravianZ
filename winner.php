@@ -1144,7 +1144,7 @@ d17/x3f8m6l++P5/85njqecf6NH/s8/0/wHeyCdEnMVhkQAAAABJRU5ErkJggg==" align="right" 
 					<br /><br />
 					<center><a href="dorf1.php">&raquo; Continue</a></center>
 				</div>
-				</br></br><div id="side_info">
+				</br></br></br></br><div id="side_info">
 					<?php
 					include("Templates/multivillage.tpl");
 					include("Templates/quest.tpl");

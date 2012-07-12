@@ -315,7 +315,7 @@
    }
 ?>
 </div>
-</br></br><div id="side_info">
+</br></br></br></br><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

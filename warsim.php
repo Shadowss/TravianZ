@@ -133,7 +133,7 @@ if(count($target) > 0) {
 <p class="btn"><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
 </form>
 </div>
-</br></br><div id="side_info">
+</br></br></br></br><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");
