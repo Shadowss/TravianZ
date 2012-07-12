@@ -19,7 +19,7 @@ $amt = $_POST['vill_amount'];
 
 for($i=1;$i<=$amt;$i++) {
 
-		$kid = rand(1,4);
+		$kid = $_POST['kid'];
 		$wid = $database->generateBase($kid);
 		$database->setFieldTaken($wid);
 		$time = time();
