@@ -25,7 +25,20 @@ echo "<tr><td class=\"desc\">
 </div>
 <div class=\"details\">
 <img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".(${'u'.$i}['wood']*3)."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".(${'u'.$i}['clay']*3)."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".(${'u'.$i}['iron']*3)."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".(${'u'.$i}['crop']*3)."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />".(${'u'.$i}['pop']-($building->getTypeLevel(41)>=1?1:0))."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />";
-echo $generator->getTimeFormat(round(${'u'.$i}['time'] * ($bid30[$village->resarray['f'.$id]]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) / SPEED * $artefact_bonus2 / $artefact_bonus));
+$dur=round(${'u'.$i}['time'] * ($bid30[$village->resarray['f'.$id]]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) / SPEED * $artefact_bonus2 / $artefact_bonus);
+					$foolartefact = $database->getFoolArtefactInfo(5,$village->wid,$session->uid);
+					if(count($foolartefact) > 0){
+					foreach($foolartefact as $arte){
+					if($arte['bad_effect'] == 1){
+					$dur *= $arte['effect2'];
+					}else{
+					$dur /= $arte['effect2'];
+					$dur = round($dur);
+					}
+					}
+					}
+					$dur=$generator->getTimeFormat($dur);
+echo ($dur=="0:00:00")? "0:00:01":$dur;
 if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
                    echo "|<a href=\"build.php?gid=17&t=3&r1=".((${'u'.$i}['wood'])*$technology->maxUnitPlus($i))."&r2=".((${'u'.$i}['clay'])*$technology->maxUnitPlus($i))."&r3=".((${'u'.$i}['iron'])*$technology->maxUnitPlus($i))."&r4=".((${'u'.$i}['crop'])*$technology->maxUnitPlus($i))."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  } 

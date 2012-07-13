@@ -454,6 +454,17 @@ class Technology {
 			$upkeep = round($upkeep);
 			$upkeep *= 3;
 			}
+			$foolartefact = $database->getFoolArtefactInfo(4,$vid,$session->uid);
+			if(count($foolartefact) > 0){
+			foreach($foolartefact as $arte){
+			if($arte['bad_effect'] == 1){
+			$upkeep *= $arte['effect2'];
+			}else{
+			$upkeep /= $arte['effect2'];
+			$upkeep = round($upkeep);
+			}
+			}
+			}
 		return $upkeep;
 	}
 

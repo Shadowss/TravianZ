@@ -60,8 +60,22 @@
 			$fastertroops = 1;
 			}
 			$time = round($generator->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
-            
-            $ctar1 = 0;
+			$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$seesion->uid);
+			if(count($foolartefact) > 0){
+			foreach($foolartefact as $arte){
+			if($arte['bad_effect'] == 1){
+			$time *= $arte['effect2'];
+			}else{
+			$time /= $arte['effect2'];
+			$time = round($time);
+			}
+			}
+			}
+			if($data['u7'] > 0){
+            $ctar1 = 99;
+			}else{
+			$ctar1 = 0;
+			}
             $ctar2 = 0; 
             $abdata = $database->getABTech($getFLData['wref']);
             $reference = $database->addAttack(($getFLData['wref']),$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],$data['type'],$ctar1,$ctar2,0,$abdata['b1'],$abdata['b2'],$abdata['b3'],$abdata['b4'],$abdata['b5'],$abdata['b6'],$abdata['b7'],$abdata['b8']);

@@ -2408,6 +2408,17 @@ class MYSQL_DB {
 	$each *= 3;
 	$each = round($each);
 	}
+	$foolartefact = $database->getFoolArtefactInfo(5,$vid,$uid);
+	if(count($foolartefact) > 0){
+	foreach($foolartefact as $arte){
+	if($arte['bad_effect'] == 1){
+	$each *= $arte['effect2'];
+	}else{
+	$each /= $arte['effect2'];
+	$each = round($each);
+	}
+	}
+	}
 	if($each == 0){ $each = 1; }
 	$time2 = $now+$each;
 	if(count($queued) > 0) {
@@ -2942,10 +2953,10 @@ class MYSQL_DB {
 		return $this->mysql_fetch_all($result);
 	}
 
-	function getArtefactInfo() {
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id > 0";
+	function getFoolArtefactInfo($type,$vid,$uid) {
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND type = $type OR owner = $uid AND size > 1 AND active = 1 AND type = $type";
 		$result = mysql_query($q, $this->connection);
-		return mysql_fetch_array($result);
+		return $this->mysql_fetch_all($result);
 	}
 
 	function claimArtefact($vref, $ovref, $id) {

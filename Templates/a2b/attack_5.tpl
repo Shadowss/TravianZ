@@ -23,7 +23,17 @@ $to = array('x'=>$coor['x'], 'y'=>$coor['y']);
 			$fastertroops = 1;
 			}
 $time = round($generator->procDistanceTime($from,$to,300,0)/$fastertroops);
-
+$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$seesion->uid);
+if(count($foolartefact) > 0){
+foreach($foolartefact as $arte){
+if($arte['bad_effect'] == 1){
+$time *= $arte['effect2'];
+}else{
+$time /= $arte['effect2'];
+$time = round($time);
+}
+}
+}
 // Temp
 
 $ckey= $generator->generateRandStr(6);
@@ -388,7 +398,17 @@ $actionType = "Raid";
 			$fastertroops = 1;
 			}
 				$time = round($generator->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
-
+				$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$seesion->uid);
+				if(count($foolartefact) > 0){
+				foreach($foolartefact as $arte){
+				if($arte['bad_effect'] == 1){
+				$time *= $arte['effect2'];
+				}else{
+				$time /= $arte['effect2'];
+				$time = round($time);
+				}
+				}
+				}
 			?>
 
 			

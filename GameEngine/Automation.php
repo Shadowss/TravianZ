@@ -208,6 +208,7 @@ class Automation {
 		$this->procClimbers();
 		$this->CheckBan();
 		$this->regenerateOasisTroops();
+		$this->artefactOfTheFool();
 	}
 
 	private function loyaltyRegeneration() {
@@ -1580,6 +1581,17 @@ class Automation {
 			}else{
 			$artefact_bouns = 1;
 			}
+			$foolartefact = $database->getFoolArtefactInfo(7,$vid,$session->uid);
+			if(count($foolartefact) > 0){
+			foreach($foolartefact as $arte){
+			if($arte['bad_effect'] == 1){
+			$cranny_eff *= $arte['effect2'];
+			}else{
+			$cranny_eff /= $arte['effect2'];
+			$cranny_eff = round($cranny_eff);
+			}
+			}
+			}
 			$cranny_eff = ($cranny * $atk_bonus)*$def_bonus*$artefact_bouns;
 
 			// work out available resources.
@@ -1817,23 +1829,10 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-			$artowner = $database->getVillageField($data['to'],"owner");
-			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
-			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-			if($bartefact > 0){
-			$strongerbuildings = 5;
-			}else if($bartefact1 > 0){
-			$strongerbuildings = 4;
-			}else if($bartefact2 > 0){
-			$strongerbuildings = 3;
-			}else{
-			$strongerbuildings = 1;
-			}
 				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
 				}
 				if ($battlepart[4]>$needed_cata)
 				{
@@ -1954,23 +1953,10 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-			$artowner = $database->getVillageField($data['to'],"owner");
-			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
-			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-			if($bartefact > 0){
-			$strongerbuildings = 5;
-			}else if($bartefact1 > 0){
-			$strongerbuildings = 4;
-			}else if($bartefact2 > 0){
-			$strongerbuildings = 3;
-			}else{
-			$strongerbuildings = 1;
-			}
 				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
 				}
 				if (($battlepart[4]/2)>$needed_cata)
 				{
@@ -2091,23 +2077,10 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-			$artowner = $database->getVillageField($data['to'],"owner");
-			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
-			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-			if($bartefact > 0){
-			$strongerbuildings = 5;
-			}else if($bartefact1 > 0){
-			$strongerbuildings = 4;
-			}else if($bartefact2 > 0){
-			$strongerbuildings = 3;
-			}else{
-			$strongerbuildings = 1;
-			}
 				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
 				}
 				if (($battlepart[4]/2)>$needed_cata)
 				{
@@ -2544,6 +2517,17 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$p_fastertroops = 1;
 			}
 			$p_time = round($this->procDistanceTime($p_to,$p_from,min($p_speeds),1)/$p_fastertroops);
+			$foolartefact1 = $database->getFoolArtefactInfo(2,$prisoner['from'],$p_owner);
+			if(count($foolartefact1) > 0){
+			foreach($foolartefact1 as $arte){
+			if($arte['bad_effect'] == 1){
+			$p_time *= $arte['effect2'];
+			}else{
+			$p_time /= $arte['effect2'];
+			$p_time = round($p_time);
+			}
+			}
+			}
 			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
 			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,time(),($p_time+time()));
 			$anothertroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
@@ -2592,8 +2576,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}else{
 			$fastertroops = 1;
 			}
-				$endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + time();
-				//$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
+			$endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
+			$foolartefact2 = $database->getFoolArtefactInfo(2,$from['wref'],$from['owner']);
+			if(count($foolartefact2) > 0){
+			foreach($foolartefact2 as $arte){
+			if($arte['bad_effect'] == 1){
+			$endtime *= $arte['effect2'];
+			}else{
+			$endtime /= $arte['effect2'];
+			$endtime = round($endtime);
+			}
+			}
+			}
+			$endtime += time();
 				if($type == 1) {
 					$database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
 				}else {
@@ -2710,7 +2705,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}else{
 			$fastertroops = 1;
 			}
-			$endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + time();
+			$endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
+			$foolartefact3 = $database->getFoolArtefactInfo(2,$from['wref'],$from['owner']);
+			if(count($foolartefact3) > 0){
+			foreach($foolartefact3 as $arte){
+			if($arte['bad_effect'] == 1){
+			$endtime *= $arte['effect2'];
+			}else{
+			$endtime /= $arte['effect2'];
+			$endtime = round($endtime);
+			}
+			}
+			}
+			$endtime += time();
 				$database->setMovementProc($data['moveid']);
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
 				$peace = PEACE;
@@ -2906,6 +2913,17 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$fastertroops = 1;
 			}
 				$time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),1)/$fastertroops);
+				$foolartefact4 = $database->getFoolArtefactInfo(2,$from['wref'],$from['owner']);
+				if(count($foolartefact4) > 0){
+				foreach($foolartefact4 as $arte){
+				if($arte['bad_effect'] == 1){
+				$time *= $arte['effect2'];
+				}else{
+				$time /= $arte['effect2'];
+				$time = round($endtime);
+				}
+				}
+				}
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
 				$technology->checkReinf($post['ckey']);
@@ -3238,7 +3256,11 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		return $ownunit;
 	}
 
-	public function getUpkeep($array,$type) {
+	public function getUpkeep($array,$type,$vid=0,$prisoners=0) {
+		global $database,$session,$village;
+		if($vid==0) { $vid=$village->wid; }
+		$buildarray = array();
+		$buildarray = $database->getResourceLevel($vid);
 		$upkeep = 0;
 		switch($type) {
 			case 0:
@@ -3267,13 +3289,76 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			break;
 		}
 		for($i=$start;$i<=$end;$i++) {
+			$k = $i-$start+1;
 			$unit = "u".$i;
+			$unit2 = "t".$k;
 			global $$unit;
 			$dataarray = $$unit;
+			for($j=19;$j<=38;$j++) {
+			if($buildarray['f'.$j.'t'] == 41) {
+			$horsedrinking = $j;
+			}
+			}
+			if($prisoners == 0){
+			if(isset($horsedrinking)){
+			if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
+			|| ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
+			|| ($i==6 && $buildarray['f'.$horsedrinking] == 20)) {
+			$upkeep += ($dataarray['pop']-1) * $array[$unit];
+			} else {
 			$upkeep += $dataarray['pop'] * $array[$unit];
+			}}else{
+			$upkeep += $dataarray['pop'] * $array[$unit];
+			}
+			}else{
+			if(isset($horsedrinking)){
+			if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
+			|| ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
+			|| ($i==6 && $buildarray['f'.$horsedrinking] == 20)) {
+			$upkeep += ($dataarray['pop']-1) * $array[$unit2];
+			} else {
+			$upkeep += $dataarray['pop'] * $array[$unit2];
+			}}else{
+			$upkeep += $dataarray['pop'] * $array[$unit2];
+			}
+			}
 		}
+		 //   $unit = "hero";
+		 //   global $$unit;
+		 //   $dataarray = $$unit;
+		 if($prisoners == 0){
+			$upkeep += $array['hero'] * 6;
+		 }else{
+			$upkeep += $array['t11'] * 6;
+		 }
+			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,4,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($vid,4,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,4,2,0));
+			if($artefact > 0){
+			$upkeep /= 2;
+			$upkeep = round($upkeep);
+			}else if($artefact1 > 0){
+			$upkeep /= 2;
+			$upkeep = round($upkeep);
+			}else if($artefact2 > 0){
+			$upkeep /= 4;
+			$upkeep = round($upkeep);
+			$upkeep *= 3;
+			}
+			$foolartefact = $database->getFoolArtefactInfo(4,$vid,$session->uid);
+			if(count($foolartefact) > 0){
+			foreach($foolartefact as $arte){
+			if($arte['bad_effect'] == 1){
+			$upkeep *= $arte['effect2'];
+			}else{
+			$upkeep /= $arte['effect2'];
+			$upkeep = round($upkeep);
+			}
+			}
+			}
 		return $upkeep;
 	}
+
 	private function bountycalculateOProduction($bountywid) {
 		global $technology,$database;
 		$this->bountyOproduction['wood'] = $this->bountyGetOWoodProd();
@@ -4083,6 +4168,45 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		foreach($array as $oasis) {
 			$database->populateOasisUnits($oasis['wref'],$oasis['high']);
 			$database->updateOasis($oasis['wref']);
+		}
+	}
+	
+	private function artefactOfTheFool() {
+		global $database;
+		$time = time();
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and $time - lastupdate >= 86400";
+		$array = $database->query_return($q);
+		foreach($array as $artefact) {
+		$kind = rand(1,7);
+		while($kind == 6){
+		$kind = rand(1,7);
+		}
+		if($artefact['size'] != 3){
+		$bad_effect = rand(0,1);
+		}else{
+		$bad_effect = 0;
+		}
+		switch($kind) {
+				case 1:
+				$effect = rand(1,5);
+				break;
+				case 2:
+				$effect = rand(1,3);
+				break;
+				case 3:
+				$effect = rand(3,10);
+				break;
+				case 4:
+				$effect = rand(2,4);
+				break;
+				case 5:
+				$effect = rand(2,4);
+				break;
+				case 7:
+				$effect = rand(1,6);
+				break;
+			}
+		mysql_query("UPDATE ".TB_PREFIX."artefacts SET kind = $kind, bad_effect = $bad_effect, effect2 = $effect, lastupdate = $time WHERE id = ".$artefact['id']."");
 		}
 	}
 }

@@ -12,6 +12,17 @@ include("next.tpl");
 			}else{
 			$artefact_bouns = 1;
 			}
+			$good_effect = $bad_effect = 1;
+			$foolartefact = $database->getFoolArtefactInfo(7,$village->wid,$seesion->uid);
+			if(count($foolartefact) > 0){
+			foreach($foolartefact as $arte){
+			if($arte['bad_effect'] == 1){
+			$bad_effect = $arte['effect2'];
+			}else{
+			$good_effect = $arte['effect2'];
+			}
+			}
+			}
 ?>
 <div id="build" class="gid23"><a href="#" onClick="return Popup(23,4);" class="build_logo">
 	<img class="building g23" src="img/x.gif" alt="Cranny" title="Cranny" />
@@ -44,11 +55,11 @@ include("next.tpl");
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2*$artefact_bouns; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*$artefact_bouns; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}}else{
         ?>
@@ -56,11 +67,11 @@ include("next.tpl");
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[10]['attri']*2*$artefact_bouns; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*2*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[10]['attri']*$artefact_bouns; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}}}
         ?>

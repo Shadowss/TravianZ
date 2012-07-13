@@ -18,7 +18,17 @@ $to = array('x'=>$newvillage['x'], 'y'=>$newvillage['y']);
 			$fastertroops = 1;
 			}
 $time = round($generator->procDistanceTime($from,$to,300,0)/$fastertroops);
-
+$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$seesion->uid);
+if(count($foolartefact) > 0){
+foreach($foolartefact as $arte){
+if($arte['bad_effect'] == 1){
+$time *= $arte['effect2'];
+}else{
+$time /= $arte['effect2'];
+$time = round($time);
+}
+}
+}
 echo '<pre>';
 echo '</pre>';
 ?>

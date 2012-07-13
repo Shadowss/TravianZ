@@ -313,12 +313,32 @@ if($session->access != BANNED){
 			$fastertroops = 1;
 			}
 		$time = round($generator->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
+		$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$session->uid);
+		if(count($foolartefact) > 0){
+		foreach($foolartefact as $arte){
+		if($arte['bad_effect'] == 1){
+		$time *= $arte['effect2'];
+		}else{
+		$time /= $arte['effect2'];
+		$time = round($time);
+		}
+		}
+		}
 		$to_owner = $database->getVillageField($data['to_vid'],"owner");
 		$artefact_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,3,0));
 		$artefact1_2 = count($database->getOwnUniqueArtefactInfo2($data['to_vid'],7,1,1));
 		$artefact2_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,2,0));
-		if (isset($post['ctar1'])){if($artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0){$post['ctar1'] = 99;}else{$post['ctar1'] = $post['ctar1'];}}else{ $post['ctar1'] = 0;}
-		if (isset($post['ctar2'])){if($artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0){$post['ctar2'] = 99;}else{$post['ctar2'] = $post['ctar2'];}}else{ $post['ctar2'] = 0;}
+		$foolartefact2 = $database->getFoolArtefactInfo(7,$data['to_vid'],$to_owner);
+		$good_artefact = 0;
+		if(count($foolartefact2) > 0){
+		foreach($foolartefact2 as $arte){
+		if($arte['bad_effect'] == 0){
+		$good_artefact = 1;
+		}
+		}
+		}
+		if (isset($post['ctar1'])){if($artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0 or $good_artefact == 1){$post['ctar1'] = 99;}else{$post['ctar1'] = $post['ctar1'];}}else{ $post['ctar1'] = 0;}
+		if (isset($post['ctar2'])){if($artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0 or $good_artefact == 1){$post['ctar2'] = 99;}else{$post['ctar2'] = $post['ctar2'];}}else{ $post['ctar2'] = 0;}
 		if (isset($post['spy'])){$post['spy'] = $post['spy'];}else{ $post['spy'] = 0;}
 		$abdata = $database->getABTech($village->wid);
 		$reference = $database->addAttack(($village->wid),$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],$data['type'],$post['ctar1'],$post['ctar2'],$post['spy'],$abdata['b1'],$abdata['b2'],$abdata['b3'],$abdata['b4'],$abdata['b5'],$abdata['b6'],$abdata['b7'],$abdata['b8']);
@@ -448,6 +468,17 @@ if($session->access != BANNED){
 			$fastertroops = 1;
 			}
 				$time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),1)/$fastertroops);
+				$foolartefact2 = $database->getFoolArtefactInfo(2,$village->wid,$session->uid);
+				if(count($foolartefact2) > 0){
+				foreach($foolartefact2 as $arte){
+				if($arte['bad_effect'] == 1){
+				$time *= $arte['effect2'];
+				}else{
+				$time /= $arte['effect2'];
+				$time = round($time);
+				}
+				}
+				}
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
 				$technology->checkReinf($post['ckey']);

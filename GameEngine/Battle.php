@@ -292,7 +292,17 @@ class Battle {
 								if($abcount <= 8 && ${att_ab.$abcount} > 0) {
 
 										$ap += (35 + ( 35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i] * $attacker_artefact;
-
+										$att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
+										if(count($att_foolartefact) > 0){
+										foreach($att_foolartefact as $arte){
+										if($arte['bad_effect'] == 1){
+										$ap *= $arte['effect2'];
+										}else{
+										$ap /= $arte['effect2'];
+										$ap = round($ap);
+										}
+										}
+										}
 								}
 								else {
 										$ap += ($Attacker['u'.$i] * $Attacker['u'.$i] * $Attacker['u'.$i])/3;
@@ -372,6 +382,17 @@ class Battle {
 										if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
 												$dp +=  (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * (($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4) * $defender_artefact;
 												$abcount +=1;
+										$def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
+										if(count($def_foolartefact) > 0){
+										foreach($def_foolartefact as $arte){
+										if($arte['bad_effect'] == 1){
+										$dp *= $arte['effect2'];
+										}else{
+										$dp /= $arte['effect2'];
+										$dp = round($dp);
+										}
+										}
+										}
 										}
 										else {
 												$dp += ($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4;
@@ -585,10 +606,21 @@ class Battle {
 			}else{
 			$strongerbuildings = 1;
 			}
-			if($stonemason==0){
-			$need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / $strongerbuildings)) + 0.5);
+			$good_effect = $bad_effect = 1;
+			$foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
+			if(count($foolartefact) > 0){
+			foreach($foolartefact as $arte){
+			if($arte['bad_effect'] == 1){
+			$bad_effect = $arte['effect2'];
 			}else{
-			$need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+			$good_effect = $arte['effect2'];
+			}
+			}
+			}
+			if($stonemason==0){
+			$need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+			}else{
+			$need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
 			}
 			// Aantal katapulten om het gebouw neer te halen
 			$result[3] = $need;
@@ -614,10 +646,21 @@ class Battle {
 			}else{
 			$strongerbuildings = 1;
 			}
-			if($stonemason==0){
-			$need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / $strongerbuildings)) + 0.5);
+			$good_effect = $bad_effect = 1;
+			$foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
+			if(count($foolartefact) > 0){
+			foreach($foolartefact as $arte){
+			if($arte['bad_effect'] == 1){
+			$bad_effect = $arte['effect2'];
 			}else{
-			$need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+			$good_effect = $arte['effect2'];
+			}
+			}
+			}
+			if($stonemason==0){
+			$need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+			}else{
+			$need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
 			}
 			// Aantal katapulten om het gebouw neer te halen
 			$result[7] = $need;
