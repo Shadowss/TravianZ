@@ -164,12 +164,6 @@ class MYSQL_DB {
 			$result = mysql_query($q, $this->connection);
 			return $this->mysql_fetch_all($result);
 	}
-	
-	function getUnstarvation(){
-			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv = 0 and starvupdate = 0";
-			$result = mysql_query($q, $this->connection);
-			return $this->mysql_fetch_all($result);
-	}
 
 	function getActivateField($ref, $field, $mode) {
 		if(!$mode) {

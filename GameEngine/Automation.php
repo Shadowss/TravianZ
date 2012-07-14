@@ -3995,6 +3995,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$starvarray = array();
 		$starvarray = $database->getStarvation();
 		foreach ($starvarray as $starv){
+		$unitarrays = $this->getAllUnits($starv['wref']);
+		$upkeep = $starv['pop'] + $this->getUpkeep($unitarrays, 0);
 			if (($starv['starvupdate']+600) < $time){
 				// get enforce
 				$enforcearray = $database->getEnforceVillage($starv['wref'],0);
@@ -4049,9 +4051,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 						$database->setVillageField($starv['wref'], 'crop', $newcrop);
 					}
 				}
-				$upkeep = $starv['pop'] + $this->getUpkeep($unitarrays, 0);
 				if($difcrop > 0){
-					$killunits = round($difcrop/18000);
+					$killunits = floor($difcrop/18000);
 					if($killunits > 0){
 					if (isset($enf)){
 						if($killunits < $maxcount){
@@ -4077,14 +4078,14 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					}
 					}
 				}
-
+			}
 				$crop = $database->getCropProdstarv($starv['wref']);
 				if ($crop > $upkeep){
 					$database->setVillageField($starv['wref'], 'starv', 0);
 					$database->setVillageField($starv['wref'], 'starvupdate', 0);
 				}
-			}
-			unset ($starv,$unitarray,$enforcearray,$enforce,$starvarray);
+
+			unset ($starv,$unitarrays,$enforcearray,$enforce,$starvarray);
 		}
 
 		if(file_exists("GameEngine/Prevention/starvation.txt")) {
