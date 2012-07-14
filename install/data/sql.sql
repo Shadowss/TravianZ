@@ -188,6 +188,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
   `desc` text NOT NULL,
   `effect` varchar(100) NOT NULL,
   `img` varchar(20) NOT NULL,
+  `active` tinyint(1) unsigned NOT NULL,
   `kind` tinyint(1) unsigned NOT NULL,
   `bad_effect` tinyint(1) unsigned NOT NULL,
   `effect2` tinyint(2) unsigned NOT NULL,
