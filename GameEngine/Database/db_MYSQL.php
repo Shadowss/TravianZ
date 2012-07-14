@@ -2954,7 +2954,7 @@ class MYSQL_DB {
 	}
 
 	function getFoolArtefactInfo($type,$vid,$uid) {
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND type = $type OR owner = $uid AND size > 1 AND active = 1 AND type = $type";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND type = 8 AND kind = $type OR owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
