@@ -45,7 +45,7 @@ class funct {
 		  if(is_numeric($get['uid'])){
 		  $get['uid'] = $get['uid'];
 		  }else{
-		  $get['uid'] = $database->getUserField($get['uid'],'id',1);
+		  $get['uid'] = $database->getUserField(addslashes($get['uid']),'id',1);
 		  }
 
 		$admin->AddBan($get['uid'],$end,$get['reason']);

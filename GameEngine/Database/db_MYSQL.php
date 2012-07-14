@@ -2408,7 +2408,7 @@ class MYSQL_DB {
 	$each *= 3;
 	$each = round($each);
 	}
-	$foolartefact = $database->getFoolArtefactInfo(5,$vid,$uid);
+	$foolartefact = $this->getFoolArtefactInfo(5,$vid,$uid);
 	if(count($foolartefact) > 0){
 	foreach($foolartefact as $arte){
 	if($arte['bad_effect'] == 1){

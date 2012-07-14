@@ -64,7 +64,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" class="on"><input type="image" src="../img/admin/b/ok1.gif" value="submit"></td>
+				<td colspan="2" class="on"><input type="image" src="../img/admin/b/ok1.gif" value="submit"></br>Notice: if player have ' in is name, you need to write his ID to ban him.</td>
 			</tr>
 		</tbody>
 	</table>

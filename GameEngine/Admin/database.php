@@ -224,7 +224,7 @@ class adm_DB {
 
 	function DelBan($uid,$id){
 	 global $database;
-	$name = $database->getUserField($uid,"username",0);
+	$name = addslashes($database->getUserField($uid,"username",0));
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Unbanned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
 	$q = "UPDATE ".TB_PREFIX."users SET `access` = '".USER."' WHERE `id` = $uid;";
 	mysql_query($q, $this->connection);
@@ -234,13 +234,13 @@ class adm_DB {
 
   function AddBan($uid,$end,$reason){
 	global $database;
-	$name = $database->getUserField($uid,"username",0);
+	$name = addslashes($database->getUserField($uid,"username",0));
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Banned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
 	$q = "UPDATE ".TB_PREFIX."users SET `access` = '0' WHERE `id` = $uid;";
 	mysql_query($q, $this->connection);
 	$time = time();
 	$admin = $_SESSION['id'];  //$database->getUserField($_SESSION['username'],'id',1);
-	$name = $database->getUserField($uid,'username',0);
+	$name = addslashes($database->getUserField($uid,'username',0));
 	$q = "INSERT INTO ".TB_PREFIX."banlist (`uid`, `name`, `reason`, `time`, `end`, `admin`, `active`) VALUES ($uid, '$name' , '$reason', '$time', '$end', '$admin', '1');";
 	mysql_query($q, $this->connection);
   }

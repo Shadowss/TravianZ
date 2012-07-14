@@ -3260,7 +3260,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		global $database,$session,$village;
 		if($vid==0) { $vid=$village->wid; }
 		$buildarray = array();
-		$buildarray = $database->getResourceLevel($vid);
+		if($vid!=0){ $buildarray = $database->getResourceLevel($vid); }
 		$upkeep = 0;
 		switch($type) {
 			case 0:

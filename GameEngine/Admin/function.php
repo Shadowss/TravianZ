@@ -42,11 +42,10 @@ class funct {
 	  case addBan:
 		if($get['time']){$end = time()+$get['time']; }else{$end = '';}
 
-		  if(preg_match("/^[0-9]+$/",$get['uid'])){
-		  //if(eregi("^[0-9]*+$",$get['uid'])){
+		  if(is_numeric($get['uid'])){
 		  $get['uid'] = $get['uid'];
 		  }else{
-		  $get['uid'] = $database->getUserField($get['uid'],'id',1);
+		  $get['uid'] = $database->getUserField(addslashes($get['uid']),'id',1);
 		  }
 
 		$admin->AddBan($get['uid'],$end,$get['reason']);
