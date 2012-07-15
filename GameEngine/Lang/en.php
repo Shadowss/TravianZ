@@ -236,6 +236,12 @@ define("U58","Monster Catapult");
 define("U59","Monster Chief");
 define("U60","Monster Settler");
 
+// RESOURCES
+define("R1","Lumber");
+define("R2","Clay");
+define("R3","Iron");
+define("R4","Crop");
+
 //INDEX.php
 define("LOGIN","Login");
 define("PLAYERS","Players");
