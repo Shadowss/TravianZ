@@ -1,11 +1,5 @@
 <?php 
-if(isset($_GET['z'])) {
-	$currentcoor = $database->getCoor($_GET['z']);++$requse2;
-    $y = $currentcoor['y'];
-	$x = $currentcoor['x'];
-    $bigmid = $_GET['z'];
-}
-else if(isset($_POST['xp']) && isset($_POST['yp'])){
+if(isset($_POST['xp']) && isset($_POST['yp'])){
 	$x = $_POST['xp'];
     $y = $_POST['yp'];
     $bigmid = $generator->getBaseID($x,$y);
