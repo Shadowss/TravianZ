@@ -1,5 +1,11 @@
 <?php 
-if(isset($_POST['xp']) && isset($_POST['yp'])){
+if(isset($_GET['z'])) {
+	$currentcoor = $database->getCoor($_GET['z']);++$requse2;
+    $y = $currentcoor['y'];
+	$x = $currentcoor['x'];
+    $bigmid = $_GET['z'];
+}
+else if(isset($_POST['xp']) && isset($_POST['yp'])){
 	$x = $_POST['xp'];
     $y = $_POST['yp'];
     $bigmid = $generator->getBaseID($x,$y);
@@ -9,7 +15,6 @@ else {
 	$x = $village->coor['x'];
     $bigmid = $village->wid;
 }
-
 
 $xm7 = ($x-7) < -WORLD_MAX? $x+WORLD_MAX+WORLD_MAX-6 : $x-7;
 $xm3 = ($x-3) < -WORLD_MAX? $x+WORLD_MAX+WORLD_MAX-2 : $x-3;

@@ -4117,7 +4117,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					} else
 						if($session['oldrank'] < $oldrank) {
 							$totalpoints = $oldrank - $session['oldrank'];
-							$database->removeclimberrankpop($session['id'], $session['oldrank']);
+							$database->removeclimberrankpop($session['id'], $totalpoints);
 							$database->updateoldrank($session['id'], $oldrank);
 						}
 					}else{
