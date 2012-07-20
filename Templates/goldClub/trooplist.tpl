@@ -104,11 +104,11 @@ if($session->tribe == 1){
 				</div>
 				<div class="troopGroup">
 					<label for="t3"><img class="unit u23" title="<?php echo U23; ?>" src="img/x.gif"></label>
-					<input class="text troop" id="t3" type="text" name="t3" value="<?php if($t3!=0){ echo $t3; }else{ echo 0; } ?>" disabled="disabled">
+					<input class="text troop" id="t3" type="text" value="<?php if($t3!=0){ echo $t3; }else{ echo 0; } ?>" disabled="disabled">
 				</div>
 				<div class="troopGroup">
 					<label for="t4"><img class="unit u24" title="<?php echo U24; ?>" src="img/x.gif"></label>
-					<input class="text troop" id="t4" type="text" value="<?php if($t4!=0){ echo $t4; }else{ echo 0; } ?>">
+					<input class="text troop" id="t4" type="text" name="t4" value="<?php if($t4!=0){ echo $t4; }else{ echo 0; } ?>">
 				</div>
 				<div class="troopGroup">
 					<label for="t5"><img class="unit u25" title="<?php echo U25; ?>" src="img/x.gif"></label>
