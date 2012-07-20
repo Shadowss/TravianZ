@@ -450,30 +450,30 @@ class Battle {
 			}
 				}
 
-				//
-				// Formule voor de berekening van de bonus verdedigingsmuur "en" Residence ";
-				//
-				if($def_wall > 0) {
-						// Stel de factor berekening voor de "Muur" als het type van de beschaving
-						// Factor = 1030 Romeinse muur
-						// Factor = 1020 Wall Germanen
-						// Factor = 1025 Wall Galliers
-						$dp *= pow($factor,$def_wall)*1.08;
-						// Defensa Cavelerie = Cavelerie * Muur (%)
-						$cdp *= pow($factor,$def_wall)*1.08;
-						// Defensa Cavelerie = Cavelerie * Muur (%)
-						$cdp *= pow($factor,$def_wall)*2;
+                // 
+                // Formule voor de berekening van de bonus verdedigingsmuur "en" Residence "; 
+                // 
+                if($def_wall > 0) { 
+                        // Stel de factor berekening voor de "Muur" als het type van de beschaving 
+                        // Factor = 1030 Romeinse muur 
+                        // Factor = 1020 Wall Germanen 
+                        // Factor = 1025 Wall Galliers 
+                        $factor = ($def_tribe == 1)? 1.030 : (($def_tribe == 2)? 1.020 : 1.025); 
+                        // Verdediging infantery = Infantery * Muur (%) 
+                        $dp *= pow($factor,$def_wall); 
+                        // Verdediging Cavelerie = Cavelerie * Muur (%) 
+                        $cdp *= pow($factor,$def_wall); 
 
-						// Berekening van de Basic defence bonus "Residence"
-						$dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)))*0.5;
-						$cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)))*0.5;
-				}
-				else
-		{
-						// Berekening van de Basic defence bonus "Residence"
-						$dp += (2*(pow($residence,2)));
-						$cdp += (2*(pow($residence,2)));
-				}
+                        // Berekening van de Basic defence bonus "Residence" 
+                        $dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
+                        $cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
+                } 
+                else 
+        { 
+                        // Berekening van de Basic defence bonus "Residence" 
+                        $dp += (2*(pow($residence,2))); 
+                        $cdp += (2*(pow($residence,2))); 
+                }  
 
 				//
 				// Formule voor het berekenen van punten aanvallers (Infanterie & Cavalry)
