@@ -2374,8 +2374,7 @@ if($data['t11'] > 0){
 	";
 				}else if($data['spy'] == 2){
 					if ($isoasis == 0){
-				$basearray = $database->getMInfo($data['to']);
-				$resarray = $database->getResourceLevel($basearray['wref']);
+				$resarray = $database->getResourceLevel($data['to']);
 
 
 				$crannylevel =0;
@@ -2384,21 +2383,21 @@ if($data['t11'] > 0){
 				for($j=19;$j<=40;$j++) {
 				if($resarray['f'.$j.'t'] == 25 || $resarray['f'.$j.'t'] == 26 ) {
 
-				$rplevel = $database->getFieldLevel($basearray['wref'],$j);
+				$rplevel = $database->getFieldLevel($data['to'],$j);
 
 				}
 				}
 				for($j=19;$j<=40;$j++) {
 				if($resarray['f'.$j.'t'] == 40) {
 
-				$walllevel = $database->getFieldLevel($basearray['wref'],$j);
+				$walllevel = $database->getFieldLevel($data['to'],$j);
 
 				}
 				}
 				for($j=19;$j<=40;$j++) {
 				if($resarray['f'.$j.'t'] == 23) {
 
-				$crannylevel = $database->getFieldLevel($basearray['wref'],$j);
+				$crannylevel = $database->getFieldLevel($data['to'],$j);
 
 				}
 				}
