@@ -2388,7 +2388,7 @@ if($data['t11'] > 0){
 				}
 				}
 				for($j=19;$j<=40;$j++) {
-				if($resarray['f'.$j.'t'] == 40) {
+				if($resarray['f'.$j.'t'] == 31 || $resarray['f'.$j.'t'] == 32 || $resarray['f'.$j.'t'] == 33) {
 
 				$walllevel = $database->getFieldLevel($data['to'],$j);
 
