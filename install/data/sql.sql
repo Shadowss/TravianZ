@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%active` (
-  `username` varchar(15) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `timestamp` int(11) unsigned NOT NULL,
   PRIMARY KEY (`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
