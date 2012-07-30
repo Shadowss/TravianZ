@@ -402,7 +402,7 @@ class Automation {
 		$q = "UPDATE " . TB_PREFIX . "odata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getoasis['wref']."";
 		$database->query($q);
 		}
-		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxstore";
+		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop";
 		$array = $database->query_return($q);
 		foreach($array as $getoasis) {
 		if($getoasis['wood'] > $getoasis['maxstore']){
@@ -475,7 +475,7 @@ class Automation {
 		$q = "UPDATE " . TB_PREFIX . "vdata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getvillage['wref']."";
 		$database->query($q);
 		}
-		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxstore";
+		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop";
 		$array = $database->query_return($q);
 		foreach($array as $getvillage) {
 		if($getvillage['wood'] > $getvillage['maxstore']){
