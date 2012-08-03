@@ -43,6 +43,7 @@ if (@isset($_POST['confirm']))
 		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");
 		$text = file_get_contents("Templates/text_format.tpl");
 		$text = preg_replace("'%TEKST%'",$_SESSION['m_message'] ,$text);
+		$text = utf8_encode($text);
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";

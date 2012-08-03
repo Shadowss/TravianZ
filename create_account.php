@@ -449,6 +449,7 @@ To build a WW, you must own a plan yourself (you = the WW village owner) from lv
 The construction plans are conquerable immediately when they appear to the server. 
 
 There will be a countdown in game, showing the exact time of the release, 5 days prior to the launch." ,$text);
+		$text = utf8_encode($text);
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
