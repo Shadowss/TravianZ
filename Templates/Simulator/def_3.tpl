@@ -77,7 +77,7 @@
 								<input class="text" type="text" name="a2_26" value="<?php echo $form->getValue('a2_26'); ?>" maxlength="10" title="Number Haeduan" />
 							</td>
 							<td class="research">
-								<input class="text" type="text" name="f2_26" value="<?php echo $form->getValue('f2_27'); ?>" maxlength="2" title="Level Armoury Haeduan" />
+								<input class="text" type="text" name="f2_26" value="<?php echo $form->getValue('f2_26'); ?>" maxlength="2" title="Level Armoury Haeduan" />
 							</td></tr><tr>
 
 							<td class="ico">
