@@ -2,7 +2,7 @@
 <?php 
 $basearray = $database->getMInfo($_GET['d']);
 $uinfo = $database->getVillage($basearray['id']);
-$oasis1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysql_escape_string($_GET['d']));
+$oasis1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysql_real_escape_string($_GET['d']));
 $oasis = mysql_fetch_assoc($oasis1);
 ?>
 <h1><?php if($basearray['fieldtype']!=0){
@@ -499,7 +499,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 		  if($basearray['fieldtype'] == 0){
           $query1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysql_escape_string($_GET['d']));
 		  }else{
-          $query1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysql_escape_string($_GET['d']));
+          $query1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysql_real_escape_string($_GET['d']));
 		  }
           $data1 = mysql_fetch_assoc($query1);
           $query2 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
