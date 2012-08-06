@@ -95,7 +95,7 @@ $vdata = $database->getVillage($towref);
                 <label for="slot<?php echo $id; ?>">
                 <?php
                     $type = $database->getVillageType2($towref);
-                    $oasistype = $type['oasistype'];
+                    $type = $oasistype['oasistype'];
                     if($oasistype != 0){
                 ?>
                 <span class="coordinates coordinatesWithText">
@@ -104,8 +104,7 @@ $vdata = $database->getVillage($towref);
                 <span class="coordinateY">(<?php echo $x; ?></span>
                 <span class="coordinatePipe">|</span>
                 <span class="coordinateX"><?php echo $y; ?>)</span>
-                </span></span>
-                <?php }else{ ?>
+                </span></span><?php}else{?>
                 <span class="coordinates coordinatesWithText">
                 <span class="coordText"><?php echo $vdata['name']; ?></span>
                 </span>
