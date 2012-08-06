@@ -11,14 +11,14 @@ $WrefCoor = $database->getCoor($Wref);
 $WrefX = $WrefCoor['x'];
 $WrefY = $WrefCoor['y'];
 $type = $database->getVillageType2($Wref);
-$oasistype = $to['oasistype'];
+$oasistype = $type['oasistype'];
 $vdata = $database->getVillage($Wref);
 }elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
 $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
 $WrefX = $_POST['x'];
 $WrefY = $_POST['y'];
 $type = $database->getVillageType2($Wref);
-$oasistype = $to['oasistype'];
+$oasistype = $type['oasistype'];
 $vdata = $database->getVillage($Wref);
 }
     if($_POST['x']=="" && $_POST['y']=="" && $_POST['target_id'] == ""){
@@ -126,7 +126,7 @@ foreach($arraywref as $row){
 $towref = $row["towref"];
 $tocoor = $database->getCoor($towref);
 $totype = $database->getVillageType2($towref);
-$tooasistype = $to['oasistype'];
+$tooasistype = $type['oasistype'];
 if($tooasistype == 0){
 $tovname = $database->getVillageField($towref, 'name');
 }else{

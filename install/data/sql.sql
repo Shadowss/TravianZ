@@ -1388,6 +1388,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `dpall` int(11) unsigned NOT NULL DEFAULT '0',
   `protect` int(11) unsigned NOT NULL,
   `quest` tinyint(2) NOT NULL,
+  `quest_time` int(11) unsigned NOT NULL,
   `gpack` varchar(255) NOT NULL DEFAULT 'gpack/travian_default/',
   `cp` float(14,5) unsigned NOT NULL DEFAULT '1',
   `lastupdate` int(11) unsigned NOT NULL,
