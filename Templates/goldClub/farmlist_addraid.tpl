@@ -11,14 +11,14 @@ $WrefCoor = $database->getCoor($Wref);
 $WrefX = $WrefCoor['x'];
 $WrefY = $WrefCoor['y'];
 $type = $database->getVillageType2($Wref);
-$oasistype = $type['oasistype'];
+$oasistype = $to['oasistype'];
 $vdata = $database->getVillage($Wref);
 }elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
 $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
 $WrefX = $_POST['x'];
 $WrefY = $_POST['y'];
 $type = $database->getVillageType2($Wref);
-$oasistype = $type['oasistype'];
+$oasistype = $to['oasistype'];
 $vdata = $database->getVillage($Wref);
 }
     if($_POST['x']=="" && $_POST['y']=="" && $_POST['target_id'] == ""){
@@ -27,7 +27,7 @@ $vdata = $database->getVillage($Wref);
     	$errormsg .= "Enter the correct coordinates.";
     }elseif($oasistype == 0 && $vdata == 0){
     	$errormsg .= "There is no village on those coordinates.";
-    }elseif($troops == 0){
+    }elseif($troops == "0"){
      	$errormsg .= "No troops has been selected.";
     }else{
     
@@ -126,7 +126,7 @@ foreach($arraywref as $row){
 $towref = $row["towref"];
 $tocoor = $database->getCoor($towref);
 $totype = $database->getVillageType2($towref);
-$tooasistype = $totype['oasistype'];
+$tooasistype = $to['oasistype'];
 if($tooasistype == 0){
 $tovname = $database->getVillageField($towref, 'name');
 }else{
