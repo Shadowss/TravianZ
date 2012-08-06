@@ -14,14 +14,14 @@ $WrefCoor = $database->getCoor($Wref);
 $WrefX = $WrefCoor['x'];
 $WrefY = $WrefCoor['y'];
 $type = $database->getVillageType2($Wref);
-$oasistype = $type['oasistype'];
+$oasistype = $to['oasistype'];
 $vdata = $database->getVillage($Wref);
 }elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
 $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
 $WrefX = $_POST['x'];
 $WrefY = $_POST['y'];
 $type = $database->getVillageType2($Wref);
-$oasistype = $type['oasistype'];
+$oasistype = $to['oasistype'];
 $vdata = $database->getVillage($Wref);
 }
 $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+".$_POST['t5']."+".$_POST['t6']."+".$_POST['t7']."+".$_POST['t8']."+".$_POST['t9']."+".$_POST['t10']."";
@@ -32,7 +32,7 @@ $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+"
     	$errormsg .= "Enter the correct coordinates.";
     }elseif($oasistype == 0 && $vdata == 0){
     	$errormsg .= "There is no village on those coordinates.";
-    }elseif($troops == 0){
+    }elseif($troops == "0"){
      	$errormsg .= "No troops has been selected.";
     }else{
 
@@ -134,7 +134,7 @@ foreach($arraywref as $row){
 $towref = $row["towref"];
 $tocoor = $database->getCoor($towref);
 $totype = $database->getVillageType2($towref);
-$tooasistype = $totype['oasistype'];
+$tooasistype = $to['oasistype'];
 if($tooasistype == 0){
 $tovname = $database->getVillageField($towref, 'name');
 }else{
