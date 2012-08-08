@@ -694,10 +694,11 @@ class Building {
 				$buildiron = $buildarray[$level]['iron'];
 				$buildcrop = $buildarray[$level]['crop'];
 				if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop){
+				$enought_res = 1;
 				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
 				}
 				}
-				if($database->query($q)) {
+				if($database->query($q) && ($enought_res == 1 or $jobs['master'])) {
 					$database->modifyPop($jobs['wid'],$resource['pop'],0);
 					$database->addCP($jobs['wid'],$resource['cp']);
 					$q = "DELETE FROM ".TB_PREFIX."bdata where id = ".$jobs['id'];
