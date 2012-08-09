@@ -71,6 +71,7 @@ define("NOT_OPENED_YET","Server not started yet.");
 define("REGISTER_CLOSED","The register is closed. You can't register to this server.");
 define("NAME_EMPTY","Please insert name");
 define("NAME_NO_EXIST","There is no user with the name ");
+define("ID_NO_EXIST","There is no user with the id ");
 define("SAME_NAME","You can't invite yourself");
 define("ALREADY_INVITED"," already invited");
 define("ALREADY_IN_ALLY"," already in this alliance");
