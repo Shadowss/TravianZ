@@ -145,6 +145,7 @@ class Automation {
 
 	public function Automation() {
 
+		$this->procClimbers();
 		$this->ClearUser();
 		$this->ClearInactive();
 		$this->oasisResoucesProduce();
@@ -205,7 +206,6 @@ class Automation {
 		$this->updateGeneralAttack();
 		$this->checkInvitedPlayes();
 		$this->updateStore();
-		$this->procClimbers();
 		$this->CheckBan();
 		$this->regenerateOasisTroops();
 		$this->artefactOfTheFool();

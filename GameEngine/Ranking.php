@@ -20,9 +20,11 @@
 
 			public function getUserRank($id) {
 			$ranking = $this->getRank();
-			$start = $_SESSION['start']+1;
+			$users = "SELECT * FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8") . "";
+			$users2 = mysql_num_rows(mysql_query($users));
+			$users3 = $users2+1;
 			if(count($ranking) > 0) {
-			for($i=$start;$i<($start+20);$i++) {
+			for($i=0;$i<($users3);$i++) {
 			if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
 			$myrank = $i;
 			}
