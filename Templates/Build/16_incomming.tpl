@@ -39,7 +39,7 @@ if ($units[$y]['sort_type']==3){
                   for($i=$start;$i<=($end);$i++) {
                   	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";	
                   }
-				  if($units[$y]['t11'] != 0) {
+				  if($units[$y]['t11'] != 0 && $reinfowner == $session->uid) {
                    echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";    
                   }
                   echo "</tr><tr><th>Troops</th>";

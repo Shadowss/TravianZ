@@ -76,7 +76,7 @@ class Automation {
 			case 42: $build = "Great Workshop"; break;
 			default: $build = "Nothing had"; break;
 		}
-		return $build;
+		return addslashes($build);
 	}
 
 	function recountPop($vid){
