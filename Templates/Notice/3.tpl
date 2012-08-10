@@ -77,7 +77,7 @@ for($i=153;$i<=162;$i++) {
     	echo "<td>".$dataarray[$i]."</td>";
     }
 }
-if(isset($dataarray[163]) and $dataarray[163]!=0){
+if(isset($dataarray[151]) and $dataarray[151]!=0){
 	if ($dataarray[163]==0){$tdclass='class="none"';}
 	echo "<td $tdclass>$dataarray[163]</td>";
 }

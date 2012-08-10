@@ -212,7 +212,7 @@ class Technology {
 		return $ownunit;
 	}
 
-	function getAllUnits($base,$InVillageOnly=False) {
+	function getAllUnits($base,$InVillageOnly=False,$mode=0) {
 		global $database;
 		$ownunit = $database->getUnit($base);
 		$ownunit['u99'] -= $ownunit['u99'];
@@ -226,6 +226,7 @@ class Technology {
 				$ownunit['hero'] += $enforce['hero'];
 			}
 		}
+		if($mode==0){
 		$prisoners = $database->getPrisoners($base);
 		if(!empty($prisoners)) {
 		foreach($prisoners as $prisoner){
@@ -238,6 +239,7 @@ class Technology {
 			$ownunit['u'.$i] += $prisoner['t'.$j];
 			}
 			$ownunit['hero'] += $prisoner['t11'];
+		}
 		}
 		}
 		if(!$InVillageOnly) {
