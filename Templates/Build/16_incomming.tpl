@@ -95,7 +95,7 @@ if ($units[$y]['sort_type']==3){
 		}else{
 		echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
                   <a>village of the elders</a></td>
-                  <td colspan=\"$colspan\">";
+                  <td colspan=\"10\">";
                   echo "<a>Taskmaster's troops</a>";
                   echo "</td></tr></thead><tbody class=\"units\">";
                   $tribe = $session->tribe;
