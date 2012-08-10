@@ -64,26 +64,26 @@
 							break;
 						case 4:
 							$this->procARankArray();
-							if($session->alliance == 0) {
+							if($get['aid'] == 0) {
 								$this->getStart(1);
 							} else {
-								$this->getStart($this->searchRank($session->alliance, "id"));
+								$this->getStart($this->searchRank($get['aid'], "id"));
 							}
 							break;
 						case 41:
 							$this->procAAttRankArray();
-							if($session->alliance == 0) {
+							if($get['aid'] == 0) {
 								$this->getStart(1);
 							} else {
-								$this->getStart($this->searchRank($session->alliance, "id"));
+								$this->getStart($this->searchRank($get['aid'], "id"));
 							}
 							break;
 						case 42:
 							$this->procADefRankArray();
-							if($session->alliance == 0) {
+							if($get['aid'] == 0) {
 								$this->getStart(1);
 							} else {
-								$this->getStart($this->searchRank($session->alliance, "id"));
+								$this->getStart($this->searchRank($get['aid'], "id"));
 							}
 							break;
 					}

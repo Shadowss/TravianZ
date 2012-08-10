@@ -212,6 +212,10 @@ if(isset($_GET['o'])) {
 			$database->deletePrisoners($prisoner['id']);
 				}else if($prisoner['from'] == $village->wid){
 			$troops = $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
+			if($prisoner['t11'] > 0){
+			$p_owner = $database->getVillageField($prisoner['from'],"owner");
+			mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '1', `health` = '0' WHERE `uid` = '".$p_owner."'");
+			}
 			$database->modifyUnit($prisoner['wref'],array("99o"),array($troops),array(0));
 			$database->deletePrisoners($prisoner['id']);
 				}

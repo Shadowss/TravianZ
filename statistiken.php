@@ -14,6 +14,7 @@
 include("GameEngine/Village.php");
 $__start = $generator->pageLoadTimeStart();
 if(isset($_GET['rank'])){ $_POST['rank']==$_GET['rank']; }
+$_GET['aid'] = $session->alliance;
 $ranking->procRankReq($_GET);
 $ranking->procRank($_POST);
 if(isset($_GET['newdid'])) {
