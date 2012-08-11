@@ -99,12 +99,12 @@ include("alli_menu.tpl");
             </tr>
 			<?php } ?>
             <tr>
-                <td class="desc2" colspan="2"><?php echo nl2br($profiel[0]); ?>
+                <td class="desc2" colspan="2"><?php echo stripslashes(nl2br($profiel[0])); ?>
                 </td>
             </tr>
             </table>
     </td>
-    <td class="desc1"><?php echo nl2br($profiel[1]); ?>
+    <td class="desc1"><?php echo stripslashes(nl2br($profiel[1])); ?>
     </td>
 </tr>
 </tbody>
