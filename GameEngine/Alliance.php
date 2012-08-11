@@ -317,7 +317,7 @@
 				$_SESSION['valuearray'] = $post;
 				//header("Location: build.php?id=".$post['id']);
 			} else {
-				$database->submitAlliProfile($database->RemoveXSS($session->alliance), $database->RemoveXSS($post['be2']), $database->RemoveXSS($post['be1']));
+				$database->submitAlliProfile($database->RemoveXSS($session->alliance), $post['be2'], $post['be1']);
 				// log the notice
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance description.');
 			}
