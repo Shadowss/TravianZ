@@ -65,6 +65,11 @@ if(isset($_GET['u']))
 				echo "No updates Avaiable";
 			}
 			?></td>
-		</tr>			
+		</tr>
+		<tr>
+		<td class="hab" colspan="2">Visit Forum</td>
+	        <td class="hab" colspan="1"><center><a href="http://travian.gamingcrazy.net/forum/"><img src="../img/admin/b/ok1.gif"></a></center></td>
+		</tr>
 	</tbody>
-</table>
+</table><br /><br />
+<p><font color="red">Guys don`t forget to register at the forum to receive information of the updates"</font></p>
