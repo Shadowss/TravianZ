@@ -51,14 +51,14 @@ if(isset($_GET['u']))
 		</tr>
 		<tr>
 			<td class="hab" colspan="2">Check for Update</td>
-			<td class="hab" colspan="1"><center><a href="http://travian.gamingcrazy.net/TravianZ/Admin/admin.php?p=update&c"><img src="../img/admin/b/ok1.gif"></a></center></td>
+			<td class="hab" colspan="1"><center><a href="?p=update&c"><img src="../img/admin/b/ok1.gif"></a></center></td>
 		</tr>
 		<tr>
 		<td class="hab" colspan="2">Update</td>
 		<td class="hab" colspan="1"><?php
 			if($latest > $ver)
 			{
-				echo'<center><a href="http://travian.gamingcrazy.net/TravianZ/Admin/admin.php?p=update&u"><img src="../img/admin/b/update.png"></a></center>'; 
+				echo'<center><a href="?p=update&u"><img src="../img/admin/b/update.png"></a></center>'; 
 			} 
 			else
 			{ 
