@@ -24,7 +24,7 @@
 			$users2 = mysql_num_rows(mysql_query($users));
 			$users3 = $users2+1;
 			if(count($ranking) > 0) {
-			for($i=0;$i<($users3);$i++) {
+			for($i=1;$i<($users3);$i++) {
 			if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
 			$myrank = $i;
 			}
@@ -160,7 +160,7 @@
 
 			public function searchRank($name, $field) {
 				while(1) {
-					$key = key($this->rankarray);
+					$key = key($this->rankarray)+1;
 					if($this->rankarray[$key][$field] == $name) {
 						return $key;
 						break;
