@@ -1,3 +1,3 @@
 <?php
-$latest="4";
+$latest="8";
 ?>
