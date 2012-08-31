@@ -52,9 +52,11 @@ class Battle {
 					}
 					if(isset($post['wall3']) && $post['wall3'] == "") {
 						$post['wall3'] = 0;
-					}if(isset($post['wall4']) && $post['wall4'] == "") {
+					}
+					if(isset($post['wall4']) && $post['wall4'] == "") {
 						$post['wall4'] = 0;
-					}if(isset($post['wall5']) && $post['wall5'] == "") {
+					}
+					if(isset($post['wall5']) && $post['wall5'] == "") {
 						$post['wall5'] = 0;
 					}
 					$post['tribe'] = $target[0];
@@ -86,8 +88,7 @@ class Battle {
 		for($i=$start;$i<=($start+9);$i++) {
 			$attacker['u'.$i] = $post['a1_'.$index];
 			if($index <=8) {
-				${
-					att_ab.$index} = $post['f1_'.$index];
+				${att_ab.$index} = $post['f1_'.$index];
 			}
 			$index += 1;
 		}
@@ -105,32 +106,27 @@ class Battle {
 		switch($deftribe) {
 			case 1:
 				for($i=1;$i<=8;$i++) {
-					${
-						def_ab.$i} = $post['f2_'.$i];
+					${def_ab.$i} = $post['f2_'.$i];
 				}
 				break;
 			case 2:
 				for($i=11;$i<=18;$i++) {
-					${
-						def_ab.$i-10} = $post['f2_'.$i];
+					${def_ab.$i-10} = $post['f2_'.$i];
 				}
 				break;
 			case 3:
 				for($i=21;$i<=28;$i++) {
-					${
-						def_ab.$i-20} = $post['f2_'.$i];
+					${def_ab.$i-20} = $post['f2_'.$i];
 				}
 				break;
 			case 4:
 				for($i=31;$i<=38;$i++) {
-					${
-						def_ab.$i-30} = $post['f2_'.$i];
+					${def_ab.$i-30} = $post['f2_'.$i];
 				}
 				break;
 			case 5:
 				for($i=41;$i<=48;$i++) {
-					${
-						def_ab.$i-40} = $post['f2_'.$i];
+					${def_ab.$i-40} = $post['f2_'.$i];
 				}
 				break;
 		}
@@ -294,87 +290,69 @@ class Battle {
 		if($type == 1)
 		{
 			for($i=$start;$i<=$end;$i++) {
-				global ${
-					'u'.$i};
-					$j = $i-$start+1;
-					if($abcount <= 8 && ${
-						att_ab.$abcount} > 0) {
-
-							$ap += (35 + ( 35 + 300 * ${
-								'u'.$i}['pop'] / 7) * (pow(1.007, ${
-								att_ab.$abcount}) - 1)) * $Attacker['u'.$i] * $attacker_artefact;
-								$att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
-								if(count($att_foolartefact) > 0){
-									foreach($att_foolartefact as $arte){
-										if($arte['bad_effect'] == 1){
-											$ap *= $arte['effect2'];
-										}else{
-											$ap /= $arte['effect2'];
-											$ap = round($ap);
-										}
-									}
-								}
+				global ${'u'.$i};
+				$j = $i-$start+1;
+				if($abcount <= 8 && ${att_ab.$abcount} > 0) {
+					$ap += (35 + ( 35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i] * $attacker_artefact;
+					$att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
+					if(count($att_foolartefact) > 0){
+						foreach($att_foolartefact as $arte){
+							if($arte['bad_effect'] == 1){
+								$ap *= $arte['effect2'];
+							}else{
+								$ap /= $arte['effect2'];
+								$ap = round($ap);
+							}
 						}
-						else {
-							$ap += ($Attacker['u'.$i] * $Attacker['u'.$i] * $Attacker['u'.$i])/3;
-						}
+					}
+				}
+				else {
+					$ap += ($Attacker['u'.$i] * $Attacker['u'.$i] * $Attacker['u'.$i])/3;
+				}
 
-
-						$units['Att_unit'][$i] = $Attacker['u'.$i];
+				$units['Att_unit'][$i] = $Attacker['u'.$i];
 			}
 			if ($Attacker['uhero'] != 0){
 				$ap += $atkhero['atk'] * 35;
-			 $ap = $ap * $atkhero['ob'];
+				$ap = $ap * $atkhero['ob'];
 			}
 		}
 		else
 		{
 			$abcount = 1;
 			for($i=$start;$i<=$end;$i++) {
-				global ${
-					'u'.$i};
-					$j = $i-$start+1;
-					if($abcount <= 8 && ${
-						att_ab.$abcount} > 0) {
-							if(in_array($i,$calvary)) {
-								$cap += (${
-									'u'.$i}['atk'] + (${
-										'u'.$i}['atk'] + 300 * ${
-											'u'.$i}['pop'] / 7) * (pow(1.007, ${
-									att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
-							}
-							else {
-								$ap += (${
-									'u'.$i}['atk'] + (${
-										'u'.$i}['atk'] + 300 * ${
-											'u'.$i}['pop'] / 7) * (pow(1.007, ${
-									att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
-							}
-						}
-						else {
-							if(in_array($i,$calvary)) {
-								$cap += $Attacker['u'.$i]*${
-									'u'.$i}['atk'];
-							}
-							else {
-								$ap += $Attacker['u'.$i]*${
-									'u'.$i}['atk'];
-							}
-						}
+				global ${'u'.$i};
+				$j = $i-$start+1;
+				if($abcount <= 8 && ${att_ab.$abcount} > 0) {
+					if(in_array($i,$calvary)) {
+						$cap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
+					}
+					else {
+						$ap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
+					}
+				}
+				else {
+					if(in_array($i,$calvary)) {
+						$cap += $Attacker['u'.$i]*${'u'.$i}['atk'];
+					}
+					else {
+						$ap += $Attacker['u'.$i]*${'u'.$i}['atk'];
+					}
+				}
 
 
-						$abcount +=1;
-						// catapult attack
-						if(in_array($i,$catapult)) {
-							$catp += $Attacker['u'.$i];
-						}
-						// ram
-						if(in_array($i,$rams))
-						{
-							$ram += $Attacker['u'.$i];
-						}
-						$involve += $Attacker['u'.$i];
-						$units['Att_unit'][$i] = $Attacker['u'.$i];
+				$abcount +=1;
+				// catapult attack
+				if(in_array($i,$catapult)) {
+					$catp += $Attacker['u'.$i];
+				}
+				// ram
+				if(in_array($i,$rams))
+				{
+					$ram += $Attacker['u'.$i];
+				}
+				$involve += $Attacker['u'.$i];
+				$units['Att_unit'][$i] = $Attacker['u'.$i];
 			}
 
 			if ($Attacker['uhero'] != 0)
@@ -401,30 +379,26 @@ class Battle {
 			for($y=4;$y<=44;$y++) {
 				if($y == 4 || $y == 14 || $y == 23 || $y == 44)
 				{
-					global ${
-						'u'.$y};
-						if($y >= $start && $y <= ($end-2) && ${
-							def_ab.$abcount} > 0) {
-								$dp +=  (20 + (20 + 300 * ${
-									'u'.$y}['pop'] / 7) * (pow(1.007, ${
-									def_ab.$abcount}) - 1)) * (($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4) * $defender_artefact;
-									$abcount +=1;
-									$def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
-									if(count($def_foolartefact) > 0){
-										foreach($def_foolartefact as $arte){
-											if($arte['bad_effect'] == 1){
-												$dp *= $arte['effect2'];
-											}else{
-												$dp /= $arte['effect2'];
-												$dp = round($dp);
-											}
-										}
+					global ${'u'.$y};
+					if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
+						$dp +=  (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * (($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4) * $defender_artefact;
+							$abcount +=1;
+							$def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
+							if(count($def_foolartefact) > 0){
+								foreach($def_foolartefact as $arte){
+									if($arte['bad_effect'] == 1){
+										$dp *= $arte['effect2'];
+									}else{
+										$dp /= $arte['effect2'];
+										$dp = round($dp);
 									}
+								}
 							}
-							else {
-								$dp += ($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4;
-							}
-							$units['Def_unit'][$y] = $Defender['u'.$y];
+					}
+					else {
+						$dp += ($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4;
+					}
+					$units['Def_unit'][$y] = $Defender['u'.$y];
 				}
 			}
 			if ($Defender['hero'] != 0){
@@ -444,30 +418,18 @@ class Battle {
 		else
 		{
 			for($y=1;$y<=50;$y++) {
-				global ${
-					'u'.$y};
-					if($y >= $start && $y <= ($end-2) && ${
-						def_ab.$abcount} > 0) {
-							$dp +=  (${
-								'u'.$y}['di'] + (${
-									'u'.$y}['di'] + 300 * ${
-										'u'.$y}['pop'] / 7) * (pow(1.007, ${
-								def_ab.$abcount}) - 1)) * $Defender['u'.$y];
-								$cdp += (${
-									'u'.$y}['dc'] + (${
-										'u'.$y}['dc'] + 300 * ${
-											'u'.$y}['pop'] / 7) * (pow(1.007, ${
-									def_ab.$abcount}) - 1)) * $Defender['u'.$y];
-						}
-						else {
-							$dp += $Defender['u'.$y]*${
-								'u'.$y}['di'];
-								$cdp += $Defender['u'.$y]*${
-									'u'.$y}['dc'];
-						}
-						$involve += $Defender['u'.$y];
-						$units['Def_unit'][$y] = $Defender['u'.$y];
-						$abcount +=1;
+				global ${'u'.$y};
+				if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
+					$dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * $Defender['u'.$y];
+					$cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * $Defender['u'.$y];
+				}
+				else {
+					$dp += $Defender['u'.$y]*${'u'.$y}['di'];
+					$cdp += $Defender['u'.$y]*${'u'.$y}['dc'];
+				}
+				$involve += $Defender['u'.$y];
+				$units['Def_unit'][$y] = $Defender['u'.$y];
+				$abcount +=1;
 			}
 			if($Defender['hero'] != 0)
 			{
@@ -814,8 +776,7 @@ class Battle {
 			$j = $i-$start+1;
 			$y = $i-(($att_tribe-1)*10);
 
-			$max_bounty += ($Attacker['u'.$i]-$result['casualties_attacker'][$y])*${
-				'u'.$i}['cap'];
+			$max_bounty += ($Attacker['u'.$i]-$result['casualties_attacker'][$y])*${'u'.$i}['cap'];
 
 		}
 
