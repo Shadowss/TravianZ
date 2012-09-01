@@ -44,7 +44,7 @@
 <tbody>
 <?php
 		for ($i=($session->tribe-1)*10+9;$i<=($session->tribe*10);$i++) {
-			if ($slots['settlers']>0 && $i%10==0 || $slots['chiefs']>0 && $i%10==9) {
+			if ($slots['settlers']>0 && $i%10==0 || $slots['chiefs']>0 && $i%10==9 && $session->tribe != 4) {
 			       $maxunit = MIN($technology->maxUnit($i),($i%10==0?$slots['settlers']:$slots['chiefs']));
 
 echo "<tr><td class=\"desc\">

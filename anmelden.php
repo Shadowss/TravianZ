@@ -55,7 +55,7 @@ if(REG_OPEN == true){ ?>
 	<tbody>
 		<tr class="top">
 			<th><?php echo NICKNAME; ?></td>
-			<td><input class="text" type="text" name="name" value="<?php echo $form->getValue('name'); ?>" maxlength="15" />
+			<td><input class="text" type="text" name="name" value="<?php echo $form->getValue('name'); ?>" maxlength="20" />
 			<span class="error"><?php echo $form->getError('name'); ?></span>
 			</td>
 		</tr>
@@ -69,7 +69,7 @@ if(REG_OPEN == true){ ?>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>
 			<td>
-				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="30" />
+				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="20" />
 				<span class="error"><?php echo $form->getError('pw'); ?></span>
 			</td>
 		</tr>

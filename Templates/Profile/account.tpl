@@ -106,17 +106,15 @@ echo "<span class=\"error\">".$form->getError('email')."</span>";
 </tr>
 </thead><tbody>
 <tr>
-    <td class="note" colspan="2">You can delete your account here. After starting the cancellation it will take three days to complete the cancellation of your account. You can cancel this process within the first 24 hours.</td>
+    <td class="note" colspan="2">You can delete your account here. After starting the cancellation it will take 5 hours to complete the cancellation of your account. You can cancel this process before it done.</td>
 </tr><tr>
 <?php
 $timestamp = $database->isDeleting($session->uid);
 if($timestamp) {
 echo "<td colspan=\"2\" class=\"count\">";
-if($timestamp > time()+48*3600) {
 echo "<a href=\"spieler.php?s=3&id=".$session->uid."&a=1&e=4\"><img
 		class=\"del\" src=\"img/x.gif\" alt=\"Cancel process\"
 		title=\"Cancel process\" /> </a>";
-        }
 		$time=$generator->getTimeFormat(($timestamp-time()));
         echo "The account will be deleted in <span
 		id=\"timer1\">".$time."</span> .</td>";

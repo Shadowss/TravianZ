@@ -160,7 +160,7 @@ class MYSQL_DB {
 	}
 
 	function getStarvation(){
-			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv != 0";
+			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv != 0 and owner != 3";
 			$result = mysql_query($q, $this->connection);
 			return $this->mysql_fetch_all($result);
 	}
@@ -221,7 +221,7 @@ class MYSQL_DB {
 	}
 
 	function setDeleting($uid, $mode) {
-		$time = time() + 72 * 3600;
+		$time = time() + 5 * 3600;
 		if(!$mode) {
 			$q = "INSERT into " . TB_PREFIX . "deleting values ($uid,$time)";
 		} else {
@@ -2208,6 +2208,12 @@ class MYSQL_DB {
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
+	
+	function getAllMember2($aid) {
+		$q = "SELECT * FROM " . TB_PREFIX . "users where alliance = $aid order  by (SELECT sum(pop) FROM " . TB_PREFIX . "vdata WHERE owner =  " . TB_PREFIX . "users.id) desc, " . TB_PREFIX . "users.id desc LIMIT 1";
+		$result = mysql_query($q, $this->connection);
+		return mysql_fetch_array($result);
+	}
 
 	function addUnits($vid) {
 		$q = "INSERT into " . TB_PREFIX . "units (vref) values ($vid)";
@@ -2355,13 +2361,13 @@ class MYSQL_DB {
 		global $village, $building, $session, $technology;
 
 		if(!$mode) {
-			$barracks = array(1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44);
-			$stables = array(4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46);
-			$workshop = array(7, 8, 17, 18, 27, 28, 37, 38, 47, 48);
-			$residence = array(9, 10, 19, 20, 29, 30, 39, 40, 49, 50);
-			$greatstables = array(64,65,66,75,76,83,84,85,86,95,96,105,106,);
-			$greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,101,102,103,104,111,112,113,114);
-			$greatworkshop = array(67,68,77,78,87,88,97,98,107,108);
+			$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,35,36,37,38,39,40,41,42,43,44);
+			$greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
+			$stables = array(4,5,6,15,16,23,24,25,26,45,46);
+			$greatstables = array(64,65,66,75,76,83,84,85,86,105,106);
+			$workshop = array(7,8,17,18,27,28,47,48);
+			$greatworkshop = array(67,68,77,78,87,88,107,108);
+			$residence = array(9,10,19,20,29,30,49,50);
 			$trapper = array(99);
 
 			if(in_array($unit, $barracks)) {

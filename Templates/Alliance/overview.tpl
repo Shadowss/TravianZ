@@ -147,7 +147,7 @@ foreach($memberlist as $member) {
         }elseif ((time()-604800) < $member['timestamp'] && (time()-259200) > $member['timestamp']){
             echo "    <td class=on><img class=online4 src=img/x.gif title='Last 7 days' alt='Last 7 days' /></td>";    
         }else{
-             echo "    <td class=on><img class=online5 src=img/x.gif title=now online alt=now online /></td>";   
+             echo "    <td class=on><img class=online5 src=img/x.gif title=inactive alt=inactive /></td>";   
         }
     }
     

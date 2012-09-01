@@ -42,11 +42,10 @@
             $start = 17;
             }else if ($session->tribe == 3){
             $start = 27;
-            }else if ($session->tribe == 4){
-            $start = 37;
-            }else if ($session->tribe == 5){
+			}else if ($session->tribe == 5){
             $start = 47;
             }
+			if($session->tribe != 4){
             for($i=$start;$i<=($start+1);$i++) {
                 if($technology->getTech($i)) {
                 echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u$i\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
@@ -85,6 +84,7 @@
             if($success == 0) {
                 echo "<tr><td class=\"none\" colspan=\"3\">No units avaliable. Research at academy</td></tr>";
             }
+			}
             ?>
 				</tbody>
 			</table>

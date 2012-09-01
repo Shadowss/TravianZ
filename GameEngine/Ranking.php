@@ -24,7 +24,7 @@
 			$users2 = mysql_num_rows(mysql_query($users));
 			$users3 = $users2+1;
 			if(count($ranking) > 0) {
-			for($i=1;$i<($users3);$i++) {
+			for($i=0;$i<($users3);$i++) {
 			if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
 			$myrank = $i;
 			}
@@ -42,15 +42,19 @@
 							break;
 						case 8:
 							$this->procHeroRankArray();
+							$this->getStart($this->searchRank($session->uid, "owner"));
 							break;
 						case 11:
 							$this->procRankRaceArray(1);
+							$this->getStart($this->searchRank($session->uid, "userid"));
 							break;
 						case 12:
 							$this->procRankRaceArray(2);
+							$this->getStart($this->searchRank($session->uid, "userid"));
 							break;
 						case 13:
 							$this->procRankRaceArray(3);
+							$this->getStart($this->searchRank($session->uid, "userid"));
 							break;
 						case 31:
 							$this->procAttRankArray();
@@ -160,7 +164,7 @@
 
 			public function searchRank($name, $field) {
 				while(1) {
-					$key = key($this->rankarray)+1;
+					$key = key($this->rankarray);
 					if($this->rankarray[$key][$field] == $name) {
 						return $key;
 						break;

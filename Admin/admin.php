@@ -93,7 +93,6 @@ $timeformat = new timeFormatGenerator;
 												<a href="<?php echo HOMEPAGE; ?>">Server Homepage</a>
 												<a href="admin.php">Control Panel Home</a>
 												<a href="<?php echo SERVER; ?>dorf1.php">Return to the server</a>
-												<a href="?p=update"><font color="Red"><b>Server Update</font></b></a>
 												<br />
 												<a href="?action=logout">Logout</a>
 												<br />
@@ -103,8 +102,8 @@ $timeformat = new timeFormatGenerator;
 												<a href="?p=notregistered">Players Not Activated</a>
 												<br />
 												<a href="#"><b>Search</b></a>
-												<a href="?p=search">General Search</a>
-												<a href="?p=message">Search IGMs/Reports</a>
+												<a href="?p=search">Search Players/Alliances/Villages/E-mails/IPs/Deleted Players</a>
+												<a href="?p=message">Search Messages/Battle Reports</a>
 												<br />
 												<a href="#"><b>Ban</b></a>
 												<a href="?p=ban">Ban/Unban Players</a>
@@ -130,7 +129,7 @@ $timeformat = new timeFormatGenerator;
 												<br />
 												<a href="#"><b>Natars</b></a>
 												<a href="?p=natarend">Add WW Villages</a>
-												<a href="?p=natarbuildingplan">Add WW Building Plan Villages</a>
+												<a href="?p=natarbuildingplan">Add WW Buildingplan Villages</a>
 												<br />
 												<a href="#"><b>Admin:</b></a>
 												<a href="?p=admin_log"><font color="Red"><b>Admin Log</font></b></a>

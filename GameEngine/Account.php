@@ -114,7 +114,6 @@ class Account {
 				if($uid) {
 					setcookie("COOKUSR",$_POST['name'],time()+COOKIE_EXPIRE,COOKIE_PATH);
 					setcookie("COOKEMAIL",$_POST['email'],time()+COOKIE_EXPIRE,COOKIE_PATH);
-
 					$database->updateUserField($uid,"act","",1);
 					$database->updateUserField($uid,"invited",$_POST['invited'],1);
 					$this->generateBase($_POST['kid'],$uid,$_POST['name']);

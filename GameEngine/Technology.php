@@ -90,13 +90,13 @@ class Technology {
 		global $database,$village;
 		$trainingarray = $database->getTraining($village->wid);
 		$listarray = array();
-		$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,41,42,43,44);
-		$greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,101,102,103,104);
-		$stables = array(4,5,6,15,16,23,24,25,26,35,36,45,46);
-		$greatstables = array(64,65,66,75,76,83,84,85,86,95,96,105,106);
-		$workshop = array(7,8,17,18,27,28,37,38,47,48);
-		$greatworkshop = array(67,68,77,78,87,88,97,98,107,108);
-		$residence = array(9,10,19,20,29,30,39,40,49,50);
+		$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,35,36,37,38,39,40,41,42,43,44);
+		$greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
+		$stables = array(4,5,6,15,16,23,24,25,26,45,46);
+		$greatstables = array(64,65,66,75,76,83,84,85,86,105,106);
+		$workshop = array(7,8,17,18,27,28,47,48);
+		$greatworkshop = array(67,68,77,78,87,88,107,108);
+		$residence = array(9,10,19,20,29,30,49,50);
 		$trapper = array(99);
 		if(count($trainingarray) > 0) {
 			foreach($trainingarray as $train) {

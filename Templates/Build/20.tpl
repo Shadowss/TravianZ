@@ -18,8 +18,10 @@
 					</tr>
 				</thead>
 				<tbody>
-                <?php 
+                <?php
+				if($session->tribe != 4){
                 include("20_".$session->tribe.".tpl");
+				}
                 ?>
 				</tbody>
 			</table>

@@ -108,7 +108,7 @@
 		public function sendInvite($post) {
 			global $form, $database, $session;
 			if($session->access != BANNED){
-			if(isset($post['a_name']) && $post['a_uid'] != ""){
+			if(isset($post['a_name']) or $post['a_uid'] == ""){
 			$UserData = $database->getUserArray($post['a_name'], 0);
 			if($this->userPermArray['opt4'] == 0) {
 				$form->addError("perm", NO_PERMISSION);
@@ -393,6 +393,13 @@
 			} elseif(md5($post['pw']) !== $session->userinfo['password']) {
 				$form->addError("pw2", PW_ERR);
 			} else {
+				if($database->isAllianceOwner($sessiom->uid)){
+				$newowner = $database->getAllMember2($session->alliance);
+				$newleader = $newowner['id'];
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
+				$database->query($q);
+				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+				}
 				$database->updateUserField($session->uid, 'alliance', 0, 1);
 				$database->deleteAlliPermissions($session->uid);
 				// log the notice

@@ -12,7 +12,7 @@
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['ok'])){
-$database->updateUserField($session->username,'ok','0','0'); $_SESSION['ok'] = '0';
+$database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';
 }
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];

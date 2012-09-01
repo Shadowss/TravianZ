@@ -106,7 +106,7 @@ Reply:
 if($user['friend'.$i] == 0 && $user['friend'.$i.'wait'] == 0){
 if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"></td>
   <td class="pla">
-    <input class="text" type="text" name="addfriends<?php echo $i; ?>" value="" maxlength="15" />
+    <input class="text" type="text" name="addfriends<?php echo $i; ?>" value="" maxlength="20" />
   </td>
   <td class="on"></td><?php if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}}else if($user['friend'.$i.'wait'] == 0){
 if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delfriend=<?php echo $i; ?>"><img class="del" src="img/x.gif" alt="delete" title="delete"></td>
@@ -124,7 +124,7 @@ if(is_int($i/2)){ echo "<tr>"; } ?><td class="end"><a href="nachrichten.php?delf
         }elseif ((time()-604800) < $friend['timestamp'] && (time()-259200) > $friend['timestamp']){
             echo "    <td class=on><img class=online4 src=img/x.gif title='Last 7 days' alt='Last 7 days' /></td>";    
         }else{
-             echo "    <td class=on><img class=online5 src=img/x.gif title=now online alt=now online /></td>";   
+             echo "    <td class=on><img class=online5 src=img/x.gif title=inactive alt=inactive /></td>";   
         }
 if(!is_int($i/2)){ echo "</tr>"; }else{ echo "<td></td>";}
   }else{

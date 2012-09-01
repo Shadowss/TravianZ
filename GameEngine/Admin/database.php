@@ -52,6 +52,7 @@ class adm_DB {
 	for ($i = 0; $i <= count($villages)-1; $i++) {
 	  $vid = $villages[$i]['wref'];
 	  $this->recountPop($vid);
+	  $this->recountCP($vid);
 	}
   }
 
@@ -60,15 +61,30 @@ class adm_DB {
 	$fdata = $database->getResourceLevel($vid);
 	$popTot = 0;
 	for ($i = 1; $i <= 40; $i++) {
-	  $lvl = $fdata["f".$i];
-	  $building = $fdata["f".$i."t"];
-	  if($building){
+		$lvl = $fdata["f".$i];
+		$building = $fdata["f".$i."t"];
+		if($building){
 		$popTot += $this->buildingPOP($building,$lvl);
-	  }
+		}
 	}
 	$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
 	mysql_query($q, $this->connection);
   }
+  
+	function recountCP($vid){
+	global $database;
+	$fdata = $database->getResourceLevel($vid);
+	$popTot = 0;
+	for ($i = 1; $i <= 40; $i++) {
+		$lvl = $fdata["f".$i];
+		$building = $fdata["f".$i."t"];
+		if($building){
+		$popTot += $this->buildingCP($building,$lvl);
+		}
+	}
+	$q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
+	mysql_query($q, $this->connection);
+	}
 
   function buildingPOP($f,$lvl){
 	$name = "bid".$f;
@@ -80,6 +96,18 @@ class adm_DB {
 	}
 	return $popT;
   }
+  
+	function buildingCP($f,$lvl){
+	$name = "bid".$f;
+	global $$name;
+		$popT = 0;
+		$dataarray = $$name;
+
+		for ($i = 0; $i <= $lvl; $i++) {
+			$popT += $dataarray[$i]['cp'];
+		}
+	return $popT;
+	}
 
 	function getWref($x,$y) {
 		$q = "SELECT id FROM ".TB_PREFIX."wdata where x = $x and y = $y";
