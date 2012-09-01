@@ -11,7 +11,7 @@
 
 		$database->populateOasisdata();
 		$database->populateOasis();
-		$database->populateOasisUnitsHigh();
+		$database->populateOasisUnits();
 
 
 
