@@ -402,6 +402,8 @@ class Automation {
 				$database->query($q);
 				$q = "DELETE FROM ".TB_PREFIX."users where id = ".$need['uid'];
 				$database->query($q);
+				$q = "DELETE FROM ".TB_PREFIX."deleting where uid = ".$need['uid'];
+				$database->query($q);
 			}
 		}
 		if(file_exists("GameEngine/Prevention/cleardeleting.txt")) {
