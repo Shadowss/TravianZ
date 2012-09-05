@@ -168,7 +168,6 @@ class Session {
 				if($this->userarray['b4'] > $this->time) {
 					$this->bonus4 = 1;
 				}
-				$this->money = $this->userarray['money'];
 			}
 
 			private function SurfControl(){

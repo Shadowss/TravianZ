@@ -106,7 +106,7 @@ echo "<span class=\"error\">".$form->getError('email')."</span>";
 </tr>
 </thead><tbody>
 <tr>
-    <td class="note" colspan="2">You can delete your account here. After starting the cancellation it will take 5 hours to complete the cancellation of your account. You can cancel this process before it done.</td>
+	<td class="note" colspan="2">You can delete your account here. After starting the cancellation it will take three days to complete the cancellation of your account. You can cancel this process within the first 24 hours.</td>
 </tr><tr>
 <?php
 $timestamp = $database->isDeleting($session->uid);

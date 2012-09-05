@@ -113,7 +113,7 @@ if (isset($_POST['name'])) {
     </tr> 
     <tr> 
         <th>Regeneration</th> 
-        <td class="val"><?php echo ($hero_info['regeneration']*5*ceil(SPEED/10)); ?>/Day</td> 
+        <td class="val"><?php echo ($hero_info['regeneration']*5*SPEED); ?>/Day</td> 
         <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['regeneration']*2)+1; ?>px;" alt="<?php echo ($hero_info['regeneration']*5*SPEED); ?>%/Day" title="<?php echo ($hero_info['regeneration']*5*SPEED); ?>%/Day" /></td> 
         <td class="up"><span class="none"> 
         <?php 
