@@ -210,4 +210,3 @@ $timeformat = new timeFormatGenerator;
 		</div>
 	</body>
 </html>
-
