@@ -14,7 +14,7 @@ if(isset($_GET['u']))
 		$newfile = "update.zip";
 		if (!copy($file, $newfile)) 
 		{
-				echo "Update Files of Version $dl were not found.";
+				echo "Update Files of Version $dl were not found.<br />";
 		}
 		else
 		{
@@ -24,11 +24,11 @@ if(isset($_GET['u']))
 				$zip->extractTo('../');
 				$zip->close();
 				unlink('update.zip');
-				echo "Successfully Updated to Version $dl ";;
+				echo "Successfully Updated to Version $dl.<br />";;
 			} 
 			else 	
 			{
-				echo 'Failed to update to Version $dl';
+				echo 'Failed to update to Version $dl.<br />';
 			}
 		}
 	}
