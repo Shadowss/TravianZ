@@ -376,7 +376,7 @@ class Battle {
 				if($type == 1)
 				{
 						for($y=4;$y<=44;$y++) {
-								if($y == 4 || $y == 14 || $y == 23)
+								if($y == 4 || $y == 14 || $y == 23 || $y == 44)
 								{
 										global ${'u'.$y};
 										if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
