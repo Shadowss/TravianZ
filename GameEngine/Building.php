@@ -509,7 +509,7 @@ class Building {
 			if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
 			break;
 			case 40:
-			$wwlevel = $village->resarray['f'.$id];
+			$wwlevel = $village->resarray['f99'];
 			if($wwlevel > 50){
 			$needed_plan = 1;
 			}else{
