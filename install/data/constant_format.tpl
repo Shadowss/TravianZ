@@ -95,6 +95,9 @@ define("PROTECTION","%BEGINNER%");
 // ***** Enable WW Statistics
 define("WW",%WW%);
 
+// ***** Show Natars in Statistics
+define("SHOW_NATARS",%SHOW_NATARS%); 
+
 // ***** Enable T4 is Coming screen
 define("T4_COMING",%T4_COMING%);
 

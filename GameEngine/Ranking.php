@@ -180,8 +180,9 @@
 			public function procRankArray() {
 				global $database, $multisort;
 				if($database->countUser() > 0){
-				$holder = array();
-				$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
+			$holder = array();
+			if(Show_Natars == True){
+			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
 
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
 			FROM " . TB_PREFIX . "vdata
@@ -200,10 +201,31 @@
 			)allitag
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			AND " . TB_PREFIX . "users.tribe <= 3 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
+			AND " . TB_PREFIX . "users.tribe <= 5 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
+			}else{
+			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
 
+			SELECT SUM( " . TB_PREFIX . "vdata.pop )
+			FROM " . TB_PREFIX . "vdata
+			WHERE " . TB_PREFIX . "vdata.owner = userid
+			)totalpop, (
 
-				$result = (mysql_query($q));
+			SELECT COUNT( " . TB_PREFIX . "vdata.wref )
+			FROM " . TB_PREFIX . "vdata
+			WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
+			)totalvillages, (
+
+			SELECT " . TB_PREFIX . "alidata.tag
+			FROM " . TB_PREFIX . "alidata, " . TB_PREFIX . "users
+			WHERE " . TB_PREFIX . "alidata.id = " . TB_PREFIX . "users.alliance
+			AND " . TB_PREFIX . "users.id = userid
+			)allitag
+			FROM " . TB_PREFIX . "users
+			WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
+			AND " . TB_PREFIX . "users.tribe <= 3 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";	
+			}
+
+			$result = (mysql_query($q));
 				while($row = mysql_fetch_assoc($result)) {
 					$datas[] = $row;
 				}

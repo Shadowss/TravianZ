@@ -92,6 +92,7 @@ class Process {
 		$text = preg_replace("'%GREAT_WKS%'", $_POST['great_wks'], $text);
 		$text = preg_replace("'%TS_THRESHOLD%'", $_POST['ts_threshold'], $text);
 		$text = preg_replace("'%WW%'", $_POST['ww'], $text);
+		$text = preg_replace("'%SHOW_NATARS%'", $_POST['show_natars'], $text);
 		$text = preg_replace("'%T4_COMING%'", $_POST['t4_coming'], $text);
 		$text = preg_replace("'%REG_OPEN%'", $_POST['reg_open'], $text);
 		$text = preg_replace("'%PEACE%'", $_POST['peace'], $text);
