@@ -58,9 +58,11 @@
 							break;
 						case 31:
 							$this->procAttRankArray();
+							$this->getStart($this->searchRank($session->uid, "userid"));
 							break;
 						case 32:
 							$this->procDefRankArray();
+							$this->getStart($this->searchRank($session->uid, "userid"));
 							break;
 						case 2:
 							$this->procVRankArray();

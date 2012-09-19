@@ -362,7 +362,7 @@
 				$database->deleteAlliPermissions($post['a_user']);
 				$database->deleteAlliance($session->alliance);
 				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . $post['a_user'] . '</a> has quit the alliance.');
+				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . $UserData['username'] . '</a> has quit the alliance.');
 				}
 			}else{
 			header("Location: banned.php");
@@ -377,10 +377,10 @@
 				if(isset($post['f_link'])){
 				$database->setAlliForumLink($session->alliance, $post['f_link']);
 				header("Location: allianz.php?s=5");
+				}
 			}else{
 			header("Location: banned.php");
 			}
-				}
 		}
 		/*****************************************
 		Function to quit from alliance
@@ -393,14 +393,14 @@
 			} elseif(md5($post['pw']) !== $session->userinfo['password']) {
 				$form->addError("pw2", PW_ERR);
 			} else {
-				if($database->isAllianceOwner($sessiom->uid)){
+				$database->updateUserField($session->uid, 'alliance', 0, 1);
+				if($database->isAllianceOwner($session->uid)){
 				$newowner = $database->getAllMember2($session->alliance);
 				$newleader = $newowner['id'];
 				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 				}
-				$database->updateUserField($session->uid, 'alliance', 0, 1);
 				$database->deleteAlliPermissions($session->uid);
 				// log the notice
 				$database->deleteAlliance($session->alliance);

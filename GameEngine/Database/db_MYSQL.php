@@ -221,7 +221,7 @@ class MYSQL_DB {
 	}
 
 	function setDeleting($uid, $mode) {
-		$time = time() + 72 * 3600;
+		$time = time() + 5 * 3600;
 		if(!$mode) {
 			$q = "INSERT into " . TB_PREFIX . "deleting values ($uid,$time)";
 		} else {
@@ -692,6 +692,13 @@ class MYSQL_DB {
 			array_push($newarray, $array[$i]['wref']);
 		}
 		return $newarray;
+	}
+	
+	function getVillagesID2($uid) {
+		$q = "SELECT wref from " . TB_PREFIX . "vdata where owner = $uid order by capital DESC,pop DESC";
+		$result = mysql_query($q, $this->connection);
+		$array = $this->mysql_fetch_all($result);
+		return $array;
 	}
 
 	function getVillage($vid) {

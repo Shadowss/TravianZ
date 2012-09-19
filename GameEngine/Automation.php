@@ -208,6 +208,7 @@ class Automation {
 		$this->updateStore();
 		$this->CheckBan();
 		$this->regenerateOasisTroops();
+		$this->updateMax();
 		$this->artefactOfTheFool();
 	}
 
@@ -394,6 +395,16 @@ class Automation {
 					$database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
 					}
 				}
+				$database->updateUserField($session->uid, 'alliance', 0, 1);
+				if($database->isAllianceOwner($need['uid'])){
+				$alliance = $database->getUserAllianceID($need['uid']);
+				$newowner = $database->getAllMember2($alliance);
+				$newleader = $newowner['id'];
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$alliance."";
+				$database->query($q);
+				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+				}
+				$database->deleteAlliance($alliance);
 				$q = "DELETE FROM ".TB_PREFIX."hero where uid = ".$need['uid'];
 				$database->query($q);
 				$q = "DELETE FROM ".TB_PREFIX."mdata where target = ".$need['uid']." or owner = ".$need['uid'];
@@ -615,12 +626,6 @@ class Automation {
 				$pop = $this->getPop($indi['type'],($level-1));
 				$database->modifyPop($indi['wid'],$pop[0],0);
 				$database->addCP($indi['wid'],$pop[1]);
-				if($indi['type'] == 18) {
-					$owner = $database->getVillageField($indi['wid'],"owner");
-					$max = $bid18[$level]['attri'];
-					$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
-					$database->query($q);
-				}
 
 					if($indi['type'] == 10) {
 					  $max=$database->getVillageField($indi['wid'],"maxstore");
@@ -3825,7 +3830,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			foreach($harray as $hdata){
 				if((time()-$hdata['lastupdate'])>=1){
 					if($hdata['health']<100 and $hdata['health']>0){
-					$reg = $hdata['health']+$hdata['regeneration']*5*SPEED/86400*(time()-$hdata['lastupdate']);
+					$reg = $hdata['health']+$hdata['regeneration']*5*ceil(SPEED/10)/86400*(time()-$hdata['lastupdate']);
 					if($reg <= 100){
 						$database->modifyHero("health",$reg,$hdata['heroid']);
 					}else{
@@ -4239,7 +4244,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			unlink("GameEngine/Prevention/climbers.txt");
 		}
 	}
-			
+
 	private function checkBan() {
 		global $database;
 		$time = time();
@@ -4261,7 +4266,32 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$database->updateOasis($oasis['wref']);
 		}
 	}
-	
+
+	private function updateMax() {
+		global $bid18, $database;
+		$q = "SELECT * FROM " . TB_PREFIX . "alidata where leader != 0";
+		$array = $database->query_return($q);
+		foreach($array as $ally) {
+		$owner = $ally['leader'];
+		$villages = $database->getVillagesID2($owner);
+		$max = 0;
+		foreach($villages as $village){
+		$field = $database->getResourceLevel($village['wref']);
+		for($i=19;$i<=40;$i++){
+		if($field['f'.$i.'t'] == 18){
+		$level = $field['f'.$i];
+		$attri = $bid18[$level]['attri'];
+		}
+		}
+		}
+		if($attri > $max){
+		$max = $attri;
+		}
+		$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
+		$database->query($q);
+		}
+	}
+
 	private function artefactOfTheFool() {
 		global $database;
 		$time = time();
