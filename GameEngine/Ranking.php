@@ -171,10 +171,15 @@
 						return $key;
 						break;
 					} else {
+					if($field != "userid"){
 						if(!next($this->rankarray)) {
 							return $name;
 							break;
 						}
+					}else{
+							return 0;
+							break;
+					}
 					}
 				}
 			}
@@ -183,7 +188,7 @@
 				global $database, $multisort;
 				if($database->countUser() > 0){
 			$holder = array();
-			if(Show_Natars == True){
+			if(SHOW_NATARS == True){
 			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
 
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
