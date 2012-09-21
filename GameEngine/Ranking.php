@@ -171,15 +171,15 @@
 						return $key;
 						break;
 					} else {
-					if($field != "userid"){
 						if(!next($this->rankarray)) {
+						if($field != "userid"){
 							return $name;
 							break;
-						}
-					}else{
+						}else{
 							return 0;
 							break;
-					}
+						}
+						}
 					}
 				}
 			}

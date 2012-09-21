@@ -395,6 +395,14 @@ class Automation {
 					$database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
 					}
 				}
+				for($i=0;$i<20;$i++){
+				$q = "SELECT * FROM ".TB_PREFIX."users where friend".$i." = ".$need['uid']." or friend".$i."wait = ".$need['uid']."";
+				$array = $database->query_return($q);
+				foreach($array as $friend){
+				$database->deleteFriend($friend['id'],"friend".$i);
+				$database->deleteFriend($friend['id'],"friend".$i."wait");
+				}
+				}
 				$database->updateUserField($session->uid, 'alliance', 0, 1);
 				if($database->isAllianceOwner($need['uid'])){
 				$alliance = $database->getUserAllianceID($need['uid']);
