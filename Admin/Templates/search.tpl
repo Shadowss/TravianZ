@@ -30,7 +30,7 @@
 				</select>
 			</td>
 			<td>
-				<input name="s" value="<?php echo $_POST['s'];?>">
+				<input name="s" value="<?php echo stripslashes(stripslashes($_POST['s']));?>">
 			</td>
 			<td>
 				<input type="submit" value="Search" class="slr3">
