@@ -145,7 +145,7 @@ class Automation {
 
 	public function Automation() {
 
-		$this->procClimbers();
+
 		$this->ClearUser();
 		$this->ClearInactive();
 		$this->oasisResoucesProduce();
@@ -1587,8 +1587,7 @@ class Automation {
 			 $heroxp = $totaldead_def;
 			 $database->modifyHeroXp("experience",$heroxp,$from['owner']);
 			}
-			$Defender1 = $database->getUnit($to['wref']);
-				if($Defender1['hero'] > 0){
+				if($Defender['hero'] > 0){
 				$defheroxp = $totaldead_att;
 				$database->modifyHeroXp("experience",$defheroxp,$toF['owner']);
 				}
@@ -2657,8 +2656,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					}
 				}
 
-				$database->setMovementProc($data['moveid']);
 				if($chiefing_village != 1 && $village_destroyed != 1){
+				$database->setMovementProc($data['moveid']);
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
 				// send the bounty on type 6.
 				if($type !== 1)
@@ -2720,6 +2719,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								foreach($getmovement as $movedata) {
 								$time = time();
 								$time2 = $time - $movedata['starttime'];
+								$database->setMovementProc($data['moveid']);
 								$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
 								$database->setMovementProc($movedata['moveid']);
 								}
@@ -2869,7 +2869,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			,$totaldead_def
 			,$unitsdead_att_check
 			,$totalattackdead
-			,$Defender1
 			,$enforce1
 			,$defheroowner
 			,$enforceowner
@@ -3838,7 +3837,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			foreach($harray as $hdata){
 				if((time()-$hdata['lastupdate'])>=1){
 					if($hdata['health']<100 and $hdata['health']>0){
-					$reg = $hdata['health']+$hdata['regeneration']*5*ceil(SPEED/10)/86400*(time()-$hdata['lastupdate']);
+					$reg = $hdata['health']+$hdata['regeneration']*5*SPEED/86400*(time()-$hdata['lastupdate']);
 					if($reg <= 100){
 						$database->modifyHero("health",$reg,$hdata['heroid']);
 					}else{
