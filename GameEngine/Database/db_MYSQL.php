@@ -2756,7 +2756,7 @@ class MYSQL_DB {
 			$wid = $row['id'];
 			$basearray = $this->getOMInfo($wid);
 			//We switch type of oasis and instert record with apropriate infomation.
-			$q = "INSERT into " . TB_PREFIX . "odata VALUES ('" . $basearray['id'] . "'," . $basearray['oasistype'] . ",0,400,400,400,400,400,400," . time() . ",100,2,'Unoccupied Oasis',".rand(0,2).")";
+			$q = "INSERT into " . TB_PREFIX . "odata VALUES ('" . $basearray['id'] . "'," . $basearray['oasistype'] . ",0,800,800,800,800,800,800," . time() . ",100,2,'Unoccupied Oasis',".rand(0,2).")";
 			$result = mysql_query($q, $this->connection);
 		}
 	}
