@@ -145,7 +145,7 @@ class Automation {
 
 	public function Automation() {
 
-
+		$this->procClimbers();
 		$this->ClearUser();
 		$this->ClearInactive();
 		$this->oasisResoucesProduce();
@@ -410,7 +410,7 @@ class Automation {
 				$newleader = $newowner['id'];
 				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$alliance."";
 				$database->query($q);
-				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+				$database->updateAlliPermissions($newleader, $alliance, "Leader", 1, 1, 1, 1, 1, 1, 1);
 				}
 				$database->deleteAlliance($alliance);
 				$q = "DELETE FROM ".TB_PREFIX."hero where uid = ".$need['uid'];
@@ -3837,7 +3837,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			foreach($harray as $hdata){
 				if((time()-$hdata['lastupdate'])>=1){
 					if($hdata['health']<100 and $hdata['health']>0){
-					$reg = $hdata['health']+$hdata['regeneration']*5*SPEED/86400*(time()-$hdata['lastupdate']);
+					$reg = $hdata['health']+$hdata['regeneration']*5*ceil(SPEED/10)/86400*(time()-$hdata['lastupdate']);
 					if($reg <= 100){
 						$database->modifyHero("health",$reg,$hdata['heroid']);
 					}else{
