@@ -393,6 +393,8 @@ class Automation {
 					$post['t11'] = $enforce['hero'];
 					$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 					$database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
+					$q = "DELETE FROM ".TB_PREFIX."enforcement where id = ".$enforce['id'];
+					$database->query($q);
 					}
 				}
 				for($i=0;$i<20;$i++){
@@ -2695,7 +2697,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->query($q);
 								$q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
 								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."enforcement where vref = ".$data['to'];
+								$q = "DELETE FROM ".TB_PREFIX."enforcement where from = ".$data['to'];
 								$database->query($q);
 								$q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
 								$database->query($q);
@@ -2742,22 +2744,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								}
 								$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
 								$database->deletePrisoners($pris['id']);
-								}
-								$enforcement = $database->getEnforceVillage($data['to'],0);
-								foreach($enforcement as $enforce) {
-								$time = time();
-								$fromcoor = $database->getCoor($enforce['vref']);
-								$tocoor = $database->getCoor($enforce['from']);
-								$targettribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
-								$time2 = $this->procDistanceTime($tocoor,$fromcoor,$targettribe,0);
-								$start = 10*($targettribe-1);
-								for($i=1;$i<11;$i++){
-								$unit = $start + $i;
-								$post['t'.$i] = $enforce['u'.$unit];
-								}
-								$post['t11'] = $enforce['hero'];
-								$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
-								$database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
 								}
 						}
 						}
