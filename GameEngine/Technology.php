@@ -566,7 +566,7 @@ private function trainUnit($unit,$amt,$great=false) {
 			if($building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 5) { return true; } else { return false; }
 			break;
 			case 6:
-			if($building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 10) { return true; } else { return false; }
+			if($building->getTypeLevel(22) >= 15 && $building->getTypeLevel(20) >= 10) { return true; } else { return false; }
 			break;
 			case 9:
 			case 29:

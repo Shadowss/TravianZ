@@ -383,7 +383,7 @@
 			WHERE " . TB_PREFIX . "vdata.owner = userid
 			)pop
 			FROM " . TB_PREFIX . "users
-			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
+			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
 			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC, userid DESC";
 				$result = mysql_query($q) or die(mysql_error());
 				while($row = mysql_Fetch_assoc($result)) {

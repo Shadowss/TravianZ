@@ -108,7 +108,7 @@
 		public function sendInvite($post) {
 			global $form, $database, $session;
 			if($session->access != BANNED){
-			if(isset($post['a_name']) or $post['a_uid'] == ""){
+			if($post['a_name'] != "" or $post['a_uid'] == ""){
 			$UserData = $database->getUserArray($post['a_name'], 0);
 			if($this->userPermArray['opt4'] == 0) {
 				$form->addError("perm", NO_PERMISSION);
