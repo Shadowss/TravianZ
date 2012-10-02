@@ -5,7 +5,7 @@ if (WW == True)
                         FROM " . TB_PREFIX . "users  
                         INNER JOIN " . TB_PREFIX . "vdata ON " . TB_PREFIX . "users.id = " . TB_PREFIX . "vdata.owner 
                         INNER JOIN " . TB_PREFIX . "fdata ON " . TB_PREFIX . "fdata.vref = " . TB_PREFIX . "vdata.wref 
-                        WHERE " . TB_PREFIX . "fdata.f99t = 40 ORDER BY " . TB_PREFIX . "fdata.f99 Desc LIMIT 20"); 
+                        WHERE " . TB_PREFIX . "fdata.f99t = 40 ORDER BY " . TB_PREFIX . "fdata.f99 Desc, id Desc LIMIT 20"); 
 ?> 
 <table cellpadding="1" cellspacing="1" id="villages" class="row_table_data"> 
     <thead> 
