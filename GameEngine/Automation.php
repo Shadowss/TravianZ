@@ -208,7 +208,7 @@ class Automation {
 		$this->updateStore();
 		$this->CheckBan();
 		$this->regenerateOasisTroops();
-		$this->updateMax();
+		
 		$this->artefactOfTheFool();
 	}
 
@@ -413,6 +413,7 @@ class Automation {
 				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, $alliance, "Leader", 1, 1, 1, 1, 1, 1, 1);
+				$this->updateMax($newleader);
 				}
 				$database->deleteAlliance($alliance);
 				$q = "DELETE FROM ".TB_PREFIX."hero where uid = ".$need['uid'];
@@ -660,7 +661,11 @@ class Automation {
 					}
 					  $database->setVillageField($indi['wid'],"maxcrop",$max);
 					}
-
+					
+					if($indi['type'] == 18){
+					$this->updateMax($database->getVillageField($indi['wid'],"owner"));
+					}
+					
 					if($indi['type'] == 38) {
 					$max=$database->getVillageField($indi['wid'],"maxstore");
 					if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
@@ -1915,6 +1920,9 @@ class Automation {
 						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."'*32 WHERE wref=".$data['to'];
 						$database->query($q);
 					}
+					if ($tbgid==18){
+						$this->updateMax($database->getVillageField($data['to'],'owner'));
+					}
 					$pop=$this->recountPop($data['to']);
 					$capital = $database->getVillage($data['to']);
 					if($pop=='0' && $capital['capital']=='0')
@@ -1951,6 +1959,9 @@ class Automation {
 							if ($tmaxcrop<800) $tmaxcrop=800;
 							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 							$database->query($q);
+						}
+						if ($tbgid==18){
+							$this->updateMax($database->getVillageField($data['to'],'owner'));
 						}
 						$pop=$this->recountPop($data['to']);
 					}
@@ -2040,6 +2051,9 @@ class Automation {
 						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 						$database->query($q);
 					}
+					if ($tbgid==18){
+						$this->updateMax($database->getVillageField($data['to'],'owner'));
+					}
 					$pop=$this->recountPop($data['to']);
 					if($pop=='0')
 					{
@@ -2078,6 +2092,9 @@ class Automation {
 							if ($tmaxcrop<800) $tmaxcrop=800;
 							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 							$database->query($q);
+						}
+						if ($tbgid==18){
+							$this->updateMax($database->getVillageField($data['to'],'owner'));
 						}
 						$pop=$this->recountPop($data['to']);
 					}
@@ -2165,6 +2182,9 @@ class Automation {
 						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 						$database->query($q);
 					}
+					if ($tbgid==18){
+						$this->updateMax($database->getVillageField($data['to'],'owner'));
+					}
 					$pop=$this->recountPop($data['to']);
 					if($pop=='0')
 					{
@@ -2204,6 +2224,9 @@ class Automation {
 							if ($tmaxcrop<800) $tmaxcrop=800;
 							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 							$database->query($q);
+						}
+						if ($tbgid==18){
+							$this->updateMax($database->getVillageField($data['to'],'owner'));
 						}
 						$pop=$this->recountPop($data['to']);
 					}
@@ -3800,6 +3823,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=800 WHERE `maxcrop`<=800 AND wref=".$vil['vref'];
 					$database->query($q);
 				}
+				if ($type==18){
+					$this->updateMax($database->getVillageField($vil['vref'],'owner'));
+				}
 				if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
 				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".$vil['vref'];
 				$database->query($q);
@@ -4260,13 +4286,11 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		}
 	}
 
-	private function updateMax() {
+	private function updateMax($leader) {
 		global $bid18, $database;
-		$q = "SELECT * FROM " . TB_PREFIX . "alidata where leader != 0";
-		$array = $database->query_return($q);
-		foreach($array as $ally) {
-		$owner = $ally['leader'];
-		$villages = $database->getVillagesID2($owner);
+		$q = mysql_query("SELECT * FROM " . TB_PREFIX . "alidata where leader = $leader");
+		if(mysql_num_rows($q) > 0){
+		$villages = $database->getVillagesID2($leader);
 		$max = 0;
 		foreach($villages as $village){
 		$field = $database->getResourceLevel($village['wref']);
@@ -4276,11 +4300,11 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$attri = $bid18[$level]['attri'];
 		}
 		}
-		}
 		if($attri > $max){
 		$max = $attri;
 		}
-		$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
+		}
+		$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $leader";
 		$database->query($q);
 		}
 	}

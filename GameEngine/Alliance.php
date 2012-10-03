@@ -362,7 +362,15 @@
 				$database->deleteAlliPermissions($post['a_user']);
 				$database->deleteAlliance($session->alliance);
 				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . $UserData['username'] . '</a> has quit the alliance.');
+				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($post['a_user']) . '</a> has quit the alliance.');
+				if($database->isAllianceOwner($UserData['id'])){
+				$newowner = $database->getAllMember2($session->alliance);
+				$newleader = $newowner['id'];
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
+				$database->query($q);
+				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+				$this->updateMax($newleader);
+				}
 				}
 			}else{
 			header("Location: banned.php");
@@ -400,6 +408,7 @@
 				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+				$this->updateMax($newleader);
 				}
 				$database->deleteAlliPermissions($session->uid);
 				// log the notice
@@ -446,6 +455,29 @@
 			}
 			}else{
 			header("Location: banned.php");
+			}
+		}
+		
+		private function updateMax($leader) {
+			global $bid18, $database;
+			$q = mysql_query("SELECT * FROM " . TB_PREFIX . "alidata where leader = $leader");
+			if(mysql_num_rows($q) > 0){
+			$villages = $database->getVillagesID2($leader);
+			$max = 0;
+			foreach($villages as $village){
+			$field = $database->getResourceLevel($village['wref']);
+			for($i=19;$i<=40;$i++){
+			if($field['f'.$i.'t'] == 18){
+			$level = $field['f'.$i];
+			$attri = $bid18[$level]['attri'];
+			}
+			}
+			if($attri > $max){
+			$max = $attri;
+			}
+			}
+			$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $leader";
+			$database->query($q);
 			}
 		}
 	   }
