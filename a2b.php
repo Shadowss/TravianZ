@@ -51,7 +51,7 @@ if(isset($_GET['o'])) {
 	$o = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['o']);
 	$oid = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['z']);
 	$too = $database->getOasisField($oid,"conqured");
-	if($_GET['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
+	if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
 	$disabledr ="";
 	if($session->sit == 0){
 	$disabled ="";

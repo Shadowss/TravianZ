@@ -77,7 +77,7 @@ class Units {
 					}
 					if($database->isVillageOases($oid) != 0){
 					$too = $database->getOasisField($oid,"conqured");
-					if($_GET['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
+					if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
 					$disabledr ="";
 					if($session->sit == 0){
 					$disabled ="";
