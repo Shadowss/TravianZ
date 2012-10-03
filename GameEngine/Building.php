@@ -672,10 +672,12 @@ class Building {
 	public function finishAll() {
 		global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
 		if($session->access!=BANNED){
+		$ww = 1;
 		foreach($this->buildArray as $jobs) {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
 		if($wwvillage['f99t']!=40){
+		$ww = 0;
 			$level = $jobs['level'];
 			if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
 			$finish = 1;
@@ -715,6 +717,7 @@ class Building {
 		}
 		}
 		}
+		if($ww == 0){
 		$database->finishDemolition($village->wid);
 		$technology->finishTech();
 		$logging->goldFinLog($village->wid);
@@ -725,6 +728,7 @@ class Building {
 				$q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0,timestamp=".(time()+$stillbuildingarray[0]['timestamp']-$innertimestamp)." WHERE id=".$stillbuildingarray[0]['id'];
 				$database->query($q);
 			}
+		}
 		}
 		header("Location: ".$session->referrer);
 		}else{
