@@ -2677,9 +2677,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$database->addNotice($from['owner'],$to['wref'],$ownally,2,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
 					}
 				}
-
-				if($chiefing_village != 1 && $village_destroyed != 1){
+				
 				$database->setMovementProc($data['moveid']);
+				if($chiefing_village != 1 && $village_destroyed != 1){
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
 				// send the bounty on type 6.
 				if($type !== 1)
