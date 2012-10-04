@@ -883,9 +883,6 @@ class Automation {
 		$query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time());
 		while ($row = mysql_fetch_assoc($query))
 		{
-			// fix for destroyed wws
-			$query2 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f99t` = 40 WHERE `vref` = ' . $row['vid']);
-
 			// delete the attack
 			$query3 = mysql_query('DELETE FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . $row['vid'] . ' AND `attack_time` = ' . $row['attack_time']);
 		}
@@ -1902,7 +1899,7 @@ class Automation {
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
-					if($tbid>=19) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
+					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
 					if ($tbgid==10 || $tbgid==38) {
 						$tsql=mysql_query("select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".$data['to']."");
@@ -2033,7 +2030,7 @@ class Automation {
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
-					if($tbid>=19) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
+					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
 					if ($tbgid==10 || $tbgid==38) {
 						$tsql=mysql_query("select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".$data['to']."");
@@ -2164,7 +2161,7 @@ class Automation {
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid)." destroyed.</td></tr></tbody>";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
-					if($tbid>=19) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
+					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
 					if ($tbgid==10 || $tbgid==38) {
 						$tsql=mysql_query("select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".$data['to']."");
