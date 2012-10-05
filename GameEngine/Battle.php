@@ -739,8 +739,8 @@ class Battle {
 			foreach($DefendersAll as $defenders) {
 				if($defenders['hero']>0) {
 					if(!empty($heroarray)) { reset($heroarray); }
-							$ReinforcerData = $database->getVillageBattleData($defenders['from']);
-							$heroarraydefender = $this->getBattleHero($ReinforcerData['id']);
+							$Reinforcer = $database->getVillageField($defenders['from'],"owner");
+							$heroarraydefender = $this->getBattleHero($Reinforcer);
 			$_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$heroarraydefender['heroid']."'");
 			$fdb = mysql_fetch_array($_result);
 			$hero_id=$fdb['heroid'];
