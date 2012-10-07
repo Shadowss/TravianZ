@@ -345,4 +345,6 @@ include("Templates/links.tpl");
 </html>
 <?php
 }else{
+header("Location: spieler.php");
 }
+?>
