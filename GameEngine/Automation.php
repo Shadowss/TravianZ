@@ -3855,7 +3855,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$database->modifyHero("lastupdate",time(),$hdata['heroid']);
 					}
 				}
-					if($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100){
+					while($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100){
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET level = level + 1 WHERE heroid = '".$hdata['heroid']."'");
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET points = points + 5 WHERE heroid = '".$hdata['heroid']."'");
 					}
