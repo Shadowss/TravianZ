@@ -1868,11 +1868,23 @@ class MYSQL_DB {
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
+	
+	function getBuildingByField2($wid,$field) {
+		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
+		$result = mysql_query($q, $this->connection);
+		return mysql_num_rows($result);
+	}
 
 	function getBuildingByType($wid,$type) {
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
+	}
+	
+	function getBuildingByType2($wid,$type) {
+		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
+		$result = mysql_query($q, $this->connection);
+		return mysql_num_rows($result);
 	}
 
 	function getDorf1Building($wid) {
