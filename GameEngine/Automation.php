@@ -1890,36 +1890,7 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				$artowner = $database->getVillageField($DefenderWref,"owner");
-				$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-				$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
-				$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-				if($bartefact > 0){
-				$strongerbuildings = 5;
-				}else if($bartefact1 > 0){
-				$strongerbuildings = 4;
-				}else if($bartefact2 > 0){
-				$strongerbuildings = 3;
-				}else{
-				$strongerbuildings = 1;
-				}
-				$good_effect = $bad_effect = 1;
-				$foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
-				if(count($foolartefact) > 0){
-				foreach($foolartefact as $arte){
-				if($arte['bad_effect'] == 1){
-				$bad_effect = $arte['effect2'];
-				}else{
-				$good_effect = $arte['effect2'];
-				}
-				}
-				}
-				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-				}
-				if ($battlepart[4]>$needed_cata)
+				if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -1957,7 +1928,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$needed_cata;
+					$demolish=$battlepart[4]/$battlepart[3];
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-($battlepart[4]*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2045,36 +2016,7 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				$artowner = $database->getVillageField($DefenderWref,"owner");
-				$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-				$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
-				$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-				if($bartefact > 0){
-				$strongerbuildings = 5;
-				}else if($bartefact1 > 0){
-				$strongerbuildings = 4;
-				}else if($bartefact2 > 0){
-				$strongerbuildings = 3;
-				}else{
-				$strongerbuildings = 1;
-				}
-				$good_effect = $bad_effect = 1;
-				$foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
-				if(count($foolartefact) > 0){
-				foreach($foolartefact as $arte){
-				if($arte['bad_effect'] == 1){
-				$bad_effect = $arte['effect2'];
-				}else{
-				$good_effect = $arte['effect2'];
-				}
-				}
-				}
-				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-				}
-				if (($battlepart[4]/2)>$needed_cata)
+				if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -2114,7 +2056,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=($battlepart[4]/2)/$needed_cata;
+					$demolish=$battlepart[4]/$battlepart[3];
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2199,36 +2141,7 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				$artowner = $database->getVillageField($DefenderWref,"owner");
-				$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-				$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
-				$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-				if($bartefact > 0){
-				$strongerbuildings = 5;
-				}else if($bartefact1 > 0){
-				$strongerbuildings = 4;
-				}else if($bartefact2 > 0){
-				$strongerbuildings = 3;
-				}else{
-				$strongerbuildings = 1;
-				}
-				$good_effect = $bad_effect = 1;
-				$foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
-				if(count($foolartefact) > 0){
-				foreach($foolartefact as $arte){
-				if($arte['bad_effect'] == 1){
-				$bad_effect = $arte['effect2'];
-				}else{
-				$good_effect = $arte['effect2'];
-				}
-				}
-				}
-				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-				}
-				if (($battlepart[4]/2)>$needed_cata)
+				if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid)." destroyed.</td></tr></tbody>";
@@ -2270,7 +2183,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=($battlepart[4]/2)/$needed_cata;
+					$demolish=$battlepart[4]/$battlepart[3];
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
