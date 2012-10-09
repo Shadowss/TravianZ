@@ -4241,9 +4241,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					foreach($memberlist as $member) {
 						$oldrank += $database->getVSumField($member['id'],"pop");
 					}
-					if($ally['oldrank'] == 0){
-					$database->updateoldrankAlly($ally['id'], $oldrank);
-					}
+					if($ally['oldrank'] != $oldrank){
 						if($ally['oldrank'] < $oldrank) {
 							$totalpoints = $oldrank - $ally['oldrank'];
 							$database->addclimberrankpopAlly($ally['id'], $totalpoints);
@@ -4254,6 +4252,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->removeclimberrankpopAlly($ally['id'], $totalpoints);
 								$database->updateoldrankAlly($ally['id'], $oldrank);
 							}
+					}
 					}
 					}
 		if(file_exists("GameEngine/Prevention/climbers.txt")) {
