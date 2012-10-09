@@ -25,6 +25,7 @@ class funct {
 	switch($get['action']){
 	  case recountPop:
 		$admin->recountPop($get['did']);
+		$admin->recountCP($get['did']);
 	  break;
 	  case recountPopUsr:
 		$admin->recountPopUser($get['uid']);
