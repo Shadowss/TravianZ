@@ -42,7 +42,7 @@
                 <th>Players online</th>
 
                 <td><?php
-                   $online = mysql_num_rows(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (60*30) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+                   $online = mysql_num_rows(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
                    echo $online; ?></td>
             </tr>
         </tbody>
