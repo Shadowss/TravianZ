@@ -692,7 +692,7 @@ class Automation {
 
 					// by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
 					if($indi['type'] == 40 and ($indi['level'] % 5 == 0 or $indi['level'] > 95) and $indi['level'] != 100){
-					$this->startNatarAttack($indi['level'], $indi['wid']);
+					$this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
 					}
 				if($database->getUserField($database->getVillageField($indi['wid'],"owner"),"tribe",0) != 1){
 				$q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".$indi['wid'];
@@ -725,7 +725,7 @@ class Automation {
 	}
 
 	// by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
-	private function startNatarAttack($level, $vid) {
+	private function startNatarAttack($level, $vid, $time) {
 		global $database;
 
 		// bad, but should work :D
@@ -864,7 +864,7 @@ class Automation {
 		$row = mysql_fetch_assoc($query);
 
 		// start the attacks
-		$endtime = time() + round((60 * 60 * 24) / INCREASE_SPEED);
+		$endtime = $time + round((60 * 60 * 24) / INCREASE_SPEED);
 
 		// -.-
 		mysql_query('INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')');
@@ -872,11 +872,11 @@ class Automation {
 
 		// wave 1
 		$ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
-		$database->addMovement(3, $row['wref'], $vid, $ref, time(), $endtime);
+		$database->addMovement(3, $row['wref'], $vid, $ref, $time, $endtime);
 
 		// wave 2
 		$ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20, array('vid' => $vid, 'endtime' => ($endtime + 1)));
-		$database->addMovement(3, $row['wref'], $vid, $ref2, time(), $endtime + 1);
+		$database->addMovement(3, $row['wref'], $vid, $ref2, $time, $endtime + 1);
 	}
 
 	private function checkWWAttacks() {
@@ -2652,7 +2652,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}
 			}
 			}
-			$endtime += time();
+			$endtime += $AttackArrivalTime;
 				if($type == 1) {
 					$database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
 				}else {
@@ -2665,12 +2665,12 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				
 				$database->setMovementProc($data['moveid']);
 				if($chiefing_village != 1 && $village_destroyed != 1){
-				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
+				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				// send the bounty on type 6.
 				if($type !== 1)
 				{
 					$reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
-					$database->addMovement(6,$to['wref'],$from['wref'],$reference,time(),$endtime,1,0,0,0,0,$data['ref']);
+					$database->addMovement(6,$to['wref'],$from['wref'],$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
 					$totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
 					$totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
 					$database->modifyPoints($from['owner'],'RR',$totalstolengain);
@@ -2800,9 +2800,10 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}
 			}
 			}
+			$endtime += $AttackArrivalTime;
 			$endtime += time();
 				$database->setMovementProc($data['moveid']);
-				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
+				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				$peace = PEACE;
 						$data2 = ''.$from['owner'].','.$from['wref'].','.$to['owner'].','.$owntribe.','.$unitssend_att.','.$peace.'';
 						$database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
@@ -3007,7 +3008,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				}
 				}
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
-				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
+				$database->addMovement(4,$village->wid,$enforce['from'],$reference,$AttackArrivalTime,($time+$AttackArrivalTime));
 				$technology->checkReinf($post['ckey']);
 
 						header("Location: build.php?id=39");
