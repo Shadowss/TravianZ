@@ -3163,7 +3163,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$dataarray = $database->query_return($q);
 			foreach($dataarray as $data) {
 					$to = $database->getMInfo($data['from']);
-					$user =    $database->getUserField($to['owner'],'username',0);
+					$user = addslashes($database->getUserField($to['owner'],'username',0));
 					$taken = $database->getVillageState($data['to']);
 					if($taken != 1){
 						$database->setFieldTaken($data['to']);
