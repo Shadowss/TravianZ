@@ -17,6 +17,9 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
 }
+if($_GET['id'] == 99 && $village->natar == 0){
+header("Location: dorf2.php");
+}
 if(isset($_GET['buildingFinish'])) {
 	if($session->gold >= 2) {
 		$building->finishAll();

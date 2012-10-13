@@ -150,34 +150,33 @@
 									<?php
 										## not sure if this is correct
 										$quest = $user['quest'];
-										if($quest == 0) { $questname = "Woodcutter"; }
-										elseif($quest ==1) {$questname = "Crop"; }
-										elseif($quest ==2) {$questname = "Your Villages Name"; }
-										elseif($quest ==3) {$questname = "Other Players"; }
-										elseif($quest ==4) {$questname = "Two Building Order"; }
-										elseif($quest ==5) {$questname = "Messages"; }
-										elseif($quest ==6) {$questname = "Neighbors"; }
-										elseif($quest ==7) {$questname = "Huge Army"; }
-										elseif($quest ==8) {$questname = "One Each!"; }
-										elseif($quest ==9) {$questname = "Coming Soon!"; }
-										elseif($quest ==1) {$questname = "Reports"; }
-										elseif($quest ==11) {$questname = "Everything to 1!"; }
-										elseif($quest ==12) {$questname = "Dove of Peace"; }
-										elseif($quest ==13) {$questname = "Cranny"; }
-										elseif($quest ==14) {$questname = "To Two!"; }
-										elseif($quest ==15) {$questname = "Instruction"; }
-										elseif($quest ==16) {$questname = "Main Building"; }
-										elseif($quest ==17) {$questname = "Advanced!" ;}
-										elseif($quest ==18) {$questname = "Weapons or Dough?"; }
+										if($quest == 1) { $questname = "Woodcutter"; }
+										elseif($quest ==2) {$questname = "Crop"; }
+										elseif($quest ==3) {$questname = "Your Villages Name"; }
+										elseif($quest ==4) {$questname = "Other Players"; }
+										elseif($quest ==5) {$questname = "Two Building Order"; }
+										elseif($quest ==6) {$questname = "Messages"; }
+										elseif($quest ==7) {$questname = "Huge Army!"; }
+										elseif($quest ==8) {$questname = "Everything to 1!"; }
+										elseif($quest ==9) {$questname = "Dove of Peace"; }
+										elseif($quest ==10) {$questname = "Cranny"; }
+										elseif($quest ==11) {$questname = "To Two!"; }
+										elseif($quest ==12) {$questname = "Instruction"; }
+										elseif($quest ==13) {$questname = "Main Building"; }
+										elseif($quest ==14) {$questname = "Advanced!" ;}
+										elseif($quest ==15) {$questname = "Weapons or Dough"; }
+										elseif($quest ==16) {$questname = "Military: Rally Point"; }
+										elseif($quest ==17) {$questname = "Military: Barracks"; }
+										elseif($quest ==18) {$questname = "Military: Train 2 Troops"; }
 										elseif($quest ==19) {$questname = "Economy: Granary"; }
-										elseif($quest ==20) {$questname = "Military: Rally Point"; }
-										elseif($quest ==21) {$questname = "Economy: Warehouse"; }
-										elseif($quest ==22) {$questname = "Military: Barracks"; }
-										elseif($quest ==23) {$questname = "Economy: Marketplace"; }
-										elseif($quest ==24) {$questname = "Military: Train 2 Troops"; }
-										elseif($quest ==25) {$questname = "Everything to 2!"; }
+										elseif($quest ==20) {$questname = "Economy: Warehouse"; }
+										elseif($quest ==21) {$questname = "Economy: Marketplace"; }
+										elseif($quest ==22) {$questname = "Everything to 2!"; }
 										else { $questname = "Unknown"; }
-										$quesst = $quest +1;
+										$quesst = $quest;
+										if($quest > 18){
+										$quesst = $quest - 3;
+										}
 										$questinfo = "$quesst - $questname";
 									?>
 								<input disabled="disabled" style="width: 80%;" class="fm" name="quest" value="<?php echo $questinfo; ?>"> <a href="admin.php?p=editUser&uid=<?php echo $id; ?>"><img src="../img/admin/edit.gif" title="Edit Quest"></a></td>

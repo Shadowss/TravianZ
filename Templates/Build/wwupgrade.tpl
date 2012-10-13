@@ -1,7 +1,7 @@
 <?php
 $bid = $village->resarray['f'.$id.'t'];
 $bindicate = $building->canBuild($id,$bid);
-$wwlevel = $village->resarray['f'.$id];
+$wwlevel = $village->resarray['f99'];
 if($wwlevel > 50){
 $needed_plan = 1;
 }else{
@@ -109,8 +109,12 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
     	echo "<span class=\"none\">Upgrade Granary.</span>";
     }
     else if($bindicate == 7) {
+	if($village->allcrop > 0){
     	$neededtime = $building->calculateAvaliable($id,$village->resarray['f'.$id.'t'],1+$loopsame+$doublebuild+$master);
     	echo "<span class=\"none\">Enough resources ".$neededtime[0]." at  ".$neededtime[1]."</span>";
+	}else{
+		echo "<span class=\"none\">Your crop production is negative, you will never get the required resources.</span>";
+	}
 	if($session->goldclub == 1){
 ?>	</br>
 <?php

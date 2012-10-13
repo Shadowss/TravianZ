@@ -91,7 +91,7 @@ class Automation {
 				$popTot += $this->buildingPOP($building,$lvl);
 			}
 		}
-
+		$this->recountCP($vid);
 		$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
 		mysql_query($q);
 
@@ -208,6 +208,7 @@ class Automation {
 		$this->updateStore();
 		$this->CheckBan();
 		$this->regenerateOasisTroops();
+		
 		$this->artefactOfTheFool();
 	}
 
@@ -392,8 +393,29 @@ class Automation {
 					$post['t11'] = $enforce['hero'];
 					$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 					$database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
+					$q = "DELETE FROM ".TB_PREFIX."enforcement where id = ".$enforce['id'];
+					$database->query($q);
 					}
 				}
+				for($i=0;$i<20;$i++){
+				$q = "SELECT * FROM ".TB_PREFIX."users where friend".$i." = ".$need['uid']." or friend".$i."wait = ".$need['uid']."";
+				$array = $database->query_return($q);
+				foreach($array as $friend){
+				$database->deleteFriend($friend['id'],"friend".$i);
+				$database->deleteFriend($friend['id'],"friend".$i."wait");
+				}
+				}
+				$database->updateUserField($session->uid, 'alliance', 0, 1);
+				if($database->isAllianceOwner($need['uid'])){
+				$alliance = $database->getUserAllianceID($need['uid']);
+				$newowner = $database->getAllMember2($alliance);
+				$newleader = $newowner['id'];
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$alliance."";
+				$database->query($q);
+				$database->updateAlliPermissions($newleader, $alliance, "Leader", 1, 1, 1, 1, 1, 1, 1);
+				$this->updateMax($newleader);
+				}
+				$database->deleteAlliance($alliance);
 				$q = "DELETE FROM ".TB_PREFIX."hero where uid = ".$need['uid'];
 				$database->query($q);
 				$q = "DELETE FROM ".TB_PREFIX."mdata where target = ".$need['uid']." or owner = ".$need['uid'];
@@ -615,12 +637,6 @@ class Automation {
 				$pop = $this->getPop($indi['type'],($level-1));
 				$database->modifyPop($indi['wid'],$pop[0],0);
 				$database->addCP($indi['wid'],$pop[1]);
-				if($indi['type'] == 18) {
-					$owner = $database->getVillageField($indi['wid'],"owner");
-					$max = $bid18[$level]['attri'];
-					$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
-					$database->query($q);
-				}
 
 					if($indi['type'] == 10) {
 					  $max=$database->getVillageField($indi['wid'],"maxstore");
@@ -645,7 +661,11 @@ class Automation {
 					}
 					  $database->setVillageField($indi['wid'],"maxcrop",$max);
 					}
-
+					
+					if($indi['type'] == 18){
+					$this->updateMax($database->getVillageField($indi['wid'],"owner"));
+					}
+					
 					if($indi['type'] == 38) {
 					$max=$database->getVillageField($indi['wid'],"maxstore");
 					if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
@@ -672,7 +692,7 @@ class Automation {
 
 					// by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
 					if($indi['type'] == 40 and ($indi['level'] % 5 == 0 or $indi['level'] > 95) and $indi['level'] != 100){
-					$this->startNatarAttack($indi['level'], $indi['wid']);
+					$this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
 					}
 				if($database->getUserField($database->getVillageField($indi['wid'],"owner"),"tribe",0) != 1){
 				$q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".$indi['wid'];
@@ -705,7 +725,7 @@ class Automation {
 	}
 
 	// by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
-	private function startNatarAttack($level, $vid) {
+	private function startNatarAttack($level, $vid, $time) {
 		global $database;
 
 		// bad, but should work :D
@@ -844,7 +864,7 @@ class Automation {
 		$row = mysql_fetch_assoc($query);
 
 		// start the attacks
-		$endtime = time() + round((60 * 60 * 24) / INCREASE_SPEED);
+		$endtime = $time + round((60 * 60 * 24) / INCREASE_SPEED);
 
 		// -.-
 		mysql_query('INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')');
@@ -852,20 +872,17 @@ class Automation {
 
 		// wave 1
 		$ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
-		$database->addMovement(3, $row['wref'], $vid, $ref, time(), $endtime);
+		$database->addMovement(3, $row['wref'], $vid, $ref, $time, $endtime);
 
 		// wave 2
 		$ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20, array('vid' => $vid, 'endtime' => ($endtime + 1)));
-		$database->addMovement(3, $row['wref'], $vid, $ref2, time(), $endtime + 1);
+		$database->addMovement(3, $row['wref'], $vid, $ref2, $time, $endtime + 1);
 	}
 
 	private function checkWWAttacks() {
 		$query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time());
 		while ($row = mysql_fetch_assoc($query))
 		{
-			// fix for destroyed wws
-			$query2 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f99t` = 40 WHERE `vref` = ' . $row['vid']);
-
 			// delete the attack
 			$query3 = mysql_query('DELETE FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . $row['vid'] . ' AND `attack_time` = ' . $row['attack_time']);
 		}
@@ -1574,8 +1591,7 @@ class Automation {
 			 $heroxp = $totaldead_def;
 			 $database->modifyHeroXp("experience",$heroxp,$from['owner']);
 			}
-			$Defender1 = $database->getUnit($to['wref']);
-				if($Defender1['hero'] > 0){
+				if($Defender['hero'] > 0){
 				$defheroxp = $totaldead_att;
 				$database->modifyHeroXp("experience",$defheroxp,$toF['owner']);
 				}
@@ -1874,16 +1890,11 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
-				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-				}
-				if ($battlepart[4]>$needed_cata)
+				if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
-					if($tbid>=19) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
+					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
 					if ($tbgid==10 || $tbgid==38) {
 						$tsql=mysql_query("select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".$data['to']."");
@@ -1901,6 +1912,9 @@ class Automation {
 						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."'*32 WHERE wref=".$data['to'];
 						$database->query($q);
 					}
+					if ($tbgid==18){
+						$this->updateMax($database->getVillageField($data['to'],'owner'));
+					}
 					$pop=$this->recountPop($data['to']);
 					$capital = $database->getVillage($data['to']);
 					if($pop=='0' && $capital['capital']=='0')
@@ -1914,7 +1928,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$needed_cata;
+					$demolish=$battlepart[4]/$battlepart[3];
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-($battlepart[4]*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -1937,6 +1951,9 @@ class Automation {
 							if ($tmaxcrop<800) $tmaxcrop=800;
 							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 							$database->query($q);
+						}
+						if ($tbgid==18){
+							$this->updateMax($database->getVillageField($data['to'],'owner'));
 						}
 						$pop=$this->recountPop($data['to']);
 					}
@@ -1999,16 +2016,11 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
-				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-				}
-				if (($battlepart[4]/2)>$needed_cata)
+				if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
-					if($tbid>=19) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
+					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
 					if ($tbgid==10 || $tbgid==38) {
 						$tsql=mysql_query("select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".$data['to']."");
@@ -2026,6 +2038,9 @@ class Automation {
 						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 						$database->query($q);
 					}
+					if ($tbgid==18){
+						$this->updateMax($database->getVillageField($data['to'],'owner'));
+					}
 					$pop=$this->recountPop($data['to']);
 					if($pop=='0')
 					{
@@ -2041,7 +2056,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=($battlepart[4]/2)/$needed_cata;
+					$demolish=$battlepart[4]/$battlepart[3];
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2064,6 +2079,9 @@ class Automation {
 							if ($tmaxcrop<800) $tmaxcrop=800;
 							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 							$database->query($q);
+						}
+						if ($tbgid==18){
+							$this->updateMax($database->getVillageField($data['to'],'owner'));
 						}
 						$pop=$this->recountPop($data['to']);
 					}
@@ -2123,17 +2141,12 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				if($stonemason==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
-				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-				}
-				if (($battlepart[4]/2)>$needed_cata)
+				if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid)." destroyed.</td></tr></tbody>";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
-					if($tbid>=19) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
+					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
 					if ($tbgid==10 || $tbgid==38) {
 						$tsql=mysql_query("select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".$data['to']."");
@@ -2151,6 +2164,9 @@ class Automation {
 						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 						$database->query($q);
 					}
+					if ($tbgid==18){
+						$this->updateMax($database->getVillageField($data['to'],'owner'));
+					}
 					$pop=$this->recountPop($data['to']);
 					if($pop=='0')
 					{
@@ -2167,7 +2183,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=($battlepart[4]/2)/$needed_cata;
+					$demolish=$battlepart[4]/$battlepart[3];
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2190,6 +2206,9 @@ class Automation {
 							if ($tmaxcrop<800) $tmaxcrop=800;
 							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
 							$database->query($q);
+						}
+						if ($tbgid==18){
+							$this->updateMax($database->getVillageField($data['to'],'owner'));
 						}
 						$pop=$this->recountPop($data['to']);
 					}
@@ -2633,7 +2652,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}
 			}
 			}
-			$endtime += time();
+			$endtime += $AttackArrivalTime;
 				if($type == 1) {
 					$database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
 				}else {
@@ -2643,15 +2662,15 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$database->addNotice($from['owner'],$to['wref'],$ownally,2,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
 					}
 				}
-
+				
 				$database->setMovementProc($data['moveid']);
 				if($chiefing_village != 1 && $village_destroyed != 1){
-				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
+				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				// send the bounty on type 6.
 				if($type !== 1)
 				{
 					$reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
-					$database->addMovement(6,$to['wref'],$from['wref'],$reference,time(),$endtime,1,0,0,0,0,$data['ref']);
+					$database->addMovement(6,$to['wref'],$from['wref'],$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
 					$totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
 					$totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
 					$database->modifyPoints($from['owner'],'RR',$totalstolengain);
@@ -2683,7 +2702,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->query($q);
 								$q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
 								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."enforcement where vref = ".$data['to'];
+								$q = "DELETE FROM ".TB_PREFIX."enforcement where from = ".$data['to'];
 								$database->query($q);
 								$q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
 								$database->query($q);
@@ -2707,6 +2726,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								foreach($getmovement as $movedata) {
 								$time = time();
 								$time2 = $time - $movedata['starttime'];
+								$database->setMovementProc($data['moveid']);
 								$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
 								$database->setMovementProc($movedata['moveid']);
 								}
@@ -2729,22 +2749,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								}
 								$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
 								$database->deletePrisoners($pris['id']);
-								}
-								$enforcement = $database->getEnforceVillage($data['to'],0);
-								foreach($enforcement as $enforce) {
-								$time = time();
-								$fromcoor = $database->getCoor($enforce['vref']);
-								$tocoor = $database->getCoor($enforce['from']);
-								$targettribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
-								$time2 = $this->procDistanceTime($tocoor,$fromcoor,$targettribe,0);
-								$start = 10*($targettribe-1);
-								for($i=1;$i<11;$i++){
-								$unit = $start + $i;
-								$post['t'.$i] = $enforce['u'.$unit];
-								}
-								$post['t11'] = $enforce['hero'];
-								$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
-								$database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
 								}
 						}
 						}
@@ -2796,9 +2800,10 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}
 			}
 			}
+			$endtime += $AttackArrivalTime;
 			$endtime += time();
 				$database->setMovementProc($data['moveid']);
-				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
+				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				$peace = PEACE;
 						$data2 = ''.$from['owner'].','.$from['wref'].','.$to['owner'].','.$owntribe.','.$unitssend_att.','.$peace.'';
 						$database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
@@ -2856,7 +2861,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			,$totaldead_def
 			,$unitsdead_att_check
 			,$totalattackdead
-			,$Defender1
 			,$enforce1
 			,$defheroowner
 			,$enforceowner
@@ -3004,7 +3008,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				}
 				}
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
-				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
+				$database->addMovement(4,$village->wid,$enforce['from'],$reference,$AttackArrivalTime,($time+$AttackArrivalTime));
 				$technology->checkReinf($post['ckey']);
 
 						header("Location: build.php?id=39");
@@ -3159,7 +3163,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$dataarray = $database->query_return($q);
 			foreach($dataarray as $data) {
 					$to = $database->getMInfo($data['from']);
-					$user =    $database->getUserField($to['owner'],'username',0);
+					$user = addslashes($database->getUserField($to['owner'],'username',0));
 					$taken = $database->getVillageState($data['to']);
 					if($taken != 1){
 						$database->setFieldTaken($data['to']);
@@ -3802,6 +3806,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=800 WHERE `maxcrop`<=800 AND wref=".$vil['vref'];
 					$database->query($q);
 				}
+				if ($type==18){
+					$this->updateMax($database->getVillageField($vil['vref'],'owner'));
+				}
 				if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
 				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".$vil['vref'];
 				$database->query($q);
@@ -3834,7 +3841,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$database->modifyHero("lastupdate",time(),$hdata['heroid']);
 					}
 				}
-					if($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100){
+					while($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100){
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET level = level + 1 WHERE heroid = '".$hdata['heroid']."'");
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET points = points + 5 WHERE heroid = '".$hdata['heroid']."'");
 					}
@@ -4220,9 +4227,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					foreach($memberlist as $member) {
 						$oldrank += $database->getVSumField($member['id'],"pop");
 					}
-					if($ally['oldrank'] == 0){
-					$database->updateoldrankAlly($ally['id'], $oldrank);
-					}
+					if($ally['oldrank'] != $oldrank){
 						if($ally['oldrank'] < $oldrank) {
 							$totalpoints = $oldrank - $ally['oldrank'];
 							$database->addclimberrankpopAlly($ally['id'], $totalpoints);
@@ -4235,11 +4240,12 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 							}
 					}
 					}
+					}
 		if(file_exists("GameEngine/Prevention/climbers.txt")) {
 			unlink("GameEngine/Prevention/climbers.txt");
 		}
 	}
-			
+
 	private function checkBan() {
 		global $database;
 		$time = time();
@@ -4261,7 +4267,30 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			$database->updateOasis($oasis['wref']);
 		}
 	}
-	
+
+	private function updateMax($leader) {
+		global $bid18, $database;
+		$q = mysql_query("SELECT * FROM " . TB_PREFIX . "alidata where leader = $leader");
+		if(mysql_num_rows($q) > 0){
+		$villages = $database->getVillagesID2($leader);
+		$max = 0;
+		foreach($villages as $village){
+		$field = $database->getResourceLevel($village['wref']);
+		for($i=19;$i<=40;$i++){
+		if($field['f'.$i.'t'] == 18){
+		$level = $field['f'.$i];
+		$attri = $bid18[$level]['attri'];
+		}
+		}
+		if($attri > $max){
+		$max = $attri;
+		}
+		}
+		$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $leader";
+		$database->query($q);
+		}
+	}
+
 	private function artefactOfTheFool() {
 		global $database;
 		$time = time();

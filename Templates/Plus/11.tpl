@@ -22,7 +22,7 @@ if (mysql_num_rows($MyGold)) {
 if (mysql_num_rows($MyGold)) {
 
 if($golds['b3'] == 0) {
-mysql_query("UPDATE ".TB_PREFIX."users set b3 = ('".time()."')+".PLUS_PRODUCTION." where `id`='".$session->uid."'") or die(mysql_error());
+mysql_query("UPDATE ".TB_PREFIX."users set b3 = '".(time()+PLUS_PRODUCTION)."' where `id`='".$session->uid."'") or die(mysql_error());
 } else {
 mysql_query("UPDATE ".TB_PREFIX."users set b3 = '".($golds['b3']+PLUS_PRODUCTION)."' where `id`='".$session->uid."'") or die(mysql_error());
 }

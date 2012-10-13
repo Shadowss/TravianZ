@@ -70,6 +70,7 @@ if(REG_OPEN == true){ ?>
 			<th><?php echo PASSWORD; ?></th>
 			<td>
 				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="20" />
+				<span style="color: #DD0000"><b>Warning:</b> password with & can cause problems!</span>
 				<span class="error"><?php echo $form->getError('pw'); ?></span>
 			</td>
 		</tr>

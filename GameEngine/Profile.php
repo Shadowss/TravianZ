@@ -122,15 +122,10 @@ class Profile {
 			$form->addError("email",EMAIL_ERROR);
 		}
 		if($post['del'] && md5($post['del_pw']) == $session->userinfo['password']) {
-			if($database->isAllianceOwner($post['uid'])) {
-				$form->addError("del",ALLI_OWNER);
-			}
-			else {
 			if($session->access!=BANNED){
 				$database->setDeleting($post['uid'],0);
 			}else{
 			header("Location: banned.php");
-			}
 			}
 		}
 		else {

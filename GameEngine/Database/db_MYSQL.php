@@ -221,7 +221,7 @@ class MYSQL_DB {
 	}
 
 	function setDeleting($uid, $mode) {
-		$time = time() + 72 * 3600;
+		$time = time() + 5 * 3600;
 		if(!$mode) {
 			$q = "INSERT into " . TB_PREFIX . "deleting values ($uid,$time)";
 		} else {
@@ -692,6 +692,13 @@ class MYSQL_DB {
 			array_push($newarray, $array[$i]['wref']);
 		}
 		return $newarray;
+	}
+	
+	function getVillagesID2($uid) {
+		$q = "SELECT wref from " . TB_PREFIX . "vdata where owner = $uid order by capital DESC,pop DESC";
+		$result = mysql_query($q, $this->connection);
+		$array = $this->mysql_fetch_all($result);
+		return $array;
 	}
 
 	function getVillage($vid) {
@@ -1861,11 +1868,23 @@ class MYSQL_DB {
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
+	
+	function getBuildingByField2($wid,$field) {
+		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
+		$result = mysql_query($q, $this->connection);
+		return mysql_num_rows($result);
+	}
 
 	function getBuildingByType($wid,$type) {
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
+	}
+	
+	function getBuildingByType2($wid,$type) {
+		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
+		$result = mysql_query($q, $this->connection);
+		return mysql_num_rows($result);
 	}
 
 	function getDorf1Building($wid) {
@@ -2124,7 +2143,7 @@ class MYSQL_DB {
 	}
 
 	function getARanking() {
-		$q = "SELECT id,name,tag FROM " . TB_PREFIX . "alidata where id != '' ORDER BY id DESC";
+		$q = "SELECT id,name,tag,oldrank FROM " . TB_PREFIX . "alidata where id != '' ORDER BY id DESC";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
@@ -2749,7 +2768,7 @@ class MYSQL_DB {
 			$wid = $row['id'];
 			$basearray = $this->getOMInfo($wid);
 			//We switch type of oasis and instert record with apropriate infomation.
-			$q = "INSERT into " . TB_PREFIX . "odata VALUES ('" . $basearray['id'] . "'," . $basearray['oasistype'] . ",0,400,400,400,400,400,400," . time() . ",100,2,'Unoccupied Oasis',".rand(0,2).")";
+			$q = "INSERT into " . TB_PREFIX . "odata VALUES ('" . $basearray['id'] . "'," . $basearray['oasistype'] . ",0,800,800,800,800,800,800," . time() . ",100,2,'Unoccupied Oasis',".rand(0,2).")";
 			$result = mysql_query($q, $this->connection);
 		}
 	}

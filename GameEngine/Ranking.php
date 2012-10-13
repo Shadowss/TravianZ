@@ -58,9 +58,11 @@
 							break;
 						case 31:
 							$this->procAttRankArray();
+							$this->getStart($this->searchRank($session->uid, "userid"));
 							break;
 						case 32:
 							$this->procDefRankArray();
+							$this->getStart($this->searchRank($session->uid, "userid"));
 							break;
 						case 2:
 							$this->procVRankArray();
@@ -170,8 +172,13 @@
 						break;
 					} else {
 						if(!next($this->rankarray)) {
+						if($field != "userid"){
 							return $name;
 							break;
+						}else{
+							return 0;
+							break;
+						}
 						}
 					}
 				}
@@ -180,8 +187,9 @@
 			public function procRankArray() {
 				global $database, $multisort;
 				if($database->countUser() > 0){
-				$holder = array();
-				$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
+			$holder = array();
+			if(SHOW_NATARS == True){
+			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
 
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
 			FROM " . TB_PREFIX . "vdata
@@ -200,10 +208,31 @@
 			)allitag
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-			AND " . TB_PREFIX . "users.tribe <= 3 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
+			AND " . TB_PREFIX . "users.tribe <= 5 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
+			}else{
+			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
 
+			SELECT SUM( " . TB_PREFIX . "vdata.pop )
+			FROM " . TB_PREFIX . "vdata
+			WHERE " . TB_PREFIX . "vdata.owner = userid
+			)totalpop, (
 
-				$result = (mysql_query($q));
+			SELECT COUNT( " . TB_PREFIX . "vdata.wref )
+			FROM " . TB_PREFIX . "vdata
+			WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
+			)totalvillages, (
+
+			SELECT " . TB_PREFIX . "alidata.tag
+			FROM " . TB_PREFIX . "alidata, " . TB_PREFIX . "users
+			WHERE " . TB_PREFIX . "alidata.id = " . TB_PREFIX . "users.alliance
+			AND " . TB_PREFIX . "users.id = userid
+			)allitag
+			FROM " . TB_PREFIX . "users
+			WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
+			AND " . TB_PREFIX . "users.tribe <= 3 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";	
+			}
+
+			$result = (mysql_query($q));
 				while($row = mysql_fetch_assoc($result)) {
 					$datas[] = $row;
 				}
@@ -354,7 +383,7 @@
 			WHERE " . TB_PREFIX . "vdata.owner = userid
 			)pop
 			FROM " . TB_PREFIX . "users
-			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
+			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
 			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC, userid DESC";
 				$result = mysql_query($q) or die(mysql_error());
 				while($row = mysql_Fetch_assoc($result)) {

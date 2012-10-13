@@ -108,7 +108,7 @@
 		public function sendInvite($post) {
 			global $form, $database, $session;
 			if($session->access != BANNED){
-			if(isset($post['a_name']) or $post['a_uid'] == ""){
+			if($post['a_name'] != "" or $post['a_uid'] == ""){
 			$UserData = $database->getUserArray($post['a_name'], 0);
 			if($this->userPermArray['opt4'] == 0) {
 				$form->addError("perm", NO_PERMISSION);
@@ -150,7 +150,7 @@
 				// Insertamos invitacion
 				$database->sendInvitation($UserData['id'], $aid, $session->uid);
 				// Log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . $UserData['username'] . '</a> into the alliance.');
+				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($UserData['username']) . '</a> into the alliance.');
 			}
 			}
 			}else{
@@ -362,7 +362,15 @@
 				$database->deleteAlliPermissions($post['a_user']);
 				$database->deleteAlliance($session->alliance);
 				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . $post['a_user'] . '</a> has quit the alliance.');
+				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($post['a_user']) . '</a> has quit the alliance.');
+				if($database->isAllianceOwner($UserData['id'])){
+				$newowner = $database->getAllMember2($session->alliance);
+				$newleader = $newowner['id'];
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
+				$database->query($q);
+				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+				$this->updateMax($newleader);
+				}
 				}
 			}else{
 			header("Location: banned.php");
@@ -377,10 +385,10 @@
 				if(isset($post['f_link'])){
 				$database->setAlliForumLink($session->alliance, $post['f_link']);
 				header("Location: allianz.php?s=5");
+				}
 			}else{
 			header("Location: banned.php");
 			}
-				}
 		}
 		/*****************************************
 		Function to quit from alliance
@@ -393,14 +401,15 @@
 			} elseif(md5($post['pw']) !== $session->userinfo['password']) {
 				$form->addError("pw2", PW_ERR);
 			} else {
-				if($database->isAllianceOwner($sessiom->uid)){
+				$database->updateUserField($session->uid, 'alliance', 0, 1);
+				if($database->isAllianceOwner($session->uid)){
 				$newowner = $database->getAllMember2($session->alliance);
 				$newleader = $newowner['id'];
 				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+				$this->updateMax($newleader);
 				}
-				$database->updateUserField($session->uid, 'alliance', 0, 1);
 				$database->deleteAlliPermissions($session->uid);
 				// log the notice
 				$database->deleteAlliance($session->alliance);
@@ -446,6 +455,29 @@
 			}
 			}else{
 			header("Location: banned.php");
+			}
+		}
+		
+		private function updateMax($leader) {
+			global $bid18, $database;
+			$q = mysql_query("SELECT * FROM " . TB_PREFIX . "alidata where leader = $leader");
+			if(mysql_num_rows($q) > 0){
+			$villages = $database->getVillagesID2($leader);
+			$max = 0;
+			foreach($villages as $village){
+			$field = $database->getResourceLevel($village['wref']);
+			for($i=19;$i<=40;$i++){
+			if($field['f'.$i.'t'] == 18){
+			$level = $field['f'.$i];
+			$attri = $bid18[$level]['attri'];
+			}
+			}
+			if($attri > $max){
+			$max = $attri;
+			}
+			}
+			$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $leader";
+			$database->query($q);
 			}
 		}
 	   }

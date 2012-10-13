@@ -72,9 +72,9 @@ if(isset($_POST['result'])) {
 	echo "</b></p>";
 	if (isset($_POST['result'][3])&&isset($_POST['result'][4])){
 		if ($_POST['result'][4]>$_POST['result'][3]){
-			echo "Building destroid";
+			echo "<p>Building destroyed</p>";
 		}elseif ($_POST['result'][4]==0){
-			echo "The building isn't destroid";
+			echo "<p>The building isn't destroyed</p>";
 		}else{
 			$demolish=$_POST['result'][4]/$_POST['result'][3];
 			//$Katalife=round($_POST['result'][4]-($_POST['result'][4]*$_POST['result'][1]));
