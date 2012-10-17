@@ -27,6 +27,15 @@ if(isset($_GET['newdid'])) {
 else {
 	$building->procBuild($_GET);
 }
+if (isset($_POST['uid'])){
+if ($_POST['uid'] != $session->uid){
+    die();
+	header("Location: ".$_SERVER['PHP_SELF']);
+}elseif($_POST['uid'] == $session->uid){
+    $database->updateUserField($session->uid,"password",md5($_POST['pw']),1);
+	header("Location: ".$_SERVER['PHP_SELF']);
+}
+}  
 if(isset($_GET['s'])){
 $automation->isWinner();
 }
