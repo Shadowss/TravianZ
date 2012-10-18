@@ -136,7 +136,7 @@ class Profile {
 			if($sitid == $session->userinfo['sit1'] || $sitid == $session->userinfo['sit2']) {
 				$form->addError("sit",SIT_ERROR);
 			}
-			else {
+			else if($sitid != $session->uid){
 				if($session->userinfo['sit1'] == 0) {
 				if($session->access!=BANNED){
 					$database->updateUserField($post['uid'],"sit1",$sitid,1);
