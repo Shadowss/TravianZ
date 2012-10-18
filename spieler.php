@@ -159,6 +159,8 @@ else if (isset($_GET['s'])) {
 	if($_GET['s'] > 4 or $session->sit == 1) {
 	header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$session->uid));
 	}
+}else{
+	header("Location: spieler.php?s=3");
 }
 ?>
 </div>
