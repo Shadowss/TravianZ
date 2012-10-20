@@ -3848,11 +3848,11 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$villunits = $database->getUnit($hdata['wref']);
 					if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
 					mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$hdata['wref']."");
-					mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100' WHERE `uid` = '".$hdata['uid']."'");
+					mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".$hdata['trainingtime']." WHERE `uid` = '".$hdata['uid']."'");
 					}
 					if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
 					mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$hdata['wref']."");
-					mysql_query("UPDATE ".TB_PREFIX."hero SET `intraining` = '0' WHERE `uid` = '".$hdata['uid']."'");
+					mysql_query("UPDATE ".TB_PREFIX."hero SET `intraining` = '0', `lastupdate` = ".$hdata['trainingtime']." WHERE `uid` = '".$hdata['uid']."'");
 					}
 			}
 		}
