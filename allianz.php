@@ -24,18 +24,8 @@ if(isset($_GET['fid'])){
 $fid = preg_replace("/[^0-9]/","",$_GET['fid']);
 $forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
 $forum_type = mysql_fetch_array($forum);
-if($forum_type['forum_name'] != "" && $forum_type['forum_area'] != 1){
-if($forum_type['forum_area'] == 0){
+if($forum_type['forum_name'] != "" && $forum_type['forum_area'] == 0){
 if($forum_type['alliance'] != $session->alliance){
-	header("Location: ".$_SERVER['PHP_SELF']);
-}
-}else if($forum_type['forum_area'] == 2){
-if($forum_type['alliance'] != $session->alliance){
-}else if($forum_type['forum_area'] == 3){
-
-}
-
-}else{
 	header("Location: ".$_SERVER['PHP_SELF']);
 }
 }
@@ -345,6 +335,6 @@ include("Templates/links.tpl");
 </html>
 <?php
 }else{
-header("Location: spieler.php");
+header("Location: spieler.php?uid=".$session->uid);
 }
 ?>

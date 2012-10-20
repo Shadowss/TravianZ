@@ -85,7 +85,7 @@ echo "re1:".$message->reply['topic']; }} ?>" maxlength="35" onkeyup="copyElement
 	
 				<textarea id="message" name="message" onkeyup="copyElement('body')" tabindex="3" class="textarea write message"><?php if(isset($message->reply['message'])) { echo " \n\n_________________________
 Reply:
-\n".$message->reply['message']; } ?></textarea>
+\n".stripslashes($message->reply['message']); } ?></textarea>
 				<div id="message_preview" name="message_preview" class="message"></div>
 			</div>
 			

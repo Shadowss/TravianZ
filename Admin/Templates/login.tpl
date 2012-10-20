@@ -29,7 +29,7 @@
 				<tr>
 					<td>Username</td>
 					<td>
-						<input class="fm fm110" type="text" name="name" value="<?php echo $_SESSION['username']?>" maxlength="15">
+						<input class="fm fm110" type="text" name="name" value="<?php echo $_SESSION['username']?>" maxlength="20">
 					</td>
 				</tr>
 				<tr>
