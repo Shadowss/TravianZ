@@ -21,7 +21,7 @@ if (mysql_num_rows($MyGold)) {
 
 if (mysql_num_rows($MyGold)) {
 
-if($golds['b1'] == 0) {
+if($golds['b1'] < time()) {
 mysql_query("UPDATE ".TB_PREFIX."users set b1 = '".(time()+PLUS_PRODUCTION)."' where `id`='".$session->uid."'") or die(mysql_error());
 } else {
 mysql_query("UPDATE ".TB_PREFIX."users set b1 = '".($golds['b1']+PLUS_PRODUCTION)."' where `id`='".$session->uid."'") or die(mysql_error());
