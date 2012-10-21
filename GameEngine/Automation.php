@@ -347,6 +347,10 @@ class Automation {
 					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."units where vref =".$village;
 					$database->query($q);
+					$q = "DELETE FROM ".TB_PREFIX."farmlist where wref =".$village;
+					$database->query($q);
+					$q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$village;
+					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$village;
 					$database->query($q);
 					$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village;
@@ -2717,6 +2721,10 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$q = "DELETE FROM ".TB_PREFIX."training where vref =".$data['to'];
 								$database->query($q);
 								$q = "DELETE FROM ".TB_PREFIX."units where vref =".$data['to'];
+								$database->query($q);
+								$q = "DELETE FROM ".TB_PREFIX."farmlist where wref =".$village;
+								$database->query($q);
+								$q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$village;
 								$database->query($q);
 								$q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$data['to'];
 								$database->query($q);
