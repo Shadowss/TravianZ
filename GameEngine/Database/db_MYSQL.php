@@ -221,7 +221,7 @@ class MYSQL_DB {
 	}
 
 	function setDeleting($uid, $mode) {
-		$time = time() + 5 * 3600;
+		$time = time() + 72 * 3600;
 		if(!$mode) {
 			$q = "INSERT into " . TB_PREFIX . "deleting values ($uid,$time)";
 		} else {
@@ -1320,7 +1320,7 @@ class MYSQL_DB {
 	}
 
 	function getAllianceWar2($aid){
-		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli2 = '$aid' or alli1 = '$aid' AND accepted = '1'";
+		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
