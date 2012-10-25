@@ -23,7 +23,7 @@ include("Templates/Plus/pmenu.tpl");
 <?php } ?>
     <h3>2) Copy your personal REF-Link and share it!</h3><span class="notice">Your personal REF Link:</span>
     <br>
-    <span class="link"><?php echo HOMEPAGE; ?>anmelden?id=ref_<?php echo $session->uid; ?></span>
+    <span class="link"><?php echo HOMEPAGE; ?>anmelden.php?id=ref_<?php echo $session->uid; ?></span>
 
     <h3>Progress of your invited friends</h3>
 
