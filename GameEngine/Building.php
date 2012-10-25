@@ -677,7 +677,6 @@ class Building {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
 		if($wwvillage['f99t']!=40){
-		$ww = 0;
 			$level = $jobs['level'];
 			if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
 			$finish = 1;
@@ -716,6 +715,10 @@ class Building {
 			}
 		}
 		}
+		}
+		$wwvillage1 = $database->getResourceLevel($village->wid);
+		if($wwvillage1['f99t']!=40){
+		$ww = 0;
 		}
 		if($ww == 0){
 		$database->finishDemolition($village->wid);

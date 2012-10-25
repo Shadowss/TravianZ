@@ -20,12 +20,7 @@ if(isset($_GET['newdid'])) {
 if($_GET['id'] == 99 && $village->natar == 0){
 header("Location: dorf2.php");
 }
-if(isset($_GET['buildingFinish'])) {
-	if($session->gold >= 2) {
-		$building->finishAll();
-		header("Location: build.php?gid=15");
-	}
-}
+
 $start = $generator->pageLoadTimeStart();
 $alliance->procAlliForm($_POST);
 $technology->procTech($_POST);
@@ -311,7 +306,7 @@ $automation->isWinner();
 <?php include("Templates/menu.tpl"); ?>
 <div id="content"  class="build">
 <?php
-if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['routeid'])) {
+if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['routeid']) or isset($_GET['buildingFinish'])) {
 	if(isset($_GET['s']))
 	{
 		if (!ctype_digit($_GET['s'])) {
@@ -346,6 +341,12 @@ if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['rout
 		}
 		else {
 			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
+		}
+		if($_GET['buildingFinish'] == 1) {
+		if($session->gold >= 2) {
+			$building->finishAll();
+			header("Location: build.php?gid=15");
+		}
 		}
 	}
 }else{

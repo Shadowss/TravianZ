@@ -31,9 +31,15 @@ if($village->resarray['f'.$id] >= DEMOLISH_LEVEL_REQ) {
 		echo "<b>";
 		echo "<a href='build.php?id=26&cancel=1'><img src='img/x.gif' class='del' title='cancel' alt='cancel'></a> ";
 		echo "Demolition of ".$building->procResType($VillageResourceLevels['f'.$Demolition['buildnumber'].'t']).": <span id=timer1>".$generator->getTimeFormat($Demolition['timetofinish']-time())."</span>";
-		?>
-		<a href="?buildingFinish=1" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="Finish all construction and research orders in this village immediately for 2 Gold?"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
+            if($session->gold >= 2) {
+			if($session->access!=BANNED){
+            ?> <a href="?buildingFinish=1" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="Finish all construction and research orders in this village immediately for 2 Gold?"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
 			<?php
+			}else{
+            ?> <a href="banned.php" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="Finish all construction and research orders in this village immediately for 2 Gold?"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
+		<?php
+			}
+            }
 		echo "</b>";
 	} else {
 		echo "
