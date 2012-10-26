@@ -3849,10 +3849,15 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$database->modifyHero("lastupdate",time(),$hdata['heroid']);
 					}
 				}
-					while($hdata['experience'] > $hero_levels[$hdata['level']+1] && $hdata['level'] < 100){
-					mysql_query("UPDATE " . TB_PREFIX ."hero SET level = level + 1 WHERE heroid = '".$hdata['heroid']."'");
+				$herolevel = $hdata['level'];
+				for($i = $herolevel+1; $i < 100; $i++){
+					if($hdata['experience'] > $hero_levels[$i]){
+					mysql_query("UPDATE " . TB_PREFIX ."hero SET level = $i WHERE heroid = '".$hdata['heroid']."'");
+					if($i < 99){
 					mysql_query("UPDATE " . TB_PREFIX ."hero SET points = points + 5 WHERE heroid = '".$hdata['heroid']."'");
 					}
+					}
+				}
 					$villunits = $database->getUnit($hdata['wref']);
 					if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
 					mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$hdata['wref']."");
