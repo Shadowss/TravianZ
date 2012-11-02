@@ -20,6 +20,14 @@ if(isset($_GET['del_cookie'])) {
 if(!isset($_COOKIE['COOKUSR'])) {
 	$_COOKIE['COOKUSR'] = "";
 }
+
+if ( $_SERVER[ 'REQUEST_METHOD' ] == 'POST' ) {
+    if ( !isset( $_SESSION[ 'csrf' ] ) || $_SESSION[ 'csrf' ] !== $_POST[ 'csrf' ] )
+        throw new RuntimeException( 'CSRF attack' );
+}
+$key                = sha1( microtime() );
+$_SESSION[ 'csrf' ] = $key;
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -213,6 +221,7 @@ CountBack(gsecs);
 	?>
 <form method="post" name="snd" action="login.php">
 <input type="hidden" name="ft" value="a4" />
+<input type="hidden" name="csrf" value="<?php echo $key; ?>" />
 <script type="text/javascript">
 Element.implement({
 	 //imgid: falls zu dem link ein pfeil geh?rt kann dieser "auf/zugeklappt" werden
