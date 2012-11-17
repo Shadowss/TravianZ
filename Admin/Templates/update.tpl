@@ -68,8 +68,9 @@ if(isset($_GET['u']))
 		</tr>
 		<tr>
 		<td class="hab" colspan="2">Visit Forum</td>
-	        <td class="hab" colspan="1"><center><a href="http://travian.gamingcrazy.net/forum/"><img src="../img/admin/b/ok1.gif"></a></center></td>
+	        <td class="hab" colspan="1"><center><a href="http://mmorpgd.tk/"><img src="../img/admin/b/ok1.gif"></a></center></td>
 		</tr>
 	</tbody>
 </table><br /><br />
-<p><font color="red">Guys don`t forget to register at the forum to receive information of the updates"</font></p>
+<p><font color="red">Guys don`t forget to register at the forum to receive information of the updates</font></p><br><br />
+<p><font color="red">Advertise your Server here <a href="http://mmorpgd.tk/forum-10.html">http://mmorpgd.tk/forum-10.html</a></font></p>
