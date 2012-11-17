@@ -33,7 +33,7 @@ if($_POST['uid'] != $session->uid){
 	die();
   header("Location: ".$_SERVER['PHP_SELF']);
 }elseif($_POST['uid'] == $session->uid){
-    $database->updateUserField($session->uid,"password",md5($_POST['pw']),1);
+    //$database->updateUserField($session->uid,"password",md5($_POST['pw']),1);
   header("Location: ".$_SERVER['PHP_SELF']);
 }
 }

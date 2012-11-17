@@ -53,7 +53,7 @@ include("menu.tpl"); ?>
     <tr><td colspan="2" class="empty"></td></tr>
     <?php
     for($i=0;$i<=count($varray)-1;$i++) {
-    echo "<tr><th>Village name</th><td><input tabindex=\"6\" type=\"text\" name=\"dname$i\" value=\"".$varray[$i]['name']."\" maxlength=\"20\" class=\"text\"></td></tr>";
+    echo "<tr><th>Village name</th><td><input tabindex=\"6\" type=\"text\" name=\"dname$i\" value=\"".$varray[$i]['name']."\" maxlength=\"30\" class=\"text\"></td></tr>";
     }
     ?>
     <tr><td colspan="2" class="desc2"><textarea tabindex="8" name="be2"><?php echo $session->userinfo['desc1']; ?></textarea></td></tr>

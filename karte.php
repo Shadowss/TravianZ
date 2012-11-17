@@ -10,7 +10,7 @@
 ##                                                                             ##
 #################################################################################
 
-
+if(isset($_GET['z']) && !is_numeric($_GET['z'])) die('Hacking Attempt');
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
