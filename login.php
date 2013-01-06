@@ -73,7 +73,7 @@ else
 <h5><img class="img_u04" src="img/x.gif" alt="login" /></h5>
 <p><?php echo COOKIES; ?></p>
 <?php
-if(START_DATE > date('m/d/Y')){
+if(strtotime(START_DATE) > strtotime(date('m/d/Y'))){
 ?>
 <br/><center><big>Server will start in: </big></center>
 <script language="JavaScript">
@@ -144,7 +144,7 @@ CountBack(gsecs);
 
 </script>
 <?php
-}elseif(START_DATE == date('m/d/Y')){
+}elseif(strtotime(START_DATE) == strtotime(date('m/d/Y'))){
 
 	if(START_TIME > date('H:i')){
 ?>
@@ -250,11 +250,11 @@ Element.implement({
 	<tbody>
 		<tr class="top">
 			<th><?php echo NAME; ?></th>
-			<td><input class="text" type="text" name="user" value="<?php echo stripslashes(stripslashes(stripslashes($form->getDiff("user",$_COOKIE['COOKUSR'])))); ?>" maxlength="20" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
+			<td><input class="text" type="text" name="user" value="<?php echo stripslashes(stripslashes(stripslashes($form->getDiff("user",$_COOKIE['COOKUSR'])))); ?>" maxlength="30" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
 		</tr>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>
-			<td><input class="text" type="password" name="pw" value="<?php echo $form->getValue("pw");?>" maxlength="20" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
+			<td><input class="text" type="password" name="pw" value="<?php echo $form->getValue("pw");?>" maxlength="30" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
 		</tr>
 	</tbody>
 </table>
@@ -298,11 +298,11 @@ Element.implement({
 	<tbody>
 		<tr class="top">
 			<th><?php echo NAME; ?></th>
-			<td><input class="text" type="text" name="user" value="<?php echo stripslashes(stripslashes(stripslashes($form->getDiff("user",$_COOKIE['COOKUSR'])))); ?>" maxlength="20" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
+			<td><input class="text" type="text" name="user" value="<?php echo stripslashes(stripslashes(stripslashes($form->getDiff("user",$_COOKIE['COOKUSR'])))); ?>" maxlength="30" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
 		</tr>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>
-			<td><input class="text" type="password" name="pw" value="<?php echo $form->getValue("pw");?>" maxlength="20" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
+			<td><input class="text" type="password" name="pw" value="<?php echo $form->getValue("pw");?>" maxlength="30" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
 		</tr>
 	</tbody>
 </table>
