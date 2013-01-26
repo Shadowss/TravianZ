@@ -7,26 +7,26 @@
 //                              - TravianX = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-  								//                         //
-									//         ENGLISH         //
-									//      Author: Dzoki      //
-									/////////////////////////////
+// 
+//  Traditional Chinese
+//    Author: Pickuse
+/////////////////////////////
 
 //MAIN MENU
-define("TRIBE1","Romans");
-define("TRIBE2","Teutons");
-define("TRIBE3","Gauls");
-define("TRIBE4","Nature");
-define("TRIBE5","Natars");
+define("TRIBE1","羅馬人");
+define("TRIBE2","條頓人");
+define("TRIBE3","高盧人");
+define("TRIBE4","自然界");
+define("TRIBE5","賴達族");
 define("TRIBE6","Monsters");
 
-define("HOME","Homepage");
+define("HOME","首頁");
 define("INSTRUCT","Instructions");
-define("ADMIN_PANEL","Admin Panel");
+define("ADMIN_PANEL","管理員控制台-ACP");
 define("MASS_MESSAGE","Mass Message");
-define("LOGOUT","Logout");
-define("PROFILE","Profile");
-define("SUPPORT","Support");
+define("LOGOUT","登出");
+define("PROFILE","個人資料");
+define("SUPPORT","支援");
 define("UPDATE_T_10","Update Top 10");
 define("SYSTEM_MESSAGE","System message");
 define("TRAVIAN_PLUS","Travian <b><span class=\"plus_g\">P</span><span class=\"plus_o\">l</span><span class=\"plus_g\">u</span><span class=\"plus_o\">s</span></span></span></b>");
