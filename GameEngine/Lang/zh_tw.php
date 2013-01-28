@@ -7,37 +7,38 @@
 //                              - TravianX = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-// 
-//  Traditional Chinese
-//    Author: Pickuse
-/////////////////////////////
+									//                         //
+									//         ENGLISH         //
+									//      Author: Dzoki      //
+									/////////////////////////////
 
 //MAIN MENU
 define("TRIBE1","羅馬人");
 define("TRIBE2","條頓人");
 define("TRIBE3","高盧人");
 define("TRIBE4","自然界");
-define("TRIBE5","賴達族");
+define("TRIBE5","達賴族");
 define("TRIBE6","Monsters");
 
 define("HOME","首頁");
-define("INSTRUCT","Instructions");
+define("INSTRUCT","說明");
 define("ADMIN_PANEL","管理員控制台-ACP");
-define("MASS_MESSAGE","Mass Message");
+define("MASS_MESSAGE","發送群信");
 define("LOGOUT","登出");
 define("PROFILE","個人資料");
 define("SUPPORT","支援");
-define("UPDATE_T_10","Update Top 10");
-define("SYSTEM_MESSAGE","System message");
+define("UPDATE_T_10","更新前10名");
+define("SYSTEM_MESSAGE","系統公告");
 define("TRAVIAN_PLUS","Travian <b><span class=\"plus_g\">P</span><span class=\"plus_o\">l</span><span class=\"plus_g\">u</span><span class=\"plus_o\">s</span></span></span></b>");
-define("CONTACT","Contact us!");
+define("CONTACT","聯絡我們!");
+define("GAME_RULES","遊戲規定");
 
 //MENU
-define("REG","Register");
-define("FORUM","Forum");
-define("CHAT","Chat");
+define("REG","註冊");
+define("FORUM","論壇");
+define("CHAT","聊天室");
 define("IMPRINT","Imprint");
-define("MORE_LINKS","More Links");
+define("MORE_LINKS","更多連結");
 define("TOUR","Game Tour");
 
 
@@ -80,40 +81,40 @@ define("ALREADY_IN_ALLY"," already in this alliance");
 define("TRAVIAN_COPYRIGHT","TravianZ 100% Open Source Travian Clone.");
 
 //BUILD.TPL
-define("CUR_PROD","Current production");
-define("NEXT_PROD","Production at level ");
+define("CUR_PROD","目前的產量");
+define("NEXT_PROD","產量在等級 ");
 
 //BUILDINGS
-define("B1","Woodcutter");
-define("B1_DESC","The Woodcutter cuts down trees in order to produce lumber. The further you extend the woodcutter the more lumber is produced by him.");
-define("B2","Clay Pit");
-define("B2_DESC","Clay is produced here. By increasing its level you increase its clay production.");
-define("B3","Iron Mine");
-define("B3_DESC","Here miners produce the precious resource iron. By increasing the mine`s level you increase its iron production.");
-define("B4","Cropland");
-define("B4_DESC","Your population`s food is produced here. By increasing the farm`s level you increase its crop production.");
+define("B1","伐木場");
+define("B1_DESC","伐木場是砍伐木材的地方.伐木場等級越高,單位時間內能砍伐的木材也就越多.");
+define("B2","泥坑");
+define("B2_DESC","泥坑是生產泥土的地方.泥坑等級越高,單位時間內生產的磚塊也就越多.");
+define("B3","鐵礦場");
+define("B3_DESC","鐵礦場是用來採集鐵礦的.鐵礦場等級越高,每小時能採集的鐵礦就越多.");
+define("B4","農場");
+define("B4_DESC","農場是為居民生產糧食的地方.農場等級越高,所能生產的糧食也就越多.");
 
 //DORF1
-define("LUMBER","Lumber");
-define("CLAY","Clay");
-define("IRON","Iron");
-define("CROP","Crop");
-define("LEVEL","Level");
+define("LUMBER","木材");
+define("CLAY","磚塊");
+define("IRON","鋼鐵");
+define("CROP","穀物");
+define("LEVEL","等級");
 define("CROP_COM",CROP." consumption");
-define("PER_HR","per hour");
-define("PROD_HEADER","Production");
-define("MULTI_V_HEADER","Villages");
+define("PER_HR","每小時");
+define("PROD_HEADER","生產");
+define("MULTI_V_HEADER","村莊");
 define("ANNOUNCEMENT","Announcement");
-define("GO2MY_VILLAGE","Go to my village");
-define("VILLAGE_CENTER","Village centre");
-define("FINISH_GOLD","Finish all construction and research orders in this village immediately for 2 Gold?");
-define("WAITING_LOOP","(waiting loop)");
+define("GO2MY_VILLAGE","回到我的村莊");
+define("VILLAGE_CENTER","地圖中心");
+define("FINISH_GOLD","花費2金,結束這個村莊當前建築任務或者兵種研發, 升級的任務. (除了皇宮和行宮)");
+define("WAITING_LOOP","(等待建築)");
 define("HRS","(hrs.)");
-define("DONE_AT","done at");
-define("CANCEL","cancel");
+define("DONE_AT","結束在");
+define("CANCEL","取消");
 define("LOYALTY","Loyalty:");
-define("CALCULATED_IN","Calculated in");
-define("SEVER_TIME","Server time:");
+define("CALCULATED_IN","產生在");
+define("SEVER_TIME","伺服器時間:");
 
 //QUEST
 define("Q_CONTINUE","Continue with the next task.");
@@ -162,7 +163,7 @@ define("Q5_RESP","As you noticed, building orders take rather long. The world of
 //======================================================//
 //================ UNITS - DO NOT EDIT! ================//
 //======================================================//
-define("U0","Hero");
+define("U0","英雄");
 
 //ROMAN UNITS
 define("U1","Legionnaire");
@@ -280,43 +281,43 @@ define("CHOOSE","Please choose a server.");
 define("STARTED"," The server started ". round((time()-COMMENCE)/86400) ." days ago.");
 
 //ANMELDEN.php
-define("NICKNAME","Nickname");
-define("EMAIL","Email");
-define("PASSWORD","Password");
-define("ROMANS","Romans");
-define("TEUTONS","Teutons");
-define("GAULS","Gauls");
-define("NW","North West");
-define("NE","North East");
-define("SW","South West");
-define("SE","South East");
-define("RANDOM","random");
-define("ACCEPT_RULES"," I accept the game rules and general terms and conditions.");
-define("ONE_PER_SERVER","Each player may only own ONE account per server.");
-define("BEFORE_REGISTER","Before you register an account you should read the <a href='../anleitung.php' target='_blank'>instructions</a> of TravianX to see the specific advantages and disadvantages of the three tribes.");
-define("BUILDING_UPGRADING","Building:");
-define("HOURS","hours");
+define("NICKNAME","暱稱");
+define("EMAIL","電郵信箱");
+define("PASSWORD","密碼");
+define("ROMANS","羅馬人");
+define("TEUTONS","條頓人");
+define("GAULS","高盧人");
+define("NW","西北方");
+define("NE","東北方");
+define("SW","西南方");
+define("SE","東南方");
+define("RANDOM","隨機");
+define("ACCEPT_RULES"," 我接受本遊戲的 遊戲規定 和 條款.");
+define("ONE_PER_SERVER","每個服務器，每個玩家只能擁有一個帳戶.");
+define("BEFORE_REGISTER","在你創造帳號之前請你務必閱讀 <a href='../anleitung.php' target='_blank'>遊戲說明</a> 了解 TravianX 3個種族的優點和缺點");
+define("BUILDING_UPGRADING","建築:");
+define("HOURS","小時");
 
 
 //ATTACKS ETC.
-define("TROOP_MOVEMENTS","Troop Movements:");
+define("TROOP_MOVEMENTS","軍隊移動:");
 define("ARRIVING_REINF_TROOPS","Arriving reinforcing troops");
 define("ARRIVING_REINF_TROOPS_SHORT","Reinf.");
 define("OWN_ATTACKING_TROOPS","Own attacking troops");
-define("ATTACK","Attack");
+define("ATTACK","攻擊");
 define("OWN_REINFORCING_TROOPS","Own reinforcing troops");
-define("TROOPS_DORF","Troops:");
+define("TROOPS_DORF","軍隊:");
 
 
 //LOGIN.php
 define("COOKIES","You must have cookies enabled to be able to log in. If you share this computer with other people you should log out after each session for your own safety.");
-define("NAME","Name");
-define("PW_FORGOTTEN","Password forgotten?");
+define("NAME","名稱");
+define("PW_FORGOTTEN","忘記密碼?");
 define("PW_REQUEST","Then you can request a new one which will be sent to your email address.");
-define("PW_GENERATE","Generate new password.");
-define("EMAIL_NOT_VERIFIED","Email not verified!");
+define("PW_GENERATE","產生一組新密碼.");
+define("EMAIL_NOT_VERIFIED","電子郵件帳號不正確!");
 define("EMAIL_FOLLOW","Follow this link to activate your account.");
-define("VERIFY_EMAIL","Verify Email.");
+define("VERIFY_EMAIL","驗證郵件.");
 
 
 //404.php
@@ -324,12 +325,12 @@ define("NOTHING_HERE","Nothing here!");
 define("WE_LOOKED","We looked 404 times already but can't find anything");
 
 //TIME RELATED
-define("CALCULATED","Calculated in");
-define("SERVER_TIME","Server time:");
+define("CALCULATED","產生在");
+define("SERVER_TIME","伺服器時間:");
 
 //MASSMESSAGE.php
 define("MASS","Message Content");
-define("MASS_SUBJECT","Subject:");
+define("MASS_SUBJECT","主旨:");
 define("MASS_COLOR","Message color:");
 define("MASS_REQUIRED","All fields required");
 define("MASS_UNITS","Images (units):");
@@ -349,23 +350,23 @@ define("MASS_SENT","Mass IGM was sent");
 
 	   $lang['index'][0][1] = "Welcome to " . SERVER_NAME . "";
 	   $lang['index'][0][2] = "Manual";
-	   $lang['index'][0][3] = "Play now, for free!";
+	   $lang['index'][0][3] = "這是免費的, 現在就加入!";
 	   $lang['index'][0][4] = "What is " . SERVER_NAME . "";
-	   $lang['index'][0][5] = "" . SERVER_NAME . " is a <b>browser game</b> featuring an engaging ancient world with thousands of other real players.</p><p>It`s <strong>free to play</strong> and requires <strong>no downloads</strong>.";
-	   $lang['index'][0][6] = "Click here to play " . SERVER_NAME . "";
-	   $lang['index'][0][7] = "Total players";
-	   $lang['index'][0][8] = "Players active";
-	   $lang['index'][0][9] = "Players online";
+	   $lang['index'][0][5] = "" . SERVER_NAME . " 是 <b>網頁遊戲</b> 是架構於瀏覽器的遊戲<BR />TRAVIAN世界內有數千至數萬名玩家，一名玩家就是一個村莊的領主，以外交、權謀、諜戰、結盟、分工等等謀略，成為中世紀霸主<br /><p>這是 <strong>免費的</strong> 而且 <strong>不用下載</strong>.";
+	   $lang['index'][0][6] = "點擊這裡玩 " . SERVER_NAME . "";
+	   $lang['index'][0][7] = "總人數";
+	   $lang['index'][0][8] = "活躍的玩家";
+	   $lang['index'][0][9] = "在線的玩家";
 	   $lang['index'][0][10] = "About the game";
 	   $lang['index'][0][11] = "You will begin as the chief of a tiny village and will embark on an exciting quest.";
 	   $lang['index'][0][12] = "Build up villages, wage wars or establish trade routes with your neighbours.";
 	   $lang['index'][0][13] = "Play with and against thousands of other real players and conquer the the world of Travian.";
-	   $lang['index'][0][14] = "News";
-	   $lang['index'][0][15] = "FAQ";
-	   $lang['index'][0][16] = "Screenshots";
-	   $lang['forum'] = "Forum";
-	   $lang['register'] = "Register";
-	   $lang['login'] = "Login";
+	   $lang['index'][0][14] = "新聞";
+	   $lang['index'][0][15] = "說明";
+	   $lang['index'][0][16] = "遊戲截圖";
+	   $lang['forum'] = "論壇";
+	   $lang['register'] = "註冊";
+	   $lang['login'] = "登入";
 
 
 ?>
