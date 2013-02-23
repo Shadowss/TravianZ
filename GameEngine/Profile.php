@@ -95,7 +95,11 @@ class Profile {
 		global $database,$session,$form;
 		if($post['pw2'] == $post['pw3']) {
 			if($database->login($session->username,$post['pw1'])) {
+				if ($_POST['uid'] != $session->uid){
+                      			die("Hacking Attempr");
+                		} else {
 				$database->updateUserField($post['uid'],"password",md5($post['pw2']),1);
+			}
 			}
 			else {
 				$form->addError("pw",LOGIN_PW_ERROR);
