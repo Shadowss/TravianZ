@@ -26,7 +26,7 @@ foreach($show_topic as $topi) {
 			<th>Move topic</td>
 			<td><select class="dropdown" name="fid">
 <?php
-$show_cat = $database->ForumCat();
+$show_cat = $database->ForumCat($session->alliance);
 	foreach($show_cat as $cats) {
 		if($cats['id'] == $_GET['idf']){
 			echo '<option value="'.$cats['id'].'" selected>'.$cats['forum_name'].'</option>';
