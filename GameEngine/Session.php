@@ -115,24 +115,19 @@ class Session {
 				$this->mchecker = $_SESSION['mchecker'] = $generator->generateRandStr(5);
 			}
 
-			private function checkLogin(){
-				global $database;
-				if(isset($_SESSION['username']) && isset($_SESSION['sessid'])) {
-					if(!$database->checkActiveSession($_SESSION['username'], $_SESSION['sessid'])) {
-						$this->Logout();
-						return false;
-					} else {
-						//Get and Populate Data
-						$this->PopulateVar();
-						//update database
-						$database->addActiveUser($_SESSION['username'], $this->time);
-						$database->updateUserField($_SESSION['username'], "timestamp", $this->time, 0);
-						return true;
-					}
-				} else {
-					return false;
-				}
-			}
+			privatefunctioncheckLogin(){
+                		global $database;
+                		if(isset($_SESSION['username']) && isset($_SESSION['sessid'])) {
+                    			//Get and Populate Data
+                    			$this->PopulateVar();
+                    			//update database
+                    			$database->addActiveUser($_SESSION['username'], $this->time);
+                    			$database->updateUserField($_SESSION['username'], "timestamp", $this->time, 0);
+                        		return true;
+                		} else {
+                    			return false;
+                		}
+            		}
 
 			private function PopulateVar() {
 				global $database;
