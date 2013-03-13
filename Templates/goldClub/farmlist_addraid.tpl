@@ -29,6 +29,8 @@ $vdata = $database->getVillage($Wref);
     	$errormsg .= "There is no village on those coordinates.";
     }elseif($troops == "0"){
      	$errormsg .= "No troops has been selected.";
+    }elseif($database->hasBeginnerProtection($Wref)==1){
+        $errormsg .= "Player under protection.";
     }else{
     
 		if($_POST['target_id'] != ""){
