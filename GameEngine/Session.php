@@ -115,7 +115,7 @@ class Session {
 				$this->mchecker = $_SESSION['mchecker'] = $generator->generateRandStr(5);
 			}
 
-			privatefunctioncheckLogin(){
+			private function checkLogin(){
                 		global $database;
                 		if(isset($_SESSION['username']) && isset($_SESSION['sessid'])) {
                     			//Get and Populate Data
