@@ -588,7 +588,7 @@ if ($ironL<4 || $clayL<4 || $woodL<4 || $cropL<6){?>
 <?php } elseif($_SESSION['qst']== 23){
 $database->updateUserField($_SESSION['username'],'quest','24',0);
 $_SESSION['qst']= 24; ?>
-{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":-25,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":0}<a href=\"javascript: qst_next('','23');\">Continue to play.<\/a> 
+{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><br \/><br \/><\/div>\n\t\t<div id=\"qstbg\" class=\"allres\"><\/div>\n\t\t","number":23,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":0}
 <?php
 } elseif($_SESSION['qst']==90){
 $time=time();?>
@@ -664,7 +664,7 @@ if ($_SESSION['qst_time']>= $time ){ ?>
 <?php } else if($_SESSION['qst']== 97){
 $database->updateUserField($_SESSION['username'],'quest','24',0);
 $_SESSION['qst']= 24; ?>
-{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":-25,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":0}
+{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><br \/><br \/><\/div>\n\t\t<div id=\"qstbg\" class=\"allres\"><\/div>\n\t\t","number":23,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":0}
 
 
 
@@ -916,7 +916,7 @@ if ($ironL<4 || $clayL<4 || $woodL<4 || $cropL<6){?>
 <?php } elseif($_SESSION['qst']== 23){
 $database->updateUserField($_SESSION['username'],'quest','24',0);
 $_SESSION['qst']= 24; ?>
-{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":-25,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":0}
+{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><br \/><br \/><\/div>\n\t\t<div id=\"qstbg\" class=\"allres\"><\/div>\n\t\t","number":23,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":0}
 
 <?php
 } elseif($_SESSION['qst']==90){
@@ -993,7 +993,7 @@ if ($_SESSION['qst_time']>= $time ){ ?>
 <?php } else if($_SESSION['qst']== 97){
 $database->updateUserField($_SESSION['username'],'quest','24',0);
 $_SESSION['qst']= 24; ?>
-{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":-25,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":0}
+{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;All tasks achieved!&rdquo;<\/i><br \/><br \/><br \/><\/div>\n\t\t<div id=\"qstbg\" class=\"allres\"><\/div>\n\t\t","number":23,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":0}
 
 
 

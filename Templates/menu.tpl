@@ -40,16 +40,16 @@ div.c1 {text-align: center}
 
                     echo "<a href=\"Admin/admin.php\"><font color=\"Blue\">Multihunter Panel</font></a>";
                     } ?> <?php if($session->access == ADMIN) {
-                    echo "<a href=\"Admin/admin.php\"><font color=\"Red\">Admin Panel</font></a>";
-                    echo "<a href=\"massmessage.php\">Mass Message</a>";
-                    echo "<a href=\"medals.php\">Update Top 10</a>";
-                    echo "<a href=\"sysmsg.php\">System message</a>";
+                    echo "<a href=\"Admin/admin.php\"><font color=\"Red\">".ADMIN_PANEL."</font></a>";
+                    echo "<a href=\"massmessage.php\">".MASS_MESSAGE."</a>";
+                    echo "<a href=\"medals.php\">".UPDATE_T_10."</a>";
+                    echo "<a href=\"sysmsg.php\">".SYSTEM_MESSAGE."</a>";
 					echo "<a href=\"create_account.php\">Create Natars</a>";
-                    } ?> <a href="logout.php"><?php echo LOGOUT; ?></a></p>
+                    } ?> <a href="logout.php"><?php echo LOGOUT;?></a></p>
 
-		<a href="rules.php"><b>Game Rules</b></a> 
+		<a href="rules.php"><b><?php echo GAME_RULES;?></b></a> 
         <p><a href="plus.php?id=3">Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
-                    <a href="support.php"><b>Support</b></a> 
+                    <a href="support.php"><b><?php echo SUPPORT;?></b></a> 
         <br></p>
 		<?php
 		$timestamp = $database->isDeleting($session->uid);

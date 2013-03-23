@@ -1849,6 +1849,14 @@ class MYSQL_DB {
 		$dbarray = mysql_fetch_array($result);
 		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
 		$this->query($q);
+		$q2 = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field <= 18 order by master,timestamp ASC";
+		if(mysql_num_rows($q2) > 0){
+		$result2 = mysql_query($q2);
+		$dbarray2 = mysql_fetch_array($result2);
+		$wc_time = $dbarray['timestamp'];
+		$q2 = "UPDATE ".TB_PREFIX."bdata SET timestamp = timestamp - $wc_time WHERE id = '".$dbarray2['id']."'";
+		$this->query($q2);
+		}
 	}
 
 	function getMasterJobs($wid) {
