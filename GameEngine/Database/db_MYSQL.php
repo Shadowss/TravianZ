@@ -221,7 +221,7 @@ class MYSQL_DB {
 	}
 
 	function setDeleting($uid, $mode) {
-		$time = time() + 48 * 3600;
+		$time = time() + 72 * 3600;
 		if(!$mode) {
 			$q = "INSERT into " . TB_PREFIX . "deleting values ($uid,$time)";
 		} else {
