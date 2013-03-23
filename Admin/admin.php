@@ -38,6 +38,10 @@ class timeFormatGenerator
 	}
 };
 $timeformat = new timeFormatGenerator;
+
+include('Templates/ver.tpl');
+include('Templates/update_latest.tpl');
+$up_avl = $latest - $ver ;
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -93,7 +97,7 @@ $timeformat = new timeFormatGenerator;
 												<a href="<?php echo HOMEPAGE; ?>">Server Homepage</a>
 												<a href="admin.php">Control Panel Home</a>
 												<a href="<?php echo SERVER; ?>dorf1.php">Return to the server</a>
-												<a href="?p=update"><font color="Red"><b>Server Update</font></b></a>
+												<a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</font></b></a>
 												<br />
 												<a href="?action=logout">Logout</a>
 												<br />

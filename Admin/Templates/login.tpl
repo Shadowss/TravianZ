@@ -11,10 +11,7 @@
 #################################################################################
 
 ############ Check Update #############
-if(isset($_GET['c']))
-{
-	copy("http://travian.gamingcrazy.net/Update/update_latest.tpl", "Templates/update_latest.tpl");
-}
+copy("http://travian.gamingcrazy.net/Update/update_latest.tpl", "Templates/update_latest.tpl");
 
 ?>
 <div align="center">
