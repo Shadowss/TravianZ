@@ -133,8 +133,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<td><span class="f9 c6">DB name:</span></td><td><input type="text" name="sdb" id="sdb"></td></tr><tr>
 	<td><span class="f9 c6">Prefix:</span></td><td><input type="text" name="prefix" id="prefix" value="s1_" size="5"></td></tr>
 	<td><span class="f9 c6">Type:</span></td><td><select name="connectt">
-	  <option value="0" selected="selected">MYSQL</option>
-	  <option value="1" disabled="disabled">MYSQLi (NOT DONE)</option>
+	  <option value="0">MYSQL</option>
+	  <option value="1" selected="selected">MYSQLi</option>
 	</select></td></tr>
 	</table>
 	</p>
