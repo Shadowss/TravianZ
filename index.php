@@ -43,9 +43,25 @@ else
 {
     die('Security: Please activate security class!');
 }
+
+$cachefile = 'cache/'.basename($_SERVER['PHP_SELF']).'.cache'; // e.g. cache/index.php.cache
+$cachetime = 3600; // time to cache in seconds
+
+if(file_exists($cachefile) && time()-$cachetime <= filemtime($cachefile)){
+  $c = @file_get_contents($cf);
+  echo $c;
+  exit;
+}else{
+  unlink($cachefile);
+}
+
+ob_start();
+
 include ("GameEngine/Database.php");
 include ("GameEngine/Lang/".LANG.".php");
+
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -273,3 +289,9 @@ include ("GameEngine/Lang/".LANG.".php");
 	</script>
 </body>
 </html>
+<?php
+
+$c = ob_get_contents();
+file_put_contents($cachefile);
+
+?>
