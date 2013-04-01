@@ -20,7 +20,7 @@ class MYSQL_DB {
 
 	function register($username, $password, $email, $tribe, $act) {
 		$time = time();
-		$timep = (time() + PROTECTION);
+		$timep = (strtotime(START_TIME) + PROTECTION);
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
 		if(mysql_query($q, $this->connection)) {
 			return mysql_insert_id($this->connection);
