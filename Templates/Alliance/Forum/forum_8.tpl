@@ -3,8 +3,8 @@
 if($session->access!=BANNED){
 $forum_data = $database->ForumCatEdit($_GET['idf']);
 foreach($forum_data as $cats) {
-	$cat_name = $cats['forum_name'];
-	$cat_des = $cats['forum_des'];
+	$cat_name = stripslashes($cats['forum_name']);
+	$cat_des = stripslashes($cats['forum_des']);
 }
 ?>
 <script language="JavaScript" type="text/javascript">

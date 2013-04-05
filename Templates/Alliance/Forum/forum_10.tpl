@@ -6,10 +6,10 @@ $post_id = $_GET['pod'];
 $topics = $database->ShowTopic($topic_id);
 $posts = $database->ShowPostEdit($post_id);
 foreach($topics as $top) {
-	$title = $top['title'];
+	$title = stripslashes($top['title']);
 }
 foreach($posts as $pos) {
-	$poss = $pos['post'];
+	$poss = stripslashes($pos['post']);
 }
 ?>
 <form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['idt']; ?>">

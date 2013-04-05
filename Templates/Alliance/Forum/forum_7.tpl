@@ -4,7 +4,7 @@ if($session->access!=BANNED){
 $tid = $_GET['tid'];
 $topics = $database->ShowTopic($tid);
 foreach($topics as $arr) {
-	$title = $arr['title'];
+	$title = stripslashes($arr['title']);
 }
 ?>
 <form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['tid']; ?>">

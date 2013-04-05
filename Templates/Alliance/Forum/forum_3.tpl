@@ -4,7 +4,7 @@ if($session->access!=BANNED){
 $topic_id = $_GET['idt'];
 $show_topic = $database->ShowTopic($topic_id);
 foreach($show_topic as $topi) {
-	$title = $topi['title'];
+	$title = stripslashes($topi['title']);
 }
 ?>
 <form method="post" action="allianz.php?s=2&fid=<?php echo $_GET['idf']; ?>&pid=<?php echo $aid; ?>">
@@ -29,9 +29,9 @@ foreach($show_topic as $topi) {
 $show_cat = $database->ForumCat($session->alliance);
 	foreach($show_cat as $cats) {
 		if($cats['id'] == $_GET['idf']){
-			echo '<option value="'.$cats['id'].'" selected>'.$cats['forum_name'].'</option>';
+			echo '<option value="'.$cats['id'].'" selected>'.stripslashes($cats['forum_name']).'</option>';
 		}else{
-			echo '<option value="'.$cats['id'].'">'.$cats['forum_name'].'</option>';
+			echo '<option value="'.$cats['id'].'">'.stripslashes($cats['forum_name']).'</option>';
 		}
 	}
 ?>
