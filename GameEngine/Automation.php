@@ -914,6 +914,7 @@ class Automation {
 			$q = "SELECT * FROM ".TB_PREFIX."route where timestamp < $time";
 			$dataarray = $database->query_return($q);
 			foreach($dataarray as $data) {
+			$database->modifyResource($data['from'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
 			$targettribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
 			$this->sendResource2($data['wood'],$data['clay'],$data['iron'],$data['crop'],$data['from'],$data['wid'],$targettribe,$data['deliveries']);
 			$database->editTradeRoute($data['id'],"timestamp",86400,1);
