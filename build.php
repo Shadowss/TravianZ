@@ -51,7 +51,7 @@ if($session->goldclub == 1 && count($session->villages) > 1){
 	if(isset($_GET['routeid'])){
 	$routeid = $_GET['routeid'];
 	}
-if($routeaccess = 1){
+if($routeaccess == 1){
 		if(isset($_POST['action']) && $_POST['action'] == 'addRoute') {
 		if($session->access != BANNED){
 		if($session->gold >= 2) {
