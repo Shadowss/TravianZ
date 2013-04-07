@@ -37,11 +37,11 @@ include("next.tpl");
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*2; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*2*CRANNY_CAPACITY; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*CRANNY_CAPACITY; ?></b> units</td>
 		<?php
 			}
 		?>
@@ -55,11 +55,11 @@ include("next.tpl");
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}}else{
         ?>
@@ -67,11 +67,11 @@ include("next.tpl");
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[10]['attri']*2*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*2*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[10]['attri']*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
 		<?php
 			}}}
         ?>

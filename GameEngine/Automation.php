@@ -1627,7 +1627,7 @@ class Automation {
 			$cranny = 0;
 			for($i=19;$i<39;$i++){
 				if($buildarray['f'.$i.'t']==23){
-				$cranny += $bid23[$buildarray['f'.$i.'']]['attri'];
+				$cranny += $bid23[$buildarray['f'.$i.'']]['attri']*CRANNY_CAPACITY;
 				}
 			}
 
