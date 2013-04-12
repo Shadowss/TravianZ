@@ -20,11 +20,15 @@ foreach($varray as $vil) {
 $countAu = $database->CountTopic($arr['owner']);
 $displayarray = $database->getUserArray($arr['owner'],1);
 if($displayarray['tribe'] == 1) {
-    $trip = "Roman";
+    $trip = "Fire";
 }else if($displayarray['tribe'] == 2) {
-	$trip = "Teutons";
+	$trip = "Water";
 }else if($displayarray['tribe'] == 3) {
-    $trip = "Gauls";
+    $trip = "Earth";
+}else if($displayarray['tribe'] == 4) {
+	$trip = "Air";
+}else if($displayarray['tribe'] == 5) {
+    $trip = "Lightning";
 }
 $input = $arr['post'];
 $bbcoded = $input;
