@@ -695,6 +695,8 @@ class Building {
 				$buildiron = $buildarray[$level]['iron'];
 				$buildcrop = $buildarray[$level]['crop'];
 				if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop){
+				$newgold = $session->gold-1;
+				$database->updateUserField($session->uid, "gold", $newgold, 1);
 				$enought_res = 1;
 				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
 				}
