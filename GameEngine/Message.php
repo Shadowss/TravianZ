@@ -118,6 +118,22 @@ class Message {
 			if($message['id'] == $id) {
 			$message = preg_replace('/\[message\]/', '', $message);
 			$message = preg_replace('/\[\/message\]/', '', $message);
+			for($i=1;$i<=$message['alliance'];$i++){
+			$message = preg_replace('/\[alliance'.$i.'\]/', '[alliance0]', $message);
+			$message = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance0]', $message);
+			}
+			for($i=0;$i<=$message['player'];$i++){
+			$message = preg_replace('/\[player'.$i.'\]/', '[player0]', $message);
+			$message = preg_replace('/\[\/player'.$i.'\]/', '[/player0]', $message);
+			}
+			for($i=0;$i<=$message['coor'];$i++){
+			$message = preg_replace('/\[coor'.$i.'\]/', '[coor0]', $message);
+			$message = preg_replace('/\[\/coor'.$i.'\]/', '[/coor0]', $message);
+			}
+			for($i=0;$i<=$message['report'];$i++){
+			$message = preg_replace('/\[report'.$i.'\]/', '[report0]', $message);
+			$message = preg_replace('/\[\/report'.$i.'\]/', '[/report0]', $message);
+			}
 				$this->reply = $_SESSION['reply'] = $message;
 				header("Location: nachrichten.php?t=1&id=" . $message['owner']);
 			}
@@ -390,18 +406,6 @@ class Message {
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
 		$text = "[message]".$text."[/message]";
 		$alliance = $player = $coor = $report = 0;
-		for($i=0;$i<=$alliance;$i++){
-		if(preg_match('/\[alliance'.$i.'\]/',$text) && preg_match('/\[\/alliance'.$i.'\]/',$text)){
-		$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '', $input);
-		$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '', $alliance1);
-		if(preg_match('/\[alliance'.$i.'\]/',$alliance1) && preg_match('/\[\/alliance'.$i.'\]/',$alliance1)){
-		$j = $i+1;
-		$text = preg_replace('/\[alliance'.$i.'\]/', '/\[alliance'.$j.'\]/', $text);
-		$text = preg_replace('/\[\/alliance'.$i.'\]/', '/\[\/alliance'.$j.'\]/', $text);
-		$alliance += 1;
-		}
-		}
-		}
 		for($i=0;$i<=$alliance;$i++){
 		if(preg_match('/\[alliance'.$i.'\]/',$text) && preg_match('/\[\/alliance'.$i.'\]/',$text)){
 		$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
