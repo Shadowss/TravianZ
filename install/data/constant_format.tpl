@@ -67,6 +67,8 @@ define("TRADER_CAPACITY","%TRADERCAP%");
 // ***** Cranny capacity
 define("CRANNY_CAPACITY","%CRANNYCAP%");
 
+// ***** Trapper capacity
+define("TRAPPER_CAPACITY","%TRAPPERCAP%");
 
 // ***** Village Expand
 // 1 = slow village expanding - more Cultural Points needed for every new village
