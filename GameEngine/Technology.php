@@ -179,7 +179,11 @@ class Technology {
 		}else{
 		$cropcalc = 0;
 		}
+		if($unit != "u99"){
 		$popcalc = floor($village->getProd("crop")/$unitarray['pop']);
+		}else{
+		$popcalc = $village->getProd("crop");
+		}
 		return min($woodcalc,$claycalc,$ironcalc,$cropcalc);
 	}
 

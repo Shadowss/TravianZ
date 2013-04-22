@@ -672,6 +672,9 @@ class Automation {
 					if($indi['type'] == 40 and ($indi['level'] % 5 == 0 or $indi['level'] > 95) and $indi['level'] != 100){
 					$this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
 					}
+					if($indi['type'] == 40 && $indi['level'] == 100){ //now can't be more than one winners if ww to level 100 is build by 2 users or more on same time
+					mysql_query("TRUNCATE ".TB_PREFIX."bdata");
+					}
 				if($database->getUserField($database->getVillageField($indi['wid'],"owner"),"tribe",0) != 1){
 				$q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".$indi['wid'];
 				$database->query($q4);
