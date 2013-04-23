@@ -14,7 +14,7 @@ include("next.tpl");
 	<tr>
 		<th>Currect maximum traps to train:</th>
 
-		<td><b><?php echo $bid36[$village->resarray['f'.$id]]['attri']; ?></b> Traps</td>
+		<td><b><?php echo $bid36[$village->resarray['f'.$id]]['attri']*TRAPPER_CAPACITY; ?></b> Traps</td>
 	</tr>
 	<tr>
 	<?php 
@@ -23,12 +23,12 @@ include("next.tpl");
 		if($next<=20){
         ?>
 		<th>Maximum traps to train at level <?php echo $next; ?>:</th>
-		<td><b><?php echo $bid36[$next]['attri']; ?></b> Traps</td>
+		<td><b><?php echo $bid36[$next]['attri']*TRAPPER_CAPACITY; ?></b> Traps</td>
         <?php
             }else{
 		?>
 		<th>Maximum traps to train at level 20:</th>
-		<td><b><?php echo $bid36[20]['attri']; ?></b> Traps</td>
+		<td><b><?php echo $bid36[20]['attri']*TRAPPER_CAPACITY; ?></b> Traps</td>
 		<?php
 			}
 			}
@@ -66,7 +66,7 @@ include("next.tpl");
 				alt="Iron" title="Iron" />10|</span><span><img class="r4" src="img/x.gif"
 				alt="Crop" title="Crop" />20|</span><span><img class="r5" src="img/x.gif" alt="Crop consumption"
 				title="Crop consumption" />0|<img class="clock" src="img/x.gif"
-				alt="Duration" title="Duration" /><?php $dur=$generator->getTimeFormat(round(${'u99'}['time'] * ($bid19[$village->resarray['f'.$id]]['attri'] / 100) / SPEED)); 
+				alt="Duration" title="Duration" /><?php $dur=$generator->getTimeFormat(round(${'u99'}['time'] * ($bid19[$village->resarray['f'.$id]]['attri']*TRAPPER_CAPACITY / 100) / SPEED)); 
 				echo ($dur=="0:00:00")? "0:00:01":$dur; ?></span>
 
 			</div>
@@ -81,7 +81,7 @@ include("next.tpl");
 			$max1 = 0;
 			for($i=19;$i<41;$i++){
 			if($village->resarray['f'.$i.'t'] == 36){
-			$max1 += $bid36[$village->resarray['f'.$i]]['attri'];
+			$max1 += $bid36[$village->resarray['f'.$i]]['attri']*TRAPPER_CAPACITY;
 			}
 			}
 			if($max > $max1 - ($village->unitarray['u99'] + $train_amt)){

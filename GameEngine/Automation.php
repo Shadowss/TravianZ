@@ -473,32 +473,6 @@ class Automation {
 		$q = "UPDATE " . TB_PREFIX . "odata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getoasis['wref']."";
 		$database->query($q);
 		}
-		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop";
-		$array = $database->query_return($q);
-		foreach($array as $getoasis) {
-		if($getoasis['wood'] > $getoasis['maxstore']){
-		$wood = $getoasis['maxstore'];
-		}else{
-		$wood = $getoasis['wood'];
-		}
-		if($getoasis['clay'] > $getoasis['maxstore']){
-		$clay = $getoasis['maxstore'];
-		}else{
-		$clay = $getoasis['clay'];
-		}
-		if($getoasis['iron'] > $getoasis['maxstore']){
-		$iron = $getoasis['maxstore'];
-		}else{
-		$iron = $getoasis['iron'];
-		}
-		if($getoasis['crop'] > $getoasis['maxstore']){
-		$crop = $getoasis['maxstore'];
-		}else{
-		$crop = $getoasis['crop'];
-		}
-		$q = "UPDATE " . TB_PREFIX . "odata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getoasis['wref']."";
-		$database->query($q);
-		}
 		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
 		$array = $database->query_return($q);
 		foreach($array as $getoasis) {
@@ -697,6 +671,9 @@ class Automation {
 					// by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
 					if($indi['type'] == 40 and ($indi['level'] % 5 == 0 or $indi['level'] > 95) and $indi['level'] != 100){
 					$this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
+					}
+					if($indi['type'] == 40 && $indi['level'] == 100){ //now can't be more than one winners if ww to level 100 is build by 2 users or more on same time
+					mysql_query("TRUNCATE ".TB_PREFIX."bdata");
 					}
 				if($database->getUserField($database->getVillageField($indi['wid'],"owner"),"tribe",0) != 1){
 				$q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".$indi['wid'];
@@ -914,6 +891,7 @@ class Automation {
 			$q = "SELECT * FROM ".TB_PREFIX."route where timestamp < $time";
 			$dataarray = $database->query_return($q);
 			foreach($dataarray as $data) {
+			$database->modifyResource($data['from'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
 			$targettribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
 			$this->sendResource2($data['wood'],$data['clay'],$data['iron'],$data['crop'],$data['from'],$data['wid'],$targettribe,$data['deliveries']);
 			$database->editTradeRoute($data['id'],"timestamp",86400,1);
@@ -1626,7 +1604,7 @@ class Automation {
 			$cranny = 0;
 			for($i=19;$i<39;$i++){
 				if($buildarray['f'.$i.'t']==23){
-				$cranny += $bid23[$buildarray['f'.$i.'']]['attri'];
+				$cranny += $bid23[$buildarray['f'.$i.'']]['attri']*CRANNY_CAPACITY;
 				}
 			}
 
@@ -3929,11 +3907,24 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood < 800 OR clay < 800 OR iron < 800 OR crop < 800";
 		$array = $database->query_return($q);
 		foreach($array as $getoasis) {
-		$oasiswood = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
-		$oasisclay = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
-		$oasisiron = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
-		$oasiscrop = (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
-		$database->modifyOasisResource($getoasis['wref'],$oasiswood,$oasisclay,$oasisiron,$oasiscrop,1);
+		$oasiswood = $getoasis['wood'] + (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		$oasisclay = $getoasis['clay'] + (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		$oasisiron = $getoasis['iron'] + (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		$oasiscrop = $getoasis['crop'] + (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
+		if($oasiswood > $getoasis['maxstore']){
+		$oasiswood = $getoasis['maxstore'];
+		}
+		if($oasisclay > $getoasis['maxstore']){
+		$oasisclay = $getoasis['maxstore'];
+		}
+		if($oasisiron > $getoasis['maxstore']){
+		$oasisiron = $getoasis['maxstore'];
+		}
+		if($oasiscrop > $getoasis['maxcrop']){
+		$oasiscrop = $getoasis['maxcrop'];
+		}
+		$q = "UPDATE " . TB_PREFIX . "odata set wood = $oasiswood, clay = $oasisclay, iron = $oasisiron, crop = $oasiscrop where wref = ".$getoasis['wref']."";
+		$database->query($q);
 		$database->updateOasis($getoasis['wref']);
 		}
 	}

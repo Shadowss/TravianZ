@@ -8,7 +8,7 @@ $posts = $database->ShowPost($tid);
 foreach($topics as $arr) {
 $cat_id = $arr['cat'];
 	$owner = $database->getUserArray($arr['owner'],1);
-	$CatName = $database->ForumCatName($cat_id);
+	$CatName = stripslashes($database->ForumCatName($cat_id));
 	$allianceinfo = $database->getAlliance($owner['alliance']);
 }
 $date = date('m/d/y H:i a',$arr['date']);
@@ -20,7 +20,7 @@ foreach($varray as $vil) {
 $countAu = $database->CountTopic($arr['owner']);
 $displayarray = $database->getUserArray($arr['owner'],1);
 if($displayarray['tribe'] == 1) {
-    $trip = "Roman";
+    $trip = "Romans";
 }else if($displayarray['tribe'] == 2) {
 	$trip = "Teutons";
 }else if($displayarray['tribe'] == 3) {
@@ -29,11 +29,11 @@ if($displayarray['tribe'] == 1) {
 $input = $arr['post'];
 $bbcoded = $input;
 include("GameEngine/BBCode.php");
-$bbcode_topic = nl2br($bbcoded);
+$bbcode_topic = stripslashes(nl2br($bbcoded));
 ?>
 <h4><a href="allianz.php?s=2&pid=<?php echo $arr['alliance']; ?>">Alliance</a> -> <a href="allianz.php?s=2&pid=<?php echo $arr['alliance']; ?>&fid=<?php echo $arr['cat']; ?>"><?php echo $CatName; ?></a></h4><table cellpadding="1" cellspacing="1" id="posts"><thead>
 <tr>
-	<th colspan="2"><?php echo $arr['title']; ?></th>
+	<th colspan="2"><?php echo stripslashes($arr['title']); ?></th>
 
 </tr><tr>
 	<td>Author</td>
@@ -76,7 +76,7 @@ foreach($posts as $po) {
 	$allianceinfo = $database->getAlliance($owner['alliance']);
 	$input = $po['post'];
 	include("GameEngine/BBCode.php");
-	$bbcode_post = nl2br($bbcoded);
+	$bbcode_post = stripslashes(nl2br($bbcoded));
 
 echo '<tr><td class="pinfo"><a class="name" href="spieler.php?uid='.$po['owner'].'">'.$owner['username'].'</a><br /><a href="allianz.php?aid='.$allianceinfo['id'].'">'.$allianceinfo['tag'].'</a><br />
 		Posts: '.$countAu.'<br />

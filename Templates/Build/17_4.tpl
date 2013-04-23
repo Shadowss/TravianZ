@@ -37,7 +37,7 @@ Standard this holds on for 7 days, but you can extend it with 7 days for the cos
 <?php
 $routes = $database->getTradeRoute($session->uid);
     if(count($routes) == 0) {
-    echo "<td colspan=\"5\" class=\"none\">No active trade route.</td></tr>";
+    echo "<td colspan=\"5\" class=\"none\">No active trade routes.</td></tr>";
     }else{
 foreach($routes as $route){
 ?>
@@ -45,7 +45,7 @@ foreach($routes as $route){
 <th><label><input class="radio" type="radio" onclick="window.location.href = '?id=<?php echo $id; ?>&t=4&routeid=<?php echo $route['id']; ?>';" name="routeid" value="<?php echo $route['id']; ?>" <?php if($routeid == $route['id']) { echo "checked"; } ?>></label></th>
 <th>
 <?php
-echo "Trade route to <a href=karte.php?d=".$route['wid']."&c=".$generator->getMapCheck($route['wid']).">".$database->getVillageField($route['wid'],"name")."</a>"	
+echo "Trade route to <a href=karte.php?d=".$route['wid']."&c=".$generator->getMapCheck($route['wid']).">".$database->getVillageField($route['wid'],"name")."</a>";
 ?>
 </th>
 <th><?php if($route['start'] > 9){ echo $route['start'];}else{ echo "0".$route['start'];} echo ":00"; ?></th>

@@ -484,10 +484,7 @@
 				$holder = array();
 				foreach($array as $value) {
 					$memberlist = $database->getAllMember($value['id']);
-					$totalap = 0;
-					foreach($memberlist as $member) {
-						$totalap += $member['ap'];
-					}
+					$totalap = $value['Aap'];
 					$value['players'] = count($memberlist);
 					$value['totalap'] = $totalap;
 					if($value['avg'] > 0) {
@@ -512,14 +509,11 @@
 				$holder = array();
 				foreach($array as $value) {
 					$memberlist = $database->getAllMember($value['id']);
-					$totaldp = 0;
-					foreach($memberlist as $member) {
-						$totaldp += $member['dp'];
-					}
+					$totaldp = $value['Adp'];
 					$value['players'] = count($memberlist);
 					$value['totaldp'] = $totaldp;
 					if($value['avg'] > 0) {
-						$value['avg'] = round($totalap / count($memberlist));
+						$value['avg'] = round($totaldp / count($memberlist));
 					} else {
 						$value['avg'] = 0;
 					}

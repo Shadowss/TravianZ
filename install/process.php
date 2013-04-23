@@ -43,6 +43,8 @@ class Process {
 		$text = preg_replace("'%INCSPEED%'", $_POST['incspeed'], $text);
 		$text = preg_replace("'%EVASIONSPEED%'", $_POST['evasionspeed'], $text);
 		$text = preg_replace("'%TRADERCAP%'", $_POST['tradercap'], $text);
+		$text = preg_replace("'%CRANNYCAP%'", $_POST['crannycap'], $text);
+		$text = preg_replace("'%TRAPPERCAP%'", $_POST['trappercap'], $text);
 		$text = preg_replace("'%STORAGE_MULTIPLIER%'", $_POST['storage_multiplier'], $text);
 		$text = preg_replace("'%UTRACK%'", $_POST['trackusers'], $text);
 		$text = preg_replace("'%UTOUT%'", $_POST['timeout'], $text);

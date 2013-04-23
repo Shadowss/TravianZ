@@ -54,7 +54,7 @@ if($database->CheckEditRes($aid)=="1"){
 }else{
 	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
 }		
-echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
+echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.stripslashes($arr['forum_name']).'">'.stripslashes($arr['forum_name']).'</a><br />'.stripslashes($arr['forum_des']).'</td>
 			<td class="cou">'.$countop.'</td>
 			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
 		</tr>';
@@ -105,7 +105,7 @@ if($database->CheckEditRes($aid)=="1"){
 }else{
 	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
 }		
-echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
+echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.stripslashes($arr['forum_name']).'">'.stripslashes($arr['forum_name']).'</a><br />'.stripslashes($arr['forum_des']).'</td>
 			<td class="cou">'.$countop.'</td>
 			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
 		</tr>';
@@ -156,7 +156,7 @@ if($database->CheckEditRes($aid)=="1"){
 }else{
 	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
 }		
-echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
+echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.stripslashes($arr['forum_name']).'">'.stripslashes($arr['forum_name']).'</a><br />'.stripslashes($arr['forum_des']).'</td>
 			<td class="cou">'.$countop.'</td>
 			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
 		</tr>';
@@ -207,7 +207,7 @@ if($database->CheckEditRes($aid)=="1"){
 }else{
 	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
 }		
-echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
+echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.stripslashes($arr['forum_name']).'">'.stripslashes($arr['forum_name']).'</a><br />'.stripslashes($arr['forum_des']).'</td>
 			<td class="cou">'.$countop.'</td>
 			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
 		</tr>';
