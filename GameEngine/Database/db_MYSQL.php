@@ -120,7 +120,18 @@ class MYSQL_DB {
 		$dbarray = mysql_fetch_array($result);
 		return $dbarray['id'];
 	}
+	
+	function caststruc($user) {
+		//loop search village user
+		$query = mysql_query("SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
+		while($villaggi_array = mysql_fetch_array($query)){
 
+		//loop structure village
+		$query1 = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
+		$strutture= mysql_fetch_array($query1);
+		return $strutture;
+	}
+	
 	function removeMeSit($uid, $uid2) {
 		$q = "UPDATE " . TB_PREFIX . "users set sit1 = 0 where id = $uid and sit1 = $uid2";
 		mysql_query($q, $this->connection);

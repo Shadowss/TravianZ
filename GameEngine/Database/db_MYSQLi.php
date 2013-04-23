@@ -19,7 +19,7 @@ class MYSQLi_DB {
 
 	function register($username, $password, $email, $tribe, $act) {
 		$time = time();
-		$timep = (time() + PROTECTION);
+		$timep = (strtotime(START_TIME) + PROTECTION);
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
 		if(mysqli_query($this->connection, $q)) {
 			return mysqli_insert_id($this->connection);
@@ -118,6 +118,17 @@ class MYSQLi_DB {
 		$result = mysqli_query($this->connection, $q);
 		$dbarray = mysqli_fetch_array($result, MYSQLI_BOTH);
 		return $dbarray['id'];
+	}
+	
+	function caststruc($user) {
+		//loop search village user
+		$query = mysqli_query($this->connection, "SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
+		while($villaggi_array = mysqli_fetch_array($query, MYSQLI_BOTH)){
+
+		//loop structure village
+		$query1 = mysqli_query($this->connection, "SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
+		$strutture= mysqli_fetch_array($query1, MYSQLI_BOTH);
+		return $strutture;
 	}
 
 	function removeMeSit($uid, $uid2) {
@@ -2150,7 +2161,7 @@ class MYSQLi_DB {
 	}
 
 	function getARanking() {
-		$q = "SELECT id,name,tag,oldrank FROM " . TB_PREFIX . "alidata where id != '' ORDER BY id DESC";
+		$q = "SELECT id,name,tag,oldrank,Aap,Adp FROM " . TB_PREFIX . "alidata where id != '' ORDER BY id DESC";
 		$result = mysqli_query($this->connection, $q);
 		return $this->mysqli_fetch_all($result);
 	}
