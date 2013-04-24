@@ -1026,7 +1026,7 @@ class Automation {
 						$cannotsend = 1;
 						}
 						}
-						if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0){
+						if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0 && $dataarray[0]['attack_type'] > 2){
 						$totaltroops = 0;
 						for($i=1;$i<=10;$i++){
 						$playerunit += $i;
