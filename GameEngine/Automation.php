@@ -357,7 +357,7 @@ class Automation {
 					$database->query($q);
 					$getmovement = $database->getMovement(3,$village,1);
 					foreach($getmovement as $movedata) {
-					$time = time();
+					$time = microtime(true);
 					$time2 = $time - $movedata['starttime'];
 					$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
 					$database->setMovementProc($movedata['moveid']);
@@ -384,7 +384,7 @@ class Automation {
 					}
 					$enforcement = $database->getEnforceVillage($village,0);
 					foreach($enforcement as $enforce) {
-					$time = time();
+					$time = microtime(true);
 					$fromcoor = $database->getCoor($enforce['vref']);
 					$tocoor = $database->getCoor($enforce['from']);
 					$targettribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
@@ -905,7 +905,7 @@ class Automation {
 		global $database;
 		$ourFileHandle = fopen("GameEngine/Prevention/market.txt", 'w');
 		fclose($ourFileHandle);
-		$time = time();
+		$time = microtime(true);
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."send where ".TB_PREFIX."movement.ref = ".TB_PREFIX."send.id and ".TB_PREFIX."movement.proc = 0 and sort_type = 0 and endtime < $time";
 		$dataarray = $database->query_return($q);
 		foreach($dataarray as $data) {
@@ -970,7 +970,7 @@ class Automation {
 					if($res!=0){
 					$reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0);
 					$database->modifyResource($from,$resource[0],$resource[1],$resource[2],$resource[3],0);
-					$database->addMovement(0,$from,$to,$reference,time(),time()+$timetaken,$send);
+					$database->addMovement(0,$from,$to,$reference,micrtime(true),microtime(true)+$timetaken,$send);
 					}
 				}
 		}
@@ -1040,7 +1040,7 @@ class Automation {
 						if($totaltroops > 0){
 						$database->modifyUnit($data['to'],array("hero"),array($DefenderUnit['hero']),array(0));
 						$attackid = $database->addAttack($data['to'],$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],4,0,0,0,0,0,0,0,0,0,0,0);
-						$database->addMovement(4,0,$data['to'],$attackid,time(),time()+(180/EVASION_SPEED));
+						$database->addMovement(4,0,$data['to'],$attackid,microtime(true),microtime(true)+(180/EVASION_SPEED));
 						$newgold = $gold-2;
 						$newmaxevasion = $maxevasion-1;
 						$database->updateUserField($DefenderID, "gold", $newgold, 1);
@@ -2575,7 +2575,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}
 			}
 			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
-			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,time(),($p_time+time()));
+			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,microtime(true),($p_time+microtime(true)));
 			$anothertroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
 			$newtraps = (round($anothertroops/3))*2;
 			$database->modifyUnit($data['to'],array("99"),array($newtraps),array(0));
@@ -2710,7 +2710,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 								$database->query($q);
 								$getmovement = $database->getMovement(3,$data['to'],1);
 								foreach($getmovement as $movedata) {
-								$time = time();
+								$time = microtime(true);
 								$time2 = $time - $movedata['starttime'];
 								$database->setMovementProc($data['moveid']);
 								$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
@@ -2787,7 +2787,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}
 			}
 			$endtime += $AttackArrivalTime;
-			$endtime += time();
+			$endtime += microtime(true);
 				$database->setMovementProc($data['moveid']);
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				$peace = PEACE;
@@ -3144,7 +3144,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		global $database, $building;
 		$ourFileHandle = fopen("GameEngine/Prevention/settlers.txt", 'w');
 		fclose($ourFileHandle);
-		$time = time();
+		$time = microtime(true);
 		$q = "SELECT * FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 5 and endtime < $time";
 		$dataarray = $database->query_return($q);
 			foreach($dataarray as $data) {
