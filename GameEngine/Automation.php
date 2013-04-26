@@ -3964,6 +3964,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$q = "SELECT * FROM ".TB_PREFIX."bdata WHERE master = 1";
 		$array = $database->query_return($q);
 		foreach($array as $master) {
+		$owner = $database->getVillageField($master['wid'],'owner');
+		$tribe = $database->getUserField($owner,'tribe',0);
 		$villwood = $database->getVillageField($master['wid'],'wood');
 		$villclay = $database->getVillageField($master['wid'],'clay');
 		$villiron = $database->getVillageField($master['wid'],'iron');
@@ -3976,6 +3978,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$buildiron = $buildarray[$level]['iron'];
 		$buildcrop = $buildarray[$level]['crop'];
 		$ww = count($database->getBuildingByType($master['wid'],40));
+		if($tribe == 1){
 		if($master['field'] < 19){
 		$bdata = count($database->getDorf1Building($master['wid']));
 		$bbdata = count($database->getDorf2Building($master['wid']));
@@ -3985,7 +3988,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		$bbdata = count($database->getDorf1Building($master['wid']));
 		$bdata1 = $database->getDorf2Building($master['wid']);
 		}
-		$owner = $database->getVillageField($master['wid'],'owner');
+		}else{
+		$bdata = $bbdata = $bdata1 = count($database->getDorf1Building($master['wid'])) + count($database->getDorf2Building($master['wid']));
+		}
 		if($database->getUserField($owner,'plus',0) > time() or $ww > 0){
 		if($bbdata < 2){
 		$inbuild = 2;
