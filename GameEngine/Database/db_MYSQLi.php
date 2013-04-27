@@ -1287,8 +1287,14 @@ class MYSQLi_DB {
 
 	function diplomacyInviteCheck($session_alliance) {
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli2 = $session_alliance AND accepted = 0";
-		$result = mysqli_query($this->connection, $q);
-		return $this->mysqli_fetch_all($result);
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
+	}
+	
+	function diplomacyInviteCheck2($ally1, $ally2) {
+		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $ally1 AND alli2 = $ally2 accepted = 0";
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
 	}
 
 	function getAllianceDipProfile($aid, $type){

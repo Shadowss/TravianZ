@@ -429,7 +429,7 @@
 			if($database->aExist($aName, "tag")) {
 				if($database->getAllianceID($aName) != $session->alliance) {
 					if($aType >= 1 and $aType <= 3) {
-						if(!$database->diplomacyInviteCheck($database->getAllianceID($aName), $session->alliance)) {
+						if(!$database->diplomacyInviteCheck2($session->alliance, $database->getAllianceID($aName))) {
 							$database->diplomacyInviteAdd($session->alliance, $database->getAllianceID($aName), $aType);
 							if($aType == 1){
 							$notice = "offer a confederation to";
