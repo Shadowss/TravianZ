@@ -173,7 +173,7 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST
 	</tr> 
 		<td class="vil"> 
 			<span>Villages:</span> 
-			<input class="text" type="text" name="dname" value="" maxlength="20" tabindex="5"> 
+			<input class="text" type="text" name="dname" value="" maxlength="30" tabindex="5"> 
 		</td> 
 	<tr> 
 		<td class="or">or</td> 
