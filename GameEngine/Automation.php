@@ -409,7 +409,7 @@ class Automation {
 				$database->deleteFriend($friend['id'],"friend".$i."wait");
 				}
 				}
-				$database->updateUserField($session->uid, 'alliance', 0, 1);
+				$database->updateUserField($need['uid'], 'alliance', 0, 1);
 				if($database->isAllianceOwner($need['uid'])){
 				$alliance = $database->getUserAllianceID($need['uid']);
 				$newowner = $database->getAllMember2($alliance);
