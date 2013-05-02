@@ -124,7 +124,7 @@ class MYSQL_DB {
 	function caststruc($user) {
 		//loop search village user
 		$query = mysql_query("SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
-		while($villaggi_array = mysql_fetch_array($query)){
+		while($villaggi_array = mysql_fetch_array($query))
 
 		//loop structure village
 		$query1 = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
