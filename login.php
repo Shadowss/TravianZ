@@ -75,14 +75,14 @@ else
 <?php
 if(strtotime(START_DATE) > strtotime(date('m/d/Y'))){
 ?>
-<br/><center><big>Server will start in: </big></center>
+<br/><center><big><?php echo SERVER_STARTS_IN; ?></big></center>
 <script language="JavaScript">
 TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
 CountActive = true;
 CountStepper = -1;
 LeadingZero = true;
 DisplayFormat = "%%H%%:%%M%%:%%S%%";
-FinishMessage = "START NOW";
+FinishMessage = "<?php echo START_NOW; ?>";
 
 function calcage(secs, num1, num2) {
   s = ((Math.floor(secs/num1))%num2).toString();
@@ -148,14 +148,14 @@ CountBack(gsecs);
 
 	if(START_TIME > date('H:i')){
 ?>
-<br/><center><big>Server will start in: </big></center>
+<br/><center><big><?php echo SERVER_STARTS_IN; ?></big></center>
 <script language="JavaScript">
 TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
 CountActive = true;
 CountStepper = -1;
 LeadingZero = true;
 DisplayFormat = "%%H%%:%%M%%:%%S%%";
-FinishMessage = "START NOW";
+FinishMessage = "<?php echo START_NOW; ?>";
 
 function calcage(secs, num1, num2) {
   s = ((Math.floor(secs/num1))%num2).toString();
