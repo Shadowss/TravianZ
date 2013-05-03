@@ -318,6 +318,8 @@ define("PW_GENERATE","Generate new password.");
 define("EMAIL_NOT_VERIFIED","Email not verified!");
 define("EMAIL_FOLLOW","Follow this link to activate your account.");
 define("VERIFY_EMAIL","Verify Email.");
+define("SERVER_STARTS_IN","Server will start in: ");
+define("START_NOW","START NOW");
 
 
 //404.php
