@@ -444,12 +444,11 @@ have a hero in an attack
 
 If not, the next attack on that village, winning with a hero and empty treasury will take the building plan.
 
-To build a WW, you must own a plan yourself (you = the WW village owner) from lvl 0 to 49, from 50 to 100 you need an additional plan in your alliance! Two plans in the WW village account won´t work!
+To build a WW, you must own a plan yourself (you = the WW village owner) from lvl 0 to 49, from 50 to 100 you need an additional plan in your alliance! Two plans in the WW village account would not work!
 
 The construction plans are conquerable immediately when they appear to the server. 
 
 There will be a countdown in game, showing the exact time of the release, 5 days prior to the launch." ,$text);
-		$text = utf8_encode($text);
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
