@@ -33,7 +33,7 @@ for($i=1;$i<=$amt;$i++) {
 		$database->addUnits($wid);
 		$database->addTech($wid);
 		$database->addABTech($wid);
-		$q = "UPDATE ".TB_PREFIX."units SET u41 = u41 + '150000', u42 = u42 + '150000', u43 = u43 + '150000', u44 = u44 + '150000', u45 = u45 + '150000', u46 = u46 + '150000', u47 = u47 + '150000', u48 = u48 + '150000' , u49 = u49 + '150000', u50 = u50 + '150000' WHERE vref = '".$wid."'";
+		$q = "UPDATE ".TB_PREFIX."units SET u41 = u41 + " . (1500 * $speed) . ", u42 = u42 + " . (1500 * $speed) . ", u43 = u43 + " . (1500 * $speed) . ", u44 = u44 + " . (1500 * $speed) . ", u45 = u45 + " . (1500 * $speed) . ", u46 = u46 + " . (1500 * $speed) . ", u47 = u47 + " . (1500 * $speed) . ", u48 = u48 + " . (1500 * $speed) . " , u49 = u49 + " . (1500 * $speed) . ", u50 = u50 + " . (1500 * $speed) . " WHERE vref = '".$wid."'";
 		mysql_query($q);
 }
 
