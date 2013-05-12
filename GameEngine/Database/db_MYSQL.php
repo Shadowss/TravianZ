@@ -130,7 +130,6 @@ class MYSQL_DB {
 		$query1 = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
 		$strutture= mysql_fetch_array($query1);
 		return $strutture;
-		}
 	}
 	
 	function removeMeSit($uid, $uid2) {
