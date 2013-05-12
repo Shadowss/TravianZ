@@ -25,9 +25,12 @@
 			$users3 = $users2+1;
 			if(count($ranking) > 0) {
 			for($i=0;$i<($users3);$i++) {
-			if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
-			$myrank = $i;
-			}
+				if( isset( $ranking[$i]['userid'] ) )
+				{
+					if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
+						$myrank = $i;
+					}
+				}
 			}
 			}
 				return $myrank;
@@ -484,7 +487,10 @@
 				$holder = array();
 				foreach($array as $value) {
 					$memberlist = $database->getAllMember($value['id']);
-					$totalap = $value['Aap'];
+					$totalap = 0;
+					foreach($memberlist as $member) {
+						$totalap += $member['ap'];
+					}
 					$value['players'] = count($memberlist);
 					$value['totalap'] = $totalap;
 					if($value['avg'] > 0) {
@@ -509,11 +515,14 @@
 				$holder = array();
 				foreach($array as $value) {
 					$memberlist = $database->getAllMember($value['id']);
-					$totaldp = $value['Adp'];
+					$totaldp = 0;
+					foreach($memberlist as $member) {
+						$totaldp += $member['dp'];
+					}
 					$value['players'] = count($memberlist);
 					$value['totaldp'] = $totaldp;
 					if($value['avg'] > 0) {
-						$value['avg'] = round($totaldp / count($memberlist));
+						$value['avg'] = round($totalap / count($memberlist));
 					} else {
 						$value['avg'] = 0;
 					}
