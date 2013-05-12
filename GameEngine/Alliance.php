@@ -108,15 +108,14 @@
 		public function sendInvite($post) {
 			global $form, $database, $session;
 			if($session->access != BANNED){
-			if($post['a_name'] != "" or $post['a_uid'] == ""){
-			$UserData = $database->getUserArray($post['a_name'], 0);
+			$UserData = $database->getUserArray(stripslashes($post['a_name']), 0);
 			if($this->userPermArray['opt4'] == 0) {
 				$form->addError("perm", NO_PERMISSION);
 			}elseif(!isset($post['a_name']) || $post['a_name'] == "") {
 				$form->addError("name1", NAME_EMPTY);
-			}elseif(!$database->checkExist($post['a_name'], 0)) {
-				$form->addError("name2", NAME_NO_EXIST.$post['a_name']);
-			}elseif($post['a_name'] == (addslashes($session->username))) {
+			}elseif(!$database->checkExist(stripslashes($post['a_name']), 0)) {
+				$form->addError("name2", NAME_NO_EXIST."".stripslashes(stripslashes($post['a_name'])));
+			}elseif($UserData['id'] == $session->uid) {
 				$form->addError("name3", SAME_NAME);
 			}elseif($database->getInvitation2($UserData['id'],$session->alliance)) {
 				$form->addError("name4", $post['a_name'].ALREADY_INVITED);
@@ -128,30 +127,7 @@
 				// Insertamos invitacion
 				$database->sendInvitation($UserData['id'], $aid, $session->uid);
 				// Log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . $UserData['username'] . '</a> into the alliance.');
-			}
-			}elseif(isset($post['a_uid'])){
-			$UserData = $database->getUserArray($post['a_uid'], 1);
-			if($this->userPermArray['opt4'] == 0) {
-				$form->addError("perm", NO_PERMISSION);
-			}elseif(!isset($post['a_uid']) || $post['a_uid'] == "") {
-				$form->addError("name1", NAME_EMPTY);
-			}elseif(!$database->checkExist($UserData['email'], 1)) {
-				$form->addError("name2", ID_NO_EXIST.$post['a_uid']);
-			}elseif($post['a_uid'] == ($session->uid)) {
-				$form->addError("name3", SAME_NAME);
-			}elseif($database->getInvitation2($UserData['id'],$session->alliance)) {
-				$form->addError("name4", $UserData['username'].ALREADY_INVITED);
-			}elseif($UserData['alliance'] == $session->alliance) {
-				$form->addError("name5", $UserData['username'].ALREADY_IN_ALLY);
-			}else{
-				// Obtenemos la informacion necesaria
-				$aid = $session->alliance;
-				// Insertamos invitacion
-				$database->sendInvitation($UserData['id'], $aid, $session->uid);
-				// Log the notice
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($UserData['username']) . '</a> into the alliance.');
-			}
 			}
 			}else{
 			header("Location: banned.php");
@@ -187,7 +163,7 @@
 				if($invite['id'] == $get['d']) {
 				$invitename = $database->getUserArray($invite['uid'], 1);
 					$database->removeInvitation($get['d']);
-					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has deleted the invitation for <a href="spieler.php?uid=' . $invitename['id'] . '">' . $invitename['username'] . '</a>.');
+					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has deleted the invitation for <a href="spieler.php?uid=' . $invitename['id'] . '">' . addslashes($invitename['username']) . '</a>.');
 				}
 			}
 			header("Location: allianz.php?delinvite");

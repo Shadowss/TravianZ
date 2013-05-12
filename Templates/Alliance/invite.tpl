@@ -23,24 +23,9 @@ include("alli_menu.tpl");
 </tr>
 </thead><tbody>
 <tr><th>Name</th>
-<td><input class="name text" type="text" name="a_name" maxlength="20"><span class="error"></span></td>
+<td><input class="name text" type="text" name="a_name" maxlength="30"><span class="error"></span></td>
 </tr>
 </tbody></table>
-<table cellpadding="1" cellspacing="1" id="invite" class="small_option"><thead>
-
-<form method="post" action="allianz.php">
-<input type="hidden" name="s" value="5">
-<input type="hidden" name="o" value="4">
-<input type="hidden" name="a" value="4">
-
-<tr>
-<th colspan="2">Invite a player into the alliance (with user id)</th>
-</tr>
-</thead><tbody>
-<tr><th>UID</th>
-<td><input class="name text" type="text" name="a_uid" maxlength="10"><span class="error"></span></td>
-</tr>
-</tbody></table>(for who have ' in the name)
 <p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" onclick="this.disabled=true;this.form.submit();"/></form> </p>
 
 <p class="error"><?php echo $form->getError("name1"); ?><br /><?php echo $form->getError("name2"); ?><br /><?php echo $form->getError("name3"); ?><br /><?php echo $form->getError("name4"); ?><br /><?php echo $form->getError("name5"); ?><br /><?php echo $form->getError("perm"); ?></p><br />
