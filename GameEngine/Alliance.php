@@ -233,6 +233,7 @@
 				$max = $bid18[$village->resarray['f' . $post['id']]]['attri'];
 				$aid = $database->createAlliance($database->RemoveXSS($post['ally1']), $database->RemoveXSS($post['ally2']), $session->uid, $max);
 				$database->updateUserField($database->RemoveXSS($session->uid), "alliance", $database->RemoveXSS($aid), 1);
+				$database->procAllyPop($aid);
 				// Asign Permissions
 				$database->createAlliPermissions($database->RemoveXSS($session->uid), $database->RemoveXSS($aid), 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
 				// log the notice

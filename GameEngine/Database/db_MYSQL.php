@@ -19,11 +19,11 @@ class MYSQL_DB {
 	}
 
 	function register($username, $password, $email, $tribe, $act) {
-        $time = time();
+		$time = time();
+        $timep = time() + PROTECTION;
 		if(strtotime(START_TIME) > time()){
-		$time = strtotime(START_TIME);
+		$timep = (strtotime(START_TIME) + PROTECTION);
 		}
-        $timep = ($time + PROTECTION);
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
 		if(mysql_query($q, $this->connection)) {
 			return mysql_insert_id($this->connection);
@@ -1160,6 +1160,27 @@ class MYSQL_DB {
 		$q = "INSERT into " . TB_PREFIX . "alidata values (0,'$name','$tag',$uid,0,0,0,'','',$max,'','','','','','','','','')";
 		mysql_query($q, $this->connection);
 		return mysql_insert_id($this->connection);
+	}
+	
+	function procAllyPop($aid) {
+		$ally = $this->getAlliance($aid);
+		$memberlist = $this->getAllMember($ally['id']);
+		$oldrank = 0;
+		foreach($memberlist as $member) {
+			$oldrank += $this->getVSumField($member['id'],"pop");
+		}
+		if($ally['oldrank'] != $oldrank){
+			if($ally['oldrank'] < $oldrank) {
+				$totalpoints = $oldrank - $ally['oldrank'];
+				$this->addclimberrankpopAlly($ally['id'], $totalpoints);
+				$this->updateoldrankAlly($ally['id'], $oldrank);
+			} else
+				if($ally['oldrank'] > $oldrank) {
+					$totalpoints = $ally['oldrank'] - $oldrank;
+					$this->removeclimberrankpopAlly($ally['id'], $totalpoints);
+					$this->updateoldrankAlly($ally['id'], $oldrank);
+				}
+		}
 	}
 
 	/*****************************************
