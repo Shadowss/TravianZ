@@ -148,7 +148,7 @@ class Automation {
 		$this->procClimbers();
 		$this->ClearUser();
 		$this->ClearInactive();
-		$this->oasisResoucesProduce();
+		$this->oasisResourcesProduce();
 		$this->pruneResource();
 		$this->pruneOResource();
 		$this->checkWWAttacks();
@@ -3900,7 +3900,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		}
 	}
 
-	private function oasisResoucesProduce() {
+	private function oasisResourcesProduce() {
 		global $database;
 		$time = time();
 		$q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood < 800 OR clay < 800 OR iron < 800 OR crop < 800";
@@ -4192,7 +4192,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			global $database, $ranking;
 					$users = "SELECT * FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8") . "";
 					$array = $database->query_return($users);
-					$ranking->procRankArray();
+					$climbers = $ranking->procRankArray();
 					if(mysql_num_rows(mysql_query($users)) > 0){
 					$q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
 					$result = mysql_query($q);
@@ -4202,26 +4202,26 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					} else {
 						$week='1';
 					}
-					foreach($array as $session){
-					$oldrank = $ranking->getUserRank($session['id']);
-					if($session['oldrank'] == 0){
-					$database->updateoldrank($session['id'], $oldrank);
+					while($row = mysql_fetch_array($climbers)){
+					$oldrank = $ranking->getUserRank($row['id']);
+					if($row['oldrank'] == 0){
+					$database->updateoldrank($row['id'], $oldrank);
 					}else{
 					if($week > 1){
-					if($session['oldrank'] > $oldrank) {
-						$totalpoints = $session['oldrank'] - $oldrank;
-						$database->addclimberrankpop($session['id'], $totalpoints);
-						$database->updateoldrank($session['id'], $oldrank);
+					if($row['oldrank'] > $oldrank) {
+						$totalpoints = $row['oldrank'] - $oldrank;
+						$database->addclimberrankpop($row['id'], $totalpoints);
+						$database->updateoldrank($row['id'], $oldrank);
 					} else
-						if($session['oldrank'] < $oldrank) {
-							$totalpoints = $oldrank - $session['oldrank'];
-							$database->removeclimberrankpop($session['id'], $totalpoints);
-							$database->updateoldrank($session['id'], $oldrank);
+						if($row['oldrank'] < $oldrank) {
+							$totalpoints = $oldrank - $row['oldrank'];
+							$database->removeclimberrankpop($row['id'], $totalpoints);
+							$database->updateoldrank($row['id'], $oldrank);
 						}
 					}else{
 						$totalpoints = mysql_num_rows(mysql_query($users)) - $oldrank;
-						$database->setclimberrankpop($session['id'], $totalpoints+1);
-						$database->updateoldrank($session['id'], $oldrank);
+						$database->setclimberrankpop($row['id'], $totalpoints+1);
+						$database->updateoldrank($row['id'], $oldrank);
 					}
 					}
 					}
