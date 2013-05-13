@@ -192,7 +192,7 @@
 				if($database->countUser() > 0){
 			$holder = array();
 			if(SHOW_NATARS == True){
-			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
+			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.oldrank oldrank, " . TB_PREFIX . "users.alliance alliance, (
 
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
 			FROM " . TB_PREFIX . "vdata
@@ -213,7 +213,7 @@
 			WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
 			AND " . TB_PREFIX . "users.tribe <= 5 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 			}else{
-			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
+			$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.oldrank oldrank, " . TB_PREFIX . "users.alliance alliance, (
 
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
 			FROM " . TB_PREFIX . "vdata
@@ -243,6 +243,7 @@
 				foreach($datas as $result) {
 					$value['userid'] = $result['userid'];
 					$value['username'] = $result['username'];
+					$value['oldrank'] = $result['oldrank'];
 					$value['alliance'] = $result['alliance'];
 					$value['aname'] = $result['allitag'];
 					$value['totalpop'] = $result['totalpop'];

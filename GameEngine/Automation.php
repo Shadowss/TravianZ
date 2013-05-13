@@ -4191,7 +4191,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		}
 			global $database, $ranking;
 					$users = "SELECT * FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8") . "";
-					$array = $database->query_return($users);
 					$climbers = $ranking->procRankArray();
 					if(mysql_num_rows(mysql_query($users)) > 0){
 					$q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
@@ -4203,25 +4202,25 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 						$week='1';
 					}
 					while($row = mysql_fetch_array($climbers)){
-					$oldrank = $ranking->getUserRank($row['id']);
+					$oldrank = $ranking->getUserRank($row['userid']);
 					if($row['oldrank'] == 0){
-					$database->updateoldrank($row['id'], $oldrank);
+					$database->updateoldrank($row['userid'], $oldrank);
 					}else{
 					if($week > 1){
 					if($row['oldrank'] > $oldrank) {
 						$totalpoints = $row['oldrank'] - $oldrank;
-						$database->addclimberrankpop($row['id'], $totalpoints);
-						$database->updateoldrank($row['id'], $oldrank);
+						$database->addclimberrankpop($row['userid'], $totalpoints);
+						$database->updateoldrank($row['userid'], $oldrank);
 					} else
 						if($row['oldrank'] < $oldrank) {
 							$totalpoints = $oldrank - $row['oldrank'];
-							$database->removeclimberrankpop($row['id'], $totalpoints);
-							$database->updateoldrank($row['id'], $oldrank);
+							$database->removeclimberrankpop($row['userid'], $totalpoints);
+							$database->updateoldrank($row['userid'], $oldrank);
 						}
 					}else{
 						$totalpoints = mysql_num_rows(mysql_query($users)) - $oldrank;
-						$database->setclimberrankpop($row['id'], $totalpoints+1);
-						$database->updateoldrank($row['id'], $oldrank);
+						$database->setclimberrankpop($row['userid'], $totalpoints+1);
+						$database->updateoldrank($row['userid'], $oldrank);
 					}
 					}
 					}

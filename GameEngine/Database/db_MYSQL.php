@@ -19,8 +19,11 @@ class MYSQL_DB {
 	}
 
 	function register($username, $password, $email, $tribe, $act) {
-		$time = time();
-		$timep = (strtotime(START_TIME) + PROTECTION);
+        $time = time();
+		if(strtotime(START_TIME) > time()){
+		$time = strtotime(START_TIME);
+		}
+        $timep = ($time + PROTECTION);
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
 		if(mysql_query($q, $this->connection)) {
 			return mysql_insert_id($this->connection);
