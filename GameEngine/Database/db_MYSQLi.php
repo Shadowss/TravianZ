@@ -28,7 +28,7 @@ class MYSQLi_DB {
 		$timep = (strtotime(START_TIME) + PROTECTION);
 		}
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
-		if(mysql_query($q, $this->connection)) {
+		if(mysql_query($this->connection, $q)) {
 			return mysql_insert_id($this->connection);
 		} else {
 			return false;
@@ -1042,19 +1042,19 @@ class MYSQLi_DB {
 		return mysqli_insert_id($this->connection);
 	}
 
-	function CreatTopic($title, $post, $cat, $owner, $alli, $ends) {
-		$date = time();
-		$q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post','$date','$date','$cat','$owner','$alli','$ends','','')";
-		mysqli_query($this->connection, $q);
-		return mysqli_insert_id($this->connection);
-	}
+    function CreatTopic($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) {
+        $date = time();
+        $q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post','$date','$date','$cat','$owner','$alli','$ends','','','$alliance','$player','$coor','$report')";
+        mysqli_query($this->connection, $q);
+        return mysqli_insert_id($this->connection);
+    }
 
-	function CreatPost($post, $tids, $owner) {
-		$date = time();
-		$q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post','$tids','$owner','$date')";
-		mysqli_query($this->connection, $q);
-		return mysqli_insert_id($this->connection);
-	}
+    function CreatPost($post, $tids, $owner, $alliance, $player, $coor, $report) {
+        $date = time();
+        $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post','$tids','$owner','$date','$alliance','$player','$coor','$report')";
+        mysqli_query($this->connection, $q);
+        return mysqli_insert_id($this->connection);
+    }
 
 	function UpdatePostDate($id) {
 		$date = time();
@@ -1062,15 +1062,15 @@ class MYSQLi_DB {
 		return mysqli_query($this->connection, $q);
 	}
 
-	function EditUpdateTopic($id, $post) {
-		$q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post' where id = $id";
-		return mysqli_query($this->connection, $q);
-	}
+    function EditUpdateTopic($id, $post, $alliance, $player, $coor, $report) {
+        $q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post', alliance0 = '$alliance', player0 = '$player', coor0 = '$coor', report0 = '$report' where id = $id";
+        return mysqli_query($this->connection, $q);
+    }
 
-	function EditUpdatePost($id, $post) {
-		$q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post' where id = $id";
-		return mysqli_query($this->connection, $q);
-	}
+    function EditUpdatePost($id, $post, $alliance, $player, $coor, $report) {
+        $q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post', alliance0 = '$alliance', player0 = '$player', coor0 = '$coor', report0 = '$report' where id = $id";
+        return mysqli_query($this->connection, $q);
+    }
 
 	function LockTopic($id, $mode) {
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set close = '$mode' where id = '$id'";
@@ -1311,13 +1311,13 @@ class MYSQLi_DB {
 
 	function diplomacyInviteCheck($session_alliance) {
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli2 = $session_alliance AND accepted = 0";
-		$result = mysql_query($q, $this->connection);
+		$result = mysql_query($this->connection, $q);
 		return $this->mysql_fetch_all($result);
 	}
 	
 	function diplomacyInviteCheck2($ally1, $ally2) {
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $ally1 AND alli2 = $ally2 accepted = 0";
-		$result = mysql_query($q, $this->connection);
+		$result = mysql_query($this->connection, $q);
 		return $this->mysql_fetch_all($result);
 	}
 

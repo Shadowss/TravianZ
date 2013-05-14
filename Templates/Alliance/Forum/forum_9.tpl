@@ -8,11 +8,19 @@ foreach($topics as $top) {
 	$ans = stripslashes($top['post']);
 	$ans = preg_replace('/\[message\]/', '', $ans);
 	$ans = preg_replace('/\[\/message\]/', '', $ans);
+	$alliance0 = $top['alliance0'];
+	$player0 = $top['player0'];
+	$coor0 = $top['coor0'];
+	$report0 = $top['report0'];
 }
 ?>
 <form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="tid" value="<?php echo $_GET['idt']; ?>">
+	<input type="hidden" name="alliance0" value="<?php echo $alliance0; ?>">
+	<input type="hidden" name="player0" value="<?php echo $player0; ?>">
+	<input type="hidden" name="coor0" value="<?php echo $coor0; ?>">
+	<input type="hidden" name="report0" value="<?php echo $report0; ?>">
 	<input type="hidden" name="editans" value="1">
 <table cellpadding="1" cellspacing="1" id="edit_post"><thead>
 	<tr>

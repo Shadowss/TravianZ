@@ -1039,19 +1039,19 @@ class MYSQL_DB {
 		return mysql_insert_id($this->connection);
 	}
 
-	function CreatTopic($title, $post, $cat, $owner, $alli, $ends) {
-		$date = time();
-		$q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post','$date','$date','$cat','$owner','$alli','$ends','','')";
-		mysql_query($q, $this->connection);
-		return mysql_insert_id($this->connection);
-	}
+    function CreatTopic($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) {
+        $date = time();
+        $q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post','$date','$date','$cat','$owner','$alli','$ends','','','$alliance','$player','$coor','$report')";
+        mysql_query($q, $this->connection);
+        return mysql_insert_id($this->connection);
+    }
 
-	function CreatPost($post, $tids, $owner) {
-		$date = time();
-		$q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post','$tids','$owner','$date')";
-		mysql_query($q, $this->connection);
-		return mysql_insert_id($this->connection);
-	}
+    function CreatPost($post, $tids, $owner, $alliance, $player, $coor, $report) {
+        $date = time();
+        $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post','$tids','$owner','$date','$alliance','$player','$coor','$report')";
+        mysql_query($q, $this->connection);
+        return mysql_insert_id($this->connection);
+    }
 
 	function UpdatePostDate($id) {
 		$date = time();
@@ -1059,15 +1059,15 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 
-	function EditUpdateTopic($id, $post) {
-		$q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post' where id = $id";
-		return mysql_query($q, $this->connection);
-	}
+    function EditUpdateTopic($id, $post, $alliance, $player, $coor, $report) {
+        $q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post', alliance0 = '$alliance', player0 = '$player', coor0 = '$coor', report0 = '$report' where id = $id";
+        return mysql_query($q, $this->connection);
+    }
 
-	function EditUpdatePost($id, $post) {
-		$q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post' where id = $id";
-		return mysql_query($q, $this->connection);
-	}
+    function EditUpdatePost($id, $post, $alliance, $player, $coor, $report) {
+       	$q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post', alliance0 = '$alliance', player0 = '$player', coor0 = '$coor', report0 = '$report' where id = $id";
+        return mysql_query($q, $this->connection);
+    }
 
 	function LockTopic($id, $mode) {
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set close = '$mode' where id = '$id'";

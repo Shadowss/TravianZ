@@ -717,6 +717,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
   `topic` varchar(255) NOT NULL,
   `owner` varchar(255) NOT NULL,
   `date` varchar(255) NOT NULL,
+  `alliance0` int(11) unsigned NOT NULL,
+  `player0` int(11) unsigned NOT NULL,
+  `coor0` int(11) unsigned NOT NULL,
+  `report0` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -743,6 +747,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
   `ends` varchar(255) NOT NULL,
   `close` varchar(255) NOT NULL,
   `stick` varchar(255) NOT NULL,
+  `alliance0` int(11) unsigned NOT NULL,
+  `player0` int(11) unsigned NOT NULL,
+  `coor0` int(11) unsigned NOT NULL,
+  `report0` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 

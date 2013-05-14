@@ -20,13 +20,21 @@ foreach($varray as $vil) {
 $countAu = $database->CountTopic($arr['owner']);
 $displayarray = $database->getUserArray($arr['owner'],1);
 if($displayarray['tribe'] == 1) {
-    $trip = "Romans";
+    $trip = "Fire";
 }else if($displayarray['tribe'] == 2) {
-	$trip = "Teutons";
+	$trip = "Water";
 }else if($displayarray['tribe'] == 3) {
-    $trip = "Gauls";
+    $trip = "Earth";
+}else if($displayarray['tribe'] == 4) {
+	$trip = "Air";
+}else if($displayarray['tribe'] == 5) {
+    $trip = "Lightning";
 }
 $input = $arr['post'];
+$alliance = $arr['alliance0'];
+$player = $arr['player0'];
+$coor = $arr['coor0'];
+$report = $arr['report0'];
 $bbcoded = $input;
 include("GameEngine/BBCode.php");
 $bbcode_topic = stripslashes(nl2br($bbcoded));
