@@ -166,8 +166,8 @@
             mysql_query("UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".$training_time2."', `wref` = '".$village->wid."' WHERE `uid` = '".$session->uid."'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$wood." WHERE `wref` = '" . $village->wid . "'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".$clay." WHERE `wref` = '" . $village->wid . "'");
-			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `iron` = `wood` - ".$iron." WHERE `wref` = '" . $village->wid . "'");
-			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `crop` = `wood` - ".$crop." WHERE `wref` = '" . $village->wid . "'");
+			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `iron` = `iron` - ".$iron." WHERE `wref` = '" . $village->wid . "'");
+			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".$crop." WHERE `wref` = '" . $village->wid . "'");
             header("Location: build.php?id=".$id."");
 			}else{
 			header("Location: banned.php"); 
