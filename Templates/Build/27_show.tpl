@@ -1,11 +1,15 @@
 <?php
 
     $artefact = $database->getArtefactDetails($_GET['show']);
-                    if($artefact['size'] == 1){
+                    if($artefact['size'] == 1 && $artefact['type'] != 11){
                        $reqlvl = 10;
                        $effect = "village";
-                   }elseif($artefact['size'] == 2 OR $artefact['size'] == 3){
+                   }else{
+					   if($artefact['type'] != 11){
                        $reqlvl = 20;
+					   }else{
+					   $reqlvl = 10;
+					   }
                        $effect = "account";
                    }  
                    if ($artefact['conquered'] >= (time()-86400)){

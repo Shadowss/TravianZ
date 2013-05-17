@@ -14,7 +14,11 @@
 <table cellpadding="1" cellspacing="1" id="build_value">
 <tr>
 	<th>Production of this village:</th>
+<?php if($database->getVillageField($village->wid, 'natar') == 0){ ?>
 	<td><b><?php echo $database->getVillageField($village->wid, 'cp'); ?></b> Culture points per day</td>
+<?php }else{ ?>
+	<td><b>0</b> Culture points per day</td>
+<?php } ?>
 </tr>
 <tr>
 	<th>Production of all villages:</th>

@@ -1444,7 +1444,11 @@ class MYSQL_DB {
 	}
 
 	function getVSumField($uid, $field) {
+		if($field != "cp"){
 		$q = "SELECT sum(" . $field . ") FROM " . TB_PREFIX . "vdata where owner = $uid";
+		}else{
+		$q = "SELECT sum(" . $field . ") FROM " . TB_PREFIX . "vdata where owner = $uid and natar = 0";
+		}
 		$result = mysql_query($q, $this->connection);
 		$row = mysql_fetch_row($result);
 		return $row[0];
