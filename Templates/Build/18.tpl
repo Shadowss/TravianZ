@@ -32,7 +32,7 @@ echo "
 	</tr></tbody>
 	</table>";
     }
-    else {
+    else if($village->resarray['f'.$id] >= 1) {
     ?>
 <table cellpadding="1" cellspacing="1" id="join">
 <form method="post" action="build.php">
