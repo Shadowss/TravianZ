@@ -39,13 +39,17 @@
         } else {
 		foreach($artefact1 as $artefact){
 		$coor2 = $database->getCoor($artefact['vref']); 
-        	if($artefact['size'] == 1) {
-        		$reqlvl = 10;
-        		$effect = "village";
-        	} elseif($artefact['size'] == 2 or 3) {
-        		$reqlvl = 20;
-        		$effect = "account";
-        	}
+                    if($artefact['size'] == 1 && $artefact['type'] != 11){
+                       $reqlvl = 10;
+                       $effect = "village";
+                   }else{
+					   if($artefact['type'] != 11){
+                       $reqlvl = 20;
+					   }else{
+					   $reqlvl = 10;
+					   }
+                       $effect = "account";
+                   }
         	echo '<tr><td class="icon"><img class="artefact_icon_' . $artefact['type'] . '" src="img/x.gif"></td>';
         	echo '<td class="nam">
                             <a href="build.php?id=' . $id . '&show='.$artefact['id'].'">' . $artefact['name'] . '</a> <span class="bon">' . $artefact['effect'] . '</span>
@@ -123,13 +127,17 @@
         		echo '<td class="nam">';
         		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span>';
         		echo '<div class="info">';
-        		if($row['size'] == 1) {
-        			$reqlvl = 10;
-        			$effect = "village";
-        		} elseif($row['size'] == 2 or $row['size'] == 3) {
-        			$reqlvl = 20;
-        			$effect = "account";
-        		}
+                    if($row['size'] == 1 && $row['type'] != 11){
+                       $reqlvl = 10;
+                       $effect = "village";
+                   }else{
+					   if($row['type'] != 11){
+                       $reqlvl = 20;
+					   }else{
+					   $reqlvl = 10;
+					   }
+                       $effect = "account";
+                   }
         		echo '<div class="info">Treasury <b>' . $reqlvl . '</b>, Effect <b>' . $effect . '</b>';
         		echo '</div></td><td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="dist">'.getDistance($coor['x'], $coor['y'], $coor2['x'], $coor2['y']).'</td>';

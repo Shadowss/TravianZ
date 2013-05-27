@@ -83,6 +83,10 @@ foreach($posts as $po) {
 	$owner = $database->getUserArray($po['owner'],1);
 	$allianceinfo = $database->getAlliance($owner['alliance']);
 	$input = $po['post'];
+	$alliance = $po['alliance0'];
+	$player = $po['player0'];
+	$coor = $po['coor0'];
+	$report = $po['report0'];
 	include("GameEngine/BBCode.php");
 	$bbcode_post = stripslashes(nl2br($bbcoded));
 
