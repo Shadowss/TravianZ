@@ -41,7 +41,7 @@ for($i=15;$i<=16;$i++) {
                  }  
         echo "</div></td>
 					<td class=\"val\">
-						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"$i\">
+						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"10\">
 					</td>
 
 					<td class=\"max\">

@@ -126,25 +126,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and ap > 0 ORDER BY ap DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=3";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=3 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			$row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=3 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t120_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t121_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t122_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -156,25 +163,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and ap > 0 ORDER BY ap DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=10";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=10 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			 $row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=10 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t130_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t131_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t132_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -186,25 +200,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and dp > 0 ORDER BY dp DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=3";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=3 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			$row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=3 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t140_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t141_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t142_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -216,25 +237,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and dp > 0 ORDER BY dp DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=10";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=10 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			 $row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=10 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t150_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t151_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t152_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -247,25 +275,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and Rc > 0 ORDER BY Rc DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=3";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=3 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			$row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=3 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t100_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t101_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t102_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -275,25 +310,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and Rc > 0 ORDER BY Rc DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=10";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=10 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			 $row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=10 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t110_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t111_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t112_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -305,25 +347,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and clp > 0 ORDER BY clp DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=3";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=3 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			 $row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=3 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t200_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t201_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t202_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -334,25 +383,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and clp > 0 ORDER BY clp DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=10";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=10 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			 $row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=10 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t210_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t211_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t212_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -364,25 +420,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and RR > 0 ORDER BY RR DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=3";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=3 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			$row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=3 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t160_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t161_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t162_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
@@ -392,25 +455,32 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	$result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 and RR > 0 ORDER BY RR DESC Limit 10");
 	while($row = mysql_fetch_array($result)){
 
-			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=10";
+			$query1="SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=10 order by week desc limit 1";
 			$result1=mysql_query($query1);
-			 $row1=mysql_fetch_row($result1);
+			$array1=mysql_fetch_array($result1);
+			$row1=0;
+			$i=$array1['week']-1;
+			while(mysql_num_rows($query2) > 0 && $i > 0){
+			$row1++;
+			$query2 = "SELECT * FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=10 AND week = $i";
+			$i--;
+			}
 
 
 		//2x in gestaan, dit is 3e dus lintje (brons)
-		if($row1[0]=='3'){
+		if($row1=='3'){
 			$img="t170_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Three', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//4x in gestaan, dit is 5e dus lintje (zilver)
-		if($row1[0]=='5'){
+		if($row1=='5'){
 			$img="t171_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Five', '".$img."')";
 			$resul=mysql_query($quer);
 		}
 		//9x in gestaan, dit is 10e dus lintje (goud)
-		if($row1[0]=='10'){
+		if($row1=='10'){
 			$img="t172_1";
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);

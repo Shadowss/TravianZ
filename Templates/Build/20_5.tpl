@@ -38,7 +38,7 @@ for($i=45;$i<=46;$i++) {
 		echo ($dur=="0:00:00")? "0:00:01":$dur;
         echo "</div></td>
 					<td class=\"val\">
-						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"$i\">
+						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"10\">
 					</td>
 
 					<td class=\"max\">

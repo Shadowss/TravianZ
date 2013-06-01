@@ -54,13 +54,21 @@
         } else if($hero_info['unit'] == 26) {
         	$name = "Haeduan";
         }
-        
+        if($hero_info['level'] <= 60){
         $wood = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['wood']);
         $clay = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['clay']);
         $iron = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['iron']);
         $crop = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['crop']);
         $training_time = $generator->getTimeFormat(round((${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus));
         $training_time2 = time() + round((${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus);
+		}else{
+        $wood = (${'h'.$hero_info['unit'].'_full'}[60]['wood']);
+        $clay = (${'h'.$hero_info['unit'].'_full'}[60]['clay']);
+        $iron = (${'h'.$hero_info['unit'].'_full'}[60]['iron']);
+        $crop = (${'h'.$hero_info['unit'].'_full'}[60]['crop']);
+        $training_time = $generator->getTimeFormat(round((${'h'.$hero_info['unit'].'_full'}[60]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus));
+        $training_time2 = time() + round((${'h'.$hero_info['unit'].'_full'}[60]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus);
+		}
 ?>
 
     <table cellpadding="1" cellspacing="1" class="build_details">
