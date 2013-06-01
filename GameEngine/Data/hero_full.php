@@ -27,59 +27,17 @@
 			'iron' => 43000, 'crop' => 21000, 'time' => 165440), array('wood' => 29000, 'clay' => 36500, 'iron' => 44000, 'crop' => 21500, 'time' => 168960), array('wood' => 30000, 'clay' => 37500, 'iron' => 45500, 'crop' => 22000, 'time' => 172480), array('wood' => 30500, 'clay' => 38500, 'iron' => 46500, 'crop' => 22500, 'time' => 176000), array('wood' => 31500, 'clay' => 39500, 'iron' => 47500, 'crop' => 23000, 'time' => 179520), array('wood' => 32000, 'clay' => 40500, 'iron' => 49000, 'crop' => 23500, 'time' => 183040), array('wood' =>
 			33000, 'clay' => 41500, 'iron' => 50000, 'crop' => 24500, 'time' => 186560), array('wood' => 33500, 'clay' => 42500, 'iron' => 51000, 'crop' => 25000, 'time' => 190080), array('wood' => 34500, 'clay' => 43500, 'iron' => 52500, 'crop' => 25500, 'time' => 193600), array('wood' => 35000, 'clay' => 44500, 'iron' => 53500, 'crop' => 26000, 'time' => 197120), array('wood' => 36000, 'clay' => 45500, 'iron' => 55000, 'crop' => 26500, 'time' => 200640), array('wood' => 37000, 'clay' => 46500, 'iron' => 56000, 'crop' => 27000, 'time' =>
 			204160), array('wood' => 37500, 'clay' => 47500, 'iron' => 57000, 'crop' => 28000, 'time' => 207680), array('wood' => 38500, 'clay' => 48500, 'iron' => 58500, 'crop' => 28500, 'time' => 211200), array('wood' => 39000, 'clay' => 49500, 'iron' => 59500, 'crop' => 29000, 'time' => 214720));
-		//STOPPED ON LEVEL 11! -> http://travian.kirilloid.ru/hero.php#unit=3
 		$h3_full = array(array('wood' => 300, 'clay' => 320, 'iron' => 420, 'crop' => 160, 'time' => 3840), array('wood' => 780, 'clay' => 830, 'iron' => 1100, 'crop' => 450, 'time' => 7680), array('wood' => 1300, 'clay' => 1400, 'iron' => 1800, 'crop' => 750, 'time' => 11520), array('wood' => 1900, 'clay' => 2000, 'iron' => 2500, 'crop' => 1100, 'time' => 15360), array('wood' => 2500, 'clay' => 2600, 'iron' => 3400, 'crop' => 1400, 'time' => 19200), array('wood' => 3100, 'clay' => 3300, 'iron' => 4200, 'crop' => 1800, 'time' => 23040),
 			array('wood' => 3800, 'clay' => 4000, 'iron' => 5100, 'crop' => 2200, 'time' => 26880), array('wood' => 4400, 'clay' => 4700, 'iron' => 6100, 'crop' => 2600, 'time' => 30720), array('wood' => 5100, 'clay' => 5500, 'iron' => 7000, 'crop' => 3000, 'time' => 34560), array('wood' => 5900, 'clay' => 6200, 'iron' => 8000, 'crop' => 3400, 'time' => 38400), array('wood' => 6600, 'clay' => 7000, 'iron' => 9000, 'crop' => 3800, 'time' => 42240), array('wood' => 7400, 'clay' => 7800, 'iron' => 10000, 'crop' => 4200, 'time' => 46080),
-			array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-, array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
-		);
+			array('wood' => 8100, 'clay' => 8600, 'iron' => 11000, 'crop' => 4700, 'time' => 49920), array('wood' => 8900, 'clay' => 9500, 'iron' => 12000, 'crop' => 5100, 'time' => 53760), array('wood' => 9700, 'clay' => 10500, 'iron' => 13500, 'crop' => 5600, 'time' => 57600), array('wood' => 10500, 'clay' => 11000, 'iron' => 14500, 'crop' => 6100, 'time' => 61440), array('wood' => 11500, 'clay' => 12000, 'iron' => 15500, 'crop' => 6600, 'time' => 65280), array('wood' => 12000, 'clay' => 13000, 'iron' => 16500, 'crop' => 7000, 'time' =>
+			69120), array('wood' => 13000, 'clay' => 14000, 'iron' => 18000, 'crop' => 7500, 'time' => 72960), array('wood' => 14000, 'clay' => 15000, 'iron' => 19000, 'crop' => 8000, 'time' => 76800), array('wood' => 15000, 'clay' => 15500, 'iron' => 20000, 'crop' => 8500, 'time' => 80640), array('wood' => 15500, 'clay' => 16500, 'iron' => 21500, 'crop' => 9100, 'time' => 84480), array('wood' => 16500, 'clay' => 17500, 'iron' => 22500, 'crop' => 9600, 'time' => 88320), array('wood' => 17500, 'clay' => 18500, 'iron' => 24000, 'crop' => 10000,
+			'time' => 92160), array('wood' => 18500, 'clay' => 19500, 'iron' => 25000, 'crop' => 10500, 'time' => 96000), array('wood' => 19500, 'clay' => 20500, 'iron' => 26500, 'crop' => 11000, 'time' => 99840), array('wood' => 20500, 'clay' => 21500, 'iron' => 27500, 'crop' => 11500, 'time' => 103680), array('wood' => 21500, 'clay' => 22500, 'iron' => 29000, 'crop' => 12000, 'time' => 107520), array('wood' => 22000, 'clay' => 23500, 'iron' => 30500, 'crop' => 13000, 'time' => 111360), array('wood' => 23000, 'clay' => 24500, 'iron' => 31500,
+			'crop' => 13500, 'time' => 115200), array('wood' => 24000, 'clay' => 25500, 'iron' => 33000, 'crop' => 14000, 'time' => 119040), array('wood' => 25000, 'clay' => 26500, 'iron' => 34000, 'crop' => 14500, 'time' => 122880), array('wood' => 26000, 'clay' => 27500, 'iron' => 35500, 'crop' => 15000, 'time' => 126720), array('wood' => 27000, 'clay' => 28500, 'iron' => 37000, 'crop' => 15500, 'time' => 130560), array('wood' => 28000, 'clay' => 30000, 'iron' => 38500, 'crop' => 16000, 'time' => 134400), array('wood' => 29000, 'clay' => 31000,
+			'iron' => 39500, 'crop' => 17000, 'time' => 138240), array('wood' => 30000, 'clay' => 32000, 'iron' => 41000, 'crop' => 17500, 'time' => 142080), array('wood' => 31000, 'clay' => 33000, 'iron' => 42500, 'crop' => 18000, 'time' => 145920), array('wood' => 32000, 'clay' => 34000, 'iron' => 44000, 'crop' => 18500, 'time' => 149760), array('wood' => 33000, 'clay' => 35000, 'iron' => 45500, 'crop' => 19000, 'time' => 153600), array('wood' => 34000, 'clay' => 36500, 'iron' => 46500, 'crop' => 19500, 'time' => 157440), array('wood' => 35500,
+			'clay' => 37500, 'iron' => 48000, 'crop' => 20500, 'time' => 161280), array('wood' => 36500, 'clay' => 38500, 'iron' => 49500, 'crop' => 21000, 'time' => 165120), array('wood' => 37500, 'clay' => 39500, 'iron' => 51000, 'crop' => 21500, 'time' => 168960), array('wood' => 38500, 'clay' => 41000, 'iron' => 52500, 'crop' => 22000, 'time' => 172800), array('wood' => 39500, 'clay' => 42000, 'iron' => 54000, 'crop' => 23000, 'time' => 176640), array('wood' => 40500, 'clay' => 43000, 'iron' => 55000, 'crop' => 23500, 'time' => 180480),
+			array('wood' => 41500, 'clay' => 44000, 'iron' => 57000, 'crop' => 24000, 'time' => 184320), array('wood' => 43000, 'clay' => 45500, 'iron' => 58500, 'crop' => 24500, 'time' => 188160), array('wood' => 44000, 'clay' => 46500, 'iron' => 60000, 'crop' => 25500, 'time' => 192000), array('wood' => 45000, 'clay' => 47500, 'iron' => 61500, 'crop' => 26000, 'time' => 195840), array('wood' => 46000, 'clay' => 49000, 'iron' => 63000, 'crop' => 26500, 'time' => 199680), array('wood' => 47000, 'clay' => 50000, 'iron' => 64500, 'crop' => 27000,
+			'time' => 203520), array('wood' => 48500, 'clay' => 51000, 'iron' => 66000, 'crop' => 28000, 'time' => 207360), array('wood' => 49500, 'clay' => 52500, 'iron' => 67500, 'crop' => 28500, 'time' => 211200), array('wood' => 50500, 'clay' => 53500, 'iron' => 69000, 'crop' => 29000, 'time' => 215040), array('wood' => 51500, 'clay' => 55000, 'iron' => 70500, 'crop' => 30000, 'time' => 218880), array('wood' => 53000, 'clay' => 56000, 'iron' => 72000, 'crop' => 30500, 'time' => 222720), array('wood' => 54000, 'clay' => 57000, 'iron' => 73500,
+			'crop' => 31000, 'time' => 226560), array('wood' => 55000, 'clay' => 58500, 'iron' => 75000, 'crop' => 31500, 'time' => 230400), array('wood' => 56500, 'clay' => 59500, 'iron' => 76500, 'crop' => 32500, 'time' => 234240));
 		//STOPPED ON LEVEL 0! -> http://travian.kirilloid.ru/hero.php#unit=4
 		$h5_full = array(array('wood' => 1100, 'clay' => 880, 'iron' => 640, 'crop' => 200, 'time' => 5280)
 , array('wood' => 46000, 'clay' => 39000, 'iron' => 56500, 'crop' => 15500, 'time' => 195200)
