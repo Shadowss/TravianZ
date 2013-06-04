@@ -197,7 +197,7 @@ class Units {
                     header("Location: a2b.php");
                 }else{
 
-                $villageName = "Unoccupied Oasis";
+                $villageName = $database->getOasisField($oid,"name");
                 $speed= 300;
                 $timetaken = $generator->procDistanceTime($coor,$village->coor,INCREASE_SPEED,1);
                 array_push($post, "$id", "$villageName", "2","$timetaken");
