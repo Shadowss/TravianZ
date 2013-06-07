@@ -973,7 +973,7 @@ class Automation {
 					if($res!=0){
 					$reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0);
 					$database->modifyResource($from,$resource[0],$resource[1],$resource[2],$resource[3],0);
-					$database->addMovement(0,$from,$to,$reference,micrtime(true),microtime(true)+$timetaken,$send);
+					$database->addMovement(0,$from,$to,$reference,microtime(true),microtime(true)+$timetaken,$send);
 					}
 				}
 		}
