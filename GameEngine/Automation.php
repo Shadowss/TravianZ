@@ -973,7 +973,7 @@ class Automation {
 					if($res!=0){
 					$reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0);
 					$database->modifyResource($from,$resource[0],$resource[1],$resource[2],$resource[3],0);
-					$database->addMovement(0,$from,$to,$reference,micrtime(true),microtime(true)+$timetaken,$send);
+					$database->addMovement(0,$from,$to,$reference,micrtime(true),micrtime(true)+$timetaken,$send);
 					}
 				}
 		}
@@ -2824,6 +2824,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			,$unitssend_att
 			,$unitssend_def
 			,$battlepart
+			,$unitlist
 			,$unitsdead_def
 			,$dead
 			,$steal

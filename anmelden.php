@@ -55,7 +55,7 @@ if(REG_OPEN == true){ ?>
 	<tbody>
 		<tr class="top">
 			<th><?php echo NICKNAME; ?></td>
-			<td><input class="text" type="text" name="name" value="<?php echo $form->getValue('name'); ?>" maxlength="20" />
+			<td><input class="text" type="text" name="name" value="<?php echo $form->getValue('name'); ?>" maxlength="30" />
 			<span class="error"><?php echo $form->getError('name'); ?></span>
 			</td>
 		</tr>
@@ -66,12 +66,17 @@ if(REG_OPEN == true){ ?>
 				<span class="error"><?php echo $form->getError('email'); ?></span>
 				</td>
 			</tr>
-		<tr class="btm">
+		<tr>
 			<th><?php echo PASSWORD; ?></th>
 			<td>
-				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="20" />
+				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="30" />
 				<span style="color: #DD0000"><b>Warning:</b> password with & can cause problems!</span>
 				<span class="error"><?php echo $form->getError('pw'); ?></span>
+			</td>
+		</tr>
+		<tr class="btm">
+			<th>Money:</td>
+			<td><input class="text" type="text" name="money" value="" maxlength="10" />
 			</td>
 		</tr>
 	</tbody>

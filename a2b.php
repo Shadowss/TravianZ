@@ -206,7 +206,7 @@ if(isset($_GET['o'])) {
 			}
 			$p_time = round($automation->procDistanceTime($p_to,$p_from,min($p_speeds),1)/$p_fastertroops);
 			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
-			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,(microtime(true)),($p_time+microtime(true)));
+			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,time(),($p_time+time()));
 			$troops = $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
 			$database->modifyUnit($prisoner['wref'],array("99o"),array($troops),array(0));
 			$database->deletePrisoners($prisoner['id']);

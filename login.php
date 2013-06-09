@@ -73,16 +73,16 @@ else
 <h5><img class="img_u04" src="img/x.gif" alt="login" /></h5>
 <p><?php echo COOKIES; ?></p>
 <?php
-if(strtotime(START_DATE) > strtotime(date('m/d/Y'))){
+if(START_DATE > date('m/d/Y')){
 ?>
-<br/><center><big><?php echo SERVER_STARTS_IN; ?></big></center>
+<br/><center><big>Server will start in: </big></center>
 <script language="JavaScript">
 TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
 CountActive = true;
 CountStepper = -1;
 LeadingZero = true;
 DisplayFormat = "%%H%%:%%M%%:%%S%%";
-FinishMessage = "<?php echo START_NOW; ?>";
+FinishMessage = "START NOW";
 
 function calcage(secs, num1, num2) {
   s = ((Math.floor(secs/num1))%num2).toString();
@@ -144,18 +144,18 @@ CountBack(gsecs);
 
 </script>
 <?php
-}elseif(strtotime(START_DATE) == strtotime(date('m/d/Y'))){
+}elseif(START_DATE == date('m/d/Y')){
 
 	if(START_TIME > date('H:i')){
 ?>
-<br/><center><big><?php echo SERVER_STARTS_IN; ?></big></center>
+<br/><center><big>Server will start in: </big></center>
 <script language="JavaScript">
 TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
 CountActive = true;
 CountStepper = -1;
 LeadingZero = true;
 DisplayFormat = "%%H%%:%%M%%:%%S%%";
-FinishMessage = "<?php echo START_NOW; ?>";
+FinishMessage = "START NOW";
 
 function calcage(secs, num1, num2) {
   s = ((Math.floor(secs/num1))%num2).toString();
