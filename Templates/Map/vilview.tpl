@@ -469,7 +469,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
         $enough_cp = false;
       }
       
-			$otext = ($basearray['occupied'] == 1)? "occupied" : "unoccupied"; 
+			$otext = ($oasis['name']); 
 			if($village->unitarray['u'.$session->tribe.'0'] >= 3 AND $enough_cp) {
         $test = "<a href=\"a2b.php?id=".$_GET['d']."&amp;s=1\">&raquo;  Found new village.</a>";
       } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 AND !$enough_cp) {
@@ -487,7 +487,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 		"&raquo; Raid $otext oasis. (build a rally point)" : 
 		
 		
-		"<a href=\"a2b.php?z=".$_GET['d']."&o\">&raquo; Raid $otext oasis.</a>" :
+		"<a href=\"a2b.php?z=".$_GET['d']."&o\">&raquo; Raid $otext.</a>" :
 		"$test"
 			?>
 		</tr>

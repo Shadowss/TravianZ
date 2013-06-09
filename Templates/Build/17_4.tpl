@@ -57,6 +57,7 @@ echo "Trade route to <a href=karte.php?d=".$route['wid']."&c=".$generator->getMa
 <th>
 </th>
 	<th colspan="4">
+   <?php $routeid=$routeid == 0? $routeid=0:$routeid; ?>	
    <a href="build.php?action=extendRoute&routeid=<?php echo $routeid; ?>">extend</a>*
  | <a href="build.php?id=<?php echo $id; ?>&t=4&action=editRoute&routeid=<?php echo $routeid; ?>">edit</a>
  | <a href="build.php?action=delRoute&routeid=<?php echo $routeid; ?>">delete</a>
