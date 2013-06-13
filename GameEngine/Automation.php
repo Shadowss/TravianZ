@@ -974,7 +974,6 @@ class Automation {
 					$reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0);
 					$database->modifyResource($from,$resource[0],$resource[1],$resource[2],$resource[3],0);
 					$database->addMovement(0,$from,$to,$reference,microtime(true),microtime(true)+$timetaken,$send);
-					$database->addMovement(0,$from,$to,$reference,microtime(true),microtime(true)+$timetaken,$send);
 					}
 				}
 		}
@@ -992,6 +991,7 @@ class Automation {
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type != '2' and endtime < $time ORDER BY endtime ASC";
 		$dataarray = $database->query_return($q);
 		$totalattackdead = 0;
+		$data_num = 0;
 		foreach($dataarray as $data) {
 			//set base things
 			//$battle->resolveConflict($data);
@@ -1029,7 +1029,7 @@ class Automation {
 						$cannotsend = 1;
 						}
 						}
-						if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0 && $dataarray[0]['attack_type'] > 2){
+						if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0 && $dataarray[$data_num]['attack_type'] > 2){
 						$totaltroops = 0;
 						for($i=1;$i<=10;$i++){
 						$playerunit += $i;
@@ -1095,7 +1095,7 @@ class Automation {
 											$spys = array(4,14,23,44);
 										for($i=$start;$i<=$end;$i++) {
 											$y = $i-$u;
-											$Attacker['u'.$i] = $dataarray[0]['t'.$y];
+											$Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
 												//there are catas
 												if(in_array($i,$catapult)) {
 												$catp += $Attacker['u'.$i];
@@ -1114,7 +1114,7 @@ class Automation {
 												$spy_pic = $i;
 												}
 												}
-												 $Attacker['uhero'] = $dataarray[0]['t11'];
+												 $Attacker['uhero'] = $dataarray[$data_num]['t11'];
 												$hero_pic = "hero";
 									//need to set these variables.
 									$def_wall = $database->getFieldLevel($data['to'],40);
@@ -1131,17 +1131,17 @@ class Automation {
 									}
 
 									//type of attack
-									if($dataarray[0]['attack_type'] == 1){
+									if($dataarray[$data_num]['attack_type'] == 1){
 										$type = 1;
 										$scout = 1;
 									}
-									if($dataarray[0]['attack_type'] == 2){
+									if($dataarray[$data_num]['attack_type'] == 2){
 										$type = 2;
 									}
-									if($dataarray[0]['attack_type'] == 3){
+									if($dataarray[$data_num]['attack_type'] == 3){
 										$type = 3;
 									}
-									if($dataarray[0]['attack_type'] == 4){
+									if($dataarray[$data_num]['attack_type'] == 4){
 										$type = 4;
 									}
 
@@ -1251,7 +1251,7 @@ class Automation {
 											$spys = array(4,14,23,44);
 										for($i=$start;$i<=$end;$i++) {
 											$y = $i-$u;
-											$Attacker['u'.$i] = $dataarray[0]['t'.$y];
+											$Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
 												//there are catas
 												if(in_array($i,$catapult)) {
 												$catp += $Attacker['u'.$i];
@@ -1270,7 +1270,7 @@ class Automation {
 												$spy_pic = $i;
 												}
 												}
-											   $Attacker['uhero'] = $dataarray[0]['t11'];
+											   $Attacker['uhero'] = $dataarray[$data_num]['t11'];
 												$hero_pic = "hero";
 									//need to set these variables.
 									$def_wall = 1;
@@ -1282,17 +1282,17 @@ class Automation {
 
 
 									//type of attack
-									if($dataarray[0]['attack_type'] == 1){
+									if($dataarray[$data_num]['attack_type'] == 1){
 										$type = 1;
 										$scout = 1;
 									}
-									if($dataarray[0]['attack_type'] == 2){
+									if($dataarray[$data_num]['attack_type'] == 2){
 										$type = 2;
 									}
-									if($dataarray[0]['attack_type'] == 3){
+									if($dataarray[$data_num]['attack_type'] == 3){
 										$type = 3;
 									}
-									if($dataarray[0]['attack_type'] == 4){
+									if($dataarray[$data_num]['attack_type'] == 4){
 										$type = 4;
 									}
 
@@ -2817,7 +2817,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				##############ISUE: Lag, fixed3####################################################
 				#### PHP.NET manual: unset() destroy more than one variable unset($foo1, $foo2, $foo3);######
 				################################################################################
-
+			$data_num++;
 			unset(
 			$Attacker
 			,$Defender
