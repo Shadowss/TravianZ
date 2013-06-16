@@ -1,0 +1,1033 @@
+﻿@charset utf-8;
+/* allgemeines */
+body
+{
+	background-color:#FFF;
+	direction:ltr;
+	font-size:13px;
+	line-height:19px;
+	margin:0;
+	text-align:left
+}
+
+html
+{
+	overflow-y:scroll
+}
+
+html,body
+{
+	height:100%;
+	margin:0;
+	padding:0
+}
+
+body,button,input,select,textarea
+{
+	font-family:Arial, Verdana, Helvetica, sans-serif
+}
+
+a
+{
+	font-size:13px;
+	text-decoration:none
+}
+
+a:hover
+{
+	color:#00BC00;
+	text-decoration:underline
+}
+
+#content a:hover
+{
+	text-decoration:none
+}
+
+img
+{
+	border:0
+}
+
+.clear
+{
+	clear:both;
+	display:block;
+	font-size:0;
+	height:0;
+	line-height:0;
+	visibility:hidden
+}
+
+ul.menu,div.menu ul
+{
+	list-style-type:none;
+	margin:0;
+	padding:0
+}
+
+.wrapper
+{
+	height:auto!important;
+	min-height:100%;
+	min-width:845px;
+	position:relative;
+	text-align:center
+}
+
+img.dynamic_btn,img.dynamic_img
+{
+	background-position:top;
+	background-repeat:no-repeat
+}
+
+img.over
+{
+	background-position:bottom
+}
+
+img.clicked
+{
+	background-position:center
+}
+
+.f16
+{
+	font-size:16pt
+}
+
+.f10
+{
+	font-size:10pt
+}
+
+.f9
+{
+	font-size:9pt;
+	font-weight:400;
+	line-height:140%
+}
+
+.f8
+{
+	font-size:8pt
+}
+
+.f7
+{
+	font-size:7pt
+}
+
+.f6
+{
+	font-size:6pt
+}
+
+.c
+{
+	color:silver
+}
+
+.c0
+{
+	color:#000
+}
+
+.c3
+{
+	color:#228B22
+}
+
+.c4
+{
+	color:#F2C700
+}
+
+.c5
+{
+	color:red
+}
+
+body.contentpage h1
+{
+	font-size:26px;
+	margin-bottom:40px;
+	padding-top:70px;
+	text-align:center
+}
+
+body.contentpage #content .characteristics,body.contentpage #content p,body.contentpage #content table,body.contentpage form
+{
+	margin:15px 160px
+}
+
+body.contentpage .rules
+{
+	margin-left:120px;
+	margin-right:160px
+}
+
+body.contentpage ul
+{
+	margin-bottom:15px;
+	margin-top:15px
+}
+
+body.contentpage .rules strong
+{
+	color:#2A720B
+}
+
+body.contentpage .rules ul strong
+{
+	color:#3BAE18
+}
+
+body.contentpage table.table_data
+{
+	background-color:silver;
+	text-align:center;
+	width:550px
+}
+
+body.contentpage table.culture_points
+{
+	margin:15px 110px;
+	width:650px
+}
+
+#tutorial_nav,body.contentpage table.tutorial_table
+{
+	background-color:#fff;
+	table-layout:fixed;
+	width:550px
+}
+
+body.contentpage #content td.beschreibung
+{
+	padding-top:50px;
+	text-align:left
+}
+
+body.contentpage table.tutorial_table td.visual
+{
+	font-size:11px;
+	font-style:italic;
+	text-align:center
+}
+
+body.contentpage table.tutorial_table td.visual img
+{
+	display:block;
+	margin:auto
+}
+
+body.contentpage table.table_data th
+{
+	background-color:#F5F5F5
+}
+
+body.contentpage table.table_data td
+{
+	background-color:#fff
+}
+
+body.contentpage table.middle
+{
+	table-layout:fixed;
+	width:520px
+}
+
+body.contentpage table.middle input
+{
+	width:80px
+}
+
+td.text,th.text
+{
+	padding-left:7px;
+	text-align:left
+}
+
+body.contentpage #content h2
+{
+	color:#71d000;
+	font-size:16px;
+	line-height:20px;
+	margin:50px 160px 10px
+}
+
+body.contentpage #content h3
+{
+	font-size:14px;
+	line-height:18px;
+	margin:15px 160px 5px
+}
+
+body.contentpage #content table h3
+{
+	margin:3px
+}
+
+body.contentpage #content ul
+{
+	margin-top:5px
+}
+
+#content .question
+{
+	color:#333;
+	font-style:italic;
+	padding-top:30px
+}
+
+body.indexpage
+{
+	background:#fff url(images/main_background_front.jpg) repeat-x top
+}
+
+body.contentpage
+{
+	background:#fff url(images/main_background_content.jpg) repeat-x top
+}
+
+#header
+{
+	left:0;
+	margin:0 auto;
+	position:absolute;
+	right:0;
+	top:0;
+	width:100%;
+	z-index:10
+}
+
+body.indexpage #header
+{
+	background:transparent url(images/artwork.jpg) no-repeat top center;
+	height:389px;
+	overflow:auto
+}
+
+body.contentpage #header
+{
+	background:transparent none;
+	height:200px
+}
+
+#country_select
+{
+	background:#fff url(images/country_background.jpg) repeat-x top;
+	height:30px;
+	left:0;
+	position:absolute;
+	top:0;
+	width:100%;
+	z-index:500
+}
+
+#navigation
+{
+	height:114px;
+	left:50%;
+	margin-left:-437px;
+	position:absolute;
+	top:52px;
+	width:830px;
+	z-index:80
+}
+
+.contentpage #navigation
+{
+	background:url(images/logo_background.jpg) no-repeat top left
+}
+
+#navigation table.menu
+{
+	position:absolute;
+	right:25px;
+	top:30px;
+	width:500px
+}
+
+#navigation .menu td
+{
+	text-align:center
+}
+
+#navigation .menu a
+{
+	color:#333;
+	font-size:14px;
+	line-height:20px;
+	padding:6px 10px 7px 0;
+	text-decoration:none;
+	text-shadow:1px 1px 1px #fff
+}
+
+#navigation .menu a.mark
+{
+	color:#a20327
+}
+
+#navigation a.home
+{
+	height:85px;
+	left:55px;
+	position:absolute;
+	top:0;
+	width:250px
+}
+
+#navigation .menu a span
+{
+	padding:6px 0 7px 10px
+}
+
+#navigation .menu a:hover
+{
+	background:transparent url(images/nav_right.gif) no-repeat scroll bottom right
+}
+
+#navigation .menu a:hover span
+{
+	background:transparent url(images/nav_left.gif) no-repeat scroll bottom left
+}
+
+#navigation .menu a:active
+{
+	background:transparent url(images/nav_right.gif) no-repeat scroll top right
+}
+
+#navigation .menu a:active span
+{
+	background:transparent url(images/nav_left.gif) no-repeat scroll top left
+}
+
+#register_now
+{
+	color:#574b2e;
+	font-weight:700;
+	height:50px;
+	left:50%;
+	margin-left:-151px;
+	position:absolute;
+	top:277px;
+	width:145px;
+	z-index:250
+}
+
+#register_now a
+{
+	color:#574b2e;
+	display:block;
+	font-size:21px;
+	margin-top:7px
+}
+
+#register_now span
+{
+	font-size:9px
+}
+
+#t4play
+{
+	left:50%;
+	margin-left:30px;
+	position:absolute;
+	top:109px;
+	z-index:250
+}
+
+#t4play img
+{
+	height:290px;
+	width:460px
+}
+
+#content
+{
+	position:relative;
+	z-index:50
+}
+
+body.indexpage #content
+{
+	padding-bottom:120px;
+	padding-top:367px
+}
+
+body.contentpage #content
+{
+	padding-bottom:160px;
+	padding-top:177px
+}
+
+#content .grit
+{
+	margin:0 auto;
+	position:relative
+}
+
+body.indexpage #content .grit
+{
+	background:transparent none;
+	width:830px
+}
+
+body.contentpage #content .grit
+{
+	background:transparent url(images/content_background.jpg) no-repeat top left;
+	min-height:400px;
+	width:840px
+}
+
+.grit .infobox
+{
+	background:transparent url(images/info_background.jpg) no-repeat top left;
+	float:left;
+	margin-left:15px;
+	margin-right:9px;
+	min-height:391px;
+	width:378px
+}
+
+.grit .infobox div
+{
+	padding-left:43px;
+	padding-right:30px
+}
+
+#what_is_travian
+{
+	padding-top:5px
+}
+
+#what_is_travian h2
+{
+	color:#71d000;
+	font-size:18px;
+	font-weight:400;
+	line-height:20px;
+	margin-bottom:10px;
+	text-shadow:0 2px 1px #fff
+}
+
+#what_is_travian .play_now
+{
+	margin:10px 0
+}
+
+#player_counter
+{
+	background:transparent url(images/count_background.jpg) no-repeat top left;
+	height:98px;
+	left:23px;
+	padding:0;
+	position:relative;
+	width:330px
+}
+
+#player_counter table
+{
+	border-spacing:0;
+	left:135px;
+	position:absolute;
+	top:20px;
+	width:165px
+}
+
+#about_the_game h2
+{
+	font-size:15px;
+	line-height:20px;
+	margin-bottom:5px
+}
+
+#about_the_game ul
+{
+	margin:5px 0 0 15px;
+	padding:0
+}
+
+#about_the_game li
+{
+	line-height:19px
+}
+
+#news_from_forum h2
+{
+	cursor:pointer;
+	font-size:15px;
+	line-height:20px;
+	margin-bottom:5px
+}
+
+#news_from_forum ul
+{
+	border-top:1px solid #999;
+	list-style:none;
+	margin:5px 10px 0 0;
+	padding:0
+}
+
+#news_from_forum li
+{
+	border-bottom:1px solid #999;
+	line-height:19px;
+	padding:3px 5px
+}
+
+.grit .secondarybox
+{
+	background:transparent url(images/news_background.jpg) repeat-y top left;
+	float:left;
+	margin-top:22px;
+	width:397px
+}
+
+.grit #screenshots
+{
+	background:transparent url(images/screenshots_background.jpg) no-repeat top left;
+	height:134px;
+	position:relative;
+	width:397px
+}
+
+#screenshots h2
+{
+	color:#fff;
+	font-size:13px;
+	margin:0;
+	padding:23px 20px 0
+}
+
+#screenshots_preview
+{
+	height:73px;
+	margin:7px 53px;
+	overflow:hidden;
+	padding:0;
+	position:absolute;
+	width:294px
+}
+
+#screenshot_list
+{
+	height:73px;
+	list-style:none;
+	margin:0;
+	padding:0
+}
+
+#screenshots .navi img
+{
+	height:26px;
+	position:absolute;
+	top:70px;
+	width:26px
+}
+
+#screenshots .next img
+{
+	background-image:url(images/buttons_screenshots_next.gif);
+	right:7px
+}
+
+#screenshots .prev img
+{
+	background-image:url(images/buttons_screenshots_prev.gif);
+	left:10px
+}
+
+#screenshot_list img
+{
+	height:73px;
+	width:98px
+}
+
+#newsbox
+{
+	background:transparent url(images/news_footer.jpg) no-repeat bottom left;
+	padding-bottom:25px
+}
+
+#newsbox h2
+{
+	background:transparent url(images/news_header.jpg) no-repeat top left;
+	color:#4c4c4c;
+	display:block;
+	font-size:17px;
+	height:30px;
+	margin:0;
+	padding:7px 15px 0
+}
+
+#newsbox .news
+{
+	background:transparent url(images/news_spacer.jpg) no-repeat bottom left;
+	padding-bottom:0;
+	padding-left:15px;
+	width:397px
+}
+
+#newsbox .news h4
+{
+	margin:3px 0 0
+}
+
+#newsbox .news p.date
+{
+	color:#999;
+	font-size:11px;
+	padding-bottom:0
+}
+
+#newsbox .news p
+{
+	margin:0;
+	padding-bottom:10px;
+	padding-right:30px
+}
+
+#footer
+{
+	background:#F1F1F1 url(images/footer_background.jpg) repeat-x top;
+	bottom:0;
+	height:90px;
+	left:0;
+	margin:0 auto;
+	position:absolute;
+	right:0;
+	z-index:80
+}
+
+#footer .logo_traviangames
+{
+	background-image:url(images/logo_traviangames.jpg);
+	height:34px;
+	width:182px
+}
+
+#footer .logo
+{
+	left:6px;
+	position:absolute;
+	top:20px
+}
+
+#footer li,#footer a
+{
+	color:#787878;
+	font-size:11px;
+	line-height:20px
+}
+
+#footer .menu
+{
+	position:absolute;
+	right:9px;
+	top:18px
+}
+
+#footer .container
+{
+	margin:0 auto;
+	position:relative;
+	width:840px
+}
+
+#footer .copyright
+{
+	clear:left;
+	direction:ltr;
+	position:absolute;
+	right:3px;
+	top:20px
+}
+
+#footer ul.menu a
+{
+	padding:0 3px
+}
+
+.overlay
+{
+	bottom:0;
+	left:0;
+	position:absolute;
+	right:0;
+	top:0;
+	z-index:400
+}
+
+.overlay .mask
+{
+	background-color:#000;
+	filter:alpha(opacity=25);
+	height:100%;
+	opacity:0.25;
+	position:fixed;
+	width:100%
+}
+
+.overlay_content
+{
+	position:absolute;
+	right:50%;
+	top:150px;
+	z-index:600
+}
+
+.overlay_content .closer img
+{
+	background-image:url(images/popup_close.gif);
+	height:25px;
+	position:absolute;
+	right:15px;
+	top:15px;
+	width:25px
+}
+
+.overlay_content .footer
+{
+	clear:both;
+	height:10px
+}
+
+.overlay_content h2,.overlay_content h4
+{
+	font-size:16px;
+	line-height:20px;
+	margin:0;
+	padding:20px 20px 0
+}
+
+#screenshot_layer .overlay_content
+{
+	background:#fff url(images/screenshot_background.gif) repeat-y top left;
+	margin-right:-322px;
+	text-align:center;
+	width:644px
+}
+
+#screenshot_layer h4
+{
+	background:transparent url(images/screenshot_header.jpg) no-repeat top left;
+	padding-bottom:15px;
+	text-align:center
+}
+
+#screenshot_layer #screen_desc
+{
+	font-size:12px;
+	margin:20px 0;
+	padding:0 40px
+}
+
+.screenshot_view img
+{
+	border:1px solid #ccc
+}
+
+#screenshot_layer .footer
+{
+	background:transparent url(images/screenshot_footer.gif) no-repeat bottom left
+}
+
+#screenshot_layer .navi img
+{
+	height:25px;
+	position:absolute;
+	top:250px;
+	width:25px
+}
+
+#screenshot_layer .next img
+{
+	background-image:url(images/popup_next.gif);
+	right:20px
+}
+
+#screenshot_layer .prev img
+{
+	background-image:url(images/popup_prev.gif);
+	left:20px
+}
+
+#iframe_layer .overlay_content
+{
+	background:#fff url(images/anleitung_background.gif) repeat-y top left;
+	margin-right:-225px;
+	width:450px
+}
+
+#iframe_layer h2
+{
+	background:transparent url(images/anleitung_header.gif) no-repeat top left;
+	padding-bottom:15px
+}
+
+#iframe_layer .footer
+{
+	background:transparent url(images/anleitung_footer.gif) no-repeat bottom left
+}
+
+#login_layer .overlay_content,#signup_layer .overlay_content
+{
+	background:#fff url(images/gameworld_background.jpg) repeat-y top left;
+	margin-right:-192px;
+	width:384px
+}
+
+#login_layer h2,#signup_layer h2
+{
+	background:transparent url(images/gameworld_header.jpg) no-repeat top left;
+	color:#71d000
+}
+
+#login_layer .footer,#signup_layer .footer
+{
+	background:transparent url(images/gameworld_footer.jpg) no-repeat bottom left
+}
+
+ul.world_list
+{
+	list-style:none;
+	margin:0;
+	padding:7px
+}
+
+.world_list li
+{
+	background-repeat:no-repeat;
+	float:left;
+	margin:4px 5px;
+	position:relative
+}
+
+.world_list li div
+{
+	position:absolute
+}
+
+.world_list li img
+{
+	position:absolute;
+	z-index:30
+}
+
+.world_list .w_small .players
+{
+	left:123px;
+	top:5px
+}
+
+.world_list .w_small .online
+{
+	left:123px;
+	top:22px
+}
+
+.world_list .w_big .players
+{
+	right:20px;
+	top:15px
+}
+
+.world_list .w_big .online
+{
+	right:20px;
+	top:33px
+}
+
+.world_list .label_players
+{
+	left:235px;
+	top:15px
+}
+
+.world_list .label_online
+{
+	left:235px;
+	top:33px
+}
+
+.world_list .worldstart
+{
+	right:20px;
+	top:10px
+}
+
+.world_list .timer
+{
+	bottom:15px;
+	right:20px
+}
+
+a,a:visited,.c1
+{
+	color:#71D000
+}
+
+a:active,.e,.c2
+{
+	color:#FF8000
+}
+
+#content a,.b,#player_counter table td
+{
+	font-weight:700
+}
+
+.menu li,#screenshot_list li
+{
+	float:left
+}
+
+.wrapper #content,#tutorial_nav td.nav_prev,table.middle td.no
+{
+	text-align:left
+}
+
+.t,#player_counter table th,#news_from_forum li a
+{
+	font-weight:400
+}
+
+h1,body.contentpage form table,body.contentpage #content td li,body.contentpage #content td form,#what_is_travian p
+{
+	margin:0
+}
+
+#tutorial_nav td.nav_next,table.middle td.yes
+{
+	text-align:right
+}
+
+#header h1,.hide,.grit #screenshots .prev img,#screenshot_layer,#screenshot_layer h3,#iframe_layer,#login_layer,#signup_layer
+{
+	display:none
+}
+
+.ie6 #navigation .menu a:hover,.ie7 #navigation .menu a:hover,.ie6 #navigation .menu a:hover span,.ie7 #navigation .menu a:hover span
+{
+	background:transparent
+}
+
+#screenshot_layer #frame_box,#iframe_layer #frame_box
+{
+	margin:0 20px
+}
+
+.world_list li.w_big,.world_list .w_big img
+{
+	height:64px;
+	width:361px
+}
+
+.world_list li.w_small,.world_list .w_small img
+{
+	height:46px;
+	width:175px
+}

@@ -1,0 +1,522 @@
+BODY
+{
+COLOR: #000;
+font-size:10pt;
+background:#FFF;
+margin-top:0px;
+margin-bottom:0px;
+margin-left:0px;
+margin-right:0px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.none {
+    color:#C0C0C0;
+}
+
+/* Fix */
+.online1, .online2, .online3, .online4, .online5 {width:12px; height:12px;}
+/* Oberer Layer mit Menue ohne Werbung */
+#ltop1 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
+
+/* Oberer Layer mit Menue mit Werbung */
+#ltop2 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mw.gif); background-repeat:repeat-x; left:0px; top:0px;}
+
+/* - VERALTET - Oberer Layer mit Mindestbreite fuer IE6 */
+/*#ltop3 {width:777px;} */
+
+/* - VERALTET - Oberer Layer mit Mindestbreite fuer IE6 bei Skyscraper */
+#ltop4 {width:911px;}
+
+/* Den gesamten mittleren Teil umschliessendes Div */
+#lmidall {position:relative; min-width:980px;}
+
+/* Den gesamten mittleren Teil umschliessendes Div */
+#lmidlc {position:relative; min-width:682px; float:left;}
+
+/* Div mit linkem Menue */
+#lleft {position:relative; width:130px; height:450px; z-index:3; float:left; left:0px; top:-7px;}
+
+/* Mittlerer Layer */
+#lmid1 {position:relative; width:552px; float:left; border:0px;}
+
+/* Hilfslayer ohne float wegen Netscape Bug (InGame) */
+#lmid2 {padding-top:38px; min-height:380px;}
+
+/* Hilfslayer ohne float wegen Netscape Bug (OutGame) */
+#lmid3 {padding-top:0px; top:-7px; min-height:440px;}
+
+#lmid2,#lmid3 {position:relative; width:500px; background-image:url(../un/a/rand.gif); background-repeat:repeat-y; padding-bottom:10px; padding-left:26px; padding-right:26px;}
+
+/* Msgboxen */
+
+#lmid3 .nb {position:absolute; width:200px; z-index:5; left:580px; top:63px; background-color:#fff;}
+
+/* Rechter Layer fuer Doerferliste und Direktlinks ohne Skyscraper */
+#lright1 {position:relative; width:200px; padding-left:18px; z-index:5; float:left;}
+
+/* Rechter Layer fuer Doerferliste und Direktlinks mit Skyscraper */
+#lright2 {position:relative; width:200px; padding-left:158px; z-index:5; float:left;}
+
+/* Unteres Div fuer Footer background-color:#0FF; */
+#lbottom {position:relative; width:100%; height:25px; z-index:1; clear:both;}
+
+/* Zusaetliches unteres Div (OutGame) */
+#lfooter1 {background-image:url(../un/a/btm.gif); background-repeat:repeat-x; width:100%; clear:both;}
+
+/* Div innerhalb von lfooter1 (OutGame) */
+#lfooter2 {padding-top:15px; font-size:8pt; color:#666; text-align:center; width:800px;}
+
+/* Div Layer fuer die Lageranzeige */
+#lres, #lres0, #lres1, #lres2 {position:absolute; width:612px; height:20px; text-align:center; z-index:2;}
+#lres0 {left:100px; top:100px;} /* mit Skyscraprer oder ohne Ad */
+#lres1 {left:100px; top:142px;} /* mit Fullsize Ad */
+#lres2 {left:100px; top:172px;} /* mit Bigsize Ad */
+
+/* Div Layer fuer die Zeitanzeige */
+#ltime {position:absolute; width:220px; height:15px; z-index:3; left:5px; top:0px; color:#FFF; font-size:10px;}
+
+/* Div fuer Truppenbewegungen*/
+#ltbw0, #ltbw1 {position:relative; width:230px; z-index:5; padding-top:5px; padding-bottom:5px; left:49px; top:0px; float:left;}
+#ltbw1 {height:47px;}
+
+/* Div fuer die Anzeige der Rohstoffproduktion */
+#lrpr {position:relative; width:230px; padding-top:5px; padding-bottom:10px; left:49px; top:0px; float:left;}
+
+/* Div fuer die Anzeige der Truppen im Dorf */
+#ltrm {position:relative; width:230px; padding-top:10px; padding-bottom:0px; left:49px; top:0px; float:left;}
+
+/* Div fuer die Anzeige der Bauauftraege */
+#lbau1 {position:relative; width:500px; top:0px; clear:both;}
+#lbau2 {position:relative; width:500px; z-index:20;}
+
+/* Platzhalter fuer Float und Ersatz fuer min-height im IE6 */
+#lplz1 {position:relative; width:250px; height:310px; float:left;}
+#lplz2, #lplz3 {position:relative; height:400px; width:500px;}
+
+
+/* Textmenue: Punkt1 | Punkt2 | Punkt3 */
+.txt_menue {font-size:10pt;}
+
+/* Alle Bilder per Default ohne Rahmen */
+img {border:0px;}
+
+/* Groesse der Bilder: Rohstoffe, Dauer, Truppen */
+img.res, img.clock {width:18px; height:12px;}
+img.unit, tr.unit td img {width:16px; height:16px;}
+img.logo {width:116px; height:60px;}
+
+/* Liste mit den Direktlinks */
+ul.dl {margin-left:0px; margin-top:0px; padding-left:20px; padding-top:3px;}
+li.dl {margin-top:2px;}
+
+.left {text-align: left;}
+.right {text-align: right;}
+.center {text-align: center;}
+.nbr {white-space:nowrap;}
+
+/* Navigation InGame */
+#n1, #n2, #n3, #n4, #n5 {width:70px; height:100px; background-repeat:no-repeat;}
+#n1:hover,#n2:hover,#n3:hover,#n4:hover {background-position:bottom;}
+#n1 {background-image:url(../un/l/n1.gif);}
+#n2 {background-image:url(../un/l/n2.gif);}
+#n3 {background-image:url(../un/l/n3.gif);}
+#n4 {background-image:url(../un/l/n4.gif);}
+
+
+/* - VERALTET - Abstand der oberen Navigation von Links */
+/* #navileft {margin-left:231px;} */
+
+/* Schriftgroessen */
+.f16 {font-size:16pt;}
+.f135 {font-size:13.5pt;}
+.f10 {font-size:10pt;}
+.f9 {font-size:9pt; line-height:140%; font-weight:normal;}
+.f8 {font-size:8pt;}
+.f75 {font-size:7.5pt;}
+.f7 {font-size:7pt;}
+.f6 {font-size:6pt;}
+
+/* e Schriftfarbe fuer Fehlermeldung Login/Anmeldung */
+.e {color:#FF8000;}
+
+/* Schriftfarbe fuer Inaktive Links */
+.c {color:#C0C0C0;}
+.c0 {color:#000000;}
+.c1 {color:#71D000;}
+.c2 {color:#FF8000;}
+.c3 {color:#228B22;}
+.c4 {color:#F2C700;}
+.c5 {color:#FF0000;}
+.c6 {color:#B500A3;}
+
+
+/* Dicke Schrift */
+.b {font-weight:bold}
+
+/* Duenne Schrift */
+.t {font-weight:normal;}
+
+
+/* Links */
+a:link, a:visited { color: #71D000; text-decoration: none; font-weight:bold;}
+a:active { color: #FF8000; text-decoration: none; font-weight:bold;}
+a:hover {color: #00BC00; text-decoration: none; font-weight:bold;}
+
+a:link.clink, a:visited.clink, a:active.clink {color:#666; text-decoration:none; font-weight:normal;}
+a:hover.clink {color:#00C000; text-decoration:none; font-weight:normal;}
+
+
+/* Navi Table left */
+#navi_table {width:116px;}
+
+/* Navigation links */
+.menu {font-weight: normal; FONT-SIZE: 12px;}
+.menu a,.menu a:link,.menu a:active,.menu a:visited {font-weight:normal; display:block; color:#000; padding-left:12px; FONT-SIZE:12px; padding-bottom:3px; padding-TOP:3px;}
+.menu a:hover {color:#00C000; cursor:pointer; background-image:url(../un/a/n12.gif); background-repeat:no-repeat;}
+
+
+
+
+h1, h2, h3, span, form, img, li {margin:0; padding:0;}
+h1 {font-size:18pt;}
+h2 {font-size:13.5pt;}
+
+
+
+
+
+
+
+/* Hintergrundbild fuer kleine Karte */
+.mbg {background-image:url(../un/m/map.jpg); z-index:1;}
+
+/* Positionsangabe fur Hintergrundbild und zwei transparente Ebenen darueber (Felder,ImgMap) */
+.mbg,.mdiv {position:absolute; width:540px; height:450px; left:5px; top:10px;}
+
+/* Div Layer fuer die Mouse Over Infobox (kleine Karte) */
+.map_infobox {position:absolute; width:170px; height:80px; z-index:50; left:360px; top:48px;}
+
+/* Div Layer fuer die Mouse Over Infobox (grosse Karte) */
+.map_infobox_xxl {position:absolute; width:170px; height:80px; z-index:500; right:20px; top:20px;}
+
+/* ausgegraute leere Tabelle */
+.map_infobox_grey {background-color:#F0F0F0; width:100%;}
+table.map_infobox_grey tr {background-color: #FFF;}
+
+/* Link zur grossen Karte */
+.map_link_to_xxlmap {position:absolute; width:33px; height:25px; z-index:650; left:26px; top:88px;}
+
+/* Formular zur Direkteingabe von Koordinaten (kleine Karte) */
+.map_insert_xy {position:absolute; width:180px; height:80px; z-index:50; left:20px; top:365px;}
+
+/* Formular zur Direkteingabe von Koordinaten (grosse Karte) */
+.map_insert_xy_xxl {position:absolute; width:180px; height:80px; z-index:500; left:10px; top:465px;}
+
+/* Koordinatenanzeige auf kleiner Karte links oben */
+.map_show_xy {position:absolute; width:200px; height:80px; z-index:50; left:26px; top:38px;}
+
+/* Koordinatenanzeige auf grosser Karte links oben */
+.map_show_xy_xxl {position:absolute; width:200px; height:80px; z-index:500; left:10px; top:10px;}
+
+
+/* Koordinaten xy der kleinen Karte */
+.mx1,.mx2,.mx3,.mx4,.mx5,.mx6,.mx7,.my1,.my2,.my3,.my4,.my5,.my6,.my7 {position:absolute; z-index:30; width:35px; height:12px; font-size:7pt; text-align:center;}
+
+.mx1{left:14px; top:255px;}
+.mx2{left:50px; top:275px;}
+.mx3{left:86px; top:295px;}
+.mx4{left:122px; top:315px;}
+.mx5{left:158px; top:335px;}
+.mx6{left:194px; top:355px;}
+.mx7{left:230px; top:375px;}
+
+.my7{left:14px; top:210px;}
+.my6{left:50px; top:190px;}
+.my5{left:86px; top:170px;}
+.my4{left:122px; top:150px;}
+.my3{left:158px; top:130px;}
+.my2{left:194px; top:110px;}
+.my1{left:230px; top:90px;}
+
+
+/* Felder kleine Karte */
+.mt1{position:absolute; z-index:1; left:229px; top:57px;}
+.mt2{position:absolute; z-index:2; left:266px; top:77px;}
+.mt3{position:absolute; z-index:3; left:303px; top:97px;}
+.mt4{position:absolute; z-index:4; left:340px; top:117px;}
+.mt5{position:absolute; z-index:5; left:377px; top:137px;}
+.mt6{position:absolute; z-index:6; left:414px; top:157px;}
+.mt7{position:absolute; z-index:7; left:451px; top:177px;}
+
+.mt8{position:absolute; z-index:2; left:193px; top:77px;}
+.mt9{position:absolute; z-index:3; left:230px; top:97px;}
+.mt10{position:absolute; z-index:4; left:267px; top:117px;}
+.mt11{position:absolute; z-index:5; left:304px; top:137px;}
+.mt12{position:absolute; z-index:6; left:341px; top:157px;}
+.mt13{position:absolute; z-index:7; left:378px; top:177px;}
+.mt14{position:absolute; z-index:8; left:415px; top:197px;}
+
+.mt15{position:absolute; z-index:3; left:157px; top:97px;}
+.mt16{position:absolute; z-index:4; left:194px; top:117px;}
+.mt17{position:absolute; z-index:5; left:231px; top:137px;}
+.mt18{position:absolute; z-index:6; left:268px; top:157px;}
+.mt19{position:absolute; z-index:7; left:305px; top:177px;}
+.mt20{position:absolute; z-index:8; left:342px; top:197px;}
+.mt21{position:absolute; z-index:9; left:379px; top:217px;}
+
+.mt22{position:absolute; z-index:4; left:121px; top:117px;}
+.mt23{position:absolute; z-index:5; left:158px; top:137px;}
+.mt24{position:absolute; z-index:6; left:195px; top:157px;}
+.mt25{position:absolute; z-index:7; left:232px; top:177px;}
+.mt26{position:absolute; z-index:8; left:269px; top:197px;}
+.mt27{position:absolute; z-index:9; left:306px; top:217px;}
+.mt28{position:absolute; z-index:10; left:343px; top:237px;}
+
+.mt29{position:absolute; z-index:5; left:85px; top:137px;}
+.mt30{position:absolute; z-index:6; left:122px; top:157px;}
+.mt31{position:absolute; z-index:7; left:159px; top:177px;}
+.mt32{position:absolute; z-index:8; left:196px; top:197px;}
+.mt33{position:absolute; z-index:9; left:233px; top:217px;}
+.mt34{position:absolute; z-index:10; left:270px; top:237px;}
+.mt35{position:absolute; z-index:11; left:307px; top:257px;}
+
+.mt36{position:absolute; z-index:6; left:49px; top:157px;}
+.mt37{position:absolute; z-index:7; left:86px; top:177px;}
+.mt38{position:absolute; z-index:8; left:123px; top:197px;}
+.mt39{position:absolute; z-index:9; left:160px; top:217px;}
+.mt40{position:absolute; z-index:10; left:197px; top:237px;}
+.mt41{position:absolute; z-index:11; left:234px; top:257px;}
+.mt42{position:absolute; z-index:12; left:271px; top:277px;}
+
+.mt43{position:absolute; z-index:7; left:13px; top:177px;}
+.mt44{position:absolute; z-index:8; left:50px; top:197px;}
+.mt45{position:absolute; z-index:9; left:87px; top:217px;}
+.mt46{position:absolute; z-index:10; left:124px; top:237px;}
+.mt47{position:absolute; z-index:11; left:161px; top:257px;}
+.mt48{position:absolute; z-index:12; left:198px; top:277px;}
+.mt49{position:absolute; z-index:13; left:235px; top:297px;}
+
+
+/* Div Layer fur die Details auf der rechten Seite */
+.map_details_right {position:absolute; width:230px; height:110px; z-index:3; left:325px; top:100px;}
+/* Div Layer fur die Details auf der rechten Seite */
+.map_details_actions {position:absolute; width:500px; height:40px; z-index:5; left:30px; top:360px;}
+/* Div Layer fur die Details auf der rechten Seite */
+.map_details_troops {position:absolute; width:220px; height:220px; z-index:3; left:325px; top:220px;}
+
+/* Dorfname fuer dorf1.php und dorf2.php */
+.dname {position:absolute; width:500px; height:40px; z-index:4; left:26px; top:38px;}
+
+/* Rohstofffelder Hintergrund */
+#f1,#f2,#f3,#f4,#f5,#f6,#f7,#f8,#f9,#f10 {position:absolute; width:300px; height:264px; left:15px; top:75px; background-repeat:no-repeat; z-index:1;}
+#f1 {background-image:url(../un/g/f1.jpg);}
+#f2 {background-image:url(../un/g/f2.jpg);}
+#f3 {background-image:url(../un/g/f3.jpg);}
+#f4 {background-image:url(../un/g/f4.jpg);}
+#f5 {background-image:url(../un/g/f5.jpg);}
+#f6 {background-image:url(../un/g/f6.jpg);}
+#f7 {background-image:url(../un/g/f7.jpg);}
+#f8 {background-image:url(../un/g/f8.jpg);}
+#f9 {background-image:url(../un/g/f9.jpg);}
+#f10 {background-image:url(../un/g/f10.jpg);}
+#resfeld {position:absolute; width:300px; height:264px; left:15px; top:75px; z-index:3;}
+
+/* Rohstofffelder Stufe */
+.rf1,.rf2,.rf3,.rf4,.rf5,.rf6,.rf7,.rf8,.rf9,.rf10,.rf11,.rf12,.rf13,.rf14,.rf15,.rf16,.rf17,.rf18 {position:absolute; z-index:2;}
+.rf1 {left: 93px; top:27px;}
+.rf2 {left: 156px; top:26px;}
+.rf3 {left: 216px; top:41px;}
+.rf4 {left: 38px; top:59px;}
+.rf5 {left: 130px; top:67px;}
+.rf6 {left: 195px; top:87px;}
+.rf7 {left: 253px; top:81px;}
+.rf8 {left: 23px; top:111px;}
+.rf9 {left: 74px; top:104px;}
+.rf10 {left: 205px; top:136px;}
+.rf11 {left: 260px; top:139px;}
+.rf12 {left: 33px; top:165px;}
+.rf13 {left: 84px; top:158px;}
+.rf14 {left: 151px; top:178px;}
+.rf15 {left: 230px; top:192px;}
+.rf16 {left: 79px; top:211px;}
+.rf17 {left: 132px; top:223px;}
+.rf18 {left: 182px; top:227px;}
+
+/* Div Layer fuer Dorfhintergrund */
+.d2_x {position:absolute; width:540px; height:448px; z-index:1; left:5px; top:30px;}
+.d2_0 {background-image:url(../un/g/bg0.jpg);}
+.d2_1 {background-image:url(../un/g/bg1.jpg);}		/* Palisade (Gallier) */
+.d2_11 {background-image:url(../un/g/bg11.jpg);}	/* Stadtmauer (Roemer) */
+.d2_12 {background-image:url(../un/g/bg12.jpg);}	/* Erdwall (Germanen) */
+.d2_2 {background-image:url(../un/g/bg2.jpg);}
+.d2_3 {background-image:url(../un/g/bg3.jpg);}
+
+/* Position der Gebaeude im Dorfzentrum */
+.d1{position:absolute; z-index:6; left:121px; top:82px;}
+.d2{position:absolute; z-index:9; left:204px; top:57px;}
+.d3{position:absolute; z-index:8; left:264px; top:47px;}
+.d4{position:absolute; z-index:9; left:338px; top:62px;}
+.d5{position:absolute; z-index:10; left:394px; top:111px;}
+
+.d6{position:absolute; z-index:11; left:86px; top:121px;}
+.d7{position:absolute; z-index:12; left:167px; top:128px;}
+.d8{position:absolute; z-index:13; left:253px; top:111px;}
+.d9{position:absolute; z-index:14; left:401px; top:152px;}
+.d10{position:absolute; z-index:15; left:72px; top:191px;}
+
+.d11{position:absolute; z-index:16; left:198px; top:156px;}
+.d12{position:absolute; z-index:17; left:161px; top:182px;}
+.d13{position:absolute; z-index:18; left:408px; top:210px;}
+.d14{position:absolute; z-index:19; left:90px; top:230px;}
+.d15{position:absolute; z-index:20; left:233px; top:226px;}
+
+.d16{position:absolute; z-index:21; left:360px; top:243px;}
+.d17{position:absolute; z-index:22; left:164px; top:266px;}
+.d18{position:absolute; z-index:23; left:292px; top:277px;}
+.d19{position:absolute; z-index:24; left:150px; top:297px;}
+.d20{position:absolute; z-index:25; left:266px; top:306px;}
+.dx1 {position:absolute; z-index:5; left:318px; top:232px;}
+
+/* ImgMap fuer Gebauedelinks */
+.dmap {position:absolute; width:422px; height:339px; z-index:30; left:68px; top:70px;}
+
+#ce {position:absolute; z-index:80;}
+.popup3 {position:absolute; background-image:url(../un/a/anl.gif); background-repeat:no-repeat; display:inline; width:430px; height:456px; z-index:80; border: 0px solid #000000; padding-top:31px; padding-bottom:0px; padding-left:20px; left: 180px; top: 99px}
+
+.popup4 {position:absolute; width:30px; height:30px; z-index:81; border: 0px solid #000000;  left: 600px; top: 115px}
+.m_navi {position:absolute; width:116px; height:18px; z-index:82; left: 145px; top: 420px}
+
+/* Login und Anmeldeformular */
+.p1 {border-style:dashed; border-width:1px; border-color:#C0C0C0; padding:6px;}
+.p2 {border-style:dashed; border-width:1px; border-color:#C0C0C0; padding:3px;}
+label {
+display: block; float: left; clear: left; width: 160px; font-size:8pt; padding-left:0.8em; padding-top:0.2em; padding-bottom:0.6em;
+}
+
+#igm {border:0px; font-family: Verdana, Arial, Helvetica, sans-serif;}
+
+.fm {border:#71D000 solid; border-width:1px; font-size:8pt; padding-left:3px; padding-top:2px; padding-bottom:2px;}
+textarea {border:#71D000 solid; border-width: 1px;}
+.fm110 { width:110px;}
+.fm60 { width:60px;}
+.fm40 { width:40px;}
+.fm25 { width:25px;}
+.fm20 { width:20px;}
+/*.fm_text {text-align:center}*/
+
+input.f80 { width:80px;}
+input.f30 { width:30px;}
+input.std {font-weight:bold; font-size:8pt; height:14pt;} /* Berichte, Nachrichten verschieben */
+
+
+/* Rahmenfarbe der Tabelle */
+.tbg {background-color: #C0C0C0; width:100%; text-align:center; font-size:10pt;}
+
+/* Zellenfarbe der Tabelle */
+table.tbg tr {background-color: #FFFFFF;}
+
+/* Hintergrundbild f&uuml;r Tabellenkopf  */
+.rbg {background-color: #FFFFFF; font-weight:bold; background-image: url(../un/a/c2.gif);}
+
+
+/* Tabellenzeile Grau */
+table.tbg tr.cbg1 td, td.cbg1 {background-color:#F5F5F5}
+table.tbg td.cbg2 {background-color:#71D000}
+
+/* Abstand links, in Tabellenzeile */
+table.tbg tr.s7 td, td.s7 {padding-left:7px; text-align:left}
+table.tbg tr.r7 td, td.r7 {padding-right:7px; text-align:right}
+
+/* Abstand links und rechts in Tabellenzeile */
+.slr3 { padding-left:3px; padding-right:3px; text-align:center}
+
+/* Rahmen f&uuml;r Treffer in der Statistik */
+table.tbg td.ou {border-top:1px solid #71D000; border-bottom:1px solid #71D000; background-color:#F0FFF0; }
+table.tbg td.li {border-left:1px solid #71D000 }
+table.tbg td.re {border-right:1px solid #71D000}
+
+/* Dorfliste */
+.dtbl {width:73px; font-size:11px;}
+.dlist1, .dlist3 {width:35px;}
+.dlist2 {width:3px; font-size:10px;}
+
+
+/* Allianz Forum */
+.forumline  {background-color: #000000; border: 1px #c0c0c0 solid;}
+.forum_h1 { font-weight: bold; font-size: 11px ; letter-spacing: 1px; color : #000000}
+
+.forumlink { font-weight: bold; font-size: 11px; color : #71D000;}
+a.forumlink { text-decoration: none; color : #71D000; }
+a.forumlink:hover{ text-decoration: underline; color : #00BC00; }
+
+td.rowpic {
+background-color: #FFFFFF;
+background-image: url(../un/a/c2.gif);
+}
+
+.genmed { font-size : 11px; }
+.gensmall { font-size : 10px; }
+.gen,.genmed,.gensmall { color : #000000; }
+a.gen,a.genmed,a.gensmall { color: #71D000; text-decoration: none; }
+a.gen:hover,a.genmed:hover,a.gensmall:hover        { color: #00BC00; text-decoration: underline; }
+
+th        {
+color: #FFFFFF; font-size: 11px; font-weight : bold;
+background-color: #777777; height: 22px;
+background-image: url(../un/a/c3.gif);
+}
+
+td.row1  {background-color:#FFF;}
+td.row11 {background-color:#FFF; PADDING-Left:4px;}
+td.row12 {background-color:#FFF; PADDING-Left:6px; PADDING-RIGHT:6px;}
+td.row2  {background-color:#FEFEFE; }
+
+
+.maintitle {
+        font-weight: bold; font-size: 22px; font-family: "Trebuchet MS",Verdana, Arial, Helvetica, sans-serif;
+        text-decoration: none; line-height : 120%; color : #000000;
+}
+.postbody { font-size : 11px; line-height: 16px}
+.name { font-size : 11px; color : #000000;}
+.postdetails { font-size : 10px; color : #000000; }
+
+/* Check for valid Graphic pack (don't change it) */
+#show_gp_test_button {display:inline;}
+#show_gp_activate_button {display:none;}
+#show_gp_ok_message {display:none;}
+#show_gp_error_message {display:inline;}
+
+/* Laenderflaggen */
+.dflags1 {position:relative; float:right; text-align:center; font-size:6pt; color:#FFF; padding-left:1px; padding-right:1px; padding-top:1px;}
+.dflags2 {padding-top:1px;}
+
+img.flags {border:solid 1px #000000; width:21px; height:13px;
+opacity:0.4;            /*      W3C-konform     */
+-moz-opacity:0.4;       /*      Mozilla und Derivate    */
+FILTER:progid:DXImageTransform.Microsoft.Alpha(opacity=40); /*IE*/
+}
+
+/* importiertes Allianzprofil */
+table#profile {border-collapse:collapse; line-height:16px; width:100%;}
+table#profile td, table#profile th {vertical-align:middle; padding:2px 7px; border:1px solid silver; font-size:13px; color:black;}
+table#profile thead th, table#profile tfoot th {background-image:url(../un/a/c2.gif); background-repeat:repeat; text-align:center; font-weight:bold;}
+table#profile thead td, table#profile tfoot td {background-color:#F3F3F3; text-align:center; width:50%;}
+table#profile tbody th, table#profile tbody td {text-align:left;}
+table#profile td.details {width:50%; height:156px; padding:0px; vertical-align:top; border-bottom:none;}
+table#profile td.details table {border-collapse:collapse; line-height:16px; margin-top:0px; width:100%;}
+table#profile td.details table th {width:50%; border-left:none; border-top:none; background:none;}
+table#profile td.details table td {border-right:none; border-left:none; border-top:none; text-align:left;}
+table#profile td.desc1, table#profile td.desc2 {width:50%; padding:0px 7px; vertical-align:middle;}
+table#profile td.desc2 {border-top:none; height:auto;}
+table#profile td div {vertical-align:center; text-align:center; padding:2px 0px; margin:0px;}
+
+table#member {border-collapse:collapse; margin-top:25px; line-height:16px; width:100%;}
+table#member td, table#member th {vertical-align:middle; padding:2px 7px; border:1px solid silver; font-size:13px; color:black;}
+table#member thead th, table#member tfoot th {background-image:url(../un/a/c2.gif); background-repeat:repeat; text-align:center; font-weight:bold;}
+table#member thead td, table#member tfoot td {background-color:#F3F3F3; text-align:center; width:50%;}
+table#member tbody th, table#member tbody td {text-align:left;}
+table#member td.ra {width:5%; text-align:right;}
+table#member td.hab {width:25%; text-align:center;}
+table#member td.vil {width:20%; text-align:center;}
+table#member td.on {width:5%; text-align:center;}

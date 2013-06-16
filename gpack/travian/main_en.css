@@ -1,0 +1,127 @@
+@CHARSET "UTF-8";body{background-color:#FFF;direction:ltr;font-size:13px;line-height:19px;margin:0;text-align:left;}
+html{overflow-y:scroll;}html,body{margin:0;padding:0;height:100%;}.clear{clear:both;display:block;font-size:0;height:0;line-height:0;visibility:hidden;}
+ul.menu,div.menu ul{list-style-type:none;margin:0;padding:0;}.menu li{float:left;}
+.wrapper{height:auto!important;height:100%;min-height:100%;min-width:845px;position:relative;text-align:center;}
+.wrapper #content{text-align:left;}body.contentPage #content .characteristics,body.contentPage #content p,body.contentPage #content table,body.contentPage form{margin:15px 160px;}
+body.contentPage .rules{margin-left:120px;margin-right:160px;}body.contentPage ul{margin-top:15px;margin-bottom:15px;}
+h1{margin:0;}body.contentPage h1{text-align:center;padding-top:70px;margin-bottom:40px;font-size:26px;}
+body.contentPage .rules strong{color:#2A720B;}body.contentPage .rules ul strong{color:#3BAE18;}
+body.contentPage form table{margin:0;}body.contentPage table.table_data{background-color:#C0C0C0;text-align:center;}
+body.contentPage table.table_data{width:550px;}body.contentPage table.culture_points{margin:15px 110px;width:650px;}
+#tutorial_nav,body.contentPage table.tutorial_table{table-layout:fixed;background-color:#fff;width:550px;}
+body.contentPage #content td li,body.contentPage #content td form{margin:0;}body.contentPage #content td.beschreibung{text-align:left;padding-top:50px;}
+body.contentPage table.tutorial_table td.visual{text-align:center;font-size:11px;font-style:italic;}
+body.contentPage table.tutorial_table td.visual img{display:block;margin:auto;}#tutorial_nav td.nav_prev{text-align:left;}
+#tutorial_nav td.nav_next{text-align:right;}body.contentPage table.table_data th{background-color:#F5F5F5;}
+body.contentPage table.table_data td{background-color:#fff;}body.contentPage table.middle{table-layout:fixed;width:520px;}
+body.contentPage table.middle input{width:80px;}table.middle td.yes{text-align:right;}
+table.middle td.no{text-align:left;}td.text,th.text{padding-left:7px;text-align:left;}
+body.contentPage #content h2{font-size:16px;color:#71d000;line-height:20px;margin:50px 160px 10px;}
+body.contentPage #content h3{margin:15px 160px 5px;font-size:14px;line-height:18px;}
+body.contentPage #content table h3{margin:3px;}body.contentPage #content ul{margin-top:5px;}
+#content .question{padding-top:30px;font-style:italic;color:#333;}#header{position:absolute;margin:0 auto;right:0;left:0;width:100%;}
+#header{top:0;z-index:10;}body.indexPage #header{height:389px;overflow:auto;}body.contentPage #header{height:200px;background:transparent none;}
+#header h1{display:none;}#country_select{position:absolute;top:0;left:0;width:100%;height:30px;z-index:500;}
+#navigation{position:absolute;top:52px;left:50%;margin-left:-437px;width:830px;height:114px;z-index:80;}
+#navigation table.menu{position:absolute;right:25px;top:30px;width:500px;}#navigation .menu td{text-align:center;}
+#navigation .menu a{text-decoration:none;font-size:14px;line-height:20px;color:#333;text-shadow:1px 1px 1px #fff;}
+#navigation .menu a.mark{color:#a20327;}#navigation a.home{width:250px;height:85px;position:absolute;left:55px;top:0;}
+#navigation .menu a{padding:6px 10px 7px 0;}#navigation .menu a span{padding:6px 0 7px 10px;}
+#register_now{position:absolute;left:50%;top:277px;margin-left:-151px;color:#574b2e;height:50px;width:145px;color:#574b2e;font-weight:bold;z-index:250;}
+#register_now a{margin-top:7px;color:#574b2e;font-size:21px;display:block;}#register_now span{font-size:9px;}
+#t4play{position:absolute;left:50%;top:109px;margin-left:30px;z-index:250;}#t4play img{width:460px;height:290px;}
+#content{position:relative;z-index:50;}body.indexPage #content{padding-top:367px;padding-bottom:120px;}
+body.contentPage #content{padding-top:177px;padding-bottom:160px;}#content .grit{position:relative;margin:0 auto;}
+body.indexPage #content .grit{width:830px;background:transparent none;}body.contentPage #content .grit{width:840px;min-height:400px;}
+.grit .infobox{float:left;margin-right:9px;margin-left:15px;min-height:391px;width:378px;}
+.grit .infobox div{padding-left:43px;padding-right:30px;}#what_is_travian{padding-top:5px;}
+#what_is_travian p{margin:0;}#what_is_travian h2{font-size:18px;font-weight:normal;color:#71d000;line-height:20px;margin-bottom:10px;text-shadow:0 2px 1px #fff;}
+#what_is_travian .play_now{margin:10px 0;}#player_counter{position:relative;padding:0;left:23px;height:98px;width:330px;}
+#player_counter table{position:absolute;left:135px;top:20px;width:165px;border-spacing:0;}
+#player_counter table th{font-weight:normal;}#player_counter table td{font-weight:bold;}
+#about_the_game h2{font-size:15px;line-height:20px;margin-bottom:5px;}#about_the_game ul{margin:0;padding:0;margin-top:5px;margin-left:15px;}
+#about_the_game li{line-height:19px;}#news_from_forum h2{font-size:15px;line-height:20px;margin-bottom:5px;cursor:pointer;}
+#news_from_forum ul{margin:0;padding:0;margin-top:5px;list-style:none;border-top:1px solid #999;margin-right:10px;}
+#news_from_forum li{line-height:19px;border-bottom:1px solid #999;padding:3px 5px;}
+#news_from_forum li a{font-weight:normal;}.hide{display:none;}.grit .secondarybox{float:left;margin-top:22px;width:397px;}
+.grit #screenshots{position:relative;height:134px;width:397px;}.grit #screenshots .prev img{display:none;}
+#screenshots h2{margin:0;padding:23px 20px 0;color:#fff;font-size:13px;}#screenshots_preview{height:73px;width:294px;position:absolute;overflow:hidden;margin:7px 53px;padding:0;}
+#screenshot_list{list-style:none;height:73px;padding:0;margin:0;}#screenshots .navi img{position:absolute;width:26px;height:26px;top:70px;}
+#screenshots .next img{right:7px;}#screenshots .prev img{left:10px;}#screenshot_list li{float:left;}
+#screenshot_list img{width:98px;height:73px;}#newsbox{padding-bottom:25px;}#newsbox h2{display:block;padding:7px 15px 0;height:30px;margin:0;font-size:17px;color:#4c4c4c;}
+#newsbox .news{width:397px;padding-bottom:0;padding-left:15px;}#newsbox .news h4{margin:0;margin-top:3px;}
+#newsbox .news p.date{font-size:11px;color:#999;padding-bottom:0;}#newsbox .news p{margin:0;padding-bottom:10px;padding-right:30px;}
+#footer{position:absolute;margin:0 auto;right:0;left:0;bottom:0;height:90px;z-index:80;}
+#footer .logo_traviangames{height:34px;width:182px;}#footer .logo{position:absolute;top:20px;left:6px;}
+#footer li,#footer a{color:#787878;font-size:11px;line-height:20px;}#footer .menu{position:absolute;top:18px;right:9px;}
+#footer .container{margin:0 auto;position:relative;width:840px;}#footer .copyright{direction:ltr;clear:left;position:absolute;right:3px;top:20px;}
+#footer ul.menu a{padding:0 3px;}.overlay{position:absolute;top:0;left:0;right:0;bottom:0;z-index:400;}
+.overlay .mask{position:fixed;background-color:#000;opacity:.25;filter:alpha(opacity=25);width:100%;height:100%;}
+.overlay_content{position:absolute;top:150px;right:50%;z-index:600;}.overlay_content .closer img{position:absolute;right:15px;top:15px;height:25px;width:25px;}
+.overlay_content .footer{clear:both;height:10px;}.overlay_content h2,.overlay_content h4{margin:0;padding:20px 20px 0;font-size:16px;line-height:20px;}
+#screenshot_layer{display:none;}#screenshot_layer h3{display:none;}#screenshot_layer .overlay_content{width:644px;margin-right:-322px;text-align:center;}
+#screenshot_layer h4{text-align:center;padding-bottom:15px;}#screen_desc{margin:20px 0;padding:0 40px;font-size:12px;}
+.screenshot_view img{border:1px solid #ccc;}#screenshot_layer .navi img{position:absolute;width:25px;height:25px;top:250px;}
+#screenshot_layer .next img{right:20px;}#screenshot_layer .prev img{left:20px;}#iframe_layer{display:none;}
+#iframe_layer .overlay_content{width:450px;margin-right:-225px;}#frame_box{margin:0 20px;}
+#iframe_layer h2{padding-bottom:15px;}#login_layer,#signup_layer{display:none;}#login_layer .overlay_content,#signup_layer .overlay_content{width:384px;margin-right:-192px;}
+#login_layer h2,#signup_layer h2{color:#71d000;}ul.world_list{padding:7px;margin:0;list-style:none;}
+.world_list li{float:left;position:relative;margin:4px 5px;background-repeat:no-repeat;}
+.world_list li div{position:absolute;}.world_list li img{position:relative;z-index:30;}
+.world_list .w_small .players{top:5px;left:123px;}.world_list .w_small .online{top:22px;left:123px;}
+.world_list .w_big .players{top:15px;right:20px;}.world_list .w_big .online{top:33px;right:20px;}
+.world_list .label_players{top:15px;left:235px;}.world_list .label_online{top:33px;left:235px;}
+.world_list li.w_big{height:64px;width:361px;}.world_list li.w_small{height:46px;width:175px;}
+.world_list .w_big img{height:64px;width:361px;}.world_list .w_small img{height:46px;width:175px;}
+.world_list .worldstart{top:10px;right:20px;}.world_list .timer{bottom:15px;right:20px;}
+body.socialPage .statHeader{margin-top:22px;padding-bottom:8px;}body.socialPage #header{transparent;height:389px;overflow:auto;}
+body.socialPage .infobox .space{min-height:54px;}body.socialPage .secondarybox h2{font-size:25px;line-height:30px;}
+body.socialPage .grit .infobox{float:left;margin-left:15px;margin-right:9px;min-height:391px;width:378px;}
+body.socialPage #content{padding-top:210px;}.socialPage .secondarybox{margin-left:8px;padding-left:40px;padding-right:40px;margin-top:0;width:415px;min-height:390px;}
+body.socialPage #content .grit{width:930px;}body.socialPage a.buttonLink{display:block;clear:both;color:white;height:43px;text-align:center;vertical-align:center;padding-top:23px;margin-top:10px;font-size:16px;}
+body.socialPage a.buttonLink:HOVER{color:white;}img{border:0;}img.dynamic_btn,img.dynamic_img{background-position:top;background-repeat:no-repeat;}
+img.over{background-position:bottom;}img.clicked{background-position:center;}body.indexPage{background:#fff url("images/main_background_front.jpg") repeat-x top;}
+body.contentPage{background:#fff url("images/main_background_content.jpg") repeat-x top;}
+body.indexPage #header{background:transparent url("images/artwork-ltr.jpg") no-repeat top center;}
+#country_select{background:#fff url("images/country_background.jpg") repeat-x top;}
+.contentPage #navigation{background:url("images/logo_background-ltr.jpg") no-repeat top left;}
+#navigation .menu a:active{background:transparent url("images/nav_right.gif") no-repeat scroll top right;}
+#navigation .menu a:active span{background:transparent url("images/nav_left.gif") no-repeat scroll top left;}
+#navigation .menu a:hover{background:transparent url("images/nav-right.gif") no-repeat scroll bottom right;}
+#navigation .menu a:hover span{background:transparent url("images/nav-left.gif") no-repeat scroll bottom left;}
+.ie6 #navigation .menu a:hover,.ie7 #navigation .menu a:hover{background:transparent;}
+.ie6 #navigation .menu a:hover span,.ie7 #navigation .menu a:hover span{background:transparent;}
+body.contentPage #content .grit{background:transparent url("images/content_background.jpg") no-repeat top left;}
+.grit .infobox{background:transparent url("images/info_background-ltr.jpg") no-repeat top left;}
+.grit .secondarybox{background:transparent url("images/news_background.jpg") repeat-y top left;}
+.grit #screenshots{background:transparent url("images/screenshots_background.jpg") no-repeat top left;}
+#screenshots .next img{background-image:url("images/buttons_screenshots-right.gif");}
+#screenshots .prev img{background-image:url("images/buttons_screenshots-left.gif");}
+#player_counter{background:transparent url("images/count_background-ltr.jpg") no-repeat top left;}
+#newsbox{background:transparent url("images/news_footer.jpg") no-repeat bottom left;}
+#newsbox h2{background:transparent url("images/news_header.jpg") no-repeat top left;}
+#newsbox .news{background:transparent url("images/news_spacer.jpg") no-repeat bottom left;}
+#footer{background:#F1F1F1 url("images/footer_background.jpg") repeat-x top;}#footer .logo_traviangames{background-image:url("images/logo_traviangames.jpg");}
+.overlay_content .closer img{background-image:url("images/popup_close.gif");}#screenshot_layer .overlay_content{background:#fff url("images/screenshot_background.gif") repeat-y top left;}
+#screenshot_layer h4{background:transparent url("images/screenshot_header.jpg") no-repeat top left;}
+#screenshot_layer .footer{background:transparent url("images/screenshot_footer.gif") no-repeat bottom left;}
+#screenshot_layer .next img{background-image:url("images/popup-right.gif");}#screenshot_layer .prev img{background-image:url("images/popup-left.gif");}
+#login_layer .overlay_content,#signup_layer .overlay_content{background:#fff url("images/gameworld_background.jpg") repeat-y top left;}
+#login_layer h2,#signup_layer h2{background:transparent url("images/gameworld_header.jpg") no-repeat top left;}
+#login_layer .footer,#signup_layer .footer{background:transparent url("images/gameworld_footer.jpg") no-repeat bottom left;}
+#iframe_layer h2{background:transparent url("images/anleitung_header.gif") no-repeat top left;}
+#iframe_layer .footer{background:transparent url("images/anleitung_footer.gif") no-repeat bottom left;}
+#iframe_layer .overlay_content{background:#fff url("images/anleitung_background.gif") repeat-y top left;}
+.socialPage .grit .infobox{background:url("images/social_box1-ltr.jpg") no-repeat scroll left top transparent;}
+.socialPage .secondarybox{background:url("images/social_box2-ltr.jpg") no-repeat scroll left top transparent;}
+.socialPage a.buttonLink{background:url("images/social_button1.gif") no-repeat scroll center center;}
+.socialPage a.buttonLink:HOVER{background:url("images/social_button2.gif") no-repeat scroll center center;}
+body.socialPage #header{background:url("images/social_landing_hg-ltr.jpg") no-repeat scroll center top;}
+body.socialPage{background:url("images/social_abstand.jpg") repeat-x scroll center top #FFF;}
+body,button,input,select,textarea{font-family:Arial,Verdana,Helvetica,sans-serif;}
+a{font-size:13px;text-decoration:none;}a,a:visited{color:#71D000;}a:active{color:#FF8000;}
+a:hover{color:#00BC00;text-decoration:underline;}#content a{font-weight:bold;}#content a:hover{text-decoration:none;}
+.f16{font-size:16pt;}.f10{font-size:10pt;}.f9{font-size:9pt;line-height:140%;font-weight:normal;}
+.f8{font-size:8pt;}.f7{font-size:7pt;}.f6{font-size:6pt;}.e{color:#FF8000;}.c{color:#C0C0C0;}
+.c0{color:#000;}.c1{color:#71D000;}.c2{color:#FF8000;}.c3{color:#228B22;}.c4{color:#F2C700;}
+.c5{color:#F00;}.b{font-weight:bold;}.t{font-weight:normal;}
