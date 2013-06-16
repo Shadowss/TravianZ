@@ -126,12 +126,13 @@ if($_POST['password'] != ""){
  * SCOUTING ALL PLAYERS
  */
  
+		$natar = mysql_fetch_array(mysql_query("SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid and capital = 1"));
 		$multiplier = NATARS_UNITS;
 		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = 1 and owner > 5";
 		$array = $database->query_return($q);
 		foreach($array as $vill){
-		$ref = $database->addAttack($wid, 0, 0, 0, 1500*$multiplier, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
-		$database->addMovement(3, $wid, $vill['wref'], $ref, time(), time()+1);
+		$ref = $database->addAttack($natar['wref'], 0, 0, 0, 1500*$multiplier, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
+		$database->addMovement(3, $natar['wref'], $vill['wref'], $ref, time(), time()+1);
 		}
 
 /**
