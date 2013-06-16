@@ -329,7 +329,7 @@ class Automation {
 			foreach($needDelete as $need) {
 				$needVillage = $database->getVillagesID($need['uid']);
 				foreach($needVillage as $village) {
-					$q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$village;
+					$q = "DELETE FROM ".TB_PREFIX."abdata where vref = ".$village;
 					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$village;
 					$database->query($q);

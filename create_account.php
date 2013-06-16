@@ -121,7 +121,18 @@ if($_POST['password'] != ""){
 		mysql_query($q3) or die(mysql_error());
 		$q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = $uid";
 		mysql_query($q4) or die(mysql_error());
-
+		
+/**
+ * SCOUTING ALL PLAYERS
+ */
+ 
+		$multiplier = NATARS_UNITS;
+		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = 1 and owner > 5";
+		$array = $database->query_return($q);
+		foreach($array as $vill){
+		$ref = $database->addAttack($wid, 0, 0, 0, 1500*$multiplier, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
+		$database->addMovement(3, $wid, $vill['wref'], $ref, time(), time()+1);
+		}
 
 /**
  * SMALL ARTEFACTS
