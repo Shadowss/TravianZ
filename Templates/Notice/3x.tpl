@@ -9,6 +9,7 @@ $time = $database->getNotice2($_GET['id'], 'time');
 $data = $database->getNotice2($_GET['id'], 'data');
 $dataarray = explode(",",$data);
 if($dataarray[151]!='' and $dataarray[151]!=0){$colspan="11";}else{$colspan="10";}
+$colspan2 = 10;
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
 			<thead>
