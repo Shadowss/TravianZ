@@ -24,8 +24,9 @@ class MYSQLi_DB {
 	function register($username, $password, $email, $tribe, $act) {
 		$time = time();
         $timep = time() + PROTECTION;
-		if(strtotime(START_TIME) > time()){
-		$timep = (strtotime(START_TIME) + PROTECTION);
+		$stime = strtotime(START_DATE)+strtotime(START_TIME)-time();
+		if($stime > time()){
+		$time = $stime;
 		}
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
 		if(mysql_query($this->connection, $q)) {
