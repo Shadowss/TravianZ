@@ -76,6 +76,7 @@ header("Location: banned.php");
 $timer = 1;
 ?>
 <div id="map_details">
+</br></br>
 <?php
 include("Templates/movement.tpl");
 include("Templates/production.tpl");
