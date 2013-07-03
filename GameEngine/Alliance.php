@@ -184,9 +184,9 @@
 				$memberlist = $database->getAllMember($invite['alliance']);
 				$alliance_info = $database->getAlliance($invite['alliance']);
 				if(count($memberlist) < $alliance_info['max']){
-					$database->removeInvitation($database->RemoveXSS($get['d']));
-					$database->updateUserField($database->RemoveXSS($invite['uid']), "alliance", $database->RemoveXSS($invite['alliance']), 1);
-					$database->createAlliPermissions($database->RemoveXSS($invite['uid']), $database->RemoveXSS($invite['alliance']), '', '0', '0', '0', '0', '0', '0', '0', '0');
+					$database->removeInvitation($get['d']);
+					$database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
+					$database->createAlliPermissions($invite['uid'], $invite['alliance'], '', '0', '0', '0', '0', '0', '0', '0', '0');
 					// Log the notice
 					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has joined the alliance.');
 				}else{
@@ -231,11 +231,11 @@
 				header("Location: build.php?id=" . $post['id']);
 			} else {
 				$max = $bid18[$village->resarray['f' . $post['id']]]['attri'];
-				$aid = $database->createAlliance($database->RemoveXSS($post['ally1']), $database->RemoveXSS($post['ally2']), $session->uid, $max);
-				$database->updateUserField($database->RemoveXSS($session->uid), "alliance", $database->RemoveXSS($aid), 1);
+				$aid = $database->createAlliance($post['ally1'], $post['ally2'], $session->uid, $max);
+				$database->updateUserField($session->uid, "alliance", $aid, 1);
 				$database->procAllyPop($aid);
 				// Asign Permissions
-				$database->createAlliPermissions($database->RemoveXSS($session->uid), $database->RemoveXSS($aid), 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
+				$database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
 				// log the notice
 				$database->insertAlliNotice($aid, 'The alliance has been founded by <a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>.');
 				header("Location: build.php?id=" . $post['id']);
@@ -271,7 +271,7 @@
 				$_SESSION['valuearray'] = $post;
 				//header("Location: build.php?id=".$post['id']);
 			} else {
-				$database->setAlliName($database->RemoveXSS($session->alliance), $database->RemoveXSS($get['ally2']), $database->RemoveXSS($get['ally1']));
+				$database->setAlliName($session->alliance, $get['ally2'], $get['ally1']);
 				// log the notice
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance name.');
 			}
@@ -294,7 +294,7 @@
 				$_SESSION['valuearray'] = $post;
 				//header("Location: build.php?id=".$post['id']);
 			} else {
-				$database->submitAlliProfile($database->RemoveXSS($session->alliance), $post['be2'], $post['be1']);
+				$database->submitAlliProfile($session->alliance, $post['be2'], $post['be1']);
 				// log the notice
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance description.');
 			}
@@ -401,7 +401,7 @@
 		private function changediplomacy($post) {
 			global $database, $session, $form;
 			if($session->access != BANNED){
-			$aName = $database->RemoveXSS($_POST['a_name']);
+			$aName = $_POST['a_name'];
 			$aType = (int)intval($_POST['dipl']);
 			if($database->aExist($aName, "tag")) {
 				if($database->getAllianceID($aName) != $session->alliance) {
