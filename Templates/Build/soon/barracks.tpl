@@ -3,7 +3,7 @@
 		<tbody><tr>
 			<td class="desc">In the barracks infantry can be trained. The higher its level the faster the troops are trained.</td>
 			<td rowspan="3" class="bimg">
-				<a href="#" onClick="return Popup(15,4);">
+				<a href="#" onClick="return Popup(19,4);">
 				<img class="building g19" src="img/x.gif" alt="Barracks" title="Barracks" /></a>
 			</td>
 		</tr>
