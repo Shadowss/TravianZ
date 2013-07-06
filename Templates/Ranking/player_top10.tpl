@@ -207,9 +207,9 @@
 	  }
 	  if($row['id']==$session->uid) {
 	  echo "<tr class=\"own hl\">"; } else { echo "<tr>"; }
-      echo "<td>".$i++.".&nbsp;</td>";
-      echo "<td><a href='spieler.php?uid=".$row['id']."'>".$row['username']."</a></td>";
-      echo "<td>".$row['RR']."</td>";
+      echo "<td class=\"ra fc\">".$i++.".&nbsp;</td>";
+      echo "<td class=\"pla\"><a href='spieler.php?uid=".$row['id']."'>".$row['username']."</a></td>";
+      echo "<td class=\"val lc\">".$row['RR']."</td>";
       echo "</tr>";
 	  }
       }
