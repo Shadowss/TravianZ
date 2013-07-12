@@ -116,7 +116,7 @@ if ($dataarray[162]!='' and $dataarray[162]!=''){ //release prisoners
 ?>
     <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
     
-    <?php echo $dataarray[146]; ?>
+    <?php echo $dataarray[162]; ?>
     </td></tr></tbody>
 <?php } ?>
 	<tbody class="goods"><tr><th>Bounty</th><td colspan="<?php echo $colspan; ?>">
