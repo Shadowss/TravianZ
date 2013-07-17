@@ -28,6 +28,7 @@ class MYSQLi_DB {
 		$time = $stime;
 		}
 		$timep = $time + PROTECTION;
+		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
 		if(mysql_query($this->connection, $q)) {
 			return mysql_insert_id($this->connection);

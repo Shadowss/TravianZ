@@ -355,7 +355,7 @@ if (!isset($SAJAX_INCLUDED)) {
 		//$data = explode("|",$data);
 		if (is_array($data)){$msg = htmlspecialchars($data[1]);}else{$msg = htmlspecialchars($data);};
 //		$msg=htmlspecialchars($msg);
-		$name = $session->username;
+		$name = addslashes($session->username);
 
 		$id_user = $session->uid;
 		$alliance = $session->alliance;
