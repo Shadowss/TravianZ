@@ -27,7 +27,7 @@ include("alli_menu.tpl");
 			</tr>
 			<tr>
 				<th>Position:</th>
-				<td><input class="name text" type="text" name="a_titel" value="<?php echo $playerData[rank]; ?>" maxlength="20" /></td>
+				<td><input class="name text" type="text" name="a_titel" value="<?php echo $playerData[rank]; ?>" maxlength="50" /></td>
 			</tr>
 	    </tbody>
     </table>
