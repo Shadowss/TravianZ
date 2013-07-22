@@ -1464,12 +1464,18 @@ class MYSQLi_DB {
 		$q = "UPDATE " . TB_PREFIX . "vdata set lastupdate = $time where wref = $vid";
 		return mysqli_query($this->connection, $q);
 	}
+
 	function updateOasis($vid) {
 		$time = time();
 		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated = $time where wref = $vid";
 		return mysqli_query($this->connection, $q);
 	}
-
+	
+	function updateOasis2($vid) {
+		$time = time();
+		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated2 = $time where wref = $vid";
+		return mysqli_query($this->connection, $q);
+	}
 
 	function setVillageName($vid, $name) {
 		if(!empty($name))
@@ -2826,7 +2832,7 @@ class MYSQLi_DB {
 			$wid = $row['id'];
 			$basearray = $this->getOMInfo($wid);
 			//We switch type of oasis and instert record with apropriate infomation.
-			$q = "INSERT into " . TB_PREFIX . "odata VALUES ('" . $basearray['id'] . "'," . $basearray['oasistype'] . ",0,800,800,800,800,800,800," . time() . ",100,2,'Unoccupied Oasis',".rand(0,2).")";
+			$q = "INSERT into " . TB_PREFIX . "odata VALUES ('" . $basearray['id'] . "'," . $basearray['oasistype'] . ",0,800,800,800,800,800,800," . time() . "," . time() . ",100,2,'Unoccupied Oasis',".rand(0,2).")";
 			$result = mysqli_query($this->connection, $q);
 		}
 	}

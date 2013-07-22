@@ -1036,6 +1036,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
   `crop` int(11) unsigned NOT NULL,
   `maxcrop` int(11) unsigned NOT NULL,
   `lastupdated` int(11) unsigned NOT NULL,
+  `lastupdated2` int(11) unsigned NOT NULL,
   `loyalty` int(11) NOT NULL DEFAULT '100',
   `owner` int(11) unsigned NOT NULL DEFAULT '2',
   `name` varchar(32) NOT NULL DEFAULT 'Unoccupied Oasis',
