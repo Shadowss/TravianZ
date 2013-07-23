@@ -1902,9 +1902,15 @@ class MYSQL_DB {
 		$dbarray = mysql_fetch_array($result);
 		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
 		$this->query($q);
-		$q2 = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field <= 18 order by master,timestamp ASC";
-		if(mysql_num_rows($q2) > 0){
+
+		$tribe = $this->getUserField($this->getVillageField($wid, "owner"), "tribe", 0);
+		if($tribe == 1){
+		$q2 = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field >= 19 order by master,timestamp ASC";
+		}else{
+		$q2 = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC";
+		}
 		$result2 = mysql_query($q2);
+		if(mysql_num_rows($result2) > 0){
 		$dbarray2 = mysql_fetch_array($result2);
 		$wc_time = $dbarray['timestamp'];
 		$q2 = "UPDATE ".TB_PREFIX."bdata SET timestamp = timestamp - $wc_time WHERE id = '".$dbarray2['id']."'";
