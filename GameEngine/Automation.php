@@ -2649,7 +2649,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 				}
 				
 				$database->setMovementProc($data['moveid']);
-				if($chiefing_village != 1 && $village_destroyed != 1){
+				if($chiefing_village != 1){
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				// send the bounty on type 6.
 				if($type !== 1)
@@ -2663,7 +2663,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					$database->modifyPointsAlly($targetally,'RR',$totalstolentaken );
 					$database->modifyPointsAlly($ownally,'RR',$totalstolengain);
 				}
-				}else if($chiefing_village == 1){
+				}else{
 				$database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
 				}
 			}
