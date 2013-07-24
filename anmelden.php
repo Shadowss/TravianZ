@@ -70,41 +70,70 @@ if(REG_OPEN == true){ ?>
 			<th><?php echo PASSWORD; ?></th>
 			<td>
 				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="30" />
-				<span style="color: #DD0000"><b>Warning:</b> password with & can cause problems!</span>
+				
 				<span class="error"><?php echo $form->getError('pw'); ?></span>
-			</td>
-		</tr>
-		<tr class="btm">
-			<th>Money:</td>
-			<td><input class="text" type="text" name="money" value="" maxlength="10" />
 			</td>
 		</tr>
 	</tbody>
 </table>
 
 <table cellpadding="1" cellspacing="1" id="sign_select">
-	<tbody>
-		<tr class="top">
-			<th><img src="img/x.gif" class="img_u06" alt="choose tribe"></th>
-			<th colspan="2"><img src="img/x.gif" class="img_u07" alt="starting position"></th>
-		</tr>
-		<tr>
-			<td class="nat"><label><input class="radio" type="radio" name="vid" value="1" <?php echo $form->getRadio('vid',1); ?>>&nbsp;<?php echo ROMANS; ?></label></td>
-			&nbsp;<td class="pos1"><label><input class="radio" type="radio" name="kid" value="0" checked>&nbsp;<?php echo RANDOM; ?></label></td>
-			<td class="pos2">&nbsp;</td>
-		</tr>
-		<tr>
-			<td><label><input class="radio" type="radio" name="vid" value="2" <?php echo $form->getRadio('vid',2); ?>>&nbsp;<?php echo TEUTONS; ?></label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="1" <?php echo $form->getRadio('kid',1); ?>>&nbsp;<?php echo NW; ?> <b>(-|+)</b>&nbsp;</label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="2" <?php echo $form->getRadio('kid',2); ?>>&nbsp;<?php echo NE; ?> <b>(+|+)</b></label></td>
-		</tr>
-		<tr class="btm">
-			<td><label><input class="radio" type="radio" name="vid" value="3" <?php echo $form->getRadio('vid',3); ?>>&nbsp;<?php echo GAULS; ?></label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="3" <?php echo $form->getRadio('kid',3); ?>>&nbsp;<?php echo SW; ?> <b>(-|-)</b></label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="4" <?php echo $form->getRadio('kid',4); ?>>&nbsp;<?php echo SE; ?> <b>(+|-)</b></label></td>
-		</tr>
-	</tbody>
-</table>
+                        <tbody>
+                            <tr class="top">
+                                <th width="109"><img src="img/x.gif" class="img_u06" alt="choose tribe"></th>
+                                <th colspan="2"><img src="img/x.gif" class="img_u07" alt="starting position"></th>
+                            </tr>
+                            <tr>
+                                <td rowspan="5" class="nat">
+                                    <label>
+                                        <img src="img/rpage/Roman.jpg" alt="Romans" width="87" height="87" longdesc="img" />
+                                        <br />
+                                        <input class="radio" type="radio" name="vid" value="1" <?php echo $form->getRadio('vid',1); ?>>&nbsp;<?php echo ROMANS; ?>
+                                    </label>
+                                </td>
+                                <td width="170" class="btm">&nbsp;</td>
+                                <td width="158" class="btm">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="pos1"><label><input class="radio" type="radio" name="kid" value="0" checked>&nbsp;<?php echo RANDOM; ?></label></td>
+                                <td width="158" class="btm">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td><label><input class="radio" type="radio" name="kid" value="1" <?php echo $form->getRadio('kid',1); ?>>&nbsp;<?php echo NW; ?>&nbsp;<b>(-|+)</b>&nbsp;</label></td>
+                                <td><label><input class="radio" type="radio" name="kid" value="2" <?php echo $form->getRadio('kid',2); ?>>&nbsp;<?php echo NE; ?>&nbsp;<b>(+|+)</b>&nbsp;</label></td>
+                            </tr>
+                            <tr>
+                                <td><label><input class="radio" type="radio" name="kid" value="3" <?php echo $form->getRadio('kid',3); ?>>&nbsp;<?php echo SW; ?>&nbsp;<b>(-|-)</b>&nbsp;</label></td>
+                                <td><label><input class="radio" type="radio" name="kid" value="4" <?php echo $form->getRadio('kid',4); ?>>&nbsp;<?php echo SE; ?>&nbsp;<b>(+|-)</b>&nbsp;</label></td>
+                            </tr>
+                            <tr>
+                                <td class="btm">&nbsp;</td>
+                                <td class="btm">&nbsp;</td>
+                            </tr>		
+                            <tr>
+                                <td>
+                                    <label>
+                                        <img src="img/rpage/Teuton.jpg" alt="Teuton" width="87" height="87" longdesc="img" />
+                                        <br />
+                                        <input class="radio" type="radio" name="vid" value="2" <?php echo $form->getRadio('vid',2); ?>>&nbsp;<?php echo TEUTONS; ?>
+                                    </label>
+                                </td>
+                                <td colspan="2" rowspan="2">
+                                    <img src="img/rpage/travian_logo.png" width="219" height="234" longdesc="img" />
+                                </td>
+                            </tr>		
+                            <tr>
+                                <td>
+                                    <label>
+                                        <img src="img/rpage/Gaul.jpg" alt="Gaul" width="87" height="87" longdesc="img" />
+                                        <br />
+                                        <input class="radio" type="radio" name="vid" value="3" <?php echo $form->getRadio('vid',3); ?>>&nbsp;<?php echo GAULS; ?>
+                                    </label>
+                                </td> 
+                            </tr>
+                         
+                        </tbody>
+                    </table>
 
 <ul class="important">
 <?php
