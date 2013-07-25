@@ -129,7 +129,7 @@ if($mainbuilding >= 10 && $granary == 20 && $village->capital == 0 && $largeA['o
     include("avaliable/greatgranary.tpl");
 }  
 if((($trapper == 0 && $trapper1 == 0) || $trapper == 20) && $rallypoint >= 1 && $session->tribe == 3 && $id != 39 && $id != 40) {
-//include("avaliable/trapper.tpl");
+	include("avaliable/trapper.tpl");
 }
 if($rallypoint == 0 && $rallypoint1 == 0 && $id != 40) {
 include("avaliable/rallypoint.tpl");
