@@ -1,6 +1,6 @@
 <?php
 		if($session->access!=BANNED){
-		$ww = 1;
+		$finish = 0;
 		foreach($building->buildArray as $jobs) {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
@@ -23,6 +23,8 @@
 				$buildiron = $buildarray[$level]['iron'];
 				$buildcrop = $buildarray[$level]['crop'];
 				if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop){
+				$newgold = $session->gold-1;
+				$database->updateUserField($session->uid, "gold", $newgold, 1);
 				$enought_res = 1;
 				$q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
 				}
@@ -39,16 +41,12 @@
 						$database->query($q);
 					}
 				}
-				if(($jobs['field'] >= 19 && ($session->tribe == 1 || $session->tribe == 5 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1 && $session->tribe != 5)) { $innertimestamp = $jobs['timestamp']; }
+				if(($jobs['field'] >= 19 && ($session->tribe == 1 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1)) { $innertimestamp = $jobs['timestamp']; }
 			}
 		}
 		}
 		}
-		$wwvillage1 = $database->getResourceLevel($village->wid);
-		if($wwvillage1['f99t']!=40){
-		$ww = 0;
-		}
-		if($ww == 0){
+		if($finish == 1){
 		$database->finishDemolition($village->wid);
 		$technology->finishTech();
 		$logging->goldFinLog($village->wid);
@@ -61,7 +59,7 @@
 			}
 		}
 		}
-		header("Location: plus.php?id=3");
+		header("Location: ".$session->referrer);
 		}else{
 		header("Location: banned.php");
 		}

@@ -672,7 +672,7 @@ class Building {
 	public function finishAll() {
 		global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
 		if($session->access!=BANNED){
-		$ww = 1;
+		$finish = 0;
 		foreach($this->buildArray as $jobs) {
 		if($jobs['wid']==$village->wid){
 		$wwvillage = $database->getResourceLevel($jobs['wid']);
@@ -718,11 +718,7 @@ class Building {
 		}
 		}
 		}
-		$wwvillage1 = $database->getResourceLevel($village->wid);
-		if($wwvillage1['f99t']!=40){
-		$ww = 0;
-		}
-		if($ww == 0){
+		if($finish == 1){
 		$database->finishDemolition($village->wid);
 		$technology->finishTech();
 		$logging->goldFinLog($village->wid);
