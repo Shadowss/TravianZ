@@ -15,7 +15,7 @@
     mysql_select_db($db_name, $con);
 
     $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY ap DESC, id DESC Limit 10");
-    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = '".$session->uid."' ORDER BY ap DESC Limit 1");
+    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = '".$session->uid."' ORDER BY ap DESC, id DESC Limit 1");
 	?>
 	<table cellpadding="1" cellspacing="1">
 	<thead>

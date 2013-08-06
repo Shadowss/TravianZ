@@ -15,7 +15,7 @@
     mysql_select_db($db_name, $con);
 
     $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
-    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY ap DESC Limit 1");
+    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY ap DESC, id DESC Limit 1");
 	?>
 	<table cellpadding="1" cellspacing="1">
 	<thead>

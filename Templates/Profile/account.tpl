@@ -130,7 +130,7 @@ else {
     <tr>
         <th>Confirm with password:</th>
 
-        <td><input class="text" type="password" name="del_pw" maxlength="20" /></td>
+        <td><input class="text" type="password" name="del_pw" maxlength="30" /></td>
         <?php 
         }
         ?>
