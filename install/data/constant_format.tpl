@@ -106,6 +106,9 @@ define("SHOW_NATARS",%SHOW_NATARS%);
 // ***** Natars Units Multiplier
 define("NATARS_UNITS",%NATARS_UNITS%); 
 
+// ***** Nature troops regeneration time
+define("NATURE_REGTIME",%NATURE_REGTIME%); 
+
 // ***** Enable T4 is Coming screen
 define("T4_COMING",%T4_COMING%);
 

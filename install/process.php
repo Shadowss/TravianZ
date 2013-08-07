@@ -96,6 +96,7 @@ class Process {
 		$text = preg_replace("'%WW%'", $_POST['ww'], $text);
 		$text = preg_replace("'%SHOW_NATARS%'", $_POST['show_natars'], $text);
 		$text = preg_replace("'%NATARS_UNITS%'", $_POST['natars_units'], $text);
+		$text = preg_replace("'%NATURE_REGTIME%'", $_POST['nature_regtime'], $text);
 		$text = preg_replace("'%T4_COMING%'", $_POST['t4_coming'], $text);
 		$text = preg_replace("'%REG_OPEN%'", $_POST['reg_open'], $text);
 		$text = preg_replace("'%PEACE%'", $_POST['peace'], $text);
