@@ -84,12 +84,6 @@ $greatwarehouse1 = $database->getBuildingByType2($village->wid,38);
 $greatgranary1 = $database->getBuildingByType2($village->wid,39);  
 $greatworkshop1 = $database->getBuildingByType2($village->wid,42);
 
-foreach ($database->getJobs($_SESSION['wid']) as $bdata) {
-    $UnderConstruction = strtolower(str_replace(array(" ","'"),"",$building->procResType($bdata['type'])));
-    $$UnderConstruction = ($$UnderConstruction == 0 ? -1 : $$UnderConstruction);
-}
-
-
 ?>
 <div id="build" class="gid0"><h1>Construct new building</h1>
 <?php
@@ -138,11 +132,11 @@ if($embassy == 0 && $embassy1 == 0 && $id != 39 && $id != 40) {
 include("avaliable/embassy.tpl");
 }
 //fix hero
-if($hero == 0 && $hero1 == 0 && $mainbuilding >= 3 && $rallypoint >= 1 && $$UnderConstruction <> -1 && $id != 39  && $id != 40) {
+if($hero == 0 && $hero1 == 0 && $mainbuilding >= 3 && $rallypoint >= 1 && $id != 39  && $id != 40) {
 include("avaliable/hero.tpl");
 }
 //fix barracks
-if($rallypoint >= 1 && $mainbuilding >= 3 && $barrack == 0 && $barrack1 == 0 && $$UnderConstruction <> -1 && $id != 39 && $id != 40) {
+if($rallypoint >= 1 && $mainbuilding >= 3 && $barrack == 0 && $barrack1 == 0 && $id != 39 && $id != 40) {
 include("avaliable/barracks.tpl");
 }
 if($mainbuilding >= 3 && $academy >= 1 && $armoury == 0 && $armoury1 == 0 && $id != 39 && $id != 40) {
@@ -152,7 +146,7 @@ if($cropland >= 5 && $grainmill == 0 && $grainmill1 == 0 && $id != 39 && $id != 
 include("avaliable/grainmill.tpl");
 }
 //fix marketplace
-if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 && $$UnderConstruction <> -1 && $id != 39 && $id != 40) {
+if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 && $id != 39 && $id != 40) {
 include("avaliable/marketplace.tpl");
 }
 if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0) {

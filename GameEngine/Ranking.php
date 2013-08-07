@@ -11,7 +11,7 @@
 
 		class Ranking {
 
-			private $rankarray = array();
+			public $rankarray = array();
 			private $rlastupdate;
 
 			public function getRank() {
@@ -45,7 +45,11 @@
 							break;
 						case 8:
 							$this->procHeroRankArray();
-							$this->getStart($this->searchRank($session->uid, "userid"));
+							if($get['hero'] == 0) {
+								$this->getStart(1);
+							} else {
+								$this->getStart($this->searchRank($session->uid, "uid"));
+							}
 							break;
 						case 11:
 							$this->procRankRaceArray(1);
@@ -181,10 +185,12 @@
 			public function searchRank($name, $field) {
 				while(1) {
 					$key = key($this->rankarray);
+					for($key=0;$key<count($this->rankarray);$key++){
 					if($this->rankarray[$key][$field] == $name) {
 						return $key;
 						break;
-					} else {
+					}
+					}
 						if(!next($this->rankarray)) {
 						if($field != "userid"){
 							return $name;
@@ -194,7 +200,7 @@
 							break;
 						}
 						}
-					}
+					
 				}
 			}
 
@@ -478,7 +484,7 @@
 				foreach($array as $value) {
 					$value['owner'] = $database->getUserField($value['uid'], "username", 0);
 					$value['level'];
-					$vaule['name'];
+					$value['name'];
 					$value['uid'];
 
 					array_push($holder, $value);

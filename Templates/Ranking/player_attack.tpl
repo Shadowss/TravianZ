@@ -35,7 +35,7 @@ $search = $_SESSION['search'];
         	$ranking = $ranking->getRank();
             for($i=$start;$i<($start+20);$i++) {
             	if(isset($ranking[$i]['username']) && $ranking[$i] != "pad") {
-                	if($session->uid == $ranking[$i]['id']){
+                	if($i == $search){
 					echo "<tr class=\"hl\"><td class=\"ra fc\" >";
                     }
                     else {
