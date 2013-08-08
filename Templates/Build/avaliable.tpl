@@ -123,7 +123,7 @@ if($mainbuilding >= 10 && $granary == 20 && $village->capital == 0 && $largeA['o
     include("avaliable/greatgranary.tpl");
 }  
 if((($trapper == 0 && $trapper1 == 0) || $trapper == 20) && $rallypoint >= 1 && $session->tribe == 3 && $id != 39 && $id != 40) {
-	include("avaliable/trapper.tpl");
+include("avaliable/trapper.tpl");
 }
 if($rallypoint == 0 && $rallypoint1 == 0 && $id != 40) {
 include("avaliable/rallypoint.tpl");
@@ -136,7 +136,7 @@ if($hero == 0 && $hero1 == 0 && $mainbuilding >= 3 && $rallypoint >= 1 && $id !=
 include("avaliable/hero.tpl");
 }
 //fix barracks
-if($rallypoint >= 1 && $mainbuilding >= 3 && $barrack == 0 && $barrack1 == 0 && $id != 39 && $id != 40) {
+if($rallypoint >= 1 && $mainbuilding >= 3 && $barrack == 0 && $barrack1 == 0 &id != 39 && $id != 40) {
 include("avaliable/barracks.tpl");
 }
 if($mainbuilding >= 3 && $academy >= 1 && $armoury == 0 && $armoury1 == 0 && $id != 39 && $id != 40) {
@@ -146,7 +146,7 @@ if($cropland >= 5 && $grainmill == 0 && $grainmill1 == 0 && $id != 39 && $id != 
 include("avaliable/grainmill.tpl");
 }
 //fix marketplace
-if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 && $id != 39 && $id != 40) {
+if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 &id != 39 && $id != 40) {
 include("avaliable/marketplace.tpl");
 }
 if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0) {
@@ -250,7 +250,7 @@ if($id != 39 && $id != 40) {
 <div id="build_list_soon" class="hide">
 <?php
 if($rallypoint == 0 && $session->tribe == 3 && $trapper == 0 ) {
-	include("soon/trapper.tpl");
+include("soon/trapper.tpl");
 }
 if($mainbuilding < 10 && $warehouse < 10 && $village->capital == 0 && $largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid ) {
     include("soon/greatwarehouse.tpl");
@@ -280,6 +280,14 @@ if($academy == 0 && ($mainbuilding <= 2 || $barrack <= 2)) {
    include("soon/academy.tpl");
 }
 if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4) {
+//Fix Castle
+//id user
+$user = $session->uid;
+
+//connect to DB
+mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+mysql_select_db(SQL_DB);
+
 //loop search village user
 $query = mysql_query("SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
 while($villaggi_array = mysql_fetch_array($query)){
@@ -301,6 +309,8 @@ if ($test){
 if (!$test){
 	include("soon/palace.tpl");
 }
+
+//end Fix
 }
 if($blacksmith == 0 && ($academy <= 2 || $mainbuilding <= 2)) {
    include("soon/blacksmith.tpl");
