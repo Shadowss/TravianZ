@@ -84,7 +84,7 @@ echo "re1:".$message->reply['topic']; }} ?>" maxlength="35" onkeyup="copyElement
 				<div class="line bbLine"></div>
 	
 				<textarea id="message" name="message" onkeyup="copyElement('body')" tabindex="3" class="textarea write message"><?php if(isset($message->reply['message'])) { echo " \n\n_________________________
-Reply:
+Reply: ".$database->getUserField($id,'username',0)."
 \n".stripslashes($message->reply['message']); } ?></textarea>
 				<div id="message_preview" name="message_preview" class="message"></div>
 			</div>
