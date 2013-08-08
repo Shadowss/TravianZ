@@ -136,7 +136,7 @@ if($hero == 0 && $hero1 == 0 && $mainbuilding >= 3 && $rallypoint >= 1 && $id !=
 include("avaliable/hero.tpl");
 }
 //fix barracks
-if($rallypoint >= 1 && $mainbuilding >= 3 && $barrack == 0 && $barrack1 == 0 &id != 39 && $id != 40) {
+if($rallypoint >= 1 && $mainbuilding >= 3 && $barrack == 0 && $barrack1 == 0 && $id != 39 && $id != 40) {
 include("avaliable/barracks.tpl");
 }
 if($mainbuilding >= 3 && $academy >= 1 && $armoury == 0 && $armoury1 == 0 && $id != 39 && $id != 40) {
@@ -146,7 +146,7 @@ if($cropland >= 5 && $grainmill == 0 && $grainmill1 == 0 && $id != 39 && $id != 
 include("avaliable/grainmill.tpl");
 }
 //fix marketplace
-if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 &id != 39 && $id != 40) {
+if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 && $id != 39 && $id != 40) {
 include("avaliable/marketplace.tpl");
 }
 if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0) {
