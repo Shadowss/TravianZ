@@ -47,12 +47,12 @@
 <style>
 
 .day_image {
-    background-image: url("http://travian.shadowss.ro/gpack/travian_default/img/l/day.gif");
+    background-image: url("../gpack/travian_default/img/l/day.gif");
 width: 18px;
 height:18px;
 }
 .night_image {
-      background-image: url("http://travian.shadowss.ro/gpack/travian_default/img/l/night.gif");
+      background-image: url("../gpack/travian_default/img/l/night.gif");
 width: 18px;
 height:18px;
 }
