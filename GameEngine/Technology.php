@@ -91,7 +91,7 @@ class Technology {
 		$trainingarray = $database->getTraining($village->wid);
 		$listarray = array();
 		$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,35,36,37,38,39,40,41,42,43,44);
-		$greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
+		$greatbarracks = array(61,62,63,71,72,73,74,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
 		$stables = array(4,5,6,15,16,23,24,25,26,45,46);
 		$greatstables = array(64,65,66,75,76,83,84,85,86,105,106);
 		$workshop = array(7,8,17,18,27,28,47,48);
