@@ -231,7 +231,7 @@ if($tradeoffice == 0 && $tradeoffice1 == 0 && $market == 20 && $stable >= 10  &&
 if($session->tribe == 1 && $horsedrinkingtrough == 0 && $horsedrinkingtrough1 == 0 && $rallypoint >= 10 && $stable == 20  && $id != 39 && $id != 40) {
     include("avaliable/horsedrinking.tpl");
 }
-if($session->tribe == 2 && $brewery == 0 && $brewery1 == 0 && $rallypoint >= 10 && $granary == 20  && $id != 39 && $id != 40) {
+if($session->tribe == 2 && $village->capital == 1 && $brewery == 0 && $brewery1 == 0 && $rallypoint >= 10 && $granary == 20  && $id != 39 && $id != 40) {
     include("avaliable/brewery.tpl");
 }
 if($greatbarracks == 0 && $greatbarracks1 == 0 && $barrack == 20 && $village->capital == 0 && $id != 39 && $id != 40) {
@@ -351,7 +351,7 @@ if($tradeoffice == 0 && $market <= 19 && $market >= 10 || $stable >= 5 && $stabl
 if($session->tribe == 1 && $horsedrinkingtrough == 0 && $rallypoint <= 9 && $rallypoint >= 5 || $stable <= 19 && $stable >= 10 && $session->tribe == 1) {
     include("soon/horsedrinking.tpl");
     }
-if($brewery == 0 && $rallypoint <= 9 && $rallypoint >= 5 || $granary <= 19 && $granary >= 10 && $session->tribe == 2) {
+if($brewery == 0 && $village->capital == 1 && $rallypoint <= 9 && $rallypoint >= 5 || $granary <= 19 && $granary >= 10 && $session->tribe == 2) {
     include("soon/brewery.tpl");
 }
 if($greatbarracks == 0 && $barrack >= 18 && $village->capital == 0) {
