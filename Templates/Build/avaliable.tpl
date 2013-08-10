@@ -156,7 +156,7 @@ if($academy == 0 && $academy1 == 0 && $mainbuilding >= 3 && $barrack >= 3 && $id
 include("avaliable/academy.tpl");
 }
 
-if($palace == 0 && $palace1 == 0 && $embassy >= 1 && $mainbuilding >= 5 && $id != 39 && $id != 40 && $residence == 0 && $residence1 == 0) {
+if($palace == 0 && $palace1 == 0 && $village->natar == 0 && $embassy >= 1 && $mainbuilding >= 5 && $id != 39 && $id != 40 && $residence == 0 && $residence1 == 0) {
 
 //Fix Castle
 //id user
@@ -201,7 +201,7 @@ include("avaliable/stonemason.tpl");
 if($stable == 0 && $stable1 == 0 && $blacksmith >= 3 && $academy >= 5 && $id != 39 && $id != 40) {
 include("avaliable/stable.tpl");
 }
-if($treasury == 0 && $treasury1 == 0 && $mainbuilding >= 10  && $id != 39 && $id != 40) {
+if($treasury == 0 && $treasury1 == 0 && $village->natar == 0 && $mainbuilding >= 10  && $id != 39 && $id != 40) {
 include("avaliable/treasury.tpl");
 }
 if($brickyard == 0 && $brickyard1 == 0 && $claypit >= 10 && $mainbuilding >= 5  && $id != 39 && $id != 40 ) {
@@ -279,7 +279,7 @@ if($residence == 0 && $mainbuilding <= 4) {
 if($academy == 0 && ($mainbuilding <= 2 || $barrack <= 2)) {
    include("soon/academy.tpl");
 }
-if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4) {
+if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4 && $village->natar == 0) {
 //Fix Castle
 //id user
 $user = $session->uid;
@@ -321,7 +321,7 @@ if($stonemasonslodge == 0 && $palace <= 2  && $palace != 0 && $mainbuilding >= 2
 if($stable == 0 && (($blacksmith <= 2 && $blacksmith != 0) || ($academy >= 2 && $academy <= 4))) {
    include("soon/stable.tpl");
 }
-if($treasury == 0 && $mainbuilding <= 9 && $mainbuilding >= 5) {
+if($treasury == 0 && $mainbuilding <= 9 && $mainbuilding >= 5 && $village->natar == 0) {
    include("soon/treasury.tpl");
 }
 if($brickyard == 0 && $claypit <= 9  && $claypit >= 5 && $mainbuilding >= 2  && $mainbuilding <= 4) {
@@ -372,7 +372,7 @@ if($greatworkshop == 0 && $workshop >= 18 && $village->capital == 0 && GREAT_WKS
     if($academy == 0 && ($mainbuilding == 1 || $barrack == 0)) {
     include("soon/academy.tpl");
     }
-    if($palace == 0 && ($embassy == 0 || $mainbuilding <= 2)) {
+    if($palace == 0 && ($embassy == 0 || $mainbuilding <= 2) && $village->natar == 0) {
     include("soon/palace.tpl");
     }
     if($blacksmith == 0 && ($academy == 0 || $mainbuilding == 1)) {
