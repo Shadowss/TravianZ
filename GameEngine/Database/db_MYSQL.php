@@ -1415,14 +1415,34 @@ class MYSQL_DB {
 		}
 	}
 
-	function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
-		if(!$mode) {
-			$q = "UPDATE " . TB_PREFIX . "vdata set wood = wood - $wood, clay = clay - $clay, iron = iron - $iron, crop = crop - $crop where wref = $vid";
-		} else {
-			$q = "UPDATE " . TB_PREFIX . "vdata set wood = wood + $wood, clay = clay + $clay, iron = iron + $iron, crop = crop + $crop where wref = $vid";
-		}
-		return mysql_query($q, $this->connection);
-	}
+	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
+    $q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid."";
+                $result = mysql_query($q, $this->connection);
+    $checkres= $this->mysql_fetch_all($result);
+                if(!$mode){
+    $nwood=$checkres[0]['wood']-$wood;
+    $nclay=$checkres[0]['clay']-$clay;
+    $niron=$checkres[0]['iron']-$iron;
+    $ncrop=$checkres[0]['crop']-$crop;
+    if($nwood<0 or $nclay<0 or $niron<0 or $ncrop<0){$shit=true;}
+    $dwood=($nwood<0)?0:$nwood;
+    $dclay=($nclay<0)?0:$nclay;
+    $diron=($niron<0)?0:$niron;
+    $dcrop=($ncrop<0)?0:$ncrop;
+    }else{
+    $nwood=$checkres[0]['wood']+$wood;
+    $nclay=$checkres[0]['clay']+$clay;
+    $niron=$checkres[0]['iron']+$iron;
+    $ncrop=$checkres[0]['crop']+$crop;
+    $dwood=($nwood>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nwood;
+    $dclay=($nclay>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nclay;
+    $diron=($niron>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$niron;
+    $dcrop=($ncrop>$checkres[0]['maxcrop'])?$checkres[0]['maxcrop']:$ncrop;
+    }
+    if(!$shit){
+    $q = "UPDATE " . TB_PREFIX . "vdata set wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop where wref = ".$vid;
+    return mysql_query($q, $this->connection); }else{return false;}
+   }
 
 	function modifyOasisResource($vid, $wood, $clay, $iron, $crop, $mode) {
 		if(!$mode) {
