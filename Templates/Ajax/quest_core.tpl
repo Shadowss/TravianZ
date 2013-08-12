@@ -244,11 +244,9 @@ if (isset($qact)){
 	case '23':
 	$database->updateUserField($_SESSION['username'],'quest','23',0);
 	$_SESSION['qst']= 23;
-	
+
 	//Give Reward
-	$gold=$database->getUserField($_SESSION['username'],'gold','username');
-	$gold+=15;
-	$database->updateUserField($_SESSION['username'],'gold',$gold,0);
+	$database->modifyResource($session->villages[0],1700,2100,1900,1400,1);
 	break;
 
 	case '24':
@@ -266,85 +264,89 @@ if (isset($qact)){
 	$_SESSION['qst']= 28;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],240,280,180,100,1);
+	$gold=$database->getUserField($_SESSION['username'],'gold','username');
+	$gold+=15;
+	$database->updateUserField($_SESSION['username'],'gold',$gold,0);
 	break;
-    
-        case '29':
-	$dataarray[4] = 1;
+	
+      case '29':
+	$dataarray[3] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','29',0);
 
 	$_SESSION['qst']= 29;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],600,750,600,300,1);
+	$database->modifyResource($session->villages[0],240,280,180,100,1);
 	break;
     
         case '30':
-	$dataarray[5] = 1;
+	$dataarray[4] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','30',0);
 
 	$_SESSION['qst']= 30;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],900,850,600,300,1);
+	$database->modifyResource($session->villages[0],600,750,600,300,1);
 	break;
     
         case '31':
-	$dataarray[6] = 1;
+	$dataarray[5] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','31',0);
 
 	$_SESSION['qst']= 31;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],1800,2000,1650,800,1);
+	$database->modifyResource($session->villages[0],900,850,600,300,1);
 	break;
     
         case '32':
-	$dataarray[7] = 1;
+	$dataarray[6] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','32',0);
 
 	$_SESSION['qst']= 32;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],1600,1800,1950,1200,1);
+	$database->modifyResource($session->villages[0],1800,2000,1650,800,1);
 	break;
     
         case '33':
-	$dataarray[8] = 1;
+	$dataarray[7] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','33',0);
 
 	$_SESSION['qst']= 33;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],3400,2800,3600,2200,1);
+	$database->modifyResource($session->villages[0],1600,1800,1950,1200,1);
 	break;
     
         case '34':
-	$dataarray[9] = 1;
+	$dataarray[8] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','34',0);
 
 	$_SESSION['qst']= 34;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],1050,800,900,750,1);
+	$database->modifyResource($session->villages[0],3400,2800,3600,2200,1);
 	break;
     
         case '35':
-	$dataarray[10] = 1;
+	$dataarray[9] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','35',0);
 
 	$_SESSION['qst']= 35;
 	
 	//Give Reward
-	$database->modifyResource($session->villages[0],1600,2000,1800,1300,1);
+	$database->modifyResource($session->villages[0],1050,800,900,750,1);
 	break;
-
-	case '36':
+    
+        case '36':
+	$dataarray[10] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','36',0);
-	$_SESSION['qst']= 36;
 
+	$_SESSION['qst']= 36;
+	
 	//Give Reward
-	$database->modifyResource($session->villages[0],1700,2100,1900,1400,1);
+	$database->modifyResource($session->villages[0],1600,2000,1800,1300,1);
 	break;
 	
 	

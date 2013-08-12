@@ -1418,13 +1418,33 @@ class MYSQLi_DB {
 		}
 	}
 
-	function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
-		if(!$mode) {
-			$q = "UPDATE " . TB_PREFIX . "vdata set wood = wood - $wood, clay = clay - $clay, iron = iron - $iron, crop = crop - $crop where wref = $vid";
-		} else {
-			$q = "UPDATE " . TB_PREFIX . "vdata set wood = wood + $wood, clay = clay + $clay, iron = iron + $iron, crop = crop + $crop where wref = $vid";
-		}
-		return mysqli_query($this->connection, $q);
+	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
+    $q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid."";
+                $result = mysqli_query($this->connection, $q);
+    $checkres= $this->mysqli_fetch_all($result);
+                if(!$mode){
+    $nwood=$checkres[0]['wood']-$wood;
+    $nclay=$checkres[0]['clay']-$clay;
+    $niron=$checkres[0]['iron']-$iron;
+    $ncrop=$checkres[0]['crop']-$crop;
+    if($nwood<0 or $nclay<0 or $niron<0 or $ncrop<0){$shit=true;}
+    $dwood=($nwood<0)?0:$nwood;
+    $dclay=($nclay<0)?0:$nclay;
+    $diron=($niron<0)?0:$niron;
+    $dcrop=($ncrop<0)?0:$ncrop;
+    }else{
+    $nwood=$checkres[0]['wood']+$wood;
+    $nclay=$checkres[0]['clay']+$clay;
+    $niron=$checkres[0]['iron']+$iron;
+    $ncrop=$checkres[0]['crop']+$crop;
+    $dwood=($nwood>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nwood;
+    $dclay=($nclay>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nclay;
+    $diron=($niron>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$niron;
+    $dcrop=($ncrop>$checkres[0]['maxcrop'])?$checkres[0]['maxcrop']:$ncrop;
+    }
+    if(!$shit){
+    $q = "UPDATE " . TB_PREFIX . "vdata set wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop where wref = ".$vid;
+    return mysqli_query($this->connection, $q); }else{return false;}
 	}
 
 	function modifyOasisResource($vid, $wood, $clay, $iron, $crop, $mode) {
@@ -2395,7 +2415,7 @@ class MYSQLi_DB {
 
 		if(!$mode) {
 			$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,35,36,37,38,39,40,41,42,43,44);
-			$greatbarracks = array(61,62,63,71,72,73,84,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
+			$greatbarracks = array(61,62,63,71,72,73,74,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
 			$stables = array(4,5,6,15,16,23,24,25,26,45,46);
 			$greatstables = array(64,65,66,75,76,83,84,85,86,105,106);
 			$workshop = array(7,8,17,18,27,28,47,48);
