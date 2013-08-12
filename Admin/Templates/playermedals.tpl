@@ -53,9 +53,9 @@
 									<td>$rank</td>
 									<td>$week</td>
 									<td>$points</td>
-									<td><img src=\"../<?php echo GP_LOCATE; ?>img/t/".$medal['img'].".jpg\"></td>
+									<td><img src=\"../gpack/travian_default/img/t/".$medal['img'].".jpg\"></td>
 									<td>
-										<input type=\"image\" name=\"medalid\" value=\"".$medal['id']."\" style=\"background-image: url('../<?php echo GP_LOCATE; ?>img/a/del.gif'); height: 12px; width: 12px;\" src=\"../<?php echo GP_LOCATE; ?>img/a/x.gif\">
+										<input type=\"image\" name=\"medalid\" value=\"".$medal['id']."\" style=\"background-image: url('../gpack/travian_default/img/a/del.gif'); height: 12px; width: 12px;\" src=\"../gpack/travian_default/img/a/x.gif\">
 									</td>
 								</tr>";
 						}
@@ -84,7 +84,7 @@
 				<td>
 					<form action="../GameEngine/Admin/Mods/deletemedalbyuser.php" method="POST">
 						<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
-						<input type="image" name="userid" value="<?php echo $id; ?>" style="background-image: url('../<?php echo GP_LOCATE; ?>img/a/del.gif'); height: 12px; width: 12px;" src="../<?php echo GP_LOCATE; ?>img/a/x.gif">
+						<input type="image" name="userid" value="<?php echo $id; ?>" style="background-image: url('../gpack/travian_default/img/a/del.gif'); height: 12px; width: 12px;" src="../gpack/travian_default/img/a/x.gif">
 					</form>
 				</td>
 			</tbody>
