@@ -270,7 +270,7 @@ if (isset($qact)){
 	break;
 	
       case '29':
-	$dataarray[3] = 1;
+	$dataarray[4] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','29',0);
 
 	$_SESSION['qst']= 29;
@@ -280,7 +280,7 @@ if (isset($qact)){
 	break;
     
         case '30':
-	$dataarray[4] = 1;
+	$dataarray[5] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','30',0);
 
 	$_SESSION['qst']= 30;
@@ -290,7 +290,7 @@ if (isset($qact)){
 	break;
     
         case '31':
-	$dataarray[5] = 1;
+	$dataarray[6] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','31',0);
 
 	$_SESSION['qst']= 31;
@@ -300,7 +300,7 @@ if (isset($qact)){
 	break;
     
         case '32':
-	$dataarray[6] = 1;
+	$dataarray[7] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','32',0);
 
 	$_SESSION['qst']= 32;
@@ -310,7 +310,7 @@ if (isset($qact)){
 	break;
     
         case '33':
-	$dataarray[7] = 1;
+	$dataarray[8] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','33',0);
 
 	$_SESSION['qst']= 33;
@@ -320,7 +320,7 @@ if (isset($qact)){
 	break;
     
         case '34':
-	$dataarray[8] = 1;
+	$dataarray[9] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','34',0);
 
 	$_SESSION['qst']= 34;
@@ -330,7 +330,7 @@ if (isset($qact)){
 	break;
     
         case '35':
-	$dataarray[9] = 1;
+	$dataarray[10] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','35',0);
 
 	$_SESSION['qst']= 35;
@@ -340,7 +340,6 @@ if (isset($qact)){
 	break;
     
         case '36':
-	$dataarray[10] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','36',0);
 
 	$_SESSION['qst']= 36;
