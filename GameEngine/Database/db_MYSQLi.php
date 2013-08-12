@@ -528,17 +528,21 @@ class MYSQLi_DB {
 	}
 
 	function populateOasisUnits($wid, $high) {
-		$basearray = $this->getMInfo($wid);
 		$basearray = $this->getOasisInfo($wid);
-		if($basearray2['high'] == 0){
+		if($high == 0){
 		  $max = rand(15,30);
-		  }elseif($basearray2['high'] == 1){
-		  $max = rand(70,90);
-		  }elseif($basearray2['high'] == 2){
-		  $max = rand(100,140);
+		  }elseif($high == 1){
+		  $max = rand(50,70);
+		  }elseif($high == 2){
+		  $max = rand(90,120);
+		  }
+		  $max2 = 0;
+		  $rand = rand(0,3);
+		  if($rand == 1){
+		  $max2 = 3;
 		  }
 		  //each Troop is a Set for oasis type like mountains have rats spiders and snakes fields tigers elphants clay wolves so on stonger one more not so less
-		  switch($basearray['oasistype']) {
+		  switch($basearray['type']) {
 			case 1:
 			case 2:
 			  //+25% lumber per hour
@@ -547,7 +551,7 @@ class MYSQLi_DB {
 			  break;
 			case 3:
 			  //+25% lumber and +25% crop per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET  u35 = u35 + '".rand(0,5)."', u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND (u36 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max.")";
+			  $q = "UPDATE " . TB_PREFIX . "units SET  u35 = u35 + '".rand(0,5)."', u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."', u40 = u40 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u36 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max." OR u40 <= ".$max.")";
 			  $result = mysqli_query($this->connection, $q);
 			  break;
 			case 4:
@@ -558,7 +562,7 @@ class MYSQLi_DB {
 			  break;
 			case 6:
 			  //+25% clay and +25% crop per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND (u36 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max.")";
+			  $q = "UPDATE " . TB_PREFIX . "units SET u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."', u40 = u40 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u36 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max." OR u40 <= ".$max.")";
 			  $result = mysqli_query($this->connection, $q);
 			  break;
 			case 7:
@@ -569,7 +573,7 @@ class MYSQLi_DB {
 			  break;
 			case 9:
 			  //+25% iron and +25% crop
-			  $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(0,5)."', u32 = u32 + '".rand(0,5)."', u34 = u34 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND (u31 <= ".$max." OR u32 <= ".$max." OR u34 <= ".$max.")";
+			  $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(0,5)."', u32 = u32 + '".rand(0,5)."', u34 = u34 + '".rand(0,5)."', u40 = u40 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u31 <= ".$max." OR u32 <= ".$max." OR u34 <= ".$max." OR u40 <= ".$max.")";
 			  $result = mysqli_query($this->connection, $q);
 			  break;
 			case 10:
@@ -580,7 +584,7 @@ class MYSQLi_DB {
 			  break;
 			case 12:
 			  //+50% crop per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET u33 = u33 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."', u39 = u39 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND (u33 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max.")";
+			  $q = "UPDATE " . TB_PREFIX . "units SET u33 = u33 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."', u39 = u39 + '".rand(0,5)."', u40 = u40 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u33 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max." OR u39 <= ".$max." OR u40 <= ".$max.")";
 			  $result = mysqli_query($this->connection, $q);
 			  break;
 		  }
@@ -1491,9 +1495,9 @@ class MYSQLi_DB {
 		return mysqli_query($this->connection, $q);
 	}
 	
-	function updateOasis2($vid) {
+	function updateOasis2($vid, $time) {
 		$time = time();
-		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated2 = $time where wref = $vid";
+		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated2 = lastupdated2 + $time where wref = $vid";
 		return mysqli_query($this->connection, $q);
 	}
 

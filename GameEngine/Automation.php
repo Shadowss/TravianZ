@@ -4340,11 +4340,11 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 		global $database;
 		$time = time();
 		$time2 = NATURE_REGTIME;
-		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = 0 and $time - lastupdated2 > $time2";
+		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = 0 and lastupdated2 + $time2 < $time";
 		$array = $database->query_return($q);
 		foreach($array as $oasis) {
 			$database->populateOasisUnits($oasis['wref'],$oasis['high']);
-			$database->updateOasis2($oasis['wref']);
+			$database->updateOasis2($oasis['wref'], $time2);
 		}
 	}
 
