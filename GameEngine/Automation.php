@@ -695,8 +695,9 @@ class Automation {
 				$unitarrays = $this->getAllUnits($indi['wid']);
 				$village = $database->getVillage($indi['wid']);
 				$upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-				if ($crop < $upkeep){
-					// add starv data
+				$starv = $database->getVillageField($indi['wid'],"starv");
+				if ($crop < $upkeep && $starv == 0){
+				// add starv data
 					$database->setVillageField($indi['wid'], 'starv', $upkeep);
 					$database->setVillageField($indi['wid'], 'starvupdate', $time);
 				}
@@ -2456,7 +2457,7 @@ if($data['t11'] > 0){
 					}
 $palaceimg = "<img src=\"".GP_LOCATE."img/g/g26.gif\" height=\"20\" width=\"15\" alt=\"Palace\" title=\"Palace\" />";
 $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\" alt=\"Cranny\" title=\"Cranny\" />";
-$wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"20\" width=\"15\" alt=\"Wall\" title=\"Wall\" />";
+$wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15\" alt=\"Wall\" title=\"Wall\" />";
 				$info_spy = "".$spy_pic.",".$palaceimg." Residance/Palace Level : ".$rplevel."
 				<br>".$crannyimg." Cranny level: ".$crannylevel."<br>".$wallimg." Wall Level : ".$walllevel.""; 
 
@@ -2801,7 +2802,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$unitarrays = $this->getAllUnits($to['wref']);
 				$getvillage = $database->getVillage($to['wref']);
 				$village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
-				if ($crop < $village_upkeep){
+				$starv = $database->getVillageField($to['wref'],"starv");
+				if ($crop < $village_upkeep && $starv == 0){
 					// add starv data
 					$database->setVillageField($to['wref'], 'starv', $village_upkeep);
 					$database->setVillageField($to['wref'], 'starvupdate', time());
@@ -3644,7 +3646,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$unitarrays = $this->getAllUnits($train['vref']);
 				$village = $database->getVillage($train['vref']);
 				$upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-				if ($crop < $upkeep){
+				$starv = $database->getVillageField($train['vref'],"starv");
+				if ($crop < $upkeep && $starv == 0){
 					// add starv data
 					$database->setVillageField($train['vref'], 'starv', $upkeep);
 					$database->setVillageField($train['vref'], 'starvupdate', $time);
@@ -3822,7 +3825,14 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			foreach($harray as $hdata){
 				if((time()-$hdata['lastupdate'])>=1){
 					if($hdata['health']<100 and $hdata['health']>0){
-					$reg = $hdata['health']+$hdata['regeneration']*5*SPEED/86400*(time()-$hdata['lastupdate']);
+					if(SPEED <= 10){
+					$speed = SPEED;
+					}else if(SPEED <= 100){
+					$speed = ceil(SPEED/10);
+					}else{
+					$speed = ceil(SPEED/100);
+					}
+					$reg = $hdata['health']+$hdata['regeneration']*5*$speed/86400*(time()-$hdata['lastupdate']);
 					if($reg <= 100){
 						$database->modifyHero("health",$reg,$hdata['heroid']);
 					}else{
@@ -4150,32 +4160,65 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				}
 				if($difcrop > 0){
 					$killunits = floor($difcrop/18000);
-					if($killunits > 0){
+					while($killunits > 0){
 					if (isset($enf)){
-						if($killunits < $maxcount){
+						if($killunits <= $maxcount){
 							$database->modifyEnforce($enf, $maxtype, $killunits, 0);
 							$database->setVillageField($starv['wref'], 'starv', $upkeep);
 							$database->setVillageField($starv['wref'], 'starvupdate', $time);
 						}else{
+							$database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
+							$killunits -= $maxcount;
+							foreach ($enforcearray as $enforce){
+								for($i = 0 ; $i <= 50 ; $i++){
+									$units = $enforce['u'.$i];
+									if($enforce['u'.$i] > $maxcount){
+										$maxcount = $enforce['u'.$i];
+										$maxtype = $i;
+										$enf = $enforce['id'];
+									}
+									$totalunits += $enforce['u'.$i];
+									}
+							}
+							if($totalunits == 0){
+							$maxcount = $enforce['hero'];
+							$maxtype = "hero";
+							if($maxcount <= $killunits){
 							$database->deleteReinf($enf);
+							$killunits -= $maxcount;
+							}
+							}
 							$database->setVillageField($starv['wref'], 'starv', $upkeep);
 							$database->setVillageField($starv['wref'], 'starvupdate', $time);
 						}
 					}else{
-						if($killunits < $maxcount){
+						if($killunits <= $maxcount){
 							$database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
+							$killunits = 0;
 							$database->setVillageField($starv['wref'], 'starv', $upkeep);
 							$database->setVillageField($starv['wref'], 'starvupdate', $time);
-						}elseif($killunits > $maxcount){
-							$killunits = $maxcount;
+						}else{
 							$database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
+							$killunits -= $maxcount;
+							for($i = 0 ; $i <= 50 ; $i++){
+								$units = $unitarray['u'.$i];
+								if($unitarray['u'.$i] > $maxcount){
+									$maxcount = $unitarray['u'.$i];
+									$maxtype = $i;
+								}
+								$totalunits += $unitarray['u'.$i];
+							}
+							if($totalunits == 0){
+							$maxcount = $unitarray['hero'];
+							$maxtype = "hero";
+							}
 							$database->setVillageField($starv['wref'], 'starv', $upkeep);
 							$database->setVillageField($starv['wref'], 'starvupdate', $time);
 						}
 					}
 					}
+					}
 				}
-			}
 				$crop = $database->getCropProdstarv($starv['wref']);
 				if ($crop > $upkeep){
 					$database->setVillageField($starv['wref'], 'starv', 0);
