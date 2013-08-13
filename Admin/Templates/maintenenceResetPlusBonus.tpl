@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       oasis.tpl                                                   ##
+##  Filename       MaintenenceResetPlusBonus.tpl                               ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##

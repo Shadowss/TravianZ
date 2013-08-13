@@ -2,27 +2,22 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       mainteneceResetPlus.php                                     ##
+##  Filename       populateOases.php                                           ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 
-include_once("../../config.php");
+ini_set('max_execution_time', 30000);
 
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
+include ("../../Database.php"); 
+include ("../../Admin/database.php"); 
+include ("../../config.php");
 
-$session = $_POST['admid'];
+$database->populateOasisdata();  
+$database->populateOasis();
+$database->populateOasisUnits2();
 
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysql_fetch_array($sql);
-$sessionaccess = $access['access'];
-
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
-
-mysql_query("UPDATE ".TB_PREFIX."users SET plus = '0' WHERE id !=0");
-
-header("Location: ../../../Admin/admin.php?p=resetPlusBonus&g");
+header("Location: ../../../Admin/admin.php?p=server_info");
 ?>
