@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       oasis.tpl                                                   ##
+##  Filename       MaintenenceResetGold.tpl                                    ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
@@ -15,9 +15,9 @@
 		<thead>
 			<tr>
 				<th colspan="2">Reset All Players Gold</th>
-			</tr>
+			</tr> 
 		</thead>
-		<tbody>
+		<tbody> 
 			<tr>
 				<td class="hab" colspan="2"><center><input type="image" src="../img/admin/b/ok1.gif" value="submit"></center></td>
 			</tr>

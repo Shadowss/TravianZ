@@ -1,4 +1,4 @@
-<?php###################################################################################              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 #### --------------------------------------------------------------------------- ####  Filename       admin.php                                                   ####  Developed by:  Dzoki                                                       ####  License:       TravianX Project                                            ####  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ####                                                                             ###################################################################################
+<?php###################################################################################              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 #### --------------------------------------------------------------------------- ####  Filename       admin.php                                                   ####  Developed by:  Dzoki                                                       ####  License:       TravianX Project                                            ####  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ####                                                                             ###################################################################################
 session_start();
 include("../GameEngine/Database.php");
 include("../GameEngine/Admin/database.php");
@@ -48,13 +48,13 @@ if(conf){return true;}else{return false;}
 <td class="menu">
 <?php
   if($funct->CheckLogin()){?>
-	  <a href="admin.php">ACP Home</a>	  <a href="<?php echo HOMEPAGE; ?>">Homepage</a>	  <a href="#"></a><a href="#"></a>	  <a href="?p=server_info">Server Info</a>
+	  <a href="admin.php">ACP Home</a>	  <a href="<?php echo HOMEPAGE; ?>">Homepage</a>	  <a href="#"></a><a href="#"></a>	  <a href="?p=server_info">Server Info</a>
 	  <a href="?p=online">Online users</a>
 	  <a href="?p=search">Search</a>
 	  <a href="?p=message">Msg/Rep</a>
 	  <a href="?p=ban">Ban</a>
 	  <a href="?p=config">Config</a>
-	  <a href="?p=config_editor">Config Editor</a>	  <a href="#"></a><a href="#"></a><a href="#"></a>
+	  <a href="?p=config_editor">Config Editor</a>	  <a href="#"></a><a href="#"></a><a href="#"></a>
 	  <a href="?action=logout">Logout</a>
 <?php }?>
 </td>

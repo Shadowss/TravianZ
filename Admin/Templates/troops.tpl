@@ -207,16 +207,16 @@
 							echo '
 							</tr></thead><tbody>
 							<tr>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/31.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/32.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/33.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/34.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/35.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/36.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/37.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/38.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/39.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/40.gif"></img></td>
+								<td><center /><img src="../img/un/u/31.gif"></img></td>
+								<td><center /><img src="../img/un/u/32.gif"></img></td>
+								<td><center /><img src="../img/un/u/33.gif"></img></td>
+								<td><center /><img src="../img/un/u/34.gif"></img></td>
+								<td><center /><img src="../img/un/u/35.gif"></img></td>
+								<td><center /><img src="../img/un/u/36.gif"></img></td>
+								<td><center /><img src="../img/un/u/37.gif"></img></td>
+								<td><center /><img src="../img/un/u/38.gif"></img></td>
+								<td><center /><img src="../img/un/u/39.gif"></img></td>
+								<td><center /><img src="../img/un/u/40.gif"></img></td>
 							</tr>
 						   <tr>
 								<td><center />'.$u31.'</td>
@@ -237,16 +237,16 @@
 							echo '
 							</tr></thead><tbody>
 							<tr>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/41.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/42.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/43.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/44.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/45.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/46.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/47.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/48.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/49.gif"></img></td>
-								<td><center /><img src="../<?php echo GP_LOCATE; ?>img/u/50.gif"></img></td>
+								<td><center /><img src="../img/un/u/41.gif"></img></td>
+								<td><center /><img src="../img/un/u/42.gif"></img></td>
+								<td><center /><img src="../img/un/u/43.gif"></img></td>
+								<td><center /><img src="../img/un/u/44.gif"></img></td>
+								<td><center /><img src="../img/un/u/45.gif"></img></td>
+								<td><center /><img src="../img/un/u/46.gif"></img></td>
+								<td><center /><img src="../img/un/u/47.gif"></img></td>
+								<td><center /><img src="../img/un/u/48.gif"></img></td>
+								<td><center /><img src="../img/un/u/49.gif"></img></td>
+								<td><center /><img src="../img/un/u/50.gif"></img></td>
 							</tr>
 
 

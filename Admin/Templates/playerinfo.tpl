@@ -240,11 +240,11 @@
 							</tr>
 
 							<tr>
-								<td colspan="2"><a href="?p=editWeek&uid=<?php echo $user['id']; ?>">&raquo; Edit Overall Off & Def</a></td>
+								<td colspan="2"><a href="?p=editOverall&uid=<?php echo $user['id']; ?>">&raquo; Edit Overall Off & Def</a></td>
 							</tr>
 
 							<tr>
-								<td colspan="2"><a href="?p=editOverall&uid=<?php echo $user['id']; ?>">&raquo; Edit Weekly Off, Def, Raid</a></td>
+								<td colspan="2"><a href="?p=editWeek&uid=<?php echo $user['id']; ?>">&raquo; Edit Weekly Off, Def, Raid</a></td>
 							</tr>
 
 							<tr>

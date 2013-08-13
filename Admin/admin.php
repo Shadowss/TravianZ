@@ -105,6 +105,9 @@ $up_avl = $latest - $ver ;
 												<a href="?p=server_info">Server Info</a>
 												<a href="?p=online">Online Users</a>
 												<a href="?p=notregistered">Players Not Activated</a>
+												<a href="?p=[]inactive">Players Inactivate</a>
+												<a href="?p=report">Players Reported</a>
+												<a href="?p=map">Map</a>
 												<br />
 												<a href="#"><b>Search</b></a>
 												<a href="?p=search">General Search</a>
@@ -132,7 +135,8 @@ $up_avl = $latest - $ver ;
 												<a href="?p=givePlusRes">Give All Res Bonus</a>
 												<a href="?p=maintenenceResetPlusBonus">Reset Res Bonus</a>
 												<br />
-												<a href="#"><b>Natars</b></a>
+												<a href="#"><b>Natars&Oasis</b></a>
+												<a href="?p=oasis">Populate Oases</b>
 												<a href="?p=natarend">Add WW Villages</a>
 												<a href="?p=natarbuildingplan">Add WW Building Plan Villages</a>
 												<br />
