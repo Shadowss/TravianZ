@@ -3825,14 +3825,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 			foreach($harray as $hdata){
 				if((time()-$hdata['lastupdate'])>=1){
 					if($hdata['health']<100 and $hdata['health']>0){
-					if(SPEED <= 10){
-					$speed = SPEED;
-					}else if(SPEED <= 100){
-					$speed = ceil(SPEED/10);
-					}else{
-					$speed = ceil(SPEED/100);
-					}
-					$reg = $hdata['health']+$hdata['regeneration']*5*$speed/86400*(time()-$hdata['lastupdate']);
+					$reg = $hdata['health']+$hdata['regeneration']*5*SPEED/86400*(time()-$hdata['lastupdate']);
 					if($reg <= 100){
 						$database->modifyHero("health",$reg,$hdata['heroid']);
 					}else{
