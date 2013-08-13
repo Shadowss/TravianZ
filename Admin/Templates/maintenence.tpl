@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       maintenence.tpl                                             ##
+##  Filename       editVillage.tpl                                             ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
@@ -22,11 +22,11 @@
 	<tbody> 
 		<tr>
 			<td class="hab">Close Server for Maintenece, This will ban all players (Access 2) till you can fix bugs, or a crap version of a ceasefire lol</td>
-			<td class="hab"><center><a href="admin.php?p=maintenenceBan"><img src="http://forum.ragezone.com/f742/img/admin/b/ok1.gif"></a></center></td>
+			<td class="hab"><center><a href="admin.php?p=maintenenceBan"><img src="../img/admin/b/ok1.gif"></a></center></td>
 		</tr>
 		<tr>
 			<td class="hab">Bring Server Back for Maintenece, This will unban all players (By Banning Reason)</td>
-			<td class="hab"><center><a href="admin.php?p=maintenenceUnban"><img src="http://forum.ragezone.com/f742/img/admin/b/ok1.gif"></a></center></td>
+			<td class="hab"><center><a href="admin.php?p=maintenenceUnban"><img src="../img/admin/b/ok1.gif"></a></center></td>
 		</tr>
 		<tr>
 			<form action="../GameEngine/Admin/Mods/mainteneceCleanBanData.php" method="POST">

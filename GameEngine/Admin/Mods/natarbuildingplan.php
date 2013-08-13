@@ -41,7 +41,7 @@ for($i=1;$i<=$amt;$i++) {
 		$myFile = "../../../Templates/text.tpl";
 		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");
 		$text = file_get_contents("../../../Templates/text_format.tpl");
-		$text = preg_replace("'%TEKST%'","World Wonder Construction Plans
+		$text = preg_replace("'%TEKST%'","World Wonder Construction Plans 
 
 
 Many moons ago the tribes of Travian were surprised by the unforeseen return of the Natars. This tribe from immemorial times surpassing all in wisdom, might and glory was about to trouble the free ones again. Thus they put all their efforts in preparing a last war against the Natars and vanquishing them forever. Many thought about the so-called 'Wonders of the World', a construction of many legends, as the only solution. It was told that it would render anyone invincible once completed. Ultimately making the constructors the rulers and conquerors of all known Travian. 
