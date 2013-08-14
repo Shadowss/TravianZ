@@ -4124,6 +4124,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 								$maxcount = $enforce['u'.$i];
 								$maxtype = $i;
 								$enf = $enforce['id'];
+								$enf_vill = $enforce['from'];
 							}
 							$totalunits += $enforce['u'.$i];
 							}
@@ -4157,6 +4158,10 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 					if (isset($enf)){
 						if($killunits <= $maxcount){
 							$database->modifyEnforce($enf, $maxtype, $killunits, 0);
+							if($maxtype == "hero" && $maxcount > 0){
+							$heroid = $database->getHeroField($database->getVillageField($enf_vill,"owner"),"heroid");
+							$database->modifyHero("dead", 1, $heroid);
+							}
 							$database->setVillageField($starv['wref'], 'starv', $upkeep);
 							$database->setVillageField($starv['wref'], 'starvupdate', $time);
 						}else{
@@ -4177,6 +4182,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 							$maxcount = $enforce['hero'];
 							$maxtype = "hero";
 							if($maxcount <= $killunits){
+							$heroid = $database->getHeroField($database->getVillageField($enf_vill,"owner"),"heroid");
+							$database->modifyHero("dead", 1, $heroid);
 							$database->deleteReinf($enf);
 							$killunits -= $maxcount;
 							}
@@ -4188,11 +4195,18 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 						if($killunits <= $maxcount){
 							$database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
 							$killunits = 0;
+							if($maxtype == "hero" && $maxcount > 0){
+							$heroid = $database->getHeroField($database->getVillageField($starv['wref'],"owner"),"heroid");
+							$database->modifyHero("dead", 1, $heroid);
+							}
 							$database->setVillageField($starv['wref'], 'starv', $upkeep);
 							$database->setVillageField($starv['wref'], 'starvupdate', $time);
 						}else{
-							$database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
+							$database->modifyUnit($starv['wref'], array($maxtype), array($maxcount), array(0));
+							if($maxtype != "hero"){
 							$killunits -= $maxcount;
+							$unitarray['u'.$maxtype] = 0;
+							$maxcount = 0;
 							for($i = 0 ; $i <= 50 ; $i++){
 								$units = $unitarray['u'.$i];
 								if($unitarray['u'.$i] > $maxcount){
@@ -4204,6 +4218,13 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 							if($totalunits == 0){
 							$maxcount = $unitarray['hero'];
 							$maxtype = "hero";
+							}
+							}else{
+							if($maxcount > 0){
+							$heroid = $database->getHeroField($database->getVillageField($starv['wref'],"owner"),"heroid");
+							$database->modifyHero("dead", 1, $heroid);
+							}
+							$killunits = 0;
 							}
 							$database->setVillageField($starv['wref'], 'starv', $upkeep);
 							$database->setVillageField($starv['wref'], 'starvupdate', $time);
