@@ -1418,7 +1418,7 @@ class MYSQL_DB {
 			return $dbarray['tag'];
 		}
 	}
-
+	//////////////////// ADDED BY BRAINIAC - THANK YOU
 	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
     $q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid."";
                 $result = mysql_query($q, $this->connection);
