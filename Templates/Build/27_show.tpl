@@ -17,6 +17,7 @@
                    }else{
                     $active = "Active";
                    }
+                   //// Added by brainiac - thank you
                     if ($artefact['type'] == 8){$kind=$artefact['kind']; $effecty=$artefact['effect2'];}else{$kind=$artefact['type']; $effecty=$artefact['effect'];}
                     	 switch($kind){
                     	 case 1:
