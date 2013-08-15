@@ -414,7 +414,7 @@ if($greatworkshop == 0 && $workshop >= 18 && $village->capital == 0 && GREAT_WKS
     if($session->tribe == 1 && $horsedrinkingtrough == 0 && ($rallypoint <= 5 || $stable <= 10)) {
     include("soon/horsedrinking.tpl");
     }
-    if($brewery == 0 && ($rallypoint <= 5 || $granary <= 10) && $session->tribe == 2) {
+    if($brewery == 0 && ($rallypoint <= 5 || $granary <= 10) && $session->tribe == 2 && $village->capital == 1) {
     include("soon/brewery.tpl");
     }
     if($greatbarracks == 0 && $barrack >= 15 && $village->capital == 0) {
