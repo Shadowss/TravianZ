@@ -30,7 +30,11 @@ $totalproduction = $village->allcrop; // all crops + bakery + grain mill
 							<td><img src="img/x.gif" class="r3" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /></td>
 				<td id="l2" title="<?php echo $iron; ?>"><?php echo round($village->airon)."/".$village->maxstore; ?></td>
 							<td><img src="img/x.gif" class="r4" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /></td>
+							<?php if($village->acrop > 0){ ?>
 				<td id="l1" title="<?php echo $crop; ?>"><?php echo round($village->acrop)."/".$village->maxcrop; ?></td>
+							<?php }else{ ?>
+				<td title="<?php echo $crop; ?>"><?php echo "0/".$village->maxcrop; ?></td>
+							<?php } ?>
 							<td><img src="img/x.gif" class="r5" alt="<?php echo CROP_COM; ?>" title="<?php echo CROP_COM; ?>" /></td>
 			<td><?php echo ($village->pop+$technology->getUpkeep($village->unitall,0))."/".$totalproduction.""; ?></td>
 		</tr>
