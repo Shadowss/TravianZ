@@ -458,7 +458,7 @@ class Message {
 		}
 		}
 		}
-		$database->sendMessage($user, $session->uid, $topic, $text, 0, $alliance, $player, $coor, $report);
+		$database->sendMessage($user, $session->uid, addslashes($topic), addslashes($text), 0, $alliance, $player, $coor, $report);
 		}
 	}
 
