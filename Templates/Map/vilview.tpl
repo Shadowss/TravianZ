@@ -63,7 +63,7 @@ break;
 case 3:
 $tt =  "+25% lumber and +25% crop per hour\" title=\"+25% lumber and +25% crop per hour";
 $ttt = "<td class=\"ico\"><img class=\"r1\" src=\"img/x.gif\" title=\"".LUMBER."\"> 25% ".LUMBER."</td>
-		<td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td>";
+		<tr><td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td></tr>";
 break;
 case 4:
 case 5:
@@ -73,7 +73,7 @@ break;
 case 6:
 $tt =  "+25% clay and +25% crop per hour\" title=\"+25% clay and +25% crop per hour";
 $ttt = "<td class=\"ico\"><img class=\"r2\" src=\"img/x.gif\" title=\"".CLAY."\"> 25% ".CLAY."</td>
-		<td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td>";
+		<tr><td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td></tr>";
 break;
 case 7:
 case 8:
@@ -83,7 +83,7 @@ break;
 case 9:
 $tt =  "+25% iron and +25% crop per hour\" title=\"+25% iron and +25% crop per hour";
 $ttt = "<td class=\"ico\"><img class=\"r3\" src=\"img/x.gif\" title=\"".IRON."\"> 25% ".IRON."</td>
-		<td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td>";
+		<tr><td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td></tr>";
 break;
 case 10:
 case 11:
