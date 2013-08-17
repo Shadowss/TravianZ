@@ -2479,12 +2479,7 @@ class MYSQL_DB {
 	$time += $queued[count($queued) - 1]['timestamp'] - $now;
 	$time2 += $queued[count($queued) - 1]['timestamp'] - $now;
 	}
-	if($queued[count($queued) - 1]['unit'] == $unit){
-	$time = $amt*$queued[count($queued) - 1]['eachtime'];
-			$q = "UPDATE " . TB_PREFIX . "training SET amt = amt + $amt, timestamp = timestamp + $time WHERE id = ".$queued[count($queued) - 1]['id']."";
-	}else{
 			$q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$time,$each,$time2)";
-	}
 		} else {
 			$q = "DELETE FROM " . TB_PREFIX . "training where id = $vid";
 		}
