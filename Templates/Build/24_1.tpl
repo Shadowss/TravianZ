@@ -56,8 +56,12 @@
 					</td></tr>";
 					}	
                   else if(29700 > $village->awood || 33250 > $village->aclay || 32000 > $village->airon || 6700 > $village->acrop) {
+			if($village->getProd("crop")>0){
                    	$time = $technology->calculateAvaliable(24,$cel[2]);
                     echo "<br><span class=\"none\">Enough resources ".$time[0]." at ".$time[1]."</span></div></td>";
+			} else {
+		    echo "<br><span class=\"none\">Crop production is negative so you will never reach the required resources</span></div></td>";
+					}
                     echo "<td class=\"act\">
 					<div class=\"none\">Too few<br>resources</div>
 				</td></tr>";
