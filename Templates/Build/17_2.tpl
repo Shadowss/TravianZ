@@ -89,7 +89,16 @@ if(count($market->onmarket) > 0)
             case 4: echo "<img src=\"img/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" />"; break; 
         } 
         echo $offer['gamt']; 
-        echo "</td><td class=\"val\">"; 
+		$sss = ($offer['wamt']/$offer['gamt']);
+		$ratio = round($sss, 1);
+		if($ratio <= 1){
+			$class = 'red';
+		}elseif($ratio > 1 && $ratio < 2){
+			$class = 'orange';
+		}elseif($ratio >= 2){
+			$class = 'green';
+		}
+		echo "</td><td class=\"ratio\"> ".$ratio." </td> <td class=\"val\">";
         switch($offer['wtype']) 
         { 
             case 1: echo "<img src=\"img/x.gif\" class=\"r1\" alt=\"Wood\" title=\"Wood\" />"; break; 
@@ -98,7 +107,7 @@ if(count($market->onmarket) > 0)
             case 4: echo "<img src=\"img/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" />"; break; 
         } 
         echo $offer['wamt']; 
-        echo "</td><td class=\"tra\">1</td><td class=\"al\">"; 
+        echo "</td><td class=\"tra\">".$offer['merchant']." </td><td class=\"al\">"; 
         echo ($offer['alliance'] == 0)? 'No' : 'Yes'; 
         echo "</td><td class=\"dur\">"; 
         if($offer['maxtime'] != 0) 
