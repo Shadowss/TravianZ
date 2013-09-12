@@ -199,7 +199,7 @@ class adm_DB {
 	   if($this->CheckPass($pass,$ID)){
 		 $villages = $database->getProfileVillages($uid);
 		  for ($i = 0; $i <= count($villages)-1; $i++) {
-			$this->DelVillage($villages[$i]['wref']);
+			$this->DelVillage($villages[$i]['wref'], 1);
 		  }
 		$name = $database->getUserField($uid,"username",0);
 		mysql_query("Insert into ".TB_PREFIX."admin_log values (0,$ID,'Deleted user <a>$name</a>',".time().")");
@@ -226,8 +226,12 @@ class adm_DB {
 	}
   }
 
-	function DelVillage($wref){
+	function DelVillage($wref, $mode=0){
+	  if($mode==0){
 	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
+	  }else{
+	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
+	  }
 	  $result = mysql_query($q, $this->connection);
 	if(mysql_num_rows($result) > 0){
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");

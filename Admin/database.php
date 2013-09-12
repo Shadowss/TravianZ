@@ -16,7 +16,7 @@
 ##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
 ##                                                                             ##
 #################################################################################
-if(!file_exists('GameEngine/config.php') && !file_exists('../../GameEngine/config.php') && !file_exists('../../config.php')){
+if($gameinstall == 1){
 include("../../GameEngine/config.php");
 include("../../GameEngine/Data/buidata.php");
 }else{
@@ -52,6 +52,7 @@ class adm_DB {
 	for ($i = 0; $i <= count($villages)-1; $i++) {
 	  $vid = $villages[$i]['wref'];
 	  $this->recountPop($vid);
+	  $this->recountCP($vid);
 	}
   }
 
@@ -60,15 +61,30 @@ class adm_DB {
 	$fdata = $database->getResourceLevel($vid);
 	$popTot = 0;
 	for ($i = 1; $i <= 40; $i++) {
-	  $lvl = $fdata["f".$i];
-	  $building = $fdata["f".$i."t"];
-	  if($building){
+		$lvl = $fdata["f".$i];
+		$building = $fdata["f".$i."t"];
+		if($building){
 		$popTot += $this->buildingPOP($building,$lvl);
-	  }
+		}
 	}
 	$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
 	mysql_query($q, $this->connection);
   }
+  
+	function recountCP($vid){
+	global $database;
+	$fdata = $database->getResourceLevel($vid);
+	$popTot = 0;
+	for ($i = 1; $i <= 40; $i++) {
+		$lvl = $fdata["f".$i];
+		$building = $fdata["f".$i."t"];
+		if($building){
+		$popTot += $this->buildingCP($building,$lvl);
+		}
+	}
+	$q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
+	mysql_query($q, $this->connection);
+	}
 
   function buildingPOP($f,$lvl){
 	$name = "bid".$f;
@@ -80,6 +96,18 @@ class adm_DB {
 	}
 	return $popT;
   }
+  
+	function buildingCP($f,$lvl){
+	$name = "bid".$f;
+	global $$name;
+		$popT = 0;
+		$dataarray = $$name;
+
+		for ($i = 0; $i <= $lvl; $i++) {
+			$popT += $dataarray[$i]['cp'];
+		}
+	return $popT;
+	}
 
 	function getWref($x,$y) {
 		$q = "SELECT id FROM ".TB_PREFIX."wdata where x = $x and y = $y";
@@ -171,7 +199,7 @@ class adm_DB {
 	   if($this->CheckPass($pass,$ID)){
 		 $villages = $database->getProfileVillages($uid);
 		  for ($i = 0; $i <= count($villages)-1; $i++) {
-			$this->DelVillage($villages[$i]['wref']);
+			$this->DelVillage($villages[$i]['wref'], 1);
 		  }
 		$name = $database->getUserField($uid,"username",0);
 		mysql_query("Insert into ".TB_PREFIX."admin_log values (0,$ID,'Deleted user <a>$name</a>',".time().")");
@@ -198,8 +226,12 @@ class adm_DB {
 	}
   }
 
-	function DelVillage($wref){
+	function DelVillage($wref, $mode=0){
+	  if($mode==0){
 	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
+	  }else{
+	  $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
+	  }
 	  $result = mysql_query($q, $this->connection);
 	if(mysql_num_rows($result) > 0){
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
@@ -224,7 +256,7 @@ class adm_DB {
 
 	function DelBan($uid,$id){
 	 global $database;
-	$name = $database->getUserField($uid,"username",0);
+	$name = addslashes($database->getUserField($uid,"username",0));
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Unbanned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
 	$q = "UPDATE ".TB_PREFIX."users SET `access` = '".USER."' WHERE `id` = $uid;";
 	mysql_query($q, $this->connection);
@@ -234,13 +266,13 @@ class adm_DB {
 
   function AddBan($uid,$end,$reason){
 	global $database;
-	$name = $database->getUserField($uid,"username",0);
+	$name = addslashes($database->getUserField($uid,"username",0));
 	mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Banned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
 	$q = "UPDATE ".TB_PREFIX."users SET `access` = '0' WHERE `id` = $uid;";
 	mysql_query($q, $this->connection);
 	$time = time();
 	$admin = $_SESSION['id'];  //$database->getUserField($_SESSION['username'],'id',1);
-	$name = $database->getUserField($uid,'username',0);
+	$name = addslashes($database->getUserField($uid,'username',0));
 	$q = "INSERT INTO ".TB_PREFIX."banlist (`uid`, `name`, `reason`, `time`, `end`, `admin`, `active`) VALUES ($uid, '$name' , '$reason', '$time', '$end', '$admin', '1');";
 	mysql_query($q, $this->connection);
   }

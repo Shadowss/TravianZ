@@ -34,7 +34,11 @@ class funct {
 		//stop deleting
 	  break;
 	  case delVil:
+		if($get['mode'] != 1){
 		$admin->DelVillage($get['did']);
+		}else{
+		$admin->DelVillage($get['did'], 1);
+		}
 	  break;
 	  case delBan:
 		$admin->DelBan($get['uid'],$get['id']);
