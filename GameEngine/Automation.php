@@ -1087,7 +1087,6 @@ class Automation {
 											$start = ($owntribe-1)*10+1;
 											$end = ($owntribe*10);
 											$u = (($owntribe-1)*10);
-											$catp =  0;
 											$catapult = array(8,18,28,48);
 											$ram = array(7,17,27,47);
 											$chief = array(9,19,29,49);
@@ -1097,19 +1096,15 @@ class Automation {
 											$Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
 												//there are catas
 												if(in_array($i,$catapult)) {
-												$catp += $Attacker['u'.$i];
 												$catp_pic = $i;
 												}
 												if(in_array($i,$ram)) {
-												$rams += $Attacker['u'.$i];
 												$ram_pic = $i;
 												}
 												if(in_array($i,$chief)) {
-												$chiefs += $Attacker['u'.$i];
 												$chief_pic = $i;
 												}
 												if(in_array($i,$spys)) {
-												$chiefs += $Attacker['u'.$i];
 												$spy_pic = $i;
 												}
 												}
@@ -1164,7 +1159,7 @@ class Automation {
 									$att_ab8 = $att_ab['a8'];
 
 						//rams attack
-						 if($rams > 0 and $type=='3'){
+						 if(($data['t7']-$dead7-$traped7)>0 and $type=='3'){
 						$basearraywall = $database->getMInfo($data['to']);
 						if($database->getFieldLevel($basearraywall['wref'],40)>'0'){
 							for ($w=1; $w<2; $w++){
@@ -1243,7 +1238,6 @@ class Automation {
 											$start = ($owntribe-1)*10+1;
 											$end = ($owntribe*10);
 											$u = (($owntribe-1)*10);
-											$catp =  0;
 											$catapult = array(8,18,28,38,48);
 											$ram = array(7,17,27,37,47);
 											$chief = array(9,19,29,39,49);
@@ -1253,19 +1247,15 @@ class Automation {
 											$Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
 												//there are catas
 												if(in_array($i,$catapult)) {
-												$catp += $Attacker['u'.$i];
 												$catp_pic = $i;
 												}
 												if(in_array($i,$ram)) {
-												$rams += $Attacker['u'.$i];
 												$ram_pic = $i;
 												}
 												if(in_array($i,$chief)) {
-												$chiefs += $Attacker['u'.$i];
 												$chief_pic = $i;
 												}
 												if(in_array($i,$spys)) {
-												$chiefs += $Attacker['u'.$i];
 												$spy_pic = $i;
 												}
 												}
@@ -1776,7 +1766,7 @@ class Automation {
 			$info_cat = $info_chief = $info_ram = ",";
 
 			if ($type=='3'){
-				if ($rams!='0'){
+				if (($data['t7']-$dead7-$traped7)>0){
 					if (isset($empty)){
 						$info_ram = "".$ram_pic.",There is no wall to destroy.";
 					} else
@@ -1806,7 +1796,7 @@ class Automation {
 			}
 		   if ($type=='3')
 {
-	if ($catp!='0')
+	if (($data['t8']-$dead8-$traped8)>0)
 	{
 		$pop=$this->recountPop($data['to']);
 		if($pop<=0)
@@ -2209,7 +2199,7 @@ class Automation {
 
 		//chiefing village
 		//there are senators
-		if(($data['t9']-$dead9)>0){
+		if(($data['t9']-$dead9-$traped9)>0){
 
 			$palacelevel = $database->getResourceLevel($from['wref']);
 			for($i=1;$i<=40;$i++) {
@@ -2279,7 +2269,7 @@ class Automation {
 				if(!isset($nochiefing)){
 					//$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
 					if($this->getTypeLevel(35,$data['from']) == 0){
-					for ($i=0; $i<($data['t9']-$dead9); $i++){
+					for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
 					if($owntribe == 1){
 					$rand+=rand(20,30);
 					}else{
@@ -2287,7 +2277,7 @@ class Automation {
 					}
 					}
 					}else{
-					for ($i=0; $i<($data['t9']-$dead9); $i++){
+					for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
 					$rand+=rand(5,15);
 					}
 					}

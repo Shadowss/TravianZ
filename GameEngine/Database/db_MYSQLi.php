@@ -483,7 +483,14 @@ class MYSQLi_DB {
 			if($OasisInfo['conqured'] == 0 || $OasisInfo['conqured'] != 0 && $OasisInfo['loyalty'] < 99 / min(3,(4-$this->VillageOasisCount($OasisInfo['conqured']))) && $troopcount == 0) {
 				$CoordsVillage = $this->getCoor($vref);
 				$CoordsOasis = $this->getCoor($wref);
-				if(abs($CoordsOasis['x']-$CoordsVillage['x'])<=3 && abs($CoordsOasis['y']-$CoordsVillage['y'])<=3) {
+								$max = 2 * WORLD_MAX + 1;
+                		$x1 = intval($CoordsOasis['x']);
+                		$y1 = intval($CoordsOasis['y']);
+                		$x2 = intval($CoordsVillage['x']);
+                		$y2 = intval($CoordsVillage['y']);
+                		$distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
+                		$distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
+                	if ($distanceX<=3 && $distanceY<=3) {
 					return True;
 				} else {
 					return False;
