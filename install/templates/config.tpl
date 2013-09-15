@@ -47,13 +47,16 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 		</td></tr><tr></tr>
 	<td><span class="f9 c6">Beginners protection length:</span></td><td>
 				<select name="beginner">
-				<option value="0">None (0 hours)</option>
-				<option value="21600">6 hours</option>
+				<option value="7200">2 hours</option>
+				<option value="10800">3 hours</option>
+				<option value="18000">5 hours</option>
+				<option value="28800">8 hours</option>
+				<option value="36000">10 hours</option>
 				<option value="43200" selected="selected">12 hours</option>
-				<option value="86400">24 hours</option>
-				<option value="129600">36 hours</option>
-				<option value="172800">48 hours</option>
-				<option value="259200">72 hours</option>
+				<option value="86400">24 hours (1 day)</option>
+				<option value="172800">48 hours (2 days)</option>
+				<option value="259200">72 hours (3 days)</option>
+				<option value="432000">120 hours (5 days)</option>
 				</select>
 		</td></tr><tr></tr>
 	<td><span class="f9 c6">Plus account length:</span></td><td>
@@ -90,6 +93,19 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 				<option value="86400">24 hours</option>
 				</select>
 		</td></tr><tr></tr>
+    <tr class="hover">
+        <td>Medals interval:</td>
+				<select name="medalinterval">
+				<option value="0">none</option>
+				<option value="(3600*24)">1 day</option>
+				<option value="(3600*24*2)">2 days</option>
+				<option value="(3600*24*3)">3 days</option>
+				<option value="(3600*24*4)">4 days</option>
+				<option value="(3600*24*5)">5 days</option>
+				<option value="(3600*24*6)">6 days</option>
+				<option value="(3600*24*7)" selected="selected">7 days</option>
+				</select>
+    </tr>
 	<td><span class="f9 c6">Storage Multipler:</span></td><td width="140"><input type="text" name="storage_multiplier" id="storage_multiplier" value="1"></td></tr><tr>
 	<td><span class="f9 c6">Tourn Threshold:</span></td><td width="140"><input type="text" name="ts_threshold" id="ts_threshold" value="20"></td></tr><tr>
 	<td><span class="f9 c6">Great Workshop:</span></td><td>
@@ -146,8 +162,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<td><span class="f9 c6">DB name:</span></td><td><input type="text" name="sdb" id="sdb"></td></tr><tr>
 	<td><span class="f9 c6">Prefix:</span></td><td><input type="text" name="prefix" id="prefix" value="s1_" size="5"></td></tr>
 	<td><span class="f9 c6">Type:</span></td><td><select name="connectt">
-	  <option value="0">MYSQL</option>
-	  <option value="1" selected="selected">MYSQLi</option>
+	  <option value="0" selected="selected">MYSQL</option>
+	  <option value="1">MYSQLi</option>
 	</select></td></tr>
 	</table>
 	</p>

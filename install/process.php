@@ -91,6 +91,7 @@ class Process {
 		$text = preg_replace("'%GP_LOCATE%'", $_POST['gp_locate'], $text);
 		$text = preg_replace("'%PLUS_TIME%'", $_POST['plus_time'], $text);
 		$text = preg_replace("'%PLUS_PRODUCTION%'", $_POST['plus_production'], $text);
+		$text = preg_replace("'%MEDALINTERVAL%'", $_POST['medalinterval'], $text);
 		$text = preg_replace("'%GREAT_WKS%'", $_POST['great_wks'], $text);
 		$text = preg_replace("'%TS_THRESHOLD%'", $_POST['ts_threshold'], $text);
 		$text = preg_replace("'%WW%'", $_POST['ww'], $text);

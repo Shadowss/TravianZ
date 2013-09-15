@@ -428,6 +428,22 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `%prefix%config`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%config` (
+  `lastgavemedal` int(11) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+INSERT INTO `%PREFIX%config` VALUES (0);
+
+--
+-- Dumping data for table `%prefix%config`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `%prefix%deleting`
 --
 
