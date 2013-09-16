@@ -531,7 +531,7 @@ private function trainUnit($unit,$amt,$great=false) {
 			$max = 0;
 			for($i=19;$i<41;$i++){
 			if($village->resarray['f'.$i.'t'] == 36){
-			$max += $bid36[$village->resarray['f'.$i]]['attri'];
+			$max += $bid36[$village->resarray['f'.$i]]['attri']*TRAPPER_CAPACITY;
 			}
 			}
 			$max1 = $max - ($village->unitarray['u99'] + $train_amt);
