@@ -64,7 +64,7 @@ if($database->CheckEditRes($aid)=="1"){
 	</tr>
 	<?php if($database->checkSurvey($arr['id'])){
 	$survey = $database->getSurvey($arr['id']);
-	if(!$database->checkVote($arr['id'], $session->uid) && $survey['ends'] > time()){
+	if(!$database->checkVote($arr['id'], $session->uid) && ($survey['ends'] > time() || $survey['ends'] == 0)){
 	?>
 	<tr><td class="pcontent" colspan="2"><div><center>Survey: <?php echo $survey['title']; ?></center></div>
 		<div class="clear dotted"></div><div class="text">
