@@ -167,6 +167,9 @@ $invite_permission = $database->getAlliancePermission($session->uid, "opt4", 0);
 	   if($_GET['s'] != 5 or $session->sit == 0){
 		switch($_GET['s']) {
 			case 2:
+				if(isset($_POST['vote'])){
+				$alliance->Vote($_POST);
+				}
 				include ("Templates/Alliance/forum.tpl");
 				break;
 			case 3:

@@ -47,11 +47,6 @@ if(isset($_POST['newtopic'])){
 	$owner = $session->uid;
 	$alli = $_POST['pid'];
 
-		if(isset($_POST['umfrage_ende'])){
-			$ends = "";
-		}else{
-			$ends = '';
-		}
 	if($text != ""){
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
 		$text = "[message]".$text."[/message]";
@@ -108,7 +103,28 @@ if(isset($_POST['newtopic'])){
 		}
 		}
 		}
-	$database->CreatTopic($title,$text,$cat,$owner,$alli,$ends,$alliance,$player,$coor,$report);
+	$topic_id = $database->CreatTopic($title,$text,$cat,$owner,$alli,$ends,$alliance,$player,$coor,$report);
+	if($_POST['umfrage']) {
+		if(isset($_POST['umfrage_ende'])){
+			$ends_date = $_POST['month']."/".$_POST['day']."/".$_POST['year'];
+			if($_POST['meridiem'] == 1){
+			$_POST['hour'] += 12;
+			}
+			$ends_time = $_POST['hour'].":".$_POST['minute'];
+			$ends = strtotime($ends_date)-strtotime(date('m/d/Y'))+strtotime($ends_time);
+		}else{
+			$ends = '';
+		}
+		$survey = 0;
+		for($i=1;$i<=8;$i++){
+		if($_POST['option'.$i] != ""){
+		$survey = 1;
+		}
+		}
+		if($survey == 1){
+		$database->createSurvey($topic_id, $_POST['umfrage_thema'], $_POST['option_1'], $_POST['option_2'], $_POST['option_3'], $_POST['option_4'], $_POST['option_5'], $_POST['option_6'], $_POST['option_7'], $_POST['option_8'], $ends);
+		}
+	}
 	}
 }
 }

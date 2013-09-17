@@ -368,6 +368,22 @@
 			}
 		}
 		/*****************************************
+		Function to vote on forum survey
+		*****************************************/
+		public function Vote($post) {
+			global $database, $session;
+			if($session->access != BANNED){
+			if($database->checkSurvey($post['tid']) && !$database->checkVote($post['tid'], $session->uid)){
+			$survey = $database->getSurvey($post['tid']);
+			$text = ''.$survey['voted'].','.$session->uid.',';
+			$database->Vote($post['tid'], $post['vote'], $text);
+			}
+			header("Location: allianz.php?s=2&fid2=".$post['fid2']."&pid=".$post['pid']."&tid=".$post['tid']);
+			}else{
+			header("Location: banned.php");
+			}
+		}
+		/*****************************************
 		Function to quit from alliance
 		*****************************************/
 		private function quitally($post) {

@@ -62,6 +62,47 @@ if($database->CheckEditRes($aid)=="1"){
 ?>
 		<div class="clear dotted"></div><div class="text"><?php echo $bbcode_topic; ?></div></td>
 	</tr>
+	<?php if($database->checkSurvey($arr['id'])){
+	$survey = $database->getSurvey($arr['id']);
+	if(!$database->checkVote($arr['id'], $session->uid) && $survey['ends'] > time()){
+	?>
+	<tr><td class="pcontent" colspan="2"><div><center>Survey: <?php echo $survey['title']; ?></center></div>
+		<div class="clear dotted"></div><div class="text">
+		<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['tid']; ?>">
+		<?php
+		for($i=1;$i<=8;$i++){
+		?>
+		<input class="radio" type="radio" name="vote" value="<?php echo $i; ?>" /><?php echo $survey['option'.$i]; ?></br>
+		<?php
+		}
+		?>
+		<input type="hidden" name="fid2" value="<?php echo $_GET['fid2']; ?>" />
+		<input type="hidden" name="pid" value="<?php echo $_GET['pid']; ?>" />
+		<input type="hidden" name="tid" value="<?php echo $_GET['tid']; ?>" />
+		<p class="btn"><input type="image" id="fbtn_vote" value="ok" name="s1" class="dynamic_img" src="img/x.gif" alt="Vote" /></form></p>
+		</div></td>
+	</tr>
+	<?php }else{ ?>
+	<tr><td class="pcontent" colspan="2"><div><center>Survey: <?php echo $survey['title']; ?></center></div>
+		<div class="clear dotted"></div><div class="text">
+		<?php
+		$sum = $database->getVoteSum($arr['id']);
+		for($i=1;$i<=8;$i++){
+		if($survey['option'.$i] != ""){
+		if($sum > 0){
+		$width = 100 * ($survey['vote'.$i] / $sum);
+		}else{
+		$width = 0;
+		}
+		?>
+		<?php echo $survey['option'.$i]." "; ?><img src="<?php echo GP_LOCATE; ?>/img/f/c4.gif" width="<?php echo $width; ?>" /><?php echo " ".$survey['vote'.$i]; ?></br>
+		<?php
+		}
+		}
+		?>
+		</div></td>
+	</tr>
+	<?php }} ?>
 <?php
 foreach($posts as $po) {
 

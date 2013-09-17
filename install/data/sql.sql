@@ -748,6 +748,40 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `%prefix%forum_survey`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%forum_survey` (
+  `topic` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `option1` varchar(255) NOT NULL,
+  `option2` varchar(255) NOT NULL,
+  `option3` varchar(255) NOT NULL,
+  `option4` varchar(255) NOT NULL,
+  `option5` varchar(255) NOT NULL,
+  `option6` varchar(255) NOT NULL,
+  `option7` varchar(255) NOT NULL,
+  `option8` varchar(255) NOT NULL,
+  `vote1` int(11) unsigned NOT NULL DEFAULT '0',
+  `vote2` int(11) unsigned NOT NULL DEFAULT '0',
+  `vote3` int(11) unsigned NOT NULL DEFAULT '0',
+  `vote4` int(11) unsigned NOT NULL DEFAULT '0',
+  `vote5` int(11) unsigned NOT NULL DEFAULT '0',
+  `vote6` int(11) unsigned NOT NULL DEFAULT '0',
+  `vote7` int(11) unsigned NOT NULL DEFAULT '0',
+  `vote8` int(11) unsigned NOT NULL DEFAULT '0',
+  `voted` text NOT NULL,
+  `ends` int(11) unsigned NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%forum_survey`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `%prefix%forum_topic`
 --
 

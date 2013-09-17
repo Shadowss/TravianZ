@@ -1059,6 +1059,55 @@ class MYSQL_DB {
         return mysql_insert_id($this->connection);
     }
 
+	function createSurvey($topic, $title, $option1, $option2, $option3, $option4, $option5, $option6, $option7, $option8, $ends) {
+        $q = "INSERT into " . TB_PREFIX . "forum_survey (topic,title,option1,option2,option3,option4,option5,option6,option7,option8,ends) values ('$topic','$title','$option1','$option2','$option3','$option4','$option5','$option6','$option7','$option8','$ends')";
+        return mysql_query($q, $this->connection);
+    }
+
+	function getSurvey($topic) {
+		$q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+		$result = mysql_query($q, $this->connection);
+		return mysql_fetch_array($result);
+	}
+
+	function checkSurvey($topic) {
+        $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+		$result = mysql_query($q, $this->connection);
+		if(mysql_num_rows($result)) {
+			return true;
+		} else {
+			return false;
+		}
+    }
+
+	function Vote($topic, $num, $text) {
+		$q = "UPDATE " . TB_PREFIX . "forum_survey set vote".$num." = vote".$num." + 1, voted = '$text' where topic = ".$topic."";
+		return mysql_query($q, $this->connection);
+	}
+
+	function checkVote($topic, $uid) {
+        $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+		$result = mysql_query($q, $this->connection);
+		$array = mysql_fetch_array($result);
+		$text = $array['voted'];
+		if(preg_match('/,'.$uid.',/',$text)) {
+			return true;
+		} else {
+			return false;
+		}
+    }
+
+	function getVoteSum($topic) {
+        $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+		$result = mysql_query($q, $this->connection);
+		$array = mysql_fetch_array($result);
+		$sum = 0;
+		for($i=1;$i<=8;$i++){
+		$sum += $array['vote'.$i];
+		}
+		return $sum;
+    }
+
     function CreatPost($post, $tids, $owner, $alliance, $player, $coor, $report) {
         $date = time();
         $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post','$tids','$owner','$date','$alliance','$player','$coor','$report')";
