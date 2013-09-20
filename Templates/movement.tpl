@@ -4,12 +4,13 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       movement.tpl                                                ##
 ##  Developed by:  Dzoki                                                       ##
+##  Updated by:    Shadow                                                      ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 
-$aantal = (count($database->getMovement(4,$village->wid,1))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0))+count($database->getMovement(7,$village->wid,1))-count($database->getMovement(8,$village->wid,1))-count($database->getMovement(9,$village->wid,0)));
+$aantal = (count($database->getMovement(4,$village->wid,1))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0))+count($database->getMovement(7,$village->wid,1))+count($database->getMovement(5,$village->wid,0))+count($database->getMovement(6,$village->wid,0))-count($database->getMovement(8,$village->wid,1))-count($database->getMovement(9,$village->wid,0)));
 
 if($aantal > 0){
 	echo	'<table id="movements" cellpadding="1" cellspacing="1"><thead><tr><th colspan="3">'.TROOP_MOVEMENTS.'</th></tr></thead><tbody>';
@@ -129,4 +130,44 @@ if($lala > 0){
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
 	<td><div class="mov"><span class="'.$aclass.'">'.$lala.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival3)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 	$timer += 1;
+}
+
+/* Found NEW VILLAGE by Shadow */
+
+$aantal = count($database->getMovement(5,$village->wid,0));
+$aantal2 = $database->getMovement(5,$village->wid,0);
+if($aantal > 0){
+	if(!empty($NextArrival5)) { reset($NextArrival5); }	
+			foreach($aantal2 as $receive) {
+				$action = 'att3';
+				$aclass = 'a3';
+				$title = ''.FOUNDNEWVILLAGE.'';
+				$short = ''.NEWVILLAGE.'';
+				$NextArrival5[] = $receive['endtime'];
+			}
+			
+	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat($receive['endtime']-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+	$timer += 1;
+
+}
+
+/* Attacks on Oasis (to my oasis) by Shadow */
+
+$aantal = count($database->getMovement(6,$village->wid,0));
+$aantal2 = $database->getMovement(6,$village->wid,0);
+if($aantal > 0){
+	if(!empty($NextArrival6)) { reset($NextArrival6); }	
+			foreach($aantal2 as $receive) {
+				$action = 'att3';
+				$aclass = 'a1';
+				$title = ''.OASISATTACK.'';
+				$short = ''.OASISATTACKS.'';
+				$NextArrival6[] = $receive['endtime'];
+			}
+			
+	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat($receive['endtime']-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+	$timer += 1;
+
 }
