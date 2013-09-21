@@ -697,7 +697,7 @@ class Automation {
 				$upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
 				$starv = $database->getVillageField($indi['wid'],"starv");
 				if ($crop < $upkeep && $starv == 0){
-				// add starv data
+					// add starv data
 					$database->setVillageField($indi['wid'], 'starv', $upkeep);
 					$database->setVillageField($indi['wid'], 'starvupdate', $time);
 				}
@@ -2269,7 +2269,7 @@ class Automation {
 				if(!isset($nochiefing)){
 					//$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
 					if($this->getTypeLevel(35,$data['from']) == 0){
-					for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
+					for ($i=0; $i<($data['t9']-$dead9); $i++){
 					if($owntribe == 1){
 					$rand+=rand(20,30);
 					}else{
@@ -2277,7 +2277,7 @@ class Automation {
 					}
 					}
 					}else{
-					for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
+					for ($i=0; $i<($data['t9']-$dead9); $i++){
 					$rand+=rand(5,15);
 					}
 					}
@@ -3009,7 +3009,12 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 		$dataarray = $database->query_return($q);
 		foreach($dataarray as $data) {
 		if($data['from']==0){
+		$isoasis = $database->isVillageOases($data['to']);
+		if($isoasis == 0){
 		$to = $database->getMInfo($data['to']);
+		}else{
+		$to = $database->getOMInfo($data['to']);
+		}
 		$database->addEnforce($data);
 		$reinf = $database->getEnforce($data['to'],$data['from']);
 		$database->modifyEnforce($reinf['id'],31,1,1);
@@ -3815,7 +3820,14 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 			foreach($harray as $hdata){
 				if((time()-$hdata['lastupdate'])>=1){
 					if($hdata['health']<100 and $hdata['health']>0){
-					$reg = $hdata['health']+$hdata['regeneration']*5*SPEED/86400*(time()-$hdata['lastupdate']);
+					if(SPEED <= 10){
+					$speed = SPEED;
+					}else if(SPEED <= 100){
+					$speed = ceil(SPEED/10);
+					}else{
+					$speed = ceil(SPEED/100);
+					}
+					$reg = $hdata['health']+$hdata['regeneration']*5*$speed/86400*(time()-$hdata['lastupdate']);
 					if($reg <= 100){
 						$database->modifyHero("health",$reg,$hdata['heroid']);
 					}else{
@@ -4418,8 +4430,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g33Icon.gif\" height=\"20\" width=\"15
 		$database->query($q);
 		}
 	}
-
-		function medals(){
+	
+	function medals(){
 		global $ranking,$database;
 			//we mogen de lintjes weggeven
 

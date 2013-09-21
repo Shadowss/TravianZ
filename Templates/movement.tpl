@@ -9,8 +9,12 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
-$aantal = (count($database->getMovement(4,$village->wid,1))+count($database->getMovement(34,$village->wid,1))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0))+count($database->getMovement(7,$village->wid,1))+count($database->getMovement(5,$village->wid,0))+count($database->getMovement(6,$village->wid,0))-count($database->getMovement(8,$village->wid,1))-count($database->getMovement(9,$village->wid,0)));
+$oases = 0;
+$array = $database->getOasis($village->wid);
+foreach($array as $conqured){
+$oases += count($database->getMovement(6,$village->wid,0));
+}
+$aantal = (count($database->getMovement(4,$village->wid,1))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0))+count($database->getMovement(7,$village->wid,1))+count($database->getMovement(5,$village->wid,0))+$oases-count($database->getMovement(8,$village->wid,1))-count($database->getMovement(9,$village->wid,0)));
 
 if($aantal > 0){
 	echo	'<table id="movements" cellpadding="1" cellspacing="1"><thead><tr><th colspan="3">'.TROOP_MOVEMENTS.'</th></tr></thead><tbody>';
@@ -51,7 +55,7 @@ if($aantal > 0){
 	if ($receive['attack_type'] == 2) {
 		$action = 'def1';
 		$aclass = 'd1';
-		$title = ''.OWN_REINFORCING_TROOPS.'';
+		$title = ''.ARRIVING_REINF_TROOPS.'';
 		$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
 		$NextArrival[] = $receive['endtime'];
 	}
@@ -132,31 +136,6 @@ if($lala > 0){
 	$timer += 1;
 }
 
-/* Units send to reinf. (to my town) */
-$units_type = $database->getMovement("34",$village->wid,1);
-$lala = count($units_type);
-for($i=0;$i<$lala;$i++){
-	if(($units_type[$i]['attack_type']==1)){
-		$lala -= 1;
-    }
-}
-
-	if($lala > 0){
-		if(!empty($NextArrival4)) { reset($NextArrival4); }
-			foreach($units_type as $receive) {
-				$action = 'def1';
-				$aclass = 'd1';
-				$title = ''.OWN_REINFORCING_TROOPS.'';
-				$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
-				$NextArrival4[] = $receive['endtime'];
-			}
-			
-	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$lala.'&nbsp;'.$short.'</span></div><div class="dur_r">&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat($receive['endtime']-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';	
-	$timer += 1;
-
-}
-
 /* Found NEW VILLAGE by Shadow */
 
 $aantal = count($database->getMovement(5,$village->wid,0));
@@ -179,15 +158,27 @@ if($aantal > 0){
 
 /* Attacks on Oasis (to my oasis) by Shadow */
 
-$aantal = count($database->getMovement(6,$village->wid,0));
-$aantal2 = $database->getMovement(6,$village->wid,0);
+$aantal = 0;
+$aantal2 = array();
+$array = $database->getOasis($village->wid);
+foreach($array as $conqured){
+$aantal += count($database->getMovement(6,$conqured['wref'],0));
+$aantal2 = array_merge($database->getMovement(6,$conqured['wref'],0), $aantal2);
+}
 if($aantal > 0){
 	if(!empty($NextArrival6)) { reset($NextArrival6); }	
 			foreach($aantal2 as $receive) {
+			if($receive['attack_type'] == 2){
+				$action = 'def3';
+				$aclass = 'd3';
+				$title = ''.ARRIVING_REINF_TROOPS.'';
+				$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
+			}else{
 				$action = 'att3';
-				$aclass = 'a1';
+				$aclass = 'a3';
 				$title = ''.OASISATTACK.'';
 				$short = ''.OASISATTACKS.'';
+			}
 				$NextArrival6[] = $receive['endtime'];
 			}
 			

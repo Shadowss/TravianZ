@@ -140,9 +140,9 @@ $timer += 1;
                     echo "on ".$datetime[0]." ";
                     }
                     echo "at ".$datetime[1]."</div>";
-					if (($units[$y]['starttime']+90)>time()){
+					if (($settlers[$y]['starttime']+90)>time()){
 				?>
-                    <div class="abort"><a href="build.php?id=<?php echo $_GET['id']."&mode=troops&cancel=1&moveid=".$units[$y]['moveid']; ?>"><img src="img/x.gif" class="del" /></a></div>
+                    <div class="abort"><a href="build.php?id=<?php echo $_GET['id']."&mode=troops&cancel=1&moveid=".$settlers[$y]['moveid']; ?>"><img src="img/x.gif" class="del" /></a></div>
 					<?php } ?>
                     </div>
                 </td>

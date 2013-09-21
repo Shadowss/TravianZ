@@ -133,7 +133,7 @@ if ($units[$y]['sort_type']==3){
 	if ($units[$y]['attack_type']==1){
 		$actionType = "Return from ";
 	} else if ($units[$y]['attack_type']==2){
-		$actionType = "Reinforment for ";
+		$actionType = "Reinforcement for ";
 	} else if ($units[$y]['attack_type']==3){
 		$actionType = "Return from ";
 	} else if ($units[$y]['attack_type']==4){
@@ -212,6 +212,92 @@ $to = $database->getMInfo($units[$y]['vref']);
 <?php
 	}
 	}
+$array = $database->getOasis($village->wid);
+foreach($array as $conqured){
+$oasis = $database->getMovement("6",$conqured['wref'],0);
+$total_for = count($oasis);
+for($y=0;$y < $total_for;$y++){
+$timer = $y+1;
+	if ($oasis[$y]['attack_type']==2){
+		$actionType = "Reinforcement for ";
+	} else if ($oasis[$y]['attack_type']==3){
+		$actionType = "Attack on ";
+	} else if ($oasis[$y]['attack_type']==4){
+		$actionType = "Raid on ";
+	}
+	$reinfowner = $database->getVillageField($oasis[$y]['from'],"owner");
+				  if($oasis[$y]['t11'] != 0 && $reinfowner == $session->uid) {
+                  $colspan = 11;
+				  }else{
+				  $colspan = 10;
+				  }
+		echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
+                  <a href=\"karte.php?d=".$oasis[$y]['from']."&c=".$generator->getMapCheck($oasis[$y]['from'])."\">".$database->getVillageField($oasis[$y]['from'],"name")."</a></td>
+                  <td colspan=\"$colspan\">";
+                  echo "<a href=\"spieler.php?uid=".$database->getVillageField($oasis[$y]['from'],"owner")."\">".$database->getUserField($database->getVillageField($oasis[$y]['from'],"owner"),"username",0)."'s troops</a>";
+                  echo "</td></tr></thead><tbody class=\"units\">";
+                  $tribe = $database->getUserField($database->getVillageField($oasis[$y]['from'],"owner"),"tribe",0);
+                  $start = ($tribe-1)*10+1;
+				  $end = ($tribe*10);
+                  echo "<tr><th>&nbsp;</th>";
+                  for($i=$start;$i<=($end);$i++) {
+                  	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";	
+                  }
+				  if($oasis[$y]['t11'] != 0 && $reinfowner == $session->uid) {
+                   echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";    
+                  }
+                  echo "</tr><tr><th>Troops</th>";
+                  for($i=1;$i<=$colspan;$i++) {
+				  $totalunits = $oasis[$y]['t1']+$oasis[$y]['t2']+$oasis[$y]['t3']+$oasis[$y]['t4']+$oasis[$y]['t5']+$oasis[$y]['t6']+$oasis[$y]['t7']+$oasis[$y]['t8']+$oasis[$y]['t9']+$oasis[$y]['t10']+$oasis[$y]['t11'];
+				  if($oasis[$y]['attack_type'] == 2){
+				  if($reinfowner != $session->uid){
+						echo "<td class=\"none\">?</td>";
+				  }else{
+
+
+            	if($oasis[$y]['t'.$i] == 0) {
+                	echo "<td class=\"none\">0</td>";
+                }
+                else {
+                echo "<td>";
+                echo $oasis[$y]['t'.$i]."</td>";
+				}
+				  }}else{
+				$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,3,3,0));
+				$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,3,1,1));
+				$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,3,2,0));
+				$total_artefact = $artefact + $artefact1 + $artefact2;
+				  if($totalunits > $building->getTypeLevel(16) && $total_artefact == 0){
+                 		echo "<td class=\"none\">?</td>";
+                  }else{
+				  if($oasis[$y]['t'.$i] == 0) {
+                    echo "<td class=\"none\">0</td>";
+				  }else{
+					echo "<td>?</td>";
+                  }	
+				  }
+				  }
+				  }
+                  echo "</tr></tbody>";
+                  echo '
+                  <tbody class="infos">
+									<tr>
+										<th>Arrival</th>
+										<td colspan="10">
+										<div class="in small"><span id=timer'.$timer.'>'.$generator->getTimeFormat($oasis[$y]['endtime']-time()).'</span> h</div>';
+										    $datetime = $generator->procMtime($oasis[$y]['endtime']);
+										    echo "<div class=\"at small\">";
+										    if($datetime[0] != "today") {
+										    echo "on ".$datetime[0]." ";
+										    }
+										    echo "at ".$datetime[1]." hours</div>
+											</div>
+										</td>
+									</tr>
+								</tbody>";
+		echo "</table>";
+}
+}
 
 $settlers = $database->getMovement("7",$village->wid,1);
 $total_for3 = count($settlers);

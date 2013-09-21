@@ -14,15 +14,20 @@
 <?php
 $units_type = $database->getMovement("34",$village->wid,1);
 $settlers = $database->getMovement("7",$village->wid,1);
+$oasis_incoming = 0;
+$array = $database->getOasis($village->wid);
+foreach($array as $conqured){
+$oasis_incoming += count($database->getMovement(6,$conqured['wref'],0));
+}
 $units_incoming = count($units_type);
 $settlers_incoming = count($settlers);
 for($i=0;$i<$units_incoming;$i++){
 	if($units_type[$i]['attack_type'] == 1 && $units_type[$i]['sort_type'] == 3)
 		$units_incoming -= 1;
 }
-if($units_incoming > 0 or $settlers_incoming > 0){
+if($units_incoming > 0 or $settlers_incoming > 0 or $oasis_incoming > 0){
 ?>
-<h4>Incoming troops (<?php echo $units_incoming; ?>)</h4>
+<h4>Incoming troops (<?php echo $units_incoming+$settlers_incoming+$oasis_incoming; ?>)</h4>
 	<?php include("16_incomming.tpl"); 
 	} 
 ?>
