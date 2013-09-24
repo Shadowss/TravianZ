@@ -283,7 +283,7 @@ $timer = $y+1;
                   <tbody class="infos">
 									<tr>
 										<th>Arrival</th>
-										<td colspan="10">
+										<td colspan="'.$colspan.'">
 										<div class="in small"><span id=timer'.$timer.'>'.$generator->getTimeFormat($oasis[$y]['endtime']-time()).'</span> h</div>';
 										    $datetime = $generator->procMtime($oasis[$y]['endtime']);
 										    echo "<div class=\"at small\">";
