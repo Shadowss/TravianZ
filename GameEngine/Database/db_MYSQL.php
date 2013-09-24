@@ -3410,6 +3410,36 @@ class MYSQL_DB {
 		$q = "DELETE from " . TB_PREFIX . "prisoners where id = '$id'";
 		mysql_query($q, $this->connection);
 	}
+	
+	/***************************
+	Function checkAttack
+	Made by: Shadow
+	***************************/
+
+       function checkAttack($wref, $toWref){
+            	$q = "SELECT * FROM ".TB_PREFIX."movement WHERE `from` = '$wref' AND `to` = '$toWref' AND `proc` = '0' AND `sort_type` = '3'";
+		$result = mysql_query($q, $this->connection);
+		if(mysql_num_rows($result)) {
+		return mysql_fetch_array($result);
+		} else {
+		return false;
+		}
+            }
+
+	/***************************
+	Function checkEnforce
+	Made by: Shadow
+	***************************/
+
+       function checkEnforce($vid, $from) {
+		$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $from and vref = $vid";
+      		$result = mysql_query($q, $this->connection);
+			if(!empty($result)) {
+			return mysql_insert_id($this->connection);
+		}else{
+		return true;
+		}
+	}
 };
 
 $database = new MYSQL_DB;
