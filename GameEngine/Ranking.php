@@ -53,15 +53,27 @@
 							break;
 						case 11:
 							$this->procRankRaceArray(1);
+							if($this->searchRank($session->uid, "userid") != 0){
 							$this->getStart($this->searchRank($session->uid, "userid"));
+							}else{
+							$this->getStart(1);
+							}
 							break;
 						case 12:
 							$this->procRankRaceArray(2);
+							if($this->searchRank($session->uid, "userid") != 0){
 							$this->getStart($this->searchRank($session->uid, "userid"));
+							}else{
+							$this->getStart(1);
+							}
 							break;
 						case 13:
 							$this->procRankRaceArray(3);
+							if($this->searchRank($session->uid, "userid") != 0){
 							$this->getStart($this->searchRank($session->uid, "userid"));
+							}else{
+							$this->getStart(1);
+							}
 							break;
 						case 31:
 							$this->procAttRankArray();

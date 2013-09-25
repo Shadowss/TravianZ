@@ -158,8 +158,10 @@ $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $do
 		$att = '<span class=\'m3\' ></span>';
         }elseif ($database->checkEnforce($wref,$toWref) != 0) {
 		$att = '<span class=\'m9\' ></span>';
-	}
-    	} 
+		}elseif ($database->checkScout($wref,$toWref) != 0) {
+		$att = '<span class=\'m6\' ></span>';
+		}
+    	}
 
 	// Map content
 	if($donnees['ville_user']==3 && $donnees['ville_name']=='WW Buildingplan'){

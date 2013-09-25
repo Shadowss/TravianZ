@@ -12,7 +12,7 @@
 $oases = 0;
 $array = $database->getOasis($village->wid);
 foreach($array as $conqured){
-$oases += count($database->getMovement(6,$village->wid,0));
+$oases += count($database->getMovement(6,$conqured['wref'],0));
 }
 $aantal = (count($database->getMovement(4,$village->wid,1))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0))+count($database->getMovement(7,$village->wid,1))+count($database->getMovement(5,$village->wid,0))+$oases-count($database->getMovement(8,$village->wid,1))-count($database->getMovement(9,$village->wid,0)));
 
@@ -24,6 +24,9 @@ $NextArrival = array();
 $NextArrival1 = array();
 $NextArrival2 = array();
 $NextArrival3 = array();
+$NextArrival4 = array();
+$NextArrival5 = array();
+$NextArrival6 = array();
 
 /* Units coming back from Reinf,attack,raid,evasion or reinf to my town */
 $aantal = count($database->getMovement(4,$village->wid,1))+count($database->getMovement(7,$village->wid,1));
@@ -80,7 +83,7 @@ if($aantal > 0){
 		if ($receive['attack_type'] != 2 && $receive['attack_type'] != 1) {
 			$action = 'att1';
 			$aclass = 'a1';
-			$title = ''.OWN_ATTACKING_TROOPS.'';
+			$title = ''.UNDERATTACK.'';
 			$short = ''.ATTACK.'';
 			$NextArrival1[] = $receive['endtime'];
 		}
@@ -151,7 +154,7 @@ if($aantal > 0){
 			}
 			
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat($receive['endtime']-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival5)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 	$timer += 1;
 
 }
@@ -183,7 +186,7 @@ if($aantal > 0){
 			}
 			
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat($receive['endtime']-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival6)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 	$timer += 1;
 
 }
