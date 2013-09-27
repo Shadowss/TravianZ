@@ -123,17 +123,18 @@ if($_POST['password'] != ""){
 		mysql_query($q4) or die(mysql_error());
 		
 /**
- * SCOUTING ALL PLAYERS
+ *  SCOUTING ALL PLAYERS FIX BY MisterX
  */
  
 		$natar = mysql_fetch_array(mysql_query("SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid and capital = 1"));
-		$multiplier = NATARS_UNITS;
-		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = 1 and owner > 5";
-		$array = $database->query_return($q);
-		foreach($array as $vill){
-		$ref = $database->addAttack($natar['wref'], 0, 0, 0, 1500*$multiplier, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
-		$database->addMovement(3, $natar['wref'], $vill['wref'], $ref, time(), time()+1);
-		}
+  		$multiplier = NATARS_UNITS;
+  		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner > '5'";
+  		$array = $database->query_return($q);
+        	$sendspytroops = 1500 * $multiplier;
+  		foreach($array as $vill){
+  		$ref = $database->addAttack($natar['wref'], 0, 0, 0, $sendspytroops, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
+  		$database->addMovement(3, $natar['wref'], $vill['wref'], $ref, time(), time()+10000);
+  		}
 
 /**
  * SMALL ARTEFACTS
