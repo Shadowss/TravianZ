@@ -1,9 +1,16 @@
 <?php
-# Developed By : Mr.php
-# you have no rights to change this !!
-# Fixed : Doubling Troops , Hero not dieing etc ..
-# Email : mr.php-majed@hotmail.com
-# Skype : mr.majed1005
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                        		       	       		   ##
+##  Version:       01.09.2013 						       					   ##
+##  Filename       Automation.php                                              ##
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow  	       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  Source code:   https://github.com/yi12345/TravianZ/    		       		   ##
+#################################################################################
 
 class Automation {
 
@@ -3616,44 +3623,40 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 	}
 
 	private function bountyGetCropProd() {
-		global $bid4,$bid8,$bid9,$session;
-		$crop = $grainmill = $bakery = 0;
-		$cropholder = array();
-		for($i=1;$i<=38;$i++) {
-			if($this->bountyresarray['f'.$i.'t'] == 4) {
-				array_push($cropholder,'f'.$i);
-			}
-			if($this->bountyresarray['f'.$i.'t'] == 8) {
-				$grainmill = $this->bountyresarray['f'.$i];
-			}
-			if($this->bountyresarray['f'.$i.'t'] == 9) {
-				$bakery = $this->bountyresarray['f'.$i];
-			}
-		}
-		for($i=0;$i<=count($cropholder)-1;$i++) { $crop+= $bid4[$this->bountyresarray[$cropholder[$i]]]['prod']; }
-		if($grainmill >= 1) {
-			$crop += $crop /100 * $bid8[$grainmill]['attri'];
-		}
-		if($bakery >= 1) {
-			$crop += $crop /100 * $bid9[$bakery]['attri'];
-		}
-		if($this->bountyocounter[3] != 0) {
-			$crop += $crop*0.25*$this->bountyocounter[3];
-		}
-		$who=$database->getVillageField($bountyresarray['vref'],"owner");
-		$croptrue=$database->getUserField($who,"b4",0);
-		if($croptrue > time()) {
-		$crop*=1.25;
-		if(!empty($bountyresarray['vref']) &&  is_numeric($bountyresarray['vref'])){
+  		global $bid4,$bid8,$bid9,$session;
+  		$crop = $grainmill = $bakery = 0;
+  		$cropholder = array();
+  		for($i=1;$i<=38;$i++) {
+   			if($this->bountyresarray['f'.$i.'t'] == 4) {
+    				array_push($cropholder,'f'.$i);
+   			}
+   			if($this->bountyresarray['f'.$i.'t'] == 8) {
+    		$grainmill = $this->bountyresarray['f'.$i];
+  		}
+   			if($this->bountyresarray['f'.$i.'t'] == 9) {
+    		$bakery = $this->bountyresarray['f'.$i];
+   			}
+  		}
+  		for($i=0;$i<=count($cropholder)-1;$i++) { $crop+= $bid4[$this->bountyresarray[$cropholder[$i]]]['prod']; }
+  			if($grainmill >= 1) {
+   		$crop += $crop /100 * $bid8[$grainmill]['attri'];
+  		}
+  			if($bakery >= 1) {
+   		$crop += $crop /100 * $bid9[$bakery]['attri'];
+  		}
+  			if($this->bountyocounter[3] != 0) {
+   		$crop += $crop*0.25*$this->bountyocounter[3];
+  		}
+			if(!empty($bountyresarray['vref']) &&  is_numeric($bountyresarray['vref'])){
 		$who=$database->getVillageField($bountyresarray['vref'],"owner");
 		$croptrue=$database->getUserField($who,"b4",0);
 			if($croptrue > time()) {
 		$crop*=1.25;
 			}
-		} 
-		$crop *= SPEED;
+		}
+  		$crop *= SPEED;
 		return round($crop);
-	}
+ 	}
 
 	private function trainingComplete() {
 	if(file_exists("GameEngine/Prevention/training.txt")) {
