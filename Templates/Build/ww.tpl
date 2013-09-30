@@ -14,7 +14,7 @@
 	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
 ?>
 
-<div id="build" class="gid40"><a href="#" onClick="return Popup(5,4);" class="build_logo">
+<div id="build" class="gid40"><a href="#" onClick="return Popup(40,4);" class="build_logo">
 	<img class="building g40" src="img/x.gif" alt="World Wonder" title="World Wonder" />
 </a>
 <h1>Wonder of the World <br /><span class="level">Level <?php echo $village->resarray['f'.$id];?></span></h1>
