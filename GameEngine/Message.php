@@ -396,7 +396,7 @@ class Message {
 		if($permission[opt7]==1){
 		if ($userally != 0) {
 		while ($allmembers = mysql_fetch_array($allmembersQ)) {
-		$database->sendMessage($allmembers[id],$session->uid,addslashes($topic),addslashes($text),0,$alliance,$player,$coor,$report);
+		$database->sendMessage($allmembers[id],$session->uid,htmlspecialchars(addslashes($topic)),htmlspecialchars(addslashes($text)),0,$alliance,$player,$coor,$report);
 		}
 			}
 			}
@@ -479,7 +479,7 @@ class Message {
 		}
 		}
 		}
-		$database->sendMessage($user, $session->uid, addslashes($topic), addslashes($text), 0, $alliance, $player, $coor, $report);
+		$database->sendMessage($user, $session->uid, htmlspecialchars(addslashes($topic)), htmlspecialchars(addslashes($text)), 0, $alliance, $player, $coor, $report);
 		}
 	}
 
