@@ -3,9 +3,15 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       Units.php                                                   ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Project:       TravianZ                        		       	       		   ##
+##  Version:       01.09.2013 						       					   ##
+##  Filename       Units.php	                                               ##
+##  Developed by:  Advocaite , yi12345 , Shadow  	       					   ##
+##  Fixed by:      Shadow - Doubleing Troops , Catapult fix if have artefact.  ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       			   ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
 ##                                                                             ##
 #################################################################################
 
@@ -116,57 +122,58 @@ class Units {
                     $coor = $database->getCoor($id);
                     }
                 }
+		
                 // Busqueda por coordenadas de pueblo
                 // Confirmamos y buscamos las coordenadas por coordenadas de pueblo
-				if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
-					$coor = array('x'=>$post['x'], 'y'=>$post['y']);
-					$id = $generator->getBaseID($coor['x'],$coor['y']);
-					if (!$database->getVillageState($id)){
-						$form->addError("error","Coordinates do not exist");
-					}
-					if ($session->tribe == 1){$Gtribe = "";}elseif ($session->tribe == 2){$Gtribe = "1";}elseif ($session->tribe == 3){$Gtribe = "2";}elseif ($session->tribe == 4){$Gtribe = "3";}elseif ($session->tribe == 5){$Gtribe = "4";}
-					for($i=1; $i<10; $i++)
-					{
-						if(isset($post['t'.$i]))
-						{
+                if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
+                    $coor = array('x'=>$post['x'], 'y'=>$post['y']);
+                    $id = $generator->getBaseID($coor['x'],$coor['y']);
+                    if (!$database->getVillageState($id)){
+                        $form->addError("error","Coordinates do not exist");
+                    }
+                    if ($session->tribe == 1){$Gtribe = "";}elseif  ($session->tribe == 2){$Gtribe = "1";}elseif ($session->tribe ==  3){$Gtribe = "2";}elseif ($session->tribe == 4){$Gtribe = "3";}elseif  ($session->tribe == 5){$Gtribe = "4";}
+                    for($i=1; $i<11; $i++)
+                    {
+                        if(isset($post['t'.$i]))
+                        {
 
-							if ($post['t'.$i] > $village->unitarray['u'.$Gtribe.$i])
-							{
-								$form->addError("error","You can't send more units than you have");
-								break;
-							}
+                            if ($post['t'.$i] > $village->unitarray['u'.$Gtribe.$i])
+                            {
+                                $form->addError("error","You can't send more units than you have");
+                                break;
+                            }
 
-							if($post['t'.$i]<0)
-							{
-								$form->addError("error","You can't send negative units.");
-								break;
-							}
+                            if($post['t'.$i]<0)
+                            {
+                                $form->addError("error","You can't send negative units.");
+                                break;
+                            }
 
-							if(preg_match('/[^0-9]/',$post['t'.$i]))
-							{
-								$form->addError("error","Special characters can't entered");
-								break;
-							}
-						}
-					}
-					if ($post['t11'] > $village->unitarray['hero'])
-							{
-								$form->addError("error","You can't send more units than you have");
-								break;
-							}
+			    if(preg_match('/[^0-9]/',$post['t'.$i]))
+              		    {
+                	        $form->addError("error","Special characters can't entered");
+                		break;
+              		    } 
 
-							if($post['t11']<0)
-							{
-								$form->addError("error","You can't send negative units.");
-								break;
-							}
+                        }
+                    }
+                    if ($post['t11'] > $village->unitarray['hero'])
+                            {
+                                $form->addError("error","You can't send more units than you have");
+                                break;
+                            }
 
-							if(preg_match('/[^0-9]/',$post['t11']))
-							{
-								$form->addError("error","Special characters can't entered");
-								break;
-							}
-				}
+                            if($post['t11']<0)
+                            {
+                                $form->addError("error","You can't send negative units.");
+                                break;
+                            }
+			    if(preg_match('/[^0-9]/',$post['t11']))
+              		    {
+                		$form->addError("error","Special characters can't entered");
+                		break;
+              		} 
+                }
                 if ($database->isVillageOases($id) == 0) {
                 if($database->hasBeginnerProtection($id)==1) {
                     $form->addError("error","Player is under beginners protection. You can't attack him");
@@ -336,6 +343,15 @@ if($session->access != BANNED){
         }
         }
         $to_owner = $database->getVillageField($data['to_vid'],"owner");
+		// Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
+		// If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
+		// Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
+		// Fixed by Advocaite and Shadow
+        $q = mysql_query("SELECT vref FROM ".TB_PREFIX."fdata WHERE f99t = '40' AND vref = ".$data['to_vid']."");
+        $isThere = mysql_num_rows($q);
+        if($isThere > 0)
+        {
+        $iswwvilla = 1;
         $artefact_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,3,0));
         $artefact1_2 = count($database->getOwnUniqueArtefactInfo2($data['to_vid'],7,1,1));
         $artefact2_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,2,0));
@@ -347,16 +363,62 @@ if($session->access != BANNED){
         $good_artefact = 1;
         }
         }
+        } 
+        }else{
+        $artefact_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,3,0));
+        $artefact1_2 = count($database->getOwnUniqueArtefactInfo2($data['to_vid'],7,1,1));
+        $artefact2_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,2,0));
+        $foolartefact2 = $database->getFoolArtefactInfo(7,$data['to_vid'],$to_owner);
+        $iswwvilla = 0;
+        $good_artefact = 0;
+        if(count($foolartefact2) > 0){
+        foreach($foolartefact2 as $arte){
+        if($arte['bad_effect'] == 0){
+        $good_artefact = 1;
         }
-        if (isset($post['ctar1'])){if($artefact_2 > 0 or $artefact1_2  > 0 or $artefact2_2 > 0 or $good_artefact == 1){$post['ctar1'] =  99;}else{$post['ctar1'] = $post['ctar1'];}}else{ $post['ctar1'] = 0;}
-        if (isset($post['ctar2'])){if($artefact_2 > 0 or $artefact1_2  > 0 or $artefact2_2 > 0 or $good_artefact == 1){$post['ctar2'] =  99;}else{$post['ctar2'] = $post['ctar2'];}}else{ $post['ctar2'] = 0;}
-        if (isset($post['spy'])){$post['spy'] = $post['spy'];}else{ $post['spy'] = 0;}
+        }
+        }  
+        }
+        
+        if (isset($post['ctar1'])){
+			if($artefact_2 > 0 or $artefact1_2  > 0 or $artefact2_2 > 0 or $good_artefact == 1){            
+				if ($post['ctar1'] != 40 or $post['ctar1'] != 27 and $iswwvilla == 1){
+        $post['ctar1'] = 99;
+        }else{
+        $post['ctar1'] = 99;
+            }
+        }else{
+        $post['ctar1'] = $post['ctar1'];
+        }
+        }else{ 
+        $post['ctar1'] = 0;
+        }
+        if (isset($post['ctar2'])){
+            if($artefact_2 > 0 or $artefact1_2  > 0 or $artefact2_2 > 0 or $good_artefact == 1){ 
+                if ($post['ctar2'] != 40 or $post['ctar2'] != 27 and $iswwvilla == 1){
+        $post['ctar2'] = 99;
+        }else{
+        $post['ctar2'] = 99;
+        }
+		}else{
+		$post['ctar2'] = $post['ctar2'];
+		}
+		}else{ 
+		$post['ctar2'] = 0;}
+        if (isset($post['spy'])){
+		$post['spy'] = $post['spy'];
+		}else{ 
+		$post['spy'] = 0;
+		}
         $abdata = $database->getABTech($village->wid);
         $reference =  $database->addAttack(($village->wid),$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],$data['type'],$post['ctar1'],$post['ctar2'],$post['spy'],$abdata['b1'],$abdata['b2'],$abdata['b3'],$abdata['b4'],$abdata['b5'],$abdata['b6'],$abdata['b7'],$abdata['b8']);
         $checkexist = $database->checkVilExist($data['to_vid']);
         $checkoexist = $database->checkOasisExist($data['to_vid']);
         if($checkexist or $checkoexist){
         $database->addMovement(3,$village->wid,$data['to_vid'],$reference,time(),($time+time()));
+        if(($database->hasBeginnerProtection($village->wid)==1)&&($checkexist)){
+        mysql_query("UPDATE ".TB_PREFIX."users SET protect = 0 WHERE id = $session->uid");
+		}
         }
 
         if($form->returnErrors() > 0) {
