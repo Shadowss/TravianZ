@@ -91,6 +91,7 @@ class Technology {
 		$trainingarray = $database->getTraining($village->wid);
 		$listarray = array();
 		$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,35,36,37,38,39,40,41,42,43,44);
+		// fix by brainiac - THANK YOU
 		$greatbarracks = array(61,62,63,71,72,73,74,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
 		$stables = array(4,5,6,15,16,23,24,25,26,45,46);
 		$greatstables = array(64,65,66,75,76,83,84,85,86,105,106);
@@ -142,6 +143,18 @@ class Technology {
 
 	public function getUnitList() {
 		global $database,$village;
+	//FIX BY MisterX
+  	$controlloTruppeInRinforzo = $database->getEnforceControllTroops($village->wid);
+     	for($i=1;$i<=50;$i++) {
+     	if($controlloTruppeInRinforzo['u'.$i] >= "30000000")
+     	mysql_query("UPDATE ".TB_PREFIX."enforcement set u".$i." = '0' where vref = $village->wid");
+     	}
+	//FIX BY Shadow and made by NIKO28
+	$controlloTruppe = $database->getUnit($village->wid);
+   	for($i=1;$i<=50;$i++) {
+   	if($controlloTruppe['u'.$i] >= "10000000")
+   	mysql_query("UPDATE ".TB_PREFIX."units set u".$i." = '0' where vref = $village->wid");
+   	}
 		$unitarray = func_num_args() == 1? $database->getUnit(func_get_arg(0)) : $village->unitall;
 		$listArray = array();
 		for($i=1;$i<count($this->unarray);$i++) {
