@@ -197,8 +197,7 @@ $end = ($tribe*10);
                     
                         <select name="ctar1" class="dropdown">
                             <option value="0">Random</option>
-                            <?php if($building->getTypeLevel(35) == 0){
-							if($building->getTypeLevel(16) >= 5) { ?>
+                            <?php if($building->getTypeLevel(16) >= 5) { ?>
                 <optgroup label="Resources">
                 <option value="1">Woodcutter</option>
                                 <option value="2">Clay Pit</option>
@@ -310,7 +309,7 @@ $end = ($tribe*10);
                      </td>
                 </tr>
             </tbody><?PHP  
-            }}
+            }
             else if($process['c']=='4')
             {
                 ?><tbody class="infos">  
@@ -445,6 +444,9 @@ $end = ($tribe*10);
 <input name="c" value="3" type="hidden">
 
 <?php
+    if(($database->hasBeginnerProtection($village->wid)==1)&&($database->hasBeginnerProtection($process['0'])==0)){
+  	echo"<span style=\"color: #DD0000\"><b>Caution:</b> Attacking a player will lose the protection!</span>";
+    }
     if($database->hasBeginnerProtection($process['0'])==1) { 
         echo"<b>User presently has beginners protection</b>";
     } else {
