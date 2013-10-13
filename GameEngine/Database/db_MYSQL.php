@@ -2572,6 +2572,12 @@ class MYSQL_DB {
 		$result = mysql_query($q, $this->connection);
 		return mysql_fetch_assoc($result);
 	}
+	
+	function getEnforceControllTroops($vid) {
+  		$q = "SELECT * from " . TB_PREFIX . "enforcement where  vref = $vid";
+  		$result = mysql_query($q, $this->connection);
+  		return mysql_fetch_assoc($result);
+ 	}
 
 	function addEnforce($data) {
 		$q = "INSERT into " . TB_PREFIX . "enforcement (vref,`from`) values (" . $data['to'] . "," . $data['from'] . ")";
