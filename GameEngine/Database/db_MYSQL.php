@@ -16,6 +16,7 @@ class MYSQL_DB {
 	function MYSQL_DB() {
 		$this->connection = mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
 		mysql_select_db(SQL_DB, $this->connection) or die(mysql_error());
+		mysql_query("SET NAMES 'UTF8'");  //Fix utf8 phpmyadmin by gm4st3r 
 	}
 
 	function register($username, $password, $email, $tribe, $act) {
