@@ -352,27 +352,47 @@ class MYSQL_DB {
 		}
 	}
 
-	function generateBase($sector) {
-	switch($sector) {
-	case 1:
-	$q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and x < 0 and y > 0 and occupied = 0";
-	break;
-	case 2:
-	$q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and x > 0 and y > 0 and occupied = 0";
-	break;
-	case 3:
-	$q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and x < 0 and y < 0 and occupied = 0";
-	break;
-	case 4:
-	$q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and x > 0 and y < 0 and occupied = 0";
-	break;
-	}
-	$result = mysql_query($q, $this->connection);
-	$num_rows = mysql_num_rows($result);
-	$result = $this->mysql_fetch_all($result);
-	$base = rand(0, ($num_rows-1));
-	return $result[$base]['id'];
-	}
+    function generateBase($sector, $mode) {
+    if (!$mode) {
+        $gamesday=time()-COMMENCE;
+        if ($gamesday<3600*24*10) { //10 day
+            $wide1=1;
+            $wide2=20;
+        } elseif ($gamesday<3600*24*20) { //20 day
+            $wide1=20;
+            $wide2=40;
+        } elseif ($gamesday<3600*24*30) { //30 day
+            $wide1=40;
+            $wide2=80;
+        } else {        // over 30 day
+            $wide1=80;
+            $wide2=120;
+        }
+    }
+    else {
+        $wide1=1;    
+        $wide2=WORLD_MAX;
+    }
+    switch($sector) {
+    case 1:
+    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x- y+
+    break;
+    case 2:
+    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x+ y+
+    break;
+    case 3:
+    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x- y-
+    break;
+    case 4:
+    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x+ y-
+    break;
+    }
+    $result = mysql_query($q, $this->connection);
+    $num_rows = mysql_num_rows($result);
+    $result = $this->mysql_fetch_all($result);
+    $base = rand(0, ($num_rows-1));
+    return $result[$base]['id'];
+    }  
 
 	function setFieldTaken($id) {
 		$q = "UPDATE " . TB_PREFIX . "wdata set occupied = 1 where id = $id";
