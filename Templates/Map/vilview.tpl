@@ -469,14 +469,16 @@ if($type==18 or $type==19 or $type==20 or $type==21){
         $enough_cp = false;
       }
       
-			$otext = ($oasis['name']); 
-			if($village->unitarray['u'.$session->tribe.'0'] >= 3 AND $enough_cp) {
+			   $otext = ($oasis['name']);    
+   if($village->unitarray['u'.$session->tribe.'0'] >= 3 AND $enough_cp AND $village->resarray['f39']) {
         $test = "<a href=\"a2b.php?id=".$_GET['d']."&amp;s=1\">&raquo;  Found new village.</a>";
-      } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 AND !$enough_cp) {
+    } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 AND !$enough_cp) {
         $test = "&raquo; Found new village. ($cps/$need_cps culture points)";
-      } else {
+    } elseif(!$village->resarray['f39']) {
+        $test = "&raquo; Found new village. (build a rally point)"; 
+    } else {
         $test = "&raquo; Found new village. (".$village->unitarray['u'.$session->tribe.'0']."/3 settlers available)";
-      }
+    } 
  	
 		echo ($basearray['fieldtype']==0)? 
 		($village->resarray['f39']==0)? 
