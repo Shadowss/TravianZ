@@ -1,13 +1,20 @@
 <?php
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-|              .: PLEASE DONT'T REMOVE OR CHANGE THIS NOTICE :.               	|
-| ---------------------------------------------------------------------------   |
-|  Filename       quest_core.tpl	                                       	    |
-|  Version        0.1                                                           |
-|  Developed by:  DesPlus <desplus@gmail.com>                                   |
-|  Edited by:     Marvin                                                        |
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					       ##
+##  Version:       01.09.2013 						       ##
+##  Filename       quest_core.tpl                                              ##
+##  Developed by:  DesPlus and Marvin                                          ##
+##  Fixed by:      Shadow / Skype : cata7007                                   ##
+##  Revision by:   noonn                                 		       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       ##
+##                                                                             ##
+#################################################################################
 
 include("GameEngine/Village.php");
 include("GameEngine/Data/cp.php");
@@ -33,32 +40,44 @@ if(SPEED == '1'){
 } 
 $_SESSION['qst_time'] = $uArray['quest_time'];
 if (isset($qact)){
+
+/* Edit by: noonn */
+
+$query2 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $session->userinfo['id']);
+$data2 = mysql_fetch_assoc($query2);
  switch($qact) {
 	case 'enter':
+	if($data2['quest'] == 0){
 	$database->updateUserField($_SESSION['username'],'quest','1',0);
 	$_SESSION['qst']= 1;
+	}
 	break;
-	
-	
+
+
 	//user does not follow the quest. 
 	//Get reward: Resources: Every 24 hours (1 speed)  24/speed=hours
 	//Gold: 25 gold
 	case 'skip':
+	if($data2['quest'] == 0){
 	$database->updateUserField($_SESSION['username'],'quest','90',0);
 	$_SESSION['qst']= 90;
+	}
 	break;
 
 	case '2':
+	if($data2['quest'] == 1){
 	$database->updateUserField($_SESSION['username'],'quest','2',0);		
 	$_SESSION['qst']= 2;	
 	//Give Reward
-	$database->FinishWoodcutter($session->villages[0]);	
+	$database->FinishWoodcutter($session->villages[0]);
+	}
 	break;
 
 	case '3':
+	if($data2['quest'] == 2){
 	$database->updateUserField($_SESSION['username'],'quest','3',0);
 	$_SESSION['qst']= 3;
-	
+
 	//Give Reward
 	if(!$session->plus){
 		mysql_query("UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$_SESSION['username']."'") or die(mysql_error());
@@ -67,14 +86,17 @@ if (isset($qact)){
 		$plus+=86400;
 		$database->updateUserField($_SESSION['username'],'plus',$plus,0);
 	}
+	}
 	break;
 
 	case '4':
+	if($data2['quest'] == 3){
 	$database->updateUserField($_SESSION['username'],'quest','4',0);
 	$_SESSION['qst']= 4;
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],30,60,30,20,1);		
+	}
 	break;
 	
 	case 'rank':
@@ -82,27 +104,32 @@ if (isset($qact)){
 	break;
 	
 	case '5':
+	if($data2['quest'] == 4){
 	$database->updateUserField($_SESSION['username'],'quest','5',0);
 	$_SESSION['qst']= 5;
 	
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],40,30,20,30,1);	
+	}
 	break;
 
 	case '6':
+	if($data2['quest'] == 5){
 	$database->updateUserField($_SESSION['username'],'quest','6',0);
 	$_SESSION['qst']= 6;
 	$Subject="Message From The Taskmaster";
-	$Message="You are to be informed that a nice reward is waiting for you at the taskmaster.<br /><br />Hint: The message has been generated automatically. An answer is not necessary.";
-	$database->sendMessage($session->userinfo['id'],4,$Subject,$Message,0,0,0,0,0);
-	$RB=true;
+        $Message="You are to be informed that a nice reward is waiting for you at the taskmaster.<br /><br />Hint: The message has been generated automatically. An answer is not necessary.";
+        $database->sendMessage($session->userinfo['id'],4,$Subject,$Message,0,0,0,0,0);
+        $RB=true;
 		
 	//Give Reward
 	$database->modifyResource($session->villages[0],50,60,30,30,1);	
+	}
 	break;
 	
 	case '7':
+	if($data2['quest'] == 6){
 	$database->updateUserField($_SESSION['username'],'quest','7',0);
 	$_SESSION['qst']= 7;
 		
@@ -110,9 +137,11 @@ if (isset($qact)){
 	$gold=$database->getUserField($_SESSION['username'],'gold','username');
 	$gold+=20;
 	$database->updateUserField($_SESSION['username'],'gold',$gold,0);
+	}
 	break;
 	
 	case '8':
+	if($data2['quest'] == 7){
 	$crop = round($village->acrop);
 	if ($crop>=200){
 	$database->updateUserField($_SESSION['username'],'quest','8',0);
@@ -126,17 +155,21 @@ if (isset($qact)){
 	} else{
 	$NoCrop="No Enough Crop!";
 	}
+	}
 	break;
 	
 	case '9':
+	if($data2['quest'] == 8){
 	$database->updateUserField($_SESSION['username'],'quest','9',0);
 	$_SESSION['qst']= 9;
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],75,90,30,50,1);
+	}
 	break;
 	
 	case '10':
+	if($data2['quest'] == 9){
 	$database->updateUserField($_SESSION['username'],'quest','10',0);
 	$_SESSION['qst']= 10;
 		
@@ -148,22 +181,27 @@ if (isset($qact)){
 		$plus+=172800;
 		$database->updateUserField($_SESSION['username'],'plus',$plus,0);
 	}
+	}
 	break;
 	
 	case '11':
+	if($data2['quest'] == 10){
 	$database->updateUserField($_SESSION['username'],'quest','11',0);
 	$_SESSION['qst']= 11;
 			
 	//Give Reward
 	$database->modifyResource($session->villages[0],150,180,30,130,1);
+	}
 	break;
 	
 	case '12':
+	if($data2['quest'] == 11){
 	$database->updateUserField($_SESSION['username'],'quest','12',0);
 	$_SESSION['qst']= 12;
 			
 	//Give Reward
 	$database->modifyResource($session->villages[0],60,50,40,30,1);
+	}
 	break;
 	
 	case 'lumber':
@@ -171,93 +209,121 @@ if (isset($qact)){
 	break;
 	
 	case '13':
+	if($data2['quest'] == 12){
 	$database->updateUserField($_SESSION['username'],'quest','13',0);
 	$_SESSION['qst']= 13;
 			
 	//Give Reward
 	$database->modifyResource($session->villages[0],50,30,60,20,1);
+	}
 	break;
 	
 	case '14':
+	if($data2['quest'] == 13){
 	$database->updateUserField($_SESSION['username'],'quest','14',0);
 	$_SESSION['qst']= 14;
 			
 	//Give Reward
 	$database->modifyResource($session->villages[0],75,75,40,40,1);
+	}
 	break;
 	
 	case '15':
+	if($data2['quest'] == 14){
 	$database->updateUserField($_SESSION['username'],'quest','15',0);
 	$_SESSION['qst']= 15;
 			
 	//Give Reward
 	$database->modifyResource($session->villages[0],100,90,100,60,1);
+	}
 	break;
 	
 	case '16':
+	if($data2['quest'] == 15){
 	$database->updateUserField($_SESSION['username'],'quest','16',0);
-	$_SESSION['qst']= 16;			
+	$_SESSION['qst']= 16;
+	}
 	break;
 	
 	case '17':
+	if($data2['quest'] == 16){
 	$database->updateUserField($_SESSION['username'],'quest','17',0);
 	$_SESSION['qst']= 17;
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],80,90,60,40,1);
+	}
 	break;
 	
 	case '18':
+	if($data2['quest'] == 17){
 	$database->updateUserField($_SESSION['username'],'quest','18',0);
 	$_SESSION['qst']= 18;
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],70,100,90,100,1);
+	}
 	break;
 
 	case '19':
+	if($data2['quest'] == 15){
 	$database->updateUserField($_SESSION['username'],'quest','19',0);
-	$_SESSION['qst']= 19;			
+	$_SESSION['qst']= 19;
+	}
 	break;
 	
 	case '20':
+	if($data2['quest'] == 19){
 	$database->updateUserField($_SESSION['username'],'quest','20',0);
 	$_SESSION['qst']= 20;
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],80,90,60,40,1);
+	}
 	break;
 	
 	case '21':
+	if($data2['quest'] == 20){
 	$database->updateUserField($_SESSION['username'],'quest','21',0);
+
+	//Give Reward
+	$database->modifyResource($session->villages[0],70,120,90,50,1);
 	$_SESSION['qst']= 21;
+	}
 	break;
 	
 	case '22':
+	if($data2['quest'] == 18){
 	$database->updateUserField($_SESSION['username'],'quest','22',0);
 	$_SESSION['qst']= 22;
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],300,320,360,570,1);
+	}
 	break;
 	
 	case '23':
+	if($data2['quest'] == 36){
 	$database->updateUserField($_SESSION['username'],'quest','23',0);
 	$_SESSION['qst']= 23;
 
 	//Give Reward
 	$database->modifyResource($session->villages[0],1700,2100,1900,1400,1);
+	}
 	break;
 
 	case '24':
+	if($data2['quest'] == 21){
 	$database->updateUserField($_SESSION['username'],'quest','22',0);
 	$_SESSION['qst']= 22;
 
 	//Give Reward
-	$database->modifyResource($session->villages[0],200,200,700,450,1);
+	$database->modifyResource($session->villages[0],300,320,360,570,1);
+	}
 	break;
 
       case '28':
+      if($data2['quest'] == 22){
 	$dataarray[3] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','28',0);
 
@@ -267,9 +333,11 @@ if (isset($qact)){
 	$gold=$database->getUserField($_SESSION['username'],'gold','username');
 	$gold+=15;
 	$database->updateUserField($_SESSION['username'],'gold',$gold,0);
+	}
 	break;
 	
       case '29':
+      if($data2['quest'] == 28){
 	$dataarray[4] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','29',0);
 
@@ -277,9 +345,11 @@ if (isset($qact)){
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],240,280,180,100,1);
+	}
 	break;
     
         case '30':
+	if($data2['quest'] == 29){
 	$dataarray[5] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','30',0);
 
@@ -287,9 +357,11 @@ if (isset($qact)){
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],600,750,600,300,1);
+	}
 	break;
     
         case '31':
+	if($data2['quest'] == 30){
 	$dataarray[6] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','31',0);
 
@@ -297,9 +369,11 @@ if (isset($qact)){
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],900,850,600,300,1);
+	}
 	break;
     
         case '32':
+	if($data2['quest'] == 31){
 	$dataarray[7] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','32',0);
 
@@ -307,9 +381,11 @@ if (isset($qact)){
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],1800,2000,1650,800,1);
+	}
 	break;
     
         case '33':
+	if($data2['quest'] == 32){
 	$dataarray[8] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','33',0);
 
@@ -317,9 +393,11 @@ if (isset($qact)){
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],1600,1800,1950,1200,1);
+	}
 	break;
     
         case '34':
+	if($data2['quest'] == 33){
 	$dataarray[9] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','34',0);
 
@@ -327,9 +405,11 @@ if (isset($qact)){
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],3400,2800,3600,2200,1);
+	}
 	break;
     
         case '35':
+	if($data2['quest'] == 34){
 	$dataarray[10] = 1;
 	$database->updateUserField($_SESSION['username'],'quest','35',0);
 
@@ -337,19 +417,23 @@ if (isset($qact)){
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],1050,800,900,750,1);
+	}
 	break;
     
         case '36':
+	if($data2['quest'] == 35){
 	$database->updateUserField($_SESSION['username'],'quest','36',0);
 
 	$_SESSION['qst']= 36;
 	
 	//Give Reward
 	$database->modifyResource($session->villages[0],1600,2000,1800,1300,1);
+	}
 	break;
 	
 	
 	case '91':
+	if($data2['quest'] == 90){
 	$database->updateUserField($_SESSION['username'],'quest','91',0);
 	$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 	$_SESSION['qst']= 91;
@@ -365,55 +449,67 @@ if (isset($qact)){
 	$gold=$database->getUserField($_SESSION['username'],'gold','username');
 	$gold+=15;
 	$database->updateUserField($_SESSION['username'],'gold',$gold,0);
+	}
 	break;
 	
 	
 	case '92':
+	if($data2['quest'] == 91){
 	$database->updateUserField($_SESSION['username'],'quest','92',0);
 	$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 	$_SESSION['qst']= 92;
 	$_SESSION['qst_time'] = time()+$skipp_time;
 	//Give Reward
 	$database->modifyResource($session->villages[0],217,247,177,207,1);
+	}
 	break;	
 	
 	case '93':
+	if($data2['quest'] == 92){
 	$database->updateUserField($_SESSION['username'],'quest','93',0);
 	$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 	$_SESSION['qst']= 93;
 	$_SESSION['qst_time'] = time()+$skipp_time;
 	//Give Reward
 	$database->modifyResource($session->villages[0],217,247,177,207,1);
+	}
 	break;	
 	
 	case '94':
+	if($data2['quest'] == 93){
 	$database->updateUserField($_SESSION['username'],'quest','94',0);
 	$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 	$_SESSION['qst']= 94;
 	$_SESSION['qst_time'] = time()+$skipp_time;
 	//Give Reward
 	$database->modifyResource($session->villages[0],217,247,177,207,1);
+	}
 	break;	
 	
 	case '95':
+	if($data2['quest'] == 94){
 	$database->updateUserField($_SESSION['username'],'quest','95',0);
 	$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 	$_SESSION['qst']= 95;
 	$_SESSION['qst_time'] = time()+$skipp_time;
 	//Give Reward
 	$database->modifyResource($session->villages[0],217,247,177,207,1);
+	}
 	break;	
 	
 	case '96':
+	if($data2['quest'] == 95){
 	$database->updateUserField($_SESSION['username'],'quest','96',0);
 	$database->updateUserField($_SESSION['username'],'quest_time',''.(time()+$skipp_time).'',0);
 	$_SESSION['qst']= 96;
 	$_SESSION['qst_time'] = time()+$skipp_time;
 	//Give Reward
 	$database->modifyResource($session->villages[0],217,247,177,207,1);
+	}
 	break;	
 	
 	case '97':
+	if($data2['quest'] == 96){
 	$database->updateUserField($_SESSION['username'],'quest','97',0);
 	$database->updateUserField($_SESSION['username'],'quest_time',''.(time()).'',0);
 	$_SESSION['qst_time'] = time();
@@ -430,6 +526,7 @@ if (isset($qact)){
 	$gold=$database->getUserField($_SESSION['username'],'gold','username');
 	$gold+=20;
 	$database->updateUserField($_SESSION['username'],'gold',$gold,0);
+	}
 	break;
 }
 
@@ -438,7 +535,7 @@ if (isset($qact)){
 header("Content-Type: application/json;");
 if($session->access!=BANNED){
       if($_SESSION['qst']== 0){
-	  ?>
+          ?>
 
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Welcome to <?php echo SERVER_NAME; ?>!<\/h1><br \/><i>&rdquo;As I see you have been made chieftain of this little village. I will be your counselor for the first few days and never leave your (right hand) side.&rdquo;<\/i><br \/><br \/><span id=\"qst_accpt\"><a class=\"qle\" href=\"javascript: qst_next('','enter'); \">To the first task.<\/a><a class=\"qri\" href=\"javascript: qst_fhandle();\">Look\u00a0around\u00a0on\u00a0your\u00a0own.<\/a><input type=\"hidden\" id=\"qst_val\" value=\"2\" \/><br \/><br \/><br \/><a class=\"qri\" href=\"javascript: qst_next('','skip');\">Play no tasks.<\/a><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":null,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":1}
 
@@ -447,12 +544,12 @@ if($session->access!=BANNED){
 //Check one of Woodcutters is level 1 or upper 
 $tRes = $database->getResourceLevel($session->villages[0]);
 $woodL=$tRes['f1']+$tRes['f3']+$tRes['f14']+$tRes['f17'];
-	//check if you are building a woodcutter to level 1
-	foreach($building->buildArray as $jobs) {
-			if($jobs['type']==1){
-				$woodL="99";
-			}	
-      	}
+        //check if you are building a woodcutter to level 1
+        foreach($building->buildArray as $jobs) {
+                        if($jobs['type']==1){
+                                $woodL="99";
+                        }        
+              }
 if ($woodL<1){?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Task 1: Woodcutter<\/h1><br \/><i>&rdquo;There are four green forests around your village. Construct a woodcutter on one of them. Lumber is an important resource for our new settlement.&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\">Order:<\/p>Construct a woodcutter.<\/div><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"wood\"><\/div>\n\t\t","number":"-1","reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":99}
 <?php $_SESSION['qstnew']='0'; }else{ $_SESSION['qstnew']='1'; ?>
@@ -683,8 +780,8 @@ if ($ironL<4 || $clayL<4 || $woodL<4 || $cropL<6){?>
 <?php } ?>
 
 
-////////////////// DE AICI INCEPE TOT \\\\\\\\\\\\\\\\\\\\\\\
-//////////////////// Added by Shadow \\\\\\\\\\\\\\\\\\\\\\\\\
+////////////////// DE AICI INCEPE TOT \\\\\\\\\\\\\\\\\\\\\\\\\\\
+//Added by Shadow - cata7007@gmail.com / Skype : cata7007\\\\\\\\
 
 <?php } elseif($_SESSION['qst']== 28){
 
@@ -787,7 +884,7 @@ if ($wall==0){?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Task 28: Build a <?php echo $unarray[$session->userinfo['tribe']];?><\/h1><br \/><i>&rdquo;That's what I'm talking about. A <?php echo $unarray[$session->userinfo['tribe']];?> Very useful. It increases the defence of the troops in the village.&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><input type=\"hidden\" id=\"qst_val\" value=\"2\" \/>Your reward:<\/p><img src=\"img\/x.gif\" class=\"r1\" alt=\"Lumber\" title=\"Lumber\" \/>1700&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r2\" alt=\"Clay\" title=\"Clay\" \/>2100&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r3\" alt=\"Iron\" title=\"Iron\" \/>1900&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" \/>1400&nbsp;&nbsp;<\/div><br \/><span id=\"qst_accpt\"><a href=\"javascript: qst_next('','23');\">Continue with the next task.<\/a><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":36,"reward":{"wood":1700,"clay":2100,"iron":1900,"crop":1400},"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":99}
 <?php } ?>
 
-//////////////////// Added by Shadow \\\\\\\\\\\\\\\\\\\\\\\\
+//Added by Shadow - cata7007@gmail.com / Skype : cata7007\\\\\\\\
 /////////////////////// AICI SE TERMINA TOTUL \\\\\\\\\\\\\\\\\\\\\\\
 
 // End tasks message
@@ -879,7 +976,7 @@ $_SESSION['qst']= 24; ?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Tasks<\/h1><br \/><i>&rdquo;Not loaded!&rdquo;<\/i><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":-25,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":0}
 <?php }}else{
       if($_SESSION['qst']== 0){
-	  ?>
+          ?>
 
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Welcome to <?php echo SERVER_NAME; ?>!<\/h1><br \/><i>&rdquo;As I see you have been made chieftain of this little village. I will be your counselor for the first few days and never leave your (right hand) side.&rdquo;<\/i><br \/><br \/><span id=\"qst_accpt\"><a class=\"qle\" href=\"banned.php\">To the first task.<\/a><a class=\"qri\" href=\"banned.php\">Look\u00a0around\u00a0on\u00a0your\u00a0own.<\/a><input type=\"hidden\" id=\"qst_val\" value=\"2\" \/><br \/><br \/><br \/><a class=\"qri\" href=\"banned.php\">Play no tasks.<\/a><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":null,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":1}
 
@@ -1120,7 +1217,7 @@ if ($ironL<4 || $clayL<4 || $woodL<4 || $cropL<6){?>
 <?php } ?>
 
 ////////////////// DE AICI INCEPE TOT \\\\\\\\\\\\\\\\\\\\\\\
-//////////////////// Added by Shadow \\\\\\\\\\\\\\\\\\\\\\\\\
+//Added by Shadow - cata7007@gmail.com / Skype : cata7007\\\\\\\\
 
 <?php } elseif($_SESSION['qst']== 28){
 
@@ -1223,7 +1320,7 @@ if ($wall==0){?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> Task 28: Build a <?php echo $unarray[$session->userinfo['tribe']];?><\/h1><br \/><i>&rdquo;That's what I'm talking about. A <?php echo $unarray[$session->userinfo['tribe']];?> Very useful. It increases the defence of the troops in the village.&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><input type=\"hidden\" id=\"qst_val\" value=\"2\" \/>Your reward:<\/p><img src=\"img\/x.gif\" class=\"r1\" alt=\"Lumber\" title=\"Lumber\" \/>1700&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r2\" alt=\"Clay\" title=\"Clay\" \/>2100&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r3\" alt=\"Iron\" title=\"Iron\" \/>1900&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" \/>1400&nbsp;&nbsp;<\/div><br \/><span id=\"qst_accpt\"><a href=\"banned.php\">Continue with the next task.<\/a><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":36,"reward":{"wood":1700,"clay":2100,"iron":1900,"crop":1400},"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":99}
 <?php } ?>
 
-//////////////////// Added by Shadow \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//Added by Shadow - cata7007@gmail.com / Skype : cata7007\\\\\\\\
 /////////////////////// AICI SE TERMINA TOTUL \\\\\\\\\\\\\\\\\\\\\\\
 
 // End tasks message
