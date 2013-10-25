@@ -94,33 +94,77 @@ if($_POST['password'] != ""){
 /**
  * Creating account & capital village
  */
-		$username = "Natars";
-		$password = md5($_POST['password']);
-		$email = "natars@noreply.com";
-		$tribe = 5;
-		$desc = "********************
-					[#natars]
-				********************";
+        $username = "Natars";
+        $password = md5($_POST['password']);
+        $email = "natars@noreply.com";
+        $tribe = 5;
+        $desc = "********************
+                    [#natars]
+                ********************";
 
-		$q = "INSERT INTO " . TB_PREFIX . "users (id,username,password,access,email,timestamp,tribe,location,act,protect) VALUES (3, '$username', '$password', " . USER . ", '$email', ".time().", $tribe, '', '', 0)";
-		mysql_query($q);
-		unset($q);
-		$uid = $database->getUserField($username, 'id', 1);
-		generateBase(0, $uid, $username);
-		$wid = mysql_fetch_assoc(mysql_query("SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid"));
-		$q = "UPDATE " . TB_PREFIX . "vdata SET pop = 834 WHERE owner = $uid";
-		mysql_query($q) or die(mysql_error());
-		$q2 = "UPDATE " . TB_PREFIX . "users SET access = 2 WHERE id = $uid";
-		mysql_query($q2) or die(mysql_error());
-		if(SPEED > 3) {
-			$speed = 5;
-		} else {
-			$speed = SPEED;
-		}
-		$q3 = "UPDATE " . TB_PREFIX . "units SET u41 = " . (64700 * $speed) . ", u42 = " . (295231 * $speed) . ", u43 = " . (180747 * $speed) . ", u44 = " . (20000 * $speed) . ", u45 = " . (364401 * $speed) . ", u46 = " . (217602 * $speed) . ", u47 = " . (2034 * $speed) . ", u48 = " . (1040 * $speed) . " , u49 = " . (1 * $speed) . ", u50 = " . (9 * $speed) . " WHERE vref = " . $wid['wref'] . "";
-		mysql_query($q3) or die(mysql_error());
-		$q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = $uid";
-		mysql_query($q4) or die(mysql_error());
+        $q = "INSERT INTO " . TB_PREFIX . "users (id,username,password,access,email,timestamp,tribe,location,act,protect) VALUES (3, '$username', '$password', " . USER . ", '$email', ".time().", $tribe, '', '', 0)";
+        mysql_query($q);
+        unset($q);
+        $uid = $database->getUserField($username, 'id', 1);
+        //generateBase(0, $uid, $username);
+        $arrayXY=array();
+        $arrayXY=array
+        (
+            array(WORLD_MAX, WORLD_MAX),
+            array(WORLD_MAX, -WORLD_MAX),
+            array(-WORLD_MAX, -WORLD_MAX),
+            array(WORLD_MAX-1, WORLD_MAX),
+            array(WORLD_MAX, WORLD_MAX-1),
+            array(-WORLD_MAX, WORLD_MAX-1),
+            array(WORLD_MAX-1, -WORLD_MAX),
+            array(WORLD_MAX-1, WORLD_MAX-1),
+            array(WORLD_MAX, -WORLD_MAX+1),
+            array(WORLD_MAX-1, -WORLD_MAX+1),
+            array(-WORLD_MAX+1, -WORLD_MAX+1),
+            array(WORLD_MAX-2, WORLD_MAX),
+            array(WORLD_MAX-2, -WORLD_MAX),
+            array(WORLD_MAX-2, WORLD_MAX-1),
+            array(WORLD_MAX-1, WORLD_MAX-2),
+            array(-WORLD_MAX+2, WORLD_MAX),
+            array(-WORLD_MAX+2, WORLD_MAX-1),
+            array(-WORLD_MAX+2, -WORLD_MAX+2)
+        );
+        $status=0;
+        $i=0;
+        while ($i<=17) {
+            $wid = $database->getVilWref($arrayXY[$i][0],$arrayXY[$i][1]);
+            $status = $database->getVillageState($wid);
+            $i++;
+            if ($status==0) break;
+        }
+        if($status != 0) { //have taken then random
+            generateBase(0, $uid, $username);
+            $status = 1;
+        }
+        if($status == 0) {
+            $database->setFieldTaken($wid);
+            $database->addVillage($wid, $uid, $username, 1);
+            $database->addResourceFields($wid, $database->getVillageType($wid));
+            $database->addUnits($wid);
+            $database->addTech($wid);
+            $database->addABTech($wid);
+            $database->updateUserField($uid, "access", USER, 1);
+        }
+                
+        $wid = mysql_fetch_assoc(mysql_query("SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid"));
+        $q = "UPDATE " . TB_PREFIX . "vdata SET pop = 834 WHERE owner = $uid";
+        mysql_query($q) or die(mysql_error());
+        $q2 = "UPDATE " . TB_PREFIX . "users SET access = 2 WHERE id = $uid";
+        mysql_query($q2) or die(mysql_error());
+        if(SPEED > 3) {
+            $speed = 5;
+        } else {
+            $speed = SPEED;
+        }
+        $q3 = "UPDATE " . TB_PREFIX . "units SET u41 = " . (64700 * $speed) . ", u42 = " . (295231 * $speed) . ", u43 = " . (180747 * $speed) . ", u44 = " . (20000 * $speed) . ", u45 = " . (364401 * $speed) . ", u46 = " . (217602 * $speed) . ", u47 = " . (2034 * $speed) . ", u48 = " . (1040 * $speed) . " , u49 = " . (1 * $speed) . ", u50 = " . (9 * $speed) . " WHERE vref = " . $wid['wref'] . "";
+        mysql_query($q3) or die(mysql_error());
+        $q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = $uid";
+        mysql_query($q4) or die(mysql_error());
 		
 /**
  *  SCOUTING ALL PLAYERS FIX BY MisterX
@@ -471,8 +515,14 @@ There will be a countdown in game, showing the exact time of the release, 5 days
 					or die(mysql_error());
 			}
 
-		echo "Done";
-}else{
+        echo "Done";
+}elseif($database->checkExist('Natars', 0))    {
+?>
+<p>
+<span class="c2">Error: Natar account already exist</span>
+</p>
+<?php
+}else {
 ?>
 <form action="create_account.php" method="post">
 
