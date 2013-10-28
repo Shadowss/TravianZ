@@ -60,7 +60,7 @@ if(isset($_GET['u']))
 		<td class="hab" colspan="1"><?php
 			if($latest > $ver)
 			{
-				echo'<center><a href="?p=update&u"><img src="../img/admin/b/update.png"></a></center>'; 
+				echo'<center><a href="https://github.com/yi12345/TravianZ"><img src="../img/admin/b/update.png"></a></center>'; 
 			} 
 			else
 			{ 
