@@ -3,9 +3,10 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 include('ver.tpl');
 if(isset($_GET['c']))
 {
-	copy("http://travian.gamingcrazy.net/Update/update_latest.tpl", "Templates/update_latest.tpl");
+	copy("https://raw.github.com/yi12345/TravianZ/master/Admin/Templates/update_latest.tpl", "Templates/update_latest.tpl");
 }
 include('update_latest.tpl');
+/*
 if(isset($_GET['u']))
 {
 	for ($dl=$ver+1; $dl<=$latest; $dl++)
@@ -24,7 +25,7 @@ if(isset($_GET['u']))
 				$zip->extractTo('../');
 				$zip->close();
 				unlink('update.zip');
-				echo "Successfully Updated to Version $dl.<br />";;
+				echo "Successfully Updated to Version $dl.<br />";
 			} 
 			else 	
 			{
@@ -33,6 +34,7 @@ if(isset($_GET['u']))
 		}
 	}
 }
+*/
 ?>
 <table id="member" cellpadding="1" cellspacing="1" >
 	<thead>
@@ -58,7 +60,7 @@ if(isset($_GET['u']))
 		<td class="hab" colspan="1"><?php
 			if($latest > $ver)
 			{
-				echo'<center><a href="?p=update&u"><img src="../img/admin/b/update.png"></a></center>'; 
+				echo'<center><a href="https://github.com/yi12345/TravianZ"><img src="../img/admin/b/update.png"></a></center>'; 
 			} 
 			else
 			{ 
@@ -68,9 +70,7 @@ if(isset($_GET['u']))
 		</tr>
 		<tr>
 		<td class="hab" colspan="2">Visit Forum</td>
-	        <td class="hab" colspan="1"><center><a href="http://mmorpgd.tk/"><img src="../img/admin/b/ok1.gif"></a></center></td>
+	        <td class="hab" colspan="1"><center><a href="#"><img src="../img/admin/b/ok1.gif"></a></center></td>
 		</tr>
 	</tbody>
-</table><br /><br />
-<p><font color="red">Guys don`t forget to register at the forum to receive information of the updates</font></p><br><br />
-<p><font color="red">Advertise your Server here <a href="http://mmorpgd.tk/forum-10.html">http://mmorpgd.tk/forum-10.html</a></font></p>
+</table>

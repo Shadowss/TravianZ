@@ -158,7 +158,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	<table><tr>
 	<td><span class="f9 c6">Hostname:</span></td><td><input name="sserver" type="text" id="sserver" value="localhost"></td></tr><tr>
 	<td><span class="f9 c6">Username:</span></td><td><input name="suser" type="text" id="suser" value=""></td></tr><tr>
-	<td><span class="f9 c6">Password:</span></td><td><input type="text" name="spass" id="spass"></td></tr><tr>
+	<td><span class="f9 c6">Password:</span></td><td><input type="password" name="spass" id="spass"></td></tr><tr>
 	<td><span class="f9 c6">DB name:</span></td><td><input type="text" name="sdb" id="sdb"></td></tr><tr>
 	<td><span class="f9 c6">Prefix:</span></td><td><input type="text" name="prefix" id="prefix" value="s1_" size="5"></td></tr>
 	<td><span class="f9 c6">Type:</span></td><td><select name="connectt">
