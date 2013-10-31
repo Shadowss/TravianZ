@@ -87,6 +87,7 @@ $data2 = mysql_fetch_assoc($query2);
 	$database->updateUserField($_SESSION['username'],'plus',$plus,0);
 	}
 	}
+	}
 	break;
 
 	case '4':
@@ -180,6 +181,7 @@ $data2 = mysql_fetch_assoc($query2);
 	$plus=$database->getUserField($_SESSION['username'],'plus','username');
 	$plus+=172800;
 	$database->updateUserField($_SESSION['username'],'plus',$plus,0);
+	}
 	}
 	}
 	break;
