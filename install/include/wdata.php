@@ -19,10 +19,10 @@ $y=(WORLD_MAX-$i);
 	$x=((WORLD_MAX*-1)+$j);
 
 	//choose a field type
-	if($x == 0 & $y == 0){
-		$typ='3';
-		$otype='0';
-	}else{
+	if(($x == 0 & $y == 0) || ($x == WORLD_MAX & $y == WORLD_MAX)) {
+        $typ='3';
+        $otype='0';
+    	}else{  
 	$rand=rand(1, 1000);
 		if("10" >= $rand){
 		$typ='1';
