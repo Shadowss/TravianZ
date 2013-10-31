@@ -2375,15 +2375,20 @@ class Automation {
 			unset($plevel);
 		}
 
-if($data['t11'] > 0){
-			if ($isoasis != 0) {
-				if ($database->canConquerOasis($data['from'],$data['to'])) {
-				if($unitssend_def[1] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[2] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[3] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[4] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[5] == '0,0,0,0,0,0,0,0,0,0'){
-					$database->conquerOasis($data['from'],$data['to']);
-					$info_chief = $hero_pic.",Your hero has conquered this oasis";
-				}
-				} else {
-					$OasisInfo = $database->getOasisInfo($data['to']);
+if($data['t11'] > 0){ 
+            if ($isoasis != 0) { 
+                if ($database->canConquerOasis($data['from'],$data['to'])) {
+                    $troopcount = $database->countOasisTroops($data['to']);
+                    //if($unitssend_def[1] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[2] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[3] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[4] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[5] == '0,0,0,0,0,0,0,0,0,0'){
+                    if ($troopcount==0) {
+                        $database->conquerOasis($data['from'],$data['to']);
+                        $info_chief = $hero_pic.",Your hero has conquered this oasis";
+                    }
+                    elseif ($heroxp == 0) {
+                        $info_chief = $hero_pic.",Your hero had nothing to kill therfore gains no XP at all";
+                    } else $info_chief = $hero_pic.",Your hero gained ".$heroxp." XP";
+                } else {
+                    $OasisInfo = $database->getOasisInfo($data['to']);
 					if ($OasisInfo['conqured'] != 0) {
 						$Oloyaltybefore =  $OasisInfo['loyalty'];
 						$database->modifyOasisLoyalty($data['to']);
@@ -2637,15 +2642,17 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 			}
 			$endtime += $AttackArrivalTime;
-				if($type == 1) {
-					$database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-				}else {
-					if ($totaldead_att == 0 && $totaltraped_att == 0){
-					$database->addNotice($from['owner'],$to['wref'],$ownally,1,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-					}else{
-					$database->addNotice($from['owner'],$to['wref'],$ownally,2,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-					}
-				}
+                if($type == 1) {
+                    if($from['owner'] == 3) {
+                        $database->addNotice($to['owner'],$to['wref'],$targetally,0,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                    } else $database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);    
+                }else {
+                    if ($totaldead_att == 0 && $totaltraped_att == 0){
+                    $database->addNotice($from['owner'],$to['wref'],$ownally,1,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                    }else{
+                    $database->addNotice($from['owner'],$to['wref'],$ownally,2,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                    }
+                }  
 				
 				$database->setMovementProc($data['moveid']);
 				if($chiefing_village != 1){
