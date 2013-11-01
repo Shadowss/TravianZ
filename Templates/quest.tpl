@@ -10,7 +10,7 @@
 ##                                                                             ##
 #################################################################################
 
-if ($_SESSION['qst']!=24 && QUEST==true){?>
+if ($_SESSION['qst']<38 && QUEST==true){?>
 
 <div id="anm" style="width:120px; height:140px; visibility:hidden;"></div>
 			<div id="qge">
@@ -26,7 +26,7 @@ if ($_SESSION['qst']!=24 && QUEST==true){?>
 				<?php }else{ ?>
 				quest.number=0;
 				<?php } ?>
-				quest.last = 23;
+				quest.last = 37;
 				cache_preload = new Image();
 				cache_preload.src = "img/x.gif";
 				cache_preload.className = "wood";
