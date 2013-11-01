@@ -5,11 +5,18 @@ mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       Session.php                                                 ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Project:       TravianZ                        		       	       ##
+##  Version:       01.09.2013 						       ##
+##  Filename       Session.ph   p                                              ##
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow  	       ##
+##  Fixed by:      Shadow - Doubleing Troops , STARVATION , HERO FIXED COMPL.  ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       ##
 ##                                                                             ##
 #################################################################################
+
 if(!file_exists('GameEngine/config.php') && !file_exists('../../GameEngine/config.php') && !file_exists('../../config.php')) {
 header("Location: install/");
 }
@@ -128,6 +135,33 @@ class Session {
                     			return false;
                 		}
             		}
+			
+
+			/***************************
+			Function to check Real Hero
+			Made by: Shadow and brainiacX
+			***************************/
+
+ 			function CheckHeroReal () {
+				global $database;
+   				$hero=0;
+    			foreach($this->villages as $myvill){
+     				$q1 = "SELECT SUM(hero) from " . TB_PREFIX . "enforcement where `from` = ".$myvill;       // check if hero is send as reinforcement
+     				$result1 = mysql_query($q1, $database->connection);
+     				$he1=mysql_fetch_array($result1);
+     				$hero+=$he1[0];
+     				$q2 = "SELECT SUM(hero) from " . TB_PREFIX . "units where `vref` = ".$myvill;   // check if hero is on my account (all villages)
+     				$result2 = mysql_query($q2, $database->connection);
+     				$he2=mysql_fetch_array($result2);
+     				$hero+=$he2[0];
+     				$hero+=$database->HeroNotInVil($myvill); // check if hero is not in village (come back from attack , raid , etc.)
+     				}
+     				if(!$database->getHeroDead($this->uid) and !$hero){ // check if hero is already dead
+					}elseif(!$database->getHeroInRevive($this->uid) and !$hero){ // check if hero is already in revive
+					}elseif(!$database->getHeroInTraining($this->uid) and !$hero){ // check if hero is in training
+      				$database->KillMyHero($this->uid);
+				} 
+     		}
 
 			private function PopulateVar() {
 				global $database;
@@ -163,6 +197,7 @@ class Session {
 				if($this->userarray['b4'] > $this->time) {
 					$this->bonus4 = 1;
 				}
+                                $this->CheckHeroReal();
 			}
 
 			private function SurfControl(){
@@ -190,4 +225,5 @@ class Session {
 $session = new Session;
 $form = new Form;
 $message = new Message;
+
 ?>
