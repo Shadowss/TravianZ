@@ -39,6 +39,11 @@ switch($_GET['f']) {
 	}else {
 	$qact2=null;
 	}
+	if (isset($_GET['qact3'])){
+        $qact3=preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['qact3']);
+    	}else {
+        $qact3=null;
+    	}  
 		include("Templates/Ajax/quest_core.tpl");
 		break;
 }
