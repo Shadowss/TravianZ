@@ -25,7 +25,7 @@ class MYSQL_DB {
 		mysql_query("SET NAMES 'UTF8'");  //Fix utf8 phpmyadmin by gm4st3r
 	}
 
-	function register($username, $password, $email, $tribe, $act, $reflink) {
+	function register($username, $password, $email, $tribe, $act) {
 		$time = time();
         	$stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
 		if($stime > time()){
@@ -33,7 +33,7 @@ class MYSQL_DB {
 		}
 		$timep = $time + PROTECTION;
 		$time = time();
-		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime,reflink) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time, '$reflink')";
+		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $timep, $time, $time)";
 		if(mysql_query($q, $this->connection)) {
 			return mysql_insert_id($this->connection);
 		} else {
