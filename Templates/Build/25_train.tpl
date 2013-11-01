@@ -66,8 +66,8 @@ $dur=round(${'u'.$i}['time'] * ($bid25[$village->resarray['f'.$id]]['attri'] / 1
 					}
 					$dur=$generator->getTimeFormat($dur);
 echo ($dur=="0:00:00")? "0:00:01":$dur;
-				if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) > 1) {
-echo "|<a href=\"build.php?gid=17&t=3&r1=".${'r'.$i}['wood']."&r2=".${'r'.$i}['clay']."&r3=".${'r'.$i}['iron']."&r4=".${'r'.$i}['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+				if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) > 0) {
+    echo "|<a href=\"build.php?gid=17&t=3&r1=".${'u'.$i}['wood']."&r2=".${'u'.$i}['clay']."&r3=".${'u'.$i}['iron']."&r4=".${'u'.$i}['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
 				}
 echo "<td class=\"val\"><input type=\"text\" class=\"text\" name=\"t".$i."\" value=\"0\" maxlength=\"4\"></td>
 <td class=\"max\"><a href=\"#\" onClick=\"document.snd.t".$i.".value=".$maxunit."; return false;\">(".$maxunit.")</a></td></tr></tbody>";
