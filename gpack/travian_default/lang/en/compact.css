@@ -1017,6 +1017,14 @@ div#map div#map_coords input.text {
     margin-right: 8px;
     width: 28px;
 }
+div#qstd div#map_coords input.text {
+    margin-right: 8px;
+    width: 28px;
+}
+div#qstd input.text {
+    margin-right: 8px;
+    width: 28px;
+}
 div#map table#map_infobox {
     position: absolute;
     z-index: 50;
@@ -6758,6 +6766,29 @@ img.def_i {
     height: 16px;
     width: 16px;
 }
+
+img.gebIcon{width:16px;height:16px;background-image:url(../../img/g/icon/gebIcon.gif);}
+img.g1Icon{background-image:url(../../img/g/icon/g1Icon.gif);}img.g2Icon{background-image:url(../../img/g/icon/g2Icon.gif);}
+img.g3Icon{background-image:url(../../img/g/icon/g3Icon.gif);}img.g4Icon{background-image:url(../../img/g/icon/g4Icon.gif);}
+img.g5Icon{background-image:url(../../img/g/icon/g5Icon.gif);}img.g6Icon{background-image:url(../../img/g/icon/g6Icon.gif);}
+img.g7Icon{background-image:url(../../img/g/icon/g7Icon.gif);}img.g8Icon{background-image:url(../../img/g/icon/g8Icon.gif);}
+img.g9Icon{background-image:url(../../img/g/icon/g9Icon.gif);}img.g10Icon{background-image:url(../../img/g/icon/g10Icon.gif);}
+img.g11Icon{background-image:url(../../img/g/icon/g11Icon.gif);}img.g13Icon{background-image:url(../../img/g/icon/g13Icon.gif);}
+img.g14Icon{background-image:url(../../img/g/icon/g14Icon.gif);}img.g15Icon{background-image:url(../../img/g/icon/g15Icon.gif);}
+img.g16Icon{background-image:url(../../img/g/icon/g16Icon.gif);}img.g17Icon{background-image:url(../../img/g/icon/g17Icon.gif);}
+img.g18Icon{background-image:url(../../img/g/icon/g18Icon.gif);}img.g19Icon{background-image:url(../../img/g/icon/g19Icon.gif);}
+img.g20Icon{background-image:url(../../img/g/icon/g20Icon.gif);}img.g21Icon{background-image:url(../../img/g/icon/g21Icon.gif);}
+img.g22Icon{background-image:url(../../img/g/icon/g22Icon.gif);}img.g23Icon{background-image:url(../../img/g/icon/g23Icon.gif);}
+img.g24Icon{background-image:url(../../img/g/icon/g24Icon.gif);}img.g25Icon{background-image:url(../../img/g/icon/g25Icon.gif);}
+img.g26Icon{background-image:url(../../img/g/icon/g26Icon.gif);}img.g27Icon{background-image:url(../../img/g/icon/g27Icon.gif);}
+img.g28Icon{background-image:url(../../img/g/icon/g28Icon.gif);}img.g29Icon{background-image:url(../../img/g/icon/g29Icon.gif);}
+img.g30Icon{background-image:url(../../img/g/icon/g30Icon.gif);}img.g31Icon{background-image:url(../../img/g/icon/g31Icon.gif);}
+img.g32Icon{background-image:url(../../img/g/icon/g32Icon.gif);}img.g33Icon{background-image:url(../../img/g/icon/g33Icon.gif);}
+img.g34Icon{background-image:url(../../img/g/icon/g34Icon.gif);}img.g36Icon{background-image:url(../../img/g/icon/g36Icon.gif);}
+img.g37Icon{background-image:url(../../img/g/icon/g37Icon.gif);}img.g38Icon{background-image:url(../../img/g/icon/g38Icon.gif);}
+img.g39Icon{background-image:url(../../img/g/icon/g39Icon.gif);}img.g40Icon{background-image:url(../../img/g/icon/g40Icon.gif);}
+img.g41Icon{background-image:url(../../img/g/icon/g41Icon.gif);}img.big.white.g1{background-image:url(../../img/g/big/white/g1-rtl.png);}
+
 div#map div#map_content div span {
     height: 16px;
     width: 18px;
@@ -8184,7 +8215,7 @@ img.g16 {
     background-image: url("../../img/g/g16.gif");
 }
 img.g16b {
-    background-image: url("../../img/g/g16b.gif");
+    background-image: url("../../img/g/g16b.gif"); 
 }
 img.g16e {
     background-image: url("../../img/g/g16e.gif");
