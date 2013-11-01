@@ -9,9 +9,17 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-	include("GameEngine/config.php");
-	include("GameEngine/Database.php");
-	include("GameEngine/Lang/".LANG.".php");
+	include("GameEngine/Village.php");
+$amount = $_SESSION['amount'];
+$start = $generator->pageLoadTimeStart();
+if(isset($_GET['newdid'])) {
+	$_SESSION['wid'] = $_GET['newdid'];
+	header("Location: ".$_SERVER['PHP_SELF']);
+}
+else {
+	$building->procBuild($_GET);
+}
+$automation->isWinner();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -62,15 +70,15 @@ function chkFormular () {
 </script>
 	   </head>
 
-<body class="v35 ie ie7" onload="initCounter()">
-
+<body class="v35 ie ie8">
 <div class="wrapper">
+<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
-</div>
+	</div>
 <?php include("Templates/header.tpl"); ?>
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
-<div id="content" class="village1">
+<?php include("Templates/support.tpl"); ?>
 <h1>Support</h1>
 <p>You can use the following form to submit your request to the Support.<br />Please take a bit of time to answer the form questions in as much detail as possible, so that we can answer your request quickly and in length. <br />Please note that without a valid email address, your request will not get processed.
 <br><br><b>Bug reports, login errors, general questions and feedback</b></p>
@@ -130,21 +138,35 @@ function chkFormular () {
 		</form>	
  
 </div>
-<div id="side_info" class="outgame">
+</br></br></br></br><div id="side_info">
 <?php
-if(NEWSBOX1) { include("Templates/News/newsbox1.tpl"); }
-if(NEWSBOX2) { include("Templates/News/newsbox2.tpl"); }
-if(NEWSBOX3) { include("Templates/News/newsbox3.tpl"); }
+include("Templates/multivillage.tpl");
+include("Templates/quest.tpl");
+include("Templates/news.tpl");
+include("Templates/links.tpl");
 ?>
-			</div>
-
+</div>
 <div class="clear"></div>
-			</div>
+</div>
+<div class="footer-stopper"></div>
+<div class="clear"></div>
 
-			<div class="footer-stopper outgame"></div>
-			<div class="clear"></div>
+<?php
+include("Templates/footer.tpl");
+include("Templates/res.tpl");
+?>
+<div id="stime">
+<div id="ltime">
+<div id="ltimeWrap">
+Calculated in <b><?php
+echo round(($generator->pageLoadTimeEnd()-$start)*1000);
+?></b> ms
 
-<?php include("Templates/footer.tpl"); ?>
+<br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+</div>
+	</div>
+</div>
+
 <div id="ce"></div>
 </body>
 </html>
