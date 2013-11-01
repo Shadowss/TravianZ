@@ -3,14 +3,18 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                        		       	       		   ##
-##  Version:       01.09.2013 						       					   ##
+##  Project:       TravianZ                        		       	       ##
+##  Version:       01.09.2013 						       ##
 ##  Filename       Automation.php                                              ##
 ##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow  	       ##
+##  Fixed by:      Shadow - Doubleing Troops , STARVATION , HERO FIXED COMPL.  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
-##  Source code:   https://github.com/yi12345/TravianZ/    		       		   ##
+##  URLs:          http://travian.shadowss.ro 				       ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       ##
+##                                                                             ##
 #################################################################################
+
 
 class Automation {
 
@@ -200,7 +204,7 @@ class Automation {
 		if(!file_exists("GameEngine/Prevention/sendunits.txt") or time()-filemtime("GameEngine/Prevention/sendunits.txt")>50) {
 			$this->sendunitsComplete();
 		}
-		if(!file_exists("GameEngine/Prevention/loyalty.txt") or time()-filemtime("GameEngine/Prevention/loyalty.txt")>50) {
+		if(!file_exists("GameEngine/Prevention/loyalty.txt") or time()-filemtime("GameEngine/Prevention/loyalty.txt")>60) {
 			$this->loyaltyRegeneration();
 		}
 		if(!file_exists("GameEngine/Prevention/sendreinfunits.txt") or time()-filemtime("GameEngine/Prevention/sendreinfunits.txt")>50) {
@@ -221,11 +225,16 @@ class Automation {
 		$this->artefactOfTheFool();
 	}
 
-	private function loyaltyRegeneration() {
-	if(file_exists("GameEngine/Prevention/loyalty.txt")) {
-			unlink("GameEngine/Prevention/loyalty.txt");
-		}
-		global $database;
+    private function loyaltyRegeneration() {
+    	if(file_exists("GameEngine/Prevention/loyalty.txt")) {
+            unlink("GameEngine/Prevention/loyalty.txt");
+    }
+    //create new file to check filetime
+    //not every click regenerate but 1 minute or after
+    
+    		$ourFileHandle = fopen("GameEngine/Prevention/loyalty.txt", 'w');
+    		fclose($ourFileHandle);    
+    		global $database;  
 		$array = array();
 		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE loyalty<>100";
 		$array = $database->query_return($q);
@@ -238,8 +247,8 @@ class Automation {
 				} else {
 					$value = 0;
 				}
-				$newloyalty = min(100,$loyalty['loyalty']+$value*(time()-$loyalty['lastupdate'])/(60*60));
-				$q = "UPDATE ".TB_PREFIX."vdata SET loyalty = $newloyalty WHERE wref = '".$loyalty['wref']."'";
+				$newloyalty = min(100,$loyalty['loyalty']+$value*(time()-$loyalty['lastupdated'])/(60*60));
+				$q = "UPDATE ".TB_PREFIX."odata SET loyalty = $newloyalty, lastupdated=".time()." WHERE wref = '".$loyalty['wref']."'";
 				$database->query($q);
 			}
 		}
@@ -260,22 +269,22 @@ class Automation {
 				$database->query($q);
 			}
 		}
-		if(file_exists("GameEngine/Prevention/loyalty.txt")) {
-			unlink("GameEngine/Prevention/loyalty.txt");
-		}
+		//if(file_exists("GameEngine/Prevention/loyalty.txt")) {
+		//	unlink("GameEngine/Prevention/loyalty.txt");
+		//}
 	}
 
 	   private function getfieldDistance($coorx1, $coory1, $coorx2, $coory2) {
-   $max = 2 * WORLD_MAX + 1;
-   $x1 = intval($coorx1);
-   $y1 = intval($coory1);
-   $x2 = intval($coorx2);
-   $y2 = intval($coory2);
-   $distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
-   $distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
-   $dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
-   return round($dist, 1);
-   }
+   		$max = 2 * WORLD_MAX + 1;
+   		$x1 = intval($coorx1);
+   		$y1 = intval($coory1);
+   		$x2 = intval($coorx2);
+   		$y2 = intval($coory2);
+   		$distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
+   		$distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
+   		$dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
+   	   return round($dist, 1);
+   	}	
 
 	 public function getTypeLevel($tid,$vid) {
 		global $village,$database;
@@ -647,11 +656,11 @@ class Automation {
 					}
 					  $database->setVillageField($indi['wid'],"maxcrop",$max);
 					}
-					
+
 					if($indi['type'] == 18){
 					$this->updateMax($database->getVillageField($indi['wid'],"owner"));
 					}
-					
+
 					if($indi['type'] == 38) {
 					$max=$database->getVillageField($indi['wid'],"maxstore");
 					if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
@@ -1732,14 +1741,6 @@ class Automation {
 				}
 			}
 
-			if ($isoasis == 0) {
-				$database->modifyResource($data["to"], $steal[0], $steal[1], $steal[2], $steal[3], false);
-				$this->pruneResource();
-			} else {
-				$database->modifyOasisResource($data["to"], $steal[0], $steal[1], $steal[2], $steal[3], false);
-				$this->pruneOResource();
-			}
-
 			//work out time of return
 			$start = ($owntribe-1)*10+1;
 			$end = ($owntribe*10);
@@ -1771,7 +1772,7 @@ class Automation {
 
 // Data for when troops return.
 
-				//catapulten kijken :D
+				//catapults look :D
 			$info_cat = $info_chief = $info_ram = ",";
 
 			if ($type=='3'){
@@ -1999,7 +2000,7 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				if ($battlepart[4]>$battlepart[3])
+                	if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -2124,7 +2125,7 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				if ($battlepart[4]>$battlepart[3])
+                if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid)." destroyed.</td></tr></tbody>";
@@ -2390,10 +2391,10 @@ if($data['t11'] > 0){
                 } else {
                     $OasisInfo = $database->getOasisInfo($data['to']);
 					if ($OasisInfo['conqured'] != 0) {
-						$Oloyaltybefore =  $OasisInfo['loyalty'];
+						$Oloyaltybefore =  intval($OasisInfo['loyalty']);
 						$database->modifyOasisLoyalty($data['to']);
 						$OasisInfo = $database->getOasisInfo($data['to']);
-						$Oloyaltynow =  $OasisInfo['loyalty'];
+						$Oloyaltynow =  intval($OasisInfo['loyalty']);
 						$info_chief = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP";
 					} else {
 						if ($heroxp == 0) {
@@ -2459,11 +2460,13 @@ if($data['t11'] > 0){
 						$walllevel =0;
 						$rplevel =0;
 					}
+
 $palaceimg = "<img src=\"".GP_LOCATE."img/g/g26.gif\" height=\"20\" width=\"15\" alt=\"Palace\" title=\"Palace\" />";
 $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\" alt=\"Cranny\" title=\"Cranny\" />";
 $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"20\" width=\"15\" alt=\"Wall\" title=\"Wall\" />";
 				$info_spy = "".$spy_pic.",".$palaceimg." Residance/Palace Level : ".$rplevel."
-				<br>".$crannyimg." Cranny level: ".$crannylevel."<br>".$wallimg." Wall Level : ".$walllevel.""; 
+
+				<br>".$crannyimg." Cranny level: ".$crannylevel."<br>".$wallimg." Wall level : ".$walllevel."";
 
 				}
 
@@ -2529,16 +2532,16 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			$neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $p_alliance>0) and ($neutralarray[0]['alli1']==$ownally or $neutralarray[0]['alli2']==$ownally) and ($ownally != $p_alliance and $ownally and $p_alliance)) ? '1':'0';
 			if($p_alliance == $ownally or $friend == 1 or $neutral == 1){
 			$p_tribe = $database->getUserField($p_owner,"tribe",0);
-            
+
             $p_eigen = $database->getCoor($prisoner['wref']);
             $p_from = array('x'=>$p_eigen['x'], 'y'=>$p_eigen['y']);
             $p_ander = $database->getCoor($prisoner['from']);
             $p_to = array('x'=>$p_ander['x'], 'y'=>$p_ander['y']);
 			$p_tribe = $database->getUserField($p_owner,"tribe",0);
-            
+
             $p_speeds = array();
-    
-            //find slowest unit.            
+
+            //find slowest unit.
             for($i=1;$i<=10;$i++){
                 if ($prisoner['t'.$i]){
                     if($prisoner['t'.$i] != '' && $prisoner['t'.$i] > 0){
@@ -2548,7 +2551,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     }
                 }
             }
-			
+
 			if ($prisoner['t11']>0){
 				$p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$p_owner."";
 				$p_resulth = mysql_query($p_qh);
@@ -2556,7 +2559,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$p_hero_unit=$p_hero_f['unit'];
 				$p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
 			}
-            
+
             $p_artefact = count($database->getOwnUniqueArtefactInfo2($p_owner,2,3,0));
 			$p_artefact1 = count($database->getOwnUniqueArtefactInfo2($prisoner['from'],2,1,1));
 			$p_artefact2 = count($database->getOwnUniqueArtefactInfo2($p_owner,2,2,0));
@@ -2644,7 +2647,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			$endtime += $AttackArrivalTime;
                 if($type == 1) {
                     if($from['owner'] == 3) {
-                        $database->addNotice($to['owner'],$to['wref'],$targetally,0,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                    $database->addNotice($to['owner'],$to['wref'],$targetally,0,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                     } else $database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);    
                 }else {
                     if ($totaldead_att == 0 && $totaltraped_att == 0){
@@ -2653,7 +2656,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     $database->addNotice($from['owner'],$to['wref'],$ownally,2,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                     }
                 }  
-				
+
 				$database->setMovementProc($data['moveid']);
 				if($chiefing_village != 1){
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
@@ -2661,6 +2664,11 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				if($type !== 1)
 				{
 					$reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
+					if ($isoasis == 0){
+                    $database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
+					}else{
+					$database->modifyOasisResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
+					}
 					$database->addMovement(6,$to['wref'],$from['wref'],$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
 					$totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
 					$totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
@@ -3031,7 +3039,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$to = $database->getMInfo($data['to']);
 		}else{
 		$to = $database->getOMInfo($data['to']);
-		}
+    		} 
 		$database->addEnforce($data);
 		$reinf = $database->getEnforce($data['to'],$data['from']);
 		$database->modifyEnforce($reinf['id'],31,1,1);
@@ -3047,7 +3055,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			$toF = $database->getVillage($data['to']);
 			$fromF = $database->getVillage($data['from']);
 
-						//check to see if we're only sending a hero between own villages and there's a Mansion at target village
+			//check to see if we're only sending a hero between own villages and there's a Mansion at target village
 			if($data['t11'] != 0) {
 				if($database->getVillageField($data['from'],"owner") == $database->getVillageField($data['to'],"owner")) {
 					for($i=1;$i<=10;$i++) { if($data['t'.$i]>0) { $NonHeroPresent = 1; break; } }
@@ -3057,11 +3065,21 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 						$heroid = $database->getHero($database->getVillageField($data['from'],"owner"),1);
 						$database->modifyHero("wref",$data['to'],$heroid,0);
 						$HeroTransfer = 1;
+			//		}else{ 
+			// hero goes to reinforce other player village 
+			//			$check = $database->getEnforce($data['to'], $data['from']); 
+			//	if (isset($check['id'])) { 
+			//if there are troops of the same owner hero, then hero is added to them 
+			//			$database->modifyEnforce($check['id'], "hero", 1, 1); 
+			//		}else{ 
+			// the hero is the only troop that reinforces 
+			//		$data['t11']=1; $database->addEnforce($data); 
+			//			} 
 					}
 				}
-			} if(!$HeroTransfer)
-		   {
-  //check if there is defence from town in to town
+			}
+			if(!$HeroTransfer){
+  			//check if there is defence from town in to town
 				$check=$database->getEnforce($data['to'],$data['from']);
 				if (!isset($check['id'])){
 					//no:
@@ -3171,6 +3189,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
            		}
 		}
           }
+
 		$this->pruneResource();
 
 		// Settlers
@@ -3183,7 +3202,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 
 		$database->modifyUnit($data['to'],array($tribe."0"),array(3),array(1));
 		$database->setMovementProc($data['moveid']);
-		}
+
+           }
 
 		if(file_exists("GameEngine/Prevention/returnunits.txt")) {
 			unlink("GameEngine/Prevention/returnunits.txt");
@@ -3380,6 +3400,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 
 	public function getUpkeep($array,$type,$vid=0,$prisoners=0) {
 		global $database,$session,$village;
+
 		if($vid==0) { $vid=$village->wid; }
 		$buildarray = array();
 		if($vid!=0){ $buildarray = $database->getResourceLevel($vid); }
@@ -3401,7 +3422,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			$start = 21;
 			$end = 30;
 			break;
-			case 4:
+                        case 4:
 			$start = 31;
 			$end = 40;
 			break;
@@ -3662,7 +3683,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 		}
   		$crop *= SPEED;
-		return round($crop);
+  	return round($crop);
  	}
 
 	private function trainingComplete() {
@@ -3874,7 +3895,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 	}
 
 	private function updateHero() {
- if(file_exists("GameEngine/Prevention/updatehero.txt")) {
+ 	if(file_exists("GameEngine/Prevention/updatehero.txt")) {
 			unlink("GameEngine/Prevention/updatehero.txt");
 		}
 		global $database,$hero_levels;
@@ -3884,13 +3905,13 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				if((time()-$hdata['lastupdate'])>=1){
 					if($hdata['health']<100 and $hdata['health']>0){
 					if(SPEED <= 10){
-					$speed = SPEED;
-					}else if(SPEED <= 100){
-					$speed = ceil(SPEED/10);
-					}else{
-					$speed = ceil(SPEED/100);
-					}
-					$reg = $hdata['health']+$hdata['regeneration']*5*$speed/86400*(time()-$hdata['lastupdate']);
+          				$speed = SPEED;
+          				}else if(SPEED <= 100){
+          				$speed = ceil(SPEED/10);
+          				}else{
+          				$speed = ceil(SPEED/100);
+          				}
+          				$reg = $hdata['health']+$hdata['regeneration']*5*$speed/86400*(time()-$hdata['lastupdate']);
 					if($reg <= 100){
 						$database->modifyHero("health",$reg,$hdata['heroid']);
 					}else{
@@ -4293,7 +4314,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			unlink("GameEngine/Prevention/climbers.txt");
 		}
 	}
-	
+
 	private function procClimbers($uid) {
 			global $database, $ranking;
 					$ranking->procRankArray();
@@ -4423,518 +4444,549 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$database->query($q);
 		}
 	}
+
+	private function checkReviveHero(){
+		global $database,$session;
+		$herodata=$database->getHero($session->uid,1);
+		if ($herodata[0]['dead']==1){
+			mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 0 WHERE vref = ".$session->villages[0]."");
+		}
+    	if($herodata[0]['trainingtime'] <= time()) {
+        		if($herodata[0]['trainingtime'] != 0) {
+        			if($herodata[0]['dead'] == 0) {
+        				mysql_query("UPDATE " . TB_PREFIX . "hero SET trainingtime = '0' WHERE uid = " . $session->uid . "");
+						mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$session->villages[0]."");
+ 			       }
+        		}
+        	}
+	}
+
+	/************************************************
+	Function for automate medals - by yi12345 and Shadow
+	References: 
+	************************************************/
 	
 	function medals(){
-		global $ranking,$database;
-			//we mogen de lintjes weggeven
+    		global $ranking,$database;
 
-			$giveMedal = false;
-			$q = "SELECT * FROM ".TB_PREFIX."config";
-			$result = mysql_query($q); 
-			if($result) {
-				$row=mysql_fetch_assoc($result);
-				$stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
-				if($row['lastgavemedal'] == 0 && $stime < time()){
-				$newtime = time()+MEDALINTERVAL;
-				$q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$newtime;
-				$database->query($q);
-				$row['lastgavemedal'] = time()+MEDALINTERVAL;
-				}
-				$time = $row['lastgavemedal'] + MEDALINTERVAL;
-				if ($time < time()) $giveMedal = true;
-			}
-			if($giveMedal && MEDALINTERVAL > 0){
-			//bepaal welke week we zitten
-			$q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
-			$result = mysql_query($q);
-			if(mysql_num_rows($result)) {
-				$row=mysql_fetch_assoc($result);
-				$week=($row['week']+1);
-			} else {
-				$week='1';
-			}
+      //we may give away ribbons
 
-			//Do same for ally week
-			$q = "SELECT * FROM ".TB_PREFIX."allimedal order by week DESC LIMIT 0, 1";
-			$result = mysql_query($q);
-			if(mysql_num_rows($result)) {
-				$row=mysql_fetch_assoc($result);
-				$allyweek=($row['week']+1);
-			} else {
-				$allyweek='1';
-			}
+      $giveMedal = false;
+      $q = "SELECT * FROM ".TB_PREFIX."config";
+      $result = mysql_query($q); 
+      if($result) {
+        $row=mysql_fetch_assoc($result);
+        $stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
+        if($row['lastgavemedal'] == 0 && $stime < time()){
+        $newtime = time()+MEDALINTERVAL;
+        $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$newtime;
+        $database->query($q);
+        $row['lastgavemedal'] = time()+MEDALINTERVAL;
+        }
+        $time = $row['lastgavemedal'] + MEDALINTERVAL;
+        if ($time < time()) $giveMedal = true;
+      }
 
+      if($giveMedal && MEDALINTERVAL > 0){
 
-		//Aanvallers v/d Week
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
-			$i=0;   
-		while($row = mysql_fetch_array($result)){
-		$i++;   
-		$img="t2_".($i)."";
-		$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '1', '".($i)."', '".$week."', '".$row['ap']."', '".$img."')";
-		$resul=mysql_query($quer);    
-		}
+      //determine which week we are
 
-		//Verdediger v/d Week
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
-			$i=0;   
-		while($row = mysql_fetch_array($result)){
-		$i++;   
-		$img="t3_".($i)."";
-		$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '2', '".($i)."', '".$week."', '".$row['dp']."', '".$img."')";
-		$resul=mysql_query($quer);    
-		}   
+      $q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
+      $result = mysql_query($q);
+      if(mysql_num_rows($result)) {
+        $row=mysql_fetch_assoc($result);
+        $week=($row['week']+1);
+      } else {
+        $week='1';
+      }
 
-		//Klimmers v/d Week
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
-			$i=0;   
-		while($row = mysql_fetch_array($result)){
-		$i++;   
-		$img="t1_".($i)."";
-		$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '3', '".($i)."', '".$week."', '".$row['Rc']."', '".$img."')";
-		$resul=mysql_query($quer);    
-		}   
+      //Do same for ally week
 
-			//Rank climbers of the week
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
-			$i=0;     
-		while($row = mysql_fetch_array($result)){
-			$i++;    
-		$img="t6_".($i)."";
-			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '10', '".($i)."', '".$week."', '".$row['clp']."', '".$img."')";
-			$resul=mysql_query($quer);      
-			}    
-
-		//Overvallers v/d Week
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
-			$i=0;   
-		while($row = mysql_fetch_array($result)){
-		$i++;   
-		$img="t4_".($i)."";
-		$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$week."', '".$row['RR']."', '".$img."')";
-		$resul=mysql_query($quer);    
-		}   
-
-		//deel de bonus voor aanval+defence top 10 uit
-		//Pak de top10 aanvallers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){
-
-			 //Pak de top10 verdedigers
-			$result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
-			while($row2 = mysql_fetch_array($result2)){
-				if($row['id']==$row2['id']){
-
-				$query3="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 5";
-				$result3=mysql_query($query3);
-				 $row3=mysql_fetch_row($result3);
-
-					//kijk welke kleur het lintje moet hebben
-					if($row3[0]<='2'){
-						$img="t22".$row3[0]."_1";
-							switch ($row3[0]) {
-								case "0":
-									$tekst="";
-									break;
-								case "1":
-									$tekst="twice ";
-									break;
-								case "2":
-									$tekst="three times ";
-									break;
-							}
-						$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '5', '0', '".$week."', '".$tekst."', '".$img."')";
-						$resul=mysql_query($quer);
-					}
-				}
-			}    
-		}
-
-		//je staat voor 3e / 5e / 10e keer in de top 3 aanvallers 
-		//Pak de top10 aanvallers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
-
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=3";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+      $q = "SELECT * FROM ".TB_PREFIX."allimedal order by week DESC LIMIT 0, 1";
+      $result = mysql_query($q);
+      if(mysql_num_rows($result)) {
+        $row=mysql_fetch_assoc($result);
+        $allyweek=($row['week']+1);
+      } else {
+        $allyweek='1';
+      }
 
 
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){  
-				$img="t120_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){  
-				$img="t121_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}       
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){ 
-				$img="t122_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
+    //Aanvallers v/d Week
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+      $i=0;   
+    while($row = mysql_fetch_array($result)){
+    $i++;   
+    $img="t2_".($i)."";
+    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '1', '".($i)."', '".$week."', '".$row['ap']."', '".$img."')";
+    $resul=mysql_query($quer);    
+    }
 
-		}
-		//je staat voor 3e / 5e / 10e keer in de top 10 aanvallers 
-			//Pak de top10 aanvallers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
+    //Verdediger v/d Week
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+      $i=0;   
+    while($row = mysql_fetch_array($result)){
+    $i++;   
+    $img="t3_".($i)."";
+    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '2', '".($i)."', '".$week."', '".$row['dp']."', '".$img."')";
+    $resul=mysql_query($quer);    
+    }   
 
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=10";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+    //Klimmers v/d Week
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+      $i=0;   
+    while($row = mysql_fetch_array($result)){
+    $i++;   
+    $img="t1_".($i)."";
+    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '3', '".($i)."', '".$week."', '".$row['Rc']."', '".$img."')";
+    $resul=mysql_query($quer);    
+    }   
 
+      //Rank climbers of the week
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
+      $i=0;     
+    while($row = mysql_fetch_array($result)){
+      $i++;    
+    $img="t6_".($i)."";
+      $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '10', '".($i)."', '".$week."', '".$row['clp']."', '".$img."')";
+      $resul=mysql_query($quer);      
+      }    
 
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){    
-				$img="t130_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){    
-				$img="t131_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}        
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){    
-				$img="t132_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
+    //Overvallers v/d Week
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+      $i=0;   
+    while($row = mysql_fetch_array($result)){
+    $i++;   
+    $img="t4_".($i)."";
+    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$week."', '".$row['RR']."', '".$img."')";
+    $resul=mysql_query($quer);    
+    }   
 
-		}
-		//je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
-		//Pak de top10 verdedigers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
+    //deel de bonus voor aanval+defence top 10 uit
+    //Pak de top10 aanvallers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){
 
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=3";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+       //Pak de top10 verdedigers
+      $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+      while($row2 = mysql_fetch_array($result2)){
+        if($row['id']==$row2['id']){
 
+        $query3="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 5";
+        $result3=mysql_query($query3);
+         $row3=mysql_fetch_row($result3);
 
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){  
-				$img="t140_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){  
-				$img="t141_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}       
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){ 
-				$img="t142_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
+          //kijk welke kleur het lintje moet hebben
+          if($row3[0]<='2'){
+            $img="t22".$row3[0]."_1";
+              switch ($row3[0]) {
+                case "0":
+                  $tekst="";
+                  break;
+                case "1":
+                  $tekst="twice ";
+                  break;
+                case "2":
+                  $tekst="three times ";
+                  break;
+              }
+            $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '5', '0', '".$week."', '".$tekst."', '".$img."')";
+            $resul=mysql_query($quer);
+          }
+        }
+      }    
+    }
 
-		}
-			//je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
-			//Pak de top10 verdedigers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
+    //je staat voor 3e / 5e / 10e keer in de top 3 aanvallers 
+    //Pak de top10 aanvallers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
 
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=10";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
-
-
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){    
-				$img="t150_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){    
-				$img="t151_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}        
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){    
-				$img="t152_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-
-		}   
-
-		//je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
-		//Pak de top10 klimmers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
-
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=3";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=3";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
 
 
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){  
-				$img="t100_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){  
-				$img="t101_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}       
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){ 
-				$img="t102_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-		}
-		//je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
-			//Pak de top10 klimmers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){  
+        $img="t120_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){  
+        $img="t121_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }       
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){ 
+        $img="t122_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
 
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=10";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+    }
+    //je staat voor 3e / 5e / 10e keer in de top 10 aanvallers 
+      //Pak de top10 aanvallers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
 
-
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){    
-				$img="t110_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){    
-				$img="t111_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}        
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){    
-				$img="t112_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-		}
-
-			//je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
-			//Pak de top3 rank climbers 
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
-
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=3";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=10";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
 
 
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){    
-				$img="t200_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){    
-				$img="t201_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}        
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){    
-				$img="t202_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-		}
-			//je staat voor 3e / 5e / 10e keer in de top 10klimmers 
-			//Pak de top3 rank climbers 
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){    
+        $img="t130_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){    
+        $img="t131_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }        
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){    
+        $img="t132_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
 
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=10";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+    }
+    //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
+    //Pak de top10 verdedigers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
 
-
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){    
-				$img="t210_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){    
-				$img="t211_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}        
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){    
-				$img="t212_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-		}       
-
-		//je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
-		//Pak de top10 overvallers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
-
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=3";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=3";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
 
 
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){  
-				$img="t160_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){  
-				$img="t161_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}       
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){ 
-				$img="t162_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-		} 
-		//je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
-			//Pak de top10 overvallers
-			$result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
-			while($row = mysql_fetch_array($result)){ 
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){  
+        $img="t140_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){  
+        $img="t141_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }       
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){ 
+        $img="t142_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
 
-				$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=10";
-				$result1=mysql_query($query1);
-				$row1=mysql_fetch_row($result1);
+    }
+      //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
+      //Pak de top10 verdedigers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
+
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=10";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
 
 
-			//2x in gestaan, dit is 3e dus lintje (brons)
-			if($row1[0]=='3'){    
-				$img="t170_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Three', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-			//4x in gestaan, dit is 5e dus lintje (zilver)
-			if($row1[0]=='5'){    
-				$img="t171_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Five', '".$img."')";
-				$resul=mysql_query($quer);
-			}        
-			//9x in gestaan, dit is 10e dus lintje (goud)
-			if($row1[0]=='10'){    
-				$img="t172_1";
-				$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Ten', '".$img."')";
-				$resul=mysql_query($quer);
-			}
-		}
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){    
+        $img="t150_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){    
+        $img="t151_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }        
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){    
+        $img="t152_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
 
-		//Zet alle waardens weer op 0
-		 $query="SELECT * FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
-		 $result=mysql_query($query);
-		 for ($i=0; $row=mysql_fetch_row($result); $i++){
-		 mysql_query("UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id = ".$row[0]."");
-		}
+    }   
 
-		//Start alliance Medals wooot
+    //je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
+    //Pak de top10 klimmers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
 
-		//Aanvallers v/d Week
-		$result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
-		$i=0;     while($row = mysql_fetch_array($result)){
-		$i++;    $img="a2_".($i)."";
-		$quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '1', '".($i)."', '".$allyweek."', '".$row['ap']."', '".$img."')";
-		$resul=mysql_query($quer);      
-		}
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=3";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
 
-		//Verdediger v/d Week
-		$result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
-		$i=0;     while($row = mysql_fetch_array($result)){
-		$i++;    $img="a3_".($i)."";
-		$quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '2', '".($i)."', '".$allyweek."', '".$row['dp']."', '".$img."')";
-		$resul=mysql_query($quer);      
-		}    
 
-		//Overvallers v/d Week
-		$result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
-		$i=0;     while($row = mysql_fetch_array($result)){
-		$i++;    $img="a4_".($i)."";
-		$quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$allyweek."', '".$row['RR']."', '".$img."')";
-		$resul=mysql_query($quer);      
-		}
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){  
+        $img="t100_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){  
+        $img="t101_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }       
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){ 
+        $img="t102_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+    }
+    //je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
+      //Pak de top10 klimmers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
 
-		//Rank climbers of the week
-		$result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
-		$i=0;     while($row = mysql_fetch_array($result)){
-		$i++;    $img="a1_".($i)."";
-		$quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '3', '".($i)."', '".$allyweek."', '".$row['clp']."', '".$img."')";
-		$resul=mysql_query($quer);      
-		}
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=10";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
 
-		$result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
-		while($row = mysql_fetch_array($result)){
 
-			//Pak de top10 verdedigers
-			$result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
-			while($row2 = mysql_fetch_array($result2)){
-				if($row['id']==$row2['id']){
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){    
+        $img="t110_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){    
+        $img="t111_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }        
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){    
+        $img="t112_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+    }
 
-				$query3="SELECT count(*) FROM ".TB_PREFIX."allimedal WHERE allyid='".$row['id']."' AND categorie = 5";
-				$result3=mysql_query($query3);
-				$row3=mysql_fetch_row($result3);
+      //je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
+      //Pak de top3 rank climbers 
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
 
-					//kijk welke kleur het lintje moet hebben
-					if($row3[0]<='2'){
-						$img="t22".$row3[0]."_1";
-							switch ($row3[0]) {
-								case "0":
-									$tekst="";
-									break;
-								case "1":
-									$tekst="twice ";
-									break;
-								case "2":
-									$tekst="three times ";
-									break;
-							}
-						$quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '5', '0', '".$allyweek."', '".$tekst."', '".$img."')";
-						$resul=mysql_query($quer);
-					}
-				}
-			}    
-		}
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=3";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
 
-			$query="SELECT * FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
-			$result=mysql_query($query);
-			for ($i=0; $row=mysql_fetch_row($result); $i++){
-			mysql_query("UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id = ".$row[0]."");
-			}
 
-			$q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$time;
-			$database->query($q);
-	}
-	}
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){    
+        $img="t200_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){    
+        $img="t201_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }        
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){    
+        $img="t202_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+    }
+      //je staat voor 3e / 5e / 10e keer in de top 10klimmers 
+      //Pak de top3 rank climbers 
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
 
-	private function artefactOfTheFool() {
-		global $database;
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=10";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
+
+
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){    
+        $img="t210_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){    
+        $img="t211_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }        
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){    
+        $img="t212_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+    }       
+
+    //je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
+    //Pak de top10 overvallers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
+
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=3";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
+
+
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){  
+        $img="t160_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){  
+        $img="t161_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }       
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){ 
+        $img="t162_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+    } 
+    //je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
+      //Pak de top10 overvallers
+      $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+      while($row = mysql_fetch_array($result)){ 
+
+        $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=10";
+        $result1=mysql_query($query1);
+        $row1=mysql_fetch_row($result1);
+
+
+      //2x in gestaan, dit is 3e dus lintje (brons)
+      if($row1[0]=='3'){    
+        $img="t170_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Three', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+      //4x in gestaan, dit is 5e dus lintje (zilver)
+      if($row1[0]=='5'){    
+        $img="t171_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Five', '".$img."')";
+        $resul=mysql_query($quer);
+      }        
+      //9x in gestaan, dit is 10e dus lintje (goud)
+      if($row1[0]=='10'){    
+        $img="t172_1";
+        $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Ten', '".$img."')";
+        $resul=mysql_query($quer);
+      }
+    }
+
+    //Zet alle waardens weer op 0
+     $query="SELECT * FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
+     $result=mysql_query($query);
+     for ($i=0; $row=mysql_fetch_row($result); $i++){
+     mysql_query("UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id = ".$row[0]."");
+    }
+
+    //Start alliance Medals wooot
+
+    //Aanvallers v/d Week
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
+    $i=0;     while($row = mysql_fetch_array($result)){
+    $i++;    $img="a2_".($i)."";
+    $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '1', '".($i)."', '".$allyweek."', '".$row['ap']."', '".$img."')";
+    $resul=mysql_query($quer);      
+    }
+
+    //Verdediger v/d Week
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
+    $i=0;     while($row = mysql_fetch_array($result)){
+    $i++;    $img="a3_".($i)."";
+    $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '2', '".($i)."', '".$allyweek."', '".$row['dp']."', '".$img."')";
+    $resul=mysql_query($quer);      
+    }    
+
+    //Overvallers v/d Week
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
+    $i=0;     while($row = mysql_fetch_array($result)){
+    $i++;    $img="a4_".($i)."";
+    $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$allyweek."', '".$row['RR']."', '".$img."')";
+    $resul=mysql_query($quer);      
+    }
+
+    //Rank climbers of the week
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
+    $i=0;     while($row = mysql_fetch_array($result)){
+    $i++;    $img="a1_".($i)."";
+    $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '3', '".($i)."', '".$allyweek."', '".$row['clp']."', '".$img."')";
+    $resul=mysql_query($quer);      
+    }
+
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
+    while($row = mysql_fetch_array($result)){
+
+      //Pak de top10 verdedigers
+      $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
+      while($row2 = mysql_fetch_array($result2)){
+        if($row['id']==$row2['id']){
+
+        $query3="SELECT count(*) FROM ".TB_PREFIX."allimedal WHERE allyid='".$row['id']."' AND categorie = 5";
+        $result3=mysql_query($query3);
+        $row3=mysql_fetch_row($result3);
+
+          //kijk welke kleur het lintje moet hebben
+          if($row3[0]<='2'){
+            $img="t22".$row3[0]."_1";
+              switch ($row3[0]) {
+                case "0":
+                  $tekst="";
+                  break;
+                case "1":
+                  $tekst="twice ";
+                  break;
+                case "2":
+                  $tekst="three times ";
+                  break;
+              }
+            $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '5', '0', '".$allyweek."', '".$tekst."', '".$img."')";
+            $resul=mysql_query($quer);
+          }
+        }
+      }    
+    }
+
+      $query="SELECT * FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
+      $result=mysql_query($query);
+      for ($i=0; $row=mysql_fetch_row($result); $i++){
+      mysql_query("UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id = ".$row[0]."");
+      }
+
+      $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$time;
+      $database->query($q);
+  }
+  }
+
+	/************************************************
+	Function for automate medals - by yi12345 and Shadow
+	References: 
+	************************************************/
+ 
+ 	private function artefactOfTheFool() {
+	 global $database;
 		$time = time();
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and $time - lastupdate >= 86400";
 		$array = $database->query_return($q);
