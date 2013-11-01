@@ -1,13 +1,19 @@
 <?php
 
-/** --------------------------------------------------- **\
-| ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
-+---------------------------------------------------------+
-| Credits:     All the developers including the leaders:  |
-|              Advocaite & Dzoki & Donnchadh              |
-|                                                         |
-| Copyright:   TravianX Project All rights reserved       |
-\** --------------------------------------------------- **/
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                                                    ##
+##  Version:       01.09.2013                    			       			   ## 
+##  Filename       create_account.php                                          ##
+##  Developed by:  Dzoki , Advocaite , Donnchadh , yi12345 , Shadow , MisterX  ## 
+##  Fixed by:      Shadow & MisterX - Scouting all players , artefact names.   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/              ## 
+##                                                                             ##
+#################################################################################
 
 
 		include_once ("GameEngine/Session.php");
@@ -92,22 +98,22 @@ if($_POST['password'] != ""){
 		}
 
 /**
- * Creating account & capital village
- */
-        $username = "Natars";
-        $password = md5($_POST['password']);
-        $email = "natars@noreply.com";
-        $tribe = 5;
-        $desc = "********************
-                    [#natars]
-                ********************";
+ * Creating account & capital village - Fixed by Shadow - cata7007@gmail.com / Skype : cata7007
+ */ 
 
-        $q = "INSERT INTO " . TB_PREFIX . "users (id,username,password,access,email,timestamp,tribe,location,act,protect) VALUES (3, '$username', '$password', " . USER . ", '$email', ".time().", $tribe, '', '', 0)";
-        mysql_query($q);
-        unset($q);
-        $uid = $database->getUserField($username, 'id', 1);
-        //generateBase(0, $uid, $username);
-        $arrayXY=array();
+		$username = "Natars";
+		$password = md5($_POST['password']);
+		$email = "natars@noreply.com";
+		$tribe = 5;
+		$desc = "***************************
+				[#natars]
+			***************************";
+
+		$q = "INSERT INTO " . TB_PREFIX . "users (id,username,password,access,email,timestamp,tribe,location,act,protect) VALUES (3, '$username', '$password', " . USER . ", '$email', ".time().", $tribe, '', '', 0)";
+		mysql_query($q);
+		unset($q);
+		$uid = $database->getUserField($username, 'id', 1);
+		$arrayXY=array();
         $arrayXY=array
         (
             array(WORLD_MAX, WORLD_MAX),
@@ -167,10 +173,10 @@ if($_POST['password'] != ""){
         mysql_query($q4) or die(mysql_error());
 		
 /**
- *  SCOUTING ALL PLAYERS FIX BY MisterX
+ * SCOUTING ALL PLAYERS FIX BY MisterX
  */
  
-		$natar = mysql_fetch_array(mysql_query("SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid and capital = 1"));
+ 		$natar = mysql_fetch_array(mysql_query("SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid and capital = 1"));
   		$multiplier = NATARS_UNITS;
   		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = '1' and owner > '5'";
   		$array = $database->query_return($q);
@@ -186,7 +192,7 @@ if($_POST['password'] != ""){
 		function Artefact($uid, $type, $size, $art_name, $village_name, $desc, $effect, $img) {
 			global $database;
 			$kid = rand(1, 4);
-			$wid = $database->generateBase($kid);
+			$wid = $database->generateBase($kid, 1);
 			$database->addArtefact($wid, $uid, $type, $size, $art_name, $desc, $effect, $img);
 			$database->setFieldTaken($wid);
 			$database->addVillage($wid, $uid, $village_name, '0');
@@ -393,7 +399,7 @@ if($_POST['password'] != ""){
 		unset($vname);
 		unset($effect);;
 		$vname = 'Builders Sketch';
-		$effect = '';
+		$effect = '(GG&GW)';
 		for($i > 1; $i < 6; $i++) {
 			Artefact($uid, 6, 1, 'Slight storage masterplan', '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
 		}
@@ -402,7 +408,7 @@ if($_POST['password'] != ""){
 		unset($vname);
 		unset($effect);
 		$vname = 'Babylonian Tablet';
-		$effect = '';
+		$effect = '(GG&GW)';
 		for($i > 1; $i < 4; $i++) {
 			Artefact($uid, 6, 2, 'Great storage masterplan', '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
 		}
@@ -493,11 +499,11 @@ Now begins the final stretch, when the greatest armies of the Free people and th
 
 Facts:
 To steal one, the following things must happen:
-you must attack the village (NO Raid!)
+You must attack the village (NO Raid!)
 WIN the Attack
-destroy the treasury
-an empty treasury lvl 10 MUST be in the village where that attack came from
-have a hero in an attack
+Destroy the treasury
+An empty treasury lvl 10 MUST be in the village where that attack came from
+Have a hero in an attack
 
 If not, the next attack on that village, winning with a hero and empty treasury will take the building plan.
 
@@ -515,7 +521,7 @@ There will be a countdown in game, showing the exact time of the release, 5 days
 					or die(mysql_error());
 			}
 
-        echo "Done";
+		echo "Done";
 }elseif($database->checkExist('Natars', 0))    {
 ?>
 <p>
