@@ -340,12 +340,12 @@ if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['rout
 		else {
 			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
 		}
-		if($_GET['buildingFinish'] == 1) {
-		if($session->gold >= 2) {
-			$building->finishAll();
-			header("Location: build.php?gid=15");
-		}
-		}
+        	if($_GET['buildingFinish'] == 1) {
+        	if($session->gold >= 2) {
+            		$building->finishAll();
+            		header("Location: build.php?gid=".$_GET['id']."&ty=".$_GET['ty']);
+        	}
+        	}  
 	}
 }else{
 header("Location: dorf1.php");
