@@ -52,6 +52,9 @@ class Account {
 			else if(!USRNM_SPECIAL && preg_match('/[^0-9A-Za-z]/',$_POST['name'])) {
 				$form->addError("name",USRNM_CHAR);
 			}
+			else if(USRNM_SPECIAL && preg_match("/[:,\\. \\n\\r\\t\\s\\<\\>]+/", $_POST['name'])) {
+				$form->addError("name",USRNM_CHAR);
+			}
 			else if($database->checkExist($_POST['name'],0)) {
 				$form->addError("name",USRNM_TAKEN);
 			}
