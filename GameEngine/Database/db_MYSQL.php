@@ -41,9 +41,9 @@ class MYSQL_DB {
 		}
 	}
 
-	function activate($username, $password, $email, $tribe, $locate, $act, $act2, $reflink) {
+	function activate($username, $password, $email, $tribe, $locate, $act, $act2) {
 		$time = time();
-		$q = "INSERT INTO " . TB_PREFIX . "activate (username,password,access,email,tribe,timestamp,location,act,act2,reflink) VALUES ('$username', '$password', " . USER . ", '$email', $tribe, $time, $locate, '$act', '$act2', '$reflink')";
+		$q = "INSERT INTO " . TB_PREFIX . "activate (username,password,access,email,tribe,timestamp,location,act,act2) VALUES ('$username', '$password', " . USER . ", '$email', $tribe, $time, $locate, '$act', '$act2')";
 				if(mysql_query($q, $this->connection)) {
 			return mysql_insert_id($this->connection);
 		} else {
