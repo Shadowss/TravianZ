@@ -739,69 +739,6 @@ class MYSQL_DB {
 		}
 	}
 
-	/*****************************************
-	Function to vacation mode - by advocaite
-	References: 
-	*****************************************/
-
-	function setvacmode($uid,$days){
-		$days1 =60*60*24*$days;
-		$time =time()+$days1;
-		$q ="UPDATE ".TB_PREFIX."users SET vac_mode = '1' , vac_time=".$time." WHERE id=".$uid."";
-		$result =mysql_query($q,$this->connection);
-		}
-
-/*
-
-	function setvacmode($uid,$days){
-  		$days1 =60*60*24*$days;
-  		$time =time()+$days1;
-  		$q ="SELECT * FROM ".TB_PREFIX."users WHERE id=".$uid."";
-  		$result =mysql_query($q,$this->connection);
-  		$array=mysql_fetch_assoc($result);
-  		if (time() > $array["vactwoweeks"]){
-  		$q1 ="UPDATE ".TB_PREFIX."users SET vac_mode = '1' , vac_time=".$time." ,vactwoweeks = ".time()+(time() *60*60*24*14)." WHERE id=".$uid."";
-  		$result1 =mysql_query($q1,$this->connection);
-  		}
-  
-  		}
-
-*/
-
-	function removevacationmode($uid){
-
-		$q ="UPDATE ".TB_PREFIX."users SET vac_mode = '0' , vac_time='0' WHERE id=".$uid."";
-		$result =mysql_query($q,$this->connection);
-		}
-
-	function getvacmodexy($wref){
-		$q = "SELECT id,oasistype,occupied FROM " . TB_PREFIX . "wdata where id = $wref";
-		$result = mysql_query($q, $this->connection);
-		$dbarray = mysql_fetch_array($result);
-		if($dbarray['occupied'] != 0 && $dbarray['oasistype'] == 0) {
-		$q1 = "SELECT owner FROM " . TB_PREFIX . "vdata where wref = ".$dbarray['id']."";
-		$result1 = mysql_query($q1, $this->connection);
-		$dbarray1 = mysql_fetch_array($result1);
-                if($dbarray1['owner'] != 0){
-		$q2 = "SELECT vac_mode,vac_time FROM " . TB_PREFIX . "users where id = ".$dbarray1['owner']."";
-		$result2 = mysql_query($q2, $this->connection);
-		$dbarray2 = mysql_fetch_array($result2);	
-		if($dbarray2['vac_mode'] ==1){
-		return true;
-		}else{
-		return false;
-		}
-		}	
-		} else {
-		return false;
-		}
-	}
- 
-	/*****************************************
-	Function to vacation mode - by advocaite
-	References: 
-	*****************************************/
-
 	function getProfileVillages($uid) {
 		$q = "SELECT capital,wref,name,pop,created from " . TB_PREFIX . "vdata where owner = $uid order by pop desc";
 		$result = mysql_query($q, $this->connection);
