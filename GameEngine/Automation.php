@@ -2405,16 +2405,21 @@ if($data['t11'] > 0){
 					}
 				}
 			} else {
-				$artifact = $database->getOwnArtefactInfo($data['to']);
-				if ($artifact['vref'] == $data['to']) {
-					if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
-						$database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
-						$info_chief = $hero_pic.",Your hero is carrying home a artefact and gained ".$heroxp." XP from the battle";
-					} else {
-						$info_chief = $hero_pic.",Your hero could not claim the artefact and gained ".$heroxp." XP from the battle";
-
-					}
-				}
+    global $form;
+    if ($heroxp == 0) {
+        $xp=" no XP from the battle";
+    } else {
+        $xp=" gained ".$heroxp." XP from the battle";
+    }
+    $artifact = $database->getOwnArtefactInfo($data['to']);
+    if (!empty($artifact)) {
+        if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
+            $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
+            $info_chief = $hero_pic.",Your hero is carrying home a artefact and".$xp;
+        } else {
+            $info_chief = $hero_pic.",".$form->getError("error").$xp;
+        }
+    }  
 			}
 		}
 
