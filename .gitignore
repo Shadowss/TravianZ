@@ -1,6 +1,9 @@
 # Windows image file caches
 Thumbs.db
 
+# ignore install folder with update ( i think not sure )
+/install/*
+
 # Folder config file
 Desktop.ini
 
