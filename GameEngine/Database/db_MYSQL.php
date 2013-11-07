@@ -3282,73 +3282,70 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 
-	public function canClaimArtifact($from,$vref,$type,$kind) {
-	$numArtefatti = mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $from");
- 	$numArtefatti2 = mysql_num_rows($numArtefatti);
- 	if($numArtefatti2 > 0){ 
- 		return FALSE;
- 		}
-	$type2 = $type3 = 0;
-	if(count($this->getOwnUniqueArtefactInfo2($this->getVillagefield($from,"owner"),2,2,0)) > 0 && $type == 2){
-	$type2 = 1;
-	}
-	if(count($this->getOwnUniqueArtefactInfo2($this->getVillagefield($from,"owner"),2,3,0)) > 0 && $type == 3){
-	$type3 = 1;
-	}
-	if((count($this->getOwnArtefactInfo2($from)) < 3 && $type2 == 0 && $type3 == 0) or $kind == 11){
-		$DefenderFields = $this->getResourceLevel($vref);
-		$defcanclaim = TRUE;
-		for($i=19;$i<=38;$i++) {
-			if($DefenderFields['f'.$i.'t'] == 27) {
-				$defTresuaryLevel = $DefenderFields['f'.$i];
-				if($defTresuaryLevel > 0) {
-					$defcanclaim = FALSE;
-				} else {
-					$defcanclaim = TRUE;
-				}
-			}
-		}
-		$AttackerFields = $this->getResourceLevel($from);
-		for($i=19;$i<=38;$i++) {
-			if($AttackerFields['f'.$i.'t'] == 27) {
-				$attTresuaryLevel = $AttackerFields['f'.$i];
-				if ($attTresuaryLevel >= 10) {
-					$villageartifact = TRUE;
-				} else {
-					$villageartifact = FALSE;
-				}
-				if ($attTresuaryLevel >= 20){
-					$accountartifact = TRUE;
-				} else {
-					$accountartifact = FALSE;
-				}
-			}
-		}
-		if ($type == 1) {
-			if ($defcanclaim == TRUE && $villageartifact == TRUE) {
-				return TRUE;
-			} else {
-				return FALSE;
-			}
-		} else if ($type == 2) {
-			if ($defcanclaim == TRUE && $accountartifact == TRUE) {
-				return TRUE;
-			} else {
-				return FALSE;
-			}
-		} else if ($type == 3) {
-			if ($defcanclaim == TRUE && $accountartifact == TRUE) {
-				return TRUE;
-			} else {
-				return FALSE;
-			}
-		} else {
-			return FALSE;
-		}
-		}else{
-			return FALSE;
-		}
-	}
+    public function canClaimArtifact($from,$vref,$type,$kind) {
+    //fix by Ronix
+    global $session, $form;
+    $type1 = $type2 = $type3 = 0;
+    
+    $artifact = $this->getOwnArtefactInfo($from);
+    if (!empty($artifact)) {
+        $form->addError("error","Treasury is full. Your hero could not claim the artefact and");
+        return false;
+    }
+    $uid=$session->uid;    
+    $q="SELECT Count(type) AS totals,
+    SUM(IF(type = '1',1,0)) small,
+    SUM(IF(type = '2',1,0)) great,
+    SUM(IF(type = '3',1,0)) unique,
+    FROM ".TB_PREFIX."artefacts WHERE owner = ".$uid;
+    $result = mysql_query($q, $this->connection);
+    $artifact= $this->mysql_fetch_all($result);
+    if($artifact['totals'] < 3) {    
+        $DefenderFields = $this->getResourceLevel($vref);
+        $defcanclaim = TRUE;
+        for($i=19;$i<=38;$i++) {
+            if($DefenderFields['f'.$i.'t'] == 27) {
+                $defTresuaryLevel = $DefenderFields['f'.$i];
+                if($defTresuaryLevel > 0) {
+                    $defcanclaim = FALSE;
+                    $form->addError("error","Treasury has not been destroyed. Your hero could not claim the artefact and");
+                    return false;
+                } else {
+                    $defcanclaim = TRUE;
+                }
+            }
+        }
+        $AttackerFields = $this->getResourceLevel($from,2);
+        for($i=19;$i<=38;$i++) {
+            if($AttackerFields['f'.$i.'t'] == 27) {
+                $attTresuaryLevel = $AttackerFields['f'.$i];
+                if ($attTresuaryLevel >= 10) {
+                    $villageartifact = TRUE;
+                } else {
+                    $villageartifact = FALSE;
+                }
+                if ($attTresuaryLevel >= 20){
+                    $accountartifact = TRUE;
+                } else {
+                    $accountartifact = FALSE;
+                }
+            }
+        }
+        if (($artifact['great']>0 || $artifact['unique']>0) && $type>1) {
+            $form->addError("error","Max num. of great/unique artefacts. Your hero could not claim the artefact and");
+            return FALSE;
+        }
+        if (($type == 1 && ($villageartifact || $accountartifact)) || (($type == 2 || $type == 3)&& $accountartifact)) {
+            return TRUE;
+        } else {
+                $form->addError("error","Level treasury is low. Your hero could not claim the artefact and");
+                return FALSE;
+        }
+    } else {
+        $form->addError("error","Max num. of artefacts. Your hero could not claim the artefact and");
+        return FALSE;
+    }
+}  
 
 	function getArtefactDetails($id) {
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = " . $id . "";
