@@ -148,6 +148,12 @@ class Units {
                                 $form->addError("error","You can't send negative units.");
                                 break;
                             }
+                            
+                            if($post['t'.$i]>30000000)
+                            {
+                                $form->addError("error","Bug attempt!");
+                                break;
+                            }
 
 			    if(preg_match('/[^0-9]/',$post['t'.$i]))
               		    {
@@ -166,6 +172,11 @@ class Units {
                             if($post['t11']<0)
                             {
                                 $form->addError("error","You can't send negative units.");
+                                break;
+                            }
+                            if($post['t11']>2)
+                            {
+                                $form->addError("error","Bug attempt!");
                                 break;
                             }
 			    if(preg_match('/[^0-9]/',$post['t11']))
