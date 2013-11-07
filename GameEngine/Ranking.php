@@ -196,13 +196,15 @@
 
 			public function searchRank($name, $field) {
 				while(1) {
-					$key = key($this->rankarray);
-					for($key=0;$key<count($this->rankarray);$key++){
-					if($this->rankarray[$key][$field] == $name) {
-						return $key;
-						break;
-					}
-					}
+    //$key = key($this->rankarray);
+       for($key=0;$key<count($this->rankarray);$key++){
+        if($this->rankarray[$key]!="pad") {
+        if($this->rankarray[$key][$field] == $name) {
+            return $key;
+            break;
+        }
+       }    
+      }  
 						if(!next($this->rankarray)) {
 						if($field != "userid"){
 							return $name;
