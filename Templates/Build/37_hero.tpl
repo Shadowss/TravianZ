@@ -169,7 +169,7 @@ if (isset($_POST['name'])) {
             if($_GET['add'] == "reset") { 
                 if($hero_info['level'] <= 3){ 
                       if($hero_info['attack'] != 0 OR $hero_info['defence'] != 0 OR $hero_info['attackbonus'] != 0 OR $hero_info['defencebonus'] != 0 OR $hero_info['regeneration'] != 0){ 
-                    mysql_query("UPDATE " . TB_PREFIX . "hero SET `points` = '".(($hero_info['level']*5)+10)."' WHERE `uid` = '" . $session->uid . "'"); 
+                    mysql_query("UPDATE " . TB_PREFIX . "hero SET `points` = '".(($hero_info['level']*5)+5)."' WHERE `uid` = '" . $session->uid . "'"); 
                     mysql_query("UPDATE " . TB_PREFIX . "hero SET `attack` = '0' WHERE `uid` = '" . $session->uid . "'"); 
                     mysql_query("UPDATE " . TB_PREFIX . "hero SET `defence` = '0' WHERE `uid` = '" . $session->uid . "'"); 
                     mysql_query("UPDATE " . TB_PREFIX . "hero SET `attackbonus` = '0' WHERE `uid` = '" . $session->uid . "'"); 
