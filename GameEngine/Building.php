@@ -741,12 +741,14 @@ class Building {
         }
         }
         }
-        if($finish == 1 or $finish==0){
-        $database->finishDemolition($village->wid);
-        $technology->finishTech();
-        $logging->goldFinLog($village->wid);
-        $database->modifyGold($session->uid,2,0);
-        $stillbuildingarray = $database->getJobs($village->wid);
+        if($finish != 2){
+            $demolition=$database->finishDemolition($village->wid);
+            $tech=$technology->finishTech();
+            if ($finish==1 || $demolition>0 || $tech>0) {
+                $logging->goldFinLog($village->wid);
+                $database->modifyGold($session->uid,2,0);
+            }
+                        $stillbuildingarray = $database->getJobs($village->wid);  
         if(count($stillbuildingarray) == 1) {
             if($stillbuildingarray[0]['loopcon'] == 1) {
                 //$q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0,timestamp=".(time()+$stillbuildingarray[0]['timestamp']-$innertimestamp)." WHERE id=".$stillbuildingarray[0]['id'];
