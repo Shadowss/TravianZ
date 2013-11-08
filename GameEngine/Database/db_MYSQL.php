@@ -387,7 +387,7 @@ class MYSQL_DB {
 	}
 	*/
 	
-	function generateBase($sector, $mode) {
+	function generateBase($sector, $mode=0) {
     if (!$mode) {
         $gamesday=time()-COMMENCE;
         if ($gamesday<3600*24*10) { //10 day
