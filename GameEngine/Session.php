@@ -36,7 +36,6 @@ include ("Form.php");
 include ("Generator.php");
 include ("Multisort.php");
 include ("Ranking.php");
-include ("Automation.php");
 include ("Lang/" . LANG . ".php");
 include ("Logging.php");
 include ("Message.php");
