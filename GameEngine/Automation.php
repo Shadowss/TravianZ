@@ -1328,7 +1328,7 @@ class Automation {
 										$stonemason = "1";
 
 		}
-
+		$defspy=($Defender['u4']>0 || $Defender['u14']>0 || $Defender['u23']>0 || $Defender['u44']>0)? true:false;
 		if(PEACE == 0 || $targettribe == 4 || $targettribe == 5){
 		if($targettribe == 1){
 		$def_spy = $Defender['u4'];
@@ -1482,7 +1482,7 @@ class Automation {
 						$totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
 						//NEED TO SEND A RAPPORTAGE!!!
 						$data2 = ''.$database->getVillageField($enforce['from'],"owner").','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.'';
-						if($scout){
+  						if($scout && $defspy){ //fix by ronix  
 						if($totaldead_att > 0){
 						if($totaldead_att == $totalsend_att){
 						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
@@ -2489,23 +2489,22 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			$data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,';
 
 			//Undetected and detected in here.
-			if($scout){
-				for($i=1;$i<=10;$i++)
-				{
-					if($battlepart['casualties_attacker'][$i]){
-					if($from['owner'] == 3){
-						$database->addNotice($to['owner'],$to['wref'],$targetally,0,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-						break;
-					}else if($unitsdead_att == $unitssend_att){
-						$database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-						break;
-						}else{
-						$database->addNotice($to['owner'],$to['wref'],$targetally,21,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-						break;
-						}
-					}
-				}
-			}
+                    	if($scout){
+                        
+                        for($i=1;$i<=10;$i++){
+                            if($battlepart['casualties_attacker'][$i]){
+                                if($from['owner'] == 3){
+                                    $database->addNotice($to['owner'],$to['wref'],$targetally,0,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                                    break;
+                                }else if($unitsdead_att == $unitssend_att && $defspy){ //fix by ronix
+                                    $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                                    break;
+                                }else if($defspy){ //fix by ronix
+                                    $database->addNotice($to['owner'],$to['wref'],$targetally,21,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                                    break;
+                                }
+                            }
+                        }  
 			else {
 			if($type == 3 && $totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
 			$prisoners = $database->getPrisoners($to['wref']);
@@ -2698,68 +2697,41 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			if($type == 3 or $type == 4){
 			$database->addGeneralAttack($totalattackdead);
 			}
-						if($village_destroyed == 1){
-						$varray = $database->getProfileVillages($to['owner']);
-						if(count($varray)!='1' AND $to['capital']!='1'){
-								$database->clearExpansionSlot($data['to']);
-								$q = "DELETE FROM ".TB_PREFIX."abdata where wref = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."enforcement where from = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."research where vref = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."tdata where vref = ".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."training where vref =".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."units where vref =".$data['to'];
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."farmlist where wref =".$village;
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$village;
-								$database->query($q);
-								$q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$data['to'];
-								$database->query($q);
-								$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
-								$database->query($q);
-								$getmovement = $database->getMovement(3,$data['to'],1);
-								foreach($getmovement as $movedata) {
-								$time = microtime(true);
-								$time2 = $time - $movedata['starttime'];
-								$database->setMovementProc($data['moveid']);
-								$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
-								$database->setMovementProc($movedata['moveid']);
-								}
-								$q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to'];
-								$database->query($q);
-								$getprisoners = $database->getPrisoners($data['to']);
-								foreach($getprisoners as $pris) {
-								$troops = 0;
-								for($i=1;$i<12;$i++){
-								$troops += $pris['t'.$i];
-								}
-								$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-								$database->deletePrisoners($pris['id']);
-								}
-								$getprisoners = $database->getPrisoners3($data['to']);
-								foreach($getprisoners as $pris) {
-								$troops = 0;
-								for($i=1;$i<12;$i++){
-								$troops += $pris['t'.$i];
-								}
-								$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-								$database->deletePrisoners($pris['id']);
-								}
-						}
-						}
+   			if($village_destroyed == 1){
+    				$varray = $database->getProfileVillages($to['owner']);
+    			if(count($varray)!='1' AND $to['capital']!='1'){
+         				$database->clearExpansionSlot($data['to']);
+        				$q = "DELETE FROM ".TB_PREFIX."abdata,".TB_PREFIX."odata,".TB_PREFIX."farmlist,".TB_PREFIX."vdata where wref = ".$data['to'];
+					$database->query($q);
+					$q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
+					$database->query($q);
+					$q = "DELETE FROM ".TB_PREFIX."fdata,".TB_PREFIX."market,".TB_PREFIX."research,".TB_PREFIX."tdata,".TB_PREFIX."training,".TB_PREFIX."units where vref = ".$data['to'];
+					$database->query($q);
+					$q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$data['to'];
+					$database->query($q);
+					$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
+					$database->query($q);
+				$getmovement = $database->getMovement(3,$data['to'],1);
+    			foreach($getmovement as $movedata) {
+        			$time = microtime(true);
+        			$time2 = $time - $movedata['starttime'];
+        			$database->setMovementProc($data['moveid']);
+        			$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
+                                $database->setMovementProc($movedata['moveid']);
+                            }
+					$q = "DELETE FROM ".TB_PREFIX."movement,".TB_PREFIX."enforcement where from = ".$data['to'];
+					$database->query($q);
+                            $getprisoners = $database->getPrisoners($data['to']);
+                            foreach($getprisoners as $pris) {  
+			    $troops = 0;
+			    for($i=1;$i<12;$i++){
+			    $troops += $pris['t'.$i];
+			}
+				$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+				$database->deletePrisoners($pris['id']);
+			}
+			}
+			}
 			}else{
 			//units attack string for battleraport
 			$unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
