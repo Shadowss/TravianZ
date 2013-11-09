@@ -2505,6 +2505,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                 }
                             }
                         }  
+                    	}
 			else {
 			if($type == 3 && $totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
 			$prisoners = $database->getPrisoners($to['wref']);
@@ -2729,6 +2730,14 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 				$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
 				$database->deletePrisoners($pris['id']);
+				$getprisoners = $database->getPrisoners3($data['to']);
+                		foreach($getprisoners as $pris) {
+                		$troops = 0;
+                		for($i=1;$i<12;$i++){
+                		$troops += $pris['t'.$i];
+                		}
+                		$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+                		$database->deletePrisoners($pris['id']);
 			}
 			}
 			}
