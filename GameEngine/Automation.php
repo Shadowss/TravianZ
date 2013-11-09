@@ -2730,6 +2730,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 				$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
 				$database->deletePrisoners($pris['id']);
+                            }
 				$getprisoners = $database->getPrisoners3($data['to']);
                 		foreach($getprisoners as $pris) {
                 		$troops = 0;
