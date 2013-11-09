@@ -131,19 +131,24 @@ class Units {
                     if (!$database->getVillageState($id)){
                         $form->addError("error","Coordinates do not exist");
                     }
-                    if ($session->tribe == 1){$Gtribe = "";}elseif  ($session->tribe == 2){$Gtribe = "1";}elseif ($session->tribe ==  3){$Gtribe = "2";}elseif ($session->tribe == 4){$Gtribe = "3";}elseif  ($session->tribe == 5){$Gtribe = "4";}
-                    for($i=1; $i<11; $i++)
+		if ($session->tribe == 1){$Gtribe = "";}elseif  ($session->tribe == 2){$Gtribe = "1";}elseif ($session->tribe ==  3){$Gtribe = "2";}elseif ($session->tribe == 4){$Gtribe = "3";}elseif  ($session->tribe == 5){$Gtribe = "4";}
+            		for($i=1; $i<12; $i++)
+            		{
+                	if(isset($post['t'.$i]))
+                
+                	{
+                     
+                    if ($i<10) $troophave=$village->unitarray['u'.$Gtribe.$i];
+                    if ($i==10)$troophave=$village->unitarray['u'.floor(intval($Gtribe)+1)*$i];
+                    if ($i==11)$troophave=$village->unitarray['hero'];
+                                        
+                    if (intval($post['t'.$i]) > $troophave)
                     {
-                        if(isset($post['t'.$i]))
-                        {
-
-                            if ($post['t'.$i] > $village->unitarray['u'.$Gtribe.$i])
-                            {
                                 $form->addError("error","You can't send more units than you have");
                                 break;
                             }
 
-                            if($post['t'.$i]<0)
+                            if(intval($post['t'.$i])<0)
                             {
                                 $form->addError("error","You can't send negative units.");
                                 break;
