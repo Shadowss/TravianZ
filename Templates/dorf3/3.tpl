@@ -102,20 +102,20 @@ foreach($varray as $vil){
 	$timerwood = floor(($maxs-$wood)/$prod_wood*3600);
 	$timerclay = floor(($maxs-$clay)/$prod_clay*3600);
 	$timeriron = floor(($maxs-$iron)/$prod_iron*3600);
-	$timer1 = $generator->getTimeFormat(min($timerwood,$timerclay,$timeriron));
-	$timer2 = $generator->getTimeFormat(floor(($maxc-$crop)/$prod_crop*3600));
+	$timer1 = min($timerwood,$timerclay,$timeriron);
+	$timer2 = floor(($maxc-$crop)/$prod_crop*3600);
   
 	echo '<tr class="'.$class.'">
 		<td class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vdata['name'].'</a></td>
 		<td class="lum '.$critW.'" title="'.$wood.'/'.$maxs.'">'.$percentW.'%</td> 
 		<td class="clay '.$critC.'" title="'.$clay.'/'.$maxs.'">'.$percentC.'%</td>
 		<td class="iron '.$critI.'" title="'.$iron.'/'.$maxs.'">'.$percentI.'%</td>
-		<td class="max123"><span '.($timer1!="0:00:00"?'id="timer'.$timer.'"':'').'>'.$timer1.'</span></td>';
-	if($timer1 != "0:00:00") { $timer++; }  		
+		<td class="max123"><span '.($timer1>0?'id="timer'.$timer.'"':'').'>'.($timer1>=0?$generator->getTimeFormat($timer1):'never').'</span></td>';
+	if($timer1 >0) { $timer++; }		
 	echo '	
 		<td class="crop '.$critCR.'" title="'.$crop.'/'.$maxc.'">'.$percentCr.'%</td>
-		<td class="max4 lc"><span '.($timer2!="0:00:00"?'id="timer'.$timer.'"':'').'>'.$timer2.'</span></td></tr>';  
-	if($timer2 != "0:00:00") { $timer++; }  		
+		<td class="max4 lc"><span '.($timer2>0?'id="timer'.$timer.'"':'').'>'.($timer2>=0?$generator->getTimeFormat($timer2):'never').'</span></td></tr>';  
+	if($timer1 >0) { $timer++; }   		
 }
 ?>
 </tbody></table>
