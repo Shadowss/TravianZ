@@ -2698,30 +2698,50 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			if($type == 3 or $type == 4){
 			$database->addGeneralAttack($totalattackdead);
 			}
-   			if($village_destroyed == 1){
-    				$varray = $database->getProfileVillages($to['owner']);
-    			if(count($varray)!='1' AND $to['capital']!='1'){
-         				$database->clearExpansionSlot($data['to']);
-        				$q = "DELETE FROM ".TB_PREFIX."abdata,".TB_PREFIX."odata,".TB_PREFIX."farmlist,".TB_PREFIX."vdata where wref = ".$data['to'];
-					$database->query($q);
-					$q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
-					$database->query($q);
-					$q = "DELETE FROM ".TB_PREFIX."fdata,".TB_PREFIX."market,".TB_PREFIX."research,".TB_PREFIX."tdata,".TB_PREFIX."training,".TB_PREFIX."units where vref = ".$data['to'];
-					$database->query($q);
-					$q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$data['to'];
-					$database->query($q);
-					$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
-					$database->query($q);
-				$getmovement = $database->getMovement(3,$data['to'],1);
-    			foreach($getmovement as $movedata) {
-        			$time = microtime(true);
-        			$time2 = $time - $movedata['starttime'];
-        			$database->setMovementProc($data['moveid']);
-        			$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
+                    if($village_destroyed == 1){
+                        $varray = $database->getProfileVillages($to['owner']);
+                        if(count($varray)!='1' AND $to['capital']!='1'){
+                            $database->clearExpansionSlot($data['to']);
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."abdata where vref = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."research where vref = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."tdata where vref = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."training where vref =".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."units where vref =".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."farmlist where wref =".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$data['to'];
+                            $database->query($q);
+                            $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
+                            $database->query($q);
+                            $getmovement = $database->getMovement(3,$data['to'],1);
+                            foreach($getmovement as $movedata) {
+                                $time = microtime(true);
+                                $time2 = $time - $movedata['starttime'];
+                                $database->setMovementProc($data['moveid']);
+                                $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
                                 $database->setMovementProc($movedata['moveid']);
                             }
-					$q = "DELETE FROM ".TB_PREFIX."movement,".TB_PREFIX."enforcement where from = ".$data['to'];
-					$database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to'];
+                            $database->query($q);
+                            $q = "DELETE FROM ".TB_PREFIX."enforcement where from = ".$data['to'];
+                            $database->query($q);
+
                             $getprisoners = $database->getPrisoners($data['to']);
                             foreach($getprisoners as $pris) {  
 			    $troops = 0;
