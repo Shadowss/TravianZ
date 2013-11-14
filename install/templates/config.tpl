@@ -4,12 +4,31 @@ if(isset($_GET['c']) && $_GET['c'] == 1) {
 echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php check cmod.</span></div><br>";
 }
 ?>
+<br \>
+<body onLoad="show_clock()">
+
+<center><script language="javascript" src="liveclock.js"></script></center>
+
 <form action="process.php" method="post" id="dataform">
 
 	<p>
 	<span class="f10 c">SERVER RELATED</span>
 	<table><tr>
 	<td><span class="f9 c6">Server name:</span></td><td width="140"><input type="text" name="servername" id="servername" value="TravianZ"></td></tr><tr>
+	        <td><span class="f9 c6">Server Timezone:</span></td><td>
+	<select name="tzone" onChange="refresh(this.value)">
+	<option value="1,Africa/Dakar" <?php if ($tz==1) echo "selected";?>>Africa</option>
+	<option value="2,America/New_York" <?php if ($tz==2) echo "selected";?>>America</option>
+	<option value="3,Antarctica/Casey" <?php if ($tz==3) echo "selected";?>>Antarctica</option>
+	<option value="4,Arctic/Longyearbyen" <?php if ($tz==4) echo "selected";?>>Arctic</option>
+	<option value="5,Asia/Kuala_Lumpur" <?php if ($tz==5) echo "selected";?>>Asia</option>
+	<option value="6,Atlantic/Azores" <?php if ($tz==6) echo "selected";?>>Atlantic</option>
+	<option value="7,Australia/Melbourne" <?php if ($tz==7) echo "selected";?>>Australia</option>
+	<option value="8,Europe/Bucharest" <?php if ($tz==8) echo "selected";?>>Europe</option>
+	<option value="9,Indian/Maldives" <?php if ($tz==9) echo "selected";?>>Indian</option>
+	<option value="10,Pacific/Fiji" <?php if ($tz==10) echo "selected";?>>Pacific</option>
+	</select>
+        </td></tr><tr>
 	<td><span class="f9 c6">Server speed:</span></td><td><input name="speed" type="text" id="speed" value="1" size="2"></td></tr><tr>
 	<td><span class="f9 c6">Troop speed:</span></td><td width="140"><input type="text" name="incspeed" id="incspeed" value="1" size="2"></td></tr><tr>
 	<td><span class="f9 c6">Evasion speed:</span></td><td><input name="evasionspeed" type="text" id="evasionspeed" value="1" size="2"></td></tr><tr>
