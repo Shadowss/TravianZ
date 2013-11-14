@@ -593,29 +593,37 @@ class Automation {
 		}
 	}
 
-	private function culturePoints() {
-	if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
-			unlink("GameEngine/Prevention/culturepoints.txt");
-		}
-		global $database,$session;
-		$time = time()-600; // 10minutes
-		$array = array();
-		$q = "SELECT id, lastupdate FROM ".TB_PREFIX."users WHERE lastupdate < $time";
-		$array = $database->query_return($q);
+        private function culturePoints() {
+        if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
+                        unlink("GameEngine/Prevention/culturepoints.txt");
+                }
+                global $database,$session;
+                //fix by ronix
+                if (SPEED >10)
+                  $speed=10;
+                 else
+                    $speed=SPEED;
+                $dur_day=86400/$speed; //24 hours/speed
+                if ($dur_day<3600) $dur_day=3600;
+                $time = time()-600; // recount every 10minutes
+                
+                $array = array();
+                $q = "SELECT id, lastupdate FROM ".TB_PREFIX."users WHERE lastupdate < $time";
+                $array = $database->query_return($q);
 
-		foreach($array as $indi) {
-			if($indi['lastupdate'] <= $time && $indi['lastupdate'] > 0){
-				$cp = $database->getVSumField($indi['id'], 'cp') * (time()-$indi['lastupdate'])/86400; // 24 hours
+                foreach($array as $indi) {
+                        if($indi['lastupdate'] <= $time && $indi['lastupdate'] > 0){
+                                $cp = $database->getVSumField($indi['id'], 'cp') * (time()-$indi['lastupdate'])/$dur_day;
 
-				$newupdate = time();
-				$q = "UPDATE ".TB_PREFIX."users set cp = cp + $cp, lastupdate = $newupdate where id = '".$indi['id']."'";
-				$database->query($q);
-			}
-		}
-		if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
-			unlink("GameEngine/Prevention/culturepoints.txt");
-		}
-}
+                                $newupdate = time();
+                                $q = "UPDATE ".TB_PREFIX."users set cp = cp + $cp, lastupdate = $newupdate where id = '".$indi['id']."'";
+                                $database->query($q);
+                        }
+                }
+                if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
+                        unlink("GameEngine/Prevention/culturepoints.txt");
+                }
+}  
 
 	private function buildComplete() {
 	if(file_exists("GameEngine/Prevention/build.txt")) {
@@ -1067,140 +1075,146 @@ class Automation {
 						$database->updateUserField($DefenderID, "maxevasion", $newmaxevasion, 1);
 						}
 						}
-						//get defence units
-						$Defender = array();    $rom = $ger = $gal = $nat = $natar = 0;
-						$Defender = $database->getUnit($data['to']);
-						$enforcementarray = $database->getEnforceVillage($data['to'],0);
-						if(count($enforcementarray) > 0) {
-							foreach($enforcementarray as $enforce) {
-								for($i=1;$i<=50;$i++) {
-									$Defender['u'.$i] += $enforce['u'.$i];
-								}
-							}
-						}
-							for($i=1;$i<=50;$i++){
-								if(!isset($Defender['u'.$i])){
-									$Defender['u'.$i] = '0';
-								} else {
-								 if($Defender['u'.$i]=='' or $Defender['u'.$i]<='0'){
-									$Defender['u'.$i] = '0';
-								 } else {
-												if($i<=10){ $rom='1'; }
-											else if($i<=20){ $ger='1'; }
-											else if($i<=30){ $gal='1'; }
-											else if($i<=40){ $nat='1'; }
-											else if($i<=50){ $natar='1'; }
-								}
-								}
-							}
-								if(!isset($Defender['hero'])){
-									$Defender['hero'] = '0';
-								} else {
-								 if($Defender['hero']=='' or $Defender['hero']<='0'){
-									$Defender['hero'] = '0';
-								 }
-								}
-									//get attack units
-											$Attacker = array();
-											$start = ($owntribe-1)*10+1;
-											$end = ($owntribe*10);
-											$u = (($owntribe-1)*10);
-											$catapult = array(8,18,28,48);
-											$ram = array(7,17,27,47);
-											$chief = array(9,19,29,49);
-											$spys = array(4,14,23,44);
-										for($i=$start;$i<=$end;$i++) {
-											$y = $i-$u;
-											$Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
-												//there are catas
-												if(in_array($i,$catapult)) {
-												$catp_pic = $i;
-												}
-												if(in_array($i,$ram)) {
-												$ram_pic = $i;
-												}
-												if(in_array($i,$chief)) {
-												$chief_pic = $i;
-												}
-												if(in_array($i,$spys)) {
-												$spy_pic = $i;
-												}
-												}
-												 $Attacker['uhero'] = $dataarray[$data_num]['t11'];
-												$hero_pic = "hero";
-									//need to set these variables.
-									$def_wall = $database->getFieldLevel($data['to'],40);
-									$att_tribe = $owntribe;
-									$def_tribe = $targettribe;
-									$residence = "0";
-									$attpop = $fromF['pop'];
-									$defpop = $toF['pop'];
-									for ($i=19; $i<40; $i++){
-										if ($database->getFieldLevel($data['to'],"".$i."t")=='25' OR $database->getFieldLevel($data['to'],"".$i."t")=='26'){
-											$residence = $database->getFieldLevel($data['to'],$i);
-											$i=40;
-										}
-									}
+                    //get defence units
+                    $Defender = array();
+                    $enforDefender = array();
+                    $rom = $ger = $gal = $nat = $natar = 0;
+                    $Defender = $database->getUnit($data['to']);
+                    $enforcementarray = $database->getEnforceVillage($data['to'],0);
+                    if(count($enforcementarray) > 0) {
+                                                
+                        foreach($enforcementarray as $enforce) {
+                           for($i=1;$i<=50;$i++) {
+                                $enforDefender['u'.$i] += $enforce['u'.$i];
+                            }
+                            $enforDefender['hero'] += $enforce['hero'];
+                       }
+                    }
+                    for($i=1;$i<=50;$i++){
+                        $def_ab[$i]=0;
+                        if(!isset($Defender['u'.$i])){
+                            $Defender['u'.$i] = '0';
+                        } else {
+                            if($Defender['u'.$i]=='' or $Defender['u'.$i]<='0'){
+                                $Defender['u'.$i] = '0';
+                            } else {
+                                if($i<=10){ $rom='1'; }
+                                else if($i<=20){ $ger='1'; }
+                                else if($i<=30){ $gal='1'; }
+                                else if($i<=40){ $nat='1'; }
+                                else if($i<=50){ $natar='1'; }
+                            }
+                        }
+                    }
+                    if(!isset($Defender['hero'])){
+                        $Defender['hero'] = '0';
+                    } else {
+                        if($Defender['hero']=='' or $Defender['hero']<='0'){
+                            $Defender['hero'] = '0';
+                        }
+                    }
+                    //get attack units
+                    $Attacker = array();
+                    $start = ($owntribe-1)*10+1;
+                    $end = ($owntribe*10);
+                    $u = (($owntribe-1)*10);
+                    $catapult = array(8,18,28,48);
+                    $ram = array(7,17,27,47);
+                    $chief = array(9,19,29,49);
+                    $spys = array(4,14,23,44);
+                    for($i=$start;$i<=$end;$i++) {
+                        $y = $i-$u;
+                        $Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
+                        //there are catas
+                        if(in_array($i,$catapult)) {
+                            $catp_pic = $i;
+                        }
+                        if(in_array($i,$ram)) {
+                            $ram_pic = $i;
+                        }
+                        if(in_array($i,$chief)) {
+                            $chief_pic = $i;
+                        }
+                        if(in_array($i,$spys)) {
+                            $spy_pic = $i;
+                        }
+                    }
+                    $Attacker['uhero'] = $dataarray[$data_num]['t11'];
+                    $hero_pic = "hero";
+                    //need to set these variables.
+                    $def_wall = $database->getFieldLevel($data['to'],40);
+                    $att_tribe = $owntribe;
+                    $def_tribe = $targettribe;
+                    $residence = "0";
+                    $attpop = $fromF['pop'];
+                    $defpop = $toF['pop'];
+                    $def_ab=array();
+                    //get level of palace or residence
+                    for ($i=19; $i<40; $i++){
+                        if ($database->getFieldLevel($data['to'],"".$i."t")=='25' OR $database->getFieldLevel($data['to'],"".$i."t")=='26'){
+                            $residence = $database->getFieldLevel($data['to'],$i);
+                            $i=40;
+                        }
+                    }
+                    
+                    //type of attack
+                    if($dataarray[$data_num]['attack_type'] == 1){
+                        $type = 1;
+                        $scout = 1;
+                    }
+                    if($dataarray[$data_num]['attack_type'] == 2){
+                        $type = 2;
+                    }
+                    if($dataarray[$data_num]['attack_type'] == 3){
+                        $type = 3;
+                    }
+                    if($dataarray[$data_num]['attack_type'] == 4){
+                        $type = 4;
+                    }
+                    $ud=($def_tribe-1)*10;
+                    $att_ab = $database->getABTech($data['from']); // Blacksmith level
+                    $att_ab1 = $att_ab['b1'];
+                    $att_ab2 = $att_ab['b2'];
+                    $att_ab3 = $att_ab['b3'];
+                    $att_ab4 = $att_ab['b4'];
+                    $att_ab5 = $att_ab['b5'];
+                    $att_ab6 = $att_ab['b6'];
+                    $att_ab7 = $att_ab['b7'];
+                    $att_ab8 = $att_ab['b8'];
+                    $armory = $database->getABTech($data['to']); // Armory level
+                    $def_ab[$ud+1] = $armory['a1'];
+                    $def_ab[$ud+2] = $armory['a2'];
+                    $def_ab[$ud+3] = $armory['a3'];
+                    $def_ab[$ud+4] = $armory['a4'];
+                    $def_ab[$ud+5] = $armory['a5'];
+                    $def_ab[$ud+6] = $armory['a6'];
+                    $def_ab[$ud+7] = $armory['a7'];
+                    $def_ab[$ud+8] = $armory['a8'];
+                    
+                    //rams attack
+                    if(($data['t7']-$dead7-$traped7)>0 and $type=='3'){
+                        $basearraywall = $database->getMInfo($data['to']);
+                        if($database->getFieldLevel($basearraywall['wref'],40)>'0'){
+                            for ($w=1; $w<2; $w++){
+                                if ($database->getFieldLevel($basearraywall['wref'],40)!='0'){
+                                
+                                    $walllevel = $database->getFieldLevel($basearraywall['wref'],40);
+                                    $wallgid = $database->getFieldLevel($basearraywall['wref'],"40t");
+                                    $wallid = 40;
+                                    $w='4';
+                                } else {$w = $w--; }
+                            }
+                        }else{
+                            $empty = 1;
+                        }
+                    }
+                    
+                    $tblevel = '0';
+                    $stonemason = "0";
 
-									//type of attack
-									if($dataarray[$data_num]['attack_type'] == 1){
-										$type = 1;
-										$scout = 1;
-									}
-									if($dataarray[$data_num]['attack_type'] == 2){
-										$type = 2;
-									}
-									if($dataarray[$data_num]['attack_type'] == 3){
-										$type = 3;
-									}
-									if($dataarray[$data_num]['attack_type'] == 4){
-										$type = 4;
-									}
-
-									$att_ab = $database->getABTech($data['from']); // Blacksmith level
-									$att_ab1 = $att_ab['b1'];
-									$att_ab2 = $att_ab['b2'];
-									$att_ab3 = $att_ab['b3'];
-									$att_ab4 = $att_ab['b4'];
-									$att_ab5 = $att_ab['b5'];
-									$att_ab6 = $att_ab['b6'];
-									$att_ab7 = $att_ab['b7'];
-									$att_ab8 = $att_ab['b8'];
-									$def_ab = $database->getABTech($data['to']); // Armory level
-									$att_ab1 = $att_ab['a1'];
-									$att_ab2 = $att_ab['a2'];
-									$att_ab3 = $att_ab['a3'];
-									$att_ab4 = $att_ab['a4'];
-									$att_ab5 = $att_ab['a5'];
-									$att_ab6 = $att_ab['a6'];
-									$att_ab7 = $att_ab['a7'];
-									$att_ab8 = $att_ab['a8'];
-
-						//rams attack
-						 if(($data['t7']-$dead7-$traped7)>0 and $type=='3'){
-						$basearraywall = $database->getMInfo($data['to']);
-						if($database->getFieldLevel($basearraywall['wref'],40)>'0'){
-							for ($w=1; $w<2; $w++){
-						if ($database->getFieldLevel($basearraywall['wref'],40)!='0'){
-
-						$walllevel = $database->getFieldLevel($basearraywall['wref'],40);
-						$wallgid = $database->getFieldLevel($basearraywall['wref'],"40t");
-						$wallid = 40;
-						$w='4';
-											} else {$w = $w--; }
-							}
-						}else{
-						$empty = 1;
-						}
-						}
-
-									$tblevel = '1';
-									$stonemason = "1";
-
-
-			/*--------------------------------
-			// End Battle part
-			--------------------------------*/
+                /*--------------------------------
+                // End village Battle part
+                --------------------------------*/
 			}else{
 			$Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
 			$Defender['id'] = $database->getUserField($database->getOasisField($data['to'],"owner"),"id",0);
@@ -1215,173 +1229,182 @@ class Automation {
 			$toF = $database->getOasisV($data['to']);
 			$fromF = $database->getVillage($data['from']);
 
-
-						//get defence units
-						$Defender = array();    $rom = $ger = $gal = $nat = $natar = 0;
-						$Defender = $database->getUnit($data['to']);
-						$enforcementarray = $database->getEnforceVillage($data['to'],0);
-
-						if(count($enforcementarray) > 0) {
-							foreach($enforcementarray as $enforce) {
-								for($i=1;$i<=50;$i++) {
-									$Defender['u'.$i] += $enforce['u'.$i];
-								}
-									$Defender['hero'] += $enforce['hero'];
-							}
-						}
-							for($i=1;$i<=50;$i++){
-								if(!isset($Defender['u'.$i])){
-									$Defender['u'.$i] = '0';
-								} else {
-								 if($Defender['u'.$i]=='' or $Defender['u'.$i]<='0'){
-									$Defender['u'.$i] = '0';
-								 } else {
-												if($i<=10){ $rom='1'; }
-											else if($i<=20){ $ger='1'; }
-											else if($i<=30){ $gal='1'; }
-											else if($i<=40){ $nat='1'; }
-											else if($i<=50){ $natar='1'; }
-								}
-								}
-							}
-								if(!isset($Defender['hero'])){
-									$Defender['hero'] = '0';
-								} else {
-								 if($Defender['hero']=='' or $Defender['hero']<'0'){
-									$Defender['hero'] = '0';
-								 }
-								}
-									//get attack units
-											$Attacker = array();
-											$start = ($owntribe-1)*10+1;
-											$end = ($owntribe*10);
-											$u = (($owntribe-1)*10);
-											$catapult = array(8,18,28,38,48);
-											$ram = array(7,17,27,37,47);
-											$chief = array(9,19,29,39,49);
-											$spys = array(4,14,23,44);
-										for($i=$start;$i<=$end;$i++) {
-											$y = $i-$u;
-											$Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
-												//there are catas
-												if(in_array($i,$catapult)) {
-												$catp_pic = $i;
-												}
-												if(in_array($i,$ram)) {
-												$ram_pic = $i;
-												}
-												if(in_array($i,$chief)) {
-												$chief_pic = $i;
-												}
-												if(in_array($i,$spys)) {
-												$spy_pic = $i;
-												}
-												}
-											   $Attacker['uhero'] = $dataarray[$data_num]['t11'];
-												$hero_pic = "hero";
-									//need to set these variables.
-									$def_wall = 1;
-									$att_tribe = $owntribe;
-									$def_tribe = $targettribe;
-									$residence = "0";
-									$attpop = $fromF['pop'];
-									$defpop = 100;
-
-
-									//type of attack
-									if($dataarray[$data_num]['attack_type'] == 1){
-										$type = 1;
-										$scout = 1;
-									}
-									if($dataarray[$data_num]['attack_type'] == 2){
-										$type = 2;
-									}
-									if($dataarray[$data_num]['attack_type'] == 3){
-										$type = 3;
-									}
-									if($dataarray[$data_num]['attack_type'] == 4){
-										$type = 4;
-									}
-
-									$def_ab = Array (
-										"b1" => 0, // Blacksmith level
-										"b2" => 0, // Blacksmith level
-										"b3" => 0, // Blacksmith level
-										"b4" => 0, // Blacksmith level
-										"b5" => 0, // Blacksmith level
-										"b6" => 0, // Blacksmith level
-										"b7" => 0, // Blacksmith level
-										"b8" => 0); // Blacksmith level
-
-									$att_ab = Array (
-										"a1" => 0, // armoury level
-										"a2" => 0, // armoury level
-										"a3" => 0, // armoury level
-										"a4" => 0, // armoury level
-										"a5" => 0, // armoury level
-										"a6" => 0, // armoury level
-										"a7" => 0, // armoury level
-										"a8" => 0); // armoury level
-
-										$empty='1';
-										$tblevel = '0';
-										$stonemason = "1";
-
-		}
-		$defspy=($Defender['u4']>0 || $Defender['u14']>0 || $Defender['u23']>0 || $Defender['u44']>0)? true:false;
-		if(PEACE == 0 || $targettribe == 4 || $targettribe == 5){
-		if($targettribe == 1){
-		$def_spy = $Defender['u4'];
-		}elseif($targettribe == 2){
-		$def_spy = $Defender['u14'];
-		}elseif($targettribe == 3){
-		$def_spy = $Defender['u23'];
-		}elseif($targettribe == 5){
-		$def_spy = $Defender['u54'];
-		}
-		if(!$scout or $def_spy > 0){
-				$traps = $Defender['u99']-$Defender['u99o'];
-				for($i=1;$i<=11;$i++){
-				$traps1 = $traps;
-				if($data['t'.$i] < $traps1){
-				$traps1 = $data['t'.$i];
-				}
-				${traped.$i}=$traps1;
-				$traps -= $traps1;
-				$database->modifyUnit($data['to'],array("99o"),array($traps1),array(1));
-				}
-				for($i=$start;$i<=$end;$i++) {
-				$j = $i-$start+1;
-				$Attacker['u'.$i] -= ${traped.$j};
-				}
-				$Attacker['uhero'] -= $traped11;
-				$totaltraped_att = $traped1+$traped2+$traped3+$traped4+$traped5+$traped6+$traped7+$traped8+$traped9+$traped10+$traped11;
-				if($totaltraped_att > 0){
-				$prisoners2 = $database->getPrisoners2($data['to'],$data['from']);
-				if(empty($prisoners2)){
-				$database->addPrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
-				}else{
-				$database->updatePrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
-				}
-				}
-		}
-			$battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref);
-
-			//units attack string for battleraport
-			$unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
-			$herosend_att = $data['t11'];
-			if ($herosend_att>0){
-				$unitssend_att_check=$unitssend_att.','.$data['t11'];
-			}else{
-				$unitssend_att_check=$unitssend_att;
-			}
-			//units defence string for battleraport
-						$enforcementarray2 = $database->getEnforceVillage($data['to'],0);
-						if(count($enforcementarray2) > 0) {
-							foreach($enforcementarray2 as $enforce2) {
-									$Defender['hero'] += $enforce2['hero'];
-							}
-						}
+                    //get defence units
+                    $Defender = array();
+                    $enforDefender = array();
+                    $rom = $ger = $gal = $nat = $natar = 0;
+                    $Defender = $database->getUnit($data['to']);
+                    $enforcementarray = $database->getEnforceVillage($data['to'],0);
+                    
+                    if(count($enforcementarray) > 0) {
+                        foreach($enforcementarray as $enforce) {
+                            for($i=1;$i<=50;$i++) {
+                                $enforDefender['u'.$i] += $enforce['u'.$i];
+                            }
+                            $enforDefender['hero'] += $enforce['hero'];
+                        }
+                    }
+                    for($i=1;$i<=50;$i++){
+                        if(!isset($Defender['u'.$i])){
+                            $Defender['u'.$i] = '0';
+                        } else {
+                            if($Defender['u'.$i]=='' or $Defender['u'.$i]<='0'){
+                                $Defender['u'.$i] = '0';
+                            } else {
+                                if($i<=10){ $rom='1'; }
+                                else if($i<=20){ $ger='1'; }
+                                else if($i<=30){ $gal='1'; }
+                                else if($i<=40){ $nat='1'; }
+                                else if($i<=50){ $natar='1'; }
+                            }
+                            
+                        }
+                    }
+                    if(!isset($Defender['hero'])){
+                        $Defender['hero'] = '0';
+                    } else {
+                        if($Defender['hero']=='' or $Defender['hero']<'0'){
+                            $Defender['hero'] = '0';
+                        }
+                    }
+                    
+                    //get attack units
+                    $Attacker = array();
+                    $start = ($owntribe-1)*10+1;
+                    $end = ($owntribe*10);
+                    $u = (($owntribe-1)*10);
+                    $catapult = array(8,18,28,38,48);
+                    $ram = array(7,17,27,37,47);
+                    $chief = array(9,19,29,39,49);
+                    $spys = array(4,14,23,44);
+                    for($i=$start;$i<=$end;$i++) {
+                        $y = $i-$u;
+                        $Attacker['u'.$i] = $dataarray[$data_num]['t'.$y];
+                        //there are catas
+                        if(in_array($i,$catapult)) {
+                            $catp_pic = $i;
+                        }
+                        if(in_array($i,$ram)) {
+                            $ram_pic = $i;
+                        }
+                        if(in_array($i,$chief)) {
+                            $chief_pic = $i;
+                        }
+                        if(in_array($i,$spys)) {
+                            $spy_pic = $i;
+                        }
+                    }
+                    $Attacker['uhero'] = $dataarray[$data_num]['t11'];
+                    $hero_pic = "hero";
+                    //need to set these variables.
+                    $def_wall = 1;
+                    $att_tribe = $owntribe;
+                    $def_tribe = $targettribe;
+                    $residence = "0";
+                    $attpop = $fromF['pop'];
+                    $defpop = 100;
+                    
+                    //type of attack
+                    if($dataarray[$data_num]['attack_type'] == 1){
+                        $type = 1;
+                        $scout = 1;
+                    }
+                    if($dataarray[$data_num]['attack_type'] == 2){
+                        $type = 2;
+                    }
+                    if($dataarray[$data_num]['attack_type'] == 3){
+                        $type = 3;
+                    }
+                    if($dataarray[$data_num]['attack_type'] == 4){
+                        $type = 4;
+                    }
+                    
+                    $def_ab = Array (
+                        "b1" => 0, // Blacksmith level
+                        "b2" => 0, // Blacksmith level
+                        "b3" => 0, // Blacksmith level
+                        "b4" => 0, // Blacksmith level
+                        "b5" => 0, // Blacksmith level
+                        "b6" => 0, // Blacksmith level
+                        "b7" => 0, // Blacksmith level
+                        "b8" => 0); // Blacksmith level
+                    $att_ab = Array (
+                        "a1" => 0, // armoury level
+                        "a2" => 0, // armoury level
+                        "a3" => 0, // armoury level
+                        "a4" => 0, // armoury level
+                        "a5" => 0, // armoury level
+                        "a6" => 0, // armoury level
+                        "a7" => 0, // armoury level
+                        "a8" => 0); // armoury level
+                        
+                    $empty='1';
+                    $tblevel = '0';
+                    $stonemason = "0";
+                }
+                //fix by ronix
+                for ($i=1;$i<=50;$i++) $enforDefender['u'.$i]+=$Defender['u'.$i];
+                $defspy=($enforDefender['u4']>0 || $enforDefender['u14']>0 || $enforDefender['u23']>0 || $enforDefender['u44']>0)? true:false;
+                
+                if(PEACE == 0 || $targettribe == 4 || $targettribe == 5){
+                    if($targettribe == 1){
+                        $def_spy = $enforDefender['u4'];
+                    }elseif($targettribe == 2){
+                        $def_spy = $enforDefender['u14'];
+                    }elseif($targettribe == 3){
+                        $def_spy = $enforDefender['u23'];
+                    }elseif($targettribe == 5){
+                        $def_spy = $enforDefender['u54'];
+                    }
+                    if(!$scout or $def_spy > 0){
+                        $traps = $Defender['u99']-$Defender['u99o'];
+                        for($i=1;$i<=11;$i++){
+                            $traps1 = $traps;
+                            if($data['t'.$i] < $traps1){
+                                $traps1 = $data['t'.$i];
+                            }
+                            ${traped.$i}=$traps1;
+                            $traps -= $traps1;
+                            $database->modifyUnit($data['to'],array("99o"),array($traps1),array(1));
+                        }
+                        for($i=$start;$i<=$end;$i++) {
+                            $j = $i-$start+1;
+                            $Attacker['u'.$i] -= ${traped.$j};
+                        }
+                        $Attacker['uhero'] -= $traped11;
+                        $totaltraped_att = $traped1+$traped2+$traped3+$traped4+$traped5+$traped6+$traped7+$traped8+$traped9+$traped10+$traped11;
+                        if($totaltraped_att > 0){
+                            $prisoners2 = $database->getPrisoners2($data['to'],$data['from']);
+                            if(empty($prisoners2)){
+                                $database->addPrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
+                            }else{
+                                $database->updatePrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
+                            }
+                        }
+                    }    
+                    //to battle.php
+                    //fix by ronix
+                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref);
+                                        
+                    //units attack string for battleraport
+                    $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
+                    $herosend_att = $data['t11'];
+                    if ($herosend_att>0){
+                        $unitssend_att_check=$unitssend_att.','.$data['t11'];
+                    }else{
+                        $unitssend_att_check=$unitssend_att;
+                    }
+                    //units defence string for battleraport
+                    $enforcementarray2 = $database->getEnforceVillage($data['to'],0);
+                    if(count($enforcementarray2) > 0) {
+                        foreach($enforcementarray2 as $enforce2) {
+                            $Defender['hero'] += $enforce2['hero'];
+                            for ($i=1;$i<=50;$i++) {
+                                $Defender['u'.$i]+= $enforce2['u'.$i];
+                            }    
+                        }
+                    }	
+						
 				$unitssend_def[1] = ''.$Defender['u1'].','.$Defender['u2'].','.$Defender['u3'].','.$Defender['u4'].','.$Defender['u5'].','.$Defender['u6'].','.$Defender['u7'].','.$Defender['u8'].','.$Defender['u9'].','.$Defender['u10'].'';
 				$unitssend_def[2] = ''.$Defender['u11'].','.$Defender['u12'].','.$Defender['u13'].','.$Defender['u14'].','.$Defender['u15'].','.$Defender['u16'].','.$Defender['u17'].','.$Defender['u18'].','.$Defender['u19'].','.$Defender['u20'].'';
 				$unitssend_def[3] = ''.$Defender['u21'].','.$Defender['u22'].','.$Defender['u23'].','.$Defender['u24'].','.$Defender['u25'].','.$Defender['u26'].','.$Defender['u27'].','.$Defender['u28'].','.$Defender['u29'].','.$Defender['u30'].'';
@@ -1482,15 +1505,7 @@ class Automation {
 						$totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
 						//NEED TO SEND A RAPPORTAGE!!!
 						$data2 = ''.$database->getVillageField($enforce['from'],"owner").','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.'';
-  						if($scout && $defspy){ //fix by ronix  
-						if($totaldead_att > 0){
-						if($totaldead_att == $totalsend_att){
-						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
-						}else{
-						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
-						}
-						}
-						}else{
+						if(!$scout) {
 						if($totalnotlife == 0){
 						$database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
 						}else if($totallife > $totalnotlife){
@@ -2651,10 +2666,10 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 			$endtime += $AttackArrivalTime;
                 if($type == 1) {
-                    if($from['owner'] == 3) {
-                    $database->addNotice($to['owner'],$to['wref'],$targetally,0,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
-                    } else $database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);    
-                }else {
+        	if($from['owner'] == 3) { //fix natar report by ronix
+            	$database->addNotice($to['owner'],$to['wref'],$targetally,0,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+        	} else $database->addNotice($from['owner'],$to['wref'],$ownally,21,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+        	}else {
                     if ($totaldead_att == 0 && $totaltraped_att == 0){
                     $database->addNotice($from['owner'],$to['wref'],$ownally,1,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                     }else{
