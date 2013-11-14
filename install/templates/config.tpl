@@ -4,10 +4,6 @@ if(isset($_GET['c']) && $_GET['c'] == 1) {
 echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php check cmod.</span></div><br>";
 }
 ?>
-<br \>
-<body onLoad="show_clock()">
-
-<center><script language="javascript" src="liveclock.js"></script></center>
 
 <form action="process.php" method="post" id="dataform">
 
