@@ -3,11 +3,15 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                        		       	       ##
+##  Version:       01.09.2013 						       ##
 ##  Filename       Battle.php                                                  ##
-##  Developed by:  Dzoki & Dixie  Reworked buy Advocaite love it or hate it    ##
-##  Thanks to:     Akakori & Elmar                                             ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow  	       ##
+##  Fixed by:      Shadow - Doubleing Troops , STARVATION , HERO FIXED COMPL.  ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       ##
 ##                                                                             ##
 #################################################################################
 
@@ -15,7 +19,7 @@ class Battle {
 
 		public function procSim($post) {
 				global $form;
-				// Recivimos el formulario y procesamos
+				// Receive the form and process
 				if(isset($post['a1_v']) && (isset($post['a2_v1']) || isset($post['a2_v2']) || isset($post['a2_v3']) || isset($post['a2_v4']))) {
 								$_POST['mytribe'] = $post['a1_v'];
 								$target = array();
@@ -64,109 +68,92 @@ class Battle {
 								}
 				}
 		}
-		private function getBattleHero($uid) {
-		global $database;
-		$heroarray = $database->getHero($uid);
-		$herodata = $GLOBALS["h".$heroarray[0]['unit']];
+		
+	private function getBattleHero($uid) {
+                global $database;
+                $heroarray = $database->getHero($uid);
+                $herodata = $GLOBALS["h".$heroarray[0]['unit']];
 
-		$h_atk = $herodata['atk'] + 5 * floor($heroarray[0]['attack'] * $herodata['atkp'] / 5);
-		$h_di = $herodata['di'] + 5 * floor($heroarray[0]['defence'] * $herodata['dip'] / 5);
-		$h_dc = $herodata['dc'] + 5 * floor($heroarray[0]['defence'] * $herodata['dcp'] / 5);
-		$h_ob = 1 + 0.002 * $heroarray[0]['attackbonus'];
-		$h_db = 1 + 0.002 * $heroarray[0]['defencebonus'];
+                $h_atk = $herodata['atk'] + 5 * floor($heroarray[0]['attack'] * $herodata['atkp'] / 5);
+                $h_di = $herodata['di'] + 5 * floor($heroarray[0]['defence'] * $herodata['dip'] / 5);
+                $h_dc = $herodata['dc'] + 5 * floor($heroarray[0]['defence'] * $herodata['dcp'] / 5);
+                $h_ob = 1 + 0.002 * $heroarray[0]['attackbonus'];
+                $h_db = 1 + 0.002 * $heroarray[0]['defencebonus'];
 
-		return array('heroid'=>$heroarray[0]['heroid'],'unit'=>$heroarray[0]['unit'],'atk'=>$h_atk,'di'=>$h_di,'dc'=>$h_dc,'ob'=>$h_ob,'db'=>$h_db,'health'=>$heroarray['health']);
-		}
+                return array('heroid'=>$heroarray[0]['heroid'],'unit'=>$heroarray[0]['unit'],'atk'=>$h_atk,'di'=>$h_di,'dc'=>$h_dc,'ob'=>$h_ob,'db'=>$h_db,'health'=>$heroarray['health']);
+                }
+		
+        private function simulate($post) {
+                //fix by ronix
+                //set the arrays with attacking and defending units
+                $attacker = array('u1'=>0,'u2'=>0,'u3'=>0,'u4'=>0,'u5'=>0,'u6'=>0,'u7'=>0,'u8'=>0,'u9'=>0,'u10'=>0,'u11'=>0,'u12'=>0,'u13'=>0,'u14'=>0,'u15'=>0,'u16'=>0,'u17'=>0,'u18'=>0,'u19'=>0,'u20'=>0,'u21'=>0,'u22'=>0,'u23'=>0,'u24'=>0,'u25'=>0,'u26'=>0,'u27'=>0,'u28'=>0,'u29'=>0,'u30'=>0,'u31'=>0,'u32'=>0,'u33'=>0,'u34'=>0,'u35'=>0,'u36'=>0,'u37'=>0,'u38'=>0,'u39'=>0,'u40'=>0,'u41'=>0,'u42'=>0,'u43'=>0,'u44'=>0,'u45'=>0,'u46'=>0,'u47'=>0,'u48'=>0,'u49'=>0,'u50'=>0);
+                $start = ($post['a1_v']-1)*10+1;
+                $index = 1;
+                                
+                for($i=$start;$i<=($start+9);$i++) {
+                        $attacker['u'.$i] = $post['a1_'.$index];
+                        if($index <=8) {
+                                ${att_ab.$index} = $post['f1_'.$index];
+                        }
+                        $index += 1;
+                }
+                
+                $defender = array();
+                
+                for($i=1;$i<=50;$i++) {
+                        if(isset($post['a2_'.$i]) && $post['a2_'.$i] != "") {
+                                $defender['u'.$i] = $post['a2_'.$i];
+                                $def_ab[$i]=$post['f2_'.$i];
+                                
+                        }
+                        else {
+                                $defender['u'.$i] = 0;
+                                $def_ab[$i]=0;
+                        }
+                }
+                $deftribe = $post['tribe']; //not valid if multi def
+                $wall = 0;
+                if($post['kata'] == "") {
+                        $post['kata'] = 0;
+                }
 
-		private function simulate($post) {
-				// Establecemos los arrays con las unidades del atacante y defensor
-				$attacker = array('u1'=>0,'u2'=>0,'u3'=>0,'u4'=>0,'u5'=>0,'u6'=>0,'u7'=>0,'u8'=>0,'u9'=>0,'u10'=>0,'u11'=>0,'u12'=>0,'u13'=>0,'u14'=>0,'u15'=>0,'u16'=>0,'u17'=>0,'u18'=>0,'u19'=>0,'u20'=>0,'u21'=>0,'u22'=>0,'u23'=>0,'u24'=>0,'u25'=>0,'u26'=>0,'u27'=>0,'u28'=>0,'u29'=>0,'u30'=>0,'u31'=>0,'u32'=>0,'u33'=>0,'u34'=>0,'u35'=>0,'u36'=>0,'u37'=>0,'u38'=>0,'u39'=>0,'u40'=>0,'u41'=>0,'u42'=>0,'u43'=>0,'u44'=>0,'u45'=>0,'u46'=>0,'u47'=>0,'u48'=>0,'u49'=>0,'u50'=>0);
-				$start = ($post['a1_v']-1)*10+1;
-				$index = 1;
-				for($i=$start;$i<=($start+9);$i++) {
-						$attacker['u'.$i] = $post['a1_'.$index];
-						if($index <=8) {
-								${att_ab.$index} = $post['f1_'.$index];
-						}
-						$index += 1;
-				}
-				$defender = array();
-				for($i=1;$i<=50;$i++) {
-						if(isset($post['a2_'.$i]) && $post['a2_'.$i] != "") {
-								$defender['u'.$i] = $post['a2_'.$i];
-						}
-						else {
-								$defender['u'.$i] = 0;
-						}
-				}
-				$deftribe = $post['tribe'];
-				$wall = 0;
-				switch($deftribe) {
-						case 1:
-						for($i=1;$i<=8;$i++) {
-								${def_ab.$i} = $post['f2_'.$i];
-						}
-						break;
-						case 2:
-						for($i=11;$i<=18;$i++) {
-								${def_ab.$i-10} = $post['f2_'.$i];
-						}
-						break;
-						case 3:
-						for($i=21;$i<=28;$i++) {
-								${def_ab.$i-20} = $post['f2_'.$i];
-						}
-						break;
-			case 4:
-			for($i=31;$i<=38;$i++) {
-				${def_ab.$i-30} = $post['f2_'.$i];
-			}
-			break;
-			case 5:
-			for($i=41;$i<=48;$i++) {
-				${def_ab.$i-40} = $post['f2_'.$i];
-			}
-			break;
-				}
-				if($post['kata'] == "") {
-						$post['kata'] = 0;
-				}
+                // check scout
 
-				// check scout
-
-				$scout = 1;
-				for($i=$start;$i<=($start+9);$i++) {
-						if($i == 4 || $i == 14 || $i == 23 || $i == 44)
-						{}
-						else{
-								if($attacker['u'.$i]>0) {
-										$scout = 0;
-										break;
-								}
-						}
-				}
-				if($post['wall1'] != 0){
-				$walllevel = $post['wall1'];
-				}elseif($post['wall2'] != 0){
-				$walllevel = $post['wall2'];
-				}elseif($post['wall3'] != 0){
-				$walllevel = $post['wall3'];
-				}elseif($post['wall4'] != 0){
-				$walllevel = $post['wall4'];
-				}elseif($post['wall5'] != 0){
-				$walllevel = $post['wall5'];
-				}else{
-				$walllevel = 0;
-				}
-				if($walllevel > 20){
-				$walllevel = 0;
-				}
-				$wall = $walllevel;
-				if(!$scout)
-						return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
-				else
-						return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
-		}
+                $scout = 1;
+                for($i=$start;$i<=($start+9);$i++) {
+                        if($i == 4 || $i == 14 || $i == 23 || $i == 44){
+                        }else{
+                                if($attacker['u'.$i]>0) {
+                                        $scout = 0;
+                                        break;
+                                }
+                        }
+                }
+                if($post['wall1'] != 0){
+                $walllevel = $post['wall1'];
+                }else if($post['wall2'] != 0){
+                $walllevel = $post['wall2'];
+                }else if($post['wall3'] != 0){
+                $walllevel = $post['wall3'];
+                }else if($post['wall4'] != 0){
+                $walllevel = $post['wall4'];
+                }else if($post['wall5'] != 0){
+                $walllevel = $post['wall5'];
+                }else{
+                $walllevel = 0;
+                }
+                if($walllevel > 20){
+                $walllevel = 0;
+                }
+                $wall = $walllevel;
+                                
+                if(!$scout) 
+                    
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
+                
+                else 
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
+        }  
 
 	 public function getTypeLevel($tid,$vid) {
 		global $village,$database;
@@ -216,573 +203,630 @@ class Battle {
 	}
 
 		//1 raid 0 normal
-		function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab1,$def_ab2,$def_ab3,$def_ab4,$def_ab5,$def_ab6,$def_ab7,$def_ab8,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
-				global $bid34,$bid35,$database;
-				// Definieer de array met de eenheden
-				$calvary = array(4,5,6,15,16,23,24,25,26,45,46);
-				$catapult = array(8,18,28,48);
-				$rams = array(7,17,27,47);
-				$catp = $ram = 0;
-				// Array om terug te keren met het resultaat van de berekening
-				$result = array();
-				$involve = 0;
-				$winner = false;
-				// bij 0 alle deelresultaten
-				$cap = $ap = $dp = $cdp = $rap = $rdp = 0;
+        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
+                global $bid34,$bid35,$database;
+                //fix by ronix
+                
+                // Define the array, with the units
+                $calvary = array(4,5,6,15,16,23,24,25,26,45,46);
+                $catapult = array(8,18,28,48);
+                $rams = array(7,17,27,47);
+                $catp = $ram = 0;
+                // Array to return the result of the calculation back
+                $result = array();
+                $involve = 0;
+                $winner = false;
+                // at 0 all partial results
+                $cap = $ap = $dp = $cdp = $rap = $rdp = 0;
+                
+        
+            $att_artefact = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,3,0));
+            $att_artefact1 = count($database->getOwnUniqueArtefactInfo2($AttackerWref,3,1,1));
+            $att_artefact2 = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,2,0));
+            if($att_artefact > 0){
+            $attacker_artefact = 10;
+            }else if($att_artefact1 > 0){
+            $attacker_artefact = 5;
+            }else if($att_artefact2 > 0){
+            $attacker_artefact = 3;
+            }else{
+            $attacker_artefact = 1;
+            }
+            $def_artefact = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,3,0));
+            $def_artefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,3,1,1));
+            $def_artefact2 = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,2,0));
+            if($def_artefact > 0){
+            $defender_artefact = 10;
+            }else if($att_artefact1 > 0){
+            $defender_artefact = 5;
+            }else if($def_artefact2 > 0){
+            $defender_artefact = 3;
+            }else{
+            $defender_artefact = 1;
+            }
+        if($Attacker['uhero'] != 0)
+        {
 
-		//exit($type);
-			$att_artefact = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,3,0));
-			$att_artefact1 = count($database->getOwnUniqueArtefactInfo2($AttackerWref,3,1,1));
-			$att_artefact2 = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,2,0));
-			if($att_artefact > 0){
-			$attacker_artefact = 10;
-			}else if($att_artefact1 > 0){
-			$attacker_artefact = 5;
-			}else if($att_artefact2 > 0){
-			$attacker_artefact = 3;
-			}else{
-			$attacker_artefact = 1;
-			}
-			$def_artefact = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,3,0));
-			$def_artefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,3,1,1));
-			$def_artefact2 = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,2,0));
-			if($def_artefact > 0){
-			$defender_artefact = 10;
-			}else if($att_artefact1 > 0){
-			$defender_artefact = 5;
-			}else if($def_artefact2 > 0){
-			$defender_artefact = 3;
-			}else{
-			$defender_artefact = 1;
-			}
-		if($Attacker['uhero'] != 0)
-		{
-			//exit($AttackerID);
-		  $atkhero = $this->getBattleHero($AttackerID);
-		}
+          $atkhero = $this->getBattleHero($AttackerID);
+        }
 
-		if($Defender['hero'] != 0)
-		{
-			//exit($DefenderID);
-		$defenderhero = $this->getBattleHero($DefenderID);
-		}
+        if($Defender['hero'] != 0)
+        {
 
-		$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
-		if(!empty($DefendersAll)){
-		foreach($DefendersAll as $defenders) {
-		$fromvillage = $defenders['from'];
-		$reinfowner = $database->getVillageField($fromvillage,"owner");
-		$defhero[$fromvillage] = $this->getBattleHero($reinfowner);
-		}
-		}
-		// Berekenen het totaal aantal punten van Aanvaller
-		$start = ($att_tribe-1)*10+1;
-		$end = ($att_tribe*10);
-		if($att_tribe == 3){
-		$abcount = 3;
-		}else{
-		$abcount = 4;
-		}
-		
-				if($type == 1)
-				{
-						for($i=$start;$i<=$end;$i++) {
-								global ${'u'.$i};
-								$j = $i-$start+1;
-								if($abcount <= 8 && ${att_ab.$abcount} > 0) {
+        $defenderhero = $this->getBattleHero($DefenderID);
+        }
+        //own defender units
+        if ($type==1) {
+            $datadefScout=$this->getDataDefScout($Defender,$def_ab,$defender_artefact);
+            $dp+=$datadefScout['dp'];
+            $cdp+=$datadefScout['cdp'];
+            $involve=$datadef['involve'];
+            if ($datadefScout['detect']==1) $detected = 1;
+        }else{
+            $datadef=$this->getDataDef($Defender,$def_ab);
+            $dp+=$datadef['dp'];
+            $cdp+=$datadef['cdp'];
+            $involve=$datadef['involve'];
+            if($Defender['hero'] != 0){
+                $units['Def_unit']['hero'] = $Defender['hero'];
+                $cdp += $defenderhero['dc'];
+                $dp += $defenderhero['di'];
+                $dp = $dp * $defenderhero['db'];
+                $cdp = $cdp * $defenderhero['db'];
+            }
+        }
+                
+        //get every enforcement in defender village
+                
+        $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+    
+        // Calculates the total points of the Defender
+        if(!empty($DefendersAll)){
+            foreach($DefendersAll as $defenders) {
+                
+                for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
+                $fromvillage = $defenders['from'];
+                $enforcetribe = $database->getUserField($database->getVillageField($fromvillage,"owner"),"tribe",0);
+                $ud=($enforcetribe-1)*10;                
+                if($defenders['from']>1) { //don't check nature tribe
+                    $armory = $database->getABTech($defenders['from']); // Armory level every village enforcement
+                    $def_ab[$ud+1] = $armory['a1'];
+                    $def_ab[$ud+2] = $armory['a2'];
+                    $def_ab[$ud+3] = $armory['a3'];
+                    $def_ab[$ud+4] = $armory['a4'];
+                    $def_ab[$ud+5] = $armory['a5'];
+                    $def_ab[$ud+6] = $armory['a6'];
+                    $def_ab[$ud+7] = $armory['a7'];
+                    $def_ab[$ud+8] = $armory['a8'];
+                }
+                
+                if ($type==1) {
+                    $datadefScout=$this->getDataDefScout($defenders,$def_ab,$defender_artefact);
+                    $dp+=$datadefScout['dp'];
+                    $cdp+=$datadefScout['cdp'];
+                    $involve=$datadef['involve'];
+                    if ($datadefScout['detect']==1) $detected = 1;
+                }else{
+                    $datadef=$this->getDataDef($defenders,$def_ab);
+                    $dp+=$datadef['dp'];
+                    $cdp+=$datade['cdp'];
+                    $involve=$datadef['involve'];
+                    
+                }            
+                
+                $reinfowner = $database->getVillageField($fromvillage,"owner");
+                $defhero[$fromvillage] = $this->getBattleHero($reinfowner);
+            }
+        }
+                
+        
+        // Calculate the total number of points Attacker
+        $start = ($att_tribe-1)*10+1;
+        $end = ($att_tribe*10);
+        if($att_tribe == 3){
+        $abcount = 3;
+        }else{
+        $abcount = 4;
+        }
+        
+                if($type == 1) //scout
+                {
+                        for($i=$start;$i<=$end;$i++) {
+                                global ${'u'.$i};
+                                $j = $i-$start+1;
+                                if($abcount <= 8 && ${att_ab.$abcount} > 0) { 
 
-										$ap += (35 + ( 35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i] * $attacker_artefact;
-										$att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
-										if(count($att_foolartefact) > 0){
-										foreach($att_foolartefact as $arte){
-										if($arte['bad_effect'] == 1){
-										$ap *= $arte['effect2'];
-										}else{
-										$ap /= $arte['effect2'];
-										$ap = round($ap);
-										}
-										}
-										}
-								}
-								else {
-										$ap += ($Attacker['u'.$i] * $Attacker['u'.$i] * $Attacker['u'.$i])/3;
-								}
+                                        if(in_array($i,$calvary)) {
+                                            $cap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
+                                        }
+                                        else {
+                                            $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
+                                        }
+                                                                                
+                                        $att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
+                                        if(count($att_foolartefact) > 0){
+                                        foreach($att_foolartefact as $arte){
+                                        if($arte['bad_effect'] == 1){
+                                        $ap *= $arte['effect2'];
+                                        }else{
+                                        $ap /= $arte['effect2'];
+                                        $ap = round($ap);
+                                        }
+                                        }
+                                        }
+                                }
+                                else {
+                                        if(in_array($i,$calvary)) {
+                                                $cap += $Attacker['u'.$i]*33;
+                                        }
+                                        else {
+                                                $ap += $Attacker['u'.$i]*30.7;
+                                        }                                        
+                                }
+                                $abcount +=1;
+                                $involve += $Attacker['u'.$i];
+                                $units['Att_unit'][$i] = $Attacker['u'.$i];
+                        }
+                        if ($Attacker['uhero'] != 0){
+                            $ap += $atkhero['atk'] * 35;
+                            $ap = $ap * $atkhero['ob'];
+                        }
+                }
+                else //type=3 normal 4=raid
+                {
+                $abcount = 1;
+                        for($i=$start;$i<=$end;$i++) {
+                                global ${'u'.$i};
+                                $j = $i-$start+1;
+                                if($abcount <= 8 && ${att_ab.$abcount} > 0) {
+                                        if(in_array($i,$calvary)) {
+                                                $cap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
+                                        }
+                                        else {
+                                                $ap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
+                                        }
+                                }
+                                else {
+                                        if(in_array($i,$calvary)) {
+                                                $cap += $Attacker['u'.$i]*${'u'.$i}['atk'];
+                                        }
+                                        else {
+                                                $ap += $Attacker['u'.$i]*${'u'.$i}['atk'];
+                                        }
+                                }
 
 
-								$units['Att_unit'][$i] = $Attacker['u'.$i];
-						}
-			if ($Attacker['uhero'] != 0){
-			$ap += $atkhero['atk'] * 35;
-			$ap = $ap * $atkhero['ob'];
-			}
-				}
-				else
-				{
-				$abcount = 1;
-						for($i=$start;$i<=$end;$i++) {
-								global ${'u'.$i};
-								$j = $i-$start+1;
-								if($abcount <= 8 && ${att_ab.$abcount} > 0) {
-										if(in_array($i,$calvary)) {
-												$cap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
-										}
-										else {
-												$ap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
-										}
-								}
-								else {
-										if(in_array($i,$calvary)) {
-												$cap += $Attacker['u'.$i]*${'u'.$i}['atk'];
-										}
-										else {
-												$ap += $Attacker['u'.$i]*${'u'.$i}['atk'];
-										}
-								}
+                                $abcount +=1;
+                                // Points catapult the attacker
+                                if(in_array($i,$catapult)) {
+                                        $catp += $Attacker['u'.$i];
+                                }
+                                 // Points of the Rams attacker
+                if(in_array($i,$rams))
+                {
+                    $ram += $Attacker['u'.$i];
+                }
+                $involve += $Attacker['u'.$i];
+                $units['Att_unit'][$i] = $Attacker['u'.$i];
+            }
 
+            if ($Attacker['uhero'] != 0)
+            {
+                $units['Att_unit']['hero'] = $Attacker['uhero'];
+                $cap += $Attacker['uhero']*$atkhero['atk'];
+                $ap += $Attacker['uhero']*$atkhero['atk'];
+                $ap = $ap * $atkhero['ob'];
+                $cap = $cap * $atkhero['ob'];
+            }
 
-								$abcount +=1;
-								// Punten van de catavult van de aanvaller
-								if(in_array($i,$catapult)) {
-										$catp += $Attacker['u'.$i];
-								}
-								 // Punten van de Rammen van de aanvaller
-				if(in_array($i,$rams))
-				{
-					$ram += $Attacker['u'.$i];
-				}
-				$involve += $Attacker['u'.$i];
-				$units['Att_unit'][$i] = $Attacker['u'.$i];
-			}
+        }
 
-			if ($Attacker['uhero'] != 0)
-			{
-				$units['Att_unit']['hero'] = $Attacker['uhero'];
-				$cap += $Attacker['uhero']*$atkhero['atk'];
-				$ap += $Attacker['uhero']*$atkhero['atk'];
-				$ap = $ap * $atkhero['ob'];
-				$cap = $cap * $atkhero['ob'];
-			}
+                // Formula for calculating the bonus defensive wall and Residence
 
-		}
-
-				//
-				// Berekent het totaal aantal punten van de Defender
-				//
-		$start = ($def_tribe-1)*10+1;
-		$end = ($def_tribe*10);
-
-		$abcount = 1;
-
-				if($type == 1)
-				{
-						for($y=4;$y<=44;$y++) {
-								if($y == 4 || $y == 14 || $y == 23 || $y == 44)
-								{
-										global ${'u'.$y};
-										if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
-												$dp +=  (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * (($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4) * $defender_artefact;
-												$abcount +=1;
-										$def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
-										if(count($def_foolartefact) > 0){
-										foreach($def_foolartefact as $arte){
-										if($arte['bad_effect'] == 1){
-										$dp *= $arte['effect2'];
-										}else{
-										$dp /= $arte['effect2'];
-										$dp = round($dp);
-										}
-										}
-										}
-										}
-										else {
-												$dp += ($Defender['u'.$y]*$Defender['u'.$y]*$Defender['u'.$y])/4;
-										}
-										$units['Def_unit'][$y] = $Defender['u'.$y];
-										if($units['Def_unit'][$y] > 0){
-										$detected = 1;
-										}
-								}
-						}
-						if($detected == 1){
-							if ($Defender['hero'] != 0){
-							$dp += $defenderhero['di'] * 35;
-							$dp = $dp * $defenderhero['db'];
-							}
-							$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
-							if(!empty($DefendersAll)){
-							foreach($DefendersAll as $defenders) {
-							$fromvillage = $defenders['from'];
-							$dp += $defhero[$fromvillage]['di'] * 35;
-							$dp = $dp * $defhero[$fromvillage]['db'];
-							}
-							}
-						}
-				}
-
-				else
-				{
-						for($y=1;$y<=50;$y++) {
-								global ${'u'.$y};
-								if($y >= $start && $y <= ($end-2) && ${def_ab.$abcount} > 0) {
-										$dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * $Defender['u'.$y];
-										$cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, ${def_ab.$abcount}) - 1)) * $Defender['u'.$y];
-								}
-								else {
-										$dp += $Defender['u'.$y]*${'u'.$y}['di'];
-										$cdp += $Defender['u'.$y]*${'u'.$y}['dc'];
-								}
-								$involve += $Defender['u'.$y];
-								$units['Def_unit'][$y] = $Defender['u'.$y];
-								$abcount +=1;
-						}
-			if($Defender['hero'] != 0)
-			{
-				$units['Def_unit']['hero'] = $Defender['hero'];
-				$cdp += $defenderhero['dc'];
-				$dp += $defenderhero['di'];
-				$dp = $dp * $defenderhero['db'];
-				$cdp = $cdp * $defenderhero['db'];
-			}
-			$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
-			if(!empty($DefendersAll)){
-			foreach($DefendersAll as $defenders) {
-				$fromvillage = $defenders['from'];
-				$cdp += $defhero[$fromvillage]['dc'];
-				$dp += $defhero[$fromvillage]['di'];
-				$dp = $dp * $defhero[$fromvillage]['db'];
-				$cdp = $cdp * $defhero[$fromvillage]['db'];
-			}
-			}
-				}
-
-                // 
-                // Formule voor de berekening van de bonus verdedigingsmuur "en" Residence "; 
-                // 
                 if($def_wall > 0) { 
-                        // Stel de factor berekening voor de "Muur" als het type van de beschaving 
-                        // Factor = 1030 Romeinse muur 
-                        // Factor = 1020 Wall Germanen 
-                        // Factor = 1025 Wall Galliers 
+                        // Set the factor calculation for the "wall" as the type of the civilization 
+                        // Factor = 1030 Wall Roman
+                        // Factor = 1020 Wall Teuton 
+                        // Factor = 1025 Wall Goul 
                         $factor = ($def_tribe == 1)? 1.030 : (($def_tribe == 2)? 1.020 : 1.025); 
-                        // Verdediging infantery = Infantery * Muur (%) 
-                        $dp *= pow($factor,$def_wall); 
-                        // Verdediging Cavelerie = Cavelerie * Muur (%) 
-                        $cdp *= pow($factor,$def_wall); 
+                        // Defense infantry = Infantry * Wall (%) 
+                        
+                        if ($dp>0 || $cdp >0) { //fix by ronix
+                            $dp *= pow($factor,$def_wall); 
+                        // Defense calvary calvary = * Wall (%)
+                            $cdp *= pow($factor,$def_wall); 
 
-                        // Berekening van de Basic defence bonus "Residence" 
-                        $dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
-                        $cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
+                        // Calculation of the Basic defense bonus "Residence" 
+                            $dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
+                            $cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
+                        } else {
+                                    
+                            $dp = 10*pow($factor,$def_wall); 
+                        // Defense calvary calvary = * Wall (%) 
+                            
+                            $cdp = 10*pow($factor,$def_wall); 
+
+                        // Calculation of the Basic defense bonus "Residence"  
+                            $dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
+                            $cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 
+                        }
                 } 
                 else 
-        { 
-                        // Berekening van de Basic defence bonus "Residence" 
+                { 
+                        // Calculation of the Basic defense bonus "Residence" 
                         $dp += (2*(pow($residence,2))); 
                         $cdp += (2*(pow($residence,2))); 
                 }  
 
-				//
-				// Formule voor het berekenen van punten aanvallers (Infanterie & Cavalry)
-				//
-				if($AttackerWref != 0){
-						$rap = ($ap+$cap)+(($ap+$cap)/100*$bid35[$this->getTypeLevel(35,$AttackerWref)]['attri']);
-				}else{
-						$rap = $ap+$cap;
-				}
-				//
-				// Formule voor de berekening van Defensive Punten
-				//
-						 if ($rap==0)
-				 $rdp = ($dp) + ($cdp) + 10;
-			else
-				 $rdp = ($dp * ($ap/$rap)) + ($cdp * ($cap/$rap)) + 10;
-				//
-				// En de Winnaar is....:
-				//
-				$result['Attack_points'] = $rap;
-				$result['Defend_points'] = $rdp;
+                // Formula for calculating points attackers (Infantry & Cavalry)
+                
+                if($AttackerWref != 0){
+                        $rap = ($ap+$cap)+(($ap+$cap)/100*$bid35[$this->getTypeLevel(35,$AttackerWref)]['attri']);
+                }else{
+                        $rap = $ap+$cap;
+                }
+                
+                // Formula for calculating Defensive Points
+                
+                if ($rap==0) 
+                    $rdp = ($dp) + ($cdp) + 10;
+                else
+                    $rdp = ($dp * ($ap/$rap)) + ($cdp * ($cap/$rap)) + 10;
+                
+                // The Winner is....:
+                
+                $result['Attack_points'] = $rap;
+                $result['Defend_points'] = $rdp;
+                $winner = ($rap > $rdp);
 
-				$winner = ($rap > $rdp);
+                $result['Winner'] = ($winner)? "attacker" : "defender";
 
-				$result['Winner'] = ($winner)? "attacker" : "defender";
+                // Formula for calculating the Moral
+                if($attpop > $defpop) {
+                        if ($rap < $rdp) {
+                                $moralbonus = min(1.5, pow($attpop / $defpop, (0.2*($rap/$rdp))));
+                        }
+                        else {
+                        if($defpop==0){
+                                $moralbonus = min(1.5, pow($attpop, 0.2));
+                        }else{
+                                $moralbonus = min(1.5, pow($attpop / $defpop, 0.2));
+                        }
+                        }
+                }
+                else {
+                        $moralbonus = 1.0;
+                }
 
-				// Formule voor de berekening van de Moraal
-				if($attpop > $defpop) {
-						if ($rap < $rdp) {
-								$moralbonus = min(1.5, pow($attpop / $defpop, (0.2*($rap/$rdp))));
-						}
-						else {
-						if($defpop==0){
-								$moralbonus = min(1.5, pow($attpop, 0.2));
-						}else{
-								$moralbonus = min(1.5, pow($attpop / $defpop, 0.2));
-						}
-						}
-				}
-				else {
-						$moralbonus = 1.0;
-				}
+                if($involve >= 1000) {
+                    $Mfactor = round(2*(1.8592-pow($involve,0.015)),4);
+                }
+                else {
+                    $Mfactor = 1.5;
+                }
+                if ($Mfactor < 1.25778){$Mfactor=1.25778;}elseif ($Mfactor > 1.5){$Mfactor=1.5;}
+                // Formula for calculating lost drives
+                // $type = 1 scout, 2?
+                // $type = 3 Normal, 4 Raid
+                if($type == 1)
+                {
+                        
+                        $holder = pow((($rdp*$moralbonus)/$rap),$Mfactor);
+                        $holder = $holder / (1 + $holder);
+                        // Attacker
+                        $result[1] = $holder;
 
-				if($involve >= 1000) {
-					$Mfactor = round(2*(1.8592-pow($involve,0.015)),4);
-				}
-				else {
-					$Mfactor = 1.5;
-				}
-				if ($Mfactor < 1.25778){$Mfactor=1.25778;}elseif ($Mfactor > 1.5){$Mfactor=1.5;}
-				// Formule voor het berekenen verloren drives
-				// $type = 1 Raid, 0 Normal
-				if($type == 1)
-				{
-						$holder = pow((($rdp*$moralbonus)/$rap),$Mfactor);
-						$holder = $holder / (1 + $holder);
-						// Attacker
-						$result[1] = $holder;
+                        // Defender
+                        $result[2] = 0;
+                }
+                else if($type == 2)
+                {
 
-						// Defender
-						$result[2] = 0;
-				}
-				else if($type == 2)
-				{
+                }
+                else if($type == 4) {
+                        $holder = ($winner) ? pow((($rdp*$moralbonus)/$rap),$Mfactor) : pow(($rap/($rdp*$moralbonus)),$Mfactor);
+                        $holder = $holder / (1 + $holder);
+                        // Attacker
+                        $result[1] = $winner ? $holder : 1 - $holder;
+                        // Defender
+                        $result[2] = $winner ? 1 - $holder : $holder;
+                        $ram -= round($ram*$result[1]/100);
+                        $catp -= round($catp*$result[1]/100);
+                }
+                else if($type == 3)
+        {
+                        // Attacker
+                        $result[1] = ($winner)? pow((($rdp*$moralbonus)/$rap),$Mfactor) : 1;
+                        $result[1] = round($result[1],8);
 
-				}
-				else if($type == 4) {
-						$holder = ($winner) ? pow((($rdp*$moralbonus)/$rap),$Mfactor) : pow(($rap/($rdp*$moralbonus)),$Mfactor);
-						$holder = $holder / (1 + $holder);
-						// Attacker
-						$result[1] = $winner ? $holder : 1 - $holder;
-						// Defender
-						$result[2] = $winner ? 1 - $holder : $holder;
-						$ram -= round($ram*$result[1]/100);
-			$catp -= round($catp*$result[1]/100);
-				}
-				else if($type == 3)
-		{
-						// Attacker
-						$result[1] = ($winner)? pow((($rdp*$moralbonus)/$rap),$Mfactor) : 1;
-						$result[1] = round($result[1],8);
+                        // Defender
+                        $result[2] = (!$winner)?  pow(($rap/($rdp*$moralbonus)),$Mfactor) : 1;
+                        $result[2] = round($result[2],8);
+                        // If attacked with "Hero"
+                        $ku = ($att_tribe-1)*10+9;
+            $kings = $Attacker['u'.$ku];
 
-						// Defender
-						$result[2] = (!$winner)?  pow(($rap/($rdp*$moralbonus)),$Mfactor) : 1;
-						$result[2] = round($result[2],8);
-						// Als aangevallen met "Hero"
-						$ku = ($att_tribe-1)*10+9;
-			$kings = $Attacker['u'.$ku];
+            $aviables= $kings-round($kings*$result[1]);
+                        if ($aviables>0){
+                                switch($aviables){
+                                case 1:
+                                $fealthy = rand(20,30);
+                                break;
+                                case 2:
+                                $fealthy = rand(40,60);
+                                break;
+                                case 3:
+                                $fealthy = rand(60,80);
+                                break;
+                                case 4:
+                                $fealthy = rand(80,100);
+                                break;
+                                default:
+                                $fealthy = 100;
+                                break;
+                                }
+                                $result['hero_fealthy'] = $fealthy;
+                        }
+                        $ram -= ($winner)? round($ram*$result[1]/100) : round($ram*$result[2]/100);
+            $catp -= ($winner)? round($catp*$result[1]/100) : round($catp*$result[2]/100);
 
-			$aviables= $kings-round($kings*$result[1]);
-						if ($aviables>0){
-								switch($aviables){
-								case 1:
-								$fealthy = rand(20,30);
-								break;
-								case 2:
-								$fealthy = rand(40,60);
-								break;
-								case 3:
-								$fealthy = rand(60,80);
-								break;
-								case 4:
-								$fealthy = rand(80,100);
-								break;
-								default:
-								$fealthy = 100;
-								break;
-								}
-								$result['hero_fealthy'] = $fealthy;
-						}
-						$ram -= ($winner)? round($ram*$result[1]/100) : round($ram*$result[2]/100);
-			$catp -= ($winner)? round($catp*$result[1]/100) : round($catp*$result[2]/100);
+                }
+                // Formula for the calculation of catapults needed
+                 if($catp > 0 && $tblevel != 0) {
+            $wctp = pow(($rap/$rdp),1.5);
+            $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
+            $wctp *= $catp;
+            $artowner = $database->getVillageField($DefenderWref,"owner");
+            $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+            $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
+            $bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+            if($bartefact > 0){
+            $strongerbuildings = 5;
+            }else if($bartefact1 > 0){
+            $strongerbuildings = 4;
+            }else if($bartefact2 > 0){
+            $strongerbuildings = 3;
+            }else{
+            $strongerbuildings = 1;
+            }
+            $good_effect = $bad_effect = 1;
+            $foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
+            if(count($foolartefact) > 0){
+            foreach($foolartefact as $arte){
+            if($arte['bad_effect'] == 1){
+            $bad_effect = $arte['effect2'];
+            }else{
+            $good_effect = $arte['effect2'];
+            }
+            }
+            }
+            if($stonemason==0){
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            }else{
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            }
+            // Number catapults to take down the building
+            $result[3] = $need;
+            //Number catapults nego
+            $result[4] = $wctp;
+            $result[5] = $moralbonus;
+            $result[6] = $att_ab['a8'];
+        }
+        if($ram > 0 && $walllevel != 0) {
+            $wctp = pow(($rap/$rdp),1.5);
+            $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
+            $wctp *= $ram/2;
+            $artowner = $database->getVillageField($DefenderWref,"owner");
+            $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+            $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
+            $bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+            if($bartefact > 0){
+            $strongerbuildings = 5;
+            }else if($bartefact1 > 0){
+            $strongerbuildings = 4;
+            }else if($bartefact2 > 0){
+            $strongerbuildings = 3;
+            }else{
+            $strongerbuildings = 1;
+            }
+            $good_effect = $bad_effect = 1;
+            $foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
+            if(count($foolartefact) > 0){
+            foreach($foolartefact as $arte){
+            if($arte['bad_effect'] == 1){
+            $bad_effect = $arte['effect2'];
+            }else{
+            $good_effect = $arte['effect2'];
+            }
+            }
+            }
+            if($stonemason==0){
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            }else{
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            }
+            // Number catapults to take down the building
+            $result[7] = $need;
 
-				}
-				// Formule voor de berekening van katapulten nodig
-				 if($catp > 0 && $tblevel != 0) {
-			$wctp = pow(($rap/$rdp),1.5);
-			$wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-			$wctp *= $catp;
-			$artowner = $database->getVillageField($DefenderWref,"owner");
-			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
-			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-			if($bartefact > 0){
-			$strongerbuildings = 5;
-			}else if($bartefact1 > 0){
-			$strongerbuildings = 4;
-			}else if($bartefact2 > 0){
-			$strongerbuildings = 3;
-			}else{
-			$strongerbuildings = 1;
-			}
-			$good_effect = $bad_effect = 1;
-			$foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
-			if(count($foolartefact) > 0){
-			foreach($foolartefact as $arte){
-			if($arte['bad_effect'] == 1){
-			$bad_effect = $arte['effect2'];
-			}else{
-			$good_effect = $arte['effect2'];
-			}
-			}
-			}
-			if($stonemason==0){
-			$need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-			}else{
-			$need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-			}
-			// Aantal katapulten om het gebouw neer te halen
-			$result[3] = $need;
-			// Aantal Katapulten die handeling
-			$result[4] = $wctp;
-			$result[5] = $moralbonus;
-			$result[6] = $att_ab['a8'];
-		}
-		if($ram > 0 && $walllevel != 0) {
-			$wctp = pow(($rap/$rdp),1.5);
-			$wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-			$wctp *= $ram/2;
-			$artowner = $database->getVillageField($DefenderWref,"owner");
-			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
-			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-			if($bartefact > 0){
-			$strongerbuildings = 5;
-			}else if($bartefact1 > 0){
-			$strongerbuildings = 4;
-			}else if($bartefact2 > 0){
-			$strongerbuildings = 3;
-			}else{
-			$strongerbuildings = 1;
-			}
-			$good_effect = $bad_effect = 1;
-			$foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
-			if(count($foolartefact) > 0){
-			foreach($foolartefact as $arte){
-			if($arte['bad_effect'] == 1){
-			$bad_effect = $arte['effect2'];
-			}else{
-			$good_effect = $arte['effect2'];
-			}
-			}
-			}
-			if($stonemason==0){
-			$need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-			}else{
-			$need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-			}
-			// Aantal katapulten om het gebouw neer te halen
-			$result[7] = $need;
+            // Number catapults to action
+            $result[8] = $wctp;
+        }
 
-			// Aantal Katapulten die handeling
-			$result[8] = $wctp;
-		}
+                $result[6] = pow($rap/$rdp*$moralbonus,$Mfactor);
 
-				$result[6] = pow($rap/$rdp*$moralbonus,$Mfactor);
+                $total_att_units = count($units['Att_unit']);
+        $start = intval(($att_tribe-1)*10+1);
+        $end = intval(($att_tribe*10));
 
-				$total_att_units = count($units['Att_unit']);
-		$start = intval(($att_tribe-1)*10+1);
-		$end = intval(($att_tribe*10));
+        for($i=$start;$i <= $end;$i++)
+        {
+            $y = $i-(($att_tribe-1)*10);
+            $result['casualties_attacker'][$y] = round($result[1]*$units['Att_unit'][$i]);
 
-		for($i=$start;$i <= $end;$i++)
-		{
-			$y = $i-(($att_tribe-1)*10);
-			$result['casualties_attacker'][$y] = round($result[1]*$units['Att_unit'][$i]);
+        }
 
-		}
+        if ($units['Att_unit']['hero']>0)
+        {
 
-		if ($units['Att_unit']['hero']>0)
-		{
-
-			$_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$atkhero['heroid']."'");
-			$fdb = mysql_fetch_array($_result);
-			$hero_id=$fdb['heroid'];
-			$hero_health=$fdb['health'];
-			$damage_health=round(100*$result[1]);
-			//exit($damage_health."|".$hero_health."|".$atkhero['heroid']);
-			if ($hero_health<=$damage_health or $damage_health>90)
-			{
-				//hero die
-				$result['casualties_attacker']['11'] = 1;
-				mysql_query("update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
-				mysql_query("update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
-			}
-			else
-			{
-				mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
-			}
-		}
-			unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
-
-
-		if ($units['Def_unit']['hero']>0)
-		{
-
-			$_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$defenderhero['heroid']."'");
-			$fdb = mysql_fetch_array($_result);
-			$hero_id=$fdb['heroid'];
-			$hero_health=$fdb['health'];
-			$damage_health=round(100*$result[2]);
-			if ($hero_health<=$damage_health or $damage_health>90)
-			{
-				//hero die
-				$result['deadherodef'] = 1;
-				mysql_query("update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
-				mysql_query("update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
-			}
-			else
-			{
-				$result['deadherodef'] = 0;
-				mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
-			}
-		}
-			unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
-
-			$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
-			if(!empty($DefendersAll)){
-			foreach($DefendersAll as $defenders) {
-				if($defenders['hero']>0) {
-					if(!empty($heroarray)) { reset($heroarray); }
-							$Reinforcer = $database->getVillageField($defenders['from'],"owner");
-							$heroarraydefender = $this->getBattleHero($Reinforcer);
-			$_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$heroarraydefender['heroid']."'");
-			$fdb = mysql_fetch_array($_result);
-			$hero_id=$fdb['heroid'];
-			$hero_health=$fdb['health'];
-			$damage_health=round(100*$result[2]);
-			if ($hero_health<=$damage_health or $damage_health>90)
-			{
-				//hero die
-				$result['deadheroref'][$defenders['id']] = 1;
-				mysql_query("update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
-				mysql_query("update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
-			}
-			else
-			{
-				$result['deadheroref'][$defenders['id']] = 0;
-				mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
-			}
-						}
-			}
-		}
-			unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
+            $_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$atkhero['heroid']."'");
+            $fdb = mysql_fetch_array($_result);
+            $hero_id=$fdb['heroid'];
+            $hero_health=$fdb['health'];
+            $damage_health=round(100*$result[1]);
+            
+            if ($hero_health<=$damage_health or $damage_health>90)
+            {
+                //hero die
+                $result['casualties_attacker']['11'] = 1;
+                mysql_query("update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
+                mysql_query("update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
+            }
+            else
+            {
+                mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
+            }
+        }
+            unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 
 
-				// Work out bounty
-		$start = ($att_tribe-1)*10+1;
-		$end = ($att_tribe*10);
+        if ($units['Def_unit']['hero']>0)
+        {
 
-		$max_bounty = 0;
+            $_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$defenderhero['heroid']."'");
+            $fdb = mysql_fetch_array($_result);
+            $hero_id=$fdb['heroid'];
+            $hero_health=$fdb['health'];
+            $damage_health=round(100*$result[2]);
+            if ($hero_health<=$damage_health or $damage_health>90)
+            {
+                //hero die
+                $result['deadherodef'] = 1;
+                mysql_query("update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
+                mysql_query("update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
+            }
+            else
+            {
+                $result['deadherodef'] = 0;
+                mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
+            }
+        }
+            unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 
-				for($i=$start;$i<=$end;$i++) {
-				$j = $i-$start+1;
-			$y = $i-(($att_tribe-1)*10);
+            $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+            if(!empty($DefendersAll)){
+            foreach($DefendersAll as $defenders) {
+                if($defenders['hero']>0) {
+                    if(!empty($heroarray)) { reset($heroarray); }
+                            $Reinforcer = $database->getVillageField($defenders['from'],"owner");
+                            $heroarraydefender = $this->getBattleHero($Reinforcer);
+            $_result=mysql_query("select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$heroarraydefender['heroid']."'");
+            $fdb = mysql_fetch_array($_result);
+            $hero_id=$fdb['heroid'];
+            $hero_health=$fdb['health'];
+            $damage_health=round(100*$result[2]);
+            if ($hero_health<=$damage_health or $damage_health>90)
+            {
+                //hero die
+                $result['deadheroref'][$defenders['id']] = 1;
+                mysql_query("update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
+                mysql_query("update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
+            }
+            else
+            {
+                $result['deadheroref'][$defenders['id']] = 0;
+                mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
+            }
+                        }
+            }
+        }
+            unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 
-						$max_bounty += ($Attacker['u'.$i]-$result['casualties_attacker'][$y])*${'u'.$i}['cap'];
 
-				}
+                // Work out bounty
+        $start = ($att_tribe-1)*10+1;
+        $end = ($att_tribe*10);
 
-				$result['bounty'] = $max_bounty;
+        $max_bounty = 0;
 
+                for($i=$start;$i<=$end;$i++) {
+                $j = $i-$start+1;
+            $y = $i-(($att_tribe-1)*10);
 
-				return $result;
-		}
+                        $max_bounty += ($Attacker['u'.$i]-$result['casualties_attacker'][$y])*${'u'.$i}['cap'];
+
+                }
+
+                $result['bounty'] = $max_bounty;
+
+                
+                return $result;
+        }  
+        
+                public function getDataDefScout($defenders,$def_ab,$defender_artefact) {
+            global $database;
+            //fix by ronix            
+            for($y=4;$y<=44;$y++) {
+                if($y == 4 || $y == 14 || $y == 23 || $y == 44){
+                    global ${'u'.$y};
+                                                            
+                    if($defenders['u'.$y]>0 && $def_ab[$y] > 0) {
+                        $dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y] * $defender_artefact;;
+                        $cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y] * $defender_artefact;;
+                        $def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
+                        if(count($def_foolartefact) > 0){
+                            foreach($def_foolartefact as $arte){
+                                if($arte['bad_effect'] == 1){
+                                    $dp *= $arte['effect2'];
+                                }else{
+                                    $dp /= $arte['effect2'];
+                                    $dp = round($dp);
+                                }
+                            }
+                        }
+                    }else {
+                        $dp += $defenders['u'.$y]*${'u'.$y}['di'];
+                        $cdp += $defenders['u'.$y]*${'u'.$y}['dc'];
+                        $units['Def_unit'][$y] = $defenders['u'.$y];
+                        if($units['Def_unit'][$y] > 0){
+                            $detected = 1;
+                        }
+                    }
+                    $invol += $defenders['u'.$y]; //total troops
+                    $units['Def_unit'][$y] = $defenders['u'.$y];                        
+                }
+            }
+        
+            $datadef['dp']=$dp;
+            $datadef['cdp']=$cdp;
+            $datadef['detect']=($detected==1)? 1:0;
+            $datadef['involve']=$invol;
+            return $datadef;
+        }
+        
+        public function getDataDef($defenders,$def_ab) {
+            //fix by ronix            
+            for($y=1;$y<=50;$y++) {
+                global ${'u'.$y};
+                if ($defenders['u'.$y]>0) {
+                    if ($def_ab[$y]>0) {
+                        $dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y];
+                        $cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y];
+                    }else{
+                        $dp += $defenders['u'.$y]*${'u'.$y}['di'];
+                        $cdp += $defenders['u'.$y]*${'u'.$y}['dc'];
+                    }    
+                    
+                }
+                $invol += $defenders['u'.$y]; //total troops        
+                $units['Def_unit'][$y] = $defenders['u'.$y];
+            }
+            $datadef['dp']=$dp;
+            $datadef['cdp']=$cdp;
+            $datadef['involve']=$invol;
+            
+            return $datadef;
+        
+        }  
 
 		public function resolveConflict($data) {
 				global $database,$units,$unitsbytype;
