@@ -6,8 +6,8 @@
 ##  Project:       TravianZ                        		       	       ##
 ##  Version:       01.09.2013 						       ##
 ##  Filename       Battle.php                                                  ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow  	       ##
-##  Fixed by:      Shadow - Doubleing Troops , STARVATION , HERO FIXED COMPL.  ##
+##  Developed by:  ronix , Shadow , NarcisRO  				       ##
+##  Fixed by:      ronix : war simulator and battle system.  		       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro 				       ##
