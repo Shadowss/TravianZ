@@ -3,6 +3,20 @@
 if(!isset($_GET['s'])) {
 	$_GET['s']=0;
 }
+$tz=(isset($_GET['t']))? $_GET['t']:1;
+    switch($tz) {
+        case 1: $t_zone="Africa/Dakar";break;
+        case 2: $t_zone="America/New_York";break;
+        case 3: $t_zone="Antarctica/Casey";break;
+        case 4: $t_zone="Arctic/Longyearbyen";break;
+        case 5: $t_zone="Asia/Kuala_Lumpur";break;
+        case 6: $t_zone="Atlantic/Azores";break;
+        case 7: $t_zone="Australia/Melbourne";break;
+        case 8: $t_zone="Europe/Bucharest";break;
+        case 9: $t_zone="Indian/Maldives";break;
+        case 10: $t_zone="Pacific/Fiji";break;
+    }
+date_default_timezone_set($t_zone);
 ?>
 
  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -10,7 +24,7 @@ if(!isset($_GET['s'])) {
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>TravianX Installation</title>
+	<title>TravianZ Installation - Version Modified by Shadow v.7.0.0</title>
 	<link rel="shortcut icon" href="favicon.ico" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
@@ -26,6 +40,18 @@ if(!isset($_GET['s'])) {
 	<link href="../gpack/travian_default/lang/en/lang.css?e21d2" rel="stylesheet" type="text/css" />
 </head>
 <body>
+<script LANGUAGE="JavaScript">
+function refresh(tz) {
+     var dt = new Array();
+    dt=tz.split(",");
+    tz=dt[0];
+    location="?s=1&t="+tz;
+}
+function proceed() {
+    document.dataform.Submit.disabled=true;
+    return(true);
+}
+</script>
 	<div class="wrapper">
 		<img class="c1" src="img/x.gif" id="msfilter" alt="" name="msfilter" />
 
@@ -50,7 +76,7 @@ if(!isset($_GET['s'])) {
 					}
 					?>
 				<div class="headline"><center>
-				<span class="f18 c5">TravianX Installation Script</span>
+				<span class="f18 c5">TravianZ Installation Script - Version Modified by Shadow v.7.0.0</span>
 				</center></div>
 
 				<?php
