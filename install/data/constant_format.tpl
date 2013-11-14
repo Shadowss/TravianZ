@@ -24,6 +24,11 @@
 // ***** Name
 define("SERVER_NAME","%SERVERNAME%");
 
+// ***** Time zone added by ronix
+// Defines server time zone.
+define("TIMEZONE","%STIMEZONE%");
+date_default_timezone_set(TIMEZONE);
+
 // ***** Started
 // Defines when has server started.
 define("COMMENCE","%STARTTIME%");
