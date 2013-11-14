@@ -24,7 +24,7 @@ date_default_timezone_set($t_zone);
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>TravianZ Installation - Version Modified by Shadow v.7.0.0</title>
+	<title>TravianZ Installation</title>
 	<link rel="shortcut icon" href="favicon.ico" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
@@ -76,7 +76,7 @@ function proceed() {
 					}
 					?>
 				<div class="headline"><center>
-				<span class="f18 c5">TravianZ Installation Script - Version Modified by Shadow v.7.0.0</span>
+				<span class="f18 c5">TravianZ Installation Script</span>
 				</center></div>
 
 				<?php
