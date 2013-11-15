@@ -6,8 +6,8 @@
 ##  Project:       TravianZ                        		       	       ##
 ##  Version:       01.09.2013 						       ##
 ##  Filename       Battle.php                                                  ##
-##  Developed by:  ronix , Shadow , NarcisRO  				       ##
-##  Fixed by:      ronix : war simulator and battle system.  		       ##
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow  	       ##
+##  Fixed by:      Shadow - Doubleing Troops , STARVATION , HERO FIXED COMPL.  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro 				       ##
@@ -39,6 +39,7 @@ class Battle {
 					array_push($target,5);
 				}
 								$_POST['target'] = $target;
+								if (intval($_POST['h_off_bonus'])>20) $post['h_off_bonus']=20;
 								if(isset($post['a1_1'])) {
 										$sum = $sum2 = 0;
 										for($i=1;$i<=10;$i++) {
@@ -82,6 +83,13 @@ class Battle {
 
                 return array('heroid'=>$heroarray[0]['heroid'],'unit'=>$heroarray[0]['unit'],'atk'=>$h_atk,'di'=>$h_di,'dc'=>$h_dc,'ob'=>$h_ob,'db'=>$h_db,'health'=>$heroarray['health']);
                 }
+                
+        private function getBattleHeroSim($attbonus) {
+        	global $database;
+        	$h_atk = 0;
+        	$h_ob = 1 + 0.010 * $attbonus;
+        	return array('unit'=>16,'atk'=>$h_atk,'ob'=>$h_ob);
+        }  
 		
         private function simulate($post) {
                 //fix by ronix
@@ -89,6 +97,7 @@ class Battle {
                 $attacker = array('u1'=>0,'u2'=>0,'u3'=>0,'u4'=>0,'u5'=>0,'u6'=>0,'u7'=>0,'u8'=>0,'u9'=>0,'u10'=>0,'u11'=>0,'u12'=>0,'u13'=>0,'u14'=>0,'u15'=>0,'u16'=>0,'u17'=>0,'u18'=>0,'u19'=>0,'u20'=>0,'u21'=>0,'u22'=>0,'u23'=>0,'u24'=>0,'u25'=>0,'u26'=>0,'u27'=>0,'u28'=>0,'u29'=>0,'u30'=>0,'u31'=>0,'u32'=>0,'u33'=>0,'u34'=>0,'u35'=>0,'u36'=>0,'u37'=>0,'u38'=>0,'u39'=>0,'u40'=>0,'u41'=>0,'u42'=>0,'u43'=>0,'u44'=>0,'u45'=>0,'u46'=>0,'u47'=>0,'u48'=>0,'u49'=>0,'u50'=>0);
                 $start = ($post['a1_v']-1)*10+1;
                 $index = 1;
+                $offhero=intval($post['h_off_bonus']);
                                 
                 for($i=$start;$i<=($start+9);$i++) {
                         $attacker['u'.$i] = $post['a1_'.$index];
@@ -146,13 +155,12 @@ class Battle {
                 $walllevel = 0;
                 }
                 $wall = $walllevel;
-                                
-                if(!$scout) 
-                    
-                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
                 
-                else 
-                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0);
+                if(!$scout) 
+        
+    			return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,$offhero,0,0,0,0);
+		else 
+   			return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0,0);
         }  
 
 	 public function getTypeLevel($tid,$vid) {
@@ -203,7 +211,7 @@ class Battle {
 	}
 
 		//1 raid 0 normal
-        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
+        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
                 global $bid34,$bid35,$database;
                 //fix by ronix
                 
@@ -410,13 +418,17 @@ class Battle {
                 $units['Att_unit'][$i] = $Attacker['u'.$i];
             }
 
-            if ($Attacker['uhero'] != 0)
-            {
-                $units['Att_unit']['hero'] = $Attacker['uhero'];
-                $cap += $Attacker['uhero']*$atkhero['atk'];
-                $ap += $Attacker['uhero']*$atkhero['atk'];
-                $ap = $ap * $atkhero['ob'];
-                $cap = $cap * $atkhero['ob'];
+           if ($Attacker['uhero'] != 0)
+    	   {
+           	$units['Att_unit']['hero'] = $Attacker['uhero'];
+           	$ap = $ap * $atkhero['ob'];
+           	$cap = $cap * $atkhero['ob'];
+    }
+
+    	   if ($offhero!=0) {
+        	$atkhero=$this->getBattleHeroSim($offhero);
+        	$ap = $ap * $atkhero['ob'];
+        	$cap = $cap * $atkhero['ob'];  
             }
 
         }
@@ -536,12 +548,13 @@ class Battle {
                 else if($type == 3)
         {
                         // Attacker
-                        $result[1] = ($winner)? pow((($rdp*$moralbonus)/$rap),$Mfactor) : 1;
-                        $result[1] = round($result[1],8);
+    			$result[1] = ($winner)? round(pow((($rdp*$moralbonus)/$rap),$Mfactor),8) : 1;
+    			if ($result[1]>1) {$result[1]=1;$winner=false;$result['Winner'] = "defender";}
 
                         // Defender
-                        $result[2] = (!$winner)?  pow(($rap/($rdp*$moralbonus)),$Mfactor) : 1;
-                        $result[2] = round($result[2],8);
+    			$result[2] = (!$winner)? round(pow(($rap/($rdp*$moralbonus)),$Mfactor),8) : 1;
+    			if ($result[1]==1) {$result[2]=round(pow(($rap/($rdp*$moralbonus)),$Mfactor),8);}
+    			if ($result[2]>1) {$result[2]=1;$result['Winner'] = "attacker";$winner=true;}  
                         // If attacked with "Hero"
                         $ku = ($att_tribe-1)*10+9;
             $kings = $Attacker['u'.$ku];
@@ -575,7 +588,7 @@ class Battle {
                  if($catp > 0 && $tblevel != 0) {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-            $wctp *= $catp;
+            $wctp *= $catp+($att_ab8/1.5);
             $artowner = $database->getVillageField($DefenderWref,"owner");
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
@@ -601,9 +614,9 @@ class Battle {
             }
             }
             if($stonemason==0){
-            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab8))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
             }else{
-            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab8))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
             }
             // Number catapults to take down the building
             $result[3] = $need;
@@ -615,7 +628,7 @@ class Battle {
         if($ram > 0 && $walllevel != 0) {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-            $wctp *= $ram/2;
+            $wctp *= ($ram/2) + ($att_ab7/1.5);
             $artowner = $database->getVillageField($DefenderWref,"owner");
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
@@ -641,9 +654,9 @@ class Battle {
             }
             }
             if($stonemason==0){
-            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab7))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
             }else{
-            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab7))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
             }
             // Number catapults to take down the building
             $result[7] = $need;
