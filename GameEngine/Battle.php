@@ -49,19 +49,31 @@ class Battle {
 												if($post['palast'] == "") {
 														$post['palast'] = 0;
 												}
-												if(isset($post['wall1']) && $post['wall1'] == "") {
-														$post['wall1'] = 0;
-												}
-												if(isset($post['wall2']) && $post['wall2'] == "") {
-														$post['wall2'] = 0;
-												}
-												if(isset($post['wall3']) && $post['wall3'] == "") {
-														$post['wall3'] = 0;
-												}if(isset($post['wall4']) && $post['wall4'] == "") {
-							$post['wall4'] = 0;
-						}if(isset($post['wall5']) && $post['wall5'] == "") {
-							$post['wall5'] = 0;
-						}
+												    if(isset($post['wall1'])) {
+        $post['wall1'] = intval($post['wall1']);
+        if ($post['wall1'] > 20) $post['wall1']=20;
+        $post['walllevel']=$post['wall1'];
+    }
+    if(isset($post['wall2'])) {
+        $post['wall2'] = intval($post['wall2']);
+        if ($post['wall2'] > 20) $post['wall2']=20;
+        if ($post['walllevel']==0) $post['walllevel']=$post['wall2'];
+    }
+    if(isset($post['wall3'])) {
+        $post['wall3'] = intval($post['wall3']);
+        if ($post['wall3'] > 20) $post['wall3']=20;
+        if ($post['walllevel']==0) $post['walllevel']=$post['wall3'];
+    }
+    if(isset($post['wall4'])) {
+        $post['wall4'] = intval($post['wall4']);
+        if ($post['wall4'] > 20) $post['wall4']=20;
+        if ($post['walllevel']==0) $post['walllevel']=$post['wall4'];
+    }
+    if(isset($post['wall5'])) {
+        $post['wall5'] = intval($post['wall5']);
+        if ($post['wall5'] > 20) $post['wall5']=20;
+        if ($post['walllevel']==0) $post['walllevel']=$post['wall5'];
+    }  
 												$post['tribe'] = $target[0];
 												$_POST['result'] = $this->simulate($post);
 												$form->valuearray = $post;
@@ -138,22 +150,7 @@ class Battle {
                                 }
                         }
                 }
-                if($post['wall1'] != 0){
-                $walllevel = $post['wall1'];
-                }else if($post['wall2'] != 0){
-                $walllevel = $post['wall2'];
-                }else if($post['wall3'] != 0){
-                $walllevel = $post['wall3'];
-                }else if($post['wall4'] != 0){
-                $walllevel = $post['wall4'];
-                }else if($post['wall5'] != 0){
-                $walllevel = $post['wall5'];
-                }else{
-                $walllevel = 0;
-                }
-                if($walllevel > 20){
-                $walllevel = 0;
-                }
+                $walllevel=$post['walllevel'];
                 $wall = $walllevel;
                 
                 if(!$scout) 
