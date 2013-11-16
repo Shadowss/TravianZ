@@ -64,25 +64,42 @@ if(isset($_POST['result'])) {
 	$target = isset($_POST['target'])? $_POST['target'] : array();
 	$tribe = isset($_POST['mytribe'])? $_POST['mytribe'] : $session->tribe;
 	include("Templates/Simulator/res_a".$tribe.".tpl");
-	foreach($target as $tar) {
-		include("Templates/Simulator/res_d".$tar.".tpl");
-	}
-	echo "<p>Type of attack: <b>";
-	echo $form->getValue('ktyp') == 0? "Normal" : "Raid";
-	echo "</b></p>";
-	if (isset($_POST['result'][3])&&isset($_POST['result'][4])){
-		if ($_POST['result'][4]>$_POST['result'][3]){
-			echo "<p>Building destroyed</p>";
-		}elseif ($_POST['result'][4]==0){
-			echo "<p>The building isn't destroyed</p>";
-		}else{
-			$demolish=$_POST['result'][4]/$_POST['result'][3];
-			//$Katalife=round($_POST['result'][4]-($_POST['result'][4]*$_POST['result'][1]));
-			//$totallvl = round($form->getValue('kata')-($form->getValue('kata') * $demolish));
-			$totallvl = round(sqrt(pow(($form->getValue('kata')+0.5),2)-($_POST['result'][4]*8)));
-			echo "<p>Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$totallvl."</b></p>";
-		}
-	}
+    foreach($target as $tar) {
+        include("Templates/Simulator/res_d".$tar.".tpl");
+    }
+    echo "<p>Type of attack: <b>";
+    echo $form->getValue('ktyp') == 0? "Normal" : "Raid";
+    echo "</b></p>";
+    echo "<p>";
+    if (isset($_POST['result'][7])&&isset($_POST['result'][8])){
+        if ($form->getValue('ktyp') == 1) {
+            echo "Hint: The ram does not work during a raid.<br>";
+        }elseif ($_POST['result'][8]>$_POST['result'][7]){
+            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>0</b></p>";
+        }elseif ($_POST['result'][8]==0){
+            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$form->getValue('walllevel')."</b></p>";
+        }else{
+            $demolish_ram=$_POST['result'][8]/$_POST['result'][7];
+            $totallvl = round(sqrt(pow(($form->getValue('kata')+0.5),2)-($_POST['result'][8]*8)));
+            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$totallvl."</b></p>";
+        }
+    }
+    
+    if (isset($_POST['result'][3])&&isset($_POST['result'][4])){
+        if ($form->getValue('ktyp') == 1) {
+            echo "Hint: The catapult does not shoot during a raid.</p>";
+        }elseif ($_POST['result'][4]>$_POST['result'][3]){
+            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>0</b></p>";
+        }elseif ($_POST['result'][4]==0){
+            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$form->getValue('kata')."</b></p></p>";
+        }else{
+            $demolish=$_POST['result'][4]/$_POST['result'][3];
+            //$Katalife=round($_POST['result'][4]-($_POST['result'][4]*$_POST['result'][1]));
+            //$totallvl = round($form->getValue('kata')-($form->getValue('kata') * $demolish));
+            $totallvl = round(sqrt(pow(($form->getValue('kata')+0.5),2)-($_POST['result'][4]*8)));
+            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$totallvl."</b></p>";
+        }
+    } 
 }
 $target = isset($_POST['target'])? $_POST['target'] : array();
 $tribe = isset($_POST['mytribe'])? $_POST['mytribe'] : $session->tribe;
