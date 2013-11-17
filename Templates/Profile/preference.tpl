@@ -6,13 +6,17 @@ if(isset($_GET['del']) && is_numeric($_GET['del'])){
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       links.tpl                                                   ##
-##  Developed by:  Slim, Manuel Mannhardt < manuel_mannhardt@web.de >          ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       01.09.2013 						       	 				   ##
+##  Filename       preference.php                                              ##
+##  Developed by:  Dzoki                                                       ##
+##  Fixed by:      Shadow / Skype : cata7007                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
 ##                                                                             ##
 #################################################################################
-
 // Save new link or just edit a link
 if($_POST) {
     $links = array();
@@ -111,14 +115,14 @@ while($data = mysql_fetch_assoc($query)) {
 	  </td>
 	 <td class="nr"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="nr<?php print $i; ?>" value="<?php print $link['pos']; ?>" size="1" maxlength="3" /><input type="hidden" name="id<?php print $i; ?>" value="<?php print $link['id']; ?>" /></td>
 	 <td class="nam"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkname<?php print $i; ?>" value="<?php print $link['name']; ?>" maxlength="30" /></td>
-	 <td class="link"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="<?php print $link['url']; ?>" maxlength="255" /></td>          
+	 <td class="txt"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="<?php print $link['url']; ?>" maxlength="255" /></td>          
       </tr>
       <?php ++$i; $last_pos = $link['pos']; endforeach; ?>
       <tr>
 	<td></td>
 	<td class="nr"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="nr<?php print $i; ?>" value="<?php print ($last_pos + 1); ?>" size="1" maxlength="3"></td>
 	<td class="nam"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkname<?php print $i; ?>" value="" maxlength="30"></td>
-	<td class="link"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="" maxlength="255"></td>
+	<td class="txt"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="" maxlength="255"></td>
       </tr>
       <tr>
        <td colspan="4"><input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></td>
@@ -126,7 +130,8 @@ while($data = mysql_fetch_assoc($query)) {
     </tbody>
   </table>
 </form>
-<!-- <table cellpadding="1" cellspacing="1" id="completion" class="set"><thead>
+
+<table cellpadding="1" cellspacing="1" id="completion" class="set"><thead>
     <tr>
 	<th colspan="2">Auto completion</th>
     </tr>
@@ -245,5 +250,5 @@ while($data = mysql_fetch_assoc($query)) {
 </tbody>
 </table><p class="btn"><input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
 
-</form> //-->
+</form> 
 
