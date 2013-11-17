@@ -98,7 +98,7 @@ if(isset($id))
 				</tr>
 				<tr>
 					<td>Coordinates:</td>
-					<td colspan="2"><a href="<?php echo HOMEPAGE ?>karte.php?d=<?php echo $village['wref']; ?>&c=<?php echo $generator->getMapCheck($village['wref']); ?>" target="blank">(<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</a></td>
+					<td colspan="2"><a href="<?php echo HOMEPAGE ?>/karte.php?d=<?php echo $village['wref']; ?>&c=<?php echo $generator->getMapCheck($village['wref']); ?>" target="blank">(<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</a></td>
 				</tr>
 				<tr>
 					<td>Village ID</td>
