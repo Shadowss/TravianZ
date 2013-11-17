@@ -28,7 +28,7 @@ else {
 	$building->procBuild($_GET);
 }
 
-if($_GET['s'] == 1){
+if(isset($_GET['s'])){
 $automation->isWinner();
 }
 ?>
