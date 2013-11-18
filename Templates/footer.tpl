@@ -19,10 +19,11 @@
 
 									<center><br />
 
-									<div class="copyright">&copy; 2010 - 2011 TravianX All rights reserved</div>
+									<div class="copyright">&copy; 2010 - 2013 <?php echo SERVER_NAME;?> All rights reserved</div>
 
-									<div class="copyright">Server running on: <b><font color="Red">TravianZ</font></b>
-</div>
+									<div class="copyright">Server running on: <a href="version.php"><b><font color="Red">v.7.0</font></b></a>
+
+									</div>
 
 													</div>
 
