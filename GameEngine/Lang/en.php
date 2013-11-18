@@ -308,7 +308,7 @@ define("OWN_ATTACKING_TROOPS","Own attacking troops");
 define("ATTACK","Attack");
 define("OWN_REINFORCING_TROOPS","Own reinforcing troops");
 define("TROOPS_DORF","Troops:");
-define("NEWVILLAGE","New village");
+define("NEWVILLAGE","New vill.");
 define("FOUNDNEWVILLAGE","Founding New village");
 define("UNDERATTACK","The village is under attack");
 define("OASISATTACK","The Oasis is under attack");
