@@ -30,21 +30,21 @@ else if(isset($_GET['r'])) {
 			<td class="aligned_coords"><div class="cox">('.$returnVillageArray[$i-1]['x'].'</div><div class="pi">|</div><div class="coy">'.$returnVillageArray[$i-1]['y'].')</div></td></tr>';
 	}
 }
-else if(isset($_GET['o'])) {
-		for($i=1;$i<=count($session->villages);++$i){echo'
-		<tr>
-			<td class="dot '.(($_SESSION['wid'] == $returnVillageArray[$i-1]['wref'] ) ? 'hl':'').'">●</td>
-			<td class="link"><a href="?newdid='.$returnVillageArray[$i-1]['wref'].(($id>=19) ? "&id=".$id : "&o=".$_GET['o']).'">'.$returnVillageArray[$i-1]['name'].'</a></td>
-			<td class="aligned_coords"><div class="cox">('.$returnVillageArray[$i-1]['x'].'</div><div class="pi">|</div><div class="coy">'.$returnVillageArray[$i-1]['y'].')</div></td></tr>';
-	}
-}
 else if(isset($_GET['z'])) {
-		for($i=1;$i<=count($session->villages);++$i){echo'
-		<tr>
-			<td class="dot '.(($_SESSION['wid'] == $returnVillageArray[$i-1]['wref'] ) ? 'hl':'').'">●</td>
-			<td class="link"><a href="?newdid='.$returnVillageArray[$i-1]['wref'].(($id>=19) ? "&id=".$id : "&z=".$_GET['z']).'">'.$returnVillageArray[$i-1]['name'].'</a></td>
-			<td class="aligned_coords"><div class="cox">('.$returnVillageArray[$i-1]['x'].'</div><div class="pi">|</div><div class="coy">'.$returnVillageArray[$i-1]['y'].')</div></td></tr>';
-	}
+        for($i=1;$i<=count($session->villages);++$i){echo'
+        <tr>
+            <td class="dot '.(($_SESSION['wid'] == $returnVillageArray[$i-1]['wref'] ) ? 'hl':'').'">●</td>
+            <td class="link"><a href="?newdid='.$returnVillageArray[$i-1]['wref'].(($id>=19) ? "&id=".$id : "&z=".$_GET['z']).'">'.$returnVillageArray[$i-1]['name'].'</a></td>
+            <td class="aligned_coords"><div class="cox">('.$returnVillageArray[$i-1]['x'].'</div><div class="pi">|</div><div class="coy">'.$returnVillageArray[$i-1]['y'].')</div></td></tr>';
+    }
+}
+else if(isset($_GET['o'])) {
+        for($i=1;$i<=count($session->villages);++$i){echo'
+        <tr>
+            <td class="dot '.(($_SESSION['wid'] == $returnVillageArray[$i-1]['wref'] ) ? 'hl':'').'">●</td>
+            <td class="link"><a href="?newdid='.$returnVillageArray[$i-1]['wref'].(($id>=19) ? "&id=".$id : "&o=".$_GET['o']).'">'.$returnVillageArray[$i-1]['name'].'</a></td>
+            <td class="aligned_coords"><div class="cox">('.$returnVillageArray[$i-1]['x'].'</div><div class="pi">|</div><div class="coy">'.$returnVillageArray[$i-1]['y'].')</div></td></tr>';
+    }
 }
 else if(isset($_GET['s'])) {
 		for($i=1;$i<=count($session->villages);++$i){echo'
