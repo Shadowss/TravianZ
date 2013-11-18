@@ -67,6 +67,7 @@ class Village {
 		$this->unitarray = $database->getUnit($this->wid);
 		$this->enforcetome = $database->getEnforceVillage($this->wid,0);
 		$this->enforcetoyou = $database->getEnforceVillage($this->wid,1);
+		$this->enforceoasis = $database->getOasisEnforce($this->wid,0);
 		$this->unitall =  $technology->getAllUnits($this->wid);
 		$this->techarray = $database->getTech($this->wid);
 		$this->abarray = $database->getABTech($this->wid);
