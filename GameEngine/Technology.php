@@ -229,47 +229,66 @@ class Technology {
 		return $ownunit;
 	}
 
-	function getAllUnits($base,$InVillageOnly=False,$mode=0) {
-		global $database;
-		$ownunit = $database->getUnit($base);
-		$ownunit['u99'] -= $ownunit['u99'];
-		$ownunit['u99o'] -= $ownunit['u99o'];
-		$enforcementarray = $database->getEnforceVillage($base,0);
-		if(count($enforcementarray) > 0) {
-			foreach($enforcementarray as $enforce) {
-				for($i=1;$i<=50;$i++) {
-					$ownunit['u'.$i] += $enforce['u'.$i];
-				}
-				$ownunit['hero'] += $enforce['hero'];
-			}
-		}
-		if($mode==0){
-		$prisoners = $database->getPrisoners($base);
-		if(!empty($prisoners)) {
-		foreach($prisoners as $prisoner){
-			$owner = $database->getVillageField($base,"owner");
-			$ownertribe = $database->getUserField($owner,"tribe",0);
-			$start = ($ownertribe-1)*10+1;
-			$end = ($ownertribe*10);
-			for($i=$start;$i<=$end;$i++) {
-			$j = $i-$start+1;
-			$ownunit['u'.$i] += $prisoner['t'.$j];
-			}
-			$ownunit['hero'] += $prisoner['t11'];
-		}
-		}
-		}
-		if(!$InVillageOnly) {
-			$movement = $database->getVillageMovement($base);
-			if(!empty($movement)) {
-				for($i=1;$i<=50;$i++) {
-					$ownunit['u'.$i] += $movement['u'.$i];
-				}
-				$ownunit['hero'] += $movement['hero'];
-			}
-		}
-		return $ownunit;
-	}
+    function getAllUnits($base,$InVillageOnly=False,$mode=0) {
+        global $database;
+        $ownunit = $database->getUnit($base);
+        $ownunit['u99'] -= $ownunit['u99'];
+        $ownunit['u99o'] -= $ownunit['u99o'];
+        $enforcementarray = $database->getEnforceVillage($base,0);
+        if(count($enforcementarray) > 0) {
+            foreach($enforcementarray as $enforce) {
+                for($i=1;$i<=50;$i++) {
+                    $ownunit['u'.$i] += $enforce['u'.$i];
+                }
+                $ownunit['hero'] += $enforce['hero'];
+            }
+        }
+        if ($mode==0) {
+            $enforceoasis=$database->getOasisEnforce($base,0);
+            if(count($enforceoasis) > 0) {
+                foreach($enforceoasis as $enforce) {
+                    for($i=1;$i<=50;$i++) {
+                        $ownunit['u'.$i] += $enforce['u'.$i];
+                    }
+                    $ownunit['hero'] += $enforce['hero'];
+                }
+            }
+            $enforceoasis1=$database->getOasisEnforce($base,1);
+            if(count($enforceoasis1) > 0) {
+                foreach($enforceoasis1 as $enforce) {
+                    for($i=1;$i<=50;$i++) {
+                        $ownunit['u'.$i] += $enforce['u'.$i];
+                    }
+                    $ownunit['hero'] += $enforce['hero'];
+                }
+            }            
+            
+            $prisoners = $database->getPrisoners($base);
+            if(!empty($prisoners)) {
+                foreach($prisoners as $prisoner){
+                    $owner = $database->getVillageField($base,"owner");
+                    $ownertribe = $database->getUserField($owner,"tribe",0);
+                    $start = ($ownertribe-1)*10+1;
+                    $end = ($ownertribe*10);
+                    for($i=$start;$i<=$end;$i++) {
+                        $j = $i-$start+1;
+                        $ownunit['u'.$i] += $prisoner['t'.$j];
+                    }
+                    $ownunit['hero'] += $prisoner['t11'];
+                }
+            }
+        }
+        if(!$InVillageOnly) {
+            $movement = $database->getVillageMovement($base);
+            if(!empty($movement)) {
+                for($i=1;$i<=50;$i++) {
+                    $ownunit['u'.$i] += $movement['u'.$i];
+                }
+                $ownunit['hero'] += $movement['hero'];
+            }
+        }
+        return $ownunit;
+    }
 
 	public function meetTRequirement($unit) {
 		global $session;
