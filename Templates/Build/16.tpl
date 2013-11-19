@@ -179,10 +179,13 @@ if($units_incoming > 0 or $settlers_incoming > 0 or $oasis_incoming > 0){
             }
             if(count($enforceoasis) > 0) {
                 echo "<h4>Troops in oasis</h4>";
-                foreach($enforceoasis as $enforce) {
+                    foreach($enforceoasis as $enforce) {
                     $colspan = 10+$enforce['hero'];
                     echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
                     <a href=\"karte.php?d=".$enforce['conqured']."&c=".$generator->getMapCheck($enforce['conqured'])."\">".$database->getVillageField($enforce['conqured'],"name")."</a></td>
+                    <td colspan=\"$colspan\">";
+                    //edit code
+                    echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'],"owner")."\">".$database->getUserField($database->getVillageField($enforce['from'],"owner"),"username",0)." troops</a> from <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'],"name")."</a>"; 
                     <td colspan=\"$colspan\">";
                     echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'],"owner")."\">".$database->getUserField($database->getVillageField($enforce['from'],"owner"),"username",0)." troops</a>";
                     echo "</td></tr></thead><tbody class=\"units\">";
