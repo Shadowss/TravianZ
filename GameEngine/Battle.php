@@ -154,10 +154,11 @@ class Battle {
                 $wall = $walllevel;
                 
                 if(!$scout) 
-        
-    			return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,$offhero,0,0,0,0);
-		else 
-   			return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0,0);
+                    
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,$offhero,0,0,0,0,0);
+                
+                else 
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0,0,0);
         }  
 
 	 public function getTypeLevel($tid,$vid) {
@@ -208,7 +209,7 @@ class Battle {
 	}
 
 		//1 raid 0 normal
-        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref) {
+        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby) {
                 global $bid34,$bid35,$database;
                 //fix by ronix
                 
@@ -282,8 +283,13 @@ class Battle {
         }
                 
         //get every enforcement in defender village
-                
-        $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+        
+        if ($conqureby>0) { //def from oasis
+            $DefendersAll = $database->getOasisEnforce($data['to'],1);
+        } else {
+            $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+        }
+        if(!empty($DefendersAll)){
     
         // Calculates the total points of the Defender
         if(!empty($DefendersAll)){
