@@ -1231,13 +1231,13 @@ class Automation {
 			$from = $database->getMInfo($data['from']);
 			$toF = $database->getOasisV($data['to']);
 			$fromF = $database->getVillage($data['from']);
-
+			$conqureby=0;
                     //get defence units
                     $Defender = array();
                     $enforDefender = array();
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to']);
-                    $enforcementarray = $database->getEnforceVillage($data['to'],0);
+                    $enforcementarray = $database->getOasisEnforce($data['to'],1);
                     
                     if(count($enforcementarray) > 0) {
                         foreach($enforcementarray as $enforce) {
