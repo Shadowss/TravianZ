@@ -3386,39 +3386,55 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		return array($wood,$clay,$iron,$crop);
 	}
 
-	function getAllUnits($base) {
-		global $database;
-		$ownunit = $database->getUnit($base);
-		$enforcementarray = $database->getEnforceVillage($base,0);
-		if(count($enforcementarray) > 0) {
-			foreach($enforcementarray as $enforce) {
-				for($i=1;$i<=50;$i++) {
-					$ownunit['u'.$i] += $enforce['u'.$i];
-				}
-			}
-		}
-		$movement = $database->getVillageMovement($base);
-		if(!empty($movement)) {
-			for($i=1;$i<=50;$i++) {
-				$ownunit['u'.$i] += $movement['u'.$i];
-			}
-		}
-		$prisoners = $database->getPrisoners($base);
-		if(!empty($prisoners)) {
-		foreach($prisoners as $prisoner){
-			$owner = $database->getVillageField($base,"owner");
-			$ownertribe = $database->getUserField($owner,"tribe",0);
-			$start = ($ownertribe-1)*10+1;
-			$end = ($ownertribe*10);
-			for($i=$start;$i<=$end;$i++) {
-			$j = $i-$start+1;
-			$ownunit['u'.$i] += $prisoner['t'.$j];
-			}
-			$ownunit['hero'] += $prisoner['t11'];
-		}
-		}
-		return $ownunit;
-	}
+        function getAllUnits($base) {
+                global $database;
+                $ownunit = $database->getUnit($base);
+                $enforcementarray = $database->getEnforceVillage($base,0);
+                if(count($enforcementarray) > 0) {
+                        foreach($enforcementarray as $enforce) {
+                                for($i=1;$i<=50;$i++) {
+                                        $ownunit['u'.$i] += $enforce['u'.$i];
+                                }
+                        }
+                }
+                $enforceoasis=$database->getOasisEnforce($base,0);
+                if(count($enforceoasis) > 0) {
+                        foreach($enforceoasis as $enforce) {
+                                for($i=1;$i<=50;$i++) {
+                                        $ownunit['u'.$i] += $enforce['u'.$i];
+                                }
+                        }
+                }
+                $enforceoasis1=$database->getOasisEnforce($base,1);
+                if(count($enforceoasis1) > 0) {
+                        foreach($enforceoasis1 as $enforce) {
+                                for($i=1;$i<=50;$i++) {
+                                        $ownunit['u'.$i] += $enforce['u'.$i];
+                                }
+                        }
+                }                
+                $movement = $database->getVillageMovement($base);
+                if(!empty($movement)) {
+                        for($i=1;$i<=50;$i++) {
+                                $ownunit['u'.$i] += $movement['u'.$i];
+                        }
+                }
+                $prisoners = $database->getPrisoners($base);
+                if(!empty($prisoners)) {
+                foreach($prisoners as $prisoner){
+                        $owner = $database->getVillageField($base,"owner");
+                        $ownertribe = $database->getUserField($owner,"tribe",0);
+                        $start = ($ownertribe-1)*10+1;
+                        $end = ($ownertribe*10);
+                        for($i=$start;$i<=$end;$i++) {
+                        $j = $i-$start+1;
+                        $ownunit['u'.$i] += $prisoner['t'.$j];
+                        }
+                        $ownunit['hero'] += $prisoner['t11'];
+                }
+                }
+                return $ownunit;
+        }
 
 	public function getUpkeep($array,$type,$vid=0,$prisoners=0) {
 		global $database,$session,$village;
