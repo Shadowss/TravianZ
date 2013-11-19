@@ -1010,6 +1010,7 @@ class Automation {
 				unlink("GameEngine/Prevention/sendunits.txt");
 			}
 		global $bid23,$bid34,$database,$battle,$village,$technology,$logging,$generator;
+		$reload=false;
 		 $ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
 			fclose($ourFileHandle);
 		$time = time();
@@ -1018,6 +1019,7 @@ class Automation {
 		$totalattackdead = 0;
 		$data_num = 0;
 		foreach($dataarray as $data) {
+			$reload=true;
 			//set base things
 			//$battle->resolveConflict($data);
 			$tocoor = $database->getCoor($data['from']);
@@ -2717,66 +2719,9 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     if($village_destroyed == 1){
                         $varray = $database->getProfileVillages($to['owner']);
                         if(count($varray)!='1' AND $to['capital']!='1'){
-                            $database->clearExpansionSlot($data['to']);
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."abdata where vref = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."research where vref = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."tdata where vref = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."training where vref =".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."units where vref =".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."farmlist where wref =".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$data['to'];
-                            $database->query($q);
-                            $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$data['to'];
-                            $database->query($q);
-                            $getmovement = $database->getMovement(3,$data['to'],1);
-                            foreach($getmovement as $movedata) {
-                                $time = microtime(true);
-                                $time2 = $time - $movedata['starttime'];
-                                $database->setMovementProc($data['moveid']);
-                                $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
-                                $database->setMovementProc($movedata['moveid']);
-                            }
-                            $q = "DELETE FROM ".TB_PREFIX."movement where from = ".$data['to'];
-                            $database->query($q);
-                            $q = "DELETE FROM ".TB_PREFIX."enforcement where from = ".$data['to'];
-                            $database->query($q);
-
-                            $getprisoners = $database->getPrisoners($data['to']);
-                            foreach($getprisoners as $pris) {  
-			    $troops = 0;
-			    for($i=1;$i<12;$i++){
-			    $troops += $pris['t'.$i];
-			}
-				$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-				$database->deletePrisoners($pris['id']);
-                            }
-				$getprisoners = $database->getPrisoners3($data['to']);
-                		foreach($getprisoners as $pris) {
-                		$troops = 0;
-                		for($i=1;$i<12;$i++){
-                		$troops += $pris['t'.$i];
-                		}
-                		$database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-                		$database->deletePrisoners($pris['id']);
-			}
-			}
+                        $this->DelVillage($data['tp']);        
+                        }
+                    	}
 			}
 			}else{
 			//units attack string for battleraport
@@ -2916,7 +2861,77 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			if(file_exists("GameEngine/Prevention/sendunits.txt")) {
 				unlink("GameEngine/Prevention/sendunits.txt");
 			}
+			if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
 	}
+	
+	    function DelVillage($wref, $mode=0){
+        global $database, $units;
+            $database->clearExpansionSlot($wref);
+            $q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."bdata where wid = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."market where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."odata where wref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."research where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."tdata where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."fdata where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."training where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."units where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."farmlist where wref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
+            mysql_query($q, $this->connection);
+        
+            $q = "DELETE FROM ".TB_PREFIX."movement where `from` = $wref and proc=0";
+            mysql_query($q, $this->connection);
+                
+            $getmovement = $database->getMovement(3,$wref,1);
+            foreach($getmovement as $movedata) {
+                $time = microtime(true);
+                $time2 = $time - $movedata['starttime'];
+                $database->setMovementProc($movedata['moveid']);
+                $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
+                //$database->setMovementProc($movedata['moveid']);
+            }
+
+            //check    return enforcement from del village
+            $units->returnTroops($wref);
+        
+            $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
+            mysql_query($q, $this->connection);
+    
+            if (mysql_affected_rows()>0) {
+                $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
+                mysql_query($q, $this->connection);
+            
+                $getprisoners = $database->getPrisoners($wref);
+                foreach($getprisoners as $pris) {
+                    $troops = 0;
+                    for($i=1;$i<12;$i++){
+                        $troops += $pris['t'.$i];
+                    }
+                    $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+                    $database->deletePrisoners($pris['id']);
+                }
+                $getprisoners = $database->getPrisoners3($wref);
+                foreach($getprisoners as $pris) {
+                    $troops = 0;
+                    for($i=1;$i<12;$i++){
+                        $troops += $pris['t'.$i];
+                    }
+                    $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+                    $database->deletePrisoners($pris['id']);
+                }
+            }
+        }
 
 	private function sendTroopsBack($post) {
 		global $form, $database, $village, $generator, $session, $technology;
@@ -3050,12 +3065,14 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				unlink("GameEngine/Prevention/sendreinfunits.txt");
 			}
 		global $bid23,$database,$battle;
+		$reload=false;
 		$time = time();
 			$ourFileHandle = fopen("GameEngine/Prevention/sendreinfunits.txt", 'w');
 			fclose($ourFileHandle);
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
 		$dataarray = $database->query_return($q);
 		foreach($dataarray as $data) {
+			$reload=true;
 		if($data['from']==0){
 		$isoasis = $database->isVillageOases($data['to']);
 		if($isoasis == 0){
@@ -3144,6 +3161,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
 				unlink("GameEngine/Prevention/sendreinfunits.txt");
 			}
+			if($reload) header("Location: ".$_SERVER['PHP_SELF']);
 	}
 
 	private function returnunitsComplete() {
