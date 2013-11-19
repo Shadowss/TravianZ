@@ -329,6 +329,7 @@ class Battle {
                 $defhero[$fromvillage] = $this->getBattleHero($reinfowner);
             }
         }
+	}
                 
         
         // Calculate the total number of points Attacker
