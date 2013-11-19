@@ -672,16 +672,6 @@ header("Location: banned.php");
 }
     }
     
-        function getOasisEnforceArray($id, $mode=0) {
-        if (!$mode) {
-            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where e.id = $id";
-        }else{
-            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.from=o.wref where e.id =$id";
-        }
-        $result = mysql_query($q, $this->connection);
-        return mysql_fetch_assoc($result);
-    }
-
     public function Settlers($post) {
         global $form, $database, $village, $session;
         if($session->access != BANNED){
