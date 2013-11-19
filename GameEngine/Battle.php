@@ -285,7 +285,7 @@ class Battle {
         //get every enforcement in defender village
         
         if ($conqureby>0) { //def from oasis
-            $DefendersAll = $database->getOasisEnforce($data['to'],1);
+            $DefendersAll = $database->getOasisEnforce($DefenderWref,1);
         } else {
             $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
         }
