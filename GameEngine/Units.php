@@ -532,11 +532,12 @@ header("Location: banned.php");
 }
     }}
 
-    private function sendTroopsBack($post) {
+        private function sendTroopsBack($post) {
         global $form, $database, $village, $generator, $session, $technology;
 if($session->access != BANNED){
         $enforce=$database->getEnforceArray($post['ckey'],0);
-        if(($enforce['from']==$village->wid) || ($enforce['vref']==$village->wid)){
+        $enforceoasis=$database->getOasisEnforceArray($post['ckey'], 0);
+        if(($enforce['from']==$village->wid) || ($enforce['vref']==$village->wid) || ($enforceoasis['conqured']==$village->wid)){
             $to = $database->getVillage($enforce['from']);
             $Gtribe = "";
             if ($database->getUserField($to['owner'],'tribe',0) ==  '2'){ $Gtribe = "1"; } else if  ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe =  "2"; } else if ($database->getUserField($to['owner'],'tribe',0) ==  '4'){ $Gtribe = "3"; }else if  ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe =  "4"; }
