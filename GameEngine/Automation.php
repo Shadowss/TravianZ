@@ -1231,7 +1231,7 @@ class Automation {
 			$from = $database->getMInfo($data['from']);
 			$toF = $database->getOasisV($data['to']);
 			$fromF = $database->getVillage($data['from']);
-			$conqureby=0;
+			$conqureby=$toF['conqured'];
                     //get defence units
                     $Defender = array();
                     $enforDefender = array();
