@@ -2726,6 +2726,16 @@ class MYSQL_DB {
         $result = mysql_query($q, $this->connection);
         return $this->mysql_fetch_all($result);
     	}
+    	
+    	function getOasisEnforceArray($id, $mode=0) {
+        if (!$mode) {
+            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where e.id = $id";
+        }else{
+            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.from=o.wref where e.id =$id";
+        }
+        $result = mysql_query($q, $this->connection);
+        return mysql_fetch_assoc($result);
+    	}
 	
 	function getEnforceControllTroops($vid) {
   		$q = "SELECT * from " . TB_PREFIX . "enforcement where  vref = $vid";
