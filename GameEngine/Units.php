@@ -243,7 +243,7 @@ class Units {
     }
     
         public function returnTroops($wref) {
-        global $database, $admin, $technology;
+        global $database, $generator;
 
         $getenforce=$database->getEnforceVillage($wref,0);
                 
@@ -305,7 +305,7 @@ class Units {
             }else{
                 $fastertroops = 1;
             }
-            $time = round($admin->procDistanceTime($fromCor,$toCor,min($speeds),$enforce['from'])/$fastertroops);
+            $time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),$enforce['from'])/$fastertroops);
             
             $foolartefact2 = $database->getFoolArtefactInfo(2,$enforce['from'],$from['owner']);
             if(count($foolartefact2) > 0){
@@ -320,7 +320,7 @@ class Units {
             }
             $reference =  $database->addAttack($enforce['from'],$enforce['u'.$start],$enforce['u'.($start+1)],$enforce['u'.($start+2)],$enforce['u'.($start+3)],$enforce['u'.($start+4)],$enforce['u'.($start+5)],$enforce['u'.($start+6)],$enforce['u'.($start+7)],$enforce['u'.($start+8)],$enforce['u'.($start+9)],$enforce['hero'],2,0,0,0,0);
             $database->addMovement(4,$wref,$enforce['from'],$reference,time(),($time+time()));
-            $technology->checkReinf($enforce['id']);
+            $database->deleteReinf($enforce['id']);
         }
     }
     
