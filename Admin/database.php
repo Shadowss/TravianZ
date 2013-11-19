@@ -233,83 +233,84 @@ class adm_DB {
   }
 
     function DelVillage($wref, $mode=0){
-      global $database, $units;
-      if($mode==0){
-      $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
+        global $database;
+        if($mode==0){
+            $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
       }else{
-      $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
+        $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
       }
-      $result = mysql_query($q, $this->connection);
-    if(mysql_num_rows($result) > 0){
-        mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
+        $result = mysql_query($q, $this->connection);
+        if(mysql_num_rows($result) > 0){
+            mysql_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
 
-        $database->clearExpansionSlot($wref);
-        $q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."bdata where wid = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."market where vref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."odata where wref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."research where vref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."tdata where vref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."fdata where vref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."training where vref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."units where vref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."farmlist where wref = $wref";
-        mysql_query($q, $this->connection);
-        $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
-        mysql_query($q, $this->connection);
+            $database->clearExpansionSlot($wref);
         
-        $q = "DELETE FROM ".TB_PREFIX."movement where `from` = $wref and proc=0";
-        mysql_query($q, $this->connection);
-                
-        $getmovement = $database->getMovement(3,$wref,1);
-        foreach($getmovement as $movedata) {
-            $time = microtime(true);
-            $time2 = $time - $movedata['starttime'];
-            $database->setMovementProc($movedata['moveid']);
-            $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
-            //$database->setMovementProc($movedata['moveid']);
-        }
-
-        //check    return enforcement from del village
-        $units->returnTroops($wref);
-        
-        $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
-        mysql_query($q, $this->connection);
-    
-        if (mysql_affected_rows()>0) {
-            $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
+            $q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";
             mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."bdata where wid = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."market where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."odata where wref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."research where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."tdata where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."fdata where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."training where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."units where vref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."farmlist where wref = $wref";
+            mysql_query($q, $this->connection);
+            $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
+            mysql_query($q, $this->connection);
+        
+            $q = "DELETE FROM ".TB_PREFIX."movement where `from` = $wref and proc=0";
+            mysql_query($q, $this->connection);
+                
+            $getmovement = $database->getMovement(3,$wref,1);
+            foreach($getmovement as $movedata) {
+                $time = microtime(true);
+                $time2 = $time - $movedata['starttime'];
+                $database->setMovementProc($movedata['moveid']);
+                $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
             
-            $getprisoners = $database->getPrisoners($wref);
-            foreach($getprisoners as $pris) {
-                $troops = 0;
-                for($i=1;$i<12;$i++){
-                    $troops += $pris['t'.$i];
-                }
-                $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-                $database->deletePrisoners($pris['id']);
             }
-            $getprisoners = $database->getPrisoners3($wref);
-            foreach($getprisoners as $pris) {
-                $troops = 0;
-                for($i=1;$i<12;$i++){
-                    $troops += $pris['t'.$i];
+
+            //check    return enforcement from del village
+            $this->returnTroops($wref);
+        
+            $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
+            mysql_query($q, $this->connection);
+    
+            if (mysql_affected_rows()>0) {
+                $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
+                mysql_query($q, $this->connection);
+            
+                $getprisoners = $database->getPrisoners($wref);
+                foreach($getprisoners as $pris) {
+                    $troops = 0;
+                    for($i=1;$i<12;$i++){
+                        $troops += $pris['t'.$i];
+                    }
+                    $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+                    $database->deletePrisoners($pris['id']);
                 }
-                $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-                $database->deletePrisoners($pris['id']);
+                $getprisoners = $database->getPrisoners3($wref);
+                foreach($getprisoners as $pris) {
+                    $troops = 0;
+                    for($i=1;$i<12;$i++){
+                        $troops += $pris['t'.$i];
+                    }
+                    $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+                    $database->deletePrisoners($pris['id']);
+                }
             }
         }
     }
-}
 
     public function getTypeLevel($tid,$vid) {
         global $village,$database;
