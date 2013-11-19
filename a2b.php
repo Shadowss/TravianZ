@@ -153,7 +153,8 @@ if(isset($_GET['o'])) {
 			} else
 				if(isset($r)) {
 					$enforce = $database->getEnforceArray($r, 0);
-					if($enforce['from'] == $village->wid) {
+					$enforceoasis=$database->getOasisEnforceArray($r, 0);
+					if($enforce['from'] == $village->wid || $enforceoasis['conqured']==$village->wid) {
 						$to = $database->getVillage($enforce['from']);
 						$ckey = $r;
 						include ("Templates/a2b/sendback_" . $database->getUserField($to['owner'], 'tribe', 0) . ".tpl");
