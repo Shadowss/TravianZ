@@ -1,5 +1,5 @@
 <!--
-** Made by: Dzoki
+** 
 ** - TravianX -
 ** DO NOT REMOVE COPYRIGHT NOTICE!
 -->
@@ -20,420 +20,209 @@ function loadProductGroup(group_id) {
 }
 //-->
 </script>
-<h1>Donate for the <?php echo SERVER_NAME ?></h1>
-<?php echo SERVER_NAME ?> has written the script that this server is using. Script is free at the moment, so keep it that way by donating small anmount!<br/><br/>
+<table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
+	<thead>
 
-<center><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="9GUP874LYUYTA">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
+		<tr>
+			<th colspan="2">Gold Shop</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td class="pic"><img src="img/bezahlung/Travian_verdienen.jpg" style="99px; height:99px;" alt="Package A" />
 
+			<div>Gold Shop</div>
+			</td>
+			<td class="desc">
+			Basically, we reserve the ordered amount of gold immediately after the payment. If there are any problems, please send an email to our 
+			<a href="mailto:payments@travianist.com">payment account</a>. <br /><br /><b>Username<br />Payment Method<br />Ordered Package<br />
+			Date and time</b><br /><br />We strive to ensure speedy processing!<br />
+                            
+                            </td>
 
-(paypal check-out)
-</center><br><br/>
-<?php
-if($session->access != BANNED){
-?>
+		</tr>
+	</tbody>
+</table>
 <div id="products">
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package A</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
+			    <table class="product lang_ltr lang_de" cellpadding="1" cellspacing="1">
+				<thead>
+					<tr>
+						<th>Package A</th>
+					</tr>
+				</thead>
+				<tbody>
 
 
-                                                                                <tr>
-                                                <td class="pic">
-                        
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_a.jpg" style="width:
+										<tr>
+						<td class="pic"><a href="plus1.php?id=110">
+							<img src="img/bezahlung/Travian_paket_a.jpg" style="width:
+							99px; height:99px;"
+				                         alt="Package A" /></a></td>
+					</tr>
+					<tr>
+						<td>60&nbsp;Gold</td>
+					</tr>
+					<tr>
+						<td>1,99&nbsp;EUR</td>
 
-                                                        99px; height:99px;"
-
-                                                         alt="Package A" /></td>
-                                        </tr>
-                                        <tr>
-                                                <td>30&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>1.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="ZAPMM5TASPU7E">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-</td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package B</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
+					</tr>
+					<tr>
+						<td><a href="plus1.php?id=110">&raquo; buy</a></td>
+					</tr>
+									</tbody>
+			</table>
+			    <table class="product lang_ltr lang_de" cellpadding="1" cellspacing="1">
+				<thead>
+					<tr>
+						<th>Package B</th>
+					</tr>
+				</thead>
+				<tbody>
 
 
-                                                                                <tr>
-                                                <td class="pic">
-                        
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_b.jpg" style="width:
+										<tr>
+						<td class="pic"><a
+							href="plus1.php?id=111">
+							<img src="img/bezahlung/Travian_paket_b.jpg" style="width:
+							99px; height:99px;"
+				                         alt="Package B" /></a></td>
+					</tr>
+					<tr>
+						<td>120&nbsp;Gold</td>
+					</tr>
+					<tr>
+						<td>4,99&nbsp;EUR</td>
 
-                                                        99px; height:99px;"
-
-                                                         alt="Package B" /></td>
-                                        </tr>
-                                        <tr>
-                                                <td>100&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>3.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="MUA3TCPTLCDUN">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-</td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package C</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
+					</tr>
+					<tr>
+						<td><a
+							href="plus1.php?id=111">&raquo; buy</a></td>
+					</tr>
+									</tbody>
+			</table>
+			    <table class="product lang_ltr lang_de" cellpadding="1" cellspacing="1">
+				<thead>
+					<tr>
+						<th>Package C</th>
+					</tr>
+				</thead>
+				<tbody>
 
 
-                                                                                <tr>
-                                                <td class="pic">
-                        
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_c.jpg" style="width:
+										<tr>
+						<td class="pic"><a
+							href="plus1.php?id=112">
+							<img src="img/bezahlung/Travian_paket_c.jpg" style="width:
+							99px; height:99px;"
+				                         alt="Package C" /></a></td>
+					</tr>
+					<tr>
+						<td>360&nbsp;Gold</td>
+					</tr>
+					<tr>
+						<td>9,99&nbsp;EUR</td>
 
-                                                        99px; height:99px;"
-
-                                                         alt="Package C" /></td>
-                                        </tr>
-                                        <tr>
-                                                <td>250&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>6.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="E7S4ZVLCK4V8N">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form></td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package D</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
+					</tr>
+					<tr>
+						<td><a
+							href="plus1.php?id=112">&raquo; buy</a></td>
+					</tr>
+									</tbody>
+			</table>
+			    <table class="product lang_ltr lang_de" cellpadding="1" cellspacing="1">
+				<thead>
+					<tr>
+						<th>Package D</th>
+					</tr>
+				</thead>
+				<tbody>
 
 
-                                                                                <tr>
-                                                <td class="pic">
-                        
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_d.jpg" style="width:
+										<tr>
+						<td class="pic"><a
+							href="plus1.php?id=113">
+							<img src="img/bezahlung/Travian_paket_d.jpg" style="width:
+							99px; height:99px;"
+				                         alt="Package D" /></a></td>
+					</tr>
+					<tr>
+						<td>1000&nbsp;Gold</td>
+					</tr>
+					<tr>
+						<td>19,99&nbsp;EUR</td>
 
-                                                        99px; height:99px;"
-
-                                                         alt="Package D" /></td>
-                                        </tr>
-                                        <tr>
-                                                <td>600&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>12.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="RFTJWJQW47QHU">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-</td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package E</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
+					</tr>
+					<tr>
+						<td><a
+							href="plus1.php?id=113">&raquo; buy</a></td>
+					</tr>
+									</tbody>
+			</table>
+			    <table class="product lang_ltr lang_de" cellpadding="1" cellspacing="1">
+				<thead>
+					<tr>
+						<th>Package E</th>
+					</tr>
+				</thead>
+				<tbody>
 
 
-                                                                                <tr>
-                                                <td class="pic">
-                        
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_e.jpg" style="width:
+										<tr>
+						<td class="pic"><a
+							href="plus1.php?id=3110">
+							<img src="img/bezahlung/Travian_paket_e.jpg" style="width:
+							99px; height:99px;"
+				                         alt="Package E" /></a></td>
+					</tr>
+					<tr>
+						<td>2000&nbsp;Gold</td>
+					</tr>
+					<tr>
+						<td>49,99&nbsp;EUR</td>
 
-                                                        99px; height:99px;"
-
-                                                         alt="Package E" /></td>
-                                        </tr>
-                                        <tr>
-                                                <td>1600&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>34.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="X5G8NT6H3XNMS">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynow_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-</td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Voucher</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
+					</tr>
+					<tr>
+						<td><a
+							href="plus1.php?id=3110">&raquo; buy</a></td>
+					</tr>
+									</tbody>
+			</table>
+			    			   
+			   <!-- <table class="product lang_ltr lang_de" cellpadding="1" cellspacing="1">
+				<thead>
+					<tr>
+						<th>Verdienen</th>
+					</tr>
+				</thead>
+				<tbody>
 
 
-                                                                                <tr>
-                                                <td class="pic"><a href="#" class="voucher" onclick="window.open('/voucher.php','voucher','scrollbars=yes,status=yes,resizable=yes,toolbar=yes,width=800,height=600');return false;">
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_voucher_b.jpg" style="width:
+										<tr>
+						<td class="pic"><a
+							href="plus1.php?id=5533">
+							<img src="img/bezahlung/Travian_verdienen.jpg" style="width:
+							99px; height:99px;"
+				                         alt="verdienen" /></a></td>
+					</tr>
+					<tr>
+						<td>300&nbsp;Gold</td>
+					</tr>
+					<tr>
+						<td>12,00&nbsp;EUR</td>
 
-                                                        99px; height:99px;"
-
-                                                         alt="Voucher" /></a></td>
-                                        </tr>
-                                        <tr>
-                                                <td>Your Option</td>
-                                        </tr>
-                                        <tr>
-                                                <td>
-                                                <font color="gray">(ID operator)</font
-                                                </td>
-                                        </tr>
-                                        <tr>
-                                                <td>
-                                                        <a href="#" class="voucher" onclick="window.open('/voucher.php','voucher','scrollbars=yes,status=yes,resizable=yes,toolbar=yes,width=800,height=600');return false;">
-                                                &raquo; Buy                                                </a>
-                                                </td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                        <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th><font color="red">Rules</font></th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-                                <tr><td>
-                                after you buy the product, you should report to the Multihunter.
-                                <br/>to activate your product within 24 hours.
-                                </td></tr>
-
-                                                                        </tbody>
-                        </table>
+					</tr>
+					<tr>
+						<td><a
+							href="plus1.php?id=5533">&raquo; buy</a></td>
+					</tr>
+									</tbody>
+			</table>-->
+			    
 
 
 <div class="clear"></div>
-<div style="padding: 10px 10px; font-style: italic; font-size: 10px;">All prices listed are final sales amounts.</div>
+<div style="padding: 10px 10px; font-style: italic; font-size: 10px; color: #F00;"><b>None of the packages are refundable!</b></div>
 
 </div>
-<?php }else{ ?>
-<div id="products">
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package 1</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
 
-
-                                                                                <tr>
-                                                <td class="pic"><a>
-
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_a.jpg" style="width:
-
-                                                        99px; height:99px;"
-
-                                                         alt="Package A" /></a></td>
-                                        </tr>
-                                        <tr>
-                                                <td>30&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>1.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><a
-
-                                                        href="banned.php">&raquo; next</a></td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package 2</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-
-
-                                                                                <tr>
-                                                <td class="pic"><a>
-
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_b.jpg" style="width:
-
-                                                        99px; height:99px;"
-
-                                                         alt="Package B" /></a></td>
-                                        </tr>
-                                        <tr>
-                                                <td>100&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>3.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><a
-
-                                                        href="banned.php">&raquo; next</a></td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package 3</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-
-
-                                                                                <tr>
-                                                <td class="pic"><a>
-
-                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_c.jpg" style="width:
-
-                                                        99px; height:99px;"
-
-                                                         alt="Package C" /></a></td>
-                                        </tr>
-                                        <tr>
-                                                <td>250&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>6.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><a
-
-                                                        href="banned.php">&raquo; next</a></td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package 4</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-
-
-                                                                                <tr>
-                                                <td class="pic"><a>
-
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_d.jpg" style="width:
-
-                                                        99px; height:99px;"
-
-                                                         alt="Package D" /></a></td>
-                                        </tr>
-                                        <tr>
-                                                <td>600&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>12.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><a
-
-                                                        href="banned.php">&raquo; next</a></td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-                            <table class="product lang_ltr lang_en" cellpadding="1" cellspacing="1">
-                                <thead>
-                                        <tr>
-                                                <th>Package 5</th>
-                                        </tr>
-                                </thead>
-                                <tbody>
-
-
-                                                                                <tr>
-                                                <td class="pic"><a>
-
-                                                        <img src="http://content.tg-payment.com/content/img/products/Travian_paket_e.jpg" style="width:
-
-                                                        99px; height:99px;"
-
-                                                         alt="Package E" /></a></td>
-                                        </tr>
-                                        <tr>
-                                                <td>1600&nbsp;Gold</td>
-                                        </tr>
-                                        <tr>
-                                                <td>34.00&nbsp;USD</td>
-
-                                        </tr>
-                                        <tr>
-                                                <td><a
-
-                                                        href="banned.php">&raquo; next</a></td>
-                                        </tr>
-                                                                        </tbody>
-                        </table>
-
-
-<div class="clear"></div>
-<div style="padding: 10px 10px; font-style: italic; font-size: 10px;">All prices listed are final sales amounts.</div>
-<?php } ?>
 </div>

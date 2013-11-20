@@ -1,6 +1,6 @@
 <?php
 //////////////     made by alq0rsan   /////////////////////////
-if($session->access != BANNED){
+if($session->access != BANNED && $session->gold >= 10){
     $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 

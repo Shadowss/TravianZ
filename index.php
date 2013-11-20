@@ -49,7 +49,7 @@ include ("GameEngine/Lang/".LANG.".php");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Powered by ZravianX - <?php echo SERVER_NAME; ?></title>
+	<title><?php echo SERVER_NAME; ?></title>
 	<link rel="shortcut icon" href="favicon.ico" />
 	<link rel="stylesheet" type="text/css" href="gpack/travian/main.css" />
 	<link rel="stylesheet" type="text/css" href="gpack/travian/flaggs.css" />

@@ -1,5 +1,19 @@
 <?php
 include("Templates/Plus/pmenu.tpl");
+
+
+
+	if(!empty($_GET['gold'])) {
+	
+    $gold =$_GET['gold'];
+	$user = $_GET['user'];
+	$q= mysql_query("update ".TB_PREFIX."users set gold=gold+$R_GOLD  where id=$id");
+	mysql_query($q);
+	
+	$q= mysql_query("update ".TB_PREFIX."users set reflink=0  where id=$user");
+	mysql_query($q);
+    
+    }
 ?>
 
     <h2>Invite friends and receive free Gold</h2>
@@ -31,7 +45,13 @@ include("Templates/Plus/pmenu.tpl");
             <tr>
                 <th colspan="6">Players brought in</th>
             </tr>
-
+<!-- Fix Reference Link -->
+<?php                         
+mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+mysql_select_db(SQL_DB);
+$query = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE reflink = ".$id."");
+$row = mysql_num_rows($query);
+?>
             <tr>
                 <td>UID</td>
 
@@ -40,7 +60,15 @@ include("Templates/Plus/pmenu.tpl");
                 <td>Inhabitants</td>
 
                 <td>Villages</td>
+
+		    <td>Gold</td>
             </tr>
+<?php
+if ($row<>0){
+while($reference = mysql_fetch_array($query)){
+}
+}
+?>
         </thead>
 		<tbody>
 		<?php
@@ -61,6 +89,15 @@ include("Templates/Plus/pmenu.tpl");
                 <td><?php echo $totalpop; ?></td>
 
                 <td><?php echo count($varray); ?></td>
+<td> <?php
+			 if ($villaggi >= ACTIVATE4){ ?>
+			 <a href="?id=<?php echo $id; ?>&gold=true&user=<?php echo $reference['id']; ?>"><img src="../img/admin/gold.gif"></a>
+			 <?php
+			 }else{ ?>
+			 	<img src="../img/admin/gold_g.gif">
+			<?php
+			 } ?> </td>
+
             </tr>
 		<?php
 		}}else{

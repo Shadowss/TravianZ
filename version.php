@@ -135,15 +135,45 @@ $automation->isWinner();
 67. Fix catapult target on brewerey , now you can target brewerey.</br>
 68. Added loss protection if you have beginner protection and want to attack a player you loss protection.</br>
 69. Fix artefacts, will not win more artifacts from the same village.</br>
-70. Fix quest_core.tpl , now you cannot claim two rewards and also fix task 17.</br>
-71. Fix new village must build a rally point.</br>
-72. Fix sorting distance artefact village.</br>
-73. Fix to conquer oasis: can conquer 1 attack if nature troop die.</br>
-74. Fix report scout by Natars. Now report player can see..</br>
-75. Fix area and location like real travian.</br>
-76. Fix field Natar village set to type=3.</br>
-77. Fix Natar village area 400/400 or WORLD_MAX not the random area.</br>
-78. Fix create_account.php : cannot create Natar if already exist.</br>
+70. Fix UTF8 in database and sql.sql file.</br>
+71. Fixed Username HACK on register.</br>
+72. Fixed Village hack in profile . </br>
+73. Fixed a Bug where Founder or a user in alliance can kick himself.</br>
+74. Fixed new village must build a rally point. </br>
+75. Fix sorting distance artefact village . </br>
+76. Fix to conquer oasis: can conquer 1 attack if nature troop die. </br>
+77. Fix report scout by Natars. Now report player can see.. </br>
+78. Fix area and location like real travian. </br>
+79. Fix field natar village set to type=3. </br>
+80. Fix natar village area 400/400 or WORLD_MAX not the random area. </br>
+81. Fix create_account : cannot create natar if already exist. </br>
+82. Fix counter timer if timer < 0 = display 0:00:00 and not display like your time pc. </br>
+83. Fix quest_core , now is like real travian. </br>
+84. Fix update oasis unit. </br>
+85. Fixed Registration hack. </br>
+86. Fixed Village hack hidden village and <name> ! </br>
+87. Fixed hidden Alliance name  and fixed the bug of kicking your self if you are founder or anything else. </br>
+88. Fix conquer artefact. </br>
+89. Fix ranking and Quest 4. </br>
+90. Fix finishAll building/demolition/tecknology. </br>
+91. Fix conquer Occupied Oasis. </br>
+92. Fix NPC trade on settler in village or palace. </br>
+93. Fix bug when paste address to update building or resource , now not possible to upgrade. </br>
+94. Fix spy : When defender has no spy's in his village, an incomming spy attack should be unnoticed, and the defender shouldn't get a report and also there shouldn't appear red swords in dorf.1 when there are no own spy's in village.</br>
+95. Fix village to destroy and less query. </br>
+96. Fix settler to raid (1 unit of settler can carry 3000 resource...wow!!)</br>
+97. Fix dorf3 , now timer works corectly. </br>
+98. Added timezone in instalation file , and can be edited after installation on config. </br>
+99. The damage must be calculate for all troops as a defender. </br>
+100. Battle system is fixed and it`s work like real travian. </br>
+101. War Simulator system is fixed and it`s work like real travian. </br>
+102. Fix calculation culturepoint according to the speed server.</br>
+103. Fix to delete hero table when delete user from admin.</br>
+104. Fix link to coor village from admin.</br>
+105. Fix return troops if village destroy.</br>
+106. Fix link list multivillage.</br>
+107. Fix rally point to list troops own/other village/oasis.</br>
+
 </div>
 </div>
 </br></br></br></br><div id="side_info">

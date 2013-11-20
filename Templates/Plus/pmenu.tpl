@@ -52,4 +52,6 @@
         }
 
 ?>>Earn gold</a>
+| <a href="a2b2.php">Account Statement</a>
+
 </div>
