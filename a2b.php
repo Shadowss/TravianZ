@@ -10,7 +10,6 @@
 #################################################################################
 
 include("GameEngine/Village.php");
-include("GameEngine/Units.php");
 
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {

@@ -12,6 +12,7 @@
 include("Session.php");
 include("Building.php");
 include("Market.php");
+include_once("GameEngine/Units.php");
 include("Technology.php");
 include("Automation.php");
 

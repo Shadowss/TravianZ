@@ -2867,30 +2867,30 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         global $database, $units;
             $database->clearExpansionSlot($wref);
             $q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."bdata where wid = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."market where vref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."odata where wref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."research where vref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."tdata where vref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."fdata where vref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."training where vref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."units where vref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."farmlist where wref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
         
             $q = "DELETE FROM ".TB_PREFIX."movement where `from` = $wref and proc=0";
-            mysql_query($q, $this->connection);
+            $database->query($q);
                 
             $getmovement = $database->getMovement(3,$wref,1);
             foreach($getmovement as $movedata) {
@@ -2905,11 +2905,11 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             $units->returnTroops($wref);
         
             $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
-            mysql_query($q, $this->connection);
+            $database->query($q);
     
             if (mysql_affected_rows()>0) {
                 $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
-                mysql_query($q, $this->connection);
+                $database->query($q);
             
                 $getprisoners = $database->getPrisoners($wref);
                 foreach($getprisoners as $pris) {
