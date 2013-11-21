@@ -40,7 +40,7 @@ class Automation {
 		}
 	}
 
-		public function procResType($ref) {
+		public function procResType($ref,$mode=0,$isoasis=0) {
 		global $session;
 		switch($ref) {
 			case 1: $build = "Woodcutter"; break;
@@ -85,10 +85,18 @@ class Automation {
 			case 40: $build = "Wonder of the World"; break;
 			case 41: $build = "Horse Drinking Trough"; break;
 			case 42: $build = "Great Workshop"; break;
-			default: $build = "Nothing had"; break;
+			    //default: $build = "Nothing had"; break;
+			}
+		if ($build=="") {
+        if ($mode) { //true to destroy village
+            $build="The village has been";
+        }else{ //capital or only 1 village left.. not destroy
+            $build="Village can't be";
+        }
 		}
+		if ($isoasis!=0) $build = "Oasis had";
 		return addslashes($build);
-	}
+		}
 
 	function recountPop($vid){
 	global $database;
@@ -1009,7 +1017,7 @@ class Automation {
 	if(file_exists("GameEngine/Prevention/sendunits.txt")) {
 				unlink("GameEngine/Prevention/sendunits.txt");
 			}
-		global $bid23,$bid34,$database,$battle,$village,$technology,$logging,$generator;
+		global $bid23,$bid34,$database,$battle,$village,$technology,$logging,$generator,$session;
 		$reload=false;
 		 $ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
 			fclose($ourFileHandle);
@@ -1019,7 +1027,6 @@ class Automation {
 		$totalattackdead = 0;
 		$data_num = 0;
 		foreach($dataarray as $data) {
-			$reload=true;
 			//set base things
 			//$battle->resolveConflict($data);
 			$tocoor = $database->getCoor($data['from']);
@@ -1031,8 +1038,9 @@ class Automation {
 			if ($isoasis == 0){
 			$Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
 			$Defender['id'] = $database->getUserField($database->getVillageField($data['to'],"owner"),"id",0);
-			$AttackerID = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
-			$DefenderID = $database->getUserField($database->getVillageField($data['to'],"owner"),"id",0);
+			$AttackerID = $Attacker['id'];
+            $DefenderID = $Defender['id'];
+            if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
 			$owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
 			$targettribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
 			$ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
@@ -1221,8 +1229,9 @@ class Automation {
 			}else{
 			$Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
 			$Defender['id'] = $database->getUserField($database->getOasisField($data['to'],"owner"),"id",0);
-			$AttackerID = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
-			$DefenderID = $database->getUserField($database->getOasisField($data['to'],"owner"),"id",0);
+			$AttackerID = $Attacker['id'];
+            $DefenderID = $Defender['id'];
+            if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
 			$owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
 			$targettribe =  $database->getUserField($database->getOasisField($data['to'],"owner"),"tribe",0);;
 			$ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
@@ -1791,7 +1800,15 @@ class Automation {
 // Data for when troops return.
 
 				//catapults look :D
-			$info_cat = $info_chief = $info_ram = ",";
+			    $info_cat = $info_chief = $info_ram = ",";
+    //check to see if can destroy village
+    $varray = $database->getProfileVillages($to['owner']);
+    if(count($varray)!='1' AND $to['capital']!='1'){
+        $can_destroy=1;
+    }else{
+        $can_destroy=0;
+    }
+    if ($isoasis == 1) $can_destroy=0;
 
 			if ($type=='3'){
 				if (($data['t7']-$dead7-$traped7)>0){
@@ -1827,10 +1844,17 @@ class Automation {
 	if (($data['t8']-$dead8-$traped8)>0)
 	{
 		$pop=$this->recountPop($data['to']);
-		if($pop<=0)
-		{
-			$info_cat = ",".$catp_pic.", Village already destroyed.";
-		}
+		        if ($isoasis == 0) {
+            $pop=$this->recountPop($data['to']);
+        } else $pop=10; //oasis cannot be destroy bt cata/ram
+        if($pop<=0) { 
+            if($can_destroy==1) {
+                $info_cat = ",".$catp_pic.", Village already destroyed.";
+                $village_destroyed = 1;
+            } else {
+                $info_cat = ",".$catp_pic.", Village can't be destroyed.";
+            }
+        }
 		else
 		{
 			$basearray = $data['to'];
@@ -1894,7 +1918,7 @@ class Automation {
 				$tbid = $rand;
 				if ($battlepart[4]>$battlepart[3])
 				{
-					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
+					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
 					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
@@ -1917,16 +1941,17 @@ class Automation {
 					if ($tbgid==18){
 						$this->updateMax($database->getVillageField($data['to'],'owner'));
 					}
+					if ($isoasis == 0) {
 					$pop=$this->recountPop($data['to']);
 					$capital = $database->getVillage($data['to']);
-					if($pop=='0' && $capital['capital']=='0')
-					{
+					if($pop=='0' && $can_destroy==1){
 					$village_destroyed = 1;
 					}
+    }
 				}
 				elseif ($battlepart[4]==0)
 				{
-					$info_cat = "".$catp_pic.",".$this->procResType($tbgid)." was not damaged.";
+					$info_cat = "".$catp_pic.",".$this->procResType($tbgid,$can_destroy,$isoasis)." was not damaged.";
 				}
 				else
 				{
@@ -1959,7 +1984,7 @@ class Automation {
 						}
 						$pop=$this->recountPop($data['to']);
 					}
-					$info_cat = "".$catp_pic.",".$this->procResType($tbgid).$info_cata;
+					$info_cat = "".$catp_pic.",".$this->procResType($tbgid,$can_destroy,$isoasis).$info_cata;
 					$database->setVillageLevel($data['to'],"f".$tbid."",$totallvl);
 				}
 			}
@@ -2020,7 +2045,7 @@ class Automation {
 				$tbid = $rand;
                 	if ($battlepart[4]>$battlepart[3])
 				{
-					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid)." destroyed.";
+					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
 					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
@@ -2043,18 +2068,21 @@ class Automation {
 					if ($tbgid==18){
 						$this->updateMax($database->getVillageField($data['to'],'owner'));
 					}
+					if ($isoasis == 0) {
 					$pop=$this->recountPop($data['to']);
-					if($pop=='0')
-					{
-						$varray = $database->getProfileVillages($to['owner']);
-						if(count($varray)!='1' AND $to['capital']!='1'){
-						$village_destroyed = 1;
-						}
 					}
+					    if ($isoasis == 0) {
+        $pop=$this->recountPop($data['to']);
+        if($pop=='0'){
+            if($can_destroy==1){
+                $village_destroyed = 1;
+            }
+        }
+    }
 				}
 				elseif ($battlepart[4]==0)
 				{
-					$info_cat = "".$catp_pic.",".$this->procResType($tbgid)." was not damaged.";
+					$info_cat = "".$catp_pic.",".$this->procResType($tbgid,$can_destroy,$isoasis)." was not damaged.";
 				}
 				else
 				{
@@ -2087,7 +2115,7 @@ class Automation {
 						}
 						$pop=$this->recountPop($data['to']);
 					}
-					$info_cat = "".$catp_pic.",".$this->procResType($tbgid).$info_cata;
+					$info_cat = "".$catp_pic.",".$this->procResType($tbgid,$can_destroy,$isoasis).$info_cata;
 					$database->setVillageLevel($data['to'],"f".$tbid."",$totallvl);
 				}
 				$bdo2=mysql_query("select * from " . TB_PREFIX . "fdata where vref = $basearray");
@@ -2146,7 +2174,7 @@ class Automation {
                 if ($battlepart[4]>$battlepart[3])
 				{
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid)." destroyed.</td></tr></tbody>";
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.</td></tr></tbody>";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
 					if($tbid>=19 && $tbid!=99) { $database->setVillageLevel($data['to'],"f".$tbid."t",'0'); }
 					$buildarray = $GLOBALS["bid".$tbgid];
@@ -2169,19 +2197,20 @@ class Automation {
 					if ($tbgid==18){
 						$this->updateMax($database->getVillageField($data['to'],'owner'));
 					}
+					if ($isoasis == 0) {
 					$pop=$this->recountPop($data['to']);
-					if($pop=='0')
-					{
-						$varray = $database->getProfileVillages($to['owner']);
-						if(count($varray)!='1' AND $to['capital']!='1'){
-						$village_destroyed = 1;
-						}
 					}
+					if ($isoasis == 0) {
+                        $pop=$this->recountPop($data['to']);
+                        if($pop=='0' && $can_destroy==1){
+                            $village_destroyed = 1;
+                        }
+                    }
 				}
 				elseif ($battlepart[4]==0)
 				{
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid)." was not damaged.</td></tr></tbody>";
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis)." was not damaged.</td></tr></tbody>";
 				}
 				else
 				{
@@ -2212,11 +2241,13 @@ class Automation {
 						if ($tbgid==18){
 							$this->updateMax($database->getVillageField($data['to'],'owner'));
 						}
-						$pop=$this->recountPop($data['to']);
+						if ($isoasis == 0) {
+                            $pop=$this->recountPop($data['to']);
+                        }
 					}
 
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid).$info_cata."</td></tr></tbody>";
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis).$info_cata."</td></tr></tbody>";
 					$database->setVillageLevel($data['to'],"f".$tbid."",$totallvl);
 
 				}
@@ -2496,7 +2527,14 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
 			}
 			else{
-				$data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
+				if($village_destroyed == 1 && $can_destroy==1){
+                    //check if village pop=0 and no info destroy
+                    if (strpos($info_cat,"The village has")==0) {
+                        $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
+                                          <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> The village has been destroyed.</td></tr></tbody>";
+                    }
+                }
+                $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
 			}
 
 
@@ -2717,11 +2755,10 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			$database->addGeneralAttack($totalattackdead);
 			}
                     if($village_destroyed == 1){
-                        $varray = $database->getProfileVillages($to['owner']);
-                        if(count($varray)!='1' AND $to['capital']!='1'){
-						$this->DelVillage($data['tp']);
-			}
-			}
+                if($can_destroy==1){
+                    $this->DelVillage($data['to']);        
+                }
+            }
 			}else{
 			//units attack string for battleraport
 			$unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -2889,8 +2926,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
             $database->query($q);
         
-            $q = "DELETE FROM ".TB_PREFIX."movement where `from` = $wref and proc=0";
-            $database->query($q);
+            $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`from` = $wref AND `to` = $wref) OR (`from` = $wref AND sort_type=3))";
+            $database->query($q, $this->connection);
                 
             $getmovement = $database->getMovement(3,$wref,1);
             foreach($getmovement as $movedata) {
@@ -3063,7 +3100,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 	if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
 				unlink("GameEngine/Prevention/sendreinfunits.txt");
 			}
-		global $bid23,$database,$battle;
+		global $bid23,$database,$battle,$session;
 		$reload=false;
 		$time = time();
 			$ourFileHandle = fopen("GameEngine/Prevention/sendreinfunits.txt", 'w');
@@ -3071,14 +3108,23 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
 		$dataarray = $database->query_return($q);
 		foreach($dataarray as $data) {
-			$reload=true;
-		if($data['from']==0){
-		$isoasis = $database->isVillageOases($data['to']);
-		if($isoasis == 0){
-		$to = $database->getMInfo($data['to']);
-		}else{
-		$to = $database->getOMInfo($data['to']);
-    		} 
+		        $isoasis = $database->isVillageOases($data['to']);
+        if($isoasis == 0){
+            $to = $database->getMInfo($data['to']);
+            $toF = $database->getVillage($data['to']);
+            $DefenderID = $database->getVillageField($data['to'],"owner");
+            $targettribe = $database->getUserField($DefenderID,"tribe",0);
+            $conqureby=0;
+        }else{
+            $to = $database->getOMInfo($data['to']);
+            $toF = $database->getOasisV($data['to']);
+            $DefenderID = $to['owner'];
+            $targettribe = $database->getUserField($DefenderID,"tribe",0);
+            $conqureby=$toF['conqured'];                    
+        }
+        if($data['from']==0){
+            $DefenderID = $database->getVillageField($data['to'],"owner");
+            if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true; 
 		$database->addEnforce($data);
 		$reinf = $database->getEnforce($data['to'],$data['from']);
 		$database->modifyEnforce($reinf['id'],31,1,1);
@@ -3087,12 +3133,11 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$database->setMovementProc($data['moveid']);
 		}else{
 			//set base things
-			$owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
-			$targettribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
-			$to = $database->getMInfo($data['to']);
-			$from = $database->getMInfo($data['from']);
-			$toF = $database->getVillage($data['to']);
-			$fromF = $database->getVillage($data['from']);
+            $AttackerID = $database->getVillageField($data['from'],"owner");
+            $owntribe = $database->getUserField($AttackerID,"tribe",0);
+            $from = $database->getMInfo($data['from']);
+            $fromF = $database->getVillage($data['from']);
+            if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;  
 
 			//check to see if we're only sending a hero between own villages and there's a Mansion at target village
 			if($data['t11'] != 0) {
@@ -3137,10 +3182,16 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			//send rapport
 			$unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
 			$data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
-			$database->addNotice($from['owner'],$from['wref'],$ownally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
-			if($from['owner'] != $to['owner']) {
-				$database->addNotice($to['owner'],$to['wref'],$targetally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
-			}
+            
+            if($isoasis == 0){
+                $to_name=$to['name'];
+            }else{
+                $to_name="Oasis ".$database->getVillageField($to['conqured'],"name");
+            }
+            $database->addNotice($from['owner'],$from['wref'],$ownally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,$AttackArrivalTime);
+            if($from['owner'] != $to['owner']) {
+                $database->addNotice($to['owner'],$to['wref'],$targetally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,$AttackArrivalTime);
+            }
 			//update status
 			$database->setMovementProc($data['moveid']);
 			}
@@ -3170,6 +3221,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		global $database;
 		$ourFileHandle = fopen("GameEngine/Prevention/returnunits.txt", 'w');
 		fclose($ourFileHandle);
+		$reload=false;
 		$time = time();
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '4' and endtime < $time";
 		$dataarray = $database->query_return($q);
@@ -3254,14 +3306,16 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 	if(file_exists("GameEngine/Prevention/settlers.txt")) {
 				unlink("GameEngine/Prevention/settlers.txt");
 			}
-		global $database, $building;
+		global $database, $building, $session;
 		$ourFileHandle = fopen("GameEngine/Prevention/settlers.txt", 'w');
 		fclose($ourFileHandle);
 		$time = microtime(true);
 		$q = "SELECT * FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 5 and endtime < $time";
 		$dataarray = $database->query_return($q);
 			foreach($dataarray as $data) {
-					$to = $database->getMInfo($data['from']);
+                $ownerID = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
+                if ($session->uid==$ownerID) $reload=true;
+                $to = $database->getMInfo($data['from']);
 					$user = addslashes($database->getUserField($to['owner'],'username',0));
 					$taken = $database->getVillageState($data['to']);
 					if($taken != 1){
@@ -3298,8 +3352,9 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 					}
 			}
 			if(file_exists("GameEngine/Prevention/settlers.txt")) {
-				unlink("GameEngine/Prevention/settlers.txt");
-			}
+                unlink("GameEngine/Prevention/settlers.txt");
+            }
+            if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
 	}
 
 	private function researchComplete() {
