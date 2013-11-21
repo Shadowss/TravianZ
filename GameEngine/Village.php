@@ -28,15 +28,22 @@ class Village {
 	private $production = array();
 	private $oasisowned,$ocounter = array();
 
-	function Village() {
-		global $session;
-		if(isset($_SESSION['wid'])) {
-			$this->wid = $_SESSION['wid'];
-		}
-		else {
-			$this->wid = $session->villages[0];
-		}
-		$this->LoadTown();
+    function Village() {
+        global $session, $database;
+        if(isset($_SESSION['wid'])) {
+            $this->wid = $_SESSION['wid'];
+            
+        }
+        else {
+            $this->wid = $session->villages[0];
+        }
+        //add new line code
+        //check exist village if from village destroy to avoid error msg.
+        if (!$database-> checkVilExist($this->wid)) {
+            $this->wid=$database->getVillageID($session->uid);
+            $_SESSION['wid']=$this->wid;
+        }
+        $this->LoadTown();
 		$this->calculateProduction();
 		$this->processProduction();
 		$this->ActionControl();
