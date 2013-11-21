@@ -11,6 +11,7 @@
 #################################################################################
 include_once("../../config.php");
 include_once("../../Session.php");
+include_once("../../Automation.php");
 mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysql_select_db(SQL_DB);
 
