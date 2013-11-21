@@ -14,7 +14,6 @@ include("Building.php");
 include("Market.php");
 include_once("GameEngine/Units.php");
 include("Technology.php");
-include("Automation.php");
 
 class Village {
 
@@ -301,5 +300,5 @@ class Village {
 };
 $village = new Village;
 $building = new Building;
-
+include_once ("Automation.php");
 ?>
