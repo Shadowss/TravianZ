@@ -1246,7 +1246,7 @@ class Automation {
                     $enforDefender = array();
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to']);
-                    $enforcementarray = $database->getOasisEnforce($data['to'],1);
+                    $enforcementarray = $database->getEnforceVillage($data['to'],0);
                     
                     if(count($enforcementarray) > 0) {
                         foreach($enforcementarray as $enforce) {
@@ -1406,11 +1406,24 @@ class Automation {
                     }else{
                         $unitssend_att_check=$unitssend_att;
                     }
-                    //units defence string for battleraport
+                   //units defence string for battleraport
+                    $DefenderHero=array();
+                    $i=0;
+                    if (isset($Defender['hero'])) {
+                        if ($Defender['hero']>0) {
+                            $i=1;
+                            $DefenderHero[$i]=$DefenderID;
+                        }
+                    }
+            
                     $enforcementarray2 = $database->getEnforceVillage($data['to'],0);
                     if(count($enforcementarray2) > 0) {
                         foreach($enforcementarray2 as $enforce2) {
                             $Defender['hero'] += $enforce2['hero'];
+                            if ($enforce2['hero']>0) {
+                                $i++;
+                                $DefenderHero[$i] = $database->getVillageField($enforce2['from'],"owner");
+                            }
                             for ($i=1;$i<=50;$i++) {
                                 $Defender['u'.$i]+= $enforce2['u'.$i];
                             }    
@@ -1602,28 +1615,36 @@ class Automation {
 			$troopsdead9 = $dead9+1;
 			$troopsdead10 = $dead10;
 			$troopsdead11 = $dead11;
-			for($i=1;$i<=50;$i++) {
-			$totaldead_def += $dead[''.$i.''];
-			}
-			$totaldead_def += $dead['hero'];
-			if ($Attacker['uhero'] != 0){
-			 $heroxp = $totaldead_def;
-			 $database->modifyHeroXp("experience",$heroxp,$from['owner']);
-			}
-				if($Defender['hero'] > 0){
-				$defheroxp = $totaldead_att;
-				$database->modifyHeroXp("experience",$defheroxp,$toF['owner']);
-				}
-			$enforcementarray1 = $database->getEnforceVillage($to['wref'],0);
-			if(count($enforcementarray1) > 0) {
-			foreach($enforcementarray1 as $enforce1) {
-							if($enforce1['hero'] > 0){
-							$enforceowner = $database->getVillageField($enforce1['from'],"owner");
-							$reinfheroxp = $totaldead_att;
-							$database->modifyHeroXp("experience",$reinfheroxp,$enforceowner);
-							}
-			}
-						}
+                    for($i=1;$i<=50;$i++) {
+                        if($unitarray) { reset($unitarray); }
+                        $unitarray = $GLOBALS["u".$i];
+                            
+                        $totaldead_def += $dead[''.$i.''];
+                        $totalheroxp_att += ($dead[''.$i.'']*$unitarray['pop']);
+                    }
+                    $totalheroxp_att += ($dead['hero']*6);
+                    if ($Attacker['uhero'] != 0){
+                        $heroxp = $totalheroxp_att;
+                        $database->modifyHeroXp("experience",$heroxp,$from['owner']);
+                    }
+                    
+                    
+                    if($Defender['hero'] > 0){
+                        
+                        for($i=1;$i<=10;$i++){
+                            if($unitarray) { reset($unitarray); }
+                            $unitarray = $GLOBALS["u".(($att_tribe-1)*10+$i)];
+                            $totalheroxp_def += ($dead.$i*$unitarray['pop']);
+                        }
+                        $totalheroxp_def +=$dead11*6;
+                        //counting heroxp
+                        $defheroxp=intval($totalheroxp_def/count($DefenderHero));
+                        for ($i=1;$i<=count($DefenderHero);$i++){
+                            $reinfheroxp = $totalheroxp_def;
+                            $database->modifyHeroXp("experience",$reinfheroxp,$DefenderHero[$i]);
+                        }                        
+                        
+                    }
 			$database->modifyPoints($toF['owner'],'dpall',$totaldead_att );
 			$database->modifyPoints($from['owner'],'apall',$totaldead_def);
 			$database->modifyPoints($toF['owner'],'dp',$totaldead_att );
@@ -2256,9 +2277,10 @@ class Automation {
 	}
 }
 
-		//chiefing village
-		//there are senators
-		if(($data['t9']-$dead9-$traped9)>0){
+                    //chiefing village
+                    //there are senators
+                    if(($data['t9']-$dead9-$traped9)>0){
+                        if ($type=='3') {
 
 			$palacelevel = $database->getResourceLevel($from['wref']);
 			for($i=1;$i<=40;$i++) {
@@ -2422,38 +2444,40 @@ class Automation {
 			} else {
 				$info_chief = "".$chief_pic.",Not enough culture points.";
 			}
-			unset($plevel);
-		}
-
-if($data['t11'] > 0){ 
-            if ($isoasis != 0) { 
-                if ($database->canConquerOasis($data['from'],$data['to'])) {
-                    $troopcount = $database->countOasisTroops($data['to']);
-                    //if($unitssend_def[1] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[2] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[3] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[4] == '0,0,0,0,0,0,0,0,0,0' and $unitssend_def[5] == '0,0,0,0,0,0,0,0,0,0'){
-                    if ($troopcount==0) {
-                        $database->conquerOasis($data['from'],$data['to']);
-                        $info_chief = $hero_pic.",Your hero has conquered this oasis";
+			                            unset($plevel);
+                        }else{
+                            $info_chief = "".$chief_pic.",Could not reduce cultural points during raid";
+                        }
                     }
-                    elseif ($heroxp == 0) {
-                        $info_chief = $hero_pic.",Your hero had nothing to kill therfore gains no XP at all";
-                    } else $info_chief = $hero_pic.",Your hero gained ".$heroxp." XP";
-                } else {
-                    $OasisInfo = $database->getOasisInfo($data['to']);
-					if ($OasisInfo['conqured'] != 0) {
-						$Oloyaltybefore =  intval($OasisInfo['loyalty']);
-						$database->modifyOasisLoyalty($data['to']);
-						$OasisInfo = $database->getOasisInfo($data['to']);
-						$Oloyaltynow =  intval($OasisInfo['loyalty']);
-						$info_chief = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP";
-					} else {
-						if ($heroxp == 0) {
-							$info_chief = $hero_pic.",Your hero had nothing to kill therfore gains no XP at all";
-						} else {
-							$info_chief = $hero_pic.",Your hero gained ".$heroxp." XP";
-						}
-					}
-				}
-			} else {
+
+                    if($data['t11'] > 0){ //hero
+                        if ($heroxp == 0) {
+                            $xp="";
+                        } else {
+                            $xp=" and gained ".$heroxp." XP from the battle";
+                        }
+                        if ($isoasis != 0) { //oasis
+                            $OasisInfo = $database->getOasisInfo($data['to']);
+                            $troopcount = $database->countOasisTroops($data['to']);
+                            if ($database->canConquerOasis($data['from'],$data['to']) && $troopcount==0) {
+                                $database->conquerOasis($data['from'],$data['to']);
+                                $info_chief = $hero_pic.",Your hero has conquered this oasis".$xp;
+                            }else{
+                                if ($OasisInfo['conqured'] != 0 && $troopcount==0) {
+                                    $Oloyaltybefore = intval($OasisInfo['loyalty']);
+                                    $database->modifyOasisLoyalty($data['to']);
+                                    $OasisInfo = $database->getOasisInfo($data['to']);
+                                    $Oloyaltynow = intval($OasisInfo['loyalty']);
+                                    $info_chief = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP";
+                                }else{
+                                    if ($heroxp == 0) {
+                                        $info_chief = $hero_pic.",Your hero had nothing to kill therfore gains no XP at all";
+                                    } else {
+                                        $info_chief = $hero_pic.",Your hero gained ".$heroxp." XP";
+                                    }
+                                }
+                            }
+                        } else {
     global $form;
     if ($heroxp == 0) {
         $xp=" no XP from the battle";
@@ -2925,9 +2949,11 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
             $database->query($q);
+            $q = "DELETE FROM ".TB_PREFIX."ndata WHERE toWref=$wref";
+            $database->query($q);
         
             $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`from` = $wref AND `to` = $wref) OR (`from` = $wref AND sort_type=3))";
-            $database->query($q, $this->connection);
+            $database->query($q);
                 
             $getmovement = $database->getMovement(3,$wref,1);
             foreach($getmovement as $movedata) {
@@ -2935,9 +2961,10 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 $time2 = $time - $movedata['starttime'];
                 $database->setMovementProc($movedata['moveid']);
                 $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
-                //$database->setMovementProc($movedata['moveid']);
             }
-
+            $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = $wref";
+            $database->query($q);
+            
             //check    return enforcement from del village
             $units->returnTroops($wref);
         
