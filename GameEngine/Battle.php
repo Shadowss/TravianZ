@@ -327,6 +327,13 @@ class Battle {
                 
                 $reinfowner = $database->getVillageField($fromvillage,"owner");
                 $defhero[$fromvillage] = $this->getBattleHero($reinfowner);
+                    //calculate def hero from enforcement
+                    if($defenders['hero'] != 0){
+                        $cdp += $defhero[$fromvillage]['dc'];
+                        $dp += $defhero[$fromvillage]['di'];
+                        $dp = $dp * $defhero[$fromvillage]['db'];
+                        $cdp = $cdp * $defhero[$fromvillage]['db'];
+                    }  
             }
         }
 	}
