@@ -242,86 +242,99 @@ class Units {
 
     }
     
-        public function returnTroops($wref) {
-        global $database, $generator;
+    public function returnTroops($wref) {
+        global $database;
 
         $getenforce=$database->getEnforceVillage($wref,0);
-                
         foreach($getenforce as $enforce) {
-            
-            $to = $database->getVillage($enforce['from']);
-            $Gtribe = "";
-            if ($database->getUserField($to['owner'],'tribe',0) ==  '2'){ $Gtribe = "1"; }
-            else if ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe =  "2"; }
-            else if ($database->getUserField($to['owner'],'tribe',0) ==  '4'){ $Gtribe = "3"; }
-            else if  ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe =  "4"; }
-                    
-            $start = ($database->getUserField($to['owner'],'tribe',0)-1)*10+1;
-            $end = ($database->getUserField($to['owner'],'tribe',0)*10);
-
-            $from = $database->getVillage($enforce['from']);
-            $fromcoor = $database->getCoor($enforce['from']);
-            $tocoor = $database->getCoor($enforce['vref']);
-            $fromCor = array('x'=>$tocoor['x'], 'y'=>$tocoor['y']);
-            $toCor = array('x'=>$fromcoor['x'], 'y'=>$fromcoor['y']);
-
-            $speeds = array();
-
-            //find slowest unit.
-            for($i=$start;$i<=$end;$i++){
-                
-                if(intval($enforce['u'.$i]) > 0){
-                    if($unitarray) { reset($unitarray); }
-                    $unitarray = $GLOBALS["u".$i];
-                    $speeds[] = $unitarray['speed'];
-                    //echo print_r(array_keys($speeds))."unitspd\n".$i."trib\n";
-                    
-
-                } else {
-                    $enforce['u'.$i]='0';
-                }
-                
-            }
-            
-            if( intval($enforce['hero']) > 0){
-                $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner']."";
-                $result = mysql_query($q);
-                $hero_f=mysql_fetch_array($result);
-                $hero_unit=$hero_f['unit'];
-                $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
-            } else {
-                $enforce['hero']='0';
-            }
-            
-            $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
-            $artefact1 = count($database->getOwnUniqueArtefactInfo2($enforce['from'],2,1,1));
-            $artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
-            if($artefact > 0){
-                $fastertroops = 3;
-            }else if($artefact1 > 0){
-                $fastertroops = 2;
-            }else if($artefact2 > 0){
-                $fastertroops = 1.5;
-            }else{
-                $fastertroops = 1;
-            }
-            $time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),$enforce['from'])/$fastertroops);
-            
-            $foolartefact2 = $database->getFoolArtefactInfo(2,$enforce['from'],$from['owner']);
-            if(count($foolartefact2) > 0){
-                foreach($foolartefact2 as $arte){
-                    if($arte['bad_effect'] == 1){
-                        $time *= $arte['effect2'];
-                    }else{
-                        $time /= $arte['effect2'];
-                        $time = round($time);
-                    }
-                }
-            }
-            $reference =  $database->addAttack($enforce['from'],$enforce['u'.$start],$enforce['u'.($start+1)],$enforce['u'.($start+2)],$enforce['u'.($start+3)],$enforce['u'.($start+4)],$enforce['u'.($start+5)],$enforce['u'.($start+6)],$enforce['u'.($start+7)],$enforce['u'.($start+8)],$enforce['u'.($start+9)],$enforce['hero'],2,0,0,0,0);
-            $database->addMovement(4,$wref,$enforce['from'],$reference,time(),($time+time()));
-            $database->deleteReinf($enforce['id']);
+            $this->processReturnTroops($enforce);    
         }
+        //check oasis
+        $getenforce1=$database->getOasisEnforce($wref,1);
+        foreach($getenforce1 as $enforce) {
+            echo $enforce['vref']."vref\n";
+            $this->processReturnTroops($enforce);
+        }
+        //set oasis to default
+        if (count($getenforce1)>0) {
+            $q = "DELETE FROM ".TB_PREFIX."ndata WHERE toWref=".$getenforce1[0]['vref'];
+            $database->query($q);
+            $database->populateOasisUnits($getenforce1[0]['vref'],$getenforce1[0]['high']);
+            $q = "UPDATE ".TB_PREFIX."odata SET conqured=0,wood=800,iron=800,clay=800,maxstore=800,crop=800,maxcrop=800,lastupdated=". time().",lastupdated2=".time().",loyalty=100,owner=2,name='Unoccupied Oasis' WHERE conqured=$wref";
+            $database->query($q);
+        }    
+    }
+
+    private function processReturnTroops($enforce) {
+        global $database, $generator;
+        echo $enforce['from']."from\n";
+        $to = $database->getVillage($enforce['from']);
+        $Gtribe = "";
+        if ($database->getUserField($to['owner'],'tribe',0) ==  '2'){ $Gtribe = "1"; }
+        else if ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe =  "2"; }
+        else if ($database->getUserField($to['owner'],'tribe',0) ==  '4'){ $Gtribe = "3"; }
+        else if  ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe =  "4"; }
+                    
+        $start = ($database->getUserField($to['owner'],'tribe',0)-1)*10+1;
+        $end = ($database->getUserField($to['owner'],'tribe',0)*10);
+
+        $from = $database->getVillage($enforce['from']);
+        $fromcoor = $database->getCoor($enforce['from']);
+        $tocoor = $database->getCoor($enforce['vref']);
+        $fromCor = array('x'=>$tocoor['x'], 'y'=>$tocoor['y']);
+        $toCor = array('x'=>$fromcoor['x'], 'y'=>$fromcoor['y']);
+
+        $speeds = array();
+
+        //find slowest unit.
+        for($i=$start;$i<=$end;$i++){
+        
+            if(intval($enforce['u'.$i]) > 0){
+                if($unitarray) { reset($unitarray); }
+                $unitarray = $GLOBALS["u".$i];
+                $speeds[] = $unitarray['speed'];
+            }else{
+                $enforce['u'.$i]='0';
+            }
+        }
+        if( intval($enforce['hero']) > 0){
+            $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner']."";
+            $result = mysql_query($q);
+            $hero_f=mysql_fetch_array($result);
+            $hero_unit=$hero_f['unit'];
+            $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
+        }else{
+            $enforce['hero']='0';
+        }
+            
+        $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
+        $artefact1 = count($database->getOwnUniqueArtefactInfo2($enforce['from'],2,1,1));
+        $artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+        if($artefact > 0){
+            $fastertroops = 3;
+        }else if($artefact1 > 0){
+            $fastertroops = 2;
+        }else if($artefact2 > 0){
+            $fastertroops = 1.5;
+        }else{
+            $fastertroops = 1;
+        }
+        $time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),$enforce['from'])/$fastertroops);
+            
+        $foolartefact2 = $database->getFoolArtefactInfo(2,$enforce['from'],$from['owner']);
+        if(count($foolartefact2) > 0){
+            foreach($foolartefact2 as $arte){
+                if($arte['bad_effect'] == 1){
+                    $time *= $arte['effect2'];
+                }else{
+                    $time /= $arte['effect2'];
+                    $time = round($time);
+                }
+            }
+        }
+        $reference =  $database->addAttack($enforce['from'],$enforce['u'.$start],$enforce['u'.($start+1)],$enforce['u'.($start+2)],$enforce['u'.($start+3)],$enforce['u'.($start+4)],$enforce['u'.($start+5)],$enforce['u'.($start+6)],$enforce['u'.($start+7)],$enforce['u'.($start+8)],$enforce['u'.($start+9)],$enforce['hero'],2,0,0,0,0);
+        $database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,time(),($time+time()));
+        $database->deleteReinf($enforce['id']);    
     }
     
     private function sendTroops($post) {
