@@ -252,7 +252,6 @@ class Units {
         //check oasis
         $getenforce1=$database->getOasisEnforce($wref,1);
         foreach($getenforce1 as $enforce) {
-            echo $enforce['vref']."vref\n";
             $this->processReturnTroops($enforce);
         }
         //set oasis to default
@@ -267,7 +266,6 @@ class Units {
 
     private function processReturnTroops($enforce) {
         global $database, $generator;
-        echo $enforce['from']."from\n";
         $to = $database->getVillage($enforce['from']);
         $Gtribe = "";
         if ($database->getUserField($to['owner'],'tribe',0) ==  '2'){ $Gtribe = "1"; }
