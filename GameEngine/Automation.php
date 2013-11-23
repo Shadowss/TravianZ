@@ -1641,6 +1641,7 @@ class Automation {
                         $defheroxp=intval($totalheroxp_def/count($DefenderHero));
                         for ($i=1;$i<=count($DefenderHero);$i++){
                             $reinfheroxp = $defheroxp;
+				$database->modifyHeroXp("experience",$reinfheroxp,$DefenderHero[$i]);
 				}                        
                         
                     }
