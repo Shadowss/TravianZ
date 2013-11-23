@@ -1640,9 +1640,8 @@ class Automation {
                         //counting heroxp
                         $defheroxp=intval($totalheroxp_def/count($DefenderHero));
                         for ($i=1;$i<=count($DefenderHero);$i++){
-                            $reinfheroxp = $totalheroxp_def;
-                            $database->modifyHeroXp("experience",$reinfheroxp,$DefenderHero[$i]);
-                        }                        
+                            $reinfheroxp = $defheroxp;
+				}                        
                         
                     }
 			$database->modifyPoints($toF['owner'],'dpall',$totaldead_att );
