@@ -1368,17 +1368,19 @@ class Automation {
                     }elseif($targettribe == 5){
                         $def_spy = $enforDefender['u54'];
                     }
-                    if(!$scout or $def_spy > 0){
+                                        if(!$scout or $def_spy > 0){
+                        $traps2=0;
                         $traps = $Defender['u99']-$Defender['u99o'];
                         for($i=1;$i<=11;$i++){
                             $traps1 = $traps;
                             if($data['t'.$i] < $traps1){
                                 $traps1 = $data['t'.$i];
+                                $traps2+= $data['t'.$i];
                             }
                             ${traped.$i}=$traps1;
                             $traps -= $traps1;
-                            $database->modifyUnit($data['to'],array("99o"),array($traps1),array(1));
                         }
+                        $database->modifyUnit($data['to'],array("99o"),array($traps2),array(1));
                         for($i=$start;$i<=$end;$i++) {
                             $j = $i-$start+1;
                             $Attacker['u'.$i] -= ${traped.$j};
@@ -1620,41 +1622,39 @@ class Automation {
                         $unitarray = $GLOBALS["u".$i];
                             
                         $totaldead_def += $dead[''.$i.''];
-                        $totalheroxp_att += ($dead[''.$i.'']*$unitarray['pop']);
+                        
+                        $totalpoint_att += ($dead[''.$i.'']*$unitarray['pop']);
                     }
-                    $totalheroxp_att += ($dead['hero']*6);
+                    $totalpoint_att += ($dead['hero']*6);
+                    
                     if ($Attacker['uhero'] != 0){
-                        $heroxp = $totalheroxp_att;
+                        $heroxp = $totalpoint_att;
                         $database->modifyHeroXp("experience",$heroxp,$from['owner']);
                     }
-                    
-                    
-                    if($Defender['hero'] > 0){
                         
-                        for($i=1;$i<=10;$i++){
-                            if($unitarray) { reset($unitarray); }
-                            $unitarray = $GLOBALS["u".(($att_tribe-1)*10+$i)];
-                            $totalheroxp_def += ($dead.$i*$unitarray['pop']);
-                        }
-                        $totalheroxp_def +=$dead11*6;
+                    for($i=1;$i<=10;$i++){
+                        if($unitarray) { reset($unitarray); }
+                        $unitarray = $GLOBALS["u".(($att_tribe-1)*10+$i)];
+                        $totalpoint_def += (${dead.$i}*$unitarray['pop']);
+                    }
+                    $totalpoint_def +=$dead11*6;
+                    if($Defender['hero'] > 0){    
                         //counting heroxp
-                        $defheroxp=intval($totalheroxp_def/count($DefenderHero));
+                        $defheroxp=intval($totalpoint_def/count($DefenderHero));
                         for ($i=1;$i<=count($DefenderHero);$i++){
                             $reinfheroxp = $defheroxp;
-				$database->modifyHeroXp("experience",$reinfheroxp,$DefenderHero[$i]);
-				}                        
-                        
+                            $database->modifyHeroXp("experience",$reinfheroxp,$DefenderHero[$i]);
+                        }
                     }
-			$database->modifyPoints($toF['owner'],'dpall',$totaldead_att );
-			$database->modifyPoints($from['owner'],'apall',$totaldead_def);
-			$database->modifyPoints($toF['owner'],'dp',$totaldead_att );
-			$database->modifyPoints($from['owner'],'ap',$totaldead_def);
-			$database->modifyPointsAlly($targetally,'Adp',$totaldead_att );
-			$database->modifyPointsAlly($ownally,'Aap',$totaldead_def);
-			$database->modifyPointsAlly($targetally,'dp',$totaldead_att );
-			$database->modifyPointsAlly($ownally,'ap',$totaldead_def);
-
-
+                    
+                    $database->modifyPoints($toF['owner'],'dpall',$totalpoint_def);
+                    $database->modifyPoints($from['owner'],'apall',$totalpoint_att);
+                    $database->modifyPoints($toF['owner'],'dp',$totalpoint_def);
+                    $database->modifyPoints($from['owner'],'ap',$totalpoint_att);
+                    $database->modifyPointsAlly($targetally,'Adp',$totalpoint_def);
+                    $database->modifyPointsAlly($ownally,'Aap',$totalpoint_att);
+                    $database->modifyPointsAlly($targetally,'dp',$totalpoint_def);
+                    $database->modifyPointsAlly($ownally,'ap',$totalpoint_att);
 
 			if ($isoasis == 0){
 			// get toatal cranny value:
@@ -3167,6 +3167,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;  
 
 			//check to see if we're only sending a hero between own villages and there's a Mansion at target village
+			$HeroTransfer=0;
+			$NonHeroPresent=0;
 			if($data['t11'] != 0) {
 				if($database->getVillageField($data['from'],"owner") == $database->getVillageField($data['to'],"owner")) {
 					for($i=1;$i<=10;$i++) { if($data['t'.$i]>0) { $NonHeroPresent = 1; break; } }
@@ -3190,21 +3192,24 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				}
 			}
 			if(!$HeroTransfer){
-  			//check if there is defence from town in to town
-				$check=$database->getEnforce($data['to'],$data['from']);
-				if (!isset($check['id'])){
-					//no:
-					$database->addEnforce($data);
-				} else{
-				 //yes
-					 $start = ($owntribe-1)*10+1;
-					 $end = ($owntribe*10);
-				 //add unit.
-					 $j='1';
-					 for($i=$start;$i<=$end;$i++){
-						$database->modifyEnforce($check['id'],$i,$data['t'.$j.''],1); $j++;
-					}
-				}
+  			                    if(!$HeroTransfer){
+                        //check if there is defence from town in to town
+                        $check=$database->getEnforce($data['to'],$data['from']);
+                        if (!isset($check['id'])){
+                            //no:
+                            $database->addEnforce($data);
+                        } else{
+                            //yes
+                            $start = ($owntribe-1)*10+1;
+                            $end = ($owntribe*10);
+                            //add unit.
+                            $j='1';
+                            for($i=$start;$i<=$end;$i++){
+                                $database->modifyEnforce($check['id'],$i,$data['t'.$j.''],1); $j++;
+                            }
+                            $database->modifyEnforce($check['id'],'hero',$data['t11'],1);
+                        		}
+                    		}
 			}
 			//send rapport
 			$unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
@@ -4220,7 +4225,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$bdata1 = $database->getDorf2Building($master['wid']);
 		}
 		}else{
-		$bdata = $bbdata = $bdata1 = count($database->getDorf1Building($master['wid'])) + count($database->getDorf2Building($master['wid']));
+		$bdata = $bbdata = count($database->getDorf1Building($master['wid'])) + count($database->getDorf2Building($master['wid']));
+    		$bdata1 = $database->getDorf1Building($master['wid']);
 		}
 		if($database->getUserField($owner,'plus',0) > time() or $ww > 0){
 		if($bbdata < 2){
