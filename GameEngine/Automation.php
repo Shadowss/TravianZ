@@ -1368,25 +1368,24 @@ class Automation {
                     }elseif($targettribe == 5){
                         $def_spy = $enforDefender['u54'];
                     }
-                                        if(!$scout or $def_spy > 0){
-                        $traps2=0;
+                    if(!$scout or $def_spy >0){
                         $traps = $Defender['u99']-$Defender['u99o'];
+                        if ($traps<1) $traps=0;
                         for($i=1;$i<=11;$i++){
                             $traps1 = $traps;
                             if($data['t'.$i] < $traps1){
                                 $traps1 = $data['t'.$i];
-                                $traps2+= $data['t'.$i];
                             }
                             ${traped.$i}=$traps1;
                             $traps -= $traps1;
                         }
-                        $database->modifyUnit($data['to'],array("99o"),array($traps2),array(1));
+                        $totaltraped_att = $traped1+$traped2+$traped3+$traped4+$traped5+$traped6+$traped7+$traped8+$traped9+$traped10+$traped11;
+                        $database->modifyUnit($data['to'],array("99o"),array($totaltraped_att),array(1));
                         for($i=$start;$i<=$end;$i++) {
                             $j = $i-$start+1;
                             $Attacker['u'.$i] -= ${traped.$j};
                         }
                         $Attacker['uhero'] -= $traped11;
-                        $totaltraped_att = $traped1+$traped2+$traped3+$traped4+$traped5+$traped6+$traped7+$traped8+$traped9+$traped10+$traped11;
                         if($totaltraped_att > 0){
                             $prisoners2 = $database->getPrisoners2($data['to'],$data['from']);
                             if(empty($prisoners2)){
@@ -2587,99 +2586,99 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         }  
                     	}
 			else {
-			if($type == 3 && $totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
-			$prisoners = $database->getPrisoners($to['wref']);
-			if(count($prisoners) > 0){
-			$anothertroops = 0;
-			foreach($prisoners as $prisoner){
-			$p_owner = $database->getVillageField($prisoner['from'],"owner");
-			if($p_owner == $from['owner']){
-			$database->modifyAttack2($data['ref'],1,$prisoner['t1']);
-			$database->modifyAttack2($data['ref'],2,$prisoner['t2']);
-			$database->modifyAttack2($data['ref'],3,$prisoner['t3']);
-			$database->modifyAttack2($data['ref'],4,$prisoner['t4']);
-			$database->modifyAttack2($data['ref'],5,$prisoner['t5']);
-			$database->modifyAttack2($data['ref'],6,$prisoner['t6']);
-			$database->modifyAttack2($data['ref'],7,$prisoner['t7']);
-			$database->modifyAttack2($data['ref'],8,$prisoner['t8']);
-			$database->modifyAttack2($data['ref'],9,$prisoner['t9']);
-			$database->modifyAttack2($data['ref'],10,$prisoner['t10']);
-			$database->modifyAttack2($data['ref'],11,$prisoner['t11']);
-			$mytroops = $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
-			$newtraps = round($mytroops/3);
-			$database->modifyUnit($data['to'],array("99"),array($newtraps),array(0));
-			$database->modifyUnit($data['to'],array("99o"),array($mytroops),array(0));
-			}else{
-			$p_alliance = $database->getUserField($p_owner,"alliance",0);
-			$friendarray = $database->getAllianceAlly($p_alliance,1);
-			$neutralarray = $database->getAllianceAlly($p_alliance,2);
-			$friend = (($friendarray[0]['alli1']>0 and $friendarray[0]['alli2']>0 and $p_alliance>0) and ($friendarray[0]['alli1']==$ownally or $friendarray[0]['alli2']==$ownally) and ($ownally != $p_alliance and $ownally and $p_alliance)) ? '1':'0';
-			$neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $p_alliance>0) and ($neutralarray[0]['alli1']==$ownally or $neutralarray[0]['alli2']==$ownally) and ($ownally != $p_alliance and $ownally and $p_alliance)) ? '1':'0';
-			if($p_alliance == $ownally or $friend == 1 or $neutral == 1){
-			$p_tribe = $database->getUserField($p_owner,"tribe",0);
+                        if($type == 3 && $totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
+                            $prisoners = $database->getPrisoners($to['wref']);
+                            if(count($prisoners) > 0){
+                                $anothertroops = 0;
+                                $mytroops=0;
+                                foreach($prisoners as $prisoner){
+                                    $p_owner = $database->getVillageField($prisoner['from'],"owner");
+                                    if($p_owner == $from['owner']){
+                                        $database->modifyAttack2($data['ref'],1,$prisoner['t1']);
+                                        $database->modifyAttack2($data['ref'],2,$prisoner['t2']);
+                                        $database->modifyAttack2($data['ref'],3,$prisoner['t3']);
+                                        $database->modifyAttack2($data['ref'],4,$prisoner['t4']);
+                                        $database->modifyAttack2($data['ref'],5,$prisoner['t5']);
+                                        $database->modifyAttack2($data['ref'],6,$prisoner['t6']);
+                                        $database->modifyAttack2($data['ref'],7,$prisoner['t7']);
+                                        $database->modifyAttack2($data['ref'],8,$prisoner['t8']);
+                                        $database->modifyAttack2($data['ref'],9,$prisoner['t9']);
+                                        $database->modifyAttack2($data['ref'],10,$prisoner['t10']);
+                                        $database->modifyAttack2($data['ref'],11,$prisoner['t11']);
+                                        $mytroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
+                                        $database->deletePrisoners($prisoner['id']);
+                                    }else{
+                                        $p_alliance = $database->getUserField($p_owner,"alliance",0);
+                                        $friendarray = $database->getAllianceAlly($p_alliance,1);
+                                        $neutralarray = $database->getAllianceAlly($p_alliance,2);
+                                        $friend = (($friendarray[0]['alli1']>0 and $friendarray[0]['alli2']>0 and $p_alliance>0) and ($friendarray[0]['alli1']==$ownally or $friendarray[0]['alli2']==$ownally) and ($ownally != $p_alliance and $ownally and $p_alliance)) ? '1':'0';
+                                        $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $p_alliance>0) and ($neutralarray[0]['alli1']==$ownally or $neutralarray[0]['alli2']==$ownally) and ($ownally != $p_alliance and $ownally and $p_alliance)) ? '1':'0';
+                                        if($p_alliance == $ownally or $friend == 1 or $neutral == 1){
+                                            $p_tribe = $database->getUserField($p_owner,"tribe",0);
 
-            $p_eigen = $database->getCoor($prisoner['wref']);
-            $p_from = array('x'=>$p_eigen['x'], 'y'=>$p_eigen['y']);
-            $p_ander = $database->getCoor($prisoner['from']);
-            $p_to = array('x'=>$p_ander['x'], 'y'=>$p_ander['y']);
-			$p_tribe = $database->getUserField($p_owner,"tribe",0);
+                                            $p_eigen = $database->getCoor($prisoner['wref']);
+                                            $p_from = array('x'=>$p_eigen['x'], 'y'=>$p_eigen['y']);
+                                            $p_ander = $database->getCoor($prisoner['from']);
+                                            $p_to = array('x'=>$p_ander['x'], 'y'=>$p_ander['y']);
+                                            $p_tribe = $database->getUserField($p_owner,"tribe",0);
 
-            $p_speeds = array();
+                                            $p_speeds = array();
 
-            //find slowest unit.
-            for($i=1;$i<=10;$i++){
-                if ($prisoner['t'.$i]){
-                    if($prisoner['t'.$i] != '' && $prisoner['t'.$i] > 0){
-                        if($p_unitarray) { reset($p_unitarray); }
-                        $p_unitarray = $GLOBALS["u".(($p_tribe-1)*10+$i)];
-                        $p_speeds[] = $p_unitarray['speed'];
-                    }
-                }
-            }
+                                            //find slowest unit.
+                                            for($i=1;$i<=10;$i++){
+                                                if ($prisoner['t'.$i]){
+                                                    if($prisoner['t'.$i] != '' && $prisoner['t'.$i] > 0){
+                                                        if($p_unitarray) { reset($p_unitarray); }
+                                                        $p_unitarray = $GLOBALS["u".(($p_tribe-1)*10+$i)];
+                                                        $p_speeds[] = $p_unitarray['speed'];
+                                                    }
+                                                }
+                                            }
 
-			if ($prisoner['t11']>0){
-				$p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$p_owner."";
-				$p_resulth = mysql_query($p_qh);
-				$p_hero_f=mysql_fetch_array($p_resulth);
-				$p_hero_unit=$p_hero_f['unit'];
-				$p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
-			}
+                                            if ($prisoner['t11']>0){
+                                                $p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$p_owner."";
+                                                $p_resulth = $database->query($p_qh);
+                                                $p_hero_f=mysql_fetch_array($p_resulth);
+                                                $p_hero_unit=$p_hero_f['unit'];
+                                                $p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
+                                            }
 
-            $p_artefact = count($database->getOwnUniqueArtefactInfo2($p_owner,2,3,0));
-			$p_artefact1 = count($database->getOwnUniqueArtefactInfo2($prisoner['from'],2,1,1));
-			$p_artefact2 = count($database->getOwnUniqueArtefactInfo2($p_owner,2,2,0));
-			if($p_artefact > 0){
-			$p_fastertroops = 3;
-			}else if($p_artefact1 > 0){
-			$p_fastertroops = 2;
-			}else if($p_artefact2 > 0){
-			$p_fastertroops = 1.5;
-			}else{
-			$p_fastertroops = 1;
-			}
-			$p_time = round($this->procDistanceTime($p_to,$p_from,min($p_speeds),1)/$p_fastertroops);
-			$foolartefact1 = $database->getFoolArtefactInfo(2,$prisoner['from'],$p_owner);
-			if(count($foolartefact1) > 0){
-			foreach($foolartefact1 as $arte){
-			if($arte['bad_effect'] == 1){
-			$p_time *= $arte['effect2'];
-			}else{
-			$p_time /= $arte['effect2'];
-			$p_time = round($p_time);
-			}
-			}
-			}
-			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
-			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,microtime(true),($p_time+microtime(true)));
-			$anothertroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
-			$newtraps = (round($anothertroops/3))*2;
-			$database->modifyUnit($data['to'],array("99"),array($newtraps),array(0));
-			$database->modifyUnit($data['to'],array("99o"),array($anothertroops),array(0));
-			}
-			}
-			$database->deletePrisoners($prisoner['id']);
-			}
-			$trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
+                                            $p_artefact = count($database->getOwnUniqueArtefactInfo2($p_owner,2,3,0));
+                                            $p_artefact1 = count($database->getOwnUniqueArtefactInfo2($prisoner['from'],2,1,1));
+                                            $p_artefact2 = count($database->getOwnUniqueArtefactInfo2($p_owner,2,2,0));
+                                            if($p_artefact > 0){
+                                                $p_fastertroops = 3;
+                                            }else if($p_artefact1 > 0){
+                                                $p_fastertroops = 2;
+                                            }else if($p_artefact2 > 0){
+                                                $p_fastertroops = 1.5;
+                                            }else{
+                                                $p_fastertroops = 1;
+                                            }
+                                            $p_time = round($this->procDistanceTime($p_to,$p_from,min($p_speeds),1)/$p_fastertroops);
+                                            $foolartefact1 = $database->getFoolArtefactInfo(2,$prisoner['from'],$p_owner);
+                                            if(count($foolartefact1) > 0){
+                                                foreach($foolartefact1 as $arte){
+                                                    if($arte['bad_effect'] == 1){
+                                                        $p_time *= $arte['effect2'];
+                                                    }else{
+                                                        $p_time /= $arte['effect2'];
+                                                        $p_time = round($p_time);
+                                                    }
+                                                }
+                                            }
+                                            $p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
+                                            $database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,microtime(true),($p_time+microtime(true)));
+                                            $anothertroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
+                                            $database->deletePrisoners($prisoner['id']);
+                                        }
+                                    }
+                                }
+                                
+                                $newtraps = round(($mytroops+$anothertroops)/3);
+                                $database->modifyUnit($data['to'],array("99"),array($newtraps),array(0));
+                                $database->modifyUnit($data['to'],array("99o"),array($mytroops+$anothertroops),array(0));
+                                $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
 			$p_username = $database->getUserField($from['owner'],"username",0);
 			if($mytroops > 0 && $anothertroops > 0){
 			$info_trap = "".$trapper_pic." ".$p_username." released <b>".$mytroops."</b> from his troops and <b>".$anothertroops."</b> friendly troops.";
