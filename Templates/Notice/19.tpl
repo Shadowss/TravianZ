@@ -62,12 +62,14 @@ for($i=152;$i<=161;$i++) {
     }
 }
 if(isset($dataarray[147]) and $dataarray[147]!=0){
-	if ($dataarray[161]==0){$tdclass='class="none"';}
-	echo "<td $tdclass>$dataarray[161]</td>";
+    if ($dataarray[161]==0) $tdclass='class="none"'; else $tdclass='';
+    echo "<td $tdclass>$dataarray[161]</td>";
 }
 }
-echo "</tr></tbody>";
-?>
+if(isset($dataarray[171]) && $dataarray[171] !=''){
+echo $dataarray[171];
+}
+echo "</tr></tbody>";?>
 </table>
 	
 <?php
