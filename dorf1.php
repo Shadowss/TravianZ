@@ -72,6 +72,7 @@ header("Location: banned.php");
 <?php include("Templates/menu.tpl"); ?>
 <div id="content"  class="village1">
 <h1><?php echo $village->vname; if($village->loyalty!='100'){ if($village->loyalty>'33'){ $color="gr"; }else{ $color="re"; } ?><div id="loyality" class="<?php echo $color; ?>"><?php echo LOYALTY; ?> <?php echo floor($village->loyalty); ?>%</div><?php } ?></h1>
+<div id="cap" align="left"><?php if($village->capital!='0') { echo "<font color=gray>(Capital)</font>"; }else{ halt; } ?></div>
 <?php include("Templates/field.tpl");
 $timer = 1;
 ?>
