@@ -173,6 +173,18 @@ $automation->isWinner();
 105. Fix return troops if village destroy.</br>
 106. Fix link list multivillage.</br>
 107. Fix rally point to list troops own/other village/oasis.</br>
+108. Fix recive report when other player send me reinforcement to my oasis</br>
+109. Fix calculate defender hero</br>
+110. Fix enforcement oasis</br>
+111. Fix hero XP calculation by crop consumed and share point hero xp</br>
+112. Fix chiefting village only normal attack can reduce loyalty</br>
+113. Fix conquered oasis. Hero must use normal attack if oasis is conquered by other player</br>
+114. Fix destroy village.</br>
+115. Fix returntroop in oasis when destroy village</br>
+116. Fix total point hero and statistics calculation by crop consumption</br>
+117. Fix hero reinfocement sometimes mising in action</br>
+118. Fix total of trapper bug is full trapp if 1 troop only you send.</br>
+119. Fix invalid argument supplied if using masterbuilder</br>
 
 </div>
 </div>
