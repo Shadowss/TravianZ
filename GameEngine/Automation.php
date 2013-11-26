@@ -2949,9 +2949,6 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
             $database->query($q);
-            $q = "DELETE FROM ".TB_PREFIX."ndata WHERE toWref=$wref";
-            $database->query($q);
-        
             $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`from` = $wref AND `to` = $wref) OR (`from` = $wref AND sort_type=3))";
             $database->query($q);
                 
