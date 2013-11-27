@@ -1,6 +1,7 @@
 <?php
 
         $artefact1 = $database->getOwnArtefactInfo3($session->uid);
+        $result = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = " . $session->uid . ""));
         $wref = $village->wid;
        $coor = $database->getCoor($wref); 
         function getDistance($coorx1, $coory1, $coorx2, $coory2) {
