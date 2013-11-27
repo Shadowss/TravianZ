@@ -14,9 +14,9 @@ $unitsbytype=array('infantry'=>array(1,2,3,11,12,13,14,21,22,31,32,33,34,41,42,4
 $u1=array('atk'=>40,'di'=>35,'dc'=>50,'wood'=>120,'clay'=>100,'iron'=>150,'crop'=>30,'pop'=>1,'speed'=>6,'time'=>1600,'cap'=>50);
 $u2=array('atk'=>30,'di'=>65,'dc'=>35,'wood'=>100,'clay'=>130,'iron'=>160,'crop'=>70,'pop'=>1,'speed'=>5,'time'=>1760,'cap'=>20);
 $u3=array('atk'=>70,'di'=>40,'dc'=>25,'wood'=>150,'clay'=>160,'iron'=>210,'crop'=>80,'pop'=>1,'speed'=>7,'time'=>1920,'cap'=>50);
-$u4=array('atk'=>0,'di'=>20,'dc'=>10,'wood'=>140,'clay'=>160,'iron'=>20,'crop'=>40,'pop'=>2,'speed'=>16,'time'=>1360,'cap'=>0);
-$u5=array('atk'=>120,'di'=>65,'dc'=>50,'wood'=>550,'clay'=>440,'iron'=>320,'crop'=>100,'pop'=>3,'speed'=>14,'time'=>2640,'cap'=>100);
-$u6=array('atk'=>180,'di'=>80,'dc'=>105,'wood'=>550,'clay'=>640,'iron'=>800,'crop'=>180,'pop'=>4,'speed'=>10,'time'=>3520,'cap'=>70);
+$u4=array('atk'=>0,'di'=>20,'dc'=>10,'wood'=>140,'clay'=>160,'iron'=>20,'crop'=>40,'pop'=>2,'speed'=>16,'time'=>1360,'cap'=>0,'drinking'=>10);
+$u5=array('atk'=>120,'di'=>65,'dc'=>50,'wood'=>550,'clay'=>440,'iron'=>320,'crop'=>100,'pop'=>3,'speed'=>14,'time'=>2640,'cap'=>100,'drinking'=>15);
+$u6=array('atk'=>180,'di'=>80,'dc'=>105,'wood'=>550,'clay'=>640,'iron'=>800,'crop'=>180,'pop'=>4,'speed'=>10,'time'=>3520,'cap'=>70,'drinking'=>20);
 $u7=array('atk'=>60,'di'=>30,'dc'=>75,'wood'=>900,'clay'=>360,'iron'=>500,'crop'=>70,'pop'=>3,'speed'=>4,'time'=>4600,'cap'=>0);
 $u8=array('atk'=>75,'di'=>60,'dc'=>10,'wood'=>950,'clay'=>1350,'iron'=>600,'crop'=>90,'pop'=>6,'speed'=>3,'time'=>9000,'cap'=>0);
 $u9=array('atk'=>50,'di'=>40,'dc'=>30,'wood'=>30750,'clay'=>27200,'iron'=>45000,'crop'=>37500,'pop'=>5,'speed'=>5,'time'=>90700,'cap'=>0);
