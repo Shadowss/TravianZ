@@ -13,7 +13,7 @@
                        $effect = "account";
                    }
                    if ($artefact['conquered'] >= (time()-86400)){
-                   $active = "Inactive";
+                   $active = date("Y-m-d H:i:s",$artefact['conquered']+86400);
                    }else{
                     $active = "Active";
                    }
