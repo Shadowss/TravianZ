@@ -1,7 +1,5 @@
 <?php
-
         $artefact1 = $database->getOwnArtefactInfo3($session->uid);
-        $result = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = " . $session->uid . ""));
         $wref = $village->wid;
        $coor = $database->getCoor($wref); 
         function getDistance($coorx1, $coory1, $coorx2, $coory2) {
@@ -34,7 +32,7 @@
         <tbody>
             <?php
 
-        if($result == 0) {
+        if (count($artefact1)==0){
         	echo '<tr><td colspan="4" class="none">You do not own any artefacts.</td></tr>';
         } else {
 		foreach($artefact1 as $artefact){
