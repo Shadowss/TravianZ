@@ -387,7 +387,7 @@ class MYSQL_DB {
 	}
 	*/
 	
-	function generateBase($sector, $mode=0) {
+	function generateBase($sector, $mode=1) {
     if (!$mode) {
         $gamesday=time()-COMMENCE;
         if ($gamesday<3600*24*10) { //10 day
@@ -2413,6 +2413,11 @@ class MYSQL_DB {
 		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit + $amt where id = $aid";
 		return mysql_query($q, $this->connection);
 	}
+	
+	function modifyAttack3($aid, $units) {
+        $q = "UPDATE ".TB_PREFIX."attacks set $units WHERE id = $aid";
+        return mysql_query($q, $this->connection);
+    }
 
 	function getRanking() {
 		$q = "SELECT id,username,alliance,ap,apall,dp,dpall,access FROM " . TB_PREFIX . "users WHERE tribe<=3 AND access<" . (INCLUDE_ADMIN ? "10" : "8");
