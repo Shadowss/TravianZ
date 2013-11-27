@@ -83,6 +83,31 @@ if(isset($dataarray[151]) and $dataarray[151]!=0){
     echo "<td $tdclass>$dataarray[163]</td>";
 }
 }
+if ($dataarray[165]!='' and $dataarray[166]!=''){ //ram
+?>
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
+    <img class="unit u<?php echo $dataarray[165]; ?>" src="img/x.gif" alt="Ram" title="Ram" />
+    <?php echo $dataarray[166]; ?>
+    </td></tr></tbody>
+<?php } 
+if ($dataarray[167]!='' and $dataarray[168]!=''){ //cata
+?>
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
+    <img class="unit u<?php echo $dataarray[167]; ?>" src="img/x.gif" alt="Catapult" title="Catapult" />
+    <?php echo $dataarray[168]; ?>
+    </td></tr></tbody>
+<?php }
+if ($dataarray[169]!='' and $dataarray[170]!=''){ //chief
+?>
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
+    <img class="unit u<?php echo $dataarray[169]; ?>" src="img/x.gif" alt="Chief" title="Chief" />
+    <?php echo $dataarray[170]; ?>
+    </td></tr></tbody>
+<?php }
+if(isset($dataarray[171]) && $dataarray[171] !=''){ //troop not return
+echo $dataarray[171];
+}
+?>
 if(isset($dataarray[171]) && $dataarray[171] !=''){
 echo $dataarray[171];
 }
