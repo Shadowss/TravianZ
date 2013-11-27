@@ -1535,6 +1535,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
 `crop` float(12,2) NOT NULL,
 `maxcrop` int(11) unsigned NOT NULL,
 `lastupdate` int(11) unsigned NOT NULL,
+`lastupdate2` int(11) unsigned NOT NULL,  
 `loyalty` float(9,6) unsigned NOT NULL DEFAULT '100',
 `exp1` int(11) NOT NULL,
 `exp2` int(11) NOT NULL,
