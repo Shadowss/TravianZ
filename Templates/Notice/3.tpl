@@ -117,7 +117,6 @@ if(isset($dataarray[171]) && $dataarray[171] !=''){ //troop not return
     <?php echo $dataarray[171]; ?>
     </td></tr></tbody>
 <?php }?>
-
 if ($dataarray[172]!='' and $dataarray[173]!=''){ //hero
 ?>
     <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
@@ -131,7 +130,6 @@ if(isset($dataarray[171]) && $dataarray[171] !=''){ //troop not return
     <?php echo $dataarray[171]; ?>
     </td></tr></tbody>
 <?php }?>
-echo "</tr></tbody>"; ?>
 </td></tr></tbody>
 
 </table>
