@@ -1805,7 +1805,7 @@ class Automation {
 // Data for when troops return.
 
 				//catapults look :D
-			    $info_cat = $info_chief = $info_ram = ",";
+			    $info_cat = $info_chief = $info_ram = $info_hero = ",";
     //check to see if can destroy village
     $varray = $database->getProfileVillages($to['owner']);
     if(count($varray)!='1' AND $to['capital']!='1'){
@@ -2437,51 +2437,49 @@ class Automation {
                         }
                     }
 
-                    if($data['t11'] > 0){ //hero
+                    if(($data['t11']-$dead11-$traped11)> 0){ //hero
                         if ($heroxp == 0) {
                             $xp="";
+                            $info_hero = $hero_pic.",Your hero had nothing to kill therfore gains no XP at all";
                         } else {
                             $xp=" and gained ".$heroxp." XP from the battle";
+                            $info_hero = $hero_pic.",Your hero gained ".$heroxp." XP";
                         }
+                        
                         if ($isoasis != 0) { //oasis
                             $OasisInfo = $database->getOasisInfo($data['to']);
                             $troopcount = $database->countOasisTroops($data['to']);
                             if ($database->canConquerOasis($data['from'],$data['to']) && $troopcount==0) {
                                 $database->conquerOasis($data['from'],$data['to']);
-                                $info_chief = $hero_pic.",Your hero has conquered this oasis".$xp;
+                                $info_hero = $hero_pic.",Your hero has conquered this oasis".$xp;
+                            
                             }else{
                                 if ($OasisInfo['conqured'] != 0 && $troopcount==0) {
                                     $Oloyaltybefore = intval($OasisInfo['loyalty']);
                                     $database->modifyOasisLoyalty($data['to']);
                                     $OasisInfo = $database->getOasisInfo($data['to']);
                                     $Oloyaltynow = intval($OasisInfo['loyalty']);
-                                    $info_chief = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP";
-                                }else{
-                                    if ($heroxp == 0) {
-                                        $info_chief = $hero_pic.",Your hero had nothing to kill therfore gains no XP at all";
-                                    } else {
-                                        $info_chief = $hero_pic.",Your hero gained ".$heroxp." XP";
-                                    }
+                                    $info_hero = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP";
                                 }
                             }
                         } else {
-    global $form;
-    if ($heroxp == 0) {
-        $xp=" no XP from the battle";
-    } else {
-        $xp=" gained ".$heroxp." XP from the battle";
-    }
-    $artifact = $database->getOwnArtefactInfo($data['to']);
-    if (!empty($artifact)) {
-        if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
-            $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
-            $info_chief = $hero_pic.",Your hero is carrying home a artefact and".$xp;
-        } else {
-            $info_chief = $hero_pic.",".$form->getError("error").$xp;
-        }
-    }  
-			}
-		}
+                            global $form;
+                            if ($heroxp == 0) {
+                                $xp=" no XP from the battle";
+                            } else {
+                                $xp=" gained ".$heroxp." XP from the battle";
+                            }
+                            $artifact = $database->getOwnArtefactInfo($data['to']);
+                            if (!empty($artifact)) {
+                                if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
+                                    $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
+                                    $info_hero = $hero_pic.",Your hero is carrying home a artefact and".$xp;
+                                } else {
+                                    $info_hero = $hero_pic.",".$form->getError("error").$xp;
+                                }
+                            }
+                        }
+                    }else $info_hero = $hero_pic.",Your hero die but gained ".$heroxp." XP";
 
 				if($scout){
 				if ($data['spy'] == 1){
@@ -2553,9 +2551,9 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 
 
 			// When all troops die, sends no info...send info
-                    $info_troop= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">none of your soldiers have returned.</td></tr></tbody>";
-                    $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop;
-					
+                $info_troop= "None of your soldiers have returned";
+				$data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
+
 			//Undetected and detected in here.
                     	if($scout){
                         
@@ -2678,7 +2676,10 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 			}
 			}
-			$data2 = $data2.','.addslashes($info_trap).',,';
+			    if($totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
+				$info_troop= "";
+			}
+			$data2 = $data2.','.addslashes($info_trap).',,,'.$info_troop.','.$info_hero;  
 			if($totalsend_alldef == 0){
 			$database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
 			}else if($totaldead_alldef == 0){
