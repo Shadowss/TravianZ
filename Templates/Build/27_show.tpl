@@ -102,7 +102,7 @@
                 </tr>
 
                 <tr>
-                    <th>time of activation</th>
+                    <th>Time of activation</th>
                     <td><?php echo $active;?></td>
                 </tr>
             </tbody></table>
