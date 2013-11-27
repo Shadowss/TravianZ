@@ -1847,7 +1847,7 @@ class Automation {
 }
 		   if ($type=='3')
 {
-	if (($data['t8']-$dead8-$traped8)>0)
+	if (($data['t8']-$traped8)>0)
 	{
 		$pop=$this->recountPop($data['to']);
 		        if ($isoasis == 0) {
