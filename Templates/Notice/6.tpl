@@ -115,6 +115,13 @@ if ($dataarray[162]!='' and $dataarray[162]!=''){ //release prisoners
     
     <?php echo $dataarray[162]; ?>
     </td></tr></tbody>
+<?php }
+if ($dataarray[165]!='' and $dataarray[166]!=''){ //hero
+?>
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
+    <img class="unit u<?php echo $dataarray[165]; ?>" src="img/x.gif" alt="Hero" title="Hero" />
+    <?php echo $dataarray[166]; ?>
+    </td></tr></tbody>
 <?php } ?>
 	<tbody class="goods"><tr><th>Bounty</th><td colspan="<?php echo $colspan; ?>">
 	<div class="res"><img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /><?php echo $dataarray[23]; ?> | <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $dataarray[24]; ?> | <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $dataarray[25]; ?> | <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $dataarray[26]; ?></div><div class="carry"><img class="car" src="img/x.gif" alt="carry" title="carry" /><?php echo ($dataarray[23]+$dataarray[24]+$dataarray[25]+$dataarray[26])."/".$dataarray[27]; ?></div>
