@@ -1567,32 +1567,18 @@ class Automation {
 				$totalattackdead += $totaldead_alldef;
 
 
-			// Set units returning from attack
-			$database->modifyAttack($data['ref'],1,$dead1);
-			$database->modifyAttack($data['ref'],2,$dead2);
-			$database->modifyAttack($data['ref'],3,$dead3);
-			$database->modifyAttack($data['ref'],4,$dead4);
-			$database->modifyAttack($data['ref'],5,$dead5);
-			$database->modifyAttack($data['ref'],6,$dead6);
-			$database->modifyAttack($data['ref'],7,$dead7);
-			$database->modifyAttack($data['ref'],8,$dead8);
-			$database->modifyAttack($data['ref'],9,$dead9);
-			$database->modifyAttack($data['ref'],10,$dead10);
-			$database->modifyAttack($data['ref'],11,$dead11);
-			$unitsdead_att = ''.$dead1.','.$dead2.','.$dead3.','.$dead4.','.$dead5.','.$dead6.','.$dead7.','.$dead8.','.$dead9.','.$dead10.'';
-
-			$database->modifyAttack($data['ref'],1,$traped1);
-			$database->modifyAttack($data['ref'],2,$traped2);
-			$database->modifyAttack($data['ref'],3,$traped3);
-			$database->modifyAttack($data['ref'],4,$traped4);
-			$database->modifyAttack($data['ref'],5,$traped5);
-			$database->modifyAttack($data['ref'],6,$traped6);
-			$database->modifyAttack($data['ref'],7,$traped7);
-			$database->modifyAttack($data['ref'],8,$traped8);
-			$database->modifyAttack($data['ref'],9,$traped9);
-			$database->modifyAttack($data['ref'],10,$traped10);
-			$database->modifyAttack($data['ref'],11,$traped11);
-			$unitstraped_att = ''.$traped1.','.$traped2.','.$traped3.','.$traped4.','.$traped5.','.$traped6.','.$traped7.','.$traped8.','.$traped9.','.$traped10.','.$traped11.'';
+                    // Set units returning from attack
+                    
+                    for ($i=1;$i<=11;$i++) {
+                        $t_units.="t".$i."=t".$i." - ".${dead.$i}.(($i > 10) ? '' : ', ');
+                        $p_units.="t".$i."=t".$i." - ".${traped.$i}.(($i > 10) ? '' : ', ');
+                    }    
+                
+                    $database->modifyAttack3($data['ref'],$t_units);
+                    $database->modifyAttack3($data['ref'],$p_units);
+                    
+                    $unitsdead_att = ''.$dead1.','.$dead2.','.$dead3.','.$dead4.','.$dead5.','.$dead6.','.$dead7.','.$dead8.','.$dead9.','.$dead10.'';
+                    $unitstraped_att = ''.$traped1.','.$traped2.','.$traped3.','.$traped4.','.$traped5.','.$traped6.','.$traped7.','.$traped8.','.$traped9.','.$traped10.','.$traped11.'';
 			if ($herosend_att>0){
 				$unitsdead_att_check = $unitsdead_att.','.$dead11;
 			}else{
@@ -1829,8 +1815,8 @@ class Automation {
     }
     if ($isoasis == 1) $can_destroy=0;
 
-			if ($type=='3'){
-				if (($data['t7']-$dead7-$traped7)>0){
+					if ($type=='3'){
+						if (($data['t7']-$traped7)>0){
 					if (isset($empty)){
 						$info_ram = "".$ram_pic.",There is no wall to destroy.";
 					} else
@@ -1852,12 +1838,13 @@ class Automation {
 					$info_ram = "".$ram_pic.",Wall was not damaged.";
 					}else{
 					$info_ram = "".$ram_pic.",Wall damaged from level <b>".$walllevel."</b> to level <b>".$totallvl."</b>.";
-							$database->setVillageLevel($data['to'],"f".$wallid."",$totallvl);
-					}
-
-					}
-				}
-			}
+                $database->setVillageLevel($data['to'],"f".$wallid."",$totallvl);
+            }
+        }
+    }
+} elseif (($data['t7']-$traped7)>0){
+    $info_ram = "".$ram_pic.",Hint: The ram does not work during a raid.";
+}
 		   if ($type=='3')
 {
 	if (($data['t8']-$dead8-$traped8)>0)
