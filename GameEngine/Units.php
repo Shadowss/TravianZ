@@ -242,13 +242,14 @@ class Units {
 
     }
     
-    public function returnTroops($wref) {
+    public function returnTroops($wref,$mode=0) {
         global $database;
-
-        $getenforce=$database->getEnforceVillage($wref,0);
-        foreach($getenforce as $enforce) {
-            $this->processReturnTroops($enforce);    
-        }
+        if (!mode) {
+            $getenforce=$database->getEnforceVillage($wref,0);
+            foreach($getenforce as $enforce) {
+                $this->processReturnTroops($enforce);    
+            }
+        }    
         //check oasis
         $getenforce1=$database->getOasisEnforce($wref,1);
         foreach($getenforce1 as $enforce) {
