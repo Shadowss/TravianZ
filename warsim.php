@@ -80,7 +80,7 @@ if(isset($_POST['result'])) {
             echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$form->getValue('walllevel')."</b></p>";
         }else{
             $demolish_ram=$_POST['result'][8]/$_POST['result'][7];
-            $totallvl = round(sqrt(pow(($form->getValue('kata')+0.5),2)-($_POST['result'][8]*8)));
+            $totallvl = round(sqrt(pow(($form->getValue('walllevel')+0.5),2)-($_POST['result'][8]*8)));
             echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$totallvl."</b></p>";
         }
     }
