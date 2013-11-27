@@ -117,10 +117,21 @@ if(isset($dataarray[171]) && $dataarray[171] !=''){ //troop not return
     <?php echo $dataarray[171]; ?>
     </td></tr></tbody>
 <?php }?>
-if(isset($dataarray[171]) && $dataarray[171] !=''){
-echo $dataarray[171];
-}
-echo "</tr></tbody>";?>
+
+if ($dataarray[172]!='' and $dataarray[173]!=''){ //hero
+?>
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
+    <img class="unit u<?php echo $dataarray[172]; ?>" src="img/x.gif" alt="Hero" title="Hero" />
+    <?php echo $dataarray[173]; ?>
+    </td></tr></tbody>
+<?php }
+if(isset($dataarray[171]) && $dataarray[171] !=''){ //troop not return
+?>    
+    <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
+    <?php echo $dataarray[171]; ?>
+    </td></tr></tbody>
+<?php }?>
+echo "</tr></tbody>"; ?>
 </td></tr></tbody>
 
 </table>
