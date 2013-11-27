@@ -112,10 +112,11 @@ if ($dataarray[172]!='' and $dataarray[173]!=''){ //hero
     </td></tr></tbody>
 <?php }
 if(isset($dataarray[171]) && $dataarray[171] !=''){ //troop not return
+?>    
     <tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-    echo $dataarray[171];
+    <?php echo $dataarray[171]; ?>
     </td></tr></tbody>
-}?>
+<?php }?>
 if(isset($dataarray[171]) && $dataarray[171] !=''){
 echo $dataarray[171];
 }
