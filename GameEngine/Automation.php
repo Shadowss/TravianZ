@@ -2479,7 +2479,14 @@ class Automation {
                                 }
                             }
                         }
-                    }else $info_hero = $hero_pic.",Your hero die but gained ".$heroxp." XP";
+                    }else {
+                        if ($heroxp == 0) {
+                            $xp=" and no XP from the battle";
+                        } else {
+                            $xp=" but gained ".$heroxp." XP from the battle";
+                        }                    
+                        $info_hero = $hero_pic.",Your hero die ".$xp;
+                    }
 
 				if($scout){
 				if ($data['spy'] == 1){
