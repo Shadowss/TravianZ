@@ -2686,7 +2686,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			    if($totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
 				$info_troop= "";
 			}
-			$data2 = $data2.','.addslashes($info_trap).',,,'.$info_troop.','.$info_hero;  
+			$data2 = $data2.','.addslashes($info_trap).',,'.$info_troop.','.$info_hero;
 			if($totalsend_alldef == 0){
 			$database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
 			}else if($totaldead_alldef == 0){
