@@ -6,7 +6,7 @@
 ##  Project:       TravianZ                                                    ##
 ##  Version:       01.09.2013                    			       			   ## 
 ##  Filename       db_MYSQL.php                                                ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow           ## 
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
 ##  Fixed by:      Shadow - Doubleing Troops , STARVATION , HERO FIXED COMPL.  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
@@ -1960,7 +1960,7 @@ class MYSQL_DB {
 	}
 
 	function removeBuilding($d) {
-		global $building;
+		global $building, $village;
 		$jobLoopconID = -1;
 		$SameBuildCount = 0;
 		$jobs = $building->buildArray;
@@ -2050,14 +2050,16 @@ class MYSQL_DB {
 				mysql_query($q, $this->connection);
 			}
 		} else {
-			if($jobs[$jobDeleted]['field'] >= 19) {
-				$x = "SELECT f" . $jobs[$jobDeleted]['field'] . " FROM " . TB_PREFIX . "fdata WHERE vref=" . $jobs[$jobDeleted]['wid'];
-				$result = mysql_query($x, $this->connection) or die(mysql_error());
-				$fieldlevel = mysql_fetch_row($result);
-				if($fieldlevel[0] == 0) {
-					$x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . $jobs[$jobDeleted]['wid'];
-					mysql_query($x, $this->connection) or die(mysql_error());
-				}
+            if($jobs[$jobDeleted]['field'] >= 19) {
+                $x = "SELECT f" . $jobs[$jobDeleted]['field'] . " FROM " . TB_PREFIX . "fdata WHERE vref=" . $jobs[$jobDeleted]['wid'];
+                $result = mysql_query($x, $this->connection) or die(mysql_error());
+                $fieldlevel = mysql_fetch_row($result);
+                if($fieldlevel[0] == 0) {
+                    if ($village->natar!=1) { //fix by ronix
+                        $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . $jobs[$jobDeleted]['wid'];
+                        mysql_query($x, $this->connection) or die(mysql_error());
+                    }    
+                }
 			}
 			if(($jobLoopconID >= 0) && ($jobs[$jobDeleted]['loopcon'] != 1)) {
 				if(($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19) || sizeof($jobs) < 3) {
