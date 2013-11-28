@@ -51,6 +51,12 @@ if($village->resarray['f'.$id] >= DEMOLISH_LEVEL_REQ) {
                 echo "<option value=".$i.$select.">".$i.". ".$building->procResType($VillageResourceLevels['f'.$i.'t'])." (lvl ".$VillageResourceLevels['f'.$i].")</option>";
             }
         }
+        if ($village->natar==1) {
+            $select=($ty==99)? " SELECTED":"";
+            if ($VillageResourceLevels['f99'] >= 1 && !$building->isCurrent(99) && !$building->isLoop(99)) {
+                echo "<option value=99".$select.">99. ".$building->procResType(40)." (lvl ".$VillageResourceLevels['f99'].")</option>";
+            }
+        }
         echo "</select><input id=\"btn_demolish\" name=\"demolish\" class=\"dynamic_img\" value=\"Demolish\" type=\"image\" src=\"img/x.gif\" alt=\"Demolish\" title=\"Demolish\" /></form>";
     }
 }
