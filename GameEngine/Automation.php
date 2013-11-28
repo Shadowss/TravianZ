@@ -2479,14 +2479,14 @@ class Automation {
                                 }
                             }
                         }
-                    }else {
+                    }elseif($data['t11']>0) {
                         if ($heroxp == 0) {
                             $xp=" and no XP from the battle";
                         } else {
                             $xp=" but gained ".$heroxp." XP from the battle";
                         }                    
                         $info_hero = $hero_pic.",Your hero die ".$xp;
-                    }
+                    }  
 
 				if($scout){
 				if ($data['spy'] == 1){
@@ -3991,7 +3991,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 	if(file_exists("GameEngine/Prevention/demolition.txt")) {
 			unlink("GameEngine/Prevention/demolition.txt");
 		}
-		global $building,$database;
+		global $building,$database,$village;
 		$ourFileHandle = fopen("GameEngine/Prevention/demolition.txt", 'w');
 		fclose($ourFileHandle);
 
@@ -4017,6 +4017,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 					$this->updateMax($database->getVillageField($vil['vref'],'owner'));
 				}
 				if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
+				if ($village->natar==1) $clear=""; //fix by ronix
 				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".$vil['vref'];
 				$database->query($q);
 				$pop=$this->getPop($type,$level-1);
