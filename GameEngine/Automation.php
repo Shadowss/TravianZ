@@ -4001,7 +4001,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 					$this->updateMax($database->getVillageField($vil['vref'],'owner'));
 				}
 				if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
-				if ($village->natar==1) $clear=""; //fix by ronix
+				if ($village->natar==1 && $type==99) $clear=""; //fix by ronix
 				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".$vil['vref'];
 				$database->query($q);
 				$pop=$this->getPop($type,$level-1);
