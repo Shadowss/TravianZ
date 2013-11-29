@@ -1380,8 +1380,8 @@ class Automation {
                     }    
                     //to battle.php
                     //fix by ronix
-                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby);
-                                        
+                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby);                   
+					
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
                     $herosend_att = $data['t11'];
