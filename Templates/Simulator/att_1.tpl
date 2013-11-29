@@ -154,11 +154,18 @@
 						<td class="research"></td>
 					</tr><tr>
 
-						    <td class="ico"><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero" /></td>
-						    <td class="desc">Hero (off bonus)</td>
-						    <td class="value"><input class="text" type="text" name="h_off_bonus" value="<?php echo $form->getValue('h_off_bonus')==""? 0 : $form->getValue('h_off_bonus'); ?>" maxlength="4" title="Hero (off bonus)" /></td>
-						    <td class="research"></td>
-				    	</tr></table>
+						                       </tr><tr>
+                            <td class="ico"><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero" /></td>
+                            <td class="desc">Hero (off bonus)</td>
+                            <td class="value"><input class="text" type="text" name="h_off_bonus" value="<?php echo $form->getValue('h_off_bonus')==""? 0 : $form->getValue('h_off_bonus'); ?>" maxlength="4" title="Hero (off bonus)" /></td>
+                            <td class="research"></td>
+                    </tr>
+                    <tr>
+                            <td class="ico"><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero" /></td>
+                            <td class="desc">Hero (fighting strength)</td>
+                            <td class="value"><input class="text" type="text" name="h_off" value="<?php echo $form->getValue('h_off')==""? 0 : $form->getValue('h_off'); ?>" maxlength="5" title="Hero (fighting strength)" /></td>
+                            <td class="research"></td>
+                    </tr></table>
 			</td>
 		</tr>
 	</tbody></table>
