@@ -1330,24 +1330,8 @@ class Automation {
                         $type = 4;
                     }
                     
-                    $def_ab = Array (
-                        "b1" => 0, // Blacksmith level
-                        "b2" => 0, // Blacksmith level
-                        "b3" => 0, // Blacksmith level
-                        "b4" => 0, // Blacksmith level
-                        "b5" => 0, // Blacksmith level
-                        "b6" => 0, // Blacksmith level
-                        "b7" => 0, // Blacksmith level
-                        "b8" => 0); // Blacksmith level
-                    $att_ab = Array (
-                        "a1" => 0, // armoury level
-                        "a2" => 0, // armoury level
-                        "a3" => 0, // armoury level
-                        "a4" => 0, // armoury level
-                        "a5" => 0, // armoury level
-                        "a6" => 0, // armoury level
-                        "a7" => 0, // armoury level
-                        "a8" => 0); // armoury level
+                    $att_ab1=$att_ab2=$att_ab3=$att_ab4=$att_ab5=$att_ab6=$att_ab7=$att_ab8=0;
+					$def_ab[31]=$def_ab[32]=$def_ab[33]=$def_ab[34]=$def_ab[35]=$def_ab[36]=$def_ab[37]=$def_ab[38]=0;
                         
                     $empty='1';
                     $tblevel = '0';
