@@ -87,7 +87,6 @@ class Battle {
                 $heroarray = $database->getHero($uid);
                 $herodata = $GLOBALS["h".$heroarray[0]['unit']];
 				$h_atk = $herodata['atk'] + ($heroarray[0]['attack'] * $herodata['atkp']);
-                $h_atk = $herodata['atk'] + 5 * floor($heroarray[0]['attack'] * $herodata['atkp'] / 5);
                 $h_di = $herodata['di'] + 5 * floor($heroarray[0]['defence'] * $herodata['dip'] / 5);
                 $h_dc = $herodata['dc'] + 5 * floor($heroarray[0]['defence'] * $herodata['dcp'] / 5);
                 $h_ob = 1 + 0.002 * $heroarray[0]['attackbonus'];
@@ -344,51 +343,33 @@ class Battle {
         $abcount = 4;
         }
         
-                if($type == 1) //scout
-                {
-                        for($i=$start;$i<=$end;$i++) {
-                                global ${'u'.$i};
-                                $j = $i-$start+1;
-                                if($abcount <= 8 && ${att_ab.$abcount} > 0) { 
-
-                                        if(in_array($i,$calvary)) {
-                                            $cap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
-                                        }
-                                        else {
-                                            $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];
-                                        }
-                                                                                
-                                        $att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
-                                        if(count($att_foolartefact) > 0){
-                                        foreach($att_foolartefact as $arte){
-                                        if($arte['bad_effect'] == 1){
-                                        $ap *= $arte['effect2'];
-                                        }else{
-                                        $ap /= $arte['effect2'];
-                                        $ap = round($ap);
-                                        }
-                                        }
-                                        }
-                                }
-                                else {
-                                        if(in_array($i,$calvary)) {
-                                                $cap += $Attacker['u'.$i]*33;
-                                        }
-                                        else {
-                                                $ap += $Attacker['u'.$i]*30.7;
-                                        }                                        
-                                }
-                                $abcount +=1;
-                                $involve += $Attacker['u'.$i];
-                                $units['Att_unit'][$i] = $Attacker['u'.$i];
+            if($type == 1) {//scout
+                    for($i=$start;$i<=$end;$i++) {
+                        global ${'u'.$i};
+                        $j = $i-$start+1;
+                        if($Attacker['u'.$i]>0 && ($i == 4 || $i == 14 || $i == 23 || $i == 44)){
+                            if(${att_ab.$abcount} > 0) { 
+                                    $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.004, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];// ^ ($Attacker['u'.$i]/100);
+                            }else{
+                                $ap += $Attacker['u'.$i]*25;
+                            }
+                        }    
+                        $involve += $Attacker['u'.$i];
+                        $units['Att_unit'][$i] = $Attacker['u'.$i];
+                        
+                    }
+                    $att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
+                    if(count($att_foolartefact) > 0){
+                        foreach($att_foolartefact as $arte){
+                            if($arte['bad_effect'] == 1){
+                                $ap *= $arte['effect2'];
+                            }else{
+                                $ap /= $arte['effect2'];
+                                $ap = round($ap);
+                            }
                         }
-                        if ($Attacker['uhero'] != 0){
-                            $ap += $atkhero['atk'] * 35;
-                            $ap = $ap * $atkhero['ob'];
-                        }
-                }
-                else //type=3 normal 4=raid
-                {
+                    }
+                }else{ //type=3 normal 4=raid
                 $abcount = 1;
                         for($i=$start;$i<=$end;$i++) {
                                 global ${'u'.$i};
