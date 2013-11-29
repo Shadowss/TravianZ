@@ -282,13 +282,9 @@ class Battle {
             }
         }
                 
-        //get every enforcement in defender village
-        
-        if ($conqureby>0) { //def from oasis
-            $DefendersAll = $database->getOasisEnforce($DefenderWref,1);
-        } else {
-            $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
-        }
+        //get every enforcement in defender village/oasis
+		
+        $DefendersAll = $database->getEnforceVillage($DefenderWref,0); 
         if(!empty($DefendersAll)){
     
         // Calculates the total points of the Defender
