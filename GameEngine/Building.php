@@ -524,11 +524,11 @@ class Building {
 			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(16) >= 1) { return true; } else { return false; }
 			break;
 			case 38:
-			if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
-			break;
-			case 39:
-			if($this->getTypeLevel(15) >= 10 && $village->capital == 0) { return true; } else { return false; }
-			break;
+            		if($this->getTypeLevel(15) >= 10) { return true; } else { return false; }
+            		break;
+            		case 39:
+            		if($this->getTypeLevel(15) >= 10) { return true; } else { return false; }
+            		break; 
 			case 40:
 			$wwlevel = $village->resarray['f99'];
 			if($wwlevel > 50){
