@@ -86,7 +86,7 @@ class Battle {
                 global $database;
                 $heroarray = $database->getHero($uid);
                 $herodata = $GLOBALS["h".$heroarray[0]['unit']];
-
+				$h_atk = $herodata['atk'] + ($heroarray[0]['attack'] * $herodata['atkp']);
                 $h_atk = $herodata['atk'] + 5 * floor($heroarray[0]['attack'] * $herodata['atkp'] / 5);
                 $h_di = $herodata['di'] + 5 * floor($heroarray[0]['defence'] * $herodata['dip'] / 5);
                 $h_dc = $herodata['dc'] + 5 * floor($heroarray[0]['defence'] * $herodata['dcp'] / 5);
@@ -155,10 +155,10 @@ class Battle {
                 
                 if(!$scout) 
                     
-                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,$offhero,0,0,0,0,0);
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,$offhero,$post['h_off'],0,0,0,0,0);
                 
                 else 
-                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0,0,0);
+                        return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$post['palast'],$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0,0,0,0);
         }  
 
 	 public function getTypeLevel($tid,$vid) {
@@ -209,7 +209,7 @@ class Battle {
 	}
 
 		//1 raid 0 normal
-        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby) {
+        function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$hero_strenght,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby) {
                 global $bid34,$bid35,$database;
                 //fix by ronix
                 
@@ -322,14 +322,14 @@ class Battle {
                 }            
                 
                 $reinfowner = $database->getVillageField($fromvillage,"owner");
-                $defhero[$fromvillage] = $this->getBattleHero($reinfowner);
-                    //calculate def hero from enforcement
-                    if($defenders['hero'] != 0){
-                        $cdp += $defhero[$fromvillage]['dc'];
-                        $dp += $defhero[$fromvillage]['di'];
-                        $dp = $dp * $defhero[$fromvillage]['db'];
-                        $cdp = $cdp * $defhero[$fromvillage]['db'];
-                    }  
+                $defhero = $this->getBattleHero($reinfowner);
+				//calculate def hero from enforcement
+				if($defenders['hero'] != 0){
+					$cdp += $defhero['dc'];
+					$dp += $defhero['di'];
+					$dp = $dp * $defhero['db'];
+					$cdp = $cdp * $defhero['db'];
+				}  
             }
         }
 	}
@@ -425,18 +425,19 @@ class Battle {
                 $units['Att_unit'][$i] = $Attacker['u'.$i];
             }
 
-           if ($Attacker['uhero'] != 0)
-    	   {
-           	$units['Att_unit']['hero'] = $Attacker['uhero'];
-           	$ap = $ap * $atkhero['ob'];
-           	$cap = $cap * $atkhero['ob'];
-    }
-
-    	   if ($offhero!=0) {
-        	$atkhero=$this->getBattleHeroSim($offhero);
-        	$ap = $ap * $atkhero['ob'];
-        	$cap = $cap * $atkhero['ob'];  
-            }
+                               if ($Attacker['uhero'] != 0){
+                        $units['Att_unit']['hero'] = $Attacker['uhero'];
+                        $ap += $atkhero['atk'];
+                        $ap = $ap * $atkhero['ob'];
+                        $cap = $cap * $atkhero['ob'];
+                    }
+            
+                    if ($offhero!=0 || $hero_strenght!=0) {
+                        $atkhero=$this->getBattleHeroSim($offhero);
+                        $ap += $hero_strenght;                
+                        $ap = $ap * $atkhero['ob'];
+                        $cap = $cap * $atkhero['ob'];
+                    }
 
         }
 
