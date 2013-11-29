@@ -116,10 +116,10 @@ if($wall == 0 && $wall1 == 0) {
 if((($warehouse == 0 && $warehouse1 == 0) || $warehouse == 20) && $mainbuilding >= 1 && $id != 39 && $id != 40) {
 include("avaliable/warehouse.tpl");
 }
-if($mainbuilding >= 10 && $warehouse == 20 && $village->capital == 0 && $largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid ) {
+if((($greatwarehouse == 0 && $greatwarehouse1 == 0) || $greatwarehouse == 20) && $mainbuilding >= 10 && ($largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid) && ($id != 39 && $id != 40)) {
     include("avaliable/greatwarehouse.tpl");
 }
-if($mainbuilding >= 10 && $granary == 20 && $village->capital == 0 && $largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid ) {
+if((($greatgranary == 0 && $greatgranary1 == 0) || $greatgranary == 20) && $mainbuilding >= 10 && ($largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid) && ($id != 39 && $id != 40)) {
     include("avaliable/greatgranary.tpl");
 }  
 if((($trapper == 0 && $trapper1 == 0) || $trapper == 20) && $rallypoint >= 1 && $session->tribe == 3 && $id != 39 && $id != 40) {
