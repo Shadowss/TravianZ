@@ -498,6 +498,7 @@ class Message {
 		$welcomemsg = preg_replace("'%PLAYERS%'", $database->countUser(), $welcomemsg);
 		$welcomemsg = preg_replace("'%ALLI%'", $database->countAlli(), $welcomemsg);
 		$welcomemsg = preg_replace("'%SERVER_NAME%'", SERVER_NAME, $welcomemsg);
+                $welcomemsg = preg_replace("'%PROTECTION%'", (PROTECTION/3600), $welcomemsg);
 		$welcomemsg = "[message]".$welcomemsg."[/message]";
 		return $database->sendMessage($uid, 1, WEL_TOPIC, addslashes($welcomemsg), 0, 0, 0, 0, 0);
 	}
