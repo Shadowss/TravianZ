@@ -3561,11 +3561,15 @@ class MYSQL_DB {
         return mysql_query($q, $this->connection) or die(mysql_error());
     	}
 	
-	function getPrisoners($wid) {
-		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid";
-		$result = mysql_query($q, $this->connection);
-		return $this->mysql_fetch_all($result);
-	}
+    function getPrisoners($wid,$mode=0) {
+        if(!$mode) {
+            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid";
+        }else {
+            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where `from` = $wid";
+        }    
+        $result = mysql_query($q, $this->connection);
+        return $this->mysql_fetch_all($result);
+    }
 
 	function getPrisoners2($wid,$from) {
 		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid and " . TB_PREFIX . "prisoners.from = $from";
