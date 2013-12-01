@@ -76,29 +76,47 @@ class Units {
         global $database,$village,$session,$generator,$logging,$form;
                 // Busqueda por nombre de pueblo
                 // Confirmamos y buscamos las coordenadas por nombre de pueblo
-                    if($post['x']!="" && $post['y']!=""){
-                    $oid = $database->getVilWref($post['x'],$post['y']);
-                    }else if($post['dname']!=""){
-                    $oid = $database->getVillageByName(stripslashes($post['dname']));
-                    }
-                    if($database->isVillageOases($oid) != 0){
-                    $too = $database->getOasisField($oid,"conqured");
-                    if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
+        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
+            $vid = $database->getVilWref($post['x'],$post['y']);
+            unset($post['dname']);
+            unset($_POST['dname']);
+        }else if(isset($post['dname']) && $post['dname']!=""){
+            $vid = $database->getVillageByName(stripslashes($post['dname']));
+        }
+        if (!empty($vid)) {
+            if($database->isVillageOases($vid) != 0){
+                $too = $database->getOasisField($vid,"conqured");
+                if($too == 0){
+                    $disabledr ="disabled=disabled"; $disabled ="disabled=disabled";
+                }else{
                     $disabledr ="";
                     if($session->sit == 0){
-                    $disabled ="";
+                        $disabled ="";
                     }else{
-                    $disabled ="disabled=disabled";
+                        $disabled ="disabled=disabled";
                     }
-                    }
-                    }else{
+                }
+            }else{
+                $too = $database->getVillage($vid);
+                if($too['owner'] == 3){
+                    $disabledr ="disabled=disabled"; $disabled ="";
+                }else{
                     $disabledr ="";
                     if($session->sit == 0){
-                    $disabled ="";
+                        $disabled ="";
                     }else{
-                    $disabled ="disabled=disabled";
+                        $disabled ="disabled=disabled";
                     }
-                    }
+                }
+            }
+        }else{
+            $disabledr ="";
+            if($session->sit == 0){
+                $disabled ="";
+            }else{
+                $disabled ="disabled=disabled";
+            }
+        }
                 if($disabledr != "" && $post['c'] == 2){
                 $form->addError("error","You can't reinforce this village/oasis");
                 }
@@ -125,71 +143,36 @@ class Units {
 		
                 // Busqueda por coordenadas de pueblo
                 // Confirmamos y buscamos las coordenadas por coordenadas de pueblo
-                if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
-                    $coor = array('x'=>$post['x'], 'y'=>$post['y']);
-                    $id = $generator->getBaseID($coor['x'],$coor['y']);
-                    if (!$database->getVillageState($id)){
-                        $form->addError("error","Coordinates do not exist");
-                    }
-		if ($session->tribe == 1){$Gtribe = "";}elseif  ($session->tribe == 2){$Gtribe = "1";}elseif ($session->tribe ==  3){$Gtribe = "2";}elseif ($session->tribe == 4){$Gtribe = "3";}elseif  ($session->tribe == 5){$Gtribe = "4";}
-            		for($i=1; $i<12; $i++)
-            		{
-                	if(isset($post['t'.$i]))
-                
-                	{
-                     
+        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
+            $coor = array('x'=>$post['x'], 'y'=>$post['y']);
+            $id = $generator->getBaseID($coor['x'],$coor['y']);
+            if (!$database->getVillageState($id)){
+                $form->addError("error","Coordinates do not exist");
+            }
+        }   
+        if (!empty($coor)) {    
+            if ($session->tribe == 1){$Gtribe = "";}elseif  ($session->tribe == 2){$Gtribe = "1";}elseif ($session->tribe ==  3){$Gtribe = "2";}elseif ($session->tribe == 4){$Gtribe = "3";}elseif  ($session->tribe == 5){$Gtribe = "4";}
+            for($i=1; $i<12; $i++){
+                if(isset($post['t'.$i])){
                     if ($i<10) $troophave=$village->unitarray['u'.$Gtribe.$i];
                     if ($i==10)$troophave=$village->unitarray['u'.floor(intval($Gtribe)+1)*$i];
                     if ($i==11)$troophave=$village->unitarray['hero'];
                                         
-                    if (intval($post['t'.$i]) > $troophave)
-                    {
-                                $form->addError("error","You can't send more units than you have");
-                                break;
-                            }
-
-                            if(intval($post['t'.$i])<0)
-                            {
-                                $form->addError("error","You can't send negative units.");
-                                break;
-                            }
-                            
-                            if($post['t'.$i]>30000000)
-                            {
-                                $form->addError("error","Bug attempt!");
-                                break;
-                            }
-
-			    if(preg_match('/[^0-9]/',$post['t'.$i]))
-              		    {
-                	        $form->addError("error","Special characters can't entered");
-                		break;
-              		    } 
-
-                        }
+                    if (intval($post['t'.$i]) > $troophave){
+                        $form->addError("error","You can't send more units than you have");
+                        break;
                     }
-                    if ($post['t11'] > $village->unitarray['hero'])
-                            {
-                                $form->addError("error","You can't send more units than you have");
-                                break;
-                            }
-
-                            if($post['t11']<0)
-                            {
-                                $form->addError("error","You can't send negative units.");
-                                break;
-                            }
-                            if($post['t11']>2)
-                            {
-                                $form->addError("error","Bug attempt!");
-                                break;
-                            }
-			    if(preg_match('/[^0-9]/',$post['t11']))
-              		    {
-                		$form->addError("error","Special characters can't entered");
-                		break;
-              		} 
+                    if(intval($post['t'.$i])<0){
+                        $form->addError("error","You can't send negative units.");
+                        break;
+                    }
+                    if(preg_match('/[^0-9]/',$post['t'.$i])){
+                        $form->addError("error","Special characters can't entered");
+                        break;
+                    } 
                 }
+            }
+        }
                 if ($database->isVillageOases($id) == 0) {
                 if($database->hasBeginnerProtection($id)==1) {
                     $form->addError("error","Player is under beginners protection. You can't attack him");
