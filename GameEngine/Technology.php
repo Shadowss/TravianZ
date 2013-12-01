@@ -263,7 +263,7 @@ class Technology {
                 }
             }            
             
-            $prisoners = $database->getPrisoners($base);
+            $prisoners = $database->getPrisoners($base,1);
             if(!empty($prisoners)) {
                 foreach($prisoners as $prisoner){
                     $owner = $database->getVillageField($base,"owner");
