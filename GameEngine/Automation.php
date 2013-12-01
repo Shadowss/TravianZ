@@ -1033,8 +1033,9 @@ class Automation {
 			$isoasis = $database->isVillageOases($data['to']);
 			$AttackArrivalTime = $data['endtime'];
 			$AttackerWref = $data['from'];
-			$DefenderWref =	$data['to'];
-			if ($isoasis == 0){
+			$DefenderWref = $data['to'];
+            $NatarCapital=false;
+            if ($isoasis == 0){ //village
 			$Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
 			$Defender['id'] = $database->getUserField($database->getVillageField($data['to'],"owner"),"id",0);
 			$AttackerID = $Attacker['id'];
@@ -1049,6 +1050,7 @@ class Automation {
 			$toF = $database->getVillage($data['to']);
 			$fromF = $database->getVillage($data['from']);
 			$conqureby=0;
+            $NatarCapital=($toF['owner']==3 && $toF['capital']==1)? true:false;  
 
 						$DefenderUnit = array();
 						$DefenderUnit = $database->getUnit($data['to']);
@@ -1351,7 +1353,12 @@ class Automation {
                     }elseif($targettribe == 5){
                         $def_spy = $enforDefender['u54'];
                     }
-                    if(!$scout or $def_spy >0){
+                    //impossible to attack or scout NATAR Capital Village
+                    if ($NatarCapital) {
+                        for($i=1;$i<=11;$i++){
+                            ${traped.$i}=$data['t'.$i];
+                        }
+                    }elseif(!$scout || $def_spy >0){
                         $traps = $Defender['u99']-$Defender['u99o'];
                         if ($traps<1) $traps=0;
                         for($i=1;$i<=11;$i++){
@@ -1362,6 +1369,8 @@ class Automation {
                             ${traped.$i}=$traps1;
                             $traps -= $traps1;
                         }
+                    }
+                    if(!$scout || $def_spy >0 || $NatarCapital){        
                         $totaltraped_att = $traped1+$traped2+$traped3+$traped4+$traped5+$traped6+$traped7+$traped8+$traped9+$traped10+$traped11;
                         $database->modifyUnit($data['to'],array("99o"),array($totaltraped_att),array(1));
                         for($i=$start;$i<=$end;$i++) {
@@ -2820,18 +2829,21 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 						$database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 						$database->addNotice($to['owner'],$to['wref'],$targetally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 			}
-				$crop = $database->getCropProdstarv($to['wref']);
-				$unitarrays = $this->getAllUnits($to['wref']);
-				$getvillage = $database->getVillage($to['wref']);
-				$village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
-				$starv = $database->getVillageField($to['wref'],"starv");
-				if ($crop < $village_upkeep){
-				// add starv data
-				$database->setVillageField($to['wref'], 'starv', $village_upkeep);
-				if($starv==0){
-				$database->setVillageField($to['wref'], 'starvupdate', time());}
-				}
-				unset($crop,$unitarrays,$getvillage,$village_upkeep);
+                //check if not natar tribe
+                $getvillage = $database->getVillage($to['wref']);
+                if ($getvillage['owner']!=3) {
+                    $crop = $database->getCropProdstarv($to['wref']);
+                    $unitarrays = $this->getAllUnits($to['wref']);
+                    $village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
+                    $starv = $getvillage['starv'];
+                    if ($crop < $village_upkeep){
+                        // add starv data
+                        $database->setVillageField($to['wref'], 'starv', $village_upkeep);
+                        if($starv==0)
+                            $database->setVillageField($to['wref'], 'starvupdate', time());
+                    }
+                        unset($crop,$unitarrays,$getvillage,$village_upkeep);
+                }
 
 				#################################################
 				################FIXED BY SONGER################
@@ -3501,7 +3513,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                 $ownunit['u'.$i] += $movement['u'.$i];
                         }
                 }
-                $prisoners = $database->getPrisoners($base);
+                $prisoners = $database->getPrisoners($base,1);
                 if(!empty($prisoners)) {
                 foreach($prisoners as $prisoner){
                         $owner = $database->getVillageField($base,"owner");
@@ -4001,7 +4013,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 					$this->updateMax($database->getVillageField($vil['vref'],'owner'));
 				}
 				if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
-				if ($village->natar==1 && $type==99) $clear=""; //fix by ronix
+                if ($village->natar==1 && $type==40) $clear=""; //fix by ronix
 				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".$vil['vref'];
 				$database->query($q);
 				$pop=$this->getPop($type,$level-1);
