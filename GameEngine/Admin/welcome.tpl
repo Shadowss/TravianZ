@@ -1,7 +1,7 @@
 Hello %USER%,
 
 Thank you for registering on our server.
-Since the %START% at %TIME% Romans, Gauls and Teutons attack each other on this game world. Right now, %PLAYERS% players in %ALLI% Alliances are fighting for supremacy. To not get lost in this devastating battle, you should look for allies even though you are <b>protected by beginner\'s protection for 1 day</b>.
+Since the %START% at %TIME% Romans, Gauls and Teutons attack each other on this game world. Right now, %PLAYERS% players in %ALLI% Alliances are fighting for supremacy. To not get lost in this devastating battle, you should look for allies even though you are <b>protected by beginner\'s protection for %PROTECTION% hours</b>.
 
 The taskmaster will help you on your way to establishing your empire with advice, deed and resources (after a few tasks such as finding out the exact duration of your beginner\'s protection). You can find him on the right side of your village. After successfully completing all of his tasks you will be on your own again.
 
