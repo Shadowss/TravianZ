@@ -11,7 +11,7 @@
         </td>
         <td class="vil">
             <span>Village:</span>
-            <input class="text" name="dname" value="" maxlength="20" type="text" >
+             <input class="text" name="dname" value="<?php echo $form->getValue('dname');?>" maxlength="20" type="text" >
         </td>
 
     </tr>
@@ -39,8 +39,8 @@ if(isset($_GET['z'])){
 $coor = $database->getCoor($_GET['z']);
 }
 else{
-$coor['x'] = "";
-$coor['y'] = "";
+$coor['x']=$form->getValue("x");
+$coor['y']=$form->getValue("y");
 }
 ?>
         <td class="target">
