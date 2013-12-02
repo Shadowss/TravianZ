@@ -179,7 +179,7 @@
 				while(1) {
 					if(count($this->rankarray) > 1) {
 						$key = key($this->rankarray);
-						if($this->rankarray[$key]["id"] == $id) {
+						if(isset ($this->rankarray[$key]["id"]) && $this->rankarray[$key]["id"] === $id) {
 							return $key;
 							break;
 						} else {
