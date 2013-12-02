@@ -97,7 +97,7 @@ $up_avl = $latest - $ver ;
 												<a href="<?php echo HOMEPAGE; ?>">Server Homepage</a>
 												<a href="admin.php">Control Panel Home</a>
 												<a href="<?php echo SERVER; ?>dorf1.php">Return to the server</a>
-												<a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</font></b></a>
+												<!-- <a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</font></b></a>-->
 												<br />
 												<a href="?action=logout">Logout</a>
 												<br />

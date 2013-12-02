@@ -1,10 +1,10 @@
 <?php
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 include('ver.tpl');
-if(isset($_GET['c']))
-{
-	copy("https://raw.github.com/yi12345/TravianZ/master/Admin/Templates/update_latest.tpl", "Templates/update_latest.tpl");
-}
+//if(isset($_GET['c']))
+//{
+//	copy("https://raw.github.com/yi12345/TravianZ/master/Admin/Templates/update_latest.tpl", "Templates/update_latest.tpl");
+//}
 include('update_latest.tpl');
 /*
 if(isset($_GET['u']))
