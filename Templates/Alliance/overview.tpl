@@ -54,7 +54,7 @@ include("alli_menu.tpl");
             </tr>
             <tr>
                 <th>Rank</th>
-                <td><?php echo $ranking->getAllianceRank($aid); ?>.</td>
+                <td><?php echo $ranking->getAllianceRank($aid); ?></td>
             </tr>
             <tr>
                 <th>Points</th>
