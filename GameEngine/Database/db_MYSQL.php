@@ -158,7 +158,7 @@ class MYSQL_DB {
             $q = "SELECT $field FROM " . TB_PREFIX . "users where username = '$ref'";
         }
         $result = mysql_query($q, $this->connection) or die(mysql_error());
-        if(mysql_num_rows($result)) {
+        if($result) {
             $dbarray = mysql_fetch_array($result);
             return $dbarray[$field];
         }elseif($field=="username"){
@@ -841,10 +841,10 @@ class MYSQL_DB {
     function getVillageField($ref, $field) {
         $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
         $result = mysql_query($q, $this->connection);
-        if(mysql_num_rows($result)) {
+        if($result){
             $dbarray = mysql_fetch_array($result);
             return $dbarray[$field];
-        }elseif($field=="name"){
+         }elseif($field=="name"){
             return "??";
         }else return 0;    
     }
