@@ -1,6 +1,16 @@
 <?php
 $dataarray = explode(",",$message->readingNotice['data']);
 if($dataarray[13]!='' or $dataarray!=0){$colspan="11";}else{$colspan="10";}
+if ($database->getUserField($dataarray[1],'username',0)!="??" || $dataarray[1] == 0) {
+    $user_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[1],"id",0)."\">".($dataarray[1] == 0 ? "taskmaster" : $database->getUserField($dataarray[1],'username',0))."</a>";
+}else{
+    $user_url="<font color=\"grey\"><b>??</b></font>";
+}
+if($database->getVillageField($dataarray[0],'name')!="??" || $dataarray[0] == 0) {
+        $from_url=($dataarray[0] == 0)? "village of the elders" : "<a href=\"karte.php?d=".$dataarray[0]."&c=".$generator->getMapCheck($dataarray[0])."\">".$database->getVillageField($dataarray[0],'name')."</a>";
+}else{
+        $from_url="<font color=\"grey\"><b>??</b></font>";
+}
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
 			<thead>
@@ -22,7 +32,7 @@ if($dataarray[13]!='' or $dataarray!=0){$colspan="11";}else{$colspan="10";}
 		<table cellpadding="1" cellspacing="1" id="reinforcement">
 		
 <thead><tr>
-<td class="role">sender</td><td colspan="<?php echo $colspan; ?>"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[1],"id",0); ?>"><?php echo ($dataarray[1] == 0)? "taskmaster" : $database->getUserField($dataarray[1],"username",0); ?></a> from the village <?php echo ($dataarray[0] == 0)? "village of the elders" : "<a href='karte.php?d=".$dataarray[0]."&amp;c=".$generator->getMapCheck($dataarray[0])."'>".$database->getVillageField($dataarray[0],name)."</a>"; ?></td></tr></thead>
+<td class="role">sender</td><td colspan="<?php echo $colspan ?>"><?php echo $user_url;?> from the village <?php echo $from_url;?></td></tr></thead>
 <tbody class="units"><tr>
 <td>&nbsp;</td>
 <?php
