@@ -2,6 +2,16 @@
 //reinforcement is underattack
 $dataarray = explode(",",$message->readingNotice['data']);
 if(isset($dataarray[24]) and $dataarray[24]!=0){$colspan="11";}else{$colspan="10";}
+if ($database->getUserField($dataarray[0],'username',0)!="??") {
+    $user_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[0],'id',0)."\">".$database->getUserField($dataarray[0],'username',0)."</a>";
+}else{
+    $user_url="<font color=\"grey\"><b>??</b></font>";
+}
+if($database->getVillageField($dataarray[26],'name')!="??") {
+    $from_url="<a href=\"karte.php?d=".$dataarray[26]."&c=".$generator->getMapCheck($dataarray[26])."\">".$database->getVillageField($dataarray[26],'name')."</a>";
+}else{
+    $from_url="<font color=\"grey\"><b>??</b></font>";
+}
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
 			<thead>
@@ -23,7 +33,7 @@ if(isset($dataarray[24]) and $dataarray[24]!=0){$colspan="11";}else{$colspan="10
 		<table cellpadding="1" cellspacing="1" class="defender"><thead>
 <tr>
 <td class="role">Defender</td>
-<td colspan="<?php echo $colspan ?>"><a href="spieler.php?uid=<?php echo $database->getUserField($dataarray[0],"id",0); ?>"><?php echo $database->getUserField($dataarray[0],"username",0); ?></a> in the village <a href="karte.php?d=<?php echo $dataarray[1]."&amp;c=".$generator->getMapCheck($dataarray[1]); ?>"><?php echo $database->getVillageField($dataarray[1],"name"); ?></a></td>
+<td colspan="<?php echo $colspan ?>"><?php echo $user_url;?> from the village <?php echo $from_url;?></td>
 </tr>
 </thead>
 <tbody class="units">
