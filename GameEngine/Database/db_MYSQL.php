@@ -151,16 +151,20 @@ class MYSQL_DB {
 		mysql_query($q2, $this->connection);
 	}
 
-	function getUserField($ref, $field, $mode) {
-		if(!$mode) {
-			$q = "SELECT $field FROM " . TB_PREFIX . "users where id = '$ref'";
-		} else {
-			$q = "SELECT $field FROM " . TB_PREFIX . "users where username = '$ref'";
-		}
-		$result = mysql_query($q, $this->connection) or die(mysql_error());
-		$dbarray = mysql_fetch_array($result);
-		return $dbarray[$field];
-	}
+    function getUserField($ref, $field, $mode) {
+        if(!$mode) {
+            $q = "SELECT $field FROM " . TB_PREFIX . "users where id = '$ref'";
+        } else {
+            $q = "SELECT $field FROM " . TB_PREFIX . "users where username = '$ref'";
+        }
+        $result = mysql_query($q, $this->connection) or die(mysql_error());
+        if(mysql_num_rows($result)) {
+            $dbarray = mysql_fetch_array($result);
+            return $dbarray[$field];
+        }elseif($field=="username"){
+            return "??";
+        }else return 0;    
+    }
 
 	function getInvitedUser($uid) {
 		$q = "SELECT * FROM " . TB_PREFIX . "users where invited = $uid order by regtime desc";
@@ -834,13 +838,16 @@ class MYSQL_DB {
 		return mysql_fetch_assoc($result);
 	}
 
-	function getVillageField($ref, $field) {
-		$q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
-		$result = mysql_query($q, $this->connection);
-		$dbarray = mysql_fetch_array($result);
-		return $dbarray[$field];
-
-	}
+    function getVillageField($ref, $field) {
+        $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
+        $result = mysql_query($q, $this->connection);
+        if(mysql_num_rows($result)) {
+            $dbarray = mysql_fetch_array($result);
+            return $dbarray[$field];
+        }elseif($field=="name"){
+            return "??";
+        }else return 0;    
+    }
 
 	function getOasisField($ref, $field) {
 		$q = "SELECT $field FROM " . TB_PREFIX . "odata where wref = $ref";
