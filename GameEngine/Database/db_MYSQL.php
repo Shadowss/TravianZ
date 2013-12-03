@@ -2061,8 +2061,9 @@ class MYSQL_DB {
                 $x = "SELECT f" . $jobs[$jobDeleted]['field'] . " FROM " . TB_PREFIX . "fdata WHERE vref=" . $jobs[$jobDeleted]['wid'];
                 $result = mysql_query($x, $this->connection) or die(mysql_error());
                 $fieldlevel = mysql_fetch_row($result);
-                if($fieldlevel[0] == 0) {
-                    if ($village->natar!=1 && $jobs[$jobDeleted]['field']!=99) { //fix by ronix 
+                    if($fieldlevel[0] == 0) {
+                    if ($village->natar==1 && $jobs[$jobDeleted]['field']==99) { //fix by ronix
+                    }else{    
                         $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . $jobs[$jobDeleted]['wid'];
                         mysql_query($x, $this->connection) or die(mysql_error());
                     }    
