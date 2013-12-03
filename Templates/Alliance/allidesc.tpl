@@ -63,7 +63,7 @@ include("alli_menu.tpl");
         <tr><td class="rbg" colspan="4">Medals</td></tr>
         <tr>
             <td>Category</td>
-            <td>Rang</td>
+            <td>Rank</td>
             <td>Week</td>
             <td>BB-Code</td>
         </tr>
@@ -99,7 +99,7 @@ INDELING CATEGORIEEN:
         $titel="Robber of the week";
         break;
     case "5":
-        $titel="Top 10 of both attacckers and defenders";
+        $titel="Top 10 of both attackers and defenders";
         break;
     case "6":
         $titel="Top 3 of Attackers of week ".$medal['points']." in a row";
