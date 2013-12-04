@@ -3174,21 +3174,10 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 						$heroid = $database->getHero($database->getVillageField($data['from'],"owner"),1);
 						$database->modifyHero("wref",$data['to'],$heroid,0);
 						$HeroTransfer = 1;
-			//		}else{ 
-			// hero goes to reinforce other player village 
-			//			$check = $database->getEnforce($data['to'], $data['from']); 
-			//	if (isset($check['id'])) { 
-			//if there are troops of the same owner hero, then hero is added to them 
-			//			$database->modifyEnforce($check['id'], "hero", 1, 1); 
-			//		}else{ 
-			// the hero is the only troop that reinforces 
-			//		$data['t11']=1; $database->addEnforce($data); 
-			//			} 
 					}
 				}
 			}
-			if(!$HeroTransfer){
-  			                    if(!$HeroTransfer){
+  			        if(!$HeroTransfer){
                         //check if there is defence from town in to town
                         $check=$database->getEnforce($data['to'],$data['from']);
                         if (!isset($check['id'])){
@@ -3206,7 +3195,6 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                             $database->modifyEnforce($check['id'],'hero',$data['t11'],1);
                         		}
                     		}
-			}
 			//send rapport
 			$unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
 			$data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
