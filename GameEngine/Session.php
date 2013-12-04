@@ -155,12 +155,16 @@ class Session {
      				$hero+=$he2[0];
      				$hero+=$database->HeroNotInVil($myvill); // check if hero is not in village (come back from attack , raid , etc.)
      				}
-     				if(!$database->getHeroDead($this->uid) and !$hero){ // check if hero is already dead
-					}elseif(!$database->getHeroInRevive($this->uid) and !$hero){ // check if hero is already in revive
-					}elseif(!$database->getHeroInTraining($this->uid) and !$hero){ // check if hero is in training
-      				$database->KillMyHero($this->uid);
+     				$yes=true; //fix by ronix
+            if($database->getHeroDead($this->uid) and !$hero){ // check if hero is already dead
+                $yes=false;
+            }elseif($database->getHeroInRevive($this->uid) and !$hero){ // check if hero is already in revive
+                $yes=false;
+            }elseif($database->getHeroInTraining($this->uid) and !$hero){ // check if hero is in training
+                $yes=false;
+            } 
+            if($yes and !$hero) $database->KillMyHero($this->uid);
 				} 
-     		}
 
 			private function PopulateVar() {
 				global $database;
@@ -196,7 +200,7 @@ class Session {
 				if($this->userarray['b4'] > $this->time) {
 					$this->bonus4 = 1;
 				}
-                                $this->CheckHeroReal();
+                $this->CheckHeroReal();
 			}
 
 			private function SurfControl(){
