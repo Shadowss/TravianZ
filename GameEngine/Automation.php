@@ -1050,7 +1050,8 @@ class Automation {
 			$toF = $database->getVillage($data['to']);
 			$fromF = $database->getVillage($data['from']);
 			$conqureby=0;
-            $NatarCapital=($toF['owner']==3 && $toF['capital']==1)? true:false;  
+            $NatarCapital=($toF['owner']==3 && $toF['capital']==1)? true:false;
+            if(!isset($to['name']) || $to['name']=='') $to['name']="??";    
 
 						$DefenderUnit = array();
 						$DefenderUnit = $database->getUnit($data['to']);
@@ -1849,13 +1850,12 @@ class Automation {
 		        if ($isoasis == 0) {
             $pop=$this->recountPop($data['to']);
         } else $pop=10; //oasis cannot be destroy bt cata/ram
-        if($pop<=0) { 
-            if($can_destroy==1) {
-                $info_cat = ",".$catp_pic.", Village already destroyed.";
-                $village_destroyed = 1;
-            } else {
-                $info_cat = ",".$catp_pic.", Village can't be destroyed.";
-            }
+            if($pop<=0) { 
+                if($can_destroy==1) {
+                    $info_cat = "".$catp_pic.", Village already destroyed.";
+                    } else {
+                    $info_cat = "".$catp_pic.", Village can't be destroyed.";
+                                }
         }
 		else
 		{
