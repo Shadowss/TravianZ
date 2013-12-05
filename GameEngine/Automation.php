@@ -3119,65 +3119,72 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				}
 	}
 
-	private function sendreinfunitsComplete() {
-	if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
-				unlink("GameEngine/Prevention/sendreinfunits.txt");
-			}
-		global $bid23,$database,$battle,$session;
-		$reload=false;
-		$time = time();
-			$ourFileHandle = fopen("GameEngine/Prevention/sendreinfunits.txt", 'w');
-			fclose($ourFileHandle);
-		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
-		$dataarray = $database->query_return($q);
-		foreach($dataarray as $data) {
-		        $isoasis = $database->isVillageOases($data['to']);
-        if($isoasis == 0){
-            $to = $database->getMInfo($data['to']);
-            $toF = $database->getVillage($data['to']);
-            $DefenderID = $database->getVillageField($data['to'],"owner");
-            $targettribe = $database->getUserField($DefenderID,"tribe",0);
-            $conqureby=0;
-        }else{
-            $to = $database->getOMInfo($data['to']);
-            $toF = $database->getOasisV($data['to']);
-            $DefenderID = $to['owner'];
-            $targettribe = $database->getUserField($DefenderID,"tribe",0);
-            $conqureby=$toF['conqured'];                    
-        }
-        if($data['from']==0){
-            $DefenderID = $database->getVillageField($data['to'],"owner");
-            if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true; 
-		$database->addEnforce($data);
-		$reinf = $database->getEnforce($data['to'],$data['from']);
-		$database->modifyEnforce($reinf['id'],31,1,1);
-		$data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
-		$database->addNotice($to['owner'],$to['wref'],$targetally,8,'village of the elders reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
-		$database->setMovementProc($data['moveid']);
-		}else{
-			//set base things
-            $AttackerID = $database->getVillageField($data['from'],"owner");
-            $owntribe = $database->getUserField($AttackerID,"tribe",0);
-            $from = $database->getMInfo($data['from']);
-            $fromF = $database->getVillage($data['from']);
-            if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;  
+        private function sendreinfunitsComplete() {
+            if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
+                unlink("GameEngine/Prevention/sendreinfunits.txt");
+            }
+            global $bid23,$database,$battle,$session;
+            $reload=false;
+            $time = time();
+            $ourFileHandle = fopen("GameEngine/Prevention/sendreinfunits.txt", 'w');
+            fclose($ourFileHandle);
+            $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
+            $dataarray = $database->query_return($q);
+            foreach($dataarray as $data) {
+                $isoasis = $database->isVillageOases($data['to']);
+                if($isoasis == 0){
+                    $to = $database->getMInfo($data['to']);
+                    $toF = $database->getVillage($data['to']);
+                    $DefenderID = $to['owner'];
+                    $targettribe = $database->getUserField($DefenderID,"tribe",0);
+                    $conqureby=0;
+                }else{
+                    $to = $database->getOMInfo($data['to']);
+                    $toF = $database->getOasisV($data['to']);
+                    $DefenderID = $to['owner'];
+                    $targettribe = $database->getUserField($DefenderID,"tribe",0);
+                    $conqureby=$toF['conqured'];                    
+                }
+                if($data['from']==0){
+                    $DefenderID = $database->getVillageField($data['to'],"owner");
+                    if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
+                    $database->addEnforce($data);
+                    $reinf = $database->getEnforce($data['to'],$data['from']);
+                    $database->modifyEnforce($reinf['id'],31,1,1);
+                    $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
+                    $database->addNotice($to['owner'],$to['wref'],$targetally,8,'village of the elders reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
+                    $database->setMovementProc($data['moveid']);
+                    if ($session->uid==$DefenderID) $reload=true;
+                }else{
+                    //set base things
+                    $from = $database->getMInfo($data['from']);
+                    $fromF = $database->getVillage($data['from']);
+                    $AttackerID = $from['owner'];
+                    $owntribe = $database->getUserField($AttackerID,"tribe",0);
+                    
+                    
+                    if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
 
-			//check to see if we're only sending a hero between own villages and there's a Mansion at target village
-			$HeroTransfer=0;
-			$NonHeroPresent=0;
-			if($data['t11'] != 0) {
-				if($database->getVillageField($data['from'],"owner") == $database->getVillageField($data['to'],"owner")) {
-					for($i=1;$i<=10;$i++) { if($data['t'.$i]>0) { $NonHeroPresent = 1; break; } }
-					if($NonHeroPresent == 0 && $this->getTypeLevel(37,$data['to']) > 0) {
-						//don't reinforce, addunit instead
-						$database->modifyUnit($data['to'],array("hero"),array(1),array(1));
-						$heroid = $database->getHero($database->getVillageField($data['from'],"owner"),1);
-						$database->modifyHero("wref",$data['to'],$heroid,0);
-						$HeroTransfer = 1;
-					}
-				}
-			}
-  			        if(!$HeroTransfer){
+                    //check to see if we're only sending a hero between own villages and there's a Mansion at target village
+                    $HeroTransfer=0;
+                    $NonHeroPresent=0;
+                    if($data['t11'] != 0) {
+                        if($AttackerID == $DefenderID) {
+                            for($i=1;$i<=10;$i++) { 
+                                if($data['t'.$i]>0) {
+                                    $NonHeroPresent = 1; break; 
+                                }
+                            }
+                            if($NonHeroPresent == 0 && $this->getTypeLevel(37,$data['to']) > 0) {
+                                //don't reinforce, addunit instead
+                                $database->modifyUnit($data['to'],array("hero"),array(1),array(1));
+                                $heroid = $database->getHero($DefenderID,1);
+                                $database->modifyHero("wref",$data['to'],$heroid,0);
+                                $HeroTransfer = 1;
+                            }
+                        }
+                    }
+                    if(!$HeroTransfer){
                         //check if there is defence from town in to town
                         $check=$database->getEnforce($data['to'],$data['from']);
                         if (!isset($check['id'])){
@@ -3193,42 +3200,43 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                 $database->modifyEnforce($check['id'],$i,$data['t'.$j.''],1); $j++;
                             }
                             $database->modifyEnforce($check['id'],'hero',$data['t11'],1);
-                        		}
-                    		}
-			//send rapport
-			$unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
-			$data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
-            
-            if($isoasis == 0){
-                $to_name=$to['name'];
-            }else{
-                $to_name="Oasis ".$database->getVillageField($to['conqured'],"name");
+                        }
+                    }
+                    //send rapport
+                    $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
+                    $data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
+                    
+                    
+                    if($isoasis == 0){
+                        $to_name=$to['name'];
+                    }else{
+                        $to_name="Oasis ".$database->getVillageField($to['conqured'],"name");
+                    }
+                    $database->addNotice($from['owner'],$from['wref'],$ownally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,$AttackArrivalTime);
+                    if($from['owner'] != $to['owner']) {
+                        $database->addNotice($to['owner'],$to['wref'],$targetally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,$AttackArrivalTime);
+                    }
+                    //update status
+                    $database->setMovementProc($data['moveid']);
+                }
+                $crop = $database->getCropProdstarv($data['to']);
+                $unitarrays = $this->getAllUnits($data['to']);
+                $village = $database->getVillage($data['to']);
+                $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
+                $starv = $database->getVillageField($data['to'],"starv");
+                if ($crop < $upkeep){
+                    // add starv data
+                    $database->setVillageField($data['to'], 'starv', $upkeep);
+                    if($starv==0){
+                        $database->setVillageField($data['to'], 'starvupdate', $time);
+                    }
+                }
             }
-            $database->addNotice($from['owner'],$from['wref'],$ownally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,$AttackArrivalTime);
-            if($from['owner'] != $to['owner']) {
-                $database->addNotice($to['owner'],$to['wref'],$targetally,8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,$AttackArrivalTime);
+            if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
+                unlink("GameEngine/Prevention/sendreinfunits.txt");
             }
-			//update status
-			$database->setMovementProc($data['moveid']);
-			}
-			$crop = $database->getCropProdstarv($data['to']);
-    			$unitarrays = $this->getAllUnits($data['to']);
-    			$village = $database->getVillage($data['to']);
-    			$upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
- 			$starv = $database->getVillageField($data['to'],"starv");
-          		if ($crop < $upkeep){
-          		// add starv data
-             		$database->setVillageField($data['to'], 'starv', $upkeep);
-   			if($starv==0){
-             		$database->setVillageField($data['to'], 'starvupdate', $time);
-           		}
-		}
-		}
-		if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
-				unlink("GameEngine/Prevention/sendreinfunits.txt");
-			}
-			if($reload) header("Location: ".$_SERVER['PHP_SELF']);
-	}
+            if($reload) header("Location: ".$_SERVER['PHP_SELF']);
+        }
 
 	private function returnunitsComplete() {
 	if(file_exists("GameEngine/Prevention/returnunits.txt")) {
