@@ -96,11 +96,13 @@ class Account {
 			$form->addError("agree",AGREE_ERROR);
 		}
 		if($form->returnErrors() > 0) {
-			$_SESSION['errorarray'] = $form->getErrors();
-			$_SESSION['valuearray'] = $_POST;
+            $form->addError("invt",$_POST['invited']);
+            $_SESSION['errorarray'] = $form->getErrors();
+            $_SESSION['valuearray'] = $_POST;
+            
 
-			header("Location: anmelden.php");
-		}
+            header("Location: anmelden.php");
+        }
 		else {
 			if(AUTH_EMAIL){
 			$act = $generator->generateRandStr(10);
