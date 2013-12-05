@@ -16,14 +16,17 @@ include("Templates/Plus/pmenu.tpl");
 	<form action="plus.php" method="POST">
     <p><input class="mail" name="mail" value=""></p>
 	<p>Own text:</p>
-	<p><textarea id="text" name="text"></textarea></p>
+	<p><textarea id="text" name="text" rows="3" cols="20" style="width:350px">
+hi, please use this link.
+<?php echo HOMEPAGE.(substr(HOMEPAGE, -1)=="/" ? "":"/"); ?>anmelden.php?uid=ref_<?php echo $session->uid; ?>
+</textarea></p>
 	</form>
 <?php }else{ ?>
     <p><a href="banned.php">&raquo; Invite by e-mail</a></p>
 <?php } ?>
     <h3>2) Copy your personal REF-Link and share it!</h3><span class="notice">Your personal REF Link:</span>
     <br>
-    <span class="link"><?php echo HOMEPAGE; ?>anmelden.php?id=ref_<?php echo $session->uid; ?></span>
+    <span class="link"><?php echo HOMEPAGE.(substr(HOMEPAGE, -1)=="/" ? "":"/");?>anmelden.php?uid=ref_<?php echo $session->uid; ?></span>
 
     <h3>Progress of your invited friends</h3>
 
