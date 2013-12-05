@@ -758,9 +758,10 @@ private function trainUnit($unit,$amt,$great=false) {
 						$fail='1';
 						}
 					}
-			if($fail==0){
-			$database->deleteReinf($id);
-			}
+        if ($enforce['hero']>0) $fail='1';
+        if($fail==0){
+            $database->deleteReinf($id);
+        }
 
 	}
 
