@@ -3180,17 +3180,12 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     
                     if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
 
-                    //check to see if we're only sending a hero between own villages and there's a Mansion at target village
+    //check to see if we're sending a hero between own villages and there's a Mansion at target village
                     $HeroTransfer=0;
-                    $NonHeroPresent=0;
+                    $troopsPresent=0;
                     if($data['t11'] != 0) {
                         if($AttackerID == $DefenderID) {
-                            for($i=1;$i<=10;$i++) { 
-                                if($data['t'.$i]>0) {
-                                    $NonHeroPresent = 1; break; 
-                                }
-                            }
-                            if($NonHeroPresent == 0 && $this->getTypeLevel(37,$data['to']) > 0) {
+                            if($this->getTypeLevel(37,$data['to']) > 0) {
                                 //don't reinforce, addunit instead
                                 $database->modifyUnit($data['to'],array("hero"),array(1),array(1));
                                 $heroid = $database->getHero($DefenderID,1);
@@ -3199,7 +3194,15 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                             }
                         }
                     }
-                    if(!$HeroTransfer){
+                    for($i=1;$i<=10;$i++) { 
+                        if($data['t'.$i]>0) {
+                            $troopsPresent = 1; break; 
+                        }
+                    }
+
+                    if($data['t11'] != 0 || $troopsPresent) {
+                        $temphero=$data['t11'];
+                        if ($HeroTransfer) $data['t11']=0;
                         //check if there is defence from town in to town
                         $check=$database->getEnforce($data['to'],$data['from']);
                         if (!isset($check['id'])){
@@ -3212,10 +3215,13 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                             //add unit.
                             $j='1';
                             for($i=$start;$i<=$end;$i++){
-                                $database->modifyEnforce($check['id'],$i,$data['t'.$j.''],1); $j++;
-                            }
+                                $t_units.="u".$i."=u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');$j++;
+                            }    
+                            $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".$check['id'];
+                            $database->query($q);
                             $database->modifyEnforce($check['id'],'hero',$data['t11'],1);
                         }
+                        $data['t11']=$temphero;
                     }
                     //send rapport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
