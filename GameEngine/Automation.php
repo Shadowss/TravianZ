@@ -1613,6 +1613,21 @@ class Automation {
                         $database->modifyHeroXp("experience",$heroxp,$from['owner']);
                     }
                         
+                    for($i=1;$i<=50;$i++) {
+                        if($unitarray) { reset($unitarray); }
+                        $unitarray = $GLOBALS["u".$i];
+                            
+                        $totaldead_def += $dead[''.$i.''];
+                        
+                        $totalpoint_att += ($dead[''.$i.'']*$unitarray['pop']);
+                    }
+                    $totalpoint_att += ($dead['hero']*6);
+                    
+                    if ($Attacker['uhero'] != 0){
+                        $heroxp = $totalpoint_att;
+                        $database->modifyHeroXp("experience",$heroxp,$from['owner']);
+                    }
+                        
                     for($i=1;$i<=10;$i++){
                         if($unitarray) { reset($unitarray); }
                         $unitarray = $GLOBALS["u".(($att_tribe-1)*10+$i)];
