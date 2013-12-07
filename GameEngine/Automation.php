@@ -1602,26 +1602,11 @@ class Automation {
                         if($unitarray) { reset($unitarray); }
                         $unitarray = $GLOBALS["u".$i];
                             
-                        $totaldead_def += $dead[''.$i.''];
+                        $totaldead_def += $alldead[''.$i.''];
                         
-                        $totalpoint_att += ($dead[''.$i.'']*$unitarray['pop']);
+                        $totalpoint_att += ($alldead[''.$i.'']*$unitarray['pop']);
                     }
-                    $totalpoint_att += ($dead['hero']*6);
-                    
-                    if ($Attacker['uhero'] != 0){
-                        $heroxp = $totalpoint_att;
-                        $database->modifyHeroXp("experience",$heroxp,$from['owner']);
-                    }
-                        
-                    for($i=1;$i<=50;$i++) {
-                        if($unitarray) { reset($unitarray); }
-                        $unitarray = $GLOBALS["u".$i];
-                            
-                        $totaldead_def += $dead[''.$i.''];
-                        
-                        $totalpoint_att += ($dead[''.$i.'']*$unitarray['pop']);
-                    }
-                    $totalpoint_att += ($dead['hero']*6);
+                    $totalpoint_att += ($alldead['hero']*6);
                     
                     if ($Attacker['uhero'] != 0){
                         $heroxp = $totalpoint_att;
