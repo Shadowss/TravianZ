@@ -2436,7 +2436,7 @@ class Automation {
                     if(($data['t11']-$dead11-$traped11)> 0){ //hero
                         if ($heroxp == 0) {
                             $xp="";
-                            $info_hero = $hero_pic.",Your hero had nothing to kill therfore gains no XP at all";
+                            $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all";
                         } else {
                             $xp=" and gained ".$heroxp." XP from the battle";
                             $info_hero = $hero_pic.",Your hero gained ".$heroxp." XP";
