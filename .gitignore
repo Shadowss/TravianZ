@@ -2,7 +2,8 @@
 Thumbs.db
 
 # ignore install folder with update ( i think not sure )
-/install/*
+# Fannybaws note - I am sure, it should not be ignored :)
+# /install/*
 
 # Folder config file
 Desktop.ini
