@@ -96,19 +96,20 @@ $vdata = $database->getVillage($towref);
                 <?php
                     $oasistype = $database->getVillageType2($towref);
                     if($oasistype != 0){
+                        $thisVillageName = 'Oasis';
+                    }
+                    else
+                    {
+                        $thisVillageName = $vdata["name"];
+                    }
                 ?>
                 <span class="coordinates coordinatesWithText">
-                <span class="coordText">Oasis</span>
+                <span class="coordText"><?php echo $thisVillageName; ?></span>
                 <span class="coordinatesWrapper">
                 <span class="coordinateY">(<?php echo $x; ?></span>
                 <span class="coordinatePipe">|</span>
                 <span class="coordinateX"><?php echo $y; ?>)</span>
-                </span></span><?php;}else{?>
-                <span class="coordinates coordinatesWithText">
-                <span class="coordText"><?php echo $vdata['name']; ?></span>
-                </span>
-                <?php } ?>
-                
+                </span></span>
                 <span class="clear">‎</span>
                 </label>
             </td>
