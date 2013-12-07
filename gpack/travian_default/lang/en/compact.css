@@ -796,6 +796,11 @@ div.village2 div#village_map .d20 {
     top: 276px;
     z-index: 25;
 }
+div.village2 div#village_map .d40 {
+    left: 227px;
+    top: 180px;
+    z-index: 16;
+}
 div.village2 div#village_map .g40 {
     top: 138px;
 }
