@@ -53,7 +53,7 @@ while($row = mysql_fetch_array($sql)){
 $sql2 = mysql_query("SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = $lid ORDER BY distance ASC");
 $query2 = mysql_num_rows($sql2);
 if($query2 == 0) {        
-    echo '<td class="noData" colspan="7">There is no any raid list.</td>';
+    echo '<td class="noData" colspan="7">There is not any raid list.</td>';
 }else{
 while($row = mysql_fetch_array($sql2)){ 
 $id= $row['id'];$lid = $row['lid'];$towref = $row['towref'];$x = $row['x'];$y = $row['y'];
