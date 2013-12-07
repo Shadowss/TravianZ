@@ -94,8 +94,7 @@ $vdata = $database->getVillage($towref);
         ?>
                 <label for="slot<?php echo $id; ?>">
                 <?php
-                    $type = $database->getVillageType2($towref);
-                    $oasistype = $type['oasistype'];
+                    $oasistype = $database->getVillageType2($towref);
                     if($oasistype != 0){
                 ?>
                 <span class="coordinates coordinatesWithText">
