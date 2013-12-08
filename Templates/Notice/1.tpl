@@ -19,10 +19,12 @@ if ($database->getUserField($dataarray[28],'username',0)!="??") {
 }else{
 	$defuser_url="<font color=\"grey\"><b>??</b></font>";
 }
-if($database->getVillageField($dataarray[29],'name')!="??") {
-	$deffrom_url="<a href=\"karte.php?d=".$dataarray[29]."&c=".$generator->getMapCheck($dataarray[29])."\">".$database->getVillageField($dataarray[29],'name')."</a>";
+if($database->isVillageOases($dataarray[29])){
+    $deffrom_url="<a href=\"karte.php?d=".$dataarray[29]."&c=".$generator->getMapCheck($dataarray[29])."\">".$dataarray[30]."</a>";
+}elseif($database->getVillageField($dataarray[29],'name')!="??") {
+    $deffrom_url="<a href=\"karte.php?d=".$dataarray[29]."&c=".$generator->getMapCheck($dataarray[29])."\">".$database->getVillageField($dataarray[29],'name')."</a>";
 }else{
-	$deffrom_url="<font color=\"grey\"><b>??</b></font>";
+    $deffrom_url="<font color=\"grey\"><b>??</b></font>";
 }
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
