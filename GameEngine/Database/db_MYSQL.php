@@ -567,16 +567,17 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 
-		public function modifyOasisLoyalty($wref) {
-			if($this->isVillageOases($wref) != 0) {
-			$OasisInfo = $this->getOasisInfo($wref);
-			if($OasisInfo['conqured'] != 0) {
-			$LoyaltyAmendment = floor(100 / min(3,(4-$this->VillageOasisCount($OasisInfo['conqured']))));
-			$q = "UPDATE `".TB_PREFIX."odata` SET loyalty=loyalty-$LoyaltyAmendment, lastupdated=".time()." WHERE wref=$wref";
-			return mysql_query($q, $this->connection);
-			}
-		}
-	}
+    public function modifyOasisLoyalty($wref) {
+        if($this->isVillageOases($wref) != 0) {
+            $OasisInfo = $this->getOasisInfo($wref);
+            if($OasisInfo['conqured'] != 0) {
+                $LoyaltyAmendment = floor(100 / min(3,(4-$this->VillageOasisCount($OasisInfo['conqured']))));
+                $q = "UPDATE `".TB_PREFIX."odata` SET loyalty=loyalty-$LoyaltyAmendment, lastupdated=".time()." WHERE wref=$wref";
+                $result=mysql_query($q, $this->connection);
+                return $OasisInfo['loyalty']-$LoyaltyAmendment;
+            }
+        }
+    }
 
 	function populateOasis() {
 		$q = "SELECT * FROM " . TB_PREFIX . "wdata where oasistype != 0";
