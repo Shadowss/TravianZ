@@ -1691,10 +1691,17 @@ class Automation {
 			$this->updateORes($data['to']);
 			$this->pruneOResource();
 
-			$totclay = $database->getOasisField($data['to'],'clay');
-			$totiron = $database->getOasisField($data['to'],'iron');
-			$totwood = $database->getOasisField($data['to'],'wood');
-			$totcrop = $database->getOasisField($data['to'],'crop');
+                        if ($conqureby >0) { //10% from owner proc village owner - fix by ronix
+                            $totclay = intval($database->getVillageField($conqureby,'clay')/10);
+                            $totiron = intval($database->getVillageField($conqureby,'iron')/10);
+                            $totwood = intval($database->getVillageField($conqureby,'wood')/10);
+                            $totcrop = intval($database->getVillageField($conqureby,'crop')/10);
+                        }else{
+                            $totclay = $database->getOasisField($data['to'],'clay');
+                            $totiron = $database->getOasisField($data['to'],'iron');
+                            $totwood = $database->getOasisField($data['to'],'wood');
+                            $totcrop = $database->getOasisField($data['to'],'crop');
+                        }
 			}
 			$avclay = floor($totclay - $cranny_eff);
 			$aviron = floor($totiron - $cranny_eff);
@@ -2442,22 +2449,28 @@ class Automation {
                             $info_hero = $hero_pic.",Your hero gained ".$heroxp." XP";
                         }
                         
-                        if ($isoasis != 0) { //oasis
-                            $OasisInfo = $database->getOasisInfo($data['to']);
-                            $troopcount = $database->countOasisTroops($data['to']);
-                            if ($database->canConquerOasis($data['from'],$data['to']) && $troopcount==0) {
-                                $database->conquerOasis($data['from'],$data['to']);
-                                $info_hero = $hero_pic.",Your hero has conquered this oasis".$xp;
+                        if ($isoasis != 0) { //oasis fix by ronix
+                            if ($to['owner']!=$from['owner']) {
+                                $troopcount = $database->countOasisTroops($data['to']);
+                                $canqured=$database->canConquerOasis($data['from'],$data['to']);
+                                if ($canqured==1 && $troopcount==0) {
+                                    $database->conquerOasis($data['from'],$data['to']);
+                                    $info_hero = $hero_pic.",Your hero has conquered this oasis".$xp;
                             
-                            }else{
-                                if ($OasisInfo['conqured'] != 0 && $troopcount==0) {
-                                    $Oloyaltybefore = intval($OasisInfo['loyalty']);
-                                    $database->modifyOasisLoyalty($data['to']);
-                                    $OasisInfo = $database->getOasisInfo($data['to']);
-                                    $Oloyaltynow = intval($OasisInfo['loyalty']);
-                                    $info_hero = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore." and gained ".$heroxp." XP";
+                                }else{
+                                    if ($canqured==3 && $troopcount==0) {
+                                        if ($type=='3') {
+                                            $Oloyaltybefore = intval($to['loyalty']);
+                                            //$database->modifyOasisLoyalty($data['to']);
+                                            //$OasisInfo = $database->getOasisInfo($data['to']);
+                                            $Oloyaltynow = intval($database->modifyOasisLoyalty($data['to']));//intval($OasisInfo['loyalty']);
+                                            $info_hero = $hero_pic.",Your hero has reduced oasis loyalty to ".$Oloyaltynow." from ".$Oloyaltybefore.$xp;
+                                        }else{
+                                            $info_hero = $hero_pic.",Could not reduce loyalty during raid".$xp;
+                                        }
+                                    }
                                 }
-                            }
+                            }    
                         } else {
                             global $form;
                             if ($heroxp == 0) {
