@@ -184,7 +184,7 @@
 	   echo "<tr>";
 	   echo "<td>15c</td>";
 	   if($row['occupied'] == 0) {
-		   echo "<td>(".$row['x']."|".$row['y'].")</td>";
+		   echo "<td><a href=\"karte.php?d=".$row['id']."&c=".$generator->getMapCheck($row['id'])."\">".$database->getVillageField($row['id'], "name")." (".$row['x']."|".$row['y'].")</td>";
 		   echo "<td>-</td>";
 		   echo "<td><b><font color=\"green\">Unoccupied</b></font></td>";
 	   } else {
@@ -237,7 +237,7 @@
 	   echo "<tr>";
 	   echo "<td>9c</td>";
 	   if($row['occupied'] == 0) {
-		   echo "<td>(".$row['x']."|".$row['y'].")</td>";
+		   echo "<td><a href=\"karte.php?d=".$row['id']."&c=".$generator->getMapCheck($row['id'])."\">".$database->getVillageField($row['id'], "name")." (".$row['x']."|".$row['y'].")</td>";
 		   echo "<td>-</td>";
 		   echo "<td><b><font color=\"green\">Unoccupied</b></font></td>";
 	   } else {
@@ -295,7 +295,7 @@
 	   echo "<tr>";
 	   echo "<td>" . $field . "</td>";
 	   if($row['occupied'] == 0) {
-		   echo "<td>(".$row['x']."|".$row['y'].")</td>";
+		   echo "<td><a href=\"karte.php?d=".$row['id']."&c=".$generator->getMapCheck($row['id'])."\">".$database->getVillageField($row['id'], "name")." (".$row['x']."|".$row['y'].")</td>";
 		   echo "<td>-</td>";
 		   echo "<td><b><font color=\"green\">Unoccupied</b></font></td>";
 	   } else {
