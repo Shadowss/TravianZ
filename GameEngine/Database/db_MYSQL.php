@@ -3307,9 +3307,14 @@ class MYSQL_DB {
             return FALSE;
         }
         if (($type == 1 && ($villageartifact || $accountartifact)) || (($type == 2 || $type == 3)&& $accountartifact)) {
-            return TRUE;
+            if($this->getVillageField($from,"capital")==1) {
+                $form->addError("error","Ancient Construction Plan cannot kept in capital village");
+                return FALSE;
+            }else{
+                return TRUE;
+            }
         } else {
-                $form->addError("error","Level treasury is low. Your hero could not claim the artefact and");
+                $form->addError("error","Your level treasury is low. Your hero could not claim the artefact");
                 return FALSE;
         }
     } else {
