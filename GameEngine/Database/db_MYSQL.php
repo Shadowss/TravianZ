@@ -3271,7 +3271,7 @@ class MYSQL_DB {
     FROM ".TB_PREFIX."artefacts WHERE owner = ".$uid;
     $result = mysql_query($q, $this->connection);
     $artifact= $this->mysql_fetch_all($result);
-    if($artifact['totals'] < 3) {    
+    if($artifact['totals'] < 3 || $kind==11) {    
         $DefenderFields = $this->getResourceLevel($vref);
         $defcanclaim = TRUE;
         for($i=19;$i<=38;$i++) {
