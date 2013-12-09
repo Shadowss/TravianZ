@@ -392,15 +392,18 @@ class MYSQL_DB {
 	*/
 	
 	function generateBase($sector, $mode=1) {
+	$num_rows = 0;
+	$count_while = 0;
+	while (!$num_rows){
     if (!$mode) {
         $gamesday=time()-COMMENCE;
-        if ($gamesday<3600*24*10) { //10 day
+        if ($gamesday<3600*24*10 && $count_while==0) { //10 day
             $wide1=1;
             $wide2=20;
-        } elseif ($gamesday<3600*24*20) { //20 day
+        } elseif ($gamesday<3600*24*20 && $count_while==1) { //20 day
             $wide1=20;
             $wide2=40;
-        } elseif ($gamesday<3600*24*30) { //30 day
+        } elseif ($gamesday<3600*24*30 && $count_while==2) { //30 day
             $wide1=40;
             $wide2=80;
         } else {        // over 30 day
@@ -428,6 +431,8 @@ class MYSQL_DB {
     }
     $result = mysql_query($q, $this->connection);
     $num_rows = mysql_num_rows($result);
+    $count_while++;
+	}
     $result = $this->mysql_fetch_all($result);
     $base = rand(0, ($num_rows-1));
     return $result[$base]['id'];
