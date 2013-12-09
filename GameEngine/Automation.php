@@ -2478,14 +2478,18 @@ class Automation {
                             } else {
                                 $xp=" gained ".$heroxp." XP from the battle";
                             }
-                            $artifact = $database->getOwnArtefactInfo($data['to']);
-                            if (!empty($artifact)) {
-                                if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
-                                    $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
-                                    $info_hero = $hero_pic.",Your hero is carrying home a artefact and".$xp;
-                                } else {
-                                    $info_hero = $hero_pic.",".$form->getError("error").$xp;
-                                }
+							if ($type=='3') {
+                                $artifact = $database->getOwnArtefactInfo($data['to']);
+                                if (!empty($artifact)) {
+                                    if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
+                                        $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
+                                        $info_hero = $hero_pic.",Your hero is carrying home a artefact".$xp;
+                                    } else {
+                                        $info_hero = $hero_pic.",".$form->getError("error").$xp;
+                                    }
+                                }    
+                            }else {
+                                $info_hero = $hero_pic.",Your hero could not claim the artefact during raid".$xp;
                             }
                         }
                     }elseif($data['t11']>0) {
