@@ -13,8 +13,9 @@ $tz=(isset($_GET['t']))? $_GET['t']:1;
         case 6: $t_zone="Atlantic/Azores";break;
         case 7: $t_zone="Australia/Melbourne";break;
         case 8: $t_zone="Europe/Bucharest";break;
-        case 9: $t_zone="Indian/Maldives";break;
-        case 10: $t_zone="Pacific/Fiji";break;
+        case 9: $t_zone="Europe/London";break;
+        case 10: $t_zone="Indian/Maldives";break;
+        case 11: $t_zone="Pacific/Fiji";break;
     }
 date_default_timezone_set($t_zone);
 ?>
