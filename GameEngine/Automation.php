@@ -2489,7 +2489,9 @@ class Automation {
                                     }
                                 }    
                             }else {
-                                $info_hero = $hero_pic.",Your hero could not claim the artefact during raid".$xp;
+                                if (!empty($artifact)) {
+                                    $info_hero = $hero_pic.",Your hero could not claim the artefact during raid".$xp;
+                                }
                             }
                         }
                     }elseif($data['t11']>0) {
