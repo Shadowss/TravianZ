@@ -18,7 +18,7 @@ if ($_SESSON['access'] == MULTIHUNTER) die("<br /><br /><br /><br /><br /><br />
 <style>
 	.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
 </style>
-<h2><center>Made by Dzoki</center></h2>
+<h2><center>Made by Dzoki / Modified by Shadow</center></h2>
 <table id="member">
 	<thead>
 		<tr>
@@ -35,6 +35,14 @@ if ($_SESSON['access'] == MULTIHUNTER) die("<br /><br /><br /><br /><br /><br />
 	<tr>
 		<td>Server Name</td>
 		<td><?php echo SERVER_NAME;?></td>
+	</tr>
+	<tr>
+		<td>Medal Interval</td>
+		<td><?php echo (MEDALINTERVAL/3600/24);?> days</td>
+	</tr>
+	<tr>
+		<td>Peace</td>
+		<td><?php echo PEACE;?></td>
 	</tr>
 	<tr>
 		<td>Server Started</td>
@@ -55,6 +63,30 @@ if ($_SESSON['access'] == MULTIHUNTER) die("<br /><br /><br /><br /><br /><br />
 	<tr>
 		<td>Troop Speed</td>
 		<td><?php echo INCREASE_SPEED;?>x</td>
+	</tr>
+	<tr>
+		<td>Evasion Speed</td>
+		<td><?php echo EVASION_SPEED;?>x</td>
+	</tr>
+	<tr>
+		<td>Trader capacity</td>
+		<td><?php echo TRADER_CAPACITY;?>x</td>
+	</tr>
+	<tr>
+		<td>Cranny capacity</td>
+		<td><?php echo CRANNY_CAPACITY;?>x</td>
+	</tr>
+	<tr>
+		<td>Trapper capacity</td>
+		<td><?php echo TRAPPER_CAPACITY;?>x</td>
+	</tr>
+	<tr>
+		<td>Natars Units Multiplier</td>
+		<td><?php echo NATARS_UNITS;?>x</td>
+	</tr>
+	<tr>
+		<td>Nature troops regeneration time </td>
+		<td><?php echo (NATURE_REGTIME/3600);?> hours</td>
 	</tr>
 	<tr>
 		<td>Village Expanding Speed</td>
