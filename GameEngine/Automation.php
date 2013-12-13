@@ -2478,22 +2478,19 @@ class Automation {
                             } else {
                                 $xp=" gained ".$heroxp." XP from the battle";
                             }
-							if ($type=='3') {
-                                $artifact = $database->getOwnArtefactInfo($data['to']);
-                                if (!empty($artifact)) {
+                            $artifact = $database->getOwnArtefactInfo($data['to']);
+                            if (!empty($artifact)) {
+                                if ($type=='3') {
                                     if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
                                         $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
                                         $info_hero = $hero_pic.",Your hero is carrying home a artefact".$xp;
                                     } else {
                                         $info_hero = $hero_pic.",".$form->getError("error").$xp;
                                     }
-                                }    
-                            }else {
-                                if (!empty($artifact)) {
-                                    $info_hero = $hero_pic.",Your hero could not claim the artefact during raid".$xp;
+                                }else{
+                                    $info_hero = $hero_pic.",Your hero could not claim the artefact during raid".$xp;                                
                                 }
                             }
-                        }
                     }elseif($data['t11']>0) {
                         if ($heroxp == 0) {
                             $xp=" and no XP from the battle";
@@ -3257,6 +3254,15 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     }
                 }
             }
+            //check empty reinforcement in rally point
+            $e_units='';
+            for ($i=1;$i<=50;$i++) {
+                $e_units.='u'.$i.'=0 AND ';
+            }
+            $e_units.='hero=0';
+            $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".$data['to']." OR `from`=".$data['to'].")";
+            $database->query($q);
+        
             if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
                 unlink("GameEngine/Prevention/sendreinfunits.txt");
             }
