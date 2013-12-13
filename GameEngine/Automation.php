@@ -2491,6 +2491,7 @@ class Automation {
                                     $info_hero = $hero_pic.",Your hero could not claim the artefact during raid".$xp;                                
                                 }
                             }
+						}
                     }elseif($data['t11']>0) {
                         if ($heroxp == 0) {
                             $xp=" and no XP from the battle";
