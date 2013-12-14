@@ -473,12 +473,14 @@ class MYSQL_DB {
 		}
 		return mysql_query($q, $this->connection);
 	}
-	function isVillageOases($wref) {
-		$q = "SELECT id, oasistype FROM " . TB_PREFIX . "wdata where id = $wref";
-		$result = mysql_query($q, $this->connection);
-		$dbarray = mysql_fetch_array($result);
-		return $dbarray['oasistype'];
-	}
+    function isVillageOases($wref) {
+        $q = "SELECT id, oasistype FROM " . TB_PREFIX . "wdata where id = $wref";
+        $result = mysql_query($q, $this->connection);
+        if($result){
+            $dbarray = mysql_fetch_array($result);
+            return $dbarray['oasistype'];
+        }else return 0;    
+    }
 
 	public function VillageOasisCount($vref) {
 		$q = "SELECT count(*) FROM `".TB_PREFIX."odata` WHERE conqured=$vref";
@@ -3404,7 +3406,7 @@ class MYSQL_DB {
 
 		$basecrop = $grainmill = $bakery = 0;
 		$owner = $this->getVrefField($wref, 'owner');
-		$bonus = $this->getUserField($owner, b4, 0);
+		$bonus = $this->getUserField($owner, 'b4', 0);
 
 		$buildarray = $this->getResourceLevel($wref);
 		$cropholder = array();
