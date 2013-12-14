@@ -2492,16 +2492,18 @@ class Automation {
                                 }
                             }
 						}
-                    }elseif($data['t11']>0) {
+                        }elseif($data['t11']>0) {
                         if ($heroxp == 0) {
-                            $xp=" and no XP from the battle";
+                            $xp="";
                         } else {
                             $xp=" but gained ".$heroxp." XP from the battle";
                         }                    
-                        $info_hero = $hero_pic.",Your hero die ".$xp;
-                    }  
-
-				if($scout){
+                        $info_hero = $hero_pic.",Your hero die".$xp;
+                    }    
+                    if ($DefenderID==0) {
+                        $natar=0;
+                    }
+                    if($scout){
 				if ($data['spy'] == 1){
 				$info_spy = "".$spy_pic.",<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".round($totwood)." |
 				 <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".round($totclay)." |
@@ -2756,18 +2758,19 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 }  
 
 				$database->setMovementProc($data['moveid']);
-				if($chiefing_village != 1){
-				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
-				// send the bounty on type 6.
-				if($type !== 1)
-				{
-					$reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
-					if ($isoasis == 0){
-                    $database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
-					}else{
-					$database->modifyOasisResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
-					}
-					$database->addMovement(6,$to['wref'],$from['wref'],$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
+                        if($chiefing_village != 1){
+                            $database->addMovement(4,$DefenderWref,$AttackerWref,$data['ref'],$AttackArrivalTime,$endtime);
+                        
+                            // send the bounty on type 6.
+                            if($type !== 1){
+
+                                $reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
+                                if ($isoasis == 0){
+                                    $database->modifyResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                }else{
+                                    $database->modifyOasisResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                }
+                                $database->addMovement(6,$DefenderWref,$AttackerWref,$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);  
 					$totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
 					$totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
 					$database->modifyPoints($from['owner'],'RR',$totalstolengain);
@@ -2775,9 +2778,11 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 					$database->modifyPointsAlly($targetally,'RR',$totalstolentaken );
 					$database->modifyPointsAlly($ownally,'RR',$totalstolengain);
 				}
-				}else{
-				$database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
-				}
+				}else{ //fix by ronix if only 1 chief left to conqured - don't add with zero enforces
+    if($totalsend_att - ($totaldead_att+$totaltraped_att) > 0) {
+        $database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
+    }
+}
 			}
 			else //else they die and don't return or report.
 			{
@@ -3247,22 +3252,23 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 $village = $database->getVillage($data['to']);
                 $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
                 $starv = $database->getVillageField($data['to'],"starv");
-                if ($crop < $upkeep){
+                 if ($crop < $upkeep){
                     // add starv data
                     $database->setVillageField($data['to'], 'starv', $upkeep);
                     if($starv==0){
                         $database->setVillageField($data['to'], 'starvupdate', $time);
                     }
                 }
+            
+                //check empty reinforcement in rally point
+                $e_units='';
+                for ($i=1;$i<=50;$i++) {
+                    $e_units.='u'.$i.'=0 AND ';
+                }
+                $e_units.='hero=0';
+                $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".$data['to']." OR `from`=".$data['to'].")";
+                $database->query($q);
             }
-            //check empty reinforcement in rally point
-            $e_units='';
-            for ($i=1;$i<=50;$i++) {
-                $e_units.='u'.$i.'=0 AND ';
-            }
-            $e_units.='hero=0';
-            $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".$data['to']." OR `from`=".$data['to'].")";
-            $database->query($q);
         
             if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
                 unlink("GameEngine/Prevention/sendreinfunits.txt");
