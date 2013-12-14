@@ -9,7 +9,6 @@
 ##                                                                             ##
 #################################################################################
 include("GameEngine/Village.php");
-$start = $generator->pageLoadTimeStart();
 	$building->procBuild($_GET);
 if($session->plus){
 ?>
@@ -32,14 +31,6 @@ if($session->plus){
 </head>
 <body onload="start()"><?php
 	include("Templates/Map/mapviewlarge.tpl");?>
-	<div id="stime">
-		<div id="ltime">
-			<div id="ltimeWrap">
-				Calculated in <b><?php echo round(($generator->pageLoadTimeEnd()-$start)*1000);?></b> ms<br />
-				Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
-			</div>
-		</div>
-	</div>
 	<div id="ce"></div>
 </body>
 </html>
