@@ -4392,7 +4392,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         }else{ //get own reinforcement from other village
                             $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".$starv['wref']." AND v.owner=v1.owner";
                             $enforcearray = $database->query_return($q);
-                            if(count($enforcearray)==0){
+                            if(count($enforcearray)>0){
                                 foreach ($enforcearray as $enforce){
                                     for($i = 0 ; $i <= 50 ; $i++){
                                         $units = $enforce['u'.$i];
@@ -4450,16 +4450,21 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         global ${u.$maxtype};
                         $hungry=array();
                         $hungry=${u.$maxtype};
-                        if ($hungry['crop']>0) {
+                        if ($hungry['crop']>0 && $oldcrop <=0) {
                             $killunits = intval($difcrop/$hungry['crop']);
                         }else $killunits=0;
                         
                         if($killunits > 0){
+                           $pskolko =  abs($skolko);
+			   if($killunits > $pskolko && $skolko <0){
+			      $killunits = $pskolko;
+				}
                             if (isset($enf)){
                                 if($killunits < $maxcount){
                                     $database->modifyEnforce($enf, $maxtype, $killunits, 0);
                                     $database->setVillageField($starv['wref'], 'starv', $upkeep);
                                     $database->setVillageField($starv['wref'], 'starvupdate', $time);
+                                    $database->modifyResource($starv['wref'],0,0,0,$hungry['crop'],1);
                                     if($maxtype == "hero"){
                                         $heroid = $database->getHeroField($database->getVillageField($enf,"owner"),"heroid");
                                         $database->modifyHero("dead", 1, $heroid);
@@ -4474,6 +4479,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                     $database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
                                     $database->setVillageField($starv['wref'], 'starv', $upkeep);
                                     $database->setVillageField($starv['wref'], 'starvupdate', $time);
+                                    $database->modifyResource($starv['wref'],0,0,0,$hungry['crop'],1);
                                     if($maxtype == "hero"){
                                         $heroid = $database->getHeroField($starv['owner'],"heroid");
                                         $database->modifyHero("dead", 1, $heroid);
