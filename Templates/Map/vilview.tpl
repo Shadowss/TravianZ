@@ -163,6 +163,7 @@ if($query != 0){
 while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
+	$topic=$row['topic'];
 	echo "<tr><td>";
 if($type==18 or $type==19 or $type==20 or $type==21){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
