@@ -6,7 +6,7 @@
 ##  Developed by:  Dzoki                                                       ##
 ##  Reworked:      aggenkeech                                                  ##
 ##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
+##  Copyright:     TravianX (c) 2010-2014. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 
@@ -134,6 +134,9 @@ $up_avl = $latest - $ver ;
 												<a href="#"><b>Res Bonus</b></a>
 												<a href="?p=givePlusRes">Give All Res Bonus</a>
 												<a href="?p=maintenenceResetPlusBonus">Reset Res Bonus</a>
+												<br />
+												<a href="#"><b>Users</b></a>
+												<a href="?p=addUsers">Create Users</a>
 												<br />
 												<a href="#"><b>Natars</b></a>
 												<a href="?p=natarend">Add WW Villages</a>
