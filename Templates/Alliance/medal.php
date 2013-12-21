@@ -22,7 +22,7 @@ INDELING CATEGORIEEN:
 == 8. in top 3 - klimmers    ==
 == 9. in top 3 - overval     ==
 ******************************/
-$geregistreerd=date('d-m-Y', ($allianceinfo['timestamp']));
+//$geregistreerd=date('d-m-Y', ($allianceinfo['timestamp']));
 
 $profiel = preg_replace("/\[war]/s",'At war with<br>'.$database->getAllianceWar($aid), $profiel, 1); 
 $profiel = preg_replace("/\[ally]/s",'Confederacies<br>'.$database->getAllianceDipProfile($aid,1), $profiel, 1); 
@@ -50,7 +50,7 @@ switch ($medal['categorie']) {
 		$woord="Resources";
         break;
 	 case "5":
-        $titel="Receiving this medal shows that your alliance was in the top 3 of both attackers and defenders of the week.";
+        $titel="Receiving this medal shows that your alliance was in the top 3 of both attacckers and defenders of the week.";
         $bonus[$medal['id']]=1;
 		break;
 	 case "6":
@@ -58,7 +58,7 @@ switch ($medal['categorie']) {
         $bonus[$medal['id']]=1;
 		break;
 	 case "7":
-        $titel="Receiving this medal shows that your alliance was in the top 3 of the defenders of the week ".$medal['points']." in a row";
+        $titel="Receiving this medal shows that your alliance was in the top 3 of the deffenders of the week ".$medal['points']." in a row";
         $bonus[$medal['id']]=1;
 		break;
 	 case "8":

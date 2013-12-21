@@ -1,5 +1,10 @@
 <?php
-//////////////// made by TTMTT ////////////////
+############################################################
+##              DO NOT REMOVE THIS NOTICE                 ##
+##                    MADE BY TTMTT                       ##
+##                     FIX BY RONIX                       ##
+##                       TRAVIANZ                         ##
+############################################################
 if($session->access!=BANNED){
 $cat_id = $_GET['fid'];
 $CatName = stripslashes($database->ForumCatName($cat_id));
@@ -24,7 +29,7 @@ if($ChckTopic){
 		$lposts = $database->LastPost($arrs['id']);
 			foreach($lposts as $post) {
 			}
-		if($database->CheckLastPost($arrs[id])){
+		if($database->CheckLastPost($arrs['id'])){
 			$post_dates = date('m/d/y, H:i a',$post['date']);
 			$owner_topics = $database->getUserArray($post['owner'],1);
 		}else{
@@ -48,7 +53,7 @@ if($ChckTopic){
 		echo '</td>
 		<td class="tit"><a href="allianz.php?s=2&fid2='.$arrs['cat'].'&pid='.$aid.'&tid='.$arrs['id'].'">'.stripslashes($arrs['title']).'</a><br></td>
 		<td class="cou">'.$CountPosts.'</td>
-		<td class="last">'.$post_dates.'<br /><a href="spieler.php?uid='.$arrs[owner].'">'.$owner_topics['username'].'</a> <a href="allianz.php?s=2&fid2='.$arrs['cat'].'&pid='.$aid.'&tid='.$arrs['id'].'&seite=max"><img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></a>
+		<td class="last">'.$post_dates.'<br /><a href="spieler.php?uid='.$arrs['owner'].'">'.$owner_topics['username'].'</a> <a href="allianz.php?s=2&fid2='.$arrs['cat'].'&pid='.$aid.'&tid='.$arrs['id'].'&seite=max"><img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></a>
 		</td></tr>';
 	
 	}
@@ -96,7 +101,7 @@ echo '<tr>
 	<a href="allianz.php?s=2&pid=<?php echo $aid; ?>&fid=<?php echo $cat_id; ?>&ac=newtopic"><img id="fbtn_post" class="dynamic_img" src="img/x.gif" alt="Post new thread" /></a> 
 <?php
 	$opt = $database->getAlliPermissions($session->uid, $aid);
-	if($opt[opt5] == 1){
+	if(isset($opt['opt5']) && $opt['opt5']== 1){
 		echo '<a href="allianz.php?s=2&fid='.$cat_id.'&seite=1&admin=switch_admin" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 	}
 ?>

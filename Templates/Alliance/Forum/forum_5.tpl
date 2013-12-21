@@ -1,5 +1,10 @@
-<!-- //////////////// made by TTMTT //////////////// -->
 <?php
+############################################################
+##              DO NOT REMOVE THIS NOTICE                 ##
+##                    MADE BY TTMTT                       ##
+##                     FIX BY RONIX                       ##
+##                       TRAVIANZ                         ##
+############################################################
 if($session->access!=BANNED){
 ?>
 <form method="post" name="post" action="allianz.php?s=2&fid=<?php echo $_GET['fid']; ?>&pid=<?php echo $_GET['pid']; ?>">
@@ -89,7 +94,16 @@ if($session->access!=BANNED){
 
 		<th>Options</th>
 		<td>
-<input class="text" type="text" name="option_1" maxlength="60" /><input class="text" type="text" name="option_2" maxlength="60" /><input class="text" type="text" name="option_3" maxlength="60" /><input class="text" type="text" name="option_4" maxlength="60" /><input class="text" type="text" name="option_5" maxlength="60" /><input class="text" type="text" name="option_6" maxlength="60" /><input class="text" type="text" name="option_7" maxlength="60" /><input class="text" type="text" name="option_8" maxlength="60" /></td><td></td>
+Option 1: <input class="text" type="text" name="option_1" maxlength="100" style="width:150px"/><br>
+Option 2: <input class="text" type="text" name="option_2" maxlength="100" style="width:150px"/><br>
+Option 3: <input class="text" type="text" name="option_3" maxlength="100" style="width:150px"/><br>
+Option 4: <input class="text" type="text" name="option_4" maxlength="100" style="width:150px"/><br>
+Option 5: <input class="text" type="text" name="option_5" maxlength="100" style="width:150px"/><br>
+Option 6: <input class="text" type="text" name="option_6" maxlength="100" style="width:150px"/><br>
+Option 7: <input class="text" type="text" name="option_7" maxlength="100" style="width:150px"/><br>
+Option 8: <input class="text" type="text" name="option_8" maxlength="100" style="width:150px"/><br>
+</td>
+<td></td>
 		</tr>
 <tr>
 	<th>ends on</th>

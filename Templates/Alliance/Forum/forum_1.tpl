@@ -1,5 +1,10 @@
-<!-- //////////////// made by TTMTT //////////////// -->
 <?php
+############################################################
+##              DO NOT REMOVE THIS NOTICE                 ##
+##                    MADE BY TTMTT                       ##
+##                     FIX BY RONIX                       ##
+##                       TRAVIANZ                         ##
+############################################################
 if($session->access!=BANNED){
 ?>
 <script language="JavaScript" type="text/javascript">

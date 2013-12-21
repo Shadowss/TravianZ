@@ -1,5 +1,10 @@
 <?php
-//////////////// made by TTMTT ////////////////
+############################################################
+##              DO NOT REMOVE THIS NOTICE                 ##
+##                    MADE BY TTMTT                       ##
+##                     FIX BY RONIX                       ##
+##                       TRAVIANZ                         ##
+############################################################
 if($session->access!=BANNED){
 $topic_id = $_GET['idt'];
 $topics = $database->ShowTopic($topic_id);
@@ -14,7 +19,7 @@ foreach($topics as $top) {
 	$report0 = $top['report0'];
 }
 ?>
-<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['idt']; ?>">
+<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['pid']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="tid" value="<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="alliance0" value="<?php echo $alliance0; ?>">

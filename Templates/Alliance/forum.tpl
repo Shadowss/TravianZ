@@ -1,10 +1,16 @@
 <?php
-//////////////// made by TTMTT ////////////////
+############################################################
+##              DO NOT REMOVE THIS NOTICE                 ##
+##                    MADE BY TTMTT                       ##
+##                     FIX BY RONIX                       ##
+##                       TRAVIANZ                         ##
+############################################################
+
 if(isset($aid)) {
 $aid = $aid;
-}else if($_GET['fid']){
+}else if(isset($_GET['fid'])){
 $aid = $database->ForumCatAlliance($_GET['fid']);
-}else if($_GET['fid2']){
+}else if(isset($_GET['fid2'])){
 $aid = $database->ForumCatAlliance($_GET['fid2']);
 }else{
 $aid = $session->alliance;
@@ -49,84 +55,83 @@ if(isset($_POST['newtopic'])){
 
 	if($text != ""){
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
-		$text = "[message]".$text."[/message]";
-		$alliance = $player = $coor = $report = 0;
-		for($i=0;$i<=$alliance;$i++){
-		if(preg_match('/\[alliance'.$i.'\]/',$text) && preg_match('/\[\/alliance'.$i.'\]/',$text)){
-		$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
-		if(preg_match('/\[alliance'.$i.'\]/',$alliance1) && preg_match('/\[\/alliance'.$i.'\]/',$alliance1)){
-		$j = $i+1;
-		$alliance2 = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $text);
-		$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '[alliance'.$j.']', $alliance1);
-		$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance'.$j.']', $alliance1);
-		$text = $alliance2."[/alliance".$i."]".$alliance1;
-		$alliance += 1;
-		}
-		}
-		}
-		for($i=0;$i<=$player;$i++){
-		if(preg_match('/\[player'.$i.'\]/',$text) && preg_match('/\[\/player'.$i.'\]/',$text)){
-		$player1 = preg_replace('/\[message\](.*?)\[\/player'.$i.'\]/is', '', $text);
-		if(preg_match('/\[player'.$i.'\]/',$player1) && preg_match('/\[\/player'.$i.'\]/',$player1)){
-		$j = $i+1;
-		$player2 = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $text);
-		$player1 = preg_replace('/\[player'.$i.'\]/', '[player'.$j.']', $player1);
-		$player1 = preg_replace('/\[\/player'.$i.'\]/', '[/player'.$j.']', $player1);
-		$text = $player2."[/player".$i."]".$player1;
-		$player += 1;
-		}
-		}
-		}
-		for($i=0;$i<=$coor;$i++){
-		if(preg_match('/\[coor'.$i.'\]/',$text) && preg_match('/\[\/coor'.$i.'\]/',$text)){
-		$coor1 = preg_replace('/\[message\](.*?)\[\/coor'.$i.'\]/is', '', $text);
-		if(preg_match('/\[coor'.$i.'\]/',$coor1) && preg_match('/\[\/coor'.$i.'\]/',$coor1)){
-		$j = $i+1;
-		$coor2 = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $text);
-		$coor1 = preg_replace('/\[coor'.$i.'\]/', '[coor'.$j.']', $coor1);
-		$coor1 = preg_replace('/\[\/coor'.$i.'\]/', '[/coor'.$j.']', $coor1);
-		$text = $coor2."[/coor".$i."]".$coor1;
-		$coor += 1;
-		}
-		}
-		}
-		for($i=0;$i<=$report;$i++){
-		if(preg_match('/\[report'.$i.'\]/',$text) && preg_match('/\[\/report'.$i.'\]/',$text)){
-		$report1 = preg_replace('/\[message\](.*?)\[\/report'.$i.'\]/is', '', $text);
-		if(preg_match('/\[report'.$i.'\]/',$report1) && preg_match('/\[\/report'.$i.'\]/',$report1)){
-		$j = $i+1;
-		$report2 = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $text);
-		$report1 = preg_replace('/\[report'.$i.'\]/', '[report'.$j.']', $report1);
-		$report1 = preg_replace('/\[\/report'.$i.'\]/', '[/report'.$j.']', $report1);
-		$text = $report2."[/report".$i."]".$report1;
-		$report += 1;
-		}
-		}
-		}
-	$topic_id = $database->CreatTopic($title,$text,$cat,$owner,$alli,$ends,$alliance,$player,$coor,$report);
-	if($_POST['umfrage']) {
-		if(isset($_POST['umfrage_ende'])){
-			$ends_date = $_POST['month']."/".$_POST['day']."/".$_POST['year'];
-			if($_POST['meridiem'] == 1){
-			$_POST['hour'] += 12;
+			$text = "[message]".$text."[/message]";
+			$alliance = $player = $coor = $report = 0;
+			for($i=0;$i<=$alliance;$i++){
+				if(preg_match('/\[alliance'.$i.'\]/',$text) && preg_match('/\[\/alliance'.$i.'\]/',$text)){
+					$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
+					if(preg_match('/\[alliance'.$i.'\]/',$alliance1) && preg_match('/\[\/alliance'.$i.'\]/',$alliance1)){
+						$j = $i+1;
+						$alliance2 = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $text);
+						$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '[alliance'.$j.']', $alliance1);
+						$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance'.$j.']', $alliance1);
+						$text = $alliance2."[/alliance".$i."]".$alliance1;
+						$alliance += 1;
+					}
+				}
 			}
-			$ends_time = $_POST['hour'].":".$_POST['minute'];
-			$ends = strtotime($ends_date)-strtotime(date('m/d/Y'))+strtotime($ends_time);
-		}else{
-			$ends = '';
-		}
-		$survey = 0;
-		for($i=1;$i<=8;$i++){
-		if($_POST['option'.$i] != ""){
-		$survey = 1;
-		}
-		}
-		if($survey == 1){
-		$database->createSurvey($topic_id, $_POST['umfrage_thema'], $_POST['option_1'], $_POST['option_2'], $_POST['option_3'], $_POST['option_4'], $_POST['option_5'], $_POST['option_6'], $_POST['option_7'], $_POST['option_8'], $ends);
+			for($i=0;$i<=$player;$i++){
+				if(preg_match('/\[player'.$i.'\]/',$text) && preg_match('/\[\/player'.$i.'\]/',$text)){
+					$player1 = preg_replace('/\[message\](.*?)\[\/player'.$i.'\]/is', '', $text);
+					if(preg_match('/\[player'.$i.'\]/',$player1) && preg_match('/\[\/player'.$i.'\]/',$player1)){
+						$j = $i+1;
+						$player2 = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $text);
+						$player1 = preg_replace('/\[player'.$i.'\]/', '[player'.$j.']', $player1);
+						$player1 = preg_replace('/\[\/player'.$i.'\]/', '[/player'.$j.']', $player1);
+						$text = $player2."[/player".$i."]".$player1;
+						$player += 1;
+					}
+				}
+			}
+			for($i=0;$i<=$coor;$i++){
+				if(preg_match('/\[coor'.$i.'\]/',$text) && preg_match('/\[\/coor'.$i.'\]/',$text)){
+					$coor1 = preg_replace('/\[message\](.*?)\[\/coor'.$i.'\]/is', '', $text);
+					if(preg_match('/\[coor'.$i.'\]/',$coor1) && preg_match('/\[\/coor'.$i.'\]/',$coor1)){
+						$j = $i+1;
+						$coor2 = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $text);
+						$coor1 = preg_replace('/\[coor'.$i.'\]/', '[coor'.$j.']', $coor1);
+						$coor1 = preg_replace('/\[\/coor'.$i.'\]/', '[/coor'.$j.']', $coor1);
+						$text = $coor2."[/coor".$i."]".$coor1;
+						$coor += 1;
+					}
+				}
+			}
+			for($i=0;$i<=$report;$i++){
+				if(preg_match('/\[report'.$i.'\]/',$text) && preg_match('/\[\/report'.$i.'\]/',$text)){
+					$report1 = preg_replace('/\[message\](.*?)\[\/report'.$i.'\]/is', '', $text);
+					if(preg_match('/\[report'.$i.'\]/',$report1) && preg_match('/\[\/report'.$i.'\]/',$report1)){
+						$j = $i+1;
+						$report2 = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $text);
+						$report1 = preg_replace('/\[report'.$i.'\]/', '[report'.$j.']', $report1);
+						$report1 = preg_replace('/\[\/report'.$i.'\]/', '[/report'.$j.']', $report1);
+						$text = $report2."[/report".$i."]".$report1;
+						$report += 1;
+					}
+				}
+			}
+			$survey = 0;
+			$ends='';
+			if(isset($_POST['umfrage'])) {
+				if(isset($_POST['umfrage_ende'])){
+					$ends_date = $_POST['month']."/".$_POST['day']."/".$_POST['year'];
+					if($_POST['meridiem'] == 1){
+						$_POST['hour'] += 12;
+					}
+					$ends_time = $_POST['hour'].":".$_POST['minute'];
+					$ends = strtotime($ends_date)-strtotime(date('m/d/Y'))+strtotime($ends_time);
+				}
+				for($i=1;$i<=8;$i++){
+					if(isset($_POST['option_'.$i]) && $_POST['option_'.$i]!= ""){
+						$survey = 1;
+					}
+				}
+			}
+			$topic_id = $database->CreatTopic($title,$text,$cat,$owner,$alli,$ends,$alliance,$player,$coor,$report);
+			if($survey == 1){
+				$database->createSurvey($topic_id, $_POST['umfrage_thema'], $_POST['option_1'], $_POST['option_2'], $_POST['option_3'], $_POST['option_4'], $_POST['option_5'], $_POST['option_6'], $_POST['option_7'], $_POST['option_8'], $ends);
+			}
 		}
 	}
-	}
-}
 }
 if(isset($_POST['newpost'])){
 	$text = $_POST['text'];
@@ -373,25 +378,26 @@ if($opt['opt5'] == 1){
 }
 }
 if($_GET['admin']== "pin"){
-	$database->StickTopic($_GET[idt],1); // stick topic
+	$database->StickTopic($_GET['idt'],1); // stick topic
 }
 if($_GET['admin']== "unpin"){
-	$database->StickTopic($_GET[idt],''); // unstick topic
+	$database->StickTopic($_GET['idt'],''); // unstick topic
 }
 if($_GET['admin']== "delforum"){
-	$database->DeleteCat($_GET[idf]); // delete forum
+	$database->DeleteCat($_GET['idf']); // delete forum
 }
 if($_GET['admin']== "deltopic"){
-	$database->DeleteTopic($_GET[idt]); // delete topic
+	$database->DeleteTopic($_GET['idt']); // delete topic
+	$database->DeleteSurvey($_GET['idt']); // delete survey
 }
 if($_GET['admin']== "delpost"){
-	$database->DeletePost($_GET[pod]); // stick topic
+	$database->DeletePost($_GET['pod']); // stick topic
 }
 if($_GET['admin']== "lock"){
-	$database->LockTopic($_GET[idt],1); // lock topic
+	$database->LockTopic($_GET['idt'],1); // lock topic
 }
 if($_GET['admin']== "unlock"){
-	$database->LockTopic($_GET[idt],''); // unlock topic
+	$database->LockTopic($_GET['idt'],''); // unlock topic
 }
 if($_GET['admin']== "newforum"){
 	include("Forum/forum_1.tpl");  // new forum

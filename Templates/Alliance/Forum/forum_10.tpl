@@ -1,5 +1,10 @@
 <?php
-//////////////// made by TTMTT ////////////////
+############################################################
+##              DO NOT REMOVE THIS NOTICE                 ##
+##                    MADE BY TTMTT                       ##
+##                     FIX BY RONIX                       ##
+##                       TRAVIANZ                         ##
+############################################################
 if($session->access!=BANNED){
 $topic_id = $_GET['pod'];
 $post_id = $_GET['pod'];

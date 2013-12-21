@@ -1,55 +1,58 @@
 <?php
-
+//fix by ronix
 if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) die('Hacking Attemp');
-	   include ("GameEngine/Village.php");
-	   include ("GameEngine/Chat.php");
-	   $start = $generator->pageLoadTimeStart();
-	   $alliance->procAlliance($_GET);
+include ("GameEngine/Village.php");
+include ("GameEngine/Chat.php");
+$start = $generator->pageLoadTimeStart();
+$alliance->procAlliance($_GET);
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	if(isset($_GET['s'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?s=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s']));
+		header("Location: ".$_SERVER['PHP_SELF']."?s=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s']));
 	}else if(isset($_GET['aid'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?aid=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['aid']));
+		header("Location: ".$_SERVER['PHP_SELF']."?aid=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['aid']));
+	}else{
+		header("Location: ".$_SERVER['PHP_SELF']);
 	}
-	else{
-	header("Location: ".$_SERVER['PHP_SELF']);
 }
+if(isset($_GET['s'])){
+	$automation->isWinner();
 }
-	   if(isset($_GET['s'])){
-		$automation->isWinner();
-		}
 
 if(isset($_GET['fid'])){
-$fid = preg_replace("/[^0-9]/","",$_GET['fid']);
-$forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
-$forum_type = mysql_fetch_array($forum);
-if($forum_type['forum_name'] != "" && $forum_type['forum_area'] == 0){
-if($forum_type['alliance'] != $session->alliance){
-	header("Location: ".$_SERVER['PHP_SELF']);
-}
-}
+	$fid = preg_replace("/[^0-9]/","",$_GET['fid']);
+	$forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
+	$forum_type = mysql_fetch_array($forum);
+	if($forum_type['forum_name'] != "" && $forum_type['forum_area'] == 0){
+		if($forum_type['alliance'] != $session->alliance){
+			header("Location: ".$_SERVER['PHP_SELF']);
+		}
+	}
 }else if(isset($_GET['fid2'])){
-$fid = preg_replace("/[^0-9]/","",$_GET['fid2']);
-$forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
-$forum_type = mysql_fetch_array($forum);
-if($forum_type['forum_name'] != "" && $forum_type['forum_area'] != 1){
-if($forum_type['forum_area'] == 0){
-if($forum_type['alliance'] != $session->alliance){
-	header("Location: ".$_SERVER['PHP_SELF']);
+	$fid = preg_replace("/[^0-9]/","",$_GET['fid2']);
+	$forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
+	if (!empty($forum)) {
+		$forum_type = mysql_fetch_array($forum);
+		if($forum_type['forum_name'] != "" && $forum_type['forum_area'] != 1){
+			if($forum_type['forum_area'] == 0){
+				if($forum_type['alliance'] != $session->alliance){
+					header("Location: ".$_SERVER['PHP_SELF']);
+				}
+			}else if($forum_type['forum_area'] == 2){
+				if($forum_type['alliance'] != $session->alliance){
+					header("Location: ".$_SERVER['PHP_SELF']);
+				}
+			}else if($forum_type['forum_area'] == 3){
+				if($forum_type['alliance'] != $session->alliance){
+					header("Location: ".$_SERVER['PHP_SELF']);
+				}
+			}else{
+				header("Location: ".$_SERVER['PHP_SELF']);
+			}
+		}
+	}	
 }
-}else if($forum_type['forum_area'] == 2){
-if($forum_type['alliance'] != $session->alliance){
-}else if($forum_type['forum_area'] == 3){
-
-}
-
-}else{
-	header("Location: ".$_SERVER['PHP_SELF']);
-}
-}
-}
-if($_GET['aid'] or $_GET['fid'] or $_GET['fid2'] or $session->alliance!=0){
+if(isset($_GET['aid']) or isset($_GET['fid']) or isset($_GET['fid2']) or $session->alliance!=0){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
