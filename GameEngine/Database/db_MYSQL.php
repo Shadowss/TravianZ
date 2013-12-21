@@ -1209,12 +1209,25 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 
-	function DeleteCat($id) {
-		$qs = "DELETE from " . TB_PREFIX . "forum_cat where id = '$id'";
-		$q = "DELETE from " . TB_PREFIX . "forum_topic where cat = '$id'";
-		mysql_query($qs, $this->connection);
-		return mysql_query($q, $this->connection);
-	}
+    function DeleteCat($id) {
+        $qs = "DELETE from " . TB_PREFIX . "forum_cat where id = '$id'";
+        $q = "DELETE from " . TB_PREFIX . "forum_topic where cat = '$id'";
+        $q2="SELECT id from ".TB_PREFIX."forum_topic where cat ='$id'";
+        $result = mysql_query($q2, $this->connection);
+        if (!empty($result)) {
+            $array=$this->mysql_fetch_all($result);
+            foreach($array as $ss) {
+                $this->DeleteSurvey($ss['id']);
+            }
+        }
+        mysql_query($qs, $this->connection);
+        return mysql_query($q, $this->connection);
+    }
+	
+	function DeleteSurvey($id) {
+        $qs = "DELETE from " . TB_PREFIX . "forum_survey where topic = '$id'";
+        return mysql_query($qs, $this->connection);
+    }  
 
 	function DeleteTopic($id) {
 		$qs = "DELETE from " . TB_PREFIX . "forum_topic where id = '$id'";
