@@ -153,7 +153,11 @@ class Session {
      				$result2 = mysql_query($q2, $database->connection);
      				$he2=mysql_fetch_array($result2);
      				$hero+=$he2[0];
-     				$hero+=$database->HeroNotInVil($myvill); // check if hero is not in village (come back from attack , raid , etc.)
+     				$q3 = "SELECT SUM(t11) from " . TB_PREFIX . "prisoners where `from` = ".$myvill;   // check if hero is prisoner
+					$result3 = mysql_query($q3, $database->connection);
+					$he3=mysql_fetch_array($result3);
+					$hero+=$he3[0];
+					$hero+=$database->HeroNotInVil($myvill); // check if hero is not in village (come back from attack , raid , etc.)  
      				}
      				$yes=true; //fix by ronix
             if($database->getHeroDead($this->uid) and !$hero){ // check if hero is already dead
