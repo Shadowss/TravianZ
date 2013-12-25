@@ -248,7 +248,7 @@ $end = ($tribe*10);
                             <?php } ?>
                         </select>
 
-            <?php if($building->getTypeLevel(16) == 20) { ?>
+            <?php if($building->getTypeLevel(16) == 20 && $process['t8'] >= 20) { ?>
                      <select name="ctar2" class="dropdown">
                 <option value="0">-</option>
                 <option value="99">Random</option>
