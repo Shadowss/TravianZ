@@ -214,7 +214,7 @@ include ("GameEngine/Lang/".LANG.".php");
 			<h2><?php echo CHOOSE; ?></h2>
 			<a href="#" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
 			<ul class="world_list">
-				<li class="w_big c3" style="background-image:url('img/en/welten/en1_big_g.jpg');">
+				<li class="w_big c3" style="background-image:url('img/en/welten/en1_big.jpg');">
 					<a href="login.php"><img class="w_button" src="img/un/x.gif" alt="World" title="<?php echo $users; echo "&nbsp;"; echo PLAYERS; echo "&nbsp;|&nbsp;"; echo $active; echo "&nbsp;"; echo ACTIVE; echo "&nbsp;|&nbsp;"; echo $online; echo "&nbsp;"; echo ONLINE; ?>" /></a>
 					<div class="label_players c0"><?php echo PLAYERS; ?>:</div>
 					<div class="label_online c0"><?php echo ONLINE; ?>:</div>
