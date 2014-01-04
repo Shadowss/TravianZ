@@ -3303,13 +3303,14 @@ class MYSQL_DB {
             $form->addError("error","Max num. of great/unique artefacts. Your hero could not claim the artefact and");
             return FALSE;
         }
-        if (($type == 1 && ($villageartifact || $accountartifact)) || (($type == 2 || $type == 3)&& $accountartifact)) {
-            if($this->getVillageField($from,"capital")==1) {
-                $form->addError("error","Ancient Construction Plan cannot kept in capital village");
-                return FALSE;
-            }else{
-                return TRUE;
-            }
+        if (($type == 1 && ($villageartifact || $accountartifact)) || (($type == 2 || $type == 3)&& $accountartifact)){
+            return TRUE;
+//            if($this->getVillageField($from,"capital")==1) {
+//                $form->addError("error","Ancient Construction Plan cannot kept in capital village");
+//                return FALSE;
+//            }else{
+//                return TRUE;
+//            }
         } else {
                 $form->addError("error","Your level treasury is low. Your hero could not claim the artefact");
                 return FALSE;
