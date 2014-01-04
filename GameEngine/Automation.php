@@ -2483,7 +2483,7 @@ class Automation {
                                 if ($type=='3') {
                                     if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
                                         $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
-                                        $info_hero = $hero_pic.",Your hero is carrying home a artefact".$xp;
+                                        $info_hero = $hero_pic.",Your hero is carrying home an artefact".$xp;
                                     } else {
                                         $info_hero = $hero_pic.",".$form->getError("error").$xp;
                                     }
