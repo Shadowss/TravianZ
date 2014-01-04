@@ -3250,25 +3250,26 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 
-    public function canClaimArtifact($from,$vref,$type,$kind) {
+    public function canClaimArtifact($from,$vref,$size,$type) {
     //fix by Ronix
     global $session, $form;
-    $type1 = $type2 = $type3 = 0;
+    $size1 = $size2 = $size3 = 0;
     
     $artifact = $this->getOwnArtefactInfo($from);
     if (!empty($artifact)) {
-        $form->addError("error","Treasury is full. Your hero could not claim the artefact and");
+        $form->addError("error","Treasury is full. Your hero could not claim the artefact");
         return false;
     }
     $uid=$session->uid;    
-    $q="SELECT Count(type) AS totals,
-    SUM(IF(type = '1',1,0)) small,
-    SUM(IF(type = '2',1,0)) great,
-    SUM(IF(type = '3',1,0)) unique,
+    $q="SELECT Count(size) AS totals,
+    SUM(IF(size = '1',1,0)) small,
+    SUM(IF(size = '2',1,0)) great,
+    SUM(IF(size = '3',1,0)) `unique`
     FROM ".TB_PREFIX."artefacts WHERE owner = ".$uid;
     $result = mysql_query($q, $this->connection);
     $artifact= $this->mysql_fetch_all($result);
-    if($artifact['totals'] < 3 || $kind==11) {    
+
+    if($artifact['totals'] < 3 || $type==11) {    
         $DefenderFields = $this->getResourceLevel($vref);
         $defcanclaim = TRUE;
         for($i=19;$i<=38;$i++) {
@@ -3276,7 +3277,7 @@ class MYSQL_DB {
                 $defTresuaryLevel = $DefenderFields['f'.$i];
                 if($defTresuaryLevel > 0) {
                     $defcanclaim = FALSE;
-                    $form->addError("error","Treasury has not been destroyed. Your hero could not claim the artefact and");
+                    $form->addError("error","Treasury has not been destroyed. Your hero could not claim the artefact");
                     return false;
                 } else {
                     $defcanclaim = TRUE;
@@ -3299,27 +3300,28 @@ class MYSQL_DB {
                 }
             }
         }
-        if (($artifact['great']>0 || $artifact['unique']>0) && $type>1) {
-            $form->addError("error","Max num. of great/unique artefacts. Your hero could not claim the artefact and");
+        if (($artifact['great']>0 || $artifact['unique']>0) && $size>1) {
+            $form->addError("error","Max num. of great/unique artefacts. Your hero could not claim the artefact");
             return FALSE;
         }
-        if (($type == 1 && ($villageartifact || $accountartifact)) || (($type == 2 || $type == 3)&& $accountartifact)){
-            return TRUE;
-//            if($this->getVillageField($from,"capital")==1) {
-//                $form->addError("error","Ancient Construction Plan cannot kept in capital village");
-//                return FALSE;
-//            }else{
-//                return TRUE;
-//            }
+        if (($size == 1 && ($villageartifact || $accountartifact)) || (($size == 2 || $size == 3)&& $accountartifact)) {
+/*            
+	if($this->getVillageField($from,"capital")==1 && $type==11) {
+                $form->addError("error","Ancient Construction Plan cannot kept in capital village");
+                return FALSE;
+            }else{
+                return TRUE;
+            }
+*/
         } else {
                 $form->addError("error","Your level treasury is low. Your hero could not claim the artefact");
                 return FALSE;
         }
     } else {
-        $form->addError("error","Max num. of artefacts. Your hero could not claim the artefact and");
+        $form->addError("error","Max num. of artefacts. Your hero could not claim the artefact");
         return FALSE;
     }
-}  
+}
 
 	function getArtefactDetails($id) {
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = " . $id . "";
