@@ -3305,6 +3305,7 @@ class MYSQL_DB {
             return FALSE;
         }
         if (($size == 1 && ($villageartifact || $accountartifact)) || (($size == 2 || $size == 3)&& $accountartifact)) {
+            return true;
 /*            
 	if($this->getVillageField($from,"capital")==1 && $type==11) {
                 $form->addError("error","Ancient Construction Plan cannot kept in capital village");
