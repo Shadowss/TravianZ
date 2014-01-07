@@ -1925,7 +1925,8 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				if ($battlepart[4]>$battlepart[3])
+			        $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$bid25[$residence]['attri']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5); 
+				if ($battlepart[4]>$needed_cata)
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -1964,7 +1965,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$battlepart[3];
+					$demolish=$battlepart[4]/$needed_cata;
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-($battlepart[4]*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2052,7 +2053,8 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-                	if ($battlepart[4]>$battlepart[3])
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$bid25[$residence]['attri']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+                	if ($battlepart[4]>$needed_cata)
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -2095,7 +2097,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$battlepart[3];
+					$demolish=$battlepart[4]/$needed_cata;
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2180,7 +2182,8 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-                if ($battlepart[4]>$battlepart[3])
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$bid25[$residence]['attri']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+                if ($battlepart[4]>$needed_cata)
 				{
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.</td></tr></tbody>";
@@ -2223,7 +2226,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$battlepart[3];
+					$demolish=$battlepart[4]/$needed_cata;
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2852,7 +2855,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 			}
 			$endtime += $AttackArrivalTime;
-			$endtime += microtime(true);
+			//$endtime += microtime(true);
 				$database->setMovementProc($data['moveid']);
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				$peace = PEACE;
