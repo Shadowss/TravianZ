@@ -19,18 +19,20 @@
 	<li>Last but not least, Enjoy.</li>
 	</ul>
 
+        <br>
 	<ul>
-
-	<li><h4>CHMOD:</h4></li>
-	<li>install to 777</li>
-	<li>GameEngine to 777</li>
-	<li><h4>After CHMOD:</h4></li>
-	<li>Delete install folder</li>
-	<li>Change CHMOD GameEngine back to 644 and CHMOD 777: Prevention, Notes</li>
+	<li><h4>Before Installation (Linux):</h4></li>
+	<li>CHMOD install to 777 (chmod -R 777 install)</li>
+	<li>CHMOD GameEngine to 777 (chmod -R 777 GameEngine)</li>
+	<li><h4>After Installation</h4></li>
+	<li>Delete install folder (sudo rm -R install)</li>
+	<li>CHMOD GameEngine back to 755 (sudo chmod -R 755 GameEngine)</li>
+        <li>CHMOD Prevention to 777 (sudo chmod -R 777 GameEngine/Prevention)</li>
+        <li>CHMOD Notes to 777 (sudo chmod -R 777 GameEngine/Notes)</li>
 	</ul>
 
 	<div class="lbox">
-	TravianX Team
+	TravianZ Team
 	</div>
 	<br>
 
