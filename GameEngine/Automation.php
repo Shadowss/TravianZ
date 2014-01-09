@@ -2502,8 +2502,8 @@ class Automation {
                             $xp=" but gained ".$heroxp." XP from the battle";
                         }                    
                                                 if ($traped11>0) {
-                            $info_hero = $hero_pic.",Your hero has trapped".$xp;
-                        }else $info_hero = $hero_pic.",Your hero die".$xp; 
+                            $info_hero = $hero_pic.",Your hero was trapped".$xp;
+                        }else $info_hero = $hero_pic.",Your hero died".$xp; 
                     }    
                     if ($DefenderID==0) {
                         $natar=0;

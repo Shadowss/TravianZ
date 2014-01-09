@@ -284,10 +284,10 @@ define("Q31_RESP","Warehouse has upgraded to level 7...");
 define("Q32","Task 26: All to five!");
 define("Q32_DESC","You will always need more resources. Resource tiles are quite expensive but will always pay out in the long term.");
 define("Q32_ORDER","Order:<\/p>Upgrade all resources tiles to level 5.");
-define("Q32_RESP","All resources were to level 5, the village's products have gone up and take a step forward...");
+define("Q32_RESP","All resources are at level 5, very good, your village grows and thrives!");
 
 define("Q33","Task 27: Palace or Residence?");
-define("Q33_DESC","To found a new village, you will need settlers. Those you can train in either a palace or a residence.");
+define("Q33_DESC","To found a new village, you will need settlers. They can be trained in either a palace or a residence.");
 define("Q33_ORDER","Order:<\/p>Build a palace or residence to level 10.");
 define("Q33_RESP","had reached to level 10, you can now train settlers and found your second village. Notice the cultural points...");
 

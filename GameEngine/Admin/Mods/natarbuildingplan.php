@@ -67,7 +67,7 @@ NOTE: If the above criteria is not met during the attack, the next attack on tha
 
 
 
-To build a Treasure Chamber (Treasury), you will need a Main Building level 10 and the village MUST NOT be a Capital or contain a World Wonder.
+To build a Treasure Chamber (Treasury), you will need a Main Building level 10 and the village MUST NOT contain a World Wonder.
 
 To build a World Wonder, you must own the Construction Plans yourself (you = the World Wonder Village Owner) from level 0 to 50, and then from level 51 to 100 you will need an additional set of Construction Plans in your Alliance! Two sets of Construction Plans in the World Wonder Village Account will not work!" ,$text);
 		fwrite($fh, $text);
