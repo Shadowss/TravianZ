@@ -41,4 +41,5 @@
 		Credits: Akakori & Elmar<br />
 		Fixed, remade and new features added by <b>Dzoki</b><br />
 		Reworked by <b>aggenkeech</b>
+		Remaked by <b>Shadow</b>
 	</font>
