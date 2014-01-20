@@ -119,6 +119,7 @@ define("CALCULATED_IN","Calculated in");
 define("SEVER_TIME","Server time:");
 
 //QUEST
+define("Q_BUTN","Send");
 define("Q_CONTINUE","Continue with the next task.");
 define("Q_REWARD","Your reward:");
 define("Q0","Welcome to ");
