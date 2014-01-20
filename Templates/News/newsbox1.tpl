@@ -3,7 +3,7 @@
         
         
         <b><center>TravianZ</center></b><br />
-        <b>Version: <font color="Red">v7.0</font></b><br />
+        <b>Version: <font color="Red">v8.0</font></b><br />
         <b>Major Changes:</b> New index.php, chief training fixed, graphic packs now work but only for outside links. See more in readme file!<br />
         <b>Minor Changes:</b> Admin panel updated a bit, config updated, installation system updated<br />
         <b>Script Price:</b> FREE!<br /><br />
