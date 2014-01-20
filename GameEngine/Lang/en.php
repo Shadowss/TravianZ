@@ -208,6 +208,7 @@ define("Q13_RESP","Very good, your village grows and thrives!");
 define("Q14","Task 14: Instructions");
 define("Q14_DESC","In the ingame instructions you can find short information texts about different buildings and types of units.<br \/><br \/>Click on 'instructions' at the left to find out how much lumber is required for the barracks.");
 define("Q14_ORDER","Order:<\/p>Enter how much lumber barracks cost");
+define("Q14_BUTN","Send");
 define("Q14_RESP","Exactly! Barracks cost 210 lumber.");
 
 define("Q15","Task 15: Main Building");
