@@ -194,61 +194,68 @@ while($data = mysql_fetch_assoc($query)) {
 </tr>
 </thead><tbody>
 
-<tr>
-    <th>Time zones</th>
-    <td><select name="timezone" class="dropdown">
-	<optgroup label="local time zones"><option value="495">Europe</option>
-<option value="99" selected="selected">UK</option>
-<option value="492">Turkey</option>
-<option value="328">Asia/Kolkata</option>
-<option value="345">Asia/Bangkok</option>
-
-<option value="257">USA/New York</option>
-<option value="189">USA/Chicago</option>
-<option value="474">New Zealand</option></optgroup><optgroup label="general time zones"><option value="12">UTC-11</option>
-	   <option value="13">UTC-10</option>
-	   <option value="14">UTC-9</option>
-	   <option value="15">UTC-8</option>
-	   <option value="16">UTC-7</option>
-
-	   <option value="17">UTC-6</option>
-	   <option value="18">UTC-5</option>
-	   <option value="19">UTC-4</option>
-	   <option value="20">UTC-3</option>
-	   <option value="21">UTC-2</option>
-	   <option value="22">UTC-1</option>
-
-	   <option value="23">UTC</option>
-	   <option value="0">UTC+1</option>
-	   <option value="1">UTC+2</option>
-	   <option value="2">UTC+3</option>
-	   <option value="3">UTC+4</option>
-	   <option value="4">UTC+5</option>
-
-	   <option value="5">UTC+6</option>
-	   <option value="6">UTC+7</option>
-	   <option value="7">UTC+8</option>
-	   <option value="8">UTC+9</option>
-	   <option value="9">UTC+10</option>
-	   <option value="10">UTC+11</option>
-
-	   <option value="11">UTC+12</option>
-	   
-	</optgroup></select>
-
-    </td>
-</tr><tr>
-    <th>Date</th>
-    <td>
-	<label><input class="radio" type="Radio" name="tformat" value="0" checked> EU (dd.mm.yy 24h)</label><br />
-
-	<label><input class="radio" type="Radio" name="tformat" value="1"> US (mm/dd/yy 12h)</label><br />
-	<label><input class="radio" type="Radio" name="tformat" value="2"> UK (dd/mm/yy 12h)</label><br />
-	<label><input class="radio" type="Radio" name="tformat" value="3"> ISO (yy/mm/dd 24h)</label>
-    </td>
-</tr>
-</tbody>
-</table><p class="btn"><input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
+			<tr>
+				<th>Time zone:</th>
+				<td>
+					 <select name="timeZone">
+						<optgroup label="local time zones">
+							<option value="30"<?php echo $timeZone == 30 ? " selected=\"selected\"" : "" ?>>Europe/Vilnius</option>
+							<option value="31"<?php echo $timeZone == 31 ? " selected=\"selected\"" : "" ?>>Newfoundland</option>
+							<option value="32"<?php echo $timeZone == 32 ? " selected=\"selected\"" : "" ?>>United Kingdom</option>
+							<option value="33"<?php echo $timeZone == 33 ? " selected=\"selected\"" : "" ?>>Central Europe</option>
+							<option value="34"<?php echo $timeZone == 34 ? " selected=\"selected\"" : "" ?>>Iran</option>
+							<option value="35"<?php echo $timeZone == 35 ? " selected=\"selected\"" : "" ?>>Calcutta</option>
+							<option value="36"<?php echo $timeZone == 36 ? " selected=\"selected\"" : "" ?>>Cocos</option>
+							<option value="37"<?php echo $timeZone == 37 ? " selected=\"selected\"" : "" ?>>Australian Central</option>
+						</optgroup>
+						<optgroup label="general time zones">
+							<option value="13"<?php echo $timeZone == 13 ? " selected=\"selected\"" : "" ?>>UTC-11</option>
+							<option value="14"<?php echo $timeZone == 14 ? " selected=\"selected\"" : "" ?>>UTC-10</option>
+							<option value="15"<?php echo $timeZone == 15 ? " selected=\"selected\"" : "" ?>>UTC-9</option>
+							<option value="16"<?php echo $timeZone == 16 ? " selected=\"selected\"" : "" ?>>UTC-8</option>
+							<option value="17"<?php echo $timeZone == 17 ? " selected=\"selected\"" : "" ?>>UTC-7</option>
+							<option value="18"<?php echo $timeZone == 18 ? " selected=\"selected\"" : "" ?>>UTC-6</option>
+							<option value="19"<?php echo $timeZone == 19 ? " selected=\"selected\"" : "" ?>>UTC-5</option>
+							<option value="20"<?php echo $timeZone == 20 ? " selected=\"selected\"" : "" ?>>UTC-4</option>
+							<option value="21"<?php echo $timeZone == 21 ? " selected=\"selected\"" : "" ?>>UTC-3</option>
+							<option value="22"<?php echo $timeZone == 22 ? " selected=\"selected\"" : "" ?>>UTC-2</option>
+							<option value="23"<?php echo $timeZone == 23 ? " selected=\"selected\"" : "" ?>>UTC-1</option>
+							<option value="0"<?php echo $timeZone == 0 ? " selected=\"selected\"" : "" ?>>UTC</option>
+							<option value="1"<?php echo $timeZone == 1 ? " selected=\"selected\"" : "" ?>>UTC+1</option>
+							<option value="2"<?php echo $timeZone == 2 ? " selected=\"selected\"" : "" ?>>UTC+2</option>
+							<option value="3"<?php echo $timeZone == 3 ? " selected=\"selected\"" : "" ?>>UTC+3</option>
+							<option value="4"<?php echo $timeZone == 4 ? " selected=\"selected\"" : "" ?>>UTC+4</option>
+							<option value="5"<?php echo $timeZone == 5 ? " selected=\"selected\"" : "" ?>>UTC+5</option>
+							<option value="6"<?php echo $timeZone == 6 ? " selected=\"selected\"" : "" ?>>UTC+6</option>
+							<option value="7"<?php echo $timeZone == 7 ? " selected=\"selected\"" : "" ?>>UTC+7</option>
+							<option value="8"<?php echo $timeZone == 8 ? " selected=\"selected\"" : "" ?>>UTC+8</option>
+							<option value="9"<?php echo $timeZone == 9 ? " selected=\"selected\"" : "" ?>>UTC+9</option>
+							<option value="10"<?php echo $timeZone == 10 ? " selected=\"selected\"" : "" ?>>UTC+10</option>
+							<option value="11"<?php echo $timeZone == 11 ? " selected=\"selected\"" : "" ?>>UTC+11</option>
+							<option value="12"<?php echo $timeZone == 12 ? " selected=\"selected\"" : "" ?>>UTC+12</option>
+						</optgroup>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th class="timeFormat">Date format:</th>
+				<td>
+					<label>
+						<input class="radio" type="radio" name="dateFormat" value="0"<?php echo $dateFormat == 0 ? " checked=\"checked\"" : "" ?>></input> EU (dd.mm.yy 24h)
+					</label>
+					<label>
+						<input class="radio" type="radio" name="dateFormat" value="1"<?php echo $dateFormat == 1 ? " checked=\"checked\"" : "" ?>></input> US (mm/dd/yy 12h)
+					</label>
+					<label>
+						<input class="radio" type="radio" name="dateFormat" value="2"<?php echo $dateFormat == 2 ? " checked=\"checked\"" : "" ?>></input> UK (dd/mm/yy 12h)
+					</label>
+					<label>
+						<input class="radio" type="radio" name="dateFormat" value="3"<?php echo $dateFormat == 3 ? " checked=\"checked\"" : "" ?>></input> ISO (yy/mm/dd 24h)
+					</label>
+				</td>
+			</tr>
+		</tbody>
+	</table><p class="btn"><input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
 
 </form> 
 
