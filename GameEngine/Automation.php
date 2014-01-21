@@ -1925,7 +1925,8 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-				if ($battlepart[4]>$battlepart[3])
+			        $needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$bid25[$residence]['attri']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5); 
+				if ($battlepart[4]>$needed_cata)
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -1964,7 +1965,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$battlepart[3];
+					$demolish=$battlepart[4]/$needed_cata;
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-($battlepart[4]*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2052,7 +2053,8 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-                	if ($battlepart[4]>$battlepart[3])
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$bid25[$residence]['attri']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+                	if ($battlepart[4]>$needed_cata)
 				{
 					$info_cat = "".$catp_pic.", ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.";
 					$database->setVillageLevel($data['to'],"f".$tbid."",'0');
@@ -2095,7 +2097,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$battlepart[3];
+					$demolish=$battlepart[4]/$needed_cata;
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2180,7 +2182,8 @@ class Automation {
 				$tblevel = $bdo['f'.$rand];
 				$tbgid = $bdo['f'.$rand.'t'];
 				$tbid = $rand;
-                if ($battlepart[4]>$battlepart[3])
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$bid25[$residence]['attri']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+                if ($battlepart[4]>$needed_cata)
 				{
 					$info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.</td></tr></tbody>";
@@ -2223,7 +2226,7 @@ class Automation {
 				}
 				else
 				{
-					$demolish=$battlepart[4]/$battlepart[3];
+					$demolish=$battlepart[4]/$needed_cata;
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-(($battlepart[4]/2)*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -2483,7 +2486,7 @@ class Automation {
                                 if ($type=='3') {
                                     if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
                                         $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
-                                        $info_hero = $hero_pic.",Your hero is carrying home a artefact".$xp;
+                                        $info_hero = $hero_pic.",Your hero is carrying home an artefact".$xp;
                                     } else {
                                         $info_hero = $hero_pic.",".$form->getError("error").$xp;
                                     }
@@ -2492,16 +2495,20 @@ class Automation {
                                 }
                             }
 						}
-                    }elseif($data['t11']>0) {
+                        }elseif($data['t11']>0) {
                         if ($heroxp == 0) {
-                            $xp=" and no XP from the battle";
+                            $xp="";
                         } else {
                             $xp=" but gained ".$heroxp." XP from the battle";
                         }                    
-                        $info_hero = $hero_pic.",Your hero die ".$xp;
-                    }  
-
-				if($scout){
+                                                if ($traped11>0) {
+                            $info_hero = $hero_pic.",Your hero was trapped".$xp;
+                        }else $info_hero = $hero_pic.",Your hero died".$xp; 
+                    }    
+                    if ($DefenderID==0) {
+                        $natar=0;
+                    }
+                    if($scout){
 				if ($data['spy'] == 1){
 				$info_spy = "".$spy_pic.",<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".round($totwood)." |
 				 <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".round($totclay)." |
@@ -2756,18 +2763,19 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 }  
 
 				$database->setMovementProc($data['moveid']);
-				if($chiefing_village != 1){
-				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
-				// send the bounty on type 6.
-				if($type !== 1)
-				{
-					$reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
-					if ($isoasis == 0){
-                    $database->modifyResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
-					}else{
-					$database->modifyOasisResource($to['wref'],$steal[0],$steal[1],$steal[2],$steal[3],0);
-					}
-					$database->addMovement(6,$to['wref'],$from['wref'],$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
+                        if($chiefing_village != 1){
+                            $database->addMovement(4,$DefenderWref,$AttackerWref,$data['ref'],$AttackArrivalTime,$endtime);
+                        
+                            // send the bounty on type 6.
+                            if($type !== 1){
+
+                                $reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
+                                if ($isoasis == 0){
+                                    $database->modifyResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                }else{
+                                    $database->modifyOasisResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                }
+                                $database->addMovement(6,$DefenderWref,$AttackerWref,$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);  
 					$totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
 					$totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
 					$database->modifyPoints($from['owner'],'RR',$totalstolengain);
@@ -2775,9 +2783,11 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 					$database->modifyPointsAlly($targetally,'RR',$totalstolentaken );
 					$database->modifyPointsAlly($ownally,'RR',$totalstolengain);
 				}
-				}else{
-				$database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
-				}
+				}else{ //fix by ronix if only 1 chief left to conqured - don't add with zero enforces
+			if($totalsend_att - ($totaldead_att+$totaltraped_att) > 1) {
+        $database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
+    }
+}
 			}
 			else //else they die and don't return or report.
 			{
@@ -2845,7 +2855,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			}
 			}
 			$endtime += $AttackArrivalTime;
-			$endtime += microtime(true);
+			//$endtime += microtime(true);
 				$database->setMovementProc($data['moveid']);
 				$database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
 				$peace = PEACE;
@@ -3247,22 +3257,23 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 $village = $database->getVillage($data['to']);
                 $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
                 $starv = $database->getVillageField($data['to'],"starv");
-                if ($crop < $upkeep){
+                 if ($crop < $upkeep){
                     // add starv data
                     $database->setVillageField($data['to'], 'starv', $upkeep);
                     if($starv==0){
                         $database->setVillageField($data['to'], 'starvupdate', $time);
                     }
                 }
+            
+                //check empty reinforcement in rally point
+                $e_units='';
+                for ($i=1;$i<=50;$i++) {
+                    $e_units.='u'.$i.'=0 AND ';
+                }
+                $e_units.='hero=0';
+                $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".$data['to']." OR `from`=".$data['to'].")";
+                $database->query($q);
             }
-            //check empty reinforcement in rally point
-            $e_units='';
-            for ($i=1;$i<=50;$i++) {
-                $e_units.='u'.$i.'=0 AND ';
-            }
-            $e_units.='hero=0';
-            $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".$data['to']." OR `from`=".$data['to'].")";
-            $database->query($q);
         
             if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
                 unlink("GameEngine/Prevention/sendreinfunits.txt");
@@ -4386,7 +4397,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         }else{ //get own reinforcement from other village
                             $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".$starv['wref']." AND v.owner=v1.owner";
                             $enforcearray = $database->query_return($q);
-                            if(count($enforcearray)==0){
+                            if(count($enforcearray)>0){
                                 foreach ($enforcearray as $enforce){
                                     for($i = 0 ; $i <= 50 ; $i++){
                                         $units = $enforce['u'.$i];
@@ -4444,16 +4455,21 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         global ${u.$maxtype};
                         $hungry=array();
                         $hungry=${u.$maxtype};
-                        if ($hungry['crop']>0) {
+                        if ($hungry['crop']>0 && $oldcrop <=0) {
                             $killunits = intval($difcrop/$hungry['crop']);
                         }else $killunits=0;
                         
                         if($killunits > 0){
+						$pskolko =  abs($skolko);
+						if($killunits > $pskolko && $skolko <0){
+						$killunits = $pskolko;
+						}
                             if (isset($enf)){
                                 if($killunits < $maxcount){
                                     $database->modifyEnforce($enf, $maxtype, $killunits, 0);
                                     $database->setVillageField($starv['wref'], 'starv', $upkeep);
                                     $database->setVillageField($starv['wref'], 'starvupdate', $time);
+									$database->modifyResource($starv['wref'],0,0,0,$hungry['crop'],1);
                                     if($maxtype == "hero"){
                                         $heroid = $database->getHeroField($database->getVillageField($enf,"owner"),"heroid");
                                         $database->modifyHero("dead", 1, $heroid);
@@ -4468,6 +4484,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                     $database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
                                     $database->setVillageField($starv['wref'], 'starv', $upkeep);
                                     $database->setVillageField($starv['wref'], 'starvupdate', $time);
+									$database->modifyResource($starv['wref'],0,0,0,$hungry['crop'],1);
                                     if($maxtype == "hero"){
                                         $heroid = $database->getHeroField($starv['owner'],"heroid");
                                         $database->modifyHero("dead", 1, $heroid);
