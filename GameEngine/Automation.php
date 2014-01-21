@@ -5245,6 +5245,111 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 	Function for automate medals - by yi12345 and Shadow
 	References: 
 	************************************************/
+	
+		function setTimeZone($id) {
+		switch ($id)
+		{
+			case 0:
+				date_default_timezone_set('Etc/GMT');
+				break;
+			case 1:
+				date_default_timezone_set('Etc/GMT-1');
+				break;
+			case 2:
+				date_default_timezone_set('Etc/GMT-2');
+				break;
+			case 3:
+				date_default_timezone_set('Etc/GMT-3');
+				break;
+			case 4:
+				date_default_timezone_set('Etc/GMT-4');
+				break;
+			case 5:
+				date_default_timezone_set('Etc/GMT-5');
+				break;
+			case 6:
+				date_default_timezone_set('Etc/GMT-6');
+				break;
+			case 7:
+				date_default_timezone_set('Etc/GMT-7');
+				break;
+			case 8:
+				date_default_timezone_set('Etc/GMT-8');
+				break;
+			case 9:
+				date_default_timezone_set('Etc/GMT-9');
+				break;
+			case 10:
+				date_default_timezone_set('Etc/GMT-10');
+				break;
+			case 11:
+				date_default_timezone_set('Etc/GMT-11');
+				break;
+			case 12:
+				date_default_timezone_set('Etc/GMT-12');
+				break;
+			case 13:
+				date_default_timezone_set('Etc/GMT+11');
+				break;
+			case 14:
+				date_default_timezone_set('Etc/GMT+10');
+				break;
+			case 15:
+				date_default_timezone_set('Etc/GMT+9');
+				break;
+			case 16:
+				date_default_timezone_set('Etc/GMT+8');
+				break;
+			case 17:
+				date_default_timezone_set('Etc/GMT+7');
+				break;
+			case 18:
+				date_default_timezone_set('Etc/GMT+6');
+				break;
+			case 19:
+				date_default_timezone_set('Etc/GMT+5');
+				break;
+			case 20:
+				date_default_timezone_set('Etc/GMT+4');
+				break;
+			case 21:
+				date_default_timezone_set('Etc/GMT+3');
+				break;
+			case 22:
+				date_default_timezone_set('Etc/GMT+2');
+				break;
+			case 23:
+				date_default_timezone_set('Etc/GMT+1');
+				break;
+			case 30:
+				date_default_timezone_set('Europe/Vilnius');
+				break;
+			case 31:
+				date_default_timezone_set('Canada/Newfoundland');
+				break;
+			case 32:
+				date_default_timezone_set('Europe/London');
+				break;
+			case 33:
+				date_default_timezone_set('CET');
+				break;
+			case 34:
+				date_default_timezone_set('Iran');
+				break;
+			case 35:
+				date_default_timezone_set('Asia/Calcutta');
+				break;
+			case 36:
+				date_default_timezone_set('Indian/Cocos');
+				break;
+			case 37:
+				date_default_timezone_set('Australia/ACT');
+				break;
+			default:
+				date_default_timezone_set('Etc/GMT');
+				break;
+		}
+	}
  
  	private function artefactOfTheFool() {
 	 global $database;
