@@ -1,0 +1,28 @@
+[20-Jan-2014 13:36:23 Europe/Bucharest] PHP Warning:  mysql_fetch_assoc() expects parameter 1 to be resource, boolean given in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/report.tpl on line 14
+[20-Jan-2014 14:39:18 Europe/Bucharest] PHP Warning:  mysql_fetch_assoc() expects parameter 1 to be resource, boolean given in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/report.tpl on line 14
+[23-Jan-2014 14:08:26 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:08:27 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:08:28 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:08:28 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:08:28 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:08:28 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:09:07 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:09:08 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:09:29 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:10:05 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:10:05 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:10:05 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:10:06 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:10:06 Europe/Bucharest] PHP Fatal error:  Cannot redeclare class MYSQL_DB in /home/outlet/public_html/shadowss.ro/travian/GameEngine/Database/db_MYSQL.php on line 19
+[23-Jan-2014 14:10:22 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:10:29 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:10:30 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:10:33 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:13 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:14 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:16 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:17 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:17 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:18 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:19 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185
+[23-Jan-2014 14:12:19 Europe/Bucharest] PHP Parse error:  syntax error, unexpected '<' in /home/outlet/public_html/shadowss.ro/travian/Admin/Templates/playerinfo.tpl on line 185

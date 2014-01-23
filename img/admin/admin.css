@@ -487,6 +487,28 @@ td.row2  {background-color:#FEFEFE; }
 #show_gp_ok_message {display:none;}
 #show_gp_error_message {display:inline;}
 
+#medal_mouseover {
+    background-color: #F5F5F5;
+    border: 1px solid #BBBBBB;
+    padding: 2px 5px;
+    position: absolute;
+    width: 250px;
+    z-index: 999;
+}
+#medal_mouseover table {
+    background: none repeat scroll 0 0 transparent;
+}
+#medal_mouseover table th, #medal_mouseover table td {
+    background: none repeat scroll 0 0 transparent;
+}
+#medal_mouseover table th {
+    padding-right: 10px;
+    width: 50px;
+}
+.hide {
+    display: none;
+}  
+
 /* Laenderflaggen */
 .dflags1 {position:relative; float:right; text-align:center; font-size:6pt; color:#FFF; padding-left:1px; padding-right:1px; padding-top:1px;}
 .dflags2 {padding-top:1px;}

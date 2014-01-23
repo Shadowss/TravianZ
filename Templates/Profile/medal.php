@@ -1,10 +1,11 @@
 <?php			   
 	//gp link
-	if($session->gpack == null || GP_ENABLE == false) {
-	$gpack= GP_LOCATE;
-	} else {
-	$gpack= $session->gpack;
-	}
+    $separator=isset($separator)? $separator:"";
+    if($session->gpack == null || GP_ENABLE == false) {
+    $gpack= $separator.GP_LOCATE;
+    } else {
+    $gpack= $separator.$session->gpack;
+    }  
 
 	
 //de bird

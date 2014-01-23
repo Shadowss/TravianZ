@@ -17,7 +17,7 @@
 						<table cellpadding="0" cellspacing="0">
 							<tr>
 								<th>Rank</th>
-								<td>????<?php /* echo $ranking->searchRank($user['id'], "rank");*/ ?></td>
+								<td><?php $ranking->procRankArray();echo $ranking->getUserRank($user['id']); ?></td>
 							</tr>
 							<tr>
 								<th>Tribe</th>
@@ -181,6 +181,7 @@
 										elseif($quest ==34) {$questname = "3 settlers"; }
 										elseif($quest ==35) {$questname = "New Village"; }
 										elseif($quest ==36) {$questname = "Build a Wall/Palisade"; }
+										elseif($quest >=37) {$questname = "Finish"; }
 										else { $questname = "Unknown"; }
 										$quesst = $quest;
 										if($quest > 18){
@@ -258,13 +259,13 @@
 							<tr>
 								<td colspan="2" class="desc2">
 									<div class="desc2div">
-										<center><?php echo nl2br($user['desc1']); ?></center>
+										<center><?php echo nl2br($profiel[0]); ?></center>
 									</div>
 								</td>
 							</tr>
 						</table>
 					<td class="desc1">
-						<center><?php echo nl2br($user['desc2']); ?></center>
+						<center><?php echo nl2br($profiel[1]); ?></center>
 					</td>
 				</tr>
 			</tbody>
