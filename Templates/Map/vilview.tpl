@@ -1,5 +1,21 @@
 <div id="content"  class="map">
 <?php 
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                        		       	       		   ##
+##  Version:       01.09.2013 						       					   ##
+##  Filename       vilview.php                                                 ##
+##  Developed by:  Advocaite , yi12345 , Shadow     			       		   ##
+##  Fixed by:      Shadow - Tribe Names , correct view resource  	       	   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       			   ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
+##                                                                             ##
+#################################################################################
+
 $basearray = $database->getMInfo($_GET['d']);
 $uinfo = $database->getVillage($basearray['id']);
 $oasis1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysql_real_escape_string($_GET['d']));
@@ -163,7 +179,6 @@ if($query != 0){
 while($row = mysql_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
-	$topic=$row['topic'];
 	echo "<tr><td>";
 if($type==18 or $type==19 or $type==20 or $type==21){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
@@ -470,16 +485,16 @@ if($type==18 or $type==19 or $type==20 or $type==21){
         $enough_cp = false;
       }
       
-			   $otext = ($oasis['name']);    
-   if($village->unitarray['u'.$session->tribe.'0'] >= 3 AND $enough_cp AND $village->resarray['f39']) {
+			$otext = ($oasis['name']); 
+			if($village->unitarray['u'.$session->tribe.'0'] >= 3 AND $enough_cp) {
         $test = "<a href=\"a2b.php?id=".$_GET['d']."&amp;s=1\">&raquo;  Found new village.</a>";
-    } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 AND !$enough_cp) {
+      } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 AND !$enough_cp) {
         $test = "&raquo; Found new village. ($cps/$need_cps culture points)";
-    } elseif(!$village->resarray['f39']) {
+	  } elseif(!$village->resarray['f39']) {
         $test = "&raquo; Found new village. (build a rally point)"; 
-    } else {
+      } else {
         $test = "&raquo; Found new village. (".$village->unitarray['u'.$session->tribe.'0']."/3 settlers available)";
-    } 
+      }
  	
 		echo ($basearray['fieldtype']==0)? 
 		($village->resarray['f39']==0)? 
@@ -507,9 +522,12 @@ if($type==18 or $type==19 or $type==20 or $type==21){
           $data1 = mysql_fetch_assoc($query1);
           $query2 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
           $data2 = mysql_fetch_assoc($query2);
+			// Vacation mode added by Shadow - cata7007@gmail.com / Skype : cata7007
 			if($data2['access']=='0' or $data2['access']=='8' or $data2['access']=='9') {
 			echo "&raquo; Send troops. (Player is banned)";
-          } else if($data2['protect'] < time()) {
+			} else if($data2['vac_mode']=='1') {
+			echo "&raquo; Send troops. (Vacation mode on)";
+                      } else if($data2['protect'] < time()) {
             echo $village->resarray['f39']? "<a href=\"a2b.php?z=".$_GET['d']."\">&raquo; Send troops." : "&raquo; Send troops. (build a rally point)"; 
           } else {
             echo "&raquo; Send troops. (beginners protection)";
@@ -522,6 +540,8 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 					<?php
 			if($data2['access']=='0' or $data2['access']=='8' or $data2['access']=='9') {
 			echo "&raquo; Send merchant(s). (banned)";
+			} else if($data2['vac_mode']=='1') {
+			echo "&raquo; Send merchant(s). (Vacation mode on)";
           } else {
             echo $building->getTypeLevel(17)? "<a href=\"build.php?z=".$_GET['d']."&id=" . $building->getTypeField(17) . "\">&raquo; Send merchant(s)." : "&raquo; Send merchant(s). (build marketplace)"; 
           }
