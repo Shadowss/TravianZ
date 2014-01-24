@@ -42,7 +42,7 @@ $search = $_SESSION['search'];
                     echo "<tr><td class=\"ra \" >";
                     }
                     echo $i.".</td><td class=\"al \" ><a href=\"allianz.php?aid=".$ranking[$i]['id']."\">".$ranking[$i]['tag']."</a></td><td class=\"pla \" >";
-                    echo $ranking[$i]['players']."</td><td class=\"po \">".$ranking[$i]['totalap']."</td></tr>";
+                    echo $ranking[$i]['players']."</td><td class=\"po \">".$ranking[$i]['Aap']."</td></tr>";
                 }
             }
         }
