@@ -541,6 +541,125 @@ define("WONDER","Wonder of the World");
 define("HORSEDRINKING","Horse Drinking Trough");
 define("GREATWORKSHOP","Great Workshop");
 
+//artefact
+define("ARCHITECTS_DESC","All buildings in the area of effect are stronger. This means that you will need more catapults to damage buildings protected by this artifacts powers.");
+define("ARCHITECTS_SMALL","The architects slight secret");
+define("ARCHITECTS_SMALLVILLAGE","Diamond Chisel");
+define("ARCHITECTS_LARGE","The architects great secret");
+define("ARCHITECTS_LARGEVILLAGE","Giant Marble Hammer");
+define("ARCHITECTS_UNIQUE","The architects unique secret");
+define("ARCHITECTS_UNIQUEVILLAGE","Hemons Scrolls");
+define("HASTE_DESC","All troops in the area of effect move faster.");
+define("HASTE_SMALL","The slight titan boots");
+define("HASTE_SMALLVILLAGE","Opal Horseshoe");
+define("HASTE_LARGE","The great titan boots");
+define("HASTE_LARGEVILLAGE","Golden Chariot");
+define("HASTE_UNIQUE","The unique titan boots");
+define("HASTE_UNIQUEVILLAGE","Pheidippides Sandals");
+define("EYESIGHT_DESC","All spies (Scouts, Pathfinders, and Equites Legati) increase their spying ability. In addition, with all versions of this artifact you can see the incoming TYPE of troops but not how many there are.");
+define("EYESIGHT_SMALL","The eagles slight eyes");
+define("EYESIGHT_SMALLVILLAGE","Tale of a Rat");
+define("EYESIGHT_LARGE","The eagles great eyes");
+define("EYESIGHT_LARGEVILLAGE","Generals Letter");
+define("EYESIGHT_UNIQUE","The eagles unique eyes");
+define("EYESIGHT_UNIQUEVILLAGE","Diary of Sun Tzu");
+define("DIET_DESC","All troops in the artifacts range consume less wheat, making it possible to maintain a larger army.");
+define("DIET_SMALL","Slight diet control");
+define("DIET_SMALLVILLAGE","Silver Platter");
+define("DIET_LARGE","Great diet control");
+define("DIET_LARGEVILLAGE","Sacred Hunting Bow");
+define("DIET_UNIQUE","Unique diet control");
+define("DIET_UNIQUEVILLAGE","King Arthurs Chalice");
+define("ACADEMIC_DESC","Troops are built a certain percentage faster within the scope of the artifact.");
+define("ACADEMIC_SMALL","The trainers slight talent");
+define("ACADEMIC_SMALLVILLAGE","Scribed Soldiers Oath");
+define("ACADEMIC_LARGE","The trainers great talent");
+define("ACADEMIC_LARGEVILLAGE","Declaration of War");
+define("ACADEMIC_UNIQUE","The trainers unique talent");
+define("ACADEMIC_UNIQUEVILLAGE","Memoirs of Alexander the Great");
+define("STORAGE_DESC","With this building plan you are able to build the Great Granary or Great Warehouse in the Village with the artifact, or the whole account depending on the artifact. As long as you posses that artifact you are able to build and enlarge those buildings.");
+define("STORAGE_SMALL","Slight storage masterplan");
+define("STORAGE_SMALLVILLAGE","Builders Sketch");
+define("STORAGE_LARGE","Great storage masterplan");
+define("STORAGE_LARGEVILLAGE","Babylonian Tablet");
+define("CONFUSION_DESC","Cranny capacity is increased by a certain amount for each type of artifact. Catapults can only shoot random on villages within this artifacts power. Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact. When aiming at a resource field only random resource fields can be hit, when aiming at a building only random buildings can be hit.");
+define("CONFUSION_SMALL","Rivals slight confusion");
+define("CONFUSION_SMALLVILLAGE","Map of the Hidden Caverns");
+define("CONFUSION_LARGE","Rivals great confusion");
+define("CONFUSION_LARGEVILLAGE","Bottomless Satchel");
+define("CONFUSION_UNIQUE","Rivals unique confusion");
+define("CONFUSION_UNIQUEVILLAGE","Trojan Horse");
+define("FOOL_DESC","Every 24 hours it gets a random effect, bonus, or penalty (all are possible with the exception of great warehouse, great granary and WW building plans). They change effect AND scope every 24 hours. The unique artifact will always take positive bonuses.");
+define("FOOL_SMALL","Artefact of the slight fool");
+define("FOOL_SMALLVILLAGE","Pendant of Mischief");
+define("FOOL_UNIQUE","Artefact of the unique fool");
+define("FOOL_UNIQUEVILLAGE","Forbidden Manuscript");
+define("ARTEFACT","Construction plans
+
+
+
+Countless days have passed since the first battles upon the walls of the cursed villages of the Dread Natars, many armies of both the free ones and the Natarian empire struggled and died before the walls of the many strongholds from which the Natars had once ruled all creation. Now with the dust settled and a relative calm having settled in, armies began to count their losses and collect their dead, the stench of combat still lingering in the night air, a smell of a slaughter unforgettable in its extent and brutality yet soon to be dwarfed by yet others. The largest armies of the free ones and the Dread Natars were marshalling for yet another renewed assault upon the coveted former strongholds of the Natarian Empire.
+
+Soon scouts arrived telling of a most awesome sight and a chilling reminder, a dread army of an unfathomable size had been spotted marshalling at the end of the world, the Natarian capital, a force so great and unstoppable that the dust from their march would choke off all light, a force so brutal and ruthless that it would crush all hope. The free people knew that they had to race now, race against time and the endless hordes of the Natarian Empire to raise a Wonder of the World to restore the world to peace and vanquish the Natarian threat.
+
+But to raise such a great Wonder would be no easy task, one would need construction plans created in the distant past, plans of such an arcane nature that even the very wisest of sages knew not their contents or locations.
+
+Tens of thousands of scouts roamed across all existence searching in vain for these mystical plans, looking in all places but the dreaded Natarian Capital, yet could not find them. Today however, they return bearing good news, they return baring the locations of the plans, hidden by the armies of the Natars inside secret strongholds constructed to be hidden from the eyes of man.
+
+Now begins the final stretch, when the greatest armies of the Free people and the Natars will clash across the world for the fate of all that lies under heaven. This is the war that will echo across the eons, this is your war, and here you shall etch your name across history, here you shall become legend.
+
+
+Facts:
+To steal one, the following things must happen:
+You must attack the village (NO Raid!)
+WIN the Attack
+Destroy the treasury
+An empty treasury lvl 10 MUST be in the village where that attack came from
+Have a hero in an attack
+
+If not, the next attack on that village, winning with a hero and empty treasury will take the building plan.
+
+To build a WW, you must own a plan yourself (you = the WW village owner) from lvl 0 to 49, from 50 to 100 you need an additional plan in your alliance! Two plans in the WW village account would not work!
+
+The construction plans are conquerable immediately when they appear to the server. 
+
+There will be a countdown in game, showing the exact time of the release, 5 days prior to the launch. ");
+
+
+//planos
+define("PLAN","Ancient Construction Plan");
+define("PLANVILLAGE","WW Buildingplan");
+define("PLAN_DESC","With this ancient construction plan you will able to build World Wonder to level 50. to build further, your alliance must hold at least two plans.");
+define("PLAN_INFO","World Wonder Construction Plans 
+
+
+Many moons ago the tribes of Travian were surprised by the unforeseen return of the Natars. This tribe from immemorial times surpassing all in wisdom, might and glory was about to trouble the free ones again. Thus they put all their efforts in preparing a last war against the Natars and vanquishing them forever. Many thought about the so-called 'Wonders of the World', a construction of many legends, as the only solution. It was told that it would render anyone invincible once completed. Ultimately making the constructors the rulers and conquerors of all known Travian. 
+
+However, it was also told that one would need construction plans to construct such a building. Due to this fact, the architects devised cunning plans about how to store these safely. After a while, one could see temple-like buildings in many a city and metropolis - the Treasure Chambers (Treasuries). 
+
+Sadly, no one - not even the wise and well versed - knew where to find these construction plans. The harder people tried to locate them, the more it seemed as if they where only legends. 
+
+Today, however, this last secret will be revealed. Deprivations and endeavors of the past will not have been in vain, as today scouts of several tribes have successfully obtained the whereabouts of the construction plans. Well guarded by the Natars, they lie hidden in several oases to be found all over Travian. Only the most valiant heroes will be able to secure such a plan and bring it home safely so that the construction can begin. 
+
+In the end, we will see whether the free tribes of Travian can once again outwit the Natars and vanquish them once and for all. Do not be so foolish as to assume that the Natars will leave without a fight, though!
+
+
+
+To steal a set of Construction Plans from the Natars, the following things must happen:
+- You must Attack the village (NOT Raid!)
+- You must WIN the Attack
+- You must DESTROY the Treasure Chamber (Treasury)
+- Your Hero MUST be in that attack, as he is the only one who may carry the Construction Plans
+- An empty level 10 Treasure Chamber (Treasury) MUST be in the village where that attack came from
+NOTE: If the above criteria is not met during the attack, the next attack on that village which does meet the above criteria will take the Construction Plans.
+
+
+
+To build a Treasure Chamber (Treasury), you will need a Main Building level 10 and the village MUST NOT be a Capital or contain a World Wonder.
+
+To build a World Wonder, you must own the Construction Plans yourself (you = the World Wonder Village Owner) from level 0 to 50, and then from level 51 to 100 you will need an additional set of Construction Plans in your Alliance! Two sets of Construction Plans in the World Wonder Village Account will not work!");
+define("WWVILLAGE","WW village");
+
 /*
 |--------------------------------------------------------------------------
 |   Index
