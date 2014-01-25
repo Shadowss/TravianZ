@@ -268,8 +268,8 @@ define("Q24_RESP","Congratulations! Your village grows and thrives...");
 define("Q28","Task 22: Alliance.");
 define("Q28_DESC","Teamwork is important in Travian. Players who work together organise themselves in alliances. Get an invitation from an alliance in your region and join this alliance. Alternatively, you can found your own alliance. To do this, you need a level 3 embassy.");
 define("Q28_ORDER","Order:<\/p>Join an alliance or found one on your own.");
-define("Q28_RESP","Is good! Now you're in a union called");
-define("Q28_RESP1",", and you're a member of their alliance with the faster you'll progress...");
+define("Q28_RESP","Well done! Now you're in a union called");
+define("Q28_RESP1",", and you're a member of their alliance.<br>Working together you will all progress faster...");
 
 define("Q29","Task 23: Main Building to Level 5");
 define("Q29_DESC","To be able to build a palace or residence, you will need a main building at level 5.");
