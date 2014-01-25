@@ -183,7 +183,7 @@ define("Q9_ORDER","Order:<\/p>Extend all resource tiles to level 1.");
 define("Q9_RESP","Very good, your resource production just thrives.<br \/><br \/>Soon we can start with constructing buildings in the village.");
 
 define("Q10","Task 10: Dove of Peace");
-define("Q10_DESC","The first days after signing up you are protected against attacks by your fellow players. You can see how long this protection lasts by adding the code <b>[#0]<\/b> to your profile.");
+define("Q10_DESC","After signing up you are protected against attacks by your fellow players. You can see how long this protection lasts by adding the code <b>[#0]<\/b> to your profile.");
 define("Q10_ORDER","Order:<\/p>Write the code <b>[#0]<\/b> into your profile by adding it to one of the two description fields.");
 define("Q10_RESP","Well done! Now everyone can see what a great warrior the world is approached by.");
 define("Q10_REWARD","Your reward:<\/p>2 day Travian");
