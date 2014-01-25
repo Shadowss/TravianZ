@@ -284,7 +284,7 @@ define("Q30_RESP","Granary is level 3 now...");
 define("Q31","Task 25: Warehouse to Level 7");
 define("Q31_DESC"," To make sure your resources won't overflow, you should upgrade your warehouse.");
 define("Q31_ORDER","Order:<\/p>Upgrade your warehouse to level 7.");
-define("Q31_RESP","Warehouse has upgraded to level 7...");
+define("Q31_RESP","Warehouse has been upgraded to level 7...");
 
 define("Q32","Task 26: All to five!");
 define("Q32_DESC","You will always need more resources. Resource tiles are quite expensive but will always pay out in the long term.");
