@@ -165,10 +165,11 @@ define("Q6_RESP2","in the left hand menu.");
 define("Q6_SUBJECT","Message From The Taskmaster");
 define("Q6_MESSAGE","You are to be informed that a nice reward is waiting for you at the taskmaster.<br /><br />Hint: The message has been generated automatically. An answer is not necessary.");
 
+//TODO: Should this be 4 More instead of One Each?
 define("Q7","Task 7: One Each!");
 define("Q7_DESC","Now we should increase your resource production a bit. Build an additional woodcutter, clay pit, iron mine and cropland to level 1.");
 define("Q7_ORDER","Order:<\/p>Extend one more of each resource tile to level 1.");
-define("Q7_RESP","Very good, great develop of resources production.");
+define("Q7_RESP","Very good, great development of resource production.");
 
 define("Q8","Task 8: Huge Army!");
 define("Q8_DESC","Now I've got a very special quest for you. I am hungry. Give me 200 crop!<br \/><br \/>In return I will try to organize a huge army to protect your village.");
