@@ -261,7 +261,7 @@ define("Q23_ORDER","Order:<\/p>Please build a Marketplace.");
 define("Q23_RESP",";The Marketplace has been completed. Now you can make offers of your own and accept foreign offers! When creating your own offers, you should think about offering what other players need most to get more profit.");
 
 define("Q24","Task 21: Everything to 2.");
-define("Q24_DESC","Now we should increase your resource production a bit. Build an additional woodcutter, clay pit, iron mine and cropland to level 1.");
+define("Q24_DESC","Now we should increase our resource production a bit more.");
 define("Q24_ORDER","Order:<\/p>Extend all resource tiles to level 2.");
 define("Q24_RESP","Congratulations! Your village grows and thrives...");
 
