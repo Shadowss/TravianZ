@@ -178,7 +178,7 @@ define("Q8_BUTN","Send crop");
 define("Q8_NOCROP","No Enough Crop!");
 
 define("Q9","Task 9: Everything to 1.");
-define("Q9_DESC","In Travian there is always something to do! While you are waiting for incoming the huge army, Now we should increase your resource production a bit. Extend all your resource tiles to level 1.");
+define("Q9_DESC","In " . SERVER_NAME . " there is always something to do! While you are waiting for incoming the huge army, Now we should increase your resource production a bit. Extend all your resource tiles to level 1.");
 define("Q9_ORDER","Order:<\/p>Extend all resource tiles to level 1.");
 define("Q9_RESP","Very good, your resource production just thrives.<br \/><br \/>Soon we can start with constructing buildings in the village.");
 
