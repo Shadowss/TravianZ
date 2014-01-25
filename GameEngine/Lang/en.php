@@ -146,7 +146,7 @@ define("Q3_ORDER","Order:<\/p>Change your village's name to something nice.");
 define("Q3_RESP","Wow, a great name for their village. It could have been the name of my village!...");
 
 define("Q4","Task 4: Other Players");
-define("Q4_DESC","In ". SERVER_NAME ." you play along with billions of other players. Click 'statistics' in the top menu to look up your rank and enter it here.");
+define("Q4_DESC","In ". SERVER_NAME ." you play along with thousands of other players. Click 'statistics' in the top menu to look up your rank and enter it here.");
 define("Q4_ORDER","Order:<\/p>Look for your rank in the statistics and enter it here.");
 define("Q4_BUTN","complete task");
 define("Q4_RESP","Exactly! That's your rank.");
