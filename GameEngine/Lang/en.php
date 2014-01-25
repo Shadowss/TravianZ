@@ -146,7 +146,7 @@ define("Q3_ORDER","Order:<\/p>Change your village's name to something nice.");
 define("Q3_RESP","Wow, a great name for their village. It could have been the name of my village!...");
 
 define("Q4","Task 4: Other Players");
-define("Q4_DESC","In ". SERVER_NAME ." you play along with thousands of other players. Click 'statistics' in the top menu to look up your rank and enter it here.");
+define("Q4_DESC","In <b>". SERVER_NAME ."</b> you play along with thousands of other players. Click 'statistics' in the top menu to look up your rank and enter it here.");
 define("Q4_ORDER","Order:<\/p>Look for your rank in the statistics and enter it here.");
 define("Q4_BUTN","complete task");
 define("Q4_RESP","Exactly! That's your rank.");
@@ -154,7 +154,7 @@ define("Q4_RESP","Exactly! That's your rank.");
 define("Q5","Task 5: Two Building Orders");
 define("Q5_DESC","Build an iron mine and a clay pit. Of iron and clay one can never have enough.");
 define("Q5_ORDER","Order:<\/p><ul><li>Extend one iron mine.<\/li><li>Extend one clay pit.<\/li><\/ul>");
-define("Q5_RESP","As you noticed, building orders take rather long. The world of ". SERVER_NAME ." will continue to spin even if you are offline. Even in a few months there will be many new things for you to discover.<br \/><br \/>The best thing to do is occasionally checking your village and giving you subjects new tasks to do.");
+define("Q5_RESP","As you noticed, building orders take rather long. The world of <b>". SERVER_NAME ."</b> will continue to spin even if you are offline. Even in a few months there will be many new things for you to discover.<br \/><br \/>The best thing to do is occasionally checking your village and giving you subjects new tasks to do.");
 
 define("Q6","Task 6: Messages");
 define("Q6_DESC","You can talk to other players using the messaging system. I sent a message to you. Read it and come back here.<br \/><br \/>P.S. Don't forget: on the left the reports, on the right the messages.");
