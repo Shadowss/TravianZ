@@ -159,8 +159,8 @@ define("Q5_RESP","As you noticed, building orders take rather long. The world of
 define("Q6","Task 6: Messages");
 define("Q6_DESC","You can talk to other players using the messaging system. I sent a message to you. Read it and come back here.<br \/><br \/>P.S. Don't forget: on the left the reports, on the right the messages.");
 define("Q6_ORDER","Order:<\/p>Read your new message.");
-define("Q6_RESP","You received it? Very good.<br \/><br \/>Here is some Gold. With Gold you can do several things, e.g. extend your   in the left hand menu.");
-define("Q6_RESP1","-Account or increase your resource production.To do so click ");
+define("Q6_RESP","You received it? Very good.<br \/><br \/>Here is some Gold. With Gold you can do several things, e.g. extend your ");
+define("Q6_RESP1"," Account or increase your resource production.To do so click ");
 define("Q6_RESP2","in the left hand menu.");
 define("Q6_SUBJECT","Message From The Taskmaster");
 define("Q6_MESSAGE","You are to be informed that a nice reward is waiting for you at the taskmaster.<br /><br />Hint: The message has been generated automatically. An answer is not necessary.");
