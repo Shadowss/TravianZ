@@ -216,7 +216,7 @@ define("Q14_RESP","Exactly! Barracks cost 210 lumber.");
 define("Q15","Task 15: Main Building");
 define("Q15_DESC","Your master builders need a main building level 3 to erect important buildings such as the marketplace or barracks.");
 define("Q15_ORDER","Order:<\/p>Extend your main building to level 3.");
-define("Q15_RESP","Well done. The main building level 3 has been completed.<br><br>With this upgrade your master builders cannot only construct more types of buildings but also do so faster.");
+define("Q15_RESP","Well done. The main building level 3 has been completed.<br><br>With this upgrade your master builders can construct more types of buildings and also do so faster.");
 
 define("Q16","Task 16: Advanced!");
 define("Q16_DESC","Look up your rank in the player statistics again and enjoy your progress.");
