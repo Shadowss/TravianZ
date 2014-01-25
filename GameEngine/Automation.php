@@ -1454,7 +1454,25 @@ class Automation {
 				${dead.$i}=$data['t'.$i];
 				}else { ${dead.$i} = $battlepart['casualties_attacker'][$i]; }
 				}
-
+                     //if the defender does not have spies, the attacker will not die spies.	FIXED BY Armando
+                        if($scout){
+							$spy_def_Detect=0;
+							for($i=1;$i<=(50);$i++) {
+			                    if($i == 4 || $i == 14 || $i == 23 || $i == 34 || $i == 44){
+								    if($Defender['u'.$i]>0) { 
+					                 $spy_def_Detect=$i;
+									 break;
+					                } 
+				                }								   
+		               	    }
+								
+						} 								
+                        if($spy_def_Detect==0) { 
+					    $dead3=0;
+					    $dead4=0;
+						$battlepart['casualties_attacker'][3]=0;
+						$battlepart['casualties_attacker'][4]=0;
+						}
 				#################################################
 
                     $dead=array();
