@@ -5,6 +5,7 @@
 ##                       TRAVIANZ                         ##
 ############################################################
 $dataarray = explode(",",$message->readingNotice['data']);
+$colspan="10";
 $colspan2="10";
 //attacker
 if ($database->getUserField($dataarray[0],'username',0)!="??") {
