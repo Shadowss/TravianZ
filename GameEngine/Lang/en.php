@@ -277,7 +277,7 @@ define("Q29_ORDER","Order:<\/p>Upgrade your main building to level 5.");
 define("Q29_RESP","The main building is level 5 now and you can build palace or residence...");
 
 define("Q30","Task 24: Granary to Level 3.");
-define("Q30_DESC","That you do not lose crop, you should upgrade your granary.");
+define("Q30_DESC","To avoid losing crop, you should upgrade your granary.");
 define("Q30_ORDER","Order:<\/p>Upgrade your granary to level 3.");
 define("Q30_RESP","Granary is level 3 now...");
 
