@@ -193,9 +193,9 @@ define("Q11_DESC","Around you, there are many different villages. One of them is
 define("Q11_DESC1"," Click on 'map' in the header menu and look for that village. The name of your neighbours' villages can be seen when hovering your mouse over any of them.");
 define("Q11_ORDER","Order:</p>Look for the coordinates of ");
 define("Q11_ORDER1","and enter them here.");
-define("Q11_RESP","Exactly, there ");
-define("Q11_RESP1"," Village! As many resources as you reach this village. Well, almost as much ...");
-define("Q11_BUTN","completar misi&oacute;n");
+define("Q11_RESP","Exactly, that is where ");
+define("Q11_RESP1"," is! Your reward is how many resources this village has. Well, almost as many ...");
+define("Q11_BUTN","complete task");
 
 define("Q12","Task 12: Cranny");
 define("Q12_DESC","It's getting time to erect a cranny. The world of <?php echo SERVER_NAME; ?> is dangerous.<br \/><br \/>Many players live by stealing other players' resources. Build a cranny to hide some of your resources from enemies.");
