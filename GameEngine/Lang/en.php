@@ -241,7 +241,7 @@ define("Q19_RESP","Well done... The best instructors from the whole country have
 define("Q20","Task 20: Train.");
 define("Q20_DESC","Now that you have barracks you can start training troops. Train two ");
 define("Q20_ORDER","Please train 2 ");
-define("Q20_RESP","The foundation for your glorious army has been laid.<br \/><br \/>Before sending your army off to plunder you should check with the");
+define("Q20_RESP","The foundation for your glorious army has been laid.<br \/><br \/>Before sending your army off to plunder you should check with the.");
 define("Q20_RESP1","to see how many troops you need to successfully fight one rat without losses.");
 
 define("Q21","Task 18: Economy");
