@@ -642,7 +642,12 @@ class Automation {
 		$q = "SELECT * FROM ".TB_PREFIX."bdata where timestamp < $time and master = 0";
 		$array = $database->query_return($q);
 		foreach($array as $indi) {
+	           $level = $database->getFieldLevel($indi['wid'],$indi['field']);
+		   if (($level+1) == $indi['level']){
 			$q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
+		   }else{ $indi['level']=($level+1);
+			$q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
+		   }
 			if($database->query($q)) {
 				$level = $database->getFieldLevel($indi['wid'],$indi['field']);
 				$this->recountPop($indi['wid']);
