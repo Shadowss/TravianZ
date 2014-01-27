@@ -17,6 +17,7 @@ mysql_select_db(SQL_DB);
 $id = $_POST['id'];
 $baseName = $_POST['users_base_name'];
 $amount = (int) $_POST['users_amount'];
+$beginnersProtection = $_POST['users_protection'];
 
 // Some basic error checking
 if (strlen($baseName) < 4)
@@ -74,8 +75,6 @@ else
                 /*
                  * @TODO
                  * 
-                 * Make beginners protection optional for Users created
-                 * 
                  * Allow option to create (random) bigger villages,
                  * upgrade fields, granary, warehouse, wall etc
                  * 
@@ -85,11 +84,24 @@ else
                  * where required
                  */
                 
-                // Show beginners protection in User Profile - see TODOs
+                // Show the dove in User Profile - will show this even if
+                // beginners protection is not checked
                 // Need a $database function for this 
                 // (assuming we don't already have one as creating Natars also updates this way) 
                 $q = "UPDATE " . TB_PREFIX . "users SET desc2 = '[#0]' WHERE id = $uid";
                 mysql_query($q) or die(mysql_error());
+               
+                if (!$beginnersProtection)
+                {
+                    // No beginners protection so set it to current time
+                    // TODO create a $database function for this
+                    // also used in editProtection.php so assuming no function
+                    // already exists
+                    $protection = time();
+                    mysql_query("UPDATE ".TB_PREFIX."users SET 
+                        protect = '".$protection."' 
+                        WHERE id = $uid") or die(mysql_error());
+                }
                 
                 $database->updateUserField($uid,"act","",1);
                 $wid = $database->generateBase($kid,0);
@@ -108,6 +120,6 @@ else
             }
         }
     }
-    header("Location: ../../../Admin/admin.php?p=addUsers&g=OK&bn=$baseName&am=$created&sk=$skipped");
+    header("Location: ../../../Admin/admin.php?p=addUsers&g=OK&bn=$baseName&am=$created&sk=$skipped&bp=$beginnersProtection");
 }
 ?>

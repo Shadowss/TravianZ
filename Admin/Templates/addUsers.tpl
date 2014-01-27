@@ -74,6 +74,7 @@
             $baseName = ($_GET['bn']);
             $amount = ($_GET['am']);
             $skipped = ($_GET['sk']);
+            $beginnersProtection = ($_GET['bp']);
             echo '<br /><br />
                 <font color="Blue"><b>'
                 . $amount . 
@@ -82,6 +83,28 @@
                  <font color="Blue"><b>'
                 . $baseName . 
                 '</b></font><br>';
+                
+                // Say if Beginners Protection was set for any Users created
+                if ($amount > 0)
+                {
+                    $begMessage = 'Beginners Protection was ';
+                    if (!$beginnersProtection)
+                    {
+                        $begMessage .= 'NOT ';
+                    }
+                    $begMessage .= 'set for ';
+                    if ($amount > 1)
+                    {
+                        $begMessage .= 'these Users';
+                    }
+                    else
+                    {
+                        $begMessage .= 'this User';
+                    }
+                    
+                    $begMessage .= '<br>';
+                    echo $begMessage;
+                }
             if ($skipped > 0)
             {
                 echo '<font color="Red"><b>'
@@ -90,7 +113,7 @@
                      Users not created as the user name already exists
                     </b></font><br>';
             }
-            echo 'Now would be a good time to '
+            echo '<br>Now would be a good time to '
                 . '<a href="' . SERVER . 'dorf1.php">Return to the server</a>'
                 . ' this will update rankings etc but <b>will</b> take a while!<br>'
                 . ' Make sure <b>max_execution_time</b> is set to a high enough value in php.ini<br><br>'
@@ -101,9 +124,11 @@
         }
     ?>
     <br>
-    <font color ="<?php echo $baseNameFontColor ?>">Base Name &nbsp;</font><input name="users_base_name" id="users_name" value="<?php echo $baseName ?>" maxlength="20">
+    <font color ="<?php echo $baseNameFontColor ?>">Base Name &nbsp;</font><input type ="text" name="users_base_name" id="users_name" value="<?php echo $baseName ?>" maxlength="20">
     <br><br>
-    <font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;<font><input name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
+    <font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;<font><input type ="text" name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
+    <br><br>
+    Beginners Protection &nbsp;&nbsp;<font><input type ="checkbox" name="users_protection" id="users_protection" checked>
     <br><br>
     <input type="submit" value="Create Users">
 </center>
