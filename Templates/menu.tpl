@@ -45,10 +45,12 @@ div.c1 {text-align: center}
                     echo "<a href=\"sysmsg.php\">".SYSTEM_MESSAGE."</a>";
 					echo "<a href=\"create_account.php\">Create Natars</a>";
                     } ?> <a href="logout.php"><?php echo LOGOUT;?></a></p>
-
-		<a href="rules.php"><b><?php echo GAME_RULES;?></b></a> 
-        <p><a href="plus.php?id=3">Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
-                    <a href="support.php"><b><?php echo SUPPORT;?></b></a> 
+        <p>
+            <a href="plus.php?id=3"><?php echo SERVER_NAME; ?> <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
+        </p>
+        <p>
+            <a href="rules.php"><b><?php echo GAME_RULES;?></b></a> 
+            <a href="support.php"><b><?php echo SUPPORT;?></b></a> 
         <br></p>
 		<?php
 		$timestamp = $database->isDeleting($session->uid);
