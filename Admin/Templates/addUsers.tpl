@@ -90,7 +90,7 @@
                     $begMessage = 'Beginners Protection was ';
                     if (!$beginnersProtection)
                     {
-                        $begMessage .= 'NOT ';
+                        $begMessage .= '<font color="red"><b>NOT</b></font> ';
                     }
                     $begMessage .= 'set for ';
                     if ($amount > 1)
@@ -126,9 +126,9 @@
     <br>
     <font color ="<?php echo $baseNameFontColor ?>">Base Name &nbsp;</font><input type ="text" name="users_base_name" id="users_name" value="<?php echo $baseName ?>" maxlength="20">
     <br><br>
-    <font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;<font><input type ="text" name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
+    <font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;</font><input type ="text" name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
     <br><br>
-    Beginners Protection &nbsp;&nbsp;<font><input type ="checkbox" name="users_protection" id="users_protection" checked>
+    Beginners Protection &nbsp;&nbsp;<input type ="checkbox" name="users_protection" id="users_protection" checked>
     <br><br>
     <input type="submit" value="Create Users">
 </center>
