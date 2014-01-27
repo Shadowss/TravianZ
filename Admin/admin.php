@@ -15,7 +15,7 @@ include("../GameEngine/Database.php");
 include("../GameEngine/Admin/database.php");
 include("../GameEngine/config.php");
 include("../GameEngine/Data/buidata.php");
-// Should we including Session.php here instead?
+// TODO: Should we including Session.php here instead?
 include_once ("../GameEngine/Lang/" . LANG . ".php");
 
 class timeFormatGenerator
