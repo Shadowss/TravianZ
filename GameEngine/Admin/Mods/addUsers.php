@@ -18,6 +18,7 @@ $id = $_POST['id'];
 $baseName = $_POST['users_base_name'];
 $amount = (int) $_POST['users_amount'];
 $beginnersProtection = $_POST['users_protection'];
+$postTribe = $_POST['tribe'];
 
 // Some basic error checking
 if (strlen($baseName) < 4)
@@ -54,7 +55,16 @@ else
         //$password = $baseName . $i . 'PASS';
         
         $email = $baseName . $i . '@example.com';
-        $tribe = rand(1, 3);
+        if ($postTribe == 0)
+        {
+            // Random Tribe
+            $tribe = rand(1, 3);
+        }
+        else
+        {
+            // No error checking here but should be set to 1-3 from form
+            $tribe = $postTribe;
+        }
         // Create in a random quad
         $kid = rand(1,4);
         // Dont need to activate, not 100% sure we need to initialise $act
@@ -120,6 +130,6 @@ else
             }
         }
     }
-    header("Location: ../../../Admin/admin.php?p=addUsers&g=OK&bn=$baseName&am=$created&sk=$skipped&bp=$beginnersProtection");
+    header("Location: ../../../Admin/admin.php?p=addUsers&g=OK&bn=$baseName&am=$created&sk=$skipped&bp=$beginnersProtection&tr=$postTribe");
 }
 ?>

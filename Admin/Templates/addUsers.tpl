@@ -75,6 +75,25 @@
             $amount = ($_GET['am']);
             $skipped = ($_GET['sk']);
             $beginnersProtection = ($_GET['bp']);
+            switch ($_GET['tr'])
+            {
+                case '0':
+                    $tribe = RANDOM;
+                    break;
+                case '1':
+                    $tribe = ROMANS;
+                    break;
+                case '2':
+                    $tribe = TEUTONS;
+                    break;
+                case '3':
+                    $tribe = GAULS;
+                    break;
+                default:
+                    // Should never reach here
+                    $tribe = 'Unknown';
+            }
+            
             echo '<br /><br />
                 <font color="Blue"><b>'
                 . $amount . 
@@ -87,23 +106,28 @@
                 // Say if Beginners Protection was set for any Users created
                 if ($amount > 0)
                 {
+                    // Plural or Singular for User(s)
+                    // TODO: Add options for these to lang files
+                    if ($amount > 1)
+                    {
+                        $usersMessage = 'these Users';
+                    }
+                    else
+                    {
+                        $usersMessage = 'this User';
+                    }
                     $begMessage = 'Beginners Protection was ';
                     if (!$beginnersProtection)
                     {
                         $begMessage .= '<font color="red"><b>NOT</b></font> ';
                     }
-                    $begMessage .= 'set for ';
-                    if ($amount > 1)
-                    {
-                        $begMessage .= 'these Users';
-                    }
-                    else
-                    {
-                        $begMessage .= 'this User';
-                    }
-                    
-                    $begMessage .= '<br>';
+                    $begMessage .= 'set for ' . $usersMessage . '<br>';
                     echo $begMessage;
+                    
+                    // Say Tribes chosen
+                    $tribeMessage = 'Tribe for ' . $usersMessage . ' was ';
+                    $tribeMessage .= $tribe . '<br>';
+                    echo $tribeMessage; 
                 }
             if ($skipped > 0)
             {
@@ -124,12 +148,18 @@
         }
     ?>
     <br>
-    <font color ="<?php echo $baseNameFontColor ?>">Base Name &nbsp;</font><input type ="text" name="users_base_name" id="users_name" value="<?php echo $baseName ?>" maxlength="20">
-    <br><br>
-    <font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;</font><input type ="text" name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
-    <br><br>
-    Beginners Protection &nbsp;&nbsp;<input type ="checkbox" name="users_protection" id="users_protection" checked>
-    <br><br>
-    <input type="submit" value="Create Users">
 </center>
+<font color ="<?php echo $baseNameFontColor ?>">Base Name &nbsp;</font><input type ="text" name="users_base_name" id="users_name" value="<?php echo $baseName ?>" maxlength="20">
+<br><br>
+<font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;</font><input type ="text" name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
+<br><br>
+Beginners Protection &nbsp;&nbsp;<input type ="checkbox" name="users_protection" id="users_protection" checked>
+<br><br>
+Tribe:<br>
+<label><input type="radio" name="tribe" value="0" checked> &nbsp;<?php echo RANDOM; ?></label><br>
+<label><input type="radio" name="tribe" value="1"> &nbsp;<?php echo ROMANS; ?></label><br>
+<label><input type="radio" name="tribe" value="2"> &nbsp;<?php echo TEUTONS; ?></label><br>
+<label><input type="radio" name="tribe" value="3"> &nbsp;<?php echo GAULS; ?></label><br>
+<br><br>
+<input type="submit" value="Create Users">
 </form>
