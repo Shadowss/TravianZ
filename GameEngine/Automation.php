@@ -387,7 +387,7 @@ class Automation {
 					$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
 					$database->setMovementProc($movedata['moveid']);
 					}
-					$q = "DELETE FROM ".TB_PREFIX."movement where `from` = ".$village;
+					$q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $village AND sort_type=4) OR (`from` = $village AND sort_type=3))";
 					$database->query($q);
 					$getprisoners = $database->getPrisoners($village);
 					foreach($getprisoners as $pris) {
@@ -2975,7 +2975,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
             $database->query($q);
-            $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`from` = $wref AND `to` = $wref) OR (`from` = $wref AND sort_type=3))";
+            $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $wref AND sort_type=4) OR (`from` = $wref AND sort_type=3))";
             $database->query($q);
                 
             $getmovement = $database->getMovement(3,$wref,1);
