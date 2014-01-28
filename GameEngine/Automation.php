@@ -1465,14 +1465,14 @@ class Automation {
 					                } 
 				                }								   
 		               	    }
-								
-						} 								
-                        if($spy_def_Detect==0) { 
+					if($spy_def_Detect==0) { 
 					    $dead3=0;
 					    $dead4=0;
 						$battlepart['casualties_attacker'][3]=0;
 						$battlepart['casualties_attacker'][4]=0;
-						}
+						}			
+						} 								
+                        
 				#################################################
 
                     $dead=array();
