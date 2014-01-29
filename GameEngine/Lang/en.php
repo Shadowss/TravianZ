@@ -6,7 +6,7 @@
 //                                Made by: Dzoki & Dixie (TravianX)                                 //
 //                              - TravianX = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
-//                                Adding tasks and constructions  by: Armando                       //
+//                                Adding tasks, constructions and artefact  by: Armando             //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 									//                         //
 									//         ENGLISH         //
@@ -229,7 +229,8 @@ define("Q17_BUTN1","Military");
 
 define("Q18","Task 18: Military");
 define("Q18_DESC","A brave decision. To be able to send troops you need a rally point.<br \/><br \/>The rally point must be built on a specific building site. The ");
-define("Q18_DESC1"," is located on the right side of the main building, slightly below it. The building site itself is curved.");
+define("Q18_DESC1"," building site.");
+define("Q18_DESC2"," is located on the right side of the main building, slightly below it. The building site itself is curved.");
 define("Q18_ORDER","Order:<\/p>Construct a rally point.");
 define("Q18_RESP","Your rally point has been erected! A good move towards world domination!");
 
