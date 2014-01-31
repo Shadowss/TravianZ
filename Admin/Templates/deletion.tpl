@@ -42,7 +42,7 @@ if($_GET['uid'])
 					</tr>
 					<tr>
 						<td>Rank:</td>
-						<td>???.</td>
+						<td><?php $ranking->procRankArray();echo $ranking->getUserRank($user['id']); ?></td>
 						<td>Population:</td>
 						<td><?php echo $totalpop;?></td>
 					</tr>

@@ -48,6 +48,7 @@ if(isset($id))
 	91l+gRNDLzw6f+nepcsPrl14cPXW8wcMWqVaEYdtPdZYubUHww0AMs5cusygU68UtVUr87CPWbdd
 	9Ly83TcO7Lq2I7ozoXfZTAalCjWZemnlaYo2u0wVFkoJdwoyZDOZNDi//vqRwbkjac+dC827p2h3
 	Gyh3S6m0a0Qszrnz6RnQWAAxV5tT/VAiNQAAAABJRU5ErkJggg==";
+	/*
 	class Generator
 	{
 		public function getMapCheck($wref)
@@ -56,6 +57,7 @@ if(isset($id))
 		}
 	};
 	$generator = new Generator;
+	*/
 	if($village and $user)
 	{
 		include("search2.tpl"); ?>
@@ -195,7 +197,7 @@ if(isset($id))
 					for($e=1; $e<4; $e++)
 					{
 						$exp = $village['exp'.$e.''];
-						if($exp['wref'] == 0)
+						if($exp == 0)
 						{
 							echo '
 								<tr>
@@ -294,7 +296,7 @@ if(isset($id))
 							elseif($type==12){ $type = '<img src="../img/admin/r/4.gif"> + 50%'; }
 							echo "
 							<tr>
-								<td><a href=\"?delOas&oid=\" onClick=\"return del(\'oas\','.$varray[$i]['wref'].');\"><img src=\"../img/admin/del.gif\"></a></td>
+								<td><a href=\"?delOas&oid=\" onClick=\"return del('oas',".$varray[$i]['wref'].")\"><img src=\"../img/admin/del.gif\"></a></td> 
 								<td class=\"hab\">".$row['name']."</td>
 								<td class=\"hab\"><a href=\"../karte.php?d=".$row['wref']."&c=".$generator->getMapCheck($row['wref'])."\" target=\"blank\">(".$oasisx."|".$oasisy.")</a></td>
 								<td class=\"hab\">".$row['loyalty']."%</td>

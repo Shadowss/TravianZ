@@ -1,10 +1,11 @@
 <?php			   
-	//gp link
+    //gp link
     $separator=isset($separator)? $separator:"";
-    if($session->gpack == null || GP_ENABLE == false) {
+    $gpack_load=isset($user['gpack'])? $user['gpack']:$database->getUserField($_SESSION['username'], 'gpack', 1);
+    if($gpack_load== null || GP_ENABLE == false) {
     $gpack= $separator.GP_LOCATE;
     } else {
-    $gpack= $separator.$session->gpack;
+    $gpack= $separator.$gpack_load;
     }  
 
 	
