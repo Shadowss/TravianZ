@@ -1,5 +1,21 @@
 <div id="content"  class="map">
 <?php 
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                        		       	       		   ##
+##  Version:       01.09.2013 						       					   ##
+##  Filename       vilview.php                                                 ##
+##  Developed by:  Advocaite , yi12345 , Shadow     			       		   ##
+##  Fixed by:      Shadow - Tribe Names , correct view resource  	       	   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       			   ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
+##                                                                             ##
+#################################################################################
+
 $basearray = $database->getMInfo($_GET['d']);
 $uinfo = $database->getVillage($basearray['id']);
 $oasis1 = mysql_query('SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysql_real_escape_string($_GET['d']));

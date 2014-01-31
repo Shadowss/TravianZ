@@ -516,6 +516,110 @@ define("WONDER","Maravilla del Mundo");
 define("HORSEDRINKING","Bebedero Equino");
 define("GREATWORKSHOP","Gran Taller");
 
+//artefact
+define("ARCHITECTS_DESC","Los edificios son m&aacute;s resistentes a los ataques de las catapultas y arietes.");
+define("ARCHITECTS_SMALL","Peque&ntilde;os secretos  de la arquitectura");
+define("ARCHITECTS_SMALLVILLAGE","Diamante Cincel");
+define("ARCHITECTS_LARGE","Grandes secretos  de la arquitectura");
+define("ARCHITECTS_LARGEVILLAGE","Martillo de M&aacute;rmol Gigante");
+define("ARCHITECTS_UNIQUE","El gran secreto &uacute;nico de los arquitectos");
+define("ARCHITECTS_UNIQUEVILLAGE","Pergaminos de Hemon");
+define("HASTE_DESC","Las tropas recorrer&aacute;n las distancias en menor tiempo.");
+define("HASTE_SMALL","Las botas ligeras de Titan");
+define("HASTE_SMALLVILLAGE","Opalo de herradura");
+define("HASTE_LARGE","Las grandes botas de Titan");
+define("HASTE_LARGEVILLAGE","Carroza de Oro");
+define("HASTE_UNIQUE","Las botas &uacute;nica de Titan ");
+define("HASTE_UNIQUEVILLAGE","Sandalias Fil&iacute;pides");
+define("EYESIGHT_DESC","Los emisarios, Equites Legati y Batidores son m&aacute;s efectivos espiando, y defendiendo contra ataques de espionaje. Todas las unidades esp&iacute;as en la aldea/cuenta as&iacute; como los esp&iacute;as enviados a realizar espionaje desde la aldea/cuenta se ver&aacute;n beneficiados. Adicionalmente, podr&aacute;s ver los diferentes tipos de tropas atacando a tu aldea/cuenta, pero no la cantidad de las mismas.");
+define("EYESIGHT_SMALL","Peque&ntilde;os ojos de &aacute;guila");
+define("EYESIGHT_SMALLVILLAGE","Historia de una rata");
+define("EYESIGHT_LARGE","Grandes ojos de &aacute;guila");
+define("EYESIGHT_LARGEVILLAGE","Carta de Generales");
+define("EYESIGHT_UNIQUE","Ojos &uacute;nicos de la &aacute;guila");
+define("EYESIGHT_UNIQUEVILLAGE","Diario de Sun Tzu");
+define("DIET_DESC","Las tropas consumen menos cereal.");
+define("DIET_SMALL","ligero Control de la dieta");
+define("DIET_SMALLVILLAGE","Plato de Plata");
+define("DIET_LARGE","Gran control de la dieta");
+define("DIET_LARGEVILLAGE","Arco de Caza Sagrado");
+define("DIET_UNIQUE","Control de la dieta &uacute;nica");
+define("DIET_UNIQUEVILLAGE","C&aacute;liz del Rey Arthurs");
+define("ACADEMIC_DESC","Las tropas son entrenadas m&aacute;s r&aacute;pido.");
+define("ACADEMIC_SMALL","Entrenadores con ligero talento");
+define("ACADEMIC_SMALLVILLAGE","Soldados de Sagrado Juramento");
+define("ACADEMIC_LARGE","Entrenadores con gran talento");
+define("ACADEMIC_LARGEVILLAGE","Declaraci&oacute;n de Guerra");
+define("ACADEMIC_UNIQUE","Entrenadores con talento &uacute;nico");
+define("ACADEMIC_UNIQUEVILLAGE","Memorias de Alejandro Magno");
+define("STORAGE_DESC","Estos planos te Concede la habilidad para construir el almac&eacute;n grande y el granero grande");
+define("STORAGE_SMALL","Peque&ntilde;o Plano de construcci&oacute;n para Gran Almac&eacute;n y Gran Granero");
+define("STORAGE_SMALLVILLAGE","Bosquejo de Constructores");
+define("STORAGE_LARGE","Gran Plano de construcci&oacute;n para Gran Almac&eacute;n y Gran Granero");
+define("STORAGE_LARGEVILLAGE","Tableta de de Babilonia");
+define("CONFUSION_DESC","El artefacto multiplica la capacidad del escondite y fuerza a las catapultas enemigas disparar a casualidad. El edificio de la maravilla podr&aacute; ser siempre seleccionado.");
+define("CONFUSION_SMALL","Peque&ntilde;a Confusi&oacute;n de los Rivales");
+define("CONFUSION_SMALLVILLAGE","Mapa de las Cavernas Ocultas");
+define("CONFUSION_LARGE","Gran Confusi&oacute;n de los Rivales");
+define("CONFUSION_LARGEVILLAGE","Taleguilla del Abismo");
+define("CONFUSION_UNIQUE","Gran Confusi&oacute;n &uacute;nica de los Rivales");
+define("CONFUSION_UNIQUEVILLAGE","Caballo de Troya");
+define("FOOL_DESC","Este artefacto cambia el efecto cada 24 horas, y puede obtener el efecto de cualquier otro artefacto. El rango de acci&oacute;n del efecto tambi&eacute;n es determinado cada 24 horas. La versi&oacute;n normal de este artefacto puede garantizar tambi&eacute;n efectos negativos, como por ejemplo que las tropas sean m&aacute;s lentas, o que consuman m&aacute;s cereal. La versi&oacute;n &uacute;nica de este artefacto s&oacute;lo proporciona efectos positivos, pero el alcance de los efectos sigue siendo aleatorio. Puede garantizar un incremento de velocidad de 1% en las tropas, por ejemplo.");
+define("FOOL_SMALL","Artefacto del Loco");
+define("FOOL_SMALLVILLAGE","Colgante de la Travesura");
+define("FOOL_UNIQUE","Artefacto &uacute;nico del Loco");
+define("FOOL_UNIQUEVILLAGE","Manuscritos Prohibidos");
+define("ARTEFACT","Misteriosas Reliquias
+Mi se&ntilde;or, han aparecido misteriosas aldeas donde se dice que existen unos artefactos de gran poder, los ancianos del consejo las llaman reliquias.
+
+Completamente resguardadas por la poderosa raza Natares y su temido ej&eacute;rcito, pero no ser&aacute; impedimento para vos valeroso emperador, O s&iacute;. 
+
+Vuestros generales me han comentado que su ej&eacute;rcito crece y crece m&aacute;s, pronto podremos apoderarnos de esas reliquias, los talleres fabrican vuestras catapultas para destruir el tesoro que guarda la reliquia y vuestro mejor soldado nuestro h&eacute;roe se entrena cada vez m&aacute;s fuerte para poder traerle esta reliquia.
+
+Pero las tropas y los aldeanos necesitan de motivaci&oacute;n, usted mi se&ntilde;or debe de generar esa fuerza necesaria para llevarnos a todos al triunfo y a la gloria. 
+
+La mitad del camino ha llegado, la victoria est&aacute; en sus manos mi se&ntilde;or. ");
+
+
+//planos
+define("PLAN","Planos de construcci&oacute;n antigua");
+define("PLANVILLAGE","Planos de Construcci&oacute;n MM");
+define("PLAN_DESC","Con este plano de construcci&oacute;n antigua usted ser&aacute; capaz de construir una Maravilla del Mundo a nivel 50. para construir un mayor nivel, su alianza debe tener por lo menos dos planos.");
+define("PLAN_INFO","El tiempo ha llegado.
+
+Ahora que los d&iacute;as son m&aacute;s cortos y las noches m&aacute;s fr&iacute;as, la gente de Travian se da cuenta que el final de esta era se acerca. La leyenda de gloriosas batallas y lujosos edificios de eras pasadas... parec&iacute;a ser todo lo que queda de aquel entonces. Pero las masas decidieron que este no ser&iacute;a el modo como esta era terminar&iacute;a.
+
+Una maravilla deber&iacute;a ser construida, un edificio de infinita grandeza y poder. Esta maravilla deber&iacute;a unir a todos los habitantes de Travian.
+
+Tristemente, el conocimiento de las gloriosas maravillas se hab&iacute;a perdido, llevado a la tumba por sus ya desaparecidos antepasados. Justo antes de que la gente perdiera toda esperanza, el destino gui&oacute; su atenci&oacute;n hacia la ancestral tribu de los Natares. Esa tribu ancestral, superviviente a muchas eras y sangrientas batallas, puede poseer a&uacute;n algunos de los planos de construcci&oacute;n necesarios para las maravillas, pero una sensaci&oacute;n extra&ntilde;a parece emanar de ellos...
+
+La Leyenda de los Natares.
+
+Una vez, antes de que los Romanos invadieran Travian, las ahora libres razas Galas y Germanas estaban esclavizadas por los Natares. Los Natares eran una raza muy especial, que habr&iacute;a sido olvidada en el tiempo de no ser por las historias a&uacute;n contadas por ancianas, nodrizas y vagabundos.
+
+Ellos dominaban todo Travian y entre todo su poder y crueldad pose&iacute;an un conocimiento completo acerca de las fuerzas elementales que nunca ser&iacute;a superado. Muy poco se sabe de esta raza, s&oacute;lo quedan los informes de un testigo que vivi&oacute; el poder Natare, y sobrevivi&oacute; el paso de las eras.
+
+Quien lea este informe, encontrar&aacute; la descripci&oacute;n de una Ciudad de Oro con un templo situado en el centro de la ciudad, una maravilla de indescriptible grandeza y poder. Tambi&eacute;n habla de secretos y arcaicos lugares donde estos templos pueden ser erguidos. Lugares donde toda la sabidur&iacute;a y conocimiento de los Natares puede ser encontrado para, una vez m&aacute;s, esclavizar Travian.
+
+Los planes de los Natares.
+
+Los Natares tienes planes propios y quieren esclavizar las razas libres para construir una maravilla. Sin embargo, quien sea que construya una maravilla en su lugar conseguir&aacute; la &uacute;ltima gesta de convertir Travian en un mundo de paz y unidad. Al final de esta era, podremos ver si la gente libre de Travian consigue llevar a cabo esta intr&eacute;pida y gloriosa haza&ntilde;a, si las futuras historias, ser&aacute;n acerca de valientes alianzas o de los odiados Natares.
+
+
+Para robar un conjunto de Planes de la construcci&oacute;n de los Natares , las siguientes cosas deben suceder :
+- Usted debe atacar la aldea ( NO en Asalto !)
+- Usted debe ganar el ataque
+- Debes destruir a la C&aacute;mara del Tesoro (Hacienda)
+- Tu h&eacute;roe debe ser en ese ataque , ya que es el &uacute;nico que puede llevar a los planes de construcci&oacute;n
+- Un nivel de vac&iacute;o 10 C&aacute;mara del Tesoro ( Tesoro ) DEBE estar en el pueblo donde el ataque provino de
+NOTA : Si no se cumplen los criterios mencionados en el ataque , el pr&oacute;ximo ataque a ese pueblo que no cumple con los criterios anteriores se llevar&aacute; a los planes de construcci&oacute;n.
+
+
+Construir una C&aacute;mara del Tesoro (Hacienda) , se necesita un nivel de Edificio Principal 10 y el pueblo no debe ser una capital o contener una Maravilla del Mundo .
+
+Para construir una Maravilla del Mundo , debe poseer los Planes de construcci&oacute;n a ti mismo ( que = la Maravilla del Mundo Village propietario ) desde el nivel 0 a 49, y luego desde el nivel de 50 a 100 se necesita un conjunto adicional de Planes de la construcci&oacute;n en su Alianza ! Dos juegos de planos de construcci&oacute;n en la Cuenta de World Village Wonder no funcionan !");
+define("WWVILLAGE","Aldea MM");
+
 /*
 |--------------------------------------------------------------------------
 |   Index

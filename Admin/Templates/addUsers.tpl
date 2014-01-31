@@ -74,6 +74,26 @@
             $baseName = ($_GET['bn']);
             $amount = ($_GET['am']);
             $skipped = ($_GET['sk']);
+            $beginnersProtection = ($_GET['bp']);
+            switch ($_GET['tr'])
+            {
+                case '0':
+                    $tribe = RANDOM;
+                    break;
+                case '1':
+                    $tribe = ROMANS;
+                    break;
+                case '2':
+                    $tribe = TEUTONS;
+                    break;
+                case '3':
+                    $tribe = GAULS;
+                    break;
+                default:
+                    // Should never reach here
+                    $tribe = 'Unknown';
+            }
+            
             echo '<br /><br />
                 <font color="Blue"><b>'
                 . $amount . 
@@ -82,6 +102,33 @@
                  <font color="Blue"><b>'
                 . $baseName . 
                 '</b></font><br>';
+                
+                // Say if Beginners Protection was set for any Users created
+                if ($amount > 0)
+                {
+                    // Plural or Singular for User(s)
+                    // TODO: Add options for these to lang files
+                    if ($amount > 1)
+                    {
+                        $usersMessage = 'these Users';
+                    }
+                    else
+                    {
+                        $usersMessage = 'this User';
+                    }
+                    $begMessage = 'Beginners Protection was ';
+                    if (!$beginnersProtection)
+                    {
+                        $begMessage .= '<font color="red"><b>NOT</b></font> ';
+                    }
+                    $begMessage .= 'set for ' . $usersMessage . '<br>';
+                    echo $begMessage;
+                    
+                    // Say Tribes chosen
+                    $tribeMessage = 'Tribe for ' . $usersMessage . ' was ';
+                    $tribeMessage .= $tribe . '<br>';
+                    echo $tribeMessage; 
+                }
             if ($skipped > 0)
             {
                 echo '<font color="Red"><b>'
@@ -90,7 +137,7 @@
                      Users not created as the user name already exists
                     </b></font><br>';
             }
-            echo 'Now would be a good time to '
+            echo '<br>Now would be a good time to '
                 . '<a href="' . SERVER . 'dorf1.php">Return to the server</a>'
                 . ' this will update rankings etc but <b>will</b> take a while!<br>'
                 . ' Make sure <b>max_execution_time</b> is set to a high enough value in php.ini<br><br>'
@@ -101,10 +148,18 @@
         }
     ?>
     <br>
-    <font color ="<?php echo $baseNameFontColor ?>">Base Name &nbsp;</font><input name="users_base_name" id="users_name" value="<?php echo $baseName ?>" maxlength="20">
-    <br><br>
-    <font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;<font><input name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
-    <br><br>
-    <input type="submit" value="Create Users">
 </center>
+<font color ="<?php echo $baseNameFontColor ?>">Base Name &nbsp;</font><input type ="text" name="users_base_name" id="users_name" value="<?php echo $baseName ?>" maxlength="20">
+<br><br>
+<font color ="<?php echo $amountFontColor ?>">How Many &nbsp;&nbsp;</font><input type ="text" name="users_amount" id="users_amount" value="<?php echo $amount ?>" maxlength="4">
+<br><br>
+Beginners Protection &nbsp;&nbsp;<input type ="checkbox" name="users_protection" id="users_protection" checked>
+<br><br>
+Tribe:<br>
+<label><input type="radio" name="tribe" value="0" checked> &nbsp;<?php echo RANDOM; ?></label><br>
+<label><input type="radio" name="tribe" value="1"> &nbsp;<?php echo ROMANS; ?></label><br>
+<label><input type="radio" name="tribe" value="2"> &nbsp;<?php echo TEUTONS; ?></label><br>
+<label><input type="radio" name="tribe" value="3"> &nbsp;<?php echo GAULS; ?></label><br>
+<br><br>
+<input type="submit" value="Create Users">
 </form>

@@ -387,7 +387,7 @@ class Automation {
 					$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
 					$database->setMovementProc($movedata['moveid']);
 					}
-					$q = "DELETE FROM ".TB_PREFIX."movement where `from` = ".$village;
+					$q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $village AND sort_type=4) OR (`from` = $village AND sort_type=3))";
 					$database->query($q);
 					$getprisoners = $database->getPrisoners($village);
 					foreach($getprisoners as $pris) {
@@ -642,7 +642,12 @@ class Automation {
 		$q = "SELECT * FROM ".TB_PREFIX."bdata where timestamp < $time and master = 0";
 		$array = $database->query_return($q);
 		foreach($array as $indi) {
+	           $level = $database->getFieldLevel($indi['wid'],$indi['field']);
+		   if (($level+1) == $indi['level']){
 			$q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
+		   }else{ $indi['level']=($level+1);
+			$q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
+		   }
 			if($database->query($q)) {
 				$level = $database->getFieldLevel($indi['wid'],$indi['field']);
 				$this->recountPop($indi['wid']);
@@ -1454,7 +1459,25 @@ class Automation {
 				${dead.$i}=$data['t'.$i];
 				}else { ${dead.$i} = $battlepart['casualties_attacker'][$i]; }
 				}
-
+                     //if the defender does not have spies, the attacker will not die spies.	FIXED BY Armando
+                        if($scout){
+							$spy_def_Detect=0;
+							for($i=1;$i<=(50);$i++) {
+			                    if($i == 4 || $i == 14 || $i == 23 || $i == 34 || $i == 44){
+								    if($Defender['u'.$i]>0) { 
+					                 $spy_def_Detect=$i;
+									 break;
+					                } 
+				                }								   
+		               	    }
+					if($spy_def_Detect==0) { 
+					    $dead3=0;
+					    $dead4=0;
+						$battlepart['casualties_attacker'][3]=0;
+						$battlepart['casualties_attacker'][4]=0;
+						}			
+						} 								
+                        
 				#################################################
 
                     $dead=array();
@@ -2975,7 +2998,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
             $database->query($q);
-            $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`from` = $wref AND `to` = $wref) OR (`from` = $wref AND sort_type=3))";
+            $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $wref AND sort_type=4) OR (`from` = $wref AND sort_type=3))";
             $database->query($q);
                 
             $getmovement = $database->getMovement(3,$wref,1);
