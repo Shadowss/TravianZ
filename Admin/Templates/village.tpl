@@ -48,7 +48,6 @@ if(isset($id))
 	91l+gRNDLzw6f+nepcsPrl14cPXW8wcMWqVaEYdtPdZYubUHww0AMs5cusygU68UtVUr87CPWbdd
 	9Ly83TcO7Lq2I7ozoXfZTAalCjWZemnlaYo2u0wVFkoJdwoyZDOZNDi//vqRwbkjac+dC827p2h3
 	Gyh3S6m0a0Qszrnz6RnQWAAxV5tT/VAiNQAAAABJRU5ErkJggg==";
-	/*
 	class Generator
 	{
 		public function getMapCheck($wref)
@@ -57,7 +56,6 @@ if(isset($id))
 		}
 	};
 	$generator = new Generator;
-	*/
 	if($village and $user)
 	{
 		include("search2.tpl"); ?>
