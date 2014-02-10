@@ -516,6 +516,7 @@ class Battle {
 
                 // Defender
                 $result[2] = 0;
+            	}
                 else if($type == 2)
                 {
 
