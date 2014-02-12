@@ -10,7 +10,7 @@
 ##                                                                             ##
 #################################################################################
 
-if ($_SESSION['qst']<38 && QUEST==true){?>
+if ($_SESSION['qst']<38 && QUEST==true or $_SESSION['qst']>80){?>
 
 <div id="anm" style="width:120px; height:140px; visibility:hidden;"></div>
 			<div id="qge">
