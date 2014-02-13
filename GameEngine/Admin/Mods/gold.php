@@ -8,7 +8,8 @@
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
+if (!isset($_SESSION)) session_start();
+if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../config.php");
 
 error_reporting(E_ALL);

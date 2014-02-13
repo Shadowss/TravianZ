@@ -11,7 +11,8 @@
 include_once("../../GameEngine/Account.php");
 mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysql_select_db(SQL_DB);
-if ($session->access < ADMIN) die("Access Denied: You are not Admin!");
+if (!isset($_SESSION)) session_start();
+if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");  
 
 $uid = $_POST['uid'];
 $topic = $_POST['topic'];

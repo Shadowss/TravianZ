@@ -7,7 +7,8 @@
 ## Copyright: TravianZ (c) 2014. All rights reserved.                     ##
 ############################################################################
 
-
+if (!isset($_SESSION)) session_start();
+if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../config.php");
 include_once("../../Session.php");
 include_once("../../Automation.php");

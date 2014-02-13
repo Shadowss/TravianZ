@@ -8,13 +8,15 @@
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 #################################################################################
-
+if (!isset($_SESSION)) session_start();
+if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../Account.php");
 
 mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysql_select_db(SQL_DB);
 
-if ($session->access < ADMIN) die("Access Denied: You are not Admin!");
+if (!isset($_SESSION)) session_start();
+if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 
 $medalid = $_POST['medalid'];
 $uid = $_POST['uid'];

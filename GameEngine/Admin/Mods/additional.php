@@ -8,9 +8,9 @@
 ##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
 include_once("../../config.php");
-
+if (!isset($_SESSION)) session_start();
+if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysql_select_db(SQL_DB);
 
