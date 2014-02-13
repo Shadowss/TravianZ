@@ -1884,7 +1884,7 @@ class Automation {
                 if($can_destroy==1) {
                     $info_cat = "".$catp_pic.", Village already destroyed.";
                     } else {
-                    $info_cat = "".$catp_pic.", Village can't be destroyed.";
+                    $info_cat = "".$catp_pic.", Village can\'t be destroyed.";
                                 }
         }
 		else

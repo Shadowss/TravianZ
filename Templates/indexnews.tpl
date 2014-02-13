@@ -16,5 +16,5 @@
 ##                                                                             ##
 #################################################################################
 ?>
-<p class="date">[Release by: ZravianX]</p>
+<p class="date">[Release by: TravianZ]</p>
 <p>Thank you for using our version!</p>

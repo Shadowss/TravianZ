@@ -290,57 +290,47 @@ class Battle {
         //get every enforcement in defender village/oasis
 		
         $DefendersAll = $database->getEnforceVillage($DefenderWref,0); 
-        if(!empty($DefendersAll)){
-    
-        // Calculates the total points of the Defender
-        if(!empty($DefendersAll)){
-            foreach($DefendersAll as $defenders) {
-                
-                for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
-                $fromvillage = $defenders['from'];
-                $enforcetribe = $database->getUserField($database->getVillageField($fromvillage,"owner"),"tribe",0);
-                $ud=($enforcetribe-1)*10;                
-                if($defenders['from']>1) { //don't check nature tribe
-                    $armory = $database->getABTech($defenders['from']); // Armory level every village enforcement
-                    $def_ab[$ud+1] = $armory['a1'];
-                    $def_ab[$ud+2] = $armory['a2'];
-                    $def_ab[$ud+3] = $armory['a3'];
-                    $def_ab[$ud+4] = $armory['a4'];
-                    $def_ab[$ud+5] = $armory['a5'];
-                    $def_ab[$ud+6] = $armory['a6'];
-                    $def_ab[$ud+7] = $armory['a7'];
-                    $def_ab[$ud+8] = $armory['a8'];
+            if(!empty($DefendersAll) && $DefenderWref>0){
+                foreach($DefendersAll as $defenders) {
+                    for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
+                    $fromvillage = $defenders['from'];
+                    $enforcetribe = $database->getUserField($database->getVillageField($fromvillage,"owner"),"tribe",0);
+                    $ud=($enforcetribe-1)*10;                
+                    if($defenders['from']>0) { //don't check nature tribe
+                        $armory = $database->getABTech($defenders['from']); // Armory level every village enforcement
+                        $def_ab[$ud+1] = $armory['a1'];
+                        $def_ab[$ud+2] = $armory['a2'];
+                        $def_ab[$ud+3] = $armory['a3'];
+                        $def_ab[$ud+4] = $armory['a4'];
+                        $def_ab[$ud+5] = $armory['a5'];
+                        $def_ab[$ud+6] = $armory['a6'];
+                        $def_ab[$ud+7] = $armory['a7'];
+                        $def_ab[$ud+8] = $armory['a8'];
+                    }
+                    if ($type==1) {
+                        $datadefScout=$this->getDataDefScout($defenders,$def_ab,$defender_artefact);
+                        $dp+=$datadefScout['dp'];
+                        $cdp+=$datadefScout['cdp'];
+                        $involve=$datadefScout['involve'];
+                        if ($datadefScout['detect']==1) $detected = 1;
+                    }else{
+                        $datadef=$this->getDataDef($defenders,$def_ab);
+                        $dp+=$datadef['dp'];
+                        $cdp+=$datadef['cdp'];
+                        $involve=$datadef['involve'];
+                    }            
+                    $reinfowner = $database->getVillageField($fromvillage,"owner");
+                    $defhero = $this->getBattleHero($reinfowner);
+                    //calculate def hero from enforcement
+                    if($defenders['hero'] != 0){
+                        $cdp += $defhero['dc'];
+                        $dp += $defhero['di'];
+                        $dp = $dp * $defhero['db'];
+                        $cdp = $cdp * $defhero['db'];
+                    }    
                 }
-                
-                if ($type==1) {
-                    $datadefScout=$this->getDataDefScout($defenders,$def_ab,$defender_artefact);
-                    $dp+=$datadefScout['dp'];
-                    $cdp+=$datadefScout['cdp'];
-                    $involve=$datadef['involve'];
-                    if ($datadefScout['detect']==1) $detected = 1;
-                }else{
-                    $datadef=$this->getDataDef($defenders,$def_ab);
-                    $dp+=$datadef['dp'];
-                    $cdp+=$datade['cdp'];
-                    $involve=$datadef['involve'];
-                    
-                }            
-                
-                $reinfowner = $database->getVillageField($fromvillage,"owner");
-                $defhero = $this->getBattleHero($reinfowner);
-				//calculate def hero from enforcement
-				if($defenders['hero'] != 0){
-					$cdp += $defhero['dc'];
-					$dp += $defhero['di'];
-					$dp = $dp * $defhero['db'];
-					$cdp = $cdp * $defhero['db'];
-				}  
             }
-        }
-	}
-                
-        
-        // Calculate the total number of points Attacker
+            // Calculate the total number of points Attacker
         $start = ($att_tribe-1)*10+1;
         $end = ($att_tribe*10);
         if($att_tribe == 3){
@@ -354,12 +344,12 @@ class Battle {
                         global ${'u'.$i};
                         $j = $i-$start+1;
                         if($Attacker['u'.$i]>0 && ($i == 4 || $i == 14 || $i == 23 || $i == 44)){
-                            if(${att_ab.$abcount} > 0) { 
-                                    $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.004, ${att_ab.$abcount}) - 1)) * $Attacker['u'.$i];// ^ ($Attacker['u'.$i]/100);
+                            if(${'att_ab'.$abcount} > 0) { 
+                                    $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.00697, ${'att_ab'.$abcount}) - 1)) * $Attacker['u'.$i];
                             }else{
-                                $ap += $Attacker['u'.$i]*25;
+                                $ap += $Attacker['u'.$i]*35;
                             }
-                        }    
+                        }     
                         $involve += $Attacker['u'.$i];
                         $units['Att_unit'][$i] = $Attacker['u'.$i];
                         
@@ -515,17 +505,18 @@ class Battle {
                 // Formula for calculating lost drives
                 // $type = 1 scout, 2?
                 // $type = 3 Normal, 4 Raid
-                if($type == 1)
-                {
-                        
-                        $holder = pow((($rdp*$moralbonus)/$rap),$Mfactor);
-                        $holder = $holder / (1 + $holder);
-                        // Attacker
-                        $result[1] = $holder;
+            	if($type == 1){
 
-                        // Defender
-                        $result[2] = 0;
-                }
+                $holder = pow(($rdp/$rap),1.5);
+                if($holder>1) $holder=1;
+                
+                // Attacker
+                $result[1] = $holder;
+                if ($att_tribe==5) $result[1] = 0; //Birds of Prey cannot die when scout
+
+                // Defender
+                $result[2] = 0;
+            	}
                 else if($type == 2)
                 {
 
