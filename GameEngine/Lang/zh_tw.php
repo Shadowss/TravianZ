@@ -6,7 +6,7 @@
 //                                Made by: Dzoki & Dixie (TravianX)                                 //
 //                              - TravianX = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
-//                                Adding tasks and constructions  by: Armando                       //
+//                                Adding tasks, constructions and artefact  by: Armando             //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 									//                         //
 									//         ENGLISH         //
@@ -209,6 +209,7 @@ define("Q13_RESP","Very good, your village grows and thrives!");
 define("Q14","Task 14: Instructions");
 define("Q14_DESC","In the ingame instructions you can find short information texts about different buildings and types of units.<br \/><br \/>Click on 'instructions' at the left to find out how much lumber is required for the barracks.");
 define("Q14_ORDER","Order:<\/p>Enter how much lumber barracks cost");
+define("Q14_BUTN","complete task");
 define("Q14_RESP","Exactly! Barracks cost 210 lumber.");
 
 define("Q15","Task 15: Main Building");
@@ -228,7 +229,8 @@ define("Q17_BUTN1","Military");
 
 define("Q18","Task 18: Military");
 define("Q18_DESC","A brave decision. To be able to send troops you need a rally point.<br \/><br \/>The rally point must be built on a specific building site. The ");
-define("Q18_DESC1"," is located on the right side of the main building, slightly below it. The building site itself is curved.");
+define("Q18_DESC1"," building site.");
+define("Q18_DESC2"," is located on the right side of the main building, slightly below it. The building site itself is curved.");
 define("Q18_ORDER","Order:<\/p>Construct a rally point.");
 define("Q18_RESP","Your rally point has been erected! A good move towards world domination!");
 
@@ -241,7 +243,8 @@ define("Q20","Task 20: Train.");
 define("Q20_DESC","Now that you have barracks you can start training troops. Train two ");
 define("Q20_ORDER","Please train 2 ");
 define("Q20_RESP","The foundation for your glorious army has been laid.<br \/><br \/>Before sending your army off to plunder you should check with the.");
-define("Q20_RESP1","to see how many troops you need to successfully fight one rat without losses.");
+define("Q20_RESP1","Combat Simulator");
+define("Q20_RESP2","to see how many troops you need to successfully fight one rat without losses.");
 
 define("Q21","Task 18: Economy");
 define("Q21_DESC","Trade & Economy was your choice. Golden times await you for sure!");
@@ -472,6 +475,38 @@ define("OWN_ATTACKING_TROOPS","Own attacking troops");
 define("ATTACK","攻擊");
 define("OWN_REINFORCING_TROOPS","Own reinforcing troops");
 define("TROOPS_DORF","軍隊:");
+define("NEWVILLAGE","New vill.");
+define("FOUNDNEWVILLAGE","Founding New village");
+define("UNDERATTACK","The village is under attack");
+define("OASISATTACK","The Oasis is under attack");
+define("OASISATTACKS","Oasis Att.");
+define("RETURNFROM","Return from");
+define("REINFORCEMENTFOR","Reinforcement to");
+define("ATTACK_ON","Attack to");
+define("RAID_ON","Raid to");
+define("SCOUTING","Scouting");
+define("PRISONERS","Prisioners");
+define("PRISONERSIN","Prisioners in");
+define("PRISONERSFROM","Prisioners from");
+define("TROOPS","Troops");
+define("TROOPSFROM","Troops");
+define("BOUNTY","Bounty");
+define("ARRIVAL","Arrival");
+define("INCOMING_TROOPS","Incoming Troops");
+define("TROOPS_ON_THEIR_WAY","Troops on their way");
+define("OWN_TROOPS","Own troops");
+define("ON","on");
+define("AT","at");
+define("UPKEEP","Upkeep");
+define("SEND_BACK","Send back");
+define("TROOPS_IN_THE_VILLAGE","Troops in the village");
+define("TROOPS_IN_OTHER_VILLAGE","Troops in other village");
+define("TROOPS_IN_OASIS","Troops in oasis");
+define("KILL","Kill");
+define("FROM","From");
+define("SEND_TROOPS","Send troops");
+define("TASKMASTER","Taskmaster");
+define("VILLAGE_OF_THE_ELDERS_TROOPS","village of the elders troops");
 
 
 //LOGIN.php
@@ -483,6 +518,8 @@ define("PW_GENERATE","產生一組新密碼.");
 define("EMAIL_NOT_VERIFIED","電子郵件帳號不正確!");
 define("EMAIL_FOLLOW","Follow this link to activate your account.");
 define("VERIFY_EMAIL","驗證郵件.");
+define("SERVER_STARTS_IN","Server will start in: ");
+define("START_NOW","START NOW");
 
 
 //404.php
@@ -523,6 +560,8 @@ define("ARMOURY","Armoury");
 define("TOURNAMENTSQUARE","Tournament Square");
 define("MAINBUILDING","Main Building");
 define("RALLYPOINT","Rally Point");
+define("OVERVIEW","Resumen");
+define("RALLYPOINT_DESC","Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.");
 define("MARKETPLACE","Marketplace");
 define("EMBASSY","Embassy");
 define("BARRACKS","Barracks");
