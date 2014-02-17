@@ -11,7 +11,7 @@
 				  }
                   
 			?>
-			</tr><tr><th>Troops</th>
+			</tr><tr><th><?php echo TROOPS;?></th>
             <?php
             for($i=$start;$i<=$end;$i++) {
             	if($village->unitarray['u'.$i] == 0) {
@@ -30,5 +30,5 @@
                 
             ?>
            </tr></tbody>
-            <tbody class="infos"><tr><th>Upkeep</th>
-            <td colspan="<?php if($village->unitarray['hero'] == 0) {echo"10";}else{echo"11";}?>"><?php echo $technology->getUpkeep($village->unitarray,0); ?><img class="r4" src="img/x.gif" title="Crop" alt="Crop" />per hour</td></tr>
+            <tbody class="infos"><tr><th><?php echo UPKEEP;?></th>
+            <td colspan="<?php if($village->unitarray['hero'] == 0) {echo"10";}else{echo"11";}?>"><?php echo $technology->getUpkeep($village->unitarray,0); ?><img class="r4" src="img/x.gif" title="Crop" alt="Crop" /><?php echo PER_HR;?></td></tr>
