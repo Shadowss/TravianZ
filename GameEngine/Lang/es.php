@@ -6,7 +6,7 @@
 //                                Made by: Dzoki & Dixie (TravianX)                                 //
 //                              - TravianX = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
-//                                Adding tasks and constructions  by: Armando                       //
+//                                Adding tasks, constructions and artefact  by: Armando             //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 									//                         //
 									//         SPANISH         //
@@ -432,12 +432,44 @@ define("HOURS","horas");
 
 //ATTACKS ETC.
 define("TROOP_MOVEMENTS","movimientos de tropa:");
-define("ARRIVING_REINF_TROOPS","Llegando refuerzos");
+define("ARRIVING_REINF_TROOPS","Refuerzos llegando ");
 define("ARRIVING_REINF_TROOPS_SHORT","Refuer.");
 define("OWN_ATTACKING_TROOPS","Tropas atacando");
 define("ATTACK","Ataque");
-define("OWN_REINFORCING_TROOPS","Refuerzos despachados");
+define("OWN_REINFORCING_TROOPS","Reforzando");
 define("TROOPS_DORF","Tropas:");
+define("NEWVILLAGE","Nueva Aldea.");
+define("FOUNDNEWVILLAGE","Fundando Nueva Aldea");
+define("UNDERATTACK","Tropas atacantes llegando");
+define("OASISATTACK","Tropas atacantes llegando");
+define("OASISATTACKS","Oasis Att.");
+define("RETURNFROM","Regreso de");
+define("REINFORCEMENTFOR","Refuerzo para");
+define("ATTACK_ON","Ataque contra");
+define("RAID_ON","Asalto contra");
+define("SCOUTING","Espiando a");
+define("PRISONERS","Prisioneros");
+define("PRISONERSIN","Prisioneros en");
+define("PRISONERSFROM","Prisioneros de");
+define("TROOPS","Tropas");
+define("TROOPSFROM","Tropas de");
+define("BOUNTY","Bot&iacute;n");
+define("ARRIVAL","Llegada");
+define("INCOMING_TROOPS","Tropas llegando");
+define("TROOPS_ON_THEIR_WAY","Tropas saliendo");
+define("OWN_TROOPS","Tropas propias");
+define("ON","el");
+define("AT","a las");
+define("UPKEEP","Consumo");
+define("SEND_BACK","Retirar");
+define("TROOPS_IN_THE_VILLAGE","Tropas en esta aldea");
+define("TROOPS_IN_OTHER_VILLAGE","Tropas en otras aldeas");
+define("TROOPS_IN_OASIS","Tropas en oasis");
+define("KILL","Matar");
+define("FROM","aldea");
+define("SEND_TROOPS","Enviar tropas");
+define("TASKMASTER","Amo de las Misiones");
+define("VILLAGE_OF_THE_ELDERS_TROOPS","Tropas de la Aldea de los Sabios Ancianos");
 
 
 //LOGIN.php
@@ -449,6 +481,8 @@ define("PW_GENERATE","Pedir nueva contrase&ntilde;a");
 define("EMAIL_NOT_VERIFIED","Correo no verificado!");
 define("EMAIL_FOLLOW","Sigue este v&iacute;nculo para activar este enlace.");
 define("VERIFY_EMAIL","Verificar Correo.");
+define("SERVER_STARTS_IN","Servidor comenzar&aacute; en: ");
+define("START_NOW","EMPIEZA AHORA");
 
 
 //404.php
@@ -489,6 +523,8 @@ define("ARMOURY","Armer&iacute;a");
 define("TOURNAMENTSQUARE","Plaza de torneos");
 define("MAINBUILDING","Edificio Principal");
 define("RALLYPOINT","Plaza de Reuniones");
+define("OVERVIEW","Resumen");
+define("RALLYPOINT_DESC","Aqui se re&uacute;nen las tropas de tu aldea. Desde aqu&iacute;, pueden ser enviadas para atacar, conquistar, asaltar, fundar otras aldeas o como refuerzos. <br \/> <br \/> Si hay menos unidades atacantes que el nivel de la plaza de reuniones entonces puedo ver el tipo de unidad. ");
 define("MARKETPLACE","Mercado");
 define("EMBASSY","Embajada");
 define("BARRACKS","Cuartel");
