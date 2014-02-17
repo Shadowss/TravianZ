@@ -55,29 +55,47 @@ class Building {
         	}
     	}  
 
-	public function procBuild($get) {
-		global $session, $village;
-		if(isset($get['a']) && $get['c'] == $session->checker && !isset($get['id'])) {
-			if($get['a'] == 0) {
-				$this->removeBuilding($get['d']);
-			}
-			else {
-				$session->changeChecker();
-				$this->canProcess($village->resarray['f'.$get['a'].'t'],$get['a']);
-				$this->upgradeBuilding($get['a']);
-			}
-		}
-		if(isset($get['a']) && $get['c'] == $session->checker && isset($get['id'])) {
-			$session->changeChecker();
-			$this->canProcess($get['a'],$get['id']);
-			$this->constructBuilding($get['id'],$get['a']);
-		}
-		if(isset($get['buildingFinish'])) {
-			if($session->gold >= 2 && $session->sit == 0) {
-				$this->finishAll();
-			}
-		}
-	}
+    public function procBuild($get) {
+        global $session, $village, $database;
+        if(isset($get['a']) && $get['c'] == $session->checker && !isset($get['id'])) {
+            if($get['a'] == 0) {
+                $this->removeBuilding($get['d']);
+            }else {
+                $session->changeChecker();
+                $this->canProcess($village->resarray['f'.$get['a'].'t'],$get['a']);
+                $this->upgradeBuilding($get['a']);
+            }
+        }
+        if(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker) && isset($_SESSION['mas'])) {
+            $m=$get['master'];
+            $master=explode(",",$_SESSION['mas'][$m]);
+            if($get['master']==$master[0] && $get['id']==$master[1] && $get['time']==$master[2]) {
+                $session->changeChecker();
+                unset($_SESSION['mas']);
+                if($session->access==BANNED){
+                    header("Location: banned.php");
+                    exit;
+                }    
+                $level = $database->getResourceLevel($village->wid);
+                $database->addBuilding($village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level['f'.$get['id']] + 1 + count($database->getBuildingByField($village->wid,$get['id'])));
+                if($get['id'] > 18) {
+                    header("Location: dorf2.php");
+                } else {
+                    header("Location: dorf1.php");
+                }
+            }    
+        }
+        if(isset($get['a']) && $get['c'] == $session->checker && isset($get['id'])) {
+            $session->changeChecker();
+            $this->canProcess($get['a'],$get['id']);
+            $this->constructBuilding($get['id'],$get['a']);
+        }
+        if(isset($get['buildingFinish']) && $session->plus) {
+            if($session->gold >= 2 && $session->sit == 0) {
+                $this->finishAll();
+            }
+        }
+    }
 
 	public function canBuild($id,$tid) {
 		global $village,$session,$database;

@@ -13,9 +13,15 @@
 
 					    <td class="research"></td>
 				    </tr>
+					<tr>
+					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="Stonemason's Lodge" title="Stonemason's Lodge" /></td>
+					    <td class="desc" title="Stonemason's Lodge">Stonemason's Lodge</td>
+					    <td class="value"><input class="text" type="text" name="stonemason" value="<?php echo $form->getValue('stonemason')==""? 0 : $form->getValue('stonemason'); ?>" maxlength="2" title="Level Stonemason's Lodge" /></td>
+					    <td class="research"></td>
+				    </tr>
                     <?php
                     if(in_array(1,$target)) {
-					if($_POST['wall1'] != 0){
+					if(isset($_POST['wall1']) && $_POST['wall1'] != 0){
 					$wall1 = $_POST['wall1'];
 					}else{
 					$wall1 = 0;
@@ -28,7 +34,7 @@
 				    	</tr>";
                     }
                     if(in_array(2,$target)) {
-					if($_POST['wall2'] != 0){
+					if(isset($_POST['wall2']) && $_POST['wall2'] != 0){
 					$wall2 = $_POST['wall2'];
 					}else{
 					$wall2 = 0;
@@ -42,8 +48,8 @@
 					    </tr>";
                     }
                     if(in_array(3,$target)) {
-					if($_POST['wall3'] != 0){
-					$wall3 = $_POST['wall3'];
+					if(isset($_POST['wall3']) && $_POST['wall3'] != 0){
+						$wall3 = $_POST['wall3'];
 					}else{
 					$wall3 = 0;
 					}
@@ -63,11 +69,13 @@
 					    <td class="research"></td>
 				    </tr>
 				    <tr>
-					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="Palace" title="Stonemason's Lodge" /></td>
-					    <td class="desc" title="Stonemason's Lodge">Stonemason's Lodge</td>
-					    <td class="value"><input class="text" type="text" name="stonemason" value="<?php echo $form->getValue('stonemason')==""? 0 : $form->getValue('stonemason'); ?>" maxlength="2" title="Level Stonemason's Lodge" /></td>
-					    <td class="research"></td>
+						<td class="ico"><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero" /></td>
+						<td class="desc">Hero (def bonus)</td>
+						<td class="value"><input class="text" type="text" name="h_def_bonus" value="<?php echo $form->getValue('h_def_bonus')==""? 0 : $form->getValue('h_def_bonus'); ?>" maxlength="4" title="Hero (def bonus)" /></td>
+						<td class="research"></td>
 				    </tr>
+					
+					
 				</table>
 			</td>
 		</tr></tbody></table>
