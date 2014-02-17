@@ -483,6 +483,45 @@ define("UNDERATTACK","The village is under attack");
 define("OASISATTACK","The Oasis is under attack");
 define("OASISATTACKS","Oasis Att.");
 
+//SEND TROOP
+define("REINFORCE","Reinforcement");
+define("NORMALATTACK","Normal Attack");
+define("RAID","Raid");
+define("OR","or");
+define("SENDTROOP","Send troops");
+define("TROOP","Troops");
+define("NOTROOP","no troops");
+
+//map
+define("DETAIL","Details");
+define("ABANDVALLEY","Abandoned valley");
+define("UNOCCUOASIS","Unoccupied oasis");
+define("OCCUOASIS","Occupied oasis");
+define("THERENOINFO","There is no<br>information available.");
+define("LANDDIST","Land distribution");
+define("TRIBE","Tribe");
+define("ALLIANCE","Alliance");
+define("OWNER","Owner");
+define("POP","Population");
+define("REPORT","Report");
+define("OPTION","Options");
+define("CENTREMAP","Centre map");
+define("FNEWVILLAGE","Found new village");
+define("CULTUREPOINT","culture points");
+define("BUILDRALLY","build a rally point");
+define("SETTLERSAVAIL","settlers available");
+define("BEGINPRO","beginners protection");
+define("SENDMERC","Send merchant(s)");
+define("BAN","Player is banned");
+define("BUILDMARKET","Build marketplace");
+define("PERHOUR","per hour");
+define("BONUS","Bonus");
+
+//other
+define("VILLAGE","Village");
+define("OASIS","Oasis");
+define("PLAYER","Player");
+
 
 //LOGIN.php
 define("COOKIES","You must have cookies enabled to be able to log in. If you share this computer with other people you should log out after each session for your own safety.");

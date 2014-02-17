@@ -133,6 +133,8 @@ $yrow = 0;
 $row = 0;
 $coorindex = 0;
 $map_js ='';
+$map_content='';
+$map_gen='';
 $coorarray = array(
 "48, 253, 85, 273, 48, 293, 11, 273"
 ,"84, 233, 121, 253, 84, 273, 47, 253" 
@@ -313,12 +315,15 @@ $neutralarray=$database->getAllianceAlly($donnees["aliance_id"],2);
 $enemyarray=$database->getAllianceWar2($donnees["aliance_id"]);
 //var_dump($friendarray);
 //echo "(".$friendarray[0]['alli1'].">0 or ".$donnees["aliance_id"].">0) and (".$friendarray[0]['alli1']."==".$donnees["aliance_id"]." or ".$friendarray[0]['alli2']."==".$donnees["aliance_id"].") and (".$session->alliance." != ".$targetalliance." and ".$session->alliance." and ".$targetalliance.")<br>\n";
-
-$friend = (($friendarray[0]['alli1']>0 and $friendarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($friendarray[0]['alli1']==$session->alliance or $friendarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
-
-$war = (($enemyarray[0]['alli1']>0 and $enemyarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($enemyarray[0]['alli1']==$session->alliance or $enemyarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
-
-$neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($neutralarray[0]['alli1']==$session->alliance or $neutralarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
+if (isset($friendarray[0])) {
+	$friend = (($friendarray[0]['alli1']>0 and $friendarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($friendarray[0]['alli1']==$session->alliance or $friendarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
+}else $friend='0';
+if (isset($enemyarray[0])) {
+	$war = (($enemyarray[0]['alli1']>0 and $enemyarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($enemyarray[0]['alli1']==$session->alliance or $enemyarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
+}else $war='0';
+if (isset($neutralarray[0])) {
+	$neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($neutralarray[0]['alli1']==$session->alliance or $neutralarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
+}else $neutral='0';
 
 //echo $targetalliance.">>";
 //var_dump($friendarray);
@@ -327,8 +332,7 @@ $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $do
 //echo in_array($targetalliance,$friendarray);
 	$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $session->uid)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? ($friend==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : ($war==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : ($neutral==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $session->alliance? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
 
-	// Map Attacks by Shadow and MisterX
-
+		// Map Attacks by Shadow and MisterX
     	$att = '';
     	if($session->plus) {
         $wref = $village->wid;
@@ -342,7 +346,8 @@ $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $do
 		$att = '<span class=\'m6\' ></span>';
 		}
     	}
- 
+
+	
 	// Map content
 	if($donnees['ville_user']==3 && $donnees['ville_name']=='WW Buildingplan'){
 	$map_content .= "<div id='i_".$row."_".$i."' class='o99'>$att</div>\r"; 
@@ -380,7 +385,7 @@ $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $do
 			if($yrow == 12 && $i2 == 12) {$map_js .= "]\n";}
 			else {$map_js .= ",";}
 		}
-		$regcount += 1;
+		//$regcount += 1;
 	}
 	else {$map_js .= "]";}
 	
@@ -401,21 +406,22 @@ $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $do
 				<div id="map">
 					<script type="text/javascript">
 						var text_k = {}
-						text_k.details = 'Details';
-						text_k.spieler = 'Player';
-						text_k.einwohner = 'Population';
-						text_k.allianz = 'Alliance';
-						text_k.verlassenes_tal = 'Abandoned valley';
-						text_k.besetztes_tal = 'Occupied oasis';
-						text_k.freie_oase = 'Unoccupied oasis';
+						text_k.details = '<?php echo DETAIL;?>';
+						text_k.spieler = '<?php echo PLAYER;?>';
+						text_k.einwohner = '<?php echo POP;?>';
+						text_k.allianz = '<?php echo ALLIANCE;?>';
+						text_k.verlassenes_tal = '<?php echo ABANDVALLEY;?>';
+						text_k.besetztes_tal = '<?php echo OCCUOASIS;?>';
+						text_k.freie_oase = '<?php echo UNOCCUOASIS;?>';
 						var text_x = {}
-						text_x.r1 = 'Lumber';
-						text_x.r2 = 'Clay';
-						text_x.r3 = 'Iron';
-						text_x.r4 = 'Crop';
+						text_x.r1 = '<?php echo LUMBER;?>';
+						text_x.r2 = '<?php echo CLAY;?>';
+						text_x.r3 = '<?php echo IRON;?>';
+						text_x.r4 = '<?php echo CROP;?>';
 					</script>
 					<div id="map_content">
 						<?php echo $map_content;?>
+						
 					</div>
 					<div id="map_rulers"><?php
 						for($i=0;$i<=12;$i++){
@@ -454,7 +460,7 @@ $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $do
 							<input type="image" id="btn_ok" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="OK" />
 						</form>
 					</div>
-					<table cellpadding="1" cellspacing="1" id="map_infobox" class="default"><thead><tr><th colspan="2">Details</th></tr></thead><tbody><tr><th>Player</th><td>-</td></tr><tr><th>Population</th><td>-</td></tr><tr><th>Alliance</th><td>-</td></tr></tbody></table>
+					<table cellpadding="1" cellspacing="1" id="map_infobox" class="default"><thead><tr><th colspan="2"><?php echo DETAIL;?></th></tr></thead><tbody><tr><th><?php echo PLAYER;?></th><td>-</td></tr><tr><th><?php echo POP;?></th><td>-</td></tr><tr><th><?php echo ALLIANCE;?></th><td></td></tr></tbody></table>
 				</div>
 			</div>
 		</div>
