@@ -252,7 +252,7 @@ function testSum() {
 			</tbody> 
 		</table> 
 		<p id="submitButton"> 
-	<?php if($session->userinfo['gold'] > 3) { ?><a href="javascript:document.snd.submit();">Trade resources at (step 2 of 2)</a> <span class="none">(Costs: <img src="img/x.gif" class="gold_g" alt="Gold" title="Gold" /><b>3</b>)</span><?php } else { echo"<span class='none'>Trade resources at (step 2 of 2)</span> (Costs: <img src='img/x.gif' class='gold' alt='Gold' title='Gold' /><b>3</b>)"; }?>	</p>
+	<?php if($session->userinfo['gold'] >= 3) { ?><a href="javascript:document.snd.submit();">Trade resources at (step 2 of 2)</a> <span class="none">(Costs: <img src="img/x.gif" class="gold_g" alt="Gold" title="Gold" /><b>3</b>)</span><?php } else { echo"<span class='none'>Trade resources at (step 2 of 2)</span> (Costs: <img src='img/x.gif' class='gold' alt='Gold' title='Gold' /><b>3</b>)"; }?>	</p>
 		<p id="submitText"></p> 
 		</form> 
 		<script> 
