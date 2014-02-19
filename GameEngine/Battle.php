@@ -283,47 +283,47 @@ class Battle {
 					$cdp *= $defenderhero['db'];
 				}
 			}
-			$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
-			if(!empty($DefendersAll) && $DefenderWref>0){
-				foreach($DefendersAll as $defenders) {
-					for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
-					$fromvillage = $defenders['from'];
-					$enforcetribe = $database->getUserField($database->getVillageField($fromvillage,"owner"),"tribe",0);
-					$ud=($enforcetribe-1)*10;				
-					if($defenders['from']>0) { //don't check nature tribe
-						$armory = $database->getABTech($defenders['from']); // Armory level every village enforcement
-						$def_ab[$ud+1] = $armory['a1'];
-						$def_ab[$ud+2] = $armory['a2'];
-						$def_ab[$ud+3] = $armory['a3'];
-						$def_ab[$ud+4] = $armory['a4'];
-						$def_ab[$ud+5] = $armory['a5'];
-						$def_ab[$ud+6] = $armory['a6'];
-						$def_ab[$ud+7] = $armory['a7'];
-						$def_ab[$ud+8] = $armory['a8'];
-					}
-					if ($type==1) {
-						$datadefScout=$this->getDataDefScout($Defender,$def_ab,$defender_artefact,$AttackerWref,$AttackerID);
-						$dp+=$datadefScout['dp'];
-						$cdp+=$datadefScout['cdp'];
-						$involve=$datadefScout['involve'];
-						if ($datadefScout['detect']==1) $detected = 1;
-					}else{
-						$datadef=$this->getDataDef($Defenders,$def_ab);
-						$dp+=$datadef['dp'];
-						$cdp+=$datadef['cdp'];
-						$involve=$datadef['involve'];
-					}			
-					$reinfowner = $database->getVillageField($fromvillage,"owner");
-					$defhero = $this->getBattleHero($reinfowner);
-					//calculate def hero from enforcement
-					if($defenders['hero'] != 0){
-						$cdp += $defhero['dc'];
-						$dp += $defhero['di'];
-						$dp *= $defhero['db'];
-						$cdp *= $defhero['db'];
-					}	
-				}
-			}
+            $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
+            if(!empty($DefendersAll) && $DefenderWref>0){
+                foreach($DefendersAll as $defenders) {
+                    for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
+                    $fromvillage = $defenders['from'];
+                    $enforcetribe = $database->getUserField($database->getVillageField($fromvillage,"owner"),"tribe",0);
+                    $ud=($enforcetribe-1)*10;                
+                    if($defenders['from']>0) { //don't check nature tribe
+                        $armory = $database->getABTech($defenders['from']); // Armory level every village enforcement
+                        $def_ab[$ud+1] = $armory['a1'];
+                        $def_ab[$ud+2] = $armory['a2'];
+                        $def_ab[$ud+3] = $armory['a3'];
+                        $def_ab[$ud+4] = $armory['a4'];
+                        $def_ab[$ud+5] = $armory['a5'];
+                        $def_ab[$ud+6] = $armory['a6'];
+                        $def_ab[$ud+7] = $armory['a7'];
+                        $def_ab[$ud+8] = $armory['a8'];
+                    }
+                    if ($type==1) {
+                        $datadefScout=$this->getDataDefScout($defenders,$def_ab,$defender_artefact,$AttackerWref,$AttackerID);
+                        $dp+=$datadefScout['dp'];
+                        $cdp+=$datadefScout['cdp'];
+                        $involve=$datadefScout['involve'];
+                        if ($datadefScout['detect']==1) $detected = 1;
+                    }else{
+                        $datadef=$this->getDataDef($defenders,$def_ab);
+                        $dp+=$datadef['dp'];
+                        $cdp+=$datadef['cdp'];
+                        $involve=$datadef['involve'];
+                    }            
+                    $reinfowner = $database->getVillageField($fromvillage,"owner");
+                    $defhero = $this->getBattleHero($reinfowner);
+                    //calculate def hero from enforcement
+                    if($defenders['hero'] != 0){
+                        //$cdp += $defhero['dc'];
+                        //$dp += $defhero['di'];
+                        $dp *= $defhero['db'];
+                        $cdp *= $defhero['db'];
+                    }    
+                }
+            }
 			// Calculate the total number of points Attacker
 			$start = ($att_tribe-1)*10+1;
 			$end = ($att_tribe*10);
