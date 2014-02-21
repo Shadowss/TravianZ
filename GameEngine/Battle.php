@@ -2,12 +2,16 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                        		       	       		   ##
+##  Version:       01.09.2013 						       					   ##
 ##  Filename       Battle.php                                                  ##
 ##  Developed by:  Dzoki & Dixie  											   ##
 ##  Thanks to:     Akakori & Elmar                                             ##
 ##  Reworked and Fix by:   ronix                                               ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       			   ##
+##  Source code:   http://github.com/Shadowss/TravianZ			    	       ##
 ##                                                                             ##
 #################################################################################
 class Battle {
