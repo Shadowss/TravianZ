@@ -74,8 +74,8 @@ class Units {
     }
     private function loadUnits($post) {
         global $database,$village,$session,$generator,$logging,$form;
-                // Busqueda por nombre de pueblo
-                // Confirmamos y buscamos las coordenadas por nombre de pueblo
+                // Search by town name
+                // Coordinates and look confirm name people
         if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
             $vid = $database->getVilWref($post['x'],$post['y']);
             unset($post['dname']);
@@ -141,8 +141,8 @@ class Units {
                     }
                 }
 		
-                // Busqueda por coordenadas de pueblo
-                // Confirmamos y buscamos las coordenadas por coordenadas de pueblo
+                // People search by coordinates
+                // We confirm and seek coordinate coordinates Village
         if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
             $coor = array('x'=>$post['x'], 'y'=>$post['y']);
             $id = $generator->getBaseID($coor['x'],$coor['y']);
@@ -191,14 +191,14 @@ class Units {
                                 $form->addError("error","You cant attack same village you are sending from.");
                                 //break;
                     }
-                // Procesamos el array con los errores dados en el formulario
+                // We process the array with the errors given in the form
                 if($form->returnErrors() > 0) {
                     $_SESSION['errorarray'] = $form->getErrors();
                     $_SESSION['valuearray'] = $_POST;
                     header("Location: a2b.php");
                 }else{
-                // Debemos devolver un array con $post, que contiene todos los datos mas
-                // otra variable que definira que el flag esta levantado y se va a enviar y el tipo de envio
+                // We must return an array with $ post, which contains all the data more
+                // another variable that will define the flag is raised and is being sent and the type of shipping
                 $villageName = $database->getVillageField($id,'name');
                 $speed= 300;
                 $timetaken = $generator->procDistanceTime($coor,$village->coor,INCREASE_SPEED,1);

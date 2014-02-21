@@ -1,12 +1,23 @@
 <?php
-##################################################################
-## Page:        winner.php                                      ##
-## Description: When the player builds Wonder of the World      ##
-##              to level 100 the winner details are shown.      ##
-##              tells the players the game is over              ##
-## Authors:     aggenkeech - and a little help from Eyas95      ##
-## Created:     31/03/2012                                      ##
-##################################################################
+
+#################################################################################
+## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- 			        ##
+## ---------------------------------------------------------------------------  ##
+## Project:     TravianZ 							##
+## Version:     18.02.2014 							##
+## Description: When the player builds Wonder of the World      		##
+##              to level 100 the winner details are shown.      		##
+##              tells the players the game is over              		##
+## Authors:     aggenkeech - and a little help from Eyas95      		##
+## Page:        winner.php                                      		##
+## Fixed by:    Shadow  							##
+## License:     TravianZ Project 						##
+## Copyright:   TravianZ (c) 2010-2013. All rights reserved. 			##
+## URLs:        http://travian.shadowss.ro 					##
+## Source code: http://github.com/Shadowss/TravianZ-by-Shadow/ 			##
+## 										##
+#################################################################################
+
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {

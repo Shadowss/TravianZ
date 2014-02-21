@@ -19,7 +19,7 @@
         <table id="show_artefacts" cellpadding="1" cellspacing="1">
     		<thead>
     			<tr>
-			    	<th colspan="4">Small artefacts</th>
+			    	<th colspan="4">Big artefacts</th>
     			</tr>
     			<tr>
     				<td></td>

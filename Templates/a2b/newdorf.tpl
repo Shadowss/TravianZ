@@ -1,5 +1,8 @@
 <?php
-
+$wood = round($village->awood);
+$clay = round($village->aclay);
+$iron = round($village->airon);
+$crop = round($village->acrop);
 $founder = $database->getVillage($village->wid);
 $newvillage = $database->getMInfo($_GET['id']);
 $eigen = $database->getCoor($village->wid);
@@ -79,17 +82,12 @@ echo '</pre>';
 </table>
 <p class="btn">
 <?php
-$mode = CP; 
-$total = count($database->getProfileVillages($session->uid)); 
-$need_cps = ${'cp'.$mode}[$total+1];
-$cps = $session->cp;
-
-if($cps >= $need_cps) {
+if ($wood>749 && $clay>749 && $iron>749 && $crop>749) {
 ?>
 <input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img"  alt="OK" src="img/x.gif" onclick="this.disabled=true;this.form.submit();"/>
 <?php
 } else {
-  print "$cps/$need_cps culture points";
+  echo "<span class=\"c2\"><b>Not enough resource</b></span>";
 }
 ?>
 </form>
