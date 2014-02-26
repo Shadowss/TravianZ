@@ -48,7 +48,8 @@ function refresh(tz) {
 								<option value="Asia/Kuala_Lumpur" <?php if (TIMEZONE=="Asia/Kuala_Lumpur") echo "selected";?>>Asia</option>
 								<option value="Atlantic/Azores" <?php if (TIMEZONE=="Atlantic/Azores") echo "selected";?>>Atlantic</option>
 								<option value="Australia/Melbourne" <?php if (TIMEZONE=="Australia/Melbourne") echo "selected";?>>Australia</option>
-								<option value="Europe/Berlin" <?php if (TIMEZONE=="Europe/Berlin") echo "selected";?>>Europe</option>
+								<option value="Europe/Bucharest" <?php if (TIMEZONE=="Europe/Bucharest") echo "selected";?>>Europe (Bucharest)</option>
+								<option value="Europe/London" <?php if (TIMEZONE=="Europe/London") echo "selected";?>>Europe (London)</option>
 								<option value="Indian/Maldives" <?php if (TIMEZONE=="Indian/Maldives") echo "selected";?>>Indian</option>
 								<option value="Pacific/Fiji" <?php if (TIMEZONE=="Pacific/Fiji") echo "selected";?>>Pacific</option>
 							</select>
