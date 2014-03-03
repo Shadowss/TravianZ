@@ -77,6 +77,7 @@ class Process {
 		$text = preg_replace("'%ACTIVATE%'", $_POST['activate'], $text);
 		$text = preg_replace("'%ARANK%'", $_POST['admin_rank'], $text);
 		$text = preg_replace("'%QUEST%'", $_POST['quest'], $text);
+		$text = preg_replace("'%QTYPE%'", $_POST['qtype'], $text);  
 		$text = preg_replace("'%BEGINNER%'", $_POST['beginner'], $text);
 		$text = preg_replace("'%STARTTIME%'", time(), $text);
 		$text = preg_replace("'%DOMAIN%'", $_POST['domain'], $text);
