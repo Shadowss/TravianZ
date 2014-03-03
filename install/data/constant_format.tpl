@@ -94,6 +94,9 @@ define("STORAGE_BASE",800*STORAGE_MULTIPLIER);
 // ***** Quest
 // Ingame quest enabled/disabled.
 define("QUEST",%QUEST%);
+//quest type : 25 = Travian Official 
+//             37 = TravianZ Extended 
+define("QTYPE",%QTYPE%);
 
 // ***** Beginners Protection
 // 3600 = 1 hour
