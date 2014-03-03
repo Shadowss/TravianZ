@@ -274,12 +274,16 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 	</p>
 
 	<p>
-	<span class="f10 c">EXTRA OPTIONS</span>
-	<table><tr>
-	<td><span class="f9 c6">Quest:</span></td><td><select name="quest">
-	  <option value="true" selected="selected">Yes</option>
-	  <option value="false">No</option>
-	</select></td></tr><tr>
+    <span class="f10 c">EXTRA OPTIONS</span>
+    <table><tr>
+    <td><span class="f9 c6">Quest:</span></td><td><select name="quest">
+      <option value="true" selected="selected">Yes</option>
+      <option value="false">No</option>
+    </select></td></tr><tr>
+        <td><span class="f9 c6">Quest Type:</span></td><td><select name="qtype">
+      <option value="25" selected="selected">Official Travian</option>
+      <option value="37">TravianZ Extended</option>
+    </select></td></tr><tr>
 	<td><span class="f9 c6">Activate:</span></td><td><select name="activate">
 	  <option value="true">Yes</option>
 	  <option value="false" selected="selected">No</option>
