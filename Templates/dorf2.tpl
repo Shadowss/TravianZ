@@ -82,20 +82,23 @@ for ($i=1;$i<=20;$i++) {
         }
     }
 	echo "<img src=\"img/x.gif\" class=\"building d$i $img\" alt=\"$text\" />";
-	//set event last quest firework..hooooray!!
-    if ($_SESSION['qst']==38) {
+	//set event last quest
+    if (($_SESSION['qst']==38 && QTYPE==37) || ($_SESSION['qst']==31 && QTYPE==25)){
         if ($i<8) {
+            //$x=rand(1,20);
+            
             $dte=array("tur","purp","yell","oran","green","red","blue");
+            //$im="e".rand(1, 7);    
             $im=$dte[$i];
             echo "<img src=\"img/x.gif\" class=\"building e$i rocket $im\" alt=\"$text\" />";
         }
     }
-	}
+}    
 }
-    if ($_SESSION['qst']==38) {
+    if (($_SESSION['qst']==38 && QTYPE==37) || ($_SESSION['qst']==31 && QTYPE==25)){
         $database->updateUserField($_SESSION['username'],'quest','40',0);
         $_SESSION['qst']=40;
-    }
+    }  
     if($village->resarray['f39'] == 0) {
             if($building->rallying()) {
             echo "<img src=\"img/x.gif\" class=\"dx1 g16b\" alt=\"Rally Point Level ".$village->resarray['f39']."\" />";
