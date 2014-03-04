@@ -84,16 +84,27 @@ class Session {
 				$_SESSION['checker'] = $generator->generateRandStr(3);
 				$_SESSION['mchecker'] = $generator->generateRandStr(5);
 				$_SESSION['qst'] = $database->getUserField($_SESSION['username'], "quest", 1);
-				if(!isset($_SESSION['wid'])) {
-					$query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
-					$data = mysql_fetch_assoc($query);
-					$_SESSION['wid'] = $data['wref'];
-				} else
-					if($_SESSION['wid'] == '') {
-						$query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
-						$data = mysql_fetch_assoc($query);
-						$_SESSION['wid'] = $data['wref'];
-					}
+                $result = mysql_query("SELECT village_select FROM `". TB_PREFIX."users` WHERE `username`='".$_SESSION['username']."'");
+                $dbarray = mysql_fetch_assoc($result);
+                $selected_village=$dbarray['village_select'];
+                if(!isset($_SESSION['wid'])) {
+                    if($selected_village!='') {
+                        $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                    }else{
+                        $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
+                    }
+                    $data = mysql_fetch_assoc($query);
+                    $_SESSION['wid'] = $data['wref'];
+                } else
+                    if($_SESSION['wid'] == '') {
+                        if($selected_village!='') {
+                            $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                        }else{
+                            $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
+                        }
+                        $data = mysql_fetch_assoc($query);
+                        $_SESSION['wid'] = $data['wref'];
+                    }
 				$this->PopulateVar();
 
 				$logging->addLoginLog($this->uid, $_SERVER['REMOTE_ADDR']);

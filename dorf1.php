@@ -15,7 +15,8 @@ if(isset($_GET['ok'])){
 $database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';
 }
 if(isset($_GET['newdid'])) {
-	$_SESSION['wid'] = $_GET['newdid'];
+    $_SESSION['wid'] = $_GET['newdid'];
+    $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$_GET['newdid']." WHERE id=".$session->uid);  
 	header("Location: ".$_SERVER['PHP_SELF']);
 }else{
 $building->procBuild($_GET);

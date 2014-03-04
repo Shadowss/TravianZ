@@ -164,24 +164,44 @@ if(isset($id))
 					<td><img class="r1" src="../img/x.gif"> Lumber</td>
 					<td><center><?php echo floor($village['wood']); ?></center></td>
 					<td rowspan="3"><center><?php echo $village['maxstore'];?></center></td>
+<<<<<<< HEAD
 					<td><center><?php echo $production['wood'];?></td>
+=======
+					<td><center><?php echo $village->getProd("wood"); ?></td>
+					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
+>>>>>>> f343a4a791674f8f8eb4866de9e9a9fe67b15824
 				</tr>
 				</tr>
 				<tr>
 					<td><img class="r2" src="../img/x.gif"> Clay</td>
 					<td><center><?php echo floor($village['clay']); ?></center></td>
+<<<<<<< HEAD
 					<td><center><?php echo $production['clay'];?></center></td>
+=======
+					<td><center><?php echo $village->getProd("clay"); ?></center></td>
+					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
+>>>>>>> f343a4a791674f8f8eb4866de9e9a9fe67b15824
 				</tr>
 				<tr>
 					<td><img class="r3" src="../img/x.gif"> Iron</td>
 					<td><center><?php echo floor($village['iron']); ?></center></td>
+<<<<<<< HEAD
 					<td><center><?php echo $production['iron'];?></center></td>
+=======
+					<td><center><?php echo $village->getProd("iron"); ?></center></td>
+					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
+>>>>>>> f343a4a791674f8f8eb4866de9e9a9fe67b15824
 				</tr>
 				<tr>
 					<td><img class="r4" src="../img/x.gif"> Crop</td>
 					<td><center><?php echo floor($village['crop']); ?></center></td>
 					<td><center><?php echo $village['maxcrop'];?></center></td>
+<<<<<<< HEAD
 					<td><center><?php echo $production['crop'];?></center></td>
+=======
+					<td><center><?php echo $village->getProd("crop"); ?></center></td>
+					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
+>>>>>>> f343a4a791674f8f8eb4866de9e9a9fe67b15824
 				</tr>
 			</tbody>
 		</table>

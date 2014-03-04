@@ -14,7 +14,8 @@
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
-	$_SESSION['wid'] = $_GET['newdid'];
+    $_SESSION['wid'] = $_GET['newdid'];
+    $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$_GET['newdid']." WHERE id=".$session->uid);  
 	if(isset($_GET['s'])){
 	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
 	}else{
