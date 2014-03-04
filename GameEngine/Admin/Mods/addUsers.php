@@ -1,14 +1,13 @@
 <?php
 ############################################################################
-## Filename addUsers.php                                                  ##
-## Created by: KFCSpike                                                   ##
-## Contributors: KFCSpike                                                 ##
-## License: TravianZ Project                                              ##
-## Copyright: TravianZ (c) 2014. All rights reserved.                     ##
+## Filename addUsers.php ##
+## Created by: KFCSpike ##
+## Contributors: KFCSpike ##
+## License: TravianZ Project ##
+## Copyright: TravianZ (c) 2014. All rights reserved. ##
 ############################################################################
 
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
 include_once("../../config.php");
 include_once("../../Session.php");
 include_once("../../Automation.php");
@@ -50,7 +49,7 @@ else
         // Random passwords disallow admin logging in to use the accounts
         $password = $generator->generateRandStr(20);
         
-        // Leaving the line below but commented out - could be used to 
+        // Leaving the line below but commented out - could be used to
         // allow admin to log in to the generated accounts and play them
         // Easily guessed by players so should only be used for testing
         //$password = $baseName . $i . 'PASS';
@@ -72,7 +71,7 @@ else
         $act = "";
         
         // Check username not already registered
-        if($database->checkExist($userName,0)) 
+        if($database->checkExist($userName,0))
         {
             // Name already used, do nothing except update $skipped
             $skipped ++;
@@ -81,24 +80,24 @@ else
         {
             // Register them and build the village
             $uid = $database->register($userName, md5($password), $email, $tribe ,$act);
-            if($uid) 
+            if($uid)
             {
                 /*
-                 * @TODO
-                 * 
-                 * Allow option to create (random) bigger villages,
-                 * upgrade fields, granary, warehouse, wall etc
-                 * 
-                 * Allow option to create (random) troops in some villages
-                 * 
-                 * Don't directly access the DB, create a $database function 
-                 * where required
-                 */
+* @TODO
+*
+* Allow option to create (random) bigger villages,
+* upgrade fields, granary, warehouse, wall etc
+*
+* Allow option to create (random) troops in some villages
+*
+* Don't directly access the DB, create a $database function
+* where required
+*/
                 
                 // Show the dove in User Profile - will show this even if
                 // beginners protection is not checked
-                // Need a $database function for this 
-                // (assuming we don't already have one as creating Natars also updates this way) 
+                // Need a $database function for this
+                // (assuming we don't already have one as creating Natars also updates this way)
                 $q = "UPDATE " . TB_PREFIX . "users SET desc2 = '[#0]' WHERE id = $uid";
                 mysql_query($q) or die(mysql_error());
                
@@ -109,9 +108,9 @@ else
                     // also used in editProtection.php so assuming no function
                     // already exists
                     $protection = time();
-                    mysql_query("UPDATE ".TB_PREFIX."users SET 
-                        protect = '".$protection."' 
-                        WHERE id = $uid") or die(mysql_error());
+                    mysql_query("UPDATE ".TB_PREFIX."users SET
+protect = '".$protection."'
+WHERE id = $uid") or die(mysql_error());
                 }
                 
                 $database->updateUserField($uid,"act","",1);

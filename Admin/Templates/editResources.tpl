@@ -10,16 +10,16 @@
 #################################################################################
 
 $id = $_GET['did'];
-$village = $database->getVillage($id);
-$user = $database->getUserArray($village['owner'],1);
-$coor = $database->getCoor($village['wref']);
-$varray = $database->getProfileVillages($village['owner']);
-$type = $database->getVillageType($village['wref']);
-$fdata = $database->getResourceLevel($village['wref']);
 if(isset($id))
 {
+	$village = $database->getVillage($id);
+	$user = $database->getUserArray($village['owner'],1);
+	$coor = $database->getCoor($village['wref']);
+	//$varray = $database->getProfileVillages($village['owner']);
+	//$type = $database->getVillageType($village['wref']);
+	//$fdata = $database->getResourceLevel($village['wref']);
+
 	include("search2.tpl"); ?>
-	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
 	<form action="../GameEngine/Admin/Mods/editResources.php" method="POST">
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="did" id="did" value="<?php echo $_GET['did']; ?>">
@@ -68,9 +68,12 @@ if(isset($id))
 				</tr>
 			</tbody>
 		</table>
-
-		<br /><br />
-		<center><input type="image" src="../img/admin/b/ok1.gif" value="submit"></center>
+		<br />
+		<table id="ejas" border="0" width="100%">
+			<tr><td align="left"><a href="../Admin/admin.php?p=village&did=<?php echo $_GET['did'];?>"><< back</a></td>
+				<td align="right"><input type="image" border="0" src="../img/admin/b/ok1.gif"></td>
+			</tr>
+		</table>
 	</form><?php
 }
 else

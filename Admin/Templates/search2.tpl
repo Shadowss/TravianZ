@@ -4,32 +4,14 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       search2.tpl                                                 ##
 ##  Developed by:  Dzoki                                                       ##
-##  Reworked:      aggenkeech                                                  ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
+##  Reworked:      aggenkeech && ronix                                         ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+$array_tribe=array('-',TRIBE1,TRIBE2,TRIBE3,TRIBE4,TRIBE5,TRIBE6);
+$tribename = $array_tribe[$user['tribe']];
 
-if($user['tribe'] == 1)
-{
-	$tribename = "Roman";
-}
-else if($user['tribe'] == 2)
-{
-	$tribename = "Teutons";
-}
-else if($user['tribe'] == 3)
-{
-	$tribename = "Gauls";
-}
-else if($user['tribe'] == 4)
-{
-	$tribename = "Nature";
-}
-else if($user['tribe'] == 5)
-{
-	$tribename ="Natars";
-}
 $searchresults = $admin->search_player($user['username']);
 $numsimplayers = count($searchresults);
 $id = $user['id'];
@@ -55,7 +37,7 @@ foreach($varray as $vil)
 	</div>
 
 	<?php
-	if($_GET['did'])
+	if(isset($_GET['did']))
 	{  ?>
 		<div id="s_nav4">
 				<div align="left" style="font-size: 10pt;"><b>Village:</b> <a href="?p=village&did=<?php echo $village['wref'];?>"><?php echo $village['name'];?></a> (did: <?php echo $village['wref'];?>)</div>

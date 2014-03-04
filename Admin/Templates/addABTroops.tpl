@@ -2,10 +2,10 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       addTroops.tpl                                               ##
-##  Developed by:  Dzoki & Advocatie                                           ##
+##  Filename       addABTroops.tpl                                             ##
+##  Developed by:  ronix                                                       ##
 ##  License:       TravianZ Project                                            ##
-##  Reworks by:    ronix                                                       ##
+##  Thanks to:     Dzoki & itay2277(Add troops)                                ##
 ##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
@@ -16,8 +16,10 @@ if(isset($id))
 {
 	$village = $database->getVillage($id);
 	$user = $database->getUserArray($village['owner'],1);
+	$abtech = $database->getABTech($id); // Armory/blacksmith level	
 	$units = $database->getUnit($village['wref']);
 	$coor = $database->getCoor($village['wref']);
+	
 	$tribe = $user['tribe'];
 	if($tribe ==1){ $img = 0;}
 	if($tribe ==2){ $img = 10;}
@@ -26,21 +28,26 @@ if(isset($id))
 	if($tribe ==5){ $img = 40;}
 	if($tribe ==6){ $img = 50;}
 	include("search2.tpl");
-?>	
-<form action="../GameEngine/Admin/Mods/addTroops.php" method="POST">
+?>				
+		
+<form action="../GameEngine/Admin/Mods/addABTroops.php" method="POST">
 <input type="hidden" name="id" id="id" value="<?php echo $_GET['did']; ?>">
 <input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 <table id="member">
 	<thead>
 	<tr>
-		<th colspan="2">Edit troops</th>
+	<th colspan="3">Upgrades AB Tech troops</th>
 	</tr></thead><tbody>
+	<tr><td align="center">Troop Type</td>
+	<td align="center">Armour</td>
+	<td align="center">Blackmith</td>
+	</tr>
 	<?php 
-	for($i=1; $i<11; $i++) {
+	for($i=1; $i<9; $i++) {
 		echo '<tr>
 			<td class="addTroops"><img src="../img/un/u/'.($img+$i).'.gif"></img> '.$unarray[$img+$i].'</td>
-			<td class="addTroops"><input class="addTroops" name="u'.($img+$i).'" id="u'.($img+$i).'" value="'.$units["u".($img+$i)].'" maxlength="10">
-			&nbsp;&nbsp;&nbsp;<font color="#bcbcbc" size="1">Currently: <b>'.$units["u".($img+$i)].'</b><font></td>
+			<td class="addTroops"><input class="addTroops" name="a'.$i.'" id="a'.$i.'" value="'.$abtech["a".$i].'" maxlength="10"></td>
+			<td class="addTroops"><input class="addTroops" name="b'.$i.'" id="b'.$i.'" value="'.$abtech["b".$i].'" maxlength="10"></td>
 		</tr>';
 	} ?>
 	</tbody></table>
@@ -51,5 +58,4 @@ if(isset($id))
 	</tr>
 	</table>
 	</form>
-	<?php
-	} ?>
+<?php }?>	

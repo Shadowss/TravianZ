@@ -11,11 +11,10 @@
 #################################################################################
 
 session_start();
-
 include_once("../GameEngine/Database.php");
+include_once ("../GameEngine/Lang/" . LANG . ".php");
 include_once("../GameEngine/Admin/database.php");
-include_once("../GameEngine/Data/buidata.php");
-include_once ("../GameEngine/Lang/" . LANG . ".php");  
+include_once("../GameEngine/Data/buidata.php"); 
 
 class timeFormatGenerator
 {

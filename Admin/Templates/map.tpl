@@ -20,7 +20,7 @@ if(isset($_POST['show1']) || isset($_POST['show2'])) {
 	$check1="checked ";
 	$criteria="WHERE tribe<>5";
 }
-if ($check1=="" && $check2=="") {$criteria="WHERE tribe NOT IN(1,2,3,4,5)";}
+if ($check1=="" && $check2=="") {$criteria="WHERE tribe=0)";}
 ?>
 <link rel="stylesheet" href="../img/admin/map.css" type="text/css" media="all">
 			<div id="start">
