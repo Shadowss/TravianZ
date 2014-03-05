@@ -10,6 +10,7 @@
 ##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
 ##  Improved:      aggenkeech                                                  ##
 #################################################################################
+error_reporting(0);
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 $id = $_GET['did'];
 if(isset($id))
