@@ -1,18 +1,18 @@
     <?php
 	$place = $place1 = $place2 = $place3 = "?";
-    $db_host=SQL_SERVER; $db_user=SQL_USER; $db_pass=SQL_PASS; $db_name=SQL_DB;
+    //$db_host=SQL_SERVER; $db_user=SQL_USER; $db_pass=SQL_PASS; $db_name=SQL_DB;
 
-    $con = mysql_connect($db_host, $db_user, $db_pass);
-    if (!$con)
-      {
-      die('Could not connect: ' . mysql_error());
-      }
+    //$con = mysql_connect($db_host, $db_user, $db_pass);
+    //if (!$con)
+    //  {
+    //  die('Could not connect: ' . mysql_error());
+    //  }
 
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
              
-    mysql_select_db($db_name, $con);
+    //mysql_select_db($db_name, $con);
 
     $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access<".(INCLUDE_ADMIN?"10":"8")." AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY ap DESC, id DESC Limit 10");
     $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = '".$session->uid."' ORDER BY ap DESC, id DESC Limit 1");
@@ -229,7 +229,7 @@
       echo "</tr>";
       }
 	  
-	mysql_close($con);
+//	mysql_close($con);
 ?>
          </tbody>
 </table>
