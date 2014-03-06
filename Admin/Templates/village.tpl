@@ -10,8 +10,8 @@
 ##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
 ##  Improved:      aggenkeech                                                  ##
 #################################################################################
-error_reporting(0);
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+error_reporting(0);
 $id = $_GET['did'];
 if(isset($id))
 {
@@ -166,31 +166,23 @@ if(isset($id))
 					<td><center><?php echo floor($village['wood']); ?></center></td>
 					<td rowspan="3"><center><?php echo $village['maxstore'];?></center></td>
 					<td><center><?php echo $production['wood'];?></td>
-					<td><center><?php echo $village->getProd("wood"); ?></td>
-					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
 				</tr>
 				</tr>
 				<tr>
 					<td><img class="r2" src="../img/x.gif"> Clay</td>
 					<td><center><?php echo floor($village['clay']); ?></center></td>
 					<td><center><?php echo $production['clay'];?></center></td>
-					<td><center><?php echo $village->getProd("clay"); ?></center></td>
-					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
 				</tr>
 				<tr>
 					<td><img class="r3" src="../img/x.gif"> Iron</td>
 					<td><center><?php echo floor($village['iron']); ?></center></td>
 					<td><center><?php echo $production['iron'];?></center></td>
-					<td><center><?php echo $village->getProd("iron"); ?></center></td>
-					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
 				</tr>
 				<tr>
 					<td><img class="r4" src="../img/x.gif"> Crop</td>
 					<td><center><?php echo floor($village['crop']); ?></center></td>
 					<td><center><?php echo $village['maxcrop'];?></center></td>
 					<td><center><?php echo $production['crop'];?></center></td>
-					<td><center><?php echo $village->getProd("crop"); ?></center></td>
-					<td><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></td>
 				</tr>
 			</tbody>
 		</table>
