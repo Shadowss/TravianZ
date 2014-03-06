@@ -4,25 +4,21 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       editBuildings.php                                           ##
 ##  Developed by:  aggenkeech                                                  ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
+##  Fix by:        ronix                                                       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2011-2014. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if(!isset($_SESSION)) session_start();
+if($_SESSION['access'] < 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+
 include_once("../../config.php");
 
 mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysql_select_db(SQL_DB);
 
-$session = $_POST['admid'];
 $id = $_POST['id'];
-
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysql_fetch_array($sql);
-$sessionaccess = $access['access'];
-
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
 mysql_query("UPDATE ".TB_PREFIX."fdata SET 
 	f1  = '".$_POST['id1level']."', 
@@ -107,5 +103,5 @@ mysql_query("UPDATE ".TB_PREFIX."fdata SET
 	f40t = '".$_POST['id40gid']."' 
 	WHERE vref = $id") or die(mysql_error());
 
-header("Location: ../../../Admin/admin.php?action=recountPop&did=".$id."");
+header("Location: ../../../Admin/admin.php?p=village&did=".$id."");
 ?>
