@@ -22,6 +22,7 @@ include_once("../../GameEngine/Data/buidata.php");
 }else{
 include_once("../GameEngine/Data/unitdata.php");
 include_once("../GameEngine/Technology.php");
+include_once("../GameEngine/Data/buidata.php");
 }
 class adm_DB {
 	var $connection;
@@ -56,58 +57,60 @@ class adm_DB {
 	}
   }
 
-	function recountPop($vid){
-	global $database;
-	$fdata = $database->getResourceLevel($vid);
-	$popTot = 0;
-	for ($i = 1; $i <= 40; $i++) {
-		$lvl = $fdata["f".$i];
-		$building = $fdata["f".$i."t"];
-		if($building){
-		$popTot += $this->buildingPOP($building,$lvl);
-		}
-	}
-	$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
-	mysql_query($q, $this->connection);
+    function recountPop($vid){
+    global $database;
+    $fdata = $database->getResourceLevel($vid);
+    $popTot = 0;
+    for ($i = 1; $i <= 40; $i++) {
+        $lvl = $fdata["f".$i];
+        $building = $fdata["f".$i."t"];
+        if($building>0 && $lvl>0){
+            $popTot += $this->buildingPOP($building,$lvl);
+        }
+    }
+
+    $q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
+    mysql_query($q, $this->connection);
   }
   
-	function recountCP($vid){
-	global $database;
-	$fdata = $database->getResourceLevel($vid);
-	$popTot = 0;
-	for ($i = 1; $i <= 40; $i++) {
-		$lvl = $fdata["f".$i];
-		$building = $fdata["f".$i."t"];
-		if($building){
-		$popTot += $this->buildingCP($building,$lvl);
-		}
-	}
-	$q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
-	mysql_query($q, $this->connection);
-	}
+    function recountCP($vid){
+    global $database;
+    $fdata = $database->getResourceLevel($vid);
+    $popTot = 0;
+    for ($i = 1; $i <= 40; $i++) {
+        $lvl = $fdata["f".$i];
+        $building = $fdata["f".$i."t"];
+        if($building>0 && $lvl>0){
+            $popTot += $this->buildingCP($building,$lvl);
+        }
+    }
+    $q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
+    mysql_query($q, $this->connection);
+    }
 
   function buildingPOP($f,$lvl){
-	$name = "bid".$f;
-		global $$name;
-		$popT = 0;
-		$dataarray = $$name;
-	for ($i = 0; $i <= $lvl; $i++) {
-	  $popT += $dataarray[$i]['pop'];
-	}
-	return $popT;
+    $name = "bid".$f;
+    global $$name;
+    $popT = 0;
+    $dataarray = $$name;
+
+    for ($i = 1; $i <= $lvl; $i++) {
+        $popT += $dataarray[$i]['pop'];
+    }
+    return $popT;
   }
   
-	function buildingCP($f,$lvl){
-	$name = "bid".$f;
-	global $$name;
-		$popT = 0;
-		$dataarray = $$name;
-
-		for ($i = 0; $i <= $lvl; $i++) {
-			$popT += $dataarray[$i]['cp'];
-		}
-	return $popT;
-	}
+    function buildingCP($f,$lvl){
+        $name = "bid".$f;
+        global $$name;
+        $popT = 0;
+        $dataarray = $$name;
+        
+        for ($i = 1; $i <= $lvl; $i++) {
+            $popT += $dataarray[$i]['cp'];
+        }
+        return $popT;
+    } 
 
 	function getWref($x,$y) {
 		$q = "SELECT id FROM ".TB_PREFIX."wdata where x = $x and y = $y";
