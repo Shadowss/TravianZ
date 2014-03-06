@@ -27,73 +27,73 @@ class funct {
 	}
   }
 
-  function Act($get){
-	global $admin,$database;
+   function Act($get){
+    global $admin,$database;
 
-	switch($get['action']){
-	  case recountPop:
-		$admin->recountPop($get['did']);
-		$admin->recountCP($get['did']);
-	  break;
-	  case recountPopUsr:
-		$admin->recountPopUser($get['uid']);
-	  break;
-	  case StopDel:
-		//stop deleting
-	  break;
-	  case delVil:
-		if($get['mode'] != 1){
-		$admin->DelVillage($get['did']);
-		}else{
-		$admin->DelVillage($get['did'], 1);
-		}
-	  break;
-	  case delBan:
-		$admin->DelBan($get['uid'],$get['id']);
-		//remove ban
-	  break;
-	  case addBan:
-		if($get['time']){$end = time()+$get['time']; }else{$end = '';}
+    switch($get['action']){
+      case "recountPop":
+        $admin->recountPop($get['did']);
+        $admin->recountCP($get['did']);
+      break;
+      case "recountPopUsr":
+        $admin->recountPopUser($get['uid']);
+      break;
+      case "StopDel":
+        //stop deleting
+      break;
+      case "delVil":
+        if($get['mode'] != 1){
+        $admin->DelVillage($get['did']);
+        }else{
+        $admin->DelVillage($get['did'], 1);
+        }
+      break;
+      case "delBan":
+        $admin->DelBan($get['uid'],$get['id']);
+        //remove ban
+      break;
+      case "addBan":
+        if($get['time']){$end = time()+$get['time']; }else{$end = '';}
 
-		  if(is_numeric($get['uid'])){
-		  $get['uid'] = $get['uid'];
-		  }else{
-		  $get['uid'] = $database->getUserField(addslashes($get['uid']),'id',1);
-		  }
+          if(is_numeric($get['uid'])){
+          $get['uid'] = $get['uid'];
+          }else{
+          $get['uid'] = $database->getUserField(addslashes($get['uid']),'id',1);
+          }
 
-		$admin->AddBan($get['uid'],$end,$get['reason']);
-		//add ban
-	  break;
-	  case delOas:
-		//oaza
-	  break;
-	  case logout:
-		$this->LogOut();
-	  break;
-	}
-	if($get['action'] == 'logout'){
-	  header("Location: admin.php");
-	}else{
-	  header("Location: ".$_SERVER['HTTP_REFERER']);
-	}
+        $admin->AddBan($get['uid'],$end,$get['reason']);
+        //add ban
+      break;
+      case "delOas":
+        //oaza
+      break;
+      case "logout":
+        $this->LogOut();
+      break;
+    }
+    if($get['action'] == 'logout'){
+      header("Location: admin.php");
+    }else{
+      header("Location: ".$_SERVER['HTTP_REFERER']);
+    }
   }
 
   function Act2($post){
-	global $admin,$database;
-	  switch($post['action']){
-	  case DelPlayer:
-		$admin->DelPlayer($post['uid'],$post['pass']);
-		header("Location: ?p=search&msg=ursdel");
-	  break;
-	  case punish:
-		$admin->Punish($post);
-		header("Location: ".$_SERVER['HTTP_REFERER']);
-	  break;
-	  case addVillage:
-		$admin->AddVillage($post);
-		header("Location: ".$_SERVER['HTTP_REFERER']);
-	  break;
-	  }
+    global $admin,$database;
+      switch($post['action']){
+      case "DelPlayer":
+        $admin->DelPlayer($post['uid'],$post['pass']);
+        header("Location: ?p=search&msg=ursdel");
+      break;
+      case "punish":
+        $admin->Punish($post);
+        header("Location: ".$_SERVER['HTTP_REFERER']);
+      break;
+      case "addVillage":
+        $admin->AddVillage($post);
+        header("Location: ".$_SERVER['HTTP_REFERER']);
+      break;
+      }
   }
 
   function LogIN($username,$password){
