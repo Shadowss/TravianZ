@@ -42,6 +42,9 @@ include("menu2.tpl");
     <tr>
         <th colspan="2">Player <?php echo $displayarray['username']; ?></th>
     </tr>
+    <?php if($displayarray['access']==ADMIN){ echo "<tr><th colspan='2'><font color='Red'><center><b>This player is Admin.</b></font></center></th></tr>"; } ?>
+<?php if($displayarray['access']==MULTIHUNTER){ echo "<tr><th colspan='2'><font color='Blue'><center><b>This player is Multihunter.</b></font></center></th></tr>"; } ?>
+<?php if($displayarray['access']==BANNED){ echo "<tr><th colspan='2'><font color='Green'><center><b>This player is BANNED.</b></font></center></th></tr>"; } ?>
     <tr>
         <td>Details</td>
         <td>Description</td>
