@@ -356,7 +356,7 @@ define("Q25_10_RESP","Now a huge army from taskmaster has arrive to protect your
 define("Q25_10_REWARD","Your reward:<\/p>2 days more of Travian");
 
 define("Q25_11","Task 11: Reports");
-define("Q25_11_DESC","Every time something important happens to your account you will receive a report.<br \/><br \/>You can see these by clicking on the left half of the 5th button (from left to right). Read the report and come back here.”");
+define("Q25_11_DESC","Every time something important happens to your account you will receive a report.<br \/><br \/>You can see these by clicking on the left half of the 5th button (from left to right). Read the report and come back here.");
 define("Q25_11_ORDER","Order:<\/p>Read your latest report.");
 define("Q25_11_RESP","You received it? Very good. Here is your reward.");
 
