@@ -1911,7 +1911,11 @@ class MYSQL_DB {
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
-
+	function getUnViewNotice($uid) {
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid AND viewed=0";
+		$result = mysql_query($q, $this->connection);
+		return $this->mysql_fetch_all($result);
+	}
 	function createTradeRoute($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time) {
 	$x = "UPDATE " . TB_PREFIX . "users SET gold = gold - 2 WHERE id = ".$uid."";
 		mysql_query($x, $this->connection);
