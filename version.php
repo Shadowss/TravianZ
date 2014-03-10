@@ -64,13 +64,13 @@ $automation->isWinner();
 <?php include("Templates/menu.tpl"); ?>
 <?php include("Templates/version.tpl"); ?>
 <div id="products">
-1. Advocaite</br>
-2. Dzoki</br>
-3. Shadow</br>
-4. NarcisRO</br>
-5. yi12345</br>
-6. ronix</br>
-7. brainiacX</br>
+1. ronix - For coding above and beyond the call of duty</br>
+2. Dzoki - Version starter</br>
+3. Shadow - For coding above and beyond the call of duty</br>
+4. Advocaite - For coding above and beyond the call of duty</br>
+5. yi12345 - It's always a pleasure</br>
+6. NarcisRO - bug hunter</br>
+7. brainiacX - For being able to code, when we needed code the most</br>
 8. Niko28</br>
 9. akshay9</br>
 10. KFCSpike</br>
@@ -78,8 +78,8 @@ $automation->isWinner();
 12. hexcoded</br>
 13. SlimZ</br>
 14. inblackhole</br>
-15. elio</br>
-16. AL3XAND3R or MisterX</br>
+15. elio - Your advise is always welcome</br>
+16. AL3XAND3R or MisterX - For keeping the faith</br>
 17. Mr.php</br>
 18. Akakori</br>
 19. G3n3s!s</br>
