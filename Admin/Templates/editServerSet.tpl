@@ -291,8 +291,6 @@ function refresh(tz) {
 						<td><select name="error">
 							<option value="error_reporting (E_ALL ^ E_NOTICE);" <?php if(ERROR_REPORTING=="error_reporting (E_ALL ^ E_NOTICE);") echo "selected";?>>Yes</option>
 							<option value="error_reporting (0);" <?php if(ERROR_REPORTING=="error_reporting (0);") echo "selected";?>>No</option>
-							<option value="error_reporting (E_ALL ^ E_NOTICE);" <?php if(ERROR_REPORT=="error_reporting (E_ALL ^ E_NOTICE);") echo "selected";?>>Yes</option>
-							<option value="error_reporting (0);" <?php if(ERROR_REPORT=="error_reporting (0);") echo "selected";?>>No</option>
 						</select>
 						</td>
 					</tr>
