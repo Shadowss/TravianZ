@@ -389,7 +389,7 @@ define("Q25_16_RESP","Exactly! Barracks cost 210 lumber.");
 define("Q25_17","Task 17: Main Building");
 define("Q25_17_DESC","Your master builders need a main building level 3 to erect important buildings such as the marketplace or barracks.");
 define("Q25_17_ORDER","Order:<\/p>Extend your main building to level 3.");
-define("Q15_17_RESP","Well done. The main building level 3 has been completed.<br><br>With this upgrade your master builders can construct more types of buildings and also do so faster.");
+define("Q25_17_RESP","Well done. The main building level 3 has been completed.<br><br>With this upgrade your master builders can construct more types of buildings and also do so faster.");
 
 define("Q25_18","Task 18: Advanced!");
 define("Q25_18_DESC","Look up your rank in the player statistics again and enjoy your progress.");
@@ -414,7 +414,7 @@ define("Q25_21_RESP",";Well done, your Warehouse is complete...&rdquo;<\/i><br \
 define("Q25_22","Task 21: Marketplace.");
 define("Q25_22_DESC",";Construct a Marketplace so you can trade with your fellow players.");
 define("Q25_22_ORDER","Order:<\/p>Please build a Marketplace.");
-define("Q25_22_RESP",";The Marketplace has been completed. Now you can make offers of your own and accept foreign offers! When creating your own offers, you should think about offering what other players need most to get more profit.");
+define("Q25_22_RESP","The Marketplace has been completed. Now you can make offers of your own and accept foreign offers! When creating your own offers, you should think about offering what other players need most to get more profit.");
 
 define("Q25_23","Task 19: Military");
 define("Q25_23_DESC","A brave decision. To be able to send troops you need a rally point.<br \/><br \/>The rally point must be built on a specific building site. The ");
@@ -441,9 +441,9 @@ define("Q25_26_ORDER","Order:<\/p>Extend all resource tiles to level 2.");
 define("Q25_26_RESP","Congratulations! Your village grows and thrives...");
 
 define("Q25_27","Task 23: Friends.");
-define("Q25_27_DESC","As single player it is hard to compete with attackers. It is to your advantage if your neighbours like you.<br \/><br \/>It is even better if you play together with friends. Did you know that you can earn <?php $gold;?> by inviting friends?");
-define("Q25_27_ORDER","Order:<\/p>How much <?php $gold;?> do you earn for inviting a friend?");
-define("Q25_27_RESP","Correct! You get 50 <?php $gold;?> if your invited friend have 2 village.");
+define("Q25_27_DESC","As single player it is hard to compete with attackers. It is to your advantage if your neighbours like you.<br \/><br \/>It is even better if you play together with friends. Did you know that you can earn <img src='img/x.gif' class='gold' alt='Gold' title='Gold'> by inviting friends?");
+define("Q25_27_ORDER","Order:<\/p>How much <img src='img/x.gif' class='gold' alt='Gold' title='Gold'> do you earn for inviting a friend?");
+define("Q25_27_RESP","Correct! You get 50 <img src='img/x.gif' class='gold' alt='Gold' title='Gold'> if your invited friend have 2 village.");
 
 define("Q25_28","Task 24: Construct Embassy.");
 define("Q25_28_DESC","The world of Travian is dangerous. You already built a cranny to protect you against attackers.<br \/><br \/>A good alliance will give you even better protection.");

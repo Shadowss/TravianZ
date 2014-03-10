@@ -85,11 +85,8 @@ for ($i=1;$i<=20;$i++) {
 	//set event last quest
     if (($_SESSION['qst']==38 && QTYPE==37) || ($_SESSION['qst']==31 && QTYPE==25)){
         if ($i<8) {
-            //$x=rand(1,20);
-            
-            $dte=array("tur","purp","yell","oran","green","red","blue");
-            //$im="e".rand(1, 7);    
-            $im=$dte[$i];
+            $dte=array("tur","purp","yell","oran","green","red","dark");
+            $im=$dte[$i-1];
             echo "<img src=\"img/x.gif\" class=\"building e$i rocket $im\" alt=\"$text\" />";
         }
     }

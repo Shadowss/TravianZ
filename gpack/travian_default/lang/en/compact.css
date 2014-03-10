@@ -868,6 +868,10 @@ div.village2 div#village_map img.red {
     left: 328px;
     top: 210px;
 }
+div.village2 div#village_map img.dark {
+    left: 140px;
+    top: 75px;
+}
 div.village2 table#building_contract {
     margin: -40px 19px 0;
     position: relative;
@@ -8066,6 +8070,30 @@ div.quest div.wood {
     background-image: url("../../img/q/wood.jpg");
     height: 237px;
 }
+div.quest div.report {
+    background-image: url("../../img/q/report.jpg");
+    height: 179px;
+}
+div.quest div.gold {
+    background-image: url("../../img/q/gold.jpg");
+    height: 234px;
+}
+div.quest div.granary {
+    background-image: url("../../img/q/granary.jpg");
+    height: 179px;
+}
+div.quest div.embassy{
+    background-image: url("../../img/q/embassy.jpg");
+    height: 234px;
+}
+div.quest div.ally {
+    background-image: url("../../img/q/alliance.jpg");
+    height: 179px;
+}
+div.quest div.rally {
+    background-image: url("../../img/q/rally.jpg");
+    height: 242px;
+}
 a#n1 img, a#n2 img, a#n3 img, a#n4 img, div#n5 {
     background-position: 0 -21px;
     background-repeat: no-repeat;
@@ -8540,6 +8568,9 @@ div.village2 div#village_map img.green {
 }
 div.village2 div#village_map img.red {
     background-image: url("../../img/special/NewyearRocket_red_1a.gif");
+}
+div.village2 div#village_map img.dark {
+    background-image: url("../../img/special/NewyearRocket_dark_1a.gif");
 }
 div#map div#map_content div.b00 {
     background-image: url("../../img/m/d00.gif");
