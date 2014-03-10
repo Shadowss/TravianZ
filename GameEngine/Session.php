@@ -17,30 +17,31 @@ mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 ##                                                                             ##
 #################################################################################
 
-if(!file_exists('GameEngine/config.php') && !file_exists('../../GameEngine/config.php') && !file_exists('../../config.php')) {
+if(file_exists('GameEngine/config.php') || file_exists('../../GameEngine/config.php') || file_exists('../../config.php') || file_exists('../GameEngine/config.php')) {
+}else{
 header("Location: install/");
 }
 
 $script_name = ($_SERVER['REQUEST_URI'] == 'karte.php') ? 'karte' : $_SERVER['REQUEST_URI'];
-include ("Battle.php");
-include ("Data/buidata.php");
-include ("Data/cp.php");
-include ("Data/cel.php");
-include ("Data/resdata.php");
-include ("Data/unitdata.php");
-include ("Data/hero_full.php");
-include ("config.php");
-include ("Database.php");
-include ("Mailer.php");
-include ("Form.php");
-include ("Generator.php");
-include ("Multisort.php");
-include ("Ranking.php");
-include ("Lang/" . LANG . ".php");
-include ("Logging.php");
-include ("Message.php");
-include ("Alliance.php");
-include ("Profile.php");
+include_once ("Battle.php");
+include_once ("Data/buidata.php");
+include_once ("Data/cp.php");
+include_once ("Data/cel.php");
+include_once ("Data/resdata.php");
+include_once ("Data/unitdata.php");
+include_once ("Data/hero_full.php");
+include_once ("config.php");
+include_once ("Database.php");
+include_once ("Mailer.php");
+include_once ("Form.php");
+include_once ("Generator.php");
+include_once ("Multisort.php");
+include_once ("Ranking.php");
+include_once ("Lang/" . LANG . ".php");
+include_once ("Logging.php");
+include_once ("Message.php");
+include_once ("Alliance.php");
+include_once ("Profile.php");
 
 class Session {
 
@@ -60,7 +61,7 @@ class Session {
 
 			function Session() {
 				$this->time = time();
-				session_start();
+				if (!isset($_SESSION)) session_start();
 
 				$this->logged_in = $this->checkLogin();
 

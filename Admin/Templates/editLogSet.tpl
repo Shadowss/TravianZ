@@ -97,13 +97,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>
 				</tr>
 				<tr>
-					<td>Error Reporting</td>
-					<td><select name="error">
-						<option value="error_reporting (E_ALL ^ E_NOTICE);" selected="selected">Yes</option>
-						<option value="error_reporting (0);">No</option>
-					</select>
-					</td>
-				</tr>		
+	
 				</tbody>
 			</table>
 			<br />

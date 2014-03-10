@@ -155,12 +155,18 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 	</tr>
 	<tr>
 		<td>Error Reporting</td>
+<<<<<<< HEAD
 		<td><b>
 		<?php 
 		echo (ERROR_REPORT=="error_reporting (0);")? "No": (ERROR_REPORT=="error_reporting (E_ALL);")? "Yes (E_ALL)":"Yes (E_ALL ^ E_NOTICE)";
 		?>
 		</b></td>
 	</tr>	
+=======
+		<td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td>
+	</tr>
+	
+>>>>>>> 743a19326cddff179e325da92167a5362a94a6a2
 	</table>
 
 	<table id="member">

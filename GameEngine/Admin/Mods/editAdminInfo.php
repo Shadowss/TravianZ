@@ -17,7 +17,7 @@ $id = $_POST['id'];
 $myFile = "../../config.php";
 $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\config.php");
 		
-
+		$ERRORREPORT=ERROR_REPORT;
 		$T4=(T4_COMING==false)? "false":"true";
 		$GP_ENABLE=(GP_ENABLE==false)? "false":"true";
 		$QUEST=(QUEST==false)? "false":"true";
@@ -41,7 +41,8 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$LIMIT_MAILBOX=(LIMIT_MAILBOX==false)? "false":"true";
 		
 		$text = file_get_contents("constant_format.tpl");
-		$text = preg_replace("'%ERROR%'", $_POST['error'], $text);
+		$text = preg_replace("'%ERRORREPORT%'", $ERRORREPORT, $text);
+		$text = preg_replace("'%ERROR%'", $ERRORREPORT, $text);
 		$text = preg_replace("'%SERVERNAME%'", SERVER_NAME, $text);
 		$text = preg_replace("'%STIMEZONE%'", TIMEZONE, $text);
 		$text = preg_replace("'%STARTTIME%'", COMMENCE, $text);
