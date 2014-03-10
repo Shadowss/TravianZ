@@ -9,7 +9,7 @@
 ##                                                                             ##
 #################################################################################
 
-include("config.php");
+include_once("config.php");
 
 switch(DB_TYPE) {
 	case 1:
