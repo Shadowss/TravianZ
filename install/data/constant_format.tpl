@@ -16,6 +16,7 @@
 //////////////////////////////////
 // (E_ALL ^ E_NOTICE) = enabled
 // (0) = disabled
+define("ERROR_REPORT","%ERRORREPORT%");
 %ERROR%
 
 //////////////////////////////////
