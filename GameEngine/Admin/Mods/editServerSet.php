@@ -34,6 +34,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		
 				
 		$text = file_get_contents("constant_format.tpl");
+		$text = preg_replace("'%ERRORREPORT%'", $_POST['error'], $text);
 		$text = preg_replace("'%ERROR%'", $_POST['error'], $text);
 		$text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);
 		$text = preg_replace("'%STIMEZONE%'", $_POST['tzone'], $text);
