@@ -153,6 +153,11 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td>Graphic Pack</td>
 		<td><?php if(GP_ENABLE == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else { echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
+	<tr>
+		<td>Error Reporting</td>
+		<td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td>
+	</tr>
+	
 	</table>
 
 	<table id="member">
