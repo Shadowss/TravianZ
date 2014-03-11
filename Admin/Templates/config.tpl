@@ -41,10 +41,13 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td>Server Timezone</td>
 		<td><?php echo TIMEZONE;?></td>
 	</tr>
-	<tr>
-		<td>Language</td>
-		<td><?php if(LANG == 'en'){ echo "English"; } ?></td>
-	</tr>
+        	<td>Language</td>
+        	<td><?php if(LANG == 'en'){ echo "English"; } ?>
+        	<?php if(LANG == 'nl'){ echo "Dutch"; } ?>
+        	<?php if(LANG == 'es'){ echo "Spain"; } ?>
+        	<?php if(LANG == 'my'){ echo "Malay"; } ?>
+        	<?php if(LANG == 'ru'){ echo "Russian"; } ?>
+        	</td>
 	<tr>
 		<td>Server Speed</td>
 		<td><?php echo ''.SPEED.'x';?></td>
@@ -91,7 +94,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 	</tr>
 	<tr>
 		<td>Register Open</td>
-		<td><?php if(REG_OPEN == true) { echo "<b><font color='blue'>true</font></b>"; } else { echo "<b><font color='Red'>False</font></b>"; } ?></td>
+		<td><?php if(REG_OPEN == true) { echo "<b><font color='blue'>True</font></b>"; } else { echo "<b><font color='Red'>False</font></b>"; } ?></td>
 	</tr>
 	<tr>
 		<td>Activation Mail</td>
