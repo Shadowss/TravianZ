@@ -57,16 +57,17 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Language</td>
-						<td>
-							<select name="lang">
-								<option value="en" <?php if (LANG=="en") echo "selected";?>>English</option>
-								<option value="es" <?php if (LANG=="es") echo "selected";?>>Spain</option>
-								<option value="my" <?php if (LANG=="my") echo "selected";?>>Malay</option>
-								<option value="ru" <?php if (TIMEZONE=="ru") echo "selected";?>>Russian</option>
-								<option value="zh_tw" <?php if (TIMEZONE=="zh_tw") echo "selected";?>>Taiwan</option>
-							</select>
-						</td>	
+                        <td>Language</td>
+                        <td>
+                            <select name="lang">
+                                <option value="en" <?php if (LANG=="en") echo "selected";?>>English</option>
+                               <option value="nl" <?php if (LANG=="nl") echo "selected";?>>Dutch</option>
+                                <option value="es" <?php if (LANG=="es") echo "selected";?>>Spain</option>
+                                <option value="my" <?php if (LANG=="my") echo "selected";?>>Malay</option>
+                                <option value="ru" <?php if (LANG=="ru") echo "selected";?>>Russian</option>
+                                <option value="zh_tw" <?php if (LANG=="zh_tw") echo "selected";?>>Taiwan</option>
+                            </select>
+                        </td>
 					</tr>				
 					<tr>
 						<td>Server Speed</td>
