@@ -138,7 +138,7 @@
                     </b></font><br>';
             }
             echo '<br>Now would be a good time to '
-                . '<a href="' . SERVER . 'dorf1.php">Return to the server</a>'
+                . '<a href="' . SERVER . '/dorf1.php">Return to the server</a>'
                 . ' this will update rankings etc but <b>will</b> take a while!<br>'
                 . ' Make sure <b>max_execution_time</b> is set to a high enough value in php.ini<br><br>'
                 . 'Choose a different <b>Base Name</b> if you want to create more<br>';
