@@ -26,7 +26,6 @@ else if($_POST['dname']!=""){
 if($checkexist){
 $villageOwner = $database->getVillageField($getwref,'owner');
 $userAccess = $database->getUserField($villageOwner,'access',0);
-}
 // Function vacation mode by Shadow
 $userVacation = $database->getUserField($villageOwner,'vac_mode',0);
 }

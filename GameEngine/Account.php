@@ -186,6 +186,11 @@ class Account {
 		if($database->getUserField($_POST['user'],"act",1) != "") {
 			$form->addError("activate",$_POST['user']);
 		}
+		// Vacation mode by Shadow
+		if($database->getUserField($_POST['user'],"vac_mode",1) == 1 && $database->getUserField($_POST['user'],"vac_time",1) > time()) {
+		$form->addError("vacation","Vacation mode is still enabled");
+		}
+		// Vacation mode by Shadow
 		if($form->returnErrors() > 0) {
 			$_SESSION['errorarray'] = $form->getErrors();
 			$_SESSION['valuearray'] = $_POST;
@@ -194,6 +199,9 @@ class Account {
 		}
 		else {
 		$userid = $database->getUserArray($_POST['user'], 0);
+		// Vacation mode by Shadow
+		$database->removevacationmode($userid['id']);
+		// Vacation mode by Shadow
 		if($database->login($_POST['user'],$_POST['pw'])){
 			$database->UpdateOnline("login" ,$_POST['user'],time(),$userid['id']);
 		}else if($database->sitterLogin($_POST['user'],$_POST['pw'])){
