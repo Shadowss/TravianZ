@@ -53,19 +53,19 @@ $profiel = preg_replace("/\[#WW]/is",'<img src="'.$gpack.'img/t/g40_11-ltr.png" 
 
 //romans image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['tribe'] == "1"){
+if($displayarray['tribe'] == "1" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#roman]/is",'<img src="'.$gpack.'../../img/rpage/Roman1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Romans : Because of its high level of social and technological development the Romans are masters at building and its coordination. Also, their troops are part of the elite in Travian. They are very balanced and useful in attacking and defending.</td></tr></table>\')">', $profiel, 1);
 }
 
 //Gauls image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['tribe'] == "2"){
+if($displayarray['tribe'] == "2" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#teuton]/is",'<img src="'.$gpack.'../../img/rpage/Teuton1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Teutons : The Teutons are the most aggressive tribe. Their troops are notorious and feared for their rage and frenzy when they attack. They move around as a plundering horde, not even afraid of death. </td></tr></table>\')">', $profiel, 1);
 }
 
 //Teutons image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['tribe'] == "3"){
+if($displayarray['tribe'] == "3" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#gaul]/is",'<img src="'.$gpack.'../../img/rpage/Gaul1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Gauls : The Gauls are the most peaceful of all three tribes in Travian. Their troops are trained for an excellent defence, but their ability to attack can still compete with the other two tribes. The Gauls are born riders and their horses are famous for their speed. This means that their riders can hit the enemy exactly where they can cause the most damage and swiftly take care of them.</td></tr></table>\')">', $profiel, 1);
 }
 
@@ -79,32 +79,32 @@ $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" bord
 
 //Multihunter image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['username'] == "Multihunter"){
+if($displayarray['username'] == "Multihunter" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#MULTIHUNTER]/is",'<img src="'.$gpack.'img/t/t6_1.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Official Server Global Multihunter</td></tr></table>\')">', $profiel, 1);
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Multihunter</td></tr></table>\')">', $profiel, 1);
 }
 
 //Travian Team image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['username'] == "Multihunter"){
+if($displayarray['username'] == "Multihunter" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Travian Team</td></tr></table>\')">', $profiel, 1);
 }
 
 //Travian Team image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['access'] == "9"){
+if($displayarray['access'] == "9" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Travian Team</td></tr></table>\')">', $profiel, 1);
 }
 
 //Multihunter image (for anyone)
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['access'] == "9"){
+if($displayarray['access'] == "9" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Multihunter</td></tr></table>\')">', $profiel, 1);
 }
 
 //Multihunter image (for anyone)
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['access'] == "8"){
+if($displayarray['access'] == "8" && $displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Multihunter</td></tr></table>\')">', $profiel, 1);
 }
 
