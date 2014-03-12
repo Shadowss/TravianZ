@@ -147,7 +147,10 @@ else if (isset($_GET['s'])) {
 	if($_GET['s'] == 4) {
 		include("Templates/Profile/graphic.tpl");
 	}
-	if($_GET['s'] > 4 or $session->sit == 1) {
+	if($_GET['s'] == 5) {
+	include("Templates/Profile/vacation.tpl");
+	}
+	if($_GET['s'] > 5 or $session->sit == 1) {
 	header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$session->uid));
 	}
 }

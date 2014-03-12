@@ -845,7 +845,7 @@ The construction plans are conquerable immediately when they appear to the serve
 There will be a countdown in game, showing the exact time of the release, 5 days prior to the launch. ");
 
 
-//planos
+//Building Plans
 define("PLAN","Ancient Construction Plan");
 define("PLANVILLAGE","WW Buildingplan");
 define("PLAN_DESC","With this ancient construction plan you will able to build World Wonder to level 50. to build further, your alliance must hold at least two plans.");

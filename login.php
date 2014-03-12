@@ -207,6 +207,10 @@ if($form->getError("activate") != "") {
 	<a href=\"activate.php?usr=".$form->getError("activate")."\">".VERIFY_EMAIL."</a>
 	</p>";
 }
+if($form->getError("vacation") != "") {
+echo "<p class=\"error_box\">
+<span class=\"error\">".$form->getError("vacation")."</span></p>";
+}
 ?>
 </div>
 <div id="side_info" class="outgame">

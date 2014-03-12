@@ -27,9 +27,12 @@ if($checkexist){
 $villageOwner = $database->getVillageField($getwref,'owner');
 $userAccess = $database->getUserField($villageOwner,'access',0);
 }
+// Function vacation mode by Shadow
+$userVacation = $database->getUserField($villageOwner,'vac_mode',0);
+}
 $maxcarry = $market->maxcarry;
 $maxcarry *= $market->merchantAvail();
-if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && $userAccess == 2){
+if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && $userAccess == 2 && $userVacation == 0){
 ?>
 <form method="POST" name="snd" action="build.php"> 
 <input type="hidden" name="ft" value="mk1">
@@ -215,6 +218,8 @@ if(isset($_POST['ft'])=='check'){
 		$error = '<span class="error"><b>You cannot send resources to the same village</b></span>';
 	}elseif($userAccess == '0' or $userAccess == '8' or $userAccess == '9'){
 		$error = '<span class="error"><b>Player is Banned. You cannot send resources to him.</b></span>';
+	}elseif($userVacation == '1') {
+	$error = '<span class="error"><b>Player is on vacation mode. You cannot send resources to him.</b></span>';
     }elseif($_POST['r1']==0 && $_POST['r2']==0 && $_POST['r3']==0 && $_POST['r4']==0){
 		$error = '<span class="error"><b>Resources not selected.</b></span>';
     }elseif(!$_POST['x'] && !$_POST['y'] && !$_POST['dname']){

@@ -148,6 +148,11 @@ class Units {
             $id = $generator->getBaseID($coor['x'],$coor['y']);
             if (!$database->getVillageState($id)){
                 $form->addError("error","Coordinates do not exist");
+				//check vaction mode- by advocaite
+			if($database->getvacmodexy($id)){
+			$form->addError("error","User is on vacation mode");
+			}
+				//END Vaction mode check
             }
         }   
         if (!empty($coor)) {    
