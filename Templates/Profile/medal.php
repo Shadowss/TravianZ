@@ -17,14 +17,15 @@
 #################################################################################
 
 		   
-	//gp link
-	if($session->gpack == null || GP_ENABLE == false) {
-	$gpack= GP_LOCATE;
-	} else {
-	$gpack= $session->gpack;
-	}
+    //gp link
+    $separator=isset($separator)? $separator:"";
+    $gpack_load=isset($user['gpack'])? $user['gpack']:$database->getUserField($_SESSION['username'], 'gpack', 1);
+    if($gpack_load== null || GP_ENABLE == false) {
+    $gpack= $separator.GP_LOCATE;
+    } else {
+    $gpack= $separator.$gpack_load;
+    }  
 
-	
 //de bird
 if($displayarray['protect'] > time()){
 $secondsDiff = $displayarray['protect'] - time();
