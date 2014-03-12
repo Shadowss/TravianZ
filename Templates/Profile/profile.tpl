@@ -1,6 +1,23 @@
 <h1>Player profile</h1>
 
 <?php 
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       01.09.2013 						       	 				   ##
+##  Filename       profile.php                                                 ##
+##  Developed by:  Dzoki                                                       ##
+##  Fixed by:      Shadow / Skype : cata7007                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
+##                                                                             ##
+#################################################################################
+
+
 $varmedal = $database->getProfileMedal($session->uid);
 
 include("menu.tpl"); ?>
@@ -65,7 +82,7 @@ include("menu.tpl"); ?>
 		<tr><td class="rbg" colspan="4">Medals</td></tr>
 		<tr>
 			<td>Category</td>
-			<td>Rank</td>
+			<td>Rang</td>
 			<td>Week</td>
 			<td>BB-Code</td>
 		</tr>
@@ -101,7 +118,7 @@ INDELING CATEGORIEEN:
         $titel="Robber of the week";
         break;
     case "5":
-        $titel="Top 10 of both attackers and defenders";
+        $titel="Top 10 of both attacckers and defenders";
         break;
     case "6":
         $titel="Top 3 of Attackers of week ".$medal['points']." in a row";
@@ -138,6 +155,21 @@ INDELING CATEGORIEEN:
 				   <td></td>
 				   <td>[#0]</td>
 			 	 </tr>
+				<?php 
+				// Added by Shadow - cata7007@gmail.com / Skype : cata7007
+				if($session->userinfo['tribe'] == 1 && $session->userinfo['username'] == "Shadow") {
+				echo"<tr><td>Tribe Romans</td><td></td><td></td><td>[#roman]</td></tr>";
+				} else if($session->userinfo['tribe'] == 2 && $session->userinfo['username'] == "Shadow") {
+				echo"<tr><td>Tribe Teutons</td><td></td><td></td><td>[#teuton]</td></tr>";
+				} else if($session->userinfo['tribe'] == 3 && $session->userinfo['username'] == "Shadow") {
+				echo"<tr><td>Tribe Gauls</td><td></td><td></td><td>[#gaul]</td></tr>";
+				} else if($session->userinfo['access'] == 9 && $session->userinfo['username'] == "Shadow") {
+				echo"<tr><td>Administrator</td><td></td><td></td><td>[#MH]</td></tr>";
+				echo"<tr><td>Administrator</td><td></td><td></td><td>[#TEAM]</td></tr>";
+				} else if($session->userinfo['access'] == 8 && $session->userinfo['username'] == "Shadow") {
+				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MH]</td></tr>";
+				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#TEAM]</td></tr>";
+				} ?>
 				 </table></p>
 				 
 				 
