@@ -3,7 +3,7 @@
  | <a href="spieler.php?s=1" <?php if(isset($_GET['s']) && $_GET['s'] == 1) { echo "class=\"selected\""; } ?>>Profile</a>
  | <a href="spieler.php?s=2" <?php if(isset($_GET['s']) && $_GET['s'] == 2) { echo "class=\"selected\""; } ?>>Preferences</a>
  | <a href="spieler.php?s=3" <?php if(isset($_GET['s']) && $_GET['s'] == 3) { echo "class=\"selected\""; } ?>>Account</a>
- | <a href="spieler.php?s=5" <?php if(isset($_GET['s']) && $_GET['s'] == 5) { echo "class=\"selected\""; } ?>>Vacation</a>
+ <?php /*| <a href="spieler.php?s=5" <?php if(isset($_GET['s']) && $_GET['s'] == 5) { echo "class=\"selected\""; } ?>>Vacation</a> */  ?>
  <?php
  if(GP_ENABLE) {
  ?>
