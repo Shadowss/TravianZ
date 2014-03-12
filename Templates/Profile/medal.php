@@ -79,32 +79,32 @@ $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" bord
 
 //Multihunter image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['username'] == "Multihunter" && $displayarray['username'] == "Shadow"){
+if($displayarray['username'] == "Multihunter"){
 $profiel = preg_replace("/\[#MULTIHUNTER]/is",'<img src="'.$gpack.'img/t/t6_1.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Official Server Global Multihunter</td></tr></table>\')">', $profiel, 1);
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Multihunter</td></tr></table>\')">', $profiel, 1);
 }
 
 //Travian Team image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['username'] == "Multihunter" && $displayarray['username'] == "Shadow"){
+if($displayarray['username'] == "Multihunter"){
 $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Travian Team</td></tr></table>\')">', $profiel, 1);
 }
 
 //Travian Team image
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['access'] == "9" && $displayarray['username'] == "Shadow"){
+if($displayarray['access'] == "9"){
 $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Travian Team</td></tr></table>\')">', $profiel, 1);
 }
 
 //Multihunter image (for anyone)
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['access'] == "9" && $displayarray['username'] == "Shadow"){
+if($displayarray['access'] == "9"){
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Multihunter</td></tr></table>\')">', $profiel, 1);
 }
 
 //Multihunter image (for anyone)
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['access'] == "8" && $displayarray['username'] == "Shadow"){
+if($displayarray['access'] == "8"){
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Multihunter</td></tr></table>\')">', $profiel, 1);
 }
 
