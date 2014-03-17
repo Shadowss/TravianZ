@@ -19,6 +19,7 @@
 
 if(!file_exists('GameEngine/config.php')) {
 header("Location: install/");
+exit;
 }
 
 include ("GameEngine/config.php");
@@ -77,7 +78,7 @@ include ("GameEngine/Lang/".LANG.".php");
 			show_flags('', '', region_list);
 			</script>
 		</div>
-		<div id="header"><h1><?php echo WELCOME; ?></h1></div>
+		<div id="header"><h1><?php echo $lang['index'][0][1]; ?></h1></div>
 		<div id="navigation">
 			<a href="index.php" class="home"><img src="img/x.gif" alt="Travian" /></a>
 			<table class="menu">
@@ -123,9 +124,9 @@ include ("GameEngine/Lang/".LANG.".php");
 
 									<td><?php
 
-										   $users = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5"));
-										   echo $users;
-
+											$return=mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5");
+											$users=(!empty($return))? mysql_num_rows($return):0;
+											echo $users;
 									?></td>
 								</tr>
 
@@ -138,7 +139,8 @@ include ("GameEngine/Lang/".LANG.".php");
 
 									<td><?php
 
-										   $active = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (3600*24) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+										   $return = mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (3600*24) AND tribe!=0 AND tribe!=4 AND tribe!=5");
+										   $active=(!empty($return))? mysql_num_rows($return):0;
 										   echo $active;
 
 									?></td>
@@ -153,7 +155,8 @@ include ("GameEngine/Lang/".LANG.".php");
 
 									<td><?php
 
-										   $online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+										   $return = mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5");
+										   $online=(!empty($return))? mysql_num_rows($return):0;
 										   echo $online;
 
 									?></td>

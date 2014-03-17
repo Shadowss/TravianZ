@@ -845,7 +845,7 @@ The construction plans are conquerable immediately when they appear to the serve
 There will be a countdown in game, showing the exact time of the release, 5 days prior to the launch. ");
 
 
-//Building Plans
+//planos
 define("PLAN","Ancient Construction Plan");
 define("PLANVILLAGE","WW Buildingplan");
 define("PLAN_DESC","With this ancient construction plan you will able to build World Wonder to level 50. to build further, your alliance must hold at least two plans.");
@@ -903,6 +903,20 @@ define("WWVILLAGE","WW village");
 	   $lang['forum'] = "Forum";
 	   $lang['register'] = "Register";
 	   $lang['login'] = "Login";
+	   $lang['screenshots']['title1']="Village";
+       $lang['screenshots']['desc1']="Village building";
+       $lang['screenshots']['title2']="Resource";
+       $lang['screenshots']['desc2']="Village resource is wood, clay, iron and crop";
+       $lang['screenshots']['title3']="Map";
+       $lang['screenshots']['desc3']="Location your village in map";
+       $lang['screenshots']['title4']="Contruct Building";
+       $lang['screenshots']['desc4']="How to contruct building or resource level";
+       $lang['screenshots']['title5']="Report";
+       $lang['screenshots']['desc5']="Your attack report";
+       $lang['screenshots']['title6']="Statistics";
+       $lang['screenshots']['desc6']="View your ranking in statistics";
+       $lang['screenshots']['title7']="Weapons or dough";
+       $lang['screenshots']['desc7']="You can choose to play as military or economy";  
 
 
 ?>
