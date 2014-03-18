@@ -33,6 +33,8 @@ $remainingDay     = floor($secondsDiff/60/60/24);
 $remainingHour    = floor(($secondsDiff-($remainingDay*60*60))/3600);
 $remainingMinutes = floor(($secondsDiff-($remainingDay*60*60)-($remainingHour*60*60))/60);
 $remainingSeconds = floor(($secondsDiff-($remainingDay*60*60)-($remainingHour*60*60))-($remainingMinutes*60));
+
+$nul1 = $nul2 = $nul3 = "0";
 if(strlen($remainingSeconds) <= 1){
 $nul1 = "0";}
 if(strlen($remainingMinutes) <= 1){
