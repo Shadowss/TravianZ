@@ -44,8 +44,9 @@ if(isset($id))
 			include("playerdeletion.tpl");
 		}
 
-		include("playerinfo.tpl");
-		include("playeradditionalinfo.tpl");
+        include("playerinfo.tpl");
+        include("playerheroinfo.tpl");
+        include("playeradditionalinfo.tpl");  
 		echo "<br />";
 		include("playermedals.tpl");
 		include ("villages.tpl"); ?>

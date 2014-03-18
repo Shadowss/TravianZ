@@ -542,3 +542,31 @@ table#member td.ra {width:5%; text-align:right;}
 table#member td.hab {width:25%; text-align:center;}
 table#member td.vil {width:20%; text-align:center;}
 table#member td.on {width:5%; text-align:center;}
+
+
+.dropdown {border:#71D000 solid; border-width:1px; font-size:10pt;}
+input.dynamic_img, img.dynamic_img {
+    background-position: center top;
+    height: 20px;
+}
+input.over, img.over {
+    background-position: center bottom;
+}
+input.clicked, img.clicked {
+    background-position: center center;
+}
+
+input#btn_login {width:97px; background-image: url(b/login.gif);}
+input#btn_signup {width:97px; background-image: url(b/signup.gif);}
+input#btn_ok {width:47px; background-image: url(b/ok.gif);}
+input#btn_reply {width:97px; background-image: url(b/reply.gif);}
+input#btn_send {width:97px; background-image: url(b/send.gif);}
+input#btn_save {width:97px; background-image: url(b/save.gif);}
+input#btn_delete {width:97px; background-image: url(b/delete.gif);}
+input#btn_archiv {width:97px; background-image: url(b/archiv.gif);}
+input#btn_back {width:97px; background-image: url(b/zurueck.html);}
+input#btn_train {width:97px; background-image: url(b/train.gif);}
+input#btn_back {width:97px; background-image: url(b/back.gif);}
+input#btn_forward {width:97px; background-image: url(b/forward.gif);}
+input#btn_demolish {width:97px; background-image: url(b/demolish.gif);}
+input#btn_search {width:97px; background-image: url(b/search.gif);}

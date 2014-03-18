@@ -704,9 +704,9 @@ header("Location: banned.php");
     }
     }
 
-    public function Hero($uid) {
+    public function Hero($uid,$all=0) {
         global $database;
-        $heroarray = $database->getHero($uid);
+        $heroarray = $database->getHero($uid,$all);
         $herodata = $GLOBALS["h".$heroarray[0]['unit']];
 
         $h_atk = $herodata['atk'] + 5 * floor($heroarray[0]['attack'] * $herodata['atkp'] / 5);

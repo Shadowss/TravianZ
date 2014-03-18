@@ -70,6 +70,44 @@ class funct {
       case "logout":
         $this->LogOut();
       break;
+      case "killHero":
+        $varray = $database->getProfileVillages($get['uid']);
+        $killhero=false;
+        $error="";
+        for ($i = 0; $i <= count($varray)-1; $i++) {
+            $killhero=$database->FindHeroInVil($varray[$i]['wref']);
+            if ($killhero) break;
+            $killhero=$database->FindHeroInDef($varray[$i]['wref']);
+            if ($killhero) break;
+            $killhero=$database->FindHeroInMovement($varray[$i]['wref']);
+            if ($killhero) break;
+        }
+        if (!$killhero){
+            $killhero=$database->FindHeroInOasis($get['uid']);
+        }    
+        if ($killhero) {
+            $database->KillMyHero($get['uid']);
+            $error="&kc=1";
+        }else $error="&e=1";    
+        header("Location: admin.php?p=player&uid=".$get['uid'].$error);
+        exit;
+      case "reviveHero":
+        $result=$database->query("SELECT * FROM ".TB_PREFIX."hero WHERE uid='".$get['uid']."'");
+        $hdata=mysql_fetch_array($result);
+        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".$hdata['wref']);
+        $database->query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".time()." WHERE `uid` = '".$get['uid']."'");
+        header("Location: admin.php?p=player&uid=".$get['uid']."&rc=1");
+        exit;
+      case "addHero":
+        $user = $database->getUserArray($get['uid'],1);
+        $vilarray=$database->getVrefCapital($get['uid']);
+        
+        $database->query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`,
+        `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`,
+        `intraining`) VALUES ('".$get['uid']."', '" . $vilarray['wref'] . "', '0', '".$get['u']."', '".addslashes($user['username'])."',
+        '0', '5', '0', '0', '100', '0', '0', '0', '0', '".time()."', '50', '0')");
+        header("Location: admin.php?p=player&uid=".$get['uid']."&ac=1");
+        exit;      
     }
     if($get['action'] == 'logout'){
       header("Location: admin.php");

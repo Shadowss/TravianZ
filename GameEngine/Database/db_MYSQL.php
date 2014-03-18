@@ -3657,10 +3657,10 @@ References:
      }
    }
  
-   /*****************************************
-Function to vacation mode - by advocaite
-References:
-*****************************************/
+    /*****************************************
+	Function to vacation mode - by advocaite
+	References:
+	*****************************************/
 
 	/***************************
 	Function to get Hero Dead
@@ -3731,6 +3731,88 @@ References:
   	       $q = "UPDATE " . TB_PREFIX . "hero set dead = 1 where uid = ".$id;
                return mysql_query($q, $this->connection);
        }
+	   
+	    /***************************
+        Function to find Hero place
+        Made by: ronix
+        ***************************/
+        function FindHeroInVil($wid) {
+            $result = $this->query("SELECT * FROM ".TB_PREFIX."units WHERE hero>0 AND vref='".$wid."'");
+            if (!empty($result)) {
+                $dbarray = mysql_fetch_array($result);
+                if(isset($dbarray['hero'])) {
+                    $this->query("UPDATE ".TB_PREFIX."units SET hero=0 WHERE vref='".$wid."'");
+                    unset($dbarray);
+                    return true;
+                }
+            }    
+            return false;
+        }
+        function FindHeroInDef($wid) {
+            $delDef=true;
+            $result = $this->query_return("SELECT * FROM ".TB_PREFIX."enforcement WHERE hero>0 AND `from` = ".$wid);
+            if (!empty($result)) {
+                $dbarray = mysql_fetch_array($result);
+                if(isset($dbarray['hero'])) {
+                    $this->query("UPDATE ".TB_PREFIX."enforcement SET hero=0 WHERE `from` = ".$wid);
+                    for ($i=0;$i<50;$i++) {
+                        if($dbarray['u'.$i]>0) {
+                            $delDef=false;
+                            break;
+                        }
+                    }
+                    if ($delDef) $this->deleteReinf($wid);
+                    unset($dbarray);
+                    return true;
+                }
+            }    
+            return false;
+        }
+        function FindHeroInOasis($uid) {
+            $delDef=true;
+            $dbarray = $this->query_return("SELECT e.*,o.conqured,o.owner FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.owner=".$uid." AND e.hero>0");
+            if(!empty($dbarray)) {
+                foreach($dbarray as $defoasis) {
+                    if($defoasis['hero']>0) {
+                        $this->query("UPDATE ".TB_PREFIX."enforcement SET hero=0 WHERE `from` = ".$defoasis['from']);
+                        for ($i=0;$i<50;$i++) {
+                            if($dbarray['u'.$i]>0) {
+                                $delDef=false;
+                                break;
+                            }
+                        }
+                        if ($delDef) $this->deleteReinf($defoasis['from']);
+                        unset($dbarray);
+                        return true;
+                    }
+                }
+            }
+            return 0;
+        }
+    
+        function FindHeroInMovement($wid) {
+            $outgoingarray = $this->getMovement(3, $wid, 0);
+            if(!empty($outgoingarray)) {
+                foreach($outgoingarray as $out) {
+                    if ($out['t11']>0) {
+                        $dbarray = $this->query("UPDATE ".TB_PREFIX."attacks SET t11=0 WHERE `id` = ".$out['ref']);
+                        return true;
+                        break;        
+                    }
+                }
+            }
+            $returningarray = $this->getMovement(4, $wid, 1);
+            if(!empty($returningarray)) {
+                foreach($returningarray as $ret) {
+                    if($ret['attack_type'] != 1 && $ret['t11']>0) {
+                        $dbarray = $this->query("UPDATE ".TB_PREFIX."attacks SET t11=0 WHERE `id` = ".$ret['ref']);
+                        return true;
+                        break;
+                    }
+                }
+            }
+            return false;
+        }
 
 	/***************************
 	Function checkAttack
