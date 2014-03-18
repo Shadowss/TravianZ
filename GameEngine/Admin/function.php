@@ -111,6 +111,7 @@ class funct {
         
         header("Location: admin.php?p=player&uid=".$get['uid']."&ac=1");
         exit;
+		}
     if($get['action'] == 'logout'){
       header("Location: admin.php");
     }else{
