@@ -14,13 +14,13 @@
 <center><b>Create Users and Villages</b>
     <br><br>
     <font color="Red">
-        <b>
-            Submitting this form will create new Users (and their home Villages) on your server!<br>
-        </b>
-    </font>
-    <br>
-    <b>Base Name</b> should be between 4 and 20 characters long
-    <br><br>
+Submitting this form will create new Users<br>(and their home Villages) on your server!
+</font><br><font color="blue">with all resource,  mainbuilding, rallypoint, warehouse, granary, wall, marketplaced, residence, troop (for level-up hero) and one cranny.
+</b>
+</font>
+<p>
+<b>Base Name</b> should be between 4 and 20 characters long
+</p>
     <b>How Many</b> should be between 1 and 200<br>
     (Higher values might take a while or cause a crash!)
     <br><br>
