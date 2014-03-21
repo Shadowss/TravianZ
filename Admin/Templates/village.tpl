@@ -116,8 +116,8 @@ if(isset($id))
 					</form>
 				</tr>
 				<tr>
-					<td>Population <a href="admin.php?action=recountPop&did=<?php echo $_GET['did']; ?>"><?php echo $refreshicon; ?></a></td>
-					<td colspan="2"><?php echo $village['pop'];?></td>
+					<td>Population</td>
+					<td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo $_GET['did']; ?>"><?php echo $refreshicon; ?></a></td>
 				</tr>
 				<tr>
 					<td>Coordinates:</td>
@@ -255,7 +255,7 @@ if(isset($id))
 								<td><a href=\"?delOas&oid=\" onClick=\"return del('oas',".$row['wref'].")\"><img src=\"../img/admin/del.gif\"></a></td>
 								<td class=\"hab\">".$row['name']."</td>
 								<td class=\"hab\"><a href=\"../karte.php?d=".$row['wref']."&c=".$generator->getMapCheck($row['wref'])."\" target=\"blank\">(".$row['x']."|".$row['y'].")</a></td>
-								<td class=\"hab\">".$row['loyalty']."%</td>
+								<td class=\"hab\">".round($row['loyalty'])."%</td>
 								<td class=\"hab\">$type</td>
 							</tr>";
 						}	  
