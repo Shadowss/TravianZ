@@ -50,12 +50,13 @@ if(isset($id))
 			<td class="addTroops"><input class="addTroops" name="b'.$i.'" id="b'.$i.'" value="'.$abtech["b".$i].'" maxlength="10"></td>
 		</tr>';
 	} ?>
-	</tbody></table>
-	<br />
-	<table width="100%">
-	<tr><td align="left"><a href="../Admin/admin.php?p=village&did=<?php echo $_GET['did'];?>"><< back</a></td>
-	<td align="right"><input type="image" border="0" src="../img/admin/b/ok1.gif"></td>
+	</tbody>
+	<thead>
+	<tr>
+		<td style="border-right:none; text-align:left"><input name="back" type="image" id="btn_back" class="dynamic_img" src="img/x.gif" value="back" alt="back" onclick="return go_url('../Admin/admin.php?p=village&did=<?php echo $_GET["did"];?>')" /></td>
+		<td style="border-left:none; text-align:right" colspan="5"><input name="save" type="image" id="btn_save" class="dynamic_img" src="img/x.gif" value="save" alt="save" /></td>
 	</tr>
+	</thead>	
 	</table>
 	</form>
 <?php }?>	
