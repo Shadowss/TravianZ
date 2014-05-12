@@ -935,6 +935,10 @@ define("CONSTRUCT_NEW_BUILDING","Construct new building");
 define("SHOWSOON_AVAILABLE_BUILDINGS","show soon available buildings");
 define("HIDESOON_AVAILABLE_BUILDINGS","hide soon available buildings");
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a8a79eb6ef20f64140101971a8ae64b060adf572
 
 //artefact
 define("ARCHITECTS_DESC","All buildings in the area of effect are stronger. This means that you will need more catapults to damage buildings protected by this artifacts powers.");
@@ -1080,6 +1084,23 @@ define("WWVILLAGE","WW village");
 	   $lang['forum'] = "Forum";
 	   $lang['register'] = "Register";
 	   $lang['login'] = "Login";
+<<<<<<< HEAD
+=======
+	   $lang['screenshots']['title1']="Village";
+       $lang['screenshots']['desc1']="Village building";
+       $lang['screenshots']['title2']="Resource";
+       $lang['screenshots']['desc2']="Village resource is wood, clay, iron and crop";
+       $lang['screenshots']['title3']="Map";
+       $lang['screenshots']['desc3']="Location your village in map";
+       $lang['screenshots']['title4']="Contruct Building";
+       $lang['screenshots']['desc4']="How to contruct building or resource level";
+       $lang['screenshots']['title5']="Report";
+       $lang['screenshots']['desc5']="Your attack report";
+       $lang['screenshots']['title6']="Statistics";
+       $lang['screenshots']['desc6']="View your ranking in statistics";
+       $lang['screenshots']['title7']="Weapons or dough";
+       $lang['screenshots']['desc7']="You can choose to play as military or economy";  
+>>>>>>> a8a79eb6ef20f64140101971a8ae64b060adf572
 
 
 ?>

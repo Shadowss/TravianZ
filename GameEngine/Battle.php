@@ -441,7 +441,6 @@ class Battle {
 					$dp = 10 * pow($factor,$def_wall) * $def_wall; 
 					// Defense calvary calvary = * Wall (%) 
 					$cdp = 10 * pow($factor,$def_wall) * $def_wall;
-					echo $dp;		
 					if($type!=1) {
 						// Calculation of the Basic defense bonus "Residence"  
 						$dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall))); 

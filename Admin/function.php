@@ -27,73 +27,114 @@ class funct {
 	}
   }
 
-  function Act($get){
-	global $admin,$database;
+   function Act($get){
+    global $admin,$database;
 
-	switch($get['action']){
-	  case recountPop:
-		$admin->recountPop($get['did']);
-		$admin->recountCP($get['did']);
-	  break;
-	  case recountPopUsr:
-		$admin->recountPopUser($get['uid']);
-	  break;
-	  case StopDel:
-		//stop deleting
-	  break;
-	  case delVil:
-		if($get['mode'] != 1){
-		$admin->DelVillage($get['did']);
-		}else{
-		$admin->DelVillage($get['did'], 1);
+    switch($get['action']){
+      case "recountPop":
+        $admin->recountPop($get['did']);
+        $admin->recountCP($get['did']);
+      break;
+      case "recountPopUsr":
+        $admin->recountPopUser($get['uid']);
+      break;
+      case "StopDel":
+        //stop deleting
+      break;
+      case "delVil":
+        if($get['mode'] != 1){
+        $admin->DelVillage($get['did']);
+        }else{
+        $admin->DelVillage($get['did'], 1);
+        }
+      break;
+      case "delBan":
+        $admin->DelBan($get['uid'],$get['id']);
+        //remove ban
+      break;
+      case "addBan":
+        if($get['time']){$end = time()+$get['time']; }else{$end = '';}
+
+          if(is_numeric($get['uid'])){
+          $get['uid'] = $get['uid'];
+          }else{
+          $get['uid'] = $database->getUserField(addslashes($get['uid']),'id',1);
+          }
+
+        $admin->AddBan($get['uid'],$end,$get['reason']);
+        //add ban
+      break;
+      case "delOas":
+        //oaza
+      break;
+      case "logout":
+        $this->LogOut();
+      break;
+      case "killHero":
+        $varray = $database->getProfileVillages($get['uid']);
+        $killhero=false;
+        $error="";
+        for ($i = 0; $i <= count($varray)-1; $i++) {
+            $killhero=$database->FindHeroInVil($varray[$i]['wref']);
+            if ($killhero) break;
+            $killhero=$database->FindHeroInDef($varray[$i]['wref']);
+            if ($killhero) break;
+            $killhero=$database->FindHeroInMovement($varray[$i]['wref']);
+            if ($killhero) break;
+        }
+        if (!$killhero){
+            $killhero=$database->FindHeroInOasis($get['uid']);
+        }    
+        if ($killhero) {
+            $database->KillMyHero($get['uid']);
+            $error="&kc=1";
+        }else $error="&e=1";    
+        header("Location: admin.php?p=player&uid=".$get['uid'].$error);
+        exit;
+      case "reviveHero":
+        $result=$database->query("SELECT * FROM ".TB_PREFIX."hero WHERE uid='".$get['uid']."'");
+        $hdata=mysql_fetch_array($result);
+        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".$hdata['wref']);
+        $database->query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".time()." WHERE `uid` = '".$get['uid']."'");
+        header("Location: admin.php?p=player&uid=".$get['uid']."&rc=1");
+        exit;
+      case "addHero":
+        $user = $database->getUserArray($get['uid'],1);
+        $vilarray=$database->getVrefCapital($get['uid']);
+        
+        $database->query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`,
+        `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`,
+        `intraining`) VALUES ('".$get['uid']."', '" . $vilarray['wref'] . "', '0', '".$get['u']."', '".addslashes($user['username'])."',
+        '0', '5', '0', '0', '100', '0', '0', '0', '0', '".time()."', '50', '0')");
+        
+        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".$vilarray['wref']);
+        
+        header("Location: admin.php?p=player&uid=".$get['uid']."&ac=1");
+        exit;
 		}
-	  break;
-	  case delBan:
-		$admin->DelBan($get['uid'],$get['id']);
-		//remove ban
-	  break;
-	  case addBan:
-		if($get['time']){$end = time()+$get['time']; }else{$end = '';}
-
-		  if(is_numeric($get['uid'])){
-		  $get['uid'] = $get['uid'];
-		  }else{
-		  $get['uid'] = $database->getUserField(addslashes($get['uid']),'id',1);
-		  }
-
-		$admin->AddBan($get['uid'],$end,$get['reason']);
-		//add ban
-	  break;
-	  case delOas:
-		//oaza
-	  break;
-	  case logout:
-		$this->LogOut();
-	  break;
-	}
-	if($get['action'] == 'logout'){
-	  header("Location: admin.php");
-	}else{
-	  header("Location: ".$_SERVER['HTTP_REFERER']);
-	}
+    if($get['action'] == 'logout'){
+      header("Location: admin.php");
+    }else{
+      header("Location: ".$_SERVER['HTTP_REFERER']);
+    }
   }
 
   function Act2($post){
-	global $admin,$database;
-	  switch($post['action']){
-	  case DelPlayer:
-		$admin->DelPlayer($post['uid'],$post['pass']);
-		header("Location: ?p=search&msg=ursdel");
-	  break;
-	  case punish:
-		$admin->Punish($post);
-		header("Location: ".$_SERVER['HTTP_REFERER']);
-	  break;
-	  case addVillage:
-		$admin->AddVillage($post);
-		header("Location: ".$_SERVER['HTTP_REFERER']);
-	  break;
-	  }
+    global $admin,$database;
+      switch($post['action']){
+      case "DelPlayer":
+        $admin->DelPlayer($post['uid'],$post['pass']);
+        header("Location: ?p=search&msg=ursdel");
+      break;
+      case "punish":
+        $admin->Punish($post);
+        header("Location: ".$_SERVER['HTTP_REFERER']);
+      break;
+      case "addVillage":
+        $admin->AddVillage($post);
+        header("Location: ".$_SERVER['HTTP_REFERER']);
+      break;
+      }
   }
 
   function LogIN($username,$password){

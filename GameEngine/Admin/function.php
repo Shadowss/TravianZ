@@ -106,9 +106,12 @@ class funct {
         `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`,
         `intraining`) VALUES ('".$get['uid']."', '" . $vilarray['wref'] . "', '0', '".$get['u']."', '".addslashes($user['username'])."',
         '0', '5', '0', '0', '100', '0', '0', '0', '0', '".time()."', '50', '0')");
+        
+        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".$vilarray['wref']);
+        
         header("Location: admin.php?p=player&uid=".$get['uid']."&ac=1");
-        exit;      
-    }
+        exit;
+		}
     if($get['action'] == 'logout'){
       header("Location: admin.php");
     }else{

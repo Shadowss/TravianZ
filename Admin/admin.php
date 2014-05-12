@@ -130,6 +130,11 @@ $up_avl = $latest - $ver ;
 			function hideStuff(id) {
 				document.getElementById(id).style.display = 'none';
 			}
+			function go_url(url) {
+				location=url;
+				return(false);
+			}			
+			
 		</script>
 		<div id="ltop1">
 			<div style="position:relative; width:231px; height:100px; float:left;">

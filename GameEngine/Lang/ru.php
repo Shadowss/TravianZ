@@ -539,46 +539,388 @@ define("WOODCUTTER","Woodcutter");
 define("CLAYPIT","Clay Pit");
 define("IRONMINE","Iron Mine");
 define("CROPLAND","Cropland");
+
 define("SAWMILL","Sawmill");
+define("SAWMILL_DESC","Here wood delivered by your Woodcutters is processed. Based on its level your sawmill can increase your wood production by up to 25 percent.");
+define("CURRENT_WOOD_BONUS","Current wood bonus:");
+define("WOOD_BONUS_LEVEL","Wood bonus at level");
+define("MAX_LEVEL","Building already at max level");
+define("PERCENT","Percent");
+
 define("BRICKYARD","Brickyard");
+define("CURRENT_CLAY_BONUS","Current clay bonus:");
+define("CLAY_BONUS_LEVEL","Clay bonus at level");
+define("BRICKYARD_DESC","Here clay is processed into bricks. Based on its level your Brickyard can increase your clay production by up to 25 percent.");
+
 define("IRONFOUNDRY","Iron Foundry");
+define("CURRENT_IRON_BONUS","Current iron bonus:");
+define("IRON_BONUS_LEVEL","Iron bonus at level");
+define("IRONFOUNDRY_DESC","Iron is smelted here. Based on its level your Iron Foundry can increase your iron production by up to 25 percent.");
+
 define("GRAINMILL","Grain Mill");
+define("CURRENT_CROP_BONUS","Current crop bonus:");
+define("CROP_BONUS_LEVEL","Crop bonus at level");
+define("GRAINMILL_DESC","Here your grain is milled in order to produce flour. Based on its level your grain mill can increase your crop production by up to 25 percent.");
+
 define("BAKERY","Bakery");
+define("BAKERY_DESC","Here the flour produced in your mill is used to bake bread. In addition with the Grain Mill the increase in crop production can go up to 50 percent.");
+
 define("WAREHOUSE","Warehouse");
+define("CURRENT_CAPACITY","Current capacity:");
+define("CAPACITY_LEVEL","Capacity at level");
+define("RESOURCE_UNITS","Resource units");
+define("WAREHOUSE_DESC","The resources wood, clay and iron are stored in your Warehouse. By increasing its level you increase your Warehouse's capacity.");
+
 define("GRANARY","Granary");
+define("CROP_UNITS","Crop units");
+define("GRANARY_DESC","Crop produced by your farms is stored in the Granary. By increasing its level you increase the Granary's capacity.");
+
 define("BLACKSMITH","Blacksmith");
+define("ACTION","Action");
+define("UPGRADE","Upgrade");
+define("UPGRADE_IN_PROGRESS","Upgrade in<br>progress");
+define("UPGRADE_BLACKSMITH","Upgrade<br>blacksmith");
+define("UPGRADES_COMMENCE_BLACKSMITH","Upgrades can commence when blacksmith is completed.");
+define("MAXIMUM_LEVEL","Maximum<br>level");
+define("EXPAND_WAREHOUSE","Expand<br>warehouse");
+define("EXPAND_GRANARY","Expand<br>granary");
+define("ENOUGH_RESOURCES","Enough resources");
+define("CROP_NEGATIVE ","Crop production is negative so you will never reach the required resources");
+define("TOO_FEW_RESOURCES","Too few<br>resources");
+define("UPGRADING","Upgrading");
+define("DURATION","Duration");
+define("COMPLETE","Complete");
+define("BLACKSMITH_DESC","In the blacksmith's melting furnaces your warriors' weapons are enhanced. By increasing its level you can order the fabrication of even better weapons.");
+
 define("ARMOURY","Armoury");
+define("UPGRADE_ARMOURY","Upgrade<br>Armoury");
+define("UPGRADES_COMMENCE_ARMOURY","Upgrades can commence when armoury is completed.");
+define("ARMOURY_DESC","In the armoury's melting furnaces your warriors' armour is enhanced. By increasing its level you can order the fabrication of even better armour.");
+
 define("TOURNAMENTSQUARE","Tournament Square");
+define("CURRENT_SPEED","Current speed bonus:");
+define("SPEED_LEVEL","Speed bonus at level");
+define("TOURNAMENTSQUARE_DESC","At the Tournament Square your troops can train their stamina. The further the building is upgraded the faster your troops are beyond a minimum distance of ".TS_THRESHOLD."  squares.");
+
 define("MAINBUILDING","Main Building");
+define("CURRENT_CONSTRUCTION_TIME","Current construction time:");
+define("CONSTRUCTION_TIME_LEVEL","Construction time at level");
+define("DEMOLITION_BUILDING","Demolition of the building:</h2><p>If you no longer need a building, you can order the demolition of the building.</p>");
+define("DEMOLISH","Demolish");
+define("DEMOLITION_OF","Demolition of ");
+define("MAINBUILDING_DESC","In the main building the village's master builders live. The higher its level the faster your master builders complete the construction of new buildings.");
+
 define("RALLYPOINT","Rally Point");
-define("OVERVIEW","Resumen");
+define("OVERVIEW","Overview");
+define("REINFORCEMENT","Reinforcement");
+define("EVASION_SETTINGS","evasion settings");
+define("SEND_TROOPS_AWAY_MAX","Send troops away a maximun of");
+define("TIMES","times");
+define("PER_EVASION","per evasion");
 define("RALLYPOINT_DESC","Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.");
+
 define("MARKETPLACE","Marketplace");
+define("MERCHANT","Merchants");
+define("OR_","or");
+define("GO","go");
+define("UNITS_OF_RESOURCE","units of resource");
+define("MERCHANT_CARRY","Each merchant can carry");
+define("MERCHANT_COMING","Merchants coming");
+define("TRANSPORT_FROM","Transport from");
+define("ARRIVAL_IN","Arrival in");
+define("NO_COORDINATES_SELECTED","No Coordinates selected");
+define("CANNOT_SEND_RESOURCES","You cannot send resources to the same village");
+define("BANNED_CANNOT_SEND_RESOURCES","Player is Banned. You cannot send resources to him");
+define("RESOURCES_NO_SELECTED","Resources not selected");
+define("ENTER_COORDINATES","Enter coordinates or village name");
+define("TOO_FEW_MERCHANTS","Too few merchants");
+define("OWN_MERCHANTS_ONWAY","Own merchants on the way");
+define("MERCHANTS_RETURNING","Merchants returning");
+define("TRANSPORT_TO","Transport to");
+define("I_AN_SEARCHING","I'm searching");
+define("I_AN_OFFERING","I'm offering");
+define("OFFERS_MARKETPLACE","Offers at the marketplace");
+define("OFFERED_TO_ME","Offered<br>to me");
+define("WANTED_TO_ME","Wanted<br>from me");
+define("NOT_ENOUGH_MERCHANTS","Not Enough Merchant");
+define("ACCEP_OFFER","Accept offer");
+define("NO_AVALIBLE_OFFERS","There are no avaliable offers on the market");
+define("SEARCHING","Searching");
+define("OFFERING","Offering");
+define("MAX_TIME_TRANSPORT","max. time of transport");
+define("OWN_ALLIANCE_ONLY","own alliance only");
+define("INVALID_OFFER","Invalid offer");
+define("OFFER","Offer");
+define("SEARCH","Search");
+define("OWN_OFFERS","Own offers");
+define("ALL","All");
+define("NPC_TRADE","NPC Trade");
+define("SUM","Sum");
+define("REST","Rest");
+define("TRADE_RESOURCES","Trade resources at (step 2 of 2");
+define("DISTRIBUTE_RESOURCES","Distribute resources at (step 1 of 2)");
+define("OF","of");
+define("NPC_COMPLETED","NPC completed");
+define("BACK_BUILDING","Back to building");
+define("YOU_CAN_NAT_NPC_WW","You can't use NPC trade in WW village.");
+define("NPC_TRADING","NPC trading");
+define("SEND_RESOURCES","Send Resources");
+define("BUY","Buy");
+define("TRADE_ROUTES","trade routes");
+define("DESCRIPTION","Description");
+define("TIME_LEFT","Time left");
+define("START","Start");
+define("NO_TRADE_ROUTES","No active trade routes");
+define("TRADE_ROUTE_TO","Trade route to");
+define("CHECKED","checked");
+define("DAYS","days");
+define("EXTEND","extend");
+define("EDIT","edit");
+define("EXTEND_TRADE_ROUTES","Extend the trade route by 7 days for");
+define("CREATE_TRADE_ROUTES","Create new trade route");
+define("DELIVERIES","deliveries");
+define("START_TIME_TRADE","start time");
+define("CREATE_TRADE_ROUTE","Create trade route");
+define("TARGET_VILLAGE","target village");
+define("EDIT_TRADE_ROUTES","Edit trade route");
+define("TRADE_ROUTES_DESC","Trade route allows you to set up routes for your merchant that he will walk every day at a certain hour. <br /><br /> Standard this holds on for 7 days, but you can extend it with 7 days for the cost of");
+define("NPC_TRADE_DESC","With the NPC merchant you can distribute the resources in your warehouse as you desire. <br /><br /> The first line shows the current stock. In the second line you can choose another distribution. The third line shows the difference between the old and new stock.");
+define("MARKETPLACE_DESC","At the Marketplace you can trade resources with other players. The higher its level, the more resources can be transported at the same time.");
+
 define("EMBASSY","Embassy");
+define("ALLIANCE","Alliance");
+define("TAG","Tag");
+define("TO_THE_ALLIANCE","to the alliance");
+define("JOIN_ALLIANCE","join alliance");
+define("REFUSE","refuse");
+define("ACCEPT","accept");
+define("NO_INVITATIONS","There are no invitations available.");
+define("NO_CREATE_ALLIANCE","Banned player can't create an alliance.");
+define("FOUND_ALLIANCE","found alliance");
+define("EMBASSY_DESC","The embassy is a place for diplomats. The higher its level the more options the king gains.");
+
 define("BARRACKS","Barracks");
+define("QUANTITY","Quantity");
+define("MAX","Max");
+define("TRAINING","Training");
+define("FINISHED","Finished");
+define("UNIT_FINISHED","The next unit will be finished in");
+define("AVAILABLE","Available");
+define("TRAINING_COMMENCE_BARRACKS","Training can commence when barracks are completed.");
+define("BARRACKS_DESC","All foot soldiers are trained in the barracks. The higher the level of the barracks, the faster the troops are trained.");
+
 define("STABLE","Stable");
+define("AVAILABLE_ACADEMY","No units available. Research at academy");
+define("TRAINING_COMMENCE_STABLE","Training can commence when stable are completed.");
+define("STABLE_DESC","Cavalry can be trained in the stable. The higher its level the faster the troops are trained.");
+
 define("WORKSHOP","Workshop");
+define("TRAINING_COMMENCE_WORKSHOP","Training can commence when workshop are completed.");
+define("WORKSHOP_DESC","Siege engines like catapults and rams can be built in the workshop. The higher its level the faster the units are produced.");
+
 define("ACADEMY","Academy");
+define("RESEARCH_AVAILABLE","There are no researches available");
+define("RESEARCH_COMMENCE_ACADEMY","Research can commence when academy is completed.");
+define("RESEARCH","Research");
+define("EXPAND_WAREHOUSE1","Expand warehouse");
+define("EXPAND_GRANARY1","Expand granary");
+define("RESEARCH_IN_PROGRESS","Research in<br>progress");
+define("RESEARCHING","Researching");
+define("PREREQUISITES","Prerequisites");
+define("SHOW_MORE","show more");
+define("HIDE_MORE","hide more");
+define("ACADEMY_DESC","In the academy new unit types can be researched. By increasing its level you can order the research of better units.");
+
 define("CRANNY","Cranny");
+define("CURRENT_HIDDEN_UNITS","Currently hidden units per resource:");
+define("HIDDEN_UNITS_LEVEL","Hidden units per resource at level");
+define("UNITS","units");
+define("CRANNY_DESC","The cranny is used to hide some of your resources when the village is attacked. These resources cannot be stolen.");
+
 define("TOWNHALL","Town Hall");
+define("CELEBRATIONS_COMMENCE_TOWNHALL","Celebrations can commence when the town hall is completed.");
+define("GREAT_CELEBRATIONS","Great celebration");
+define("CULTURE_POINTS","culture points");
+define("HOLD","hold");
+define("CELEBRATIONS_IN_PROGRESS","Celebration</br>in progress");
+define("CELEBRATIONS","Celebrations");
+define("TOWNHALL_DESC","You can hold pompous celebrations in the Town Hall. Such a celebration increases your culture points. Building up your Town Hall to a higher level will decrease the length of the celebration.");
+
 define("RESIDENCE","Residence");
+define("CAPITAL","This is your capital");
+define("RESIDENCE_TRAIN_DESC","In order to found a new village you need a level 10 or 20 residence and 3 settlers. In order to conquer a new village you need a level 10 or 20 residence and a senator, chief or chieftain.");
+define("PRODUCTION_POINTS","Production of this village:");
+define("PRODUCTION_ALL_POINTS","Production of all villages:");
+define("POINTS_DAY","Culture points per day");
+define("VILLAGES_PRODUCED","Your villages have produced");
+define("POINTS_NEED","points in total. To found or conquer a new village you need");
+define("POINTS","points");
+define("VILLAGE","Village");
+define("PLAYER","Player");
+define("INHABITANTS","Inhabitants");
+define("COORDINATES","Coordinates");
+define("EXPANSION","Expansion");
+define("TRAIN","Train");
+define("DATE","Date");
+define("CONQUERED_BY_VILLAGE","Villages founded or conquered by this village");
+define("NONE_CONQUERED_BY_VILLAGE","No other village has been founded or conquered by this village yet.");
+define("RESIDENCE_CULTURE_DESC","In order to extend your empire you need culture points. These culture points increase in the course of time and do so faster as your building levels increase.");
+define("RESIDENCE_LOYALTY_DESC","By attacking with senators, chiefs or chieftains a village's loyalty can be brought down. If it reaches zero, the village joins the realm of the attacker. The loyalty of this village is currently at ");
+define("RESIDENCE_DESC","The residence is a small palace, where the king or queen lives when (s)he visits the village. The residence protects the village against enemies who want to conquer it.");
+
 define("PALACE","Palace");
+define("PALACE_CONSTRUCTION","Palace under construction");
+define("PALACE_TRAIN_DESC","In order to found a new village you need a level 10, 15 or 20 palace and 3 settlers. In order to conquer a new village you need a level 10, 15 or 20 palace and a senator, chief or chieftain.");
+define("CHANGE_CAPITAL","change capital");
+define("SECURITY_CHANGE_CAPITAL","Are you sure, that you want to change your capital?<br /><b>You can\'t undo this!</b><br />For security you must enter your password to confirm:<br />");
+define("PALACE_DESC","The king or queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.");
+
 define("TREASURY","Treasury");
+define("ARTIFACTS_AREA","Artefacts in your area");
+define("NO_ARTIFACTS_AREA","There is no artefacts in your area.");
+define("OWN_ARTIFACTS","Own artefacts");
+define("CONQUERED","Conquered");
+define("DISTANCE","Distance");
+define("EFFECT","Effect");
+define("ACCOUNT","account");
+define("SMALL_ARTIFACTS","Small artefacts");
+define("LARGE_ARTIFACTS","Large artefacts");
+define("NO_ARTIFACTS","There is no artefacts.");
+define("ANY_ARTIFACTS","You do not own any artefacts.");
+define("OWNER","Owner");
+define("AREA_EFFECT","Area of effect");
+define("BONUS","Bonus");
+define("REQUIRED_LEVEL","Required level");
+define("TIME_CONQUER","Time of conquer");
+define("TIME_ACTIVATION","Time of activation");
+define("FORMER_OWNER","Former owner(s)");
+define("BUILDING_STRONGER","building stronger with");
+define("BUILDING_WEAKER","building weaker with");
+define("TROOPS_FASTER","makes troops faster with");
+define("TROOPS_SLOWEST","makes troops slowest with");
+define("SPIES_INCREASE","spies increase ability with");
+define("SPIES_DECRESE","spies decrese ability with");
+define("CONSUME_LESS","all troops consume less with");
+define("CONSUME_HIGH","all troops consume high with");
+define("TROOPS_MAKE_FASTER","troops make faster with");
+define("TROOPS_MAKE_SLOWEST","troops make slowest with");
+define("YOU_CONSTRUCT","you can construct ");
+define("CRANNY_INCREASED","cranny capacity is increased by");
+define("CRANNY_DECRESE","cranny capacity is decrese by");
+define("TREASURY_DESC","The riches of your empire are kept in the treasury. The treasury has room for one treasure. After you have captured an artefact it takes 24 hours on a normal server or 12 hours on a thrice speed server to be effective.");
+
 define("TRADEOFFICE","Trade Office");
+define("CURRENT_MERCHANT","Current merchant load:");
+define("MERCHANT_LEVEL","Merchant load at level");
+define("TRADEOFFICE_DESC","In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.");
+
 define("GREATBARRACKS","Great Barracks");
+define("TRAINING_COMMENCE_GREATBARRACKS","Training can commence when great barracks are completed.");
+define("GREATBARRACKS_DESC","Foot soldiers are trained in the great barracks. The higher the level of the barracks, the faster the troops are trained.");
+
 define("GREATSTABLE","Great Stable");
+define("TRAINING_COMMENCE_GREATSTABLE","Training can commence when great stables are completed.");
+define("GREATSTABLE_DESC","Cavalry can be trained in the great stable. The higher its level the faster the troops are trained.");
+
 define("CITYWALL","City Wall");
+define("DEFENCE_NOW","Defence Bonus now:");
+define("DEFENCE_LEVEL","Defence Bonus at level");
+define("CITYWALL_DESC","By building a City Wall you can protect your village against the barbarian hordes of your enemies. The higher the wall's level, the higher the bonus given to your forces' defence.");
+
 define("EARTHWALL","Earth Wall");
+define("EARTHWALL_DESC","By building a Earth Wall you can protect your village against the barbarian hordes of your enemies. The higher the wall's level, the higher the bonus given to your forces' defence.");
+
 define("PALISADE","Palisade");
+define("PALISADE_DESC","By building a Palisade you can protect your village against the barbarian hordes of your enemies. The higher the wall's level, the higher the bonus given to your forces' defence.");
+
 define("STONEMASON","Stonemason's Lodge");
+define("CURRENT_STABILITY","Current stability bonus:");
+define("STABILITY_LEVEL","Stability bonus at level");
+define("STONEMASON_DESC","The stonemason's lodge is an expert at cutting stone. The further the building is extended the higher the stability of the village's buildings.");
+
 define("BREWERY","Brewery");
+define("CURRENT_BONUS","Current bonus:");
+define("BONUS_LEVEL","Bonus at level");
+define("BREWERY_DESC","Tasty mead is brewed in the Brewery and later quaffed by the soldiers during the celebrations.");
+
 define("TRAPPER","Trapper");
+define("CURRENT_TRAPS","Currect maximum traps to train:");
+define("TRAPS_LEVEL","Maximum traps to train at level");
+define("TRAPS","Traps");
+define("TRAP","Trap");
+define("CURRENT_HAVE","Your currently have");
+define("WHICH_OCCUPIED","of which are occupied.");
+define("TRAINING_COMMENCE_TRAPPER","Training can commence when trapper are completed.");
+define("TRAPPER_DESC","The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won't be able to harm your village anymore.");
+
 define("HEROSMANSION","Hero's Mansion");
+define("HERO_READY","Hero will be ready in ");
+define("NAME_CHANGED","Hero name has been changed");
+define("NOT_UNITS","Not available units");
+define("NOT","Not ");
+define("TRAIN_HERO","Train New Hero");
+define("REVIVE","Revive");
+define("OASES","Oases");
+define("DELETE","delete");
+define("RESOURCES","Resources");
+define("OFFENCE","Offence");
+define("DEFENCE","Defence");
+define("OFF_BONUS","Off-Bonus");
+define("DEF_BONUS","Def-Bonus");
+define("REGENERATION","Regeneration");
+define("DAY","Day");
+define("EXPERIENCE","Experience");
+define("YOU_CAN","You can ");
+define("RESET","reset");
+define("YOUR_POINT_UNTIL"," your points until you are level ");
+define("OR_LOWER"," or lower!");
+define("YOUR_HERO_HAS","Your hero has ");
+define("OF_HIT_POINTS","of his hit points.");
+define("ERROR_NAME_SHORT","Error: name too short");
+define("HEROSMANSION_DESC","In the Hero's mansion you can train your own hero and at level 10, 15 and 20 you can conquer oases with Hero in the immediate vicinity.");
+
 define("GREATWAREHOUSE","Great Warehouse");
+define("GREATWAREHOUSE_DESC","Wood, clay and iron are stored in the warehouse. The great warehouse offers you more space and keeps your goods drier and safer than the normal one.");
+
 define("GREATGRANARY","Great Granary");
+define("GREATGRANARY_DESC","Crop produced by your farms is stored in the granary. The great granary offers you more space and keeps your crops drier and safer than the normal one.");
+
 define("WONDER","Wonder of the World");
+define("WORLD_WONDER","World Wonder");
+define("WONDER_DESC","The World Wonder (otherwise known as a Wonder of the World) is as wonderful as it sounds. This building is built in order to win the server. Each level of the World Wonder costs hundreds of thousands (even millions) of resources to build.");
+define("WORLD_WONDER_CHANGE_NAME","You need to have World Wonder level 1 to be able to change its name");
+define("WORLD_WONDER_NAME","World Wonder name");
+define("WORLD_WONDER_NOTCHANGE_NAME","You can not change the name of the World Wonder after level 10");
+define("WORLD_WONDER_NAME_CHANGED","Name changed");
+
 define("HORSEDRINKING","Horse Drinking Trough");
+define("HORSEDRINKING_DESC","The horse drinking trough of the Romans decreases the training time of cavalry and the upkeep of these troops as well.");
+
 define("GREATWORKSHOP","Great Workshop");
+define("TRAINING_COMMENCE_GREATWORKSHOP","Training can commence when great workshop is completed.");
+define("GREATWORKSHOP_DESC","Siege engines like catapults and rams can be built in the great workshop. The higher its level the faster the units are produced.");
+
+define("BUILDING_MAX_LEVEL_UNDER","Building max level under construction");
+define("BUILDING_BEING_DEMOLISHED","Building presently being demolished");
+define("COSTS_UPGRADING_LEVEL","Costs</b> for upgrading to level");
+define("WORKERS_ALREADY_WORK","The workers are already at work.");
+define("CONSTRUCTING_MASTER_BUILDER","Constructing with master builder ");
+define("COSTS","costs");
+define("GOLD","Gold");
+define("WORKERS_ALREADY_WORK_WAITING","The workers are already at work. (waiting loop)");
+define("ENOUGH_FOOD_EXPAND_CROPLAND","Not enough food. Expand cropland.");
+define("UPGRADE_WAREHOUSE","Upgrade Warehouse");
+define("UPGRADE_GRANARY","Upgrade Granary");
+define("YOUR_CROP_NEGATIVE","Your crop production is negative, you will never get the required resources.");
+define("UPGRADE_LEVEL","Upgrade to level ");
+define("WAITING","(waiting loop)");
+define("NEED_WWCONSTRUCTION_PLAN","Need WW construction plan");
+define("NEED_MORE_WWCONSTRUCTION_PLAN","Need more WW construction plan");
+define("CONSTRUCT_NEW_BUILDING","Construct new building");
+define("SHOWSOON_AVAILABLE_BUILDINGS","show soon available buildings");
+define("HIDESOON_AVAILABLE_BUILDINGS","hide soon available buildings");
+
+
 
 //artefact
 define("ARCHITECTS_DESC","All buildings in the area of effect are stronger. This means that you will need more catapults to damage buildings protected by this artifacts powers.");

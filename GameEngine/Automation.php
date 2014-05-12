@@ -4764,8 +4764,12 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $database->query($q);
         $row['lastgavemedal'] = time()+MEDALINTERVAL;
         }
-        $time = $row['lastgavemedal'] + MEDALINTERVAL;
-        if ($time < time()) $giveMedal = true;
+        $giveMedal = true;
+        } else {
+        	$time = $row['lastgavemedal'] + MEDALINTERVAL;
+        	if ($time < time()) { 
+        		$giveMedal = true;
+      	}
       }
 
       if($giveMedal && MEDALINTERVAL > 0){
