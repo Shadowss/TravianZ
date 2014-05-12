@@ -6,27 +6,27 @@
 			<table cellpadding="1" cellspacing="1" id="npc" class="transparent">
 			<thead>
 			<tr>
-			<th colspan="2">Edit trade route</th>
+			<th colspan="2"><?php echo EDIT_TRADE_ROUTES;?></th>
 			</tr>
 			</thead>
 				<tbody>
 				<tr>
 					<th>
-						Resources:					</th>
+						<?php echo RESOURCES;?>:					</th>
 					<td>
-						<img src="../../<?php echo GP_LOCATE; ?>img/r/1.gif" alt="Lumber" title="Lumber"> <input class="text" type="text" name="r1" id="r1" value="<?php echo $edited_route['wood']; ?>" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/2.gif" alt="Clay" title="CLay"> <input class="text" type="text" name="r2" id="r2" value="<?php echo $edited_route['clay']; ?>" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/3.gif" alt="Iron" title="Iron"> <input class="text" type="text" name="r3" id="r3" value="<?php echo $edited_route['iron']; ?>" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/4.gif" alt="Crop" title="Crop"> <input class="text" type="text" name="r4" id="r4" value="<?php echo $edited_route['crop']; ?>" maxlength="5" tabindex="1" style="width:50px;">
+						<img src="../../<?php echo GP_LOCATE; ?>img/r/1.gif" alt="Lumber" title="<?php echo LUMBER;?>"> <input class="text" type="text" name="r1" id="r1" value="<?php echo $edited_route['wood']; ?>" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/2.gif" alt="Clay" title="<?php echo CLAY;?>"> <input class="text" type="text" name="r2" id="r2" value="<?php echo $edited_route['clay']; ?>" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/3.gif" alt="Iron" title="<?php echo IRON;?>"> <input class="text" type="text" name="r3" id="r3" value="<?php echo $edited_route['iron']; ?>" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/4.gif" alt="Crop" title="<?php echo CROP;?>"> <input class="text" type="text" name="r4" id="r4" value="<?php echo $edited_route['crop']; ?>" maxlength="5" tabindex="1" style="width:50px;">
 					</td>
 				</tr>
 				<tr>
 					<th>
-						start time:					</th>
+						<?php echo START_TIME_TRADE;?>:					</th>
 					<td>
 						<select name="start"><?php for($i=0;$i<=23;$i++){?><option value="<?php echo $i; ?>" <?php if($i == $edited_route['start']){echo "selected";} ?>><?php if($i > 9){echo $i;}else{echo "0".$i;}?></option><?php } ?></select>
 					</td>
 				</tr>
 				<tr>
 					<th>
-						deliveries:					</th>
+						<?php echo DELIVERIES;?>:					</th>
 					<td>
 						<select name="deliveries"><?php for($i=1;$i<=3;$i++){?><option value="<?php echo $i; ?>" <?php if($i == $edited_route['deliveries']){echo "selected";} ?>><?php echo $i; ?></option><?php } ?></select>
 					</td>

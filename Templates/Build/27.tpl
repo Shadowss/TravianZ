@@ -2,11 +2,11 @@
 
 <body>
     <div id="build" class="gid27">
-        <a href="#" onclick="return Popup(27,4);" class="build_logo"><img class="building g27" src="img/x.gif" alt="Treasury" title="Treasury"></a>
+        <a href="#" onclick="return Popup(27,4);" class="build_logo"><img class="building g27" src="img/x.gif" alt="Treasury" title="<?php echo TREASURY; ?>"></a>
 
-        <h1>Treasury <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+        <h1><?php echo TREASURY; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 
-        <p class="build_desc">The riches of your empire are kept in the treasury. The treasury has room for one treasure. After you have captured an artefact it takes 24 hours on a normal server or 12 hours on a thrice speed server to be effective.</p>
+        <p class="build_desc"><?php echo TREASURY_DESC; ?></p>
         <?php
         
         include("27_menu.tpl");

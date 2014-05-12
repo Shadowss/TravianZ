@@ -1,8 +1,8 @@
 <div id="build" class="gid21"><a href="#" onClick="return Popup(21,4, 'gid');" class="build_logo"> 
-<img class="building g21" src="img/x.gif" alt="Workshop" title="Workshop" /> </a>
+<img class="building g21" src="img/x.gif" alt="Workshop" title="<?php echo WORKSHOP; ?>" /> </a>
 
-<h1>Workshop <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc">Siege engines like catapults and rams can be built in the workshop. The higher its level the faster the units are produced.</p>
+<h1><?php echo WORKSHOP; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo WORKSHOP_DESC; ?></p>
 <?php if ($building->getTypeLevel(21) > 0) { ?>
 
 		<form method="POST" name="snd" action="build.php">
@@ -11,9 +11,9 @@
 			<table cellpadding="1" cellspacing="1" class="build_details">
 			<thead>
 					<tr>
-						<td>Name</td>
-						<td>Quantity</td>
-						<td>Max</td>
+						<td><?php echo NAME; ?></td>
+						<td><?php echo QUANTITY; ?></td>
+						<td><?php echo MAX; ?></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -49,9 +49,9 @@
             for($i=$start;$i<=($start+1);$i++) {
                 if($technology->getTech($i)) {
                 echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u$i\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
-                    <a href=\"#\" onClick=\"return Popup($i,1);\">".$technology->getUnitName($i)."</a> <span class=\"info\">(Avaliable: ".$village->unitarray['u'.$i].")</span></div>";
+                    <a href=\"#\" onClick=\"return Popup($i,1);\">".$technology->getUnitName($i)."</a> <span class=\"info\">(".AVAILABLE.": ".$village->unitarray['u'.$i].")</span></div>";
                     echo "<div class=\"details\">
-                                        <img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".${'u'.$i}['crop']."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />".${'u'.$i}['pop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />";
+                                        <img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"".LUMBER."\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"".CLAY."\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"".IRON."\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"".CROP."\" />".${'u'.$i}['crop']."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"".CROP_COM."\" />".${'u'.$i}['pop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />";
                     $dur=round(${'u'.$i}['time'] * ($bid21[$village->resarray['f'.$id]]['attri'] / 100) / SPEED * $artefact_bonus2 / $artefact_bonus);
 					$foolartefact = $database->getFoolArtefactInfo(5,$village->wid,$session->uid);
 					if(count($foolartefact) > 0){
@@ -82,7 +82,7 @@
                 }
             }
             if($success == 0) {
-                echo "<tr><td class=\"none\" colspan=\"3\">No units avaliable. Research at academy</td></tr>";
+                echo "<tr><td class=\"none\" colspan=\"3\">".AVAILABLE_ACADEMY."</td></tr>";
             }
 			}
             ?>
@@ -95,7 +95,7 @@
 		</form>
 <?php
 	    } else {
-			echo "<b>Training can commence when workshop are completed.</b><br>\n";
+			echo "<b>".TRAINING_COMMENCE_WORKSHOP."</b><br>\n";
 		}
 
     $trainlist = $technology->getTrainingList(3);
@@ -104,9 +104,9 @@
     	echo "
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
 		<thead><tr>
-			<td>Training</td>
-			<td>Duration</td>
-			<td>Finished</td>
+			<td>".TRAINING."</td>
+			<td>".DURATION."</td>
+			<td>".FINISHED."</td>
 		</tr></thead>
 		<tbody>";
         $TrainCount = 0;
@@ -128,7 +128,7 @@
             }
             echo $time[1];
 		} ?>
-		</tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
+		</tr><tr class="next"><td colspan="3"><?php echo UNIT_FINISHED; ?> <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
         </tbody></table>
     <?php }
 include("upgrade.tpl");

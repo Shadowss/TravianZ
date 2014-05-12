@@ -24,35 +24,35 @@
 \*-------------------------------------------------------*/
     
     if($hero_info['unit'] == 1) {
-        	$name = "Legionnaire";
+        	$name = U1;
         } else if($hero_info['unit'] == 2) {
-        	$name = "Praetorian";
+        	$name = U2;
         } else if($hero_info['unit'] == 3) {
-        	$name = "Imperian";
+        	$name = U3;
         } else if($hero_info['unit'] == 5) {
-        	$name = "Equites Imperatoris";
+        	$name = U5;
         } else if($hero_info['unit'] == 6) {
-        	$name = "Equites Caesaris";
+        	$name = U6;
         } else if($hero_info['unit'] == 11) {
-        	$name = "Clubswinger";
+        	$name = U11;
         } else if($hero_info['unit'] == 12) {
-        	$name = "Spearman";
+        	$name = U12;
         } else if($hero_info['unit'] == 13) {
-        	$name = "Axeman";
+        	$name = U13;
         } else if($hero_info['unit'] == 15) {
-        	$name = "Paladin";
+        	$name = U15;
         } else if($hero_info['unit'] == 16) {
-        	$name = "Teutonic Knight";
+        	$name = U16;
         } else if($hero_info['unit'] == 21) {
-        	$name = "Phalanx";
+        	$name = U21;
         } else if($hero_info['unit'] == 22) {
-        	$name = "Swordsman";
+        	$name = U22;
         } else if($hero_info['unit'] == 24) {
-        	$name = "Theutates Thunder";
+        	$name = U24;
         } else if($hero_info['unit'] == 25) {
-        	$name = "Druidrider";
+        	$name = U25;
         } else if($hero_info['unit'] == 26) {
-        	$name = "Haeduan";
+        	$name = U26;
         }
         if($hero_info['level'] <= 60){
         $wood = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['wood']);
@@ -74,7 +74,7 @@
     <table cellpadding="1" cellspacing="1" class="build_details">
         <thead>
             <tr>
-                <th colspan="2">Revive hero</th>
+                <th colspan="2"><?php echo REVIVE; ?> <?php echo U0; ?></th>
             </tr>
         </thead>
     
@@ -86,7 +86,7 @@
     <table id="distribution" cellpadding="1" cellspacing="1">
         <thead>
             <tr>
-            <?php echo "<tr class='next'><th>Hero will be ready in <span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
+            <?php echo "<tr class='next'><th>".HERO_READY." <span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
             </tr>
         </thead>
             
@@ -110,12 +110,12 @@
 						<?php echo $name . " (Level " . $hero_info['level'] . ")"; ?>
 					</div>
 					<div class="details">
-						<img class="r1" src="img/x.gif" alt="Wood" title="Wood" /><?php echo $wood; ?>|
-                        <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $clay; ?>|
-                        <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $iron; ?>|
-                        <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $crop; ?>|
-                        <img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" />6|
-                        <img class="clock" src="img/x.gif" alt="Duration" title="Duration" />
+						<img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
+                        <img class="r2" src="img/x.gif" alt="Clay" title="<?php echo CLAY; ?>" /><?php echo $clay; ?>|
+                        <img class="r3" src="img/x.gif" alt="Iron" title="<?php echo IRON; ?>" /><?php echo $iron; ?>|
+                        <img class="r4" src="img/x.gif" alt="Crop" title="<?php echo CROP; ?>" /><?php echo $crop; ?>|
+                        <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM; ?>" />6|
+                        <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION; ?>" />
 				        <?php echo $training_time; ?>
                     </div>
 				</td>
@@ -123,9 +123,9 @@
                 <td class="val" width="20%"><center>
                 <?php
                 if($village->awood < $wood OR $village->aclay < $clay OR $village->airon < $iron OR $village->acrop < $crop) {
-                    echo "<span class=\"none\">No enough resources</span>";
+                    echo "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
                 }else {
-                    echo "<a href=\"build.php?id=".$id."&revive=1\">Revive</a>";
+                    echo "<a href=\"build.php?id=".$id."&revive=1\">".REVIVE."</a>";
                 }
                 
                 ?></center></td>
@@ -141,12 +141,12 @@
 						<?php echo $name . " (Level " . $hero_info['level'] . ")"; ?>
 					</div>
 					<div class="details">
-						<img class="r1" src="img/x.gif" alt="Wood" title="Wood" /><?php echo $wood; ?>|
-                        <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $clay; ?>|
-                        <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $iron; ?>|
-                        <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $crop; ?>|
-                        <img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" />6|
-                        <img class="clock" src="img/x.gif" alt="Duration" title="Duration" />
+						<img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
+                        <img class="r2" src="img/x.gif" alt="Clay" title="<?php echo CLAY; ?>" /><?php echo $clay; ?>|
+                        <img class="r3" src="img/x.gif" alt="Iron" title="<?php echo IRON; ?>" /><?php echo $iron; ?>|
+                        <img class="r4" src="img/x.gif" alt="Crop" title="<?php echo CROP; ?>" /><?php echo $crop; ?>|
+                        <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM; ?>" />6|
+                        <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION; ?>" />
 				        <?php echo $training_time; ?>
                     </div>
 				</td>
@@ -154,9 +154,9 @@
                 <td class="val" width="20%"><center>
                 <?php
                 if($village->awood < $wood OR $village->aclay < $clay OR $village->airon < $iron OR $village->acrop < $crop) {
-                    echo "<span class=\"none\">No enough resources</span>";
+                    echo "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
                 }else {
-                    echo "<a href=\"build.php?id=".$id."&revive=1\">Revive</a>";
+                    echo "<a href=\"build.php?id=".$id."&revive=1\">".REVIVE."</a>";
                 }
                 
                 ?>

@@ -1,25 +1,25 @@
-<div id="build" class="gid26"><h1>Palace <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<div id="build" class="gid26"><h1><?php echo PALACE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 <p class="build_desc">
 	<a href="#" onClick="return Popup(26,4, 'gid');"
 		class="build_logo"> <img
 		class="building g26"
 		src="img/x.gif" alt="Palace"
-		title="Palace" /> </a>
+		title="<?php echo PALACE; ?>" /> </a>
 
-The king or queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.
+<?php echo PALACE_DESC; ?>
 
 <?php include("26_menu.tpl"); ?>
 
 <table cellpadding="1" cellspacing="1" id="expansion">
 <thead><tr>
-	<th colspan="6"><a name="h2"></a>Villages founded or conquered by this village</th>
+	<th colspan="6"><a name="h2"></a><?php echo CONQUERED_BY_VILLAGE; ?></th>
 </tr>
 <tr>
-	<td colspan="2">Village</td>
-	<td>Player</td>
-	<td>Inhabitants</td>
-	<td>Coordinates</td>
-	<td>Date</td>
+	<td colspan="2"><?php echo VILLAGE; ?></td>
+	<td><?php echo PLAYER; ?></td>
+	<td><?php echo INHABITANTS; ?></td>
+	<td><?php echo COORDINATES; ?></td>
+	<td><?php echo DATE; ?></td>
 </tr></thead>
 <tbody>
 <?php
@@ -49,7 +49,7 @@ echo '
 	}
 }
 else{
-echo '<tr><td colspan="6" class="none">No other village has been founded or conquered by this village yet.</td></tr>';
+echo '<tr><td colspan="6" class="none">'.NONE_CONQUERED_BY_VILLAGE.'</td></tr>';
 }
 ?>
 </tbody></table></div>

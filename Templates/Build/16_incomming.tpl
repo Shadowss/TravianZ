@@ -64,7 +64,8 @@ if ($units[$y]['sort_type']==3){
 				$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,3,3,0));
 				$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,3,1,1));
 				$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,3,2,0));
-				$total_artefact = $artefact + $artefact1 + $artefact2;
+				$foolartefact = count($database->getFoolArtefactInfo(3,$village->wid,$session->uid));
+				$total_artefact = $artefact + $artefact1 + $artefact2 + $foolartefact;
 				  if($total_artefact == 0){
                  		echo "<td class=\"none\">?</td>";
                   }else{
@@ -98,7 +99,7 @@ if ($units[$y]['sort_type']==3){
 		echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
                   <a>village of the elders</a></td>
                   <td colspan=\"10\">";
-                  echo "<a>Taskmaster's troops</a>";
+                  echo "<a>".VILLAGE_OF_THE_ELDERS_TROOPS."</a>";
                   echo "</td></tr></thead><tbody class=\"units\">";
                   $tribe = $session->tribe;
                   $start = ($tribe-1)*10+1;

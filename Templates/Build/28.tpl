@@ -2,16 +2,16 @@
 include("next.tpl");
 ?>
 <div id="build" class="gid28"><a href="#" onClick="return Popup(28,4);" class="build_logo">
-	<img class="building g28" src="img/x.gif" alt="Trade Office" title="Trade Office" />
+	<img class="building g28" src="img/x.gif" alt="Trade Office" title="<?php echo TRADEOFFICE; ?>" />
 </a>
-<h1>Trade Office <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc">In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.</p>
+<h1><?php echo TRADEOFFICE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo TRADEOFFICE_DESC; ?></p>
 
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
-			<th>Current merchant load:</th>
-			<td><b><?php echo $bid28[$village->resarray['f'.$id]]['attri']; ?></b> Percent</td>
+			<th><?php echo CURRENT_MERCHANT; ?></th>
+			<td><b><?php echo $bid28[$village->resarray['f'.$id]]['attri']; ?></b> <?php echo PERCENT; ?></td>
 		</tr>
 		<tr>
 		<?php 
@@ -19,13 +19,13 @@ include("next.tpl");
 		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
 		if($next<=20){
         ?>
-			<th>Merchant load at level <?php echo $next; ?>:</th>
-			<td><b><?php echo $bid28[$next]['attri']; ?></b> Percent</td>
+			<th><?php echo MERCHANT_LEVEL; ?> <?php echo $next; ?>:</th>
+			<td><b><?php echo $bid28[$next]['attri']; ?></b> <?php echo PERCENT; ?></td>
             <?php
             }else{
         ?>
-			<th>Merchant load at level 20:</th>
-			<td><b><?php echo $bid28[20]['attri']; ?></b> Percent</td>
+			<th><?php echo MERCHANT_LEVEL; ?> 20:</th>
+			<td><b><?php echo $bid28[20]['attri']; ?></b> <?php echo PERCENT; ?></td>
             <?php
 			}}
             ?>

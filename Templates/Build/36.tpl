@@ -1,20 +1,20 @@
 <?php
 include("next.tpl");
 ?>
-<div id="build" class="gid36"><h1>Trapper <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<div id="build" class="gid36"><h1><?php echo TRAPPER; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 <p class="build_desc">
 	<a href="#" onClick="return Popup(36,4, 'gid');"
 		class="build_logo"> <img
 		class="building g36"
 		src="img/x.gif" alt="Trapper"
-		title="Trapper" /> </a>
-	The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won't be able to harm your village anymore. </p>
+		title="<?php echo TRAPPER; ?>" /> </a>
+	<?php echo TRAPPER_DESC; ?> </p>
 
 <table cellpadding="1" cellspacing="1" id="build_value">
 	<tr>
-		<th>Currect maximum traps to train:</th>
+		<th><?php echo CURRENT_TRAPS; ?></th>
 
-		<td><b><?php echo $bid36[$village->resarray['f'.$id]]['attri']*TRAPPER_CAPACITY; ?></b> Traps</td>
+		<td><b><?php echo $bid36[$village->resarray['f'.$id]]['attri']*TRAPPER_CAPACITY; ?></b> <?php echo TRAPS; ?></td>
 	</tr>
 	<tr>
 	<?php 
@@ -22,13 +22,13 @@ include("next.tpl");
 		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
 		if($next<=20){
         ?>
-		<th>Maximum traps to train at level <?php echo $next; ?>:</th>
-		<td><b><?php echo $bid36[$next]['attri']*TRAPPER_CAPACITY; ?></b> Traps</td>
+		<th><?php echo TRAPS_LEVEL; ?> <?php echo $next; ?>:</th>
+		<td><b><?php echo $bid36[$next]['attri']*TRAPPER_CAPACITY; ?></b> <?php echo TRAPS; ?></td>
         <?php
             }else{
 		?>
-		<th>Maximum traps to train at level 20:</th>
-		<td><b><?php echo $bid36[20]['attri']*TRAPPER_CAPACITY; ?></b> Traps</td>
+		<th><?php echo TRAPS_LEVEL; ?> 20:</th>
+		<td><b><?php echo $bid36[20]['attri']*TRAPPER_CAPACITY; ?></b> <?php echo TRAPS; ?></td>
 		<?php
 			}
 			}
@@ -36,7 +36,7 @@ include("next.tpl");
 
 	</tr>
 </table>
-<p>Your currently have <b><?php echo $village->unitarray['u99']; ?></b> traps, <b><?php echo $village->unitarray['u99o']; ?></b> of which are occupied.</p>
+<p><?php echo CURRENT_HAVE; ?> <b><?php echo $village->unitarray['u99']; ?></b> <?php echo TRAPS; ?>, <b><?php echo $village->unitarray['u99o']; ?></b> <?php echo WHICH_OCCUPIED; ?></p>
 <?php if ($building->getTypeLevel(36) > 0) { ?>
 <form method="POST" name="snd" action="build.php">
 				<input type="hidden" name="id" value="<?php echo $id; ?>" />
@@ -45,9 +45,9 @@ include("next.tpl");
 	<thead>
 
 		<tr>
-			<td>Name</td>
-			<td>Quantity</td>
-			<td>Max</td>
+			<td><?php echo NAME; ?></td>
+			<td><?php echo QUANTITY; ?></td>
+			<td><?php echo MAX; ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -57,16 +57,16 @@ include("next.tpl");
 			<div class="tit"><img class="unit u99" src="img/x.gif"
 				alt="Trap"
 				title="Trap" /> <a href="#"
-				onClick="return Popup(36,4,'gid');">Trap</a> <span class="info">(Available: <?php echo $village->unitarray['u99']; ?>)</span>
+				onClick="return Popup(36,4,'gid');"><?php echo TRAP; ?></a> <span class="info">(<?php echo AVAILABLE; ?>: <?php echo $village->unitarray['u99']; ?>)</span>
 			</div>
 			<div class="details">
 			<span><img class="r1" src="img/x.gif"
-				alt="Lumber" title="Lumber" />20|</span><span><img class="r2" src="img/x.gif"
-				alt="Clay" title="Clay" />30|</span><span><img class="r3" src="img/x.gif"
-				alt="Iron" title="Iron" />10|</span><span><img class="r4" src="img/x.gif"
-				alt="Crop" title="Crop" />20|</span><span><img class="r5" src="img/x.gif" alt="Crop consumption"
-				title="Crop consumption" />0|<img class="clock" src="img/x.gif"
-				alt="Duration" title="Duration" /><?php $dur=$generator->getTimeFormat(round(${'u99'}['time'] * ($bid19[$village->resarray['f'.$id]]['attri']*TRAPPER_CAPACITY / 100) / SPEED)); 
+				alt="Lumber" title="<?php echo LUMBER; ?>" />20|</span><span><img class="r2" src="img/x.gif"
+				alt="Clay" title="<?php echo CLAY; ?>" />30|</span><span><img class="r3" src="img/x.gif"
+				alt="Iron" title="<?php echo IRON; ?>" />10|</span><span><img class="r4" src="img/x.gif"
+				alt="Crop" title="<?php echo CROP; ?>" />20|</span><span><img class="r5" src="img/x.gif" alt="Crop consumption"
+				title="<?php echo CROP_COM; ?>" />0|<img class="clock" src="img/x.gif"
+				alt="Duration" title="<?php echo DURATION; ?>" /><?php $dur=$generator->getTimeFormat(round(${'u99'}['time'] * ($bid19[$village->resarray['f'.$id]]['attri']*TRAPPER_CAPACITY / 100) / SPEED)); 
 				echo ($dur=="0:00:00")? "0:00:01":$dur; ?></span>
 
 			</div>
@@ -99,15 +99,15 @@ include("next.tpl");
 	<p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" onclick="this.disabled=true;this.form.submit();"/></p></form>
 	<?php
 	} else {
-		echo "<b>Training can commence when trapper are completed.</b><br>\n";
+		echo "<b>".TRAINING_COMMENCE_TRAPPER."</b><br>\n";
 	}
     if(count($trainlist) > 0) {
     	echo "
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
 		<thead><tr>
-			<td>Training</td>
-			<td>Duration</td>
-			<td>Finished</td>
+			<td>".TRAINING."</td>
+			<td>".DURATION."</td>
+			<td>".FINISHED."</td>
 		</tr></thead>
 		<tbody>";
 		$TrainCount = 0;
@@ -129,7 +129,7 @@ include("next.tpl");
             }
 			echo $time[1];
 		} ?>
-		</tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
+		</tr><tr class="next"><td colspan="3"><?php echo UNIT_FINISHED; ?> <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
 		</tbody></table>
     <?php }
 include("upgrade.tpl");

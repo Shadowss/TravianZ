@@ -1,8 +1,8 @@
 <div id="build" class="gid17"><a href="#" onClick="return Popup(17,4);" class="build_logo">  
-    <img class="building g17" src="img/x.gif" alt="Marketplace" title="Marketplace" />  
+    <img class="building g17" src="img/x.gif" alt="Marketplace" title="<?php echo MARKETPLACE;?>" />  
 </a>  
-<h1>Marketplace <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>  
-<p class="build_desc">At the Marketplace you can trade resources with other players. The higher its level, the more resources can be transported at the same time.</p>  
+<h1><?php echo LEVEL;?> <span class="level"><?php echo MARKETPLACE;?> <?php echo $village->resarray['f'.$id]; ?></span></h1>  
+<p class="build_desc"><?php echo LEVEL;?><?php echo MARKETPLACE_DESC;?></p>  
   
 <?php include("17_menu.tpl"); ?> 
 <form method="POST" action="build.php">  
@@ -11,34 +11,34 @@
   
     <table id="sell" cellpadding="1" cellspacing="1">  
         <tr>  
-            <th>Offering</th>  
+            <th><?php echo OFFERING;?></th>  
             <td class="val"><input class="text" tabindex="1" name="m1" value="" maxlength="6" /></td>  
             <td class="res">  
                 <select name="rid1" tabindex="2" class="dropdown">  
-                    <option value="1" selected="selected">Lumber</option>  
-                    <option value="2">Clay</option>  
-                    <option value="3">Iron</option>  
-                    <option value="4">Crop</option>  
+                    <option value="1" selected="selected"><?php echo LUMBER;?></option>  
+                    <option value="2"><?php echo CLAY;?></option>  
+                    <option value="3"><?php echo IRON;?></option>  
+                    <option value="4"><?php echo CROP;?></option>  
                 </select>  
             </td>  
-            <td class="tra"><input class="check" type="checkbox" tabindex="5" name="d1" value="1" /> max. time of transport: <input class="text" tabindex="6" name="d2" value="2" maxlength="2" /> hours</td> 
+            <td class="tra"><input class="check" type="checkbox" tabindex="5" name="d1" value="1" /> <?php echo MAX_TIME_TRANSPORT;?>: <input class="text" tabindex="6" name="d2" value="2" maxlength="2" /> <?php echo HOURS;?></td> 
         </tr>  
         <tr>  
-            <th>Searching</th>  
+            <th><?php echo SEARCHING;?></th>  
             <td class="val"><input class="text" tabindex="3" name="m2" value="" maxlength="6" /></td>  
             <td class="res">  
                 <select name="rid2" tabindex="4" class="dropdown">  
-                    <option value="1">Lumber</option>  
-                    <option value="2" selected="selected">Clay</option>  
-                    <option value="3">Iron</option>  
-                    <option value="4">Crop</option>  
+                    <option value="1"><?php echo LUMBER;?></option>  
+                    <option value="2" selected="selected"><?php echo CLAY;?></option>  
+                    <option value="3"><?php echo IRON;?></option>  
+                    <option value="4"><?php echo CROP;?></option>  
                 </select>  
             </td>  
             <td class="al"> 
                 <?php  
                     if($session->userinfo['alliance'] != 0) 
                     { 
-                        echo "<input class=\"check\" type=\"checkbox\" tabindex=\"7\" name=\"ally\" value=\"1\" /> own alliance only"; 
+                        echo "<input class=\"check\" type=\"checkbox\" tabindex=\"7\" name=\"ally\" value=\"1\" /> ".OWN_ALLIANCE_ONLY.""; 
                     } 
                 ?>  
             </td> 
@@ -48,15 +48,15 @@
     <?php 
         if(isset($_GET['e1'])) 
         { 
-            echo "<p class=\"error2\">Not enough resources</p>"; 
+            echo "<p class=\"error2\">".NOT_ENOUGH_RESOURCES."</p>"; 
         } 
         elseif(isset($_GET['e2'])) 
         { 
-            echo "<p class=\"error2\">Invalid offer</p>"; 
+            echo "<p class=\"error2\">".INVALID_OFFER."</p>"; 
         } 
         elseif(isset($_GET['e3'])) 
         { 
-            echo "<p class=\"error2\">Not enough merchants</p>"; 
+            echo "<p class=\"error2\">".NOT_ENOUGH_MERCHANTS."</p>"; 
         } 
         else 
         { 
@@ -68,25 +68,25 @@
 <?php 
 if(count($market->onmarket) > 0) 
 { 
-    echo "<table id=\"sell_overview\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><th colspan=\"6\">Own offers</th></tr><tr><td>&nbsp;</td><td>Offer</td><td>Search</td><td>Merchants</td><td>Alliance</td><td>Duration</td></tr></thead><tbody>"; 
+    echo "<table id=\"sell_overview\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><th colspan=\"7\">".OWN_OFFERS."</th></tr><tr><td>&nbsp;</td><td>".OFFER."</td><td>ratio</td><td>".SEARCH."</td><td>".MERCHANT."</td><td>".ALLIANCE."</td><td>".DURATION."</td></tr></thead><tbody>"; 
     foreach($market->onmarket as $offer) 
     { 
         if($session->access != BANNED) 
         { 
-            echo "<tr><td class=\"abo\"><a href=\"build.php?id=$id&t=2&a=5&del=".$offer['id']."\"><img class=\"del\"src=\"img/x.gif\" alt=\"Delete\" title=\"Delete\" /></a></td>"; 
+            echo "<tr><td class=\"abo\"><a href=\"build.php?id=$id&t=2&a=5&del=".$offer['id']."\"><img class=\"del\"src=\"img/x.gif\" alt=\"Delete\" title=\"".DELETE."\" /></a></td>"; 
             echo "<td class=\"val\">"; 
         } 
         else 
         { 
-            echo "<tr><td class=\"abo\"><a href=\"banned.php\"><img class=\"del\"src=\"img/x.gif\" alt=\"Delete\" title=\"Delete\" /></a></td>"; 
+            echo "<tr><td class=\"abo\"><a href=\"banned.php\"><img class=\"del\"src=\"img/x.gif\" alt=\"Delete\" title=\"".DELETE."\" /></a></td>"; 
             echo "<td class=\"val\">"; 
         } 
         switch($offer['gtype']) 
         { 
-            case 1: echo "<img src=\"img/x.gif\" class=\"r1\" alt=\"Wood\" title=\"Wood\" />"; break; 
-            case 2: echo "<img src=\"img/x.gif\" class=\"r2\" alt=\"Clay\" title=\"Clay\" />"; break; 
-            case 3: echo "<img src=\"img/x.gif\" class=\"r3\" alt=\"Iron\" title=\"Iron\" />"; break; 
-            case 4: echo "<img src=\"img/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" />"; break; 
+            case 1: echo "<img src=\"img/x.gif\" class=\"r1\" alt=\"Wood\" title=\"".LUMBER."\" />"; break; 
+            case 2: echo "<img src=\"img/x.gif\" class=\"r2\" alt=\"Clay\" title=\"".CLAY."\" />"; break; 
+            case 3: echo "<img src=\"img/x.gif\" class=\"r3\" alt=\"Iron\" title=\"".IRON."\" />"; break; 
+            case 4: echo "<img src=\"img/x.gif\" class=\"r4\" alt=\"Crop\" title=\"".CROP."\" />"; break; 
         } 
         echo $offer['gamt']; 
 		$sss = ($offer['wamt']/$offer['gamt']);
@@ -101,10 +101,10 @@ if(count($market->onmarket) > 0)
 		echo "</td><td class=\"ratio\"> ".$ratio." </td> <td class=\"val\">";
         switch($offer['wtype']) 
         { 
-            case 1: echo "<img src=\"img/x.gif\" class=\"r1\" alt=\"Wood\" title=\"Wood\" />"; break; 
-            case 2: echo "<img src=\"img/x.gif\" class=\"r2\" alt=\"Clay\" title=\"Clay\" />"; break; 
-            case 3: echo "<img src=\"img/x.gif\" class=\"r3\" alt=\"Iron\" title=\"Iron\" />"; break; 
-            case 4: echo "<img src=\"img/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" />"; break; 
+            case 1: echo "<img src=\"img/x.gif\" class=\"r1\" alt=\"Wood\" title=\"".LUMBER."\" />"; break; 
+            case 2: echo "<img src=\"img/x.gif\" class=\"r2\" alt=\"Clay\" title=\"".CLAY."\" />"; break; 
+            case 3: echo "<img src=\"img/x.gif\" class=\"r3\" alt=\"Iron\" title=\"".IRON."\" />"; break; 
+            case 4: echo "<img src=\"img/x.gif\" class=\"r4\" alt=\"Crop\" title=\"".CROP."\" />"; break; 
         } 
         echo $offer['wamt']; 
         echo "</td><td class=\"tra\">".$offer['merchant']." </td><td class=\"al\">"; 
@@ -117,7 +117,7 @@ if(count($market->onmarket) > 0)
         } 
         else 
         { 
-            echo "All"; 
+            echo "".ALL.""; 
         } 
         echo "</td></tr>"; 
     } 

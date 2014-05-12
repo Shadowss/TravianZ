@@ -4,10 +4,10 @@
 	<input type="hidden" name="id" value="<?php echo $id ?>">
 	<input type="hidden" name="ft" value="ali1">
 	<thead><tr>
-		<th colspan="2">found alliance</th>
+		<th colspan="2"><?php echo FOUND_ALLIANCE; ?></th>
 	</tr></thead>
 	<tbody><tr>
-		<th>Tag</th>
+		<th><?php echo TAG; ?></th>
 		<td class="tag">
 			<input class="text" name="ally1" value="<?php echo $form->getValue("ally1"); ?>" maxlength="15">
 			<span class="error"><?php echo $form->getError("ally1"); ?></span>
@@ -15,7 +15,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th>Name</th>
+		<th><?php echo NAME; ?></th>
 		<td class="nam">
 			<input class="text" name="ally2" value="<?php echo $form->getValue("ally2"); ?>" maxlength="50">
 			<span class="error"><?php echo $form->getError("ally2"); ?></span>
@@ -32,10 +32,10 @@
 	<input type="hidden" name="id" value="<?php echo $id ?>">
 	<input type="hidden" name="ft" value="ali1">
 	<thead><tr>
-		<th colspan="2">found alliance</th>
+		<th colspan="2"><?php echo FOUND_ALLIANCE; ?></th>
 	</tr></thead>
 	<tbody><tr>
-		<th>Tag</th>
+		<th><?php echo TAG; ?></th>
 		<td class="tag">
 			<input class="text" name="ally1" disabled="disabled" value="<?php echo $form->getValue("ally1"); ?>" maxlength="8">
 			<span class="error"><?php echo $form->getError("ally1"); ?></span>
@@ -43,7 +43,7 @@
 		</td>
 	</tr>
 	<tr>
-		<th>Name</th>
+		<th><?php echo NAME; ?></th>
 		<td class="nam">
 			<input class="text" name="ally2" disabled="disabled" value="<?php echo $form->getValue("ally2"); ?>" maxlength="25">
 			<span class="error"><?php echo $form->getError("ally2"); ?></span>
@@ -52,7 +52,7 @@
 	</tr></tbody>
 	</table>
 	<?php
-	echo "Banned player can't create an alliance.";
+	echo "".NO_CREATE_ALLIANCE."";
 	?></br><?php
 	}
 	?>

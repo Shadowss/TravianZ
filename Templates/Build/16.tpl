@@ -1,5 +1,5 @@
 <div id="build" class="gid16"><a href="#" onClick="return Popup(16,4);" class="build_logo">
-        <img class="g16" src="img/x.gif" alt="Rally point" title="Rally point" />
+        <img class="g16" src="img/x.gif" alt="Rally point" title="<?php echo RALLYPOINT;?>" />
 </a>
 <h1><?php echo RALLYPOINT;?> <span class="level"><?php echo LEVEL;?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 <p class="build_desc"><?php echo RALLYPOINT_DESC;?></p>

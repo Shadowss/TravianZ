@@ -1,8 +1,8 @@
 <div id="build" class="gid20"><a href="#" onClick="return Popup(20,4);" class="build_logo">
-<img class="building g20" src="img/x.gif" alt="Stable" title="Stable" /> </a>
+<img class="building g20" src="img/x.gif" alt="Stable" title="<?php echo STABLE; ?>" /> </a>
 
-<h1>Stable <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc">Cavalry can be trained in the stable. The higher its level the faster the troops are trained.<br /></p>
+<h1><?php echo STABLE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo STABLE_DESC; ?><br /></p>
 
 <?php if ($building->getTypeLevel(20) > 0) { ?>
 
@@ -12,9 +12,9 @@
 			<table cellpadding="1" cellspacing="1" class="build_details">
 				<thead>
 					<tr>
-						<td>Name</td>
-						<td>Quantity</td>
-						<td>Max</td>
+						<td><?php echo NAME; ?></td>
+						<td><?php echo QUANTITY; ?></td>
+						<td><?php echo MAX; ?></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -32,7 +32,7 @@
 		</form>
 <?php
 	} else {
-		echo "<b>Training can commence when stables are completed.</b><br>\n";
+		echo "<b>".TRAINING_COMMENCE_STABLE."</b><br>\n";
 	}
     $trainlist = $technology->getTrainingList(2);
     if(count($trainlist) > 0) {
@@ -40,9 +40,9 @@
     	echo "
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
 		<thead><tr>
-			<td>Training</td>
-			<td>Duration</td>
-			<td>Finished</td>
+			<td>".TRAINING."</td>
+			<td>".DURATION."</td>
+			<td>".FINISHED."</td>
 		</tr></thead>
 		<tbody>";
 		$TrainCount = 0;
@@ -64,7 +64,7 @@
             }
             echo $time[1];
 		} ?>
-		</tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
+		</tr><tr class="next"><td colspan="3"><?php echo UNIT_FINISHED; ?> <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
         </tbody></table>
     <?php }
     ?>

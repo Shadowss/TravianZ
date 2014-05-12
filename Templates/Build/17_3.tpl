@@ -1,9 +1,9 @@
 <?php if($session->gold > 2){ ?>
 <div id="build" class="gid17"><a href="#" onClick="return Popup(17,4);" class="build_logo"> 
-	<img class="building g17" src="img/x.gif" alt="Marketplace" title="Marketplace" /> 
+	<img class="building g17" src="img/x.gif" alt="Marketplace" title="<?php echo MARKETPLACE;?>" /> 
 </a> 
-<h1>Marketplace <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1> 
-<p class="build_desc">At the Marketplace you can trade resources with other players. The higher its level, the more resources can be transported at the same time.
+<h1><?php echo MARKETPLACE;?> <span class="level"><?php echo LEVEL;?> <?php echo $village->resarray['f'.$id]; ?></span></h1> 
+<p class="build_desc"><?php echo MARKETPLACE_DESC;?>
 </p> 
  
 <?php include("17_menu.tpl"); 
@@ -12,12 +12,11 @@
 if(isset($_GET['c'])){
 ?>
 
-<p><b>NPC completed.</b> Cost 3<img src="img/x.gif" class="gold" alt="Gold" title="Gold" /></p> 
-<a href="javascript: history.go(-2)">Back to building</a> 
+<p><b><?php echo NPC_COMPLETED;?>.</b> <?php echo COSTS;?> 3<img src="img/x.gif" class="gold" alt="Gold" title="<?php echo GOLD;?>" /></p> 
+<a href="javascript: history.go(-2)"><?php echo BACK_BUILDING;?></a> 
 <?php } else { ?>
 
-<p>With the NPC merchant you can distribute the resources in your warehouse as you desire. <br /><br />
-The first line shows the current stock. In the second line you can choose another distribution. The third line shows the difference between the old and new stock.</p>
+<p><?php echo NPC_TRADE_DESC;?></p>
 
 
 <script language="JavaScript"> 
@@ -152,7 +151,7 @@ function portionOut() {
  
 function testSum() {
 	if (document.getElementById("remain").innerHTML!=0) {
-		document.getElementById("submitText").innerHTML="<a href='javascript:portionOut();'>Distribute resources at (step 1 of 2)</a>";
+		document.getElementById("submitText").innerHTML="<a href='javascript:portionOut();'><?php echo DISTRIBUTE_RESOURCES; ?></a>";
 		document.getElementById("submitText").style.display="block";
 		document.getElementById("submitButton").style.display="none";
 	} else {
@@ -175,30 +174,30 @@ function testSum() {
 		<table id="npc" cellpadding="1" cellspacing="1"> 
 			<thead> 
 				<tr> 
-					<th colspan="5">NPC Trade</th> 
+					<th colspan="5"><?php echo NPC_TRADE;?></th> 
 				</tr> 
 				<tr>
 			<td class="all"> 
-				<a href="javascript:fillup(0);"><img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /></a> 
+				<a href="javascript:fillup(0);"><img class="r1" src="img/x.gif" alt="Lumber" title="<?php echo LUMBER;?>" /></a> 
 				<span id="org0"><?php echo floor($village->awood); ?></span> 
 			</td> 
 		
 			<td class="all"> 
-				<a href="javascript:fillup(1);"><img class="r2" src="img/x.gif" alt="Clay" title="Clay" /></a> 
+				<a href="javascript:fillup(1);"><img class="r2" src="img/x.gif" alt="Clay" title="<?php echo CLAY;?>" /></a> 
 				<span id="org1"><?php echo floor($village->aclay); ?></span> 
 			</td> 
 		
 			<td class="all"> 
-				<a href="javascript:fillup(2);"><img class="r3" src="img/x.gif" alt="Iron" title="Iron" /></a> 
+				<a href="javascript:fillup(2);"><img class="r3" src="img/x.gif" alt="Iron" title="<?php echo IRON;?>" /></a> 
 				<span id="org2"><?php echo floor($village->airon); ?></span> 
 			</td> 
 		
 			<td class="all"> 
-				<a href="javascript:fillup(3);"><img class="r4" src="img/x.gif" alt="Crop" title="Crop" /></a> 
+				<a href="javascript:fillup(3);"><img class="r4" src="img/x.gif" alt="Crop" title="<?php echo CROP;?>" /></a> 
 				<span id="org3"><?php echo floor($village->acrop); ?></span> 
 			</td> 
 		
-				<td class="sum">Sum:&nbsp;<span id="org4"><?php echo floor($village->awood+$village->acrop+$village->airon+$village->aclay); ?></span></td> 
+				<td class="sum"><?php echo SUM;?>:&nbsp;<span id="org4"><?php echo floor($village->awood+$village->acrop+$village->airon+$village->aclay); ?></span></td> 
 			</tr> 
 		</thead> 
 		<tbody> 
@@ -224,7 +223,7 @@ function testSum() {
 				<input type="hidden" name="m1[]" value="<?php echo floor($village->acrop); ?>" /> 
 			</td> 
 		
-			<td class="sum">Sum:&nbsp;<span id="newsum"><?php if(isset($_GET['r1']) && isset($_GET['r2']) && isset($_GET['r3']) && isset($_GET['r4'])) { echo $_GET['r1']+$_GET['r2']+$_GET['r3']+$_GET['r4']; } else { echo 0; } ?></span></td> 
+			<td class="sum"><?php echo SUM;?>:&nbsp;<span id="newsum"><?php if(isset($_GET['r1']) && isset($_GET['r2']) && isset($_GET['r3']) && isset($_GET['r4'])) { echo $_GET['r1']+$_GET['r2']+$_GET['r3']+$_GET['r4']; } else { echo 0; } ?></span></td> 
 		</tr> 
 		<tr> 
 	
@@ -244,7 +243,7 @@ function testSum() {
 				<span id="diff3"><?php echo 0-floor($village->acrop); ?></span> 
 			</td> 
 		
-					<td class="sum">Rest:&nbsp;<span id="remain">
+					<td class="sum"><?php echo REST;?>:&nbsp;<span id="remain">
                     <?php if(isset($_GET['r1']) && isset($_GET['r2']) && isset($_GET['r3']) && isset($_GET['r4'])) { 
                     echo floor($village->awood+$village->acrop+$village->airon+$village->aclay)-($_GET['r1']+$_GET['r2']+$_GET['r3']+$_GET['r4']); 
                     } else { echo floor($village->awood+$village->acrop+$village->airon+$village->aclay); } ?></span></td> 
@@ -252,7 +251,7 @@ function testSum() {
 			</tbody> 
 		</table> 
 		<p id="submitButton"> 
-	<?php if($session->userinfo['gold'] >= 3) { ?><a href="javascript:document.snd.submit();">Trade resources at (step 2 of 2)</a> <span class="none">(Costs: <img src="img/x.gif" class="gold_g" alt="Gold" title="Gold" /><b>3</b>)</span><?php } else { echo"<span class='none'>Trade resources at (step 2 of 2)</span> (Costs: <img src='img/x.gif' class='gold' alt='Gold' title='Gold' /><b>3</b>)"; }?>	</p>
+	<?php if($session->userinfo['gold'] >= 3) { ?><a href="javascript:document.snd.submit();"><?php echo TRADE_RESOURCES;?>)</a> <span class="none">(<?php echo COSTS;?>: <img src="img/x.gif" class="gold_g" alt="Gold" title="<?php echo GOLD;?>" /><b>3</b>)</span><?php } else { echo"<span class='none'>".TRADE_RESOURCES.")</span> (".COSTS.": <img src='img/x.gif' class='gold' alt='Gold' title='".GOLD."' /><b>3</b>)"; }?>	</p>
 		<p id="submitText"></p> 
 		</form> 
 		<script> 
@@ -261,7 +260,7 @@ function testSum() {
         
 		<?php }else{ ?>
 		</br></br>
-		<?php echo "You can't use NPC trade in WW village.";
+		<?php echo "".YOU_CAN_NAT_NPC_WW."";
 		}} ?>
 	</div>
 <?php

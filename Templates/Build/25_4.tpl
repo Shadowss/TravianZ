@@ -1,24 +1,24 @@
-<div id="build" class="gid25"><h1>Residence <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<div id="build" class="gid25"><h1><?php echo RESIDENCE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 <p class="build_desc">
 	<a href="#" onClick="return Popup(25,4, 'gid');"
 		class="build_logo"> <img
 		class="building g25"
 		src="img/x.gif" alt="Residence"
-		title="Residence" /> </a>
-	The residence is a small palace, where the king or queen lives when (s)he visits the village. The residence protects the village against enemies who want to conquer it.</p>
+		title="<?php echo RESIDENCE; ?>" /> </a>
+	<?php echo RESIDENCE_DESC; ?></p>
 
 <?php include("25_menu.tpl"); ?>
 
 <table cellpadding="1" cellspacing="1" id="expansion">
 <thead><tr>
-	<th colspan="6"><a name="h2"></a>Villages founded or conquered by this village</th>
+	<th colspan="6"><a name="h2"></a><?php echo CONQUERED_BY_VILLAGE; ?></th>
 </tr>
 <tr>
-	<td colspan="2">Village</td>
-	<td>Player</td>
-	<td>Inhabitants</td>
-	<td>Coordinates</td>
-	<td>Date</td>
+	<td colspan="2"><?php echo VILLAGE; ?></td>
+	<td><?php echo PLAYER; ?></td>
+	<td><?php echo INHABITANTS; ?></td>
+	<td><?php echo COORDINATES; ?></td>
+	<td><?php echo DATE; ?></td>
 </tr></thead>
 <tbody>
 <?php
@@ -48,7 +48,7 @@ echo '
 	}
 }
 else{
-echo '<tr><td colspan="6" class="none">No other village has been founded or conquered by this village yet.</td></tr>';
+echo '<tr><td colspan="6" class="none">'.NONE_CONQUERED_BY_VILLAGE.'</td></tr>';
 }
 ?>
 </tbody></table></div>

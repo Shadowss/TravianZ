@@ -1,14 +1,14 @@
 <body>
     <div id="build" class="gid27">
-        <a href="#" onclick="return Popup(27,4);" class="build_logo"><img class="building g27" src="img/x.gif" alt="Treasury" title="Treasury"></a>
+        <a href="#" onclick="return Popup(27,4);" class="build_logo"><img class="building g27" src="img/x.gif" alt="Treasury" title="<?php echo TREASURY; ?>"></a>
 
-        <h1>Treasury <span class="level">Level <?php
+        <h1><?php echo TREASURY; ?> <span class="level"><?php echo LEVEL; ?> <?php
 
         echo $Account->resarray['f' . $id];
 
 ?></span></h1>
 
-        <p class="build_desc">The riches of your empire are kept in the treasury. The treasury has room for one treasure. After you have captured an artefact it takes 24 hours on a normal server or 12 hours on a thrice speed server to be effective.</p>
+        <p class="build_desc"><?php echo TREASURY_DESC; ?></p>
         
         <?php
 
@@ -19,20 +19,20 @@
         <table id="show_artefacts" cellpadding="1" cellspacing="1">
     		<thead>
     			<tr>
-			    	<th colspan="4">Big artefacts</th>
+			    	<th colspan="4"><?php echo LARGE_ARTIFACTS; ?></th>
     			</tr>
     			<tr>
     				<td></td>
-	    			<td>Name</td>
-	    			<td>Player</td>
-	    			<td>Alliance</td>
+	    			<td><?php echo NAME; ?></td>
+	    			<td><?php echo PLAYER; ?></td>
+	    			<td><?php echo ALLIANCE; ?></td>
     			</tr>
     		</thead>
     		<tbody>
             <?php
 
         if(mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts")) == 0) {
-        	echo '<td colspan="4" class="none">There is no artefacts.</td>';
+        	echo '<td colspan="4" class="none">'.NO_ARTIFACTS.'</td>';
         } else {
 
         	$artefact = mysql_query("SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 2 AND type = 1");
@@ -40,7 +40,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -54,7 +54,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -74,7 +74,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -88,7 +88,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -108,7 +108,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -122,7 +122,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -142,7 +142,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -156,7 +156,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -175,7 +175,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -189,7 +189,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -208,7 +208,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -222,7 +222,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -241,7 +241,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -255,7 +255,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
@@ -274,7 +274,7 @@
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
         		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>20</b>, Effect <b>Account</b></div>';
+        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>20</b>, '.EFFECT.' <b>'.ACCOUNT.'</b></div>';
         		echo '</td>';
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';

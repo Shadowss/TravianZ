@@ -17,44 +17,44 @@
 
 
  <div id="build" class="gid37">
-        <a href="#" onclick="return Popup(37,4, 'gid');" class="build_logo"><img class="building g37" src="img/x.gif" alt="Hero's mansion" title="Hero's mansion"></a>
+        <a href="#" onclick="return Popup(37,4, 'gid');" class="build_logo"><img class="building g37" src="img/x.gif" alt="Hero's mansion" title="<?php echo HEROSMANSION; ?>"></a>
 
-        <h1>Hero's mansion <span class="level">Level <?php echo $village->resarray['f' . $id]; ?></span></h1>
+        <h1><?php echo HEROSMANSION; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f' . $id]; ?></span></h1>
 
-        <p class="build_desc">In the Hero's mansion you can train your own hero and at level 10, 15 and 20 you can conquer oases with Hero in the immediate vicinity.</p>
+        <p class="build_desc"><?php echo HEROSMANSION_DESC; ?></p>
 
         
         <?php           
         if($hero_info['unit'] == 1) {
-        	$name = "Legionnaire";
+        	$name = U1;
         } else if($hero_info['unit'] == 2) {
-        	$name = "Praetorian";
+        	$name = U2;
         } else if($hero_info['unit'] == 3) {
-        	$name = "Imperian";
+        	$name = U3;
         } else if($hero_info['unit'] == 5) {
-        	$name = "Equites Imperatoris";
+        	$name = U5;
         } else if($hero_info['unit'] == 6) {
-        	$name = "Equites Caesaris";
+        	$name = U6;
         } else if($hero_info['unit'] == 11) {
-        	$name = "Clubswinger";
+        	$name = U11;
         } else if($hero_info['unit'] == 12) {
-        	$name = "Spearman";
+        	$name = U12;
         } else if($hero_info['unit'] == 13) {
-        	$name = "Axeman";
+        	$name = U13;
         } else if($hero_info['unit'] == 15) {
-        	$name = "Paladin";
+        	$name = U15;
         } else if($hero_info['unit'] == 16) {
-        	$name = "Teutonic Knight";
+        	$name = U16;
         } else if($hero_info['unit'] == 21) {
-        	$name = "Phalanx";
+        	$name = U21;
         } else if($hero_info['unit'] == 22) {
-        	$name = "Swordsman";
+        	$name = U22;
         } else if($hero_info['unit'] == 24) {
-        	$name = "Theutates Thunder";
+        	$name = U24;
         } else if($hero_info['unit'] == 25) {
-        	$name = "Druidrider";
+        	$name = U25;
         } else if($hero_info['unit'] == 26) {
-        	$name = "Haeduan";
+        	$name = U26;
         }
         $name1 = $hero_info['name'];
 
@@ -69,7 +69,7 @@
 	<table id="distribution" cellpadding="1" cellspacing="1">
         <thead>
             <tr>
-            <?php echo "<tr class='next'><th>Hero will be ready in <span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
+            <?php echo "<tr class='next'><th>".HERO_READY."<span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
             </tr>
         </thead>
             

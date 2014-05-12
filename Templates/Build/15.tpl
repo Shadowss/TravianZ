@@ -2,16 +2,16 @@
 include("next.tpl");
 ?>
 <div id="build" class="gid15"><a href="#" onClick="return Popup(15,4);" class="build_logo">
-	<img class="building g15" src="img/x.gif" alt="Main Building" title="Main Building" />
+	<img class="building g15" src="img/x.gif" alt="Main Building" title="<?php echo MAINBUILDING; ?>" />
 </a>
-<h1>Main Building <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc">In the main building the village's master builders live. The higher its level the faster your master builders complete the construction of new buildings.</p>
+<h1><?php echo MAINBUILDING; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo MAINBUILDING_DESC; ?></p>
 
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
-			<th>Current construction time:</th>
-			<td><b><?php echo round($bid15[$village->resarray['f'.$id]]['attri']); ?></b> Percent</td>
+			<th><?php echo CURRENT_CONSTRUCTION_TIME; ?></th>
+			<td><b><?php echo round($bid15[$village->resarray['f'.$id]]['attri']); ?></b> <?php echo PERCENT; ?></td>
 		</tr>
 		<tr>
 		<?php 
@@ -19,13 +19,13 @@ include("next.tpl");
 		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
 		if($next<=20){
         ?>
-			<th>Construction time at level <?php echo $next; ?>:</th>
-			<td><b><?php echo round($bid15[$next]['attri']); ?></b> Percent</td>
+			<th><?php echo CONSTRUCTION_TIME_LEVEL; ?> <?php echo $next; ?>:</th>
+			<td><b><?php echo round($bid15[$next]['attri']); ?></b> <?php echo PERCENT; ?></td>
             <?php
             }else{
         ?>
-			<th>Construction time at level 20:</th>
-			<td><b><?php echo round($bid15[20]['attri']); ?></b> Percent</td>
+			<th><?php echo CONSTRUCTION_TIME_LEVEL; ?> 20:</th>
+			<td><b><?php echo round($bid15[20]['attri']); ?></b> <?php echo PERCENT; ?></td>
             <?php
 			}}
             ?>

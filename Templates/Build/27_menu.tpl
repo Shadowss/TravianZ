@@ -6,7 +6,7 @@
         }
 
 ?>
-    ">Own artefacts</a>
+    "><?php echo OWN_ARTIFACTS; ?></a>
          
  | <a href="build.php?id=<?php echo $id; ?>&t=2" <?php
 
@@ -14,12 +14,12 @@
         	echo "class=\"selected\"";
         }
 
-?>">Small artefacts</a>
+?>"><?php echo SMALL_ARTIFACTS; ?></a>
 
  | <a href="build.php?id=<?php echo $id; ?>&t=3" <?php
 
         if(isset($_GET['t']) && $_GET['t'] == 3) {
         	echo "class=\"selected\"";
         }
-?>">Large artefacts</a>
+?>"><?php echo LARGE_ARTIFACTS; ?></a>
 </div>

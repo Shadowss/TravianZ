@@ -2,16 +2,16 @@
 include("next.tpl");
 ?>
 <div id="build" class="gid14"><a href="#" onClick="return Popup(14,4);" class="build_logo">
-	<img class="building g14" src="img/x.gif" alt="Tournament Square" title="Tournament Square" />
+	<img class="building g14" src="img/x.gif" alt="Tournament Square" title="<?php echo TOURNAMENTSQUARE; ?>" />
 </a>
-<h1>Tournament Square <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc">At the Tournament Square your troops can train their stamina. The further the building is upgraded the faster your troops are beyond a minimum distance of <?php echo TS_THRESHOLD ?> squares.</p>
+<h1><?php echo TOURNAMENTSQUARE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo TOURNAMENTSQUARE_DESC; ?> </p>
 
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
-			<th>Current speed bonus:</th>
-			<td><b><?php echo $bid14[$village->resarray['f'.$id]]['attri']; ?></b> Percent</td>
+			<th><?php echo CURRENT_SPEED; ?></th>
+			<td><b><?php echo $bid14[$village->resarray['f'.$id]]['attri']; ?></b> <?php echo PERCENT; ?></td>
 		</tr>
 		<tr>
 		<?php 
@@ -19,13 +19,13 @@ include("next.tpl");
 		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
 		if($next<=20){
         ?>
-			<th>Speed bonus at level <?php echo $next; ?>:</th>
-			<td><b><?php echo $bid14[$next]['attri']; ?></b> Percent</td>
+			<th><?php echo SPEED_LEVEL; ?> <?php echo $next; ?>:</th>
+			<td><b><?php echo $bid14[$next]['attri']; ?></b> <?php echo PERCENT; ?></td>
             <?php
             }else{
         ?>
-			<th>Speed bonus at level 20:</th>
-			<td><b><?php echo $bid14[20]['attri']; ?></b> Percent</td>
+			<th><?php echo SPEED_LEVEL; ?> 20:</th>
+			<td><b><?php echo $bid14[20]['attri']; ?></b> <?php echo PERCENT; ?></td>
             <?php
 			}}
             ?>

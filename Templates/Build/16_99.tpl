@@ -4,15 +4,15 @@ if(!$session->goldclub) {
 			}else{
 ?>
 <div id="build" class="gid16"><a href="#" onClick="return Popup(16,4);" class="build_logo">
-	<img class="g16" src="img/x.gif" alt="Rally point" title="Rally point" />
+	<img class="g16" src="img/x.gif" alt="Rally point" title="<?php echo RALLYPOINT;?>" />
 </a>
-<h1>Rally point <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc">Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.</p>
+<h1><?php echo RALLYPOINT;?> <span class="level"><?php echo LEVEL;?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo RALLYPOINT_DESC;?></p>
 
 <div id="textmenu">
-		<a href="build.php?id=<?php echo $id; ?>">Overview</a> |
-		<a href="a2b.php">Send troops</a> |
-		<a href="warsim.php">Combat Simulator</a> <?php if($session->goldclub==1){ ?>|
+		<a href="build.php?id=<?php echo $id; ?>"><?php echo OVERVIEW;?></a> |
+		<a href="a2b.php"><?php echo SEND_TROOPS;?></a> |
+		<a href="warsim.php"><?php echo Q20_RESP1;?></a> <?php if($session->goldclub==1){ ?>|
 		<a href="build.php?id=<?php echo $id; ?>&amp;t=99">Gold Club</a>
 		<?php } ?>
 		</div>
@@ -25,17 +25,17 @@ if(!$session->goldclub) {
 <table cellpadding="1" cellspacing="1">
         <thead>
             <tr>
-                <th colspan="4">evasion settings</th>
+                <th colspan="4"><?php echo EVASION_SETTINGS;?></th>
             </tr>
 
             <tr>
                 <td></td>
 
-                <td>village</td>
+                <td><?php echo MULTI_V_HEADER; ?></td>
 
-                <td>own troops</td>
+                <td><?php echo OWN_TROOPS; ?></td>
 
-                <td>reinforcement</td>
+                <td><?php echo REINFORCEMENT;?></td>
             </tr>
         </thead>
 		<tbody>
@@ -65,8 +65,8 @@ if(!$session->goldclub) {
 <form action="build.php?id=39&t=99" method="POST">
 <br />
 <tr>
-						Send troops away a maximun of <input class="text" type="text" name="maxevasion" value="<?php echo $user['maxevasion']; ?>" maxlength="3" style="width:50px;"> times
-						<span class="none">(costs: <img src="<?php echo GP_LOCATE; ?>img/a/gold_g.gif" alt="Gold" title="Gold"/><b>2</b> per evasion)</span>
+						<?php echo SEND_TROOPS_AWAY_MAX;?> <input class="text" type="text" name="maxevasion" value="<?php echo $user['maxevasion']; ?>" maxlength="3" style="width:50px;"> <?php echo TIMES;?>
+						<span class="none">(<?php echo COSTS;?>: <img src="<?php echo GP_LOCATE; ?>img/a/gold_g.gif" alt="Gold" title="<?php echo GOLD;?>"/><b>2</b> <?php echo PER_EVASION;?>)</span>
 					
 </tr>
 <tr>

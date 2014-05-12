@@ -4,9 +4,9 @@
     	echo "
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
 		<thead><tr>
-			<td>Training</td>
-			<td>Duration</td>
-			<td>Finished</td>
+			<td>".TRAINING."</td>
+			<td>".DURATION."</td>
+			<td>".FINISHED."</td>
 		</tr></thead>
 		<tbody>";
 		$TrainCount = 0;
@@ -28,7 +28,7 @@
             }
 			echo $time[1];
 		} ?>
-		</tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
+		</tr><tr class="next"><td colspan="3"><?php echo UNIT_FINISHED; ?> <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
 		</tbody></table>
     <?php }
 ?>

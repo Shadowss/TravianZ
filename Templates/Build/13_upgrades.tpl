@@ -1,8 +1,8 @@
 <table cellpadding="1" cellspacing="1" class="build_details">
 	<thead>
 		<tr>
-			<td>Armoury</td>
-			<td>Action</td>
+			<td><?php echo ARMOURY; ?></td>
+			<td><?php echo ACTION; ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -25,33 +25,33 @@ echo "<div class=\"details\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" 
 					}
 				}
 		        if($abdata['a'.$j] == 20) {
-					echo "<td class=\"act\"><div class=\"none\">Maximum<br>level</div></td></tr>";
+					echo "<td class=\"act\"><div class=\"none\">".MAXIMUM_LEVEL."</div></td></tr>";
 				}
 				else if(${'ab'.$i}[$abdata['a'.$j]+1]['wood'] > $village->maxstore || ${'ab'.$i}[$abdata['a'.$j]+1]['clay'] > $village->maxstore || ${'ab'.$i}[$abdata['a'.$j]+1]['iron'] > $village->maxstore) {
-					echo "<td class=\"act\"><div class=\"none\">Expand<br>warehouse</div></td></tr>";
+					echo "<td class=\"act\"><div class=\"none\">".EXPAND_WAREHOUSE."</div></td></tr>";
 				}
 				else if (${'ab'.$i}[$abdata['a'.$j]+1]['crop'] > $village->maxcrop) {
-					echo "<td class=\"act\"><div class=\"none\">Expand<br>granary</div></td></tr>";
+					echo "<td class=\"act\"><div class=\"none\">".EXPAND_GRANARY."</div></td></tr>";
 				}
 				else if (${'ab'.$i}[$abdata['a'.$j]+1]['wood'] > $village->awood || ${'ab'.$i}[$abdata['a'.$j]+1]['clay'] > $village->aclay || ${'ab'.$i}[$abdata['a'.$j]+1]['iron'] > $village->airon || ${'ab'.$i}[$abdata['a'.$j]+1]['crop'] > $village->acrop) {
 					if($village->getProd("crop")>0 || $village->acrop > ${'ab'.$i}[$abdata['a'.$j]+1]['crop']){
 						$time = $technology->calculateAvaliable(13,${'ab'.$i}[$abdata['a'.$j]+1]);
-						echo "<br><span class=\"none\">Enough resources ".$time[0]." at ".$time[1]."</span></div></td>";
+						echo "<br><span class=\"none\">".ENOUGH_RESOURCES." ".$time[0]." at ".$time[1]."</span></div></td>";
 					} else {
-						echo "<br><span class=\"none\">Crop production is negative so you will never reach the required resources</span></div></td>";
+						echo "<br><span class=\"none\">".CROP_NEGATIVE."</span></div></td>";
 					}
-		            echo "<td class=\"act\"><div class=\"none\">Too few<br>resources</div></td></tr>";
+		            echo "<td class=\"act\"><div class=\"none\">".TOO_FEW_RESOURCES."</div></td></tr>";
 				}
 				else if ($building->getTypeLevel(13) <= $abdata['a'.$j]) {
-					echo "<td class=\"act\"><div class=\"none\">Upgrade<br>armoury</div></td></tr>";
+					echo "<td class=\"act\"><div class=\"none\">".UPGRADE_ARMOURY."</div></td></tr>";
 				}
 				else if (count($ABups) > 0) {
-					echo "<td class=\"act\"><div class=\"none\">Upgrade in<br>progress</div></td></tr>";
+					echo "<td class=\"act\"><div class=\"none\">".UPGRADE_IN_PROGRESS."</div></td></tr>";
 				}
 				else if($session->access != BANNED){
-				echo "<td class=\"act\"><a class=\"research\" href=\"build.php?id=$id&amp;a=$j&amp;c=".$session->mchecker."\">Upgrade</a></td></tr>";
+				echo "<td class=\"act\"><a class=\"research\" href=\"build.php?id=$id&amp;a=$j&amp;c=".$session->mchecker."\">".UPGRADE."</a></td></tr>";
 				}else{
-				echo "<td class=\"act\"><a class=\"research\" href=\"banned.php\">Upgrade</a></td></tr>";
+				echo "<td class=\"act\"><a class=\"research\" href=\"banned.php\">".UPGRADE."</a></td></tr>";
 				}
 			}
 		}
@@ -61,7 +61,7 @@ echo "<div class=\"details\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" 
 
 <?php
 	if(count($ABups) > 0) {
-		echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\"><thead><tr><td>Upgrading</td><td>Duration</td><td>Complete</td></tr>
+		echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\"><thead><tr><td>".UPGRADING."</td><td>".DURATION."</td><td>".COMPLETE."</td></tr>
 </thead><tbody>";
 		$timer = 1;
 		foreach($ABups as $arms) {

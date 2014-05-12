@@ -4,13 +4,13 @@
 			<table cellpadding="1" cellspacing="1" id="npc" class="transparent">
 			<thead>
 			<tr>
-			<th colspan="2">Create trade route</th>
+			<th colspan="2"><?php echo CREATE_TRADE_ROUTE;?></th>
 			</tr>
 			</thead>
 				<tbody>
 				<tr>
 					<th>
-						target village:					</th>
+						<?php echo TARGET_VILLAGE;?>:					</th>
 					<td>
                     
 						<select id="tvillage" name="tvillage">
@@ -36,37 +36,37 @@
 				</tr>
 				<tr>
 					<th>
-						Resources:					</th>
+						<?php echo RESOURCES;?>:					</th>
 					<td>
-						<img src="../../<?php echo GP_LOCATE; ?>img/r/1.gif" alt="Lumber" title="Lumber"> <input class="text" type="text" name="r1" id="r1" value="" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/2.gif" alt="Clay" title="Clay"> <input class="text" type="text" name="r2" id="r2" value="" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/3.gif" alt="Iron" title="Iron"> <input class="text" type="text" name="r3" id="r3" value="" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/4.gif" alt="Crop" title="Crop"> <input class="text" type="text" name="r4" id="r4" value="" maxlength="5" tabindex="1" style="width:50px;">
+						<img src="../../<?php echo GP_LOCATE; ?>img/r/1.gif" alt="Lumber" title="<?php echo LUMBER;?>"> <input class="text" type="text" name="r1" id="r1" value="" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/2.gif" alt="Clay" title="<?php echo CLAY;?>"> <input class="text" type="text" name="r2" id="r2" value="" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/3.gif" alt="Iron" title="<?php echo IRON;?>"> <input class="text" type="text" name="r3" id="r3" value="" maxlength="5" tabindex="1" style="width:50px;">  <img src="../../<?php echo GP_LOCATE; ?>img/r/4.gif" alt="Crop" title="<?php echo CROP;?>"> <input class="text" type="text" name="r4" id="r4" value="" maxlength="5" tabindex="1" style="width:50px;">
 					</td>
 				</tr>
 				<tr>
 					<th>
-						start time:					</th>
+						<?php echo START_TIME_TRADE;?>:					</th>
 					<td>
 						<select name="start"><option value="0" selected="selected">00</option><option value="1">01</option><option value="2">02</option><option value="3">03</option><option value="4">04</option><option value="5">05</option><option value="6">06</option><option value="7">07</option><option value="8">08</option><option value="9">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option></select>
 					</td>
 				</tr>
 				<tr>
 					<th>
-						deliveries:					</th>
+						<?php echo DELIVERIES;?>:					</th>
 					<td>
 						<select name="deliveries"><option value="1" selected="selected">1</option><option value="2">2</option><option value="3">3</option></select>
 					</td>
 				</tr>
 				<tr>
 					<th>
-						costs:					</th>
+						<?php echo COSTS;?>:					</th>
 					<td>
-						<img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="Gold"> 2
+						<img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"> 2
 					</td>
 				</tr>
 				<tr>
 					<th>
-						Duration:					</th>
+						<?php echo DURATION;?>:					</th>
 					<td>
-						7 days
+						7 <?php echo DAYS;?>
 					</td>
 				</tr>
 			</tbody></table>

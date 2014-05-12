@@ -25,23 +25,23 @@ include("next.tpl");
 			}
 ?>
 <div id="build" class="gid23"><a href="#" onClick="return Popup(23,4);" class="build_logo">
-	<img class="building g23" src="img/x.gif" alt="Cranny" title="Cranny" />
+	<img class="building g23" src="img/x.gif" alt="Cranny" title="<?php echo CRANNY; ?>" />
 </a>
-<h1>Cranny <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc">The cranny is used to hide some of your resources when the village is attacked. These resources cannot be stolen.</p>
+<h1><?php echo CRANNY; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo CRANNY_DESC; ?></p>
 
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 	<tr>
-		<th>Currently hidden units per resource:</th>
+		<th><?php echo CURRENT_HIDDEN_UNITS; ?></th>
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*2*CRANNY_CAPACITY; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*2*CRANNY_CAPACITY; ?></b> <?php echo UNITS; ?></td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*CRANNY_CAPACITY; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]]['attri']*CRANNY_CAPACITY; ?></b> <?php echo UNITS; ?></td>
 		<?php
 			}
 		?>
@@ -51,27 +51,27 @@ include("next.tpl");
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
 		if($next<=10){
         ?>
-		<th>Hidden units per resource at level <?php echo $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master; ?>:</th>
+		<th><?php echo HIDDEN_UNITS_LEVEL; ?> <?php echo $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master; ?>:</th>
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*2*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> <?php echo UNITS; ?></td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[$village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master]['attri']*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> <?php echo UNITS; ?></td>
 		<?php
 			}}else{
         ?>
-		<th>Hidden units per resource at level 20:</th>
+		<th><?php echo HIDDEN_UNITS_LEVEL; ?> 20:</th>
 <?php
 		if($session->tribe == 3) {
 		?>
-		<td><b><?php echo $bid23[10]['attri']*2*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*2*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> <?php echo UNITS; ?></td>
 		<?php
 			}else{
 		?>
-		<td><b><?php echo $bid23[10]['attri']*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> units</td>
+		<td><b><?php echo $bid23[10]['attri']*CRANNY_CAPACITY*$artefact_bouns*$good_effect/$bad_effect; ?></b> <?php echo UNITS; ?></td>
 		<?php
 			}}}
         ?>
