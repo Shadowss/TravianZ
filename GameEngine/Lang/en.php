@@ -210,6 +210,7 @@ define("Q13_RESP","Very good, your village grows and thrives!");
 define("Q14","Task 14: Instructions");
 define("Q14_DESC","In the ingame instructions you can find short information texts about different buildings and types of units.<br \/><br \/>Click on 'instructions' at the left to find out how much lumber is required for the barracks.");
 define("Q14_ORDER","Order:<\/p>Enter how much lumber barracks cost");
+define("Q14_BUTN","complete task");
 define("Q14_RESP","Exactly! Barracks cost 210 lumber.");
 
 define("Q15","Task 15: Main Building");
@@ -511,9 +512,45 @@ define("FROM","From");
 define("SEND_TROOPS","Send troops");
 define("TASKMASTER","Taskmaster");
 define("VILLAGE_OF_THE_ELDERS_TROOPS","village of the elders troops");
- 
- 	
 
+//SEND TROOP
+define("REINFORCE","Reinforcement");
+define("NORMALATTACK","Normal Attack");
+define("RAID","Raid");
+define("OR","or");
+define("SENDTROOP","Send troops");
+define("TROOP","Troops");
+define("NOTROOP","no troops");
+
+//map
+define("DETAIL","Details");
+define("ABANDVALLEY","Abandoned valley");
+define("UNOCCUOASIS","Unoccupied oasis");
+define("OCCUOASIS","Occupied oasis");
+define("THERENOINFO","There is no<br>information available.");
+define("LANDDIST","Land distribution");
+define("TRIBE","Tribe");
+define("ALLIANCE","Alliance");
+define("OWNER","Owner");
+define("POP","Population");
+define("REPORT","Report");
+define("OPTION","Options");
+define("CENTREMAP","Centre map");
+define("FNEWVILLAGE","Found new village");
+define("CULTUREPOINT","culture points");
+define("BUILDRALLY","build a rally point");
+define("SETTLERSAVAIL","settlers available");
+define("BEGINPRO","beginners protection");
+define("SENDMERC","Send merchant(s)");
+define("BAN","Player is banned");
+define("BUILDMARKET","Build marketplace");
+define("PERHOUR","per hour");
+define("BONUS","Bonus");
+
+//other
+define("VILLAGE","Village");
+define("OASIS","Oasis");
+define("PLAYER","Player");
 
 //LOGIN.php
 define("COOKIES","You must have cookies enabled to be able to log in. If you share this computer with other people you should log out after each session for your own safety.");
@@ -1080,19 +1117,19 @@ define("WWVILLAGE","WW village");
 	   $lang['register'] = "Register";
 	   $lang['login'] = "Login";
 	   $lang['screenshots']['title1']="Village";
-       $lang['screenshots']['desc1']="Village building";
-       $lang['screenshots']['title2']="Resource";
-       $lang['screenshots']['desc2']="Village resource is wood, clay, iron and crop";
-       $lang['screenshots']['title3']="Map";
-       $lang['screenshots']['desc3']="Location your village in map";
-       $lang['screenshots']['title4']="Contruct Building";
-       $lang['screenshots']['desc4']="How to contruct building or resource level";
-       $lang['screenshots']['title5']="Report";
-       $lang['screenshots']['desc5']="Your attack report";
-       $lang['screenshots']['title6']="Statistics";
-       $lang['screenshots']['desc6']="View your ranking in statistics";
-       $lang['screenshots']['title7']="Weapons or dough";
-       $lang['screenshots']['desc7']="You can choose to play as military or economy";  
-
+	   $lang['screenshots']['desc1']="Village building";
+           $lang['screenshots']['title2']="Resource";
+           $lang['screenshots']['desc2']="Village resource is wood, clay, iron and crop";
+           $lang['screenshots']['title3']="Map";
+           $lang['screenshots']['desc3']="Location your village in map";
+           $lang['screenshots']['title4']="Contruct Building";
+           $lang['screenshots']['desc4']="How to contruct building or resource level";
+           $lang['screenshots']['title5']="Report";
+           $lang['screenshots']['desc5']="Your attack report";
+           $lang['screenshots']['title6']="Statistics";
+           $lang['screenshots']['desc6']="View your ranking in statistics";
+           $lang['screenshots']['title7']="Weapons or dough";
+           $lang['screenshots']['desc7']="You can choose to play as military or economy";  
+    
 
 ?>
