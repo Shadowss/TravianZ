@@ -6,10 +6,9 @@ $name = $session->uid;
 //echo"<br>Veriable free : ?account=56387&project=trvnx&theme=default&gfx=x-surfer&bgcolor=ffffff&title=travianix-30+Gold&amount=150&free=$free<br>";
 ?>
 <!-- Hinweis -->
-
+<!--
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
 	<thead>
-
 		<tr>
 			<th colspan="2">1. Call2Pay</th>
 		</tr>
@@ -88,6 +87,7 @@ $name = $session->uid;
 		</tr>
 	</tbody>
 </table>
+-->
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
 	<thead>
 

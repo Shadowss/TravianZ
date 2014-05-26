@@ -2,7 +2,7 @@
 include("Templates/Plus/pmenu.tpl");
 $free = $session->uid;
 ?>
-
+<!--
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
 	<thead>
 
@@ -30,6 +30,7 @@ $free = $session->uid;
 		</tr>
 	</tbody>
 </table>
+-->
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
 	<thead>
 
@@ -52,6 +53,7 @@ $free = $session->uid;
 		</tr>
 	</tbody>
 </table>
+<!--
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
 	<thead>
 
@@ -125,6 +127,7 @@ $free = $session->uid;
 		</tr>
 	</tbody>
 </table>
+-->
 <br /><br /><br /><br /><br /><br />
 </div>
 
