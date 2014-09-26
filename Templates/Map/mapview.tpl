@@ -179,7 +179,7 @@ if (isset($neutralarray[0])) {
 	}
 
 	//Map create
-	$map_gen .= "<area id='a_".$row."_".$i."' shape='poly' coords='".$coorarray[$coorindex]."' title='".$donnees['ville_name']."' href='karte.php?d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."' />\n";
+	$map_gen .= "<area id='a_".$row."_".$i."' shape='poly' coords='".$coorarray[$coorindex]."' title='".$donnees['ville_name']."' href='map.php?d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."' />\n";
 
 	//Javascript map info
 	if($yrow!=7){
@@ -219,22 +219,22 @@ if (isset($neutralarray[0])) {
 }
 ?>
 <div id="content"  class="map">
-	<h1><?php echo MAP;?>(<span id="x"><?php echo $x;?></span>|<span id="y"><?php echo $y;?></span>)</h1>
+	<h1>Map(<span id="x"><?php echo $x;?></span>|<span id="y"><?php echo $y;?></span>)</h1>
 	<div id="map">
 		<script type="text/javascript">
 			var text_k = {}
-			text_k.details = '<?php echo DETAIL;?>';
-			text_k.spieler = '<?php echo PLAYER;?>';
-			text_k.einwohner = '<?php echo POP;?>';
-			text_k.allianz = '<?php echo ALLIANCE;?>';
-			text_k.verlassenes_tal = '<?php echo ABANDVALLEY;?>';
-			text_k.besetztes_tal = '<?php echo OCCUOASIS;?>';
-			text_k.freie_oase = '<?php echo UNOCCUOASIS;?>';
+			text_k.details = '<?php echo Details;?>';
+			text_k.spieler = '<?php echo Player;?>';
+			text_k.einwohner = '<?php echo Population;?>';
+			text_k.allianz = '<?php echo Alliance;?>';
+			text_k.verlassenes_tal = '<?php echo 'Abandoned valley';?>';
+			text_k.besetztes_tal = '<?php echo 'Occupied Oasis';?>';
+			text_k.freie_oase = '<?php echo 'Unoccupied Oasis';?>';
 			var text_x = {}
-			text_x.r1 = '<?php echo LUMBER;?>';
-			text_x.r2 = '<?php echo CLAY;?>';
-			text_x.r3 = '<?php echo IRON;?>';
-			text_x.r4 = '<?php echo CROP;?>';
+			text_x.r1 = '<?php echo Lumber;?>';
+			text_x.r2 = '<?php echo Clay;?>';
+			text_x.r3 = '<?php echo Iron;?>';
+			text_x.r4 = '<?php echo Crop;?>';
 		</script>
 		<div id="map_content"><?php echo $map_content;?></div>
 		<div id="map_rulers"><?php
@@ -245,10 +245,10 @@ if (isset($neutralarray[0])) {
 		</div>
 		<map id="map_overlay" name="map_overlay">
 			<?php echo $map_gen;?>
-			<area id="ma_n1" href="karte.php?z=<?php echo $generator->getBaseID($x,$yp1);?>" coords="422,67,25" shape="circle" title="<?php echo NORTH;?>"/>
-			<area id="ma_n2" href="karte.php?z=<?php echo $generator->getBaseID($xp1,$y);?>" coords="427,254,25" shape="circle" title="<?php echo EAST;?>"/>
-			<area id="ma_n3" href="karte.php?z=<?php echo $generator->getBaseID($x,$ym1);?>" coords="119,255,25" shape="circle" title="<?php echo SOUTH;?>"/>
-			<area id="ma_n4" href="karte.php?z=<?php echo $generator->getBaseID($xm1,$y);?>" coords="114,63,25" shape="circle" title="<?php echo WEST;?>"/>
+			<area id="ma_n1" href="map.php?z=<?php echo $generator->getBaseID($x,$yp1);?>" coords="422,67,25" shape="circle" title="North"/>
+			<area id="ma_n2" href="map.php?z=<?php echo $generator->getBaseID($xp1,$y);?>" coords="427,254,25" shape="circle" title="East"/>
+			<area id="ma_n3" href="map.php?z=<?php echo $generator->getBaseID($x,$ym1);?>" coords="119,255,25" shape="circle" title="South"/>
+			<area id="ma_n4" href="map.php?z=<?php echo $generator->getBaseID($xm1,$y);?>" coords="114,63,25" shape="circle" title="West"/>
 		</map>
 		<img id="map_links" src="img/x.gif" usemap="#map_overlay" />
 		<script type="text/javascript">
@@ -261,23 +261,23 @@ if (isset($neutralarray[0])) {
 			function init_local(){map_init();}
 		</script><?php
 		if($session->plus){
-			echo '<a id="map_makelarge" href="#" onclick="PopupMap('.$bigmid.');" ><img class="ml" src="img/x.gif" alt="large map" title="'.LARGEMAP.'"/></a>';
+			echo '<a id="map_makelarge" href="#" onclick="PopupMap('.$bigmid.');" ><img class="ml" src="img/x.gif" alt="large map" title="large map"/></a>';
 		}?>
 		<img id="map_navibox" src="img/x.gif" usemap="#map_navibox"/>
 		<map name="map_navibox">
-			<area id="ma_n1p7" href="karte.php?z=<?php echo $generator->getBaseID($x,$yp7) ?>" coords="51,15,73,3,95,15,73,27" shape="poly" title="<?php echo NORTH;?>"/>
-			<area id="ma_n2p7" href="karte.php?z=<?php echo $generator->getBaseID($xm7,$y) ?>" coords="51,41,73,29,95,41,73,53" shape="poly" title="<?php echo EAST;?>"/>
-			<area id="ma_n3p7" href="karte.php?z=<?php echo $generator->getBaseID($x,$ym7) ?>" coords="4,41,26,29,48,41,26,53" shape="poly" title="<?php echo SOUTH;?>"/>
-			<area id="ma_n4p7" href="karte.php?z=<?php echo $generator->getBaseID($xp7,$y) ?>" coords="4,15,26,3,48,15,26,27" shape="poly" title="<?php echo WEST;?>"/>
+			<area id="ma_n1p7" href="map.php?z=<?php echo $generator->getBaseID($x,$yp7) ?>" coords="51,15,73,3,95,15,73,27" shape="poly" title="North"/>
+			<area id="ma_n2p7" href="map.php?z=<?php echo $generator->getBaseID($xm7,$y) ?>" coords="51,41,73,29,95,41,73,53" shape="poly" title="East"/>
+			<area id="ma_n3p7" href="map.php?z=<?php echo $generator->getBaseID($x,$ym7) ?>" coords="4,41,26,29,48,41,26,53" shape="poly" title="South"/>
+			<area id="ma_n4p7" href="map.php?z=<?php echo $generator->getBaseID($xp7,$y) ?>" coords="4,15,26,3,48,15,26,27" shape="poly" title="West"/>
 		</map>
 		<div id="map_coords">
-			<form name="map_coords" method="post" action="karte.php">
+			<form name="map_coords" method="post" action="map.php">
 				<span>x </span><input id="mcx" class="text" name="xp" value="<?php echo $x ?>" maxlength="4"/>
 				<span>y </span><input id="mcy" class="text" name="yp" value="<?php echo $y ?>" maxlength="4"/>
 				<input type="image" id="btn_ok" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="OK" /><br />
-				<?php if($session->goldclub != 0){echo "<a href=\"crop_finder.php\"><img src=\"".GP_LOCATE."img/misc/cropfinder.gif\" /> ".CROPFINDER."</a>";}?>
+				<?php if($session->goldclub != 0){echo "<a href=\"crop_finder.php\"><img src=\"".GP_LOCATE."img/misc/cropfinder.gif\" /> Crop Finder</a>";}?>
 			</form>
 		</div>
-		<table cellpadding="1" cellspacing="1" id="map_infobox" class="default"><thead><tr><th colspan="2"><?php echo DETAIL;?></th></tr></thead><tbody><tr><th><?php echo PLAYER;?></th><td>-</td></tr><tr><th><?php echo POP;?></th><td>-</td></tr><tr><th><?php echo ALLIANCE;?></th><td></td></tr></tbody></table>
+		<table cellpadding="1" cellspacing="1" id="map_infobox" class="default"><thead><tr><th colspan="2"><?php echo Details;?></th></tr></thead><tbody><tr><th><?php echo Player;?></th><td>-</td></tr><tr><th><?php echo Population;?></th><td>-</td></tr><tr><th><?php echo Alliance;?></th><td></td></tr></tbody></table>
 	</div>            
 </div>
