@@ -677,6 +677,10 @@ define("PERHOUR","per hour");
 define("BONUS","Bonus");
 define("MAP","Map");
 define("CROPFINDER","Crop Finder");
+define("NORTH","North");
+define("EAST","East");
+define("SOUTH","South");
+define("WEST","West");
 
 //other
 define("VILLAGE","Village");
