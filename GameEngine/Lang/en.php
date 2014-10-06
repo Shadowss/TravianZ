@@ -675,6 +675,8 @@ define("BAN","Player is banned");
 define("BUILDMARKET","Build marketplace");
 define("PERHOUR","per hour");
 define("BONUS","Bonus");
+define("MAP","Map");
+define("CROPFINDER","Crop Finder");
 
 //other
 define("VILLAGE","Village");
