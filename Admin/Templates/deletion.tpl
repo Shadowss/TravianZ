@@ -8,7 +8,7 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-
+include_once("../GameEngine/Ranking.php");
 if($_GET['uid'])
 {
 	$user = $database->getUserArray($_GET['uid'],1);
