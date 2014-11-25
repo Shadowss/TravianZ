@@ -29,6 +29,21 @@
 					</td>
 				</tr>
 				<tr>
+					<td>Vacation Mode</td>
+					<td>
+						<?php
+							if($user['vac_mode'] == 0)
+							{
+								echo "Disabled";
+							}
+							else if($user['vac_mode'] == 1)
+							{
+								echo "Enabled";
+							}
+						?>
+					</td>
+				</tr>
+				<tr>
 					<td>Gold</td>
 					<td><img src="../img/admin/gold.gif"> <?php echo $user['gold']; ?></td>
 				</tr>
