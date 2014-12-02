@@ -3642,7 +3642,7 @@ References:
      $q1 = "SELECT owner FROM " . TB_PREFIX . "vdata where wref = ".$dbarray['id']."";
      $result1 = mysql_query($q1, $this->connection);
      $dbarray1 = mysql_fetch_array($result1);
-                 if($dbarray1['owner'] != 0){
+     if($dbarray1['owner'] != 0){
      $q2 = "SELECT vac_mode,vac_time FROM " . TB_PREFIX . "users where id = ".$dbarray1['owner']."";
      $result2 = mysql_query($q2, $this->connection);
      $dbarray2 = mysql_fetch_array($result2);

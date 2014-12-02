@@ -149,10 +149,11 @@ class Units {
             if (!$database->getVillageState($id)){
                 $form->addError("error","Coordinates do not exist");
 				//check vaction mode- by advocaite
-			if($database->getvacmodexy($id)){
+				if($database->getUserField($_POST['user'],"vac_mode",1) == 1){
+			//if($database->getvacmodexy($id)){
 			$form->addError("error","User is on vacation mode");
 			}
-				//END Vaction mode check
+			//END Vaction mode check
             }
         }   
         if (!empty($coor)) {    

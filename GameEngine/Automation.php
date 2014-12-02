@@ -3,15 +3,15 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                        		       	       ##
-##  Version:       01.09.2013 						       ##
+##  Project:       TravianZ                        		       	       		   ##
+##  Version:       01.09.2013 						       					   ##
 ##  Filename       Automation.php                                              ##
 ##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Fixed by:      Shadow - Doubleing Troops , STARVATION , HERO FIXED COMPL.  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro 				       ##
-##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       ##
+##  URLs:          http://travian.shadowss.ro 				       			   ##
+##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	           ##
 ##                                                                             ##
 #################################################################################
 
@@ -2347,7 +2347,7 @@ class Automation {
 			$cp_mode = $GLOBALS['cp'.$mode];
 			$need_cps = $cp_mode[$varray1+1];
 			$user_cps = $database->getUserField($from['owner'],"cp",0);
-			//kijken of laatste dorp is, of hoofddorp
+			//see if last village, or village head
 			if($user_cps >= $need_cps){
 			if(count($varray)!='1' AND $to['capital']!='1' AND $villexp < $canconquer){
 			if($to['owner']!=3 OR $to['name']!='WW Buildingplan'){
@@ -2592,11 +2592,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 }
                 $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
 			}
-
-
-
-
-
+			
 			// When all troops die, sends no info...send info
                 $info_troop= "None of your soldiers have returned";
 				$data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
