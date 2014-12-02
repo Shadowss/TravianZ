@@ -205,6 +205,7 @@ $up_avl = $latest - $ver ;
 												<a href="#"><b>Admin:</b></a>
 												<a href="?p=admin_log"><font color="Red"><b>Admin Log</font></b></a>
 												<a href="?p=config">Server Settings</a>
+												<a href="?p=resetServer">Server Resetting</a>
 												<?php
 											}
 											else if($_SESSION['access'] == MULTIHUNTER)
