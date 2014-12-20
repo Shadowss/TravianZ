@@ -77,6 +77,7 @@ mysql_query("TRUNCATE TABLE ".TB_PREFIX."odata");
 $database->populateOasisdata();
 $database->populateOasis();
 $database->populateOasisUnits2();
+$uid=$database->getVillageID(5);
 
 $passw=md5('123456');
 mysql_query("TRUNCATE TABLE ".TB_PREFIX."users");
@@ -86,8 +87,13 @@ mysql_query("INSERT INTO ".TB_PREFIX."users (id, username, password, email, trib
 (2, 'Nature', '', 'support@travianx.mail', 4, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
 (4, 'Taskmaster', '', 'support@travianx.mail', 0, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0)");
 
+mysql_query("INSERT INTO ".TB_PREFIX."units (vref) VALUES ($uid)");
+mysql_query("INSERT INTO ".TB_PREFIX."tdata (vref) VALUES ($uid)");
+
+mysql_query("INSERT INTO ".TB_PREFIX."fdata (vref, f1t, f2t, f3t, f4t, f5t, f6t, f7t, f8t, f9t, f10t, f11t, f12t, f13t, f14t, f15t, f16t, f17t, f18t, f26, f26t, wwname) VALUES ($uid, '1', '4', '1', '3', '2',  '2', '3', '4', '4', '3', '3', '4', '4', '1', '4', '2', '1', '2', '1', '15', 'World Wonder')");
+
 mysql_query("DELETE FROM ".TB_PREFIX."vdata WHERE owner<>5");
-mysql_query("UPDATE ".TB_PREFIX."wdata SET occupied=0");
+mysql_query("UPDATE ".TB_PREFIX."wdata SET occupied=0 WHERE id<>$uid");
 mysql_query("TRUNCATE TABLE ".TB_PREFIX."ww_attacks");
 
 header("Location: ../admin.php?p=resetdone");
