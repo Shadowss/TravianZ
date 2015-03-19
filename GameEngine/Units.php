@@ -186,7 +186,6 @@ class Units {
                                 //break;
                     }
                 //check if vacation mode:
-                $villageOwner = $database->getVillageField($id,'owner');
                     if($database->getvacmodexy($id)){
                                 $form->addError("error","User is on vacation mode");
                                 //break;
