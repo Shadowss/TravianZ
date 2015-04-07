@@ -13,12 +13,12 @@ $WrefY = $WrefCoor['y'];
 $type = $database->getVillageType2($Wref);
 $oasistype = $type['oasistype'];
 $vdata = $database->getVillage($Wref);
-}elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
+}elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y']) && $_POST['x']<= WORLD_MAX && $_POST['y']<= WORLD_MAX){){
 $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
 $WrefX = $_POST['x'];
 $WrefY = $_POST['y'];
 $type = $database->getVillageType2($Wref);
-$oasistype = $type['oasistype'];
+$oasistype = $type;
 $vdata = $database->getVillage($Wref);
 }
     if($_POST['x']=="" && $_POST['y']=="" && $_POST['target_id'] == ""){
