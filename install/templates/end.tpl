@@ -8,13 +8,13 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 ?>
 <p>
-Thanks for installing TravianX.
+Thanks for installing TravianZ.
 <h4>Please remove/rename the installation folder.</h4>
 All the files are placed. The database is created, so you can now start playing on your own Travian.
 </p>
 
 <?php include("../GameEngine/config.php"); ?>
 <p>
-<center><font size="4"><a href="<?php echo HOMEPAGE; ?>">> My TravianX homepage <</font></a></center>
+<center><font size="4"><a href="<?php echo HOMEPAGE; ?>">> My TravianZ homepage <</font></a></center>
 </p>
 </div>
