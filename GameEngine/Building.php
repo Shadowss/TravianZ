@@ -86,9 +86,11 @@ class Building {
             }    
         }
         if(isset($get['a']) && $get['c'] == $session->checker && isset($get['id'])) {
-            $session->changeChecker();
-            $this->canProcess($get['a'],$get['id']);
-            $this->constructBuilding($get['id'],$get['a']);
+            if  ($get['id'] > 18 && ($get['id'] < 41 || $get['id'] == 99)){
+            	$session->changeChecker();
+            	$this->canProcess($get['a'],$get['id']);
+            	$this->constructBuilding($get['id'],$get['a']);
+            }
         }
         if(isset($get['buildingFinish']) && $session->plus) {
             if($session->gold >= 2 && $session->sit == 0) {
