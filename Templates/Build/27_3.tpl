@@ -287,7 +287,7 @@
             <?php
 	}
 ?>
-    	</tbody></table></div>
+    	</tbody></table>
         
         <?php
 
