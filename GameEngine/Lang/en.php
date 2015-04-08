@@ -827,6 +827,7 @@ define("TRANSPORT_TO","Transport to");
 define("I_AN_SEARCHING","I'm searching");
 define("I_AN_OFFERING","I'm offering");
 define("OFFERS_MARKETPLACE","Offers at the marketplace");
+define("NO_AVAILABLE_OFFERS","No offers at the marketplace");
 define("OFFERED_TO_ME","Offered<br>to me");
 define("WANTED_TO_ME","Wanted<br>from me");
 define("NOT_ENOUGH_MERCHANTS","Not Enough Merchant");

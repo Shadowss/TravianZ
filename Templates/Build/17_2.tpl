@@ -1,8 +1,8 @@
 <div id="build" class="gid17"><a href="#" onClick="return Popup(17,4);" class="build_logo">  
     <img class="building g17" src="img/x.gif" alt="Marketplace" title="<?php echo MARKETPLACE;?>" />  
 </a>  
-<h1><?php echo LEVEL;?> <span class="level"><?php echo MARKETPLACE;?> <?php echo $village->resarray['f'.$id]; ?></span></h1>  
-<p class="build_desc"><?php echo LEVEL;?><?php echo MARKETPLACE_DESC;?></p>  
+<h1><span class="level"><?php echo MARKETPLACE;?> <?php echo LEVEL;?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc"><?php echo MARKETPLACE_DESC;?></p>  
   
 <?php include("17_menu.tpl"); ?> 
 <form method="POST" action="build.php">  
