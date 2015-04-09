@@ -357,11 +357,13 @@ if (!isset($SAJAX_INCLUDED)) {
 //		$msg=htmlspecialchars($msg);
 		$name = addslashes($session->username);
 
-		$id_user = $session->uid;
-		$alliance = $session->alliance;
-		$now = time();
-			echo $q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ('$id_user','$name','$alliance','$now','$msg')";
-			mysql_query($q, $database->connection);
+		if ($msg != ""){
+			$id_user = $session->uid;
+			$alliance = $session->alliance;
+			$now = time();
+				echo $q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ('$id_user','$name','$alliance','$now','$msg')";
+				mysql_query($q, $database->connection);
+		}
 	}
 
 	function get_data() {
