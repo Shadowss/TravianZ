@@ -7,7 +7,7 @@
 //                              - TravianZ = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
 //                                Adding tasks, constructions and artefact  by: Armando             //
-//                                Modified , added , fixed , implementd  by: Shadowss and ronix     //
+//                                Modified , added , fixed , implementd  by: Shadow and ronix       //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 									//                         //
 									//         ENGLISH         //
