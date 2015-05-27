@@ -1,12 +1,13 @@
 <?php
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                             TRAVIANX                                             //
+//                                             TRAVIANZ                                             //
 //            Only for advanced users, do not edit if you dont know what are you doing!             //
-//                                Made by: Dzoki & Dixie (TravianX)                                 //
-//                              - TravianX = Travian Clone Project -                                //
+//                                Made by: Dzoki & Dixie (TravianZ)                                 //
+//                              - TravianZ = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
 //                                Adding tasks, constructions and artefact  by: Armando             //
+//                                Modified , added , fixed , implementd  by: Shadowss and ronix     //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 									//                         //
 									//         ENGLISH         //
