@@ -19,7 +19,7 @@ You have been banned due to a violation of the rules.
 Your banning reason is <?php echo $ban1['reason']; ?>.
 </br>
 
-</br></br> To ensure that you won't get banned again in the future, you shuold read the rules carefully:
+</br></br> To ensure that you won't get banned again in the future, you should read the rules carefully:
 </br></br><center> <?php echo "<a class=\"rules\" href=\"rules.php\">» Game rules</a>"; ?> </center>
 </br></br></br>
 To continue playing contact the Multihunter and put things straight with him/her

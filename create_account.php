@@ -4,14 +4,16 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       01.09.2013                    			       			   ## 
+##  Version:       22.06.2015                    			       ## 
 ##  Filename       create_account.php                                          ##
 ##  Developed by:  Dzoki , Advocaite , Donnchadh , yi12345 , Shadow , MisterX  ## 
 ##  Fixed by:      Shadow & MisterX - Scouting all players , artefact names.   ##
+##  Fixed by:      InCube - double troops				       ##
+##  Fixed by:      ronix						       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
-##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/              ## 
+##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		       ##
+##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
 ##                                                                             ##
 #################################################################################
 
