@@ -21,7 +21,7 @@ if ($id1 == 199) {
 $_SESSION['amount'] = $amount;
 $trenner 	= "\n";
 $status		= 'ok';
-$url		= 'http://travian.shadowss.ro/a2b2.php'; // change to your own
+$url		= '../a2b2.php'; // change to your own
 $target		= '_blank';
 $forward	= 0;
 
@@ -41,7 +41,7 @@ if ($id1 == 499) {
 $_SESSION['amount'] = $amount;
 $trenner 	= "\n";
 $status		= 'ok';
-$url		= 'http://travian.shadowss.ro/a2b2.php'; // change to your own
+$url		= '../a2b2.php'; // change to your own
 $target		= '_blank';
 $forward	= 1;
 
@@ -60,7 +60,7 @@ if ($id1 == 999) {
 $_SESSION['amount'] = $amount;
 $trenner 	= "\n";
 $status		= 'ok';
-$url		= 'http://travian.shadowss.ro/a2b2.php'; // change to your own
+$url		= '../a2b2.php'; // change to your own
 $target		= '_blank';
 $forward	= 1;
 
@@ -79,7 +79,7 @@ if ($id1 == 1999) {
 $_SESSION['amount'] = $amount;
 $trenner 	= "\n";
 $status		= 'ok';
-$url		= 'http://travian.shadowss.ro/a2b2.php'; // change to your own
+$url		= '../a2b2.php'; // change to your own
 $target		= '_blank';
 $forward	= 1;
 
@@ -98,7 +98,7 @@ if ($id1 == 4999) {
 $_SESSION['amount'] = $amount;
 $trenner 	= "\n";
 $status		= 'ok';
-$url		= 'http://travian.shadowss.ro/a2b2.php'; // change to your own
+$url		= '../a2b2.php'; // change to your own
 $target		= '_blank';
 $forward	= 1;
 
