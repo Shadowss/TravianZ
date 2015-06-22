@@ -1,19 +1,24 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                        		       	       		   ##
-##  Version:       01.09.2013 						       					   ##
+##  Project:       TravianZ                                                    ##
+##  Version:       22.06.2015                    			       ## 
 ##  Filename       Battle.php                                                  ##
-##  Developed by:  Dzoki & Dixie  											   ##
+##  Developed by:  Dzoki & Dixie   					       ## 
+##  Fixed by:      Shadow 				  		       ##
 ##  Thanks to:     Akakori & Elmar                                             ##
 ##  Reworked and Fix by:   ronix                                               ##
+##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro 				       			   ##
-##  Source code:   http://github.com/Shadowss/TravianZ			    	       ##
+##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		       ##
+##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
 ##                                                                             ##
 #################################################################################
+
+
 class Battle {
 
 		public function procSim($post) {

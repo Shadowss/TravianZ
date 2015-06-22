@@ -3,15 +3,16 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                        		       	       		   ##
-##  Version:       01.09.2013 						       					   ##
-##  Filename       Units.php	                                               ##
-##  Developed by:  Advocaite , yi12345 , Shadow  	       					   ##
-##  Fixed by:      Shadow - Doubleing Troops , Catapult fix if have artefact.  ##
+##  Project:       TravianZ                                                    ##
+##  Version:       22.06.2015                    			       ## 
+##  Filename       Units.php                                                   ##
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
+##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
+##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro 				       			   ##
-##  Source code:   http://github.com/Shadowss/TravianZ				       	   ##
+##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		       ##
+##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
 ##                                                                             ##
 #################################################################################
 

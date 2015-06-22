@@ -1,19 +1,20 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-|   PLEASE DO NOT REMOVE THIS COPYRIGHT NOTICE!
-|--------------------------------------------------------------------------
-|
-|   Project owner:   Dzoki < dzoki.travian@gmail.com >
-|
-|   This script is property of TravianX Project. You are allowed to change
-|   its source and release it under own name, not under name `TravianX`.
-|   You have no rights to remove copyright notices.
-|
-|   TravianX All rights reserved
-|
-*/
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                                                    ##
+##  Version:       22.06.2015                    			       ## 
+##  Filename       Alliance.php                                                ##
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
+##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
+##  Fixed by:      InCube - double troops				       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		       ##
+##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##                                                                             ##
+#################################################################################
 
 	   class Alliance {
 
