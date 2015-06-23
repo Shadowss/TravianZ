@@ -1059,8 +1059,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
  `data` text NULL,
  `time` int(11) NULL,
  `viewed` tinyint(1) NULL,
- `archive` tinyint(1) NULL,
- `del` tinyint(1) NULL,
+ `archive` tinyint(1) NULL DEFAULT '0',
+ `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
