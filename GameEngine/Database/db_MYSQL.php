@@ -2717,14 +2717,12 @@ class MYSQL_DB {
 			if($unit == 121){$unit = 21;}
 			if($unit =="hero"){$unit = 'hero';}
 			else{$unit = 'u' . $unit;}
-
-			++$i;
-		// Fixed
+		++$i;
+		//Fixed part of negativ troops (double troops) - by InCube
 		$array_amt[$i] = $array_amt[$i] < 0 ? 0 : $array_amt[$i];
-		//
-			$units .= $unit.' = '.$unit.' '.(($array_mode[$i] == 1)? '+':'-').'  '.$array_amt[$i].(($number > $i+1) ? ', ' : '');
+		//Fixed part of negativ troops (double troops) - by InCube
+		$units .= $unit.' = '.$unit.' '.(($array_mode[$i] == 1)? '+':'-').'  '.$array_amt[$i].(($number > $i+1) ? ', ' : '');
 		}
-
 		$q = "UPDATE ".TB_PREFIX."units set $units WHERE vref = $vref";
 		return mysql_query($q, $this->connection);
 	}
@@ -3621,7 +3619,7 @@ class MYSQL_DB {
 		mysql_query($q, $this->connection);
 	}
 	
-		/*****************************************
+/*****************************************
 Function to vacation mode - by advocaite
 References:
 *****************************************/
@@ -3691,7 +3689,7 @@ References:
    	}
 	
 	/***************************
-	Function to get Hero In Train
+	Function to get Hero In Training
 	Made by: Shadow
 	***************************/
 
@@ -3736,7 +3734,7 @@ References:
                return mysql_query($q, $this->connection);
        }
 	   
-	    /***************************
+	/***************************
         Function to find Hero place
         Made by: ronix
         ***************************/

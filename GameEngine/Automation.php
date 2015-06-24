@@ -1396,6 +1396,7 @@ class Automation {
                     }    
                     //to battle.php
                     //fix by ronix
+		    //MUST TO BE FIX : You need to filter these values
  		    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby);
  		
                     //units attack string for battleraport
@@ -1456,6 +1457,7 @@ class Automation {
 				#################################################
 
 				for($i=1;$i<=11;$i++){
+				//MUST TO BE FIX : This is only for defender and still not properly coded
 				if($battlepart['casualties_attacker'][$i] <= 0) { ${dead.$i} = 0; }elseif($battlepart['casualties_attacker'][$i] > $data['t'.$i]){
 				${dead.$i}=$data['t'.$i];
 				}else { ${dead.$i} = $battlepart['casualties_attacker'][$i]; }
@@ -1988,7 +1990,9 @@ class Automation {
 				}
 				else
 				{
+					//MUST TO BE FIX : Unless variable
 					$demolish=$battlepart[4]/$battlepart[3];
+					//MUST TO BE FIX This part goes also below 0 if u have a lot of catapults
 					$totallvl = round(sqrt(pow(($tblevel+0.5),2)-($battlepart[4]*8)));
 					if ($tblevel==$totallvl)
 						$info_cata=" was not damaged.";
@@ -4310,7 +4314,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		}
 	}
 
-		/************************************************
+	/************************************************
         Function for starvation - by brainiacX and Shadow
         Rework by ronix
         References:
@@ -4373,7 +4377,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         }
                         $other_reinf=true;
                     }
-                }else{ //own troops from oasis
+                }else{ 
+		//own troops from oasis
                     $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=".$starv['wref']." AND o.owner=v.owner";
                     $enforceoasis = $database->query_return($q);
                     if(count($enforceoasis)>0){
@@ -4392,7 +4397,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                 $maxtype = "hero";
                             }
                         }
-                    }else{ //get enforce other player from village
+                    }else{ 
+			//get enforce other player from village
                         $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".$starv['wref']." AND v.owner<>v1.owner";
                         $enforcearray = $database->query_return($q);
                         if(count($enforcearray)>0){
@@ -4411,7 +4417,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                     $maxtype = "hero";
                                 }
                             }    
-                        }else{ //get own reinforcement from other village
+                        }else{ 
+			//get own reinforcement from other village
                             $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".$starv['wref']." AND v.owner=v1.owner";
                             $enforcearray = $database->query_return($q);
                             if(count($enforcearray)>0){
@@ -4430,7 +4437,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                         $maxtype = "hero";
                                     }
                                 }
-                            }else{ //get own unit
+                            }else{ 
+			//get own unit
                                 $unitarray = $database->getUnit($starv['wref']);
                                 for($i = 0 ; $i <= 50 ; $i++){
                                     $units = $unitarray['u'.$i];
@@ -4790,7 +4798,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
       }
 
 
-    //Aanvallers v/d Week
+    //Attackers of the week
       $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
       $i=0;   
     while($row = mysql_fetch_array($result)){
@@ -4800,7 +4808,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
     $resul=mysql_query($quer);    
     }
 
-    //Verdediger v/d Week
+    //Defender of the week
       $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
       $i=0;   
     while($row = mysql_fetch_array($result)){
@@ -4810,7 +4818,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
     $resul=mysql_query($quer);    
     }   
 
-    //Klimmers v/d Week
+    //Climbers of the week
       $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
       $i=0;   
     while($row = mysql_fetch_array($result)){
@@ -4830,7 +4838,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
       $resul=mysql_query($quer);      
       }    
 
-    //Overvallers v/d Week
+    //Robbers of the week
       $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
       $i=0;   
     while($row = mysql_fetch_array($result)){
@@ -4840,12 +4848,12 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
     $resul=mysql_query($quer);    
     }   
 
-    //deel de bonus voor aanval+defence top 10 uit
-    //Pak de top10 aanvallers
+    //Part of the bonus for top 10 attack + defense out
+    //Top10 attackers
       $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
       while($row = mysql_fetch_array($result)){
 
-       //Pak de top10 verdedigers
+       //Top 10 defenders
       $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
       while($row2 = mysql_fetch_array($result2)){
         if($row['id']==$row2['id']){
@@ -4854,7 +4862,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $result3=mysql_query($query3);
          $row3=mysql_fetch_row($result3);
 
-          //kijk welke kleur het lintje moet hebben
+          //Look what color the ribbon must have
           if($row3[0]<='2'){
             $img="t22".$row3[0]."_1";
               switch ($row3[0]) {
@@ -4875,8 +4883,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
       }    
     }
 
-    //je staat voor 3e / 5e / 10e keer in de top 3 aanvallers 
-    //Pak de top10 aanvallers
+    //you stand for 3rd / 5th / 10th time in the top 3 strikers
+    //top10 attackers
       $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
       while($row = mysql_fetch_array($result)){ 
 
@@ -4885,19 +4893,19 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $row1=mysql_fetch_row($result1);
 
 
-      //2x in gestaan, dit is 3e dus lintje (brons)
+      //2x at present as it is so ribbon 3rd (bronze)
       if($row1[0]=='3'){  
         $img="t120_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Three', '".$img."')";
         $resul=mysql_query($quer);
       }
-      //4x in gestaan, dit is 5e dus lintje (zilver)
+      //4x at present as it is so 5th medal (silver)
       if($row1[0]=='5'){  
         $img="t121_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }       
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){ 
         $img="t122_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Ten', '".$img."')";
@@ -4905,8 +4913,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
       }
 
     }
-    //je staat voor 3e / 5e / 10e keer in de top 10 aanvallers 
-      //Pak de top10 aanvallers
+    //you stand for 3rd / 5th / 10th time in the top 10 attackers 
+      //top10 attackers
       $result = mysql_query("SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
       while($row = mysql_fetch_array($result)){ 
 
@@ -4927,7 +4935,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }        
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){    
         $img="t132_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '12', '0', '".$week."', 'Ten', '".$img."')";
@@ -4957,7 +4965,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }       
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){ 
         $img="t142_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Ten', '".$img."')";
@@ -4987,7 +4995,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }        
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){    
         $img="t152_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '13', '0', '".$week."', 'Ten', '".$img."')";
@@ -5018,7 +5026,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }       
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){ 
         $img="t102_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '8', '0', '".$week."', 'Ten', '".$img."')";
@@ -5047,7 +5055,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }        
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){    
         $img="t112_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '14', '0', '".$week."', 'Ten', '".$img."')";
@@ -5077,7 +5085,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }        
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){    
         $img="t202_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '11', '0', '".$week."', 'Ten', '".$img."')";
@@ -5106,7 +5114,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }        
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){    
         $img="t212_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '16', '0', '".$week."', 'Ten', '".$img."')";
@@ -5136,7 +5144,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }       
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){ 
         $img="t162_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '9', '0', '".$week."', 'Ten', '".$img."')";
@@ -5165,7 +5173,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Five', '".$img."')";
         $resul=mysql_query($quer);
       }        
-      //9x in gestaan, dit is 10e dus lintje (goud)
+      //9x at present as it is so 10th medal (gold)
       if($row1[0]=='10'){    
         $img="t172_1";
         $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '15', '0', '".$week."', 'Ten', '".$img."')";
@@ -5173,7 +5181,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
       }
     }
 
-    //Zet alle waardens weer op 0
+    //Put all true dens to 0
      $query="SELECT * FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
      $result=mysql_query($query);
      for ($i=0; $row=mysql_fetch_row($result); $i++){
@@ -5226,7 +5234,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $result3=mysql_query($query3);
         $row3=mysql_fetch_row($result3);
 
-          //kijk welke kleur het lintje moet hebben
+          //Look what color the ribbon must have
           if($row3[0]<='2'){
             $img="t22".$row3[0]."_1";
               switch ($row3[0]) {
