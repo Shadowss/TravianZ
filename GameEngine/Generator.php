@@ -9,7 +9,7 @@
 ##                                                                             ##
 #################################################################################
 
-class Generator {
+class MyGenerator {
 
 	public function generateRandID(){
 		return md5($this->generateRandStr(16));
@@ -162,4 +162,4 @@ if (date('Ymd',time()) == date('Ymd',$time)) {
 	}
 
 };
-$generator = new Generator;
+$generator = new MyGenerator;
