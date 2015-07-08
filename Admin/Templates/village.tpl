@@ -70,14 +70,14 @@ if(isset($id))
 	Gyh3S6m0a0Qszrnz6RnQWAAxV5tT/VAiNQAAAABJRU5ErkJggg==";
 	$refreshicon  = "<img src=\"".$refreshiconfrm."\">";
 	
-	class Generator
+	class MyGenerator
 	{
 		public function getMapCheck($wref)
 		{
 			return substr(md5($wref),5,2);
 		}
 	};
-	$generator = new Generator;
+	$generator = new MyGenerator;
 	
 	if($village and $user)
 	{
