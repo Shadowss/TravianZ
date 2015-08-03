@@ -1,0 +1,8 @@
+<Files "*.tpl">
+	Order Deny,Allow
+	Deny from all
+ErrorDocument 403 http://travian.shadowss.ro/403.php
+ErrorDocument 404 http://travian.shadowss.ro/404.php
+ErrorDocument 500 http://travian.shadowss.ro/500.php
+Options -Indexes  
+</Files>
