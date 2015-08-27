@@ -30,6 +30,12 @@
         <li>CHMOD Prevention to 777 (sudo chmod -R 777 GameEngine/Prevention)</li>
         <li>CHMOD Notes to 777 (sudo chmod -R 777 GameEngine/Notes)</li>
 	</ul>
+	
+	<br>
+	<ul>
+	<li><h4>After Installation</h4></li>
+	<li>Protect folder /Admin with password protect directory</li>
+	</ul>
 
 	<div class="lbox">
 	TravianZ Team
