@@ -520,7 +520,7 @@ class Building {
 			if($this->getTypeLevel(22) >= 10 && $this->getTypeLevel(15) >= 10) { return true; } else { return false; }
 			break;
 			case 25:
-			if($this->getTypeLevel(15) >= 5) { return true; } else { return false; }
+			if($this->getTypeLevel(15) >= 5 && $this->getTypeLevel(26) == 0) { return true; } else { return false; }
 			break;
 			case 26:
 			if($this->getTypeLevel(18) >= 1 && $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(25) == 0) { return true; } else { return false; }
