@@ -929,7 +929,7 @@ define("CRANNY_DESC","The cranny is used to hide some of your resources when the
 define("TOWNHALL","Town Hall");
 define("CELEBRATIONS_COMMENCE_TOWNHALL","Celebrations can commence when the town hall is completed.");
 define("GREAT_CELEBRATIONS","Great celebration");
-define("CULTURE_POINTS","culture points");
+define("CULTURE_POINTS","Culture points");
 define("HOLD","hold");
 define("CELEBRATIONS_IN_PROGRESS","Celebration</br>in progress");
 define("CELEBRATIONS","Celebrations");
