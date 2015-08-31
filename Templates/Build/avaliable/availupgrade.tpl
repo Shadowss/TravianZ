@@ -23,7 +23,7 @@ $mastertime = $uprequire['time'];
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">Constructing with master builder </a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">Constructing with master builder</span>";
@@ -37,7 +37,7 @@ $mastertime = $uprequire['time'];
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">Constructing with master builder </a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">Constructing with master builder</span>";
@@ -61,7 +61,7 @@ $mastertime = $uprequire['time'];
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">Constructing with master builder </a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">Constructing with master builder</span>";

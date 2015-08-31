@@ -72,24 +72,22 @@ class Building {
                 $this->upgradeBuilding($get['a']);
             }
         }
-        if(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker) && isset($_SESSION['mas'])) {
+        if(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker)) {
             $m=$get['master'];
-            $master=explode(",",$_SESSION['mas'][$m]);
-            if($get['master']==$master[0] && $get['id']==$master[1] && $get['time']==$master[2]) {
-                $session->changeChecker();
-                unset($_SESSION['mas']);
-                if($session->access==BANNED){
-                    header("Location: banned.php");
-                    exit;
-                }    
-                $level = $database->getResourceLevel($village->wid);
-                $database->addBuilding($village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level['f'.$get['id']] + 1 + count($database->getBuildingByField($village->wid,$get['id'])));
-                if($get['id'] > 18) {
-                    header("Location: dorf2.php");
-                } else {
-                    header("Location: dorf1.php");
-                }
+            $master = $_GET;
+            $session->changeChecker();
+            if($session->access==BANNED){
+                header("Location: banned.php");
+                exit;
             }    
+            $level = $database->getResourceLevel($village->wid);
+            $database->addBuilding($village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level['f'.$get['id']] + 1 + count($database->getBuildingByField($village->wid,$get['id'])));
+            $database->modifyGold($session->uid,1,0);
+            if($get['id'] > 18) {
+                header("Location: dorf2.php");
+            } else {
+                header("Location: dorf1.php");
+            }
         }
         if(isset($get['a']) && $get['c'] == $session->checker && isset($get['id'])) {
             if  ($get['id'] > 18 && ($get['id'] < 41 || $get['id'] == 99)){

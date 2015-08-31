@@ -27,7 +27,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
 <?php
 	if($id <= 18) {
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -35,7 +35,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
 	}
 	}else{
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -51,7 +51,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
 <?php
 	if($id <= 18) {
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -59,7 +59,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
 	}
 	}else{
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -89,7 +89,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
 <?php
 	if($id <= 18) {
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -97,7 +97,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
 	}
 	}else{
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
