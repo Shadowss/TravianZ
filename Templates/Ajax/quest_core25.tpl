@@ -44,17 +44,12 @@ if(SPEED == '1'){
 } 
 
 if (isset($qact)){
-	if ($check_quest==$qact) {
-		//avoid hacking gold, resources or reward -- added by Ronix
-	}else {
-		if ($qact > $_SESSION['qst'] || !is_numeric($qact)){
+	if ($qact == $_SESSION['qst']+1 && (($_SESSION['qst']>= 1 && $_SESSION['qst']<=30) || (time()-$_SESSION['qst_time']>=0 && ($_SESSION['qst'] >= 90 && $_SESSION['qst'] <=97))) || ($_SESSION['qst']== 0 && ($qact == "enter" || $qact == "skip")) || ($qact == "rank" && ($_SESSION['qst']== 4 || $_SESSION['qst']== 18)) || ($_SESSION['qst']== 7 && $qact == "coor") || ($_SESSION['qst']== 16 && $qact == "lumber") || ($_SESSION['qst']== 19 && $qact == 23) || ($_SESSION['qst']== 22 && $qact == 26) || ($_SESSION['qst']== 27 && $qact == "gold")) {		//avoid hacking gold, resources or reward -- added by Ronix - Fixed by Pietro
 		switch($qact) {
 		case 'enter':
 			$database->updateUserField($_SESSION['username'],'quest','1',0);
 			$_SESSION['qst']= 1;
 			break;
-	
-	
 			//user does not follow the quest. 
 			//Get reward: Resources: Every 24 hours (1 speed)  24/speed=hours
 			//Gold: 25 gold
@@ -401,7 +396,7 @@ if (isset($qact)){
 			$gold+=20;
 			$database->updateUserField($_SESSION['username'],'gold',$gold,0);
 			break;
-		}}	
+		}	
 	}
 }
 
@@ -1211,4 +1206,3 @@ $_SESSION['qst']= 31; ?>
 <?php } else {
 
  }} ?>
-
