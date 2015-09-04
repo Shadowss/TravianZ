@@ -4388,7 +4388,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=".$starv['wref']." AND o.owner=v.owner";
                     $enforceoasis = $database->query_return($q);
                     if(count($enforceoasis)>0){
-                        foreach ($enforceoasis as $enforceO){
+                        foreach ($enforceoasis as $enforce){
                             for($i=1;$i<=50;$i++){
                                 $units = $enforce['u'.$i];
                                 if($enforce['u'.$i] > $maxcount){
