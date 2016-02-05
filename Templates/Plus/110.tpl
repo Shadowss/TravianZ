@@ -92,7 +92,7 @@ $name = $session->uid;
 	<thead>
 
 		<tr>
-			<th colspan="2">4. Paypal</th>
+			<th colspan="2">Paypal</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -101,7 +101,7 @@ $name = $session->uid;
 
 			<div>Gold : 60<br />Cost : 1,99 Euro<br />Wait: 24 hours</div>
 			</td>
-			<td class="desc">Payment by <br />
+			<td class="desc">Initiate Payment by Paypal <br />
             <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PS2CGCWUQHLU6" target="_blank">
 				<img src="img/bezahlung/paypal1.gif" style="width:126px; height:47px;" alt="Moneybookers" /></a><br />
 			More Info about PayPal can be found here: <br />                              <a href="#"
