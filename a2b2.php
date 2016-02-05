@@ -68,14 +68,14 @@ $automation->isWinner();
 <div id="products">
 <?        
 if ($amount == 199) {
-// Kontoauszug aufrufen f&uuml;r Goldpaket A
+// Statement retrieve Gold Package A
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds = mysql_fetch_array($MyGold);
 $goldnow = $golds['6'] + 60; 
 mysql_query("UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysql_error());
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds1 = mysql_fetch_array($MyGold);
-?><p>Thank you for your purchase here at Travianist.com</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p> 
+?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?></p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p> 
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
 		<thead>
 			<tr>
@@ -110,20 +110,20 @@ $golds1 = mysql_fetch_array($MyGold);
 			</tr>
              </tbody></table>
             <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
-            <p>Please mail your username, package, order time and email used to <a href="mailto:diq@xygen.us">our billing address</a>.</p>
+            <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
           
 <?
 
 }
 if ($amount == 499) {
-// Kontoauszug aufrufen f&uuml;r Goldpaket B
+// Statement retrieve Gold Package B
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds = mysql_fetch_array($MyGold);
 $goldnow = $golds['6'] + 120; 
 mysql_query("UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysql_error());
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds1 = mysql_fetch_array($MyGold);
-?><p>Thank you for your purchase here at TravianX.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p> 
+?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p> 
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
 		<thead>
 			<tr>
@@ -145,7 +145,7 @@ $golds1 = mysql_fetch_array($MyGold);
              <tr>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Zubuchung</center></font></b></td>
+				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
 				<td class="desc"><center>60 Gold</center></td>
                 <td class="act"><center>&nbsp;</center></td>
 			</tr>
@@ -158,19 +158,19 @@ $golds1 = mysql_fetch_array($MyGold);
 			</tr>
              </tbody></table>
                       <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
-            <p>Please mail your username, package, order time and email used to <a href="mailto:diq@xygen.us">our billing address</a>.</p>
+            <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
 <?
 
 }
 if ($amount == 999) {
-// Kontoauszug aufrufen f&uuml;r Goldpaket C
+// Statement retrieve Gold Package C
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds = mysql_fetch_array($MyGold);
 $goldnow = $golds['6'] + 360; 
 mysql_query("UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysql_error());
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds1 = mysql_fetch_array($MyGold);
-?><p>Thank you for your purchase here at TravianX.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
+?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
 		<thead>
 			<tr>
@@ -192,7 +192,7 @@ $golds1 = mysql_fetch_array($MyGold);
              <tr>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Zubuchung</center></font></b></td>
+				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
 				<td class="desc"><center>60 Gold</center></td>
                 <td class="act"><center>&nbsp;</center></td>
 			</tr>
@@ -205,19 +205,19 @@ $golds1 = mysql_fetch_array($MyGold);
 			</tr>
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
-            <p>Please mail your username, package, order time and email used to <a href="mailto:diq@xygen.us">our billing address</a>.</p>
+            <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
 <?
 
 }
 if ($amount == 1999) {
-// Kontoauszug aufrufen f&uuml;r Goldpaket D
+// Statement retrieve Gold Package D
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds = mysql_fetch_array($MyGold);
 $goldnow = $golds['6'] + 1000; 
 mysql_query("UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysql_error());
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds1 = mysql_fetch_array($MyGold);
-?><p>Thank you for your purchase here at TravianX.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
+?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
 		<thead>
 			<tr>
@@ -239,7 +239,7 @@ $golds1 = mysql_fetch_array($MyGold);
              <tr>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Zubuchung</center></font></b></td>
+				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
 				<td class="desc"><center>60 Gold</center></td>
                 <td class="act"><center>&nbsp;</center></td>
 			</tr>
@@ -252,19 +252,19 @@ $golds1 = mysql_fetch_array($MyGold);
 			</tr>
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
-            <p>Please mail your username, package, order time and email used to <a href="mailto:diq@xygen.us">our billing address</a>.</p>
+            <p>Please mail your username, package, order time and email used to <a href="cata7007@gmail.com">our billing address</a>.</p>
 <?
 
 }
 if ($amount == 4999) {
-// Kontoauszug aufrufen f&uuml;r Goldpaket E
+// Statement retrieve Gold Package E
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds = mysql_fetch_array($MyGold);
 $goldnow = $golds['6'] + 2000; 
 mysql_query("UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysql_error());
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
 $golds1 = mysql_fetch_array($MyGold);
-?><p>Thank you for your purchase here at TravianX.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
+?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
 		<thead>
 			<tr>
@@ -286,7 +286,7 @@ $golds1 = mysql_fetch_array($MyGold);
              <tr>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Zubuchung</center></font></b></td>
+				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
 				<td class="desc"><center>60 Gold</center></td>
                 <td class="act"><center>&nbsp;</center></td>
 			</tr>
@@ -299,7 +299,7 @@ $golds1 = mysql_fetch_array($MyGold);
 			</tr>
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
-            <p>Please mail your username, package, order time and email used to <a href="mailto:diq@xygen.us">our billing address</a>.</p>
+            <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
 <?
 }
 				if ($amount == 0) 
@@ -328,7 +328,7 @@ $golds1 = mysql_fetch_array($MyGold);
              </tr>
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
-            <p>Please mail your username, package, order time and email used to <a href="mailto:contact@shadowss.ro">our billing address</a>.</p>
+            <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
 				<? 
 				
 				}
