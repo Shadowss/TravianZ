@@ -35,7 +35,7 @@ function loadProductGroup(group_id) {
 			</td>
 			<td class="desc">
 			Basically, we reserve the ordered amount of gold immediately after the payment. If there are any problems, please send an email to our 
-			<a href="mailto:payments@travianist.com">payment account</a>. <br /><br /><b>Username<br />Payment Method<br />Ordered Package<br />
+			<a href="mailto:cata7007@gmail.com">payment account</a>. <br /><br /><b>Username<br />Payment Method<br />Ordered Package<br />
 			Date and time</b><br /><br />We strive to ensure speedy processing!<br />
                             
                             </td>
