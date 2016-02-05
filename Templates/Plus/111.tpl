@@ -90,7 +90,7 @@ $free = $session->uid;
 	<thead>
 
 		<tr>
-			<th colspan="2">4. Paypal</th>
+			<th colspan="2">Paypal</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -99,10 +99,10 @@ $free = $session->uid;
 
 			<div>Gold : 120<br />Cost : 4,99 Euro<br />Wait: 24 hours</div>
 			</td>
-			<td class="desc">Bezahlung per Paypal einleiten<br />
+			<td class="desc">Initiate Payment by Paypal <br />
             <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5UWF3SUPQZELW" target="_blank">
 				<img src="img/bezahlung/paypal1.gif" style="width:126px; height:47px;" alt="Moneybookers" /></a><br />
-            Mehr Information zu PayPal findest du hier:                <br />                <a href="#"
+            More Info about PayPal can be found here:                <br />                <a href="#"
 				onclick="window.open('https://www.paypal.com/de/cgi-bin/webscr?cmd=xpt/cps/popup/OLCWhatIsPayPal-outside','external','scrollbars=yes,status=yes,resizable=yes,toolbar=yes,width=800,height=600');return false;">Weitere Infos</a>                <br /> </td>
 
 		</tr>
@@ -123,14 +123,14 @@ $free = $session->uid;
 			<div>Gold : 120<br />Cost : 4,99 Euro<br />Wait: 24 hours</div>
 			</td>
 			<td class="desc">
-							Mit Skrill (moneybookers) kannst du mit deiner Kreditkarte oder per Überweisung von deinem Konto zahlen.                <br />
+							Mit Skrill (moneybookers) kannst du mit deiner Kreditkarte oder per Ãœberweisung von deinem Konto zahlen.                <br />
                 
             				<?PHP echo'<form action="https://www.moneybookers.com/app/payment.pl" target="_blank">
  <input type="hidden" name="pay_to_email" value="novgorodschi@icloud.com">
  <input type="hidden" name="recipient_description" value="netsoundradio">
  <input type="hidden" name="transaction_id" value="112">
  <input type="hidden" name="return_url" value="http://www.merchant.com/payment_made.htm">
- <input type="hidden" name="return_url_text" value="Danke für deinen Einkauf">
+ <input type="hidden" name="return_url_text" value="Danke fÃ¼r deinen Einkauf">
  <input type="hidden" name="return_url_target" value="1">
  <input type="hidden" name="cancel_url" value="http://www.merchant.com/payment_cancelled.htm">
  <input type="hidden" name="cancel_url_target" value="1">
@@ -139,7 +139,7 @@ $free = $session->uid;
  <input type="hidden" name="new_window_redirect" value="1">
  <input type="hidden" name="dynamic_descriptor" value="Descriptor">
  <input type="hidden" name="language" value="DE">
- <input type="hidden" name="confirmation_note" value="Vielen Dank für deinen Einkauf! ">
+ <input type="hidden" name="confirmation_note" value="Vielen Dank fÃ¼r deinen Einkauf! ">
  <input type="hidden" name="merchant_fields" value="field1">
  <input type="hidden" name="title" value="">
  <input type="hidden" name="firstname" value="">
@@ -163,7 +163,7 @@ $free = $session->uid;
  <input type="hidden" name="detail1_text" value="Paket B : 100 Gold">
  <input type="hidden" name="detail2_description" value="Beschreibung:">
  <input type="hidden" name="detail2_text" value="Travian Gold ">
- <input type="hidden" name="detail3_description" value="Verkäufer-ID:">
+ <input type="hidden" name="detail3_description" value="VerkÃ¤ufer-ID:">
  <input type="hidden" name="detail3_text" value="37115003">
  <input type="hidden" name="detail4_description" value="Weitere Angaben:">
  <input type="hidden" name="detail4_text" value="5-6 Tage Leieferzeit">
