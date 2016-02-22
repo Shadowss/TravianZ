@@ -55,7 +55,7 @@ CREATE TABLE `%PREFIX%links` (
  `name` VARCHAR( 50 ) NULL ,
  `url` VARCHAR( 150 ) NULL ,
  `pos` INT( 10 ) NULL
-) ENGINE = MYISAM;
+) ENGINE = InnoDB;
 
 --
 -- Dumping data for table `%PREFIX%links`
