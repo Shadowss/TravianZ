@@ -2,7 +2,7 @@
 <?php
 
 $online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
-
+$top_rank = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access< 8 AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY oldrank ASC Limit 1"));
 
 ?>
 
@@ -43,6 +43,10 @@ $online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE
 <tr>
 <td><b>Server Start</td>
 <td>: <font color="Red"><?php echo START_DATE;?></font></b></td>
+</tr>
+<tr>
+<td><b>Best Player</td>
+<td>:  <font color="Red"><?php echo $top_rank['username'] ?></font></b></td>
 </tr>
 </table>
 </div>
