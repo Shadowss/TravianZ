@@ -14,7 +14,8 @@ class MYSQLi_DB {
 	var $connection;
 
 	function MYSQLi_DB() {
-		$this->connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB) or die(mysqli_error());
+		$this->connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
+		mysqli_select_db(SQL_DB, $this->connection) or die(mysql_error());
 	}
 		function query($query) {
 		return mysqli_query($this->connection, $query);
@@ -27,7 +28,7 @@ class MYSQL_DB {
 	var $connection;
 
 	function MYSQL_DB() {
-		$this->connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
+		$this->connection = mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
 		mysql_select_db(SQL_DB, $this->connection) or die(mysql_error());
 	}
 
