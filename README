@@ -1,3 +1,11 @@
+TravianZ Version v.8.0.0 FINAL TEST
+
+Download and updates : https://github.com/Shadowss/TravianZ
+
+Thank you to : advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , and many others that make that version posible.
+
+This version is same as yi12345.
+
 First i want to say THANKS for all who worked on that version , will find a list on Version file.
 
 TravianZ is based on TravianX v6.0.0 or TravianZ or TravianX with some grapich changes from ZravianX.
@@ -110,3 +118,4 @@ TravianZ is based on TravianX v6.0.0 or TravianZ or TravianX with some grapich c
 105. Fix hero reinfocement sometimes mising in action</br>
 106. Fix total of trapper bug is full trapp if 1 troop only you send.</br>
 107. Fix invalid argument supplied if using masterbuilder</br>
+108. Change entire database to InnoDB.
