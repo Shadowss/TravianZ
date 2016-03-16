@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
  `week` int(11) NULL,
  `points` bigint(255) NULL,
  `img` varchar(255) NULL,
- `del` tinyint(1) NULL,
+ `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1005,7 +1005,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
  `week` int(11) NULL,
  `points` varchar(15) NULL,
  `img` varchar(10) NULL,
- `del` tinyint(1) NULL,
+ `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
