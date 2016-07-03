@@ -148,6 +148,7 @@ if (date('Ymd',time()) == date('Ymd',$time)) {
 	}
 
 	public function pageLoadTimeStart() {
+		if (isset($_SERVER["REQUEST_TIME_FLOAT"])) return $_SERVER["REQUEST_TIME_FLOAT"];
 		return microtime(true);
 	}
 
