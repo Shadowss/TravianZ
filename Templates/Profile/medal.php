@@ -28,19 +28,10 @@
 
 //de bird
 if($displayarray['protect'] > time()){
-$secondsDiff = $displayarray['protect'] - time();
-$remainingDay     = floor($secondsDiff/60/60/24);
-$remainingHour    = floor(($secondsDiff-($remainingDay*60*60))/3600);
-$remainingMinutes = floor(($secondsDiff-($remainingDay*60*60)-($remainingHour*60*60))/60);
-$remainingSeconds = floor(($secondsDiff-($remainingDay*60*60)-($remainingHour*60*60))-($remainingMinutes*60));
+$secondsDiff      = $displayarray['protect'] - time();
+$remainingDay     = floor($secondsDiff/(3600*24));
 
-$nul1 = $nul2 = $nul3 = "0";
-if(strlen($remainingSeconds) <= 1){
-$nul1 = "0";}
-if(strlen($remainingMinutes) <= 1){
-$nul2 = "0";} 
-if(strlen($remainingHour) <= 1){ $nul3 = "0"; } 
-$left="$nul3$remainingHour:$nul2$remainingMinutes:$nul1$remainingSeconds";
+$left = "$remainingDay days ".date("H:i:s", $secondsDiff);
 $profiel = preg_replace("/\[#0]/is",'<img src="'.$gpack.'img/t/tn.gif" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>This player has '.$left.' hours of beginners protection left.</td></tr></table>\')">', $profiel, 1);
 } else {
 $geregistreerd=date('d-m-Y', ($displayarray['regtime']));
