@@ -83,7 +83,11 @@ function proceed() {
 				<?php
 				if(substr(sprintf('%o', fileperms('../')), -4)<'700'){
 					echo"<span class='f18 c5'>ERROR!</span><br />It's not possible to write the config file. Change the permission to '777'. After that, refresh this page!";
-				} else
+				} 
+				else if (file_exists("installation_done")) {
+					echo"<span class='f18 c5'>ERROR!</span><br />Installation appears to have been completed.<br />If this is an error remove installation_done file in install directory.";
+				}
+				else
 					switch($_GET['s']){
 						case 0:
 						include("templates/greet.tpl");

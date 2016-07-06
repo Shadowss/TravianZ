@@ -134,17 +134,6 @@ class MYSQL_DB {
 		return $dbarray['id'];
 	}
 	
-	function caststruc($user) {
-		//loop search village user
-		$query = mysql_query("SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
-		while($villaggi_array = mysql_fetch_array($query))
-
-		//loop structure village
-		$query1 = mysql_query("SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
-		$strutture= mysql_fetch_array($query1);
-		return $strutture;
-	}
-	
 	function removeMeSit($uid, $uid2) {
 		$q = "UPDATE " . TB_PREFIX . "users set sit1 = 0 where id = $uid and sit1 = $uid2";
 		mysql_query($q, $this->connection);
@@ -193,12 +182,6 @@ class MYSQL_DB {
 			return $this->mysql_fetch_all($result);
 	}
 
-	function getUnstarvation(){
-      			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv = 0 and starvupdate = 0";
-      			$result = mysql_query($q, $this->connection);
-      			return $this->mysql_fetch_all($result);
-  	} 
-
 	function getActivateField($ref, $field, $mode) {
 		if(!$mode) {
 			$q = "SELECT $field FROM " . TB_PREFIX . "activate where id = '$ref'";
@@ -219,14 +202,6 @@ class MYSQL_DB {
 		} else {
 			return false;
 		}
-	}
-
-	function checkActivate($act) {
-		$q = "SELECT * FROM " . TB_PREFIX . "activate where act = '$act'";
-		$result = mysql_query($q, $this->connection);
-		$dbarray = mysql_fetch_array($result);
-
-		return $dbarray;
 	}
 
 	function sitterLogin($username, $password) {
@@ -322,16 +297,6 @@ class MYSQL_DB {
 		$exec1 = mysql_query($q, $this->connection);
 		$exec2 = mysql_query($q2, $this->connection);
 		if($exec1 && $exec2) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function checkactiveSession($username, $sessid) {
-		$q = "SELECT username FROM " . TB_PREFIX . "users where username = '$username' and sessid = '$sessid' LIMIT 1";
-		$result = mysql_query($q, $this->connection);
-		if(mysql_num_rows($result) != 0) {
 			return true;
 		} else {
 			return false;
@@ -778,19 +743,6 @@ class MYSQL_DB {
 		return mysql_fetch_array($result);
 	}
 
-	public function getVillageBattleData($vid) {
-		$q = "SELECT u.id,u.tribe,v.capital,f.f40 AS wall FROM ".TB_PREFIX."users u,".TB_PREFIX."fdata f,".TB_PREFIX."vdata v WHERE u.id=v.owner AND f.vref=v.wref AND v.wref=".$vid;
-		$result = mysql_query($q, $this->connection);
-		return mysql_fetch_array($result);
-	}
-
-	public function getPopulation($uid) {
-		$q = "SELECT sum(pop) AS pop FROM ".TB_PREFIX."vdata WHERE owner=".$uid;
-		$result = mysql_query($q, $this->connection);
-		$dbarray = mysql_fetch_array($result);
-		return $dbarray['pop'];
-	}
-
 	function getOasisV($vid) {
 		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = $vid";
 		$result = mysql_query($q, $this->connection);
@@ -860,24 +812,6 @@ class MYSQL_DB {
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
 	}
-
-	//fix market log	
-	function getMarketLog() {
-        	$q = "SELECT id,wid,log from " . TB_PREFIX . "market_log where id != 0 ORDER BY id ASC";
-        	$result = mysql_query($q, $this->connection);
-        	return $this->mysql_fetch_all($result);
-        }
-	function getMarketLogVillage($village) {
-		$q = "SELECT wref,owner,name from " . TB_PREFIX . "vdata where wref =$village ";
-        	$result = mysql_query($q, $this->connection);
-        	return $this->mysql_fetch_all($result);
-        }
-	function getMarketLogUsers($id_user) {
-        	$q = "SELECT id,username from " . TB_PREFIX . "users where id =$id_user ";
-        	$result = mysql_query($q, $this->connection);
-        	return $this->mysql_fetch_all($result);
-        }
-	//end fix
 
 	function getCoor($wref) {
 		if ($wref !=""){
@@ -1434,12 +1368,6 @@ class MYSQL_DB {
 		return $dbarray['id'];
 	}
 
-	function getDiplomacy($aid) {
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE id = $aid";
-		$result = mysql_query($q, $this->connection);
-		return $this->mysql_fetch_all($result);
-	}
-
 	function diplomacyCancelOffer($id) {
 		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id";
 		return mysql_query($q, $this->connection);
@@ -1840,24 +1768,6 @@ class MYSQL_DB {
 		} else {
 			return mysql_query($q, $this->connection);
 		}
-	}
-
-	function getDelSent($uid) {
-		$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner = $uid and delowner = 1 ORDER BY time DESC";
-		$result = mysql_query($q, $this->connection);
-		return $this->mysql_fetch_all($result);
-	}
-
-	function getDelInbox($uid) {
-		$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $uid and deltarget = 1 ORDER BY time DESC";
-		$result = mysql_query($q, $this->connection);
-		return $this->mysql_fetch_all($result);
-	}
-
-	function getDelArchive($uid) {
-		$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $uid and archived = 1 and deltarget = 1 OR owner = $uid and archived = 1 and delowner = 1 ORDER BY time DESC";
-		$result = mysql_query($q, $this->connection);
-		return $this->mysql_fetch_all($result);
 	}
 
 	function unarchiveNotice($id) {
@@ -2550,17 +2460,6 @@ class MYSQL_DB {
 		return mysql_query($q, $this->connection);
 	}
 
-	function modifyHeroByOwner($column,$value,$uid,$mode=0) {
-		if(!$mode) {
-			$q = "UPDATE `".TB_PREFIX."hero` SET $column = $value WHERE uid = $uid";
-		} elseif($mode=1) {
-			$q = "UPDATE `".TB_PREFIX."hero` SET $column = $column + $value WHERE uid = $uid";
-		} else {
-			$q = "UPDATE `".TB_PREFIX."hero` SET $column = $column - $value WHERE uid = $uid";
-		}
-		return mysql_query($q, $this->connection);
-	}
-
 	function modifyHeroXp($column,$value,$heroid) {
 		$q = "UPDATE ".TB_PREFIX."hero SET $column = $column + $value WHERE uid=$heroid";
 		return mysql_query($q, $this->connection);
@@ -2610,13 +2509,6 @@ class MYSQL_DB {
 		$q = "SELECT * FROM " . TB_PREFIX . "training where vref = $vid ORDER BY id";
 		$result = mysql_query($q, $this->connection);
 		return $this->mysql_fetch_all($result);
-	}
-
-	function countTraining($vid) {
-		$q = "SELECT * FROM " . TB_PREFIX . "training WHERE vref = $vid";
-		$result = mysql_query($q, $this->connection);
-		$row = mysql_fetch_row($result);
-		return $row[0];
 	}
 
 	function trainUnit($vid, $unit, $amt, $pop, $each, $time, $mode) {
@@ -2882,30 +2774,6 @@ class MYSQL_DB {
 	}
 
 	/***************************
-	Function to get world wonder level!
-	Made by: Dzoki
-	***************************/
-
-	function getWWLevel($vref) {
-		$q = "SELECT f99 FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
-		$result = mysql_query($q, $this->connection) or die(mysql_error());
-		$dbarray = mysql_fetch_array($result);
-		return $dbarray['f99'];
-	}
-
-	/***************************
-	Function to get world wonder owner ID!
-	Made by: Dzoki
-	***************************/
-
-	function getWWOwnerID($vref) {
-		$q = "SELECT owner FROM " . TB_PREFIX . "vdata WHERE wref = $vref";
-		$result = mysql_query($q, $this->connection) or die(mysql_error());
-		$dbarray = mysql_fetch_array($result);
-		return $dbarray['owner'];
-	}
-
-	/***************************
 	Function to get user alliance name!
 	Made by: Dzoki
 	***************************/
@@ -2940,10 +2808,6 @@ class MYSQL_DB {
 	}
 
 	//medal functions
-	function addclimberpop($user, $cp) {
-		$q = "UPDATE " . TB_PREFIX . "users set Rc = Rc + '$cp' where id = $user";
-		return mysql_query($q, $this->connection);
-	}
 	function addclimberrankpop($user, $cp) {
 		$q = "UPDATE " . TB_PREFIX . "users set clp = clp + '$cp' where id = $user";
 		return mysql_query($q, $this->connection);
@@ -2960,15 +2824,7 @@ class MYSQL_DB {
 		$q = "UPDATE " . TB_PREFIX . "users set oldrank = '$cp' where id = $user";
 		return mysql_query($q, $this->connection);
 	}
-	function removeclimberpop($user, $cp) {
-		$q = "UPDATE " . TB_PREFIX . "users set Rc = Rc - '$cp' where id = $user";
-		return mysql_query($q, $this->connection);
-	}
 	// ALLIANCE MEDAL FUNCTIONS
-	function addclimberpopAlly($user, $cp) {
-		$q = "UPDATE " . TB_PREFIX . "alidata set Rc = Rc + '$cp' where id = $user";
-		return mysql_query($q, $this->connection);
-	}
 	function addclimberrankpopAlly($user, $cp) {
 		$q = "UPDATE " . TB_PREFIX . "alidata set clp = clp + '$cp' where id = $user";
 		return mysql_query($q, $this->connection);
@@ -2979,10 +2835,6 @@ class MYSQL_DB {
 	}
 	function updateoldrankAlly($user, $cp) {
 		$q = "UPDATE " . TB_PREFIX . "alidata set oldrank = '$cp' where id = $user";
-		return mysql_query($q, $this->connection);
-	}
-	function removeclimberpopAlly($user, $cp) {
-		$q = "UPDATE " . TB_PREFIX . "alidata set Rc = Rc - '$cp' where id = $user";
 		return mysql_query($q, $this->connection);
 	}
 
@@ -3071,22 +2923,6 @@ class MYSQL_DB {
 		$result = mysql_query($q, $this->connection) or die(mysql_error());
 		$dbarray = mysql_fetch_array($result);
 		return $dbarray['crop'];
-	}
-
-	function Getowner($vid) {
-		$s = "SELECT owner FROM " . TB_PREFIX . "vdata where wref = $vid";
-		$result1 = mysql_query($s, $this->connection);
-		$row1 = mysql_fetch_row($result1);
-		return $row1[0];
-	}
-
-	public function debug($time, $uid, $debug_info) {
-		$q = "INSERT INTO " . TB_PREFIX . "debug_info (time,uid,debug_info) VALUES ($time,$uid,$debug_info)";
-		if(mysql_query($q, $this->connection)) {
-			return mysql_insert_id($this->connection);
-		} else {
-			return false;
-		}
 	}
 
 	function populateOasisdata() {
@@ -3209,12 +3045,6 @@ class MYSQL_DB {
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
 		$result = mysql_query($q, $this->connection);
 		return mysql_fetch_array($result);
-	}
-	
-	function getOwnArtefactInfo2($vref) {
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
-		$result = mysql_query($q, $this->connection);
-		return $this->mysql_fetch_all($result);
 	}
 	
 	function getOwnArtefactInfo3($uid) {
