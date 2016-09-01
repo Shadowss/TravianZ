@@ -1,13 +1,22 @@
 TravianZ Version v.8.0.1 Fix bugs
 
 This is a fork from : https://github.com/Shadowss/TravianZ
-First I want to apply fixes to the v.8.0.0 FINAL TEST version, for the bug when installing with the latest WampServer 3.0.4 64bit(Apache 2.4.18, PHP 5.6.19, MySQL 5.7.11)
+I use TravianZ v.8.0.0 FINAL TEST with WampServer 3.0.4 64bit(Apache 2.4.18, PHP 5.6.19, MySQL 5.7.11), and found out there're a bunch of bugs which should be fixed. So that's the reason to start this project.
 
 My changes notes:
 0. Change README with new contents
 1. Change install/templates/config.tpl to deal with deprecated warning from new PHP version.
+2. Fix install/data/sql.sql, to be executable in current MySQL version.
+3. Fix to db_MYSQL.php with safe_mysql_fetch_all, and safe_mysql_fetch_array wrappers, to avoid error: fix for Warning: mysql_fetch_all/array() expects parameter 1 to be resource, boolean given
+4. Fix to the db_MYSQLi.php in class object declaration(if anybody want to use db_MYSQLi.php again)
 
-Thank you to : advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , and many others that make that version posible.
+Note for the original code:
+The last commit 4372c40 from Shadowss/TravianZ is on Jul 6 2016, with note:
+108. Change entire database to InnoDB.
+
+Original thank you information:
+--------------------------------------------------------------------------------------------------------------
+Thank you to : Shadowss, advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , and many others that make that version posible.
 
 This version is same as yi12345.
 
@@ -15,5 +24,5 @@ First i want to say THANKS for all who worked on that version , will find a list
 
 TravianZ is based on TravianX v6.0.0 or TravianZ or TravianX with some grapich changes from ZravianX.
 
-The last commit from Shadowss/TravianZ is on Jul 6 2016, with note:
-108. Change entire database to InnoDB.
+--------------------------------------------------------------------------------------------------------------
+
