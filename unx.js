@@ -166,7 +166,11 @@ function fd(url,gd,hd,id){
 				var kd=jd.getResponseHeader('Content-Type');
 				kd=kd.substr(0,kd.indexOf(';'));
 				switch(kd){
-					case'application/json':gd((jd.responseText==''?null:eval('('+jd.responseText+')')));break;
+					case'application/json':
+						if (jd.responseText.indexOf('[]') < 0) {
+							gd((jd.responseText==''?null:eval('('+jd.responseText+')')));
+						}
+						break;
 					case'text/plain':case'text/html':gd(jd.responseText);break;
 					default:throw'Illegal content type';
 				}
