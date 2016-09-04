@@ -14,6 +14,12 @@ My changes notes:
 	VM5051:1 Uncaught SyntaxError: Unexpected token )
 	jd.onreadystatechange @ unx.js?0ac36:170
 	This error arises when moving to the border of the map.
+6. Fix the map loop moving bug:
+	Symptom: For map not set to size 400x400, on the map page,
+	when moving on and on in one direction, cross the map border(loop) two times, 
+	the moving function will be crashed(freeze, you can't move any more).
+	I found out that unx.js handle a static map size(400x400).
+	So I fixed this with a m_c.world_max variable from mapview.tpl and changed the unx.js accordingly.
 
 Note for the original code:
 The last commit 4372c40 from Shadowss/TravianZ is on Jul 6 2016, with note:
