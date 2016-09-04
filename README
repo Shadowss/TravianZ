@@ -21,6 +21,7 @@ My changes notes:
 	the moving function will be crashed(freeze, you can't move any more).
 	I found out that unx.js handle a static map size(400x400).
 	So I fixed this with a m_c.world_max variable from mapview.tpl and changed the unx.js accordingly.
+7. Fix the constructor global variable missing in Session.php
 
 Note for the original code:
 The last commit 4372c40 from Shadowss/TravianZ is on Jul 6 2016, with note:

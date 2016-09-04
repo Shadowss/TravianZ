@@ -61,6 +61,8 @@ class Session {
 			var $villages = array();
 
 			function Session() {
+        		global $database; //TienTN fix
+
 				$this->time = time();
 				if (!isset($_SESSION)) session_start();
 
