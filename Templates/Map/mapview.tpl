@@ -256,6 +256,7 @@ if (isset($neutralarray[0])) {
 			m_c.ad = [<?php echo '['.$map_js;?>];
 			m_c.z = {"x":<?php echo $x ?>,"y":<?php echo $y ?>};
 			m_c.size = 7;
+			m_c.world_max = <?php echo WORLD_MAX; /*TienTN: add a value to handle in unx.js instead of hardcoding*/ ?>;
 			var mdim = {"x":7,"y":7,"rad":3}
 			var mmode = 0;
 			function init_local(){map_init();}

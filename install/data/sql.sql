@@ -22,7 +22,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `ckey` varchar(255) NULL,
  `time_check` int(11) NULL DEFAULT '0',
  `to_vid` int(11) NULL,
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
 --
 
 CREATE TABLE `%PREFIX%links` (
- `id` INT( 25 ) NULL AUTO_INCREMENT PRIMARY KEY ,
+ `id` INT( 25 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
  `userid` INT( 25 ) NULL ,
  `name` VARCHAR( 50 ) NULL ,
  `url` VARCHAR( 150 ) NULL ,
@@ -68,7 +68,7 @@ CREATE TABLE `%PREFIX%links` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
- `vref` int(11) NULL,
+ `vref` int(11) NOT NULL,
  `a1` tinyint(2) NULL DEFAULT '0',
  `a2` tinyint(2) NULL DEFAULT '0',
  `a3` tinyint(2) NULL DEFAULT '0',
@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
- `id` int(255) NULL AUTO_INCREMENT,
+ `id` int(255) NOT NULL AUTO_INCREMENT,
  `username` varchar(100) NULL,
  `password` varchar(100) NULL,
  `email` text NULL,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%active` (
- `username` varchar(100) NULL,
+ `username` varchar(100) NOT NULL,
  `timestamp` int(11) NULL,
  PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%active` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%admin_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `user` text NULL,
  `log` text NULL,
  `time` int(25) NULL,
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%admin_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `allyid` int(11) NULL,
  `categorie` int(11) NULL,
  `plaats` int(11) NULL,
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `vref` int(11) NULL,
  `owner` int(11) NULL,
  `type` tinyint(2) NULL,
@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%alidata` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `name` varchar(100) NULL,
  `tag` varchar(100) NULL,
  `leader` int(11) NULL,
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alidata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%ali_invite` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `uid` int(11) NULL,
  `alliance` int(11) NULL,
  `sender` int(11) NULL,
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_invite` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%ali_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `aid` int(11) NULL,
  `comment` text NULL,
  `date` int(11) NULL,
@@ -280,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `uid` int(11) NULL,
  `alliance` int(11) NULL,
  `rank` varchar(100) NULL,
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `vref` int(11) NULL,
  `t1` int(11) NULL,
  `t2` int(11) NULL,
@@ -347,7 +347,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%banlist` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `uid` int(11) NULL,
  `name` varchar(100) NULL,
  `reason` varchar(30) NULL,
@@ -370,7 +370,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%banlist` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wid` int(11) NULL,
  `field` tinyint(2) NULL,
  `type` tinyint(2) NULL,
@@ -393,7 +393,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%build_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wid` int(11) NULL,
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -412,7 +412,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%build_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
- `id` int(20) NULL AUTO_INCREMENT,
+ `id` int(20) NOT NULL AUTO_INCREMENT,
  `id_user` int(11) NULL,
  `name` varchar(255) NULL,
  `alli` varchar(255) NULL,
@@ -449,7 +449,7 @@ INSERT INTO `%PREFIX%config` VALUES (0);
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%deleting` (
- `uid` int(11) NULL,
+ `uid` int(11) NOT NULL,
  `timestamp` int(11) NULL,
  PRIMARY KEY (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -466,7 +466,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%deleting` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
- `vref` int(11) NULL,
+ `vref` int(11) NOT NULL,
  `buildnumber` int(11) NULL DEFAULT '0',
  `lvl` int(11) NULL DEFAULT '0',
  `timetofinish` int(11) NULL,
@@ -485,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%diplomacy` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `alli1` int(11) NULL,
  `alli2` int(11) NULL,
  `type` tinyint(1) NULL,
@@ -504,7 +504,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%diplomacy` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `u1` int(11) NULL DEFAULT '0',
  `u2` int(11) NULL DEFAULT '0',
  `u3` int(11) NULL DEFAULT '0',
@@ -572,7 +572,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wref` int(11) NULL,
  `owner` int(11) NULL,
  `name` varchar(100) NULL,
@@ -591,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
- `vref` int(11) NULL,
+ `vref` int(11) NOT NULL,
  `f1` tinyint(2) NULL DEFAULT '0',
  `f1t` tinyint(2) NULL DEFAULT '0',
  `f2` tinyint(2) NULL DEFAULT '0',
@@ -676,7 +676,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
  `f99t` tinyint(2) NULL DEFAULT '0',
  `wwname` varchar(100) NULL DEFAULT 'World Wonder',
  PRIMARY KEY (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%fdata`
@@ -690,7 +690,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `owner` varchar(255) NULL,
  `alliance` varchar(255) NULL,
  `forum_name` varchar(255) NULL,
@@ -711,7 +711,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_edit` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `alliance` varchar(255) NULL,
  `result` varchar(255) NULL,
  PRIMARY KEY (`id`)
@@ -729,7 +729,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_edit` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `post` longtext NULL,
  `topic` varchar(255) NULL,
  `owner` varchar(255) NULL,
@@ -787,7 +787,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_survey` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `title` varchar(255) NULL,
  `post` longtext NULL,
  `date` varchar(255) NULL,
@@ -817,7 +817,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `casualties` int(11) NULL,
  `time` int(11) NULL,
  `shown` tinyint(1) NULL,
@@ -836,7 +836,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wid` int(11) NULL,
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -855,7 +855,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
- `heroid` int(11) NULL AUTO_INCREMENT,
+ `heroid` int(11) NOT NULL AUTO_INCREMENT,
  `uid` int(11) NULL,
  `unit` smallint(2) NULL,
  `name` tinytext NULL,
@@ -891,7 +891,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%illegal_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `user` int(11) NULL,
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -910,7 +910,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%illegal_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%login_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `uid` int(11) NULL,
  `ip` varchar(15) NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -929,7 +929,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%login_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%market` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `vref` int(11) NULL,
  `gtype` tinyint(1) NULL,
  `gamt` int(11) NULL,
@@ -954,7 +954,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%market` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%market_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wid` int(11) NULL,
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -973,7 +973,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%market_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `target` int(11) NULL,
  `owner` int(11) NULL,
  `topic` varchar(100) NULL,
@@ -1003,7 +1003,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `userid` int(11) NULL,
  `categorie` int(11) NULL,
  `plaats` int(11) NULL,
@@ -1026,7 +1026,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
- `moveid` int(11) NULL AUTO_INCREMENT,
+ `moveid` int(11) NOT NULL AUTO_INCREMENT,
  `sort_type` tinyint(4) NULL DEFAULT '0',
  `from` int(11) NULL DEFAULT '0',
  `to` int(11) NULL DEFAULT '0',
@@ -1055,7 +1055,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `uid` int(11) NULL,
  `toWref` int(11) NULL,
  `ally` int(11) NULL,
@@ -1081,7 +1081,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
- `wref` int(11) NULL,
+ `wref` int(11) NOT NULL,
  `type` tinyint(2) NULL,
  `conqured` int(11) NULL,
  `wood` int(11) NULL,
@@ -1129,7 +1129,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%prisoners` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wref` int(11) NULL,
  `from` int(11) NULL,
  `t1` int(11) NULL,
@@ -1158,7 +1158,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%prisoners` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `lid` int(11) NULL,
  `towref` int(11) NULL,
  `x` int(11) NULL,
@@ -1189,7 +1189,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `vref` int(11) NULL,
  `tech` varchar(3) NULL,
  `timestamp` int(11) NULL,
@@ -1208,7 +1208,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `uid` int(11) NULL,
  `wid` int(11) NULL,
  `from` int(11) NULL,
@@ -1236,7 +1236,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%send` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wood` int(11) NULL,
  `clay` int(11) NULL,
  `iron` int(11) NULL,
@@ -1257,7 +1257,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%send` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%tdata` (
- `vref` int(11) NULL,
+ `vref` int(11) NOT NULL,
  `t2` tinyint(1) NULL DEFAULT '0',
  `t3` tinyint(1) NULL DEFAULT '0',
  `t4` tinyint(1) NULL DEFAULT '0',
@@ -1313,7 +1313,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%tdata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%tech_log` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `wid` int(11) NULL,
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1332,7 +1332,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%tech_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `vref` int(11) NULL,
  `unit` tinyint(2) NULL,
  `amt` int(11) NULL,
@@ -1355,7 +1355,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%units` (
- `vref` int(11) NULL,
+ `vref` int(11) NOT NULL,
  `u1` int(11) NULL DEFAULT '0',
  `u2` int(11) NULL DEFAULT '0',
  `u3` int(11) NULL DEFAULT '0',
@@ -1424,7 +1424,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%units` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `username` varchar(100) NULL,
  `password` varchar(100) NULL,
  `email` text NULL,
@@ -1432,7 +1432,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
  `access` tinyint(1) NULL DEFAULT '1',
  `gold` int(9) NULL DEFAULT '0',
  `gender` tinyint(1) NULL DEFAULT '0',
- `birthday` date NULL DEFAULT '0000-00-00',
+ `birthday` date NULL DEFAULT '1970-01-01',
  `location` text NULL,
  `desc1` text NULL,
  `desc2` text NULL,
@@ -1518,10 +1518,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
 --
 
 INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `access`, `gold`, `gender`, `birthday`, `location`, `desc1`, `desc2`, `plus`, `b1`, `b2`, `b3`, `b4`, `sit1`, `sit2`, `alliance`, `sessid`, `act`, `timestamp`, `ap`, `apall`, `dp`, `dpall`, `protect`, `quest`, `gpack`, `cp`, `lastupdate`, `RR`, `Rc`, `ok`) VALUES
-(5, 'Multihunter', '', 'multihunter@travianx.mail', 0, 9, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(1, 'Support', '', 'support@travianx.mail', 0, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(2, 'Nature', '4262cc190152adfc1a3fcf32af6aa430', 'support@travianx.mail', 4, 9, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(4, 'Taskmaster', '', 'support@travianx.mail', 0, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0);
+(5, 'Multihunter', '', 'multihunter@travianx.mail', 0, 9, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(1, 'Support', '', 'support@travianx.mail', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(2, 'Nature', '4262cc190152adfc1a3fcf32af6aa430', 'support@travianx.mail', 4, 9, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(4, 'Taskmaster', '', 'support@travianx.mail', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1530,7 +1530,7 @@ INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `ac
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
-`wref` int(11) NULL,
+`wref` int(11) NOT NULL,
 `owner` int(11) NULL,
 `name` varchar(100) NULL,
 `capital` tinyint(1) NULL,
@@ -1570,7 +1570,7 @@ PRIMARY KEY (`wref`)
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
- `id` int(11) NULL AUTO_INCREMENT,
+ `id` int(11) NOT NULL AUTO_INCREMENT,
  `fieldtype` tinyint(2) NULL,
  `oasistype` tinyint(2) NULL,
  `x` int(11) NULL,
@@ -1590,7 +1590,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%password` (
- `uid` int(11) NULL,
+ `uid` int(11) NOT NULL,
  `npw` varchar(100) NULL,
  `cpw` varchar(100) NULL,
  `used` tinyint(1) NULL DEFAULT '0',

@@ -3863,6 +3863,6 @@ References:
 
 };
 
-$database = new MYSQL_DB;
+$database = new MYSQLi_DB;
 
 ?>

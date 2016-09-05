@@ -166,7 +166,11 @@ function fd(url,gd,hd,id){
 				var kd=jd.getResponseHeader('Content-Type');
 				kd=kd.substr(0,kd.indexOf(';'));
 				switch(kd){
-					case'application/json':gd((jd.responseText==''?null:eval('('+jd.responseText+')')));break;
+					case'application/json':
+						if (jd.responseText.indexOf('[]') < 0) {
+							gd((jd.responseText==''?null:eval('('+jd.responseText+')')));
+						}
+						break;
 					case'text/plain':case'text/html':gd(jd.responseText);break;
 					default:throw'Illegal content type';
 				}
@@ -189,16 +193,60 @@ else
 {url+='&'+param;}
 }
 document.location.href=url;}
-var rd={'index':0,'dir':0,'size':null,'fields':[],'cindex':0,'usealternate':false}
-;var m_c=rd;var sd;var td;var ud;var vd;var wd;var xd;var yd;var zd;var $d;var _d=false;var ae;var be;var ce;var de=[];de[38]=1;de[39]=2;de[40]=3;de[37]=4;var ee={}
-;var fe;var ge;function map_init(){sd=false;td=false;ud=false;vd=false;xd=0;wd=0;fe=he('karte2');ie(['i','a','t']);if(null==m_c.az){throw'm_c.az muss seitenspezifisch initialisiert werden.';}
-for(var p in m_c.az){document.getElementById('ma_'+p).onclick=je;}
-var ke=['mcx','mcy','x','y','map_infobox'];for(var i=0;i<ke.length;i++){ee[ke[i]]=document.getElementById(ke[i]);}
-ke=['mcx','mcy'];for(var i=0;i<ke.length;i++){ee[ke[i]].onfocus=function(){vd=true;}
-;ee[ke[i]].onblur=function(){vd=false;}
-;}
+var rd={'index':0,'dir':0,'size':null,'fields':[],'cindex':0,'usealternate':false};
+var m_c=rd;
+var sd;
+var td;
+var ud;
+var vd;
+var wd;
+var xd;
+var yd;
+var zd;
+var $d;
+var _d=false;
+var ae;
+var be;
+var ce;
+var de=[];
+de[38]=1;
+de[39]=2;
+de[40]=3;
+de[37]=4;
+var ee={};
+var fe;
+var ge;
+function map_init(){
+	sd=false;
+	td=false;
+	ud=false;
+	vd=false;
+	xd=0;
+	wd=0;
+	fe=he('karte2');
+	ie(['i','a','t']);
+	if(null==m_c.az){
+		throw'm_c.az muss seitenspezifisch initialisiert werden.';
+	}
+	for(var p in m_c.az){
+		document.getElementById('ma_'+p).onclick=je;
+	}
+	var ke=['mcx','mcy','x','y','map_infobox'];
+	for(var i=0;i<ke.length;i++){
+		ee[ke[i]]=document.getElementById(ke[i]);
+	}
+	ke=['mcx','mcy'];
+	for(var i=0;i<ke.length;i++){
+		ee[ke[i]].onfocus=function(){vd=true;};
+		ee[ke[i]].onblur=function(){vd=false;};
+	}
 
-ee.ibox_cells=[];ee.ibox_cells[0]=ee.map_infobox.firstChild.firstChild.lastChild;for(var i=1;i<=3;i++){ee.ibox_cells[i]=ee.map_infobox.firstChild.nextSibling.childNodes[i-1].lastChild}
+	ee.ibox_cells=[];
+	ee.ibox_cells[0]=ee.map_infobox.firstChild.firstChild.lastChild;
+	for(var i=1;i<=3;i++)
+	{
+		ee.ibox_cells[i]=ee.map_infobox.firstChild.nextSibling.childNodes[i-1].lastChild;
+	}
 	document.onkeyup=le;
 	document.onkeydown=me;
 	document.onkeypress=ne;
@@ -237,7 +285,11 @@ function ef(ff,gf){return((ff-1)*10)+gf
 }
 function hf(jf){ee.x.firstChild.nodeValue=jf.x;ee.y.firstChild.nodeValue=jf.y;}
 function kf(jf){ee.mcx.value=jf.x;ee.mcy.value=jf.y;l=$$('div.cropfinder_icon a').set('href','cropfinder.php?x='+jf.x+'&y='+jf.y);}
-function lf(x,y){return(400+x)+(400-y)*801+1;}
+function lf(x,y){
+	var world_max = m_c.world_max;
+	var world_max_double = (world_max * 2)+1;	
+	return(world_max+x)+(world_max-y)*world_max_double+1;
+}
 function ve(){if(mmode){zd=window.open(this.href,"map","top=100,left=25,width=1007,height=585");zd.focus();}
 else{xe(true);fd('ajax.php?f=kp&z='+lf(m_c.z.x,m_c.z.y),function(mf){xe(false);ae=document.getElementsByTagName('body')[0];be=document.getElementsByTagName('html')[0];ae.parentNode.removeChild(ae);ce=document.createElement('body');ce.innerHTML=mf.lm;ce.style.backgroundColor='#ffffff';be.appendChild(ce);m_c=[];for(var qd in mf.dat.m_c){m_c[qd]=mf.dat.m_c[qd];}
 m_c.fields=[];mdim=mf.dat.mdim;mmode=mf.dat.mmode;map_init();}
@@ -252,49 +304,190 @@ be.removeChild(ce);be.appendChild(ae);map_init();var of;var area;for(var i=0;i<m
 }
 hf(m_c.z);kf(m_c.z);}
 return false;}
-function je(){var qf=1*this.id.substring(4,5);var rf=1*(this.id.substring(5,7)=='p7'?mdim.x:1);map_scroll(qf,rf);return false;}
+
+//this function is executed on map direction icon clicking
+//ma_n1, ma_n2, ma_n3, ma_n4
+//	document.getElementById('ma_'+p).onclick=je;
+function je(){
+	var qf=1*this.id.substring(4,5);
+	var rf=1*(this.id.substring(5,7)=='p7'?mdim.x:1);
+//	console.log(this.id + "--" + qf+"-"+rf);
+	map_scroll(qf,rf);
+	return false;
+}
 function sf(z){var x=z.x-mdim.rad;var y=z.y-mdim.rad;var tf=z.x+mdim.rad;var uf=z.y+mdim.rad;return{'x':x,'y':y,'xx':tf,'yy':uf}
 ;}
-function vf(qf,rf,wf){if(wf==null){wf=0;}
-if(m_c.size==null){throw'Globale Variable m_c.size muss auf den Wert von $travian[map_prefetch_rows]) gesetzt werden.';}
-var xf,yf;if(null===rf||1===rf){yf=m_c.size-1;}
-else if(mdim.x==rf){xf=mdim.x;yf=-(mdim.x-1);}
-else{throw'Parameter steps muss 1 oder Breite der Karte in Feldern sein.';}
-var x,y,tf,uf,z;var z=m_c.z;switch(qf){case 1:x=z.x+mdim.rad;y=z.y+mdim.rad+wf;tf=z.x-mdim.rad;uf=y+yf;break;case 2:x=z.x+mdim.rad+wf;y=z.y-mdim.rad;tf=x+yf;uf=z.y+mdim.rad;break;case 3:x=z.x+mdim.rad;y=z.y-mdim.rad-wf;tf=z.x-mdim.rad;uf=y-yf;break;case 4:x=z.x-mdim.rad-wf;y=z.y-mdim.rad;tf=x-yf;uf=z.y+mdim.rad;break;}
-return{'x':x,'y':y,'xx':tf,'yy':uf}
-;}
-function zf($f){if($f>400){$f-=801;}
-if($f<-400){$f+=801;}
-return $f;}
-function _f($f){if($f>400){$f=400;}
-if($f<-400){$f=-400;}
-return $f;}
-function ag(qf,rf){var z={}
-;z.x=m_c.z.x*1;z.y=m_c.z.y*1;switch(qf){case 1:z.y+=rf;break;case 2:z.x+=rf;break;case 3:z.y-=rf;break;case 4:z.x-=rf;break;}
-m_c.z.x=zf(z.x);m_c.z.y=zf(z.y);}
+function vf(qf,rf,wf){
+	if(wf==null){wf=0;}
+	if(m_c.size==null){
+		throw'Globale Variable m_c.size muss auf den Wert von $travian[map_prefetch_rows]) gesetzt werden.';
+	}
+	var xf,yf;
+	if(null===rf||1===rf){
+		yf=m_c.size-1;
+	}
+	else if(mdim.x==rf){
+		xf=mdim.x;yf=-(mdim.x-1);
+	}
+	else{
+		throw'Parameter steps muss 1 oder Breite der Karte in Feldern sein.';
+	}
+	var x,y,tf,uf,z;var z=m_c.z;
+	switch(qf){
+		case 1:
+			x=z.x+mdim.rad;y=z.y+mdim.rad+wf;
+			tf=z.x-mdim.rad;uf=y+yf;
+			break;
+		case 2:
+			x=z.x+mdim.rad+wf;y=z.y-mdim.rad;
+			tf=x+yf;uf=z.y+mdim.rad;
+			break;
+		case 3:
+			x=z.x+mdim.rad;y=z.y-mdim.rad-wf;
+			tf=z.x-mdim.rad;
+			uf=y-yf;
+			break;
+		case 4:
+			x=z.x-mdim.rad-wf;
+			y=z.y-mdim.rad;
+			tf=x-yf;
+			uf=z.y+mdim.rad;
+			break;
+	}
+	return{'x':x,'y':y,'xx':tf,'yy':uf};
+}
+
+function zf($f){
+	var world_max = m_c.world_max;
+	var world_max_double = (world_max * 2) + 1;
+	if($f>world_max){
+		$f-=world_max_double;
+	}
+	if($f<-world_max){
+		$f+=world_max_double;
+	}
+	return $f;
+}
+
+function _f($f){
+	if($f>m_c.world_max){
+		$f=m_c.world_max;
+	}
+	if($f<-m_c.world_max){
+		$f=-m_c.world_max;
+	}
+	return $f;
+}
+
+//tientn: m_c is the object hold all global variables
+function ag(qf,rf){
+	var z={};
+	z.x=m_c.z.x*1;
+	z.y=m_c.z.y*1;
+	switch(qf){
+		case 1:
+			z.y+=rf;
+			break;
+		case 2:
+			z.x+=rf;
+			break;
+		case 3:
+			z.y-=rf;
+			break;
+		case 4:
+			z.x-=rf;
+			break;
+	}
+	m_c.z.x=zf(z.x);
+	m_c.z.y=zf(z.y);
+}
 function bg(cg){return'ajax.php?f=k7&x='+cg.x+'&y='+cg.y+'&xx='+cg.xx+'&yy='+cg.yy;}
-function map_scroll(qf,rf,dg){var cg,eg;if(sd){return false;}
-if(fg()){if(td){return false;}
-sd=true;gg();m_c.usealternate=false;m_c.cindex=0;if(dg!==undefined){m_c.z.x=_f(dg.x);m_c.z.y=_f(dg.y);cg=sf(m_c.z);}
-else{ag(qf,rf);cg=vf(qf,rf);}
-hg=bg(cg);fd(hg,ig);}
-else{if(jg()){if(td){return false;}
-td=true;ag(qf,rf);cg=vf(qf,rf,2);hg=bg(cg);fd(hg,ig);}
-else if(kg()){ag(qf,rf);lg();gg();}
-else{ag(qf,rf);}
-mg(qf,rf);}
-function ig(ng){var og;if(jg()){og=pg(m_c.cindex);m_c.usealternate=false;td=false;}
-else{og=m_c.cindex;}
-m_c.fields[og]=ng;if(fg()){if(dg!==undefined){mg(0,0,m_c.z);qg('x');qg('y');}
-else{mg(qf,rf);qg(qf);}
-sd=false;}
-}
-function jg(){return m_c.usealternate;}
-function fg(){return(qf!=m_c.dir||rf==mdim.x||(rf==1&&rf!=m_c.steps)||dg!==undefined);}
-function kg(){return(m_c.index==m_c.size);}
-}
+
+function map_scroll(qf,rf,dg) {
+	var cg,eg;
+	if(sd){
+		return false;
+	}
+	if(fg()){
+		if(td){
+			return false;
+		}
+		sd=true;
+		gg();
+		m_c.usealternate=false;
+		m_c.cindex=0;
+		if(dg!==undefined){
+			m_c.z.x=_f(dg.x);
+			m_c.z.y=_f(dg.y);
+			cg=sf(m_c.z);
+		}
+		else{
+			ag(qf,rf);
+			cg=vf(qf,rf);
+		}
+		hg=bg(cg);
+		fd(hg,ig);
+	}
+	else{
+		if(jg()){
+			if(td){
+				return false;
+			}
+			td=true;
+			ag(qf,rf);
+			cg=vf(qf,rf,2);
+			hg=bg(cg);
+			fd(hg,ig);
+		}
+		else if(kg()){
+			ag(qf,rf);
+			lg();
+			gg();
+		}
+		else{
+			ag(qf,rf);
+		}
+		mg(qf,rf);
+	}
+	function ig(ng){
+		var og;
+		if(jg()){
+			og=pg(m_c.cindex);
+			m_c.usealternate=false;
+			td=false;
+		}
+		else{
+			og=m_c.cindex;
+		}
+		m_c.fields[og]=ng;
+		if(fg()){
+			if(dg!==undefined){
+				mg(0,0,m_c.z);
+				qg('x');
+				qg('y');
+			}
+			else{
+				mg(qf,rf);
+				qg(qf);
+			}
+			sd=false;
+		}
+	}
+	function jg(){
+		return m_c.usealternate;
+	}
+	function fg(){
+		return(qf!=m_c.dir||rf==mdim.x||(rf==1&&rf!=m_c.steps)||dg!==undefined);
+	}
+	function kg(){
+		return(m_c.index==m_c.size);
+	}
+} //end of map_scroll
+
 function rg(qf,rf){m_c.dir=qf;m_c.steps=rf;}
-function gg(){m_c.index=0;}
+function gg(){
+	m_c.index=0;
+}
 function sg(){m_c.index++;if(m_c.index==m_c.size-2){m_c.usealternate=true;}
 }
 function lg(){m_c.cindex=pg(m_c.cindex);}
@@ -319,11 +512,25 @@ area.details.normal_field=area.details.name===undefined&&area.details.typ==0;are
 ;area.details.classic_oasis=area.details.querystring==='';}
 function df(dh){switch(dh){case 1:return[3,3,3,9];case 2:return[3,4,5,6];case 3:return[4,4,4,6];case 4:return[4,5,3,6];case 5:return[5,3,4,6];case 6:return[1,1,1,15];case 7:return[4,4,3,7];case 8:return[3,4,4,7];case 9:return[4,3,4,7];case 10:return[3,5,4,6];case 11:return[4,3,5,6];case 12:return[5,4,3,6];default:return false;}
 }
-function oe(){var x=parseInt(this.xp.value);var y=parseInt(this.yp.value);if(!isNaN(x)&&!isNaN(y)){map_scroll(0,0,{'x':x,'y':y}
-);}
-return false;}
-function ne(e){if(vd){return true;}
-var qd=(window.event)?event.keyCode:e.keyCode;var qf=eh(qd);if(qf!=0){return false;}
+//document.map_coords.onsubmit=oe;
+function oe(){
+	var x=parseInt(this.xp.value);
+	var y=parseInt(this.yp.value);
+	if(!isNaN(x)&&!isNaN(y)){
+		map_scroll(0,0,{'x':x,'y':y});
+	}
+	return false;
+}
+//document.onkeypress=ne;
+function ne(e){
+	if(vd){
+		return true;
+	}
+	var qd=(window.event)?event.keyCode:e.keyCode;
+	var qf=eh(qd);
+	if(qf!=0){
+		return false;
+	}
 }
 function qe(){_d=true;hf(this.details);$e(this.details);fh(this);ge=this;}
 function fh(area){if(!area.details.fresh.href){if(area.details.classic_oasis){area.removeAttribute('href');area.style.cursor='default';}
@@ -357,14 +564,31 @@ function vg(qf){for(var i=0;i<mdim.x;i++){for(var j=1;j<mdim.x;j++){switch(qf){c
 }
 }
 }
-function eh(qd){if(de[qd]!==undefined){return de[qd];}
-return 0;}
-function le(e){if(vd){return true;}
-var qd=((window.event)?event.keyCode:e.keyCode);if(16==qd){ud=false;}
-var qf=eh(qd);if(qf==wd&&wd!=0){wd=0;kf(m_c.z);ph();}
+function eh(qd){
+	if(de[qd]!==undefined){
+		return de[qd];
+	}
+	return 0;
 }
-function m_r(qf,qh){if(wd==qf&&qh==xd){window.setTimeout(function(){m_r(qf,qh)}
-,100);map_scroll(qf,1);}
+//document.onkeyup=le;
+function le(e){
+	if(vd){
+		return true;
+	}
+	var qd=((window.event)?event.keyCode:e.keyCode);
+	if(16==qd){
+		ud=false;
+	}
+	var qf=eh(qd);
+	if(qf==wd&&wd!=0){
+		wd=0;kf(m_c.z);ph();
+	}
+}
+function m_r(qf,qh){
+	if(wd==qf&&qh==xd){
+		window.setTimeout(function(){m_r(qf,qh)},100);
+		map_scroll(qf,1);
+	}
 }
 function qg(rh){var jb;switch(rh){case 2:case 4:case'x':jb='x';break;case 1:case 3:case'y':jb='y';break;}
 var sh='m'+jb;var th;var uh;var vh=0;var wh=0;for(var i=0;i<mdim.x;i++){if(jb=='x'){vh=i;}
@@ -372,12 +596,26 @@ else{wh=i;}
 if(ee[sh][i]){th=pe(vh,wh,'a').details[jb];ee[sh][i].firstChild.nodeValue=th;}
 }
 }
-function me(e){if(vd){return true;}
-var qd=(window.event)?event.keyCode:e.keyCode;if(qd==16){ud=true;}
-var qf=eh(qd);if(qf!=0&&qf!=wd){var rf=(ud?mdim.x:1);map_scroll(qf,rf);var qh=new Date().getTime();if(rf==1){window.setTimeout(function(){m_r(qf,qh)}
-,500);}
-xd=qh;wd=qf;ph();}
-if(qf!=0){return false;}
+//document.onkeydown=me;
+function me(e){
+	if(vd){
+		return true;
+	}
+	var qd=(window.event)?event.keyCode:e.keyCode;if(qd==16){ud=true;}
+	var qf=eh(qd);
+	if(qf!=0&&qf!=wd){
+		var rf=(ud?mdim.x:1);
+		map_scroll(qf,rf);
+		var qh=new Date().getTime();
+		if(rf==1){
+			window.setTimeout(function(){m_r(qf,qh)},500);
+		}
+		xd=qh;wd=qf;
+		ph();
+	}
+	if(qf!=0){
+		return false;
+	}
 }
 function ph(){window.setTimeout(function(){if(_d){$e(ge.details);}
 }
