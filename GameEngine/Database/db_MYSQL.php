@@ -45,10 +45,15 @@ class MYSQL_DB {
 	}
 
 	function register($username, $password, $email, $tribe, $act) {
+		//TienTN add validation
+		if (strlen($username) > 100 || strlen($password) > 100 || !is_numeric($tribe) || strlen($act) > 10) {
+			throw new Exception('register: wrong param');
+			return false;
+		}
 		$time = time();
-        	$stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
+       	$stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
 		if($stime > time()){
-		$time = $stime;
+		    $time = $stime;
 		}
 		$timep = $time + PROTECTION;
 		$time = time();
@@ -61,6 +66,11 @@ class MYSQL_DB {
 	}
 
 	function activate($username, $password, $email, $tribe, $locate, $act, $act2) {
+		//TienTN add validation
+		if (strlen($username) > 100 || strlen($password) > 100 || !is_numeric($tribe) || strlen($act) > 10 || strlen($act2) > 10) {
+			throw new Exception('register: wrong param');
+			return false;
+		}
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "activate (username,password,access,email,tribe,timestamp,location,act,act2) VALUES ('$username', '$password', " . USER . ", '$email', $tribe, $time, $locate, '$act', '$act2')";
 				if(mysql_query($q, $this->connection)) {
@@ -378,17 +388,17 @@ class MYSQL_DB {
     }
     switch($sector) {
     case 1:
-    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x- y+
-    break;
+        $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x- y+
+        break;
     case 2:
-    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x+ y+
-    break;
+        $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x+ y+
+        break;
     case 3:
-    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x- y-
-    break;
+        $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x- y-
+        break;
     case 4:
-    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x+ y-
-    break;
+        $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x+ y-
+        break;
     }
     $result = mysql_query($q, $this->connection);
     $num_rows = mysql_num_rows($result);
@@ -400,6 +410,11 @@ class MYSQL_DB {
     }
 
 	function setFieldTaken($id) {
+		//TienTN add validation
+		if (!is_numeric($id)) {
+			throw new Exception('setFieldTaken: wrong param');
+			return null;			
+		}
 		$q = "UPDATE " . TB_PREFIX . "wdata set occupied = 1 where id = $id";
 		return mysql_query($q, $this->connection);
 	}
@@ -412,11 +427,21 @@ class MYSQL_DB {
 			$vname = $username . "\'s village";
 		}
 		$time = time();
+		//TienTN add validation
+		if (!is_numeric($wid) || !is_numeric($uid) || strlen($vname) > 100 || is_bool($capital) === false) {
+			throw new Exception('addVillage: wrong param');
+			return null;
+		}
 		$q = "INSERT into " . TB_PREFIX . "vdata (wref, owner, name, capital, pop, cp, celebration, wood, clay, iron, maxstore, crop, maxcrop, lastupdate, created) values ('$wid', '$uid', '$vname', '$capital', 2, 1, 0, 750, 750, 750, ".STORAGE_BASE.", 750, ".STORAGE_BASE.", '$time', '$time')";
 		return mysql_query($q, $this->connection) or die(mysql_error());
 	}
 
 	function addResourceFields($vid, $type) {
+		//TienTN add validation
+		if (!is_numeric($vid)) {
+			throw new Exception('addResourceFields: Invalid param');
+			return null;
+		}
 		switch($type) {
 			case 1:
 				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
