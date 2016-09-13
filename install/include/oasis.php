@@ -8,8 +8,8 @@
         include ("../../GameEngine/Admin/database.php");
 
 
-		mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-		mysql_select_db(SQL_DB);
+		mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+		mysqli_select_db(SQL_DB);
 
 		$database->populateOasisdata();
 		$database->populateOasis();

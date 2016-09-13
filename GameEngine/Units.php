@@ -354,13 +354,11 @@ class Units {
                     if ($data['u11'] > $village->unitarray['hero'])
                             {
                                 $form->addError("error","You can't send more units than you have");
-                                break;
                             }
 
                             if($data['u11']<0)
                             {
                                 $form->addError("error","You can't send negative units.");
-                                break;
                             }
                 if($form->returnErrors() > 0) {
                     $_SESSION['errorarray'] = $form->getErrors();
@@ -566,13 +564,11 @@ if($session->access != BANNED){
                                 if ($post['t11'] > $enforce['hero'])
                                 {
                                     $form->addError("error","You can't send more units than you have");
-                                    break;
                                 }
 
                                 if($post['t11']<0)
                                 {
                                     $form->addError("error","You can't send negative units.");
-                                    break;
                                 }
                         } else {
                         $post['t11']='0';

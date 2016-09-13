@@ -1,5 +1,4 @@
 <?php include("templates/script.tpl");
-
 if(!isset($_GET['s'])) {
 	$_GET['s']=0;
 }

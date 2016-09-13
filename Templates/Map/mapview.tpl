@@ -111,7 +111,7 @@ $query2 = "SELECT
 
 //$query2;
 
-$result2 = mysql_query($query2) or die(mysql_error());
+$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error());
 
 $targetalliance = array();
 $neutralarray = array();
@@ -129,7 +129,7 @@ $map_js ='';
 $map_gen='';
 $map_content='';
 
-while ($donnees = mysql_fetch_assoc($result2)){
+while ($donnees = mysqli_fetch_assoc($result2)){
 
 $targetalliance=$donnees["aliance_id"];
 $friendarray=$database->getAllianceAlly($donnees["aliance_id"],1);
