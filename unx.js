@@ -168,7 +168,7 @@ function fd(url,gd,hd,id){
 				switch(kd){
 					case'application/json':
 						if (jd.responseText.indexOf('[]') < 0) {
-							gd((jd.responseText==''?null:eval('('+jd.responseText+')')));
+							gd(jd.responseText==''?null:eval('('+jd.responseText+')'));
 						}
 						break;
 					case'text/plain':case'text/html':gd(jd.responseText);break;

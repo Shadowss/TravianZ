@@ -36,14 +36,14 @@ class adm_DB {
 
 	function Login($username,$password){
 		$q = "SELECT password FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
-		$result = mysqli_query($q, $this->connection);
+		$result = mysqli_query($this->connection,$q);
 		$dbarray = mysqli_fetch_array($result);
 		if($dbarray['password'] == md5($password)) {
-			mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,'X','$username logged in (IP: <b>".$_SERVER['REMOTE_ADDR']."</b>)',".time().")");
+			mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,'X','$username logged in (IP: <b>".$_SERVER['REMOTE_ADDR']."</b>)',".time().")");
 			return true;
 		}
 		else {
-			mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,'X','<font color=\'red\'><b>IP: ".$_SERVER['REMOTE_ADDR']." tried to log in with username <u> $username</u> but access was denied!</font></b>',".time().")");
+			mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,'X','<font color=\'red\'><b>IP: ".$_SERVER['REMOTE_ADDR']." tried to log in with username <u> $username</u> but access was denied!</font></b>',".time().")");
 			return false;
 		}
 	}
@@ -86,7 +86,7 @@ class adm_DB {
         }
     }
     $q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
-    mysqli_query($q, $this->connection);
+    mysqli_query($this->connection,$q);
     }
 
   function buildingPOP($f,$lvl){
@@ -115,7 +115,7 @@ class adm_DB {
 
 	function getWref($x,$y) {
 		$q = "SELECT id FROM ".TB_PREFIX."wdata where x = $x and y = $y";
-		$result = mysqli_query($q, $this->connection);
+		$result = mysqli_query($this->connection,$q);
 		$r = mysqli_fetch_array($result);
 		return $r['id'];
 	}
@@ -165,16 +165,16 @@ class adm_DB {
 			if($post['clean_ware']){
 			  $time = time();
 			  $q = "UPDATE ".TB_PREFIX."vdata SET `wood` = '0', `clay` = '0', `iron` = '0', `crop` = '0', `lastupdate` = '$time' WHERE wref = $vid;";
-			  mysqli_query($q, $this->connection);
+			  mysqli_query($this->connection,$q);
 			}
 		  }
-			mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Punished user: <a href=\'admin.php?p=player&uid=".$post['uid']."\'>".$post['uid']."</a> with <b>-".$post['punish']."%</b> population',".time().")");
+			mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Punished user: <a href=\'admin.php?p=player&uid=".$post['uid']."\'>".$post['uid']."</a> with <b>-".$post['punish']."%</b> population',".time().")");
   }
 
   function PunishBuilding($vid,$proc,$pop){
 	global $database;
 	$q = "UPDATE ".TB_PREFIX."vdata set pop = $pop where wref = $vid;";
-	mysqli_query($q, $this->connection);
+	mysqli_query($this->connection,$q);
 	$fdata = $database->getResourceLevel($vid);
 	for ($i = 1; $i <= 40; $i++) {
 	  if($fdata['f'.$i]>1){
@@ -194,7 +194,7 @@ class adm_DB {
 
   function DelUnits2($vid,$unit){
 	  $q = "UPDATE ".TB_PREFIX."units SET `u$unit` = '0' WHERE `vref` = $vid;";
-	  mysqli_query($q, $this->connection);
+	  mysqli_query($this->connection,$q);
   }
 
 	function DelPlayer($uid,$pass){
@@ -206,12 +206,12 @@ class adm_DB {
 			$this->DelVillage($villages[$i]['wref'], 1);
 		  }
  		$q = "DELETE FROM ".TB_PREFIX."hero where uid = $uid";
-		mysqli_query($q, $this->connection);
+		mysqli_query($this->connection,$q);
  
 		$name = $database->getUserField($uid,"username",0);
-		mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,$ID,'Deleted user <a>$name</a>',".time().")");
+		mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,$ID,'Deleted user <a>$name</a>',".time().")");
 		$q = "DELETE FROM ".TB_PREFIX."users WHERE `id` = $uid;";
-		 mysqli_query($q, $this->connection);
+		 mysqli_query($this->connection,$q);
 	}
   }
 
