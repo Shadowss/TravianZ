@@ -140,7 +140,7 @@ class Account {
 	   {
 			global $database;
 			$q = "SELECT * FROM ".TB_PREFIX."activate where act = '".$_POST['id']."'";
-			$result = mysqli_query($q, $database->connection);
+			$result = mysqli_query($GLOBALS['link'],$q);
 			$dbarray = mysqli_fetch_array($result);
 			if($dbarray['act'] == $_POST['id']) {
 				$uid = $database->register($dbarray['username'],$dbarray['password'],$dbarray['email'],$dbarray['tribe'],"");
@@ -165,7 +165,7 @@ class Account {
 	private function Unreg() {
 		global $database;
 		$q = "SELECT * FROM ".TB_PREFIX."activate where id = '".$_POST['id']."'";
-		$result = mysqli_query($database->connection,$q);
+		$result = mysqli_query($GLOBALS['link'],$q);
 		$dbarray = mysqli_fetch_array($result);
 		if(md5($_POST['pw']) == $dbarray['password']) {
 			$database->unreg($dbarray['username']);
@@ -179,7 +179,7 @@ class Account {
 	private function Login() {
 		global $database,$session,$form;
 		$user = $_POST['user'];
-		$user = mysqli_real_escape_string($link, $user);
+		$user = mysqli_real_escape_string($GLOBALS['link'], $user);
 		if(!isset($_POST['user']) || $_POST['user'] == "") {
 			$form->addError("user",$user);
 		}
@@ -225,7 +225,7 @@ class Account {
 		global $session,$database;
 		unset($_SESSION['wid']);
 		$database->activeModify(addslashes($session->username),1);
-		$database->UpdateOnline("logout") or die(mysql_error());
+		$database->UpdateOnline("logout") or die(mysqli_error());
 		$session->Logout();
 	}
 

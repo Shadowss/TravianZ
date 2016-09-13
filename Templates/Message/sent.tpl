@@ -22,8 +22,8 @@
             <th>Recipient</th>
             <th class="sent"><a href="nachrichten.php?t=2&s=0&amp;t=2&amp;o=1">Sent</a></th>
             </tr></thead><tfoot><tr><th><?php
-		$MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
-		$golds = mysql_fetch_array($MyGold);
+		$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+		$golds = mysqli_fetch_array($MyGold);
 		$date2=strtotime("NOW");
 		if ($golds['plus'] <= $date2) { ?>
 		<?php } else { ?>

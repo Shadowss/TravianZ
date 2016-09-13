@@ -363,8 +363,8 @@ $end = ($tribe*10);
                 {
                 //$uid
                 $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid";
-                $result = mysql_query($q);
-                $hero_f=mysql_fetch_array($result);
+                $result = mysqli_query($GLOBALS['link'],$q);
+                $hero_f=mysqli_fetch_array($result);
                 $hero_unit=$hero_f['unit'];
                 $speeds[] = ${'u'.$hero_unit}['speed'];
                 }

@@ -88,23 +88,23 @@ class Session {
 				$_SESSION['checker'] = $generator->generateRandStr(3);
 				$_SESSION['mchecker'] = $generator->generateRandStr(5);
 				$_SESSION['qst'] = $database->getUserField($_SESSION['username'], "quest", 1);
-                $result = mysqli_query($link,"SELECT village_select FROM `". TB_PREFIX."users` WHERE `username`='".$_SESSION['username']."'");
+                $result = mysqli_query($GLOBALS['link'],"SELECT village_select FROM `". TB_PREFIX."users` WHERE `username`='".$_SESSION['username']."'");
                 $dbarray = mysqli_fetch_assoc($result);
                 $selected_village=$dbarray['village_select'];
                 if(!isset($_SESSION['wid'])) {
                     if($selected_village!='') {
-                        $query = mysqli_query($link,'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                     }else{
-                        $query = mysqli_query($link,'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
+                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
                     }
                     $data = mysqli_fetch_assoc($query);
                     $_SESSION['wid'] = $data['wref'];
                 } else
                     if($_SESSION['wid'] == '') {
                         if($selected_village!='') {
-                            $query = mysqli_query($link,'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                            $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                         }else{
-                            $query = mysqli_query($link,'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
+                            $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($_SESSION['username'], "id", 1) . ' LIMIT 1');
                         }
                         $data = mysqli_fetch_assoc($query);
                         $_SESSION['wid'] = $data['wref'];
@@ -161,18 +161,18 @@ class Session {
    				$hero=0;
     			foreach($this->villages as $myvill){
      				$q1 = "SELECT SUM(hero) from " . TB_PREFIX . "enforcement where `from` = ".$myvill;       // check if hero is send as reinforcement
-     				$result1 = mysqli_query($link,$q1);
+     				$result1 = mysqli_query($GLOBALS['link'],$q1);
 					if(mysqli_num_rows($result1) != 0) {
 						$he1=mysqli_fetch_array($result1);
 						$hero+=$he1[0];
 					}
      				
      				$q2 = "SELECT SUM(hero) from " . TB_PREFIX . "units where `vref` = ".$myvill;   // check if hero is on my account (all villages)
-     				$result2 = mysqli_query($link,$q2);
+     				$result2 = mysqli_query($GLOBALS['link'],$q2);
      				$he2=mysqli_fetch_array($result2);
      				$hero+=$he2[0];
      				$q3 = "SELECT SUM(t11) from " . TB_PREFIX . "prisoners where `from` = ".$myvill;   // check if hero is prisoner
-					$result3 = mysqli_query($link,$q3);
+					$result3 = mysqli_query($GLOBALS['link'],$q3);
 					$he3=mysqli_fetch_array($result3);
 					$hero+=$he3[0];
 					$hero+=$database->HeroNotInVil($myvill); // check if hero is not in village (come back from attack , raid , etc.)  

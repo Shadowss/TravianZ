@@ -2,10 +2,8 @@
 session_start();
 include('GameEngine/config.php');
 include_once ("GameEngine/Lang/" . LANG . ".php");
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
-mysql_select_db(SQL_DB) or die(mysql_error());
 include("GameEngine/Generator.php");
-include("GameEngine/Database/db_MYSQL.php");
+include("GameEngine/Database.php");
 
 //include("GameEngine/Session.php");
 
@@ -88,14 +86,14 @@ $query2 = "SELECT
 			where ".TB_PREFIX."wdata.id IN ($maparray)
 			ORDER BY FIND_IN_SET(".TB_PREFIX."wdata.id,'$maparray2')";
 
-$result2 = mysql_query($query2) or die(mysql_error());
+$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error());
 
 $i=0;
 //Load coor array
 $yrow = 0;
 
 $map_js ='';
-while ($donnees = mysql_fetch_assoc($result2)){	
+while ($donnees = mysqli_fetch_assoc($result2)){	
 
 $targetalliance=$donnees["aliance_id"];
 $friendarray=$database->getAllianceAlly($donnees["aliance_id"],1);

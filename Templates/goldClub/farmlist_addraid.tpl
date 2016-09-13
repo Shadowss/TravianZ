@@ -85,8 +85,8 @@ $vdata = $database->getVillage($Wref);
                         <select name="lid">
 <?php
 
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = $session->uid ORDER BY name ASC");
-while($row = mysql_fetch_array($sql)){ 
+$sql = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = $session->uid ORDER BY name ASC");
+while($row = mysqli_fetch_array($sql)){ 
 $lid = $row["id"];
 $lname = $row["name"];
 $lowner = $row["owner"];
@@ -123,7 +123,7 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 $getwref = "SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".$_GET['lid']."";
 $arraywref = $database->query_return($getwref);
 	echo '<option value="">Select village</option>';
-if(mysql_num_rows(mysql_query($getwref)) != 0){
+if(mysqli_num_rows(mysqli_query($GLOBALS['link'],$getwref)) != 0){
 foreach($arraywref as $row){
 $towref = $row["towref"];
 $tocoor = $database->getCoor($towref);

@@ -12,9 +12,8 @@
 
 include_once("GameEngine/Account.php");
 $max_per_pass = 1000;
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
-if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attemp!");
+
+if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attemp!");
 
 if (@$_POST['submit'] == "Send")
 {
@@ -45,7 +44,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	$_SESSION['m_message'] = preg_replace("/\*u([0-9]*)(left|right)\*/i", "<img src='img/u2/u$1.gif' style='float:$2;' alt='unit$1' />",  $_SESSION['m_message']);
 	$_SESSION['m_message'] = "[message]".$_SESSION['m_message']."[/message]";
 
-	$users_count = mysql_fetch_assoc(mysql_query("SELECT count(*) as count FROM ".TB_PREFIX."users WHERE id != 0"));
+	$users_count = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT count(*) as count FROM ".TB_PREFIX."users WHERE id != 0"));
 	$users_count = $users_count['count'];
 	if ($_GET['from'] + $max_per_pass <= $users_count) $plus = $max_per_pass; else $plus = $users_count - $_GET['from'];
 	$sql = "INSERT INTO ".TB_PREFIX."mdata (`target`, `owner`, `topic`, `message`, `viewed`, `archived`, `send`, `time`) VALUES ";
@@ -71,7 +70,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 		$sql .= "($i, 0, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time()."),";
 	}
 	}
-	mysql_query($sql);
+	mysqli_query($GLOBALS['link'],$sql);
 	if (($users_count - $_GET['from']) > $max_per_pass) echo header("Location: massmessage.php?send=true&from=",$_GET['from'] + $max_per_pass); else $done = true;
 }
 
@@ -258,4 +257,3 @@ if (isset($_GET['send']) && isset($_GET['from']))
 <div id="ce"></div>
 </body>
 </html>
-<?php mysql_close(); ?>
