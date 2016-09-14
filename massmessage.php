@@ -47,27 +47,27 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	$users_count = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT count(*) as count FROM ".TB_PREFIX."users WHERE id != 0"));
 	$users_count = $users_count['count'];
 	if ($_GET['from'] + $max_per_pass <= $users_count) $plus = $max_per_pass; else $plus = $users_count - $_GET['from'];
-	$sql = "INSERT INTO ".TB_PREFIX."mdata (`target`, `owner`, `topic`, `message`, `viewed`, `archived`, `send`, `time`) VALUES ";
+	$sql = "INSERT INTO ".TB_PREFIX."mdata (`target`, `owner`, `topic`, `message`, `viewed`, `archived`, `send`, `time`,`deltarget`,`delowner`,`alliance`,`player`,`coor`,`report`) VALUES ";
 	for($i = $_GET['from']; $i < ($_GET['from'] + $plus) ; $i++) {
 	if($i > 5){
 		if ($_SESSION['m_color'])
 		{
-			$sql .= "($i, 5, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time()."),";
+			$sql .= "($i, 5, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
 		}
 		else
 		{
-			$sql .= "($i, 5, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time()."),";
+			$sql .= "($i, 5, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
 		}
 	}
 	}
 	if($i > 5){
 	if ($_SESSION['m_color'])
 	{
-		$sql .= "($i, 5, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().")";
+		$sql .= "($i, 5, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0)";
 	}
 	else
 	{
-		$sql .= "($i, 0, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time()."),";
+		$sql .= "($i, 0, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
 	}
 	}
 	mysqli_query($GLOBALS['link'],$sql);

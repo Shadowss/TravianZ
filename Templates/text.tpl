@@ -10,7 +10,7 @@
 #################################################################################
 
 
-$txt="Asd";
+$txt="Testing system message";
 
 //bbcode = html code
 $txt = preg_replace("/\[b\]/is",'<b>', $txt);
