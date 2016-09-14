@@ -3541,7 +3541,7 @@ class MYSQLi_DB {
 	}
 
 	//end general statistics
-
+	
 	function addFriend($uid, $column, $friend) {
 		$q = "UPDATE " . TB_PREFIX . "users SET $column = $friend WHERE id = $uid";
 		return mysqli_query($this->dblink,$q);

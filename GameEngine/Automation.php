@@ -30,7 +30,7 @@ class Automation {
 	private $bountyOproduction = array();
 	private $bountyOpop = 1;
 
-		public function isWinner() {
+	public function isWinner() {
 		$q = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
 		$isThere = mysqli_num_rows($q);
 		if($isThere > 0)
