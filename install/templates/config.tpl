@@ -80,6 +80,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
 		</td></tr><tr></tr>
 	<td><span class="f9 c6">Beginners protection length:</span></td><td>
 				<select name="beginner">
+				<option value="0">No protection</option>
 				<option value="7200">2 hours</option>
 				<option value="10800">3 hours</option>
 				<option value="18000">5 hours</option>

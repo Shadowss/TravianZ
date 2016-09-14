@@ -140,11 +140,11 @@ class MYSQLi_DB {
 	
 	function caststruc($user) {
 		//loop search village user
-		$query = mysqli_query("SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
+		$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
 		while($villaggi_array = mysqli_fetch_array($query))
 
 		//loop structure village
-		$query1 = mysqli_query("SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
+		$query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
 		$strutture= mysqli_fetch_array($query1);
 		return $strutture;
 	}
@@ -497,7 +497,7 @@ class MYSQLi_DB {
 	 public function countOasisTroops($vref){
 		//count oasis troops: $troops_o
 	$troops_o=0;
-	$o_unit2=mysqli_query("select * from ".TB_PREFIX."units where `vref`='".$vref."'");
+	$o_unit2=mysqli_query($GLOBALS['link'],"select * from ".TB_PREFIX."units where `vref`='".$vref."'");
 	$o_unit=mysqli_fetch_array($o_unit2);
 
 	for ($i=1;$i<51;$i++)
@@ -506,7 +506,7 @@ class MYSQLi_DB {
 	}
 	$troops_o+=$o_unit['hero'];
 
-	$o_unit2=mysqli_query("select * from ".TB_PREFIX."enforcement where `vref`='".$vref."'");
+	$o_unit2=mysqli_query($GLOBALS['link'],"select * from ".TB_PREFIX."enforcement where `vref`='".$vref."'");
 	while ($o_unit=@mysqli_fetch_array($o_unit2))
 	{
 		for ($i=1;$i<51;$i++)
@@ -1352,7 +1352,7 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function deleteAlliance($aid) {
-		$result = mysqli_query("SELECT * FROM " . TB_PREFIX . "users where alliance = $aid");
+		$result = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "users where alliance = $aid");
 		$num_rows = mysqli_num_rows($result);
 		if($num_rows == 0) {
 			$q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
@@ -1636,7 +1636,8 @@ class MYSQLi_DB {
 	function getFieldType($vid, $field) {
 		$q = "SELECT f" . $field . "t from " . TB_PREFIX . "fdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_result($result, 0);
+		$row = mysqli_fetch_array($result);
+		return $row["f" . $field . "t"];
 	}
 	
 	function getFieldDistance($wid) {
