@@ -149,11 +149,17 @@ if (date('Ymd',time()) == date('Ymd',$time)) {
 
 	public function pageLoadTimeStart() {
 		if (isset($_SERVER["REQUEST_TIME_FLOAT"])) return $_SERVER["REQUEST_TIME_FLOAT"];
-		return microtime(true);
+		$starttime = microtime(true);
+		$startarray = explode(" ", $starttime);
+		//$starttime = $startarray[1] + $startarray[0];
+		return $startarray[0];
 	}
 
 	public function pageLoadTimeEnd() {
-		return microtime(true);
+		$endtime = microtime(true);
+		$endarray = explode(" ", $endtime);
+		//$endtime = $endarray[1] + $endarray[0];
+		return $endarray[0];
 	}
 
 };
