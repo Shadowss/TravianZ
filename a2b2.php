@@ -66,7 +66,7 @@ $automation->isWinner();
 <?php include("Templates/Plus/pmenu.tpl"); ?>
 <h1>Account transactions</h1>
 <div id="products">
-<?        
+<?php     
 if ($amount == 199) {
 // Statement retrieve Gold Package A
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
@@ -89,7 +89,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -105,7 +105,7 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
@@ -137,7 +137,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -153,7 +153,7 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
@@ -184,7 +184,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -200,7 +200,7 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
@@ -231,7 +231,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -247,7 +247,7 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
@@ -278,7 +278,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -294,7 +294,7 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
@@ -323,18 +323,18 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Current account balance</b></td>
 				<td class="desc"><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center></td>
 				<td class="desc"><center><b>Account inquiry</b></center></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
              </tr>
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-				<? 
+				<?php 
 				
 				}
 
 ?>
-<? $_SESSION['amount'] = 0; ?>
+<?php $_SESSION['amount'] = 0; ?>
 
 </div>
 </div>
@@ -358,9 +358,7 @@ include("Templates/res.tpl");
 <div id="stime">
 <div id="ltime">
 <div id="ltimeWrap">
-Calculated in <b><?php
-echo round(($generator->pageLoadTimeEnd()-$start)*1000);
-?></b> ms
+Calculated in <b><?php echo round(($generator->pageLoadTimeEnd()-$start)*1000); ?></b> ms
 
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
