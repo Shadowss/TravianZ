@@ -138,3 +138,9 @@ TienTN changes:
 	I found out that unx.js handle a static map size(400x400).
 	So I fixed this with a m_c.world_max variable from mapview.tpl and changed the unx.js accordingly.
 7. Fix the constructor global variable missing in Session.php
+
+
+TPLinux Changes:
+1. Solve FinishAll with two gold issue/bug
+2. Solve Reload crush issue after building construction finished
+
