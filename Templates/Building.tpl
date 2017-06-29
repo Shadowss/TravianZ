@@ -8,11 +8,12 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+$building->loadBuilding();
 ?>
-
+<?php if($building->NewBuilding){ ?>
 <table cellpadding="1" cellspacing="1" id="building_contract">
-		<thead><tr>
-        <th colspan="4"><?php echo BUILDING_UPGRADING;?>
+    <thead><tr>
+    <th colspan="4"><?php echo BUILDING_UPGRADING;?>
 			<?php
             
             if($session->gold >= 2) {
@@ -57,3 +58,4 @@
             </tbody>
 	</table>
 	<script type="text/javascript">var bld=[{"stufe":1,"gid":"1","aid":"3"}]</script>
+<?php } ?>
