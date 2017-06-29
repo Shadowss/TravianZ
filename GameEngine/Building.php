@@ -7,7 +7,7 @@
 ##  Version:       22.06.2015                    			       ## 
 ##  Filename       Building.php                                                ##
 ##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
-##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
+##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL., TPLinux            ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
@@ -97,7 +97,7 @@ class Building {
             }
         }
         if(isset($get['buildingFinish']) && $session->plus) {
-            if(intval($session->gold) >= 2 && $session->sit == 0) {  // edit by TPLinux
+            if(intval($session->gold) >= 2 && $session->sit == 0) {
                 $this->finishAll();
             }
         }
@@ -278,7 +278,7 @@ class Building {
 		return $build;
 	}
 
-	private function loadBuilding() {
+	public function loadBuilding() {
 		global $database,$village,$session;
 		$this->buildArray = $database->getJobs($village->wid);
 		$this->allocated = count($this->buildArray);
@@ -301,8 +301,11 @@ class Building {
 					}
 				}
 			}
+            // echo var_dump($this->buildArray);
 			$this->NewBuilding = true;
-		}
+		}else{
+            $this->NewBuilding = false;
+        }
 	}
 
 	private function removeBuilding($d) {
