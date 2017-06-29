@@ -97,7 +97,7 @@ class Building {
             }
         }
         if(isset($get['buildingFinish']) && $session->plus) {
-            if($session->gold >= 2 && $session->sit == 0) {
+            if(intval($session->gold) >= 2 && $session->sit == 0) {  // edit by TPLinux
                 $this->finishAll();
             }
         }
