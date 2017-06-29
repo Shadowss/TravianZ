@@ -58,37 +58,14 @@ for(i=1;;i++){pb=document.getElementById("timer"+i);if(pb!=null){bb[i]=new Objec
 else{break;}
 }
 executeCounter();}
-function executeCounter(){
-    for(var i in ab){
-	wb = db() - cb;
-	xb = rb(ab[i].counter_time + wb);
-	ab[i].node.innerHTML = xb;
-    }
-    for(i in bb){
-	wb = db() - cb;
-	yb = bb[i].counter_time - wb;
-	// console.log('yb: ' + yb);
-	if(eb == 0 && yb < 0){
-	    bb[i] = null;
-	    eb = 1;
-	    setTimeout(function(){window.location.href = ''},1000);
-	}
-	//    eb = 1;
-	//    if(auto_reload == 1){
-	//	setTimeout("document.location.reload()",1000);
-	//    }
-	//    else if(auto_reload==0){
-	//	setTimeout("mreload()",1000);
-	//    }
-	//}
-	else{
-	    xb=rb(yb);
-	    bb[i].node.innerHTML = xb;
-	}
-	if(eb == 0 && yb >= 0){
-	    setTimeout("executeCounter()",1000);
-	}
-    }
+function executeCounter(){for(var i in ab){wb=db()-cb;xb=rb(ab[i].counter_time+wb);ab[i].node.innerHTML=xb;}
+for(i in bb){wb=db()-cb;yb=bb[i].counter_time-wb;
+if(eb==0&&yb<1){eb=1;if(auto_reload==1){setTimeout("document.location.reload()",1000);}
+else if(auto_reload==0){setTimeout("mreload()",1000);}
+}
+else{}
+xb=rb(yb);bb[i].node.innerHTML=xb;}
+if(eb==0){window.setTimeout("executeCounter()",1000);}
 }
 function mb(zb){pb=document.getElementById(zb);if(pb!=null){fb[zb]=new Object();var $b=pb.innerHTML.match(/(\d+)\/(\d+)/);element=$b[0].split("/");_b=parseInt(element[0]);ac=parseInt(element[1]);bc=pb.title;if(bc!=0){cc=nb();timer[zb]=new Object();timer[zb].start=cc;timer[zb].production=bc;timer[zb].start_res=_b;timer[zb].max_res=ac;timer[zb].ms=3600000/bc;dc=100;if(timer[zb].ms<dc){timer[zb].ms=dc;}
 timer[zb].node=pb;executeTimer(zb);}
