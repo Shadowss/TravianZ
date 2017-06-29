@@ -141,6 +141,8 @@ TienTN changes:
 
 
 TPLinux Changes:
-1. Solve FinishAll with two gold issue/bug
-2. Solve Reload crush issue after building construction finished
-
+1. Fix FinishAll with two gold issue/bug
+2. Fix Reload crush issue after building construction finished
+3. Fix in_array bug in show more buldings in WWV 
+4. Fix winner redirection
+5. Fix winner WW image path
