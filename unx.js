@@ -1,3 +1,4 @@
+window.dlang = 'ar';  // edit it to en if fullscreen map not working
 var timer=new Object();var ab=new Object();var bb=new Object();var cb=db();var eb=0;var auto_reload=1;var fb=new Object();var	is_opera=window.opera!==undefined;var	is_ie=document.all!==undefined&&window.opera===undefined;var is_ie6p=document.compatMode!==undefined&&document.all!==undefined&&window.opera===undefined;var is_ie7=document.documentElement!==undefined&&document.documentElement.style.maxHeight!==undefined;var is_ie6=is_ie6p&&!is_ie7;var is_ff2p=window.Iterator!==undefined;var is_ff3p=document.getElementsByClassName!==undefined;var is_ff2=is_ff2p&&!is_ff3p
 function gb(){return hb('height');}
 function ib(){return hb('width');}
@@ -133,8 +134,12 @@ function Popup(i,j,sc){
 function PopupMap(i){
 	if(typeof sc=='undefined'){sc='s';}
 	pb=document.getElementById("ce");
-	if(pb!=null){
-		var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a></div>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div>';
+    if(pb!=null){
+	if(window.dlang== 'ar'){
+	    var tc='<div class="popup_map" style="right: 320px; left: -100px; top: 20px">'+'<div id="drag2"><a href="#" style="position: absolute;right: 968px;margin-top: 10px;" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	}else{
+	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	}
 		pb.innerHTML=tc;uc2();
 	}
 	vc();
@@ -148,8 +153,12 @@ $$('.popup3')[0].grab(new Element('div',{'id':'drag'}
 );if($$('body')[0].getStyle('direction').toLowerCase()=='rtl'){$$('.popup3')[0].setStyle('direction','rtl').getParent().setStyle('direction','ltr');}
 }
 function uc2(){
-	if($('drag')){return;}
+    if($('drag')){return;}
+    if(window.dlang== 'ar'){
+	$$('.popup_map')[0].grab(new Element('div',{'id':'drag', "style": "width: 1000px;height: 10px;background-color: #fff0;position: absolute;cursor: move;"}),'top').makeDraggable({'handle':'drag'});
+    }else{
 	$$('.popup_map')[0].grab(new Element('div',{'id':'drag'}),'top').makeDraggable({'handle':'drag'});
+    }
 	if($$('body')[0].getStyle('direction').toLowerCase()=='rtl'){
 		$$('.popup_map')[0].setStyle('direction','rtl').getParent().setStyle('direction','ltr');
 	}
