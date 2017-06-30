@@ -146,3 +146,4 @@ TPLinux Changes:
 3. Fix in_array bug in show more buldings in WWV 
 4. Fix winner redirection
 5. Fix winner WW image path
+6. Convert '<?' To '<?php' in a2ab.php (Account transaction page)
