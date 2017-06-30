@@ -66,7 +66,7 @@ $automation->isWinner();
 <?php include("Templates/Plus/pmenu.tpl"); ?>
 <h1>Account transactions</h1>
 <div id="products">
-<?        
+<?php
 if ($amount == 199) {
 // Statement retrieve Gold Package A
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
@@ -89,7 +89,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -105,14 +105,14 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
             <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
           
-<?
+<?php
 
 }
 if ($amount == 499) {
@@ -137,7 +137,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -153,13 +153,13 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
                       <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 
 }
 if ($amount == 999) {
@@ -184,7 +184,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -200,13 +200,13 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 
 }
 if ($amount == 1999) {
@@ -231,7 +231,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -247,13 +247,13 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 
 }
 if ($amount == 4999) {
@@ -278,7 +278,7 @@ $golds1 = mysql_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
 				<td class="desc"><center>&nbsp;</center></td>
                 <td class="act"><center>&nbsp;</center></td>
@@ -294,13 +294,13 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
 				<td class="desc"><center>&nbsp;</center></td>
 				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><? echo $golds1['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
 			</tr>
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 }
 				if ($amount == 0) 
 				{
@@ -323,18 +323,18 @@ $golds1 = mysql_fetch_array($MyGold);
 				<td class="desc"><b>&nbsp;&nbsp;Current account balance</b></td>
 				<td class="desc"><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center></td>
 				<td class="desc"><center><b>Account inquiry</b></center></td>
-				<td class="desc"><center><? echo $golds['6']; ?></center></td>
+				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
                 <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
              </tr>
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-				<? 
+				<?php 
 				
 				}
 
 ?>
-<? $_SESSION['amount'] = 0; ?>
+<?php $_SESSION['amount'] = 0; ?>
 
 </div>
 </div>
