@@ -147,3 +147,6 @@ TPLinux Changes:
 4. Fix winner redirection
 5. Fix winner WW image path
 6. Convert '<?' To '<?php' in a2ab.php (Account transaction page)
+7. Fixing ( Building shape not upgraded after Construct finish )
+
+
