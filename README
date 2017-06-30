@@ -151,5 +151,7 @@ TPLinux Changes:
 8. Change multihunter msg color to orange 
 9. Change fetch time to server speed if > 5
 10. Fixing Quest not appears if press (play no tasks)
+11. Fix the redirection from rally point when attack is finished
+
 
 --
