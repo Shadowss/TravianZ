@@ -149,6 +149,7 @@ TPLinux Changes:
 6. Convert '<?' To '<?php' in a2ab.php (Account transaction page)
 7. Fixing ( Building shape not upgraded after Construct finish )
 8. Change multihunter msg color to orange 
-
+9. Change fetch time to server speed if > 5
+10. Fixing Quest not appears if press (play no tasks)
 
 --
