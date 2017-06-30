@@ -58,4 +58,6 @@ $building->loadBuilding();
             </tbody>
 	</table>
 	<script type="text/javascript">var bld=[{"stufe":1,"gid":"1","aid":"3"}]</script>
-<?php } ?>
+<?php }else{
+            header('Location: dorf1.php');
+} ?>
