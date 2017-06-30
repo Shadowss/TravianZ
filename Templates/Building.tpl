@@ -59,5 +59,6 @@ $building->loadBuilding();
 	</table>
 	<script type="text/javascript">var bld=[{"stufe":1,"gid":"1","aid":"3"}]</script>
 <?php }else{
-            header('Location: dorf1.php');
+        $the_link = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        header('Location: '. $the_link);
 } ?>
