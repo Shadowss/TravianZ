@@ -68,7 +68,7 @@ function executeCounter(){
 	wb = db() - cb;
 	yb = bb[i].counter_time - wb;
 	// console.log('yb: ' + yb);
-	if(eb == 0 && yb <= 0){
+	if(eb == 0 && yb < 0){
 	    bb[i] = null;
 	    eb = 1;
 	    setTimeout(function(){window.location.href = ''},1000);
@@ -89,6 +89,7 @@ function executeCounter(){
 	    setTimeout("executeCounter()",1000);
 	}
     }
+    setTimeout("executeCounter()",1000);
 }
 
 function mb(zb){pb=document.getElementById(zb);if(pb!=null){fb[zb]=new Object();var $b=pb.innerHTML.match(/(\d+)\/(\d+)/);element=$b[0].split("/");_b=parseInt(element[0]);ac=parseInt(element[1]);bc=pb.title;if(bc!=0){cc=nb();timer[zb]=new Object();timer[zb].start=cc;timer[zb].production=bc;timer[zb].start_res=_b;timer[zb].max_res=ac;timer[zb].ms=3600000/bc;dc=100;if(timer[zb].ms<dc){timer[zb].ms=dc;}
