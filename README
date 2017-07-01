@@ -154,4 +154,5 @@ TPLinux Changes:
 11. Fix the redirection from rally point when attack is finished
 12. Remove Rally point advantage
 13. Fix fullscreen map in rtl layout
+14. Fix divesion by Zero bug in general statics
 --
