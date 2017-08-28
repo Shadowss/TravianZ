@@ -9,11 +9,11 @@
 | Copyright:   TravianX Project All rights reserved       |
 \** --------------------------------------------------- **/
 
-   $tribe1 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE tribe = 1");
-   $tribe2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE tribe = 2");
-   $tribe3 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE tribe = 3");
-   $tribes = array(mysql_num_rows($tribe1), mysql_num_rows($tribe2), mysql_num_rows($tribe3));
-   $users = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5")); ?>
+   $tribe1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE tribe = 1");
+   $tribe2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE tribe = 2");
+   $tribe3 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE tribe = 3");
+   $tribes = array(mysqli_num_rows($tribe1), mysqli_num_rows($tribe2), mysqli_num_rows($tribe3));
+   $users = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5")); ?>
 
     <table cellpadding="1" cellspacing="1" id="world_player" class="world">
         <thead>
@@ -34,7 +34,7 @@
                 <th>Active players</th>
 
                 <td><?php
-                   $active = mysql_num_rows(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (3600*24) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+                   $active = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (3600*24) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
                    echo $active; ?></td>
             </tr>
 
@@ -42,7 +42,7 @@
                 <th>Players online</th>
 
                 <td><?php
-                   $online = mysql_num_rows(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+                   $online = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
                    echo $online; ?></td>
             </tr>
         </tbody>

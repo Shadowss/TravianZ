@@ -1,8 +1,8 @@
 <h5><img src="img/en/t2/newsbox1.gif" alt="newsbox 1"></h5>
 <?php
 
-$online = mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
-$top_rank = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE access< 8 AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY oldrank ASC Limit 1"));
+$online = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+$top_rank = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE access< 8 AND id > 5 AND tribe<=3 AND tribe > 0 ORDER BY oldrank ASC Limit 1"));
 
 ?>
 

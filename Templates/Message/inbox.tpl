@@ -1,6 +1,6 @@
 x<div id="content"  class="messages">
     <h1>Messages</h1>
-    <?php 
+    <?php
     include("menu.tpl");
     ?>
     <form method="post" action="nachrichten.php" name="msg" ><table cellpadding="1" cellspacing="1" id="overview">
@@ -11,8 +11,8 @@ x<div id="content"  class="messages">
 		<th class="sent">Sent</th>
 	    </tr></thead><tfoot><tr><th>
 		<?php
-		$MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
-		$golds = mysql_fetch_array($MyGold);
+		$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+		$golds = mysqli_fetch_array($MyGold);
 		$date2=strtotime("NOW");
 		if ($golds['plus'] <= $date2) { ?>
 		<?php } else { ?>
@@ -23,7 +23,7 @@ x<div id="content"  class="messages">
 		<input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" />
 		<?php if($session->plus) { echo "<input name=\"archive\" value=\"Archive\" type=\"image\" id=\"btn_archiv\" class=\"dynamic_img\" src=\"img/x.gif\" alt=\"Archive\" />"; } ?>
 		<input name="ft" value="m3" type="hidden" />
-	    </th><th class="navi"><?php 
+	    </th><th class="navi"><?php
 		if(!isset($_GET['s']) && count($message->inbox1) < 10) {
 		echo "&laquo;&raquo;";
 		}
@@ -47,7 +47,7 @@ x<div id="content"  class="messages">
 		     background-color:orange;
 		 }
 		</style>
-		<?php 
+		<?php
 		if(isset($_GET['s'])) {
 		$s = $_GET['s'];
 		}

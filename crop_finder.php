@@ -126,9 +126,9 @@
 <?php
 
    define('PREFIX', TB_PREFIX);
-   $type15 = mysql_query("SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 6");
-   $type9 = mysql_query("SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 1");
-   $type_both = mysql_query("SELECT id,x,y,occupied,fieldtype FROM ".PREFIX."wdata WHERE fieldtype = 1 OR fieldtype = 6");
+   $type15 = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 6");
+   $type9 = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 1");
+   $type_both = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied,fieldtype FROM ".PREFIX."wdata WHERE fieldtype = 1 OR fieldtype = 6");
 
    if(is_numeric($_GET['x']) AND is_numeric($_GET['y'])) {
 	   $coor['x'] = $_GET['x'];
@@ -172,7 +172,7 @@
 
 <?php
 
-   while($row = mysql_fetch_array($type15)) {
+   while($row = mysqli_fetch_array($type15)) {
 	   $dist = getDistance($coor['x'], $coor['y'], $row['x'], $row['y']);
 
 	   $rows[$dist] = $row;
@@ -224,7 +224,7 @@
 <?php
 
    unset($rows);
-   while($row = mysql_fetch_array($type9)) {
+   while($row = mysqli_fetch_array($type9)) {
 	   $dist = getDistance($coor['x'], $coor['y'], $row['x'], $row['y']);
 
 	   $rows[$dist] = $row;
@@ -277,7 +277,7 @@
 <?php
 
    unset($rows);
-   while($row = mysql_fetch_array($type_both)) {
+   while($row = mysqli_fetch_array($type_both)) {
 	   $dist = getDistance($coor['x'], $coor['y'], $row['x'], $row['y']);
 
 	   $rows[$dist] = $row;

@@ -18,6 +18,7 @@
 #################################################################################
 
 session_start();
+include_once("../GameEngine/config.php");
 include_once("../GameEngine/Database.php");
 include_once ("../GameEngine/Lang/" . LANG . ".php");
 include_once("../GameEngine/Admin/database.php");
