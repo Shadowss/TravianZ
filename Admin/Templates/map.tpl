@@ -68,7 +68,7 @@ if ($check1=="" && $check2=="") {$criteria="WHERE tribe=0)";}
 					$player_info=$database->query_return($q);
 					foreach($player_info as $p_array) {
 						$p_name=$p_array['username'];
-						$p_village=mysql_real_escape_string($p_array['name']);
+						$p_village=mysqli_real_escape_string($GLOBALS["link"], $p_array['name']);
 						$p_coor="(".$p_array['x']."|".$p_array['y'].")";
 						$p_pop=$p_array['pop'];
 						$p_tribe=$array_tribe[$p_array['tribe']];

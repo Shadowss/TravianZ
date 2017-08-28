@@ -13,8 +13,8 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 include("../GameEngine/config.php");
 $id = $_SESSION['id'];
 
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."medal");
-$nummedals = mysql_num_rows($sql);
+$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."medal");
+$nummedals = mysqli_num_rows($sql);
 ?>
 
 
@@ -37,11 +37,11 @@ $nummedals = mysql_num_rows($sql);
 	</thead>
 	<tbody>
 		<?php
-			$sql = mysql_query("SELECT * FROM ".TB_PREFIX."medal");
-			$tot = mysql_num_rows($sql);
-			$sql = mysql_query("SELECT week FROM ".TB_PREFIX."medal ORDER BY week DESC LIMIT 1");
-			if(mysql_num_rows($sql) > 0){
-			$week = mysql_result($sql, 0);
+			$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."medal");
+			$tot = mysqli_num_rows($sql);
+			$sql = mysqli_query($GLOBALS["link"], "SELECT week FROM ".TB_PREFIX."medal ORDER BY week DESC LIMIT 1");
+			if(mysqli_num_rows($sql) > 0){
+			$week = mysqli_result($sql, 0);
 			echo "<tr><td><center>$week</center></td><td><center>$tot</center></td></tr>";
 			}else{
 			echo "<tr><td><center>0</center></td><td><center>$tot</center></td></tr>";
@@ -77,8 +77,8 @@ $nummedals = mysql_num_rows($sql);
 			{
 				$newweek = $j+1;
 
-				$sql = mysql_query("SELECT * FROM ".TB_PREFIX."medal WHERE week = $newweek");
-				$tot = mysql_num_rows($sql);
+				$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."medal WHERE week = $newweek");
+				$tot = mysqli_num_rows($sql);
 
 				echo "<tr><td>$newweek</td><td>$tot</td><td><input type=\"image\" name=\"medalweek\" value=\"".$newweek."\" style=\"background-image: url('../gpack/travian_default/img/a/del.gif'); height: 12px; width: 12px;\" src=\"../gpack/travian_default/img/a/x.gif\"></td>";
 			}
@@ -116,8 +116,8 @@ $nummedals = mysql_num_rows($sql);
 	<tbody>
 		<?php
 			$query = "SELECT * FROM ".TB_PREFIX."medal ORDER BY id DESC";
-			$result = mysql_query($query);
-			while($row = mysql_fetch_array($result))
+			$result = mysqli_query($GLOBALS["link"], $query);
+			while($row = mysqli_fetch_array($result))
 			{
 				$i = $i + 1;
 				$titel="Bonus";
@@ -144,7 +144,7 @@ $nummedals = mysql_num_rows($sql);
 				$playerid = $row['userid'];
 
 				$unq = "SELECT username FROM ".TB_PREFIX."users where id = $playerid";
-				$user = mysql_result(mysql_query($unq), 0);
+				$user = mysqli_result(mysqli_query($GLOBALS["link"], $unq), 0);
 				$username = $user;
 
 				$player = "<a href=\"admin.php?p=player&uid=".$playerid."\">$username</a>";

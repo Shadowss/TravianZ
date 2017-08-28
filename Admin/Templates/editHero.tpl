@@ -14,8 +14,8 @@ if(isset($_GET['uid'])){
 	include_once("../GameEngine/Data/hero_full.php"); 
 	include_once("../GameEngine/Units.php");
 	$user = $database->getUserArray($id,1);
-	$result = mysql_query("SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = ".$id); 
-	$hero_info = mysql_fetch_array($result);
+	$result = mysqli_query($GLOBALS["link"], "SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = ".$id); 
+	$hero_info = mysqli_fetch_array($result);
 	$hero = $units->Hero($id,1);
 	$unarray = array(1=>U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42,U43,U44,U45,U46,U47,U48,U49,U50,U99,U0);
 	$utribe=($user['tribe']-1)*10;

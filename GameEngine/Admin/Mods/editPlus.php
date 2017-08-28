@@ -12,14 +12,14 @@ if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../config.php");
 
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
+$GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+mysqli_select_db($GLOBALS["link"], SQL_DB);
 
 $session = $_POST['admid'];
 $id = $_POST['id'];
 
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysql_fetch_array($sql);
+$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
+$access = mysqli_fetch_array($sql);
 $sessionaccess = $access['access'];
 
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
@@ -30,8 +30,8 @@ $b2dur = $_POST['clay'] * 86400;
 $b3dur = $_POST['iron'] * 86400;
 $b4dur = $_POST['crop'] * 86400;
 
-$sql1 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$id."");
-$user = mysql_fetch_array($sql1);
+$sql1 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$id."");
+$user = mysqli_fetch_array($sql1);
 
 if($user['plus'] < time()){
 if($pdur > 1){ $plus = (time() + $pdur); } else { $plus = time(); }
@@ -59,13 +59,13 @@ if($b4dur > 1){ $crop = (time() + $b4dur); } else { $crop = time(); }
 if($b4dur > 1){ $crop = ($user['b4'] + $b4dur); } else { $crop = $user['b4']; }
 }
 
-mysql_query("UPDATE ".TB_PREFIX."users SET 
+mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
 	plus = '".$plus."',
 	b1 = '".$wood."', 
 	b2 = '".$clay."',
 	b3 = '".$iron."',
 	b4 = '".$crop."' 
-	WHERE id = $id") or die(mysql_error());
+	WHERE id = $id") or die(mysqli_error());
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");
 ?>

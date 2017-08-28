@@ -284,8 +284,8 @@ if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4 && $village->natar 
 $user = $session->uid;
 
 //connect to DB
-//mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-//mysql_select_db(SQL_DB);
+//mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+//mysqli_select_db(SQL_DB);
 
 //loop search village user
 $query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
