@@ -4700,7 +4700,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		global $database;
 		$time = time();
 		$time2 = NATURE_REGTIME;
-		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = 0 and lastupdated2 + $time2 < $time";
+		$timeFinal = $time - $time2;
+		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = 0 and lastupdated2 < $timeFinal";
 		$array = $database->query_return($q);
 		foreach($array as $oasis) {
 			$database->populateOasisUnits($oasis['wref'],$oasis['high']);
