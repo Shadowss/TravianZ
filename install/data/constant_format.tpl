@@ -252,6 +252,8 @@ define("ADMIN_NAME", "%ANAME%");
 //////////////////////////////////////////
 //   ****  DO NOT EDIT SETTINGS  ****   //
 //////////////////////////////////////////
+define("AUTO_DEL_INACTIVE",false); // auto-delete inactive players; default = false
+define("UN_ACT_TIME", 3628800); // 6 weeks to consider a player inactive
 define("TRACK_USR","%UTRACK%");
 define("USER_TIMEOUT","%UTOUT%"); 
 define("ALLOW_BURST",false);
