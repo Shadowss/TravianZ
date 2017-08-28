@@ -1,16 +1,22 @@
-TravianZ Version v.8.0.0 FINAL TEST
+TravianZ Version v.8.0.1, PHPv7
 
-Download and updates : https://github.com/Shadowss/TravianZ
+Download and updates : https://github.com/martinambrus/TravianZ/
 
-Thank you to : Shadowss , advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , and many others that make that version posible.
+Thank you to : Shadowss , advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , martinambrus and many others that make that version posible.
 
-This version is same as yi12345.
+This version is forked from the one of Shadowss (https://github.com/Shadowss/TravianZ).
 
 First i want to say THANKS for all who worked on that version , will find a list on Version file.
 
 TravianZ is based on TravianX v6.0.0 or TravianZ or TravianX with some grapich changes from ZravianX.
 
 
+martinambrus changes:
+1. PHP7 compatibility (mysql functions converted to mysqli)
+2. a lot of database optimizations (not in code but in MySQL tables themselves, mostly adding indexes to speed things up)
+
+
+Shadowss changes:
 1. Modified Plus System with packages.</br>
 2. Modified in Plus System and added Account Statement.</br>
 3. Enabled Report Player in Profile. Send message to Multihunter. </br>
