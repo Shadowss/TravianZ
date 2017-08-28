@@ -17,7 +17,7 @@ $invited=(isset($_GET['uid'])) ? filter_var($_GET['uid'], FILTER_SANITIZE_NUMBER
 <html>
 	<head>
 	<title><?php echo SERVER_NAME; ?></title>
-		<link REL="shortcut icon" HREF="favicon.ico"/>
+		<link rel="shortcut icon" href="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="imagetoolbar" content="no" />
@@ -43,7 +43,7 @@ $invited=(isset($_GET['uid'])) ? filter_var($_GET['uid'], FILTER_SANITIZE_NUMBER
 if(REG_OPEN == true){ ?>
 <div id="content"  class="signup">
 
-<h1><img src="img/x.gif" class="anmelden" alt="register for the game"></h1>
+<h1><img src="img/x.gif" class="anmelden" alt="register for the game" /></h1>
 <h5><img src="img/x.gif" class="img_u05" alt="registration"/></h5>
 
 <p><?php echo BEFORE_REGISTER; ?></p>
@@ -55,7 +55,7 @@ if(REG_OPEN == true){ ?>
 <table cellpadding="1" cellspacing="1" id="sign_input">
 	<tbody>
 		<tr class="top">
-			<th><?php echo NICKNAME; ?></td>
+			<th><?php echo NICKNAME; ?></th>
 			<td><input class="text" type="text" name="name" value="<?php echo $form->getValue('name'); ?>" maxlength="30" />
 			<span class="error"><?php echo $form->getError('name'); ?></span>
 			</td>
@@ -80,23 +80,23 @@ if(REG_OPEN == true){ ?>
 <table cellpadding="1" cellspacing="1" id="sign_select">
 	<tbody>
 		<tr class="top">
-			<th><img src="img/x.gif" class="img_u06" alt="choose tribe"></th>
-			<th colspan="2"><img src="img/x.gif" class="img_u07" alt="starting position"></th>
+			<th><img src="img/x.gif" class="img_u06" alt="choose tribe" /></th>
+			<th colspan="2"><img src="img/x.gif" class="img_u07" alt="starting position" /></th>
 		</tr>
 		<tr>
-			<td class="nat"><label><input class="radio" type="radio" name="vid" value="1" <?php echo $form->getRadio('vid',1); ?>>&nbsp;<?php echo ROMANS; ?></label></td>
-			&nbsp;<td class="pos1"><label><input class="radio" type="radio" name="kid" value="0" checked>&nbsp;<?php echo RANDOM; ?></label></td>
+			<td class="nat"><label><input class="radio" type="radio" name="vid" value="1" <?php echo $form->getRadio('vid',1); ?> />&nbsp;<?php echo ROMANS; ?></label></td>
+			<td class="pos1"><label><input class="radio" type="radio" name="kid" value="0" checked="checked" />&nbsp;<?php echo RANDOM; ?></label></td>
 			<td class="pos2">&nbsp;</td>
 		</tr>
 		<tr>
-			<td><label><input class="radio" type="radio" name="vid" value="2" <?php echo $form->getRadio('vid',2); ?>>&nbsp;<?php echo TEUTONS; ?></label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="1" <?php echo $form->getRadio('kid',1); ?>>&nbsp;<?php echo NW; ?> <b>(-|+)</b>&nbsp;</label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="2" <?php echo $form->getRadio('kid',2); ?>>&nbsp;<?php echo NE; ?> <b>(+|+)</b></label></td>
+			<td><label><input class="radio" type="radio" name="vid" value="2" <?php echo $form->getRadio('vid',2); ?> />&nbsp;<?php echo TEUTONS; ?></label></td>
+			<td><label><input class="radio" type="radio" name="kid" value="1" <?php echo $form->getRadio('kid',1); ?> />&nbsp;<?php echo NW; ?> <b>(-|+)</b>&nbsp;</label></td>
+			<td><label><input class="radio" type="radio" name="kid" value="2" <?php echo $form->getRadio('kid',2); ?> />&nbsp;<?php echo NE; ?> <b>(+|+)</b></label></td>
 		</tr>
 		<tr class="btm">
-			<td><label><input class="radio" type="radio" name="vid" value="3" <?php echo $form->getRadio('vid',3); ?>>&nbsp;<?php echo GAULS; ?></label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="3" <?php echo $form->getRadio('kid',3); ?>>&nbsp;<?php echo SW; ?> <b>(-|-)</b></label></td>
-			<td><label><input class="radio" type="radio" name="kid" value="4" <?php echo $form->getRadio('kid',4); ?>>&nbsp;<?php echo SE; ?> <b>(+|-)</b></label></td>
+			<td><label><input class="radio" type="radio" name="vid" value="3" <?php echo $form->getRadio('vid',3); ?> />&nbsp;<?php echo GAULS; ?></label></td>
+			<td><label><input class="radio" type="radio" name="kid" value="3" <?php echo $form->getRadio('kid',3); ?> />&nbsp;<?php echo SW; ?> <b>(-|-)</b></label></td>
+			<td><label><input class="radio" type="radio" name="kid" value="4" <?php echo $form->getRadio('kid',4); ?> />&nbsp;<?php echo SE; ?> <b>(+|-)</b></label></td>
 		</tr>
 	</tbody>
 </table>
@@ -121,7 +121,7 @@ echo $form->getError('agree');
 <?php }else{ ?>
 <div id="content"  class="signup">
 
-<h1><img src="img/x.gif" class="anmelden" alt="register for the game"></h1>
+<h1><img src="img/x.gif" class="anmelden" alt="register for the game" /></h1>
 <h5><img src="img/x.gif" class="img_u05" alt="registration"/></h5>
 
 <p><?php echo REGISTER_CLOSED; ?></p>

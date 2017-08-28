@@ -269,7 +269,7 @@ $automation->isWinner();
 <html>
 <head>
 	<title><?php echo SERVER_NAME; ?></title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -359,7 +359,7 @@ header("Location: ".$_SERVER['PHP_SELF']."?id=39");
 
 </div>
 
-</br></br></br></br><div id="side_info">
+<br /><br /><br /><br /><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

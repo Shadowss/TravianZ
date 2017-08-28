@@ -28,7 +28,7 @@ $automation->isWinner();
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -89,24 +89,24 @@ $golds1 = mysqli_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds['6']; ?></div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
              </tr>
              <tr>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
-				<td class="desc"><center>60 Gold</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b><font color="#71D000">Package</font></b></div></td>
+				<td class="desc"><div style="text-align: center">60 Gold</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
 			</tr>
             <tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
-                <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds1['6']; ?></div></td>
+                <td class="act"><div style="text-align: center"><?php echo date('d.m.Y H:i:s'); ?></div></td>
 			</tr>
              </tbody></table>
             <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
@@ -137,24 +137,24 @@ $golds1 = mysqli_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds['6']; ?></div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
              </tr>
              <tr>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
-				<td class="desc"><center>60 Gold</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b><font color="#71D000">Package</font></b></div></td>
+				<td class="desc"><div style="text-align: center">60 Gold</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
 			</tr>
             <tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
-                <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds1['6']; ?></div></td>
+                <td class="act"><div style="text-align: center"><?php echo date('d.m.Y H:i:s'); ?></div></td>
 			</tr>
              </tbody></table>
                       <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
@@ -184,24 +184,24 @@ $golds1 = mysqli_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds['6']; ?></div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
              </tr>
              <tr>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
-				<td class="desc"><center>60 Gold</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b><font color="#71D000">Package</font></b></div></td>
+				<td class="desc"><div style="text-align: center">60 Gold</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
 			</tr>
             <tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
-                <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds1['6']; ?></div></td>
+                <td class="act"><div style="text-align: center"><?php echo date('d.m.Y H:i:s'); ?></div></td>
 			</tr>
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
@@ -231,24 +231,24 @@ $golds1 = mysqli_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds['6']; ?></div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
              </tr>
              <tr>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
-				<td class="desc"><center>60 Gold</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b><font color="#71D000">Package</font></b></div></td>
+				<td class="desc"><div style="text-align: center">60 Gold</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
 			</tr>
             <tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
-                <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds1['6']; ?></div></td>
+                <td class="act"><div style="text-align: center"><?php echo date('d.m.Y H:i:s'); ?></div></td>
 			</tr>
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
@@ -278,24 +278,24 @@ $golds1 = mysqli_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
-				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds['6']; ?></div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
              </tr>
              <tr>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><b><font color="#71D000"><center>Package</center></font></b></td>
-				<td class="desc"><center>60 Gold</center></td>
-                <td class="act"><center>&nbsp;</center></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b><font color="#71D000">Package</font></b></div></td>
+				<td class="desc"><div style="text-align: center">60 Gold</div></td>
+                <td class="act"><div style="text-align: center">&nbsp;</div></td>
 			</tr>
             <tr>
 				<td class="desc"><b>&nbsp;&nbsp;Account Balance (new)</b></td>
-				<td class="desc"><center>&nbsp;</center></td>
-				<td class="desc"><center><b>&nbsp;</b></center></td>
-				<td class="desc"><center><?php echo $golds1['6']; ?></center></td>
-                <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
+				<td class="desc"><div style="text-align: center">&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b>&nbsp;</b></div></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds1['6']; ?></div></td>
+                <td class="act"><div style="text-align: center"><?php echo date('d.m.Y H:i:s'); ?></div></td>
 			</tr>
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
@@ -321,10 +321,10 @@ $golds1 = mysqli_fetch_array($MyGold);
 		<tbody>
 			<tr>
 				<td class="desc"><b>&nbsp;&nbsp;Current account balance</b></td>
-				<td class="desc"><center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</center></td>
-				<td class="desc"><center><b>Account inquiry</b></center></td>
-				<td class="desc"><center><?php echo $golds['6']; ?></center></td>
-                <td class="act"><center><?php echo date('d.m.Y H:i:s'); ?></center></td>
+				<td class="desc"><div style="text-align: center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td>
+				<td class="desc"><div style="text-align: center"><b>Account inquiry</b></div></td>
+				<td class="desc"><div style="text-align: center"><?php echo $golds['6']; ?></div></td>
+                <td class="act"><div style="text-align: center"><?php echo date('d.m.Y H:i:s'); ?></div></td>
              </tr>
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
@@ -338,7 +338,7 @@ $golds1 = mysqli_fetch_array($MyGold);
 
 </div>
 </div>
-</br></br></br></br><div id="side_info">
+<br /><br /><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

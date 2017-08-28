@@ -54,7 +54,7 @@ $up_avl = $latest - $ver ;
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
-		<link REL="shortcut icon" HREF="favicon.ico"/>
+		<link rel="shortcut icon" href="favicon.ico"/>
 		<title>Admin Panel</title>
 		<link rel=stylesheet type="text/css" href="../img/admin/admin.css">
 		<link rel=stylesheet type="text/css" href="../img/admin/acp.css">
@@ -204,7 +204,7 @@ $up_avl = $latest - $ver ;
 												<a href="?p=natarbuildingplan">Add WW Building Plan Villages</a>
 												<br />
 												<a href="#"><b>Admin:</b></a>
-												<a href="?p=admin_log"><font color="Red"><b>Admin Log</font></b></a>
+												<a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a>
 												<a href="?p=config">Server Settings</a>
 												<a href="?p=resetServer">Server Resetting</a>
 												<?php

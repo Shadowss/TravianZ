@@ -80,7 +80,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -122,7 +122,6 @@ if (isset($_GET['send']) && isset($_GET['from']))
 
 		window.addEvent('domready', start);
 	</script>
-</head>
 		<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
@@ -151,7 +150,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 
 <div id="content"  class="login">
 <?php if (@!$NextStep && @!$NextStep2 && @!$done){?>
-<form method="POST" action="massmessage.php" name="myform" id="myform">
+<form method="post" action="massmessage.php" name="myform" id="myform">
 			<table cellspacing="1" cellpadding="2" class="tbg" style="background-color:#C0C0C0; border: 0px solid #C0C0C0; font-size: 10pt;">
 			  <tbody>
 				<tr>
@@ -160,21 +159,21 @@ if (isset($_GET['send']) && isset($_GET['from']))
 				<tr>
 					<td style="font-size: 10pt; text-align: left; width: 200px;"><?php echo MASS_SUBJECT; ?></td>
 					<td style="font-size: 10pt; text-align: left;">
-					<input type="text" style="width: 240px;" class="fm" name="subject" value="" size="30"></td>
+					<input type="text" style="width: 240px;" class="fm" name="subject" value="" size="30" /></td>
 				</tr>
 				<tr>
 				  <td style="font-size: 10pt; text-align: left;"><?php echo MASS_COLOR; ?></td>
 				  <td style="font-size: 10pt; text-align: left;">
 
 
-					<input type="text" style="width: 240px;" class="fm" name="color" size="30"></td>
+					<input type="text" style="width: 240px;" class="fm" name="color" size="30" /></td>
 				</tr>
 				<tr>
-				  <td colspan="2" style="font-size: 10pt; text-align:center;"><?php echo MASS; ?>			        <br>
+				  <td colspan="2" style="font-size: 10pt; text-align:center;"><?php echo MASS; ?>			        <br />
 			<textarea class="fm" name="message" cols="60" rows="23"></textarea></td>
 				</tr>
 				<tr>
-				  <td colspan="2"  style="text-align:center;"><?php echo MASS_REQUIRED; ?><td>
+				  <td colspan="2"  style="text-align:center;"><?php echo MASS_REQUIRED; ?></td>
 				</tr>
 				<tr>
 				  <td colspan="2"  style="text-align:center;">
@@ -187,7 +186,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 <?php echo MASS_UNITS; ?>
 <a href="javascript:toggleDisplay('message_smilies')"><?php echo MASS_SHOWHIDE; ?></a>
 
-<div name="smilll" id="message_smilies" style="background:none repeat scroll 0 0 #EFEFEF;border:1px solid #71D000;left:20px;margin-top:5px;max-width:660px;padding:5px;position:relative;display: none;">
+<div id="smilll" id="message_smilies" style="background:none repeat scroll 0 0 #EFEFEF;border:1px solid #71D000;left:20px;margin-top:5px;max-width:660px;padding:5px;position:relative;display: none;">
 <?php echo MASS_READ; ?>
 <a href="#" onclick="smilie('*u1*')"><img src="img/x.gif" class="uu1" /></a>
 <a href="#" onclick="smilie('*u2*')"><img src="img/x.gif" class="uu2" /></a>
@@ -219,7 +218,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 <?php } ?>
 
 <?php }elseif (@$NextStep){?>
-<form method="POST" action="massmessage.php">
+<form method="post" action="massmessage.php">
 			<table cellspacing="1" cellpadding="2" class="tbg">
 			  <tbody>
 				<tr>
@@ -228,8 +227,8 @@ if (isset($_GET['send']) && isset($_GET['from']))
 				<tr>
 				  <td style="text-align: left; width: 200px;"><?php echo MASS_REALLY; ?></td>
 				  <td style="text-align: left;">
-					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="Yes">
-					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="No"></td>
+					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="Yes" />
+					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="No" /></td>
 				</tr>
 			  </tbody>
 			</table>

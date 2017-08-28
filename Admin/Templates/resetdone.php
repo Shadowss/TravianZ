@@ -19,8 +19,10 @@ unset($_SESSION['username'], $_SESSION['sessid']);
     <tbody>
         <tr>
             <td>
-                <br>
-                <center>Resetting Server already done.</center><br>Multihunter password is: 123456<br>&nbsp;
+                <br />
+                <div style="text-align: center">
+                	Resetting Server already done.</div>
+                <br />Multihunter password is: 123456<br>&nbsp;
             </td>
         </tr>
     </tbody>

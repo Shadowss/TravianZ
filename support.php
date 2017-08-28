@@ -25,7 +25,7 @@ $automation->isWinner();
 <html>
 	<head>
 	<title><?php echo SERVER_NAME; ?></title>
-		<link REL="shortcut icon" HREF="favicon.ico"/>
+		<link rel="shortcut icon" href="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="imagetoolbar" content="no" />
@@ -138,7 +138,7 @@ function chkFormular () {
 		</form>	
  
 </div>
-</br></br></br></br><div id="side_info">
+<br /><br /><br /><br /><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

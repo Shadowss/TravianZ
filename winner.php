@@ -150,7 +150,7 @@ $q = "
 <html>
 	<head>
 		<title><?php echo SERVER_NAME ?></title>
-		<link REL="shortcut icon" HREF="favicon.ico"/>
+		<link rel="shortcut icon" href="favicon.ico"/>
 		<meta http-equiv="cache-control" content="max-age=0" />
 		<meta http-equiv="pragma" content="no-cache" />
 		<meta http-equiv="expires" content="0" />
@@ -187,13 +187,13 @@ $q = "
 	</head>
 	<body class="v35 ie ie8">
 		<div class="wrapper">
-			<img style="filter: chroma();" src="img/x.gif" id="msfilter" alt="">
+			<img style="filter: chroma();" src="img/x.gif" id="msfilter" alt="" />
 			<div id="dynamic_header"></div>
 			<?php include("Templates/header.tpl"); ?>
 			<div id="mid">
 				<?php include("Templates/menu.tpl"); ?>
 				<div id="content" class="village2" style="font-size: 9pt;">
-					<img src="./gpack/travian_default/img/misc/win.png" align="right" style="padding-top: 40px;">
+					<img src="./gpack/travian_default/img/misc/win.png" align="right" style="padding-top: 40px;" />
 					<p>
 					<b>Dear <?php echo SERVER_NAME; ?> Players,</b>
 					<br /><br />
@@ -222,9 +222,9 @@ $q = "
 					<small><i>(By: Shadow v7.0.0)</i></small></p>
 
 					<br /><br />
-					<center><a href="dorf1.php">&raquo; Continue</a></center>
+					<div style="text-align: center"><a href="dorf1.php">&raquo; Continue</a></div>
 				</div>
-				</br></br></br></br><div id="side_info">
+				<br /><br /><br /><br /><div id="side_info">
 					<?php
 					include("Templates/multivillage.tpl");
 					include("Templates/quest.tpl");

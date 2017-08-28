@@ -742,7 +742,7 @@ define("CELEBRATIONS_COMMENCE_TOWNHALL","Celebrations can commence when the town
 define("GREAT_CELEBRATIONS","Great celebration");
 define("CULTURE_POINTS","culture points");
 define("HOLD","hold");
-define("CELEBRATIONS_IN_PROGRESS","Celebration</br>in progress");
+define("CELEBRATIONS_IN_PROGRESS","Celebration<br />in progress");
 define("CELEBRATIONS","Celebrations");
 define("TOWNHALL_DESC","You can hold pompous celebrations in the Town Hall. Such a celebration increases your culture points. Building up your Town Hall to a higher level will decrease the length of the celebration.");
 

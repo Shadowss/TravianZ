@@ -906,7 +906,7 @@ define("CELEBRATIONS_COMMENCE_TOWNHALL","Celebraciones pueden comenzar cuando se
 define("GREAT_CELEBRATIONS","Gran Fiesta");
 define("CULTURE_POINTS","puntos de cultura");
 define("HOLD","celebrar");
-define("CELEBRATIONS_IN_PROGRESS","Celebracion</br>en proceso");
+define("CELEBRATIONS_IN_PROGRESS","Celebracion<br />en proceso");
 define("CELEBRATIONS","Fiesta");
 define("TOWNHALL_DESC","En el Centro C&iacute;vico puedes organizar grandes o peque&ntilde;as fiestas para los habitantes de tu aldea. Cada fiesta incrementar&aacute; tus Puntos de Cultura.");
 
