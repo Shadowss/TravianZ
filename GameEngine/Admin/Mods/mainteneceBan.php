@@ -34,6 +34,12 @@ $admin = $session;
 $active = '1';
 $access = '2';
 
+function mysqli_result($res, $row, $field=0) {
+	$res->data_seek($row);
+	$datarow = $res->fetch_array();
+	return $datarow[$field];
+}
+
 $sql = "SELECT id FROM ".TB_PREFIX."users ORDER BY ID DESC LIMIT 1";
 $loops = mysqli_result(mysqli_query($GLOBALS["link"], $sql), 0);
 
