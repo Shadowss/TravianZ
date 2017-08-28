@@ -2995,7 +2995,7 @@ class MYSQLi_DB {
 	}
 
 	function getTrainingList() {
-		$q = "SELECT * FROM " . TB_PREFIX . "training where vref != ''";
+		$q = "SELECT * FROM " . TB_PREFIX . "training where vref IS NOT NULL";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
