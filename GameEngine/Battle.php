@@ -168,6 +168,13 @@ class Battle {
 				$walllevel=$post['walllevel'];
 				$wall = $walllevel;
 				$palast = $post['palast'];
+				
+				if($scout ==1 && $defscout==0) {
+					$walllevel = 0;
+					$wall = 0;
+					$palast = 0;
+				}
+				
 				if($scout ==1) {
 					$palast = 0; //no def point palace n residence when scout
 				}

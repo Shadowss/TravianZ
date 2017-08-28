@@ -20,3 +20,5 @@ GameEngine/Notes/*
 
 # Install instalation_done marker left by install script
 install/installation_done
+/.buildpath
+/.project
