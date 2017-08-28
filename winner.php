@@ -193,7 +193,7 @@ $q = "
 			<div id="mid">
 				<?php include("Templates/menu.tpl"); ?>
 				<div id="content" class="village2" style="font-size: 9pt;">
-					<img src="../gpack/travian_default/img/misc/win.png" align="right" style="padding-top: 40px;">
+					<img src="./gpack/travian_default/img/misc/win.png" align="right" style="padding-top: 40px;">
 					<p>
 					<b>Dear <?php echo SERVER_NAME; ?> Players,</b>
 					<br /><br />

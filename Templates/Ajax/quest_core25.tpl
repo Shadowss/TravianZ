@@ -40,9 +40,8 @@ if(SPEED == '1'){
 } else if(SPEED <= '5'){
 	$skipp_time="7200"; 
 } else if(SPEED > '5'){ 
-	$skipp_time="3600"; 
+    $skipp_time= 3600 / SPEED;
 } 
-
 if (isset($qact)){
 	if ($qact == $_SESSION['qst']+1 && (($_SESSION['qst']>= 1 && $_SESSION['qst']<=30) || (time()-$_SESSION['qst_time']>=0 && ($_SESSION['qst'] >= 90 && $_SESSION['qst'] <=97))) || ($_SESSION['qst']== 0 && ($qact == "enter" || $qact == "skip")) || ($qact == "rank" && ($_SESSION['qst']== 4 || $_SESSION['qst']== 18)) || ($_SESSION['qst']== 7 && $qact == "coor") || ($_SESSION['qst']== 16 && $qact == "lumber") || ($_SESSION['qst']== 19 && $qact == 23) || ($_SESSION['qst']== 22 && $qact == 26) || ($_SESSION['qst']== 27 && $qact == "gold")) {		//avoid hacking gold, resources or reward -- added by Ronix - Fixed by Pietro
 		switch($qact) {

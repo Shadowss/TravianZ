@@ -70,10 +70,18 @@
                 <td><?php
                    echo $tribes[0]; ?></td>
 
-                <td><?php
-                   $percents = 100 * (($tribes[0]) / $users);
-                   echo $percents = intval($percents);
-                   echo "%"; ?></td>
+                <td>
+		    <?php
+		    if($users > 0){
+                    $percents = 100 * (($tribes[0]) / $users);
+                    echo $percents = intval($percents);
+                    echo "%";
+		    }else{
+		    echo '---';
+		    }
+		    ?>
+
+		</td>
             </tr>
 
             <tr>
@@ -83,9 +91,14 @@
                    echo $tribes[1]; ?></td>
 
                 <td><?php
-                   $percents = 100 * ($tribes[1] / $users);
-                   echo $percents = intval($percents);
-                   echo "%"; ?></td>
+		    if($users > 0){
+                    $percents = 100 * ($tribes[1] / $users);
+                    echo $percents = intval($percents);
+                    echo "%";
+		    }else{
+		    echo '---';
+		    }
+		    ?></td>
             </tr>
 
             <tr>
@@ -95,9 +108,14 @@
                    echo $tribes[2]; ?></td>
 
                 <td><?php
-                   $percents = 100 * ($tribes[2] / $users);
+		    if($users > 0){
+                    $percents = 100 * ($tribes[2] / $users);
                    echo $percents = intval($percents);
-                   echo "%"; ?></td>
+                    echo "%";
+		    }else{
+		    echo '---';
+		    }
+		    ?></td>
             </tr>
         </tbody>
     </table>

@@ -66,7 +66,7 @@ $automation->isWinner();
 <?php include("Templates/Plus/pmenu.tpl"); ?>
 <h1>Account transactions</h1>
 <div id="products">
-<?php     
+<?php
 if ($amount == 199) {
 // Statement retrieve Gold Package A
 $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysql_error());
@@ -112,7 +112,7 @@ $golds1 = mysql_fetch_array($MyGold);
             <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
           
-<?
+<?php
 
 }
 if ($amount == 499) {
@@ -159,7 +159,7 @@ $golds1 = mysql_fetch_array($MyGold);
              </tbody></table>
                       <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 
 }
 if ($amount == 999) {
@@ -206,7 +206,7 @@ $golds1 = mysql_fetch_array($MyGold);
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 
 }
 if ($amount == 1999) {
@@ -253,7 +253,7 @@ $golds1 = mysql_fetch_array($MyGold);
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 
 }
 if ($amount == 4999) {
@@ -300,7 +300,7 @@ $golds1 = mysql_fetch_array($MyGold);
              </tbody></table>
                         <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-<?
+<?php
 }
 				if ($amount == 0) 
 				{
@@ -329,7 +329,7 @@ $golds1 = mysql_fetch_array($MyGold);
              </tbody></table>
                        <p>Please verify the information.<br />It will let us know if the data is incorrect.</p>
             <p>Please mail your username, package, order time and email used to <a href="mailto:cata7007@gmail.com">our billing address</a>.</p>
-				<?php 
+				<?php
 				
 				}
 

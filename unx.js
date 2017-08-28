@@ -1,3 +1,4 @@
+window.dlang = 'ar';  // edit it to en if fullscreen map not working
 var timer=new Object();var ab=new Object();var bb=new Object();var cb=db();var eb=0;var auto_reload=1;var fb=new Object();var	is_opera=window.opera!==undefined;var	is_ie=document.all!==undefined&&window.opera===undefined;var is_ie6p=document.compatMode!==undefined&&document.all!==undefined&&window.opera===undefined;var is_ie7=document.documentElement!==undefined&&document.documentElement.style.maxHeight!==undefined;var is_ie6=is_ie6p&&!is_ie7;var is_ff2p=window.Iterator!==undefined;var is_ff3p=document.getElementsByClassName!==undefined;var is_ff2=is_ff2p&&!is_ff3p
 function gb(){return hb('height');}
 function ib(){return hb('width');}
@@ -58,15 +59,40 @@ for(i=1;;i++){pb=document.getElementById("timer"+i);if(pb!=null){bb[i]=new Objec
 else{break;}
 }
 executeCounter();}
-function executeCounter(){for(var i in ab){wb=db()-cb;xb=rb(ab[i].counter_time+wb);ab[i].node.innerHTML=xb;}
-for(i in bb){wb=db()-cb;yb=bb[i].counter_time-wb;
-if(eb==0&&yb<1){eb=1;if(auto_reload==1){setTimeout("document.location.reload()",1000);}
-else if(auto_reload==0){setTimeout("mreload()",1000);}
+function executeCounter(){
+    for(var i in ab){
+	wb = db() - cb;
+	xb = rb(ab[i].counter_time + wb);
+	ab[i].node.innerHTML = xb;
+    }
+    for(i in bb){
+	wb = db() - cb;
+	yb = bb[i].counter_time - wb;
+	// console.log('yb: ' + yb);
+	if(eb == 0 && yb < 0){
+	    bb[i] = null;
+	    eb = 1;
+	    setTimeout(function(){window.location.href = ''},1000);
+	}
+	//    eb = 1;
+	//    if(auto_reload == 1){
+	//	setTimeout("document.location.reload()",1000);
+	//    }
+	//    else if(auto_reload==0){
+	//	setTimeout("mreload()",1000);
+	//    }
+	//}
+	else{
+	    xb=rb(yb);
+	    bb[i].node.innerHTML = xb;
+	}
+	if(eb == 0 && yb >= 0){
+	    setTimeout("executeCounter()",1000);
+	}
+    }
+    setTimeout("executeCounter()",1000);
 }
-else{}
-xb=rb(yb);bb[i].node.innerHTML=xb;}
-if(eb==0){window.setTimeout("executeCounter()",1000);}
-}
+
 function mb(zb){pb=document.getElementById(zb);if(pb!=null){fb[zb]=new Object();var $b=pb.innerHTML.match(/(\d+)\/(\d+)/);element=$b[0].split("/");_b=parseInt(element[0]);ac=parseInt(element[1]);bc=pb.title;if(bc!=0){cc=nb();timer[zb]=new Object();timer[zb].start=cc;timer[zb].production=bc;timer[zb].start_res=_b;timer[zb].max_res=ac;timer[zb].ms=3600000/bc;dc=100;if(timer[zb].ms<dc){timer[zb].ms=dc;}
 timer[zb].node=pb;executeTimer(zb);}
 else
@@ -108,8 +134,12 @@ function Popup(i,j,sc){
 function PopupMap(i){
 	if(typeof sc=='undefined'){sc='s';}
 	pb=document.getElementById("ce");
-	if(pb!=null){
-		var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a></div>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div>';
+    if(pb!=null){
+	if(window.dlang== 'ar'){
+	    var tc='<div class="popup_map" style="right: 320px; left: -100px; top: 20px">'+'<div id="drag2"><a href="#" style="position: absolute;right: 968px;margin-top: 10px;" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	}else{
+	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	}
 		pb.innerHTML=tc;uc2();
 	}
 	vc();
@@ -123,8 +153,12 @@ $$('.popup3')[0].grab(new Element('div',{'id':'drag'}
 );if($$('body')[0].getStyle('direction').toLowerCase()=='rtl'){$$('.popup3')[0].setStyle('direction','rtl').getParent().setStyle('direction','ltr');}
 }
 function uc2(){
-	if($('drag')){return;}
+    if($('drag')){return;}
+    if(window.dlang== 'ar'){
+	$$('.popup_map')[0].grab(new Element('div',{'id':'drag', "style": "width: 1000px;height: 10px;background-color: #fff0;position: absolute;cursor: move;"}),'top').makeDraggable({'handle':'drag'});
+    }else{
 	$$('.popup_map')[0].grab(new Element('div',{'id':'drag'}),'top').makeDraggable({'handle':'drag'});
+    }
 	if($$('body')[0].getStyle('direction').toLowerCase()=='rtl'){
 		$$('.popup_map')[0].setStyle('direction','rtl').getParent().setStyle('direction','ltr');
 	}

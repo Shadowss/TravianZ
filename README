@@ -138,3 +138,21 @@ TienTN changes:
 	I found out that unx.js handle a static map size(400x400).
 	So I fixed this with a m_c.world_max variable from mapview.tpl and changed the unx.js accordingly.
 7. Fix the constructor global variable missing in Session.php
+
+
+TPLinux Changes:
+1. Fix FinishAll with two gold issue/bug
+2. Fix Reload crush issue after building construction finished
+3. Fix in_array bug in show more buldings in WWV 
+4. Fix winner redirection
+5. Fix winner WW image path
+6. Convert '<?' To '<?php' in a2ab.php (Account transaction page)
+7. Fixing ( Building shape not upgraded after Construct finish )
+8. Change multihunter msg color to orange 
+9. Change fetch time to server speed if > 5
+10. Fixing Quest not appears if press (play no tasks)
+11. Fix the redirection from rally point when attack is finished
+12. Remove Rally point advantage
+13. Fix fullscreen map in rtl layout
+14. Fix divesion by Zero bug in general statics
+--
