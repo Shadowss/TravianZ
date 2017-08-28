@@ -270,15 +270,17 @@
 					$datas[] = $row;
 				}
 
-				foreach($datas as $result) {
-					$value['userid'] = $result['userid'];
-					$value['username'] = $result['username'];
-					$value['oldrank'] = $result['oldrank'];
-					$value['alliance'] = $result['alliance'];
-					$value['aname'] = $result['allitag'];
-					$value['totalpop'] = $result['totalpop'];
-					$value['totalvillage'] = $result['totalvillages'];
-					array_push($holder, $value);
+				if (count($datas)) {
+					foreach($datas as $result) {
+						$value['userid'] = $result['userid'];
+						$value['username'] = $result['username'];
+						$value['oldrank'] = $result['oldrank'];
+						$value['alliance'] = $result['alliance'];
+						$value['aname'] = $result['allitag'];
+						$value['totalpop'] = $result['totalpop'];
+						$value['totalvillage'] = $result['totalvillages'];
+						array_push($holder, $value);
+					}
 				}
 
 				$newholder = array("pad");
