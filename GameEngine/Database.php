@@ -140,11 +140,11 @@ class MYSQLi_DB {
 	
 	function caststruc($user) {
 		//loop search village user
-		$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
+		$query = mysqli_query($this->dblink,"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
 		while($villaggi_array = mysqli_fetch_array($query))
 
 		//loop structure village
-		$query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
+		$query1 = mysqli_query($this->dblink,"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
 		$strutture= mysqli_fetch_array($query1);
 		return $strutture;
 	}
@@ -497,7 +497,7 @@ class MYSQLi_DB {
 	 public function countOasisTroops($vref){
 		//count oasis troops: $troops_o
 	$troops_o=0;
-	$o_unit2=mysqli_query($GLOBALS['link'],"select * from ".TB_PREFIX."units where `vref`='".$vref."'");
+	$o_unit2=mysqli_query($this->dblink,"select * from ".TB_PREFIX."units where `vref`='".$vref."'");
 	$o_unit=mysqli_fetch_array($o_unit2);
 
 	for ($i=1;$i<51;$i++)
@@ -506,7 +506,7 @@ class MYSQLi_DB {
 	}
 	$troops_o+=$o_unit['hero'];
 
-	$o_unit2=mysqli_query($GLOBALS['link'],"select * from ".TB_PREFIX."enforcement where `vref`='".$vref."'");
+	$o_unit2=mysqli_query($this->dblink,"select * from ".TB_PREFIX."enforcement where `vref`='".$vref."'");
 	while ($o_unit=@mysqli_fetch_array($o_unit2))
 	{
 		for ($i=1;$i<51;$i++)
@@ -1352,7 +1352,7 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function deleteAlliance($aid) {
-		$result = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "users where alliance = $aid");
+		$result = mysqli_query($this->dblink,"SELECT * FROM " . TB_PREFIX . "users where alliance = $aid");
 		$num_rows = mysqli_num_rows($result);
 		if($num_rows == 0) {
 			$q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
@@ -1648,9 +1648,9 @@ class MYSQLi_DB {
         $y1 = intval($coor['y']);
         $prevdist = 0;
         $q2 = "SELECT * FROM " . TB_PREFIX . "vdata where owner = 4";
-        $array2 = mysqli_fetch_array(mysqli_query($q2));
+        $array2 = mysqli_fetch_array(mysqli_query($this->dblink,$q2));
         $vill = $array2['wref'];
-        if(mysqli_num_rows(mysqli_query($q)) > 0){
+        if(mysqli_num_rows(mysqli_query($this->dblink,$q)) > 0){
             foreach($array as $village){
                 $coor2 = $this->getCoor($village['wref']);
                 $max = 2 * WORLD_MAX + 1;
@@ -2131,7 +2131,7 @@ class MYSQLi_DB {
 	function FinishWoodcutter($wid) {
 		$time = time()-1;
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC";
-		$result = mysqli_query($q);
+		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
 		$this->query($q);
@@ -2141,7 +2141,7 @@ class MYSQLi_DB {
 		}else{
 		$q2 = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC";
 		}
-		$result2 = mysqli_query($q2);
+		$result2 = mysqli_query($this->dblink,$q2);
 		if(mysqli_num_rows($result2) > 0){
 		$dbarray2 = mysqli_fetch_array($result2);
 		$wc_time = $dbarray['timestamp'];
@@ -3353,7 +3353,7 @@ class MYSQLi_DB {
 
 	function getMovementById($id){
 		$q = "SELECT * FROM ".TB_PREFIX."movement WHERE moveid = ".$id."";
-		$result = mysqli_query($q);
+		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
 		return $array;
 	}
