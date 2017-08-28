@@ -62,12 +62,22 @@ executeCounter();}
 function executeCounter(){
     for(var i in ab){
 	wb = db() - cb;
-	xb = rb(ab[i].counter_time + wb);
+	if (ab[i] && ab[i]['counter_time']) {
+		xb = rb(ab[i].counter_time + wb);
+	} else {
+		xb = 0;
+	}
 	ab[i].node.innerHTML = xb;
     }
     for(i in bb){
 	wb = db() - cb;
-	yb = bb[i].counter_time - wb;
+	
+	if (bb[i] && bb[i]['counter_time']) {
+		yb = bb[i].counter_time - wb;
+	} else {
+		eb = 0;
+		yb = -1;
+	}
 	// console.log('yb: ' + yb);
 	if(eb == 0 && yb < 0){
 	    bb[i] = null;
@@ -86,9 +96,9 @@ function executeCounter(){
 	    xb=rb(yb);
 	    bb[i].node.innerHTML = xb;
 	}
-	if(eb == 0 && yb >= 0){
+	/*if(eb == 0 && yb >= 0){
 	    setTimeout("executeCounter()",1000);
-	}
+	}*/
     }
     setTimeout("executeCounter()",1000);
 }

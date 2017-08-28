@@ -132,7 +132,7 @@ window
 
 // IE MooTools Fix
 
-if (Browser.Engine.trident) // für IE
+if (Browser.Engine.trident) // fï¿½r IE
 
 {
 
@@ -372,7 +372,7 @@ var BBEditor = new Class ({
 
 	/**
 
-	 * Fügt den klickbaren Objekten die Events hinzu
+	 * Fï¿½gt den klickbaren Objekten die Events hinzu
 
 	 *
 
@@ -402,7 +402,7 @@ var BBEditor = new Class ({
 
 	/**
 
-	 * Fügt einen ausgewählten Tag in die
+	 * Fï¿½gt einen ausgewï¿½hlten Tag in die
 
 	 * Textarea ein
 
