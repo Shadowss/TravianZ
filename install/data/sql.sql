@@ -86,11 +86,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
  `b6` tinyint(2) NULL DEFAULT '0',
  `b7` tinyint(2) NULL DEFAULT '0',
  `b8` tinyint(2) NULL DEFAULT '0',
- PRIMARY KEY (`vref`),
- KEY `master` (`master`),
- KEY `timestamp` (`timestamp`),
- KEY `master-timestamp` (`master`,`timestamp`) USING BTREE,
- KEY `wid` (`wid`)
+ PRIMARY KEY (`vref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -199,7 +195,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  `bad_effect` tinyint(1) NULL DEFAULT '0',
  `effect2` tinyint(2) NULL DEFAULT '0',
  `lastupdate` int(11) NULL DEFAULT '0', 
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `vref-type` (`vref`,`type`),
+ KEY `owner-active` (`owner`,`active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -231,9 +229,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alidata` (
  `clp` bigint(255) NULL DEFAULT '0',
  `oldrank` bigint(255) NULL DEFAULT '0',
  `forumlink` varchar(150) NULL,
- PRIMARY KEY (`id`),
- KEY `vref-type` (`vref`,`type`),
- KEY `owner-active` (`owner`,`active`)
+ PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -387,7 +383,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
  `timestamp` int(11) NULL,
  `master` tinyint(1) NULL,
  `level` tinyint(3) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `master` (`master`),
+ KEY `timestamp` (`timestamp`),
+ KEY `master-timestamp` (`master`,`timestamp`) USING BTREE,
+ KEY `wid` (`wid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
