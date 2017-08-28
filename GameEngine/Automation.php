@@ -35,7 +35,7 @@ class Automation {
 		$isThere = mysql_num_rows($q);
 		if($isThere > 0)
 		{
-		header('Location: /winner.php');
+		header('Location: winner.php');
 		}else{
 		## there is no winner
 		}

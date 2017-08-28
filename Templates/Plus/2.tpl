@@ -22,19 +22,9 @@ include("Templates/Plus/pmenu.tpl");
 		<th colspan="2">Larger map</th>
 	</tr>
 	<tr>
-		<td class="preview"><a href="plus.php?id=3"><img class="xxl_map" src="img/x.gif" alt="Larger map" title="Larger map" /></a></td>
+	    <td class="preview"><a href="plus.php?id=3"><img class="xxl_map" src="img/x.gif" alt="Larger map" title="Larger map" /></a></td>
 
 		<td class="text">You can enlarge the map to get a better overview. Instead of 7x7 fields you can have a map of 13x13 fields. Other alliances which are allied or have a non-aggression pact (NAP) with you are shown in special colours.</td>
-	</tr><tr>
-		<td colspan="2" class="empty"></td>
-	</tr>
-	<tr>
-		<th colspan="2">Improved view in the rally point.</th>
-	</tr>
-	<tr>
-
-		<td class="preview"><a href="plus.php?id=3"><img class="att_mark" src="img/x.gif" alt="Improved view in the rally point." title="Improved view in the rally point." /></a></td>
-		<td class="text">In your rally point you can mark incoming attacks in the colours green, yellow and red to be able to distinguish between what you think are severe and harmless attacks . Additionally the total movement time (without taking into consideration the tournament square or an artefact effect) of the troop types is shown.</td>
 	</tr><tr>
 		<td colspan="2" class="empty"></td>
 	</tr>

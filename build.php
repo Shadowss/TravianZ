@@ -353,7 +353,7 @@ if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['rout
         	}  
 	}
 }else{
-header("Location: dorf1.php");
+header("Location: ".$_SERVER['PHP_SELF']."?id=39");
 }
 ?>
 
