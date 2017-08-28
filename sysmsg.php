@@ -11,16 +11,14 @@
 
 include_once("GameEngine/Account.php");
 $max_per_pass = 1000;
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
-if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
+if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
 
 if(isset($_GET['del'])){
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
-			$result=mysql_query($query) or die (mysql_error());
-			for ($i=0; $row=mysql_fetch_row($result); $i++) {
-					$updateattquery = mysql_query("UPDATE ".TB_PREFIX."users SET ok = '0' WHERE id = '".$row[0]."'")
-					or die(mysql_error());
+			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error());
+			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
+					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '0' WHERE id = '".$row[0]."'")
+					or die(mysqli_error());
 			}
 }
 
@@ -47,10 +45,10 @@ if (@isset($_POST['confirm']))
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
-			$result=mysql_query($query) or die (mysql_error());
-			for ($i=0; $row=mysql_fetch_row($result); $i++) {
-					$updateattquery = mysql_query("UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
-					or die(mysql_error());
+			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error());
+			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
+					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
+					or die(mysqli_error());
 			}
 		$done = true;
 		} else { die("<br/><br/><br/>wrong"); }
@@ -185,4 +183,3 @@ System Message was sent
 <div id="ce"></div>
 </body>
 </html>
-<?php mysql_close(); ?>

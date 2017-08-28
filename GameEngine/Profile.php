@@ -120,7 +120,7 @@ class Profile {
 		if($set){
         unset($_SESSION['wid']);
 		$database->activeModify(addslashes($session->username),1);
-		$database->UpdateOnline("logout") or die(mysql_error());
+		$database->UpdateOnline("logout") or die(mysqli_error());
 		$session->Logout();
 		header("Location: login.php");
 		}else{

@@ -59,7 +59,6 @@ class Process {
 		$text = preg_replace("'%SPASS%'", $_POST['spass'], $text);
 		$text = preg_replace("'%SDB%'", $_POST['sdb'], $text);
 		$text = preg_replace("'%PREFIX%'", $_POST['prefix'], $text);
-		$text = preg_replace("'%CONNECTT%'", $_POST['connectt'], $text);
 		$text = preg_replace("'%AEMAIL%'", $_POST['aemail'], $text);
 		$text = preg_replace("'%ANAME%'", $_POST['aname'], $text);
 		$text = preg_replace("'%SUBDOM%'", $_POST['subdom'], $text);

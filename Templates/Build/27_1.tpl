@@ -84,7 +84,7 @@ Treasury <b>' . $reqlvl . '</b>, Effect <b>' . $effect . '</b>
 <tbody>
 <?php
 
-if(mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts")) == 0) {
+if(mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "artefacts")) == 0) {
                 echo '<td colspan="4" class="none">'.NO_ARTIFACTS_AREA.'</td>';
         } else {
 
@@ -102,11 +102,11 @@ if(mysql_num_rows(mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts")) == 0)
 
         unset($reqlvl);
         unset($effect);
-        $arts = mysql_query("SELECT * FROM " . TB_PREFIX . "artefacts");
+        $arts = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "artefacts");
         $rows = array();
-        while($row = mysql_fetch_array($arts)) {
-                        $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . $row['vref']);
-                        $coor2 = mysql_fetch_assoc($query);
+        while($row = mysqli_fetch_array($arts)) {
+                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . $row['vref']);
+                        $coor2 = mysqli_fetch_assoc($query);
 
                         
                         $dist = round(getDistance($coor['x'], $coor['y'], $coor2['x'], $coor2['y']),1);

@@ -12,14 +12,14 @@
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['ok'])){
-$database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';
+	$database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';
 }
 if(isset($_GET['newdid'])) {
     $_SESSION['wid'] = $_GET['newdid'];
     $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$_GET['newdid']." WHERE id=".$session->uid);  
 	header("Location: ".$_SERVER['PHP_SELF']);
-}else{
-$building->procBuild($_GET);
+} else {
+	$building->procBuild($_GET);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

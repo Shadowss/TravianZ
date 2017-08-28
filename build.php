@@ -237,16 +237,16 @@ $now=time();
 if(($now-$oldmovement[0]['starttime'])<90 && $oldmovement[0]['from'] == $village->wid){
 
 $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$_GET['moveid'];
-$resultc=$database->query($qc) or die(mysql_error());
+$resultc=$database->query($qc) or die(mysqli_error());
 
-	if (mysql_num_rows($resultc)==1){
+	if (mysqli_num_rows($resultc)==1){
 
 	$q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$_GET['moveid'];
 	$database->query($q);
 	$end=$now+($now-$oldmovement[0]['starttime']);
 	//echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;
 	$q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
-	$lastid=mysql_fetch_array(mysql_query($q2));
+	$lastid=mysqli_fetch_array(mysqli_query($GLOBALS['link'],$q2));
 	$newid=$lastid['id']+1;
 	$q2 = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
 	$database->query($q2);

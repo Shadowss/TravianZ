@@ -206,14 +206,6 @@ define("SQL_DB", "%SDB%");
 // ***** Database - Table Prefix
 define("TB_PREFIX", "%PREFIX%");
 
-// ***** Database type
-// 0 = MYSQL
-// 1 = MYSQLi
-// default: 1
-define("DB_TYPE", %CONNECTT%);
-
-
-
 ////////////////////////////////////
 //   ****  EXTRA SETTINGS  ****   //
 ////////////////////////////////////

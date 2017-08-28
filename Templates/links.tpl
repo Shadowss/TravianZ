@@ -10,10 +10,10 @@
 #################################################################################
 
 // Fetch all links
-$query = $database->getLinks($session->uid);  
-if (mysql_num_rows($query) > 0){
+$query = $database->getLinks($session->uid); 
+if (mysqli_num_rows($query) > 0){
 $links = array();
-while($data = mysql_fetch_assoc($query)) {
+while($data = mysqli_fetch_assoc($query)) {
     $links[] = $data;
 }
 

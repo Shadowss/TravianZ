@@ -30,8 +30,7 @@ class Village {
     function Village() {
         global $session, $database;
         if(isset($_SESSION['wid'])) {
-            $this->wid = $_SESSION['wid'];
-            
+            $this->wid = $_SESSION['wid'];          
         }
         else {
             $this->wid = $session->villages[0];
