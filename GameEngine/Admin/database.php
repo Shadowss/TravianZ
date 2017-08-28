@@ -24,7 +24,7 @@ include_once("../GameEngine/Data/unitdata.php");
 include_once("../GameEngine/Technology.php");
 include_once("../GameEngine/Data/buidata.php");
 }
-include_once("../../GameEngine/Database.php");
+include_once("../GameEngine/Database.php");
 class adm_DB {
 	
 	var $connection; 
