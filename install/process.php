@@ -124,7 +124,7 @@ class Process {
 		if(DB_TYPE) {
 			$result = $database->connection->multi_query($str);
 		} else {
-			$result = $database->mysqli_exec_batch($str);
+			$result = $database->mysql_exec_batch($str);
 		}
 		if($result) {
 			header("Location: index.php?s=3");
