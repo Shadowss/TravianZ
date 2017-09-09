@@ -210,8 +210,8 @@ class Message {
 		global $database,$session;
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
-			$message1 = mysql_query("SELECT * FROM " . TB_PREFIX . "mdata where id = ".$post['n' . $i]."");
-			$message = mysql_fetch_array($message1);
+			$message1 = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "mdata where id = ".$post['n' . $i]."");
+			$message = mysqli_fetch_array($message1);
 			if($message['target'] == $session->uid && $message['owner'] == $session->uid){
 				$database->getMessage($post['n' . $i], 8);
 			}else if($message['target'] == $session->uid){
@@ -321,16 +321,16 @@ class Message {
 		// Vulnerability closed by Shadow
 
 		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".time()." - 60";
-		$res = mysql_query($q) or die(mysql_error(). " query  ".$q);
-		$flood = mysql_num_rows($res);
+		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error(). " query  ".$q);
+		$flood = mysqli_num_rows($res);
 		if($flood > 5)
 		return; //flood
 
 		// Vulnerability closed by Shadow
 			
-		$allmembersQ = mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE alliance='".$session->alliance."'");
+		$allmembersQ = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE alliance='".$session->alliance."'");
 		$userally = $database->getUserField($session->uid,"alliance",0);
-		$permission=mysql_fetch_array(mysql_query("SELECT opt7 FROM ".TB_PREFIX."ali_permission WHERE uid='".$session->uid."'"));
+		$permission=mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT opt7 FROM ".TB_PREFIX."ali_permission WHERE uid='".$session->uid."'"));
 		if(WORD_CENSOR) {
 		$topic = $this->wordCensor($topic);
 		$text = $this->wordCensor($text);
@@ -395,7 +395,7 @@ class Message {
 		}
 		if($permission[opt7]==1){
 		if ($userally != 0) {
-		while ($allmembers = mysql_fetch_array($allmembersQ)) {
+		while ($allmembers = mysqli_fetch_array($allmembersQ)) {
 		$database->sendMessage($allmembers[id],$session->uid,htmlspecialchars(addslashes($topic)),htmlspecialchars(addslashes($text)),0,$alliance,$player,$coor,$report);
 		}
 			}
@@ -410,8 +410,8 @@ class Message {
 		// Vulnerability closed by Shadow
 
 		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".time()." - 60";
-		$res = mysql_query($q) or die(mysql_error(). " query  ".$q);
-		$flood = mysql_num_rows($res);
+		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error(). " query  ".$q);
+		$flood = mysqli_num_rows($res);
 		if($flood > 5)
 		return; //flood
 

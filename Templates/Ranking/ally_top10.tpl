@@ -1,21 +1,12 @@
     <?php
-	$place = $place1 = $place2 = $place3 = "?";
-    $db_host=SQL_SERVER; $db_user=SQL_USER; $db_pass=SQL_PASS; $db_name=SQL_DB;
+	$place = $place1 = $place2 = $place3 = "?";   
 
-    $con = mysql_connect($db_host, $db_user, $db_pass);
-    if (!$con)
-      {
-      die('Could not connect: ' . mysql_error());
-      }
-
-    for($i=1;$i<=0;$i++) {
+	for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
-             
-    mysql_select_db($db_name, $con);
-
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
-    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY ap DESC, id DESC Limit 1");
+	
+    $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
+    $result2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY ap DESC, id DESC Limit 1");
 	?>
 	<table cellpadding="1" cellspacing="1">
 	<thead>
@@ -39,7 +30,7 @@
 	</thead>
 	<tbody>
 <?php
-    while($row = mysql_fetch_array($result))
+    while($row = mysqli_fetch_array($result))
       {
 	  if($row['id']==$session->alliance) {
 	  $place = $i;
@@ -56,7 +47,7 @@
 			<td colspan="3" class="empty"></td>
 		</tr>
 <?php
-    while($row = mysql_fetch_array($result2))
+    while($row = mysqli_fetch_array($result2))
       {
 		if($row['id'] == $session->alliance) {
 		echo "<tr class=\"none\">"; } else { echo "<tr class=\"own hl\">"; }
@@ -75,8 +66,8 @@
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
-    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY dp DESC Limit 1");
+    $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
+    $result2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY dp DESC Limit 1");
 ?>
 <table cellpadding="1" cellspacing="1" id="top10_defs" class="top10 row_table_data">
 	<thead>
@@ -93,7 +84,7 @@
 	</thead>
 	<tbody>
 <?php
-    while($row = mysql_fetch_array($result))
+    while($row = mysqli_fetch_array($result))
       {
 	  if($row['id']==$session->alliance) {
 	  $place1 = $i;
@@ -111,7 +102,7 @@
 			<td colspan="3" class="empty"></td>
 		</tr>
 <?php
-    while($row = mysql_fetch_array($result2))
+    while($row = mysqli_fetch_array($result2))
       {
      if($row['id'] == $session->alliance) {
 		echo "<tr class=\"none\">"; } else { echo "<tr class=\"own hl\">"; }
@@ -129,8 +120,8 @@
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY clp DESC, id DESC Limit 10");
-    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY clp DESC Limit 1");
+    $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY clp DESC, id DESC Limit 10");
+    $result2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY clp DESC Limit 1");
 ?>
 <div class="clear"></div>
 <table cellpadding="1" cellspacing="1" id="top10_climbers" class="top10 row_table_data">
@@ -148,7 +139,7 @@
 	</thead>
 	<tbody>
 <?php
-    while($row = mysql_fetch_array($result))
+    while($row = mysqli_fetch_array($result))
       {
 	  if($row['id']==$session->alliance) {
 	  $place2 = $i;
@@ -165,7 +156,7 @@
 			<td colspan="3" class="empty"></td>
 		</tr>
 <?php
-    while($row = mysql_fetch_array($result2))
+    while($row = mysqli_fetch_array($result2))
       {
 		if($row['id'] == $session->alliance) {
 		echo "<tr class=\"none\">"; } else { echo "<tr class=\"own hl\">"; }
@@ -182,8 +173,8 @@
     for($i=1;$i<=0;$i++) {
     echo "Row ".$i;
     }
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
-    $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY RR DESC Limit 1");
+    $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
+    $result2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata WHERE id = '".$session->alliance."' ORDER BY RR DESC Limit 1");
 ?>
 <table cellpadding="1" cellspacing="1" id="top10_raiders" class="top10 row_table_data">
 	<thead>
@@ -200,7 +191,7 @@
 	</thead>
 	<tbody>
 <?php
-    while($row = mysql_fetch_array($result))
+    while($row = mysqli_fetch_array($result))
       {
 	  if($row['RR'] >= 0) {
 	  if($row['id']==$session->alliance) {
@@ -219,7 +210,7 @@
 			<td colspan="3" class="empty"></td>
 		</tr>
 <?php
-    while($row = mysql_fetch_array($result2))
+    while($row = mysqli_fetch_array($result2))
       {
       if($row['id'] == $session->alliance) {
 		echo "<tr class=\"none\">"; } else { echo "<tr class=\"own hl\">"; }
@@ -230,7 +221,7 @@
       echo "</tr>";
       }
 	  
-	mysql_close($con);
+	mysqli_close($con);
 ?>
          </tbody>
 </table>

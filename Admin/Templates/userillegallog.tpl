@@ -2,7 +2,7 @@
 $id = $_GET['uid'];
 if(isset($id))
 {
-	$player = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = $id"));
+	$player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = $id"));
 	?>
 	<table cellpadding="1" cellspacing="1" id="member">
 		<thead>
@@ -18,8 +18,8 @@ if(isset($id))
 		<tbody>
 			<?php
 				$sql = "SELECT * FROM ".TB_PREFIX."illegal_log WHERE user = $id";
-				$result = mysql_query($sql);
-				while($row = mysql_fetch_assoc($result))
+				$result = mysqli_query($GLOBALS["link"], $sql);
+				while($row = mysqli_fetch_assoc($result))
 				{
 					$i++;
 					echo '

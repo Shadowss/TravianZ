@@ -237,16 +237,16 @@ $now=time();
 if(($now-$oldmovement[0]['starttime'])<90 && $oldmovement[0]['from'] == $village->wid){
 
 $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$_GET['moveid'];
-$resultc=$database->query($qc) or die(mysql_error());
+$resultc=$database->query($qc) or die(mysqli_error());
 
-	if (mysql_num_rows($resultc)==1){
+	if (mysqli_num_rows($resultc)==1){
 
 	$q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$_GET['moveid'];
 	$database->query($q);
 	$end=$now+($now-$oldmovement[0]['starttime']);
 	//echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;
 	$q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
-	$lastid=mysql_fetch_array(mysql_query($q2));
+	$lastid=mysqli_fetch_array(mysqli_query($GLOBALS['link'],$q2));
 	$newid=$lastid['id']+1;
 	$q2 = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
 	$database->query($q2);
@@ -269,7 +269,7 @@ $automation->isWinner();
 <html>
 <head>
 	<title><?php echo SERVER_NAME; ?></title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -353,13 +353,13 @@ if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['rout
         	}  
 	}
 }else{
-header("Location: dorf1.php");
+header("Location: ".$_SERVER['PHP_SELF']."?id=39");
 }
 ?>
 
 </div>
 
-</br></br></br></br><div id="side_info">
+<br /><br /><br /><br /><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

@@ -40,9 +40,8 @@ if(SPEED == '1'){
 } else if(SPEED <= '5'){
 	$skipp_time="7200"; 
 } else if(SPEED > '5'){ 
-	$skipp_time="3600"; 
+    $skipp_time= 3600 / SPEED;
 } 
-
 if (isset($qact)){
 	if ($qact == $_SESSION['qst']+1 && (($_SESSION['qst']>= 1 && $_SESSION['qst']<=30) || (time()-$_SESSION['qst_time']>=0 && ($_SESSION['qst'] >= 90 && $_SESSION['qst'] <=97))) || ($_SESSION['qst']== 0 && ($qact == "enter" || $qact == "skip")) || ($qact == "rank" && ($_SESSION['qst']== 4 || $_SESSION['qst']== 18)) || ($_SESSION['qst']== 7 && $qact == "coor") || ($_SESSION['qst']== 16 && $qact == "lumber") || ($_SESSION['qst']== 19 && $qact == 23) || ($_SESSION['qst']== 22 && $qact == 26) || ($_SESSION['qst']== 27 && $qact == "gold")) {		//avoid hacking gold, resources or reward -- added by Ronix - Fixed by Pietro
 		switch($qact) {
@@ -70,7 +69,7 @@ if (isset($qact)){
 			$_SESSION['qst']= 3;
 			//Give Reward
 			if(!$session->plus){
-				mysql_query("UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$_SESSION['username']."'") or die(mysql_error());
+				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$_SESSION['username']."'") or die(mysqli_error());
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus','username');
 				$plus+=86400;
@@ -155,7 +154,7 @@ if (isset($qact)){
 			$_SESSION['qst']= 11;
 			//Give Reward
 			if(!$session->plus){
-				mysql_query("UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$_SESSION['username']."'") or die(mysql_error());
+				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$_SESSION['username']."'") or die(mysqli_error());
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus','username');
 				$plus+=172800;
@@ -323,7 +322,7 @@ if (isset($qact)){
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
 			if(!$session->plus){
-				mysql_query("UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$_SESSION['username']."'") or die(mysql_error());
+				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$_SESSION['username']."'") or die(mysqli_error());
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus',1);
 				$plus+=86400;
@@ -386,7 +385,7 @@ if (isset($qact)){
 			$_SESSION['qst']= 97;
 			//Give Reward 20 gold + 2 days plus
 			if(!$session->plus){
-				mysql_query("UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$_SESSION['username']."'") or die(mysql_error());
+				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$_SESSION['username']."'") or die(mysqli_error());
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus',1);
 				$plus+=172800;

@@ -21,8 +21,8 @@ if(isset($_GET['s'])){
 
 if(isset($_GET['fid'])){
 	$fid = preg_replace("/[^0-9]/","",$_GET['fid']);
-	$forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
-	$forum_type = mysql_fetch_array($forum);
+	$forum = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
+	$forum_type = mysqli_fetch_array($forum);
 	if($forum_type['forum_name'] != "" && $forum_type['forum_area'] == 0){
 		if($forum_type['alliance'] != $session->alliance){
 			header("Location: ".$_SERVER['PHP_SELF']);
@@ -30,9 +30,9 @@ if(isset($_GET['fid'])){
 	}
 }else if(isset($_GET['fid2'])){
 	$fid = preg_replace("/[^0-9]/","",$_GET['fid2']);
-	$forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
+	$forum = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
 	if (!empty($forum)) {
-		$forum_type = mysql_fetch_array($forum);
+		$forum_type = mysqli_fetch_array($forum);
 		if($forum_type['forum_name'] != "" && $forum_type['forum_area'] != 1){
 			if($forum_type['forum_area'] == 0){
 				if($forum_type['alliance'] != $session->alliance){
@@ -62,7 +62,7 @@ if(isset($_GET['aid']) or isset($_GET['fid']) or isset($_GET['fid2']) or $sessio
 	   echo SERVER_NAME
 
 ?></title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -291,7 +291,7 @@ $invite_permission = $database->getAlliancePermission($session->uid, "opt4", 0);
 
 ?>
 </div>
-</br></br></br></br><div id="side_info">
+<br /><br /><br /><br /><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

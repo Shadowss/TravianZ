@@ -28,7 +28,7 @@ if(!isset($_REQUEST['npw'])){
 <html>
 	<head>
 	<title><?php echo SERVER_NAME; ?></title>
-		<link REL="shortcut icon" HREF="favicon.ico"/>
+		<link rel="shortcut icon" href="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="imagetoolbar" content="no" />
@@ -95,7 +95,7 @@ if(!isset($_REQUEST['npw'])){
 ?>
 		<p>Before you can request a new password you have to enter the email address that has been used to register the account.
 <br /><br />Afterwards you will receive an e-mail with a new password. The password will only work after confirming it, though.</p>
-		<form action="password.php" method="POST">
+		<form action="password.php" method="post">
 			<p>
 				<b>Email</b><br />
 				<input type="hidden" name="npw" value="<?php echo intval($_GET['npw']); ?>" />

@@ -11,16 +11,14 @@
 
 include_once("GameEngine/Account.php");
 $max_per_pass = 1000;
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
-if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
+if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
 
 if(isset($_GET['del'])){
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
-			$result=mysql_query($query) or die (mysql_error());
-			for ($i=0; $row=mysql_fetch_row($result); $i++) {
-					$updateattquery = mysql_query("UPDATE ".TB_PREFIX."users SET ok = '0' WHERE id = '".$row[0]."'")
-					or die(mysql_error());
+			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error());
+			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
+					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '0' WHERE id = '".$row[0]."'")
+					or die(mysqli_error());
 			}
 }
 
@@ -47,10 +45,10 @@ if (@isset($_POST['confirm']))
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
-			$result=mysql_query($query) or die (mysql_error());
-			for ($i=0; $row=mysql_fetch_row($result); $i++) {
-					$updateattquery = mysql_query("UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
-					or die(mysql_error());
+			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error());
+			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
+					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
+					or die(mysqli_error());
 			}
 		$done = true;
 		} else { die("<br/><br/><br/>wrong"); }
@@ -61,7 +59,7 @@ if (@isset($_POST['confirm']))
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -88,7 +86,6 @@ if (@isset($_POST['confirm']))
 
 		window.addEvent('domready', start);
 	</script>
-</head>
 		   <?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
@@ -117,14 +114,14 @@ if (@isset($_POST['confirm']))
 
 <div id="content"  class="login">
 <?php if (@!$NextStep && @!$NextStep2 && @!$done){?>
-<form method="POST" action="sysmsg.php" name="myform" id="myform">
+<form method="post" action="sysmsg.php" name="myform" id="myform">
 			<table cellspacing="1" cellpadding="1" class="tbg" style="background-color:#C0C0C0; border: 0px solid #C0C0C0; font-size: 10pt;">
 			  <tbody>
 				<tr>
 				  <td class="rbg" style="font-size: 10pt; text-align:center;">System Message</td>
 				</tr>
 				<tr>
-				  <td style="font-size: 10pt; text-align:center;">Text BBCode:<br><b>[b] txt [/b]</b> - <i>[i] txt [/i]</i> - <u>[u] txt [/u]</u> <br />
+				  <td style="font-size: 10pt; text-align:center;">Text BBCode:<br /><b>[b] txt [/b]</b> - <i>[i] txt [/i]</i> - <u>[u] txt [/u]</u> <br />
 			<textarea class="fm" name="message" cols="60" rows="23"></textarea></td>
 				</tr>
 				<tr>
@@ -139,7 +136,7 @@ if (@isset($_POST['confirm']))
 			</form>
 <a href="sysmsg.php?del">Delete old System Message</a>
 <?php }elseif (@$NextStep){?>
-<form method="POST" action="sysmsg.php">
+<form method="post" action="sysmsg.php">
 			<table cellspacing="1" cellpadding="2" class="tbg">
 			  <tbody>
 				<tr>
@@ -148,8 +145,8 @@ if (@isset($_POST['confirm']))
 				<tr>
 				  <td style="text-align: left; width: 200px;">Do you really want to send System Message?</td>
 				  <td style="text-align: left;">
-					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="Yes">
-					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="No"></td>
+					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="Yes" />
+					<input type="submit" style="width: 240px;" class="fm" name="confirm" value="No" /></td>
 				</tr>
 			  </tbody>
 			</table>
@@ -185,4 +182,3 @@ System Message was sent
 <div id="ce"></div>
 </body>
 </html>
-<?php mysql_close(); ?>

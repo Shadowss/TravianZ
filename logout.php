@@ -57,12 +57,12 @@ $start = $generator->pageLoadTimeStart();
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 		<div id="content"  class="logout">
-<h1>Logout successful.</h1><img class="roman" src="img/x.gif" alt=""><p>Thank you for your visit.</p>
+<h1>Logout successful.</h1><img class="roman" src="img/x.gif" alt="" /><p>Thank you for your visit.</p>
 
 		<p>If other people use this computer too, you should delete your cookies for your own safety:<br /><a href="login.php?del_cookie">&raquo; delete cookies</a></p>
 </div>
 
-</br></br></br></br><div id="side_info">
+<br /><br /><br /><br /><div id="side_info">
 <?php
 include("Templates/news.tpl");
 ?>

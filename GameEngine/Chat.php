@@ -362,7 +362,7 @@ if (!isset($SAJAX_INCLUDED)) {
 			$alliance = $session->alliance;
 			$now = time();
 				echo $q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ('$id_user','$name','$alliance','$now','$msg')";
-				mysql_query($q, $database->connection);
+				mysqli_query($GLOBALS['link'],$q);
 		}
 	}
 
@@ -370,8 +370,8 @@ if (!isset($SAJAX_INCLUDED)) {
 		global $session,$database;
 
 		$alliance = $session->alliance;
-		$query = mysql_query("select * from ".TB_PREFIX."chat where alli='$alliance' order by id desc limit 0,13");
-			while ($r = mysql_fetch_array($query)) {
+		$query = mysqli_query($GLOBALS['link'],"select * from ".TB_PREFIX."chat where alli='$alliance' order by id desc limit 0,13");
+			while ($r = mysqli_fetch_array($query)) {
 			$dates = date("g:i",$r[date]);
 			$data .= "[{$dates}] <a href='spieler.php?uid={$r['id_user']}'>{$r['name']}</a>: {$r[msg]} <br>";
 			}

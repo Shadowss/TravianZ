@@ -54,7 +54,8 @@ CREATE TABLE `%PREFIX%links` (
  `userid` INT( 25 ) NULL ,
  `name` VARCHAR( 50 ) NULL ,
  `url` VARCHAR( 150 ) NULL ,
- `pos` INT( 10 ) NULL
+ `pos` INT( 10 ) NULL,
+ KEY `userid-pos` (`userid`,`pos`) USING BTREE
 ) ENGINE = InnoDB;
 
 --
@@ -168,7 +169,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
  `points` bigint(255) NULL,
  `img` varchar(255) NULL,
  `del` tinyint(1) NULL DEFAULT '0',
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `week` (`week`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -193,11 +195,13 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  `bad_effect` tinyint(1) NULL DEFAULT '0',
  `effect2` tinyint(2) NULL DEFAULT '0',
  `lastupdate` int(11) NULL DEFAULT '0', 
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `vref-type` (`vref`,`type`),
+ KEY `owner-active` (`owner`,`active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Table structure for table `s1_artefacts`
+-- Table structure for table `%PREFIX%artefacts`
 --
 -- --------------------------------------------------------
 
@@ -348,14 +352,15 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%banlist` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
- `uid` int(11) NULL,
- `name` varchar(100) NULL,
- `reason` varchar(30) NULL,
- `time` int(11) NULL,
- `end` varchar(10) NULL,
- `admin` int(11) NULL,
- `active` int(11) NULL,
- PRIMARY KEY (`id`)
+  `uid` int(11) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `reason` varchar(30) DEFAULT NULL,
+  `time` int(11) UNSIGNED DEFAULT NULL,
+  `end` int(11) UNSIGNED DEFAULT NULL,
+  `admin` int(11) DEFAULT NULL,
+  `active` tinyint(1) UNSIGNED DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `active-end` (`active`,`end`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -378,7 +383,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
  `timestamp` int(11) NULL,
  `master` tinyint(1) NULL,
  `level` tinyint(3) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `master` (`master`),
+ KEY `timestamp` (`timestamp`),
+ KEY `master-timestamp` (`master`,`timestamp`) USING BTREE,
+ KEY `wid` (`wid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -470,7 +479,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
  `buildnumber` int(11) NULL DEFAULT '0',
  `lvl` int(11) NULL DEFAULT '0',
  `timetofinish` int(11) NULL,
- PRIMARY KEY (`vref`)
+ PRIMARY KEY (`vref`),
+ KEY `timetofinish` (`timetofinish`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -558,7 +568,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
  `hero` tinyint(1) NULL DEFAULT '0',
  `from` int(11) NULL DEFAULT '0',
  `vref` int(11) NULL DEFAULT '0',
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `vref` (`vref`),
+ KEY `from` (`from`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -821,7 +833,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
  `casualties` int(11) NULL,
  `time` int(11) NULL,
  `shown` tinyint(1) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `shown` (`shown`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -874,7 +887,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
  `trainingtime` int(11) NULL,
  `inrevive` tinyint(1) NULL,
  `intraining` tinyint(1) NULL,
- PRIMARY KEY (`heroid`)
+ PRIMARY KEY (`heroid`),
+ KEY `uid` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 --
@@ -987,7 +1001,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
  `player` int(11) NULL,
  `coor` int(11) NULL,
  `report` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `target-time` (`target`,`time`) USING BTREE,
+ KEY `owner` (`owner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1065,7 +1081,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
  `viewed` tinyint(1) NULL,
  `archive` tinyint(1) NULL DEFAULT '0',
  `del` tinyint(1) NULL DEFAULT '0',
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `time` (`time`),
+ KEY `uid-time` (`uid`,`time`) USING BTREE,
+ KEY `del` (`del`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1095,7 +1114,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
  `owner` int(11) NULL DEFAULT '2',
  `name` varchar(32) NULL DEFAULT 'Unoccupied Oasis',
  `high` tinyint(1) NULL,
- PRIMARY KEY (`wref`)
+ PRIMARY KEY (`wref`),
+ KEY `lastupdated2` (`lastupdated2`) USING BTREE,
+ KEY `conqured` (`conqured`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1114,7 +1135,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
  `uid` int(11) NULL,
  `time` varchar(32) NULL,
  `sit` tinyint(1) NULL,
- UNIQUE KEY `name` (`name`)
+ UNIQUE KEY `name` (`name`),
+ KEY `uid` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1142,7 +1164,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%prisoners` (
  `t9` int(11) NULL,
  `t10` int(11) NULL,
  `t11` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `wref` (`wref`),
+ KEY `from` (`from`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1192,7 +1216,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
  `vref` int(11) NULL,
  `tech` varchar(3) NULL,
  `timestamp` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `vref` (`vref`),
+ KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1220,7 +1246,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
  `merchant` int(11) NULL,
  `timestamp` int(11) NULL,
  `timeleft` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `uid` (`uid`),
+ KEY `wid` (`wid`),
+ KEY `timestamp` (`timestamp`),
+ KEY `timeleft` (`timeleft`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1339,7 +1369,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
  `timestamp` int(11) NULL,
  `eachtime` int(11) NULL,
  `timestamp2` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `vref` (`vref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1509,7 +1540,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
  `vac_time` varchar(255) NULL DEFAULT '0',
  `vac_mode` int(2) NULL DEFAULT '0',
  `vactwoweeks` varchar(255) NULL DEFAULT '0',
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `invited` (`invited`),
+ KEY `lastupdate` (`lastupdate`),
+ KEY `alliance` (`alliance`),
+ KEY `username` (`username`(25)) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
@@ -1554,7 +1589,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
 `starv` int(11) NULL DEFAULT '0',
 `starvupdate` int(11) NULL DEFAULT '0',
 `evasion` tinyint(1) NULL DEFAULT '0',
-PRIMARY KEY (`wref`)
+PRIMARY KEY (`wref`),
+KEY `owner-capital-pop` (`owner`,`capital`,`pop`),
+KEY `maxstore` (`maxstore`),
+KEY `maxcrop` (`maxcrop`),
+KEY `celebration` (`celebration`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1607,8 +1646,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%password` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%ww_attacks` (
- `vid` int(25) NULL,
- `attack_time` int(25) NULL
+ `vid` int(25) DEFAULT NULL,
+  `attack_time` int(11) DEFAULT NULL,
+  KEY `attack_time` (`attack_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 --

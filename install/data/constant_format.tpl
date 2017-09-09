@@ -252,8 +252,12 @@ define("ADMIN_NAME", "%ANAME%");
 //////////////////////////////////////////
 //   ****  DO NOT EDIT SETTINGS  ****   //
 //////////////////////////////////////////
-define("TRACK_USR","%UTRACK%");
-define("USER_TIMEOUT","%UTOUT%"); 
+define("AUTO_DEL_INACTIVE",false); // auto-delete inactive players; default = false
+define("UN_ACT_TIME", 3628800); // 6 weeks to consider a player inactive
+//define("TRACK_USR","%UTRACK%");
+//define("USER_TIMEOUT","%UTOUT%");
+define("TRACK_USR",true); // track users' being active or not
+define("USER_TIMEOUT",3600); // 1 hour of no activity counts as inactivity
 define("ALLOW_BURST",false);
 define("BASIC_MAX",1);
 define("INNER_MAX",1);

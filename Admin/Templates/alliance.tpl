@@ -78,10 +78,10 @@ if($_GET['aid'])
 								<?php
 									error_reporting(0);
 									$sql = "SELECT * FROM ".TB_PREFIX."ali_permission WHERE alliance = ".$_GET['aid']."";
-									$result = mysql_query($sql);
-									while($row = mysql_fetch_assoc($result))
+									$result = mysqli_query($GLOBALS["link"], $sql);
+									while($row = mysqli_fetch_assoc($result))
 									{
-										$player = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$row['uid'].""));
+										$player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$row['uid'].""));
 										if($row['opt1'] == 1) { $position1 = "Assign To Position"; } else { $position1 = "No Assigning Positions"; }
 										if($row['opt2'] == 1) { $position2 = "Kick Players"; } else { $position2 = "No Kicking Players"; }
 										if($row['opt3'] == 1) { $position3 = "Change Alliance Description"; } else { $position3 = "No Changing Description"; }
@@ -236,8 +236,8 @@ if($_GET['aid'])
 			</thead>
 				<?php
 					$sql = "SELECT * FROM ".TB_PREFIX."ali_log WHERE aid = ".$_GET['aid']."";
-					$result = mysql_query($sql);
-					while($row = mysql_fetch_assoc($result))
+					$result = mysqli_query($GLOBALS["link"], $sql);
+					while($row = mysqli_fetch_assoc($result))
 					{
 						echo '
 						<tr>
@@ -265,8 +265,8 @@ if($_GET['aid'])
 			</thead>
 				<?php
 					$sql = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = ".$_GET['aid']."";
-					$result = mysql_query($sql);
-					while($row = mysql_fetch_assoc($result))
+					$result = mysqli_query($GLOBALS["link"], $sql);
+					while($row = mysqli_fetch_assoc($result))
 					{
 						if($row['type'] == 1) { $type = 'Confederation Pact'; }
 						if($row['type'] == 2) { $type = 'Non Agression Pact'; }
@@ -274,7 +274,7 @@ if($_GET['aid'])
 						if($row['accepted'] == 0) { $accepted = "<img src=\"../../gpack/travian_default/img/a/del.gif\">"; }
 						if($row['accepted'] ==1) { $accepted = "<img src=\"../../gpack/travian_default/img/a/acc.gif\">"; }
 
-						$ally = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
+						$ally = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
 						echo '
 						<tr>
 							<td><a href="admin.php?p=alliance&aid='.$row['alli1'].'">'.$ally['tag'].'</a></td>
@@ -300,8 +300,8 @@ if($_GET['aid'])
 			</thead>
 				<?php
 					$sql = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli2 = ".$_GET['aid']."";
-					$result = mysql_query($sql);
-					while($row = mysql_fetch_assoc($result))
+					$result = mysqli_query($GLOBALS["link"], $sql);
+					while($row = mysqli_fetch_assoc($result))
 					{
 						if($row['type'] == 1) { $type = 'Confederation Pact'; }
 						if($row['type'] == 2) { $type = 'Non Agression Pact'; }
@@ -309,7 +309,7 @@ if($_GET['aid'])
 						if($row['accepted'] == 0) { $accepted = "<img src=\"../../gpack/travian_default/img/a/del.gif\">"; }
 						if($row['accepted'] ==1) { $accepted = "<img src=\"../../gpack/travian_default/img/a/acc.gif\">"; }
 
-						$ally = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
+						$ally = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
 						echo '
 						<tr>
 							<td><a href="admin.php?p=alliance&aid='.$row['alli2'].'">'.$ally['tag'].'</a></td>
@@ -336,8 +336,8 @@ if($_GET['aid'])
 			</thead>
 				<?php
 					$sql = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = ".$_GET['aid']." OR alli2 = ".$_GET['aid']." AND accepted = 1";
-					$result = mysql_query($sql);
-					while($row = mysql_fetch_assoc($result))
+					$result = mysqli_query($GLOBALS["link"], $sql);
+					while($row = mysqli_fetch_assoc($result))
 					{
 						if($row['type'] == 1) { $type = 'Confederation Pact'; }
 						if($row['type'] == 2) { $type = 'Non Agression Pact'; }
@@ -345,8 +345,8 @@ if($_GET['aid'])
 						if($row['accepted'] == 0) { $accepted = "<img src=\"../../gpack/travian_default/img/a/del.gif\">"; }
 						if($row['accepted'] == 1) { $accepted = "<img src=\"../../gpack/travian_default/img/a/acc.gif\">"; }
 
-						$ally1 = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
-						$ally2 = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
+						$ally1 = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli1'].""));
+						$ally2 = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."alidata WHERE id = ".$row['alli2'].""));
 						echo '
 						<tr>
 							<td><a href="admin.php?p=alliance&aid='.$row['alli1'].'">'.$ally1['tag'].'</a> & <a href="admin.php?p=alliance&aid='.$row['alli2'].'">'.$ally2['tag'].'</a></td>

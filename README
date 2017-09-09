@@ -1,16 +1,23 @@
-TravianZ Version v.8.0.0 FINAL TEST
+TravianZ Version v.8.0.1, PHPv7
 
-Download and updates : https://github.com/Shadowss/TravianZ
+Download and updates : https://github.com/martinambrus/TravianZ/
 
-Thank you to : Shadowss , advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , and many others that make that version posible.
+Thank you to : Shadowss , advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , martinambrus and many others that make that version posible.
 
-This version is same as yi12345.
+This version is forked from the one of Shadowss (https://github.com/Shadowss/TravianZ).
 
 First i want to say THANKS for all who worked on that version , will find a list on Version file.
 
 TravianZ is based on TravianX v6.0.0 or TravianZ or TravianX with some grapich changes from ZravianX.
 
 
+martinambrus changes:
+1. PHP7 compatibility (mysql functions converted to mysqli)
+2. a lot of database optimizations (not in code but in MySQL tables themselves, mostly adding indexes to speed things up)
+3. fix for a nasty JavaScript bug which was killing the browser with any number of countdown(s) running on page (even one!)
+
+
+Shadowss changes:
 1. Modified Plus System with packages.</br>
 2. Modified in Plus System and added Account Statement.</br>
 3. Enabled Report Player in Profile. Send message to Multihunter. </br>
@@ -138,3 +145,21 @@ TienTN changes:
 	I found out that unx.js handle a static map size(400x400).
 	So I fixed this with a m_c.world_max variable from mapview.tpl and changed the unx.js accordingly.
 7. Fix the constructor global variable missing in Session.php
+
+
+TPLinux Changes:
+1. Fix FinishAll with two gold issue/bug
+2. Fix Reload crush issue after building construction finished
+3. Fix in_array bug in show more buldings in WWV 
+4. Fix winner redirection
+5. Fix winner WW image path
+6. Convert '<?' To '<?php' in a2ab.php (Account transaction page)
+7. Fixing ( Building shape not upgraded after Construct finish )
+8. Change multihunter msg color to orange 
+9. Change fetch time to server speed if > 5
+10. Fixing Quest not appears if press (play no tasks)
+11. Fix the redirection from rally point when attack is finished
+12. Remove Rally point advantage
+13. Fix fullscreen map in rtl layout
+14. Fix divesion by Zero bug in general statics
+--

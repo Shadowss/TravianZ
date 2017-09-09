@@ -31,7 +31,7 @@
    echo SERVER_NAME
 
 ?> - Crop Finder</title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -98,10 +98,10 @@
 <div id="content"  class="player">
 
 <h1>Crop Finder</h1>
-<center>
+<div style="text-align: center">
 <img width="200" src="gpack/travian_default/img/g/f6.jpg" />
 <img width="200" src="gpack/travian_default/img/g/f1.jpg" />
-</center>
+</div>
 <br /><br />
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?s" method="post">
  <table>
@@ -115,10 +115,10 @@
   </tr>
   <tr>
    <td>Startposition:</td>
-   <td>x: <input type="text" name="x" value="<?php print $coor2['x']; ?>" size="3" /> y: <input type="text" name="y" value="<?php print $coor2['y']; ?>"  size="3" />
+   <td>x: <input type="text" name="x" value="<?php print $coor2['x']; ?>" size="3" /> y: <input type="text" name="y" value="<?php print $coor2['y']; ?>"  size="3" /></td>
   </tr>
   <tr>
-   <td colspan="2"><input type="submit" name="submit" value="Search"></td>
+   <td colspan="2"><input type="submit" name="submit" value="Search" /></td>
   </tr>
  </table>
 </form>
@@ -126,9 +126,9 @@
 <?php
 
    define('PREFIX', TB_PREFIX);
-   $type15 = mysql_query("SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 6");
-   $type9 = mysql_query("SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 1");
-   $type_both = mysql_query("SELECT id,x,y,occupied,fieldtype FROM ".PREFIX."wdata WHERE fieldtype = 1 OR fieldtype = 6");
+   $type15 = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 6");
+   $type9 = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 1");
+   $type_both = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied,fieldtype FROM ".PREFIX."wdata WHERE fieldtype = 1 OR fieldtype = 6");
 
    if(is_numeric($_GET['x']) AND is_numeric($_GET['y'])) {
 	   $coor['x'] = $_GET['x'];
@@ -167,12 +167,9 @@
 	</tr>
 	</thead><tbody>
 
-
-</td></tr><br>
-
 <?php
 
-   while($row = mysql_fetch_array($type15)) {
+   while($row = mysqli_fetch_array($type15)) {
 	   $dist = getDistance($coor['x'], $coor['y'], $row['x'], $row['y']);
 
 	   $rows[$dist] = $row;
@@ -192,7 +189,7 @@
 		   echo "<td><a href=\"spieler.php?uid=".$database->getVillageField($row['id'], "owner")."\">".$database->getUserField($database->getVillageField($row['id'], "owner"), "username", 0)."</a></td>";
 		   echo "<td><b><font color=\"red\">Occupied</b></font></td>";
 	   }
-	   echo "<td><center>".getDistance($coor['x'], $coor['y'], $row['x'], $row['y'])."</center></td>";
+	   echo "<td><div style=\"text-align: center\">".getDistance($coor['x'], $coor['y'], $row['x'], $row['y'])."</div></td>";
    }
 
 ?>
@@ -219,12 +216,10 @@
 	</tr>
 	</thead><tbody>
 
-
-</td></tr><br>
 <?php
 
    unset($rows);
-   while($row = mysql_fetch_array($type9)) {
+   while($row = mysqli_fetch_array($type9)) {
 	   $dist = getDistance($coor['x'], $coor['y'], $row['x'], $row['y']);
 
 	   $rows[$dist] = $row;
@@ -245,7 +240,7 @@
 		   echo "<td><a href=\"spieler.php?uid=".$database->getVillageField($row['id'], "owner")."\">".$database->getUserField($database->getVillageField($row['id'], "owner"), "username", 0)."</a></td>";
 		   echo "<td><b><font color=\"red\">Occupied</b></font></td>";
 	   }
-	   echo "<td><center>".getDistance($coor['x'], $coor['y'], $row['x'], $row['y'])."</center></td>";
+	   echo "<td><div style=\"text-align: center\">".getDistance($coor['x'], $coor['y'], $row['x'], $row['y'])."</div></td>";
    }
 
 ?>
@@ -272,12 +267,10 @@
 	</tr>
 	</thead><tbody>
 
-
-</td></tr><br>
 <?php
 
    unset($rows);
-   while($row = mysql_fetch_array($type_both)) {
+   while($row = mysqli_fetch_array($type_both)) {
 	   $dist = getDistance($coor['x'], $coor['y'], $row['x'], $row['y']);
 
 	   $rows[$dist] = $row;
@@ -303,7 +296,7 @@
 		   echo "<td><a href=\"spieler.php?uid=".$database->getVillageField($row['id'], "owner")."\">".$database->getUserField($database->getVillageField($row['id'], "owner"), "username", 0)."</a></td>";
 		   echo "<td><b><font color=\"red\">Occupied</b></font></td>";
 	   }
-	   echo "<td><center>".getDistance($coor['x'], $coor['y'], $row['x'], $row['y'])."</center></td>";
+	   echo "<td><div style=\"text-align: center\">".getDistance($coor['x'], $coor['y'], $row['x'], $row['y'])."</div></td>";
    }
 
 ?>
@@ -315,7 +308,7 @@
    }
 ?>
 </div>
-</br></br></br></br><div id="side_info">
+<br /><br /><br /><br /><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

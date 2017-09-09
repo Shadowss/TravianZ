@@ -1,7 +1,7 @@
 <?php
 if(isset($_GET['uid']))
 {
-	$user = mysql_fetch_assoc(mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id = ".$_GET['uid']."")); ?>
+	$user = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$_GET['uid']."")); ?>
 	<form action="../GameEngine/Admin/Mods/editPassword.php" method="POST">
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="uid" id="uid" value="<?php echo $_GET['uid']; ?>">

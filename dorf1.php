@@ -12,21 +12,21 @@
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['ok'])){
-$database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';
+	$database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';
 }
 if(isset($_GET['newdid'])) {
     $_SESSION['wid'] = $_GET['newdid'];
     $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$_GET['newdid']." WHERE id=".$session->uid);  
 	header("Location: ".$_SERVER['PHP_SELF']);
-}else{
-$building->procBuild($_GET);
+} else {
+	$building->procBuild($_GET);
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
 	<title><?php echo SERVER_NAME ?></title>
-	<link REL="shortcut icon" HREF="favicon.ico"/>
+	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
 	<meta http-equiv="expires" content="0" />
@@ -69,7 +69,7 @@ $building->procBuild($_GET);
 $timer = 1;
 ?>
 <div id="map_details">
-</br></br>
+<br /><br />
 <?php
 include("Templates/movement.tpl");
 include("Templates/production.tpl");
@@ -80,7 +80,7 @@ if($building->NewBuilding) {
 }
 ?>
 </div>
-</br></br></br></br><div id="side_info">
+<br /><br /><br /><br /><div id="side_info">
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");

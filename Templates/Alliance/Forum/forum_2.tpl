@@ -9,14 +9,14 @@ if($session->access!=BANNED){
 $displayarray = $database->getUserArray($session->uid,1);
 $forumcat = $database->ForumCat(htmlspecialchars($displayarray['alliance']));
 $ally = $session->alliance;
-$public = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 1");
-$public1 = mysql_num_rows($public);
-$cofederation = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2");
-$cofederation1 = mysql_num_rows($cofederation);
-$alliance = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0");
-$alliance1 = mysql_num_rows($alliance);
-$closed = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3");
-$closed1 = mysql_num_rows($closed);
+$public = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 1");
+$public1 = mysqli_num_rows($public);
+$cofederation = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2");
+$cofederation1 = mysqli_num_rows($cofederation);
+$alliance = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0");
+$alliance1 = mysqli_num_rows($alliance);
+$closed = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3");
+$closed1 = mysqli_num_rows($closed);
 if($public1 != 0){
 ?>
 <table cellpadding="1" cellspacing="1" id="public"><thead>

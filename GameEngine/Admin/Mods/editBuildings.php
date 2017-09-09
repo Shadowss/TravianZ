@@ -15,12 +15,12 @@ if($_SESSION['access'] < 9) die("<h1><font color=\"red\">Access Denied: You are 
 
 include_once("../../config.php");
 
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
+$GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
+mysqli_select_db($GLOBALS["link"], SQL_DB);
 
 $id = $_POST['id'];
 
-mysql_query("UPDATE ".TB_PREFIX."fdata SET 
+mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."fdata SET 
 	f1  = '".$_POST['id1level']."', 
 	f1t = '".$_POST['id1gid']."', 
 	f2  = '".$_POST['id2level']."', 
@@ -101,7 +101,7 @@ mysql_query("UPDATE ".TB_PREFIX."fdata SET
 	f39t = '".$_POST['id39gid']."', 
 	f40  = '".$_POST['id40level']."', 
 	f40t = '".$_POST['id40gid']."' 
-	WHERE vref = $id") or die(mysql_error());
+	WHERE vref = $id") or die(mysqli_error());
 
 header("Location: ../../../Admin/admin.php?p=village&did=".$id."");
 ?>

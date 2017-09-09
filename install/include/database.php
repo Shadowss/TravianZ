@@ -17,9 +17,9 @@ class MYSQLi_DB {
 		return mysqli_query($this->connection, $query);
 		}
 };
-class MYSQL_DB {
+class mysql_DB {
 	var $connection;
-	function MYSQL_DB() {
+	function mysql_DB() {
 		$this->connection = mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysql_error());
 		mysql_select_db(SQL_DB, $this->connection) or die(mysql_error());
 	}
@@ -50,6 +50,6 @@ if(DB_TYPE) {
 	$database = new MYSQLi_DB;
 }
 else {
-	$database = new MYSQL_DB;
+	$database = new mysql_DB;
 }
 ?>
