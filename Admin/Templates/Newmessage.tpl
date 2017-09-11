@@ -19,7 +19,7 @@ if(isset($id))
 	$varray = $database->getProfileVillages($id);
 	$varmedal = $database->getProfileMedal($id); ?>
 
-	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css">
+	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7d" rel="stylesheet" type="text/css">
 	<style type="text/css">
 		input.dynamic_img, img.dynamic_img
 		{

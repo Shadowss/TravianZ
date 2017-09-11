@@ -212,9 +212,9 @@ div.popup_map div#drag {
 div.popup_map div#drag2 {
     cursor:pointer;
     height: 20px;
-    left: 1050px;
+    left: 300%;
     position: absolute;
-    top: -525px;
+    top: 100%;
     width: 20px;
     z-index: 2;
 }
