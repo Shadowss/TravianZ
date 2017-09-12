@@ -15,6 +15,7 @@ martinambrus changes:
 1. PHP7 compatibility (mysql functions converted to mysqli)
 2. a lot of database optimizations (not in code but in MySQL tables themselves, mostly adding indexes to speed things up)
 3. fix for a nasty JavaScript bug which was killing the browser with any number of countdown(s) running on page (even one!)
+4. large map not centered fix
 
 
 Shadowss changes:

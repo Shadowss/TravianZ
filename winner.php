@@ -159,8 +159,8 @@ $q = "
 		<script src="mt-full.js?0faaa" type="text/javascript"></script>
 		<script src="unx.js?0faaa" type="text/javascript"></script>
 		<script src="new.js?0faaa" type="text/javascript"></script>
-		<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
-		<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+		<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
+		<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7d" rel="stylesheet" type="text/css" />
 		<?php
 		if($session->gpack == null || GP_ENABLE == false)
 		{
