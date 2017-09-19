@@ -15,7 +15,7 @@ class Form {
 	public $valuearray = array();
 	private $errorcount;
 
-	public function Form() {
+	public function __construct() {
 		if(isset($_SESSION['errorarray']) && isset($_SESSION['valuearray'])) {
 			$this->errorarray = $_SESSION['errorarray'];
 			$this->valuearray = $_SESSION['valuearray'];

@@ -17,7 +17,7 @@ class Message {
 	private $totalMessage, $totalNotice;
 	private $allNotice = array();
 
-	function Message() {
+	function __construct() {
 		$this->getMessages();
 		$this->getNotice();
 		if($this->totalMessage > 0) {

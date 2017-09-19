@@ -25,7 +25,7 @@ class Building {
 	private $basic,$inner,$plus = 0;
 	public $buildArray = array();
 
-	public function Building() {
+	public function __construct() {
 		global $session;
 		$this->maxConcurrent = BASIC_MAX;
 		if(ALLOW_ALL_TRIBE || $session->tribe == 1) {

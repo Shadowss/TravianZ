@@ -20,7 +20,7 @@
 class MYSQLi_DB {
 
 	var $dblink;
-	function mysqli_DB() {
+	function __construct() {
 		$this->dblink = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error());
 		mysqli_select_db($this->dblink, SQL_DB);
 		mysqli_query($this->dblink,"SET NAMES 'UTF8'"); 

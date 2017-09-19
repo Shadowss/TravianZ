@@ -165,7 +165,7 @@ class Automation {
 	return $popT;
 	}
 
-	public function Automation() {
+	public function __construct() {
 
 		$this->procNewClimbers();
 		$this->ClearUser();

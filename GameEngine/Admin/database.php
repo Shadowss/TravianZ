@@ -28,7 +28,7 @@ include_once("../GameEngine/Database.php");
 class adm_DB {
 	
 	var $connection; 
-	function adm_DB(){
+	function __construct(){
 		global $database;
 		$database = new MYSQLi_DB;
 		$this->connection = $database->return_link();
