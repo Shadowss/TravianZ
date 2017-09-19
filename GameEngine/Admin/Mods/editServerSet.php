@@ -11,6 +11,7 @@
 
 if(!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
+include_once("../../config.php");
 include_once("../../Database.php");
 $id = $_POST['id'];
 
