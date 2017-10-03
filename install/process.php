@@ -9,6 +9,9 @@
 ##                                                                             ##
 #################################################################################
 
+// don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
+@set_time_limit(0);
+
 if(file_exists("include/constant.php")) {
 	include ("include/database.php");
 }

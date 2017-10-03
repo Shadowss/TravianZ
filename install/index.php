@@ -1,4 +1,8 @@
-<?php include("templates/script.tpl");
+<?php
+// don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
+@set_time_limit(0);
+
+include("templates/script.tpl");
 
 if(!isset($_GET['s'])) {
 	$_GET['s']=0;
