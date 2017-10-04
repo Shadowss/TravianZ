@@ -3,11 +3,11 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       config.php                                                  ##
-##  Version        4.8.5                                                       ##
+##  Version        8.0                                                         ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
-##  Rework by:     ronix                                                       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2013-2014. All rights reserved.                ##
+##  Modified by:   Shadow and ronix                                            ##
 ##                                                                             ##
 #################################################################################
 
@@ -26,7 +26,7 @@ define("ERROR_REPORT","%ERRORREPORT%");
 // ***** Name
 define("SERVER_NAME","%SERVERNAME%");
 
-// ***** Time zone
+// ***** Time zone added by ronix
 // Defines server time zone.
 define("TIMEZONE","%STIMEZONE%");
 date_default_timezone_set(TIMEZONE);
@@ -56,7 +56,7 @@ define("WORLD_MAX", "%MAX%");
 // ***** Graphic Pack
 // True = enabled, false = disabled
 //!!!!!!!!!!!! DO NOT ENABLE !!!!!!!!!!!!
-define("GP_ENABLE",%GP%);
+define("GP_ENABLE",false);
 // Graphic pack location (default: gpack/travian_default/)
 define("GP_LOCATE", "gpack/travian_default/");
 
@@ -96,7 +96,7 @@ define("STORAGE_BASE",800*STORAGE_MULTIPLIER);
 // Ingame quest enabled/disabled.
 define("QUEST",%QUEST%);
 //quest type : 25 = Travian Official 
-//             37 = Extended 
+//             37 = TravianZ Extended 
 define("QTYPE",%QTYPE%);
 
 // ***** Beginners Protection
@@ -129,6 +129,30 @@ define("T4_COMING",%T4_COMING%);
 define("AUTH_EMAIL",%ACTIVATE%);
 
 // ***** PLUS
+//Plus PayPal e-mail address
+define("PAYPAL_EMAIL","%PAYPAL_EMAIL%");
+//Plus PayPal currency
+define("PAYPAL_CURRENCY","%PAYPAL_CURRENCY%");
+//Plus Package A Price
+define("PLUS_PACKAGE_A_PRICE","%PLUS_PACKAGE_A_PRICE%");
+//Plus Package A Gold
+define("PLUS_PACKAGE_A_GOLD","%PLUS_PACKAGE_A_GOLD%");
+//Plus Package B Price
+define("PLUS_PACKAGE_B_PRICE","%PLUS_PACKAGE_B_PRICE%");
+//Plus Package B Gold
+define("PLUS_PACKAGE_B_GOLD","%PLUS_PACKAGE_B_GOLD%");
+//Plus Package C Price
+define("PLUS_PACKAGE_C_PRICE","%PLUS_PACKAGE_C_PRICE%");
+//Plus Package C Gold
+define("PLUS_PACKAGE_C_GOLD","%PLUS_PACKAGE_C_GOLD%");
+//Plus Package D Gold
+define("PLUS_PACKAGE_D_GOLD","%PLUS_PACKAGE_D_GOLD%");
+//Plus Package D Price
+define("PLUS_PACKAGE_D_PRICE","%PLUS_PACKAGE_D_PRICE%");
+//Plus Package E Price
+define("PLUS_PACKAGE_E_PRICE","%PLUS_PACKAGE_E_PRICE%");
+//Plus Package E Gold
+define("PLUS_PACKAGE_E_GOLD","%PLUS_PACKAGE_E_GOLD%");
 //Plus account lenght
 define("PLUS_TIME",%PLUS_TIME%);
 //+25% production lenght
@@ -254,8 +278,10 @@ define("ADMIN_NAME", "%ANAME%");
 //////////////////////////////////////////
 define("AUTO_DEL_INACTIVE",false); // auto-delete inactive players; default = false
 define("UN_ACT_TIME", 3628800); // 6 weeks to consider a player inactive
-define("TRACK_USR","%UTRACK%");
-define("USER_TIMEOUT","%UTOUT%"); 
+//define("TRACK_USR","%UTRACK%");
+//define("USER_TIMEOUT","%UTOUT%");
+define("TRACK_USR",true); // track users' being active or not
+define("USER_TIMEOUT",3600); // 1 hour of no activity counts as inactivity
 define("ALLOW_BURST",false);
 define("BASIC_MAX",1);
 define("INNER_MAX",1);
@@ -273,9 +299,7 @@ define("MULTIHUNTER",8);
 define("ADMIN",9);
 define("COOKIE_EXPIRE", 60*60*24*7); 
 define("COOKIE_PATH", "/"); 
-define("MODERATOR",4); 
-define("AUTO_DEL_INACTIVE",false);
-define("UN_ACT_TIME",3600);
+
 
 ////////////////////////////////////////////
 //   ****  DOMAIN/SERVER SETTINGS  ****   //
@@ -292,9 +316,8 @@ $requse = 0;
 ##  Filename       config.php                                                  ##
 ##  Version        4.8.5                                                       ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
-##  Rework by:     ronix                                                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 

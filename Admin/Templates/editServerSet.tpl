@@ -186,36 +186,6 @@ function refresh(tz) {
 							</select>
 					</tr>
 					<tr>
-						<td><b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> account duration</td>
-						<td>
-							<select name="plus_time">
-								<option value="(3600*12)" <?php if(PLUS_TIME==43200) echo "selected";?>>12 hours</option>
-								<option value="(3600*24)" <?php if(PLUS_TIME==86400) echo "selected";?>>1 day</option>
-								<option value="(3600*24*2)" <?php if(PLUS_TIME==172800) echo "selected";?>>2 days</option>
-								<option value="(3600*24*3)" <?php if(PLUS_TIME==259200) echo "selected";?>>3 days</option>
-								<option value="(3600*24*4)" <?php if(PLUS_TIME==345600) echo "selected";?>>4 days</option>
-								<option value="(3600*24*5)" <?php if(PLUS_TIME==432000) echo "selected";?>>5 days</option>
-								<option value="(3600*24*6)" <?php if(PLUS_TIME==518400) echo "selected";?>>6 days</option>
-								<option value="(3600*24*7)" <?php if(PLUS_TIME==604800) echo "selected";?>>7 days</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<td>+25% production duration</td>
-						<td>
-							<select name="plus_production">
-								<option value="(3600*12)" <?php if(PLUS_TIME==43200) echo "selected";?>>12 hours</option>
-								<option value="(3600*24)" <?php if(PLUS_TIME==86400) echo "selected";?>>1 day</option>
-								<option value="(3600*24*2)" <?php if(PLUS_TIME==172800) echo "selected";?>>2 days</option>
-								<option value="(3600*24*3)" <?php if(PLUS_TIME==259200) echo "selected";?>>3 days</option>
-								<option value="(3600*24*4)" <?php if(PLUS_TIME==345600) echo "selected";?>>4 days</option>
-								<option value="(3600*24*5)" <?php if(PLUS_TIME==432000) echo "selected";?>>5 days</option>
-								<option value="(3600*24*6)" <?php if(PLUS_TIME==518400) echo "selected";?>>6 days</option>
-								<option value="(3600*24*7)" <?php if(PLUS_TIME==604800) echo "selected";?>>7 days</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
 						<td>Nature Troops Regeneration Time</td>
 						<td>
 							<select name="nature_regtime">

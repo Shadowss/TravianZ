@@ -116,14 +116,6 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td>World Wonder - Statistics</td>
 		<td><?php if(WW == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(WW == false) { echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
-	<tr>
-		<td><b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> account duration</td>
-		<td><?php if(PLUS_TIME >= 86400){ echo ''.(PLUS_TIME/86400).' Days'; } else if(PLUS_TIME < 86400){ echo ''.(PLUS_TIME/3600).' Hours'; } ?></td>
-	</tr>
-	<tr>
-		<td>+25% production duration</td>
-		<td><?php if(PLUS_PRODUCTION >= 86400){ echo ''.(PLUS_PRODUCTION/86400).' Days'; } else if(PLUS_PRODUCTION < 86400){ echo ''.(PLUS_PRODUCTION/3600).' Hours'; } ?></td>
-	</tr>
 	<tr>	
 		<td>Nature Troops Regeneration Time</td>
 		<td><?php if(NATURE_REGTIME >= 86400){ echo ''.(NATURE_REGTIME/86400).' Days'; } else if(NATURE_REGTIME < 86400){ echo ''.(NATURE_REGTIME/3600).' Hours'; } ?></td>
@@ -162,6 +154,73 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td>
 	</tr>
 	</table>
+
+    <table id="member">
+        <thead>
+            <tr>
+                <th><b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> Settings <a href="admin.php?p=editPlusSet"><img src="../img/admin/edit.gif" title="Edit PLUS Setting"></a></th>
+            </tr>
+        </thead>
+    </table>
+
+  <table id="profile">
+    <tr>
+        <td>PayPal E-Mail Address</td>
+        <td><?php echo (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'martin@martinambrus.com'); ?></td>
+    </tr>
+    <tr>
+        <td>Payment Currency</td>
+        <td><?php echo (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
+    </tr>
+    <tr>
+        <td>Package "A" Amount of Gold</td>
+        <td><?php echo (defined('PLUS_PACKAGE_A_GOLD') ? PLUS_PACKAGE_A_GOLD : 60); ?></td>
+    </tr>
+    <tr>
+        <td>Package "A" Amount of Price</td>
+        <td><?php echo (defined('PLUS_PACKAGE_A_PRICE') ? PLUS_PACKAGE_A_PRICE : '1,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
+    </tr>
+    <tr>
+        <td>Package "B" Amount of Gold</td>
+        <td><?php echo (defined('PLUS_PACKAGE_B_GOLD') ? PLUS_PACKAGE_B_GOLD : 120); ?></td>
+    </tr>
+    <tr>
+        <td>Package "B" Amount of Price</td>
+        <td><?php echo (defined('PLUS_PACKAGE_B_PRICE') ? PLUS_PACKAGE_B_PRICE : '4,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
+    </tr>
+    <tr>
+        <td>Package "C" Amount of Gold</td>
+        <td><?php echo (defined('PLUS_PACKAGE_C_GOLD') ? PLUS_PACKAGE_C_GOLD : 360); ?></td>
+    </tr>
+    <tr>
+        <td>Package "C" Amount of Price</td>
+        <td><?php echo (defined('PLUS_PACKAGE_C_PRICE') ? PLUS_PACKAGE_C_PRICE : '9,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
+    </tr>
+    <tr>
+        <td>Package "D" Amount of Gold</td>
+        <td><?php echo (defined('PLUS_PACKAGE_D_GOLD') ? PLUS_PACKAGE_D_GOLD : 1000); ?></td>
+    </tr>
+    <tr>
+        <td>Package "D" Amount of Price</td>
+        <td><?php echo (defined('PLUS_PACKAGE_D_PRICE') ? PLUS_PACKAGE_D_PRICE : '19,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
+    </tr>
+    <tr>
+        <td>Package "E" Amount of Gold</td>
+        <td><?php echo (defined('PLUS_PACKAGE_E_GOLD') ? PLUS_PACKAGE_E_GOLD : 2000); ?></td>
+    </tr>
+    <tr>
+        <td>Package "E" Amount of Price</td>
+        <td><?php echo (defined('PLUS_PACKAGE_E_PRICE') ? PLUS_PACKAGE_E_PRICE : '49,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
+    </tr>
+    <tr>
+        <td><b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> account duration</td>
+        <td><?php if(PLUS_TIME >= 86400){ echo ''.(PLUS_TIME/86400).' Days'; } else if(PLUS_TIME < 86400){ echo ''.(PLUS_TIME/3600).' Hours'; } ?></td>
+    </tr>
+    <tr>
+        <td>+25% production duration</td>
+        <td><?php if(PLUS_PRODUCTION >= 86400){ echo ''.(PLUS_PRODUCTION/86400).' Days'; } else if(PLUS_PRODUCTION < 86400){ echo ''.(PLUS_PRODUCTION/3600).' Hours'; } ?></td>
+    </tr>
+</table>
 
 	<table id="member">
 		<thead>
