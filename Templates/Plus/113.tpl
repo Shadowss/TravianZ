@@ -72,30 +72,37 @@ $free = $session->uid;
 			<td class="pic">
                 <img src="img/bezahlung/paypal.jpg" style="99px; height:99px;" alt="Package D" />
     
-                <div>Gold : <?php echo PLUS_PACKAGE_D_GOLD; ?><br />Cost : <?php echo PLUS_PACKAGE_D_PRICE . ' ' . PAYPAL_CURRENCY; ?><br />Wait: 24 hours</div>
+                <div>
+                    Gold : <?php echo (defined('PLUS_PACKAGE_D_GOLD') ? PLUS_PACKAGE_D_GOLD : 1000); ?>
+                    <br />
+                    Cost : <?php echo (defined('PLUS_PACKAGE_D_PRICE') ? PLUS_PACKAGE_D_PRICE : '19,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?>
+                    <br />
+                    Wait: 24 hours
+                </div>
                 </td>
-                <td class="desc">Initiate Payment by Paypal <br /><br />
-                <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                <td class="desc">
+                    Initiate Payment by Paypal
+                    <br /><br />
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
     
-                  <!-- Identify your business so that you can collect the payments. -->
-                  <input type="hidden" name="business" value="<?php echo PAYPAL_EMAIL; ?>">
-                
-                  <!-- Specify a Buy Now button. -->
-                  <input type="hidden" name="cmd" value="_xclick">
-                
-                  <!-- Specify details about the item that buyers will purchase. -->
-                  <input type="hidden" name="item_name" value="<?php echo SERVER_NAME . ' Package D Gold Pack'; ?>">
-                  <input type="hidden" name="amount" value="<?php echo str_replace(",", ".", PLUS_PACKAGE_D_PRICE); ?>">
-                  <input type="hidden" name="currency_code" value="<?php echo PAYPAL_CURRENCY; ?>">
-                
-                  <!-- Display the payment button. -->
-                  <input type="image" name="submit" border="0"
-                  src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png"
-                  alt="Buy Now">
-                  <img alt="" border="0" width="1" height="1"
-                  src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
-    
-                </form>
+                      <!-- Identify your business so that you can collect the payments. -->
+                      <input type="hidden" name="business" value="<?php echo (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'martin@martinambrus.com'); ?>">
+                    
+                      <!-- Specify a Buy Now button. -->
+                      <input type="hidden" name="cmd" value="_xclick">
+                    
+                      <!-- Specify details about the item that buyers will purchase. -->
+                      <input type="hidden" name="item_name" value="<?php echo SERVER_NAME . ' Package D Gold Pack'; ?>">
+                      <input type="hidden" name="amount" value="<?php echo (defined('PLUS_PACKAGE_D_PRICE') ? str_replace(",", ".", PLUS_PACKAGE_D_PRICE) : '19,99'); ?>">
+                      <input type="hidden" name="currency_code" value="<?php echo (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?>">
+                    
+                      <!-- Display the payment button. -->
+                      <input type="image" name="submit" border="0"
+                      src="https://www.paypalobjects.com/webstatic/en_US/i/btn/png/btn_buynow_107x26.png"
+                      alt="Buy Now">
+                      <img alt="" border="0" width="1" height="1" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" >
+        
+                    </form>
     
                 <br />
                 More Info about PayPal can be found here: <br />
