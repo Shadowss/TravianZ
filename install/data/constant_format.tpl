@@ -129,6 +129,30 @@ define("T4_COMING",%T4_COMING%);
 define("AUTH_EMAIL",%ACTIVATE%);
 
 // ***** PLUS
+//Plus PayPal e-mail address
+define("PAYPAL_EMAIL",%PAYPAL_EMAIL%);
+//Plus PayPal currency
+define("PAYPAL_CURRENCY",%PAYPAL_CURRENCY%);
+//Plus Package A Price
+define("PLUS_PACKAGE_A_PRICE",%PLUS_PACKAGE_A_PRICE%);
+//Plus Package A Gold
+define("PLUS_PACKAGE_A_GOLD",%PLUS_PACKAGE_A_GOLD%);
+//Plus Package B Price
+define("PLUS_PACKAGE_B_PRICE",%PLUS_PACKAGE_B_PRICE%);
+//Plus Package B Gold
+define("PLUS_PACKAGE_B_GOLD",%PLUS_PACKAGE_B_GOLD%);
+//Plus Package C Price
+define("PLUS_PACKAGE_C_PRICE",%PLUS_PACKAGE_C_PRICE%);
+//Plus Package C Gold
+define("PLUS_PACKAGE_C_GOLD",%PLUS_PACKAGE_C_GOLD%);
+//Plus Package D Gold
+define("PLUS_PACKAGE_D_GOLD",%PLUS_PACKAGE_D_GOLD%);
+//Plus Package D Price
+define("PLUS_PACKAGE_D_PRICE",%PLUS_PACKAGE_D_PRICE%);
+//Plus Package E Price
+define("PLUS_PACKAGE_E_PRICE",%PLUS_PACKAGE_E_PRICE%);
+//Plus Package E Gold
+define("PLUS_PACKAGE_E_GOLD",%PLUS_PACKAGE_E_GOLD%);
 //Plus account lenght
 define("PLUS_TIME",%PLUS_TIME%);
 //+25% production lenght
