@@ -130,7 +130,7 @@ define("AUTH_EMAIL",%ACTIVATE%);
 
 // ***** PLUS
 //Plus PayPal e-mail address
-define("PAYPAL_EMAIL",%PAYPAL_EMAIL%);
+define("PAYPAL_EMAIL",%PAYPAL_EMAIL%");
 //Plus PayPal currency
 define("PAYPAL_CURRENCY","%PAYPAL_CURRENCY%");
 //Plus Package A Price
