@@ -56,7 +56,7 @@ $free = $session->uid;
                 
                   <!-- Specify details about the item that buyers will purchase. -->
                   <input type="hidden" name="item_name" value="<?php echo SERVER_NAME . ' Package E Gold Pack'; ?>">
-                  <input type="hidden" name="amount" value="<?php echo PLUS_PACKAGE_E_PRICE; ?>">
+                  <input type="hidden" name="amount" value="<?php echo str_replace(",", ".", PLUS_PACKAGE_E_PRICE); ?>">
                   <input type="hidden" name="currency_code" value="<?php echo PAYPAL_CURRENCY; ?>">
                 
                   <!-- Display the payment button. -->
