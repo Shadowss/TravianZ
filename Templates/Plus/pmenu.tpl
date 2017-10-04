@@ -3,10 +3,10 @@
 <div id="textmenu">
    <a href="plus.php" <?php
 
-        if(!isset($_GET['id'])) {
+        if(!isset($_GET['id']) && @(basename($_SERVER['REQUEST_URI']) !== 'a2b2.php')) {
         	echo "class=\"selected\"";
         }
-        if(isset($_GET['id']) && $_GET['id'] == 1) {
+        if(isset($_GET['id']) && ($_GET['id'] == 1) || strlen($_GET['id']) === 3) {
         	echo "class=\"selected\"";
         }
 
@@ -17,7 +17,7 @@
         if(isset($_GET['id']) && $_GET['id'] == 2) {
         	echo "class=\"selected\"";
         }
-        if(isset($_GET['id']) && $_GET['id'] >= 6) {
+        if(isset($_GET['id']) && $_GET['id'] >= 6 && strlen($_GET['id']) < 3) {
         	echo "class=\"selected\"";
         }
 
@@ -28,7 +28,7 @@
         if(isset($_GET['id']) && $_GET['id'] == 3) {
         	echo "class=\"selected\"";
         }
-        if(isset($_GET['id']) && $_GET['id'] >= 6) {
+        if(isset($_GET['id']) && $_GET['id'] >= 6 && strlen($_GET['id']) < 3) {
         	echo "class=\"selected\"";
         }
 
@@ -47,11 +47,16 @@
         if(isset($_GET['id']) && $_GET['id'] == 5) {
         	echo "class=\"selected\"";
         }
-        if(isset($_GET['id']) && $_GET['id'] >= 6) {
+        if(isset($_GET['id']) && $_GET['id'] >= 6 && strlen($_GET['id']) < 3) {
         	echo "class=\"selected\"";
         }
 
 ?>>Earn gold</a>
-| <a href="a2b2.php">Account Statement</a>
+| <a href="a2b2.php" <?php
+
+        if(@(basename($_SERVER['REQUEST_URI']) === 'a2b2.php')) {
+            echo "class=\"selected\"";
+        }
+?>>Account Statement</a>
 
 </div>
