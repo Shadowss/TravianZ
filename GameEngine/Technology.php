@@ -162,7 +162,7 @@ class Technology {
 		$listArray = array();
 		for($i=1;$i<count($this->unarray);$i++) {
 			$holder = array();
-			if($unitarray['u'.$i] != 0 && $unitarray['u'.$i] != "") {
+			if(!empty($unitarray['u'.$i]) && $unitarray['u'.$i] != 0 && $unitarray['u'.$i] != "") {
 				$holder['id'] = $i;
 				$holder['name'] = $this->unarray[$i];
 				$holder['amt'] = $unitarray['u'.$i];
