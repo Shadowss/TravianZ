@@ -1041,21 +1041,23 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
- `moveid` int(11) NOT NULL AUTO_INCREMENT,
- `sort_type` tinyint(4) NULL DEFAULT '0',
- `from` int(11) NULL DEFAULT '0',
- `to` int(11) NULL DEFAULT '0',
- `ref` int(11) NULL DEFAULT '0',
- `ref2` int(11) NULL DEFAULT '0',
- `starttime` int(11) NULL DEFAULT '0',
- `endtime` int(11) NULL DEFAULT '0',
- `proc` tinyint(1) NULL DEFAULT '0',
- `send` tinyint(1) NULL,
- `wood` int(11) NULL,
- `clay` int(11) NULL,
- `iron` int(11) NULL,
- `crop` int(11) NULL,
- PRIMARY KEY (`moveid`)
+  `moveid` int(11) NOT NULL AUTO_INCREMENT,
+  `sort_type` tinyint(4) DEFAULT '0',
+  `from` int(11) DEFAULT '0',
+  `to` int(11) DEFAULT '0',
+  `ref` int(11) DEFAULT '0',
+  `ref2` int(11) DEFAULT '0',
+  `starttime` int(11) DEFAULT '0',
+  `endtime` int(11) DEFAULT '0',
+  `proc` tinyint(1) DEFAULT '0',
+  `send` tinyint(1) DEFAULT NULL,
+  `wood` int(11) DEFAULT NULL,
+  `clay` int(11) DEFAULT NULL,
+  `iron` int(11) DEFAULT NULL,
+  `crop` int(11) DEFAULT NULL,
+  PRIMARY KEY (`moveid`),
+  KEY `ref` (`ref`),
+  KEY `from-proc-sort_type` (`from`,`proc`,`sort_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
