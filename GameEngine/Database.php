@@ -1475,6 +1475,7 @@ class MYSQLi_DB {
 	function getAllianceDipProfile($aid, $type){
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '$type' AND accepted = '1' OR alli2 = '$aid' AND type = '$type' AND accepted = '1'";
 		$array = $this->query_return($q);
+		$text = "";
 			foreach($array as $row){
 				if($row['alli1'] == $aid){
 				$alliance = $this->getAlliance($row['alli2']);
@@ -1493,6 +1494,7 @@ class MYSQLi_DB {
 	function getAllianceWar($aid){
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
 		$array = $this->query_return($q);
+        $text = "";
 			foreach($array as $row){
 				if($row['alli1'] == $aid){
 				$alliance = $this->getAlliance($row['alli2']);
@@ -1570,6 +1572,7 @@ class MYSQLi_DB {
 	/////////////ADDED BY BRAINIAC - THANK YOU
 
 	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
+            $shit = false;
     		$q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid."";
                 $result = mysqli_query($this->dblink,$q);
     		$checkres= $this->mysqli_fetch_all($result);
@@ -1599,6 +1602,7 @@ class MYSQLi_DB {
    	}
 
 	function modifyOasisResource($vid, $wood, $clay, $iron, $crop, $mode) {
+        $shit = false;
 		$q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "odata where wref = ".$vid."";
                 $result = mysqli_query($this->dblink,$q);
     		$checkres= $this->mysqli_fetch_all($result);
@@ -3443,6 +3447,10 @@ class MYSQLi_DB {
 	function getCropProdstarv($wref) {
 	global $bid4,$bid8,$bid9,$sesion,$technology;
 
+	    $wood = 0;
+	    $cropo = 0;
+	    $clay = 0;
+	    $iron = 0;
 		$basecrop = $grainmill = $bakery = 0;
 		$owner = $this->getVrefField($wref, 'owner');
 		$bonus = $this->getUserField($owner, 'b4', 0);
@@ -3554,6 +3562,7 @@ class MYSQLi_DB {
 	}
 
 	function checkFriends($uid) {
+	    global $session;
 		$user = $this->getUserArray($uid, 1);
 		for($i=0;$i<=19;$i++) {
 		if($user['friend'.$i] == 0 && $user['friend'.$i.'wait'] == 0){
@@ -3566,7 +3575,7 @@ class MYSQLi_DB {
 		}
 		if($user['friend'.$j.'wait'] == 0){
 		$friendwait = $this->getUserField($uid, "friend".$j."wait", 0);
-		$this->addFriend($sessionuid,"friend".$k."wait",$friendwait);
+		$this->addFriend($session->uid,"friend".$k."wait",$friendwait);
 		$this->deleteFriend($uid,"friend".$j."wait");
 		}
 		}
