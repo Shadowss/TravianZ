@@ -27,7 +27,7 @@ class Village {
 	private $production = array();
 	private $oasisowned,$ocounter = array();
 
-    function Village() {
+    function __construct() {
         global $session, $database;
         if(isset($_SESSION['wid'])) {
             $this->wid = $_SESSION['wid'];          
