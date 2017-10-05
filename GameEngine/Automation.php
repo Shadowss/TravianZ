@@ -958,6 +958,10 @@ class Automation {
 
 			$to = $database->getMInfo($data['to']);
 			$from = $database->getMInfo($data['from']);
+
+            $ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
+            $targetally = $database->getUserField($database->getVillageField($data['to'],"owner"),"alliance",0);
+
 			$database->addNotice($to['owner'],$to['wref'],$targetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
 			if($from['owner'] != $to['owner']) {
 				$database->addNotice($from['owner'],$to['wref'],$ownally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
@@ -1068,8 +1072,8 @@ class Automation {
 						$cannotsend = 0;
 						$movements = $database->getMovement("34",$data['to'],1);
 						for($y=0;$y < count($movements);$y++){
-						$returntime = $unit[$y]['endtime']-time();
-						if($unit[$y]['sort_type'] == 4 && $unit[$y]['from'] != 0 && $returntime <= 10){ 
+						$returntime = $units[$y]['endtime']-time();
+						if($units[$y]['sort_type'] == 4 && $units[$y]['from'] != 0 && $returntime <= 10){
 						$cannotsend = 1;
 						}
 						}
@@ -1211,6 +1215,7 @@ class Automation {
                     $def_ab[$ud+8] = $armory['a8'];
                     
                     //rams attack
+                    //TODO: where did dead7 & traped7 come from??/
                     if(($data['t7']-$dead7-$traped7)>0 and $type=='3'){
                         $basearraywall = $database->getMInfo($data['to']);
                         if($database->getFieldLevel($basearraywall['wref'],40)>'0'){
@@ -3442,7 +3447,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			if(file_exists("GameEngine/Prevention/settlers.txt")) {
                 unlink("GameEngine/Prevention/settlers.txt");
             }
-            if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
+            //if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
 	}
 
 	private function researchComplete() {
