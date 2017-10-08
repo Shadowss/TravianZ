@@ -74,7 +74,7 @@ if($_GET['uid'])
 					</tr>
 					<tr>
 						<td>Password:</td>
-						<td><input type="text" name="pass"></td>
+						<td><input type="password" name="pass"></td>
 						<td colspan="2"><input type="submit" class="c5" value="Delete player"></td>
 					</tr>
 				</tbody>
