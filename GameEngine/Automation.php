@@ -1072,8 +1072,8 @@ class Automation {
 						$cannotsend = 0;
 						$movements = $database->getMovement("34",$data['to'],1);
 						for($y=0;$y < count($movements);$y++){
-						$returntime = $units[$y]['endtime']-time();
-						if($units[$y]['sort_type'] == 4 && $units[$y]['from'] != 0 && $returntime <= 10){
+						$returntime = $units->$y['endtime']-time();
+						if($units->$y['sort_type'] == 4 && $units->$y['from'] != 0 && $returntime <= 10){
 						$cannotsend = 1;
 						}
 						}
