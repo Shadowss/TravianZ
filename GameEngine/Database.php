@@ -1248,6 +1248,10 @@ class MYSQLi_DB {
 	}
 
 	function getAllianceName($id) {
+		if (!$id) {
+			return '';
+		}
+
 		$q = "SELECT tag from " . TB_PREFIX . "alidata where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
