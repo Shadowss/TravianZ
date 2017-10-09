@@ -16,6 +16,11 @@ martinambrus changes:
 2. a lot of database optimizations (not in code but in MySQL tables themselves, mostly adding indexes to speed things up)
 3. fix for a nasty JavaScript bug which was killing the browser with any number of countdown(s) running on page (even one!)
 4. large map not centered fix
+5. WW Buildings have no aliance (PHP warning removed)
+6. password in Admin area for deletion of user is now really a password field
+7. Multihunter couldn't progress beyond Quest level 4
+8. PLUS settings (including PayPal options) can be configured in Admin
+9. installation timeouting fix
 
 
 Shadowss changes:
