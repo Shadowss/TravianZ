@@ -1,10 +1,8 @@
-TravianZ Version v.8.0.1, PHPv7
+TravianZ Version v.8.1.1 BETA (for PHP version 7)
 
 Download and updates : https://github.com/Shadowss/TravianZ
 
 Thank you to : Shadowss , advocaite , brainiacX , MisterX , yi12345 , ronix , Elio , martinambrus and many others that make that version posible.
-
-This version is forked from the one of Shadowss (https://github.com/Shadowss/TravianZ).
 
 First i want to say THANKS for all who worked on that version , will find a list on Version file.
 
@@ -21,6 +19,7 @@ martinambrus changes:
 7. Multihunter couldn't progress beyond Quest level 4
 8. PLUS settings (including PayPal options) can be configured in Admin
 9. installation timeouting fix
+10. extra settings in admin save config correctly
 
 
 Shadowss changes:
