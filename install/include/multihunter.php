@@ -1,5 +1,8 @@
 <?php
-$gameinstall = 1;
+		// don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
+		@set_time_limit(0);
+
+		$gameinstall = 1;
 
 		include ("../../GameEngine/config.php");
 		include ("../../GameEngine/Database.php");
