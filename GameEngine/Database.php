@@ -163,7 +163,7 @@ class MYSQLi_DB {
         } else {
             $q = "SELECT $field FROM " . TB_PREFIX . "users where username = '$ref'";
         }
-        $result = mysqli_query($this->dblink,$q) or die(mysqli_error());
+        $result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
         if($result) {
             $dbarray = mysqli_fetch_array($result);
             return $dbarray[$field];
