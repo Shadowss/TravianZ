@@ -375,6 +375,8 @@ class MYSQLi_DB {
 	}
 	
 	function generateBase($sector, $mode=1) {
+	// don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
+	@set_time_limit(0);
 	$num_rows = 0;
 	$count_while = 0;
     while (!$num_rows){
