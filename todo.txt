@@ -1,4 +1,5 @@
 - change title for each page, so it fits with H1 (or history will always show a lot of "TravianZ" entries without a way to know where that history entry leads)
+  ... same in Admin panel
 - fix deleting users (need to delete their villages (+alliances/construction plans/...?) after a while)
 - check if defeating a player (destroying their village) removes that village from map after a while (as stated in FAQ)
 - fix inability to change alliance description
@@ -6,3 +7,11 @@
 - add combat Simulator link to options for a village/oasis (Centre map, Raid, Send Troops...)
 - don't show Support & Taskmaster in stats
 - add Support + Taskmaster login possibility into the game
+- fix editing current task from Taskmaster -> number never match the edited quest after save
+- remove <br /> tags from profile description and replace them by real new lines when editing players in Admin
+- cannot delete a single medal in admin
+- add back buttons to Admin where there are not (like editing a user)
+- disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)
+- when editing Additional Information for user and adjusting gold, sometimes the first time will not record the new gold amount
+- update password hashes (I believe they are md5 only now)
+- make mass messages work with apostrophes and quotes
