@@ -1,0 +1,8 @@
+- change title for each page, so it fits with H1 (or history will always show a lot of "TravianZ" entries without a way to know where that history entry leads)
+- fix deleting users (need to delete their villages (+alliances/construction plans/...?) after a while)
+- check if defeating a player (destroying their village) removes that village from map after a while (as stated in FAQ)
+- fix inability to change alliance description
+- add PayPal listener to verify gold transactions imediatelly
+- add combat Simulator link to options for a village/oasis (Centre map, Raid, Send Troops...)
+- don't show Support & Taskmaster in stats
+- add Support + Taskmaster login possibility into the game
