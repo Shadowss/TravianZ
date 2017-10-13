@@ -1617,7 +1617,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
  `y` int(11) NULL,
  `occupied` tinyint(1) NULL,
  `image` varchar(3) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `occupied` (`occupied`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
