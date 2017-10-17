@@ -24,3 +24,6 @@ install/installation_done
 /.project
 /installed_*/
 /installation_done
+
+# Eclipse settings
+.settings
