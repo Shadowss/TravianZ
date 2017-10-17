@@ -355,6 +355,7 @@ class Automation {
 			foreach($needDelete as $need) {
 				$needVillage = $database->getVillagesID($need['uid']);
 				foreach($needVillage as $village) {
+				    $village = (int) $village;
 					$q = "DELETE FROM ".TB_PREFIX."abdata where vref = ".$village;
 					$database->query($q);
 					$q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$village;
@@ -425,12 +426,12 @@ class Automation {
 					$post['t11'] = $enforce['hero'];
 					$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 					$database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
-					$q = "DELETE FROM ".TB_PREFIX."enforcement where id = ".$enforce['id'];
+					$q = "DELETE FROM ".TB_PREFIX."enforcement where id = ".(int) $enforce['id'];
 					$database->query($q);
 					}
 				}
 				for($i=0;$i<20;$i++){
-				$q = "SELECT * FROM ".TB_PREFIX."users where friend".$i." = ".$need['uid']." or friend".$i."wait = ".$need['uid']."";
+				    $q = "SELECT * FROM ".TB_PREFIX."users where friend".$i." = ".(int) $need['uid']." or friend".$i."wait = ".(int) $need['uid']."";
 				$array = $database->query_return($q);
 				foreach($array as $friend){
 				$database->deleteFriend($friend['id'],"friend".$i);
@@ -442,21 +443,21 @@ class Automation {
 				$alliance = $database->getUserAllianceID($need['uid']);
 				$newowner = $database->getAllMember2($alliance);
 				$newleader = $newowner['id'];
-				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$alliance."";
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, $alliance, "Leader", 1, 1, 1, 1, 1, 1, 1);
 				$this->updateMax($newleader);
 				}
 				$database->deleteAlliance($alliance);
-				$q = "DELETE FROM ".TB_PREFIX."hero where uid = ".$need['uid'];
+				$q = "DELETE FROM ".TB_PREFIX."hero where uid = ".(int) $need['uid'];
 				$database->query($q);
-				$q = "DELETE FROM ".TB_PREFIX."mdata where target = ".$need['uid']." or owner = ".$need['uid'];
+				$q = "DELETE FROM ".TB_PREFIX."mdata where target = ".(int) $need['uid']." or owner = ".(int) $need['uid'];
 				$database->query($q);
-				$q = "DELETE FROM ".TB_PREFIX."ndata where uid = ".$need['uid'];
+				$q = "DELETE FROM ".TB_PREFIX."ndata where uid = ".(int) $need['uid'];
 				$database->query($q);
-				$q = "DELETE FROM ".TB_PREFIX."users where id = ".$need['uid'];
+				$q = "DELETE FROM ".TB_PREFIX."users where id = ".(int) $need['uid'];
 				$database->query($q);
-				$q = "DELETE FROM ".TB_PREFIX."deleting where uid = ".$need['uid'];
+				$q = "DELETE FROM ".TB_PREFIX."deleting where uid = ".(int) $need['uid'];
 				$database->query($q);
 			}
 		}
@@ -545,7 +546,7 @@ class Automation {
 		}else{
 		$maxcrop = $getvillage['maxcrop'];
 		}
-		$q = "UPDATE " . TB_PREFIX . "vdata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getvillage['wref']."";
+		$q = "UPDATE " . TB_PREFIX . "vdata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".(int) $getvillage['wref']."";
 		$database->query($q);
 		}
 		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop";
@@ -571,7 +572,7 @@ class Automation {
 		}else{
 		$crop = $getvillage['crop'];
 		}
-		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getvillage['wref']."";
+		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".(int) $getvillage['wref']."";
 		$database->query($q);
 		}
 		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
@@ -597,7 +598,7 @@ class Automation {
 		}else{
 		$crop = $getvillage['crop'];
 		}
-		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getvillage['wref']."";
+		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".(int) $getvillage['wref']."";
 		$database->query($q);
 		}
 		}
@@ -647,9 +648,9 @@ class Automation {
 		foreach($array as $indi) {
 	           $level = $database->getFieldLevel($indi['wid'],$indi['field']);
 			   if (($level+1) == $indi['level']){
-				$q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
+			       $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".(int) $indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
 			   }else{ $indi['level']=($level+1);
-				$q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".$indi['wid'];
+			   $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".(int) $indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
 			   }
 			if($database->query($q)) {
 				$level = $database->getFieldLevel($indi['wid'],$indi['field']);
@@ -716,18 +717,18 @@ class Automation {
 					mysqli_query($GLOBALS['link'],"TRUNCATE ".TB_PREFIX."bdata");
 					}
 				if($database->getUserField($database->getVillageField($indi['wid'],"owner"),"tribe",0) != 1){
-				$q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".$indi['wid'];
+				    $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".(int) $indi['wid'];
 				$database->query($q4);
 				}else{
 				if($indi['field'] > 18){
-				$q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".$indi['wid']." and field > 18";
+				    $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".(int) $indi['wid']." and field > 18";
 				$database->query($q4);
 				}else{
-				$q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".$indi['wid']." and field < 19";
+				    $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".(int) $indi['wid']." and field < 19";
 				$database->query($q4);
 				}
 				}
-				$q = "DELETE FROM ".TB_PREFIX."bdata where id = ".$indi['id'];
+				$q = "DELETE FROM ".TB_PREFIX."bdata where id = ".(int) $indi['id'];
 				$database->query($q);
 			}
 				$crop = $database->getCropProdstarv($indi['wid']);
@@ -1973,7 +1974,7 @@ class Automation {
 						$t_sql=mysqli_fetch_array($tsql);
 						$tmaxstore=$t_sql['maxstore']-$buildarray[$tblevel]['attri'];
 						if ($tmaxstore<800) $tmaxstore=800;
-						$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."'*32 WHERE wref=".$data['to'];
+						$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."'*32 WHERE wref=".(int) $data['to'];
 						$database->query($q);
 					}
 					if ($tbgid==11 || $tbgid==39) {
@@ -1981,7 +1982,7 @@ class Automation {
 						$t_sql=mysqli_fetch_array($tsql);
 						$tmaxcrop=$t_sql['maxcrop']-$buildarray[$tblevel]['attri'];
 						if ($tmaxcrop<800) $tmaxcrop=800;
-						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."'*32 WHERE wref=".$data['to'];
+						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."'*32 WHERE wref=".(int) $data['to'];
 						$database->query($q);
 					}
 					if ($tbgid==18){
@@ -2016,7 +2017,7 @@ class Automation {
 							$t_sql=mysqli_fetch_array($tsql);
 							$tmaxstore=$t_sql['maxstore']+$buildarray[$totallvl]['attri']-$buildarray[$tblevel]['attri'];
 							if ($tmaxstore<800) $tmaxstore=800;
-							$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".$data['to'];
+							$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".(int) $data['to'];
 							$database->query($q);
 						}
 						if ($tbgid==11 || $tbgid==39) {
@@ -2024,7 +2025,7 @@ class Automation {
 							$t_sql=mysqli_fetch_array($tsql);
 							$tmaxcrop=$t_sql['maxcrop']+$buildarray[$totallvl]['attri']-$buildarray[$tblevel]['attri'];
 							if ($tmaxcrop<800) $tmaxcrop=800;
-							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
+							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".(int) $data['to'];
 							$database->query($q);
 						}
 						if ($tbgid==18){
@@ -2102,7 +2103,7 @@ class Automation {
 						$t_sql=mysqli_fetch_array($tsql);
 						$tmaxstore=$t_sql['maxstore']-$buildarray[$tblevel]['attri'];
 						if ($tmaxstore<800) $tmaxstore=800*32;
-						$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".$data['to'];
+						$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".(int) $data['to'];
 						$database->query($q);
 					}
 					if ($tbgid==11 || $tbgid==39) {
@@ -2110,7 +2111,7 @@ class Automation {
 						$t_sql=mysqli_fetch_array($tsql);
 						$tmaxcrop=$t_sql['maxcrop']-$buildarray[$tblevel]['attri'];
 						if ($tmaxcrop<800) $tmaxcrop=800*32;
-						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
+						$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".(int) $data['to'];
 						$database->query($q);
 					}
 					if ($tbgid==18){
@@ -2147,7 +2148,7 @@ class Automation {
 							$t_sql=mysqli_fetch_array($tsql);
 							$tmaxstore=$t_sql['maxstore']+$buildarray[$totallvl]['attri']-$buildarray[$tblevel]['attri'];
 							if ($tmaxstore<800) $tmaxstore=800;
-							$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".$data['to'];
+							$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".(int) $data['to'];
 							$database->query($q);
 						}
 						if ($tbgid==11 || $tbgid==39) {
@@ -2275,7 +2276,7 @@ class Automation {
 							$t_sql=mysqli_fetch_array($tsql);
 							$tmaxstore=$t_sql['maxstore']+$buildarray[$totallvl]['attri']-$buildarray[$tblevel]['attri'];
 							if ($tmaxstore<800) $tmaxstore=800;
-							$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".$data['to'];
+							$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`='".$tmaxstore."' WHERE wref=".(int) $data['to'];
 							$database->query($q);
 						}
 						if ($tbgid==11 || $tbgid==39) {
@@ -2283,7 +2284,7 @@ class Automation {
 							$t_sql=mysqli_fetch_array($tsql);
 							$tmaxcrop=$t_sql['maxcrop']+$buildarray[$totallvl]['attri']-$buildarray[$tblevel]['attri'];
 							if ($tmaxcrop<800) $tmaxcrop=800;
-							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".$data['to'];
+							$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`='".$tmaxcrop."' WHERE wref=".(int) $data['to'];
 							$database->query($q);
 						}
 						if ($tbgid==18){
@@ -2404,15 +2405,15 @@ class Automation {
 						$database->setVillageField($data['to'],loyalty,0);
 						$database->setVillageField($data['to'],owner,$database->getVillageField($data['from'],"owner"));
 						//delete upgrades in armory and blacksmith
-						$q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref = ".$data['to']."";
+						$q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref = ".(int) $data['to']."";
 						$database->query($q);
 						$database->addABTech($data['to']);
 						//delete researches in academy
-						$q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref = ".$data['to']."";
+						$q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref = ".(int) $data['to']."";
 						$database->query($q);
 						$database->addTech($data['to']);
 						//delete reinforcement
-						$q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = ".$data['to']."";
+						$q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = ".(int) $data['to']."";
 						$database->query($q);
 						// check buildings
 						$pop1 = $database->getVillageField($data['from'],"pop");
@@ -2682,7 +2683,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                                             }
 
                                             if ($prisoner['t11']>0){
-                                                $p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$p_owner."";
+                                                $p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner."";
                                                 $p_resulth = $database->query($p_qh);
                                                 $p_hero_f=mysqli_fetch_array($p_resulth);
                                                 $p_hero_unit=$p_hero_f['unit'];
@@ -2986,6 +2987,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 	    function DelVillage($wref, $mode=0){
         global $database, $units;
             $database->clearExpansionSlot($wref);
+            $wref = (int) $wref;
             $q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";
             $database->query($q);
             $q = "DELETE FROM ".TB_PREFIX."bdata where wid = $wref";
@@ -3264,7 +3266,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                             for($i=$start;$i<=$end;$i++){
                                 $t_units.="u".$i."=u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');$j++;
                             }    
-                            $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".$check['id'];
+                            $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".(int) $check['id'];
                             $database->query($q);
                             $database->modifyEnforce($check['id'],'hero',$data['t11'],1);
                         }
@@ -3306,7 +3308,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     $e_units.='u'.$i.'=0 AND ';
                 }
                 $e_units.='hero=0';
-                $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".$data['to']." OR `from`=".$data['to'].")";
+                $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".(int) $data['to']." OR `from`=".(int) $data['to'].")";
                 $database->query($q);
             }
             }
@@ -3478,15 +3480,15 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			$sort_type = substr($data['tech'],0,1);
 			switch($sort_type) {
 				case "t":
-				$q = "UPDATE ".TB_PREFIX."tdata set ".$data['tech']." = 1 where vref = ".$data['vref'];
+				    $q = "UPDATE ".TB_PREFIX."tdata set ".$data['tech']." = 1 where vref = ".(int) $data['vref'];
 				break;
 				case "a":
 				case "b":
-				$q = "UPDATE ".TB_PREFIX."abdata set ".$data['tech']." = ".$data['tech']." + 1 where vref = ".$data['vref'];
+				    $q = "UPDATE ".TB_PREFIX."abdata set ".$data['tech']." = ".$data['tech']." + 1 where vref = ".(int) $data['vref'];
 				break;
 			}
 			$database->query($q);
-			$q = "DELETE FROM ".TB_PREFIX."research where id = ".$data['id'];
+			$q = "DELETE FROM ".TB_PREFIX."research where id = ".(int) $data['id'];
 			$database->query($q);
 		}
 		if(file_exists("GameEngine/Prevention/research.txt")) {
@@ -4084,15 +4086,15 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$level = $database->getFieldLevel($vil['vref'],$vil['buildnumber']);
 				$buildarray = $GLOBALS["bid".$type];
 				if ($type==10 || $type==38) {
-					$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`=`maxstore`-".$buildarray[$level]['attri']." WHERE wref=".$vil['vref'];
+				    $q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`=`maxstore`-".$buildarray[$level]['attri']." WHERE wref=".(int) $vil['vref'];
 					$database->query($q);
-					$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`=800 WHERE `maxstore`<= 800 AND wref=".$vil['vref'];
+					$q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`=800 WHERE `maxstore`<= 800 AND wref=".(int) $vil['vref'];
 					$database->query($q);
 				}
 				if ($type==11 || $type==39) {
-					$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=`maxcrop`-".$buildarray[$level]['attri']." WHERE wref=".$vil['vref'];
+				    $q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=`maxcrop`-".$buildarray[$level]['attri']." WHERE wref=".(int) $vil['vref'];
 					$database->query($q);
-					$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=800 WHERE `maxcrop`<=800 AND wref=".$vil['vref'];
+					$q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=800 WHERE `maxcrop`<=800 AND wref=".(int) $vil['vref'];
 					$database->query($q);
 				}
 				if ($type==18){
@@ -4100,7 +4102,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				}
 				if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
                 if ($village->natar==1 && $type==40) $clear=""; //fix by ronix
-				$q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".$vil['vref'];
+                $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".(int) $vil['vref'];
 				$database->query($q);
 				$pop=$this->getPop($type,$level-1);
 				$database->modifyPop($vil['vref'],$pop[0],1);
@@ -4235,7 +4237,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		if($oasiscrop > $getoasis['maxcrop']){
 		$oasiscrop = $getoasis['maxcrop'];
 		}
-		$q = "UPDATE " . TB_PREFIX . "odata set wood = $oasiswood, clay = $oasisclay, iron = $oasisiron, crop = $oasiscrop where wref = ".$getoasis['wref']."";
+		$q = "UPDATE " . TB_PREFIX . "odata set wood = $oasiswood, clay = $oasisclay, iron = $oasisiron, crop = $oasiscrop where wref = ".(int) $getoasis['wref']."";
 		$database->query($q);
 		$database->updateOasis($getoasis['wref']);
 		}
@@ -4375,7 +4377,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 
                 
                 // get enforce other player from oasis
-                $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=".$starv['wref']." AND o.owner<>v.owner";
+                $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=".(int) $starv['wref']." AND o.owner<>v.owner";
                 $enforceoasis = $database->query_return($q);
                 $maxcount=0;
                 $totalunits=0;
@@ -4398,7 +4400,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     }
                 }else{ 
 		//own troops from oasis
-                    $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=".$starv['wref']." AND o.owner=v.owner";
+                    $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=".(int) $starv['wref']." AND o.owner=v.owner";
                     $enforceoasis = $database->query_return($q);
                     if(count($enforceoasis)>0){
                         foreach ($enforceoasis as $enforce){
@@ -4418,7 +4420,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         }
                     }else{ 
 			//get enforce other player from village
-                        $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".$starv['wref']." AND v.owner<>v1.owner";
+                        $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".(int) $starv['wref']." AND v.owner<>v1.owner";
                         $enforcearray = $database->query_return($q);
                         if(count($enforcearray)>0){
                             foreach ($enforcearray as $enforce){
@@ -4438,7 +4440,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                             }    
                         }else{ 
 			//get own reinforcement from other village
-                            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".$starv['wref']." AND v.owner=v1.owner";
+                            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=".(int) $starv['wref']." AND v.owner=v1.owner";
                             $enforcearray = $database->query_return($q);
                             if(count($enforcearray)>0){
                                 foreach ($enforcearray as $enforce){
@@ -4785,7 +4787,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
         $stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
         if($row['lastgavemedal'] == 0 && $stime < time()){
         $newtime = time()+MEDALINTERVAL;
-        $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$newtime;
+        $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".(int) $newtime;
         $database->query($q);
         $row['lastgavemedal'] = time()+MEDALINTERVAL;
         }

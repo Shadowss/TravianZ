@@ -236,12 +236,12 @@ $oldmovement=$database->getMovementById($_GET['moveid']);
 $now=time();
 if(($now-$oldmovement[0]['starttime'])<90 && $oldmovement[0]['from'] == $village->wid){
 
-    $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$database->escape($_GET['moveid']);
+    $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$database->escape((int) $_GET['moveid']);
 $resultc=$database->query($qc) or die(mysqli_error($database->dblink));
 
 	if (mysqli_num_rows($resultc)==1){
 
-	    $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$database->escape($_GET['moveid']);
+	    $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$database->escape((int) $_GET['moveid']);
 	$database->query($q);
 	$end=$now+($now-$oldmovement[0]['starttime']);
 	//echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;

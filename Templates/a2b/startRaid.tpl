@@ -4,7 +4,7 @@
     $lid = $_POST['lid'];
     $tribe = $_POST['tribe'];
     $getFLData = $database->getFLData($lid);
-    $sql = "SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".$database->escape($lid)." order by id asc";
+    $sql = "SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".$database->escape((int) $lid)." order by id asc";
 	$array = $database->query_return($sql);
     foreach($array as $row){
 	$sql1 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE vref = ".(int) $getFLData['wref']));

@@ -344,7 +344,7 @@
 				if($database->isAllianceOwner($UserData['id'])){
 				$newowner = $database->getAllMember2($session->alliance);
 				$newleader = $newowner['id'];
-				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 				$this->updateMax($newleader);
@@ -399,7 +399,7 @@
 				if($database->isAllianceOwner($session->uid)){
 				$newowner = $database->getAllMember2($session->alliance);
 				$newleader = $newowner['id'];
-				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".$session->alliance."";
+				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
 				$this->updateMax($newleader);
@@ -471,7 +471,7 @@
 			$max = $attri;
 			}
 			}
-			$q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $leader";
+			$q = "UPDATE ".TB_PREFIX."alidata set max = ".(int) $max." where leader = ".(int) $leader;
 			$database->query($q);
 			}
 		}
