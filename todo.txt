@@ -20,3 +20,4 @@
 - pagination in attacks goes to "All" reports instead of staying in "Attacks"
 - quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
 - disallow kicking yourself from alliance or provide a confirmation dialog and correct redirect
+- sending messages to players via Admin doesn't work
