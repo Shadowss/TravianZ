@@ -229,27 +229,29 @@ class MYSQLi_DB {
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function getVrefField($ref, $field){
+	function getVrefField($ref, $field) {
+	    list($ref, $field) = $this->escape_input($ref, $field);
 			$q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = '$ref'";
 			$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
 			$dbarray = mysqli_fetch_array($result);
 			return $dbarray[$field];
 	}
 
-	function getVrefCapital($ref){
+	function getVrefCapital($ref) {
+	    list($ref) = $this->escape_input($ref);
 		$q = "SELECT * FROM " . TB_PREFIX . "vdata where owner = '$ref' and capital = 1";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray;
 	}
 
-	function getStarvation(){
+	function getStarvation() {
 			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv != 0 and owner != 3";
 			$result = mysqli_query($this->dblink,$q);
 			return $this->mysqli_fetch_all($result);
 	}
 
-	function getUnstarvation(){
+	function getUnstarvation() {
       			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv = 0 and starvupdate = 0";
       			$result = mysqli_query($this->dblink,$q);
       			return $this->mysqli_fetch_all($result);
@@ -591,7 +593,8 @@ class MYSQLi_DB {
 		return $row[0];
 	}
 
-	 public function countOasisTroops($vref){
+	 public function countOasisTroops($vref) {
+	     list($vref) = $this->escape_input($vref);
 		//count oasis troops: $troops_o
 	$troops_o=0;
 	$o_unit2=mysqli_query($this->dblink,"select * from ".TB_PREFIX."units where `vref`='".$vref."'");
@@ -1781,7 +1784,8 @@ class MYSQLi_DB {
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function getAllianceDipProfile($aid, $type){
+	function getAllianceDipProfile($aid, $type) {
+	    list($aid, $type) = $this->escape_input($aid, $type);
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '$type' AND accepted = '1' OR alli2 = '$aid' AND type = '$type' AND accepted = '1'";
 		$array = $this->query_return($q);
 		$text = "";
@@ -1800,7 +1804,8 @@ class MYSQLi_DB {
 		return $text;
 	}
 
-	function getAllianceWar($aid){
+	function getAllianceWar($aid) {
+	    list($aid) = $this->escape_input($aid);
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
 		$array = $this->query_return($q);
         $text = "";
@@ -1819,13 +1824,15 @@ class MYSQLi_DB {
 		return $text;
 	}
 
-	function getAllianceAlly($aid, $type){
+	function getAllianceAlly($aid, $type) {
+	    list($aid, $type) = $this->escape_input($aid, $type);
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE (alli1 = '$aid' or alli2 = '$aid') AND (type = '$type' AND accepted = '1')";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function getAllianceWar2($aid){
+	function getAllianceWar2($aid) {
+	    list($aid) = $this->escape_input($aid);
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
@@ -2941,13 +2948,15 @@ class MYSQLi_DB {
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function getUserByTribe($tribe){
+	function getUserByTribe($tribe) {
+	    list($tribe) = $this->escape_input($tribe);
 		$q = "SELECT * FROM " . TB_PREFIX . "users where tribe = $tribe";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function getUserByAlliance($aid){
+	function getUserByAlliance($aid) {
+	    list($aid) = $this->escape_input($aid);
 		$q = "SELECT * FROM " . TB_PREFIX . "users where alliance = $aid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
@@ -3039,7 +3048,8 @@ class MYSQLi_DB {
 		}
 	}
 
-	function getHeroField($uid,$field){
+	function getHeroField($uid,$field) {
+	    list($uid,$field) = $this->escape_input($uid,$field);
 			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid";
 			$result = mysqli_query($this->dblink,$q);
 			return $this->mysqli_fetch_all($result);
@@ -3240,7 +3250,8 @@ class MYSQLi_DB {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function modifyUnit($vref, $array_unit, $array_amt, $array_mode){
+	function modifyUnit($vref, $array_unit, $array_amt, $array_mode) {
+	    list($vref, $array_unit, $array_amt, $array_mode) = $this->escape_input($vref, $array_unit, $array_amt, $array_modes);
 		$i = -1;
 		$units='';
 		$number = count($array_unit);
@@ -3973,24 +3984,28 @@ class MYSQLi_DB {
 		return mysqli_fetch_array($result);
 	}
 
-	function getMovementById($id){
+	function getMovementById($id) {
+	    list($id) = $this->escape_input($id);
 		$q = "SELECT * FROM ".TB_PREFIX."movement WHERE moveid = ".$id."";
 		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
 		return $array;
 	}
 
-	function getLinks($id){
+	function getLinks($id) {
+	    list($id) = $this->escape_input($id);
 		$q = 'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . $id . ' ORDER BY `pos` ASC';
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function removeLinks($id,$uid){
+	function removeLinks($id,$uid) {
+	    list($id,$uid) = $this->escape_input($id,$uid);
 		$q = "DELETE FROM " . TB_PREFIX . "links WHERE `id` = ".$id." and `userid` = ".$uid."";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getVilFarmlist($wref){
+	function getVilFarmlist($wref) {
+	    list($wref) = $this->escape_input($wref);
 		$q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE wref = ' . $wref . ' ORDER BY wref ASC';
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -4046,19 +4061,22 @@ class MYSQLi_DB {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getArrayMemberVillage($uid){
+	function getArrayMemberVillage($uid) {
+	    list($uid) = $this->escape_input($uid);
 		$q = 'SELECT a.wref, a.name, b.x, b.y from '.TB_PREFIX.'vdata AS a left join '.TB_PREFIX.'wdata AS b ON b.id = a.wref where owner = '.$uid.' order by capital DESC,pop DESC';
 		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
 		return $array;
 	}
 
-	function addPassword($uid, $npw, $cpw){
+	function addPassword($uid, $npw, $cpw) {
+	    list($uid, $npw, $cpw) = $this->escape_input($uid, $npw, $cpw);
 		$q = "REPLACE INTO `" . TB_PREFIX . "password`(uid, npw, cpw) VALUES ($uid, '$npw', '$cpw')";
 		mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
 	}
 
-	function resetPassword($uid, $cpw){
+	function resetPassword($uid, $cpw) {
+	    list($uid, $cpw) = $this->escape_input($uid, $cpw);
 		$q = "SELECT npw FROM `" . TB_PREFIX . "password` WHERE uid = $uid AND cpw = '$cpw' AND used = 0";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
 		$dbarray = mysqli_fetch_array($result);
@@ -4164,7 +4182,7 @@ class MYSQLi_DB {
 		$q = "SELECT * FROM " . TB_PREFIX . "general where shown = 1";
 		$result = $this->query_return($q);
 		$attack = 0;
-		foreach($result as $general){
+		foreach($result as $general) {
 		if(date("j. M",$time) == date("j. M",$general['time'])){
 		$attack += 1;
 		}
@@ -4301,19 +4319,22 @@ Function to vacation mode - by advocaite
 References:
 *****************************************/
 
-   function setvacmode($uid,$days){
+   function setvacmode($uid,$days) {
+     list($uid,$days) = $this->escape_input($uid,$days);
      $days1 =60*60*24*$days;
      $time =time()+$days1;
      $q ="UPDATE ".TB_PREFIX."users SET vac_mode = '1' , vac_time=".$time." WHERE id=".$uid."";
 	 $result =mysqli_query($this->dblink,$q);
      }
 	 
-   function removevacationmode($uid){
+   function removevacationmode($uid) {
+       list($uid) = $this->escape_input($uid);
      $q ="UPDATE ".TB_PREFIX."users SET vac_mode = '0' , vac_time='0' WHERE id=".$uid."";
      $result =mysqli_query($this->dblink,$q);
      }
 
-   function getvacmodexy($wref){
+   function getvacmodexy($wref) {
+       list($wref) = $this->escape_input($wref);
 	$q = "SELECT id,oasistype,occupied FROM " . TB_PREFIX . "wdata where id = $wref";
      $result = mysqli_query($this->dblink,$q);
      $dbarray = mysqli_fetch_array($result);
@@ -4516,7 +4537,8 @@ References:
 	Made by: Shadow
 	***************************/
 
-       function checkAttack($wref, $toWref){
+       function checkAttack($wref, $toWref) {
+           list($wref, $toWref) = $this->escape_input($wref, $toWref);
             	$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and (" . TB_PREFIX . "attacks.attack_type = 3 or " . TB_PREFIX . "attacks.attack_type = 4) ORDER BY endtime ASC";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
