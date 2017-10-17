@@ -13,6 +13,7 @@ class Logging {
 
 	public function addIllegal($uid,$ref,$type) {
 		global $database;
+		list($uid,$ref,$type) = $database->escape_input($uid,$ref,$type);
 		if(LOG_ILLEGAL) {
 			$log = "Attempted to ";
 			switch($type) {
@@ -27,6 +28,7 @@ class Logging {
 
 	public function addLoginLog($id,$ip) {
 		global $database;
+		list($id,$ip) = $database->escape_input($id,$ip);
 		if(LOG_LOGIN) {
 			$q = "Insert into ".TB_PREFIX."login_log values (0,$id,'$ip')";
 			$database->query($q);
@@ -35,6 +37,7 @@ class Logging {
 
 	public function addBuildLog($wid,$building,$level,$type) {
 		global $database;
+		list($wid,$building,$level,$type) = $database->escape_input($wid,$building,$level,$type);
 		if(LOG_BUILD) {
 			if($type) {
 				$log = "Start Construction of ";
@@ -50,6 +53,7 @@ class Logging {
 
 	public function addTechLog($wid,$tech,$level) {
 		global $database;
+		list($wid,$tech,$level) = $database->escape_input($wid,$tech,$level);
 		if(LOG_TECH) {
 			$log = "Upgrading of tech ".$tech." to level ".$level;
 			$q = "Insert into ".TB_PREFIX."tech_log values (0,$wid,'$log')";
@@ -59,6 +63,7 @@ class Logging {
 
 	public function goldFinLog($wid) {
 		global $database;
+		list($wid) = $database->escape_input($wid);
 		if(LOG_GOLD_FIN) {
 			$log = "Finish construction and research with gold";
 			$q = "Insert into ".TB_PREFIX."gold_fin_log values (0,$wid,'$log')";
@@ -72,6 +77,7 @@ class Logging {
 
 	public function addMarketLog($wid,$type,$data) {
 		global $database;
+		list($wid,$type,$data) = $database->escape_input($wid,$type,$data);
 		if(LOG_MARKET) {
 			if($type == 1) {
 				$log = "Sent ".$data[0].",".$data[1].",".$data[2].",".$data[3]." to village ".$data[4];
@@ -94,6 +100,7 @@ class Logging {
 
 	public function debug($time,$uid,$debug_info) {
 		global $database;
+		list($time,$uid,$debug_info) = $database->escape_input($time,$uid,$debug_info);
 
 		//$debugFile = "/tmp/debug";
 		//$fh = fopen($debugFile, 'a') or die('No debug file');
