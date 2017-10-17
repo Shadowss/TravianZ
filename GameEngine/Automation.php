@@ -1028,15 +1028,15 @@ class Automation {
 			}
 		global $bid23,$bid34,$database,$battle,$village,$technology,$logging,$generator,$session,$units;
 		$reload=false;
-		 $ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
-			fclose($ourFileHandle);
+		//$ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
+		//fclose($ourFileHandle);
 		$time = time();
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type != '2' and endtime < $time ORDER BY endtime ASC";
 		$dataarray = $database->query_return($q);
 		$totalattackdead = 0;
 		$data_num = 0;
 		
-		if ($dataarray) {
+		if ($dataarray && count($dataarray)) {
 		foreach($dataarray as $data) {
 			//set base things
 			//$battle->resolveConflict($data);
@@ -1404,7 +1404,8 @@ class Automation {
                     //to battle.php
                     //fix by ronix
 		    //MUST TO BE FIX : You need to filter these values
- 		    filter_input_array($battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby));
+ 		    //filter_input_array($battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby));
+                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby);
  		
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -3187,7 +3188,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
             $dataarray = $database->query_return($q);
             
-            if ($dataarray) {
+            if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
                 $isoasis = $database->isVillageOases($data['to']);
                 if($isoasis == 0){
@@ -3325,7 +3326,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '4' and endtime < $time";
 		$dataarray = $database->query_return($q);
 
-		if ($dataarray) {
+		if ($dataarray && count($dataarray)) {
 		foreach($dataarray as $data) {
 
 		$tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
@@ -3389,7 +3390,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 
 		$q = "SELECT * FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
 		$dataarray = $database->query_return($q);
-		if ($dataarray) {
+		if ($dataarray && count($dataarray)) {
 		foreach($dataarray as $data) {
 
 		$tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
