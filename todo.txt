@@ -14,4 +14,8 @@
 - disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)
 - when editing Additional Information for user and adjusting gold, sometimes the first time will not record the new gold amount
 - update password hashes (I believe they are md5 only now)
-- make mass messages work with apostrophes and quotes
+- allow to redirect Support messages to admin's nickname (for when there's only a single admin and doesn't like switching between Support and themselves) 
+- disallow Support to play (single cookie for Admin and the game means support gets no village and lots of warnings when they switch to game now)
+- make messages work with apostrophes
+- resetting res bonus in admin actually says that bonus was given after OK is pressed
+- pagination in attacks goes to "All" reports instead of staying in "Attacks"

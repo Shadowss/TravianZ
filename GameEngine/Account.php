@@ -139,7 +139,7 @@ class Account {
 		if(START_DATE < date('m/d/Y') or START_DATE == date('m/d/Y') && START_TIME <= date('H:i'))
 	   {
 			global $database;
-			$q = "SELECT * FROM ".TB_PREFIX."activate where act = '".$_POST['id']."'";
+			$q = "SELECT * FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";
 			$result = mysqli_query($GLOBALS['link'],$q);
 			$dbarray = mysqli_fetch_array($result);
 			if($dbarray['act'] == $_POST['id']) {
@@ -164,7 +164,7 @@ class Account {
 
 	private function Unreg() {
 		global $database;
-		$q = "SELECT * FROM ".TB_PREFIX."activate where id = '".$_POST['id']."'";
+		$q = "SELECT * FROM ".TB_PREFIX."activate where id = '".$database->escape($_POST['id'])."'";
 		$result = mysqli_query($GLOBALS['link'],$q);
 		$dbarray = mysqli_fetch_array($result);
 		if(md5($_POST['pw']) == $dbarray['password']) {

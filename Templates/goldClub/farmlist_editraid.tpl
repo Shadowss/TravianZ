@@ -79,7 +79,7 @@ if($FLData['owner'] == $session->uid){
 		<div class="boxes boxesColor gray"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents cf">
 
 <?php
-$getlid = $database->getRaidList($_GET["eid"]);
+$getlid = $database->getRaidList($database->escape($_GET["eid"]));
 $lid2 = $getlid['lid'];
 ?>
 		<input type="hidden" name="action" value="editSlot">

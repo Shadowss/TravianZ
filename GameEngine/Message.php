@@ -208,6 +208,7 @@ class Message {
 
 	private function removeMessage($post) {
 		global $database,$session;
+		$post = $database->escape($post);
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
 			$message1 = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "mdata where id = ".$post['n' . $i]."");

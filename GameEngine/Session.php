@@ -84,7 +84,7 @@ class Session {
 				global $database, $generator, $logging;
 				$this->logged_in = true;
 				$_SESSION['sessid'] = $generator->generateRandID();
-				$_SESSION['username'] = $user;
+				$_SESSION['username'] = $database->escape($user);
 				$_SESSION['checker'] = $generator->generateRandStr(3);
 				$_SESSION['mchecker'] = $generator->generateRandStr(5);
 				$_SESSION['qst'] = $database->getUserField($_SESSION['username'], "quest", 1);

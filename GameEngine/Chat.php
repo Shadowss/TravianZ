@@ -354,6 +354,7 @@ if (!isset($SAJAX_INCLUDED)) {
 
 		//$data = explode("|",$data);
 		if (is_array($data)){$msg = htmlspecialchars($data[1]);}else{$msg = htmlspecialchars($data);};
+		$msg = $database->escape($msg);
 //		$msg=htmlspecialchars($msg);
 		$name = addslashes($session->username);
 

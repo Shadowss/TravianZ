@@ -1,3 +1,4 @@
+
 <?php
 
 #################################################################################
@@ -26,12 +27,34 @@ class MYSQLi_DB {
 		mysqli_select_db($this->dblink, SQL_DB);
 		mysqli_query($this->dblink,"SET NAMES 'UTF8'"); 
 	}
+
+	function escape($value) {
+	    return mysqli_real_escape_string($this->dblink, $value);
+	}
+	
+	function escape_input() {
+	    $numargs = func_num_args();
+	    $arg_list = func_get_args();
+	    $ret = [];
+
+	    for ($i = 0; $i < $numargs; $i++) {
+	        if (!is_object($arg_list[$i])) {
+	           $res[] = mysqli_real_escape_string($this->dblink, $arg_list[$i]);
+	        } else {
+	           $res[] = $arg_list[$i];
+	        }
+	    }
+	    
+	    return $res;
+	}
 	
 	function return_link() {
 		return $this->dblink;
 	}
 
 	function register($username, $password, $email, $tribe, $act) {
+        list($username, $password, $email, $tribe, $act) = $this->escape_input($username, $password, $email, $tribe, $act);
+
 		$time = time();
         	$stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
 		if($stime > time()){
@@ -48,6 +71,8 @@ class MYSQLi_DB {
 	}
 
 	function activate($username, $password, $email, $tribe, $locate, $act, $act2) {
+        list($username, $password, $email, $tribe, $locate, $act, $act2) = $this->escape_input($username, $password, $email, $tribe, $locate, $act, $act2);
+
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "activate (username,password,access,email,tribe,timestamp,location,act,act2) VALUES ('$username', '$password', " . USER . ", '$email', $tribe, $time, $locate, '$act', '$act2')";
 				if(mysqli_query($this->dblink,$q)) {
@@ -58,14 +83,20 @@ class MYSQLi_DB {
 	}
 
 	function unreg($username) {
+        list($username) = $this->escape_input($username);
+
 		$q = "DELETE from " . TB_PREFIX . "activate where username = '$username'";
 		return mysqli_query($this->dblink,$q);
 	}
 	function deleteReinf($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE from " . TB_PREFIX . "enforcement where id = '$id'";
 		mysqli_query($this->dblink,$q);
 	}
 	function updateResource($vid, $what, $number) {
+        list($vid, $what, $number) = $this->escape_input($vid, $what, $number);
+
 
 		$q = "UPDATE " . TB_PREFIX . "vdata set " . $what . "=" . $number . " where wref = $vid";
 		$result = mysqli_query($this->dblink,$q);
@@ -73,6 +104,7 @@ class MYSQLi_DB {
 	}
 
 	function checkExist($ref, $mode) {
+        list($ref, $mode) = $this->escape_input($ref, $mode);
 
 		if(!$mode) {
 			$q = "SELECT username FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
@@ -88,6 +120,7 @@ class MYSQLi_DB {
 	}
 
 	function checkExist_activate($ref, $mode) {
+        list($ref, $mode) = $this->escape_input($ref, $mode);
 
 		if(!$mode) {
 			$q = "SELECT username FROM " . TB_PREFIX . "activate where username = '$ref' LIMIT 1";
@@ -103,6 +136,8 @@ class MYSQLi_DB {
 	}
 
 	public function hasBeginnerProtection($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT u.protect FROM ".TB_PREFIX."users u,".TB_PREFIX."vdata v WHERE u.id=v.owner AND v.wref=".$vid;
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -118,6 +153,8 @@ class MYSQLi_DB {
 	}
 
 	function updateUserField($ref, $field, $value, $switch) {
+        list($ref, $field, $value, $switch) = $this->escape_input($ref, $field, $value, $switch);
+
 		if(!$switch) {
 			$q = "UPDATE " . TB_PREFIX . "users set $field = '$value' where username = '$ref'";
 		} else {
@@ -127,12 +164,16 @@ class MYSQLi_DB {
 	}
 
 	function getSitee($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT id from " . TB_PREFIX . "users where sit1 = $uid or sit2 = $uid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getVilWref($x, $y) {
+        list($x, $y) = $this->escape_input($x, $y);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "wdata where x = $x AND y = $y";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -140,6 +181,8 @@ class MYSQLi_DB {
 	}
 	
 	function caststruc($user) {
+        list($user) = $this->escape_input($user);
+
 		//loop search village user
 		$query = mysqli_query($this->dblink,"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
 		while($villaggi_array = mysqli_fetch_array($query))
@@ -151,6 +194,8 @@ class MYSQLi_DB {
 	}
 	
 	function removeMeSit($uid, $uid2) {
+        list($uid, $uid2) = $this->escape_input($uid, $uid2);
+
 		$q = "UPDATE " . TB_PREFIX . "users set sit1 = 0 where id = $uid and sit1 = $uid2";
 		mysqli_query($this->dblink,$q);
 		$q2 = "UPDATE " . TB_PREFIX . "users set sit2 = 0 where id = $uid and sit2 = $uid2";
@@ -158,6 +203,8 @@ class MYSQLi_DB {
 	}
 
     function getUserField($ref, $field, $mode) {
+        list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
+
         if(!$mode) {
             $q = "SELECT $field FROM " . TB_PREFIX . "users where id = '$ref'";
         } else {
@@ -173,6 +220,8 @@ class MYSQLi_DB {
     }
 
 	function getInvitedUser($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "users where invited = $uid order by regtime desc";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
@@ -205,6 +254,8 @@ class MYSQLi_DB {
   	} 
 
 	function getActivateField($ref, $field, $mode) {
+        list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
+
 		if(!$mode) {
 			$q = "SELECT $field FROM " . TB_PREFIX . "activate where id = '$ref'";
 		} else {
@@ -216,6 +267,8 @@ class MYSQLi_DB {
 	}
 
 	function login($username, $password) {
+        list($username, $password) = $this->escape_input($username, $password);
+
 		$q = "SELECT password,sessid FROM " . TB_PREFIX . "users where username = '$username'";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -227,6 +280,8 @@ class MYSQLi_DB {
 	}
 
 	function checkActivate($act) {
+        list($act) = $this->escape_input($act);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "activate where act = '$act'";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -235,6 +290,8 @@ class MYSQLi_DB {
 	}
 
 	function sitterLogin($username, $password) {
+        list($username, $password) = $this->escape_input($username, $password);
+
 		$q = "SELECT sit1,sit2 FROM " . TB_PREFIX . "users where username = '$username' and access != " . BANNED;
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -260,6 +317,8 @@ class MYSQLi_DB {
 	}
 
 	function setDeleting($uid, $mode) {
+        list($uid, $mode) = $this->escape_input($uid, $mode);
+
 		$time = time() + 72 * 3600;
 		if(!$mode) {
 			$q = "INSERT into " . TB_PREFIX . "deleting values ($uid,$time)";
@@ -270,6 +329,8 @@ class MYSQLi_DB {
 	}
 
 	function isDeleting($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT timestamp from " . TB_PREFIX . "deleting where uid = $uid";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -277,6 +338,8 @@ class MYSQLi_DB {
 	}
 
 	function modifyGold($userid, $amt, $mode) {
+        list($userid, $amt, $mode) = $this->escape_input($userid, $amt, $mode);
+
 		if(!$mode) {
 			$q = "UPDATE " . TB_PREFIX . "users set gold = gold - $amt where id = $userid";
 		} else {
@@ -293,6 +356,8 @@ class MYSQLi_DB {
 	*****************************************/
 
 	function getUserArray($ref, $mode) {
+        list($ref, $mode) = $this->escape_input($ref, $mode);
+
 		if(!$mode) {
 			$q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref'";
 		} else {
@@ -303,6 +368,8 @@ class MYSQLi_DB {
 	}
 
 	function activeModify($username, $mode) {
+        list($username, $mode) = $this->escape_input($username, $mode);
+
 		$time = time();
 		if(!$mode) {
 			$q = "INSERT into " . TB_PREFIX . "active VALUES ('$username',$time)";
@@ -313,6 +380,8 @@ class MYSQLi_DB {
 	}
 
 	function addActiveUser($username, $time) {
+        list($username, $time) = $this->escape_input($username, $time);
+
 		$q = "REPLACE into " . TB_PREFIX . "active values ('$username',$time)";
 		if(mysqli_query($this->dblink,$q)) {
 			return true;
@@ -322,6 +391,8 @@ class MYSQLi_DB {
 	}
 
 	function updateActiveUser($username, $time) {
+        list($username, $time) = $this->escape_input($username, $time);
+
 		$q = "REPLACE into " . TB_PREFIX . "active values ('$username',$time)";
 		$q2 = "UPDATE " . TB_PREFIX . "users set timestamp = $time where username = '$username'";
 		$exec1 = mysqli_query($this->dblink,$q);
@@ -334,6 +405,8 @@ class MYSQLi_DB {
 	}
 
 	function checkactiveSession($username, $sessid) {
+        list($username, $sessid) = $this->escape_input($username, $sessid);
+
 		$q = "SELECT username FROM " . TB_PREFIX . "users where username = '$username' and sessid = '$sessid' LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result) != 0) {
@@ -344,16 +417,22 @@ class MYSQLi_DB {
 	}
 
 	function submitProfile($uid, $gender, $location, $birthday, $des1, $des2) {
+        list($uid, $gender, $location, $birthday, $des1, $des2) = $this->escape_input($uid, $gender, $location, $birthday, $des1, $des2);
+
 		$q = "UPDATE " . TB_PREFIX . "users set gender = $gender, location = '$location', birthday = '$birthday', desc1 = '$des1', desc2 = '$des2' where id = $uid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function gpack($uid, $gpack) {
+        list($uid, $gpack) = $this->escape_input($uid, $gpack);
+
 		$q = "UPDATE " . TB_PREFIX . "users set gpack = '$gpack' where id = $uid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function GetOnline($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT sit FROM " . TB_PREFIX . "online where uid = $uid";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -361,6 +440,8 @@ class MYSQLi_DB {
 	}
 
 	function UpdateOnline($mode, $name = "", $time = "", $uid = 0) {
+        list($mode, $name, $time, $uid) = $this->escape_input($mode, $name, $time, $uid);
+
 		global $session;
 		if($mode == "login") {
 			$q = "INSERT IGNORE INTO " . TB_PREFIX . "online (name, uid, time, sit) VALUES ('$name', '$uid', " . time() . ", 0)";
@@ -375,6 +456,8 @@ class MYSQLi_DB {
 	}
 	
 	function generateBase($sector, $mode=1) {
+        list($sector, $mode) = $this->escape_input($sector, $mode);
+
 	// don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 	@set_time_limit(0);
 	$num_rows = 0;
@@ -424,11 +507,15 @@ class MYSQLi_DB {
     }
 
 	function setFieldTaken($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "UPDATE " . TB_PREFIX . "wdata set occupied = 1 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addVillage($wid, $uid, $username, $capital) {
+        list($wid, $uid, $username, $capital) = $this->escape_input($wid, $uid, $username, $capital);
+
 		$total = count($this->getVillagesID($uid));
 		if($total >= 1) {
 			$vname = $username . "\'s village " . ($total + 1);
@@ -441,6 +528,8 @@ class MYSQLi_DB {
 	}
 
 	function addResourceFields($vid, $type) {
+        list($vid, $type) = $this->escape_input($vid, $type);
+
 		switch($type) {
 			case 1:
 				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
@@ -482,6 +571,8 @@ class MYSQLi_DB {
 		return mysqli_query($this->dblink,$q);
 	}
     function isVillageOases($wref) {
+        list($wref) = $this->escape_input($wref);
+
         $q = "SELECT id, oasistype FROM " . TB_PREFIX . "wdata where id = $wref";
         $result = mysqli_query($this->dblink,$q);
         if($result){
@@ -491,6 +582,8 @@ class MYSQLi_DB {
     }
 
 	public function VillageOasisCount($vref) {
+        list($vref) = $this->escape_input($vref);
+
 		$q = "SELECT count(*) FROM `".TB_PREFIX."odata` WHERE conqured=$vref";
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_row($result);
@@ -522,6 +615,8 @@ class MYSQLi_DB {
 	}
 
     public function canConquerOasis($vref,$wref) {
+        list($vref,$wref) = $this->escape_input($vref,$wref);
+
         $AttackerFields = $this->getResourceLevel($vref);
         for($i=19;$i<=38;$i++) {
             if($AttackerFields['f'.$i.'t'] == 37) { $HeroMansionLevel = $AttackerFields['f'.$i]; }
@@ -553,6 +648,8 @@ class MYSQLi_DB {
     }
 
 	public function conquerOasis($vref,$wref) {
+        list($vref,$wref) = $this->escape_input($vref,$wref);
+
 		$vinfo = $this->getVillage($vref);
 		$uid = $vinfo['owner'];
 		$q = "UPDATE `".TB_PREFIX."odata` SET conqured=$vref,loyalty=100,lastupdated=".time().",owner=$uid,name='Occupied Oasis' WHERE wref=$wref";
@@ -560,6 +657,8 @@ class MYSQLi_DB {
 	}
 
     public function modifyOasisLoyalty($wref) {
+        list($wref) = $this->escape_input($wref);
+
         if($this->isVillageOases($wref) != 0) {
             $OasisInfo = $this->getOasisInfo($wref);
             if($OasisInfo['conqured'] != 0) {
@@ -583,6 +682,8 @@ class MYSQLi_DB {
 	}
 
 	function populateOasisUnits($wid, $high) {
+        list($wid, $high) = $this->escape_input($wid, $high);
+
 		$basearray = $this->getOasisInfo($wid);
 		if($high == 0){
 		  $max = rand(15,30);
@@ -700,6 +801,8 @@ class MYSQLi_DB {
 	}
 
 	function removeOases($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE wref = $wref";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -710,6 +813,8 @@ class MYSQLi_DB {
 	References: Village ID
 	***************************/
 	function getVillageType($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT id, fieldtype FROM " . TB_PREFIX . "wdata where id = $wref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -723,6 +828,8 @@ class MYSQLi_DB {
 	References: Village ID
 	*****************************************/
 	function getVillageState($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT oasistype,occupied FROM " . TB_PREFIX . "wdata where id = $wref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -734,12 +841,16 @@ class MYSQLi_DB {
 	}
 
 	function getProfileVillages($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT capital,wref,name,pop,created from " . TB_PREFIX . "vdata where owner = $uid order by pop desc";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getProfileMedal($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT id,categorie,plaats,week,img,points from " . TB_PREFIX . "medal where userid = $uid and del = 0 order by id desc";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
@@ -747,6 +858,8 @@ class MYSQLi_DB {
 	}
 
 	function getProfileMedalAlly($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT id,categorie,plaats,week,img,points from " . TB_PREFIX . "allimedal where allyid = $uid and del = 0 order by id desc";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
@@ -754,6 +867,8 @@ class MYSQLi_DB {
 	}
 
 	function getVillageID($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT wref FROM " . TB_PREFIX . "vdata WHERE owner = $uid";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -762,6 +877,8 @@ class MYSQLi_DB {
 
 
 	function getVillagesID($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT wref from " . TB_PREFIX . "vdata where owner = $uid order by capital DESC,pop DESC";
 		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
@@ -773,6 +890,8 @@ class MYSQLi_DB {
 	}
 	
 	function getVillagesID2($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT wref from " . TB_PREFIX . "vdata where owner = $uid order by capital DESC,pop DESC";
 		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
@@ -780,18 +899,24 @@ class MYSQLi_DB {
 	}
 
 	function getVillage($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "vdata where wref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	public function getVillageBattleData($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT u.id,u.tribe,v.capital,f.f40 AS wall FROM ".TB_PREFIX."users u,".TB_PREFIX."fdata f,".TB_PREFIX."vdata v WHERE u.id=v.owner AND f.vref=v.wref AND v.wref=".$vid;
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	public function getPopulation($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT sum(pop) AS pop FROM ".TB_PREFIX."vdata WHERE owner=".$uid;
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -799,36 +924,48 @@ class MYSQLi_DB {
 	}
 
 	function getOasisV($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function getMInfo($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "vdata ON " . TB_PREFIX . "vdata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function getOMInfo($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "odata ON " . TB_PREFIX . "odata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function getOasis($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getOasisInfo($wid) {
+        list($wid) = $this->escape_input($wid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = $wid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
 	}
 
     function getVillageField($ref, $field) {
+        list($ref, $field) = $this->escape_input($ref, $field);
+
         $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
         $result = mysqli_query($this->dblink,$q);
         if($result){
@@ -840,6 +977,8 @@ class MYSQLi_DB {
     }
 
 	function getOasisField($ref, $field) {
+        list($ref, $field) = $this->escape_input($ref, $field);
+
 		$q = "SELECT $field FROM " . TB_PREFIX . "odata where wref = $ref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -847,16 +986,22 @@ class MYSQLi_DB {
 	}
 
 	function setVillageField($ref, $field, $value) {
+        list($ref, $field, $value) = $this->escape_input($ref, $field, $value);
+
 		$q = "UPDATE " . TB_PREFIX . "vdata set $field = '$value' where wref = $ref";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function setVillageLevel($ref, $field, $value) {
+        list($ref, $field, $value) = $this->escape_input($ref, $field, $value);
+
 		$q = "UPDATE " . TB_PREFIX . "fdata set " . $field . " = '" . $value . "' where vref = " . $ref . "";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getResourceLevel($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * from " . TB_PREFIX . "fdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
@@ -873,13 +1018,18 @@ class MYSQLi_DB {
         	$q = "SELECT id,wid,log from " . TB_PREFIX . "market_log where id != 0 ORDER BY id ASC";
         	$result = mysqli_query($this->dblink,$q);
         	return $this->mysqli_fetch_all($result);
-        }
+	}
+
 	function getMarketLogVillage($village) {
+        list($village) = $this->escape_input($village);
+
 		$q = "SELECT wref,owner,name from " . TB_PREFIX . "vdata where wref =$village ";
         	$result = mysqli_query($this->dblink,$q);
         	return $this->mysqli_fetch_all($result);
         }
 	function getMarketLogUsers($id_user) {
+        list($id_user) = $this->escape_input($id_user);
+
         	$q = "SELECT id,username from " . TB_PREFIX . "users where id =$id_user ";
         	$result = mysqli_query($this->dblink,$q);
         	return $this->mysqli_fetch_all($result);
@@ -887,6 +1037,8 @@ class MYSQLi_DB {
 	//end fix
 
 	function getCoor($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		if ($wref !=""){
 		$q = "SELECT x,y FROM " . TB_PREFIX . "wdata where id = $wref";
 		$result = mysqli_query($this->dblink,$q);
@@ -895,6 +1047,8 @@ class MYSQLi_DB {
 	}
 
 	function CheckForum($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -905,6 +1059,8 @@ class MYSQLi_DB {
 	}
 
 	function CountCat($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT count(id) FROM " . TB_PREFIX . "forum_topic where cat = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_row($result);
@@ -912,12 +1068,16 @@ class MYSQLi_DB {
 	}
 
 	function LastTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id' order by post_date";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function CheckLastTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -928,6 +1088,8 @@ class MYSQLi_DB {
 	}
 
 	function CheckLastPost($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_post where topic = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -938,12 +1100,16 @@ class MYSQLi_DB {
 	}
 
 	function LastPost($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_post where topic = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function CountTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT count(id) FROM " . TB_PREFIX . "forum_post where owner = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_row($result);
@@ -955,6 +1121,8 @@ class MYSQLi_DB {
 	}
 
 	function CountPost($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT count(id) FROM " . TB_PREFIX . "forum_post where topic = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_row($result);
@@ -962,18 +1130,24 @@ class MYSQLi_DB {
 	}
 
 	function ForumCat($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' ORDER BY id";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function ForumCatEdit($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_cat where id = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function ForumCatAlliance($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT alliance from " . TB_PREFIX . "forum_cat where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -981,6 +1155,8 @@ class MYSQLi_DB {
 	}
 
 	function ForumCatName($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT forum_name from " . TB_PREFIX . "forum_cat where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -988,6 +1164,8 @@ class MYSQLi_DB {
 	}
 
 	function CheckCatTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -998,6 +1176,8 @@ class MYSQLi_DB {
 	}
 
 	function CheckResultEdit($alli) {
+        list($alli) = $this->escape_input($alli);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_edit where alliance = '$alli'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -1008,6 +1188,8 @@ class MYSQLi_DB {
 	}
 
 	function CheckCloseTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT close from " . TB_PREFIX . "forum_topic where id = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1015,6 +1197,8 @@ class MYSQLi_DB {
 	}
 
 	function CheckEditRes($alli) {
+        list($alli) = $this->escape_input($alli);
+
 		$q = "SELECT result from " . TB_PREFIX . "forum_edit where alliance = '$alli'";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1022,18 +1206,24 @@ class MYSQLi_DB {
 	}
 
 	function CreatResultEdit($alli, $result) {
+        list($alli, $result) = $this->escape_input($alli, $result);
+
 		$q = "INSERT into " . TB_PREFIX . "forum_edit values (0,'$alli','$result')";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
 
 	function UpdateResultEdit($alli, $result) {
+        list($alli, $result) = $this->escape_input($alli, $result);
+
 		$date = time();
 		$q = "UPDATE " . TB_PREFIX . "forum_edit set result = '$result' where alliance = '$alli'";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getVillageType2($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $wref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1041,6 +1231,8 @@ class MYSQLi_DB {
 	}
 
 	function getVillageType3($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $wref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1048,12 +1240,16 @@ class MYSQLi_DB {
 	}
 
 	function getFLData($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "farmlist where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function checkVilExist($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "vdata where wref = '$wref'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -1064,6 +1260,8 @@ class MYSQLi_DB {
 	}
 
 	function checkOasisExist($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = '$wref'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -1074,57 +1272,77 @@ class MYSQLi_DB {
 	}
 
 	function UpdateEditTopic($id, $title, $cat) {
+        list($id, $title, $cat) = $this->escape_input($id, $title, $cat);
+
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set title = '$title', cat = '$cat' where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function UpdateEditForum($id, $name, $des) {
+        list($id, $name, $des) = $this->escape_input($id, $name, $des);
+
 		$q = "UPDATE " . TB_PREFIX . "forum_cat set forum_name = '$name', forum_des = '$des' where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function StickTopic($id, $mode) {
+        list($id, $mode) = $this->escape_input($id, $mode);
+
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set stick = '$mode' where id = '$id'";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function ForumCatTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id' AND stick = '' ORDER BY post_date desc";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function ForumCatTopicStick($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id' AND stick = '1' ORDER BY post_date desc";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function ShowTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_topic where id = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function ShowPost($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_post where topic = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function ShowPostEdit($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "forum_post where id = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function CreatForum($owner, $alli, $name, $des, $area) {
+        list($owner, $alli, $name, $des, $area) = $this->escape_input($owner, $alli, $name, $des, $area);
+
 		$q = "INSERT into " . TB_PREFIX . "forum_cat values (0,'$owner','$alli','$name','$des','$area')";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
 
     function CreatTopic($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) {
+        list($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) = $this->escape_input($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report);
+
         $date = time();
         $q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post','$date','$date','$cat','$owner','$alli','$ends','','','$alliance','$player','$coor','$report')";
         mysqli_query($this->dblink,$q);
@@ -1136,17 +1354,23 @@ class MYSQLi_DB {
 	*************************/
 
   function createSurvey($topic, $title, $option1, $option2, $option3, $option4, $option5, $option6, $option7, $option8, $ends) {
+        list($topic, $title, $option1, $option2, $option3, $option4, $option5, $option6, $option7, $option8, $ends) = $this->escape_input($topic, $title, $option1, $option2, $option3, $option4, $option5, $option6, $option7, $option8, $ends);
+
         $q = "INSERT into " . TB_PREFIX . "forum_survey (topic,title,option1,option2,option3,option4,option5,option6,option7,option8,ends) values ('$topic','$title','$option1','$option2','$option3','$option4','$option5','$option6','$option7','$option8','$ends')";
         return mysqli_query($this->dblink,$q);
     }
 
   function getSurvey($topic) {
+        list($topic) = $this->escape_input($topic);
+
     $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
     $result = mysqli_query($this->dblink,$q);
     return mysqli_fetch_array($result);
   }
 
   function checkSurvey($topic) {
+        list($topic) = $this->escape_input($topic);
+
     $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
     $result = mysqli_query($this->dblink,$q);
     if(mysqli_num_rows($result)) {
@@ -1157,11 +1381,15 @@ class MYSQLi_DB {
     }
 
   function Vote($topic, $num, $text) {
+        list($topic, $num, $text) = $this->escape_input($topic, $num, $text);
+
     $q = "UPDATE " . TB_PREFIX . "forum_survey set vote".$num." = vote".$num." + 1, voted = '$text' where topic = ".$topic."";
     return mysqli_query($this->dblink,$q);
   }
 
   function checkVote($topic, $uid) {
+        list($topic, $uid) = $this->escape_input($topic, $uid);
+
         $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
     $result = mysqli_query($this->dblink,$q);
     $array = mysqli_fetch_array($result);
@@ -1174,6 +1402,8 @@ class MYSQLi_DB {
     }
 
   function getVoteSum($topic) {
+        list($topic) = $this->escape_input($topic);
+
         $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
     $result = mysqli_query($this->dblink,$q);
     $array = mysqli_fetch_array($result);
@@ -1190,6 +1420,8 @@ class MYSQLi_DB {
 	*************************/
 
     function CreatPost($post, $tids, $owner, $alliance, $player, $coor, $report) {
+        list($post, $tids, $owner, $alliance, $player, $coor, $report) = $this->escape_input($post, $tids, $owner, $alliance, $player, $coor, $report);
+
         $date = time();
         $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post','$tids','$owner','$date','$alliance','$player','$coor','$report')";
         mysqli_query($this->dblink,$q);
@@ -1197,27 +1429,37 @@ class MYSQLi_DB {
     }
 
 	function UpdatePostDate($id) {
+        list($id) = $this->escape_input($id);
+
 		$date = time();
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set post_date = '$date' where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
     function EditUpdateTopic($id, $post, $alliance, $player, $coor, $report) {
+        list($id, $post, $alliance, $player, $coor, $report) = $this->escape_input($id, $post, $alliance, $player, $coor, $report);
+
         $q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post', alliance0 = '$alliance', player0 = '$player', coor0 = '$coor', report0 = '$report' where id = $id";
         return mysqli_query($this->dblink,$q);
     }
 
     function EditUpdatePost($id, $post, $alliance, $player, $coor, $report) {
+        list($id, $post, $alliance, $player, $coor, $report) = $this->escape_input($id, $post, $alliance, $player, $coor, $report);
+
        	$q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post', alliance0 = '$alliance', player0 = '$player', coor0 = '$coor', report0 = '$report' where id = $id";
         return mysqli_query($this->dblink,$q);
     }
 
 	function LockTopic($id, $mode) {
+        list($id, $mode) = $this->escape_input($id, $mode);
+
 		$q = "UPDATE " . TB_PREFIX . "forum_topic set close = '$mode' where id = '$id'";
 		return mysqli_query($this->dblink,$q);
 	}
 
     function DeleteCat($id) {
+        list($id) = $this->escape_input($id);
+
         $qs = "DELETE from " . TB_PREFIX . "forum_cat where id = '$id'";
         $q = "DELETE from " . TB_PREFIX . "forum_topic where cat = '$id'";
         $q2="SELECT id from ".TB_PREFIX."forum_topic where cat ='$id'";
@@ -1233,11 +1475,15 @@ class MYSQLi_DB {
     }
 	
 	function DeleteSurvey($id) {
+        list($id) = $this->escape_input($id);
+
         $qs = "DELETE from " . TB_PREFIX . "forum_survey where topic = '$id'";
         return mysqli_query($this->dblink,$qs);
     }  
 
 	function DeleteTopic($id) {
+        list($id) = $this->escape_input($id);
+
 		$qs = "DELETE from " . TB_PREFIX . "forum_topic where id = '$id'";
 		//  $q = "DELETE from ".TB_PREFIX."forum_post where topic = '$id'";//
 		return mysqli_query($this->dblink,$qs); //
@@ -1245,11 +1491,15 @@ class MYSQLi_DB {
 	}
 
 	function DeletePost($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE from " . TB_PREFIX . "forum_post where id = '$id'";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getAllianceName($id) {
+        list($id) = $this->escape_input($id);
+
 		if (!$id) {
 			return '';
 		}
@@ -1261,6 +1511,8 @@ class MYSQLi_DB {
 	}
 
 	function getAlliancePermission($ref, $field, $mode) {
+        list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
+
 		if(!$mode) {
 			$q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where uid = '$ref'";
 		} else {
@@ -1272,17 +1524,23 @@ class MYSQLi_DB {
 	}
 
 	function getAlliance($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "alidata where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
 	}
 
 	function setAlliName($aid, $name, $tag) {
+        list($aid, $name, $tag) = $this->escape_input($aid, $name, $tag);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata set name = '$name', tag = '$tag' where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function isAllianceOwner($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * from " . TB_PREFIX . "alidata where leader = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -1293,6 +1551,8 @@ class MYSQLi_DB {
 	}
 
 	function aExist($ref, $type) {
+        list($ref, $type) = $this->escape_input($ref, $type);
+
 		$q = "SELECT $type FROM " . TB_PREFIX . "alidata where $type = '$ref'";
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
@@ -1303,11 +1563,15 @@ class MYSQLi_DB {
 	}
 
 	function modifyPoints($aid, $points, $amt) {
+        list($aid, $points, $amt) = $this->escape_input($aid, $points, $amt);
+
 		$q = "UPDATE " . TB_PREFIX . "users set $points = $points + $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function modifyPointsAlly($aid, $points, $amt) {
+        list($aid, $points, $amt) = $this->escape_input($aid, $points, $amt);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata set $points = $points + $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -1317,12 +1581,16 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function createAlliance($tag, $name, $uid, $max) {
+        list($tag, $name, $uid, $max) = $this->escape_input($tag, $name, $uid, $max);
+
 		$q = "INSERT into " . TB_PREFIX . "alidata values (0,'$name','$tag',$uid,0,0,0,'','',$max,'','','','','','','','','')";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
 	
 	function procAllyPop($aid) {
+        list($aid) = $this->escape_input($aid);
+
 		$ally = $this->getAlliance($aid);
 		$memberlist = $this->getAllMember($ally['id']);
 		$oldrank = 0;
@@ -1348,6 +1616,8 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function insertAlliNotice($aid, $notice) {
+        list($aid, $notice) = $this->escape_input($aid, $notice);
+
 		$time = time();
 		$q = "INSERT into " . TB_PREFIX . "ali_log values (0,'$aid','$notice',$time)";
 		mysqli_query($this->dblink,$q);
@@ -1359,8 +1629,10 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function deleteAlliance($aid) {
+        list($aid) = $this->escape_input($aid);
+
 		$result = mysqli_query($this->dblink,"SELECT * FROM " . TB_PREFIX . "users where alliance = $aid");
-		$num_rows = mysqli_num_rows($result);
+		$num_rows = mysqli_num_rows($this->dblink, $result);
 		if($num_rows == 0) {
 			$q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
 		}
@@ -1373,6 +1645,8 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function readAlliNotice($aid) {
+        list($aid) = $this->escape_input($aid);
+
 		$q = "SELECT * from " . TB_PREFIX . "ali_log where aid = $aid ORDER BY date DESC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
@@ -1383,6 +1657,8 @@ class MYSQLi_DB {
 	References: ID, notice, description
 	*****************************************/
 	function createAlliPermissions($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7, $opt8) {
+        list($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7, $opt8) = $this->escape_input($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7, $opt8);
+
 
 		$q = "INSERT into " . TB_PREFIX . "ali_permission values(0,'$uid','$aid','$rank','$opt1','$opt2','$opt3','$opt4','$opt5','$opt6','$opt7','$opt8')";
 		mysqli_query($this->dblink,$q);
@@ -1394,6 +1670,8 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function deleteAlliPermissions($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "DELETE from " . TB_PREFIX . "ali_permission where uid = '$uid'";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -1402,6 +1680,8 @@ class MYSQLi_DB {
 	References:
 	*****************************************/
 	function updateAlliPermissions($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7) {
+        list($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7) = $this->escape_input($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7);
+
 
 		$q = "UPDATE " . TB_PREFIX . "ali_permission SET rank = '$rank', opt1 = '$opt1', opt2 = '$opt2', opt3 = '$opt3', opt4 = '$opt4', opt5 = '$opt5', opt6 = '$opt6', opt7 = '$opt7' where uid = $uid && alliance =$aid";
 		return mysqli_query($this->dblink,$q);
@@ -1412,6 +1692,8 @@ class MYSQLi_DB {
 	References: ID, notice, description
 	*****************************************/
 	function getAlliPermissions($uid, $aid) {
+        list($uid, $aid) = $this->escape_input($uid, $aid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ali_permission where uid = $uid && alliance = $aid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
@@ -1422,23 +1704,31 @@ class MYSQLi_DB {
 	References: ID, notice, description
 	*****************************************/
 	function submitAlliProfile($aid, $notice, $desc) {
+        list($aid, $notice, $desc) = $this->escape_input($aid, $notice, $desc);
+
 
 		$q = "UPDATE " . TB_PREFIX . "alidata SET `notice` = '$notice', `desc` = '$desc' where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function diplomacyInviteAdd($alli1, $alli2, $type) {
+        list($alli1, $alli2, $type) = $this->escape_input($alli1, $alli2, $type);
+
 		$q = "INSERT INTO " . TB_PREFIX . "diplomacy (alli1,alli2,type,accepted) VALUES ($alli1,$alli2," . (int)intval($type) . ",0)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function diplomacyOwnOffers($session_alliance) {
+        list($session_alliance) = $this->escape_input($session_alliance);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $session_alliance AND accepted = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getAllianceID($name) {
+        list($name) = $this->escape_input($name);
+
 		$q = "SELECT id FROM " . TB_PREFIX . "alidata WHERE tag ='" . $this->RemoveXSS($name) . "'";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1446,33 +1736,45 @@ class MYSQLi_DB {
 	}
 
 	function getDiplomacy($aid) {
+        list($aid) = $this->escape_input($aid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE id = $aid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function diplomacyCancelOffer($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function diplomacyInviteAccept($id, $session_alliance) {
+        list($id, $session_alliance) = $this->escape_input($id, $session_alliance);
+
 		$q = "UPDATE " . TB_PREFIX . "diplomacy SET accepted = 1 WHERE id = $id AND alli2 = $session_alliance";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function diplomacyInviteDenied($id, $session_alliance) {
+        list($id, $session_alliance) = $this->escape_input($id, $session_alliance);
+
 		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $session_alliance";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function diplomacyInviteCheck($session_alliance) {
+        list($session_alliance) = $this->escape_input($session_alliance);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli2 = $session_alliance AND accepted = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function diplomacyInviteCheck2($ally1, $ally2) {
+        list($ally1, $ally2) = $this->escape_input($ally1, $ally2);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $ally1 AND alli2 = $ally2 accepted = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
@@ -1529,23 +1831,31 @@ class MYSQLi_DB {
 	}
 
 	function diplomacyExistingRelationships($session_alliance) {
+        list($session_alliance) = $this->escape_input($session_alliance);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli2 = $session_alliance AND accepted = 1";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function diplomacyExistingRelationships2($session_alliance) {
+        list($session_alliance) = $this->escape_input($session_alliance);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $session_alliance AND accepted = 1";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function diplomacyCancelExistingRelationship($id, $session_alliance) {
+        list($id, $session_alliance) = $this->escape_input($id, $session_alliance);
+
 		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $session_alliance OR id = $id AND alli1 = $session_alliance";
 		return mysqli_query($this->dblink,$q);
 	}
 	
 	function checkDiplomacyInviteAccept($aid, $type) {
+        list($aid, $type) = $this->escape_input($aid, $type);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $aid AND type = $type AND accepted = 1 OR alli2 = $aid AND type = $type AND accepted = 1";
 		$result = mysqli_query($this->dblink,$q);
 		if($type == 3){
@@ -1560,11 +1870,15 @@ class MYSQLi_DB {
 	}
 
 	function setAlliForumdblink($aid, $dblink) {
+        list($aid, $dblink) = $this->escape_input($aid, $dblink);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata SET `forumdblink` = '$dblink' WHERE id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getUserAlliance($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT " . TB_PREFIX . "alidata.tag from " . TB_PREFIX . "users join " . TB_PREFIX . "alidata where " . TB_PREFIX . "users.alliance = " . TB_PREFIX . "alidata.id and " . TB_PREFIX . "users.id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1578,6 +1892,8 @@ class MYSQLi_DB {
 	/////////////ADDED BY BRAINIAC - THANK YOU
 
 	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
+        list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input($vid, $wood, $clay, $iron, $crop, $mode);
+
             $shit = false;
     		$q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid."";
                 $result = mysqli_query($this->dblink,$q);
@@ -1608,6 +1924,8 @@ class MYSQLi_DB {
    	}
 
 	function modifyOasisResource($vid, $wood, $clay, $iron, $crop, $mode) {
+        list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input($vid, $wood, $clay, $iron, $crop, $mode);
+
         $shit = false;
 		$q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "odata where wref = ".$vid."";
                 $result = mysqli_query($this->dblink,$q);
@@ -1638,6 +1956,8 @@ class MYSQLi_DB {
    	}
 
 	function getFieldLevel($vid, $field) {
+        list($vid, $field) = $this->escape_input($vid, $field);
+
 		$q = "SELECT f" . $field . " from " . TB_PREFIX . "fdata where vref = $vid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);	
 		$row = mysqli_fetch_array($result);
@@ -1645,6 +1965,8 @@ class MYSQLi_DB {
 	}
 
 	function getFieldType($vid, $field) {
+        list($vid, $field) = $this->escape_input($vid, $field);
+
 		$q = "SELECT f" . $field . "t from " . TB_PREFIX . "fdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_array($result);
@@ -1652,6 +1974,8 @@ class MYSQLi_DB {
 	}
 	
 	function getFieldDistance($wid) {
+        list($wid) = $this->escape_input($wid);
+
         $q = "SELECT * FROM " . TB_PREFIX . "vdata where owner > 4 and wref != $wid";
         $array = $this->query_return($q);
         $coor = $this->getCoor($wid);
@@ -1680,6 +2004,8 @@ class MYSQLi_DB {
     	}  
 
 	function getVSumField($uid, $field) {
+        list($uid, $field) = $this->escape_input($uid, $field);
+
 		if($field != "cp"){
 		$q = "SELECT sum(" . $field . ") FROM " . TB_PREFIX . "vdata where owner = $uid";
 		}else{
@@ -1691,6 +2017,8 @@ class MYSQLi_DB {
 	}
 
 	function updateVillage($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$time = time();
 		$q = "UPDATE " . TB_PREFIX . "vdata set lastupdate = $time where wref = $vid";
 		return mysqli_query($this->dblink,$q);
@@ -1698,12 +2026,16 @@ class MYSQLi_DB {
 
 
 	function updateOasis($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$time = time();
 		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated = $time where wref = $vid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function updateOasis2($vid, $time) {
+        list($vid, $time) = $this->escape_input($vid, $time);
+
 		$time = time();
 		$time2 = NATURE_REGTIME;
 		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated2 = $time + $time2 where wref = $vid";
@@ -1711,6 +2043,8 @@ class MYSQLi_DB {
 	}
 
 	function setVillageName($vid, $name) {
+        list($vid, $name) = $this->escape_input($vid, $name);
+
 		if(!empty($name))
 		{
 		$q = "UPDATE " . TB_PREFIX . "vdata set name = '$name' where wref = $vid";
@@ -1719,6 +2053,8 @@ class MYSQLi_DB {
 	}
 
 	function modifyPop($vid, $pop, $mode) {
+        list($vid, $pop, $mode) = $this->escape_input($vid, $pop, $mode);
+
 		if(!$mode) {
 			$q = "UPDATE " . TB_PREFIX . "vdata set pop = pop + $pop where wref = $vid";
 		} else {
@@ -1728,11 +2064,15 @@ class MYSQLi_DB {
 	}
 
 	function addCP($ref, $cp) {
+        list($ref, $cp) = $this->escape_input($ref, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "vdata set cp = cp + $cp where wref = $ref";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addCel($ref, $cel, $type) {
+        list($ref, $cel, $type) = $this->escape_input($ref, $cel, $type);
+
 		$q = "UPDATE " . TB_PREFIX . "vdata set celebration = $cel, type= $type where wref = $ref";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -1744,15 +2084,21 @@ class MYSQLi_DB {
 	}
 
 	function clearCel($ref) {
+        list($ref) = $this->escape_input($ref);
+
 		$q = "UPDATE " . TB_PREFIX . "vdata set celebration = 0, type = 0 where wref = $ref";
 		return mysqli_query($this->dblink,$q);
 	}
 	function setCelCp($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function clearExpansionSlot($id) {
+        list($id) = $this->escape_input($id);
+
 		for($i = 1; $i <= 3; $i++) {
 			$q = "UPDATE " . TB_PREFIX . "vdata SET exp" . $i . "=0 WHERE exp" . $i . "=" . $id;
 			mysqli_query($this->dblink,$q);
@@ -1760,46 +2106,62 @@ class MYSQLi_DB {
 	}
 
 	function getInvitation($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ali_invite where uid = $uid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function getInvitation2($uid, $aid) {
+        list($uid, $aid) = $this->escape_input($uid, $aid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ali_invite where uid = $uid and alliance = $aid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getAliInvitations($aid) {
+        list($aid) = $this->escape_input($aid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ali_invite where alliance = $aid && accept = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function sendInvitation($uid, $alli, $sender) {
+        list($uid, $alli, $sender) = $this->escape_input($uid, $alli, $sender);
+
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "ali_invite values (0,$uid,$alli,$sender,$time,0)";
 		return mysqli_query($this->dblink,$q) or die(mysqli_error());
 	}
 
 	function removeInvitation($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE FROM " . TB_PREFIX . "ali_invite where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function sendMessage($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) {
+        list($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) = $this->escape_input($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report);
+
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "mdata values (0,$client,$owner,'$topic',\"$message\",0,0,$send,$time,0,0,$alliance,$player,$coor,$report)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function setArchived($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 1 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function setNorm($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 0 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -1815,6 +2177,8 @@ class MYSQLi_DB {
 	References: User ID/Message ID, Mode
 	***************************/
 	function getMessage($id, $mode) {
+        list($id, $mode) = $this->escape_input($id, $mode);
+
 		global $session;
 		switch($mode) {
 			case 1:
@@ -1860,44 +2224,60 @@ class MYSQLi_DB {
 	}
 
 	function getDelSent($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner = $uid and delowner = 1 ORDER BY time DESC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getDelInbox($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $uid and deltarget = 1 ORDER BY time DESC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getDelArchive($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $uid and archived = 1 and deltarget = 1 OR owner = $uid and archived = 1 and delowner = 1 ORDER BY time DESC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function unarchiveNotice($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "UPDATE " . TB_PREFIX . "ndata set ntype = archive, archive = 0 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function archiveNotice($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "update " . TB_PREFIX . "ndata set archive = ntype, ntype = 9 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function removeNotice($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "UPDATE " . TB_PREFIX . "ndata set del = 1,viewed = 1 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function noticeViewed($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "UPDATE " . TB_PREFIX . "ndata set viewed = 1 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
         function addNotice($uid, $toWref, $ally, $type, $topic, $data, $time = 0) {
+        list($uid, $toWref, $ally, $type, $topic, $data, $time) = $this->escape_input($uid, $toWref, $ally, $type, $topic, $data, $time);
+
         	if($time == 0) {
         	$time = time();
         	}
@@ -1906,12 +2286,16 @@ class MYSQLi_DB {
         }
 
 	function getNotice($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 0 ORDER BY time DESC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getNotice2($id, $field) {
+        list($id, $field) = $this->escape_input($id, $field);
+
 		$q = "SELECT ".$field." FROM " . TB_PREFIX . "ndata where `id` = '$id'";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1919,22 +2303,30 @@ class MYSQLi_DB {
 	}
 
 	function getNotice3($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getNotice4($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ndata where id = $id ORDER BY time DESC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	function getUnViewNotice($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid AND viewed=0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	function createTradeRoute($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time) {
+        list($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time) = $this->escape_input($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time);
+
 	$x = "UPDATE " . TB_PREFIX . "users SET gold = gold - 2 WHERE id = ".$uid."";
 		mysqli_query($this->dblink,$x);
 		$timeleft = time()+604800;
@@ -1943,12 +2335,16 @@ class MYSQLi_DB {
 	}
 
 	function getTradeRoute($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "route where uid = $uid ORDER BY timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getTradeRoute2($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -1956,6 +2352,8 @@ class MYSQLi_DB {
 	}
 
 	function getTradeRouteUid($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -1963,6 +2361,8 @@ class MYSQLi_DB {
 	}
 
 	function editTradeRoute($id,$column,$value,$mode) {
+        list($id,$column,$value,$mode) = $this->escape_input($id,$column,$value,$mode);
+
 	if(!$mode){
 		$q = "UPDATE " . TB_PREFIX . "route set $column = $value where id = $id";
 	}else{
@@ -1972,11 +2372,15 @@ class MYSQLi_DB {
 	}
 
 	function deleteTradeRoute($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE FROM " . TB_PREFIX . "route where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addBuilding($wid, $field, $type, $loop, $time, $master, $level) {
+        list($wid, $field, $type, $loop, $time, $master, $level) = $this->escape_input($wid, $field, $type, $loop, $time, $master, $level);
+
 		$x = "UPDATE " . TB_PREFIX . "fdata SET f" . $field . "t=" . $type . " WHERE vref=" . $wid;
 		mysqli_query($this->dblink,$x) or die(mysqli_error());
 		$q = "INSERT into " . TB_PREFIX . "bdata values (0,$wid,$field,$type,$loop,$time,$master,$level)";
@@ -1984,6 +2388,8 @@ class MYSQLi_DB {
 	}
 
 	function removeBuilding($d) {
+        list($d) = $this->escape_input($d);
+
 		global $building, $village;
 		$jobLoopconID = -1;
 		$SameBuildCount = 0;
@@ -2099,6 +2505,8 @@ class MYSQLi_DB {
 	}
 
 	function addDemolition($wid, $field) {
+        list($wid, $field) = $this->escape_input($wid, $field);
+
 		global $building, $village;
 		$q = "DELETE FROM ".TB_PREFIX."bdata WHERE field=$field AND wid=$wid";
 		mysqli_query($this->dblink,$q);
@@ -2109,6 +2517,8 @@ class MYSQLi_DB {
 
 
 	function getDemolition($wid = 0) {
+        list($wid) = $this->escape_input($wid);
+
 		if($wid) {
 			$q = "SELECT * FROM " . TB_PREFIX . "demolition WHERE vref=" . $wid;
 		} else {
@@ -2123,23 +2533,31 @@ class MYSQLi_DB {
 	}
 
 	function finishDemolition($wid) {
+        list($wid) = $this->escape_input($wid);
+
         	$q = "UPDATE " . TB_PREFIX . "demolition SET timetofinish=" . time() . " WHERE vref=" . $wid;
         	$result= mysqli_query($this->dblink,$q);
         	return mysqli_affected_rows();
     	}  
 
 	function delDemolition($wid) {
+        list($wid) = $this->escape_input($wid);
+
 		$q = "DELETE FROM " . TB_PREFIX . "demolition WHERE vref=" . $wid;
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getJobs($wid) {
+        list($wid) = $this->escape_input($wid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function FinishWoodcutter($wid) {
+        list($wid) = $this->escape_input($wid);
+
 		$time = time()-1;
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
@@ -2162,59 +2580,79 @@ class MYSQLi_DB {
 	}
 
 	function getMasterJobs($wid) {
+        list($wid) = $this->escape_input($wid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and master = 1 order by master,timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getMasterJobsByField($wid,$field) {
+        list($wid,$field) = $this->escape_input($wid,$field);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 1 order by master,timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getBuildingByField($wid,$field) {
+        list($wid,$field) = $this->escape_input($wid,$field);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function getBuildingByField2($wid,$field) {
+        list($wid,$field) = $this->escape_input($wid,$field);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_num_rows($result);
 	}
 
 	function getBuildingByType($wid,$type) {
+        list($wid,$type) = $this->escape_input($wid,$type);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function getBuildingByType2($wid,$type) {
+        list($wid,$type) = $this->escape_input($wid,$type);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_num_rows($result);
 	}
 
 	function getDorf1Building($wid) {
+        list($wid) = $this->escape_input($wid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field < 19 and master = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getDorf2Building($wid) {
+        list($wid) = $this->escape_input($wid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field > 18 and master = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function updateBuildingWithMaster($id, $time,$loop) {
+        list($id, $time,$loop) = $this->escape_input($id, $time,$loop);
+
 		$q = "UPDATE " . TB_PREFIX . "bdata SET master = 0, timestamp = ".$time.",loopcon = ".$loop." WHERE id = ".$id."";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getVillageByName($name) {
+        list($name) = $this->escape_input($name);
+
 		$q = "SELECT wref FROM " . TB_PREFIX . "vdata where name = '$name' limit 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -2226,6 +2664,8 @@ class MYSQLi_DB {
 	References: id
 	***************************/
 	function setMarketAcc($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "UPDATE " . TB_PREFIX . "market set accept = 1 where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -2237,6 +2677,8 @@ class MYSQLi_DB {
 	References: Wood/ID, Clay, Iron, Crop, Mode
 	***************************/
 	function sendResource($ref, $clay, $iron, $crop, $merchant, $mode) {
+        list($ref, $clay, $iron, $crop, $merchant, $mode) = $this->escape_input($ref, $clay, $iron, $crop, $merchant, $mode);
+
 		if(!$mode) {
 			$q = "INSERT INTO " . TB_PREFIX . "send values (0,$ref,$clay,$iron,$crop,$merchant)";
 			mysqli_query($this->dblink,$q);
@@ -2254,6 +2696,8 @@ class MYSQLi_DB {
 	***************************/
 
 	function getResourcesBack($vref, $gtype, $gamt) {
+        list($vref, $gtype, $gamt) = $this->escape_input($vref, $gtype, $gamt);
+
 		//Xtype (1) = wood, (2) = clay, (3) = iron, (4) = crop
 		if($gtype == 1) {
 			$q = "UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` + '$gamt' WHERE wref = $vref";
@@ -2280,6 +2724,8 @@ class MYSQLi_DB {
 	***************************/
 
 	function getMarketField($vref, $field) {
+        list($vref, $field) = $this->escape_input($vref, $field);
+
 		$q = "SELECT $field FROM " . TB_PREFIX . "market where vref = '$vref'";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -2287,6 +2733,8 @@ class MYSQLi_DB {
 	}
 
 	function removeAcceptedOffer($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE FROM " . TB_PREFIX . "market where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
@@ -2299,6 +2747,8 @@ class MYSQLi_DB {
 	References: Village, Give, Amt, Want, Amt, Time, Alliance, Mode
 	***************************/
 	function addMarket($vid, $gtype, $gamt, $wtype, $wamt, $time, $alliance, $merchant, $mode) {
+        list($vid, $gtype, $gamt, $wtype, $wamt, $time, $alliance, $merchant, $mode) = $this->escape_input($vid, $gtype, $gamt, $wtype, $wamt, $time, $alliance, $merchant, $mode);
+
 		if(!$mode) {
 			$q = "INSERT INTO " . TB_PREFIX . "market values (0,$vid,$gtype,$gamt,$wtype,$wamt,0,$time,$alliance,$merchant)";
 			mysqli_query($this->dblink,$q);
@@ -2314,6 +2764,8 @@ class MYSQLi_DB {
 	References: Village, Mode
 	***************************/
 	function getMarket($vid, $mode) {
+        list($vid, $mode) = $this->escape_input($vid, $mode);
+
 		$alliance = $this->getUserField($this->getVillageField($vid, "owner"), "alliance", 0);
 		if(!$mode) {
 			$q = "SELECT * FROM " . TB_PREFIX . "market where vref = $vid and accept = 0";
@@ -2329,12 +2781,16 @@ class MYSQLi_DB {
 	References: ID
 	***************************/
 	function getMarketInfo($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "market where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
 	}
 
 	function setMovementProc($moveid) {
+        list($moveid) = $this->escape_input($moveid);
+
 		$q = "UPDATE " . TB_PREFIX . "movement set proc = 1 where moveid = $moveid";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -2344,6 +2800,8 @@ class MYSQLi_DB {
 	References: Village
 	***************************/
 	function totalMerchantUsed($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$time = time();
 		$q = "SELECT sum(" . TB_PREFIX . "send.merchant) from " . TB_PREFIX . "send, " . TB_PREFIX . "movement where " . TB_PREFIX . "movement.from = '$vid' and " . TB_PREFIX . "send.id = " . TB_PREFIX . "movement.ref and " . TB_PREFIX . "movement.proc = 0 and sort_type = 0";
 		$result = mysqli_query($this->dblink,$q);
@@ -2358,6 +2816,8 @@ class MYSQLi_DB {
 	}
 
 	function getMovement($type, $village, $mode) {
+        list($type, $village, $mode) = $this->escape_input($type, $village, $mode);
+
 		$time = time();
 		if(!$mode) {
 			$where = "from";
@@ -2405,12 +2865,16 @@ class MYSQLi_DB {
 	}
 
 	function addA2b($ckey, $timestamp, $to, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type) {
+        list($ckey, $timestamp, $to, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type) = $this->escape_input($ckey, $timestamp, $to, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type);
+
 		$q = "INSERT INTO " . TB_PREFIX . "a2b (ckey,time_check,to_vid,u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,u11,type) VALUES ('$ckey', '$timestamp', '$to', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6', '$t7', '$t8', '$t9', '$t10', '$t11', '$type')";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
 
 	function getA2b($ckey, $check) {
+        list($ckey, $check) = $this->escape_input($ckey, $check);
+
 		$q = "SELECT * from " . TB_PREFIX . "a2b where ckey = '" . $ckey . "' AND time_check = '" . $check . "'";
 		$result = mysqli_query($this->dblink,$q);
 		if($result) {
@@ -2421,29 +2885,39 @@ class MYSQLi_DB {
 	}
 
 	function addMovement($type, $from, $to, $ref, $time, $endtime, $send = 1, $wood = 0, $clay = 0, $iron = 0, $crop = 0, $ref2 = 0) {
+        list($type, $from, $to, $ref, $time, $endtime, $send, $wood, $clay, $iron, $crop, $ref2) = $this->escape_input($type, $from, $to, $ref, $time, $endtime, $send, $wood, $clay, $iron, $crop, $ref2);
+
 		$q = "INSERT INTO " . TB_PREFIX . "movement values (0,$type,$from,$to,$ref,$ref2,$time,$endtime,0,$send,$wood,$clay,$iron,$crop)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addAttack($vid, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type, $ctar1, $ctar2, $spy,$b1=0,$b2=0,$b3=0,$b4=0,$b5=0,$b6=0,$b7=0,$b8=0) {
+        list($vid, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type, $ctar1, $ctar2, $spy,$b1,$b2,$b3,$b4,$b5,$b6,$b7,$b8) = $this->escape_input($vid, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type, $ctar1, $ctar2, $spy,$b1,$b2,$b3,$b4,$b5,$b6,$b7,$b8);
+
 		$q = "INSERT INTO " . TB_PREFIX . "attacks values (0,$vid,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,$type,$ctar1,$ctar2,$spy,$b1,$b2,$b3,$b4,$b5,$b6,$b7,$b8)";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
 
 	function modifyAttack($aid, $unit, $amt) {
+        list($aid, $unit, $amt) = $this->escape_input($aid, $unit, $amt);
+
 		$unit = 't' . $unit;
 		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit - $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 	
 	function modifyAttack2($aid, $unit, $amt) {
+        list($aid, $unit, $amt) = $this->escape_input($aid, $unit, $amt);
+
 		$unit = 't' . $unit;
 		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit + $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 	
 	function modifyAttack3($aid, $units) {
+        list($aid, $units) = $this->escape_input($aid, $units);
+
         $q = "UPDATE ".TB_PREFIX."attacks set $units WHERE id = $aid";
         return mysqli_query($this->dblink,$q);
     }
@@ -2485,23 +2959,31 @@ class MYSQLi_DB {
 	}
 
 	function getAllMember($aid) {
+        list($aid) = $this->escape_input($aid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "users where alliance = $aid order  by (SELECT sum(pop) FROM " . TB_PREFIX . "vdata WHERE owner =  " . TB_PREFIX . "users.id) desc, " . TB_PREFIX . "users.id desc";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function getAllMember2($aid) {
+        list($aid) = $this->escape_input($aid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "users where alliance = $aid order  by (SELECT sum(pop) FROM " . TB_PREFIX . "vdata WHERE owner =  " . TB_PREFIX . "users.id) desc, " . TB_PREFIX . "users.id desc LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function addUnits($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "INSERT into " . TB_PREFIX . "units (vref) values ($vid)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getUnit($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * from " . TB_PREFIX . "units where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		if (!empty($result)) {
@@ -2512,6 +2994,8 @@ class MYSQLi_DB {
 	}
 
 	function getUnitsNumber($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * from " . TB_PREFIX . "units where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_assoc($result);
@@ -2537,6 +3021,8 @@ class MYSQLi_DB {
 	}
 
 	function getHero($uid=0,$all=0) {
+        list($uid,$all) = $this->escape_input($uid,$all);
+
 		if ($all) {
 			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid=$uid";
 		} elseif (!$uid) {
@@ -2559,6 +3045,8 @@ class MYSQLi_DB {
 	}
 
 	function modifyHero($column,$value,$heroid,$mode=0) {
+        list($column,$value,$heroid,$mode) = $this->escape_input($column,$value,$heroid,$mode);
+
 		if(!$mode) {
 			$q = "UPDATE `".TB_PREFIX."hero` SET $column = $value WHERE heroid = $heroid";
 		} elseif($mode=1) {
@@ -2570,6 +3058,8 @@ class MYSQLi_DB {
 	}
 
 	function modifyHeroByOwner($column,$value,$uid,$mode=0) {
+        list($column,$value,$uid,$mode) = $this->escape_input($column,$value,$uid,$mode);
+
 		if(!$mode) {
 			$q = "UPDATE `".TB_PREFIX."hero` SET $column = $value WHERE uid = $uid";
 		} elseif($mode=1) {
@@ -2581,38 +3071,52 @@ class MYSQLi_DB {
 	}
 
 	function modifyHeroXp($column,$value,$heroid) {
+        list($column,$value,$heroid) = $this->escape_input($column,$value,$heroid);
+
 		$q = "UPDATE ".TB_PREFIX."hero SET $column = $column + $value WHERE uid=$heroid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addTech($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "INSERT into " . TB_PREFIX . "tdata (vref) values ($vid)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addABTech($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "INSERT into " . TB_PREFIX . "abdata (vref) values ($vid)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getABTech($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "abdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
 	}
 
 	function addResearch($vid, $tech, $time) {
+        list($vid, $tech, $time) = $this->escape_input($vid, $tech, $time);
+
 		$q = "INSERT into " . TB_PREFIX . "research values (0,$vid,'$tech',$time)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getResearching($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "research where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function checkIfResearched($vref, $unit) {
+        list($vref, $unit) = $this->escape_input($vref, $unit);
+
 		$q = "SELECT $unit FROM " . TB_PREFIX . "tdata WHERE vref = $vref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -2620,18 +3124,24 @@ class MYSQLi_DB {
 	}
 
 	function getTech($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * from " . TB_PREFIX . "tdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
 	}
 
 	function getTraining($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "training where vref = $vid ORDER BY id";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function countTraining($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "training WHERE vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_row($result);
@@ -2639,6 +3149,8 @@ class MYSQLi_DB {
 	}
 
 	function trainUnit($vid, $unit, $amt, $pop, $each, $time, $mode) {
+        list($vid, $unit, $amt, $pop, $each, $time, $mode) = $this->escape_input($vid, $unit, $amt, $pop, $each, $time, $mode);
+
 		global $village, $building, $session, $technology;
 
 		if(!$mode) {
@@ -2721,6 +3233,8 @@ class MYSQLi_DB {
 	}
 
 	function updateTraining($id, $trained, $each) {
+        list($id, $trained, $each) = $this->escape_input($id, $trained, $each);
+
 		$q = "UPDATE " . TB_PREFIX . "training set amt = amt - $trained, timestamp2 = timestamp2 + $each where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -2747,12 +3261,16 @@ class MYSQLi_DB {
 	}
 
 	function getEnforce($vid, $from) {
+        list($vid, $from) = $this->escape_input($vid, $from);
+
 		$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $from and vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
 	}
 	
     	function getOasisEnforce($ref, $mode=0) {
+        list($ref, $mode) = $this->escape_input($ref, $mode);
+
         if (!$mode) {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured = $ref AND e.from !=$ref";
         }else{
@@ -2763,6 +3281,8 @@ class MYSQLi_DB {
     	}
     	
     	function getOasisEnforceArray($id, $mode=0) {
+        list($id, $mode) = $this->escape_input($id, $mode);
+
         if (!$mode) {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where e.id = $id";
         }else{
@@ -2773,12 +3293,16 @@ class MYSQLi_DB {
     	}
 	
 	function getEnforceControllTroops($vid) {
+        list($vid) = $this->escape_input($vid);
+
   		$q = "SELECT * from " . TB_PREFIX . "enforcement where  vref = $vid";
   		$result = mysqli_query($this->dblink,$q);
   		return mysqli_fetch_assoc($result);
  	}
 
 	function addEnforce($data) {
+        list($data) = $this->escape_input($data);
+
 		$q = "INSERT into " . TB_PREFIX . "enforcement (vref,`from`) values (" . $data['to'] . "," . $data['from'] . ")";
 		mysqli_query($this->dblink,$q);
 		$id = mysqli_insert_id($this->dblink);
@@ -2796,6 +3320,8 @@ class MYSQLi_DB {
 	}
 
 	function addEnforce2($data,$tribe,$dead1,$dead2,$dead3,$dead4,$dead5,$dead6,$dead7,$dead8,$dead9,$dead10,$dead11) {
+        list($data,$tribe,$dead1,$dead2,$dead3,$dead4,$dead5,$dead6,$dead7,$dead8,$dead9,$dead10,$dead11) = $this->escape_input($data,$tribe,$dead1,$dead2,$dead3,$dead4,$dead5,$dead6,$dead7,$dead8,$dead9,$dead10,$dead11);
+
 		$q = "INSERT into " . TB_PREFIX . "enforcement (vref,`from`) values (" . $data['to'] . "," . $data['from'] . ")";
 		mysqli_query($this->dblink,$q);
 		$id = mysqli_insert_id($this->dblink);
@@ -2821,6 +3347,8 @@ class MYSQLi_DB {
 	}
 
 	function modifyEnforce($id, $unit, $amt, $mode) {
+        list($id, $unit, $amt, $mode) = $this->escape_input($id, $unit, $amt, $mode);
+
 		if($unit != 'hero') { $unit = 'u' . $unit; }
 		if(!$mode) {
 			$q = "UPDATE " . TB_PREFIX . "enforcement set $unit = $unit - $amt where id = $id";
@@ -2831,6 +3359,8 @@ class MYSQLi_DB {
 	}
 
 	function getEnforceArray($id, $mode) {
+        list($id, $mode) = $this->escape_input($id, $mode);
+
 		if(!$mode) {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where id = $id";
 		} else {
@@ -2841,6 +3371,8 @@ class MYSQLi_DB {
 	}
 
 	function getEnforceVillage($id, $mode) {
+        list($id, $mode) = $this->escape_input($id, $mode);
+
 		if(!$mode) {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where vref = $id";
 		} else {
@@ -2851,6 +3383,8 @@ class MYSQLi_DB {
 	}
 
 	function getVillageMovement($id) {
+        list($id) = $this->escape_input($id);
+
 		$vinfo = $this->getVillage($id);
 		$vtribe = $this->getUserField($vinfo['owner'], "tribe", 0);
 		$movingunits = array();
@@ -2906,6 +3440,8 @@ class MYSQLi_DB {
 	***************************/
 
 	function getWWLevel($vref) {
+        list($vref) = $this->escape_input($vref);
+
 		$q = "SELECT f99 FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -2918,6 +3454,8 @@ class MYSQLi_DB {
 	***************************/
 
 	function getWWOwnerID($vref) {
+        list($vref) = $this->escape_input($vref);
+
 		$q = "SELECT owner FROM " . TB_PREFIX . "vdata WHERE wref = $vref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -2930,6 +3468,8 @@ class MYSQLi_DB {
 	***************************/
 
 	function getUserAllianceID($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT alliance FROM " . TB_PREFIX . "users where id = $id";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -2942,6 +3482,8 @@ class MYSQLi_DB {
 	***************************/
 
 	function getWWName($vref) {
+        list($vref) = $this->escape_input($vref);
+
 		$q = "SELECT wwname FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -2954,53 +3496,77 @@ class MYSQLi_DB {
 	***************************/
 
 	function submitWWname($vref, $name) {
+        list($vref, $name) = $this->escape_input($vref, $name);
+
 		$q = "UPDATE " . TB_PREFIX . "fdata SET `wwname` = '$name' WHERE " . TB_PREFIX . "fdata.`vref` = $vref";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	//medal functions
 	function addclimberpop($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "users set Rc = Rc + '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function addclimberrankpop($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "users set clp = clp + '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function removeclimberrankpop($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "users set clp = clp - '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function setclimberrankpop($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "users set clp = '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function updateoldrank($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "users set oldrank = '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function removeclimberpop($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "users set Rc = Rc - '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	// ALLIANCE MEDAL FUNCTIONS
 	function addclimberpopAlly($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata set Rc = Rc + '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function addclimberrankpopAlly($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata set clp = clp + '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function removeclimberrankpopAlly($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata set clp = clp - '$cp'' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function updateoldrankAlly($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata set oldrank = '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
 	function removeclimberpopAlly($user, $cp) {
+        list($user, $cp) = $this->escape_input($user, $cp);
+
 		$q = "UPDATE " . TB_PREFIX . "alidata set Rc = Rc - '$cp' where id = $user";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -3037,6 +3603,8 @@ class MYSQLi_DB {
 	References: Result
 	***************************/
 	function mysqli_fetch_all($result) {
+        list($result) = $this->escape_input($result);
+
 		$all = array();
 		if($result) {
 			while($row = mysqli_fetch_assoc($result)) {
@@ -3047,6 +3615,8 @@ class MYSQLi_DB {
 	}
 
 	function query_return($q) {
+        list($q) = $this->escape_input($q);
+
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -3056,15 +3626,21 @@ class MYSQLi_DB {
 	References: Query
 	***************************/
 	function query($query) {
+        list($query) = $this->escape_input($query);
+
 		return mysqli_query($this->dblink,$query);
 	}
 
 	function RemoveXSS($val) {
+        list($val) = $this->escape_input($val);
+
 		return htmlspecialchars($val, ENT_QUOTES);
 	}
 
 	//MARKET FIXES
 	function getWoodAvailable($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT wood FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -3072,6 +3648,8 @@ class MYSQLi_DB {
 	}
 
 	function getClayAvailable($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT clay FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -3079,6 +3657,8 @@ class MYSQLi_DB {
 	}
 
 	function getIronAvailable($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT iron FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -3086,6 +3666,8 @@ class MYSQLi_DB {
 	}
 
 	function getCropAvailable($wref) {
+        list($wref) = $this->escape_input($wref);
+
 		$q = "SELECT crop FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error());
 		$dbarray = mysqli_fetch_array($result);
@@ -3093,6 +3675,8 @@ class MYSQLi_DB {
 	}
 
 	function Getowner($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$s = "SELECT owner FROM " . TB_PREFIX . "vdata where wref = $vid";
 		$result1 = mysqli_query($this->dblink,$s);
 		$row1 = mysqli_fetch_row($result1);
@@ -3100,6 +3684,8 @@ class MYSQLi_DB {
 	}
 
 	public function debug($time, $uid, $debug_info) {
+        list($time, $uid, $debug_info) = $this->escape_input($time, $uid, $debug_info);
+
 		$q = "INSERT INTO " . TB_PREFIX . "debug_info (time,uid,debug_info) VALUES ($time,$uid,$debug_info)";
 		if(mysqli_query($this->dblink,$q)) {
 			return mysqli_insert_id($this->dblink);
@@ -3220,47 +3806,63 @@ class MYSQLi_DB {
 	}
 
 	function addArtefact($vref, $owner, $type, $size, $name, $desc, $effect, $img) {
+        list($vref, $owner, $type, $size, $name, $desc, $effect, $img) = $this->escape_input($vref, $owner, $type, $size, $name, $desc, $effect, $img);
+
 		$q = "INSERT INTO `" . TB_PREFIX . "artefacts` (`vref`, `owner`, `type`, `size`, `conquered`, `name`, `desc`, `effect`, `img`, `active`) VALUES ('$vref', '$owner', '$type', '$size', '" . time() . "', '$name', '$desc', '$effect', '$img', '0')";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function getOwnArtefactInfo($vref) {
+        list($vref) = $this->escape_input($vref);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 	
 	function getOwnArtefactInfo2($vref) {
+        list($vref) = $this->escape_input($vref);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function getOwnArtefactInfo3($uid) {
+        list($uid) = $this->escape_input($uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $uid";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getOwnArtefactInfoByType($vref, $type) {
+        list($vref, $type) = $this->escape_input($vref, $type);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = '$vref' AND type = '$type' order by size";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function getOwnArtefactInfoByType2($vref, $type) {
+        list($vref, $type) = $this->escape_input($vref, $type);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function getOwnUniqueArtefactInfo($id, $type, $size) {
+        list($id, $type, $size) = $this->escape_input($id, $type, $size);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function getOwnUniqueArtefactInfo2($id, $type, $size, $mode) {
+        list($id, $type, $size, $mode) = $this->escape_input($id, $type, $size, $mode);
+
 	if(!$mode){
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND active = 1 AND type = $type AND size=$size";
 	}else{
@@ -3271,18 +3873,24 @@ class MYSQLi_DB {
 	}
 
 	function getFoolArtefactInfo($type,$vid,$uid) {
+        list($type,$vid,$uid) = $this->escape_input($type,$vid,$uid);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND type = 8 AND kind = $type OR owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
 	function claimArtefact($vref, $ovref, $id) {
+        list($vref, $ovref, $id) = $this->escape_input($vref, $ovref, $id);
+
 		$time = time();
 		$q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id, conquered = $time, active = 1 WHERE vref = $ovref";
 		return mysqli_query($this->dblink,$q);
 	}
 
     public function canClaimArtifact($from,$vref,$size,$type) {
+        list($from,$vref,$size,$type) = $this->escape_input($from,$vref,$size,$type);
+
     //fix by Ronix
     global $session, $form;
     $size1 = $size2 = $size3 = 0;
@@ -3357,6 +3965,8 @@ class MYSQLi_DB {
 }
 
 	function getArtefactDetails($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = " . $id . "";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
@@ -3393,32 +4003,44 @@ class MYSQLi_DB {
 	}
 
 	function getRaidList($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "raidlist WHERE id = ".$id."";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 
 	function delFarmList($id, $owner) {
+        list($id, $owner) = $this->escape_input($id, $owner);
+
 		$q = "DELETE FROM " . TB_PREFIX . "farmlist where id = $id and owner = $owner";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function delSlotFarm($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE FROM " . TB_PREFIX . "raidlist where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function createFarmList($wref, $owner, $name) {
+        list($wref, $owner, $name) = $this->escape_input($wref, $owner, $name);
+
 		$q = "INSERT INTO " . TB_PREFIX . "farmlist (`wref`, `owner`, `name`) VALUES ('$wref', '$owner', '$name')";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addSlotFarm($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
+        list($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
+
 		$q = "INSERT INTO " . TB_PREFIX . "raidlist (`lid`, `towref`, `x`, `y`, `distance`, `t1`, `t2`, `t3`, `t4`, `t5`, `t6`, `t7`, `t8`, `t9`, `t10`) VALUES ('$lid', '$towref', '$x', '$y', '$distance', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6', '$t7', '$t8', '$t9', '$t10')";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function editSlotFarm($eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
+        list($eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input($eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
+
 		$q = "UPDATE " . TB_PREFIX . "raidlist set lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6', t7 = '$t7', t8 = '$t8', t9 = '$t9', t10 = '$t10' WHERE id = $eid";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -3451,6 +4073,8 @@ class MYSQLi_DB {
 	}
 
 	function getCropProdstarv($wref) {
+        list($wref) = $this->escape_input($wref);
+
 	global $bid4,$bid8,$bid9,$sesion,$technology;
 
 	    $wood = 0;
@@ -3526,12 +4150,16 @@ class MYSQLi_DB {
 	//general statistics
 
 	function addGeneralAttack($casualties) {
+        list($casualties) = $this->escape_input($casualties);
+
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "general values (0,'$casualties','$time',1)";
 		return mysqli_query($this->dblink,$q) or die(mysqli_error());
 	}
 
 	function getAttackByDate($time) {
+        list($time) = $this->escape_input($time);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "general where shown = 1";
 		$result = $this->query_return($q);
 		$attack = 0;
@@ -3544,6 +4172,8 @@ class MYSQLi_DB {
 	}
 
 	function getAttackCasualties($time) {
+        list($time) = $this->escape_input($time);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "general where shown = 1";
 		$result = $this->query_return($q);
 		$casualties = 0;
@@ -3558,16 +4188,22 @@ class MYSQLi_DB {
 	//end general statistics
 	
 	function addFriend($uid, $column, $friend) {
+        list($uid, $column, $friend) = $this->escape_input($uid, $column, $friend);
+
 		$q = "UPDATE " . TB_PREFIX . "users SET $column = $friend WHERE id = $uid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function deleteFriend($uid, $column) {
+        list($uid, $column) = $this->escape_input($uid, $column);
+
 		$q = "UPDATE " . TB_PREFIX . "users SET $column = 0 WHERE id = $uid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function checkFriends($uid) {
+        list($uid) = $this->escape_input($uid);
+
 	    global $session;
 		$user = $this->getUserArray($uid, 1);
 		for($i=0;$i<=19;$i++) {
@@ -3590,6 +4226,8 @@ class MYSQLi_DB {
 	}
 
 	function setVillageEvasion($vid) {
+        list($vid) = $this->escape_input($vid);
+
 		$village = $this->getVillage($vid);
 		if($village['evasion'] == 0){
 		$q = "UPDATE " . TB_PREFIX . "vdata SET evasion = 1 WHERE wref = $vid";
@@ -3600,17 +4238,23 @@ class MYSQLi_DB {
 	}
 	
 	function addPrisoners($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) {
+        list($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) = $this->escape_input($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11);
+
 		$q = "INSERT INTO " . TB_PREFIX . "prisoners values (0,$wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11)";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
 	
 	function updatePrisoners($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) {
+        list($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) = $this->escape_input($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11);
+
         $q = "UPDATE " . TB_PREFIX . "prisoners set t1 = t1 + $t1, t2 = t2 + $t2, t3 = t3 + $t3, t4 = t4 + $t4, t5 = t5 + $t5, t6 = t6 + $t6, t7 = t7 + $t7, t8 = t8 + $t8, t9 = t9 + $t9, t10 = t10 + $t10, t11 = t11 + $t11 where wref = $wid and ".TB_PREFIX."prisoners.from = $from";
         return mysqli_query($this->dblink,$q) or die(mysqli_error());
     	}
 	
     function getPrisoners($wid,$mode=0) {
+        list($wid,$mode) = $this->escape_input($wid,$mode);
+
         if(!$mode) {
             $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid";
         }else {
@@ -3621,24 +4265,32 @@ class MYSQLi_DB {
     }
 
 	function getPrisoners2($wid,$from) {
+        list($wid,$from) = $this->escape_input($wid,$from);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid and " . TB_PREFIX . "prisoners.from = $from";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function getPrisonersByID($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where id = $id";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
 	
 	function getPrisoners3($from) {
+        list($from) = $this->escape_input($from);
+
 		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 	
 	function deletePrisoners($id) {
+        list($id) = $this->escape_input($id);
+
 		$q = "DELETE from " . TB_PREFIX . "prisoners where id = '$id'";
 		mysqli_query($this->dblink,$q);
 	}
@@ -3694,6 +4346,8 @@ References:
 	***************************/
 
  	function getHeroDead($id) {
+        list($id) = $this->escape_input($id);
+
     		$q = "SELECT dead FROM " . TB_PREFIX . "hero WHERE `uid` = $id";
     		$result = mysqli_query($this->dblink,$q);
     		$notend= mysqli_fetch_array($result);
@@ -3706,6 +4360,8 @@ References:
 	***************************/
 
  	function getHeroInRevive($id) {
+        list($id) = $this->escape_input($id);
+
     		$q = "SELECT inrevive FROM " . TB_PREFIX . "hero WHERE `uid` = $id";
     		$result = mysqli_query($this->dblink,$q);
     		$notend= mysqli_fetch_array($result);
@@ -3718,6 +4374,8 @@ References:
 	***************************/
 
  	function getHeroInTraining($id) {
+        list($id) = $this->escape_input($id);
+
     		$q = "SELECT intraining FROM " . TB_PREFIX . "hero WHERE `uid` = $id";
     		$result = mysqli_query($this->dblink,$q);
     		$notend= mysqli_fetch_array($result);
@@ -3730,6 +4388,8 @@ References:
 	***************************/
 
 	function HeroNotInVil($id) {
+        list($id) = $this->escape_input($id);
+
                 $heronum=0;
     		$outgoingarray = $this->getMovement(3, $id, 0);
     		if(!empty($outgoingarray)) {
@@ -3754,6 +4414,8 @@ References:
 	***************************/
 
        function KillMyHero($id) {
+        list($id) = $this->escape_input($id);
+
   	       $q = "UPDATE " . TB_PREFIX . "hero set dead = 1 where uid = ".$id;
                return mysqli_query($this->dblink,$q);
        }
@@ -3763,6 +4425,8 @@ References:
         Made by: ronix
         ***************************/
         function FindHeroInVil($wid) {
+        list($wid) = $this->escape_input($wid);
+
             $result = $this->query("SELECT * FROM ".TB_PREFIX."units WHERE hero>0 AND vref='".$wid."'");
             if (!empty($result)) {
                 $dbarray = mysqli_fetch_array($result);
@@ -3775,6 +4439,8 @@ References:
             return false;
         }
         function FindHeroInDef($wid) {
+        list($wid) = $this->escape_input($wid);
+
             $delDef=true;
             $result = $this->query_return("SELECT * FROM ".TB_PREFIX."enforcement WHERE hero>0 AND `from` = ".$wid);
             if (!empty($result)) {
@@ -3795,6 +4461,8 @@ References:
             return false;
         }
         function FindHeroInOasis($uid) {
+        list($uid) = $this->escape_input($uid);
+
             $delDef=true;
             $dbarray = $this->query_return("SELECT e.*,o.conqured,o.owner FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.owner=".$uid." AND e.hero>0");
             if(!empty($dbarray)) {
@@ -3817,6 +4485,8 @@ References:
         }
     
         function FindHeroInMovement($wid) {
+        list($wid) = $this->escape_input($wid);
+
             $outgoingarray = $this->getMovement(3, $wid, 0);
             if(!empty($outgoingarray)) {
                 foreach($outgoingarray as $out) {
@@ -3861,6 +4531,8 @@ References:
 	***************************/
 
 	function checkEnforce($wref, $toWref) {
+        list($wref, $toWref) = $this->escape_input($wref, $toWref);
+
     		$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 2 ORDER BY endtime ASC";
         	$result = mysqli_query($this->dblink,$q);
     		if(mysqli_num_rows($result)) {
@@ -3876,6 +4548,8 @@ References:
   	***************************/
 
 	function checkScout($wref, $toWref) {
+        list($wref, $toWref) = $this->escape_input($wref, $toWref);
+
     		$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 1 ORDER BY endtime ASC";
         	$result = mysqli_query($this->dblink,$q);
     		if(mysqli_num_rows($result)) {
