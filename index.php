@@ -206,7 +206,7 @@ include ("GameEngine/Lang/".LANG.".php");
 					<li><a href="spielregeln.php"><?php echo SPIELREGELN; ?></a>|</li>
 					<li><a href="agb.php"><?php echo AGB; ?></a>|</li>
 					<li><a href="impressum.php"><?php echo IMPRINT; ?></a></li>
-					<li class="copyright">&copy; 2011-2014 - TravianZ - All rights reserved</li>
+					<li class="copyright">&copy; 2011-<?php echo date('Y'); ?> - TravianZ - All rights reserved</li>
 				</ul>
 			</div>
 		</div>

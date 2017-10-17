@@ -1,4 +1,4 @@
-TravianZ Version v.8.1.1 BETA (for PHP version 7)
+TravianZ Version v.8.2.0 BETA (for PHP version 7)
 
 Download and updates : https://github.com/Shadowss/TravianZ
 
@@ -20,6 +20,9 @@ martinambrus changes:
 8. PLUS settings (including PayPal options) can be configured in Admin
 9. installation timeouting fix
 10. extra settings in admin save config correctly
+11. security tightened to try and prevent MySQL injections from in-game
+12. assigning link to alliance forum now works
+13. alliance description now really editable
 
 
 Shadowss changes:
