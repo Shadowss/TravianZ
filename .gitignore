@@ -27,3 +27,6 @@ install/installation_done
 
 # Eclipse settings
 .settings
+
+# PHPStorm
+.idea
