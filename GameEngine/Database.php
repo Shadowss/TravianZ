@@ -3633,8 +3633,6 @@ class MYSQLi_DB {
 	}
 
 	function query_return($q) {
-        list($q) = $this->escape_input($q);
-
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
