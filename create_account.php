@@ -157,26 +157,26 @@ if($_POST['password'] != ""){
             $database->updateUserField($uid, "access", USER, 1);
         }
                 
-        $wid = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid"));
-        $q = "UPDATE " . TB_PREFIX . "vdata SET pop = 834 WHERE owner = $uid";
+        $wid = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = ".(int) $uid));
+        $q = "UPDATE " . TB_PREFIX . "vdata SET pop = 834 WHERE owner = ".(int) $uid;
         mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
-        $q2 = "UPDATE " . TB_PREFIX . "users SET access = 2 WHERE id = $uid";
+        $q2 = "UPDATE " . TB_PREFIX . "users SET access = 2 WHERE id = ".(int) $uid;
         mysqli_query($GLOBALS['link'],$q2) or die(mysqli_error($database->dblink));
         if(SPEED > 3) {
             $speed = 5;
         } else {
             $speed = SPEED;
         }
-        $q3 = "UPDATE " . TB_PREFIX . "units SET u41 = " . (64700 * $speed) . ", u42 = " . (295231 * $speed) . ", u43 = " . (180747 * $speed) . ", u44 = " . (20000 * $speed) . ", u45 = " . (364401 * $speed) . ", u46 = " . (217602 * $speed) . ", u47 = " . (2034 * $speed) . ", u48 = " . (1040 * $speed) . " , u49 = " . (1 * $speed) . ", u50 = " . (9 * $speed) . " WHERE vref = " . $wid['wref'] . "";
+        $q3 = "UPDATE " . TB_PREFIX . "units SET u41 = " . (64700 * $speed) . ", u42 = " . (295231 * $speed) . ", u43 = " . (180747 * $speed) . ", u44 = " . (20000 * $speed) . ", u45 = " . (364401 * $speed) . ", u46 = " . (217602 * $speed) . ", u47 = " . (2034 * $speed) . ", u48 = " . (1040 * $speed) . " , u49 = " . (1 * $speed) . ", u50 = " . (9 * $speed) . " WHERE vref = " . (int) $wid['wref'] . "";
         mysqli_query($GLOBALS['link'],$q3) or die(mysqli_error($database->dblink));
-        $q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = $uid";
+        $q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = ".(int) $uid;
         mysqli_query($GLOBALS['link'],$q4) or die(mysqli_error($database->dblink));
 		
 /**
  * SCOUTING ALL PLAYERS FIX BY MisterX
  */
  
- 		$natar = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid and capital = 1"));
+        $natar = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = ".(int) $uid." and capital = 1"));
   		$multiplier = NATARS_UNITS;
   		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = '1' and owner > '5'";
   		$array = $database->query_return($q);
@@ -200,22 +200,22 @@ if($_POST['password'] != ""){
 			$database->addUnits($wid);
 			$database->addTech($wid);
 			$database->addABTech($wid);
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET pop = 163 WHERE wref = $wid");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET name = '$village_name' WHERE wref = $wid");
+			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET pop = 163 WHERE wref = ".(int) $wid);
+			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET name = '$village_name' WHERE wref = ".(int) $wid);
 			if(SPEED > 3) {
 				$speed = 5;
 			} else {
 				$speed = SPEED;
 			}
 			if($size == 1) {
-				mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(1000, 2000) * $speed) . ", u42 = " . (rand(1500, 2000) * $speed) . ", u43 = " . (rand(2300, 2800) * $speed) . ", u44 = " . (rand(25, 75) * $speed) . ", u45 = " . (rand(1200, 1900) * $speed) . ", u46 = " . (rand(1500, 2000) * $speed) . ", u47 = " . (rand(500, 900) * $speed) . ", u48 = " . (rand(100, 300) * $speed) . " , u49 = " . (rand(1, 5) * $speed) . ", u50 = " . (rand(1, 5) * $speed) . " WHERE vref = " . $wid . "");
-				mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 10, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = $wid");
+			    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(1000, 2000) * $speed) . ", u42 = " . (rand(1500, 2000) * $speed) . ", u43 = " . (rand(2300, 2800) * $speed) . ", u44 = " . (rand(25, 75) * $speed) . ", u45 = " . (rand(1200, 1900) * $speed) . ", u46 = " . (rand(1500, 2000) * $speed) . ", u47 = " . (rand(500, 900) * $speed) . ", u48 = " . (rand(100, 300) * $speed) . " , u49 = " . (rand(1, 5) * $speed) . ", u50 = " . (rand(1, 5) * $speed) . " WHERE vref = " . (int) $wid . "");
+			    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 10, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = ".(int) $wid);
 			} elseif($size == 2) {
-				mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(2000, 4000) * $speed) . ", u42 = " . (rand(3000, 4000) * $speed) . ", u43 = " . (rand(4600, 5600) * $speed) . ", u44 = " . (rand(50, 150) * $speed) . ", u45 = " . (rand(2400, 3800) * $speed) . ", u46 = " . (rand(3000, 4000) * $speed) . ", u47 = " . (rand(1000, 1800) * $speed) . ", u48 = " . (rand(200, 600) * $speed) . " , u49 = " . (rand(2, 10) * $speed) . ", u50 = " . (rand(2, 10) * $speed) . " WHERE vref = " . $wid . "");
-				mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 20, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = $wid");
+			    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(2000, 4000) * $speed) . ", u42 = " . (rand(3000, 4000) * $speed) . ", u43 = " . (rand(4600, 5600) * $speed) . ", u44 = " . (rand(50, 150) * $speed) . ", u45 = " . (rand(2400, 3800) * $speed) . ", u46 = " . (rand(3000, 4000) * $speed) . ", u47 = " . (rand(1000, 1800) * $speed) . ", u48 = " . (rand(200, 600) * $speed) . " , u49 = " . (rand(2, 10) * $speed) . ", u50 = " . (rand(2, 10) * $speed) . " WHERE vref = " . (int) $wid . "");
+			    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 20, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = ".(int) $wid);
 			} elseif($size == 3) {
-				mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(4000, 8000) * $speed) . ", u42 = " . (rand(6000, 8000) * $speed) . ", u43 = " . (rand(9200, 11200) * $speed) . ", u44 = " . (rand(100, 300) * $speed) . ", u45 = " . (rand(4800, 7600) * $speed) . ", u46 = " . (rand(6000, 8000) * $speed) . ", u47 = " . (rand(2000, 3600) * $speed) . ", u48 = " . (rand(400, 1200) * $speed) . " , u49 = " . (rand(4, 20) * $speed) . ", u50 = " . (rand(4, 20) * $speed) . " WHERE vref = " . $wid . "");
-				mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 20, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = $wid");
+			    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(4000, 8000) * $speed) . ", u42 = " . (rand(6000, 8000) * $speed) . ", u43 = " . (rand(9200, 11200) * $speed) . ", u44 = " . (rand(100, 300) * $speed) . ", u45 = " . (rand(4800, 7600) * $speed) . ", u46 = " . (rand(6000, 8000) * $speed) . ", u47 = " . (rand(2000, 3600) * $speed) . ", u48 = " . (rand(400, 1200) * $speed) . " , u49 = " . (rand(4, 20) * $speed) . ", u50 = " . (rand(4, 20) * $speed) . " WHERE vref = " . (int) $wid . "");
+			    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 20, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = ".(int) $wid);
 			}
 		}
 

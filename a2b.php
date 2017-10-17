@@ -185,7 +185,7 @@ if(isset($_GET['o'])) {
             }
 			
 			if ($prisoner['t11']>0){
-				$p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$p_owner."";
+			    $p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner."";
 				$p_resulth = mysqli_query($GLOBALS['link'],$p_qh);
 				$p_hero_f=mysqli_fetch_array($p_resulth);
 				$p_hero_unit=$p_hero_f['unit'];

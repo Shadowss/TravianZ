@@ -11,7 +11,7 @@ x<div id="content"  class="messages">
 		<th class="sent">Sent</th>
 	    </tr></thead><tfoot><tr><th>
 		<?php
-		$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+		$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".(int) $session->uid."'") or die(mysqli_error($database->dblink));
 		$golds = mysqli_fetch_array($MyGold);
 		$date2=strtotime("NOW");
 		if ($golds['plus'] <= $date2) { ?>

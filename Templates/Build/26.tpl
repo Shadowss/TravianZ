@@ -7,32 +7,32 @@ if(time() - $_SESSION['time_p'] > 5) {
 
 if($_POST AND $_GET['action'] == 'change_capital') {
   $pass = mysqli_escape_string($GLOBALS['link'],$_POST['pass']);
-  $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $session->uid);
+  $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $session->uid);
   $data = mysqli_fetch_assoc($query);
   if($data['password'] == md5($pass)) {
-    $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $session->uid . ' AND `capital` = 1');
+    $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' .(int)  $session->uid . ' AND `capital` = 1');
     $data1 = mysqli_fetch_assoc($query1);
-    $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata` WHERE `vref` = ' . $data1['wref']);
+    $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata` WHERE `vref` = ' . (int) $data1['wref']);
     $data2 = mysqli_fetch_assoc($query2);
     if($data2['vref'] != $village->wid) {
       for($i = 1; $i<=18; ++$i) {
         if($data2['f' . $i] > 10) {
-          $query2 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . '` = 10 WHERE `vref` = ' . $data2['vref']) or die(mysqli_error($database->dblink));
+          $query2 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . '` = 10 WHERE `vref` = ' . (int) $data2['vref']) or die(mysqli_error($database->dblink));
         }
 }
 for($i=19; $i<=40; ++$i) {
         if($data2['f' . $i . 't'] == 34) {
-          $query3 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . $data2['vref']) or die(mysqli_error($database->dblink));
+          $query3 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . (int) $data2['vref']) or die(mysqli_error($database->dblink));
         }
 }
         
          for($i=19; $i<=40; ++$i) {
         if($data2['f' . $i . 't'] == 29 or $data2['f' . $i . 't'] == 30 or $data2['f' . $i . 't'] == 38 or $data2['f' . $i . 't'] == 39 or $data2['f' . $i . 't'] == 42) {
-          $query3 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . $village->wid) or die(mysqli_error($database->dblink));
+          $query3 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . (int) $village->wid) or die(mysqli_error($database->dblink));
         }
 }
-$query3 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 0 WHERE `wref` = ' . $data1['wref']);
-$query4 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 1 WHERE `wref` = ' . $village->wid);
+$query3 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 0 WHERE `wref` = ' . (int) $data1['wref']);
+$query4 = mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 1 WHERE `wref` = ' . (int) $village->wid);
 }
         } else {
     $error = '<br /><font color="red">'.LOGIN_PW_ERROR.'</font><br />';
@@ -68,7 +68,7 @@ else{
 ?>
 
 <?php
-$query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $session->uid . ' AND `capital` = 1');
+$query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $session->uid . ' AND `capital` = 1');
 $data = mysqli_fetch_assoc($query);
 if($data['wref'] == $village->wid) {
 ?>

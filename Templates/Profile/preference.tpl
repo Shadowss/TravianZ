@@ -50,7 +50,7 @@ if($_POST) {
 	
 	if(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) == '') {
 	    // Add new link
-	    $userid = $session->uid;
+	    $userid = (int) $session->uid;
 	    if($session->access!=BANNED){
 	    $query = mysqli_query($GLOBALS['link'],'INSERT INTO `' . TB_PREFIX . 'links` (`userid`, `name`, `url`, `pos`) VALUES (' . $userid . ', \'' . $link['linkname'] . '\', \'' . $link['linkziel'] . '\', ' . $link['nr'] . ')');
 		}else{
@@ -82,7 +82,7 @@ if($_POST) {
 
 
 // Fetch all links
-$query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . $session->uid . ' ORDER BY `pos` ASC') or die(mysqli_error($database->dblink));
+$query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . (int) $session->uid . ' ORDER BY `pos` ASC') or die(mysqli_error($database->dblink));
 $links = array();
 while($data = mysqli_fetch_assoc($query)) {
     $links[] = $data;

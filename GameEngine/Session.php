@@ -91,12 +91,12 @@ class Session {
 				$_SESSION['qst'] = $database->getUserField($user_sanitized, "quest", 1);
 				$result = mysqli_query($GLOBALS['link'],"SELECT village_select FROM `". TB_PREFIX."users` WHERE `username`='".$user_sanitized."'");
                 $dbarray = mysqli_fetch_assoc($result);
-                $selected_village=$dbarray['village_select'];
+                $selected_village=(int) $dbarray['village_select'];
                 if(!isset($_SESSION['wid'])) {
                     if($selected_village!='') {
                         $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                     }else{
-                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
+                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
                     }
                     $data = mysqli_fetch_assoc($query);
                     $_SESSION['wid'] = $data['wref'];
@@ -105,7 +105,7 @@ class Session {
                         if($selected_village!='') {
                             $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                         }else{
-                            $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
+                            $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
                         }
                         $data = mysqli_fetch_assoc($query);
                         $_SESSION['wid'] = $data['wref'];
@@ -161,18 +161,18 @@ class Session {
 				global $database,$link;
    				$hero=0;
     			foreach($this->villages as $myvill){
-     				$q1 = "SELECT SUM(hero) from " . TB_PREFIX . "enforcement where `from` = ".$myvill;       // check if hero is send as reinforcement
+    			    $q1 = "SELECT SUM(hero) from " . TB_PREFIX . "enforcement where `from` = ".(int) $myvill;       // check if hero is send as reinforcement
      				$result1 = mysqli_query($GLOBALS['link'],$q1);
 					if(mysqli_num_rows($result1) != 0) {
 						$he1=mysqli_fetch_array($result1);
 						$hero+=$he1[0];
 					}
      				
-     				$q2 = "SELECT SUM(hero) from " . TB_PREFIX . "units where `vref` = ".$myvill;   // check if hero is on my account (all villages)
+					$q2 = "SELECT SUM(hero) from " . TB_PREFIX . "units where `vref` = ".(int) $myvill;   // check if hero is on my account (all villages)
      				$result2 = mysqli_query($GLOBALS['link'],$q2);
      				$he2=mysqli_fetch_array($result2);
      				$hero+=$he2[0];
-     				$q3 = "SELECT SUM(t11) from " . TB_PREFIX . "prisoners where `from` = ".$myvill;   // check if hero is prisoner
+     				$q3 = "SELECT SUM(t11) from " . TB_PREFIX . "prisoners where `from` = ".(int) $myvill;   // check if hero is prisoner
 					$result3 = mysqli_query($GLOBALS['link'],$q3);
 					$he3=mysqli_fetch_array($result3);
 					$hero+=$he3[0];

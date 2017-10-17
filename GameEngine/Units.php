@@ -286,7 +286,7 @@ class Units {
             }
         }
         if( intval($enforce['hero']) > 0){
-            $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner']."";
+            $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']."";
             $result = mysqli_query($GLOBALS['link'],$q);
             $hero_f=mysqli_fetch_array($result);
             $hero_unit=$hero_f['unit'];
@@ -378,13 +378,13 @@ if($session->access != BANNED){
                 array(0,0,0,0,0,0,0,0,0,0,0)
             );
 
-    $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],$data['to_vid']));
+            $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],(int) $data['to_vid']));
     $data1 = mysqli_fetch_assoc($query1);
-    $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
+    $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $data1['owner']);
     $data2 = mysqli_fetch_assoc($query2);
-    $query11 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],$village->wid));
+    $query11 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],(int) $village->wid));
     $data11 = mysqli_fetch_assoc($query11);
-    $query21 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data11['owner']);
+    $query21 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $data11['owner']);
     $data21 = mysqli_fetch_assoc($query21);
 
 
@@ -445,7 +445,7 @@ if($session->access != BANNED){
 		// If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
 		// Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
 		// Fixed by Advocaite and Shadow
-        $q = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99t = '40' AND vref = ".$data['to_vid']."");
+        $q = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99t = '40' AND vref = ".(int) $data['to_vid']."");
         $isThere = mysqli_num_rows($q);
         if($isThere > 0)
         {
@@ -515,7 +515,7 @@ if($session->access != BANNED){
         if($checkexist or $checkoexist){
         $database->addMovement(3,$village->wid,$data['to_vid'],$reference,time(),($time+time()));
         if(($database->hasBeginnerProtection($village->wid)==1)&&($checkexist)){
-        mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET protect = 0 WHERE id = $session->uid");
+            mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET protect = 0 WHERE id = ". (int) $session->uid);
 		}
         }
 
@@ -614,7 +614,7 @@ if($session->access != BANNED){
                 }
                     if (isset($post['t11'])){
                         if( $post['t11'] != '' && $post['t11'] > 0){
-                        $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".$from['owner']."";
+                            $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']."";
                         $resulth = mysqli_query($GLOBALS['link'],$qh);
                         $hero_f=mysqli_fetch_array($resulth);
                         $hero_unit=$hero_f['unit'];

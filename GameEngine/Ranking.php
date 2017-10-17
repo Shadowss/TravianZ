@@ -293,7 +293,7 @@
 
 			public function procRankRaceArray($race) {
 				global $multisort,$database;
-				$race = $database->escape($race);
+				$race = $database->escape((int) $race);
 				//$array = $GLOBALS['db']->getRanking();
 				$holder = array();
 				//$value['totalvillage'] = count($GLOBALS['db']->getVillagesID($value['id']));

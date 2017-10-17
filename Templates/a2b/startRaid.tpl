@@ -7,7 +7,7 @@
     $sql = "SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".$database->escape($lid)." order by id asc";
 	$array = $database->query_return($sql);
     foreach($array as $row){
-	$sql1 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE vref = ".$getFLData['wref']));
+	$sql1 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE vref = ".(int) $getFLData['wref']));
         $sid = $row['id'];
         $wref = $row['towref'];
         $t1 = $row['t1'];$t2 = $row['t2'];$t3 = $row['t3'];$t4 = $row['t4'];$t5 = $row['t5'];

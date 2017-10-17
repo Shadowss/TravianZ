@@ -164,11 +164,11 @@ $user = $session->uid;
 
 
 //loop search village user
-$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
+$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user."");
 while($villaggi_array = mysqli_fetch_array($query)){
 
         //loop structure village
-    $query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
+    $query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".(int) $villaggi_array['wref']."");
     $strutture= mysqli_fetch_array($query1);
     if($strutture == false)
         $strutture = [];
@@ -288,11 +288,11 @@ $user = $session->uid;
 //mysqli_select_db(SQL_DB);
 
 //loop search village user
-$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user."");
+$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user."");
 while($villaggi_array = mysqli_fetch_array($query)){
 
         //loop structure village
-        $query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".$villaggi_array['wref']."");
+        $query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".(int) $villaggi_array['wref']."");
         $strutture= mysqli_fetch_array($query1);
 
 //search Castle in array structure village

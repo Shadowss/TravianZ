@@ -105,7 +105,7 @@ if(mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . 
         $arts = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "artefacts");
         $rows = array();
         while($row = mysqli_fetch_array($arts)) {
-                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . $row['vref']);
+                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . (int) $row['vref']);
                         $coor2 = mysqli_fetch_assoc($query);
 
                         

@@ -14,8 +14,8 @@ global $database;
 
 if (isset($_POST['name'])) { 
 	$_POST['name'] = stripslashes($_POST['name']);
-     mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `name`='".($database->escape($_POST['name']))."' where `uid`='".$session->uid."'") or die("ERROR:".mysqli_error($database->dblink)); 
-        $hero = mysqli_query("SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . $session->uid . ""); 
+     mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `name`='".($database->escape($_POST['name']))."' where `uid`='".$database->escape($session->uid)."'") or die("ERROR:".mysqli_error($database->dblink)); 
+        $hero = mysqli_query("SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . (int) $session->uid . ""); 
         $hero_info = mysqli_fetch_array($hero); 
         echo "".NAME_CHANGED.""; 
     } 
@@ -170,48 +170,48 @@ if (isset($_POST['name'])) {
             if($_GET['add'] == "reset") { 
                 if($hero_info['level'] <= 3){ 
                       if($hero_info['attack'] != 0 OR $hero_info['defence'] != 0 OR $hero_info['attackbonus'] != 0 OR $hero_info['defencebonus'] != 0 OR $hero_info['regeneration'] != 0){ 
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = '".(($hero_info['level']*5)+5)."' WHERE `uid` = '" . $session->uid . "'"); 
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attack` = '0' WHERE `uid` = '" . $session->uid . "'"); 
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defence` = '0' WHERE `uid` = '" . $session->uid . "'"); 
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attackbonus` = '0' WHERE `uid` = '" . $session->uid . "'"); 
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defencebonus` = '0' WHERE `uid` = '" . $session->uid . "'"); 
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `regeneration` = '0' WHERE `uid` = '" . $session->uid . "'"); 
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = '".(($hero_info['level']*5)+5)."' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attack` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defence` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attackbonus` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defencebonus` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `regeneration` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                     header("Location: build.php?id=".$id.""); 
                 } 
             } 
          } 
             if($_GET['add'] == "off" && $hero_info['attack'] < 100) { 
                     if($hero_info['points'] > 0) { 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attack` = `attack` + 1 WHERE `uid` = '" . $session->uid . "'"); 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $session->uid . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attack` = `attack` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         header("Location: build.php?id=".$id.""); 
                     } 
                 } 
             if($_GET['add'] == "deff" && $hero_info['defence'] < 100) { 
                     if($hero_info['points'] > 0) { 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defence` = `defence` + 1 WHERE `uid` = '" . $session->uid . "'"); 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $session->uid . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defence` = `defence` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         header("Location: build.php?id=".$id.""); 
                     } 
                 } 
           if($_GET['add'] == "obonus" && $hero_info['attackbonus'] < 100) { 
                     if($hero_info['points'] > 0) { 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attackbonus` = `attackbonus` + 1 WHERE `uid` = '" . $session->uid . "'"); 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $session->uid . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attackbonus` = `attackbonus` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         header("Location: build.php?id=".$id.""); 
                     } 
                 } 
           if($_GET['add'] == "dbonus" && $hero_info['defencebonus'] < 100) { 
                     if($hero_info['points'] > 0) { 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defencebonus` = `defencebonus` + 1 WHERE `uid` = '" . $session->uid . "'"); 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $session->uid . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defencebonus` = `defencebonus` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         header("Location: build.php?id=".$id.""); 
                     } 
                 } 
           if($_GET['add'] == "reg" && $hero_info['regeneration'] < 100) { 
                     if($hero_info['points'] > 0) { 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `regeneration` = `regeneration` + 1 WHERE `uid` = '" . $session->uid . "'"); 
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $session->uid . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `regeneration` = `regeneration` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         header("Location: build.php?id=".$id.""); 
                     } 
                 } 

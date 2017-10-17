@@ -380,7 +380,7 @@ $end = ($tribe*10);
                 else
                 {
                 //$uid
-                $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid";
+                $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $uid;
                 $result = mysqli_query($GLOBALS['link'],$q);
                 $hero_f=mysqli_fetch_array($result);
                 $hero_unit=$hero_f['unit'];

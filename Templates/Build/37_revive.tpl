@@ -171,11 +171,11 @@
     
     if($_GET['revive'] == 1 && $hero_info['inrevive'] == 0 && $hero_info['intraining'] == 0 && $hero_info['dead'] == 1){
 			if($session->access != BANNED){
-            mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".$training_time2."', `wref` = '".$village->wid."' WHERE `uid` = '".$session->uid."'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$wood." WHERE `wref` = '" . $village->wid . "'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".$clay." WHERE `wref` = '" . $village->wid . "'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `iron` = `iron` - ".$iron." WHERE `wref` = '" . $village->wid . "'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".$crop." WHERE `wref` = '" . $village->wid . "'");
+            mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".(int) $training_time2."', `wref` = '".(int) $village->wid."' WHERE `uid` = '".(int) $session->uid."'");
+			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $wood." WHERE `wref` = '" . (int) $village->wid . "'");
+			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $clay." WHERE `wref` = '" . (int) $village->wid . "'");
+			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `iron` = `iron` - ".(int) $iron ." WHERE `wref` = '" . (int) $village->wid . "'");
+			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $crop." WHERE `wref` = '" . (int) $village->wid . "'");
             header("Location: build.php?id=".$id."");
 			}else{
 			header("Location: banned.php"); 

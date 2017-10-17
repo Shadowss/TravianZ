@@ -13,7 +13,7 @@
 include_once("GameEngine/Account.php");
 $max_per_pass = 1000;
 
-if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attemp!");
+if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".(int) $session->uid)) != '1') die("Hacking attemp!");
 
 if (@$_POST['submit'] == "Send")
 {

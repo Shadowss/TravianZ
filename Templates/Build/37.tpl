@@ -8,7 +8,7 @@
 | Copyright:     TravianX Project All rights reserved     |
 \*-------------------------------------------------------*/
 
-        $hero = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . $session->uid . "");
+        $hero = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . (int) $session->uid . "");
         $hero_info = mysqli_fetch_array($hero);
         
         $define['reset_level'] = 3; // Until which level you are able to reset your points
