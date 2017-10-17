@@ -28,7 +28,7 @@ mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET
 	ap = '".$_POST['off']."', 
 	dp = '".$_POST['def']."', 
 	RR = '".$_POST['res']."' 
-	WHERE id = $id") or die(mysqli_error());
+	WHERE id = $id") or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");
 ?>

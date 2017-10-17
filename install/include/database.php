@@ -11,7 +11,7 @@ include("constant.php");
 class MYSQLi_DB {
 	var $connection;
 	function MYSQLi_DB() {
-		$this->connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB) or die(mysqli_error());
+		$this->connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB) or die(mysqli_error($database->dblink));
 	}
 		function query($query) {
 		return mysqli_query($this->connection, $query);

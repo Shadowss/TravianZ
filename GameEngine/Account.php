@@ -226,7 +226,7 @@ class Account {
 		global $session,$database;
 		unset($_SESSION['wid']);
 		$database->activeModify(addslashes($session->username),1);
-		$database->UpdateOnline("logout") or die(mysqli_error());
+		$database->UpdateOnline("logout") or die(mysqli_error($database->dblink));
 		$session->Logout();
 	}
 

@@ -159,18 +159,18 @@ if($_POST['password'] != ""){
                 
         $wid = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $uid"));
         $q = "UPDATE " . TB_PREFIX . "vdata SET pop = 834 WHERE owner = $uid";
-        mysqli_query($GLOBALS['link'],$q) or die(mysqli_error());
+        mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
         $q2 = "UPDATE " . TB_PREFIX . "users SET access = 2 WHERE id = $uid";
-        mysqli_query($GLOBALS['link'],$q2) or die(mysqli_error());
+        mysqli_query($GLOBALS['link'],$q2) or die(mysqli_error($database->dblink));
         if(SPEED > 3) {
             $speed = 5;
         } else {
             $speed = SPEED;
         }
         $q3 = "UPDATE " . TB_PREFIX . "units SET u41 = " . (64700 * $speed) . ", u42 = " . (295231 * $speed) . ", u43 = " . (180747 * $speed) . ", u44 = " . (20000 * $speed) . ", u45 = " . (364401 * $speed) . ", u46 = " . (217602 * $speed) . ", u47 = " . (2034 * $speed) . ", u48 = " . (1040 * $speed) . " , u49 = " . (1 * $speed) . ", u50 = " . (9 * $speed) . " WHERE vref = " . $wid['wref'] . "";
-        mysqli_query($GLOBALS['link'],$q3) or die(mysqli_error());
+        mysqli_query($GLOBALS['link'],$q3) or die(mysqli_error($database->dblink));
         $q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = $uid";
-        mysqli_query($GLOBALS['link'],$q4) or die(mysqli_error());
+        mysqli_query($GLOBALS['link'],$q4) or die(mysqli_error($database->dblink));
 		
 /**
  * SCOUTING ALL PLAYERS FIX BY MisterX
@@ -486,10 +486,10 @@ if($_POST['password'] != ""){
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
-			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error());
+			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error($database->dblink));
 			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
 					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
-					or die(mysqli_error());
+					or die(mysqli_error($database->dblink));
 			}
 
 		echo "Done";

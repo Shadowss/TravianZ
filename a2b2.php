@@ -69,11 +69,11 @@ $automation->isWinner();
 <?php
 if ($amount == 199) {
 // Statement retrieve Gold Package A
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds = mysqli_fetch_array($MyGold);
 $goldnow = $golds['6'] + 60; 
-mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error());
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds1 = mysqli_fetch_array($MyGold);
 ?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?></p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p> 
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
@@ -117,11 +117,11 @@ $golds1 = mysqli_fetch_array($MyGold);
 }
 if ($amount == 499) {
 // Statement retrieve Gold Package B
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds = mysqli_fetch_array($MyGold);
 $goldnow = $golds['6'] + 120; 
-mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error());
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds1 = mysqli_fetch_array($MyGold);
 ?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p> 
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
@@ -164,11 +164,11 @@ $golds1 = mysqli_fetch_array($MyGold);
 }
 if ($amount == 999) {
 // Statement retrieve Gold Package C
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds = mysqli_fetch_array($MyGold);
 $goldnow = $golds['6'] + 360; 
-mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error());
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds1 = mysqli_fetch_array($MyGold);
 ?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
@@ -211,11 +211,11 @@ $golds1 = mysqli_fetch_array($MyGold);
 }
 if ($amount == 1999) {
 // Statement retrieve Gold Package D
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds = mysqli_fetch_array($MyGold);
 $goldnow = $golds['6'] + 1000; 
-mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error());
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds1 = mysqli_fetch_array($MyGold);
 ?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
@@ -258,11 +258,11 @@ $golds1 = mysqli_fetch_array($MyGold);
 }
 if ($amount == 4999) {
 // Statement retrieve Gold Package E
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds = mysqli_fetch_array($MyGold);
 $goldnow = $golds['6'] + 2000; 
-mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error());
-$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = '".$goldnow."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 $golds1 = mysqli_fetch_array($MyGold);
 ?><p>Thank you for your purchase here at <?php echo SERVER_NAME ?>.</p><p>Below you see the entry record.  Out of it, you can observe your old as well as your new account balance.</p>
 <table class="plusFunctions" cellpadding="1" cellspacing="1">
@@ -304,7 +304,7 @@ $golds1 = mysqli_fetch_array($MyGold);
 }
 				if ($amount == 0) 
 				{
-				$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error());
+				$MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
 				$golds = mysqli_fetch_array($MyGold);	
 					 ?>
                 

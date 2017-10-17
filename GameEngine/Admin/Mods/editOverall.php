@@ -27,7 +27,7 @@ if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
 	apall = '".$_POST['off']."', 
 	dpall = '".$_POST['def']."' 
-	WHERE id = $id") or die(mysqli_error());
+	WHERE id = $id") or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");
 ?>

@@ -882,7 +882,7 @@ class Automation {
 		}
 
 		// get the capital village from the natars
-		$query = mysqli_query($GLOBALS['link'],'SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysqli_error());
+		$query = mysqli_query($GLOBALS['link'],'SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysqli_error($database->dblink));
 		$row = mysqli_fetch_assoc($query);
 
 		// start the attacks
@@ -4205,7 +4205,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$crop = 800 * STORAGE_MULTIPLIER;
 			}
 
-			mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . $ress . ', `maxcrop` = ' . $crop . ' WHERE `wref` = ' . $row['vref']) or die(mysqli_error());
+			mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . $ress . ', `maxcrop` = ' . $crop . ' WHERE `wref` = ' . $row['vref']) or die(mysqli_error($database->dblink));
 		}
 	}
 

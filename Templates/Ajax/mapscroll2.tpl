@@ -101,7 +101,7 @@ $query2 = "SELECT
 			ORDER BY FIND_IN_SET(".TB_PREFIX."wdata.id,'$maparray2')";
 
 //echo $query2;
-$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error());
+$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error($database->dblink));
 
 $i=0;
 $i2=0;

@@ -111,7 +111,7 @@ $query2 = "SELECT
 
 //$query2;
 
-$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error());
+$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error($database->dblink));
 
 $targetalliance = array();
 $neutralarray = array();

@@ -26,7 +26,7 @@ $sessionaccess = $access['access'];
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
 $q = "UPDATE ".TB_PREFIX."users SET gold = gold + ".$_POST['gold']." WHERE id != '0'";
-mysqli_query($GLOBALS["link"], $q) or die(mysqli_error());
+mysqli_query($GLOBALS["link"], $q) or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=gold&g");
 ?>

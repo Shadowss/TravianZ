@@ -15,10 +15,10 @@ if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."u
 
 if(isset($_GET['del'])){
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
-			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error());
+			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error($database->dblink));
 			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
 					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '0' WHERE id = '".$row[0]."'")
-					or die(mysqli_error());
+					or die(mysqli_error($database->dblink));
 			}
 }
 
@@ -45,10 +45,10 @@ if (@isset($_POST['confirm']))
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
-			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error());
+			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error($database->dblink));
 			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
 					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
-					or die(mysqli_error());
+					or die(mysqli_error($database->dblink));
 			}
 		$done = true;
 		} else { die("<br/><br/><br/>wrong"); }

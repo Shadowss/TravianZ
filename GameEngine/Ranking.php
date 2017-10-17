@@ -378,7 +378,7 @@
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.apall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
 			ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC, userid DESC";
-				$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error());
+				$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
 				while($row = mysqli_Fetch_assoc($result)) {
 					$datas[] = $row;
 				}
@@ -420,7 +420,7 @@
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
 			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC, userid DESC";
-				$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error());
+				$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
 				while($row = mysqli_Fetch_assoc($result)) {
 					$datas[] = $row;
 				}

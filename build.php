@@ -237,7 +237,7 @@ $now=time();
 if(($now-$oldmovement[0]['starttime'])<90 && $oldmovement[0]['from'] == $village->wid){
 
 $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$_GET['moveid'];
-$resultc=$database->query($qc) or die(mysqli_error());
+$resultc=$database->query($qc) or die(mysqli_error($database->dblink));
 
 	if (mysqli_num_rows($resultc)==1){
 

@@ -86,7 +86,7 @@ $query2 = "SELECT
 			where ".TB_PREFIX."wdata.id IN ($maparray)
 			ORDER BY FIND_IN_SET(".TB_PREFIX."wdata.id,'$maparray2')";
 
-$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error());
+$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error($database->dblink));
 
 $i=0;
 //Load coor array

@@ -31,8 +31,8 @@ class adm_DB {
 
   function adm_DB(){
 	global $database;
-		$this->connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error());
-		mysqli_select_db($this->connection, SQL_DB) or die(mysqli_error());
+		$this->connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error($database->dblink));
+		mysqli_select_db($this->connection, SQL_DB) or die(mysqli_error($database->dblink));
 	}
 
 	function Login($username,$password){
