@@ -1789,15 +1789,18 @@ class MYSQLi_DB {
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '$type' AND accepted = '1' OR alli2 = '$aid' AND type = '$type' AND accepted = '1'";
 		$array = $this->query_return($q);
 		$text = "";
-			foreach($array as $row){
-				if($row['alli1'] == $aid){
-				$alliance = $this->getAlliance($row['alli2']);
-				}elseif($row['alli2'] == $aid){
-				$alliance = $this->getAlliance($row['alli1']);
-				}
-				$text .= "";
-				$text .= "<a href=allianz.php?aid=".$alliance['id'].">".$alliance['tag']."</a><br> ";
-			}
+		
+		if ($array) {
+    		foreach($array as $row){
+    			if($row['alli1'] == $aid){
+    			$alliance = $this->getAlliance($row['alli2']);
+    			}elseif($row['alli2'] == $aid){
+    			$alliance = $this->getAlliance($row['alli1']);
+    			}
+    			$text .= "";
+    			$text .= "<a href=allianz.php?aid=".$alliance['id'].">".$alliance['tag']."</a><br> ";
+    		}
+		}
 		if(strlen($text) == 0){
 			$text = "-<br>";
 		}
@@ -1809,15 +1812,18 @@ class MYSQLi_DB {
 		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
 		$array = $this->query_return($q);
         $text = "";
-			foreach($array as $row){
-				if($row['alli1'] == $aid){
-				$alliance = $this->getAlliance($row['alli2']);
-				}elseif($row['alli2'] == $aid){
-				$alliance = $this->getAlliance($row['alli1']);
-				}
-				$text .= "";
-				$text .= "<a href=allianz.php?aid=".$alliance['id'].">".$alliance['tag']."</a><br> ";
-			}
+        
+        if ($array) {
+    		foreach($array as $row){
+    			if($row['alli1'] == $aid){
+    			$alliance = $this->getAlliance($row['alli2']);
+    			}elseif($row['alli2'] == $aid){
+    			$alliance = $this->getAlliance($row['alli1']);
+    			}
+    			$text .= "";
+    			$text .= "<a href=allianz.php?aid=".$alliance['id'].">".$alliance['tag']."</a><br> ";
+    		}
+        }
 		if(strlen($text) == 0){
 			$text = "-<br>";
 		}
