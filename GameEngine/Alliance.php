@@ -361,7 +361,7 @@
 			global $database, $session;
 			if($session->access != BANNED){
 				if(isset($post['f_link'])){
-				$database->setAlliForumLink($session->alliance, $post['f_link']);
+				    $database->setAlliForumdblink($session->alliance, $post['f_link']);
 				header("Location: allianz.php?s=5");
 				}
 			}else{
