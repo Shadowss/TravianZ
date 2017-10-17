@@ -164,7 +164,7 @@ class Account {
 
 	private function Unreg() {
 		global $database;
-		$q = "SELECT * FROM ".TB_PREFIX."activate where id = '".$database->escape($_POST['id'])."'";
+		$q = "SELECT * FROM ".TB_PREFIX."activate where id = '".$database->escape((int) $_POST['id'])."'";
 		$result = mysqli_query($GLOBALS['link'],$q);
 		$dbarray = mysqli_fetch_array($result);
 		if(md5($_POST['pw']) == $dbarray['password']) {

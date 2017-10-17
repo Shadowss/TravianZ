@@ -359,10 +359,10 @@ if (!isset($SAJAX_INCLUDED)) {
 		$name = addslashes($session->username);
 
 		if ($msg != ""){
-			$id_user = $session->uid;
-			$alliance = $session->alliance;
+		    $id_user = (int) $session->uid;
+			$alliance = $database->escape($session->alliance);
 			$now = time();
-				echo $q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ('$id_user','$name','$alliance','$now','$msg')";
+				echo $q = "INSERT into ".TB_PREFIX."chat (id_user,name,alli,date,msg) values ($id_user,'$name','$alliance','$now','$msg')";
 				mysqli_query($GLOBALS['link'],$q);
 		}
 	}
@@ -370,7 +370,7 @@ if (!isset($SAJAX_INCLUDED)) {
 	function get_data() {
 		global $session,$database;
 
-		$alliance = $session->alliance;
+		$alliance = $database->escape($session->alliance);
 		$query = mysqli_query($GLOBALS['link'],"select * from ".TB_PREFIX."chat where alli='$alliance' order by id desc limit 0,13");
 			while ($r = mysqli_fetch_array($query)) {
 			$dates = date("g:i",$r[date]);

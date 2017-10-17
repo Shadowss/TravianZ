@@ -454,7 +454,7 @@
 		
 		private function updateMax($leader) {
 			global $bid18, $database;
-			$leader = $database->escape($leader);
+			$leader = $database->escape((int) $leader);
 			$q = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "alidata where leader = $leader");
 			if(mysqli_num_rows($q) > 0){
 			$villages = $database->getVillagesID2($leader);

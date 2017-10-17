@@ -102,7 +102,7 @@ class Battle {
 		$h_dc = $herodata['dc'] + 5 * floor($heroarray[0]['defence'] * $herodata['dcp'] / 5);
 		$h_ob = 1 + 0.010 * ($heroarray[0]['attackbonus']/5);
 		$h_db = 1 + 0.010 * ($heroarray[0]['defencebonus']/5);
-		return array('heroid'=>$heroarray[0]['heroid'],'unit'=>$heroarray[0]['unit'],'atk'=>$h_atk,'di'=>$h_di,'dc'=>$h_dc,'ob'=>$h_ob,'db'=>$h_db,'health'=>$heroarray['health']);
+		return array('heroid'=>(int) $heroarray[0]['heroid'],'unit'=>$heroarray[0]['unit'],'atk'=>$h_atk,'di'=>$h_di,'dc'=>$h_dc,'ob'=>$h_ob,'db'=>$h_db,'health'=>$heroarray['health']);
 		}
 		
 		private function getBattleHeroSim($attbonus) {
@@ -659,19 +659,19 @@ class Battle {
 
 			if (isset($units['Att_unit']['hero']) && $units['Att_unit']['hero'] >0){
 
-				$_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$atkhero['heroid']."'");
+			    $_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $atkhero['heroid']);
 				$fdb = mysqli_fetch_array($_result);
-				$hero_id=$fdb['heroid'];
+				$hero_id=(int) $fdb['heroid'];
 				$hero_health=$fdb['health'];
 				$damage_health=round(100*$result[1]);
 			
 				if ($hero_health<=$damage_health or $damage_health>90){
 					//hero die
 					$result['casualties_attacker']['11'] = 1;
-					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
-					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
+					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `dead`='1' where `heroid`=".(int) $hero_id);
+					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`='0' where `heroid`=".(int) $hero_id);
 				}else{
-					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
+				    mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`=`health`-".(int) $damage_health." where `heroid`=".(int) $hero_id);
 				}
 			}
 			unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
@@ -679,19 +679,19 @@ class Battle {
 
 			if (isset($units['Def_unit']['hero']) && $units['Def_unit']['hero'] >0){
 
-				$_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$defenderhero['heroid']."'");
+			    $_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $defenderhero['heroid']);
 				$fdb = mysqli_fetch_array($_result);
-				$hero_id=$fdb['heroid'];
+				$hero_id=(int) $fdb['heroid'];
 				$hero_health=$fdb['health'];
 				$damage_health=round(100*$result[2]);
 				if ($hero_health<=$damage_health or $damage_health>90){
 					//hero die
 					$result['deadherodef'] = 1;
-					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
-					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
+					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `dead`='1' where `heroid`=".(int) $hero_id);
+					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`='0' where `heroid`=".(int) $hero_id);
 				}else{
 					$result['deadherodef'] = 0;
-					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
+					mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`=`health`-".(int) $damage_health." where `heroid`=".(int) $hero_id);
 				}
 			}
 			unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
@@ -703,19 +703,19 @@ class Battle {
 						if(!empty($heroarray)) { reset($heroarray); }
 						$Reinforcer = $database->getVillageField($defenders['from'],"owner");
 						$heroarraydefender = $this->getBattleHero($Reinforcer);
-						$_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`='".$heroarraydefender['heroid']."'");
+						$_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $heroarraydefender['heroid']);
 						$fdb = mysqli_fetch_array($_result);
-						$hero_id=$fdb['heroid'];
+						$hero_id=(int) $fdb['heroid'];
 						$hero_health=$fdb['health'];
 						$damage_health=round(100*$result[2]);
 						if ($hero_health<=$damage_health or $damage_health>90){
 							//hero die
 							$result['deadheroref'][$defenders['id']] = 1;
-							mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `dead`='1' where `heroid`='".$hero_id."'");
-							mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`='0' where `heroid`='".$hero_id."'");
+							mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `dead`='1' where `heroid`=".(int) $hero_id);
+							mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`='0' where `heroid`=".(int) $hero_id);
 						}else{
 							$result['deadheroref'][$defenders['id']] = 0;
-							mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
+							mysqli_query($GLOBALS['link'],"update " . TB_PREFIX . "hero set `health`=`health`-".(int) $damage_health." where `heroid`=".(int) $hero_id);
 						}
 					}
 				}
