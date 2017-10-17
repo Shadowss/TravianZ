@@ -1,3 +1,4 @@
+- just so it's really visible => exchange md5 for something more secure
 - change title for each page, so it fits with H1 (or history will always show a lot of "TravianZ" entries without a way to know where that history entry leads)
   ... same in Admin panel
 - fix deleting users (need to delete their villages (+alliances/construction plans/...?) after a while)
@@ -21,3 +22,5 @@
 - quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
 - disallow kicking yourself from alliance or provide a confirmation dialog and correct redirect
 - sending messages to players via Admin doesn't work
+- check aliance invitation accepting - apparently it doesn't work too well on first try?
+- normalize forum tables - varchar is used for numeric values and is joined with int field
