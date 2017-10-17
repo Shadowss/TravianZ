@@ -29,6 +29,7 @@ class MYSQLi_DB {
 	}
 
 	function escape($value) {
+	    $value = stripslashes($value);
 	    return mysqli_real_escape_string($this->dblink, $value);
 	}
 	
@@ -38,7 +39,8 @@ class MYSQLi_DB {
 	    $ret = [];
 
 	    for ($i = 0; $i < $numargs; $i++) {
-	        if (!is_object($arg_list[$i])) {
+	        if (is_string($arg_list[$i])) {
+               $arg_list[$i] = stripslashes($arg_list[$i]);
 	           $res[] = mysqli_real_escape_string($this->dblink, $arg_list[$i]);
 	        } else {
 	           $res[] = $arg_list[$i];
@@ -268,7 +270,6 @@ class MYSQLi_DB {
 
 	function login($username, $password) {
         list($username, $password) = $this->escape_input($username, $password);
-
 		$q = "SELECT password,sessid FROM " . TB_PREFIX . "users where username = '$username'";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
