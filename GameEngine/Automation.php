@@ -1035,6 +1035,8 @@ class Automation {
 		$dataarray = $database->query_return($q);
 		$totalattackdead = 0;
 		$data_num = 0;
+		
+		if ($dataarray) {
 		foreach($dataarray as $data) {
 			//set base things
 			//$battle->resolveConflict($data);
@@ -2970,6 +2972,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				#################################################
 
 		   }
+		}
 			if(file_exists("GameEngine/Prevention/sendunits.txt")) {
 				unlink("GameEngine/Prevention/sendunits.txt");
 			}
@@ -3183,6 +3186,8 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
             fclose($ourFileHandle);
             $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
             $dataarray = $database->query_return($q);
+            
+            if ($dataarray) {
             foreach($dataarray as $data) {
                 $isoasis = $database->isVillageOases($data['to']);
                 if($isoasis == 0){
@@ -3300,6 +3305,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".$data['to']." OR `from`=".$data['to'].")";
                 $database->query($q);
             }
+            }
         
             if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
                 unlink("GameEngine/Prevention/sendreinfunits.txt");
@@ -3319,6 +3325,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '4' and endtime < $time";
 		$dataarray = $database->query_return($q);
 
+		if ($dataarray) {
 		foreach($dataarray as $data) {
 
 		$tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
@@ -3344,6 +3351,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
            	}
 		}
 		 }
+		}
 
 		// Recieve the bounty on type 6.
 
@@ -3381,6 +3389,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 
 		$q = "SELECT * FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
 		$dataarray = $database->query_return($q);
+		if ($dataarray) {
 		foreach($dataarray as $data) {
 
 		$tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
@@ -3389,6 +3398,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$database->setMovementProc($data['moveid']);
 
            }
+		}
 
 		if(file_exists("GameEngine/Prevention/returnunits.txt")) {
 			unlink("GameEngine/Prevention/returnunits.txt");
