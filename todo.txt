@@ -19,3 +19,4 @@
 - make messages work with apostrophes
 - resetting res bonus in admin actually says that bonus was given after OK is pressed
 - pagination in attacks goes to "All" reports instead of staying in "Attacks"
+- quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
