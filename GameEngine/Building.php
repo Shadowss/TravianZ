@@ -635,8 +635,19 @@ class Building {
 
 	public function isMax($id,$field,$loop=0) {
 		$name = "bid".$id;
-		global $$name,$village;
+		global $$name,$village,$session;
 		$dataarray = $$name;
+
+		// special case for Multihunter login which mathematically (because of the resarray length)
+		// allows for building resource fields above level 20
+		if ($session->tribe == 0) {
+		    if ($village->resarray['f'.$field] == 20) {
+		      return true;
+		    } else {
+		      return false;
+		    }
+		}
+
 		if($id <= 4) {
 			if($village->capital == 1) {
 				return ($village->resarray['f'.$field] == (count($dataarray) - 1 - $loop));
