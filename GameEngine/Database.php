@@ -3258,7 +3258,7 @@ class MYSQLi_DB {
 	}
 
 	function modifyUnit($vref, $array_unit, $array_amt, $array_mode) {
-	    list($vref, $array_unit, $array_amt, $array_mode) = $this->escape_input((int) $vref, $array_unit, $array_amt, $array_modes);
+	    list($vref, $array_unit, $array_amt, $array_mode) = $this->escape_input((int) $vref, $array_unit, $array_amt, $array_mode);
 		$i = -1;
 		$units='';
 		$number = count($array_unit);

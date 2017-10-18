@@ -24,3 +24,4 @@
 - sending messages to players via Admin doesn't work
 - check aliance invitation accepting - apparently it doesn't work too well on first try?
 - normalize forum tables - varchar is used for numeric values and is joined with int field
+- task 1 => construct woodcutter will not reload the page when finished, so it would still seem that woodcutter build is in progress
