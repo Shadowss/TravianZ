@@ -33,7 +33,7 @@ if(isset($_GET['gid'])) {
 if(isset($_POST['t'])){
 	$_GET['t'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['t']);
 }
-if(isset($_GET['id'])) {
+if(isset($_GET['id'])) {    
 	if (!ctype_digit(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']))){
 		$_GET['id'] = "1";
 	}

@@ -646,7 +646,7 @@ class Building {
 			}
 		}
 		else {
-			return ($village->resarray['f'.$field] == count($dataarray) - $loop);
+		    return ($village->resarray['f'.$field] == count($dataarray) - $loop);
 		}
 	}
 
