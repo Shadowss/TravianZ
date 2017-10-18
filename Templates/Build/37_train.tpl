@@ -535,7 +535,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '1', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '1', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50', '1')");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u1` = `u1` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u1['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u1['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -551,7 +551,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '2', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '2', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u2` = `u2` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u2['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u2['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -566,7 +566,7 @@ $output.="<tr>
                 if($_GET['train'] == 3){
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '3', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u3['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '3', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u3['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u3` = `u3` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u3['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u3['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -581,7 +581,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '5', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u5['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '5', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u5['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u5` = `u5` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u5['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u5['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -597,7 +597,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '6', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u6['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '6', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u6['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u6` = `u6` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u6['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u6['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -615,7 +615,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '11', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u11['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '11', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u11['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u11` = `u11` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u11['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u11['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -631,7 +631,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '12', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u12['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '12', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u12['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u12` = `u12` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u12['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u12['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -647,7 +647,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '13', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u13['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '13', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u13['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u13` = `u13` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u13['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u13['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -663,7 +663,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '15', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u15['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '15', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u15['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u15` = `u15` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u15['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u15['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -679,7 +679,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '16', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u16['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '16', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u16['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u16` = `u16` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u16['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u16['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -697,7 +697,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '21', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u21['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '21', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u21['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u21` = `u21` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u21['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u21['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -713,7 +713,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '22', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u22['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '22', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u22['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u22` = `u22` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u22['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u22['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -729,7 +729,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '24', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u24['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '24', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u24['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u24` = `u24` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u24['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u24['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -745,7 +745,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '25', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u25['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '25', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u25['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u25` = `u25` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u25['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u25['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
@@ -761,7 +761,7 @@ $output.="<tr>
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '26', '".$database-escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u26['time'] / SPEED)*3))."', '50', '1')");
+					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '26', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u26['time'] / SPEED)*3))."', '50', '1')");
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u26` = `u26` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $u26['wood']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $u26['clay']." WHERE `wref` = '" . (int) $village->wid . "'");
