@@ -15,12 +15,12 @@ if(isset($_POST['show1']) || isset($_POST['show2'])) {
  $check2=isset($_POST['show2'])? "checked ":"";
  if ($check1!="" && $check2!="") {$criteria="";}
  if ($check1!="" && $check2=="") {$criteria="WHERE tribe<>5";}
- if ($check1=="" && $check2!="") {$criteria="WHERE tribe IN(0,5)";}
+ if ($check1=="" && $check2!="") {$criteria="WHERE tribe IN(0,5) OR tribe IS NULL";}
 }elseif(!isset($_GET['c'])){
 	$check1="checked ";
 	$criteria="WHERE tribe<>5";
 }
-if ($check1=="" && $check2=="") {$criteria="WHERE tribe=0)";}
+if ($check1=="" && $check2=="") {$criteria="WHERE tribe=0";}
 ?>
 <link rel="stylesheet" href="../img/admin/map.css" type="text/css" media="all">
 			<div id="start">
