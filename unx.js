@@ -216,7 +216,9 @@ function fd(url,gd,hd,id){
 		if(jd.readyState==4){
 			if(jd.status==200){
 				var kd=jd.getResponseHeader('Content-Type');
-				kd=kd.substr(0,kd.indexOf(';'));
+				if (kd.indexOf(';') > -1) {
+					kd=kd.substr(0,kd.indexOf(';'));
+				}
 				switch(kd){
 					case'application/json':
 						if (jd.responseText.indexOf('[]') < 0) {
