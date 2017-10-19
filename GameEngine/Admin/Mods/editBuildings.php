@@ -14,6 +14,7 @@ if(!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
 include_once("../../config.php");
+include_once("../../Database.php");
 
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
