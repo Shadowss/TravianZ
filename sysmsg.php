@@ -40,8 +40,10 @@ if (@isset($_POST['confirm']))
 		$myFile = "Templates/text.tpl";
 		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");
 		$text = file_get_contents("Templates/text_format.tpl");
-		$text = preg_replace("'%TEKST%'",$_SESSION['m_message'] ,$text);
-		$text = utf8_encode($text);
+		$text = preg_replace("'%TEKST%'",str_replace('"', '\\"', $_SESSION['m_message']) ,$text);
+		// the following is not really needed and results in fhe file starting with BOM which gets displayed when the message is shown
+		// ... also, this very much depends on the underlying system and utf8_encode() is only good if the system is defaulted to ISO-8859-1
+		// $text = utf8_encode($text);
 		fwrite($fh, $text);
 
 			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";

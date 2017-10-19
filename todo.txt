@@ -1,4 +1,4 @@
-- just so it's really visible => exchange md5 for something more secure
+- just so it's really visible => exchange md5 for something more secure (probably password_hash() using bcrypt)
 - change title for each page, so it fits with H1 (or history will always show a lot of "TravianZ" entries without a way to know where that history entry leads)
   ... same in Admin panel
 - fix deleting users (need to delete their villages (+alliances/construction plans/...?) after a while)
@@ -6,17 +6,16 @@
 - add PayPal listener to verify gold transactions imediatelly
 - add combat Simulator link to options for a village/oasis (Centre map, Raid, Send Troops...)
 - don't show Support & Taskmaster in stats
-- add Support + Taskmaster login possibility into the game
+- add Support login possibility into Admin (ask for password during installation, create Support messages section)
+- allow sending Mass Message + System Message from Admin
 - fix editing current task from Taskmaster -> number never match the edited quest after save
 - remove <br /> tags from profile description and replace them by real new lines when editing players in Admin
 - cannot delete a single medal in admin
 - add back buttons to Admin where there are not (like editing a user)
 - disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)
-- when editing Additional Information for user and adjusting gold, sometimes the first time will not record the new gold amount
-- update password hashes (I believe they are md5 only now)
+- when editing Additional Information for user and adjusting gold, sometimes the first time will not record the new gold amount (when pressing Enter)
 - allow to redirect Support messages to admin's nickname (for when there's only a single admin and doesn't like switching between Support and themselves) 
 - disallow Support to play (single cookie for Admin and the game means support gets no village and lots of warnings when they switch to game now)
-- make messages work with apostrophes
 - resetting res bonus in admin actually says that bonus was given after OK is pressed
 - pagination in attacks goes to "All" reports instead of staying in "Attacks"
 - quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
