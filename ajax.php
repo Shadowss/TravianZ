@@ -11,6 +11,7 @@
 
 switch($_GET['f']) {
 	case 'k7':
+	    header('Content-Type: application/json');
 		$x = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['x']);
 		$y = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['y']);
 		$xx = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['xx']);
