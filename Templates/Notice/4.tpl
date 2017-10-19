@@ -8,16 +8,20 @@ $dataarray = explode(",",$message->readingNotice['data']);
 if(isset($dataarray[147]) and $dataarray[147]!=0){$colspan="11";}else{$colspan="10";}
 if(isset($dataarray[149]) and $dataarray[149]!=0){$colspan2="11";}else{$colspan2="10";}
 //attacker
-if ($database->getUserField($dataarray[0],'username',0)!="??") {
+$usr = $database->getUserField($dataarray[0],'username',0);
+if ($usr && $usr!="??") {
 	$user_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[0],'id',0)."\">".$database->getUserField($dataarray[0],'username',0)."</a>";
 }else{
 	$user_url="<font color=\"grey\"><b>??</b></font>";
 }
-if($database->getVillageField($dataarray[1],'name')!="??") {
+
+$villageName = $database->getVillageField($dataarray[1],'name');
+if($villageName && $villageName!="??") {
 	$from_url="<a href=\"karte.php?d=".$dataarray[1]."&c=".$generator->getMapCheck($dataarray[1])."\">".$database->getVillageField($dataarray[1],'name')."</a>";
 }else{
 	$from_url="<font color=\"grey\"><b>??</b></font>";
 }
+
 //defender
 if ($database->getUserField($dataarray[28],'username',0)!="??") {
 	$defuser_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[28],'id',0)."\">".$database->getUserField($dataarray[28],'username',0)."</a>";
@@ -52,14 +56,14 @@ if($database->isVillageOases($dataarray[29])){
 		<table cellpadding="1" cellspacing="1" id="attacker"><thead>
 <tr>
 <td class="role">Attacker</td>
-<td colspan="<?php echo $colspan ?>"><?php echo $user_url;?> from the village <?php echo $from_url;?></td>
+<td colspan="<?php echo $colspan ?>"><?php echo ($user_url ? $user_url : 'Natar Counterforce'); ?> <?php echo ($from_url ? 'from the village '.$from_url : '');?></td>
 </tr>
 </thead>
 <tbody class="units">
 <tr>
 <td>&nbsp;</td>
 <?php
-$tribe = $dataarray[2];
+$tribe = $dataarray[2] || 0;
 $start = ($tribe-1)*10+1;
 for($i=$start;$i<=($start+9);$i++) {
 	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
