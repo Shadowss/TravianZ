@@ -23,6 +23,8 @@ martinambrus changes:
 11. security tightened to try and prevent MySQL injections from in-game
 12. assigning link to alliance forum now works
 13. alliance description now really editable
+14. Admin SQL injection fixes
+15. fix for map not showing natar villages
 
 
 Shadowss changes:

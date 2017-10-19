@@ -71,7 +71,15 @@ if ($check1=="" && $check2=="") {$criteria="WHERE tribe=0)";}
 						$p_village=mysqli_real_escape_string($GLOBALS["link"], $p_array['name']);
 						$p_coor="(".$p_array['x']."|".$p_array['y'].")";
 						$p_pop=$p_array['pop'];
-						$p_tribe=$array_tribe[$p_array['tribe']];
+
+						// natars have a NULL tribe, since they don't have user accounts
+						if (!$p_array['tribe']) {
+							$p_tribe = $array_tribe[TRIBE5];
+							$p_array['tribe'] = 5;
+						} else {
+							$p_tribe=$array_tribe[$p_array['tribe']];
+						}
+
 						$p_info="<a href=\"?p=village&did=".$p_array['wref']."\" target=\"_blank\"><img src=\"../img/admin/map_".$p_array['tribe'].".gif\" border=\"0\" onmouseout=\"med_closeDescription()\" onmousemove=\"med_mouseMoveHandler(arguments[0],'<ul class=\'p_info\'><li>Player name : <b>$p_name</b></li><li>Village name : <b>$p_village</b></li><li>Coordinat : <b>$p_coor</b></li><li>Population : <b>$p_pop</b></li><li>Tribe : <b>$p_tribe</b></li></ul>')\"></a>";
 						//250px=0
 						$xdiv=250/WORLD_MAX;
