@@ -18,6 +18,14 @@
 ## 										##
 #################################################################################
 
+if (!function_exists('mysqli_result')) {
+    function mysqli_result($res, $row, $field=0) {
+        $res->data_seek($row);
+        $datarow = $res->fetch_array();
+        return $datarow[$field];
+    }
+}
+
 include("GameEngine/Village.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
@@ -203,7 +211,7 @@ $q = "
 
 					The results: Day had long since passed into night, yet the workers in <?php echo "<a href=\"karte.php?d=$vref&c=".$generator->getMapCheck($vref)."\">$winningvillagename</a>"; ?>,
 					laboured on throught the wintery eve, every wary of the countless armies marching to destroy their work, knowing that they raced against time and the greatest
-					threat that had ever faced the free people. Their tireless struggles were rewared at <b><?php echo date('H:i:s'); ?></b> on <b><?php echo date('d:M:Y'); ?></b> after a
+					threat that had ever faced the free people. Their tireless struggles were rewarded at <b><?php echo date('H:i:s'); ?></b> on <b><?php echo date('d. M. Y'); ?></b> after a
 					nameless worker laid the dinal stone in what will forever known as the greatest and most magnificent creation in all of history since the fall of the Natars<br /><br />
 
 					Together with the alliance "<?php echo "<a href=\"allianz.php?aid=$allianceid\">$winningalliancetag</a>"; ?>", "<?php echo "<a href=\"spieler.php?uid=$owner\">$username</a>"; ?>"
