@@ -72,8 +72,8 @@ if ($check1=="" && $check2=="") {$criteria="WHERE tribe=0)";}
 						$p_coor="(".$p_array['x']."|".$p_array['y'].")";
 						$p_pop=$p_array['pop'];
 
-						// natars have a NULL tribe, since they don't have user accounts
-						if (!$p_array['tribe']) {
+						// natars have a NULL username, since they don't have user accounts
+						if (!$p_array['username']) {
 							$p_tribe = $array_tribe[TRIBE5];
 							$p_array['tribe'] = 5;
 						} else {
