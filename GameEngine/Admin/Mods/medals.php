@@ -18,8 +18,9 @@ mysqli_select_db($GLOBALS["link"], SQL_DB);
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 
-$medalid = $_POST['medalid'];
-$uid = $_POST['uid'];
+$medalid = (int) $_POST['medalid'];
+$uid = (int) $_POST['uid'];
+$admid = (int) $_POST['admid'];
 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."medal set del = 1 WHERE id = ".$medalid."");
 
@@ -29,7 +30,7 @@ $name = mysqli_result($name, 0);
 mysqli_query($GLOBALS["link"], "Insert into ".TB_PREFIX."admin_log values (0,$admid,'Deleted medal id [#".$medalid."] from the user <a href=\'admin.php?p=player&uid=$uid\'>$name</a> ',".time().")");
 
 
-$deleteweek = $_POST['medalweek'];
+$deleteweek = (int) $_POST['medalweek'];
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."medal set del = 1 WHERE week = ".$deleteweek."");
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$uid."");

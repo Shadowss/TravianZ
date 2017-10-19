@@ -10,10 +10,10 @@
 #################################################################################
 
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
-$id = $_SESSION['id'];
+$id = (int) $_SESSION['id'];
 if(isset($_GET['uid']))
 {
-	$sql = mysqli_query($GLOBALS["link"], "SELECT access FROM ".TB_PREFIX."users WHERE id = ".$_GET['uid']."");
+	$sql = mysqli_query($GLOBALS["link"], "SELECT access FROM ".TB_PREFIX."users WHERE id = ".(int) $_GET['uid']."");
 	$curaccess = mysqli_result($sql, 0);
 	$player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$id.""));
 	?>

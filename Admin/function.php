@@ -30,6 +30,10 @@ class funct {
    function Act($get){
     global $admin,$database;
 
+    foreach ($get as $key => $value) {
+        $get[$key] = $database->escape($value);
+    }
+    
     switch($get['action']){
       case "recountPop":
         $admin->recountPop($get['did']);
@@ -92,10 +96,10 @@ class funct {
         header("Location: admin.php?p=player&uid=".$get['uid'].$error);
         exit;
       case "reviveHero":
-        $result=$database->query("SELECT * FROM ".TB_PREFIX."hero WHERE uid='".$get['uid']."'");
+          $result=$database->query("SELECT * FROM ".TB_PREFIX."hero WHERE uid=".(int) $get['uid']);
         $hdata=mysqli_fetch_array($result);
-        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".$hdata['wref']);
-        $database->query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".time()." WHERE `uid` = '".$get['uid']."'");
+        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
+        $database->query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".time()." WHERE `uid` = ".(int) $get['uid']);
         header("Location: admin.php?p=player&uid=".$get['uid']."&rc=1");
         exit;
       case "addHero":
@@ -104,10 +108,10 @@ class funct {
         
         $database->query("INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`,
         `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`,
-        `intraining`) VALUES ('".$get['uid']."', '" . $vilarray['wref'] . "', '0', '".$get['u']."', '".addslashes($user['username'])."',
+        `intraining`) VALUES (".(int) $get['uid'].", " . (int) $vilarray['wref'] . ", '0', ".(int) $get['u'].", '".addslashes($user['username'])."',
         '0', '5', '0', '0', '100', '0', '0', '0', '0', '".time()."', '50', '0')");
         
-        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".$vilarray['wref']);
+        $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".(int) $vilarray['wref']);
         
         header("Location: admin.php?p=player&uid=".$get['uid']."&ac=1");
         exit;

@@ -130,7 +130,7 @@ $nummedals = mysqli_num_rows($sql);
 				$bb = $row['id'];
 				$allyid = $row['allyid'];
 
-				$unq = "SELECT name FROM ".TB_PREFIX."alidata WHERE id = ".$allyid."";
+				$unq = "SELECT name FROM ".TB_PREFIX."alidata WHERE id = ".(int) $allyid."";
 				$user = mysqli_result(mysqli_query($GLOBALS["link"], $unq), 0);
 				$allyname = $user;
 

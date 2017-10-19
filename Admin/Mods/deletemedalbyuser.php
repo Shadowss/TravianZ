@@ -17,7 +17,7 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 
 
 
-$userid = $_POST['userid'];
+$userid = (int) $_POST['userid'];
 mysqli_query($GLOBALS["link"], "DELETE FROM ".TB_PREFIX."medal WHERE userid = ".$userid."");
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$userid."");

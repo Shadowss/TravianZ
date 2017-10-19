@@ -8,7 +8,7 @@
 ##                                                                             ##
 #################################################################################
 $time = time();
-$ban = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."banlist WHERE `uid` = '".$session->uid."' and active = 1");
+$ban = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."banlist WHERE `uid` = '".(int) $session->uid."' and active = 1");
 $ban1 = mysqli_fetch_array($ban);
 ?>
 

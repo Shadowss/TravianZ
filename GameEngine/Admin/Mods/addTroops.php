@@ -27,11 +27,11 @@ $units="";
 	if($tribe ==6){ $u = 50;}
 
 for($i=1; $i<11; $i++) {
-	$units.="u".($u+$i)."=".$_POST['u'.($u+$i)].(($i < 10) ? ", " : "");
+	$units.="u".($u+$i)."=".$database->escape($_POST['u'.($u+$i)].(($i < 10) ? ", " : ""));
 }
-$q = "UPDATE ".TB_PREFIX."units SET ".$units." WHERE vref = $id";
+$q = "UPDATE ".TB_PREFIX."units SET ".$units." WHERE vref = ".(int) $id;
 $database->query($q);
-$database->query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Changed troop anmount in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
+$database->query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed troop anmount in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
 
 header("Location: ../../../Admin/admin.php?p=village&did=".$id."&d");
 ?>

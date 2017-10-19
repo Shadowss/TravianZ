@@ -15,8 +15,8 @@ include_once("../../config.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
-$id = $_POST['uid'];
+$session = (int) $_POST['admid'];
+$id = (int) $_POST['uid'];
 $pass = md5($_POST['newpw']);
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");

@@ -14,7 +14,7 @@ if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$id = $_POST['id'];
+$id = (int) $_POST['id'];
 $admid = $_POST['admid'];
 
 //$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$admid."");
@@ -26,22 +26,26 @@ if (!isset($_SESSION)) {
 
 if($_SESSION['access'] != ADMIN) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
-$access = $_POST['access'];
-$dur = $_POST['protect'] * 86400;
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
+$access = (int) $_POST['access'];
+$dur = (int) $_POST['protect'] * 86400;
 $protection = (time() + $dur);
 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
 	access = ".$access.",
-	gold = ".$_POST['gold'].",	
-	sit1 = '".$_POST['sitter1']."',
-	sit2 = '".$_POST['sitter2']."',
+	gold = ".(int) $_POST['gold'].",	
+	sit1 = '".(int) $_POST['sitter1']."',
+	sit2 = '".(int) $_POST['sitter2']."',
 	protect = '".$protection."',
-	cp = ".$_POST['cp'].",
-	ap = '".$_POST['off']."', 
-	dp = '".$_POST['def']."', 
-	RR = '".$_POST['res']."', 
-	apall = '".$_POST['ooff']."', 
-	dpall = '".$_POST['odef']."' 
+	cp = ".(int) $_POST['cp'].",
+	ap = '".(int) $_POST['off']."', 
+	dp = '".(int) $_POST['def']."', 
+	RR = '".(int) $_POST['res']."', 
+	apall = '".(int) $_POST['ooff']."', 
+	dpall = '".(int) $_POST['odef']."' 
 	WHERE id = ".$id."") or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");

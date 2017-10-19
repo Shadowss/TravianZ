@@ -8,9 +8,8 @@
 ##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-$id = isset($_GET['uid']);
 if(isset($_GET['uid'])){
-	$id = $_GET['uid'];
+	$id = (int) $_GET['uid'];
 	include_once("../GameEngine/Data/hero_full.php"); 
 	include_once("../GameEngine/Units.php");
 	$user = $database->getUserArray($id,1);

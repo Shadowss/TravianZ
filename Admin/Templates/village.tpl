@@ -37,7 +37,7 @@ if(isset($id))
 	elseif($type == 12){ $typ = array(5,4,3,6); }
 	$ocounter = array();
 	$wood = $clay = $iron =$crop = 0;
-	$q = "SELECT o.*, w.x, w.y FROM ".TB_PREFIX."odata AS o LEFT JOIN ".TB_PREFIX."wdata AS w ON o.wref=w.id WHERE conqured = ".$village['wref'];
+	$q = "SELECT o.*, w.x, w.y FROM ".TB_PREFIX."odata AS o LEFT JOIN ".TB_PREFIX."wdata AS w ON o.wref=w.id WHERE conqured = ".(int) $village['wref'];
 	$result = $database->query_return($q);
 	if(count($result) >0)
 		{

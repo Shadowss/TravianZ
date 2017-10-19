@@ -15,7 +15,11 @@ include_once("../../config.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
+$session = (int) $_POST['admid'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);
@@ -25,7 +29,7 @@ if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not 
 
 $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users"));
 
-$duration = $_POST['duration'] * 3600;
+$duration = (int) $_POST['duration'] * 3600;
 $start = $_POST['start'];
 $startts = strtotime($start);
 $endts = $startts + $duration;
@@ -49,7 +53,7 @@ for($i = 0; $i < $loops + 1; $i++)
 	$result = mysqli_query($GLOBALS["link"], $query);
 	while($row = mysqli_fetch_assoc($result))
 	{
-		mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."banlist ".$row['id'].", ".$row['username'].", ".$reason.", ".$startts.", ".$endts.", ".$admin.", ".$active."");
+	    mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."banlist VALUES('', ".(int) $row['id'].", '".$row['username']."', '".$reason."', ".(int) $startts.", ".(int) $endts.", ".(int) $admin.", ".(int) $active.")");
 		##mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."banlist (`uid`, `name`, `reason`, `time`, `end`, `admin`, `active`) VALUES (".$row['id'].", '".$row['username']."' , '$reason', '$startts', '$endts', '$admin', '1')");
 	}
 }

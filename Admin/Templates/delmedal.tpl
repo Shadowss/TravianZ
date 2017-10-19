@@ -141,7 +141,7 @@ $nummedals = mysqli_num_rows($sql);
 				$week = $row['week'];
 				$points = $row['points'];
 				$bb = $row['id'];
-				$playerid = $row['userid'];
+				$playerid = (int) $row['userid'];
 
 				$unq = "SELECT username FROM ".TB_PREFIX."users where id = $playerid";
 				$user = mysqli_result(mysqli_query($GLOBALS["link"], $unq), 0);

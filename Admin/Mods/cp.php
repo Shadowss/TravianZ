@@ -15,8 +15,8 @@ mysqli_select_db(SQL_DB);
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");  
 
-$id = $_POST['id'];
-$admid = $_POST['admid'];
+$id = (int) $_POST['id'];
+$admid = (int) $_POST['admid'];
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET cp = cp + ".$_POST['cp']." WHERE id = ".$id."");
 
 $name = $database->getUserField($id,"username",0);

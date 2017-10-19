@@ -15,8 +15,8 @@ include_once("../../config.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
-$id = $_POST['id'];
+$session = (int) $_POST['admid'];
+$id = (int) $_POST['id'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);
@@ -25,8 +25,8 @@ $sessionaccess = $access['access'];
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
-	apall = '".$_POST['off']."', 
-	dpall = '".$_POST['def']."' 
+	apall = '".(int) $_POST['off']."', 
+	dpall = '".(int) $_POST['def']."' 
 	WHERE id = $id") or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");

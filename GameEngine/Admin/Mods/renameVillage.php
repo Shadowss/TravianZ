@@ -15,9 +15,15 @@ include_once("../../config.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$did = $_POST['did'];
+$nameorig = $_POST['villagename'];
+
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
+$did = (int) $_POST['did'];
 $name = $_POST['villagename'];
-$session = $_POST['admid'];
+$session = (int) $_POST['admid'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);
@@ -28,5 +34,5 @@ if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not 
 $sql = "UPDATE ".TB_PREFIX."vdata SET name = '$name' WHERE wref = $did";
 mysqli_query($GLOBALS["link"], $sql);
 
-header("Location: ../../../Admin/admin.php?p=village&did=".$did."&name=".$name."");
+header("Location: ../../../Admin/admin.php?p=village&did=".$did."&name=".$nameorig."");
 ?>

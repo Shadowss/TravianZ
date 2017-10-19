@@ -19,7 +19,7 @@ mysqli_select_db(SQL_DB);
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");  
 
-$id = $_POST['id'];
+$id = (int) $_POST['id'];
 $village = $database->getVillage($id);
 $user = $database->getUserArray($village['owner'],1);
 $coor = $database->getCoor($village['wref']);
@@ -27,6 +27,10 @@ $varray = $database->getProfileVillages($village['owner']);
 $type = $database->getVillageType($village['wref']);
 $fdata = $database->getResourceLevel($village['wref']);
 $units = $database->getUnit($village['wref']);
+
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = (int) $value;
+}
 
 $u1 = $_POST['u1'];
 $u2 = $_POST['u2'];
@@ -100,7 +104,7 @@ $q = "UPDATE ".TB_PREFIX."units SET u41 = '$u41', u42 = '$u42', u43 = '$u43', u4
 mysqli_query($GLOBALS["link"], $q);
 }
 
-mysqli_query($GLOBALS["link"], "Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Changed troop anmount in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
+mysqli_query($GLOBALS["link"], "Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed troop anmount in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
 
 header("Location: ../../../Admin/admin.php?p=addTroops&did=".$id."&d");
 

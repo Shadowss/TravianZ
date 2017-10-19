@@ -17,7 +17,7 @@ error_reporting(E_ALL);
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
+$session = (int) $_POST['admid'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);
@@ -25,7 +25,7 @@ $sessionaccess = $access['access'];
 
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
-$q = "UPDATE ".TB_PREFIX."users SET gold = gold + ".$_POST['gold']." WHERE id != '0'";
+$q = "UPDATE ".TB_PREFIX."users SET gold = gold + ".(int) $_POST['gold']." WHERE id != '0'";
 mysqli_query($GLOBALS["link"], $q) or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=gold&g");

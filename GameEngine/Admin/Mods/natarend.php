@@ -15,8 +15,8 @@ include_once("../../Automation.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$id = $_POST['id'];
-$amt = $_POST['vill_amount'];
+$id = (int) $_POST['id'];
+$amt = (int) $_POST['vill_amount'];
 
 for($i=1;$i<=$amt;$i++) {
 

@@ -15,8 +15,8 @@ include_once("../../config.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
-$id = $_POST['id'];
+$session = (int) $_POST['admid'];
+$id = (int) $_POST['id'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);
@@ -24,11 +24,11 @@ $sessionaccess = $access['access'];
 
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
-$pdur =  $_POST['plus'] * 86400;
-$b1dur = $_POST['wood'] * 86400;
-$b2dur = $_POST['clay'] * 86400;
-$b3dur = $_POST['iron'] * 86400;
-$b4dur = $_POST['crop'] * 86400;
+$pdur =  (int) $_POST['plus'] * 86400;
+$b1dur = (int) $_POST['wood'] * 86400;
+$b2dur = (int) $_POST['clay'] * 86400;
+$b3dur = (int) $_POST['iron'] * 86400;
+$b4dur = (int) $_POST['crop'] * 86400;
 
 $sql1 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$id."");
 $user = mysqli_fetch_array($sql1);

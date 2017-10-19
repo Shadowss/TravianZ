@@ -14,6 +14,11 @@ if(!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../Database.php");
 $status="&ce=1";
+
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
 if(isset($_POST['id'])) {
 	$_POST['hname'] = trim(stripslashes($_POST['hname']));
 	if ($_POST['hname']=="") {
@@ -23,13 +28,13 @@ if(isset($_POST['id'])) {
 		
 	include_once("../../Data/hero_full.php"); 
 	
-	$id = $_POST['id'];
+	$id = (int) $_POST['id'];
 	
-	$q = "UPDATE ".TB_PREFIX."hero SET unit=".$_POST['hunit'].", name='".$_POST['hname']."', level=".$_POST['hlvl'].", points=".$_POST['exp'].", experience=".$hero_levels[$_POST['hlvl']].", health=".$_POST['hhealth'].",
-		attack=".$_POST['hatk'].", defence=".$_POST['hdef'].", attackbonus=".$_POST['hob'].", defencebonus=".$_POST['hdb'].", regeneration=".$_POST['hrege']." WHERE uid = ".$id;
+	$q = "UPDATE ".TB_PREFIX."hero SET unit=".(int) $_POST['hunit'].", name='".$_POST['hname']."', level=".(int) $_POST['hlvl'].", points=".(int) $_POST['exp'].", experience=".(int) $hero_levels[$_POST['hlvl']].", health='".$_POST['hhealth']."',
+		attack=".(int) $_POST['hatk'].", defence=".(int) $_POST['hdef'].", attackbonus=".(int) $_POST['hob'].", defencebonus=".(int) $_POST['hdb'].", regeneration=".(int) $_POST['hrege']." WHERE uid = ".$id;
 $return=$database->query($q);
 if($return) {
-	$database->query("Insert into ".TB_PREFIX."admin_log values (0,".$_SESSION['id'].",'Changed hero info',".time().")");
+    $database->query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed hero info',".time().")");
 	$status="&cs=1";
 }	
 }

@@ -12,7 +12,7 @@
 if(!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 include_once("../../Database.php");
-$id = $_POST['id'];
+$id = (int) $_POST['id'];
 
 $myFile = "../../config.php";
 $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\config.php");

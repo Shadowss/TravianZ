@@ -11,7 +11,7 @@
 
 include_once("../GameEngine/Data/hero_full.php"); 
 include_once("../GameEngine/Units.php");
-$id=$user['id'];
+$id=(int) $user['id'];
 $hero = mysqli_query($GLOBALS["link"], "SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = ".$id); 
 $hero_info = mysqli_fetch_array($hero);
 if (!empty($hero_info)) {

@@ -15,8 +15,12 @@ include_once("../../config.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
-$id = $_POST['id'];
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
+$session = (int) $_POST['admid'];
+$id = (int) $_POST['id'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);
@@ -26,7 +30,7 @@ if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not 
 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
 	email = '".$_POST['email']."', 
-	tribe = ".$_POST['tribe'].", 
+	tribe = ".(int) $_POST['tribe'].", 
 	location = '".$_POST['location']."', 
 	desc1 = '".$_POST['desc1']."', 
 	desc2 = '".$_POST['desc2']."', 

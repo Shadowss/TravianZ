@@ -12,11 +12,15 @@ if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../config.php");
 
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
-$id = $_POST['id'];
+$session = (int) $_POST['admid'];
+$id = (int) $_POST['id'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);

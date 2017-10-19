@@ -14,7 +14,11 @@ mysqli_select_db(SQL_DB);
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");  
 
-$uid = $_POST['uid'];
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
+$uid = (int) $_POST['uid'];
 $topic = $_POST['topic'];
 $message = $_POST['message'];
 $time = time();

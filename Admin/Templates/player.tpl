@@ -57,7 +57,7 @@ if(isset($id))
 		</div>
 
 		<?php
-			$sql = "SELECT * FROM ".TB_PREFIX."banlist WHERE uid = ".$id."";
+			$sql = "SELECT * FROM ".TB_PREFIX."banlist WHERE uid = ".(int) $id."";
 			$numbans = mysqli_num_rows(mysqli_query($GLOBALS["link"], $sql));
 		?>
 		<table id="member" cellpadding="1" cellspacing="1">

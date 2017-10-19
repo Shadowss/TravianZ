@@ -21,7 +21,7 @@ function mysqli_result($res, $row, $field=0) {
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$session = $_POST['admid'];
+$session = (int) $_POST['admid'];
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);
@@ -32,10 +32,10 @@ if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not 
 $sql = "SELECT id FROM ".TB_PREFIX."users ORDER BY ID DESC LIMIT 1";
 $loops = mysqli_result(mysqli_query($GLOBALS["link"], $sql), 0);
 
-$wood = $_POST['wood'] * 86400;
-$clay = $_POST['clay'] * 86400;
-$iron = $_POST['iron'] * 86400;
-$crop = $_POST['crop'] * 86400;
+$wood = (int) $_POST['wood'] * 86400;
+$clay = (int) $_POST['clay'] * 86400;
+$iron = (int) $_POST['iron'] * 86400;
+$crop = (int) $_POST['crop'] * 86400;
 
 for($i = 0; $i < $loops + 1; $i++)
 {

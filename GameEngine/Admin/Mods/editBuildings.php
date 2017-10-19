@@ -18,7 +18,11 @@ include_once("../../config.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 
-$id = $_POST['id'];
+foreach ($_POST as $key => $value) {
+    $_POST[$key] = $database->escape($value);
+}
+
+$id = (int) $_POST['id'];
 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."fdata SET 
 	f1  = '".$_POST['id1level']."', 
