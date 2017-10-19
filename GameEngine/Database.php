@@ -1568,14 +1568,14 @@ class MYSQLi_DB {
 	}
 
 	function modifyPoints($aid, $points, $amt) {
-	    list($aid, $points, $amt) = $this->escape_input((int) $aid, (int) $points, (int) $amt);
+	    list($aid, $points, $amt) = $this->escape_input((int) $aid, $points, (int) $amt);
 
 		$q = "UPDATE " . TB_PREFIX . "users set $points = $points + $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function modifyPointsAlly($aid, $points, $amt) {
-	    list($aid, $points, $amt) = $this->escape_input((int) $aid, (int) $points, (int) $amt);
+	    list($aid, $points, $amt) = $this->escape_input((int) $aid, $points, (int) $amt);
 
 		$q = "UPDATE " . TB_PREFIX . "alidata set $points = $points + $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
