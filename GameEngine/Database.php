@@ -3643,8 +3643,6 @@ class MYSQLi_DB {
 	References: Query
 	***************************/
 	function query($query) {
-        list($query) = $this->escape_input($query);
-
 		return mysqli_query($this->dblink,$query);
 	}
 
