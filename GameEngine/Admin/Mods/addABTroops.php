@@ -19,8 +19,8 @@ $user = $database->getUserArray($village['owner'],1);
 $atech="";
 $btech="";
 for($i=1; $i<9; $i++) {
-	$atech.="a".$i."=".$_POST['a'.$i].", ";
-	$btech.="b".$i."=".$_POST['b'.$i].(($i > 7) ? "" : ", ");
+    $atech.="a".$i."=".$database->escape($_POST['a'.$i]).", ";
+    $btech.="b".$i."=".$database->escape($_POST['b'.$i]).(($i > 7) ? "" : ", ");
 }
 
 $q = "UPDATE ".TB_PREFIX."abdata SET ".$atech.$btech." WHERE vref = $id";
