@@ -11,6 +11,7 @@
 include_once("../../config.php");
 include_once("../../Session.php");
 include_once("../../Automation.php");
+include_once("../../Database.php");
 $GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysqli_select_db($GLOBALS["link"], SQL_DB);
 

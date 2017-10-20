@@ -11,6 +11,7 @@
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../config.php");
+include_once("../../Database.php");
 
 foreach ($_POST as $key => $value) {
     $_POST[$key] = $database->escape($value);
