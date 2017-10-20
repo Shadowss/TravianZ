@@ -15,7 +15,7 @@ include('GameEngine/Account.php');
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 	<head>
-	<title><?php echo SERVER_NAME; ?></title>
+	<title><?php echo SERVER_NAME . ' - Account Activation'; ?></title>
 	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />

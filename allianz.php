@@ -59,7 +59,33 @@ if(isset($_GET['aid']) or isset($_GET['fid']) or isset($_GET['fid2']) or $sessio
 <head>
 	<title><?php
 
-	   echo SERVER_NAME
+	   echo SERVER_NAME . ' &raquo; &raquo; &raquo; Alliance ';
+	   
+	   if (!empty($_GET['s'])) {
+	       switch ($_GET['s']) {
+	           case '2':
+	               echo 'Forum ('.$alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'].')';
+	               break;
+	               
+	           case '6':
+	               echo 'Chat ('.$alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'].')';
+	               break;
+	               
+	           case '3':
+	               echo 'Attacks ('.$alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'].')';
+	               break;
+	               
+	           case '4':
+	               echo 'News ('.$alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'].')';
+	               break;
+	               
+	           case '5':
+	               echo 'Options ('.$alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'].')';
+	               break;
+	       }
+	   } else {
+	       echo $alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'];
+	   }
 
 ?></title>
 	<link rel="shortcut icon" href="favicon.ico"/>
@@ -151,7 +177,6 @@ if(isset($_GET['aid']) or isset($_GET['fid']) or isset($_GET['fid2']) or $sessio
 <div id="dynamic_header">
 	</div>
 <?php
-
 	   include ("Templates/header.tpl");
 
 ?>

@@ -25,7 +25,7 @@ include("../GameEngine/Admin/database.php");
 <html>
 <head>
   <link rel="shortcut icon" href="favicon.ico"/>
-	<title>Admin Control Panel - TravianX</title>
+	<title>Admin Control Panel - TravianZ</title>
 	<link rel=stylesheet type="text/css" href="../img/admin/admin.css">
 	<link rel=stylesheet type="text/css" href="../img/admin/acp.css">
 	<link rel=stylesheet type="text/css" href="../img/../img.css">

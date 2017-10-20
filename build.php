@@ -389,5 +389,9 @@ echo round(($generator->pageLoadTimeEnd()-$pagestart)*1000);
 </div>
 
 <div id="ce">    </div>
+<script type="text/javascript">
+	// update TITLE to include building name, as it's not very possible to do in PHP in current codebase
+	document.title = document.title + ' » » ' + document.getElementsByTagName('h1')[0].innerHTML.replace(/(<([^>]+)>)/ig,"");
+</script>
 </body>
 </html>

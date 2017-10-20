@@ -75,7 +75,7 @@ if(isset($_GET['o'])) {
 <head>
 	<title><?php
 
-		echo SERVER_NAME
+		echo SERVER_NAME . ' - Send Troops'
 
 ?></title>
 	<link rel="shortcut icon" href="favicon.ico"/>

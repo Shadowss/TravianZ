@@ -16,7 +16,7 @@ include("GameEngine/config.php");
 
 <html>
 	<head>
-	<title><?php echo SERVER_NAME; ?></title>
+	<title><?php echo SERVER_NAME; ?> - Manual</title>
 		<link rel="shortcut icon" href="favicon.ico"/>
 	<meta name="content-language" content="en" />
 	<meta http-equiv="cache-control" content="max-age=0" />

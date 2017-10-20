@@ -26,7 +26,37 @@ if(isset($_GET['newdid'])) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title><?php echo SERVER_NAME ?></title>
+	<title><?php
+	echo SERVER_NAME . ' &raquo; &raquo; &raquo; Statistics (';
+	
+	if (!empty($_GET['id'])) {
+	    switch ($_GET['id']) {
+	        case '4':
+	            echo 'Alliances';
+	            break;
+	            
+	        case '2':
+	            echo 'Villages';
+	            break;
+	            
+	        case '8':
+	            echo 'Heroes';
+	            break;
+	            
+	        case '0':
+	            echo 'General';
+	            break;
+	            
+	        case '99':
+	            echo 'WW';
+	            break;
+	    }
+	} else {
+	    echo 'Players';
+	}
+	
+	echo ')';
+	?></title>
 	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
