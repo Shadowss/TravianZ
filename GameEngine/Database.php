@@ -453,7 +453,15 @@ class MYSQLi_DB {
 	}
 
 	function submitProfile($uid, $gender, $location, $birthday, $des1, $des2) {
+	    // temporarily replace newlines with placeholders, so they don't get escaped and backslashed stripped out of them
+	    $des1 = str_replace(['\\r', '\\n'], ['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], $des1);
+	    $des2 = str_replace(['\\r', '\\n'], ['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], $des2);
+
 	    list($uid, $gender, $location, $birthday, $des1, $des2) = $this->escape_input((int) $uid, (int) $gender, $location, $birthday, $des1, $des2);
+	    
+	    // return new lines and return carriages to descriptions
+	    $des1 = str_replace(['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], ['\\r', '\\n'], $des1);
+	    $des2 = str_replace(['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], ['\\r', '\\n'], $des2);
 
 		$q = "UPDATE " . TB_PREFIX . "users set gender = $gender, location = '$location', birthday = '$birthday', desc1 = '$des1', desc2 = '$des2' where id = $uid";
 		return mysqli_query($this->dblink,$q);
