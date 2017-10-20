@@ -140,7 +140,7 @@ class Profile {
 				if ($_POST['uid'] != $session->uid){
                       			die("Hacking Attempr");
                 		} else {
-				$database->updateUserField($post['uid'],"password",md5($post['pw2']),1);
+                		    $database->updateUserField($post['uid'],"password",password_hash($post['pw2'], PASSWORD_BCRYPT,['cost' => 12]),1);
 			}
 			}
 			else {
@@ -156,7 +156,7 @@ class Profile {
 		else {
 			$form->addError("email",EMAIL_ERROR);
 		}
-		if($post['del'] && md5($post['del_pw']) == $session->userinfo['password']) {
+		if($post['del'] && password_verify($session->userinfo['password'], $post['del_pw'])) {
 				$database->setDeleting($post['uid'],0);
 		}
 		else {

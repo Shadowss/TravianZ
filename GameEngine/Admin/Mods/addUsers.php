@@ -85,7 +85,7 @@ else
         else
         {
             // Register them and build the village
-            $uid = $database->register($userName, md5($password), $email, $tribe ,$act);
+            $uid = $database->register($userName, password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]), $email, $tribe ,$act);
             if($uid)
             {
                 /*

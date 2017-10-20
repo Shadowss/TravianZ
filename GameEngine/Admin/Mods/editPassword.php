@@ -17,7 +17,7 @@ mysqli_select_db($GLOBALS["link"], SQL_DB);
 
 $session = (int) $_POST['admid'];
 $id = (int) $_POST['uid'];
-$pass = md5($_POST['newpw']);
+$pass = password_hash($_POST['newpw'], PASSWORD_BCRYPT, ['cost' => 12]);
 
 $sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
 $access = mysqli_fetch_array($sql);

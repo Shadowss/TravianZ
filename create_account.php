@@ -102,7 +102,7 @@ if($_POST['password'] != ""){
  */ 
 
 		$username = "Natars";
-		$password = md5($_POST['password']);
+		$password = password_hash($_POST['password'], PASSWORD_BCRYPT,['cost' => 12]);
 		$email = "natars@noreply.com";
 		$tribe = 5;
 		$desc = "***************************

@@ -1,4 +1,3 @@
-- just so it's really visible => exchange md5 for something more secure (probably password_hash() using bcrypt)
 - change title for each page, so it fits with H1 (or history will always show a lot of "TravianZ" entries without a way to know where that history entry leads)
   ... same in Admin panel
 - fix deleting users (need to delete their villages (+alliances/construction plans/...?) after a while)

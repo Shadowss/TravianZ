@@ -14,7 +14,7 @@
 
 		if(isset($_POST['mhpw'])) {
 			$password = $_POST['mhpw'];
-			mysqli_query($conn, "UPDATE " . TB_PREFIX . "users SET password = '" . md5($password) . "' WHERE username = 'Multihunter'");
+			mysqli_query($conn, "UPDATE " . TB_PREFIX . "users SET password = '" . password_hash($password, PASSWORD_BCRYPT,['cost' => 12]) . "' WHERE username = 'Multihunter'");
 			$wid = $admin->getWref(0, 0);
 			$uid = 5;
 			$status = $database->getVillageState($wid);

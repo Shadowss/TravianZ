@@ -23,7 +23,7 @@ class MYSQLi_DB {
 
 	var $dblink;
 	function __construct() {
-		$this->dblink = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error($database->dblink));
+		$this->dblink = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error($this->dblink));
 		mysqli_select_db($this->dblink, SQL_DB);
 		mysqli_query($this->dblink,"SET NAMES 'UTF8'"); 
 	}
@@ -64,11 +64,17 @@ class MYSQLi_DB {
 		}
 		$timep = $time + PROTECTION;
 		$time = time();
-		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, " . (int) $tribe . ", '$act', $timep, $time, $time)";
+		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime,is_bcrypt) VALUES ('$username', '$password', " . USER . ", '$email', $time, " . (int) $tribe . ", '$act', $timep, $time, $time,1)";
 		if(mysqli_query($this->dblink,$q)) {
 			return mysqli_insert_id($this->dblink);
 		} else {
-			return false;
+		    // if an error has occured, we probably don't have DB converted to handle bcrypt passwords yet
+		    $q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, " . (int) $tribe . ", '$act', $timep, $time, $time)";
+		    if(mysqli_query($this->dblink,$q)) {
+		        return mysqli_insert_id($this->dblink);
+		    } else {
+			    return false;
+		    }
 		}
 	}
 
@@ -232,7 +238,7 @@ class MYSQLi_DB {
 	function getVrefField($ref, $field) {
 	    list($ref, $field) = $this->escape_input((int) $ref, $field);
 			$q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
-			$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+			$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 			$dbarray = mysqli_fetch_array($result);
 			return $dbarray[$field];
 	}
@@ -240,7 +246,7 @@ class MYSQLi_DB {
 	function getVrefCapital($ref) {
 	    list($ref) = $this->escape_input((int) $ref);
 		$q = "SELECT * FROM " . TB_PREFIX . "vdata where owner = $ref and capital = 1";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray;
 	}
@@ -265,17 +271,44 @@ class MYSQLi_DB {
 		} else {
 			$q = "SELECT $field FROM " . TB_PREFIX . "activate where username = '$ref'";
 		}
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray[$field];
 	}
 
 	function login($username, $password) {
         list($username, $password) = $this->escape_input($username, $password);
-		$q = "SELECT password,sessid FROM " . TB_PREFIX . "users where username = '$username'";
+		$q = "SELECT id,password,sessid,is_bcrypt FROM " . TB_PREFIX . "users where username = '$username'";
 		$result = mysqli_query($this->dblink,$q);
+		
+		// if we didn't update the database for bcrypt hashes yet...
+		if (mysqli_error($this->dblink) != '') {
+		    $q = "SELECT id, password,sessid,0 as is_bcrypt FROM " . TB_PREFIX . "users where username = '$username'";
+		    $result = mysqli_query($this->dblink,$q);
+		    $bcrypt_update_done = false;
+		} else {
+		    $bcrypt_update_done = true;
+		}
+		
 		$dbarray = mysqli_fetch_array($result);
-		if($dbarray['password'] == md5($password)) {
+		
+		// even if we didn't do a DB conversion for bcrypt passwords,
+		// we still need to check if this password wasn't encrypted via password_hash,
+		// since all methods were updated to use that instead of md5 and therefore
+		// new passwords in DB will be bcrypt already even without the is_bcrypt field present
+		$bcrypted = true;
+		$pwOk = password_verify($password, $dbarray['password']);
+		
+		if (!$pwOk && !$dbarray['is_bcrypt']) {
+		    $pwOk = ($dbarray['password'] == md5($password));
+		    $bcrypted = false;
+		}
+
+		if($pwOk) {
+		    // update password to bcrypt, if correct
+		    if (!$dbarray['is_bcrypt'] && !$bcrypted) {
+		        mysqli_query($this->dblink, "UPDATE " . TB_PREFIX . "users SET password = '".password_hash($password, PASSWORD_BCRYPT,['cost' => 12])."'".($bcrypt_update_done ? ', is_bcrypt = 1' : '')." where id = ".(int) $dbarray['id']);
+		    }
 			return true;
 		} else {
 			return false;
@@ -309,7 +342,7 @@ class MYSQLi_DB {
 				$dbarray3 = mysqli_fetch_array($result3);
 		}
 		if($dbarray['sit1'] != 0 || $dbarray['sit2'] != 0) {
-			if($dbarray2['password'] == md5($password) || $dbarray3['password'] == md5($password)) {
+		    if(password_verify($password, $dbarray2['password']) || password_verify($password, $dbarray3['password'])) {
 				return true;
 			} else {
 				return false;
@@ -526,7 +559,7 @@ class MYSQLi_DB {
 		}
 		$time = time();
 		$q = "INSERT into " . TB_PREFIX . "vdata (wref, owner, name, capital, pop, cp, celebration, wood, clay, iron, maxstore, crop, maxcrop, lastupdate, created) values ($wid, $uid, '$vname', $capital, 2, 1, 0, 750, 750, 750, ".STORAGE_BASE.", 750, ".STORAGE_BASE.", $time, $time)";
-		return mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		return mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 	}
 
 	function addResourceFields($vid, $type) {
@@ -1523,7 +1556,7 @@ class MYSQLi_DB {
 		} else {
 			$q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where username = '$ref'";
 		}
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray[$field];
 	}
@@ -2149,7 +2182,7 @@ class MYSQLi_DB {
 
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "ali_invite values (0,$uid,$alli,$sender,$time,0)";
-		return mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		return mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 	}
 
 	function removeInvitation($id) {
@@ -2297,7 +2330,7 @@ class MYSQLi_DB {
     	$time = time();
     	}
     	$q = "INSERT INTO " . TB_PREFIX . "ndata (id, uid, toWref, ally, topic, ntype, data, time, viewed) values (0,'$uid','$toWref','$ally','$topic',$type,'$data',$time,0)";
-    	return mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+    	return mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
     }
 
 	function getNotice($uid) {
@@ -2361,7 +2394,7 @@ class MYSQLi_DB {
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray;
 	}
@@ -2370,7 +2403,7 @@ class MYSQLi_DB {
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['uid'];
 	}
@@ -2397,7 +2430,7 @@ class MYSQLi_DB {
 	    list($wid, $field, $type, $loop, $time, $master, $level) = $this->escape_input((int) $wid, $field, (int) $type, (int) $loop, (int) $time, (int) $master, (int) $level);
 
 		$x = "UPDATE " . TB_PREFIX . "fdata SET f" . $field . "t=" . $type . " WHERE vref=" . $wid;
-		mysqli_query($this->dblink,$x) or die(mysqli_error($database->dblink));
+		mysqli_query($this->dblink,$x) or die(mysqli_error($this->dblink));
 		$q = "INSERT into " . TB_PREFIX . "bdata values (0,$wid,$field,$type,$loop,$time,$master,$level)";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -2497,13 +2530,13 @@ class MYSQLi_DB {
 		} else {
             if($jobs[$jobDeleted]['field'] >= 19) {
                 $x = "SELECT f" . $jobs[$jobDeleted]['field'] . " FROM " . TB_PREFIX . "fdata WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
-                $result = mysqli_query($this->dblink,$x) or die(mysqli_error($database->dblink));
+                $result = mysqli_query($this->dblink,$x) or die(mysqli_error($this->dblink));
                 $fieldlevel = mysqli_fetch_row($result);
                     if($fieldlevel[0] == 0) {
                     if ($village->natar==1 && $jobs[$jobDeleted]['field']==99) { //fix by ronix
                     }else{    
                         $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
-                        mysqli_query($this->dblink,$x) or die(mysqli_error($database->dblink));
+                        mysqli_query($this->dblink,$x) or die(mysqli_error($this->dblink));
                     }    
                 }
 			}
@@ -2511,7 +2544,7 @@ class MYSQLi_DB {
 				if(($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19) || sizeof($jobs) < 3) {
 					$uprequire = $building->resourceRequired($jobs[$jobLoopconID]['field'], $jobs[$jobLoopconID]['type']);
 					$x = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,timestamp=" . (time() + (int) $uprequire['time']) . " WHERE wid=" . (int) $jobs[$jobDeleted]['wid'] . " AND loopcon=1 AND master=0";
-					mysqli_query($this->dblink,$x) or die(mysqli_error($database->dblink));
+					mysqli_query($this->dblink,$x) or die(mysqli_error($this->dblink));
 				}
 			}
 		}
@@ -2742,7 +2775,7 @@ class MYSQLi_DB {
         list($vref, $field) = $this->escape_input($vref, $field);
 
 		$q = "SELECT $field FROM " . TB_PREFIX . "market where vref = '$vref'";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray[$field];
 	}
@@ -3136,7 +3169,7 @@ class MYSQLi_DB {
 	    list($vref, $unit) = $this->escape_input((int) $vref, $unit);
 
 		$q = "SELECT $unit FROM " . TB_PREFIX . "tdata WHERE vref = $vref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray[$unit];
 	}
@@ -3462,7 +3495,7 @@ class MYSQLi_DB {
 	    list($vref) = $this->escape_input((int) $vref);
 
 		$q = "SELECT f99 FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['f99'];
 	}
@@ -3476,7 +3509,7 @@ class MYSQLi_DB {
 	    list($vref) = $this->escape_input((int) $vref);
 
 		$q = "SELECT owner FROM " . TB_PREFIX . "vdata WHERE wref = $vref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['owner'];
 	}
@@ -3490,7 +3523,7 @@ class MYSQLi_DB {
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT alliance FROM " . TB_PREFIX . "users where id = $id";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['alliance'];
 	}
@@ -3504,7 +3537,7 @@ class MYSQLi_DB {
 	    list($vref) = $this->escape_input((int) $vref);
 
 		$q = "SELECT wwname FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['wwname'];
 	}
@@ -3657,7 +3690,7 @@ class MYSQLi_DB {
 	    list($wref) = $this->escape_input((int) $wref);
 
 		$q = "SELECT wood FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['wood'];
 	}
@@ -3666,7 +3699,7 @@ class MYSQLi_DB {
 	    list($wref) = $this->escape_input((int) $wref);
 
 		$q = "SELECT clay FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['clay'];
 	}
@@ -3675,7 +3708,7 @@ class MYSQLi_DB {
 	    list($wref) = $this->escape_input((int) $wref);
 
 		$q = "SELECT iron FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['iron'];
 	}
@@ -3684,7 +3717,7 @@ class MYSQLi_DB {
 	    list($wref) = $this->escape_input((int) $wref);
 
 		$q = "SELECT crop FROM " . TB_PREFIX . "vdata WHERE wref = $wref";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['crop'];
 	}
@@ -4075,19 +4108,19 @@ class MYSQLi_DB {
 	function addPassword($uid, $npw, $cpw) {
 	    list($uid, $npw, $cpw) = $this->escape_input((int) $uid, $npw, $cpw);
 		$q = "REPLACE INTO `" . TB_PREFIX . "password`(uid, npw, cpw) VALUES ($uid, '$npw', '$cpw')";
-		mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 	}
 
 	function resetPassword($uid, $cpw) {
 	    list($uid, $cpw) = $this->escape_input((int) $uid, $cpw);
 		$q = "SELECT npw FROM `" . TB_PREFIX . "password` WHERE uid = $uid AND cpw = '$cpw' AND used = 0";
-		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 
 		if(!empty($dbarray)) {
-			if(!$this->updateUserField($uid, 'password', md5($dbarray['npw']), 1)) return false;
+		    if(!$this->updateUserField($uid, 'password', password_hash($dbarray['npw'], PASSWORD_BCRYPT,['cost' => 12]), 1)) return false;
 			$q = "UPDATE `" . TB_PREFIX . "password` SET used = 1 WHERE uid = $uid AND cpw = '$cpw' AND used = 0";
-			mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+			mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 			return true;
 		}
 
@@ -4174,7 +4207,7 @@ class MYSQLi_DB {
 
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "general values (0,'$casualties','$time',1)";
-		return mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+		return mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 	}
 
 	function getAttackByDate($time) {
@@ -4269,7 +4302,7 @@ class MYSQLi_DB {
 	    list($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) = $this->escape_input((int) $wid,(int) $from,(int) $t1,(int) $t2,(int) $t3,(int) $t4,(int) $t5,(int) $t6,(int) $t7,(int) $t8,(int) $t9,(int) $t10,(int) $t11);
 
         $q = "UPDATE " . TB_PREFIX . "prisoners set t1 = t1 + $t1, t2 = t2 + $t2, t3 = t3 + $t3, t4 = t4 + $t4, t5 = t5 + $t5, t6 = t6 + $t6, t7 = t7 + $t7, t8 = t8 + $t8, t9 = t9 + $t9, t10 = t10 + $t10, t11 = t11 + $t11 where wref = $wid and ".TB_PREFIX."prisoners.from = $from";
-        return mysqli_query($this->dblink,$q) or die(mysqli_error($database->dblink));
+        return mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
     	}
 	
     function getPrisoners($wid,$mode=0) {

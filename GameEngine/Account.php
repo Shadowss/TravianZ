@@ -114,7 +114,7 @@ class Account {
 			if(AUTH_EMAIL){
 			$act = $generator->generateRandStr(10);
 			$act2 = $generator->generateRandStr(5);
-				$uid = $database->activate($_POST['name'],md5($_POST['pw']),$_POST['email'],$_POST['vid'],$_POST['kid'],$act,$act2);
+			$uid = $database->activate($_POST['name'],password_hash($_POST['pw'], PASSWORD_BCRYPT,['cost' => 12]),$_POST['email'],$_POST['vid'],$_POST['kid'],$act,$act2);
 				if($uid) {
 
 					$mailer->sendActivate($_POST['email'],$_POST['name'],$_POST['pw'],$act);
@@ -122,7 +122,7 @@ class Account {
 				}
 			}
 			else {
-				$uid = $database->register($_POST['name'],md5($_POST['pw']),$_POST['email'],$_POST['vid'],$act);
+			    $uid = $database->register($_POST['name'],password_hash($_POST['pw'], PASSWORD_BCRYPT,['cost' => 12]),$_POST['email'],$_POST['vid'],$act);
 				if($uid) {
 					setcookie("COOKUSR",$_POST['name'],time()+COOKIE_EXPIRE,COOKIE_PATH);
 					setcookie("COOKEMAIL",$_POST['email'],time()+COOKIE_EXPIRE,COOKIE_PATH);
@@ -167,7 +167,7 @@ class Account {
 		$q = "SELECT * FROM ".TB_PREFIX."activate where id = '".$database->escape((int) $_POST['id'])."'";
 		$result = mysqli_query($GLOBALS['link'],$q);
 		$dbarray = mysqli_fetch_array($result);
-		if(md5($_POST['pw']) == $dbarray['password']) {
+		if(password_verify($_POST['pw'], $dbarray['password'])) {
 			$database->unreg($dbarray['username']);
 			header("Location: anmelden.php");
 		}

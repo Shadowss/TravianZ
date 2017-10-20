@@ -1542,6 +1542,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
  `vac_time` varchar(255) NULL DEFAULT '0',
  `vac_mode` int(2) NULL DEFAULT '0',
  `vactwoweeks` varchar(255) NULL DEFAULT '0',
+ `is_bcrypt` tinyint(1) NOT NULL DEFAULT '0',
  PRIMARY KEY (`id`),
  KEY `invited` (`invited`),
  KEY `lastupdate` (`lastupdate`),

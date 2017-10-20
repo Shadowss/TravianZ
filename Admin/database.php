@@ -39,11 +39,41 @@ class adm_DB {
 		global $database;
 		list($username,$password) = $database->escape_input($username,$password);
 
-		$q = "SELECT password FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
+		$q = "SELECT id, password, is_bcrypt FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
 		$result = mysqli_query($this->connection, $q);
+		
+		// if we didn't update the database for bcrypt hashes yet...
+		if (mysqli_error($database->dblink) != '') {
+		    // no need to select ID here, since the DB is not updated, so there will be no password conversion later
+		    $q = "SELECT id, password, 0 as is_bcrypt FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
+		    $result = mysqli_query($this->connection, $q);
+		    $bcrypt_update_done = false;
+		} else {
+		    $bcrypt_update_done = true;
+		}
+		
 		$dbarray = mysqli_fetch_array($result);
-		if($dbarray['password'] == md5($password)) {
+		
+		// even if we didn't do a DB conversion for bcrypt passwords,
+		// we still need to check if this password wasn't encrypted via password_hash,
+		// since all methods were updated to use that instead of md5 and therefore
+		// new passwords in DB will be bcrypt already even without the is_bcrypt field present
+		$bcrypted = true;
+		$pwOk = password_verify($password, $dbarray['password']);
+
+		if (!$pwOk && !$dbarray['is_bcrypt']) {
+		    $pwOk = ($dbarray['password'] == md5($password));
+		    $bcrypted = false;
+		}
+		
+		if($pwOk) {
+		    // update password to bcrypt, if correct
+		    if (!$dbarray['is_bcrypt'] && !$bcrypted) {
+		        mysqli_query($this->connection, "UPDATE " . TB_PREFIX . "users SET password = '".password_hash($password, PASSWORD_BCRYPT,['cost' => 12])."'".($bcrypt_update_done ? ', is_bcrypt = 1' : '')." where id = ".(int) $dbarray['id']);
+		    }
+
 			mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,'X','$username logged in (IP: <b>".$_SERVER['REMOTE_ADDR']."</b>)',".time().")");
+
 			return true;
 		}
 		else {
@@ -227,14 +257,37 @@ class adm_DB {
 	}
 
   function CheckPass($password,$uid){
-	$q = "SELECT password FROM ".TB_PREFIX."users where id = ".(int) $uid." and access = ".ADMIN;
-		$result = mysqli_query($this->connection, $q);
-		$dbarray = mysqli_fetch_array($result);
-		if($dbarray['password'] == md5($password)) {
-		  return true;
-	}else{
-	  return false;
-	}
+      $q = "SELECT id,password, is_bcrypt FROM ".TB_PREFIX."users where id = ".(int) $uid." and access = ".ADMIN;
+      $result = mysqli_query($this->connection, $q);
+      
+      // if we didn't update the database for bcrypt hashes yet...
+      if (mysqli_error($this->dblink) != '') {
+          // no need to select ID here, since the DB is not updated, so there will be no password conversion later
+          $q = "SELECT password, 0 as is_bcrypt FROM ".TB_PREFIX."users where id = ".(int) $uid." and access = ".ADMIN;
+          $result = mysqli_query($this->dblink,$q);
+          $bcrypt_update_done = false;
+      } else {
+          $bcrypt_update_done = true;
+      }
+      
+      $dbarray = mysqli_fetch_array($result);
+      
+      // check if this is still md5 password hash
+      if (!$dbarray['is_bcrypt']) {
+          $pwOk = ($dbarray['password'] == md5($password));
+      } else {
+          $pwOk = password_verify($password, $dbarray['password']);
+      }
+      
+      if($pwOk) {
+          // update password to bcrypt, if correct
+          if ($bcrypt_update_done && !$dbarray['is_bcrypt']) {
+              mysqli_query($this->connection, "UPDATE " . TB_PREFIX . "users SET password = '".password_hash($password, PASSWORD_BCRYPT,['cost' => 12])."', is_bcrypt = 1 where id = ".(int) $dbarray['id']);
+          }
+          return true;
+      } else {
+          return false;
+      }
   }
 
     function DelVillage($wref, $mode=0){

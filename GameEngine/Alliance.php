@@ -392,7 +392,7 @@
 			if($session->access != BANNED){
 			if(!isset($post['pw']) || $post['pw'] == "") {
 				$form->addError("pw1", PW_EMPTY);
-			} elseif(md5($post['pw']) !== $session->userinfo['password']) {
+			} elseif(!password_verify($post['pw'], $session->userinfo['password'])) {
 				$form->addError("pw2", PW_ERR);
 			} else {
 				$database->updateUserField($session->uid, 'alliance', 0, 1);
