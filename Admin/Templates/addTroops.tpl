@@ -14,8 +14,6 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 $id = $_GET['did'];
 if(isset($id))
 {
-	$village = $database->getVillage($id);
-	$user = $database->getUserArray($village['owner'],1);
 	$units = $database->getUnit($village['wref']);
 	$coor = $database->getCoor($village['wref']);
 	$tribe = $user['tribe'];

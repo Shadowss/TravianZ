@@ -11,7 +11,6 @@
 
 $id = $_GET['uid'];
 $uid = $_GET['uid'];
-$user = $database->getUserArray($id,1);
 if(isset($id))
 {
 	?>

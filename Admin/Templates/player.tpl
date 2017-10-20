@@ -14,8 +14,6 @@ if(isset($id))
 {
 	include_once("../GameEngine/Ranking.php");
 	$varmedal = $database->getProfileMedal($id);
-	$displayarray = $database->getUserArray($id,1);
-	$user=$displayarray;
 	$profiel="".$user['desc1']."".md5('skJkev3')."".$user['desc2']."";
 	$separator="../";
 	require("../Templates/Profile/medal.php");

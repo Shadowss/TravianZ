@@ -2,7 +2,6 @@
 $id = $_GET['did'];
 if(isset($id))
 {
-	$village = $database->getVillage($id);
 	?>
 	<br /><br />
 	<table id="profile">

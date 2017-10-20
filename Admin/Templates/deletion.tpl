@@ -11,7 +11,6 @@
 include_once("../GameEngine/Ranking.php");
 if($_GET['uid'])
 {
-	$user = $database->getUserArray($_GET['uid'],1);
 	$varray = $database->getProfileVillages($_GET['uid']);
 	if($user)
 	{

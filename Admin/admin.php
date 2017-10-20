@@ -50,12 +50,316 @@ $timeformat = new timeFormatGenerator;
 include('Templates/ver.tpl');
 include('Templates/update_latest.tpl');
 $up_avl = $latest - $ver ;
+
+$subpage = 'Login';
+
+if (!empty($_GET['p'])) {
+    switch ($_GET['p']) {
+        case 'server_info':
+            $subpage = 'Server Info';
+            break;
+        
+        case 'online':
+            $subpage = 'Online Users';
+            break;
+            
+        case 'notregistered':
+            $subpage = 'Players Not Activated';
+            break;
+            
+        case 'inactive':
+            $subpage = 'Players Inactivate';
+            break;
+            
+        case 'report':
+            $subpage = 'Players Reported';
+            break;
+            
+        case 'map':
+            $subpage = 'Map';
+            break;
+            
+        case 'search':
+            $subpage = 'General Search';
+            break;
+            
+        case 'message':
+            $subpage = 'Search IGMs/Reports';
+            break;
+            
+        case 'ban':
+            $subpage = 'Ban/Unban Players';
+            break;
+            
+        case 'maintenence':
+            $subpage = 'Server Maintenence';
+            break;
+            
+        case 'cleanban':
+            $subpage = 'Clean Banlist Data';
+            break;
+            
+        case 'gold':
+            $subpage = 'Give All Free Gold';
+            break;
+            
+        case 'usergold':
+            $subpage = 'Give Free Gold To Specific User';
+            break;
+            
+        case 'maintenenceResetGold':
+            $subpage = 'Reset Gold';
+            break;
+            
+        case 'delmedal':
+            $subpage = 'Delete Player Medals';
+            break;
+            
+        case 'delallymedal':
+            $subpage = 'Delete Ally Medals';
+            break;
+            
+        case 'givePlus':
+            $subpage = 'Give All Plus';
+            break;
+            
+        case 'maintenenceResetPlus':
+            $subpage = 'Reset Plus';
+            break;
+            
+        case 'givePlusRes':
+            $subpage = 'Give All Res Bonus';
+            break;
+            
+        case 'maintenenceResetPlusBonus':
+            $subpage = 'Reset Res Bonus';
+            break;
+            
+        case 'addUsers':
+            $subpage = 'Create Users';
+            break;
+            
+        case 'natarend':
+            $subpage = 'Add WW Villages';
+            break;
+            
+        case 'natarbuildingplan':
+            $subpage = 'Add WW Building Plan Villages';
+            break;
+            
+        case 'admin_log':
+            $subpage = 'Admin Log';
+            break;
+            
+        case 'config':
+            $subpage = 'Server Settings';
+            break;
+            
+        case 'editServerSet':
+            $subpage = 'Server Configuration';
+            break;
+            
+        case 'editPlusSet':
+            $subpage = 'PLUS Settings';
+            break;
+            
+        case 'editLogSet':
+            $subpage = 'Log Settings';
+            break;
+            
+        case 'editNewsboxSet':
+            $subpage = 'NewsBox Settings';
+            break;
+            
+        case 'editExtraSet':
+            $subpage = 'Extra Settings';
+            break;
+            
+        case 'editAdminInfo':
+            $subpage = 'Edit Admin Information';
+            break;
+            
+        case 'resetServer':
+            $subpage = 'Server Resetting';
+            break;
+            
+        case 'player':
+            if (!empty($_GET['uid'])) {
+                $displayarray = $database->getUserArray($_GET['uid'],1);
+                $user=$displayarray;
+                $subpage = 'Player Details ('.$user['username'].')';
+            } else {
+                $subpage = 'Player Details (no player)';
+            }
+            break;
+            
+        case 'editUser':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Edit Player ('.$user['username'].')';
+            } else {
+                $subpage = 'Edit Player (no player)';
+            }
+            break;
+            
+        case 'deletion':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Delete Player ('.$user['username'].')';
+            } else {
+                $subpage = 'Delete Player (no player)';
+            }
+            break;
+            
+        case 'Newmessage':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Compose Message ('.$user['username'].')';
+            } else {
+                $subpage = 'Compose Message';
+            }
+            break;
+            
+        case 'editPlus':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Edit Plus &amp; Resources  ('.$user['username'].')';
+            } else {
+                $subpage = 'Edit Plus &amp; Resources';
+            }
+            break;
+            
+        case 'editSitter':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Edit Sitters ('.$user['username'].')';
+            } else {
+                $subpage = 'Edit Sitters ';
+            }
+            break;
+            
+        case 'editOverall':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Edit Off &amp; Def ('.$user['username'].')';
+            } else {
+                $subpage = 'Edit Off &amp; Def';
+            }
+            break;
+            
+        case 'editWeek':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Edit Weekly Off &amp; Def ('.$user['username'].')';
+            } else {
+                $subpage = 'Edit Weekly Off &amp; Def';
+            }
+            break;
+            
+        case 'userlogin':
+            if (!empty($_GET['uid'])) {
+                $player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".(int) $_GET['uid']));
+                $subpage = 'User Logins ('.$player['username'].')';
+            } else {
+                $subpage = 'User Logins (no player)';
+            }
+            break;
+            
+        case 'userillegallog':
+            if (!empty($_GET['uid'])) {
+                $player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".(int) $_GET['uid']));
+                $subpage = 'User Illegals Log ('.$player['username'].')';
+            } else {
+                $subpage = 'User Illegals Log (no player)';
+            }
+            break;
+            
+        case 'editHero':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Edit Hero ('.$user['username'].')';
+            } else {
+                $subpage = 'Edit Hero';
+            }
+            break;
+            
+        case 'editAdditional':
+            if (!empty($_GET['uid'])) {
+                $user = $database->getUserArray($_GET['uid'],1);
+                $subpage = 'Edit Additional Info ('.$user['username'].')';
+            } else {
+                $subpage = 'Edit Additional Info';
+            }
+            break;
+            
+        case 'village':
+            if (!empty($_GET['did'])) {
+                $village = $database->getVillage($_GET['did']);
+                $user = $database->getUserArray($village['owner'],1);
+                $subpage = 'Edit Village ('.$village['name'].' &raquo; '.$user['username'].')';
+            } else {
+                $subpage = 'Edit Village (no village)';
+            }
+            break;
+            
+        case 'editResources':
+            if (!empty($_GET['did'])) {
+                $village = $database->getVillage($_GET['did']);
+                $user = $database->getUserArray($village['owner'],1);
+                $subpage = 'Edit Resources ('.$village['name'].' &raquo; '.$user['username'].')';
+            } else {
+                $subpage = 'Edit Resources (no village)';
+            }
+            break;
+            
+        case 'addTroops':
+            if (!empty($_GET['did'])) {
+                $village = $database->getVillage($_GET['did']);
+                $user = $database->getUserArray($village['owner'],1);
+                $subpage = 'Edit Troops ('.$village['name'].' &raquo; '.$user['username'].')';
+            } else {
+                $subpage = 'Edit Troops (no village)';
+            }
+            break;
+            
+        case 'addABTroops':
+            if (!empty($_GET['did'])) {
+                $village = $database->getVillage($_GET['did']);
+                $user = $database->getUserArray($village['owner'],1);
+                $subpage = 'Upgrade Troops ('.$village['name'].' &raquo; '.$user['username'].')';
+            } else {
+                $subpage = 'Upgrade Troops (no village)';
+            }
+            break;
+            
+        case 'editVillage':
+            if (!empty($_GET['did'])) {
+                $village = $database->getVillage($_GET['did']);
+                $user = $database->getUserArray($village['owner'],1);
+                $subpage = 'Edit Village ('.$village['name'].' &raquo; '.$user['username'].')';
+            } else {
+                $subpage = 'Edit Village (no village)';
+            }
+            break;
+            
+        case 'villagelog':
+            if (!empty($_GET['did'])) {
+                $village = $database->getVillage($_GET['did']);
+                $user = $database->getUserArray($village['owner'],1);
+                $subpage = 'Build Log ('.$village['name'].' &raquo; '.$user['username'].')';
+            } else {
+                $subpage = 'Build Log (no village)';
+            }
+            break;
+    }
+}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<link rel="shortcut icon" href="favicon.ico"/>
-		<title>Admin Panel</title>
+		<title>Admin Panel - <?php echo $subpage; ?></title>
 		<link rel=stylesheet type="text/css" href="../img/admin/admin.css">
 		<link rel=stylesheet type="text/css" href="../img/admin/acp.css">
 		<link rel=stylesheet type="text/css" href="../img/img.css">

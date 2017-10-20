@@ -2,7 +2,6 @@
 $id = (int) $_GET['uid'];
 if(isset($id))
 {
-	$player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = $id"));
 	?>
 	<table cellpadding="1" cellspacing="1" id="member">
 		<thead>

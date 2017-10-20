@@ -13,7 +13,6 @@ if (!isset($_SESSION)) {
 }
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 $id = $_GET['uid'];
-$user = $database->getUserArray($id,1);
 $dur=$user['protect']-time();
 $protect=0;
 if($dur>43200) {

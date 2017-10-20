@@ -15,8 +15,6 @@ error_reporting(0);
 $id = $_GET['did'];
 if(isset($id))
 {
-	$village = $database->getVillage($id);
-	$user = $database->getUserArray($village['owner'],1);
 	$coor = $database->getCoor($village['wref']);
 	$varray = $database->getProfileVillages($village['owner']);
 	$type = $database->getVillageType($village['wref']);
