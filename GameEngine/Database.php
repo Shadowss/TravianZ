@@ -1678,7 +1678,7 @@ class MYSQLi_DB {
 	    list($aid) = $this->escape_input((int) $aid);
 
 		$result = mysqli_query($this->dblink,"SELECT * FROM " . TB_PREFIX . "users where alliance = $aid");
-		$num_rows = mysqli_num_rows($this->dblink, $result);
+		$num_rows = mysqli_num_rows($result);
 		if($num_rows == 0) {
 			$q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
 		}
