@@ -83,12 +83,12 @@ if(isset($id))
 							<td colspan="2" class="empty"></td>
 						</tr>
 						<tr>
-							<td colspan="2" class="desc2"><textarea cols="25" rows="14" tabindex="1" name="desc1"><?php echo nl2br($user['desc1']); ?></textarea></td>
+							<td colspan="2" class="desc2"><textarea cols="25" rows="14" tabindex="1" name="desc1"><?php echo $user['desc1']; ?></textarea></td>
 						</tr>
 					</table>
 				</td>
 				<td class="desc1">
-					<textarea tabindex="8" cols="30" rows="20" name="desc2"><?php echo nl2br($user['desc2']); ?></textarea>
+					<textarea tabindex="8" cols="30" rows="20" name="desc2"><?php echo $user['desc2']; ?></textarea>
 				</td>
 			</tr>
 			<tr>

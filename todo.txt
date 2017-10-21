@@ -1,8 +1,6 @@
-- don't show Support & Taskmaster in stats
 - add Support login possibility into Admin (ask for password during installation, create Support messages section)
 - allow sending Mass Message + System Message from Admin
 - fix editing current task from Taskmaster -> number never match the edited quest after save
-- remove <br /> tags from profile description and replace them by real new lines when editing players in Admin
 - cannot delete a single medal in admin
 - add back buttons to Admin where there are not (like editing a user)
 - disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)
