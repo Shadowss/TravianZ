@@ -1,5 +1,4 @@
 - fix deleting users (need to delete their villages (+alliances/construction plans/...?) after a while)
-- check if defeating a player (destroying their village) removes that village from map after a while (as stated in FAQ)
 - add PayPal listener to verify gold transactions imediatelly
 - add combat Simulator link to options for a village/oasis (Centre map, Raid, Send Troops...)
 - don't show Support & Taskmaster in stats
@@ -24,4 +23,4 @@
 - it's possible to train 2 senators - when 1 is trained, another one is possible to be trained
 - add registered date into user details in Admin
 - npc shop button is missing from settlers training (palace)
-- logs don't seem to work
+- should random attacks from Natars when building Wonder of the World be unit-less?

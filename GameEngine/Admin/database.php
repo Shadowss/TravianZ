@@ -78,12 +78,12 @@ class adm_DB {
 	            mysqli_query($this->connection, "UPDATE " . TB_PREFIX . "users SET password = '".password_hash($password, PASSWORD_BCRYPT,['cost' => 12])."'".($bcrypt_update_done ? ', is_bcrypt = 1' : '')." where id = ".(int) $dbarray['id']);
 	        }
 	        
-	        mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,'X','$username logged in (IP: <b>".$_SERVER['REMOTE_ADDR']."</b>)',".time().")");
+	        mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,'X','$username logged in (IP: <b>".$_SERVER['REMOTE_ADDR']."</b>)',".time().")");
 	        
 	        return true;
 	    }
 	    else {
-	        mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,'X','<font color=\'red\'><b>IP: ".$_SERVER['REMOTE_ADDR']." tried to log in with username <u> $username</u> but access was denied!</font></b>',".time().")");
+	        mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,'X','<font color=\'red\'><b>IP: ".$_SERVER['REMOTE_ADDR']." tried to log in with username <u> $username</u> but access was denied!</font></b>',".time().")");
 	        return false;
 	    }
 	}
@@ -167,7 +167,7 @@ class adm_DB {
 	$status = $database->getVillageState($wid);
 	$status = 0;
 	if($status == 0){
-	    mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Added new village <b><a href=\'admin.php?p=village&did=$wid\'>$wid</a></b> to user <b><a href=\'admin.php?p=player&uid=$uid\'>$uid</a></b>',".time().")");
+	    mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Added new village <b><a href=\'admin.php?p=village&did=$wid\'>$wid</a></b> to user <b><a href=\'admin.php?p=player&uid=$uid\'>$uid</a></b>',".time().")");
 	  $database->setFieldTaken($wid);
 		  $database->addVillage($wid,$uid,'new village','0');
 		  $database->addResourceFields($wid,$database->getVillageType($wid));
@@ -306,7 +306,7 @@ class adm_DB {
 	  }
 		$result = mysqli_query($this->connection, $q);
 		if(mysqli_num_rows($result) > 0){
-		    mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
+		    mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
 
 			$database->clearExpansionSlot($wref);
 		
@@ -381,7 +381,7 @@ class adm_DB {
 	 global $database;
 	 $name = addslashes($database->getUserField($uid,"username",0));
 	 $uid = (int) $uid;
-	mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Unbanned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
+	mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Unbanned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
 	$q = "UPDATE ".TB_PREFIX."users SET `access` = '".USER."' WHERE `id` = $uid;";
 	mysqli_query($this->connection, $q);
 	$q = "UPDATE ".TB_PREFIX."banlist SET `active` = '0' WHERE `id` = $id;";
@@ -393,7 +393,7 @@ class adm_DB {
 	$name = addslashes($database->getUserField($uid,"username",0));
 	list($end,$reason) = $database->escape_input($end,$reason);
 	$uid = (int) $uid;
-	mysqli_query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Banned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
+	mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Banned user <a href=\'admin.php?p=player&uid=$uid\'>$name</a>',".time().")");
 	$q = "UPDATE ".TB_PREFIX."users SET `access` = '0' WHERE `id` = $uid";
 	mysqli_query($this->connection, $q);
 	$time = time();

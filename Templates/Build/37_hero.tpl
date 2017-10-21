@@ -15,7 +15,7 @@ global $database;
 if (isset($_POST['name'])) { 
 	$_POST['name'] = stripslashes($_POST['name']);
      mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `name`='".($database->escape($_POST['name']))."' where `uid`='".$database->escape($session->uid)."'") or die("ERROR:".mysqli_error($database->dblink)); 
-        $hero = mysqli_query("SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . (int) $session->uid . ""); 
+        $hero = mysqli_query($database->dblink,"SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . (int) $session->uid . ""); 
         $hero_info = mysqli_fetch_array($hero); 
         echo "".NAME_CHANGED.""; 
     } 
