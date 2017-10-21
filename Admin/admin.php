@@ -461,7 +461,7 @@ if (!empty($_GET['p'])) {
 											{ ?>
 												<a href="<?php echo HOMEPAGE; ?>">Server Homepage</a>
 												<a href="admin.php">Control Panel Home</a>
-												<a href="<?php echo SERVER; ?>dorf1.php">Return to the server</a>
+												<a href="<?php echo rtrim(SERVER, '/'); ?>/dorf1.php">Return to the server</a>
 												<!-- <a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</font></b></a>-->
 												<br />
 												<a href="?action=logout">Logout</a>
