@@ -27,7 +27,9 @@ include("alli_menu.tpl");
 								<select name="a_user" class="name dropdown">
 								<?php
                                 foreach($memberlist as $member) {
-                                echo "<option value=".$member['id'].">".$member['username']."</option>";
+                                	if ($member['id'] != $session->uid) {
+                                		echo "<option value=".$member['id'].">".$member['username']."</option>";
+                                	}
                                 }
                                 ?>
                                 </select>

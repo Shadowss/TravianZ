@@ -1681,9 +1681,9 @@ class MYSQLi_DB {
 		$num_rows = mysqli_num_rows($result);
 		if($num_rows == 0) {
 			$q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
+			mysqli_query($this->dblink,$q);
+			return mysqli_insert_id($this->dblink);
 		}
-		mysqli_query($this->dblink,$q);
-		return mysqli_insert_id($this->dblink);
 	}
 
 	/*****************************************

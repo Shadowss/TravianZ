@@ -332,7 +332,7 @@
 		private function kickAlliUser($post) {
 			global $database, $session, $form;
 			if($session->access != BANNED){
-			$UserData = $database->getUserArray($post['a_user'], 0);
+			$UserData = $database->getUserArray($post['a_user'], 1);
 			if($this->userPermArray['opt2'] == 0) {
 				$form->addError("perm", NO_PERMISSION);
 			} else if($UserData['id'] != $session->uid){
