@@ -246,13 +246,18 @@ class adm_DB {
 			$this->DelVillage($villages[$i]['wref'], 1);
 		  }
 		  $q = "DELETE FROM ".TB_PREFIX."hero where uid = ".(int) $uid;
-		mysqli_query($this->connection,$q);
+		  mysqli_query($this->connection,$q);
  
-		$name = $database->getUserField($uid,"username",0);
-		mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,$ID,'Deleted user <a>$name</a>',".time().")");
-		$q = "DELETE FROM ".TB_PREFIX."users WHERE `id` = ".(int) $uid;
-		 mysqli_query($this->connection,$q);
+		  $name = $database->getUserField($uid,"username",0);
+		  mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,$ID,'Deleted user <a>$name</a>',".time().")");
+
+		  $q = "DELETE FROM ".TB_PREFIX."users WHERE `id` = ".(int) $uid;
+		  mysqli_query($this->connection,$q);
+	} else {
+	    return false;
 	}
+	
+	return true;
   }
 
   function getUserActive() {
@@ -267,10 +272,10 @@ class adm_DB {
 	$result = mysqli_query($this->connection, $q);
 	
 	// if we didn't update the database for bcrypt hashes yet...
-	if (mysqli_error($this->dblink) != '') {
+	if (mysqli_error($this->connection) != '') {
 	    // no need to select ID here, since the DB is not updated, so there will be no password conversion later
 	    $q = "SELECT password, 0 as is_bcrypt FROM ".TB_PREFIX."users where id = ".(int) $uid." and access = ".ADMIN;
-	    $result = mysqli_query($this->dblink,$q);
+	    $result = mysqli_query($this->connection,$q);
 	    $bcrypt_update_done = false;
 	} else {
 	    $bcrypt_update_done = true;
@@ -278,11 +283,16 @@ class adm_DB {
 
 	$dbarray = mysqli_fetch_array($result);
 	
-	// check if this is still md5 password hash
-	if (!$dbarray['is_bcrypt']) {
+	// even if we didn't do a DB conversion for bcrypt passwords,
+	// we still need to check if this password wasn't encrypted via password_hash,
+	// since all methods were updated to use that instead of md5 and therefore
+	// new passwords in DB will be bcrypt already even without the is_bcrypt field present
+	$bcrypted = true;
+	$pwOk = password_verify($password, $dbarray['password']);
+	
+	if (!$pwOk && !$dbarray['is_bcrypt']) {
 	    $pwOk = ($dbarray['password'] == md5($password));
-	} else {
-	    $pwOk = password_verify($password, $dbarray['password']);
+	    $bcrypted = false;
 	}
 	
 	if($pwOk) {
@@ -334,6 +344,9 @@ class adm_DB {
 			mysqli_query($this->connection, $q);
 		
 			$q = "DELETE FROM ".TB_PREFIX."movement where `from` = $wref and proc=0";
+			mysqli_query($this->connection, $q);
+			
+			$q = "UPDATE ".TB_PREFIX."wdata SET occupied = 0 where id = $wref";
 			mysqli_query($this->connection, $q);
 				
 			$getmovement = $database->getMovement(3,$wref,1);

@@ -123,8 +123,11 @@ class funct {
     global $admin,$database;
       switch($post['action']){
       case "DelPlayer":
-        $admin->DelPlayer($post['uid'],$post['pass']);
-        header("Location: ?p=search&msg=ursdel");
+          if ($admin->DelPlayer($post['uid'],$post['pass'])) {
+              header("Location: ?p=search&msg=ursdel");
+          } else {
+              die('Invalid Admin password, cannot delete player. Please go back and retry.');
+          }
       break;
       case "punish":
         $admin->Punish($post);
