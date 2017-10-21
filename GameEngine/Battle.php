@@ -54,7 +54,7 @@ class Battle {
 				if(isset($post['a1_1'])) {
 					$sum = $sum2 = $post['walllevel'] = 0;
 					for($i=1;$i<=10;$i++) {
-						$sum += $post['a1_'.$i];
+					    $sum += (!empty($post['a1_'.$i]) ? $post['a1_'.$i] : 0);
 					}
 					if($sum > 0) {
 						$post['palast'] = intval($post['palast']);
