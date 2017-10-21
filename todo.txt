@@ -4,7 +4,6 @@
 - cannot delete a single medal in admin
 - add back buttons to Admin where there are not (like editing a user)
 - disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)
-- when editing Additional Information for user and adjusting gold, sometimes the first time will not record the new gold amount (when pressing Enter)
 - allow to redirect Support messages to admin's nickname (for when there's only a single admin and doesn't like switching between Support and themselves) 
 - disallow Support to play (single cookie for Admin and the game means support gets no village and lots of warnings when they switch to game now)
 - resetting res bonus in admin actually says that bonus was given after OK is pressed
