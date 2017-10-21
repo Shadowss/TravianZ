@@ -241,7 +241,9 @@
 					)allitag
 					FROM " . TB_PREFIX . "users
 					WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-					AND " . TB_PREFIX . "users.tribe <= 5 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
+					AND " . TB_PREFIX . "users.tribe <= 5
+                    AND " . TB_PREFIX . "users.id > 5
+                    ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 				} else {
 					$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.oldrank oldrank, " . TB_PREFIX . "users.alliance alliance, (
 
@@ -262,7 +264,9 @@
 					)allitag
 					FROM " . TB_PREFIX . "users
 					WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-					AND " . TB_PREFIX . "users.tribe <= 3 ORDER BY totalpop DESC, totalvillages DESC, userid DESC";	
+					AND " . TB_PREFIX . "users.tribe <= 3
+                    AND " . TB_PREFIX . "users.id > 5
+                    ORDER BY totalpop DESC, totalvillages DESC, userid DESC";	
 				}
 
 				$result = (mysqli_query($GLOBALS['link'],$q));
@@ -319,6 +323,7 @@
 			)allitag
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.tribe = $race AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
+            AND " . TB_PREFIX . "users.id > 5
 			ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 
 
@@ -377,6 +382,7 @@
 			)pop
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.apall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
+            AND " . TB_PREFIX . "users.id > 5
 			ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC, userid DESC";
 				$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
 				while($row = mysqli_Fetch_assoc($result)) {
@@ -419,6 +425,7 @@
 			)pop
 			FROM " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
+            AND " . TB_PREFIX . "users.id > 5
 			ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC, userid DESC";
 				$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
 				while($row = mysqli_Fetch_assoc($result)) {
