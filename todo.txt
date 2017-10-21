@@ -12,7 +12,6 @@
 - normalize forum tables - varchar is used for numeric values and is joined with int field
 - task 1 => construct woodcutter will not reload the page when finished, so it would still seem that woodcutter build is in progress
 - it's possible to train 2 senators - when 1 is trained, another one is possible to be trained
-- add registered date into user details in Admin
 - npc shop button is missing from settlers training (palace)
 - should random attacks from Natars when building Wonder of the World be unit-less?
 - send forum replies in a forum where a user is active also to that user's mailbox
