@@ -8,7 +8,6 @@
 - disallow Support to play (single cookie for Admin and the game means support gets no village and lots of warnings when they switch to game now)
 - resetting res bonus in admin actually says that bonus was given after OK is pressed
 - quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
-- sending messages to players via Admin doesn't work
 - check aliance invitation accepting - apparently it doesn't work too well on first try?
 - normalize forum tables - varchar is used for numeric values and is joined with int field
 - task 1 => construct woodcutter will not reload the page when finished, so it would still seem that woodcutter build is in progress

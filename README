@@ -39,6 +39,7 @@ martinambrus changes:
 27. editing additional user data in Admin now saves them when Enter is used instead of clicking on "Save" as well
 28. fixed reports pagination always staying on "All" tab
 29. fix for the "fixed" :) self-kicking from an alliance
+30. fixed sending messages to player via Admin
 
 
 Shadowss changes:
