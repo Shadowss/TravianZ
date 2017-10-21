@@ -5,6 +5,7 @@ $uinfo = $database->getVillage($basearray['id']);
 $oasis1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysqli_real_escape_string($GLOBALS['link'],$_GET['d']));
 $oasis = mysqli_fetch_assoc($oasis1);
 $access=$session->access;
+$oasislink = '';
 ?>
 <h1><?php if($basearray['fieldtype']!=0){
 echo !$basearray['occupied']? ABANDVALLEY : $basearray['name']; echo " (".$basearray['x']."|".$basearray['y'].")";
@@ -128,6 +129,13 @@ if($oasis['owner'] == 2){
         $a = 0;
         for ($i = 31; $i <= 40; $i++) {
           if($unit['u'.$i]){
+          	// assemble oasis warsim link
+          	if ($basearray['fieldtype'] == 0) {
+          		if (!$oasislink) {
+          			$oasislink = rtrim(HOMEPAGE, '/').'/warsim.php?target=4';
+          		}
+          		$oasislink .= '&amp;u'.$i.'='.$unit['u'.$i];
+          	}
             echo '<tr>';
                       echo '<td class="ico"><img class="unit u'.$i.'" src="img/x.gif" alt="'.$unarray[$i].'" title="'.$unarray[$i].'" /></td>';
                       echo '<td class="val">'.$unit['u'.$i].'</td>';
@@ -469,14 +477,29 @@ if($type==18 or $type==19 or $type==20 or $type==21){
         $test = "&raquo; ".FNEWVILLAGE." (".$village->unitarray['u'.$session->tribe.'0']."/3 ".SETTLERSAVAIL.")";
     }
  	
-	echo ($basearray['fieldtype']==0)? 
-		($village->resarray['f39']==0)? 
-		($basearray['owner'] == $session->uid)?
-			
-		"<a href=\"build.php?id=39\">&raquo; ".RAID." $otext ".OASIS." (".BUILDRALLY.")</a>" : 
-		"&raquo; ".RAID." $otext ".OASIS." (".BUILDRALLY.")" : 
-		"<a href=\"a2b.php?z=".$_GET['d']."&o\">&raquo; ".RAID." $otext</a>" :
-		"$test"
+ 	if ($basearray['fieldtype']==0) {
+ 		if ($village->resarray['f39']==0) {
+ 			if ($basearray['owner'] == $session->uid) {
+ 				echo "<a href=\"build.php?id=39\">&raquo; ".RAID." $otext ".OASIS." (".BUILDRALLY.")</a>";
+ 			} else {
+ 				echo "&raquo; ".RAID." $otext ".OASIS." (".BUILDRALLY.")";
+ 			}
+ 		} else {
+ 			echo "<a href=\"a2b.php?z=".$_GET['d']."&o\">&raquo; ".RAID." $otext</a>";
+ 		}
+ 		
+ 		if ($oasislink) {
+?>
+		</tr>
+		<tr>
+			<td>
+				<a href="<?php echo $oasislink; ?>">&raquo; Combat Simulator</a>
+			</td>
+<?php
+		}
+ 	} else {
+ 		echo "$test";
+ 	}
 	?>
 		</tr>
         <?php } 

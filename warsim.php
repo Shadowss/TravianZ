@@ -101,7 +101,24 @@ if(isset($_POST['result'])) {
         }
     } 
 }
-$target = isset($_POST['target'])? $_POST['target'] : array();
+
+if (!empty($_GET['target'])) {
+    // this only works for Nature, as GET links like this one will come from an oasis
+    if (!$_GET['target'] != 4) {
+        $_GET['target'] = 4;
+    }
+
+    // fill-in session value-array data
+    foreach ($_GET as $key => $value) {
+        if ($key[0] === 'u' && is_numeric($value)) {
+            $form->setValue('a2_' . substr($key, 1), $value);
+        }
+    }
+    
+    
+}
+
+$target = isset($_POST['target'])? $_POST['target'] : (!empty($_GET['target']) ? array((int) $_GET['target']) : array());
 $tribe = isset($_POST['mytribe'])? $_POST['mytribe'] : $session->tribe;
 if(count($target) > 0) {
 	include("Templates/Simulator/att_".preg_replace("/[^a-zA-Z0-9_-]/","",$tribe).".tpl");

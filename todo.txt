@@ -1,4 +1,3 @@
-- add combat Simulator link to options for a village/oasis (Centre map, Raid, Send Troops...)
 - don't show Support & Taskmaster in stats
 - add Support login possibility into Admin (ask for password during installation, create Support messages section)
 - allow sending Mass Message + System Message from Admin

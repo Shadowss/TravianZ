@@ -51,6 +51,10 @@ class Form {
 			return "";
 		}
 	}
+	
+	public function setValue($field, $value) {
+        $this->valuearray[$field] = $value;
+	}
 
 	public function getDiff($field,$cookie) {
 		if(array_key_exists($field,$this->valuearray) && $this->valuearray[$field] != $cookie) {
