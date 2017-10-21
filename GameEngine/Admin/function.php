@@ -202,6 +202,7 @@ class funct {
 			case 39: $build = "Great Granary"; break;
 			case 40: $build = "Wonder of the World"; break;
 			case 41: $build = "Horse Drinking Trough"; break;
+			case 42: $build = "Great Workshop"; break;
 			default: $build = "Error"; break;
 		}
 		return $build;

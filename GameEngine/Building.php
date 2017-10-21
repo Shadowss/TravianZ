@@ -663,32 +663,48 @@ class Building {
 
 	public function getTypeLevel($tid,$vid=0) {
 		global $village,$database;
+
 		$keyholder = array();
+
 		if($vid == 0) {
 			$resourcearray = $village->resarray;
 		} else {
 			$resourcearray = $database->getResourceLevel($vid);
 		}
+
 		foreach(array_keys($resourcearray,$tid) as $key) {
 			if(strpos($key,'t')) {
 				$key = preg_replace("/[^0-9]/", '', $key);
 				array_push($keyholder, $key);
 			}
 		}
+
 		$element = count($keyholder);
+
+		// if we count more than 1 instance of the building (mostly resource fields)
 		if($element >= 2) {
+		    // resource field
 			if($tid <= 4) {
 				$temparray = array();
+				
 				for($i=0;$i<=$element-1;$i++) {
+				    // collect current field level
 					array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
 				}
+
+				// find out the maximum field level for this village
+				$maValue = max($temparray);
 				foreach ($temparray as $key => $val) {
-					if ($val == max($temparray))
-					$target = $key;
+				    if ($val == $maValue) {
+					   $target = $key;
+					}
 				}
 			}
+			// village building
 			else {
 				$target = 0;
+				
+				// find the highest level built for this building type
 				for($i=1;$i<=$element-1;$i++) {
 					if($resourcearray['f'.$keyholder[$i]] > $resourcearray['f'.$keyholder[$target]]) {
 						$target = $i;
@@ -696,12 +712,15 @@ class Building {
 				}
 			}
 		}
+		// if we count only a single building
 		else if($element == 1) {
 			$target = 0;
 		}
+		// no building matching search criteria
 		else {
 			return 0;
 		}
+
 		if($keyholder[$target] != "") {
 			return $resourcearray['f'.$keyholder[$target]];
 		}
