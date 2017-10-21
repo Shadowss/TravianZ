@@ -35,7 +35,7 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
     echo "&laquo;&raquo;";
     }
     else if (!isset($_GET['s']) && count($message->noticearray) > 10) {
-    echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
+    echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=10&amp;o=0\">&raquo;</a>";
     }
     else if(isset($_GET['s']) && count($message->noticearray) > $_GET['s']) {
     	if(count($message->noticearray) > ($_GET['s']+10) && $_GET['s']-10 < count($message->noticearray) && $_GET['s'] != 0) {
