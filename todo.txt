@@ -1,4 +1,3 @@
-- dorf1.php without being logged-in (but being logged-in via Admin) takes forever to load
 - allow sending Mass Message + System Message from Admin
 - fix editing current task from Taskmaster -> number never match the edited quest after save
 - cannot delete a single medal in admin

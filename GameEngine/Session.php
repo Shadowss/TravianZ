@@ -278,6 +278,10 @@ class Session {
 };
 $session = new Session;
 $form = new Form;
-$message = new Message;
+
+// if there is no user, we'd try to load messages for user with ID 0, which is wrong
+if ($_SESSION['id_user']) {
+    $message = new Message;
+}
 
 ?>
