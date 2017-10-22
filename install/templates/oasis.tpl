@@ -1,4 +1,4 @@
-<?
+<?php
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 // TRAVIANX //
 // Only for advanced users, do not edit if you dont know what are you doing! //
@@ -6,6 +6,11 @@
 // - TravianX = Travian Clone Project - //
 // DO NOT REMOVE COPYRIGHT NOTICE! //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+if(isset($_GET['err']) && $_GET['err'] == 1) {
+echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Existing Oasis data found in the database! Please clear the 'odata' table before continuing.</span></div><br /><br />";
+}
+
 ?>
 <form action="include/oasis.php" method="post" id="dataform">
 <p>

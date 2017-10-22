@@ -12,6 +12,12 @@
 
 include("database.php");
 
+// check if we don't already have world data
+$data_exist = $database->query_return("SELECT * FROM " . TB_PREFIX . "wdata LIMIT 1");
+if (count($data_exist)) {
+    header("Location: ../index.php?s=3&err=1");
+    exit;
+}
 
 $xyas=(1+(2*WORLD_MAX));
 

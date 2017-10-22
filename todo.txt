@@ -1,6 +1,3 @@
-- cannot delete a single medal in admin
-- add back buttons to Admin where there are not (like editing a user)
-- disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then) 
 - quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
 - check aliance invitation accepting - apparently it doesn't work too well on first try?
 - normalize forum tables - varchar is used for numeric values and is joined with int field
@@ -10,4 +7,5 @@
 - should random attacks from Natars when building Wonder of the World be unit-less?
 - send forum replies in a forum where a user is active also to that user's mailbox
 - make an option for admin to be raidable (in profile?)
+- finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
 - add PayPal listener to verify gold transactions imediatelly

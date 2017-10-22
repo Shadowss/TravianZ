@@ -16,7 +16,11 @@
 #################################################################################
 
 if(isset($_GET['c']) && $_GET['c'] == 1) {
-echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating wdata. Check configuration or file.</span></div><br>";
+echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Error creating wdata. Check configuration or file.</span></div><br><br>";
+}
+
+if(isset($_GET['err']) && $_GET['err'] == 1) {
+echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Existing World Data found in the database! Please clear your database before continuing.</span></div><br /><br />";
 }
 ?>
 <form action="process.php" method="post" id="dataform">

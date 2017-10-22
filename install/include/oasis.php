@@ -9,10 +9,13 @@
         include ("../../GameEngine/Database.php");
         include ("../../GameEngine/Admin/database.php");
 
-
-		$conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-		mysqli_select_db($conn, SQL_DB);
-
+		// check if we don't already have world data
+		$data_exist = $database->query_return("SELECT * FROM " . TB_PREFIX . "odata LIMIT 1");
+		if (count($data_exist)) {
+		    header("Location: ../index.php?s=6&err=1");
+		    exit;
+		}
+		
 		$database->populateOasisdata();
 		$database->populateOasis();
 		$database->populateOasisUnits2();
