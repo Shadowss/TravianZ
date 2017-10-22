@@ -1,4 +1,3 @@
-- fix editing current task from Taskmaster -> number never match the edited quest after save
 - cannot delete a single medal in admin
 - add back buttons to Admin where there are not (like editing a user)
 - disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)

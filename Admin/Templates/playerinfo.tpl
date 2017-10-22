@@ -184,9 +184,6 @@
 										elseif($quest >=37) {$questname = "Finish"; }
 										else { $questname = "Unknown"; }
 										$quesst = $quest;
-										if($quest > 18){
-										$quesst = $quest - 3;
-										}
 										$questinfo = "$quesst - $questname";
 									?>
 								<input disabled="disabled" style="width: 80%;" class="fm" name="quest" value="<?php echo $questinfo; ?>"> <a href="admin.php?p=editUser&uid=<?php echo $id; ?>"><img src="../img/admin/edit.gif" title="Edit Quest"></a></td>
