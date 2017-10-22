@@ -42,6 +42,7 @@ martinambrus changes:
 30. fixed sending messages to player via Admin
 31. Support user is now a part of the installation and can be logged into Admin and in-game (albeit in game, they have no village, so can not access fields or village views)
 32. messages sent to Multihunter now have the correct recepient shown next to them (was empty)
+33. new links in Admin to access in-game messages + Mass Message & System Message dialogs
 
 
 Shadowss changes:

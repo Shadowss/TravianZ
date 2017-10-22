@@ -478,6 +478,11 @@ if (!empty($_GET['p'])) {
 												<a href="?p=search">General Search</a>
 												<a href="?p=message">Search IGMs/Reports</a>
 												<br />
+												<a href="#"><b>Messages</b></a>
+												<a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">Read In-Game Messages</a>
+												<a href="<?php echo rtrim(SERVER, '/'); ?>/massmessage.php">Create Mass Message</a>
+												<a href="<?php echo rtrim(SERVER, '/'); ?>/sysmsg.php">Create System Message</a>
+												<br />
 												<a href="#"><b>Ban</b></a>
 												<a href="?p=ban">Ban/Unban Players</a>
 												<a href="?p=maintenence">Server Maintenence</a>
@@ -517,6 +522,7 @@ if (!empty($_GET['p'])) {
 											{ ?>
 												<a href="admin.php">MCP Home</a>
 												<a href="<?php echo HOMEPAGE; ?>">Homepage</a>
+												<a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">In-Game Messages</a>
 												<a href="#"></a><a href="#"></a>
 												<a href="?p=server_info">Server Info</a>
 												<a href="?p=online">Online users</a>
