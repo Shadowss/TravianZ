@@ -1,5 +1,5 @@
 - normalize forum tables - varchar is used for numeric values and is joined with int field
-- send forum replies in a forum where a user is active also to that user's mailbox
 - make an option for admin to be raidable (in profile?)
 - finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
+- add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
 - add PayPal listener to verify gold transactions imediatelly

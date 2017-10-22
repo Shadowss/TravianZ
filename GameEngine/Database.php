@@ -1471,13 +1471,40 @@ class MYSQLi_DB {
 	        FORUM SUREY
 	*************************/
 
-    function CreatPost($post, $tids, $owner, $alliance, $player, $coor, $report) {
-        list($post, $tids, $owner, $alliance, $player, $coor, $report) = $this->escape_input($post, $tids, $owner, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+    function CreatPost($post, $tids, $owner, $alliance, $player, $coor, $report, $fid2 = 0) {
+        global $message, $session;
+        list($post, $tids, $owner, $alliance, $player, $coor, $report, $fid2) = $this->escape_input($post, (int) $tids, $owner, (int) $alliance, (int) $player, (int) $coor, (int) $report, (int) $fid2);
 
         $date = time();
-        $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post','$tids','$owner','$date',$alliance,$player,$coor,$report)";
+        $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post',$tids,'$owner','$date',$alliance,$player,$coor,$report)";
         mysqli_query($this->dblink,$q);
-        return mysqli_insert_id($this->dblink);
+        $postID = mysqli_insert_id($this->dblink);
+        
+        // create a message notification for each person subscribed to this topic
+        // ... for now it's everyone who ever posted there, there is no real un/subscription yet
+        if ($fid2 !== 0) {
+            $q = "SELECT DISTINCT owner FROM ".TB_PREFIX . "forum_post WHERE topic = $tids";
+            $result = mysqli_query($this->dblink, $q);
+            if ($result->num_rows) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    if ($row['owner'] != $owner) {
+                        $this->sendMessage(
+                            (int) $row['owner'],
+                            2,
+                            'New Message in Alliance Forum',
+                            "Hi!\n\n".$this->escape($session->username)." posted a new message into your common topic. Here\\'s a link that will get you there: <a href=\"".rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>",
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            true);
+                    }
+                }
+            }
+        }
+        
+        return $postID;
     }
 
 	function UpdatePostDate($id) {
@@ -2206,8 +2233,10 @@ class MYSQLi_DB {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function sendMessage($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) {
-	    list($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) = $this->escape_input((int) $client, (int) $owner, $topic, $message, (int) $send, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+	function sendMessage($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report, $skip_escaping = false) {
+	    if (!$skip_escaping) {
+	       list($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) = $this->escape_input((int) $client, (int) $owner, $topic, $message, (int) $send, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+	    }
 
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "mdata values (0,$client,$owner,'$topic','$message',0,0,$send,$time,0,0,$alliance,$player,$coor,$report)";

@@ -743,14 +743,15 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_edit` (
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
  `post` longtext NULL,
- `topic` varchar(255) NULL,
+ `topic` int(11) DEFAULT NULL,
  `owner` varchar(255) NULL,
  `date` varchar(255) NULL,
  `alliance0` int(11) NULL,
  `player0` int(11) NULL,
  `coor0` int(11) NULL,
  `report0` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `topic-owner` (`topic`,`owner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

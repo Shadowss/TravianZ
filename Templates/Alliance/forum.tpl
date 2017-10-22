@@ -136,6 +136,7 @@ if(isset($_POST['newtopic'])){
 if(isset($_POST['newpost'])){
 	$text = $_POST['text'];
 	$tids = $_POST['tid'];
+	$fid2 = $_POST['fid2'];
 	$owner = $session->uid;
 	if($text != ""){
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
@@ -194,7 +195,7 @@ if(isset($_POST['newpost'])){
 		}
 		}
 		$database->UpdatePostDate($tids);
-		$database->CreatPost($text,$tids,$owner,$alliance,$player,$coor,$report);
+		$database->CreatPost($text,$tids,$owner,$alliance,$player,$coor,$report,$fid2);
 	}
 	}
 }

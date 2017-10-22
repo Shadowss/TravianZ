@@ -418,17 +418,19 @@ class Message {
 		}
 	}
 
-	private function sendMessage($recieve, $topic, $text) {
+	private function sendMessage($recieve, $topic, $text, $security_check = true) {
 		global $session, $database;
 		$user = $database->getUserField($recieve, "id", 1);
 
 		// Vulnerability closed by Shadow
 
-		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".time()." - 60";
-		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q);
-		$flood = mysqli_num_rows($res);
-		if($flood > 5)
-		return; //flood
+		if ($security_check) {
+    		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".time()." - 60";
+    		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q);
+    		$flood = mysqli_num_rows($res);
+    		if($flood > 5)
+    		return; //flood
+		}
 
 		// Vulnerability closed by Shadow
 

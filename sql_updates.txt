@@ -1,2 +1,7 @@
+-- 22.10.2017 -> forum topics table and indexe changes
+ALTER TABLE `s1_forum_post` CHANGE `topic` `topic` INT NULL DEFAULT NULL;
+ALTER TABLE `s1_forum_post` CHANGE `owner` `owner` INT NULL DEFAULT NULL;
+ALTER TABLE `travian`.`s1_forum_post` ADD INDEX `topic-owner` (`topic`, `owner`);
+
 -- 20.10.2017 -> changing MD5 for bcrypt password hashing algo
 ALTER TABLE `s1_users` ADD `is_bcrypt` TINYINT(1) NOT NULL DEFAULT '0' AFTER `vactwoweeks`;

@@ -11,6 +11,7 @@ foreach($topics as $arr) {
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="pid" value="<?php echo $_GET['pid']; ?>">
 	<input type="hidden" name="tid" value="<?php echo $_GET['tid']; ?>">
+	<input type="hidden" name="fid2" value="<?php echo $_GET['fid2']; ?>">
 	<input type="hidden" name="newpost" value="1">
 
 	<input type="hidden" name="checkstr" value="c0d"><table cellpadding="1" cellspacing="1" id="new_post"><thead>
