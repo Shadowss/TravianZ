@@ -4,7 +4,7 @@
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
 ##  Version:       22.06.2015                    			       ## 
-##  Filename       multihunter.tpl                                             ##
+##  Filename       support.tpl                                             ##
 ##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
 ##  Fixed by:      InCube - double troops				       ##
@@ -14,17 +14,18 @@
 ##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
 ##                                                                             ##
 #################################################################################
+	rename("include/constant.php","../GameEngine/config.php");
 ?>
 
 
 
-<form action="include/multihunter.php" method="post" id="dataform">
+<form action="include/support.php" method="post" id="dataform">
 
 <p>
-	<span class="f10 c">Create Multihunter account</span>
+	<span class="f10 c">Create Support account</span>
 		<table>
-			<tr><td>Name:</td><td><input type="text" name="mhpw" id="mhpw" value="Multihunter" disabled="disabled"></td></tr>
-			<tr><td>Password:</td><td><input type="text" name="mhpw" id="mhpw" value=""></td></tr>
+			<tr><td>Name:</td><td><input type="text" name="sname" value="Support" disabled="disabled"></td></tr>
+			<tr><td>Password:</td><td><input type="text" name="spw" id="spw" value=""></td></tr>
 			<tr><td>Note: Rember this password! You need it for the ACP</td><td></td></tr>
 		</table>
 </p>
