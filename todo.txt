@@ -1,4 +1,5 @@
 - normalize forum tables - varchar is used for numeric values and is joined with int field
 - finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
 - add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
+- include past raids in the farm list that were not in the farm list itself but are actually manual past attacks - will need DB update for the attacks table to include targets (now only holds attacker)
 - add PayPal listener to verify gold transactions imediatelly
