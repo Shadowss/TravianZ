@@ -89,9 +89,9 @@ if(isset($_GET['o'])) {
 	<meta http-equiv="expires" content="0" />
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<script src="mt-full.js?0faaa" type="text/javascript"></script>
-	<script src="unx.js?0faaa" type="text/javascript"></script>
-	<script src="new.js?0faaa" type="text/javascript"></script>
+	<script src="mt-full.js?0faab" type="text/javascript"></script>
+	<script src="unx.js?0faab" type="text/javascript"></script>
+	<script src="new.js?0faab" type="text/javascript"></script>
 	<link href="<?php
 
 		echo GP_LOCATE;

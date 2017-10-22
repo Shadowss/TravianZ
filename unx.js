@@ -759,24 +759,73 @@ function qst_handle(){if(quest.anmlock){return false;}
 quest.markup=false;if(quest.anmstep===false){fd(fi(),function(mf){for(var qd in mf){quest[qd]=mf[qd];}
 }
 );}
-hi();if(quest.ar){auto_reload=quest.ar;quest.ar=undefined;}
+hi();
+
+if (quest.ar) {
+	auto_reload=quest.ar;
+	quest.ar=undefined;
+	document.location.href = (document.location.href.indexOf('#') > -1 ? document.location.href.substring(0, document.location.href.indexOf('#')) : document.location.href);
+}
+
 }
 function qst_wfm(){var vi=document.getElementById('popup3');if(!quest.markup||!vi){if(!quest.anmlock){window.setTimeout('qst_wfm(true)',50);}
 }
-else{wi(quest);vi.innerHTML=quest.markup;uc();xi=false;if(quest.reward.finish&&window.bld){var yi=document.getElementById('building_contract');if(bld.length<2&&bld[0].gid==1){yi.innerHTML='';xi=0;}
-else{for(var i in bld){if(bld[i].stufe==1&&bld[i].gid==1){yi.getElementsByTagName('table')[0].deleteRow(i);xi=i;break;}
+else{
+	wi(quest);
+	vi.innerHTML=quest.markup;
+	uc();
+	xi=false;
+	
+	if(quest.reward.finish&&window.bld) {
+		var yi=document.getElementById('building_contract');
+		if (bld.length<2 && bld[0].gid==1) {
+			yi.innerHTML='';
+			xi=0;
+		} else {
+			for(var i in bld) {
+				if (bld[i].stufe==1 && bld[i].gid==1) {
+					yi.getElementsByTagName('table')[0].deleteRow(i);
+					xi=i;
+					break;
+				}
+		}
+	}
+
+	if (xi!==false) {
+		var zi=$$('#t3 .rf'+bld[xi].aid)[0];
+		if(zi) {
+			zi.removeClass('rf'+bld[xi].stufe);
+			zi.addClass('rf'+bld[xi].stufe+1);
+		} else {
+			$$('.f3')[0].appendChild(new Element('img',{'class':('reslevel rf'+bld[xi].aid+' level'+bld[xi].stufe),'src':'img/x.gif'}));
+		}
+	}
+
+		quest.ar=auto_reload;
+		auto_reload=-1;
+	}
+
+	if (quest.reward.plus) {
+		var of=document.getElementById('logo').className='plus';
+	}
+
+	quest.markup=false;
+	quest.msg=false;
 }
+
 }
-if(xi!==false){var zi=$$('#t3 .rf'+bld[xi].aid)[0];if(zi){zi.removeClass('rf'+bld[xi].stufe);zi.addClass('rf'+bld[xi].stufe+1);}
-else{$$('.f3')[0].appendChild(new Element('img',{'class':('reslevel rf'+bld[xi].aid+' level'+bld[xi].stufe),'src':'img/x.gif'}
-));}
+
+function qst_weiter(){
+	pi();
+	fd(fi(), function(mf){
+		document.getElementById('popup3').innerHTML=mf.markup;
+		var $i=document.getElementById('qgei');
+		$i.className=mf.qgsrc;
+		wi(mf);
+		uc();
+	}
+	);
 }
-quest.ar=auto_reload;auto_reload=-1;}
-if(quest.reward.plus){var of=document.getElementById('logo').className='plus';}
-quest.markup=false;quest.msg=false;}
-}
-function qst_weiter(){pi();fd(fi(),function(mf){document.getElementById('popup3').innerHTML=mf.markup;var $i=document.getElementById('qgei');$i.className=mf.qgsrc;wi(mf);uc();}
-);}
 function pi(){document.getElementById('popup3').innerHTML='<img src="img/x.gif" class="xlo" />';}
 function qst_enter(jf){if(jf===undefined){jf=false;}
 var id;if(jf){id={'x':document.getElementById('qst_val_x').value,'y':document.getElementById('qst_val_y').value}

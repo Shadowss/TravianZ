@@ -365,7 +365,7 @@ if (!empty($_GET['p'])) {
 		<link rel=stylesheet type="text/css" href="../img/img.css">
 		<script src="/mt-full.js?423cb"  type="text/javascript"></script>
 		<script src="ajax.js" type="text/javascript"></script>
-		<script src="../new.js?0faaa" type="text/javascript"></script>
+		<script src="../new.js?0faab" type="text/javascript"></script>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta http-equiv="imagetoolbar" content="no">
 	</head>

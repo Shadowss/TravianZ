@@ -1,7 +1,5 @@
-- quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
 - check aliance invitation accepting - apparently it doesn't work too well on first try?
 - normalize forum tables - varchar is used for numeric values and is joined with int field
-- task 1 => construct woodcutter will not reload the page when finished, so it would still seem that woodcutter build is in progress
 - it's possible to train 2 senators - when 1 is trained, another one is possible to be trained
 - npc shop button is missing from settlers training (palace)
 - should random attacks from Natars when building Wonder of the World be unit-less?
