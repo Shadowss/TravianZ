@@ -662,8 +662,13 @@ class Building {
 	}
 
 	public function getTypeLevel($tid,$vid=0) {
-		global $village,$database;
+		global $village,$database,$session;
 
+		// Support would not have a village, so this is irrelevant
+		if ($session->uid  == 1) {
+		    return 0;
+		}
+		
 		$keyholder = array();
 
 		if($vid == 0) {
@@ -671,7 +676,7 @@ class Building {
 		} else {
 			$resourcearray = $database->getResourceLevel($vid);
 		}
-
+		
 		foreach(array_keys($resourcearray,$tid) as $key) {
 			if(strpos($key,'t')) {
 				$key = preg_replace("/[^0-9]/", '', $key);
