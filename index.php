@@ -58,8 +58,8 @@ include ("GameEngine/Lang/".LANG.".php");
 	<meta name="content-language" content="<?php echo LANG; ?>" />
 	<meta http-equiv="imagetoolbar" content="no" />
 	<script src="mt-core.js" type="text/javascript"></script>
-	<script src="new.js" type="text/javascript"></script>
-	<script src="new2.js" type="text/javascript"></script>
+	<script src="new.js?22102017" type="text/javascript"></script>
+	<script src="new2.js?22102017" type="text/javascript"></script>
 	<style type="text/css">
 		<!-- li.c4 {background-image:url('img/en/welten/en1_big.jpg');} -->
 		<!-- li.c3 {background-image:url('img/en/welten/en1_big_g.jpg');} -->
@@ -270,9 +270,29 @@ include ("GameEngine/Lang/".LANG.".php");
 		</div>
 	</div>
 	<script type="text/javascript">
-	var screenshots = [
-	{'img':'img/en/s/s1.png','hl':"<?php echo $lang['screenshots']['title1']; ?>", 'desc':"<?php echo $lang['screenshots']['desc1']; ?>"},{'img':'img/en/s/s2.png','hl':"<?php echo $lang['screenshots']['title2']; ?>", 'desc':"<?php echo $lang['screenshots']['desc2']; ?>"},{'img':'img/en/s/s4.png','hl':"<?php echo $lang['screenshots']['title3']; ?>", 'desc':"<?php echo $lang['screenshots']['desc3']; ?>"},{'img':'img/en/s/s3.png','hl':"<?php echo $lang['screenshots']['title4']; ?>", 'desc':"<?php echo $lang['screenshots']['desc4']; ?>"},{'img':'img/en/s/s5.png','hl':"<?php echo $lang['screenshots']['title5']; ?>", 'desc':"<?php echo $lang['screenshots']['desc5']; ?>"},{'img':'img/en/s/s7.png','hl':"<?php echo $lang['screenshots']['title6']; ?>", 'desc':"<?php echo $lang['screenshots']['desc6']; ?>"},{'img':'img/en/s/s8.png','hl':"<?php echo $lang['screenshots']['title7']; ?>", 'desc':"<?php echo $lang['screenshots']['desc7']; ?>"}];
-	var galarie = new Fx.Screenshots('screen_view', 'screen_hl', 'screen_desc', screenshots);
+		var screenshots = [
+			{'img':'img/en/s/s1.png','hl':"<?php echo $lang['screenshots']['title1']; ?>", 'desc':"<?php echo $lang['screenshots']['desc1']; ?>"},{'img':'img/en/s/s2.png','hl':"<?php echo $lang['screenshots']['title2']; ?>", 'desc':"<?php echo $lang['screenshots']['desc2']; ?>"},{'img':'img/en/s/s4.png','hl':"<?php echo $lang['screenshots']['title3']; ?>", 'desc':"<?php echo $lang['screenshots']['desc3']; ?>"},{'img':'img/en/s/s3.png','hl':"<?php echo $lang['screenshots']['title4']; ?>", 'desc':"<?php echo $lang['screenshots']['desc4']; ?>"},{'img':'img/en/s/s5.png','hl':"<?php echo $lang['screenshots']['title5']; ?>", 'desc':"<?php echo $lang['screenshots']['desc5']; ?>"},{'img':'img/en/s/s7.png','hl':"<?php echo $lang['screenshots']['title6']; ?>", 'desc':"<?php echo $lang['screenshots']['desc6']; ?>"},{'img':'img/en/s/s8.png','hl':"<?php echo $lang['screenshots']['title7']; ?>", 'desc':"<?php echo $lang['screenshots']['desc7']; ?>"}
+		];
+		var galarie = new Fx.Screenshots('screen_view', 'screen_hl', 'screen_desc', screenshots);
+	<?php
+	    if (isset($_GET['signup'])) {
+	?>
+		window.addEvent('domready', function() {
+			$$('.signup_link').fireEvent('click');
+		});
+	<?php
+	   }
+	?>
+
+	<?php
+    	if (isset($_GET['login'])) {
+	?>
+		window.addEvent('domready', function() {
+    		$$('.login_link').fireEvent('click');
+    	});
+	<?php
+	   }
+	?>
 	</script>
 </body>
 </html>

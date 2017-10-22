@@ -51,13 +51,17 @@ window.addEvent('domready', function() {
 
 	//Signup Buttons
 	$$('.signup_link').addEvent('click', function(event) {
-		event.stop();
+		if (typeof(event) !== 'undefined') {
+			event.stop();
+		}
 		$('signup_layer').fireEvent('show');
 	});
 
 	//Login Buttons
 	$$('.login_link').addEvent('click', function(event) {
-		event.stop();
+		if (typeof(event) !== 'undefined') {
+			event.stop();
+		}
 		$('login_layer').fireEvent('show');
 	});
 
