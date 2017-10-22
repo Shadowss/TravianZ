@@ -42,8 +42,13 @@
                 <th>Players online</th>
 
                 <td><?php
-                   $online = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
-                   echo $online; ?></td>
+                    $online = mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE timestamp > ".(time() - (60*10))." AND tribe!=0 AND tribe!=4 AND tribe!=5");
+                    if (!empty($online)) {
+                   		echo mysqli_fetch_assoc($online)['Total'];
+                   	} else {
+                   		echo 0;
+                   	}
+                   ?></td>
             </tr>
         </tbody>
     </table>

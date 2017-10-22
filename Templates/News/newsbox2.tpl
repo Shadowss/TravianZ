@@ -1,8 +1,7 @@
 <h5><img src="img/en/t2/newsbox2.gif" alt="newsbox 2"></h5>
 <?php
 
-$online = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "users WHERE " . time() . "-timestamp < (60*10) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
-
+$online = mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE timestamp > ".(time() - (60*10))." AND tribe!=0 AND tribe!=4 AND tribe!=5");
 
 ?>
 
@@ -10,7 +9,15 @@ $online = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PR
 <table width="100%" border="0">
 <tr>
 <td align="left"><b>Online Users</td>
-<td>: <font color="Red"><?php echo $online ?> users</font></b></td>
+<td>: <font color="Red"><?php
+
+	if (!empty($online)) {
+    	echo mysqli_fetch_assoc($online)['Total'];
+    } else {
+    	echo 0;
+    }
+
+?> users</font></b></td>
 </tr>
 <tr>
 <td><b>Server Speed</td>
