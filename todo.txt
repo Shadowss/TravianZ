@@ -1,11 +1,10 @@
-- add Support login possibility into Admin (ask for password during installation, create Support messages section)
+- dorf1.php without being logged-in (but being logged-in via Admin) takes forever to load
 - allow sending Mass Message + System Message from Admin
 - fix editing current task from Taskmaster -> number never match the edited quest after save
 - cannot delete a single medal in admin
 - add back buttons to Admin where there are not (like editing a user)
 - disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)
 - allow to redirect Support messages to admin's nickname (for when there's only a single admin and doesn't like switching between Support and themselves) 
-- disallow Support to play (single cookie for Admin and the game means support gets no village and lots of warnings when they switch to game now)
 - resetting res bonus in admin actually says that bonus was given after OK is pressed
 - quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
 - check aliance invitation accepting - apparently it doesn't work too well on first try?
