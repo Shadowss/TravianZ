@@ -79,7 +79,6 @@ class adm_DB {
 	        }
 	        
 	        mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,'X','$username logged in (IP: <b>".$_SERVER['REMOTE_ADDR']."</b>)',".time().")");
-	        
 	        return true;
 	    }
 	    else {
