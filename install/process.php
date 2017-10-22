@@ -65,6 +65,7 @@ class Process {
 		$text = preg_replace("'%CONNECTT%'", $_POST['connectt'], $text);
 		$text = preg_replace("'%AEMAIL%'", $_POST['aemail'], $text);
 		$text = preg_replace("'%ANAME%'", $_POST['aname'], $text);
+		$text = preg_replace("'%ASUPPMSGS%'", ($_POST['admin_support_msgs'] == 'True' ? 'true' : 'false'), $text);
 		//$text = preg_replace("'%SUBDOM%'", $_POST['subdom'], $text);
 		$text = preg_replace("'%LOGBUILD%'", $_POST['log_build'], $text);
 		$text = preg_replace("'%LOGTECH%'", $_POST['log_tech'], $text);

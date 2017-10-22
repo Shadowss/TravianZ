@@ -46,6 +46,7 @@ martinambrus changes:
 34. mass messages sent out under Support rather than Multihunter (we should not be scaring people :D)
 35. fixed displaying of current Quest in Admin
 36. fixed OK message in Admin when resetting All Players' PLUS
+37. new config option to show Support messages in Admin's mailbox
 
 
 Shadowss changes:

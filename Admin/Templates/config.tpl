@@ -394,6 +394,10 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td>Include Admin in Rank</td>
 		<td><?php if(INCLUDE_ADMIN == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(INCLUDE_ADMIN == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
+	<tr>
+		<td>Include Support Messages in Admin Mailbox</td>
+		<td><?php if(ADMIN_RECEIVE_SUPPORT_MESSAGES == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(ADMIN_RECEIVE_SUPPORT_MESSAGES == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
+	</tr>
 </table>
 
 <?php

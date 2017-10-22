@@ -271,6 +271,9 @@ define("ADMIN_EMAIL", "%AEMAIL%");
 // ***** Admin Name
 define("ADMIN_NAME", "%ANAME%");
 
+// ***** Show Support Messages in Admin
+define("ADMIN_RECEIVE_SUPPORT_MESSAGES", %ASUPPMSGS%);
+
 
 
 //////////////////////////////////////////

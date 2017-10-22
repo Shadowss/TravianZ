@@ -36,6 +36,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$LOG_MARKET=(LOG_MARKET==false)? "false":"true";
 		$LOG_ILLEGAL=(LOG_ILLEGAL==false)? "false":"true";
 		$INCLUDE_ADMIN=(INCLUDE_ADMIN==false)? "false":"true";
+		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
 		
 		$text = file_get_contents("constant_format.tpl");
 		$text = preg_replace("'%ERRORREPORT%'", ERROR_REPORT, $text);
@@ -94,6 +95,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%ARANK%'", (INCLUDE_ADMIN ? 'true' : 'false'), $text);
 		$text = preg_replace("'%AEMAIL%'", ADMIN_EMAIL, $text);
 		$text = preg_replace("'%ANAME%'", ADMIN_NAME, $text);
+		$text = preg_replace("'%ASUPPMSGS%'", $SUPPORT_MSGS_IN_ADMIN, $text);
 		$text = preg_replace("'%UTRACK%'", "TRACK_USR", $text); // not in use, text only in a comment
 		$text = preg_replace("'%UTOUT%'", "USER_TIMEOUT", $text); // not in use, text only in a comment
 		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);

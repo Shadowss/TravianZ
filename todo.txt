@@ -1,7 +1,7 @@
+- allow writing messages as Support if Admin and showing Support messages in inbox
 - cannot delete a single medal in admin
 - add back buttons to Admin where there are not (like editing a user)
-- disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then)
-- allow to redirect Support messages to admin's nickname (for when there's only a single admin and doesn't like switching between Support and themselves) 
+- disallow installation if existing data are in place, or world map would end up screwed and villages not showing (because there can be multiple villages/oasis generated for one square then) 
 - quest image should glow red when new task is ready to be read (now it's only red when page is refreshed)
 - check aliance invitation accepting - apparently it doesn't work too well on first try?
 - normalize forum tables - varchar is used for numeric values and is joined with int field

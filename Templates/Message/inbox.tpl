@@ -1,4 +1,4 @@
-x<div id="content"  class="messages">
+<div id="content"  class="messages">
     <h1>Messages</h1>
     <?php
     include("menu.tpl");

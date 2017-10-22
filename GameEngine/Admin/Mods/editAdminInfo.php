@@ -99,6 +99,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%ARANK%'", $_POST['admin_rank'], $text);		
 		$text = preg_replace("'%AEMAIL%'", $_POST['aemail'], $text);
 		$text = preg_replace("'%ANAME%'", $_POST['aname'], $text);
+		$text = preg_replace("'%ASUPPMSGS%'", ($_POST['admin_support_msgs'] == 'True' ? 'true' : 'false'), $text);
 		$text = preg_replace("'%UTRACK%'", "", $text);
 		$text = preg_replace("'%UTOUT%'", "", $text);
 		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);

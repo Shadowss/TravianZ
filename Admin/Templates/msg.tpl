@@ -9,7 +9,7 @@
 ##                                                                             ##
 #################################################################################
 
-$msg = $database->getMessage($_GET['nid'],3);;
+$msg = $database->getMessage($_GET['nid'],3);
 if($msg)
 { ?>
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">

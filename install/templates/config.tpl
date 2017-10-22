@@ -251,6 +251,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             <td><span class="f9 c6">Admin email:</span></td>
             <td><input type="text" name="aemail" id="aemail" value=""></td>
         </tr>
+		<tr>
         <td><span class="f9 c6">Show admin in stats:</span></td>
         <td>
             <select name="admin_rank">
@@ -259,7 +260,15 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             </select>
         </td>
         </tr>
-        <tr>
+		<tr>
+        <td><span class="f9 c6">Include Support Messages in Admin Mailbox:</span></td>
+        <td>
+            <select name="admin_support_msgs">
+                <option value="True" selected="selected">True</option>
+                <option value="False">False</option>
+            </select>
+        </td>
+        </tr>
     </table>
     </p>
     <p>

@@ -2239,27 +2239,38 @@ class MYSQLi_DB {
 	References: User ID/Message ID, Mode
 	***************************/
 	function getMessage($id, $mode) {
+	    global $session;
+
 	    list($id, $mode) = $this->escape_input((int) $id, $mode);
 
+	    // update $id if we should show Support messages for Admins and we are an admin
+	    if (
+	       ($session->access == MULTIHUNTER || $session->access == ADMIN)
+	       && ADMIN_RECEIVE_SUPPORT_MESSAGES
+	       && in_array($mode, [1,2,6,9,10,11])
+	    ) {
+	        $id = $id . ', 1';
+	    }
+	    
 		global $session;
 		switch($mode) {
 			case 1:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $id and send = 0 and archived = 0 ORDER BY time DESC";
+				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 ORDER BY time DESC";
 				break;
 			case 2:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner = $id ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) ORDER BY time DESC";
 				break;
 			case 3:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata where id = $id";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where id = $id";
 				break;
 			case 4:
-				$q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target = $session->uid";
+			    $q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target IN(".((($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES) ? $session->uid.',1' : $session->uid).")";
 				break;
 			case 5:
 				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,viewed = 1 where id = $id";
 				break;
 			case 6:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target = $id and send = 0 and archived = 1";
+				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1";
 				break;
 			case 7:
 				$q = "UPDATE " . TB_PREFIX . "mdata set delowner = 1 where id = $id";
@@ -2268,13 +2279,13 @@ class MYSQLi_DB {
 				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,delowner = 1,viewed = 1 where id = $id";
 				break;
 			case 9:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target = $id and send = 0 and archived = 0 and deltarget = 0 ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 and deltarget = 0 ORDER BY time DESC";
 				break;
 			case 10:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner = $id and delowner = 0 ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) and delowner = 0 ORDER BY time DESC";
 				break;
 			case 11:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target = $id and send = 0 and archived = 1 and deltarget = 0";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 and deltarget = 0";
 				break;
 		}
 		if($mode <= 3 || $mode == 6 || $mode > 8) {

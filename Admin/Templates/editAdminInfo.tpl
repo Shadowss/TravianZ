@@ -41,6 +41,14 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 						</select>
 					</td>
 				</tr>
+					<td>Include Support Messages in Admin Mailbox:</td>
+        			<td>
+            			<select name="admin_support_msgs">
+                			<option value="True" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==true) echo "selected";?>>True</option>
+                			<option value="False" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==false) echo "selected";?>>False</option>
+            			</select>
+        			</td>
+        		</tr>
 			</tbody>
 			</table>
 			<br />
