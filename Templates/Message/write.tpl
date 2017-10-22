@@ -53,9 +53,9 @@ $user = $database->getUserArray($session->uid, 1);
    if (preg_match("/re([0-9]+)/i",$message->reply['topic'],$c)) 
    { 
        $c = $c[1]+1; 
-       echo $message->reply['topic'] = preg_replace("/re[0-9]+/i","re".($c),$message->reply['topic']); 
+       echo $message->reply['topic'] = strip_tags(preg_replace("/re[0-9]+/i","re".($c),$message->reply['topic'])); 
 }else{ 
-echo "re1:".$message->reply['topic']; }} ?>" maxlength="35" onkeyup="copyElement('subject')" tabindex=2/>
+echo "re1:".strip_tags($message->reply['topic']); }} ?>" maxlength="35" onkeyup="copyElement('subject')" tabindex=2/>
 	</div>
 <a id="adbook" href="#" onclick="toggleFriendsList(); return false;"><img src="img/x.gif" alt="Addressbook" title="Addressbook" /></a>
 <div class="clear"></div>
@@ -94,7 +94,14 @@ Reply: ".$database->getUserField($id,'username',0)."
 			</script>
 					<p class="btn">
 		<input type="hidden" name="ft" value="m2" />
-		<input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="img/x.gif" alt="send" onclick="this.disabled=true;this.form.submit();" tabindex=4; />			
+		<input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="img/x.gif" alt="send" onclick="this.disabled=true;this.form.submit();" tabindex=4; />
+		<?php
+			if (($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES && !empty($_GET['mid'])) {
+		?><br />
+		<input type="checkbox" name="as_support"<?php echo ((!empty($_GET['tid']) && $_GET['tid'] == 1) ? ' checked="checked"' : ''); ?> /> Send as Support
+		<?php
+			}
+		?>			
 	</p>
 	</form>
 	<div id="adressbook" class="hide"><h2>Addressbook</h2>

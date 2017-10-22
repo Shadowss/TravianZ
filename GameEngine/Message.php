@@ -118,26 +118,31 @@ class Message {
 	public function quoteMessage($id) {
 		foreach($this->inbox as $message) {
 			if($message['id'] == $id) {
-			$message = preg_replace('/\[message\]/', '', $message);
-			$message = preg_replace('/\[\/message\]/', '', $message);
-			for($i=1;$i<=$message['alliance'];$i++){
-			$message = preg_replace('/\[alliance'.$i.'\]/', '[alliance0]', $message);
-			$message = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance0]', $message);
-			}
-			for($i=0;$i<=$message['player'];$i++){
-			$message = preg_replace('/\[player'.$i.'\]/', '[player0]', $message);
-			$message = preg_replace('/\[\/player'.$i.'\]/', '[/player0]', $message);
-			}
-			for($i=0;$i<=$message['coor'];$i++){
-			$message = preg_replace('/\[coor'.$i.'\]/', '[coor0]', $message);
-			$message = preg_replace('/\[\/coor'.$i.'\]/', '[/coor0]', $message);
-			}
-			for($i=0;$i<=$message['report'];$i++){
-			$message = preg_replace('/\[report'.$i.'\]/', '[report0]', $message);
-			$message = preg_replace('/\[\/report'.$i.'\]/', '[/report0]', $message);
-			}
-				$this->reply = $_SESSION['reply'] = $message;
-				header("Location: nachrichten.php?t=1&id=" . $message['owner']);
+    			$message = preg_replace('/\[message\]/', '', $message);
+    			$message = preg_replace('/\[\/message\]/', '', $message);
+
+    			for($i=1;$i<=$message['alliance'];$i++){
+        			$message = preg_replace('/\[alliance'.$i.'\]/', '[alliance0]', $message);
+        			$message = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance0]', $message);
+    			}
+
+    			for($i=0;$i<=$message['player'];$i++){
+        			$message = preg_replace('/\[player'.$i.'\]/', '[player0]', $message);
+        			$message = preg_replace('/\[\/player'.$i.'\]/', '[/player0]', $message);
+    			}
+
+    			for($i=0;$i<=$message['coor'];$i++){
+        			$message = preg_replace('/\[coor'.$i.'\]/', '[coor0]', $message);
+        			$message = preg_replace('/\[\/coor'.$i.'\]/', '[/coor0]', $message);
+    			}
+
+    			for($i=0;$i<=$message['report'];$i++){
+        			$message = preg_replace('/\[report'.$i.'\]/', '[report0]', $message);
+        			$message = preg_replace('/\[\/report'.$i.'\]/', '[/report0]', $message);
+    			}
+
+    			$this->reply = $_SESSION['reply'] = $message;
+				header("Location: nachrichten.php?t=1&id=" . $message['owner'] . "&mid=" . $message['id'] . "&tid=" . $message['target']);
 				exit;
 			}
 		}
@@ -489,7 +494,10 @@ class Message {
 		}
 		}
 		}
-		$database->sendMessage($user, $session->uid, htmlspecialchars(addslashes($topic)), htmlspecialchars(addslashes($text)), 0, $alliance, $player, $coor, $report);
+		
+		// check if we're not sending this as support
+		$support_from_admin_allowed = (($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES);		
+		$database->sendMessage($user, ((!empty($_POST['as_support']) && $support_from_admin_allowed) ? 1 : $session->uid), htmlspecialchars(addslashes($topic)), htmlspecialchars(addslashes($text)), 0, $alliance, $player, $coor, $report);
 		}
 	}
 

@@ -57,6 +57,8 @@
     $s = 0;
     }
     $name = 1;
+    $support_messages = (($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES);
+    
     for($i=(1+$s);$i<=(10+$s);$i++) {
     if(count($message->sent1) >= $i) {
     if($message->sent1[$i-1]['target'] == 0) {
@@ -65,7 +67,7 @@
     else {
     echo "<tr>";
     }
-    echo "<td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->sent1[$i-1]['id']."\" /></td>
+    echo "<td class=\"sel\">".((!$support_messages || ($support_messages && $message->inbox1[$i-1]['target'] != 1)) ? "<input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->sent1[$i-1]['id']."\" />" : '<u><b title="Sent as Support"><i>S</i></b></u>')."</td>
 		<td class=\"top\"><a href=\"nachrichten.php?id=".$message->sent1[$i-1]['id']."\">".$message->sent1[$i-1]['topic']."</a> ";
     if($message->sent1[$i-1]['viewed'] == 0) {
     echo "(unread)";

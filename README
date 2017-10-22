@@ -47,6 +47,7 @@ martinambrus changes:
 35. fixed displaying of current Quest in Admin
 36. fixed OK message in Admin when resetting All Players' PLUS
 37. new config option to show Support messages in Admin's mailbox
+38. new feature: allowing messages to be sent as Support from in-game when user is Admin + it's allowed in config
 
 
 Shadowss changes:
