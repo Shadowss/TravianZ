@@ -1548,7 +1548,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
  KEY `invited` (`invited`),
  KEY `lastupdate` (`lastupdate`),
  KEY `alliance` (`alliance`),
- KEY `username` (`username`(25)) USING BTREE
+ KEY `username` (`username`(25)) USING BTREE,
+ KEY `tribe` (`tribe`),
+ KEY `timestamp` (`timestamp`),
+ KEY `timestamp-tribe` (`timestamp`,`tribe`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --

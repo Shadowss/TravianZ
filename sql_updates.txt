@@ -1,3 +1,7 @@
+-- 22.10.2017 -> SQL optimizations
+ALTER TABLE `s1_users` ADD INDEX(`tribe`);
+ALTER TABLE `s1_users` ADD INDEX `timestamp-tribe` (`timestamp`, `tribe`);
+
 -- 22.10.2017 -> forum topics table and indexe changes
 ALTER TABLE `s1_forum_post` CHANGE `topic` `topic` INT NULL DEFAULT NULL;
 ALTER TABLE `s1_forum_post` CHANGE `owner` `owner` INT NULL DEFAULT NULL;
