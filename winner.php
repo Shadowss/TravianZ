@@ -31,6 +31,7 @@ $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF']);
+	exit;
 }
 else {
 	$building->procBuild($_GET);
@@ -262,5 +263,6 @@ $q = "
 <?php
 }else{
 header("Location: dorf1.php");
+exit;
 }
 ?>

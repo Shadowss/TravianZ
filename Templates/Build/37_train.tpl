@@ -543,8 +543,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u1['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit;
 					}
 					}
                 if($_GET['train'] == 2){
@@ -559,8 +561,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u2['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 3){
@@ -573,8 +577,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `iron` = `iron` - ".(int) $u3['iron']." WHERE `wref` = '" . (int) $village->wid . "'");
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u3['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 5){
@@ -589,8 +595,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u5['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 6){
@@ -605,8 +613,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u6['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 				}
 			}
@@ -623,8 +633,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u11['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
                     header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
                 }
                 if($_GET['train'] == 12){
@@ -639,8 +651,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u12['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 13){
@@ -655,8 +669,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u13['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 15){
@@ -671,8 +687,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u15['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 16){
@@ -687,8 +705,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u16['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
             }
@@ -705,8 +725,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u21['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 22){
@@ -721,8 +743,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u22['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 24){
@@ -737,8 +761,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u24['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 25){
@@ -753,8 +779,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u25['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
                 if($_GET['train'] == 26){
@@ -769,8 +797,10 @@ $output.="<tr>
 					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $u26['crop']." WHERE `wref` = '" . (int) $village->wid . "'");
 					}
 					header("Location: build.php?id=".$id."");
+					exit;
 					}else{
-					header("Location: banned.php"); 
+					header("Location: banned.php");
+					exit; 
 					}
 					}
 			}

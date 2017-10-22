@@ -23,7 +23,9 @@ if($session->access != BANNED && $session->gold >= 10){
 		}
 	}
 	header("Location: plus.php?id=3");
+	exit;
 } else {
 	header("Location: banned.php");
+	exit;
 }
  ?>

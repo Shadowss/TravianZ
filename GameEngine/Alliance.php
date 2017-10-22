@@ -131,7 +131,8 @@
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($UserData['username']) . '</a> into the alliance.');
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -147,9 +148,11 @@
 					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has rejected the invitation.');
 				}
 			}
-			header("Location: build.php?id=".$get['id']);
+			    header("Location: build.php?id=".$get['id']);
+			    exit;
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -167,9 +170,11 @@
 					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has deleted the invitation for <a href="spieler.php?uid=' . $invitename['id'] . '">' . addslashes($invitename['username']) . '</a>.');
 				}
 			}
-			header("Location: allianz.php?delinvite");
+			    header("Location: allianz.php?delinvite");
+			    exit;
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -200,10 +205,12 @@
 			if($accept_error == 1){
 			$form->addError("ally_accept", "The alliance can contain only ".$max." peoples right now.");
 			}else{
-			header("Location: build.php?id=" . $get['id']);
+			    header("Location: build.php?id=" . $get['id']);
+			    exit;
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -230,6 +237,7 @@
 				$_SESSION['valuearray'] = $post;
 
 				header("Location: build.php?id=" . $post['id']);
+				exit;
 			} else {
 				$max = $bid18[$village->resarray['f' . $post['id']]]['attri'];
 				$aid = $database->createAlliance($post['ally1'], $post['ally2'], $session->uid, $max);
@@ -240,9 +248,11 @@
 				// log the notice
 				$database->insertAlliNotice($aid, 'The alliance has been founded by <a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>.');
 				header("Location: build.php?id=" . $post['id']);
+				exit;
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -277,7 +287,8 @@
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance name.');
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -300,7 +311,8 @@
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance description.');
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -323,7 +335,8 @@
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed permissions.');
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 		/*****************************************
@@ -351,7 +364,8 @@
 				}
 				}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 		/*****************************************
@@ -362,10 +376,12 @@
 			if($session->access != BANNED){
 				if(isset($post['f_link'])){
 				    $database->setAlliForumdblink($session->alliance, $post['f_link']);
-				header("Location: allianz.php?s=5");
+				    header("Location: allianz.php?s=5");
+				    exit;
 				}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 		/*****************************************
@@ -379,9 +395,11 @@
 			$text = ''.$survey['voted'].','.$session->uid.',';
 			$database->Vote($post['tid'], $post['vote'], $text);
 			}
-			header("Location: allianz.php?s=2&fid2=".$post['fid2']."&pid=".$post['pid']."&tid=".$post['tid']);
+			    header("Location: allianz.php?s=2&fid2=".$post['fid2']."&pid=".$post['pid']."&tid=".$post['tid']);
+			    exit;
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 		/*****************************************
@@ -409,9 +427,11 @@
 				$database->deleteAlliance($session->alliance);
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has quit the alliance.');
 				header("Location: spieler.php?uid=".$session->uid);
+				exit;
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 
@@ -448,7 +468,8 @@
 				$form->addError("name", "Alliance does not exist");
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 		

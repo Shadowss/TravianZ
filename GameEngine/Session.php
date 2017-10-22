@@ -21,6 +21,7 @@ mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 if(file_exists('GameEngine/config.php') || file_exists('../../GameEngine/config.php') || file_exists('../../config.php') || file_exists('../GameEngine/config.php')) {
 }else{
 header("Location: install/");
+exit;
 }
 
 $script_name = ($_SERVER['REQUEST_URI'] == 'karte.php') ? 'karte' : $_SERVER['REQUEST_URI'];
@@ -123,8 +124,10 @@ class Session {
 
                 if ($dbarray['id'] == 1) {
 				    header("Location: nachrichten.php");
+				    exit;
 				} else {
 				    header("Location: dorf1.php");
+				    exit;
 				}
 			}
 
@@ -257,13 +260,16 @@ class Session {
 				if(!$this->logged_in) {
 					if(!in_array($page, $pagearray) || $page == "logout.php") {
 						header("Location: login.php");
+						exit;
 					}
 				} else {
 					if(in_array($page, $pagearray)) {
 					    if ($this->uid == 1) {
 					        header("Location: nachrichten.php");
+					        exit;
 					    } else {
 					        header("Location: dorf1.php");
+					        exit;
 					    }
 					}
 

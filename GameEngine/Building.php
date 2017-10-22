@@ -47,14 +47,16 @@ class Building {
                 global $session;
         if($session->access==BANNED){
             header("Location: banned.php");
-                        exit;
+            exit;
         } else {
             if ($this->checkResource($id,$tid)!=4) {
                 if($tid >= 19) {
                     header("Location: dorf2.php");
+                    exit;
                              }
                 else {
                     header("Location: dorf1.php");
+                    exit;
                               }
                                 exit;
              		}
@@ -85,8 +87,10 @@ class Building {
             $database->modifyGold($session->uid,1,0);
             if($get['id'] > 18) {
                 header("Location: dorf2.php");
+                exit;
             } else {
                 header("Location: dorf1.php");
+                exit;
             }
         }
         if(isset($get['a']) && $get['c'] == $session->checker && isset($get['id'])) {
@@ -319,9 +323,11 @@ class Building {
 					}
 					if($jobs['field'] >= 19) {
 						header("Location: dorf2.php");
+						exit;
 					}
 					else {
 						header("Location: dorf1.php");
+						exit;
 					}
 				}
 			}
@@ -370,13 +376,16 @@ class Building {
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]+($loopsame>0?2:1)),0);
 				if($id >= 19) {
 					header("Location: dorf2.php");
+					exit;
 				}
 				else {
 					header("Location: dorf1.php");
+					exit;
 				}
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 	}
@@ -413,9 +422,11 @@ class Building {
 			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time,0,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]-1),2);
 				header("Location: dorf2.php");
+				exit;
 			}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 		}
 	}
@@ -449,9 +460,11 @@ class Building {
 					$logging->addBuildLog($village->wid,$this->procResType($tid),($village->resarray['f'.$id]+1),1);
 					$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
 					header("Location: dorf2.php");
+					exit;
 				}
 			}else{
-			header("Location: banned.php");
+			    header("Location: banned.php");
+			    exit;
 			}
 			}
 		}
@@ -819,9 +832,11 @@ class Building {
             }
         }
         }
-        header("Location: ".$session->referrer);
+            header("Location: ".$session->referrer);
+            exit;
         }else{
-        header("Location: banned.php");
+            header("Location: banned.php");
+            exit;
         }
     }  
 

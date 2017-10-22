@@ -102,5 +102,6 @@ $database->updateUserField($session->uid,gpack,$_POST["custom_url"],1);
     <?php
     }else{
 	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
+	exit;
 	}
     ?>

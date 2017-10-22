@@ -12,14 +12,18 @@
 
    if($session->goldclub == 0) {
 	   header("Location: plus.php?id=3");
+	   exit;
    }
 
    if($_POST['type'] == 15) {
 	   header("Location: ".$_SERVER['PHP_SELF']."?s=1&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
+	   exit;
    } elseif($_POST['type'] == 9) {
 	   header("Location: ".$_SERVER['PHP_SELF']."?s=2&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
+	   exit;
    } elseif($_POST['type'] == 'both') {
 	   header("Location: ".$_SERVER['PHP_SELF']."?s=3&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
+	   exit;
    }
 
 ?>

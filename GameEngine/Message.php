@@ -45,6 +45,7 @@ class Message {
 				$this->sendMessage($post['an'],$post['be'],addslashes($post['message']));
 				}
 				header("Location: nachrichten.php?t=2");
+				exit;
 					break;
 				case "m3":
 				case "m4":
@@ -88,6 +89,7 @@ class Message {
 			if($get['t'] == 5) {
 				if(!$session->plus){
 					header("Location: berichte.php");
+					exit;
 				} else {
 					$type = 9;
 				}
@@ -136,6 +138,7 @@ class Message {
 			}
 				$this->reply = $_SESSION['reply'] = $message;
 				header("Location: nachrichten.php?t=1&id=" . $message['owner']);
+				exit;
 			}
 		}
 	}
@@ -223,6 +226,7 @@ class Message {
 			}
 		}
 		header("Location: nachrichten.php");
+		exit;
 	}
 
 	private function archiveMessage($post) {
@@ -233,6 +237,7 @@ class Message {
 			}
 		}
 		header("Location: nachrichten.php");
+		exit;
 	}
 
 	private function unarchiveMessage($post) {
@@ -243,6 +248,7 @@ class Message {
 			}
 		}
 		header("Location: nachrichten.php");
+		exit;
 	}
 
 	private function removeNotice($post) {
@@ -253,6 +259,7 @@ class Message {
 			}
 		}
 		header("Location: berichte.php");
+		exit;
 	}
 
 	private function archiveNotice($post) {
@@ -263,6 +270,7 @@ class Message {
 			}
 		}
 		header("Location: berichte.php");
+		exit;
 	}
 
 	private function unarchiveNotice($post) {
@@ -273,6 +281,7 @@ class Message {
 			}
 		}
 		header("Location: berichte.php");
+		exit;
 	}
 
 	private function getReadNotice($id) {
@@ -593,6 +602,7 @@ class Message {
 		}
 		}
 		header("Location: nachrichten.php?t=1");
+		exit;
 	}
 
 }

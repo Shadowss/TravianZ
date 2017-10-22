@@ -12,6 +12,7 @@ include("GameEngine/Village.php");
 if(isset($_GET['newdid'])){
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF']);
+	exit;
 }
 if($village->resarray['f'.$_GET['id'].'t'] == 24 and $village->currentcel == 0){
 	if(!empty($_GET['type']) && $_GET['type'] == 1){
@@ -38,3 +39,4 @@ if($village->resarray['f'.$_GET['id'].'t'] == 24 and $village->currentcel == 0){
 	}
 }
 header("Location: build.php?id=".$_GET['id']);
+exit;

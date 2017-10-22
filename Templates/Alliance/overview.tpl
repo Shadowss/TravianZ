@@ -11,7 +11,8 @@ $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
 $totalpop = 0;
 if($allianceinfo['tag']==""){
-header("Location: allianz.php");
+	header("Location: allianz.php");
+	exit;
 }
 foreach($memberlist as $member) {
     $totalpop += $database->getVSumField($member['id'],"pop");

@@ -6,6 +6,7 @@ if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList' && $_POST['did']!
     $database->createFarmList($_POST['did'], $session->uid, $_POST['name']);
 }else if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList'){
 	header("Location: build.php?gid=16&t=99&action=addList");
+	exit;
 }
 
 $sql = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY wref = $village->wid DESC");

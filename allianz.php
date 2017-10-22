@@ -9,10 +9,13 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	if(isset($_GET['s'])){
 		header("Location: ".$_SERVER['PHP_SELF']."?s=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s']));
+		exit;
 	}else if(isset($_GET['aid'])){
 		header("Location: ".$_SERVER['PHP_SELF']."?aid=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['aid']));
+		exit;
 	}else{
 		header("Location: ".$_SERVER['PHP_SELF']);
+		exit;
 	}
 }
 if(isset($_GET['s'])){
@@ -26,6 +29,7 @@ if(isset($_GET['fid'])){
 	if($forum_type['forum_name'] != "" && $forum_type['forum_area'] == 0){
 		if($forum_type['alliance'] != $session->alliance){
 			header("Location: ".$_SERVER['PHP_SELF']);
+			exit;
 		}
 	}
 }else if(isset($_GET['fid2'])){
@@ -37,17 +41,21 @@ if(isset($_GET['fid'])){
 			if($forum_type['forum_area'] == 0){
 				if($forum_type['alliance'] != $session->alliance){
 					header("Location: ".$_SERVER['PHP_SELF']);
+					exit;
 				}
 			}else if($forum_type['forum_area'] == 2){
 				if($forum_type['alliance'] != $session->alliance){
 					header("Location: ".$_SERVER['PHP_SELF']);
+					exit;
 				}
 			}else if($forum_type['forum_area'] == 3){
 				if($forum_type['alliance'] != $session->alliance){
 					header("Location: ".$_SERVER['PHP_SELF']);
+					exit;
 				}
 			}else{
 				header("Location: ".$_SERVER['PHP_SELF']);
+				exit;
 			}
 		}
 	}	
@@ -220,6 +228,7 @@ $invite_permission = $database->getAlliancePermission($session->uid, "opt4", 0);
 		// Options
 	   }else{
 		header("Location: ".$_SERVER['PHP_SELF']);
+		exit;
 	   }}else if(isset($_GET['delinvite']) && $invite_permission == 1){
 		include ("Templates/Alliance/invite.tpl");
 	    } elseif(isset($_POST['o'])) {
@@ -367,5 +376,6 @@ include("Templates/links.tpl");
 <?php
 }else{
 header("Location: spieler.php?uid=".$session->uid);
+exit;
 }
 ?>

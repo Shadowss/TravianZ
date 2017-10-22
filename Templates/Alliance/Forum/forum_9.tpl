@@ -83,5 +83,6 @@ foreach($topics as $top) {
 <span style="color: #DD0000"><b>Warning:</b> you can't use the values <b>[message]</b> or <b>[/message]</b> in your post because it can cause problem with bbcode system.</span>
 	<?php }else{
 header("Location: banned.php");
+exit;
 }
 ?>

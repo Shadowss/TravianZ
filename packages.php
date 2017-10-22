@@ -110,4 +110,4 @@ echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 </html>
 <?php
 }
-else{header("Location: banned.php");}?>
+else{header("Location: banned.php");exit;}?>

@@ -255,5 +255,6 @@ if($closed1 != 0){
 </p>
 <?php }else{
 header("Location: banned.php");
+exit;
 }
 ?>

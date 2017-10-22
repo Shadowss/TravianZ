@@ -17,12 +17,15 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 if(isset($_GET['d']) && isset($_GET['c'])){
 		header("Location: ".$_SERVER['PHP_SELF']."?d=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['d'])."&c=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['c']));
+		exit;
 }
 else if(isset($_GET['d'])){
 		header("Location: ".$_SERVER['PHP_SELF']."?d=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['d']));
+		exit;
 }
 else{
 	header("Location: ".$_SERVER['PHP_SELF']);
+	exit;
 }
 } else {
 	$building->procBuild($_GET);
@@ -76,6 +79,7 @@ if(isset($_GET['d']) && isset($_GET['c'])) {
 	}
 	else {
 		header("Location: dorf1.php");
+		exit;
 	}
 }
 else {

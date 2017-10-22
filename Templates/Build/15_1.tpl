@@ -4,8 +4,10 @@ if($_REQUEST["cancel"] == "1") {
 if($session->access != BANNED){
     $database->delDemolition($village->wid);
     header("Location: build.php?gid=15&ty=$ty&cancel=0&demolish=0");
+	exit;
 }else{
-header("Location: banned.php");
+	header("Location: banned.php");
+	exit;
 }
 }
 
@@ -16,9 +18,11 @@ if($session->access != BANNED){
         $database->addDemolition($village->wid,$type);
         $session->changeChecker();
         header("Location: build.php?gid=15&ty=$type&cancel=0&demolish=0");
+		exit;
     }
 }else{
-header("Location: banned.php");
+	header("Location: banned.php");
+	exit;
 }
 }
 

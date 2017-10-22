@@ -50,7 +50,8 @@ class Market
             $vref = $village->wid; 
             $database->getResourcesBack($vref,$type,$amt); 
             $database->addMarket($village->wid,$get['del'],0,0,0,0,0,0,1); 
-            header("Location: build.php?id=".$get['id']."&t=2"); 
+            header("Location: build.php?id=".$get['id']."&t=2");
+            exit;
         } 
         if(isset($get['t']) && $get['t'] == 1 && isset($get['a']) && $get['a'] == $session->mchecker && !isset($get['del'])) 
         { 
@@ -100,7 +101,8 @@ class Market
         $availableCrop = $database->getCropAvailable($village->wid); 
         if($session->access == BANNED) 
         { 
-            header("Location: banned.php"); 
+            header("Location: banned.php");
+            exit;
         } 
         else if($availableWood >= $post['r1'] AND $availableClay >= $post['r2'] AND $availableIron >= $post['r3'] AND $availableCrop >= $post['r4']) 
         { 
@@ -124,7 +126,8 @@ class Market
                     } 
                 } 
             } 
-            header("Location: build.php?id=".$post['id']); 
+            header("Location: build.php?id=".$post['id']);
+            exit;
         } 
         else 
         { 
@@ -140,17 +143,20 @@ class Market
         if($post['rid1'] == $post['rid2']) 
         { 
             // Trading res for res of same type (invalid) 
-            header("Location: build.php?id=".$post['id']."&t=2&e2"); 
+            header("Location: build.php?id=".$post['id']."&t=2&e2");
+            exit;
         } 
         elseif($post['m1'] > (2 * $post['m2'])) 
         { 
             // Trade is for more than 2x (invalid) 
-            header("Location: build.php?id=".$post['id']."&t=2&e2"); 
+            header("Location: build.php?id=".$post['id']."&t=2&e2");
+            exit;
         } 
         elseif($post['m2'] > (2 * $post['m1'])) 
         { 
             // Trade is for less than 0.5x (invalid) 
-            header("Location: build.php?id=".$post['id']."&t=2&e2"); 
+            header("Location: build.php?id=".$post['id']."&t=2&e2");
+            exit;
         } 
         else 
         { 
@@ -165,7 +171,8 @@ class Market
              
             if($session->access == BANNED) 
             { 
-                header("Location: banned.php"); 
+                header("Location: banned.php");
+                exit;
             } 
              
             elseif($availableWood >= $wood AND $availableClay >= $clay AND $availableIron >= $iron AND $availableCrop >= $crop) 
@@ -194,18 +201,21 @@ class Market
                         $database->addMarket($village->wid,$post['rid1'],$post['m1'],$post['rid2'],$post['m2'],$time,$alliance,$reqMerc,0); 
                     } 
                     // Enough merchants 
-                    header("Location: build.php?id=".$post['id']."&t=2"); 
+                    header("Location: build.php?id=".$post['id']."&t=2");
+                    exit;
                 } 
                 else 
                 { 
                     // Not enough merchants 
-                    header("Location: build.php?id=".$post['id']."&t=2&e3"); 
+                    header("Location: build.php?id=".$post['id']."&t=2&e3");
+                    exit;
                 } 
             } 
             else 
             { 
                 // not enough resources 
-                header("Location: build.php?id=".$post['id']."&t=2&e1"); 
+                header("Location: build.php?id=".$post['id']."&t=2&e1");
+                exit;
             } 
         } 
     } 
@@ -241,7 +251,8 @@ class Market
         $database->setMarketAcc($get['g']); 
         $database->removeAcceptedOffer($get['g']); 
         $logging->addMarketLog($village->wid,2,array($infoarray['vref'],$get['g'])); 
-        header("Location: build.php?id=".$get['id']); 
+        header("Location: build.php?id=".$get['id']);
+        exit;
     } 
 
     private function loadOnsale() 
@@ -330,7 +341,8 @@ class Market
                 //kijken of ze niet meer gs invoeren dan ze hebben 
                 if($session->access == BANNED) 
                 { 
-                    header("Location: banned.php"); 
+                    header("Location: banned.php");
+                    exit;
                 } 
                 else if (($post['m2'][0]+$post['m2'][1]+$post['m2'][2]+$post['m2'][3])<=(round($village->awood)+round($village->aclay)+round($village->airon)+round($village->acrop))) 
                 { 
@@ -339,16 +351,19 @@ class Market
                     $database->setVillageField($village->wid,"iron",$post['m2'][2]); 
                     $database->setVillageField($village->wid,"crop",$post['m2'][3]); 
                     $database->modifyGold($session->uid,3,0); 
-                    header("Location: build.php?id=".$post['id']."&t=3&c");; 
+                    header("Location: build.php?id=".$post['id']."&t=3&c");;
+                    exit;
                 } 
                 else 
                 { 
-                    header("Location: build.php?id=".$post['id']."&t=3"); 
+                    header("Location: build.php?id=".$post['id']."&t=3");
+                    exit;
                 } 
             } 
             else 
             { 
-                header("Location: build.php?id=".$post['id']."&t=3"); 
+                header("Location: build.php?id=".$post['id']."&t=3");
+                exit;
             } 
         } 
     } 

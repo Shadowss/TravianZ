@@ -2,6 +2,7 @@
 if(isset($_GET['del']) && is_numeric($_GET['del'])){
 	$database->removeLinks($_GET['del'],$session->uid);
 	header("Location: spieler.php?s=2");
+	exit;
 }
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -55,6 +56,7 @@ if($_POST) {
 	    $query = mysqli_query($GLOBALS['link'],'INSERT INTO `' . TB_PREFIX . 'links` (`userid`, `name`, `url`, `pos`) VALUES (' . $userid . ', \'' . $link['linkname'] . '\', \'' . $link['linkziel'] . '\', ' . $link['nr'] . ')');
 		}else{
 		header("Location: banned.php");
+		exit;
 		}
 		} elseif(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) != '') {
 	    // Update link

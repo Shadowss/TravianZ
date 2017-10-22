@@ -177,8 +177,10 @@
 			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `iron` = `iron` - ".(int) $iron ." WHERE `wref` = '" . (int) $village->wid . "'");
 			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $crop." WHERE `wref` = '" . (int) $village->wid . "'");
             header("Location: build.php?id=".$id."");
+			exit;
 			}else{
-			header("Location: banned.php"); 
+			header("Location: banned.php");
+			exit; 
 			}
     }
 	if($hero_info['inrevive'] == 0 && $hero_info['intraining'] == 0) {

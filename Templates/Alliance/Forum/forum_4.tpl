@@ -108,5 +108,6 @@ echo '<tr>
 	</p>
 <?php }else{
 header("Location: banned.php");
+exit;
 }
 ?>

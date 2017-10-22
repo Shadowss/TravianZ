@@ -16,6 +16,7 @@ include("GameEngine/Account.php");
 if(isset($_GET['del_cookie'])) {
 	setcookie("COOKUSR","",time()-3600*24,"/");
 	header("Location: login.php");
+	exit;
 }
 if(!isset($_COOKIE['COOKUSR'])) {
 	$_COOKIE['COOKUSR'] = "";

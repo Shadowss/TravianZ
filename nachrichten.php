@@ -21,10 +21,13 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 if(isset($_GET['t'])) {
 	header("Location: ".$_SERVER['PHP_SELF']."?t=".$_GET['t']);
+	exit;
 }else if($_GET['id']!=0) {
 	header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
+	exit;
 }else{
 	header("Location: ".$_SERVER['PHP_SELF']);
+	exit;
 }
 }
 if(isset($_GET['delfriend']) && is_numeric($_GET['delfriend'])){
@@ -44,6 +47,7 @@ $database->deleteFriend($session->uid,"friend".$_GET['delfriend']);
 $database->deleteFriend($session->uid,"friend".$_GET['delfriend']."wait");
 $database->checkFriends($session->uid);
 header("Location: ".$_SERVER['PHP_SELF']."?t=1");
+exit;
 }
 if(isset($_GET['confirm']) && is_numeric($_GET['confirm'])){
 $myid = $database->getUserArray($session->uid, 1);
@@ -59,6 +63,7 @@ $added = 1;
 $database->addFriend($session->uid,"friend".$_GET['confirm'],$wait['id']);
 $database->addFriend($session->uid,"friend".$_GET['confirm']."wait",0);
 header("Location: ".$_SERVER['PHP_SELF']."?t=1");
+exit;
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

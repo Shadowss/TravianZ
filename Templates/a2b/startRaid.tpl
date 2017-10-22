@@ -98,4 +98,5 @@
 	}
 	}
 header("Location: build.php?id=39&t=99");
+exit;
 ?>

@@ -21,6 +21,7 @@ class Profile {
 				$this->updateProfile($post);
 				}else{
 				header("Location: banned.php");
+				exit;
 				}
 				break;
 				case "p3":
@@ -28,6 +29,7 @@ class Profile {
 				$this->updateAccount($post);
 				}else{
 				header("Location: banned.php");
+				exit;
 				}
 				break;
 				case "p4":
@@ -36,6 +38,7 @@ class Profile {
 				$this->setvactionmode($post);
 				}else{
 				header("Location: banned.php");
+				exit;
 				}
 				break;
 			}
@@ -47,6 +50,7 @@ class Profile {
 				$this->gpack($post);
 			}else{
 			header("Location: banned.php");
+			exit;
 			}
 			break;
 			}
@@ -62,6 +66,7 @@ class Profile {
 				$this->removeMeSit($get);
 				}else{
 				header("Location: banned.php");
+				exit;
 				}
 				break;
 				case 3:
@@ -69,6 +74,7 @@ class Profile {
 				$this->removeSitter($get);
 				}else{
 				header("Location: banned.php");
+				exit;
 				}
 				break;
 				case 4:
@@ -76,6 +82,7 @@ class Profile {
 				$this->cancelDeleting($get);
 				}else{
 				header("Location: banned.php");
+				exit;
 				}
 				break;
 			}
@@ -94,12 +101,14 @@ class Profile {
         $database->setVillageName($database->RemoveXSS($varray[$i]['wref']),$k);
 		}  
 		header("Location: spieler.php?uid=".$post['uid']);
+		exit;
 	}
 
 	private function gpack($post) {
 		global $database, $session;
 		$database->gpack($database->RemoveXSS($session->uid),$database->RemoveXSS($post['custom_url']));
 		header("Location: spieler.php?uid=".$session->uid);
+		exit;
 	}
 	
 		/*******************************************************
@@ -123,8 +132,10 @@ class Profile {
 		$database->UpdateOnline("logout") or die(mysqli_error($database->dblink));
 		$session->Logout();
 		header("Location: login.php");
+		exit;
 		}else{
 		header("Location: spieler.php?s=5");
+		exit;
 		}
 		}
 
@@ -178,6 +189,7 @@ class Profile {
 		}
 		$_SESSION['errorarray'] = $form->getErrors();
 		header("Location: spieler.php?s=3");
+		exit;
 	}
 
 	private function removeSitter($get) {
@@ -189,12 +201,14 @@ class Profile {
 			$session->changeChecker();
 		}
 		header("Location: spieler.php?s=".$get['s']);
+		exit;
 	}
 
 	private function cancelDeleting($get) {
 		global $database,$session;
 		$database->setDeleting($get['id'],1);
 		header("Location: spieler.php?s=".$get['s']);
+		exit;
 	}
 
 	private function removeMeSit($get) {
@@ -204,6 +218,7 @@ class Profile {
 			$session->changeChecker();
 		}
 		header("Location: spieler.php?s=".$get['s']);
+		exit;
 	}
 };
 $profile = new Profile;

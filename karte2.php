@@ -36,4 +36,4 @@ if($session->plus){
 </html>
 <?php
 }
-else{header("Location: karte.php");}?>
+else{header("Location: karte.php");exit;}?>

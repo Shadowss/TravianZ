@@ -16,18 +16,23 @@ if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 if(isset($_GET['w'])) {
 	header("Location: ".$_SERVER['PHP_SELF']."?w=".$_GET['w']);
+	exit;
 }
 else if(isset($_GET['r'])) {
 	header("Location: ".$_SERVER['PHP_SELF']."?r=".$_GET['r']);
+	exit;
 }
 else if(isset($_GET['o'])) {
 	header("Location: ".$_SERVER['PHP_SELF']."?o=".$_GET['o']);
+	exit;
 }
 else if(isset($_GET['z'])) {
 	header("Location: ".$_SERVER['PHP_SELF']."?z=".$_GET['z']);
+	exit;
 }
 else if($_GET['id']!=0){
 	header("Location: ".$_SERVER['PHP_SELF']);
+	exit;
 }
 }
 else {
@@ -219,7 +224,9 @@ if(isset($_GET['o'])) {
 			$database->modifyUnit($prisoner['wref'],array("99o"),array($troops),array(0));
 			$database->deletePrisoners($prisoner['id']);
 				}
-				header("Location: build.php?id=39");} else {
+				header("Location: build.php?id=39");
+				exit;
+				} else {
 					if(isset($process['0'])) {
 						$coor = $database->getCoor($process['0']);
 						include ("Templates/a2b/attack.tpl");

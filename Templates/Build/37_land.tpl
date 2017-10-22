@@ -7,8 +7,10 @@ if($_GET['gid']==37 && isset($_GET['del'])){
 if($session->access != BANNED){
 	$database->removeOases($_GET['del']);
 	header("Location: build.php?id=".$id."&land");
+	exit;
 }else{
 	header("Location: banned.php");
+	exit;
 }
 }
 ?>

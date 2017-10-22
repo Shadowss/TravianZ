@@ -202,6 +202,7 @@ class Units {
                     $_SESSION['errorarray'] = $form->getErrors();
                     $_SESSION['valuearray'] = $_POST;
                     header("Location: a2b.php");
+                    exit;
                 }else{
                 // We must return an array with $ post, which contains all the data more
                 // another variable that will define the flag is raised and is being sent and the type of shipping
@@ -218,6 +219,7 @@ class Units {
                     $_SESSION['errorarray'] = $form->getErrors();
                     $_SESSION['valuearray'] = $_POST;
                     header("Location: a2b.php");
+                    exit;
                 }else{
 
                 $villageName = $database->getOasisField($id,"name");
@@ -364,6 +366,7 @@ class Units {
                     $_SESSION['errorarray'] = $form->getErrors();
                     $_SESSION['valuearray'] = $_POST;
                     header("Location: a2b.php");
+                    exit;
                 } else {
 
 if($session->access != BANNED){
@@ -523,11 +526,14 @@ if($session->access != BANNED){
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
             header("Location: a2b.php");
+            exit;
         }
         header("Location: build.php?id=39");
+        exit;
 
 }else{
 header("Location: banned.php");
+exit;
 }
     }}
 
@@ -578,6 +584,7 @@ if($session->access != BANNED){
                     $_SESSION['errorarray'] = $form->getErrors();
                     $_SESSION['valuearray'] = $_POST;
                     header("Location: a2b.php");
+                    exit;
                 } else {
 
                     //change units
@@ -654,6 +661,7 @@ if($session->access != BANNED){
                 $technology->checkReinf($post['ckey']);
 
                         header("Location: build.php?id=39");
+                        exit;
 
                 }
         } else {
@@ -662,10 +670,12 @@ if($session->access != BANNED){
                     $_SESSION['errorarray'] = $form->getErrors();
                     $_SESSION['valuearray'] = $_POST;
                     header("Location: a2b.php");
+                    exit;
                 }
         }
 }else{
 header("Location: banned.php");
+exit;
 }
     }
     
@@ -684,20 +694,25 @@ header("Location: banned.php");
           $database->modifyUnit($village->wid,array($unit),array(3),array(0));
           $database->addMovement(5,$village->wid,$post['s'],0,time(),time()+$post['timestamp']);
           header("Location: build.php?id=39");
+          exit;
 
           if($form->returnErrors() > 0) {
               $_SESSION['errorarray'] = $form->getErrors();
               $_SESSION['valuearray'] = $_POST;
               header("Location: a2b.php");
+              exit;
           }
     } else {
       header("Location: build.php?id=39");
+      exit;
     }
     }else{
       header("Location: dorf1.php");
+      exit;
     }
     }else{
         header("Location: banned.php");
+        exit;
     }
     }
 

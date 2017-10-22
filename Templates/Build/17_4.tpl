@@ -70,5 +70,6 @@ echo "".TRADE_ROUTE_TO." <a href=karte.php?d=".$route['wid']."&c=".$generator->g
 <?php
 }}else{
 header("Location: build.php?id=".$_GET['id']."");
+exit;
 }
 ?>

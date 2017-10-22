@@ -159,5 +159,6 @@ if(T4_COMING==true){
 <?php
 }else{
 header("Location: ../index.php");
+exit;
 }
 ?>

@@ -293,6 +293,7 @@ class Village {
 		if($page == "build.php" && $session->uid != $this->infoarray['owner']) {
 			unset($_SESSION['wid']);
 			header("Location: dorf1.php");
+			exit;
 		}
 	}
 

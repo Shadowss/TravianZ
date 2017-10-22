@@ -47,6 +47,7 @@ if (WW == True)
 } 
 else 
 { 
-    header("Location: statistiken.php"); 
+    header("Location: statistiken.php");
+	exit; 
 } 
 ?>

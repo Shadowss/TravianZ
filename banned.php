@@ -93,4 +93,4 @@ echo round(($generator->pageLoadTimeEnd()-$start)*1000);
 </html>
 <?php
 }
-else{header("Location: dorf1.php");}?>
+else{header("Location: dorf1.php");exit;}?>

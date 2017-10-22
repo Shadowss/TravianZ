@@ -111,5 +111,6 @@ foreach($forum_data as $cats) {
 </table><p class="btn"><input type="image" value="ok" name="s1" id="fbtn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
 <?php }else{
 header("Location: banned.php");
+exit;
 }
 ?>

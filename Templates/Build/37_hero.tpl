@@ -45,7 +45,8 @@ if (isset($_POST['name'])) {
 		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=off\">(<b>+</b>)</a>"; 
 		}else{
-		header("Location: banned.php"); 
+			header("Location: banned.php");
+			exit; 
 		}
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
@@ -64,7 +65,8 @@ if (isset($_POST['name'])) {
 		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=deff\">(<b>+</b>)</a>"; 
 		}else{
-		header("Location: banned.php"); 
+			header("Location: banned.php");
+			exit; 
 		}
         }else { 
             echo "<span class=\"none\">(+)</span>"; 
@@ -83,7 +85,8 @@ if (isset($_POST['name'])) {
 		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=obonus\">(<b>+</b>)</a>"; 
 		}else{
-		header("Location: banned.php"); 
+			header("Location: banned.php");
+			exit; 
 		}			
 		
         }else { 
@@ -103,7 +106,8 @@ if (isset($_POST['name'])) {
 		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=dbonus\">(<b>+</b>)</a>"; 
 		}else{
-		header("Location: banned.php"); 
+			header("Location: banned.php");
+			exit; 
 		}
 
         }else { 
@@ -123,7 +127,8 @@ if (isset($_POST['name'])) {
 		if($session->access != BANNED){
             echo "<a href=\"build.php?id=".$id."&add=reg\">(<b>+</b>)</a>"; 
 		}else{
-		header("Location: banned.php"); 
+			header("Location: banned.php");
+			exit; 
 		}
 
         }else { 
@@ -176,7 +181,8 @@ if (isset($_POST['name'])) {
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attackbonus` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defencebonus` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `regeneration` = '0' WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
-                    header("Location: build.php?id=".$id.""); 
+                    header("Location: build.php?id=".$id."");
+					exit; 
                 } 
             } 
          } 
@@ -184,35 +190,40 @@ if (isset($_POST['name'])) {
                     if($hero_info['points'] > 0) { 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attack` = `attack` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
-                        header("Location: build.php?id=".$id.""); 
+                        header("Location: build.php?id=".$id."");
+						exit; 
                     } 
                 } 
             if($_GET['add'] == "deff" && $hero_info['defence'] < 100) { 
                     if($hero_info['points'] > 0) { 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defence` = `defence` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
-                        header("Location: build.php?id=".$id.""); 
+                        header("Location: build.php?id=".$id."");
+						exit; 
                     } 
                 } 
           if($_GET['add'] == "obonus" && $hero_info['attackbonus'] < 100) { 
                     if($hero_info['points'] > 0) { 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `attackbonus` = `attackbonus` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
-                        header("Location: build.php?id=".$id.""); 
+                        header("Location: build.php?id=".$id."");
+						exit; 
                     } 
                 } 
           if($_GET['add'] == "dbonus" && $hero_info['defencebonus'] < 100) { 
                     if($hero_info['points'] > 0) { 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `defencebonus` = `defencebonus` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
-                        header("Location: build.php?id=".$id.""); 
+                        header("Location: build.php?id=".$id."");
+						exit; 
                     } 
                 } 
           if($_GET['add'] == "reg" && $hero_info['regeneration'] < 100) { 
                     if($hero_info['points'] > 0) { 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `regeneration` = `regeneration` + 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
                         mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET `points` = `points` - 1 WHERE `uid` = '" . $database->escape($session->uid) . "'"); 
-                        header("Location: build.php?id=".$id.""); 
+                        header("Location: build.php?id=".$id."");
+						exit; 
                     } 
                 } 
           } 

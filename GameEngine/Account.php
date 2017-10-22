@@ -109,6 +109,7 @@ class Account {
             
 
             header("Location: anmelden.php");
+            exit;
         }
 		else {
 			if(AUTH_EMAIL){
@@ -119,6 +120,7 @@ class Account {
 
 					$mailer->sendActivate($_POST['email'],$_POST['name'],$_POST['pw'],$act);
 					header("Location: activate.php?id=$uid&q=$act2");
+					exit;
 				}
 			}
 			else {
@@ -130,6 +132,7 @@ class Account {
 					$database->updateUserField($uid,"invited",$_POST['invited'],1);
 					$this->generateBase($_POST['kid'],$uid,$_POST['name']);
 					header("Location: login.php");
+					exit;
 				}
 			}
 		}
@@ -148,16 +151,19 @@ class Account {
 				$database->unreg($dbarray['username']);
 				$this->generateBase($dbarray['kid'],$uid,$dbarray['username']);
 				header("Location: activate.php?e=2");
+				exit;
 				}
 			}
 			else
 			{
 				header("Location: activate.php?e=3");
+				exit;
 			}
 	   }
 	   else
 	   {
 			header("Location: activate.php");
+			exit;
 	   }
 
 	}
@@ -170,9 +176,11 @@ class Account {
 		if(password_verify($_POST['pw'], $dbarray['password'])) {
 			$database->unreg($dbarray['username']);
 			header("Location: anmelden.php");
+			exit;
 		}
 		else {
 			header("Location: activate.php?e=3");
+			exit;
 		}
 	}
 
@@ -207,6 +215,7 @@ class Account {
 			$_SESSION['valuearray'] = $_POST;
 
 			header("Location: login.php");
+			exit;
 		} else {
     		$userid = $database->getUserArray($_POST['user'], 0);
     		// Vacation mode by Shadow

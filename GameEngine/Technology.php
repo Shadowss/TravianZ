@@ -401,8 +401,10 @@ class Technology {
 			}
 		}
 		header("Location: build.php?id=".$post['id']);
+		exit;
 	}else{
 		header("Location: banned.php");
+		exit;
 	}
 	}
 
@@ -678,6 +680,7 @@ private function trainUnit($unit,$amt,$great=false) {
 		}
 		$session->changeChecker();
 		header("Location: build.php?id=".$get['id']);
+		exit;
 	}
 
 	private function upgradeSword($get) {
@@ -696,6 +699,7 @@ private function trainUnit($unit,$amt,$great=false) {
 		}
 		$session->changeChecker();
 		header("Location: build.php?id=".$get['id']);
+		exit;
 	}
 
 	private function upgradeArmour($get) {
@@ -714,6 +718,7 @@ private function trainUnit($unit,$amt,$great=false) {
 		}
 		$session->changeChecker();
 		header("Location: build.php?id=".$get['id']);
+		exit;
 	}
 
 	public function getUnitName($i) {

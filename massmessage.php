@@ -71,7 +71,10 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	}
 	}
 	mysqli_query($GLOBALS['link'],$sql);
-	if (($users_count - $_GET['from']) > $max_per_pass) echo header("Location: massmessage.php?send=true&from=",$_GET['from'] + $max_per_pass); else $done = true;
+	if (($users_count - $_GET['from']) > $max_per_pass) {
+	    header("Location: massmessage.php?send=true&from=",$_GET['from'] + $max_per_pass);
+	    exit;
+	} else $done = true;
 }
 
 ?>

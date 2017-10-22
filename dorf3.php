@@ -18,8 +18,10 @@ if(isset($_GET['newdid'])) {
     $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$database->escape((int) $_GET['newdid'])." WHERE id=".$session->uid);  
 	if(isset($_GET['s'])){
 	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
+	exit;
 	}else{
 	header("Location: ".$_SERVER['PHP_SELF']);
+	exit;
 }
 }
 ?>

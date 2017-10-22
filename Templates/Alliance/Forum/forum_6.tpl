@@ -173,5 +173,6 @@ echo '<div class="clear dotted"></div><div class="text">'.$bbcode_post.'</div></
 	 echo '</div>';
 }else{
 header("Location: banned.php");
+exit;
 }
 	 ?>

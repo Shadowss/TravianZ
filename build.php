@@ -16,9 +16,11 @@ include_once("GameEngine/Units.php");
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
+	exit;
 }
 if($_GET['id'] == 99 && $village->natar == 0){
 header("Location: dorf2.php");
+exit;
 }
 
 $pagestart = $generator->pageLoadTimeStart();
@@ -78,15 +80,18 @@ if($session->goldclub == 1 && count($session->villages) > 1){
 			if($totalres > 0){
 				$database->createTradeRoute($session->uid,$_POST['tvillage'],$village->wid,$_POST['r1'],$_POST['r2'],$_POST['r3'],$_POST['r4'],$_POST['start'],$_POST['deliveries'],$reqMerc,$timestamp);
 				header("Location: build.php?gid=17&t=4");
+				exit;
 				$route = 1;
 			}else{
 				header("Location: build.php?gid=17&t=4&create");
+				exit;
 				$route = 1;
 			}
 		}
 		}else{
 		$route = 0;
 		header("Location: banned.php");
+		exit;
 		}
 		}
 		if(isset($_GET['action']) && $_GET['action'] == 'extendRoute') {
@@ -98,20 +103,24 @@ if($session->goldclub == 1 && count($session->villages) > 1){
 		$newgold = $session->gold-2;
 		$database->updateUserField($session->uid,'gold',$newgold,1);
 		header("Location: build.php?gid=17&t=4");
+		exit;
 		$route = 1;
 		unset($routeid);
 		}else{
 		header("Location: build.php?gid=17&t=4");
+		exit;
 		$route = 1;
 		unset($routeid);
 		}
 		}else{
 		header("Location: build.php?gid=17&t=4");
+		exit;
 		$route = 1;
 		}
 		}else{
 		$route = 0;
 		header("Location: banned.php");
+		exit;
 		}
 		}
 		if(isset($_POST['action']) && $_POST['action'] == 'editRoute') {
@@ -138,11 +147,13 @@ if($session->goldclub == 1 && count($session->villages) > 1){
 		$database->editTradeRoute($_POST['routeid'],"timestamp",$timestamp,0);
 		}
 		header("Location: build.php?gid=17&t=4");
+		exit;
 		$route = 1;
 		unset($routeid);
 		}else{
 		$route = 0;
 		header("Location: banned.php");
+		exit;
 		}
 		}
 		if(isset($_GET['action']) && $_GET['action'] == 'delRoute') {
@@ -151,16 +162,19 @@ if($session->goldclub == 1 && count($session->villages) > 1){
 		if($traderoute == $session->uid){
 		$database->deleteTradeRoute($_GET['routeid']);
 		header("Location: build.php?gid=17&t=4");
+		exit;
 		$route = 1;
 		unset($routeid);
 		}else{
 		header("Location: build.php?gid=17&t=4");
+		exit;
 		$route = 1;
 		unset($routeid);
 		}
 		}else{
 		$route = 0;
 		header("Location: banned.php");
+		exit;
 		}
 		}
 }
@@ -187,15 +201,18 @@ if($session->goldclub == 1){
 			if($_GET['action'] == 'deleteList') {
 				$database->delFarmList($_GET['lid'], $session->uid);
 				header("Location: build.php?id=39&t=99");
+				exit;
 			}elseif($_GET['action'] == 'deleteSlot') {
 				$database->delSlotFarm($_GET['eid']);
 				   header("Location: build.php?id=39&t=99");
+				   exit;
 			}
 			if($_POST['action'] == 'startRaid'){
 			if($session->access != BANNED){
 			include ("Templates/a2b/startRaid.tpl");
 			}else{
 			header("Location: banned.php");
+			exit;
 			}
 			}
 
@@ -212,11 +229,13 @@ if($session->goldclub == 1){
 			$database->setVillageEvasion($_GET['evasion']);
 			}
 			header("Location: build.php?id=39&t=99");
+			exit;
 			}
 
 			if(isset($_POST['maxevasion']) && is_numeric($_POST['maxevasion'])) {
 			$database->updateUserField($session->uid, "maxevasion", $_POST['maxevasion'], 1);
 			header("Location: build.php?id=39&t=99");
+			exit;
 			}
 		}
 }else{
@@ -228,6 +247,7 @@ if($session->access != BANNED){
 	$units->Settlers($_POST);
 }else{
 header("Location: banned.php");
+exit;
 }
 }
 if($_GET['mode']=='troops' && $_GET['cancel']==1){
@@ -257,8 +277,10 @@ $resultc=$database->query($qc) or die(mysqli_error($database->dblink));
 	}
 }
 header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
+exit;
 }else{
 header("Location: banned.php");
+exit;
 }
 }
 if(isset($_GET['id'])){
@@ -349,11 +371,13 @@ if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['rout
         	if($session->gold >= 2) {
             		$building->finishAll();
             		header("Location: build.php?gid=".$_GET['id']."&ty=".$_GET['ty']);
+            		exit;
         	}
         	}  
 	}
 }else{
 header("Location: ".$_SERVER['PHP_SELF']."?id=39");
+exit;
 }
 ?>
 

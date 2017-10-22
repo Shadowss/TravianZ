@@ -47,5 +47,6 @@ if($session->access!=BANNED){
 <?php
 }else{
 	header("Location: banned.php");
+	exit;
 }
 ?>

@@ -266,5 +266,6 @@ function testSum() {
 <?php
 }else{
 header("Location: build.php?id=".$_GET['id']."");
+exit;
 }
 ?>

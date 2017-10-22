@@ -64,6 +64,7 @@ $troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+"
 		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
         
         header("Location: build.php?id=39&t=99");
+		exit;
 }
 }
 if($FLData['owner'] == $session->uid){
@@ -166,5 +167,6 @@ $vill[$towref] = 1;
 <?php
 }else{
 header("Location: build.php?id=39&t=99");
+exit;
 }
 ?>

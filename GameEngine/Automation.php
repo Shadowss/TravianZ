@@ -35,7 +35,8 @@ class Automation {
 		$isThere = mysqli_num_rows($q);
 		if($isThere > 0)
 		{
-		header('Location: winner.php');
+		    header('Location: winner.php');
+		    exit;
 		}else{
 		## there is no winner
 		}
@@ -3100,6 +3101,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 					$_SESSION['errorarray'] = $form->getErrors();
 					$_SESSION['valuearray'] = $_POST;
 					header("Location: a2b.php");
+					exit;
 				} else {
 
 					//change units
@@ -3176,6 +3178,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$technology->checkReinf($post['ckey']);
 
 						header("Location: build.php?id=39");
+						exit;
 
 				}
 	}
