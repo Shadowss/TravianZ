@@ -1592,15 +1592,14 @@ class Automation {
                     $unitsdead_deff[5] = '?,?,?,?,?,?,?,?,?,?,';
                     $deadhero = $alldead['hero']+$owndead['hero'];
 
-                    $totaldead_alldef[1] = $alldead['1']+$alldead['2']+$alldead['3']+$alldead['4']+$alldead['5']+$alldead['6']+$alldead['7']+$alldead['8']+$alldead['9']+$alldead['10'];
-                    $totaldead_alldef[2] = $alldead['11']+$alldead['12']+$alldead['13']+$alldead['14']+$alldead['15']+$alldead['16']+$alldead['17']+$alldead['18']+$alldead['19']+$alldead['20'];
-                    $totaldead_alldef[3] = $alldead['21']+$alldead['22']+$alldead['23']+$alldead['24']+$alldead['25']+$alldead['26']+$alldead['27']+$alldead['28']+$alldead['29']+$alldead['30'];
-                    $totaldead_alldef[4] = $alldead['31']+$alldead['32']+$alldead['33']+$alldead['34']+$alldead['35']+$alldead['36']+$alldead['37']+$alldead['38']+$alldead['39']+$alldead['40'];
-                    $totaldead_alldef[5] = $alldead['41']+$alldead['42']+$alldead['43']+$alldead['44']+$alldead['45']+$alldead['46']+$alldead['47']+$alldead['48']+$alldead['49']+$alldead['50'];
+                    $totaldead_alldef_tmp[1] = $alldead['1']+$alldead['2']+$alldead['3']+$alldead['4']+$alldead['5']+$alldead['6']+$alldead['7']+$alldead['8']+$alldead['9']+$alldead['10'];
+                    $totaldead_alldef_tmp[2] = $alldead['11']+$alldead['12']+$alldead['13']+$alldead['14']+$alldead['15']+$alldead['16']+$alldead['17']+$alldead['18']+$alldead['19']+$alldead['20'];
+                    $totaldead_alldef_tmp[3] = $alldead['21']+$alldead['22']+$alldead['23']+$alldead['24']+$alldead['25']+$alldead['26']+$alldead['27']+$alldead['28']+$alldead['29']+$alldead['30'];
+                    $totaldead_alldef_tmp[4] = $alldead['31']+$alldead['32']+$alldead['33']+$alldead['34']+$alldead['35']+$alldead['36']+$alldead['37']+$alldead['38']+$alldead['39']+$alldead['40'];
+                    $totaldead_alldef_tmp[5] = $alldead['41']+$alldead['42']+$alldead['43']+$alldead['44']+$alldead['45']+$alldead['46']+$alldead['47']+$alldead['48']+$alldead['49']+$alldead['50'];
 
-                    $totaldead_alldef = $totaldead_alldef[1]+$totaldead_alldef[2]+$totaldead_alldef[3]+$totaldead_alldef[4]+$totaldead_alldef[5]+$deadhero;
+                    $totaldead_alldef = $totaldead_alldef_tmp[1]+$totaldead_alldef_tmp[2]+$totaldead_alldef_tmp[3]+$totaldead_alldef_tmp[4]+$totaldead_alldef_tmp[5]+$deadhero;
                     $totalattackdead += $totaldead_alldef;
-
 
                     // Set units returning from attack
                     
