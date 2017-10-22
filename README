@@ -1,4 +1,4 @@
-TravianZ Version v.8.2.0 BETA (for PHP version 7)
+TravianZ Version v.8.2.5 BETA (for PHP version 7)
 
 Download and updates : https://github.com/Shadowss/TravianZ
 
@@ -40,6 +40,8 @@ martinambrus changes:
 28. fixed reports pagination always staying on "All" tab
 29. fix for the "fixed" :) self-kicking from an alliance
 30. fixed sending messages to player via Admin
+31. Support user is now a part of the installation and can be logged into Admin and in-game (albeit in game, they have no village, so can not access fields or village views)
+32. messages sent to Multihunter now have the correct recepient shown next to them (was empty)
 
 
 Shadowss changes:
