@@ -117,6 +117,11 @@
                         <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM; ?>" />6|
                         <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION; ?>" />
 				        <?php echo $training_time; ?>
+				        <?php
+				        	if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                   				echo "|<a href=\"build.php?gid=17&t=3&r1=".$wood."&r2=".$clay."&r3=".$iron."&r4=".$crop."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+                 			}
+				        ?>
                     </div>
 				</td>
 				
@@ -148,6 +153,11 @@
                         <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM; ?>" />6|
                         <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION; ?>" />
 				        <?php echo $training_time; ?>
+				        <?php
+				        	if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                   				echo "|<a href=\"build.php?gid=17&t=3&r1=".$wood."&r2=".$clay."&r3=".$iron."&r4=".$crop."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+                 			}
+				        ?>
                     </div>
 				</td>
 				
