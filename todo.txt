@@ -1,3 +1,4 @@
+- add checkbox when sending units for a raid to include the attack in the raid list, if eligible
 - normalize forum tables - varchar is used for numeric values and is joined with int field
 - finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
 - add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
