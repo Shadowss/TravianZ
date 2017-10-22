@@ -45,6 +45,7 @@ martinambrus changes:
 33. new links in Admin to access in-game messages + Mass Message & System Message dialogs
 34. mass messages sent out under Support rather than Multihunter (we should not be scaring people :D)
 35. fixed displaying of current Quest in Admin
+36. fixed OK message in Admin when resetting All Players' PLUS
 
 
 Shadowss changes:
