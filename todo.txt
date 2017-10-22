@@ -1,5 +1,6 @@
 - add checkbox when sending units for a raid to include the attack in the raid list, if eligible
 - change "incoming attacker" title of the raid list icon when actually attacking a farm (it should be "Own attacking troops")
+- change "select all" button to actually select all checkboxes via JS, not via page reload
 - normalize forum tables - varchar is used for numeric values and is joined with int field
 - finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
 - add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
