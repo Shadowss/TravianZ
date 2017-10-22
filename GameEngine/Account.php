@@ -264,6 +264,8 @@ class Account {
 		$database->addTech($wid);
 		$database->addABTech($wid);
 		$database->updateUserField($uid,"access",USER,1);
+		
+		$message = new Message();
 		$message->sendWelcome($uid,$username);
 	}
 
