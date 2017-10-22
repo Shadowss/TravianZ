@@ -4525,7 +4525,7 @@ References:
             $delDef=true;
             $result = $this->query_return("SELECT * FROM ".TB_PREFIX."enforcement WHERE hero>0 AND `from` = ".$wid);
             if (!empty($result)) {
-                $dbarray = mysqli_fetch_array($result);
+                $dbarray = $result;
                 if(isset($dbarray['hero'])) {
                     $this->query("UPDATE ".TB_PREFIX."enforcement SET hero=0 WHERE `from` = ".$wid);
                     for ($i=0;$i<50;$i++) {
