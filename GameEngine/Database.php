@@ -212,7 +212,13 @@ class MYSQLi_DB {
 
     function getUserField($ref, $field, $mode) {
         list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
-
+        
+        // update for Multihunter's username and ID
+        if ($ref == '' || $ref == 0) {
+            $ref = 'Multihunter';
+            $mode = 1;
+        }
+        
         if(!$mode) {
             $q = "SELECT $field FROM " . TB_PREFIX . "users where id = " . (int) $ref;
         } else {
