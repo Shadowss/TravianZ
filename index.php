@@ -155,7 +155,7 @@ include ("GameEngine/Lang/".LANG.".php");
 
 									<td><?php
 
-										   $return = mysqli_query($link,"SELECT Count(*) FROM " . TB_PREFIX . "users WHERE timestamp > ".(time() - (60*10))." AND tribe!=0 AND tribe!=4 AND tribe!=5");
+										   $return = mysqli_query($link,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE timestamp > ".(time() - (60*10))." AND tribe!=0 AND tribe!=4 AND tribe!=5");
 										   $online=(!empty($return))? mysqli_fetch_assoc($return)['Total']:0;
 										   echo $online;
 
