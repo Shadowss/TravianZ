@@ -5298,7 +5298,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
  	private function artefactOfTheFool() {
 	 global $database;
 		$time = time();
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and $time - lastupdate >= 86400";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and lastupdate <= ".($time - 86400);
 		$array = $database->query_return($q);
 		foreach($array as $artefact) {
 		$kind = rand(1,7);

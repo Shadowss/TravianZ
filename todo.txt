@@ -6,3 +6,9 @@
 - add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
 - include past raids in the farm list that were not in the farm list itself but are actually manual past attacks - will need DB update for the attacks table to include targets (now only holds attacker)
 - add PayPal listener to verify gold transactions imediatelly
+- check the following queries for performing stuff on DB rather than in PHP:
+  "SELECT * FROM s1_vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop"
+  "SELECT * FROM s1_odata WHERE maxstore < 800 OR maxcrop < 800"
+  "SELECT * FROM s1_vdata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0"
+- try to find and fix this (it's probably automation but has came up with a new registration, first login):
+  "UPDATE s1_units set hero = hero -   WHERE vref = 38801"

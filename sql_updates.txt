@@ -1,11 +1,42 @@
 -- 22.10.2017 -> SQL optimizations
 ALTER TABLE `s1_users` ADD INDEX(`tribe`);
 ALTER TABLE `s1_users` ADD INDEX `timestamp-tribe` (`timestamp`, `tribe`);
+ALTER TABLE `s1_users` DROP INDEX `username`;
+ALTER TABLE `s1_users` ADD UNIQUE `username` (`username`);
+ALTER TABLE `s1_activate` CHANGE `username` `username` VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `s1_activate` ADD UNIQUE `username` (`username`);
+ALTER TABLE `s1_activate` CHANGE `email` `email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `s1_activate` ADD UNIQUE(`email`);
+ALTER TABLE `s1_users` CHANGE `email` `email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+-- YOU MAY NOT NEED THESE IF YOUR EMAILS FOR THESE 3 ACCOUNTS ARE ALREADY DIFFERENT FROM ONE ANOTHER
+UPDATE `s1_users` SET `email` = 'support@travianz.game' WHERE `s1_users`.`id` = 1;
+UPDATE `s1_users` SET `email` = 'nature@travianz.game' WHERE `s1_users`.`id` = 2;
+UPDATE `s1_users` SET `email` = 'taskmaster@travianz.game' WHERE `s1_users`.`id` = 4;
+-- END OF "YOU MAY NOT NEED THESE"
+ALTER TABLE `s1_users` ADD UNIQUE `email` (`email`);
+ALTER TABLE `s1_users` ADD INDEX(`access`);
+ALTER TABLE `s1_active` ADD INDEX(`timestamp`);
+ALTER TABLE `s1_odata` ADD INDEX(`clay`);
+ALTER TABLE `s1_odata` ADD INDEX(`crop`);
+ALTER TABLE `s1_odata` ADD INDEX(`iron`);
+ALTER TABLE `s1_odata` ADD INDEX(`wood`);
+ALTER TABLE `s1_vdata` ADD INDEX(`crop`);
+ALTER TABLE `s1_vdata` ADD INDEX(`iron`);
+ALTER TABLE `s1_vdata` ADD INDEX(`clay`);
+ALTER TABLE `s1_vdata` ADD INDEX(`wood`);
+ALTER TABLE `s1_deleting` ADD INDEX(`timestamp`);
+ALTER TABLE `s1_movement` ADD INDEX `proc-sort_type-endtime` (`proc`, `sort_type`, `endtime`);
+ALTER TABLE `s1_vdata` ADD INDEX(`starv`);
+ALTER TABLE `s1_vdata` ADD INDEX(`loyalty`);
+ALTER TABLE `s1_odata` ADD INDEX(`loyalty`);
+ALTER TABLE `s1_artefacts` ADD INDEX `active-type-lastupdate` (`active`, `type`, `lastupdate`);
+
 
 -- 22.10.2017 -> forum topics table and indexe changes
 ALTER TABLE `s1_forum_post` CHANGE `topic` `topic` INT NULL DEFAULT NULL;
 ALTER TABLE `s1_forum_post` CHANGE `owner` `owner` INT NULL DEFAULT NULL;
 ALTER TABLE `travian`.`s1_forum_post` ADD INDEX `topic-owner` (`topic`, `owner`);
+
 
 -- 20.10.2017 -> changing MD5 for bcrypt password hashing algo
 ALTER TABLE `s1_users` ADD `is_bcrypt` TINYINT(1) NOT NULL DEFAULT '0' AFTER `vactwoweeks`;

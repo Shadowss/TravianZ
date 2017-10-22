@@ -102,16 +102,18 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
  `id` int(255) NOT NULL AUTO_INCREMENT,
- `username` varchar(100) NULL,
- `password` varchar(100) NULL,
- `email` text NULL,
- `tribe` tinyint(1) NULL,
- `access` tinyint(1) NULL DEFAULT '1',
- `act` varchar(10) NULL,
- `timestamp` int(11) NULL DEFAULT '0',
- `location` text NULL,
- `act2` varchar(10) NULL,
- PRIMARY KEY (`id`)
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `tribe` tinyint(1) DEFAULT NULL,
+  `access` tinyint(1) DEFAULT '1',
+  `act` varchar(10) DEFAULT NULL,
+  `timestamp` int(11) DEFAULT '0',
+  `location` text,
+  `act2` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -128,7 +130,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
 CREATE TABLE IF NOT EXISTS `%PREFIX%active` (
  `username` varchar(100) NOT NULL,
  `timestamp` int(11) NULL,
- PRIMARY KEY (`username`)
+ PRIMARY KEY (`username`),
+ KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -196,8 +199,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  `effect2` tinyint(2) NULL DEFAULT '0',
  `lastupdate` int(11) NULL DEFAULT '0', 
  PRIMARY KEY (`id`),
- KEY `vref-type` (`vref`,`type`),
- KEY `owner-active` (`owner`,`active`)
+ KEY `owner-active` (`owner`,`active`),
+ KEY `vref-type-kind` (`vref`,`type`,`kind`) USING BTREE,
+ KEY `active-type-lastupdate` (`active`,`type`,`lastupdate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -460,7 +464,8 @@ INSERT INTO `%PREFIX%config` VALUES (0);
 CREATE TABLE IF NOT EXISTS `%PREFIX%deleting` (
  `uid` int(11) NOT NULL,
  `timestamp` int(11) NULL,
- PRIMARY KEY (`uid`)
+ PRIMARY KEY (`uid`),
+ KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1058,7 +1063,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   `crop` int(11) DEFAULT NULL,
   PRIMARY KEY (`moveid`),
   KEY `ref` (`ref`),
-  KEY `from-proc-sort_type` (`from`,`proc`,`sort_type`)
+  KEY `from-proc-sort_type` (`from`,`proc`,`sort_type`),
+  KEY `proc-sort_type-endtime` (`proc`,`sort_type`,`endtime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1119,7 +1125,12 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
  `high` tinyint(1) NULL,
  PRIMARY KEY (`wref`),
  KEY `lastupdated2` (`lastupdated2`) USING BTREE,
- KEY `conqured` (`conqured`)
+ KEY `conqured` (`conqured`),
+ KEY `wood` (`wood`),
+ KEY `iron` (`iron`),
+ KEY `clay` (`clay`),
+ KEY `crop` (`crop`),
+ KEY `loyalty` (`loyalty`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1458,100 +1469,101 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%units` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
- `username` varchar(100) NULL,
- `password` varchar(100) NULL,
- `email` text NULL,
- `tribe` tinyint(1) NULL,
- `access` tinyint(1) NULL DEFAULT '1',
- `gold` int(9) NULL DEFAULT '0',
- `gender` tinyint(1) NULL DEFAULT '0',
- `birthday` date NULL DEFAULT '1970-01-01',
- `location` text NULL,
- `desc1` text NULL,
- `desc2` text NULL,
- `plus` int(11) NULL DEFAULT '0',
- `goldclub` int(11) NULL DEFAULT '0',
- `b1` int(11) NULL DEFAULT '0',
- `b2` int(11) NULL DEFAULT '0',
- `b3` int(11) NULL DEFAULT '0',
- `b4` int(11) NULL DEFAULT '0',
- `sit1` int(11) NULL DEFAULT '0',
- `sit2` int(11) NULL DEFAULT '0',
- `alliance` int(11) NULL DEFAULT '0',
- `sessid` varchar(100) NULL,
- `act` varchar(10) NULL,
- `timestamp` int(11) NULL DEFAULT '0',
- `ap` int(11) NULL DEFAULT '0',
- `apall` int(11) NULL DEFAULT '0',
- `dp` int(11) NULL DEFAULT '0',
- `dpall` int(11) NULL DEFAULT '0',
- `protect` int(11) NULL,
- `quest` tinyint(2) NULL,
- `quest_time` int(11) NULL,
- `gpack` varchar(255) NULL DEFAULT 'gpack/travian_default/',
- `cp` float(14,5) NULL DEFAULT '1',
- `lastupdate` int(11) NULL,
- `RR` int(255) NULL DEFAULT '0',
- `Rc` int(255) NULL DEFAULT '0',
- `ok` tinyint(1) NULL DEFAULT '0',
- `clp` bigint(255) NULL DEFAULT '0',
- `oldrank` bigint(255) NULL DEFAULT '0',
- `regtime` int(11) NULL DEFAULT '0',
- `invited` int(11) NULL DEFAULT '0',
- `friend0` int(11) NULL DEFAULT '0',
- `friend1` int(11) NULL DEFAULT '0',
- `friend2` int(11) NULL DEFAULT '0',
- `friend3` int(11) NULL DEFAULT '0',
- `friend4` int(11) NULL DEFAULT '0',
- `friend5` int(11) NULL DEFAULT '0',
- `friend6` int(11) NULL DEFAULT '0',
- `friend7` int(11) NULL DEFAULT '0',
- `friend8` int(11) NULL DEFAULT '0',
- `friend9` int(11) NULL DEFAULT '0',
- `friend10` int(11) NULL DEFAULT '0',
- `friend11` int(11) NULL DEFAULT '0',
- `friend12` int(11) NULL DEFAULT '0',
- `friend13` int(11) NULL DEFAULT '0',
- `friend14` int(11) NULL DEFAULT '0',
- `friend15` int(11) NULL DEFAULT '0',
- `friend16` int(11) NULL DEFAULT '0',
- `friend17` int(11) NULL DEFAULT '0',
- `friend18` int(11) NULL DEFAULT '0',
- `friend19` int(11) NULL DEFAULT '0',
- `friend0wait` int(11) NULL DEFAULT '0',
- `friend1wait` int(11) NULL DEFAULT '0',
- `friend2wait` int(11) NULL DEFAULT '0',
- `friend3wait` int(11) NULL DEFAULT '0',
- `friend4wait` int(11) NULL DEFAULT '0',
- `friend5wait` int(11) NULL DEFAULT '0',
- `friend6wait` int(11) NULL DEFAULT '0',
- `friend7wait` int(11) NULL DEFAULT '0',
- `friend8wait` int(11) NULL DEFAULT '0',
- `friend9wait` int(11) NULL DEFAULT '0',
- `friend10wait` int(11) NULL DEFAULT '0',
- `friend11wait` int(11) NULL DEFAULT '0',
- `friend12wait` int(11) NULL DEFAULT '0',
- `friend13wait` int(11) NULL DEFAULT '0',
- `friend14wait` int(11) NULL DEFAULT '0',
- `friend15wait` int(11) NULL DEFAULT '0',
- `friend16wait` int(11) NULL DEFAULT '0',
- `friend17wait` int(11) NULL DEFAULT '0',
- `friend18wait` int(11) NULL DEFAULT '0',
- `friend19wait` int(11) NULL DEFAULT '0',
- `maxevasion` mediumint(3) NULL DEFAULT '0',
- `village_select` bigint(20) DEFAULT NULL,
- `vac_time` varchar(255) NULL DEFAULT '0',
- `vac_mode` int(2) NULL DEFAULT '0',
- `vactwoweeks` varchar(255) NULL DEFAULT '0',
- `is_bcrypt` tinyint(1) NOT NULL DEFAULT '0',
- PRIMARY KEY (`id`),
- KEY `invited` (`invited`),
- KEY `lastupdate` (`lastupdate`),
- KEY `alliance` (`alliance`),
- KEY `username` (`username`(25)) USING BTREE,
- KEY `tribe` (`tribe`),
- KEY `timestamp` (`timestamp`),
- KEY `timestamp-tribe` (`timestamp`,`tribe`)
+  `username` varchar(100) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `tribe` tinyint(1) DEFAULT NULL,
+  `access` tinyint(1) DEFAULT '1',
+  `gold` int(9) DEFAULT '0',
+  `gender` tinyint(1) DEFAULT '0',
+  `birthday` date DEFAULT '1970-01-01',
+  `location` text,
+  `desc1` text,
+  `desc2` text,
+  `plus` int(11) DEFAULT '0',
+  `goldclub` int(11) DEFAULT '0',
+  `b1` int(11) DEFAULT '0',
+  `b2` int(11) DEFAULT '0',
+  `b3` int(11) DEFAULT '0',
+  `b4` int(11) DEFAULT '0',
+  `sit1` int(11) DEFAULT '0',
+  `sit2` int(11) DEFAULT '0',
+  `alliance` int(11) DEFAULT '0',
+  `sessid` varchar(100) DEFAULT NULL,
+  `act` varchar(10) DEFAULT NULL,
+  `timestamp` int(11) DEFAULT '0',
+  `ap` int(11) DEFAULT '0',
+  `apall` int(11) DEFAULT '0',
+  `dp` int(11) DEFAULT '0',
+  `dpall` int(11) DEFAULT '0',
+  `protect` int(11) DEFAULT NULL,
+  `quest` tinyint(2) DEFAULT NULL,
+  `quest_time` int(11) DEFAULT NULL,
+  `gpack` varchar(255) DEFAULT 'gpack/travian_default/',
+  `cp` float(14,5) DEFAULT '1.00000',
+  `lastupdate` int(11) DEFAULT NULL,
+  `RR` int(255) DEFAULT '0',
+  `Rc` int(255) DEFAULT '0',
+  `ok` tinyint(1) DEFAULT '0',
+  `clp` bigint(255) DEFAULT '0',
+  `oldrank` bigint(255) DEFAULT '0',
+  `regtime` int(11) DEFAULT '0',
+  `invited` int(11) DEFAULT '0',
+  `friend0` int(11) DEFAULT '0',
+  `friend1` int(11) DEFAULT '0',
+  `friend2` int(11) DEFAULT '0',
+  `friend3` int(11) DEFAULT '0',
+  `friend4` int(11) DEFAULT '0',
+  `friend5` int(11) DEFAULT '0',
+  `friend6` int(11) DEFAULT '0',
+  `friend7` int(11) DEFAULT '0',
+  `friend8` int(11) DEFAULT '0',
+  `friend9` int(11) DEFAULT '0',
+  `friend10` int(11) DEFAULT '0',
+  `friend11` int(11) DEFAULT '0',
+  `friend12` int(11) DEFAULT '0',
+  `friend13` int(11) DEFAULT '0',
+  `friend14` int(11) DEFAULT '0',
+  `friend15` int(11) DEFAULT '0',
+  `friend16` int(11) DEFAULT '0',
+  `friend17` int(11) DEFAULT '0',
+  `friend18` int(11) DEFAULT '0',
+  `friend19` int(11) DEFAULT '0',
+  `friend0wait` int(11) DEFAULT '0',
+  `friend1wait` int(11) DEFAULT '0',
+  `friend2wait` int(11) DEFAULT '0',
+  `friend3wait` int(11) DEFAULT '0',
+  `friend4wait` int(11) DEFAULT '0',
+  `friend5wait` int(11) DEFAULT '0',
+  `friend6wait` int(11) DEFAULT '0',
+  `friend7wait` int(11) DEFAULT '0',
+  `friend8wait` int(11) DEFAULT '0',
+  `friend9wait` int(11) DEFAULT '0',
+  `friend10wait` int(11) DEFAULT '0',
+  `friend11wait` int(11) DEFAULT '0',
+  `friend12wait` int(11) DEFAULT '0',
+  `friend13wait` int(11) DEFAULT '0',
+  `friend14wait` int(11) DEFAULT '0',
+  `friend15wait` int(11) DEFAULT '0',
+  `friend16wait` int(11) DEFAULT '0',
+  `friend17wait` int(11) DEFAULT '0',
+  `friend18wait` int(11) DEFAULT '0',
+  `friend19wait` int(11) DEFAULT '0',
+  `maxevasion` mediumint(3) DEFAULT '0',
+  `village_select` bigint(20) DEFAULT NULL,
+  `vac_time` varchar(255) DEFAULT '0',
+  `vac_mode` int(2) DEFAULT '0',
+  `vactwoweeks` varchar(255) DEFAULT '0',
+  `is_bcrypt` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `username` (`username`),
+  KEY `invited` (`invited`),
+  KEY `lastupdate` (`lastupdate`),
+  KEY `alliance` (`alliance`),
+  KEY `tribe` (`tribe`),
+  KEY `timestamp-tribe` (`timestamp`,`tribe`),
+  KEY `access` (`access`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
@@ -1560,9 +1572,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
 
 INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `access`, `gold`, `gender`, `birthday`, `location`, `desc1`, `desc2`, `plus`, `b1`, `b2`, `b3`, `b4`, `sit1`, `sit2`, `alliance`, `sessid`, `act`, `timestamp`, `ap`, `apall`, `dp`, `dpall`, `protect`, `quest`, `gpack`, `cp`, `lastupdate`, `RR`, `Rc`, `ok`) VALUES
 (5, 'Multihunter', '', 'multihunter@travianx.mail', 0, 9, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(1, 'Support', '', 'support@travianx.mail', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(2, 'Nature', '4262cc190152adfc1a3fcf32af6aa430', 'support@travianx.mail', 4, 9, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(4, 'Taskmaster', '', 'support@travianx.mail', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0);
+(1, 'Support', '', 'support@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(2, 'Nature', '4262cc190152adfc1a3fcf32af6aa430', 'nature@travianz.game', 4, 9, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(4, 'Taskmaster', '', 'taskmaster@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1600,7 +1612,13 @@ PRIMARY KEY (`wref`),
 KEY `owner-capital-pop` (`owner`,`capital`,`pop`),
 KEY `maxstore` (`maxstore`),
 KEY `maxcrop` (`maxcrop`),
-KEY `celebration` (`celebration`)
+KEY `celebration` (`celebration`),
+KEY `wood` (`wood`),
+KEY `clay` (`clay`),
+KEY `iron` (`iron`),
+KEY `crop` (`crop`),
+KEY `starv` (`starv`),
+KEY `loyalty` (`loyalty`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

@@ -3977,7 +3977,7 @@ class MYSQLi_DB {
 	function getFoolArtefactInfo($type,$vid,$uid) {
 	    list($type,$vid,$uid) = $this->escape_input((int) $type,(int) $vid,(int) $uid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND type = 8 AND kind = $type OR owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND ((type = 8 AND kind = $type) OR (owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type))";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
