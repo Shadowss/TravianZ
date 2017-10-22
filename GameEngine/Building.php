@@ -765,7 +765,7 @@ class Building {
 		return false;
 	}
 
-    public function finishAll() {
+    public function finishAll($redirect_url = '') {
         global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
         if($session->access!=BANNED){
         $finish = 0;
@@ -832,13 +832,13 @@ class Building {
             }
         }
         }
-            header("Location: ".$session->referrer);
+            header("Location: ".($redirect_url ? $redirect_url : $session->referrer));
             exit;
         }else{
             header("Location: banned.php");
             exit;
         }
-    }  
+    }
 
 	public function resourceRequired($id,$tid,$plus=1) {
 		$name = "bid".$tid;
