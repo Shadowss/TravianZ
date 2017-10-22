@@ -49,6 +49,9 @@ martinambrus changes:
 37. new config option to show Support messages in Admin's mailbox
 38. new feature: allowing messages to be sent as Support from in-game when user is Admin + it's allowed in config
 39. not allowing installation if old data are still in database to prevent multiple worlds generation and game misbehavior
+40. fixed quest 1 to reload the page and allow for immediate completion of the woodcutter
+41. NPC links added to units in Hero Mansion
+42. fixed random attacks attacker tribe (Natars) when building Wonder of the World 
 
 
 Shadowss changes:

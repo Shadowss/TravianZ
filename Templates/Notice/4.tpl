@@ -63,7 +63,7 @@ if($database->isVillageOases($dataarray[29])){
 <tr>
 <td>&nbsp;</td>
 <?php
-$tribe = $dataarray[2] || 0;
+$tribe = ($dataarray[2] ? $dataarray[2] : 5);
 $start = ($tribe-1)*10+1;
 for($i=$start;$i<=($start+9);$i++) {
 	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
