@@ -89,19 +89,13 @@ class Session {
 				$_SESSION['checker'] = $generator->generateRandStr(3);
 				$_SESSION['mchecker'] = $generator->generateRandStr(5);
 				$_SESSION['qst'] = $database->getUserField($user_sanitized, "quest", 1);
-				$result = mysqli_query($GLOBALS['link'],"SELECT village_select FROM `". TB_PREFIX."users` WHERE `username`='".$user_sanitized."'");
-                $dbarray = mysqli_fetch_assoc($result);
-                $selected_village=(int) $dbarray['village_select'];
-                if(!isset($_SESSION['wid'])) {
-                    if($selected_village!='') {
-                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
-                    }else{
-                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
-                    }
-                    $data = mysqli_fetch_assoc($query);
-                    $_SESSION['wid'] = $data['wref'];
-                } else
-                    if($_SESSION['wid'] == '') {
+
+				$result = mysqli_query($GLOBALS['link'],"SELECT id, village_select FROM `". TB_PREFIX."users` WHERE `username`='".$user_sanitized."'");
+				$dbarray = mysqli_fetch_assoc($result);
+				$selected_village=(int) $dbarray['village_select'];
+
+				if ($dbarray['id'] > 1) {
+                    if(!isset($_SESSION['wid'])) {
                         if($selected_village!='') {
                             $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                         }else{
@@ -109,14 +103,29 @@ class Session {
                         }
                         $data = mysqli_fetch_assoc($query);
                         $_SESSION['wid'] = $data['wref'];
-                    }
-				$this->PopulateVar();
+                    } else
+                        if($_SESSION['wid'] == '') {
+                            if($selected_village!='') {
+                                $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                            }else{
+                                $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
+                            }
+                            $data = mysqli_fetch_assoc($query);
+                            $_SESSION['wid'] = $data['wref'];
+                        }
+    				$this->PopulateVar();
+    				
+    				$database->addActiveUser($user_sanitized, $this->time);
+    				$database->updateUserField($user_sanitized, "sessid", $_SESSION['sessid'], 0);
+                }
 
-				$logging->addLoginLog($this->uid, $_SERVER['REMOTE_ADDR']);
-				$database->addActiveUser($user_sanitized, $this->time);
-				$database->updateUserField($user_sanitized, "sessid", $_SESSION['sessid'], 0);
+                $logging->addLoginLog($dbarray['id'], $_SERVER['REMOTE_ADDR']);
 
-				header("Location: dorf1.php");
+                if ($dbarray['id'] == 1) {
+				    header("Location: nachrichten.php");
+				} else {
+				    header("Location: dorf1.php");
+				}
 			}
 
 			public function Logout() {
@@ -138,18 +147,27 @@ class Session {
 			}
 
 			private function checkLogin(){
-                		global $database;
-                		if(isset($_SESSION['username']) && isset($_SESSION['sessid'])) {
-                    			//Get and Populate Data
-                    			$this->PopulateVar();
-                    			//update database
-                    			$database->addActiveUser($_SESSION['username'], $this->time);
-                    			$database->updateUserField($_SESSION['username'], "timestamp", $this->time, 0);
-                        		return true;
-                		} else {
-                    			return false;
-                		}
-            		}
+        		global $database;
+        		if(isset($_SESSION['username']) && isset($_SESSION['sessid'])) {
+        		    // check if this is not a support user, for who only messages and statistics are available
+        		    if ($_SESSION['id_user'] == 1) {
+        		        $req_file = basename($_SERVER['PHP_SELF']);
+        		        if (!in_array($req_file, ['nachrichten.php', 'logout.php', 'statistiken.php', 'rules.php', 'karte.php', 'karte2.php', 'spieler.php'])) {
+        		            header('Location:nachrichten.php');
+        		            exit;
+        		        }
+        		    }
+        		    
+        			//Get and Populate Data
+        			$this->PopulateVar();
+        			//update database
+        			$database->addActiveUser($_SESSION['username'], $this->time);
+        			$database->updateUserField($_SESSION['username'], "timestamp", $this->time, 0);
+            		return true;
+        		} else {
+            			return false;
+        		}
+    		}
 			
 
 			/***************************
@@ -242,7 +260,11 @@ class Session {
 					}
 				} else {
 					if(in_array($page, $pagearray)) {
-						header("Location: dorf1.php");
+					    if ($this->uid == 1) {
+					        header("Location: nachrichten.php");
+					    } else {
+					        header("Location: dorf1.php");
+					    }
 					}
 
 				}
