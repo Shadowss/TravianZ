@@ -40,6 +40,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$LIMIT_MAILBOX=(LIMIT_MAILBOX==false)? "false":"true";
 		$INCLUDE_ADMIN=(INCLUDE_ADMIN==false)? "false":"true";
 		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
+		$ADMINS_RAIDABLE = (ADMIN_ALLOW_INCOMING_RAIDS == false ? 'false' : 'true');
 		
 		$text = file_get_contents("constant_format.tpl");
 		$text = preg_replace("'%ERRORREPORT%'", $ERRORREPORT, $text);
@@ -103,6 +104,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%AEMAIL%'", ADMIN_EMAIL, $text);
 		$text = preg_replace("'%ANAME%'", ADMIN_NAME, $text);
 		$text = preg_replace("'%ASUPPMSGS%'", $SUPPORT_MSGS_IN_ADMIN, $text);
+		$text = preg_replace("'%ARAIDS%'", $ADMINS_RAIDABLE, $text);
 		$text = preg_replace("'%UTRACK%'", "", $text);
 		$text = preg_replace("'%UTOUT%'", "", $text);
 		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);

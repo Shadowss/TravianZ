@@ -41,11 +41,21 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 						</select>
 					</td>
 				</tr>
+				<tr>
 					<td>Include Support Messages in Admin Mailbox:</td>
         			<td>
             			<select name="admin_support_msgs">
                 			<option value="True" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==true) echo "selected";?>>True</option>
                 			<option value="False" <?php if (ADMIN_RECEIVE_SUPPORT_MESSAGES==false) echo "selected";?>>False</option>
+            			</select>
+        			</td>
+        		</tr>
+        		<tr>
+					<td>Allow Administrative Accounts to be Raided and Attacked:</td>
+        			<td>
+            			<select name="admin_raidable">
+                			<option value="True" <?php if (ADMIN_ALLOW_INCOMING_RAIDS==true) echo "selected";?>>True</option>
+                			<option value="False" <?php if (ADMIN_ALLOW_INCOMING_RAIDS==false) echo "selected";?>>False</option>
             			</select>
         			</td>
         		</tr>

@@ -274,6 +274,9 @@ define("ADMIN_NAME", "%ANAME%");
 // ***** Show Support Messages in Admin
 define("ADMIN_RECEIVE_SUPPORT_MESSAGES", %ASUPPMSGS%);
 
+// ***** Allow Admin accounts to be raided and attacked
+define("ADMIN_ALLOW_INCOMING_RAIDS", %ARAIDS%);
+
 
 
 //////////////////////////////////////////

@@ -53,6 +53,8 @@ martinambrus changes:
 41. NPC links added to units in Hero Mansion
 42. fixed random attacks attacker tribe (Natars) when building Wonder of the World
 43. players who post in an Alliance forum are now notified of each subsequent post in that topic via messages
+44. editing troops in Admin now saves them when Enter is used instead of clicking on "Save" as well
+45. added option into Admin config to allow Administrative accounts to be raided and attacked (which also permits trading with them via Market)
 
 
 Shadowss changes:

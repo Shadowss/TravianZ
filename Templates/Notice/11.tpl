@@ -30,7 +30,7 @@ if($database->getVillageField($dataarray[1],'name')!="??") {
 				<tr><td colspan="2" class="report_content">
 		<table cellpadding="1" cellspacing="1" id="trade"><thead><tr>
 <td>&nbsp;</td>
-<td>><?php echo $user_url;?> from the village <?php echo $from_url;?></td>
+<td><?php echo $user_url;?> from the village <?php echo $from_url;?></td>
 </tr></thead><tbody><tr>
 <th>Resources</th>
 <td>

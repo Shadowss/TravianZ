@@ -269,6 +269,15 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             </select>
         </td>
         </tr>
+        <tr>
+        <td><span class="f9 c6">Allow Administrative Accounts to be Raided and Attacked:</span></td>
+        <td>
+            <select name="admin_raidable">
+                <option value="True" selected="selected">True</option>
+                <option value="False">False</option>
+            </select>
+        </td>
+        </tr>
     </table>
     </p>
     <p>

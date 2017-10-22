@@ -15,7 +15,7 @@
         $t11 = 0;
 		$villageOwner = $database->getVillageField($wref,'owner');
 		$userAccess = $database->getUserField($villageOwner,'access',0);
-		if($userAccess != '0' && $userAccess != '8' && $userAccess != '9'){
+		if($userAccess != '0' && $userAccess != '8' && ($userAccess != '9' || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == '9'))){
 		if($tribe == 1){ $uname = "u"; } elseif($tribe == 2){ $uname = "u1"; } elseif($tribe == 3){ $uname = "u2"; }elseif($tribe == 4){ $uname = "u3"; }else {$uname = "u4"; }
 		if($tribe == 1){ $uname1 = "u1"; } elseif($tribe == 2){ $uname1 = "u2"; } elseif($tribe == 3){ $uname1 = "u3"; }elseif($tribe == 4){ $uname1 = "u4"; }else {$uname1 = "u5"; }
 		if($tribe == 1){ $uname2 = ""; } elseif($tribe == 2){ $uname2 = "1"; } elseif($tribe == 3){ $uname2 = "2"; }elseif($tribe == 4){ $uname2 = "3"; }else {$uname2 = "4"; }
