@@ -52,18 +52,18 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	if($i > 5){
 		if ($_SESSION['m_color'])
 		{
-			$sql .= "($i, 5, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
+			$sql .= "($i, 1, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
 		}
 		else
 		{
-			$sql .= "($i, 5, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
+			$sql .= "($i, 1, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
 		}
 	}
 	}
 	if($i > 5){
 	if ($_SESSION['m_color'])
 	{
-		$sql .= "($i, 5, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0)";
+		$sql .= "($i, 1, '<span style=\'color:{$_SESSION['m_color']};\'>{$_SESSION['m_subject']}</span>', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0)";
 	}
 	else
 	{
