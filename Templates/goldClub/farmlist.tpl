@@ -247,6 +247,7 @@ while($row2 = mysqli_fetch_array($getnotice)){
 
 <div class="troopSelection">
 <?php
+/*
 $start = ($session->tribe-1)*10+1;
 $end = ($session->tribe*10);
 $un = 1;
@@ -256,6 +257,7 @@ for($i=$start;$i<=$end;$i++){
             <span class="troopSelectionValue">0</span>
         </span>';
 }
+*/
 ?>
         <div class="clear"></div>
 </div>
