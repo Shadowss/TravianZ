@@ -1,5 +1,6 @@
 -- 23.10.2017 -> SQL optimizations
 ALTER TABLE `s1_medal` ADD INDEX(`week`);
+ALTER TABLE `s1_market` ADD INDEX `vref-accept` (`vref`, `accept`);
 
 
 -- 22.10.2017 -> SQL optimizations
@@ -39,7 +40,7 @@ ALTER TABLE `s1_artefacts` ADD INDEX `active-type-lastupdate` (`active`, `type`,
 -- 22.10.2017 -> forum topics table and indexe changes
 ALTER TABLE `s1_forum_post` CHANGE `topic` `topic` INT NULL DEFAULT NULL;
 ALTER TABLE `s1_forum_post` CHANGE `owner` `owner` INT NULL DEFAULT NULL;
-ALTER TABLE `travian`.`s1_forum_post` ADD INDEX `topic-owner` (`topic`, `owner`);
+ALTER TABLE `s1_forum_post` ADD INDEX `topic-owner` (`topic`, `owner`);
 
 
 -- 20.10.2017 -> changing MD5 for bcrypt password hashing algo

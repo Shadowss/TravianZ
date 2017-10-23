@@ -958,7 +958,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%market` (
  `maxtime` int(11) NULL,
  `alliance` int(11) NULL,
  `merchant` tinyint(2) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `vref-accept` (`vref`,`accept`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
