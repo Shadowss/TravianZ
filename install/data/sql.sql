@@ -1648,7 +1648,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
  `occupied` tinyint(1) NULL,
  `image` varchar(3) NULL,
  PRIMARY KEY (`id`),
- KEY `occupied` (`occupied`)
+ KEY `occupied` (`occupied`),
+ KEY `fieldtype` (`fieldtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

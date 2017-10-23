@@ -10,15 +10,7 @@
 #################################################################################
 
 
-$txt="dobrá modrá nedotknutá mliečna krava s rosnatými rohmi a bacuľatými kostičkami
-
-καλή γαλάζια παρθένα γαλακτοπαραγωγική αγελάδα με καυτά κέρατα και κούτσουρα
-
-azgın boynuzları ve tombul chubs ile iyi mavi temiz kuru süt ineği
-
-хороша синя незаймана молочна корова з роговими рогами і пухкими чуваками
-
-良好的藍色原始乳白色牛與角角和胖胖的小孩";
+$txt="sdsad";
 
 //bbcode = html code
 $txt = preg_replace("/\[b\]/is",'<b>', $txt);
