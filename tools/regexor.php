@@ -1,6 +1,5 @@
 <?php
-    $src = "	
-";
+    $src = file_get_contents('regexor.sql');
   
     // we need to replace all escaped quotes or the regex below will go nuts
     $src = str_replace(['\\"', "\\'"], ['[Q1]', '[Q1]'], $src);
@@ -52,13 +51,13 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* from s1_enforcement where `from` = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT e.\*,o.conqured FROM s1_enforcement as e LEFT JOIN s1_odata as o ON e.vref=o.wref where o.conqured = \d{0,100} AND e.from !=\d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT e.\*,o.conqured FROM s1_enforcement as e LEFT JOIN s1_odata as o ON e.vref=o.wref where o.conqured = \d{0,100}\n/',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_prisoners where `from` = \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_prisoners where (s1_prisoners.)?(`)?from(`)? = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT (tribe|plus|gold|alliance|b4|id|maxevasion) FROM s1_users where (id = \d{0,100}|username = \'[^\']+\')\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement where s1_movement.from = \'\d{0,100}\' and sort_type = 5 and proc = 0 ORDER BY endtime ASC\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* from s1_tdata where vref = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_abdata where vref = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_research where vref = \d{0,100}\n/',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_bdata where wid = \d{0,100} and master = 1 order by master,timestamp ASC\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_bdata where wid = \d{0,100}( and field = \d{0,100})? and master = \d{0,100}( order by master,timestamp ASC)?\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_artefacts WHERE vref = \'\d{0,100}\' AND type = \'\d{0,100}\' order by size\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_artefacts WHERE owner = \d{0,100} AND type = \d{0,100} AND size=\d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_artefacts WHERE owner = \d{0,100} AND active = 1 AND type = \d{0,100} AND size=\d{0,100}\n/',
@@ -92,7 +91,7 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT (uid|timestamp) FROM s1_deleting where (timestamp < \d{0,100}|uid = \d{0,100})\n/i',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_bdata where timestamp < \d{0,100} and master = 0\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT f\d{0,100} from s1_fdata where vref = \d{0,100} LIMIT 1\n/',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_fdata set f\d{0,100} = \d{0,100}, f\d{0,100}t = \d{0,100} where vref = \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_fdata set (f\d{0,100} = \d{0,100}, )?f\d{0,100}t( )?=( )?\d{0,100} where vref( )?=( )?\d{0,100}\n/i',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_vdata set cp = \d{0,100} where wref = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_vdata set pop = \d{0,100} where wref = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT owner FROM s1_vdata where wref = \d{0,100}\n/',
@@ -116,7 +115,7 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT (wood|clay|iron|crop) FROM s1_vdata where wref = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_bdata where wid = \d{0,100} and type = \d{0,100} and master = 0\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_bdata where wid = \d{0,100} and field [<>] \d{0,100} and master = 0\n/',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_demolition WHERE timetofinish<=\d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_demolition WHERE (timetofinish<=\d{0,100}|vref=\d{0,100})\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM `s1_fdata`\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE `s1_vdata` SET `maxstore` = \d{0,100}, `maxcrop` = \d{0,100} WHERE `wref` = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+DELETE from s1_route where timeleft < \d{0,100}\n/',
@@ -160,7 +159,7 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_artefacts where type = \d{0,100} and active = 1 and lastupdate <= \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement,s1_odata, s1_attacks where s1_odata.wref = \'\d{0,100}\' and s1_movement.to = \d{0,100} and s1_movement.ref = s1_attacks.id and s1_attacks.attack_type != \d{0,100} and s1_movement.proc = 0 and s1_movement.sort_type = \d{0,100} ORDER BY endtime ASC\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement where s1_movement.to = \'\d{0,100}\' and sort_type = \d{0,100} and ref = \d{0,100} and proc = 0 ORDER BY endtime ASC\n/',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement, s1_attacks where s1_movement.to = \'\d{0,100}\' and s1_movement.ref = s1_attacks.id and s1_movement.proc = 0 and s1_movement.sort_type = \d{0,100} and s1_attacks.attack_type = \d{0,100} ORDER BY endtime ASC\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement, s1_attacks where s1_movement.(from|to) = (\')?\d{0,100}(\')? (and s1_movement.(from|to) = (\')?\d{0,100}(\')?)? and s1_movement.ref = s1_attacks.id and s1_movement.proc = 0 and s1_movement.sort_type = \d{0,100} and (\()?s1_attacks.attack_type = \d{0,100}( or s1_attacks.attack_type = \d{0,100}\))? ORDER BY endtime ASC\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT a.wref, a.name, b.x, b.y from s1_vdata AS a left join s1_wdata AS b ON b.id = a.wref where owner = \d{0,100} order by capital DESC,pop DESC\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM `s1_links` WHERE `userid` = \d{0,100} ORDER BY `pos` ASC\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+INSERT into s1_enforcement \(vref,`from`\) values \(\d{0,100},\d{0,100}\)\n/',
@@ -170,8 +169,18 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT (wood|clay|iron|crop) FROM s1_vdata WHERE wref = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT sum\(s1_send.merchant\) from s1_send, s1_movement where s1_movement.from = \'\d{0,100}\' and s1_send.id = s1_movement.ref and s1_movement.proc = 0 and sort_type = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT sum\(ref\) from s1_movement where sort_type = \d{0,100} and s1_movement.to = \'\d{0,100}\' and proc = 0\n/',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT sum\(merchant\) from s1_market where vref = \d{0,100} and accept = \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT (sum\(merchant\)|\*) from s1_market where vref = \d{0,100} and accept = \d{0,100}\n/i',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT oasistype,occupied FROM s1_wdata where id = \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+DELETE FROM s1_training where id = \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_users SET village_select=\d{0,100} WHERE id=\d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement(, s1_send)? where s1_movement.(to|from) = \'\d{0,100}\'( and s1_movement.ref = s1_send.id)? and s1_movement.proc = 0 and s1_movement.sort_type = \d{0,100} ORDER BY endtime ASC\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT vref FROM s1_fdata WHERE f99 = \'\d{0,100}\' and f99t = \'\d{0,100}\'\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+INSERT into s1_bdata values \([^)]+\)\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+Insert into s1_build_log values \([^)]+\)\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_prisoners where wref = \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT\n[^A-Za-z]+s1_wdata.id AS map_id,\n[^A-Za-z]+s1_wdata.fieldtype AS map_fieldtype,\n[^A-Za-z]+s1_wdata.oasistype AS map_oasis,\n[^A-Za-z]+s1_wdata.x AS map_x,\n[^A-Za-z]+s1_wdata.y AS map_y,\n[^A-Za-z]+s1_wdata.occupied AS map_occupied,\n[^A-Za-z]+s1_wdata.image AS map_image,\n\n[^A-Za-z]+s1_odata.conqured AS oasis_conqured,\n[^A-Za-z]+info_user_oasis.username AS oasis_user,\n[^A-Za-z]+info_user_oasis.tribe AS oasis_tribe,\n[^A-Za-z]+info_alliance_oasis.tag AS oasis_alli_name,\n\n[^A-Za-z]+s1_vdata.wref AS ville_id,\n[^A-Za-z]+s1_vdata.owner AS ville_user,\n[^A-Za-z]+s1_vdata.name AS ville_name,\n[^A-Za-z]+s1_vdata.capital AS ville_capital,\n[^A-Za-z]+s1_vdata.pop AS ville_pop,\n\n[^A-Za-z]+s1_users.id AS user_id,\n[^A-Za-z]+s1_users.username AS user_username,\n[^A-Za-z]+s1_users.tribe AS user_tribe,\n[^A-Za-z]+s1_users.alliance AS user_alliance,\n\n[^A-Za-z]+s1_alidata.id AS aliance_id,\n[^A-Za-z]+s1_alidata.tag AS aliance_name\n\n[^A-Za-z]+FROM \(\(\(\(\(\(s1_wdata\n[^A-Za-z]+LEFT JOIN s1_vdata ON s1_vdata.wref = s1_wdata.id \)\n[^A-Za-z]+LEFT JOIN s1_odata ON s1_odata.wref = s1_wdata.id \)\n[^A-Za-z]+LEFT JOIN s1_users AS info_user_oasis ON info_user_oasis.id = s1_odata.owner \)\n[^A-Za-z]+LEFT JOIN s1_alidata AS info_alliance_oasis ON info_alliance_oasis.id = info_user_oasis.alliance \)\n[^A-Za-z]+LEFT JOIN s1_users ON s1_users.id = s1_vdata.owner \)\n[^A-Za-z]+LEFT JOIN s1_alidata ON s1_alidata.id = s1_users.alliance \)\n[^A-Za-z]+where s1_wdata.id IN \([^)]+\)\n[^A-Za-z]+ORDER BY FIND_IN_SET\(s1_wdata.id,\'[^\']+\'\)\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_diplomacy WHERE \(alli1 = \'[^\']*\' or alli2 = \'[^\']*\'\) AND \(type = \'\d{0,100}\' AND accepted = \'\d{0,100}\'\)\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_diplomacy WHERE alli1 = \'[^\']*\' AND type = \'\d{0,100}\' OR alli2 = \'[^\']*\' AND type = \'\d{0,100}\' AND accepted = \'\d{0,100}\'\n/',
     ];
     
     echo preg_replace($regexes, '', $src);

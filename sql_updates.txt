@@ -1,6 +1,11 @@
 -- 23.10.2017 -> SQL optimizations
 ALTER TABLE `s1_medal` ADD INDEX(`week`);
 ALTER TABLE `s1_market` ADD INDEX `vref-accept` (`vref`, `accept`);
+ALTER TABLE `s1_fdata` ADD INDEX(`f99`);
+ALTER TABLE `s1_fdata` ADD INDEX(`f99t`);
+ALTER TABLE `s1_diplomacy` ADD INDEX(`alli1`);
+ALTER TABLE `s1_diplomacy` ADD INDEX(`alli2`);
+ALTER TABLE `s1_diplomacy` ADD INDEX `type-accepted` (`type`, `accepted`);
 
 
 -- 22.10.2017 -> SQL optimizations

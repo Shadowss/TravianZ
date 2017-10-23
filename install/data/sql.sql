@@ -505,7 +505,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%diplomacy` (
  `alli2` int(11) NULL,
  `type` tinyint(1) NULL,
  `accepted` tinyint(1) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `alli1` (`alli1`),
+ KEY `alli2` (`alli2`),
+ KEY `type-accepted` (`type`,`accepted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 --
 -- Dumping data for table `%prefix%diplomacy`
@@ -692,7 +695,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
  `f99` tinyint(2) NULL DEFAULT '0',
  `f99t` tinyint(2) NULL DEFAULT '0',
  `wwname` varchar(100) NULL DEFAULT 'World Wonder',
- PRIMARY KEY (`vref`)
+ PRIMARY KEY (`vref`),
+ KEY `f99` (`f99`),
+ KEY `f99t` (`f99t`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
