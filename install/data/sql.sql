@@ -1032,7 +1032,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
  `points` varchar(15) NULL,
  `img` varchar(10) NULL,
  `del` tinyint(1) NULL DEFAULT '0',
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `week` (`week`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

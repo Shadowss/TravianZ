@@ -10,5 +10,6 @@
   "SELECT * FROM s1_vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop"
   "SELECT * FROM s1_odata WHERE maxstore < 800 OR maxcrop < 800"
   "SELECT * FROM s1_vdata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0"
+  "SELECT * FROM `s1_fdata`"
 - try to find and fix this (it's probably automation but has came up with a new registration, first login):
   "UPDATE s1_units set hero = hero -   WHERE vref = 38801"
