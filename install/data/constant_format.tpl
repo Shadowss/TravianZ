@@ -275,7 +275,7 @@ define("ADMIN_NAME", "%ANAME%");
 define("ADMIN_RECEIVE_SUPPORT_MESSAGES", %ASUPPMSGS%);
 
 // ***** Allow Admin accounts to be raided and attacked
-define("ADMIN_ALLOW_INCOMING_RAIDS", %ARAIDS%);
+define("ADMIN_ALLOW_INCOMING_RAIDS", "%ARAIDS%");
 
 
 
