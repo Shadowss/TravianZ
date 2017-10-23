@@ -1604,13 +1604,15 @@ class Automation {
 
                     // Set units returning from attack
                     
+                    $t_units = [];
+                    $p_units = [];
                     for ($i=1;$i<=11;$i++) {
-                        $t_units.="t".$i."=t".$i." - ".${dead.$i}.(($i > 10) ? '' : ', ');
-                        $p_units.="t".$i."=t".$i." - ".${traped.$i}.(($i > 10) ? '' : ', ');
-                    }    
-                
-                    $database->modifyAttack3($data['ref'],$t_units);
-                    $database->modifyAttack3($data['ref'],$p_units);
+                        $t_units[] = "t".$i."=t".$i." - ".${dead.$i};
+                        $p_units[] = "t".$i."=t".$i." - ".${traped.$i};
+                    }
+
+                    $database->modifyAttack3($data['ref'],implode(',', $t_units));
+                    $database->modifyAttack3($data['ref'],implode(',', $p_units));
                     
                     $unitsdead_att = ''.$dead1.','.$dead2.','.$dead3.','.$dead4.','.$dead5.','.$dead6.','.$dead7.','.$dead8.','.$dead9.','.$dead10.'';
                     $unitstraped_att = ''.$traped1.','.$traped2.','.$traped3.','.$traped4.','.$traped5.','.$traped6.','.$traped7.','.$traped8.','.$traped9.','.$traped10.','.$traped11.'';
