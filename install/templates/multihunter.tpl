@@ -14,6 +14,7 @@
 ##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
 ##                                                                             ##
 #################################################################################
+rename("include/constant.php","../GameEngine/config.php");
 ?>
 
 
@@ -24,7 +25,7 @@
 	<span class="f10 c">Create Multihunter account</span>
 		<table>
 			<tr><td>Name:</td><td><input type="text" name="mhpw" id="mhpw" value="Multihunter" disabled="disabled"></td></tr>
-			<tr><td>Password:</td><td><input type="text" name="mhpw" id="mhpw" value=""></td></tr>
+			<tr><td>Password:</td><td><input type="password" name="mhpw" id="mhpw" value=""></td></tr>
 			<tr><td>Note: Rember this password! You need it for the ACP</td><td></td></tr>
 		</table>
 </p>

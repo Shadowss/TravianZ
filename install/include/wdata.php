@@ -20,6 +20,8 @@ if (count($data_exist)) {
 }
 
 $xyas=(1+(2*WORLD_MAX));
+$values_batch = [];
+$max_batch_size = 10000;
 
 for($i=0; $i<$xyas; $i++){
 $y=(WORLD_MAX-$i);
@@ -115,9 +117,22 @@ $y=(WORLD_MAX-$i);
 	}
 
 		//into database
-		$q = "INSERT into ".TB_PREFIX."wdata values (0,'".$typ."','".$otype."','".$x."','".$y."',0,'".$image."')";
-		$database->query($q);
+		$values_batch[] = "(0,'".$typ."','".$otype."','".$x."','".$y."',0,'".$image."')";
+		
+		// insert the full batch when threshold is reached
+		if (count($values_batch) === $max_batch_size) {
+		    $q = "INSERT into ".TB_PREFIX."wdata VALUES ".implode(',', $values_batch);
+		    $database->query($q);
+		    $values_batch = [];
+		}
 	}
+}
+
+// last batch may not be as big as $max_batch_size
+if (count($values_batch)) {
+    $q = "INSERT into ".TB_PREFIX."wdata VALUES ".implode(',', $values_batch);
+    $database->query($q);
+    $values_batch = [];
 }
 
 		header("Location: ../index.php?s=4");

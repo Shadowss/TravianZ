@@ -721,14 +721,8 @@ class MYSQLi_DB {
     }
 
 	function populateOasis() {
-		$q = "SELECT * FROM " . TB_PREFIX . "wdata where oasistype != 0";
-		$result = mysqli_query($this->dblink,$q);
-		while($row = mysqli_fetch_array($result)) {
-			$wid = $row['id'];
-
-			$this->addUnits($wid);
-
-		}
+		$q = "INSERT INTO " . TB_PREFIX . "units (vref) SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype <> 0";
+		mysqli_query($this->dblink,$q);
 	}
 
 	function populateOasisUnits($wid, $high) {
@@ -799,57 +793,37 @@ class MYSQLi_DB {
 		}
 
 	function populateOasisUnits2() {
-	$q2 = "SELECT * FROM " . TB_PREFIX . "wdata where oasistype != 0";
-	$result2 = mysqli_query($this->dblink,$q2);
-	while($row = mysqli_fetch_array($result2)) {
-	    $wid = (int) $row['id'];
-		switch($row['oasistype']) {
-				case 1:
-				case 2:
-					//+25% lumber oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET  u35 = u35 + '".rand(5,10)."', u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND u35 <= '10' AND u36 <= '10' AND u37 <= '10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-				case 3:
-					//+25% lumber and +25% crop oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET u35 = u35 + '".rand(5,15)."', u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND u35 <= '10' AND u36 <= '10' AND u37 <='10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-				case 4:
-				case 5:
-					//+25% clay oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(10,15)."', u32 = u32 + '".rand(5,15)."', u35 = u35 + '".rand(0,10)."' WHERE vref = '" . $wid . "' AND u31 <= '10' AND u32 <= '10' AND u35 <= '10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-				case 6:
-					//+25% clay and +25% crop oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(15,20)."', u32 = u32 + '".rand(10,15)."', u35 = u35 + '".rand(0,10)."' WHERE vref = '" . $wid . "' AND u31 <= '10' AND u32 <= '10' AND u35 <='10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-				case 7:
-				case 8:
-					//+25% iron oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(10,15)."', u32 = u32 + '".rand(5,15)."', u34 = u34 + '".rand(0,10)."' WHERE vref = '" . $wid . "' AND u31 <= '10' AND u32 <= '10' AND u34 <= '10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-				case 9:
-					//+25% iron and +25% crop oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(15,20)."', u32 = u32 + '".rand(10,15)."', u34 = u34 + '".rand(0,10)."' WHERE vref = '" . $wid . "' AND u31 <= '10' AND u32 <= '10' AND u34 <='10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-				case 10:
-				case 11:
-					//+25% crop oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(5,15)."', u33 = u33 + '".rand(5,10)."', u37 = u37 + '".rand(0,10)."', u39 = u39 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND u31 <= '10' AND u33 <= '10' AND u37 <='10' AND u39 <='10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-				case 12:
-					//+50% crop oasis
-					$q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(10,15)."', u33 = u33 + '".rand(5,10)."', u38 = u38 + '".rand(0,5)."', u39 = u39 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND u31 <= '10' AND u33 <= '10' AND u38 <='10'AND u39 <='10'";
-					$result = mysqli_query($this->dblink,$q);
-					break;
-			}
-		}
+	   // +25% lumber oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u35 = u35 + (FLOOR(5 + RAND() * 10)), u36 = u36 + (FLOOR(0 + RAND() * 5)), u37 = u37 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(1,2)) AND u35 <= 10 AND u36 <= 10 AND u37 <= 10";
+	   mysqli_query($this->dblink,$q);
+
+	   // +25% lumber and +25% crop oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u35 = u35 + (FLOOR(5 + RAND() * 15)), u36 = u36 + (FLOOR(0 + RAND() * 5)), u37 = u37 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(3)) AND u35 <= 10 AND u36 <= 10 AND u37 <= 10";
+	   mysqli_query($this->dblink,$q);
+	   
+	   // +25% clay oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(10 + RAND() * 15)), u32 = u32 + (FLOOR(5 + RAND() * 15)), u35 = u35 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(4,5)) AND u31 <= 10 AND u32 <= 10 AND u35 <= 10";
+	   mysqli_query($this->dblink,$q);
+	   
+	   // +25% clay and +25% crop oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(15 + RAND() * 20)), u32 = u32 + (FLOOR(10 + RAND() * 15)), u35 = u35 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(6)) AND u31 <= 10 AND u32 <= 10 AND u35 <= 10";
+	   mysqli_query($this->dblink,$q);
+	   
+	   // +25% iron oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(10 + RAND() * 15)), u32 = u32 + (FLOOR(5 + RAND() * 15)), u34 = u34 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(7,8)) AND u31 <= 10 AND u32 <= 10 AND u34 <= 10";
+	   mysqli_query($this->dblink,$q);
+	   
+	   // +25% iron and +25% crop oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(15 + RAND() * 20)), u32 = u32 + (FLOOR(10 + RAND() * 15)), u34 = u34 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(9)) AND u31 <= 10 AND u32 <= 10 AND u34 <= 10";
+	   mysqli_query($this->dblink,$q);
+	
+	   // +25% crop oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(5 + RAND() * 15)), u33 = u33 + (FLOOR(5 + RAND() * 10)), u37 = u37 + (FLOOR(0 + RAND() * 10)), u39 = u39 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(10,11)) AND u31 <= 10 AND u33 <= 10 AND u37 <= 10 AND u39 <= 10";
+	   mysqli_query($this->dblink,$q);
+	   
+	   // +50% crop oasis
+	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(10 + RAND() * 15)), u33 = u33 + (FLOOR(5 + RAND() * 10)), u38 = u38 + (FLOOR(0 + RAND() * 5)), u39 = u39 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(12)) AND u31 <= 10 AND u33 <= 10 AND u38 <= 10 AND u39 <= 10";
+	   mysqli_query($this->dblink,$q);
 	}
 
 	function removeOases($wref) {
@@ -3797,22 +3771,8 @@ class MYSQLi_DB {
 	}
 
 	function populateOasisdata() {
-		$q2 = "SELECT * FROM " . TB_PREFIX . "wdata where oasistype != 0";
-		$result2 = mysqli_query($this->dblink,$q2);
-		while($row = mysqli_fetch_array($result2)) {
-			$wid = $row['id'];
-			$basearray = $this->getOMInfo($wid);
-			if($basearray['oasistype'] < 4) {
-                             $high = 1;                          
-                         } else if ($basearray['oasistype'] < 10){
-                             $high = 2;                          
-                          }else {
-			     $high = 0;
-						  }		
-			//We switch type of oasis and instert record with apropriate infomation.
-						  $q = "INSERT into " . TB_PREFIX . "odata VALUES ('" . $basearray['id'] . "'," . (int) $basearray['oasistype'] . ",0,800,800,800,800,800,800," . time() . "," . time() . ",100,2,'Unoccupied Oasis',".(int) $high.")";
-			$result = mysqli_query($this->dblink,$q);
-		}
+	    $q = "INSERT INTO " . TB_PREFIX . "odata SELECT id, oasistype, 0, 800, 800, 800, 800, 800, 800, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 100, 2 , \"Unoccupied Oasis\", CASE WHEN oasistype < 4 THEN 1 WHEN oasistype < 10 THEN 2 ELSE 0 END FROM " . TB_PREFIX . "wdata WHERE oasistype <> 0";
+		mysqli_query($this->dblink,$q) OR DIE (mysqli_error($this->dblink));
 	}
 
 	public function getAvailableExpansionTraining() {

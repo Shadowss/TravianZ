@@ -14,7 +14,6 @@
 ##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
 ##                                                                             ##
 #################################################################################
-	rename("include/constant.php","../GameEngine/config.php");
 ?>
 
 
@@ -25,7 +24,7 @@
 	<span class="f10 c">Create Support account</span>
 		<table>
 			<tr><td>Name:</td><td><input type="text" name="sname" value="Support" disabled="disabled"></td></tr>
-			<tr><td>Password:</td><td><input type="text" name="spw" id="spw" value=""></td></tr>
+			<tr><td>Password:</td><td><input type="password" name="spw" id="spw" value=""></td></tr>
 			<tr><td>Note: Rember this password! You need it for the ACP</td><td></td></tr>
 		</table>
 </p>

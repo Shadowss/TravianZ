@@ -23,6 +23,6 @@
 
 
 
-		header("Location: ../index.php?s=6");
+		header("Location: ../index.php?s=7");
 
 ?>
