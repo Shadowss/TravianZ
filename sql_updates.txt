@@ -21,6 +21,10 @@ ALTER TABLE `s1_alidata` ADD INDEX(`name`);
 ALTER TABLE `s1_alidata` ADD INDEX(`leader`);
 ALTER TABLE `s1_ali_invite` ADD INDEX `alliance-accept` (`alliance`, `accept`);
 ALTER TABLE `s1_ali_invite` ADD INDEX(`uid`);
+ALTER TABLE `s1_users` ADD INDEX(`gold`);
+ALTER TABLE `s1_farmlist` ADD INDEX(`owner`);
+ALTER TABLE `s1_raidlist` CHANGE  `distance`  `distance` FLOAT NULL DEFAULT  '0';
+ALTER TABLE `s1_raidlist` ADD INDEX `lid-distance` (`lid`, `distance`);
 
 
 -- 23.10.2017 -> SQL optimizations

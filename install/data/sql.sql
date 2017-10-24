@@ -604,7 +604,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
  `wref` int(11) NULL,
  `owner` int(11) NULL,
  `name` varchar(100) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `wref` (`wref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1220,7 +1221,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
  `towref` int(11) NULL,
  `x` int(11) NULL,
  `y` int(11) NULL,
- `distance` varchar(5) NULL DEFAULT '0',
+ `distance` FLOAT NULL DEFAULT '0',
  `t1` int(11) NULL,
  `t2` int(11) NULL,
  `t3` int(11) NULL,
@@ -1231,7 +1232,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
  `t8` int(11) NULL,
  `t9` int(11) NULL,
  `t10` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `lid-distance` (`lid`, `distance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1585,7 +1587,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   KEY `timestamp-tribe` (`timestamp`,`tribe`),
   KEY `access` (`access`),
   KEY `sit1` (`sit1`),
-  KEY `sit2` (`sit2`)
+  KEY `sit2` (`sit2`),
+  KEY `gold` (`gold`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
