@@ -34,7 +34,7 @@
                 <th>Active players</th>
 
                 <td><?php
-                   $active = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE ".time()."-timestamp < (3600*24) AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+                   $active = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE timestamp > ".(time() - (3600*24))." AND tribe!=0 AND tribe!=4 AND tribe!=5"));
                    echo $active; ?></td>
             </tr>
 
