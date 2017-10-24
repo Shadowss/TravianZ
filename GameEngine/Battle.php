@@ -384,28 +384,28 @@ class Battle {
 						$j = $i-$start+1;
 						if($abcount <= 8 && ${'att_ab'.$abcount} > 0) {
 							if(in_array($i,$calvary)) {
-								$cap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * $Attacker['u'.$i];
+							    $cap += (int) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
 							}else{
-								$ap += (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * $Attacker['u'.$i];
+							    $ap += (int) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
 							}
 						}else{
 							if(in_array($i,$calvary)) {
-								$cap += $Attacker['u'.$i]*${'u'.$i}['atk'];
+								$cap += (int) $Attacker['u'.$i]*${'u'.$i}['atk'];
 							}else{
-								$ap += $Attacker['u'.$i]*${'u'.$i}['atk'];
+								$ap += (int) $Attacker['u'.$i]*${'u'.$i}['atk'];
 							}
 						}
 						$abcount +=1;
 						// Points catapult the attacker
 						if(in_array($i,$catapult)) {
-							$catp += $Attacker['u'.$i];
+							$catp += (int) $Attacker['u'.$i];
 						}
 						// Points of the Rams attacker
 						if(in_array($i,$rams)){
-							$ram += $Attacker['u'.$i];
+						    $ram += (int) $Attacker['u'.$i];
 						}
-						$involve += $Attacker['u'.$i];
-						$units['Att_unit'][$i] = $Attacker['u'.$i];
+						$involve += (int) $Attacker['u'.$i];
+						$units['Att_unit'][$i] = (int) $Attacker['u'.$i];
 					}
 					if (isset($Attacker['uhero']) && $Attacker['uhero'] != 0){
 						$units['Att_unit']['hero'] = $Attacker['uhero'];
@@ -544,9 +544,9 @@ class Battle {
 				if ($result[2]>1) {$result[2]=1;$result['Winner'] = "attacker";$winner=true;}
 				// If attacked with "Hero"
 				$ku = ($att_tribe-1)*10+9;
-				$kings = $Attacker['u'.$ku];
+				$kings = (int) $Attacker['u'.$ku];
 
-				$aviables= $kings-round($kings*$result[1]);
+				$aviables= $kings-round($kings * (int) $result[1]);
 				if ($aviables>0){
 						switch($aviables){
 						case 1:$fealthy = rand(20,30);break;
@@ -733,7 +733,7 @@ class Battle {
 				$j = $i-$start+1;
 				$y = $i-(($att_tribe-1)*10);
 
-				$max_bounty += ($Attacker['u'.$i]-$result['casualties_attacker'][$y])*${'u'.$i}['cap'];
+				$max_bounty += ((int) $Attacker['u'.$i] - (int) $result['casualties_attacker'][$y]) * (int) ${'u'.$i}['cap'];
 
 			}
 
