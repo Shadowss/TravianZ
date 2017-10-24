@@ -9,7 +9,7 @@ if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList' && $_POST['did']!
 	exit;
 }
 
-$sql = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY wref = $village->wid DESC");
+$sql = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY wref DESC");
 $query = mysqli_num_rows($sql);
 while($row = mysqli_fetch_array($sql)){
     $lid = $row["id"];
