@@ -1828,7 +1828,7 @@ class MYSQLi_DB {
 	function diplomacyInviteCheck2($ally1, $ally2) {
 	    list($ally1, $ally2) = $this->escape_input((int) $ally1, (int) $ally2);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $ally1 AND alli2 = $ally2 accepted = 0";
+		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $ally1 AND alli2 = $ally2 AND accepted = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
