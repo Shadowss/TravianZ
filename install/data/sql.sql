@@ -773,7 +773,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
   `coor0` int(11) DEFAULT NULL,
   `report0` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `topic-owner` (`topic`,`owner`)
  KEY `topic-owner` (`topic`,`owner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
