@@ -1,3 +1,28 @@
+-- 24.10.2017 -> SQL optimizations
+ALTER TABLE `s1_users` ADD INDEX(`sit1`);
+ALTER TABLE `s1_users` ADD INDEX(`sit2`);
+ALTER TABLE `s1_ndata` ADD INDEX(`toWref`);
+ALTER TABLE `s1_wdata` ADD INDEX `x-y` (`x`, `y`);
+ALTER TABLE `s1_a2b` ADD INDEX `ckey` (`ckey`(25));
+ALTER TABLE `s1_ali_permission` ADD INDEX `uid-alliance` (`uid`, `alliance`);
+ALTER TABLE `s1_forum_cat` CHANGE `alliance` `alliance` INT NOT NULL;
+ALTER TABLE `s1_forum_cat` ADD INDEX `alliance-forum_area` (`alliance`, `forum_area`);
+ALTER TABLE `s1_forum_topic` CHANGE `cat` `cat` INT NOT NULL;
+ALTER TABLE `s1_forum_topic` ADD INDEX `cat-stick` (`cat`, `stick`);
+ALTER TABLE `s1_forum_edit` CHANGE `alliance` `alliance` INT NOT NULL;
+ALTER TABLE `s1_forum_edit` ADD INDEX(`alliance`);
+ALTER TABLE `s1_forum_post` CHANGE `topic` `topic` INT NOT NULL, CHANGE `owner` `owner` INT NOT NULL;
+ALTER TABLE `s1_forum_topic` CHANGE `post_date` `post_date` INT NOT NULL;
+ALTER TABLE `s1_forum_topic` CHANGE `owner` `owner` INT NOT NULL, CHANGE `alliance` `alliance` INT NOT NULL, CHANGE `ends` `ends` INT NOT NULL, CHANGE `close` `close` TINYINT NOT NULL, CHANGE `stick` `stick` TINYINT NOT NULL;
+ALTER TABLE `s1_forum_topic` CHANGE `date` `date` INT NOT NULL;
+ALTER TABLE `s1_ali_log` ADD INDEX(`aid`);
+ALTER TABLE `s1_alidata` ADD INDEX(`tag`);
+ALTER TABLE `s1_alidata` ADD INDEX(`name`);
+ALTER TABLE `s1_alidata` ADD INDEX(`leader`);
+ALTER TABLE `s1_ali_invite` ADD INDEX `alliance-accept` (`alliance`, `accept`);
+ALTER TABLE `s1_ali_invite` ADD INDEX(`uid`);
+
+
 -- 23.10.2017 -> SQL optimizations
 ALTER TABLE `s1_medal` ADD INDEX(`week`);
 ALTER TABLE `s1_market` ADD INDEX `vref-accept` (`vref`, `accept`);

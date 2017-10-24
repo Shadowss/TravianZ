@@ -38,7 +38,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
  `u10` int(11) NULL,
  `u11` int(11) NULL,
  `type` smallint(1) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `ckey` (`ckey`(25))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -233,7 +234,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alidata` (
  `clp` bigint(255) NULL DEFAULT '0',
  `oldrank` bigint(255) NULL DEFAULT '0',
  `forumlink` varchar(150) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `tag` (`tag`),
+ KEY `name` (`name`),
+ KEY `leader` (`leader`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -254,7 +258,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_invite` (
  `sender` int(11) NULL,
  `timestamp` int(11) NULL,
  `accept` int(1) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `alliance-accept` (`alliance`, `accept`),
+ KEY `uid` (`uid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -273,7 +279,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_log` (
  `aid` int(11) NULL,
  `comment` text NULL,
  `date` int(11) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `aid` (`aid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -300,7 +307,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
  `opt6` int(1) NULL DEFAULT '0',
  `opt7` int(1) NULL DEFAULT '0',
  `opt8` int(1) NULL DEFAULT '0',
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `uid-alliance` (`uid`, `alliance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -712,13 +720,14 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `owner` varchar(255) NULL,
- `alliance` varchar(255) NULL,
- `forum_name` varchar(255) NULL,
- `forum_des` text NULL,
- `forum_area` varchar(255) NULL,
- PRIMARY KEY (`id`)
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `owner` varchar(255) DEFAULT NULL,
+  `alliance` int(11) NOT NULL,
+  `forum_name` varchar(255) DEFAULT NULL,
+  `forum_des` text,
+  `forum_area` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `alliance-forum_area` (`alliance`,`forum_area`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -734,9 +743,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_edit` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
- `alliance` varchar(255) NULL,
+ `alliance` int(11) NOT NULL,
  `result` varchar(255) NULL,
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+ KEY `alliance` (`alliance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -751,16 +761,17 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_edit` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `post` longtext NULL,
- `topic` int(11) DEFAULT NULL,
- `owner` varchar(255) NULL,
- `date` varchar(255) NULL,
- `alliance0` int(11) NULL,
- `player0` int(11) NULL,
- `coor0` int(11) NULL,
- `report0` int(11) NULL,
- PRIMARY KEY (`id`),
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `post` longtext,
+  `topic` int(11) NOT NULL,
+  `owner` int(11) NOT NULL,
+  `date` varchar(255) DEFAULT NULL,
+  `alliance0` int(11) DEFAULT NULL,
+  `player0` int(11) DEFAULT NULL,
+  `coor0` int(11) DEFAULT NULL,
+  `report0` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `topic-owner` (`topic`,`owner`)
  KEY `topic-owner` (`topic`,`owner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -811,21 +822,22 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_survey` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
- `title` varchar(255) NULL,
- `post` longtext NULL,
- `date` varchar(255) NULL,
- `post_date` varchar(255) NULL,
- `cat` varchar(255) NULL,
- `owner` varchar(255) NULL,
- `alliance` varchar(255) NULL,
- `ends` varchar(255) NULL,
- `close` varchar(255) NULL,
- `stick` varchar(255) NULL,
- `alliance0` int(11) NULL,
- `player0` int(11) NULL,
- `coor0` int(11) NULL,
- `report0` int(11) NULL,
- PRIMARY KEY (`id`)
+  `title` varchar(255) DEFAULT NULL,
+  `post` longtext,
+  `date` int(11) NOT NULL,
+  `post_date` int(11) NOT NULL,
+  `cat` int(11) NOT NULL,
+  `owner` int(11) NOT NULL,
+  `alliance` int(11) NOT NULL,
+  `ends` int(11) NOT NULL,
+  `close` tinyint(4) NOT NULL,
+  `stick` tinyint(4) NOT NULL,
+  `alliance0` int(11) DEFAULT NULL,
+  `player0` int(11) DEFAULT NULL,
+  `coor0` int(11) DEFAULT NULL,
+  `report0` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cat-stick` (`cat`, `stick`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1100,7 +1112,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
  PRIMARY KEY (`id`),
  KEY `time` (`time`),
  KEY `uid-time` (`uid`,`time`) USING BTREE,
- KEY `del` (`del`)
+ KEY `del` (`del`),
+ KEY `toWref` (`toWref`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1570,7 +1583,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   KEY `alliance` (`alliance`),
   KEY `tribe` (`tribe`),
   KEY `timestamp-tribe` (`timestamp`,`tribe`),
-  KEY `access` (`access`)
+  KEY `access` (`access`),
+  KEY `sit1` (`sit1`),
+  KEY `sit2` (`sit2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
@@ -1649,7 +1664,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
  `image` varchar(3) NULL,
  PRIMARY KEY (`id`),
  KEY `occupied` (`occupied`),
- KEY `fieldtype` (`fieldtype`)
+ KEY `fieldtype` (`fieldtype`),
+ KEY `x-y` (`x`, `y`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
