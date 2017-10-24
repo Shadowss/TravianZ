@@ -15,3 +15,7 @@
   "SELECT * FROM `s1_fdata`"
 - try to find and fix this (it's probably automation but has came up with a new registration, first login):
   "UPDATE s1_units set hero = hero -   WHERE vref = 38801"
+- there is an excessive amount of these, find where and correct that:
+  "UPDATE s1_hero set dead = 1 where uid = 99"
+- this shouldn't be:
+  "UPDATE s1_bdata SET timestamp = 1508863345 WHERE id = ''"
