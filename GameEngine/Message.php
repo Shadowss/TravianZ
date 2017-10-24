@@ -335,7 +335,7 @@ class Message {
 		
 		// Vulnerability closed by Shadow
 
-		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".time()." - 60";
+		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
 		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q);
 		$flood = mysqli_num_rows($res);
 		if($flood > 5)
@@ -425,7 +425,7 @@ class Message {
 		// Vulnerability closed by Shadow
 
 		if ($security_check) {
-    		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".time()." - 60";
+    		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".time() - 60;
     		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q);
     		$flood = mysqli_num_rows($res);
     		if($flood > 5)

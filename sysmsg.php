@@ -14,7 +14,7 @@ $max_per_pass = 1000;
 if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
 
 if(isset($_GET['del'])){
-			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
+			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id DESC";
 			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error($database->dblink));
 			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
 					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '0' WHERE id = '".$row[0]."'")
@@ -46,7 +46,7 @@ if (@isset($_POST['confirm']))
 		// $text = utf8_encode($text);
 		fwrite($fh, $text);
 
-			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id + 0 DESC";
+			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id DESC";
 			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error($database->dblink));
 			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
 					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
