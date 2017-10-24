@@ -1151,7 +1151,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
  KEY `iron` (`iron`),
  KEY `clay` (`clay`),
  KEY `crop` (`crop`),
- KEY `loyalty` (`loyalty`)
+ KEY `loyalty` (`loyalty`),
+ KEY `maxcrop` (`maxcrop`),
+ KEY `maxstore` (`maxstore`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
