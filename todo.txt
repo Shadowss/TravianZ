@@ -1,3 +1,4 @@
+- link username to user when sending alliance forum notification message
 - add checkbox when sending units for a raid to include the attack in the raid list, if eligible
 - change "incoming attacker" title of the raid list icon when actually attacking a farm (it should be "Own attacking troops")
 - change "select all" button to actually select all checkboxes via JS, not via page reload
@@ -5,6 +6,7 @@
 - finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
 - add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
 - include past raids in the farm list that were not in the farm list itself but are actually manual past attacks - will need DB update for the attacks table to include targets (now only holds attacker)
+- disallow empty posts, topics and survey values in forums (check for aliance name and tag, too)
 - add PayPal listener to verify gold transactions imediatelly
 - check the following queries for performing stuff on DB rather than in PHP:
   "SELECT * FROM s1_vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop"
