@@ -4249,7 +4249,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 
 	private function checkInvitedPlayes() {
 		global $database;
-		$q = "SELECT * FROM ".TB_PREFIX."users WHERE invited != 0";
+		$q = "SELECT * FROM ".TB_PREFIX."users WHERE invited > 0";
 		$array = $database->query_return($q);
 		foreach($array as $user) {
 		    $numusers = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE id = ".(int) $user['invited']);
