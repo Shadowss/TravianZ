@@ -188,19 +188,28 @@ $replace[85] = "<img class='smiley tongue' src='img/x.gif' alt='*tongue*' title=
 $replace[86] = "<img class='smiley veryangry' src='img/x.gif' alt='*veryangry*' title='*veryangry*'>";
 $replace[87] = "<img class='smiley veryhappy' src='img/x.gif' alt='*veryhappy*' title='*veryhappy*'>";
 $replace[88] = "<img class='smiley wink' src='img/x.gif' alt=';)' title=';)'>";
-for($i=0;$i<=$alliance;$i++){
+
+// TODO: all of the following is fundamentally broken and needs refactoring
+// ... it effectively searches tags and user IDs like this:
+//     SELECT id FROM s1_alidata WHERE tag ='[message]abcd[/message]'
+// ... which can never find anything and generates invalid and BIG SQL queries
+
+/*for($i=0;$i<=$alliance;$i++){
 $pattern[89+$i] = "/\[alliance".$i."\](.*?)\[\/alliance".$i."\]/is";
-${'bbcoded1_'.$i} = preg_replace($pattern[89+$i], "$1", $input);
-${'bbcoded1_'.$i} = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $input);
-${'bbcoded1_'.$i} = preg_replace('/\[message\](.*?)\[alliance'.$i.'\]/is', '', ${'bbcoded1_'.$i});
-$aname = $database->getAllianceID(${'bbcoded1_'.$i});
-if($aname != ""){
-$replace[89+$i] = "<a href=allianz.php?aid=$aname>$1</a>";
+
+$aid = preg_match($pattern[89+$i], $input, $matches);
+$aname = $database->getAllianceID($matches[0]);
+if($aname){
+    $replace[89+$i] = "<a href=allianz.php?aid=$aname>".$matches[0]."</a>";
 }else{
-$replace[89+$i] = "alliance not exist";
+    $replace[89+$i] = "alliance not exist";
 }
+
+${'bbcoded1_'.$i} = preg_replace($pattern[89+$i], $replace[89+$i], $input);
+${'bbcoded1_'.$i} = preg_replace('/\[message\](.*?)\[alliance'.$i.'\]/is', '', ${'bbcoded1_'.$i});
 $rep1 = 90+$i;
 }
+
 for($i=0;$i<=$player;$i++){
 $pattern[$rep1+$i] = "/\[player".$i."\](.*?)\[\/player".$i."\]/is";
 ${'bbcoded2_'.$i} = preg_replace($pattern[$rep1+$i], "$1", $input);
@@ -214,6 +223,7 @@ $replace[$rep1+$i] = "player not exist";
 }
 $rep2 = $rep1+$i+1;
 }
+
 for($i=0;$i<=$report;$i++){
 $pattern[$rep2+$i] = "/\[report".$i."\](.*?)\[\/report".$i."\]/is";
 ${'bbcoded3_'.$i} = preg_replace($pattern[$rep2+$i], "$1", $input);
@@ -229,6 +239,7 @@ $replace[$rep2+$i] = "report not exist";
 }
 $rep3 = $rep2+$i+1;
 }
+
 for($i=0;$i<=$coor;$i++){
 $pattern[$rep3+$i] = "/\[coor".$i."\](.*?)\[\/coor".$i."\]/is";
 ${'bbcoded4_'.$i} = preg_replace($pattern[$rep3+$i], "$1", $input);
@@ -240,12 +251,14 @@ $xx = 1;
 $cx = $x;
 }
 }
+
 for($x = 0; $x > -401; $x--) {
 if(preg_match('/^'.$x.'/', ${'bbcoded4_'.$i})){
 $xx = 1;
 $cx = $x;
 }
 }
+
 for($y = 0; $y < 401; $y++) {
 if(preg_match('/-'.$y.'$/', ${'bbcoded4_'.$i})){
 $yy = 1;
@@ -255,24 +268,28 @@ $yy = 1;
 $cy = $y;
 }
 }
+
 if(preg_match('/|/', ${'bbcoded4_'.$i}) && $xx == 1 && $yy == 1){
-$wref = $database->getVilWref($cx,$cy);
-$cwref = $generator->getMapCheck($wref);
-if($wref != ""){
-$wref1 = $database->getVillageType3($wref);
-if($wref1['oasistype'] == 0 && $wref1['occupied'] == 1){
-$vname = $database->getVillageField($wref,"name");
-}else if($wref1['oasistype'] == 0 && $wref1['occupied'] == 0){
-$vname = "Abandoned valley";
-}else if($wref1['oasistype'] != 0 && $wref1['occupied'] == 1){
-$vname = "Occupied Oasis";
-}else if($wref1['oasistype'] != 0 && $wref1['occupied'] == 0){
-$vname = "Unoccupied Oasis";
+    $wref = $database->getVilWref($cx,$cy);
+    $cwref = $generator->getMapCheck($wref);
+
+    if($wref != ""){
+        $wref1 = $database->getVillageType3($wref);
+        if($wref1['oasistype'] == 0 && $wref1['occupied'] == 1){
+            $vname = $database->getVillageField($wref,"name");
+        }else if($wref1['oasistype'] == 0 && $wref1['occupied'] == 0){
+            $vname = "Abandoned valley";
+        }else if($wref1['oasistype'] != 0 && $wref1['occupied'] == 1){
+            $vname = "Occupied Oasis";
+        }else if($wref1['oasistype'] != 0 && $wref1['occupied'] == 0){
+            $vname = "Unoccupied Oasis";
+        }
+        $replace[$rep3+$i] = "<a href=karte.php?d=$wref&c=$cwref>$vname($cx|$cy)</a>";
+    }
 }
-$replace[$rep3+$i] = "<a href=karte.php?d=$wref&c=$cwref>$vname($cx|$cy)</a>";
-}
-}
-}
+
+}*/
+
 $input = preg_replace('/\[message\]/', '', $input);
 $input = preg_replace('/\[\/message\]/', '', $input);
 $bbcoded = preg_replace($pattern, $replace, $input);
