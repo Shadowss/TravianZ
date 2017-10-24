@@ -25,6 +25,7 @@ ALTER TABLE `s1_users` ADD INDEX(`gold`);
 ALTER TABLE `s1_farmlist` ADD INDEX(`owner`);
 ALTER TABLE `s1_raidlist` CHANGE  `distance`  `distance` FLOAT NULL DEFAULT  '0';
 ALTER TABLE `s1_raidlist` ADD INDEX `lid-distance` (`lid`, `distance`);
+ALTER TABLE `s1_artefacts` ADD INDEX `size-type` (`size`, `type`);
 
 
 -- 23.10.2017 -> SQL optimizations

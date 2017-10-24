@@ -202,7 +202,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  PRIMARY KEY (`id`),
  KEY `owner-active` (`owner`,`active`),
  KEY `vref-type-kind` (`vref`,`type`,`kind`) USING BTREE,
- KEY `active-type-lastupdate` (`active`,`type`,`lastupdate`)
+ KEY `active-type-lastupdate` (`active`,`type`,`lastupdate`),
+ KEY `size-type` (`size`, `type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
