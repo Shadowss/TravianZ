@@ -678,23 +678,33 @@ class MYSQLi_DB implements IDbConnection {
 		}
 	}
 	
-	function generateBase($sector, $mode=1) {
+	// if $respect_gametime is false, we generate user base really anywhere
+	// and that means we can generate farms closer to the middle of the map as well
+	// ... otherwise we'd only generate farms at corner edges in late game, which
+	//     sucks for people in the middle who registered too soon
+	function generateBase($sector, $mode=1, $respect_gametime = true) {
         list($sector, $mode) = $this->escape_input($sector, $mode);
 
 	// don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 	@set_time_limit(0);
 	$num_rows = 0;
 	$count_while = 0;
+
+	// random position on the map - used when generating farms via Admin
+	if (!$respect_gametime) {
+	   $rand = rand(1,4);
+	}
+
     while (!$num_rows){
     if (!$mode) {
         $gamesday=time()-COMMENCE;
-        if ($gamesday<3600*24*10 && $count_while==0) { //10 day
+        if ((!$respect_gametime && $rand === 1) || ($respect_gametime && $gamesday<3600*24*10 && $count_while==0)) { //10 day
             $wide1=1;
             $wide2=20;
-        } elseif ($gamesday<3600*24*20 && $count_while==1) { //20 day
+        } elseif ((!$respect_gametime && $rand === 2) || ($respect_gametime && $gamesday<3600*24*20 && $count_while==1)) { //20 day
             $wide1=20;
             $wide2=40;
-        } elseif ($gamesday<3600*24*30 && $count_while==2) { //30 day
+        } elseif ((!$respect_gametime && $rand === 3) || ($respect_gametime && $gamesday<3600*24*30 && $count_while==2)) { //30 day
             $wide1=40;
             $wide2=80;
         } else {        // over 30 day

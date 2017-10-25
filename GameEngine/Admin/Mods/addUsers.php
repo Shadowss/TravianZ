@@ -124,7 +124,7 @@ WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
                 }
                 
                 $database->updateUserField($uid,"act","",1);
-                $wid = $database->generateBase($kid,0);
+                $wid = $database->generateBase($kid,0,false);
                 $database->setFieldTaken($wid);
                 
                 //calculate random generate value and level building
