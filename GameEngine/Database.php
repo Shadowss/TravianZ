@@ -15,18 +15,20 @@
 ##                                                                             ##
 #################################################################################
 
-$src_prefix = '';
-
-if (substr(getcwd(), -5) === 'Admin') {
-    $src_prefix = '../';
-}
-
-if (substr(getcwd(), -4) === 'Mods') {
-    $src_prefix = '../../../';
-}
-
-if (substr(getcwd(), -7) === 'include') {
-    $src_prefix = '../../';
+if (!isset($src_prefix)) {
+    $src_prefix = '';
+    
+    if (substr(getcwd(), -5) === 'Admin') {
+        $src_prefix = '../';
+    }
+    
+    if (substr(getcwd(), -4) === 'Mods') {
+        $src_prefix = '../../../';
+    }
+    
+    if (substr(getcwd(), -7) === 'include') {
+        $src_prefix = '../../';
+    }
 }
 
 include_once("config.php");
