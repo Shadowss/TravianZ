@@ -21,6 +21,19 @@ Thanks for installing TravianZ.
 All the files are placed. The database is created, so you can now start playing on your own Travian.
 </p>
 
+<ul>
+    <li><h4>After Installation</h4></li>
+    <li>Delete install folder (sudo rm -R install)</li>
+    <li>CHMOD GameEngine back to 755 (sudo chmod -R 755 GameEngine)</li>
+    <li>CHMOD Prevention to 777 (sudo chmod -R 777 GameEngine/Prevention)</li>
+    <li>CHMOD Notes to 777 (sudo chmod -R 777 GameEngine/Notes)</li>
+</ul>
+
+<ul>
+    <li><h4>After Installation</h4></li>
+    <li>Protect folder /Admin with password protect directory</li>
+</ul>
+
 <?php include("../GameEngine/config.php"); 
 $time = time();
 rename("../install/","../installed_".$time);
