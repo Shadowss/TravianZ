@@ -25,6 +25,10 @@ if (substr(getcwd(), -4) === 'Mods') {
     $src_prefix = '../../../';
 }
 
+if (substr(getcwd(), -7) === 'include') {
+    $src_prefix = '../../';
+}
+
 include_once("config.php");
 include_once($src_prefix."src/Database/IDbConnection.php");
 include_once($src_prefix."src/Utils/Math.php");
