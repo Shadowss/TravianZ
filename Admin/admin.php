@@ -561,7 +561,7 @@ if (!empty($_GET['p'])) {
 										{
 											include('Templates/search.tpl');
 										}
-										if($_POST['p'] and $_POST['s'])
+										if(isset($_POST['p']) && isset($_POST['s']) && $_POST['p'] and $_POST['s'])
 										{
 											$filename = 'Templates/results_'.$_POST['p'].'.tpl';
 											if(file_exists($filename))

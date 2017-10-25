@@ -110,7 +110,7 @@ class Building {
 	public function canBuild($id,$tid) {
 		global $village,$session,$database;
 		$demolition = $database->getDemolition($village->wid);
-		if($demolition[0]['buildnumber']==$id) { return 11; }
+		if((isset($demolition[0])) && $demolition[0]['buildnumber']==$id) { return 11; }
 		if($this->isMax($tid,$id)) {
 			return 1;
 		} else if($this->isMax($tid,$id,1) && ($this->isLoop($id) || $this->isCurrent($id))) {

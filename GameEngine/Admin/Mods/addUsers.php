@@ -8,6 +8,9 @@
 ## Copyright: TravianZ (c) 2014. All rights reserved.  ##
 #########################################################
 
+include_once("../../../src/Entity/User.php");
+use App\Entity\User;
+
 include_once("../../config.php");
 include_once("../../Session.php");
 include_once("../../Automation.php");
@@ -78,7 +81,7 @@ else
         $act = "";
         
         // Check username not already registered
-        if($database->checkExist($userName,0))
+        if(User::exists($database, $userName))
         {
             // Name already used, do nothing except update $skipped
             $skipped ++;

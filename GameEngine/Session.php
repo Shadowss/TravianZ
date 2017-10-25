@@ -1,4 +1,6 @@
 <?php
+use App\Entity\User;
+
 ob_start(); // Enesure, that no more header already been sent error not showing up again
 mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 
@@ -282,6 +284,10 @@ $form = new Form;
 // if there is no user, we'd try to load messages for user with ID 0, which is wrong
 if (!empty($_SESSION['id_user'])) {
     $message = new Message;
+    
+    // create a global user variable which will later be removed from here
+    // and created + retrieved either via Service Locator or other DI concept
+    $user = new User((int) $_SESSION['id_user'], $database);
 }
 
 ?>

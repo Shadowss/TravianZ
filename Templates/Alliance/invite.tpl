@@ -43,7 +43,7 @@ if (count($allianceInvitations) == 0) {
 	echo "</tr>";
     } else {
  	foreach($allianceInvitations as $invit) {
-	$invited = $database->getUserField($invit['uid'],username,0);
+	$invited = $database->getUserField($invit['uid'],'username',0);
     echo "<tr>";
     echo "<td class=abo><a href=\"?o=4&s=5&d=".$invit['id']."\"><img src=\"gpack/travian_default/img/a/del.gif\" width=\"12\" height=\"12\" alt=\"Del\"></a></td>";    
 	echo "<td><a href=spieler.php?uid=".$invit['uid'].">".$invited."</td>";

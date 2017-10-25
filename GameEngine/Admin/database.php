@@ -38,7 +38,7 @@ class adm_DB {
 	var $connection; 
 	function __construct(){
 		global $database;
-		$database = new MYSQLi_DB;
+		$database = new MYSQLi_DB(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB);
 		$this->connection = $database->return_link();
 	}
 
@@ -763,8 +763,8 @@ class adm_DB {
 		for($i=0;$i<=count($cropholder)-1;$i++) { $basecrop+= $bid4[$fdata[$cropholder[$i]]]['prod']; }
 		$crop = $basecrop + $basecrop * 0.25 * $ocounter[3];
 		$jcrop=0;
-		if($grainmill >= 1) $jcrop=$bid8[$grainmill]['attri'];
-		if($bakery >= 1) $jcrop+=$bid9[$bakery]['attri'];
+		if($grainmill >= 1) $jcrop=(isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
+		if($bakery >= 1) $jcrop+=(isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);
 		$crop += $basecrop /100 * $jcrop;
 		if($b4 > time()) {
 			$crop *= 1.25;

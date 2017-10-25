@@ -18,7 +18,10 @@
 #################################################################################
 
 
-		include_once ("GameEngine/Session.php");
+include_once("src/Entity/User.php");
+use App\Entity\User;
+
+include_once ("GameEngine/Session.php");
 		include_once ("GameEngine/config.php");
 
 
@@ -493,7 +496,7 @@ if($_POST['password'] != ""){
 			}
 
 		echo "Done";
-}elseif($database->checkExist('Natars', 0))    {
+}elseif(User::exists($database,'Natars'))    {
 ?>
 <p>
 <span class="c2">Error: Natar account already exist</span>

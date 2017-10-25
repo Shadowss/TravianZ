@@ -3891,10 +3891,10 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
   		}
   		for($i=0;$i<=count($cropholder)-1;$i++) { $crop+= $bid4[$this->bountyresarray[$cropholder[$i]]]['prod']; }
   			if($grainmill >= 1) {
-   		$crop += $crop /100 * $bid8[$grainmill]['attri'];
+   		$crop += $crop /100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
   		}
   			if($bakery >= 1) {
-   		$crop += $crop /100 * $bid9[$bakery]['attri'];
+   		$crop += $crop /100 * (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);
   		}
   			if($this->bountyocounter[3] != 0) {
    		$crop += $crop*0.25*$this->bountyocounter[3];

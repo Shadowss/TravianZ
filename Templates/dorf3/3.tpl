@@ -69,7 +69,7 @@ foreach($varray as $vil){
 		$prod_iron += $prod_iron /100 * $bid7[$foundry]['attri'];
 	}
 	if ($grainmill >= 1 || $bakery >= 1) {
-		$prod_crop += $prod_crop /100 * ($bid8[$grainmill]['attri'] + $bid9[$bakery]['attri']);
+		$prod_crop += $prod_crop /100 * ((isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0) + (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0));
 	}
 	$oasisowned = $database->getOasis($vid);
 	//more oasis logic required

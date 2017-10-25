@@ -20,7 +20,7 @@
 class funct {
 
   function CheckLogin(){
-	if($_SESSION['access'] >= MULTIHUNTER and $_SESSION['id']){
+      if(isset($_SESSION['access']) && $_SESSION['access'] >= MULTIHUNTER and $_SESSION['id']){
 	  return true;
 	}else{
 	  return false;
@@ -212,14 +212,14 @@ class funct {
 
 $funct = new funct;
 if($funct->CheckLogin()){
-  if($_GET['action']){
+    if(isset($_GET['action']) && $_GET['action']){
 	$funct->Act($_GET);
   }
-  if($_POST['action']){
+  if(isset($_POST['action']) && $_POST['action']){
 	$funct->Act2($_POST);
   }
 }
-if($_POST['action']=='login'){
+if(isset($_POST['action']) && $_POST['action']=='login'){
   $funct->LogIN($_POST['name'],$_POST['pw']);
 }
 ?>

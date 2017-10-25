@@ -40,7 +40,7 @@ if(isset($_GET['id'])) {
 		$_GET['id'] = "1";
 	}
 	$checkBuildings = array(0,16,17,25,26,27);
-	if($_GET['id'] < 19 || !in_array($_GET['gid'], $checkBuildings)){
+	if($_GET['id'] < 19 || (isset($_GET['gid']) && !in_array($_GET['gid'], $checkBuildings))){
 	    $_GET['t'] = "";
 	    $_GET['s'] = "";
 	}
@@ -250,7 +250,7 @@ header("Location: banned.php");
 exit;
 }
 }
-if($_GET['mode']=='troops' && $_GET['cancel']==1){
+if(isset($_GET['mode']) && $_GET['mode']=='troops' && isset($_GET['cancel']) && $_GET['cancel']==1){
 if($session->access != BANNED){
 $oldmovement=$database->getMovementById($_GET['moveid']);
 $now=time();
@@ -367,7 +367,7 @@ if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['rout
 		else {
 			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
 		}
-        	if($_GET['buildingFinish'] == 1) {
+		if((isset($_GET['buildingFinish'])) && $_GET['buildingFinish'] == 1) {
         	if($session->gold >= 2) {
             		$building->finishAll("build.php?gid=".$_GET['id']."&ty=".$_GET['ty']);
             		exit;

@@ -1,6 +1,4 @@
-
 <?php
-
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -17,15 +15,216 @@
 ##                                                                             ##
 #################################################################################
 
+$src_prefix = '';
+
+if (substr(getcwd(), -5) === 'Admin') {
+    $src_prefix = '../';
+}
+
+if (substr(getcwd(), -4) === 'Mods') {
+    $src_prefix = '../../../';
+}
+
 include_once("config.php");
+include_once($src_prefix."src/Database/IDbConnection.php");
+include_once($src_prefix."src/Utils/Math.php");
 
-class MYSQLi_DB {
+use App\Database\IDbConnection;
+use App\Utils\Math;
 
-	var $dblink;
-	function __construct() {
-		$this->dblink = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error($this->dblink));
-		mysqli_select_db($this->dblink, SQL_DB);
-		mysqli_query($this->dblink,"SET NAMES 'UTF8'"); 
+class MYSQLi_DB implements IDbConnection {
+
+    private
+        /**
+         * @var string MySQL server hostname to connect to.
+         */
+        $hostname = 'localhost',
+        
+        /**
+         * @var int MySQL server port to connect to.
+         */
+        $port = 3306,
+        
+        /**
+         * @var string Username to authenticate with to the MySQL connection.
+         */
+        $username = 'root',
+        
+        /**
+         * @var string Password to authenticate with to the MySQL connection.
+         */
+        $password = '',
+        
+        /**
+         * @var string Database to use with TravianZ.
+         */
+        $dbname = 'travian',
+        
+        /**
+         * @var int Counter of all SELECT queries performed.
+         */
+        $selectQueryCount = 0,
+        
+        /**
+         * @var int Counter of all INSERT queries performed.
+         */
+        $insertQueryCount = 0,
+        
+        /**
+         * @var int Counter of all UPDATE queries performed.
+         */
+        $updateQueryCount = 0,
+        
+        /**
+         * @var int Counter of all DELETE queries performed.
+         */
+        $deleteQueryCount = 0,
+        
+        /**
+         * @var int Counter of all REPLACE queries performed.
+         */
+        $replaceQueryCount = 0;
+
+	public $dblink;
+
+	/**
+	 * 
+	 * Constructor.
+	 * Will initialize the connection to MySQL
+	 * and die on any error it would encounter.
+	 * 
+	 * @example $db = new MYSQLi_DB(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB);
+	 * 
+	 * @param   string $hostname Hostname of the MySQL server.
+	 * @param   string $username Username to be used to to connect.
+	 * @param   string $password Password to be used to to connect.
+	 * @param   string $dbname   Name of the database to use.
+	 * @param   int    $port     [Optional] server port to connect to. Default: 3306
+	 * @return  void   This method doesn't have a return value.
+	 */
+	public function __construct(string $hostname, string $username, string $password, string $dbname, int $port = 3306) {
+	    $this->hostname = $hostname;
+	    $this->port     = $port;
+	    $this->username = $username;
+	    $this->password = $password;
+	    $this->dbname   = $dbname;
+
+	    // connect to the DB
+		if (!$this->connect()) {
+		    die(mysqli_errno($this->dblink));
+		}
+		 
+		// we will operate in UTF8
+		mysqli_query($this->dblink,"SET NAMES 'UTF8'");
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \App\Database\IDbConnection::connect()
+	 */
+	public function connect(): bool {
+	    // try to connect
+	    $this->dblink = mysqli_connect($this->hostname, $this->username, $this->password);
+
+	    // return on error
+	    if (mysqli_error($this->dblink)) {
+	        return false;
+	    }
+
+	    // select the DB to use
+	    mysqli_select_db($this->dblink, $this->dbname);
+
+	    // return on error
+	    if (mysqli_error($this->dblink)) {
+	        return false;
+	    } else {
+	        // connected and DB exists, we're good to go
+	        return true;
+	    }
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \App\Database\IDbConnection::disconnect()
+	 */
+	public function disconnect(): bool {
+	    if ($this->dblink) {
+	        if (!$this->dblink->close()) {
+	            return false;
+	        }
+
+	        $this->dblink = null;
+	    }
+
+	    return true;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \App\Database\IDbConnection::reconnect()
+	 */
+	public function reconnect(): bool {
+	    $this->disconnect();
+	    return $this->connect();
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * @see \App\Database\IDbConnection::query()
+	 */
+	public function query_new(string $statement, ...$params) {
+	    // check for SELECT
+	    preg_match('/[^AZ-az]*(\()?[^AZ-az]*SELECT/i', $statement, $matches);	    
+
+	    // SELECT statement it is...
+	    if (count($matches)) {
+            if ($prep = mysqli_prepare($this->dblink, $statement)) {
+                // prepare all parameter types
+                $types = [];
+
+                foreach ($params as $param) {
+                    // default to string, change if neccessary
+                    $paramType = 's';
+                    
+                    if (Math::isInt($param)) {
+                        $paramType = 'i';
+                    } else if (Math::isFloat($param)) {
+                        $paramType = 'd';
+                    }
+                    
+                    $types[] = $paramType;
+                }
+
+                // dynamically bind parameters
+                $bind_names = [implode('', $types)];
+                for ($i=0; $i<count($params); $i++){
+                    $bind_name = 'bind' . $i;
+                    $$bind_name = $params[$i];
+                    $bind_names[] = &$$bind_name;
+                }
+                call_user_func_array(array($prep, 'bind_param'),$bind_names);
+
+                // execute the statement to get its value back
+                if (mysqli_stmt_execute($prep)) {
+                    $this->selectQueryCount++;
+                    return mysqli_stmt_get_result($prep);
+                } else {
+                    throw new Exception('Failed to execute an SQL statement!');
+                }
+            } else {
+                throw new Exception('Failed to prepare an SQL statement!');
+            }
+	    }
+
+	    return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @see \App\Database\IDbConnection::is_connected()
+	 */
+	public function is_connected(): bool {
+	    return ($this->dblink ? true : false);
 	}
 
 	function escape($value) {
@@ -109,38 +308,6 @@ class MYSQLi_DB {
 		$q = "UPDATE " . TB_PREFIX . "vdata set " . $what . "=" . $number . " where wref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_query($this->dblink,$q);
-	}
-
-	function checkExist($ref, $mode) {
-        list($ref, $mode) = $this->escape_input($ref, $mode);
-
-		if(!$mode) {
-			$q = "SELECT username FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
-		} else {
-			$q = "SELECT email FROM " . TB_PREFIX . "users where email = '$ref' LIMIT 1";
-		}
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	function checkExist_activate($ref, $mode) {
-        list($ref, $mode) = $this->escape_input($ref, $mode);
-
-		if(!$mode) {
-			$q = "SELECT username FROM " . TB_PREFIX . "activate where username = '$ref' LIMIT 1";
-		} else {
-			$q = "SELECT email FROM " . TB_PREFIX . "activate where email = '$ref' LIMIT 1";
-		}
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	public function hasBeginnerProtection($vid) {
@@ -4205,7 +4372,7 @@ class MYSQLi_DB {
 		for($i=0;$i<=count($cropholder)-1;$i++) { $basecrop+= $bid4[$buildarray[$cropholder[$i]]]['prod']; }
 		$crop = $basecrop + $basecrop * 0.25 * $cropo;
 		if($grainmill >= 1 || $bakery >= 1) {
-			$crop += $basecrop /100 * ($bid8[$grainmill]['attri'] + $bid9[$bakery]['attri']);
+			$crop += $basecrop /100 * ((isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0) + (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0));
 		}
 		if($bonus > time()) {
 			$crop *= 1.25;
@@ -4635,7 +4802,7 @@ References:
 // database is not needed if we're displaying static pages
 $req_file = basename($_SERVER['PHP_SELF']);
 if (!in_array($req_file, ['tutorial.php', 'anleitung.php'])) {
-    $database = new MYSQLi_DB;
+    $database = new MYSQLi_DB(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB);
     $link = $database->return_link();
     $GLOBALS['db'] = $database;
     $GLOBALS['link'] = $database->return_link();

@@ -1,5 +1,8 @@
 <?php
 
+include_once("src/Entity/User.php");
+use App\Entity\User;
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -62,10 +65,7 @@ class Account {
 			else if(USRNM_SPECIAL && preg_match("/[:,\\. \\n\\r\\t\\s\\<\\>]+/", $_POST['name'])) {
 				$form->addError("name",USRNM_CHAR);
 			}
-			else if($database->checkExist($_POST['name'],0)) {
-				$form->addError("name",USRNM_TAKEN);
-			}
-			else if($database->checkExist_activate($_POST['name'],0)) {
+			else if(User::exists($database,$_POST['name'])) {
 				$form->addError("name",USRNM_TAKEN);
 			}
 
@@ -89,10 +89,7 @@ class Account {
 			if(!$this->validEmail($_POST['email'])) {
 				$form->addError("email",EMAIL_INVALID);
 			}
-			else if($database->checkExist($_POST['email'],1)) {
-				$form->addError("email",EMAIL_TAKEN);
-			}
-			else if($database->checkExist_activate($_POST['email'],1)) {
+			else if(User::exists($database,$_POST['email'])) {
 				$form->addError("email",EMAIL_TAKEN);
 			}
 		}
@@ -190,7 +187,7 @@ class Account {
 		if(!isset($_POST['user']) || $_POST['user'] == "") {
 			$form->addError("user",$user);
 		}
-		else if(!$database->checkExist($_POST['user'],0)) {
+		else if(!User::exists($database,$_POST['user'])) {
 			$form->addError("user",USR_NT_FOUND);
 		}
 		if(!isset($_POST['pw']) || $_POST['pw'] == "") {

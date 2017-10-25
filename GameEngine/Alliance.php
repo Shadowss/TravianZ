@@ -16,7 +16,10 @@
 ##                                                                             ##
 #################################################################################
 
-	   class Alliance {
+include_once("src/Entity/User.php");
+use App\Entity\User;
+
+class Alliance {
 
 		public $gotInvite = false;
 		public $inviteArray = array();
@@ -114,7 +117,7 @@
 				$form->addError("perm", NO_PERMISSION);
 			}elseif(!isset($post['a_name']) || $post['a_name'] == "") {
 				$form->addError("name1", NAME_EMPTY);
-			}elseif(!$database->checkExist(stripslashes($post['a_name']), 0)) {
+			}elseif(!User::exists($database, $post['a_name'])) {
 				$form->addError("name2", NAME_NO_EXIST."".stripslashes(stripslashes($post['a_name'])));
 			}elseif($UserData['id'] == $session->uid) {
 				$form->addError("name3", SAME_NAME);
