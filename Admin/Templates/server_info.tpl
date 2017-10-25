@@ -35,7 +35,7 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM
 			<tr>
 				<td>Players online</td>
 				<td><?php $t =time();
-				$result = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE timestamp > ".($t - 300).") or die(mysqli_error($database->dblink));;
+				$result = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE timestamp > ".($t - 300)) or die(mysqli_error($database->dblink));
 				$num_rows = mysqli_num_rows($result);
 				echo $num_rows;?>
 				</td>
@@ -45,7 +45,7 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM
 				<td><?php
 				$result = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE access = 0");
 				$num_rows = mysqli_num_rows($result);
-				echo $num_rows;?>
+				echo $num_rows; ?>
 				</td>
 			</tr>
 			<tr>
