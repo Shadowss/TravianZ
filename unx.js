@@ -134,7 +134,11 @@ function Popup(i,j,sc){
 	if(typeof sc=='undefined'){sc='s';}
 	pb=document.getElementById("ce");
 	if(pb!=null){
-		var tc='<div class="popup3">'+'<a href="#" onClick="Close(); return false;"><img src="img/x.gif" border="1" class="popup4" alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="manual.php?'+sc+'='+i+'&typ='+j+'" width="412" height="440" border="0"></iframe>'+'</div>';
+		var
+			iframeHeight = 440,
+			iframeWidth  = 412;
+
+		var tc='<div class="popup3">'+'<a href="#" onClick="Close(); return false;"><img src="img/x.gif" border="1" class="popup4" alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="manual.php?'+sc+'='+i+'&typ='+j+'" border="0"></iframe>'+'</div>';
 		pb.innerHTML=tc;uc();
 	}
 	vc();
@@ -145,10 +149,13 @@ function PopupMap(i){
 	if(typeof sc=='undefined'){sc='s';}
 	pb=document.getElementById("ce");
     if(pb!=null){
+    	var
+			iframeHeight = 575,
+			iframeWidth  = 1000;
 	if(window.dlang== 'ar'){
-	    var tc='<div class="popup_map" style="right: 320px; left: -100px; top: 20px">'+'<div id="drag2"><a href="#" style="position: absolute;right: 968px;margin-top: 10px;" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" style="position: absolute;right: 968px;margin-top: 10px;" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" style="position: absolute; left: ' + Math.round((documentWidth() - iframeWidth) / 2) + 'px" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
 	}else{
-	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" style="position: absolute; left: ' + Math.round((documentWidth() - iframeWidth) / 2) + 'px" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
 	}
 		pb.innerHTML=tc;uc2();
 	}
@@ -165,25 +172,36 @@ $$('.popup3')[0].grab(new Element('div',{'id':'drag'}
 function uc2(){
     if($('drag')){return;}
     if(window.dlang== 'ar'){
-	$$('.popup_map')[0].grab(new Element('div',{'id':'drag', "style": "width: 1000px;height: 10px;background-color: #fff0;position: absolute;cursor: move;"}),'top').makeDraggable({'handle':'drag'});
+	//$$('.popup_map')[0].grab(new Element('div',{'id':'drag', "style": "width: 1000px;height: 10px;background-color: #fff0;position: absolute;cursor: move;"}),'top').makeDraggable({'handle':'drag'});
     }else{
-	$$('.popup_map')[0].grab(new Element('div',{'id':'drag'}),'top').makeDraggable({'handle':'drag'});
+	//$$('.popup_map')[0].grab(new Element('div',{'id':'drag'}),'top').makeDraggable({'handle':'drag'});
     }
 	if($$('body')[0].getStyle('direction').toLowerCase()=='rtl'){
 		$$('.popup_map')[0].setStyle('direction','rtl').getParent().setStyle('direction','ltr');
 	}
 }
+
 function vc(){
 	var frm = document.getElementById("Frame");
 	if (!frm || frm == null || typeof(frm) == 'undefined') {
 		frm = document.getElementById("ce");
 	}
-	if(gb()<700||ib()<700){
-		frm.style.position='absolute';wc=true;
-	} else{
-		frm.style.position='fixed';wc=false;
-	}
+	//if(gb()<700||ib()<700){
+		frm.style.position = 'absolute';
+		wc=true;
+	//} else{
+		//frm.style.position='fixed';wc=false;
+	//}
 }
+
+window.addEvent('resize', function(){
+	$f = $$('#Frame');
+
+	if (typeof($f) != 'undefined' && typeof($f[0]) != 'undefined') {
+		$f[0].style.left = (Math.round((documentWidth() - $f[0].width) / 2)) + 'px';
+	}
+});
+
 function Close(){pb=document.getElementById("ce");if(pb!=null){pb.innerHTML='';}
 if(quest.anmstep!==false){quest.anmstep=false;}
 }
@@ -850,3 +868,12 @@ function gmwd(){if(is_ff2&&document.getElementById("gmwi").offsetWidth<50){docum
 else{document.cookie="a3=1; expires=Wed, 1 Jan 2020 00:00:00 GMT";}
 }
 function gmc(){document.getElementById("gmw").style.display="none";document.cookie="a3=3; expires=Wed, 1 Jan 2020 00:00:00 GMT";}
+function documentWidth() {
+    return Math.max(
+        document.documentElement.clientWidth,
+        document.body.scrollWidth,
+        document.documentElement.scrollWidth,
+        document.body.offsetWidth,
+        document.documentElement.offsetWidth
+    );
+}

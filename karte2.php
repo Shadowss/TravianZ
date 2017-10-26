@@ -23,10 +23,10 @@ if($session->plus){
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<script src="mt-core.js" type="text/javascript"></script>
-	<script src="unx.js" type="text/javascript"></script>
+	<script src="unx.js?f4b7e type="text/javascript"></script>
 	<script src="mt-more.js" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7d" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7e" rel="stylesheet" type="text/css" />
 	<script type="text/javascript">window.addEvent('domready', start);</script>
 </head>
 <body onload="start()"><?php

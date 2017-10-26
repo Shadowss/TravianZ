@@ -212,9 +212,6 @@ div.popup_map div#drag {
 div.popup_map div#drag2 {
     cursor:pointer;
     height: 20px;
-    left: 1050px;
-    position: absolute;
-    top: -525px;
     width: 20px;
     z-index: 2;
 }
@@ -9029,3 +9026,7 @@ td.wm_getippt {
 input.cancel{width:12px;height:12px;background-image:url(../../img/a/del.gif);}
 input.accept{width:12px;height:12px;background-image:url(../../img/a/acc.gif);}
 
+#Frame {
+    top: 0;
+    z-index: 1000;
+}
