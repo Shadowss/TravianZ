@@ -89,7 +89,7 @@ class User {
      * @return boolean       Returns true if the value exists in database,
      *                       false otherwise.
      */
-    public static function exists(IDbConnection $db, string $value) {
+    public static function exists(IDbConnection $db, $value) {
         $sql = '(
                     SELECT
                         Count(*) AS in_users

@@ -108,7 +108,7 @@ class MYSQLi_DB implements IDbConnection {
 	 * @param   int    $port     [Optional] server port to connect to. Default: 3306
 	 * @return  void   This method doesn't have a return value.
 	 */
-	public function __construct(string $hostname, string $username, string $password, string $dbname, int $port = 3306) {
+	public function __construct($hostname, $username, $password, $dbname, $port = 3306) {
 	    $this->hostname = $hostname;
 	    $this->port     = $port;
 	    $this->username = $username;
@@ -128,7 +128,7 @@ class MYSQLi_DB implements IDbConnection {
 	 * {@inheritDoc}
 	 * @see \App\Database\IDbConnection::connect()
 	 */
-	public function connect(): bool {
+	public function connect() {
 	    // try to connect
 	    $this->dblink = mysqli_connect($this->hostname, $this->username, $this->password);
 
@@ -153,7 +153,7 @@ class MYSQLi_DB implements IDbConnection {
 	 * {@inheritDoc}
 	 * @see \App\Database\IDbConnection::disconnect()
 	 */
-	public function disconnect(): bool {
+	public function disconnect() {
 	    if ($this->dblink) {
 	        if (!$this->dblink->close()) {
 	            return false;
@@ -169,16 +169,16 @@ class MYSQLi_DB implements IDbConnection {
 	 * {@inheritDoc}
 	 * @see \App\Database\IDbConnection::reconnect()
 	 */
-	public function reconnect(): bool {
+	public function reconnect() {
 	    $this->disconnect();
 	    return $this->connect();
 	}
 	
 	/**
 	 * {@inheritDoc}
-	 * @see \App\Database\IDbConnection::query()
+	 * @see \App\Database\IDbConnection::query_new()
 	 */
-	public function query_new(string $statement, ...$params) {
+	public function query_new($statement, ...$params) {
 	    // check for SELECT
 	    preg_match('/[^AZ-az]*(\()?[^AZ-az]*SELECT/i', $statement, $matches);	    
 
@@ -229,7 +229,7 @@ class MYSQLi_DB implements IDbConnection {
 	 * {@inheritDoc}
 	 * @see \App\Database\IDbConnection::is_connected()
 	 */
-	public function is_connected(): bool {
+	public function is_connected() {
 	    return ($this->dblink ? true : false);
 	}
 

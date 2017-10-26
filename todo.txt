@@ -5,6 +5,8 @@
 - show number of set vs. number of available units for raids in the farmlist
 - when not enough units are available in farmlist, show error when start raid is clicked
 - we really need un/subscription in forums (for sending notifications of new posts into messages) rather than subscribing by posting something in a topic
+- create admin user with a real village during installation if admin data are set
+- add mysql port setting into installation script
 - normalize forum tables - varchar is used for numeric values and is joined with int field
 - finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
 - add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
