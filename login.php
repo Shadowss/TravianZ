@@ -10,6 +10,10 @@
 ##                                                                             ##
 #################################################################################
 
+if(!file_exists('var/installed')) {
+    header("Location: install/");
+    exit;
+}
 
 error_reporting(E_ALL);
 include("GameEngine/Account.php");

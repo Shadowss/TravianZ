@@ -908,7 +908,7 @@ class MYSQLi_DB implements IDbConnection {
 	    global $autoprefix;
 
 	    if (is_array($wid)) {
-	        $wid = implode(',', $wid);
+	        $wid = '"'.implode(',', $wid).'"';
 	    } else {
 	        $wid = (int) $wid;
 	    }
@@ -918,10 +918,14 @@ class MYSQLi_DB implements IDbConnection {
 	    $str = file_get_contents($autoprefix."var/db/datagen-oasis-troops-regen.sql");
 	    $str = preg_replace(["'%PREFIX%'", "'%VILLAGEID%'", "'%NATURE_REG_TIME%'"], [TB_PREFIX, $wid, ($automation ? NATURE_REGTIME : -1)], $str);
 	    $result = $this->dblink->multi_query($str);
+
+	    // fetch results of the multi-query in order to allow subsequent query() and multi_query() calls to work
+	    while (mysqli_more_results($this->dblink) && mysqli_next_result($this->dblink)) {;}
+
 	    if (!$result) {
 	        return false;
 	    }
-	    
+
 	    return true;
 	}
 
@@ -3885,8 +3889,11 @@ class MYSQLi_DB implements IDbConnection {
             $str = file_get_contents($autoprefix."var/db/struct.sql");
             $str = preg_replace("'%PREFIX%'", TB_PREFIX, $str);
             $result = $this->dblink->multi_query($str);
+            
+            // fetch results of the multi-query in order to allow subsequent query() and multi_query() calls to work
+            while (mysqli_more_results($this->dblink) && mysqli_next_result($this->dblink)) {;}
+
             if (!$result) {
-                echo mysqli_error($this->dblink); exit;
                 return false;
             }
         } catch (\Exception $e) {
@@ -3921,14 +3928,12 @@ class MYSQLi_DB implements IDbConnection {
             $str = file_get_contents($autoprefix."var/db/datagen-world-data.sql");
             $str = preg_replace(["'%PREFIX%'", "'%WORLDSIZE%'"], [TB_PREFIX, WORLD_MAX], $str);
             $result = $this->dblink->multi_query($str);
+            
+            // fetch results of the multi-query in order to allow subsequent query() and multi_query() calls to work
+            while (mysqli_more_results($this->dblink) && mysqli_next_result($this->dblink)) {;}
+            
             if (!$result) {
                 return -1;
-            } else {
-                // we need to flush the result of our previous multi_query
-                // or the next multi_query in regenerateOasisUnits() will cause
-                // a "Commands out of sync; you can't run this command now" error
-                // more info: https://stackoverflow.com/a/27926561/467164
-                while (mysqli_next_result($this->dblink)) {;}
             }
             
             $result = $this->regenerateOasisUnits(-1);

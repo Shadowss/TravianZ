@@ -4733,7 +4733,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
     		foreach($array as $oasis) {
     		    $ids[] = $oasis['wref'];
     		}
-    		
+
     		$database->regenerateOasisUnits($ids, true);
 		}
 	}
@@ -5306,37 +5306,39 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$time = time();
 		$q = "SELECT * FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and lastupdate <= ".($time - 86400);
 		$array = $database->query_return($q);
-		foreach($array as $artefact) {
-		$kind = rand(1,7);
-		while($kind == 6){
-		$kind = rand(1,7);
-		}
-		if($artefact['size'] != 3){
-		$bad_effect = rand(0,1);
-		}else{
-		$bad_effect = 0;
-		}
-		switch($kind) {
-				case 1:
-				$effect = rand(1,5);
-				break;
-				case 2:
-				$effect = rand(1,3);
-				break;
-				case 3:
-				$effect = rand(3,10);
-				break;
-				case 4:
-				$effect = rand(2,4);
-				break;
-				case 5:
-				$effect = rand(2,4);
-				break;
-				case 7:
-				$effect = rand(1,6);
-				break;
-			}
-			mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."artefacts SET kind = ". (int) $kind. ", bad_effect = $bad_effect, effect2 = $effect, lastupdate = $time WHERE id = ".(int) $artefact['id']);
+		if ($array) {
+    		foreach($array as $artefact) {
+    		$kind = rand(1,7);
+    		while($kind == 6){
+    		$kind = rand(1,7);
+    		}
+    		if($artefact['size'] != 3){
+    		$bad_effect = rand(0,1);
+    		}else{
+    		$bad_effect = 0;
+    		}
+    		switch($kind) {
+    				case 1:
+    				$effect = rand(1,5);
+    				break;
+    				case 2:
+    				$effect = rand(1,3);
+    				break;
+    				case 3:
+    				$effect = rand(3,10);
+    				break;
+    				case 4:
+    				$effect = rand(2,4);
+    				break;
+    				case 5:
+    				$effect = rand(2,4);
+    				break;
+    				case 7:
+    				$effect = rand(1,6);
+    				break;
+    			}
+    			mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."artefacts SET kind = ". (int) $kind. ", bad_effect = $bad_effect, effect2 = $effect, lastupdate = $time WHERE id = ".(int) $artefact['id']);
+    		}
 		}
 	}
 }
