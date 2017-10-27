@@ -108,10 +108,10 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement, s1_send where s1_movement.ref = s1_send.id and s1_movement.proc = 0 and sort_type = \d{0,100} and endtime < \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement where (ref = 0 and )?proc = (\')?0(\')? and sort_type = (\')?\d{0,100}(\')? and endtime < \d{0,100}(\.\d{0,100})?\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_general WHERE shown = \d{0,100}\n/i',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_users WHERE invited != 0\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_users WHERE invited (!=|<|>) 0\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_banlist WHERE active = 1 and end < \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_banlist WHERE uid = \d{0,100}\n/',
-        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_odata where conqured = 0 and lastupdated2 < \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT (\*|wref) FROM s1_odata where conqured = 0 and lastupdated2 < \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_config\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_artefacts where type = \d{0,100} and active = 1 and lastupdate <= \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_movement,s1_odata, s1_attacks where s1_odata.wref = \'\d{0,100}\' and s1_movement.to = \d{0,100} and s1_movement.ref = s1_attacks.id and s1_attacks.attack_type != \d{0,100} and s1_movement.proc = 0 and s1_movement.sort_type = \d{0,100} ORDER BY endtime ASC\n/',
@@ -180,6 +180,7 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT v.wref, v.owner, v.name, v.capital, v.pop,u.username, u.tribe, u.access, w.x, w.y FROM s1_vdata AS v LEFT JOIN s1_users AS u ON v.owner=u.id LEFT JOIN s1_wdata AS w ON v.wref=w.id( WHERE tribe<>5)?\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT Count\(size\) AS totals,\n[^A-Za-z]+SUM\(IF\(size = \'\d{0,100}\',\d{0,100},\d{0,100}\)\) small,\n[^A-Za-z]+SUM\(IF\(size = \'\d{0,100}\',\d{0,100},\d{0,100}\)\) great,\n[^A-Za-z]+SUM\(IF\(size = \'\d{0,100}\',\d{0,100},\d{0,100}\)\) `unique`\n[^A-Za-z]+FROM s1_artefacts WHERE owner = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_users WHERE access < \d{0,100}\n/i',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+SELECT \* FROM s1_route where (u)?id = \d{0,100}( ORDER BY timestamp ASC)?\n/i',
 
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_users SET vac_mode = \'\d{0,100}\' , vac_time=\'\d{0,100}\' WHERE id=\d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_users set (sessid|ok|plus|gold|b1|b2|alliance|act|invited|access) = (\()?(\')?(\d{0,100}|[^\']+)(\')?(\)(( )?[+-]( )?\d{0,100})?)? where (`)?(username|id)(`)?( )?=( )?(\')?([^\']+|\d{0,100})(\')?\n/i',
@@ -232,6 +233,7 @@
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_users SET desc2 = \'[*]+\n[^A-Za-z]+\[#natars\]\n[^A-Za-z]+[*]+\' WHERE id = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_artefacts SET vref = \d{0,100}, owner = \d{0,100}, conquered = \d{0,100}, active = \d{0,100} WHERE vref = \d{0,100}\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_artefacts SET kind = \d{0,100}, bad_effect = \d{0,100}, effect2 = \d{0,100}, lastupdate = \d{0,100} WHERE id = \d{0,100}\n/',
+        '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+UPDATE s1_route set (timeleft|wood|clay|iron|crop|start|deliveries|merchant|timestamp) = (((timeleft|wood|clay|iron|crop|start|deliveries|merchant|timestamp) \+ \d{0,100})|\d{0,100})? where id = \d{0,100}\n/',
         
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+INSERT IGNORE INTO s1_online \(name, uid, time, sit\) VALUES \(\'[^\']+\', \d{0,100}, \'\d{0,100}\', \d{0,100}\)\n/',
         '/(\d{0,100} \d{1,2}:\d{1,2}:\d{1,2})?[ \t]+\d{1,100}[ \t]+Query[ \t]+Insert into s1_login_log values \(\d{0,100},\d{0,100},\'[^\']+\'\)\n/',
