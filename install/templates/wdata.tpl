@@ -4,7 +4,7 @@
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
 ##  Version:       22.06.2015                    			       ## 
-##  Filename       field.tpl                                                   ##
+##  Filename       wdata.tpl                                                   ##
 ##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
 ##  Fixed by:      InCube - double troops				       ##
@@ -15,12 +15,14 @@
 ##                                                                             ##
 #################################################################################
 
+include_once('../GameEngine/config.php');
+
 if(isset($_GET['c']) && $_GET['c'] == 1) {
 echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Error creating wdata. Check configuration or file.</span></div><br><br>";
 }
 
 if(isset($_GET['err']) && $_GET['err'] == 1) {
-echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Existing World Data found in the database! Please clear your database before continuing.</span></div><br /><br />";
+echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Existing World Data found in the database! Please empty tables <i>".TB_PREFIX."odata, ".TB_PREFIX."units, ".TB_PREFIX."vdata, ".TB_PREFIX."wdata</i> before continuing.</span></div><br /><br />";
 }
 ?>
 <form action="process.php" method="post" id="dataform">

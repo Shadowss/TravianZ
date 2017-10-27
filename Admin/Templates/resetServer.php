@@ -20,6 +20,11 @@ if (!isset($_SESSION)) {
 }
 if($_SESSION['access'] != ADMIN) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 set_time_limit(0);
+// TODO: truncate ALL tables (in a single query, not like this),
+//       then perform install steps (createDbStructure() && populateWorldData())
+//       .. no need for updates and inserts here, as that would keep autoincrements high
+//          and one nice day, after 100th reset, there will be no more integers to go for
+//          and the whole game would be screwed :P
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."a2b");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."abdata");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."activate");
@@ -71,12 +76,11 @@ mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."tdata");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."tech_log");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."training");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."units");
+mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."wdata");
 $time=time();
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."odata");
 
-$database->populateOasisdata();
-$database->populateOasis();
-$database->populateOasisUnits2();
+
 $uid=$database->getVillageID(5);
 
 $passw=password_hash("12345", PASSWORD_BCRYPT,['cost' => 12]);
@@ -93,7 +97,6 @@ mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."tdata (vref) VALUES ($u
 mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."fdata (vref, f1t, f2t, f3t, f4t, f5t, f6t, f7t, f8t, f9t, f10t, f11t, f12t, f13t, f14t, f15t, f16t, f17t, f18t, f26, f26t, wwname) VALUES ($uid, '1', '4', '1', '3', '2',  '2', '3', '4', '4', '3', '3', '4', '4', '1', '4', '2', '1', '2', '1', '15', 'World Wonder')");
 
 mysqli_query($GLOBALS["link"], "DELETE FROM ".TB_PREFIX."vdata WHERE owner<>5");
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."wdata SET occupied=0 WHERE id<>$uid");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."ww_attacks");
 
 header("Location: ../admin.php?p=resetdone");

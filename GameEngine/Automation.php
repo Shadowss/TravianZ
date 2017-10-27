@@ -4726,11 +4726,15 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		$time = time();
 		$time2 = NATURE_REGTIME;
 		$timeFinal = $time - $time2;
-		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = 0 and lastupdated2 < $timeFinal";
+		$q = "SELECT wref FROM " . TB_PREFIX . "odata where conqured = 0 and lastupdated2 < $timeFinal";
 		$array = $database->query_return($q);
-		foreach($array as $oasis) {
-			$database->populateOasisUnits($oasis['wref'],$oasis['high']);
-			$database->updateOasis2($oasis['wref'], $time2);
+		if (count($array)) {
+    		$ids = [];
+    		foreach($array as $oasis) {
+    		    $ids[] = $oasis['wref'];
+    		}
+    		
+    		$database->regenerateOasisUnits($ids, true);
 		}
 	}
 

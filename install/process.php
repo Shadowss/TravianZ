@@ -12,12 +12,9 @@
 // don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 @set_time_limit(0);
 
-if(file_exists("include/constant.php")) {
-	include ("include/database.php");
-}
 class Process {
 
-	function Process() {
+	function __construct() {
 		if(isset($_POST['subconst'])) {
 			$this->constForm();
 		} else
@@ -34,15 +31,16 @@ class Process {
 						}
 	}
 
-	function constForm() {
-		$myFile = "include/constant.php";
-		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: install\include\constant.php");
+	private function constForm() {
+		$myFile = "../GameEngine/config.php";
+		$fh = @fopen($myFile, 'w') or die("<br/><br/><br/>Can't create or update file: GameEngine\config.php");
 		$text = file_get_contents("data/constant_format.tpl");
 		$text = preg_replace("'%SERVERNAME%'", $_POST['servername'], $text);
 		$text = preg_replace("'%SSTARTDATE%'", $_POST['start_date'], $text);
 		$text = preg_replace("'%SSTARTTIME%'", $_POST['start_time'], $text);
+
 		$tz = explode(",",$_POST['tzone']);
-                $text = preg_replace("'%STIMEZONE%'", $tz[1], $text);
+        $text = preg_replace("'%STIMEZONE%'", $tz[1], $text);
 		$text = preg_replace("'%LANG%'", $_POST['lang'], $text);
 		$text = preg_replace("'%SPEED%'", $_POST['speed'], $text);
 		$text = preg_replace("'%INCSPEED%'", $_POST['incspeed'], $text);
@@ -125,7 +123,7 @@ class Process {
 
 		fwrite($fh, $text);
 
-		if(file_exists("include/constant.php")) {
+		if(file_exists("../GameEngine/config.php")) {
 			header("Location: index.php?s=2");
 		} else {
 			header("Location: index.php?s=1&c=1");
@@ -134,24 +132,52 @@ class Process {
 		fclose($fh);
 	}
 
+	/**
+	 * Creates database structure for the game.
+	 */
 	function createStruc() {
-		global $database;
-		$str = file_get_contents("data/sql.sql");
-		$str = preg_replace("'%PREFIX%'", TB_PREFIX, $str);
-		if(DB_TYPE) {
-			$result = $database->connection->multi_query($str);
-		} else {
-			$result = $database->mysql_exec_batch($str);
-		}
-		if($result) {
-			header("Location: index.php?s=3");
-		} else {
-			header("Location: index.php?s=2&c=1");
-		}
+	    global $database;
+
+	    include ("../GameEngine/config.php");
+	    include ("../GameEngine/Database.php");
+	    include ("../GameEngine/Admin/database.php");
+
+	    // create table structure
+	    $result = $database->createDbStructure();
+        if ($result === false) {
+            header("Location: index.php?s=2&err=1");
+            exit;
+        } else if ($result === -1) {
+	        header("Location: index.php?s=2&c=1");
+	        exit;
+	    }
+
+    	header("Location: index.php?s=3");
+    	exit;
 	}
 
+	/**
+	 * Generates map data and populates it with oasis.
+	 */
 	function createWdata() {
-		header("Location: include/wdata.php");
+	    global $database;
+
+	    include ("../GameEngine/config.php");
+	    include ("../GameEngine/Database.php");
+	    include ("../GameEngine/Admin/database.php");
+
+	    // populate world data
+	    $result = $database->populateWorldData();
+	    if ($result === false) {
+	        header("Location: index.php?s=3&err=1");
+	        exit;
+	    } else if ($result === -1) {
+	        header("Location: index.php?s=3&c=1");
+	        exit;
+	    }
+
+	    header("Location: index.php?s=4");
+	    exit;
 	}
 
 }

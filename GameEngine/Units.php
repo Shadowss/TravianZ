@@ -248,11 +248,7 @@ class Units {
         }
         //set oasis to default
         if (count($getenforce1)>0) {
-            $q = "DELETE FROM ".TB_PREFIX."ndata WHERE toWref=".(int) $getenforce1[0]['vref'];
-            $database->query($q);
-            $database->populateOasisUnits($getenforce1[0]['vref'],$getenforce1[0]['high']);
-            $q = "UPDATE ".TB_PREFIX."odata SET conqured=0,wood=800,iron=800,clay=800,maxstore=800,crop=800,maxcrop=800,lastupdated=". time().",lastupdated2=".time().",loyalty=100,owner=2,name='Unoccupied Oasis' WHERE conqured=".(int) $wref;
-            $database->query($q);
+            $database->regenerateOasisUnits($getenforce1[0]['vref']);
         }    
     }
 

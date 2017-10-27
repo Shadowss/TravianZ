@@ -15,25 +15,26 @@
 ##                                                                             ##
 #################################################################################
 
-if (!isset($src_prefix)) {
-    $src_prefix = '';
-    
-    if (substr(getcwd(), -5) === 'Admin') {
-        $src_prefix = '../';
-    }
-    
-    if (substr(getcwd(), -4) === 'Mods') {
-        $src_prefix = '../../../';
-    }
-    
-    if (substr(getcwd(), -7) === 'include') {
-        $src_prefix = '../../';
+global $autoprefix;
+
+// even with autoloader created, we can't use it here yet, as it's not been created
+// ... so, let's see where it is and include it
+$autoloader_found = false;
+// go max 5 levels up - we don't have folders that go deeper than that
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        $autoloader_found = true;
+        include_once $autoprefix.'autoloader.php';
+        break;
     }
 }
 
+if (!$autoloader_found) {
+    die('Could not find autoloading class.');
+}
+
 include_once("config.php");
-include_once($src_prefix."src/Database/IDbConnection.php");
-include_once($src_prefix."src/Utils/Math.php");
 
 use App\Database\IDbConnection;
 use App\Utils\Math;
@@ -117,7 +118,7 @@ class MYSQLi_DB implements IDbConnection {
 
 	    // connect to the DB
 		if (!$this->connect()) {
-		    die(mysqli_errno($this->dblink));
+		    die(mysqli_error($this->dblink));
 		}
 		 
 		// we will operate in UTF8
@@ -903,110 +904,25 @@ class MYSQLi_DB implements IDbConnection {
         }
     }
 
-	function populateOasis() {
-		$q = "INSERT INTO " . TB_PREFIX . "units (vref) SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype <> 0";
-		mysqli_query($this->dblink,$q);
-	}
+	function regenerateOasisUnits($wid, $automation = false) {
+	    global $autoprefix;
 
-	function populateOasisUnits($wid, $high) {
-	    list($wid, $high) = $this->escape_input((int) $wid, $high);
+	    if (is_array($wid)) {
+	        $wid = implode(',', $wid);
+	    } else {
+	        $wid = (int) $wid;
+	    }
 
-		$basearray = $this->getOasisInfo($wid);
-		if($high == 0){
-		  $max = rand(15,30);
-		}elseif($high == 1){
-	      $max = rand(50,70);
-        }elseif($high == 2){
-      	  $max = rand(90,120);	
-      	} else {
-      	  $max = rand(50,70);
-      	}
-      		  $max2 = 0;
-      		  $rand = rand(0,3);
-      		  if($rand == 1){
-      		  $max2 = 3;
-		  }
-		  //each Troop is a Set for oasis type like mountains have rats spiders and snakes fields tigers elphants clay wolves so on stonger one more not so less
-		  switch($basearray['type']) {
-			case 1:
-			case 2:
-			  //+25% lumber per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET  u35 = u35 + '".rand(0,5)."', u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND (u35 <= ".$max." OR u36 <= ".$max." OR u37 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			case 3:
-			  //+25% lumber and +25% crop per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET  u35 = u35 + '".rand(0,5)."', u36 = u36 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."', u40 = u40 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u36 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			case 4:
-			case 5:
-			  //+25% clay per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(0,5)."', u32 = u32 + '".rand(0,5)."', u35 = u35 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND (u31 <= ".$max." OR u32 <= ".$max." OR u35 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			case 6:
-			  //+25% clay and +25% crop per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(0,5)."', u32 = u32 + '".rand(0,5)."', u35 = u35 + '".rand(0,5)."', u40 = u40 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u31 <= ".$max." OR u32 <= ".$max." OR u35 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			case 7:
-			case 8:
-			  //+25% iron per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(0,5)."', u32 = u32 + '".rand(0,5)."', u34 = u34 + '".rand(0,5)."' WHERE vref = '" . $wid . "' AND (u31 <= ".$max." OR u32 <= ".$max." OR u34 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			case 9:
-			  //+25% iron and +25% crop
-			  $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + '".rand(0,5)."', u32 = u32 + '".rand(0,5)."', u34 = u34 + '".rand(0,5)."', u39 = u39 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u31 <= ".$max." OR u32 <= ".$max." OR u34 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			case 10:
-			case 11:
-			  //+25% crop per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET u33 = u33 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."', u39 = u39 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u33 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			case 12:
-			  //+50% crop per hour
-			  $q = "UPDATE " . TB_PREFIX . "units SET u33 = u33 + '".rand(0,5)."', u37 = u37 + '".rand(0,5)."', u38 = u38 + '".rand(0,5)."', u39 = u39 + '".rand(0,5)."', u40 = u40 + '".rand(0,$max2)."' WHERE vref = '" . $wid . "' AND (u33 <= ".$max." OR u37 <= ".$max." OR u38 <= ".$max." OR u39 <= ".$max.")";
-			  $result = mysqli_query($this->dblink,$q);
-			  break;
-			  }
-		}
-
-	function populateOasisUnits2() {
-	   // +25% lumber oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u35 = u35 + (FLOOR(5 + RAND() * 10)), u36 = u36 + (FLOOR(0 + RAND() * 5)), u37 = u37 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(1,2)) AND u35 <= 10 AND u36 <= 10 AND u37 <= 10";
-	   mysqli_query($this->dblink,$q);
-
-	   // +25% lumber and +25% crop oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u35 = u35 + (FLOOR(5 + RAND() * 15)), u36 = u36 + (FLOOR(0 + RAND() * 5)), u37 = u37 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(3)) AND u35 <= 10 AND u36 <= 10 AND u37 <= 10";
-	   mysqli_query($this->dblink,$q);
-	   
-	   // +25% clay oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(10 + RAND() * 15)), u32 = u32 + (FLOOR(5 + RAND() * 15)), u35 = u35 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(4,5)) AND u31 <= 10 AND u32 <= 10 AND u35 <= 10";
-	   mysqli_query($this->dblink,$q);
-	   
-	   // +25% clay and +25% crop oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(15 + RAND() * 20)), u32 = u32 + (FLOOR(10 + RAND() * 15)), u35 = u35 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(6)) AND u31 <= 10 AND u32 <= 10 AND u35 <= 10";
-	   mysqli_query($this->dblink,$q);
-	   
-	   // +25% iron oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(10 + RAND() * 15)), u32 = u32 + (FLOOR(5 + RAND() * 15)), u34 = u34 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(7,8)) AND u31 <= 10 AND u32 <= 10 AND u34 <= 10";
-	   mysqli_query($this->dblink,$q);
-	   
-	   // +25% iron and +25% crop oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(15 + RAND() * 20)), u32 = u32 + (FLOOR(10 + RAND() * 15)), u34 = u34 + (FLOOR(0 + RAND() * 10)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(9)) AND u31 <= 10 AND u32 <= 10 AND u34 <= 10";
-	   mysqli_query($this->dblink,$q);
-	
-	   // +25% crop oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(5 + RAND() * 15)), u33 = u33 + (FLOOR(5 + RAND() * 10)), u37 = u37 + (FLOOR(0 + RAND() * 10)), u39 = u39 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(10,11)) AND u31 <= 10 AND u33 <= 10 AND u37 <= 10 AND u39 <= 10";
-	   mysqli_query($this->dblink,$q);
-	   
-	   // +50% crop oasis
-	   $q = "UPDATE " . TB_PREFIX . "units SET u31 = u31 + (FLOOR(10 + RAND() * 15)), u33 = u33 + (FLOOR(5 + RAND() * 10)), u38 = u38 + (FLOOR(0 + RAND() * 5)), u39 = u39 + (FLOOR(0 + RAND() * 5)) WHERE vref IN(SELECT id FROM " . TB_PREFIX . "wdata WHERE oasistype IN(12)) AND u31 <= 10 AND u33 <= 10 AND u38 <= 10 AND u39 <= 10";
-	   mysqli_query($this->dblink,$q);
+	    // load the oasis regeneration (in-game) and units generation (during install) SQL file
+	    // and replace village ID for the given $wid
+	    $str = file_get_contents($autoprefix."var/db/datagen-oasis-troops-regen.sql");
+	    $str = preg_replace(["'%PREFIX%'", "'%VILLAGEID%'", "'%NATURE_REG_TIME%'"], [TB_PREFIX, $wid, ($automation ? NATURE_REGTIME : -1)], $str);
+	    $result = $this->dblink->multi_query($str);
+	    if (!$result) {
+	        return false;
+	    }
+	    
+	    return true;
 	}
 
 	function removeOases($wref) {
@@ -2276,15 +2192,6 @@ class MYSQLi_DB implements IDbConnection {
 
 		$time = time();
 		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated = $time where wref = $vid";
-		return mysqli_query($this->dblink,$q);
-	}
-
-	function updateOasis2($vid, $time) {
-	    list($vid, $time) = $this->escape_input((int) $vid, $time);
-
-		$time = time();
-		$time2 = NATURE_REGTIME;
-		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated2 = $time + $time2 where wref = $vid";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -3953,10 +3860,88 @@ class MYSQLi_DB implements IDbConnection {
 		}
 	}
 
-	function populateOasisdata() {
-	    $q = "INSERT INTO " . TB_PREFIX . "odata SELECT id, oasistype, 0, 800, 800, 800, 800, 800, 800, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 100, 2 , \"Unoccupied Oasis\", CASE WHEN oasistype < 4 THEN 1 WHEN oasistype < 10 THEN 2 ELSE 0 END FROM " . TB_PREFIX . "wdata WHERE oasistype <> 0";
-		mysqli_query($this->dblink,$q) OR DIE (mysqli_error($this->dblink));
-	}
+	/**
+	 * Creates a database structure for the game.
+	 * Used during installation.
+	 * 
+	 * @return boolean|number Returns TRUE, FALSE or -1. True is for successful data import 
+	 *                        (from prepared SQL file), false is in case of an SQL error.
+	 *                        -1 will be returned in case of any unexpected behavior
+	 *                        and unhandled exceptions.
+	 */
+
+    public function createDbStructure() {
+        global $autoprefix;
+
+        try {
+            // check that we don't have the structure in place already
+            // (we'd have at least 1 user present, since 4 are being created by default - Support, Nature, Multihunter & Taskmaster)
+            $data_exist = $this->query_return("SELECT * FROM " . TB_PREFIX . "users LIMIT 1");
+            if ($data_exist && count($data_exist)) {
+                return false;
+            }
+    
+            // load the DB structure SQL file
+            $str = file_get_contents($autoprefix."var/db/struct.sql");
+            $str = preg_replace("'%PREFIX%'", TB_PREFIX, $str);
+            $result = $this->dblink->multi_query($str);
+            if (!$result) {
+                echo mysqli_error($this->dblink); exit;
+                return false;
+            }
+        } catch (\Exception $e) {
+            return -1;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Populates the game database with Map World Data (i.e. creates the whole
+     * world with X,Y coordinate squares and their types).
+     * 
+     * Also populates oasis' table data for the squares where there are oasis.
+     * 
+     * @return boolean|number Returns TRUE, FALSE or -1. True is for successful data import 
+	 *                        (from prepared SQL file), false is in case of an SQL error.
+	 *                        -1 will be returned in case of any unexpected behavior
+	 *                        and unhandled exceptions.
+     */
+    public function populateWorldData() {
+        global $autoprefix;
+
+        try {
+            // check if we don't already have world data
+            $data_exist = $this->query_return("SELECT * FROM " . TB_PREFIX . "wdata LIMIT 1");
+            if ($data_exist && count($data_exist)) {
+                return false;
+            }
+
+            // load the data generation SQL file
+            $str = file_get_contents($autoprefix."var/db/datagen-world-data.sql");
+            $str = preg_replace(["'%PREFIX%'", "'%WORLDSIZE%'"], [TB_PREFIX, WORLD_MAX], $str);
+            $result = $this->dblink->multi_query($str);
+            if (!$result) {
+                return -1;
+            } else {
+                // we need to flush the result of our previous multi_query
+                // or the next multi_query in regenerateOasisUnits() will cause
+                // a "Commands out of sync; you can't run this command now" error
+                // more info: https://stackoverflow.com/a/27926561/467164
+                while (mysqli_next_result($this->dblink)) {;}
+            }
+            
+            $result = $this->regenerateOasisUnits(-1);
+            if (!$result) {
+                echo mysqli_error($this->dblink);
+                return -1;
+            }
+        } catch (\Exception $e) {
+            return -1;
+        }
+        
+        return true;
+    }
 
 	public function getAvailableExpansionTraining() {
 		global $building, $session, $technology, $village;

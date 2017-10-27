@@ -53,8 +53,16 @@ function refresh(tz) {
     location="?s=1&t="+tz;
 }
 function proceed() {
-    document.dataform.Submit.disabled=true;
-    return(true);
+	var e = document.getElementById('Submit');
+
+	// if we disable the button right away, we wouldn't be able to submit the form
+    setTimeout(function() {
+        e.disabled = "disabled";
+    }, 500);
+
+    e.value = "Processing...";
+
+    return true;
 }
 </script>
 	<div class="wrapper">
@@ -74,7 +82,7 @@ function proceed() {
 				<div id="content" class="login">
 					<?php
 					IHG_Progressbar::draw_css();
-					$bar = new IHG_Progressbar(8, 'Step %d from %d ');
+					$bar = new IHG_Progressbar(7, 'Step %d from %d ');
 					$bar->draw();
 					for($i = 0; $i < ($_GET['s']+1); $i++) {
 						$bar->tick();
@@ -88,8 +96,8 @@ function proceed() {
 				if(substr(sprintf('%o', fileperms('../')), -4)<'700'){
 					echo"<span class='f18 c5'>ERROR!</span><br />It's not possible to write the config file. Change the permission to '777'. After that, refresh this page!";
 				} 
-				else if (file_exists("installation_done")) {
-					echo"<span class='f18 c5'>ERROR!</span><br />Installation appears to have been completed.<br />If this is an error remove installation_done file in install directory.";
+				else if (file_exists("../var/installed")) {
+					echo"<span class='f18 c5'>ERROR!</span><br />Installation appears to have been completed.<br />If this is an error remove /var/installed file in install directory.";
 				}
 				else
 					switch($_GET['s']){
@@ -103,7 +111,7 @@ function proceed() {
 						include("templates/dataform.tpl");
 						break;
 						case 3:
-						include("templates/field.tpl");
+						include("templates/wdata.tpl");
 						break;
 						case 4:
 					    include("templates/multihunter.tpl");
@@ -112,9 +120,6 @@ function proceed() {
 						include("templates/support.tpl");
 						break;
 						case 6:
-						include("templates/oasis.tpl");
-						break;
-						case 7:
 						include("templates/end.tpl");
 						break;
 					}

@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
 -- Table structure for table `%PREFIX%links`
 --
 
-CREATE TABLE `%PREFIX%links` (
+CREATE TABLE IF NOT EXISTS `%PREFIX%links` (
  `id` INT( 25 ) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
  `userid` INT( 25 ) NULL ,
  `name` VARCHAR( 50 ) NULL ,

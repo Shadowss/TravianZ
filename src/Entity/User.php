@@ -14,21 +14,6 @@
 
 namespace App\Entity;
 
-if (!isset($src_prefix)) {
-    $src_prefix = '';
-    
-    if (substr(getcwd(), -5) === 'Admin') {
-        $src_prefix = '../';
-    }
-    
-    if (substr(getcwd(), -4) === 'Mods') {
-        $src_prefix = '../../../';
-    }
-}
-
-include_once($src_prefix."src/Database/IDbConnection.php");
-include_once($src_prefix."src/Utils/Math.php");
-
 use App\Database\IDbConnection;
 use App\Utils\Math;
 

@@ -9,7 +9,7 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if(!file_exists('GameEngine/config.php')) {
+if(!file_exists('var/installed')) {
 	header("Location: install/");
 	exit;
 }

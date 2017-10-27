@@ -37,7 +37,7 @@ All the files are placed. The database is created, so you can now start playing 
 <?php include("../GameEngine/config.php"); 
 $time = time();
 rename("../install/","../installed_".$time);
-touch("../installation_done");
+touch('../var/installed');
 ?>
 <p>
 <center><font size="4"><a href="<?php echo HOMEPAGE; ?>">> My TravianZ homepage <</font></a></center>

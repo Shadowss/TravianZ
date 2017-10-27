@@ -1,4 +1,5 @@
 - link username to user when sending alliance forum notification message
+- link username to user in message sender
 - add checkbox when sending units for a raid to include the attack in the raid list, if eligible
 - change "incoming attacker" title of the raid list icon when actually attacking a farm (it should be "Own attacking troops")
 - change "select all" button to actually select all checkboxes via JS, not via page reload

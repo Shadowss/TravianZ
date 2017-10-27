@@ -14,7 +14,6 @@
 ##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
 ##                                                                             ##
 #################################################################################
-rename("include/constant.php","../GameEngine/config.php");
 ?>
 
 

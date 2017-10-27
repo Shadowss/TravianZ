@@ -20,10 +20,9 @@ mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 ##                                                                             ##
 #################################################################################
 
-if(file_exists('GameEngine/config.php') || file_exists('../../GameEngine/config.php') || file_exists('../../config.php') || file_exists('../GameEngine/config.php')) {
-}else{
-header("Location: install/");
-exit;
+if(!file_exists('GameEngine/config.php') && !file_exists('../GameEngine/config.php') && !file_exists('../../GameEngine/config.php') && !file_exists('../../config.php')) {
+    header("Location: install/");
+    exit;
 }
 
 $script_name = ($_SERVER['REQUEST_URI'] == 'karte.php') ? 'karte' : $_SERVER['REQUEST_URI'];
