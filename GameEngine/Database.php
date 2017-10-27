@@ -908,13 +908,13 @@ class MYSQLi_DB implements IDbConnection {
 	    global $autoprefix;
 
 	    if (is_array($wid)) {
-	        $wid = '"'.implode(',', $wid).'"';
+	        $wid = '(' . implode('),(', $wid) . ')';
 	    } else {
-	        $wid = (int) $wid;
+	        $wid = '(' . (int) $wid . ')';
 	    }
 
 	    // load the oasis regeneration (in-game) and units generation (during install) SQL file
-	    // and replace village ID for the given $wid
+	    // and replace village IDs for the given $wid
 	    $str = file_get_contents($autoprefix."var/db/datagen-oasis-troops-regen.sql");
 	    $str = preg_replace(["'%PREFIX%'", "'%VILLAGEID%'", "'%NATURE_REG_TIME%'"], [TB_PREFIX, $wid, ($automation ? NATURE_REGTIME : -1)], $str);
 	    $result = $this->dblink->multi_query($str);

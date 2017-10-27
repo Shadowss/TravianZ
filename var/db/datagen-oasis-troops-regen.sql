@@ -16,14 +16,28 @@ SET @natureRegTime = %NATURE_REG_TIME%;
 
 
 
--- Oasis village ID.
---
--- type:        int
--- description: when > -1, used to regenerate units of a single oasis (when conquered > unoccupied)
---               when == -1, installation or server reset in progress, all oasis data are updated
+-- A temporary table with oasis village ID(s).
+-- Used instead of variable so we can work with it as with array.
+-- The only other option would be to repeat IDs replacements below
+-- or define them once in a string and use FIND_IN_SET() for lookups,
+-- which is TERRIBLE, performance-wise (since it doesn't use indexes).
 
-SET @village = %VILLAGEID%;
+CREATE TEMPORARY TABLE %PREFIX%oids (id INT NOT NULL, PRIMARY KEY (id));
+INSERT INTO %PREFIX%oids VALUES %VILLAGEID%;
 
+
+
+-- Equivalent to "VILLAGEID === -1" (in PHP). Determines whether we have
+-- any single oasis to actually update (mode = conquered > unocupied)
+-- or we're updating 1 or more specific oasis (mode = install, server reset, Automation's nature regen).
+ 
+SET @noVillage = ((SELECT id FROM %PREFIX%oids LIMIT 1) = -1);
+
+
+
+
+-- faster access to first oasis ID, so we don't need to reselect all the time below 
+SET @firstVillage = (SELECT id FROM %PREFIX%oids LIMIT 1);
 
 -- minimum and maximum number of units for oasis with "high" field set to 0
 SET @minUnitsForOasis0 = 15;
@@ -59,19 +73,7 @@ UPDATE %PREFIX%odata
     WHERE
         @natureRegTime = -1
         AND
-        (
-            (
-                -- should we have a list of IDs, we need to use FIND_IN_SET
-                LOCATE(",", @village) > 0
-                AND
-                FIND_IN_SET(conqured, @village)
-            )
-            OR
-            (
-                -- for a single ID, we use a simple condition which can definitely use an index as well
-                conqured = @village
-            )
-        );
+        conqured = @firstVillage;
 
 -- ---------------------------------------------
 -- remove past reports (conquered > unoccupied)
@@ -80,19 +82,7 @@ DELETE FROM %PREFIX%ndata
     WHERE
         @natureRegTime = -1
         AND
-        (
-            (
-                -- should we have a list of IDs, we need to use FIND_IN_SET
-                LOCATE(",", @village) > 0
-                AND
-                FIND_IN_SET(toWref, @village)
-            )
-            OR
-            (
-                -- for a single ID, we use a simple condition which can definitely use an index as well
-                toWref = @village
-            )
-        );
+        toWref = @firstVillage;
 
 
 -- ----------------------------------------------------------------
@@ -105,19 +95,7 @@ SET
 WHERE
     @natureRegTime > -1
     AND
-    (
-        (
-            -- should we have a list of IDs, we need to use FIND_IN_SET
-            LOCATE(",", @village) > 0
-            AND
-            FIND_IN_SET(wref, @village)
-        )
-        OR
-        (
-            -- for a single ID, we use a simple condition which can definitely use an index as well
-            wref = @village
-        )
-    );
+    wref IN ( SELECT id FROM %PREFIX%oids );
 
 
 -- -----------------------------------------------------------------------
@@ -137,7 +115,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -150,21 +128,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND
@@ -205,7 +171,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1 = -1
                 AND
                 vref IN(
                         SELECT
@@ -218,21 +184,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND
@@ -271,7 +225,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1 = -1
                 AND
                 vref IN(
                         SELECT
@@ -284,21 +238,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND u31 <= (
@@ -335,7 +277,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1 = -1
                 AND
                 vref IN(
                         SELECT
@@ -348,21 +290,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND u31 <= (
@@ -398,7 +328,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1 = -1
                 AND
                 vref IN(
                         SELECT
@@ -411,21 +341,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND u31 <= (
@@ -462,7 +380,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1 = -1
                 AND
                 vref IN(
                         SELECT
@@ -475,21 +393,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND u31 <= (
@@ -527,7 +433,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1 = -1
                 AND
                 vref IN(
                         SELECT
@@ -540,21 +446,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND u31 <= (
@@ -600,7 +494,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @village = -1
+                @firstVillage = -1 = -1
                 AND
                 vref IN(
                         SELECT
@@ -613,21 +507,9 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @village > -1
+                @firstVillage = -1 > -1
                 AND
-                (
-                    (
-                        -- should we have a list of IDs, we need to use FIND_IN_SET
-                        LOCATE(",", @village) > 0
-                        AND
-                        FIND_IN_SET(vref, @village)
-                    )
-                    OR
-                    (
-                        -- for a single ID, we use a simple condition which can definitely use an index as well
-                        vref = @village
-                    )
-                )
+                vref IN ( SELECT id FROM %PREFIX%oids )
             )
         )
         AND u31 <= (

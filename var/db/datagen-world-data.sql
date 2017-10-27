@@ -96,6 +96,8 @@ INSERT INTO %PREFIX%wdata
             WHERE @row2 <= (%WORLDSIZE% - 1)) as y
         ) as generator;
 
+
+
 -- populate oasis data
 INSERT INTO %PREFIX%odata
     SELECT
@@ -136,6 +138,7 @@ INSERT INTO %PREFIX%odata
         %PREFIX%wdata
     WHERE
         oasistype <> 0;
+
 
 
 -- create some defensive units for existing oasis
