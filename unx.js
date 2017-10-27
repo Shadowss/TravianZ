@@ -138,7 +138,7 @@ function Popup(i,j,sc){
 			iframeHeight = 440,
 			iframeWidth  = 412;
 
-		var tc='<div class="popup3">'+'<a href="#" onClick="Close(); return false;"><img src="img/x.gif" border="1" class="popup4" alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="manual.php?'+sc+'='+i+'&typ='+j+'" border="0"></iframe>'+'</div>';
+		var tc='<div class="popup3">'+'<a href="#" onClick="Close(); return false;"><img src="img/x.gif" border="1" class="popup4" alt="Move"></a>'+'<iframe frameborder="0" id="Frame" style="top: auto" src="manual.php?'+sc+'='+i+'&typ='+j+'" width="412" height="440" border="0"></iframe>'+'</div>';
 		pb.innerHTML=tc;uc();
 	}
 	vc();
@@ -153,9 +153,9 @@ function PopupMap(i){
 			iframeHeight = 575,
 			iframeWidth  = 1000;
 	if(window.dlang== 'ar'){
-	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" style="position: absolute;right: 968px;margin-top: 10px;" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" style="position: absolute; left: ' + Math.round((documentWidth() - iframeWidth) / 2) + 'px" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" style="position: absolute;right: 968px;margin-top: 10px;" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" style="position: absolute; left: ' + Math.round((documentWidth() - iframeWidth) / 2) + 'px; top: ' + Math.round((documentHeight() - iframeHeight) / 2) + 'px" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
 	}else{
-	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" style="position: absolute; left: ' + Math.round((documentWidth() - iframeWidth) / 2) + 'px" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
+	    var tc='<div class="popup_map">'+'<div id="drag2"><a href="#" id="map_popclose" onClick="Close(); return false;"><img src="img/x.gif" border="0" width="20px" height="20px"  alt="Move"></a>'+'<iframe frameborder="0" id="Frame" src="karte2.php?z='+i+'" style="position: absolute; left: ' + Math.round((documentWidth() - iframeWidth) / 2) + 'px; top: ' + Math.round((documentHeight() - iframeHeight) / 2) + 'px" width="1000" height="575" border="0" scrolling="no"></iframe>'+'</div></div>';
 	}
 		pb.innerHTML=tc;uc2();
 	}
@@ -197,8 +197,9 @@ function vc(){
 window.addEvent('resize', function(){
 	$f = $$('#Frame');
 
-	if (typeof($f) != 'undefined' && typeof($f[0]) != 'undefined') {
+	if (typeof($f) != 'undefined' && typeof($f[0]) != 'undefined' && $f[0].src.indexOf('manual.php') === -1) {
 		$f[0].style.left = (Math.round((documentWidth() - $f[0].width) / 2)) + 'px';
+		$f[0].style.top = (Math.round((documentHeight() - $f[0].height) / 2)) + 'px';
 	}
 });
 
@@ -875,5 +876,15 @@ function documentWidth() {
         document.documentElement.scrollWidth,
         document.body.offsetWidth,
         document.documentElement.offsetWidth
+    );
+}
+
+function documentHeight() {
+    return Math.max(
+        document.documentElement.clientHeight,
+        //document.body.scrollHeight,
+        //document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight
     );
 }

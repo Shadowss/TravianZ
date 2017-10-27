@@ -76,7 +76,7 @@ if(isset($id))
 		<style>
 			.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
 		</style>
-		<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7e" rel="stylesheet" type="text/css">
+		<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7f" rel="stylesheet" type="text/css">
 		<br />
 
 		<table id="profile" cellpadding="1" cellspacing="1" >

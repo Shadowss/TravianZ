@@ -299,10 +299,10 @@ $automation->isWinner();
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
 	<script src="mt-full.js?ebe79" type="text/javascript"></script>
-	<script src="unx.js?f4b7e" type="text/javascript"></script>
+	<script src="unx.js?f4b7f" type="text/javascript"></script>
 	<script src="new.js?ebe79" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7e" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7f" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
@@ -414,7 +414,11 @@ echo round(($generator->pageLoadTimeEnd()-$pagestart)*1000);
 <div id="ce">    </div>
 <script type="text/javascript">
 	// update TITLE to include building name, as it's not very possible to do in PHP in current codebase
-	document.title = document.title + ' » » ' + document.getElementsByTagName('h1')[0].innerHTML.replace(/(<([^>]+)>)/ig,"");
+	if (document.getElementsByTagName('h1').length) {
+		document.title = document.title + ' » » ' + document.getElementsByTagName('h1')[0].innerHTML.replace(/(<([^>]+)>)/ig,"");
+	} else {
+		document.title + ' » » New Building'
+	}
 </script>
 </body>
 </html>

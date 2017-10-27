@@ -196,7 +196,7 @@ div.popup_map {
     padding-right: 80px;
     padding-top: 31px;
     position:relative;
-    top: 99px;
+    top: 0;
     z-index: 80;
 }
 div.popup_map div#drag {
