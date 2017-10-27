@@ -59,7 +59,19 @@ UPDATE %PREFIX%odata
     WHERE
         @natureRegTime = -1
         AND
-        conqured IN ( @village );
+        (
+            (
+                -- should we have a list of IDs, we need to use FIND_IN_SET
+                LOCATE(",", @village) > 0
+                AND
+                FIND_IN_SET(conqured, @village)
+            )
+            OR
+            (
+                -- for a single ID, we use a simple condition which can definitely use an index as well
+                conqured = @village
+            )
+        );
 
 -- ---------------------------------------------
 -- remove past reports (conquered > unoccupied)
@@ -68,7 +80,19 @@ DELETE FROM %PREFIX%ndata
     WHERE
         @natureRegTime = -1
         AND
-        toWref IN ( @village );
+        (
+            (
+                -- should we have a list of IDs, we need to use FIND_IN_SET
+                LOCATE(",", @village) > 0
+                AND
+                FIND_IN_SET(toWref, @village)
+            )
+            OR
+            (
+                -- for a single ID, we use a simple condition which can definitely use an index as well
+                toWref = @village
+            )
+        );
 
 
 -- ----------------------------------------------------------------
@@ -81,7 +105,19 @@ SET
 WHERE
     @natureRegTime > -1
     AND
-    wref IN ( @village );
+    (
+        (
+            -- should we have a list of IDs, we need to use FIND_IN_SET
+            LOCATE(",", @village) > 0
+            AND
+            FIND_IN_SET(wref, @village)
+        )
+        OR
+        (
+            -- for a single ID, we use a simple condition which can definitely use an index as well
+            wref = @village
+        )
+    );
 
 
 -- -----------------------------------------------------------------------
@@ -116,7 +152,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND
@@ -172,7 +220,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND
@@ -226,7 +286,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND u31 <= (
@@ -278,7 +350,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND u31 <= (
@@ -329,7 +413,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND u31 <= (
@@ -381,7 +477,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND u31 <= (
@@ -434,7 +542,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND u31 <= (
@@ -495,7 +615,19 @@ UPDATE %PREFIX%units u
             (
                 @village > -1
                 AND
-                vref = @village
+                (
+                    (
+                        -- should we have a list of IDs, we need to use FIND_IN_SET
+                        LOCATE(",", @village) > 0
+                        AND
+                        FIND_IN_SET(vref, @village)
+                    )
+                    OR
+                    (
+                        -- for a single ID, we use a simple condition which can definitely use an index as well
+                        vref = @village
+                    )
+                )
             )
         )
         AND u31 <= (
