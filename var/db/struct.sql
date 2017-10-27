@@ -1288,7 +1288,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
  KEY `uid` (`uid`),
  KEY `wid` (`wid`),
  KEY `timestamp` (`timestamp`),
- KEY `timeleft` (`timeleft`)
+ KEY `timeleft` (`timeleft`),
+ KEY `uid-timestamp` (`uid`, `timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
