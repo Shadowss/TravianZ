@@ -24,15 +24,25 @@ if (!function_exists('mysqli_result')) {
     }
 }
 
-if(isset($gameinstall) && $gameinstall == 1){
-include_once("../../GameEngine/config.php");
-include_once("../../GameEngine/Data/buidata.php");
-}else{
-include_once("../GameEngine/Data/unitdata.php");
-include_once("../GameEngine/Technology.php");
-include_once("../GameEngine/Data/buidata.php");
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        // we have our path, let's leave
+        break;
+    }
 }
-include_once("../GameEngine/Database.php");
+
+if(isset($gameinstall) && $gameinstall == 1){
+    include_once($autoprefix."GameEngine/config.php");
+    include_once($autoprefix."GameEngine/Data/buidata.php");
+}else{
+    include_once($autoprefix."GameEngine/Data/unitdata.php");
+    include_once($autoprefix."GameEngine/Technology.php");
+    include_once($autoprefix."GameEngine/Data/buidata.php");
+}
+include_once($autoprefix."GameEngine/Database.php");
 class adm_DB {
 	
 	var $connection; 
