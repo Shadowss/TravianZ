@@ -10,6 +10,11 @@
 ##                                                                             ##
 #################################################################################
 
+if(!file_exists('var/installed')) {
+    header("Location: install/");
+    exit;
+}
+
 include('GameEngine/Account.php');
 $invited=(isset($_GET['uid'])) ? filter_var($_GET['uid'], FILTER_SANITIZE_NUMBER_INT):$form->getError('invt');
 ?>

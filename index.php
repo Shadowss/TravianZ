@@ -18,8 +18,8 @@
 #################################################################################
 
 if(!file_exists('var/installed')) {
-header("Location: install/");
-exit;
+    header("Location: install/");
+    exit;
 }
 
 include ("GameEngine/config.php");
