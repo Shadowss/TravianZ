@@ -164,21 +164,36 @@ class Session {
 
 			private function checkLogin(){
         		global $database;
-        		if(isset($_SESSION['username']) && isset($_SESSION['sessid'])) {
+
+        		$user = '';
+        		$id = '';
+        		$admin = false;
+        		$inAdmin = (strpos($_SERVER['REQUEST_URI'], '/Admin') !== false);
+
+        		if (!$inAdmin && isset($_SESSION['username'])) {
+        		    $user = $_SESSION['username'];
+        		    $id   = (int) $_SESSION['id_user'];
+        		} else if ($inAdmin && isset($_SESSION['admin_username'])) {
+        		    $user  = $_SESSION['admin_username'];
+        		    $id    = (int) $_SESSION['id'];
+        		    $admin = true;
+        		}
+        		
+        		if($user && ($admin || isset($_SESSION['sessid']))) {
         		    // check if this is not a support user, for who only messages and statistics are available
-        		    if ($_SESSION['id_user'] == 1) {
+        		    if ($user == 1) {
         		        $req_file = basename($_SERVER['PHP_SELF']);
         		        if (!in_array($req_file, ['nachrichten.php', 'logout.php', 'statistiken.php', 'rules.php', 'karte.php', 'karte2.php', 'spieler.php'])) {
         		            header('Location:nachrichten.php');
         		            exit;
         		        }
         		    }
-        		    
+
         			//Get and Populate Data
         			$this->PopulateVar();
         			//update database
-        			$database->addActiveUser($_SESSION['username'], $this->time);
-        			$database->updateUserField($_SESSION['username'], "timestamp", $this->time, 0);
+        			$database->addActiveUser($user, $this->time);
+        			$database->updateUserField($user, "timestamp", $this->time, 0);
             		return true;
         		} else {
             			return false;
