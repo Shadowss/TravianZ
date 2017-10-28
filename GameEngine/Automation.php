@@ -4646,7 +4646,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 						$week='1';
 					}
 					$myrank = $ranking->getUserRank($uid);
-					if($climbers[$myrank]['oldrank'] > $myrank){
+					if(isset($climbers[$myrank]['oldrank']) && $climbers[$myrank]['oldrank'] > $myrank){
 					for($i=$myrank+1;$i<=$climbers[$myrank]['oldrank'];$i++) {
 					$oldrank = $ranking->getUserRank($climbers[$i]['userid']);
 					if($week > 1){
@@ -4668,7 +4668,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 							$database->setclimberrankpop($climbers[$myrank]['userid'], $totalpoints);
 							$database->updateoldrank($climbers[$myrank]['userid'], $myrank);
 					}
-					}else if($climbers[$myrank]['oldrank'] < $myrank){
+					}else if(isset($climbers[$myrank]['oldrank']) && $climbers[$myrank]['oldrank'] < $myrank){
 					for($i=$climbers[$myrank]['oldrank'];$i<$myrank;$i++) {
 					$oldrank = $ranking->getUserRank($climbers[$i]['userid']);
 					if($week > 1){
