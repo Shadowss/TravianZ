@@ -20,7 +20,7 @@ $to = array('x'=>$coor['x'], 'y'=>$coor['y']);
 			$fastertroops = 1;
 			}
 $time = round($generator->procDistanceTime($from,$to,300,0)/$fastertroops);
-$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$seesion->uid);
+$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$session->uid);
 if(count($foolartefact) > 0){
 foreach($foolartefact as $arte){
 if($arte['bad_effect'] == 1){
@@ -143,7 +143,7 @@ $end = ($tribe*10);
 
                         <td><?php echo $process[1]; ?></td>
 
-                        <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>"><?php echo $actionType." to ".$process['1']; ?></td>
+                        <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>"><?php echo $actionType." to ".$process['1']; ?></td>
 
                     </tr>
 
@@ -157,7 +157,7 @@ $end = ($tribe*10);
                  <?php 
                 for($i=$start;$i<=($end);$i++) {
                       echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";    
-                  } if ($process['t11'] != ''){
+                  } if (!empty($process['t11'])){
                   echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";    
                   
                   }?>
@@ -420,7 +420,7 @@ $end = ($tribe*10);
 			$fastertroops = 1;
 			}
                 $time = round($generator->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
-				$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$seesion->uid);
+				$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$session->uid);
 				if(count($foolartefact) > 0){
 				foreach($foolartefact as $arte){
 				if($arte['bad_effect'] == 1){
@@ -436,7 +436,7 @@ $end = ($tribe*10);
 
             
 
-            <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
+            <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
 
             <div class="in">in <?php echo $generator->getTimeFormat($time); ?></div>
 

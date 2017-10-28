@@ -124,8 +124,8 @@ class Units {
                 if($disabled != "" && $post['c'] == 3){
                 $form->addError("error","You can't attack this village/oasis with normal attack");
                 }
-                if(    !$post['t1'] && !$post['t2'] &&  !$post['t3'] && !$post['t4'] && !$post['t5'] &&
-                    !$post['t6'] && !$post['t7'] &&  !$post['t8'] && !$post['t9'] && !$post['t10'] &&  !$post['t11']){
+                if(empty($post['t1']) && empty($post['t2']) &&  empty($post['t3']) && empty($post['t4']) && empty($post['t5']) &&
+                    empty($post['t6']) && empty($post['t7']) &&  empty($post['t8']) && empty($post['t9']) && empty($post['t10']) &&  empty($post['t11'])){
                 $form->addError("error","You need to mark min. one troop");
                 }
 
