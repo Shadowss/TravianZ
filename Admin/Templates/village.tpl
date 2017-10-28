@@ -207,7 +207,7 @@ if(isset($id))
 						else
 						{
 							$vill = $database->getVillage($exp);
-							$link = '<a href="admin.php?=village&did='.$vill['wref'].'">'.$vill['name'].'</a>';
+							$link = '<a href="admin.php?p=village&did='.$vill['wref'].'">'.$vill['name'].'</a>';
 							echo '
 								<tr>
 									<td class="hab">'.$link.'</td>
