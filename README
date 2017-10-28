@@ -1,4 +1,4 @@
-TravianZ Version v.8.2.5 BETA (for PHP version 7)
+TravianZ Version v.8.3.0 BETA
 
 Download and updates : https://github.com/Shadowss/TravianZ
 
@@ -58,6 +58,9 @@ martinambrus changes:
 46. vastly improved speed of world and oasis generation steps
 47. Multihunter & Support password fields are now really password fields
 48. login & logout pages redirect to install if game is not installed yet
+49. Multihunter can no longer build beyond level 20
+50. installation final screen shows info to remove install folder and CHMOD folders on Linux
+51. fixed farms generation via Admin - these will be created all over map, not only where new players are currently being placed (players are positioned like this: middle section for first 20 days, then corners, then in between)
 
 
 Shadowss changes:
