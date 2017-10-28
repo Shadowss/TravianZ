@@ -128,7 +128,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
@@ -171,7 +171,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @firstVillage = -1 = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -184,7 +184,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
@@ -225,7 +225,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @firstVillage = -1 = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -238,7 +238,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
@@ -277,7 +277,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @firstVillage = -1 = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -290,7 +290,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
@@ -328,7 +328,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @firstVillage = -1 = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -341,7 +341,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
@@ -380,7 +380,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @firstVillage = -1 = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -393,7 +393,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
@@ -433,7 +433,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @firstVillage = -1 = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -446,7 +446,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
@@ -494,7 +494,7 @@ UPDATE %PREFIX%units u
     WHERE
         (
             (
-                @firstVillage = -1 = -1
+                @firstVillage = -1
                 AND
                 vref IN(
                         SELECT
@@ -507,7 +507,7 @@ UPDATE %PREFIX%units u
             )
             OR
             (
-                @firstVillage = -1 > -1
+                @firstVillage > -1
                 AND
                 vref IN ( SELECT id FROM %PREFIX%oids )
             )
