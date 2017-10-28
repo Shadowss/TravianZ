@@ -10,7 +10,7 @@
 ##                                                                             ##
 #################################################################################
 
-if(!file_exists('var/installed')) {
+if(!file_exists('var/installed') && @opendir('/var/installed')) {
     header("Location: install/");
     exit;
 }

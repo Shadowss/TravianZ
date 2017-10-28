@@ -9,7 +9,7 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if(!file_exists('var/installed')) {
+if(!file_exists('var/installed') && @opendir('install')) {
 	header("Location: install/");
 	exit;
 }
