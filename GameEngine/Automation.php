@@ -470,8 +470,9 @@ class Automation {
 	private function ClearUser() {
 		global $database;
 		if(AUTO_DEL_INACTIVE) {
-			$time = time()+UN_ACT_TIME;
-			$q = "DELETE from ".TB_PREFIX."users where timestamp >= $time and act != ''";
+			$time = time()-UN_ACT_TIME;
+			
+			$q = "INSERT INTO ".TB_PREFIX."deleting SELECT id, UNIX_TIMESTAMP() FROM ".TB_PREFIX."users WHERE timestamp < $time AND tribe IN(1,2,3)";
 			$database->query($q);
 		}
 	}
