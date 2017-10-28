@@ -58,7 +58,7 @@ function proceed() {
 	// if we disable the button right away, we wouldn't be able to submit the form
     setTimeout(function() {
         e.disabled = "disabled";
-    }, 500);
+    }, 200);
 
     e.value = "Processing...";
 
