@@ -62,6 +62,7 @@ martinambrus changes:
 50. installation final screen shows info to remove install folder and CHMOD folders on Linux
 51. fixed farms generation via Admin - these will be created all over map, not only where new players are currently being placed (players are positioned like this: middle section for first 20 days, then corners, then in between)
 52. fixed logged-in check (no longer redirects to login.php from admin when not logged-in to the game itself)
+53. horse drinking trough now decreases crop usage by real the amounts of how much crop Roman horse units really consume
 
 
 Shadowss changes:
