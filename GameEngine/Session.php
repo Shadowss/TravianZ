@@ -20,7 +20,19 @@ mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 ##                                                                             ##
 #################################################################################
 
-if(!file_exists('GameEngine/config.php') && !file_exists('../GameEngine/config.php') && !file_exists('../../GameEngine/config.php') && !file_exists('../../config.php')) {
+global $autoprefix;
+
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        // we have our path, let's leave
+        break;
+    }
+}
+
+if(!file_exists($autoprefix.'GameEngine/config.php')) {
     header("Location: install/");
     exit;
 }

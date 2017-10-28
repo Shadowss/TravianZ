@@ -1,19 +1,4 @@
 <?php
-
-$src_prefix = '';
-if (substr(getcwd(), -5) === 'Admin') {
-    $src_prefix = '../';
-}
-
-if (substr(getcwd(), -4) === 'Mods') {
-    $src_prefix = '../../';
-}
-
-if (substr(getcwd(), -7) === 'include') {
-    $src_prefix = '../../';
-}
-
-include_once($src_prefix."src/Entity/User.php");
 use App\Entity\User;
 
 #################################################################################
@@ -32,7 +17,19 @@ use App\Entity\User;
 ##                                                                             ##
 #################################################################################
 
-include("Session.php");
+global $autoprefix;
+
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        // we have our path, let's leave
+        break;
+    }
+}
+
+include($autoprefix."GameEngine/Session.php");
 
 class Account {
 

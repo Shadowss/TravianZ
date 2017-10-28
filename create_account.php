@@ -18,11 +18,22 @@
 #################################################################################
 
 
-include_once("src/Entity/User.php");
 use App\Entity\User;
 
-include_once ("GameEngine/Session.php");
-		include_once ("GameEngine/config.php");
+global $autoprefix;
+
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        // we have our path, let's leave
+        break;
+    }
+}
+
+include_once ($autoprefix."GameEngine/Session.php");
+include_once ($autoprefix."GameEngine/config.php");
 
 
 /**
@@ -80,13 +91,13 @@ $start = $generator->pageLoadTimeStart();
 /**
  * Functions
  */
-if($_POST['password'] != ""){
+if(isset($_POST['password']) && $_POST['password'] != ""){
 		function generateBase($kid, $uid, $username) {
 			global $database, $message;
 			if($kid == 0) {
 				$kid = rand(1, 4);
 			} else {
-				$kid = $_POST['kid'];
+			    $kid = (isset($_POST['kid']) ? $_POST['kid'] : '');
 			}
 
 			$wid = $database->generateBase($kid);
@@ -231,7 +242,7 @@ if($_POST['password'] != ""){
 
 		$vname = ARCHITECTS_SMALLVILLAGE;
 		$effect = '(4x)';
-		for($i > 1; $i < 6; $i++) {
+		for($i = 2; $i < 6; $i++) {
 			Artefact($uid, 1, 1, ARCHITECTS_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type1.gif');
 		}
 
@@ -240,7 +251,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = ARCHITECTS_LARGEVILLAGE;
 		$effect = '(3x)';
-		for($i > 1; $i < 4; $i++) {
+		for($i = 2; $i < 4; $i++) {
 			Artefact($uid, 1, 2, ARCHITECTS_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type1.gif');
 		}
 
@@ -249,7 +260,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = ARCHITECTS_UNIQUEVILLAGE;
 		$effect = '(5x)';
-		for($i > 1; $i < 1; $i++) {
+		for($i = 2; $i < 1; $i++) {
 			Artefact($uid, 1, 3, ARCHITECTS_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type1.gif');
 		}
 
@@ -265,7 +276,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = HASTE_SMALLVILLAGE;
 		$effect = '(2x)';
-		for($i > 1; $i < 6; $i++) {
+		for($i = 2; $i < 6; $i++) {
 			Artefact($uid, 2, 1, HASTE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
 		}
 
@@ -274,7 +285,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = HASTE_LARGEVILLAGE;
 		$effect = '(1.5x)';
-		for($i > 1; $i < 4; $i++) {
+		for($i = 2; $i < 4; $i++) {
 			Artefact($uid, 2, 2, HASTE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
 		}
 
@@ -283,7 +294,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = HASTE_UNIQUEVILLAGE;
 		$effect = '(3x)';
-		for($i > 1; $i < 1; $i++) {
+		for($i = 2; $i < 1; $i++) {
 			Artefact($uid, 2, 3, HASTE_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
 		}
 
@@ -299,7 +310,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = EYESIGHT_SMALLVILLAGE;
 		$effect = '(5x)';
-		for($i > 1; $i < 6; $i++) {
+		for($i = 2; $i < 6; $i++) {
 			Artefact($uid, 3, 1, EYESIGHT_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type3.gif');
 		}
 
@@ -308,7 +319,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = EYESIGHT_LARGEVILLAGE;
 		$effect = '(3x)';
-		for($i > 1; $i < 4; $i++) {
+		for($i = 2; $i < 4; $i++) {
 			Artefact($uid, 3, 2, EYESIGHT_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type3.gif');
 		}
 
@@ -317,7 +328,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = EYESIGHT_UNIQUEVILLAGE;
 		$effect = '(10x)';
-		for($i > 1; $i < 1; $i++) {
+		for($i = 2; $i < 1; $i++) {
 			Artefact($uid, 3, 3, EYESIGHT_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type3.gif');
 		}
 
@@ -333,7 +344,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = DIET_SMALLVILLAGE;
 		$effect = '(50%)';
-		for($i > 1; $i < 6; $i++) {
+		for($i = 2; $i < 6; $i++) {
 			Artefact($uid, 4, 1, DIET_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
 		}
 
@@ -342,7 +353,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = DIET_LARGEVILLAGE;
 		$effect = '(25%)';
-		for($i > 1; $i < 4; $i++) {
+		for($i = 2; $i < 4; $i++) {
 			Artefact($uid, 4, 2, DIET_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
 		}
 
@@ -351,7 +362,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = DIET_UNIQUEVILLAGE;
 		$effect = '(50%)';
-		for($i > 1; $i < 1; $i++) {
+		for($i = 2; $i < 1; $i++) {
 			Artefact($uid, 4, 3, DIET_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
 		}
 
@@ -368,7 +379,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = ACADEMIC_SMALLVILLAGE;
 		$effect = '(50%)';
-		for($i > 1; $i < 6; $i++) {
+		for($i = 2; $i < 6; $i++) {
 			Artefact($uid, 5, 1, ACADEMIC_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
 		}
 
@@ -377,7 +388,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = ACADEMIC_LARGEVILLAGE;
 		$effect = '(25%)';
-		for($i > 1; $i < 4; $i++) {
+		for($i = 2; $i < 4; $i++) {
 			Artefact($uid, 5, 2, ACADEMIC_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
 		}
 
@@ -386,7 +397,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = ACADEMIC_UNIQUEVILLAGE;
 		$effect = '(50%)';
-		for($i > 1; $i < 1; $i++) {
+		for($i = 2; $i < 1; $i++) {
 			Artefact($uid, 5, 3, ACADEMIC_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
 		}
 
@@ -403,7 +414,7 @@ if($_POST['password'] != ""){
 		unset($effect);;
 		$vname = STORAGE_SMALLVILLAGE;
 		$effect = '(GG&GW)';
-		for($i > 1; $i < 6; $i++) {
+		for($i = 2; $i < 6; $i++) {
 			Artefact($uid, 6, 1, STORAGE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
 		}
 
@@ -412,7 +423,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = STORAGE_LARGEVILLAGE;
 		$effect = '(GG&GW)';
-		for($i > 1; $i < 4; $i++) {
+		for($i = 2; $i < 4; $i++) {
 			Artefact($uid, 6, 2, STORAGE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
 		}
 
@@ -429,7 +440,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = CONFUSION_SMALLVILLAGE;
 		$effect = '(200)';
-		for($i > 1; $i < 6; $i++) {
+		for($i = 2; $i < 6; $i++) {
 			Artefact($uid, 7, 1, CONFUSION_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type7.gif');
 		}
 
@@ -438,7 +449,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = CONFUSION_LARGEVILLAGE;
 		$effect = '(100)';
-		for($i > 1; $i < 4; $i++) {
+		for($i = 2; $i < 4; $i++) {
 			Artefact($uid, 7, 2, CONFUSION_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type7.gif');
 		}
 
@@ -447,7 +458,7 @@ if($_POST['password'] != ""){
 		unset($effect);
 		$vname = CONFUSION_UNIQUEVILLAGE;
 		$effect = '(500)';
-		for($i > 1; $i < 1; $i++) {
+		for($i = 2; $i < 1; $i++) {
 			Artefact($uid, 7, 3, CONFUSION_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type7.gif');
 		}
 
@@ -463,7 +474,8 @@ if($_POST['password'] != ""){
 		unset($vname);
 		unset($effect);
 		$vname = FOOL_SMALLVILLAGE;
-		for($i > 1; $i < 5; $i++) {
+		$effect = '';
+		for($i = 2; $i < 5; $i++) {
 			Artefact($uid, 8, 1, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
 		}
 
@@ -471,7 +483,8 @@ if($_POST['password'] != ""){
 		unset($vname);
 		unset($effect);
 		$vname = FOOL_SMALLVILLAGE;
-		for($i > 1; $i < 5; $i++) {
+		$effect = '';
+		for($i = 2; $i < 5; $i++) {
 			Artefact($uid, 8, 2, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
 		}
 
@@ -479,7 +492,8 @@ if($_POST['password'] != ""){
 		unset($vname);
 		unset($effect);
 		$vname = FOOL_UNIQUEVILLAGE;
-		for($i > 1; $i < 1; $i++) {
+		$effect = '';
+		for($i = 2; $i < 1; $i++) {
 			Artefact($uid, 8, 3, FOOL_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
 		}
 		$myFile = "Templates/text.tpl";
@@ -510,7 +524,7 @@ if($_POST['password'] != ""){
 	<span>Choose Password</span>
 </p>
 <table>
-	<tr><td>Password:</td><td><input type="text" name="password" value="" /></td></tr>
+	<tr><td>Password:</td><td><input type="password" name="password" value="" /></td></tr>
 </table>
 
 	<div style="text-align: center">

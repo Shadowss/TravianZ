@@ -16,8 +16,27 @@
 ##                                                                             ##
 #################################################################################
 
-include_once("src/Entity/User.php");
 use App\Entity\User;
+
+global $autoprefix;
+
+// even with autoloader created, we can't use it here yet, as it's not been created
+// ... so, let's see where it is and include it
+$autoloader_found = false;
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        $autoloader_found = true;
+        include_once $autoprefix.'autoloader.php';
+        break;
+    }
+}
+
+if (!$autoloader_found) {
+    die('Could not find autoloading class.');
+}
 
 class Alliance {
 
