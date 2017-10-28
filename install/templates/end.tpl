@@ -27,6 +27,7 @@ All the files are placed. The database is created, so you can now start playing 
     <li>CHMOD GameEngine back to 755 (sudo chmod -R 755 GameEngine)</li>
     <li>CHMOD Prevention to 777 (sudo chmod -R 777 GameEngine/Prevention)</li>
     <li>CHMOD Notes to 777 (sudo chmod -R 777 GameEngine/Notes)</li>
+    <li>CHMOD var/log to 777 (sudo chmod -R 777 var/log)</li>
 </ul>
 
 <ul>
