@@ -769,7 +769,6 @@ class Building {
         global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
         if($session->access!=BANNED){
         $finish = 0;
-        
         foreach($this->buildArray as $jobs) {
         if($jobs['wid']==$village->wid){
             $finish=2;
@@ -817,6 +816,8 @@ class Building {
         }
         }
         if($finish != 2){
+            $newgold = $session->gold-2;
+            $database->updateUserField($session->uid, "gold", $newgold, 1);
             $demolition=$database->finishDemolition($village->wid);
             $tech=$technology->finishTech();
             if ($finish==1 || $demolition>0 || $tech>0) {
