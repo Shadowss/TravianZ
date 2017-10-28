@@ -8,7 +8,7 @@
 ##  Copyright:     TravianZ (c) 2012-2014. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-unset($_SESSION['username'], $_SESSION['sessid']);
+unset($_SESSION['admin_username'], $_SESSION['sessid']);
 ?>
 <table id="member">
     <thead>

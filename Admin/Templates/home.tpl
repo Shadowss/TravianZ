@@ -31,7 +31,7 @@
 
 <br /><br /><br /><br />
 
-	Hello <b><?php echo $_SESSION['username']; ?></b>, You are logged in as: <b><font color="Red">Administrator</font></b></center>
+	Hello <b><?php echo $_SESSION['admin_username']; ?></b>, You are logged in as: <b><font color="Red">Administrator</font></b></center>
 	<br /><br /><br />
 
 	<br /><br /><br /><br /><br />

@@ -143,7 +143,7 @@ class funct {
   function LogIN($username,$password){
 	global $admin,$database;
 	if($admin->Login($username,$password)){
-	  //$_SESSION['username'] = $username;
+	  $_SESSION['admin_username'] = $username;
 	  $_SESSION['access'] = $database->getUserField($username,'access',1);
 	  $_SESSION['id'] = $database->getUserField($username,'id',1);
 	  header("Location: ".$_SERVER['HTTP_REFERER']);
