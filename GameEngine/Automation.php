@@ -4491,6 +4491,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 $timedif = $time-$starv['starvupdate'];
                 $skolko=$database->getCropProdstarv($starv['wref'])-$starv['starv'];
                 if($skolko<0){$golod=true;}
+                else{$golod=false;}
                 if($golod){
                     $starvsec = (abs($skolko)/3600);
                     $difcrop = ($timedif*$starvsec); //crop eat up over time
