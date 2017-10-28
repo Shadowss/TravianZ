@@ -42,8 +42,15 @@ if(SPEED == '1'){
 	$skipp_time="7200"; 
 } else if(SPEED > '5'){ 
     $skipp_time= 3600 / SPEED;
-} 
+}
+
 if (isset($qact)){
+	// check that the quest we're on is not lower than the quest we're requesting
+	$currentQuest = $database->getUserField($_SESSION['username'],"quest",1);
+	if ($qact < $currentQuest) {
+		$qact = $currentQuest;
+	}
+
 	if ($qact == $_SESSION['qst']+1 && (($_SESSION['qst']>= 1 && $_SESSION['qst']<=30) || (time()-$_SESSION['qst_time']>=0 && ($_SESSION['qst'] >= 90 && $_SESSION['qst'] <=97))) || ($_SESSION['qst']== 0 && ($qact == "enter" || $qact == "skip")) || ($qact == "rank" && ($_SESSION['qst']== 4 || $_SESSION['qst']== 18)) || ($_SESSION['qst']== 7 && $qact == "coor") || ($_SESSION['qst']== 16 && $qact == "lumber") || ($_SESSION['qst']== 19 && $qact == 23) || ($_SESSION['qst']== 22 && $qact == 26) || ($_SESSION['qst']== 27 && $qact == "gold")) {		//avoid hacking gold, resources or reward -- added by Ronix - Fixed by Pietro
 		switch($qact) {
 		case 'enter':
@@ -402,6 +409,16 @@ if (isset($qact)){
 
 header("Content-Type: application/json;");
 if($session->access!=BANNED){
+
+	// check that the quest we're on is not lower than the quest we're requesting
+	if (!isset($currentQuest)) {
+		$currentQuest = $database->getUserField($_SESSION['username'],"quest",1);
+	}
+
+	if (empty($_SESSION['qst']) || $_SESSION['qst'] < $currentQuest) {
+		$_SESSION['qst'] = $currentQuest;
+	}
+
     if($_SESSION['qst']== 0){?>
 {"markup":"<div id=\"qstd\"><h1> <img class=\"point\" src=\"img/x.gif\" alt=\"\" title=\"\"> <?php echo Q0; ?> <?php echo SERVER_NAME; ?>!<\/h1><br \/><i>&rdquo;<?php echo Q0_DESC; ?>&rdquo;<\/i><br><br><span id=\"qst_accpt\"><a class=\"qle\" href=\"javascript: qst_next('','enter')\"><?php echo Q0_OPT1; ?></a><a class=\"qri\" href=\"javascript: qst_fhandle();\"><?php echo Q0_OPT2; ?></a><input type=\"hidden\" id=\"qst_val\" value=\"2\"><br><br><br><a class=\"qri\" href=\"javascript: qst_next('','skip');\"><?php echo Q0_OPT3; ?></a></span></div><div id=\"qstbg\" class=\"intro\"></div>","number":null,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":1}
 

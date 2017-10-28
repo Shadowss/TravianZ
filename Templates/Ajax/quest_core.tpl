@@ -41,7 +41,15 @@ if(SPEED == '1'){
 	$skipp_time="3600"; 
 } 
 $_SESSION['qst_time'] = $uArray['quest_time'];
+
 if (isset($qact)){
+
+	// check that the quest we're on is not lower than the quest we're requesting
+	$currentQuest = $database->getUserField($_SESSION['username'],"quest",1);
+	if ($qact < $currentQuest) {
+		$qact = $currentQuest;
+	}
+
 	if ($check_quest==$qact) {
 		//avoid hacking gold, resources or reward -- added by Ronix
 	}else {
@@ -418,6 +426,15 @@ if (isset($qact)){
 
 header("Content-Type: application/json;");
 if($session->access!=BANNED){
+	// check that the quest we're on is not lower than the quest we're requesting
+	if (!isset($currentQuest)) {
+		$currentQuest = $database->getUserField($_SESSION['username'],"quest",1);
+	}
+
+	if (empty($_SESSION['qst']) || $_SESSION['qst'] < $currentQuest) {
+		$_SESSION['qst'] = $currentQuest;
+	}
+
       if($_SESSION['qst']== 0){
 	  ?>
 
