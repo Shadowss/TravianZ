@@ -33,7 +33,7 @@
 				<tr>
 					<td>Username</td>
 					<td>
-						<input class="fm fm110" type="text" name="name" value="<?php echo $_SESSION['username']?>" maxlength="20">
+						<input class="fm fm110" type="text" name="name" value="<?php echo (isset($_SESSION['username']) ? $_SESSION['username'] : '')?>" maxlength="20">
 					</td>
 				</tr>
 				<tr>
