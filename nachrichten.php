@@ -11,10 +11,14 @@
 #################################################################################
 
 
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 $message->procMessage($_POST);
-if($_GET['t'] == 1){
+if(isset($_GET['t']) && $_GET['t'] == 1){
 	$automation->isWinner();
 }
 if(isset($_GET['newdid'])) {

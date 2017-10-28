@@ -9,8 +9,12 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+use App\Utils\AccessLogger;
+
 ob_start();
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 $profile->procProfile($_POST);
 $profile->procSpecial($_GET);

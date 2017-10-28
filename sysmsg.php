@@ -9,7 +9,11 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 include_once("GameEngine/Account.php");
+AccessLogger::logRequest();
+
 $max_per_pass = 1000;
 if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
 

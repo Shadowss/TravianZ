@@ -19,6 +19,7 @@
 
 
 use App\Entity\User;
+use App\Utils\AccessLogger;
 
 global $autoprefix;
 
@@ -34,6 +35,7 @@ for ($i = 0; $i < 5; $i++) {
 
 include_once ($autoprefix."GameEngine/Session.php");
 include_once ($autoprefix."GameEngine/config.php");
+AccessLogger::logRequest();
 
 
 /**

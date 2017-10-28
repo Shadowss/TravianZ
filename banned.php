@@ -9,9 +9,12 @@
 ##                                                                             ##
 #################################################################################
 
-include("GameEngine/Village.php");
-$start = $generator->pageLoadTimeStart();
+use App\Utils\AccessLogger;
 
+include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
+$start = $generator->pageLoadTimeStart();
 if($session->access == BANNED){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

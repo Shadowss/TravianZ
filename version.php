@@ -11,7 +11,11 @@
 #################################################################################
 
 
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $amount = $_SESSION['amount'];
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {

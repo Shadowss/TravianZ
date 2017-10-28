@@ -10,13 +10,16 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 if(!file_exists('var/installed') && @opendir('install')) {
     header("Location: install/");
     exit;
 }
 
-error_reporting(E_ALL);
 include("GameEngine/Account.php");
+AccessLogger::logRequest();
+
 if(isset($_GET['del_cookie'])) {
 	setcookie("COOKUSR","",time()-3600*24,"/");
 	header("Location: login.php");

@@ -10,7 +10,11 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 include_once("GameEngine/Account.php");
+AccessLogger::logRequest();
+
 $max_per_pass = 1000;
 
 if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".(int) $session->uid)) != '1') die("Hacking attemp!");
@@ -189,7 +193,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 <?php echo MASS_UNITS; ?>
 <a href="javascript:toggleDisplay('message_smilies')"><?php echo MASS_SHOWHIDE; ?></a>
 
-<div id="smilll" id="message_smilies" style="background:none repeat scroll 0 0 #EFEFEF;border:1px solid #71D000;left:20px;margin-top:5px;max-width:660px;padding:5px;position:relative;display: none;">
+<div id="message_smilies" style="background:none repeat scroll 0 0 #EFEFEF;border:1px solid #71D000;left:20px;margin-top:5px;max-width:660px;padding:5px;position:relative;display: none;">
 <?php echo MASS_READ; ?>
 <a href="#" onclick="smilie('*u1*')"><img src="img/x.gif" class="uu1" /></a>
 <a href="#" onclick="smilie('*u2*')"><img src="img/x.gif" class="uu2" /></a>

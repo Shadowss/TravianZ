@@ -8,7 +8,11 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 if(isset($_GET['newdid'])){
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF']);

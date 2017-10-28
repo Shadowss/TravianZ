@@ -8,7 +8,10 @@
 | Copyright:     TravianX Project All rights reserved     |
 \*-------------------------------------------------------*/
 
+   use App\Utils\AccessLogger;
+
    include ("GameEngine/Village.php");
+   AccessLogger::logRequest();
 
    if($session->goldclub == 0) {
 	   header("Location: plus.php?id=3");

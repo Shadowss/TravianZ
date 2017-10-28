@@ -18,6 +18,8 @@
 ## 										##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 if (!function_exists('mysqli_result')) {
     function mysqli_result($res, $row, $field=0) {
         $res->data_seek($row);
@@ -27,6 +29,8 @@ if (!function_exists('mysqli_result')) {
 }
 
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];

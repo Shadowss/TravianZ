@@ -9,6 +9,8 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+use App\Utils\AccessLogger;
+
 if(!file_exists('var/installed') && @opendir('install')) {
 	header("Location: install/");
 	exit;
@@ -18,6 +20,7 @@ include("GameEngine/Lang/" . LANG . ".php");
 include("GameEngine/Database.php");
 include("GameEngine/Mailer.php");
 include("GameEngine/Generator.php");
+AccessLogger::logRequest();
 
 if(!isset($_REQUEST['npw'])){
 	header("Location: login.php");

@@ -1,6 +1,10 @@
 <?php
 
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];

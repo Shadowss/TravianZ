@@ -10,9 +10,12 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 include("GameEngine/config.php");
 include("GameEngine/Database.php");
 include("GameEngine/Lang/".LANG.".php");
+AccessLogger::logRequest();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">

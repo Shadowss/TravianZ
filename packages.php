@@ -9,7 +9,11 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 $id = $_GET['id'];
 if($session->access != BANNED){

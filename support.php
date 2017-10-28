@@ -9,7 +9,11 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-	include("GameEngine/Village.php");
+use App\Utils\AccessLogger;
+
+include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $amount = $_SESSION['amount'];
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {

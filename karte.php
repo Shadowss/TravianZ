@@ -10,8 +10,12 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 if(isset($_GET['z']) && !is_numeric($_GET['z'])) die('Hacking Attempt');
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];

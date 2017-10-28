@@ -305,6 +305,10 @@ define("MULTIHUNTER",8);
 define("ADMIN",9);
 define("COOKIE_EXPIRE", 60*60*24*7); 
 define("COOKIE_PATH", "/"); 
+define("LOG_PAGE_ACCESS", false);
+define("PAGE_ACCESS_LOG_DATE", true);
+define("PAGE_ACCESS_LOG_IP", true);
+define("PAGE_ACCESS_LOG_FILENAME", 'access.log'); // filename ONLY, no path!
 
 
 ////////////////////////////////////////////

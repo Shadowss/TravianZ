@@ -10,9 +10,13 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 ob_start();
 include_once("GameEngine/Village.php");
 include_once("GameEngine/Units.php");
+AccessLogger::logRequest();
+
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));

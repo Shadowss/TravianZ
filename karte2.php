@@ -8,8 +8,12 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
-	$building->procBuild($_GET);
+AccessLogger::logRequest();
+
+$building->procBuild($_GET);
 if($session->plus){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

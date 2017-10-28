@@ -9,7 +9,11 @@
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['ok'])){
 	$database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';

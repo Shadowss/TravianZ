@@ -3,7 +3,7 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Filename       User.php                                                    ##
+##  Filename       Math.php                                                    ##
 ##  Developed by:  martinambrus                                                ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2017. All rights reserved.                ##

@@ -10,12 +10,16 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 if(!file_exists('var/installed') && @opendir('install')) {
     header("Location: install/");
     exit;
 }
 
 include('GameEngine/Account.php');
+AccessLogger::logRequest();
+
 $invited=(isset($_GET['uid'])) ? filter_var($_GET['uid'], FILTER_SANITIZE_NUMBER_INT):$form->getError('invt');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -10,7 +10,11 @@
 ##                                                                             ##
 #################################################################################
 
+use App\Utils\AccessLogger;
+
 include("GameEngine/Village.php");
+AccessLogger::logRequest();
+
 $start = $generator->pageLoadTimeStart();
 $message->noticeType($_GET);
 $message->procNotice($_POST);
