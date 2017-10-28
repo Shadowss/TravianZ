@@ -12,7 +12,7 @@ INSERT INTO %PREFIX%wdata
 
             -- fieldtype is always 3 for the middle and the word border
             IF (
-                (x = 0 AND y = 0) OR (x = 100 AND y = 100),
+                (x = 0 AND y = 0) OR (x = %WORLDSIZE% AND y = %WORLDSIZE%),
                 3,
                 -- get a field type based on the random number previously generated
                 CASE
@@ -34,7 +34,7 @@ INSERT INTO %PREFIX%wdata
 
             -- there are no oasis' in the middle and by the word border
             IF (
-                (x = 0 AND y = 0) OR (x = 100 AND y = 100),
+                (x = 0 AND y = 0) OR (x = %WORLDSIZE% AND y = %WORLDSIZE%),
                 0,
                 -- get an oasis type if the field type generated in the previous IF statement
                 -- is 0, based on the random number previously generated
@@ -73,9 +73,9 @@ INSERT INTO %PREFIX%wdata
             (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t,
             (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
 
-            -- in t3, we only need 4 rows of dummy data, as 400 is currently the maximum allowed map size
-            -- which brings us to `t1` x `t2` x `t3` = 10 x 10 x 4 = 400
-            (select 0 union select 1 union select 2 union select 3) t3,
+            -- in t3, we only need 9 rows of dummy data, as 400 is currently the maximum allowed map size (i.e. -400 to +400)
+            -- which brings us to `t1` x `t2` x `t3` = 10 x 10 x 9 = 900 (we need 900 not 800 because coordinates start at 0,0 not 1,1)
+            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8) t3,
 
             -- here we tell MySQL where to start, so if we have a world 100x100, this will set @row to -101
             -- (not -100 because the first select already increments the @row by 1, so we'd start at -99 instead)
@@ -91,7 +91,7 @@ INSERT INTO %PREFIX%wdata
             (SELECT @row2 := @row2 + 1 as x FROM 
             (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t,
             (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
-            (select 0 union select 1 union select 2) t3,
+            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8) t3,
             (SELECT @row2 := (-%WORLDSIZE% - 1)) as beginning
             WHERE @row2 <= (%WORLDSIZE% - 1)) as x
         ) as generator;
