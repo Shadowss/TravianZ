@@ -3577,7 +3577,14 @@ class MYSQLi_DB implements IDbConnection {
 			foreach($returningarray as $ret) {
 				if($ret['attack_type'] != 1) {
 					for($i = 1; $i <= 10; $i++) {
+					    if (!isset($movingunits['u' . (($vtribe - 1) * 10 + $i)])) {
+					        $movingunits['u' . (($vtribe - 1) * 10 + $i)] = 0;
+					    }
 						$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $ret['t' . $i];
+					}
+					
+					if (!isset($movingunits['hero'])) {
+					    $movingunits['hero'] = 0;
 					}
 					$movingunits['hero'] += $ret['t11'];
 				}

@@ -98,6 +98,6 @@ class User {
         // convert result into an array
         $res = mysqli_fetch_array($res, MYSQLI_NUM);
 
-        return ($res[0] > 0 || $res[1] > 0);
+        return ($res[0] > 0 || (count($res) > 1 && $res[1] > 0));
     }
 }

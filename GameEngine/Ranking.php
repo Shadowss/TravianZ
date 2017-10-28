@@ -23,6 +23,7 @@
 				$users = "SELECT * FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8") . "";
 				$users2 = mysqli_num_rows(mysqli_query($GLOBALS['link'],$users));
 				$users3 = $users2+1;
+				$myrank = 0;
 				if(count($ranking) > 0) {
 					for($i=0;$i<($users3);$i++) {
 						if( isset( $ranking[$i]['userid'] ) ) {						

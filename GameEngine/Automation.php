@@ -3602,7 +3602,11 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                 $movement = $database->getVillageMovement($base);
                 if(!empty($movement)) {
                         for($i=1;$i<=50;$i++) {
-                                $ownunit['u'.$i] += $movement['u'.$i];
+                            if (!isset($ownunit['u'.$i])) {
+                                $ownunit['u'.$i] = 0;
+                            }
+
+                            $ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
                         }
                 }
                 $prisoners = $database->getPrisoners($base,1);
@@ -4184,24 +4188,24 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			{
 				if ($row['f' . $i . 't'] == 10)
 				{
-					$ress += $bid10[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER;
+				    $ress += ((isset($bid10[$row['f' . $i]]) && isset($bid10[$row['f' . $i]]['attri'])) ? $bid10[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
 				}
 
 				if ($row['f' . $i . 't'] == 38)
 				{
-					$ress += $bid38[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER;
+				    $ress += ((isset($bid38[$row['f' . $i]]) && isset($bid38[$row['f' . $i]]['attri'])) ? $bid38[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
 				}
 
 
 
 				if ($row['f' . $i . 't'] == 11)
 				{
-					$crop += $bid11[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER;
+				    $crop += ((isset($bid11[$row['f' . $i]]) && isset($bid11[$row['f' . $i]]['attri'])) ? $bid11[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
 				}
 
 				if ($row['f' . $i . 't'] == 39)
 				{
-					$crop += $bid39[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER;
+				    $crop += ((isset($bid39[$row['f' . $i]]) && isset($bid39[$row['f' . $i]]['attri'])) ? $bid39[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
 				}
 			}
 
@@ -4429,13 +4433,13 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                         if(count($enforcearray)>0){
                             foreach ($enforcearray as $enforce){
                                 for($i = 0 ; $i <= 50 ; $i++){
-                                    $units = $enforce['u'.$i];
-                                    if($enforce['u'.$i] > $maxcount){
-                                        $maxcount = $enforce['u'.$i];
+                                    $units = (isset($enforce['u'.$i]) ? $enforce['u'.$i] : 0);
+                                    if($units > $maxcount){
+                                        $maxcount = $units;
                                         $maxtype = $i;
                                         $enf = $enforce['id'];
                                     }
-                                    $totalunits += $enforce['u'.$i];
+                                    $totalunits += $units;
                                 }
                                 if($totalunits == 0){
                                     $maxcount = $enforce['hero'];
@@ -4449,13 +4453,13 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                             if(count($enforcearray)>0){
                                 foreach ($enforcearray as $enforce){
                                     for($i = 0 ; $i <= 50 ; $i++){
-                                        $units = $enforce['u'.$i];
-                                        if($enforce['u'.$i] > $maxcount){
-                                            $maxcount = $enforce['u'.$i];
+                                        $units = (isset($enforce['u'.$i]) ? $enforce['u'.$i] : 0);
+                                        if($units > $maxcount){
+                                            $maxcount = $units;
                                             $maxtype = $i;
                                             $enf = $enforce['id'];
                                         }
-                                        $totalunits += $enforce['u'.$i];
+                                        $totalunits += $units;
                                     }
                                     if($totalunits == 0){
                                         $maxcount = $enforce['hero'];
@@ -4466,12 +4470,12 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 			//get own unit
                                 $unitarray = $database->getUnit($starv['wref']);
                                 for($i = 0 ; $i <= 50 ; $i++){
-                                    $units = $unitarray['u'.$i];
-                                    if($unitarray['u'.$i] > $maxcount){
-                                        $maxcount = $unitarray['u'.$i];
+                                    $units = (isset($unitarray['u'.$i]) ? $unitarray['u'.$i] : 0);
+                                    if($units > $maxcount){
+                                        $maxcount = $units;
                                         $maxtype = $i;
                                     }
-                                    $totalunits += $unitarray['u'.$i];
+                                    $totalunits += $units;
                                 }
                                 if($totalunits == 0){
                                     $maxcount = $unitarray['hero'];
@@ -4502,9 +4506,9 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
                     }
                     
                     if($difcrop > 0){
-                        global ${u.$maxtype};
+                        global ${'u'.$maxtype};
                         $hungry=array();
-                        $hungry=${u.$maxtype};
+                        $hungry=${'u'.$maxtype};
                         if ($hungry['crop']>0 && $oldcrop <=0) {
                             $killunits = intval($difcrop/$hungry['crop']);
                         }else $killunits=0;

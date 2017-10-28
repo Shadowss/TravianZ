@@ -16,9 +16,9 @@ $displayarray = $database->getUserArray($_GET['uid'],1);
 
 $varmedal = $database->getProfileMedal($_GET['uid']);
 
-$profiel="".$displayarray['desc1']."".md5(skJkev3)."".$displayarray['desc2']."";
+$profiel="".$displayarray['desc1']."".md5('skJkev3')."".$displayarray['desc2']."";
 require("medal.php");
-$profiel=explode("".md5(skJkev3)."", $profiel);
+$profiel=explode("".md5('skJkev3')."", $profiel);
 
 $varray = $database->getProfileVillages($_GET['uid']);
 $totalpop = 0;
