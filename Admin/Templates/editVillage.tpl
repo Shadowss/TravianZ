@@ -71,7 +71,7 @@ if(isset($id))
 				</thead>
 				<tbody>
 					<?php
-						for($i =1; $i<=39; $i++)
+						for($i = 1; $i<=42; $i++)
 						{
 							$bu = $funct->procResType($i);
 							echo '
@@ -81,10 +81,6 @@ if(isset($id))
 							</tr>';
 						}
 					?>
-					<tr>
-						<td class="on">41.</td>
-						<td class="on">Horse Drinking Trough</td>
-					</tr>
 				</tbody>
 			</table>
 			<a href="#" onclick="hideStuff('instructions'); return false;">Hide Instructions</a>
