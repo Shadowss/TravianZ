@@ -1,4 +1,3 @@
-- link username to user when sending alliance forum notification message
 - link username to user in message sender
 - scale oasis regeneration with game progresses (now we have elephants and tigers everywhere)
 - add checkbox when sending units for a raid to include the attack in the raid list, if eligible

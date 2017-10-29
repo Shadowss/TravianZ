@@ -1570,7 +1570,7 @@ class MYSQLi_DB implements IDbConnection {
                             (int) $row['owner'],
                             2,
                             'New Message in Alliance Forum',
-                            "Hi!\n\n".$this->escape($session->username)." posted a new message into your common topic. Here\\'s a link that will get you there: <a href=\"".rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>",
+                            "Hi!\n\n<a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$this->escape($session->username)."</a> posted a new message into your common topic. Here\\'s a link that will get you there: <a href=\"".rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>",
                             0,
                             0,
                             0,
