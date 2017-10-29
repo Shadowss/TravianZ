@@ -815,8 +815,11 @@ class Building {
         }
         }
         if($finish != 2){
-            $newgold = $session->gold-2;
-            $database->updateUserField($session->uid, "gold", $newgold, 1);
+            // only decrease gold if we didn't already do it for the building phase
+            if (!isset($newgold)) {
+                $newgold = $session->gold-2;
+                $database->updateUserField($session->uid, "gold", $newgold, 1);
+            }
             $demolition=$database->finishDemolition($village->wid);
             $tech=$technology->finishTech();
             if ($finish==1 || $demolition>0 || $tech>0) {
