@@ -1,5 +1,6 @@
 - link username to user when sending alliance forum notification message
 - link username to user in message sender
+- scale oasis regeneration with game progresses (now we have elephants and tigers everywhere)
 - add checkbox when sending units for a raid to include the attack in the raid list, if eligible
 - change "incoming attacker" title of the raid list icon when actually attacking a farm (it should be "Own attacking troops")
 - change "select all" button to actually select all checkboxes via JS, not via page reload
@@ -15,6 +16,7 @@
 - disallow empty posts, topics and survey values in forums (check for aliance name and tag, too)
 - when WW is at level 100, the player has to click on it in order for win to register - win should be registered as soon as lvl 100 is reached
 - add the possibility to see player's war log (attack messages) in Admin
+- repair BBCode functionality for including unit and alliance placeholders
 - add PayPal listener to verify gold transactions imediatelly
 - check the following queries for performing stuff on DB rather than in PHP:
   "SELECT * FROM s1_vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop"
