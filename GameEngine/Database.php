@@ -1696,15 +1696,23 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function isAllianceOwner($id) {
-	    list($id) = $this->escape_input((int) $id);
+	    $id = (int) $id;
 
-		$q = "SELECT * from " . TB_PREFIX . "alidata where leader = ". $id;
+		$q = "SELECT id from " . TB_PREFIX . "alidata where leader = ". $id;
 		$result = mysqli_query($this->dblink,$q);
 		if(mysqli_num_rows($result)) {
-			return true;
+		    $result = mysqli_fetch_assoc($result);
+			return $result['id'];
 		} else {
 			return false;
 		}
+	}
+	
+	function countAllianceMembers($aid) {
+	    $aid = (int) $aid;
+	    $q = "SELECT Count(*) as Total from ".TB_PREFIX."users WHERE alliance = ".$aid;
+	    $membersCount = $this->query_return($q);
+	    return $membersCount[0]['Total'];
 	}
 
 	function aExist($ref, $type) {
@@ -2131,13 +2139,84 @@ class MYSQLi_DB implements IDbConnection {
 		return $row["f" . $field];
 	}
 
+	function getSingleFieldTypeCount($uid, $field, $lvl = false, $lvlComparisonSign = '=') {
+	    $uid = (int) $uid;
+	    $field = (int) $field;
+	    $lvl = ($lvl === false ? $lvl : (int) $lvl);
+
+	    if (!in_array($lvlComparisonSign, ['=', '<', '>', '>=', '<=', '!='])) {
+	        $lvlComparisonSign = '=';
+	    }
+
+	    $q = "
+            SELECT
+            	Count(*) as Total
+            FROM
+            	".TB_PREFIX."fdata f
+            	LEFT JOIN ".TB_PREFIX."vdata v ON f.vref = v.wref
+                LEFT JOIN ".TB_PREFIX."users u ON v.owner = u.id
+            WHERE
+            	u.id = ".$uid."
+                AND
+                (
+                    (f1t = ".$field.($lvl !== false ? ' AND f1 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f2t = ".$field.($lvl !== false ? ' AND f2 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f3t = ".$field.($lvl !== false ? ' AND f3 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f4t = ".$field.($lvl !== false ? ' AND f4 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f5t = ".$field.($lvl !== false ? ' AND f5 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f6t = ".$field.($lvl !== false ? ' AND f6 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f7t = ".$field.($lvl !== false ? ' AND f7 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f8t = ".$field.($lvl !== false ? ' AND f8 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f9t = ".$field.($lvl !== false ? ' AND f9 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f10t = ".$field.($lvl !== false ? ' AND f10 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f11t = ".$field.($lvl !== false ? ' AND f11 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f12t = ".$field.($lvl !== false ? ' AND f12 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f13t = ".$field.($lvl !== false ? ' AND f13 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f14t = ".$field.($lvl !== false ? ' AND f14 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f15t = ".$field.($lvl !== false ? ' AND f15 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f16t = ".$field.($lvl !== false ? ' AND f16 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f17t = ".$field.($lvl !== false ? ' AND f17 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f18t = ".$field.($lvl !== false ? ' AND f18 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f19t = ".$field.($lvl !== false ? ' AND f19 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f20t = ".$field.($lvl !== false ? ' AND f20 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f21t = ".$field.($lvl !== false ? ' AND f21 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f22t = ".$field.($lvl !== false ? ' AND f22 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f23t = ".$field.($lvl !== false ? ' AND f23 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f24t = ".$field.($lvl !== false ? ' AND f24 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f25t = ".$field.($lvl !== false ? ' AND f25 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f26t = ".$field.($lvl !== false ? ' AND f26 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f27t = ".$field.($lvl !== false ? ' AND f27 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f28t = ".$field.($lvl !== false ? ' AND f28 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f29t = ".$field.($lvl !== false ? ' AND f29 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f30t = ".$field.($lvl !== false ? ' AND f30 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f31t = ".$field.($lvl !== false ? ' AND f31 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f32t = ".$field.($lvl !== false ? ' AND f32 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f33t = ".$field.($lvl !== false ? ' AND f33 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f34t = ".$field.($lvl !== false ? ' AND f34 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f35t = ".$field.($lvl !== false ? ' AND f35 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f36t = ".$field.($lvl !== false ? ' AND f36 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f37t = ".$field.($lvl !== false ? ' AND f37 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f38t = ".$field.($lvl !== false ? ' AND f38 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f39t = ".$field.($lvl !== false ? ' AND f39 '.$lvlComparisonSign.' '.$lvl : '').")
+                    OR (f40t = ".$field.($lvl !== false ? ' AND f40 '.$lvlComparisonSign.' '.$lvl : '').")
+                )";
+
+	    $result = mysqli_query($this->dblink,$q);
+	    $row = mysqli_fetch_array($result);
+	    return $row["Total"];
+	}
+	
 	function getFieldType($vid, $field) {
 	    list($vid, $field) = $this->escape_input((int) $vid, $field);
 
-		$q = "SELECT f" . $field . "t from " . TB_PREFIX . "fdata where vref = $vid";
-		$result = mysqli_query($this->dblink,$q);
-		$row = mysqli_fetch_array($result);
-		return $row["f" . $field . "t"];
+	    if ($field && $vid) {
+    		$q = "SELECT f" . $field . "t from " . TB_PREFIX . "fdata where vref = $vid";
+    		$result = mysqli_query($this->dblink,$q);
+    		$row = mysqli_fetch_array($result);
+    		return $row["f" . $field . "t"];
+	    } else {
+	        return 0;
+	    }
 	}
 	
 	function getFieldDistance($wid) {
@@ -2678,12 +2757,36 @@ class MYSQLi_DB implements IDbConnection {
 	function addDemolition($wid, $field) {
 	    list($wid, $field) = $this->escape_input((int) $wid, (int) $field);
 
-		global $building, $village;
+		global $building, $village, $session;
+
+		$fLevel = $this->getFieldLevel($wid,$field);
+
+		// check if we're not demolishing an Embassy at level 3
+		if ($fLevel == 3 && $this->getFieldType($wid,$field) == 18) {
+		    // check if this user is the founder of the alliance
+		    if ($session->alliance && $this->isAllianceOwner($session->uid) == $session->alliance) {
+		        // check if we have any other players in this alliance left
+		        $membersCount = $this->countAllianceMembers($session->alliance);
+		        if ($membersCount > 1) {
+		            // check if this player has only 1 last Embassy on level 3
+		            if ($this->getSingleFieldTypeCount($session->uid, 18, 3, '>=') == 1) {
+    		            // cannot demolish Embassy further until the player quits the alliance,
+    		            // as they are founder and there are still other players in the alliance,
+    		            // thus destroying Embassy would evict this player from the alliance
+    		            // and leave a new random leader
+    		            return 18;
+		            }
+		        }
+		    }
+		}
+
 		$q = "DELETE FROM ".TB_PREFIX."bdata WHERE field=$field AND wid=$wid";
 		mysqli_query($this->dblink,$q);
 		$uprequire = $building->resourceRequired($field,$village->resarray['f'.$field.'t'],0);
-		$q = "INSERT INTO ".TB_PREFIX."demolition VALUES (".$wid.",".$field.",".($this->getFieldLevel($wid,$field)-1).",".(time()+floor($uprequire['time']/2)).")";
-		return mysqli_query($this->dblink,$q);
+		$q = "INSERT INTO ".TB_PREFIX."demolition VALUES (".$wid.",".$field.",".($fLevel-1).",".(time()+floor($uprequire['time']/2)).")";
+		mysqli_query($this->dblink,$q);
+		
+		return true;
 	}
 
 
@@ -2706,13 +2809,86 @@ class MYSQLi_DB implements IDbConnection {
 	function finishDemolition($wid) {
 	    list($wid) = $this->escape_input((int) $wid);
 
-        	$q = "UPDATE " . TB_PREFIX . "demolition SET timetofinish=" . time() . " WHERE vref=" . $wid;
-        	$result= mysqli_query($this->dblink,$q);
-        	return mysqli_affected_rows();
-    	}  
+    	$q = "UPDATE " . TB_PREFIX . "demolition SET timetofinish=" . time() . " WHERE vref=" . $wid;
+    	$result= mysqli_query($this->dblink,$q);
+    	return mysqli_affected_rows();
+	}  
 
-	function delDemolition($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
+	function delDemolition($wid, $checkEmbassy = false) {
+	    $wid = (int) $wid;
+
+	    if ($checkEmbassy) {
+	        // check if we've demolished an Embassy
+	        // and select the user it belonged to as well,
+	        // so we can potentially disconnect them from the alliance
+	        // and remove it - if they don't have any more Embassies
+	        //                 or if the they are founder and they have no more lvl 3+ Embassies
+	        $q = '
+            SELECT
+                u.id, u.alliance, d.buildnumber, d.lvl
+            FROM
+                '.TB_PREFIX.'demolition d
+                LEFT JOIN '.TB_PREFIX.'vdata v ON d.vref = v.wref
+                LEFT JOIN '.TB_PREFIX.'users u ON u.id = v.owner
+            WHERE d.vref = '.$wid;
+
+	        $res = mysqli_fetch_all(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
+	        foreach ($res as $key) {
+	            // if this building was demolished completely, there is no record of what it was
+	            // therefore, we need to check status of Embassies in case we've just demolished
+	            // an Embassy and should disconnect a player from an alliance
+	            if ($key['lvl'] == 0 && $key['alliance'] > 0 && $this->getSingleFieldTypeCount($key['id'], 18, 1, '>=') == 0) {
+	                // if we have no more Embassies and this player is in an alliance,
+	                // disconnect him from that alliance
+                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$key['id']);
+                    $_SESSION['alliance_user'] = 0;
+
+                    // notify them via in-game messaging
+                    $this->sendMessage(
+                        $key['id'],
+                        2,
+                        'You left the alliance',
+                        "Hi!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>",
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        true);
+	            } else {
+    	            $fType = $this->getFieldType($wid, $key['buildnumber']);
+    
+    	            // we're actually demolishing an Embassy
+    	            if ($fType == 18) {
+    	                $isOwner = ($key['alliance'] && $this->isAllianceOwner($key['id']) == $key['alliance']);
+    
+    	                // in case the player is an alliance founder,
+    	                // we demolished a lvl 3 Embasy
+    	                // and there are no more lvl 3+ Embassies left for them
+    	                // disconnect them from the alliance and delete it
+    	                // because alliance can only be founded with a lvl 3+ Embassy
+    	                if ($isOwner && $key['lvl'] == 2 && $this->getSingleFieldTypeCount($key['id'], 18, 3, '>=') == 0) {
+    	                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$key['id']);
+    	                    $this->deleteAlliance($key['alliance']);
+    	                    $_SESSION['alliance_user'] = 0;
+    	                    
+    	                    // notify them via in-game messaging
+    	                    $this->sendMessage(
+    	                        $key['id'],
+    	                        2,
+    	                        'Your alliance was disbanded',
+    	                        "Hi!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\n\In order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>",
+    	                        0,
+    	                        0,
+    	                        0,
+    	                        0,
+    	                        0,
+    	                        true);
+    	                }
+    	            }
+	            }
+	        }
+	    }
 
 		$q = "DELETE FROM " . TB_PREFIX . "demolition WHERE vref=" . $wid;
 		return mysqli_query($this->dblink,$q);

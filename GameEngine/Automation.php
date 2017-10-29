@@ -4122,7 +4122,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 				$pop=$this->getPop($type,$level-1);
 				$database->modifyPop($vil['vref'],$pop[0],1);
 				$this->procClimbers($database->getVillageField($vil['vref'],'owner'));
-				$database->delDemolition($vil['vref']);
+				$database->delDemolition($vil['vref'], true);
 			}
 		}
 		if(file_exists("GameEngine/Prevention/demolition.txt")) {

@@ -15,9 +15,13 @@ if(!empty($_REQUEST["demolish"]) && $_REQUEST["c"] == $session->mchecker) {
 if($session->access != BANNED){
     if($_REQUEST["type"] != null) {
         $type = $_REQUEST['type'];
-        $database->addDemolition($village->wid,$type);
-        $session->changeChecker();
-        header("Location: build.php?gid=15&ty=$type&cancel=0&demolish=0");
+        $demolish_permitted = $database->addDemolition($village->wid,$type);
+        if ($demolish_permitted === true) {
+        	$session->changeChecker();
+        	header("Location: build.php?gid=15&ty=$type&cancel=0&demolish=0");
+        } else {
+        	header("Location: build.php?gid=15&ty=$type&nodemolish=".$demolish_permitted);
+        }
 		exit;
     }
 }else{
@@ -46,9 +50,21 @@ if($village->resarray['f'.$id] >= DEMOLISH_LEVEL_REQ) {
 }
 echo "</b>";
 } else {
+		if (isset($_GET['nodemolish'])) {
+			switch ($_GET['nodemolish']) {
+				case 18:
+					echo '<p style="color: #ff0000; text-align: left">
+					Because you are the founder of your alliance, demolition of a lvl 3 Embassy cannot be started.
+					You can still <a href="allianz.php?s=5">quit the alliance</a>, while selecting a new leader
+					in the &quot;quit alliance&quot; form.
+					</p>';
+					break;
+			}
+		}
+
         echo "
 <form action=\"build.php?gid=15&amp;demolish=1&amp;cancel=0&amp;c=".$session->mchecker."\" method=\"POST\" style=\"display:inline\">
-<select name=\"type\" class=\"dropdown\">";
+<select id=\"demolition_type\" name=\"type\" class=\"dropdown\">";
         for ($i=19; $i<=41; $i++) {
             $select=($i==$ty)? " SELECTED":"";
             if ($VillageResourceLevels['f'.$i] >= 1 && !$building->isCurrent($i) && !$building->isLoop($i)) {
@@ -61,7 +77,34 @@ if ($village->natar==1) {
                 echo "<option value=99".$select.">99. ".$building->procResType(40)." (lvl ".$VillageResourceLevels['f99'].")</option>";
             }
 }
-echo "</select><input id=\"btn_demolish\" name=\"demolish\" class=\"dynamic_img\" value=\"Demolish\" type=\"image\" src=\"img/x.gif\" alt=\"Demolish\" title=\"".DEMOLISH."\" /></form>";
+echo "</select><input id=\"btn_demolish\" name=\"demolish\" class=\"dynamic_img\" value=\"Demolish\" type=\"image\" src=\"img/x.gif\" alt=\"Demolish\" title=\"".DEMOLISH."\" onClick=\"javascript:return verify_demolition();\" /></form>";
 }
 }
 ?> 
+
+<script type="text/javascript">
+<!--
+	function verify_demolition() {
+		dType = document.getElementById('demolition_type');
+		if (dType.options[dType.selectedIndex].text.indexOf('Embassy (lvl 3)') > -1) {
+			// check if we really want to demolish a lvl 3 embassy
+			if (!window.confirm('WARNING!\n'
+				+ 'You are about to demolish an Embassy at lvl 3!\n\n'
+				+ 'If you are the founder of your alliance and this is your last Embassy and your alliance has no additional members, the alliance will be deleted.\n\n'
+				+ 'Click OK to confirm or Cancel to stop.')) {
+				return false;
+			}
+		} else if (dType.options[dType.selectedIndex].text.indexOf('Embassy (lvl 1)') > -1) {
+			// check if we really want to demolish a lvl 1 embassy
+			if (!window.confirm('WARNING!\n'
+				+ 'You are about to demolish an Embassy at lvl 1!\n\n'
+				+ 'If you are in an alliance and this is your last Embassy in game, you will automatically quit that alliance when the demolition is complete.\n\n'
+				+ 'Click OK to confirm or Cancel to stop.')) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+//-->
+</script>
