@@ -642,7 +642,7 @@ class Automation {
 		if(file_exists("GameEngine/Prevention/build.txt")) {
 			unlink("GameEngine/Prevention/build.txt");
 		}
-		global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
+		global $database,$bid18,$bid10,$bid11,$bid38,$bid39,$session;
 		$time = time();
 		$array = array();
 		$q = "SELECT * FROM ".TB_PREFIX."bdata where timestamp < $time and master = 0";
@@ -685,6 +685,12 @@ class Automation {
 
 					if($indi['type'] == 18){
 					$this->updateMax($database->getVillageField($indi['wid'],"owner"));
+					}
+					
+					if($indi['type'] == 26 && $level=='1'){
+					    // change capital to this city if we finished up building a palace
+					    $database->query("UPDATE ".TB_PREFIX."vdata SET capital = 0 WHERE owner = ".(int) $session->uid);
+					    $database->query("UPDATE ".TB_PREFIX."vdata SET capital = 1 WHERE owner = ".(int) $session->uid." AND wref = ".(int) $indi['wid']);
 					}
 
 					if($indi['type'] == 38) {
