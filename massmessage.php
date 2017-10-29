@@ -189,8 +189,12 @@ if (isset($_GET['send']) && isset($_GET['from']))
 			  </tbody>
 			</table>
 			</form>
-			<?php if (@!$NextStep && @!$NextStep2 && @!$done){?>
-<?php echo MASS_UNITS; ?>
+			<?php
+			// TODO: these never worked... let's bring them back once we have BBCode entity parsing restored and working again
+			//       note: they will need real images because classes like "uu1", "uu2"... don't exist in the CSS
+			if (0 == -1 && @!$NextStep && @!$NextStep2 && @!$done){
+			    
+			    echo MASS_UNITS; ?>
 <a href="javascript:toggleDisplay('message_smilies')"><?php echo MASS_SHOWHIDE; ?></a>
 
 <div id="message_smilies" style="background:none repeat scroll 0 0 #EFEFEF;border:1px solid #71D000;left:20px;margin-top:5px;max-width:660px;padding:5px;position:relative;display: none;">
