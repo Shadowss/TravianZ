@@ -74,11 +74,14 @@
 			}
 			$date = $generator->procMtime($message->inbox1[$i-1]['time']);
 			if($message->inbox1[$i-1]['owner'] <= 1) {
-			echo "</td><td class=\"send\"><a><u>".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</u></a></td>
+			echo "</td><td class=\"send\"><a href=\"support.php\"><u>".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</u></a></td>
 		    <td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
 		    }
 		    else {
-		    echo "</td><td class=\"send\"><a href=\"spieler.php?uid=".$message->inbox1[$i-1]['owner']."\">".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</a></td>
+		    $linkSender = ($message->inbox1[$i-1]['owner'] != 2 && $message->inbox1[$i-1]['owner'] != 4);
+
+		    echo "</td><td class=\"send\">".($linkSender ? "<a href=\"spieler.php?uid=".$message->inbox1[$i-1]['owner']."\">" : '<b>').$database->getUserField($message->inbox1[$i-1]['owner'],'username',0).($linkSender ? '</a>' : '</b>')."</td>
+
 		    <td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
 		    }
 		    }

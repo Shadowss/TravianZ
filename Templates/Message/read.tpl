@@ -17,7 +17,19 @@ include("menu.tpl");
 <div id="read_content" class="msg_content">
 	<img src="img/x.gif" id="label" class="read" alt="" />
 	<div id="heading">
-		<div><?php echo $database->getUserField($message->reading['owner'],"username",0); ?></div>
+		<div><?php
+			$linkSender = ($message->reading['owner'] != 2 && $message->reading['owner'] != 4);
+			if ($linkSender) {
+				echo '<a href="'.rtrim(SERVER, '/')."/spieler.php?uid=".$message->reading['owner']."\">";
+			}
+			
+			echo $database->getUserField($message->reading['owner'],"username",0);
+			
+			if ($linkSender) {
+				echo '</a>';
+			}
+			?>
+		</div>
 		<div><?php echo $message->reading['topic']; ?></div>
 	</div>
 	<div id="time">
