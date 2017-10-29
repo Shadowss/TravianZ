@@ -431,10 +431,9 @@ class Building {
 		}
 	}
 
-
-
 	private function constructBuilding($id,$tid) {
 		global $database,$village,$session,$logging;
+
 		if($this->allocated < $this->maxConcurrent) {
 			if($tid == 16) {
 				$id = 39;
@@ -552,23 +551,23 @@ class Building {
 			if($this->getTypeLevel(20) == 20 && $village->capital == 0) { return true; } else { return false; }
 			break;
 			case 34:
-			if($this->getTypeLevel(26) >= 3 && $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(25) == 0) { return true; } else { return false; }
+		    if($this->getTypeLevel(26) >= 3 && $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(25) == 0 && $village->capital != 0) { return true; } else { return false; }
 			break;
 			case 35:
-			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(11) == 20) { return true; } else { return false; }
+		    if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(11) == 20 && $session->tribe == 2 && $village->capital != 0) { return true; } else { return false; }
 			break;
 			case 36:
-			if($this->getTypeLevel(16) >= 1) { return true; } else { return false; }
+			if($this->getTypeLevel(16) >= 1 && $session->tribe == 3) { return true; } else { return false; }
 			break;
 			case 37:
 			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(16) >= 1) { return true; } else { return false; }
 			break;
 			case 38:
-            		if($this->getTypeLevel(15) >= 10) { return true; } else { return false; }
-            		break;
-            		case 39:
-            		if($this->getTypeLevel(15) >= 10) { return true; } else { return false; }
-            		break; 
+		    if($this->getTypeLevel(15) >= 10 && $village->natar == 1) { return true; } else { return false; }
+    		break;
+    		case 39:
+		    if($this->getTypeLevel(15) >= 10 && $village->natar == 1) { return true; } else { return false; }
+    		break; 
 			case 40:
 			$wwlevel = $village->resarray['f99'];
 			if($wwlevel > 50){
@@ -601,10 +600,10 @@ class Building {
 			if($village->natar == 1 && $wwbuildingplan > $needed_plan) { return true; } else { return false; }
 			break;
 			case 41:
-			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20) { return true; } else { return false; }
+			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20 && $session->tribe == 1) { return true; } else { return false; }
 			break;
 			case 42:
-			if($this->getTypeLevel(21) == 20 && $village->capital == 0) { return true; } else { return false; }
+		    if(GREAT_WKS && $this->getTypeLevel(21) == 20 && $village->capital == 0) { return true; } else { return false; }
 			break;
 		}
 	}
