@@ -47,6 +47,10 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	$_SESSION['m_message'] = preg_replace("/\[url\=([a-z0-9\_\.\:\/\-]*)\]([a-z0-9\_\.\:\/\-]*)\[\/url\]/i", "<a href='$1'>$2</a>",  $_SESSION['m_message']);
 	$_SESSION['m_message'] = preg_replace("/\*u([0-9]*)(left|right)\*/i", "<img src='img/u2/u$1.gif' style='float:$2;' alt='unit$1' />",  $_SESSION['m_message']);
 	$_SESSION['m_message'] = "[message]".$_SESSION['m_message']."[/message]";
+	
+	$_SESSION['m_color'] = $database->escape($_SESSION['m_color']);
+	$_SESSION['m_subject'] = $database->escape($_SESSION['m_subject']);
+	$_SESSION['m_message'] = $database->escape($_SESSION['m_message']);
 
 	$users_count = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT count(*) as count FROM ".TB_PREFIX."users WHERE id != 0"));
 	$users_count = $users_count['count'];
