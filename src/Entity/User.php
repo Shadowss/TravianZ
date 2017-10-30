@@ -77,7 +77,7 @@ class User {
     public static function exists(IDbConnection $db, $value) {
         $sql = '(
                     SELECT
-                        Count(*) AS in_users
+                        Count(*) AS Total
                     FROM
                         '.TB_PREFIX.'users
                     WHERE
@@ -86,7 +86,7 @@ class User {
                 UNION ALL
                 (
                     SELECT
-                        Count(*) AS in_act
+                        Count(*) AS Total
                     FROM
                         '.TB_PREFIX.'activate
                     WHERE
@@ -95,9 +95,6 @@ class User {
 
         $res = $db->query_new($sql, $value, $value, $value, $value);
 
-        // convert result into an array
-        $res = mysqli_fetch_array($res, MYSQLI_NUM);
-
-        return ($res[0] > 0 || (count($res) > 1 && $res[1] > 0));
+        return ($res[0]['Total'] > 0 || $res[1]['Total']);
     }
 }

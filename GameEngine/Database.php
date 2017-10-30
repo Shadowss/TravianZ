@@ -214,7 +214,36 @@ class MYSQLi_DB implements IDbConnection {
                 // execute the statement to get its value back
                 if (mysqli_stmt_execute($prep)) {
                     $this->selectQueryCount++;
-                    return mysqli_stmt_get_result($prep);
+
+                    // read metadata, so we know what fields we were actually selecting
+                    // and can prepare our temporary variables to read them into
+                    $resultMetaData = mysqli_stmt_result_metadata($prep);
+
+                    $stmtRow = array();
+                    $rowReferences = array();
+                    while ($field = mysqli_fetch_field($resultMetaData)) {
+                        $rowReferences[] = &$stmtRow[$field->name];
+                    }
+                    mysqli_free_result($resultMetaData); 
+
+                    // now call bind_result with all our variables to recive the data prepared
+                    call_user_func_array(array($prep, 'bind_result'), $rowReferences);
+
+                    // prepare the array-ed result
+                    while(mysqli_stmt_fetch($prep)){
+                        $row = array();
+                        foreach($stmtRow as $key => $value){
+                            $row[$key] = $value;
+                        }
+                        $queryResult[] = $row;
+                    }
+
+                    // free the result and the prepared statement itself
+                    mysqli_stmt_free_result($prep); 
+                    mysqli_stmt_close($prep);
+
+                    // and return the value
+                    return $queryResult;
                 } else {
                     throw new Exception('Failed to execute an SQL statement!');
                 }
