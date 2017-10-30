@@ -15,7 +15,7 @@ use App\Utils\AccessLogger;
 include("GameEngine/Village.php");
 AccessLogger::logRequest();
 
-$start = $generator->pageLoadTimeStart();
+$start_timer = $generator->pageLoadTimeStart();
 $message->noticeType($_GET);
 $message->procNotice($_POST);
 if(isset($_GET['newdid'])) {
@@ -154,7 +154,7 @@ include("Templates/res.tpl");
 <div id="ltime">
 <div id="ltimeWrap">
 Calculated in <b><?php
-echo round(($generator->pageLoadTimeEnd()-$start)*1000);
+echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
 ?></b> ms
 
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>

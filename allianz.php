@@ -7,7 +7,7 @@ include ("GameEngine/Village.php");
 include ("GameEngine/Chat.php");
 AccessLogger::logRequest();
 
-$start = $generator->pageLoadTimeStart();
+$start_timer = $generator->pageLoadTimeStart();
 $alliance->procAlliance($_GET);
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];

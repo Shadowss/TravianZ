@@ -16,7 +16,7 @@ use App\Utils\AccessLogger;
 include("GameEngine/Account.php");
 AccessLogger::logRequest();
 
-$start = $generator->pageLoadTimeStart();
+$start_timer = $generator->pageLoadTimeStart();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -83,7 +83,7 @@ include("Templates/footer.tpl");
 <div id="ltime">
 <div id="ltimeWrap">
 Calculated in <b><?php
-echo round(($generator->pageLoadTimeEnd()-$start)*1000);
+echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
 ?></b> ms
 
 <br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>

@@ -31,7 +31,7 @@ if (!function_exists('mysqli_result')) {
 include("GameEngine/Village.php");
 AccessLogger::logRequest();
 
-$start = $generator->pageLoadTimeStart();
+$start_timer = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 	header("Location: ".$_SERVER['PHP_SELF']);
@@ -256,7 +256,7 @@ $q = "
 			<div id="stime">
 				<div id="ltime">
 					<div id="ltimeWrap">
-						Calculated in <b><?php echo round(($generator->pageLoadTimeEnd()-$start)*1000);?></b> ms
+						Calculated in <b><?php echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);?></b> ms
 						<br/>Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 					</div>
 				</div>
