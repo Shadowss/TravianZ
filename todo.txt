@@ -1,4 +1,13 @@
+- cannot train settlers in palace if chieftan is in the village (2 villages founded, palace lvl 20, so 3rd should be possible)
+- can we have / accept invitations from multiple alliances? if so, will first invitation rewrite the next? or when accepting, will all other invitations be deleted?
+- when you put 2 builds into a loop (queue) and add 3rd to be built with master builder, the last one doesn't take resources and will be finished for free with PLUS immediate finish action
+- inviting player into alliance who already is in an alliance should not work
+- accepting invitation if alliance Embassy is not on high enough level should not work
+- when a village becomes new capital, old capital should rapidly degrade its fields to max level 10 (plus max storage & crop should go down with it)
 - scale oasis regeneration with game progresses (now we have elephants and tigers everywhere)
+- can we move heroes to other villages? (http://travian.wikia.com/wiki/Hero%27s_Mansion)
+- warning should appear if the player is trying to send troops to attack an allied village
+- alliance icon shoud be visible in reports next to player's name when a player is in the same alliance (so alliance members can see that they are potentially being attacked by other alliance members of the same alliance)
 - add checkbox when sending units for a raid to include the attack in the raid list, if eligible
 - change "incoming attacker" title of the raid list icon when actually attacking a farm (it should be "Own attacking troops")
 - change "select all" button to actually select all checkboxes via JS, not via page reload
@@ -7,7 +16,10 @@
 - we really need un/subscription in forums (for sending notifications of new posts into messages) rather than subscribing by posting something in a topic
 - create admin user with a real village during installation if admin data are set
 - add mysql port setting into installation script
+- make sure that when auto-removing inactive players, anyone who have units going there + anyone with them in their raid lists etc. gets notified and sorted out
+- allow adding gold, plus etc. to certain players globally (last active 3 days ago, ...)
 - normalize forum tables - varchar is used for numeric values and is joined with int field
+- at higher speeds, units creation is too fast and keeps refreshing the barracks/stable page, so it's impossible to navigate out
 - finish parts in Admin that are unfinished (mostly delete -X- buttons and Alliance settings)
 - add batching logic to mehods which get called too frequently and multiple times (example - Message::sendMessage() now that is sends messages for each forum post)
 - include past raids in the farm list that were not in the farm list itself but are actually manual past attacks - will need DB update for the attacks table to include targets (now only holds attacker)
@@ -27,3 +39,10 @@
   "UPDATE s1_hero set dead = 1 where uid = 99"
 - this shouldn't be:
   "UPDATE s1_bdata SET timestamp = 1508863345 WHERE id = ''"
+- add new PLUS option to buy additional waiting slot (for 1000 gold?)
+- add new PLUS option to be notified of a finished construction via in-game messages
+- add new PLUS-only setting for the Embassy -> when an Embassy is destroyed/level decreased and nobody in alliance has the full power
+  to hold all members in their Embassy, allow to evict last X members / members who were last online / members with least population
+  (+ add check for members who have WW or artifacts in their villages) from the alliance and select a leader with closest Embassy level
+  to hold the rest
+- add new PLUS-only alliance setting for reassigning a leader directly without quitting the alliance
