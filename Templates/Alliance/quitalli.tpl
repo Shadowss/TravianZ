@@ -27,7 +27,7 @@ include("alli_menu.tpl");
 </tr>
 </thead><tbody>
 <?php
-	if ($isOwner && $membersCount > 0) {
+	if ($isOwner && $membersCount > 1) {
 ?>
 <tr>
 	<td colspan="2" class="info">
@@ -45,8 +45,13 @@ include("alli_menu.tpl");
 		<select name="new_founder" class="name dropdown">
 		<?php
 			$canQuit = false;
+			$minEmbassyLevel = $database->getMinEmbassyLevel( $database->countAllianceMembers($session->alliance) );
+			if ($minEmbassyLevel < 3) {
+				$minEmbassyLevel = 3;
+			}
+
            	foreach($memberlist as $member) {
-           		if (($member['id'] != $session->uid) && ($database->getSingleFieldTypeCount($member['id'], 18, 3, '>=') >= 1)) {
+           		if (($member['id'] != $session->uid) && ($database->getSingleFieldTypeCount($member['id'], 18, '>=', $minEmbassyLevel) >= 1)) {
                		echo "<option value=\"".$member['id']."\">".$member['username']."</option>";
                		$canQuit = true;
                	}
@@ -60,6 +65,8 @@ include("alli_menu.tpl");
 	</td>
 </tr>
 <?php
+	} else {
+		$canQuit = true;
 	}
 ?>
 <tr>
@@ -83,7 +90,7 @@ include("alli_menu.tpl");
 ?>
 	<span style="color: red">
 		<br />
-		Unfortunately, there are no members of the alliance with Embassy at level 3 or more. In this case, you will not be able 
+		Unfortunately, there are no members of the alliance with Embassy at level <?php echo $minEmbassyLevel; ?> or more. In this case, you will not be able 
 		to reassign the founder role. You can still <a href="allianz.php?s=5">kick all members</a> and quit the alliance afterwards,
 		if you wish.
 	</span>

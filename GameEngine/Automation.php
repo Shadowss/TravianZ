@@ -1996,6 +1996,7 @@ class Automation {
 					}
 					if ($tbgid==18){
 						$this->updateMax($database->getVillageField($data['to'],'owner'));
+						//$p_alliance = $database->getUserField($data['to'],"alliance",0);
 					}
 					if ($isoasis == 0) {
 					$pop=$this->recountPop($data['to']);
@@ -4750,7 +4751,7 @@ $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"
 		}
 	}
 
-	private function updateMax($leader) {
+	public function updateMax($leader) {
 		global $bid18, $database;
 		$q = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "alidata where leader = ". (int) $leader);
 		if(mysqli_num_rows($q) > 0){

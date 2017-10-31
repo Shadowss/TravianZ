@@ -437,7 +437,11 @@ class Alliance {
 			} else {
 			    // check whether this is not the founder leaving and if he is, see whether
 			    // his replacement has been selected
-			    if ($session->alliance && $database->isAllianceOwner($session->uid) == $session->alliance) {
+			    if (
+			        $session->alliance &&
+			        $database->isAllianceOwner($session->uid) == $session->alliance &&
+			        $database->countAllianceMembers($session->alliance) > 1
+			    ) {
 				    // check that we have a valid new founder
 				    if (!isset($post['new_founder'])) {
 				        $form->addError("founder", 'founder was not selected');
@@ -461,13 +465,13 @@ class Alliance {
     				    return;
     				}
 
-    				$newleader = $post['new_founder'];
-    				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
+    				$newleader = (int) $post['new_founder'];
+    				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".(int) $session->alliance;
     				$_SESSION['alliance_user'] = 0;
     				$database->query($q);
-    				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    				$database->createAlliPermissions($newleader, $session->alliance, 'Alliance Leader', 1, 1, 1, 1, 1, 1, 1, 1);
     				$this->updateMax($newleader);
-    				
+
     				// send the new founder an in-game message, notifying them of their election
     				$database->sendMessage(
     				    $newleader,

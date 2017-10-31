@@ -1,5 +1,12 @@
--- 27.10.2018 -> SQL optimizations
+-- 31.10.2017 -> Embassy and alliance updates
+ALTER TABLE `s1_ali_permission` ADD INDEX(`alliance`);
+ALTER TABLE `s1_allimedal` ADD INDEX(`allyid`);
+ALTER TABLE `s1_ali_permission` DROP INDEX `uid-alliance`, ADD UNIQUE `uid-alliance` (`uid`, `alliance`) USING BTREE;
+
+
+-- 27.10.2017 -> SQL optimizations
 ALTER TABLE `s1_route` ADD INDEX `uid-timestamp` (`uid`, `timestamp`);
+
 
 -- 24.10.2017 -> SQL optimizations
 ALTER TABLE `s1_users` ADD INDEX(`sit1`);

@@ -1710,7 +1710,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getAlliance($id) {
-	    list($id) = $this->escape_input((int) $id);
+	    $id = (int) $id;
 
 		$q = "SELECT * from " . TB_PREFIX . "alidata where id = $id";
 		$result = mysqli_query($this->dblink,$q);
@@ -1825,13 +1825,28 @@ class MYSQLi_DB implements IDbConnection {
 	function deleteAlliance($aid) {
 	    list($aid) = $this->escape_input((int) $aid);
 
-		$result = mysqli_query($this->dblink,"SELECT * FROM " . TB_PREFIX . "users where alliance = $aid");
-		$num_rows = mysqli_num_rows($result);
-		if($num_rows == 0) {
-			$q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
-			mysqli_query($this->dblink,$q);
-			return mysqli_insert_id($this->dblink);
-		}
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users where alliance = $aid", MYSQLI_ASSOC));
+		if ($result['Total'] == 0) {
+	        // remove the alliance
+	        $q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
+	        mysqli_query($this->dblink,$q);
+
+	        // remove all permissions for that alliance
+	        $q = "DELETE FROM " . TB_PREFIX . "ali_permission WHERE alliance = $aid";
+	        mysqli_query($this->dblink,$q);
+
+	        // remove all logs for that alliance
+	        $q = "DELETE FROM " . TB_PREFIX . "ali_log WHERE aid = $aid";
+	        mysqli_query($this->dblink,$q);
+
+	        // remove all medals for that alliance
+	        $q = "DELETE FROM " . TB_PREFIX . "allimedal WHERE allyid = $aid";
+	        mysqli_query($this->dblink,$q);
+
+	        // remove all invitations for that alliance
+	        $q = "DELETE FROM " . TB_PREFIX . "ali_invite WHERE alliance = $aid";
+	        mysqli_query($this->dblink,$q);
+	    }
 	}
 
 	/*****************************************
@@ -2168,7 +2183,7 @@ class MYSQLi_DB implements IDbConnection {
 		return $row["f" . $field];
 	}
 
-	function getSingleFieldTypeCount($uid, $field, $lvl = false, $lvlComparisonSign = '=') {
+	function getSingleFieldTypeCount($uid, $field, $lvlComparisonSign = '=', $lvl = false) {
 	    $uid = (int) $uid;
 	    $field = (int) $field;
 	    $lvl = ($lvl === false ? $lvl : (int) $lvl);
@@ -2788,17 +2803,29 @@ class MYSQLi_DB implements IDbConnection {
 
 		global $building, $village, $session;
 
-		$fLevel = $this->getFieldLevel($wid,$field);
+		// check if we're not demolishing an Embassy
+		if ($this->getFieldType($wid,$field) == 18) {
 
-		// check if we're not demolishing an Embassy at level 3
-		if ($fLevel == 3 && $this->getFieldType($wid,$field) == 18) {
+		    // get field level, alliance members count and the minimum
+		    // level of Embassy to be able to hold this number of people
+		    $fLevel          = $this->getFieldLevel($wid,$field);
+		    $membersCount    = $this->countAllianceMembers($session->alliance);
+		    $minEmbassyLevel = $this->getMinEmbassyLevel($membersCount);
+		    $isOwner         = $this->isAllianceOwner($session->uid) == $session->alliance;
+
+		    // make sure minimum Embassy level is 3 of the player is alliance owner
+            if ($isOwner && $minEmbassyLevel < 3) {
+                $minEmbassyLevel = 3;
+            }
+
 		    // check if this user is the founder of the alliance
-		    if ($session->alliance && $this->isAllianceOwner($session->uid) == $session->alliance) {
+		    // and whether we're not trying to demolish under the lowest level
+		    // which can hold current number of members
+		    if ($fLevel == $minEmbassyLevel && $session->alliance && $isOwner) {
 		        // check if we have any other players in this alliance left
-		        $membersCount = $this->countAllianceMembers($session->alliance);
 		        if ($membersCount > 1) {
-		            // check if this player has only 1 last Embassy on level 3
-		            if ($this->getSingleFieldTypeCount($session->uid, 18, 3, '>=') == 1) {
+		            // check if this player has only 1 last Embassy on a sufficient level
+		            if ($this->getSingleFieldTypeCount($session->uid, 18, '>=', $minEmbassyLevel) == 1) {
     		            // cannot demolish Embassy further until the player quits the alliance,
     		            // as they are founder and there are still other players in the alliance,
     		            // thus destroying Embassy would evict this player from the alliance
@@ -2849,12 +2876,12 @@ class MYSQLi_DB implements IDbConnection {
 	    if ($checkEmbassy) {
 	        // check if we've demolished an Embassy
 	        // and select the user it belonged to as well,
-	        // so we can potentially disconnect them from the alliance
+	        // so we can potentially evict them from the alliance
 	        // and remove it - if they don't have any more Embassies
 	        //                 or if the they are founder and they have no more lvl 3+ Embassies
 	        $q = '
             SELECT
-                u.id, u.alliance, d.buildnumber, d.lvl
+                u.id, u.username, u.alliance, d.buildnumber, d.lvl
             FROM
                 '.TB_PREFIX.'demolition d
                 LEFT JOIN '.TB_PREFIX.'vdata v ON d.vref = v.wref
@@ -2863,64 +2890,271 @@ class MYSQLi_DB implements IDbConnection {
 
 	        $res = mysqli_fetch_all(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
 	        foreach ($res as $key) {
-	            // if this building was demolished completely, there is no record of what it was
-	            // therefore, we need to check status of Embassies in case we've just demolished
-	            // an Embassy and should disconnect a player from an alliance
-	            if ($key['lvl'] == 0 && $key['alliance'] > 0 && $this->getSingleFieldTypeCount($key['id'], 18, 1, '>=') == 0) {
-	                // if we have no more Embassies and this player is in an alliance,
-	                // disconnect him from that alliance
-                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$key['id']);
-                    $_SESSION['alliance_user'] = 0;
+	            // if this building being demolished is an Embassy or was demolished completely
+	            // and the player is in an alliance, check and update their alliance status
+	            if (($key['alliance'] > 0) && ($key['lvl'] == 0 || $this->getFieldType($wid, $key['buildnumber']) == 18)) {
+                    $this->checkAllianceEmbassiesStatus($key, true);
+                }
+	        }
+	    }
 
-                    // notify them via in-game messaging
-                    $this->sendMessage(
-                        $key['id'],
-                        2,
-                        'You left the alliance',
-                        "Hi!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>",
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        true);
+		$q = "DELETE FROM " . TB_PREFIX . "demolition WHERE vref=" . $wid;
+		return mysqli_query($this->dblink,$q);
+	}
+
+	/**
+	 * Returns a minimum level for an Embassy in order to accomodate
+	 * the given number of members.
+	 * 
+	 * @param int $membersCount Number of members for an alliance to accomodate.
+	 *                          Maximum = 60 
+	 * 
+	 * @return number Returns the level of Embassy required to accomodate
+	 *                the given number of members.
+	 */
+	public function getMinEmbassyLevel($membersCount) {
+	    $membersCount = (int) $membersCount;
+	    
+	    if ($membersCount > 60) {
+	        $membersCount = 60;
+	    }
+
+	    if ($membersCount < 0) {
+	        $membersCount = 0;
+	    }
+
+	    return ceil((20 / 60) * $membersCount);
+	}
+
+	/***
+	 * Returns the number of members an alliance can hold
+	 * with the current level of leader's Embassy.
+	 * 
+	 * @param int $embassyLevel Level of leader's Embassy building.
+	 * 
+	 * @return number Returns the number of members an alliance
+	 *                can hold with the current level of leader's Embassy.
+	 */
+	public function getAllianceCapacity($embassyLevel) {
+	    $embassyLevel = (int) $embassyLevel;
+
+	    if ($embassyLevel > 20) {
+	        $embassyLevel = 20;
+	    }
+
+	    if ($embassyLevel < 0) {
+	        $embassyLevel = 0;
+	    }
+
+	    // ceil is not really necessary but to make sure
+	    // decimals won't crack this up, it's here
+	    return ceil((60 / 20) * $embassyLevel);
+	}
+	
+	/**
+	 * Checks and potentially updates the status of a player-alliance
+	 * relationship given the user input.
+	 * 
+	 * @param array $userData     Data of the user for which we want to check
+	 *                            the player-alliance relationship.
+	 * @param boolean $demolition Determines whether the request came from
+	 *                            a buiding demolition (true) or from a battle
+	 *                            report (false).
+	 *                            
+	 * @return boolean            Returns TRUE if there was no change
+	 *                            to the player-alliance relationship
+	 *                            FALSE otherwise.
+	 */
+	public function checkAllianceEmbassiesStatus($userData, $demolition = false) {
+	    // TODO: refactor this and break it into more smaler methods
+	    global $session, $automation;
+
+	    // check whether this player is an alliance owner
+	    $isOwner = ($userData['alliance'] && $this->isAllianceOwner($userData['id']) == $userData['alliance']);
+
+	    // for demolition, the Embassy was already destroyed, so we need at least 1
+	    // Embassy still standing... for battle, the Embassy is still standing
+	    // and will only be deleted upon finalizing battle calculations, so we need
+	    // to check for at least 2 Embassies
+	    $minimumExistingEmbassyRecords = ($demolition ? 1 : 2);
+
+	    // if they are not an alliance owner, simply check whether we have any Embassies
+	    // at lvl 1+ standing somewhere
+	    if (!$isOwner) {
+	        // TODO: replace magic numbers by constants (18 = Embassy)
+	        if ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', 1) < $minimumExistingEmbassyRecords) {
+
+	            // the player has no more Embassies, evict them from the alliance
+	            mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
+	            
+	            // unset the alliance in session, if we're evicting
+	            // currently logged-in player
+	            if ($session->uid == $userData['id']) {
+	                $_SESSION['alliance_user'] = 0;
+	            }
+	            
+	            // notify them via in-game messaging, if we come from a demolition,
+	            // otherwise return a result which can be used in battle reports
+	            if ($demolition) {
+	                $this->sendMessage(
+	                    $userData['id'],
+	                    2,
+	                    'You left the alliance',
+	                    "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>",
+	                    0,
+	                    0,
+	                    0,
+	                    0,
+	                    0,
+	                    true);
 	            } else {
-    	            $fType = $this->getFieldType($wid, $key['buildnumber']);
-    
-    	            // we're actually demolishing an Embassy
-    	            if ($fType == 18) {
-    	                $isOwner = ($key['alliance'] && $this->isAllianceOwner($key['id']) == $key['alliance']);
-    
-    	                // in case the player is an alliance founder,
-    	                // we demolished a lvl 3 Embasy
-    	                // and there are no more lvl 3+ Embassies left for them
-    	                // disconnect them from the alliance and delete it
-    	                // because alliance can only be founded with a lvl 3+ Embassy
-    	                if ($isOwner && $key['lvl'] == 2 && $this->getSingleFieldTypeCount($key['id'], 18, 3, '>=') == 0) {
-    	                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$key['id']);
-    	                    $this->deleteAlliance($key['alliance']);
-    	                    $_SESSION['alliance_user'] = 0;
-    	                    
-    	                    // notify them via in-game messaging
+	                // player has been removed from the alliance
+	                return false;
+	            }
+
+	        }
+	    } else {
+	        // the player IS an alliance owner, check if we need to take any action
+	        $membersCount            = $this->countAllianceMembers($userData['alliance']);
+	        $minAllianceEmbassyLevel = $this->getMinEmbassyLevel($membersCount);
+
+	        // in this case, the minimum Embassy level cannot go below 3,
+	        // since this player is a leader and as such, he needs at least
+	        // a level 3 Embassy
+	        if ($minAllianceEmbassyLevel < 3) {
+	            $minAllianceEmbassyLevel = 3;
+	        }
+
+	        $takeAction              = (
+	            // was the Embassy taken below a threshold level?
+	            ($userData['lvl'] <= $minAllianceEmbassyLevel)
+	            &&
+	            // check for standing Embassies with sufficient level
+    	        // TODO: replace magic numbers by constants (18 = Embassy)
+	            ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', $minAllianceEmbassyLevel) < $minimumExistingEmbassyRecords)
+	        );
+
+	        // the Embassy got damaged below a sufficient level and there are no more Embassies
+	        // at that level standing on this player's account, additional actions are needed
+	        if ($takeAction) {
+
+	            // load all alliance members
+	            $members = $this->getAllMember($userData['alliance']);
+
+	            // if we come from demolition, we need to evict all new members
+	            // that accepted an invitation while level 3 of the last
+	            // Embassy was already under demolition. The demolition dialog itself
+	            // already checks if there are no more people other than the owner
+	            // present before the demolition is allowed.
+	            if ($demolition) {
+	                foreach ($members as $member) {
+	                    // evict the player from the alliance
+	                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$member['id']);
+
+	                    // notify them via in-game messaging
+	                    $this->sendMessage(
+	                        $member['id'],
+	                        2,
+	                        'Your alliance was disbanded',
+	                        (
+	                            ($member['id'] == $userData['id'])
+	                            ?
+	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\nIn order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>"
+	                            :
+	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a demolition of your alliance founder's last Embassy below level 3, this alliance has been disbanded.\n\n\You can now accept invitations from other alliances or found a new alliance yourself.\n\nYours sincerely,\n<i>Server Robot :)</i>"
+                            ),
+	                        0,
+	                        0,
+	                        0,
+	                        0,
+	                        0,
+	                        true);
+	                }
+	            } else {
+	                // we come from a battle result, therefore we need to check
+	                // for the first player in the alliance who has a sufficient
+	                // level Embassy and to which we can auto-reassign the leadership
+	                $newLeaderFound = false;
+	                // in case we'll need these later to disband the alliance,
+	                // we'll collect them inside this foeach loop
+	                $memberIDs      = [];
+
+	                foreach ($member as $member) {
+	                    if (!$newLeaderFound && $this->getSingleFieldTypeCount($member['id'], 18, '>=', $minAllianceEmbassyLevel) >= $minimumExistingEmbassyRecords) {
+	                        // found a new leader for the alliance
+	                        $newLeaderFound = true;
+	                        $newleader = $member['id'];
+	                        $q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $userData['alliance'];
+	                        $this->query($q);
+	                        $this->updateAlliPermissions($newleader, $userData['alliance'], "Leader", 1, 1, 1, 1, 1, 1, 1);
+	                        $automation->updateMax($newleader);
+
+	                        // update permissions for the old leader
+	                        $this->updateAlliPermissions($userData['id'], $userData['alliance'], "Former Leader", 0, 0, 0, 0, 0, 0, 0);
+
+	                        // notify new leader via in-game messaging
+	                        $this->sendMessage(
+	                            $newleader,
+	                            2,
+	                            'You are now an alliance leader',
+                                "Hi, ".$userData['username']."!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=".$userData['id']."\">".$userData['username']."</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>",
+	                            0,
+	                            0,
+	                            0,
+	                            0,
+	                            0,
+	                            true);
+	                    }
+
+	                    $memberIDs[] = $member['id'];
+	                }
+
+	                // if there wasn't anyone with a sufficient level of Embassy
+	                // among the existing members, disperse this alliance
+	                if (!$newLeaderFound) {
+
+	                    // evict all members from the alliance
+	                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $memberIDs).")");
+
+	                    // notify all of them via in-game messaging
+	                    foreach ($memberIDs as $id) {
     	                    $this->sendMessage(
-    	                        $key['id'],
+    	                        $id,
     	                        2,
-    	                        'Your alliance was disbanded',
-    	                        "Hi!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\n\In order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>",
+    	                        'Your alliance was dispersed',
+    	                        (
+    	                            ($id == $userData['id'])
+    	                            ?
+    	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>"
+    	                            :
+    	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player that degraded it below threshold allowed to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>"
+    	                            ),
     	                        0,
     	                        0,
     	                        0,
     	                        0,
     	                        0,
     	                        true);
-    	                }
-    	            }
+	                    }
+	                }
 	            }
+	            
+	            // execute a method that will delete an alliance
+	            // if no members are left in it
+	            $this->deleteAlliance($userData['alliance']);
+
+	            // unset the alliance in session, if we're evicting
+	            // currently logged-in player
+	            if ($userData['alliance'] == $userData['id']) {
+	                $_SESSION['alliance_user'] = 0;
+	            }
+
+	            return false;
 	        }
 	    }
 
-		$q = "DELETE FROM " . TB_PREFIX . "demolition WHERE vref=" . $wid;
-		return mysqli_query($this->dblink,$q);
+	    // no changes in player-to-alliance relationship
+	    return true;
 	}
 
 	function getJobs($wid) {

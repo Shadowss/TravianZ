@@ -11,6 +11,12 @@ if($session->access != BANNED){
 }
 }
 
+if ($session->alliance) {
+	$memberCount = $database->countAllianceMembers($session->alliance);
+} else {
+	$memberCount = 0;
+}
+
 if(!empty($_REQUEST["demolish"]) && $_REQUEST["c"] == $session->mchecker) {
 if($session->access != BANNED){
     if($_REQUEST["type"] != null) {
@@ -54,9 +60,10 @@ echo "</b>";
 			switch ($_GET['nodemolish']) {
 				case 18:
 					echo '<p style="color: #ff0000; text-align: left">
-					Because you are the founder of your alliance, demolition of a lvl 3 Embassy cannot be started.
-					You can still <a href="allianz.php?s=5">quit the alliance</a>, while selecting a new leader
-					in the &quot;quit alliance&quot; form.
+					Because you are the leader of your alliance, demolition of your current Embassy cannot be started,
+					since it still holds all of your <b>'.$memberCount.'</b> alliance members.
+					You can, however <a href="allianz.php?s=5">quit the alliance</a>, while selecting a new leader
+					in the &quot;quit alliance&quot; form, then continue the demolition.
 					</p>';
 					break;
 			}
@@ -85,20 +92,44 @@ echo "</select><input id=\"btn_demolish\" name=\"demolish\" class=\"dynamic_img\
 <script type="text/javascript">
 <!--
 	function verify_demolition() {
-		dType = document.getElementById('demolition_type');
-		if (dType.options[dType.selectedIndex].text.indexOf('Embassy (lvl 3)') > -1) {
+		var dType    = document.getElementById('demolition_type');
+		var warnLvl3 = <?php
+			if (
+				$session->alliance &&
+				$database->isAllianceOwner($session->uid) == $session->alliance &&
+				// don't show the OK/Cancel warning if we have more members, since
+				// that will be handled by the returned value
+				$memberCount == 1 &&
+				$database->getSingleFieldTypeCount($session->uid, 18, '>=', 3) == 1
+			) {
+				echo 'true';
+			} else {
+				echo 'false';
+			}
+		?>;
+		var warnLvl1 = <?php
+			if ($session->alliance && $database->getSingleFieldTypeCount($session->uid, 18, '>=', 1) == 1) {
+				echo 'true';
+			} else {
+				echo 'false';
+			}
+		?>;
+
+		if (warnLvl3 && dType.options[dType.selectedIndex].text.indexOf('Embassy (lvl 3)') > -1) {
 			// check if we really want to demolish a lvl 3 embassy
 			if (!window.confirm('WARNING!\n'
-				+ 'You are about to demolish an Embassy at lvl 3!\n\n'
-				+ 'If you are the founder of your alliance and this is your last Embassy and your alliance has no additional members, the alliance will be deleted.\n\n'
+				+ 'You are about to demolish the last lvl3 Embassy!\n\n'
+				+ 'Since you are the leader of your alliance and because there are no additional members left, the alliance will be disbanded once the demolition completes.\n\n'
+				+ 'After that happens, you can found a new alliance or join one that already exists.\n\n'
 				+ 'Click OK to confirm or Cancel to stop.')) {
 				return false;
 			}
-		} else if (dType.options[dType.selectedIndex].text.indexOf('Embassy (lvl 1)') > -1) {
+		} else if (warnLvl1 && dType.options[dType.selectedIndex].text.indexOf('Embassy (lvl 1)') > -1) {
 			// check if we really want to demolish a lvl 1 embassy
 			if (!window.confirm('WARNING!\n'
-				+ 'You are about to demolish an Embassy at lvl 1!\n\n'
-				+ 'If you are in an alliance and this is your last Embassy in game, you will automatically quit that alliance when the demolition is complete.\n\n'
+				+ 'You are about to demolish your last Embassy!\n\n'
+				+ 'Since you are in an alliance, you will automatically quit that alliance once the demolition completes.\n\n'
+				+ 'After that happens, you can found or join an alliance again.\n\n'
 				+ 'Click OK to confirm or Cancel to stop.')) {
 				return false;
 			}

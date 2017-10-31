@@ -174,7 +174,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
  `img` varchar(255) NULL,
  `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
- KEY `week` (`week`)
+ KEY `week` (`week`),
+ KEY `allyid` (`allyid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -309,7 +310,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
  `opt7` int(1) NULL DEFAULT '0',
  `opt8` int(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
- KEY `uid-alliance` (`uid`, `alliance`)
+ UNIQUE KYE `uid-alliance` (`uid`, `alliance`) USING BTREE,
+ KEY `alliance` (`alliance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
