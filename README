@@ -1,3 +1,5 @@
+[![Code Triagers Badge](https://www.codetriage.com/shadowss/travianz/badges/users.svg)](https://www.codetriage.com/shadowss/travianz)
+
 TravianZ Version v.8.3.1 BETA
 
 Download and updates : https://github.com/Shadowss/TravianZ
@@ -85,8 +87,8 @@ martinambrus changes:
          you will auto-quit the alliance
      c2) if your Embassy was brought down from level 3+ to level 2, 1 or 0 (destroyed), and you ARE the founder of your alliance,
          and there are no more level 3+ Embassies in your villages:
-      c21) the lead position will be auto-reassigned to the first applicable alliance member (with Embassy at level 3+)
-      c22) if no new leader (with Embassy at level 3+) can be found, the alliance will be disbanded
+      c21) the lead position will be auto-reassigned to the first applicable alliance member (with Embassy at level 3+ that also has high enough level to hold all members of the alliance)
+      c22) if no new leader can be found, the alliance will be disbanded
 
 
 Shadowss changes:
