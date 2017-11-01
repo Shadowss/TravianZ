@@ -448,7 +448,9 @@ class Automation {
                     $database->updateAlliPermissions($newleader, $alliance, "Leader", 1, 1, 1, 1, 1, 1, 1);
                     Automation::updateMax($newleader);
                 }
-                $database->deleteAlliance($alliance);
+                if (isset($alliance)) {
+                    $database->deleteAlliance($alliance);
+                }
                 $q = "DELETE FROM ".TB_PREFIX."hero where uid = ".(int) $need['uid'];
                 $database->query($q);
                 $q = "DELETE FROM ".TB_PREFIX."mdata where target = ".(int) $need['uid']." or owner = ".(int) $need['uid'];
