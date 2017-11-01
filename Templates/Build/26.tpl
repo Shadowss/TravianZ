@@ -74,7 +74,7 @@ if($data['wref'] == $village->wid) {
 <p class="none"><?php echo CAPITAL; ?></p>
 <?php
 } else {
-  if($_GET['confirm'] == '') {
+  if(empty($_GET['confirm'])) {
     print '<p><a href="?id=' . $building->getTypeField(26) . '&confirm=yes">&raquo '.CHANGE_CAPITAL.'</a></p>';
   } else {
     print '<p>Are you sure, that you want to change your capital?<br /><b>You can\'t undo this!</b><br />For security you must enter your password to confirm:<br />
