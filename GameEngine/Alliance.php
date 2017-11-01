@@ -382,7 +382,7 @@ class Alliance {
 				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
 				$database->query($q);
 				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-				$this->updateMax($newleader);
+				Automation::updateMax($newleader);
 				}
 				}
 			}else{
@@ -470,7 +470,7 @@ class Alliance {
     				$_SESSION['alliance_user'] = 0;
     				$database->query($q);
     				$database->createAlliPermissions($newleader, $session->alliance, 'Alliance Leader', 1, 1, 1, 1, 1, 1, 1, 1);
-    				$this->updateMax($newleader);
+    				Automation::updateMax($newleader);
 
     				// send the new founder an in-game message, notifying them of their election
     				$database->sendMessage(
@@ -535,30 +535,6 @@ class Alliance {
 			}else{
 			    header("Location: banned.php");
 			    exit;
-			}
-		}
-		
-		private function updateMax($leader) {
-			global $bid18, $database;
-			$leader = $database->escape((int) $leader);
-			$q = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "alidata where leader = $leader");
-			if(mysqli_num_rows($q) > 0){
-			$villages = $database->getVillagesID2($leader);
-			$max = 0;
-			foreach($villages as $village){
-			$field = $database->getResourceLevel($village['wref']);
-			for($i=19;$i<=40;$i++){
-			if($field['f'.$i.'t'] == 18){
-			$level = $field['f'.$i];
-			$attri = $bid18[$level]['attri'];
-			}
-			}
-			if($attri > $max){
-			$max = $attri;
-			}
-			}
-			$q = "UPDATE ".TB_PREFIX."alidata set max = ".(int) $max." where leader = ".(int) $leader;
-			$database->query($q);
 			}
 		}
 	   }

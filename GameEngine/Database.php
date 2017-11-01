@@ -2963,11 +2963,14 @@ class MYSQLi_DB implements IDbConnection {
 	 *                            
 	 * @return boolean            Returns TRUE if there was no change
 	 *                            to the player-alliance relationship
-	 *                            FALSE otherwise.
+	 *                            FALSE if the player was an alliance
+	 *                            leader and the alliance was destroyed
+	 *                            and 0 when the player was evicted from
+	 *                            the alliance due to Embassy damage.
 	 */
 	public function checkAllianceEmbassiesStatus($userData, $demolition = false) {
 	    // TODO: refactor this and break it into more smaler methods
-	    global $session, $automation;
+	    global $session;
 
 	    // check whether this player is an alliance owner
 	    $isOwner = ($userData['alliance'] && $this->isAllianceOwner($userData['id']) == $userData['alliance']);
@@ -3000,7 +3003,7 @@ class MYSQLi_DB implements IDbConnection {
 	                    $userData['id'],
 	                    2,
 	                    'You left the alliance',
-	                    "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>",
+	                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
 	                    0,
 	                    0,
 	                    0,
@@ -3009,7 +3012,19 @@ class MYSQLi_DB implements IDbConnection {
 	                    true);
 	            } else {
 	                // player has been removed from the alliance
-	                return false;
+	                $this->sendMessage(
+	                    $userData['id'],
+	                    2,
+	                    'An attack has forced you to leave the alliance',
+	                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the leader to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
+	                    0,
+	                    0,
+	                    0,
+	                    0,
+	                    0,
+	                    true);
+
+	                return 0;
 	            }
 
 	        }
@@ -3059,9 +3074,9 @@ class MYSQLi_DB implements IDbConnection {
 	                        (
 	                            ($member['id'] == $userData['id'])
 	                            ?
-	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\nIn order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>"
+	                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\nIn order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>")
 	                            :
-	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a demolition of your alliance founder's last Embassy below level 3, this alliance has been disbanded.\n\n\You can now accept invitations from other alliances or found a new alliance yourself.\n\nYours sincerely,\n<i>Server Robot :)</i>"
+	                            $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a demolition of your alliance founder's last Embassy below level 3, this alliance has been disbanded.\n\n\You can now accept invitations from other alliances or found a new alliance yourself.\n\nYours sincerely,\n<i>Server Robot :)</i>")
                             ),
 	                        0,
 	                        0,
@@ -3079,34 +3094,41 @@ class MYSQLi_DB implements IDbConnection {
 	                // we'll collect them inside this foeach loop
 	                $memberIDs      = [];
 
-	                foreach ($member as $member) {
-	                    if (!$newLeaderFound && $this->getSingleFieldTypeCount($member['id'], 18, '>=', $minAllianceEmbassyLevel) >= $minimumExistingEmbassyRecords) {
-	                        // found a new leader for the alliance
-	                        $newLeaderFound = true;
-	                        $newleader = $member['id'];
-	                        $q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $userData['alliance'];
-	                        $this->query($q);
-	                        $this->updateAlliPermissions($newleader, $userData['alliance'], "Leader", 1, 1, 1, 1, 1, 1, 1);
-	                        $automation->updateMax($newleader);
+	                // no need for this whole foreach loop if this player is the lone
+	                // founder and member of their alliance
+	                if ($membersCount > 1) {
+    	                foreach ($members as $member) {
+    	                    if (!$newLeaderFound && $this->getSingleFieldTypeCount($member['id'], 18, '>=', $minAllianceEmbassyLevel) >= 1) {
+    	                        // found a new leader for the alliance
+    	                        $newLeaderFound = true;
+    	                        $newleader = $member['id'];
+    	                        $q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $userData['alliance'];
+    	                        $this->query($q);
+    	                        $this->updateAlliPermissions($newleader, $userData['alliance'], "Leader", 1, 1, 1, 1, 1, 1, 1);
+    	                        Automation::updateMax($newleader);
+    
+    	                        // update permissions for the old leader
+    	                        $this->updateAlliPermissions($userData['id'], $userData['alliance'], "Former Leader", 0, 0, 0, 0, 0, 0, 0);
+    
+    	                        // notify new leader via in-game messaging
+    	                        $this->sendMessage(
+    	                            $newleader,
+    	                            2,
+    	                            'You are now the alliance leader',
+    	                            $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=".$userData['id']."\">".$userData['username']."</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
+    	                            0,
+    	                            0,
+    	                            0,
+    	                            0,
+    	                            0,
+    	                            true);
+    	                    }
 
-	                        // update permissions for the old leader
-	                        $this->updateAlliPermissions($userData['id'], $userData['alliance'], "Former Leader", 0, 0, 0, 0, 0, 0, 0);
-
-	                        // notify new leader via in-game messaging
-	                        $this->sendMessage(
-	                            $newleader,
-	                            2,
-	                            'You are now an alliance leader',
-                                "Hi, ".$userData['username']."!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=".$userData['id']."\">".$userData['username']."</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>",
-	                            0,
-	                            0,
-	                            0,
-	                            0,
-	                            0,
-	                            true);
-	                    }
-
-	                    $memberIDs[] = $member['id'];
+    	                    $memberIDs[] = $member['id'];
+    	                }
+	                } else {
+	                    // if there is only 1 member and it's the actual founder
+	                    $memberIDs[] = $userData['id'];
 	                }
 
 	                // if there wasn't anyone with a sufficient level of Embassy
@@ -3117,18 +3139,18 @@ class MYSQLi_DB implements IDbConnection {
 	                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $memberIDs).")");
 
 	                    // notify all of them via in-game messaging
-	                    foreach ($memberIDs as $id) {
+	                    foreach ($members as $member) {
     	                    $this->sendMessage(
-    	                        $id,
+    	                        $member['id'],
     	                        2,
     	                        'Your alliance was dispersed',
     	                        (
-    	                            ($id == $userData['id'])
+    	                            ($member['id'] == $userData['id'])
     	                            ?
-    	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>"
+    	                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level ".($membersCount > 1 ? "which is unable to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership," : "lower then 3 - which is required to found and hold your own alliance - ")." your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>")
     	                            :
-    	                            "Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player that degraded it below threshold allowed to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>"
-    	                            ),
+    	                            $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player that degraded it below threshold allowed to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+    	                        ),
     	                        0,
     	                        0,
     	                        0,
@@ -3136,9 +3158,34 @@ class MYSQLi_DB implements IDbConnection {
     	                        0,
     	                        true);
 	                    }
+	                } else {
+	                    // if a new leader was found, notify all alliance member of this change
+	                    // notify all of them via in-game messaging
+	                    foreach ($members as $member) {
+	                        // don't send duplicate messages to the new leader
+	                        if ($member['id'] != $newleader) {
+    	                        $this->sendMessage(
+    	                            $member['id'],
+    	                            2,
+    	                            'Your alliance has a new leader',
+    	                            (
+    	                                ($member['id'] == $userData['id'])
+    	                                ?
+    	                                $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all ".$membersCount." alliance members, another alliance member who meets these criteria has been auto-elected as a new alliance leader.\n\nAdditionally - due to the Embassy destruction - you have been forcefuly evicted from your alliance.\n\nPlease re-establish the connection with your alliance by building a new Embassy and contacting <a href=\"spieler.php?uid=".$newleader."\">the new leader</a> for an invitation.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+    	                                :
+    	                                $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player, <a href=\"spieler.php?uid=".$newleader."\">another alliance member</a> with enough Embassy capacity has been auto-elected as the new alliance leader.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+    	                                ),
+    	                            0,
+    	                            0,
+    	                            0,
+    	                            0,
+    	                            0,
+    	                            true);
+	                        }
+	                    }
 	                }
 	            }
-	            
+
 	            // execute a method that will delete an alliance
 	            // if no members are left in it
 	            $this->deleteAlliance($userData['alliance']);
@@ -3149,7 +3196,7 @@ class MYSQLi_DB implements IDbConnection {
 	                $_SESSION['alliance_user'] = 0;
 	            }
 
-	            return false;
+	            return ((isset($newLeaderFound) && $newLeaderFound === true) ? true : false);
 	        }
 	    }
 
@@ -4006,7 +4053,14 @@ class MYSQLi_DB implements IDbConnection {
 		if(!empty($outgoingarray)) {
 			foreach($outgoingarray as $out) {
 				for($i = 1; $i <= 10; $i++) {
+				    if (!isset($movingunits['u' . (($vtribe - 1) * 10 + $i)])) {
+				        $movingunits['u' . (($vtribe - 1) * 10 + $i)] = 0;
+				    }
 					$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $out['t' . $i];
+				}
+				
+				if (!isset($movingunits['hero'])) {
+				    $movingunits['hero'] = 0;
 				}
 				$movingunits['hero'] += $out['t11'];
 			}
