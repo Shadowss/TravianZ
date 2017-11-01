@@ -37,7 +37,7 @@ martinambrus changes:
 23. Great Workshop added to manual pages
 24. new Combat Simulator link when showing details of oasis for quicker determination if we can win that fight
 25. Support, Taskmaster & Multihunter no longer shown in statistics as last players with 0 villages
-26. invalid <br /> tags no longer added to description textboxes when editing User in Admin
+26. invalid `<br />` tags no longer added to description textboxes when editing User in Admin
 27. editing additional user data in Admin now saves them when Enter is used instead of clicking on "Save" as well
 28. fixed reports pagination always staying on "All" tab
 29. fix for the "fixed" :) self-kicking from an alliance
@@ -72,23 +72,7 @@ martinambrus changes:
 58. fixed ability to go back in quests and gain gold and resources all over again when using default quests set
 59. fix for "finish immediatelly" PLUS button to decrease gold amount even when demolition alone has been insta-completed
 60. fix: building a Palace in another village makes that village capital
-61. new feature: Embassy mechanics overhaul (sorry, this sounds like a contract but it's actually how it all works)
-    a) quitting an alliance as its founder will require the player to pass the lead position to someone else
-     a1) if there is nobody in the alliance with Embassy level 3, the first resolution would be to ask someone to build it up to level 3
-     a2) if nobody wants to build an Embassy to level 3, the second resolution is to kick everyone out of the alliance and then quit it
-    b) demolition of an Embassy now follows these rules
-     b1) if the level of Embassy is 3 and the player is not the founder, demolition will be allowed
-     b2) if the level of Embassy is 3 and the player IS the founder, demolition will only be allowed:
-      b21) if another Embassy at level 3 exists in another village of this player
-      b22) if there are no more players in the alliance (in which case the alliance will be deleted once the demolition is complete)
-     b3) if the level of Embassy is 1 and the player don't have any more Embassies, they will auto-quit the alliance once the demolition is complete
-    c) upon successful attack on an Embassy (by another player):
-     c1) if your Embassy was destroyed and you are not the founder of your alliance, and if there are no more Embassies in your villages,
-         you will auto-quit the alliance
-     c2) if your Embassy was brought down from level 3+ to level 2, 1 or 0 (destroyed), and you ARE the founder of your alliance,
-         and there are no more level 3+ Embassies in your villages:
-      c21) the lead position will be auto-reassigned to the first applicable alliance member (with Embassy at level 3+ that also has high enough level to hold all members of the alliance)
-      c22) if no new leader can be found, the alliance will be disbanded
+61. new feature: Embassy mechanics overhaul - check out our [Wiki Page](https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics) or this [Google Presentation](https://docs.google.com/presentation/d/1KN1qVAlxVj7aAN6F9QkRai1oliajfxKPIaJ4MSodUac/edit?usp=sharing) to learn more about it
 
 
 Shadowss changes:
