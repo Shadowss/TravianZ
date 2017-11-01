@@ -22,7 +22,7 @@ if(isset($_GET['newdid'])) {
 	header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
 	exit;
 }
-if($_GET['id'] == 99 && $village->natar == 0){
+if(isset($_GET['id']) && $_GET['id'] == 99 && $village->natar == 0){
 header("Location: dorf2.php");
 exit;
 }
@@ -185,33 +185,33 @@ if($session->goldclub == 1 && count($session->villages) > 1){
 if($session->goldclub == 1){
 		if(isset($_GET['t'])==99) {
 
-			if($_GET['action'] == 'addList') {
+		    if(isset($_GET['action']) && $_GET['action'] == 'addList') {
 				$create = 1;
-			}else if($_GET['action'] == 'addraid') {
+		    }else if(isset($_GET['action']) && $_GET['action'] == 'addraid') {
 				$create = 2;
-			}else if($_GET['action'] == 'showSlot' && $_GET['eid']) {
+		    }else if(isset($_GET['action']) && $_GET['action'] == 'showSlot' && $_GET['eid']) {
 				$create = 3;
 			}else{
 				$create = 0;
 			}
 
-			if($_GET['slid']) {
+			if(isset($_GET['slid']) && $_GET['slid']) {
 			$FLData = $database->getFLData($_GET['slid']);
 			if($FLData['owner'] == $session->uid){
 			$checked[$_GET['slid']] = 1;
 			}
 			}
 
-			if($_GET['action'] == 'deleteList') {
+			if(isset($_GET['action']) && $_GET['action'] == 'deleteList') {
 				$database->delFarmList($_GET['lid'], $session->uid);
 				header("Location: build.php?id=39&t=99");
 				exit;
-			}elseif($_GET['action'] == 'deleteSlot') {
+			}elseif(isset($_GET['action']) && $_GET['action'] == 'deleteSlot') {
 				$database->delSlotFarm($_GET['eid']);
 				   header("Location: build.php?id=39&t=99");
 				   exit;
 			}
-			if($_POST['action'] == 'startRaid'){
+			if(isset($_POST['action']) && $_POST['action'] == 'startRaid'){
 			if($session->access != BANNED){
 			include ("Templates/a2b/startRaid.tpl");
 			}else{

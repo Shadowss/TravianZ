@@ -1,6 +1,6 @@
 <?php
 $ty=(isset($_GET['ty']))? $_GET['ty']:"";
-if($_REQUEST["cancel"] == "1") {
+if(isset($_REQUEST["cancel"]) && $_REQUEST["cancel"] == "1") {
 if($session->access != BANNED){
     $database->delDemolition($village->wid);
     header("Location: build.php?gid=15&ty=$ty&cancel=0&demolish=0");
