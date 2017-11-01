@@ -383,7 +383,7 @@ class Technology {
 
 	public function getTech($tech) {
 		global $village;
-		return ($village->techarray['t'.$tech] == 1);
+		return (isset($village->techarray['t'.$tech]) && $village->techarray['t'.$tech] == 1);
 	}
 
 	private function procTrain($post,$great=false) {
