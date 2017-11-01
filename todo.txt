@@ -14,6 +14,8 @@
 - show number of set vs. number of available units for raids in the farmlist
 - when not enough units are available in farmlist, show error when start raid is clicked
 - we really need un/subscription in forums (for sending notifications of new posts into messages) rather than subscribing by posting something in a topic
+- we also need cross-alliance message sending section (the permission seems to be there but the interface isn't)
+- send alliance invitation to in-game messages as wells
 - create admin user with a real village during installation if admin data are set
 - add mysql port setting into installation script
 - make sure that when auto-removing inactive players, anyone who have units going there + anyone with them in their raid lists etc. gets notified and sorted out
