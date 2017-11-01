@@ -468,7 +468,7 @@ class Battle {
 			// Formula for calculating points attackers (Infantry & Cavalry)
 				
 			if($AttackerWref != 0){
-				$rap = ($ap+$cap)+(($ap+$cap)/100*$bid35[$this->getTypeLevel(35,$AttackerWref)]['attri']);
+			    $rap = ($ap+$cap)+(($ap+$cap)/100*(isset($bid35[$this->getTypeLevel(35,$AttackerWref)]) ? $bid35[$this->getTypeLevel(35,$AttackerWref)]['attri'] : 0));
 			}else{
 				$rap = $ap+$cap;
 			}

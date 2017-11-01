@@ -72,7 +72,7 @@ $ckey= $generator->generateRandStr(6);
                (!empty($process['t10']) ? $process['t10'] : 0) +
                (!empty($process['t11']) ? $process['t11'] : 0);
  }
- if ($scout==1 && $totalunits==0) {
+ if (isset($scout) && $scout==1 && isset($totalunits) && $totalunits==0) {
 if ($process['c'] != 2){
 $process['c'] = 1;
 }

@@ -285,7 +285,14 @@ class Technology {
             $movement = $database->getVillageMovement($base);
             if(!empty($movement)) {
                 for($i=1;$i<=50;$i++) {
-                    $ownunit['u'.$i] += $movement['u'.$i];
+                    if (!isset($ownunit['u'.$i])) {
+                        $ownunit['u'.$i] = 0;
+                    }
+                    $ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
+                }
+
+                if (!isset($ownunit['hero'])) {
+                    $ownunit['hero'] = 0;
                 }
                 $ownunit['hero'] += $movement['hero'];
             }

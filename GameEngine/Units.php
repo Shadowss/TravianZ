@@ -129,7 +129,7 @@ class Units {
                 $form->addError("error","You need to mark min. one troop");
                 }
 
-                if(!$post['dname'] && !$post['x'] && !$post['y']){
+                if(!empty($post['dname']) && !empty($post['x']) && !empty($post['y'])){
                 $form->addError("error","Insert name or coordinates");
                 }
 
@@ -174,7 +174,7 @@ class Units {
                 }
             }
         }
-                if ($database->isVillageOases($id) == 0) {
+                if (isset($id) && $database->isVillageOases($id) == 0) {
                 if($database->hasBeginnerProtection($id)==1) {
                     $form->addError("error","Player is under beginners protection. You can't attack him");
                 }
@@ -220,8 +220,7 @@ class Units {
                     $_SESSION['valuearray'] = $_POST;
                     header("Location: a2b.php");
                     exit;
-                }else{
-
+                } else if (isset($id)) {
                 $villageName = $database->getOasisField($id,"name");
                 $speed= 300;
                 $timetaken = $generator->procDistanceTime($coor,$village->coor,INCREASE_SPEED,1);

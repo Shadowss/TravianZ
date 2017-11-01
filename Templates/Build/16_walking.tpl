@@ -1,6 +1,7 @@
 <?php
 $units = $database->getMovement(3,$village->wid,0);
 $total_for = count($units);
+$timer = 0;
 
 for($y=0;$y<$total_for;$y++){
 $timer += 1;
