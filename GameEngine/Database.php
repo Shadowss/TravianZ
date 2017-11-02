@@ -4469,7 +4469,6 @@ class MYSQLi_DB implements IDbConnection {
             
             $result = $this->regenerateOasisUnits(-1);
             if (!$result) {
-                echo mysqli_error($this->dblink);
                 return -1;
             }
         } catch (\Exception $e) {
