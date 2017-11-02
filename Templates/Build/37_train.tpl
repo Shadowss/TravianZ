@@ -797,7 +797,7 @@ $output.="<tr>
 					}
             }
         if($session->tribe == 3){
-                if($_GET['train'] == 21){
+                if(isset($_GET['train']) && $_GET['train'] == 21){
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
@@ -815,7 +815,7 @@ $output.="<tr>
 					exit; 
 					}
 					}
-                if($_GET['train'] == 22){
+                if(isset($_GET['train']) && $_GET['train'] == 22){
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
@@ -833,7 +833,7 @@ $output.="<tr>
 					exit; 
 					}
 					}
-                if($_GET['train'] == 24){
+                if(isset($_GET['train']) && $_GET['train'] == 24){
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
@@ -851,7 +851,7 @@ $output.="<tr>
 					exit; 
 					}
 					}
-                if($_GET['train'] == 25){
+                if(isset($_GET['train']) && $_GET['train'] == 25){
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
@@ -869,7 +869,7 @@ $output.="<tr>
 					exit; 
 					}
 					}
-                if($_GET['train'] == 26){
+                if(isset($_GET['train']) && $_GET['train'] == 26){
 				if($session->access != BANNED){
 					mysqli_query($GLOBALS['link'],"DELETE from " . TB_PREFIX . "hero WHERE `dead` = 1 AND `uid` = '" . $database->escape($session->uid) . "'");
 					if($count_hero == 0){
