@@ -5121,7 +5121,7 @@ References:
  	function getHeroDead($id) {
  	    list($id) = $this->escape_input((int) $id);
 
-    		$q = "SELECT dead FROM " . TB_PREFIX . "hero WHERE `uid` = $id WHERE dead = 0";
+    		$q = "SELECT dead FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND dead = 0";
     		$result = mysqli_query($this->dblink,$q);
     		if (mysqli_num_rows($result) > 0) {
          		return 0;
