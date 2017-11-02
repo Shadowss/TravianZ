@@ -84,7 +84,6 @@ class Building {
             }    
             $level = $database->getResourceLevel($village->wid);
             $database->addBuilding($village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level['f'.$get['id']] + 1 + count($database->getBuildingByField($village->wid,$get['id'])));
-            $database->modifyGold($session->uid,1,0);
             if($get['id'] > 18) {
                 header("Location: dorf2.php");
                 exit;
@@ -766,80 +765,89 @@ class Building {
 
     public function finishAll($redirect_url = '') {
         global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
-        if($session->access!=BANNED){
-        $finish = 0;
-        $jobsCompleted = 0;
-        foreach($this->buildArray as $jobs) {
-        if($jobs['wid']==$village->wid){
-            $finish=2;
-        $wwvillage = $database->getResourceLevel($jobs['wid']);
-        if($wwvillage['f99t']!=40){
-            $level = $jobs['level'];
-            if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
-            $finish = 1;
-            $jobsCompleted++;
-                $resource = $this->resourceRequired($jobs['field'],$jobs['type']);
-                if($jobs['master'] == 0){
-                $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
-                }else{
-                $villwood = $database->getVillageField($jobs['wid'],'wood');
-                $villclay = $database->getVillageField($jobs['wid'],'clay');
-                $villiron = $database->getVillageField($jobs['wid'],'iron');
-                $villcrop = $database->getVillageField($jobs['wid'],'crop');
-                $type = $jobs['type'];
-                $buildarray = $GLOBALS["bid".$type];
-                $buildwood = $buildarray[$level]['wood'];
-                $buildclay = $buildarray[$level]['clay'];
-                $buildiron = $buildarray[$level]['iron'];
-                $buildcrop = $buildarray[$level]['crop'];
-                if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop){
-                $newgold = $session->gold-1;
-                $database->updateUserField($session->uid, "gold", $newgold, 1);
-                $enought_res = 1;
-                $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".(int) $jobs['type']." where vref = ".(int) $jobs['wid'];
-                }
-                }
-                if($database->query($q) && ($enought_res == 1 or $jobs['master'] == 0)) {
-                    $database->modifyPop($jobs['wid'],$resource['pop'],0);
-                    $database->addCP($jobs['wid'],$resource['cp']);
-                    $q = "DELETE FROM ".TB_PREFIX."bdata where id = ".(int) $jobs['id'];
-                    $database->query($q);
-                    if($jobs['type'] == 18) {
-                        $owner = $database->getVillageField($jobs['wid'],"owner");
-                        $max = $bid18[$level]['attri'];
-                        $q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
-                        $database->query($q);
+
+        if ($session->access!=BANNED) {
+            // will be true if we should decrease player's gold by 2
+            // for the immediate completion action
+            $countPlus2Gold  = false;
+            // will be true if we should decrease player's gold by 1
+            // for master builder queue
+            $countMasterGold = false;
+
+            foreach ($this->buildArray as $jobs) {
+                if ($jobs['wid']==$village->wid) {
+                    $wwvillage = $database->getResourceLevel($jobs['wid']);
+                    if ($wwvillage['f99t']!=40) {
+                        $level = $jobs['level'];
+                        if ($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
+                            $resource = $this->resourceRequired($jobs['field'],$jobs['type']);
+                            if ($jobs['master'] == 0) {
+                                $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
+                                $countPlus2Gold = true;
+                            } else {
+                                $countMasterGold = true;
+                                $villwood = $database->getVillageField($jobs['wid'],'wood');
+                                $villclay = $database->getVillageField($jobs['wid'],'clay');
+                                $villiron = $database->getVillageField($jobs['wid'],'iron');
+                                $villcrop = $database->getVillageField($jobs['wid'],'crop');
+                                $type = $jobs['type'];
+                                $buildarray = $GLOBALS["bid".$type];
+                                $buildwood = $buildarray[$level]['wood'];
+                                $buildclay = $buildarray[$level]['clay'];
+                                $buildiron = $buildarray[$level]['iron'];
+                                $buildcrop = $buildarray[$level]['crop'];
+                                if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop) {
+                                    $enought_res = 1;
+                                    $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".(int) $jobs['type']." where vref = ".(int) $jobs['wid'];
+                                }
+                            }
+
+                            if ($database->query($q) && ($enought_res == 1 or $jobs['master'] == 0)) {
+                                $database->modifyPop($jobs['wid'],$resource['pop'],0);
+                                $database->addCP($jobs['wid'],$resource['cp']);
+                                $q = "DELETE FROM ".TB_PREFIX."bdata where id = ".(int) $jobs['id'];
+                                $database->query($q);
+                                if($jobs['type'] == 18) {
+                                    $owner = $database->getVillageField($jobs['wid'],"owner");
+                                    $max = $bid18[$level]['attri'];
+                                    $q = "UPDATE ".TB_PREFIX."alidata set max = $max where leader = $owner";
+                                    $database->query($q);
+                                }
+                            }
+
+                            if (($jobs['field'] >= 19 && ($session->tribe == 1 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1)) {
+                                $innertimestamp = $jobs['timestamp'];
+                            }
+                        }
                     }
                 }
-                if(($jobs['field'] >= 19 && ($session->tribe == 1 || ALLOW_ALL_TRIBE)) || (!ALLOW_ALL_TRIBE && $session->tribe != 1)) { $innertimestamp = $jobs['timestamp']; }
             }
-        }
-        }
-        }
-        if($finish != 2 || $jobsCompleted == 0){
-            // only decrease gold if we didn't already do it for the building phase
-            $demolition=$database->finishDemolition($village->wid);
-            $tech=$technology->finishTech();
-            if ($finish==1 || $demolition>0 || $tech>0) {
+
+            $demolition = $database->finishDemolition($village->wid);
+            $tech = $technology->finishTech();
+            if ($demolition > 0 || $tech > 0) {
+                $countPlus2Gold = true;
                 $logging->goldFinLog($village->wid);
-                if (!isset($newgold)) {
-                    $session->gold = $session->gold - 2;
-                    $newgold = $session->gold;
-                    $database->updateUserField($session->uid, "gold", $newgold, 1);
+            }
+
+            // deduct the right amount of gold
+            if ($countMasterGold || $countPlus2Gold) {
+                $newgold = $session->gold - (($countMasterGold && $countPlus2Gold) ? 3 : 2);
+                $database->updateUserField($session->uid, "gold", $newgold, 1);
+            }
+
+            $stillbuildingarray = $database->getJobs($village->wid);  
+            if (count($stillbuildingarray) == 1) {
+                if($stillbuildingarray[0]['loopcon'] == 1) {
+                    //$q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0,timestamp=".(time()+$stillbuildingarray[0]['timestamp']-$innertimestamp)." WHERE id=".$stillbuildingarray[0]['id'];
+                    $q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0 WHERE id=".(int) $stillbuildingarray[0]['id'];
+                    $database->query($q);
                 }
             }
-                        $stillbuildingarray = $database->getJobs($village->wid);  
-        if(count($stillbuildingarray) == 1) {
-            if($stillbuildingarray[0]['loopcon'] == 1) {
-                //$q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0,timestamp=".(time()+$stillbuildingarray[0]['timestamp']-$innertimestamp)." WHERE id=".$stillbuildingarray[0]['id'];
-                $q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0 WHERE id=".(int) $stillbuildingarray[0]['id'];
-                $database->query($q);
-            }
-        }
-        }
+
             header("Location: ".($redirect_url ? $redirect_url : $session->referrer));
             exit;
-        }else{
+        } else {
             header("Location: banned.php");
             exit;
         }
