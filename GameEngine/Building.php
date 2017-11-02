@@ -768,6 +768,7 @@ class Building {
         global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
         if($session->access!=BANNED){
         $finish = 0;
+        $jobsCompleted = 0;
         foreach($this->buildArray as $jobs) {
         if($jobs['wid']==$village->wid){
             $finish=2;
@@ -776,6 +777,7 @@ class Building {
             $level = $jobs['level'];
             if($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
             $finish = 1;
+            $jobsCompleted++;
                 $resource = $this->resourceRequired($jobs['field'],$jobs['type']);
                 if($jobs['master'] == 0){
                 $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
@@ -814,7 +816,7 @@ class Building {
         }
         }
         }
-        if($finish != 2){
+        if($finish != 2 || $jobsCompleted == 0){
             // only decrease gold if we didn't already do it for the building phase
             $demolition=$database->finishDemolition($village->wid);
             $tech=$technology->finishTech();
