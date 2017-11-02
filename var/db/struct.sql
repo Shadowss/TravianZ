@@ -310,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
  `opt7` int(1) NULL DEFAULT '0',
  `opt8` int(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
- UNIQUE KYE `uid-alliance` (`uid`, `alliance`) USING BTREE,
+ UNIQUE KEY `uid-alliance` (`uid`, `alliance`) USING BTREE,
  KEY `alliance` (`alliance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
