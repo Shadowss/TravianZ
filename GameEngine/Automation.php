@@ -3150,7 +3150,7 @@ class Automation {
         $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
         $database->query($q);
         
-        if (mysqli_affected_rows()>0) {
+        if (mysqli_affected_rows($database->dblink)>0) {
             $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
             $database->query($q);
             

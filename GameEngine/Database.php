@@ -2867,7 +2867,7 @@ class MYSQLi_DB implements IDbConnection {
 
     	$q = "UPDATE " . TB_PREFIX . "demolition SET timetofinish=" . time() . " WHERE vref=" . $wid;
     	$result= mysqli_query($this->dblink,$q);
-    	return mysqli_affected_rows();
+    	return mysqli_affected_rows($this->dblink);
 	}  
 
 	function delDemolition($wid, $checkEmbassy = false) {
