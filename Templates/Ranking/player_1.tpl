@@ -42,7 +42,7 @@ $search = $_SESSION['search'];
                     echo "<tr><td class=\"ra \" >";
                     }
                     echo $i.".</td><td class=\"pla \" >";
-						if($ranking[$i]['access'] > 2){
+						if(isset($ranking[$i]['access']) && $ranking[$i]['access'] > 2){
 						echo"<u><a href=\"spieler.php?uid=".$ranking[$i]['userid']."\">".$ranking[$i]['username']."</a></u>";
 						} else {
 						echo"<a href=\"spieler.php?uid=".$ranking[$i]['userid']."\">".$ranking[$i]['username']."</a>";
