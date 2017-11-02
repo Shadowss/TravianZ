@@ -2,6 +2,7 @@
 ALTER TABLE `s1_hero` ADD INDEX(`lastupdate`);
 ALTER TABLE `s1_hero` DROP INDEX `uid`, ADD INDEX `uid` (`uid`, `dead`) USING BTREE;
 ALTER TABLE `s1_hero` ADD INDEX(`inrevive`);
+ALTER TABLE `s1_hero` ADD INDEX(`intraining`);
 
 -- 31.10.2017 -> Embassy and alliance updates
 ALTER TABLE `s1_ali_permission` ADD INDEX(`alliance`);

@@ -283,7 +283,7 @@ class Units {
             }
         }
         if( intval($enforce['hero']) > 0){
-            $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']."";
+            $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
             $result = mysqli_query($GLOBALS['link'],$q);
             $hero_f=mysqli_fetch_array($result);
             $hero_unit=$hero_f['unit'];
@@ -616,7 +616,7 @@ if($session->access != BANNED){
                 }
                     if (isset($post['t11'])){
                         if( $post['t11'] != '' && $post['t11'] > 0){
-                            $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']."";
+                            $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                         $resulth = mysqli_query($GLOBALS['link'],$qh);
                         $hero_f=mysqli_fetch_array($resulth);
                         $hero_unit=$hero_f['unit'];

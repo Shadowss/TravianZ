@@ -14,13 +14,10 @@ global $database;
 
 if (isset($_POST['name'])) { 
 	$_POST['name'] = stripslashes($_POST['name']);
-     mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `name`='".($database->escape($_POST['name']))."' where `uid`='".$database->escape($session->uid)."'") or die("ERROR:".mysqli_error($database->dblink)); 
-        $hero = mysqli_query($database->dblink,"SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . (int) $session->uid . ""); 
-        $hero_info = mysqli_fetch_array($hero); 
-        echo "".NAME_CHANGED.""; 
-    } 
-     
-    $hero = $units->Hero($session->uid); 
+	mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `name`='".($database->escape($_POST['name']))."' where `uid`='".$database->escape($session->uid)."' AND dead = 0") or die("ERROR:".mysqli_error($database->dblink));   
+    echo "".NAME_CHANGED.""; 
+} 
+    $hero_info = $units->Hero($session->uid); 
 ?>
 
 <table id="distribution" cellpadding="1" cellspacing="1"> 
@@ -37,8 +34,8 @@ if (isset($_POST['name'])) {
 	</tr></thead> 
     <tbody><tr> 
         <th><?php echo OFFENCE; ?></th> 
-        <td class="val"><?php echo $hero['atk']; ?></td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['attack'])+1; ?>px;" alt="<?php echo $hero['atk']; ?>" title="<?php echo $hero['atk']; ?>" /></td> 
+        <td class="val"><?php echo $hero_info['atk']; ?></td> 
+        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['attack'])+1; ?>px;" alt="<?php echo $hero_info['atk']; ?>" title="<?php echo $hero_info['atk']; ?>" /></td> 
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0 && $hero_info['attack'] < 100){ 
@@ -57,8 +54,8 @@ if (isset($_POST['name'])) {
     </tr> 
     <tr> 
         <th><?php echo DEFENCE; ?></th> 
-        <td class="val"><?php echo $hero['di'] . "/" . $hero['dc']; ?></td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['defence'])+1; ?>px;" alt="<?php echo ($hero['di']) . "/" . ($hero['dc']); ?>"  title="<?php echo ($hero['di']) . "/" . ($hero['dc']); ?>" /></td> 
+        <td class="val"><?php echo $hero_info['di'] . "/" . $hero_info['dc']; ?></td> 
+        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['defence'])+1; ?>px;" alt="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>"  title="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>" /></td> 
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0 && $hero_info['defence'] < 100){ 
@@ -77,8 +74,8 @@ if (isset($_POST['name'])) {
     </tr> 
         <tr> 
         <th><?php echo OFF_BONUS; ?></th> 
-        <td class="val"><?php echo ($hero['ob']-1)*100; ?>%</td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero['ob']-1)*1000+1; ?>px;" alt="<?php echo ($hero['ob']-1)*100; ?>%" title="<?php echo ($hero['ob']-1)*100; ?>%" /></td> 
+        <td class="val"><?php echo ($hero_info['ob']-1)*100; ?>%</td> 
+        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['ob']-1)*1000+1; ?>px;" alt="<?php echo ($hero_info['ob']-1)*100; ?>%" title="<?php echo ($hero_info['ob']-1)*100; ?>%" /></td> 
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0 && $hero_info['attackbonus'] < 100){ 
@@ -98,8 +95,8 @@ if (isset($_POST['name'])) {
     </tr> 
     <tr> 
         <th><?php echo DEF_BONUS; ?></th> 
-        <td class="val"><?php echo ($hero['db']-1)*100; ?>%</td> 
-        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero['db']-1)*1000+1; ?>px;" alt="<?php echo ($hero['db']-1)*100; ?>%" title="<?php echo ($hero['db']-1)*100; ?>%" /></td> 
+        <td class="val"><?php echo ($hero_info['db']-1)*100; ?>%</td> 
+        <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo ($hero_info['db']-1)*1000+1; ?>px;" alt="<?php echo ($hero_info['db']-1)*100; ?>%" title="<?php echo ($hero_info['db']-1)*100; ?>%" /></td> 
         <td class="up"><span class="none"> 
         <?php 
         if($hero_info['points'] > 0 && $hero_info['defencebonus'] < 100){ 

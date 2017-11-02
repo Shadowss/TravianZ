@@ -1884,7 +1884,7 @@ class Automation {
                         }
                     }
                     if ($herosend_att>0){
-                        $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']."";
+                        $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                         $resulth = mysqli_query($GLOBALS['link'],$qh);
                         $hero_f=mysqli_fetch_array($resulth);
                         $hero_unit=$hero_f['unit'];
@@ -2804,7 +2804,7 @@ class Automation {
                                             }
                                             
                                             if ($prisoner['t11']>0){
-                                                $p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner."";
+                                                $p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner." AND dead = 0";
                                                 $p_resulth = $database->query($p_qh);
                                                 $p_hero_f=mysqli_fetch_array($p_resulth);
                                                 $p_hero_unit=$p_hero_f['unit'];
@@ -2978,7 +2978,7 @@ class Automation {
                         }
                     }
                     if ($herosend_att>0){
-                        $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']."";
+                        $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                         $resulth = mysqli_query($GLOBALS['link'],$qh);
                         $hero_f=mysqli_fetch_array($resulth);
                         $hero_unit=$hero_f['unit'];
@@ -3259,7 +3259,7 @@ class Automation {
             }
             if (isset($post['t11'])){
                 if( $post['t11'] != '' && $post['t11'] > 0){
-                    $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']."";
+                    $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                     $resulth = mysqli_query($GLOBALS['link'],$qh);
                     $hero_f=mysqli_fetch_array($resulth);
                     $hero_unit=$hero_f['unit'];
@@ -4894,8 +4894,8 @@ class Automation {
         if($herodata[0]['trainingtime'] <= time()) {
             if($herodata[0]['trainingtime'] != 0) {
                 if($herodata[0]['dead'] == 0) {
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET trainingtime = '0' WHERE uid = " . (int) $session->uid . "");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $session->villages[0]."");
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET trainingtime = '0' WHERE heroid = " . $herodata[0]['heroid']);
+                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $session->villages[0]);
                 }
             }
         }

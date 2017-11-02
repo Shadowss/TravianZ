@@ -3729,7 +3729,7 @@ class MYSQLi_DB implements IDbConnection {
 
 	function getHeroField($uid,$field) {
 	    list($uid,$field) = $this->escape_input((int) $uid,$field);
-			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid";
+			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid AND dead = 0";
 			$result = mysqli_query($this->dblink,$q);
 			return $this->mysqli_fetch_all($result);
 	}
@@ -3751,11 +3751,11 @@ class MYSQLi_DB implements IDbConnection {
 	    list($column,$value,$uid,$mode) = $this->escape_input($column,$value,(int) $uid,$mode);
 
 		if(!$mode) {
-			$q = "UPDATE `".TB_PREFIX."hero` SET $column = '$value' WHERE uid = $uid";
+			$q = "UPDATE `".TB_PREFIX."hero` SET $column = '$value' WHERE uid = $uid AND dead = 0";
 		} elseif($mode=1) {
-		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column + ". (int) $value ." WHERE uid = $uid";
+		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column + ". (int) $value ." WHERE uid = $uid AND dead = 0";
 		} else {
-		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column - ". (int) $value ." WHERE uid = $uid";
+		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column - ". (int) $value ." WHERE uid = $uid AND dead = 0";
 		}
 		return mysqli_query($this->dblink,$q);
 	}
@@ -3763,7 +3763,7 @@ class MYSQLi_DB implements IDbConnection {
 	function modifyHeroXp($column,$value,$heroid) {
 	    list($column,$value,$heroid) = $this->escape_input($column,(int) $value,(int) $heroid);
 
-		$q = "UPDATE ".TB_PREFIX."hero SET $column = $column + $value WHERE uid=$heroid";
+		$q = "UPDATE ".TB_PREFIX."hero SET $column = $column + $value WHERE uid=$heroid AND dead = 0";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -5121,10 +5121,13 @@ References:
  	function getHeroDead($id) {
  	    list($id) = $this->escape_input((int) $id);
 
-    		$q = "SELECT dead FROM " . TB_PREFIX . "hero WHERE `uid` = $id";
+    		$q = "SELECT dead FROM " . TB_PREFIX . "hero WHERE `uid` = $id WHERE dead = 0";
     		$result = mysqli_query($this->dblink,$q);
-    		$notend= mysqli_fetch_array($result);
-     		return $notend['dead'];
+    		if (mysqli_num_rows($result) > 0) {
+         		return 0;
+    		} else {
+    		    return 1;
+    		}
    	}
 	
 	/***************************
@@ -5135,10 +5138,13 @@ References:
  	function getHeroInRevive($id) {
  	    list($id) = $this->escape_input((int) $id);
 
-    		$q = "SELECT inrevive FROM " . TB_PREFIX . "hero WHERE `uid` = $id";
+    		$q = "SELECT inrevive FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND inrevive = 1";
     		$result = mysqli_query($this->dblink,$q);
-    		$notend= mysqli_fetch_array($result);
-     		return $notend['inrevive'];
+    		if (mysqli_num_rows($result) > 0) {
+    		    return 1;
+    		} else {
+    		    return 0;
+    		}
    	}
 	
 	/***************************
@@ -5149,10 +5155,13 @@ References:
  	function getHeroInTraining($id) {
  	    list($id) = $this->escape_input((int) $id);
 
-    		$q = "SELECT intraining FROM " . TB_PREFIX . "hero WHERE `uid` = $id";
+    		$q = "SELECT intraining FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND intraining = 1";
     		$result = mysqli_query($this->dblink,$q);
-    		$notend= mysqli_fetch_array($result);
-     		return $notend['intraining'];
+    		if (mysqli_num_rows($result) > 0) {
+    		    return 1;
+    		} else {
+    		    return 0;
+    		}
    	}
 
 	/***************************
@@ -5189,7 +5198,7 @@ References:
        function KillMyHero($id) {
            list($id) = $this->escape_input((int) $id);
 
-  	       $q = "UPDATE " . TB_PREFIX . "hero set dead = 1 where uid = ".$id;
+  	       $q = "UPDATE " . TB_PREFIX . "hero set dead = 1 where uid = ".$id." AND dead = 0";
                return mysqli_query($this->dblink,$q);
        }
 	   
