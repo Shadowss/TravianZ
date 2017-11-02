@@ -10,11 +10,18 @@
 #################################################################################
 if(isset($_GET['uid'])){
 	$id = (int) $_GET['uid'];
+	$hid = (int) $_GET['hid'];
 	include_once("../GameEngine/Data/hero_full.php"); 
 	include_once("../GameEngine/Units.php");
-	$result = mysqli_query($GLOBALS["link"], "SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = ".$id); 
-	$hero_info = mysqli_fetch_array($result);
-	$hero = $units->Hero($id,1);
+	$heroes = $units->Hero($id,1);
+
+	foreach ($heroes as $hdata) {
+		if ($hdata['heroid'] == $hid) {
+			$hero = $hdata;
+			break;
+		}
+	}
+
 	$unarray = array(1=>U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42,U43,U44,U45,U46,U47,U48,U49,U50,U99,U0);
 	$utribe=($user['tribe']-1)*10;
 ?>
@@ -88,6 +95,7 @@ function check_unit(el) {
 	<form name="frmHero" action="../GameEngine/Admin/Mods/editHero.php" method="POST">
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="id" value="<?php echo $id; ?>" />
+		<input type="hidden" name="hid" value="<?php echo $hid; ?>" />
 <table style="border-collapse:collapse; margin-top:25px; line-height:16px; width:100%;">
 	<tr>
 		<td colspan="6" align="center"><b>Edit Player Hero</b></td>
@@ -100,24 +108,24 @@ function check_unit(el) {
 	</tr>
 	<tr>
 		<td>Hero Name</td> 
-		<td colspan="2"><?php echo $hero_info['name'];?></td>
-		<td colspan="3"><input name="hname" class="fm" value="<?php echo $hero_info['name'];?>"></td> 
+		<td colspan="2"><?php echo $hero['name'];?></td>
+		<td colspan="3"><input name="hname" class="fm" value="<?php echo $hero['name'];?>"></td> 
 	</tr>
 	<tr>
 		<td>Hero Level</td> 
-		<td colspan="2"><?php echo $hero_info['level']; ?></td> 
+		<td colspan="2"><?php echo $hero['level']; ?></td> 
 		<td colspan="3" style="font-weight:bold"><div id="hlvl">0</div><input name="hlvl" type="hidden" value="0"</td> 
 	</tr>
 	<tr>
 		<td>Hero Unit</td> 
-		<td colspan="2"><?php echo "<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($hero_info['unit'])."\" title=\"".$technology->getUnitName($hero_info['unit'])."\" /> (".$technology->getUnitName($hero_info['unit']); ?>)</td>
-		<td width="10%" align="center" style="border-right:none"><div id="unt"><?php echo "<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($hero_info['unit'])."\" title=\"".$technology->getUnitName($hero_info['unit'])."\" />";?></div></td>
+		<td colspan="2"><?php echo "<img class=\"unit u".$hero['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($hero['unit'])."\" title=\"".$technology->getUnitName($hero['unit'])."\" /> (".$technology->getUnitName($hero['unit']); ?>)</td>
+		<td width="10%" align="center" style="border-right:none"><div id="unt"><?php echo "<img class=\"unit u".$hero['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($hero['unit'])."\" title=\"".$technology->getUnitName($hero['unit'])."\" />";?></div></td>
 		<td width="25%" colspan="2" style="border-left:none" align="left"><select name="hunit" class="dropdown" onchange="check_unit(this)">
 						<?php
 						for ($i=1;$i<7;$i++) {
 							if (($i==3 && $user['tribe']==4) || ($i==4 && $user['tribe']!=3)) {
 							}else{
-								echo "<option value='".($utribe+$i)."'".($hero_info['unit'] == ($utribe+$i)? 'selected':'').">".$unarray[($utribe+$i)]."</option>\<br>";
+								echo "<option value='".($utribe+$i)."'".($hero['unit'] == ($utribe+$i)? 'selected':'').">".$unarray[($utribe+$i)]."</option>\<br>";
 							}
 						}
 						?>		
@@ -133,7 +141,7 @@ function check_unit(el) {
 	<tr>
 		<td>Offence</td> 
 		<td align="center"><?php echo $hero['atk']; ?></td> 
-		<td align="center"><?php echo $hero_info['attack'];?></td> 		
+		<td align="center"><?php echo $hero['attack'];?></td> 		
 		<td width="10%" align="center" id="hatk0"><font color="grey">(-)</font></td>
 		<td width="10%" align="center" id="hatk1"><a href="#" onclick="return changeValue(1,'hatk')">(+)</a></td> 
 		<td width="15%" align="center" style="font-weight:bold"><div id="hatk2">0</div><input id="hatk" name="hatk" type="hidden" value="0"></td> 
@@ -141,7 +149,7 @@ function check_unit(el) {
 	<tr> 
 		<td>Defence</td> 
 		<td align="center"><?php echo $hero['di'] . "/" . $hero['dc']; ?></td>
-		<td align="center"><?php echo $hero_info['defence'];?></td>	
+		<td align="center"><?php echo $hero['defence'];?></td>	
 		<td align="center" id="hdef0"><font color="grey">(-)</font></td>
 		<td align="center" id="hdef1"><a href="#" onclick="return changeValue(1,'hdef')">(+)</a></td> 
 		<td align="center" style="font-weight:bold"><div id="hdef2">0</div><input id="hdef" name="hdef" type="hidden" value="0"></td>
@@ -149,7 +157,7 @@ function check_unit(el) {
         <tr> 
 			<td>Off-Bonus</td> 
 			<td align="center"><?php echo ($hero['ob']-1)*100; ?>%</td> 
-			<td align="center"><?php echo $hero_info['attackbonus'];?></td>			
+			<td align="center"><?php echo $hero['attackbonus'];?></td>			
 			<td align="center" id="hob0"><font color="grey">(-)</font></td>
 			<td align="center" id="hob1"><a href="#" onclick="return changeValue(1,'hob')">(+)</a></td> 
 			<td align="center" style="font-weight:bold"><div id="hob2">0</div><input id="hob" name="hob" type="hidden" value="0"></td>
@@ -157,37 +165,37 @@ function check_unit(el) {
 		<tr> 
 			<td>Def-Bonus</td> 
 			<td align="center"><?php echo ($hero['db']-1)*100; ?>%</td> 
-			<td align="center"><?php echo $hero_info['defencebonus'];?></td>			
+			<td align="center"><?php echo $hero['defencebonus'];?></td>			
 			<td align="center" id="hdb0"><font color="grey">(-)</font></td>
 			<td align="center" id="hdb1"><a href="#" onclick="return changeValue(1,'hdb')">(+)</a></td> 
 			<td align="center" style="font-weight:bold"><div id="hdb2">0</div><input id="hdb" name="hdb" type="hidden" value="0"></td>
 		</tr> 
 		<tr> 
 			<td>Regeneration</td> 
-			<td align="center"><?php echo ($hero_info['regeneration']*5*SPEED); ?>/Day</font></td> 
-			<td align="center"><?php echo $hero_info['regeneration'];?></td>			
+			<td align="center"><?php echo ($hero['regeneration']*5*SPEED); ?>/Day</font></td> 
+			<td align="center"><?php echo $hero['regeneration'];?></td>			
 			<td align="center" id="hrege0"><font color="grey">(-)</font></td>
 			<td align="center" id="hrege1"><a href="#" onclick="return changeValue(1,'hrege')">(+)</a></td> 
 			<td align="center" style="font-weight:bold"><div id="hrege2">0</div><input id="hrege" name="hrege" type="hidden" value="0"></td>
 		<tr> 
 			<?php 
-			$count_level_exp=500-intval($hero_info['attack']+$hero_info['defence']+$hero_info['attackbonus']+$hero_info['defencebonus']+$hero_info['regeneration']);
-			if ($hero_info['points']>$count_level_exp) $hero_info['points']=$count_level_exp;
-			if($hero_info['experience'] < 495000){ ?>
+			$count_level_exp=500-intval($hero['attack']+$hero['defence']+$hero['attackbonus']+$hero['defencebonus']+$hero['regeneration']);
+			if ($hero['points']>$count_level_exp) $hero['points']=$count_level_exp;
+			if($hero['experience'] < 495000){ ?>
 				<td>Experience</td>
-				<td colspan="2" align="center"><?php echo (int) (($hero_info['experience'] - $hero_levels[$hero_info['level']]) / ($hero_levels[$hero_info['level']+1] - $hero_levels[$hero_info['level']])*100) ?>% (
-				<?php echo $hero_info['points']; ?>)</td> 
+				<td colspan="2" align="center"><?php echo (int) (($hero['experience'] - $hero_levels[$hero['level']]) / ($hero_levels[$hero['level']+1] - $hero_levels[$hero['level']])*100) ?>% (
+				<?php echo $hero['points']; ?>)</td> 
 			<?php }else{ ?>
 				<td>Experience</td>
-				<td colspan="2" align="center">100% (<?php echo $hero_info['points']; ?>)</td> 
+				<td colspan="2" align="center">100% (<?php echo $hero['points']; ?>)</td> 
 			<?php } ?>
 			<td align="center" style="font-weight:bold" colspan="3"><div id="exp1">5</div><input id="exp" name="exp" type="hidden" value="5"></td> 
 			
 		</tr>
 		<tr> 
 			<td>Health</td>
-			<td colspan="2" align="center"><?php echo round($hero_info['health']);?>%</td>			
-			<td colspan="3" align="center"><input name="hhealth" class="fm fm40" maxlength="3" value="<?php echo round($hero_info['health']);?>">%</td> 
+			<td colspan="2" align="center"><?php echo round($hero['health']);?>%</td>			
+			<td colspan="3" align="center"><input name="hhealth" class="fm fm40" maxlength="3" value="<?php echo round($hero['health']);?>">%</td> 
 		</tr>
 		<tr class="thead">
 			<td style="border-right:none" align="left"><input name="back" type="image" id="btn_back" class="dynamic_img" src="img/x.gif" value="back" alt="back" onclick="return go_url('../Admin/admin.php?p=player&uid=<?php echo $_GET["uid"];?>')" /></td>

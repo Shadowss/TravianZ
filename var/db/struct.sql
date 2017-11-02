@@ -914,7 +914,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
  `inrevive` tinyint(1) NULL,
  `intraining` tinyint(1) NULL,
  PRIMARY KEY (`heroid`),
- KEY `uid` (`uid`)
+ KEY `uid` (`uid`, `dead`) USING BTREE,
+ KEY `lastupdate` (`lastupdate`),
+ KEY `inrevive` (`inrevive`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 --

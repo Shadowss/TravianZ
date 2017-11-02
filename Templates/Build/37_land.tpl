@@ -3,7 +3,7 @@
 	Copyright: Travianx Project */
 
 	$oasisarray = $database->getOasis($village->wid);
-if($_GET['gid']==37 && isset($_GET['del'])){
+if(isset($_GET['gid']) && $_GET['gid']==37 && isset($_GET['del'])){
 if($session->access != BANNED){
 	$database->removeOases($_GET['del']);
 	header("Location: build.php?id=".$id."&land");

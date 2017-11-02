@@ -71,7 +71,7 @@ martinambrus changes:
 57. new feature: access log (only in config.php file to be used by advanced users to log game traffic and reveal URL hacks)
 58. fixed ability to go back in quests and gain gold and resources all over again when using default quests set
 59. fix for "finish immediatelly" PLUS button to decrease gold amount even when demolition alone has been insta-completed
-60. fix: building a Palace in another village makes that village capital
+60. fixed maximum of 3 heroes in the Hero's Mansion (+ update of the Admin interface to account for it)
 61. new feature: Embassy mechanics overhaul - check out our [Wiki Page](https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics) or this [Google Presentation](https://docs.google.com/presentation/d/1KN1qVAlxVj7aAN6F9QkRai1oliajfxKPIaJ4MSodUac/edit?usp=sharing) to learn more about it
 
 

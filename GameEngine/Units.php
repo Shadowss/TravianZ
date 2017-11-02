@@ -711,18 +711,106 @@ exit;
     }
     }
 
-    public function Hero($uid,$all=0) {
+    public function Hero($uid, $all = 0, $include_dead = false) {
         global $database;
-        $heroarray = $database->getHero($uid,$all);
-        $herodata = $GLOBALS["h".$heroarray[0]['unit']];
+        $heroarray = $database->getHero($uid, $all, $include_dead);
+        $herodata = false;
+        $singleHeroArrayID = 0;
 
-        $h_atk = $herodata['atk'] + 5 * floor($heroarray[0]['attack'] * $herodata['atkp'] / 5);
-        $h_di = $herodata['di'] + 5 * floor($heroarray[0]['defence'] * $herodata['dip'] / 5);
-        $h_dc = $herodata['dc'] + 5 * floor($heroarray[0]['defence'] * $herodata['dcp'] / 5);
-        $h_ob = 1 + 0.002 * $heroarray[0]['attackbonus'];
-        $h_db = 1 + 0.002 * $heroarray[0]['defencebonus'];
+        // no hero data found
+        if (!count($heroarray)) {
+            return false;
+        }
 
-        return  array('heroid'=>$heroarray[0]['heroid'],'unit'=>$heroarray[0]['unit'],'atk'=>$h_atk,'di'=>$h_di,'dc'=>$h_dc,'ob'=>$h_ob,'db'=>$h_db,'health'=>$heroarray[0]['health']);
+        // check all heroes and load hero data for the one,
+        // whose data were updated more recently - if we're not getting all of them
+        if (!$all) {
+            foreach ($heroarray as $id => $hero) {
+                // try to load a hero who's alive first
+                if (!$herodata && $hero['dead'] != 1) {
+                    // this global value comes from GameEngine/Data/unitdata.php
+                    $herodata = $GLOBALS["h".$hero['unit']];
+                    $singleHeroArrayID = $id;
+                    break;
+                }
+            }
+
+            // if we couldn't get a living hero,
+            // resort to loading the first one from the list,
+            // as that would be the one most recently updated/used
+            if (!$herodata) {
+                // this global value comes from GameEngine/Data/unitdata.php
+                $herodata = $GLOBALS["h".$heroarray[0]['unit']];
+            }
+
+            $h_atk = $herodata['atk'] + 5 * floor($heroarray[$singleHeroArrayID]['attack'] * $herodata['atkp'] / 5);
+            $h_di = $herodata['di'] + 5 * floor($heroarray[$singleHeroArrayID]['defence'] * $herodata['dip'] / 5);
+            $h_dc = $herodata['dc'] + 5 * floor($heroarray[$singleHeroArrayID]['defence'] * $herodata['dcp'] / 5);
+            $h_ob = 1 + 0.002 * $heroarray[$singleHeroArrayID]['attackbonus'];
+            $h_db = 1 + 0.002 * $heroarray[$singleHeroArrayID]['defencebonus'];
+    
+            return [
+                    'heroid' => $heroarray[$singleHeroArrayID]['heroid'],
+                    'unit' => $heroarray[$singleHeroArrayID]['unit'],
+                    'name' => $heroarray[$singleHeroArrayID]['name'],
+                    'inrevive' => $heroarray[$singleHeroArrayID]['inrevive'],
+                    'intraining' => $heroarray[$singleHeroArrayID]['intraining'],
+                    'trainingtime' => $heroarray[$singleHeroArrayID]['trainingtime'],
+                    'level' => $heroarray[$singleHeroArrayID]['level'],
+                    'attack' => $heroarray[$singleHeroArrayID]['attack'],
+                    'atk' => $h_atk,
+                    'defence' => $heroarray[$singleHeroArrayID]['defence'],
+                    'di' => $h_di,
+                    'dc' => $h_dc,
+                    'attackbonus' => $heroarray[$singleHeroArrayID]['attackbonus'],
+                    'ob' => $h_ob,
+                    'defencebonus' => $heroarray[$singleHeroArrayID]['defencebonus'],
+                    'db' => $h_db,
+                    'regeneration' => $heroarray[$singleHeroArrayID]['regeneration'],
+                    'health' => $heroarray[$singleHeroArrayID]['health'],
+                    'dead' => $heroarray[$singleHeroArrayID]['dead'],
+                    'points' => $heroarray[$singleHeroArrayID]['points'],
+                    'experience' => $heroarray[$singleHeroArrayID]['experience']
+            ];
+        } else {
+            // build up a full array of heroes and their stats
+            $heroes = [];
+            foreach ($heroarray as $id => $hero) {
+                $herodata = $GLOBALS["h".$heroarray[$id]['unit']];
+
+                $h_atk = $herodata['atk'] + 5 * floor($heroarray[$id]['attack'] * $herodata['atkp'] / 5);
+                $h_di = $herodata['di'] + 5 * floor($heroarray[$id]['defence'] * $herodata['dip'] / 5);
+                $h_dc = $herodata['dc'] + 5 * floor($heroarray[$id]['defence'] * $herodata['dcp'] / 5);
+                $h_ob = 1 + 0.002 * $heroarray[$id]['attackbonus'];
+                $h_db = 1 + 0.002 * $heroarray[$id]['defencebonus'];
+                
+                $heroes[] = [
+                    'heroid' => $heroarray[$id]['heroid'],
+                    'unit' => $heroarray[$id]['unit'],
+                    'name' => $heroarray[$id]['name'],
+                    'inrevive' => $heroarray[$id]['inrevive'],
+                    'intraining' => $heroarray[$id]['intraining'],
+                    'trainingtime' => $heroarray[$id]['trainingtime'],
+                    'level' => $heroarray[$id]['level'],
+                    'attack' => $heroarray[$id]['attack'],
+                    'atk' => $h_atk,
+                    'defence' => $heroarray[$id]['defence'],
+                    'di' => $h_di,
+                    'dc' => $h_dc,
+                    'attackbonus' => $heroarray[$id]['attackbonus'],
+                    'ob' => $h_ob,
+                    'defencebonus' => $heroarray[$id]['defencebonus'],
+                    'db' => $h_db,
+                    'regeneration' => $heroarray[$id]['regeneration'],
+                    'health' => $heroarray[$id]['health'],
+                    'dead' => $heroarray[$id]['dead'],
+                    'points' => $heroarray[$id]['points'],
+                    'experience' => $heroarray[$id]['experience']
+                ];
+            }
+            
+            return $heroes;
+        }
     }
 };
 

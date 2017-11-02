@@ -8,9 +8,7 @@
 | Copyright:     TravianX Project All rights reserved     |
 \*-------------------------------------------------------*/
 
-        $hero = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = " . (int) $session->uid . "");
-        $hero_info = mysqli_fetch_array($hero);
-        
+        $hero_info = $units->Hero($session->uid, 0, true);
         $define['reset_level'] = 3; // Until which level you are able to reset your points
       
 ?>
@@ -61,7 +59,7 @@
 		if(isset($_GET['land'])) {
 			include("37_land.tpl");
 		} else {
-		if(mysqli_num_rows($hero) == 0){
+		if($hero_info === false){
             include("37_train.tpl");
         }elseif($hero_info['intraining'] == 1){
 		$timeleft = $generator->getTimeFormat($hero_info['trainingtime'] - time());
@@ -87,10 +85,10 @@
     </table>
 		<?php
 		}
-        if(mysqli_num_rows($hero) != 0 AND $hero_info['dead'] == 1 AND $hero_info['intraining'] == 0){
+        if($hero_info !== false AND $hero_info['dead'] == 1 AND $hero_info['intraining'] == 0){
             include("37_revive.tpl");
         }
-        if(mysqli_num_rows($hero) != 0 AND $hero_info['dead'] == 0 AND $hero_info['trainingtime'] <= time() AND $hero_info['inrevive'] == 0 AND $hero_info['intraining'] == 0){
+        if($hero_info !== false AND $hero_info['dead'] == 0 AND $hero_info['trainingtime'] <= time() AND $hero_info['inrevive'] == 0 AND $hero_info['intraining'] == 0){
             include("37_hero.tpl");
         }
         }

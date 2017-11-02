@@ -1,3 +1,8 @@
+-- 2.11.2017 -> Hero fixes
+ALTER TABLE `s1_hero` ADD INDEX(`lastupdate`);
+ALTER TABLE `s1_hero` DROP INDEX `uid`, ADD INDEX `uid` (`uid`, `dead`) USING BTREE;
+ALTER TABLE `s1_hero` ADD INDEX(`inrevive`);
+
 -- 31.10.2017 -> Embassy and alliance updates
 ALTER TABLE `s1_ali_permission` ADD INDEX(`alliance`);
 ALTER TABLE `s1_allimedal` ADD INDEX(`allyid`);

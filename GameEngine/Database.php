@@ -3709,15 +3709,15 @@ class MYSQLi_DB implements IDbConnection {
 		return $totalunits;
 	}
 
-	function getHero($uid=0,$all=0) {
+	function getHero($uid=0, $all=0, $include_dead = false) {
 	    list($uid,$all) = $this->escape_input((int) $uid,$all);
 
 		if ($all) {
-			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid=$uid";
+			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid=$uid ORDER BY lastupdate DESC";
 		} elseif (!$uid) {
 			$q = "SELECT * FROM ".TB_PREFIX."hero";
 		} else {
-			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE dead=0 AND uid=$uid LIMIT 1";
+			$q = "SELECT * FROM ".TB_PREFIX."hero WHERE ".($include_dead ? '' : "dead=0 AND ")."uid=$uid LIMIT 1";
 		}
 		$result = mysqli_query($this->dblink,$q);
 		if (!empty($result)) {

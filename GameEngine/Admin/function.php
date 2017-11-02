@@ -92,10 +92,17 @@ class funct {
         header("Location: admin.php?p=player&uid=".$get['uid'].$error);
         exit;
       case "reviveHero":
-          $result=$database->query("SELECT * FROM ".TB_PREFIX."hero WHERE uid=".(int) $get['uid']);
+          $livingHeroesCount = mysqli_fetch_array($database->query("SELECT Count(*) as Total FROM ".TB_PREFIX."hero WHERE uid=".(int) $get['uid']." AND (dead = 0 OR inrevive = 1)"), MYSQLI_ASSOC);
+
+          if ($livingHeroesCount['Total'] > 0) {
+              header("Location: admin.php?p=player&uid=".$get['uid']."&re=1");
+              exit;
+          }
+
+        $result=$database->query("SELECT * FROM ".TB_PREFIX."hero WHERE heroid = ".(int) $get['hid']." AND uid=".(int) $get['uid']);
         $hdata=mysqli_fetch_array($result);
         $database->query("UPDATE ".TB_PREFIX."units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
-        $database->query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".time()." WHERE `uid` = ".(int) $get['uid']);
+        $database->query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".time()." WHERE `heroid` = ".(int) $get['hid']." AND `uid` = ".(int) $get['uid']);
         header("Location: admin.php?p=player&uid=".$get['uid']."&rc=1");
         exit;
       case "addHero":

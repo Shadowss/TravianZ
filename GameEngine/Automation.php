@@ -4280,11 +4280,11 @@ class Automation {
                 $villunits = $database->getUnit($hdata['wref']);
                 if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
-                    mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".(int) $hdata['trainingtime']." WHERE `uid` = ".(int) $hdata['uid']);
+                    mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".(int) $hdata['trainingtime']." WHERE `heroid` = ".(int) $hdata['heroid']);
                 }
                 if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
-                    mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `intraining` = '0', `lastupdate` = ".(int) $hdata['trainingtime']." WHERE `uid` = ".(int) $hdata['uid']);
+                    mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `intraining` = '0', `lastupdate` = ".(int) $hdata['trainingtime']." WHERE `heroid` = ".(int) $hdata['heroid']);
                 }
             }
         }

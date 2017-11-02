@@ -1,3 +1,10 @@
+<table cellpadding="1" cellspacing="1" class="build_details">
+        <thead>
+            <tr>
+                <th colspan="2"><?php echo REVIVE; ?> <?php echo U0; ?></th>
+            </tr>
+        </thead>
+
 <?php
 			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,5,3,0));
 			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,5,1,1));
@@ -22,66 +29,75 @@
 |                Dzoki < dzoki.travian@gmail.com >        |
 | Copyright:     TravianX Project All rights reserved     |
 \*-------------------------------------------------------*/
-    
-    if($hero_info['unit'] == 1) {
+	$heroes = $units->Hero($session->uid, 1);
+
+	// check if there is a hero in revive already
+	$reviving = false;
+	$training = false;
+
+	foreach ($heroes as $hero_datarow) {
+		if ($hero_datarow['inrevive']) {
+			$reviving = true;
+		}
+
+		if ($hero_datarow['intraining']) {
+			$training = true;
+		}
+	}
+
+	foreach ($heroes as $hero_datarow) {
+
+    if($hero_datarow['unit'] == 1) {
         	$name = U1;
-        } else if($hero_info['unit'] == 2) {
+        } else if($hero_datarow['unit'] == 2) {
         	$name = U2;
-        } else if($hero_info['unit'] == 3) {
+        } else if($hero_datarow['unit'] == 3) {
         	$name = U3;
-        } else if($hero_info['unit'] == 5) {
+        } else if($hero_datarow['unit'] == 5) {
         	$name = U5;
-        } else if($hero_info['unit'] == 6) {
+        } else if($hero_datarow['unit'] == 6) {
         	$name = U6;
-        } else if($hero_info['unit'] == 11) {
+        } else if($hero_datarow['unit'] == 11) {
         	$name = U11;
-        } else if($hero_info['unit'] == 12) {
+        } else if($hero_datarow['unit'] == 12) {
         	$name = U12;
-        } else if($hero_info['unit'] == 13) {
+        } else if($hero_datarow['unit'] == 13) {
         	$name = U13;
-        } else if($hero_info['unit'] == 15) {
+        } else if($hero_datarow['unit'] == 15) {
         	$name = U15;
-        } else if($hero_info['unit'] == 16) {
+        } else if($hero_datarow['unit'] == 16) {
         	$name = U16;
-        } else if($hero_info['unit'] == 21) {
+        } else if($hero_datarow['unit'] == 21) {
         	$name = U21;
-        } else if($hero_info['unit'] == 22) {
+        } else if($hero_datarow['unit'] == 22) {
         	$name = U22;
-        } else if($hero_info['unit'] == 24) {
+        } else if($hero_datarow['unit'] == 24) {
         	$name = U24;
-        } else if($hero_info['unit'] == 25) {
+        } else if($hero_datarow['unit'] == 25) {
         	$name = U25;
-        } else if($hero_info['unit'] == 26) {
+        } else if($hero_datarow['unit'] == 26) {
         	$name = U26;
         }
-        if($hero_info['level'] <= 60){
-        $wood = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['wood']);
-        $clay = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['clay']);
-        $iron = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['iron']);
-        $crop = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['crop']);
-        $training_time = $generator->getTimeFormat(round((${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus));
-        $training_time2 = time() + round((${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus);
+        if($hero_datarow['level'] <= 60){
+        $wood = (${'h'.$hero_datarow['unit'].'_full'}[$hero_datarow['level']]['wood']);
+        $clay = (${'h'.$hero_datarow['unit'].'_full'}[$hero_datarow['level']]['clay']);
+        $iron = (${'h'.$hero_datarow['unit'].'_full'}[$hero_datarow['level']]['iron']);
+        $crop = (${'h'.$hero_datarow['unit'].'_full'}[$hero_datarow['level']]['crop']);
+        $timeToTrain = round((${'h'.$hero_datarow['unit'].'_full'}[$hero_datarow['level']]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus);
+        $training_time = $generator->getTimeFormat($timeToTrain);
+        $training_time2 = time() + $timeToTrain;
 		}else{
-        $wood = (${'h'.$hero_info['unit'].'_full'}[60]['wood']);
-        $clay = (${'h'.$hero_info['unit'].'_full'}[60]['clay']);
-        $iron = (${'h'.$hero_info['unit'].'_full'}[60]['iron']);
-        $crop = (${'h'.$hero_info['unit'].'_full'}[60]['crop']);
-        $training_time = $generator->getTimeFormat(round((${'h'.$hero_info['unit'].'_full'}[60]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus));
-        $training_time2 = time() + round((${'h'.$hero_info['unit'].'_full'}[60]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus);
+        $wood = (${'h'.$hero_datarow['unit'].'_full'}[60]['wood']);
+        $clay = (${'h'.$hero_datarow['unit'].'_full'}[60]['clay']);
+        $iron = (${'h'.$hero_datarow['unit'].'_full'}[60]['iron']);
+        $crop = (${'h'.$hero_datarow['unit'].'_full'}[60]['crop']);
+        $timeToTrain = round((${'h'.$hero_datarow['unit'].'_full'}[60]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus);
+        $training_time = $generator->getTimeFormat($timeToTrain);
+        $training_time2 = time() + $timeToTrain;
 		}
-?>
 
-    <table cellpadding="1" cellspacing="1" class="build_details">
-        <thead>
-            <tr>
-                <th colspan="2"><?php echo REVIVE; ?> <?php echo U0; ?></th>
-            </tr>
-        </thead>
-    
-    <?php
-	if($hero_info['inrevive'] == 1) {
-    $timeleft = $generator->getTimeFormat($hero_info['trainingtime'] - time());
-                
+	if($hero_datarow['inrevive'] == 1) {
+    $timeleft = $generator->getTimeFormat($hero_datarow['trainingtime'] - time());
 ?>
     <table id="distribution" cellpadding="1" cellspacing="1">
         <thead>
@@ -95,19 +111,19 @@
 				   echo "<tr>
                 <td class=\"desc\">
 					<div class=\"tit\">
-						<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$name."\" title=\"".$name."\" />
+						<img class=\"unit u".$hero_datarow['unit']."\" src=\"img/x.gif\" alt=\"".$name."\" title=\"".$name."\" />
 						$name ($name1)
 					</div>"
 			?>
 			
             </tr>
     </table>
-	<?php }else{ if($hero_info['unit'] == 1 OR 11 OR 21){ ?>
+	<?php }else if (!$reviving) { if($hero_datarow['unit'] == 1 OR 11 OR 21){ ?>
         <tr>
                 <td class="desc">
 					<div class="tit">
-						<img class="unit u<?php echo $hero_info['unit']; ?>" src="img/x.gif" alt="<?php echo $name; ?>" title="<?php echo $name; ?>" />
-						<?php echo $name . " (Level " . $hero_info['level'] . ")"; ?>
+						<img class="unit u<?php echo $hero_datarow['unit']; ?>" src="img/x.gif" alt="<?php echo $name; ?>" title="<?php echo $name; ?>" />
+						<?php echo $name . " (Level " . $hero_datarow['level'] . ")"; ?>
 					</div>
 					<div class="details">
 						<img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
@@ -130,7 +146,7 @@
                 if($village->awood < $wood OR $village->aclay < $clay OR $village->airon < $iron OR $village->acrop < $crop) {
                     echo "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
                 }else {
-                    echo "<a href=\"build.php?id=".$id."&revive=1\">".REVIVE."</a>";
+                    echo "<a href=\"build.php?id=".$id."&amp;revive=1&amp;hid=".$hero_datarow['heroid']."\">".REVIVE."</a>";
                 }
                 
                 ?></center></td>
@@ -138,12 +154,12 @@
         <?php }else { ?>
         
         
-    <?php if($database->checkIfResearched($village->wid, 't'.$hero_info['unit']) != 0){ ?>
+    <?php if($database->checkIfResearched($village->wid, 't'.$hero_datarow['unit']) != 0){ ?>
         <tr>
                 <td class="desc">
 					<div class="tit">
-						<img class="unit u<?php echo $hero_info['unit']; ?>" src="img/x.gif" alt="<?php echo $name; ?>" title="<?php echo $name; ?>" />
-						<?php echo $name . " (Level " . $hero_info['level'] . ")"; ?>
+						<img class="unit u<?php echo $hero_datarow['unit']; ?>" src="img/x.gif" alt="<?php echo $name; ?>" title="<?php echo $name; ?>" />
+						<?php echo $name . " (Level " . $hero_datarow['level'] . ")"; ?>
 					</div>
 					<div class="details">
 						<img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER; ?>" /><?php echo $wood; ?>|
@@ -166,34 +182,39 @@
                 if($village->awood < $wood OR $village->aclay < $clay OR $village->airon < $iron OR $village->acrop < $crop) {
                     echo "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
                 }else {
-                    echo "<a href=\"build.php?id=".$id."&revive=1\">".REVIVE."</a>";
+                    echo "<a href=\"build.php?id=".$id."&amp;revive=1&amp;hid=".$hero_datarow['heroid']."\">".REVIVE."</a>";
                 }
                 
                 ?>
                 </center></td>
             </tr>
-        <?php } }} ?>
-        
-</table>
+        <?php }
+        }
+    }
 
-
-    <?php
-    
-    if(isset($_GET['revive']) && $_GET['revive'] == 1 && $hero_info['inrevive'] == 0 && $hero_info['intraining'] == 0 && $hero_info['dead'] == 1){
-			if($session->access != BANNED){
-            mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".(int) $training_time2."', `wref` = '".(int) $village->wid."' WHERE `uid` = '".(int) $session->uid."'");
+	if(isset($_GET['revive']) && $_GET['revive'] == 1 && isset($_GET['hid']) && $_GET['hid'] == $hero_datarow['heroid'] && $hero_datarow['inrevive'] == 0 && $hero_datarow['intraining'] == 0 && $hero_datarow['dead'] == 1){
+		if($session->access != BANNED){
+            mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".(int) $training_time2."', `wref` = '".(int) $village->wid."' WHERE `heroid` = ".(int) $_GET['hid']." AND `uid` = '".(int) $session->uid."'");
 			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $wood." WHERE `wref` = '" . (int) $village->wid . "'");
 			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $clay." WHERE `wref` = '" . (int) $village->wid . "'");
 			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `iron` = `iron` - ".(int) $iron ." WHERE `wref` = '" . (int) $village->wid . "'");
 			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $crop." WHERE `wref` = '" . (int) $village->wid . "'");
             header("Location: build.php?id=".$id."");
 			exit;
-			}else{
+		} else {
 			header("Location: banned.php");
 			exit; 
-			}
+		}
     }
-	if($hero_info['inrevive'] == 0 && $hero_info['intraining'] == 0) {
+
+    }
+?>
+        
+</table>
+
+
+    <?php
+	if(!$reviving && !$training) {
             include ("37_train.tpl");
 	}
     ?>

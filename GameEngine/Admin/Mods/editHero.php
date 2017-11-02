@@ -19,7 +19,7 @@ foreach ($_POST as $key => $value) {
     $_POST[$key] = $database->escape($value);
 }
 
-if(isset($_POST['id'])) {
+if(isset($_POST['id']) && isset($_POST['hid'])) {
 	$_POST['hname'] = trim(stripslashes($_POST['hname']));
 	if ($_POST['hname']=="") {
 		header("Location: ../../../Admin/admin.php?p=editHero&uid=".$_POST['id']."&e=1");
@@ -29,9 +29,10 @@ if(isset($_POST['id'])) {
 	include_once("../../Data/hero_full.php"); 
 	
 	$id = (int) $_POST['id'];
+	$hid = (int) $_POST['hid'];
 	
 	$q = "UPDATE ".TB_PREFIX."hero SET unit=".(int) $_POST['hunit'].", name='".$_POST['hname']."', level=".(int) $_POST['hlvl'].", points=".(int) $_POST['exp'].", experience=".(int) $hero_levels[$_POST['hlvl']].", health='".$_POST['hhealth']."',
-		attack=".(int) $_POST['hatk'].", defence=".(int) $_POST['hdef'].", attackbonus=".(int) $_POST['hob'].", defencebonus=".(int) $_POST['hdb'].", regeneration=".(int) $_POST['hrege']." WHERE uid = ".$id;
+		attack=".(int) $_POST['hatk'].", defence=".(int) $_POST['hdef'].", attackbonus=".(int) $_POST['hob'].", defencebonus=".(int) $_POST['hdb'].", regeneration=".(int) $_POST['hrege']." WHERE heroid = ".$hid." AND uid = ".$id;
 $return=$database->query($q);
 if($return) {
     $database->query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed hero info',".time().")");

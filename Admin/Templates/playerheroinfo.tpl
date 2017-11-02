@@ -11,14 +11,19 @@
 
 include_once("../GameEngine/Data/hero_full.php"); 
 include_once("../GameEngine/Units.php");
-$id=(int) $user['id'];
-$hero = mysqli_query($GLOBALS["link"], "SELECT * FROM " . TB_PREFIX . "hero WHERE `uid` = ".$id); 
-$hero_info = mysqli_fetch_array($hero);
-if (!empty($hero_info)) {
-	$hero = $units->Hero($id,1);
-}else {
-$hero="none";
-}	
+$id = (int) $_GET['uid'];
+$hero = $units->Hero($id,1);
+
+// find a hero who's alive
+$heroAliveIndex = -1;
+if ($hero !== false) {
+	foreach ($hero as $hid => $h) {
+		if (!$h['dead']) {
+			$heroAliveIndex = $hid;
+			break;
+		}
+	}
+}
 ?>
 <style>
 td {
@@ -35,17 +40,10 @@ thead {
 <table style="border-collapse:collapse; margin-top:25px; line-height:16px; width:100%;">
 	<thead>
 	<tr>
-		<td colspan="3">Player Hero Info 
-		<?php if (!$hero_info['dead'] && $hero!="none") {?>
-			&nbsp;&nbsp;<a href='admin.php?p=editHero&uid=<?php echo $id; ?>'>
-			<img src="../img/admin/edit.gif" title="Edit Player Hero Info"></a>
-			&nbsp;<a href='?action=killHero&uid=<?php echo $id; ?>'>
-			<img src="../img/admin/del.gif" title="Kill Player Hero"></a>
-		<?php }?>	
-		</td>
+		<td colspan="3">Player Heroes</td>
 	</tr>
 	</thead>
-	<?php if ($hero=="none") {?>
+	<?php if ($hero === false) {?>
 		<tr>
 			<td colspan="3" align="center">None &nbsp;&nbsp;<font color="blue">Add Hero</font>
 			<?php
@@ -62,20 +60,59 @@ thead {
 			?>
 		
 		</tr>	
-	<?php }else {?>
+	<?php
+		} else {
+		$x = 1;
+		foreach ($hero as $h) {
+	?>
+	<tr>
+		<td colspan="3" style="text-align: center; color: blue; font-weight: bold">
+			Hero #<?php echo $x++; ?>
+		</td>
+	</tr>
 	<tr>
 		<td width="35%">Hero Name</td> 
-			<td colspan="2" width="65%"><?php echo $hero_info['name']; ?></td> 
+			<td colspan="2" width="65%"><?php echo $h['name']; ?></td> 
 	</tr>
 	<tr>
 		<td>Hero Level</td> 
-		<td colspan="2"><?php echo $hero_info['level']; ?></td> 
+		<td colspan="2"><?php echo $h['level']; ?></td> 
 	</tr>
 	<tr>
 		<td>Hero Unit</td> 
-		<td colspan="2"><?php echo "<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($hero_info['unit'])."\" title=\"".$technology->getUnitName($hero_info['unit'])."\" /> (".$technology->getUnitName($hero_info['unit']); ?>)</td> 
+		<td colspan="2"><?php echo "<img class=\"unit u".$h['unit']."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($h['unit'])."\" title=\"".$technology->getUnitName($h['unit'])."\" /> (".$technology->getUnitName($h['unit']); ?>)</td> 
 	</tr>
-	<?php if (!$hero_info['dead']) {?>
+	<tr> 
+		<td>Status</td> 
+		<td colspan="2"<?php
+			if ($h['dead']) {
+				echo ' class="c5"';
+			}
+		?>>
+		<?php
+			if (!$h['dead']) {
+		?>
+			<span style="color: green; font-weight: bold">Alive</span>
+			&nbsp;<a href='admin.php?p=editHero&uid=<?php echo $id; ?>&amp;hid=<?php echo $h['heroid'] ?>'>
+			<img src="../img/admin/edit.gif" title="Edit Player Hero Info"></a>
+			&nbsp;<a href='?action=killHero&uid=<?php echo $id; ?>'>
+			<img src="../img/admin/del.gif" title="Kill Player Hero"></a></td>
+		<?php
+			} else {
+		?>
+			Dead &nbsp;
+			<?php
+				if ($heroAliveIndex === -1) {
+			?><a href="?action=reviveHero&uid=<?php echo $id;?>&amp;hid=<?php echo $h['heroid'] ?>" title="Revive hero"><?php echo $refreshicon; ?></a>
+			<?php
+				} else {
+					echo '<span style="color: black; font-size: smaller">(cannot revive, kill living hero first)</span>';
+				}
+			?>
+		<?php
+			}
+		?>
+	<?php if (!$h['dead']) { ?>
 	<thead>
 	<tr>
 		<td width="35%">Details</td>
@@ -85,66 +122,73 @@ thead {
 	</thead>
 	<tr>
 		<td>Offence</td> 
-		<td><?php echo $hero['atk']; ?></td> 
-		<td><?php echo $hero_info['attack']; ?></td> 
+		<td><?php echo $h['atk']; ?></td> 
+		<td><?php echo $h['attack']; ?></td> 
 	</tr> 
 	<tr> 
 		<td>Defence</td> 
-		<td><?php echo $hero['di'] . "/" . $hero['dc']; ?></td> 
-			<td><?php echo $hero_info['defence']; ?></td> 
+		<td><?php echo $h['di'] . "/" . $h['dc']; ?></td> 
+			<td><?php echo $h['defence']; ?></td> 
 		</tr> 
         <tr> 
 			<td>Off-Bonus</td> 
-			<td><?php echo ($hero['ob']-1)*100; ?>%</td> 
-			<td><?php echo $hero_info['attackbonus']; ?></td> 
+			<td><?php echo ($h['ob']-1)*100; ?>%</td> 
+			<td><?php echo $h['attackbonus']; ?></td> 
 		</tr> 
 		<tr> 
 			<td>Def-Bonus</td> 
-			<td><?php echo ($hero['db']-1)*100; ?>%</td> 
-			<td><?php echo $hero_info['defencebonus']; ?></td> 
+			<td><?php echo ($h['db']-1)*100; ?>%</td> 
+			<td><?php echo $h['defencebonus']; ?></td> 
 		</tr> 
 		<tr> 
 			<td>Regeneration</td> 
-			<td><?php echo ($hero_info['regeneration']*5*SPEED); ?>/Day</td> 
-			<td><?php echo $hero_info['regeneration']; ?></td> 
+			<td><?php echo ($h['regeneration']*5*SPEED); ?>/Day</td> 
+			<td><?php echo $h['regeneration']; ?></td> 
 		<tr> 
 			<?php 
-			$count_level_exp=500-intval($hero_info['attack']+$hero_info['defence']+$hero_info['attackbonus']+$hero_info['defencebonus']+$hero_info['regeneration']);
-			if ($hero_info['points']>$count_level_exp) $hero_info['points']=$count_level_exp;
-			if($hero_info['experience'] < 495000){ ?>
-				<td>Experience: <?php echo (int) (($hero_info['experience'] - $hero_levels[$hero_info['level']]) / ($hero_levels[$hero_info['level']+1] - $hero_levels[$hero_info['level']])*100) ?>%</td> 
-		        <td colspan="2"><?php echo $hero_info['points']; ?></td> 
+			$count_level_exp=500-intval($h['attack']+$h['defence']+$h['attackbonus']+$h['defencebonus']+$h['regeneration']);
+			if ($h['points']>$count_level_exp) $h['points']=$count_level_exp;
+			if($h['experience'] < 495000){ ?>
+				<td>Experience: <?php echo (int) (($h['experience'] - $hero_levels[$h['level']]) / ($hero_levels[$h['level']+1] - $hero_levels[$h['level']])*100) ?>%</td> 
+		        <td colspan="2"><?php echo $h['points']; ?></td> 
 			<?php }else{ ?>
 				<td>Experience: 100%</td> 
-		        <td colspan="2"><?php echo $hero_info['points']; ?></td> 
+		        <td colspan="2"><?php echo $h['points']; ?></td> 
 			<?php } ?>
 		</tr>
 		<tr> 
 			<td>Health</td> 
-			<td colspan="2"><?php echo round($hero_info['health']); ?>%</td> 
+			<td colspan="2"><?php echo round($h['health']); ?>%</td> 
 		<tr>
-		<?php }else{?>
-		<tr> 
-			<td>Status</td> 
-			<td colspan="2" class="c5">Dead &nbsp;&nbsp;<a href="?action=reviveHero&uid=<?php echo $id;?>" title="Revive hero"><?php echo $refreshicon; ?></a></td> 
 		<tr>
-	
-	<?php }
+			<td colspan="3">&nbsp;</td>
+		</tr>
+		<?php 
+			} else {
+		?>
+		<tr>
+			<td colspan="3">&nbsp;</td>
+		</tr>
+		<?php
+			}
+		}
 	}
 	?>
 	</table>	
 	<?php
 	if(isset($_GET['e'])){
-		echo '<div align="center"><font color="Red"><b>Problem to kill hero</font></b></div>';
+		echo '<div align="center"><font color="Red"><b>Here could not be killed due to an unexpected error.</font></b></div>';
 	}elseif(isset($_GET['kc'])){
-		echo '<div align="center"><font color="blue"><b>Kill hero has done</font></b></div>';
+		echo '<div align="center"><font color="blue"><b>Hero has been killed.</b></font></div>';
 	}elseif(isset($_GET['rc'])){
-		echo '<div align="center"><font color="blue"><b>Revive hero has done</font></b></div>';
+		echo '<div align="center"><font color="blue"><b>Hero has been revived.</b></font></div>';
+	}elseif(isset($_GET['re'])){
+		echo '<div align="center"><font color="red"><b>Hero cannot be revived because another hero still lives or is in revival.</b></font></div>';
 	}elseif(isset($_GET['ac'])){
-		echo '<div align="center"><font color="blue"><b>Add hero has done</font></b></div>';
+		echo '<div align="center"><font color="blue"><b>A new hero was added.</b></font></div>';
 	}elseif(isset($_GET['cs'])){
-		echo '<div align="center"><font color="blue"><b>Change hero info has done</font></b></div>';
+		echo '<div align="center"><font color="blue"><b>Hero information has been saved.</b></font></div>';
 	}elseif(isset($_GET['ce'])){
-		echo '<div align="center"><font color="Red"><b>Problem to change hero info</font></b></div>';
+		echo '<div align="center"><font color="Red"><b>Hero data could not be edited due to an unexpected error.</b></font></div>';
 	}
 	?>
