@@ -586,7 +586,7 @@ var BBEditor = new Class ({
 
 	showPreview: function(data) {
 
-		if (data.error == true) {
+		if (data && data.error == true) {
 
 			alert(data.errorMsg);
 
@@ -594,7 +594,7 @@ var BBEditor = new Class ({
 
 		} else {
 
-			this.preview.innerHTML = data.text;
+			this.preview.innerHTML = this.textArea.value;
 
 			this.preview.setStyle('display','block');
 
