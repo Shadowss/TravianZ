@@ -162,7 +162,7 @@ class Automation {
         $dataarray = $$name;
         
         for ($i = 0; $i <= $lvl; $i++) {
-            $popT += ((isset($dataarray[$i]) && $dataarray[$i]['cp']) ? $dataarray[$i]['cp'] : 0);
+            $popT += ((isset($dataarray[$i]) && isset($dataarray[$i]['cp'])) ? $dataarray[$i]['cp'] : 0);
         }
         return $popT;
     }
