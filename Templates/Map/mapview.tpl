@@ -262,7 +262,7 @@ if (isset($neutralarray[0])) {
 			function init_local(){map_init();}
 		</script><?php
 		if($session->plus){
-			echo '<a id="map_makelarge" href="#" onclick="PopupMap('.$bigmid.');" ><img class="ml" src="img/x.gif" alt="large map" title="'.LARGEMAP.'"/></a>';
+			echo '<a id="map_makelarge" href="#" onclick="PopupMap('.$bigmid.');" ><img class="ml" src="img/x.gif" alt="large map" title="Large Map"/></a>';
 		}?>
 		<img id="map_navibox" src="img/x.gif" usemap="#map_navibox"/>
 		<map name="map_navibox">
