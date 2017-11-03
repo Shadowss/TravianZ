@@ -4,6 +4,8 @@
 - inviting player into alliance who already is in an alliance should not work
 - accepting invitation if alliance Embassy is not on high enough level should not work
 - when a village becomes new capital, old capital should rapidly degrade its fields to max level 10 (plus max storage & crop should go down with it)
+- scale new accounts creation placements with the server speed (10x server will have LOTS of players in the middle and corners by Natars time)
+- shouldn't we create accounts from middle towards corners, not middle-corners-everywhere?
 - scale oasis regeneration with game progresses (now we have elephants and tigers everywhere)
 - can we move heroes to other villages? (http://travian.wikia.com/wiki/Hero%27s_Mansion)
 - warning should appear if the player is trying to send troops to attack an allied village
