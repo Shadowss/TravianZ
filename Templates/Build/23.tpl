@@ -13,7 +13,7 @@ include("next.tpl");
 			$artefact_bouns = 1;
 			}
 			$good_effect = $bad_effect = 1;
-			$foolartefact = $database->getFoolArtefactInfo(7,$village->wid,$seesion->uid);
+			$foolartefact = $database->getFoolArtefactInfo(7,$village->wid,$session->uid);
 			if(count($foolartefact) > 0){
 			foreach($foolartefact as $arte){
 			if($arte['bad_effect'] == 1){
