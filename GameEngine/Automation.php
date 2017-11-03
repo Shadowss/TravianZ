@@ -3339,12 +3339,12 @@ class Automation {
                 }
                 if($data['from']==0){
                     $DefenderID = $database->getVillageField($data['to'],"owner");
-                    if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
+                    if (isset($AttackerID) && $session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
                     $database->addEnforce($data);
                     $reinf = $database->getEnforce($data['to'],$data['from']);
                     $database->modifyEnforce($reinf['id'],31,1,1);
                     $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
-                    $database->addNotice($to['owner'],$to['wref'],$targetally,8,'village of the elders reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
+                    $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,'village of the elders reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
                     $database->setMovementProc($data['moveid']);
                     if ($session->uid==$DefenderID) $reload=true;
                 }else{
