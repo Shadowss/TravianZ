@@ -1,4 +1,4 @@
- <?php
+<?php
 #########################################################
 ## Filename addUsers.php                               ##
 ## Created by: KFCSpike                                ##
@@ -170,4 +170,4 @@ WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
     }
     header("Location: ../../../Admin/admin.php?p=addUsers&g=OK&bn=$baseName&am=$created&sk=$skipped&bp=$beginnersProtection&tr=$postTribe");
 }
-?> 
+?>
