@@ -4115,6 +4115,9 @@ class MYSQLi_DB implements IDbConnection {
 		}
 		$settlerarray = $this->getMovement(5, $id, 0);
 		if(!empty($settlerarray)) {
+		    if (!isset($movingunits['u' . ($vtribe * 10)])) {
+		        $movingunits['u' . ($vtribe * 10)] = 0;
+		    }
 			$movingunits['u' . ($vtribe * 10)] += 3 * count($settlerarray);
 		}
 		return $movingunits;
@@ -4558,9 +4561,9 @@ class MYSQLi_DB implements IDbConnection {
 				}
 			}
 		}
-		// trapped settlers/chiefs calculation required
+		// TODO: trapped settlers/chiefs calculation required
 
-		$settlerslots = $maxslots * 3 - $settlers - $chiefs * 3;
+		$settlerslots = $maxslots * 3 - $settlers * 3;
 		$chiefslots = $maxslots - $chiefs - floor(($settlers + 2) / 3);
 
 		if(!$technology->getTech(($session->tribe - 1) * 10 + 9)) {

@@ -1,4 +1,3 @@
-- cannot train settlers in palace if chieftan is in the village (2 villages founded, palace lvl 20, so 3rd should be possible)
 - can we have / accept invitations from multiple alliances? if so, will first invitation rewrite the next? or when accepting, will all other invitations be deleted?
 - when you put 2 builds into a loop (queue) and add 3rd to be built with master builder, the last one doesn't take resources and will be finished for free with PLUS immediate finish action
 - inviting player into alliance who already is in an alliance should not work
@@ -50,3 +49,4 @@
   (+ add check for members who have WW or artifacts in their villages) from the alliance and select a leader with closest Embassy level
   to hold the rest
 - add new PLUS-only alliance setting for reassigning a leader directly without quitting the alliance
+- allow for a game mechanic where if a chieftan exists in a village attacked by another player with a chieftan, there's a chance (random, or based on cultural points of those 2 players?) that the home chieftan would prevent village from conversion (also possibly decrease cultural points on attacks, if this is not done yet)

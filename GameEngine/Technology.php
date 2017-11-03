@@ -294,7 +294,7 @@ class Technology {
                 if (!isset($ownunit['hero'])) {
                     $ownunit['hero'] = 0;
                 }
-                $ownunit['hero'] += $movement['hero'];
+                $ownunit['hero'] += (isset($movement['hero']) ? $movement['hero'] : 0);
             }
         }
         return $ownunit;
