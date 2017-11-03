@@ -2515,7 +2515,7 @@ class Automation {
                                             if(($toF['loyalty']-$rand)>0){
                                                 $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty']-$rand)."</b>.";
                                                 $database->setVillageField($data['to'],loyalty,($toF['loyalty']-$rand));
-                                            } else {
+                                            } else if (!$village_destroyed) {
                                                 //you took over the village
                                                 $villname = addslashes($database->getVillageField($data['to'],"name"));
                                                 $artifact = $database->getOwnArtefactInfo($data['to']);
