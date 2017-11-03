@@ -4562,8 +4562,7 @@ class MYSQLi_DB implements IDbConnection {
 			}
 		}
 		// TODO: trapped settlers/chiefs calculation required
-
-		$settlerslots = $maxslots * 3 - $settlers * 3;
+		$settlerslots = ($maxslots * 3) - $settlers;
 		$chiefslots = $maxslots - $chiefs - floor(($settlers + 2) / 3);
 
 		if(!$technology->getTech(($session->tribe - 1) * 10 + 9)) {
