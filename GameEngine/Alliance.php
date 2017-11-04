@@ -205,32 +205,34 @@ class Alliance {
 		*****************************************/
 		private function acceptInvite($get) {
 			global $form, $database, $session;
-			if($session->access != BANNED){
-			foreach($this->inviteArray as $invite) {
-			if($session->alliance == 0){
-				if($invite['id'] == $get['d'] && $invite['uid'] == $session->uid) {
-				$memberlist = $database->getAllMember($invite['alliance']);
-				$alliance_info = $database->getAlliance($invite['alliance']);
-				if(count($memberlist) < $alliance_info['max']){
-					$database->removeInvitation($get['d']);
-					$database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
-					$database->createAlliPermissions($invite['uid'], $invite['alliance'], '', '0', '0', '0', '0', '0', '0', '0', '0');
-					// Log the notice
-					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has joined the alliance.');
-				}else{
-				$accept_error = 1;
-				$max = $alliance_info['max'];
-				}
-				}
-			}
-			}
-			if($accept_error == 1){
-			$form->addError("ally_accept", "The alliance can contain only ".$max." peoples right now.");
-			}else{
-			    header("Location: build.php?id=" . $get['id']);
-			    exit;
-			}
-			}else{
+
+			if ($session->access != BANNED) {
+    			foreach ($this->inviteArray as $invite) {
+        			if ($session->alliance == 0) {
+        				if ($invite['id'] == $get['d'] && $invite['uid'] == $session->uid) {
+            				$memberlist = $database->getAllMember($invite['alliance']);
+            				$alliance_info = $database->getAlliance($invite['alliance']);
+            				if (count($memberlist) < $alliance_info['max']) {
+            					$database->removeInvitation($get['d']);
+            					$database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
+            					$database->createAlliPermissions($invite['uid'], $invite['alliance'], '', 0, 0, 0, 0, 0, 0, 0, 0);
+            					// Log the notice
+            					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has joined the alliance.');
+            				} else {
+            				    $accept_error = 1;
+            				    $max = $alliance_info['max'];
+            				}
+        				}
+        			}
+    			}
+
+    			if($accept_error == 1){
+    			    $form->addError("ally_accept", "The alliance can contain only ".$max." members at this moment.");
+    			}else{
+    			    header("Location: build.php?id=" . $get['id']);
+    			    exit;
+    			}
+			} else{
 			    header("Location: banned.php");
 			    exit;
 			}

@@ -4238,9 +4238,6 @@ class Automation {
                     $q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=800 WHERE `maxcrop`<=800 AND wref=".(int) $vil['vref'];
                     $database->query($q);
                 }
-                if ($type==18){
-                    Automation::updateMax($database->getVillageField($vil['vref'],'owner'));
-                }
                 if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
                 if ($village->natar==1 && $type==40) $clear=""; //fix by ronix
                 $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".(int) $vil['vref'];
@@ -4249,6 +4246,9 @@ class Automation {
                 $database->modifyPop($vil['vref'],$pop[0],1);
                 $this->procClimbers($database->getVillageField($vil['vref'],'owner'));
                 $database->delDemolition($vil['vref'], true);
+                if ($type==18){
+                    Automation::updateMax($database->getVillageField($vil['vref'],'owner'));
+                }
             }
         }
         if(file_exists("GameEngine/Prevention/demolition.txt")) {
@@ -4880,8 +4880,8 @@ class Automation {
     
     public static function updateMax($leader) {
         global $bid18, $database;
-        $q = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "alidata where leader = ". (int) $leader);
-        if(mysqli_num_rows($q) > 0){
+        $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "alidata where leader = ". (int) $leader), MYSQLI_ASSOC);
+        if ($q['Total'] > 0) {
             $villages = $database->getVillagesID2($leader);
             $max = 0;
             foreach($villages as $village){
