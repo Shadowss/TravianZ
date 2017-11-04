@@ -28,7 +28,8 @@ $sessionaccess = $access['access'];
 
 if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
 
-$users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users"));
+$users = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."users"), MYSQLI_ASSOC);
+$users = $users['Total'];
 
 $reason = $_POST['unbanreason'];
 $admin = $session;

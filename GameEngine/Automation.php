@@ -30,14 +30,12 @@ class Automation {
     private $bountyOpop = 1;
     
     public function isWinner() {
-        $q = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
-        $isThere = mysqli_num_rows($q);
-        if($isThere > 0)
+        // check whether someone already built a level 100 Wonder of the World
+        $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99 = 100 and f99t = 40"), MYSQLI_ASSOC);
+        if($q['Total'] > 0)
         {
             header('Location: winner.php');
             exit;
-        }else{
-            ## there is no winner
         }
     }
     

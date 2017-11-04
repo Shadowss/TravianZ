@@ -5,9 +5,9 @@ include("GameEngine/Config.php");
 		$connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error($database->dblink));
 		mysqli_select_db(SQL_DB, $connection) or die(mysqli_error($database->dblink));
 
-		$q = "SELECT * FROM ".TB_PREFIX."movement where endtime < ".time()." and proc = 0";
-		$result = mysqli_query($GLOBALS["link"], $q, $connection);
-		$count=mysqli_num_rows($result);
+		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."movement where endtime < ".time()." and proc = 0";
+		$result = mysqli_fetch_array(mysqli_query($GLOBALS["link"], $q, $connection), MYSQLI_ASSOC);
+		$count=$result['Total'];
 
 ?>
 

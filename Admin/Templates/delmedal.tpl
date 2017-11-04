@@ -13,8 +13,8 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 include("../GameEngine/config.php");
 $id = $_SESSION['id'];
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."medal");
-$nummedals = mysqli_num_rows($sql);
+$sql = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."medal"), MYSQLI_ASSOC);
+$nummedals = $sql['Total'];
 ?>
 
 
@@ -37,8 +37,8 @@ $nummedals = mysqli_num_rows($sql);
 	</thead>
 	<tbody>
 		<?php
-			$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."medal");
-			$tot = mysqli_num_rows($sql);
+			$sql = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."medal"), MYSQLI_ASSOC);
+			$tot = $sql['Total'];
 			$sql = mysqli_query($GLOBALS["link"], "SELECT week FROM ".TB_PREFIX."medal ORDER BY week DESC LIMIT 1");
 			if(mysqli_num_rows($sql) > 0){
 			$week = mysqli_result($sql, 0);
@@ -77,8 +77,8 @@ $nummedals = mysqli_num_rows($sql);
 			{
 				$newweek = $j+1;
 
-				$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."medal WHERE week = $newweek");
-				$tot = mysqli_num_rows($sql);
+				$sql = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."medal WHERE week = $newweek"), MYSQLI_ASSOC);
+				$tot = $sql['Total'];
 
 				echo "<tr><td>$newweek</td><td>$tot</td><td><input type=\"image\" name=\"medalweek\" value=\"".$newweek."\" style=\"background-image: url('../gpack/travian_default/img/a/del.gif'); height: 12px; width: 12px;\" src=\"../gpack/travian_default/img/a/x.gif\"></td>";
 			}

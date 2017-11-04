@@ -335,9 +335,9 @@ class Message {
 		
 		// Vulnerability closed by Shadow
 
-		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
-		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q);
-		$flood = mysqli_num_rows($res);
+		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
+		$res = mysqli_fetch_array(mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
+		$flood = $res['Total'];
 		if($flood > 5)
 		return; //flood
 
@@ -425,9 +425,9 @@ class Message {
 		// Vulnerability closed by Shadow
 
 		if ($security_check) {
-    		$q = "SELECT * FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
-    		$res = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q);
-    		$flood = mysqli_num_rows($res);
+    		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
+    		$res = mysqli_fetch_array(mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
+    		$flood = $res['Total'];
     		if($flood > 5)
     		return; //flood
 		}

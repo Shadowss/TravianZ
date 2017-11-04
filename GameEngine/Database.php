@@ -652,9 +652,9 @@ class MYSQLi_DB implements IDbConnection {
 	function checkactiveSession($username, $sessid) {
         list($username, $sessid) = $this->escape_input($username, $sessid);
 
-		$q = "SELECT username FROM " . TB_PREFIX . "users where username = '$username' and sessid = '$sessid' LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result) != 0) {
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "users where username = '$username' and sessid = '$sessid' LIMIT 1";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if($result['Total'] > 0) {
 			return true;
 		} else {
 			return false;
@@ -1208,9 +1208,9 @@ class MYSQLi_DB implements IDbConnection {
 	function CheckForum($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id'";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "forum_cat where alliance = $id";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if ($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -1237,9 +1237,9 @@ class MYSQLi_DB implements IDbConnection {
 	function CheckLastTopic($id) {
         list($id) = $this->escape_input($id);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id'";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_topic where cat = $id";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -1249,9 +1249,9 @@ class MYSQLi_DB implements IDbConnection {
 	function CheckLastPost($id) {
         list($id) = $this->escape_input($id);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_post where topic = '$id'";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_post where topic = $id";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if ($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -1325,9 +1325,9 @@ class MYSQLi_DB implements IDbConnection {
 	function CheckCatTopic($id) {
         list($id) = $this->escape_input($id);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_topic where cat = '$id'";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_topic where cat = $id";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if ($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -1337,9 +1337,9 @@ class MYSQLi_DB implements IDbConnection {
 	function CheckResultEdit($alli) {
         list($alli) = $this->escape_input($alli);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_edit where alliance = '$alli'";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_edit where alliance = $alli";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if ($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -1409,9 +1409,9 @@ class MYSQLi_DB implements IDbConnection {
 	function checkVilExist($wref) {
 	    list($wref) = $this->escape_input((int) $wref);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "vdata where wref = '$wref'";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "vdata where wref = '$wref'";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if ($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -1421,9 +1421,9 @@ class MYSQLi_DB implements IDbConnection {
 	function checkOasisExist($wref) {
 	    list($wref) = $this->escape_input((int) $wref);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = '$wref'";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "odata where wref = '$wref'";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -1530,9 +1530,9 @@ class MYSQLi_DB implements IDbConnection {
   function checkSurvey($topic) {
       list($topic) = $this->escape_input((int) $topic);
 
-    $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
-    $result = mysqli_query($this->dblink,$q);
-    if(mysqli_num_rows($result)) {
+    $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+    $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    if ($result['Total']) {
     return true;
     } else {
     return false;
@@ -3293,9 +3293,9 @@ class MYSQLi_DB implements IDbConnection {
 	function getBuildingByField2($wid,$field) {
 	    list($wid,$field) = $this->escape_input((int) $wid,(int) $field);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return mysqli_num_rows($result);
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		return $result['Total'];
 	}
 
 	function getBuildingByType($wid,$type) {
@@ -3309,9 +3309,9 @@ class MYSQLi_DB implements IDbConnection {
 	function getBuildingByType2($wid,$type) {
 	    list($wid,$type) = $this->escape_input((int) $wid,(int) $type);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return mysqli_num_rows($result);
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		return $result['Total'];
 	}
 
 	function getDorf1Building($wid) {
@@ -4133,9 +4133,9 @@ class MYSQLi_DB implements IDbConnection {
 	***************************/
 
 	function getWW() {
-		$q = "SELECT * FROM " . TB_PREFIX . "fdata WHERE f99t = 40";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "fdata WHERE f99t = 40";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		if($result['Total']) {
 			return true;
 		} else {
 			return false;
@@ -5123,9 +5123,9 @@ References:
  	function getHeroDead($id) {
  	    list($id) = $this->escape_input((int) $id);
 
-    		$q = "SELECT dead FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND dead = 0";
-    		$result = mysqli_query($this->dblink,$q);
-    		if (mysqli_num_rows($result) > 0) {
+    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND dead = 0";
+    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    		if ($result['Total'] > 0) {
          		return 0;
     		} else {
     		    return 1;
@@ -5140,9 +5140,9 @@ References:
  	function getHeroInRevive($id) {
  	    list($id) = $this->escape_input((int) $id);
 
-    		$q = "SELECT inrevive FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND inrevive = 1";
-    		$result = mysqli_query($this->dblink,$q);
-    		if (mysqli_num_rows($result) > 0) {
+    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND inrevive = 1";
+    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    		if ($result['Total'] > 0) {
     		    return 1;
     		} else {
     		    return 0;
@@ -5157,9 +5157,9 @@ References:
  	function getHeroInTraining($id) {
  	    list($id) = $this->escape_input((int) $id);
 
-    		$q = "SELECT intraining FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND intraining = 1";
-    		$result = mysqli_query($this->dblink,$q);
-    		if (mysqli_num_rows($result) > 0) {
+    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND intraining = 1";
+    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    		if ($result['Total'] > 0) {
     		    return 1;
     		} else {
     		    return 0;
@@ -5300,15 +5300,16 @@ References:
 	***************************/
 
        function checkAttack($wref, $toWref) {
-           list($wref, $toWref) = $this->escape_input((int) $wref, (int) $toWref);
-            	$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and (" . TB_PREFIX . "attacks.attack_type = 3 or " . TB_PREFIX . "attacks.attack_type = 4) ORDER BY endtime ASC";
-		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
-		return true;
-		} else {
-		return false;
-		}
-            }
+            list($wref, $toWref) = $this->escape_input((int) $wref, (int) $toWref);
+
+            $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and (" . TB_PREFIX . "attacks.attack_type = 3 or " . TB_PREFIX . "attacks.attack_type = 4) ORDER BY endtime ASC";
+            $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    		if ($result['Total']) {
+    		return true;
+    		} else {
+    		return false;
+    		}
+       }
 
 	/***************************
 	Function checkEnforce
@@ -5318,9 +5319,9 @@ References:
 	function checkEnforce($wref, $toWref) {
 	    list($wref, $toWref) = $this->escape_input((int) $wref, (int) $toWref);
 
-    		$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 2 ORDER BY endtime ASC";
-        	$result = mysqli_query($this->dblink,$q);
-    		if(mysqli_num_rows($result)) {
+    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 2 ORDER BY endtime ASC";
+    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    		if($result['Total']) {
     		return true;
      		}else{
     		return false;
@@ -5335,9 +5336,9 @@ References:
 	function checkScout($wref, $toWref) {
 	    list($wref, $toWref) = $this->escape_input((int) $wref, (int) $toWref);
 
-    		$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 1 ORDER BY endtime ASC";
-        	$result = mysqli_query($this->dblink,$q);
-    		if(mysqli_num_rows($result)) {
+    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 1 ORDER BY endtime ASC";
+    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    		if($result['Total']) {
      		return true;
     		}else{
     		return false;

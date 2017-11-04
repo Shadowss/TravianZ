@@ -260,10 +260,10 @@ $oldmovement=$database->getMovementById($_GET['moveid']);
 $now=time();
 if(($now-$oldmovement[0]['starttime'])<90 && $oldmovement[0]['from'] == $village->wid){
 
-    $qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$database->escape((int) $_GET['moveid']);
-$resultc=$database->query($qc) or die(mysqli_error($database->dblink));
+    $qc="SELECT Count(*) as Total FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$database->escape((int) $_GET['moveid']);
+    $resultc=mysqli_fetch_array(mysqli_query($database->dblink, $qc), MYSQLI_ASSOC);
 
-	if (mysqli_num_rows($resultc)==1){
+	if ($resultc['Total']==1){
 
 	    $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$database->escape((int) $_GET['moveid']);
 	$database->query($q);

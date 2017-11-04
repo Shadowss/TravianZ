@@ -31,7 +31,9 @@
     		<tbody>
             <?php
 
-        if(mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "artefacts")) == 0) {
+		$count = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts"), MYSQLI_ASSOC);
+		$count = $count['Total'];
+        if($count == 0) {
         	echo '<td colspan="4" class="none">'.NO_ARTIFACTS.'</td>';
         } else {
 

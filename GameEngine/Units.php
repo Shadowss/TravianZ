@@ -443,8 +443,8 @@ if($session->access != BANNED){
 		// If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
 		// Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
 		// Fixed by Advocaite and Shadow
-        $q = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99t = '40' AND vref = ".(int) $data['to_vid']."");
-        $isThere = mysqli_num_rows($q);
+        $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99t = '40' AND vref = ".(int) $data['to_vid']), MYSQLI_ASSOC);
+        $isThere = $q['Total'];
         if($isThere > 0)
         {
         $iswwvilla = 1;

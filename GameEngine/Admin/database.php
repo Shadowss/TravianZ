@@ -318,13 +318,14 @@ class adm_DB {
 	function DelVillage($wref, $mode=0){
 		global $database;
 		$wref = (int) $wref;
-		if($mode==0){
-			$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
-	  }else{
-		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
-	  }
-		$result = mysqli_query($this->connection, $q);
-		if(mysqli_num_rows($result) > 0){
+		if ($mode==0) {
+			$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."vdata WHERE `wref` = $wref and capital = 0";
+	    } else {
+		    $q = "SELECT Count(*) as Total FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
+	    }
+
+	    $result = mysqli_fetch_array(mysqli_query($this->connection, $q), MYSQLI_ASSOC);
+		if($result['Total'] > 0){
 		    mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
 
 			$database->clearExpansionSlot($wref);

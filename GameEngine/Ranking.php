@@ -20,8 +20,9 @@
 
 			public function getUserRank($id) {
 				$ranking = $this->getRank();
-				$users = "SELECT * FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8") . "";
-				$users2 = mysqli_num_rows(mysqli_query($GLOBALS['link'],$users));
+				$users = "SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8");
+				$users2 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],$users), MYSQLI_ASSOC);
+				$users2 = $users2['Total'];
 				$users3 = $users2+1;
 				$myrank = 0;
 				if(count($ranking) > 0) {

@@ -12,8 +12,8 @@
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 include("../GameEngine/config.php");
 $id = $_SESSION['id'];
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."allimedal");
-$nummedals = mysqli_num_rows($sql);
+$sql = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."allimedal"), MYSQLI_ASSOC);
+$nummedals = $sql['Total'];
 ?>
 
 
@@ -36,8 +36,8 @@ $nummedals = mysqli_num_rows($sql);
 	</thead>
 	<tbody>
 		<?php
-			$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."allimedal");
-			$tot = mysqli_num_rows($sql);
+			$sql = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."allimedal"), MYSQLI_ASSOC);
+			$tot = $sql['Total'];
 			$sql = mysqli_query($GLOBALS["link"], "SELECT week FROM ".TB_PREFIX."allimedal ORDER BY week DESC LIMIT 1");
 			if(mysqli_num_rows($sql) > 0){
 			$week = mysqli_result($sql, 0);
@@ -75,8 +75,8 @@ $nummedals = mysqli_num_rows($sql);
 			for($j = 0; $j<$week; $j++)
 			{
 				$newweek = $j+1;
-				$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."allimedal WHERE week = $newweek");
-				$tot = mysqli_num_rows($sql);
+				$sql = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."allimedal WHERE week = $newweek"), MYSQLI_ASSOC);
+				$tot = $sql['Total'];
 				echo "<tr>
 				<td>$newweek</td>
 				<td>$tot</td>

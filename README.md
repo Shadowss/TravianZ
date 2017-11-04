@@ -189,7 +189,7 @@ TienTN changes:
 1. Change install/templates/config.tpl to deal with deprecated warning from new PHP version.
 2. Fix install/data/sql.sql, to be executable in current MySQL version.
 3. Fix db_MYSQL.php
-	with safe_mysql_fetch_all, and safe_mysql_fetch_array wrappers, to avoid
+	with safe_mysql_fetch_all, and safe_mysqli_fetch_array wrappers, to avoid
 	Warning: mysql_fetch_all/array() expects parameter 1 to be resource, boolean given
 4. Fix the db_MYSQLi.php in class object declaration(if anybody want to use db_MYSQLi.php again)
 5. Fix the unx.js file for error:

@@ -9,11 +9,13 @@
 | Copyright:   TravianX Project All rights reserved       |
 \** --------------------------------------------------- **/
 
-   $tribe1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE tribe = 1");
-   $tribe2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE tribe = 2");
-   $tribe3 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE tribe = 3");
-   $tribes = array(mysqli_num_rows($tribe1), mysqli_num_rows($tribe2), mysqli_num_rows($tribe3));
-   $users = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5")); ?>
+   $tribe1 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 1"), MYSQLI_ASSOC);
+   $tribe2 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 2"), MYSQLI_ASSOC);
+   $tribe3 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 3"), MYSQLI_ASSOC);
+   $tribes = array($tribe1['Total'], $tribe2['Total'], $tribe3['Total']);
+   $users = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5"), MYSQLI_ASSOC);
+   $users = $users['Total'];
+?>
 
     <table cellpadding="1" cellspacing="1" id="world_player" class="world">
         <thead>
