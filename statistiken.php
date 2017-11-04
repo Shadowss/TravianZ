@@ -17,7 +17,7 @@ include("GameEngine/Village.php");
 AccessLogger::logRequest();
 
 $__start = $generator->pageLoadTimeStart();
-if(isset($_GET['rank'])){ $_POST['rank']==$_GET['rank']; }
+if(isset($_GET['rank'])){ $_POST['rank']=$_GET['rank']; }
 $_GET['aid'] = $session->alliance;
 $_GET['hero'] = count($database->getHero($session->uid));
 $ranking->procRankReq($_GET);
