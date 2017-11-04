@@ -1825,7 +1825,7 @@ class MYSQLi_DB implements IDbConnection {
 	function deleteAlliance($aid) {
 	    list($aid) = $this->escape_input((int) $aid);
 
-		$result = mysqli_fetch_array(mysqli_query($this->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users where alliance = $aid", MYSQLI_ASSOC));
+	    $result = mysqli_fetch_array(mysqli_query($this->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users where alliance = $aid"), MYSQLI_ASSOC);
 		if ($result['Total'] == 0) {
 	        // remove the alliance
 	        $q = "DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid";
