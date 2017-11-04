@@ -357,7 +357,7 @@ include("Templates/links.tpl");
 
 ?> <b><?php
 
-	   echo round(($generator->pageLoadTimeEnd() - $start) * 1000);
+	   echo round(($generator->pageLoadTimeEnd() - $start_timer) * 1000);
 
 ?></b> ms
 
