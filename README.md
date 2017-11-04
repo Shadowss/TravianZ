@@ -73,6 +73,7 @@ martinambrus changes:
 59. fix for "finish immediatelly" PLUS button to decrease gold amount even when demolition alone has been insta-completed
 60. fixed maximum of 3 heroes in the Hero's Mansion (+ update of the Admin interface to account for it)
 61. new feature: Embassy mechanics overhaul - check out our [Wiki Page](https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics) or this [Google Presentation](https://docs.google.com/presentation/d/1KN1qVAlxVj7aAN6F9QkRai1oliajfxKPIaJ4MSodUac/edit?usp=sharing) to learn more about it
+666. there's just a lot of stuff being worked on in this project and I'm too lazy to be writing all of it down... when the project is at lease stable, I think this will make sense... for now, it's just an "I did this" shoutout and people can see that in commits
 
 
 Shadowss changes:
