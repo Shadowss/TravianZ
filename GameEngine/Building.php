@@ -785,20 +785,29 @@ class Building {
                                 $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
                                 $countPlus2Gold = true;
                             } else {
-                                $countMasterGold = true;
-                                $villwood = $database->getVillageField($jobs['wid'],'wood');
-                                $villclay = $database->getVillageField($jobs['wid'],'clay');
-                                $villiron = $database->getVillageField($jobs['wid'],'iron');
-                                $villcrop = $database->getVillageField($jobs['wid'],'crop');
-                                $type = $jobs['type'];
-                                $buildarray = $GLOBALS["bid".$type];
-                                $buildwood = $buildarray[$level]['wood'];
-                                $buildclay = $buildarray[$level]['clay'];
-                                $buildiron = $buildarray[$level]['iron'];
-                                $buildcrop = $buildarray[$level]['crop'];
-                                if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop) {
-                                    $enought_res = 1;
-                                    $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".(int) $jobs['type']." where vref = ".(int) $jobs['wid'];
+                                // don't allow master builder to build anything
+                                // if we only have 2 gold, since that would take us to -1 gold
+                                if ($session->gold > 2) {
+                                    $countMasterGold = true;
+                                    $villwood = $database->getVillageField($jobs['wid'],'wood');
+                                    $villclay = $database->getVillageField($jobs['wid'],'clay');
+                                    $villiron = $database->getVillageField($jobs['wid'],'iron');
+                                    $villcrop = $database->getVillageField($jobs['wid'],'crop');
+                                    $type = $jobs['type'];
+                                    $buildarray = $GLOBALS["bid".$type];
+                                    $buildwood = $buildarray[$level]['wood'];
+                                    $buildclay = $buildarray[$level]['clay'];
+                                    $buildiron = $buildarray[$level]['iron'];
+                                    $buildcrop = $buildarray[$level]['crop'];
+                                    if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop) {
+                                        $enought_res = 1;
+                                        $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".(int) $jobs['type']." where vref = ".(int) $jobs['wid'];
+                                    }
+                                } else {
+                                    // if we only have 2 gold, we need to cancel this job, as there will never
+                                    // be enough gold now in our account to finish this up
+                                    $q = "DELETE FROM ".TB_PREFIX."bdata WHERE id = ".(int) $jobs['id'];
+                                    $database->query($q);
                                 }
                             }
 
