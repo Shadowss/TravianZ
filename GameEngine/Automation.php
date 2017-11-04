@@ -1427,6 +1427,10 @@ class Automation {
                     //fix by ronix
                     //MUST TO BE FIX : You need to filter these values
                     //filter_input_array($battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby));
+                    if (!isset($walllevel)) {
+                        $walllevel = 0;
+                    }
+
                     $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby);
                     
                     //units attack string for battleraport
@@ -1488,9 +1492,13 @@ class Automation {
                     
                     for($i=1;$i<=11;$i++){
                         //MUST TO BE FIX : This is only for defender and still not properly coded
-                        if($battlepart['casualties_attacker'][$i] <= 0) { ${'dead'.$i} = 0; }elseif($battlepart['casualties_attacker'][$i] > $data['t'.$i]){
+                        if (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) && $battlepart['casualties_attacker'][$i] <= 0) {
+                                ${'dead'.$i} = 0;
+                        } else if (isset($data['t'.$i]) && isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) && $battlepart['casualties_attacker'][$i] > $data['t'.$i]) {
                             ${'dead'.$i}=$data['t'.$i];
-                        }else { ${'dead'.$i} = (isset($battlepart['casualties_attacker'][$i]) ? $battlepart['casualties_attacker'][$i] : 0); }
+                        } else {
+                            ${'dead'.$i} = (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) ? $battlepart['casualties_attacker'][$i] : 0);
+                        }
                     }
                     //if the defender does not have spies, the attacker will not die spies.	FIXED BY Armando
                     if(!empty($scout) && $scout){
@@ -1599,7 +1607,7 @@ class Automation {
                         if (!isset($alldead[$i])) {
                             $alldead[$i] = 0;
                         }
-                        $alldead[$i] += $owndead[$i];
+                        $alldead[$i] += (isset($owndead[$i]) ? $owndead[$i] : 0);
                     }
                     $unitsdead_def[1] = ''.$alldead['1'].','.$alldead['2'].','.$alldead['3'].','.$alldead['4'].','.$alldead['5'].','.$alldead['6'].','.$alldead['7'].','.$alldead['8'].','.$alldead['9'].','.$alldead['10'].'';
                     $unitsdead_def[2] = ''.$alldead['11'].','.$alldead['12'].','.$alldead['13'].','.$alldead['14'].','.$alldead['15'].','.$alldead['16'].','.$alldead['17'].','.$alldead['18'].','.$alldead['19'].','.$alldead['20'].'';
@@ -1612,11 +1620,11 @@ class Automation {
                     $unitsdead_deff[4] = '?,?,?,?,?,?,?,?,?,?,';
                     $unitsdead_deff[5] = '?,?,?,?,?,?,?,?,?,?,';
 
-                    if (!isset($alldead['hero'])) {
+                    if (empty($alldead['hero'])) {
                         $alldead['hero'] = 0;
                     }
 
-                    if (!isset($owndead['hero'])) {
+                    if (empty($owndead['hero'])) {
                         $owndead['hero'] = 0;
                     }
 
@@ -1699,6 +1707,9 @@ class Automation {
                     for($i=1;$i<=10;$i++){
                         if($unitarray) { reset($unitarray); }
                         $unitarray = $GLOBALS["u".(($att_tribe-1)*10+$i)];
+                        if (!isset($totalpoint_def)) {
+                            $totalpoint_def = 0;
+                        }
                         $totalpoint_def += (${'dead'.$i}*$unitarray['pop']);
                     }
 
@@ -2538,6 +2549,16 @@ class Automation {
                                                 //delete reinforcement
                                                 $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = ".(int) $data['to']."";
                                                 $database->query($q);
+                                                //no units can stay in the village itself
+                                                $units2reset = [];
+                                                for ($u = 1; $u <= 50; $u++) {
+                                                    $units2reset[] = 'u'.$u.' = 0';
+                                                }
+                                                $units2reset[] = 'u99 = 0';
+                                                $units2reset[] = 'u99o = 0';
+                                                $units2reset[] = 'hero = 0';
+                                                $q = "UPDATE ".TB_PREFIX."units SET ".implode(',', $units2reset)." WHERE vref = ".(int) $data['to'];
+                                                $database->query($q);
                                                 // check buildings
                                                 $pop1 = $database->getVillageField($data['from'],"pop");
                                                 $pop2 = $database->getVillageField($data['to'],"pop");
@@ -2668,7 +2689,7 @@ class Automation {
                     if ($DefenderID==0) {
                         $natar=0;
                     }
-                    if($scout){
+                    if(!empty($scout)){
                         if ($data['spy'] == 1){
                             $info_spy = "".$spy_pic.",<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".round($totwood)." |
 				 <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".round($totclay)." |
@@ -2723,14 +2744,14 @@ class Automation {
                         $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
                     }
                     else{
-                        if($village_destroyed == 1 && $can_destroy==1){
+                        if(isset($village_destroyed) && $village_destroyed == 1 && $can_destroy==1){
                             //check if village pop=0 and no info destroy
                             if (strpos($info_cat,"The village has")==0) {
                                 $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
                                           <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> The village has been destroyed.</td></tr></tbody>";
                             }
                         }
-                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
+                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.(isset($info_spy) ? $info_spy : '').',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
                     }
                     
                     // When all troops die, sends no info...send info
@@ -2738,7 +2759,7 @@ class Automation {
                     $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
                     
                     //Undetected and detected in here.
-                    if($scout){
+                    if(!empty($scout)){
                         
                         for($i=1;$i<=10;$i++){
                             if($battlepart['casualties_attacker'][$i]){
@@ -2859,10 +2880,10 @@ class Automation {
                                 }
                             }
                         }
-                        if($totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
+                        if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0){
                             $info_troop= "";
                         }
-                        $data2 = $data2.','.addslashes($info_trap).',,'.$info_troop.','.$info_hero;
+                        $data2 = $data2.','.(isset($info_trap) ? addslashes($info_trap) : '').',,'.$info_troop.','.$info_hero;
                         if($totalsend_alldef == 0){
                             $database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                         }else if($totaldead_alldef == 0){
@@ -2875,7 +2896,7 @@ class Automation {
                     }
                     //to here
                     // If the dead units not equal the ammount sent they will return and report
-                    if($totalsend_att - ($totaldead_att+$totaltraped_att) > 0)
+                    if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
                     {
                         $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
                         $artefact1 = count($database->getOwnUniqueArtefactInfo2($from['wref'],2,1,1));
@@ -2911,7 +2932,7 @@ class Automation {
                                 $database->addNotice($from['owner'],$to['wref'],$ownally,21,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                             }
                         }else {
-                            if ($totaldead_att == 0 && $totaltraped_att == 0){
+                            if ((empty($totaldead_att) || $totaldead_att == 0) && (empty($totaltraped_att) || $totaltraped_att == 0)){
                                 $database->addNotice($from['owner'],$to['wref'],$ownally,1,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                             }else{
                                 $database->addNotice($from['owner'],$to['wref'],$ownally,2,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
@@ -2919,7 +2940,7 @@ class Automation {
                         }
                         
                         $database->setMovementProc($data['moveid']);
-                        if($chiefing_village != 1){
+                        if(isset($chiefing_village) && $chiefing_village != 1){
                             $database->addMovement(4,$DefenderWref,$AttackerWref,$data['ref'],$AttackArrivalTime,$endtime);
                             
                             // send the bounty on type 6.
@@ -2940,7 +2961,7 @@ class Automation {
                                 $database->modifyPointsAlly($ownally,'RR',$totalstolengain);
                             }
                         }else{ //fix by ronix if only 1 chief left to conqured - don't add with zero enforces
-                            if($totalsend_att - ($totaldead_att+$totaltraped_att) > 1) {
+                            if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 1){
                                 $database->addEnforce2($data,$owntribe,$troopsdead1,$troopsdead2,$troopsdead3,$troopsdead4,$troopsdead5,$troopsdead6,$troopsdead7,$troopsdead8,$troopsdead9,$troopsdead10,$troopsdead11);
                             }
                         }
@@ -2957,7 +2978,7 @@ class Automation {
                     if($type == 3 or $type == 4){
                         $database->addGeneralAttack($totalattackdead);
                     }
-                    if($village_destroyed == 1){
+                    if(isset($village_destroyed) && $village_destroyed == 1){
                         if($can_destroy==1){
                             $this->DelVillage($data['to']);
                         }

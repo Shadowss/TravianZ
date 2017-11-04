@@ -211,7 +211,7 @@ $end = ($tribe*10);
             <?php if($process['c']=='3'){ ?><tbody class="cata">
                 <tr>
                     <th>Destination:</th>
-                    <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
+                    <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
                     
                         <select name="ctar1" class="dropdown">
                             <option value="0">Random</option>

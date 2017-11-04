@@ -4029,7 +4029,7 @@ class MYSQLi_DB implements IDbConnection {
 		$j = '1';
 		for($i = $start; $i <= $end; $i++) {
 			$this->modifyEnforce($id, $i, $data['t' . $j . ''], 1);
-			$this->modifyEnforce($id, $i, ${dead.$j}, 0);
+			$this->modifyEnforce($id, $i, ${'dead'.$j}, 0);
 			$j++;
 		}
 		$this->modifyEnforce($id,'hero',$data['t11'],1);
