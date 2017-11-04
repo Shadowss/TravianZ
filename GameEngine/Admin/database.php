@@ -271,7 +271,7 @@ class adm_DB {
 
   function getUserActive() {
 	$time = time() - (60*5);
-		$q = "SELECT * FROM ".TB_PREFIX."users where timestamp > $time and username != 'support' ORDER BY access DESC, lastupdate DESC";
+		$q = "SELECT * FROM ".TB_PREFIX."users where timestamp > $time and username != 'support' ORDER BY access DESC, username ASC";
 		$result = mysqli_query($this->connection, $q);
 	return $this->mysqli_fetch_all($result);
 	}
