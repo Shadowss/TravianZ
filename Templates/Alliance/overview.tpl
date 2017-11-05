@@ -89,7 +89,7 @@ include("alli_menu.tpl");
                 echo "</tr>";
                 } 
 				}
-			if($allianceinfo['forumlink'] != ''){
+			if($allianceinfo['forumlink'] != '' && $allianceinfo['forumlink'] != '0'){
                 echo "<tr>";
                 echo "<td><a href='".$allianceinfo['forumlink']."'>» to the forum</td>";
                 echo "</tr>";
