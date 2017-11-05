@@ -806,12 +806,13 @@ class Building {
                                 } else {
                                     // if we only have 2 gold, we need to cancel this job, as there will never
                                     // be enough gold now in our account to finish this up
+                                    $exclude_master = true;
                                     $q = "DELETE FROM ".TB_PREFIX."bdata WHERE id = ".(int) $jobs['id'];
                                     $database->query($q);
                                 }
                             }
 
-                            if ($database->query($q) && ($enought_res == 1 or $jobs['master'] == 0)) {
+                            if (!isset($exclude_master) && $database->query($q) && ($enought_res == 1 or $jobs['master'] == 0)) {
                                 $database->modifyPop($jobs['wid'],$resource['pop'],0);
                                 $database->addCP($jobs['wid'],$resource['cp']);
                                 $q = "DELETE FROM ".TB_PREFIX."bdata where id = ".(int) $jobs['id'];
