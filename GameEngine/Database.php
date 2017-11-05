@@ -2091,7 +2091,7 @@ class MYSQLi_DB implements IDbConnection {
 	function setAlliForumdblink($aid, $dblink) {
 	    list($aid, $dblink) = $this->escape_input((int) $aid, $dblink);
 
-		$q = "UPDATE " . TB_PREFIX . "alidata SET `forumdblink` = '$dblink' WHERE id = $aid";
+		$q = "UPDATE " . TB_PREFIX . "alidata SET `forumlink` = '$dblink' WHERE id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
