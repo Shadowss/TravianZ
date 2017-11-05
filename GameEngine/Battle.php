@@ -659,7 +659,7 @@ class Battle {
 
 			if (isset($units['Att_unit']['hero']) && $units['Att_unit']['hero'] >0){
 
-			    $_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $atkhero['heroid']);
+			    $_result=mysqli_query($GLOBALS['link'],"select heroid, health from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $atkhero['heroid']);
 				$fdb = mysqli_fetch_array($_result);
 				$hero_id=(int) $fdb['heroid'];
 				$hero_health=$fdb['health'];
@@ -679,7 +679,7 @@ class Battle {
 
 			if (isset($units['Def_unit']['hero']) && $units['Def_unit']['hero'] >0){
 
-			    $_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $defenderhero['heroid']);
+			    $_result=mysqli_query($GLOBALS['link'],"select heroid, health from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $defenderhero['heroid']);
 				$fdb = mysqli_fetch_array($_result);
 				$hero_id=(int) $fdb['heroid'];
 				$hero_health=$fdb['health'];
@@ -703,7 +703,7 @@ class Battle {
 						if(!empty($heroarray)) { reset($heroarray); }
 						$Reinforcer = $database->getVillageField($defenders['from'],"owner");
 						$heroarraydefender = $this->getBattleHero($Reinforcer);
-						$_result=mysqli_query($GLOBALS['link'],"select * from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $heroarraydefender['heroid']);
+						$_result=mysqli_query($GLOBALS['link'],"select heroid, health from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $heroarraydefender['heroid']);
 						$fdb = mysqli_fetch_array($_result);
 						$hero_id=(int) $fdb['heroid'];
 						$hero_health=$fdb['health'];

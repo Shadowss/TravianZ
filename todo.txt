@@ -1,3 +1,4 @@
+- oasis attack does not return troops
 - shouldn't we create accounts from middle towards corners, not middle-corners-everywhere?
 - change "incoming attacker" title of the raid list icon when actually attacking a farm (it should be "Own attacking troops")
 - change "select all" button to actually select all checkboxes via JS, not via page reload

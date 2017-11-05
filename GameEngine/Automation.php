@@ -249,7 +249,7 @@ class Automation {
         fclose($ourFileHandle);
         global $database;
         $array = array();
-        $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE loyalty<>100";
+        $q = "SELECT wref, loyalty, lastupdate2 FROM ".TB_PREFIX."vdata WHERE loyalty<>100";
         $array = $database->query_return($q);
         if(!empty($array)) {
             foreach($array as $loyalty) {
@@ -266,7 +266,7 @@ class Automation {
             }
         }
         $array = array();
-        $q = "SELECT * FROM ".TB_PREFIX."odata WHERE loyalty<>100";
+        $q = "SELECT conqured, loyalty, lastupdated, wref FROM ".TB_PREFIX."odata WHERE loyalty<>100";
         $array = $database->query_return($q);
         if(!empty($array)) {
             foreach($array as $loyalty) {
@@ -432,7 +432,7 @@ class Automation {
                     }
                 }
                 for($i=0;$i<20;$i++){
-                    $q = "SELECT * FROM ".TB_PREFIX."users where friend".$i." = ".(int) $need['uid']." or friend".$i."wait = ".(int) $need['uid']."";
+                    $q = "SELECT id FROM ".TB_PREFIX."users where friend".$i." = ".(int) $need['uid']." or friend".$i."wait = ".(int) $need['uid']."";
                     $array = $database->query_return($q);
                     foreach($array as $friend){
                         $database->deleteFriend($friend['id'],"friend".$i);
@@ -490,7 +490,7 @@ class Automation {
     private function pruneOResource() {
         global $database;
         if(!ALLOW_BURST) {
-            $q = "SELECT * FROM ".TB_PREFIX."odata WHERE maxstore < 800 OR maxcrop < 800";
+            $q = "SELECT maxstore, maxcrop, wref FROM ".TB_PREFIX."odata WHERE maxstore < 800 OR maxcrop < 800";
             $array = $database->query_return($q);
             foreach($array as $getoasis) {
                 if($getoasis['maxstore'] < 800){
@@ -506,7 +506,7 @@ class Automation {
                 $q = "UPDATE " . TB_PREFIX . "odata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getoasis['wref']."";
                 $database->query($q);
             }
-            $q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
+            $q = "SELECT wood, clay, iron, crop, wref FROM ".TB_PREFIX."odata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
             $array = $database->query_return($q);
             foreach($array as $getoasis) {
                 if($getoasis['wood'] < 0){
@@ -537,7 +537,7 @@ class Automation {
     private function pruneResource() {
         global $database;
         if(!ALLOW_BURST) {
-            $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE maxstore < 800 OR maxcrop < 800";
+            $q = "SELECT maxstore, maxcrop, wref FROM ".TB_PREFIX."vdata WHERE maxstore < 800 OR maxcrop < 800";
             $array = $database->query_return($q);
             foreach($array as $getvillage) {
                 if($getvillage['maxstore'] < 800){
@@ -553,7 +553,7 @@ class Automation {
                 $q = "UPDATE " . TB_PREFIX . "vdata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".(int) $getvillage['wref']."";
                 $database->query($q);
             }
-            $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop";
+            $q = "SELECT maxstore, maxcrop, wood, clay, iron, crop, wref FROM ".TB_PREFIX."vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop";
             $array = $database->query_return($q);
             foreach($array as $getvillage) {
                 if($getvillage['wood'] > $getvillage['maxstore']){
@@ -571,15 +571,15 @@ class Automation {
                 }else{
                     $iron = $getvillage['iron'];
                 }
-                if($getvillage['crop'] > $getvillage['maxstore']){
-                    $crop = $getvillage['maxstore'];
+                if($getvillage['crop'] > $getvillage['maxcrop']){
+                    $crop = $getvillage['maxcrop'];
                 }else{
                     $crop = $getvillage['crop'];
                 }
                 $q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".(int) $getvillage['wref']."";
                 $database->query($q);
             }
-            $q = "SELECT * FROM ".TB_PREFIX."vdata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
+            $q = "SELECT wood, clay, iron, crop, wref FROM ".TB_PREFIX."vdata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
             $array = $database->query_return($q);
             foreach($array as $getvillage) {
                 if($getvillage['wood'] < 0){
@@ -647,7 +647,7 @@ class Automation {
         global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
         $time = time();
         $array = array();
-        $q = "SELECT * FROM ".TB_PREFIX."bdata where timestamp < $time and master = 0";
+        $q = "SELECT id, wid, field, level, type, timestamp FROM ".TB_PREFIX."bdata where timestamp < $time and master = 0";
         $array = $database->query_return($q);
         foreach($array as $indi) {
             $level = $database->getFieldLevel($indi['wid'],$indi['field']);
@@ -910,7 +910,7 @@ class Automation {
     }
     
     private function checkWWAttacks() {
-        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time());
+        $query = mysqli_query($GLOBALS['link'],'SELECT vid, attack_time FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time());
         while ($row = mysqli_fetch_assoc($query))
         {
             // delete the attack
@@ -937,7 +937,7 @@ class Automation {
     private function TradeRoute() {
         global $database;
         $time = time();
-        $q = "SELECT * FROM ".TB_PREFIX."route where timestamp < $time";
+        $q = "SELECT `from`, wood, clay, iron, crop, wid, deliveries, id FROM ".TB_PREFIX."route where timestamp < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
             $database->modifyResource($data['from'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
@@ -955,7 +955,7 @@ class Automation {
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/market.txt", 'w');
         fclose($ourFileHandle);
         $time = microtime(true);
-        $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."send where ".TB_PREFIX."movement.ref = ".TB_PREFIX."send.id and ".TB_PREFIX."movement.proc = 0 and sort_type = 0 and endtime < $time";
+        $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 0 AND endtime < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
             
@@ -982,7 +982,7 @@ class Automation {
             $database->addMovement(2,$data['to'],$data['from'],$data['merchant'],time(),$endtime,$data['send'],$data['wood'],$data['clay'],$data['iron'],$data['crop']);
             $database->setMovementProc($data['moveid']);
         }
-        $q1 = "SELECT * FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 2 and endtime < $time";
+        $q1 = "SELECT send, moveid, `to`, wood, clay, iron, crop, `from` FROM ".TB_PREFIX."movement WHERE proc = 0 and sort_type = 2 and endtime < $time";
         $dataarray1 = $database->query_return($q1);
         foreach($dataarray1 as $data1) {
             $database->setMovementProc($data1['moveid']);
@@ -1040,7 +1040,24 @@ class Automation {
         //$ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
         //fclose($ourFileHandle);
         $time = time();
-        $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type != '2' and endtime < $time ORDER BY endtime ASC";
+        $q = "
+            SELECT
+                `from`, `to`, endtime, ref, ctar1, ctar2, spy, moveid,
+                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
+            FROM
+                ".TB_PREFIX."movement,
+                ".TB_PREFIX."attacks
+            WHERE
+                ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id
+                AND
+                ".TB_PREFIX."movement.proc = 0
+                AND
+                ".TB_PREFIX."movement.sort_type = 3
+                AND
+                ".TB_PREFIX."attacks.attack_type != 2
+                AND
+                endtime < $time
+            ORDER BY endtime ASC";
         $dataarray = $database->query_return($q);
         $totalattackdead = 0;
         $data_num = 0;
@@ -1897,7 +1914,7 @@ class Automation {
                         }
                     }
                     if ($herosend_att>0){
-                        $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
+                        $qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                         $resulth = mysqli_query($GLOBALS['link'],$qh);
                         $hero_f=mysqli_fetch_array($resulth);
                         $hero_unit=$hero_f['unit'];
@@ -2827,7 +2844,7 @@ class Automation {
                                             }
                                             
                                             if ($prisoner['t11']>0){
-                                                $p_qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner." AND dead = 0";
+                                                $p_qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner." AND dead = 0";
                                                 $p_resulth = $database->query($p_qh);
                                                 $p_hero_f=mysqli_fetch_array($p_resulth);
                                                 $p_hero_unit=$p_hero_f['unit'];
@@ -3001,7 +3018,7 @@ class Automation {
                         }
                     }
                     if ($herosend_att>0){
-                        $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
+                        $qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                         $resulth = mysqli_query($GLOBALS['link'],$qh);
                         $hero_f=mysqli_fetch_array($resulth);
                         $hero_unit=$hero_f['unit'];
@@ -3282,7 +3299,7 @@ class Automation {
             }
             if (isset($post['t11'])){
                 if( $post['t11'] != '' && $post['t11'] > 0){
-                    $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
+                    $qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                     $resulth = mysqli_query($GLOBALS['link'],$qh);
                     $hero_f=mysqli_fetch_array($resulth);
                     $hero_unit=$hero_f['unit'];
@@ -3337,7 +3354,23 @@ class Automation {
         $time = time();
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/sendreinfunits.txt", 'w');
         fclose($ourFileHandle);
-        $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
+        $q = "
+            SELECT
+                `to`, `from`, moveid,
+                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
+            FROM
+                ".TB_PREFIX."movement,
+                ".TB_PREFIX."attacks 
+            WHERE
+                ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id
+                AND
+                ".TB_PREFIX."movement.proc = 0
+                AND
+                ".TB_PREFIX."movement.sort_type = 3
+                AND
+                ".TB_PREFIX."attacks.attack_type = 2
+                AND
+                endtime < $time";
         $dataarray = $database->query_return($q);
         
         if ($dataarray && count($dataarray)) {
@@ -3475,7 +3508,21 @@ class Automation {
         fclose($ourFileHandle);
         $reload=false;
         $time = time();
-        $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '4' and endtime < $time";
+        $q = "
+            SELECT
+                `to`, `from`, moveid,
+                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
+            FROM
+                ".TB_PREFIX."movement,
+                ".TB_PREFIX."attacks
+            WHERE
+                ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id
+                AND
+                ".TB_PREFIX."movement.proc = 0
+                AND
+                ".TB_PREFIX."movement.sort_type = 4
+                AND
+                endtime < $time";
         $dataarray = $database->query_return($q);
         
         if ($dataarray && count($dataarray)) {
@@ -3508,7 +3555,7 @@ class Automation {
         
         // Recieve the bounty on type 6.
         
-        $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."send where ".TB_PREFIX."movement.ref = ".TB_PREFIX."send.id and ".TB_PREFIX."movement.proc = 0 and sort_type = 6 and endtime < $time";
+        $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 6 AND endtime < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
             
@@ -3540,7 +3587,7 @@ class Automation {
         
         // Settlers
         
-        $q = "SELECT * FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
+        $q = "SELECT `to`, moveid FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
         $dataarray = $database->query_return($q);
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
@@ -3567,7 +3614,7 @@ class Automation {
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/settlers.txt", 'w');
         fclose($ourFileHandle);
         $time = microtime(true);
-        $q = "SELECT * FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 5 and endtime < $time";
+        $q = "SELECT `to`, `from`, moveid, starttime, ref FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 5 and endtime < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
             $ownerID = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
@@ -3624,7 +3671,7 @@ class Automation {
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/research.txt", 'w');
         fclose($ourFileHandle);
         $time = time();
-        $q = "SELECT * FROM ".TB_PREFIX."research where timestamp < $time";
+        $q = "SELECT tech, vref, id FROM ".TB_PREFIX."research where timestamp < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
             $sort_type = substr($data['tech'],0,1);
@@ -4378,7 +4425,7 @@ class Automation {
     private function oasisResourcesProduce() {
         global $database;
         $time = time();
-        $q = "SELECT * FROM ".TB_PREFIX."odata WHERE wood < 800 OR clay < 800 OR iron < 800 OR crop < 800";
+        $q = "SELECT wood, clay, iron, crop, lastupdated, maxstore, maxcrop, wref FROM ".TB_PREFIX."odata WHERE wood < 800 OR clay < 800 OR iron < 800 OR crop < 800";
         $array = $database->query_return($q);
         foreach($array as $getoasis) {
             $oasiswood = $getoasis['wood'] + (8*SPEED/3600)*(time()-$getoasis['lastupdated']);
@@ -4405,11 +4452,11 @@ class Automation {
     
     private function checkInvitedPlayes() {
         global $database;
-        $q = "SELECT * FROM ".TB_PREFIX."users WHERE invited > 0";
+        $q = "SELECT id, invited FROM ".TB_PREFIX."users WHERE invited > 0";
         $array = $database->query_return($q);
         foreach($array as $user) {
-            $numusers = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE id = ".(int) $user['invited']);
-            if(mysqli_num_rows($numusers) > 0){
+            $numusers = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE id = ".(int) $user['invited']), MYSQLI_ASSOC);
+            if($numusers['Total'] > 0){
                 $varray = count($database->getProfileVillages($user['id']));
                 if($varray > 1){
                     $usergold = $database->getUserField($user['invited'],"gold",0);
@@ -4424,7 +4471,7 @@ class Automation {
     private function updateGeneralAttack() {
         global $database;
         $time = time();
-        $q = "SELECT * FROM ".TB_PREFIX."general WHERE shown = 1";
+        $q = "SELECT id, time FROM ".TB_PREFIX."general WHERE shown = 1";
         $array = $database->query_return($q);
         foreach($array as $general) {
             if(time() - (86400*8) > $general['time']){
@@ -4435,7 +4482,7 @@ class Automation {
     
     private function MasterBuilder() {
         global $database;
-        $q = "SELECT * FROM ".TB_PREFIX."bdata WHERE master = 1";
+        $q = "SELECT id, wid, type, level, field, timestamp FROM ".TB_PREFIX."bdata WHERE master = 1";
         $array = $database->query_return($q);
         foreach($array as $master) {
             $owner = $database->getVillageField($master['wid'],'owner');
@@ -4741,7 +4788,7 @@ class Automation {
         $ranking->procRankArray();
         $climbers = $ranking->getRank();
         if(count($ranking->getRank()) > 0){
-            $q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
+            $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($GLOBALS['link'],$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
@@ -4749,7 +4796,7 @@ class Automation {
             } else {
                 $week='1';
             }
-            $q = "SELECT * FROM ".TB_PREFIX."users where oldrank = 0 and id > 5";
+            $q = "SELECT id FROM ".TB_PREFIX."users where oldrank = 0 and id > 5";
             $array = $database->query_return($q);
             foreach($array as $user){
                 $newrank = $ranking->getUserRank($user['id']);
@@ -4790,7 +4837,7 @@ class Automation {
         $ranking->procRankArray();
         $climbers = $ranking->getRank();
         if(count($ranking->getRank()) > 0){
-            $q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
+            $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($GLOBALS['link'],$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
@@ -4872,7 +4919,7 @@ class Automation {
     private function checkBan() {
         global $database;
         $time = time();
-        $q = "SELECT * FROM ".TB_PREFIX."banlist WHERE active = 1 and end < $time";
+        $q = "SELECT id, uid FROM ".TB_PREFIX."banlist WHERE active = 1 and end < $time";
         $array = $database->query_return($q);
         foreach($array as $banlist) {
             mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."banlist SET active = 0 WHERE id = ".(int) $banlist['id']."");
@@ -4947,7 +4994,7 @@ class Automation {
         //we may give away ribbons
         
         $giveMedal = false;
-        $q = "SELECT * FROM ".TB_PREFIX."config";
+        $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
         $result = mysqli_query($GLOBALS['link'],$q);
         if($result) {
             $row=mysqli_fetch_assoc($result);
@@ -4966,7 +5013,7 @@ class Automation {
             
             //determine which week we are
             
-            $q = "SELECT * FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
+            $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($GLOBALS['link'],$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
@@ -4977,7 +5024,7 @@ class Automation {
             
             //Do same for ally week
             
-            $q = "SELECT * FROM ".TB_PREFIX."allimedal order by week DESC LIMIT 0, 1";
+            $q = "SELECT week FROM ".TB_PREFIX."allimedal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($GLOBALS['link'],$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
@@ -4988,7 +5035,7 @@ class Automation {
             
             
             //Attackers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, ap FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -4998,7 +5045,7 @@ class Automation {
             }
             
             //Defender of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, dp FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5008,7 +5055,7 @@ class Automation {
             }
             
             //Climbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, Rc FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5018,7 +5065,7 @@ class Automation {
             }
             
             //Rank climbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, clp FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5028,7 +5075,7 @@ class Automation {
             }
             
             //Robbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, RR FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5039,15 +5086,15 @@ class Automation {
             
             //Part of the bonus for top 10 attack + defense out
             //Top10 attackers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
                 //Top 10 defenders
-                $result2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+                $result2 = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
                 while($row2 = mysqli_fetch_array($result2)){
                     if($row['id']==$row2['id']){
                         
-                        $query3="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 5";
+                        $query3="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 5";
                         $result3=mysqli_query($GLOBALS['link'],$query3);
                         $row3=mysqli_fetch_row($result3);
                         
@@ -5074,10 +5121,10 @@ class Automation {
             
             //you stand for 3rd / 5th / 10th time in the top 3 strikers
             //top10 attackers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=3";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5104,10 +5151,10 @@ class Automation {
             }
             //you stand for 3rd / 5th / 10th time in the top 10 attackers
             //top10 attackers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=10";
+
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5134,10 +5181,10 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=3";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5164,10 +5211,10 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=10";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5195,10 +5242,10 @@ class Automation {
             
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top10 klimmers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=3";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5224,10 +5271,10 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top10 klimmers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=10";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5254,10 +5301,10 @@ class Automation {
             
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top3 rank climbers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=3";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5283,10 +5330,10 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 10klimmers
             //Pak de top3 rank climbers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=10";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5313,10 +5360,10 @@ class Automation {
             
             //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
             //Pak de top10 overvallers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=3";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5342,10 +5389,10 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
             //Pak de top10 overvallers
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
                 
-                $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=10";
+                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
                 
@@ -5371,7 +5418,7 @@ class Automation {
             }
             
             //Put all true dens to 0
-            $query="SELECT * FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
+            $query="SELECT id FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
             $result=mysqli_query($GLOBALS['link'],$query);
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
                 mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id = ".(int) $row[0]);
@@ -5380,7 +5427,7 @@ class Automation {
             //Start alliance Medals wooot
             
             //Aanvallers v/d Week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, ap FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a2_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '1', ".($i).", '".$allyweek."', '".$row['ap']."', '".$img."')";
@@ -5388,7 +5435,7 @@ class Automation {
             }
             
             //Verdediger v/d Week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, dp FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a3_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '2', ".($i).", '".$allyweek."', '".$row['dp']."', '".$img."')";
@@ -5396,7 +5443,7 @@ class Automation {
             }
             
             //Overvallers v/d Week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, RR FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a4_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '4', ".($i).", '".$allyweek."', '".$row['RR']."', '".$img."')";
@@ -5404,7 +5451,7 @@ class Automation {
             }
             
             //Rank climbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
+            $result = mysqli_query($GLOBALS['link'],"SELECT id, clp FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a1_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '3', ".($i).", '".$allyweek."', '".$row['clp']."', '".$img."')";
@@ -5415,11 +5462,11 @@ class Automation {
             while($row = mysqli_fetch_array($result)){
                 
                 //Pak de top10 verdedigers
-                $result2 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
+                $result2 = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
                 while($row2 = mysqli_fetch_array($result2)){
                     if($row['id']==$row2['id']){
                         
-                        $query3="SELECT count(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int) $row['id']." AND categorie = 5";
+                        $query3="SELECT Count(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int) $row['id']." AND categorie = 5";
                         $result3=mysqli_query($GLOBALS['link'],$query3);
                         $row3=mysqli_fetch_row($result3);
                         
@@ -5444,7 +5491,7 @@ class Automation {
                 }
             }
             
-            $query="SELECT * FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
+            $query="SELECT id FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
             $result=mysqli_query($GLOBALS['link'],$query);
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
                 mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id = ".(int) $row[0]);
@@ -5463,7 +5510,7 @@ class Automation {
     private function artefactOfTheFool() {
         global $database;
         $time = time();
-        $q = "SELECT * FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and lastupdate <= ".($time - 86400);
+        $q = "SELECT id, size FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and lastupdate <= ".($time - 86400);
         $array = $database->query_return($q);
         if ($array) {
             foreach($array as $artefact) {
