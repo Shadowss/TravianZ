@@ -83,7 +83,7 @@ $tocoor = $database->getCoor($enforce['vref']);
        	echo"<span class=\"none\">(".$enforce['u25'].")</span></td>";
 
         ?>
-		<td class="regular"><img class="unit u28" src="img/x.gif" title="Trebuchet" alt="Trebuchet"> <input class="text" <?php if ($enforce['u28']<=0) {echo ' disabled="disabled"';}?> name="t8" value="<?php echo $enforce['u26']; ?>" maxlength="6" type="text">
+		<td class="regular"><img class="unit u28" src="img/x.gif" title="Trebuchet" alt="Trebuchet"> <input class="text" <?php if ($enforce['u28']<=0) {echo ' disabled="disabled"';}?> name="t8" value="<?php echo $enforce['u28']; ?>" maxlength="6" type="text">
 		<?php 
        	echo"<span class=\"none\">(".$enforce['u28'].")</span></td>";
 
