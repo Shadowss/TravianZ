@@ -60,7 +60,7 @@ if($_POST) {
 		}
 		} elseif(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) != '') {
 	    // Update link
-	    $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+	    $query = mysqli_query($GLOBALS['link'],'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
 	    $data = mysqli_fetch_assoc($query);
 	    
 	    // May the user update this entry?
@@ -69,7 +69,7 @@ if($_POST) {
 	    }
 	} elseif(trim($link['nr']) == '' AND trim($link['linkname']) == '' AND trim($link['linkziel']) == '' AND trim($link['id']) != '') {
 	    // Delete entry
-	    $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+	    $query = mysqli_query($GLOBALS['link'],'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
 	    $data = mysqli_fetch_assoc($query);
 	    
 	    // May the user delete this entry?

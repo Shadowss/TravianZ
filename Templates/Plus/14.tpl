@@ -1,9 +1,6 @@
 <?php
 //////////////     made by alq0rsan   /////////////////////////
 if($session->access != BANNED){
-    $MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-    $golds = mysqli_fetch_array($MyGold);
-
     $MyVilId = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE `wref`='".$village->wid."'") or die(mysqli_error($database->dblink));
     $uuVilid = mysqli_fetch_array($MyVilId);
 

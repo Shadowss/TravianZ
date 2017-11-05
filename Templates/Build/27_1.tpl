@@ -103,10 +103,10 @@ if($count == 0) {
 
         unset($reqlvl);
         unset($effect);
-        $arts = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "artefacts");
+        $arts = mysqli_query($GLOBALS['link'],"SELECT type, vref, id, name, size, owner, effect FROM " . TB_PREFIX . "artefacts");
         $rows = array();
         while($row = mysqli_fetch_array($arts)) {
-                        $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . (int) $row['vref']);
+                        $query = mysqli_query($GLOBALS['link'],'SELECT x, y FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . (int) $row['vref']);
                         $coor2 = mysqli_fetch_assoc($query);
 
                         

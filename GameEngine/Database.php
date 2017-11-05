@@ -385,7 +385,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getVilWref($x, $y) {
 	    list($x, $y) = $this->escape_input((int) $x, (int) $y);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "wdata where x = $x AND y = $y";
+		$q = "SELECT id FROM " . TB_PREFIX . "wdata where x = $x AND y = $y";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['id'];
@@ -395,7 +395,7 @@ class MYSQLi_DB implements IDbConnection {
 	    list($user) = $this->escape_input((int) $user);
 
 		//loop search village user
-		$query = mysqli_query($this->dblink,"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".$user);
+		$query = mysqli_query($this->dblink,"SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = ".$user);
 		while($villaggi_array = mysqli_fetch_array($query))
 
 		//loop structure village
@@ -1383,7 +1383,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getVillageType2($wref) {
 	    list($wref) = $this->escape_input((int) $wref);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $wref";
+		$q = "SELECT oasistype FROM " . TB_PREFIX . "wdata where id = $wref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['oasistype'];
@@ -1549,7 +1549,7 @@ class MYSQLi_DB implements IDbConnection {
   function checkVote($topic, $uid) {
       list($topic, $uid) = $this->escape_input((int) $topic, $uid);
 
-        $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+        $q = "SELECT voted FROM " . TB_PREFIX . "forum_survey where topic = $topic";
     $result = mysqli_query($this->dblink,$q);
     $array = mysqli_fetch_array($result);
     $text = $array['voted'];
@@ -1991,7 +1991,7 @@ class MYSQLi_DB implements IDbConnection {
 
 	function getAllianceDipProfile($aid, $type) {
 	    list($aid, $type) = $this->escape_input($aid, $type);
-		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '$type' AND accepted = '1' OR alli2 = '$aid' AND type = '$type' AND accepted = '1'";
+		$q = "SELECT alli1, alli2 FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '$type' AND accepted = '1' OR alli2 = '$aid' AND type = '$type' AND accepted = '1'";
 		$array = $this->query_return($q);
 		$text = "";
 		
@@ -2014,7 +2014,7 @@ class MYSQLi_DB implements IDbConnection {
 
 	function getAllianceWar($aid) {
 	    list($aid) = $this->escape_input($aid);
-		$q = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
+		$q = "SELECT alli1, alli2 FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
 		$array = $this->query_return($q);
         $text = "";
         
@@ -2075,12 +2075,12 @@ class MYSQLi_DB implements IDbConnection {
 	function checkDiplomacyInviteAccept($aid, $type) {
 	    list($aid, $type) = $this->escape_input((int) $aid, (int) $type);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $aid AND type = $type AND accepted = 1 OR alli2 = $aid AND type = $type AND accepted = 1";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $aid AND type = $type AND accepted = 1 OR alli2 = $aid AND type = $type AND accepted = 1";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
 		if($type == 3){
 			return true;
 		}else{
-		if(mysqli_num_rows($result) < 4) {
+		if($result['Total'] < 4) {
 			return true;
 		} else {
 			return false;
@@ -2266,13 +2266,13 @@ class MYSQLi_DB implements IDbConnection {
 	function getFieldDistance($wid) {
 	    list($wid) = $this->escape_input((int) $wid);
 
-        $q = "SELECT * FROM " . TB_PREFIX . "vdata where owner > 4 and wref != $wid";
+        $q = "SELECT wref FROM " . TB_PREFIX . "vdata where owner > 4 and wref != $wid";
         $array = $this->query_return($q);
         $coor = $this->getCoor($wid);
         $x1 = intval($coor['x']);
         $y1 = intval($coor['y']);
         $prevdist = 0;
-        $q2 = "SELECT * FROM " . TB_PREFIX . "vdata where owner = 4";
+        $q2 = "SELECT wref FROM " . TB_PREFIX . "vdata where owner = 4";
         $array2 = mysqli_fetch_array(mysqli_query($this->dblink,$q2));
         $vill = $array2['wref'];
         if(mysqli_num_rows(mysqli_query($this->dblink,$q)) > 0){
@@ -2648,7 +2648,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getTradeRouteUid($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
+		$q = "SELECT uid FROM " . TB_PREFIX . "route where id = $id";
 		$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['uid'];
@@ -3246,16 +3246,16 @@ class MYSQLi_DB implements IDbConnection {
 	    list($wid) = $this->escape_input((int) $wid);
 
 		$time = time()-1;
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC";
+		$q = "SELECT id, timestamp FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
 		$this->query($q);
 		$tribe = $this->getUserField($this->getVillageField($wid, "owner"), "tribe", 0);
 		if($tribe == 1){
-		$q2 = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field >= 19 order by master,timestamp ASC";
+		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field >= 19 order by master,timestamp ASC";
 		}else{
-		$q2 = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC";
+		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC";
 		}
 		$result2 = mysqli_query($this->dblink,$q2);
 		if(mysqli_num_rows($result2) > 0){
@@ -4932,7 +4932,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getAttackByDate($time) {
         list($time) = $this->escape_input($time);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "general where shown = 1";
+		$q = "SELECT time FROM " . TB_PREFIX . "general where shown = 1";
 		$result = $this->query_return($q);
 		$attack = 0;
 		foreach($result as $general) {
@@ -4946,7 +4946,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getAttackCasualties($time) {
         list($time) = $this->escape_input($time);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "general where shown = 1";
+		$q = "SELECT casualties FROM " . TB_PREFIX . "general where shown = 1";
 		$result = $this->query_return($q);
 		$casualties = 0;
 		foreach($result as $general){
@@ -5211,7 +5211,7 @@ References:
         function FindHeroInVil($wid) {
         list($wid) = $this->escape_input($wid);
 
-            $result = $this->query("SELECT * FROM ".TB_PREFIX."units WHERE hero>0 AND vref='".$wid."'");
+            $result = $this->query("SELECT hero FROM ".TB_PREFIX."units WHERE hero>0 AND vref='".$wid."'");
             if (!empty($result)) {
                 $dbarray = mysqli_fetch_array($result);
                 if(isset($dbarray['hero'])) {

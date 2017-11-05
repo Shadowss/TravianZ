@@ -93,7 +93,7 @@ $lid2 = $getlid['lid'];
 					<td>
 						<select onchange="getTargetsByLid();" id="lid" name="lid">
 <?php
-$sql = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY name ASC");
+$sql = mysqli_query($GLOBALS['link'],"SELECT id, name, owner, wref FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY name ASC");
 while($row = mysqli_fetch_array($sql)){ 
 $lid = $row["id"];
 $lname = $row["name"];
@@ -127,7 +127,7 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 							<label class="lastTargets">Last targets:</label>
 							<select name="target_id">
 <?php
-$getwref = "SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".(int) $lid2;
+$getwref = "SELECT id, towref FROM ".TB_PREFIX."raidlist WHERE lid = ".(int) $lid2;
 $arraywref = $database->query_return($getwref);
 	echo '<option value="">Select village</option>';
 if(mysqli_num_rows(mysqli_query($GLOBALS['link'],$getwref)) != 0){

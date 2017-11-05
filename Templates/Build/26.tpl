@@ -6,10 +6,10 @@ if(time() - (!empty($_SESSION['time_p']) ? $_SESSION['time_p'] : 0) > 5) {
 
 if($_POST AND $_GET['action'] == 'change_capital') {
   $pass = mysqli_escape_string($GLOBALS['link'],$_POST['pass']);
-  $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $session->uid);
+  $query = mysqli_query($GLOBALS['link'],'SELECT password FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $session->uid);
   $data = mysqli_fetch_assoc($query);
   if(password_verify($pass, $data['password'])) {
-    $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' .(int)  $session->uid . ' AND `capital` = 1');
+    $query1 = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' .(int)  $session->uid . ' AND `capital` = 1');
     $data1 = mysqli_fetch_assoc($query1);
     $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata` WHERE `vref` = ' . (int) $data1['wref']);
     $data2 = mysqli_fetch_assoc($query2);
@@ -67,7 +67,7 @@ else{
 ?>
 
 <?php
-$query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $session->uid . ' AND `capital` = 1');
+$query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $session->uid . ' AND `capital` = 1');
 $data = mysqli_fetch_assoc($query);
 if($data['wref'] == $village->wid) {
 ?>

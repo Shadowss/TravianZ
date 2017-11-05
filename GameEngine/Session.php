@@ -111,18 +111,18 @@ class Session {
 				if ($dbarray['id'] > 1) {
                     if(!isset($_SESSION['wid'])) {
                         if($selected_village!='') {
-                            $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                            $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                         }else{
-                            $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
+                            $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
                         }
                         $data = mysqli_fetch_assoc($query);
                         $_SESSION['wid'] = $data['wref'];
                     } else
                         if($_SESSION['wid'] == '') {
                             if($selected_village!='') {
-                                $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                                $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                             }else{
-                                $query = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
+                                $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
                             }
                             $data = mysqli_fetch_assoc($query);
                             $_SESSION['wid'] = $data['wref'];

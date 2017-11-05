@@ -283,7 +283,7 @@ class Units {
             }
         }
         if( intval($enforce['hero']) > 0){
-            $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
+            $q = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
             $result = mysqli_query($GLOBALS['link'],$q);
             $hero_f=mysqli_fetch_array($result);
             $hero_unit=$hero_f['unit'];
@@ -376,13 +376,11 @@ if($session->access != BANNED){
                 array(0,0,0,0,0,0,0,0,0,0,0)
             );
 
-            $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],(int) $data['to_vid']));
+            $query1 = mysqli_query($GLOBALS['link'],'SELECT owner FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],(int) $data['to_vid']));
     $data1 = mysqli_fetch_assoc($query1);
-    $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $data1['owner']);
-    $data2 = mysqli_fetch_assoc($query2);
-    $query11 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],(int) $village->wid));
+    $query11 = mysqli_query($GLOBALS['link'],'SELECT owner FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],(int) $village->wid));
     $data11 = mysqli_fetch_assoc($query11);
-    $query21 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $data11['owner']);
+    $query21 = mysqli_query($GLOBALS['link'],'SELECT tribe FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . (int) $data11['owner']);
     $data21 = mysqli_fetch_assoc($query21);
 
 
@@ -616,7 +614,7 @@ if($session->access != BANNED){
                 }
                     if (isset($post['t11'])){
                         if( $post['t11'] != '' && $post['t11'] > 0){
-                            $qh = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
+                            $qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
                         $resulth = mysqli_query($GLOBALS['link'],$qh);
                         $hero_f=mysqli_fetch_array($resulth);
                         $hero_unit=$hero_f['unit'];

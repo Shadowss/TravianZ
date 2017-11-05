@@ -9,7 +9,7 @@ if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList' && $_POST['did']!
 	exit;
 }
 
-$sql = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY wref DESC");
+$sql = mysqli_query($GLOBALS['link'],"SELECT id, name, owner, wref FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY wref DESC");
 $query = mysqli_num_rows($sql);
 while($row = mysqli_fetch_array($sql)){
     $lid = $row["id"];
@@ -193,7 +193,7 @@ $vdata = $database->getVillage($towref);
 <?php
 $noticeClass = array("Scout Report","Won as attacker without losses","Won as attacker with losses","Lost as attacker with losses","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Lost as defender without losses","Reinforcement arrived","","Wood Delivered","Clay Delivered","Iron Delivered","Crop Delivered","","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Won scouting as attacker","Lost scouting as attacker","Won scouting as defender","Lost scouting as defender");
 $limits = "(ntype=1 or ntype=2 or ntype=3 or ntype=18 or ntype=19 or ntype=22)";
-$getnotice = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."ndata WHERE $limits AND toWref = ".(int) $towref." AND uid = ".(int) $session->uid." ORDER BY time DESC Limit 1");
+$getnotice = mysqli_query($GLOBALS['link'],"SELECT ntype, data, time, id FROM ".TB_PREFIX."ndata WHERE $limits AND toWref = ".(int) $towref." AND uid = ".(int) $session->uid." ORDER BY time DESC Limit 1");
 if(mysqli_num_rows($getnotice) > 0){
 while($row2 = mysqli_fetch_array($getnotice)){
     $dataarray = explode(",",$row2['data']);
@@ -316,7 +316,7 @@ if(!$database->getVilFarmlist($village->wid)){
         {
             Travian.Game.RaidList.setData({
 <?php
-$result = mysqli_query($GLOBALS['link'],'SELECT * FROM '.TB_PREFIX.'farmlist WHERE wref = '.(int) $village->wid.'');
+$result = mysqli_query($GLOBALS['link'],'SELECT id FROM '.TB_PREFIX.'farmlist WHERE wref = '.(int) $village->wid.'');
 $query1 = mysqli_num_rows($result);
 $NUM1 = 1;
 while($row = mysqli_fetch_array($result)){

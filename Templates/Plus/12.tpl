@@ -1,7 +1,7 @@
 <?php
 //////////////     made by alq0rsan, improved by evader   /////////////////////////
 if($session->access != BANNED && $session->gold >= 5){
-    $MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+    $MyGold = mysqli_query($GLOBALS['link'],"SELECT gold, b4 FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
     $golds = mysqli_fetch_array($MyGold);
 	if($session->sit == 0) {
 		if (mysqli_num_rows($MyGold)) {

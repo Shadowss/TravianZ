@@ -164,7 +164,7 @@ $user = $session->uid;
 
 
 //loop search village user
-$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user."");
+$query = mysqli_query($GLOBALS['link'],"SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user."");
 while($villaggi_array = mysqli_fetch_array($query)){
 
         //loop structure village
@@ -288,7 +288,7 @@ $user = $session->uid;
 //mysqli_select_db(SQL_DB);
 
 //loop search village user
-$query = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user."");
+$query = mysqli_query($GLOBALS['link'],"SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user."");
 while($villaggi_array = mysqli_fetch_array($query)){
 
         //loop structure village

@@ -38,7 +38,7 @@
         } else {
 
 
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 1");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 1");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -58,7 +58,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 2");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 2");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -78,7 +78,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 3");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 3");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -98,7 +98,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 4");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 4");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -117,7 +117,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 5");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 5");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -136,7 +136,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 6");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 6");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -155,7 +155,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 7");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 7");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -174,7 +174,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 2 AND type = 8");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 2 AND type = 8");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -188,7 +188,7 @@
 
         	unset($artefact);
         	unset($row);
-        	$artefact = mysqli_query($GLOBALS['link'],"SELECT * FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 8");
+        	$artefact = mysqli_query($GLOBALS['link'],"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 8");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';

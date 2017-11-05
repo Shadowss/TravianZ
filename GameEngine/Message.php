@@ -219,7 +219,7 @@ class Message {
 		$post = $database->escape($post);
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
-			    $message1 = mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "mdata where id = ".(int) $post['n' . $i]."");
+			    $message1 = mysqli_query($GLOBALS['link'],"SELECT target, owner FROM " . TB_PREFIX . "mdata where id = ".(int) $post['n' . $i]."");
 			$message = mysqli_fetch_array($message1);
 			if($message['target'] == $session->uid && $message['owner'] == $session->uid){
 				$database->getMessage($post['n' . $i], 8);

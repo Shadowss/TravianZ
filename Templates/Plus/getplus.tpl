@@ -50,8 +50,8 @@ EOT;
     $plusTime = 604800; // 7 days
     $time = time();
     $giveplus = ($time + $plustime);
-    $accountCheck = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-    if(mysqli_num_rows($accountCheck) <= 0){
+    $accountCheck = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'"), MYSQLI_ASSOC) or die(mysqli_error($database->dblink));
+    if($accountCheck['Total'] <= 0){
         echo "<b>ERROR:</b><br />";
         echo "The account name you entered does not exist.";
         echo "<br /><br /><input type=\"button\" value=\"Back\" onclick=\"history.go(-1)\">";
@@ -59,7 +59,6 @@ EOT;
     }
     if(!$valid) break;
     $valid=TRUE;
-    $acc = mysqli_fetch_array($accountCheck);
 
     $plusCheck = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
     $pluss = mysqli_fetch_array($plusCheck);
