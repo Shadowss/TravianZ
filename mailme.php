@@ -1,30 +1,27 @@
 <?php 
 
-### start config ### 
-
-$strEmpfaenger = 'changeme@change.me'; 
-
-$strFrom = "From: TravianiX Support <changeme@change.me>\n"; 
-$strFrom .= "X-Sender: <changeme@change.me>\n"; 
-$strFrom .= "X-Mailer: PHP\n"; 
-$strFrom .= "X-Priority: 3\n"; 
-$strFrom .= "Errors-To: <changeme@change.me>\n"; 
-$strFrom .= "Return-Path: <changeme@change.me>\n"; 
-$strFrom .= "Reply-To: " . $_POST['Emailadress'] . "\n"; 
-$strFrom .= "Content-Type: text; charset=iso-8859-15\n"; 
-
-$strSubject    = "New Ticket supported"; 
-
-
-$strReturnhtml = 'dorf1.php'; 
-
-
-$strDelimiter  = ":\t"; 
-
-### end of config ### 
-
-if($_POST) 
+if($_POST && count($_POST)) 
 { 
+    include_once('GameEngine/config.php');
+    $strEmpfaenger = (ADMIN_EMAIL ? ADMIN_EMAIL : (PAYPAL_EMAIL ? PAYPAL_EMAIL : 'martin@martinambrus.com'));
+    
+    $strFrom = "From: TravianiX Support <$strEmpfaenger>\n";
+    $strFrom .= "X-Sender: <$strEmpfaenger>\n";
+    $strFrom .= "X-Mailer: PHP\n";
+    $strFrom .= "X-Priority: 3\n";
+    $strFrom .= "Errors-To: <$strEmpfaenger>\n";
+    $strFrom .= "Return-Path: <$strEmpfaenger>\n";
+    $strFrom .= "Reply-To: " . $_POST['Emailadress'] . "\n";
+    $strFrom .= "Content-Type: text; charset=iso-8859-15\n";
+    
+    $strSubject    = "New Ticket supported";
+    
+    
+    $strReturnhtml = 'dorf1.php';
+    
+    
+    $strDelimiter  = ":\t";
+
  $strMailtext = ""; 
 
  while(list($strName,$value) = each($_POST)) 
