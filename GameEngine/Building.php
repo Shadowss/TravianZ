@@ -773,6 +773,8 @@ class Building {
             // will be true if we should decrease player's gold by 1
             // for master builder queue
             $countMasterGold = false;
+            // number of jobs to finish
+            $buildcount = ($this->buildArray ? count($this->buildArray) : 0);
 
             foreach ($this->buildArray as $jobs) {
                 if ($jobs['wid']==$village->wid) {
@@ -781,14 +783,11 @@ class Building {
                         $level = $jobs['level'];
                         if ($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
                             $resource = $this->resourceRequired($jobs['field'],$jobs['type']);
-                            if ($jobs['master'] == 0) {
-                                $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
-                                $countPlus2Gold = true;
-                            } else {
+                            // master builder involved
+                            if ($jobs['master'] != 0) {
                                 // don't allow master builder to build anything
                                 // if we only have 2 gold, since that would take us to -1 gold
                                 if ($session->gold > 2) {
-                                    $countMasterGold = true;
                                     $villwood = $database->getVillageField($jobs['wid'],'wood');
                                     $villclay = $database->getVillageField($jobs['wid'],'clay');
                                     $villiron = $database->getVillageField($jobs['wid'],'iron');
@@ -799,9 +798,17 @@ class Building {
                                     $buildclay = $buildarray[$level]['clay'];
                                     $buildiron = $buildarray[$level]['iron'];
                                     $buildcrop = $buildarray[$level]['crop'];
-                                    if($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop) {
+                                    if ($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop) {
+                                        $countMasterGold = true;
                                         $enought_res = 1;
-                                        $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".(int) $jobs['type']." where vref = ".(int) $jobs['wid'];
+                                        // we need to subtract resources for this, if another 2 jobs are active,
+                                        // as we'd never subtract those otherwise
+                                        if ($buildcount > 2) {
+                                            $database->setVillageField($jobs['wid'],'wood',($villwood - $buildwood));
+                                            $database->setVillageField($jobs['wid'],'clay',($villclay - $buildclay));
+                                            $database->setVillageField($jobs['wid'],'iron',($villiron - $buildiron));
+                                            $database->setVillageField($jobs['wid'],'crop',($villcrop - $buildcrop));
+                                        }
                                     }
                                 } else {
                                     // if we only have 2 gold, we need to cancel this job, as there will never
@@ -810,6 +817,14 @@ class Building {
                                     $q = "DELETE FROM ".TB_PREFIX."bdata WHERE id = ".(int) $jobs['id'];
                                     $database->query($q);
                                 }
+                            } else {
+                                // non-master builder build, we should count +2 gold for it
+                                $countPlus2Gold = true;
+                            }
+
+                            // update build level in the database
+                            if ($countMasterGold || $countPlus2Gold) {
+                                $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
                             }
 
                             if (!isset($exclude_master) && $database->query($q) && ($enought_res == 1 or $jobs['master'] == 0)) {
