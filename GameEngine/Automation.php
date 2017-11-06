@@ -2960,7 +2960,12 @@ class Automation {
                         }
                         
                         $database->setMovementProc($data['moveid']);
-                        if(!isset($chiefing_village) || (isset($chiefing_village) && $chiefing_village != 1)){
+
+                        if (!isset($chiefing_village)) {
+                            $chiefing_village = 0;
+                        }
+
+                        if($chiefing_village != 1){
                             $database->addMovement(4,$DefenderWref,$AttackerWref,$data['ref'],$AttackArrivalTime,$endtime);
                             
                             // send the bounty on type 6.
@@ -2998,7 +3003,12 @@ class Automation {
                     if($type == 3 or $type == 4){
                         $database->addGeneralAttack($totalattackdead);
                     }
-                    if(!isset($village_destroyed) || (isset($village_destroyed) && $village_destroyed == 1)){
+                    
+                    if (!isset($village_destroyed)) {
+                        $village_destroyed = 0;
+                    }
+                    
+                    if ($village_destroyed == 1) {
                         if($can_destroy==1){
                             $this->DelVillage($data['to']);
                         }
