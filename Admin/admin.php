@@ -425,6 +425,7 @@ if (!empty($_GET['p'])) {
 			if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); }
 			if(e == 'unban'){ var conf = confirm('Dou you really want unban player '+id+'?'); }
 			if(e == 'stopDel'){ var conf = confirm('Dou you really want stop deleting user '+id+'?'); }
+			if(e == 'oas'){ var conf = confirm('Dou you really want to delete oasis id '+id+'?'); }
 			if(conf){return true;}else{return false;}
 			}
 		</script>

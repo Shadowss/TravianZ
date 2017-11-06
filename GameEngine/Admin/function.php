@@ -65,6 +65,7 @@ class funct {
         //add ban
       break;
       case "delOas":
+        $database->query('UPDATE '.TB_PREFIX.'odata SET conqured = 0, owner = 2, name = "Unoccupied Oasis" WHERE wref = '.$get['oid']);
         //oaza
       break;
       case "logout":
