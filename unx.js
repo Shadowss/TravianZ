@@ -1,4 +1,5 @@
 window.dlang = 'ar';  // edit it to en if fullscreen map not working
+window.reloading = false;
 var timer=new Object();var ab=new Object();var bb=new Object();var cb=db();var eb=0;var auto_reload=1;var fb=new Object();var	is_opera=window.opera!==undefined;var	is_ie=document.all!==undefined&&window.opera===undefined;var is_ie6p=document.compatMode!==undefined&&document.all!==undefined&&window.opera===undefined;var is_ie7=document.documentElement!==undefined&&document.documentElement.style.maxHeight!==undefined;var is_ie6=is_ie6p&&!is_ie7;var is_ff2p=window.Iterator!==undefined;var is_ff3p=document.getElementsByClassName!==undefined;var is_ff2=is_ff2p&&!is_ff3p
 function gb(){return hb('height');}
 function ib(){return hb('width');}
@@ -19,7 +20,10 @@ if(vb<10){t+="0";}
 t+=vb;
 } else {
 t='0:00:00';
-document.location.reload();
+if (!window.reloading) {
+	document.location.reload();
+	window.reloading = true;
+}
 }
 return t;
 }
@@ -82,7 +86,10 @@ function executeCounter(){
 	if(eb == 0 && yb < 0){
 	    bb[i] = null;
 	    eb = 1;
-	    setTimeout(function(){window.location.href = ''},1000);
+	    if (!window.reloading) {
+	    	setTimeout(function(){window.location.href = ''},1000);
+	    	window.reloading = true;
+	    }
 	}
 	//    eb = 1;
 	//    if(auto_reload == 1){
@@ -265,7 +272,11 @@ function mreload(){param='reload=auto';url=window.location.href;if(url.indexOf(p
 else
 {url+='&'+param;}
 }
-document.location.href=url;}
+if (!window.reloading) {
+	document.location.href=url;
+	window.reloading = true;
+}
+}
 var rd={'index':0,'dir':0,'size':null,'fields':[],'cindex':0,'usealternate':false};
 var m_c=rd;
 var sd;
@@ -783,7 +794,10 @@ hi();
 if (quest.ar) {
 	auto_reload=quest.ar;
 	quest.ar=undefined;
-	document.location.href = (document.location.href.indexOf('#') > -1 ? document.location.href.substring(0, document.location.href.indexOf('#')) : document.location.href);
+	if (!window.reloading) {
+		document.location.href = (document.location.href.indexOf('#') > -1 ? document.location.href.substring(0, document.location.href.indexOf('#')) : document.location.href);
+		window.reloading = true;
+	}
 }
 
 }
