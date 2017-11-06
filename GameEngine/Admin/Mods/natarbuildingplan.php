@@ -37,7 +37,7 @@ for($i=1;$i<=$amt;$i++) {
 		$q = "UPDATE ".TB_PREFIX."units SET u41 = u41 + " . (1500 * $speed) . ", u42 = u42 + " . (1500 * $speed) . ", u43 = u43 + " . (1500 * $speed) . ", u44 = u44 + " . (1500 * $speed) . ", u45 = u45 + " . (1500 * $speed) . ", u46 = u46 + " . (1500 * $speed) . ", u47 = u47 + " . (1500 * $speed) . ", u48 = u48 + " . (1500 * $speed) . " , u49 = u49 + " . (1500 * $speed) . ", u50 = u50 + " . (1500 * $speed) . " WHERE vref = '".$wid."'";
 		mysqli_query($GLOBALS["link"], $q);
 		$desc = PLAN_DESC;
-		$database->addArtefact($wid, 3, 11, 1, PLAN, $desc, '', 'typeww.gif');
+		$database->addArtefact($wid, 3, 11, 1, PLAN, $desc, '', 'type1.gif');
 }
 		$myFile = "../../../Templates/text.tpl";
 		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");

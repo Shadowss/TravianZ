@@ -51,7 +51,7 @@ if ($artefact['type'] == 8){$kind=$artefact['kind']; $effecty=$artefact['effect2
 $bonus=$betterorbadder." ".$effecty."";
 ?>
 
-<div class="artefact image-<?php echo $artefact['type'] ?>">
+<div class="artefact image-<?php echo str_replace(['type', '.gif'], '', $artefact['img']); ?>">
 <table id="art_details" cellpadding="1" cellspacing="1">
 <thead>
 <tr>

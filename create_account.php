@@ -245,7 +245,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = ARCHITECTS_SMALLVILLAGE;
 		$effect = '(4x)';
 		for($i = 2; $i < 6; $i++) {
-			Artefact($uid, 1, 1, ARCHITECTS_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type1.gif');
+			Artefact($uid, 1, 1, ARCHITECTS_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
 		}
 
 		unset($i);
@@ -254,7 +254,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = ARCHITECTS_LARGEVILLAGE;
 		$effect = '(3x)';
 		for($i = 2; $i < 4; $i++) {
-			Artefact($uid, 1, 2, ARCHITECTS_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type1.gif');
+			Artefact($uid, 1, 2, ARCHITECTS_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
 		}
 
 		unset($i);
@@ -263,7 +263,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = ARCHITECTS_UNIQUEVILLAGE;
 		$effect = '(5x)';
 		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 1, 3, ARCHITECTS_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type1.gif');
+			Artefact($uid, 1, 3, ARCHITECTS_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
 		}
 
 /**
@@ -279,7 +279,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = HASTE_SMALLVILLAGE;
 		$effect = '(2x)';
 		for($i = 2; $i < 6; $i++) {
-			Artefact($uid, 2, 1, HASTE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
+			Artefact($uid, 2, 1, HASTE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
 		}
 
 		unset($i);
@@ -288,7 +288,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = HASTE_LARGEVILLAGE;
 		$effect = '(1.5x)';
 		for($i = 2; $i < 4; $i++) {
-			Artefact($uid, 2, 2, HASTE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
+			Artefact($uid, 2, 2, HASTE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
 		}
 
 		unset($i);
@@ -297,7 +297,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = HASTE_UNIQUEVILLAGE;
 		$effect = '(3x)';
 		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 2, 3, HASTE_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
+			Artefact($uid, 2, 3, HASTE_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
 		}
 
 /**
@@ -313,7 +313,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = EYESIGHT_SMALLVILLAGE;
 		$effect = '(5x)';
 		for($i = 2; $i < 6; $i++) {
-			Artefact($uid, 3, 1, EYESIGHT_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type3.gif');
+			Artefact($uid, 3, 1, EYESIGHT_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
 		}
 
 		unset($i);
@@ -322,7 +322,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = EYESIGHT_LARGEVILLAGE;
 		$effect = '(3x)';
 		for($i = 2; $i < 4; $i++) {
-			Artefact($uid, 3, 2, EYESIGHT_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type3.gif');
+			Artefact($uid, 3, 2, EYESIGHT_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
 		}
 
 		unset($i);
@@ -331,7 +331,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = EYESIGHT_UNIQUEVILLAGE;
 		$effect = '(10x)';
 		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 3, 3, EYESIGHT_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type3.gif');
+			Artefact($uid, 3, 3, EYESIGHT_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
 		}
 
 /**
@@ -347,7 +347,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = DIET_SMALLVILLAGE;
 		$effect = '(50%)';
 		for($i = 2; $i < 6; $i++) {
-			Artefact($uid, 4, 1, DIET_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
+			Artefact($uid, 4, 1, DIET_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
 		}
 
 		unset($i);
@@ -356,7 +356,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = DIET_LARGEVILLAGE;
 		$effect = '(25%)';
 		for($i = 2; $i < 4; $i++) {
-			Artefact($uid, 4, 2, DIET_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
+			Artefact($uid, 4, 2, DIET_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
 		}
 
 		unset($i);
@@ -365,7 +365,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = DIET_UNIQUEVILLAGE;
 		$effect = '(50%)';
 		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 4, 3, DIET_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
+			Artefact($uid, 4, 3, DIET_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
 		}
 
 
@@ -382,7 +382,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = ACADEMIC_SMALLVILLAGE;
 		$effect = '(50%)';
 		for($i = 2; $i < 6; $i++) {
-			Artefact($uid, 5, 1, ACADEMIC_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
+			Artefact($uid, 5, 1, ACADEMIC_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
 		}
 
 		unset($i);
@@ -391,7 +391,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = ACADEMIC_LARGEVILLAGE;
 		$effect = '(25%)';
 		for($i = 2; $i < 4; $i++) {
-			Artefact($uid, 5, 2, ACADEMIC_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
+			Artefact($uid, 5, 2, ACADEMIC_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
 		}
 
 		unset($i);
@@ -400,7 +400,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = ACADEMIC_UNIQUEVILLAGE;
 		$effect = '(50%)';
 		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 5, 3, ACADEMIC_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
+			Artefact($uid, 5, 3, ACADEMIC_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
 		}
 
 
@@ -417,7 +417,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = STORAGE_SMALLVILLAGE;
 		$effect = '(GG&GW)';
 		for($i = 2; $i < 6; $i++) {
-			Artefact($uid, 6, 1, STORAGE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
+			Artefact($uid, 6, 1, STORAGE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type9.gif');
 		}
 
 		unset($i);
@@ -426,7 +426,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = STORAGE_LARGEVILLAGE;
 		$effect = '(GG&GW)';
 		for($i = 2; $i < 4; $i++) {
-			Artefact($uid, 6, 2, STORAGE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
+			Artefact($uid, 6, 2, STORAGE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type9.gif');
 		}
 
 
@@ -443,7 +443,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = CONFUSION_SMALLVILLAGE;
 		$effect = '(200)';
 		for($i = 2; $i < 6; $i++) {
-			Artefact($uid, 7, 1, CONFUSION_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type7.gif');
+			Artefact($uid, 7, 1, CONFUSION_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type10.gif');
 		}
 
 		unset($i);
@@ -452,7 +452,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = CONFUSION_LARGEVILLAGE;
 		$effect = '(100)';
 		for($i = 2; $i < 4; $i++) {
-			Artefact($uid, 7, 2, CONFUSION_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type7.gif');
+			Artefact($uid, 7, 2, CONFUSION_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type10.gif');
 		}
 
 		unset($i);
@@ -461,7 +461,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = CONFUSION_UNIQUEVILLAGE;
 		$effect = '(500)';
 		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 7, 3, CONFUSION_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type7.gif');
+			Artefact($uid, 7, 3, CONFUSION_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type10.gif');
 		}
 
 
@@ -478,7 +478,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = FOOL_SMALLVILLAGE;
 		$effect = '';
 		for($i = 2; $i < 5; $i++) {
-			Artefact($uid, 8, 1, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
+			Artefact($uid, 8, 1, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'typefool.gif');
 		}
 
 		unset($i);
@@ -487,7 +487,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = FOOL_SMALLVILLAGE;
 		$effect = '';
 		for($i = 2; $i < 5; $i++) {
-			Artefact($uid, 8, 2, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
+			Artefact($uid, 8, 2, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'typefool.gif');
 		}
 
 		unset($i);
@@ -496,7 +496,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$vname = FOOL_UNIQUEVILLAGE;
 		$effect = '';
 		for($i = 2; $i < 1; $i++) {
-			Artefact($uid, 8, 3, FOOL_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
+			Artefact($uid, 8, 3, FOOL_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'typefool.gif');
 		}
 		$myFile = "Templates/text.tpl";
 		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");
