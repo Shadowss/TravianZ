@@ -808,7 +808,7 @@ $unarray=array("",CITYWALL,EARTHWALL,"PALISADE");
 
 $wall = $village->resarray['f40'];
 if ($wall==0){?>
-{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q36; ?>*<?php echo $unarray[$session->userinfo['tribe']];?>*<\/h1><br \/><i>&rdquo;<?php echo Q36_DESC; ?><b> <?php echo $unarray[$session->userinfo['tribe']];?><\/b> <?php echo Q36_DESC1; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><?php echo Q36_ORDER; ?><b><?php echo $unarray[$session->userinfo['tribe']];?><\/b>.<\/div><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":"-36","reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":99}
+{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q36; ?>*<?php echo $unarray[$session->userinfo['tribe']];?>*<\/h1><br \/><i>&rdquo;<?php echo Q36_DESC; ?><b> <?php echo $unarray[$session->userinfo['tribe']];?><\/b> <?php echo Q36_DESC1; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><?php echo Q36_ORDER; ?><b><?php echo $unarray[$session->userinfo['tribe']];?><\/b>.<\/div><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":"-36","reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":0}
 <?php $_SESSION['qstnew']='0'; }else{ $_SESSION['qstnew']='1'; ?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q36; ?>*<?php echo $unarray[$session->userinfo['tribe']];?>*<\/h1><br \/><i>&rdquo;<?php echo Q36_RESP; ?> <b><?php echo $unarray[$session->userinfo['tribe']];?> <\/b> <?php echo Q36_RESP1; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><input type=\"hidden\" id=\"qst_val\" value=\"2\" \/><?php echo Q_REWARD; ?><\/p><img src=\"img\/x.gif\" class=\"r1\" alt=\"Lumber\" title=\"Lumber\" \/>1700&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r2\" alt=\"Clay\" title=\"Clay\" \/>2100&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r3\" alt=\"Iron\" title=\"Iron\" \/>1900&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" \/>1400&nbsp;&nbsp;<\/div><br \/><span id=\"qst_accpt\"><a href=\"javascript: qst_next('','37');\"><?php echo Q_CONTINUE; ?><\/a><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"intro\"><\/div>\n\t\t","number":36,"reward":{"wood":1700,"clay":2100,"iron":1900,"crop":1400},"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":99}
 <?php } ?>
@@ -818,9 +818,9 @@ if ($wall==0){?>
 
 // End tasks message
 <?php } elseif($_SESSION['qst']== 37 ){
-$database->updateUserField($_SESSION['username'],'quest','38',0);
+$database->updateUserField($_SESSION['username'],'quest','38',99);
 $_SESSION['qst']= 38; ?>
-{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q37; ?><\/h1><br \/><i>&rdquo;<?php echo Q37_DESC; ?>&rdquo;<\/i><br \/><br \/><br \/><\/div>\n\t\t<div id=\"qstbg\" class=\"allres\"><\/div>\n\t\t","number":37,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":0}
+{"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q37; ?><\/h1><br \/><i>&rdquo;<?php echo Q37_DESC; ?>&rdquo;<\/i><br \/><br \/><br \/><\/div>\n\t\t<div id=\"qstbg\" class=\"allres\"><\/div>\n\t\t","number":37,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":99}
 <?php
 } elseif($_SESSION['qst']==90){
 $time=time();?>

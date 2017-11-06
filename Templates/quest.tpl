@@ -11,7 +11,7 @@
 ##                                                                             ##
 #################################################################################
 $_SESSION['qtyp'] = QTYPE;
-if ($_SESSION['id_user'] != 1 && (($_SESSION['qst'] < 38 && QTYPE == 37 && QUEST == true) || ($_SESSION['qst'] < 31 && QTYPE == 25 && QUEST == true) || ($_SESSION['qst'] >= 90 && QTYPE == 25 && QUEST == true))) {?>
+if ($_SESSION['id_user'] != 1 && (($_SESSION['qst'] < 38 && QTYPE == 37 && QUEST == true) || ($_SESSION['qst'] < 31 && QTYPE == 25 && QUEST == true) || ($_SESSION['qst'] >= 90 && QUEST == true))) {?>
 <div id="anm" style="width:120px; height:140px; visibility:hidden;"></div>
 <div id="qge">
     <?php if ($_SESSION['qst'] == 0 or (isset($_SESSION['qstnew']) && $_SESSION['qstnew']==1)){ ?>
