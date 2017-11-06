@@ -24,8 +24,8 @@ $admid = (int) $_POST['admid'];
 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."medal set del = 1 WHERE id = ".$medalid."");
 
-$name = mysqli_query($GLOBALS["link"], "SELECT name FROM ".TB_PREFIX."users WHERE id= ".$uid."");
-$name = mysqli_result($name, 0);
+$name = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT name FROM ".TB_PREFIX."users WHERE id= ".$uid.""), MYSQLI_ASSOC);
+$name = $name['name'];
 
 mysqli_query($GLOBALS["link"], "Insert into ".TB_PREFIX."admin_log values (0,$admid,'Deleted medal id [#".$medalid."] from the user <a href=\'admin.php?p=player&uid=$uid\'>$name</a> ',".time().")");
 
