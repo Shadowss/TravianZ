@@ -1042,7 +1042,7 @@ class Automation {
         $time = time();
         $q = "
             SELECT
-                `from`, `to`, endtime, ref, ctar1, ctar2, spy, moveid,
+                `from`, `to`, endtime, ref, ctar1, ctar2, spy, moveid, attack_type,
                 t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
             FROM
                 ".TB_PREFIX."movement,
@@ -1654,6 +1654,9 @@ class Automation {
                     $totaldead_alldef_tmp[5] = $alldead['41']+$alldead['42']+$alldead['43']+$alldead['44']+$alldead['45']+$alldead['46']+$alldead['47']+$alldead['48']+$alldead['49']+$alldead['50'];
                     
                     $totaldead_alldef = $totaldead_alldef_tmp[1]+$totaldead_alldef_tmp[2]+$totaldead_alldef_tmp[3]+$totaldead_alldef_tmp[4]+$totaldead_alldef_tmp[5]+$deadhero;
+                    if (!isset($totalattackdead)) {
+                        $totalattackdead = 0;
+                    }
                     $totalattackdead += $totaldead_alldef;
                     
                     // Set units returning from attack
@@ -2971,7 +2974,7 @@ class Automation {
                                 }
                                 $database->addMovement(6,$DefenderWref,$AttackerWref,$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
                                 $totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
-                                $totalstolentaken=($totalstolentaken-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
+                                $totalstolentaken=((isset($totalstolentaken) ? $totalstolentaken : 0)-($steal[0]+$steal[1]+$steal[2]+$steal[3]));
                                 $database->modifyPoints($from['owner'],'RR',$totalstolengain);
                                 $database->modifyPoints($to['owner'],'RR',$totalstolentaken);
                                 $database->modifyPointsAlly($targetally,'RR',$totalstolentaken );
