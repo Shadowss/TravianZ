@@ -3427,7 +3427,20 @@ class Automation {
                     $troopsPresent=0;
                     if($data['t11'] != 0) {
                         if($AttackerID == $DefenderID) {
-                            if($this->getTypeLevel(37,$data['to']) > 0) {
+                            // only add hero if we're sending him alone
+                            if (
+                                ($this->getTypeLevel(37,$data['to']) > 0) &&
+                                ($data['t1'] == 0) &&
+                                ($data['t2'] == 0) &&
+                                ($data['t3'] == 0) &&
+                                ($data['t4'] == 0) &&
+                                ($data['t5'] == 0) &&
+                                ($data['t6'] == 0) &&
+                                ($data['t7'] == 0) &&
+                                ($data['t8'] == 0) &&
+                                ($data['t9'] == 0) &&
+                                ($data['t10'] == 0)
+                            ) {
                                 //don't reinforce, addunit instead
                                 $database->modifyUnit($data['to'],array("hero"),array(1),array(1));
                                 $heroid = $database->getHero($DefenderID,1);
