@@ -2547,7 +2547,7 @@ class Automation {
                                             //loyalty is more than 0
                                             if(($toF['loyalty']-$rand)>0){
                                                 $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty']-$rand)."</b>.";
-                                                $database->setVillageField($data['to'],loyalty,($toF['loyalty']-$rand));
+                                                $database->setVillageField($data['to'],'loyalty',($toF['loyalty']-$rand));
                                             } else if (!$village_destroyed) {
                                                 //you took over the village
                                                 $villname = addslashes($database->getVillageField($data['to'],"name"));
@@ -2556,8 +2556,8 @@ class Automation {
                                                 if ($artifact['vref'] == $data['to']){
                                                     $database->claimArtefact($data['to'],$data['to'],$database->getVillageField($data['from'],"owner"));
                                                 }
-                                                $database->setVillageField($data['to'],loyalty,0);
-                                                $database->setVillageField($data['to'],owner,$database->getVillageField($data['from'],"owner"));
+                                                $database->setVillageField($data['to'],'loyalty',0);
+                                                $database->setVillageField($data['to'],'owner',$database->getVillageField($data['from'],"owner"));
                                                 //delete upgrades in armory and blacksmith
                                                 $q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref = ".(int) $data['to']."";
                                                 $database->query($q);
