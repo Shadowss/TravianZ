@@ -189,106 +189,61 @@ $replace[86] = "<img class='smiley veryangry' src='img/x.gif' alt='*veryangry*' 
 $replace[87] = "<img class='smiley veryhappy' src='img/x.gif' alt='*veryhappy*' title='*veryhappy*'>";
 $replace[88] = "<img class='smiley wink' src='img/x.gif' alt=';)' title=';)'>";
 
-// TODO: all of the following is fundamentally broken and needs refactoring
-// ... it effectively searches tags and user IDs like this:
-//     SELECT id FROM s1_alidata WHERE tag ='[message]abcd[/message]'
-// ... which can never find anything and generates invalid and BIG SQL queries
+// replace alliance placeholders
+$input = preg_replace_callback(
+    "/\[alliance(\d{0,20})\]([^\]]*)\[\/alliance\d{0,20}\]/is",
+    function($matches) {
+        global $database;
 
-/*for($i=0;$i<=$alliance;$i++){
-$pattern[89+$i] = "/\[alliance".$i."\](.*?)\[\/alliance".$i."\]/is";
-
-$aid = preg_match($pattern[89+$i], $input, $matches);
-$aname = $database->getAllianceID($matches[0]);
-if($aname){
-    $replace[89+$i] = "<a href=allianz.php?aid=$aname>".$matches[0]."</a>";
-}else{
-    $replace[89+$i] = "alliance not exist";
-}
-
-${'bbcoded1_'.$i} = preg_replace($pattern[89+$i], $replace[89+$i], $input);
-${'bbcoded1_'.$i} = preg_replace('/\[message\](.*?)\[alliance'.$i.'\]/is', '', ${'bbcoded1_'.$i});
-$rep1 = 90+$i;
-}
-
-for($i=0;$i<=$player;$i++){
-$pattern[$rep1+$i] = "/\[player".$i."\](.*?)\[\/player".$i."\]/is";
-${'bbcoded2_'.$i} = preg_replace($pattern[$rep1+$i], "$1", $input);
-${'bbcoded2_'.$i} = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $input);
-${'bbcoded2_'.$i} = preg_replace('/\[message\](.*?)\[player'.$i.'\]/is', '', ${'bbcoded2_'.$i});
-$uname = $database->getUserField(${'bbcoded2_'.$i}, "id", 1);
-if($uname != ""){
-$replace[$rep1+$i] = "<a href=spieler.php?uid=$uname>$1</a>";
-}else{
-$replace[$rep1+$i] = "player not exist";
-}
-$rep2 = $rep1+$i+1;
-}
-
-for($i=0;$i<=$report;$i++){
-$pattern[$rep2+$i] = "/\[report".$i."\](.*?)\[\/report".$i."\]/is";
-${'bbcoded3_'.$i} = preg_replace($pattern[$rep2+$i], "$1", $input);
-${'bbcoded3_'.$i} = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $input);
-${'bbcoded3_'.$i} = preg_replace('/\[message\](.*?)\[report'.$i.'\]/is', '', ${'bbcoded3_'.$i});
-$report = count($database->getNotice4(${'bbcoded3_'.$i}));
-if($report > 0){
-$topic = $database->getNotice2(${'bbcoded3_'.$i},"topic");
-$ally = $database->getNotice2(${'bbcoded3_'.$i},"ally");
-$replace[$rep2+$i] = "<a href=berichte.php?id=$1&aid=$ally>$topic</a>";
-}else{
-$replace[$rep2+$i] = "report not exist";
-}
-$rep3 = $rep2+$i+1;
-}
-
-for($i=0;$i<=$coor;$i++){
-$pattern[$rep3+$i] = "/\[coor".$i."\](.*?)\[\/coor".$i."\]/is";
-${'bbcoded4_'.$i} = preg_replace($pattern[$rep3+$i], "$1", $input);
-${'bbcoded4_'.$i} = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $input);
-${'bbcoded4_'.$i} = preg_replace('/\[message\](.*?)\[coor'.$i.'\]/is', '', ${'bbcoded4_'.$i});
-for($x = 0; $x < 401; $x++) {
-if(preg_match('/^'.$x.'/', ${'bbcoded4_'.$i})){
-$xx = 1;
-$cx = $x;
-}
-}
-
-for($x = 0; $x > -401; $x--) {
-if(preg_match('/^'.$x.'/', ${'bbcoded4_'.$i})){
-$xx = 1;
-$cx = $x;
-}
-}
-
-for($y = 0; $y < 401; $y++) {
-if(preg_match('/-'.$y.'$/', ${'bbcoded4_'.$i})){
-$yy = 1;
-$cy = $y*(-1);
-}else if(preg_match('/'.$y.'$/', ${'bbcoded4_'.$i})){
-$yy = 1;
-$cy = $y;
-}
-}
-
-if(preg_match('/|/', ${'bbcoded4_'.$i}) && $xx == 1 && $yy == 1){
-    $wref = $database->getVilWref($cx,$cy);
-    $cwref = $generator->getMapCheck($wref);
-
-    if($wref != ""){
-        $wref1 = $database->getVillageType3($wref);
-        if($wref1['oasistype'] == 0 && $wref1['occupied'] == 1){
-            $vname = $database->getVillageField($wref,"name");
-        }else if($wref1['oasistype'] == 0 && $wref1['occupied'] == 0){
-            $vname = "Abandoned valley";
-        }else if($wref1['oasistype'] != 0 && $wref1['occupied'] == 1){
-            $vname = "Occupied Oasis";
-        }else if($wref1['oasistype'] != 0 && $wref1['occupied'] == 0){
-            $vname = "Unoccupied Oasis";
+        $aname = $database->getAllianceID($matches[1]);
+        if ($aname) {
+            return "<a href=allianz.php?aid=$aname>".$matches[2]."</a>";
+        } else {
+            return $matches[2];
         }
-        $replace[$rep3+$i] = "<a href=karte.php?d=$wref&c=$cwref>$vname($cx|$cy)</a>";
-    }
-}
+    },
+    $input);
 
-}*/
+// replace player placeholders
+$input = preg_replace_callback(
+    "/\[player(\d{0,20})\]([^\]]*)\[\/player\d{0,20}\]/is",
+    function($matches) {
+        global $database;
+        
+        $uname = $database->getUserField((int) $matches[1], "id", 0);
+        if ($uname) {
+            return "<a href=spieler.php?uid=$uname>".$matches[2]."</a>";
+        } else {
+            return $matches[2];
+        }
+    },
+    $input);
+
+// replace report placeholders
+$input = preg_replace_callback(
+    "/\[report(\d{0,20})\]([^\]]*)\[\/report\d{0,20}\]/is",
+    function($matches) {
+        global $database;
+        
+        $report = count($database->getNotice4((int) $matches[1]));
+        if (count($report)) {
+            return "<a href=berichte.php?id=".$matches[1].">".$matches[2]."</a>";
+        } else {
+            return $matches[2];
+        }
+    },
+    $input);
+
+// replace coordinate placeholders
+$input = preg_replace_callback(
+    "/\[coor(\d{0,20})\]([^\]]*)\[\/coor\d{0,20}\]/is",
+    function($matches) {
+        global $generator;
+
+        $cwref = $generator->getMapCheck($matches[1]);
+        return "<a href=karte.php?d=".$matches[1]."&amp;c=".$cwref.">".$matches[2]."</a>";
+    },
+    $input);
 
 $input = preg_replace('/\[message\]/', '', $input);
 $input = preg_replace('/\[\/message\]/', '', $input);
