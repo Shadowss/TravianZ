@@ -16,9 +16,9 @@
 
 use App\Utils\AccessLogger;
 
-include("GameEngine/config.php");
-include("GameEngine/Database.php");
-include("GameEngine/Lang/".LANG.".php");
+include_once("GameEngine/config.php");
+include_once("GameEngine/Database.php");
+include_once("GameEngine/Lang/".LANG.".php");
 AccessLogger::logRequest();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

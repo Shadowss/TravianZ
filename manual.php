@@ -11,7 +11,7 @@
 ##                                                                             ##
 #################################################################################
 
-include("GameEngine/config.php");
+include_once("GameEngine/config.php");
 ?>
 
 <html>

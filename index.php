@@ -24,7 +24,7 @@ if(!file_exists('var/installed') && @opendir('install')) {
     exit;
 }
 
-include ("GameEngine/config.php");
+include_once("GameEngine/config.php");
 /*
 if($_SERVER['HTTP_HOST'] != '.SERVER.')
 {

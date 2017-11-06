@@ -15,11 +15,11 @@ if(!file_exists('var/installed') && @opendir('install')) {
 	header("Location: install/");
 	exit;
 }
-include("GameEngine/config.php");
-include("GameEngine/Lang/" . LANG . ".php");
-include("GameEngine/Database.php");
-include("GameEngine/Mailer.php");
-include("GameEngine/Generator.php");
+include_once("GameEngine/config.php");
+include_once("GameEngine/Lang/" . LANG . ".php");
+include_once("GameEngine/Database.php");
+include_once("GameEngine/Mailer.php");
+include_once("GameEngine/Generator.php");
 AccessLogger::logRequest();
 
 if(!isset($_REQUEST['npw'])){

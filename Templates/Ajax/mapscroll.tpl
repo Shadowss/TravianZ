@@ -1,9 +1,9 @@
 <?php
 session_start();
-include('GameEngine/config.php');
+include_once('GameEngine/config.php');
 include_once ("GameEngine/Lang/" . LANG . ".php");
-include("GameEngine/Generator.php");
-include("GameEngine/Database.php");
+include_once("GameEngine/Generator.php");
+include_once("GameEngine/Database.php");
 
 //include("GameEngine/Session.php");
 

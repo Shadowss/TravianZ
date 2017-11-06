@@ -1,6 +1,6 @@
 <?php
 $count="0";
-include("GameEngine/Config.php");
+include_once("GameEngine/Config.php");
 
 		$connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error($database->dblink));
 		mysqli_select_db(SQL_DB, $connection) or die(mysqli_error($database->dblink));
