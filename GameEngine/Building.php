@@ -784,7 +784,7 @@ class Building {
                         if ($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
                             $resource = $this->resourceRequired($jobs['field'],$jobs['type']);
                             // master builder involved
-                            if ($jobs['master'] != 0) {
+                            if ($jobs['master'] != 0 && $this->meetRequirement($jobs['field'])) {
                                 // don't allow master builder to build anything
                                 // if we only have 2 gold, since that would take us to -1 gold
                                 if ($session->gold > 2) {
