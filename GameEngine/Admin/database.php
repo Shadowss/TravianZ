@@ -196,6 +196,7 @@ class adm_DB {
 		  for ($i = 0; $i <= count($villages)-1; $i++) {
 			$vid = $villages[$i]['wref'];
 			if($post['punish']){
+			  $logPunishment = "<b>-".(int) $post['punish']."%</b> population";
 			  $popOld = $villages[$i]['pop'];
 			  $proc = 100-$post['punish'];
 			  $pop = floor(($popOld/100)*($proc));
@@ -204,6 +205,7 @@ class adm_DB {
 
 			}
 			if($post['del_troop']){
+			    $logPunishment = "<b>troops removal</b>";
 				if($user['tribe'] == 1) {
 				  $unit = 1;
 				}else if($user['tribe'] == 2) {
@@ -214,12 +216,13 @@ class adm_DB {
 				  $this->DelUnits($villages[$i]['wref'],$unit);
 			}
 			if($post['clean_ware']){
+			    $logPunishment = "<b>emptying warehouses</b>";
 			  $time = time();
 			  $q = "UPDATE ".TB_PREFIX."vdata SET `wood` = '0', `clay` = '0', `iron` = '0', `crop` = '0', `lastupdate` = '$time' WHERE wref = ".(int) $vid;
 			  mysqli_query($this->connection,$q);
 			}
 		  }
-		  mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Punished user: <a href=\'admin.php?p=player&uid=".(int) $post['uid']."\'>".(int) $post['uid']."</a> with <b>-".(int) $post['punish']."%</b> population',".time().")");
+		  mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Punished user: <a href=\'admin.php?p=player&uid=".(int) $post['uid']."\'>".(int) $post['uid']."</a> with ".$logPunishment."',".time().")");
   }
 
   function PunishBuilding($vid,$proc,$pop){
