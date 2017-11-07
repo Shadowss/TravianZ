@@ -54,7 +54,7 @@ define("SPEED", "%SPEED%");
 define("WORLD_MAX", "%MAX%");
 
 // ***** Graphic Pack
-// True = enabled, false = disabled
+// true = enabled, false = disabled
 //!!!!!!!!!!!! DO NOT ENABLE !!!!!!!!!!!!
 define("GP_ENABLE",false);
 // Graphic pack location (default: gpack/travian_default/)
@@ -213,10 +213,14 @@ define("NEWSBOX3",%BOX3%);
 //////////////////////////////////
 
 // ***** SQL Hostname
-// example. sql106.000space.com / localhost
+// example: sql106.000space.com / localhost
 // If you host server on own PC than this value is: localhost
 // If you use online hosting, value must be written in host cpanel
 define("SQL_SERVER", "%SSERVER%");
+
+// ***** SQL Port
+// default: 3306
+define("SQL_PORT", %SPORT%);
 
 // ***** Database Username
 define("SQL_USER", "%SUSER%");

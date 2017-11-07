@@ -93,6 +93,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%BOX3%'", $_POST['box3'], $text);
 		//end update
 		$text = preg_replace("'%SSERVER%'", SQL_SERVER, $text);
+		$text = str_replace("%SPORT%", SQL_PORT, $text);
 		$text = preg_replace("'%SUSER%'", SQL_USER, $text);
 		$text = preg_replace("'%SPASS%'", SQL_PASS, $text);
 		$text = preg_replace("'%SDB%'", SQL_DB, $text);

@@ -326,6 +326,10 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td><?php echo SQL_SERVER;?></td>
 	</tr>
 	<tr>
+		<td>Port</td>
+		<td><?php echo SQL_PORT;?></td>
+	</tr>
+	<tr>
 		<td>DB Username</td>
 		<td><?php echo SQL_USER;?></td>
 	</tr>

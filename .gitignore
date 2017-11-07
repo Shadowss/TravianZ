@@ -29,3 +29,6 @@ GameEngine/Notes/*
 
 # PHPStorm
 .idea
+
+# additional constant_format.tpl file, copied over from the installation folder
+GameEngine/Admin/Mods/constant_format.tpl

@@ -5350,7 +5350,7 @@ References:
 // database is not needed if we're displaying static pages
 $req_file = basename($_SERVER['PHP_SELF']);
 if (!in_array($req_file, ['tutorial.php', 'anleitung.php'])) {
-    $database = new MYSQLi_DB(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB);
+    $database = new MYSQLi_DB(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB, SQL_PORT);
     $link = $database->return_link();
     $GLOBALS['db'] = $database;
     $GLOBALS['link'] = $database->return_link();

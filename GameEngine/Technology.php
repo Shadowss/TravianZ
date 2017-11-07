@@ -10,6 +10,28 @@
 ##                                                                             ##
 #################################################################################
 
+global $autoprefix;
+
+// even with autoloader created, we can't use it here yet, as it's not been created
+// ... so, let's see where it is and include it
+$autoloader_found = false;
+// go max 5 levels up - we don't have folders that go deeper than that
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        $autoloader_found = true;
+        include_once $autoprefix.'autoloader.php';
+        break;
+    }
+}
+
+if (!$autoloader_found) {
+    die('Could not find autoloading class.');
+}
+
+// this is needed for installation, since the lang file would not be included yet
+include_once($autoprefix."GameEngine/lang/en.php");
+
 class Technology {
 
 	public $unarray = array(1=>U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42,U43,U44,U45,U46,U47,U48,U49,U50,U99,U0);

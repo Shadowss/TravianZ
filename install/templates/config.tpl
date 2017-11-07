@@ -118,8 +118,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             <td><span class="f9 c6">Register Open:</span></td>
             <td>
                 <select name="reg_open">
-                    <option value="True" selected="selected">True</option>
-                    <option value="False">False</option>
+                    <option value="true" selected="selected">true</option>
+                    <option value="false">false</option>
                 </select>
             </td>
         </tr>
@@ -202,8 +202,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             <td><span class="f9 c6">Great Workshop:</span></td>
             <td>
                 <select name="great_wks">
-                    <option value="True">True</option>
-                    <option value="False" selected="selected">False</option>
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
                 </select>
             </td>
         </tr>
@@ -211,8 +211,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             <td><span class="f9 c6">ww:</span></td>
             <td>
                 <select name="ww">
-                    <option value="True">True</option>
-                    <option value="False" selected="selected">False</option>
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
                 </select>
             </td>
         </tr>
@@ -220,8 +220,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             <td><span class="f9 c6">Show Natars in Statistics:</span></td>
             <td>
                 <select name="show_natars">
-                    <option value="True">True</option>
-                    <option value="False" selected="selected">False</option>
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
                 </select>
             </td>
         </tr>
@@ -255,8 +255,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
         <td><span class="f9 c6">Show admin in stats:</span></td>
         <td>
             <select name="admin_rank">
-                <option value="True">True</option>
-                <option value="False" selected="selected">False</option>
+                <option value="true">true</option>
+                <option value="false" selected="selected">false</option>
             </select>
         </td>
         </tr>
@@ -264,8 +264,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
         <td><span class="f9 c6">Include Support Messages in Admin Mailbox:</span></td>
         <td>
             <select name="admin_support_msgs">
-                <option value="True" selected="selected">True</option>
-                <option value="False">False</option>
+                <option value="true" selected="selected">true</option>
+                <option value="false">false</option>
             </select>
         </td>
         </tr>
@@ -273,8 +273,8 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
         <td><span class="f9 c6">Allow Administrative Accounts to be Raided and Attacked:</span></td>
         <td>
             <select name="admin_raidable">
-                <option value="True" selected="selected">True</option>
-                <option value="False">False</option>
+                <option value="true" selected="selected">true</option>
+                <option value="false">false</option>
             </select>
         </td>
         </tr>
@@ -286,6 +286,10 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
         <tr>
             <td><span class="f9 c6">Hostname:</span></td>
             <td><input name="sserver" type="text" id="sserver" value="localhost"></td>
+        </tr>
+        <tr>
+            <td><span class="f9 c6">Port:</span></td>
+            <td><input name="sport" type="text" id="sport" value="3306"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Username:</span></td>
