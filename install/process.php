@@ -77,10 +77,8 @@ class Process {
 		$findReplace["%SDB%"] = $_POST['sdb'];
 		$findReplace["%PREFIX%"] = $_POST['prefix'];
 		$findReplace["%CONNECTT%"] = $_POST['connectt'];
-		$findReplace["%AEMAIL%"] = $_POST['aemail'];
-		$findReplace["%ANAME%"] = $_POST['aname'];
-		$findReplace["%ASUPPMSGS%"] = ($_POST['admin_support_msgs'] == 'true' ? 'true' : 'false');
-		$findReplace["%ARAIDS%"] = ($_POST['admin_raidable'] == 'true' ? 'true' : 'false');
+		$findReplace["%ASUPPMSGS%"] = 'true';
+		$findReplace["%ARAIDS%"] = 'false';
 		//$findReplace["%SUBDOM%"] = $_POST['subdom'];
 		$findReplace["%LOGBUILD%"] = $_POST['log_build'];
 		$findReplace["%LOGTECH%"] = $_POST['log_tech'];
@@ -94,7 +92,7 @@ class Process {
 		//$findReplace["%MINPASSLENGTH%"] = $_POST['passlength'];
 		//$findReplace["%SPECIALCHARS%"] = $_POST['specialchars'];
 		$findReplace["%ACTIVATE%"] = $_POST['activate'];
-		$findReplace["%ARANK%"] = $_POST['admin_rank'];
+		$findReplace["%ARANK%"] = 'false';
 		$findReplace["%QUEST%"] = $_POST['quest'];
 		$findReplace["%QTYPE%"] = $_POST['qtype'];  
 		$findReplace["%BEGINNER%"] = $_POST['beginner'];

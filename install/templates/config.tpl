@@ -241,46 +241,6 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
     </table>
     </p>
     <p>
-        <span class="f10 c">ADMIN ACCOUNT</span>
-    <table>
-        <tr>
-            <td><span class="f9 c6">Admin name:</span></td>
-            <td><input type="text" name="aname" id="aname" value=""></td>
-        </tr>
-        <tr>
-            <td><span class="f9 c6">Admin email:</span></td>
-            <td><input type="text" name="aemail" id="aemail" value=""></td>
-        </tr>
-		<tr>
-        <td><span class="f9 c6">Show admin in stats:</span></td>
-        <td>
-            <select name="admin_rank">
-                <option value="true">true</option>
-                <option value="false" selected="selected">false</option>
-            </select>
-        </td>
-        </tr>
-		<tr>
-        <td><span class="f9 c6">Include Support Messages in Admin Mailbox:</span></td>
-        <td>
-            <select name="admin_support_msgs">
-                <option value="true" selected="selected">true</option>
-                <option value="false">false</option>
-            </select>
-        </td>
-        </tr>
-        <tr>
-        <td><span class="f9 c6">Allow Administrative Accounts to be Raided and Attacked:</span></td>
-        <td>
-            <select name="admin_raidable">
-                <option value="true" selected="selected">true</option>
-                <option value="false">false</option>
-            </select>
-        </td>
-        </tr>
-    </table>
-    </p>
-    <p>
         <span class="f10 c">SQL RELATED</span>
     <table>
         <tr>

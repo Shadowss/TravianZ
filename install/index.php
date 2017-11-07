@@ -82,7 +82,7 @@ function proceed() {
 				<div id="content" class="login">
 					<?php
 					IHG_Progressbar::draw_css();
-					$bar = new IHG_Progressbar(7, 'Step %d from %d ');
+					$bar = new IHG_Progressbar(6, 'Step %d from %d ');
 					$bar->draw();
 					for($i = 0; $i < ($_GET['s']+1); $i++) {
 						$bar->tick();
@@ -114,12 +114,9 @@ function proceed() {
 						include("templates/wdata.tpl");
 						break;
 						case 4:
-					    include("templates/multihunter.tpl");
+					    include("templates/accounts.tpl");
 					    break;
 						case 5:
-						include("templates/support.tpl");
-						break;
-						case 6:
 						include("templates/end.tpl");
 						break;
 					}
