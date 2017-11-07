@@ -60,7 +60,7 @@ else {
 		if($_GET['typ'] == 4 && $_GET['s'] == 0) {
 			$_GET['s'] = 1;
 		}
-	include("Templates/Manual/".$_GET['typ'].preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s']).".tpl");
+		include("Templates/Manual/".$_GET['typ'].preg_replace("/[^a-zA-Z0-9_-]/","",(isset($_GET['s']) ? $_GET['s'] : '')).".tpl");
 	}
 }
 ?>
