@@ -775,6 +775,8 @@ class Building {
             $countMasterGold = false;
             // number of jobs to finish
             $buildcount = ($this->buildArray ? count($this->buildArray) : 0);
+            // will be true if the job was successfully finished
+            $jobFinishSuccess = false;
 
             foreach ($this->buildArray as $jobs) {
                 if ($jobs['wid']==$village->wid) {
@@ -799,6 +801,7 @@ class Building {
                                     $buildiron = $buildarray[$level]['iron'];
                                     $buildcrop = $buildarray[$level]['crop'];
                                     if ($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop) {
+                                        $jobFinishSuccess = true;
                                         $countMasterGold = true;
                                         $enought_res = 1;
                                         // we need to subtract resources for this, if another 2 jobs are active,
@@ -820,10 +823,11 @@ class Building {
                             } else {
                                 // non-master builder build, we should count +2 gold for it
                                 $countPlus2Gold = true;
+                                $jobFinishSuccess = true;
                             }
 
                             // update build level in the database
-                            if ($countMasterGold || $countPlus2Gold) {
+                            if ($jobFinishSuccess) {
                                 $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
                             }
 
@@ -846,6 +850,9 @@ class Building {
                         }
                     }
                 }
+
+                // reset the flag for the next job
+                $jobFinishSuccess = false;
             }
 
             $demolition = $database->finishDemolition($village->wid);
