@@ -178,7 +178,9 @@ class adm_DB {
 	if($status == 0){
 	    mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Added new village <b><a href=\'admin.php?p=village&did=$wid\'>$wid</a></b> to user <b><a href=\'admin.php?p=player&uid=$uid\'>$uid</a></b>',".time().")");
 	  $database->setFieldTaken($wid);
-		  $database->addVillage($wid,$uid,'new village','0');
+	  $username = $database->getUserArray($uid,1);
+	  $username = $username['username'];
+	  $database->addVillage($wid,$uid,$username,'0');
 		  $database->addResourceFields($wid,$database->getVillageType($wid));
 		  $database->addUnits($wid);
 		  $database->addTech($wid);
