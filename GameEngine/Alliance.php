@@ -151,6 +151,18 @@ class Alliance {
 				$database->sendInvitation($UserData['id'], $aid, $session->uid);
 				// Log the notice
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($UserData['username']) . '</a> into the alliance.');
+				// send invitation via in-game messages
+				$database->sendMessage(
+				    $UserData['id'],
+				    2,
+				    'Alliance invitation.',
+				    $database->escape("Hi, ".$UserData['username']."!\n\nThis is to inform you that you have been invited to join an alliance. To accept this invitation, please visit your Embassy.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
+				    0,
+				    0,
+				    0,
+				    0,
+				    0,
+				    true);
 			}
 			}else{
 			    header("Location: banned.php");
