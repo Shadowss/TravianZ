@@ -7,7 +7,7 @@ if(isset($id))
 	<table id="profile">
 		<thead>
 		<tr>
-				<th colspan="3" class="on"><a href="#"><?php echo $village['name']; ?></a>'s Build Log</th>
+				<th colspan="3" class="on"><a href="#"><?php echo $village['name']; ?></a>'s Research Log</th>
 			</tr>
 			<tr>
 				<td style="width: 12%">#</td>
@@ -16,7 +16,7 @@ if(isset($id))
 			</tr>
 		</thead>
 			<?php
-				$sql = "SELECT * FROM ".TB_PREFIX."build_log WHERE wid = ".(int) $_GET['did']."";
+				$sql = "SELECT * FROM ".TB_PREFIX."tech_log WHERE wid = ".(int) $_GET['did']."";
 				$result = mysqli_query($GLOBALS["link"], $sql);
 				$j = 0;
 				while($row = mysqli_fetch_assoc($result))

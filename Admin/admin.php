@@ -351,6 +351,16 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Build Log (no village)';
             }
             break;
+            
+        case 'techlog':
+            if (!empty($_GET['did'])) {
+                $village = $database->getVillage($_GET['did']);
+                $user = $database->getUserArray($village['owner'],1);
+                $subpage = 'Research Log ('.$village['name'].' &raquo; '.$user['username'].')';
+            } else {
+                $subpage = 'Research Log (no village)';
+            }
+            break;
     }
 }
 

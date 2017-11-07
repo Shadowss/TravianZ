@@ -107,7 +107,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		fwrite($fh, $text);
 		fclose($fh);
 
-$database->query("Insert into ".TB_PREFIX."admin_log values (0,".$id.",'Changed PLUS setting',".time().")");
+$database->query("Insert into ".TB_PREFIX."admin_log values (0,".$id.",'Changed PLUS Settings',".time().")");
 
 header("Location: ../../../Admin/admin.php?p=config");
 

@@ -31,7 +31,7 @@ for($i=1; $i<11; $i++) {
 }
 $q = "UPDATE ".TB_PREFIX."units SET ".$units." WHERE vref = ".(int) $id;
 $database->query($q);
-$database->query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed troop anmount in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
+$database->query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed troop amounts in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
 
 header("Location: ../../../Admin/admin.php?p=village&did=".$id."&d");
 ?>

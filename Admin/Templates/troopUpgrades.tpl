@@ -54,7 +54,7 @@ if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 		if($_SESSION['access'] == ADMIN)
 		{
 			if($tribe==5) { echo '<span class="none">Upgrades Troops</span>';}
-			else { echo '<a href="admin.php?p=addABTroops&did='.$_GET['did'].'">Upgrades Troops</a>';}
+			else { echo '<a href="admin.php?p=addABTroops&did='.$_GET['did'].'">Upgrades Troops</a><a href="admin.php?p=techlog&did='.$_GET['did'].'" style="float: right">Research Log</a>';}
 		}
 		if(isset($_GET['ab'])){
 			echo '<div align="right"><font color="Red"><b>AB Tech Troops upgrades</font></b></div>';
