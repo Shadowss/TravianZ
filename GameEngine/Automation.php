@@ -1047,7 +1047,7 @@ class Automation {
         $q = "
             SELECT
                 `from`, `to`, endtime, ref, ctar1, ctar2, spy, moveid, attack_type,
-                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
+                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, (SELECT oasistype FROM ".TB_PREFIX."wdata WHERE id = `to`) as oasistype
             FROM
                 ".TB_PREFIX."movement,
                 ".TB_PREFIX."attacks
@@ -1065,42 +1065,56 @@ class Automation {
         $dataarray = $database->query_return($q);
         $totalattackdead = 0;
         $data_num = 0;
-        
+
+        // set up caching variables, so we don't do same lookups more than once below
+        $villageOwners = [];
+        $cachedUserData = [];
+
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
                 //set base things
-                //$battle->resolveConflict($data);
-                $tocoor = $database->getCoor($data['from']);
-                $fromcoor = $database->getCoor($data['to']);
-                $isoasis = $database->isVillageOases($data['to']);
+                $isoasis = $data['oasistype'];
                 $AttackArrivalTime = $data['endtime'];
                 $AttackerWref = $data['from'];
                 $DefenderWref = $data['to'];
                 $NatarCapital=false;
+
+                // cache owners and other cacheable data
+                if (!isset($villageOwners[$data['from']])) {
+                    $villageOwners[$data['from']] = $database->getVillageField($data['from'],"owner");
+                    $cachedUserData[$data['from']] = $database->getUserArray($villageOwners[$data['from']], 1);
+                }
+
+                if (!isset($villageOwners[$data['to']])) {
+                    $villageOwners[$data['to']] = ($isoasis ? $database->getOasisField($data['to'],"owner") : $database->getVillageField($data['to'],"owner"));
+                    $cachedUserData[$data['to']] = $database->getUserArray($villageOwners[$data['to']], 1);
+                }
+
+                $Attacker['id'] = $cachedUserData[$data['from']]["id"];
+                $AttackerID = $Attacker['id'];
+                $owntribe = $cachedUserData[$data['from']]["tribe"];
+                $ownally = $cachedUserData[$data['from']]["alliance"];
+                $from = $database->getMInfo($data['from']);
+                $fromF = $database->getVillage($data['from']);
+
                 if ($isoasis == 0){ //village
-                    $Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
-                    $Defender['id'] = $database->getUserField($database->getVillageField($data['to'],"owner"),"id",0);
-                    $AttackerID = $Attacker['id'];
+                    $Defender['id'] = $cachedUserData[$data['to']]["id"];
                     $DefenderID = $Defender['id'];
                     if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
-                    $owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
-                    $targettribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
-                    $ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
-                    $targetally = $database->getUserField($database->getVillageField($data['to'],"owner"),"alliance",0);
+                    $targettribe = $cachedUserData[$data['to']]["tribe"];
+                    $targetally = $cachedUserData[$data['to']]["alliance"];
                     $to = $database->getMInfo($data['to']);
-                    $from = $database->getMInfo($data['from']);
                     $toF = $database->getVillage($data['to']);
-                    $fromF = $database->getVillage($data['from']);
                     $conqureby=0;
                     $NatarCapital=($toF['owner']==3 && $toF['capital']==1)? true:false;
                     if(!isset($to['name']) || $to['name']=='') $to['name']="??";
                     
                     $DefenderUnit = array();
                     $DefenderUnit = $database->getUnit($data['to']);
-                    $evasion = $database->getVillageField($data['to'],"evasion");
-                    $maxevasion = $database->getUserField($DefenderID,"maxevasion",0);
-                    $gold = $database->getUserField($DefenderID,"gold",0);
-                    $playerunit = ($targettribe-1)*10;
+                    $evasion = $toF["evasion"];
+                    $maxevasion = $cachedUserData[$data['to']]["maxevasion"];
+                    $gold = $cachedUserData[$data['to']]["gold"];
+                    $playerunit = (( $targettribe - 1 ) * 10);
                     $cannotsend = 0;
                     $movements = $database->getMovement("34",$data['to'],1);
                     for($y=0;$y < count($movements);$y++){
@@ -1113,13 +1127,21 @@ class Automation {
                     }
                     if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0 && $dataarray[$data_num]['attack_type'] > 2){
                         $totaltroops = 0;
+                        $unitModifications_units = [];
+                        $unitModifications_amounts = [];
+                        $unitModifications_modes = [];
                         for($i=1;$i<=10;$i++){
                             $playerunit += $i;
                             $data['u'.$i] = $DefenderUnit['u'.$playerunit];
-                            $database->modifyUnit($data['to'],array($playerunit),array($DefenderUnit['u'.$playerunit]),array(0));
+                            $unitModifications_units[] = $playerunit;
+                            $unitModifications_amounts[] = $DefenderUnit['u'.$playerunit];
+                            $unitModifications_modes[] = 0;
                             $playerunit -= $i;
                             $totaltroops += $data['u'.$i];
                         }
+                        // modify units in DB
+                        $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
+
                         $data['u11'] = $DefenderUnit['hero'];
                         $totaltroops += $data['u11'];
                         if($totaltroops > 0){
@@ -1128,12 +1150,10 @@ class Automation {
                             $database->addMovement(4,0,$data['to'],$attackid,microtime(true),microtime(true)+(180/EVASION_SPEED));
                             $newgold = $gold-2;
                             $newmaxevasion = $maxevasion-1;
-                            $database->updateUserField($DefenderID, "gold", $newgold, 1);
-                            $database->updateUserField($DefenderID, "maxevasion", $newmaxevasion, 1);
+                            $database->updateUserFields($DefenderID, ["gold", "maxevasion"], [$newgold, $newmaxevasion], 1);
                         }
                     }
                     //get defence units
-                    $Defender = array();
                     $enforDefender = array();
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to']);
@@ -1250,46 +1270,33 @@ class Automation {
                     
                     //rams attack
                     //TODO: where did dead7 & traped7 come from??/
-                    if(($data['t7']/*-$dead7-$traped7*/)>0 and $type=='3'){
-                        $basearraywall = $database->getMInfo($data['to']);
-                        if($database->getFieldLevel($basearraywall['wref'],40)>'0'){
-                            for ($w=1; $w<2; $w++){
-                                if ($database->getFieldLevel($basearraywall['wref'],40)!='0'){
-                                    
-                                    $walllevel = $database->getFieldLevel($basearraywall['wref'],40);
-                                    $wallgid = $database->getFieldLevel($basearraywall['wref'],"40t");
-                                    $wallid = 40;
-                                    $w='4';
-                                } else {$w = $w--; }
-                            }
+                    if (($data['t7']/*-$dead7-$traped7*/)>0 and $type=='3') {
+                        $basearraywall = $to;
+                        if (($walllevel = $database->getFieldLevel($basearraywall['wref'],40)) > 0){
+                            $wallgid = $database->getFieldLevel($basearraywall['wref'],"40t");
+                            $wallid = 40;
+                            $w='4';
                         }else{
                             $empty = 1;
                         }
                     }
-                    
+
                     $tblevel = '1';
                     $stonemason = "1";
-                    
+
                     /*--------------------------------
                      // End village Battle part
                      --------------------------------*/
                 }else{
-                    $Attacker['id'] = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
                     $Defender['id'] = $database->getUserField($database->getOasisField($data['to'],"owner"),"id",0);
-                    $AttackerID = $Attacker['id'];
                     $DefenderID = $Defender['id'];
                     if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
-                    $owntribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
                     $targettribe =  $database->getUserField($database->getOasisField($data['to'],"owner"),"tribe",0);;
-                    $ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
                     $targetally = $database->getUserField($database->getOasisField($data['to'],"owner"),"alliance",0);
                     $to = $database->getOMInfo($data['to']);
-                    $from = $database->getMInfo($data['from']);
                     $toF = $database->getOasisV($data['to']);
-                    $fromF = $database->getVillage($data['from']);
                     $conqureby=$toF['conqured'];
                     //get defence units
-                    $Defender = array();
                     $enforDefender = array();
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to']);

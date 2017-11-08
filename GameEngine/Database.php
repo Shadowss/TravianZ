@@ -416,6 +416,24 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
+    function updateUserFields($ref, $fields, $values, $switch) {
+        list($ref, $switch) = $this->escape_input($ref, $switch);
+
+        // prepare field-value pairs
+        $pairs = [];
+        foreach ($fields as $index => $fieldName) {
+            $pairs[] = $fieldName.' = '.(Math::isInt($values[$index]) ? $values[$index] : '"'.$this->escape($values[$index]).'"');
+        }
+
+        if(!$switch) {
+            $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." WHERE username = '$ref'";
+        } else {
+            $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." WHERE id = " . (int) $ref;
+        }
+
+        return mysqli_query($this->dblink,$q);
+    }
+
 	function getSitee($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
