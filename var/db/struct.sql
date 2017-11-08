@@ -1709,7 +1709,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%password` (
 CREATE TABLE IF NOT EXISTS `%PREFIX%ww_attacks` (
  `vid` int(25) DEFAULT NULL,
   `attack_time` int(11) DEFAULT NULL,
-  KEY `attack_time` (`attack_time`)
+  KEY `attack_time` (`attack_time`),
+  KEY `vid` (`vid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 --
