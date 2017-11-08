@@ -166,7 +166,6 @@ class Automation {
     }
     
     public function __construct() {
-        
         $this->procNewClimbers();
         $this->ClearUser();
         $this->ClearInactive();
@@ -4404,48 +4403,44 @@ class Automation {
     // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
     private function updateStore() {
         global $bid10, $bid38, $bid11, $bid39;
-        
         $result = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata`');
-        while ($row = mysqli_fetch_assoc($result))
-        {
+        $dataStore = [];
+        
+        while ($row = mysqli_fetch_assoc($result)) {
             $ress = $crop = 0;
-            for ($i = 19; $i < 40; ++$i)
-            {
-                if ($row['f' . $i . 't'] == 10)
-                {
-                    $ress += ((isset($bid10[$row['f' . $i]]) && isset($bid10[$row['f' . $i]]['attri'])) ? $bid10[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
-                }
-                
-                if ($row['f' . $i . 't'] == 38)
-                {
-                    $ress += ((isset($bid38[$row['f' . $i]]) && isset($bid38[$row['f' . $i]]['attri'])) ? $bid38[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
-                }
-                
-                
-                
-                if ($row['f' . $i . 't'] == 11)
-                {
-                    $crop += ((isset($bid11[$row['f' . $i]]) && isset($bid11[$row['f' . $i]]['attri'])) ? $bid11[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
-                }
-                
-                if ($row['f' . $i . 't'] == 39)
-                {
-                    $crop += ((isset($bid39[$row['f' . $i]]) && isset($bid39[$row['f' . $i]]['attri'])) ? $bid39[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
+            for ($i = 19; $i < 40; ++$i) {
+                $bidVar = 'bid';
+                switch ($row["f$i". 't']) {
+                    case 10:
+                    case 38:
+                        $bidVar .= $row["f$i". 't'];
+                        if (isset($$bidVar[$row["f$i"]]) && isset($$bidVar[$row["f$i"]]['attri'])) {
+                            $ress += $$bidVar[$row["f$i"]]['attri'] * STORAGE_MULTIPLIER;
+                        }
+                        break;
+                    case 11:
+                    case 39:
+                        $bidVar .= $row["f$i". 't'];
+                        if (isset($$bidVar[$row["f$i"]]) && isset($$bidVar[$row["f$i"]]['attri'])) {
+                            $crop += $$bidVar[$row["f$i"]]['attri'] * STORAGE_MULTIPLIER;
+                        }
+                        break;
                 }
             }
             
-            if ($ress == 0)
-            {
-                $ress = 800 * STORAGE_MULTIPLIER;
-            }
-            
-            if ($crop == 0)
-            {
-                $crop = 800 * STORAGE_MULTIPLIER;
-            }
-            
-            mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']) or die(mysqli_error($database->dblink));
+            $ress = $ress?: 800 * STORAGE_MULTIPLIER;
+            $crop = $crop?: 800 * STORAGE_MULTIPLIER;
+            $dataStore[] = [$ress, $crop, $row['vref']];
         }
+        
+        mysqli_begin_transaction($GLOBALS['link']) or die(mysqli_error($database->dblink));;
+        $sql = 'UPDATE ' .TB_PREFIX. 'vdata SET maxstore = ?, maxcrop = ? WHERE `wref` = ?';
+        $stmt = mysqli_prepare($GLOBALS['link'], $sql);
+        foreach ($dataStore as $data) {
+            $stmt->bind_param('iii', $data[0], $data[1], $data[2]);
+            $stmt->execute() or die(mysqli_error($database->dblink));
+        }
+        mysqli_commit($GLOBALS['link']) or die(mysqli_error($database->dblink));
     }
     
     private function oasisResourcesProduce() {
