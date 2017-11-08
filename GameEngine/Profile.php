@@ -167,7 +167,7 @@ class Profile {
 		else {
 			$form->addError("email",EMAIL_ERROR);
 		}
-		if($post['del'] && password_verify($session->userinfo['password'], $post['del_pw'])) {
+		if($post['del'] && password_verify($post['del_pw'], $session->userinfo['password'])) {
 				$database->setDeleting($post['uid'],0);
 		}
 		else {
