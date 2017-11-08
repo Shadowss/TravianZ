@@ -56,7 +56,7 @@
 
    echo GP_LOCATE;
 
-?>lang/en/compact.css?f4b7f" rel="stylesheet" type="text/css" />
+?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
 	<?php
 
    if($session->gpack == null || GP_ENABLE == false) {

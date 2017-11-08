@@ -118,7 +118,7 @@ if(isset($_GET['aid']) or isset($_GET['fid']) or isset($_GET['fid2']) or $sessio
 
 	   echo GP_LOCATE;
 
-?>lang/en/compact.css?f4b7f" rel="stylesheet" type="text/css" />
+?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
 	<?php
 
 	   if($session->gpack == null || GP_ENABLE == false) {

@@ -2772,6 +2772,8 @@ body.manual table#troop_info {
 }
 body.manual div#t_desc {
     margin-top: 30px;
+    max-height: 145px;
+    overflow-x: auto;
 }
 body.manual img#big_unit {
     left: 260px;
