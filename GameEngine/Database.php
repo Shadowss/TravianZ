@@ -180,76 +180,118 @@ class MYSQLi_DB implements IDbConnection {
 	 * @see \App\Database\IDbConnection::query_new()
 	 */
 	public function query_new($statement, ...$params) {
-	    // check for SELECT
-	    preg_match('/[^AZ-az]*(\()?[^AZ-az]*SELECT/i', $statement, $matches);	    
+	    if ($prep = mysqli_prepare($this->dblink, $statement)) {
+	        // if we're doing a multi-update/insert/delete query,
+	        // we'll need to mark it as such
+	        $is_multi_query = false;
 
-	    // SELECT statement it is...
-	    if (count($matches)) {
-            if ($prep = mysqli_prepare($this->dblink, $statement)) {
-                // prepare all parameter types
-                $types = [];
+	        // determine the nature of this query
+	        preg_match('/[^AZ-az]*(\()?[^AZ-az]*SELECT/i', $statement, $select_matches);
+	        preg_match('/[^AZ-az]*(\()?[^AZ-az]*DELETE/i', $statement, $delete_matches);
+	        preg_match('/[^AZ-az]*(\()?[^AZ-az]*INSERT/i', $statement, $insert_matches);
+	        preg_match('/[^AZ-az]*(\()?[^AZ-az]*REPLACE/i', $statement, $replace_matches);
+	        preg_match('/[^AZ-az]*(\()?[^AZ-az]*UPDATE/i', $statement, $update_matches);
 
-                foreach ($params as $param) {
-                    // default to string, change if neccessary
-                    $paramType = 's';
-                    
-                    if (Math::isInt($param)) {
-                        $paramType = 'i';
-                    } else if (Math::isFloat($param)) {
-                        $paramType = 'd';
-                    }
-                    
-                    $types[] = $paramType;
-                }
+	        // a single array parameter means that we're batching multiple
+	        // value feeds for a single prepared statement, so we just use
+	        // the first array value to actually prepare the statement
+	        // and determine all the binding types
+	        if (count($params) == 1) {
+	            $paramsArray = $params[0];
+	            $is_multi_query = true;
+	        } else {
+	            $paramsArray = $params;
+	            // convert method parameters into an array,
+	            // so we can reuse it in both cases - when we're executing
+	            // just a single prepared statement and also when we're
+	            // batching up multiple values for an insert/update/delete statement
+	            $params = [$params];
+	        }
 
-                // dynamically bind parameters
-                $bind_names = [implode('', $types)];
-                for ($i=0; $i<count($params); $i++){
-                    $bind_name = 'bind' . $i;
-                    $$bind_name = $params[$i];
-                    $bind_names[] = &$$bind_name;
-                }
-                call_user_func_array(array($prep, 'bind_param'),$bind_names);
+	        // determine and prepare parameter types
+	        $types = [];
+	        foreach ($paramsArray as $param) {
+	            // default to string, change if neccessary
+	            $paramType = 's';
 
-                // execute the statement to get its value back
-                if (mysqli_stmt_execute($prep)) {
-                    $this->selectQueryCount++;
+	            if (Math::isInt($param)) {
+	                $paramType = 'i';
+	            } else if (Math::isFloat($param)) {
+	                $paramType = 'd';
+	            }
 
-                    // read metadata, so we know what fields we were actually selecting
-                    // and can prepare our temporary variables to read them into
-                    $resultMetaData = mysqli_stmt_result_metadata($prep);
+	            $types[] = $paramType;
+	        }
 
-                    $stmtRow = array();
-                    $rowReferences = array();
-                    while ($field = mysqli_fetch_field($resultMetaData)) {
-                        $rowReferences[] = &$stmtRow[$field->name];
-                    }
-                    mysqli_free_result($resultMetaData); 
+	        // dynamically bind each data batch using previously
+	        // defined parameters
+	        $implodedNames = [implode('', $types)];
+	        $outputValues = [];
 
-                    // now call bind_result with all our variables to recive the data prepared
-                    call_user_func_array(array($prep, 'bind_result'), $rowReferences);
+	        foreach ($params as $dataBatch) {
+	            $bind_names = $implodedNames;
+    	        for ($i=0; $i<count($dataBatch); $i++) {
+    	            $bind_name = 'bind' . $i;
+    	            $$bind_name = $dataBatch[$i];
+    	            $bind_names[] = &$$bind_name;
+    	        }
+    	        call_user_func_array(array($prep, 'bind_param'), $bind_names);
 
-                    // prepare the array-ed result
-                    while(mysqli_stmt_fetch($prep)){
-                        $row = array();
-                        foreach($stmtRow as $key => $value){
-                            $row[$key] = $value;
+        	    // SELECT
+        	    if (count($select_matches)) {
+                    // execute the statement to get its value back
+                    if (mysqli_stmt_execute($prep)) {
+                        $this->selectQueryCount++;
+                        $queryResult = [];
+    
+                        // read metadata, so we know what fields we were actually selecting
+                        // and can prepare our temporary variables to read them into
+                        $resultMetaData = mysqli_stmt_result_metadata($prep);
+    
+                        $stmtRow = array();
+                        $rowReferences = array();
+                        while ($field = mysqli_fetch_field($resultMetaData)) {
+                            $rowReferences[] = &$stmtRow[$field->name];
                         }
-                        $queryResult[] = $row;
+                        mysqli_free_result($resultMetaData); 
+    
+                        // now call bind_result with all our variables to recive the data prepared
+                        call_user_func_array(array($prep, 'bind_result'), $rowReferences);
+    
+                        // prepare the array-ed result
+                        while(mysqli_stmt_fetch($prep)){
+                            $row = array();
+                            foreach($stmtRow as $key => $value){
+                                $row[$key] = $value;
+                            }
+                            $queryResult[] = $row;
+                        }
+    
+                        // free the result
+                        mysqli_stmt_free_result($prep); 
+    
+                        $outputValues[] = $queryResult;
+                    } else {
+                        throw new Exception('Failed to execute an SQL statement!');
                     }
+        	    }
+    	    }
 
-                    // free the result and the prepared statement itself
-                    mysqli_stmt_free_result($prep); 
-                    mysqli_stmt_close($prep);
+    	    // free the prepared statement
+    	    mysqli_stmt_close($prep);
 
-                    // and return the value
-                    return $queryResult;
-                } else {
-                    throw new Exception('Failed to execute an SQL statement!');
-                }
-            } else {
-                throw new Exception('Failed to prepare an SQL statement!');
-            }
+    	    // return the expected result
+    	    if (count($select_matches)) {
+    	        // if there is only a single result, return it alone
+    	        if (count($outputValues) === 1) {
+    	            return $outputValues[0];
+    	        } else {
+    	            // otherwise, return all the data
+    	            return $outputValues;
+    	        }
+    	    }
+        } else {
+            throw new Exception('Failed to prepare an SQL statement!');
 	    }
 
 	    return false;
