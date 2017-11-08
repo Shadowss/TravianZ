@@ -154,7 +154,7 @@ class Alliance {
 				// send invitation via in-game messages
 				$database->sendMessage(
 				    $UserData['id'],
-				    2,
+				    4,
 				    'Alliance invitation.',
 				    $database->escape("Hi, ".$UserData['username']."!\n\nThis is to inform you that you have been invited to join an alliance. To accept this invitation, please visit your Embassy.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
 				    0,
@@ -489,7 +489,7 @@ class Alliance {
     				// send the new founder an in-game message, notifying them of their election
     				$database->sendMessage(
     				    $newleader,
-    				    2,
+    				    4,
     				    'You are now leader of your alliance',
     				    "Hi!\n\nThis is to inform you that the former leader of your alliance - <a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$database->escape($session->username)."</a>, has decided to quit and elected you as his replacement. You now gain full access, administration and responsibilities to your alliance.\n\nGood luck!\n\nYours sincerely,\n<i>Server Robot :)</i>",
     				    0,

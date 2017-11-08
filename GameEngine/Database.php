@@ -1597,7 +1597,7 @@ class MYSQLi_DB implements IDbConnection {
                     if ($row['owner'] != $owner) {
                         $this->sendMessage(
                             (int) $row['owner'],
-                            2,
+                            4,
                             'New Message in Alliance Forum',
                             "Hi!\n\n<a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$this->escape($session->username)."</a> posted a new message into your common topic. Here\\'s a link that will get you there: <a href=\"".rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>",
                             0,
@@ -3001,7 +3001,7 @@ class MYSQLi_DB implements IDbConnection {
 	            if ($demolition) {
 	                $this->sendMessage(
 	                    $userData['id'],
-	                    2,
+	                    4,
 	                    'You left the alliance',
 	                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
 	                    0,
@@ -3014,7 +3014,7 @@ class MYSQLi_DB implements IDbConnection {
 	                // player has been removed from the alliance
 	                $this->sendMessage(
 	                    $userData['id'],
-	                    2,
+	                    4,
 	                    'An attack has forced you to leave the alliance',
 	                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the leader to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
 	                    0,
@@ -3069,7 +3069,7 @@ class MYSQLi_DB implements IDbConnection {
 	                    // notify them via in-game messaging
 	                    $this->sendMessage(
 	                        $member['id'],
-	                        2,
+	                        4,
 	                        'Your alliance was disbanded',
 	                        (
 	                            ($member['id'] == $userData['id'])
@@ -3113,7 +3113,7 @@ class MYSQLi_DB implements IDbConnection {
     	                        // notify new leader via in-game messaging
     	                        $this->sendMessage(
     	                            $newleader,
-    	                            2,
+    	                            4,
     	                            'You are now the alliance leader',
     	                            $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=".$userData['id']."\">".$userData['username']."</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
     	                            0,
@@ -3142,7 +3142,7 @@ class MYSQLi_DB implements IDbConnection {
 	                    foreach ($members as $member) {
     	                    $this->sendMessage(
     	                        $member['id'],
-    	                        2,
+    	                        4,
     	                        'Your alliance was dispersed',
     	                        (
     	                            ($member['id'] == $userData['id'])
@@ -3177,7 +3177,7 @@ class MYSQLi_DB implements IDbConnection {
 	                            if ($keepCurrentPlayer || (!$keepCurrentPlayer && $member['id'] != $userData['id']))
         	                        $this->sendMessage(
         	                            $member['id'],
-        	                            2,
+        	                            4,
         	                            'Your alliance has a new leader',
         	                            (
         	                                ($member['id'] == $userData['id'])
@@ -3209,7 +3209,7 @@ class MYSQLi_DB implements IDbConnection {
 	                        // notify the evicted player
 	                        $this->sendMessage(
 	                            $userData['id'],
-	                            2,
+	                            4,
 	                            'An attack has forced you to leave the alliance',
 	                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the <a href=\"spieler.php?uid=".$newleader."\">newly auto-elected leader</a> to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
 	                            0,
