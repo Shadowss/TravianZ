@@ -1039,9 +1039,10 @@ class Automation {
         if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
         }
+
         $reload=false;
-        //$ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
-        //fclose($ourFileHandle);
+        $ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
+        fclose($ourFileHandle);
         $time = time();
         $q = "
             SELECT
