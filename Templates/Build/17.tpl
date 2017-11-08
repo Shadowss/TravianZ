@@ -14,16 +14,21 @@ var carry = <?php echo $market->maxcarry; ?>;
 //-->
 </script>
 <?php
+for ($a = 1; $a <= 4; $a++) {
+    if (!isset($_POST['r'.$a])) {
+        $_POST['r'.$a] = 0;
+    }
+}
 $allres = (int) $_POST['r1'] + (int) $_POST['r2'] + (int) $_POST['r3'] + (int) $_POST['r4'];
-if($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
+if(!empty($_POST['x']) && !empty($_POST['y']) && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
 	$getwref = $database->getVilWref($_POST['x'],$_POST['y']);
 	$checkexist = $database->checkVilExist($getwref);
 }
-else if($_POST['dname']!=""){
+else if(!empty($_POST['dname'])){
 	$getwref = $database->getVillageByName($_POST['dname']);
 	$checkexist = $database->checkVilExist($getwref);
 }
-if($checkexist){
+if(isset($checkexist) && $checkexist){
 $villageOwner = $database->getVillageField($getwref,'owner');
 $userAccess = $database->getUserField($villageOwner,'access',0);
 }
