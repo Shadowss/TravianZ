@@ -489,7 +489,7 @@ class Alliance {
     				// send the new founder an in-game message, notifying them of their election
     				$database->sendMessage(
     				    $newleader,
-    				    1,
+    				    2,
     				    'You are now leader of your alliance',
     				    "Hi!\n\nThis is to inform you that the former leader of your alliance - <a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$database->escape($session->username)."</a>, has decided to quit and elected you as his replacement. You now gain full access, administration and responsibilities to your alliance.\n\nGood luck!\n\nYours sincerely,\n<i>Server Robot :)</i>",
     				    0,
