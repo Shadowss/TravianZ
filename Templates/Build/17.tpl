@@ -91,7 +91,7 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST
 	</tr>
 	<tr>
 		<th><?php echo PLAYER;?>:</th>
-		<td><a href="spieler.php?uid=<?php echo $getvilowner; ?>"><?php echo $database->getUserField($getvilowner,username,0); ?></a></td>
+		<td><a href="spieler.php?uid=<?php echo $getvilowner; ?>"><?php echo $database->getUserField($getvilowner,'username',0); ?></a></td>
 	</tr>
 	<tr>
 		<th><?php echo DURATION;?>:</th>
