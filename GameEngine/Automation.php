@@ -586,6 +586,8 @@ class Automation {
         // IDs of villages that were affected by this building completion update,
         // used to calculate statistical data at the end
         $villagesAffected = [];
+        // IDs of owners for each village we process
+        $villageOwners = [];
         // tribes for owner IDs, in case we have one owner that finished building
         // in multiple villages, so we don't have to select their tribe in every
         // foreach cycle
@@ -608,9 +610,12 @@ class Automation {
         // complete each of them
         foreach($res as $indi) {
             // store village ID for later for statistical updates
+            $villageData = $database->getVillageFields($indi['wid'],'owner, maxcrop, maxstore, starv, pop');
+            $villageOwner = $villageData['owner'];
+            $villageOwners[$indi['wid']] = $villageOwner;
             $villagesAffected[] = (int) $indi['wid'];
             $level = $database->getFieldLevel($indi['wid'],$indi['field']);
-            $villageOwner = $database->getVillageField($indi['wid'],"owner");
+            $fieldsToSet = [];
 
             if (!isset($ownersToTribes[$villageOwner])) {
                 $ownersToTribes[$villageOwner] = $database->getUserField($villageOwner, "tribe", 0);
@@ -632,7 +637,7 @@ class Automation {
                 // update capacity if we updated a warehouse or a granary
                 if (in_array($indi['type'], [10, 11, 38, 39])) {
                     $fieldDbName = (in_array($indi['type'], [10, 38]) ? 'maxstore' : 'maxcrop');
-                    $max = $database->getVillageField($indi['wid'], $fieldDbName);
+                    $max = $villageData[$fieldDbName];
 
                     if($level == 1 && $max == STORAGE_BASE) {
                         $max=STORAGE_BASE;
@@ -645,7 +650,7 @@ class Automation {
                         $max = ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
                     }
 
-                    $database->setVillageField($indi['wid'], $fieldDbName, $max);
+                    $fieldsToSet[$fieldDbName] = $max;
                 }
 
                 // if we updated Embassy, update maximum members that the alliance can take
@@ -681,22 +686,24 @@ class Automation {
 
             $crop = $database->getCropProdstarv($indi['wid']);
             $unitarrays = $this->getAllUnits($indi['wid']);
-            $village = $database->getVillage($indi['wid']);
-            $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-            $starv = $database->getVillageField($indi['wid'],"starv");
-            if ($crop < $upkeep){
+            $upkeep = $villageData['pop'] + $this->getUpkeep($unitarrays, 0);
+            $starv = $villageData["starv"];
+            if ($crop < $upkeep) {
                 // add starv data
-                $database->setVillageField($indi['wid'], 'starv', $upkeep);
+                $fieldsToSet['starv'] = $upkeep;
                 if($starv==0){
-                    $database->setVillageField($indi['wid'], 'starvupdate', $time);
+                    $fieldsToSet['starvupdate'] = $time;
                 }
             }
+
+            // update the requested fields, all at once
+            $database->setVillageFields($indi['wid'], array_keys($fieldsToSet), array_values($fieldsToSet));
         }
 
-        // update statistical data andfor affected villages
+        // update statistical data for affected villages
         foreach ($villagesAffected as $affected_id) {
             $this->recountPop( $affected_id );
-            $this->procClimbers( $database->getVillageField( $affected_id, 'owner' ) );
+            $this->procClimbers( $villageOwners[$affected_id] );
         }
 
         // update data that can be done in one swoop instead of using multiple update queries

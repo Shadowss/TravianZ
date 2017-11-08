@@ -1177,6 +1177,16 @@ class MYSQLi_DB implements IDbConnection {
         }else return 0;    
     }
 
+    function getVillageFields($ref, $fields) {
+        list($ref, $field) = $this->escape_input((int) $ref, $fields);
+
+        $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
+        $result = mysqli_query($this->dblink,$q);
+        if($result) {
+            return mysqli_fetch_array($result, MYSQLI_ASSOC);
+        } else return 0;
+    }
+
 	function getOasisField($ref, $field) {
 	    list($ref, $field) = $this->escape_input((int) $ref, $field);
 
@@ -1192,6 +1202,19 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "UPDATE " . TB_PREFIX . "vdata set $field = '$value' where wref = $ref";
 		return mysqli_query($this->dblink,$q);
 	}
+
+    function setVillageFields($ref, $fields, $values) {
+        list($ref, $field, $value) = $this->escape_input((int) $ref, $fields, $values);
+
+        // build the field-value query parts
+        $fieldValues = [];
+        foreach ($fields as $id => $fieldName) {
+            $fieldValues[] = $fieldName.' = '.((Math::isInt($values[$id]) || Math::isFloat($values[$id])) ? $values[$id] : '"'.$this->escape($values[$id]).'"');
+        }
+
+        $q = "UPDATE " . TB_PREFIX . "vdata set ".implode(', ', $fieldValues)." where wref = $ref";
+        return mysqli_query($this->dblink,$q);
+    }
 
 	function setVillageLevel($ref, $field, $value) {
 	    list($ref, $field, $value) = $this->escape_input((int) $ref, $field, $value);
