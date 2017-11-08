@@ -37,7 +37,7 @@ include_once("GameEngine/config.php");
 if (isset($_GET['s']) && !ctype_digit($_GET['s'])) {
 	$_GET['s'] = "0";
 }
-if (!ctype_digit($_GET['typ'])) {
+if (isset($_GET['typ']) && !ctype_digit($_GET['typ'])) {
 	$_GET['typ'] = null;
 }
 if(!isset($_GET['typ']) && !isset($_GET['s'])) {

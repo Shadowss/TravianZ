@@ -40,7 +40,7 @@
 </tbody></table>
 
 <img id="big_unit" class="big_u1" src="img/x.gif" alt="Legionnaire" title="Legionnaire" /><div id="t_desc">The Legionnaire is the simple and all-purpose infantry of the Roman Empire. With his well-rounded training, he is good at both defence and attack. However, the Legionnaire will never reach the levels of the more specialized troops.</div><div id="prereqs"><b>Prerequisites</b><br /><a href="manual.php?typ=4&amp;gid=19">Barracks</a> Level 1</div><map id="nav" name="nav">
- <area href="manual.php?s=1" title="back" coords="0,0,45,18" shape="rect" alt="" />
+ <area href="manual.php?s=1&amp;typ=2" title="back" coords="0,0,45,18" shape="rect" alt="" />
  <area href="manual.php?s=1" title="Overview" coords="46,0,70,18" shape="rect" alt="" />
  <area href="manual.php?typ=1&amp;s=2" title="forward" coords="71,0,116,18" shape="rect" alt="" />
 </map>

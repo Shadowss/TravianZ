@@ -45,6 +45,6 @@ As the journey and the founding of the new village are very difficult, three set
  <area href="manual.php?typ=1&amp;s=29" title="back" coords="0,0,45,18" shape="rect" alt="" />
  <area href="manual.php?s=1" title="Overview" coords="46,0,70,18" shape="rect" alt="" />
 
- <area href="manual.php?s=1" title="forward" coords="71,0,116,18" shape="rect" alt="" />
+ <area href="manual.php?s=3&amp;typ=2" title="forward" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />
