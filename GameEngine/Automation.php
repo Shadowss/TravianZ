@@ -575,100 +575,109 @@ class Automation {
     }
     
     private function buildComplete() {
+        global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
+
         if(file_exists("GameEngine/Prevention/build.txt")) {
             unlink("GameEngine/Prevention/build.txt");
         }
-        global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
+
         $time = time();
-        $array = array();
-        $q = "SELECT id, wid, field, level, type, timestamp FROM ".TB_PREFIX."bdata where timestamp < $time and master = 0";
-        $array = $database->query_return($q);
-        foreach($array as $indi) {
+        // IDs of villages that were affected by this building completion update,
+        // used to calculate statistical data at the end
+        $villagesAffected = [];
+        // tribes for owner IDs, in case we have one owner that finished building
+        // in multiple villages, so we don't have to select their tribe in every
+        // foreach cycle
+        $ownersToTribes = [];
+        // holds additional conditions when updating loopcon records in the bdata table
+        $loopconUpdates = [];
+        // this will hold IDs of bdata table records to delete
+        $dbIdsToDelete = [];
+
+        // get all pending builds that should be complete by now
+        $res = $database->query_return(
+            "SELECT
+                id, wid, field, level, type, timestamp
+             FROM
+                ".TB_PREFIX."bdata
+            WHERE
+                timestamp < $time and master = 0"
+        );
+
+        // complete each of them
+        foreach($res as $indi) {
+            // store village ID for later for statistical updates
+            $villagesAffected[] = (int) $indi['wid'];
             $level = $database->getFieldLevel($indi['wid'],$indi['field']);
-            if (($level+1) == $indi['level']){
-                $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".(int) $indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
-            }else{ $indi['level']=($level+1);
-            $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".(int) $indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
+            $villageOwner = $database->getVillageField($indi['wid'],"owner");
+
+            if (!isset($ownersToTribes[$villageOwner])) {
+                $ownersToTribes[$villageOwner] = $database->getUserField($villageOwner, "tribe", 0);
             }
+
+            if (($level + 1) == $indi['level']){
+                $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
+            } else {
+                $indi['level'] = ($level + 1);
+                $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
+            }
+
             if($database->query($q)) {
-                $level = $database->getFieldLevel($indi['wid'],$indi['field']);
-                $this->recountPop($indi['wid']);
-                $this->procClimbers($database->getVillageField($indi['wid'],'owner'));
-                
-                if($indi['type'] == 10) {
-                    $max=$database->getVillageField($indi['wid'],"maxstore");
-                    if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
-                    if($level!=1){
-                        $max-=$bid10[$level-1]['attri']*STORAGE_MULTIPLIER;
-                        $max+=$bid10[$level]['attri']*STORAGE_MULTIPLIER;
-                    }else{
-                        $max=$bid10[$level]['attri']*STORAGE_MULTIPLIER;
+                // this will be the level we brought the building to now
+                $level = $indi['level'];
+
+                // TODO: magic numbers into constants (for building types below)
+
+                // update capacity if we updated a warehouse or a granary
+                if (in_array($indi['type'], [10, 11, 38, 39])) {
+                    $fieldDbName = (in_array($indi['type'], [10, 38]) ? 'maxstore' : 'maxcrop');
+                    $max = $database->getVillageField($indi['wid'], $fieldDbName);
+
+                    if($level == 1 && $max == STORAGE_BASE) {
+                        $max=STORAGE_BASE;
                     }
-                    $database->setVillageField($indi['wid'],"maxstore",$max);
-                }
-                
-                if($indi['type'] == 11) {
-                    $max=$database->getVillageField($indi['wid'],"maxcrop");
-                    if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
-                    if($level!=1){
-                        $max-=$bid11[$level-1]['attri']*STORAGE_MULTIPLIER;
-                        $max+=$bid11[$level]['attri']*STORAGE_MULTIPLIER;
-                    }else{
-                        $max=$bid11[$level]['attri']*STORAGE_MULTIPLIER;
+
+                    if ($level != 1) {
+                        $max -= ${'bid'.$indi['type']}[$level-1]['attri'] * STORAGE_MULTIPLIER;
+                        $max += ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
+                    } else {
+                        $max = ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
                     }
-                    $database->setVillageField($indi['wid'],"maxcrop",$max);
+
+                    $database->setVillageField($indi['wid'], $fieldDbName, $max);
                 }
-                
+
+                // if we updated Embassy, update maximum members that the alliance can take
                 if($indi['type'] == 18){
-                    Automation::updateMax($database->getVillageField($indi['wid'],"owner"));
+                    Automation::updateMax($villageOwner);
                 }
-                
-                if($indi['type'] == 38) {
-                    $max=$database->getVillageField($indi['wid'],"maxstore");
-                    if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
-                    if($level!=1){
-                        $max-=$bid38[$level-1]['attri']*STORAGE_MULTIPLIER;
-                        $max+=$bid38[$level]['attri']*STORAGE_MULTIPLIER;
-                    }else{
-                        $max=$bid38[$level]['attri']*STORAGE_MULTIPLIER;
-                    }
-                    $database->setVillageField($indi['wid'],"maxstore",$max);
-                }
-                
-                if($indi['type'] == 39) {
-                    $max=$database->getVillageField($indi['wid'],"maxcrop");
-                    if($level=='1' && $max==STORAGE_BASE){ $max=STORAGE_BASE; }
-                    if($level!=1){
-                        $max-=$bid39[$level-1]['attri']*STORAGE_MULTIPLIER;
-                        $max+=$bid39[$level]['attri']*STORAGE_MULTIPLIER;
-                    }else{
-                        $max=$bid39[$level]['attri']*STORAGE_MULTIPLIER;
-                    }
-                    $database->setVillageField($indi['wid'],"maxcrop",$max);
-                }
-                
+
                 // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
-                if($indi['type'] == 40 and ($indi['level'] % 5 == 0 or $indi['level'] > 95) and $indi['level'] != 100){
+                if ($indi['type'] == 40 && ($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
                     $this->startNatarAttack($indi['level'], $indi['wid'], $indi['timestamp']);
                 }
-                if($indi['type'] == 40 && $indi['level'] == 100){ //now can't be more than one winners if ww to level 100 is build by 2 users or more on same time
+
+                //now can't be more than one winner if ww to level 100 is build by 2 users or more on same time
+                if ($indi['type'] == 40 && $indi['level'] == 100) {
                     mysqli_query($GLOBALS['link'],"TRUNCATE ".TB_PREFIX."bdata");
                 }
-                if($database->getUserField($database->getVillageField($indi['wid'],"owner"),"tribe",0) != 1){
-                    $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".(int) $indi['wid'];
-                    $database->query($q4);
-                }else{
-                    if($indi['field'] > 18){
-                        $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".(int) $indi['wid']." and field > 18";
-                        $database->query($q4);
-                    }else{
-                        $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and master = 0 and wid = ".(int) $indi['wid']." and field < 19";
-                        $database->query($q4);
+
+                // TODO: find out what exactly these conditions are for
+                // no special military conditioning for Teutons and Gauls
+                if ($ownersToTribes[$villageOwner] != 1) {
+                    $loopconUpdates[$indi['wid']] = '';
+                } else {
+                    // special condition for Roman military buildings
+                    if ($indi['field'] > 18) {
+                        $loopconUpdates[$indi['wid']] = ' AND field > 18';
+                    } else {
+                        $loopconUpdates[$indi['wid']] = ' AND field < 19';
                     }
                 }
-                $q = "DELETE FROM ".TB_PREFIX."bdata where id = ".(int) $indi['id'];
-                $database->query($q);
+
+                $dbIdsToDelete[] = (int) $indi['id'];
             }
+
             $crop = $database->getCropProdstarv($indi['wid']);
             $unitarrays = $this->getAllUnits($indi['wid']);
             $village = $database->getVillage($indi['wid']);
@@ -682,6 +691,30 @@ class Automation {
                 }
             }
         }
+
+        // update statistical data andfor affected villages
+        foreach ($villagesAffected as $affected_id) {
+            $this->recountPop( $affected_id );
+            $this->procClimbers( $database->getVillageField( $affected_id, 'owner' ) );
+        }
+
+        // update data that can be done in one swoop instead of using multiple update queries
+        // no special checks for Romans
+        foreach ($loopconUpdates as $villageId => $updateCondition) {
+            $database->query(
+                "UPDATE
+                    ".TB_PREFIX."bdata
+                 SET
+                    loopcon = 0
+                 WHERE
+                    loopcon = 1 AND
+                    master = 0 AND
+                    wid = ".$villageId.$updateCondition);
+        }
+
+        // delete all processed entries
+        $database->query("DELETE FROM ".TB_PREFIX."bdata WHERE id IN(".implode(',', $dbIdsToDelete).")");
+
         if(file_exists("GameEngine/Prevention/build.txt")) {
             unlink("GameEngine/Prevention/build.txt");
         }
