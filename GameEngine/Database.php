@@ -4668,12 +4668,24 @@ class MYSQLi_DB implements IDbConnection {
 			}
 		}
 		// TODO: trapped settlers/chiefs calculation required
-		$settlerslots = ($maxslots * 3) - $settlers;
+		$settlerslots = ($maxslots * 3)  - $chiefs - $settlers;
+
+		// don't allow training of settlers if there is at least 1 chief in the village
+        if ($chiefs > 0) {
+            $settlerslots = 0;
+        }
+
 		$chiefslots = $maxslots - $chiefs - floor(($settlers + 2) / 3);
 
 		if(!$technology->getTech(($session->tribe - 1) * 10 + 9)) {
 			$chiefslots = 0;
 		}
+
+        // don't allow training of chieftains if there is at least 1 settler in the village
+        if ($settlers > 0) {
+            $chiefslots = 0;
+        }
+
 		$slots = array("chiefs" => $chiefslots, "settlers" => $settlerslots);
 		return $slots;
 	}
