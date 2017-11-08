@@ -248,14 +248,14 @@ class Automation {
         fclose($ourFileHandle);
         global $database;
         $array = array();
-        $q = "SELECT wref, loyalty, lastupdate2 FROM ".TB_PREFIX."vdata WHERE loyalty<>100";
+        $q = "SELECT wref, loyalty, lastupdate2 FROM ".TB_PREFIX."vdata WHERE loyalty < 100";
         $array = $database->query_return($q);
         if(!empty($array)) {
             foreach($array as $loyalty) {
-                if($this->getTypeLevel(25,$loyalty['wref']) >= 1){
-                    $value = $this->getTypeLevel(25,$loyalty['wref']);
-                }elseif($this->getTypeLevel(26,$loyalty['wref']) >= 1){
-                    $value = $this->getTypeLevel(26,$loyalty['wref']);
+                if (($t25_level = $this->getTypeLevel(25, $loyalty['wref'])) >= 1) {
+                    $value = $t25_level;
+                }elseif(($t26_level = $this->getTypeLevel(26,$loyalty['wref'])) >= 1){
+                    $value = $t26_level;
                 } else {
                     $value = 0;
                 }
@@ -265,14 +265,14 @@ class Automation {
             }
         }
         $array = array();
-        $q = "SELECT conqured, loyalty, lastupdated, wref FROM ".TB_PREFIX."odata WHERE loyalty<>100";
+        $q = "SELECT conqured, loyalty, lastupdated, wref FROM ".TB_PREFIX."odata WHERE loyalty < 100";
         $array = $database->query_return($q);
         if(!empty($array)) {
             foreach($array as $loyalty) {
-                if($this->getTypeLevel(25,$loyalty['conqured']) >= 1){
-                    $value = $this->getTypeLevel(25,$loyalty['conqured']);
-                }elseif($this->getTypeLevel(26,$loyalty['conqured']) >= 1){
-                    $value = $this->getTypeLevel(26,$loyalty['conqured']);
+                if(($t25_level = $this->getTypeLevel(25,$loyalty['conqured'])) >= 1){
+                    $value = $t25_level;
+                }elseif(($t26_level = $this->getTypeLevel(26,$loyalty['conqured'])) >= 1){
+                    $value = $t26_level;
                 } else {
                     $value = 0;
                 }
@@ -366,7 +366,7 @@ class Automation {
                     $database->query($q);
                     $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$village;
                     $database->query($q);
-                    $q = "DELETE FROM ".TB_PREFIX."odata where wref = ".$village;
+                    $q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, loyalty = 100, owner = 2, name = 'Unoccupied Oasis' where wref = ".$village;
                     $database->query($q);
                     $q = "DELETE FROM ".TB_PREFIX."research where vref = ".$village;
                     $database->query($q);
@@ -489,121 +489,56 @@ class Automation {
     private function pruneOResource() {
         global $database;
         if(!ALLOW_BURST) {
-            $q = "SELECT maxstore, maxcrop, wref FROM ".TB_PREFIX."odata WHERE maxstore < 800 OR maxcrop < 800";
-            $array = $database->query_return($q);
-            foreach($array as $getoasis) {
-                if($getoasis['maxstore'] < 800){
-                    $maxstore = 800;
-                }else{
-                    $maxstore = $getoasis['maxstore'];
-                }
-                if($getoasis['maxcrop'] < 800){
-                    $maxcrop = 800;
-                }else{
-                    $maxcrop = $getoasis['maxcrop'];
-                }
-                $q = "UPDATE " . TB_PREFIX . "odata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".$getoasis['wref']."";
-                $database->query($q);
-            }
-            $q = "SELECT wood, clay, iron, crop, wref FROM ".TB_PREFIX."odata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
-            $array = $database->query_return($q);
-            foreach($array as $getoasis) {
-                if($getoasis['wood'] < 0){
-                    $wood = 0;
-                }else{
-                    $wood = $getoasis['wood'];
-                }
-                if($getoasis['clay'] < 0){
-                    $clay = 0;
-                }else{
-                    $clay = $getoasis['clay'];
-                }
-                if($getoasis['iron'] < 0){
-                    $iron = 0;
-                }else{
-                    $iron = $getoasis['iron'];
-                }
-                if($getoasis['crop'] < 0){
-                    $crop = 0;
-                }else{
-                    $crop = $getoasis['crop'];
-                }
-                $q = "UPDATE " . TB_PREFIX . "odata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".$getoasis['wref']."";
-                $database->query($q);
-            }
+            $database->query("UPDATE
+                      ".TB_PREFIX."odata
+                  SET
+                      wood = IF(wood < 0, 0, wood),
+                      clay = IF(clay < 0, 0, clay),
+                      iron = IF(iron < 0, 0, iron),
+                      crop = IF(crop < 0, 0, crop),
+                      maxstore = IF(maxstore < 800, 800, maxstore),
+                      maxcrop = IF(maxcrop < 800, 800, maxcrop)
+                  WHERE
+                      maxstore < 800 OR
+                      maxcrop < 800 OR
+                      wood < 0 OR
+                      clay < 0 OR
+                      iron < 0 OR
+                      crop < 0");
         }
     }
     private function pruneResource() {
         global $database;
         if(!ALLOW_BURST) {
-            $q = "SELECT maxstore, maxcrop, wref FROM ".TB_PREFIX."vdata WHERE maxstore < 800 OR maxcrop < 800";
-            $array = $database->query_return($q);
-            foreach($array as $getvillage) {
-                if($getvillage['maxstore'] < 800){
-                    $maxstore = 800;
-                }else{
-                    $maxstore = $getvillage['maxstore'];
-                }
-                if($getvillage['maxcrop'] < 800){
-                    $maxcrop = 800;
-                }else{
-                    $maxcrop = $getvillage['maxcrop'];
-                }
-                $q = "UPDATE " . TB_PREFIX . "vdata set maxstore = $maxstore, maxcrop = $maxcrop where wref = ".(int) $getvillage['wref']."";
-                $database->query($q);
-            }
-            $q = "SELECT maxstore, maxcrop, wood, clay, iron, crop, wref FROM ".TB_PREFIX."vdata WHERE wood > maxstore OR clay > maxstore OR iron > maxstore OR crop > maxcrop";
-            $array = $database->query_return($q);
-            foreach($array as $getvillage) {
-                if($getvillage['wood'] > $getvillage['maxstore']){
-                    $wood = $getvillage['maxstore'];
-                }else{
-                    $wood = $getvillage['wood'];
-                }
-                if($getvillage['clay'] > $getvillage['maxstore']){
-                    $clay = $getvillage['maxstore'];
-                }else{
-                    $clay = $getvillage['clay'];
-                }
-                if($getvillage['iron'] > $getvillage['maxstore']){
-                    $iron = $getvillage['maxstore'];
-                }else{
-                    $iron = $getvillage['iron'];
-                }
-                if($getvillage['crop'] > $getvillage['maxcrop']){
-                    $crop = $getvillage['maxcrop'];
-                }else{
-                    $crop = $getvillage['crop'];
-                }
-                $q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".(int) $getvillage['wref']."";
-                $database->query($q);
-            }
-            $q = "SELECT wood, clay, iron, crop, wref FROM ".TB_PREFIX."vdata WHERE wood < 0 OR clay < 0 OR iron < 0 OR crop < 0";
-            $array = $database->query_return($q);
-            foreach($array as $getvillage) {
-                if($getvillage['wood'] < 0){
-                    $wood = 0;
-                }else{
-                    $wood = $getvillage['wood'];
-                }
-                if($getvillage['clay'] < 0){
-                    $clay = 0;
-                }else{
-                    $clay = $getvillage['clay'];
-                }
-                if($getvillage['iron'] < 0){
-                    $iron = 0;
-                }else{
-                    $iron = $getvillage['iron'];
-                }
-                if($getvillage['crop'] < 0){
-                    $crop = 0;
-                }else{
-                    $crop = $getvillage['crop'];
-                }
-                $q = "UPDATE " . TB_PREFIX . "vdata set wood = $wood, clay = $clay, iron = $iron, crop = $crop where wref = ".(int) $getvillage['wref']."";
-                $database->query($q);
-            }
+            $database->query("UPDATE
+                      ".TB_PREFIX."vdata
+                  SET
+                      wood = IF(wood < 0, 0, wood),
+                      clay = IF(clay < 0, 0, clay),
+                      iron = IF(iron < 0, 0, iron),
+                      crop = IF(crop < 0, 0, crop),
+                      maxstore = IF(maxstore < 800, 800, maxstore),
+                      maxcrop = IF(maxcrop < 800, 800, maxcrop)
+                  WHERE
+                      maxstore < 800 OR
+                      maxcrop < 800 OR
+                      wood < 0 OR
+                      clay < 0 OR
+                      iron < 0 OR
+                      crop < 0");
+
+            $database->query("UPDATE
+                      ".TB_PREFIX."vdata
+                  SET
+                      wood = IF(wood > maxstore, maxstore, wood),
+                      clay = IF(clay > maxstore, maxstore, clay),
+                      iron = IF(iron > maxstore, maxstore, iron),
+                      crop = IF(crop > maxcrop, maxcrop, crop)
+                  WHERE
+                      wood > maxstore OR
+                      clay > maxstore OR
+                      iron > maxstore OR
+                      crop > maxcrop");
         }
     }
     
@@ -4445,7 +4380,7 @@ class Automation {
             $dataStore[] = [$ress, $crop, $row['vref']];
         }
         
-        mysqli_begin_transaction($GLOBALS['link']) or die(mysqli_error($database->dblink));;
+        mysqli_begin_transaction($GLOBALS['link']) or die(mysqli_error($database->dblink));
         $sql = 'UPDATE ' .TB_PREFIX. 'vdata SET maxstore = ?, maxcrop = ? WHERE `wref` = ?';
         $stmt = mysqli_prepare($GLOBALS['link'], $sql);
         foreach ($dataStore as $data) {
@@ -5025,7 +4960,6 @@ class Automation {
         global $ranking,$database;
         
         //we may give away ribbons
-        
         $giveMedal = false;
         $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
         $result = mysqli_query($GLOBALS['link'],$q);
