@@ -932,8 +932,31 @@ class Automation {
         $time = microtime(true);
         $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 0 AND endtime < $time";
         $dataarray = $database->query_return($q);
+
+        // holds village owners of the given village IDs, as we can have
+        // multiple market routes from the same village going to other villages
+        $villageOwners = [];
+        // cache of alliances for the village owners
+        $alliances = [];
+        // cache for tribes for the village owners
+        $tribes = [];
+
         foreach($dataarray as $data) {
-            
+            // cache village owners
+            if (!isset($villageOwners[$data['from']])) {
+                $villageOwners[$data['from']] = $database->getVillageField($data['from'],"owner");
+                $userData = $database->getUserFields($villageOwners[$data['from']],"alliance, tribe",0);
+                $alliances[$data['from']] = $userData["alliance"];
+                $tribes[$data['from']] = $userData["tribe"];
+            }
+
+            if (!isset($villageOwners[$data['to']])) {
+                $villageOwners[$data['to']] = $database->getVillageField($data['to'],"owner");
+                $userData = $database->getUserFields($villageOwners[$data['to']],"alliance, tribe",0);
+                $alliances[$data['to']] = $userData["alliance"];
+                $tribes[$data['to']] = $userData["tribe"];
+            }
+
             if($data['wood'] >= $data['clay'] && $data['wood'] >= $data['iron'] && $data['wood'] >= $data['crop']){ $sort_type = "10"; }
             elseif($data['clay'] >= $data['wood'] && $data['clay'] >= $data['iron'] && $data['clay'] >= $data['crop']){ $sort_type = "11"; }
             elseif($data['iron'] >= $data['wood'] && $data['iron'] >= $data['clay'] && $data['iron'] >= $data['crop']){ $sort_type = "12"; }
@@ -941,9 +964,9 @@ class Automation {
             
             $to = $database->getMInfo($data['to']);
             $from = $database->getMInfo($data['from']);
-            
-            $ownally = $database->getUserField($database->getVillageField($data['from'],"owner"),"alliance",0);
-            $targetally = $database->getUserField($database->getVillageField($data['to'],"owner"),"alliance",0);
+
+            $ownally = $alliances[$data['to']];
+            $targetally = $alliances[$data['to']];
             
             $database->addNotice($to['owner'],$to['wref'],$targetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             if($from['owner'] != $to['owner']) {
@@ -952,7 +975,7 @@ class Automation {
             $database->modifyResource($data['to'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],1);
             $tocoor = $database->getCoor($data['from']);
             $fromcoor = $database->getCoor($data['to']);
-            $targettribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
+            $targettribe = $tribes[$data['from']];
             $endtime = $this->procDistanceTime($tocoor,$fromcoor,$targettribe,0) + $data['endtime'];
             $database->addMovement(2,$data['to'],$data['from'],$data['merchant'],time(),$endtime,$data['send'],$data['wood'],$data['clay'],$data['iron'],$data['crop']);
             $database->setMovementProc($data['moveid']);
@@ -962,7 +985,7 @@ class Automation {
         foreach($dataarray1 as $data1) {
             $database->setMovementProc($data1['moveid']);
             if($data1['send'] > 1){
-                $targettribe1 = $database->getUserField($database->getVillageField($data1['to'],"owner"),"tribe",0);
+                $targettribe1 = $tribes[$data1['to']];
                 $send = $data1['send']-1;
                 $this->sendResource2($data1['wood'],$data1['clay'],$data1['iron'],$data1['crop'],$data1['to'],$data1['from'],$targettribe1,$send);
             }

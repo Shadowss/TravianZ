@@ -478,6 +478,27 @@ class MYSQLi_DB implements IDbConnection {
         }else return 0;    
     }
 
+    function getUserFields($ref, $fields, $mode) {
+        list($ref, $fields, $mode) = $this->escape_input($ref, $fields, $mode);
+
+        // update for Multihunter's username and ID
+        if (($mode && $ref == '') || (!$mode && $ref == 0)) {
+            $ref = 'Multihunter';
+            $mode = 1;
+        }
+
+        if(!$mode) {
+            $q = "SELECT $fields FROM " . TB_PREFIX . "users where id = " . (int) $ref;
+        } else {
+            $q = "SELECT $fields FROM " . TB_PREFIX . "users where username = '$ref'";
+        }
+
+        $result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
+        if($result) {
+            return mysqli_fetch_array($result, MYSQLI_ASSOC);
+        } else return 0;
+    }
+
 	function getInvitedUser($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
