@@ -3535,7 +3535,7 @@ class Automation {
         $time = time();
         $q = "
             SELECT
-                `to`, `from`, moveid,
+                `to`, `from`, moveid, starttime, endtime,
                 t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
             FROM
                 ".TB_PREFIX."movement,
@@ -3549,31 +3549,43 @@ class Automation {
                 AND
                 endtime < $time";
         $dataarray = $database->query_return($q);
+
+        // because of a yet-to-be-discovered but, movements sometimes get inserted into the database twice,
+        // so we need to de-duplicate them here by checking for the same wave properties sent out at the
+        // same time (i.e. with exactly the same timestamp)
+        $wavesData = [];
         
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
-                
-                $tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
-                
-                if($tribe == 1){ $u = ""; } elseif($tribe == 2){ $u = "1"; } elseif($tribe == 3){ $u = "2"; } elseif($tribe == 4){ $u = "3"; } else{ $u = "4"; }
-                $database->modifyUnit(
-                    $data['to'],
-                    array($u."1",$u."2",$u."3",$u."4",$u."5",$u."6",$u."7",$u."8",$u."9",$tribe."0","hero"),
-                    array($data['t1'],$data['t2'],$data['t3'],$data['t4'],$data['t5'],$data['t6'],$data['t7'],$data['t8'],$data['t9'],$data['t10'],$data['t11']),
-                    array(1,1,1,1,1,1,1,1,1,1,1)
-                    );
-                $database->setMovementProc($data['moveid']);
-                $crop = $database->getCropProdstarv($data['to']);
-                $unitarrays = $this->getAllUnits($data['to']);
-                $village = $database->getVillage($data['to']);
-                $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-                $starv = $database->getVillageField($data['to'],"starv");
-                if ($crop < $upkeep){
-                    // add starv data
-                    $database->setVillageField($data['to'], 'starv', $upkeep);
-                    if($starv==0){
-                        $database->setVillageField($data['to'], 'starvupdate', $time);
+                if (!isset($wavesData[$data['from'].$data['to'].$data['starttime'].$data['endtime']])) {
+                    $tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
+                    
+                    if($tribe == 1){ $u = ""; } elseif($tribe == 2){ $u = "1"; } elseif($tribe == 3){ $u = "2"; } elseif($tribe == 4){ $u = "3"; } else{ $u = "4"; }
+                    $database->modifyUnit(
+                        $data['to'],
+                        array($u."1",$u."2",$u."3",$u."4",$u."5",$u."6",$u."7",$u."8",$u."9",$tribe."0","hero"),
+                        array($data['t1'],$data['t2'],$data['t3'],$data['t4'],$data['t5'],$data['t6'],$data['t7'],$data['t8'],$data['t9'],$data['t10'],$data['t11']),
+                        array(1,1,1,1,1,1,1,1,1,1,1)
+                        );
+                    $database->setMovementProc($data['moveid']);
+                    $crop = $database->getCropProdstarv($data['to']);
+                    $unitarrays = $this->getAllUnits($data['to']);
+                    $village = $database->getVillage($data['to']);
+                    $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
+                    $starv = $database->getVillageField($data['to'],"starv");
+                    if ($crop < $upkeep){
+                        // add starv data
+                        $database->setVillageField($data['to'], 'starv', $upkeep);
+                        if($starv==0){
+                            $database->setVillageField($data['to'], 'starvupdate', $time);
+                        }
                     }
+
+                    // make sure we don't process duplicate movements until the big bad bug which inserts them into DB is fixed
+                    $wavesData[$data['from'].$data['to'].$data['starttime'].$data['endtime']] = true;
+                } else {
+                    // duplicate record, just mark it as processed
+                    $database->setMovementProc($data['moveid']);
                 }
             }
         }
