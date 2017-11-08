@@ -32,7 +32,7 @@ else { $messagelol = "i4"; }
 if(SPEED == '1'){ 
 	$skipp_time="43200"; 
 } else if(SPEED == '2'){ 
-	$skipp_time="21600"; 
+	$skipp_time="21600";
 } else if(SPEED == '3'){ 
 	$skipp_time="11988"; 
 } else if(SPEED <= '5'){
@@ -571,7 +571,7 @@ $getvID = $database->getVillageID($session->uid);
 $nvillage = $database->getFieldDistance($getvID);
 $ncoor = $database->getCoor($nvillage);
 $nvillagename = $database->getVillageField($nvillage,"name");
-if ($x!=$ncoor['x'] or $y!=$ncoor['y']){?>
+if (!isset($x) || !isset($y) || $x!=$ncoor['x'] || $y!=$ncoor['y']){?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q11; ?></h1><br><i>&rdquo;<?php echo Q11_DESC; ?> <b><?php echo $nvillagename; ?></b>. <?php echo Q11_DESC1; ?>&rdquo;</i><div class=\"rew\"><p class=\"ta_aw\"><?php echo Q11_ORDER; ?> <b><?php echo $nvillagename; ?></b> <?php echo Q11_ORDER1; ?></div><div id=\"map_coords\"><span>X </span><input class=\"text\" value=\"\" maxlength=\"4\" id=\"qst_val_x\" name=\"xp\"><span> Y </span><input class=\"text\" value=\"\" maxlength=\"4\" id=\"qst_val_y\" name=\"xy\"> <input type=\"button\" value=\"<?php echo Q11_BUTN; ?>\" onclick=\"qst_next2('1','coor',document.getElementById('qst_val_x').value,document.getElementById('qst_val_y').value)\"></div></div><span id=\"qst_accpt\"><\/span><\/div><\/div>\n\t\t<div id=\"qstbg\" class=\"neighbour\"><\/div>\n\t\t","number":-11,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":0}
 <?php $_SESSION['qstnew']='0'; }else{ $_SESSION['qstnew']='1'; ?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q11; ?><\/h1><br \/><i>&rdquo;<?php echo Q11_RESP; ?> <b> <?php echo $nvillagename;?> <\/b> <?php echo Q11_RESP1; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><input type=\"hidden\" id=\"qst_val\" value=\"2\" \/><?php echo Q_REWARD; ?><\/p><img src=\"img\/x.gif\" class=\"r1\" alt=\"Lumber\" title=\"Lumber\" \/>60&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r2\" alt=\"Clay\" title=\"Clay\" \/>30&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r3\" alt=\"Iron\" title=\"Iron\" \/>40&nbsp;&nbsp;<img src=\"img\/x.gif\" class=\"r4\" alt=\"Crop\" title=\"Crop\" \/>90&nbsp;&nbsp;<\/div><br \/><span id=\"qst_accpt\"><a href=\"javascript: qst_next('','12');\"><?php echo Q_CONTINUE; ?><\/a><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"neighbour\"><\/div>\n\t\t","number":11,"reward":{"wood":60,"clay":30,"iron":40,"crop":90},"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":99}
