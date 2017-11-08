@@ -3562,9 +3562,11 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function setMovementProc($moveid) {
-	    list($moveid) = $this->escape_input((int) $moveid);
+        if (!Math::isInt($moveid)) {
+            list($moveid) = $this->escape_input($moveid);
+        }
 
-		$q = "UPDATE " . TB_PREFIX . "movement set proc = 1 where moveid = $moveid";
+		$q = "UPDATE " . TB_PREFIX . "movement set proc = 1 where moveid IN($moveid)";
 		return mysqli_query($this->dblink,$q);
 	}
 
