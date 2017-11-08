@@ -1288,11 +1288,11 @@ class Automation {
                      // End village Battle part
                      --------------------------------*/
                 }else{
-                    $Defender['id'] = $database->getUserField($database->getOasisField($data['to'],"owner"),"id",0);
+                    $Defender['id'] = $cachedUserData[$data['to']]["id"];
                     $DefenderID = $Defender['id'];
                     if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
-                    $targettribe =  $database->getUserField($database->getOasisField($data['to'],"owner"),"tribe",0);;
-                    $targetally = $database->getUserField($database->getOasisField($data['to'],"owner"),"alliance",0);
+                    $targettribe =  $cachedUserData[$data['to']]["tribe"];
+                    $targetally = $cachedUserData[$data['to']]["alliance"];
                     $to = $database->getOMInfo($data['to']);
                     $toF = $database->getOasisV($data['to']);
                     $conqureby=$toF['conqured'];
@@ -1560,12 +1560,24 @@ class Automation {
                     $end = ($targettribe*10);
                     
                     if($targettribe == 1){ $u = ""; $rom='1'; } else if($targettribe == 2){ $u = "1"; $ger='1'; } else if($targettribe == 3){$u = "2"; $gal='1'; }else if($targettribe == 4){ $u = "3"; $nat='1'; } else { $u = "4"; $natar='1'; } //FIX
-                    for($i=$start;$i<=$end;$i++) { if($i==$end){ $u=$targettribe; }
-                    if($unitlist){
-                        $owndead[$i]=round($battlepart[2]*$unitlist[0]['u'.$i]);
-                        $database->modifyUnit($data['to'],array($i),array($owndead[$i]),array(0));
+
+                    $unitModifications_units = [];
+                    $unitModifications_amounts = [];
+                    $unitModifications_modes = [];
+                    for ($i = $start; $i <= $end; $i++) {
+                        if($i == $end) {
+                            $u = $targettribe;
+                        }
+
+                        if($unitlist){
+                            $owndead[$i]=round($battlepart[2]*$unitlist[0]['u'.$i]);
+                            $unitModifications_units[] = $i;
+                            $unitModifications_amounts[] = $owndead[$i];
+                            $unitModifications_modes[] = 0;
+                        }
                     }
-                    }
+                    // modify units in DB
+                    $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
                     $owndead['hero']='0';
                     if($unitlist){
                         $owndead['hero'] = (isset($battlepart['deadherodef']) ? $battlepart['deadherodef'] : '');
@@ -1576,7 +1588,7 @@ class Automation {
                         foreach($database->getEnforceVillage($data['to'],0) as $enforce) {
                             $life=''; $notlife=''; $wrong='0';
                             if($enforce['from'] != 0){
-                                $tribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
+                                $tribe = $cachedUserData[$data['from']]["tribe"];
                             }else{
                                 $tribe = 4;
                             }
@@ -1584,9 +1596,20 @@ class Automation {
                             $end = ($tribe*10);
                             unset($dead);
                             if($tribe == 1){ $rom='1'; } else if($tribe == 2){ $ger='1'; }else if($tribe == 3){ $gal='1'; }else if($tribe == 4){ $nat='1'; } else { $natar='1'; }
-                            for($i=$start;$i<=$end;$i++){ //($i=$start;$i<=($start+9);$i++) {
+
+                            $enforceModificationsById = [];
+                            for ($i = $start; $i <= $end; $i++){ //($i=$start;$i<=($start+9);$i++) {
                                 if($enforce['u'.$i]>'0'){
-                                    $database->modifyEnforce($enforce['id'],$i,round($battlepart[2]*$enforce['u'.$i]),0);
+                                    if (!isset($enforceModificationsById[$enforce['id']])) {
+                                        $enforceModificationsById[$enforce['id']] = [
+                                            'units' => [],
+                                            'amounts' => [],
+                                            'modes' => []
+                                        ];
+                                    }
+                                    $enforceModificationsById[$enforce['id']]['units'][] = $i;
+                                    $enforceModificationsById[$enforce['id']]['amounts'][] = round($battlepart[2]*$enforce['u'.$i]);
+                                    $enforceModificationsById[$enforce['id']]['modes'][] = 0;
                                     $dead[$i]=round($battlepart[2]*$enforce['u'.$i]);
                                     $checkpoint=round($battlepart[2]*$enforce['u'.$i]);
                                     $alldead[$i]+=$dead[$i];
@@ -1597,6 +1620,12 @@ class Automation {
                                     $dead[$i]='0';
                                 }
                             }
+
+                            // modify enforce in DB
+                            foreach ($enforceModificationsById as $enforceId => $enforceArray) {
+                                $database->modifyEnforce( $enforceId, $enforceArray['units'], $enforceArray['amounts'], $enforceArray['modes']);
+                            }
+
                             if($enforce['hero']>'0'){
                                 $database->modifyEnforce($enforce['id'],"hero",$battlepart['deadheroref'][$enforce['id']],0);
                                 $dead['hero']=$battlepart['deadheroref'][$enforce['id']];
@@ -1616,14 +1645,17 @@ class Automation {
                             $totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
                             $totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
                             //NEED TO SEND A RAPPORTAGE!!!
-                            $data2 = ''.$database->getVillageField($enforce['from'],"owner").','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.','.$enforce['from'].'';
+                            $enforceOwner = [
+                                'from' => $database->getVillageField($enforce['from'],"owner")
+                            ];
+                            $data2 = ''.$enforceOwner['from'].','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.','.$enforce['from'].'';
                             if(!$scout) {
                                 if($totalnotlife == 0){
-                                    $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                                    $database->addNotice($enforceOwner['from'],$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                                 }else if($totallife > $totalnotlife){
-                                    $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                                    $database->addNotice($enforceOwner['from'],$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                                 }else{
-                                    $database->addNotice($database->getVillageField($enforce['from'],"owner"),$from['wref'],$ownally,17,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                                    $database->addNotice($enforceOwner['from'],$from['wref'],$ownally,17,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                                 }
                                 //delete reinf sting when its killed all.
                                 if($wrong=='0'){ $database->deleteReinf($enforce['id']); }

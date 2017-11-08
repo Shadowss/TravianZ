@@ -4147,11 +4147,20 @@ class MYSQLi_DB implements IDbConnection {
 	    list($id, $unit, $amt, $mode) = $this->escape_input((int) $id, $unit, (int) $amt, $mode);
 
 		if($unit != 'hero') { $unit = 'u' . $unit; }
-		if(!$mode) {
-			$q = "UPDATE " . TB_PREFIX . "enforcement set $unit = $unit - $amt where id = $id";
-		} else {
-			$q = "UPDATE " . TB_PREFIX . "enforcement set $unit = $unit + $amt where id = $id";
-		}
+
+		// prepare pairing array, even if we're not passing arrays, so we can use the same logic
+        $pairs = [];
+		if (!is_array($unit)) {
+		    $unit = [$unit];
+		    $amt = [$amt];
+		    $mode = [$mode];
+        }
+
+        foreach ($unit as $index => $unitType) {
+		    $pairs[] = $unitType . ' = ' . $unitType . (!$mode[$index] ? ' - ' : ' + ') . $amt[$index];
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "enforcement SET ".implode(', ', $pairs)." WHERE id = $id";
 		mysqli_query($this->dblink,$q);
 	}
 
