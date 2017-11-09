@@ -26,7 +26,7 @@ foreach($varray as $vil){
 	$hasCel = $database->getVillageField($vid,'celebration');
 	if ($hasCel <> 0) { $timer++; }
 
-	if($vdata['capital'] == 1){$class = 'hl';}else{$class = '';}                  
+	if(isset($vdata) && isset($vdata['capital']) && $vdata['capital'] == 1){$class = 'hl';}else{$class = '';}
 
 	echo '<tr class="'.$class.'"><td class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vil['name'].'</a></td>';
 	echo '<td class="cps">'.$cp.'</td>';
@@ -36,7 +36,7 @@ foreach($varray as $vil){
 	$tribe = $session->tribe;
 	$siedler = $unit['u'.$tribe*10];
 	$siedlerp = '<img src=img/un/u/'.($tribe*10).'.gif />';
-	$senator = $unit['u'.($tribe-1)*10+9];
+	$senator = (isset($unit['u'.((($tribe-1)*10)+9)]) ? $unit['u'.((($tribe-1)*10)+9)] : 0);
 	$senatorp = '<img src=img/un/u/'.(($tribe-1)*10+9).'.gif />';
 	$i=1;
 	while($i <=$siedler) {
@@ -51,11 +51,11 @@ foreach($varray as $vil){
 		
 	echo '</span></td>';
 	echo '<td class="slo lc">'.$exp.'/'.$maxslots.'</td>';
-	$gesexp = $gesexp + $exp;
-	$gesdorf = $gesdorf + $maxslots;
-	$gescp = $gescp + $cp;
-	$gessied = $gessied + $siedler;
-	$gessen = $gessen + $senator;
+	$gesexp = (isset($gesexp) ? $gesexp : 0) + $exp;
+	$gesdorf = (isset($gesdorf) ? $gesdorf : 0) + $maxslots;
+	$gescp = (isset($gescp) ? $gescp : 0) + $cp;
+	$gessied = (isset($gessied) ? $gessied : 0) + $siedler;
+	$gessen = (isset($gessen) ? $gessen : 0) + $senator;
 	echo '</tr>';    
 }
 ?>
