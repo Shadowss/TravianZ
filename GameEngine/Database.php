@@ -2278,6 +2278,280 @@ class MYSQLi_DB implements IDbConnection {
     			return mysqli_query($this->dblink,$q); }else{return false;}
    	}
 
+    function getFieldLevelIfInVillage($vid, $fieldType) {
+        $vid = (int) $vid;
+
+        // $fieldType can be both, integer and string, to be used in the IN statement,
+        // so we need to handle it correctly here
+        if (!Math::isInt($fieldType)) {
+            $fieldType = $this->escape($fieldType);
+        }
+
+        // please don't scream...
+        // with the current table structure, there really IS NOT another way
+        // (except for stored procedures, which we can't rely will be allowed on the server)
+        $result = mysqli_query($this->dblink,"
+                SELECT
+                    IF(
+                        f1t IN ($fieldType),
+                        f1,
+                        IF(
+                            f2t IN ($fieldType),
+                            f2,
+                            IF(
+                                f3t IN ($fieldType),
+                                f3,
+                                IF(
+                                    f4t IN ($fieldType),
+                                    f4,
+                                    IF(
+                                        f5t IN ($fieldType),
+                                        f5,
+                                        IF(
+                                            f6t IN ($fieldType),
+                                            f6,
+                                            IF(
+                                                f7t IN ($fieldType),
+                                                f7,
+                                                IF(
+                                                    f8t IN ($fieldType),
+                                                    f8,
+                                                    IF(
+                                                        f9t IN ($fieldType),
+                                                        f9,
+                                                        IF(
+                                                            f10t IN ($fieldType),
+                                                            f10,
+                                                            IF(
+                                                                f11t IN ($fieldType),
+                                                                f11,
+                                                                IF(
+                                                                    f12t IN ($fieldType),
+                                                                    f12,
+                                                                    IF(
+                                                                        f13t IN ($fieldType),
+                                                                        f13,
+                                                                        IF(
+                                                                            f14t IN ($fieldType),
+                                                                            f14,
+                                                                            IF(
+                                                                                f15t IN ($fieldType),
+                                                                                f15,
+                                                                                IF(
+                                                                                    f16t IN ($fieldType),
+                                                                                    f16,
+                                                                                    IF(
+                                                                                        f17t IN ($fieldType),
+                                                                                        f17,
+                                                                                        IF(
+                                                                                            f18t IN ($fieldType),
+                                                                                            f18,
+                                                                                            IF(
+                                                                                                f19t IN ($fieldType),
+                                                                                                f19,
+                                                                                                IF(
+                                                                                                    f20t IN ($fieldType),
+                                                                                                    f20,
+                                                                                                    IF(
+                                                                                                        f20t IN ($fieldType),
+                                                                                                        f20,
+                                                                                                        IF(
+                                                                                                            f21t IN ($fieldType),
+                                                                                                            f21,
+                                                                                                            IF(
+                                                                                                                f22t IN ($fieldType),
+                                                                                                                f22,
+                                                                                                                IF(
+                                                                                                                    f23t IN ($fieldType),
+                                                                                                                    f23,
+                                                                                                                    IF(
+                                                                                                                        f24t IN ($fieldType),
+                                                                                                                        f24,
+                                                                                                                        IF(
+                                                                                                                            f25t IN ($fieldType),
+                                                                                                                            f25,
+                                                                                                                            IF(
+                                                                                                                                f26t IN ($fieldType),
+                                                                                                                                f26,
+                                                                                                                                IF(
+                                                                                                                                    f27t IN ($fieldType),
+                                                                                                                                    f27,
+                                                                                                                                    IF(
+                                                                                                                                        f28t IN ($fieldType),
+                                                                                                                                        f28,
+                                                                                                                                        IF(
+                                                                                                                                            f29t IN ($fieldType),
+                                                                                                                                            f29,
+                                                                                                                                            IF(
+                                                                                                                                                f30t IN ($fieldType),
+                                                                                                                                                f30,
+                                                                                                                                                IF(
+                                                                                                                                                    f31t IN ($fieldType),
+                                                                                                                                                    f31,
+                                                                                                                                                    IF(
+                                                                                                                                                        f32t IN ($fieldType),
+                                                                                                                                                        f32,
+                                                                                                                                                        IF(
+                                                                                                                                                            f33t IN ($fieldType),
+                                                                                                                                                            f33,
+                                                                                                                                                            IF(
+                                                                                                                                                                f34t IN ($fieldType),
+                                                                                                                                                                f34,
+                                                                                                                                                                IF(
+                                                                                                                                                                    f35t IN ($fieldType),
+                                                                                                                                                                    f35,
+                                                                                                                                                                    IF(
+                                                                                                                                                                        f36t IN ($fieldType),
+                                                                                                                                                                        f36,
+                                                                                                                                                                        IF(
+                                                                                                                                                                            f37t IN ($fieldType),
+                                                                                                                                                                            f37,
+                                                                                                                                                                            IF(
+                                                                                                                                                                                f38t IN ($fieldType),
+                                                                                                                                                                                f38,
+                                                                                                                                                                                IF(
+                                                                                                                                                                                    f39t IN ($fieldType),
+                                                                                                                                                                                    f39,
+                                                                                                                                                                                    IF(
+                                                                                                                                                                                        f40t IN ($fieldType),
+                                                                                                                                                                                        f40,
+                                                                                                                                                                                        0
+                                                                                                                                                                                    )
+                                                                                                                                                                                )
+                                                                                                                                                                            )
+                                                                                                                                                                        )
+                                                                                                                                                                    )
+                                                                                                                                                                )
+                                                                                                                                                            )
+                                                                                                                                                        )
+                                                                                                                                                    )
+                                                                                                                                                )
+                                                                                                                                            )
+                                                                                                                                        )
+                                                                                                                                    )
+                                                                                                                                )
+                                                                                                                            )
+                                                                                                                        )
+                                                                                                                    )
+                                                                                                                )
+                                                                                                            )
+                                                                                                        )
+                                                                                                    )
+                                                                                                )
+                                                                                            )
+                                                                                        )
+                                                                                    )
+                                                                                )
+                                                                            )
+                                                                        )
+                                                                    )
+                                                                )
+                                                            )
+                                                        )
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    ) as level
+                FROM
+                    `s1_fdata`
+                WHERE
+                    vref = $vid
+                    AND
+                    (f1t IN ($fieldType)
+                    OR
+                    f2t IN ($fieldType)
+                    OR
+                    f3t IN ($fieldType)
+                    OR
+                    f4t IN ($fieldType)
+                    OR
+                    f5t IN ($fieldType)
+                    OR
+                    f6t IN ($fieldType)
+                    OR
+                    f7t IN ($fieldType)
+                    OR
+                    f8t IN ($fieldType)
+                    OR
+                    f9t IN ($fieldType)
+                    OR
+                    f10t IN ($fieldType)
+                    OR
+                    f11t IN ($fieldType)
+                    OR
+                    f12t IN ($fieldType)
+                    OR
+                    f13t IN ($fieldType)
+                    OR
+                    f14t IN ($fieldType)
+                    OR
+                    f15t IN ($fieldType)
+                    OR
+                    f16t IN ($fieldType)
+                    OR
+                    f17t IN ($fieldType)
+                    OR
+                    f18t IN ($fieldType)
+                    OR
+                    f19t IN ($fieldType)
+                    OR
+                    f20t IN ($fieldType)
+                    OR
+                    f20t IN ($fieldType)
+                    OR
+                    f21t IN ($fieldType)
+                    OR
+                    f22t IN ($fieldType)
+                    OR
+                    f23t IN ($fieldType)
+                    OR
+                    f24t IN ($fieldType)
+                    OR
+                    f25t IN ($fieldType)
+                    OR
+                    f26t IN ($fieldType)
+                    OR
+                    f27t IN ($fieldType)
+                    OR
+                    f28t IN ($fieldType)
+                    OR
+                    f29t IN ($fieldType)
+                    OR
+                    f30t IN ($fieldType)
+                    OR
+                    f30t IN ($fieldType)
+                    OR
+                    f31t IN ($fieldType)
+                    OR
+                    f32t IN ($fieldType)
+                    OR
+                    f33t IN ($fieldType)
+                    OR
+                    f34t IN ($fieldType)
+                    OR
+                    f35t IN ($fieldType)
+                    OR
+                    f36t IN ($fieldType)
+                    OR
+                    f37t IN ($fieldType)
+                    OR
+                    f38t IN ($fieldType)
+                    OR
+                    f39t IN ($fieldType)
+                    OR
+                    f40t IN ($fieldType)
+                    OR
+                    f99 IN ($fieldType))
+        ");
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return $row['level'];
+    }
+   	
 	function getFieldLevel($vid, $field) {
 	    list($vid, $field) = $this->escape_input((int) $vid, $field);
 
@@ -4144,24 +4418,23 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function modifyEnforce($id, $unit, $amt, $mode) {
-	    list($id, $unit, $amt, $mode) = $this->escape_input((int) $id, $unit, (int) $amt, $mode);
-
-		if($unit != 'hero') { $unit = 'u' . $unit; }
+	    $id = (int) $id;
 
 		// prepare pairing array, even if we're not passing arrays, so we can use the same logic
         $pairs = [];
 		if (!is_array($unit)) {
 		    $unit = [$unit];
-		    $amt = [$amt];
-		    $mode = [$mode];
+		    $amt = [(int) $amt];
+		    $mode = [(int) $mode];
         }
 
         foreach ($unit as $index => $unitType) {
-		    $pairs[] = $unitType . ' = ' . $unitType . (!$mode[$index] ? ' - ' : ' + ') . $amt[$index];
+            $unitType = ($unitType != 'hero' ? 'u' . $this->escape($unitType) : $unitType);
+		    $pairs[] = $unitType . ' = ' . $unitType . (!(int) $mode[$index] ? ' - ' : ' + ') . (int) $amt[$index];
         }
 
 		$q = "UPDATE " . TB_PREFIX . "enforcement SET ".implode(', ', $pairs)." WHERE id = $id";
-		mysqli_query($this->dblink,$q);
+		mysqli_query($this->dblink,$q) OR DIE (mysqli_error($this->dblink));
 	}
 
 	function getEnforceArray($id, $mode) {
@@ -4713,7 +4986,8 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
-	
+
+	// TODO: wtf, 2 same functionalities with 2 differently named functions??
 	function getOwnArtefactInfo2($vref) {
 	    list($vref) = $this->escape_input((int) $vref);
 
@@ -4729,6 +5003,28 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
+
+    function getOwnArtefactCount($uid, $type, $size, $mode) {
+        // $type and $size can both be either a single integer or a list of integer to be used in an IN statement
+        if (!Math::isInt($type)) {
+            $type = $this->escape($type);
+        }
+
+        if (!Math::isInt($size)) {
+            $size = $this->escape($size);
+        }
+
+        $uid = (int) $uid;
+        $mode = (int) $mode;
+
+        if (!$mode) {
+            $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND active = 1 AND type IN($type) AND size IN($size)";
+        }else{
+            $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts WHERE vref = $id AND active = 1 AND type IN($type) AND size IN($size)";
+        }
+        $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+        return $result['Total'];
+    }
 
 	function getOwnArtefactInfoByType($vref, $type) {
         list($vref, $type) = $this->escape_input($vref, $type);
