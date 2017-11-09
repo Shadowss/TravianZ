@@ -26,7 +26,7 @@
 			<tr>
 				<td>User ID</td>
 				<td>
-					<input type="text" class="fm" name="uid" value="<?php echo $_GET['uid'];?>">
+					<input type="text" class="fm" name="uid" value="<?php echo (isset($_GET['uid']) ? $_GET['uid'] : '');?>">
 				</td>
 			</tr>
 			<tr>
