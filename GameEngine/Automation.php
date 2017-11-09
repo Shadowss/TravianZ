@@ -5039,7 +5039,7 @@ class Automation {
     private function checkBan() {
         global $database;
         $time = time();
-        $q = "SELECT id, uid FROM ".TB_PREFIX."banlist WHERE active = 1 and end < $time";
+        $q = "SELECT id, uid FROM ".TB_PREFIX."banlist WHERE active = 1 AND end < $time AND end > 0";
         $array = $database->query_return($q);
         foreach($array as $banlist) {
             mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."banlist SET active = 0 WHERE id = ".(int) $banlist['id']."");
