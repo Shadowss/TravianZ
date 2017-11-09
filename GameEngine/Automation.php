@@ -986,6 +986,12 @@ class Automation {
         foreach($dataarray1 as $data1) {
             $completedIDs[] = $data1['moveid'];
             if($data1['send'] > 1){
+                if (!isset($villageOwners[$data1['to']])) {
+                    $villageOwners[$data1['to']] = $database->getVillageField($data1['to'],"owner");
+                    $userData1 = $database->getUserFields($villageOwners[$data1['to']],"alliance, tribe",0);
+                    $alliances[$data1['to']] = $userData1["alliance"];
+                    $tribes[$data1['to']] = $userData1["tribe"];
+                }
                 $targettribe1 = $tribes[$data1['to']];
                 $send = $data1['send']-1;
                 $this->sendResource2($data1['wood'],$data1['clay'],$data1['iron'],$data1['crop'],$data1['to'],$data1['from'],$targettribe1,$send);
@@ -1078,6 +1084,8 @@ class Automation {
                 $AttackerWref = $data['from'];
                 $DefenderWref = $data['to'];
                 $NatarCapital=false;
+                $varray = $database->getProfileVillages($to['owner']);
+                $varray1 = $database->getProfileVillages($from['owner']);
 
                 // cache owners and other cacheable data
                 if (!isset($villageOwners[$data['from']])) {
@@ -1419,7 +1427,7 @@ class Automation {
                         for($i=1;$i<=11;$i++){
                             ${'traped'.$i}=$data['t'.$i];
                         }
-                    }elseif(!empty($scout) || $def_spy >0){
+                    }elseif(!empty($scout) || (isset($def_spy) && $def_spy >0)){
                         $traps = $Defender['u99']-$Defender['u99o'];
                         if ($traps<1) $traps=0;
                         for($i=1;$i<=11;$i++){
@@ -1431,7 +1439,7 @@ class Automation {
                             $traps -= $traps1;
                         }
                     }
-                    if(!empty($scout) || $def_spy >0 || $NatarCapital){
+                    if(!empty($scout) || (isset($def_spy) && $def_spy >0) || (isset($NatarCapital) && $NatarCapital)){
                         for ($i = 1; $i <= 11; $i++) {
                             if (!isset(${'trapped'.$i})) {
                                 ${'trapped'.$i} = 0;
@@ -1718,9 +1726,8 @@ class Automation {
                     
                     // Set units returning from attack
                     
-                    $t_units = [];
                     $p_units = [];
-                    for ($i=1;$i<=11;$i++) {
+                    for ($i=1; $i <= 11; $i++) {
                         if (!isset(${'dead'.$i})) {
                             ${'dead'.$i} = 0;
                         }
@@ -1729,12 +1736,10 @@ class Automation {
                             ${'traped'.$i} = 0;
                         }
 
-                        $t_units[] = "t".$i."=t".$i." - ".${'dead'.$i};
-                        $p_units[] = "t".$i."=t".$i." - ".${'traped'.$i};
+                        $p_units[] = "t".$i." = t".$i." - ".(${'dead'.$i} + ${'traped'.$i});
                     }
-                    
-                    $database->modifyAttack3($data['ref'],implode(',', $t_units));
-                    $database->modifyAttack3($data['ref'],implode(',', $p_units));
+
+                    $database->modifyAttack3($data['ref'],implode(', ', $p_units));
                     
                     $unitsdead_att = ''.$dead1.','.$dead2.','.$dead3.','.$dead4.','.$dead5.','.$dead6.','.$dead7.','.$dead8.','.$dead9.','.$dead10.'';
                     $unitstraped_att = ''.$traped1.','.$traped2.','.$traped3.','.$traped4.','.$traped5.','.$traped6.','.$traped7.','.$traped8.','.$traped9.','.$traped10.','.$traped11.'';
@@ -1803,14 +1808,29 @@ class Automation {
                         }
                     }
                     
-                    $database->modifyPoints($toF['owner'],'dpall',$totalpoint_def);
-                    $database->modifyPoints($from['owner'],'apall',$totalpoint_att);
-                    $database->modifyPoints($toF['owner'],'dp',$totalpoint_def);
-                    $database->modifyPoints($from['owner'],'ap',$totalpoint_att);
-                    $database->modifyPointsAlly($targetally,'Adp',$totalpoint_def);
-                    $database->modifyPointsAlly($ownally,'Aap',$totalpoint_att);
-                    $database->modifyPointsAlly($targetally,'dp',$totalpoint_def);
-                    $database->modifyPointsAlly($ownally,'ap',$totalpoint_att);
+                    $database->modifyPoints(
+                        $toF['owner'],
+                        ['dpall', 'dp'],
+                        [$totalpoint_def, $totalpoint_def]
+                    );
+
+                    $database->modifyPoints(
+                        $from['owner'],
+                        ['apall', 'ap'],
+                        [$totalpoint_att, $totalpoint_att]
+                    );
+
+                    $database->modifyPointsAlly(
+                        $targetally,
+                        ['Adp', 'dp'],
+                        [$totalpoint_def, $totalpoint_def]
+                    );
+
+                    $database->modifyPointsAlly(
+                        $ownally,
+                        ['Aap', 'ap'],
+                        [$totalpoint_att, $totalpoint_att]
+                    );
                     
                     if ($isoasis == 0){
                         // get toatal cranny value:
@@ -1854,30 +1874,34 @@ class Automation {
                         // work out available resources.
                         $this->updateRes($data['to'],$to['owner']);
                         $this->pruneResource();
-                        
-                        $totclay = $database->getVillageField($data['to'],'clay');
-                        $totiron = $database->getVillageField($data['to'],'iron');
-                        $totwood = $database->getVillageField($data['to'],'wood');
-                        $totcrop = $database->getVillageField($data['to'],'crop');
+
+                        $villageData = $database->getVillageFields($data['to'],'clay, iron, wood, crop');
+                        $totclay = $villageData['clay'];
+                        $totiron = $villageData['iron'];
+                        $totwood = $villageData['wood'];
+                        $totcrop = $villageData['crop'];
                     }else{
                         $cranny_eff = 0;
                         
                         // work out available resources.
                         $this->updateORes($data['to']);
                         $this->pruneOResource();
-                        
+
                         if ($conqureby >0) { //10% from owner proc village owner - fix by ronix
-                            $totclay = intval($database->getVillageField($conqureby,'clay')/10);
-                            $totiron = intval($database->getVillageField($conqureby,'iron')/10);
-                            $totwood = intval($database->getVillageField($conqureby,'wood')/10);
-                            $totcrop = intval($database->getVillageField($conqureby,'crop')/10);
+                            $villageData = $database->getVillageFields($conqureby,'clay, iron, wood, crop');
+                            $totclay = intval($villageData['clay']/10);
+                            $totiron = intval($villageData['iron']/10);
+                            $totwood = intval($villageData['wood']/10);
+                            $totcrop = intval($villageData['crop']/10);
                         }else{
-                            $totclay = $database->getOasisField($data['to'],'clay');
-                            $totiron = $database->getOasisField($data['to'],'iron');
-                            $totwood = $database->getOasisField($data['to'],'wood');
-                            $totcrop = $database->getOasisField($data['to'],'crop');
+                            $oasisData = $database->getOasisFields($data['to'],'clay, iron, wood, crop');
+                            $totclay = $oasisData['clay'];
+                            $totiron = $oasisData['iron'];
+                            $totwood = $oasisData['wood'];
+                            $totcrop = $oasisData['crop'];
                         }
                     }
+
                     $avclay = floor($totclay - $cranny_eff);
                     $aviron = floor($totiron - $cranny_eff);
                     $avwood = floor($totwood - $cranny_eff);
@@ -1986,7 +2010,6 @@ class Automation {
                     //catapults look :D
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
                     //check to see if can destroy village
-                    $varray = $database->getProfileVillages($to['owner']);
                     if(count($varray)!='1' AND $to['capital']!='1'){
                         $can_destroy=1;
                     }else{
@@ -2029,9 +2052,9 @@ class Automation {
                         if (($data['t8']-$traped8)>0)
                         {
                             $pop=$this->recountPop($data['to']);
-                            if ($isoasis == 0) {
-                                $pop=$this->recountPop($data['to']);
-                            } else $pop=10; //oasis cannot be destroy bt cata/ram
+                            if ($isoasis != 0) {
+                                $pop=10; //oasis cannot be destroy bt cata/ram
+                            }
                             if($pop<=0) {
                                 if($can_destroy==1) {
                                     $info_cat = "".$catp_pic.", Village already destroyed.";
@@ -2115,7 +2138,9 @@ class Automation {
                                             $database->query($q);
                                         }
                                         if ($tbgid==11 || $tbgid==39) {
-                                            $tsql=mysqli_query($GLOBALS['link'],"select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".(int) $data['to']);
+                                            if (!isset($tsql)) {
+                                                $tsql=mysqli_query($GLOBALS['link'],"select `maxstore`,`maxcrop` from ".TB_PREFIX."vdata where wref=".(int) $data['to']);
+                                            }
                                             $t_sql=mysqli_fetch_array($tsql);
                                             $tmaxcrop=$t_sql['maxcrop']-$buildarray[$tblevel]['attri'];
                                             if ($tmaxcrop<800) $tmaxcrop=800;
@@ -2139,7 +2164,6 @@ class Automation {
                                         }
                                         if ($isoasis == 0) {
                                             $pop=$this->recountPop($data['to']);
-                                            $capital = $database->getVillage($data['to']);
                                             if($pop=='0' && $can_destroy==1){
                                                 $village_destroyed = 1;
                                             }
@@ -2569,11 +2593,9 @@ class Automation {
                             else{
                                 $villexp = 3;
                             }
-                            $varray = $database->getProfileVillages($to['owner']);
-                            $varray1 = count($database->getProfileVillages($from['owner']));
                             $mode = CP;
                             $cp_mode = $GLOBALS['cp'.$mode];
-                            $need_cps = $cp_mode[$varray1+1];
+                            $need_cps = $cp_mode[count($varray1)+1];
                             $user_cps = $database->getUserField($from['owner'],"cp",0);
                             //see if last village, or village head
                             if($user_cps >= $need_cps){

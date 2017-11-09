@@ -1235,6 +1235,13 @@ class MYSQLi_DB implements IDbConnection {
 		return $dbarray[$field];
 	}
 
+    function getOasisFields($ref, $fields) {
+        list($ref, $fields) = $this->escape_input((int) $ref, $fields);
+
+        $q = "SELECT $fields FROM " . TB_PREFIX . "odata where wref = $ref";
+        return mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+    }
+
 	function setVillageField($ref, $field, $value) {
 	    list($ref, $field, $value) = $this->escape_input((int) $ref, $field, $value);
 
@@ -1861,16 +1868,38 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function modifyPoints($aid, $points, $amt) {
-	    list($aid, $points, $amt) = $this->escape_input((int) $aid, $points, (int) $amt);
+	    $aid = (int) $aid;
 
-		$q = "UPDATE " . TB_PREFIX . "users set $points = $points + $amt where id = $aid";
+	    if (!is_array($points)) {
+	        $points = [$points];
+	        $amt    = [$amt];
+        }
+
+        $updates = [];
+        foreach ($points as $index => $value) {
+            $value = $this->escape($value);
+	        $updates[] = $value.' = ' . $value . ' + ' . (int) $amt[$index];
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $updates)." WHERE id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function modifyPointsAlly($aid, $points, $amt) {
-	    list($aid, $points, $amt) = $this->escape_input((int) $aid, $points, (int) $amt);
+        $aid = (int) $aid;
 
-		$q = "UPDATE " . TB_PREFIX . "alidata set $points = $points + $amt where id = $aid";
+        if (!is_array($points)) {
+            $points = [$points];
+            $amt    = [$amt];
+        }
+
+        $updates = [];
+        foreach ($points as $index => $value) {
+            $value = $this->escape($value);
+            $updates[] = $value.' = ' . $value . ' + ' . (int) $amt[$index];
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "alidata SET ".implode(', ', $updates)." WHERE id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
