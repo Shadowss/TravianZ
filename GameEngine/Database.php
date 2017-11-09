@@ -4434,7 +4434,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
 		$q = "UPDATE " . TB_PREFIX . "enforcement SET ".implode(', ', $pairs)." WHERE id = $id";
-		mysqli_query($this->dblink,$q) OR DIE (mysqli_error($this->dblink));
+		mysqli_query($this->dblink,$q);
 	}
 
 	function getEnforceArray($id, $mode) {
