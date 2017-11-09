@@ -5398,13 +5398,13 @@ class MYSQLi_DB implements IDbConnection {
 	function getAttackCasualties($time) {
         list($time) = $this->escape_input($time);
 
-		$q = "SELECT casualties FROM " . TB_PREFIX . "general where shown = 1";
+		$q = "SELECT time, casualties FROM " . TB_PREFIX . "general where shown = 1";
 		$result = $this->query_return($q);
 		$casualties = 0;
 		foreach($result as $general){
-		if(date("j. M",$time) == date("j. M",$general['time'])){
-		$casualties += $general['casualties'];
-		}
+		    if(date("j. M",$time) == date("j. M",$general['time'])){
+		        $casualties += $general['casualties'];
+		    }
 		}
 		return $casualties;
 	}
