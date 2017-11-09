@@ -786,39 +786,41 @@ class Building {
                         if ($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
                             $resource = $this->resourceRequired($jobs['field'],$jobs['type']);
                             // master builder involved
-                            if ($jobs['master'] != 0 && $this->meetRequirement($jobs['field'])) {
-                                // don't allow master builder to build anything
-                                // if we only have 2 gold, since that would take us to -1 gold
-                                if ($session->gold > 2) {
-                                    $villwood = $database->getVillageField($jobs['wid'],'wood');
-                                    $villclay = $database->getVillageField($jobs['wid'],'clay');
-                                    $villiron = $database->getVillageField($jobs['wid'],'iron');
-                                    $villcrop = $database->getVillageField($jobs['wid'],'crop');
-                                    $type = $jobs['type'];
-                                    $buildarray = $GLOBALS["bid".$type];
-                                    $buildwood = $buildarray[$level]['wood'];
-                                    $buildclay = $buildarray[$level]['clay'];
-                                    $buildiron = $buildarray[$level]['iron'];
-                                    $buildcrop = $buildarray[$level]['crop'];
-                                    if ($buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop) {
-                                        $jobFinishSuccess = true;
-                                        $countMasterGold = true;
-                                        $enought_res = 1;
-                                        // we need to subtract resources for this, if another 2 jobs are active,
-                                        // as we'd never subtract those otherwise
-                                        if ($buildcount > 2) {
-                                            $database->setVillageField($jobs['wid'],'wood',($villwood - $buildwood));
-                                            $database->setVillageField($jobs['wid'],'clay',($villclay - $buildclay));
-                                            $database->setVillageField($jobs['wid'],'iron',($villiron - $buildiron));
-                                            $database->setVillageField($jobs['wid'],'crop',($villcrop - $buildcrop));
+                            if ($jobs['master'] != 0) {
+                            	if ($this->meetRequirement($jobs['field'])) {
+                                    // don't allow master builder to build anything
+                                    // if we only have 2 gold, since that would take us to -1 gold
+                                    if ( $session->gold > 2 ) {
+                                        $villwood   = $database->getVillageField( $jobs['wid'], 'wood' );
+                                        $villclay   = $database->getVillageField( $jobs['wid'], 'clay' );
+                                        $villiron   = $database->getVillageField( $jobs['wid'], 'iron' );
+                                        $villcrop   = $database->getVillageField( $jobs['wid'], 'crop' );
+                                        $type       = $jobs['type'];
+                                        $buildarray = $GLOBALS[ "bid" . $type ];
+                                        $buildwood  = $buildarray[ $level ]['wood'];
+                                        $buildclay  = $buildarray[ $level ]['clay'];
+                                        $buildiron  = $buildarray[ $level ]['iron'];
+                                        $buildcrop  = $buildarray[ $level ]['crop'];
+                                        if ( $buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop ) {
+                                            $jobFinishSuccess = true;
+                                            $countMasterGold  = true;
+                                            $enought_res      = 1;
+                                            // we need to subtract resources for this, if another 2 jobs are active,
+                                            // as we'd never subtract those otherwise
+                                            if ( $buildcount > 2 ) {
+                                                $database->setVillageField( $jobs['wid'], 'wood', ( $villwood - $buildwood ) );
+                                                $database->setVillageField( $jobs['wid'], 'clay', ( $villclay - $buildclay ) );
+                                                $database->setVillageField( $jobs['wid'], 'iron', ( $villiron - $buildiron ) );
+                                                $database->setVillageField( $jobs['wid'], 'crop', ( $villcrop - $buildcrop ) );
+                                            }
                                         }
+                                    } else {
+                                        // if we only have 2 gold, we need to cancel this job, as there will never
+                                        // be enough gold now in our account to finish this up
+                                        $exclude_master = true;
+                                        $q              = "DELETE FROM " . TB_PREFIX . "bdata WHERE id = " . (int) $jobs['id'];
+                                        $database->query( $q );
                                     }
-                                } else {
-                                    // if we only have 2 gold, we need to cancel this job, as there will never
-                                    // be enough gold now in our account to finish this up
-                                    $exclude_master = true;
-                                    $q = "DELETE FROM ".TB_PREFIX."bdata WHERE id = ".(int) $jobs['id'];
-                                    $database->query($q);
                                 }
                             } else {
                                 // non-master builder build, we should count +2 gold for it
