@@ -221,7 +221,7 @@
       echo "</tr>";
       }
 	  
-	mysqli_close($con);
+	//mysqli_close($con);
 ?>
          </tbody>
 </table>
