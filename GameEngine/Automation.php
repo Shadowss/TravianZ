@@ -1080,8 +1080,6 @@ class Automation {
                 $AttackerWref = $data['from'];
                 $DefenderWref = $data['to'];
                 $NatarCapital=false;
-                $varray = $database->getProfileVillages($to['owner']);
-                $varray1 = $database->getProfileVillages($from['owner']);
 
                 // cache owners and other cacheable data
                 if (!isset($villageOwners[$data['from']])) {
@@ -1398,6 +1396,10 @@ class Automation {
                     $tblevel = '0';
                     $stonemason = "0";
                 }
+
+                $varray = $database->getProfileVillages($to['owner']);
+                $varray1 = $database->getProfileVillages($from['owner']);
+
                 //fix by ronix
                 for ($i=1;$i<=50;$i++) {
                     if (!isset($enforDefender['u'.$i])) {
@@ -1627,6 +1629,9 @@ class Automation {
                                 $enforceModificationsById[$enforce['id']]['modes'][] = 0;
                                 $dead[$i] = (isset($battlepart[2]) ? round($battlepart[2]*$enforce['u'.$i]) : 0);
                                 $checkpoint = (isset($battlepart[2]) ? round($battlepart[2]*$enforce['u'.$i]) : 0);
+                                if (!isset($alldead[$i])) {
+                                    $alldead[$i] = 0;
+                                }
                                 $alldead[$i]+=$dead[$i];
                                 if (!isset($enforce['u'.$i])) {
                                     $enforce['u'.$i] = 0;
@@ -1657,10 +1662,10 @@ class Automation {
                         $notlife1 = $dead[$start]+$dead[$start+1]+$dead[$start+2]+$dead[$start+3]+$dead[$start+4]+$dead[$start+5]+$dead[$start+6]+$dead[$start+7]+$dead[$start+8]+$dead[$start+9];
                         $life= ''.$enforce['u'.$start.''].','.$enforce['u'.($start+1).''].','.$enforce['u'.($start+2).''].','.$enforce['u'.($start+3).''].','.$enforce['u'.($start+4).''].','.$enforce['u'.($start+5).''].','.$enforce['u'.($start+6).''].','.$enforce['u'.($start+7).''].','.$enforce['u'.($start+8).''].','.$enforce['u'.($start+9).''].'';
                         $life1 = $enforce['u'.$start.'']+$enforce['u'.($start+1).'']+$enforce['u'.($start+2).'']+$enforce['u'.($start+3).'']+$enforce['u'.($start+4).'']+$enforce['u'.($start+5).'']+$enforce['u'.($start+6).'']+$enforce['u'.($start+7).'']+$enforce['u'.($start+8).'']+$enforce['u'.($start+9).''];
-                        $lifehero = $enforce['hero'];
-                        $notlifehero = $dead['hero'];
-                        $totallife = $enforce['hero']+$life1;
-                        $totalnotlife = $dead['hero']+$notlife1;
+                        $lifehero = (isset($enforce['hero']) ? $enforce['hero'] : 0);
+                        $notlifehero = (isset($dead['hero']) ? $dead['hero'] : 0);
+                        $totallife = (isset($enforce['hero']) ? $enforce['hero'] : 0)+$life1;
+                        $totalnotlife = (isset($dead['hero']) ? $dead['hero'] : 0)+$notlife1;
                         $totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
                         $totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
                         //NEED TO SEND A RAPPORTAGE!!!
@@ -1668,7 +1673,7 @@ class Automation {
                             'from' => $database->getVillageField($enforce['from'],"owner")
                         ];
                         $data2 = ''.$enforceOwner['from'].','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.','.$enforce['from'].'';
-                        if(!$scout) {
+                        if(empty($scout)) {
                             if($totalnotlife == 0){
                                 $database->addNotice($enforceOwner['from'],$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                             }else if($totallife > $totalnotlife){

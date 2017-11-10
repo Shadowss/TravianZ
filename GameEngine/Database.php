@@ -2977,7 +2977,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
     function addNotice($uid, $toWref, $ally, $type, $topic, $data, $time = 0) {
-    list($uid, $toWref, $ally, $type, $topic, $data, $time) = $this->escape_input($uid, $toWref, $ally, $type, $topic, $data, $time);
+    list($uid, $toWref, $ally, $type, $topic, $data, $time) = $this->escape_input((int) $uid, (int) $toWref, (int) $ally, (int) $type, $topic, $data, (int) $time);
 
     	if($time == 0) {
     	$time = time();

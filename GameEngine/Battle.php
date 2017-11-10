@@ -812,6 +812,9 @@ class Battle {
 			for($y=1;$y<=50;$y++) {
 				global ${'u'.$y};
 				if ($defenders['u'.$y]>0) {
+					if (!isset($def_ab[$y])) {
+                        $def_ab[$y] = 0;
+					}
 					if ($def_ab[$y]>0) {
 						$dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y];
 						$cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y];
