@@ -14,3 +14,4 @@
   "UPDATE s1_hero set dead = 1 where uid = 99"
 - this shouldn't be:
   "UPDATE s1_bdata SET timestamp = 1508863345 WHERE id = ''"
+- when refactored version is complete, make a bot competition and create server only for bots to fight each other to see who can program the better bot :)
