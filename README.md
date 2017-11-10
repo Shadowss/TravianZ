@@ -222,3 +222,6 @@ TPLinux Changes:
 13. Fix fullscreen map in rtl layout
 14. Fix divesion by Zero bug in general statics
 --
+
+
+[![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
