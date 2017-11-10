@@ -243,8 +243,8 @@
 					)allitag
 					FROM " . TB_PREFIX . "users
 					WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
-					AND " . TB_PREFIX . "users.tribe <= 5
-                    AND " . TB_PREFIX . "users.id > 5
+					AND (" . TB_PREFIX . "users.tribe <= 5 OR " . TB_PREFIX . "users.tribe = 5)
+                    AND (" . TB_PREFIX . "users.id > 5 OR " . TB_PREFIX . "users.id = 3)
                     ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 				} else {
 					$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.oldrank oldrank, " . TB_PREFIX . "users.alliance alliance, (
