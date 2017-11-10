@@ -2,7 +2,7 @@
 $bid = $village->resarray['f'.$id.'t'];
 $bindicate = $building->canBuild($id,$bid);
 $wwlevel = $village->resarray['f99'];
-if($wwlevel > 50){
+if($wwlevel >= 50){
 $needed_plan = 1;
 }else{
 $needed_plan = 0;
