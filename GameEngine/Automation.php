@@ -982,9 +982,8 @@ class Automation {
         }
         $q1 = "SELECT send, moveid, `to`, wood, clay, iron, crop, `from` FROM ".TB_PREFIX."movement WHERE proc = 0 and sort_type = 2 and endtime < $time";
         $dataarray1 = $database->query_return($q1);
-        $completedIDs = [];
         foreach($dataarray1 as $data1) {
-            $completedIDs[] = $data1['moveid'];
+            $database->setMovementProc($data1['moveid']);
             if($data1['send'] > 1){
                 if (!isset($villageOwners[$data1['to']])) {
                     $villageOwners[$data1['to']] = $database->getVillageField($data1['to'],"owner");
@@ -997,9 +996,6 @@ class Automation {
                 $this->sendResource2($data1['wood'],$data1['clay'],$data1['iron'],$data1['crop'],$data1['to'],$data1['from'],$targettribe1,$send);
             }
         }
-
-        // updated processed records
-        $database->setMovementProc(implode(', ', $completedIDs));
 
         if(file_exists("GameEngine/Prevention/market.txt")) {
             unlink("GameEngine/Prevention/market.txt");
