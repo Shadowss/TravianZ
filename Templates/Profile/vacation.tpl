@@ -22,14 +22,46 @@ include("menu.tpl"); ?>
 <input type="hidden" name="ft" value="p4">
 <input type="hidden" name="uid" value="<?php echo $session->uid; ?>" />
 
-    <table cellpadding="1" cellspacing="1" id="del_acc" class="account"><thead>
+<table cellpadding="1" cellspacing="1" id="del_acc" class="account"><thead>
 <tr>
     <th colspan="2">Vacation Mode</th>
+
 </tr>
 </thead><tbody>
 <tr>
 	<td class="note" colspan="2">If you plan on being away for an extended period of time and do not wish to set a sitter, you can set your account to Holiday Mode. During this time your account will stop produceing resource , CP , research , trops , etc , and stop receiving attacks , reinforcements, raid , essentially freezing your account. Remember, this just freezes your Travian, not time. If you are a member of Gold Club it will run out during this time and if you have automatic renewal selected, the automatic renewal feature will be cancelled while in Holiday Mode.Please Note you must set min of 2 days vaction mode and NO MORE THEN 14 days.</td>
-</tr><tr>
+		</tr><tr>
+		
+
+<div>
+<h4 class="round">General description</h4>
+	Use vacation mode to protect your villages during you are away.<br/>
+	During the vacation will be inactive next actions:<br/>
+<ul>
+<li>Send or receive troops</li>
+<li>Start new construction order</li>
+<li>Use market</li>
+<li>Train new troops</li>
+<li>Join to an alliance</li>
+<li>Delete account</li>
+</ul></div>
+
+<h4 class="round">Conditions</h4>
+        <ul>
+           <li>No troops in movement</li>
+		   <li>No troops on way to other villages</li>
+		   <li>No troops send to reinforcements other villages</li>
+		   <li>No player have reinforcements on your villages</li>
+		   <li>Do not have Wonder World</li>
+		   <li>Do not have any artefacts</li>
+		   <li>You are no longer in player protections</li>
+		   <li>Do not have any troops in your traps</li>
+		   <li>Your account is not in deletion process.</li>        
+		   </ul>
+    </div>
+	</div>
+</div>
+
 
 <th>Want to activate Vacation Mode?</th>
         <td class="del_selection">
