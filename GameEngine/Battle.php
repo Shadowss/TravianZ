@@ -238,7 +238,7 @@ class Battle {
 	}
 
 		//1 raid 0 normal
-		function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$hero_strenght,$deffhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby) {
+		function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$hero_strenght,$deffhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $defReinforcements = null, $villageOwners = array(), $userdataCache = array()) {
 			global $bid34,$bid35,$database;
 				
 			// Define the array, with the units
@@ -303,10 +303,11 @@ class Battle {
 					$cdp *= $defenderhero['db'];
 				}
 			}
-            $DefendersAll = $database->getEnforceVillage($DefenderWref,0);
-			$villageOwners = [];
-			$userdataCache = [];
-            $villageOwners[$DefenderWref] = $database->getVillageField($DefenderWref,"owner");
+            $DefendersAll = (!is_null($defReinforcements) ? $database->getEnforceVillage($DefenderWref,0) : $defReinforcements);
+
+			if (!isset($villageOwners[$DefenderWref])) {
+                $villageOwners[ $DefenderWref ] = $database->getVillageField( $DefenderWref, "owner" );
+            }
 
             if(!empty($DefendersAll) && $DefenderWref>0){
                 foreach($DefendersAll as $defenders) {

@@ -2307,7 +2307,7 @@ class MYSQLi_DB implements IDbConnection {
     			return mysqli_query($this->dblink,$q); }else{return false;}
    	}
 
-    function getFieldLevelIfInVillage($vid, $fieldType) {
+    function getFieldLevelInVillage($vid, $fieldType) {
         $vid = (int) $vid;
 
         // $fieldType can be both, integer and string, to be used in the IN statement,
@@ -2318,7 +2318,7 @@ class MYSQLi_DB implements IDbConnection {
 
         // please don't scream...
         // with the current table structure, there really IS NOT another way
-        // (except for stored procedures, which we can't rely will be allowed on the server)
+        // (except for stored procedures, which we can't rely on to be allowed on the server)
         $result = mysqli_query($this->dblink,"
                 SELECT
                     IF(

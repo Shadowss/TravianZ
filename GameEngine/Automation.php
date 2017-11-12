@@ -1236,7 +1236,7 @@ class Automation {
                     $defpop = $toF['pop'];
                     $def_ab=array();
                     //get level of palace or residence
-                    $residence = $database->getFieldLevelIfInVillage($data['to'], '25, 26');
+                    $residence = $database->getFieldLevelInVillage($data['to'], '25, 26');
 
                     //type of attack
                     if($dataarray[$data_num]['attack_type'] == 1){
@@ -1467,7 +1467,7 @@ class Automation {
                         $walllevel = 0;
                     }
 
-                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby);
+                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $enforcementarray, $villageOwners, $cachedUserData);
                     
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -1486,7 +1486,8 @@ class Automation {
                             $DefenderHero[$d]=$DefenderID;
                         }
                     }
-                    
+
+                    // our reinforcements count could have changed at this point, thus the re-select
                     $enforcementarray2 = $database->getEnforceVillage($data['to'],0);
                     if(count($enforcementarray2) > 0) {
                         foreach($enforcementarray2 as $enforce2) {
@@ -1595,7 +1596,9 @@ class Automation {
                         $database->modifyUnit($data['to'],array("hero"),array($owndead['hero']),array(0));
                     }
                     //kill other defence in village
-                    foreach($database->getEnforceVillage($data['to'],0) as $enforce) {
+                    // ... once again, units could have changed, so we need to reselect
+                    $enforcementarray3 = $database->getEnforceVillage($data['to'],0);
+                    foreach ($enforcementarray3 as $enforce) {
                         $life=''; $notlife=''; $wrong='0';
                         if($enforce['from'] != 0){
                             if (!isset($villageOwners[$enforce['from']])) {
@@ -1669,17 +1672,17 @@ class Automation {
                         $totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
                         $totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
                         //NEED TO SEND A RAPPORTAGE!!!
-                        $enforceOwner = [
-                            'from' => $database->getVillageField($enforce['from'],"owner")
-                        ];
-                        $data2 = ''.$enforceOwner['from'].','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.','.$enforce['from'].'';
+                        if (!isset($villageOwners[$enforce['from']])) {
+                            $villageOwners[$enforce['from']] = $database->getVillageField( $enforce['from'], "owner" );
+                        }
+                        $data2 = ''.$villageOwners[$enforce['from']].','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.','.$enforce['from'].'';
                         if(empty($scout)) {
                             if($totalnotlife == 0){
-                                $database->addNotice($enforceOwner['from'],$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                            $database->addNotice($villageOwners[$enforce['from']],$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                             }else if($totallife > $totalnotlife){
-                                $database->addNotice($enforceOwner['from'],$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                                $database->addNotice($villageOwners[$enforce['from']],$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                             }else{
-                                $database->addNotice($enforceOwner['from'],$from['wref'],$ownally,17,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                                $database->addNotice($villageOwners[$enforce['from']],$from['wref'],$ownally,17,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                             }
                             //delete reinf sting when its killed all.
                             if($wrong=='0'){ $database->deleteReinf($enforce['id']); }
