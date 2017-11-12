@@ -277,15 +277,6 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
         </tr>
     </table>
     </p>
-    <!-- <LEFT BOX - ADMIN RELATED>
-        <span><center><strong>ADMIN RELATED</strong></center></span><br />
-        <span class="f9 c6 cc2">Admin Name:</span><span class="cc3"><input type="text" name="aname" id="aname"></span><br /><br />
-        <span class="f9 c6 cc2">Admin Email:</span><span class="cc3"><input name="aemail" type="text" id="aemail"></span><br /><br />
-        <span class="f9 c6 cc2">Admin rank:</span><span class="cc3" style="position: absolute;right:20%;"><select name="admin_rank">
-          <option value="false">No</option>
-          <option value="true" selected="selected">Yes</option></select></span><br /><br />
-        
-        <!-- </LEFT BOX - ADMIN RELATED> -->
     <!-- <RIGHT BOX - GPACK RELATED>
         <span><center><strong>GPACK RELATED</strong></center></span><br />
         
