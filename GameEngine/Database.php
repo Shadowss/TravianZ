@@ -1250,23 +1250,35 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
     function setVillageFields($ref, $fields, $values) {
-        list($ref, $field, $value) = $this->escape_input((int) $ref, $fields, $values);
+        list($ref, $fields, $value) = $this->escape_input((int) $ref, $fields, $values);
 
         // build the field-value query parts
         $fieldValues = [];
         foreach ($fields as $id => $fieldName) {
-            $fieldValues[] = $fieldName.' = '.((Math::isInt($values[$id]) || Math::isFloat($values[$id])) ? $values[$id] : '"'.$this->escape($values[$id]).'"');
+            $fieldValues[] = $this->escape_input($fieldName).' = '.((Math::isInt($values[$id]) || Math::isFloat($values[$id])) ? $values[$id] : '"'.$this->escape($values[$id]).'"');
         }
 
         $q = "UPDATE " . TB_PREFIX . "vdata set ".implode(', ', $fieldValues)." where wref = $ref";
         return mysqli_query($this->dblink,$q);
     }
 
-	function setVillageLevel($ref, $field, $value) {
-	    list($ref, $field, $value) = $this->escape_input((int) $ref, $field, $value);
+	function setVillageLevel($ref, $fields, $values) {
+	    list($ref, $fields, $values) = $this->escape_input((int) $ref, $fields, $values);
 
-		$q = "UPDATE " . TB_PREFIX . "fdata set " . $field . " = '" . $value . "' where vref = " . $ref . "";
-		return mysqli_query($this->dblink,$q);
+        // build the field-value query parts
+        $fieldValues = [];
+
+        if (!is_array($fields)) {
+            $fields = [$fields];
+            $values = [$values];
+        }
+
+        foreach ($fields as $id => $fieldName) {
+            $fieldValues[] = $this->escape($fieldName).' = '.((Math::isInt($values[$id]) || Math::isFloat($values[$id])) ? $values[$id] : '"'.$this->escape($values[$id]).'"');
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "fdata set ".implode(', ', $fieldValues)." where vref = " . $ref;
+		return mysqli_query($this->dblink,$q) OR DIE (mysqli_error($this->dblink) . ' ... ' . $q);
 	}
 
 	function getResourceLevel($vid) {
@@ -2274,6 +2286,32 @@ class MYSQLi_DB implements IDbConnection {
     		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop where wref = ".$vid;
     			return mysqli_query($this->dblink,$q); }else{return false;}
    	}
+
+   	function setMaxStoreForVillage($vid, $maxLevel) {
+	    $vid = (int) $vid;
+	    $maxLevel = (int) $maxLevel;
+
+        $this->query("
+                        UPDATE
+                            ".TB_PREFIX."vdata
+                        SET
+                            `maxstore` = IF( `maxstore` - $maxLevel < 800, 800, `maxstore` - $maxLevel )
+                        WHERE
+                            wref=$vid");
+    }
+
+    function setMaxCropForVillage($vid, $maxLevel) {
+        $vid = (int) $vid;
+        $maxLevel = (int) $maxLevel;
+
+        $this->query("
+                        UPDATE
+                            ".TB_PREFIX."vdata
+                        SET
+                            `maxcrop` = IF( `maxcrop` - $maxLevel < 800, 800, `maxcrop` - $maxLevel )
+                        WHERE
+                            wref=$vid");
+    }
 
 	function modifyOasisResource($vid, $wood, $clay, $iron, $crop, $mode) {
 	    list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, (int) $wood, (int) $clay, (int) $iron, (int) $crop, $mode);
@@ -3640,6 +3678,33 @@ class MYSQLi_DB implements IDbConnection {
 	    // no changes in player-to-alliance relationship
 	    return true;
 	}
+
+	function checkEmbassiesAfterBattle(&$villageOwners, &$cachedUserData, $vid) {
+        if (!isset($villageOwners[$vid])) {
+            $villageOwners[$vid] = $this->getVillageField($vid,"owner");
+        }
+
+        if (!isset($cachedUserData[$vid])) {
+            $cachedUserData[$vid] = $this->getUserArray($villageOwners[$vid], 1);
+        }
+
+        Automation::updateMax($villageOwners[$vid]);
+        $allianceStatus = $this->checkAllianceEmbassiesStatus([
+            'id'       => $cachedUserData[$vid],
+            'alliance' => $cachedUserData[$vid]["alliance"],
+            'username' => $cachedUserData[$vid]["username"],
+            'lvl'      => $totallvl
+        ]);
+
+        if ($allianceStatus === false) {
+            return ' This player\'s alliance has been dispersed.';
+        } else if ($allianceStatus === 0) {
+            return ' Player was forced to leave their alliance.';
+        } else {
+            // all is good, no need to append additional alliance-related text
+            return '';
+        }
+    }
 
 	function getJobs($wid) {
 	    list($wid) = $this->escape_input((int) $wid);
