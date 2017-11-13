@@ -1125,7 +1125,7 @@ class Automation {
             }
 
             // no damage to the building/field
-            if ( $tblevel >= $totallvl ) {
+            if ( $tblevel == $totallvl ) {
                 $info_cata = " was not damaged.";
             } else // building/field damaged, damage calculations to follow
             {
