@@ -20,7 +20,7 @@ $database->reload('admin.php?page=1');
   <td>
   <select class="dropdown" name="LANG"">
 <?php
-$handle=opendir('GameEngine/lang');
+$handle=opendir('GameEngine/Lang');
 while (false!==($file = readdir($handle)))
 {
 	if (similar_text(".",$file)<1)

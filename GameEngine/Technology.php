@@ -30,7 +30,7 @@ if (!$autoloader_found) {
 }
 
 // this is needed for installation, since the lang file would not be included yet
-include_once($autoprefix."GameEngine/lang/en.php");
+include_once($autoprefix."GameEngine/Lang/en.php");
 
 class Technology {
 
