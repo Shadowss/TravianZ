@@ -1110,7 +1110,19 @@ class Automation {
         // building/field was damaged, let's calculate the actual damage
         {
             //TODO: MUST TO BE FIX This part goes also below 0 if u have a lot of catapults
+            // TODO: this whole math seems incorrect, it needs a revision, and potentially a rewrite
             $totallvl = round( sqrt( pow( ( $tblevel + 0.5 ), 2 ) - ( ( !$twoRowsCatapultSetup ? (int) $battlepart[4] : (int) $battlepart[4] / 2 ) * 8 ) ) );
+
+            // sometimes this goes above the actual level, so in that case we just reverse everything
+            // and take the buiding down so many levels
+            if ($totallvl > $tblevel) {
+                $totallvl = $tblevel - ($totallvl - $tblevel);
+            }
+
+            // don't allow this to go below 0
+            if ($totallvl <= 0) {
+                $totallvl = 1;
+            }
 
             // no damage to the building/field
             if ( $tblevel >= $totallvl ) {
