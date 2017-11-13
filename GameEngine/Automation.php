@@ -17,7 +17,7 @@
 #################################################################################
 
 class Automation {
-    
+
     private $bountyresarray = array();
     private $bountyinfoarray = array();
     private $bountyproduction = array();
@@ -28,7 +28,7 @@ class Automation {
     private $bountyOinfoarray = array();
     private $bountyOproduction = array();
     private $bountyOpop = 1;
-    
+
     public function isWinner() {
         // check whether someone already built a level 100 Wonder of the World
         $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99 = 100 and f99t = 40"), MYSQLI_ASSOC);
@@ -38,7 +38,7 @@ class Automation {
             exit;
         }
     }
-    
+
     public function procResType($ref,$mode=0,$isoasis=0) {
         global $session;
         switch($ref) {
@@ -96,13 +96,13 @@ class Automation {
         if ($isoasis!=0) $build = "Oasis had";
         return addslashes($build);
     }
-    
+
     function recountPop($vid){
         global $database;
         $vid = (int) $vid;
         $fdata = $database->getResourceLevel($vid);
         $popTot = 0;
-        
+
         for ($i = 1; $i <= 40; $i++) {
             $lvl = $fdata["f".$i];
             $building = $fdata["f".$i."t"];
@@ -115,17 +115,17 @@ class Automation {
         mysqli_query($GLOBALS['link'],$q);
         $owner = $database->getVillageField($vid,"owner");
         $this->procClimbers($owner);
-        
+
         return $popTot;
-        
+
     }
-    
+
     function recountCP($vid){
         global $database;
         $vid = (int) $vid;
         $fdata = $database->getResourceLevel($vid);
         $popTot = 0;
-        
+
         for ($i = 1; $i <= 40; $i++) {
             $lvl = $fdata["f".$i];
             $building = $fdata["f".$i."t"];
@@ -133,40 +133,40 @@ class Automation {
                 $popTot += $this->buildingCP($building,$lvl);
             }
         }
-        
+
         $q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
         mysqli_query($GLOBALS['link'],$q);
-        
+
         return $popTot;
-        
+
     }
-    
+
     function buildingPOP($f,$lvl){
         $name = "bid".$f;
         global $$name;
         $popT = 0;
         $dataarray = $$name;
-        
+
         for ($i = 0; $i <= $lvl; $i++) {
             $popT += ((isset($dataarray[$i]) && isset($dataarray[$i]['pop'])) ? $dataarray[$i]['pop'] : 0);
         }
         return $popT;
     }
-    
+
     function buildingCP($f,$lvl){
         $name = "bid".$f;
         global $$name;
         $popT = 0;
         $dataarray = $$name;
-        
+
         for ($i = 0; $i <= $lvl; $i++) {
             $popT += ((isset($dataarray[$i]) && isset($dataarray[$i]['cp'])) ? $dataarray[$i]['cp'] : 0);
         }
         return $popT;
     }
-    
+
     public function __construct() {
-        
+
         $this->procNewClimbers();
         $this->ClearUser();
         $this->ClearInactive();
@@ -233,7 +233,7 @@ class Automation {
         $this->medals();
         $this->artefactOfTheFool();
     }
-    
+
     private function loyaltyRegeneration() {
         global $autoprefix;
 
@@ -243,8 +243,8 @@ class Automation {
         //fix by ronix
         //create new file to check filetime
         //not every click regenerate but 1 minute or after
-        
-        
+
+
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/loyalty.txt", 'w');
         fclose($ourFileHandle);
         global $database;
@@ -283,7 +283,7 @@ class Automation {
             }
         }
     }
-    
+
     private function getfieldDistance($coorx1, $coory1, $coorx2, $coory2) {
         $max = 2 * WORLD_MAX + 1;
         $x1 = intval($coorx1);
@@ -295,13 +295,13 @@ class Automation {
         $dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
         return round($dist, 1);
     }
-    
+
     public function getTypeLevel($tid,$vid) {
         global $village,$database;
         $keyholder = array();
-        
+
         $resourcearray = $database->getResourceLevel($vid);
-        
+
         foreach(array_keys($resourcearray,$tid) as $key) {
             if(strpos($key,'t')) {
                 $key = preg_replace("/[^0-9]/", '', $key);
@@ -342,7 +342,7 @@ class Automation {
             return 0;
         }
     }
-    
+
     private function clearDeleting() {
         global $autoprefix;
         if(file_exists($autoprefix."GameEngine/Prevention/cleardeleting.txt")) {
@@ -468,17 +468,17 @@ class Automation {
             unlink("GameEngine/Prevention/cleardeleting.txt");
         }
     }
-    
+
     private function ClearUser() {
         global $database;
         if(AUTO_DEL_INACTIVE) {
             $time = time()-UN_ACT_TIME;
-            
+
             $q = "INSERT INTO ".TB_PREFIX."deleting SELECT id, UNIX_TIMESTAMP() FROM ".TB_PREFIX."users WHERE timestamp < $time AND tribe IN(1,2,3)";
             $database->query($q);
         }
     }
-    
+
     private function ClearInactive() {
         global $database;
         if(TRACK_USR) {
@@ -542,7 +542,7 @@ class Automation {
                       crop > maxcrop");
         }
     }
-    
+
     private function culturePoints() {
         if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
             unlink("GameEngine/Prevention/culturepoints.txt");
@@ -556,15 +556,15 @@ class Automation {
                 $dur_day=86400/$speed; //24 hours/speed
                 if ($dur_day<3600) $dur_day=3600;
                 $time = time()-600; // recount every 10minutes
-                
+
                 $array = array();
                 $q = "SELECT id, lastupdate FROM ".TB_PREFIX."users WHERE lastupdate < $time";
                 $array = $database->query_return($q);
-                
+
                 foreach($array as $indi) {
                     if($indi['lastupdate'] <= $time && $indi['lastupdate'] > 0){
                         $cp = $database->getVSumField($indi['id'], 'cp') * (time()-$indi['lastupdate'])/$dur_day;
-                        
+
                         $newupdate = time();
                         $q = "UPDATE ".TB_PREFIX."users set cp = cp + $cp, lastupdate = $newupdate where id = '".$indi['id']."'";
                         $database->query($q);
@@ -574,7 +574,7 @@ class Automation {
                     unlink("GameEngine/Prevention/culturepoints.txt");
                 }
     }
-    
+
     private function buildComplete() {
         global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
 
@@ -727,11 +727,11 @@ class Automation {
             unlink("GameEngine/Prevention/build.txt");
         }
     }
-    
+
     // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
     private function startNatarAttack($level, $vid, $time) {
         global $database;
-        
+
         // bad, but should work :D
         // I took the data from my first ww (first .org world)
         // todo: get the algo from the real travian with the 100 biggest
@@ -741,118 +741,118 @@ class Automation {
                 array(3412, 2814, 4156, 3553, 9, 0),
                 array(35, 0, 77, 33, 17, 10)
             ),
-            
+
             10 => array(
                 array(4314, 3688, 5265, 4621, 13, 0),
                 array(65, 0, 175, 77, 28, 17)
             ),
-            
+
             15 => array(
                 array(4645, 4267, 5659, 5272, 15, 0),
                 array(99, 0, 305, 134, 40, 25)
             ),
-            
+
             20 => array(
                 array(6207, 5881, 7625, 7225, 22, 0),
                 array(144, 0, 456, 201, 56, 36)
             ),
-            
+
             25 => array(
                 array(6004, 5977, 7400, 7277, 23, 0),
                 array(152, 0, 499, 220, 58, 37)
             ),
-            
+
             30 => array(
                 array(7073, 7181, 8730, 8713, 27, 0),
                 array(183, 0, 607, 268, 69, 45)
             ),
-            
+
             35 => array(
                 array(7090, 7320, 8762, 8856, 28, 0),
                 array(186, 0, 620, 278, 70, 45)
             ),
-            
+
             40 => array(
                 array(7852, 6967, 9606, 8667, 25, 0),
                 array(146, 0, 431, 190, 60, 37)
             ),
-            
+
             45 => array(
                 array(8480, 8883, 10490, 10719, 35, 0),
                 array(223, 0, 750, 331, 83, 54)
             ),
-            
+
             50 => array(
                 array(8522, 9038, 10551, 10883, 35, 0),
                 array(224, 0, 757, 335, 83, 54)
             ),
-            
+
             55 => array(
                 array(8931, 8690, 10992, 10624, 32, 0),
                 array(219, 0, 707, 312, 84, 54)
             ),
-            
+
             60 => array(
                 array(12138, 13013, 15040, 15642, 51, 0),
                 array(318, 0, 1079, 477, 118, 76)
             ),
-            
+
             65 => array(
                 array(13397, 14619, 16622, 17521, 58, 0),
                 array(345, 0, 1182, 522, 127, 83)
             ),
-            
+
             70 => array(
                 array(16323, 17665, 20240, 21201, 70, 0),
                 array(424, 0, 1447, 640, 157, 102)
             ),
-            
+
             75 => array(
                 array(20739, 22796, 25746, 27288, 91, 0),
                 array(529, 0, 1816, 803, 194, 127)
             ),
-            
+
             80 => array(
                 array(21857, 24180, 27147, 28914, 97, 0),
                 array(551, 0, 1898, 839, 202, 132)
             ),
-            
+
             85 => array(
                 array(22476, 25007, 27928, 29876, 100, 0),
                 array(560, 0, 1933, 855, 205, 134)
             ),
-            
+
             90 => array(
                 array(31345, 35053, 38963, 41843, 141, 0),
                 array(771, 0, 2668, 1180, 281, 184)
             ),
-            
+
             95 => array(
                 array(31720, 35635, 39443, 42506, 144, 0),
                 array(771, 0, 2671, 1181, 281, 184)
             ),
-            
+
             96 => array(
                 array(32885, 37007, 40897, 44130, 150, 0),
                 array(795, 0, 2757, 1219, 289, 190)
             ),
-            
+
             97 => array(
                 array(32940, 37099, 40968, 44235, 150, 0),
                 array(794, 0, 2755, 1219, 289, 190)
             ),
-            
+
             98 => array(
                 array(33521, 37691, 41686, 44953, 152, 0),
                 array(812, 0, 2816, 1246, 296, 194)
             ),
-            
+
             99 => array(
                 array(36251, 40861, 45089, 48714, 165, 0),
                 array(872, 0, 3025, 1338, 317, 208)
             )
         );
-        
+
         // select the troops^^
         if (isset($troops[$level]))
         {
@@ -862,28 +862,28 @@ class Automation {
         {
             return false;
         }
-        
+
         // get the capital village from the natars
         $query = mysqli_query($GLOBALS['link'],'SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysqli_error($database->dblink));
         $row = mysqli_fetch_assoc($query);
-        
+
         // start the attacks
         $endtime = $time + round((60 * 60 * 24) / INCREASE_SPEED);
-        
+
         // -.-
         $vid = (int) $vid;
         mysqli_query($GLOBALS['link'],'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')');
         mysqli_query($GLOBALS['link'],'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . ($endtime + 1) . ')');
-        
+
         // wave 1
         $ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
         $database->addMovement(3, $row['wref'], $vid, $ref, $time, $endtime);
-        
+
         // wave 2
         $ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20, array('vid' => $vid, 'endtime' => ($endtime + 1)));
         $database->addMovement(3, $row['wref'], $vid, $ref2, $time, $endtime + 1);
     }
-    
+
     private function checkWWAttacks() {
         $query = mysqli_query($GLOBALS['link'],'SELECT vid, attack_time FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time());
         while ($row = mysqli_fetch_assoc($query))
@@ -892,7 +892,7 @@ class Automation {
             $query3 = mysqli_query($GLOBALS['link'],'DELETE FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . (int) $row['vid'] . ' AND `attack_time` = ' . (int) $row['attack_time']);
         }
     }
-    
+
     private function getPop($tid,$level) {
         $name = "bid".$tid;
         global $$name,$village;
@@ -901,14 +901,14 @@ class Automation {
         $cp = $dataarray[($level+1)]['cp'];
         return array($pop,$cp);
     }
-    
+
     private function delTradeRoute() {
         global $database;
         $time = time();
         $q = "DELETE from ".TB_PREFIX."route where timeleft < $time";
         $database->query($q);
     }
-    
+
     private function TradeRoute() {
         global $database;
         $time = time();
@@ -921,7 +921,7 @@ class Automation {
             $database->editTradeRoute($data['id'],"timestamp",86400,1);
         }
     }
-    
+
     private function marketComplete() {
         global $database, $autoprefix;
         if(file_exists($autoprefix."GameEngine/Prevention/market.txt")) {
@@ -961,13 +961,13 @@ class Automation {
             elseif($data['clay'] >= $data['wood'] && $data['clay'] >= $data['iron'] && $data['clay'] >= $data['crop']){ $sort_type = "11"; }
             elseif($data['iron'] >= $data['wood'] && $data['iron'] >= $data['clay'] && $data['iron'] >= $data['crop']){ $sort_type = "12"; }
             elseif($data['crop'] >= $data['wood'] && $data['crop'] >= $data['clay'] && $data['crop'] >= $data['iron']){ $sort_type = "13"; }
-            
+
             $to = $database->getMInfo($data['to']);
             $from = $database->getMInfo($data['from']);
 
             $ownally = $alliances[$data['to']];
             $targetally = $alliances[$data['to']];
-            
+
             $database->addNotice($to['owner'],$to['wref'],$targetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             if($from['owner'] != $to['owner']) {
                 $database->addNotice($from['owner'],$to['wref'],$ownally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
@@ -1001,7 +1001,7 @@ class Automation {
             unlink("GameEngine/Prevention/market.txt");
         }
     }
-    
+
     private function sendResource2($wtrans,$ctrans,$itrans,$crtrans,$from,$to,$tribe,$send) {
         global $bid17,$bid28,$database,$generator,$logging;
         $availableWood = $database->getWoodAvailable($from);
@@ -1113,7 +1113,7 @@ class Automation {
             $totallvl = round( sqrt( pow( ( $tblevel + 0.5 ), 2 ) - ( ( !$twoRowsCatapultSetup ? (int) $battlepart[4] : (int) $battlepart[4] / 2 ) * 8 ) ) );
 
             // no damage to the building/field
-            if ( $tblevel == $totallvl ) {
+            if ( $tblevel >= $totallvl ) {
                 $info_cata = " was not damaged.";
             } else // building/field damaged, damage calculations to follow
             {
@@ -3038,7 +3038,7 @@ class Automation {
         $database->query($q);
         $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $wref AND sort_type=4) OR (`from` = $wref AND sort_type=3))";
         $database->query($q);
-        
+
         $getmovement = $database->getMovement(3,$wref,1);
         foreach($getmovement as $movedata) {
             $time = microtime(true);
@@ -3048,17 +3048,17 @@ class Automation {
         }
         $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = $wref";
         $database->query($q);
-        
+
         //check    return enforcement from del village
         $units->returnTroops($wref);
-        
+
         $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
         $database->query($q);
-        
+
         if (mysqli_affected_rows($database->dblink)>0) {
             $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
             $database->query($q);
-            
+
             $getprisoners = $database->getPrisoners($wref);
             foreach($getprisoners as $pris) {
                 $troops = 0;
@@ -3079,15 +3079,15 @@ class Automation {
             }
         }
     }
-    
+
     private function sendTroopsBack($post) {
         global $form, $database, $village, $generator, $session, $technology;
-        
+
         $enforce=$database->getEnforceArray($post['ckey'],0);
         $to = $database->getVillage($enforce['from']);
         $Gtribe = "";
         if ($database->getUserField($to['owner'],'tribe',0) == '2'){ $Gtribe = "1"; } else if ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe = "2"; } else if ($database->getUserField($to['owner'],'tribe',0) == '4'){ $Gtribe = "3"; }else if ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe = "4"; }
-        
+
         for($i=1; $i<10; $i++){
             if(isset($post['t'.$i])){
                 if($i!=10){
@@ -3096,7 +3096,7 @@ class Automation {
                         $form->addError("error","You can't send more units than you have");
                         break;
                     }
-                    
+
                     if($post['t'.$i]<0)
                     {
                         $form->addError("error","You can't send negative units.");
@@ -3111,43 +3111,43 @@ class Automation {
             if ($post['t11'] > $enforce['hero'])
             {
                 $form->addError("error","You can't send more units than you have");
-                
+
             }
-            
+
             if($post['t11']<0)
             {
                 $form->addError("error","You can't send negative units.");
-                
+
             }
         } else {
             $post['t11']='0';
         }
-        
+
         if($form->returnErrors() > 0) {
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
             header("Location: a2b.php");
             exit;
         } else {
-            
+
             //change units
             $start = ($database->getUserField($to['owner'],'tribe',0)-1)*10+1;
             $end = ($database->getUserField($to['owner'],'tribe',0)*10);
-            
+
             $j='1';
             for($i=$start;$i<=$end;$i++){
                 $database->modifyEnforce($post['ckey'],$i,$post['t'.$j.''],0); $j++;
             }
-            
+
             //get cord
             $from = $database->getVillage($enforce['from']);
             $fromcoor = $database->getCoor($enforce['from']);
             $tocoor = $database->getCoor($enforce['vref']);
             $fromCor = array('x'=>$tocoor['x'], 'y'=>$tocoor['y']);
             $toCor = array('x'=>$fromcoor['x'], 'y'=>$fromcoor['y']);
-            
+
             $speeds = array();
-            
+
             //find slowest unit.
             for($i=1;$i<=10;$i++){
                 if (isset($post['t'.$i])){
@@ -3202,13 +3202,13 @@ class Automation {
             $reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
             $database->addMovement(4,$village->wid,$enforce['from'],$reference,$AttackArrivalTime,($time+$AttackArrivalTime));
             $technology->checkReinf($post['ckey']);
-            
+
             header("Location: build.php?id=39");
             exit;
-            
+
         }
     }
-    
+
     private function sendreinfunitsComplete() {
         global $bid23,$database,$battle,$session,$autoprefix;
 
@@ -3237,7 +3237,7 @@ class Automation {
                 AND
                 endtime < $time";
         $dataarray = $database->query_return($q);
-        
+
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
                 $isoasis = $database->isVillageOases($data['to']);
@@ -3270,10 +3270,10 @@ class Automation {
                     $fromF = $database->getVillage($data['from']);
                     $AttackerID = $from['owner'];
                     $owntribe = $database->getUserField($AttackerID,"tribe",0);
-                    
-                    
+
+
                     if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
-                    
+
                     //check to see if we're sending a hero between own villages and there's a Mansion at target village
                     $HeroTransfer=0;
                     $troopsPresent=0;
@@ -3306,7 +3306,7 @@ class Automation {
                             $troopsPresent = 1; break;
                         }
                     }
-                    
+
                     if($data['t11'] != 0 || $troopsPresent) {
                         $temphero=$data['t11'];
                         if ($HeroTransfer) $data['t11']=0;
@@ -3333,8 +3333,8 @@ class Automation {
                     //send rapport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
                     $data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
-                    
-                    
+
+
                     if($isoasis == 0){
                         $to_name=$to['name'];
                     }else{
@@ -3359,7 +3359,7 @@ class Automation {
                         $database->setVillageField($data['to'], 'starvupdate', $time);
                     }
                 }
-                
+
                 //check empty reinforcement in rally point
                 $e_units='';
                 for ($i=1;$i<=50;$i++) {
@@ -3370,13 +3370,13 @@ class Automation {
                 $database->query($q);
             }
         }
-        
+
         if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
             unlink("GameEngine/Prevention/sendreinfunits.txt");
         }
         if($reload) header("Location: ".$_SERVER['PHP_SELF']);
     }
-    
+
     private function returnunitsComplete() {
         global $database, $autoprefix;
         if(file_exists($autoprefix."GameEngine/Prevention/returnunits.txt")) {
@@ -3407,12 +3407,12 @@ class Automation {
         // so we need to de-duplicate them here by checking for the same wave properties sent out at the
         // same time (i.e. with exactly the same timestamp)
         $wavesData = [];
-        
+
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
                 if (!isset($wavesData[$data['from'].$data['to'].$data['starttime'].$data['endtime']])) {
                     $tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
-                    
+
                     if($tribe == 1){ $u = ""; } elseif($tribe == 2){ $u = "1"; } elseif($tribe == 3){ $u = "2"; } elseif($tribe == 4){ $u = "3"; } else{ $u = "4"; }
                     $database->modifyUnit(
                         $data['to'],
@@ -3442,18 +3442,18 @@ class Automation {
                 }
             }
         }
-        
+
         // Recieve the bounty on type 6.
-        
+
         $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 6 AND endtime < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
-            
+
             if($data['wood'] >= $data['clay'] && $data['wood'] >= $data['iron'] && $data['wood'] >= $data['crop']){ $sort_type = "10"; }
             elseif($data['clay'] >= $data['wood'] && $data['clay'] >= $data['iron'] && $data['clay'] >= $data['crop']){ $sort_type = "11"; }
             elseif($data['iron'] >= $data['wood'] && $data['iron'] >= $data['clay'] && $data['iron'] >= $data['crop']){ $sort_type = "12"; }
             elseif($data['crop'] >= $data['wood'] && $data['crop'] >= $data['clay'] && $data['crop'] >= $data['iron']){ $sort_type = "13"; }
-            
+
             $to = $database->getMInfo($data['to']);
             $from = $database->getMInfo($data['from']);
             $database->modifyResource($data['to'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],1);
@@ -3472,29 +3472,29 @@ class Automation {
                 }
             }
         }
-        
+
         $this->pruneResource();
-        
+
         // Settlers
-        
+
         $q = "SELECT `to`, moveid FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
         $dataarray = $database->query_return($q);
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
-                
+
                 $tribe = $database->getUserField($database->getVillageField($data['to'],"owner"),"tribe",0);
-                
+
                 $database->modifyUnit($data['to'],array($tribe."0"),array(3),array(1));
                 $database->setMovementProc($data['moveid']);
-                
+
             }
         }
-        
+
         if(file_exists("GameEngine/Prevention/returnunits.txt")) {
             unlink("GameEngine/Prevention/returnunits.txt");
         }
     }
-    
+
     private function sendSettlersComplete() {
         global $database, $building, $session, $autoprefix;
 
@@ -3520,11 +3520,11 @@ class Automation {
                 $database->addTech($data['to']);
                 $database->addABTech($data['to']);
                 $database->setMovementProc($data['moveid']);
-                
+
                 $exp1 = $database->getVillageField($data['from'],'exp1');
                 $exp2 = $database->getVillageField($data['from'],'exp2');
                 $exp3 = $database->getVillageField($data['from'],'exp3');
-                
+
                 if($exp1 == 0){
                     $exp = 'exp1';
                     $value = $data['to'];
@@ -3550,7 +3550,7 @@ class Automation {
         }
         //if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
     }
-    
+
     private function researchComplete() {
         global $database, $autoprefix;
 
@@ -3582,16 +3582,16 @@ class Automation {
             unlink("GameEngine/Prevention/research.txt");
         }
     }
-    
+
     private function updateRes($bountywid,$uid) {
         global $session;
-        
-        
+
+
         $this->bountyLoadTown($bountywid);
         $this->bountycalculateProduction($bountywid,$uid);
         $this->bountyprocessProduction($bountywid);
     }
-    
+
     private function updateORes($bountywid) {
         global $session;
         $this->bountyLoadOTown($bountywid);
@@ -3603,7 +3603,7 @@ class Automation {
         $this->bountyinfoarray = $database->getOasisV($bountywid);
         $this->bountyresarray = $database->getResourceLevel($bountywid);
         $this->bountypop = 2;
-        
+
     }
     private function bountyLoadTown($bountywid) {
         global $database,$session,$logging,$technology;
@@ -3612,9 +3612,9 @@ class Automation {
         $this->bountyoasisowned = $database->getOasis($bountywid);
         $this->bountyocounter = $this->bountysortOasis();
         $this->bountypop = $this->bountyinfoarray['pop'];
-        
+
     }
-    
+
     private function bountysortOasis() {
         $crop = $clay = $wood = $iron = 0;
         foreach ($this->bountyoasisowned as $oasis) {
@@ -3654,7 +3654,7 @@ class Automation {
         }
         return array($wood,$clay,$iron,$crop);
     }
-    
+
     function getAllUnits($base) {
         global $database;
         $ownunit = $database->getUnit($base);
@@ -3688,7 +3688,7 @@ class Automation {
                 if (!isset($ownunit['u'.$i])) {
                     $ownunit['u'.$i] = 0;
                 }
-                
+
                 $ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
             }
         }
@@ -3708,10 +3708,10 @@ class Automation {
         }
         return $ownunit;
     }
-    
+
     public function getUpkeep($array,$type,$vid=0,$prisoners=0) {
         global $database,$session,$village;
-        
+
         if($vid==0) { $vid=$village->wid; }
         $buildarray = array();
         if($vid!=0){ $buildarray = $database->getResourceLevel($vid); }
@@ -3813,7 +3813,7 @@ class Automation {
         }
         return $upkeep;
     }
-    
+
     private function bountycalculateOProduction($bountywid) {
         global $technology,$database;
         $this->bountyOproduction['wood'] = $this->bountyGetOWoodProd();
@@ -3832,18 +3832,18 @@ class Automation {
         $this->bountyproduction['iron'] = $this->bountyGetIronProd();
         if ($uniqueA['size']==3 && $uniqueA['owner']==$uid){
             $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-(($upkeep)-round($upkeep*0.50));
-            
+
         }else if ($normalA['type']==4 && $normalA['size']==1 && $normalA['owner']==$uid){
             $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-(($upkeep)-round($upkeep*0.25));
-            
+
         }else if ($largeA['size']==2 && $largeA['owner']==$uid){
             $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-(($upkeep)-round($upkeep*0.25));
-            
+
         }else{
             $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-$upkeep;
         }
     }
-    
+
     private function bountyprocessProduction($bountywid) {
         global $database;
         $timepast = time() - $this->bountyinfoarray['lastupdate'];
@@ -3864,7 +3864,7 @@ class Automation {
         $database->modifyOasisResource($bountywid,$nwood,$nclay,$niron,$ncrop,1);
         $database->updateOasis($bountywid);
     }
-    
+
     private function bountyGetWoodProd() {
         global $bid1,$bid5,$session;
         $wood = $sawmill = 0;
@@ -3907,7 +3907,7 @@ class Automation {
         $iron *= SPEED;
         return round($iron);
     }
-    
+
     private function bountyGetOCropProd() {
         global $session;
         $crop = 0;
@@ -3937,7 +3937,7 @@ class Automation {
         $clay *= SPEED;
         return round($clay);
     }
-    
+
     private function bountyGetIronProd() {
         global $bid3,$bid7,$session;
         $iron = $foundry = 0;
@@ -3960,7 +3960,7 @@ class Automation {
         $iron *= SPEED;
         return round($iron);
     }
-    
+
     private function bountyGetCropProd() {
         global $bid4,$bid8,$bid9,$session;
         $crop = $grainmill = $bakery = 0;
@@ -3996,7 +3996,7 @@ class Automation {
         $crop *= SPEED;
         return round($crop);
     }
-    
+
     private function trainingComplete() {
         global $database, $autoprefix;
 
@@ -4050,7 +4050,7 @@ class Automation {
             unlink("GameEngine/Prevention/training.txt");
         }
     }
-    
+
     public function procDistanceTime($coor,$thiscoor,$ref,$mode) {
         global $bid14,$database,$generator;
         $resarray = $database->getResourceLevel($generator->getBaseID($coor['x'],$coor['y']));
@@ -4086,19 +4086,19 @@ class Automation {
                 $speed = $speed * ($bid14[$this->getsort_typeLevel(14,$resarray)]['attri']/100) ;
             }
         }
-        
-        
+
+
         if($speed!=0){
             return round(($distance/$speed) * 3600 / INCREASE_SPEED);
         }else{
             return round($distance * 3600 / INCREASE_SPEED);
         }
-        
+
     }
-    
+
     private function getsort_typeLevel($tid,$resarray) {
-        
-        
+
+
         global $village;
         $keyholder = array();
         foreach(array_keys($resarray,$tid) as $key) {
@@ -4141,7 +4141,7 @@ class Automation {
             return 0;
         }
     }
-    
+
     private function celebrationComplete() {
         global $database, $autoprefix;
 
@@ -4151,7 +4151,7 @@ class Automation {
 
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/celebration.txt", 'w');
         fclose($ourFileHandle);
-        
+
         $varray = $database->getCel();
         foreach($varray as $vil){
             $id = $vil['wref'];
@@ -4165,7 +4165,7 @@ class Automation {
             unlink("GameEngine/Prevention/celebration.txt");
         }
     }
-    
+
     private function demolitionComplete() {
         global $building,$database,$village,$autoprefix;
 
@@ -4175,7 +4175,7 @@ class Automation {
 
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/demolition.txt", 'w');
         fclose($ourFileHandle);
-        
+
         $varray = $database->getDemolition();
         foreach($varray as $vil) {
             if ($vil['timetofinish'] <= time()) {
@@ -4211,7 +4211,7 @@ class Automation {
             unlink("GameEngine/Prevention/demolition.txt");
         }
     }
-    
+
     private function updateHero() {
         if(file_exists("GameEngine/Prevention/updatehero.txt")) {
             unlink("GameEngine/Prevention/updatehero.txt");
@@ -4261,16 +4261,16 @@ class Automation {
         if(file_exists("GameEngine/Prevention/updatehero.txt")) {
             unlink("GameEngine/Prevention/updatehero.txt");
         }
-        
-        
+
+
     }
-    
+
     // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
     private function updateStore() {
         global $bid10, $bid38, $bid11, $bid39;
-        
+
         $result = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata`');
-        
+
         mysqli_begin_transaction($GLOBALS['link']) or die(mysqli_error($database->dblink));;
         while ($row = mysqli_fetch_assoc($result))
         {
@@ -4281,40 +4281,40 @@ class Automation {
                 {
                     $ress += ((isset($bid10[$row['f' . $i]]) && isset($bid10[$row['f' . $i]]['attri'])) ? $bid10[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
                 }
-                
+
                 if ($row['f' . $i . 't'] == 38)
                 {
                     $ress += ((isset($bid38[$row['f' . $i]]) && isset($bid38[$row['f' . $i]]['attri'])) ? $bid38[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
                 }
-                
-                
-                
+
+
+
                 if ($row['f' . $i . 't'] == 11)
                 {
                     $crop += ((isset($bid11[$row['f' . $i]]) && isset($bid11[$row['f' . $i]]['attri'])) ? $bid11[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
                 }
-                
+
                 if ($row['f' . $i . 't'] == 39)
                 {
                     $crop += ((isset($bid39[$row['f' . $i]]) && isset($bid39[$row['f' . $i]]['attri'])) ? $bid39[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
                 }
             }
-            
+
             if ($ress == 0)
             {
                 $ress = 800 * STORAGE_MULTIPLIER;
             }
-            
+
             if ($crop == 0)
             {
                 $crop = 800 * STORAGE_MULTIPLIER;
             }
-            
+
             mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']) or die(mysqli_error($database->dblink));
         }
         mysqli_commit($GLOBALS['link']) or die(mysqli_error($database->dblink));
     }
-    
+
     private function oasisResourcesProduce() {
         global $database;
         $time = time();
@@ -4342,7 +4342,7 @@ class Automation {
             $database->updateOasis($getoasis['wref']);
         }
     }
-    
+
     private function checkInvitedPlayes() {
         global $database;
         $q = "SELECT id, invited FROM ".TB_PREFIX."users WHERE invited > 0";
@@ -4360,7 +4360,7 @@ class Automation {
             }
         }
     }
-    
+
     private function updateGeneralAttack() {
         global $database;
         $time = time();
@@ -4372,7 +4372,7 @@ class Automation {
             }
         }
     }
-    
+
     private function MasterBuilder() {
         global $database;
         $q = "SELECT id, wid, type, level, field, timestamp FROM ".TB_PREFIX."bdata WHERE master = 1";
@@ -4434,13 +4434,13 @@ class Automation {
             }
         }
     }
-    
+
     /************************************************
      Function for starvation - by brainiacX and Shadow
      Rework by ronix
      References:
      ************************************************/
-    
+
     private function starvation() {
         global $database, $village, $autoprefix;
 
@@ -4451,7 +4451,7 @@ class Automation {
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/starvation.txt", 'w');
         fclose($ourFileHandle);
         $time = time();
-        
+
         //update starvation
         $getvillage = $database->getVillage($village->wid);
         $starv = $getvillage['starv'];
@@ -4467,17 +4467,17 @@ class Automation {
             }
             unset($crop,$unitarrays,$getvillage,$village_upkeep);
         }
-        
+
         // load villages with minus prod
-        
+
         $starvarray = array();
         $starvarray = $database->getStarvation();
         foreach ($starvarray as $starv){
             $unitarrays = $this->getAllUnits($starv['wref']);
             $howweeating=$this->getUpkeep($unitarrays, 0,$starv['wref']);
             $upkeep = $starv['pop'] + $howweeating;
-            
-            
+
+
             // get enforce other player from oasis
             $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=".(int) $starv['wref']." AND o.owner<>v.owner";
             $enforceoasis = $database->query_return($q);
@@ -4579,9 +4579,9 @@ class Automation {
                     }
                 }
             }
-            
+
             // counting
-            
+
             $timedif = $time-$starv['starvupdate'];
             $skolko=$database->getCropProdstarv($starv['wref'])-$starv['starv'];
             if($skolko<0){$golod=true;}
@@ -4599,7 +4599,7 @@ class Automation {
                         $database->setVillageField($starv['wref'], 'crop', $newcrop);
                     }
                 }
-                
+
                 if($difcrop > 0){
                     global ${'u'.$maxtype};
                     $hungry=array();
@@ -4607,7 +4607,7 @@ class Automation {
                     if ($hungry['crop']>0 && $oldcrop <=0) {
                         $killunits = intval($difcrop/$hungry['crop']);
                     }else $killunits=0;
-                    
+
                     if($killunits > 0){
                         $pskolko =  abs($skolko);
                         if($killunits > $pskolko && $skolko <0){
@@ -4657,22 +4657,22 @@ class Automation {
                 $database->setVillageField($starv['wref'], 'starv', 0);
                 $database->setVillageField($starv['wref'], 'starvupdate', 0);
             }
-            
-            
+
+
             unset ($starv,$unitarrays,$enforcearray,$enforce,$starvarray);
         }
-        
+
         if(file_exists("GameEngine/Prevention/starvation.txt")) {
             unlink("GameEngine/Prevention/starvation.txt");
         }
     }
-    
+
     /************************************************
      Function for starvation - by brainiacX and Shadow
      Rework by ronix
      References:
      ************************************************/
-    
+
     private function procNewClimbers() {
         if(file_exists("GameEngine/Prevention/climbers.txt")) {
             unlink("GameEngine/Prevention/climbers.txt");
@@ -4724,7 +4724,7 @@ class Automation {
             unlink("GameEngine/Prevention/climbers.txt");
         }
     }
-    
+
     private function procClimbers($uid) {
         global $database, $ranking;
         $ranking->procRankArray();
@@ -4808,7 +4808,7 @@ class Automation {
             }
         }
     }
-    
+
     private function checkBan() {
         global $database;
         $time = time();
@@ -4819,7 +4819,7 @@ class Automation {
             mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET access = 2 WHERE id = ".(int) $banlist['uid']."");
         }
     }
-    
+
     private function regenerateOasisTroops() {
         global $database;
         $time = time();
@@ -4832,11 +4832,11 @@ class Automation {
             foreach($array as $oasis) {
                 $ids[] = $oasis['wref'];
             }
-            
+
             $database->regenerateOasisUnits($ids, true);
         }
     }
-    
+
     public static function updateMax($leader) {
         global $bid18, $database;
         $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "alidata where leader = ". (int) $leader), MYSQLI_ASSOC);
@@ -4859,7 +4859,7 @@ class Automation {
             $database->query($q);
         }
     }
-    
+
     private function checkReviveHero(){
         global $database,$session;
         $herodata=$database->getHero($session->uid,1);
@@ -4875,15 +4875,15 @@ class Automation {
             }
         }
     }
-    
+
     /************************************************
      Function for automate medals - by yi12345 and Shadow
      References:
      ************************************************/
-    
+
     function medals(){
         global $ranking,$database;
-        
+
         //we may give away ribbons
         $giveMedal = false;
         $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
@@ -4900,11 +4900,11 @@ class Automation {
             $time = $row['lastgavemedal'] + MEDALINTERVAL;
             if ($time < time()) $giveMedal = true;
         }
-        
+
         if($giveMedal && MEDALINTERVAL > 0){
-            
+
             //determine which week we are
-            
+
             $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($GLOBALS['link'],$q);
             if(mysqli_num_rows($result)) {
@@ -4913,9 +4913,9 @@ class Automation {
             } else {
                 $week='1';
             }
-            
+
             //Do same for ally week
-            
+
             $q = "SELECT week FROM ".TB_PREFIX."allimedal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($GLOBALS['link'],$q);
             if(mysqli_num_rows($result)) {
@@ -4924,8 +4924,8 @@ class Automation {
             } else {
                 $allyweek='1';
             }
-            
-            
+
+
             //Attackers of the week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, ap FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             $i=0;
@@ -4935,7 +4935,7 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."medal (userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", 1, ".($i).", ".(int) $week.", '".$row['ap']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Defender of the week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, dp FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             $i=0;
@@ -4945,7 +4945,7 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '2', ".($i).", '".(int) $week."', '".$row['dp']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Climbers of the week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, Rc FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             $i=0;
@@ -4955,7 +4955,7 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '3', ".($i).", '".(int) $week."', '".$row['Rc']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Rank climbers of the week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, clp FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
             $i=0;
@@ -4965,7 +4965,7 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '10', ".($i).", '".(int) $week."', '".$row['clp']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Robbers of the week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, RR FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             $i=0;
@@ -4975,21 +4975,21 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '4', ".($i).", '".(int) $week."', '".$row['RR']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Part of the bonus for top 10 attack + defense out
             //Top10 attackers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 //Top 10 defenders
                 $result2 = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
                 while($row2 = mysqli_fetch_array($result2)){
                     if($row['id']==$row2['id']){
-                        
+
                         $query3="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 5";
                         $result3=mysqli_query($GLOBALS['link'],$query3);
                         $row3=mysqli_fetch_row($result3);
-                        
+
                         //Look what color the ribbon must have
                         if($row3[0]<='2'){
                             $img="t22".$row3[0]."_1";
@@ -5010,17 +5010,17 @@ class Automation {
                     }
                 }
             }
-            
+
             //you stand for 3rd / 5th / 10th time in the top 3 strikers
             //top10 attackers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x at present as it is so ribbon 3rd (bronze)
                 if($row1[0]=='3'){
                     $img="t120_1";
@@ -5039,7 +5039,7 @@ class Automation {
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '6', '0', '".(int) $week."', 'Ten', '".$img."')";
                     $resul=mysqli_query($GLOBALS['link'],$quer);
                 }
-                
+
             }
             //you stand for 3rd / 5th / 10th time in the top 10 attackers
             //top10 attackers
@@ -5049,8 +5049,8 @@ class Automation {
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t130_1";
@@ -5069,18 +5069,18 @@ class Automation {
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '12', '0', '".(int) $week."', 'Ten', '".$img."')";
                     $resul=mysqli_query($GLOBALS['link'],$quer);
                 }
-                
+
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t140_1";
@@ -5099,18 +5099,18 @@ class Automation {
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '7', '0', '".(int) $week."', 'Ten', '".$img."')";
                     $resul=mysqli_query($GLOBALS['link'],$quer);
                 }
-                
+
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t150_1";
@@ -5129,19 +5129,19 @@ class Automation {
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '13', '0', '".(int) $week."', 'Ten', '".$img."')";
                     $resul=mysqli_query($GLOBALS['link'],$quer);
                 }
-                
+
             }
-            
+
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top10 klimmers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t100_1";
@@ -5165,12 +5165,12 @@ class Automation {
             //Pak de top10 klimmers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t110_1";
@@ -5190,17 +5190,17 @@ class Automation {
                     $resul=mysqli_query($GLOBALS['link'],$quer);
                 }
             }
-            
+
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top3 rank climbers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t200_1";
@@ -5224,12 +5224,12 @@ class Automation {
             //Pak de top3 rank climbers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t210_1";
@@ -5249,17 +5249,17 @@ class Automation {
                     $resul=mysqli_query($GLOBALS['link'],$quer);
                 }
             }
-            
+
             //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
             //Pak de top10 overvallers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=3";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t160_1";
@@ -5283,12 +5283,12 @@ class Automation {
             //Pak de top10 overvallers
             $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=10";
                 $result1=mysqli_query($GLOBALS['link'],$query1);
                 $row1=mysqli_fetch_row($result1);
-                
-                
+
+
                 //2x in gestaan, dit is 3e dus lintje (brons)
                 if($row1[0]=='3'){
                     $img="t170_1";
@@ -5308,16 +5308,16 @@ class Automation {
                     $resul=mysqli_query($GLOBALS['link'],$quer);
                 }
             }
-            
+
             //Put all true dens to 0
             $query="SELECT id FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
             $result=mysqli_query($GLOBALS['link'],$query);
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
                 mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id = ".(int) $row[0]);
             }
-            
+
             //Start alliance Medals wooot
-            
+
             //Aanvallers v/d Week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, ap FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
@@ -5325,7 +5325,7 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '1', ".($i).", '".$allyweek."', '".$row['ap']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Verdediger v/d Week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, dp FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
@@ -5333,7 +5333,7 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '2', ".($i).", '".$allyweek."', '".$row['dp']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Overvallers v/d Week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, RR FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
@@ -5341,7 +5341,7 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '4', ".($i).", '".$allyweek."', '".$row['RR']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             //Rank climbers of the week
             $result = mysqli_query($GLOBALS['link'],"SELECT id, clp FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
@@ -5349,19 +5349,19 @@ class Automation {
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '3', ".($i).", '".$allyweek."', '".$row['clp']."', '".$img."')";
                 $resul=mysqli_query($GLOBALS['link'],$quer);
             }
-            
+
             $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
-                
+
                 //Pak de top10 verdedigers
                 $result2 = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
                 while($row2 = mysqli_fetch_array($result2)){
                     if($row['id']==$row2['id']){
-                        
+
                         $query3="SELECT Count(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int) $row['id']." AND categorie = 5";
                         $result3=mysqli_query($GLOBALS['link'],$query3);
                         $row3=mysqli_fetch_row($result3);
-                        
+
                         //Look what color the ribbon must have
                         if($row3[0]<='2'){
                             $img="t22".$row3[0]."_1";
@@ -5382,23 +5382,23 @@ class Automation {
                     }
                 }
             }
-            
+
             $query="SELECT id FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
             $result=mysqli_query($GLOBALS['link'],$query);
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
                 mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id = ".(int) $row[0]);
             }
-            
+
             $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$time;
             $database->query($q);
         }
     }
-    
+
     /************************************************
      Function for automate medals - by yi12345 and Shadow
      References:
      ************************************************/
-    
+
     private function artefactOfTheFool() {
         global $database;
         $time = time();
