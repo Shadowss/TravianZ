@@ -104,6 +104,11 @@ class Market
             header("Location: banned.php");
             exit;
         } 
+        //check if vacation mode:
+        elseif($database->getvacmodexy($id)){
+        $form->addError("error","User is on vacation mode");
+        //break;
+        }
         else if($availableWood >= $post['r1'] AND $availableClay >= $post['r2'] AND $availableIron >= $post['r3'] AND $availableCrop >= $post['r4']) 
         { 
             $resource = array($wtrans,$ctrans,$itrans,$crtrans); 
