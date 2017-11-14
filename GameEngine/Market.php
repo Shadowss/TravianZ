@@ -85,7 +85,7 @@ class Market
 
     private function sendResource($post) 
     { 
-        global $database,$village,$session,$generator,$logging; 
+        global $database,$village,$session,$generator,$logging,$form; 
          
         $wtrans = (isset($post['r1']) && $post['r1'] != "")? $post['r1'] : 0; 
         $ctrans = (isset($post['r2']) && $post['r2'] != "")? $post['r2'] : 0; 
@@ -99,16 +99,15 @@ class Market
         $availableClay = $database->getClayAvailable($village->wid); 
         $availableIron = $database->getIronAvailable($village->wid); 
         $availableCrop = $database->getCropAvailable($village->wid); 
+		//check if vacation mode:
+        if($database->getvacmodexy($id)){
+        $form->addError("error","User is on vacation mode");
+        }
         if($session->access == BANNED) 
         { 
             header("Location: banned.php");
             exit;
         } 
-        //check if vacation mode:
-        elseif($database->getvacmodexy($id)){
-        $form->addError("error","User is on vacation mode");
-        //break;
-        }
         else if($availableWood >= $post['r1'] AND $availableClay >= $post['r2'] AND $availableIron >= $post['r3'] AND $availableCrop >= $post['r4']) 
         { 
             $resource = array($wtrans,$ctrans,$itrans,$crtrans); 
