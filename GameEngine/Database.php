@@ -511,10 +511,19 @@ class MYSQLi_DB implements IDbConnection {
 		mysqli_query($this->dblink,$q);
 	}
 	function updateResource($vid, $what, $number) {
-	    list($vid, $what, $number) = $this->escape_input((int) $vid, $what, (int) $number);
+	    $vid = (int) $vid;
 
+	    if (!is_array($what)) {
+	        $what = [$what];
+	        $number = [$number];
+        }
 
-		$q = "UPDATE " . TB_PREFIX . "vdata set " . $what . "=" . $number . " where wref = $vid";
+        $pairs = [];
+        foreach ($what as $index => $whatValue) {
+            $pairs[] = $this->escape($whatValue) . ' = ' . (Math::isInt($number[$index]) ? $number[$index] : '"'.$this->escape($number[$index]).'"');
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(', ', $pairs)." WHERE wref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_query($this->dblink,$q);
 	}

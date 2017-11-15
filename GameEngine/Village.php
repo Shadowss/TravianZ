@@ -96,11 +96,16 @@ class Village {
 		$this->loyalty = $this->infoarray['loyalty'];
 		$this->master = count($database->getMasterJobs($this->wid));
 		//de gs in town, zetten op max pakhuisinhoud
-		if($this->awood>$this->maxstore){ $this->awood=$this->maxstore; $database->updateResource($this->wid,'wood',$this->maxstore); }
-		if($this->aclay>$this->maxstore){ $this->aclay=$this->maxstore; $database->updateResource($this->wid,'clay',$this->maxstore); }
-		if($this->airon>$this->maxstore){ $this->airon=$this->maxstore; $database->updateResource($this->wid,'iron',$this->maxstore); }
-		if($this->acrop>$this->maxcrop){ $this->acrop=$this->maxcrop; $database->updateResource($this->wid,'crop',$this->maxcrop); }
+        $resourceUpdates = [];
+		if($this->awood>$this->maxstore){ $this->awood=$this->maxstore; $resourceUpdates['wood'] = $this->maxstore; }
+		if($this->aclay>$this->maxstore){ $this->aclay=$this->maxstore; $resourceUpdates['clay'] = $this->maxstore; }
+		if($this->airon>$this->maxstore){ $this->airon=$this->maxstore; $resourceUpdates['iron'] = $this->maxstore; }
+		if($this->acrop>$this->maxcrop){ $this->acrop=$this->maxcrop; $resourceUpdates['crop'] = $this->maxcrop; }
 
+		// update DB values
+        if (count($resourceUpdates)) {
+            $database->updateResource( $this->wid, array_keys( $resourceUpdates ), array_values($resourceUpdates) );
+        }
 	}
 
 	private function calculateProduction() {
