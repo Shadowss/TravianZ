@@ -102,7 +102,9 @@ class Session {
 				$user_sanitized = $database->escape($user);
 				$_SESSION['checker'] = $generator->generateRandStr(3);
 				$_SESSION['mchecker'] = $generator->generateRandStr(5);
-				$_SESSION['qst'] = $database->getUserField($user_sanitized, "quest", 1);
+
+                $userFields = $database->getUserFields($user_sanitized, "quest, id", 1, true);
+				$_SESSION['qst'] = $userFields["quest"];
 
 				$result = mysqli_query($GLOBALS['link'],"SELECT id, village_select FROM `". TB_PREFIX."users` WHERE `username`='".$user_sanitized."'");
 				$dbarray = mysqli_fetch_assoc($result);
@@ -113,7 +115,7 @@ class Session {
                         if($selected_village!='') {
                             $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                         }else{
-                            $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
+                            $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $userFields["id"] . ' LIMIT 1');
                         }
                         $data = mysqli_fetch_assoc($query);
                         $_SESSION['wid'] = $data['wref'];
@@ -122,7 +124,7 @@ class Session {
                             if($selected_village!='') {
                                 $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
                             }else{
-                                $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . (int) $database->getUserField($user_sanitized, "id", 1) . ' LIMIT 1');
+                                $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $userFields["id"] . ' LIMIT 1');
                             }
                             $data = mysqli_fetch_assoc($query);
                             $_SESSION['wid'] = $data['wref'];
@@ -196,7 +198,7 @@ class Session {
         			$database->updateUserField($user, "timestamp", $this->time, 0);
             		return true;
         		} else {
-            			return false;
+                    return false;
         		}
     		}
 			

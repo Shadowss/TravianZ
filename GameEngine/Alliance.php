@@ -380,26 +380,27 @@ class Alliance {
 		*****************************************/
 		private function kickAlliUser($post) {
 			global $database, $session, $form;
-			if($session->access != BANNED){
-			$UserData = $database->getUserArray($post['a_user'], 1);
-			if($this->userPermArray['opt2'] == 0) {
-				$form->addError("perm", NO_PERMISSION);
-			} else if($UserData['id'] != $session->uid){
-				$database->updateUserField($post['a_user'], 'alliance', 0, 1);
-				$database->deleteAlliPermissions($post['a_user']);
-				$database->deleteAlliance($session->alliance);
-				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($post['a_user']) . '</a> has quit the alliance.');
-				if($session->alliance && $database->isAllianceOwner($UserData['id']) == $session->alliance){
-				$newowner = $database->getAllMember2($session->alliance);
-				$newleader = $newowner['id'];
-				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
-				$database->query($q);
-				$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-				Automation::updateMax($newleader);
+
+			if ($session->access != BANNED) {
+				$UserData = $database->getUserArray($post['a_user'], 1);
+				if($this->userPermArray['opt2'] == 0) {
+					$form->addError("perm", NO_PERMISSION);
+				} else if($UserData['id'] != $session->uid){
+					$database->updateUserField($post['a_user'], 'alliance', 0, 1);
+					$database->deleteAlliPermissions($post['a_user']);
+					$database->deleteAlliance($session->alliance);
+					// log the notice
+					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($post['a_user']) . '</a> has quit the alliance.');
+						if($session->alliance && $database->isAllianceOwner($UserData['id']) == $session->alliance){
+						$newowner = $database->getAllMember2($session->alliance);
+						$newleader = $newowner['id'];
+						$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
+						$database->query($q);
+						$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+						Automation::updateMax($newleader);
+					}
 				}
-				}
-			}else{
+			} else {
 			    header("Location: banned.php");
 			    exit;
 			}

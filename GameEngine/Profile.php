@@ -97,8 +97,7 @@ class Profile {
 			for($i=0;$i<=count($varray)-1;$i++) {
 				$k = trim($post['dname'.$i]);
 				$name = preg_replace("/[^a-zA-Z0-9_-\s]/", "", $k);
-				$database->setVillageName($database->RemoveXSS($varray[$i]['wref']),$name);
-        $database->setVillageName($database->RemoveXSS($varray[$i]['wref']),$k);
+				$database->setVillageName($varray[$i]['wref'],$database->RemoveXSS($name));
 		}  
 		header("Location: spieler.php?uid=".$post['uid']);
 		exit;
@@ -146,13 +145,14 @@ class Profile {
 
 	private function updateAccount($post) {
 		global $database,$session,$form;
+
 		if($post['pw2'] == $post['pw3']) {
 			if($database->login($session->username,$post['pw1'])) {
 				if ($_POST['uid'] != $session->uid){
-                      			die("Hacking Attempr");
-                		} else {
-                		    $database->updateUserField($post['uid'],"password",password_hash($post['pw2'], PASSWORD_BCRYPT,['cost' => 12]),1);
-			}
+                    die("Hacking Attempr");
+                } else {
+                    $database->updateUserField($post['uid'],"password",password_hash($post['pw2'], PASSWORD_BCRYPT,['cost' => 12]),1);
+				}
 			}
 			else {
 				$form->addError("pw",LOGIN_PW_ERROR);
@@ -161,18 +161,24 @@ class Profile {
 		else {
 			$form->addError("pw",PASS_MISMATCH);
 		}
+
+
 		if($post['email_alt'] == $session->userinfo['email']) {
 			$database->updateUserField($post['uid'],"email",$post['email_neu'],1);
 		}
 		else {
 			$form->addError("email",EMAIL_ERROR);
 		}
+
+
 		if($post['del'] && password_verify($post['del_pw'], $session->userinfo['password'])) {
 				$database->setDeleting($post['uid'],0);
 		}
 		else {
 			$form->addError("del",PASS_MISMATCH);
 		}
+
+
 		if($post['v1'] != "") {
 			$sitid = $database->getUserField($post['v1'],"id",1);
 			if($sitid == $session->userinfo['sit1'] || $sitid == $session->userinfo['sit2']) {
@@ -187,6 +193,7 @@ class Profile {
 				}
 			}
 		}
+
 		$_SESSION['errorarray'] = $form->getErrors();
 		header("Location: spieler.php?s=3");
 		exit;
@@ -194,12 +201,15 @@ class Profile {
 
 	private function removeSitter($get) {
 		global $database,$session;
+
 		if($get['a'] == $session->checker) {
 			if($session->userinfo['sit'.$get['type']] == $get['id']) {
 				$database->updateUserField($session->uid,"sit".$get['type'],0,1);
 			}
+
 			$session->changeChecker();
 		}
+
 		header("Location: spieler.php?s=".$get['s']);
 		exit;
 	}
@@ -213,13 +223,16 @@ class Profile {
 
 	private function removeMeSit($get) {
 		global $database,$session;
+
 		if($get['a'] == $session->checker) {
 			$database->removeMeSit($get['id'],$session->uid);
 			$session->changeChecker();
 		}
+
 		header("Location: spieler.php?s=".$get['s']);
 		exit;
 	}
 };
+
 $profile = new Profile;
 ?>

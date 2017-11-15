@@ -135,8 +135,13 @@ class Account {
 				if($uid) {
 					setcookie("COOKUSR",$_POST['name'],time()+COOKIE_EXPIRE,COOKIE_PATH);
 					setcookie("COOKEMAIL",$_POST['email'],time()+COOKIE_EXPIRE,COOKIE_PATH);
-					$database->updateUserField($uid,"act","",1);
-					$database->updateUserField($uid,"invited",$_POST['invited'],1);
+					$database->updateUserField(
+						$uid,
+                        ["act", "invited"],
+                        ["", $_POST['invited']],
+                        1
+                    );
+
 					$this->generateBase($_POST['kid'],$uid,$_POST['name']);
 					header("Location: login.php");
 					exit;
@@ -177,7 +182,7 @@ class Account {
 
 	private function Unreg() {
 		global $database;
-		$q = "SELECT password, username FROM ".TB_PREFIX."activate where id = '".$database->escape((int) $_POST['id'])."'";
+		$q = "SELECT password, username FROM ".TB_PREFIX."activate where id = ".(int) $_POST['id'];
 		$result = mysqli_query($GLOBALS['link'],$q);
 		$dbarray = mysqli_fetch_array($result);
 		if(password_verify($_POST['pw'], $dbarray['password'])) {
@@ -207,12 +212,14 @@ class Account {
 			$form->addError("pw",LOGIN_PW_ERROR);
 		}
 
-		if($database->getUserField($_POST['user'],"act",1) != "") {
+		$userData = $database->getUserArray($_POST['user'], 0);
+
+		if($userData["act"] != "") {
 			$form->addError("activate",$_POST['user']);
 		}
 
 		// Vacation mode by Shadow
-		if($database->getUserField($_POST['user'],"vac_mode",1) == 1 && $database->getUserField($_POST['user'],"vac_time",1) > time()) {
+		if($userData["vac_mode"] == 1 && $userData["vac_time"] > time()) {
     		$form->addError("vacation","Vacation mode is still enabled");
 		}
 
@@ -224,14 +231,13 @@ class Account {
 			header("Location: login.php");
 			exit;
 		} else {
-    		$userid = $database->getUserArray($_POST['user'], 0);
     		// Vacation mode by Shadow
-    		$database->removevacationmode($userid['id']);
+    		$database->removevacationmode($userData['id']);
     		// Vacation mode by Shadow
     		if($database->login($_POST['user'],$_POST['pw'])){
-    			$database->UpdateOnline("login" ,$_POST['user'],time(),$userid['id']);
+    			$database->UpdateOnline("login" ,$_POST['user'],time(),$userData['id']);
     		}else if($database->sitterLogin($_POST['user'],$_POST['pw'])){
-    			$database->UpdateOnline("sitter" ,$_POST['user'],time(),$userid['id']);
+    			$database->UpdateOnline("sitter" ,$_POST['user'],time(),$userData['id']);
     		}
     			setcookie("COOKUSR",$_POST['user'],time()+COOKIE_EXPIRE,COOKIE_PATH);
     			$session->login($_POST['user']);

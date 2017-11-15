@@ -244,7 +244,6 @@ class Automation {
         //create new file to check filetime
         //not every click regenerate but 1 minute or after
 
-
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/loyalty.txt", 'w');
         fclose($ourFileHandle);
         global $database;
@@ -1283,7 +1282,7 @@ class Automation {
                             $database->addMovement(4,0,$data['to'],$attackid,microtime(true),microtime(true)+(180/EVASION_SPEED));
                             $newgold = $gold-2;
                             $newmaxevasion = $maxevasion-1;
-                            $database->updateUserFields($DefenderID, ["gold", "maxevasion"], [$newgold, $newmaxevasion], 1);
+                            $database->updateUserField($DefenderID, ["gold", "maxevasion"], [$newgold, $newmaxevasion], 1);
                         }
                     }
                     //get defence units
@@ -2363,9 +2362,11 @@ class Automation {
                                 }
                             }
 
-                            $exp1 = $database->getVillageField($from['wref'],'exp1');
-                            $exp2 = $database->getVillageField($from['wref'],'exp2');
-                            $exp3 = $database->getVillageField($from['wref'],'exp3');
+                            $expArray = $database->getVillageFields($from['wref'], 'exp1, exp2, exp3');
+                            $exp1 = $expArray['exp1'];
+                            $exp2 = $expArray['exp2'];
+                            $exp3 = $expArray['exp3'];
+
                             if($exp1 == 0){
                                 $villexp = 0;
                             }
@@ -2381,18 +2382,24 @@ class Automation {
                             $mode = CP;
                             $cp_mode = $GLOBALS['cp'.$mode];
                             $need_cps = $cp_mode[count($varray1)+1];
-                            $user_cps = $database->getUserField($from['owner'],"cp",0);
-                            //see if last village, or village head
+
+                            if (!isset($cachedUserData[$from['owner']])) {
+                                $cachedUserData[$from['owner']] = $database->getUserArray($from['owner'], 1);
+                            }
+
+                            $user_cps = $cachedUserData[$from['owner']]['cp'];
+
+                            //check for last village or capital
                             if($user_cps >= $need_cps){
                                 if(count($varray)!='1' AND $to['capital']!='1' AND $villexp < $canconquer){
                                     if($to['owner']!=3 OR $to['name']!='WW Buildingplan'){
-                                        //if there is no Palace/Residence
-                                        for ($i=18; $i<39; $i++){
-                                            if ($database->getFieldLevel($data['to'],"".$i."t")==25 or $database->getFieldLevel($data['to'],"".$i."t")==26){
-                                                $nochiefing='1';
-                                                $info_chief = "".$chief_pic.",The Palace/Residence isn\'t destroyed!";
-                                            }
+                                        // check for standing Palace or Residence
+                                        if ($database->getFieldLevelInVillage($data['to'], '25, 26')) {
+                                            $nochiefing = 1;
+                                            $info_chief = "".$chief_pic.",The Palace/Residence isn\'t destroyed!";
                                         }
+
+                                        // we can conquer this village
                                         if(!isset($nochiefing)){
                                             //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
                                             if($this->getTypeLevel(35,$data['from']) == 0){
@@ -2408,31 +2415,46 @@ class Automation {
                                                     $rand+=rand(5,15);
                                                 }
                                             }
-                                            //loyalty is more than 0
-                                            if(($toF['loyalty']-$rand)>0){
+
+                                            // loyalty is more than 0
+                                            if (($toF['loyalty']-$rand) > 0) {
                                                 $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty']-$rand)."</b>.";
                                                 $database->setVillageField($data['to'],'loyalty',($toF['loyalty']-$rand));
                                             } else if (!$village_destroyed) {
-                                                //you took over the village
+                                                // you took over the village
                                                 $villname = addslashes($database->getVillageField($data['to'],"name"));
                                                 $artifact = $database->getOwnArtefactInfo($data['to']);
+
                                                 $info_chief = "".$chief_pic.",Inhabitants of ".$villname." village decided to join your empire.";
+
                                                 if ($artifact['vref'] == $data['to']){
-                                                    $database->claimArtefact($data['to'],$data['to'],$database->getVillageField($data['from'],"owner"));
+                                                    if (!isset($villageOwners[$data['from']])) {
+                                                        $villageOwners[$data['from']] = $database->getVillageField($data['from'],"owner");
+                                                    }
+                                                    $database->claimArtefact($data['to'], $data['to'], $villageOwners[$data['from']]);
                                                 }
-                                                $database->setVillageField($data['to'],'loyalty',0);
-                                                $database->setVillageField($data['to'],'owner',$database->getVillageField($data['from'],"owner"));
+
+
+                                                $database->setVillageFields(
+                                                    $data['to'],
+                                                    ['loyalty', 'owner'],
+                                                    [0, $villageOwners[$data['from']]]
+                                                );
+
                                                 //delete upgrades in armory and blacksmith
-                                                $q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref = ".(int) $data['to']."";
+                                                $q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref = ".(int) $data['to'];
                                                 $database->query($q);
                                                 $database->addABTech($data['to']);
+
                                                 //delete researches in academy
-                                                $q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref = ".(int) $data['to']."";
+                                                $q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref = ".(int) $data['to'];
                                                 $database->query($q);
                                                 $database->addTech($data['to']);
+
                                                 //delete reinforcement
-                                                $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = ".(int) $data['to']."";
+                                                $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = ".(int) $data['to'];
                                                 $database->query($q);
+
                                                 //no units can stay in the village itself
                                                 $units2reset = [];
                                                 for ($u = 1; $u <= 50; $u++) {
@@ -2443,36 +2465,50 @@ class Automation {
                                                 $units2reset[] = 'hero = 0';
                                                 $q = "UPDATE ".TB_PREFIX."units SET ".implode(',', $units2reset)." WHERE vref = ".(int) $data['to'];
                                                 $database->query($q);
+
                                                 // check buildings
+                                                $newLevels_fieldNames = [];
+                                                $newLevels_fieldValues = [];
+
                                                 $pop1 = $database->getVillageField($data['from'],"pop");
                                                 $pop2 = $database->getVillageField($data['to'],"pop");
                                                 if($pop1 > $pop2){
                                                     $buildlevel = $database->getResourceLevel($data['to']);
+
                                                     for ($i=1; $i<=39; $i++){
                                                         if($buildlevel['f'.$i]!=0){
                                                             if($buildlevel['f'.$i."t"]!=35 && $buildlevel['f'.$i."t"]!=36 && $buildlevel['f'.$i."t"]!=41){
                                                                 $leveldown = $buildlevel['f'.$i]-1;
-                                                                $database->setVillageLevel($data['to'],"f".$i,$leveldown);
+                                                                $newLevels_fieldNames[] = "f".$i;
+                                                                $newLevels_fieldValues[] = $leveldown;
                                                             }else{
-                                                                $database->setVillageLevel($data['to'],"f".$i,0);
-                                                                $database->setVillageLevel($data['to'],"f".$i."t",0);
+                                                                $newLevels_fieldNames[] = "f".$i;
+                                                                $newLevels_fieldValues[] = 0;
+
+                                                                $newLevels_fieldNames[] = "f".$i."t";
+                                                                $newLevels_fieldValues[] = 0;
                                                             }
                                                         }
                                                     }
-                                                    if($buildlevel['f99']!=0){
+
+                                                    if ($buildlevel['f99']!=0) {
                                                         $leveldown = $buildlevel['f99']-1;
-                                                        $database->setVillageLevel($data['to'],"f99",$leveldown);
+                                                        $newLevels_fieldNames[] = "f99";
+                                                        $newLevels_fieldValues[] = $leveldown;
                                                     }
                                                 }
+
                                                 //destroy wall
-                                                $database->setVillageLevel($data['to'],"f40",0);
-                                                $database->setVillageLevel($data['to'],"f40t",0);
-                                                $database->clearExpansionSlot($data['to']);
+                                                $newLevels_fieldNames[] = "f40";
+                                                $newLevels_fieldValues[] = 0;
 
+                                                $newLevels_fieldNames[] = "f40t";
+                                                $newLevels_fieldValues[] = 0;
 
-                                                $exp1 = $database->getVillageField($data['from'],'exp1');
-                                                $exp2 = $database->getVillageField($data['from'],'exp2');
-                                                $exp3 = $database->getVillageField($data['from'],'exp3');
+                                                $expArray = $database->getVillageFields($data['from'], 'exp1, exp2, exp3');
+                                                $exp1 = $expArray['exp1'];
+                                                $exp2 = $expArray['exp2'];
+                                                $exp3 = $expArray['exp3'];
 
                                                 if($exp1 == 0){
                                                     $exp = 'exp1';
@@ -2486,11 +2522,16 @@ class Automation {
                                                     $exp = 'exp3';
                                                     $value = $data['to'];
                                                 }
+
                                                 $database->setVillageField($data['from'],$exp,$value);
+
                                                 //remove oasis related to village
                                                 $units->returnTroops($data['to'],1);
                                                 $chiefing_village = 1;
 
+                                                // update data in the database
+                                                $database->clearExpansionSlot($data['to']);
+                                                $database->setVillageLevel($data['to'], $newLevels_fieldNames, $newLevels_fieldValues);
                                             }
                                         }
                                     } else {

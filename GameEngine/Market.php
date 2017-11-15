@@ -94,7 +94,10 @@ class Market
         $wtrans = str_replace("-", "", $wtrans); 
         $ctrans = str_replace("-", "", $ctrans); 
         $itrans = str_replace("-", "", $itrans); 
-        $crtrans = str_replace("-", "", $crtrans); 
+        $crtrans = str_replace("-", "", $crtrans);
+        // preload all village data, since we're retrieving some of those separately below
+        $database->getVillage($village->wid);
+
         $availableWood = $database->getWoodAvailable($village->wid); 
         $availableClay = $database->getClayAvailable($village->wid); 
         $availableIron = $database->getIronAvailable($village->wid); 
@@ -130,8 +133,9 @@ class Market
             exit;
         } 
         else 
-        { 
-            // something 
+        {
+            // TODO: WTF??? :D
+            // something
         } 
     } 
 
@@ -163,7 +167,11 @@ class Market
             $wood = ($post['rid1'] == 1)? $post['m1'] : 0; 
             $clay = ($post['rid1'] == 2)? $post['m1'] : 0; 
             $iron = ($post['rid1'] == 3)? $post['m1'] : 0; 
-            $crop = ($post['rid1'] == 4)? $post['m1'] : 0; 
+            $crop = ($post['rid1'] == 4)? $post['m1'] : 0;
+
+            // preload all village data, since we're retrieving some of those separately below
+            $database->getVillage($village->wid);
+
             $availableWood = $database->getWoodAvailable($village->wid); 
             $availableClay = $database->getClayAvailable($village->wid); 
             $availableIron = $database->getIronAvailable($village->wid); 
@@ -235,16 +243,23 @@ class Market
             } 
         } 
         $myresource = $hisresource = array(1=>0,0,0,0); 
-        $myresource[$infoarray['wtype']] = $infoarray['wamt']; 
-        $mysendid = $database->sendResource($myresource[1],$myresource[2],$myresource[3],$myresource[4],$reqMerc,0); 
-        $hisresource[$infoarray['gtype']] = $infoarray['gamt']; 
-        $hissendid = $database->sendResource($hisresource[1],$hisresource[2],$hisresource[3],$hisresource[4],$infoarray['merchant'],0); 
+        $myresource[$infoarray['wtype']] = $infoarray['wamt'];
+        $mysendid = $database->sendResource($myresource[1],$myresource[2],$myresource[3],$myresource[4],$reqMerc,0);
+        $hisresource[$infoarray['gtype']] = $infoarray['gamt'];
+        $hissendid = $database->sendResource($hisresource[1],$hisresource[2],$hisresource[3],$hisresource[4],$infoarray['merchant'],0);
         $hiscoor = $database->getCoor($infoarray['vref']); 
         $mytime = $generator->procDistanceTime($hiscoor,$village->coor,$session->tribe,0); 
         $targettribe = $database->getUserField($database->getVillageField($infoarray['vref'],"owner"),"tribe",0); 
-        $histime = $generator->procDistanceTime($village->coor,$hiscoor,$targettribe,0); 
-        $database->addMovement(0,$village->wid,$infoarray['vref'],$mysendid,time(),$mytime+time());
-        $database->addMovement(0,$infoarray['vref'],$village->wid,$hissendid,time(),$histime+time()); 
+        $histime = $generator->procDistanceTime($village->coor,$hiscoor,$targettribe,0);
+        $timestamp = time();
+        $database->addMovement(
+            [0, 0],
+            [$village->wid, $infoarray['vref']],
+            [$infoarray['vref'], $village->wid],
+            [$mysendid, $hissendid],
+            [$timestamp, $timestamp],
+            [$mytime + $timestamp, $histime + $timestamp]
+        );
         $resource = array(1=>0,0,0,0); 
         $resource[$infoarray['wtype']] = $infoarray['wamt']; 
         $database->modifyResource($village->wid,$resource[1],$resource[2],$resource[3],$resource[4],0); 
@@ -346,11 +361,12 @@ class Market
                 } 
                 else if (($post['m2'][0]+$post['m2'][1]+$post['m2'][2]+$post['m2'][3])<=(round($village->awood)+round($village->aclay)+round($village->airon)+round($village->acrop))) 
                 { 
-                    $database->setVillageField($village->wid,"wood",$post['m2'][0]); 
-                    $database->setVillageField($village->wid,"clay",$post['m2'][1]); 
-                    $database->setVillageField($village->wid,"iron",$post['m2'][2]); 
-                    $database->setVillageField($village->wid,"crop",$post['m2'][3]); 
-                    $database->modifyGold($session->uid,3,0); 
+                    $database->setVillageField(
+                        $village->wid,
+                        ["wood", "clay", "iron", "crop"],
+                        [$post['m2'][0], $post['m2'][1], $post['m2'][2], $post['m2'][3]]
+                    );
+                    $database->modifyGold($session->uid,3,0);
                     header("Location: build.php?id=".$post['id']."&t=3&c");;
                     exit;
                 } 
