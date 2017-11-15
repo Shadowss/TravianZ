@@ -185,6 +185,11 @@ class MYSQLi_DB implements IDbConnection {
         $coordsCache = [],
 
         /**
+         * @var array Cache of units in a village.
+         */
+        $unitsCache = [],
+
+        /**
          * @var array Cache of messages to be sent out to players,
          *            so we can collect them and send them out together
          *            at the end of script execution.
@@ -4588,24 +4593,30 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getUnit($vid) {
+	function getUnit($vid, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$unitsCache, $vid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * from " . TB_PREFIX . "units where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
 		if (!empty($result)) {
-			return mysqli_fetch_assoc($result);
+            self::$unitsCache[$vid] = mysqli_fetch_assoc($result);
 		} else {
-			return NULL;
+            self::$unitsCache[$vid] = null;
 		}
+
+		return self::$unitsCache[$vid];
 	}
 
-	function getUnitsNumber($vid) {
+	function getUnitsNumber($vid, $use_cache = false) {
 	    list($vid) = $this->escape_input((int) $vid);
 
-		$q = "SELECT * from " . TB_PREFIX . "units where vref = $vid";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_assoc($result);
+        $dbarray = $this->getUnit($vid);
 		$totalunits = 0;
 		$movingunits = $this->getVillageMovement($vid);
 		for($i=1;$i<=50;$i++){
