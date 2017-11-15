@@ -703,7 +703,6 @@ class Automation {
         // update statistical data for affected villages
         foreach ($villagesAffected as $affected_id) {
             $this->recountPop( $affected_id );
-            $this->procClimbers( $villageOwners[$affected_id] );
         }
 
         // update data that can be done in one swoop instead of using multiple update queries
