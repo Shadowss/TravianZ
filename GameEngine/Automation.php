@@ -497,11 +497,11 @@ class Automation {
                       clay = IF(clay < 0, 0, clay),
                       iron = IF(iron < 0, 0, iron),
                       crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < 800, 800, maxstore),
-                      maxcrop = IF(maxcrop < 800, 800, maxcrop)
+                      maxstore = IF(maxstore < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxstore),
+                      maxcrop = IF(maxcrop < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxcrop)
                   WHERE
-                      maxstore < 800 OR
-                      maxcrop < 800 OR
+                      maxstore < (800 * ".STORAGE_MULTIPLIER.") OR
+                      maxcrop < (800 * ".STORAGE_MULTIPLIER.") OR
                       wood < 0 OR
                       clay < 0 OR
                       iron < 0 OR
@@ -518,11 +518,11 @@ class Automation {
                       clay = IF(clay < 0, 0, clay),
                       iron = IF(iron < 0, 0, iron),
                       crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < 800, 800, maxstore),
-                      maxcrop = IF(maxcrop < 800, 800, maxcrop)
+                      maxstore = IF(maxstore < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxstore),
+                      maxcrop = IF(maxcrop < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxcrop)
                   WHERE
-                      maxstore < 800 OR
-                      maxcrop < 800 OR
+                      maxstore < (800 * ".STORAGE_MULTIPLIER.") OR
+                      maxcrop < (800 * ".STORAGE_MULTIPLIER.") OR
                       wood < 0 OR
                       clay < 0 OR
                       iron < 0 OR
@@ -4323,12 +4323,9 @@ class Automation {
     private function updateStore() {
         global $bid10, $bid38, $bid11, $bid39;
 
-        // first of all, update all max storage and max crop where it fell below 800
-
-
         $result = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata`');
 
-        mysqli_begin_transaction($GLOBALS['link']) or die(mysqli_error($database->dblink));
+        mysqli_begin_transaction($GLOBALS['link']);
         while ($row = mysqli_fetch_assoc($result))
         {
             $ress = $crop = 0;
@@ -4357,19 +4354,15 @@ class Automation {
                 }
             }
 
-            if ($ress == 0)
-            {
-                $ress = 800 * STORAGE_MULTIPLIER;
+            // no need for update, since we didn't find any warehouses or granaries
+            // and maximums would have been set to correct values inside prune* functions already
+            if ($ress == 0 && $crop == 0) {
+                continue;
             }
 
-            if ($crop == 0)
-            {
-                $crop = 800 * STORAGE_MULTIPLIER;
-            }
-
-            mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']) or die(mysqli_error($database->dblink));
+            mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']);
         }
-        mysqli_commit($GLOBALS['link']) or die(mysqli_error($database->dblink));
+        mysqli_commit($GLOBALS['link']);
     }
 
     private function oasisResourcesProduce() {
