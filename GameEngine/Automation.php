@@ -29,6 +29,76 @@ class Automation {
     private $bountyOproduction = array();
     private $bountyOpop = 1;
 
+    public function __construct() {
+
+        $this->procNewClimbers();
+        $this->ClearUser();
+        $this->ClearInactive();
+        $this->oasisResourcesProduce();
+        $this->pruneResource();
+        $this->pruneOResource();
+        $this->checkWWAttacks();
+        if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time()-filemtime("GameEngine/Prevention/culturepoints.txt")>50) {
+            $this->culturePoints();
+        }
+        if(!file_exists("GameEngine/Prevention/updatehero.txt") or time()-filemtime("GameEngine/Prevention/updatehero.txt")>50) {
+            $this->updateHero();
+        }
+        if(!file_exists("GameEngine/Prevention/cleardeleting.txt") or time()-filemtime("GameEngine/Prevention/cleardeleting.txt")>50) {
+            $this->clearDeleting();
+        }
+        if (! file_exists("GameEngine/Prevention/build.txt") or time() - filemtime("GameEngine/Prevention/build.txt")>50)
+        {
+            $this->buildComplete();
+        }
+        $this->MasterBuilder();
+        if (! file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt")>50)
+        {
+            $this->demolitionComplete();
+        }
+        // TODO: check if commenting-out this next line affected anything (it shouldn't) and should improve performance
+        //$this->updateStore();
+        $this->delTradeRoute();
+        $this->TradeRoute();
+        if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>50) {
+            $this->marketComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/research.txt") or time()-filemtime("GameEngine/Prevention/research.txt")>50) {
+            $this->researchComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/training.txt") or time()-filemtime("GameEngine/Prevention/training.txt")>50) {
+            $this->trainingComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/starvation.txt") or time()-filemtime("GameEngine/Prevention/starvation.txt")>50) {
+            $this->starvation();
+        }
+        if(!file_exists("GameEngine/Prevention/celebration.txt") or time()-filemtime("GameEngine/Prevention/celebration.txt")>50) {
+            $this->celebrationComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/sendunits.txt") or time()-filemtime("GameEngine/Prevention/sendunits.txt")>50) {
+            $this->sendunitsComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/loyalty.txt") or time()-filemtime("GameEngine/Prevention/loyalty.txt")>60) {
+            $this->loyaltyRegeneration();
+        }
+        if(!file_exists("GameEngine/Prevention/sendreinfunits.txt") or time()-filemtime("GameEngine/Prevention/sendreinfunits.txt")>50) {
+            $this->sendreinfunitsComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/returnunits.txt") or time()-filemtime("GameEngine/Prevention/returnunits.txt")>50) {
+            $this->returnunitsComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/settlers.txt") or time()-filemtime("GameEngine/Prevention/settlers.txt")>50) {
+            $this->sendSettlersComplete();
+        }
+        $this->updateGeneralAttack();
+        $this->checkInvitedPlayes();
+        $this->updateStore();
+        $this->CheckBan();
+        $this->regenerateOasisTroops();
+        $this->medals();
+        $this->artefactOfTheFool();
+    }
+
     public function isWinner() {
         // check whether someone already built a level 100 Wonder of the World
         $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99 = 100 and f99t = 40"), MYSQLI_ASSOC);
@@ -163,76 +233,6 @@ class Automation {
             $popT += ((isset($dataarray[$i]) && isset($dataarray[$i]['cp'])) ? $dataarray[$i]['cp'] : 0);
         }
         return $popT;
-    }
-
-    public function __construct() {
-
-        $this->procNewClimbers();
-        $this->ClearUser();
-        $this->ClearInactive();
-        $this->oasisResourcesProduce();
-        $this->pruneResource();
-        $this->pruneOResource();
-        $this->checkWWAttacks();
-        if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time()-filemtime("GameEngine/Prevention/culturepoints.txt")>50) {
-            $this->culturePoints();
-        }
-        if(!file_exists("GameEngine/Prevention/updatehero.txt") or time()-filemtime("GameEngine/Prevention/updatehero.txt")>50) {
-            $this->updateHero();
-        }
-        if(!file_exists("GameEngine/Prevention/cleardeleting.txt") or time()-filemtime("GameEngine/Prevention/cleardeleting.txt")>50) {
-            $this->clearDeleting();
-        }
-        if (! file_exists("GameEngine/Prevention/build.txt") or time() - filemtime("GameEngine/Prevention/build.txt")>50)
-        {
-            $this->buildComplete();
-        }
-        $this->MasterBuilder();
-        if (! file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt")>50)
-        {
-            $this->demolitionComplete();
-        }
-        // TODO: check if commenting-out this next line affected anything (it shouldn't) and should improve performance
-        //$this->updateStore();
-        $this->delTradeRoute();
-        $this->TradeRoute();
-        if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>50) {
-            $this->marketComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/research.txt") or time()-filemtime("GameEngine/Prevention/research.txt")>50) {
-            $this->researchComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/training.txt") or time()-filemtime("GameEngine/Prevention/training.txt")>50) {
-            $this->trainingComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/starvation.txt") or time()-filemtime("GameEngine/Prevention/starvation.txt")>50) {
-            $this->starvation();
-        }
-        if(!file_exists("GameEngine/Prevention/celebration.txt") or time()-filemtime("GameEngine/Prevention/celebration.txt")>50) {
-            $this->celebrationComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/sendunits.txt") or time()-filemtime("GameEngine/Prevention/sendunits.txt")>50) {
-            $this->sendunitsComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/loyalty.txt") or time()-filemtime("GameEngine/Prevention/loyalty.txt")>60) {
-            $this->loyaltyRegeneration();
-        }
-        if(!file_exists("GameEngine/Prevention/sendreinfunits.txt") or time()-filemtime("GameEngine/Prevention/sendreinfunits.txt")>50) {
-            $this->sendreinfunitsComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/returnunits.txt") or time()-filemtime("GameEngine/Prevention/returnunits.txt")>50) {
-            $this->returnunitsComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/settlers.txt") or time()-filemtime("GameEngine/Prevention/settlers.txt")>50) {
-            $this->sendSettlersComplete();
-        }
-        $this->updateGeneralAttack();
-        $this->checkInvitedPlayes();
-        $this->updateStore();
-        $this->CheckBan();
-        $this->regenerateOasisTroops();
-        $this->medals();
-        $this->artefactOfTheFool();
     }
 
     private function loyaltyRegeneration() {
@@ -4322,6 +4322,9 @@ class Automation {
     // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
     private function updateStore() {
         global $bid10, $bid38, $bid11, $bid39;
+
+        // first of all, update all max storage and max crop where it fell below 800
+
 
         $result = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata`');
 
