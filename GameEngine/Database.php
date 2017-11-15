@@ -201,13 +201,13 @@ class MYSQLi_DB implements IDbConnection {
 	public $dblink;
 
 	/**
-	 * 
+	 *
 	 * Constructor.
 	 * Will initialize the connection to MySQL
 	 * and die on any error it would encounter.
-	 * 
+	 *
 	 * @example $db = new MYSQLi_DB(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB);
-	 * 
+	 *
 	 * @param   string $hostname Hostname of the MySQL server.
 	 * @param   string $username Username to be used to to connect.
 	 * @param   string $password Password to be used to to connect.
@@ -226,7 +226,7 @@ class MYSQLi_DB implements IDbConnection {
 		if (!$this->connect()) {
 		    die(mysqli_error($this->dblink));
 		}
-		 
+
 		// we will operate in UTF8
 		mysqli_query($this->dblink,"SET NAMES 'UTF8'");
 	}
@@ -255,7 +255,7 @@ class MYSQLi_DB implements IDbConnection {
 	        return true;
 	    }
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @see \App\Database\IDbConnection::disconnect()
@@ -271,7 +271,7 @@ class MYSQLi_DB implements IDbConnection {
 
 	    return true;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @see \App\Database\IDbConnection::reconnect()
@@ -280,7 +280,7 @@ class MYSQLi_DB implements IDbConnection {
 	    $this->disconnect();
 	    return $this->connect();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 * @see \App\Database\IDbConnection::query_new()
@@ -349,21 +349,21 @@ class MYSQLi_DB implements IDbConnection {
                     if (mysqli_stmt_execute($prep)) {
                         $this->selectQueryCount++;
                         $queryResult = [];
-    
+
                         // read metadata, so we know what fields we were actually selecting
                         // and can prepare our temporary variables to read them into
                         $resultMetaData = mysqli_stmt_result_metadata($prep);
-    
+
                         $stmtRow = array();
                         $rowReferences = array();
                         while ($field = mysqli_fetch_field($resultMetaData)) {
                             $rowReferences[] = &$stmtRow[$field->name];
                         }
-                        mysqli_free_result($resultMetaData); 
-    
+                        mysqli_free_result($resultMetaData);
+
                         // now call bind_result with all our variables to recive the data prepared
                         call_user_func_array(array($prep, 'bind_result'), $rowReferences);
-    
+
                         // prepare the array-ed result
                         while(mysqli_stmt_fetch($prep)){
                             $row = array();
@@ -372,10 +372,10 @@ class MYSQLi_DB implements IDbConnection {
                             }
                             $queryResult[] = $row;
                         }
-    
+
                         // free the result
-                        mysqli_stmt_free_result($prep); 
-    
+                        mysqli_stmt_free_result($prep);
+
                         $outputValues[] = $queryResult;
                     } else {
                         throw new Exception('Failed to execute an SQL statement!');
@@ -435,7 +435,7 @@ class MYSQLi_DB implements IDbConnection {
 	    $value = stripslashes($value);
 	    return mysqli_real_escape_string($this->dblink, $value);
 	}
-	
+
 	function escape_input() {
 	    $numargs = func_num_args();
 	    $arg_list = func_get_args();
@@ -449,10 +449,10 @@ class MYSQLi_DB implements IDbConnection {
 	           $res[] = $arg_list[$i];
 	        }
 	    }
-	    
+
 	    return $res;
 	}
-	
+
 	function return_link() {
 		return $this->dblink;
 	}
@@ -577,7 +577,7 @@ class MYSQLi_DB implements IDbConnection {
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['id'];
 	}
-	
+
 	function caststruc($user) {
 	    list($user) = $this->escape_input((int) $user);
 
@@ -590,7 +590,7 @@ class MYSQLi_DB implements IDbConnection {
 		$strutture= mysqli_fetch_array($query1);
 		return $strutture;
 	}
-	
+
 	function removeMeSit($uid, $uid2) {
 	    list($uid, $uid2) = $this->escape_input((int) $uid, (int) $uid2);
 
@@ -734,7 +734,7 @@ class MYSQLi_DB implements IDbConnection {
       			$q = "SELECT * FROM " . TB_PREFIX . "vdata where starv = 0 and starvupdate = 0";
       			$result = mysqli_query($this->dblink,$q);
       			return $this->mysqli_fetch_all($result);
-  	} 
+  	}
 
 	function getActivateField($ref, $field, $mode) {
         list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
@@ -753,7 +753,7 @@ class MYSQLi_DB implements IDbConnection {
         list($username, $password) = $this->escape_input($username, $password);
 		$q = "SELECT id,password,sessid,is_bcrypt FROM " . TB_PREFIX . "users where username = '$username'";
 		$result = mysqli_query($this->dblink,$q);
-		
+
 		// if we didn't update the database for bcrypt hashes yet...
 		if (mysqli_error($this->dblink) != '') {
 		    $q = "SELECT id, password,sessid,0 as is_bcrypt FROM " . TB_PREFIX . "users where username = '$username'";
@@ -762,16 +762,16 @@ class MYSQLi_DB implements IDbConnection {
 		} else {
 		    $bcrypt_update_done = true;
 		}
-		
+
 		$dbarray = mysqli_fetch_array($result);
-		
+
 		// even if we didn't do a DB conversion for bcrypt passwords,
 		// we still need to check if this password wasn't encrypted via password_hash,
 		// since all methods were updated to use that instead of md5 and therefore
 		// new passwords in DB will be bcrypt already even without the is_bcrypt field present
 		$bcrypted = true;
 		$pwOk = password_verify($password, $dbarray['password']);
-		
+
 		if (!$pwOk && !$dbarray['is_bcrypt']) {
 		    $pwOk = ($dbarray['password'] == md5($password));
 		    $bcrypted = false;
@@ -939,7 +939,7 @@ class MYSQLi_DB implements IDbConnection {
 	    $des2 = str_replace(['\\r', '\\n'], ['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], $des2);
 
 	    list($uid, $gender, $location, $birthday, $des1, $des2) = $this->escape_input((int) $uid, (int) $gender, $location, $birthday, $des1, $des2);
-	    
+
 	    // return new lines and return carriages to descriptions
 	    $des1 = str_replace(['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], ['\\r', '\\n'], $des1);
 	    $des2 = str_replace(['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], ['\\r', '\\n'], $des2);
@@ -1117,7 +1117,7 @@ class MYSQLi_DB implements IDbConnection {
         if($result){
             $dbarray = mysqli_fetch_array($result);
             return $dbarray['oasistype'];
-        }else return 0;    
+        }else return 0;
     }
 
 	public function VillageOasisCount($vref) {
@@ -1164,7 +1164,7 @@ class MYSQLi_DB implements IDbConnection {
         if($this->VillageOasisCount($vref) < floor(($HeroMansionLevel-5)/5)) {
             $OasisInfo = $this->getOasisInfo($wref);
             //fix by ronix
-            if($OasisInfo['conqured'] == 0 || $OasisInfo['conqured'] != 0 && intval($OasisInfo['loyalty']) < 99 / min(3,(4-$this->VillageOasisCount($OasisInfo['conqured'])))){ 
+            if($OasisInfo['conqured'] == 0 || $OasisInfo['conqured'] != 0 && intval($OasisInfo['loyalty']) < 99 / min(3,(4-$this->VillageOasisCount($OasisInfo['conqured'])))){
                 $CoordsVillage = $this->getCoor($vref);
                 $CoordsOasis = $this->getCoor($wref);
                                 $max = 2 * WORLD_MAX + 1;
@@ -1359,7 +1359,7 @@ class MYSQLi_DB implements IDbConnection {
 		self::$villageIDsCache[$uid] = $newarray;
 		return self::$villageIDsCache[$uid];
 	}
-	
+
 	function getVillagesID2($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
@@ -1460,7 +1460,7 @@ class MYSQLi_DB implements IDbConnection {
             return $dbarray[$field];
          }elseif($field=="name"){
             return "??";
-        }else return 0;    
+        }else return 0;
     }
 
     function getVillageFields($ref, $fields) {
@@ -1550,7 +1550,7 @@ class MYSQLi_DB implements IDbConnection {
 		return $this->mysqli_fetch_all($result);
 	}
 
-	//fix market log	
+	//fix market log
 	function getMarketLog() {
         	$q = "SELECT id,wid,log from " . TB_PREFIX . "market_log where id != 0 ORDER BY id ASC";
         	$result = mysqli_query($this->dblink,$q);
@@ -1960,7 +1960,7 @@ class MYSQLi_DB implements IDbConnection {
     $sum += $array['vote'.$i];
     }
     return $sum;
-    } 
+    }
 
 
 	/*************************
@@ -1975,7 +1975,7 @@ class MYSQLi_DB implements IDbConnection {
         $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post',$tids,'$owner','$date',$alliance,$player,$coor,$report)";
         mysqli_query($this->dblink,$q);
         $postID = mysqli_insert_id($this->dblink);
-        
+
         // create a message notification for each person subscribed to this topic
         // ... for now it's everyone who ever posted there, there is no real un/subscription yet
         if ($fid2 !== 0) {
@@ -1999,7 +1999,7 @@ class MYSQLi_DB implements IDbConnection {
                 }
             }
         }
-        
+
         return $postID;
     }
 
@@ -2048,13 +2048,13 @@ class MYSQLi_DB implements IDbConnection {
         mysqli_query($this->dblink,$qs);
         return mysqli_query($this->dblink,$q);
     }
-	
+
 	function DeleteSurvey($id) {
         list($id) = $this->escape_input($id);
 
         $qs = "DELETE from " . TB_PREFIX . "forum_survey where topic = '$id'";
         return mysqli_query($this->dblink,$qs);
-    }  
+    }
 
 	function DeleteTopic($id) {
         list($id) = $this->escape_input($id);
@@ -2133,7 +2133,7 @@ class MYSQLi_DB implements IDbConnection {
 			return false;
 		}
 	}
-	
+
 	function countAllianceMembers($aid) {
 	    $aid = (int) $aid;
 	    $q = "SELECT Count(*) as Total from ".TB_PREFIX."users WHERE alliance = ".$aid;
@@ -2200,7 +2200,7 @@ class MYSQLi_DB implements IDbConnection {
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
-	
+
 	function procAllyPop($aid) {
         list($aid) = $this->escape_input($aid);
 
@@ -2437,7 +2437,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-	
+
 	function diplomacyInviteCheck2($ally1, $ally2) {
 	    list($ally1, $ally2) = $this->escape_input((int) $ally1, (int) $ally2);
 
@@ -2451,7 +2451,7 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "SELECT alli1, alli2 FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '$type' AND accepted = '1' OR alli2 = '$aid' AND type = '$type' AND accepted = '1'";
 		$array = $this->query_return($q);
 		$text = "";
-		
+
 		if ($array) {
     		foreach($array as $row){
     			if($row['alli1'] == $aid){
@@ -2474,7 +2474,7 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "SELECT alli1, alli2 FROM ".TB_PREFIX."diplomacy WHERE alli1 = '$aid' AND type = '3' OR alli2 = '$aid' AND type = '3' AND accepted = '1'";
 		$array = $this->query_return($q);
         $text = "";
-        
+
         if ($array) {
     		foreach($array as $row){
     			if($row['alli1'] == $aid){
@@ -2528,7 +2528,7 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $session_alliance OR id = $id AND alli1 = $session_alliance";
 		return mysqli_query($this->dblink,$q);
 	}
-	
+
 	function checkDiplomacyInviteAccept($aid, $type) {
 	    list($aid, $type) = $this->escape_input((int) $aid, (int) $type);
 
@@ -2930,12 +2930,12 @@ class MYSQLi_DB implements IDbConnection {
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
         return $row['level'];
     }
-   	
+
 	function getFieldLevel($vid, $field) {
 	    list($vid, $field) = $this->escape_input((int) $vid, $field);
 
 		$q = "SELECT f" . $field . " from " . TB_PREFIX . "fdata where vref = $vid LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);	
+		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_array($result);
 		return $row["f" . $field];
 	}
@@ -3006,7 +3006,7 @@ class MYSQLi_DB implements IDbConnection {
 	    $row = mysqli_fetch_array($result);
 	    return $row["Total"];
 	}
-	
+
 	function getFieldType($vid, $field) {
 	    list($vid, $field) = $this->escape_input((int) $vid, $field);
 
@@ -3019,7 +3019,7 @@ class MYSQLi_DB implements IDbConnection {
 	        return 0;
 	    }
 	}
-	
+
 	function getFieldDistance($wid) {
 	    list($wid) = $this->escape_input((int) $wid);
 
@@ -3048,7 +3048,7 @@ class MYSQLi_DB implements IDbConnection {
             }
         }
         return $vill;
-    	}  
+    	}
 
 	function getVSumField($uid, $field, $use_cache = true) {
 	    list($uid, $field) = $this->escape_input((int) $uid, $field);
@@ -3158,7 +3158,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-	
+
 	function getInvitation2($uid, $aid) {
 	    list($uid, $aid) = $this->escape_input((int) $uid, (int) $aid);
 
@@ -3255,7 +3255,7 @@ class MYSQLi_DB implements IDbConnection {
 	    ) {
 	        $id = $id . ', 1';
 	    }
-	    
+
 		global $session;
 		switch($mode) {
 			case 1:
@@ -3563,10 +3563,10 @@ class MYSQLi_DB implements IDbConnection {
                 $fieldlevel = mysqli_fetch_row($result);
                     if($fieldlevel[0] == 0) {
                     if ($village->natar==1 && $jobs[$jobDeleted]['field']==99) { //fix by ronix
-                    }else{    
+                    }else{
                         $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
                         mysqli_query($this->dblink,$x) or die(mysqli_error($this->dblink));
-                    }    
+                    }
                 }
 			}
 			if(($jobLoopconID >= 0) && ($jobs[$jobDeleted]['loopcon'] != 1)) {
@@ -3624,7 +3624,7 @@ class MYSQLi_DB implements IDbConnection {
 		$uprequire = $building->resourceRequired($field,$village->resarray['f'.$field.'t'],0);
 		$q = "INSERT INTO ".TB_PREFIX."demolition VALUES (".$wid.",".$field.",".($fLevel-1).",".(time()+floor($uprequire['time']/2)).")";
 		mysqli_query($this->dblink,$q);
-		
+
 		return true;
 	}
 
@@ -3651,7 +3651,7 @@ class MYSQLi_DB implements IDbConnection {
     	$q = "UPDATE " . TB_PREFIX . "demolition SET timetofinish=" . time() . " WHERE vref=" . $wid;
     	$result= mysqli_query($this->dblink,$q);
     	return mysqli_affected_rows($this->dblink);
-	}  
+	}
 
 	function delDemolition($wid, $checkEmbassy = false) {
 	    $wid = (int) $wid;
@@ -3688,16 +3688,16 @@ class MYSQLi_DB implements IDbConnection {
 	/**
 	 * Returns a minimum level for an Embassy in order to accomodate
 	 * the given number of members.
-	 * 
+	 *
 	 * @param int $membersCount Number of members for an alliance to accomodate.
-	 *                          Maximum = 60 
-	 * 
+	 *                          Maximum = 60
+	 *
 	 * @return number Returns the level of Embassy required to accomodate
 	 *                the given number of members.
 	 */
 	public function getMinEmbassyLevel($membersCount) {
 	    $membersCount = (int) $membersCount;
-	    
+
 	    if ($membersCount > 60) {
 	        $membersCount = 60;
 	    }
@@ -3712,9 +3712,9 @@ class MYSQLi_DB implements IDbConnection {
 	/***
 	 * Returns the number of members an alliance can hold
 	 * with the current level of leader's Embassy.
-	 * 
+	 *
 	 * @param int $embassyLevel Level of leader's Embassy building.
-	 * 
+	 *
 	 * @return number Returns the number of members an alliance
 	 *                can hold with the current level of leader's Embassy.
 	 */
@@ -3733,17 +3733,17 @@ class MYSQLi_DB implements IDbConnection {
 	    // decimals won't crack this up, it's here
 	    return ceil((60 / 20) * $embassyLevel);
 	}
-	
+
 	/**
 	 * Checks and potentially updates the status of a player-alliance
 	 * relationship given the user input.
-	 * 
+	 *
 	 * @param array $userData     Data of the user for which we want to check
 	 *                            the player-alliance relationship.
 	 * @param boolean $demolition Determines whether the request came from
 	 *                            a buiding demolition (true) or from a battle
 	 *                            report (false).
-	 *                            
+	 *
 	 * @return boolean            Returns TRUE if there was no change
 	 *                            to the player-alliance relationship
 	 *                            FALSE if the player was an alliance
@@ -3772,13 +3772,13 @@ class MYSQLi_DB implements IDbConnection {
 
 	            // the player has no more Embassies, evict them from the alliance
 	            mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
-	            
+
 	            // unset the alliance in session, if we're evicting
 	            // currently logged-in player
 	            if ($session->uid == $userData['id']) {
 	                $_SESSION['alliance_user'] = 0;
 	            }
-	            
+
 	            // notify them via in-game messaging, if we come from a demolition,
 	            // otherwise return a result which can be used in battle reports
 	            if ($demolition) {
@@ -3892,7 +3892,7 @@ class MYSQLi_DB implements IDbConnection {
 
     	                        // update permissions for the old leader
     	                        $this->updateAlliPermissions($userData['id'], $userData['alliance'], "Former Leader", 0, 0, 0, 0, 0, 0, 0);
-    
+
     	                        // notify new leader via in-game messaging
     	                        $this->sendMessage(
     	                            $newleader,
@@ -3982,7 +3982,7 @@ class MYSQLi_DB implements IDbConnection {
 	                    // if this was their last Embassy and was completely destroyed
 	                    if (!$keepCurrentPlayer) {
 	                        mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
-	                        
+
 	                        // unset the alliance in session, if we're evicting
 	                        // currently logged-in player
 	                        if ($session->uid == $userData['id']) {
@@ -4099,7 +4099,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-	
+
 	function getBuildingByField2($wid,$field) {
 	    list($wid,$field) = $this->escape_input((int) $wid,(int) $field);
 
@@ -4115,7 +4115,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-	
+
 	function getBuildingByType2($wid,$type) {
 	    list($wid,$type) = $this->escape_input((int) $wid,(int) $type);
 
@@ -4507,7 +4507,7 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit - $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
-	
+
 	function modifyAttack2($aid, $unit, $amt) {
 	    list($aid, $unit, $amt) = $this->escape_input((int) $aid, $unit, (int) $amt);
 
@@ -4515,7 +4515,7 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit + $amt where id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
-	
+
 	function modifyAttack3($aid, $units) {
 	    list($aid, $units) = $this->escape_input((int) $aid, $units);
 
@@ -4576,7 +4576,7 @@ class MYSQLi_DB implements IDbConnection {
         self::$allianceMembersCache[$aid] = $this->mysqli_fetch_all($result);
         return self::$allianceMembersCache[$aid];
 	}
-	
+
 	function getAllMember2($aid) {
 	    return $this->getAllMember($aid, 1);
 	}
@@ -4894,7 +4894,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_assoc($result);
 	}
-	
+
     	function getOasisEnforce($ref, $mode=0) {
     	    list($ref, $mode) = $this->escape_input((int) $ref, $mode);
 
@@ -4906,7 +4906,7 @@ class MYSQLi_DB implements IDbConnection {
         $result = mysqli_query($this->dblink,$q);
         return $this->mysqli_fetch_all($result);
     	}
-    	
+
     	function getOasisEnforceArray($id, $mode=0) {
     	    list($id, $mode) = $this->escape_input((int) $id, $mode);
 
@@ -4918,7 +4918,7 @@ class MYSQLi_DB implements IDbConnection {
         $result = mysqli_query($this->dblink,$q);
         return mysqli_fetch_assoc($result);
     	}
-	
+
 	function getEnforceControllTroops($vid) {
 	    list($vid) = $this->escape_input((int) $vid);
 
@@ -5032,7 +5032,7 @@ class MYSQLi_DB implements IDbConnection {
 				    }
 					$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $out['t' . $i];
 				}
-				
+
 				if (!isset($movingunits['hero'])) {
 				    $movingunits['hero'] = 0;
 				}
@@ -5049,7 +5049,7 @@ class MYSQLi_DB implements IDbConnection {
 					    }
 						$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $ret['t' . $i];
 					}
-					
+
 					if (!isset($movingunits['hero'])) {
 					    $movingunits['hero'] = 0;
 					}
@@ -5405,8 +5405,8 @@ class MYSQLi_DB implements IDbConnection {
 	/**
 	 * Creates a database structure for the game.
 	 * Used during installation.
-	 * 
-	 * @return boolean|number Returns TRUE, FALSE or -1. True is for successful data import 
+	 *
+	 * @return boolean|number Returns TRUE, FALSE or -1. True is for successful data import
 	 *                        (from prepared SQL file), false is in case of an SQL error.
 	 *                        -1 will be returned in case of any unexpected behavior
 	 *                        and unhandled exceptions.
@@ -5422,12 +5422,12 @@ class MYSQLi_DB implements IDbConnection {
             if ($data_exist && count($data_exist)) {
                 return false;
             }
-    
+
             // load the DB structure SQL file
             $str = file_get_contents($autoprefix."var/db/struct.sql");
             $str = preg_replace("'%PREFIX%'", TB_PREFIX, $str);
             $result = $this->dblink->multi_query($str);
-            
+
             // fetch results of the multi-query in order to allow subsequent query() and multi_query() calls to work
             while (mysqli_more_results($this->dblink) && mysqli_next_result($this->dblink)) {;}
 
@@ -5437,17 +5437,17 @@ class MYSQLi_DB implements IDbConnection {
         } catch (\Exception $e) {
             return -1;
         }
-        
+
         return true;
     }
-    
+
     /**
      * Populates the game database with Map World Data (i.e. creates the whole
      * world with X,Y coordinate squares and their types).
-     * 
+     *
      * Also populates oasis' table data for the squares where there are oasis.
-     * 
-     * @return boolean|number Returns TRUE, FALSE or -1. True is for successful data import 
+     *
+     * @return boolean|number Returns TRUE, FALSE or -1. True is for successful data import
 	 *                        (from prepared SQL file), false is in case of an SQL error.
 	 *                        -1 will be returned in case of any unexpected behavior
 	 *                        and unhandled exceptions.
@@ -5466,14 +5466,14 @@ class MYSQLi_DB implements IDbConnection {
             $str = file_get_contents($autoprefix."var/db/datagen-world-data.sql");
             $str = preg_replace(["'%PREFIX%'", "'%WORLDSIZE%'"], [TB_PREFIX, WORLD_MAX], $str);
             $result = $this->dblink->multi_query($str);
-            
+
             // fetch results of the multi-query in order to allow subsequent query() and multi_query() calls to work
             while (mysqli_more_results($this->dblink) && mysqli_next_result($this->dblink)) {;}
-            
+
             if (!$result) {
                 return -1;
             }
-            
+
             $result = $this->regenerateOasisUnits(-1);
             if (!$result) {
                 return -1;
@@ -5481,7 +5481,7 @@ class MYSQLi_DB implements IDbConnection {
         } catch (\Exception $e) {
             return -1;
         }
-        
+
         return true;
     }
 
@@ -5611,7 +5611,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-	
+
 	function getOwnArtefactInfo3($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
@@ -5712,13 +5712,13 @@ class MYSQLi_DB implements IDbConnection {
     //fix by Ronix
     global $session, $form;
     $size1 = $size2 = $size3 = 0;
-    
+
     $artifact = $this->getOwnArtefactInfo($from);
     if (!empty($artifact)) {
         $form->addError("error","Treasury is full. Your hero could not claim the artefact");
         return false;
     }
-    $uid=$session->uid;    
+    $uid=$session->uid;
     $q="SELECT Count(size) AS totals,
     SUM(IF(size = '1',1,0)) small,
     SUM(IF(size = '2',1,0)) great,
@@ -5727,7 +5727,7 @@ class MYSQLi_DB implements IDbConnection {
     $result = mysqli_query($this->dblink,$q);
     $artifact= $this->mysqli_fetch_all($result);
 
-    if($artifact['totals'] < 3 || $type==11) {    
+    if($artifact['totals'] < 3 || $type==11) {
         $DefenderFields = $this->getResourceLevel($vref);
         $defcanclaim = TRUE;
         for($i=19;$i<=38;$i++) {
@@ -5764,7 +5764,7 @@ class MYSQLi_DB implements IDbConnection {
         }
         if (($size == 1 && ($villageartifact || $accountartifact)) || (($size == 2 || $size == 3)&& $accountartifact)) {
             return true;
-/*            
+/*
 	if($this->getVillageField($from,"capital")==1 && $type==11) {
                 $form->addError("error","Ancient Construction Plan cannot kept in capital village");
                 return FALSE;
@@ -6009,7 +6009,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	//end general statistics
-	
+
 	function addFriend($uid, $column, $friend) {
 	    list($uid, $column, $friend) = $this->escape_input((int) $uid, $column, (int) $friend);
 
@@ -6059,7 +6059,7 @@ class MYSQLi_DB implements IDbConnection {
 		}
 		return mysqli_query($this->dblink,$q);
 	}
-	
+
 	function addPrisoners($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) {
 	    list($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) = $this->escape_input((int) $wid,(int) $from,(int) $t1,(int) $t2,(int) $t3,(int) $t4,(int) $t5,(int) $t6,(int) $t7,(int) $t8,(int) $t9,(int) $t10,(int) $t11);
 
@@ -6067,14 +6067,14 @@ class MYSQLi_DB implements IDbConnection {
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
-	
+
 	function updatePrisoners($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) {
 	    list($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) = $this->escape_input((int) $wid,(int) $from,(int) $t1,(int) $t2,(int) $t3,(int) $t4,(int) $t5,(int) $t6,(int) $t7,(int) $t8,(int) $t9,(int) $t10,(int) $t11);
 
         $q = "UPDATE " . TB_PREFIX . "prisoners set t1 = t1 + $t1, t2 = t2 + $t2, t3 = t3 + $t3, t4 = t4 + $t4, t5 = t5 + $t5, t6 = t6 + $t6, t7 = t7 + $t7, t8 = t8 + $t8, t9 = t9 + $t9, t10 = t10 + $t10, t11 = t11 + $t11 where wref = $wid and ".TB_PREFIX."prisoners.from = $from";
         return mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
     	}
-	
+
     function getPrisoners($wid,$mode=0) {
         list($wid,$mode) = $this->escape_input((int) $wid,$mode);
 
@@ -6082,7 +6082,7 @@ class MYSQLi_DB implements IDbConnection {
             $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid";
         }else {
             $q = "SELECT * FROM " . TB_PREFIX . "prisoners where `from` = $wid";
-        }    
+        }
         $result = mysqli_query($this->dblink,$q);
         return $this->mysqli_fetch_all($result);
     }
@@ -6094,7 +6094,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-	
+
 	function getPrisonersByID($id) {
 	    list($id) = $this->escape_input((int) $id);
 
@@ -6102,7 +6102,7 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
-	
+
 	function getPrisoners3($from) {
 	    list($from) = $this->escape_input((int) $from);
 
@@ -6110,14 +6110,14 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-	
+
 	function deletePrisoners($id) {
         list($id) = $this->escape_input($id);
 
 		$q = "DELETE from " . TB_PREFIX . "prisoners where id = '$id'";
 		mysqli_query($this->dblink,$q);
 	}
-	
+
 /*****************************************
 Function to vacation mode - by advocaite
 References:
@@ -6130,7 +6130,7 @@ References:
      $q ="UPDATE ".TB_PREFIX."users SET vac_mode = '1' , vac_time=".$time." WHERE id=".$uid."";
 	 $result =mysqli_query($this->dblink,$q);
      }
-	 
+
    function removevacationmode($uid) {
        list($uid) = $this->escape_input((int) $uid);
      $q ="UPDATE ".TB_PREFIX."users SET vac_mode = '0' , vac_time='0' WHERE id=".$uid."";
@@ -6160,7 +6160,7 @@ References:
      return false;
      }
    }
- 
+
     /*****************************************
 	Function to vacation mode - by advocaite
 	References:
@@ -6190,7 +6190,7 @@ References:
 
         return self::$heroDeadCache[$id];
    	}
-	
+
 	/***************************
 	Function to get Hero In Revive
 	Made by: Shadow
@@ -6207,7 +6207,7 @@ References:
     		    return 0;
     		}
    	}
-	
+
 	/***************************
 	Function to get Hero In Training
 	Made by: Shadow
@@ -6262,7 +6262,7 @@ References:
   	       $q = "UPDATE " . TB_PREFIX . "hero set dead = 1 where uid = ".$id." AND dead = 0";
                return mysqli_query($this->dblink,$q);
        }
-	   
+
 	/***************************
         Function to find Hero place
         Made by: ronix
@@ -6278,7 +6278,7 @@ References:
                     unset($dbarray);
                     return true;
                 }
-            }    
+            }
             return false;
         }
         function FindHeroInDef($wid) {
@@ -6300,7 +6300,7 @@ References:
                     unset($dbarray);
                     return true;
                 }
-            }    
+            }
             return false;
         }
         function FindHeroInOasis($uid) {
@@ -6326,7 +6326,7 @@ References:
             }
             return 0;
         }
-    
+
         function FindHeroInMovement($wid) {
         list($wid) = $this->escape_input($wid);
 
@@ -6336,7 +6336,7 @@ References:
                     if ($out['t11']>0) {
                         $dbarray = $this->query("UPDATE ".TB_PREFIX."attacks SET t11=0 WHERE `id` = ".$out['ref']);
                         return true;
-                        break;        
+                        break;
                     }
                 }
             }
@@ -6385,7 +6385,7 @@ References:
      		}else{
     		return false;
     		}
-  	}	
+  	}
 
 	/***************************
   	Function checkScout
@@ -6402,7 +6402,7 @@ References:
     		}else{
     		return false;
      		}
-   	}  
+   	}
 
 };
 

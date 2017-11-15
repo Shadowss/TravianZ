@@ -192,7 +192,8 @@ class Automation {
         {
             $this->demolitionComplete();
         }
-        $this->updateStore();
+        // TODO: check if commenting-out this next line affected anything (it shouldn't) and should improve performance
+        //$this->updateStore();
         $this->delTradeRoute();
         $this->TradeRoute();
         if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>50) {
@@ -4324,7 +4325,7 @@ class Automation {
 
         $result = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata`');
 
-        mysqli_begin_transaction($GLOBALS['link']) or die(mysqli_error($database->dblink));;
+        mysqli_begin_transaction($GLOBALS['link']) or die(mysqli_error($database->dblink));
         while ($row = mysqli_fetch_assoc($result))
         {
             $ress = $crop = 0;
