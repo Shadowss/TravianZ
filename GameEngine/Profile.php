@@ -96,7 +96,7 @@ class Profile {
 		$varray = $database->getProfileVillages($post['uid']);
 			for($i=0;$i<=count($varray)-1;$i++) {
 				$k = trim($post['dname'.$i]);
-				$name = preg_replace("/[^a-zA-Z0-9_-\s]/", "", $k);
+				$name = preg_replace("/[^a-zA-Z0-9_\-\s'\"]/", "", $k);
 				$database->setVillageName($varray[$i]['wref'],$database->RemoveXSS($name));
 		}  
 		header("Location: spieler.php?uid=".$post['uid']);
