@@ -497,11 +497,11 @@ class Automation {
                       clay = IF(clay < 0, 0, clay),
                       iron = IF(iron < 0, 0, iron),
                       crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxstore),
-                      maxcrop = IF(maxcrop < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxcrop)
+                      maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
+                      maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
                   WHERE
-                      maxstore < (800 * ".STORAGE_MULTIPLIER.") OR
-                      maxcrop < (800 * ".STORAGE_MULTIPLIER.") OR
+                      maxstore < ".STORAGE_BASE." OR
+                      maxcrop < ".STORAGE_BASE." OR
                       wood < 0 OR
                       clay < 0 OR
                       iron < 0 OR
@@ -518,11 +518,11 @@ class Automation {
                       clay = IF(clay < 0, 0, clay),
                       iron = IF(iron < 0, 0, iron),
                       crop = IF(crop < 0, 0, crop),
-                      maxstore = IF(maxstore < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxstore),
-                      maxcrop = IF(maxcrop < (800 * ".STORAGE_MULTIPLIER."), (800 * ".STORAGE_MULTIPLIER."), maxcrop)
+                      maxstore = IF(maxstore < ".STORAGE_BASE.", ".STORAGE_BASE.", maxstore),
+                      maxcrop = IF(maxcrop < ".STORAGE_BASE.", ".STORAGE_BASE.", maxcrop)
                   WHERE
-                      maxstore < (800 * ".STORAGE_MULTIPLIER.") OR
-                      maxcrop < (800 * ".STORAGE_MULTIPLIER.") OR
+                      maxstore < ".STORAGE_BASE." OR
+                      maxcrop < ".STORAGE_BASE." OR
                       wood < 0 OR
                       clay < 0 OR
                       iron < 0 OR
@@ -4238,13 +4238,13 @@ class Automation {
                 if ($type==10 || $type==38) {
                     $q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`=`maxstore`-".$buildarray[$level]['attri']." WHERE wref=".(int) $vil['vref'];
                     $database->query($q);
-                    $q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`=800 WHERE `maxstore`<= 800 AND wref=".(int) $vil['vref'];
+                    $q = "UPDATE ".TB_PREFIX."vdata SET `maxstore`= ".STORAGE_BASE." WHERE `maxstore`<= ".STORAGE_BASE." AND wref=".(int) $vil['vref'];
                     $database->query($q);
                 }
                 if ($type==11 || $type==39) {
                     $q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=`maxcrop`-".$buildarray[$level]['attri']." WHERE wref=".(int) $vil['vref'];
                     $database->query($q);
-                    $q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`=800 WHERE `maxcrop`<=800 AND wref=".(int) $vil['vref'];
+                    $q = "UPDATE ".TB_PREFIX."vdata SET `maxcrop`= ".STORAGE_BASE." WHERE `maxcrop`<=800 AND wref=".(int) $vil['vref'];
                     $database->query($q);
                 }
                 if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
@@ -4357,6 +4357,15 @@ class Automation {
             // and maximums would have been set to correct values inside prune* functions already
             if ($ress == 0 && $crop == 0) {
                 continue;
+            }
+
+            // maxstore nor maxcrop can go below the minimum threshold
+            if ($ress < STORAGE_BASE) {
+                $ress = STORAGE_BASE;
+            }
+
+            if ($crop < STORAGE_BASE) {
+                $crop = STORAGE_BASE;
             }
 
             mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']);
@@ -4679,6 +4688,7 @@ class Automation {
                             }
                         }else{
                             if($killunits < $maxcount){
+                                die('vvvv');
                                 $database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
                                 $database->setVillageField($starv['wref'], 'starv', $upkeep);
                                 $database->setVillageField($starv['wref'], 'starvupdate', $time);

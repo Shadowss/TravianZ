@@ -126,7 +126,7 @@ class Market
                     $res = $resource[0]+$resource[1]+$resource[2]+$resource[3]; 
                     if($res!=0) 
                     { 
-                        $reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0); 
+                        $reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0);
                         $database->modifyResource($village->wid,$resource[0],$resource[1],$resource[2],$resource[3],0); 
                         $database->addMovement(0,$village->wid,$id,$reference,time(),time()+$timetaken,$post['send3']); 
                         $logging->addMarketLog($village->wid,1,array($resource[0],$resource[1],$resource[2],$resource[3],$id)); 
@@ -201,7 +201,7 @@ class Market
                     } 
                 } 
                 if($this->merchantAvail() != 0 && $reqMerc <= $this->merchantAvail()) 
-                { 
+                {
                     if($database->modifyResource($village->wid,$wood,$clay,$iron,$crop,0)) 
                     { 
                         $time = 0; 
@@ -265,7 +265,7 @@ class Market
             [$mytime + $timestamp, $histime + $timestamp]
         );
         $resource = array(1=>0,0,0,0); 
-        $resource[$infoarray['wtype']] = $infoarray['wamt']; 
+        $resource[$infoarray['wtype']] = $infoarray['wamt'];
         $database->modifyResource($village->wid,$resource[1],$resource[2],$resource[3],$resource[4],0); 
         $database->setMarketAcc($get['g']); 
         $database->removeAcceptedOffer($get['g']); 

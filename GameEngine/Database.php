@@ -2585,33 +2585,40 @@ class MYSQLi_DB implements IDbConnection {
 	     list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, (int) $wood, (int) $clay, (int) $iron, (int) $crop, $mode);
 
             $shit = false;
-    		$q="SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid."";
-                $result = mysqli_query($this->dblink,$q);
-    		$checkres= $this->mysqli_fetch_all($result);
-                if(!$mode){
-    		$nwood=$checkres[0]['wood']-$wood;
-    		$nclay=$checkres[0]['clay']-$clay;
-    		$niron=$checkres[0]['iron']-$iron;
-    		$ncrop=$checkres[0]['crop']-$crop;
-    		if($nwood<0 or $nclay<0 or $niron<0 or $ncrop<0){$shit=true;}
-    		$dwood=($nwood<0)?0:$nwood;
-    		$dclay=($nclay<0)?0:$nclay;
-    		$diron=($niron<0)?0:$niron;
-    		$dcrop=($ncrop<0)?0:$ncrop;
-    	}else{
-    		$nwood=$checkres[0]['wood']+$wood;
-    		$nclay=$checkres[0]['clay']+$clay;
-    		$niron=$checkres[0]['iron']+$iron;
-    		$ncrop=$checkres[0]['crop']+$crop;
-    		$dwood=($nwood>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nwood;
-    		$dclay=($nclay>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nclay;
-    		$diron=($niron>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$niron;
-    		$dcrop=($ncrop>$checkres[0]['maxcrop'])?$checkres[0]['maxcrop']:$ncrop;
+    		$q = "SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid;
+            $result = mysqli_query($this->dblink,$q);
+    		$checkres = $this->mysqli_fetch_all($result);
+
+            if(!$mode){
+                $nwood = $checkres[0]['wood'] - $wood;
+                $nclay = $checkres[0]['clay'] - $clay;
+                $niron = $checkres[0]['iron'] - $iron;
+                $ncrop = $checkres[0]['crop'] - $crop;
+                if ( $nwood < 0 or $nclay < 0 or $niron < 0 or $ncrop < 0 ) {
+                    $shit = true;
+                }
+                $dwood = ( $nwood < 0 ) ? 0 : $nwood;
+                $dclay = ( $nclay < 0 ) ? 0 : $nclay;
+                $diron = ( $niron < 0 ) ? 0 : $niron;
+                $dcrop = ( $ncrop < 0 ) ? 0 : $ncrop;
+    	    } else {
+                $nwood=$checkres[0]['wood']+$wood;
+                $nclay=$checkres[0]['clay']+$clay;
+                $niron=$checkres[0]['iron']+$iron;
+                $ncrop=$checkres[0]['crop']+$crop;
+                $dwood=($nwood>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nwood;
+                $dclay=($nclay>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nclay;
+                $diron=($niron>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$niron;
+                $dcrop=($ncrop>$checkres[0]['maxcrop'])?$checkres[0]['maxcrop']:$ncrop;
     		}
-    	if(!$shit){
-    		$q = "UPDATE " . TB_PREFIX . "vdata set wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop where wref = ".$vid;
-    			return mysqli_query($this->dblink,$q); }else{return false;}
-   	}
+
+         if ( ! $shit ) {
+             $q = "UPDATE " . TB_PREFIX . "vdata set wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop where wref = " . $vid;
+             return mysqli_query( $this->dblink, $q );
+         } else {
+             return false;
+         }
+	}
 
    	function setMaxStoreForVillage($vid, $maxLevel) {
 	    $vid = (int) $vid;
@@ -2621,7 +2628,7 @@ class MYSQLi_DB implements IDbConnection {
                         UPDATE
                             ".TB_PREFIX."vdata
                         SET
-                            `maxstore` = IF( `maxstore` - $maxLevel < 800, 800, `maxstore` - $maxLevel )
+                            `maxstore` = IF( `maxstore` - $maxLevel < ".STORAGE_BASE.", ".STORAGE_BASE.", `maxstore` - $maxLevel )
                         WHERE
                             wref=$vid");
     }
@@ -2634,7 +2641,7 @@ class MYSQLi_DB implements IDbConnection {
                         UPDATE
                             ".TB_PREFIX."vdata
                         SET
-                            `maxcrop` = IF( `maxcrop` - $maxLevel < 800, 800, `maxcrop` - $maxLevel )
+                            `maxcrop` = IF( `maxcrop` - $maxLevel < ".STORAGE_BASE.", ".STORAGE_BASE.", `maxcrop` - $maxLevel )
                         WHERE
                             wref=$vid");
     }
