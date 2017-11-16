@@ -1153,7 +1153,7 @@ La mitad del camino ha llegado, la victoria est&aacute; en sus manos mi se&ntild
 //planos
 define("PLAN","Planos de construcci&oacute;n antigua");
 define("PLANVILLAGE","Planos de Construcci&oacute;n MM");
-define("PLAN_DESC","Con este plano de construcci&oacute;n antigua usted ser&aacute; capaz de construir una Maravilla del Mundo a nivel 49. para construir un mayor nivel, su alianza debe tener por lo menos dos planos.");
+define("PLAN_DESC","Con este plano de construcci&oacute;n antigua usted ser&aacute; capaz de construir una Maravilla del Mundo a nivel 50. para construir un mayor nivel, su alianza debe tener por lo menos dos planos.");
 define("PLAN_INFO","El tiempo ha llegado.
 
 Ahora que los d&iacute;as son m&aacute;s cortos y las noches m&aacute;s fr&iacute;as, la gente de Travian se da cuenta que el final de esta era se acerca. La leyenda de gloriosas batallas y lujosos edificios de eras pasadas... parec&iacute;a ser todo lo que queda de aquel entonces. Pero las masas decidieron que este no ser&iacute;a el modo como esta era terminar&iacute;a.
@@ -1186,7 +1186,7 @@ NOTA : Si no se cumplen los criterios mencionados en el ataque , el pr&oacute;xi
 
 Construir una C&aacute;mara del Tesoro (Hacienda) , se necesita un nivel de Edificio Principal 10 y el pueblo no debe  contener una Maravilla del Mundo .
 
-Para construir una Maravilla del Mundo , debe poseer los Planes de construcci&oacute;n a ti mismo ( que = la Maravilla del Mundo Village propietario ) desde el nivel 0 a 49, y luego desde el nivel de 50 a 100 se necesita un conjunto adicional de Planes de la construcci&oacute;n en su Alianza ! Dos juegos de planos de construcci&oacute;n en la Cuenta de World Village Wonder no funcionan !");
+Para construir una Maravilla del Mundo , debe poseer los Planes de construcci&oacute;n a ti mismo ( que = la Maravilla del Mundo Village propietario ) desde el nivel 0 a 50, y luego desde el nivel de 51 a 100 se necesita un conjunto adicional de Planes de la construcci&oacute;n en su Alianza ! Dos juegos de planos de construcci&oacute;n en la Cuenta de World Village Wonder no funcionan !");
 define("WWVILLAGE","Aldea MM");
 /*
 |--------------------------------------------------------------------------
