@@ -104,12 +104,15 @@ class Village {
 
 		// update DB values
         if (count($resourceUpdates)) {
+            call_user_func(get_class($database).'::clearVillageCache');
             $database->updateResource( $this->wid, array_keys( $resourceUpdates ), array_values($resourceUpdates) );
         }
 	}
 
 	private function calculateProduction() {
 		global $technology,$database,$session;
+
+        call_user_func(get_class($database).'::clearVillageCache');
 		$normalA = $database->getOwnArtefactInfoByType($_SESSION['wid'],4);
 		$largeA = $database->getOwnUniqueArtefactInfo($session->uid,4,2);
 		$uniqueA = $database->getOwnUniqueArtefactInfo($session->uid,4,3);

@@ -436,6 +436,14 @@ class MYSQLi_DB implements IDbConnection {
         }
     }
 
+    /**
+     * Clears cached village data, so after automation is run, we can re-load new data (like resource levels etc)
+     * to be displayed in the front-end.
+     */
+    public static function clearVillageCache() {
+        self::$villageFieldsCache = [];
+    }
+
 	function escape($value) {
 	    $value = stripslashes($value);
 	    return mysqli_real_escape_string($this->dblink, $value);
