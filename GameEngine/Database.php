@@ -432,7 +432,7 @@ class MYSQLi_DB implements IDbConnection {
 	 */
 	public function connect() {
 	    // try to connect
-	    $this->dblink = mysqli_connect($this->hostname, $this->username, $this->password);
+	    $this->dblink = mysqli_connect($this->hostname.':'.$this->port, $this->username, $this->password);
 
 	    // return on error
 	    if (mysqli_error($this->dblink)) {
