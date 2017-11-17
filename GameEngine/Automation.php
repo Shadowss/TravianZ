@@ -570,6 +570,7 @@ class Automation {
                         $database->query($q);
                     }
                 }
+
                 if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
                     unlink("GameEngine/Prevention/culturepoints.txt");
                 }
@@ -4272,6 +4273,16 @@ class Automation {
         global $database,$hero_levels;
         $harray = $database->getHero();
         if(!empty($harray)){
+            // first of all, prepare all unit data at once for these heroes
+            $heroVillageIDs = [];
+            foreach($harray as $hdata) {
+                $heroVillageIDs[] = $hdata['wref'];
+            }
+
+            // load data for those prepared IDs
+            $unitData = $database->getUnit($heroVillageIDs);
+
+            // now do the math
             foreach($harray as $hdata){
                 if((time()-$hdata['lastupdate'])>=1){
                     if($hdata['health']<100 and $hdata['health']>0){
@@ -4300,7 +4311,7 @@ class Automation {
                         }
                     }
                 }
-                $villunits = $database->getUnit($hdata['wref']);
+                $villunits = $unitData[$hdata['wref']];
                 if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
                     mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `dead` = '0', `inrevive` = '0', `health` = '100', `lastupdate` = ".(int) $hdata['trainingtime']." WHERE `heroid` = ".(int) $hdata['heroid']);

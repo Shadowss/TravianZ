@@ -5056,7 +5056,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getUnit($vid, $use_cache = true) {
-	    list($vid) = $this->escape_input((int) $vid);
+	    $vid = (int) $vid;
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
@@ -5064,15 +5064,41 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * from " . TB_PREFIX . "units where vref = $vid";
+        if (!is_array($vid)) {
+            $vid = [$vid];
+        }
+
+		$q = "SELECT * from " . TB_PREFIX . "units where vref IN(".implode(', ', $vid).")";
 		$result = mysqli_query($this->dblink,$q);
-		if (!empty($result)) {
-            self::$unitsCache[$vid] = mysqli_fetch_assoc($result);
+		$returnArray = [];
+		$resCount = 0;
+		$vidCount = count($vid);
+
+		if (!empty($result) && ($resCount = mysqli_num_rows($result)) && $resCount) {
+		    while ($row = mysqli_fetch_assoc($result)) {
+                self::$unitsCache[$row['vref']] = $row;
+                $returnArray[$row['vref']] = $row;
+            }
 		} else {
-            self::$unitsCache[$vid] = null;
+		    // fill everything with nulls
+		    foreach ($vid as $id) {
+                self::$unitsCache[$id] = null;
+                $returnArray[$id] = null;
+            }
 		}
 
-		return self::$unitsCache[$vid];
+		// check if we're not missing any return values
+        if ($vidCount != $resCount) {
+		    // fill-in the gaps, as it would mean some of the IDs we got were not found
+            // (which is super-strange, but it's still a mathematical possibility)
+            foreach ($vid as $id) {
+                if (!isset($returnArray[$id])) {
+                    $returnArray[$id] = null;
+                }
+            }
+        }
+
+		return ($vidCount > 1 ? $returnArray : reset($returnArray));
 	}
 
     // no need to cache this method
