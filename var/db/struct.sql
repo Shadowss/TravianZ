@@ -1033,7 +1033,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
  `report` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `target-time` (`target`,`time`) USING BTREE,
- KEY `owner` (`owner`)
+ KEY `owner` (`owner`),
+ KEY `target-viewed` (`target`,`viewed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1119,7 +1120,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
  KEY `time` (`time`),
  KEY `uid-time` (`uid`,`time`) USING BTREE,
  KEY `del` (`del`),
- KEY `toWref` (`toWref`)
+ KEY `toWref` (`toWref`),
+ KEY `uid-viewed` (`uid`,`viewed`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

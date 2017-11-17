@@ -677,8 +677,12 @@ class MYSQLi_DB implements IDbConnection {
      * @return string Returns a sanitized string, safe for SQL queries.
      */
 	function escape($value) {
-	    $value = stripslashes($value);
-	    return mysqli_real_escape_string($this->dblink, $value);
+	    if (is_string($value)) {
+            $value = stripslashes( $value );
+            return mysqli_real_escape_string($this->dblink, $value);
+        } else {
+	        return $value;
+        }
 	}
 
     /**
@@ -3635,6 +3639,24 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "DELETE FROM " . TB_PREFIX . "ali_invite where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
+
+    // no need to cache this method
+	function getUnreadMessagesCount($uid) {
+	    $uid = (int) $uid;
+
+	    return mysqli_fetch_array(mysqli_query($this->dblink, '
+	        SELECT Count(*) as numUnread FROM '.TB_PREFIX.'mdata WHERE target = '.$uid.' AND viewed = 0'
+        ), MYSQLI_ASSOC)['numUnread'];
+    }
+
+    // no need to cache this method
+    function getUnreadNoticesCount($uid) {
+        $uid = (int) $uid;
+
+        return mysqli_fetch_array(mysqli_query($this->dblink, '
+	        SELECT Count(*) as numUnread FROM '.TB_PREFIX.'ndata WHERE uid = '.$uid.' AND viewed = 0'
+        ), MYSQLI_ASSOC)['numUnread'];
+    }
 
 	function sendMessage($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report, $skip_escaping = false) {
 	    if (!$skip_escaping) {

@@ -18,14 +18,33 @@ class Message {
 	private $allNotice = array();
 
 	function __construct() {
-		$this->getMessages();
-		$this->getNotice();
-		if($this->totalMessage > 0) {
-			$this->unread = $this->checkUnread();
-		}
-		if($this->totalNotice > 0) {
-			$this->nunread = $this->checkNUnread();
-		}
+        $req_file = basename($_SERVER['PHP_SELF']);
+        $this->unread = $this->checkUnread();
+        $this->nunread = $this->checkNUnread();
+
+        if ($req_file == 'nachrichten.php') {
+            if ( isset( $_GET['t'] ) ) {
+                switch ( $_GET['t'] ) {
+                    // send messages page
+                    case 2:
+                        $this->getMessages( 2 );
+                        break;
+
+                    // archived messages page
+                    case 3:
+                        $this->getMessages( 3 );
+                        break;
+                }
+            } else {
+                // inbox - received messages page
+                $this->getMessages( 1 );
+            }
+        }
+
+        if ($req_file == 'berichte.php') {
+            $this->getNotice();
+        }
+
 		if(isset($_SESSION['reply'])) {
 			$this->reply = $_SESSION['reply'];
 			unset($_SESSION['reply']);
@@ -218,17 +237,18 @@ class Message {
 		global $database,$session;
 		$post = $database->escape($post);
 		for($i = 1; $i <= 10; $i++) {
-			if(isset($post['n' . $i])) {
-			    $message1 = mysqli_query($GLOBALS['link'],"SELECT target, owner FROM " . TB_PREFIX . "mdata where id = ".(int) $post['n' . $i]."");
-			$message = mysqli_fetch_array($message1);
-			if($message['target'] == $session->uid && $message['owner'] == $session->uid){
-				$database->getMessage($post['n' . $i], 8);
-			}else if($message['target'] == $session->uid){
-				$database->getMessage($post['n' . $i], 5);
-			}else if($message['owner'] == $session->uid){
-				$database->getMessage($post['n' . $i], 7);
-			}
-			}
+            if ( isset( $post[ 'n' . $i ] ) ) {
+                $message1 = mysqli_query( $GLOBALS['link'], "SELECT target, owner FROM " . TB_PREFIX . "mdata where id = " . (int) $post[ 'n' . $i ] . "" );
+                $message  = mysqli_fetch_array( $message1 );
+
+                if ( $message['target'] == $session->uid && $message['owner'] == $session->uid ) {
+                    $database->getMessage( $post[ 'n' . $i ], 8 );
+                } else if ( $message['target'] == $session->uid ) {
+                    $database->getMessage( $post[ 'n' . $i ], 5 );
+                } else if ( $message['owner'] == $session->uid ) {
+                    $database->getMessage( $post[ 'n' . $i ], 7 );
+                }
+            }
 		}
 		header("Location: nachrichten.php");
 		exit;
@@ -317,17 +337,24 @@ class Message {
 		}
 	}
 
-	private function getMessages() {
+	private function getMessages($which) {
 		global $database, $session;
-		$this->inbox = $database->getMessage($session->uid, 1);
-		$this->sent = $database->getMessage($session->uid, 2);
-		$this->inbox1 = $database->getMessage($session->uid, 9);
-		$this->sent1 = $database->getMessage($session->uid, 10);
-		if($session->plus) {
-			$this->archived = $database->getMessage($session->uid, 6);
-			$this->archived1 = $database->getMessage($session->uid, 11);
-		}
-		$this->totalMessage = count($this->inbox) + count($this->sent);
+
+		switch ($which) {
+            case 1: $this->inbox = $database->getMessage($session->uid, 1);
+                    $this->inbox1 = $database->getMessage($session->uid, 9);
+                    break;
+
+            case 2: $this->sent = $database->getMessage($session->uid, 2);
+                    $this->sent1 = $database->getMessage($session->uid, 10);
+                    break;
+
+            case 3: if($session->plus) {
+                        $this->archived = $database->getMessage($session->uid, 6);
+                        $this->archived1 = $database->getMessage($session->uid, 11);
+                    }
+                    break;
+        }
 	}
 
 	private function sendAMessage($topic,$text) {
@@ -546,47 +573,50 @@ class Message {
 	}
 
 	private function checkUnread() {
-		foreach($this->inbox as $message) {
-			if($message['viewed'] == 0) {
-				return true;
-			}
-		}
-		return false;
+	    global $database, $session;
+
+	    return $database->getUnreadMessagesCount($session->uid);
 	}
 
 	private function checkNUnread() {
-		foreach($this->allNotice as $notice) {
-			if($notice['viewed'] == 0) {
-				return true;
-			}
-		}
-		return false;
+        global $database, $session;
+
+        return $database->getUnreadNoticesCount($session->uid);
 	}
 
 	private function findInbox($id) {
-		foreach($this->inbox as $message) {
-			if($message['id'] == $id) {
-				return true;
-			}
-		}
+        if (count($this->inbox)) {
+            foreach ( $this->inbox as $message ) {
+                if ( $message['id'] == $id ) {
+                    return true;
+                }
+            }
+        }
+
 		return false;
 	}
 
 	private function findSent($id) {
-		foreach($this->sent as $message) {
-			if($message['id'] == $id) {
-				return true;
-			}
-		}
+	    if (count($this->sent)) {
+            foreach ( $this->sent as $message ) {
+                if ( $message['id'] == $id ) {
+                    return true;
+                }
+            }
+        }
+
 		return false;
 	}
 
 	private function findArchive($id) {
-		foreach($this->archived as $message) {
-			if($message['id'] == $id) {
-				return true;
-			}
-		}
+        if (count($this->archived)) {
+            foreach ( $this->archived as $message ) {
+                if ( $message['id'] == $id ) {
+                    return true;
+                }
+            }
+        }
+
 		return false;
 	}
 
