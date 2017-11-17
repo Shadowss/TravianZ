@@ -230,9 +230,29 @@ class MYSQLi_DB implements IDbConnection {
         $prisonersCacheByVillageAndFromIDs = [],
 
         /**
+         * @var array Cache of info about whether a village is an oasis.
+         */
+        $isVillageOasisCache = [],
+
+        /**
          * @var array Cache of resource levels.
          */
         $resourceLevelsCache = [],
+
+        /**
+         * @var array Cache of oasis data.
+         */
+        $oasisFieldsCache = [],
+
+        /**
+         * @var array Cache of oasis data by conquered ID.
+         */
+        $oasisFieldsCacheByConqueredID = [],
+
+        /**
+         * @var array Cache of research.
+         */
+        $abTechCache = [],
 
         /**
          * @var array Cache of messages to be sent out to players,
@@ -581,6 +601,7 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
+	// no need to cache this method
 	public function hasBeginnerProtection($vid) {
         list($vid) = $this->escape_input($vid);
 
@@ -636,6 +657,7 @@ class MYSQLi_DB implements IDbConnection {
 		return $this->mysqli_fetch_all($result);
 	}
 
+	// no need to cache this method
 	function getVilWref($x, $y) {
 	    list($x, $y) = $this->escape_input((int) $x, (int) $y);
 
@@ -798,11 +820,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getVrefField($ref, $field) {
-	    list($ref, $field) = $this->escape_input((int) $ref, $field);
-			$q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
-			$result = mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
-			$dbarray = mysqli_fetch_array($result);
-			return $dbarray[$field];
+        return $this->getVillage($ref)[$field];
 	}
 
 	function getVrefCapital($ref) {
@@ -1198,15 +1216,24 @@ class MYSQLi_DB implements IDbConnection {
 		}
 		return mysqli_query($this->dblink,$q);
 	}
-    function isVillageOases($wref) {
+    function isVillageOases($wref, $use_cache = true) {
         list($wref) = $this->escape_input((int) $wref);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$isVillageOasisCache, $wref)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
         $q = "SELECT id, oasistype FROM " . TB_PREFIX . "wdata where id = ". $wref;
         $result = mysqli_query($this->dblink,$q);
         if($result){
             $dbarray = mysqli_fetch_array($result);
-            return $dbarray['oasistype'];
-        }else return 0;
+            $result = $dbarray['oasistype'];
+        }else $result = 0;
+
+        self::$isVillageOasisCache[$wref] = $result;
+        return self::$isVillageOasisCache[$wref];
     }
 
 	public function VillageOasisCount($vref) {
@@ -1499,12 +1526,20 @@ class MYSQLi_DB implements IDbConnection {
 		return $dbarray['pop'];
 	}
 
-	function getOasisV($vid) {
+	function getOasisV($vid, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$oasisFieldsCache, $vid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_array($result);
+
+        self::$oasisFieldsCache[$vid] = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return self::$oasisFieldsCache[$vid];
 	}
 
 	function getMInfo($id) {
@@ -1523,20 +1558,24 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_fetch_array($result);
 	}
 
-	function getOasis($vid) {
+	function getOasis($vid, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$oasisFieldsCacheByConqueredID, $vid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "odata where conqured = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+
+        self::$oasisFieldsCacheByConqueredID[$vid] = $this->mysqli_fetch_all($result);
+        return self::$oasisFieldsCacheByConqueredID[$vid];
 	}
 
-	function getOasisInfo($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
-
-		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = $wid";
-		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_assoc($result);
+	function getOasisInfo($wid, $use_cache = true) {
+	    return $this->getOasisV($wid, $use_cache);
 	}
 
     function getVillageField($ref, $field, $use_cache = true) {
@@ -1577,20 +1616,27 @@ class MYSQLi_DB implements IDbConnection {
         } else return 0;*/
     }
 
-	function getOasisField($ref, $field) {
-	    list($ref, $field) = $this->escape_input((int) $ref, $field);
+	function getOasisField($ref, $field, $use_cache = true) {
+        // return all data, don't waste time by selecting fields one by one
+        $oasisArray = $this->getOasisV($ref, $use_cache);
+        $result = (isset($oasisArray[$field]) ? $oasisArray[$field] : null);
+
+	    /*list($ref, $field) = $this->escape_input((int) $ref, $field);
 
 		$q = "SELECT $field FROM " . TB_PREFIX . "odata where wref = $ref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		return $dbarray[$field];
+		return $dbarray[$field];*/
 	}
 
-    function getOasisFields($ref, $fields) {
-        list($ref, $fields) = $this->escape_input((int) $ref, $fields);
+    function getOasisFields($ref, $fields, $use_cache = true) {
+        // return all data, don't waste time by selecting fields one by one
+        return $this->getOasisV($ref, $use_cache);
+
+        /*list($ref, $fields) = $this->escape_input((int) $ref, $fields);
 
         $q = "SELECT $fields FROM " . TB_PREFIX . "odata where wref = $ref";
-        return mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+        return mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);*/
     }
 
 	function setVillageField($ref, $field, $value) {
@@ -1907,6 +1953,7 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_fetch_array($result);
 	}
 
+	// no need to cache this method
 	function checkVilExist($wref) {
 	    list($wref) = $this->escape_input((int) $wref);
 
@@ -1919,6 +1966,7 @@ class MYSQLi_DB implements IDbConnection {
 		}
 	}
 
+	// no need to cache this method
 	function checkOasisExist($wref) {
 	    list($wref) = $this->escape_input((int) $wref);
 
@@ -4266,6 +4314,7 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
+	// no need to cache this method
 	function getVillageByName($name) {
         list($name) = $this->escape_input($name);
 
@@ -4573,6 +4622,7 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_insert_id($this->dblink);
 	}
 
+	// no need to cache this method
 	function getA2b($ckey, $check) {
         list($ckey, $check) = $this->escape_input($ckey, $check);
 
@@ -4842,12 +4892,20 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getABTech($vid) {
+	function getABTech($vid, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$abTechCache, $vid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "abdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_assoc($result);
+
+        self::$abTechCache[$vid] = mysqli_fetch_assoc($result);
+        return self::$abTechCache[$vid];
 	}
 
 	function addResearch($vid, $tech, $time) {
@@ -6304,6 +6362,9 @@ References:
 *****************************************/
 
    function setvacmode($uid,$days) {
+       // TODO: refactor vacation mode
+       return;
+
        list($uid,$days) = $this->escape_input((int) $uid,(int) $days);
      $days1 =60*60*24*$days;
      $time =time()+$days1;
@@ -6312,12 +6373,18 @@ References:
      }
 
    function removevacationmode($uid) {
+       // TODO: refactor vacation mode
+       return;
+
        list($uid) = $this->escape_input((int) $uid);
      $q ="UPDATE ".TB_PREFIX."users SET vac_mode = '0' , vac_time='0' WHERE id=".$uid."";
      $result =mysqli_query($this->dblink,$q);
      }
 
    function getvacmodexy($wref) {
+       // TODO: refactor vacation mode
+       return;
+
        list($wref) = $this->escape_input((int) $wref);
 	$q = "SELECT id,oasistype,occupied FROM " . TB_PREFIX . "wdata where id = $wref";
      $result = mysqli_query($this->dblink,$q);
