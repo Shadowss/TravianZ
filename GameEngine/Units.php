@@ -287,7 +287,7 @@ class Units {
             }
         }
         if( intval($enforce['hero']) > 0){
-            $hero_unit = $database->getHeroField($from['owner'], 'unit')['unit'];
+            $hero_unit = $database->getHeroField($from['owner'], 'unit');
             $speeds[]  = $GLOBALS['u'.$hero_unit]['speed'];
         }else{
             $enforce['hero']='0';
@@ -654,7 +654,7 @@ class Units {
                     }
                     if ( isset( $post['t11'] ) ) {
                         if ( $post['t11'] != '' && $post['t11'] > 0 ) {
-                            $hero_unit = $database->getHeroField($from['owner'], 'unit')['unit'];
+                            $hero_unit = $database->getHeroField($from['owner'], 'unit');
                             $speeds[]  = $GLOBALS[ 'u' . $hero_unit ]['speed'];
                         } else {
                             $post['t11'] = '0';

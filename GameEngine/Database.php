@@ -5169,14 +5169,14 @@ class MYSQLi_DB implements IDbConnection {
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && ($cachedValue = self::returnCachedContent(self::$heroFieldCache, $uid.$field)) && !is_null($cachedValue)) {
-            return $cachedValue;
+            return $cachedValue[$field];
         }
 
         $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid AND dead = 0";
         $result = mysqli_query($this->dblink,$q);
 
         self::$heroFieldCache[$uid.$field] = $this->mysqli_fetch_all($result);
-        return self::$heroFieldCache[$uid.$field];
+        return self::$heroFieldCache[$uid.$field][$field];
 	}
 
 	function modifyHero($column,$value,$heroid,$mode=0) {

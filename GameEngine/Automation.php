@@ -1697,8 +1697,7 @@ class Automation {
                     $alldead=array();
                     $heroAttackDead=$dead11;
                     //kill own defence
-                    $q = "SELECT * FROM ".TB_PREFIX."units WHERE vref='".$data['to']."'";
-                    $unitlist = $database->query_return($q);
+                    $unitlist = $database->getUnit($data['to']);
                     $start = ($targettribe-1)*10+1;
                     $end = ($targettribe*10);
 
@@ -1713,7 +1712,7 @@ class Automation {
                         }
 
                         if($unitlist){
-                            $owndead[$i]=round($battlepart[2]*$unitlist[0]['u'.$i]);
+                            $owndead[$i] = round($battlepart[2] * (isset($unitlist[0]) ? $unitlist[0]['u'.$i] : 0));
                             $unitModifications_units[] = $i;
                             $unitModifications_amounts[] = $owndead[$i];
                             $unitModifications_modes[] = 0;
@@ -2136,10 +2135,7 @@ class Automation {
                         }
                     }
                     if ($herosend_att>0){
-                        $qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
-                        $resulth = mysqli_query($GLOBALS['link'],$qh);
-                        $hero_f=mysqli_fetch_array($resulth);
-                        $hero_unit=$hero_f['unit'];
+                        $hero_unit = $database->getHeroField($from['owner'], 'unit');
                         $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
                     }
 
@@ -3349,7 +3345,7 @@ class Automation {
                             ) {
                                 //don't reinforce, addunit instead
                                 $database->modifyUnit($data['to'],array("hero"),array(1),array(1));
-                                $heroid = $database->getHero($DefenderID,1);
+                                $heroid = $database->getHeroField($DefenderID, 'heroid');
                                 $database->modifyHero("wref",$data['to'],$heroid,0);
                                 $HeroTransfer = 1;
                             }
