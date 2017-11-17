@@ -769,7 +769,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
   `post` longtext,
   `topic` int(11) NOT NULL,
   `owner` int(11) NOT NULL,
-  `date` varchar(255) DEFAULT NULL,
+  `date` int(11) DEFAULT NULL,
   `alliance0` int(11) DEFAULT NULL,
   `player0` int(11) DEFAULT NULL,
   `coor0` int(11) DEFAULT NULL,

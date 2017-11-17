@@ -1,6 +1,7 @@
 -- 17.11.2017 -> query optimizations
 ALTER TABLE `s1_prisoners` DROP INDEX `from`, ADD INDEX `from-t11` (`from`, `t11`);
 ALTER TABLE `s1_enforcement` DROP INDEX `from`, ADD INDEX `from` (`from`, `hero`) USING BTREE;
+ALTER TABLE `s1_forum_post` CHANGE `date` `date` INT NULL DEFAULT NULL;
 
 
 -- 8.11.2017 -> query optimizations and cleanups
