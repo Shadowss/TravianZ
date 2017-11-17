@@ -190,6 +190,51 @@ class MYSQLi_DB implements IDbConnection {
         $unitsCache = [],
 
         /**
+         * @var array Cache of reinforcements in a village.
+         */
+        $villageReinforcementsCache = [],
+
+        /**
+         * @var array Cache of reinforcements by from ID and village ID.
+         */
+        $villageFromReinforcementsCache = [],
+
+        /**
+         * @var array Cache of reinforcements by ID.
+         */
+        $reinforcementsCache = [],
+
+        /**
+         * @var array Cache of oasis reinforcements by conquered & from ID.
+         */
+        $oasisReinforcementsCache = [],
+
+        /**
+         * @var array Cache of oasis reinforcements by ID.
+         */
+        $oasisArrayReinforcementsCache = [],
+
+        /**
+         * @var array Cache of prisoners.
+         */
+        $prisonersCache = [],
+
+        /**
+         * @var array Cache of prisoners by ID.
+         */
+        $prisonersCacheByID = [],
+
+        /**
+         * @var array Cache of prisoners by village ID and from ID.
+         */
+        $prisonersCacheByVillageAndFromIDs = [],
+
+        /**
+         * @var array Cache of resource levels.
+         */
+        $resourceLevelsCache = [],
+
+        /**
          * @var array Cache of messages to be sent out to players,
          *            so we can collect them and send them out together
          *            at the end of script execution.
@@ -623,9 +668,25 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
     function getUserField($ref, $field, $mode, $use_cache = true) {
+        // update for Multihunter's username and ID
+        if (($mode && $ref == '') || (!$mode && $ref == 0)) {
+            $ref = 'Multihunter';
+            $mode = 1;
+        }
+
         // return all data, don't waste time by selecting fields one by one
         $userArray = $this->getUserArray($ref, !$mode, $use_cache);
-        return (isset($userArray[$field]) ? $userArray[$field] : null);
+        $result = (isset($userArray[$field]) ? $userArray[$field] : null);
+
+        if ($result) {
+            // will return the result
+        } elseif($field=="username") {
+            $result = "??";
+        } else {
+            $result = 0;
+        }
+
+        return $result;
 
         /*list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
 
@@ -665,6 +726,12 @@ class MYSQLi_DB implements IDbConnection {
     }
 
     function getUserFields($ref, $fields, $mode, $use_cache = true) {
+        // update for Multihunter's username and ID
+        if (($mode && $ref == '') || (!$mode && $ref == 0)) {
+            $ref = 'Multihunter';
+            $mode = 1;
+        }
+
 	    // return all data, don't waste time by selecting fields one by one
 	    return $this->getUserArray($ref, !$mode, $use_cache);
 
@@ -1472,8 +1539,20 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_fetch_assoc($result);
 	}
 
-    function getVillageField($ref, $field) {
-        list($ref, $field) = $this->escape_input((int) $ref, $field);
+    function getVillageField($ref, $field, $use_cache = true) {
+        // return all data, don't waste time by selecting fields one by one
+        $villageArray = $this->getVillage($ref, $use_cache);
+        $result = (isset($villageArray[$field]) ? $villageArray[$field] : null);
+
+        if($result){
+            // will return the result
+        }elseif($field=="name"){
+            $result = "??";
+        }else $result = 0;
+
+        return $result;
+
+        /*list($ref, $field) = $this->escape_input((int) $ref, $field);
 
         $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
         $result = mysqli_query($this->dblink,$q);
@@ -1482,17 +1561,20 @@ class MYSQLi_DB implements IDbConnection {
             return $dbarray[$field];
          }elseif($field=="name"){
             return "??";
-        }else return 0;
+        }else return 0;*/
     }
 
-    function getVillageFields($ref, $fields) {
-        list($ref, $field) = $this->escape_input((int) $ref, $fields);
+    function getVillageFields($ref, $fields, $use_cache = true) {
+        // return all data, don't waste time by selecting fields one by one
+        return $this->getVillage($ref, $use_cache);
+
+        /*list($ref, $field) = $this->escape_input((int) $ref, $fields);
 
         $q = "SELECT $field FROM " . TB_PREFIX . "vdata where wref = $ref";
         $result = mysqli_query($this->dblink,$q);
         if($result) {
             return mysqli_fetch_array($result, MYSQLI_ASSOC);
-        } else return 0;
+        } else return 0;*/
     }
 
 	function getOasisField($ref, $field) {
@@ -1558,12 +1640,20 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getResourceLevel($vid) {
+	function getResourceLevel($vid, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$resourceLevelsCache, $vid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * from " . TB_PREFIX . "fdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_assoc($result);
+
+        self::$resourceLevelsCache[$vid] = mysqli_fetch_assoc($result);
+        return self::$resourceLevelsCache[$vid];
 	}
 
 	function getAdminLog() {
@@ -4844,42 +4934,44 @@ class MYSQLi_DB implements IDbConnection {
 			}
 			$now = time();
 
-	$uid = $this->getVillageField($vid, "owner");
-	$artefact = count($this->getOwnUniqueArtefactInfo2($uid,5,3,0));
-	$artefact1 = count($this->getOwnUniqueArtefactInfo2($vid,5,1,1));
-	$artefact2 = count($this->getOwnUniqueArtefactInfo2($uid,5,2,0));
-	if($artefact > 0){
-	$time = $now+round(($time-$now)/2);
-	$each /= 2;
-	$each = round($each);
-	}else if($artefact1 > 0){
-	$time = $now+round(($time-$now)/2);
-	$each /= 2;
-	$each = round($each);
-	}else if($artefact2 > 0){
-	$time = $now+round(($time-$now)/4*3);
-	$each /= 4;
-	$each = round($each);
-	$each *= 3;
-	$each = round($each);
-	}
-	$foolartefact = $this->getFoolArtefactInfo(5,$vid,$uid);
-	if(count($foolartefact) > 0){
-	foreach($foolartefact as $arte){
-	if($arte['bad_effect'] == 1){
-	$each *= $arte['effect2'];
-	}else{
-	$each /= $arte['effect2'];
-	$each = round($each);
-	}
-	}
-	}
-	if($each == 0){ $each = 1; }
-	$time2 = $now+$each;
-	if(count($queued) > 0) {
-	$time += $queued[count($queued) - 1]['timestamp'] - $now;
-	$time2 += $queued[count($queued) - 1]['timestamp'] - $now;
-	}
+            $uid       = $this->getVillageField( $vid, "owner" );
+            $artefact  = count( $this->getOwnUniqueArtefactInfo2( $uid, 5, 3, 0 ) );
+            $artefact1 = count( $this->getOwnUniqueArtefactInfo2( $vid, 5, 1, 1 ) );
+            $artefact2 = count( $this->getOwnUniqueArtefactInfo2( $uid, 5, 2, 0 ) );
+            if ( $artefact > 0 ) {
+                $time = $now + round( ( $time - $now ) / 2 );
+                $each /= 2;
+                $each = round( $each );
+            } else if ( $artefact1 > 0 ) {
+                $time = $now + round( ( $time - $now ) / 2 );
+                $each /= 2;
+                $each = round( $each );
+            } else if ( $artefact2 > 0 ) {
+                $time = $now + round( ( $time - $now ) / 4 * 3 );
+                $each /= 4;
+                $each = round( $each );
+                $each *= 3;
+                $each = round( $each );
+            }
+            $foolartefact = $this->getFoolArtefactInfo( 5, $vid, $uid );
+            if ( count( $foolartefact ) > 0 ) {
+                foreach ( $foolartefact as $arte ) {
+                    if ( $arte['bad_effect'] == 1 ) {
+                        $each *= $arte['effect2'];
+                    } else {
+                        $each /= $arte['effect2'];
+                        $each = round( $each );
+                    }
+                }
+            }
+            if ( $each == 0 ) {
+                $each = 1;
+            }
+            $time2 = $now + $each;
+            if ( count( $queued ) > 0 ) {
+                $time  += $queued[ count( $queued ) - 1 ]['timestamp'] - $now;
+                $time2 += $queued[ count( $queued ) - 1 ]['timestamp'] - $now;
+            }
 	// TROOPS MAKE SUM IN BARAKS , ETC
 	//if($queued[count($queued) - 1]['unit'] == $unit){
 	//$time = $amt*$queued[count($queued) - 1]['eachtime'];
@@ -4922,16 +5014,30 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function getEnforce($vid, $from) {
+	function getEnforce($vid, $from, $use_cache = true) {
 	    list($vid, $from) = $this->escape_input((int) $vid, (int) $from);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFromReinforcementsCache, $vid.$from)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $from and vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_assoc($result);
+
+        self::$villageFromReinforcementsCache[$vid.$from] = mysqli_fetch_assoc($result);
+        return self::$villageFromReinforcementsCache[$vid.$from];
 	}
 
-    	function getOasisEnforce($ref, $mode=0) {
-    	    list($ref, $mode) = $this->escape_input((int) $ref, $mode);
+    function getOasisEnforce($ref, $mode=0, $use_cache = true) {
+        list($ref, $mode) = $this->escape_input((int) $ref, $mode);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$oasisReinforcementsCache, $ref.$mode)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
         if (!$mode) {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured = $ref AND e.from !=$ref";
@@ -4939,11 +5045,19 @@ class MYSQLi_DB implements IDbConnection {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured = $ref";
         }
         $result = mysqli_query($this->dblink,$q);
-        return $this->mysqli_fetch_all($result);
-    	}
 
-    	function getOasisEnforceArray($id, $mode=0) {
-    	    list($id, $mode) = $this->escape_input((int) $id, $mode);
+        self::$oasisReinforcementsCache[$ref.$mode] = $this->mysqli_fetch_all($result);
+        return self::$oasisReinforcementsCache[$ref.$mode];
+    }
+
+    function getOasisEnforceArray($id, $mode=0, $use_cache = true) {
+        list($id, $mode) = $this->escape_input((int) $id, $mode);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$oasisArrayReinforcementsCache, $id.$mode)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
         if (!$mode) {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where e.id = $id";
@@ -4951,16 +5065,10 @@ class MYSQLi_DB implements IDbConnection {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.from=o.wref where e.id =$id";
         }
         $result = mysqli_query($this->dblink,$q);
-        return mysqli_fetch_assoc($result);
-    	}
 
-	function getEnforceControllTroops($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
-
-  		$q = "SELECT * from " . TB_PREFIX . "enforcement where  vref = $vid";
-  		$result = mysqli_query($this->dblink,$q);
-  		return mysqli_fetch_assoc($result);
- 	}
+        self::$oasisArrayReinforcementsCache[$id.$mode] = mysqli_fetch_assoc($result);
+        return self::$oasisArrayReinforcementsCache[$id.$mode];
+    }
 
 	function addEnforce($data) {
         list($data) = $this->escape_input($data);
@@ -5028,8 +5136,14 @@ class MYSQLi_DB implements IDbConnection {
 		mysqli_query($this->dblink,$q);
 	}
 
-	function getEnforceArray($id, $mode) {
+	function getEnforceArray($id, $mode, $use_cache = true) {
 	    list($id, $mode) = $this->escape_input((int) $id, $mode);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$reinforcementsCache, $id.$mode)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		if(!$mode) {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where id = $id";
@@ -5037,11 +5151,19 @@ class MYSQLi_DB implements IDbConnection {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $id";
 		}
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_assoc($result);
+
+        self::$reinforcementsCache[$id.$mode] = mysqli_fetch_assoc($result);
+        return self::$reinforcementsCache[$id.$mode];
 	}
 
-	function getEnforceVillage($id, $mode) {
+	function getEnforceVillage($id, $mode, $use_cache = true) {
 	    list($id, $mode) = $this->escape_input((int) $id, $mode);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageReinforcementsCache, $id.$mode)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		if(!$mode) {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where vref = $id";
@@ -5049,7 +5171,9 @@ class MYSQLi_DB implements IDbConnection {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $id";
 		}
 		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+
+        self::$villageReinforcementsCache[$id.$mode] = $this->mysqli_fetch_all($result);
+        return self::$villageReinforcementsCache[$id.$mode];
 	}
 
 	function getVillageMovement($id) {
@@ -5520,6 +5644,7 @@ class MYSQLi_DB implements IDbConnection {
         return true;
     }
 
+    // no need to cache, not used in any loops or more than once for each page load
 	public function getAvailableExpansionTraining() {
 		global $building, $session, $technology, $village;
 		$q = "SELECT (IF(exp1=0,1,0)+IF(exp2=0,1,0)+IF(exp3=0,1,0)) FROM " . TB_PREFIX . "vdata WHERE wref = ".(int) $village->wid;
@@ -6110,8 +6235,14 @@ class MYSQLi_DB implements IDbConnection {
         return mysqli_query($this->dblink,$q) or die(mysqli_error($this->dblink));
     	}
 
-    function getPrisoners($wid,$mode=0) {
+    function getPrisoners($wid,$mode=0, $use_cache = true) {
         list($wid,$mode) = $this->escape_input((int) $wid,$mode);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCache, $wid.$mode)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
         if(!$mode) {
             $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid";
@@ -6119,31 +6250,45 @@ class MYSQLi_DB implements IDbConnection {
             $q = "SELECT * FROM " . TB_PREFIX . "prisoners where `from` = $wid";
         }
         $result = mysqli_query($this->dblink,$q);
-        return $this->mysqli_fetch_all($result);
+
+        self::$prisonersCache[$wid.$mode] = $this->mysqli_fetch_all($result);
+        return self::$prisonersCache[$wid.$mode];
     }
 
-	function getPrisoners2($wid,$from) {
+	function getPrisoners2($wid,$from, $use_cache = true) {
 	    list($wid,$from) = $this->escape_input((int) $wid,(int) $from);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCacheByVillageAndFromIDs, $wid.$from)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid and " . TB_PREFIX . "prisoners.from = $from";
 		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+
+        self::$prisonersCacheByVillageAndFromIDs[$wid.$from] = $this->mysqli_fetch_all($result);
+        return self::$prisonersCacheByVillageAndFromIDs[$wid.$from];
 	}
 
-	function getPrisonersByID($id) {
+	function getPrisonersByID($id, $use_cache = true) {
 	    list($id) = $this->escape_input((int) $id);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCacheByID, $id)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where id = $id";
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_array($result);
+
+        self::$prisonersCacheByID[$id] = mysqli_fetch_array($result);
+        return self::$prisonersCacheByID[$id];
 	}
 
 	function getPrisoners3($from) {
-	    list($from) = $this->escape_input((int) $from);
-
-		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        return $this->getPrisoners($from, 1);
 	}
 
 	function deletePrisoners($id) {

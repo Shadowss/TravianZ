@@ -787,11 +787,11 @@ private function trainUnit($unit,$amt,$great=false) {
 	}
 
 	public function finishTech() {
-        	global $database,$village;
-        	$q = "UPDATE ".TB_PREFIX."research SET timestamp=".(time()-1)." WHERE vref = ".(int) $village->wid;
-        	$result = $database->query($q);
-        	return mysqli_affected_rows($database->dblink);
-    	}  
+        global $database,$village;
+        $q = "UPDATE ".TB_PREFIX."research SET timestamp=".(time()-1)." WHERE vref = ".(int) $village->wid;
+        $result = $database->query($q);
+        return mysqli_affected_rows($database->dblink);
+    }
 
 	public function calculateAvaliable($id,$resarray=array()) {
 		global $village,$generator,${'r'.$id};
