@@ -470,141 +470,292 @@ class Building {
 
 	private function meetRequirement($id) {
 		global $village,$session,$database;
-		switch($id) {
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 11:
-			case 15:
-			case 16:
-			case 18:
-			case 23:
-			case 31:
-			case 32:
-			case 33:
-			return true;
-			break;
-			case 10:
-			case 20:
-			return ($this->getTypeLevel(15) >= 1)? true : false;
-			break;
-			case 5:
-			if($this->getTypeLevel(1) >= 10 && $this->getTypeLevel(15) >= 5) { return true; } else { return false; }
-			break;
-			case 6:
-			if($this->getTypeLevel(2) >= 10 && $this->getTypeLevel(15) >= 5) { return true; } else { return false; }
-			break;
-			case 7:
-			if($this->getTypeLevel(3) >= 10 && $this->getTypeLevel(15) >= 5) { return true; } else { return false; }
-			break;
-			case 8:
-			if($this->getTypeLevel(4) >= 5) { return true; } else { return false; }
-			break;
-			case 9:
-			if($this->getTypeLevel(15) >= 5 && $this->getTypeLevel(4) >= 10 && $this->getTypeLevel(8) >= 5) { return true; } else { return false; }
-			break;
-			case 12:
-			if($this->getTypeLevel(22) >= 3 && $this->getTypeLevel(15) >= 3) { return true; } else { return false; }
-			break;
-			case 13:
-			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(22) >= 1) { return true; } else { return false; }
-			break;
-			case 14:
-			if($this->getTypeLevel(16) >= 15) { return true; } else { return false; }
-			break;
-			case 17:
-			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(10) >= 1 && $this->getTypeLevel(11) >= 1) { return true; } else { return false; }
-			break;
-			case 19:
-			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(16) >= 1) { return true; } else { return false; }
-			break;
-			case 20:
-			if($this->getTypeLevel(12) >= 3 && $this->getTypeLevel(22) >= 5) { return true; } else { return false; }
-			break;
-			case 21:
-			if($this->getTypeLevel(22) >= 10 && $this->getTypeLevel(15) >= 5) { return true; } else { return false; }
-			break;
-			case 22:
-			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(16) >= 1) { return true; } else { return false; }
-			break;
-			case 24:
-			if($this->getTypeLevel(22) >= 10 && $this->getTypeLevel(15) >= 10) { return true; } else { return false; }
-			break;
-			case 25:
-			if($this->getTypeLevel(15) >= 5 && $this->getTypeLevel(26) == 0) { return true; } else { return false; }
-			break;
-			case 26:
-			if($this->getTypeLevel(18) >= 1 && $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(25) == 0) { return true; } else { return false; }
-			break;
-			case 27:
-			if($this->getTypeLevel(15) >= 10) { return true; } else { return false; }
-			break;
-			case 28:
-			if($this->getTypeLevel(17) == 20 && $this->getTypeLevel(20) >= 10) { return true; } else { return false; }
-			break;
-			case 29:
-			if($this->getTypeLevel(19) == 20 && $village->capital == 0) { return true; } else { return false; }
-			break;
-			case 30:
-			if($this->getTypeLevel(20) == 20 && $village->capital == 0) { return true; } else { return false; }
-			break;
-			case 34:
-		    if($this->getTypeLevel(26) >= 3 && $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(25) == 0 && $village->capital != 0) { return true; } else { return false; }
-			break;
-			case 35:
-		    if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(11) == 20 && $session->tribe == 2 && $village->capital != 0) { return true; } else { return false; }
-			break;
-			case 36:
-			if($this->getTypeLevel(16) >= 1 && $session->tribe == 3) { return true; } else { return false; }
-			break;
-			case 37:
-			if($this->getTypeLevel(15) >= 3 && $this->getTypeLevel(16) >= 1) { return true; } else { return false; }
-			break;
-			case 38:
-		    if($this->getTypeLevel(15) >= 10 && $village->natar == 1) { return true; } else { return false; }
-    		break;
-    		case 39:
-		    if($this->getTypeLevel(15) >= 10 && $village->natar == 1) { return true; } else { return false; }
-    		break; 
-			case 40:
-			$wwlevel = $village->resarray['f99'];
-			if($wwlevel > 50){
-			$needed_plan = 1;
-			}else{
-			$needed_plan = 0;
-			}
-			$wwbuildingplan = 0;
-			$villages = $database->getVillagesID($session->uid);
-			foreach($villages as $village1){
-			$plan = count($database->getOwnArtefactInfoByType2($village1,11));
-			if($plan > 0){
-			$wwbuildingplan = 1;
-			}
-			}
-			if($session->alliance != 0){
-			$alli_users = $database->getUserByAlliance($session->alliance);
-			foreach($alli_users as $users){
-			$villages = $database->getVillagesID($users['id']);
-			if($users['id'] != $session->uid){
-			foreach($villages as $village1){
-			$plan = count($database->getOwnArtefactInfoByType2($village1,11));
-			if($plan > 0){
-			$wwbuildingplan += 1;
-			}
-			}
-			}
-			}
-			}
-			if($village->natar == 1 && $wwbuildingplan > $needed_plan) { return true; } else { return false; }
-			break;
-			case 41:
-			if($this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20 && $session->tribe == 1) { return true; } else { return false; }
-			break;
-			case 42:
-		    if(GREAT_WKS && $this->getTypeLevel(21) == 20 && $village->capital == 0) { return true; } else { return false; }
-			break;
-		}
+
+        switch ( $id ) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 11:
+            case 15:
+            case 16:
+            case 18:
+            case 23:
+            case 31:
+            case 32:
+            case 33:
+                return true;
+                break;
+
+            case 10:
+            case 20:
+                return ( $this->getTypeLevel( 15 ) >= 1 ) ? true : false;
+                break;
+
+            case 5:
+                if ( $this->getTypeLevel( 1 ) >= 10 && $this->getTypeLevel( 15 ) >= 5 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 6:
+                if ( $this->getTypeLevel( 2 ) >= 10 && $this->getTypeLevel( 15 ) >= 5 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 7:
+                if ( $this->getTypeLevel( 3 ) >= 10 && $this->getTypeLevel( 15 ) >= 5 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 8:
+                if ( $this->getTypeLevel( 4 ) >= 5 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 9:
+                if ( $this->getTypeLevel( 15 ) >= 5 && $this->getTypeLevel( 4 ) >= 10 && $this->getTypeLevel( 8 ) >= 5 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 12:
+                if ( $this->getTypeLevel( 22 ) >= 3 && $this->getTypeLevel( 15 ) >= 3 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 13:
+                if ( $this->getTypeLevel( 15 ) >= 3 && $this->getTypeLevel( 22 ) >= 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 14:
+                if ( $this->getTypeLevel( 16 ) >= 15 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 17:
+                if ( $this->getTypeLevel( 15 ) >= 3 && $this->getTypeLevel( 10 ) >= 1 && $this->getTypeLevel( 11 ) >= 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 19:
+                if ( $this->getTypeLevel( 15 ) >= 3 && $this->getTypeLevel( 16 ) >= 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 20:
+                if ( $this->getTypeLevel( 12 ) >= 3 && $this->getTypeLevel( 22 ) >= 5 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 21:
+                if ( $this->getTypeLevel( 22 ) >= 10 && $this->getTypeLevel( 15 ) >= 5 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 22:
+                if ( $this->getTypeLevel( 15 ) >= 3 && $this->getTypeLevel( 16 ) >= 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 24:
+                if ( $this->getTypeLevel( 22 ) >= 10 && $this->getTypeLevel( 15 ) >= 10 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 25:
+                if ( $this->getTypeLevel( 15 ) >= 5 && $this->getTypeLevel( 26 ) == 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 26:
+                if ( $this->getTypeLevel( 18 ) >= 1 && $this->getTypeLevel( 15 ) >= 5 && $this->getTypeLevel( 25 ) == 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 27:
+                if ( $this->getTypeLevel( 15 ) >= 10 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 28:
+                if ( $this->getTypeLevel( 17 ) == 20 && $this->getTypeLevel( 20 ) >= 10 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 29:
+                if ( $this->getTypeLevel( 19 ) == 20 && $village->capital == 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 30:
+                if ( $this->getTypeLevel( 20 ) == 20 && $village->capital == 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 34:
+                if ( $this->getTypeLevel( 26 ) >= 3 && $this->getTypeLevel( 15 ) >= 5 && $this->getTypeLevel( 25 ) == 0 && $village->capital != 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 35:
+                if ( $this->getTypeLevel( 16 ) >= 10 && $this->getTypeLevel( 11 ) == 20 && $session->tribe == 2 && $village->capital != 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 36:
+                if ( $this->getTypeLevel( 16 ) >= 1 && $session->tribe == 3 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 37:
+                if ( $this->getTypeLevel( 15 ) >= 3 && $this->getTypeLevel( 16 ) >= 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 38:
+                if ( $this->getTypeLevel( 15 ) >= 10 && $village->natar == 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 39:
+                if ( $this->getTypeLevel( 15 ) >= 10 && $village->natar == 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 40:
+                $wwlevel = $village->resarray['f99'];
+
+                if ( $wwlevel > 50 ) {
+                    $needed_plan = 1;
+                } else {
+                    $needed_plan = 0;
+                }
+
+                $wwbuildingplan = 0;
+                $villages       = $database->getVillagesID( $session->uid );
+                foreach ( $villages as $village1 ) {
+                    $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
+                    if ( $plan > 0 ) {
+                        $wwbuildingplan = 1;
+                    }
+                }
+
+                if ( $session->alliance != 0 ) {
+                    $alli_users = $database->getUserByAlliance( $session->alliance );
+                    foreach ( $alli_users as $users ) {
+                        $villages = $database->getVillagesID( $users['id'] );
+                        if ( $users['id'] != $session->uid ) {
+                            foreach ( $villages as $village1 ) {
+                                $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
+                                if ( $plan > 0 ) {
+                                    $wwbuildingplan += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ( $village->natar == 1 && $wwbuildingplan > $needed_plan ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 41:
+                if ( $this->getTypeLevel( 16 ) >= 10 && $this->getTypeLevel( 20 ) == 20 && $session->tribe == 1 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+
+            case 42:
+                if ( GREAT_WKS && $this->getTypeLevel( 21 ) == 20 && $village->capital == 0 ) {
+                    return true;
+                } else {
+                    return false;
+                }
+                break;
+        }
 	}
 
 	private function checkResource($tid,$id) {

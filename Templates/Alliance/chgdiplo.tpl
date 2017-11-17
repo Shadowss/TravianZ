@@ -140,8 +140,8 @@
         unset($type);
         $alliance = $session->alliance;
         
-        if(count($database->diplomacyInviteCheck($alliance))){
-            foreach($database->diplomacyInviteCheck($alliance) as $key => $row){
+        if(($dInvites = $database->diplomacyInviteCheck($alliance)) && count($dInvites)){
+            foreach($dInvites as $key => $row){
                 if($row['type'] == 1){
                     $type = "Conf.";
                 } else if($row['type'] == 2){
@@ -171,8 +171,8 @@
         unset($row);
         $alliance = $session->alliance;
         
-        if(count($database->diplomacyExistingRelationships($alliance))){
-            foreach($database->diplomacyExistingRelationships($alliance) as $key => $row){
+        if(($rels = $database->diplomacyExistingRelationships($alliance)) && count($rels)){
+            foreach($rels as $key => $row){
                 if($row['type'] == 1){
                     $type = "Conf.";
                 } else if($row['type'] == 2){
@@ -182,8 +182,8 @@
                 }
                 echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli2'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$row['alli1'].'"><center>'.$database->getAllianceName($row['alli1']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
             }   
-        } elseif(count($database->diplomacyExistingRelationships2($alliance))){
-            foreach($database->diplomacyExistingRelationships2($alliance) as $key => $row){
+        } elseif(($rels = $database->diplomacyExistingRelationships2($alliance)) && count($rels)){
+            foreach($rels as $key => $row){
                 if($row['type'] == 1){
                     $type = "Conf.";
                 } else if($row['type'] == 2){

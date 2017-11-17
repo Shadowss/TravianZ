@@ -521,10 +521,11 @@ class Alliance {
 			$aName = $_POST['a_name'];
 			$aType = (int)intval($_POST['dipl']);
 			if($database->aExist($aName, "tag")) {
-				if($database->getAllianceID($aName) != $session->alliance) {
+				$allianceID = $database->getAllianceID($aName);
+				if($allianceID != $session->alliance) {
 					if($aType >= 1 and $aType <= 3) {
-						if(!$database->diplomacyInviteCheck2($session->alliance, $database->getAllianceID($aName))) {
-							$database->diplomacyInviteAdd($session->alliance, $database->getAllianceID($aName), $aType);
+						if(!$database->diplomacyInviteCheck2($session->alliance, $allianceID)) {
+							$database->diplomacyInviteAdd($session->alliance, $allianceID, $aType);
 							if($aType == 1){
 							$notice = "offer a confederation to";
 							}else if($aType == 2){
@@ -532,7 +533,7 @@ class Alliance {
 							}else if($aType == 3){
 							$notice = "declare war on";
 							}
-							$database->insertAlliNotice($session->alliance, '<a href="allianz.php?aid=' . $session->alliance . '">' . $database->getAllianceName($session->alliance) . '</a> '. $notice .' <a href="allianz.php?aid=' . $database->getAllianceID($aName) . '">' . $aName . '</a>.');
+							$database->insertAlliNotice($session->alliance, '<a href="allianz.php?aid=' . $session->alliance . '">' . $database->getAllianceName($session->alliance) . '</a> '. $notice .' <a href="allianz.php?aid=' . $allianceID . '">' . $aName . '</a>.');
 							$form->addError("name", "Invite sended");
 						} else {
 							$form->addError("name", "You have already sended them a invite");
