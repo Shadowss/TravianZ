@@ -1825,7 +1825,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
     function setVillageFields($ref, $fields, $values) {
-        list($ref, $fields, $value) = $this->escape_input((int) $ref, $fields, $values);
+        list($ref, $fields, $values) = $this->escape_input((int) $ref, $fields, $values);
 
         // build the field-value query parts
         $fieldValues = [];
