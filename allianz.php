@@ -3,8 +3,8 @@
 use App\Utils\AccessLogger;
 
 if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) die('Hacking Attemp');
-include ("GameEngine/Village.php");
-include ("GameEngine/Chat.php");
+include_once("GameEngine/Village.php");
+include_once("GameEngine/Chat.php");
 AccessLogger::logRequest();
 
 $start_timer = $generator->pageLoadTimeStart();

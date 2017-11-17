@@ -12,7 +12,7 @@
 
 use App\Utils\AccessLogger;
 
-include("GameEngine/Village.php");
+include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
 $start_timer = $generator->pageLoadTimeStart();

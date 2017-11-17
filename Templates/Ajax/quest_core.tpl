@@ -16,7 +16,7 @@
 ##                                                                             ##
 #################################################################################
 
-include("GameEngine/Village.php");
+include_once("GameEngine/Village.php");
 include("GameEngine/Data/cp.php");
 
 $user_sanitized = $database->escape($_SESSION['username']);

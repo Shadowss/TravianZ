@@ -28,7 +28,7 @@ if (!function_exists('mysqli_result')) {
     }
 }
 
-include("GameEngine/Village.php");
+include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
 $start_timer = $generator->pageLoadTimeStart();

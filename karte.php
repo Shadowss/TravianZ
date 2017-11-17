@@ -13,7 +13,7 @@
 use App\Utils\AccessLogger;
 
 if(isset($_GET['z']) && !is_numeric($_GET['z'])) die('Hacking Attempt');
-include("GameEngine/Village.php");
+include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
 $start_timer = $generator->pageLoadTimeStart();
