@@ -48,7 +48,7 @@ class adm_DB {
 	var $connection; 
 	function __construct(){
 		global $database;
-		$database = new MYSQLi_DB(SQL_SERVER.':'.SQL_PORT, SQL_USER, SQL_PASS, SQL_DB);
+		$database = new MYSQLi_DB(SQL_SERVER.':'.(defined('SQL_PORT') ? SQL_PORT : 3306), SQL_USER, SQL_PASS, SQL_DB);
 		$this->connection = $database->return_link();
 	}
 
