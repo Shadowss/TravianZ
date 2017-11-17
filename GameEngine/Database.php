@@ -1576,22 +1576,9 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getVillageID($uid, $use_cache = true) {
-	    list($uid) = $this->escape_input((int) $uid);
-
-        // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageIDsCache, $uid)) && !is_null($cachedValue)) {
-            return $cachedValue[0];
-        }
-
-		$q = "SELECT wref FROM " . TB_PREFIX . "vdata WHERE owner = $uid";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
-
-        self::$villageIDsCache[$uid] = [$dbarray]['wref'];
-        return self::$villageIDsCache[$uid][0];
+	    // load cached value
+	    return $this->getVillagesID($uid, $use_cache)[0];
 	}
-
 
 	function getVillagesID($uid, $use_cache = true) {
 	    list($uid) = $this->escape_input((int) $uid);
@@ -1599,7 +1586,7 @@ class MYSQLi_DB implements IDbConnection {
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageIDsCache, $uid)) && !is_null($cachedValue)) {
-            return $cachedValue[0]['wref'];
+            return $cachedValue;
         }
 
 		$q = "SELECT wref from " . TB_PREFIX . "vdata where owner = $uid order by capital DESC,pop DESC";
@@ -3829,8 +3816,8 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
-        self::$noticesCacheById[$id] = $dbarray[$field];
-        return self::$noticesCacheById[$id];
+        self::$noticesCacheById[$id] = $dbarray;
+        return self::$noticesCacheById[$id][$field];
 	}
 
 	function getNotice3($uid, $use_cache = true) {
@@ -3839,7 +3826,7 @@ class MYSQLi_DB implements IDbConnection {
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && ($cachedValue = self::returnCachedContent(self::$noticesCacheByUId, $uid)) && !is_null($cachedValue)) {
-            return $cachedValue[$field];
+            return $cachedValue;
         }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
