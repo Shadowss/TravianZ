@@ -1,3 +1,8 @@
+-- 17.11.2017 -> query optimizations
+ALTER TABLE `s1_prisoners` DROP INDEX `from`, ADD INDEX `from-t11` (`from`, `t11`);
+ALTER TABLE `s1_enforcement` DROP INDEX `from`, ADD INDEX `from` (`from`, `hero`) USING BTREE;
+
+
 -- 8.11.2017 -> query optimizations and cleanups
 ALTER TABLE `s1_ww_attacks` ADD INDEX(`vid`);
 

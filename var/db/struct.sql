@@ -589,7 +589,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
  `vref` int(11) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`),
- KEY `from` (`from`)
+ KEY `from` (`from`,`hero`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
@@ -1208,7 +1208,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%prisoners` (
  `t11` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `wref` (`wref`),
- KEY `from` (`from`)
+ KEY `from` (`from`,`t11`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
