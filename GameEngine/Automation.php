@@ -2763,10 +2763,15 @@ class Automation {
                                 }
 
                                 $newtraps = round(($mytroops+$anothertroops)/3);
-                                $database->modifyUnit($data['to'],array("99"),array($newtraps),array(0));
-                                $database->modifyUnit($data['to'],array("99o"),array($mytroops+$anothertroops),array(0));
+                                $database->modifyUnit(
+                                    $data['to'],
+                                    ['99', '99o'],
+                                    [$newtraps, $mytroops+$anothertroops],
+                                    [0, 0]
+                                );
                                 $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
                                 $p_username = $database->getUserField($from['owner'],"username",0);
+
                                 if($mytroops > 0 && $anothertroops > 0){
                                     $info_trap = "".$trapper_pic." ".$p_username." released <b>".$mytroops."</b> from his troops and <b>".$anothertroops."</b> friendly troops.";
                                 }elseif($mytroops > 0){
@@ -2776,10 +2781,13 @@ class Automation {
                                 }
                             }
                         }
+
                         if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0){
                             $info_troop= "";
                         }
+
                         $data2 = $data2.','.(isset($info_trap) ? addslashes($info_trap) : '').',,'.$info_troop.','.$info_hero;
+
                         if($totalsend_alldef == 0){
                             $database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                         }else if($totaldead_alldef == 0){
@@ -2906,13 +2914,16 @@ class Automation {
                             $speeds[] = $unitarray['speed'];
                         }
                     }
+
                     if ($herosend_att>0){
                         $hero_unit = $database->getHeroField($from['owner'], 'unit', false)['unit'];
                         $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
                     }
+
                     $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
                     $artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
                     $artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+
                     if($artefact > 0){
                         $fastertroops = 3;
                     }else if($artefact1 > 0){
@@ -2922,8 +2933,10 @@ class Automation {
                     }else{
                         $fastertroops = 1;
                     }
+
                     $endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
                     $foolartefact3 = $database->getFoolArtefactInfo(2,$from['wref'],$from['owner']);
+
                     if(count($foolartefact3) > 0){
                         foreach($foolartefact3 as $arte){
                             if($arte['bad_effect'] == 1){
@@ -2943,6 +2956,7 @@ class Automation {
                     $database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
                     $database->addNotice($to['owner'],$to['wref'],$targetally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
                 }
+
                 //check if not natar tribe
                 $getvillage = $database->getVillage($to['wref']);
                 if ($getvillage['owner']!=3) {
@@ -2950,6 +2964,7 @@ class Automation {
                     $unitarrays = $this->getAllUnits($to['wref'], false);
                     $village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
                     $starv = $getvillage['starv'];
+
                     if ($crop < $village_upkeep){
                         // add starv data
                         $database->setVillageField($to['wref'], 'starv', $village_upkeep);
@@ -2977,6 +2992,7 @@ class Automation {
                 #### PHP.NET manual: unset() destroy more than one variable unset($foo1, $foo2, $foo3);######
                 ################################################################################
                 $data_num++;
+
                 unset(
                     $Attacker
                     ,$Defender
