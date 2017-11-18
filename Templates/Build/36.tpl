@@ -84,6 +84,11 @@ include("next.tpl");
 			$max1 += $bid36[$village->resarray['f'.$i]]['attri']*TRAPPER_CAPACITY;
 			}
 			}
+
+			if (!isset($train_amt)) {
+                $train_amt = 0;
+            }
+
 			if($max > $max1 - ($village->unitarray['u99'] + $train_amt)){
 			$max = $max1 - ($village->unitarray['u99'] + $train_amt);
 			}
