@@ -167,10 +167,10 @@ class Automation {
         return addslashes($build);
     }
 
-    function recountPop($vid){
+    function recountPop($vid, $use_cache = true){
         global $database;
         $vid = (int) $vid;
-        $fdata = $database->getResourceLevel($vid);
+        $fdata = $database->getResourceLevel($vid, $use_cache);
         $popTot = 0;
 
         for ($i = 1; $i <= 40; $i++) {
@@ -1011,13 +1011,6 @@ class Automation {
         // building/field destroyed
         if ($battlepart[4]>$battlepart[3])
         {
-            if ($isSecondRow) {
-                $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.</td></tr></tbody>";
-            } else {
-                $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " destroyed.";
-            }
-
             // prepare data to be updated
             $fieldsToSet = ["f".$tbid];
             $fieldValuesToSet = [0];
@@ -1053,10 +1046,19 @@ class Automation {
 
             // oasis cannot be destroyed
             if ($isoasis == 0) {
-                $pop=$this->recountPop($data['to']);
+                $pop=$this->recountPop($data['to'], false);
                 if($pop==0 && $can_destroy==1){
                     $village_destroyed = 1;
+                    // this will ensure the right $info_cat text
+                    $tbgid = 0;
                 }
+            }
+
+            if ($isSecondRow) {
+                $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis)." destroyed.</td></tr></tbody>";
+            } else {
+                $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " destroyed.";
             }
         }
         // building/field not damaged
@@ -1083,8 +1085,8 @@ class Automation {
             }
 
             // don't allow this to go below 0
-            if ($totallvl <= 0) {
-                $totallvl = 1;
+            if ($totallvl < 0) {
+                $totallvl = 0;
             }
 
             // no damage to the building/field
@@ -1095,7 +1097,14 @@ class Automation {
                 // update $bdo, so we don't have to reselect later
                 $bdo[ 'f' . $catapultTarget ] = $totallvl;
 
-                $info_cata  = " damaged from level <b>" . $tblevel . "</b> to level <b>" . $totallvl . "</b>.";
+                if ($tblevel == 1 && $totallvl == 0) {
+                    // building was actually destroyed - recalculate population and remove village itself, if needed
+                    $info_cata = " destroyed.";
+                } else {
+                    // building was damaged to a lower level
+                    $info_cata = " damaged from level <b>" . $tblevel . "</b> to level <b>" . $totallvl . "</b>.";
+                }
+
                 $buildarray = $GLOBALS[ "bid" . $tbgid ];
 
                 // (great) warehouse level was changed
@@ -1112,10 +1121,26 @@ class Automation {
                 if ( $tbgid == 18 ) {
                     $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], false );
                 }
+            }
 
-                // no need to recalculate population of oasis, as there is none
-                if ( $isoasis == 0 ) {
-                    $pop = $this->recountPop( $data['to'] );
+            $fieldsToSet = ["f" . $tbid];
+            $fieldValuesToSet = [$totallvl];
+
+            if ($totallvl == 0) {
+                $fieldsToSet[] = "f" . $tbid . "t";
+                $fieldValuesToSet[] = 0;
+                $bdo['f'.$catapultTarget."t"] = 0;
+            }
+
+            $database->setVillageLevel( $data['to'], $fieldsToSet, $fieldValuesToSet );
+
+            // recalculate population and check if the village shouldn't be destroyed at this point
+            $pop = $this->recountPop( $data['to'], false );
+            if ($isoasis == 0) {
+                if($pop==0 && $can_destroy==1){
+                    $village_destroyed = 1;
+                    // this will ensure the right $info_cat text
+                    $tbgid = 0;
                 }
             }
 
@@ -1125,7 +1150,6 @@ class Automation {
             } else {
                 $info_cat = "" . $catp_pic . "," . $this->procResType( $tbgid, $can_destroy, $isoasis ) . $info_cata;
             }
-            $database->setVillageLevel( $data['to'], "f" . $tbid, $totallvl );
         }
     }
 
@@ -1223,19 +1247,23 @@ class Automation {
                             $playerunit -= $i;
                             $totaltroops += $data['u'.$i];
                         }
-                        // modify units in DB
-                        $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
 
                         $data['u11'] = $DefenderUnit['hero'];
                         $totaltroops += $data['u11'];
                         if($totaltroops > 0){
-                            $database->modifyUnit($data['to'],array("hero"),array($DefenderUnit['hero']),array(0));
+                            $evasionUnitModifications_units[] = 'hero';
+                            $evasionUnitModifications_amounts[] = $DefenderUnit['hero'];
+                            $evasionUnitModifications_modes[] = 0;
+
                             $attackid = $database->addAttack($data['to'],$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],4,0,0,0,0,0,0,0,0,0,0,0);
                             $database->addMovement(4,0,$data['to'],$attackid,microtime(true),microtime(true)+(180/EVASION_SPEED));
                             $newgold = $gold-2;
                             $newmaxevasion = $maxevasion-1;
                             $database->updateUserField($DefenderID, ["gold", "maxevasion"], [$newgold, $newmaxevasion], 1);
                         }
+
+                        // modify units in DB
+                        $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
                     }
                     //get defence units
                     $enforDefender = array();
@@ -1689,13 +1717,20 @@ class Automation {
                             $unitModifications_modes[] = 0;
                         }
                     }
-                    // modify units in DB
-                    $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
-                    $owndead['hero']='0';
+
+                    $owndead['hero'] = 0;
+
                     if($unitlist){
                         $owndead['hero'] = (isset($battlepart['deadherodef']) ? $battlepart['deadherodef'] : '');
-                        $database->modifyUnit($data['to'],array("hero"),array($owndead['hero']),array(0));
+
+                        $unitModifications_units[] = 'hero';
+                        $unitModifications_amounts[] = $owndead['hero'];
+                        $unitModifications_modes[] = 0;
                     }
+
+                    // modify units in DB
+                    $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
+
                     //kill other defence in village
                     // ... once again, units could have changed, so we need to reselect
                     $enforcementarray3 = $database->getEnforceVillage($data['to'],0, false);
@@ -1742,19 +1777,23 @@ class Automation {
                             }
                         }
 
-                        // modify enforce in DB
-                        foreach ($enforceModificationsById as $enforceId => $enforceArray) {
-                            $database->modifyEnforce( $enforceId, $enforceArray['units'], $enforceArray['amounts'], $enforceArray['modes']);
-                        }
+                        if($enforce['hero'] > 0) {
+                            $enforceModificationsById[$enforce['id']]['units'][] = 'hero';
+                            $enforceModificationsById[$enforce['id']]['amounts'][] = $battlepart['deadheroref'][$enforce['id']];
+                            $enforceModificationsById[$enforce['id']]['modes'][] = 0;
 
-                        if($enforce['hero']>'0'){
-                            $database->modifyEnforce($enforce['id'],"hero",$battlepart['deadheroref'][$enforce['id']],0);
                             $dead['hero']=$battlepart['deadheroref'][$enforce['id']];
                             $alldead['hero']+=$dead['hero'];
                             if($dead['hero']!=$enforce['hero']){
                                 $wrong='1';
                             }
                         }
+
+                        // modify enforce in DB
+                        foreach ($enforceModificationsById as $enforceId => $enforceArray) {
+                            $database->modifyEnforce( $enforceId, $enforceArray['units'], $enforceArray['amounts'], $enforceArray['modes']);
+                        }
+
                         $notlife= ''.$dead[$start].','.$dead[$start+1].','.$dead[$start+2].','.$dead[$start+3].','.$dead[$start+4].','.$dead[$start+5].','.$dead[$start+6].','.$dead[$start+7].','.$dead[$start+8].','.$dead[$start+9].'';
                         $notlife1 = $dead[$start]+$dead[$start+1]+$dead[$start+2]+$dead[$start+3]+$dead[$start+4]+$dead[$start+5]+$dead[$start+6]+$dead[$start+7]+$dead[$start+8]+$dead[$start+9];
                         $life= ''.$enforce['u'.$start.''].','.$enforce['u'.($start+1).''].','.$enforce['u'.($start+2).''].','.$enforce['u'.($start+3).''].','.$enforce['u'.($start+4).''].','.$enforce['u'.($start+5).''].','.$enforce['u'.($start+6).''].','.$enforce['u'.($start+7).''].','.$enforce['u'.($start+8).''].','.$enforce['u'.($start+9).''].'';
@@ -2158,14 +2197,13 @@ class Automation {
                             {
                                 // village stands, let's do the damage
                                 $basearray = $data['to'];
-
-                                $bdo=mysqli_fetch_array(mysqli_query($database->dblink,"select * from " . TB_PREFIX . "fdata where vref = " . (int) $basearray), MYSQLI_ASSOC);
+                                $bdo = $database->getResourceLevel($basearray, false);
                                 $catapultTarget = $data['ctar1'];
                                 $catapultTarget2 = (isset($data['ctar2']) ? $data['ctar2'] : 0);
 
                                 $catapults1TargetRandom = ($catapultTarget == 0);
-                                $catapults2TargetRandom = ($catapultTarget2 == 99);
                                 $catapults2WillNotShoot = ($catapultTarget2 == 0);
+                                $catapults2TargetRandom = ($catapults2WillNotShoot || $catapultTarget2 == 99);
 
                                 // we're manually targetting 1st and/or 2nd row of catapults
                                 if (!$catapults1TargetRandom || !$catapults2TargetRandom)
@@ -2209,6 +2247,7 @@ class Automation {
                                             }
                                         } else {
                                             $catapultTarget = 0;
+                                            $catapults1TargetRandom = true;
                                         }
                                     }
 
@@ -2223,6 +2262,7 @@ class Automation {
                                             }
                                         } else {
                                             $catapultTarget2 = 99;
+                                            $catapults2TargetRandom = true;
                                         }
                                     }
                                 }
@@ -2231,7 +2271,7 @@ class Automation {
                                 if ($catapults1TargetRandom)
                                 {
                                     $list=array();
-                                    $j = 0;
+                                    $j = 1;
                                     for ($i=1;$i<=41;$i++)
                                     {
                                         if ($i==41) $i=99;
@@ -2241,14 +2281,14 @@ class Automation {
                                             $j++;
                                         }
                                     }
-                                    $catapultTarget = $list[ rand(1, $j) ];
+                                    $catapultTarget = $list[ rand(1, $j - 1) ];
                                 }
 
                                 // 2nd row of catapults set to target randomly
-                                if ($catapults2TargetRandom)
+                                if ($catapults2TargetRandom && !$catapults2WillNotShoot)
                                 {
                                     $list=array();
-                                    $j=0;
+                                    $j=1;
                                     for ($i=1;$i<=41;$i++)
                                     {
                                         if ($i==41) $i=99;
@@ -2258,7 +2298,7 @@ class Automation {
                                             $list[$j]=$i;
                                         }
                                     }
-                                    $catapultTarget2 = $list[ rand(1, $j) ];
+                                    $catapultTarget2 = $list[ rand(1, $j - 1) ];
                                 }
 
                                 /**
@@ -2348,6 +2388,7 @@ class Automation {
                                 if(count($varray)!='1' AND $to['capital']!='1' AND $villexp < $canconquer){
                                     if($to['owner']!=3 OR $to['name']!='WW Buildingplan'){
                                         // check for standing Palace or Residence
+                                        // note: at this point, we can use cache, since we've cleared it above
                                         if ($database->getFieldLevelInVillage($data['to'], '25, 26')) {
                                             $nochiefing = 1;
                                             $info_chief = "".$chief_pic.",The Palace/Residence isn\'t destroyed!";
@@ -2356,6 +2397,7 @@ class Automation {
                                         // we can conquer this village
                                         if(!isset($nochiefing)){
                                             //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
+                                            // note: at this point, we can use cache, since we've cleared it above
                                             if($this->getTypeLevel(35,$data['from']) == 0){
                                                 for ($i=0; $i<($data['t9']-$dead9); $i++){
                                                     if($owntribe == 1){
@@ -2565,7 +2607,7 @@ class Automation {
                     if ($DefenderID==0) {
                         $natar=0;
                     }
-                    if(!empty($scout)){
+                    if(!empty($scout)) {
                         if ($data['spy'] == 1){
                             $info_spy = "".$spy_pic.",<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".round($totwood)." |
 				 <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".round($totclay)." |
