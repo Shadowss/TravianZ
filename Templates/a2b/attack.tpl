@@ -199,7 +199,7 @@ $end = ($tribe*10);
                 <tbody class="options">
         <tr>
             <th>Options</th>
-            <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>"><input class="radio" name="spy" value="1" checked="checked" type="radio">Scout resources and troops<br>
+            <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>"><input class="radio" name="spy" value="1" checked="checked" type="radio">Scout resources and troops<br>
             <input class="radio" name="spy" value="2" type="radio">Scout defences and troops                                            </td>
         </tr>
     </tbody>
