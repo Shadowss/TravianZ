@@ -1543,7 +1543,7 @@ class Automation {
                         for($i=1;$i<=11;$i++){
                             ${'traped'.$i}=$data['t'.$i];
                         }
-                    }elseif(!empty($scout) || (isset($def_spy) && $def_spy >0)){
+                    }elseif(empty($scout) || (isset($def_spy) && $def_spy >0)){
                         $traps = $Defender['u99']-$Defender['u99o'];
                         if ($traps<1) $traps=0;
                         for($i=1;$i<=11;$i++){
@@ -1555,10 +1555,10 @@ class Automation {
                             $traps -= $traps1;
                         }
                     }
-                    if(!empty($scout) || (isset($def_spy) && $def_spy >0) || (isset($NatarCapital) && $NatarCapital)){
+                    if(empty($scout) || (isset($def_spy) && $def_spy >0) || (isset($NatarCapital) && $NatarCapital)){
                         for ($i = 1; $i <= 11; $i++) {
-                            if (!isset(${'trapped'.$i})) {
-                                ${'trapped'.$i} = 0;
+                            if (!isset(${'traped'.$i})) {
+                                ${'traped'.$i} = 0;
                             }
                         }
                         $totaltraped_att = $traped1+$traped2+$traped3+$traped4+$traped5+$traped6+$traped7+$traped8+$traped9+$traped10+$traped11;
@@ -1744,7 +1744,18 @@ class Automation {
                         $start = ($tribe-1)*10+1;
                         $end = ($tribe*10);
                         unset($dead);
-                        if($tribe == 1){ $rom='1'; } else if($tribe == 2){ $ger='1'; }else if($tribe == 3){ $gal='1'; }else if($tribe == 4){ $nat='1'; } else { $natar='1'; }
+
+                        if ( $tribe == 1 ) {
+                            $rom = '1';
+                        } else if ( $tribe == 2 ) {
+                            $ger = '1';
+                        } else if ( $tribe == 3 ) {
+                            $gal = '1';
+                        } else if ( $tribe == 4 ) {
+                            $nat = '1';
+                        } else {
+                            $natar = '1';
+                        }
 
                         $enforceModificationsById = [];
                         for ($i = $start; $i <= $end; $i++){ //($i=$start;$i<=($start+9);$i++) {
@@ -2554,7 +2565,7 @@ class Automation {
                         if ($isoasis != 0) { //oasis fix by ronix
                             if ($to['owner']!=$from['owner']) {
                                 $troopcount = $database->countOasisTroops($data['to'], false);
-                                $canqured=$database->canConquerOasis($data['from'],$data['to']);
+                                $canqured=$database->canConquerOasis($data['from'],$data['to'], false);
                                 if ($canqured==1 && $troopcount==0) {
                                     $database->conquerOasis($data['from'],$data['to']);
                                     $info_hero = $hero_pic.",Your hero has conquered this oasis".$xp;
@@ -2617,34 +2628,10 @@ class Automation {
 	";
                         }else if($data['spy'] == 2){
                             if ($isoasis == 0){
-                                $resarray = $database->getResourceLevel($data['to']);
-
-
-                                $crannylevel =0;
-                                $rplevel = 0;
-                                $walllevel = 0;
-                                for($j=19;$j<=40;$j++) {
-                                    if($resarray['f'.$j.'t'] == 25 || $resarray['f'.$j.'t'] == 26 ) {
-
-                                        $rplevel = $database->getFieldLevel($data['to'],$j);
-
-                                    }
-                                }
-                                for($j=19;$j<=40;$j++) {
-                                    if($resarray['f'.$j.'t'] == 31 || $resarray['f'.$j.'t'] == 32 || $resarray['f'.$j.'t'] == 33) {
-
-                                        $walllevel = $database->getFieldLevel($data['to'],$j);
-
-                                    }
-                                }
-                                for($j=19;$j<=40;$j++) {
-                                    if($resarray['f'.$j.'t'] == 23) {
-
-                                        $crannylevel = $database->getFieldLevel($data['to'],$j);
-
-                                    }
-                                }
-                            }else {
+                                $crannylevel = $database->getFieldLevelInVillage($data['to'], 23);
+                                $walllevel = $database->getFieldLevelInVillage($data['to'], '31, 32, 33');
+                                $rplevel = $database->getFieldLevelInVillage($data['to'], '25, 26');
+                            } else {
                                 $crannylevel =0;
                                 $walllevel =0;
                                 $rplevel =0;
@@ -2703,17 +2690,11 @@ class Automation {
                                 foreach($prisoners as $prisoner){
                                     $p_owner = $database->getVillageField($prisoner['from'],"owner");
                                     if($p_owner == $from['owner']){
-                                        $database->modifyAttack2($data['ref'],1,$prisoner['t1']);
-                                        $database->modifyAttack2($data['ref'],2,$prisoner['t2']);
-                                        $database->modifyAttack2($data['ref'],3,$prisoner['t3']);
-                                        $database->modifyAttack2($data['ref'],4,$prisoner['t4']);
-                                        $database->modifyAttack2($data['ref'],5,$prisoner['t5']);
-                                        $database->modifyAttack2($data['ref'],6,$prisoner['t6']);
-                                        $database->modifyAttack2($data['ref'],7,$prisoner['t7']);
-                                        $database->modifyAttack2($data['ref'],8,$prisoner['t8']);
-                                        $database->modifyAttack2($data['ref'],9,$prisoner['t9']);
-                                        $database->modifyAttack2($data['ref'],10,$prisoner['t10']);
-                                        $database->modifyAttack2($data['ref'],11,$prisoner['t11']);
+                                        $database->modifyAttack2(
+                                            $data['ref'],
+                                            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+                                            [$prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'], $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11']]
+                                        );
                                         $mytroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
                                         $database->deletePrisoners($prisoner['id']);
                                     }else{

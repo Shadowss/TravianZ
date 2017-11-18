@@ -1430,7 +1430,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-        $AttackerFields = $this->getResourceLevel( $vref );
+        $AttackerFields = $this->getResourceLevel( $vref, $use_cache );
         for ( $i = 19; $i <= 38; $i ++ ) {
             if ( $AttackerFields[ 'f' . $i . 't' ] == 37 ) {
                 $HeroMansionLevel = $AttackerFields[ 'f' . $i ];
@@ -1442,7 +1442,7 @@ class MYSQLi_DB implements IDbConnection {
             if (
                 $OasisInfo['conqured'] == 0 ||
                 $OasisInfo['conqured'] != 0 &&
-                intval( $OasisInfo['loyalty'] ) < ( 99 / min(3, (4 - $this->VillageOasisCount($OasisInfo['conqured']))) )
+                intval( $OasisInfo['loyalty'] ) < ( 99 / min(3, (4 - $this->VillageOasisCount($OasisInfo['conqured'], $use_cache))) )
             ) {
                 $CoordsVillage = $this->getCoor( $vref );
                 $CoordsOasis   = $this->getCoor( $wref );
@@ -4999,8 +4999,18 @@ class MYSQLi_DB implements IDbConnection {
 	function modifyAttack2($aid, $unit, $amt) {
 	    list($aid, $unit, $amt) = $this->escape_input((int) $aid, $unit, (int) $amt);
 
-		$unit = 't' . $unit;
-		$q = "UPDATE " . TB_PREFIX . "attacks set $unit = $unit + $amt where id = $aid";
+	    if (!is_array($unit)) {
+	        $unit = [$unit];
+	        $amt = [$amt];
+        }
+
+        $pairs = [];
+	    foreach ($unit as $index => $unitValue) {
+	        $unitValue = 't' . $this->escape($unitValue);
+            $pairs[] = $unitValue . ' = ' . $unitValue . ' + ' . (int) $amt[$index];
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "attacks SET ".implode(', ', $pairs)." WHERE id = $aid";
 		return mysqli_query($this->dblink,$q);
 	}
 
