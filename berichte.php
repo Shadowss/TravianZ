@@ -1,4 +1,6 @@
 <?php
+include_once("GameEngine/Generator.php");
+$start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -15,7 +17,6 @@ use App\Utils\AccessLogger;
 include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
-$start_timer = $generator->pageLoadTimeStart();
 $message->noticeType($_GET);
 $message->procNotice($_POST);
 if(isset($_GET['newdid'])) {

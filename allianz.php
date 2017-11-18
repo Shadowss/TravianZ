@@ -1,4 +1,7 @@
 <?php
+include_once("GameEngine/Generator.php");
+$start_timer = $generator->pageLoadTimeStart();
+
 //fix by ronix
 use App\Utils\AccessLogger;
 
@@ -7,7 +10,6 @@ include_once("GameEngine/Village.php");
 include_once("GameEngine/Chat.php");
 AccessLogger::logRequest();
 
-$start_timer = $generator->pageLoadTimeStart();
 $alliance->procAlliance($_GET);
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];

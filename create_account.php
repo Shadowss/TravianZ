@@ -1,4 +1,6 @@
 <?php
+include_once("GameEngine/Generator.php");
+$start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -44,8 +46,6 @@ AccessLogger::logRequest();
 		if($session->access < ADMIN){
 			die("Access Denied: You are not Admin!");
 			}else{
-
-$start_timer = $generator->pageLoadTimeStart();
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

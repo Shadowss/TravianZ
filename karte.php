@@ -1,4 +1,6 @@
 <?php
+include_once("GameEngine/Generator.php");
+$start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -16,7 +18,6 @@ if(isset($_GET['z']) && !is_numeric($_GET['z'])) die('Hacking Attempt');
 include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
-$start_timer = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
 if(isset($_GET['d']) && isset($_GET['c'])){

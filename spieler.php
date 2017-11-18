@@ -1,4 +1,6 @@
 <?php
+include_once("GameEngine/Generator.php");
+$start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -15,7 +17,6 @@ ob_start();
 include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
-$start_timer = $generator->pageLoadTimeStart();
 $profile->procProfile($_POST);
 $profile->procSpecial($_GET);
 if(isset($_GET['newdid'])) {

@@ -1,4 +1,6 @@
 <?php
+include_once("GameEngine/Generator.php");
+$start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -14,7 +16,6 @@ use App\Utils\AccessLogger;
 include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
-$start_timer = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
     $_SESSION['wid'] = $_GET['newdid'];
     $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$database->escape((int) $_GET['newdid'])." WHERE id=".$session->uid);  

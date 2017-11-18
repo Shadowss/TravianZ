@@ -1,4 +1,6 @@
 <?php
+include_once("GameEngine/Generator.php");
+$start_timer = $generator->pageLoadTimeStart();
 
 /** --------------------------------------------------- **\
 | ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
