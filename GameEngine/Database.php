@@ -659,7 +659,7 @@ class MYSQLi_DB implements IDbConnection {
             $arrayVariable[$arrayStructure] = [];
         }
 
-        if (isset($arrayVariable[$arrayStructure]) && !is_null($arrayVariable[$arrayStructure])) {
+        if (isset($arrayVariable[$arrayStructure]) && count($arrayVariable[$arrayStructure])) {
             return $arrayVariable[$arrayStructure];
         } else {
             return null;
@@ -1789,7 +1789,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getOasisField($ref, $field, $use_cache = true) {
         // return all data, don't waste time by selecting fields one by one
         $oasisArray = $this->getOasisV($ref, $use_cache);
-        $result = (isset($oasisArray[$field]) ? $oasisArray[$field] : null);
+        return (isset($oasisArray[$field]) ? $oasisArray[$field] : null);
 
 	    /*list($ref, $field) = $this->escape_input((int) $ref, $field);
 
@@ -1817,7 +1817,13 @@ class MYSQLi_DB implements IDbConnection {
 
         $pairs = [];
 	    foreach ($field as $index => $fieldValue) {
-	        $pairs[] = $this->escape($fieldValue).' = '.((Math::isInt($value[$index]) || Math::isFloat($value[$index])) ? $value[$index] : '"'.$this->escape($value[$index]).'"');
+            $newValue = ((Math::isInt($value[$index]) || Math::isFloat($value[$index])) ? $value[$index] : '"'.$this->escape($value[$index]).'"');
+	        $pairs[] = $this->escape($fieldValue).' = '.$newValue;
+
+	        // update cache
+	        if (isset(self::$villageFieldsCache[$ref])) {
+                self::$villageFieldsCache[$ref][$fieldValue] = $newValue;
+            }
         }
 
 		$q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(', ', $pairs)." WHERE wref = ".(int) $ref;
@@ -1871,6 +1877,11 @@ class MYSQLi_DB implements IDbConnection {
         self::$resourceLevelsCache[$vid] = mysqli_fetch_assoc($result);
         return self::$resourceLevelsCache[$vid];
 	}
+
+	public function clearResourseLevelsCache() {
+	    self::$resourceLevelsCache = [];
+        self::$fieldLevelsInVillageSearchCache = [];
+    }
 
 	function getAdminLog() {
 		$q = "SELECT id,user,log,time from " . TB_PREFIX . "admin_log where id != 0 ORDER BY id DESC";
@@ -4216,12 +4227,12 @@ class MYSQLi_DB implements IDbConnection {
 	 *                            and 0 when the player was evicted from
 	 *                            the alliance due to Embassy damage.
 	 */
-	public function checkAllianceEmbassiesStatus($userData, $demolition = false) {
+	public function checkAllianceEmbassiesStatus($userData, $demolition = false, $use_cache = true) {
 	    // TODO: refactor this and break it into more smaler methods
 	    global $session;
 
 	    // check whether this player is an alliance owner
-	    $isOwner = ($userData['alliance'] && $this->isAllianceOwner($userData['id']) == $userData['alliance']);
+	    $isOwner = ($userData['alliance'] && $this->isAllianceOwner($userData['id'], $use_cache) == $userData['alliance']);
 
 	    // for demolition, the Embassy was already destroyed, so we need at least 1
 	    // Embassy still standing... for battle, the Embassy is still standing
@@ -4233,7 +4244,7 @@ class MYSQLi_DB implements IDbConnection {
 	    // at lvl 1+ standing somewhere
 	    if (!$isOwner) {
 	        // TODO: replace magic numbers by constants (18 = Embassy)
-	        if ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', 1) < $minimumExistingEmbassyRecords) {
+	        if ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', 1, $use_cache) < $minimumExistingEmbassyRecords) {
 
 	            // the player has no more Embassies, evict them from the alliance
 	            mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
@@ -4278,7 +4289,7 @@ class MYSQLi_DB implements IDbConnection {
 	        }
 	    } else {
 	        // the player IS an alliance owner, check if we need to take any action
-	        $membersCount            = $this->countAllianceMembers($userData['alliance']);
+	        $membersCount            = $this->countAllianceMembers($userData['alliance'], $use_cache);
 	        $minAllianceEmbassyLevel = $this->getMinEmbassyLevel($membersCount);
 
 	        // in this case, the minimum Embassy level cannot go below 3,
@@ -4294,7 +4305,7 @@ class MYSQLi_DB implements IDbConnection {
 	            &&
 	            // check for standing Embassies with sufficient level
     	        // TODO: replace magic numbers by constants (18 = Embassy)
-	            ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', $minAllianceEmbassyLevel) < $minimumExistingEmbassyRecords)
+	            ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', $minAllianceEmbassyLevel, false, $use_cache) < $minimumExistingEmbassyRecords)
 	        );
 
 	        // the Embassy got damaged below a sufficient level and there are no more Embassies
@@ -4302,7 +4313,7 @@ class MYSQLi_DB implements IDbConnection {
 	        if ($takeAction) {
 
 	            // load all alliance members
-	            $members = $this->getAllMember($userData['alliance']);
+	            $members = $this->getAllMember($userData['alliance'], 0, $use_cache);
 
 	            // if we come from demolition, we need to evict all new members
 	            // that accepted an invitation while level 3 of the last
@@ -4410,7 +4421,7 @@ class MYSQLi_DB implements IDbConnection {
 	                } else {
 	                    // let's determine whether to keep currently attacked player
 	                    // in the alliance or not
-	                    if ($userData['lvl'] > 0 || $this->getSingleFieldTypeCount($member['id'], 18, '>=', 1) >= $minimumExistingEmbassyRecords) {
+	                    if ($userData['lvl'] > 0 || $this->getSingleFieldTypeCount($member['id'], 18, '>=', 1, $use_cache) >= $minimumExistingEmbassyRecords) {
                             $keepCurrentPlayer = true;
                         } else {
                             $keepCurrentPlayer = false;
@@ -4483,7 +4494,7 @@ class MYSQLi_DB implements IDbConnection {
 	    return true;
 	}
 
-	function checkEmbassiesAfterBattle($vid) {
+	function checkEmbassiesAfterBattle($vid, $use_cache = true) {
         $userData = $this->getUserArray($this->getVillageField($vid,"owner"), 1);
 
         Automation::updateMax($this->getVillageField($vid,"owner"));
@@ -4492,7 +4503,7 @@ class MYSQLi_DB implements IDbConnection {
             'alliance' => $userData["alliance"],
             'username' => $userData["username"],
             'lvl'      => $totallvl
-        ]);
+        ], false, $use_cache);
 
         if ($allianceStatus === false) {
             return ' This player\'s alliance has been dispersed.';
@@ -5081,6 +5092,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         if (!is_array($vid)) {
+            $singleVillage = true;
             $vid = [$vid];
         }
 
@@ -5114,7 +5126,7 @@ class MYSQLi_DB implements IDbConnection {
             }
         }
 
-		return ($vidCount > 1 ? $returnArray : reset($returnArray));
+		return (!isset($singleVillage) ? $returnArray : reset($returnArray));
 	}
 
     // no need to cache this method

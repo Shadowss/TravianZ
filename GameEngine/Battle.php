@@ -311,7 +311,10 @@ class Battle {
             foreach($DefendersAll as $defenders) {
                 for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
                 $fromvillage = $defenders['from'];
-                $enforcetribe = $database->getUserArray($database->getVillageField($fromvillage,"owner"), 1)["tribe"];
+
+                $userdataCache[$fromvillage] = $database->getUserArray($database->getVillageField($fromvillage,"owner"), 1);
+
+                $enforcetribe = $userdataCache[$fromvillage]["tribe"];
                 $ud=($enforcetribe-1)*10;
                 if($defenders['from']>0) { //don't check nature tribe
                     $armory = $database->getABTech($defenders['from']); // Armory level every village enforcement

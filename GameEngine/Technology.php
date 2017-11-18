@@ -175,7 +175,9 @@ class Technology {
 				$holder['amt'] = $unitarray['u'.$i];
 				array_push($listArray,$holder);
 			}
-		}if($unitarray['hero'] != 0 && $unitarray['hero'] != "") {
+		}
+
+		if($unitarray['hero'] != 0 && $unitarray['hero'] != "") {
 				$holder['id'] = "hero";
 				$holder['name'] = $this->unarray[$i];
 				$holder['amt'] = $unitarray['hero'];
