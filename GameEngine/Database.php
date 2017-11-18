@@ -380,6 +380,11 @@ class MYSQLi_DB implements IDbConnection {
         $cropProductionStarvationValueCache = [],
 
         /**
+         * @var array Cache of profile villages.
+         */
+        $profileVillagesCache = [],
+
+        /**
          * @var array Cache of messages to be sent out to players,
          *            so we can collect them and send them out together
          *            at the end of script execution.
@@ -1547,12 +1552,20 @@ class MYSQLi_DB implements IDbConnection {
         }
 	}
 
-	function getProfileVillages($uid) {
+	function getProfileVillages($uid, $use_cache = true) {
 	    list($uid) = $this->escape_input((int) $uid);
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$profileVillagesCache, $uid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT capital,wref,name,pop,created from " . TB_PREFIX . "vdata where owner = $uid order by pop desc";
 		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+
+        self::$profileVillagesCache[$uid] = $this->mysqli_fetch_all($result);
+        return self::$profileVillagesCache[$uid];
 	}
 
 	// no need to refactor this method
@@ -4470,20 +4483,14 @@ class MYSQLi_DB implements IDbConnection {
 	    return true;
 	}
 
-	function checkEmbassiesAfterBattle(&$villageOwners, &$cachedUserData, $vid) {
-        if (!isset($villageOwners[$vid])) {
-            $villageOwners[$vid] = $this->getVillageField($vid,"owner");
-        }
+	function checkEmbassiesAfterBattle($vid) {
+        $userData = $this->getUserArray($this->getVillageField($vid,"owner"), 1);
 
-        if (!isset($cachedUserData[$vid])) {
-            $cachedUserData[$vid] = $this->getUserArray($villageOwners[$vid], 1);
-        }
-
-        Automation::updateMax($villageOwners[$vid]);
+        Automation::updateMax($this->getVillageField($vid,"owner"));
         $allianceStatus = $this->checkAllianceEmbassiesStatus([
-            'id'       => $cachedUserData[$vid],
-            'alliance' => $cachedUserData[$vid]["alliance"],
-            'username' => $cachedUserData[$vid]["username"],
+            'id'       => $userData['id'],
+            'alliance' => $userData["alliance"],
+            'username' => $userData["username"],
             'lvl'      => $totallvl
         ]);
 

@@ -240,7 +240,7 @@ class Battle {
 	}
 
     //1 raid 0 normal
-    function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$hero_strenght,$deffhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $defReinforcements = null, $villageOwners = array(), $userdataCache = array()) {
+    function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$hero_strenght,$deffhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $defReinforcements = null) {
         global $bid34,$bid35,$database;
 
         // Define the array, with the units
@@ -307,21 +307,11 @@ class Battle {
         }
         $DefendersAll = (!is_null($defReinforcements) ? $database->getEnforceVillage($DefenderWref,0) : $defReinforcements);
 
-        if (!isset($villageOwners[$DefenderWref])) {
-            $villageOwners[ $DefenderWref ] = $database->getVillageField( $DefenderWref, "owner" );
-        }
-
         if(!empty($DefendersAll) && $DefenderWref>0){
             foreach($DefendersAll as $defenders) {
                 for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
                 $fromvillage = $defenders['from'];
-
-                if (!isset($villageOwners[$fromvillage])) {
-                    $villageOwners[$fromvillage] = $database->getVillageField($fromvillage,"owner");
-                    $userdataCache[$fromvillage] = $database->getUserArray($villageOwners[$fromvillage], 1);
-                }
-
-                $enforcetribe = $userdataCache[$fromvillage]["tribe"];
+                $enforcetribe = $database->getUserArray($database->getVillageField($fromvillage,"owner"), 1)["tribe"];
                 $ud=($enforcetribe-1)*10;
                 if($defenders['from']>0) { //don't check nature tribe
                     $armory = $database->getABTech($defenders['from']); // Armory level every village enforcement
@@ -346,7 +336,7 @@ class Battle {
                     $cdp+=$datadef['cdp'];
                     $involve=$datadef['involve'];
                 }
-                $reinfowner = $villageOwners[$fromvillage];
+                $reinfowner = $database->getVillageField($fromvillage,"owner");
                 $defhero = $this->getBattleHero($reinfowner);
                 //calculate def hero from enforcement
                 if($defenders['hero'] != 0){
@@ -582,7 +572,7 @@ class Battle {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
             $wctp *= $catp+($att_ab8/1.5);
-            $artowner = $villageOwners[$DefenderWref];
+            $artowner = $database->getVillageField( $DefenderWref, "owner" );
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
             $bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
@@ -625,7 +615,7 @@ class Battle {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
             $wctp *= ($ram/2) + ($att_ab7/1.5);
-            $artowner = $villageOwners[$DefenderWref];
+            $artowner = $database->getVillageField( $DefenderWref, "owner" );
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
             $bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
@@ -716,10 +706,7 @@ class Battle {
             foreach($DefendersAll as $defenders) {
                 if($defenders['hero']>0) {
                     if(!empty($heroarray)) { reset($heroarray); }
-                    if (!isset($villageOwners[$defenders['from']])) {
-                        $villageOwners[$defenders['from']] = $database->getVillageField($defenders['from'],"owner");
-                        $battleHeroesCache[$defenders['from']] = $this->getBattleHero($villageOwners[$defenders['from']]);
-                    }
+                    $battleHeroesCache[$defenders['from']] = $this->getBattleHero($database->getVillageField($defenders['from'],"owner"));
                     $heroarraydefender = $battleHeroesCache[$defenders['from']];
                     $_result=mysqli_query($GLOBALS['link'],"select heroid, health from " . TB_PREFIX . "hero where `dead`='0' and `heroid`=".(int) $heroarraydefender['heroid']);
                     $fdb = mysqli_fetch_array($_result);

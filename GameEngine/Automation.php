@@ -587,12 +587,6 @@ class Automation {
         // IDs of villages that were affected by this building completion update,
         // used to calculate statistical data at the end
         $villagesAffected = [];
-        // IDs of owners for each village we process
-        $villageOwners = [];
-        // tribes for owner IDs, in case we have one owner that finished building
-        // in multiple villages, so we don't have to select their tribe in every
-        // foreach cycle
-        $ownersToTribes = [];
         // holds additional conditions when updating loopcon records in the bdata table
         $loopconUpdates = [];
         // this will hold IDs of bdata table records to delete
@@ -613,14 +607,9 @@ class Automation {
             // store village ID for later for statistical updates
             $villageData = $database->getVillageFields($indi['wid'],'owner, maxcrop, maxstore, starv, pop');
             $villageOwner = $villageData['owner'];
-            $villageOwners[$indi['wid']] = $villageOwner;
             $villagesAffected[] = (int) $indi['wid'];
             $level = $database->getFieldLevel($indi['wid'],$indi['field']);
             $fieldsToSet = [];
-
-            if (!isset($ownersToTribes[$villageOwner])) {
-                $ownersToTribes[$villageOwner] = $database->getUserField($villageOwner, "tribe", 0);
-            }
 
             if (($level + 1) == $indi['level']){
                 $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
@@ -671,7 +660,7 @@ class Automation {
 
                 // TODO: find out what exactly these conditions are for
                 // no special military conditioning for Teutons and Gauls
-                if ($ownersToTribes[$villageOwner] != 1) {
+                if ($database->getUserField($villageOwner, "tribe", 0) != 1) {
                     $loopconUpdates[$indi['wid']] = '';
                 } else {
                     // special condition for Roman military buildings
@@ -933,29 +922,9 @@ class Automation {
         $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 0 AND endtime < $time";
         $dataarray = $database->query_return($q);
 
-        // holds village owners of the given village IDs, as we can have
-        // multiple market routes from the same village going to other villages
-        $villageOwners = [];
-        // cache of alliances for the village owners
-        $alliances = [];
-        // cache for tribes for the village owners
-        $tribes = [];
-
         foreach($dataarray as $data) {
-            // cache village owners
-            if (!isset($villageOwners[$data['from']])) {
-                $villageOwners[$data['from']] = $database->getVillageField($data['from'],"owner");
-                $userData = $database->getUserFields($villageOwners[$data['from']],"alliance, tribe",0);
-                $alliances[$data['from']] = $userData["alliance"];
-                $tribes[$data['from']] = $userData["tribe"];
-            }
-
-            if (!isset($villageOwners[$data['to']])) {
-                $villageOwners[$data['to']] = $database->getVillageField($data['to'],"owner");
-                $userData = $database->getUserFields($villageOwners[$data['to']],"alliance, tribe",0);
-                $alliances[$data['to']] = $userData["alliance"];
-                $tribes[$data['to']] = $userData["tribe"];
-            }
+            $userData_from = $database->getUserFields($database->getVillageField($data['from'],"owner"),"alliance, tribe",0);
+            $userData_to = $database->getUserFields($database->getVillageField($data['to'],"owner"),"alliance, tribe",0);
 
             if($data['wood'] >= $data['clay'] && $data['wood'] >= $data['iron'] && $data['wood'] >= $data['crop']){ $sort_type = "10"; }
             elseif($data['clay'] >= $data['wood'] && $data['clay'] >= $data['iron'] && $data['clay'] >= $data['crop']){ $sort_type = "11"; }
@@ -965,8 +934,8 @@ class Automation {
             $to = $database->getMInfo($data['to']);
             $from = $database->getMInfo($data['from']);
 
-            $ownally = $alliances[$data['to']];
-            $targetally = $alliances[$data['to']];
+            $ownally = $userData_from['alliance'];
+            $targetally = $userData_to['alliance'];
 
             $database->addNotice($to['owner'],$to['wref'],$targetally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             if($from['owner'] != $to['owner']) {
@@ -975,7 +944,7 @@ class Automation {
             $database->modifyResource($data['to'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],1);
             $tocoor = $database->getCoor($data['from']);
             $fromcoor = $database->getCoor($data['to']);
-            $targettribe = $tribes[$data['from']];
+            $targettribe = $userData_to["tribe"];
             $endtime = $this->procDistanceTime($tocoor,$fromcoor,$targettribe,0) + $data['endtime'];
             $database->addMovement(2,$data['to'],$data['from'],$data['merchant'],time(),$endtime,$data['send'],$data['wood'],$data['clay'],$data['iron'],$data['crop']);
             $database->setMovementProc($data['moveid']);
@@ -985,13 +954,7 @@ class Automation {
         foreach($dataarray1 as $data1) {
             $database->setMovementProc($data1['moveid']);
             if($data1['send'] > 1){
-                if (!isset($villageOwners[$data1['to']])) {
-                    $villageOwners[$data1['to']] = $database->getVillageField($data1['to'],"owner");
-                    $userData1 = $database->getUserFields($villageOwners[$data1['to']],"alliance, tribe",0);
-                    $alliances[$data1['to']] = $userData1["alliance"];
-                    $tribes[$data1['to']] = $userData1["tribe"];
-                }
-                $targettribe1 = $tribes[$data1['to']];
+                $targettribe1 = $database->getUserFields($database->getVillageField($data1['to'],"owner"),"alliance, tribe",0)['tribe'];
                 $send = $data1['send']-1;
                 $this->sendResource2($data1['wood'],$data1['clay'],$data1['iron'],$data1['crop'],$data1['to'],$data1['from'],$targettribe1,$send);
             }
@@ -1085,7 +1048,7 @@ class Automation {
 
             // embassy level was changed
             if ($tbgid==18){
-                $info_cat .= $database->checkEmbassiesAfterBattle($villageOwners, $cachedUserData, $data['to']);
+                $info_cat .= $database->checkEmbassiesAfterBattle($data['to']);
             }
 
             // oasis cannot be destroyed
@@ -1147,7 +1110,7 @@ class Automation {
 
                 // embassy level was changed
                 if ( $tbgid == 18 ) {
-                    $info_cat .= $database->checkEmbassiesAfterBattle( $villageOwners, $cachedUserData, $data['to'] );
+                    $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'] );
                 }
 
                 // no need to recalculate population of oasis, as there is none
@@ -1199,10 +1162,6 @@ class Automation {
         $totalattackdead = 0;
         $data_num = 0;
 
-        // set up caching variables, so we don't do same lookups more than once below
-        $villageOwners = [];
-        $cachedUserData = [];
-
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
                 //set base things
@@ -1212,30 +1171,20 @@ class Automation {
                 $DefenderWref = $data['to'];
                 $NatarCapital=false;
 
-                // cache owners and other cacheable data
-                if (!isset($villageOwners[$data['from']])) {
-                    $villageOwners[$data['from']] = $database->getVillageField($data['from'],"owner");
-                    $cachedUserData[$data['from']] = $database->getUserArray($villageOwners[$data['from']], 1);
-                }
-
-                if (!isset($villageOwners[$data['to']])) {
-                    $villageOwners[$data['to']] = ($isoasis ? $database->getOasisField($data['to'],"owner") : $database->getVillageField($data['to'],"owner"));
-                    $cachedUserData[$data['to']] = $database->getUserArray($villageOwners[$data['to']], 1);
-                }
-
-                $Attacker['id'] = $cachedUserData[$data['from']]["id"];
+                $Attacker['id'] = $database->getUserArray($database->getVillageField($data['from'],"owner"), 1)["id"];
                 $AttackerID = $Attacker['id'];
-                $owntribe = $cachedUserData[$data['from']]["tribe"];
-                $ownally = $cachedUserData[$data['from']]["alliance"];
+                $owntribe = $database->getUserArray($database->getVillageField($data['from'],"owner"), 1)["tribe"];
+                $ownally = $database->getUserArray($database->getVillageField($data['from'],"owner"), 1)["alliance"];
                 $from = $database->getMInfo($data['from']);
                 $fromF = $database->getVillage($data['from']);
 
                 if ($isoasis == 0){ //village
-                    $Defender['id'] = $cachedUserData[$data['to']]["id"];
+                    $DefenderUserData = $database->getUserArray($database->getVillageField($data['to'],"owner"), 1);
+                    $Defender['id'] = $DefenderUserData["id"];
                     $DefenderID = $Defender['id'];
                     if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
-                    $targettribe = $cachedUserData[$data['to']]["tribe"];
-                    $targetally = $cachedUserData[$data['to']]["alliance"];
+                    $targettribe = $DefenderUserData["tribe"];
+                    $targetally = $DefenderUserData["alliance"];
                     $to = $database->getMInfo($data['to']);
                     $toF = $database->getVillage($data['to']);
                     $conqureby=0;
@@ -1245,8 +1194,8 @@ class Automation {
                     $DefenderUnit = array();
                     $DefenderUnit = $database->getUnit($data['to']);
                     $evasion = $toF["evasion"];
-                    $maxevasion = $cachedUserData[$data['to']]["maxevasion"];
-                    $gold = $cachedUserData[$data['to']]["gold"];
+                    $maxevasion = $DefenderUserData["maxevasion"];
+                    $gold = $DefenderUserData["gold"];
                     $playerunit = (( $targettribe - 1 ) * 10);
                     $cannotsend = 0;
                     $movements = $database->getMovement("34",$data['to'],1);
@@ -1258,22 +1207,24 @@ class Automation {
                             }
                         }
                     }
+
                     if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0 && $dataarray[$data_num]['attack_type'] > 2){
+                        $evaded = true;
                         $totaltroops = 0;
-                        $unitModifications_units = [];
-                        $unitModifications_amounts = [];
-                        $unitModifications_modes = [];
+                        $evasionUnitModifications_units = [];
+                        $evasionUnitModifications_amounts = [];
+                        $evasionUnitModifications_modes = [];
                         for($i=1;$i<=10;$i++){
                             $playerunit += $i;
                             $data['u'.$i] = $DefenderUnit['u'.$playerunit];
-                            $unitModifications_units[] = $playerunit;
-                            $unitModifications_amounts[] = $DefenderUnit['u'.$playerunit];
-                            $unitModifications_modes[] = 0;
+                            $evasionUnitModifications_units[] = $playerunit;
+                            $evasionUnitModifications_amounts[] = $DefenderUnit['u'.$playerunit];
+                            $evasionUnitModifications_modes[] = 0;
                             $playerunit -= $i;
                             $totaltroops += $data['u'.$i];
                         }
                         // modify units in DB
-                        $database->modifyUnit($data['to'], $unitModifications_units, $unitModifications_amounts, $unitModifications_modes);
+                        $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
 
                         $data['u11'] = $DefenderUnit['hero'];
                         $totaltroops += $data['u11'];
@@ -1289,7 +1240,7 @@ class Automation {
                     //get defence units
                     $enforDefender = array();
                     $rom = $ger = $gal = $nat = $natar = 0;
-                    $Defender = $database->getUnit($data['to']);
+                    $Defender = $database->getUnit($data['to'], false);
                     $enforcementarray = $database->getEnforceVillage($data['to'],0);
                     if(count($enforcementarray) > 0) {
 
@@ -1312,8 +1263,8 @@ class Automation {
                         if(!isset($Defender['u'.$i])){
                             $Defender['u'.$i] = '0';
                         } else {
-                            if($Defender['u'.$i]=='' or $Defender['u'.$i]<='0'){
-                                $Defender['u'.$i] = '0';
+                            if($Defender['u'.$i]=='' || $Defender['u'.$i] <= 0){
+                                $Defender['u'.$i] = 0;
                             } else {
                                 if($i<=10){ $rom='1'; }
                                 else if($i<=20){ $ger='1'; }
@@ -1326,8 +1277,8 @@ class Automation {
                     if(!isset($Defender['hero'])){
                         $Defender['hero'] = '0';
                     } else {
-                        if($Defender['hero']=='' or $Defender['hero']<='0'){
-                            $Defender['hero'] = '0';
+                        if($Defender['hero']=='' or $Defender['hero'] <= 0){
+                            $Defender['hero'] = 0;
                         }
                     }
                     //get attack units
@@ -1423,11 +1374,12 @@ class Automation {
                      // End village Battle part
                      --------------------------------*/
                 }else{
-                    $Defender['id'] = $cachedUserData[$data['to']]["id"];
+                    $DefenderUserData = $database->getUserArray($database->getOasisField($data['to'],"owner"), 1);
+                    $Defender['id'] = $DefenderUserData["id"];
                     $DefenderID = $Defender['id'];
                     if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
-                    $targettribe =  $cachedUserData[$data['to']]["tribe"];
-                    $targetally = $cachedUserData[$data['to']]["alliance"];
+                    $targettribe =  $DefenderUserData["tribe"];
+                    $targetally = $DefenderUserData["alliance"];
                     $to = $database->getOMInfo($data['to']);
                     $toF = $database->getOasisV($data['to']);
                     $conqureby=$toF['conqured'];
@@ -1598,7 +1550,7 @@ class Automation {
                         $walllevel = 0;
                     }
 
-                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $enforcementarray, $villageOwners, $cachedUserData);
+                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $enforcementarray);
 
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -1619,16 +1571,13 @@ class Automation {
                     }
 
                     // our reinforcements count could have changed at this point, thus the re-select
-                    $enforcementarray2 = $database->getEnforceVillage($data['to'],0);
+                    $enforcementarray2 = $database->getEnforceVillage($data['to'],0, false);
                     if(count($enforcementarray2) > 0) {
                         foreach($enforcementarray2 as $enforce2) {
                             $Defender['hero'] += $enforce2['hero'];
                             if ($enforce2['hero']>0) {
                                 $d++;
-                                if (!isset($villageOwners[$enforce2['from']])) {
-                                    $villageOwners[$enforce2['from']] = $database->getVillageField($enforce2['from'],"owner");
-                                }
-                                $DefenderHero[$d] = $villageOwners[$enforce2['from']];
+                                $DefenderHero[$d] = $database->getVillageField($enforce2['from'],"owner");
                             }
                             for ($i=1;$i<=50;$i++) {
                                 $Defender['u'.$i]+= $enforce2['u'.$i];
@@ -1697,7 +1646,7 @@ class Automation {
                     $alldead=array();
                     $heroAttackDead=$dead11;
                     //kill own defence
-                    $unitlist = $database->getUnit($data['to']);
+                    $unitlist = $database->getUnit($data['to'], false);
                     $start = ($targettribe-1)*10+1;
                     $end = ($targettribe*10);
 
@@ -1727,18 +1676,11 @@ class Automation {
                     }
                     //kill other defence in village
                     // ... once again, units could have changed, so we need to reselect
-                    $enforcementarray3 = $database->getEnforceVillage($data['to'],0);
+                    $enforcementarray3 = $database->getEnforceVillage($data['to'],0, false);
                     foreach ($enforcementarray3 as $enforce) {
                         $life=''; $notlife=''; $wrong='0';
                         if($enforce['from'] != 0){
-                            if (!isset($villageOwners[$enforce['from']])) {
-                                $villageOwners[$enforce['from']] = $database->getVillageField($enforce['from'],"owner");
-                            }
-
-                            if (!isset($cachedUserData[$enforce['from']])) {
-                                $cachedUserData[$enforce['from']] = $database->getUserArray($villageOwners[$enforce['from']], 1);
-                            }
-                            $tribe = $cachedUserData[$enforce['from']]["tribe"];
+                            $tribe = $database->getUserArray($database->getVillageField($enforce['from'],"owner"), 1)["tribe"];
                         }else{
                             $tribe = 4;
                         }
@@ -1802,17 +1744,14 @@ class Automation {
                         $totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
                         $totaldead_att = $dead1+$dead2+$dead3+$dead4+$dead5+$dead6+$dead7+$dead8+$dead9+$dead10+$dead11;
                         //NEED TO SEND A RAPPORTAGE!!!
-                        if (!isset($villageOwners[$enforce['from']])) {
-                            $villageOwners[$enforce['from']] = $database->getVillageField( $enforce['from'], "owner" );
-                        }
-                        $data2 = ''.$villageOwners[$enforce['from']].','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.','.$enforce['from'].'';
+                        $data2 = ''.$database->getVillageField( $enforce['from'], "owner" ).','.$to['wref'].','.addslashes($to['name']).','.$tribe.','.$life.','.$notlife.','.$lifehero.','.$notlifehero.','.$enforce['from'].'';
                         if(empty($scout)) {
                             if($totalnotlife == 0){
-                            $database->addNotice($villageOwners[$enforce['from']],$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                            $database->addNotice($database->getVillageField( $enforce['from'], "owner" ),$from['wref'],$ownally,15,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                             }else if($totallife > $totalnotlife){
-                                $database->addNotice($villageOwners[$enforce['from']],$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                                $database->addNotice($database->getVillageField( $enforce['from'], "owner" ),$from['wref'],$ownally,16,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                             }else{
-                                $database->addNotice($villageOwners[$enforce['from']],$from['wref'],$ownally,17,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
+                                $database->addNotice($database->getVillageField( $enforce['from'], "owner" ),$from['wref'],$ownally,17,'Reinforcement in '.addslashes($to['name']).' was attacked',$data2,$AttackArrivalTime);
                             }
                             //delete reinf sting when its killed all.
                             if($wrong=='0'){ $database->deleteReinf($enforce['id']); }
@@ -1979,10 +1918,7 @@ class Automation {
                         //cranny efficiency
                         $atk_bonus = ($owntribe == 2)? (4/5) : 1;
                         $def_bonus = ($targettribe == 3)? 2 : 1;
-                        if (!isset($villageOwners[$data['to']])) {
-                            $villageOwners[$data['to']] = $database->getVillageField($data['to'],"owner");
-                        }
-                        $to_owner = $villageOwners[$data['to']];
+                        $to_owner = $database->getVillageField($data['to'],"owner");
                         $artefact_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,3,0));
                         $artefact1_2 = count($database->getOwnUniqueArtefactInfo2($data['to'],7,1,1));
                         $artefact2_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,2,0));
@@ -2380,11 +2316,7 @@ class Automation {
                             $cp_mode = $GLOBALS['cp'.$mode];
                             $need_cps = $cp_mode[count($varray1)+1];
 
-                            if (!isset($cachedUserData[$from['owner']])) {
-                                $cachedUserData[$from['owner']] = $database->getUserArray($from['owner'], 1);
-                            }
-
-                            $user_cps = $cachedUserData[$from['owner']]['cp'];
+                            $user_cps = $database->getUserArray($from['owner'], 1)['cp'];
 
                             //check for last village or capital
                             if($user_cps >= $need_cps){
@@ -2425,17 +2357,14 @@ class Automation {
                                                 $info_chief = "".$chief_pic.",Inhabitants of ".$villname." village decided to join your empire.";
 
                                                 if ($artifact['vref'] == $data['to']){
-                                                    if (!isset($villageOwners[$data['from']])) {
-                                                        $villageOwners[$data['from']] = $database->getVillageField($data['from'],"owner");
-                                                    }
-                                                    $database->claimArtefact($data['to'], $data['to'], $villageOwners[$data['from']]);
+                                                    $database->claimArtefact($data['to'], $data['to'], $database->getVillageField($data['from'],"owner"));
                                                 }
 
 
                                                 $database->setVillageFields(
                                                     $data['to'],
                                                     ['loyalty', 'owner'],
-                                                    [0, $villageOwners[$data['from']]]
+                                                    [0, $database->getVillageField($data['from'],"owner")]
                                                 );
 
                                                 //delete upgrades in armory and blacksmith
@@ -2700,7 +2629,7 @@ class Automation {
                     }
                     else {
                         if($type == 3 && $totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
-                            $prisoners = $database->getPrisoners($to['wref']);
+                            $prisoners = $database->getPrisoners($to['wref'], 0, false);
                             if(count($prisoners) > 0){
                                 $anothertroops = 0;
                                 $mytroops=0;
@@ -2975,8 +2904,8 @@ class Automation {
                 //check if not natar tribe
                 $getvillage = $database->getVillage($to['wref']);
                 if ($getvillage['owner']!=3) {
-                    $crop = $database->getCropProdstarv($to['wref']);
-                    $unitarrays = $this->getAllUnits($to['wref']);
+                    $crop = $database->getCropProdstarv($to['wref'], false);
+                    $unitarrays = $this->getAllUnits($to['wref'], false);
                     $village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
                     $starv = $getvillage['starv'];
                     if ($crop < $village_upkeep){
@@ -2986,6 +2915,15 @@ class Automation {
                             $database->setVillageField($to['wref'], 'starvupdate', time());
                     }
                     unset($crop,$unitarrays,$getvillage,$village_upkeep);
+                }
+
+                // if evasion was active, return units back to base
+                if (isset($evaded)) {
+                    foreach ($evasionUnitModifications_modes as $index => $mode) {
+                        $evasionUnitModifications_modes[$index] = 1;
+                    }
+
+                    $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
                 }
 
                 #################################################
@@ -3054,6 +2992,7 @@ class Automation {
 
             }
         }
+
         if(file_exists("GameEngine/Prevention/sendunits.txt")) {
             unlink("GameEngine/Prevention/sendunits.txt");
         }
