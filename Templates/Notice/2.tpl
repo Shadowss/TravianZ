@@ -251,6 +251,9 @@ for($i=66;$i<=75;$i++) {
 }
 if($targettribe == '2' and isset($dataarray[149]) and $dataarray[149]!=0){
 	if ($dataarray[150]==0){$tdclass1='class="none"';}
+	if (!isset($tdclass1)) {
+        $tdclass1 = '';
+    }
 	echo "<td $tdclass1>$dataarray[150]</td>";
 }
 ?>
