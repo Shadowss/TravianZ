@@ -181,6 +181,14 @@ if($_GET['aid'])
 			</thead>
 			<tbody>
 			<?php
+                // preload villages data
+                $userIDs = [];
+                foreach($aliusers as $user) {
+                    $userIDs[] = $user['id'];
+                }
+                $database->getProfileVillages($userIDs);
+
+                // display the page
 				foreach($aliusers as $user)
 				{
 					$rank = $rank  + 1;

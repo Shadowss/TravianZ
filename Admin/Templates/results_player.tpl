@@ -29,12 +29,22 @@ $result = $admin->search_player($_POST['s']);
 	</tr>
 <?php
 if($result){
-for ($i = 0; $i <= count($result)-1; $i++) {
-$varray = $database->getProfileVillages($result[$i]["id"]);
-$totalpop = 0;
-foreach($varray as $vil) {
-	$totalpop += $vil['pop'];
-}
+
+    // preload villages data
+    $userIDs = [];
+    for ($i = 0; $i <= count($result)-1; $i++) {
+        $userIDs[] = $result[$i]["id"];
+    }
+    $database->getProfileVillages($userIDs);
+
+    // display
+    for ($i = 0; $i <= count($result)-1; $i++) {
+        $varray = $database->getProfileVillages($result[$i]["id"]);
+        $totalpop = 0;
+
+        foreach($varray as $vil) {
+            $totalpop += $vil['pop'];
+        }
 echo '
 	<tr>
 		<td>'.$result[$i]["id"].'</td>
@@ -43,7 +53,8 @@ echo '
 		<td>'.$totalpop.'</td>
 	</tr>
 ';
-}}
+    }
+}
 else{
 echo '
 	<tr>

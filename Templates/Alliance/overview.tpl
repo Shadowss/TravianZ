@@ -126,6 +126,15 @@ if($aid == $session->alliance){
 <?php
 // Alliance Member list loop
 $rank=0;
+
+// preload villages data
+$userIDs = [];
+foreach($memberlist as $member) {
+    $userIDs[] = $member['id'];
+}
+$database->getProfileVillages($userIDs);
+
+// continue...
 foreach($memberlist as $member) {
 
     $rank = $rank+1;

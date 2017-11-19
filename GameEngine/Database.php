@@ -1561,19 +1561,46 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getProfileVillages($uid, $use_cache = true) {
-	    list($uid) = $this->escape_input((int) $uid);
+	    $arrayPassed = is_array($uid);
+
+	    if (!$arrayPassed) {
+	        $uid = [(int) $uid];
+        } else {
+	        foreach ($uid as $index => $uidValue) {
+	            $uid[$index] = (int) $uidValue;
+            }
+        }
+
+        if (!count($uid)) {
+	        return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$profileVillagesCache, $uid)) && !is_null($cachedValue)) {
+        if ($use_cache && !$arrayPassed && ($cachedValue = self::returnCachedContent(self::$profileVillagesCache, $uid[0])) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
-		$q = "SELECT capital,wref,name,pop,created from " . TB_PREFIX . "vdata where owner = $uid order by pop desc";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT capital,wref,name,pop,created,owner from " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") order by pop desc";
+        $result = mysqli_query($this->dblink,$q);
 
-        self::$profileVillagesCache[$uid] = $this->mysqli_fetch_all($result);
-        return self::$profileVillagesCache[$uid];
+        if (!$arrayPassed) {
+            $result = $this->mysqli_fetch_all($result);
+            self::$profileVillagesCache[ $uid[0] ] = $result;
+        } else {
+            // we're preloading, cache all the data individually
+            if (mysqli_num_rows($result)) {
+                while ( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC ) ) {
+                    if ( ! isset( self::$profileVillagesCache[ $row['owner'] ] ) ) {
+                        self::$profileVillagesCache[ $row['owner'] ] = [];
+                    }
+
+                    self::$profileVillagesCache[ $row['owner'] ][] = $row;
+                }
+            }
+        }
+
+        return $result;
 	}
 
 	// no need to refactor this method

@@ -4644,6 +4644,15 @@ class Automation {
         global $database;
         $q = "SELECT id, invited FROM ".TB_PREFIX."users WHERE invited > 0";
         $array = $database->query_return($q);
+
+        // preload villages data
+        $userIDs = [];
+        foreach($array as $user) {
+            $userIDs[] = $user['id'];
+        }
+        $database->getProfileVillages($userIDs);
+
+        // continue...
         foreach($array as $user) {
             $numusers = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE id = ".(int) $user['invited']), MYSQLI_ASSOC);
             if($numusers['Total'] > 0){
