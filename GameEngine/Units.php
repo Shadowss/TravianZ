@@ -320,7 +320,7 @@ class Units {
         }
         $reference =  $database->addAttack($enforce['from'],$enforce['u'.$start],$enforce['u'.($start+1)],$enforce['u'.($start+2)],$enforce['u'.($start+3)],$enforce['u'.($start+4)],$enforce['u'.($start+5)],$enforce['u'.($start+6)],$enforce['u'.($start+7)],$enforce['u'.($start+8)],$enforce['u'.($start+9)],$enforce['hero'],2,0,0,0,0);
         $database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,time(),($time+time()));
-        $database->deleteReinf($enforce['id']);    
+        $database->deleteReinf($enforce['id']);
     }
     
     private function sendTroops($post) {
@@ -620,12 +620,23 @@ class Units {
                     $start = ( $database->getUserField( $to['owner'], 'tribe', 0 ) - 1 ) * 10 + 1;
                     $end   = ( $database->getUserField( $to['owner'], 'tribe', 0 ) * 10 );
 
-                    $j = '1';
+                    $units = [];
+                    $amounts = [];
+                    $modes = [];
+
+                    $j = 1;
                     for ( $i = $start; $i <= $end; $i ++ ) {
-                        $database->modifyEnforce( $post['ckey'], $i, $post[ 't' . $j . '' ], 0 );
+                        $units[] = $i;
+                        $amounts[] = $post[ 't' . $j . '' ];
+                        $modes[] = 0;
                         $j ++;
                     }
-                    $database->modifyEnforce( $post['ckey'], 'hero', $post['t11'], 0 );
+
+                    $units[] = 'hero';
+                    $amounts[] = $post['t11'];
+                    $modes[] = 0;
+
+                    $database->modifyEnforce( $post['ckey'], $units, $amounts, $modes );
                     $j ++;
                     //get cord
                     $from     = $database->getVillage( $enforce['from'] );
@@ -688,9 +699,9 @@ class Units {
                     }
                     $reference = $database->addAttack( $enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0 );
                     $database->addMovement( 4, $village->wid, $enforce['from'], $reference, time(), ( $time + time() ) );
-                    $technology->checkReinf( $post['ckey'] );
+                    $technology->checkReinf( $post['ckey'], false );
 
-                    header( "Location: build.php?id=39" );
+                    header( "Location: build.php?id=39&refresh=1" );
                     exit;
 
                 }

@@ -820,16 +820,18 @@ private function trainUnit($unit,$amt,$great=false) {
 		return $generator->procMtime($reqtime);
 	}
 
-	public function checkReinf($id) {
+	public function checkReinf($id, $use_cache = true) {
 		global $database;
-		$enforce=$database->getEnforceArray($id,0);
-		$fail='0';
-					for($i=1; $i<50; $i++){
-						if($enforce['u'.$i.'']>0){
-						$fail='1';
-						}
-					}
-        if ($enforce['hero']>0) $fail='1';
+		$enforce=$database->getEnforceArray($id, 0, $use_cache);
+		$fail=0;
+
+        for ($i=1; $i<50; $i++) {
+            if($enforce['u'.$i.'']>0){
+                $fail=1;
+            }
+        }
+
+        if ($enforce['hero']>0) $fail=1;
         if($fail==0){
             $database->deleteReinf($id);
         }

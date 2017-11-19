@@ -766,6 +766,7 @@ class MYSQLi_DB implements IDbConnection {
 
 		$q = "DELETE from " . TB_PREFIX . "enforcement where id = '$id'";
 		mysqli_query($this->dblink,$q);
+		self::clearReinforcementsCache();
 	}
 
 	function updateResource($vid, $what, $number) {
@@ -5603,6 +5604,15 @@ class MYSQLi_DB implements IDbConnection {
         self::$villageReinforcementsCache[$id.$mode] = $this->mysqli_fetch_all($result);
         return self::$villageReinforcementsCache[$id.$mode];
 	}
+
+	public static function clearReinforcementsCache() {
+	    self::$reinforcementsCache = [];
+	    self::$villageReinforcementsCache = [];
+	    self::$villageFromReinforcementsCache = [];
+	    self::$oasisArrayReinforcementsCache = [];
+	    self::$oasisReinforcementsCache = [];
+	    self::$unitsCache = [];
+    }
 
     // no need to cache this method
 	function getVillageMovement($id) {

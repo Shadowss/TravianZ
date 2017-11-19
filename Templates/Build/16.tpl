@@ -1,4 +1,8 @@
-<div id="build" class="gid16"><a href="#" onClick="return Popup(16,4);" class="build_logo">
+<?php
+    if (isset($_GET['refresh'])) {
+        $village->unitarray = $database->getUnit($village->wid, false);
+    }
+?><div id="build" class="gid16"><a href="#" onClick="return Popup(16,4);" class="build_logo">
         <img class="g16" src="img/x.gif" alt="Rally point" title="<?php echo RALLYPOINT;?>" />
 </a>
 <h1><?php echo RALLYPOINT;?> <span class="level"><?php echo LEVEL;?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
@@ -31,7 +35,7 @@ if($units_incoming > 0 or $settlers_incoming > 0 or $oasis_incoming > 0){
         <?php include("16_incomming.tpl");
         }
 ?>
-                
+
 <h4><?php echo TROOPS_IN_THE_VILLAGE;?></h4>
 <table class="troop_details" cellpadding="1" cellspacing="1">
         <thead>
