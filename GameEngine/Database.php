@@ -4662,11 +4662,35 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getBuildingByType2($wid,$type) {
-	    list($wid,$type) = $this->escape_input((int) $wid,(int) $type);
+	    $wid = (int) $wid;
 
-		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
-		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-		return $result['Total'];
+	    if (!is_array($type)) {
+	        $type = [(int) $type];
+        } else {
+	        foreach ($type as $index => $typeValue) {
+	            $type[$index] = (int) $typeValue;
+            }
+        }
+
+		$q = "SELECT CONCAT(type, \"=\", Count(type)) FROM " . TB_PREFIX . "bdata where wid = $wid and type IN(".implode(', ', $type).") and master = 0";
+		$result = mysqli_query($this->dblink, $q);
+		$newresult = [];
+
+		if (mysqli_num_rows($result)) {
+		    while ($row = mysqli_fetch_array($result, MYSQLI_NUM)) {
+		        if ($row[0]) {
+                    $val                  = explode( '=', $row[0] );
+                    $newresult[ $val[0] ] = $val[1];
+                }
+            }
+
+            $result = $newresult;
+
+        } else {
+		    $result = [];
+        }
+
+		return $result;
 	}
 
     // no need to cache this method

@@ -43,46 +43,60 @@ $greatwarehouse = $building->getTypeLevel(38);
 $greatgranary = $building->getTypeLevel(39);
 $greatworkshop = $building->getTypeLevel(42);
 
-$mainbuilding1 = $database->getBuildingByType2($village->wid,15);
-$cranny1 = $database->getBuildingByType2($village->wid,23);
-$granary1 = $database->getBuildingByType2($village->wid,11);
-$warehouse1 = $database->getBuildingByType2($village->wid,10);
-$embassy1 = $database->getBuildingByType2($village->wid,18);
+$typesArray = [];
+for ($i = 1; $i <= 42; $i++) {
+    $typesArray[] = $i;
+}
+
+global $typeCounts;
+$typeCounts = $database->getBuildingByType2($village->wid, $typesArray);
+
+function getTypeCount($id) {
+    global $typeCounts;
+
+    return (isset($typeCounts[$id]) ? $typeCounts[$id] : 0);
+}
+
+$mainbuilding1 = getTypeCount(15);
+$cranny1 = getTypeCount(23);
+$granary1 = getTypeCount(11);
+$warehouse1 = getTypeCount(10);
+$embassy1 = getTypeCount(18);
 $wall1 = $database->getBuildingByField2($village->wid,40);
-$rallypoint1 = $database->getBuildingByType2($village->wid,16);
-$hero1 = $database->getBuildingByType2($village->wid,37);
-$market1 = $database->getBuildingByType2($village->wid,17);
-$barrack1 = $database->getBuildingByType2($village->wid,19);
-$cropland1 = $database->getBuildingByType2($village->wid,4);
-$grainmill1 = $database->getBuildingByType2($village->wid,8);
-$residence1 = $database->getBuildingByType2($village->wid,25);
-$academy1 = $database->getBuildingByType2($village->wid,22);
-$armoury1 = $database->getBuildingByType2($village->wid,13);
-$woodcutter1 = $database->getBuildingByType2($village->wid,1);
-$palace1 = $database->getBuildingByType2($village->wid,26);
-$claypit1 = $database->getBuildingByType2($village->wid,2);
-$ironmine1 = $database->getBuildingByType2($village->wid,3);
-$blacksmith1 = $database->getBuildingByType2($village->wid,12);
-$stable1 = $database->getBuildingByType2($village->wid,20);
-$trapper1 = $database->getBuildingByType2($village->wid,36);
-$treasury1 = $database->getBuildingByType2($village->wid,27);
-$sawmill1 = $database->getBuildingByType2($village->wid,5);
-$brickyard1 = $database->getBuildingByType2($village->wid,6);
-$ironfoundry1 = $database->getBuildingByType2($village->wid,7);
-$workshop1 = $database->getBuildingByType2($village->wid,21);
-$stonemasonslodge1 = $database->getBuildingByType2($village->wid,34);
-$townhall1 = $database->getBuildingByType2($village->wid,24);
-$tournamentsquare1 = $database->getBuildingByType2($village->wid,14);
-$bakery1 = $database->getBuildingByType2($village->wid,9);
-$tradeoffice1 = $database->getBuildingByType2($village->wid,28);
-$greatbarracks1 = $database->getBuildingByType2($village->wid,29);
-$greatstable1 = $database->getBuildingByType2($village->wid,30);
-$brewery1 = $database->getBuildingByType2($village->wid,35);
-$horsedrinkingtrough1 = $database->getBuildingByType2($village->wid,41);
-$herosmansion1 = $database->getBuildingByType2($village->wid,37);
-$greatwarehouse1 = $database->getBuildingByType2($village->wid,38);
-$greatgranary1 = $database->getBuildingByType2($village->wid,39);
-$greatworkshop1 = $database->getBuildingByType2($village->wid,42);
+$rallypoint1 = getTypeCount(16);
+$hero1 = getTypeCount(37);
+$market1 = getTypeCount(17);
+$barrack1 = getTypeCount(19);
+$cropland1 = getTypeCount(4);
+$grainmill1 = getTypeCount(8);
+$residence1 = getTypeCount(25);
+$academy1 = getTypeCount(22);
+$armoury1 = getTypeCount(13);
+$woodcutter1 = getTypeCount(1);
+$palace1 = getTypeCount(26);
+$claypit1 = getTypeCount(2);
+$ironmine1 = getTypeCount(3);
+$blacksmith1 = getTypeCount(12);
+$stable1 = getTypeCount(20);
+$trapper1 = getTypeCount(36);
+$treasury1 = getTypeCount(27);
+$sawmill1 = getTypeCount(5);
+$brickyard1 = getTypeCount(6);
+$ironfoundry1 = getTypeCount(7);
+$workshop1 = getTypeCount(21);
+$stonemasonslodge1 = getTypeCount(34);
+$townhall1 = getTypeCount(24);
+$tournamentsquare1 = getTypeCount(14);
+$bakery1 = getTypeCount(9);
+$tradeoffice1 = getTypeCount(28);
+$greatbarracks1 = getTypeCount(29);
+$greatstable1 = getTypeCount(30);
+$brewery1 = getTypeCount(35);
+$horsedrinkingtrough1 = getTypeCount(41);
+$herosmansion1 = getTypeCount(37);
+$greatwarehouse1 = getTypeCount(38);
+$greatgranary1 = getTypeCount(39);
+$greatworkshop1 = getTypeCount(42);
 
 ?>
 <div id="build" class="gid0"><h1<?php echo CONSTRUCT_NEW_BUILDING;?></h1>
