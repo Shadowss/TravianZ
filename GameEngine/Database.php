@@ -1001,7 +1001,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function getVrefField($ref, $field, $use_cache = true) {
-        return $this->getVillage($ref, $use_cache)[$field];
+        return $this->getVillage($ref, 0, $use_cache)[$field];
 	}
 
     // no need to cache this method
@@ -1685,7 +1685,7 @@ class MYSQLi_DB implements IDbConnection {
         return self::$villageIDsCacheSimple[$uid];
 	}
 
-	function getVillage($vid, $use_cache = true) {
+	function getVillage($vid, $mode = 0, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
 
         // first of all, check if we should be using cache and whether the field
@@ -1803,7 +1803,7 @@ class MYSQLi_DB implements IDbConnection {
 
     function getVillageField($ref, $field, $use_cache = true) {
         // return all data, don't waste time by selecting fields one by one
-        $villageArray = $this->getVillage($ref, $use_cache);
+        $villageArray = $this->getVillage($ref, 0, $use_cache);
         $result = (isset($villageArray[$field]) ? $villageArray[$field] : null);
 
         if($result){
@@ -1828,7 +1828,7 @@ class MYSQLi_DB implements IDbConnection {
 
     function getVillageFields($ref, $fields, $use_cache = true) {
         // return all data, don't waste time by selecting fields one by one
-        return $this->getVillage($ref, $use_cache);
+        return $this->getVillage($ref, 0, $use_cache);
 
         /*list($ref, $field) = $this->escape_input((int) $ref, $fields);
 
@@ -6068,27 +6068,27 @@ References: User ID/Message ID, Mode
 	//MARKET FIXES
 	function getWoodAvailable($wref, $use_cache = true) {
         // return from cache
-        return $this->getVillage($wref, $use_cache)['wood'];
+        return $this->getVillage($wref, 0, $use_cache)['wood'];
 	}
 
 	function getClayAvailable($wref, $use_cache = true) {
         // return from cache
-        return $this->getVillage($wref, $use_cache)['clay'];
+        return $this->getVillage($wref, 0, $use_cache)['clay'];
 	}
 
 	function getIronAvailable($wref, $use_cache = true) {
         // return from cache
-        return $this->getVillage($wref, $use_cache)['iron'];
+        return $this->getVillage($wref, 0, $use_cache)['iron'];
 	}
 
 	function getCropAvailable($wref, $use_cache = true) {
         // return from cache
-        return $this->getVillage($wref, $use_cache)['crop'];
+        return $this->getVillage($wref, 0, $use_cache)['crop'];
 	}
 
 	function Getowner($vid) {
         // return from cache
-        return $this->getVillage($vid, $use_cache)['owner'];
+        return $this->getVillage($vid, 0, $use_cache)['owner'];
 	}
 
 	/**

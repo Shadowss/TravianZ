@@ -4242,7 +4242,7 @@ class Automation {
                 }
                 $crop = $database->getCropProdstarv($train['vref'], false);
                 $unitarrays = $this->getAllUnits($train['vref'], false);
-                $village = $database->getVillage($train['vref'], false);
+                $village = $database->getVillage($train['vref'], 0, false);
                 $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
                 $starv = $database->getVillageField($train['vref'],"starv");
                 if ($crop < $upkeep){
