@@ -3260,9 +3260,17 @@ class Automation {
             $end = ($database->getUserField($to['owner'],'tribe',0)*10);
 
             $j='1';
+            $units = [];
+            $amounts = [];
+            $modes = [];
+
             for($i=$start;$i<=$end;$i++){
-                $database->modifyEnforce($post['ckey'],$i,$post['t'.$j.''],0); $j++;
+                $units[] = $i;
+                $amounts[] = $post['t'.$j.''];
+                $modes[] = 0;
+                $j++;
             }
+            $database->modifyEnforce($post['ckey'], $units, $amounts, $modes);
 
             //get cord
             $from = $database->getVillage($enforce['from']);
@@ -5635,8 +5643,13 @@ class Automation {
             //Put all true dens to 0
             $query="SELECT id FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
             $result=mysqli_query($GLOBALS['link'],$query);
+            $userIDs = [];
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
-                mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id = ".(int) $row[0]);
+                $userIDs[] = (int) $row[0];
+            }
+
+            if (count($userIDs)) {
+                mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id IN(".implode(', ', $userIDs).")");
             }
 
             //Start alliance Medals wooot
@@ -5708,8 +5721,14 @@ class Automation {
 
             $query="SELECT id FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
             $result=mysqli_query($GLOBALS['link'],$query);
+
+            $aliIDs = [];
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
-                mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id = ".(int) $row[0]);
+                $aliIDs[] = (int) $row[0];
+            }
+
+            if (count($aliIDs)) {
+                mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0,RR=0,clp=0 WHERE id IN(".implode(', ', $aliIDs).")");
             }
 
             $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$time;

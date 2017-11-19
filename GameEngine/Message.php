@@ -236,75 +236,118 @@ class Message {
 	private function removeMessage($post) {
 		global $database,$session;
 		$post = $database->escape($post);
+
+		$mode5updates = [];
+        $mode7updates = [];
+        $mode8updates = [];
+
 		for($i = 1; $i <= 10; $i++) {
             if ( isset( $post[ 'n' . $i ] ) ) {
                 $message1 = mysqli_query( $GLOBALS['link'], "SELECT target, owner FROM " . TB_PREFIX . "mdata where id = " . (int) $post[ 'n' . $i ] . "" );
                 $message  = mysqli_fetch_array( $message1 );
 
                 if ( $message['target'] == $session->uid && $message['owner'] == $session->uid ) {
-                    $database->getMessage( $post[ 'n' . $i ], 8 );
+                    $mode8updates[] = $post[ 'n' . $i ];
                 } else if ( $message['target'] == $session->uid ) {
-                    $database->getMessage( $post[ 'n' . $i ], 5 );
+                    $mode5updates[] = $post[ 'n' . $i ];
                 } else if ( $message['owner'] == $session->uid ) {
-                    $database->getMessage( $post[ 'n' . $i ], 7 );
+                    $mode7updates[] = $post[ 'n' . $i ];
                 }
             }
 		}
+
+        if (count($mode5updates)) {
+            $database->getMessage( $mode5updates, 5 );
+        }
+
+        if (count($mode7updates)) {
+            $database->getMessage( $mode7updates, 7 );
+        }
+
+		if (count($mode8updates)) {
+            $database->getMessage( $mode8updates, 8 );
+        }
+
 		header("Location: nachrichten.php");
 		exit;
 	}
 
 	private function archiveMessage($post) {
 		global $database;
+
+		$archIDs = [];
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
-				$database->setArchived($post['n' . $i]);
+                $archIDs[] = $post['n' . $i];
 			}
 		}
+
+        $database->setArchived($archIDs);
+
 		header("Location: nachrichten.php");
 		exit;
 	}
 
 	private function unarchiveMessage($post) {
 		global $database;
+
+		$normIDs = [];
+
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
-				$database->setNorm($post['n' . $i]);
+                $normIDs[] = $post['n' . $i];
 			}
 		}
+        $database->setNorm($normIDs);
+
 		header("Location: nachrichten.php");
 		exit;
 	}
 
 	private function removeNotice($post) {
 		global $database;
+
+		$removeIDs = [];
+
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
-				$database->removeNotice($post['n' . $i], 5);
+                $removeIDs[] = $post['n' . $i];
 			}
 		}
+        $database->removeNotice($removeIDs);
+
 		header("Location: berichte.php");
 		exit;
 	}
 
 	private function archiveNotice($post) {
 		global $database;
+
+		$archiveIDs = [];
+
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
-				$database->archiveNotice($post['n' . $i]);
+                $archiveIDs[] = $post['n' . $i];
 			}
 		}
+        $database->archiveNotice($archiveIDs);
+
 		header("Location: berichte.php");
 		exit;
 	}
 
 	private function unarchiveNotice($post) {
 		global $database;
+
+		$unarchIDs = [];
+
 		for($i = 1; $i <= 10; $i++) {
 			if(isset($post['n' . $i])) {
-				$database->unarchiveNotice($post['n' . $i]);
+                $unarchIDs[] = $post['n' . $i];
 			}
 		}
+        $database->unarchiveNotice($unarchIDs);
+
 		header("Location: berichte.php");
 		exit;
 	}

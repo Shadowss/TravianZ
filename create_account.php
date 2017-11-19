@@ -542,12 +542,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		$text = preg_replace("'%TEKST%'",ARTEFACT ,$text);
 		fwrite($fh, $text);
 
-			$query="SELECT * FROM ".TB_PREFIX."users ORDER BY id DESC";
-			$result=mysqli_query($GLOBALS['link'],$query) or die (mysqli_error($database->dblink));
-			for ($i=0; $row=mysqli_fetch_row($result); $i++) {
-					$updateattquery = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ok = '1' WHERE id = '".$row[0]."'")
-					or die(mysqli_error($database->dblink));
-			}
+        $query="UPDATE ".TB_PREFIX."users SET ok = 1";
 
 		echo "Done";
 }elseif(User::exists($database,'Natars'))    {

@@ -3594,12 +3594,15 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function clearExpansionSlot($id) {
-	    list($id) = $this->escape_input((int) $id);
+	    $id = (int) $id;
 
+	    $pairs = [];
 		for($i = 1; $i <= 3; $i++) {
-			$q = "UPDATE " . TB_PREFIX . "vdata SET exp" . $i . "=0 WHERE exp" . $i . "=" . $id;
-			mysqli_query($this->dblink,$q);
+			$pairs[] = 'exp'.$i.' = 0';
 		}
+
+        $q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(',', $pairs)." WHERE wref = " . $id;
+        mysqli_query($this->dblink,$q);
 	}
 
     // no need to cache this method
@@ -3691,16 +3694,28 @@ class MYSQLi_DB implements IDbConnection {
     }
 
 	function setArchived($id) {
-	    list($id) = $this->escape_input((int) $id);
+        if (!is_array($id)) {
+            $id = [$id];
 
-		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 1 where id = $id";
+            foreach ($id as $index => $idValue) {
+                $id[$index] = (int) $idValue;
+            }
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 1 where id IN(".implode(', ', $id).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function setNorm($id) {
-	    list($id) = $this->escape_input((int) $id);
+        if (!is_array($id)) {
+            $id = [$id];
 
-		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 0 where id = $id";
+            foreach ($id as $index => $idValue) {
+                $id[$index] = (int) $idValue;
+            }
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 0 where id IN(".implode(',', $id).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -3718,8 +3733,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getMessage($id, $mode) {
 	    global $session;
 
-	    list($id, $mode) = $this->escape_input((int) $id, $mode);
-
+	    $mode = (int) $mode;
 	    // update $id if we should show Support messages for Admins and we are an admin
 	    if (
 	       ($session->access == MULTIHUNTER || $session->access == ADMIN)
@@ -3728,6 +3742,18 @@ class MYSQLi_DB implements IDbConnection {
 	    ) {
 	        $id = $id . ', 1';
 	    }
+
+        if (in_array($mode, [5,7,8])) {
+            if (!is_array($id)) {
+                $id = [$id];
+
+                foreach ($id as $index => $idValue) {
+                    $id[$index] = (int) $idValue;
+                }
+            }
+        } else {
+            $id = (int) $id;
+        }
 
 		global $session;
 		switch($mode) {
@@ -3744,16 +3770,16 @@ class MYSQLi_DB implements IDbConnection {
 			    $q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target IN(".((($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES) ? $session->uid.',1' : $session->uid).")";
 				break;
 			case 5:
-				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,viewed = 1 where id = $id";
+				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,viewed = 1 where id IN(".implode(', ', $id).")";
 				break;
 			case 6:
 				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1";
 				break;
 			case 7:
-				$q = "UPDATE " . TB_PREFIX . "mdata set delowner = 1 where id = $id";
+				$q = "UPDATE " . TB_PREFIX . "mdata set delowner = 1 where id IN(".implode(', ', $id).")";
 				break;
 			case 8:
-				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,delowner = 1,viewed = 1 where id = $id";
+				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,delowner = 1,viewed = 1 where IN(".implode(', ', $id).")";
 				break;
 			case 9:
 			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 and deltarget = 0 ORDER BY time DESC";
@@ -3774,23 +3800,41 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function unarchiveNotice($id) {
-	    list($id) = $this->escape_input((int) $id);
+        if (!is_array($id)) {
+            $id = [$id];
 
-		$q = "UPDATE " . TB_PREFIX . "ndata set ntype = archive, archive = 0 where id = $id";
+            foreach ($id as $index => $idValue) {
+                $id[$index] = (int) $idValue;
+            }
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "ndata set ntype = archive, archive = 0 where id IN(".implode(',', $id).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function archiveNotice($id) {
-	    list($id) = $this->escape_input((int) $id);
+        if (!is_array($id)) {
+            $id = [$id];
 
-		$q = "update " . TB_PREFIX . "ndata set archive = ntype, ntype = 9 where id = $id";
+            foreach ($id as $index => $idValue) {
+                $id[$index] = (int) $idValue;
+            }
+        }
+
+		$q = "update " . TB_PREFIX . "ndata set archive = ntype, ntype = 9 where id IN(".implode(',', $id).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function removeNotice($id) {
-	    list($id) = $this->escape_input((int) $id);
+        if (!is_array($id)) {
+            $id = [$id];
 
-		$q = "UPDATE " . TB_PREFIX . "ndata set del = 1,viewed = 1 where id = $id";
+            foreach ($id as $index => $idValue) {
+                $id[$index] = (int) $idValue;
+            }
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "ndata set del = 1,viewed = 1 where id IN(".implode(',', $id).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -5194,27 +5238,31 @@ class MYSQLi_DB implements IDbConnection {
 
     // no need to cache this method
 	function getUnitsNumber($vid, $use_cache = false) {
-	    list($vid) = $this->escape_input((int) $vid);
+        list( $vid ) = $this->escape_input( (int) $vid );
 
-        $dbarray = $this->getUnit($vid);
-		$totalunits = 0;
-		$movingunits = $this->getVillageMovement($vid);
-		for($i=1;$i<=50;$i++){
-		$totalunits += $dbarray['u'.$i];
-		}
-		$totalunits += $dbarray['hero'];
-		$movingunits = $this->getVillageMovement($vid);
-		$reinforcingunits = $this->getEnforceArray($vid,1);
-		$owner = $this->getVillageField($vid,"owner");
-		$ownertribe = $this->getUserField($owner,"tribe",0);
-		$start = ($ownertribe-1)*10+1;
-		$end = ($ownertribe*10);
-		for($i=$start;$i<=$end;$i++){
-		$totalunits += $movingunits['u'.$i];
-		$totalunits += $reinforcingunits['u'.$i];
-		}
-		$totalunits += $movingunits['hero'];
-		$totalunits += $reinforcingunits['hero'];
+        $dbarray     = $this->getUnit( $vid );
+        $totalunits  = 0;
+        $movingunits = $this->getVillageMovement( $vid );
+        for ( $i = 1; $i <= 50; $i ++ ) {
+            $totalunits += $dbarray[ 'u' . $i ];
+        }
+
+        $totalunits       += $dbarray['hero'];
+        $movingunits      = $this->getVillageMovement( $vid );
+        $reinforcingunits = $this->getEnforceArray( $vid, 1 );
+        $owner            = $this->getVillageField( $vid, "owner" );
+        $ownertribe       = $this->getUserField( $owner, "tribe", 0 );
+        $start            = ( $ownertribe - 1 ) * 10 + 1;
+        $end              = ( $ownertribe * 10 );
+
+        for ( $i = $start; $i <= $end; $i ++ ) {
+            $totalunits += $movingunits[ 'u' . $i ];
+            $totalunits += $reinforcingunits[ 'u' . $i ];
+        }
+
+        $totalunits += $movingunits['hero'];
+        $totalunits += $reinforcingunits['hero'];
+
 		return $totalunits;
 	}
 
