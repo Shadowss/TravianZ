@@ -750,7 +750,9 @@ class Automation {
         }
 
         // delete all processed entries
-        $database->query("DELETE FROM ".TB_PREFIX."bdata WHERE id IN(".implode(',', $dbIdsToDelete).")");
+        if (count($dbIdsToDelete)) {
+            $database->query( "DELETE FROM " . TB_PREFIX . "bdata WHERE id IN(" . implode( ',', $dbIdsToDelete ) . ")" );
+        }
 
         if(file_exists("GameEngine/Prevention/build.txt")) {
             unlink("GameEngine/Prevention/build.txt");
