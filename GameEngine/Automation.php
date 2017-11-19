@@ -604,11 +604,14 @@ class Automation {
 
                 // update what's needed
                 $timeNow = time();
+
+                mysqli_begin_transaction($GLOBALS['link']);
                 foreach ($ownerDatas as $record) {
                     $cp = $record['Total'] * ( $timeNow - $record['lastupdate'] ) / $dur_day;
                     $q  = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp, lastupdate = $timeNow where id = " . $record['owner'];
                     $database->query( $q );
                 }
+                mysqli_commit($GLOBALS['link']);
 
                 if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
                     unlink("GameEngine/Prevention/culturepoints.txt");
