@@ -74,7 +74,7 @@ echo "</b>";
 <select id=\"demolition_type\" name=\"type\" class=\"dropdown\">";
         for ($i=19; $i<=41; $i++) {
             $select=($i==$ty)? " SELECTED":"";
-            if ($VillageResourceLevels['f'.$i] >= 1 && !$building->isCurrent($i) && !$building->isLoop($i)) {
+            if (isset($VillageResourceLevels['f'.$i]) && $VillageResourceLevels['f'.$i] >= 1 && !$building->isCurrent($i) && !$building->isLoop($i)) {
                 echo "<option value=".$i.$select.">".$i.". ".$building->procResType($VillageResourceLevels['f'.$i.'t'])." (lvl ".$VillageResourceLevels['f'.$i].")</option>";
             }
 }
