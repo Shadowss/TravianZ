@@ -3471,7 +3471,10 @@ class Automation {
                             //add unit.
                             $j='1';
                             for($i=$start;$i<=$end;$i++){
-                                $t_units.="u".$i."=u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');$j++;
+                                if (!isset($t_units)) {
+                                    $t_units = '';
+                                }
+                                $t_units .= "u".$i."=u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');$j++;
                             }
                             $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".(int) $check['id'];
                             $database->query($q);

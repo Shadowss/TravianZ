@@ -3,15 +3,15 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       22.06.2015                    			       ##
 ##  Filename       db_MYSQL.php                                                ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
 #################################################################################
 
@@ -46,47 +46,47 @@ class MYSQLi_DB implements IDbConnection {
          * @var string MySQL server hostname to connect to.
          */
         $hostname = 'localhost',
-        
+
         /**
          * @var int MySQL server port to connect to.
          */
         $port = 3306,
-        
+
         /**
          * @var string Username to authenticate with to the MySQL connection.
          */
         $username = 'root',
-        
+
         /**
          * @var string Password to authenticate with to the MySQL connection.
          */
         $password = '',
-        
+
         /**
          * @var string Database to use with TravianZ.
          */
         $dbname = 'travian',
-        
+
         /**
          * @var int Counter of all SELECT queries performed.
          */
         $selectQueryCount = 0,
-        
+
         /**
          * @var int Counter of all INSERT queries performed.
          */
         $insertQueryCount = 0,
-        
+
         /**
          * @var int Counter of all UPDATE queries performed.
          */
         $updateQueryCount = 0,
-        
+
         /**
          * @var int Counter of all DELETE queries performed.
          */
         $deleteQueryCount = 0,
-        
+
         /**
          * @var int Counter of all REPLACE queries performed.
          */
@@ -4762,7 +4762,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getVillageByName($name) {
         list($name) = $this->escape_input($name);
 
-		$q = "SELECT wref FROM " . TB_PREFIX . "vdata where name = '$name' limit 1 LIMIT 1";
+		$q = "SELECT wref FROM " . TB_PREFIX . "vdata WHERE `name` = '$name' LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['wref'];
