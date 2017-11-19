@@ -125,6 +125,11 @@ class MYSQLi_DB implements IDbConnection {
         $villageBattleDataCache = [],
 
         /**
+         * @var array Cache of village data by owner IDs.
+         */
+        $villageDataByOwnerCache = [],
+
+        /**
          * @var array Cache of world and village data.
          */
         $worldAndVillageDataCache = [],
@@ -238,11 +243,6 @@ class MYSQLi_DB implements IDbConnection {
          * @var array Cache of heroes.
          */
         $heroCache = [],
-
-        /**
-         * @var array Cache of dead heroes.
-         */
-        $heroDeadCache = [],
 
         /**
          * @var array Cache of hero field values.
@@ -797,7 +797,7 @@ class MYSQLi_DB implements IDbConnection {
 	public function hasBeginnerProtection($vid) {
         list($vid) = $this->escape_input($vid);
 
-        $q = "SELECT u.protect FROM ".TB_PREFIX."users u,".TB_PREFIX."vdata v WHERE u.id=v.owner AND v.wref=".(int) $vid;
+        $q = "SELECT u.protect FROM ".TB_PREFIX."users u,".TB_PREFIX."vdata v WHERE u.id=v.owner AND v.wref=".(int) $vid." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		if(!empty($dbarray)) {
@@ -854,7 +854,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getVilWref($x, $y) {
 	    list($x, $y) = $this->escape_input((int) $x, (int) $y);
 
-		$q = "SELECT id FROM " . TB_PREFIX . "wdata where x = $x AND y = $y";
+		$q = "SELECT id FROM " . TB_PREFIX . "wdata where x = $x AND y = $y LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['id'];
@@ -1007,7 +1007,7 @@ class MYSQLi_DB implements IDbConnection {
     // no need to cache this method
 	function getVrefCapital($ref) {
 	    list($ref) = $this->escape_input((int) $ref);
-		$q = "SELECT * FROM " . TB_PREFIX . "vdata where owner = $ref and capital = 1";
+		$q = "SELECT * FROM " . TB_PREFIX . "vdata where owner = $ref and capital = 1 LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray;
@@ -1025,9 +1025,9 @@ class MYSQLi_DB implements IDbConnection {
         list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
 
 		if(!$mode) {
-		    $q = "SELECT $field FROM " . TB_PREFIX . "activate where id = " . (int) $ref;
+		    $q = "SELECT $field FROM " . TB_PREFIX . "activate where id = " . (int) $ref . " LIMIT 1";
 		} else {
-			$q = "SELECT $field FROM " . TB_PREFIX . "activate where username = '$ref'";
+			$q = "SELECT $field FROM " . TB_PREFIX . "activate where username = '$ref' LIMIT 1";
 		}
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -1047,7 +1047,7 @@ class MYSQLi_DB implements IDbConnection {
 
 		// if we didn't update the database for bcrypt hashes yet...
 		if (mysqli_error($this->dblink) != '') {
-		    $q = "SELECT id, password,sessid,0 as is_bcrypt FROM " . TB_PREFIX . "users where username = '$username'";
+		    $q = "SELECT id, password,sessid,0 as is_bcrypt FROM " . TB_PREFIX . "users where username = '$username' LIMIT 1";
 		    $result = mysqli_query($this->dblink,$q);
 		    $bcrypt_update_done = false;
 		} else {
@@ -1084,16 +1084,16 @@ class MYSQLi_DB implements IDbConnection {
 	function sitterLogin($username, $password) {
         list($username, $password) = $this->escape_input($username, $password);
 
-		$q = "SELECT sit1,sit2 FROM " . TB_PREFIX . "users where username = '$username' and access != " . BANNED;
+		$q = "SELECT sit1,sit2 FROM " . TB_PREFIX . "users where username = '$username' and access != " . BANNED ." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		if($dbarray['sit1'] != 0) {
-		    $q2 = "SELECT password FROM " . TB_PREFIX . "users where id = " . (int) $dbarray['sit1'] . " and access != " . BANNED;
+		    $q2 = "SELECT password FROM " . TB_PREFIX . "users where id = " . (int) $dbarray['sit1'] . " and access != " . BANNED . " LIMIT 1";
 			$result2 = mysqli_query($this->dblink,$q2);
 			$dbarray2 = mysqli_fetch_array($result2);
 		}
 		if($dbarray['sit2'] != 0) {
-		    $q3 = "SELECT password FROM " . TB_PREFIX . "users where id = " . (int) $dbarray['sit2'] . " and access != " . BANNED;
+		    $q3 = "SELECT password FROM " . TB_PREFIX . "users where id = " . (int) $dbarray['sit2'] . " and access != " . BANNED . " LIMIT 1";
 				$result3 = mysqli_query($this->dblink,$q3);
 				$dbarray3 = mysqli_fetch_array($result3);
 		}
@@ -1123,7 +1123,7 @@ class MYSQLi_DB implements IDbConnection {
 	function isDeleting($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT timestamp from " . TB_PREFIX . "deleting where uid = $uid";
+		$q = "SELECT timestamp from " . TB_PREFIX . "deleting where uid = $uid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['timestamp'];
@@ -1157,9 +1157,9 @@ class MYSQLi_DB implements IDbConnection {
         }
 
 		if(!$mode) {
-			$q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref'";
+			$q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
 		} else {
-		    $q = "SELECT * FROM " . TB_PREFIX . "users where id = " . (int) $ref;
+		    $q = "SELECT * FROM " . TB_PREFIX . "users where id = " . (int) $ref . " LIMIT 1";
 		}
 		$result = mysqli_query($this->dblink,$q);
 
@@ -1230,7 +1230,7 @@ class MYSQLi_DB implements IDbConnection {
 	function GetOnline($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT sit FROM " . TB_PREFIX . "online where uid = $uid";
+		$q = "SELECT sit FROM " . TB_PREFIX . "online WHERE uid = $uid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['sit'];
@@ -1689,7 +1689,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "vdata where wref = $vid";
+		$q = "SELECT * FROM " . TB_PREFIX . "vdata where wref = $vid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$villageFieldsCache[$vid] = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -1705,7 +1705,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-        $q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $vid";
+        $q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $vid LIMIT 1";
         $result = mysqli_query($this->dblink,$q);
 
         self::$villageFieldsCacheByWorldID[$vid] = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -1721,7 +1721,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT u.id,u.tribe,v.capital,f.f40 AS wall FROM ".TB_PREFIX."users u,".TB_PREFIX."fdata f,".TB_PREFIX."vdata v WHERE u.id=v.owner AND f.vref=v.wref AND v.wref=".$vid;
+		$q = "SELECT u.id,u.tribe,v.capital,f.f40 AS wall FROM ".TB_PREFIX."users u,".TB_PREFIX."fdata f,".TB_PREFIX."vdata v WHERE u.id=v.owner AND f.vref=v.wref AND v.wref=".$vid." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$villageBattleDataCache[$vid] = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -1737,7 +1737,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = $vid";
+		$q = "SELECT * FROM " . TB_PREFIX . "odata where wref = $vid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$oasisFieldsCache[$vid] = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -1753,7 +1753,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "vdata ON " . TB_PREFIX . "vdata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id = $id";
+		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "vdata ON " . TB_PREFIX . "vdata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$worldAndVillageDataCache[$id] = mysqli_fetch_array($result);
@@ -1769,7 +1769,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "odata ON " . TB_PREFIX . "odata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id = $id";
+		$q = "SELECT * FROM " . TB_PREFIX . "wdata left JOIN " . TB_PREFIX . "odata ON " . TB_PREFIX . "odata.wref = " . TB_PREFIX . "wdata.id where " . TB_PREFIX . "wdata.id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$worldAndOasisDataCache[$id] = mysqli_fetch_array($result);
@@ -2107,7 +2107,7 @@ class MYSQLi_DB implements IDbConnection {
 	function ForumCatAlliance($id) {
         list($id) = $this->escape_input($id);
 
-		$q = "SELECT alliance from " . TB_PREFIX . "forum_cat where id = $id";
+		$q = "SELECT alliance from " . TB_PREFIX . "forum_cat where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['alliance'];
@@ -2117,7 +2117,7 @@ class MYSQLi_DB implements IDbConnection {
 	function ForumCatName($id) {
         list($id) = $this->escape_input($id);
 
-		$q = "SELECT forum_name from " . TB_PREFIX . "forum_cat where id = $id";
+		$q = "SELECT forum_name from " . TB_PREFIX . "forum_cat where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['forum_name'];
@@ -2153,7 +2153,7 @@ class MYSQLi_DB implements IDbConnection {
 	function CheckCloseTopic($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT close from " . TB_PREFIX . "forum_topic where id = '$id'";
+		$q = "SELECT close from " . TB_PREFIX . "forum_topic where id = '$id' LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['close'];
@@ -2168,7 +2168,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT result from " . TB_PREFIX . "forum_edit where alliance = '$alli'";
+		$q = "SELECT result from " . TB_PREFIX . "forum_edit where alliance = '$alli' LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
@@ -2201,7 +2201,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getFLData($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "farmlist where id = $id";
+		$q = "SELECT * FROM " . TB_PREFIX . "farmlist where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
@@ -2330,7 +2330,7 @@ class MYSQLi_DB implements IDbConnection {
   function getSurvey($topic) {
       list($topic) = $this->escape_input((int) $topic);
 
-    $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+    $q = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic LIMIT 1";
     $result = mysqli_query($this->dblink,$q);
     return mysqli_fetch_array($result);
   }
@@ -2360,7 +2360,7 @@ class MYSQLi_DB implements IDbConnection {
   function checkVote($topic, $uid) {
       list( $topic, $uid ) = $this->escape_input( (int) $topic, $uid );
 
-      $q      = "SELECT voted FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+      $q      = "SELECT voted FROM " . TB_PREFIX . "forum_survey where topic = $topic LIMIT 1";
       $result = mysqli_query( $this->dblink, $q );
       $array  = mysqli_fetch_array( $result );
       $text   = $array['voted'];
@@ -2376,7 +2376,7 @@ class MYSQLi_DB implements IDbConnection {
   function getVoteSum($topic) {
       list( $topic ) = $this->escape_input( (int) $topic );
 
-      $q      = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic";
+      $q      = "SELECT * FROM " . TB_PREFIX . "forum_survey where topic = $topic LIMIT 1";
       $result = mysqli_query( $this->dblink, $q );
       $array  = mysqli_fetch_array( $result );
       $sum    = 0;
@@ -2516,9 +2516,9 @@ class MYSQLi_DB implements IDbConnection {
         list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
 
 		if(!$mode) {
-		    $q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where uid = ". (int) $ref;
+		    $q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where uid = ". (int) $ref . " LIMIT 1";
 		} else {
-			$q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where username = '$ref'";
+			$q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where username = '$ref' LIMIT 1";
 		}
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -2842,7 +2842,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getAllianceID($name) {
         list($name) = $this->escape_input($name);
 
-		$q = "SELECT id FROM " . TB_PREFIX . "alidata WHERE tag ='" . $this->RemoveXSS($name) . "'";
+		$q = "SELECT id FROM " . TB_PREFIX . "alidata WHERE tag ='" . $this->RemoveXSS($name) . "' LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['id'];
@@ -3017,7 +3017,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT " . TB_PREFIX . "alidata.tag from " . TB_PREFIX . "users join " . TB_PREFIX . "alidata where " . TB_PREFIX . "users.alliance = " . TB_PREFIX . "alidata.id and " . TB_PREFIX . "users.id = $id";
+		$q = "SELECT " . TB_PREFIX . "alidata.tag from " . TB_PREFIX . "users join " . TB_PREFIX . "alidata where " . TB_PREFIX . "users.alliance = " . TB_PREFIX . "alidata.id and " . TB_PREFIX . "users.id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		if($dbarray['tag'] == "") {
@@ -3386,6 +3386,7 @@ class MYSQLi_DB implements IDbConnection {
                     f40t IN ($fieldType)
                     OR
                     f99 IN ($fieldType))
+                LIMIT 1
         ");
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -3495,7 +3496,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
 	    if ($field && $vid) {
-    		$q = "SELECT f" . $field . "t from " . TB_PREFIX . "fdata where vref = $vid";
+    		$q = "SELECT f" . $field . "t from " . TB_PREFIX . "fdata where vref = $vid LIMIT 1";
     		$result = mysqli_query($this->dblink,$q);
     		$row = mysqli_fetch_array($result);
             self::$fieldTypeCache[$vid.$field] = $row["f" . $field . "t"];
@@ -3516,7 +3517,7 @@ class MYSQLi_DB implements IDbConnection {
         $x1 = intval($coor['x']);
         $y1 = intval($coor['y']);
         $prevdist = 0;
-        $q2 = "SELECT wref FROM " . TB_PREFIX . "vdata where owner = 4";
+        $q2 = "SELECT wref FROM " . TB_PREFIX . "vdata where owner = 4 LIMIT 1";
         $array2 = mysqli_fetch_array(mysqli_query($this->dblink,$q2));
         $vill = $array2['wref'];
 
@@ -3913,7 +3914,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue[$field];
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where `id` = $id ORDER BY time DESC";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where `id` = $id ORDER BY time DESC LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
@@ -3973,7 +3974,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getTradeRoute2($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "route where id = $id";
+		$q = "SELECT * FROM " . TB_PREFIX . "route where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray;
@@ -3983,7 +3984,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getTradeRouteUid($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT uid FROM " . TB_PREFIX . "route where id = $id";
+		$q = "SELECT uid FROM " . TB_PREFIX . "route where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['uid'];
@@ -4609,16 +4610,16 @@ class MYSQLi_DB implements IDbConnection {
 	    list($wid) = $this->escape_input((int) $wid);
 
 		$time = time()-1;
-		$q = "SELECT id, timestamp FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC";
+		$q = "SELECT id, timestamp FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
 		$this->query($q);
 		$tribe = $this->getUserField($this->getVillageField($wid, "owner"), "tribe", 0);
 		if($tribe == 1){
-		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field >= 19 order by master,timestamp ASC";
+		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field >= 19 order by master,timestamp ASC LIMIT 1";
 		}else{
-		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC";
+		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC LIMIT 1";
 		}
 		$result2 = mysqli_query($this->dblink,$q2);
 		if(mysqli_num_rows($result2) > 0){
@@ -4735,11 +4736,27 @@ class MYSQLi_DB implements IDbConnection {
 	function getVillageByName($name) {
         list($name) = $this->escape_input($name);
 
-		$q = "SELECT wref FROM " . TB_PREFIX . "vdata where name = '$name' limit 1";
+		$q = "SELECT wref FROM " . TB_PREFIX . "vdata where name = '$name' limit 1 LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['wref'];
 	}
+
+    function getVillageByOwner($uid, $use_cache = true) {
+        $uid = (int) $uid;
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageDataByOwnerCache, $uid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
+
+        $q = 'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $uid . ' LIMIT 1';
+        $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+
+        self::$villageDataByOwnerCache[$uid] = $result;
+        return self::$villageDataByOwnerCache[$uid];
+    }
 
 	/***************************
 	Function to set accept flag on market
@@ -4836,54 +4853,13 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT $field FROM " . TB_PREFIX . "market where vref = '$vref'";
+		$q = "SELECT * FROM " . TB_PREFIX . "market where vref = '$vref' LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
         self::$marketFieldCache[$vref.$field] = $dbarray[$field];
         return self::$marketFieldCache[$vref.$field];
 	}
-
-    function getMarketFields($vref, $fields, $use_cache = true) {
-        $vref = (int) $vref;
-
-        if (!is_array($fields)) {
-            $fields = [$fields];
-        }
-
-        // check fields one by one to see which ones we can return cached
-        if ($use_cache) {
-            $allFieldsFound = false;
-            $fieldsLeft = [];
-            $fieldValues = [];
-
-            // iterate over all the fields and see what we have cached
-            foreach ($fields as $fieldName) {
-                if (($cached = self::returnCachedContent(self::$marketFieldCache, $vref.$fieldName)) && !is_null($cached)) {
-                    $fieldValues[$fieldName] = $cached;
-                } else {
-                    $fieldsLeft[] = $fieldName;
-                }
-            }
-
-            // check if we should return here (if we have all the values) or continue with the rest below
-            if (!count($fieldsLeft)) {
-                return $fieldValues;
-            }
-        }
-
-        $q = "SELECT ".implode(', ', $fieldsLeft)." FROM " . TB_PREFIX . "market where vref = ".$vref;
-        $result = mysqli_query($this->dblink,$q);
-        $dbarray = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-        // cache results and return everything that we have
-        foreach ($dbarray as $fieldName => $fieldValue) {
-            $fieldValues[$fieldName] = $fieldValue;
-            self::$marketFieldCache[$vref.$fieldName] = $fieldValue;
-        }
-
-        return $fieldValues;
-    }
 
 	function removeAcceptedOffer($id) {
 	    list($id) = $this->escape_input((int) $id);
@@ -5482,7 +5458,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue[$unit];
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "tdata WHERE vref = $vref";
+		$q = "SELECT * FROM " . TB_PREFIX . "tdata WHERE vref = $vref LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
@@ -5897,7 +5873,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getUserAllianceID($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT alliance FROM " . TB_PREFIX . "users where id = $id";
+		$q = "SELECT alliance FROM " . TB_PREFIX . "users where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['alliance'];
@@ -5912,7 +5888,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getWWName($vref) {
 	    list($vref) = $this->escape_input((int) $vref);
 
-		$q = "SELECT wwname FROM " . TB_PREFIX . "fdata WHERE vref = $vref";
+		$q = "SELECT wwname FROM " . TB_PREFIX . "fdata WHERE vref = $vref LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['wwname'];
@@ -6250,7 +6226,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getOwnArtefactInfo($vref) {
 	    list($vref) = $this->escape_input((int) $vref);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
@@ -6274,7 +6250,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type order by size";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type order by size LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$artefactInfoByTypeCache[$vref.$type] = mysqli_fetch_array($result);
@@ -6294,7 +6270,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$artefactInfoSimpleCache[$id.$type.$size] = mysqli_fetch_array($result);
@@ -6430,7 +6406,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getArtefactDetails($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = " . $id . "";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = " . $id . " LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
@@ -6438,7 +6414,7 @@ class MYSQLi_DB implements IDbConnection {
     // no need to cache this method
 	function getMovementById($id) {
 	    list($id) = $this->escape_input((int) $id);
-		$q = "SELECT * FROM ".TB_PREFIX."movement WHERE moveid = ".$id."";
+		$q = "SELECT * FROM ".TB_PREFIX."movement WHERE moveid = ".$id;
 		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
 		return $array;
@@ -6453,14 +6429,14 @@ class MYSQLi_DB implements IDbConnection {
 
 	function removeLinks($id,$uid) {
 	    list($id,$uid) = $this->escape_input((int) $id,(int) $uid);
-		$q = "DELETE FROM " . TB_PREFIX . "links WHERE `id` = ".$id." and `userid` = ".$uid."";
+		$q = "DELETE FROM " . TB_PREFIX . "links WHERE `id` = ".$id." and `userid` = ".$uid;
 		return mysqli_query($this->dblink,$q);
 	}
 
     // no need to cache this method
 	function getVilFarmlist($wref) {
 	    list($wref) = $this->escape_input((int) $wref);
-		$q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE wref = ' . $wref . ' ORDER BY wref ASC';
+		$q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE wref = ' . $wref . ' ORDER BY wref ASC LIMIT 1';
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
@@ -6476,7 +6452,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getRaidList($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "raidlist WHERE id = ".$id;
+		$q = "SELECT * FROM " . TB_PREFIX . "raidlist WHERE id = ".$id." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
@@ -6533,7 +6509,7 @@ class MYSQLi_DB implements IDbConnection {
 
 	function resetPassword($uid, $cpw) {
 	    list($uid, $cpw) = $this->escape_input((int) $uid, $cpw);
-		$q = "SELECT npw FROM `" . TB_PREFIX . "password` WHERE uid = $uid AND cpw = '$cpw' AND used = 0";
+		$q = "SELECT npw FROM `" . TB_PREFIX . "password` WHERE uid = $uid AND cpw = '$cpw' AND used = 0 LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
@@ -6784,7 +6760,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where id = $id";
+		$q = "SELECT * FROM " . TB_PREFIX . "prisoners where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 
         self::$prisonersCacheByID[$id] = mysqli_fetch_array($result);
@@ -6860,69 +6836,18 @@ References:
      }
    }
 
-    /*****************************************
-	Function to vacation mode - by advocaite
-	References:
-	*****************************************/
+    // no need to cache this method
+    function getHeroDeadReviveOrInTraining($id) {
+        $id = (int) $id;
 
-	/***************************
-	Function to get Hero Dead
-	Made by: Shadow and brainiacX
-	***************************/
-
- 	function getHeroDead($id) {
- 	    list($id) = $this->escape_input((int) $id, $use_cache = true);
-
-        // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$heroDeadCache, $id)) && !is_null($cachedValue)) {
-            return $cachedValue;
-        }
-
-        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND dead = 0";
+        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND (dead = 0 OR inrevive = 1 OR intraining = 1)";
         $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
         if ($result['Total'] > 0) {
-            self::$heroDeadCache[$id] = 0;
+            return true;
         } else {
-            self::$heroDeadCache[$id] = 1;
+            return false;
         }
-
-        return self::$heroDeadCache[$id];
-   	}
-
-	/***************************
-	Function to get Hero In Revive
-	Made by: Shadow
-	***************************/
-    // no need to cache this method
- 	function getHeroInRevive($id) {
- 	    list($id) = $this->escape_input((int) $id);
-
-    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND inrevive = 1";
-    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-    		if ($result['Total'] > 0) {
-    		    return 1;
-    		} else {
-    		    return 0;
-    		}
-   	}
-
-	/***************************
-	Function to get Hero In Training
-	Made by: Shadow
-	***************************/
-    // no need to cache this method
- 	function getHeroInTraining($id) {
- 	    list($id) = $this->escape_input((int) $id);
-
-    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND intraining = 1";
-    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-    		if ($result['Total'] > 0) {
-    		    return 1;
-    		} else {
-    		    return 0;
-    		}
-   	}
+    }
 
 	/***************************
 	Function to Kill hero if not found
@@ -6944,7 +6869,7 @@ References:
     function FindHeroInVil($wid) {
     list($wid) = $this->escape_input($wid);
 
-        $result = $this->query("SELECT hero FROM ".TB_PREFIX."units WHERE hero>0 AND vref='".$wid."'");
+        $result = $this->query("SELECT hero FROM ".TB_PREFIX."units WHERE hero>0 AND vref='".$wid."' LIMIT 1");
         if (!empty($result)) {
             $dbarray = mysqli_fetch_array($result);
             if(isset($dbarray['hero'])) {

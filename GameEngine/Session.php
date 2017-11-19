@@ -106,27 +106,24 @@ class Session {
                 $userFields = $database->getUserFields($user_sanitized, "quest, id", 1, true);
 				$_SESSION['qst'] = $userFields["quest"];
 
-				$result = mysqli_query($GLOBALS['link'],"SELECT id, village_select FROM `". TB_PREFIX."users` WHERE `username`='".$user_sanitized."'");
-				$dbarray = mysqli_fetch_assoc($result);
+				$dbarray = $database->getUserFields($user_sanitized, 'id, village_select', 1);
 				$selected_village=(int) $dbarray['village_select'];
 
 				if ($dbarray['id'] > 1) {
                     if(!isset($_SESSION['wid'])) {
                         if($selected_village!='') {
-                            $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                            $data = $database->getVillage($selected_village);
                         }else{
-                            $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $userFields["id"] . ' LIMIT 1');
+                            $data = $database->$database->getVillage($userFields["id"]);
                         }
-                        $data = mysqli_fetch_assoc($query);
                         $_SESSION['wid'] = $data['wref'];
                     } else
                         if($_SESSION['wid'] == '') {
                             if($selected_village!='') {
-                                $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = '.$selected_village);
+                                $data = $database->getVillage($selected_village);
                             }else{
-                                $query = mysqli_query($GLOBALS['link'],'SELECT wref FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' . $userFields["id"] . ' LIMIT 1');
+                                $data = $database->$database->getVillage($userFields["id"]);
                             }
-                            $data = mysqli_fetch_assoc($query);
                             $_SESSION['wid'] = $data['wref'];
                         }
     				$this->PopulateVar();
@@ -224,16 +221,11 @@ class Session {
                     MYSQLI_ASSOC
                 )['herocount'];
 
-                $isHeroElsewhere = true; //fix by ronix
-                if($database->getHeroDead($this->uid) and !$hero){ // check if hero is already dead
-                    $isHeroElsewhere = false;
-                }elseif($database->getHeroInRevive($this->uid) and !$hero){ // check if hero is already in revive
-                    $isHeroElsewhere = false;
-                }elseif($database->getHeroInTraining($this->uid) and !$hero){ // check if hero is in training
-                    $isHeroElsewhere = false;
-                }
+                $isHeroElsewhere = $database->getHeroDeadReviveOrInTraining($this->uid);
 
-                if($isHeroElsewhere and !$hero) $database->KillMyHero($this->uid);
+                if($isHeroElsewhere && !$hero) {
+                    $database->KillMyHero($this->uid);
+                }
             }
 
 			private function PopulateVar() {
