@@ -8,15 +8,15 @@ mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       22.06.2015                    			       ##
 ##  Filename       Session.php                                                 ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
 #################################################################################
 
@@ -127,8 +127,8 @@ class Session {
                             $_SESSION['wid'] = $data['wref'];
                         }
     				$this->PopulateVar();
-    				
-    				$database->addActiveUser($user_sanitized, $this->time);
+
+    				$database->updateActiveUser($user_sanitized, $this->time);
     				$database->updateUserField($user_sanitized, "sessid", $_SESSION['sessid'], 0);
                 }
 
@@ -177,7 +177,7 @@ class Session {
         		    $id    = (int) $_SESSION['id'];
         		    $admin = true;
         		}
-        		
+
         		if($user && ($admin || isset($_SESSION['sessid']))) {
         		    // check if this is not a support user, for who only messages and statistics are available
         		    if ($user == 1) {
@@ -191,14 +191,14 @@ class Session {
         			//Get and Populate Data
         			$this->PopulateVar();
         			//update database
-        			$database->addActiveUser($user, $this->time);
+        			$database->updateActiveUser($user, $this->time);
         			$database->updateUserField($user, "timestamp", $this->time, 0);
             		return true;
         		} else {
                     return false;
         		}
     		}
-			
+
 
 			/***************************
 			Function to check Real Hero
@@ -300,7 +300,7 @@ $form = new Form;
 // if there is no user, we'd try to load messages for user with ID 0, which is wrong
 if (!empty($_SESSION['id_user'])) {
     $message = new Message;
-    
+
     // create a global user variable which will later be removed from here
     // and created + retrieved either via Service Locator or other DI concept
     $user = new User((int) $_SESSION['id_user'], $database);

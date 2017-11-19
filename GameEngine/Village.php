@@ -9,11 +9,11 @@
 ##                                                                             ##
 #################################################################################
 
-include("Session.php");
-include("Building.php");
-include("Market.php");
+include_once("Session.php");
+include_once("Building.php");
+include_once("Market.php");
 include_once("GameEngine/Units.php");
-include("Technology.php");
+include_once("Technology.php");
 
 class Village {
 
@@ -30,7 +30,7 @@ class Village {
     function __construct() {
         global $session, $database;
         if(isset($_SESSION['wid'])) {
-            $this->wid = $_SESSION['wid'];          
+            $this->wid = $_SESSION['wid'];
         }
         else {
             $this->wid = $session->villages[0];

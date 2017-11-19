@@ -1,5 +1,5 @@
-<?php 
-include("GameEngine/Session.php");
+<?php
+include_once("GameEngine/Session.php");
 header("Content-Type: application/json;");
 $currentcoor = $database->getCoor($z);
 $y = $currentcoor['y'];
@@ -68,7 +68,7 @@ for($i=0;$i<=12;$i++) {
 	}
 	if($row1 != 13 && $i != 12) {
 		echo "\\n";
-	}	
+	}
 	$index+=1;
 }
 echo "<\\/div><div id=\\\"map_rulers\\\">";
@@ -119,7 +119,7 @@ echo"<area id=\\\"ma_n4p7\\\" href=\\\"karte2.php?z=";
 echo $generator->getBaseID($xp13,$y);
 echo "\\\" coords=\\\"4,15,26,3,48,15,26,27\\\" shape=\\\"poly\\\" title=\\\"West\\\"\\/>\\n";
 echo "<\\/map><div id=\\\"map_coords\\\"><form name=\\\"map_coords\\\" method=\\\"post\\\" action=\\\"karte2.php\\\">\\n\\t\\t\\t<span>x <\\/span><input id=\\\"mcx\\\" class=\\\"text\\\" name=\\\"xp\\\" value=\\\"";
-echo $x; 
+echo $x;
 echo "\\\" maxlength=\\\"4\\\"\\/>\\n\\t\\t\\t<span>y <\\/span><input id=\\\"mcy\\\" class=\\\"text\\\" name=\\\"yp\\\" value=\\\"";
 echo $y;
 echo "\\\" maxlength=\\\"4\\\"\\/>\\n\\t\\t\\t<input type=\\\"image\\\" id=\\\"btn_ok\\\" class=\\\"dynamic_img\\\" value=\\\"ok\\\" name=\\\"s1\\\" src=\\\"img\\/x.gif\\\" alt=\\\"\\\" \\/>\\n\\t\\t\\t<\\/form><\\/div><table cellpadding=\\\"1\\\" cellspacing=\\\"1\\\" id=\\\"map_infobox\\\" class=\\\"default\\\"><thead><tr><th colspan=\\\"2\\\">Details<\\/th><\\/tr><\\/thead><tbody><tr><th>Player<\\/th><td>-<\\/td><\\/tr><tr><th>Population<\\/th><td>-<\\/td><\\/tr><tr><th>Alliance<\\/th><td>-<\\/td><\\/tr><\\/tbody><\\/table><\\/div><\\/div><\\/div><\\/div>\",\"dat\":{\"m_c\":{\"az\":{\"n1\":";
@@ -183,5 +183,5 @@ echo "],\"z\":{\"x\":";
 echo $x;
 echo ",\"y\":";
 echo $y;
-echo "},\"size\":13},\"mdim\":{\"x\":13,\"y\":13,\"rad\":6},\"mmode\":0}}";																																																																																																									
+echo "},\"size\":13},\"mdim\":{\"x\":13,\"y\":13,\"rad\":6},\"mmode\":0}}";
 ?>

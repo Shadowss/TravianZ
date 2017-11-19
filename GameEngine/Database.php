@@ -1191,13 +1191,19 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function updateActiveUser($username, $time) {
+	    static $updated = false;
+
+	    if ($updated) {
+	        return;
+        }
+
         list($username, $time) = $this->escape_input($username, $time);
 
-		$q = "REPLACE into " . TB_PREFIX . "active values ('$username',$time)";
-		$q2 = "UPDATE " . TB_PREFIX . "users set timestamp = $time where username = '$username'";
-		$exec1 = mysqli_query($this->dblink,$q);
-		$exec2 = mysqli_query($this->dblink,$q2);
-		if($exec1 && $exec2) {
+        $res1 = $this->addActiveUser($username, $time);
+        $q = "UPDATE " . TB_PREFIX . "users set timestamp = $time where username = '$username'";
+		$res2 = mysqli_query($this->dblink,$q);
+		if($res1 && $res2) {
+            $updated = true;
 			return true;
 		} else {
 			return false;
