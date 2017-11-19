@@ -3542,20 +3542,51 @@ class MYSQLi_DB implements IDbConnection {
         return $vill;
     }
 
-	function getVSumField($uid, $field, $use_cache = true) {
-	    list($field) = $this->escape_input($field);
+    function updateVSumField($field) {
+        list($field) = $this->escape_input($field);
+
+        //fix by ronix
+        if (SPEED >10) {
+            $speed = 10;
+        } else {
+            $speed = SPEED;
+        }
+
+        // cultural points to gain during a day
+        $dur_day = (86400/SPEED);
+
+        if ($dur_day < 3600) {
+            $dur_day = 3600;
+        }
+
+        $q = "
+            UPDATE " . TB_PREFIX . "users as users
+                SET cp = cp + (
+                        ( SELECT sum($field) FROM " . TB_PREFIX . "vdata as vdata WHERE vdata.owner = users.id ".($field == 'cp' ? ' AND vdata.natar = 0' : '')." ) *
+                        (UNIX_TIMESTAMP() - lastupdate) / $dur_day
+                    ),
+                    lastupdate = UNIX_TIMESTAMP()
+                WHERE
+                    lastupdate < (UNIX_TIMESTAMP() - 600)
+        "; // recount every 10 minutes
+
+        mysqli_query($this->dblink, $q) OR DIE ($q);
+    }
+
+    function getVSumField($uid, $field, $use_cache = true) {
+        list($field) = $this->escape_input($field);
 
         $array_passed = is_array($uid);
-	    if (!$array_passed) {
-	        $uid = [(int) $uid];
+        if (!$array_passed) {
+            $uid = [(int) $uid];
         } else {
-	        foreach ($uid as $index => $uidValue) {
-	            $uid[$index] = (int) $uidValue;
+            foreach ($uid as $index => $uidValue) {
+                $uid[$index] = (int) $uidValue;
             }
         }
 
         if (!count($uid)) {
-	        return [];
+            return [];
         }
 
         // first of all, check if we should be using cache and whether the field
@@ -3564,162 +3595,162 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		if($field != "cp"){
-		    $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") GROUP BY owner";
-		}else{
-		    $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") and natar = 0 GROUP BY owner";
-		}
+        if($field != "cp"){
+            $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") GROUP BY owner";
+        }else{
+            $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") and natar = 0 GROUP BY owner";
+        }
 
-		$result = mysqli_query($this->dblink,$q);
+        $result = mysqli_query($this->dblink,$q);
 
-	    // return a single value
-	    if (!$array_passed) {
+        // return a single value
+        if (!$array_passed) {
             $row = mysqli_fetch_row( $result );
             self::$userSumFieldCache[$row[0].$field] = $row[2];
         } else {
-	        $result = $this->mysqli_fetch_all($result);
-	        foreach ($result as $record) {
+            $result = $this->mysqli_fetch_all($result);
+            foreach ($result as $record) {
                 self::$userSumFieldCache[$record['owner'].$field] = $record['Total'];
             }
         }
 
         return ($array_passed ? $result : self::$userSumFieldCache[$uid[0].$field]);
-	}
+    }
 
-	function updateVillage($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
+    function updateVillage($vid) {
+        list($vid) = $this->escape_input((int) $vid);
 
-		$time = time();
-		$q = "UPDATE " . TB_PREFIX . "vdata set lastupdate = $time where wref = $vid";
-		return mysqli_query($this->dblink,$q);
-	}
+        $time = time();
+        $q = "UPDATE " . TB_PREFIX . "vdata set lastupdate = $time where wref = $vid";
+        return mysqli_query($this->dblink,$q);
+    }
 
 
-	function updateOasis($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
+    function updateOasis($vid) {
+        list($vid) = $this->escape_input((int) $vid);
 
-		$time = time();
-		$q = "UPDATE " . TB_PREFIX . "odata set lastupdated = $time where wref = $vid";
-		return mysqli_query($this->dblink,$q);
-	}
+        $time = time();
+        $q = "UPDATE " . TB_PREFIX . "odata set lastupdated = $time where wref = $vid";
+        return mysqli_query($this->dblink,$q);
+    }
 
-	function setVillageName($vid, $name) {
-	    list($vid, $name) = $this->escape_input((int) $vid, $name);
+    function setVillageName($vid, $name) {
+        list($vid, $name) = $this->escape_input((int) $vid, $name);
 
-		if(!empty($name))
-		{
-		$q = "UPDATE " . TB_PREFIX . "vdata set name = '$name' where wref = $vid";
-		return mysqli_query($this->dblink,$q);
-		}
-	}
+        if(!empty($name))
+        {
+        $q = "UPDATE " . TB_PREFIX . "vdata set name = '$name' where wref = $vid";
+        return mysqli_query($this->dblink,$q);
+        }
+    }
 
-	function modifyPop($vid, $pop, $mode) {
-	    list($vid, $pop, $mode) = $this->escape_input((int) $vid, (int) $pop, $mode);
+    function modifyPop($vid, $pop, $mode) {
+        list($vid, $pop, $mode) = $this->escape_input((int) $vid, (int) $pop, $mode);
 
-		if(!$mode) {
-			$q = "UPDATE " . TB_PREFIX . "vdata set pop = pop + $pop where wref = $vid";
-		} else {
-			$q = "UPDATE " . TB_PREFIX . "vdata set pop = pop - $pop where wref = $vid";
-		}
-		return mysqli_query($this->dblink,$q);
-	}
+        if(!$mode) {
+            $q = "UPDATE " . TB_PREFIX . "vdata set pop = pop + $pop where wref = $vid";
+        } else {
+            $q = "UPDATE " . TB_PREFIX . "vdata set pop = pop - $pop where wref = $vid";
+        }
+        return mysqli_query($this->dblink,$q);
+    }
 
-	function addCP($ref, $cp) {
-	    list($ref, $cp) = $this->escape_input((int) $ref, (int) $cp);
+    function addCP($ref, $cp) {
+        list($ref, $cp) = $this->escape_input((int) $ref, (int) $cp);
 
-		$q = "UPDATE " . TB_PREFIX . "vdata set cp = cp + $cp where wref = $ref";
-		return mysqli_query($this->dblink,$q);
-	}
+        $q = "UPDATE " . TB_PREFIX . "vdata set cp = cp + $cp where wref = $ref";
+        return mysqli_query($this->dblink,$q);
+    }
 
-	function addCel($ref, $cel, $type) {
-	    list($ref, $cel, $type) = $this->escape_input((int) $ref, (int) $cel, (int) $type);
+    function addCel($ref, $cel, $type) {
+        list($ref, $cel, $type) = $this->escape_input((int) $ref, (int) $cel, (int) $type);
 
-		$q = "UPDATE " . TB_PREFIX . "vdata set celebration = $cel, type= $type where wref = $ref";
-		return mysqli_query($this->dblink,$q);
-	}
+        $q = "UPDATE " . TB_PREFIX . "vdata set celebration = $cel, type= $type where wref = $ref";
+        return mysqli_query($this->dblink,$q);
+    }
 
-	// no need to cache this method
-	function getCel() {
-		$time = time();
-		$q = "SELECT * FROM " . TB_PREFIX . "vdata where celebration < $time AND celebration != 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
-	}
+    // no need to cache this method
+    function getCel() {
+        $time = time();
+        $q = "SELECT * FROM " . TB_PREFIX . "vdata where celebration < $time AND celebration != 0";
+        $result = mysqli_query($this->dblink,$q);
+        return $this->mysqli_fetch_all($result);
+    }
 
-	function clearCel($ref) {
-	    list($ref) = $this->escape_input((int) $ref);
+    function clearCel($ref) {
+        list($ref) = $this->escape_input((int) $ref);
 
-		$q = "UPDATE " . TB_PREFIX . "vdata set celebration = 0, type = 0 where wref = $ref";
-		return mysqli_query($this->dblink,$q);
-	}
+        $q = "UPDATE " . TB_PREFIX . "vdata set celebration = 0, type = 0 where wref = $ref";
+        return mysqli_query($this->dblink,$q);
+    }
 
-	function setCelCp($user, $cp) {
-	    list($user, $cp) = $this->escape_input((int) $user, (int) $cp);
+    function setCelCp($user, $cp) {
+        list($user, $cp) = $this->escape_input((int) $user, (int) $cp);
 
-		$q = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp where id = $user";
-		return mysqli_query($this->dblink,$q);
-	}
+        $q = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp where id = $user";
+        return mysqli_query($this->dblink,$q);
+    }
 
-	function clearExpansionSlot($id) {
-	    $id = (int) $id;
+    function clearExpansionSlot($id) {
+        $id = (int) $id;
 
-	    $pairs = [];
-		for($i = 1; $i <= 3; $i++) {
-			$pairs[] = 'exp'.$i.' = 0';
-		}
+        $pairs = [];
+        for($i = 1; $i <= 3; $i++) {
+            $pairs[] = 'exp'.$i.' = 0';
+        }
 
         $q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(',', $pairs)." WHERE wref = " . $id;
         mysqli_query($this->dblink,$q);
-	}
+    }
 
     // no need to cache this method
-	function getInvitation($uid) {
-	    list($uid) = $this->escape_input((int) $uid);
+    function getInvitation($uid) {
+        list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ali_invite where uid = $uid";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
-	}
-
-    // no need to cache this method
-	function getInvitation2($uid, $aid) {
-	    list($uid, $aid) = $this->escape_input((int) $uid, (int) $aid);
-
-		$q = "SELECT * FROM " . TB_PREFIX . "ali_invite where uid = $uid and alliance = $aid";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
-	}
+        $q = "SELECT * FROM " . TB_PREFIX . "ali_invite where uid = $uid";
+        $result = mysqli_query($this->dblink,$q);
+        return $this->mysqli_fetch_all($result);
+    }
 
     // no need to cache this method
-	function getAliInvitations($aid) {
-	    list($aid) = $this->escape_input((int) $aid);
+    function getInvitation2($uid, $aid) {
+        list($uid, $aid) = $this->escape_input((int) $uid, (int) $aid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ali_invite where alliance = $aid && accept = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
-	}
-
-	function sendInvitation($uid, $alli, $sender) {
-	    list($uid, $alli, $sender) = $this->escape_input((int) $uid, (int) $alli, (int) $sender);
-
-		$time = time();
-		$q = "INSERT INTO " . TB_PREFIX . "ali_invite values (0,$uid,$alli,$sender,$time,0)";
-		return mysqli_query($this->dblink,$q);
-	}
-
-	function removeInvitation($id) {
-	    list($id) = $this->escape_input((int) $id);
-
-		$q = "DELETE FROM " . TB_PREFIX . "ali_invite where id = $id";
-		return mysqli_query($this->dblink,$q);
-	}
+        $q = "SELECT * FROM " . TB_PREFIX . "ali_invite where uid = $uid and alliance = $aid";
+        $result = mysqli_query($this->dblink,$q);
+        return $this->mysqli_fetch_all($result);
+    }
 
     // no need to cache this method
-	function getUnreadMessagesCount($uid) {
-	    $uid = (int) $uid;
+    function getAliInvitations($aid) {
+        list($aid) = $this->escape_input((int) $aid);
 
-	    return mysqli_fetch_array(mysqli_query($this->dblink, '
-	        SELECT Count(*) as numUnread FROM '.TB_PREFIX.'mdata WHERE target = '.$uid.' AND viewed = 0'
+        $q = "SELECT * FROM " . TB_PREFIX . "ali_invite where alliance = $aid && accept = 0";
+        $result = mysqli_query($this->dblink,$q);
+        return $this->mysqli_fetch_all($result);
+    }
+
+    function sendInvitation($uid, $alli, $sender) {
+        list($uid, $alli, $sender) = $this->escape_input((int) $uid, (int) $alli, (int) $sender);
+
+        $time = time();
+        $q = "INSERT INTO " . TB_PREFIX . "ali_invite values (0,$uid,$alli,$sender,$time,0)";
+        return mysqli_query($this->dblink,$q);
+    }
+
+    function removeInvitation($id) {
+        list($id) = $this->escape_input((int) $id);
+
+        $q = "DELETE FROM " . TB_PREFIX . "ali_invite where id = $id";
+        return mysqli_query($this->dblink,$q);
+    }
+
+    // no need to cache this method
+    function getUnreadMessagesCount($uid) {
+        $uid = (int) $uid;
+
+        return mysqli_fetch_array(mysqli_query($this->dblink, '
+            SELECT Count(*) as numUnread FROM '.TB_PREFIX.'mdata WHERE target = '.$uid.' AND viewed = 0'
         ), MYSQLI_ASSOC)['numUnread'];
     }
 
@@ -3728,18 +3759,18 @@ class MYSQLi_DB implements IDbConnection {
         $uid = (int) $uid;
 
         return mysqli_fetch_array(mysqli_query($this->dblink, '
-	        SELECT Count(*) as numUnread FROM '.TB_PREFIX.'ndata WHERE uid = '.$uid.' AND viewed = 0'
+            SELECT Count(*) as numUnread FROM '.TB_PREFIX.'ndata WHERE uid = '.$uid.' AND viewed = 0'
         ), MYSQLI_ASSOC)['numUnread'];
     }
 
-	function sendMessage($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report, $skip_escaping = false) {
-	    if (!$skip_escaping) {
-	       list($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) = $this->escape_input((int) $client, (int) $owner, $topic, $message, (int) $send, (int) $alliance, (int) $player, (int) $coor, (int) $report);
-	    }
+    function sendMessage($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report, $skip_escaping = false) {
+        if (!$skip_escaping) {
+           list($client, $owner, $topic, $message, $send, $alliance, $player, $coor, $report) = $this->escape_input((int) $client, (int) $owner, $topic, $message, (int) $send, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+        }
 
-		$time = time();
+        $time = time();
 
-	    // add this message to the query cache, so we save some queries
+        // add this message to the query cache, so we save some queries
         // if we need to send multiple messages at once
         self::$sendMessageQueryCache[] = "(0,$client,$owner,'$topic','$message',0,0,$send,$time,0,0,$alliance,$player,$coor,$report)";
 
@@ -3751,16 +3782,16 @@ class MYSQLi_DB implements IDbConnection {
             self::$sendMessageQueryCache = [];
         }
 
-		return $retValue;
-	}
+        return $retValue;
+    }
 
-	public function sendPendingMessages() {
+    public function sendPendingMessages() {
         if (count(self::$sendMessageQueryCache)) {
             mysqli_query($this->dblink, "INSERT INTO " . TB_PREFIX . "mdata VALUES " . implode(', ', self::$sendMessageQueryCache));
         }
     }
 
-	function setArchived($id) {
+    function setArchived($id) {
         if (!is_array($id)) {
             $id = [$id];
 
@@ -3769,11 +3800,11 @@ class MYSQLi_DB implements IDbConnection {
             }
         }
 
-		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 1 where id IN(".implode(', ', $id).")";
-		return mysqli_query($this->dblink,$q);
-	}
+        $q = "UPDATE " . TB_PREFIX . "mdata set archived = 1 where id IN(".implode(', ', $id).")";
+        return mysqli_query($this->dblink,$q);
+    }
 
-	function setNorm($id) {
+    function setNorm($id) {
         if (!is_array($id)) {
             $id = [$id];
 
@@ -3782,20 +3813,20 @@ class MYSQLi_DB implements IDbConnection {
             }
         }
 
-		$q = "UPDATE " . TB_PREFIX . "mdata set archived = 0 where id IN(".implode(',', $id).")";
-		return mysqli_query($this->dblink,$q);
-	}
+        $q = "UPDATE " . TB_PREFIX . "mdata set archived = 0 where id IN(".implode(',', $id).")";
+        return mysqli_query($this->dblink,$q);
+    }
 
-	/***************************
-	Function to get messages
-	Mode 1: Get inbox
-	Mode 2: Get sent
-	Mode 3: Get message
-	Mode 4: Set viewed
-	Mode 5: Remove message
-	Mode 6: Retrieve archive
-	References: User ID/Message ID, Mode
-	***************************/
+/***************************
+Function to get messages
+Mode 1: Get inbox
+Mode 2: Get sent
+Mode 3: Get message
+Mode 4: Set viewed
+Mode 5: Remove message
+Mode 6: Retrieve archive
+References: User ID/Message ID, Mode
+***************************/
     // no need to cache this method
 	function getMessage($id, $mode) {
 	    global $session;

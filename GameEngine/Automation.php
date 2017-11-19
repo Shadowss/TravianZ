@@ -574,46 +574,17 @@ class Automation {
     }
 
     private function culturePoints() {
+        global $database;
+
         if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
             unlink("GameEngine/Prevention/culturepoints.txt");
         }
-        global $database,$session;
-        //fix by ronix
-        if (SPEED >10)
-            $speed=10;
-            else
-                $speed=SPEED;
-                $dur_day=86400/$speed; //24 hours/speed
-                if ($dur_day<3600) $dur_day=3600;
-                $time = time()-600; // recount every 10minutes
 
-                $array = array();
-                $q = "SELECT id, lastupdate FROM ".TB_PREFIX."users WHERE lastupdate < $time";
-                $array = $database->query_return($q);
+        $database->updateVSumField('cp');
 
-                // cache owner ID's, from which we'll create a grouped DB selection
-                $ownerIDs = [];
-                foreach($array as $indi) {
-                    if($indi['lastupdate'] <= $time && $indi['lastupdate'] > 0) {
-                        $ownerIDs[] = $indi['id'];
-                    }
-                }
-
-                // get and cache the result
-                $ownerDatas = $database->getVSumField($ownerIDs, 'cp');
-
-                // update what's needed
-                $timeNow = time();
-
-                foreach ($ownerDatas as $record) {
-                    $cp = $record['Total'] * ( $timeNow - $record['lastupdate'] ) / $dur_day;
-                    $q  = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp, lastupdate = $timeNow where id = " . $record['owner'];
-                    $database->query( $q );
-                }
-
-                if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
-                    unlink("GameEngine/Prevention/culturepoints.txt");
-                }
+        if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
+            unlink("GameEngine/Prevention/culturepoints.txt");
+        }
     }
 
     private function buildComplete() {
