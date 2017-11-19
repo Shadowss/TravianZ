@@ -47,6 +47,10 @@
 		    $uid = mysqli_insert_id($database->dblink);
 		    $admin_village_created = false;
 		    $xcoor = 50;
+            $addUnitsWrefs = [];
+            $addTechWrefs = [];
+            $addABTechWrefs = [];
+
 		    while (!$admin_village_created) {
     		    $wid = $admin->getWref($xcoor++, 50);
     		    $status = $database->getVillageState($wid);
@@ -54,12 +58,16 @@
     		        $database->setFieldTaken($wid);
     		        $database->addVillage($wid, $uid, $_POST['aname'], 1);
     		        $database->addResourceFields($wid, $database->getVillageType($wid));
-    		        $database->addUnits($wid);
-    		        $database->addTech($wid);
-    		        $database->addABTech($wid);
+                    $addUnitsWrefs[] = $wid;
+                    $addTechWrefs[] = $wid;
+                    $addABTechWrefs[] = $wid;
     		        $admin_village_created = true;
     		    }
 		    }
+
+            $database->addUnits($addUnitsWrefs);
+            $database->addTech($addTechWrefs);
+            $database->addABTech($addABTechWrefs);
 		}
 
 		// set up MultiHunter

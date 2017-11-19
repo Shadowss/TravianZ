@@ -62,6 +62,10 @@ else
     // Looks OK, let's go for it
     $created = 0;
     $skipped = 0;
+    $addUnitsWrefs = [];
+    $addTechWrefs = [];
+    $addABTechWrefs = [];
+
     for ($i= 1; $i <= $amount; $i++)
     {
         $userName = $baseName . $i;
@@ -150,9 +154,9 @@ WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
                 mysqli_query($GLOBALS["link"], $q);
                 $pop = $automation->recountPop($wid);
                 $cp = $automation->recountPop($wid);
-                $database->addUnits($wid);
-                $database->addTech($wid);
-                $database->addABTech($wid);
+                $addUnitsWrefs[] = $wid;
+                $addTechWrefs[] = $wid;
+                $addABTechWrefs[] = $wid;
                 $database->updateUserField($uid,"access",USER,1);
                 
                 //insert units randomly generate the number of troops
@@ -168,6 +172,11 @@ WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
             }
         }
     }
+
+    $database->addUnits($addUnitsWrefs);
+    $database->addTech($addTechWrefs);
+    $database->addABTech($addABTechWrefs);
+
     header("Location: ../../../Admin/admin.php?p=addUsers&g=OK&bn=$baseName&am=$created&sk=$skipped&bp=$beginnersProtection&tr=$postTribe");
 }
 ?>

@@ -542,8 +542,14 @@ class Technology {
 		 //   global $$unit;
 		 //   $dataarray = $$unit;
 		 if($prisoners == 0){
+		    if (!isset($array['hero'])) {
+                $array['hero'] = 0;
+            }
 			$upkeep += $array['hero'] * 6;
 		 }else{
+		    if (!isset($array['t11'])) {
+                $array['t11'] = 0;
+            }
 			$upkeep += $array['t11'] * 6;
 		 }
 			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,4,3,0));

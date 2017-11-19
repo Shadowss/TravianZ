@@ -17,6 +17,9 @@ mysqli_select_db($GLOBALS["link"], SQL_DB);
 
 $id = (int) $_POST['id'];
 $amt = (int) $_POST['vill_amount'];
+$addUnitsWrefs = [];
+$addTechWrefs = [];
+$addABTechWrefs = [];
 
 for($i=1;$i<=$amt;$i++) {
 
@@ -31,9 +34,9 @@ for($i=1;$i<=$amt;$i++) {
 		mysqli_query($GLOBALS["link"], $q);
 		$pop = $automation->recountPop($wid);
 		$cp = $automation->recountPop($wid);
-		$database->addUnits($wid);
-		$database->addTech($wid);
-		$database->addABTech($wid);
+		$addUnitsWrefs[] = $wid;
+		$addTechWrefs[] = $wid;
+		$addABTechWrefs[] = $wid;
 		$speed = NATARS_UNITS;
 		
 		//new with random amount of troops
@@ -41,9 +44,11 @@ for($i=1;$i<=$amt;$i++) {
 		mysqli_query($GLOBALS["link"], $q);
 }
 
+$database->addUnits($addUnitsWrefs);
+$database->addTech($addTechWrefs);
+$database->addABTech($addABTechWrefs);
 
-		mysqli_query($GLOBALS["link"], "Insert into ".TB_PREFIX."admin_log values (0,$id,'Added <b>$amt</b> WW Villages',".time().")");
-
+mysqli_query($GLOBALS["link"], "Insert into ".TB_PREFIX."admin_log values (0,$id,'Added <b>$amt</b> WW Villages',".time().")");
 
 header("Location: ../../../Admin/admin.php?p=natarend&g");
 ?>

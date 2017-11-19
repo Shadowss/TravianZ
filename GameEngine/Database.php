@@ -672,6 +672,7 @@ class MYSQLi_DB implements IDbConnection {
      */
     public static function clearVillageCache() {
         self::$villageFieldsCache = [];
+        self::$villageFieldsCacheByWorldID = [];
     }
 
     /**
@@ -994,8 +995,8 @@ class MYSQLi_DB implements IDbConnection {
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function getVrefField($ref, $field) {
-        return $this->getVillage($ref)[$field];
+	function getVrefField($ref, $field, $use_cache = true) {
+        return $this->getVillage($ref, $use_cache)[$field];
 	}
 
     // no need to cache this method
@@ -1303,9 +1304,15 @@ class MYSQLi_DB implements IDbConnection {
     }
 
 	function setFieldTaken($id) {
-	    list($id) = $this->escape_input((int) $id);
+        if (!is_array($id)) {
+            $id = [$id];
+        }
 
-		$q = "UPDATE " . TB_PREFIX . "wdata set occupied = 1 where id = ". $id;
+        foreach ($id as $index => $idValue) {
+            $id[$index] = (int) $idValue;
+        }
+
+		$q = "UPDATE " . TB_PREFIX . "wdata SET occupied = 1 WHERE id IN(". implode(', ', $id).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -1879,9 +1886,10 @@ class MYSQLi_DB implements IDbConnection {
         return self::$resourceLevelsCache[$vid];
 	}
 
-	public function clearResourseLevelsCache() {
+	public static function clearResourseLevelsCache() {
 	    self::$resourceLevelsCache = [];
         self::$fieldLevelsInVillageSearchCache = [];
+        self::$fieldLevelsCache = [];
     }
 
 	function getAdminLog() {
@@ -4948,13 +4956,27 @@ class MYSQLi_DB implements IDbConnection {
             $ref2 = [$ref2];
         }
 
+        $counter = 0;
         $pairs = [];
+
         foreach ($type as $index => $typeValue) {
             $pairs[] = '(0, '.(int) $typeValue.', '.(int) $from[$index].', '.(int) $to[$index].', '.(int) $ref[$index].', '.(int) $ref2[$index].', '.(int) $time[$index].', '.(int) $endtime[$index].', 0, '.(int) $send[$index].', '.(int) $wood[$index].', '.(int) $clay[$index].', '.(int) $iron[$index].', '.(int) $crop[$index].')';
+
+            if ($counter++ > 25) {
+                $q = "INSERT INTO " . TB_PREFIX . "movement VALUES ".implode(', ', $pairs);
+                mysqli_query($this->dblink,$q);
+
+                $pairs = [];
+                $counter = 0;
+            }
         }
 
-		$q = "INSERT INTO " . TB_PREFIX . "movement VALUES ".implode(', ', $pairs);
-		return mysqli_query($this->dblink,$q);
+        if ($counter > 0) {
+            $q = "INSERT INTO " . TB_PREFIX . "movement VALUES " . implode( ', ', $pairs );
+            return mysqli_query( $this->dblink, $q );
+        } else {
+            return true;
+        }
 	}
 
 	function addAttack($vid, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type, $ctar1, $ctar2, $spy,$b1=0,$b2=0,$b3=0,$b4=0,$b5=0,$b6=0,$b7=0,$b8=0) {
@@ -5100,9 +5122,15 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function addUnits($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
+	    if (!is_array($vid)) {
+	        $vid = [$vid];
+        }
 
-		$q = "INSERT into " . TB_PREFIX . "units (vref) values ($vid)";
+        foreach ($vid as $index => $vidValue) {
+	        $vid[$index] = (int) $vidValue;
+        }
+
+		$q = "INSERT into " . TB_PREFIX . "units (vref) values (".implode(', ', $vid).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -5222,16 +5250,25 @@ class MYSQLi_DB implements IDbConnection {
         return self::$heroFieldCache[$uid.$field][$field];
 	}
 
-	function modifyHero($column,$value,$heroid,$mode=0) {
-	    list($column,$value,$heroid,$mode) = $this->escape_input($column,$value,(int) $heroid,$mode);
+	function modifyHero($column,$value,$heroid,$mode=null) {
+	    if (!is_array($column)) {
+	        $column = [$column];
+	        $value = [$value];
+	        $mode = [$mode];
+        }
 
-		if(!$mode) {
-			$q = "UPDATE `".TB_PREFIX."hero` SET $column = '$value' WHERE heroid = $heroid";
-		} elseif($mode=1) {
-		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column + ". (int) $value . " WHERE heroid = $heroid";
-		} else {
-		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column - ". (int) $value ." WHERE heroid = $heroid";
-		}
+        $pairs = [];
+	    foreach ($column as $index => $columnValue) {
+            if($mode[$index] === null) {
+                $pairs[] = "$columnValue = ".(Math::isInt($value[$index]) ? $value[$index] : '"'.$this->escape($value[$index]).'"');
+            } elseif($mode[$index]=1) {
+                $pairs[] = "$columnValue = $columnValue + ".(int) $value[$index];
+            } else {
+                $pairs[] = "$columnValue = $columnValue - ".(int) $value[$index];
+            }
+        }
+
+        $q = "UPDATE `".TB_PREFIX."hero` SET ".implode(', ', $pairs)." WHERE heroid = $heroid";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -5256,16 +5293,28 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function addTech($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
+        if (!is_array($vid)) {
+            $vid = [$vid];
+        }
 
-		$q = "INSERT into " . TB_PREFIX . "tdata (vref) values ($vid)";
+        foreach ($vid as $index => $vidValue) {
+            $vid[$index] = (int) $vidValue;
+        }
+
+		$q = "INSERT INTO " . TB_PREFIX . "tdata (vref) VALUES (".implode(', ', $vid).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function addABTech($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
+        if (!is_array($vid)) {
+            $vid = [$vid];
+        }
 
-		$q = "INSERT into " . TB_PREFIX . "abdata (vref) values ($vid)";
+        foreach ($vid as $index => $vidValue) {
+            $vid[$index] = (int) $vidValue;
+        }
+
+		$q = "INSERT INTO " . TB_PREFIX . "abdata (vref) VALUES (".implode(', ', $vid).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -5433,11 +5482,12 @@ class MYSQLi_DB implements IDbConnection {
 			if($unit == 121){$unit = 21;}
 			if($unit =="hero"){$unit = 'hero';}
 			else{$unit = 'u' . $unit;}
-		++$i;
-		//Fixed part of negativ troops (double troops) - by InCube
-		$array_amt[$i] = (int) $array_amt[$i] < 0 ? 0 : $array_amt[$i];
-		//Fixed part of negativ troops (double troops) - by InCube
-		$units .= $unit.' = '.$unit.' '.(($array_mode[$i] == 1)? '+':'-').'  '.($array_amt[$i] ? $array_amt[$i] : 0).(($number > $i+1) ? ', ' : '');
+
+            ++$i;
+            //Fixed part of negativ troops (double troops) - by InCube
+            $array_amt[$i] = (int) $array_amt[$i] < 0 ? 0 : $array_amt[$i];
+            //Fixed part of negativ troops (double troops) - by InCube
+            $units .= $unit.' = '.$unit.' '.(($array_mode[$i] == 1)? '+':'-').'  '.($array_amt[$i] ? $array_amt[$i] : 0).(($number > $i+1) ? ', ' : '');
 		}
 		$q = "UPDATE ".TB_PREFIX."units set $units WHERE vref = $vref";
 		return mysqli_query($this->dblink,$q);
@@ -5470,8 +5520,12 @@ class MYSQLi_DB implements IDbConnection {
 
         if (!$mode) {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured = $ref AND e.from !=$ref";
-        }else{
+        }else if ($mode == 1) {
             $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured = $ref";
+        } else if ($mode == 2) {
+            $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=$ref AND o.owner<>v.owner";
+        } else if ($mode == 3) {
+            $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=$ref AND o.owner=v.owner";
         }
         $result = mysqli_query($this->dblink,$q);
 
@@ -5509,13 +5563,24 @@ class MYSQLi_DB implements IDbConnection {
 		$start = ($owntribe - 1) * 10 + 1;
 		$end = ($owntribe * 10);
 		//add unit
-		$j = '1';
+		$j = 1;
+		$units = [];
+		$amounts = [];
+		$modes = [];
+
 		for($i = $start; $i <= $end; $i++) {
-			$this->modifyEnforce($id, $i, $data['t' . $j . ''], 1);
+		    $units[] = $i;
+		    $amounts[] = $data['t' . $j . ''];
+		    $modes[] = 1;
 			$j++;
 		}
-		$this->modifyEnforce($id,'hero',$data['t11'],1);
-		return mysqli_insert_id($this->dblink);
+
+		// add hero
+        $units[] = 'hero';
+        $amounts[] = $data['t11'];
+        $modes[] = 1;
+
+		$this->modifyEnforce($id,$units, $amounts, $modes);
 	}
 
 	function addEnforce2($data,$tribe,$dead1,$dead2,$dead3,$dead4,$dead5,$dead6,$dead7,$dead8,$dead9,$dead10,$dead11) {
@@ -5534,15 +5599,34 @@ class MYSQLi_DB implements IDbConnection {
 		}
 		$end2 = ($tribe * 10);
 		//add unit
-		$j = '1';
+		$j = 1;
+
+        $units = [];
+        $amounts = [];
+        $modes = [];
+
 		for($i = $start; $i <= $end; $i++) {
-			$this->modifyEnforce($id, $i, $data['t' . $j . ''], 1);
-			$this->modifyEnforce($id, $i, ${'dead'.$j}, 0);
+            $units[] = $i;
+            $amounts[] = $data['t' . $j . ''];
+            $modes[] = 1;
+
+            $units[] = $i;
+            $amounts[] = ${'dead'.$j};
+            $modes[] = 0;
+
 			$j++;
 		}
-		$this->modifyEnforce($id,'hero',$data['t11'],1);
-		$this->modifyEnforce($id,'hero',$dead11,0);
-		return mysqli_insert_id($this->dblink);
+
+        // process heroes
+        $units[] = 'hero';
+        $amounts[] = $data['t11'];
+        $modes[] = 1;
+
+        $units[] = 'hero';
+        $amounts[] = $dead11;
+        $modes[] = 0;
+
+        $this->modifyEnforce($id,$units, $amounts, $modes);
 	}
 
 	function modifyEnforce($id, $unit, $amt, $mode) {
@@ -5596,9 +5680,13 @@ class MYSQLi_DB implements IDbConnection {
 
 		if(!$mode) {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where vref = $id";
-		} else {
+		} else if ($mode == 1) {
 			$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $id";
-		}
+		} else if ($mode == 2) {
+            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=$id AND v.owner<>v1.owner";
+        } else if ($mode == 3) {
+            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=$id AND v.owner=v1.owner";
+        }
 		$result = mysqli_query($this->dblink,$q);
 
         self::$villageReinforcementsCache[$id.$mode] = $this->mysqli_fetch_all($result);
@@ -6342,7 +6430,7 @@ class MYSQLi_DB implements IDbConnection {
 	    $clay = 0;
 	    $iron = 0;
 		$basecrop = $grainmill = $bakery = 0;
-		$owner = $this->getVrefField($wref, 'owner');
+		$owner = $this->getVrefField($wref, 'owner', $use_cache);
 		$bonus = $this->getUserField($owner, 'b4', 0);
 
 		$buildarray = $this->getResourceLevel($wref);
