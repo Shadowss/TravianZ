@@ -443,7 +443,7 @@ class Automation {
                         $start = 10*($targettribe-1);
                         for($i=1;$i<11;$i++){
                             $unit = $start + $i;
-                            $post['t'.$i] = $enforce['u'.$unit];
+                            $post['t'.$i] = (isset($enforce['u'.$unit]) ? $enforce['u'.$unit] : 0);
                         }
                         $post['t11'] = $enforce['hero'];
                         $reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
@@ -605,13 +605,11 @@ class Automation {
                 // update what's needed
                 $timeNow = time();
 
-                mysqli_begin_transaction($GLOBALS['link']);
                 foreach ($ownerDatas as $record) {
                     $cp = $record['Total'] * ( $timeNow - $record['lastupdate'] ) / $dur_day;
                     $q  = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp, lastupdate = $timeNow where id = " . $record['owner'];
                     $database->query( $q );
                 }
-                mysqli_commit($GLOBALS['link']);
 
                 if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
                     unlink("GameEngine/Prevention/culturepoints.txt");
@@ -4473,13 +4471,13 @@ class Automation {
             $unitData = $database->getUnit($heroVillageIDs);
 
             // now do the math
-            $columns = [];
-            $columnValues = [];
-            $modes = [];
-            $lastUpdateTime = time();
-            $newHealth = -1;
-
             foreach($harray as $hdata){
+                $columns = [];
+                $columnValues = [];
+                $modes = [];
+                $lastUpdateTime = time();
+                $newHealth = -1;
+
                 if((time()-$hdata['lastupdate'])>=1){
                     if($hdata['health']<100 and $hdata['health']>0){
                         if(SPEED <= 10){
