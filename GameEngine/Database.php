@@ -877,7 +877,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         // return all data, don't waste time by selecting fields one by one
-        $userArray = $this->getUserArray($ref, !$mode, $use_cache);
+        $userArray = $this->getUserArray($ref, ($mode ? 0 : 1), $use_cache);
         $result = (isset($userArray[$field]) ? $userArray[$field] : null);
 
         if ($result) {
@@ -935,7 +935,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
 	    // return all data, don't waste time by selecting fields one by one
-	    return $this->getUserArray($ref, !$mode, $use_cache);
+	    return $this->getUserArray($ref, ($mode ? 0 : 1), $use_cache);
 
         /*list($ref, $fields, $mode) = $this->escape_input($ref, $fields, $mode);
 
@@ -1035,6 +1035,12 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function login($username, $password) {
+        static $cachedResult = null;
+
+        if ($cachedResult !== null) {
+            return $cachedResult;
+        }
+
         list($username, $password) = $this->escape_input($username, $password);
 		$q = "SELECT id,password,sessid,is_bcrypt FROM " . TB_PREFIX . "users where username = '$username'";
 		$result = mysqli_query($this->dblink,$q);
@@ -1067,10 +1073,12 @@ class MYSQLi_DB implements IDbConnection {
 		    if (!$dbarray['is_bcrypt'] && !$bcrypted) {
 		        mysqli_query($this->dblink, "UPDATE " . TB_PREFIX . "users SET password = '".password_hash($password, PASSWORD_BCRYPT,['cost' => 12])."'".($bcrypt_update_done ? ', is_bcrypt = 1' : '')." where id = ".(int) $dbarray['id']);
 		    }
-			return true;
+            $cachedResult = true;
 		} else {
-			return false;
+            $cachedResult = false;
 		}
+
+		return $cachedResult;
 	}
 
 	function sitterLogin($username, $password) {
