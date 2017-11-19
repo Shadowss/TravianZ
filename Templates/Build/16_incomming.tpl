@@ -185,7 +185,12 @@ $to = $database->getMInfo($units[$y]['vref']);
             ?>
            </tr>
             <?php
-			$totalres = $res['wood']+$res['clay']+$res['iron']+$res['crop'];
+            if (isset($res)) {
+                $totalres = $res['wood'] + $res['clay'] + $res['iron'] + $res['crop'];
+            } else {
+                $totalres = 0;
+            }
+
 			if($units[$y]['attack_type']!=2 and $units[$y]['attack_type']!=1 and $totalres != ""){?>
  <tr><th><?php echo BOUNTY;?></th>
 
