@@ -1593,7 +1593,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT * from " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") capital DESC,pop DESC";
+		$q = "SELECT * from " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") ORDER BY capital DESC,pop DESC";
         $result = mysqli_query($this->dblink,$q);
 
         if (!$arrayPassed) {
@@ -1880,10 +1880,14 @@ class MYSQLi_DB implements IDbConnection {
     function setVillageFields($ref, $fields, $values) {
         list($ref, $fields, $values) = $this->escape_input((int) $ref, $fields, $values);
 
+        if (!count($fields)) {
+            return;
+        }
+
         // build the field-value query parts
         $fieldValues = [];
         foreach ($fields as $id => $fieldName) {
-            $fieldValues[] = $this->escape_input($fieldName).' = '.((Math::isInt($values[$id]) || Math::isFloat($values[$id])) ? $values[$id] : '"'.$this->escape($values[$id]).'"');
+            $fieldValues[] = $this->escape($fieldName).' = '.((Math::isInt($values[$id]) || Math::isFloat($values[$id])) ? $values[$id] : '"'.$this->escape($values[$id]).'"');
         }
 
         $q = "UPDATE " . TB_PREFIX . "vdata set ".implode(', ', $fieldValues)." where wref = $ref";
@@ -3571,7 +3575,7 @@ class MYSQLi_DB implements IDbConnection {
 	    // return a single value
 	    if (!$array_passed) {
             $row = mysqli_fetch_row( $result );
-            self::$userSumFieldCache[$uid.$field] = $row[2];
+            self::$userSumFieldCache[$row[0].$field] = $row[2];
         } else {
 	        $result = $this->mysqli_fetch_all($result);
 	        foreach ($result as $record) {
