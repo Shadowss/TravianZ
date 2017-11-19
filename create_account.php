@@ -196,11 +196,49 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
   		$multiplier = NATARS_UNITS;
   		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = '1' and owner > '5'";
   		$array = $database->query_return($q);
-        	$sendspytroops = 1500 * $multiplier;
+        $sendspytroops = 1500 * $multiplier;
+        $refs = [];
+        $vils = [];
   		foreach($array as $vill){
-  		$ref = $database->addAttack($natar['wref'], 0, 0, 0, $sendspytroops, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
-  		$database->addMovement(3, $natar['wref'], $vill['wref'], $ref, time(), time()+10000);
+  		    $refs[] = $database->addAttack($natar['wref'], 0, 0, 0, $sendspytroops, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
+            $vils[] = $vill['wref'];
   		}
+
+        $type = [];
+  		$from = [];
+  		$to = [];
+  		$ref = [];
+  		$time = [];
+  		$timeValue = time();
+  		$endtime = [];
+  		$endtimeValue = $timeValue + 10000;
+  		$counter = 0;
+
+  		foreach ($refs as $index => $refID) {
+  		    $type[] = 3;
+  		    $from[] = $natar['wref'];
+  		    $to[] = $vils[$index];
+  		    $ref[] = $refID;
+  		    $time[] = $timeValue;
+  		    $endtime[] = $endtimeValue;
+
+  		    // limit the insert, so it can push through any reasonable network limits imposed
+  		    if (++$counter > 25) {
+                $database->addMovement($type, $from, $to, $ref, $time, $endtime);
+
+                $type = [];
+                $from = [];
+                $to = [];
+                $ref = [];
+                $time = [];
+                $endtime = [];
+                $counter = 0;
+            }
+        }
+
+        if ($counter > 0) {
+            $database->addMovement( $type, $from, $to, $ref, $time, $endtime );
+        }
 
 /**
  * SMALL ARTEFACTS

@@ -41,10 +41,14 @@ if(isset($_GET['newdid'])) {
 else {
 	$building->procBuild($_GET);
 }
+	$sql = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
+	$winner = mysqli_num_rows($sql);
 
-## Get Rankings for Ranking Section
+	if($winner!=0){
+
+        ## Get Rankings for Ranking Section
 ## Top 3 Population
-$q = "
+        $q = "
 	SELECT ".TB_PREFIX."users.id userid, ".TB_PREFIX."users.username username,".TB_PREFIX."users.alliance alliance, (
 	SELECT SUM( ".TB_PREFIX."vdata.pop )
 	FROM ".TB_PREFIX."vdata
@@ -63,22 +67,22 @@ $q = "
 	WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
 	ORDER BY totalpop DESC, totalvillages DESC, username ASC";
 
-	$result = (mysqli_query($GLOBALS['link'],$q));
-	while($row = mysqli_fetch_assoc($result))
-	{
-		$datas[] = $row;
-	}
-		foreach($datas as $result)
-	{
-		$value['userid'] = $result['userid'];
-		$value['username'] = $result['username'];
-		$value['alliance'] = $result['alliance'];
-		$value['aname'] = $result['allitag'];
-		$value['totalpop'] = $result['totalpop'];
-		$value['totalvillage'] = $result['totalvillages'];
-	}
-	## Top Attacker
-	$q = "
+        $result = (mysqli_query($GLOBALS['link'],$q));
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $datas[] = $row;
+        }
+        foreach($datas as $result)
+        {
+            $value['userid'] = $result['userid'];
+            $value['username'] = $result['username'];
+            $value['alliance'] = $result['alliance'];
+            $value['aname'] = $result['allitag'];
+            $value['totalpop'] = $result['totalpop'];
+            $value['totalvillage'] = $result['totalvillages'];
+        }
+        ## Top Attacker
+        $q = "
 	SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.apall,  (
 	SELECT COUNT( " . TB_PREFIX . "vdata.wref )
 	FROM " . TB_PREFIX . "vdata
@@ -92,21 +96,21 @@ $q = "
 	WHERE " . TB_PREFIX . "users.apall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
 	ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC, username ASC";
 
-	$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
-	while($row = mysqli_fetch_assoc($result))
-	{
-		$attacker[] = $row;
-	}
-	foreach($attacker as $key => $row)
-	{
-		$value['username'] = $row['username'];
-		$value['totalvillages'] = $row['totalvillages'];
-		$value['id'] = $row['userid'];
-		$value['totalpop'] = $row['pop'];
-		$value['apall'] = $row['apall'];
-	}
-	## Top Defender
-	$q = "
+        $result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $attacker[] = $row;
+        }
+        foreach($attacker as $key => $row)
+        {
+            $value['username'] = $row['username'];
+            $value['totalvillages'] = $row['totalvillages'];
+            $value['id'] = $row['userid'];
+            $value['totalpop'] = $row['pop'];
+            $value['apall'] = $row['apall'];
+        }
+        ## Top Defender
+        $q = "
 	SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.dpall,  (
 	SELECT COUNT( " . TB_PREFIX . "vdata.wref )
 	FROM " . TB_PREFIX . "vdata
@@ -119,46 +123,41 @@ $q = "
 	FROM " . TB_PREFIX . "users
 	WHERE " . TB_PREFIX . "users.dpall >=0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
 	ORDER BY " . TB_PREFIX . "users.dpall DESC, pop DESC, username ASC";
-	$result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
-	while($row = mysqli_fetch_assoc($result))
-	{
-		$defender[] = $row;
-	}
-	foreach($defender as $key => $row)
-	{
-		$value['username'] = $row['username'];
-		$value['totalvillages'] = $row['totalvillages'];
-		$value['id'] = $row['userid'];
-		$value['totalpop'] = $row['pop'];
-		$value['dpall'] = $row['dpall'];
-	}
+        $result = mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
+        while($row = mysqli_fetch_assoc($result))
+        {
+            $defender[] = $row;
+        }
+        foreach($defender as $key => $row)
+        {
+            $value['username'] = $row['username'];
+            $value['totalvillages'] = $row['totalvillages'];
+            $value['id'] = $row['userid'];
+            $value['totalpop'] = $row['pop'];
+            $value['dpall'] = $row['dpall'];
+        }
 
-	## Get WW Winner Details
-	$sql = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
-	$vref = mysqli_result($sql, 0);
+        ## Get WW Winner Details
+        $sql = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
+        $vref = mysqli_result($sql, 0);
 
-	$sql = mysqli_query($GLOBALS['link'],"SELECT name FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysqli_error($database->dblink));
-	$winningvillagename = mysqli_result($sql, 0);
+        $sql = mysqli_query($GLOBALS['link'],"SELECT name FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysqli_error($database->dblink));
+        $winningvillagename = mysqli_result($sql, 0);
 
-	$sql = mysqli_query($GLOBALS['link'],"SELECT owner FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysqli_error($database->dblink));
-	$owner = mysqli_result($sql, 0);
+        $sql = mysqli_query($GLOBALS['link'],"SELECT owner FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysqli_error($database->dblink));
+        $owner = mysqli_result($sql, 0);
 
-	$sql = mysqli_query($GLOBALS['link'],"SELECT username FROM ".TB_PREFIX."users WHERE id = '$owner'")or die(mysqli_error($database->dblink));
-	$username = mysqli_result($sql, 0);
+        $sql = mysqli_query($GLOBALS['link'],"SELECT username FROM ".TB_PREFIX."users WHERE id = '$owner'")or die(mysqli_error($database->dblink));
+        $username = mysqli_result($sql, 0);
 
-	$sql = mysqli_query($GLOBALS['link'],"SELECT alliance FROM ".TB_PREFIX."users WHERE id = '$owner'")or die(mysqli_error($database->dblink));
-	$allianceid = mysqli_result($sql, 0);
+        $sql = mysqli_query($GLOBALS['link'],"SELECT alliance FROM ".TB_PREFIX."users WHERE id = '$owner'")or die(mysqli_error($database->dblink));
+        $allianceid = mysqli_result($sql, 0);
 
-	$sql = mysqli_query($GLOBALS['link'],"SELECT name, tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysqli_error($database->dblink));
-	$winningalliance = mysqli_result($sql, 0);
+        $sql = mysqli_query($GLOBALS['link'],"SELECT name, tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysqli_error($database->dblink));
+        $winningalliance = mysqli_result($sql, 0);
 
-	$sql = mysqli_query($GLOBALS['link'],"SELECT tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysqli_error($database->dblink));
-	$winningalliancetag = mysqli_result($sql, 0);
-
-	$sql = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
-	$winner = mysqli_num_rows($sql);
-
-	if($winner!=0){
+        $sql = mysqli_query($GLOBALS['link'],"SELECT tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysqli_error($database->dblink));
+        $winningalliancetag = mysqli_result($sql, 0);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

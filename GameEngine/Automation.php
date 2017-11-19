@@ -357,44 +357,61 @@ class Automation {
                 $needVillage = $database->getVillagesID($need['uid']);
                 foreach($needVillage as $village) {
                     $village = (int) $village;
+
                     $q = "DELETE FROM ".TB_PREFIX."abdata where vref = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."enforcement where `from` = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$village;
                     $database->query($q);
+
                     $q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, loyalty = 100, owner = 2, name = 'Unoccupied Oasis' where wref = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."research where vref = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."tdata where vref = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."training where vref =".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."units where vref =".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."farmlist where wref =".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$village;
                     $database->query($q);
+
                     $q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$village;
                     $database->query($q);
+
                     $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village;
                     $database->query($q);
                     $getmovement = $database->getMovement(3,$village,1);
+
                     foreach($getmovement as $movedata) {
                         $time = microtime(true);
                         $time2 = $time - $movedata['starttime'];
                         $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
                         $database->setMovementProc($movedata['moveid']);
                     }
+
                     $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $village AND sort_type=4) OR (`from` = $village AND sort_type=3))";
                     $database->query($q);
                     $getprisoners = $database->getPrisoners($village);
+
                     foreach($getprisoners as $pris) {
                         $troops = 0;
                         for($i=1;$i<12;$i++){
@@ -403,7 +420,9 @@ class Automation {
                         $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
                         $database->deletePrisoners($pris['id']);
                     }
+
                     $getprisoners = $database->getPrisoners3($village);
+
                     foreach($getprisoners as $pris) {
                         $troops = 0;
                         for($i=1;$i<12;$i++){
@@ -412,7 +431,9 @@ class Automation {
                         $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
                         $database->deletePrisoners($pris['id']);
                     }
+
                     $enforcement = $database->getEnforceVillage($village,0);
+
                     foreach($enforcement as $enforce) {
                         $time = microtime(true);
                         $fromcoor = $database->getCoor($enforce['vref']);
@@ -431,6 +452,7 @@ class Automation {
                         $database->query($q);
                     }
                 }
+
                 for($i=0;$i<20;$i++){
                     $q = "SELECT id FROM ".TB_PREFIX."users where friend".$i." = ".(int) $need['uid']." or friend".$i."wait = ".(int) $need['uid']."";
                     $array = $database->query_return($q);
@@ -439,7 +461,9 @@ class Automation {
                         $database->deleteFriend($friend['id'],"friend".$i."wait");
                     }
                 }
+
                 $database->updateUserField($need['uid'], 'alliance', 0, 1);
+
                 if($database->isAllianceOwner($need['uid'])){
                     $alliance = $database->getUserAllianceID($need['uid']);
                     $newowner = $database->getAllMember2($alliance);
@@ -449,17 +473,23 @@ class Automation {
                     $database->updateAlliPermissions($newleader, $alliance, "Leader", 1, 1, 1, 1, 1, 1, 1);
                     Automation::updateMax($newleader);
                 }
+
                 if (isset($alliance)) {
                     $database->deleteAlliance($alliance);
                 }
+
                 $q = "DELETE FROM ".TB_PREFIX."hero where uid = ".(int) $need['uid'];
                 $database->query($q);
+
                 $q = "DELETE FROM ".TB_PREFIX."mdata where target = ".(int) $need['uid']." or owner = ".(int) $need['uid'];
                 $database->query($q);
+
                 $q = "DELETE FROM ".TB_PREFIX."ndata where uid = ".(int) $need['uid'];
                 $database->query($q);
+
                 $q = "DELETE FROM ".TB_PREFIX."users where id = ".(int) $need['uid'];
                 $database->query($q);
+
                 $q = "DELETE FROM ".TB_PREFIX."deleting where uid = ".(int) $need['uid'];
                 $database->query($q);
             }
@@ -904,7 +934,6 @@ class Automation {
         $q = "SELECT `from`, wood, clay, iron, crop, wid, deliveries, id FROM ".TB_PREFIX."route where timestamp < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
-            $database->modifyResource($data['from'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
             $targettribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
             $this->sendResource2($data['wood'],$data['clay'],$data['iron'],$data['crop'],$data['from'],$data['wid'],$targettribe,$data['deliveries']);
             $database->editTradeRoute($data['id'],"timestamp",86400,1);
@@ -949,6 +978,7 @@ class Automation {
             $database->addMovement(2,$data['to'],$data['from'],$data['merchant'],time(),$endtime,$data['send'],$data['wood'],$data['clay'],$data['iron'],$data['crop']);
             $database->setMovementProc($data['moveid']);
         }
+
         $q1 = "SELECT send, moveid, `to`, wood, clay, iron, crop, `from` FROM ".TB_PREFIX."movement WHERE proc = 0 and sort_type = 2 and endtime < $time";
         $dataarray1 = $database->query_return($q1);
         foreach($dataarray1 as $data1) {
@@ -967,24 +997,30 @@ class Automation {
 
     private function sendResource2($wtrans,$ctrans,$itrans,$crtrans,$from,$to,$tribe,$send) {
         global $bid17,$bid28,$database,$generator,$logging;
+
         $availableWood = $database->getWoodAvailable($from);
         $availableClay = $database->getClayAvailable($from);
         $availableIron = $database->getIronAvailable($from);
         $availableCrop = $database->getCropAvailable($from);
+
         if($availableWood >= $wtrans AND $availableClay >= $ctrans AND $availableIron >= $itrans AND $availableCrop >= $crtrans){
             $merchant2 = ($this->getTypeLevel(17,$from) > 0)? $this->getTypeLevel(17,$from) : 0;
-            $used2 = $database->totalMerchantUsed($from);
+            $used2 = $database->totalMerchantUsed($from, false);
             $merchantAvail2 = $merchant2 - $used2;
             $maxcarry2 = ($tribe == 1)? 500 : (($tribe == 2)? 1000 : 750);
             $maxcarry2 *= TRADER_CAPACITY;
+
             if($this->getTypeLevel(28,$from) != 0) {
                 $maxcarry2 *= $bid28[$this->getTypeLevel(28,$from)]['attri'] / 100;
             }
+
             $resource = array($wtrans,$ctrans,$itrans,$crtrans);
             $reqMerc = ceil((array_sum($resource)-0.1)/$maxcarry2);
+
             if($merchantAvail2 != 0 && $reqMerc <= $merchantAvail2) {
                 $coor = $database->getCoor($to);
                 $coor2 = $database->getCoor($from);
+
                 if($database->getVillageState($to)) {
                     $timetaken = $generator->procDistanceTime($coor,$coor2,$tribe,0);
                     $res = $resource[0]+$resource[1]+$resource[2]+$resource[3];
@@ -994,6 +1030,7 @@ class Automation {
                         $database->addMovement(0,$from,$to,$reference,microtime(true),microtime(true)+$timetaken,$send);
                     }
                 }
+
             }
         }
     }
@@ -2685,24 +2722,36 @@ class Automation {
                         if($type == 3 && $totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
                             $prisoners = $database->getPrisoners($to['wref'], 0, false);
                             if(count($prisoners) > 0){
+
                                 $anothertroops = 0;
                                 $mytroops=0;
-                                foreach($prisoners as $prisoner){
+                                $prisoners2delete = [];
+                                $movementType = [];
+                                $movementFrom = [];
+                                $movementTo = [];
+                                $movementRef = [];
+                                $movementTime = [];
+                                $movementEndtime = [];
+                                $utime = microtime(true);
+
+                                foreach($prisoners as $prisoner) {
                                     $p_owner = $database->getVillageField($prisoner['from'],"owner");
-                                    if($p_owner == $from['owner']){
+
+                                    if ($p_owner == $from['owner']) {
                                         $database->modifyAttack2(
                                             $data['ref'],
                                             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
                                             [$prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'], $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11']]
                                         );
                                         $mytroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
-                                        $database->deletePrisoners($prisoner['id']);
-                                    }else{
+                                        $prisoners2delete[] = $prisoner['id'];
+                                    } else {
                                         $p_alliance = $database->getUserField($p_owner,"alliance",0);
                                         $friendarray = $database->getAllianceAlly($p_alliance,1);
                                         $neutralarray = $database->getAllianceAlly($p_alliance,2);
                                         $friend = (($friendarray[0]['alli1']>0 and $friendarray[0]['alli2']>0 and $p_alliance>0) and ($friendarray[0]['alli1']==$ownally or $friendarray[0]['alli2']==$ownally) and ($ownally != $p_alliance and $ownally and $p_alliance)) ? '1':'0';
                                         $neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $p_alliance>0) and ($neutralarray[0]['alli1']==$ownally or $neutralarray[0]['alli2']==$ownally) and ($ownally != $p_alliance and $ownally and $p_alliance)) ? '1':'0';
+
                                         if($p_alliance == $ownally or $friend == 1 or $neutral == 1){
                                             $p_tribe = $database->getUserField($p_owner,"tribe",0);
 
@@ -2755,12 +2804,23 @@ class Automation {
                                                 }
                                             }
                                             $p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
-                                            $database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,microtime(true),($p_time+microtime(true)));
+                                            $movementType[] = 4;
+                                            $movementFrom[] = $prisoner['wref'];
+                                            $movementTo[] = $prisoner['from'];
+                                            $movementRef[] = $p_reference;
+                                            $movementTime[] = $utime;
+                                            $movementEndtime[] = $p_time + $utime;
                                             $anothertroops += $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
-                                            $database->deletePrisoners($prisoner['id']);
+                                            $prisoners2delete[] = $prisoner['id'];
                                         }
                                     }
                                 }
+
+                                if (count($movementType)) {
+                                    $database->addMovement( $movementType, $movementFrom, $movementTo, $movementRef, $movementTime, $movementEndtime );
+                                }
+
+                                $database->deletePrisoners($prisoners2delete);
 
                                 $newtraps = round(($mytroops+$anothertroops)/3);
                                 $database->modifyUnit(
@@ -3301,6 +3361,7 @@ class Automation {
                     $targettribe = $database->getUserField($DefenderID,"tribe",0);
                     $conqureby=$toF['conqured'];
                 }
+
                 if($data['from']==0){
                     $DefenderID = $database->getVillageField($data['to'],"owner");
                     if (isset($AttackerID) && $session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;

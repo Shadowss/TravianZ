@@ -2976,41 +2976,17 @@ class MYSQLi_DB implements IDbConnection {
 
 	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
 	     list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, (int) $wood, (int) $clay, (int) $iron, (int) $crop, $mode);
+         $sign = (!$mode ? '-' : '+');
 
-            $shit = false;
-    		$q = "SELECT wood,clay,iron,crop,maxstore,maxcrop from " . TB_PREFIX . "vdata where wref = ".$vid;
-            $result = mysqli_query($this->dblink,$q);
-    		$checkres = $this->mysqli_fetch_all($result);
-
-            if(!$mode){
-                $nwood = $checkres[0]['wood'] - $wood;
-                $nclay = $checkres[0]['clay'] - $clay;
-                $niron = $checkres[0]['iron'] - $iron;
-                $ncrop = $checkres[0]['crop'] - $crop;
-                if ( $nwood < 0 or $nclay < 0 or $niron < 0 or $ncrop < 0 ) {
-                    $shit = true;
-                }
-                $dwood = ( $nwood < 0 ) ? 0 : $nwood;
-                $dclay = ( $nclay < 0 ) ? 0 : $nclay;
-                $diron = ( $niron < 0 ) ? 0 : $niron;
-                $dcrop = ( $ncrop < 0 ) ? 0 : $ncrop;
-    	    } else {
-                $nwood=$checkres[0]['wood']+$wood;
-                $nclay=$checkres[0]['clay']+$clay;
-                $niron=$checkres[0]['iron']+$iron;
-                $ncrop=$checkres[0]['crop']+$crop;
-                $dwood=($nwood>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nwood;
-                $dclay=($nclay>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$nclay;
-                $diron=($niron>$checkres[0]['maxstore'])?$checkres[0]['maxstore']:$niron;
-                $dcrop=($ncrop>$checkres[0]['maxcrop'])?$checkres[0]['maxcrop']:$ncrop;
-    		}
-
-         if ( ! $shit ) {
-             $q = "UPDATE " . TB_PREFIX . "vdata set wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop where wref = " . $vid;
-             return mysqli_query( $this->dblink, $q );
-         } else {
-             return false;
-         }
+         return mysqli_query( $this->dblink, "
+            UPDATE " . TB_PREFIX . "vdata
+                SET
+                    wood = IF(wood $sign $wood > 0 AND wood $sign $wood < maxstore, wood $sign $wood, ".($mode ? 'maxstore' : '0')."),
+                    clay = IF(clay $sign $clay > 0 AND clay $sign $clay < maxstore, clay $sign $clay, ".($mode ? 'maxstore' : '0')."),
+                    iron = IF(iron $sign $iron > 0 AND iron $sign $iron < maxstore, iron $sign $iron, ".($mode ? 'maxstore' : '0')."),
+                    crop = IF(crop $sign $crop > 0 AND crop $sign $crop < maxcrop, crop $sign $crop, ".($mode ? 'maxcrop' : '0').")
+                WHERE
+                    wref = " . $vid );
 	}
 
    	function setMaxStoreForVillage($vid, $maxLevel) {
@@ -4981,11 +4957,48 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function addAttack($vid, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type, $ctar1, $ctar2, $spy,$b1=0,$b2=0,$b3=0,$b4=0,$b5=0,$b6=0,$b7=0,$b8=0) {
-	    list($vid, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $type, $ctar1, $ctar2, $spy,$b1,$b2,$b3,$b4,$b5,$b6,$b7,$b8) = $this->escape_input((int) $vid, (int) $t1, (int) $t2, (int) $t3, (int) $t4, (int) $t5, (int) $t6, (int) $t7, (int) $t8, (int) $t9, (int) $t10, (int) $t11, (int) $type, (int) $ctar1, (int) $ctar2, (int) $spy,(int) $b1,(int) $b2,(int) $b3,(int) $b4,(int) $b5,(int) $b6,(int) $b7,(int) $b8);
+	    if (!is_array($vid)) {
+	        $vid = [$vid];
+	        $t1 = [$t1];
+            $t2 = [$t2];
+            $t3 = [$t3];
+            $t4 = [$t4];
+            $t5 = [$t5];
+            $t6 = [$t6];
+            $t7 = [$t7];
+            $t8 = [$t8];
+            $t9 = [$t9];
+            $t10 = [$t10];
+            $t11 = [$t11];
+            $type = [$type];
+            $ctar1 = [$ctar1];
+            $ctar2 = [$ctar1];
+            $spy = [$spy];
+            $b1 = [$b1];
+            $b2 = [$b2];
+            $b3 = [$b3];
+            $b4 = [$b4];
+            $b5 = [$b5];
+            $b6 = [$b6];
+            $b7 = [$b7];
+            $b8 = [$b8];
+        }
 
-		$q = "INSERT INTO " . TB_PREFIX . "attacks values (0,$vid,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,$type,$ctar1,$ctar2,$spy,$b1,$b2,$b3,$b4,$b5,$b6,$b7,$b8)";
+        $values = [];
+        foreach ($vid as $index => $vidValue) {
+            $values[] = '(0, '.(int) $vidValue.', '.(int) $t1[$index].', '.(int) $t2[$index].', '.(int) $t3[$index].', '.
+                        (int) $t4[$index].', '.(int) $t5[$index].', '.(int) $t6[$index].', '.(int) $t7[$index].', '.
+                        (int) $t8[$index].', '.(int) $t9[$index].', '.(int) $t10[$index].', '.(int) $t11[$index].
+                        ', '.(int) $type[$index].', '.(int) $ctar1[$index].', '.(int) $ctar2[$index].', '.
+                        (int) $spy[$index].', '.(int) $b1[$index].', '.(int) $b2[$index].', '.(int) $b3[$index].
+                        ', '.(int) $b4[$index].', '.(int) $b5[$index].', '.(int) $b6[$index].', '.(int) $b7[$index].
+                        ', '.(int) $b8[$index].')';
+        }
+
+		$q = "INSERT INTO " . TB_PREFIX . "attacks VALUES ".implode(', ', $values);
 		mysqli_query($this->dblink,$q);
-		return mysqli_insert_id($this->dblink);
+
+		return (count($vid) == 1 ? mysqli_insert_id($this->dblink) : true);
 	}
 
 	function modifyAttack($aid, $unit, $amt) {
@@ -4997,7 +5010,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function modifyAttack2($aid, $unit, $amt) {
-	    list($aid, $unit, $amt) = $this->escape_input((int) $aid, $unit, (int) $amt);
+	    list($aid, $unit, $amt) = $this->escape_input((int) $aid, $unit, $amt);
 
 	    if (!is_array($unit)) {
 	        $unit = [$unit];
@@ -6554,9 +6567,15 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function deletePrisoners($id) {
-        list($id) = $this->escape_input($id);
+        if (!is_array($id)) {
+            $id = [$id];
+        }
 
-		$q = "DELETE from " . TB_PREFIX . "prisoners where id = '$id'";
+        foreach ($id as $index => $idValue) {
+            $id[$index] = (int) $idValue;
+        }
+
+		$q = "DELETE FROM " . TB_PREFIX . "prisoners WHERE id IN(".implode(', ', $id).")";
 		mysqli_query($this->dblink,$q);
 	}
 
