@@ -382,7 +382,7 @@ class MYSQLi_DB implements IDbConnection {
         /**
          * @var array Cache of profile villages.
          */
-        $profileVillagesCache = [],
+        $userVillagesCache = [],
 
         /**
          * @var array Cache of fdata research values.
@@ -1588,27 +1588,26 @@ class MYSQLi_DB implements IDbConnection {
 	        return [];
         }
 
-        // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && !$arrayPassed && ($cachedValue = self::returnCachedContent(self::$profileVillagesCache, $uid[0])) && !is_null($cachedValue)) {
+        // first of all, check if we should be using cache
+        if ($use_cache && !$arrayPassed && ($cachedValue = self::returnCachedContent(self::$userVillagesCache, $uid[0])) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
-		$q = "SELECT capital,wref,name,pop,created,owner from " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") order by pop desc";
+		$q = "SELECT * from " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") capital DESC,pop DESC";
         $result = mysqli_query($this->dblink,$q);
 
         if (!$arrayPassed) {
-            $result = $this->mysqli_fetch_all($result);
-            self::$profileVillagesCache[ $uid[0] ] = $result;
+            $result                             = $this->mysqli_fetch_all($result);
+            self::$userVillagesCache[ $uid[0] ] = $result;
         } else {
             // we're preloading, cache all the data individually
             if (mysqli_num_rows($result)) {
                 while ( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC ) ) {
-                    if ( ! isset( self::$profileVillagesCache[ $row['owner'] ] ) ) {
-                        self::$profileVillagesCache[ $row['owner'] ] = [];
+                    if ( ! isset( self::$userVillagesCache[ $row['owner'] ] ) ) {
+                        self::$userVillagesCache[ $row['owner'] ] = [];
                     }
 
-                    self::$profileVillagesCache[ $row['owner'] ][] = $row;
+                    self::$userVillagesCache[ $row['owner'] ][] = $row;
                 }
             }
         }
@@ -3540,24 +3539,47 @@ class MYSQLi_DB implements IDbConnection {
     }
 
 	function getVSumField($uid, $field, $use_cache = true) {
-	    list($uid, $field) = $this->escape_input((int) $uid, $field);
+	    list($field) = $this->escape_input($field);
+
+        $array_passed = is_array($uid);
+	    if (!$array_passed) {
+	        $uid = [(int) $uid];
+        } else {
+	        foreach ($uid as $index => $uidValue) {
+	            $uid[$index] = (int) $uidValue;
+            }
+        }
+
+        if (!count($uid)) {
+	        return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$userSumFieldCache, $uid.$field)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$userSumFieldCache, $uid[0].$field)) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
 		if($field != "cp"){
-		    $q = "SELECT sum(" . $field . ") FROM " . TB_PREFIX . "vdata where owner = $uid";
+		    $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") GROUP BY owner";
 		}else{
-		    $q = "SELECT sum(" . $field . ") FROM " . TB_PREFIX . "vdata where owner = $uid and natar = 0";
+		    $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") and natar = 0 GROUP BY owner";
 		}
-		$result = mysqli_query($this->dblink,$q);
-		$row = mysqli_fetch_row($result);
 
-        self::$userSumFieldCache[$uid.$field] = $row[0];
-        return self::$userSumFieldCache[$uid.$field];
+		$result = mysqli_query($this->dblink,$q);
+
+	    // return a single value
+	    if (!$array_passed) {
+            $row = mysqli_fetch_row( $result );
+            self::$userSumFieldCache[$uid.$field] = $row[2];
+        } else {
+	        $result = $this->mysqli_fetch_all($result);
+	        foreach ($result as $record) {
+                self::$userSumFieldCache[$record['owner'].$field] = $record['Total'];
+            }
+        }
+
+        return ($array_passed ? $result : self::$userSumFieldCache[$uid[0].$field]);
 	}
 
 	function updateVillage($vid) {

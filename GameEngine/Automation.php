@@ -591,14 +591,23 @@ class Automation {
                 $q = "SELECT id, lastupdate FROM ".TB_PREFIX."users WHERE lastupdate < $time";
                 $array = $database->query_return($q);
 
+                // cache owner ID's, from which we'll create a grouped DB selection
+                $ownerIDs = [];
                 foreach($array as $indi) {
-                    if($indi['lastupdate'] <= $time && $indi['lastupdate'] > 0){
-                        $cp = $database->getVSumField($indi['id'], 'cp') * (time()-$indi['lastupdate'])/$dur_day;
-
-                        $newupdate = time();
-                        $q = "UPDATE ".TB_PREFIX."users set cp = cp + $cp, lastupdate = $newupdate where id = '".$indi['id']."'";
-                        $database->query($q);
+                    if($indi['lastupdate'] <= $time && $indi['lastupdate'] > 0) {
+                        $ownerIDs[] = $indi['id'];
                     }
+                }
+
+                // get and cache the result
+                $ownerDatas = $database->getVSumField($ownerIDs, 'cp');
+
+                // update what's needed
+                $timeNow = time();
+                foreach ($ownerDatas as $record) {
+                    $cp = $record['Total'] * ( $timeNow - $record['lastupdate'] ) / $dur_day;
+                    $q  = "UPDATE " . TB_PREFIX . "users set cp = cp + $cp, lastupdate = $timeNow where id = " . $record['owner'];
+                    $database->query( $q );
                 }
 
                 if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
