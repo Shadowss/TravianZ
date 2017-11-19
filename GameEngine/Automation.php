@@ -3795,8 +3795,10 @@ class Automation {
             }
         }
 
-        $q = "DELETE FROM ".TB_PREFIX."research where id IN(".implode(', ', $deleteIDs).")";
-        $database->query($q);
+        if (count($deleteIDs)) {
+            $q = "DELETE FROM " . TB_PREFIX . "research where id IN(" . implode( ', ', $deleteIDs ) . ")";
+            $database->query( $q );
+        }
 
         if(file_exists("GameEngine/Prevention/research.txt")) {
             unlink("GameEngine/Prevention/research.txt");
