@@ -928,6 +928,8 @@ class Building {
             $buildcount = ($this->buildArray ? count($this->buildArray) : 0);
             // will be true if the job was successfully finished
             $jobFinishSuccess = false;
+            // IDs of successful jobs to delete
+            $deletIDs = [];
 
             foreach ($this->buildArray as $jobs) {
                 if ($jobs['wid']==$village->wid) {
@@ -959,18 +961,16 @@ class Building {
                                             // we need to subtract resources for this, if another 2 jobs are active,
                                             // as we'd never subtract those otherwise
                                             if ( $buildcount > 2 ) {
-                                                $database->setVillageField( $jobs['wid'], 'wood', ( $villwood - $buildwood ) );
-                                                $database->setVillageField( $jobs['wid'], 'clay', ( $villclay - $buildclay ) );
-                                                $database->setVillageField( $jobs['wid'], 'iron', ( $villiron - $buildiron ) );
-                                                $database->setVillageField( $jobs['wid'], 'crop', ( $villcrop - $buildcrop ) );
+                                                $database->setVillageField( $jobs['wid'],
+	                                                ['wood', 'clay', 'iron', 'crop'],
+                                                    [( $villwood - $buildwood ), ( $villclay - $buildclay ), ( $villiron - $buildiron ), ( $villcrop - $buildcrop )]);
                                             }
                                         }
                                     } else {
                                         // if we only have 2 gold, we need to cancel this job, as there will never
                                         // be enough gold now in our account to finish this up
                                         $exclude_master = true;
-                                        $q              = "DELETE FROM " . TB_PREFIX . "bdata WHERE id = " . (int) $jobs['id'];
-                                        $database->query( $q );
+                                        $deletIDs[] = (int) $jobs['id'];
                                     }
                                 }
                             } else {
@@ -987,8 +987,7 @@ class Building {
                             if (!isset($exclude_master) && $database->query($q) && ($enought_res == 1 or $jobs['master'] == 0)) {
                                 $database->modifyPop($jobs['wid'],$resource['pop'],0);
                                 $database->addCP($jobs['wid'],$resource['cp']);
-                                $q = "DELETE FROM ".TB_PREFIX."bdata where id = ".(int) $jobs['id'];
-                                $database->query($q);
+                                $deletIDs[] = (int) $jobs['id'];
                                 if($jobs['type'] == 18) {
                                     $owner = $database->getVillageField($jobs['wid'],"owner");
                                     $max = $bid18[$level]['attri'];
@@ -1006,6 +1005,10 @@ class Building {
 
                 // reset the flag for the next job
                 $jobFinishSuccess = false;
+            }
+
+            if (count($deletIDs)) {
+                $database->query("DELETE FROM " . TB_PREFIX . "bdata WHERE id IN(" . implode(', ', $deletIDs) . ")");
             }
 
             $demolition = $database->finishDemolition($village->wid);

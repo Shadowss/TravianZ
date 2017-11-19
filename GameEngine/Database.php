@@ -2427,18 +2427,26 @@ class MYSQLi_DB implements IDbConnection {
         $result = mysqli_query($this->dblink,$q2);
         if (!empty($result)) {
             $array=$this->mysqli_fetch_all($result);
+            $toDelete = [];
             foreach($array as $ss) {
-                $this->DeleteSurvey($ss['id']);
+                $toDelete[] = $ss['id'];
             }
+            $this->DeleteSurvey($toDelete);
         }
         mysqli_query($this->dblink,$qs);
         return mysqli_query($this->dblink,$q);
     }
 
 	function DeleteSurvey($id) {
-        list($id) = $this->escape_input($id);
+        if (!is_array($id)) {
+            $id = [$id];
+        }
 
-        $qs = "DELETE from " . TB_PREFIX . "forum_survey where topic = '$id'";
+        foreach ($id as $index => $idValue) {
+            $id[$index] = (int) $idValue;
+        }
+
+        $qs = "DELETE from " . TB_PREFIX . "forum_survey where topic IN(".implode(', ', $id).")";
         return mysqli_query($this->dblink,$qs);
     }
 
@@ -4306,9 +4314,10 @@ class MYSQLi_DB implements IDbConnection {
 	            // already checks if there are no more people other than the owner
 	            // present before the demolition is allowed.
 	            if ($demolition) {
+	                $evicts = [];
 	                foreach ($members as $member) {
 	                    // evict the player from the alliance
-	                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$member['id']);
+                        $evicts[] = $member['id'];
 
 	                    // notify them via in-game messaging
 	                    $this->sendMessage(
@@ -4329,6 +4338,8 @@ class MYSQLi_DB implements IDbConnection {
 	                        0,
 	                        true);
 	                }
+
+                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $evicts).")");
 	            } else {
 	                // we come from a battle result, therefore we need to check
 	                // for the first player in the alliance who has a sufficient
@@ -6517,9 +6528,9 @@ class MYSQLi_DB implements IDbConnection {
 		$result = $this->query_return($q);
 		$attack = 0;
 		foreach($result as $general) {
-		if(date("j. M",$time) == date("j. M",$general['time'])){
-		$attack += 1;
-		}
+		    if(date("j. M",$time) == date("j. M",$general['time'])){
+		        $attack += 1;
+		    }
 		}
 		return $attack;
 	}

@@ -251,38 +251,38 @@ class Village {
 		$crop = $clay = $wood = $iron = 0;
 		if (!empty($this->oasisowned)) {
 			foreach ($this->oasisowned as $oasis) {
-			switch($oasis['type']) {
-					case 1:
-					case 2:
-					$wood += 1;
-					break;
-					case 3:
-					$wood += 1;
-					$crop += 1;
-					break;
-					case 4:
-					case 5:
-					$clay += 1;
-					break;
-					case 6:
-					$clay += 1;
-					$crop += 1;
-					break;
-					case 7:
-					case 8:
-					$iron += 1;
-					break;
-					case 9:
-					$iron += 1;
-					$crop += 1;
-					break;
-					case 10:
-					case 11:
-					$crop += 1;
-					break;
-					case 12:
-					$crop += 2;
-					break;
+			switch ( $oasis['type'] ) {
+                case 1:
+                case 2:
+                    $wood += 1;
+                    break;
+                case 3:
+                    $wood += 1;
+                    $crop += 1;
+                    break;
+                case 4:
+                case 5:
+                    $clay += 1;
+                    break;
+                case 6:
+                    $clay += 1;
+                    $crop += 1;
+                    break;
+                case 7:
+                case 8:
+                    $iron += 1;
+                    break;
+                case 9:
+                    $iron += 1;
+                    $crop += 1;
+                    break;
+                case 10:
+                case 11:
+                    $crop += 1;
+                    break;
+                case 12:
+                    $crop += 2;
+                    break;
 				}
 			}
 		}

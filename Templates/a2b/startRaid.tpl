@@ -80,18 +80,22 @@
             $abdata = $database->getABTech($getFLData['wref']);
             $reference = $database->addAttack(($getFLData['wref']),$data['u1'],$data['u2'],$data['u3'],$data['u4'],$data['u5'],$data['u6'],$data['u7'],$data['u8'],$data['u9'],$data['u10'],$data['u11'],$data['type'],$ctar1,$ctar2,0,$abdata['b1'],$abdata['b2'],$abdata['b3'],$abdata['b4'],$abdata['b5'],$abdata['b6'],$abdata['b7'],$abdata['b8']);
             $totalunits = $data['u1']+$data['u2']+$data['u3']+$data['u4']+$data['u5']+$data['u6']+$data['u7']+$data['u8']+$data['u9']+$data['u10']+$data['u11'];
-			$database->modifyUnit($getFLData['wref'], array($uname2.'1'), array($data['u1']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'2'), array($data['u2']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'3'), array($data['u3']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'4'), array($data['u4']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'5'), array($data['u5']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'6'), array($data['u6']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'7'), array($data['u7']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'8'), array($data['u8']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'9'), array($data['u9']), array(0));
-			$database->modifyUnit($getFLData['wref'], array($uname2.'10'), array($data['u10']), array(0));
-			$database->modifyUnit($getFLData['wref'], array('hero'), array($data['u11']), array(0));
 
+            $units = [];
+            $amounts = [];
+            $modes = [];
+
+            for ($u = 1; $u <= 10; $u++) {
+                $units[] = $uname2.$u;
+                $amounts[] = $data['u'.$u];
+                $modes[] = 0;
+            }
+
+            $units[] = 'hero';
+            $amounts[] = $data['u11'];
+            $modes[] = 0;
+
+			$database->modifyUnit($getFLData['wref'], $uname2, $amounts, $modes);
 			$database->addMovement(3,$getFLData['wref'],$data['to_vid'],$reference,time(),($time+time()));
         }    
     }
