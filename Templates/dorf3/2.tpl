@@ -7,10 +7,14 @@ include('menu.tpl');
 <td>Village</td><td><img class="r1" src="img/x.gif" title="" alt=""></td><td><img class="r2" src="img/x.gif" title="" alt=""></td><td><img class="r3" src="img/x.gif" title="" alt=""></td><td><img class="r4" src="img/x.gif" title="" alt=""></td><td>Merchants</td>
 </tr></thead><tbody>
 <?php
-$varray = $database->getProfileVillages($session->uid);  
-foreach($varray as $vil){  
+$varray = $database->getProfileVillages($session->uid);
+$woodSUM = 0;
+$claySUM = 0;
+$ironSUM = 0;
+$cropSUM = 0;
+foreach($varray as $vil){
 	$vid = $vil['wref'];
-	$vdata = $database->getVillage($vid);   
+	$vdata = $database->getVillage($vid);
 	$totalmerchants = $building->getTypeLevel(17,$vid);
 	$availmerchants = $totalmerchants - $database->totalMerchantUsed($vid);
 	if($vdata['wood'] > $vdata['maxstore']) { $wood = $vdata['maxstore']; } else { $wood = $vdata['wood']; }
@@ -28,7 +32,7 @@ foreach($varray as $vil){
 		<td class="tra lc">'.($totalmerchants>0?'<a href="build.php?newdid='.$vid.'&amp;gid=17">':'').$availmerchants.'/'.$totalmerchants.'</a></td>  
 	</tr>
 	';
-	$woodSUM += $wood;  
+	$woodSUM += $wood;
 	$claySUM += $clay;
 	$ironSUM += $iron;
 	$cropSUM += $crop;

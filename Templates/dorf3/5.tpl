@@ -18,7 +18,7 @@
 <?php
 	foreach($varray as $vil) {
 		$vid = $vil['wref'];
-		if($vdata['capital'] == 1){$class = 'hl';}else{$class = '';}
+		if(isset($vdata) && $vdata['capital'] == 1){$class = 'hl';}else{$class = '';}
 
 		$units = $database->getEnforceVillage($vid,1);
 		array_unshift($units,$database->getUnit($vid));
@@ -31,18 +31,27 @@
 				$uni['u'.$i] += $unit['u'.$i];
 				$unit_total['u'.$i] += $unit['u'.$i];
 			}
-				$uni['u'.$i] += $movement['u'.$i];
-				$unit_total['u'.$i] += $movement['u'.$i];
+			    if (isset($movement['u'.$i])) {
+                    $uni[ 'u' . $i ] += $movement[ 'u' . $i ];
+                    $unit_total['u'.$i] += $movement['u'.$i];
+                }
 			if($uni['u'.$i] !=0){$cl = '';}else{$cl = 'none';}
 			echo '<td class="'.$cl.'">'.$uni['u'.$i].'</td>';
 		}
 		$uni['hero'] = 0;
+		if (!isset($unit_total['hero'])) {
+            $unit_total['hero'] = 0;
+        }
 		foreach($units as $unit) {
 			$uni['hero'] += $unit['hero'];
 			$unit_total['hero'] += $unit['hero'];
 		}
-		$uni['hero'] += $movement['hero'];
-		$unit_total['hero'] += $movement['hero'];
+
+		if (isset($movement['hero'])) {
+            $uni['hero']        += $movement['hero'];
+            $unit_total['hero'] += $movement['hero'];
+        }
+
 		if($uni['hero'] !=0){$cl = '';}else{$cl = 'none';}
 		echo '<td class="'.$cl.'">'.$uni['hero'].'</td>';
 		echo '</tr>';
