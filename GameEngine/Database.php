@@ -1861,19 +1861,67 @@ class MYSQLi_DB implements IDbConnection {
     }
 
     function getVillageByWorldID($vid, $use_cache = true) {
-        $vid = (int) $vid;
+        $array_passed = is_array($vid);
+
+        if (!$array_passed) {
+            $vid = [(int) $vid];
+        } else {
+            foreach ($vid as $index => $ivdValue) {
+                $vid[$index] = (int) $ivdValue;
+            }
+        }
+
+        if (!count($vid)) {
+            return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFieldsCacheByWorldID, $vid)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && isset(self::$villageFieldsCacheByWorldID[$vid[0]]) && is_array(self::$villageFieldsCacheByWorldID[$vid[0]]) && !count(self::$villageFieldsCacheByWorldID[$vid[0]])) {
+            return self::$villageFieldsCacheByWorldID[$vid[0]];
+        } else if ($use_cache && $array_passed) {
+            // check what we can return from cache
+            $newVIDs = [];
+            foreach ($vid as $key) {
+                if (!isset(self::$villageFieldsCacheByWorldID[$key])) {
+                    $newVIDs [] = $key;
+                }
+            }
+
+            // everything's cached, just return the cache
+            if (!count($newVIDs)) {
+                return self::$villageFieldsCacheByWorldID;
+            } else {
+                // update remaining IDs to select and cache
+                $vid = $newVIDs;
+            }
+        } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$villageFieldsCacheByWorldID, $vid[0])) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
-        $q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $vid LIMIT 1";
-        $result = mysqli_query($this->dblink,$q);
+        $q = "SELECT * FROM " . TB_PREFIX . "wdata where id IN(".implode(', ', $vid).")";
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$villageFieldsCacheByWorldID[$vid] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        return self::$villageFieldsCacheByWorldID[$vid];
+        // return a single value
+        if (!$array_passed) {
+            self::$villageFieldsCacheByWorldID[$vid[0]] = $result[0];
+        } else {
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    self::$villageFieldsCacheByWorldID[$record['id']] = $record;
+                }
+            }
+
+            // check for any missing IDs and fill them in with blanks,
+            // since no reinforcements were found for these villages
+            foreach ($vid as $key) {
+                if (!isset(self::$villageFieldsCacheByWorldID[$key])) {
+                    self::$villageFieldsCacheByWorldID[$key] = [];
+                }
+            }
+        }
+
+        return ($array_passed ? self::$villageFieldsCacheByWorldID : self::$villageFieldsCacheByWorldID[$vid[0]]);
     }
 
 	public function getVillageBattleData($vid, $use_cache = true) {

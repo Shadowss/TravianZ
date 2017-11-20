@@ -924,6 +924,15 @@ class Automation {
         $time = time();
         $q = "SELECT `from`, wood, clay, iron, crop, wid, deliveries, id FROM ".TB_PREFIX."route where timestamp < $time";
         $dataarray = $database->query_return($q);
+
+        $vilIDs = [];
+        foreach($dataarray as $data) {
+            $vilIDs[$data['to']] = true;
+            $vilIDs[$data['from']] = true;
+        }
+        $vilIDs = array_keys($vilIDs);
+        $database->getVillageByWorldID($vilIDs);
+
         foreach($dataarray as $data) {
             $targettribe = $database->getUserField($database->getVillageField($data['from'],"owner"),"tribe",0);
             $this->sendResource2($data['wood'],$data['clay'],$data['iron'],$data['crop'],$data['from'],$data['wid'],$targettribe,$data['deliveries']);
@@ -972,6 +981,15 @@ class Automation {
 
         $q1 = "SELECT send, moveid, `to`, wood, clay, iron, crop, `from` FROM ".TB_PREFIX."movement WHERE proc = 0 and sort_type = 2 and endtime < $time";
         $dataarray1 = $database->query_return($q1);
+
+        $vilIDs = [];
+        foreach($dataarray1 as $data1) {
+            $vilIDs[$data1['to']] = true;
+            $vilIDs[$data1['from']] = true;
+        }
+        $vilIDs = array_keys($vilIDs);
+        $database->getVillageByWorldID($vilIDs);
+
         foreach($dataarray1 as $data1) {
             $database->setMovementProc($data1['moveid']);
             if($data1['send'] > 1){
@@ -3396,6 +3414,7 @@ class Automation {
             $database->getProfileVillages($vilIDs, 5);
             $database->getUnit($vilIDs);
             $database->getEnforce(array_keys($tos), array_keys($froms));
+            $database->getVillageByWorldID($vilIDs);
 
             // calculate reinforcements data
             $movementProcIDs = [];
@@ -3713,7 +3732,9 @@ class Automation {
             $vilIDs[$data['from']] = true;
             $vilIDs[$data['to']] = true;
         }
-        $database->getProfileVillages(array_keys($vilIDs), 5);
+        $vilIDs = array_keys($vilIDs);
+        $database->getProfileVillages($vilIDs, 5);
+        $database->getVillageByWorldID($vilIDs);
 
         foreach($dataarray as $data) {
             $ownerID = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
