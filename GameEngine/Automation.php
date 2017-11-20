@@ -3382,13 +3382,18 @@ class Automation {
         if ($dataarray && count($dataarray)) {
             // preload village data
             $vilIDs = [];
+            $tos = [];
+            $froms = [];
             foreach($dataarray as $data) {
                 $vilIDs[$data['from']] = true;
                 $vilIDs[$data['to']] = true;
+                $tos[$data['to']] = true;
+                $froms[$data['from']] = true;
             }
             $vilIDs = array_keys($vilIDs);
             $database->getProfileVillages($vilIDs, 5);
             $database->getUnit($vilIDs);
+            $database->getEnforce(array_keys($tos), array_keys($froms));
 
             // calculate reinforcements data
             $movementProcIDs = [];

@@ -5912,19 +5912,75 @@ References: User ID/Message ID, Mode
 	}
 
 	function getEnforce($vid, $from, $use_cache = true) {
-	    list($vid, $from) = $this->escape_input((int) $vid, (int) $from);
+	    $array_passed = is_array($vid);
+	    if (!$array_passed) {
+	        $vid = [$vid];
+	        $from = [$from];
+        } else {
+            foreach ($vid as $index => $vidValue) {
+                $vid[$index] = (int) $vidValue;
+                $from[$index] = (int) $from[$index];
+            }
+        }
+
+        if (!count($vid)) {
+            return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFromReinforcementsCache, $vid.$from)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && isset(self::$villageFromReinforcementsCache[$vid[0].$from[0]]) && is_array(self::$villageFromReinforcementsCache[$vid[0].$from[0]]) && !count(self::$villageFromReinforcementsCache[$vid[0].$from[0]])) {
+            return $cachedValue;
+        }  else if ($use_cache && $array_passed) {
+            // check what we can return from cache
+            $newVIDs = [];
+            $newFROMs = [];
+            foreach ($vid as $index => $vidValue) {
+                if (!isset(self::$villageFromReinforcementsCache[$vidValue.$from[$index]])) {
+                    $newVIDs[] = $vidValue;
+                    $newFROMs[] = $from[$index];
+                }
+            }
+
+            // everything's cached, just return the cache
+            if (!count($newVIDs)) {
+                return self::$villageFromReinforcementsCache;
+            } else {
+                // update remaining IDs to select and cache
+                $vid = $newVIDs;
+                $from = $newFROMs;
+            }
+        } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$villageFromReinforcementsCache, $vid[0].$from[0])) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
-		$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $from and vref = $vid";
-		$result = mysqli_query($this->dblink,$q);
+        // build SELECT pairs
+        $pairs = [];
+        foreach ($vid as $index => $vidValue) {
+            $pairs[] = '(`from` = '.(int) $vidValue.' AND vref = '.(int) $from[$index].')';
+        }
 
-        self::$villageFromReinforcementsCache[$vid.$from] = mysqli_fetch_assoc($result);
-        return self::$villageFromReinforcementsCache[$vid.$from];
+		$q = "SELECT * FROM " . TB_PREFIX . "enforcement WHERE ".implode(' OR ', $pairs);
+		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
+
+        // return a single value
+        if (!$array_passed) {
+            self::$villageFromReinforcementsCache[$vid[0].$from[0]] = $result[0];
+        } else {
+            foreach ( $result as $record ) {
+                self::$villageFromReinforcementsCache[$record['from'].$record['vref']] = $record;
+            }
+
+            // check for any missing IDs and fill them in with blanks,
+            // since no reinforcements were found for these villages
+            foreach ($vid as $index => $vidValue) {
+                if (!isset(self::$villageFromReinforcementsCache[$vidValue.$from[$index]])) {
+                    self::$villageFromReinforcementsCache[$vidValue.$from[$index]] = [];
+                }
+            }
+        }
+
+        return ($array_passed ? self::$villageReinforcementsCache : self::$villageReinforcementsCache[$vid[0].$from[0]]);
 	}
 
     function getOasisEnforce($ref, $mode=0, $use_cache = true) {
@@ -6068,6 +6124,7 @@ References: User ID/Message ID, Mode
 
 		// clear enforce cache
         self::$villageReinforcementsCache = [];
+        self::$villageFromReinforcementsCache = [];
         self::$reinforcementsCache = [];
 	}
 
@@ -6139,6 +6196,8 @@ References: User ID/Message ID, Mode
 		} else if ($mode == 2) {
             $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref IN(".implode(', ', $id).") AND v.owner<>v1.owner";
         } else if ($mode == 3) {
+            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref IN(".implode(', ', $id).") AND v.owner=v1.owner";
+        } else if ($mode == 4) {
             $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref IN(".implode(', ', $id).") AND v.owner=v1.owner";
         }
 		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
