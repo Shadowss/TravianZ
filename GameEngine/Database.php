@@ -3803,8 +3803,10 @@ class MYSQLi_DB implements IDbConnection {
             self::$userSumFieldCache[$row[0].$field] = $row[2];
         } else {
             $result = $this->mysqli_fetch_all($result);
-            foreach ($result as $record) {
-                self::$userSumFieldCache[$record['owner'].$field] = $record['Total'];
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    self::$userSumFieldCache[ $record['owner'] . $field ] = $record['Total'];
+                }
             }
         }
 
@@ -5286,8 +5288,10 @@ References: User ID/Message ID, Mode
         if (!$array_passed) {
             self::$marketMovementCache[$type.$village[0].$mode] = $result;
         } else {
-            foreach ( $result as $record ) {
-                self::$marketMovementCache[$type.$record[$where].$mode] = $record;
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    self::$marketMovementCache[ $type . $record[ $where ] . $mode ] = $record;
+                }
             }
 
             // check for any missing IDs and fill them in with blanks,
@@ -5967,8 +5971,10 @@ References: User ID/Message ID, Mode
         if (!$array_passed) {
             self::$villageFromReinforcementsCache[$vid[0].$from[0]] = $result[0];
         } else {
-            foreach ( $result as $record ) {
-                self::$villageFromReinforcementsCache[$record['from'].$record['vref']] = $record;
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    self::$villageFromReinforcementsCache[ $record['from'] . $record['vref'] ] = $record;
+                }
             }
 
             // check for any missing IDs and fill them in with blanks,
@@ -6039,12 +6045,14 @@ References: User ID/Message ID, Mode
         if (!$array_passed) {
             self::$oasisReinforcementsCache[$ref[0].$mode] = $result;
         } else {
-            foreach ( $result as $record ) {
-                if ( ! isset( self::$oasisReinforcementsCache[ $record['conqured'] . $mode ] ) ) {
-                    self::$oasisReinforcementsCache[ $record['conqured'] . $mode ] = [];
-                }
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    if ( ! isset( self::$oasisReinforcementsCache[ $record['conqured'] . $mode ] ) ) {
+                        self::$oasisReinforcementsCache[ $record['conqured'] . $mode ] = [];
+                    }
 
-                self::$oasisReinforcementsCache[ $record['conqured'] . $mode ][] = $record;
+                    self::$oasisReinforcementsCache[ $record['conqured'] . $mode ][] = $record;
+                }
             }
 
             // check for any missing IDs and fill them in with blanks,
@@ -6258,12 +6266,14 @@ References: User ID/Message ID, Mode
         if (!$array_passed) {
             self::$villageReinforcementsCache[$id[0].$mode] = $result;
         } else {
-            foreach ( $result as $record ) {
-                if ( ! isset( self::$villageReinforcementsCache[ $record['vref'] . $mode ] ) ) {
-                    self::$villageReinforcementsCache[ $record['vref'] . $mode ] = [];
-                }
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    if ( ! isset( self::$villageReinforcementsCache[ $record['vref'] . $mode ] ) ) {
+                        self::$villageReinforcementsCache[ $record['vref'] . $mode ] = [];
+                    }
 
-                self::$villageReinforcementsCache[ $record['vref'] . $mode ][] = $record;
+                    self::$villageReinforcementsCache[ $record['vref'] . $mode ][] = $record;
+                }
             }
 
             // check for any missing IDs and fill them in with blanks,
@@ -7188,6 +7198,7 @@ References: User ID/Message ID, Mode
 
 		$q = "INSERT INTO " . TB_PREFIX . "prisoners values (0,$wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11)";
 		mysqli_query($this->dblink,$q);
+		self::$prisonersCache = [];
 		return mysqli_insert_id($this->dblink);
 	}
 
@@ -7195,27 +7206,79 @@ References: User ID/Message ID, Mode
 	    list($wid,$from,$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11) = $this->escape_input((int) $wid,(int) $from,(int) $t1,(int) $t2,(int) $t3,(int) $t4,(int) $t5,(int) $t6,(int) $t7,(int) $t8,(int) $t9,(int) $t10,(int) $t11);
 
         $q = "UPDATE " . TB_PREFIX . "prisoners set t1 = t1 + $t1, t2 = t2 + $t2, t3 = t3 + $t3, t4 = t4 + $t4, t5 = t5 + $t5, t6 = t6 + $t6, t7 = t7 + $t7, t8 = t8 + $t8, t9 = t9 + $t9, t10 = t10 + $t10, t11 = t11 + $t11 where wref = $wid and ".TB_PREFIX."prisoners.from = $from";
-        return mysqli_query($this->dblink,$q);
-    	}
+        $res = mysqli_query($this->dblink,$q);
+        self::$prisonersCache = [];
+        return $res;
+    }
 
     function getPrisoners($wid,$mode=0, $use_cache = true) {
-        list($wid,$mode) = $this->escape_input((int) $wid,$mode);
+        $array_passed = is_array($wid);
+        $mode = (int) $mode;
+
+        if (!$array_passed) {
+            $wid = [(int) $wid];
+        } else {
+            foreach ($wid as $index => $widValue) {
+                $wid[$index] = (int) $widValue;
+            }
+        }
+
+        if (!count($wid)) {
+            return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCache, $wid.$mode)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && isset(self::$prisonersCache[$wid[0].$mode]) && is_array(self::$prisonersCache[$wid[0].$mode]) && !count(self::$prisonersCache[$wid[0].$mode])) {
+            return self::$prisonersCache[$wid[0].$mode];
+        } else if ($use_cache && $array_passed) {
+            // check what we can return from cache
+            $newWIDs = [];
+            foreach ($wid as $key) {
+                if (!isset(self::$prisonersCache[$key.$mode])) {
+                    $newWIDs [] = $key;
+                }
+            }
+
+            // everything's cached, just return the cache
+            if (!count($newWIDs)) {
+                return self::$prisonersCache;
+            } else {
+                // update remaining IDs to select and cache
+                $wid = $newWIDs;
+            }
+        } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$prisonersCache, $wid[0].$mode)) && !is_null($cachedValue)) {
+            // special case when we have empty arrays cached for this cache only
             return $cachedValue;
         }
 
         if(!$mode) {
-            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref = $wid";
+            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref IN(".implode(' ', $wid).")";
         }else {
-            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where `from` = $wid";
+            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where `from` IN(".implode(' ', $wid).")";
         }
-        $result = mysqli_query($this->dblink,$q);
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$prisonersCache[$wid.$mode] = $this->mysqli_fetch_all($result);
-        return self::$prisonersCache[$wid.$mode];
+        // return a single value
+        if (!$array_passed) {
+            self::$prisonersCache[$wid[0].$mode] = $result;
+        } else {
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ] = $record;
+                }
+            }
+
+            // check for any missing IDs and fill them in with blanks,
+            // since no reinforcements were found for these villages
+            foreach ($wid as $key) {
+                if (!isset(self::$prisonersCache[$key.$mode])) {
+                    self::$prisonersCache[$key.$mode] = [];
+                }
+            }
+        }
+
+        return ($array_passed ? self::$prisonersCache : self::$prisonersCache[$wid[0].$mode]);
     }
 
 	function getPrisoners2($wid,$from, $use_cache = true) {
@@ -7265,6 +7328,8 @@ References: User ID/Message ID, Mode
 
 		$q = "DELETE FROM " . TB_PREFIX . "prisoners WHERE id IN(".implode(', ', $id).")";
 		mysqli_query($this->dblink,$q);
+
+		self::$prisonersCache = [];
 	}
 
 /*****************************************

@@ -1226,6 +1226,7 @@ class Automation {
             $database->getUnit($vilIDs);
             $database->getEnforceVillage($vilIDs, 0);
             $database->getMovement(34, $vilIDs, 1);
+            $database->getPrisoners($vilIDs, 0);
 
             // calculate battles
             foreach($dataarray as $data) {
@@ -2728,7 +2729,7 @@ class Automation {
                     }
                     else {
                         if($type == 3 && $totalsend_att - ($totaldead_att+$totaltraped_att) > 0){
-                            $prisoners = $database->getPrisoners($to['wref'], 0, false);
+                            $prisoners = $database->getPrisoners($to['wref'], 0);
                             if(count($prisoners) > 0){
 
                                 $anothertroops = 0;
@@ -3951,7 +3952,7 @@ class Automation {
             }
         }
 
-        $prisoners = $database->getPrisoners($base, 1, $use_cache);
+        $prisoners = $database->getPrisoners($base, 1);
         if(!empty($prisoners)) {
             foreach($prisoners as $prisoner){
                 $owner = $database->getVillageField($base,"owner");
@@ -4289,6 +4290,7 @@ class Automation {
             $database->getMovement(5, $vilIDs, 0);
             $database->getOasisEnforce($vilIDs, 0);
             $database->getOasisEnforce($vilIDs, 1);
+            $database->getPrisoners($vilIDs, 1);
 
             // calculate training updates
             foreach($trainlist as $train){
