@@ -617,7 +617,9 @@ class Automation {
         foreach($res as $indi) {
             $vilIDs[$indi['wid']] = true;
         }
-        $database->getProfileVillages(array_keys($vilIDs), 5);
+        $vilIDs = array_keys($vilIDs);
+        $database->getProfileVillages($vilIDs, 5);
+        $database->getEnforceVillage($vilIDs, 0);
 
         // complete buildings
         foreach($res as $indi) {
@@ -1221,7 +1223,8 @@ class Automation {
             }
             $vilIDs = array_keys($vilIDs);
             $database->getProfileVillages($vilIDs, 5);
-            $database->getUnit($vilIDs);
+            $database->$
+            $database->getEnforceVillage($vilIDs, 0);
 
             // calculate battles
             foreach($dataarray as $data) {
@@ -1306,7 +1309,7 @@ class Automation {
                     $enforDefender = array();
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to'], false);
-                    $enforcementarray = $database->getEnforceVillage($data['to'], 0, false);
+                    $enforcementarray = $database->getEnforceVillage($data['to'], 0);
                     if(count($enforcementarray) > 0) {
 
                         foreach($enforcementarray as $enforce) {
@@ -1452,7 +1455,7 @@ class Automation {
                     $enforDefender = array();
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to'], false);
-                    $enforcementarray = $database->getEnforceVillage($data['to'],0, false);
+                    $enforcementarray = $database->getEnforceVillage($data['to'],0);
 
                     if(count($enforcementarray) > 0) {
                         foreach($enforcementarray as $enforce) {
@@ -1643,7 +1646,7 @@ class Automation {
                     }
 
                     // our reinforcements count could have changed at this point, thus the re-select
-                    $enforcementarray2 = $database->getEnforceVillage($data['to'],0, false);
+                    $enforcementarray2 = $database->getEnforceVillage($data['to'],0);
                     if(count($enforcementarray2) > 0) {
                         foreach($enforcementarray2 as $enforce2) {
                             $Defender['hero'] += $enforce2['hero'];
@@ -1770,7 +1773,7 @@ class Automation {
 
                     //kill other defence in village
                     // ... once again, units could have changed, so we need to reselect
-                    $enforcementarray3 = $database->getEnforceVillage($data['to'],0, false);
+                    $enforcementarray3 = $database->getEnforceVillage($data['to'],0);
                     foreach ($enforcementarray3 as $enforce) {
                         $life=''; $notlife=''; $wrong='0';
                         if($enforce['from'] != 0){
@@ -3897,7 +3900,7 @@ class Automation {
         global $database;
 
         $ownunit = $database->getUnit($base, $use_cache);
-        $enforcementarray = $database->getEnforceVillage($base, 0, $use_cache);
+        $enforcementarray = $database->getEnforceVillage($base, 0);
 
         if(count($enforcementarray) > 0) {
             foreach($enforcementarray as $enforce) {
@@ -4268,6 +4271,7 @@ class Automation {
             $database->getProfileVillages($vilIDs, 5);
             $database->cacheResourceLevels($vilIDs);
             $database->getUnit($vilIDs);
+            $database->getEnforceVillage($vilIDs, 0);
 
             // calculate training updates
             foreach($trainlist as $train){
@@ -4847,6 +4851,14 @@ class Automation {
 
         $starvarray = array();
         $starvarray = $database->getStarvation();
+
+        $vilIDs = [];
+        foreach ($starvarray as $starv){
+            $vilIDs[$starv['wref']] = true;
+        }
+        $vilIDs = array_keys($vilIDs);
+        $database->getEnforceVillage($vilIDs, 0);
+
         foreach ($starvarray as $starv){
             $unitarrays = $this->getAllUnits($starv['wref']);
             $howweeating=$this->getUpkeep($unitarrays, 0,$starv['wref']);

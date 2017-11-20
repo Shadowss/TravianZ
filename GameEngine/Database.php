@@ -6018,6 +6018,10 @@ References: User ID/Message ID, Mode
 
 		$q = "UPDATE " . TB_PREFIX . "enforcement SET ".implode(', ', $pairs)." WHERE id = $id";
 		mysqli_query($this->dblink,$q);
+
+		// clear enforce cache
+        self::$villageReinforcementsCache = [];
+        self::$reinforcementsCache = [];
 	}
 
 	function getEnforceArray($id, $mode, $use_cache = true) {
@@ -6041,27 +6045,79 @@ References: User ID/Message ID, Mode
 	}
 
 	function getEnforceVillage($id, $mode, $use_cache = true) {
-	    list($id, $mode) = $this->escape_input((int) $id, $mode);
+        $array_passed = is_array($id);
+        $mode = (int) $mode;
+
+        if (!$array_passed) {
+            $id = [(int) $id];
+        } else {
+            foreach ($id as $index => $idValue) {
+                $id[$index] = (int) $idValue;
+            }
+        }
+
+        if (!count($id)) {
+            return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageReinforcementsCache, $id.$mode)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$villageReinforcementsCache, $id[0].$mode)) && !is_null($cachedValue)) {
             return $cachedValue;
+        } else if ($use_cache && $array_passed) {
+            // check what we can return from cache
+            $newIDs = [];
+            foreach ($id as $key) {
+                if (!isset(self::$villageReinforcementsCache[$key.$mode])) {
+                    $newIDs [] = $key;
+                }
+            }
+
+            // everything's cached, just return the cache
+            if (!count($newIDs)) {
+                return self::$villageReinforcementsCache;
+            } else {
+                // update remaining IDs to select and cache
+                $id = $newIDs;
+            }
+        } else if ($use_cache && !$array_passed && is_array(self::$villageReinforcementsCache[$id[0].$mode]) && !count(self::$villageReinforcementsCache[$id[0].$mode])) {
+            // special case when we have empty arrays cached for this cache only
+            return self::$villageReinforcementsCache[$id[0].$mode];
         }
 
 		if(!$mode) {
-			$q = "SELECT * from " . TB_PREFIX . "enforcement where vref = $id";
+			$q = "SELECT * from " . TB_PREFIX . "enforcement where vref IN(".implode(', ', $id).")";
 		} else if ($mode == 1) {
-			$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` = $id";
+			$q = "SELECT * from " . TB_PREFIX . "enforcement where `from` IN(".implode(', ', $id).")";
 		} else if ($mode == 2) {
-            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=$id AND v.owner<>v1.owner";
+            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref IN(".implode(', ', $id).") AND v.owner<>v1.owner";
         } else if ($mode == 3) {
-            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref=$id AND v.owner=v1.owner";
+            $q = "SELECT e.*, v.owner as ownerv, v1.owner as owner1 FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref LEFT JOIN ".TB_PREFIX."vdata as v1 ON e.vref=v1.wref where e.vref IN(".implode(', ', $id).") AND v.owner=v1.owner";
         }
-		$result = mysqli_query($this->dblink,$q);
+		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$villageReinforcementsCache[$id.$mode] = $this->mysqli_fetch_all($result);
-        return self::$villageReinforcementsCache[$id.$mode];
+        // return a single value
+        if (!$array_passed) {
+            self::$villageReinforcementsCache[$id[0].$mode] = $result;
+        } else {
+            foreach ( $result as $record ) {
+                if ( ! isset( self::$villageReinforcementsCache[ $record['vref'] . $mode ] ) ) {
+                    self::$villageReinforcementsCache[ $record['vref'] . $mode ] = [];
+                }
+
+                self::$villageReinforcementsCache[ $record['vref'] . $mode ][] = $record;
+            }
+
+            // check for any missing IDs and fill them in with blanks,
+            // since no reinforcements were found for these villages
+            foreach ($id as $key) {
+                if (!isset(self::$villageReinforcementsCache[$key.$mode])) {
+                    self::$villageReinforcementsCache[$key.$mode] = [];
+                }
+            }
+        }
+
+        return ($array_passed ? self::$villageReinforcementsCache : self::$villageReinforcementsCache[$id[0].$mode]);
 	}
 
 	public static function clearReinforcementsCache() {
