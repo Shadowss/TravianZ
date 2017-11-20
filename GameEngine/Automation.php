@@ -1219,7 +1219,9 @@ class Automation {
                 $vilIDs[$data['from']] = true;
                 $vilIDs[$data['to']] = true;
             }
-            $database->getProfileVillages(array_keys($vilIDs), 5);
+            $vilIDs = array_keys($vilIDs);
+            $database->getProfileVillages($vilIDs, 5);
+            $database->getUnit($vilIDs);
 
             // calculate battles
             foreach($dataarray as $data) {
@@ -3376,7 +3378,9 @@ class Automation {
                 $vilIDs[$data['from']] = true;
                 $vilIDs[$data['to']] = true;
             }
-            $database->getProfileVillages(array_keys($vilIDs), 5);
+            $vilIDs = array_keys($vilIDs);
+            $database->getProfileVillages($vilIDs, 5);
+            $database->getUnit($vilIDs);
 
             // calculate reinforcements data
             $movementProcIDs = [];
@@ -4263,12 +4267,15 @@ class Automation {
             $vilIDs = array_keys($vilIDs);
             $database->getProfileVillages($vilIDs, 5);
             $database->cacheResourceLevels($vilIDs);
+            $database->getUnit($vilIDs);
 
             // calculate training updates
             foreach($trainlist as $train){
                 $timepast = $train['timestamp2'] - $time;
                 $pop = $train['pop'];
+                $valuesUpdated = false;
                 if($timepast <= 0 && $train['amt'] > 0) {
+                    $valuesUpdated = true;
                     $timepast2 = $time - $train['timestamp2'];
                     $trained = 1;
                     while($timepast2 >= $train['eachtime']){
@@ -4285,11 +4292,16 @@ class Automation {
                     }
                     $database->updateTraining($train['id'],$trained,$trained*$train['eachtime']);
                 }
+
+                if ($valuesUpdated) {
+                    call_user_func(get_class($database).'::clearUnitsCache');
+                }
+
                 if($train['amt'] == 0){
                     $database->trainUnit($train['id'],0,0,0,0,1,1);
                 }
                 $crop = $database->getCropProdstarv($train['vref']);
-                $unitarrays = $this->getAllUnits($train['vref'], false);
+                $unitarrays = $this->getAllUnits($train['vref']);
                 $village = $database->getVillage($train['vref'], 0);
                 $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
                 $starv = $database->getVillageField($train['vref'],"starv");

@@ -5472,22 +5472,44 @@ References: User ID/Message ID, Mode
 	}
 
 	function getUnit($vid, $use_cache = true) {
-	    $vid = (int) $vid;
+	    $array_passed = is_array($vid);
+
+        if (!$array_passed) {
+            $singleVillage = true;
+            $vid = [$vid];
+        } else {
+            foreach ($vid as $index => $vidValue) {
+                $vid[$index] = (int) $vidValue;
+            }
+        }
+
+        $returnArray = [];
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$unitsCache, $vid)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$unitsCache, (int) $vid[0])) && !is_null($cachedValue)) {
             return $cachedValue;
-        }
+        } else if ($use_cache && $array_passed) {
+            $newIDs = [];
+            foreach ($vid as $villageID) {
+                // don't cache what we don't need to cache
+                if (isset(self::$unitsCache[$villageID])) {
+                    $returnArray[$villageID] = self::$unitsCache[$villageID];
+                } else {
+                    // add the uncached ID, so we can select and cache it
+                    $newIDs[] = $villageID;
+                }
+            }
+            $vid = $newIDs;
 
-        if (!is_array($vid)) {
-            $singleVillage = true;
-            $vid = [$vid];
+            // nothing to cache? return what we have
+            if (!count($vid)) {
+                return $returnArray;
+            }
         }
 
 		$q = "SELECT * from " . TB_PREFIX . "units where vref IN(".implode(', ', $vid).")";
 		$result = mysqli_query($this->dblink,$q);
-		$returnArray = [];
 		$resCount = 0;
 		$vidCount = count($vid);
 
@@ -6048,7 +6070,11 @@ References: User ID/Message ID, Mode
 	    self::$villageFromReinforcementsCache = [];
 	    self::$oasisArrayReinforcementsCache = [];
 	    self::$oasisReinforcementsCache = [];
-	    self::$unitsCache = [];
+	    self::clearUnitsCache();
+    }
+
+    public static function clearUnitsCache() {
+        self::$unitsCache = [];
     }
 
     // no need to cache this method
