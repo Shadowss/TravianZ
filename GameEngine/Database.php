@@ -1745,7 +1745,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         // first of all, check if we should be using cache
-        if ($use_cache && !$arrayPassed && ($cachedValue = self::returnCachedContent(self::$userVillagesCache, $uid[0])) && !is_null($cachedValue)) {
+        if ($use_cache && !$arrayPassed && ($cachedValue = self::returnCachedContent(self::$userVillagesCache, $uid[0].$mode)) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
@@ -1753,7 +1753,7 @@ class MYSQLi_DB implements IDbConnection {
         if ($use_cache && $arrayPassed) {
             $newIDs = [];
             foreach ($uid as $id) {
-                if (!isset(self::$userVillagesCache[$id])) {
+                if (!isset(self::$userVillagesCache[$id.$mode])) {
                     $newIDs[] = $id;
                 }
             }
@@ -1794,7 +1794,7 @@ class MYSQLi_DB implements IDbConnection {
 
         if (!$arrayPassed) {
             $result                             = $this->mysqli_fetch_all($result);
-            self::$userVillagesCache[ $uid[0] ] = $result;
+            self::$userVillagesCache[ $uid[0].$mode ] = $result;
 
             // cache each village individually into the fields cache as well
             foreach ($result as $v) {
@@ -1806,11 +1806,11 @@ class MYSQLi_DB implements IDbConnection {
             if (mysqli_num_rows($result)) {
                 $amode = 0;
                 while ( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC ) ) {
-                    if ( ! isset( self::$userVillagesCache[ $row['owner'] ] ) ) {
-                        self::$userVillagesCache[ $row['owner'] ] = [];
+                    if ( ! isset( self::$userVillagesCache[ $row['owner'].$mode ] ) ) {
+                        self::$userVillagesCache[ $row['owner'].$mode ] = [];
                     }
 
-                    self::$userVillagesCache[ $row['owner'] ][] = $row;
+                    self::$userVillagesCache[ $row['owner'].$mode ][] = $row;
                     self::$villageFieldsCache[((int) $row['wref']).$amode] = $row;
                 }
 
