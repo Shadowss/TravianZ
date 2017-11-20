@@ -4,9 +4,9 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       22.06.2015                    			       ##
 ##  Filename       Battle.php                                                  ##
-##  Developed by:  Dzoki & Dixie   					       ## 
+##  Developed by:  Dzoki & Dixie   					       ##
 ##  Fixed by:      Shadow 				  		       ##
 ##  Thanks to:     Akakori & Elmar                                             ##
 ##  Reworked and Fix by:   ronix                                               ##
@@ -14,7 +14,7 @@
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
 #################################################################################
 
@@ -41,16 +41,16 @@ class Battle {
 				}
 				if(isset($post['a2_v5'])) {
 					array_push($target,5);
-				}					
+				}
 				$_POST['target'] = $target;
 				if(isset($post['h_off_bonus'])) {
 					if (intval($post['h_off_bonus'])>20) {$post['h_off_bonus']=20;}
 				}else $post['h_off_bonus']=0;
-				
+
 				if(isset($post['h_def_bonus'])) {
 					if (intval($post['h_def_bonus'])>20) {$post['h_def_bonus']=20;}
 				}else $post['h_def_bonus']=0;
-								
+
 				if(isset($post['a1_1'])) {
 					$sum = $sum2 = $post['walllevel'] = 0;
 					for($i=1;$i<=10;$i++) {
@@ -58,13 +58,13 @@ class Battle {
 					}
 					if($sum > 0) {
 						$post['palast'] = intval($post['palast']);
-						if($post['palast'] > 20) $post['palast'] = 20; 
+						if($post['palast'] > 20) $post['palast'] = 20;
 
 						if(isset($post['wall1'])) {
 							$post['wall1'] = intval($post['wall1']);
 							if ($post['wall1'] > 20) $post['wall1']=20;
 							if ($post['walllevel']==0) $post['walllevel']=$post['wall1'];
-						}	
+						}
 						if(isset($post['wall2'])) {
 							$post['wall2'] = intval($post['wall2']);
 							if ($post['wall2'] > 20) $post['wall2']=20;
@@ -110,7 +110,7 @@ class Battle {
 
 			return array('heroid'=>(int) $heroarray[0]['heroid'],'unit'=>$heroarray[0]['unit'],'atk'=>$h_atk,'di'=>$h_di,'dc'=>$h_dc,'ob'=>$h_ob,'db'=>$h_db,'health'=>$heroarray['health']);
 		}
-		
+
 		private function getBattleHeroSim($attbonus) {
 		    global $database;
             $h_atk =0;
@@ -118,7 +118,7 @@ class Battle {
 
             return array('unit'=>16,'atk'=>$h_atk,'ob'=>$h_ob);
 		}
-		
+
 		private function simulate($post) {
 				//set the arrays with attacking and defending units
 				$attacker = array('u1'=>0,'u2'=>0,'u3'=>0,'u4'=>0,'u5'=>0,'u6'=>0,'u7'=>0,'u8'=>0,'u9'=>0,'u10'=>0,'u11'=>0,'u12'=>0,'u13'=>0,'u14'=>0,'u15'=>0,'u16'=>0,'u17'=>0,'u18'=>0,'u19'=>0,'u20'=>0,'u21'=>0,'u22'=>0,'u23'=>0,'u24'=>0,'u25'=>0,'u26'=>0,'u27'=>0,'u28'=>0,'u29'=>0,'u30'=>0,'u31'=>0,'u32'=>0,'u33'=>0,'u34'=>0,'u35'=>0,'u36'=>0,'u37'=>0,'u38'=>0,'u39'=>0,'u40'=>0,'u41'=>0,'u42'=>0,'u43'=>0,'u44'=>0,'u45'=>0,'u46'=>0,'u47'=>0,'u48'=>0,'u49'=>0,'u50'=>0);
@@ -126,7 +126,7 @@ class Battle {
 				$index = 1;
 				$offhero=intval($post['h_off_bonus']);
 				$hero_strenght=intval($post['h_off']);
-				$deffhero=intval($post['h_def_bonus']);		
+				$deffhero=intval($post['h_def_bonus']);
 				for($i=$start;$i<=($start+9);$i++) {
 						$attacker['u'.$i] = $post['a1_'.$index];
 						if($index <=8) {
@@ -134,7 +134,7 @@ class Battle {
 						}
 						$index += 1;
 				}
-				
+
 				$defender = array();
 				$defscout=0;
 				//fix by ronix
@@ -145,7 +145,7 @@ class Battle {
 								if($i == 4 || $i == 14 || $i == 23 || $i == 44){
 									$defscout+=$defender['u'.$i];
 								}
-								
+
 						}
 						else {
 								$defender['u'.$i] = 0;
@@ -174,20 +174,20 @@ class Battle {
 				$walllevel=$post['walllevel'];
 				$wall = $walllevel;
 				$palast = $post['palast'];
-				
+
 				if($scout ==1 && $defscout==0) {
 					$walllevel = 0;
 					$wall = 0;
 					$palast = 0;
 				}
-				
+
 				if($scout ==1) {
 					$palast = 0; //no def point palace n residence when scout
 				}
-				
-				if(!$scout) 
+
+				if(!$scout)
 					return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$palast,$post['ew1'],$post['ew2'],$post['ktyp']+3,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,$offhero,$post['h_off'],$deffhero,0,0,0,0,0);
-				else 
+				else
 					return $this->calculateBattle($attacker,$defender,$wall,$post['a1_v'],$deftribe,$palast,$post['ew1'],$post['ew2'],1,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$post['kata'],$post['stonemason'],$walllevel,0,0,0,0,0,0,0,0);
 				}
 
@@ -308,6 +308,15 @@ class Battle {
         $DefendersAll = (!is_null($defReinforcements) ? $database->getEnforceVillage($DefenderWref,0) : $defReinforcements);
 
         if(!empty($DefendersAll) && $DefenderWref>0){
+            // preload village IDs
+            $vilIDs = [];
+            foreach($DefendersAll as $defenders) {
+                $vilIDs[$defenders['from']] = true;
+                $vilIDs[$defenders['to']] = true;
+            }
+            $vilIDs = array_keys($vilIDs);
+            $database->getABTech($vilIDs);
+
             foreach($DefendersAll as $defenders) {
                 for ($i=1;$i<=50;$i++) {$def_ab[$i]=0;}
                 $fromvillage = $defenders['from'];

@@ -5733,19 +5733,68 @@ References: User ID/Message ID, Mode
 	}
 
 	function getABTech($vid, $use_cache = true) {
-	    list($vid) = $this->escape_input((int) $vid);
+        $array_passed = is_array($vid);
+
+        if (!$array_passed) {
+            $vid = [(int) $vid];
+        } else {
+            foreach ($vid as $index => $ivdValue) {
+                $vid[$index] = (int) $ivdValue;
+            }
+        }
+
+        if (!count($vid)) {
+            return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$abTechCache, $vid)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && isset(self::$abTechCache[$vid[0]]) && is_array(self::$abTechCache[$vid[0]]) && !count(self::$abTechCache[$vid[0]])) {
+            return self::$abTechCache[$vid[0]];
+        } else if ($use_cache && $array_passed) {
+            // check what we can return from cache
+            $newVIDs = [];
+            foreach ($vid as $key) {
+                if (!isset(self::$abTechCache[$key])) {
+                    $newVIDs [] = $key;
+                }
+            }
+
+            // everything's cached, just return the cache
+            if (!count($newVIDs)) {
+                return self::$abTechCache;
+            } else {
+                // update remaining IDs to select and cache
+                $vid = $newVIDs;
+            }
+        } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$abTechCache, $vid[0])) && !is_null($cachedValue)) {
+            // special case when we have empty arrays cached for this cache only
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "abdata where vref = $vid";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT * FROM " . TB_PREFIX . "abdata where vref IN(".implode(', ', $vid).")";
+		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$abTechCache[$vid] = mysqli_fetch_assoc($result);
-        return self::$abTechCache[$vid];
+        // return a single value
+        if (!$array_passed) {
+            self::$abTechCache[$vid[0]] = $result;
+        } else {
+            if ($result && count($result)) {
+                foreach ( $result as $record ) {
+                    self::$abTechCache[ $record['vref']] = $record;
+                }
+            }
+
+            // check for any missing IDs and fill them in with blanks,
+            // since no reinforcements were found for these villages
+            foreach ($vid as $key) {
+                if (!isset(self::$abTechCache[$key])) {
+                    self::$abTechCache[$key] = [];
+                }
+            }
+        }
+
+        return ($array_passed ? self::$abTechCache : self::$abTechCache[$vid[0]]);
 	}
 
 	function addResearch($vid, $tech, $time) {
@@ -5781,13 +5830,22 @@ References: User ID/Message ID, Mode
         return self::$isResearchedCache[$vref][$unit];
 	}
 
-    // no need to cache this method
 	function getTech($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
+	    // this is a somewhat non-ideal, externally non-changeable way of caching
+        // but since we're only ever going to be calling this from Village constructor
+        // for our current village, this will more than suffice
+	    static $cachedData = [];
+	    $vid = (int) $vid;
+
+	    if (isset($cachedData[$vid])) {
+            return $cachedData[$vid];
+        }
 
 		$q = "SELECT * from " . TB_PREFIX . "tdata where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_assoc($result);
+        $cachedData[$vid] = mysqli_fetch_assoc($result);
+
+        return $cachedData[$vid];
 	}
 
     // no need to cache this method

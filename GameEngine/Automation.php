@@ -1227,6 +1227,7 @@ class Automation {
             $database->getEnforceVillage($vilIDs, 0);
             $database->getMovement(34, $vilIDs, 1);
             $database->getPrisoners($vilIDs, 0);
+            $database->getABTech($vilIDs);
 
             // calculate battles
             foreach($dataarray as $data) {
