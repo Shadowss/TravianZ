@@ -1223,8 +1223,9 @@ class Automation {
             }
             $vilIDs = array_keys($vilIDs);
             $database->getProfileVillages($vilIDs, 5);
-            $database->$
+            $database->getUnit($vilIDs);
             $database->getEnforceVillage($vilIDs, 0);
+            $database->getMovement(34, $vilIDs, 1);
 
             // calculate battles
             foreach($dataarray as $data) {
@@ -2451,10 +2452,14 @@ class Automation {
                                             // note: at this point, we can use cache, since we've cleared it above
                                             if($this->getTypeLevel(35,$data['from']) == 0){
                                                 for ($i=0; $i<($data['t9']-$dead9); $i++){
+                                                    if (!isset($rand)) {
+                                                        $rand = 0;
+                                                    }
+
                                                     if($owntribe == 1){
-                                                        $rand+=rand(20,30);
+                                                        $rand += rand(20,30);
                                                     }else{
-                                                        $rand+=rand(20,25);
+                                                        $rand += rand(20,25);
                                                     }
                                                 }
                                             }else{
@@ -4271,7 +4276,10 @@ class Automation {
             $database->getProfileVillages($vilIDs, 5);
             $database->cacheResourceLevels($vilIDs);
             $database->getUnit($vilIDs);
-            $database->getEnforceVillage($vilIDs, 0);
+            $database->getEnforceVillage($vilIDs, 0 );
+            $database->getMovement(3, $vilIDs, 0);
+            $database->getMovement(4, $vilIDs, 1);
+            $database->getMovement(5, $vilIDs, 0);
 
             // calculate training updates
             foreach($trainlist as $train){
