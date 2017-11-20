@@ -196,7 +196,7 @@ define("Q11_ORDER","Order:</p>Look for the coordinates of ");
 define("Q11_ORDER1","and enter them here.");
 define("Q11_RESP","Exactly, there ");
 define("Q11_RESP1"," Village! As many resources as you reach this village. Well, almost as much ...");
-define("Q11_BUTN","completar misi&oacute;n");
+define("Q11_BUTN","complete task");
 
 define("Q12","Task 12: Cranny");
 define("Q12_DESC","It's getting time to erect a cranny. The world of <?php echo SERVER_NAME; ?> is dangerous.<br \/><br \/>Many players live by stealing other players' resources. Build a cranny to hide some of your resources from enemies.");
@@ -1262,7 +1262,7 @@ define("WWVILLAGE","WW village");
            $lang['screenshots']['title6']="Statistics";
            $lang['screenshots']['desc6']="View your ranking in statistics";
            $lang['screenshots']['title7']="Weapons or dough";
-           $lang['screenshots']['desc7']="You can choose to play as military or economy";  
-    
+           $lang['screenshots']['desc7']="You can choose to play as military or economy";
+
 
 ?>

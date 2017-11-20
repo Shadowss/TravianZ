@@ -837,8 +837,8 @@ class MYSQLi_DB implements IDbConnection {
 		// update cached values
 		if ($ret = mysqli_query($this->dblink,$q)) {
             foreach ($field as $index => $fieldName) {
-                if (isset(self::$fieldsCache[$ref.$switch][$fieldName]))
-                self::$fieldsCache[$ref.$switch][$fieldName] = $value[$index];
+                if (isset(self::$fieldsCache[$ref.($switch ? 0 : 1)][$fieldName]))
+                self::$fieldsCache[$ref.($switch ? 0 : 1)][$fieldName] = $value[$index];
             }
         }
 
@@ -3622,7 +3622,7 @@ class MYSQLi_DB implements IDbConnection {
         $array2 = $this->getVillage(0, 4);
         $vill = $array2['wref'];
 
-        if(mysqli_num_rows(mysqli_query($this->dblink,$q)) > 0){
+        if ($array && count($array)){
             foreach($array as $village){
                 $coor2 = $this->getCoor($village['wref']);
                 $max = 2 * WORLD_MAX + 1;
