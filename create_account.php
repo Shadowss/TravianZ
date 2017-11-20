@@ -6,16 +6,16 @@ $start_timer = $generator->pageLoadTimeStart();
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       22.06.2015                    			       ##
 ##  Filename       create_account.php                                          ##
-##  Developed by:  Dzoki , Advocaite , Donnchadh , yi12345 , Shadow , MisterX  ## 
+##  Developed by:  Dzoki , Advocaite , Donnchadh , yi12345 , Shadow , MisterX  ##
 ##  Fixed by:      Shadow & MisterX - Scouting all players , artefact names.   ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  Fixed by:      ronix						       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
 #################################################################################
 
@@ -115,7 +115,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 
 /**
  * Creating account & capital village - Fixed by Shadow - cata7007@gmail.com / Skype : cata7007
- */ 
+ */
 
 		$username = "Natars";
 		$password = password_hash($_POST['password'], PASSWORD_BCRYPT,['cost' => 12]);
@@ -172,8 +172,8 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
             $database->addABTech($wid);
             $database->updateUserField($uid, "access", USER, 1);
         }
-                
-        $wid = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = ".(int) $uid));
+
+        $wid = $database->getVillage($uid, 2);
         $q = "UPDATE " . TB_PREFIX . "vdata SET pop = 834 WHERE owner = ".(int) $uid;
         mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink));
         $q2 = "UPDATE " . TB_PREFIX . "users SET access = 2 WHERE id = ".(int) $uid;
@@ -187,15 +187,13 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
         mysqli_query($GLOBALS['link'],$q3) or die(mysqli_error($database->dblink));
         $q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = ".(int) $uid;
         mysqli_query($GLOBALS['link'],$q4) or die(mysqli_error($database->dblink));
-		
+
 /**
  * SCOUTING ALL PLAYERS FIX BY MisterX
  */
- 
-        $natar = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = ".(int) $uid." and capital = 1"));
+        $natar = $database->getVillage($uid, 3);
   		$multiplier = NATARS_UNITS;
-  		$q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = '1' and owner > '5'";
-  		$array = $database->query_return($q);
+  		$array = $database->getProfileVillages(0, 1);
         $sendspytroops = 1500 * $multiplier;
         $refs = [];
         $vils = [];

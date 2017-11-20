@@ -1010,18 +1010,20 @@ class MYSQLi_DB implements IDbConnection {
 
     // no need to cache this method
 	function getVrefCapital($ref) {
-	    list($ref) = $this->escape_input((int) $ref);
-		$q = "SELECT * FROM " . TB_PREFIX . "vdata where owner = $ref and capital = 1 LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
-		return $dbarray;
+	    $vdata = $this->getProfileVillages($ref);
+
+	    foreach ($vdata as $village) {
+	        if ($village['capital']) {
+	            return $village;
+            }
+        }
+
+        return false;
 	}
 
     // no need to cache this method
 	function getStarvation() {
-        $q = "SELECT * FROM " . TB_PREFIX . "vdata where starv != 0 and owner != 3";
-        $result = mysqli_query($this->dblink,$q);
-        return $this->mysqli_fetch_all($result);
+        return $this->getProfileVillages(0, 2);
 	}
 
     // no need to cache this method
@@ -1583,48 +1585,6 @@ class MYSQLi_DB implements IDbConnection {
         }
 	}
 
-	function getProfileVillages($uid, $use_cache = true) {
-	    $arrayPassed = is_array($uid);
-
-	    if (!$arrayPassed) {
-	        $uid = [(int) $uid];
-        } else {
-	        foreach ($uid as $index => $uidValue) {
-	            $uid[$index] = (int) $uidValue;
-            }
-        }
-
-        if (!count($uid)) {
-	        return [];
-        }
-
-        // first of all, check if we should be using cache
-        if ($use_cache && !$arrayPassed && ($cachedValue = self::returnCachedContent(self::$userVillagesCache, $uid[0])) && !is_null($cachedValue)) {
-            return $cachedValue;
-        }
-
-		$q = "SELECT * from " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") ORDER BY capital DESC,pop DESC";
-        $result = mysqli_query($this->dblink,$q);
-
-        if (!$arrayPassed) {
-            $result                             = $this->mysqli_fetch_all($result);
-            self::$userVillagesCache[ $uid[0] ] = $result;
-        } else {
-            // we're preloading, cache all the data individually
-            if (mysqli_num_rows($result)) {
-                while ( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC ) ) {
-                    if ( ! isset( self::$userVillagesCache[ $row['owner'] ] ) ) {
-                        self::$userVillagesCache[ $row['owner'] ] = [];
-                    }
-
-                    self::$userVillagesCache[ $row['owner'] ][] = $row;
-                }
-            }
-        }
-
-        return $result;
-	}
-
 	// no need to refactor this method
 	function getProfileMedal($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
@@ -1659,9 +1619,7 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT wref from " . TB_PREFIX . "vdata where owner = $uid order by capital DESC,pop DESC";
-		$result = mysqli_query($this->dblink,$q);
-		$array = $this->mysqli_fetch_all($result);
+        $array = $this->getProfileVillages($uid, 0, $use_cache);
 		$newarray = array();
 
 		for($i = 0; $i < count($array); $i++) {
@@ -1681,29 +1639,161 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		$q = "SELECT wref from " . TB_PREFIX . "vdata where owner = $uid order by capital DESC,pop DESC";
-		$result = mysqli_query($this->dblink,$q);
-		$array = $this->mysqli_fetch_all($result);
-
+        $array = $this->getProfileVillages($uid, 0, $use_cache);
         self::$villageIDsCacheSimple[$uid] = $array;
+
         return self::$villageIDsCacheSimple[$uid];
 	}
 
-	function getVillage($vid, $mode = 0, $use_cache = true) {
-	    list($vid) = $this->escape_input((int) $vid);
+	function findAlreadyCachedVillageData($vid, $mode) {
+        // check if we don't actually have this data cached already in one of the other modes
+        for ($i = 0; $i <= 4; $i++) {
+            if ($mode !== $i && isset(self::$villageFieldsCache[$vid.$i])) {
+                // loop through cached values
+                foreach (self::$villageFieldsCache[$vid.$i] as $index => $value) {
+                    // check for existing record with our requested ID/name/owner...
+                    switch ($mode) {
+                        case 0: if ($value['wref'] == $vid) {
+                                    return $value;
+                                }
+                                break;
 
-        // first of all, check if we should be using cache and whether the field
+                        case 1: if ($value['name'] == $vid) {
+                                    return $value;
+                                }
+                                break;
+
+                        case 2: if ($value['owner'] == $vid) {
+                                    return $value;
+                                }
+                                break;
+
+                        case 3: if ($value['owner'] == $vid && $value['capital'] == 1) {
+                                    return $value;
+                                }
+                                break;
+
+                        case 4: if ($value['owner'] == 4) {
+                                    return $value;
+                                }
+                                break;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+	function getVillage($vid, $mode = 0, $use_cache = true) {
+	    // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFieldsCache, $vid)) && !is_null($cachedValue)) {
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFieldsCache, $vid.$mode)) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "vdata where wref = $vid LIMIT 1";
+        if ($use_cache && ($altCachedContentSearch = $this->findAlreadyCachedVillageData($vid, $mode))) {
+            return $altCachedContentSearch;
+        }
+
+        switch ($mode) {
+            // by WREF
+            case 0: $vid = (int) $vid;
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE wref = $vid LIMIT 1";
+                    break;
+
+            // by name
+            case 1: $name = $this->escape($vid);
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE `name` = '$name' LIMIT 1";
+                    break;
+
+            // by owner ID
+            case 2: $vid = (int) $vid;
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $vid LIMIT 1";
+                    break;
+
+            // by owner ID and capital = 1
+            case 3: $vid = (int) $vid;
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $vid capital = 1 LIMIT 1";
+                    break;
+
+            // by owner = Taskmaster
+            case 4: $vid = (int) $vid;
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = 4 LIMIT 1";
+                    break;
+        }
+
 		$result = mysqli_query($this->dblink,$q);
 
-        self::$villageFieldsCache[$vid] = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        return self::$villageFieldsCache[$vid];
+        self::$villageFieldsCache[$vid.$mode] = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        return self::$villageFieldsCache[$vid.$mode];
 	}
+
+    function getProfileVillages($uid, $mode = 0, $use_cache = true) {
+        $arrayPassed = is_array($uid);
+
+        if (!$arrayPassed) {
+            $uid = [(int) $uid];
+        } else {
+            foreach ($uid as $index => $uidValue) {
+                $uid[$index] = (int) $uidValue;
+            }
+        }
+
+        if (!count($uid)) {
+            return [];
+        }
+
+        // first of all, check if we should be using cache
+        if ($use_cache && !$arrayPassed && ($cachedValue = self::returnCachedContent(self::$userVillagesCache, $uid[0])) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
+
+        switch ($mode) {
+            // by owner ID
+            case 0: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner IN(".implode(', ', $uid).") ORDER BY capital DESC,pop DESC";
+                    break;
+
+            // villages where owner is a real player (i.e. not Natars etc.)
+            case 1: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE capital = 1 and owner > 5";
+                    break;
+
+            // villages with starvation data
+            case 2: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE starv != 0 and owner != 3";
+                    break;
+
+            // field distance calculator query
+            case 3: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner > 4 and wref != ".$uid[0];
+                    break;
+
+            // villages in need of celebration data update
+            case 4: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE celebration < ".$uid[0]." AND celebration != 0";
+                    break;
+        }
+
+        $result = mysqli_query($this->dblink,$q);
+
+        if (!$arrayPassed) {
+            $result                             = $this->mysqli_fetch_all($result);
+            self::$userVillagesCache[ $uid[0] ] = $result;
+        } else {
+            // we're preloading, cache all the data individually
+            if (mysqli_num_rows($result)) {
+                while ( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC ) ) {
+                    if ( ! isset( self::$userVillagesCache[ $row['owner'] ] ) ) {
+                        self::$userVillagesCache[ $row['owner'] ] = [];
+                    }
+
+                    self::$userVillagesCache[ $row['owner'] ][] = $row;
+                }
+
+                // just return the full cache if we've given an array of IDs to load villages for
+                $result = self::$userVillagesCache;
+            }
+        }
+
+        return $result;
+    }
 
     function getVillageByWorldID($vid, $use_cache = true) {
         $vid = (int) $vid;
@@ -3524,14 +3614,12 @@ class MYSQLi_DB implements IDbConnection {
 	function getFieldDistance($wid) {
 	    list($wid) = $this->escape_input((int) $wid);
 
-        $q = "SELECT wref FROM " . TB_PREFIX . "vdata where owner > 4 and wref != $wid";
-        $array = $this->query_return($q);
+        $array = $this->getProfileVillages($wid, 3);
         $coor = $this->getCoor($wid);
         $x1 = intval($coor['x']);
         $y1 = intval($coor['y']);
         $prevdist = 0;
-        $q2 = "SELECT wref FROM " . TB_PREFIX . "vdata where owner = 4 LIMIT 1";
-        $array2 = mysqli_fetch_array(mysqli_query($this->dblink,$q2));
+        $array2 = $this->getVillage(0, 4);
         $vill = $array2['wref'];
 
         if(mysqli_num_rows(mysqli_query($this->dblink,$q)) > 0){
@@ -3681,10 +3769,7 @@ class MYSQLi_DB implements IDbConnection {
 
     // no need to cache this method
     function getCel() {
-        $time = time();
-        $q = "SELECT * FROM " . TB_PREFIX . "vdata where celebration < $time AND celebration != 0";
-        $result = mysqli_query($this->dblink,$q);
-        return $this->mysqli_fetch_all($result);
+        return $this->getProfileVillages(time(), 4);
     }
 
     function clearCel($ref) {
@@ -4799,14 +4884,8 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-	// no need to cache this method
-	function getVillageByName($name) {
-        list($name) = $this->escape_input($name);
-
-		$q = "SELECT wref FROM " . TB_PREFIX . "vdata WHERE `name` = '$name' LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
-		return $dbarray['wref'];
+	function getVillageByName($name, $use_cache = true) {
+        return $this->getVillage($name, 1, $use_cache)['wref'];
 	}
 
     function getVillageByOwner($uid, $use_cache = true) {
@@ -6181,27 +6260,25 @@ References: User ID/Message ID, Mode
     // no need to cache, not used in any loops or more than once for each page load
 	public function getAvailableExpansionTraining() {
 		global $building, $session, $technology, $village;
-		$q = "SELECT (IF(exp1=0,1,0)+IF(exp2=0,1,0)+IF(exp3=0,1,0)) FROM " . TB_PREFIX . "vdata WHERE wref = ".(int) $village->wid;
-		$result = mysqli_query($this->dblink,$q);
-		$row = mysqli_fetch_row($result);
-		$maxslots = $row[0];
+
+		$vilData = $this->getVillage($village->wid);
+		$maxslots = (($vilData['exp1'] == 0 ? 1 : 0) + ($vilData['exp2'] == 0 ? 1 : 0) + ($vilData['exp3'] == 0 ? 1 : 0));
 		$residence = $building->getTypeLevel(25);
 		$palace = $building->getTypeLevel(26);
+
 		if($residence > 0) {
 			$maxslots -= (3 - floor($residence / 10));
 		}
+
 		if($palace > 0) {
 			$maxslots -= (3 - floor(($palace - 5) / 5));
 		}
 
-		$q = "SELECT (u10+u20+u30) FROM " . TB_PREFIX . "units WHERE vref = ". (int) $village->wid;
+		$q = "SELECT (u10+u20+u30) as R1, (u9+u19+u29) as R2 FROM " . TB_PREFIX . "units WHERE vref = ". (int) $village->wid;
 		$result = mysqli_query($this->dblink,$q);
-		$row = mysqli_fetch_row($result);
-		$settlers = $row[0];
-		$q = "SELECT (u9+u19+u29) FROM " . TB_PREFIX . "units WHERE vref = ". (int) $village->wid;
-		$result = mysqli_query($this->dblink,$q);
-		$row = mysqli_fetch_row($result);
-		$chiefs = $row[0];
+		$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+		$settlers = $row['R1'];
+		$chiefs = $row['R2'];
 
 		$settlers += 3 * count($this->getMovement(5, $village->wid, 0));
 		$current_movement = $this->getMovement(3, $village->wid, 0);
@@ -6232,6 +6309,7 @@ References: User ID/Message ID, Mode
 				$chiefs += $build['t9'];
 			}
 		}
+
 		$q = "SELECT (u10+u20+u30) FROM " . TB_PREFIX . "enforcement WHERE `from` = ".(int) $village->wid;
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_row($result);
@@ -6240,6 +6318,7 @@ References: User ID/Message ID, Mode
 				$settlers += $reinf[0];
 			}
 		}
+
 		$q = "SELECT (u9+u19+u29) FROM " . TB_PREFIX . "enforcement WHERE `from` = ".(int) $village->wid;
 		$result = mysqli_query($this->dblink,$q);
 		$row = mysqli_fetch_row($result);
@@ -6248,6 +6327,7 @@ References: User ID/Message ID, Mode
 				$chiefs += $reinf[0];
 			}
 		}
+
 		$trainlist = $technology->getTrainingList(4);
 		if(!empty($trainlist)) {
 			foreach($trainlist as $train) {

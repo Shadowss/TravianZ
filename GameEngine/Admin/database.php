@@ -448,11 +448,12 @@ class adm_DB {
   }
 
   function search_village($village){
-      global $database;
-      $village = $database->escape($village);
-	$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `name` LIKE '%$village%' or `wref` LIKE '%$village%'";
-	$result = mysqli_query($this->connection, $q);
-	return $this->mysqli_fetch_all($result);
+		global $database;
+
+		$village = $database->escape($village);
+		$q = "SELECT * FROM ".TB_PREFIX."vdata WHERE `name` LIKE '%$village%' or `wref` LIKE '%$village%'";
+		$result = mysqli_query($this->connection, $q);
+		return $this->mysqli_fetch_all($result);
   }
 
   function search_alliance($alliance){

@@ -1528,12 +1528,12 @@ class Automation {
                     $stonemason = 0;
                 }
 
-                $varray = $database->getProfileVillages($to['owner'], false);
+                $varray = $database->getProfileVillages($to['owner'], 0, false);
 
                 if ($to['owner'] == $from['owner']) {
                     $varray1 = $varray;
                 } else {
-                    $varray1 = $database->getProfileVillages($from['owner'], false);
+                    $varray1 = $database->getProfileVillages($from['owner'], 0, false);
                 }
 
                 //fix by ronix
@@ -5178,7 +5178,7 @@ class Automation {
             $villages = $database->getVillagesID2($leader);
             $max = 0;
             foreach($villages as $village){
-                $field = $database->getResourceLevel($village['wref']);
+                $field = $database->getResourceLevel($village['wref'], false);
                 for($i=19;$i<=40;$i++){
                     if($field['f'.$i.'t'] == 18){
                         $level = $field['f'.$i];

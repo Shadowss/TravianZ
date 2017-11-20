@@ -187,11 +187,11 @@ class Technology {
 	}
 
 	public function maxUnit($unit,$great=false) {
+        global $village,$$unit,$database;
+
 		$unit = "u".$unit;
-		global $village,$$unit;
 		$unitarray = $$unit;
-		$res = array();
-		$res = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT maxstore, maxcrop, wood, clay, iron, crop FROM ".TB_PREFIX."vdata WHERE wref = ".(int) $village->wid)) or die(mysqli_error($database->dblink));
+		$res = $database->getVillage($village->wid);
 		if ($res['wood'] > $res['maxstore']){$res['wood'] = $res['maxstore'];}
 		if ($res['clay'] > $res['maxstore']){$res['clay'] = $res['maxstore'];}
 		if ($res['iron'] > $res['maxstore']){$res['iron'] = $res['maxstore'];}
@@ -213,11 +213,11 @@ class Technology {
 	}
 
 	public function maxUnitPlus($unit,$great=false) {
+        global $village,$$unit,$database;
+
 		$unit = "u".$unit;
-		global $village,$$unit;
 		$unitarray = $$unit;
-		$res = array();
-		$res = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT maxstore, maxcrop, wood, clay, iron, crop FROM ".TB_PREFIX."vdata WHERE wref = ".(int) $village->wid)) or die(mysqli_error($database->dblink));
+		$res = $database->getVillage($village->wid);
 		$totalres = $res['wood']+$res['clay']+$res['iron']+$res['crop'];
 		$totalresunit = ($unitarray['wood'] * ($great?3:1))+($unitarray['clay'] * ($great?3:1))+($unitarray['iron'] * ($great?3:1))+($unitarray['crop'] * ($great?3:1));
 		$max =round($totalres/$totalresunit);
@@ -273,8 +273,8 @@ class Technology {
                     }
                     $ownunit['hero'] += $enforce['hero'];
                 }
-            }            
-            
+            }
+
             $prisoners = $database->getPrisoners($base,1);
             if(!empty($prisoners)) {
                 foreach($prisoners as $prisoner){
@@ -498,10 +498,10 @@ class Technology {
     			         switch ($i) {
     			             case 4: $upkeepDecrement = 2;
     			                     break;
-    			                     
+
     			             case 5: $upkeepDecrement = 3;
     			             break;
-    			             
+
     			             case 6: $upkeepDecrement = 4;
     			             break;
     			         }
@@ -522,10 +522,10 @@ class Technology {
         			    switch ($i) {
         			        case 4: $upkeepDecrement = 2;
         			        break;
-        			        
+
         			        case 5: $upkeepDecrement = 3;
         			        break;
-        			        
+
         			        case 6: $upkeepDecrement = 4;
         			        break;
         			    }

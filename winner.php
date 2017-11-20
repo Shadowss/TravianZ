@@ -141,11 +141,8 @@ else {
         $sql = mysqli_query($GLOBALS['link'],"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
         $vref = mysqli_result($sql, 0);
 
-        $sql = mysqli_query($GLOBALS['link'],"SELECT name FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysqli_error($database->dblink));
-        $winningvillagename = mysqli_result($sql, 0);
-
-        $sql = mysqli_query($GLOBALS['link'],"SELECT owner FROM ".TB_PREFIX."vdata WHERE wref = '$vref'")or die(mysqli_error($database->dblink));
-        $owner = mysqli_result($sql, 0);
+        $winningvillagename = $database->getVillage($vref)['name'];
+        $owner = $database->getVillage($vref)['owner'];
 
         $sql = mysqli_query($GLOBALS['link'],"SELECT username FROM ".TB_PREFIX."users WHERE id = '$owner'")or die(mysqli_error($database->dblink));
         $username = mysqli_result($sql, 0);

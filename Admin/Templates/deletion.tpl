@@ -49,8 +49,8 @@ if($_GET['uid'])
 						<td>Villages:</td>
 						<td>
 							<?php
-								$result = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user['id']."");
-								$num_rows = mysqli_num_rows($result);
+								$result = mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."vdata WHERE owner = ".(int) $user['id']."");
+								$num_rows = mysqli_fetch_array($result, MYSQLI_ASSOC)['Total'];
 								echo $num_rows;
 							?>
 						</td>

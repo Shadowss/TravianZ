@@ -105,7 +105,7 @@
             <?php echo "<tr class='next'><th>".HERO_READY." <span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
             </tr>
         </thead>
-            
+
             <tr>
 			<?php
 				   echo "<tr>
@@ -115,7 +115,7 @@
 						$name ($name1)
 					</div>"
 			?>
-			
+
             </tr>
     </table>
 	<?php }else if (!$reviving) { if($hero_datarow['unit'] == 1 OR 11 OR 21){ ?>
@@ -140,7 +140,7 @@
 				        ?>
                     </div>
 				</td>
-				
+
                 <td class="val" width="20%"><center>
                 <?php
                 if($village->awood < $wood OR $village->aclay < $clay OR $village->airon < $iron OR $village->acrop < $crop) {
@@ -148,12 +148,12 @@
                 }else {
                     echo "<a href=\"build.php?id=".$id."&amp;revive=1&amp;hid=".$hero_datarow['heroid']."\">".REVIVE."</a>";
                 }
-                
+
                 ?></center></td>
             </tr>
         <?php }else { ?>
-        
-        
+
+
     <?php if($database->checkIfResearched($village->wid, 't'.$hero_datarow['unit']) != 0){ ?>
         <tr>
                 <td class="desc">
@@ -176,7 +176,7 @@
 				        ?>
                     </div>
 				</td>
-				
+
                 <td class="val" width="20%"><center>
                 <?php
                 if($village->awood < $wood OR $village->aclay < $clay OR $village->airon < $iron OR $village->acrop < $crop) {
@@ -184,7 +184,7 @@
                 }else {
                     echo "<a href=\"build.php?id=".$id."&amp;revive=1&amp;hid=".$hero_datarow['heroid']."\">".REVIVE."</a>";
                 }
-                
+
                 ?>
                 </center></td>
             </tr>
@@ -195,21 +195,26 @@
 	if(isset($_GET['revive']) && $_GET['revive'] == 1 && isset($_GET['hid']) && $_GET['hid'] == $hero_datarow['heroid'] && $hero_datarow['inrevive'] == 0 && $hero_datarow['intraining'] == 0 && $hero_datarow['dead'] == 1){
 		if($session->access != BANNED){
             mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".(int) $training_time2."', `wref` = '".(int) $village->wid."' WHERE `heroid` = ".(int) $_GET['hid']." AND `uid` = '".(int) $session->uid."'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".(int) $wood." WHERE `wref` = '" . (int) $village->wid . "'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".(int) $clay." WHERE `wref` = '" . (int) $village->wid . "'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `iron` = `iron` - ".(int) $iron ." WHERE `wref` = '" . (int) $village->wid . "'");
-			mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "vdata SET `crop` = `crop` - ".(int) $crop." WHERE `wref` = '" . (int) $village->wid . "'");
+			mysqli_query($GLOBALS['link'],"
+			    UPDATE " . TB_PREFIX . "vdata
+			        SET
+			            `wood` = `wood` - ".(int) $wood.",
+			            `clay` = `clay` - ".(int) $clay.",
+			            `iron` = `iron` - ".(int) $iron .",
+			            `crop` = `crop` - ".(int) $crop."
+                    WHERE
+                        `wref` = '" . (int) $village->wid . "'");
             header("Location: build.php?id=".$id."");
 			exit;
 		} else {
 			header("Location: banned.php");
-			exit; 
+			exit;
 		}
     }
 
     }
 ?>
-        
+
 </table>
 
 
