@@ -249,8 +249,7 @@ class Automation {
         fclose($ourFileHandle);
         global $database;
         $array = array();
-        $q = "SELECT wref, loyalty, lastupdate2 FROM ".TB_PREFIX."vdata WHERE loyalty < 100";
-        $array = $database->query_return($q);
+        $array = $database->getProfileVillages(0, 6);
         if(!empty($array)) {
             foreach($array as $loyalty) {
                 if (($t25_level = $this->getTypeLevel(25, $loyalty['wref'])) >= 1) {
@@ -613,7 +612,14 @@ class Automation {
                 timestamp < $time and master = 0"
         );
 
-        // complete each of them
+        // preload village data
+        $vilIDs = [];
+        foreach($res as $indi) {
+            $vilIDs[$indi['wid']] = true;
+        }
+        $database->getProfileVillages(array_keys($vilIDs), 5);
+
+        // complete buildings
         foreach($res as $indi) {
             // store village ID for later for statistical updates
             $villageData = $database->getVillageFields($indi['wid'],'owner, maxcrop, maxstore, starv, pop');
@@ -1207,6 +1213,15 @@ class Automation {
         $data_num = 0;
 
         if ($dataarray && count($dataarray)) {
+            // preload village data
+            $vilIDs = [];
+            foreach($dataarray as $data) {
+                $vilIDs[$data['from']] = true;
+                $vilIDs[$data['to']] = true;
+            }
+            $database->getProfileVillages(array_keys($vilIDs), 5);
+
+            // calculate battles
             foreach($dataarray as $data) {
                 //set base things
                 $isoasis = $data['oasistype'];
@@ -3355,9 +3370,16 @@ class Automation {
         $dataarray = $database->query_return($q);
 
         if ($dataarray && count($dataarray)) {
+            // preload village data
+            $vilIDs = [];
+            foreach($dataarray as $data) {
+                $vilIDs[$data['from']] = true;
+                $vilIDs[$data['to']] = true;
+            }
+            $database->getProfileVillages(array_keys($vilIDs), 5);
 
+            // calculate reinforcements data
             $movementProcIDs = [];
-
             foreach($dataarray as $data) {
                 $isoasis = $database->isVillageOases($data['to']);
                 if($isoasis == 0){
@@ -3536,6 +3558,14 @@ class Automation {
 
         if ($dataarray && count($dataarray)) {
 
+            // preload village data
+            $vilIDs = [];
+            foreach($dataarray as $data) {
+                $vilIDs[$data['from']] = true;
+                $vilIDs[$data['to']] = true;
+            }
+            $database->getProfileVillages(array_keys($vilIDs), 5);
+
             $movementProcIDs = [];
             foreach($dataarray as $data) {
                 if (!isset($wavesData[$data['from'].$data['to'].$data['starttime'].$data['endtime']])) {
@@ -3655,6 +3685,14 @@ class Automation {
         $refs = [];
         $times = [];
         $endtimes = [];
+
+        // preload village data
+        $vilIDs = [];
+        foreach($dataarray as $data) {
+            $vilIDs[$data['from']] = true;
+            $vilIDs[$data['to']] = true;
+        }
+        $database->getProfileVillages(array_keys($vilIDs), 5);
 
         foreach($dataarray as $data) {
             $ownerID = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
@@ -4217,6 +4255,14 @@ class Automation {
         fclose($ourFileHandle);
         $trainlist = $database->getTrainingList();
         if(count($trainlist) > 0){
+            // preload village data
+            $vilIDs = [];
+            foreach($trainlist as $train){
+                $vilIDs[$train['vref']] = true;
+            }
+            $database->getProfileVillages(array_keys($vilIDs), 5);
+
+            // calculate training updates
             foreach($trainlist as $train){
                 $timepast = $train['timestamp2'] - $time;
                 $pop = $train['pop'];
@@ -4240,9 +4286,9 @@ class Automation {
                 if($train['amt'] == 0){
                     $database->trainUnit($train['id'],0,0,0,0,1,1);
                 }
-                $crop = $database->getCropProdstarv($train['vref'], false);
+                $crop = $database->getCropProdstarv($train['vref']);
                 $unitarrays = $this->getAllUnits($train['vref'], false);
-                $village = $database->getVillage($train['vref'], 0, false);
+                $village = $database->getVillage($train['vref'], 0);
                 $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
                 $starv = $database->getVillageField($train['vref'],"starv");
                 if ($crop < $upkeep){

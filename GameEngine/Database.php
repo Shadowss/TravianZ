@@ -680,7 +680,7 @@ class MYSQLi_DB implements IDbConnection {
      * to be displayed in the front-end.
      */
     public static function clearVillageCache() {
-        self::$villageFieldsCache = [];
+        self::$villageFieldsCache          = [];
         self::$villageFieldsCacheByWorldID = [];
     }
 
@@ -1688,7 +1688,7 @@ class MYSQLi_DB implements IDbConnection {
 	function getVillage($vid, $mode = 0, $use_cache = true) {
 	    // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFieldsCache, $vid.$mode)) && !is_null($cachedValue)) {
+        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFieldsCache, ((int) $vid).$mode)) && !is_null($cachedValue)) {
             return $cachedValue;
         }
 
@@ -1749,6 +1749,17 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
+        // if we've given a number of villages to preload, remove those that already are
+        if ($use_cache && $arrayPassed) {
+            $newIDs = [];
+            foreach ($uid as $id) {
+                if (!isset(self::$userVillagesCache[$id])) {
+                    $newIDs[] = $id;
+                }
+            }
+            $uid = $newIDs;
+        }
+
         switch ($mode) {
             // by owner ID
             case 0: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner IN(".implode(', ', $uid).") ORDER BY capital DESC,pop DESC";
@@ -1769,6 +1780,14 @@ class MYSQLi_DB implements IDbConnection {
             // villages in need of celebration data update
             case 4: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE celebration < ".$uid[0]." AND celebration != 0";
                     break;
+
+            // by vref ID
+            case 5: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE wref IN(".implode(', ', $uid).")";
+                    break;
+
+            // by loyalty updates required
+            case 6: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE loyalty < 100";
+                    break;
         }
 
         $result = mysqli_query($this->dblink,$q);
@@ -1776,15 +1795,23 @@ class MYSQLi_DB implements IDbConnection {
         if (!$arrayPassed) {
             $result                             = $this->mysqli_fetch_all($result);
             self::$userVillagesCache[ $uid[0] ] = $result;
+
+            // cache each village individually into the fields cache as well
+            foreach ($result as $v) {
+                $amode = 0;
+                self::$villageFieldsCache[((int) $v['wref']).$amode] = $v;
+            }
         } else {
             // we're preloading, cache all the data individually
             if (mysqli_num_rows($result)) {
+                $amode = 0;
                 while ( $row = mysqli_fetch_array( $result, MYSQLI_ASSOC ) ) {
                     if ( ! isset( self::$userVillagesCache[ $row['owner'] ] ) ) {
                         self::$userVillagesCache[ $row['owner'] ] = [];
                     }
 
                     self::$userVillagesCache[ $row['owner'] ][] = $row;
+                    self::$villageFieldsCache[((int) $row['wref']).$amode] = $row;
                 }
 
                 // just return the full cache if we've given an array of IDs to load villages for
@@ -1793,6 +1820,39 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         return $result;
+    }
+
+    function cacheVillageByWorldIDs($uid, $mode = 0) {
+	    if (!is_array($uid)) {
+	        $uid = [(int) $uid];
+        } else {
+	        foreach ($uid as $index => $uidValue) {
+	            $uid[$index] = (int) $uidValue;
+            }
+        }
+
+        $result = mysqli_query($this->dblink, "
+          SELECT
+            *
+          FROM
+            " . TB_PREFIX . "wdata as wdata
+            LEFT JOIN " . TB_PREFIX . "vdata as vdata ON wdata.id = vdata.wref
+          WHERE vdata.owner IN(".implode('', $uid).")"
+        );
+
+	    if (mysqli_num_rows($result)) {
+	        $result = $this->mysqli_fetch_all($result);
+
+	        $amode = 0;
+	        foreach ($result as $row) {
+                self::$villageFieldsCacheByWorldID[$row['id']] = $row;
+
+                // cache village fields by wref as well, for future use
+                if (!isset(self::$villageFieldsCache[((int) $row['wref']).$amode])) {
+                    self::$villageFieldsCache[ ( (int) $row['wref'] ) . $amode ] = $row;
+                }
+            }
+        }
     }
 
     function getVillageByWorldID($vid, $use_cache = true) {
@@ -2312,6 +2372,12 @@ class MYSQLi_DB implements IDbConnection {
 	// no need to cache this method
 	function checkVilExist($wref) {
 	    list($wref) = $this->escape_input((int) $wref);
+
+	    // first of all, check if this exists in our cache already - and if so, we don't need an extra query
+        $mode = 0;
+        if (isset(self::$villageFieldsCache[((int) $wref).$mode])) {
+            return true;
+        }
 
 		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "vdata where wref = '$wref'";
 		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
@@ -5961,7 +6027,7 @@ References: User ID/Message ID, Mode
 
 		$vinfo = $this->getVillage($id);
 		$vtribe = $this->getUserField($vinfo['owner'], "tribe", 0);
-		$movingunits = array();
+        $movingunits = array();
 		$outgoingarray = $this->getMovement(3, $id, 0);
 		if(!empty($outgoingarray)) {
 			foreach($outgoingarray as $out) {

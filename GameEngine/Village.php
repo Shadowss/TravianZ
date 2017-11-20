@@ -35,6 +35,9 @@ class Village {
         else {
             $this->wid = $session->villages[0];
         }
+
+        $this->preloadVillagesData();
+
         //add new line code
         //check exist village if from village destroy to avoid error msg.
         if ( !$database->checkVilExist($this->wid) ) {
@@ -48,6 +51,16 @@ class Village {
 		$this->ActionControl();
 	}
 
+	private function preloadVillagesData() {
+        global $database, $session;
+
+        // preload villages for this user account
+        $database->getProfileVillages($session->uid, 5);
+
+        // preload villages world data records
+        $database->cacheVillageByWorldIDs($session->uid);
+    }
+
 	public function getProd($type) {
 		return $this->production[$type];
 	}
@@ -57,7 +70,7 @@ class Village {
 		return $technology->getUnits($database->getUnit($vid),$database->getEnforceVillage($vid,0));
 	}
 
-	private function LoadTown() {
+	private function LoadTown($second_run = false) {
 		global $database,$session,$logging,$technology;
 		$this->infoarray = $database->getVillage($this->wid);
 		if($this->infoarray['owner'] != $session->uid && !$session->isAdmin) {
@@ -102,16 +115,24 @@ class Village {
 		if($this->airon>$this->maxstore){ $this->airon=$this->maxstore; $resourceUpdates['iron'] = $this->maxstore; }
 		if($this->acrop>$this->maxcrop){ $this->acrop=$this->maxcrop; $resourceUpdates['crop'] = $this->maxcrop; }
 
-		// update DB values
-        if (count($resourceUpdates)) {
-            call_user_func(get_class($database).'::clearVillageCache');
+		if (count($resourceUpdates)) {
             $database->updateResource( $this->wid, array_keys( $resourceUpdates ), array_values($resourceUpdates) );
+
+            // reload cache if we've updated resources and the like
+            if ($second_run) {
+                // update DB cache
+                call_user_func(get_class($database).'::clearVillageCache');
+                $this->preloadVillagesData();
+            }
+        } else if ($second_run) {
+		    $this->preloadVillagesData();
         }
 	}
 
 	private function calculateProduction() {
 		global $technology,$database,$session;
 
+		// clear cache, since we're updating village data
         call_user_func(get_class($database).'::clearVillageCache');
 		$normalA = $database->getOwnArtefactInfoByType($_SESSION['wid'],4);
 		$largeA = $database->getOwnUniqueArtefactInfo($session->uid,4,2);
@@ -145,7 +166,7 @@ class Village {
 
 		$database->modifyResource($this->wid,$nwood,$nclay,$niron,$ncrop,1);
 		$database->updateVillage($this->wid);
-		$this->LoadTown();
+        $this->LoadTown(true);
 	}
 
 	private function getWoodProd() {
