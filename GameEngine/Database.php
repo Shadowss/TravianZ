@@ -390,6 +390,11 @@ class MYSQLi_DB implements IDbConnection {
         $isResearchedCache = [],
 
         /**
+         * @var array Cache of items in research.
+         */
+        $researchingCache = [],
+
+        /**
          * @var array Cache of messages to be sent out to players,
          *            so we can collect them and send them out together
          *            at the end of script execution.
@@ -5728,6 +5733,7 @@ References: User ID/Message ID, Mode
             $vid[$index] = (int) $vidValue;
         }
 
+        self::$abTechCache = [];
 		$q = "INSERT INTO " . TB_PREFIX . "abdata (vref) VALUES (".implode(', ', $vid).")";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -5800,17 +5806,27 @@ References: User ID/Message ID, Mode
 	function addResearch($vid, $tech, $time) {
 	    list($vid, $tech, $time) = $this->escape_input((int) $vid, $tech, (int) $time);
 
+        self::$researchingCache = [];
 		$q = "INSERT into " . TB_PREFIX . "research values (0,$vid,'$tech',$time)";
 		return mysqli_query($this->dblink,$q);
 	}
 
     // no need to cache this method
-	function getResearching($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
+	function getResearching($vid, $use_cache = true) {
+        $vid = (int) $vid;
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && isset(self::$researchingCache[$vid]) && is_array(self::$researchingCache[$vid]) && !count(self::$researchingCache[$vid])) {
+            return self::$researchingCache[$vid];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$researchingCache, $vid)) && !is_null($cachedValue)) {
+            return $cachedValue;
+        }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "research where vref = $vid";
 		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        $researchingCache[$vid] = $this->mysqli_fetch_all($result);
+        return $researchingCache[$vid];
 	}
 
 	function checkIfResearched($vref, $unit, $use_cache = true) {
