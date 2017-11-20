@@ -4260,7 +4260,9 @@ class Automation {
             foreach($trainlist as $train){
                 $vilIDs[$train['vref']] = true;
             }
-            $database->getProfileVillages(array_keys($vilIDs), 5);
+            $vilIDs = array_keys($vilIDs);
+            $database->getProfileVillages($vilIDs, 5);
+            $database->cacheResourceLevels($vilIDs);
 
             // calculate training updates
             foreach($trainlist as $train){
@@ -5223,6 +5225,14 @@ class Automation {
         if ($q['Total'] > 0) {
             $villages = $database->getVillagesID2($leader);
             $max = 0;
+
+            // cache resource levels
+            $vilIDs = [];
+            foreach($villages as $village){
+                $vilIDs[$village['wref']] = true;
+            }
+            $database->cacheResourceLevels(array_keys($vilIDs));
+
             foreach($villages as $village){
                 $field = $database->getResourceLevel($village['wref'], false);
                 for($i=19;$i<=40;$i++){

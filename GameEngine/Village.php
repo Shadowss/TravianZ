@@ -46,6 +46,7 @@ class Village {
         }
 
         $this->LoadTown();
+        $database->cacheResourceLevels($this->wid);
 		$this->calculateProduction();
 		$this->processProduction();
 		$this->ActionControl();

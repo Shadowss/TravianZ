@@ -2073,6 +2073,36 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
+	function cacheResourceLevels($vids) {
+        if (!is_array($vids)) {
+            $vids = [$vids];
+        }
+
+        $newVids = [];
+	    foreach ($vids as $index => $vidValue) {
+            $vids[ $index ] = (int) $vidValue;
+
+            // don't cache what's cached
+	        if (!isset(self::$resourceLevelsCache[$vids[ $index ]])) {
+                $newVids[] = $vids[ $index ];
+            }
+        }
+        $vids = $newVids;
+
+	    if (!count($vids)) {
+	        return [];
+        }
+
+        $q = "SELECT * FROM " . TB_PREFIX . "fdata WHERE vref IN(".implode(', ', $vids).")";
+        $result = mysqli_query($this->dblink,$q);
+
+        foreach ( $this->mysqli_fetch_all( $result ) as $row ) {
+            self::$resourceLevelsCache[ $row['vref'] ] = $row;
+        }
+
+        return self::$resourceLevelsCache;
+    }
+
 	function getResourceLevel($vid, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
 
