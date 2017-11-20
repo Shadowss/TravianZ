@@ -442,15 +442,19 @@ class MYSQLi_DB implements IDbConnection {
 	 */
 	public function connect() {
 	    // try to connect
-	    $this->dblink = mysqli_connect($this->hostname.':'.$this->port, $this->username, $this->password);
+        try {
+            $this->dblink = mysqli_connect( $this->hostname, $this->username, $this->password, $this->dbname, $this->port );
+        } catch (\Exception $exception) {
+            $this->dblink = mysqli_connect( $this->hostname . ':' . $this->port, $this->username, $this->password );
 
-	    // return on error
-	    if (mysqli_error($this->dblink)) {
-	        return false;
-	    }
+            // return on error
+            if (mysqli_error($this->dblink)) {
+                return false;
+            }
 
-	    // select the DB to use
-	    mysqli_select_db($this->dblink, $this->dbname);
+            // select the DB to use
+            mysqli_select_db($this->dblink, $this->dbname);
+        }
 
 	    // return on error
 	    if (mysqli_error($this->dblink)) {

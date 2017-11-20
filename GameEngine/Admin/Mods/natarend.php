@@ -12,8 +12,18 @@
 include_once("../../config.php");
 include_once("../../Session.php");
 include_once("../../Automation.php");
-$GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysqli_select_db($GLOBALS["link"], SQL_DB);
+
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        // we have our path, let's leave
+        break;
+    }
+}
+
+include_once($autoprefix."GameEngine/Database.php");
 
 $id = (int) $_POST['id'];
 $amt = (int) $_POST['vill_amount'];
@@ -38,7 +48,7 @@ for($i=1;$i<=$amt;$i++) {
 		$addTechWrefs[] = $wid;
 		$addABTechWrefs[] = $wid;
 		$speed = NATARS_UNITS;
-		
+
 		//new with random amount of troops
         $q = "UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(50, 1200) * $speed) . ", u42 = " . (rand(100, 1400) * $speed) . ", u43 = " . (rand(200, 1600) * $speed) . ", u44 = " . (rand(10, 50) * $speed) . ", u45 = " . (rand(48, 1700) * $speed) . ", u46 = " . (rand(60, 1800) * $speed) . ", u47 = " . (rand(200, 1600) * $speed) . ", u48 = " . (rand(40, 200) * $speed) . " , u49 = " . (rand(4, 20) * $speed) . ", u50 = " . (rand(5, 25) * $speed) . " WHERE vref = '".$wid."'";
 		mysqli_query($GLOBALS["link"], $q);

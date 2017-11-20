@@ -11,14 +11,22 @@
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
 include_once("../../config.php");
-include_once("../../Database.php");
 
 foreach ($_POST as $key => $value) {
     $_POST[$key] = $database->escape($value);
 }
 
-$GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysqli_select_db($GLOBALS["link"], SQL_DB);
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        // we have our path, let's leave
+        break;
+    }
+}
+
+include_once($autoprefix."GameEngine/Database.php");
 
 $session = (int) $_POST['admid'];
 $id = (int) $_POST['id'];

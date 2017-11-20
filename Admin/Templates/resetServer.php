@@ -12,9 +12,6 @@
 include_once("../../GameEngine/config.php");
 include_once("../../GameEngine/Database.php");
 
-mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysqli_select_db(SQL_DB);
-
 if (!isset($_SESSION)) {
  session_start();
 }
@@ -100,4 +97,4 @@ mysqli_query($GLOBALS["link"], "DELETE FROM ".TB_PREFIX."vdata WHERE owner<>5");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."ww_attacks");
 
 header("Location: ../admin.php?p=resetdone");
-?> 
+?>

@@ -11,11 +11,8 @@
 
 include_once("../../Account.php");
 
-mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysqli_select_db(SQL_DB);
-
 if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");  
+if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 
 $medalid = (int) $_POST['medalid'];
 $uid = (int) $_POST['uid'];

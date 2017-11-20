@@ -12,8 +12,6 @@ include_once("../../config.php");
 include_once("../../Database.php");
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
-$GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysqli_select_db($GLOBALS["link"], SQL_DB);
 
 $id = (int) $_POST['id'];
 $admid = $_POST['admid'];

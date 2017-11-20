@@ -2,12 +2,21 @@
 $count="0";
 include_once("GameEngine/Config.php");
 
-		$connection = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS) or die(mysqli_error($database->dblink));
-		mysqli_select_db(SQL_DB, $connection) or die(mysqli_error($database->dblink));
+// go max 5 levels up - we don't have folders that go deeper than that
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix.'autoloader.php')) {
+        // we have our path, let's leave
+        break;
+    }
+}
 
-		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."movement where endtime < ".time()." and proc = 0";
-		$result = mysqli_fetch_array(mysqli_query($GLOBALS["link"], $q, $connection), MYSQLI_ASSOC);
-		$count=$result['Total'];
+include_once($autoprefix."GameEngine/Database.php");
+
+$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."movement where endtime < ".time()." and proc = 0";
+$result = mysqli_fetch_array(mysqli_query($GLOBALS["link"], $q), MYSQLI_ASSOC);
+$count=$result['Total'];
 
 ?>
 

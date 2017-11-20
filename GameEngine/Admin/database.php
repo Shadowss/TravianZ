@@ -44,21 +44,21 @@ if(isset($gameinstall) && $gameinstall == 1){
 }
 include_once($autoprefix."GameEngine/Database.php");
 class adm_DB {
-	
-	var $connection; 
+
+	var $connection;
 	function __construct(){
 		global $database;
-		$database = new MYSQLi_DB(SQL_SERVER.':'.(defined('SQL_PORT') ? SQL_PORT : 3306), SQL_USER, SQL_PASS, SQL_DB);
+		$database = new MYSQLi_DB(SQL_SERVER, SQL_USER, SQL_PASS, SQL_DB, (defined('SQL_PORT') ? SQL_PORT : 3306));
 		$this->connection = $database->return_link();
 	}
 
 	function Login($username,$password){
 	    global $database;
 	    list($username,$password) = $database->escape_input($username,$password);
-	    
+
 	    $q = "SELECT id, password, is_bcrypt FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
 	    $result = mysqli_query($this->connection, $q);
-	    
+
 	    // if we didn't update the database for bcrypt hashes yet...
 	    if (mysqli_error($database->dblink) != '') {
 	        $q = "SELECT id, password, 0 as is_bcrypt FROM ".TB_PREFIX."users where username = '$username' and access >= ".MULTIHUNTER;
@@ -67,27 +67,27 @@ class adm_DB {
 	    } else {
 	        $bcrypt_update_done = true;
 	    }
-	    
+
 	    $dbarray = mysqli_fetch_array($result);
-	    
+
 	    // even if we didn't do a DB conversion for bcrypt passwords,
 	    // we still need to check if this password wasn't encrypted via password_hash,
 	    // since all methods were updated to use that instead of md5 and therefore
 	    // new passwords in DB will be bcrypt already even without the is_bcrypt field present
 	    $bcrypted = true;
 	    $pwOk = password_verify($password, $dbarray['password']);
-	    
+
 	    if (!$pwOk && !$dbarray['is_bcrypt']) {
 	        $pwOk = ($dbarray['password'] == md5($password));
 	        $bcrypted = false;
 	    }
-	    
+
 	    if($pwOk) {
 	        // update password to bcrypt, if correct
 	        if (!$dbarray['is_bcrypt'] && !$bcrypted) {
 	            mysqli_query($this->connection, "UPDATE " . TB_PREFIX . "users SET password = '".password_hash($password, PASSWORD_BCRYPT,['cost' => 12])."'".($bcrypt_update_done ? ', is_bcrypt = 1' : '')." where id = ".(int) $dbarray['id']);
 	        }
-	        
+
 	        mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,'X','$username logged in (IP: <b>".$_SERVER['REMOTE_ADDR']."</b>)',".time().")");
 	        return true;
 	    }
@@ -122,7 +122,7 @@ class adm_DB {
     $q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = ".(int) $vid;
     mysqli_query($this->connection, $q);
   }
-  
+
     function recountCP($vid){
     global $database;
     $fdata = $database->getResourceLevel($vid);
@@ -149,18 +149,18 @@ class adm_DB {
     }
     return $popT;
   }
-  
+
     function buildingCP($f,$lvl){
         $name = "bid".$f;
         global $$name;
         $popT = 0;
         $dataarray = $$name;
-        
+
         for ($i = 1; $i <= $lvl; $i++) {
             $popT += $dataarray[$i]['cp'];
         }
         return $popT;
-    } 
+    }
 
 	function getWref($x,$y) {
 	    $q = "SELECT id FROM ".TB_PREFIX."wdata where x = ".(int) $x." and y = ".(int) $y;
@@ -261,7 +261,7 @@ class adm_DB {
 		  }
 		  $q = "DELETE FROM ".TB_PREFIX."hero where uid = ".(int) $uid;
 		  mysqli_query($this->connection,$q);
- 
+
 		  $name = $database->getUserField($uid,"username",0);
 		  mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,$ID,'Deleted user <a>$name</a>',".time().")");
 
@@ -270,7 +270,7 @@ class adm_DB {
 	} else {
 	    return false;
 	}
-	
+
 	return true;
   }
 
@@ -284,7 +284,7 @@ class adm_DB {
   function CheckPass($password,$uid){
     $q = "SELECT id,password, is_bcrypt FROM ".TB_PREFIX."users where id = ".(int) $uid." and access = ".ADMIN;
 	$result = mysqli_query($this->connection, $q);
-	
+
 	// if we didn't update the database for bcrypt hashes yet...
 	if (mysqli_error($this->connection) != '') {
 	    // no need to select ID here, since the DB is not updated, so there will be no password conversion later
@@ -296,19 +296,19 @@ class adm_DB {
 	}
 
 	$dbarray = mysqli_fetch_array($result);
-	
+
 	// even if we didn't do a DB conversion for bcrypt passwords,
 	// we still need to check if this password wasn't encrypted via password_hash,
 	// since all methods were updated to use that instead of md5 and therefore
 	// new passwords in DB will be bcrypt already even without the is_bcrypt field present
 	$bcrypted = true;
 	$pwOk = password_verify($password, $dbarray['password']);
-	
+
 	if (!$pwOk && !$dbarray['is_bcrypt']) {
 	    $pwOk = ($dbarray['password'] == md5($password));
 	    $bcrypted = false;
 	}
-	
+
 	if($pwOk) {
 	    // update password to bcrypt, if correct
 	    if ($bcrypt_update_done && !$dbarray['is_bcrypt']) {
@@ -334,7 +334,7 @@ class adm_DB {
 		    mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Deleted village <b>$wref</b>',".time().")");
 
 			$database->clearExpansionSlot($wref);
-		
+
 			$q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";
 			mysqli_query($this->connection, $q);
 			$q = "DELETE FROM ".TB_PREFIX."bdata where wid = $wref";
@@ -357,13 +357,13 @@ class adm_DB {
 			mysqli_query($this->connection, $q);
 			$q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
 			mysqli_query($this->connection, $q);
-		
+
 			$q = "DELETE FROM ".TB_PREFIX."movement where `from` = $wref and proc=0";
 			mysqli_query($this->connection, $q);
-			
+
 			$q = "UPDATE ".TB_PREFIX."wdata SET occupied = 0 where id = $wref";
 			mysqli_query($this->connection, $q);
-				
+
 			$getmovement = $database->getMovement(3,$wref,1);
 			foreach($getmovement as $movedata) {
 				$time = microtime(true);
@@ -375,14 +375,14 @@ class adm_DB {
 
 			//check	return enforcement from del village
 			$this->returnTroops($wref);
-		
+
 			$q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
 			mysqli_query($this->connection, $q);
-	
+
 			if (mysqli_affected_rows($this->connection)>0) {
 				$q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
 				mysqli_query($this->connection, $q);
-			
+
 				$getprisoners = $database->getPrisoners($wref);
 				foreach($getprisoners as $pris) {
 					$troops = 0;
@@ -403,8 +403,8 @@ class adm_DB {
 				}
 			}
 		}
-	}	
-  
+	}
+
 	function DelBan($uid,$id){
 	 global $database;
 	 $name = addslashes($database->getUserField($uid,"username",0));
@@ -511,7 +511,7 @@ class adm_DB {
 	public function getTypeLevel($tid,$vid) {
 		global $village,$database;
 		$keyholder = array();
-		
+
 		if($vid == 0) {
 			$resourcearray = $village->resarray;
 		} else {
@@ -560,7 +560,7 @@ class adm_DB {
 
 	   public function procDistanceTime($coor,$thiscoor,$ref,$vid) {
 		global $bid28,$bid14;
-		
+
 		$xdistance = ABS($thiscoor['x'] - $coor['x']);
 		if($xdistance > WORLD_MAX) {
 			$xdistance = (2 * WORLD_MAX + 1) - $xdistance;
@@ -585,17 +585,17 @@ class adm_DB {
         global $database;
 
         $getenforce=$database->getEnforceVillage($wref,0);
-        
+
 		//if(($enforce['from']==$village->wid) || ($enforce['vref']==$village->wid)){
         foreach($getenforce as $enforce) {
-			
+
 			$to = $database->getVillage($enforce['from']);
 			$Gtribe = "";
 			if ($database->getUserField($to['owner'],'tribe',0) ==  '2'){ $Gtribe = "1"; }
 			else if ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe =  "2"; }
 			else if ($database->getUserField($to['owner'],'tribe',0) ==  '4'){ $Gtribe = "3"; }
 			else if  ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe =  "4"; }
-                    
+
 			$start = ($database->getUserField($to['owner'],'tribe',0)-1)*10+1;
 			$end = ($database->getUserField($to['owner'],'tribe',0)*10);
 
@@ -609,20 +609,20 @@ class adm_DB {
 
 			//find slowest unit.
 			for($i=$start;$i<=$end;$i++){
-				
+
 				if(intval($enforce['u'.$i]) > 0){
 					if($unitarray) { reset($unitarray); }
 					$unitarray = $GLOBALS["u".$i];
 					$speeds[] = $unitarray['speed'];
 					//echo print_r(array_keys($speeds))."unitspd\n".$i."trib\n";
-					
+
 
 				} else {
 					$enforce['u'.$i]='0';
 				}
-				
+
 			}
-			
+
 			if( intval($enforce['hero']) > 0){
 			    $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
 				$result = mysqli_query($q);
@@ -632,7 +632,7 @@ class adm_DB {
 			} else {
 				$enforce['hero']='0';
 			}
-			
+
 			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
 			$artefact1 = count($database->getOwnUniqueArtefactInfo2($enforce['from'],2,1,1));
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
@@ -646,7 +646,7 @@ class adm_DB {
 				$fastertroops = 1;
 			}
 			$time = round($this->procDistanceTime($fromCor,$toCor,min($speeds),$enforce['from'])/$fastertroops);
-			
+
 			$foolartefact2 = $database->getFoolArtefactInfo(2,$enforce['from'],$from['owner']);
 			if(count($foolartefact2) > 0){
 				foreach($foolartefact2 as $arte){
@@ -662,7 +662,7 @@ class adm_DB {
 			$database->addMovement(4,$wref,$enforce['from'],$reference,time(),($time+time()));
 			$database->deleteReinf($enforce['id']);
 		}
-	}	
+	}
 
 
 	public function calculateProduction($wid,$uid,$b1,$b2,$b3,$b4,$fdata,$ocounter,$pop) {
@@ -671,8 +671,8 @@ class adm_DB {
 		$largeA = $database->getOwnUniqueArtefactInfo($uid,4,2);
 		$uniqueA = $database->getOwnUniqueArtefactInfo($uid,4,3);
 		$upkeep = $this->getUpkeep($this->getAllUnits($wid),0,$wid,$uid);
-		
-		
+
+
 		$production=array();
 		$production['wood'] = $this->getWoodProd($fdata, $ocounter,$b1);
 		$production['clay'] = $this->getClayProd($fdata, $ocounter,$b2);
@@ -822,9 +822,9 @@ class adm_DB {
 					}
 					$ownunit['hero'] += $enforce['hero'];
 				}
-			}		
+			}
 
-			
+
 			$prisoners = $database->getPrisoners($base,1);
 			if(!empty($prisoners)) {
 				foreach($prisoners as $prisoner){
@@ -840,7 +840,7 @@ class adm_DB {
 				}
 			}
 		}
-		
+
 		if(!$InVillageOnly) {
 			$movement = $database->getVillageMovement($base);
 			if(!empty($movement)) {
@@ -854,7 +854,7 @@ class adm_DB {
 		}
 		return $ownunit;
 	}
-	
+
 	public function getUpkeep($array,$type,$vid,$uid,$prisoners=0) {
 		global $database;
 		$buildarray = array();
@@ -956,7 +956,7 @@ class adm_DB {
 			}
 		return $upkeep;
 	}
-	
+
 };
 
 $admin = new adm_DB;

@@ -24,8 +24,6 @@ include_once($autoprefix."GameEngine/config.php");
 include_once($autoprefix."GameEngine/Session.php");
 include_once($autoprefix."GameEngine/Automation.php");
 include_once($autoprefix."GameEngine/Database.php");
-$GLOBALS["link"] = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysqli_select_db($GLOBALS["link"], SQL_DB);
 
 $wgarray=array(1=>1200,1700,2300,3100,4000,5000,6300,7800,9600,11800,14400,17600,21400,25900,31300,37900,45700,55100,66400,80000);
 
@@ -71,12 +69,12 @@ else
         $userName = $baseName . $i;
         // Random passwords disallow admin logging in to use the accounts
         $password = $generator->generateRandStr(20);
-        
+
         // Leaving the line below but commented out - could be used to
         // allow admin to log in to the generated accounts and play them
         // Easily guessed by players so should only be used for testing
         //$password = $baseName . $i . 'PASS';
-        
+
         $email = $baseName . $i . '@example.com';
         if ($postTribe == 0)
         {
@@ -92,7 +90,7 @@ else
         $kid = rand(1,4);
         // Dont need to activate, not 100% sure we need to initialise $act
         $act = "";
-        
+
         // Check username not already registered
         if(User::exists($database, $userName))
         {
@@ -116,14 +114,14 @@ else
 * Don't directly access the DB, create a $database function
 * where required
 */
-                
+
                 // Show the dove in User Profile - will show this even if
                 // beginners protection is not checked
                 // Need a $database function for this
                 // (assuming we don't already have one as creating Natars also updates this way)
                 $q = "UPDATE " . TB_PREFIX . "users SET desc2 = '[#0]' WHERE id = ".(int) $uid;
                 mysqli_query($GLOBALS["link"], $q) or die(mysqli_error($database->dblink));
-               
+
                 if (!$beginnersProtection)
                 {
                     // No beginners protection so set it to current time
@@ -135,17 +133,17 @@ else
 protect = '".$protection."'
 WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
                 }
-                
+
                 $database->updateUserField($uid,"act","",1);
                 $wid = $database->generateBase($kid,0,false);
                 $database->setFieldTaken($wid);
-                
+
                 //calculate random generate value and level building
                 $rand_resource=rand(30000, 80000);
                 $level_storage=rand(10, 20);
                 $cap_storage=$wgarray[$level_storage]*(STORAGE_BASE/800);
                 $rand_resource=($rand_resource>$cap_storage)? $cap_storage:$rand_resource;
-                
+
                 //insert village with all resource and building with random level
                 $time = time();
                 $q = "INSERT INTO ".TB_PREFIX."vdata (`wref`,`owner`,`name`,`capital`,`pop`,`cp`,`celebration`,`type`,`wood`,`clay`,`iron`,`maxstore`,`crop`,`maxcrop`,`lastupdate`,`loyalty`,`exp1`,`exp2`,`exp3`,`created`) values (".(int) $wid.",".(int) $uid.",'".$userName."\'s village',1,200,1,0,0,$rand_resource,$rand_resource,$rand_resource,$cap_storage,$rand_resource,$cap_storage,$time,100,0,0,0,$time)";
@@ -158,13 +156,13 @@ WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
                 $addTechWrefs[] = $wid;
                 $addABTechWrefs[] = $wid;
                 $database->updateUserField($uid,"access",USER,1);
-                
+
                 //insert units randomly generate the number of troops
                 $q = "UPDATE " . TB_PREFIX . "units SET u".(($tribe-1)*10+1)." = ".rand(100, 2000).", u".(($tribe-1)*10+2)." = ".rand(100, 2400).", u".(($tribe-1)*10+3)." = ".rand(100, 1600).", u".(($tribe-1)*10+4)." = ".rand(100, 1500).", u".(($tribe-1)*10+5)." = " .rand(48, 1700).", u".(($tribe-1)*10+6)." = ".rand(60, 1800)." WHERE vref = '".$wid."'";
                 mysqli_query($GLOBALS["link"], $q);
 
                 $created ++;
-            
+
             }
             else
             {
