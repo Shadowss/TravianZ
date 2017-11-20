@@ -187,10 +187,10 @@ class Technology {
 	}
 
 	public function maxUnit($unit,$great=false) {
-        global $village,$$unit,$database;
-
 		$unit = "u".$unit;
-		$unitarray = $$unit;
+
+        global $village,$$unit,$database;
+        $unitarray = $$unit;
 		$res = $database->getVillage($village->wid);
 		if ($res['wood'] > $res['maxstore']){$res['wood'] = $res['maxstore'];}
 		if ($res['clay'] > $res['maxstore']){$res['clay'] = $res['maxstore'];}
@@ -213,9 +213,9 @@ class Technology {
 	}
 
 	public function maxUnitPlus($unit,$great=false) {
-        global $village,$$unit,$database;
-
 		$unit = "u".$unit;
+
+        global $village,$$unit,$database;
 		$unitarray = $$unit;
 		$res = $database->getVillage($village->wid);
 		$totalres = $res['wood']+$res['clay']+$res['iron']+$res['crop'];
