@@ -114,7 +114,7 @@ class Session {
                         if($selected_village!='') {
                             $data = $database->getVillage($selected_village);
                         }else{
-                            $data = $database->$database->getVillage($userFields["id"]);
+                            $data = $database->getVillage($userFields["id"]);
                         }
                         $_SESSION['wid'] = $data['wref'];
                     } else
@@ -122,7 +122,7 @@ class Session {
                             if($selected_village!='') {
                                 $data = $database->getVillage($selected_village);
                             }else{
-                                $data = $database->$database->getVillage($userFields["id"]);
+                                $data = $database->getVillage($userFields["id"]);
                             }
                             $_SESSION['wid'] = $data['wref'];
                         }
