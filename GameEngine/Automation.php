@@ -3582,6 +3582,8 @@ class Automation {
                 $vilIDs[$data['to']] = true;
             }
             $database->getProfileVillages(array_keys($vilIDs), 5);
+            $database->getOasisEnforce($vilIDs, 0);
+            $database->getOasisEnforce($vilIDs, 1);
 
             $movementProcIDs = [];
             foreach($dataarray as $data) {
@@ -4285,6 +4287,8 @@ class Automation {
             $database->getMovement(3, $vilIDs, 0);
             $database->getMovement(4, $vilIDs, 1);
             $database->getMovement(5, $vilIDs, 0);
+            $database->getOasisEnforce($vilIDs, 0);
+            $database->getOasisEnforce($vilIDs, 1);
 
             // calculate training updates
             foreach($trainlist as $train){
@@ -4871,6 +4875,8 @@ class Automation {
         }
         $vilIDs = array_keys($vilIDs);
         $database->getEnforceVillage($vilIDs, 0);
+        $database->getOasisEnforce($vilIDs, 2);
+        $database->getOasisEnforce($vilIDs, 3);
 
         foreach ($starvarray as $starv){
             $unitarrays = $this->getAllUnits($starv['wref']);

@@ -5984,27 +5984,79 @@ References: User ID/Message ID, Mode
 	}
 
     function getOasisEnforce($ref, $mode=0, $use_cache = true) {
-        list($ref, $mode) = $this->escape_input((int) $ref, $mode);
+        $array_passed = is_array($ref);
+        $mode = (int) $mode;
+
+        if (!$array_passed) {
+            $ref = [(int) $ref];
+        } else {
+            foreach ($ref as $index => $refValue) {
+                $ref[$index] = (int) $refValue;
+            }
+        }
+
+        if (!count($ref)) {
+            return [];
+        }
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$oasisReinforcementsCache, $ref.$mode)) && !is_null($cachedValue)) {
+        if ($use_cache && !$array_passed && isset(self::$oasisReinforcementsCache[$ref[0].$mode]) && is_array(self::$oasisReinforcementsCache[$ref[0].$mode]) && !count(self::$oasisReinforcementsCache[$ref[0].$mode])) {
+            return self::$oasisReinforcementsCache[$ref[0].$mode];
+        } else if ($use_cache && $array_passed) {
+            // check what we can return from cache
+            $newREFs = [];
+            foreach ($ref as $key) {
+                if (!isset(self::$oasisReinforcementsCache[$key.$mode])) {
+                    $newREFs [] = $key;
+                }
+            }
+
+            // everything's cached, just return the cache
+            if (!count($newREFs)) {
+                return self::$oasisReinforcementsCache;
+            } else {
+                // update remaining IDs to select and cache
+                $ref = $newREFs;
+            }
+        } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$oasisReinforcementsCache, $ref[0].$mode)) && !is_null($cachedValue)) {
+            // special case when we have empty arrays cached for this cache only
             return $cachedValue;
         }
 
         if (!$mode) {
-            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured = $ref AND e.from !=$ref";
+            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured IN(".implode(', ', $ref).") AND e.from NOT IN(".implode(', ', $ref).")";
         }else if ($mode == 1) {
-            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured = $ref";
+            $q = "SELECT e.*,o.conqured FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref where o.conqured IN(".implode(', ', $ref).")";
         } else if ($mode == 2) {
-            $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=$ref AND o.owner<>v.owner";
+            $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured IN(".implode(', ', $ref).") AND o.owner<>v.owner";
         } else if ($mode == 3) {
-            $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured=$ref AND o.owner=v.owner";
+            $q = "SELECT e.*,o.conqured,o.wref,o.high, o.owner as ownero, v.owner as ownerv FROM ".TB_PREFIX."enforcement as e LEFT JOIN ".TB_PREFIX."odata as o ON e.vref=o.wref LEFT JOIN ".TB_PREFIX."vdata as v ON e.from=v.wref where o.conqured IN(".implode(', ', $ref).") AND o.owner=v.owner";
         }
-        $result = mysqli_query($this->dblink,$q);
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$oasisReinforcementsCache[$ref.$mode] = $this->mysqli_fetch_all($result);
-        return self::$oasisReinforcementsCache[$ref.$mode];
+        // return a single value
+        if (!$array_passed) {
+            self::$oasisReinforcementsCache[$ref[0].$mode] = $result;
+        } else {
+            foreach ( $result as $record ) {
+                if ( ! isset( self::$oasisReinforcementsCache[ $record['conqured'] . $mode ] ) ) {
+                    self::$oasisReinforcementsCache[ $record['conqured'] . $mode ] = [];
+                }
+
+                self::$oasisReinforcementsCache[ $record['conqured'] . $mode ][] = $record;
+            }
+
+            // check for any missing IDs and fill them in with blanks,
+            // since no reinforcements were found for these villages
+            foreach ($ref as $key) {
+                if (!isset(self::$oasisReinforcementsCache[$key.$mode])) {
+                    self::$oasisReinforcementsCache[$key.$mode] = [];
+                }
+            }
+        }
+
+        return ($array_passed ? self::$oasisReinforcementsCache : self::$oasisReinforcementsCache[$ref[0].$mode]);
     }
 
     function getOasisEnforceArray($id, $mode=0, $use_cache = true) {
