@@ -4539,11 +4539,13 @@ class Automation {
             $unitData = $database->getUnit($heroVillageIDs);
 
             // now do the math
+            $lastUpdateIDs = [];
+            $timeNow = time();
             foreach($harray as $hdata){
                 $columns = [];
                 $columnValues = [];
                 $modes = [];
-                $lastUpdateTime = time();
+                $lastUpdateTime = $timeNow;
                 $newHealth = -1;
 
                 if((time()-$hdata['lastupdate'])>=1){
@@ -4629,12 +4631,23 @@ class Automation {
                     $modes[] = null;
                 }
 
-                // last update timestamp
-                $columns[] = 'lastupdate';
-                $columnValues[] = $lastUpdateTime;
-                $modes[] = null;
+                if ($lastUpdateTime != $timeNow) {
+                    // last update timestamp
+                    $columns[]      = 'lastupdate';
+                    $columnValues[] = $lastUpdateTime;
+                    $modes[]        = null;
+                } else {
+                    // leave same last update values for multiple heroes to the end
+                    $lastUpdateIDs[] = $hdata['heroid'];
+                }
 
-                $database->modifyHero($columns, $columnValues, $hdata['heroid']);
+                if (count($columns)) {
+                    $database->modifyHero( $columns, $columnValues, $hdata['heroid'] );
+                }
+            }
+
+            if (count($lastUpdateIDs)) {
+                mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET lastupdate = $timeNow WHERE heroid IN(".implode(', ', $lastUpdateIDs).")");
             }
         }
         if(file_exists("GameEngine/Prevention/updatehero.txt")) {

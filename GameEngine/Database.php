@@ -5691,19 +5691,6 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function modifyHeroByOwner($column,$value,$uid,$mode=0) {
-	    list($column,$value,$uid,$mode) = $this->escape_input($column,$value,(int) $uid,$mode);
-
-		if(!$mode) {
-			$q = "UPDATE `".TB_PREFIX."hero` SET $column = '$value' WHERE uid = $uid AND dead = 0";
-		} elseif($mode=1) {
-		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column + ". (int) $value ." WHERE uid = $uid AND dead = 0";
-		} else {
-		    $q = "UPDATE `".TB_PREFIX."hero` SET $column = $column - ". (int) $value ." WHERE uid = $uid AND dead = 0";
-		}
-		return mysqli_query($this->dblink,$q);
-	}
-
 	function modifyHeroXp($column,$value,$heroid) {
 	    list($column,$value,$heroid) = $this->escape_input($column,(int) $value,(int) $heroid);
 
@@ -5811,7 +5798,6 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-    // no need to cache this method
 	function getResearching($vid, $use_cache = true) {
         $vid = (int) $vid;
 
