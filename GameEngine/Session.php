@@ -192,7 +192,6 @@ class Session {
         			$this->PopulateVar();
         			//update database
         			$database->updateActiveUser($user, $this->time);
-        			$database->updateUserField($user, "timestamp", $this->time, 0);
             		return true;
         		} else {
                     return false;
