@@ -5818,7 +5818,7 @@ References: User ID/Message ID, Mode
 
         // return a single value
         if (!$array_passed) {
-            self::$abTechCache[$vid[0]] = $result;
+            self::$abTechCache[$vid[0]] = $result[0];
         } else {
             if ($result && count($result)) {
                 foreach ( $result as $record ) {
