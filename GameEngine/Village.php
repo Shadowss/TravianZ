@@ -92,7 +92,7 @@ class Village {
 		$this->unitall =  $technology->getAllUnits($this->wid);
 		$this->techarray = $database->getTech($this->wid);
 		$this->abarray = $database->getABTech($this->wid);
-		$this->researching = $database->getResearching($this->wid);
+		$this->researching = $database->getResearching($this->wid, !$second_run);
 
 		$this->capital = $this->infoarray['capital'];
 		$this->natar = $this->infoarray['natar'];
