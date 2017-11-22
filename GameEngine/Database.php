@@ -3845,9 +3845,9 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         if($field != "cp"){
-            $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") GROUP BY owner";
+            $q = "SELECT owner, MIN(lastupdate), SUM(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") GROUP BY owner";
         }else{
-            $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") and natar = 0 GROUP BY owner";
+            $q = "SELECT owner, MIN(lastupdate), SUM(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") and natar = 0 GROUP BY owner";
         }
 
         $result = mysqli_query($this->dblink,$q);
