@@ -20,7 +20,7 @@ if(isset($id))
 	$type = $database->getVillageType($village['wref']);
 	$fdata = $database->getResourceLevel($village['wref']);
 	$units = $database->getUnit($village['wref']);
-	$abtech = $database->getABTech($id); // Armory/blacksmith level	
+	$abtech = $database->getABTech($id); // Armory/blacksmith level
 	if($type == 1){ $typ = array(3,3,3,9); }
 	elseif($type == 2){ $typ = array(3,4,5,6); }
 	elseif($type == 3){ $typ = array(4,4,4,6); }
@@ -40,7 +40,7 @@ if(isset($id))
 	if(count($result) >0)
 		{
 			foreach($result as $row)
-			{				
+			{
 				$type = $row['type'];
 							if($type==1) 	 { $type = '<img src="../img/admin/r/1.gif"> + 25%'; $wood+=1;}
 							elseif($type==2) { $type = '<img src="../img/admin/r/1.gif"> + 25%'; $wood+=1;}
@@ -54,13 +54,13 @@ if(isset($id))
 							elseif($type==10){ $type = '<img src="../img/admin/r/4.gif"> + 25%'; $crop+=1;}
 							elseif($type==11){ $type = '<img src="../img/admin/r/4.gif"> + 25%'; $crop+=1;}
 							elseif($type==12){ $type = '<img src="../img/admin/r/4.gif"> + 50%'; $crop+=2;}
-			}	
+			}
 		}
 	$ocounter = array($wood,$clay,$iron,$crop);
 	$production=$admin->calculateProduction($id,$user['id'],$user['b1'],$user['b2'],$user['b3'],$user['b4'],$fdata, $ocounter, $village['pop']);
 	$refreshiconfrm = "../img/admin/refresh.png";
 	$refreshicon  = "<img src=\"".$refreshiconfrm."\">";
-	
+
 	class MyGenerator
 	{
 		public function getMapCheck($wref)
@@ -69,14 +69,14 @@ if(isset($id))
 		}
 	};
 	$generator = new MyGenerator;
-	
+
 	if($village and $user)
 	{
 		include("search2.tpl"); ?>
 		<style>
 			.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
 		</style>
-		<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css">
+		<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css">
 		<br />
 
 		<table id="profile" cellpadding="1" cellspacing="1" >
@@ -249,7 +249,7 @@ if(isset($id))
 								<td class=\"hab\">".round($row['loyalty'])."%</td>
 								<td class=\"hab\">$type</td>
 							</tr>";
-						}	  
+						}
 					}
 					elseif($result ==0)
 					{

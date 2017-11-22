@@ -31,23 +31,23 @@ $automation->isWinner();
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title><?php 
+	<title><?php
 	echo SERVER_NAME . ' &raquo; &raquo; &raquo; PLUS ';
-	
+
 	if (!empty($_GET['id'])) {
 	    switch ($_GET['id']) {
 	        case '2':
 	            echo 'Advantages';
 	            break;
-	            
+
 	        case '3':
 	            echo 'Gold';
 	            break;
-	            
+
 	        case '4':
 	            echo 'FAQ';
 	            break;
-	            
+
 	        case '5':
 	            echo 'Earn Gold';
 	            break;
@@ -66,7 +66,7 @@ $automation->isWinner();
 	<script src="unx.js?f4b7g" type="text/javascript"></script>
 	<script src="new.js?0faab" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "

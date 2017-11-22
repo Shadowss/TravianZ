@@ -33,7 +33,7 @@ $battle->procSim($_POST);
 	<script src="unx.js?f4b7g" type="text/javascript"></script>
 	<script src="new.js?0faab" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
@@ -88,7 +88,7 @@ if(isset($_POST['result'])) {
             echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$totallvl."</b></p>";
         }
     }
-    
+
     if (isset($_POST['result'][3])&&isset($_POST['result'][4])){
         if ($form->getValue('ktyp') == 1) {
             echo "Hint: The catapult does not shoot during a raid.</p>";
@@ -103,7 +103,7 @@ if(isset($_POST['result'])) {
             $totallvl = round(sqrt(pow(($form->getValue('kata')+0.5),2)-($_POST['result'][4]*8)));
             echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$totallvl."</b></p>";
         }
-    } 
+    }
 }
 
 if (!empty($_GET['target'])) {
@@ -118,8 +118,8 @@ if (!empty($_GET['target'])) {
             $form->setValue('a2_' . substr($key, 1), $value);
         }
     }
-    
-    
+
+
 }
 
 $target = isset($_POST['target'])? $_POST['target'] : (!empty($_GET['target']) ? array((int) $_GET['target']) : array());

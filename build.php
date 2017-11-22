@@ -332,7 +332,7 @@ if ( isset( $_GET['id'] ) ) {
 	<script src="unx.js?f4b7g" type="text/javascript"></script>
 	<script src="new.js?ebe79" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
@@ -402,7 +402,7 @@ if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['rout
             		$building->finishAll("build.php?gid=".$_GET['id']."&ty=".$_GET['ty']);
             		exit;
         	}
-        	}  
+        	}
 	}
 }else{
 header("Location: ".$_SERVER['PHP_SELF']."?id=39");

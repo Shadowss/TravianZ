@@ -6866,7 +6866,7 @@ img.iReport19 {
 }
 div#map a#map_makelarge img {
     background-image: url("../../img/m/max.gif");
-	
+
     height: 25px;
     width: 33px;
 }
@@ -8415,40 +8415,49 @@ div.village1 div.f99, div.map img.f99 {
 div.village1 div#village_map img.level1, div.village1 div#village_map img.level2, div.village1 div#village_map img.level3, div.village1 div#village_map img.level4, div.village1 div#village_map img.level5, div.village1 div#village_map img.level6, div.village1 div#village_map img.level7, div.village1 div#village_map img.level8, div.village1 div#village_map img.level9, div.village1 div#village_map img.level10 {
     background-image: url("../../img/g/s/lvl1_10.gif");
 }
+div.village1 div#village_map img.level1_active,div.village1 div#village_map img.level2_active,div.village1 div#village_map img.level3_active,div.village1 div#village_map img.level4_active,div.village1 div#village_map img.level5_active,div.village1 div#village_map img.level6_active,div.village1 div#village_map img.level7_active,div.village1 div#village_map img.level8_active,div.village1 div#village_map img.level9_active,div.village1 div#village_map img.level10_active {
+    background-image: url("../../img/g/s/lvl1_10.gif");
+}
 div.village1 div#village_map img.level11, div.village1 div#village_map img.level12, div.village1 div#village_map img.level13, div.village1 div#village_map img.level14, div.village1 div#village_map img.level15, div.village1 div#village_map img.level16, div.village1 div#village_map img.level17, div.village1 div#village_map img.level18, div.village1 div#village_map img.level19, div.village1 div#village_map img.level20 {
+    background-image: url("../../img/g/s/lvl11_20.gif");
+}
+div.village1 div#village_map img.level11_active,div.village1 div#village_map img.level12_active,div.village1 div#village_map img.level13_active,div.village1 div#village_map img.level14_active,div.village1 div#village_map img.level15_active,div.village1 div#village_map img.level16_active,div.village1 div#village_map img.level17_active,div.village1 div#village_map img.level18_active,div.village1 div#village_map img.level19_active,div.village1 div#village_map img.level20_active {
     background-image: url("../../img/g/s/lvl11_20.gif");
 }
 div.village1 div#village_map img.level21, div.village1 div#village_map img.level22, div.village1 div#village_map img.level23, div.village1 div#village_map img.level24, div.village1 div#village_map img.level25 {
     background-image: url("../../img/g/s/lvl21_30.gif");
 }
-div.village1 div#village_map img.level1, div.village1 div#village_map img.level11, div.village1 div#village_map img.level21 {
+div.village1 div#village_map img.level21_active,div.village1 div#village_map img.level22_active,div.village1 div#village_map img.level23_active,div.village1 div#village_map img.level24_active,div.village1 div#village_map img.level25_active {
+    background-image: url("../../img/g/s/lvl21_30.gif");
+}
+div.village1 div#village_map img.level1, div#village_map img.level1_active, div.village1 div#village_map img.level11, div.village1 div#village_map img.level11_active, div.village1 div#village_map img.level21, div.village1 div#village_map img.level21_active {
     background-position: 0 0;
 }
-div.village1 div#village_map img.level2, div.village1 div#village_map img.level12, div.village1 div#village_map img.level22 {
+div.village1 div#village_map img.level2, div.village1 div#village_map img.level2_active, div.village1 div#village_map img.level12, div.village1 div#village_map img.level12_active, div.village1 div#village_map img.level22, div.village1 div#village_map img.level22_active {
     background-position: -17px 0;
 }
-div.village1 div#village_map img.level3, div.village1 div#village_map img.level13, div.village1 div#village_map img.level23 {
+div.village1 div#village_map img.level3, div.village1 div#village_map img.level3_active, div.village1 div#village_map img.level13, div.village1 div#village_map img.level13_active, div.village1 div#village_map img.level23, div.village1 div#village_map img.level23_active {
     background-position: -34px 0;
 }
-div.village1 div#village_map img.level4, div.village1 div#village_map img.level14, div.village1 div#village_map img.level24 {
+div.village1 div#village_map img.level4, div.village1 div#village_map img.level4_active, div.village1 div#village_map img.level14, div.village1 div#village_map img.level14_active, div.village1 div#village_map img.level24, div.village1 div#village_map img.level24_active {
     background-position: -51px 0;
 }
-div.village1 div#village_map img.level5, div.village1 div#village_map img.level15, div.village1 div#village_map img.level25 {
+div.village1 div#village_map img.level5, div.village1 div#village_map img.level5_active, div.village1 div#village_map img.level15, div.village1 div#village_map img.level15_active, div.village1 div#village_map img.level25, div.village1 div#village_map img.level25_active {
     background-position: -68px 0;
 }
-div.village1 div#village_map img.level6, div.village1 div#village_map img.level16 {
+div.village1 div#village_map img.level6, div.village1 div#village_map img.level6_active, div.village1 div#village_map img.level16, div.village1 div#village_map img.level16_active {
     background-position: -85px 0;
 }
-div.village1 div#village_map img.level7, div.village1 div#village_map img.level17 {
+div.village1 div#village_map img.level7, div.village1 div#village_map img.level7_active, div.village1 div#village_map img.level17, div.village1 div#village_map img.level17_active {
     background-position: -102px 0;
 }
-div.village1 div#village_map img.level8, div.village1 div#village_map img.level18 {
+div.village1 div#village_map img.level8, div.village1 div#village_map img.level8_active, div.village1 div#village_map img.level18, div.village1 div#village_map img.level18_active {
     background-position: -119px 0;
 }
-div.village1 div#village_map img.level9, div.village1 div#village_map img.level19 {
+div.village1 div#village_map img.level9, div.village1 div#village_map img.level9_active, div.village1 div#village_map img.level19, div.village1 div#village_map img.level19_active {
     background-position: -136px 0;
 }
-div.village1 div#village_map img.level10, div.village1 div#village_map img.level20 {
+div.village1 div#village_map img.level10, div.village1 div#village_map img.level10_active, div.village1 div#village_map img.level20, div.village1 div#village_map img.level20_active {
     background-position: -153px 0;
 }
 div.map img#detailed_map {
