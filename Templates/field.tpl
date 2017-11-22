@@ -16,14 +16,6 @@ $arrayVillage = $village->resarray;
 ?>
 <map name="rx" id="rx">
 <?php
-for($i=1;$i<=18;$i++) {echo "	<area href=\"build.php?id=$i\" coords=\"$coorarray[$i]\" shape=\"circle\" title=\"".$building->procResType($arrayVillage['f'.$i.'t'])." Level ".$arrayVillage['f'.$i]."\"/>\r\n";
-}
-?>
-	<area href="dorf2.php" coords="144,131,36" shape="circle" title="Village centre" alt="" />
-</map>
-
-<div id="village_map" class="f<?php echo $village->type; ?>">
-<?php
 $jobs = $database->getJobs($village->wid);
 $activeFields = [];
 if (count($jobs)) {
@@ -34,6 +26,15 @@ if (count($jobs)) {
     }
 }
 
+for ($i=1; $i<=18; $i++) {
+    echo "	<area href=\"build.php?id=$i\" coords=\"$coorarray[$i]\" shape=\"circle\" title=\"".$building->procResType($arrayVillage['f'.$i.'t'])." Level ".$arrayVillage['f'.$i].(isset($activeFields[$i]) ? ' (upgrade in progress)' : '')."\"/>\r\n";
+}
+?>
+	<area href="dorf2.php" coords="144,131,36" shape="circle" title="Village centre" alt="" />
+</map>
+
+<div id="village_map" class="f<?php echo $village->type; ?>">
+<?php
 for($i=1;$i<=18;$i++) {
 	if($arrayVillage['f'.$i.'t'] != 0) {
 		$text = "";
@@ -43,7 +44,7 @@ for($i=1;$i<=18;$i++) {
 			case 3:$text = "Iron Mine Level";break;
 			case 4:$text = "Cropland Level";break;
 		}
-		echo "<img src=\"img/x.gif\" class=\"reslevel rf$i level".$arrayVillage['f'.$i].(isset($activeFields[$i]) ? '_active' : '')."\" alt=\"$text ".$arrayVillage['f'.$i]."\" />";
+		echo "<img src=\"img/x.gif\" class=\"reslevel rf$i level".$arrayVillage['f'.$i].(isset($activeFields[$i]) ? '_active' : '')."\" alt=\"$text ".$arrayVillage['f'.$i].(isset($activeFields[$i]) ? ' (upgrade in progress)' : '')."\" />";
 	}
 }
 ?>
