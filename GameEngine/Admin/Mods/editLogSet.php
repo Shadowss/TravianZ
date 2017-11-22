@@ -14,9 +14,18 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 include_once("../../Database.php");
 $id = (int) $_POST['id'];
 
+if (file_exists('constant_format.tpl')) {
+    die(
+        'You seem to be running a new version of TravianZ which was installed using an old installer.<br />' .
+        'Please download <strong>constant_format.tpl</strong> file and copy it into the <strong>GameEngine/Admin/Mods</strong> ' .
+        'directory  - otherwise saving configuration won\'t work.<br /><br />' .
+        'The constant_format.tpl file can be downloaded at ' .
+        '<strong>https://raw.githubusercontent.com/Shadowss/TravianZ/master/install/data/constant_format.tpl</strong>');
+}
+
 $myFile = "../../config.php";
 $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\config.php");
-		
+
 		$ERRORREPORT=ERROR_REPORT;
 		$T4=(T4_COMING==false)? "false":"true";
 		$GP_ENABLE=(GP_ENABLE==false)? "false":"true";
@@ -26,7 +35,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$AUTH_EMAIL=(AUTH_EMAIL==false)? "false":"true";
 		$GREAT_WKS=(GREAT_WKS==false)? "false":"true";
 		$REG_OPEN=(REG_OPEN==false)? "false":"true";
-		
+
 		$NEWSBOX1=(NEWSBOX1==false)? "false":"true";
 		$NEWSBOX2=(NEWSBOX2==false)? "false":"true";
 		$NEWSBOX3=(NEWSBOX3==false)? "false":"true";
@@ -34,7 +43,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$INCLUDE_ADMIN=(INCLUDE_ADMIN==false)? "false":"true";
 		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
 		$ADMINS_RAIDABLE = (ADMIN_ALLOW_INCOMING_RAIDS == false ? 'false' : 'true');
-		
+
 		$text = file_get_contents("constant_format.tpl");
 		$text = preg_replace("'%ERRORREPORT%'", $ERRORREPORT, $text);
 		$text = preg_replace("'%ERROR%'", $ERRORREPORT, $text);
@@ -55,7 +64,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%TRAPPERCAP%'", TRAPPER_CAPACITY, $text);
 		$text = preg_replace("'%VILLAGE_EXPAND%'", CP, $text);
 		$text = preg_replace("'%DEMOLISH%'", DEMOLISH_LEVEL_REQ, $text);
-		$text = preg_replace("'%STORAGE_MULTIPLIER%'", STORAGE_MULTIPLIER, $text);		
+		$text = preg_replace("'%STORAGE_MULTIPLIER%'", STORAGE_MULTIPLIER, $text);
 		$text = preg_replace("'%QUEST%'", $QUEST, $text);
 		$text = preg_replace("'%QTYPE%'", QTYPE, $text);
 		$text = preg_replace("'%BEGINNER%'", PROTECTION, $text);
@@ -80,7 +89,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%LOGADMIN%'", $_POST['log_admin'], $text);
 		$text = preg_replace("'%LOGWAR%'", $_POST['log_war'], $text);
 		$text = preg_replace("'%LOGMARKET%'", $_POST['log_market'], $text);
-		$text = preg_replace("'%LOGILLEGAL%'", $_POST['log_illegal'], $text);		
+		$text = preg_replace("'%LOGILLEGAL%'", $_POST['log_illegal'], $text);
 		//end update
 		$text = preg_replace("'%BOX1%'", $NEWSBOX1, $text);
 		$text = preg_replace("'%BOX2%'", $NEWSBOX2, $text);
@@ -91,10 +100,10 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%SPASS%'", SQL_PASS, $text);
 		$text = preg_replace("'%SDB%'", SQL_DB, $text);
 		$text = preg_replace("'%PREFIX%'", TB_PREFIX, $text);
-		$text = preg_replace("'%CONNECTT%'", DB_TYPE, $text);		
+		$text = preg_replace("'%CONNECTT%'", DB_TYPE, $text);
 		$text = preg_replace("'%LIMIT_MAILBOX%'", $LIMIT_MAILBOX, $text);
 		$text = preg_replace("'%MAX_MAILS%'", MAX_MAIL, $text);
-		$text = preg_replace("'%ARANK%'", $INCLUDE_ADMIN, $text);		
+		$text = preg_replace("'%ARANK%'", $INCLUDE_ADMIN, $text);
 		$text = preg_replace("'%AEMAIL%'", ADMIN_EMAIL, $text);
 		$text = preg_replace("'%ANAME%'", ADMIN_NAME, $text);
 		$text = preg_replace("'%ASUPPMSGS%'", $SUPPORT_MSGS_IN_ADMIN, $text);
@@ -104,7 +113,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);
 		$text = preg_replace("'%HOMEPAGE%'", HOMEPAGE, $text);
 		$text = preg_replace("'%SERVER%'", SERVER, $text);
-		
+
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);
 		$text = preg_replace("'%PLUS_PRODUCTION%'", PLUS_PRODUCTION, $text);
@@ -120,7 +129,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%PLUS_PACKAGE_D_GOLD%'", (defined('PLUS_PACKAGE_D_GOLD') ? PLUS_PACKAGE_D_GOLD : '1000'), $text);
 		$text = preg_replace("'%PLUS_PACKAGE_E_PRICE%'", (defined('PLUS_PACKAGE_E_PRICE') ? PLUS_PACKAGE_E_PRICE : '49,99'), $text);
 		$text = preg_replace("'%PLUS_PACKAGE_E_GOLD%'", (defined('PLUS_PACKAGE_E_GOLD') ? PLUS_PACKAGE_E_GOLD : '2000'), $text);
-	
+
 		fwrite($fh, $text);
 		fclose($fh);
 
