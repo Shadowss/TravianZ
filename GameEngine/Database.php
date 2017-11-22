@@ -3287,15 +3287,17 @@ class MYSQLi_DB implements IDbConnection {
 	     list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, (int) $wood, (int) $clay, (int) $iron, (int) $crop, $mode);
          $sign = (!$mode ? '-' : '+');
 
-         return mysqli_query( $this->dblink, "
+         $q = "
             UPDATE " . TB_PREFIX . "vdata
                 SET
-                    wood = IF(wood $sign $wood > 0 AND wood $sign $wood < maxstore, wood $sign $wood, ".($mode ? 'maxstore' : '0')."),
-                    clay = IF(clay $sign $clay > 0 AND clay $sign $clay < maxstore, clay $sign $clay, ".($mode ? 'maxstore' : '0')."),
-                    iron = IF(iron $sign $iron > 0 AND iron $sign $iron < maxstore, iron $sign $iron, ".($mode ? 'maxstore' : '0')."),
-                    crop = IF(crop $sign $crop > 0 AND crop $sign $crop < maxcrop, crop $sign $crop, ".($mode ? 'maxcrop' : '0').")
+                    wood = IF(wood $sign $wood < 0, 0, IF(wood $sign $wood > maxstore, maxstore, $sign $wood)),
+                    clay = IF(clay $sign $clay < 0, 0, IF(clay $sign $clay > maxstore, maxstore, $sign $clay)),
+                    iron = IF(iron $sign $iron < 0, 0, IF(iron $sign $iron > maxstore, maxstore, iron $sign $iron)),
+                    crop = IF(crop $sign $crop < 0, 0, IF(crop $sign $crop > maxcrop, maxcrop, crop $sign $crop))
                 WHERE
-                    wref = " . $vid );
+                    wref = " . $vid ;
+
+         return mysqli_query( $this->dblink, $q);
 	}
 
    	function setMaxStoreForVillage($vid, $maxLevel) {
