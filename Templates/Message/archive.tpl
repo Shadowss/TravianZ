@@ -1,6 +1,6 @@
 <div id="content"  class="messages">
 <h1>Messages</h1>
-<?php 
+<?php
 include("menu.tpl");
 ?>
 <form method="post" action="nachrichten.php" name="msg" ><input type="hidden" name="ft" value="m5" /><table cellpadding="1" cellspacing="1" id="overview">
@@ -14,26 +14,26 @@ include("menu.tpl");
 	</th>
 	<th colspan="2" class="buttons">
 		<input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" /> <input name="start" type="image" value="Back" alt="Back" id="btn_back" class="dynamic_img" src="img/x.gif" /></th>
-        <th class="navi"><?php 
+        <th class="navi"><?php
     if(!isset($_GET['s']) && count($message->archived1) < 10) {
     echo "&laquo;&raquo;";
     }
     else if (!isset($_GET['s']) && count($message->archived1) > 10) {
-    echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
+    echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=10&o=0\">&raquo;</a>";
     }
     else if(isset($_GET['s']) && count($message->archived1) > $_GET['s']) {
     	if(count($message->archived1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->archived1) && $_GET['s'] != 0) {
-         echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
          else if(count($message->archived1) > $_GET['s']+10) {
-         	echo "&laquo;<a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         	echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
         else {
-        echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+        echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
         }
     }
     ?></th></tr></tfoot><tbody>
-     <?php 
+     <?php
     if(isset($_GET['s'])) {
     $s = $_GET['s'];
     }
