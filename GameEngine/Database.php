@@ -5717,7 +5717,7 @@ References: User ID/Message ID, Mode
         $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid AND dead = 0";
         $result = mysqli_query($this->dblink,$q);
 
-        self::$heroFieldCache[$uid.$field] = $this->mysqli_fetch_all($result);
+        self::$heroFieldCache[$uid.$field] = $this->mysqli_fetch_all($result)[0];
         return self::$heroFieldCache[$uid.$field][$field];
 	}
 

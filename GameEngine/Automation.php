@@ -2204,7 +2204,7 @@ class Automation {
                         }
                     }
                     if ($herosend_att>0){
-                        $hero_unit = $database->getHeroField($from['owner'], 'unit', false);
+                        $hero_unit = $database->getHeroField($from['owner'], 'unit');
                         $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
                     }
 
@@ -2803,7 +2803,7 @@ class Automation {
                                             }
 
                                             if ($prisoner['t11']>0){
-                                                $p_hero_unit = $database->getHeroField($p_owner, 'unit', false)['unit'];
+                                                $p_hero_unit = $database->getHeroField($p_owner, 'unit');
                                                 $p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
                                             }
 
@@ -3004,7 +3004,7 @@ class Automation {
                     }
 
                     if ($herosend_att>0){
-                        $hero_unit = $database->getHeroField($from['owner'], 'unit', false)['unit'];
+                        $hero_unit = $database->getHeroField($from['owner'], 'unit');
                         $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
                     }
 
@@ -3325,10 +3325,7 @@ class Automation {
             }
             if (isset($post['t11'])){
                 if( $post['t11'] != '' && $post['t11'] > 0){
-                    $qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
-                    $resulth = mysqli_query($GLOBALS['link'],$qh);
-                    $hero_f=mysqli_fetch_array($resulth);
-                    $hero_unit=$hero_f['unit'];
+                    $hero_unit = getHeroField($from['owner'], 'unit');
                     $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
                 } else {
                     $post['t11']='0';

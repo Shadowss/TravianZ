@@ -40,22 +40,22 @@ $ckey= $generator->generateRandStr(6);
 
 
  if (!isset($process['t1']) || $process['t1'] == ''){  $t1='0'; }else{  $t1=$process['t1']; }
- if (!isset($process['t2']) || $process['t2'] == ''){  $t2='0'; }else{  $t2=$process['t2']; } 
- if (!isset($process['t3']) || $process['t3'] == ''){  $t3='0'; }else{  $t3=$process['t3']; $scout=1; } 
- if (!isset($process['t4']) || $process['t4'] == ''){  $t4='0'; }else{  $t4=$process['t4']; } 
- if (!isset($process['t5']) || $process['t5'] == ''){  $t5='0'; }else{  $t5=$process['t5']; } 
- if (!isset($process['t6']) || $process['t6'] == ''){  $t6='0'; }else{  $t6=$process['t6']; } 
- if (!isset($process['t7']) || $process['t7'] == ''){  $t7='0'; }else{  $t7=$process['t7']; } 
- if (!isset($process['t8']) || $process['t8'] == ''){  $t8='0'; }else{  $t8=$process['t8']; } 
- if (!isset($process['t9']) || $process['t9'] == ''){  $t9='0'; }else{  $t9=$process['t9']; } 
- if (!isset($process['t10']) || $process['t10'] == ''){  $t10='0'; }else{  $t10=$process['t10']; } 
- if (!isset($process['t11']) || $process['t11'] == ''){  $t11='0'; }else{  $t11=$process['t11']; } 
+ if (!isset($process['t2']) || $process['t2'] == ''){  $t2='0'; }else{  $t2=$process['t2']; }
+ if (!isset($process['t3']) || $process['t3'] == ''){  $t3='0'; }else{  $t3=$process['t3']; $scout=1; }
+ if (!isset($process['t4']) || $process['t4'] == ''){  $t4='0'; }else{  $t4=$process['t4']; }
+ if (!isset($process['t5']) || $process['t5'] == ''){  $t5='0'; }else{  $t5=$process['t5']; }
+ if (!isset($process['t6']) || $process['t6'] == ''){  $t6='0'; }else{  $t6=$process['t6']; }
+ if (!isset($process['t7']) || $process['t7'] == ''){  $t7='0'; }else{  $t7=$process['t7']; }
+ if (!isset($process['t8']) || $process['t8'] == ''){  $t8='0'; }else{  $t8=$process['t8']; }
+ if (!isset($process['t9']) || $process['t9'] == ''){  $t9='0'; }else{  $t9=$process['t9']; }
+ if (!isset($process['t10']) || $process['t10'] == ''){  $t10='0'; }else{  $t10=$process['t10']; }
+ if (!isset($process['t11']) || $process['t11'] == ''){  $t11='0'; }else{  $t11=$process['t11']; }
  $totalunits =$process['t1']+$process['t2']+$process['t4']+$process['t5']+$process['t6']+$process['t7']+$process['t8']+$process['t9']+$process['t10']+$process['t11'];
      if ($scout==1 && $totalunits==0) {
 
 $process['c'] = 1;
 
-}  
+}
     $id = $database->addA2b($ckey,time(),$process['0'],$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,$process['c']);
 
 
@@ -77,7 +77,7 @@ $actionType = "Raid";
 
 ?>
 
-<h1><?php echo $actionType." to ".$process[1]; ?></h1>			
+<h1><?php echo $actionType." to ".$process[1]; ?></h1>
 
 <form method="post" action="a2b.php">
 
@@ -123,7 +123,7 @@ $actionType = "Raid";
 
 				</thead>
 
-				
+
 				<tbody class="units">
 
 					<tr>
@@ -189,7 +189,7 @@ $actionType = "Raid";
         </tr>
     </tbody>
     <?php } ?>
-                
+
 
         <?php if(isset($kata) AND $process['c']!='2'){?><tr>
 
@@ -208,7 +208,7 @@ $actionType = "Raid";
                                 <option value="0">Cropland</option>
                                 <option value="5">Sawmill</option>
                                 <option value="6">Brickyard</option>
-                            
+
                                 <option value="7">Iron Foundry</option>
                                 <option value="8">Grain Mill</option>
                                 <option value="9">Bakery</option>
@@ -225,13 +225,13 @@ $actionType = "Raid";
                                 <option value="24">Townhall</option>
                                 <option value="25">Residence</option>
                                 <option value="26">Palace</option>
-                                
+
                                 <option value="27">Treasury</option>
                                 <option value="28">Trade office</option>
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
-								<option value="40">Wonder of the World</option> 
+								<option value="40">Wonder of the World</option>
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
@@ -243,7 +243,7 @@ $actionType = "Raid";
                                 <option value="19">Barracks</option>
                                 <option value="20">Stable</option>
                                 <option value="21">Workshop</option>
-                                
+
                                 <option value="22">Academy</option>
                                 <option value="29">Great barracks</option>
                                 <option value="30">Great stable</option>
@@ -262,7 +262,7 @@ $actionType = "Raid";
                                 <option value="0">Cropland</option>
                                 <option value="5">Sawmill</option>
                                 <option value="6">Brickyard</option>
-                            
+
                                 <option value="7">Iron Foundry</option>
                                 <option value="8">Grain Mill</option>
                                 <option value="9">Bakery</option>
@@ -279,13 +279,13 @@ $actionType = "Raid";
                                 <option value="24">Townhall</option>
                                 <option value="25">Residence</option>
                                 <option value="26">Palace</option>
-                                
+
                                 <option value="27">Treasury</option>
                                 <option value="28">Trade office</option>
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
-								<option value="40">Wonder of the World</option> 
+								<option value="40">Wonder of the World</option>
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
@@ -297,7 +297,7 @@ $actionType = "Raid";
                                 <option value="19">Barracks</option>
                                 <option value="20">Stable</option>
                                 <option value="21">Workshop</option>
-                                
+
                                 <option value="22">Academy</option>
                                 <option value="29">Great barracks</option>
                                 <option value="30">Great stable</option>
@@ -308,16 +308,16 @@ $actionType = "Raid";
                     <span class="info">(will be attacked by catapult(s))</span>
                      </td>
                 </tr>
-            </tbody><?PHP  
+            </tbody><?PHP
             }
             else if($process['c']=='4')
             {
-                ?><tbody class="infos">  
+                ?><tbody class="infos">
                 <th>Destination:</th>
 
             <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
                 <?PHP
-                
+
                 echo"Warning: Catapult will <b>ONLY</b> shoot with a normal attack (they dont shoot with raids!)";
                 ?>
                 </td>
@@ -337,7 +337,7 @@ $actionType = "Raid";
 
 			<th>Arrived:</th>
 
-			
+
 
 			<?php
 
@@ -346,7 +346,7 @@ $actionType = "Raid";
 			$start = ($att_tribe == 1)? 1 : (($att_tribe == 2)? 11: 21);
 
 			$end = ($att_tribe == 1)? 10 : (($att_tribe == 2)? 20: 30);
-            
+
 			$speeds = array();
 
 			$scout = 1;
@@ -373,13 +373,13 @@ $actionType = "Raid";
 
 						}
 
-						
+
 
 					}
 
 				}
 
-			
+
 
 			if($scout)
 
@@ -411,12 +411,12 @@ $actionType = "Raid";
 				}
 			?>
 
-			
+
 
 			<td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
 
 			<div class="in">in <?php echo $generator->getTimeFormat($time); ?></div>
-			
+
             <div class="at">at <span id="tp2"> <?php echo $generator->procMtime(date('U')+$time,9)?></span><span> hours</span></div>
 
 			</td>
@@ -427,18 +427,18 @@ $actionType = "Raid";
 
 </table>
 
-<input name="timestamp" value="<?php echo time(); ?>" type="hidden"> 
+<input name="timestamp" value="<?php echo time(); ?>" type="hidden">
 
-<input name="timestamp_checksum" value="<?php echo $ckey; ?>" type="hidden"> 
+<input name="timestamp_checksum" value="<?php echo $ckey; ?>" type="hidden">
 
-<input name="ckey" value="<?php echo $id; ?>" type="hidden"> 
+<input name="ckey" value="<?php echo $id; ?>" type="hidden">
 
-<input name="id" value="39" type="hidden"> 
+<input name="id" value="39" type="hidden">
 
 <input name="a" value="533374" type="hidden">
 <input name="c" value="3" type="hidden">
 
-<p class="btn"><input value="ok" name="s1" id="btn_ok" 
+<p class="btn"><input value="ok" name="s1" id="btn_ok"
 
 class="dynamic_img " src="img/x.gif" alt="OK" type="image" onclick="if (this.disabled==false) {document.getElementsByTagName('form')[0].submit();} this.disabled=true;" onLoad="this.disabled=false;"></p>
 
