@@ -3438,7 +3438,7 @@ class Automation {
                     $DefenderID = $database->getVillageField($data['to'],"owner");
                     if (isset($AttackerID) && $session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
                     $database->addEnforce($data);
-                    $reinf = $database->getEnforce($data['to'],$data['from']);
+                    $reinf = $database->getEnforce($data['from'],$data['to']);
                     $database->modifyEnforce($reinf['id'],31,1,1);
                     $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
                     $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,'village of the elders reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);

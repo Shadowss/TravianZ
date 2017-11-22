@@ -6094,7 +6094,7 @@ References: User ID/Message ID, Mode
             }
         }
 
-        return ($array_passed ? self::$villageReinforcementsCache : self::$villageReinforcementsCache[$vid[0].$from[0]]);
+        return ($array_passed ? self::$villageFromReinforcementsCache : self::$villageFromReinforcementsCache[$vid[0].$from[0]]);
 	}
 
     function getOasisEnforce($ref, $mode=0, $use_cache = true) {
@@ -6211,7 +6211,7 @@ References: User ID/Message ID, Mode
 		$modes = [];
 
 		for($i = $start; $i <= $end; $i++) {
-		    $units[] = $i;
+		    $units[] = ($i < 0 ? 0 : $i);
 		    $amounts[] = $data['t' . $j . ''];
 		    $modes[] = 1;
 			$j++;
@@ -6237,7 +6237,7 @@ References: User ID/Message ID, Mode
 		$start2 = ($tribe - 1) * 10 + 1;
 		$start3 = ($tribe - 1) * 10;
 		if($start3 == 0){
-		$start3 = "";
+		    $start3 = "";
 		}
 		$end2 = ($tribe * 10);
 		//add unit
@@ -6248,11 +6248,11 @@ References: User ID/Message ID, Mode
         $modes = [];
 
 		for($i = $start; $i <= $end; $i++) {
-            $units[] = $i;
+            $units[] = ($i < 0 ? 0 : $i);
             $amounts[] = $data['t' . $j . ''];
             $modes[] = 1;
 
-            $units[] = $i;
+            $units[] = ($i < 0 ? 0 : $i);
             $amounts[] = ${'dead'.$j};
             $modes[] = 0;
 
