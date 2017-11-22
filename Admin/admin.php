@@ -22,30 +22,7 @@ include_once("../GameEngine/config.php");
 include_once("../GameEngine/Database.php");
 include_once ("../GameEngine/Lang/" . LANG . ".php");
 include_once("../GameEngine/Admin/database.php");
-include_once("../GameEngine/Data/buidata.php"); 
-
-class timeFormatGenerator
-{
-	public function getTimeFormat($time)
-	{
-		$min = 0;
-		$hr = 0;
-		$days = 0;
-		while ($time >= 60): $time -= 60; $min += 1; endwhile;
-		while ($min  >= 60): $min  -= 60; $hr  += 1; endwhile;
-		while ($hr   >= 24): $hr   -= 24; $days +=1; endwhile;
-		if ($min < 10)
-		{
-			$min = "0".$min;
-		}
-		if($time < 10)
-		{
-			$time = "0".$time;
-		}
-		return $days ." day ".$hr."h ".$min."m ".$time."s";
-	}
-};
-$timeformat = new timeFormatGenerator;
+include_once("../GameEngine/Data/buidata.php");
 
 include('Templates/ver.tpl');
 include('Templates/update_latest.tpl');
@@ -58,131 +35,131 @@ if (!empty($_GET['p'])) {
         case 'server_info':
             $subpage = 'Server Info';
             break;
-        
+
         case 'online':
             $subpage = 'Online Users';
             break;
-            
+
         case 'notregistered':
             $subpage = 'Players Not Activated';
             break;
-            
+
         case 'inactive':
             $subpage = 'Players Inactivate';
             break;
-            
+
         case 'report':
             $subpage = 'Players Reported';
             break;
-            
+
         case 'map':
             $subpage = 'Map';
             break;
-            
+
         case 'search':
             $subpage = 'General Search';
             break;
-            
+
         case 'message':
             $subpage = 'Search IGMs/Reports';
             break;
-            
+
         case 'ban':
             $subpage = 'Ban/Unban Players';
             break;
-            
+
         case 'maintenence':
             $subpage = 'Server Maintenence';
             break;
-            
+
         case 'cleanban':
             $subpage = 'Clean Banlist Data';
             break;
-            
+
         case 'gold':
             $subpage = 'Give All Free Gold';
             break;
-            
+
         case 'usergold':
             $subpage = 'Give Free Gold To Specific User';
             break;
-            
+
         case 'maintenenceResetGold':
             $subpage = 'Reset Gold';
             break;
-            
+
         case 'delmedal':
             $subpage = 'Delete Player Medals';
             break;
-            
+
         case 'delallymedal':
             $subpage = 'Delete Ally Medals';
             break;
-            
+
         case 'givePlus':
             $subpage = 'Give All Plus';
             break;
-            
+
         case 'maintenenceResetPlus':
             $subpage = 'Reset Plus';
             break;
-            
+
         case 'givePlusRes':
             $subpage = 'Give All Res Bonus';
             break;
-            
+
         case 'maintenenceResetPlusBonus':
             $subpage = 'Reset Res Bonus';
             break;
-            
+
         case 'addUsers':
             $subpage = 'Create Users';
             break;
-            
+
         case 'natarend':
             $subpage = 'Add WW Villages';
             break;
-            
+
         case 'natarbuildingplan':
             $subpage = 'Add WW Building Plan Villages';
             break;
-            
+
         case 'admin_log':
             $subpage = 'Admin Log';
             break;
-            
+
         case 'config':
             $subpage = 'Server Settings';
             break;
-            
+
         case 'editServerSet':
             $subpage = 'Server Configuration';
             break;
-            
+
         case 'editPlusSet':
             $subpage = 'PLUS Settings';
             break;
-            
+
         case 'editLogSet':
             $subpage = 'Log Settings';
             break;
-            
+
         case 'editNewsboxSet':
             $subpage = 'NewsBox Settings';
             break;
-            
+
         case 'editExtraSet':
             $subpage = 'Extra Settings';
             break;
-            
+
         case 'editAdminInfo':
             $subpage = 'Edit Admin Information';
             break;
-            
+
         case 'resetServer':
             $subpage = 'Server Resetting';
             break;
-            
+
         case 'player':
             if (!empty($_GET['uid'])) {
                 $displayarray = $database->getUserArray($_GET['uid'],1);
@@ -192,7 +169,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Player Details (no player)';
             }
             break;
-            
+
         case 'editUser':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -201,7 +178,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Player (no player)';
             }
             break;
-            
+
         case 'deletion':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -210,7 +187,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Delete Player (no player)';
             }
             break;
-            
+
         case 'Newmessage':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -219,7 +196,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Compose Message';
             }
             break;
-            
+
         case 'editPlus':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -228,7 +205,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Plus &amp; Resources';
             }
             break;
-            
+
         case 'editSitter':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -237,7 +214,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Sitters ';
             }
             break;
-            
+
         case 'editOverall':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -246,7 +223,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Off &amp; Def';
             }
             break;
-            
+
         case 'editWeek':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -255,7 +232,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Weekly Off &amp; Def';
             }
             break;
-            
+
         case 'userlogin':
             if (!empty($_GET['uid'])) {
                 $player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".(int) $_GET['uid']));
@@ -264,7 +241,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'User Logins (no player)';
             }
             break;
-            
+
         case 'userillegallog':
             if (!empty($_GET['uid'])) {
                 $player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".(int) $_GET['uid']));
@@ -273,7 +250,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'User Illegals Log (no player)';
             }
             break;
-            
+
         case 'editHero':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -282,7 +259,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Hero';
             }
             break;
-            
+
         case 'editAdditional':
             if (!empty($_GET['uid'])) {
                 $user = $database->getUserArray($_GET['uid'],1);
@@ -291,7 +268,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Additional Info';
             }
             break;
-            
+
         case 'village':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
@@ -301,7 +278,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Village (no village)';
             }
             break;
-            
+
         case 'editResources':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
@@ -311,7 +288,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Resources (no village)';
             }
             break;
-            
+
         case 'addTroops':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
@@ -321,7 +298,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Troops (no village)';
             }
             break;
-            
+
         case 'addABTroops':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
@@ -331,7 +308,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Upgrade Troops (no village)';
             }
             break;
-            
+
         case 'editVillage':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
@@ -341,7 +318,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Edit Village (no village)';
             }
             break;
-            
+
         case 'villagelog':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
@@ -351,7 +328,7 @@ if (!empty($_GET['p'])) {
                 $subpage = 'Build Log (no village)';
             }
             break;
-            
+
         case 'techlog':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
@@ -449,8 +426,8 @@ if (!empty($_GET['p'])) {
 			function go_url(url) {
 				location=url;
 				return(false);
-			}			
-			
+			}
+
 		</script>
 		<div id="ltop1">
 			<div style="position:relative; width:231px; height:100px; float:left;">
