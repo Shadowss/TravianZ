@@ -3290,8 +3290,8 @@ class MYSQLi_DB implements IDbConnection {
          $q = "
             UPDATE " . TB_PREFIX . "vdata
                 SET
-                    wood = IF(wood $sign $wood < 0, 0, IF(wood $sign $wood > maxstore, maxstore, $sign $wood)),
-                    clay = IF(clay $sign $clay < 0, 0, IF(clay $sign $clay > maxstore, maxstore, $sign $clay)),
+                    wood = IF(wood $sign $wood < 0, 0, IF(wood $sign $wood > maxstore, maxstore, wood $sign $wood)),
+                    clay = IF(clay $sign $clay < 0, 0, IF(clay $sign $clay > maxstore, maxstore, clay $sign $clay)),
                     iron = IF(iron $sign $iron < 0, 0, IF(iron $sign $iron > maxstore, maxstore, iron $sign $iron)),
                     crop = IF(crop $sign $crop < 0, 0, IF(crop $sign $crop > maxcrop, maxcrop, crop $sign $crop))
                 WHERE
