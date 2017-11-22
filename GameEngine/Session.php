@@ -208,7 +208,9 @@ class Session {
 				global $database,$link;
 
 				$villageIDs = implode(', ', $this->villages);
-   				$hero = mysqli_fetch_array(
+
+				// check if hero unit for this player is present anywhere on the map
+   				$heroUnitRegisters = mysqli_fetch_array(
    				    mysqli_query($database->dblink, '
                       SELECT
                         IFNULL((SELECT SUM(hero) from '.TB_PREFIX.'enforcement where `from` IN('.$villageIDs.')), 0) +
@@ -220,9 +222,12 @@ class Session {
                     MYSQLI_ASSOC
                 )['herocount'];
 
-                $isHeroElsewhere = $database->getHeroDeadReviveOrInTraining($this->uid);
+   				// check if the actual hero is alive or being trained/revived into a living state
+                $isHeroLivingOrRaising = $database->getHeroDeadReviveOrInTraining($this->uid);
 
-                if($isHeroElsewhere && !$hero) {
+                // if he doesn't register anywhere on the map but is marked as alive,
+                // we need to kill him
+                if(!$heroUnitRegisters && $isHeroLivingOrRaising) {
                     $database->KillMyHero($this->uid);
                 }
             }

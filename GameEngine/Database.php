@@ -7500,7 +7500,7 @@ References:
     function getHeroDeadReviveOrInTraining($id) {
         $id = (int) $id;
 
-        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND (dead = 0 OR inrevive = 1 OR intraining = 1)";
+        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND dead = 0 AND inrevive = 0 AND intraining = 0";
         $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
         if ($result['Total'] > 0) {
             return true;

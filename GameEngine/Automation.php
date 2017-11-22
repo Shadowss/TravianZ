@@ -4635,6 +4635,10 @@ class Automation {
                 if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
 
+                    $columns[] = 'dead';
+                    $columnValues[] = 0;
+                    $modes[] = null;
+
                     $columns[] = 'intraining';
                     $columnValues[] = 0;
                     $modes[] = null;
