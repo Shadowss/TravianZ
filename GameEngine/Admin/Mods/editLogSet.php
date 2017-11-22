@@ -14,7 +14,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 include_once("../../Database.php");
 $id = (int) $_POST['id'];
 
-if (file_exists('constant_format.tpl')) {
+if (!file_exists('constant_format.tpl')) {
     die(
         'You seem to be running a new version of TravianZ which was installed using an old installer.<br />' .
         'Please download <strong>constant_format.tpl</strong> file and copy it into the <strong>GameEngine/Admin/Mods</strong> ' .
