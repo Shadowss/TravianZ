@@ -98,6 +98,10 @@ $greatwarehouse1 = getTypeCount(38);
 $greatgranary1 = getTypeCount(39);
 $greatworkshop1 = getTypeCount(42);
 
+$residenceOrPalaceInProgress = $building->residenceOfPalaceBuildInProgress($village->wid);
+$residenceBuildInProgress = $residenceOrPalaceInProgress['residence'];
+$palaceBuildInProgress = $residenceOrPalaceInProgress['palace'];
+
 ?>
 <div id="build" class="gid0"><h1<?php echo CONSTRUCT_NEW_BUILDING;?></h1>
 <?php
@@ -163,7 +167,7 @@ include("avaliable/grainmill.tpl");
 if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 && $id != 39 && $id != 40) {
 include("avaliable/marketplace.tpl");
 }
-if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0) {
+if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0 && !$palaceBuildInProgress) {
 include("avaliable/residence.tpl");
 }
 if($academy == 0 && $academy1 == 0 && $mainbuilding >= 3 && $barrack >= 3 && $id != 39 && $id != 40) {
@@ -195,9 +199,8 @@ if ($test){
 
 }
 
-
 //if Castle no ready include palace.tpl
-if (!$test){
+if (!$test && !$residenceBuildInProgress){
         include("avaliable/palace.tpl");
 }
 

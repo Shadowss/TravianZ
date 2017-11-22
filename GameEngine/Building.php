@@ -4,15 +4,15 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       22.06.2015                    			       ##
 ##  Filename       Building.php                                                ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL., TPLinux            ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
 #################################################################################
 
@@ -41,27 +41,50 @@ class Building {
 		}
 		}
 	}
-	
+
+	public function residenceOfPalaceBuildInProgress($vid) {
+	    global $database, $village;
+
+        $residenceOrPalaceInProgress = $database->getBuildingByType($village->wid, '25, 26');
+        $residenceBuildInProgress = false;
+        $palaceBuildInProgress = false;
+
+        if (count($residenceOrPalaceInProgress)) {
+            foreach ($residenceOrPalaceInProgress as $record) {
+                if ($record['type'] == 25) {
+                    $residenceBuildInProgress = true;
+                } else {
+                    $palaceBuildInProgress = true;
+                }
+            }
+        }
+
+        return [
+            'residence' => $residenceBuildInProgress,
+            'palace' => $palaceBuildInProgress
+        ];
+    }
+
 	public function canProcess($id,$tid) {
-           	//add fix by ronix
-                global $session;
-        if($session->access==BANNED){
-            header("Location: banned.php");
-            exit;
-        } else {
-            if ($this->checkResource($id,$tid)!=4) {
-                if($tid >= 19) {
-                    header("Location: dorf2.php");
-                    exit;
-                             }
-                else {
-                    header("Location: dorf1.php");
-                    exit;
-                              }
-                                exit;
-             		}
-        	}
-    	}  
+        //add fix by ronix
+            global $session;
+    if($session->access==BANNED){
+        header("Location: banned.php");
+        exit;
+    } else {
+        if ($this->checkResource($id,$tid)!=4) {
+            if($tid >= 19) {
+                header("Location: dorf2.php");
+                exit;
+                         }
+            else {
+                header("Location: dorf1.php");
+                exit;
+                          }
+                            exit;
+                }
+        }
+    }
 
     public function procBuild($get) {
         global $session, $village, $database;
@@ -81,14 +104,28 @@ class Building {
             if($session->access==BANNED){
                 header("Location: banned.php");
                 exit;
-            }    
-            $level = $database->getResourceLevel($village->wid);
-            $database->addBuilding($village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level['f'.$get['id']] + 1 + count($database->getBuildingByField($village->wid,$get['id'])));
-            if($get['id'] > 18) {
-                header("Location: dorf2.php");
+            }
+
+            // check if we're not trying to hack-build residence and palace together
+            if (
+                ($progresses = $this->residenceOfPalaceBuildInProgress($village->wid)) &&
+                (
+                    !in_array($get['master'], [25, 26]) ||
+                    (
+                        ($get['master'] == 25 && $progresses['palace'] === false) ||
+                        ($get['master'] == 26 && $progresses['residence'] === false)
+                    )
+                )
+            ) {
+                $level = $database->getResourceLevel( $village->wid );
+                $database->addBuilding( $village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level[ 'f' . $get['id'] ] + 1 + count( $database->getBuildingByField( $village->wid, $get['id'] ) ) );
+            }
+
+            if ( $get['id'] > 18 ) {
+                header( "Location: dorf2.php" );
                 exit;
             } else {
-                header("Location: dorf1.php");
+                header( "Location: dorf1.php" );
                 exit;
             }
         }
@@ -434,37 +471,52 @@ class Building {
 		global $database,$village,$session,$logging;
 
 		if($this->allocated < $this->maxConcurrent) {
-			if($tid == 16) {
-				$id = 39;
-			}
-			else if($tid == 31 || $tid == 32 || $tid == 33) {
-				$id = 40;
-			}
-			$uprequire = $this->resourceRequired($id,$tid);
-			$time = time() + $uprequire['time'];
-			$bindicate = $this->canBuild($id,$village->resarray['f'.$id.'t']);
-			$loop = ($bindicate == 9 ? 1 : 0);
-			if($loop == 1) {
-				foreach($this->buildArray as $build) {
-					if($build['field'] >= 19 || ($session->tribe <> 1 && !ALLOW_ALL_TRIBE)) {
-						$time = $build['timestamp'] + ceil(60/SPEED) + $uprequire['time'];
-					}
-				}
-			}
-			if($this->meetRequirement($tid)) {
-			if($session->access!=BANNED){
-			$level = $database->getResourceLevel($village->wid);
-				if($database->addBuilding($village->wid,$id,$tid,$loop,$time,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
-					$logging->addBuildLog($village->wid,$this->procResType($tid),($village->resarray['f'.$id]+1),1);
-					$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
-					header("Location: dorf2.php");
-					exit;
-				}
-			}else{
-			    header("Location: banned.php");
-			    exit;
-			}
-			}
+		    // check if we're not trying to hack-build residence and palace together
+            if (
+                ($progresses = $this->residenceOfPalaceBuildInProgress($village->wid)) &&
+                (
+                    !in_array($tid, [25, 26]) ||
+                    (
+                        ($tid == 25 && $progresses['palace'] === false) ||
+                        ($tid == 26 && $progresses['residence'] === false)
+                    )
+                )
+            ) {
+
+                if ( $tid == 16 ) {
+                    $id = 39;
+                } else if ( $tid == 31 || $tid == 32 || $tid == 33 ) {
+                    $id = 40;
+                }
+                $uprequire = $this->resourceRequired( $id, $tid );
+                $time      = time() + $uprequire['time'];
+                $bindicate = $this->canBuild( $id, $village->resarray[ 'f' . $id . 't' ] );
+                $loop      = ( $bindicate == 9 ? 1 : 0 );
+                if ( $loop == 1 ) {
+                    foreach ( $this->buildArray as $build ) {
+                        if ( $build['field'] >= 19 || ( $session->tribe <> 1 && ! ALLOW_ALL_TRIBE ) ) {
+                            $time = $build['timestamp'] + ceil( 60 / SPEED ) + $uprequire['time'];
+                        }
+                    }
+                }
+                if ( $this->meetRequirement( $tid ) ) {
+                    if ( $session->access != BANNED ) {
+                        $level = $database->getResourceLevel( $village->wid );
+                        if ( $database->addBuilding( $village->wid, $id, $tid, $loop, $time, 0, $level[ 'f' . $id ] + 1 + count( $database->getBuildingByField( $village->wid, $id ) ) ) ) {
+                            $logging->addBuildLog( $village->wid, $this->procResType( $tid ), ( $village->resarray[ 'f' . $id ] + 1 ), 1 );
+                            $database->modifyResource( $village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0 );
+                            header( "Location: dorf2.php" );
+                            exit;
+                        }
+                    } else {
+                        header( "Location: banned.php" );
+                        exit;
+                    }
+                }
+            } else {
+                header( "Location: dorf2.php" );
+                exit;
+            }
 		}
 	}
 
@@ -830,7 +882,7 @@ class Building {
 		if ($session->uid  == 1) {
 		    return 0;
 		}
-		
+
 		$keyholder = array();
 
 		if($vid == 0) {
@@ -838,7 +890,7 @@ class Building {
 		} else {
 			$resourcearray = $database->getResourceLevel($vid);
 		}
-		
+
 		foreach(array_keys($resourcearray,$tid) as $key) {
 			if(strpos($key,'t')) {
 				$key = preg_replace("/[^0-9]/", '', $key);
@@ -853,7 +905,7 @@ class Building {
 		    // resource field
 			if($tid <= 4) {
 				$temparray = array();
-				
+
 				for($i=0;$i<=$element-1;$i++) {
 				    // collect current field level
 					array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
@@ -870,7 +922,7 @@ class Building {
 			// village building
 			else {
 				$target = 0;
-				
+
 				// find the highest level built for this building type
 				for($i=1;$i<=$element-1;$i++) {
 					if($resourcearray['f'.$keyholder[$i]] > $resourcearray['f'.$keyholder[$target]]) {
@@ -1024,7 +1076,7 @@ class Building {
                 $database->updateUserField($session->uid, "gold", $newgold, 1);
             }
 
-            $stillbuildingarray = $database->getJobs($village->wid);  
+            $stillbuildingarray = $database->getJobs($village->wid);
             if (count($stillbuildingarray) == 1) {
                 if($stillbuildingarray[0]['loopcon'] == 1) {
                     //$q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0,timestamp=".(time()+$stillbuildingarray[0]['timestamp']-$innertimestamp)." WHERE id=".$stillbuildingarray[0]['id'];

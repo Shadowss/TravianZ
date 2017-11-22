@@ -4971,9 +4971,11 @@ References: User ID/Message ID, Mode
 
     // no need to cache this method
 	function getBuildingByType($wid,$type) {
-	    list($wid,$type) = $this->escape_input((int) $wid,(int) $type);
+	    $wid = (int) $wid;
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
+	    $type = (strpos($type, ',') === false ? (int) $type : $this->escape($type));
+
+		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type IN($type) and master = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
