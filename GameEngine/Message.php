@@ -25,8 +25,9 @@ class Message {
         if ($req_file == 'nachrichten.php') {
             if ( isset( $_GET['t'] ) ) {
                 switch ( $_GET['t'] ) {
-                    // send messages page
+                    // send messages page or a single sent message
                     case 2:
+                    case '2a':
                         $this->getMessages( 2 );
                         break;
 
@@ -402,7 +403,7 @@ class Message {
 
 	private function sendAMessage($topic,$text) {
 		global $session,$database;
-		
+
 		// Vulnerability closed by Shadow
 
 		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
@@ -412,7 +413,7 @@ class Message {
 		return; //flood
 
 		// Vulnerability closed by Shadow
-			
+
 		$allmembersQ = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE alliance='".$session->alliance."'");
 		$userally = $database->getUserField($session->uid,"alliance",0);
 		$permission=mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT opt7 FROM ".TB_PREFIX."ali_permission WHERE uid='".$session->uid."'"));
