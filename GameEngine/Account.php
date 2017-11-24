@@ -103,7 +103,7 @@ class Account {
 				$form->addError("email",EMAIL_TAKEN);
 			}
 		}
-		if(!isset($_POST['vid'])) {
+		if(!isset($_POST['vid']) || !in_array($_POST['vid'], [1, 2, 3])) {
 			$form->addError("tribe",TRIBE_EMPTY);
 		}
 		if(!isset($_POST['agb'])) {
