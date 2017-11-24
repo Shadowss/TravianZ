@@ -5275,7 +5275,7 @@ References: User ID/Message ID, Mode
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && !$array_passed && isset(self::$marketMovementCache[$type.$village[0].$mode]) && is_array(self::$marketMovementCache[$type.$village[0].$mode]) && !count(self::$marketMovementCache[$type.$village[0].$mode])) {
-            return self::$marketMovementCache[$type.$village[0].$mode];
+            return [];
         } else if ($use_cache && $array_passed) {
             // check what we can return from cache
             $newIDs = [];
@@ -5294,7 +5294,7 @@ References: User ID/Message ID, Mode
             }
         } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$marketMovementCache, $type.$village[0].$mode)) && !is_null($cachedValue)) {
             // special case when we have empty arrays cached for this cache only
-            return $cachedValue;
+            return ($array_passed ? self::$marketMovementCache : [$cachedValue]);
         }
 
 		$time = time();
@@ -5802,7 +5802,7 @@ References: User ID/Message ID, Mode
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && !$array_passed && isset(self::$abTechCache[$vid[0]]) && is_array(self::$abTechCache[$vid[0]]) && !count(self::$abTechCache[$vid[0]])) {
-            return self::$abTechCache[$vid[0]];
+            return [];
         } else if ($use_cache && $array_passed) {
             // check what we can return from cache
             $newVIDs = [];
@@ -6127,7 +6127,7 @@ References: User ID/Message ID, Mode
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && !$array_passed && isset(self::$oasisReinforcementsCache[$ref[0].$mode]) && is_array(self::$oasisReinforcementsCache[$ref[0].$mode]) && !count(self::$oasisReinforcementsCache[$ref[0].$mode])) {
-            return self::$oasisReinforcementsCache[$ref[0].$mode];
+            return [];
         } else if ($use_cache && $array_passed) {
             // check what we can return from cache
             $newREFs = [];
@@ -6346,7 +6346,7 @@ References: User ID/Message ID, Mode
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && !$array_passed && isset(self::$villageReinforcementsCache[$id[0].$mode]) && is_array(self::$villageReinforcementsCache[$id[0].$mode]) && !count(self::$villageReinforcementsCache[$id[0].$mode])) {
-            return self::$villageReinforcementsCache[$id[0].$mode];
+            return [];
         } else if ($use_cache && $array_passed) {
             // check what we can return from cache
             $newIDs = [];
@@ -7359,7 +7359,7 @@ References: User ID/Message ID, Mode
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && !$array_passed && isset(self::$prisonersCache[$wid[0].$mode]) && is_array(self::$prisonersCache[$wid[0].$mode]) && !count(self::$prisonersCache[$wid[0].$mode])) {
-            return self::$prisonersCache[$wid[0].$mode];
+            return [];
         } else if ($use_cache && $array_passed) {
             // check what we can return from cache
             $newWIDs = [];
