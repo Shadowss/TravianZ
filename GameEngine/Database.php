@@ -6428,7 +6428,7 @@ References: User ID/Message ID, Mode
 		$vtribe = $this->getUserField($vinfo['owner'], "tribe", 0);
         $movingunits = array();
 		$outgoingarray = $this->getMovement(3, $id, 0);
-		if(!empty($outgoingarray)) {
+		if(!empty($outgoingarray) && count($outgoingarray)) {
 			foreach($outgoingarray as $out) {
 				for($i = 1; $i <= 10; $i++) {
 				    if (!isset($movingunits['u' . (($vtribe - 1) * 10 + $i)])) {
@@ -6454,7 +6454,7 @@ References: User ID/Message ID, Mode
 			}
 		}
 		$returningarray = $this->getMovement(4, $id, 1);
-		if(!empty($returningarray)) {
+		if(!empty($returningarray) && count($returningarray)) {
 			foreach($returningarray as $ret) {
 				if($ret['attack_type'] != 1) {
 					for($i = 1; $i <= 10; $i++) {
