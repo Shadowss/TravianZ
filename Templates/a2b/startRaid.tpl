@@ -97,6 +97,9 @@
 
 			$database->modifyUnit($getFLData['wref'], $uname2, $amounts, $modes);
 			$database->addMovement(3,$getFLData['wref'],$data['to_vid'],$reference,time(),($time+time()));
+
+            // prevent re-use of the same attack via re-POSTing the same data
+            $database->remA2b($data['id']);
         }    
     }
 	}

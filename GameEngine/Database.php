@@ -5371,6 +5371,13 @@ References: User ID/Message ID, Mode
 		return mysqli_insert_id($this->dblink);
 	}
 
+    function remA2b($id) {
+        $id = (int) $id;
+
+        $q = "DELETE FROM " . TB_PREFIX . "a2b WHERE id = $id";
+        return mysqli_query($this->dblink,$q);
+    }
+
 	// no need to cache this method
 	function getA2b($ckey, $check) {
         list($ckey, $check) = $this->escape_input($ckey, $check);

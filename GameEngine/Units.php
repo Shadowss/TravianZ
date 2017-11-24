@@ -552,6 +552,10 @@ class Units {
                     header( "Location: a2b.php" );
                     exit;
                 }
+
+                // prevent re-use of the same attack via re-POSTing the same data
+                $database->remA2b($data['id']);
+
                 header( "Location: build.php?id=39" );
                 exit;
 
