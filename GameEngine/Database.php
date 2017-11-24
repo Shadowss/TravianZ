@@ -6434,6 +6434,11 @@ References: User ID/Message ID, Mode
 				    if (!isset($movingunits['u' . (($vtribe - 1) * 10 + $i)])) {
 				        $movingunits['u' . (($vtribe - 1) * 10 + $i)] = 0;
 				    }
+
+				    if (!isset($out['t' . $i])) {
+                        $out['t' . $i] = 0;
+                    }
+
 					$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $out['t' . $i];
 				}
 
