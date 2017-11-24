@@ -6445,6 +6445,11 @@ References: User ID/Message ID, Mode
 				if (!isset($movingunits['hero'])) {
 				    $movingunits['hero'] = 0;
 				}
+
+				if (!isset($out['t11'])) {
+                    $out['t11'] = 0;
+                }
+
 				$movingunits['hero'] += $out['t11'];
 			}
 		}
