@@ -4993,7 +4993,7 @@ References: User ID/Message ID, Mode
             }
         }
 
-		$q = "SELECT CONCAT(type, \"=\", Count(type)) FROM " . TB_PREFIX . "bdata where wid = $wid and type IN(".implode(', ', $type).") and master = 0";
+		$q = "SELECT CONCAT(type, \"=\", Count(type)) FROM " . TB_PREFIX . "bdata where wid = $wid and type IN(".implode(', ', $type).") and master = 0 GROUP BY type";
 		$result = mysqli_query($this->dblink, $q);
 		$newresult = [];
 
