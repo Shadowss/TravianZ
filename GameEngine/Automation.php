@@ -3989,113 +3989,133 @@ class Automation {
     }
 
     public function getUpkeep($array,$type,$vid=0,$prisoners=0) {
-        global $database,$session,$village;
+        global $database, $session, $village;
 
-        if($vid==0) { $vid=$village->wid; }
+        if ( $vid == 0 ) {
+            $vid = $village->wid;
+        }
+
         $buildarray = array();
-        if($vid!=0){ $buildarray = $database->getResourceLevel($vid); }
+
+        if ( $vid != 0 ) {
+            $buildarray = $database->getResourceLevel( $vid );
+        }
+
         $upkeep = 0;
-        switch($type) {
+
+        switch ( $type ) {
             case 0:
                 $start = 1;
-                $end = 50;
+                $end   = 50;
                 break;
             case 1:
                 $start = 1;
-                $end = 10;
+                $end   = 10;
                 break;
             case 2:
                 $start = 11;
-                $end = 20;
+                $end   = 20;
                 break;
             case 3:
                 $start = 21;
-                $end = 30;
+                $end   = 30;
                 break;
             case 4:
                 $start = 31;
-                $end = 40;
+                $end   = 40;
                 break;
             case 5:
                 $start = 41;
-                $end = 50;
+                $end   = 50;
                 break;
         }
-        for($i=$start;$i<=$end;$i++) {
-            $k = $i-$start+1;
-            $unit = "u".$i;
-            $unit2 = "t".$k;
+
+        for ( $i = $start; $i <= $end; $i ++ ) {
+            $k     = $i - $start + 1;
+            $unit  = "u" . $i;
+            $unit2 = "t" . $k;
+
             global $$unit;
             $dataarray = $$unit;
-            for($j=19;$j<=38;$j++) {
-                if($buildarray['f'.$j.'t'] == 41) {
+
+            for ( $j = 19; $j <= 38; $j ++ ) {
+                if ( $buildarray[ 'f' . $j . 't' ] == 41 ) {
                     $horsedrinking = $j;
                 }
             }
-            if($prisoners == 0){
-                if(isset($horsedrinking)){
-                    if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
-                        || ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
-                        || ($i==6 && $buildarray['f'.$horsedrinking] == 20)) {
-                            $upkeep += ($dataarray['pop']-1) * $array[$unit];
-                        } else {
-                            $upkeep += $dataarray['pop'] * $array[$unit];
-                        }}else{
-                            $upkeep += $dataarray['pop'] * $array[$unit];
-                        }
-            }else{
-                if(isset($horsedrinking)){
-                    if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
-                        || ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
-                        || ($i==6 && $buildarray['f'.$horsedrinking] == 20)) {
-                            $upkeep += ($dataarray['pop']-1) * $array[$unit2];
-                        } else {
-                            $upkeep += $dataarray['pop'] * $array[$unit2];
-                        }}else{
-                            $upkeep += $dataarray['pop'] * $array[$unit2];
-                        }
+
+            if ( $prisoners == 0 ) {
+                if ( isset( $horsedrinking ) ) {
+                    if ( ( $i == 4 && $buildarray[ 'f' . $horsedrinking ] >= 10 )
+                         || ( $i == 5 && $buildarray[ 'f' . $horsedrinking ] >= 15 )
+                         || ( $i == 6 && $buildarray[ 'f' . $horsedrinking ] == 20 ) ) {
+                        $upkeep += ( $dataarray['pop'] - 1 ) * $array[ $unit ];
+                    } else {
+                        $upkeep += $dataarray['pop'] * $array[ $unit ];
+                    }
+                } else {
+                    $upkeep += $dataarray['pop'] * $array[ $unit ];
+                }
+            } else {
+                if ( isset( $horsedrinking ) ) {
+                    if ( ( $i == 4 && $buildarray[ 'f' . $horsedrinking ] >= 10 )
+                         || ( $i == 5 && $buildarray[ 'f' . $horsedrinking ] >= 15 )
+                         || ( $i == 6 && $buildarray[ 'f' . $horsedrinking ] == 20 ) ) {
+                        $upkeep += ( $dataarray['pop'] - 1 ) * $array[ $unit2 ];
+                    } else {
+                        $upkeep += $dataarray['pop'] * $array[ $unit2 ];
+                    }
+                } else {
+                    $upkeep += $dataarray['pop'] * $array[ $unit2 ];
+                }
             }
         }
+
         //   $unit = "hero";
         //   global $$unit;
         //   $dataarray = $$unit;
-        if($prisoners == 0){
-            if (!isset($array['hero'])) {
+        if ( $prisoners == 0 ) {
+            if ( ! isset( $array['hero'] ) ) {
                 $array['hero'] = 0;
             }
             $upkeep += $array['hero'] * 6;
-        }else{
-            if (!isset($array['t11'])) {
+        } else {
+            if ( ! isset( $array['t11'] ) ) {
                 $array['t11'] = 0;
             }
             $upkeep += $array['t11'] * 6;
         }
-        $who=$database->getVillageField($vid,"owner");
-        $artefact = count($database->getOwnUniqueArtefactInfo2($who,4,3,0));
-        $artefact1 = count($database->getOwnUniqueArtefactInfo2($vid,4,1,1));
-        $artefact2 = count($database->getOwnUniqueArtefactInfo2($who,4,2,0));
-        if($artefact > 0){
+
+        $who       = $database->getVillageField( $vid, "owner" );
+        $artefact  = count( $database->getOwnUniqueArtefactInfo2( $who, 4, 3, 0 ) );
+        $artefact1 = count( $database->getOwnUniqueArtefactInfo2( $vid, 4, 1, 1 ) );
+        $artefact2 = count( $database->getOwnUniqueArtefactInfo2( $who, 4, 2, 0 ) );
+
+        if ( $artefact > 0 ) {
             $upkeep /= 2;
-            $upkeep = round($upkeep);
-        }else if($artefact1 > 0){
+            $upkeep = round( $upkeep );
+        } else if ( $artefact1 > 0 ) {
             $upkeep /= 2;
-            $upkeep = round($upkeep);
-        }else if($artefact2 > 0){
+            $upkeep = round( $upkeep );
+        } else if ( $artefact2 > 0 ) {
             $upkeep /= 4;
-            $upkeep = round($upkeep);
+            $upkeep = round( $upkeep );
             $upkeep *= 3;
         }
-        $foolartefact = $database->getFoolArtefactInfo(4,$vid,$who);
-        if(count($foolartefact) > 0){
-            foreach($foolartefact as $arte){
-                if($arte['bad_effect'] == 1){
+
+        $foolartefact = $database->getFoolArtefactInfo( 4, $vid, $who );
+
+        if ( count( $foolartefact ) > 0 ) {
+            foreach ( $foolartefact as $arte ) {
+                if ( $arte['bad_effect'] == 1 ) {
                     $upkeep *= $arte['effect2'];
-                }else{
+                } else {
                     $upkeep /= $arte['effect2'];
-                    $upkeep = round($upkeep);
+                    $upkeep = round( $upkeep );
                 }
             }
         }
+
         return $upkeep;
     }
 

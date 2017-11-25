@@ -7085,7 +7085,18 @@ References: User ID/Message ID, Mode
             self::$foolArtefactCache[$vid] = [];
         }
 
-        return (isset(self::$foolArtefactCache[$vid][$type.$uid]) ? self::$foolArtefactCache[$vid][$type.$uid] : []);
+        if (
+            isset(self::$foolArtefactCache[$vid][$type.$uid]) &&
+            self::$foolArtefactCache[$vid][$type.$uid]['type'] == 8 &&
+            self::$foolArtefactCache[$vid][$type.$uid]['kind'] == $type &&
+            self::$foolArtefactCache[$vid][$type.$uid]['owner'] == $uid &&
+            self::$foolArtefactCache[$vid][$type.$uid]['size'] > 1 &&
+            self::$foolArtefactCache[$vid][$type.$uid]['active'] > 1
+        ) {
+            return self::$foolArtefactCache[$vid][$type.$uid];
+        } else {
+            return [];
+        }
 	}
 
 	function claimArtefact($vref, $ovref, $id) {
