@@ -79,7 +79,7 @@ class Building {
                 // let's see if we should allow building what we want where we want to
                 // (prevent building resource fields in the village
                 (
-                    ($page == 'dorf1.php' && $id > 1 && $id <= 4) ||
+                    ($page == 'dorf1.php' && $id >= 1 && $id <= 4) ||
                     ($page == 'dorf2.php' && $id > 4)
                 ) &&
                 // check that we're not trying to change a standing building type
