@@ -5250,9 +5250,19 @@ class Automation {
             $ally = $database->getAlliance($aid);
             $memberlist = $database->getAllMember($ally['id']);
             $oldrank = 0;
+
+            $memberIDs = [];
             foreach($memberlist as $member) {
-                $oldrank += $database->getVSumField($member['id'],"pop");
+                $memberIDs[] = $member['id'];
             }
+            $data = $database->getVSumField($memberIDs,"pop");
+
+            if (count($data)) {
+                foreach ($data as $row) {
+                    $oldrank += $row['Total'];
+                }
+            }
+
             if($ally['oldrank'] != $oldrank){
                 if($ally['oldrank'] < $oldrank) {
                     $totalpoints = $oldrank - $ally['oldrank'];

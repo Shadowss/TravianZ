@@ -1770,6 +1770,11 @@ class MYSQLi_DB implements IDbConnection {
             $uid = $newIDs;
         }
 
+        // nothing left to cache, return the full cache
+        if (!count($uid)) {
+            return self::$userVillagesCache;
+        }
+
         switch ($mode) {
             // by owner ID
             case 0: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner IN(".implode(', ', $uid).") ORDER BY capital DESC,pop DESC";
@@ -2910,9 +2915,20 @@ class MYSQLi_DB implements IDbConnection {
 		$ally = $this->getAlliance($aid);
 		$memberlist = $this->getAllMember($ally['id']);
 		$oldrank = 0;
-		foreach($memberlist as $member) {
-			$oldrank += $this->getVSumField($member['id'],"pop");
-		}
+        $memberIDs = [];
+
+        foreach($memberlist as $member) {
+            $memberIDs[] = $member['id'];
+        }
+
+        $data = $this->getVSumField($memberIDs,"pop");
+
+        if (count($data)) {
+            foreach ($data as $row) {
+                $oldrank += $row['Total'];
+            }
+        }
+
 		if($ally['oldrank'] != $oldrank){
 			if($ally['oldrank'] < $oldrank) {
 				$totalpoints = $oldrank - $ally['oldrank'];
@@ -3824,7 +3840,7 @@ class MYSQLi_DB implements IDbConnection {
                     lastupdate < (UNIX_TIMESTAMP() - 600)
         "; // recount every 10 minutes
 
-        mysqli_query($this->dblink, $q) OR DIE ($q);
+        mysqli_query($this->dblink, $q);
     }
 
     function getVSumField($uid, $field, $use_cache = true) {
@@ -7038,15 +7054,38 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$foolArtefactCache, $type.$vid.$uid)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$foolArtefactCache[$vid]) && is_array(self::$foolArtefactCache[$vid]) && !count(self::$foolArtefactCache[$vid])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$foolArtefactCache, $vid)) && !is_null($cachedValue)) {
+            $data = [];
+            // prepare the data as requested
+            if (isset($cachedValue[$type.$uid])) {
+                foreach ($cachedValue[$type.$uid] as $row) {
+                    if ($row['type'] == 8 && $row['kind'] == $type && $row['owner'] == $uid && $row['size'] > 1 && $row['active'] > 1) {
+                        $data[] = $row;
+                    }
+                }
+            }
+            return $data;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND ((type = 8 AND kind = $type) OR (owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type))";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid"; //" AND ((type = 8 AND kind = $type) OR (owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type))";
+		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$foolArtefactCache[$type.$vid.$uid] = $this->mysqli_fetch_all($result);
-        return self::$foolArtefactCache[$type.$vid.$uid];
+        // cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']])) {
+                    self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']] = [];
+                }
+
+                self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']][] = $arteInfo;
+            }
+        } else {
+            self::$foolArtefactCache[$vid] = [];
+        }
+
+        return (isset(self::$foolArtefactCache[$vid][$type.$uid]) ? self::$foolArtefactCache[$vid][$type.$uid] : []);
 	}
 
 	function claimArtefact($vref, $ovref, $id) {

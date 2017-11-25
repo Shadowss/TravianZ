@@ -16,10 +16,17 @@ if($_GET['aid'])
 	$aliusers = $database->getAllMember($_GET['aid']);
 	if($alidata and $aliusers)
 	{
-		foreach($aliusers as $member)
-		{
-			$totalpop += $database->getVSumField($member['id'],"pop");
-		} ?>
+        $memberIDs = [];
+        foreach($aliusers as $member) {
+            $memberIDs[] = $member['id'];
+        }
+        $data = $database->getVSumField($memberIDs,"pop");
+
+        if (count($data)) {
+            foreach ($data as $row) {
+                $totalpop += $row['Total'];
+            }
+        } ?>
 
 		<br>
 		<table id="profile" cellpadding="1" cellspacing="1">

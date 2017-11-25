@@ -1,17 +1,26 @@
-<?php  
+<?php
 
 if(isset($aid)) {
 $aid = $aid;
 }
 else {
 $aid = $session->alliance;
-} 
-$varmedal = $database->getProfileMedalAlly($aid); 
+}
+$varmedal = $database->getProfileMedalAlly($aid);
 $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
 $totalpop = 0;
+$memberIDs = [];
+
 foreach($memberlist as $member) {
-	$totalpop += $database->getVSumField($member['id'],"pop");
+    $memberIDs[] = $member['id'];
+}
+$data = $database->getVSumField($memberIDs,"pop");
+
+if (count($data)) {
+    foreach ($data as $row) {
+        $totalpop += $row['Total'];
+    }
 }
 
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
@@ -80,9 +89,9 @@ INDELING CATEGORIEEN:
 == 7. in top 3 - verdediging ==
 == 8. in top 3 - klimmers    ==
 == 9. in top 3 - overval     ==
-******************************/                
-                
-                
+******************************/
+
+
     foreach($varmedal as $medal) {
     $titel="Bonus";
     switch ($medal['categorie']) {
@@ -122,7 +131,7 @@ INDELING CATEGORIEEN:
     case "12":
         $titel="Top 10 of Rank Attackers of week ".$medal['points']." in a row";
         break;
-    }            
+    }
                  echo"<tr>
                    <td> ".$titel."</td>
                    <td>".$medal['plaats']."</td>
