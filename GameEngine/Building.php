@@ -67,18 +67,23 @@ class Building {
 
 	public function canProcess($id,$tid) {
         //add fix by ronix
-        global $session;
+        global $session, $database, $village;
 
         if($session->access==BANNED){
             header("Location: banned.php");
             exit;
         } else {
-            // first of all, let's see if we should allow building what we want where we want to
-            // (prevent building resource fields in the village
             $page = basename($_SERVER['SCRIPT_NAME']);
+            $levels = $database->getResourceLevel($village->wid);
             if (
-                ($page == 'dorf1.php' && $id > 1 && $id <= 4) ||
-                ($page == 'dorf2.php' && $id > 4)
+                // let's see if we should allow building what we want where we want to
+                // (prevent building resource fields in the village
+                (
+                    ($page == 'dorf1.php' && $id > 1 && $id <= 4) ||
+                    ($page == 'dorf2.php' && $id > 4)
+                ) &&
+                // check that we're not trying to change a standing building type
+                ($levels['f'.$tid.'t'] == $id)
             ) {
                 if ( $this->checkResource( $id, $tid ) != 4 ) {
                     if ( $tid >= 19 ) {
@@ -385,7 +390,7 @@ class Building {
 	}
 
 	private function upgradeBuilding($id) {
-		global $database,$village,$session,$logging;
+		global $database,$village,$session,$logging,${'bid'.$village->resarray['f'.$id.'t']};
 		if($this->allocated < $this->maxConcurrent) {
 			$uprequire = $this->resourceRequired($id,$village->resarray['f'.$id.'t']);
 			$time = time() + $uprequire['time'];
@@ -420,6 +425,12 @@ class Building {
 				}
 			}
 			$level = $database->getResourceLevel($village->wid);
+
+			// don't allow building above max levels
+            if ($level['f'.$id] + 1 > count(${'bid'.$village->resarray['f'.$id.'t']})) {
+                return;
+            }
+
 			if($session->access!=BANNED){
 			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time+($loop==1?ceil(60/SPEED):0),0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
