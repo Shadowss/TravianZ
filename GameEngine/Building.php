@@ -750,16 +750,18 @@ class Building {
                 }
                 break;
 
+            // great warehouse can only be built with artefact or only in Natar village
             case 38:
-                if ( $this->getTypeLevel( 15 ) >= 10 && $village->natar == 1 ) {
+                if ( $this->getTypeLevel( 15 ) >= 10 && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 1, 0)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)) ) ) {
                     return true;
                 } else {
                     return false;
                 }
                 break;
 
+            // great grannary can only be built with artefact or only in Natar village
             case 39:
-                if ( $this->getTypeLevel( 15 ) >= 10 && $village->natar == 1 ) {
+                if ( $this->getTypeLevel( 15 ) >= 10 && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 1, 0)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)) ) ) {
                     return true;
                 } else {
                     return false;
