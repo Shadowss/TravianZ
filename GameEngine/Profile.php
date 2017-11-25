@@ -90,9 +90,9 @@ class Profile {
 	}
 
 	private function updateProfile($post) {
-		global $database;
+		global $database, $session;
 		$birthday = $post['jahr'].'-'.$post['monat'].'-'.$post['tag'];
-		$database->submitProfile($database->RemoveXSS($post['uid']),$database->RemoveXSS($post['mw']),$database->RemoveXSS($post['ort']),$database->RemoveXSS($birthday),$database->RemoveXSS($post['be2']),$database->RemoveXSS($post['be1']));
+		$database->submitProfile($session->uid,$database->RemoveXSS($post['mw']),$database->RemoveXSS($post['ort']),$database->RemoveXSS($birthday),$database->RemoveXSS($post['be2']),$database->RemoveXSS($post['be1']));
 		$varray = $database->getProfileVillages($post['uid']);
 			for($i=0;$i<=count($varray)-1;$i++) {
 				$k = trim($post['dname'.$i]);
