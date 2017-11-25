@@ -6846,20 +6846,22 @@ References: User ID/Message ID, Mode
 
     // no need to cache this method
 	function getOwnArtefactInfo($vref) {
-	    list($vref) = $this->escape_input((int) $vref);
+	    // load the data - type is irrelevant, since the method caches all data
+        // then returns the one for our type
+        $this->getOwnArtefactInfoByType($vref, 1);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_array($result);
+        // return what we've cached
+        return (self::$artefactInfoByTypeCache[$vref]);
 	}
 
     // no need to cache this method
 	function getOwnArtefactInfo3($uid) {
-	    list($uid) = $this->escape_input((int) $uid);
+        // load the data - type and size are irrelevant, since the method caches all data
+        // then returns the one for our type and size
+        $this->getOwnUniqueArtefactInfo($uid, 1, 1);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $uid";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return what we've cached
+        return (self::$artefactInfoSimpleCache[$uid]);
 	}
 
 	function getOwnArtefactInfoByType($vref, $type, $use_cache = true) {
@@ -6868,15 +6870,32 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoByTypeCache, $vref.$type)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$artefactInfoByTypeCache[$vref]) && is_array(self::$artefactInfoByTypeCache[$vref]) && !count(self::$artefactInfoByTypeCache[$vref])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoByTypeCache, $vref)) && !is_null($cachedValue)) {
+            return (isset($cachedValue[$type]) ? $cachedValue[$type] : []);
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type order by size LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref ORDER BY size";
+		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$artefactInfoByTypeCache[$vref.$type] = mysqli_fetch_array($result);
-        return self::$artefactInfoByTypeCache[$vref.$type];
+		// cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$artefactInfoByTypeCache[$arteInfo['vref']])) {
+                    self::$artefactInfoByTypeCache[$arteInfo['vref']] = [];
+                }
+
+                // we're sorting by size, thus we only need the first one per each type
+                if (isset(self::$artefactInfoByTypeCache[$arteInfo['vref']]) && !isset(self::$artefactInfoByTypeCache[$arteInfo['vref']][$arteInfo['type']])) {
+                    self::$artefactInfoByTypeCache[$arteInfo['vref']][$arteInfo['type']] = $arteInfo;
+                }
+            }
+        } else {
+            self::$artefactInfoByTypeCache[$vref] = [];
+        }
+
+        return (isset(self::$artefactInfoByTypeCache[$vref][$type]) ? self::$artefactInfoByTypeCache[$vref][$type] : []);
 	}
 
 	function getOwnArtefactInfoByType2($vref, $type, $use_cache = true) {
@@ -6888,15 +6907,29 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoSimpleCache, $id.$type.$size)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$artefactInfoSimpleCache[$id]) && is_array(self::$artefactInfoSimpleCache[$id]) && !count(self::$artefactInfoSimpleCache[$id])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoSimpleCache, $id)) && !is_null($cachedValue)) {
+            return (isset($cachedValue[$type.$size]) ? $cachedValue[$type.$size] : []);
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id";
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$artefactInfoSimpleCache[$id.$type.$size] = mysqli_fetch_array($result);
-        return self::$artefactInfoSimpleCache[$id.$type.$size];
+        // cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$artefactInfoSimpleCache[$arteInfo['owner']])) {
+                    self::$artefactInfoSimpleCache[$arteInfo['owner']] = [];
+                }
+
+                self::$artefactInfoSimpleCache[$arteInfo['owner']][$arteInfo['type'].$arteInfo['size']] = $arteInfo;
+            }
+        } else {
+            self::$artefactInfoSimpleCache[$id] = [];
+        }
+
+        return (isset(self::$artefactInfoSimpleCache[$id][$type.$size]) ? self::$artefactInfoSimpleCache[$id][$type.$size] : []);
 	}
 
 	function getOwnUniqueArtefactInfo2($id, $type, $size, $mode, $use_cache = true) {
@@ -6904,15 +6937,29 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactDataCache, $id.$type.$size.$mode)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$artefactDataCache[$id.$mode]) && is_array(self::$artefactDataCache[$id.$mode]) && !count(self::$artefactDataCache[$id.$mode])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactDataCache, $id.$mode)) && !is_null($cachedValue)) {
+            return (isset($cachedValue[$size.$type]) ? $cachedValue[$size.$type] : []);
         }
 
-        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE ".(!$mode ? 'owner' : 'vref')." = $id AND active = 1 AND type = $type AND size=$size";
-		$result = mysqli_query($this->dblink,$q);
+        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE ".(!$mode ? 'owner' : 'vref')." = $id AND active = 1";
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$artefactDataCache[$id.$type.$size.$mode] = $this->mysqli_fetch_all($result);
-        return self::$artefactDataCache[$id.$type.$size.$mode];
+        // cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$artefactDataCache[$arteInfo[(!$mode ? 'owner' : 'vref')] . $mode])) {
+                    self::$artefactDataCache[$arteInfo[(!$mode ? 'owner' : 'vref')] . $mode] = [];
+                }
+
+                self::$artefactDataCache[$arteInfo[(!$mode ? 'owner' : 'vref')] . $mode][$arteInfo['size'].$arteInfo['type']] = $arteInfo;
+            }
+        } else {
+            self::$artefactDataCache[$id.$mode] = [];
+        }
+
+        return (isset(self::$artefactDataCache[$id.$mode][$size.$type]) ? self::$artefactDataCache[$id.$mode][$size.$type] : []);
 	}
 
 	function getFoolArtefactInfo($type,$vid,$uid, $use_cache = true) {
