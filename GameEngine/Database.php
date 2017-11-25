@@ -395,6 +395,11 @@ class MYSQLi_DB implements IDbConnection {
         $researchingCache = [],
 
         /**
+         * @var array Cache of buildings being under construction.
+         */
+        $buildingsUnderConstructionCache = [],
+
+        /**
          * @var array Cache of messages to be sent out to players,
          *            so we can collect them and send them out together
          *            at the end of script execution.
@@ -4901,65 +4906,114 @@ References: User ID/Message ID, Mode
         }
     }
 
-    // do not cache this method, as building jobs can change when using instant build (PLUS) etc.
+    private function getBData($wid, $use_cache = true) {
+	    $wid = (int) $wid;
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && isset(self::$buildingsUnderConstructionCache[$wid]) && is_array(self::$buildingsUnderConstructionCache[$wid]) && !count(self::$buildingsUnderConstructionCache[$wid])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$buildingsUnderConstructionCache, $wid)) && !is_null($cachedValue)) {
+            return self::$buildingsUnderConstructionCache[$wid];
+        }
+
+        $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
+
+        self::$buildingsUnderConstructionCache[$wid] = $result;
+        return $result;
+    }
+
+    // do not cache output, as building jobs can change when using instant build (PLUS) etc.
 	function getJobs($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
-
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+	    return $this->getBData($wid, false);
 	}
 
-    // no need to cache this method
 	function FinishWoodcutter($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
-
+	    $bdata = $this->getBData($wid);
 		$time = time()-1;
-		$q = "SELECT id, timestamp FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
-		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
+
+		// find our woodcutter
+        $dbarray = [];
+        foreach ($bdata as $row) {
+            if ($row['type'] == 1) {
+                $dbarray = $row;
+                break;
+            }
+        }
+
+        // no woodcutters? just return
+        if (!count($dbarray)) {
+            return;
+        }
+
+        // make it complete
+		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = ".$dbarray['id'];
 		$this->query($q);
+
 		$tribe = $this->getUserField($this->getVillageField($wid, "owner"), "tribe", 0);
-		if($tribe == 1){
-		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field >= 19 order by master,timestamp ASC LIMIT 1";
-		}else{
-		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC LIMIT 1";
-		}
-		$result2 = mysqli_query($this->dblink,$q2);
-		if(mysqli_num_rows($result2) > 0){
-		$dbarray2 = mysqli_fetch_array($result2);
-		$wc_time = $dbarray['timestamp'];
-		$q2 = "UPDATE ".TB_PREFIX."bdata SET timestamp = timestamp - $wc_time WHERE id = '".$dbarray2['id']."'";
-		$this->query($q2);
+
+		// find first field that's the next one in the loop after our finished woodcutter
+		$dbarray2 = [];
+        foreach ($bdata as $row) {
+            if ($row['loopcon'] == 1 && ($tribe == 1 ? $row['field'] >= 19 : true)) {
+                $dbarray2 = $row;
+                break;
+            }
+        }
+
+        // if found, update it's finish time by subtracting the resulting time for our woodcutter,
+        // which is now finished
+		if (count($dbarray2)){
+            $wc_time = $dbarray['timestamp'];
+            $q2 = "UPDATE ".TB_PREFIX."bdata SET timestamp = timestamp - $wc_time WHERE id = ".$dbarray2['id'];
+            $this->query($q2);
 		}
 	}
 
-    // no need to cache this method
 	function getMasterJobs($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
+	    // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and master = 1 order by master,timestamp ASC";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all master jobs
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 1) {
+                $data[] = $row;
+            }
+        }
+
+		return $data;
 	}
 
-    // no need to cache this method
 	function getMasterJobsByField($wid,$field) {
-	    list($wid,$field) = $this->escape_input((int) $wid,(int) $field);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 1 order by master,timestamp ASC";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all master jobs for the requested field
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 1 && $row['field'] == $field) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
-    // no need to cache this method
 	function getBuildingByField($wid,$field) {
-	    list($wid,$field) = $this->escape_input((int) $wid,(int) $field);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all non-master jobs for the requested field
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 0 && $row['field'] == $field) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
     // no need to cache this method
@@ -4971,15 +5025,20 @@ References: User ID/Message ID, Mode
 		return $result['Total'];
 	}
 
-    // no need to cache this method
 	function getBuildingByType($wid,$type) {
-	    $wid = (int) $wid;
+        // cache data
+        $bdata = $this->getBData($wid);
+        $type = (strpos($type, ',') === false ? [(int) $type] : explode(',', str_replace(' ', '', $this->escape($type))));
 
-	    $type = (strpos($type, ',') === false ? (int) $type : $this->escape($type));
+        // return all jobs which are of the requested type
+        $data = [];
+        foreach ($bdata as $row) {
+            if (in_array($row['field'], $type)) {
+                $data[] = $row;
+            }
+        }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type IN($type) and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        return $data;
 	}
 
 	function getBuildingByType2($wid,$type) {
@@ -5014,22 +5073,34 @@ References: User ID/Message ID, Mode
 		return $result;
 	}
 
-    // no need to cache this method
 	function getDorf1Building($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field < 19 and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all non-master jobs for field type under 19
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 0 && $row['field'] < 19) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
-    // no need to cache this method
 	function getDorf2Building($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field > 18 and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all non-master jobs for field type above 18
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 0 && $row['field'] > 18) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
 	function updateBuildingWithMaster($id, $time,$loop) {
