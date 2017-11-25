@@ -537,8 +537,8 @@ if ($ironL<2 || $clayL<2 || $woodL<2 || $cropL<2){?>
 <?php } elseif($_SESSION['qst']== 10){
 //comming soon
 //Check rat is in villa
-$rat = $database->getEnforce($session->villages[0], 0);
-if ($rat['u31']<1){?>
+$rat = $database->getEnforce(0, $village->wid);
+if ($rat < 1){?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q25_10; ?><\/h1><br \/><i>&rdquo;<?php echo Q25_10_DESC; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><?php echo Q25_10_ORDER; ?><\/div><br \/><span id=\"qst_accpt\"><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"army\"><\/div>\n\t\t","number":-10,"reward":false,"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>","msrc":"<?php echo $messagelol; ?>","altstep":99}
 <?php $_SESSION['qstnew']='0'; }else{ $_SESSION['qstnew']='1'; ?>
 {"markup":"\n\t\t<div id=\"qstd\"><h1> <img class=\"point\" src=\"img\/x.gif\" alt=\"\" title=\"\"\/> <?php echo Q25_10; ?><\/h1><br \/><i>&rdquo;<?php echo Q25_10_RESP; ?>&rdquo;<\/i><br \/><br \/><div class=\"rew\"><p class=\"ta_aw\"><input type=\"hidden\" id=\"qst_val\" value=\"2\" \/><?php echo Q25_10_REWARD; ?> <b><span class=\"plus_g\">P</span><span class=\"plus_o\">l</span><span class=\"plus_g\">u</span><span class=\"plus_o\">s</span></b><\/div><br \/><span id=\"qst_accpt\"><a href=\"javascript: qst_next('','11');\"><?php echo Q_CONTINUE; ?><\/a><\/span><\/div>\n\t\t<div id=\"qstbg\" class=\"army\"><\/div>\n\t\t","number":10,"reward":{"plus":2},"qgsrc":"q_l<?php echo $session->userinfo['tribe'];?>g","msrc":"<?php echo $messagelol; ?>","altstep":99}
