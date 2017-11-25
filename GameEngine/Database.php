@@ -7533,7 +7533,7 @@ References:
     function KillMyHero($id) {
         list( $id ) = $this->escape_input( (int) $id );
 
-        $q = "UPDATE " . TB_PREFIX . "hero set dead = 1 where uid = " . $id . " AND dead = 0";
+        $q = "UPDATE " . TB_PREFIX . "hero set dead = 1, intraining = 0, inrevive = 0 where uid = " . $id . " AND dead = 0";
 
         return mysqli_query( $this->dblink, $q );
     }

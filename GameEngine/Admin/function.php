@@ -86,10 +86,10 @@ class funct {
         if (!$killhero){
             $killhero=$database->FindHeroInOasis($get['uid']);
         }
-        if ($killhero) {
-            $database->KillMyHero($get['uid']);
-            $error="&kc=1";
-        }else $error="&e=1";
+
+        $database->KillMyHero($get['uid']);
+        $error="&kc=1";
+
         header("Location: admin.php?p=player&uid=".$get['uid'].$error);
         exit;
       case "reviveHero":
