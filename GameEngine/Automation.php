@@ -4605,10 +4605,10 @@ class Automation {
                     $modes[] = null;
                 }
 
-                // add 5 points, if we're below level 100
+                // add as many points as needed, if we're below level 100
                 if ($scorePoints) {
                     $columns[] = 'points';
-                    $columnValues[] = 5;
+                    $columnValues[] = (5 * ($newLevel - $herolevel));
                     $modes[] = 1;
                 }
 
