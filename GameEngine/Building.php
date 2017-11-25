@@ -83,7 +83,10 @@ class Building {
                     ($page == 'dorf2.php' && $id > 4)
                 ) &&
                 // check that we're not trying to change a standing building type
-                ($levels['f'.$tid.'t'] == $id)
+                (
+                    $levels['f'.$tid.'t'] == $id ||
+                    $levels['f'.$tid.'t'] == 0
+                )
             ) {
                 if ( $this->checkResource( $id, $tid ) != 4 ) {
                     if ( $tid >= 19 ) {
