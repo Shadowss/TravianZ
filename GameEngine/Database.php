@@ -4530,7 +4530,7 @@ References: User ID/Message ID, Mode
                 LEFT JOIN '.TB_PREFIX.'users u ON u.id = v.owner
             WHERE d.vref = '.$wid;
 
-	        $res = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
+	        $res = $this->mysqli_fetch_all(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
 	        foreach ($res as $key) {
 	            // if this building being demolished is an Embassy or was demolished completely
 	            // and the player is in an alliance, check and update their alliance status
