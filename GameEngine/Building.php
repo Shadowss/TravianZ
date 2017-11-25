@@ -67,27 +67,40 @@ class Building {
 
 	public function canProcess($id,$tid) {
         //add fix by ronix
-            global $session;
-    if($session->access==BANNED){
-        header("Location: banned.php");
-        exit;
-    } else {
-        if ($this->checkResource($id,$tid)!=4) {
-            if($tid >= 19) {
-                header("Location: dorf2.php");
-                exit;
-                         }
-            else {
-                header("Location: dorf1.php");
-                exit;
-                          }
-                            exit;
+        global $session;
+
+        if($session->access==BANNED){
+            header("Location: banned.php");
+            exit;
+        } else {
+            // first of all, let's see if we should allow building what we want where we want to
+            // (prevent building resource fields in the village
+            $page = basename($_SERVER['SCRIPT_NAME']);
+            if (
+                ($page == 'dorf1.php' && $id > 1 && $id <= 4) ||
+                ($page == 'dorf2.php' && $id > 4)
+            ) {
+                if ( $this->checkResource( $id, $tid ) != 4 ) {
+                    if ( $tid >= 19 ) {
+                        header( "Location: dorf2.php" );
+                        exit;
+                    } else {
+                        header( "Location: dorf1.php" );
+                        exit;
+                    }
+
+                    exit;
                 }
+            } else {
+                header('Location: '.$_SERVER['SCRIPT_NAME']);
+                exit;
+            }
         }
     }
 
     public function procBuild($get) {
         global $session, $village, $database;
+
         if(isset($get['a']) && $get['c'] == $session->checker && !isset($get['id'])) {
             if($get['a'] == 0) {
                 $this->removeBuilding($get['d']);
@@ -97,6 +110,7 @@ class Building {
                 $this->upgradeBuilding($get['a']);
             }
         }
+
         if(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker)) {
             $m=$get['master'];
             $master = $_GET;
