@@ -4613,7 +4613,7 @@ class Automation {
                 }
 
                 $villunits = $unitData[$hdata['wref']];
-                if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
+                if($hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
 
                     $columns[] = 'dead';
@@ -4632,7 +4632,7 @@ class Automation {
                     $lastUpdateTime = (int) $hdata['trainingtime'];
                 }
 
-                if($villunits['hero'] == 0 && $hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
+                if($hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
                     mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
 
                     $columns[] = 'dead';
