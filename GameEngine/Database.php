@@ -7079,7 +7079,7 @@ References: User ID/Message ID, Mode
                 SUM(IF(size = '3',1,0)) `unique`
                 FROM " . TB_PREFIX . "artefacts WHERE owner = " . (int) $uid;
         $result   = mysqli_query( $this->dblink, $q );
-        $artifact = $this->mysqli_fetch_all( $result );
+        $artifact = $this->mysqli_fetch_all( $result )[0];
 
         if ( $artifact['totals'] < 3 || $type == 11 ) {
             $DefenderFields = $this->getResourceLevel( $vref );

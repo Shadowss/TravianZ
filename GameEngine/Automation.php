@@ -2656,7 +2656,7 @@ class Automation {
                             } else {
                                 $xp=" gained ".$heroxp." XP from the battle";
                             }
-                            $artifact = $database->getOwnArtefactInfo($data['to']);
+                            $artifact = reset($database->getOwnArtefactInfo($data['to']));
                             if (!empty($artifact)) {
                                 if ($type=='3') {
                                     if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
