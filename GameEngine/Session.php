@@ -208,19 +208,22 @@ class Session {
 				global $database,$link;
 
 				$villageIDs = implode(', ', $this->villages);
+				if (!count($this->villages)) {
+				    $this->Logout();
+				    header('login.php');
+				    exit;
+                }
 
 				// check if hero unit for this player is present anywhere on the map
-   				$heroUnitRegisters = mysqli_fetch_array(
-   				    mysqli_query($database->dblink, '
+			    $q = '
                       SELECT
                         IFNULL((SELECT SUM(hero) from '.TB_PREFIX.'enforcement where `from` IN('.$villageIDs.')), 0) +
                         IFNULL((SELECT SUM(hero) from '.TB_PREFIX.'units where `vref` IN('.$villageIDs.')), 0) +
                         IFNULL((SELECT SUM(t11) from '.TB_PREFIX.'prisoners where `from` IN('.$villageIDs.')), 0) +
                         IFNULL((SELECT SUM(t11) FROM '.TB_PREFIX.'movement, '.TB_PREFIX.'attacks WHERE '.TB_PREFIX.'movement.`from` IN('.$villageIDs.') and '.TB_PREFIX.'movement.ref = '.TB_PREFIX.'attacks.id and '.TB_PREFIX.'movement.proc = 0 and '.TB_PREFIX.'movement.sort_type = 3), 0) +
                         IFNULL((SELECT SUM(t11) FROM '.TB_PREFIX.'movement, '.TB_PREFIX.'attacks where '.TB_PREFIX.'movement.`to` IN('.$villageIDs.') and '.TB_PREFIX.'movement.ref = '.TB_PREFIX.'attacks.id and '.TB_PREFIX.'movement.proc = 0 and '.TB_PREFIX.'movement.sort_type = 4), 0)
-                        as herocount'),
-                    MYSQLI_ASSOC
-                )['herocount'];
+                        as herocount';
+   				$heroUnitRegisters = mysqli_fetch_array( mysqli_query($database->dblink, $q, MYSQLI_ASSOC ))['herocount'];
 
    				// check if the actual hero is alive or being trained/revived into a living state
                 $isHeroLivingOrRaising = $database->getHeroDeadReviveOrInTraining($this->uid);
