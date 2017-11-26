@@ -15,18 +15,18 @@
 namespace App\Utils;
 
 /**
- * 
+ *
  * Mathematics-related helpers.
- * 
+ *
  * @author martinambrus
  *
  */
 class Math {
-    
+
     public static function isInt($val) {
         return (is_numeric($val) && intval($val) === $val);
     }
-    
+
     public static function isFloat($val) {
         return (is_numeric($val) && floatval($val) === $val);
     }

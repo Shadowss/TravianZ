@@ -1,6 +1,6 @@
 [![Code Triagers Badge](https://www.codetriage.com/shadowss/travianz/badges/users.svg)](https://www.codetriage.com/shadowss/travianz) [![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-TravianZ Version v.8.3.3 BETA b2
+TravianZ Version v.8.3.3 BETA b3
 
 Download and updates : https://github.com/Shadowss/TravianZ
 
