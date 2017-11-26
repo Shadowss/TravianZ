@@ -1678,7 +1678,7 @@ class MYSQLi_DB implements IDbConnection {
                                 }
                                 break;
 
-                        case 3: if ($value['owner'] == $vid && $value['capital'] == 1) {
+                        case 3: if ((isset($value['owner']) && isset($value['capital'])) && $value['owner'] == $vid && $value['capital'] == 1) {
                                     return $value;
                                 }
                                 break;
@@ -1724,7 +1724,7 @@ class MYSQLi_DB implements IDbConnection {
 
             // by owner ID and capital = 1
             case 3: $vid = (int) $vid;
-                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $vid capital = 1 LIMIT 1";
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $vid AND capital = 1 LIMIT 1";
                     break;
 
             // by owner = Taskmaster
