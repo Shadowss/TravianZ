@@ -42,10 +42,10 @@ class Building {
 		}
 	}
 
-	public function residenceOfPalaceBuildInProgress($vid) {
+	public function residenceOfPalaceBuildInProgress() {
 	    global $database, $village;
 
-        $residenceOrPalaceInProgress = $database->getBuildingByType($village->wid, '25, 26');
+        $residenceOrPalaceInProgress = $database->getBuildingByType($village->resarray, '25, 26');
         $residenceBuildInProgress = false;
         $palaceBuildInProgress = false;
 
@@ -65,6 +65,69 @@ class Building {
         ];
     }
 
+    /*
+     * Checks whether to allow building Wonder of the World
+     * above current level. This includes checks for WW upgrade
+     * currently in progress as well as current WW level
+     * and the right number of building plans in the alliance.
+     */
+    public function allowWwUpgrade() {
+        global $database, $village, $session;
+        static $cached = null;
+
+        if ($cached === null) {
+            $wwHighestLevelFound = $village->resarray['f99'];
+            $wwBuildingProgress  = $database->getBuildingByType( $village->wid, 99 );
+
+            if ( count( $wwBuildingProgress ) ) {
+                if ( $wwBuildingProgress[0]['level'] > $wwHighestLevelFound ) {
+                    $wwHighestLevelFound = $wwBuildingProgress[0]['level'];
+                }
+            }
+
+            // check if we should allow building the WW this high
+            if ( $wwHighestLevelFound >= 50 ) {
+                $needed_plan = 1;
+            } else {
+                $needed_plan = 0;
+            }
+
+            // count building plans
+            if ( $needed_plan ) {
+                $wwbuildingplan = 0;
+                $villages       = $database->getVillagesID( $session->uid );
+                foreach ( $villages as $village1 ) {
+                    $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
+                    if ( $plan > 0 ) {
+                        $wwbuildingplan = 1;
+                    }
+                }
+
+                if ( $session->alliance != 0 ) {
+                    $alli_users = $database->getUserByAlliance( $session->alliance );
+                    foreach ( $alli_users as $users ) {
+                        $villages = $database->getVillagesID( $users['id'] );
+                        if ( $users['id'] != $session->uid ) {
+                            foreach ( $villages as $village1 ) {
+                                $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
+                                if ( $plan > 0 ) {
+                                    $wwbuildingplan += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                $cached = $wwbuildingplan > $needed_plan;
+            } else {
+                // no need for building plans, we can still upgrade WW
+                $cached = true;
+            }
+        }
+
+        return $cached;
+    }
+
 	public function canProcess($id,$tid) {
         //add fix by ronix
         global $session, $database, $village;
@@ -75,6 +138,38 @@ class Building {
         } else {
             $page = basename($_SERVER['SCRIPT_NAME']);
             $levels = $database->getResourceLevel($village->wid);
+            $progresses = $this->residenceOfPalaceBuildInProgress();
+
+            if (
+            !(
+                // check if we're not trying to hack-build residence and palace together
+                (
+                    !in_array($tid, [25, 26]) ||
+                    (
+                        ($tid == 25 && $progresses['palace'] === false) ||
+                        ($tid == 26 && $progresses['residence'] === false)
+                    )
+                ) &&
+
+                // don't allow building WW to level 51 with a waiting loop
+                (
+                    $tid != 99 ||
+                    (
+                        $tid == 99 &&
+                        $this->allowWwUpgrade()
+                    )
+                )
+            )
+            ) {
+                if ( $tid > 18 ) {
+                    header( "Location: dorf2.php" );
+                    exit;
+                } else {
+                    header( "Location: dorf1.php" );
+                    exit;
+                }
+            }
+
             if (
                 // check that our ID actually exists within the buildings list
                 isset($village->resarray['f'.$tid.'t']) &&
@@ -122,14 +217,7 @@ class Building {
         }
 
         if(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker)) {
-            // determine the timestamp of last of all the current upgrades
-            $t = 0;
-            foreach ($this->buildArray as $key) {
-                if ($key['timestamp'] > $t) {
-                    $t = $key['timestamp'];
-                }
-            }
-
+            $this->canProcess($get['master'],$get['id']);
             $m=$get['master'];
             $master = $_GET;
             $session->changeChecker();
@@ -138,20 +226,8 @@ class Building {
                 exit;
             }
 
-            // check if we're not trying to hack-build residence and palace together
-            if (
-                ($progresses = $this->residenceOfPalaceBuildInProgress($village->wid)) &&
-                (
-                    !in_array($get['master'], [25, 26]) ||
-                    (
-                        ($get['master'] == 25 && $progresses['palace'] === false) ||
-                        ($get['master'] == 26 && $progresses['residence'] === false)
-                    )
-                )
-            ) {
-                $level = $database->getResourceLevel( $village->wid );
-                $database->addBuilding( $village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level[ 'f' . $get['id'] ] + 1 + count( $database->getBuildingByField( $village->wid, $get['id'] ) ) );
-            }
+            $level = $database->getResourceLevel( $village->wid );
+            $database->addBuilding( $village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level[ 'f' . $get['id'] ] + 1 + count( $database->getBuildingByField( $village->wid, $get['id'] ) ) );
 
             if ( $get['id'] > 18 ) {
                 header( "Location: dorf2.php" );
@@ -511,7 +587,7 @@ class Building {
 		if($this->allocated < $this->maxConcurrent) {
 		    // check if we're not trying to hack-build residence and palace together
             if (
-                ($progresses = $this->residenceOfPalaceBuildInProgress($village->wid)) &&
+                ($progresses = $this->residenceOfPalaceBuildInProgress()) &&
                 (
                     !in_array($tid, [25, 26]) ||
                     (

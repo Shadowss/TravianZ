@@ -98,7 +98,7 @@ $greatwarehouse1 = getTypeCount(38);
 $greatgranary1 = getTypeCount(39);
 $greatworkshop1 = getTypeCount(42);
 
-$residenceOrPalaceInProgress = $building->residenceOfPalaceBuildInProgress($village->wid);
+$residenceOrPalaceInProgress = $building->residenceOfPalaceBuildInProgress();
 $residenceBuildInProgress = $residenceOrPalaceInProgress['residence'];
 $palaceBuildInProgress = $residenceOrPalaceInProgress['palace'];
 
