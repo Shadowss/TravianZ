@@ -4125,10 +4125,10 @@ References: User ID/Message ID, Mode
 		global $session;
 		switch($mode) {
 			case 1:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 ORDER BY time DESC";
+				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 2:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 3:
 			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where id = $id";
@@ -4140,7 +4140,7 @@ References: User ID/Message ID, Mode
 				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,viewed = 1 where id IN(".implode(', ', $id).")";
 				break;
 			case 6:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1";
+				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 7:
 				$q = "UPDATE " . TB_PREFIX . "mdata set delowner = 1 where id IN(".implode(', ', $id).")";
@@ -4149,15 +4149,16 @@ References: User ID/Message ID, Mode
 				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,delowner = 1,viewed = 1 where IN(".implode(', ', $id).")";
 				break;
 			case 9:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 and deltarget = 0 ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 and deltarget = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 10:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) and delowner = 0 ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) and delowner = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 11:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 and deltarget = 0";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 and deltarget = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 		}
+
 		if($mode <= 3 || $mode == 6 || $mode > 8) {
 			$result = mysqli_query($this->dblink,$q);
 			return $this->mysqli_fetch_all($result);
@@ -4226,7 +4227,7 @@ References: User ID/Message ID, Mode
 	function getNotice($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 0 ORDER BY time DESC";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -4240,7 +4241,7 @@ References: User ID/Message ID, Mode
             return $cachedValue[$field];
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where `id` = $id ORDER BY time DESC LIMIT 1";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where `id` = $id ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC')." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
@@ -4257,7 +4258,7 @@ References: User ID/Message ID, Mode
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 		$result = mysqli_query($this->dblink,$q);
 
         $noticesCacheByUId[$uid] = $this->mysqli_fetch_all($result);
@@ -4271,7 +4272,7 @@ References: User ID/Message ID, Mode
 	function getUnViewNotice($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid AND viewed=0";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid AND viewed=0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}

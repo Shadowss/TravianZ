@@ -34,17 +34,17 @@
     echo "&laquo;&raquo;";
     }
     else if (!isset($_GET['s']) && count($message->sent1) > 10) {
-    echo "&laquo;<a href=\"?t=2&s=10&o=0\">&raquo;</a>";
+    echo "&laquo;<a href=\"?t=2&s=10&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&raquo;</a>";
     }
     else if(isset($_GET['s']) && count($message->sent1) > $_GET['s']) {
     	if(count($message->sent1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->sent1) && $_GET['s'] != 0) {
-         echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?t=2&s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&laquo;</a><a href=\"?t=2&s=".($_GET['s']+10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&raquo;</a>";
          }
          else if(count($message->sent1) > $_GET['s']+10) {
-         	echo "&laquo;<a href=\"?t=2&s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         	echo "&laquo;<a href=\"?t=2&s=".($_GET['s']+10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&raquo;</a>";
          }
         else {
-        echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+        echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&laquo;</a>&raquo;";
         }
     }
     ?></th></tr></tfoot>
