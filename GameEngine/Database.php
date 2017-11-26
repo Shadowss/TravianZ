@@ -5061,7 +5061,7 @@ References: User ID/Message ID, Mode
 	    $wid = (int) $wid;
 
 	    if (!is_array($type)) {
-	        $type = [(int) $type];
+	        $type = [$type];
         } else {
 	        foreach ($type as $index => $typeValue) {
 	            $type[$index] = (int) $typeValue;

@@ -45,13 +45,13 @@ class Building {
 	public function residenceOfPalaceBuildInProgress() {
 	    global $database, $village;
 
-        $residenceOrPalaceInProgress = $database->getBuildingByType($village->resarray, '25, 26');
+        $residenceOrPalaceInProgress = $database->getBuildingByType2($village->wid, '25, 26');
         $residenceBuildInProgress = false;
         $palaceBuildInProgress = false;
 
         if (count($residenceOrPalaceInProgress)) {
             foreach ($residenceOrPalaceInProgress as $record) {
-                if ($record['type'] == 25) {
+                if ($record == 25) {
                     $residenceBuildInProgress = true;
                 } else {
                     $palaceBuildInProgress = true;
