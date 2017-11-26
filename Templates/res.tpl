@@ -38,7 +38,7 @@ if (!empty($village)) {
 				<td title="<?php echo $crop; ?>"><?php echo "0/".$village->maxcrop; ?></td>
 							<?php } ?>
 							<td><img src="img/x.gif" class="r5" alt="<?php echo CROP_COM; ?>" title="<?php echo CROP_COM; ?>" /></td>
-			<td><?php echo $village->pop+$technology->getUpkeep($village->unitall,0))."/".$totalproduction.""; ?></td>
+			<td><?php echo ($village->pop+$technology->getUpkeep($village->unitall,0))."/".$totalproduction.""; ?></td>
 		</tr>
 	</table>
 	<table cellpadding="1" cellspacing="1">
