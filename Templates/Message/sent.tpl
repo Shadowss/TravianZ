@@ -43,7 +43,7 @@
          else if(count($message->sent1) > $_GET['s']+10) {
          	echo "&laquo;<a href=\"?t=2&s=".($_GET['s']+10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&raquo;</a>";
          }
-        else {
+        else if (count($message->sent1) > 10) {
         echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&laquo;</a>&raquo;";
         }
     }

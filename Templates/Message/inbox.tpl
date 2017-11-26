@@ -37,8 +37,8 @@
 		else if(count($message->inbox1) > $_GET['s']+10) {
          	echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
 		}
-		else {
-		echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+		else if(count($message->inbox1) > 10) {
+		    echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
 		}
 		}
 		?></th></tr></tfoot><tbody>

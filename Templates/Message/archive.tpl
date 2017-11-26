@@ -16,10 +16,10 @@ include("menu.tpl");
 		<input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" /> <input name="start" type="image" value="Back" alt="Back" id="btn_back" class="dynamic_img" src="img/x.gif" /></th>
         <th class="navi"><?php
     if(!isset($_GET['s']) && count($message->archived1) < 10) {
-    echo "&laquo;&raquo;";
+        echo "&laquo;&raquo;";
     }
     else if (!isset($_GET['s']) && count($message->archived1) > 10) {
-    echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=10&o=0\">&raquo;</a>";
+        echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=10&o=0\">&raquo;</a>";
     }
     else if(isset($_GET['s']) && count($message->archived1) > $_GET['s']) {
     	if(count($message->archived1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->archived1) && $_GET['s'] != 0) {
@@ -28,8 +28,8 @@ include("menu.tpl");
          else if(count($message->archived1) > $_GET['s']+10) {
          	echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
          }
-        else {
-        echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+        else if (count($message->archived1) > 10) {
+            echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
         }
     }
     ?></th></tr></tfoot><tbody>
