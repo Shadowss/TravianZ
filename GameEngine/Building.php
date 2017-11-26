@@ -176,8 +176,8 @@ class Building {
                 // let's see if we should allow building what we want where we want to
                 // (prevent building resource fields in the village
                 (
-                    ($page == 'dorf1.php' && $id >= 1 && $id <= 4) ||
-                    ($page == 'dorf2.php' && $id > 4)
+                    ($page == 'dorf1.php' && $tid >= 1 && $tid <= 4) ||
+                    ($page == 'dorf2.php' && $tid > 4)
                 ) &&
                 // check that we're not trying to change a standing building type
                 (
@@ -185,7 +185,7 @@ class Building {
                     $levels['f'.$tid.'t'] == 0
                 )
             ) {
-                if ( $this->checkResource( $id, $tid ) != 4 ) {
+                if ( !isset($_GET['master']) && $this->checkResource( $tid, $id ) != 4 ) {
                     if ( $tid >= 19 ) {
                         header( "Location: dorf2.php" );
                         exit;
