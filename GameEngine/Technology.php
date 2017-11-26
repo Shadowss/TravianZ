@@ -499,26 +499,12 @@ class Technology {
                          || ( $i == 5 && $buildarray[ 'f' . $horsedrinking ] >= 15 )
                          || ( $i == 6 && $buildarray[ 'f' . $horsedrinking ] == 20 )
                     ) {
-                        $upkeepDecrement = 0;
-                        switch ( $i ) {
-                            case 4:
-                                $upkeepDecrement = 2;
-                                break;
-
-                            case 5:
-                                $upkeepDecrement = 3;
-                                break;
-
-                            case 6:
-                                $upkeepDecrement = 4;
-                                break;
-                        }
-                        $upkeep += ( $dataarray['pop'] - $upkeepDecrement ) * $array[ $unit ];
+                        $upkeep += (( $dataarray['pop'] - 1 ) * $array[ $unit ]);
                     } else {
-                        $upkeep += $dataarray['pop'] * $array[ $unit ];
+                        $upkeep += ($dataarray['pop'] * $array[ $unit ]);
                     }
                 } else {
-                    $upkeep += $dataarray['pop'] * $array[ $unit ];
+                    $upkeep += ($dataarray['pop'] * $array[ $unit ]);
                 }
             } else {
                 if ( isset( $horsedrinking ) ) {
@@ -526,26 +512,12 @@ class Technology {
                          || ( $i == 5 && $buildarray[ 'f' . $horsedrinking ] >= 15 )
                          || ( $i == 6 && $buildarray[ 'f' . $horsedrinking ] == 20 )
                     ) {
-                        $upkeepDecrement = 0;
-                        switch ( $i ) {
-                            case 4:
-                                $upkeepDecrement = 2;
-                                break;
-
-                            case 5:
-                                $upkeepDecrement = 3;
-                                break;
-
-                            case 6:
-                                $upkeepDecrement = 4;
-                                break;
-                        }
-                        $upkeep += ( $dataarray['pop'] - $upkeepDecrement ) * $array[ $unit2 ];
+                        $upkeep += (( $dataarray['pop'] - 1 ) * $array[ $unit2 ]);
                     } else {
-                        $upkeep += $dataarray['pop'] * $array[ $unit2 ];
+                        $upkeep += ($dataarray['pop'] * $array[ $unit2 ]);
                     }
                 } else {
-                    $upkeep += $dataarray['pop'] * $array[ $unit2 ];
+                    $upkeep += ($dataarray['pop'] * $array[ $unit2 ]);
                 }
             }
         }
