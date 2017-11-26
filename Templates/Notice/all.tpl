@@ -8,7 +8,7 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
 		<tr>
 			<th colspan="2">Subject:</th>
 			<th class="sent">
-<a href="berichte.php?s=0&amp;o=1">Sent</a></th>
+<a href="berichte.php?o=1<?php echo (isset($_GET['t']) ? '&amp;t='.$_GET['t'] : ''); ?>">Sent</a></th>
 		</tr>
 	</thead><tfoot>
 		<tr><th><?php

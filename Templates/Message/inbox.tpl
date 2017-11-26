@@ -8,7 +8,7 @@
 	    <tr>
 		<th colspan="2">Subject</th>
 		<th>Sender</th>
-		<th class="sent">Sent</th>
+		<th class="sent"><a href="nachrichten.php?o=1">Sent</a></th>
 	    </tr></thead><tfoot><tr><th>
 		<?php
 		$MyGold = mysqli_query($GLOBALS['link'],"SELECT plus FROM ".TB_PREFIX."users WHERE `id`='".(int) $session->uid."'") or die(mysqli_error($database->dblink));
