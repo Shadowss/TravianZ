@@ -76,6 +76,8 @@ class Building {
             $page = basename($_SERVER['SCRIPT_NAME']);
             $levels = $database->getResourceLevel($village->wid);
             if (
+                // check that our ID actually exists within the buildings list
+                isset($village->resarray['f'.$tid.'t']) &&
                 // let's see if we should allow building what we want where we want to
                 // (prevent building resource fields in the village
                 (
@@ -120,6 +122,14 @@ class Building {
         }
 
         if(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker)) {
+            // determine the timestamp of last of all the current upgrades
+            $t = 0;
+            foreach ($this->buildArray as $key) {
+                if ($key['timestamp'] > $t) {
+                    $t = $key['timestamp'];
+                }
+            }
+
             $m=$get['master'];
             $master = $_GET;
             $session->changeChecker();
