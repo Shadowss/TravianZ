@@ -1446,7 +1446,7 @@ class MYSQLi_DB implements IDbConnection {
         $o_unit   = $this->getUnit($vref, $use_cache);
 
         for ( $i = 1; $i < 51; $i ++ ) {
-            $troops_o += $o_unit[ $i ];
+            $troops_o += $o_unit[ 'u'.$i ];
         }
 
         $troops_o += $o_unit['hero'];
@@ -1461,7 +1461,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         self::$oasisTroopsCountCache[$vref] = $troops_o;
-        return self::$oasisTroopsCountCache[$vref];
+            return self::$oasisTroopsCountCache[$vref];
 	}
 
     public function canConquerOasis($vref, $wref, $use_cache = true) {
