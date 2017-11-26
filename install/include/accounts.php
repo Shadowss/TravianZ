@@ -5,6 +5,12 @@
             exit;
         }
 
+        // don't allow creating Natars user
+        if (!empty($_POST['aname']) && strtolower($_POST['aname']) == 'natars') {
+            header("Location: ../index.php?s=4&err=2");
+            exit;
+        }
+
 		// don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 		@set_time_limit(0);
 

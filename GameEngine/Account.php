@@ -75,6 +75,9 @@ class Account {
 			else if(USRNM_SPECIAL && preg_match("/[:,\\. \\n\\r\\t\\s\\<\\>]+/", $_POST['name'])) {
 				$form->addError("name",USRNM_CHAR);
 			}
+			else if(strtolower($_POST['name']) == 'natars') {
+                $form->addError("name",USRNM_TAKEN);
+            }
 			else if(User::exists($database,$_POST['name'])) {
 				$form->addError("name",USRNM_TAKEN);
 			}
