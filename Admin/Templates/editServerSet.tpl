@@ -63,12 +63,12 @@ function refresh(tz) {
                                 <option value="en" <?php if (LANG=="en") echo "selected";?>>English</option>
                                <option value="nl" <?php if (LANG=="nl") echo "selected";?>>Dutch</option>
                                 <option value="es" <?php if (LANG=="es") echo "selected";?>>Spain</option>
-                                <option value="my" <?php if (LANG=="my") echo "selected";?>>Malay</option>
+                                <option value="rs" <?php if (LANG=="rs") echo "selected";?>>Serbian</option>
                                 <option value="ru" <?php if (LANG=="ru") echo "selected";?>>Russian</option>
-                                <option value="zh_tw" <?php if (LANG=="zh_tw") echo "selected";?>>Taiwan</option>
+                                <option value="zh_tw" <?php if (LANG=="zh_tw") echo "selected";?>>Taiwanese</option>
                             </select>
                         </td>
-					</tr>				
+					</tr>
 					<tr>
 						<td>Server Speed</td>
 						<td><input class="fm" name="speed" value="<?php echo SPEED;?>" style="width: 20%;"></td>
@@ -76,7 +76,7 @@ function refresh(tz) {
 					<tr>
 						<td>Troop Speed</td>
 						<td><input class="fm" name="incspeed" value="<?php echo INCREASE_SPEED;?>" style="width: 20%;"></td>
-					</tr>					
+					</tr>
 						<td>Evasion Speed</td>
 						<td><input class="fm" name="evasionspeed" value="<?php echo EVASION_SPEED;?>" style="width: 20%;"></td>
 					</tr>
@@ -129,7 +129,7 @@ function refresh(tz) {
 								<option value="432000" <?php if (PROTECTION=="432000") echo "selected";?>>120 hours (5 days)</option>
 							</select>
 						</td>
-					</tr>	
+					</tr>
 					<tr>
 						<td>Register Open</td>
 						<td>
@@ -148,7 +148,7 @@ function refresh(tz) {
 							</select>
 						</td>
 					</tr>
-					<tr>	
+					<tr>
 						<td>Quest</td>
 						<td>
 							<select name="quest">
@@ -214,7 +214,7 @@ function refresh(tz) {
 							</select>
 						</td>
 					</tr>
-					<tr> 
+					<tr>
 						<td>Tourn Threshold</td>
 						<td><input class="fm" name="ts_threshold" value="<?php echo TS_THRESHOLD;?>" style="width: 20%;"></td>
 					</tr>
