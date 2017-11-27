@@ -4,15 +4,15 @@
 ##                      -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                      ##
 ## ---------------------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                                 ##
-##  Version:       22.06.2015                    			                                ## 
+##  Version:       22.06.2015                    			                                ##
 ##  Filename       config.tpl                                                               ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix, martinambrus  ## 
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix, martinambrus  ##
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		                        ##
 ##  Fixed by:      InCube - double troops				                                    ##
 ##  License:       TravianZ Project                                                         ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                             ##
 ##  URLs:          http://travian.shadowss.ro                		                        ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                                ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		                                ##
 ##                                                                                          ##
 ##############################################################################################
 
@@ -141,6 +141,9 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 <select name="lang">
                     <option value="en" selected="selected">English</option>
                     <option value="es">Spanish</option>
+                    <option value="rs">Serbian</option>
+                    <option value="ru">Rusian</option>
+                    <option value="zh_tw">Taiwanese</option>
                 </select>
             </td>
         </tr>
@@ -279,15 +282,15 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
     </p>
     <!-- <RIGHT BOX - GPACK RELATED>
         <span><center><strong>GPACK RELATED</strong></center></span><br />
-        
-        
+
+
         <span class="f9 c6 c2">GPack:</span><span class="c3"><select name="gpack">
           <option value="false" selected="selected">No</option>
           <option value="true" disabled="disabled">Yes</option></select></span><br /><br />
         <span class="f9 c6 c2">GPack Design:</span><span class="c3"><select name="gp_locate">
           <option value="gpack/travian_default/" selected="selected">Travian Default
           <option value="gpack/travianx_v1/">TravianX v1 by Dzoki</option></select></span><br /><br />
-        
+
         -->
     <!-- </RIGHT BOX - GPACK RELATED> -->
     <p>
