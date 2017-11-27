@@ -5,8 +5,9 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/Shadowss/TravianZ.svg)]()
 [![license](https://img.shields.io/github/license/Shadowss/TravianZ.svg)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/Shadowss/TravianZ.svg)]()
-[![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Proudly Coded in PHPStorm](https://img.shields.io/badge/coded%20in-PHPStorm-BD5CF3.svg)](https://www.jetbrains.com/buy/opensource/?product=phpstorm)
+[![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Donate to this project on LiberaPay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/martinambrus/donate)
 
 TravianZ Version **v.8.3.3 BETA b3**
 ======
