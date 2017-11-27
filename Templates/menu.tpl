@@ -62,12 +62,26 @@ div.c1 {text-align: center}
             <?php
             	// no support for support :-D
             	if ($_SESSION['id_user'] != 1) {
-            ?> 
+            ?>
             <a href="support.php"><b><?php echo SUPPORT;?></b></a>
             <?php
             	}
-            ?> 
+            ?>
         <br></p>
+
+        <b>VOTE FOR US</b>
+        <br /><br />
+
+        <!-- SERVER VOTING //-->
+        <a href="http://topg.org/travian-private-servers/in-474476" target="_blank"><img src="http://topg.org/topg2.gif" width="88" height="31" border="0" alt="travian private servers"></a><br /><br />
+        <a href="http://www.arena-top100.com/"><img src="http://www.arena-top100.com/button.php?u=ZathrusWriter&buttontype=static" alt="Travian Private Servers" title="Travian Private Servers" /></a><br /><br />
+        <a href="http://www.gtop100.com/topsites/Travian/sitedetails/TRAVIANZ--LATEST-UPDATES-93181?vote=1" title="Travian Private Server" target="_blank"><img src="http://www.gtop100.com/images/votebutton.jpg" border="0" alt="Travian Private Server"></a><br /><br />
+        <a href="http://www.mmorpgprivateserver.com/Travian-Private-Server/?v=ZathrusWriter" title="Travian Private Server" rev="vote-for" rel="directory" target="_blank"><img src="http://www.mmorpgprivateserver.com/Travian-Private-Server.gif" alt="" /></a><noscript><a href="http://www.mmorpgprivateserver.com/" title="" rev="vote-for" rel="tag directory"></a><a href="http://www.mmorpgprivateserver.com/Travian-Private-Server/" title="Travian" rev="vote-for" rel="tag directory">Travian Private Server</a></noscript><br /><br />
+        <div style="width:88px"><a href="http://www.topmmorpgservers.com/in/ZathrusWriter" title="Toplist Travian P Servers"><img src="http://www.topmmorpgservers.com/images/button.png" alt="Top Travian Private Servers" border="0"></a></div>
+
+
+        <br>
+        <br>
 		<?php
 		$timestamp = $database->isDeleting($session->uid);
 		if($timestamp) {
@@ -110,9 +124,9 @@ div.c1 {text-align: center}
 
     <div class="footer-stopper"></div>
 
-    <div class="clear"></div><?php 
-    include("Templates/footer.tpl"); 
-    include("Templates/res.tpl"); 
+    <div class="clear"></div><?php
+    include("Templates/footer.tpl");
+    include("Templates/res.tpl");
     ?>
 
     <div id="stime">
