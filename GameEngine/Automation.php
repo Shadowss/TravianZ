@@ -654,10 +654,9 @@ class Automation {
 
                     if ($level != 1) {
                         $max -= ${'bid'.$indi['type']}[$level-1]['attri'] * STORAGE_MULTIPLIER;
-                        $max += ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
-                    } else {
-                        $max = ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
                     }
+
+                    $max += ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
 
                     $fieldsToSet[$fieldDbName] = $max;
                 }
