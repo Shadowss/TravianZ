@@ -39,21 +39,52 @@ if(isset($id))
 	$result = $database->query_return($q);
 	if(count($result) >0)
 		{
-			foreach($result as &$row)
+		    $newResult = [];
+			foreach($result as $row)
 			{
 				$type = $row['type'];
-                if($type==1) 	 { $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%'; $wood+=1;}
-                elseif($type==2) { $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%'; $wood+=1;}
-                elseif($type==3) { $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $wood+=1; $crop+=1;}
-                elseif($type==4) { $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%'; $clay+=1;}
-                elseif($type==5) { $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%'; $clay+=1;}
-                elseif($type==6) { $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $clay+=1;$crop+=1;}
-                elseif($type==7) { $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%'; $iron+=1;}
-                elseif($type==8) { $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%'; $iron+=1;}
-                elseif($type==9) { $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $iron+=1; $crop+=1;}
-                elseif($type==10){ $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%'; $crop+=1;}
-                elseif($type==11){ $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%'; $crop+=1;}
-                elseif($type==12){ $row['type'] = '<img src="../img/admin/r/4.gif"> + 50%'; $crop+=2;}
+                if ( $type == 1 ) {
+                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%';
+                    $wood        += 1;
+                } elseif ( $type == 2 ) {
+                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%';
+                    $wood        += 1;
+                } elseif ( $type == 3 ) {
+                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
+                    $wood        += 1;
+                    $crop        += 1;
+                } elseif ( $type == 4 ) {
+                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%';
+                    $clay        += 1;
+                } elseif ( $type == 5 ) {
+                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%';
+                    $clay        += 1;
+                } elseif ( $type == 6 ) {
+                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
+                    $clay        += 1;
+                    $crop        += 1;
+                } elseif ( $type == 7 ) {
+                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%';
+                    $iron        += 1;
+                } elseif ( $type == 8 ) {
+                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%';
+                    $iron        += 1;
+                } elseif ( $type == 9 ) {
+                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
+                    $iron        += 1;
+                    $crop        += 1;
+                } elseif ( $type == 10 ) {
+                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%';
+                    $crop        += 1;
+                } elseif ( $type == 11 ) {
+                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%';
+                    $crop        += 1;
+                } elseif ( $type == 12 ) {
+                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 50%';
+                    $crop        += 2;
+                }
+
+                $newResult[] = $row;
 			}
 		}
 	$ocounter = array($wood,$clay,$iron,$crop);
@@ -237,9 +268,9 @@ if(isset($id))
 			</thead>
 			<tbody>
 				<?php
-					if(count($result) >0)
+					if(count($newResult))
 					{
-						foreach($result as $row)
+						foreach($newResult as $row)
 						{
 							echo "
 							<tr>
