@@ -1,7 +1,13 @@
 [![Code Triagers Badge](https://www.codetriage.com/shadowss/travianz/badges/users.svg)](https://www.codetriage.com/shadowss/travianz)
-[![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Gratipay User](https://img.shields.io/gratipay/user/martinambrus.svg?style=plastic)](https://gratipay.com/~martinambrus/)
 [![Maintenance](https://img.shields.io/maintenance/yes/2017.svg)]()
+[![GitHub Release](https://img.shields.io/github/release/Shadowss/TravianZ/all.svg)]()
+[![Github All Downloads](https://img.shields.io/github/downloads/Shadowss/TravianZ/total.svg)]()
+[![GitHub contributors](https://img.shields.io/github/contributors/Shadowss/TravianZ.svg)]()
+[![license](https://img.shields.io/github/license/Shadowss/TravianZ.svg)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/Shadowss/TravianZ.svg)]()
+[![Proudly Coded in PHPStorm](https://img.shields.io/badge/coded%20in-PHPStorm-BD5CF3.svg)](https://www.jetbrains.com/buy/opensource/?product=phpstorm)
+[![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Donate to this project on LiberaPay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/martinambrus/donate)
 
 TravianZ Version **v.8.3.3 BETA b3**
 ======
@@ -49,3 +55,7 @@ Also, our thanks go to all both, the original and occasional developers, especia
 [advocaite](https://github.com/advocaite/), [brainiacX](https://github.com/brainiacX/), [ronix](https://github.com/ronix/), 
 [MisterX](https://github.com/MisterX/), [Elio](https://github.com/Elio/) and many others who were part of this 
 project's history.
+
+Last but not least, our thanks go to [JetBrains](https://www.jetbrains.com/) for lending us a one-year full-featured 
+[open-source PHPStorm](https://www.jetbrains.com/buy/opensource/?product=phpstorm) (and other products) license! 
+Thanks guys, you're awesome :)

@@ -128,8 +128,14 @@
                     $modes   = [];
 
                     for ( $u = 1; $u <= 10; $u ++ ) {
-                        $units[]   = $uname2 . ($u < 10 ? $u : 0);
-                        $amounts[] = $data[ 'u' . ($u < 10 ? $u : 0) ];
+                        if ($tribe == 1) {
+                          $unitKey = $uname2 . $u;
+                        } else {
+                          $unitKey = $uname2 . ($u < 10 ? $u : 0);
+                        }
+
+                        $units[]   = $uname2 . $unitKey;
+                        $amounts[] = $data[ 'u' . $unitKey ];
                         $modes[]   = 0;
                     }
 
