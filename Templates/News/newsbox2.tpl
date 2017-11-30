@@ -1,4 +1,4 @@
-<div class="news">
+<div class="news" style="width:300px">
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <!-- TravianZ Side Text Ads -->
     <ins class="adsbygoogle"
