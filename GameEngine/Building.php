@@ -87,9 +87,9 @@ class Building {
 
             // check if we should allow building the WW this high
             if ( $wwHighestLevelFound >= 50 ) {
-                $needed_plan = 1;
+                $needed_plan = 2;
             } else {
-                $needed_plan = 0;
+                $needed_plan = 1;
             }
 
             // count building plans
@@ -118,7 +118,7 @@ class Building {
                     }
                 }
 
-                $cached = $wwbuildingplan > $needed_plan;
+                $cached = $wwbuildingplan >= $needed_plan;
             } else {
                 // no need for building plans, we can still upgrade WW
                 $cached = true;
