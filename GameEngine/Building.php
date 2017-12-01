@@ -87,19 +87,22 @@ class Building {
 
             // check if we should allow building the WW this high
             if ( $wwHighestLevelFound >= 50 ) {
-                $needed_plan = 1;
+                $needed_plan = 2;
             } else {
-                $needed_plan = 0;
+                $needed_plan = 1;
             }
 
             // count building plans
             if ( $needed_plan ) {
                 $wwbuildingplan = 0;
+                $planFoundInOwnersVillage = false;
                 $villages       = $database->getVillagesID( $session->uid );
+
                 foreach ( $villages as $village1 ) {
                     $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
                     if ( $plan > 0 ) {
                         $wwbuildingplan = 1;
+                        $planFoundInOwnersVillage = true;
                     }
                 }
 
@@ -118,7 +121,11 @@ class Building {
                     }
                 }
 
-                $cached = $wwbuildingplan > $needed_plan;
+                if ($needed_plan == 1) {
+                    $cached = ($wwbuildingplan >= $needed_plan && $planFoundInOwnersVillage);
+                } else {
+                    $cached = $wwbuildingplan >= $needed_plan;
+                }
             } else {
                 // no need for building plans, we can still upgrade WW
                 $cached = true;
