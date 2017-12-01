@@ -34,8 +34,8 @@
 
 //check if there is unit needed in the village
 
-$result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE `vref` = ".(int) $village->wid."");
-$units = mysqli_fetch_array($result);
+$result      = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE `vref` = ".(int) $village->wid."");
+$units_array = mysqli_fetch_array($result);
 
 $count_hero = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = " . $database->escape($session->uid) . ""), MYSQLI_ASSOC);
 $count_hero = $count_hero['Total'];
@@ -75,7 +75,7 @@ if($session->tribe == 1) {
 
     if($village->awood < $u1['wood'] || $village->aclay < $u1['clay'] || $village->airon < $u1['iron'] || $village->acrop < $u1['crop'])
         $output.="<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-    elseif($units['u1'] == 0)
+    elseif( $units_array['u1'] == 0)
         $output.="<span class=\"none\">".NOT_UNITS."</span>";
     else $output.="<a href=\"build.php?id=".$id."&train=1\">".TRAIN."</a>";
 
@@ -112,7 +112,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u2['wood'] OR $village->aclay < $u2['clay'] OR $village->airon < $u2['iron'] OR $village->acrop < $u2['crop'])
            $output.="<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        elseif($units['u2'] == 0)
+        elseif( $units_array['u2'] == 0)
             $output.="<span class=\"none\">".NOT_UNITS."</span>";
         else
             $output.="<a href=\"build.php?id=".$id."&train=2\">".TRAIN."</a>";
@@ -150,7 +150,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u3['wood'] OR $village->aclay < $u3['clay'] OR $village->airon < $u3['iron'] OR $village->acrop < $u3['crop']) {
             $output.="<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u3'] == 0){
+        }else if( $units_array['u3'] == 0){
             $output.="<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.="<a href=\"build.php?id=".$id."&train=3\">".TRAIN."</a>";
@@ -187,7 +187,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u5['wood'] OR $village->aclay < $u5['clay'] OR $village->airon < $u5['iron'] OR $village->acrop < $u5['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u5'] == 0){
+        }else if( $units_array['u5'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=5\">".TRAIN."</a>";
@@ -224,7 +224,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u6['wood'] OR $village->aclay < $u6['clay'] OR $village->airon < $u6['iron'] OR $village->acrop < $u6['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u6'] == 0){
+        }else if( $units_array['u6'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=6\">".TRAIN."</a>";
@@ -264,7 +264,7 @@ $output.="<tr>
 
         if($village->awood < $u11['wood'] OR $village->aclay < $u11['clay'] OR $village->airon < $u11['iron'] OR $village->acrop < $u11['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u11'] == 0){
+        }else if( $units_array['u11'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=11\">".TRAIN."</a>";
@@ -301,7 +301,7 @@ $output.="<tr>
 
         if($village->awood < $u12['wood'] OR $village->aclay < $u12['clay'] OR $village->airon < $u12['iron'] OR $village->acrop < $u12['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u12'] == 0){
+        }else if( $units_array['u12'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=12\">".TRAIN."</a>";
@@ -340,7 +340,7 @@ $output.="<tr>
 
         if($village->awood < $u13['wood'] OR $village->aclay < $u13['clay'] OR $village->airon < $u13['iron'] OR $village->acrop < $u13['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u13'] == 0){
+        }else if( $units_array['u13'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=13\">".TRAIN."</a>";
@@ -377,7 +377,7 @@ $output.="<tr>
 
         if($village->awood < $u15['wood'] OR $village->aclay < $u15['clay'] OR $village->airon < $u15['iron'] OR $village->acrop < $u15['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u15'] == 0){
+        }else if( $units_array['u15'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=15\">".TRAIN."</a>";
@@ -415,7 +415,7 @@ $output.="<tr>
 
         if($village->awood < $u16['wood'] OR $village->aclay < $u16['clay'] OR $village->airon < $u16['iron'] OR $village->acrop < $u16['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u16'] == 0){
+        }else if( $units_array['u16'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=16\">".TRAIN."</a>";
@@ -455,7 +455,7 @@ $output.="<tr>
 
         if($village->awood < $u21['wood'] OR $village->aclay < $u21['clay'] OR $village->airon < $u21['iron'] OR $village->acrop < $u21['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u21'] == 0){
+        }else if( $units_array['u21'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=21\">".TRAIN."</a>";
@@ -492,7 +492,7 @@ $output.="<tr>
 
         if($village->awood < $u22['wood'] OR $village->aclay < $u22['clay'] OR $village->airon < $u22['iron'] OR $village->acrop < $u22['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u22'] == 0){
+        }else if( $units_array['u22'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=22\">".TRAIN."</a>";
@@ -530,7 +530,7 @@ $output.="<tr>
 
         if($village->awood < $u24['wood'] OR $village->aclay < $u24['clay'] OR $village->airon < $u24['iron'] OR $village->acrop < $u24['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u24'] == 0){
+        }else if( $units_array['u24'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=24\">".TRAIN."</a>";
@@ -567,7 +567,7 @@ $output.="<tr>
 
         if($village->awood < $u25['wood'] OR $village->aclay < $u25['clay'] OR $village->airon < $u25['iron'] OR $village->acrop < $u25['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u25'] == 0){
+        }else if( $units_array['u25'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=25\">".TRAIN."</a>";
@@ -605,7 +605,7 @@ $output.="<tr>
 
         if($village->awood < $u26['wood'] OR $village->aclay < $u26['clay'] OR $village->airon < $u26['iron'] OR $village->acrop < $u26['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u26'] == 0){
+        }else if( $units_array['u26'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=26\">".TRAIN."</a>";

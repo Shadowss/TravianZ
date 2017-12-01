@@ -181,7 +181,7 @@ class adm_DB {
 	  $username = $database->getUserArray($uid,1);
 	  $username = $username['username'];
 	  $database->addVillage($wid,$uid,$username,'0');
-		  $database->addResourceFields($wid,$database->getVillageType($wid));
+		  $database->addResourceFields($wid,$database->getVillageType($wid, false));
 		  $database->addUnits($wid);
 		  $database->addTech($wid);
 		  $database->addABTech($wid);
