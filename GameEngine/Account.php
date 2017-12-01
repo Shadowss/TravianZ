@@ -218,6 +218,8 @@ class Account {
 
                 if ( $activateData != "" ) {
                     $form->addError( "activate", $_POST['user'] );
+                } else {
+                    $form->addError("pw",LOGIN_PW_ERROR);
                 }
             } else {
                 $form->addError("pw",LOGIN_PW_ERROR);
