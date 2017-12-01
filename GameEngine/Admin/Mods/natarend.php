@@ -50,7 +50,7 @@ for($i=1;$i<=$amt;$i++) {
 		$speed = NATARS_UNITS;
 
 		//new with random amount of troops
-        $q = "UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(50, 1200) * $speed) . ", u42 = " . (rand(100, 1400) * $speed) . ", u43 = " . (rand(200, 1600) * $speed) . ", u44 = " . (rand(10, 50) * $speed) . ", u45 = " . (rand(48, 1700) * $speed) . ", u46 = " . (rand(60, 1800) * $speed) . ", u47 = " . (rand(200, 1600) * $speed) . ", u48 = " . (rand(40, 200) * $speed) . " , u49 = " . (rand(4, 20) * $speed) . ", u50 = " . (rand(5, 25) * $speed) . " WHERE vref = '".$wid."'";
+	    $q = "INSERT IGNORE INTO " . TB_PREFIX . "units SET u41 = " . (rand(50, 1200) * $speed) . ", u42 = " . (rand(100, 1400) * $speed) . ", u43 = " . (rand(200, 1600) * $speed) . ", u44 = " . (rand(10, 50) * $speed) . ", u45 = " . (rand(48, 1700) * $speed) . ", u46 = " . (rand(60, 1800) * $speed) . ", u47 = " . (rand(200, 1600) * $speed) . ", u48 = " . (rand(40, 200) * $speed) . " , u49 = " . (rand(4, 20) * $speed) . ", u50 = " . (rand(5, 25) * $speed) . " WHERE vref = ".$wid;
 		mysqli_query($GLOBALS["link"], $q);
 }
 
