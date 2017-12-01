@@ -1206,7 +1206,7 @@ class Automation {
         }
 
         $reload=false;
-        $ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
+        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/sendunits.txt", 'w');
         fclose($ourFileHandle);
         $time = time();
         $q = "
@@ -3138,8 +3138,8 @@ class Automation {
             }
         }
 
-        if(file_exists("GameEngine/Prevention/sendunits.txt")) {
-            unlink("GameEngine/Prevention/sendunits.txt");
+        if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
+            unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
         }
         if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
     }
