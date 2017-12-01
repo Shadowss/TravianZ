@@ -180,7 +180,7 @@ class Session {
 
         		if($user && ($admin || isset($_SESSION['sessid']))) {
         		    // check if this is not a support user, for who only messages and statistics are available
-        		    if ($user == 1) {
+        		    if ($user == 'Support') {
         		        $req_file = basename($_SERVER['PHP_SELF']);
         		        if (!in_array($req_file, ['nachrichten.php', 'logout.php', 'statistiken.php', 'rules.php', 'karte.php', 'karte2.php', 'spieler.php'])) {
         		            header('Location:nachrichten.php');
@@ -269,7 +269,9 @@ class Session {
 				if($this->userarray['b4'] > $this->time) {
 					$this->bonus4 = 1;
 				}
-                $this->CheckHeroReal();
+				if (!in_array($this->username, ['Support', 'Multihunter'])) {
+                    $this->CheckHeroReal();
+                }
 			}
 
 			private function SurfControl(){
