@@ -67,14 +67,16 @@
 		} else {
             $include_training = true;
             $include_revive = false;
-            foreach ($heroes as $hdata) {
-                if ($hdata['dead'] == 1) {
-                    $include_revive = true;
-                }
+            if (isset($heroes) && is_array($heroes) && count($heroes)) {
+                foreach ( $heroes as $hdata ) {
+                    if ( $hdata['dead'] == 1 ) {
+                        $include_revive = true;
+                    }
 
-                if ($hdata['inrevive'] == 1) {
-                    $name1 = $hdata['name'];
-                    $include_training = false;
+                    if ( $hdata['inrevive'] == 1 ) {
+                        $name1            = $hdata['name'];
+                        $include_training = false;
+                    }
                 }
             }
 
