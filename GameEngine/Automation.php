@@ -1090,8 +1090,8 @@ class Automation {
             }
 
             // oasis cannot be destroyed
+            $pop=$this->recountPop($data['to'], false);
             if ($isoasis == 0) {
-                $pop=$this->recountPop($data['to'], false);
                 if($pop==0 && $can_destroy==1){
                     $village_destroyed = 1;
                     // this will ensure the right $info_cat text
@@ -2267,6 +2267,9 @@ class Automation {
                             else
                             {
                                 // village stands, let's do the damage
+                                /**
+                                 * FIRST CATAPULTS ROW
+                                 */
                                 $basearray = $data['to'];
                                 $bdo = $database->getResourceLevel($basearray, false);
                                 $catapultTarget = $data['ctar1'];
@@ -2277,15 +2280,12 @@ class Automation {
                                 $catapults2TargetRandom = ($catapults2WillNotShoot || $catapultTarget2 == 99);
 
                                 // we're manually targetting 1st and/or 2nd row of catapults
-                                if (!$catapults1TargetRandom || !$catapults2TargetRandom)
+                                if (!$catapults1TargetRandom)
                                 {
                                     $_catapultsTarget1Levels=array();
                                     $__catapultsTarget1AltTargets=array();
 
-                                    $_catapultsTarget2Levels=array();
-                                    $__catapultsTarget2AltTargets=array();
-
-                                    // calculate targets for 1st and 2nd rows of catapults
+                                    // calculate targets for 1st rows of catapults
                                     $j=0;
                                     for ($i=1;$i<=41;$i++)
                                     {
@@ -2297,13 +2297,6 @@ class Automation {
                                             $j++;
                                             $_catapultsTarget1Levels[$j]=$bdo['f'.$i];
                                             $__catapultsTarget1AltTargets[$j]=$i;
-                                        }
-
-                                        // 2nd row of catapults pre-selected target calculations, if needed
-                                        if (!$catapults2TargetRandom && !$catapults2WillNotShoot && $bdo['f'.$i.'t'] == $catapultTarget2 && $bdo['f'.$i] > 0 && $catapultTarget2 != 31 && $catapultTarget2 != 32 && $catapultTarget2 != 33)
-                                        {
-                                            $_catapultsTarget2Levels[$j]=$bdo['f'.$i];
-                                            $__catapultsTarget2AltTargets[$j]=$i;
                                         }
                                     }
 
@@ -2319,6 +2312,54 @@ class Automation {
                                         } else {
                                             $catapultTarget = 0;
                                             $catapults1TargetRandom = true;
+                                        }
+                                    }
+                                }
+
+                                // 1st row of catapults set to target randomly
+                                if ($catapults1TargetRandom)
+                                {
+                                    $list=array();
+                                    for ($i=1;$i<=41;$i++)
+                                    {
+                                        if ($i==41) $i=99;
+                                        if ($bdo['f'.$i] > 0 && $catapultTarget != 31 && $catapultTarget != 32 && $catapultTarget != 33)
+                                        {
+                                            $list[]=$i;
+                                        }
+                                    }
+                                    $catapultTarget = $list[ rand(0, count($list) - 1) ];
+                                }
+
+                                /**
+                                 * resolve 1st row of catapults
+                                 */
+                                $village_destroyed = 0;
+                                $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget, !$catapults2WillNotShoot, false, $catp_pic, $can_destroy, $isoasis, $village_destroyed);
+
+                                /**
+                                 * SECOND CATAPULTS ROW
+                                 */
+                                // reload resource levels, since they've changed now
+                                $bdo = $database->getResourceLevel($basearray, false);
+
+                                // we're manually targetting 2nd row of catapults
+                                if (!$catapults2TargetRandom)
+                                {
+                                    $_catapultsTarget2Levels=array();
+                                    $__catapultsTarget2AltTargets=array();
+
+                                    // calculate targets for 2nd rows of catapults
+                                    $j=0;
+                                    for ($i=1;$i<=41;$i++)
+                                    {
+                                        if ($i==41) $i=99;
+
+                                        // 2nd row of catapults pre-selected target calculations, if needed
+                                        if (!$catapults2TargetRandom && !$catapults2WillNotShoot && $bdo['f'.$i.'t'] == $catapultTarget2 && $bdo['f'.$i] > 0 && $catapultTarget2 != 31 && $catapultTarget2 != 32 && $catapultTarget2 != 33)
+                                        {
+                                            $_catapultsTarget2Levels[$j]=$bdo['f'.$i];
+                                            $__catapultsTarget2AltTargets[$j]=$i;
                                         }
                                     }
 
@@ -2338,45 +2379,20 @@ class Automation {
                                     }
                                 }
 
-                                // 1st row of catapults set to target randomly
-                                if ($catapults1TargetRandom)
-                                {
-                                    $list=array();
-                                    $j = 1;
-                                    for ($i=1;$i<=41;$i++)
-                                    {
-                                        if ($i==41) $i=99;
-                                        if ($bdo['f'.$i] > 0 && $catapultTarget != 31 && $catapultTarget != 32 && $catapultTarget != 33)
-                                        {
-                                            $list[$j]=$i;
-                                            $j++;
-                                        }
-                                    }
-                                    $catapultTarget = $list[ rand(1, $j - 1) ];
-                                }
-
                                 // 2nd row of catapults set to target randomly
                                 if ($catapults2TargetRandom && !$catapults2WillNotShoot)
                                 {
                                     $list=array();
-                                    $j=1;
                                     for ($i=1;$i<=41;$i++)
                                     {
                                         if ($i==41) $i=99;
                                         if ($bdo['f'.$i] > 0)
                                         {
-                                            $j++;
-                                            $list[$j]=$i;
+                                            $list[]=$i;
                                         }
                                     }
-                                    $catapultTarget2 = $list[ rand(1, $j - 1) ];
+                                    $catapultTarget2 = $list[ rand(0, count($list) - 1) ];
                                 }
-
-                                /**
-                                 * resolve 1st row of catapults
-                                 */
-                                $village_destroyed = 0;
-                                $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget, !$catapults2WillNotShoot, false, $catp_pic, $can_destroy, $isoasis, $village_destroyed);
 
                                 /**
                                  * resolve 2nd row of catapults
