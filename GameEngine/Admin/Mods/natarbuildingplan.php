@@ -27,7 +27,6 @@ include_once($autoprefix."GameEngine/Database.php");
 
 $id = (int) $_POST['id'];
 $amt = (int) $_POST['vill_amount'];
-$addUnitsWrefs = [];
 
     for($i=1;$i<=$amt;$i++) {
 
@@ -41,7 +40,7 @@ $addUnitsWrefs = [];
         mysqli_query($GLOBALS["link"], $q);
         $pop = $automation->recountPop($wid);
         $cp = $automation->recountPop($wid);
-        $addUnitsWrefs[] = $wid;
+        $database->addUnits($wid);
         $database->addTech($wid);
         $database->addABTech($wid);
         $speed = NATARS_UNITS;
@@ -50,8 +49,6 @@ $addUnitsWrefs = [];
         $desc = PLAN_DESC;
         $database->addArtefact($wid, 3, 11, 1, PLAN, $desc, '', 'type1.gif');
     }
-
-    $database->addUnits($addUnitsWrefs);
 
     $myFile = "../../../Templates/text.tpl";
     $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");
