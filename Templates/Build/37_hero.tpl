@@ -16,8 +16,7 @@ if (isset($_POST['name'])) {
 	$_POST['name'] = stripslashes($_POST['name']);
 	mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `name`='".($database->escape($_POST['name']))."' where `uid`='".$database->escape($session->uid)."' AND dead = 0") or die("ERROR:".mysqli_error($database->dblink));   
     echo "".NAME_CHANGED.""; 
-} 
-    $hero_info = $units->Hero($session->uid); 
+}
 ?>
 
 <table id="distribution" cellpadding="1" cellspacing="1"> 
