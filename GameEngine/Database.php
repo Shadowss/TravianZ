@@ -5535,7 +5535,7 @@ References: User ID/Message ID, Mode
             $t11 = [$t11];
             $type = [$type];
             $ctar1 = [$ctar1];
-            $ctar2 = [$ctar1];
+            $ctar2 = [$ctar2];
             $spy = [$spy];
             $b1 = [$b1];
             $b2 = [$b2];
