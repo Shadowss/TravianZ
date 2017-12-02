@@ -4018,9 +4018,18 @@ class MYSQLi_DB implements IDbConnection {
     function getUnreadMessagesCount($uid) {
         $uid = (int) $uid;
 
-        return mysqli_fetch_array(mysqli_query($this->dblink, '
-            SELECT Count(*) as numUnread FROM '.TB_PREFIX.'mdata WHERE target = '.$uid.' AND viewed = 0'
-        ), MYSQLI_ASSOC)['numUnread'];
+        $ids = [$uid];
+
+        if (($this->getUserField($uid, 'access', 0) == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES) {
+            $ids[] = 1;
+        }
+
+        if ($this->getUserField($uid, 'access', 0) == MULTIHUNTER) {
+            $ids[] = 5;
+        }
+
+        $q = 'SELECT Count(*) as numUnread FROM '.TB_PREFIX.'mdata WHERE target IN('.implode(', ', $ids).') AND viewed = 0';
+        return mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC)['numUnread'];
     }
 
     // no need to cache this method
