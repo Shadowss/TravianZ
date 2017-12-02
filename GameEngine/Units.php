@@ -186,7 +186,8 @@ class Units {
                 //check if banned/admin:
                 $villageOwner = $database->getVillageField($id,'owner');
                 $userAccess = $database->getUserField($villageOwner,'access',0);
-                if($userAccess == '0' or $userAccess == '8' or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == '9')){
+                $userID = $database->getUserField($villageOwner,'id',0);
+                if($userAccess == '0' or ($userAccess == MULTIHUNTER && $userID == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
                                 $form->addError("error","Player is Banned. You can't attack him");
                                 //break;
                     }

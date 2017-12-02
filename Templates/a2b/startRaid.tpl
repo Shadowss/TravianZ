@@ -15,8 +15,9 @@
         $t11 = 0;
 		$villageOwner = $database->getVillageField($wref,'owner');
 		$userAccess = $database->getUserField($villageOwner,'access',0);
+        $userID = $database->getUserField($villageOwner,'id',0);
 
-        if ( $userAccess != '0' && $userAccess != '8' && ( $userAccess != '9' || ( ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == '9' ) ) ) {
+        if ( $userAccess != '0' && ($userAccess == MULTIHUNTER && $userID == 5) && ( $userAccess != ADMIN || ( ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN ) ) ) {
             if ( $tribe == 1 ) {
                 $uname = "u";
                 $uname1 = "u1";
