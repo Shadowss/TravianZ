@@ -9,7 +9,7 @@
 [![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Donate to this project on LiberaPay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/martinambrus/donate)
 
-TravianZ Version **v.8.3.3 BETA b3**
+TravianZ Version **v.8.3.3 BETA b4**
 ======
 **Note:** this game is still in a pre-release state, although at this point it is very playable, tested and found to be fairly stable
 
