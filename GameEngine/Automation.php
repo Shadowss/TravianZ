@@ -1102,7 +1102,7 @@ class Automation {
 
                 // embassy level was changed
                 if ($tbgid==18){
-                    $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], false);
+                    $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
                 }
 
                 $info_cat .= "</td></tr></tbody>";
@@ -1111,7 +1111,7 @@ class Automation {
 
                 // embassy level was changed
                 if ($tbgid==18){
-                    $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], false);
+                    $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
                 }
             }
         }
@@ -1201,7 +1201,7 @@ class Automation {
 
                 // embassy level was changed
                 if ( $tbgid == 18 ) {
-                    $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], false );
+                    $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], $bdo['f'.$catapultTarget], false );
                 }
 
                 $info_cat .= "</td></tr></tbody>";
@@ -1210,7 +1210,7 @@ class Automation {
 
                 // embassy level was changed
                 if ( $tbgid == 18 ) {
-                    $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], false );
+                    $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], $bdo['f'.$catapultTarget], false );
                 }
             }
         }

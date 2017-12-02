@@ -4663,11 +4663,7 @@ References: User ID/Message ID, Mode
             // check whether this player is an alliance owner
             $isOwner = ($userData['alliance'] && $this->isAllianceOwner($userData['id'], $use_cache) == $userData['alliance']);
 
-            // for demolition, the Embassy was already destroyed, so we need at least 1
-            // Embassy still standing... for battle, the Embassy is still standing
-            // and will only be deleted upon finalizing battle calculations, so we need
-            // to check for at least 2 Embassies
-            $minimumExistingEmbassyRecords = ($demolition ? 1 : 2);
+            $minimumExistingEmbassyRecords = 1;
 
             // if they are not an alliance owner, simply check whether we have any Embassies
             // at lvl 1+ standing somewhere
@@ -4927,7 +4923,7 @@ References: User ID/Message ID, Mode
 	    return true;
 	}
 
-	function checkEmbassiesAfterBattle($vid, $use_cache = true) {
+	function checkEmbassiesAfterBattle($vid, $current_level, $use_cache = true) {
         $userData = $this->getUserArray($this->getVillageField($vid,"owner"), 1);
 
         Automation::updateMax($this->getVillageField($vid,"owner"));
@@ -4935,7 +4931,7 @@ References: User ID/Message ID, Mode
             'id'       => $userData['id'],
             'alliance' => $userData["alliance"],
             'username' => $userData["username"],
-            'lvl'      => $totallvl
+            'lvl'      => $current_level
         ], false, $use_cache);
 
         if ($allianceStatus === false) {
