@@ -98,12 +98,16 @@ Reply: ".$database->getUserField($id,'username',0)."
 		<input type="hidden" name="ft" value="m2" />
 		<input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="img/x.gif" alt="send" onclick="this.disabled=true;this.form.submit();" tabindex=4; />
 		<?php
-			if (($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES && !empty($_GET['mid'])) {
+			if ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES && !empty($_GET['mid'])) {
 		?><br />
 		<input type="checkbox" name="as_support"<?php echo ((!empty($_GET['tid']) && $_GET['tid'] == 1) ? ' checked="checked"' : ''); ?> /> Send as Support
 		<?php
-			}
-		?>			
+			} else if ($session->access == MULTIHUNTER) {
+                ?><br />
+                <input type="checkbox" name="as_multihunter"<?php echo ((!empty($_GET['tid']) && $_GET['tid'] == 5) ? ' checked="checked"' : ''); ?> /> Send as Multihunter
+                <?php
+            }
+		?>
 	</p>
 	</form>
 	<div id="adressbook" class="hide"><h2>Addressbook</h2>

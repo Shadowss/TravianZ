@@ -582,9 +582,21 @@ class Message {
                 }
             }
 
-            // check if we're not sending this as support
-            $support_from_admin_allowed = ( ( $session->access == MULTIHUNTER || $session->access == ADMIN ) && ADMIN_RECEIVE_SUPPORT_MESSAGES );
-            $database->sendMessage( $user, ( ( ! empty( $_POST['as_support'] ) && $support_from_admin_allowed ) ? 1 : $session->uid ), htmlspecialchars( addslashes( $topic ) ), htmlspecialchars( addslashes( $text ) ), 0, $alliance, $player, $coor, $report );
+            // check if we're not sending this as Support or Multihunter
+            $support_from_admin_allowed = ( $session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES );
+            $send_as = $session->uid;
+
+            // send as Support?
+            if (( ! empty( $_POST['as_support'] ) && $support_from_admin_allowed )) {
+                $send_as = 1;
+            }
+
+            // send as Multihunter
+            if (( ! empty( $_POST['as_multihunter'] ) && $session->access == MULTIHUNTER )) {
+                $send_as = 5;
+            }
+
+            $database->sendMessage( $user, $send_as, htmlspecialchars( addslashes( $topic ) ), htmlspecialchars( addslashes( $text ) ), 0, $alliance, $player, $coor, $report );
         }
 	}
 

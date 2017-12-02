@@ -57,7 +57,8 @@
     $s = 0;
     }
     $name = 1;
-    $support_messages = (($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES);
+    $support_messages = ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES);
+    $multihunter_messages = ($session->access == MULTIHUNTER);
 
     for($i=(1+$s);$i<=(10+$s);$i++) {
     if(count($message->sent1) >= $i) {
@@ -67,7 +68,18 @@
     else {
     echo "<tr>";
     }
-    echo "<td class=\"sel\">".((!$support_messages || ($support_messages && $message->inbox1[$i-1]['target'] != 1)) ? "<input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->sent1[$i-1]['id']."\" />" : '<u><b title="Sent as Support"><i>S</i></b></u>')."</td>
+
+    $sent_as_text = '';
+
+    if (!$support_messages || ($support_messages && $message->inbox1[$i-1]['target'] != 1) || ($multihunter_messages && $message->inbox1[$i-1]['target'] != 5)) {
+        $sent_as_text = "<input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->sent1[$i-1]['id']."\" />";
+    } else if ($support_messages) {
+        $sent_as_text = '<u><b title="Sent as Support"><i>S</i></b></u>';
+    } else if ($multihunter_messages) {
+        $sent_as_text = '<u><b title="Sent as Multihunter"><i>M</i></b></u>';
+    }
+
+    echo "<td class=\"sel\">".$sent_as_text."</td>
 		<td class=\"top\"><a href=\"nachrichten.php?t=2a&amp;id=".$message->sent1[$i-1]['id']."\">".$message->sent1[$i-1]['topic']."</a> ";
     if($message->sent1[$i-1]['viewed'] == 0) {
     echo "(unread)";

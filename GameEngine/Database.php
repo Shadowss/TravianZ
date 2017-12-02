@@ -4101,14 +4101,25 @@ References: User ID/Message ID, Mode
 	    global $session;
 
 	    $mode = (int) $mode;
+	    $mode_updated = false;
 	    // update $id if we should show Support messages for Admins and we are an admin
 	    if (
-	       ($session->access == MULTIHUNTER || $session->access == ADMIN)
+	       $session->access == ADMIN
 	       && ADMIN_RECEIVE_SUPPORT_MESSAGES
 	       && in_array($mode, [1,2,6,9,10,11])
 	    ) {
 	        $id = $id . ', 1';
+            $mode_updated = true;
 	    }
+
+        // update $id if we should show Multihunter messages for the current player
+        if (
+            $session->access == MULTIHUNTER
+            && in_array($mode, [1,2,6,9,10,11])
+        ) {
+            $id = $id . ', 5';
+            $mode_updated = true;
+        }
 
         if (in_array($mode, [5,7,8])) {
             if (!is_array($id)) {
@@ -4119,7 +4130,9 @@ References: User ID/Message ID, Mode
                 }
             }
         } else {
-            $id = (int) $id;
+	        if (!$mode_updated) {
+                $id = (int) $id;
+            }
         }
 
 		global $session;
@@ -4134,7 +4147,17 @@ References: User ID/Message ID, Mode
 			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where id = $id";
 				break;
 			case 4:
-			    $q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target IN(".((($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES) ? $session->uid.',1' : $session->uid).")";
+			    $show_target = $session->uid;
+
+			    if ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES) {
+			        $show_target .= ',1';
+                }
+
+                if ($session->access == MULTIHUNTER) {
+                    $show_target .= ',5';
+                }
+
+			    $q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target IN(".$show_target.")";
 				break;
 			case 5:
 				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,viewed = 1 where id IN(".implode(', ', $id).")";
