@@ -2354,8 +2354,6 @@ class Automation {
                                 /**
                                  * SECOND CATAPULTS ROW
                                  */
-                                // reload resource levels, since they've changed now
-                                $bdo = $database->getResourceLevel($basearray, false);
 
                                 // we're manually targetting 2nd row of catapults
                                 if (!$catapults2TargetRandom)
@@ -2372,6 +2370,7 @@ class Automation {
                                         // 2nd row of catapults pre-selected target calculations, if needed
                                         if (!$catapults2TargetRandom && !$catapults2WillNotShoot && $bdo['f'.$i.'t'] == $catapultTarget2 && $bdo['f'.$i] > 0 && $catapultTarget2 != 31 && $catapultTarget2 != 32 && $catapultTarget2 != 33)
                                         {
+                                            $j++;
                                             $_catapultsTarget2Levels[$j]=$bdo['f'.$i];
                                             $__catapultsTarget2AltTargets[$j]=$i;
                                         }
