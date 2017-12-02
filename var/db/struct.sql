@@ -1653,7 +1653,10 @@ KEY `clay` (`clay`),
 KEY `iron` (`iron`),
 KEY `crop` (`crop`),
 KEY `starv` (`starv`),
-KEY `loyalty` (`loyalty`)
+KEY `loyalty` (`loyalty`),
+KEY `exp1` (`exp1`),
+KEY `exp2` (`exp2`),
+KEY `exp3` (`exp3`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

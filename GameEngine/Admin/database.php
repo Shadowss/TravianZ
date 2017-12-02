@@ -364,6 +364,21 @@ class adm_DB {
 			$q = "UPDATE ".TB_PREFIX."wdata SET occupied = 0 where id = $wref";
 			mysqli_query($this->connection, $q);
 
+            // clear expansion slots, if this village is an expansion of any other village
+            $q = "
+                UPDATE
+                    ".TB_PREFIX."vdata
+                SET
+                    exp1 = IF(exp1 = $wref, 0, exp1),
+                    exp2 = IF(exp2 = $wref, 0, exp2),
+                    exp3 = IF(exp3 = $wref, 0, exp3)
+                WHERE
+                    exp1 = $wref OR
+                    exp2 = $wref OR
+                    exp3 = $wref";
+
+            mysqli_query($this->connection, $q);
+
 			$getmovement = $database->getMovement(3,$wref,1);
 			foreach($getmovement as $movedata) {
 				$time = microtime(true);
