@@ -6,8 +6,9 @@
 [![license](https://img.shields.io/github/license/Shadowss/TravianZ.svg)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/Shadowss/TravianZ.svg)]()
 [![Proudly Coded in PHPStorm](https://img.shields.io/badge/coded%20in-PHPStorm-BD5CF3.svg)](https://www.jetbrains.com/buy/opensource/?product=phpstorm)
+[![Donate to this project on LiberaPay](https://img.shields.io/badge/LiberaPay-donate-F6C915.svg)](https://liberapay.com/martinambrus/donate)
 [![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Donate to this project on LiberaPay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/martinambrus/donate)
+[![Watch how this was made on YouTube](https://img.shields.io/badge/The%20making%20of...-YouTube-FF0000.svg)](https://www.youtube.com/watch?v=1XiHhpGUmQg&list=PLzV5avt1FFHorlIeoL9YX0pdb9bj-FO84)
 
 TravianZ Version **v.8.3.3 BETA b4**
 ======
@@ -17,6 +18,8 @@ TravianZ Version **v.8.3.3 BETA b4**
 * [Download and Updates](https://github.com/Shadowss/TravianZ) &raquo;&raquo; https://github.com/Shadowss/TravianZ
 * [Wiki](https://github.com/Shadowss/TravianZ/wiki)
 * [Game Mechanics](http://travian.wikia.com/wiki/Travian_Wiki)
+* [The Making Of](https://www.youtube.com/watch?v=1XiHhpGUmQg&list=PLzV5avt1FFHorlIeoL9YX0pdb9bj-FO84) - YouTube Videos about this project
+* [Donate to TravianZ](https://liberapay.com/martinambrus/donate)
 
 **Minimum requirements:**
 * [PHP](http://php.net/) 5.6.32+
