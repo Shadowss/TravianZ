@@ -52,7 +52,7 @@ foreach($forumcat as $arr) {
 				}
 			}	
 		echo	'<tr><td class="ico">';
-		if($database->CheckEditRes($aid)=="1"){
+		if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $arr['owner'] == $session->uid)){
 			echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top">
 			<img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit">
 			<img src="img/x.gif" alt="edit" /></a><br />
@@ -113,7 +113,7 @@ foreach($forumcat as $arr) {
 				}
 			}	
 		echo	'<tr><td class="ico">';
-		if($database->CheckEditRes($aid)=="1"){
+		if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $arr['owner'] == $session->uid)){
 			echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="To bottom"><img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete"><img src="img/x.gif" alt="delete" /></a>';
 		}else{
 			echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
@@ -168,7 +168,7 @@ foreach($forumcat as $arr) {
 				}
 			}	
 				echo	'<tr><td class="ico">';
-				if($database->CheckEditRes($aid)=="1"){
+				if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $arr['owner'] == $session->uid)){
 					echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="To bottom"><img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete"><img src="img/x.gif" alt="delete" /></a>';
 				}else{
 					echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
@@ -223,7 +223,7 @@ if($closed1 != 0){
 				}
 			}	
 		echo	'<tr><td class="ico">';
-		if($database->CheckEditRes($aid)=="1"){
+		if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $arr['owner'] == $session->uid)){
 			echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="To bottom"><img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete"><img src="img/x.gif" alt="delete" /></a>';
 		}else{
 			echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
