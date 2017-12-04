@@ -95,7 +95,7 @@ if(isset($_GET['o'])) {
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<script src="mt-full.js?0faab" type="text/javascript"></script>
-	<script src="unx.js?f4b7g" type="text/javascript"></script>
+	<script src="unx.js?f4b7h" type="text/javascript"></script>
 	<script src="new.js?0faab" type="text/javascript"></script>
 	<link href="<?php
 

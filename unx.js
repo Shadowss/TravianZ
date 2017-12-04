@@ -87,7 +87,7 @@ function executeCounter(){
 	    bb[i] = null;
 	    eb = 1;
 	    if (!window.reloading) {
-	    	setTimeout(function(){window.location.href = ''},1000);
+	    	setTimeout(function(){window.location.href = window.location.href;},1000);
 	    	window.reloading = true;
 	    }
 	}
