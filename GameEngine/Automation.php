@@ -4564,6 +4564,11 @@ class Automation {
             if ($vil['timetofinish'] <= time()) {
                 $type = $database->getFieldType($vil['vref'],$vil['buildnumber']);
                 $level = $database->getFieldLevel($vil['vref'],$vil['buildnumber']);
+
+                if ($level < 0) {
+                    $level = 0;
+                }
+
                 $buildarray = $GLOBALS["bid".$type];
 
                 if ($type==10 || $type==38) {
@@ -4588,7 +4593,7 @@ class Automation {
 
                 if ($village->natar==1 && $type==40) $clear=""; //fix by ronix
 
-                $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".($level-1).$clear." WHERE vref=".(int) $vil['vref'];
+                $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".(($level-1 >= 0) ? $level-1 : 0).$clear." WHERE vref=".(int) $vil['vref'];
                 $database->query($q);
 
                 $pop = $this->getPop($type,$level-1);
