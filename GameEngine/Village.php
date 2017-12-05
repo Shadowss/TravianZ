@@ -142,8 +142,9 @@ class Village {
 		$this->production['wood'] = $this->getWoodProd();
 		$this->production['clay'] = $this->getClayProd();
 		$this->production['iron'] = $this->getIronProd();
+
 		if ($uniqueA['size']==3 && $uniqueA['owner']==$session->uid){
-		$this->production['crop'] = $this->getCropProd()-$this->pop-(($upkeep)-round($upkeep*0.50));
+		$this->production['crop'] = $this->getCropProd()- $this->pop - (($upkeep)-round($upkeep*0.50));
 
 		}else if ($normalA['type']==4 && $normalA['size']==1 && $normalA['owner']==$session->uid){
 		$this->production['crop'] = $this->getCropProd()-$this->pop-(($upkeep)-round($upkeep*0.25));

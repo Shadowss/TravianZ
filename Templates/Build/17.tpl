@@ -31,10 +31,11 @@ else if(!empty($_POST['dname'])){
 if(isset($checkexist) && $checkexist){
 $villageOwner = $database->getVillageField($getwref,'owner');
 $userAccess = $database->getUserField($villageOwner,'access',0);
+$userID = $database->getUserField($villageOwner,'id',0);
 }
 $maxcarry = $market->maxcarry;
 $maxcarry *= $market->merchantAvail();
-if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == 9))){
+if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN))){
 ?>
 <form method="POST" name="snd" action="build.php"> 
 <input type="hidden" name="ft" value="mk1">
@@ -218,7 +219,7 @@ if(isset($_POST['ft'])=='check'){
 		$error = '<span class="error"><b>'.NO_COORDINATES_SELECTED.'</b></span>';
 	}elseif($getwref == $village->wid){
 		$error = '<span class="error"><b>'.CANNOT_SEND_RESOURCES.'</b></span>';
-	}elseif($userAccess == '0' or $userAccess == '8' or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == '9')){
+	}elseif($userAccess == '0' or ($userAccess == MULTIHUNTER && $userID == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
 		$error = '<span class="error"><b>'.BANNED_CANNOT_SEND_RESOURCES.'.</b></span>';
     }elseif($_POST['r1']==0 && $_POST['r2']==0 && $_POST['r3']==0 && $_POST['r4']==0){
 		$error = '<span class="error"><b>'.RESOURCES_NO_SELECTED.'.</b></span>';

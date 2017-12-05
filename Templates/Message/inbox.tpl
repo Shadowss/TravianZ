@@ -8,7 +8,7 @@
 	    <tr>
 		<th colspan="2">Subject</th>
 		<th>Sender</th>
-		<th class="sent">Sent</th>
+		<th class="sent"><a href="nachrichten.php?o=1">Sent</a></th>
 	    </tr></thead><tfoot><tr><th>
 		<?php
 		$MyGold = mysqli_query($GLOBALS['link'],"SELECT plus FROM ".TB_PREFIX."users WHERE `id`='".(int) $session->uid."'") or die(mysqli_error($database->dblink));
@@ -28,17 +28,17 @@
 		echo "&laquo;&raquo;";
 		}
 		else if (!isset($_GET['s']) && count($message->inbox1) > 10) {
-		echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
+		echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=10&o=".(!empty($_GET['o'])  )."\">&raquo;</a>";
 		}
 		else if(isset($_GET['s']) && count($message->inbox1) > $_GET['s']) {
     		if(count($message->inbox1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->inbox1) && $_GET['s'] != 0) {
-		echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+		echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
 		}
 		else if(count($message->inbox1) > $_GET['s']+10) {
-         	echo "&laquo;<a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         	echo "&laquo;<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
 		}
-		else {
-		echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+		else if(count($message->inbox1) > 10) {
+		    echo "<a href=\"?".(!empty($_GET['t']) ? 't='.$_GET['t'].'&amp;' : '')."s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
 		}
 		}
 		?></th></tr></tfoot><tbody>
@@ -55,7 +55,8 @@
 		$s = 0;
 		}
 		$name = 1;
-		$support_messages = (($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES);
+        $support_messages = ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES);
+        $multihunter_messages = ($session->access == MULTIHUNTER);
 
 		for($i=(1+$s);$i<=(10+$s);$i++) {
 		if(count($message->inbox1) >= $i) {
@@ -67,7 +68,18 @@
 		    else {
 		    echo "<tr>";
 		    }
-		    echo "<td class=\"sel\">".((!$support_messages || ($support_messages && $message->inbox1[$i-1]['target'] != 1)) ? "<input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->inbox1[$i-1]['id']."\" />" : '<u><b title="Message for Support"><i>S</i></b></u>')."</td>
+
+            $message_for_text = '';
+
+            if (!$support_messages || ($support_messages && $message->inbox1[$i-1]['target'] != 1) || ($multihunter_messages && $message->inbox1[$i-1]['target'] != 5)) {
+                $message_for_text = "<input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->inbox1[$i-1]['id']."\" />";
+            } else if ($support_messages) {
+                $message_for_text = '<u><b title="Message for Support"><i>S</i></b></u>';
+            } else if ($multihunter_messages) {
+                $message_for_text = '<u><b title="Message for Multihunter"><i>M</i></b></u>';
+            }
+
+		    echo "<td class=\"sel\">".$message_for_text."</td>
 		    <td class=\"top\"><a href=\"nachrichten.php?id=".$message->inbox1[$i-1]['id']."\">".$message->inbox1[$i-1]['topic']."</a> ";
 			if($message->inbox1[$i-1]['viewed'] == 0) {
 			echo "(new)";

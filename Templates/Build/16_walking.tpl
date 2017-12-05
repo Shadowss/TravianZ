@@ -19,12 +19,12 @@ if($units[$y]['attack_type'] == 4){
 	$attack_type = RAID_ON;
 	}
 $isoasis = $database->isVillageOases($units[$y]['to']);
-if ($isoasis ==0){ 	
+if ($isoasis ==0){
 $to = $database->getMInfo($units[$y]['to']);
 } else {
 $to = $database->getOMInfo($units[$y]['to']);}
 ?>
-<table class="troop_details" cellpadding="1" cellspacing="1">            
+<table class="troop_details" cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
 			<td class="role"><a href="karte.php?d=<?php echo $village->wid."&c=".$generator->getMapCheck($village->wid); ?>"><?php echo $village->vname; ?></a></td>
@@ -35,10 +35,10 @@ $to = $database->getOMInfo($units[$y]['to']);}
 			<?php
                   echo "<tr><th>&nbsp;</th>";
                   for($i=($session->tribe-1)*10+1;$i<=$session->tribe*10;$i++) {
-                  	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";	
+                  	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
                   }
                   if($units[$y]['t11'] != 0) {
-                   echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";    
+                   echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
                   }
 			?>
 			</tr>
@@ -84,17 +84,17 @@ $to = $database->getOMInfo($units[$y]['to']);}
 		<?php
 		}
 		?>
-        
+
         <?php
-        $settlers = $database->getMovement(5,$village->wid,0);   
+        $settlers = $database->getMovement(5,$village->wid,0);
         if($settlers){
         $total_for = count($settlers);
 
 for($y=0;$y<$total_for;$y++){
 $timer += 1;
-    
+
 ?>
-<table class="troop_details" cellpadding="1" cellspacing="1">            
+<table class="troop_details" cellpadding="1" cellspacing="1">
     <thead>
         <tr>
             <td class="role"><a href="karte.php?d=<?php echo $village->wid."&c=".$generator->getMapCheck($village->wid); ?>"><?php echo $village->vname; ?></a></td>
@@ -108,7 +108,7 @@ $timer += 1;
                   $end = ($tribe*10);
                   echo "<tr><th>&nbsp;</th>";
                   for($i=$start;$i<=($end);$i++) {
-                      echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";    
+                      echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
                   }
             ?>
             </tr>

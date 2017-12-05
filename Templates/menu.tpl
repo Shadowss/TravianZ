@@ -62,11 +62,11 @@ div.c1 {text-align: center}
             <?php
             	// no support for support :-D
             	if ($_SESSION['id_user'] != 1) {
-            ?> 
+            ?>
             <a href="support.php"><b><?php echo SUPPORT;?></b></a>
             <?php
             	}
-            ?> 
+            ?>
         <br></p>
 		<?php
 		$timestamp = $database->isDeleting($session->uid);
@@ -110,9 +110,9 @@ div.c1 {text-align: center}
 
     <div class="footer-stopper"></div>
 
-    <div class="clear"></div><?php 
-    include("Templates/footer.tpl"); 
-    include("Templates/res.tpl"); 
+    <div class="clear"></div><?php
+    include("Templates/footer.tpl");
+    include("Templates/res.tpl");
     ?>
 
     <div id="stime">

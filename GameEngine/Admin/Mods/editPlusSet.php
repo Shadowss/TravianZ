@@ -15,11 +15,20 @@ include_once("../../Database.php");
 include_once("../../config.php");
 $id = (int) $_POST['id'];
 
+if (!file_exists('constant_format.tpl')) {
+    die(
+        'You seem to be running a new version of TravianZ which was installed using an old installer.<br />' .
+        'Please download <strong>constant_format.tpl</strong> file and copy it into the <strong>GameEngine/Admin/Mods</strong> ' .
+        'directory  - otherwise saving configuration won\'t work.<br /><br />' .
+        'The constant_format.tpl file can be downloaded at ' .
+        '<strong>https://raw.githubusercontent.com/Shadowss/TravianZ/master/install/data/constant_format.tpl</strong>');
+}
+
 $myFile = "../../config.php";
 $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\config.php");
 
 		$text = file_get_contents("constant_format.tpl");
-		
+
 		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
 		$ADMINS_RAIDABLE = (ADMIN_ALLOW_INCOMING_RAIDS == false ? 'false' : 'true');
 

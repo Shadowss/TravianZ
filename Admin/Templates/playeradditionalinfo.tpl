@@ -98,7 +98,7 @@
 								else
 								{
 									$tsdiffact = $datetime - $now;
-									$timetoecho = $timeformat->getTimeFormat($tsdiffact);
+									$timetoecho = \App\Utils\DateTime::getTimeFormat($tsdiffact);
 									echo '<img src="../gpack/travian_default/img/new/tick.png" title="Ends: '.date('d.m.Y H:i',$user['protect']+3600*2).'">';
 									echo "<font color=\"blue\"> $timetoecho</font>";
 								}

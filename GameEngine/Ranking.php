@@ -27,7 +27,7 @@
 				$myrank = 0;
 				if(count($ranking) > 0) {
 					for($i=0;$i<($users3);$i++) {
-						if( isset( $ranking[$i]['userid'] ) ) {						
+						if( isset( $ranking[$i]['userid'] ) ) {
 							if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
 								$myrank = $i;
 							}
@@ -204,8 +204,8 @@
             return $key;
             break;
         }
-       }    
-      }  
+       }
+      }
 						if(!next($this->rankarray)) {
 						if($field != "userid"){
 							return $name;
@@ -215,7 +215,7 @@
 							break;
 						}
 						}
-					
+
 				}
 			}
 
@@ -268,7 +268,7 @@
 					WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
 					AND " . TB_PREFIX . "users.tribe <= 3
                     AND " . TB_PREFIX . "users.id > 5
-                    ORDER BY totalpop DESC, totalvillages DESC, userid DESC";	
+                    ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 				}
 
 				$result = (mysqli_query($GLOBALS['link'],$q));
@@ -474,16 +474,26 @@
 			}
 
 			public function procARankArray() {
-				global $multisort;
+				global $multisort, $database;
 				$array = $GLOBALS['db']->getARanking();
 				$holder = array();
 
 				foreach($array as $value) {
 					$memberlist = $GLOBALS['db']->getAllMember($value['id']);
 					$totalpop = 0;
-					foreach($memberlist as $member) {
-						$totalpop += $GLOBALS['db']->getVSumField($member['id'], "pop");
-					}
+
+                    $memberIDs = [];
+                    foreach($memberlist as $member) {
+                        $memberIDs[] = $member['id'];
+                    }
+                    $data = $database->getVSumField($memberIDs,"pop");
+
+                    if (count($data)) {
+                        foreach ($data as $row) {
+                            $totalpop += $row['Total'];
+                        }
+                    }
+
 					$value['players'] = count($memberlist);
 					$value['totalpop'] = $totalpop;
 					if(!isset($value['avg'])) {

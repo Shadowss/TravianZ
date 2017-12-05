@@ -61,8 +61,8 @@ $bbcode_topic = stripslashes(nl2br($bbcoded));
 		</td>
 		<td class="pcontent"><div class="posted">created: <?php echo $date; ?></div>
 <?php
-if($database->CheckEditRes($aid)=="1"){
-	echo '<div class="admin"><a class="edit" href="allianz.php?s=2&pid='.$arr['alliance'].'&idf='.$arr['cat'].'&idt='.$arr['id'].'&admin=editans"><img src="img/x.gif" title="edit" alt="edit" /></a><a class="fdel" href="?s=2&pid='.$arr['alliance'].'&tid='.$arr['id'].'&admin=deltopic" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="delete" alt="delete" /></a></div><br />';
+if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $arr['owner'] == $session->uid)){
+	echo '<div class="admin"><a class="edit" href="allianz.php?s=2&pid='.$arr['alliance'].'&fid2='.$_GET['fid2'].'&idf='.$arr['cat'].'&idt='.$arr['id'].'&admin=editans"><img src="img/x.gif" title="edit" alt="edit" /></a><a class="fdel" href="?s=2&pid='.$arr['alliance'].'&tid='.$arr['id'].'&admin=deltopic" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="delete" alt="delete" /></a></div><br />';
 }
 ?>
 		<div class="clear dotted"></div><div class="text"><?php echo $bbcode_topic; ?></div></td>
@@ -135,7 +135,7 @@ foreach($posts as $po) {
 		$trip = "Teutons";
 	}else if($displayarray['tribe'] == 3) {
 		$trip = "Gauls";
-	} 
+	}
 	$owner = $database->getUserArray($po['owner'],1);
 	$allianceinfo = $database->getAlliance($owner['alliance']);
 	$input = $po['post'];
@@ -154,8 +154,8 @@ echo '<tr><td class="pinfo"><a class="name" href="spieler.php?uid='.$po['owner']
 		'.$trip.'
 		</td>
 		<td class="pcontent"><div class="posted">created: '.$date.'</div>';
-	if($database->CheckEditRes($aid)=="1"){
-		echo '<div class="admin"><a class="edit" href="allianz.php?s=2&pid='.$arr['alliance'].'&idt='.$_GET['tid'].'&pod='.$po['id'].'&admin=editpost"><img src="img/x.gif" title="edit" alt="edit" /></a><a class="fdel" href="?s=2&pid='.$arr['alliance'].'&pod='.$po['id'].'&tid='.$_GET['tid'].'&admin=delpost" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="delete" alt="delete" /></a></div><br />';
+	if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $po['owner'] == $session->uid)){
+		echo '<div class="admin"><a class="edit" href="allianz.php?s=2&pid='.$arr['alliance'].'&fid2='.$_GET['fid2'].'&idt='.$_GET['tid'].'&pod='.$po['id'].'&admin=editpost"><img src="img/x.gif" title="edit" alt="edit" /></a><a class="fdel" href="?s=2&pid='.$arr['alliance'].'&pod='.$po['id'].'&tid='.$_GET['tid'].'&admin=delpost" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="delete" alt="delete" /></a></div><br />';
 	}
 echo '<div class="clear dotted"></div><div class="text">'.$bbcode_post.'</div></td>
 	</tr>';
@@ -169,7 +169,7 @@ echo '<div class="clear dotted"></div><div class="text">'.$bbcode_post.'</div></
 	if($opt['opt5'] == 1){
 		echo '<a href="allianz.php?s=2&pid='.$aid.'&tid='.$arr['id'].'&admin=switch_admin" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 	}
-	 
+
 	 echo '</div>';
 }else{
 header("Location: banned.php");

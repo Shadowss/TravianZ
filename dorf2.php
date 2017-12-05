@@ -18,7 +18,7 @@ AccessLogger::logRequest();
 
 if(isset($_GET['newdid'])) {
     $_SESSION['wid'] = $_GET['newdid'];
-    $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$database->escape((int) $_GET['newdid'])." WHERE id=".$session->uid);  
+    $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$database->escape((int) $_GET['newdid'])." WHERE id=".$session->uid);
 	header("Location: ".$_SERVER['PHP_SELF']);
 	exit;
 }else{
@@ -39,10 +39,10 @@ $automation->isWinner();
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<script src="mt-full.js?0faab" type="text/javascript"></script>
-	<script src="unx.js?f4b7g" type="text/javascript"></script>
+	<script src="unx.js?f4b7h" type="text/javascript"></script>
 	<script src="new.js?0faab" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "

@@ -29,7 +29,6 @@
 |                Dzoki < dzoki.travian@gmail.com >        |
 | Copyright:     TravianX Project All rights reserved     |
 \*-------------------------------------------------------*/
-	$heroes = $units->Hero($session->uid, 1);
 
 	// check if there is a hero in revive already
 	$reviving = false;

@@ -29,27 +29,27 @@
 		<?php } else { ?>
 		<input class="check" type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);" />
 		<?php } ?></th>
-	<th colspan="2" class="buttons"><input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" /></th><th class="navi"><?php 
+	<th colspan="2" class="buttons"><input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" /></th><th class="navi"><?php
      if(!isset($_GET['s']) && count($message->sent1) < 10) {
     echo "&laquo;&raquo;";
     }
     else if (!isset($_GET['s']) && count($message->sent1) > 10) {
-    echo "&laquo;<a href=\"?t=2&s=10&o=0\">&raquo;</a>";
+    echo "&laquo;<a href=\"?t=2&s=10&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&raquo;</a>";
     }
     else if(isset($_GET['s']) && count($message->sent1) > $_GET['s']) {
     	if(count($message->sent1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->sent1) && $_GET['s'] != 0) {
-         echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?t=2&s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&laquo;</a><a href=\"?t=2&s=".($_GET['s']+10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&raquo;</a>";
          }
          else if(count($message->sent1) > $_GET['s']+10) {
-         	echo "&laquo;<a href=\"?t=2&s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         	echo "&laquo;<a href=\"?t=2&s=".($_GET['s']+10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&raquo;</a>";
          }
-        else {
-        echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+        else if (count($message->sent1) > 10) {
+        echo "<a href=\"?t=2&s=".($_GET['s']-10)."&o=".(!empty($_GET['o']) ? $_GET['o'] : 0)."\">&laquo;</a>&raquo;";
         }
     }
     ?></th></tr></tfoot>
 <tbody>
-   <?php 
+   <?php
     if(isset($_GET['s'])) {
     $s = $_GET['s'];
     }
@@ -57,8 +57,9 @@
     $s = 0;
     }
     $name = 1;
-    $support_messages = (($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES);
-    
+    $support_messages = ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES);
+    $multihunter_messages = ($session->access == MULTIHUNTER);
+
     for($i=(1+$s);$i<=(10+$s);$i++) {
     if(count($message->sent1) >= $i) {
     if($message->sent1[$i-1]['target'] == 0) {
@@ -67,8 +68,19 @@
     else {
     echo "<tr>";
     }
-    echo "<td class=\"sel\">".((!$support_messages || ($support_messages && $message->inbox1[$i-1]['target'] != 1)) ? "<input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->sent1[$i-1]['id']."\" />" : '<u><b title="Sent as Support"><i>S</i></b></u>')."</td>
-		<td class=\"top\"><a href=\"nachrichten.php?id=".$message->sent1[$i-1]['id']."\">".$message->sent1[$i-1]['topic']."</a> ";
+
+    $sent_as_text = '';
+
+    if (!$support_messages || ($support_messages && $message->inbox1[$i-1]['target'] != 1) || ($multihunter_messages && $message->inbox1[$i-1]['target'] != 5)) {
+        $sent_as_text = "<input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->sent1[$i-1]['id']."\" />";
+    } else if ($support_messages) {
+        $sent_as_text = '<u><b title="Sent as Support"><i>S</i></b></u>';
+    } else if ($multihunter_messages) {
+        $sent_as_text = '<u><b title="Sent as Multihunter"><i>M</i></b></u>';
+    }
+
+    echo "<td class=\"sel\">".$sent_as_text."</td>
+		<td class=\"top\"><a href=\"nachrichten.php?t=2a&amp;id=".$message->sent1[$i-1]['id']."\">".$message->sent1[$i-1]['topic']."</a> ";
     if($message->sent1[$i-1]['viewed'] == 0) {
     echo "(unread)";
     }

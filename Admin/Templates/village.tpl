@@ -10,7 +10,7 @@
 ##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
 ##  Improved:      aggenkeech                                                  ##
 #################################################################################
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+if($_SESSION['access'] < 8) die("Access Denied: You are not Admin!");
 error_reporting(0);
 $id = $_GET['did'];
 if(isset($id))
@@ -20,7 +20,7 @@ if(isset($id))
 	$type = $database->getVillageType($village['wref']);
 	$fdata = $database->getResourceLevel($village['wref']);
 	$units = $database->getUnit($village['wref']);
-	$abtech = $database->getABTech($id); // Armory/blacksmith level	
+	$abtech = $database->getABTech($id); // Armory/blacksmith level
 	if($type == 1){ $typ = array(3,3,3,9); }
 	elseif($type == 2){ $typ = array(3,4,5,6); }
 	elseif($type == 3){ $typ = array(4,4,4,6); }
@@ -39,28 +39,59 @@ if(isset($id))
 	$result = $database->query_return($q);
 	if(count($result) >0)
 		{
+		    $newResult = [];
 			foreach($result as $row)
-			{				
+			{
 				$type = $row['type'];
-							if($type==1) 	 { $type = '<img src="../img/admin/r/1.gif"> + 25%'; $wood+=1;}
-							elseif($type==2) { $type = '<img src="../img/admin/r/1.gif"> + 25%'; $wood+=1;}
-							elseif($type==3) { $type = '<img src="../img/admin/r/1.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $wood+=1; $crop+=1;}
-							elseif($type==4) { $type = '<img src="../img/admin/r/2.gif"> + 25%'; $clay+=1;}
-							elseif($type==5) { $type = '<img src="../img/admin/r/2.gif"> + 25%'; $clay+=1;}
-							elseif($type==6) { $type = '<img src="../img/admin/r/2.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $clay+=1;$crop+=1;}
-							elseif($type==7) { $type = '<img src="../img/admin/r/3.gif"> + 25%'; $iron+=1;}
-							elseif($type==8) { $type = '<img src="../img/admin/r/3.gif"> + 25%'; $iron+=1;}
-							elseif($type==9) { $type = '<img src="../img/admin/r/3.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $iron+=1; $crop+=1;}
-							elseif($type==10){ $type = '<img src="../img/admin/r/4.gif"> + 25%'; $crop+=1;}
-							elseif($type==11){ $type = '<img src="../img/admin/r/4.gif"> + 25%'; $crop+=1;}
-							elseif($type==12){ $type = '<img src="../img/admin/r/4.gif"> + 50%'; $crop+=2;}
-			}	
+                if ( $type == 1 ) {
+                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%';
+                    $wood        += 1;
+                } elseif ( $type == 2 ) {
+                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%';
+                    $wood        += 1;
+                } elseif ( $type == 3 ) {
+                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
+                    $wood        += 1;
+                    $crop        += 1;
+                } elseif ( $type == 4 ) {
+                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%';
+                    $clay        += 1;
+                } elseif ( $type == 5 ) {
+                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%';
+                    $clay        += 1;
+                } elseif ( $type == 6 ) {
+                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
+                    $clay        += 1;
+                    $crop        += 1;
+                } elseif ( $type == 7 ) {
+                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%';
+                    $iron        += 1;
+                } elseif ( $type == 8 ) {
+                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%';
+                    $iron        += 1;
+                } elseif ( $type == 9 ) {
+                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
+                    $iron        += 1;
+                    $crop        += 1;
+                } elseif ( $type == 10 ) {
+                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%';
+                    $crop        += 1;
+                } elseif ( $type == 11 ) {
+                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%';
+                    $crop        += 1;
+                } elseif ( $type == 12 ) {
+                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 50%';
+                    $crop        += 2;
+                }
+
+                $newResult[] = $row;
+			}
 		}
 	$ocounter = array($wood,$clay,$iron,$crop);
 	$production=$admin->calculateProduction($id,$user['id'],$user['b1'],$user['b2'],$user['b3'],$user['b4'],$fdata, $ocounter, $village['pop']);
 	$refreshiconfrm = "../img/admin/refresh.png";
 	$refreshicon  = "<img src=\"".$refreshiconfrm."\">";
-	
+
 	class MyGenerator
 	{
 		public function getMapCheck($wref)
@@ -69,14 +100,14 @@ if(isset($id))
 		}
 	};
 	$generator = new MyGenerator;
-	
+
 	if($village and $user)
 	{
 		include("search2.tpl"); ?>
 		<style>
 			.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
 		</style>
-		<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css">
+		<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css">
 		<br />
 
 		<table id="profile" cellpadding="1" cellspacing="1" >
@@ -237,9 +268,9 @@ if(isset($id))
 			</thead>
 			<tbody>
 				<?php
-					if(count($result) >0)
+					if(count($newResult))
 					{
-						foreach($result as $row)
+						foreach($newResult as $row)
 						{
 							echo "
 							<tr>
@@ -247,9 +278,9 @@ if(isset($id))
 								<td class=\"hab\">".$row['name']."</td>
 								<td class=\"hab\"><a href=\"../karte.php?d=".$row['wref']."&c=".$generator->getMapCheck($row['wref'])."\" target=\"blank\">(".$row['x']."|".$row['y'].")</a></td>
 								<td class=\"hab\">".round($row['loyalty'])."%</td>
-								<td class=\"hab\">$type</td>
+								<td class=\"hab\">".$row['type']."</td>
 							</tr>";
-						}	  
+						}
 					}
 					elseif($result ==0)
 					{
@@ -278,6 +309,7 @@ if(isset($id))
 						$level = $fdata['f'.($f)];
 						echo "<img src=\"../img/x.gif\" class=\"reslevel rf".$f." level".$level."\">";
 					}
+
 				?>
 			</div>
 			<div id="map_details">
@@ -337,6 +369,23 @@ if(isset($id))
 			{
 				echo "<img src=\"../img/x.gif\" class=\"dx1 g16e\">";
 			}
+
+            $resourcearray = $database->getResourceLevel($village['wref']);
+            if($resourcearray['f99t'] == 40) {
+                if($resourcearray['f99'] >= 0 && $resourcearray['f99'] <= 19) {
+                    echo '<img class="ww g40" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 20 && $resourcearray['f99'] <= 39) {
+                    echo '<img class="ww g40_1" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 40 && $resourcearray['f99'] <= 59) {
+                    echo '<img class="ww g40_2" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 60 && $resourcearray['f99'] <= 79) {
+                    echo '<img class="ww g40_3" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 80 && $resourcearray['f99'] <= 99) {
+                    echo '<img class="ww g40_4" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] == 100) {
+                    echo '<img class="ww g40_5" src="img/x.gif" alt="Worldwonder">'; }
+            }
+
 			?>
 			<div id="levels" class="on">
 				<?php

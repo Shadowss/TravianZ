@@ -1,5 +1,5 @@
 <?php
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+if($_SESSION['access'] < MULTIHUNTER) die("Access Denied: You are not Admin!");
 ?>
 <table id="member">
 	<thead>

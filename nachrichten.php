@@ -92,7 +92,7 @@ if ( isset( $_GET['confirm'] ) && is_numeric( $_GET['confirm'] ) ) {
 	<script src="unx.js?f4b7d" type="text/javascript"></script>
 	<script src="new.js?f4b7d" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
@@ -120,7 +120,7 @@ if ( isset( $_GET['confirm'] ) && is_numeric( $_GET['confirm'] ) ) {
 
 <div id="mid">
 <?php include("Templates/menu.tpl");
-if(isset($_GET['id']) && !isset($_GET['t'])) {
+if(isset($_GET['id']) && (!isset($_GET['t']) || $_GET['t'] == '2a')) {
 	$message->loadMessage($_GET['id']);
 	include("Templates/Message/read.tpl");
 }
@@ -128,7 +128,7 @@ else if(isset($_GET['t'])) {
 	switch($_GET['t']) {
 		case 1:
 		if(isset($_GET['id'])) {
-		$id = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']);
+		    $id = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']);
 		}
 		include("Templates/Message/write.tpl");
 		break;

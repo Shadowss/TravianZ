@@ -38,16 +38,16 @@ $ckey= $generator->generateRandStr(6);
 
 
  if (!isset($process['t1']) || $process['t1'] == ''){  $t1='0'; }else{  $t1=$process['t1']; }
- if (!isset($process['t2']) || $process['t2'] == ''){  $t2='0'; }else{  $t2=$process['t2']; } 
- if (!isset($process['t3']) || $process['t3'] == ''){  $t3='0'; }else{  $t3=$process['t3']; if ($session->tribe == 3){ $scout=1; } } 
- if (!isset($process['t4']) || $process['t4'] == ''){  $t4='0'; }else{  $t4=$process['t4']; if ($session->tribe == 1 || $session->tribe == 2 || $session->tribe == 4 || $session->tribe == 5){ $scout=1;} } 
- if (!isset($process['t5']) || $process['t5'] == ''){  $t5='0'; }else{  $t5=$process['t5']; } 
- if (!isset($process['t6']) || $process['t6'] == ''){  $t6='0'; }else{  $t6=$process['t6']; } 
- if (!isset($process['t7']) || $process['t7'] == ''){  $t7='0'; }else{  $t7=$process['t7']; } 
- if (!isset($process['t8']) || $process['t8'] == ''){  $t8='0'; }else{  $t8=$process['t8']; } 
- if (!isset($process['t9']) || $process['t9'] == ''){  $t9='0'; }else{  $t9=$process['t9']; } 
- if (!isset($process['t10']) || $process['t10'] == ''){  $t10='0'; }else{  $t10=$process['t10']; } 
- if (!isset($process['t11']) || $process['t11'] == ''){  $t11='0'; }else{  $t11=$process['t11']; $showhero=1;} 
+ if (!isset($process['t2']) || $process['t2'] == ''){  $t2='0'; }else{  $t2=$process['t2']; }
+ if (!isset($process['t3']) || $process['t3'] == ''){  $t3='0'; }else{  $t3=$process['t3']; if ($session->tribe == 3){ $scout=1; } }
+ if (!isset($process['t4']) || $process['t4'] == ''){  $t4='0'; }else{  $t4=$process['t4']; if ($session->tribe == 1 || $session->tribe == 2 || $session->tribe == 4 || $session->tribe == 5){ $scout=1;} }
+ if (!isset($process['t5']) || $process['t5'] == ''){  $t5='0'; }else{  $t5=$process['t5']; }
+ if (!isset($process['t6']) || $process['t6'] == ''){  $t6='0'; }else{  $t6=$process['t6']; }
+ if (!isset($process['t7']) || $process['t7'] == ''){  $t7='0'; }else{  $t7=$process['t7']; }
+ if (!isset($process['t8']) || $process['t8'] == ''){  $t8='0'; }else{  $t8=$process['t8']; }
+ if (!isset($process['t9']) || $process['t9'] == ''){  $t9='0'; }else{  $t9=$process['t9']; }
+ if (!isset($process['t10']) || $process['t10'] == ''){  $t10='0'; }else{  $t10=$process['t10']; }
+ if (!isset($process['t11']) || $process['t11'] == ''){  $t11='0'; }else{  $t11=$process['t11']; $showhero=1;}
  if ($session->tribe == 3){
  $totalunits = (!empty($process['t1']) ? $process['t1'] : 0) +
                (!empty($process['t2']) ? $process['t2'] : 0) +
@@ -59,7 +59,7 @@ $ckey= $generator->generateRandStr(6);
                (!empty($process['t9']) ? $process['t9'] : 0) +
                (!empty($process['t10']) ? $process['t10'] : 0) +
                (!empty($process['t11']) ? $process['t11'] : 0);
- 
+
  }else{
  $totalunits = (!empty($process['t1']) ? $process['t1'] : 0) +
                (!empty($process['t2']) ? $process['t2'] : 0) +
@@ -106,7 +106,7 @@ $start = ($tribe-1)*10+1;
 $end = ($tribe*10);
 ?>
 
-<h1><?php echo $actionType." to ".$process[1]; ?></h1>            
+<h1><?php echo $actionType." to ".$process[1]; ?></h1>
 <form method="post" action="a2b.php">
 
             <table id="short_info" cellpadding="1" cellspacing="1">
@@ -154,14 +154,14 @@ $end = ($tribe*10);
                     <tr>
 
                         <td></td>
-                 <?php 
+                 <?php
                 for($i=$start;$i<=($end);$i++) {
-                      echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";    
+                      echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
                   } if (!empty($process['t11'])){
-                  echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";    
-                  
+                  echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
+
                   }?>
-                        
+
                     </tr>
 
                     <tr>
@@ -204,7 +204,7 @@ $end = ($tribe*10);
         </tr>
     </tbody>
     <?php } ?>
-                
+
 
         <?php if(isset($kata) AND $process['c']!='2'){?><tr>
 
@@ -212,7 +212,7 @@ $end = ($tribe*10);
                 <tr>
                     <th>Destination:</th>
                     <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
-                    
+
                         <select name="ctar1" class="dropdown">
                             <option value="0">Random</option>
                             <?php if($building->getTypeLevel(16) >= 5) { ?>
@@ -223,7 +223,7 @@ $end = ($tribe*10);
                                 <option value="4">Cropland</option>
                                 <option value="5">Sawmill</option>
                                 <option value="6">Brickyard</option>
-                            
+
                                 <option value="7">Iron Foundry</option>
                                 <option value="8">Grain Mill</option>
                                 <option value="9">Bakery</option>
@@ -245,7 +245,7 @@ $end = ($tribe*10);
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
-                                <option value="40">Wonder of the World</option>  
+                                <option value="40">Wonder of the World</option>
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
@@ -257,7 +257,7 @@ $end = ($tribe*10);
                                 <option value="19">Barracks</option>
                                 <option value="20">Stable</option>
                                 <option value="21">Workshop</option>
-                                
+
                                 <option value="22">Academy</option>
                                 <option value="29">Great barracks</option>
                                 <option value="30">Great stable</option>
@@ -278,7 +278,7 @@ $end = ($tribe*10);
                                 <option value="4">Cropland</option>
                                 <option value="5">Sawmill</option>
                                 <option value="6">Brickyard</option>
-                            
+
                                 <option value="7">Iron Foundry</option>
                                 <option value="8">Grain Mill</option>
                                 <option value="9">Bakery</option>
@@ -295,13 +295,13 @@ $end = ($tribe*10);
                                 <option value="24">Townhall</option>
                                 <option value="25">Residence</option>
                                 <option value="26">Palace</option>
-                                
+
                                 <option value="27">Treasury</option>
                                 <option value="28">Trade office</option>
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
-								<option value="40">Wonder of the World</option>  
+								<option value="40">Wonder of the World</option>
                             </optgroup>
                             <?php } ?>
                             <?php if($building->getTypeLevel(16) >= 10) { ?>
@@ -313,7 +313,7 @@ $end = ($tribe*10);
                                 <option value="19">Barracks</option>
                                 <option value="20">Stable</option>
                                 <option value="21">Workshop</option>
-                                
+
                                 <option value="22">Academy</option>
                                 <option value="29">Great barracks</option>
                                 <option value="30">Great stable</option>
@@ -326,16 +326,16 @@ $end = ($tribe*10);
                     <span class="info">(will be attacked by catapult(s))</span>
                      </td>
                 </tr>
-            </tbody><?PHP  
+            </tbody><?PHP
             }
             else if($process['c']=='4')
             {
-                ?><tbody class="infos">  
+                ?><tbody class="infos">
                 <th>Destination:</th>
 
             <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
                 <?PHP
-                
+
                 echo"Warning: Catapult will <b>ONLY</b> shoot with a normal attack (they dont shoot with raids!)";
                 ?>
                 </td>
@@ -354,7 +354,7 @@ $end = ($tribe*10);
 
    <th>Arrived:</th>
 
-            
+
 
             <?php
             $speeds = array();
@@ -375,16 +375,12 @@ $end = ($tribe*10);
 
                         {
 
-                            if ($i<11) 
-                $speeds[] = ${'u'.(($session->tribe-1)*10+$i)}['speed'];
+                if ($i<11)
+                    $speeds[] = ${'u'.(($session->tribe-1)*10+$i)}['speed'];
                 else
                 {
-                //$uid
-                $q = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $uid." AND dead = 0";
-                $result = mysqli_query($GLOBALS['link'],$q);
-                $hero_f=mysqli_fetch_array($result);
-                $hero_unit=$hero_f['unit'];
-                $speeds[] = ${'u'.$hero_unit}['speed'];
+                    $hero_unit = $database->getHeroField($uid, 'unit');
+                    $speeds[] = ${'u'.$hero_unit}['speed'];
                 }
 
                             if($i != 4)
@@ -393,7 +389,7 @@ $end = ($tribe*10);
 
                         }
 
-                        
+
 
                     }
 
@@ -401,7 +397,7 @@ $end = ($tribe*10);
 
 
 
-            
+
 
             if($scout)
 
@@ -434,7 +430,7 @@ $end = ($tribe*10);
 
             ?>
 
-            
+
 
             <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
 
@@ -450,13 +446,13 @@ $end = ($tribe*10);
 
 </table>
 
-<input name="timestamp" value="<?php echo time(); ?>" type="hidden"> 
+<input name="timestamp" value="<?php echo time(); ?>" type="hidden">
 
-<input name="timestamp_checksum" value="<?php echo $ckey; ?>" type="hidden"> 
+<input name="timestamp_checksum" value="<?php echo $ckey; ?>" type="hidden">
 
-<input name="ckey" value="<?php echo $id; ?>" type="hidden"> 
+<input name="ckey" value="<?php echo $id; ?>" type="hidden">
 
-<input name="id" value="39" type="hidden"> 
+<input name="id" value="39" type="hidden">
 
 <input name="a" value="533374" type="hidden">
 <input name="c" value="3" type="hidden">
@@ -465,11 +461,11 @@ $end = ($tribe*10);
     if(($database->hasBeginnerProtection($village->wid)==1)&&($database->hasBeginnerProtection($process['0'])==0)){
   	echo"<span style=\"color: #DD0000\"><b>Caution:</b> Attacking a player will lose the protection!</span>";
     }
-    if($database->hasBeginnerProtection($process['0'])==1) { 
+    if($database->hasBeginnerProtection($process['0'])==1) {
         echo"<b>User presently has beginners protection</b>";
     } else {
 ?>
-        <p class="btn"><input value="ok" name="s1" id="btn_ok" 
+        <p class="btn"><input value="ok" name="s1" id="btn_ok"
 
 class="dynamic_img " src="img/x.gif" alt="OK" type="image" onclick="if (this.disabled==false) {document.getElementsByTagName('form')[0].submit();} this.disabled=true;" onLoad="this.disabled=false;"></p>
 

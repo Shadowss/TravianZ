@@ -37,10 +37,10 @@ date_default_timezone_set($t_zone);
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type" content="text/html; charset=us-ascii" />
 	<script src="mt-full.js?0ac37" type="text/javascript"></script>
-	<script src="unx.js?f4b7g" type="text/javascript"></script>
+	<script src="unx.js?f4b7h" type="text/javascript"></script>
 	<script src="new.js?0ac37" type="text/javascript"></script>
 	<link href="../gpack/travian_default/lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="../gpack/travian_default/lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+	<link href="../gpack/travian_default/lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<link href="../gpack/travian_default/travian.css?e21d2" rel="stylesheet" type="text/css" />
 	<link href="../gpack/travian_default/lang/en/lang.css?e21d2" rel="stylesheet" type="text/css" />
 </head>

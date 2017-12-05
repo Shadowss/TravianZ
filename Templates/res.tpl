@@ -1,4 +1,4 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -11,12 +11,14 @@
 ?>
 
 <?php
-$wood = round($village->getProd("wood"));
-$clay = round($village->getProd("clay"));
-$iron = round($village->getProd("iron"));
-$crop = round($village->getProd("crop"));
-$totalproduction = $village->allcrop; // all crops + bakery + grain mill
-?> 
+// Natars cration script does not have village initialized
+if (!empty($village)) {
+    $wood            = round( $village->getProd( "wood" ) );
+    $clay            = round( $village->getProd( "clay" ) );
+    $iron            = round( $village->getProd( "iron" ) );
+    $crop            = round( $village->getProd( "crop" ) );
+    $totalproduction = $village->allcrop; // all crops + bakery + grain mill
+?>
 
 <div id="res">
 <div id="resWrap">
@@ -41,13 +43,13 @@ $totalproduction = $village->allcrop; // all crops + bakery + grain mill
 	</table>
 	<table cellpadding="1" cellspacing="1">
 		<tr>
-        
+
 				<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td> 
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
         <td></td>
-			<td><?php 
+			<td><?php
 			if($session->gold <= 1){
             echo '<font color="#B3B3B3"><img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Remaining gold" title="You currently have: '.$session->gold.' gold"/> '.$session->gold.' <span><span>G</span><span>o</span><span>l</span><span>d</span></span></font>';
 			}
@@ -56,11 +58,13 @@ $totalproduction = $village->allcrop; // all crops + bakery + grain mill
 			}
 			?>
 			</td>
-            
-            
-            
-				
+
+
+
+
 		</tr>
 	</table>
     </div>
 </div>
+<?php
+}

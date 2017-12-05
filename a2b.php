@@ -95,7 +95,7 @@ if(isset($_GET['o'])) {
 	<meta http-equiv="imagetoolbar" content="no" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 	<script src="mt-full.js?0faab" type="text/javascript"></script>
-	<script src="unx.js?f4b7g" type="text/javascript"></script>
+	<script src="unx.js?f4b7h" type="text/javascript"></script>
 	<script src="new.js?0faab" type="text/javascript"></script>
 	<link href="<?php
 
@@ -106,7 +106,7 @@ if(isset($_GET['o'])) {
 
 		echo GP_LOCATE;
 
-?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<?php
 
 		if($session->gpack == null || GP_ENABLE == false) {
@@ -180,10 +180,10 @@ if(isset($_GET['o'])) {
             $p_ander = $database->getCoor($prisoner['from']);
             $p_to = array('x'=>$p_ander['x'], 'y'=>$p_ander['y']);
 			$p_tribe = $database->getUserField($p_owner,"tribe",0);
-            
+
             $p_speeds = array();
-    
-            //find slowest unit.            
+
+            //find slowest unit.
             for($i=1;$i<=10;$i++){
                 if ($prisoner['t'.$i]){
                     if($prisoner['t'.$i] != '' && $prisoner['t'.$i] > 0){
@@ -193,7 +193,7 @@ if(isset($_GET['o'])) {
                     }
                 }
             }
-			
+
 			if ($prisoner['t11']>0){
 			    $p_qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner." AND dead = 0";
 				$p_resulth = mysqli_query($GLOBALS['link'],$p_qh);
@@ -201,7 +201,7 @@ if(isset($_GET['o'])) {
 				$p_hero_unit=$p_hero_f['unit'];
 				$p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
 			}
-            
+
             $p_artefact = count($database->getOwnUniqueArtefactInfo2($p_owner,2,3,0));
 			$p_artefact1 = count($database->getOwnUniqueArtefactInfo2($prisoner['from'],2,1,1));
 			$p_artefact2 = count($database->getOwnUniqueArtefactInfo2($p_owner,2,2,0));

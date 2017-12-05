@@ -515,7 +515,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
           $data1 = mysqli_fetch_assoc($query1);
           $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
           $data2 = mysqli_fetch_assoc($query2);
-			if($data2['access']=='0' or $data2['access']=='8' or (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access']=='9')) {
+			if($data2['access']=='0' or ($data2['access']== MULTIHUNTER && $data2['id'] == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access']=='9')) {
 			echo "&raquo; ".SENDTROOP." (".BAN.")";
 		  } else if($data2['vac_mode']=='1') {
 			echo "&raquo; Send troops. (Vacation mode on)";
@@ -530,7 +530,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 					    	<tr>
 					<td class="none">
 					<?php
-			if($data2['access']=='0' or $data2['access']=='8' or (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access']=='9')) { 
+			if($data2['access']=='0' or ($data2['access']== MULTIHUNTER && $data2['id'] == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access']=='9')) {
 			echo "&raquo; ".SENDMERC." (".BAN.")";
 			} else if($data2['vac_mode']=='1') {
 			echo "&raquo; Send merchant(s). (Vacation mode on)";

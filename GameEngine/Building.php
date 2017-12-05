@@ -4,15 +4,15 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       22.06.2015                    			       ##
 ##  Filename       Building.php                                                ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL., TPLinux            ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
 #################################################################################
 
@@ -41,30 +41,178 @@ class Building {
 		}
 		}
 	}
-	
+
+	public function residenceOfPalaceBuildInProgress() {
+	    global $database, $village;
+
+        $residenceOrPalaceInProgress = $database->getBuildingByType2($village->wid, '25, 26');
+        $residenceBuildInProgress = false;
+        $palaceBuildInProgress = false;
+
+        if (count($residenceOrPalaceInProgress)) {
+            foreach ($residenceOrPalaceInProgress as $record) {
+                if ($record == 25) {
+                    $residenceBuildInProgress = true;
+                } else {
+                    $palaceBuildInProgress = true;
+                }
+            }
+        }
+
+        return [
+            'residence' => $residenceBuildInProgress,
+            'palace' => $palaceBuildInProgress
+        ];
+    }
+
+    /*
+     * Checks whether to allow building Wonder of the World
+     * above current level. This includes checks for WW upgrade
+     * currently in progress as well as current WW level
+     * and the right number of building plans in the alliance.
+     */
+    public function allowWwUpgrade() {
+        global $database, $village, $session;
+        static $cached = null;
+
+        if ($cached === null) {
+            $wwHighestLevelFound = $village->resarray['f99'];
+            $wwBuildingProgress  = $database->getBuildingByType( $village->wid, 99 );
+
+            if ( count( $wwBuildingProgress ) ) {
+                if ( $wwBuildingProgress[0]['level'] > $wwHighestLevelFound ) {
+                    $wwHighestLevelFound = $wwBuildingProgress[0]['level'];
+                }
+            }
+
+            // check if we should allow building the WW this high
+            if ( $wwHighestLevelFound >= 50 ) {
+                $needed_plan = 2;
+            } else {
+                $needed_plan = 1;
+            }
+
+            // count building plans
+            if ( $needed_plan ) {
+                $wwbuildingplan = 0;
+                $planFoundInOwnersVillage = false;
+                $villages       = $database->getVillagesID( $session->uid );
+
+                foreach ( $villages as $village1 ) {
+                    $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
+                    if ( $plan > 0 ) {
+                        $wwbuildingplan = 1;
+                        $planFoundInOwnersVillage = true;
+                    }
+                }
+
+                if ( $session->alliance != 0 ) {
+                    $alli_users = $database->getUserByAlliance( $session->alliance );
+                    foreach ( $alli_users as $users ) {
+                        $villages = $database->getVillagesID( $users['id'] );
+                        if ( $users['id'] != $session->uid ) {
+                            foreach ( $villages as $village1 ) {
+                                $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
+                                if ( $plan > 0 ) {
+                                    $wwbuildingplan += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if ($needed_plan == 1) {
+                    $cached = ($wwbuildingplan >= $needed_plan && $planFoundInOwnersVillage);
+                } else {
+                    $cached = $wwbuildingplan >= $needed_plan;
+                }
+            } else {
+                // no need for building plans, we can still upgrade WW
+                $cached = true;
+            }
+        }
+
+        return $cached;
+    }
+
 	public function canProcess($id,$tid) {
-           	//add fix by ronix
-                global $session;
+        //add fix by ronix
+        global $session, $database, $village;
+
         if($session->access==BANNED){
             header("Location: banned.php");
             exit;
         } else {
-            if ($this->checkResource($id,$tid)!=4) {
-                if($tid >= 19) {
-                    header("Location: dorf2.php");
+            $page = basename($_SERVER['SCRIPT_NAME']);
+            $levels = $database->getResourceLevel($village->wid);
+            $progresses = $this->residenceOfPalaceBuildInProgress();
+
+            if (
+            !(
+                // check if we're not trying to hack-build residence and palace together
+                (
+                    !in_array($tid, [25, 26]) ||
+                    (
+                        ($tid == 25 && $progresses['palace'] === false) ||
+                        ($tid == 26 && $progresses['residence'] === false)
+                    )
+                ) &&
+
+                // don't allow building WW to level 51 with a waiting loop
+                (
+                    $tid != 99 ||
+                    (
+                        $tid == 99 &&
+                        $this->allowWwUpgrade()
+                    )
+                )
+            )
+            ) {
+                if ( $tid > 18 ) {
+                    header( "Location: dorf2.php" );
                     exit;
-                             }
-                else {
-                    header("Location: dorf1.php");
+                } else {
+                    header( "Location: dorf1.php" );
                     exit;
-                              }
-                                exit;
-             		}
-        	}
-    	}  
+                }
+            }
+
+            if (
+                // check that our ID actually exists within the buildings list
+                isset($village->resarray['f'.$tid.'t']) &&
+                // let's see if we should allow building what we want where we want to
+                // (prevent building resource fields in the village
+                (
+                    ($page == 'dorf1.php' && $id >= 1 && $id <= 4) ||
+                    ($page == 'dorf2.php' && $id > 4)
+                ) &&
+                // check that we're not trying to change a standing building type
+                (
+                    $levels['f'.$tid.'t'] == $id ||
+                    $levels['f'.$tid.'t'] == 0
+                )
+            ) {
+                if ( !isset($_GET['master']) && $this->checkResource( $id, $tid ) != 4 ) {
+                    if ( $tid >= 19 ) {
+                        header( "Location: dorf2.php" );
+                        exit;
+                    } else {
+                        header( "Location: dorf1.php" );
+                        exit;
+                    }
+
+                    exit;
+                }
+            } else {
+                header('Location: '.$_SERVER['SCRIPT_NAME']);
+                exit;
+            }
+        }
+    }
 
     public function procBuild($get) {
         global $session, $village, $database;
+
         if(isset($get['a']) && $get['c'] == $session->checker && !isset($get['id'])) {
             if($get['a'] == 0) {
                 $this->removeBuilding($get['d']);
@@ -74,21 +222,25 @@ class Building {
                 $this->upgradeBuilding($get['a']);
             }
         }
+
         if(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker)) {
+            $this->canProcess($get['master'],$get['id']);
             $m=$get['master'];
             $master = $_GET;
             $session->changeChecker();
             if($session->access==BANNED){
                 header("Location: banned.php");
                 exit;
-            }    
-            $level = $database->getResourceLevel($village->wid);
-            $database->addBuilding($village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level['f'.$get['id']] + 1 + count($database->getBuildingByField($village->wid,$get['id'])));
-            if($get['id'] > 18) {
-                header("Location: dorf2.php");
+            }
+
+            $level = $database->getResourceLevel( $village->wid );
+            $database->addBuilding( $village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level[ 'f' . $get['id'] ] + 1 + count( $database->getBuildingByField( $village->wid, $get['id'] ) ) );
+
+            if ( $get['id'] > 18 ) {
+                header( "Location: dorf2.php" );
                 exit;
             } else {
-                header("Location: dorf1.php");
+                header( "Location: dorf1.php" );
                 exit;
             }
         }
@@ -334,7 +486,7 @@ class Building {
 	}
 
 	private function upgradeBuilding($id) {
-		global $database,$village,$session,$logging;
+		global $database,$village,$session,$logging,${'bid'.$village->resarray['f'.$id.'t']};
 		if($this->allocated < $this->maxConcurrent) {
 			$uprequire = $this->resourceRequired($id,$village->resarray['f'.$id.'t']);
 			$time = time() + $uprequire['time'];
@@ -369,6 +521,12 @@ class Building {
 				}
 			}
 			$level = $database->getResourceLevel($village->wid);
+
+			// don't allow building above max levels
+            if ($level['f'.$id] + 1 > count(${'bid'.$village->resarray['f'.$id.'t']})) {
+                return;
+            }
+
 			if($session->access!=BANNED){
 			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time+($loop==1?ceil(60/SPEED):0),0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
@@ -434,37 +592,52 @@ class Building {
 		global $database,$village,$session,$logging;
 
 		if($this->allocated < $this->maxConcurrent) {
-			if($tid == 16) {
-				$id = 39;
-			}
-			else if($tid == 31 || $tid == 32 || $tid == 33) {
-				$id = 40;
-			}
-			$uprequire = $this->resourceRequired($id,$tid);
-			$time = time() + $uprequire['time'];
-			$bindicate = $this->canBuild($id,$village->resarray['f'.$id.'t']);
-			$loop = ($bindicate == 9 ? 1 : 0);
-			if($loop == 1) {
-				foreach($this->buildArray as $build) {
-					if($build['field'] >= 19 || ($session->tribe <> 1 && !ALLOW_ALL_TRIBE)) {
-						$time = $build['timestamp'] + ceil(60/SPEED) + $uprequire['time'];
-					}
-				}
-			}
-			if($this->meetRequirement($tid)) {
-			if($session->access!=BANNED){
-			$level = $database->getResourceLevel($village->wid);
-				if($database->addBuilding($village->wid,$id,$tid,$loop,$time,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
-					$logging->addBuildLog($village->wid,$this->procResType($tid),($village->resarray['f'.$id]+1),1);
-					$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
-					header("Location: dorf2.php");
-					exit;
-				}
-			}else{
-			    header("Location: banned.php");
-			    exit;
-			}
-			}
+		    // check if we're not trying to hack-build residence and palace together
+            if (
+                ($progresses = $this->residenceOfPalaceBuildInProgress()) &&
+                (
+                    !in_array($tid, [25, 26]) ||
+                    (
+                        ($tid == 25 && $progresses['palace'] === false) ||
+                        ($tid == 26 && $progresses['residence'] === false)
+                    )
+                )
+            ) {
+
+                if ( $tid == 16 ) {
+                    $id = 39;
+                } else if ( $tid == 31 || $tid == 32 || $tid == 33 ) {
+                    $id = 40;
+                }
+                $uprequire = $this->resourceRequired( $id, $tid );
+                $time      = time() + $uprequire['time'];
+                $bindicate = $this->canBuild( $id, $village->resarray[ 'f' . $id . 't' ] );
+                $loop      = ( $bindicate == 9 ? 1 : 0 );
+                if ( $loop == 1 ) {
+                    foreach ( $this->buildArray as $build ) {
+                        if ( $build['field'] >= 19 || ( $session->tribe <> 1 && ! ALLOW_ALL_TRIBE ) ) {
+                            $time = $build['timestamp'] + ceil( 60 / SPEED ) + $uprequire['time'];
+                        }
+                    }
+                }
+                if ( $this->meetRequirement( $tid ) ) {
+                    if ( $session->access != BANNED ) {
+                        $level = $database->getResourceLevel( $village->wid );
+                        if ( $database->addBuilding( $village->wid, $id, $tid, $loop, $time, 0, $level[ 'f' . $id ] + 1 + count( $database->getBuildingByField( $village->wid, $id ) ) ) ) {
+                            $logging->addBuildLog( $village->wid, $this->procResType( $tid ), ( $village->resarray[ 'f' . $id ] + 1 ), 1 );
+                            $database->modifyResource( $village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0 );
+                            header( "Location: dorf2.php" );
+                            exit;
+                        }
+                    } else {
+                        header( "Location: banned.php" );
+                        exit;
+                    }
+                }
+            } else {
+                header( "Location: dorf2.php" );
+                exit;
+            }
 		}
 	}
 
@@ -684,16 +857,18 @@ class Building {
                 }
                 break;
 
+            // great warehouse can only be built with artefact or only in Natar village
             case 38:
-                if ( $this->getTypeLevel( 15 ) >= 10 && $village->natar == 1 ) {
+                if ( $this->getTypeLevel( 15 ) >= 10 && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 1, 0)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)) ) ) {
                     return true;
                 } else {
                     return false;
                 }
                 break;
 
+            // great grannary can only be built with artefact or only in Natar village
             case 39:
-                if ( $this->getTypeLevel( 15 ) >= 10 && $village->natar == 1 ) {
+                if ( $this->getTypeLevel( 15 ) >= 10 && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 1, 0)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)) ) ) {
                     return true;
                 } else {
                     return false;
@@ -830,7 +1005,7 @@ class Building {
 		if ($session->uid  == 1) {
 		    return 0;
 		}
-		
+
 		$keyholder = array();
 
 		if($vid == 0) {
@@ -838,7 +1013,7 @@ class Building {
 		} else {
 			$resourcearray = $database->getResourceLevel($vid);
 		}
-		
+
 		foreach(array_keys($resourcearray,$tid) as $key) {
 			if(strpos($key,'t')) {
 				$key = preg_replace("/[^0-9]/", '', $key);
@@ -853,7 +1028,7 @@ class Building {
 		    // resource field
 			if($tid <= 4) {
 				$temparray = array();
-				
+
 				for($i=0;$i<=$element-1;$i++) {
 				    // collect current field level
 					array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
@@ -870,7 +1045,7 @@ class Building {
 			// village building
 			else {
 				$target = 0;
-				
+
 				// find the highest level built for this building type
 				for($i=1;$i<=$element-1;$i++) {
 					if($resourcearray['f'.$keyholder[$i]] > $resourcearray['f'.$keyholder[$target]]) {
@@ -1024,7 +1199,7 @@ class Building {
                 $database->updateUserField($session->uid, "gold", $newgold, 1);
             }
 
-            $stillbuildingarray = $database->getJobs($village->wid);  
+            $stillbuildingarray = $database->getJobs($village->wid);
             if (count($stillbuildingarray) == 1) {
                 if($stillbuildingarray[0]['loopcon'] == 1) {
                     //$q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0,timestamp=".(time()+$stillbuildingarray[0]['timestamp']-$innertimestamp)." WHERE id=".$stillbuildingarray[0]['id'];

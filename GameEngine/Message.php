@@ -25,8 +25,9 @@ class Message {
         if ($req_file == 'nachrichten.php') {
             if ( isset( $_GET['t'] ) ) {
                 switch ( $_GET['t'] ) {
-                    // send messages page
+                    // send messages page or a single sent message
                     case 2:
+                    case '2a':
                         $this->getMessages( 2 );
                         break;
 
@@ -402,7 +403,7 @@ class Message {
 
 	private function sendAMessage($topic,$text) {
 		global $session,$database;
-		
+
 		// Vulnerability closed by Shadow
 
 		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
@@ -412,7 +413,7 @@ class Message {
 		return; //flood
 
 		// Vulnerability closed by Shadow
-			
+
 		$allmembersQ = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE alliance='".$session->alliance."'");
 		$userally = $database->getUserField($session->uid,"alliance",0);
 		$permission=mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT opt7 FROM ".TB_PREFIX."ali_permission WHERE uid='".$session->uid."'"));
@@ -581,9 +582,21 @@ class Message {
                 }
             }
 
-            // check if we're not sending this as support
-            $support_from_admin_allowed = ( ( $session->access == MULTIHUNTER || $session->access == ADMIN ) && ADMIN_RECEIVE_SUPPORT_MESSAGES );
-            $database->sendMessage( $user, ( ( ! empty( $_POST['as_support'] ) && $support_from_admin_allowed ) ? 1 : $session->uid ), htmlspecialchars( addslashes( $topic ) ), htmlspecialchars( addslashes( $text ) ), 0, $alliance, $player, $coor, $report );
+            // check if we're not sending this as Support or Multihunter
+            $support_from_admin_allowed = ( $session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES );
+            $send_as = $session->uid;
+
+            // send as Support?
+            if (( ! empty( $_POST['as_support'] ) && $support_from_admin_allowed )) {
+                $send_as = 1;
+            }
+
+            // send as Multihunter
+            if (( ! empty( $_POST['as_multihunter'] ) && $session->access == MULTIHUNTER )) {
+                $send_as = 5;
+            }
+
+            $database->sendMessage( $user, $send_as, htmlspecialchars( addslashes( $topic ) ), htmlspecialchars( addslashes( $text ) ), 0, $alliance, $player, $coor, $report );
         }
 	}
 

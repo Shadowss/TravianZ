@@ -395,6 +395,11 @@ class MYSQLi_DB implements IDbConnection {
         $researchingCache = [],
 
         /**
+         * @var array Cache of buildings being under construction.
+         */
+        $buildingsUnderConstructionCache = [],
+
+        /**
          * @var array Cache of messages to be sent out to players,
          *            so we can collect them and send them out together
          *            at the end of script execution.
@@ -1441,7 +1446,7 @@ class MYSQLi_DB implements IDbConnection {
         $o_unit   = $this->getUnit($vref, $use_cache);
 
         for ( $i = 1; $i < 51; $i ++ ) {
-            $troops_o += $o_unit[ $i ];
+            $troops_o += $o_unit[ 'u'.$i ];
         }
 
         $troops_o += $o_unit['hero'];
@@ -1456,7 +1461,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         self::$oasisTroopsCountCache[$vref] = $troops_o;
-        return self::$oasisTroopsCountCache[$vref];
+            return self::$oasisTroopsCountCache[$vref];
 	}
 
     public function canConquerOasis($vref, $wref, $use_cache = true) {
@@ -1673,7 +1678,7 @@ class MYSQLi_DB implements IDbConnection {
                                 }
                                 break;
 
-                        case 3: if ($value['owner'] == $vid && $value['capital'] == 1) {
+                        case 3: if ((isset($value['owner']) && isset($value['capital'])) && $value['owner'] == $vid && $value['capital'] == 1) {
                                     return $value;
                                 }
                                 break;
@@ -1719,7 +1724,7 @@ class MYSQLi_DB implements IDbConnection {
 
             // by owner ID and capital = 1
             case 3: $vid = (int) $vid;
-                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $vid capital = 1 LIMIT 1";
+                    $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner = $vid AND capital = 1 LIMIT 1";
                     break;
 
             // by owner = Taskmaster
@@ -1763,6 +1768,11 @@ class MYSQLi_DB implements IDbConnection {
                 }
             }
             $uid = $newIDs;
+        }
+
+        // nothing left to cache, return the full cache
+        if (!count($uid)) {
+            return self::$userVillagesCache;
         }
 
         switch ($mode) {
@@ -2905,9 +2915,20 @@ class MYSQLi_DB implements IDbConnection {
 		$ally = $this->getAlliance($aid);
 		$memberlist = $this->getAllMember($ally['id']);
 		$oldrank = 0;
-		foreach($memberlist as $member) {
-			$oldrank += $this->getVSumField($member['id'],"pop");
-		}
+        $memberIDs = [];
+
+        foreach($memberlist as $member) {
+            $memberIDs[] = $member['id'];
+        }
+
+        $data = $this->getVSumField($memberIDs,"pop");
+
+        if (count($data)) {
+            foreach ($data as $row) {
+                $oldrank += $row['Total'];
+            }
+        }
+
 		if($ally['oldrank'] != $oldrank){
 			if($ally['oldrank'] < $oldrank) {
 				$totalpoints = $oldrank - $ally['oldrank'];
@@ -3287,15 +3308,17 @@ class MYSQLi_DB implements IDbConnection {
 	     list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, (int) $wood, (int) $clay, (int) $iron, (int) $crop, $mode);
          $sign = (!$mode ? '-' : '+');
 
-         return mysqli_query( $this->dblink, "
+         $q = "
             UPDATE " . TB_PREFIX . "vdata
                 SET
-                    wood = IF(wood $sign $wood > 0 AND wood $sign $wood < maxstore, wood $sign $wood, ".($mode ? 'maxstore' : '0')."),
-                    clay = IF(clay $sign $clay > 0 AND clay $sign $clay < maxstore, clay $sign $clay, ".($mode ? 'maxstore' : '0')."),
-                    iron = IF(iron $sign $iron > 0 AND iron $sign $iron < maxstore, iron $sign $iron, ".($mode ? 'maxstore' : '0')."),
-                    crop = IF(crop $sign $crop > 0 AND crop $sign $crop < maxcrop, crop $sign $crop, ".($mode ? 'maxcrop' : '0').")
+                    wood = IF(wood $sign $wood < 0, 0, IF(wood $sign $wood > maxstore, maxstore, wood $sign $wood)),
+                    clay = IF(clay $sign $clay < 0, 0, IF(clay $sign $clay > maxstore, maxstore, clay $sign $clay)),
+                    iron = IF(iron $sign $iron < 0, 0, IF(iron $sign $iron > maxstore, maxstore, iron $sign $iron)),
+                    crop = IF(crop $sign $crop < 0, 0, IF(crop $sign $crop > maxcrop, maxcrop, crop $sign $crop))
                 WHERE
-                    wref = " . $vid );
+                    wref = " . $vid ;
+
+         return mysqli_query( $this->dblink, $q);
 	}
 
    	function setMaxStoreForVillage($vid, $maxLevel) {
@@ -3817,7 +3840,7 @@ class MYSQLi_DB implements IDbConnection {
                     lastupdate < (UNIX_TIMESTAMP() - 600)
         "; // recount every 10 minutes
 
-        mysqli_query($this->dblink, $q) OR DIE ($q);
+        mysqli_query($this->dblink, $q);
     }
 
     function getVSumField($uid, $field, $use_cache = true) {
@@ -3843,9 +3866,9 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         if($field != "cp"){
-            $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") GROUP BY owner";
+            $q = "SELECT owner, MIN(lastupdate), SUM(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") GROUP BY owner";
         }else{
-            $q = "SELECT owner, lastupdate, sum(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") and natar = 0 GROUP BY owner";
+            $q = "SELECT owner, MIN(lastupdate), SUM(" . $field . ") as Total FROM " . TB_PREFIX . "vdata where owner IN(".implode(', ', $uid).") and natar = 0 GROUP BY owner";
         }
 
         $result = mysqli_query($this->dblink,$q);
@@ -3995,9 +4018,18 @@ class MYSQLi_DB implements IDbConnection {
     function getUnreadMessagesCount($uid) {
         $uid = (int) $uid;
 
-        return mysqli_fetch_array(mysqli_query($this->dblink, '
-            SELECT Count(*) as numUnread FROM '.TB_PREFIX.'mdata WHERE target = '.$uid.' AND viewed = 0'
-        ), MYSQLI_ASSOC)['numUnread'];
+        $ids = [$uid];
+
+        if (($this->getUserField($uid, 'access', 0) == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES) {
+            $ids[] = 1;
+        }
+
+        if ($this->getUserField($uid, 'access', 0) == MULTIHUNTER) {
+            $ids[] = 5;
+        }
+
+        $q = 'SELECT Count(*) as numUnread FROM '.TB_PREFIX.'mdata WHERE target IN('.implode(', ', $ids).') AND viewed = 0';
+        return mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC)['numUnread'];
     }
 
     // no need to cache this method
@@ -4078,14 +4110,25 @@ References: User ID/Message ID, Mode
 	    global $session;
 
 	    $mode = (int) $mode;
+	    $mode_updated = false;
 	    // update $id if we should show Support messages for Admins and we are an admin
 	    if (
-	       ($session->access == MULTIHUNTER || $session->access == ADMIN)
+	       $session->access == ADMIN
 	       && ADMIN_RECEIVE_SUPPORT_MESSAGES
 	       && in_array($mode, [1,2,6,9,10,11])
 	    ) {
 	        $id = $id . ', 1';
+            $mode_updated = true;
 	    }
+
+        // update $id if we should show Multihunter messages for the current player
+        if (
+            $session->access == MULTIHUNTER
+            && in_array($mode, [1,2,6,9,10,11])
+        ) {
+            $id = $id . ', 5';
+            $mode_updated = true;
+        }
 
         if (in_array($mode, [5,7,8])) {
             if (!is_array($id)) {
@@ -4096,28 +4139,40 @@ References: User ID/Message ID, Mode
                 }
             }
         } else {
-            $id = (int) $id;
+	        if (!$mode_updated) {
+                $id = (int) $id;
+            }
         }
 
 		global $session;
 		switch($mode) {
 			case 1:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 ORDER BY time DESC";
+				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 2:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 3:
 			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where id = $id";
 				break;
 			case 4:
-			    $q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target IN(".((($session->access == MULTIHUNTER || $session->access == ADMIN) && ADMIN_RECEIVE_SUPPORT_MESSAGES) ? $session->uid.',1' : $session->uid).")";
+			    $show_target = $session->uid;
+
+			    if ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES) {
+			        $show_target .= ',1';
+                }
+
+                if ($session->access == MULTIHUNTER) {
+                    $show_target .= ',5';
+                }
+
+			    $q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target IN(".$show_target.")";
 				break;
 			case 5:
 				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,viewed = 1 where id IN(".implode(', ', $id).")";
 				break;
 			case 6:
-				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1";
+				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 7:
 				$q = "UPDATE " . TB_PREFIX . "mdata set delowner = 1 where id IN(".implode(', ', $id).")";
@@ -4126,15 +4181,16 @@ References: User ID/Message ID, Mode
 				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,delowner = 1,viewed = 1 where IN(".implode(', ', $id).")";
 				break;
 			case 9:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 and deltarget = 0 ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 and deltarget = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 10:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) and delowner = 0 ORDER BY time DESC";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE owner IN($id) and delowner = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 			case 11:
-			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 and deltarget = 0";
+			    $q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 and deltarget = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 				break;
 		}
+
 		if($mode <= 3 || $mode == 6 || $mode > 8) {
 			$result = mysqli_query($this->dblink,$q);
 			return $this->mysqli_fetch_all($result);
@@ -4203,7 +4259,7 @@ References: User ID/Message ID, Mode
 	function getNotice($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 0 ORDER BY time DESC";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid and del = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -4217,7 +4273,7 @@ References: User ID/Message ID, Mode
             return $cachedValue[$field];
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where `id` = $id ORDER BY time DESC LIMIT 1";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where `id` = $id ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC')." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
@@ -4234,7 +4290,7 @@ References: User ID/Message ID, Mode
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time DESC";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 		$result = mysqli_query($this->dblink,$q);
 
         $noticesCacheByUId[$uid] = $this->mysqli_fetch_all($result);
@@ -4248,7 +4304,7 @@ References: User ID/Message ID, Mode
 	function getUnViewNotice($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid AND viewed=0";
+		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid AND viewed=0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -4443,8 +4499,8 @@ References: User ID/Message ID, Mode
 
 		global $building, $village, $session;
 
-		// check if we're not demolishing an Embassy
-		if ($this->getFieldType($wid,$field) == 18) {
+		// check if we're not demolishing an Embassy if the player is in an alliance
+		if ($this->getFieldType($wid,$field) == 18 && $session->alliance) {
 
 		    // get field level, alliance members count and the minimum
 		    // level of Embassy to be able to hold this number of people
@@ -4528,7 +4584,7 @@ References: User ID/Message ID, Mode
                 LEFT JOIN '.TB_PREFIX.'users u ON u.id = v.owner
             WHERE d.vref = '.$wid;
 
-	        $res = mysqli_fetch_all(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
+	        $res = $this->mysqli_fetch_all(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
 	        foreach ($res as $key) {
 	            // if this building being demolished is an Embassy or was demolished completely
 	            // and the player is in an alliance, check and update their alliance status
@@ -4612,273 +4668,271 @@ References: User ID/Message ID, Mode
 	    // TODO: refactor this and break it into more smaler methods
 	    global $session;
 
-	    // check whether this player is an alliance owner
-	    $isOwner = ($userData['alliance'] && $this->isAllianceOwner($userData['id'], $use_cache) == $userData['alliance']);
+	    if ($userData['alliance']) {
+            // check whether this player is an alliance owner
+            $isOwner = ($userData['alliance'] && $this->isAllianceOwner($userData['id'], $use_cache) == $userData['alliance']);
 
-	    // for demolition, the Embassy was already destroyed, so we need at least 1
-	    // Embassy still standing... for battle, the Embassy is still standing
-	    // and will only be deleted upon finalizing battle calculations, so we need
-	    // to check for at least 2 Embassies
-	    $minimumExistingEmbassyRecords = ($demolition ? 1 : 2);
+            $minimumExistingEmbassyRecords = 1;
 
-	    // if they are not an alliance owner, simply check whether we have any Embassies
-	    // at lvl 1+ standing somewhere
-	    if (!$isOwner) {
-	        // TODO: replace magic numbers by constants (18 = Embassy)
-	        if ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', 1, $use_cache) < $minimumExistingEmbassyRecords) {
+            // if they are not an alliance owner, simply check whether we have any Embassies
+            // at lvl 1+ standing somewhere
+            if (!$isOwner) {
+                // TODO: replace magic numbers by constants (18 = Embassy)
+                if ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', 1, $use_cache) < $minimumExistingEmbassyRecords) {
 
-	            // the player has no more Embassies, evict them from the alliance
-	            mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
+                    // the player has no more Embassies, evict them from the alliance
+                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
 
-	            // unset the alliance in session, if we're evicting
-	            // currently logged-in player
-	            if ($session->uid == $userData['id']) {
-	                $_SESSION['alliance_user'] = 0;
-	            }
+                    // unset the alliance in session, if we're evicting
+                    // currently logged-in player
+                    if ($session->uid == $userData['id']) {
+                        $_SESSION['alliance_user'] = 0;
+                    }
 
-	            // notify them via in-game messaging, if we come from a demolition,
-	            // otherwise return a result which can be used in battle reports
-	            if ($demolition) {
-	                $this->sendMessage(
-	                    $userData['id'],
-	                    4,
-	                    'You left the alliance',
-	                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
-	                    0,
-	                    0,
-	                    0,
-	                    0,
-	                    0,
-	                    true);
-	            } else {
-	                // player has been removed from the alliance
-	                $this->sendMessage(
-	                    $userData['id'],
-	                    4,
-	                    'An attack has forced you to leave the alliance',
-	                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the leader to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
-	                    0,
-	                    0,
-	                    0,
-	                    0,
-	                    0,
-	                    true);
+                    // notify them via in-game messaging, if we come from a demolition,
+                    // otherwise return a result which can be used in battle reports
+                    if ($demolition) {
+                        $this->sendMessage(
+                            $userData['id'],
+                            4,
+                            'You left the alliance',
+                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy, you have now successfully left your alliance.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            true);
+                    } else {
+                        // player has been removed from the alliance
+                        $this->sendMessage(
+                            $userData['id'],
+                            4,
+                            'An attack has forced you to leave the alliance',
+                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the leader to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
+                            0,
+                            0,
+                            0,
+                            0,
+                            0,
+                            true);
 
-	                return 0;
-	            }
+                        return 0;
+                    }
 
-	        }
-	    } else {
-	        // the player IS an alliance owner, check if we need to take any action
-	        $membersCount            = $this->countAllianceMembers($userData['alliance'], $use_cache);
-	        $minAllianceEmbassyLevel = $this->getMinEmbassyLevel($membersCount);
+                }
+            } else {
+                // the player IS an alliance owner, check if we need to take any action
+                $membersCount            = $this->countAllianceMembers($userData['alliance'], $use_cache);
+                $minAllianceEmbassyLevel = $this->getMinEmbassyLevel($membersCount);
 
-	        // in this case, the minimum Embassy level cannot go below 3,
-	        // since this player is a leader and as such, he needs at least
-	        // a level 3 Embassy
-	        if ($minAllianceEmbassyLevel < 3) {
-	            $minAllianceEmbassyLevel = 3;
-	        }
+                // in this case, the minimum Embassy level cannot go below 3,
+                // since this player is a leader and as such, he needs at least
+                // a level 3 Embassy
+                if ($minAllianceEmbassyLevel < 3) {
+                    $minAllianceEmbassyLevel = 3;
+                }
 
-	        $takeAction              = (
-	            // was the Embassy taken below a threshold level?
-	            ($userData['lvl'] <= $minAllianceEmbassyLevel)
-	            &&
-	            // check for standing Embassies with sufficient level
-    	        // TODO: replace magic numbers by constants (18 = Embassy)
-	            ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', $minAllianceEmbassyLevel, false, $use_cache) < $minimumExistingEmbassyRecords)
-	        );
+                $takeAction              = (
+                    // was the Embassy taken below a threshold level?
+                    ($userData['lvl'] <= $minAllianceEmbassyLevel)
+                    &&
+                    // check for standing Embassies with sufficient level
+                    // TODO: replace magic numbers by constants (18 = Embassy)
+                    ($this->getSingleFieldTypeCount($userData['id'], 18, '>=', $minAllianceEmbassyLevel, false, $use_cache) < $minimumExistingEmbassyRecords)
+                );
 
-	        // the Embassy got damaged below a sufficient level and there are no more Embassies
-	        // at that level standing on this player's account, additional actions are needed
-	        if ($takeAction) {
+                // the Embassy got damaged below a sufficient level and there are no more Embassies
+                // at that level standing on this player's account, additional actions are needed
+                if ($takeAction) {
 
-	            // load all alliance members
-	            $members = $this->getAllMember($userData['alliance'], 0, $use_cache);
+                    // load all alliance members
+                    $members = $this->getAllMember($userData['alliance'], 0, $use_cache);
 
-	            // if we come from demolition, we need to evict all new members
-	            // that accepted an invitation while level 3 of the last
-	            // Embassy was already under demolition. The demolition dialog itself
-	            // already checks if there are no more people other than the owner
-	            // present before the demolition is allowed.
-	            if ($demolition) {
-	                $evicts = [];
-	                foreach ($members as $member) {
-	                    // evict the player from the alliance
-                        $evicts[] = $member['id'];
+                    // if we come from demolition, we need to evict all new members
+                    // that accepted an invitation while level 3 of the last
+                    // Embassy was already under demolition. The demolition dialog itself
+                    // already checks if there are no more people other than the owner
+                    // present before the demolition is allowed.
+                    if ($demolition) {
+                        $evicts = [];
+                        foreach ($members as $member) {
+                            // evict the player from the alliance
+                            $evicts[] = $member['id'];
 
-	                    // notify them via in-game messaging
-	                    $this->sendMessage(
-	                        $member['id'],
-	                        4,
-	                        'Your alliance was disbanded',
-	                        (
-	                            ($member['id'] == $userData['id'])
-	                            ?
-	                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\nIn order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>")
-	                            :
-	                            $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a demolition of your alliance founder's last Embassy below level 3, this alliance has been disbanded.\n\n\You can now accept invitations from other alliances or found a new alliance yourself.\n\nYours sincerely,\n<i>Server Robot :)</i>")
-                            ),
-	                        0,
-	                        0,
-	                        0,
-	                        0,
-	                        0,
-	                        true);
-	                }
-
-                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $evicts).")");
-	            } else {
-	                // we come from a battle result, therefore we need to check
-	                // for the first player in the alliance who has a sufficient
-	                // level Embassy and to which we can auto-reassign the leadership
-	                $newLeaderFound = false;
-
-	                // in case we'll need these later to disband the alliance,
-	                // we'll collect them inside this foeach loop
-	                $memberIDs      = [];
-
-	                // no need for this whole foreach loop if this player is the lone
-	                // founder and member of their alliance
-	                if ($membersCount > 1) {
-    	                foreach ($members as $member) {
-    	                    if (!$newLeaderFound && $this->getSingleFieldTypeCount($member['id'], 18, '>=', $minAllianceEmbassyLevel) >= 1) {
-    	                        // found a new leader for the alliance
-    	                        $newLeaderFound = true;
-    	                        $newleader = $member['id'];
-    	                        $q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $userData['alliance'];
-    	                        $this->query($q);
-    	                        $this->updateAlliPermissions($newleader, $userData['alliance'], "Leader", 1, 1, 1, 1, 1, 1, 1);
-    	                        Automation::updateMax($newleader);
-
-    	                        // update permissions for the old leader
-    	                        $this->updateAlliPermissions($userData['id'], $userData['alliance'], "Former Leader", 0, 0, 0, 0, 0, 0, 0);
-
-    	                        // notify new leader via in-game messaging
-    	                        $this->sendMessage(
-    	                            $newleader,
-    	                            4,
-    	                            'You are now the alliance leader',
-    	                            $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=".$userData['id']."\">".$userData['username']."</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
-    	                            0,
-    	                            0,
-    	                            0,
-    	                            0,
-    	                            0,
-    	                            true);
-    	                    }
-
-    	                    $memberIDs[] = $member['id'];
-    	                }
-	                } else {
-	                    // if there is only 1 member and it's the actual founder
-	                    $memberIDs[] = $userData['id'];
-	                }
-
-	                // if there wasn't anyone with a sufficient level of Embassy
-	                // among the existing members, disperse this alliance
-	                if (!$newLeaderFound) {
-
-	                    // evict all members from the alliance
-	                    mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $memberIDs).")");
-
-	                    // notify all of them via in-game messaging
-	                    foreach ($members as $member) {
-    	                    $this->sendMessage(
-    	                        $member['id'],
-    	                        4,
-    	                        'Your alliance was dispersed',
-    	                        (
-    	                            ($member['id'] == $userData['id'])
-    	                            ?
-    	                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level ".($membersCount > 1 ? "which is unable to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership," : "lower then 3 - which is required to found and hold your own alliance - ")." your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>")
-    	                            :
-    	                            $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player that degraded it below threshold allowed to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>")
-    	                        ),
-    	                        0,
-    	                        0,
-    	                        0,
-    	                        0,
-    	                        0,
-    	                        true);
-	                    }
-	                } else {
-	                    // let's determine whether to keep currently attacked player
-	                    // in the alliance or not
-	                    if ($userData['lvl'] > 0 || $this->getSingleFieldTypeCount($member['id'], 18, '>=', 1, $use_cache) >= $minimumExistingEmbassyRecords) {
-                            $keepCurrentPlayer = true;
-                        } else {
-                            $keepCurrentPlayer = false;
+                            // notify them via in-game messaging
+                            $this->sendMessage(
+                                $member['id'],
+                                4,
+                                'Your alliance was disbanded',
+                                (
+                                    ($member['id'] == $userData['id'])
+                                    ?
+                                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a finished demolition of your last Embassy at level 3, and the fact that you were the leader of your alliance, this alliance has been disbanded.\n\nIn order to found a new alliance, please build a level 3 Embassy again in one of your villages.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+                                    :
+                                    $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a demolition of your alliance founder's last Embassy below level 3, this alliance has been disbanded.\n\n\You can now accept invitations from other alliances or found a new alliance yourself.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+                                ),
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                true);
                         }
 
-	                    // if a new leader was found, notify all alliance member of this change
-	                    // notify all of them via in-game messaging
-	                    foreach ($members as $member) {
-	                        // don't send duplicate messages to the new leader
-	                        if ($member['id'] != $newleader) {
-	                            // also, don't send to the attacked player if we're
-	                            // not keeping them in alliance
-	                            if ($keepCurrentPlayer || (!$keepCurrentPlayer && $member['id'] != $userData['id']))
-        	                        $this->sendMessage(
-        	                            $member['id'],
-        	                            4,
-        	                            'Your alliance has a new leader',
-        	                            (
-        	                                ($member['id'] == $userData['id'])
-        	                                ?
-        	                                $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all ".$membersCount." alliance members, another alliance member who meets these criteria has been auto-elected as a new alliance leader.\n\nAdditionally - due to the Embassy destruction - you have been forcefuly evicted from your alliance.\n\nPlease re-establish the connection with your alliance by building a new Embassy and contacting <a href=\"spieler.php?uid=".$newleader."\">the new leader</a> for an invitation.\n\nYours sincerely,\n<i>Server Robot :)</i>")
-        	                                :
-        	                                $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player, <a href=\"spieler.php?uid=".$newleader."\">another alliance member</a> with enough Embassy capacity has been auto-elected as the new alliance leader.\n\nYours sincerely,\n<i>Server Robot :)</i>")
-        	                                ),
-        	                            0,
-        	                            0,
-        	                            0,
-        	                            0,
-        	                            0,
-        	                            true);
-	                        }
-	                    }
+                        mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $evicts).")");
+                    } else {
+                        // we come from a battle result, therefore we need to check
+                        // for the first player in the alliance who has a sufficient
+                        // level Embassy and to which we can auto-reassign the leadership
+                        $newLeaderFound = false;
 
-	                    // evict current player from the alliance
-	                    // if this was their last Embassy and was completely destroyed
-	                    if (!$keepCurrentPlayer) {
-	                        mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
+                        // in case we'll need these later to disband the alliance,
+                        // we'll collect them inside this foeach loop
+                        $memberIDs      = [];
 
-	                        // unset the alliance in session, if we're evicting
-	                        // currently logged-in player
-	                        if ($session->uid == $userData['id']) {
-	                            $_SESSION['alliance_user'] = 0;
-	                        }
+                        // no need for this whole foreach loop if this player is the lone
+                        // founder and member of their alliance
+                        if ($membersCount > 1) {
+                            foreach ($members as $member) {
+                                if (!$newLeaderFound && $this->getSingleFieldTypeCount($member['id'], 18, '>=', $minAllianceEmbassyLevel) >= 1) {
+                                    // found a new leader for the alliance
+                                    $newLeaderFound = true;
+                                    $newleader = $member['id'];
+                                    $q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $userData['alliance'];
+                                    $this->query($q);
+                                    $this->updateAlliPermissions($newleader, $userData['alliance'], "Leader", 1, 1, 1, 1, 1, 1, 1);
+                                    Automation::updateMax($newleader);
 
-	                        // notify the evicted player
-	                        $this->sendMessage(
-	                            $userData['id'],
-	                            4,
-	                            'An attack has forced you to leave the alliance',
-	                            $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the <a href=\"spieler.php?uid=".$newleader."\">newly auto-elected leader</a> to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
-	                            0,
-	                            0,
-	                            0,
-	                            0,
-	                            0,
-	                            true);
-	                    }
-	                }
-	            }
+                                    // update permissions for the old leader
+                                    $this->updateAlliPermissions($userData['id'], $userData['alliance'], "Former Leader", 0, 0, 0, 0, 0, 0, 0);
 
-	            // execute a method that will delete an alliance
-	            // if no members are left in it
-	            $this->deleteAlliance($userData['alliance']);
+                                    // notify new leader via in-game messaging
+                                    $this->sendMessage(
+                                        $newleader,
+                                        4,
+                                        'You are now the alliance leader',
+                                        $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that there was a successful attack on player <a href=\"spieler.php?uid=".$userData['id']."\">".$userData['username']."</a> which has damaged their Embassy badly enough that they are no longer able to sustain the leadership of your alliance.\n\nSince your Embassy level is of a sufficient level, you have been auto-elected to the position of a new leader of your alliance with all duties and responsibilities thereof.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        0,
+                                        true);
+                                }
 
-	            return ((isset($newLeaderFound) && $newLeaderFound === true) ? true : false);
-	        }
-	    }
+                                $memberIDs[] = $member['id'];
+                            }
+                        } else {
+                            // if there is only 1 member and it's the actual founder
+                            $memberIDs[] = $userData['id'];
+                        }
+
+                        // if there wasn't anyone with a sufficient level of Embassy
+                        // among the existing members, disperse this alliance
+                        if (!$newLeaderFound) {
+
+                            // evict all members from the alliance
+                            mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $memberIDs).")");
+
+                            // notify all of them via in-game messaging
+                            foreach ($members as $member) {
+                                $this->sendMessage(
+                                    $member['id'],
+                                    4,
+                                    'Your alliance was dispersed',
+                                    (
+                                        ($member['id'] == $userData['id'])
+                                        ?
+                                        $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level ".($membersCount > 1 ? "which is unable to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership," : "lower then 3 - which is required to found and hold your own alliance - ")." your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+                                        :
+                                        $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player that degraded it below threshold allowed to hold all ".$membersCount." alliance members, and because there was no other alliance member with an Embassy on a high enough level to overtake the leadership, your alliance has been dispersed.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+                                    ),
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    true);
+                            }
+                        } else {
+                            // let's determine whether to keep currently attacked player
+                            // in the alliance or not
+                            if ($userData['lvl'] > 0 || $this->getSingleFieldTypeCount($member['id'], 18, '>=', 1, $use_cache) >= $minimumExistingEmbassyRecords) {
+                                $keepCurrentPlayer = true;
+                            } else {
+                                $keepCurrentPlayer = false;
+                            }
+
+                            // if a new leader was found, notify all alliance member of this change
+                            // notify all of them via in-game messaging
+                            foreach ($members as $member) {
+                                // don't send duplicate messages to the new leader
+                                if ($member['id'] != $newleader) {
+                                    // also, don't send to the attacked player if we're
+                                    // not keeping them in alliance
+                                    if ($keepCurrentPlayer || (!$keepCurrentPlayer && $member['id'] != $userData['id']))
+                                        $this->sendMessage(
+                                            $member['id'],
+                                            4,
+                                            'Your alliance has a new leader',
+                                            (
+                                                ($member['id'] == $userData['id'])
+                                                ?
+                                                $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack that has degraded your last Embassy to a level which is unable to hold all ".$membersCount." alliance members, another alliance member who meets these criteria has been auto-elected as a new alliance leader.\n\nAdditionally - due to the Embassy destruction - you have been forcefuly evicted from your alliance.\n\nPlease re-establish the connection with your alliance by building a new Embassy and contacting <a href=\"spieler.php?uid=".$newleader."\">the new leader</a> for an invitation.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+                                                :
+                                                $this->escape("Hi, ".$member['username']."!\n\nThis is to inform you that due to a successful attack on your alliance leader's Embassy by another player, <a href=\"spieler.php?uid=".$newleader."\">another alliance member</a> with enough Embassy capacity has been auto-elected as the new alliance leader.\n\nYours sincerely,\n<i>Server Robot :)</i>")
+                                                ),
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            0,
+                                            true);
+                                }
+                            }
+
+                            // evict current player from the alliance
+                            // if this was their last Embassy and was completely destroyed
+                            if (!$keepCurrentPlayer) {
+                                mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id = '.$userData['id']);
+
+                                // unset the alliance in session, if we're evicting
+                                // currently logged-in player
+                                if ($session->uid == $userData['id']) {
+                                    $_SESSION['alliance_user'] = 0;
+                                }
+
+                                // notify the evicted player
+                                $this->sendMessage(
+                                    $userData['id'],
+                                    4,
+                                    'An attack has forced you to leave the alliance',
+                                    $this->escape("Hi, ".$userData['username']."!\n\nThis is to inform you that due to a successful attack and destruction of your last Embassy, you have been forced to leave your alliance.\n\nTo re-establish your position in this alliance, you will need to build a new Embassy and ask the <a href=\"spieler.php?uid=".$newleader."\">newly auto-elected leader</a> to send you an invite again.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    true);
+                            }
+                        }
+                    }
+
+                    // execute a method that will delete an alliance
+                    // if no members are left in it
+                    $this->deleteAlliance($userData['alliance']);
+
+                    return ((isset($newLeaderFound) && $newLeaderFound === true) ? true : false);
+                }
+            }
+        }
 
 	    // no changes in player-to-alliance relationship
 	    return true;
 	}
 
-	function checkEmbassiesAfterBattle($vid, $use_cache = true) {
+	function checkEmbassiesAfterBattle($vid, $current_level, $use_cache = true) {
         $userData = $this->getUserArray($this->getVillageField($vid,"owner"), 1);
 
         Automation::updateMax($this->getVillageField($vid,"owner"));
@@ -4886,7 +4940,7 @@ References: User ID/Message ID, Mode
             'id'       => $userData['id'],
             'alliance' => $userData["alliance"],
             'username' => $userData["username"],
-            'lvl'      => $totallvl
+            'lvl'      => $current_level
         ], false, $use_cache);
 
         if ($allianceStatus === false) {
@@ -4899,65 +4953,114 @@ References: User ID/Message ID, Mode
         }
     }
 
-    // do not cache this method, as building jobs can change when using instant build (PLUS) etc.
+    private function getBData($wid, $use_cache = true) {
+	    $wid = (int) $wid;
+
+        // first of all, check if we should be using cache and whether the field
+        // required is already cached
+        if ($use_cache && isset(self::$buildingsUnderConstructionCache[$wid]) && is_array(self::$buildingsUnderConstructionCache[$wid]) && !count(self::$buildingsUnderConstructionCache[$wid])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$buildingsUnderConstructionCache, $wid)) && !is_null($cachedValue)) {
+            return self::$buildingsUnderConstructionCache[$wid];
+        }
+
+        $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
+
+        self::$buildingsUnderConstructionCache[$wid] = $result;
+        return $result;
+    }
+
+    // do not cache output, as building jobs can change when using instant build (PLUS) etc.
 	function getJobs($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
-
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+	    return $this->getBData($wid, false);
 	}
 
-    // no need to cache this method
 	function FinishWoodcutter($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
-
+	    $bdata = $this->getBData($wid);
 		$time = time()-1;
-		$q = "SELECT id, timestamp FROM " . TB_PREFIX . "bdata where wid = $wid and type = 1 order by master,timestamp ASC LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
-		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = '".$dbarray['id']."'";
+
+		// find our woodcutter
+        $dbarray = [];
+        foreach ($bdata as $row) {
+            if ($row['type'] == 1) {
+                $dbarray = $row;
+                break;
+            }
+        }
+
+        // no woodcutters? just return
+        if (!count($dbarray)) {
+            return;
+        }
+
+        // make it complete
+		$q = "UPDATE ".TB_PREFIX."bdata SET timestamp = $time WHERE id = ".$dbarray['id'];
 		$this->query($q);
+
 		$tribe = $this->getUserField($this->getVillageField($wid, "owner"), "tribe", 0);
-		if($tribe == 1){
-		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 and field >= 19 order by master,timestamp ASC LIMIT 1";
-		}else{
-		$q2 = "SELECT id FROM " . TB_PREFIX . "bdata where wid = $wid and loopcon = 1 order by master,timestamp ASC LIMIT 1";
-		}
-		$result2 = mysqli_query($this->dblink,$q2);
-		if(mysqli_num_rows($result2) > 0){
-		$dbarray2 = mysqli_fetch_array($result2);
-		$wc_time = $dbarray['timestamp'];
-		$q2 = "UPDATE ".TB_PREFIX."bdata SET timestamp = timestamp - $wc_time WHERE id = '".$dbarray2['id']."'";
-		$this->query($q2);
+
+		// find first field that's the next one in the loop after our finished woodcutter
+		$dbarray2 = [];
+        foreach ($bdata as $row) {
+            if ($row['loopcon'] == 1 && ($tribe == 1 ? $row['field'] >= 19 : true)) {
+                $dbarray2 = $row;
+                break;
+            }
+        }
+
+        // if found, update it's finish time by subtracting the resulting time for our woodcutter,
+        // which is now finished
+		if (count($dbarray2)){
+            $wc_time = $dbarray['timestamp'];
+            $q2 = "UPDATE ".TB_PREFIX."bdata SET timestamp = timestamp - $wc_time WHERE id = ".$dbarray2['id'];
+            $this->query($q2);
 		}
 	}
 
-    // no need to cache this method
 	function getMasterJobs($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
+	    // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and master = 1 order by master,timestamp ASC";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all master jobs
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 1) {
+                $data[] = $row;
+            }
+        }
+
+		return $data;
 	}
 
-    // no need to cache this method
 	function getMasterJobsByField($wid,$field) {
-	    list($wid,$field) = $this->escape_input((int) $wid,(int) $field);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 1 order by master,timestamp ASC";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all master jobs for the requested field
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 1 && $row['field'] == $field) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
-    // no need to cache this method
 	function getBuildingByField($wid,$field) {
-	    list($wid,$field) = $this->escape_input((int) $wid,(int) $field);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field = $field and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all non-master jobs for the requested field
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 0 && $row['field'] == $field) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
     // no need to cache this method
@@ -4969,27 +5072,34 @@ References: User ID/Message ID, Mode
 		return $result['Total'];
 	}
 
-    // no need to cache this method
 	function getBuildingByType($wid,$type) {
-	    list($wid,$type) = $this->escape_input((int) $wid,(int) $type);
+        // cache data
+        $bdata = $this->getBData($wid);
+        $type = (strpos($type, ',') === false ? [(int) $type] : explode(',', str_replace(' ', '', $this->escape($type))));
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and type = $type and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all jobs which are of the requested type
+        $data = [];
+        foreach ($bdata as $row) {
+            if (in_array($row['field'], $type)) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
 	function getBuildingByType2($wid,$type) {
 	    $wid = (int) $wid;
 
 	    if (!is_array($type)) {
-	        $type = [(int) $type];
+	        $type = [$type];
         } else {
 	        foreach ($type as $index => $typeValue) {
 	            $type[$index] = (int) $typeValue;
             }
         }
 
-		$q = "SELECT CONCAT(type, \"=\", Count(type)) FROM " . TB_PREFIX . "bdata where wid = $wid and type IN(".implode(', ', $type).") and master = 0";
+		$q = "SELECT CONCAT(type, \"=\", Count(type)) FROM " . TB_PREFIX . "bdata where wid = $wid and type IN(".implode(', ', $type).") and master = 0 GROUP BY type";
 		$result = mysqli_query($this->dblink, $q);
 		$newresult = [];
 
@@ -5010,22 +5120,34 @@ References: User ID/Message ID, Mode
 		return $result;
 	}
 
-    // no need to cache this method
 	function getDorf1Building($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field < 19 and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all non-master jobs for field type under 19
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 0 && $row['field'] < 19) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
-    // no need to cache this method
 	function getDorf2Building($wid) {
-	    list($wid) = $this->escape_input((int) $wid);
+        // cache data
+        $bdata = $this->getBData($wid);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid and field > 18 and master = 0";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return all non-master jobs for field type above 18
+        $data = [];
+        foreach ($bdata as $row) {
+            if ($row['master'] == 0 && $row['field'] > 18) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
 	}
 
 	function updateBuildingWithMaster($id, $time,$loop) {
@@ -5290,7 +5412,7 @@ References: User ID/Message ID, Mode
             }
         } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$marketMovementCache, $type.$village[0].$mode)) && !is_null($cachedValue)) {
             // special case when we have empty arrays cached for this cache only
-            return $cachedValue;
+            return ($array_passed ? self::$marketMovementCache: $cachedValue);
         }
 
 		$time = time();
@@ -5329,7 +5451,7 @@ References: User ID/Message ID, Mode
 				$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 1 ORDER BY endtime ASC";
 				break;
 			case 34:
-				$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 or " . TB_PREFIX . "movement.`" . $where . "` = IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 4 ORDER BY endtime ASC";
+				$q = "SELECT * FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 or " . TB_PREFIX . "movement.`" . $where . "` IN(".implode(', ', $village).") and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 4 ORDER BY endtime ASC";
 				break;
 			default:
 				return null;
@@ -5343,7 +5465,7 @@ References: User ID/Message ID, Mode
         } else {
             if ($result && count($result)) {
                 foreach ( $result as $record ) {
-                    self::$marketMovementCache[ $type . $record[ $where ] . $mode ] = $record;
+                    self::$marketMovementCache[ $type . $record[ $where ] . $mode ][] = $record;
                 }
             }
 
@@ -5366,6 +5488,13 @@ References: User ID/Message ID, Mode
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
+
+    function remA2b($id) {
+        $id = (int) $id;
+
+        $q = "DELETE FROM " . TB_PREFIX . "a2b WHERE id = $id";
+        return mysqli_query($this->dblink,$q);
+    }
 
 	// no need to cache this method
 	function getA2b($ckey, $check) {
@@ -5436,7 +5565,7 @@ References: User ID/Message ID, Mode
             $t11 = [$t11];
             $type = [$type];
             $ctar1 = [$ctar1];
-            $ctar2 = [$ctar1];
+            $ctar2 = [$ctar2];
             $spy = [$spy];
             $b1 = [$b1];
             $b2 = [$b2];
@@ -5713,7 +5842,7 @@ References: User ID/Message ID, Mode
         $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = $uid AND dead = 0";
         $result = mysqli_query($this->dblink,$q);
 
-        self::$heroFieldCache[$uid.$field] = $this->mysqli_fetch_all($result);
+        self::$heroFieldCache[$uid.$field] = $this->mysqli_fetch_all($result)[0];
         return self::$heroFieldCache[$uid.$field][$field];
 	}
 
@@ -6094,7 +6223,7 @@ References: User ID/Message ID, Mode
             }
         }
 
-        return ($array_passed ? self::$villageReinforcementsCache : self::$villageReinforcementsCache[$vid[0].$from[0]]);
+        return ($array_passed ? self::$villageFromReinforcementsCache : self::$villageFromReinforcementsCache[$vid[0].$from[0]]);
 	}
 
     function getOasisEnforce($ref, $mode=0, $use_cache = true) {
@@ -6211,7 +6340,7 @@ References: User ID/Message ID, Mode
 		$modes = [];
 
 		for($i = $start; $i <= $end; $i++) {
-		    $units[] = $i;
+		    $units[] = ($i < 0 ? 0 : $i);
 		    $amounts[] = $data['t' . $j . ''];
 		    $modes[] = 1;
 			$j++;
@@ -6237,7 +6366,7 @@ References: User ID/Message ID, Mode
 		$start2 = ($tribe - 1) * 10 + 1;
 		$start3 = ($tribe - 1) * 10;
 		if($start3 == 0){
-		$start3 = "";
+		    $start3 = "";
 		}
 		$end2 = ($tribe * 10);
 		//add unit
@@ -6248,11 +6377,11 @@ References: User ID/Message ID, Mode
         $modes = [];
 
 		for($i = $start; $i <= $end; $i++) {
-            $units[] = $i;
+            $units[] = ($i < 0 ? 0 : $i);
             $amounts[] = $data['t' . $j . ''];
             $modes[] = 1;
 
-            $units[] = $i;
+            $units[] = ($i < 0 ? 0 : $i);
             $amounts[] = ${'dead'.$j};
             $modes[] = 0;
 
@@ -6417,23 +6546,33 @@ References: User ID/Message ID, Mode
 		$vtribe = $this->getUserField($vinfo['owner'], "tribe", 0);
         $movingunits = array();
 		$outgoingarray = $this->getMovement(3, $id, 0);
-		if(!empty($outgoingarray)) {
+		if(!empty($outgoingarray) && count($outgoingarray)) {
 			foreach($outgoingarray as $out) {
 				for($i = 1; $i <= 10; $i++) {
 				    if (!isset($movingunits['u' . (($vtribe - 1) * 10 + $i)])) {
 				        $movingunits['u' . (($vtribe - 1) * 10 + $i)] = 0;
 				    }
+
+				    if (!isset($out['t' . $i])) {
+                        $out['t' . $i] = 0;
+                    }
+
 					$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $out['t' . $i];
 				}
 
 				if (!isset($movingunits['hero'])) {
 				    $movingunits['hero'] = 0;
 				}
+
+				if (!isset($out['t11'])) {
+                    $out['t11'] = 0;
+                }
+
 				$movingunits['hero'] += $out['t11'];
 			}
 		}
 		$returningarray = $this->getMovement(4, $id, 1);
-		if(!empty($returningarray)) {
+		if(!empty($returningarray) && count($returningarray)) {
 			foreach($returningarray as $ret) {
 				if($ret['attack_type'] != 1) {
 					for($i = 1; $i <= 10; $i++) {
@@ -6825,20 +6964,22 @@ References: User ID/Message ID, Mode
 
     // no need to cache this method
 	function getOwnArtefactInfo($vref) {
-	    list($vref) = $this->escape_input((int) $vref);
+	    // load the data - type is irrelevant, since the method caches all data
+        // then returns the one for our type
+        $this->getOwnArtefactInfoByType($vref, 1);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_array($result);
+        // return what we've cached
+        return (self::$artefactInfoByTypeCache[$vref]);
 	}
 
     // no need to cache this method
 	function getOwnArtefactInfo3($uid) {
-	    list($uid) = $this->escape_input((int) $uid);
+        // load the data - type and size are irrelevant, since the method caches all data
+        // then returns the one for our type and size
+        $this->getOwnUniqueArtefactInfo($uid, 1, 1);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $uid";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
+        // return what we've cached
+        return (self::$artefactInfoSimpleCache[$uid]);
 	}
 
 	function getOwnArtefactInfoByType($vref, $type, $use_cache = true) {
@@ -6847,15 +6988,32 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoByTypeCache, $vref.$type)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$artefactInfoByTypeCache[$vref]) && is_array(self::$artefactInfoByTypeCache[$vref]) && !count(self::$artefactInfoByTypeCache[$vref])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoByTypeCache, $vref)) && !is_null($cachedValue)) {
+            return (isset($cachedValue[$type]) ? $cachedValue[$type] : []);
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type order by size LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref ORDER BY size";
+		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$artefactInfoByTypeCache[$vref.$type] = mysqli_fetch_array($result);
-        return self::$artefactInfoByTypeCache[$vref.$type];
+		// cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$artefactInfoByTypeCache[$arteInfo['vref']])) {
+                    self::$artefactInfoByTypeCache[$arteInfo['vref']] = [];
+                }
+
+                // we're sorting by size, thus we only need the first one per each type
+                if (isset(self::$artefactInfoByTypeCache[$arteInfo['vref']]) && !isset(self::$artefactInfoByTypeCache[$arteInfo['vref']][$arteInfo['type']])) {
+                    self::$artefactInfoByTypeCache[$arteInfo['vref']][$arteInfo['type']] = $arteInfo;
+                }
+            }
+        } else {
+            self::$artefactInfoByTypeCache[$vref] = [];
+        }
+
+        return (isset(self::$artefactInfoByTypeCache[$vref][$type]) ? self::$artefactInfoByTypeCache[$vref][$type] : []);
 	}
 
 	function getOwnArtefactInfoByType2($vref, $type, $use_cache = true) {
@@ -6867,15 +7025,29 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoSimpleCache, $id.$type.$size)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$artefactInfoSimpleCache[$id]) && is_array(self::$artefactInfoSimpleCache[$id]) && !count(self::$artefactInfoSimpleCache[$id])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoSimpleCache, $id)) && !is_null($cachedValue)) {
+            return (isset($cachedValue[$type.$size]) ? $cachedValue[$type.$size] : []);
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND type = $type AND size=$size LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id";
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$artefactInfoSimpleCache[$id.$type.$size] = mysqli_fetch_array($result);
-        return self::$artefactInfoSimpleCache[$id.$type.$size];
+        // cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$artefactInfoSimpleCache[$arteInfo['owner']])) {
+                    self::$artefactInfoSimpleCache[$arteInfo['owner']] = [];
+                }
+
+                self::$artefactInfoSimpleCache[$arteInfo['owner']][$arteInfo['type'].$arteInfo['size']] = $arteInfo;
+            }
+        } else {
+            self::$artefactInfoSimpleCache[$id] = [];
+        }
+
+        return (isset(self::$artefactInfoSimpleCache[$id][$type.$size]) ? self::$artefactInfoSimpleCache[$id][$type.$size] : []);
 	}
 
 	function getOwnUniqueArtefactInfo2($id, $type, $size, $mode, $use_cache = true) {
@@ -6883,15 +7055,29 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactDataCache, $id.$type.$size.$mode)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$artefactDataCache[$id.$mode]) && is_array(self::$artefactDataCache[$id.$mode]) && !count(self::$artefactDataCache[$id.$mode])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactDataCache, $id.$mode)) && !is_null($cachedValue)) {
+            return (isset($cachedValue[$size.$type]) ? $cachedValue[$size.$type] : []);
         }
 
-        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE ".(!$mode ? 'owner' : 'vref')." = $id AND active = 1 AND type = $type AND size=$size";
-		$result = mysqli_query($this->dblink,$q);
+        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE ".(!$mode ? 'owner' : 'vref')." = $id AND active = 1";
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$artefactDataCache[$id.$type.$size.$mode] = $this->mysqli_fetch_all($result);
-        return self::$artefactDataCache[$id.$type.$size.$mode];
+        // cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$artefactDataCache[$arteInfo[(!$mode ? 'owner' : 'vref')] . $mode])) {
+                    self::$artefactDataCache[$arteInfo[(!$mode ? 'owner' : 'vref')] . $mode] = [];
+                }
+
+                self::$artefactDataCache[$arteInfo[(!$mode ? 'owner' : 'vref')] . $mode][$arteInfo['size'].$arteInfo['type']] = $arteInfo;
+            }
+        } else {
+            self::$artefactDataCache[$id.$mode] = [];
+        }
+
+        return (isset(self::$artefactDataCache[$id.$mode][$size.$type]) ? self::$artefactDataCache[$id.$mode][$size.$type] : []);
 	}
 
 	function getFoolArtefactInfo($type,$vid,$uid, $use_cache = true) {
@@ -6899,15 +7085,49 @@ References: User ID/Message ID, Mode
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$foolArtefactCache, $type.$vid.$uid)) && !is_null($cachedValue)) {
-            return $cachedValue;
+        if ($use_cache && isset(self::$foolArtefactCache[$vid]) && is_array(self::$foolArtefactCache[$vid]) && !count(self::$foolArtefactCache[$vid])) {
+            return [];
+        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$foolArtefactCache, $vid)) && !is_null($cachedValue)) {
+            $data = [];
+            // prepare the data as requested
+            if (isset($cachedValue[$type.$uid])) {
+                foreach ($cachedValue[$type.$uid] as $row) {
+                    if ($row['type'] == 8 && $row['kind'] == $type && $row['owner'] == $uid && $row['size'] > 1 && $row['active'] > 1) {
+                        $data[] = $row;
+                    }
+                }
+            }
+            return $data;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid AND ((type = 8 AND kind = $type) OR (owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type))";
-		$result = mysqli_query($this->dblink,$q);
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid"; //" AND ((type = 8 AND kind = $type) OR (owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type))";
+		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
-        self::$foolArtefactCache[$type.$vid.$uid] = $this->mysqli_fetch_all($result);
-        return self::$foolArtefactCache[$type.$vid.$uid];
+        // cache all types and return the requested one
+        if (count($result)) {
+            foreach ($result as $arteInfo) {
+                if (!isset(self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']])) {
+                    self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']] = [];
+                }
+
+                self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']][] = $arteInfo;
+            }
+        } else {
+            self::$foolArtefactCache[$vid] = [];
+        }
+
+        if (
+            isset(self::$foolArtefactCache[$vid][$type.$uid]) &&
+            self::$foolArtefactCache[$vid][$type.$uid]['type'] == 8 &&
+            self::$foolArtefactCache[$vid][$type.$uid]['kind'] == $type &&
+            self::$foolArtefactCache[$vid][$type.$uid]['owner'] == $uid &&
+            self::$foolArtefactCache[$vid][$type.$uid]['size'] > 1 &&
+            self::$foolArtefactCache[$vid][$type.$uid]['active'] > 1
+        ) {
+            return self::$foolArtefactCache[$vid][$type.$uid];
+        } else {
+            return [];
+        }
 	}
 
 	function claimArtefact($vref, $ovref, $id) {
@@ -6940,7 +7160,7 @@ References: User ID/Message ID, Mode
                 SUM(IF(size = '3',1,0)) `unique`
                 FROM " . TB_PREFIX . "artefacts WHERE owner = " . (int) $uid;
         $result   = mysqli_query( $this->dblink, $q );
-        $artifact = $this->mysqli_fetch_all( $result );
+        $artifact = $this->mysqli_fetch_all( $result )[0];
 
         if ( $artifact['totals'] < 3 || $type == 11 ) {
             $DefenderFields = $this->getResourceLevel( $vref );
@@ -7496,7 +7716,7 @@ References:
     function getHeroDeadReviveOrInTraining($id) {
         $id = (int) $id;
 
-        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND (dead = 0 OR inrevive = 1 OR intraining = 1)";
+        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND dead = 0 AND inrevive = 0 AND intraining = 0";
         $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
         if ($result['Total'] > 0) {
             return true;
@@ -7512,7 +7732,7 @@ References:
     function KillMyHero($id) {
         list( $id ) = $this->escape_input( (int) $id );
 
-        $q = "UPDATE " . TB_PREFIX . "hero set dead = 1 where uid = " . $id . " AND dead = 0";
+        $q = "UPDATE " . TB_PREFIX . "hero set dead = 1, intraining = 0, inrevive = 0 where uid = " . $id . " AND dead = 0";
 
         return mysqli_query( $this->dblink, $q );
     }

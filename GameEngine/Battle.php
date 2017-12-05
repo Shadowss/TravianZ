@@ -508,12 +508,12 @@ class Battle {
         // Formula for calculating the Moral
         if($attpop > $defpop) {
             if ($rap < $rdp) {
-                $moralbonus = min(1.5, pow($attpop / $defpop, (0.2*($rap/$rdp))));
+                $moralbonus = min(1.5, pow(($defpop > 0 ? $attpop / $defpop : 0), (0.2*($rap/$rdp))));
             }else{
                 if($defpop==0){
                     $moralbonus = min(1.5, pow($attpop, 0.2));
                 }else{
-                    $moralbonus = min(1.5, pow($attpop / $defpop, 0.2));
+                    $moralbonus = min(1.5, pow(($defpop > 0 ? $attpop / $defpop : 0), 0.2));
                 }
             }
         }else{

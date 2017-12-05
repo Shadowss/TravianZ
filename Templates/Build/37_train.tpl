@@ -34,8 +34,8 @@
 
 //check if there is unit needed in the village
 
-$result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE `vref` = ".(int) $village->wid."");
-$units = mysqli_fetch_array($result);
+$result      = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE `vref` = ".(int) $village->wid."");
+$units_array = mysqli_fetch_array($result);
 
 $count_hero = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = " . $database->escape($session->uid) . ""), MYSQLI_ASSOC);
 $count_hero = $count_hero['Total'];
@@ -75,7 +75,7 @@ if($session->tribe == 1) {
 
     if($village->awood < $u1['wood'] || $village->aclay < $u1['clay'] || $village->airon < $u1['iron'] || $village->acrop < $u1['crop'])
         $output.="<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-    elseif($units['u1'] == 0)
+    elseif( $units_array['u1'] == 0)
         $output.="<span class=\"none\">".NOT_UNITS."</span>";
     else $output.="<a href=\"build.php?id=".$id."&train=1\">".TRAIN."</a>";
 
@@ -112,7 +112,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u2['wood'] OR $village->aclay < $u2['clay'] OR $village->airon < $u2['iron'] OR $village->acrop < $u2['crop'])
            $output.="<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        elseif($units['u2'] == 0)
+        elseif( $units_array['u2'] == 0)
             $output.="<span class=\"none\">".NOT_UNITS."</span>";
         else
             $output.="<a href=\"build.php?id=".$id."&train=2\">".TRAIN."</a>";
@@ -150,7 +150,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u3['wood'] OR $village->aclay < $u3['clay'] OR $village->airon < $u3['iron'] OR $village->acrop < $u3['crop']) {
             $output.="<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u3'] == 0){
+        }else if( $units_array['u3'] == 0){
             $output.="<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.="<a href=\"build.php?id=".$id."&train=3\">".TRAIN."</a>";
@@ -187,7 +187,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u5['wood'] OR $village->aclay < $u5['clay'] OR $village->airon < $u5['iron'] OR $village->acrop < $u5['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u5'] == 0){
+        }else if( $units_array['u5'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=5\">".TRAIN."</a>";
@@ -224,7 +224,7 @@ if($session->tribe == 1) {
 
         if($village->awood < $u6['wood'] OR $village->aclay < $u6['clay'] OR $village->airon < $u6['iron'] OR $village->acrop < $u6['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u6'] == 0){
+        }else if( $units_array['u6'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=6\">".TRAIN."</a>";
@@ -264,7 +264,7 @@ $output.="<tr>
 
         if($village->awood < $u11['wood'] OR $village->aclay < $u11['clay'] OR $village->airon < $u11['iron'] OR $village->acrop < $u11['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u11'] == 0){
+        }else if( $units_array['u11'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=11\">".TRAIN."</a>";
@@ -301,7 +301,7 @@ $output.="<tr>
 
         if($village->awood < $u12['wood'] OR $village->aclay < $u12['clay'] OR $village->airon < $u12['iron'] OR $village->acrop < $u12['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u12'] == 0){
+        }else if( $units_array['u12'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=12\">".TRAIN."</a>";
@@ -340,7 +340,7 @@ $output.="<tr>
 
         if($village->awood < $u13['wood'] OR $village->aclay < $u13['clay'] OR $village->airon < $u13['iron'] OR $village->acrop < $u13['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u13'] == 0){
+        }else if( $units_array['u13'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=13\">".TRAIN."</a>";
@@ -377,7 +377,7 @@ $output.="<tr>
 
         if($village->awood < $u15['wood'] OR $village->aclay < $u15['clay'] OR $village->airon < $u15['iron'] OR $village->acrop < $u15['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u15'] == 0){
+        }else if( $units_array['u15'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=15\">".TRAIN."</a>";
@@ -415,7 +415,7 @@ $output.="<tr>
 
         if($village->awood < $u16['wood'] OR $village->aclay < $u16['clay'] OR $village->airon < $u16['iron'] OR $village->acrop < $u16['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u16'] == 0){
+        }else if( $units_array['u16'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=16\">".TRAIN."</a>";
@@ -455,7 +455,7 @@ $output.="<tr>
 
         if($village->awood < $u21['wood'] OR $village->aclay < $u21['clay'] OR $village->airon < $u21['iron'] OR $village->acrop < $u21['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u21'] == 0){
+        }else if( $units_array['u21'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=21\">".TRAIN."</a>";
@@ -492,7 +492,7 @@ $output.="<tr>
 
         if($village->awood < $u22['wood'] OR $village->aclay < $u22['clay'] OR $village->airon < $u22['iron'] OR $village->acrop < $u22['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u22'] == 0){
+        }else if( $units_array['u22'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=22\">".TRAIN."</a>";
@@ -530,7 +530,7 @@ $output.="<tr>
 
         if($village->awood < $u24['wood'] OR $village->aclay < $u24['clay'] OR $village->airon < $u24['iron'] OR $village->acrop < $u24['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u24'] == 0){
+        }else if( $units_array['u24'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=24\">".TRAIN."</a>";
@@ -567,7 +567,7 @@ $output.="<tr>
 
         if($village->awood < $u25['wood'] OR $village->aclay < $u25['clay'] OR $village->airon < $u25['iron'] OR $village->acrop < $u25['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u25'] == 0){
+        }else if( $units_array['u25'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=25\">".TRAIN."</a>";
@@ -605,7 +605,7 @@ $output.="<tr>
 
         if($village->awood < $u26['wood'] OR $village->aclay < $u26['clay'] OR $village->airon < $u26['iron'] OR $village->acrop < $u26['crop']) {
             $output.= "<span class=\"none\">".NOT."".ENOUGH_RESOURCES."</span>";
-        }else if($units['u26'] == 0){
+        }else if( $units_array['u26'] == 0){
             $output.= "<span class=\"none\">".NOT_UNITS."</span>";
         }else {
             $output.= "<a href=\"build.php?id=".$id."&train=26\">".TRAIN."</a>";
@@ -618,343 +618,44 @@ $output.="<tr>
 
 
         //HERO TRAINING
-        if($session->tribe == 1){
-                if(isset($_GET['train']) && $_GET['train'] == 1){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '1', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50', '1')");
-					mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u1` = `u1` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-					mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u1['wood'].",
-					            `clay` = `clay` - ".(int) $u1['clay'].",
-					            `iron` = `iron` - ".(int) $u1['iron'].",
-					            `crop` = `crop` - ".(int) $u1['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 2){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '2', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u1['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u2` = `u2` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u2['wood'].",
-					            `clay` = `clay` - ".(int) $u2['clay'].",
-					            `iron` = `iron` - ".(int) $u2['iron'].",
-					            `crop` = `crop` - ".(int) $u2['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 3){
-				if($session->access != BANNED){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '3', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u3['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u3` = `u3` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                    mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u3['wood'].",
-					            `clay` = `clay` - ".(int) $u3['clay'].",
-					            `iron` = `iron` - ".(int) $u3['iron'].",
-					            `crop` = `crop` - ".(int) $u3['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 5){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '5', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u5['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u5` = `u5` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u5['wood'].",
-					            `clay` = `clay` - ".(int) $u5['clay'].",
-					            `iron` = `iron` - ".(int) $u5['iron'].",
-					            `crop` = `crop` - ".(int) $u5['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 6){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '6', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u6['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u6` = `u6` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u6['wood'].",
-					            `clay` = `clay` - ".(int) $u6['clay'].",
-					            `iron` = `iron` - ".(int) $u6['iron'].",
-					            `crop` = `crop` - ".(int) $u6['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-				}
-			}
-        if($session->tribe == 2){
-                if(isset($_GET['train']) && $_GET['train'] == 11){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '11', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u11['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u11` = `u11` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u11['wood'].",
-					            `clay` = `clay` - ".(int) $u11['clay'].",
-					            `iron` = `iron` - ".(int) $u11['iron'].",
-					            `crop` = `crop` - ".(int) $u11['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-                    header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-                }
-                if(isset($_GET['train']) && $_GET['train'] == 12){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '12', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u12['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u12` = `u12` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u12['wood'].",
-					            `clay` = `clay` - ".(int) $u12['clay'].",
-					            `iron` = `iron` - ".(int) $u12['iron'].",
-					            `crop` = `crop` - ".(int) $u12['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 13){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '13', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u13['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u13` = `u13` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u13['wood'].",
-					            `clay` = `clay` - ".(int) $u13['clay'].",
-					            `iron` = `iron` - ".(int) $u13['iron'].",
-					            `crop` = `crop` - ".(int) $u13['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 15){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '15', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u15['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u15` = `u15` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u15['wood'].",
-					            `clay` = `clay` - ".(int) $u15['clay'].",
-					            `iron` = `iron` - ".(int) $u15['iron'].",
-					            `crop` = `crop` - ".(int) $u15['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 16){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '16', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u16['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u16` = `u16` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u16['wood'].",
-					            `clay` = `clay` - ".(int) $u16['clay'].",
-					            `iron` = `iron` - ".(int) $u16['iron'].",
-					            `crop` = `crop` - ".(int) $u16['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
+        if (isset($_GET['train'])) {
+            $validationArray = [];
+            switch ($session->tribe) {
+                case 1: $validationArray = [1, 2, 3, 5, 6];
+                        break;
+
+                case 2: $validationArray = [11, 12, 13, 15, 16];
+                        break;
+
+                case 3: $validationArray = [21, 22, 24, 25, 26];
+                        break;
             }
-        if($session->tribe == 3){
-                if(isset($_GET['train']) && $_GET['train'] == 21){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '21', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u21['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u21` = `u21` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u21['wood'].",
-					            `clay` = `clay` - ".(int) $u21['clay'].",
-					            `iron` = `iron` - ".(int) $u21['iron'].",
-					            `crop` = `crop` - ".(int) $u21['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 22){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '22', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u22['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u22` = `u22` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u22['wood'].",
-					            `clay` = `clay` - ".(int) $u22['clay'].",
-					            `iron` = `iron` - ".(int) $u22['iron'].",
-					            `crop` = `crop` - ".(int) $u22['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 24){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '24', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u24['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u24` = `u24` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u24['wood'].",
-					            `clay` = `clay` - ".(int) $u24['clay'].",
-					            `iron` = `iron` - ".(int) $u24['iron'].",
-					            `crop` = `crop` - ".(int) $u24['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 25){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '25', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u25['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u25` = `u25` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u25['wood'].",
-					            `clay` = `clay` - ".(int) $u25['clay'].",
-					            `iron` = `iron` - ".(int) $u25['iron'].",
-					            `crop` = `crop` - ".(int) $u25['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-                if(isset($_GET['train']) && $_GET['train'] == 26){
-				if($session->access != BANNED){
-					if($count_hero < 3){
-					mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES ('".$database->escape($session->uid)."', '" . (int) $village->wid . "', '0', '26', '".$database->escape($session->username)."', '0', '5', '0', '0', '100', '0', '0', '0', '0', '".round((time() + ($u26['time'] / SPEED)*3))."', '50', '1')");
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u26` = `u26` - 1 WHERE `vref` = '" . (int) $village->wid . "'");
-                        mysqli_query($GLOBALS['link'],"
-					    UPDATE " . TB_PREFIX . "vdata
-					        SET
-					            `wood` = `wood` - ".(int) $u26['wood'].",
-					            `clay` = `clay` - ".(int) $u26['clay'].",
-					            `iron` = `iron` - ".(int) $u26['iron'].",
-					            `crop` = `crop` - ".(int) $u26['crop']."
-                            WHERE
-                                `wref` = '" . (int) $village->wid . "'");
-					}
-					header("Location: build.php?id=".$id."");
-					exit;
-					}else{
-					header("Location: banned.php");
-					exit;
-					}
-					}
-			}
 
-
-
+            // check for a valid unit value
+            if (in_array($_GET['train'], $validationArray)) {
+                if($session->access != BANNED){
+                    if($count_hero < 3){
+                        $unitID = $_GET['train'];
+                        mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES (".$database->escape($session->uid).", " . (int) $village->wid . ", 0, ".$unitID.", '".$database->escape($session->username)."', 0, 5, 0, 0, 100, 0, 0, 0, 0, ".round((time() + (${'u'.$unitID}['time'] / SPEED)*3)).", 50, 1)");
+                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u$unitID` = `u$unitID` - 1 WHERE `vref` = " . (int) $village->wid);
+                        mysqli_query($GLOBALS['link'],"
+					    UPDATE " . TB_PREFIX . "vdata
+					        SET
+					            `wood` = `wood` - ".(int) ${'u'.$unitID}['wood'].",
+					            `clay` = `clay` - ".(int) ${'u'.$unitID}['clay'].",
+					            `iron` = `iron` - ".(int) ${'u'.$unitID}['iron'].",
+					            `crop` = `crop` - ".(int) ${'u'.$unitID}['crop']."
+                            WHERE
+                                `wref` = " . (int) $village->wid);
+                    }
+                    header("Location: build.php?id=".$id."");
+                    exit;
+                }else{
+                    header("Location: banned.php");
+                    exit;
+                }
+            }
+        }
 
 	echo  $output;
 }

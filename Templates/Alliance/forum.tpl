@@ -19,7 +19,7 @@ $aid = $session->alliance;
 $allianceinfo = $database->getAlliance($aid);
 $opt = $database->getAlliPermissions($session->uid, $aid);
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
-include("alli_menu.tpl"); 
+include("alli_menu.tpl");
 $ids = $_GET['s'];
 
 if(isset($_POST['new'])){
@@ -27,14 +27,14 @@ if(isset($_POST['new'])){
 	$forum_des = $_POST['u2'];
 	$forum_owner = $session->uid;
 	$forum_area = $_POST['bid'];
-	
+
 	$database->CreatForum($forum_owner,$aid,$forum_name,$forum_des,$forum_area);
 }
 if(isset($_POST['edittopic'])){
 	$topic_name = $_POST['thema'];
 	$topic_cat = $_POST['fid'];
 	$topic_id = $_POST['tid'];
-	
+
 	$database->UpdateEditTopic($topic_id,$topic_name,$topic_cat);
 }
 if(isset($_POST['editforum'])){
@@ -43,7 +43,7 @@ if(isset($_POST['editforum'])){
 	$forum_des = $_POST['u2'];
 	$forum_des = htmlspecialchars($forum_des);
 	$forum_id = $_POST['fid'];
-	
+
 	$database->UpdateEditForum($forum_id,$forum_name,$forum_des);
 }
 if(isset($_POST['newtopic'])){
@@ -297,10 +297,12 @@ if(isset($_POST['editpost'])){
 	$text = preg_replace('/\[coor'.$i.'\]/', '[coor0]', $text);
 	$text = preg_replace('/\[\/coor'.$i.'\]/', '[/coor0]', $text);
 	}
-	for($i=0;$i<=$text['report0'];$i++){
-	$text = preg_replace('/\[report'.$i.'\]/', '[report0]', $text);
-	$text = preg_replace('/\[\/report'.$i.'\]/', '[/report0]', $text);
-	}
+	if (isset($text['report0'])) {
+        for ( $i = 0; $i <= $text['report0']; $i ++ ) {
+            $text = preg_replace( '/\[report' . $i . '\]/', '[report0]', $text );
+            $text = preg_replace( '/\[\/report' . $i . '\]/', '[/report0]', $text );
+        }
+    }
 	$posts_id = $_POST['pod'];
 	if($text != ""){
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
@@ -370,7 +372,7 @@ if($opt['opt5'] == 1){
 	if($database->CheckResultEdit($aid) != 1){
 		$database->CreatResultEdit($aid,1);
 	}else{
-		if($database->CheckEditRes($aid) == 1){
+		if($database->CheckEditRes($aid) == 1 && $database->isAllianceOwner($session->uid) == $session->alliance){
 			$database->UpdateResultEdit($aid,'');
 		}else{
 			$database->UpdateResultEdit($aid,1);
@@ -420,11 +422,11 @@ if($_GET['admin']== "newforum"){
 	if(isset($_GET['ac'])){
 		include("Forum/forum_7.tpl"); // new post
 	}else{
-		include("Forum/forum_6.tpl"); // showtopic 
+		include("Forum/forum_6.tpl"); // showtopic
 	}
 }else{
 	if($database->CheckForum($aid)){
-		include("Forum/forum_2.tpl"); 
+		include("Forum/forum_2.tpl");
 	}else if($opt['opt5'] == 1){
 	if($session->access==BANNED){
 			echo '<p class="error">Forum is not created yet</p><p>
@@ -435,5 +437,5 @@ if($_GET['admin']== "newforum"){
 			}}else{
 			echo '<p class="error">Forum is not created yet</p>';
 			}
-	}				
+	}
 ?>

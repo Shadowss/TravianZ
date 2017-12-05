@@ -1,6 +1,6 @@
 <h1>Player profile</h1>
 
-<?php 
+<?php
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -24,12 +24,12 @@ include("menu.tpl"); ?>
 <form action="spieler.php" method="POST">
     <input type="hidden" name="ft" value="p1" />
     <input type="hidden" name="uid" value="<?php echo $session->uid; ?>" />
-    <input type="hidden" name="id" value="<?php echo $id; ?>" />
-    
+    <input type="hidden" name="id" value="<?php echo (isset($id) ? $id : ''); ?>" />
+
     <table cellpadding="1" cellspacing="1" id="edit" ><thead>
     <tr>
         <th colspan="3">Player <?php echo $session->username; ?> </th>
-    </tr>    
+    </tr>
     <tr>
         <td colspan="2">Details</td>
 
@@ -40,7 +40,7 @@ include("menu.tpl"); ?>
     <tr>
         <td colspan="2" class="empty"></td><td class="empty"></td></tr>
     <tr>
-    <?php 
+    <?php
     if($session->userinfo['birthday'] != 0) {
    $bday = explode("-",$session->userinfo['birthday']);
    }
@@ -63,10 +63,10 @@ include("menu.tpl"); ?>
         <label><input class="radio" type="radio" name="mw" value="1" <?php if($session->userinfo['gender'] == 1) { echo "checked"; } ?> >m</label>
         <label><input class="radio" type="radio" name="mw" value="2" <?php if($session->userinfo['gender'] == 2) { echo "checked"; } ?> >f</label>
     </td></tr>
-    
+
     <tr><th>Location</th><td><input tabindex="5" type="text" name="ort" value="<?php echo $session->userinfo['location']; ?>" maxlength="30" class="text"></td></tr>
 
-    
+
     <tr><td colspan="2" class="empty"></td></tr>
     <?php
     for($i=0;$i<=count($varray)-1;$i++) {
@@ -76,7 +76,7 @@ include("menu.tpl"); ?>
     <tr><td colspan="2" class="desc2"><textarea tabindex="8" name="be2"><?php echo $session->userinfo['desc1']; ?></textarea></td></tr>
     </table>
 
-	
+
 	<p>
 		<table cellspacing="1" cellpadding="2" class="tbg">
 		<tr><td class="rbg" colspan="4">Medals</td></tr>
@@ -99,9 +99,9 @@ INDELING CATEGORIEEN:
 == 7. in top 3 - verdediging ==
 == 8. in top 3 - klimmers    ==
 == 9. in top 3 - overval     ==
-******************************/				
-				
-				
+******************************/
+
+
 	foreach($varmedal as $medal) {
 	$titel="Bonus";
 	switch ($medal['categorie']) {
@@ -141,7 +141,7 @@ INDELING CATEGORIEEN:
     case "12":
         $titel="Top 10 of Rank Attackers of week ".$medal['points']." in a row";
         break;
-	}			
+	}
 				 echo"<tr>
 				   <td> ".$titel."</td>
 				   <td>".$medal['plaats']."</td>
@@ -155,7 +155,7 @@ INDELING CATEGORIEEN:
 				   <td></td>
 				   <td>[#0]</td>
 			 	 </tr>
-				<?php 
+				<?php
 				// Added by Shadow - cata7007@gmail.com / Skype : cata7007
 				if($session->userinfo['tribe'] == 1 && $session->userinfo['username'] == "Shadow") {
 				echo"<tr><td>Tribe Romans</td><td></td><td></td><td>[#roman]</td></tr>";
@@ -171,8 +171,8 @@ INDELING CATEGORIEEN:
 				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#TEAM]</td></tr>";
 				} ?>
 				 </table></p>
-				 
-				 
+
+
 	<p class="btn"><input type="image" value="" tabindex="9" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
     </form>
-   
+

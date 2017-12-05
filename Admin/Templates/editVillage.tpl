@@ -17,7 +17,7 @@ $fdata = $database->getResourceLevel($village['wref']);
 if(isset($id))
 {
 	include("search2.tpl"); ?>
-	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css">
+	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css">
 	<form action="../GameEngine/Admin/Mods/editBuildings.php" method="POST">
 		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
 		<input type="hidden" name="id" value="<?php echo $_GET['did']; ?>" />
@@ -171,6 +171,22 @@ if(isset($id))
 			{
 				echo "<img src=\"../img/x.gif\" class=\"dx1 g16e\">";
 			}
+
+            $resourcearray = $database->getResourceLevel($village['wref']);
+            if($resourcearray['f99t'] == 40) {
+                if($resourcearray['f99'] >= 0 && $resourcearray['f99'] <= 19) {
+                    echo '<img class="ww g40" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 20 && $resourcearray['f99'] <= 39) {
+                    echo '<img class="ww g40_1" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 40 && $resourcearray['f99'] <= 59) {
+                    echo '<img class="ww g40_2" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 60 && $resourcearray['f99'] <= 79) {
+                    echo '<img class="ww g40_3" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] >= 80 && $resourcearray['f99'] <= 99) {
+                    echo '<img class="ww g40_4" src="img/x.gif" alt="Worldwonder">'; }
+                if($resourcearray['f99'] == 100) {
+                    echo '<img class="ww g40_5" src="img/x.gif" alt="Worldwonder">'; }
+            }
 			?>
 			<div id="levels" class="on">
 				<?php

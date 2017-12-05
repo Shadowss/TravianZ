@@ -3,20 +3,24 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       22.06.2015                    			       ##
 ##  Filename       multihunter.tpl                                             ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
+##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
 #################################################################################
 
 if(isset($_GET['err']) && $_GET['err'] == 1) {
 	echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">At least MultiHunter &amp; Support password are required in this form.</span></div><br /><br />";
+}
+
+if(isset($_GET['err']) && $_GET['err'] == 2) {
+    echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Natars is a reserved username for an in-game NPC tribe. Please choose a different admin username.</span></div><br /><br />";
 }
 
 ?>
@@ -60,7 +64,7 @@ if(isset($_GET['err']) && $_GET['err'] == 1) {
             <td><span class="f9 c6">Admin tribe:</span></td>
             <td>
 				<select name="atribe" id="atribe">
-					<option value="1" selected="selected">Romans</option>				
+					<option value="1" selected="selected">Romans</option>
 					<option value="2">Teutons</option>
 					<option value="3">Gauls</option>
 				</select>

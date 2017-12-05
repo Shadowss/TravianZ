@@ -47,7 +47,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	$_SESSION['m_message'] = preg_replace("/\[url\=([a-z0-9\_\.\:\/\-]*)\]([a-z0-9\_\.\:\/\-]*)\[\/url\]/i", "<a href='$1'>$2</a>",  $_SESSION['m_message']);
 	$_SESSION['m_message'] = preg_replace("/\*u([0-9]*)(left|right)\*/i", "<img src='img/u2/u$1.gif' style='float:$2;' alt='unit$1' />",  $_SESSION['m_message']);
 	$_SESSION['m_message'] = "[message]".$_SESSION['m_message']."[/message]";
-	
+
 	$_SESSION['m_color'] = $database->escape($_SESSION['m_color']);
 	$_SESSION['m_subject'] = $database->escape($_SESSION['m_subject']);
 	$_SESSION['m_message'] = $database->escape($_SESSION['m_message']);
@@ -99,10 +99,10 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 
 	<script src="mt-full.js?0ac37" type="text/javascript"></script>
-	<script src="unx.js?f4b7g" type="text/javascript"></script>
+	<script src="unx.js?f4b7h" type="text/javascript"></script>
 	<script src="new.js?0ac37" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7g" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
@@ -197,7 +197,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 			// TODO: these never worked... let's bring them back once we have BBCode entity parsing restored and working again
 			//       note: they will need real images because classes like "uu1", "uu2"... don't exist in the CSS
 			if (0 == -1 && @!$NextStep && @!$NextStep2 && @!$done){
-			    
+
 			    echo MASS_UNITS; ?>
 <a href="javascript:toggleDisplay('message_smilies')"><?php echo MASS_SHOWHIDE; ?></a>
 

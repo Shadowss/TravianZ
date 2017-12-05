@@ -75,6 +75,9 @@ class Account {
 			else if(USRNM_SPECIAL && preg_match("/[:,\\. \\n\\r\\t\\s\\<\\>]+/", $_POST['name'])) {
 				$form->addError("name",USRNM_CHAR);
 			}
+			else if(strtolower($_POST['name']) == 'natars') {
+                $form->addError("name",USRNM_TAKEN);
+            }
 			else if(User::exists($database,$_POST['name'])) {
 				$form->addError("name",USRNM_TAKEN);
 			}
@@ -103,7 +106,7 @@ class Account {
 				$form->addError("email",EMAIL_TAKEN);
 			}
 		}
-		if(!isset($_POST['vid'])) {
+		if(!isset($_POST['vid']) || !in_array($_POST['vid'], [1, 2, 3])) {
 			$form->addError("tribe",TRIBE_EMPTY);
 		}
 		if(!isset($_POST['agb'])) {
@@ -154,14 +157,14 @@ class Account {
 		if(START_DATE < date('m/d/Y') or START_DATE == date('m/d/Y') && START_TIME <= date('H:i'))
 	   {
 			global $database;
-			$q = "SELECT act, username, password, email, tribe, kid FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";
+			$q = "SELECT act, username, password, email, tribe, location FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";
 			$result = mysqli_query($GLOBALS['link'],$q);
 			$dbarray = mysqli_fetch_array($result);
 			if($dbarray['act'] == $_POST['id']) {
 				$uid = $database->register($dbarray['username'],$dbarray['password'],$dbarray['email'],$dbarray['tribe'],"");
 				if($uid) {
 				$database->unreg($dbarray['username']);
-				$this->generateBase($dbarray['kid'],$uid,$dbarray['username']);
+				$this->generateBase($dbarray['location'],$uid,$dbarray['username']);
 				header("Location: activate.php?e=2");
 				exit;
 				}
@@ -209,14 +212,21 @@ class Account {
 			$form->addError("pw",LOGIN_PASS_EMPTY);
 		}
 		else if(!$database->login($_POST['user'],$_POST['pw']) && !$database->sitterLogin($_POST['user'],$_POST['pw'])) {
-			$form->addError("pw",LOGIN_PW_ERROR);
+            // try activation data if the user was not found
+            if (!$userData) {
+                $activateData = $database->getActivateField( $_POST['user'], 'act', 1 );
+
+                if ( $activateData != "" ) {
+                    $form->addError( "activate", $_POST['user'] );
+                } else {
+                    $form->addError("pw",LOGIN_PW_ERROR);
+                }
+            } else {
+                $form->addError("pw",LOGIN_PW_ERROR);
+            }
 		}
 
 		$userData = $database->getUserArray($_POST['user'], 0);
-
-		if($userData["act"] != "") {
-			$form->addError("activate",$_POST['user']);
-		}
 
 		// Vacation mode by Shadow
 		if($userData["vac_mode"] == 1 && $userData["vac_time"] > time()) {
