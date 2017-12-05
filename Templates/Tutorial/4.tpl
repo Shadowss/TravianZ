@@ -58,7 +58,7 @@
                 <li><a href="spielregeln.php">Game Rules</a>|</li>
                 <li><a href="agb.php">Terms</a>|</li>
                 <li><a href="impressum.php">Imprint</a></li>
-                <li class="copyright">&copy; 2011 - ZravianX - All right reserved</li>
+                <li class="copyright">&copy; 2010 - <?php echo date('Y') . ' ' . (defined('SERVER_NAME') ? SERVER_NAME : 'TravianZ');?> All rights reserved</li>
             </ul>
         </div>
     </div> 
