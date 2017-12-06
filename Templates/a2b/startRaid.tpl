@@ -5,9 +5,9 @@
     $tribe = $_POST['tribe'];
     $getFLData = $database->getFLData($lid);
     $sql = "SELECT id, towref, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10 FROM ".TB_PREFIX."raidlist WHERE lid = ".$database->escape((int) $lid)." order by id asc";
-	$array = $database->query_return($sql);
+    $array = $database->query_return($sql);
     foreach($array as $row){
-	$sql1 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE vref = ".(int) $getFLData['wref']));
+	    $sql1 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE vref = ".(int) $getFLData['wref']));
         $sid = $row['id'];
         $wref = $row['towref'];
         $t1 = $row['t1'];$t2 = $row['t2'];$t3 = $row['t3'];$t4 = $row['t4'];$t5 = $row['t5'];
@@ -56,9 +56,10 @@
 
                 if ( $_POST[ 'slot' . $sid ] == 'on' ) {
                     $ckey = $generator->generateRandStr( 6 );
-                    $id   = $database->addA2b( $ckey, time(), $wref, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, 4 );
+                    $time_now = time();
+                    $id   = $database->addA2b( $ckey, $time_now, $wref, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, 4 );
 
-                    $data = $database->getA2b( $ckey, time() );
+                    $data = $database->getA2b( $ckey, $time_now );
 
                     $eigen = $database->getCoor( $getFLData['wref'] );
                     $from  = array( 'x' => $eigen['x'], 'y' => $eigen['y'] );
@@ -135,8 +136,8 @@
                           $unitKey = $uname2 . ($u < 10 ? $u : 0);
                         }
 
-                        $units[]   = $uname2 . $unitKey;
-                        $amounts[] = $data[ 'u' . $unitKey ];
+                        $units[]   = $unitKey;
+                        $amounts[] = $data[ 'u' . $u];
                         $modes[]   = 0;
                     }
 
