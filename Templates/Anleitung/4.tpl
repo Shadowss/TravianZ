@@ -3353,7 +3353,7 @@ As soon as the steward of a town (senator, chief, chieftain) as been researched 
 
 		<a href="#" class="logo"><img src="img/x.gif" alt="Travian Games" class="logo_traviangames" /></a>
 
-			<li class="copyright">&copy; <?php echo TRAVIAN_COPYRIGHT; ?></li>
+			<li class="copyright">&copy; 2010 - <?php echo date('Y') . ' ' . (defined('SERVER_NAME') ? SERVER_NAME : 'TravianZ');?> All rights reserved</li>
 
 	</div>
 
