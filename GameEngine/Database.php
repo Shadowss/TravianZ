@@ -2569,10 +2569,10 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
     function CreatTopic($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) {
-        list($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) = $this->escape_input($title, $post, $cat, $owner, $alli, $ends, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+        list($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) = $this->escape_input($title, $post, (int) $cat, (int) $owner, (int) $alli, (int) $ends, (int) $alliance, (int) $player, (int) $coor, (int) $report);
 
         $date = time();
-        $q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post','$date','$date','$cat','$owner','$alli','$ends','','',$alliance,$player,$coor,$report)";
+        $q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post',$date, $date, $cat, $owner, $alli, $ends, 0, 0, $alliance, $player, $coor, $report)";
         mysqli_query($this->dblink,$q);
         return mysqli_insert_id($this->dblink);
     }
