@@ -7581,19 +7581,26 @@ References: User ID/Message ID, Mode
         }
 
         if(!$mode) {
-            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref IN(".implode(' ', $wid).")";
+            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where wref IN(".implode(', ', $wid).")";
         }else {
-            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where `from` IN(".implode(' ', $wid).")";
+            $q = "SELECT * FROM " . TB_PREFIX . "prisoners where `from` IN(".implode(', ', $wid).")";
         }
         $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
         // return a single value
         if (!$array_passed) {
-            self::$prisonersCache[$wid[0].$mode] = $result;
+            if (count($result) == 1) {
+                $result = $result[0];
+            }
+            self::$prisonersCache[$wid[0].$mode] = (count($result) ? [$result] : []);
         } else {
             if ($result && count($result)) {
+                if (!isset(self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ])) {
+                    self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ] = [];
+                }
+
                 foreach ( $result as $record ) {
-                    self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ] = $record;
+                    self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ][] = $record;
                 }
             }
 
