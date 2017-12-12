@@ -14,6 +14,9 @@ TravianZ Version **v.8.3.3 BETA b4**
 ======
 **Note:** this game is still in a pre-release state, although at this point it is very playable, tested and found to be fairly stable
 
+**WARNING:** please note that ***this is in no way an upgrade*** from the old 8.3.2 version, so please ***do not try to just copy your files over***, 
+since the installer logic has changed and you would just crash your old version
+
 **Quick links:**
 * [Download and Updates](https://github.com/Shadowss/TravianZ) &raquo;&raquo; https://github.com/Shadowss/TravianZ
 * [Wiki](https://github.com/Shadowss/TravianZ/wiki)
