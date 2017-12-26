@@ -2603,6 +2603,12 @@ class Automation {
                                                                 $leveldown = $buildlevel['f'.$i]-1;
                                                                 $newLevels_fieldNames[] = "f".$i;
                                                                 $newLevels_fieldValues[] = $leveldown;
+
+                                                                // building at level 0, remove it completely
+                                                                if (!$leveldown > 0) {
+                                                                    $newLevels_fieldNames[] = "f".$i."t";
+                                                                    $newLevels_fieldValues[] = 0;
+                                                                }
                                                             }else{
                                                                 $newLevels_fieldNames[] = "f".$i;
                                                                 $newLevels_fieldValues[] = 0;
