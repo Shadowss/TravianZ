@@ -44,8 +44,11 @@ div#mid {
 div#content {
     float: left;
     min-height: 450px;
-    overflow: auto;
+    overflow: hidden;
     position: relative;
+}
+div#content.reports {
+    overflow: auto;
 }
 div.universal {
     padding: 0 25px;
@@ -9084,4 +9087,8 @@ input.accept{width:12px;height:12px;background-image:url(../../img/a/acc.gif);}
 #Frame {
 	top: 0;
     z-index: 1000;
+}
+
+.reports table {
+    width: auto;
 }
