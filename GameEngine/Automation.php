@@ -1053,6 +1053,22 @@ class Automation {
         // currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
         $tbid = (int) $catapultTarget;
 
+        // recalculate data for catapults
+        global $bid34;
+        $stonemason = 0;
+        foreach($bdo as $key=>$b){
+        if($b == 34 AND strpos($key, "t") !== false){
+        $stonemason = str_replace("t", "", $key);
+        $stonemason = $bdo[$stonemason];
+        }
+        }
+        if($stonemason > 0){
+        $stonemasonEffect = $bid34[$stonemason]['attri'] / 100;
+        }else{
+        $stonemasonEffect = 1;
+        }
+        $battlepart[3] = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[9]))/200) / $stonemasonEffect / $battlepart[10])) + 0.5);
+
         // building/field destroyed
         if ($battlepart[4]>$battlepart[3])
         {
