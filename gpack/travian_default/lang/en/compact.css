@@ -47,7 +47,7 @@ div#content {
     overflow: hidden;
     position: relative;
 }
-div#content.reports {
+div#content.reports, div#content.build {
     overflow: auto;
 }
 div.universal {
