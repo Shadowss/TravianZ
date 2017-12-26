@@ -641,7 +641,7 @@ class adm_DB {
 
 			if( intval($enforce['hero']) > 0){
 			    $q = "SELECT * FROM ".TB_PREFIX."hero WHERE uid = ".(int) $from['owner']." AND dead = 0";
-				$result = mysqli_query($q);
+				$result = mysqli_query($database->dblink, $q);
 				$hero_f=mysqli_fetch_array($result);
 				$hero_unit=$hero_f['unit'];
 				$speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
