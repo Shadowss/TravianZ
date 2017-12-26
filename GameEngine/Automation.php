@@ -4751,7 +4751,7 @@ class Automation {
                 }
 
                 if (count($columns)) {
-                    $database->modifyHero( $columns, $columnValues, $hdata['heroid'] );
+                    $database->modifyHero( $columns, $columnValues, $hdata['heroid'], $modes );
                 }
             }
 
