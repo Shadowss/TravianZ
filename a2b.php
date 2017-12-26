@@ -106,7 +106,7 @@ if(isset($_GET['o'])) {
 
 		echo GP_LOCATE;
 
-?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
+?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
 	<?php
 
 		if($session->gpack == null || GP_ENABLE == false) {

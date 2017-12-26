@@ -32,7 +32,7 @@ if(T4_COMING==true){
 	<meta http-equiv="content-type"	content="text/html; charset=UTF-8" />
 	<meta name="content-language" content="<?php echo LANG; ?>" />
 	<link href="gpack/notification_v1_zzjhons/lang/en/lang.css" rel="stylesheet" type="text/css" />
-	<link href="gpack/notification_v1_zzjhons/lang/en/compact.css?f4b7h rel="stylesheet" type="text/css" />
+	<link href="gpack/notification_v1_zzjhons/lang/en/compact.css?f4b7i rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="crypt.js"></script>
 	<script type="text/javascript">
 		Travian.Translation.add({'allgemein.cancel': 'Abbrechen','allgemein.ok': 'OK','allgemein.send': 'com'});

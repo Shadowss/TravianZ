@@ -44,7 +44,7 @@ div#mid {
 div#content {
     float: left;
     min-height: 450px;
-    overflow: hidden;
+    overflow: auto;
     position: relative;
 }
 div.universal {

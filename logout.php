@@ -33,7 +33,7 @@ AccessLogger::logRequest();
 		<script src="unx.js?f4b7h" type="text/javascript"></script>
 		<script src="new.js?2389c" type="text/javascript"></script>
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7h" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
 	echo "
