@@ -7130,6 +7130,24 @@ References: User ID/Message ID, Mode
         }
 	}
 
+	function villageHasArtefact($vref) {
+        // this is a somewhat non-ideal, externally non-changeable way of caching
+        // but since we're only ever going to be calling this from a single point of Automation,
+        // this will more than suffice
+        static $cachedData = [];
+        $vref = (int) $vref;
+
+        if (isset($cachedData[$vref])) {
+            return $cachedData[$vref];
+        }
+
+        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
+        $result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
+        $cachedData[$vref] = $result['Total'];
+
+        return $cachedData[$vref];
+    }
+
 	function claimArtefact($vref, $ovref, $id) {
 	    list($vref, $ovref, $id) = $this->escape_input((int) $vref, (int) $ovref, (int) $id);
 

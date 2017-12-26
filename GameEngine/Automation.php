@@ -2246,9 +2246,14 @@ class Automation {
                     //catapults look :D
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
                     //check to see if can destroy village
-                    if(count($varray)!='1' AND $to['capital']!='1'){
+                    $hasArtefact = false;
+                    if (count($varray) != 1 && $to['capital'] != 1 && !$database->villageHasArtefact($DefenderWref)) {
                         $can_destroy=1;
-                    }else{
+                    } else {
+                        if ($database->villageHasArtefact($DefenderWref)) {
+                            $hasArtefact = true;
+                        }
+
                         $can_destroy=0;
                     }
                     if ($isoasis == 1) $can_destroy=0;
@@ -2304,6 +2309,20 @@ class Automation {
                                 /**
                                  * FIRST CATAPULTS ROW
                                  */
+
+                                // first of all, update data if we're targetting a Treasury in village with an artefact,
+                                // since such village (and its Treasury) cannot be destroyed until that artefact is
+                                // removed... don't worry about Treasury levels here either, that can be taken care of
+                                // once the artefact is gone
+                                if ($hasArtefact && $data['ctar1'] == 27) {
+                                    $data['ctar1'] = 0;
+                                }
+
+                                if (isset($data['ctar2']) && $hasArtefact && $data['ctar2'] == 27) {
+                                    $data['ctar2'] = 0;
+                                }
+
+                                // on to targetting
                                 $basearray = $data['to'];
                                 $bdo = $database->getResourceLevel($basearray, false);
                                 $catapultTarget = $data['ctar1'];
@@ -2359,7 +2378,10 @@ class Automation {
                                         if ($i==41) $i=99;
                                         if ($bdo['f'.$i] > 0 && $catapultTarget != 31 && $catapultTarget != 32 && $catapultTarget != 33)
                                         {
-                                            $list[]=$i;
+                                            // don't allow to randomly select Treasury if there's an artefact in it
+                                            if (!$hasArtefact || ($hasArtefact && $bdo['f'.$i.'t'] != 27)) {
+                                                $list[] = $i;
+                                            }
                                         }
                                     }
                                     $catapultTarget = $list[ rand(0, count($list) - 1) ];
@@ -2421,7 +2443,10 @@ class Automation {
                                         if ($i==41) $i=99;
                                         if ($bdo['f'.$i] > 0)
                                         {
-                                            $list[]=$i;
+                                            // don't allow to randomly select Treasury if there's an artefact in it
+                                            if (!$hasArtefact || ($hasArtefact && $bdo['f'.$i.'t'] != 27)) {
+                                                $list[] = $i;
+                                            }
                                         }
                                     }
                                     $catapultTarget2 = $list[ rand(0, count($list) - 1) ];
