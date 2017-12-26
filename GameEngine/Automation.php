@@ -2309,20 +2309,6 @@ class Automation {
                                 /**
                                  * FIRST CATAPULTS ROW
                                  */
-
-                                // first of all, update data if we're targetting a Treasury in village with an artefact,
-                                // since such village (and its Treasury) cannot be destroyed until that artefact is
-                                // removed... don't worry about Treasury levels here either, that can be taken care of
-                                // once the artefact is gone
-                                if ($hasArtefact && $data['ctar1'] == 27) {
-                                    $data['ctar1'] = 0;
-                                }
-
-                                if (isset($data['ctar2']) && $hasArtefact && $data['ctar2'] == 27) {
-                                    $data['ctar2'] = 0;
-                                }
-
-                                // on to targetting
                                 $basearray = $data['to'];
                                 $bdo = $database->getResourceLevel($basearray, false);
                                 $catapultTarget = $data['ctar1'];
@@ -2378,10 +2364,7 @@ class Automation {
                                         if ($i==41) $i=99;
                                         if ($bdo['f'.$i] > 0 && $catapultTarget != 31 && $catapultTarget != 32 && $catapultTarget != 33)
                                         {
-                                            // don't allow to randomly select Treasury if there's an artefact in it
-                                            if (!$hasArtefact || ($hasArtefact && $bdo['f'.$i.'t'] != 27)) {
-                                                $list[] = $i;
-                                            }
+                                            $list[] = $i;
                                         }
                                     }
                                     $catapultTarget = $list[ rand(0, count($list) - 1) ];
@@ -2443,10 +2426,7 @@ class Automation {
                                         if ($i==41) $i=99;
                                         if ($bdo['f'.$i] > 0)
                                         {
-                                            // don't allow to randomly select Treasury if there's an artefact in it
-                                            if (!$hasArtefact || ($hasArtefact && $bdo['f'.$i.'t'] != 27)) {
-                                                $list[] = $i;
-                                            }
+                                            $list[] = $i;
                                         }
                                     }
                                     $catapultTarget2 = $list[ rand(0, count($list) - 1) ];
