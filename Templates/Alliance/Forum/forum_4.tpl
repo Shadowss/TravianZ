@@ -38,7 +38,7 @@ if($ChckTopic){
 		}
 		
 		echo '<tr><td class="ico">';
-		if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $arrs['owner'] == $session->uid)){
+		if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $arrs['id'] || $arrs['owner'] == $session->uid)){
 			if($database->CheckCloseTopic($arrs['id']) == 1){
 				$locks = '<a class="unlock" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=unlock" title="open topic"><img src="img/x.gif" alt="open topic" /></a>';
 			}else{
@@ -72,7 +72,7 @@ if($ChckTopic){
 		}
 		
 		echo '<tr><td class="ico">';
-		if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $session->alliance || $arr['owner'] == $session->uid)){
+		if($database->CheckEditRes($aid)=="1" && ($database->isAllianceOwner($session->uid) == $arr['id'] || $arr['owner'] == $session->uid)){
 			if($database->CheckCloseTopic($arr['id']) == 1){
 				$lock = '<a class="unlock" href="?s=2&fid='.$_GET['fid'].'&idt='.$arr['id'].'&admin=unlock" title="open topic"><img src="img/x.gif" alt="open topic" /></a>';
 			}else{

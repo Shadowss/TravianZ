@@ -372,7 +372,7 @@ if($opt['opt5'] == 1){
 	if($database->CheckResultEdit($aid) != 1){
 		$database->CreatResultEdit($aid,1);
 	}else{
-		if($database->CheckEditRes($aid) == 1 && $database->isAllianceOwner($session->uid) == $session->alliance){
+		if($database->CheckEditRes($aid) == 1){
 			$database->UpdateResultEdit($aid,'');
 		}else{
 			$database->UpdateResultEdit($aid,1);
