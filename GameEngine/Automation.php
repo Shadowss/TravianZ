@@ -1068,7 +1068,6 @@ class Automation {
         $stonemasonEffect = 1;
         }
         $battlepart[3] = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[9]))/200) / $stonemasonEffect / $battlepart[10])) + 0.5);
-
         // building/field destroyed
         if ($battlepart[4]>$battlepart[3])
         {
@@ -1148,8 +1147,7 @@ class Automation {
         {
             //TODO: MUST TO BE FIX This part goes also below 0 if u have a lot of catapults
             // TODO: this whole math seems incorrect, it needs a revision, and potentially a rewrite
-            $totallvl = round( sqrt( pow( ( $tblevel + 0.5 ), 2 ) - ( ( !$twoRowsCatapultSetup ? (int) $battlepart[4] : (int) $battlepart[4] / 2 ) * 8 ) ) );
-
+            $totallvl = round( sqrt( pow( ( $tblevel + 0.5 ), 2 ) - ( ( !$twoRowsCatapultSetup ? (float) $battlepart[4] : (float) $battlepart[4] / 2 ) * 8 ) ) );
             // sometimes this goes above the actual level, so in that case we just reverse everything
             // and take the buiding down so many levels
             if ($totallvl > $tblevel) {
