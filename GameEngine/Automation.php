@@ -1357,6 +1357,15 @@ class Automation {
                         }
 
                         // modify units in DB
+										
+																  
+																	
+																  
+												 
+																				 
+																												   
+																																								  
+						 
                         $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
                     }
                     //get defence units
@@ -2915,6 +2924,7 @@ class Automation {
                                     ['99', '99o'],
                                     [$newtraps, $mytroops+$anothertroops],
                                     [0, 0]
+											 
                                 );
                                 $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
                                 $p_username = $database->getUserField($from['owner'],"username",0);
@@ -3120,15 +3130,19 @@ class Automation {
                     }
                     unset($crop,$unitarrays,$getvillage,$village_upkeep);
                 }
-
+                
+				//Returning units back to village is not necessary because it will be taken care when processing movement			
+				// Fix by AL-Kateb
                 // if evasion was active, return units back to base
-                if (isset($evaded)) {
+               /*
+			   if (isset($evaded)) {
                     foreach ($evasionUnitModifications_modes as $index => $mode) {
                         $evasionUnitModifications_modes[$index] = 1;
                     }
 
                     $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
                 }
+				*/
 
                 #################################################
                 ################FIXED BY SONGER################
@@ -3687,6 +3701,7 @@ class Automation {
                         array($u."1",$u."2",$u."3",$u."4",$u."5",$u."6",$u."7",$u."8",$u."9",$tribe."0","hero"),
                         array($data['t1'],$data['t2'],$data['t3'],$data['t4'],$data['t5'],$data['t6'],$data['t7'],$data['t8'],$data['t9'],$data['t10'],$data['t11']),
                         array(1,1,1,1,1,1,1,1,1,1,1)
+								 
                         );
                     $movementProcIDs[] = $data['moveid'];
                     $crop = $database->getCropProdstarv($data['to']);
