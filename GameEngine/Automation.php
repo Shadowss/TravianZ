@@ -1357,15 +1357,6 @@ class Automation {
                         }
 
                         // modify units in DB
-										
-																  
-																	
-																  
-												 
-																				 
-																												   
-																																								  
-						 
                         $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
                     }
                     //get defence units
