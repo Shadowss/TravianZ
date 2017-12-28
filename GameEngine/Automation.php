@@ -1068,7 +1068,6 @@ class Automation {
         $stonemasonEffect = 1;
         }
         $battlepart[3] = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[9]))/200) / $stonemasonEffect / $battlepart[10])) + 0.5);
-
         // building/field destroyed
         if ($battlepart[4]>$battlepart[3])
         {
@@ -1148,8 +1147,7 @@ class Automation {
         {
             //TODO: MUST TO BE FIX This part goes also below 0 if u have a lot of catapults
             // TODO: this whole math seems incorrect, it needs a revision, and potentially a rewrite
-            $totallvl = round( sqrt( pow( ( $tblevel + 0.5 ), 2 ) - ( ( !$twoRowsCatapultSetup ? (int) $battlepart[4] : (int) $battlepart[4] / 2 ) * 8 ) ) );
-
+            $totallvl = round( sqrt( pow( ( $tblevel + 0.5 ), 2 ) - ( ( !$twoRowsCatapultSetup ? (float) $battlepart[4] : (float) $battlepart[4] / 2 ) * 8 ) ) );
             // sometimes this goes above the actual level, so in that case we just reverse everything
             // and take the buiding down so many levels
             if ($totallvl > $tblevel) {
@@ -2656,7 +2654,10 @@ class Automation {
                                                 //remove oasis related to village
                                                 $units->returnTroops($data['to'],1);
                                                 $chiefing_village = 1;
-
+                                                
+												//Remove trade routes related to village
+												$database->deleteTradeRoutesByVillage($data['to']);
+												
                                                 // update data in the database
                                                 $database->clearExpansionSlot($data['to']);
                                                 $database->setVillageLevel($data['to'], $newLevels_fieldNames, $newLevels_fieldValues);
@@ -2915,6 +2916,7 @@ class Automation {
                                     ['99', '99o'],
                                     [$newtraps, $mytroops+$anothertroops],
                                     [0, 0]
+											 
                                 );
                                 $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
                                 $p_username = $database->getUserField($from['owner'],"username",0);
@@ -3120,15 +3122,19 @@ class Automation {
                     }
                     unset($crop,$unitarrays,$getvillage,$village_upkeep);
                 }
-
+                
+				//Returning units back to village is not necessary because it will be taken care when processing movement			
+				// Fix by AL-Kateb
                 // if evasion was active, return units back to base
-                if (isset($evaded)) {
+               /*
+			   if (isset($evaded)) {
                     foreach ($evasionUnitModifications_modes as $index => $mode) {
                         $evasionUnitModifications_modes[$index] = 1;
                     }
 
                     $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
                 }
+				*/
 
                 #################################################
                 ################FIXED BY SONGER################
@@ -3687,6 +3693,7 @@ class Automation {
                         array($u."1",$u."2",$u."3",$u."4",$u."5",$u."6",$u."7",$u."8",$u."9",$tribe."0","hero"),
                         array($data['t1'],$data['t2'],$data['t3'],$data['t4'],$data['t5'],$data['t6'],$data['t7'],$data['t8'],$data['t9'],$data['t10'],$data['t11']),
                         array(1,1,1,1,1,1,1,1,1,1,1)
+								 
                         );
                     $movementProcIDs[] = $data['moveid'];
                     $crop = $database->getCropProdstarv($data['to']);

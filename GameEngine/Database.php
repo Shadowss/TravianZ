@@ -4367,7 +4367,14 @@ References: User ID/Message ID, Mode
 		$q = "DELETE FROM " . TB_PREFIX . "route where id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
+	
+	function deleteTradeRoutesByVillage($id) {
+	    list($id) = $this->escape_input((int) $id);
 
+		$q = "DELETE FROM " . TB_PREFIX . "route where `from` = $id";
+		return mysqli_query($this->dblink,$q);
+	}
+	
 	function addBuilding($wid, $field, $type, $loop, $time, $master, $level) {
 	    list($wid, $field, $type, $loop, $time, $master, $level) = $this->escape_input((int) $wid, $field, (int) $type, (int) $loop, (int) $time, (int) $master, (int) $level);
 
