@@ -2654,7 +2654,10 @@ class Automation {
                                                 //remove oasis related to village
                                                 $units->returnTroops($data['to'],1);
                                                 $chiefing_village = 1;
-
+                                                
+												//Remove trade routes related to village
+												$database->deleteTradeRoutesByVillage($data['to']);
+												
                                                 // update data in the database
                                                 $database->clearExpansionSlot($data['to']);
                                                 $database->setVillageLevel($data['to'], $newLevels_fieldNames, $newLevels_fieldValues);
