@@ -19,7 +19,7 @@ class Village {
 
 	public $type;
 	public $coor = array();
-	public $awood,$aclay,$airon,$acrop,$pop,$maxstore,$maxcrop;
+	public $awood,$aclay,$airon,$acrop,$pop,$maxstore,$maxcrop,$atotal;
 	public $wid,$vname,$capital,$natar,$master;
 	public $resarray = array();
 	public $unitarray,$techarray,$unitall,$researching,$abarray = array();
@@ -103,6 +103,7 @@ class Village {
 		$this->aclay = $this->infoarray['clay'];
 		$this->airon = $this->infoarray['iron'];
 		$this->acrop = $this->infoarray['crop'];
+		$this->atotal = (int)($this->awood + $this->aclay + $this->airon + $this->acrop);
 		$this->pop = $this->infoarray['pop'];
 		$this->maxstore = $this->infoarray['maxstore'];
 		$this->maxcrop = $this->infoarray['maxcrop'];

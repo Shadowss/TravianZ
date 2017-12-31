@@ -39,7 +39,11 @@ $dur=round(${'u'.$i}['time'] * ($bid29[$village->resarray['f'.$id]]['attri'] / 1
 					}
 					$dur=$generator->getTimeFormat($dur);
 echo ($dur=="0:00:00")? "0:00:01":$dur;
-if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+
+//-- If available resources combined are not enough, remove NPC button
+$total_required = (int)(${'u'.$i}['wood'] + ${'u'.$i}['clay'] + ${'u'.$i}['iron'] + ${'u'.$i}['crop']);
+
+if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    echo "|<a href=\"build.php?gid=17&t=3&r1=".((${'u'.$i}['wood'])*$technology->maxUnitPlus($i))."&r2=".((${'u'.$i}['clay'])*$technology->maxUnitPlus($i))."&r3=".((${'u'.$i}['iron'])*$technology->maxUnitPlus($i))."&r4=".((${'u'.$i}['crop'])*$technology->maxUnitPlus($i))."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  } 
 echo "</div>

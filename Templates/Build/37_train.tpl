@@ -64,7 +64,10 @@ if($session->tribe == 1) {
                         <img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"".CROP_COM."\" />6|
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />";
      $output.=$generator->getTimeFormat(round($u1['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
-				        	if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+	 
+                            //-- If available resources combined are not enough, remove NPC button
+                            $total_required = (int)($u1['wood'] + $u1['clay'] + $u1['iron'] + $u1['crop']);
+                            if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    				$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u1['wood']."&r2=".$u1['clay']."&r3=".$u1['iron']."&r4=".$u1['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  			}
      $output.="</div>
@@ -101,7 +104,9 @@ if($session->tribe == 1) {
                             <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />";
         $output.=$generator->getTimeFormat(round($u2['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-        					if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                            //-- If available resources combined are not enough, remove NPC button
+                            $total_required = (int)($u2['wood'] + $u2['clay'] + $u2['iron'] + $u2['crop']);
+                            if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    				$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u2['wood']."&r2=".$u2['clay']."&r3=".$u2['iron']."&r4=".$u2['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  			}
 
@@ -139,7 +144,9 @@ if($session->tribe == 1) {
 
          $output.=  $generator->getTimeFormat(round($u3['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-        					if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                            //-- If available resources combined are not enough, remove NPC button
+                            $total_required = (int)($u3['wood'] + $u3['clay'] + $u3['iron'] + $u3['crop']);
+                            if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    				$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u3['wood']."&r2=".$u3['clay']."&r3=".$u3['iron']."&r4=".$u3['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  			}
 
@@ -175,7 +182,9 @@ if($session->tribe == 1) {
                             <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
     				        $generator->getTimeFormat(round($u5['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-    				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                            //-- If available resources combined are not enough, remove NPC button
+                            $total_required = (int)($u5['wood'] + $u5['clay'] + $u5['iron'] + $u5['crop']);
+                            if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    				$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u5['wood']."&r2=".$u5['clay']."&r3=".$u5['iron']."&r4=".$u5['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  			}
 
@@ -212,7 +221,9 @@ if($session->tribe == 1) {
                             <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
     				        $generator->getTimeFormat(round($u6['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-    				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                            //-- If available resources combined are not enough, remove NPC button
+                            $total_required = (int)($u6['wood'] + $u6['clay'] + $u6['iron'] + $u6['crop']);
+                            if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    				$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u6['wood']."&r2=".$u6['clay']."&r3=".$u6['iron']."&r4=".$u6['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  			}
 
@@ -252,7 +263,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u11['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                            //-- If available resources combined are not enough, remove NPC button
+                            $total_required = (int)($u11['wood'] + $u11['clay'] + $u11['iron'] + $u11['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u11['wood']."&r2=".$u11['clay']."&r3=".$u11['iron']."&r4=".$u11['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -289,8 +302,10 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u12['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
-                   			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u12['wood']."&r2=".$u12['clay']."&r3=".$u12['iron']."&r4=".$u12['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u12['wood'] + $u12['clay'] + $u12['iron'] + $u12['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
+                   		  $output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u12['wood']."&r2=".$u12['clay']."&r3=".$u12['iron']."&r4=".$u12['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
 				        $output .= "
@@ -328,7 +343,9 @@ $output.="<tr>
 
 				        $generator->getTimeFormat(round($u13['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u13['wood'] + $u13['clay'] + $u13['iron'] + $u13['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u13['wood']."&r2=".$u13['clay']."&r3=".$u13['iron']."&r4=".$u13['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -365,7 +382,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u15['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u15['wood'] + $u15['clay'] + $u15['iron'] + $u15['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u15['wood']."&r2=".$u15['clay']."&r3=".$u15['iron']."&r4=".$u15['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -403,7 +422,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u16['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u16['wood'] + $u16['clay'] + $u16['iron'] + $u16['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u16['wood']."&r2=".$u16['clay']."&r3=".$u16['iron']."&r4=".$u16['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -443,7 +464,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u21['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u21['wood'] + $u21['clay'] + $u21['iron'] + $u21['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u21['wood']."&r2=".$u21['clay']."&r3=".$u21['iron']."&r4=".$u21['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -480,7 +503,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u22['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u22['wood'] + $u22['clay'] + $u22['iron'] + $u22['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u22['wood']."&r2=".$u22['clay']."&r3=".$u22['iron']."&r4=".$u22['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -518,7 +543,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u24['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u24['wood'] + $u24['clay'] + $u24['iron'] + $u24['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u24['wood']."&r2=".$u24['clay']."&r3=".$u24['iron']."&r4=".$u24['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -555,7 +582,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u25['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u25['wood'] + $u25['clay'] + $u25['iron'] + $u25['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u25['wood']."&r2=".$u25['clay']."&r3=".$u25['iron']."&r4=".$u25['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
@@ -593,7 +622,9 @@ $output.="<tr>
                         <img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />".
 				        $generator->getTimeFormat(round($u26['time'] / SPEED * $artefact_bonus2 / $artefact_bonus)*3);
 
-				        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                        //-- If available resources combined are not enough, remove NPC button
+                        $total_required = (int)($u26['wood'] + $u26['clay'] + $u26['iron'] + $u26['crop']);
+                        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    			$output .= "|<a href=\"build.php?gid=17&t=3&r1=".$u26['wood']."&r2=".$u26['clay']."&r3=".$u26['iron']."&r4=".$u26['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  		}
 
