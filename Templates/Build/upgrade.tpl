@@ -1,4 +1,5 @@
 <?php
+
 $bid = $village->resarray['f'.$id.'t'];
 $bindicate = $building->canBuild($id,$bid);
 if($bindicate == 1) {
@@ -17,15 +18,18 @@ if($bindicate == 1) {
     if ($master == 1 && $loopsame == 1) {
         $loopsame = 0;
     }
-
+    //-- If available resources combined are not enough, remove NPC button
 	$uprequire = $building->resourceRequired($id,$village->resarray['f'.$id.'t'],1+$loopsame+$doublebuild+$master);
 	$mastertime = $uprequire['time'];
 ?>
+<?php
+$total_required = (int)($uprequire['wood'] + $uprequire['clay'] + $uprequire['iron'] + $uprequire['crop']);
+?>
 <p id="contract"><b><?php echo COSTS_UPGRADING_LEVEL;?> <?php echo $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master; ?>:<br />
 <img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /><span class="little_res"><?php echo $uprequire['wood']; ?></span> | <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><span class="little_res"><?php echo $uprequire['clay']; ?></span> | <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><span class="little_res"><?php echo $uprequire['iron']; ?></span> | <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><span class="little_res"><?php echo $uprequire['crop']; ?></span> | <img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" /><?php echo $uprequire['pop']; ?> | <img class="clock" src="img/x.gif" alt="duration" title="duration" /><?php echo $generator->getTimeFormat($uprequire['time']);
-if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
-    echo "|<a href=\"build.php?gid=17&t=3&r1=".$uprequire['wood']."&r2=".$uprequire['clay']."&r3=".$uprequire['iron']."&r4=".$uprequire['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
-                 } ?><br />
+if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
+    echo "| <a href=\"build.php?gid=17&t=3&r1=".$uprequire['wood']."&r2=".$uprequire['clay']."&r3=".$uprequire['iron']."&r4=".$uprequire['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+} ?><br />
 <?php
     if($bindicate == 2) {
    		echo "<span class=\"none\">".WORKERS_ALREADY_WORK."</span>";
