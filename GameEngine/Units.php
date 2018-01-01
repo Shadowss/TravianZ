@@ -727,7 +727,17 @@ class Units {
     
     public function Settlers($post) {
         global $form, $database, $village, $session;
-
+		//-- Prevent user from founding a new village if there are not enough settlers
+		//-- fix by AL-Kateb
+        $tempunits = $database->getUnit($village->coor['id']);
+        $settler_key = "u" . $session->userinfo['tribe'] . "0";
+        $settlers = (int)$tempunits[$settler_key];
+		if($settlers < 3){
+			header("location: dorf1.php");
+			exit;
+		}
+		//--
+		
         if ( $session->access != BANNED ) {
             $mode       = CP;
             $total      = count( $database->getProfileVillages( $session->uid ) );

@@ -32,6 +32,17 @@ $time = round($time);
 }
 }
 }
+//-- Prevent user from founding a new village if there are not enough settlers
+//-- fix by AL-Kateb
+$tempunits = $database->getUnit($village->coor['id']);
+$settler_key = "u" . $session->userinfo['tribe'] . "0";
+$settlers = (int)$tempunits[$settler_key];
+if($settlers < 3){
+	header("location: dorf1.php");
+	exit;
+}
+//--
+
 echo '<pre>';
 echo '</pre>';
 ?>
@@ -59,8 +70,14 @@ echo '</pre>';
 			<th>Troops</th>
 				<?php for($i=1;$i<=9;$i++) {
 					echo "<td class=\"none\">0</td>";
-				} ?>
-				<td>3</td>
+				} 
+
+				if($settlers >= 3){
+				  echo "<td>3</td>";
+				}else{
+				  echo "<td class=\"none\">0</td>";
+				}
+				?>
 		</tr>
 	</tbody>
 	<tbody class="infos">
