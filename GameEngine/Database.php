@@ -5878,7 +5878,7 @@ References: User ID/Message ID, Mode
 	function modifyHeroXp($column,$value,$heroid) {
 	    list($column,$value,$heroid) = $this->escape_input($column,(int) $value,(int) $heroid);
 
-		$q = "UPDATE ".TB_PREFIX."hero SET $column = $column + $value WHERE uid=$heroid AND dead = 0";
+		$q = "UPDATE ".TB_PREFIX."hero SET $column = $column + $value WHERE uid=$heroid";
 		return mysqli_query($this->dblink,$q);
 	}
 
