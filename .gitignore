@@ -18,6 +18,9 @@ GameEngine/config.php
 GameEngine/Prevention/*
 GameEngine/Notes/*
 
+# Ignore Templates/text.tpl because it is dynamically generated
+Templates/text.tpl
+
 # Install instalation_done marker left by install script
 /.buildpath
 /.project
