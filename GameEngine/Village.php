@@ -262,10 +262,13 @@ class Village {
         for ( $i = 0; $i <= count( $cropholder ) - 1; $i ++ ) {
             $basecrop += $bid4[ $this->resarray[ $cropholder[ $i ] ] ]['prod'];
         }
+		$bonus = 0.25 * $this->ocounter[3];
 		$crop = $basecrop + $basecrop * 0.25 * $this->ocounter[3];
+		
 		if($grainmill >= 1 || $bakery >= 1) {
-		    $crop += $basecrop /100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0) + (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);
+		    $crop += $basecrop /100 * ((isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0) + (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0));
 		}
+
 		if($session->bonus4 == 1) {
 			$crop *= 1.25;
 		}
