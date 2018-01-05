@@ -480,9 +480,9 @@ if($type==18 or $type==19 or $type==20 or $type==21){
  	if ($basearray['fieldtype']==0) {
  		if ($village->resarray['f39']==0) {
  			if ($basearray['owner'] == $session->uid) {
- 				echo "<a href=\"build.php?id=39\">&raquo; ".RAID." $otext ".OASIS." (".BUILDRALLY.")</a>";
+ 				echo "<a href=\"build.php?id=39\">&raquo; ".RAID." $otext (".BUILDRALLY.")</a>";
  			} else {
- 				echo "&raquo; ".RAID." $otext ".OASIS." (".BUILDRALLY.")";
+ 				echo "&raquo; ".RAID." $otext (".BUILDRALLY.")";
  			}
  		} else {
  			echo "<a href=\"a2b.php?z=".$_GET['d']."&o\">&raquo; ".RAID." $otext</a>";
