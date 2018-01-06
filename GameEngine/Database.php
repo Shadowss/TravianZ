@@ -678,7 +678,7 @@ class MYSQLi_DB implements IDbConnection {
             $arrayVariable[$arrayStructure] = [];
         }
 
-        if (isset($arrayVariable[$arrayStructure]) && count($arrayVariable[$arrayStructure])) {
+        if (isset($arrayVariable[$arrayStructure]) && !empty($arrayVariable[$arrayStructure])) {
             return $arrayVariable[$arrayStructure];
         } else {
             return null;
