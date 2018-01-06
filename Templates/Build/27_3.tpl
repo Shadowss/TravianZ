@@ -282,13 +282,9 @@
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
         		echo '</tr>';
         	}
-
-?>
-            <tr><td colspan="4"></td></tr>
-            
-            <?php
 	}
 ?>
+
     	</tbody></table>
         
         <?php
