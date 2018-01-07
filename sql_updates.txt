@@ -1,3 +1,6 @@
+-- 7.01.2018 -> new column
+ALTER TABLE s1_fdata ADD `ww_lastupdate` int(11) NULL DEFAULT NULL AFTER `wwname`;
+
 -- 2.12.2017 -> new indexes
 ALTER TABLE `s1_vdata` ADD INDEX(`exp1`);
 ALTER TABLE `s1_vdata` ADD INDEX(`exp2`);
