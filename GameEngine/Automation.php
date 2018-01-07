@@ -689,7 +689,7 @@ class Automation {
                     }
                 }
 
-                // Update ww last finish upgrate
+                // Update ww last finish upgrade
                 if ($indi['type'] == 40) {
                     $qW = "UPDATE ".TB_PREFIX."fdata set ww_lastupdate = ".time()." where vref = ".(int) $indi['wid'];
                     $database->query($qW);
