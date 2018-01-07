@@ -43,8 +43,10 @@ class multiSort {
 					$t = 'strnatcmp($a[' . $key . '], $b[' . $key . '])';
 					break;
 			}
-			usort($array, create_function('$a, $b', 'return ' . ($order ? '' : '-') . '(' . $t . ');'));
 
+			usort($array, function($a, $b) use ($order, $t) {
+				return ($order ? '' : '-') . ($t);
+			});
 		}
 		return $array;
 	}
