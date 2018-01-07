@@ -653,7 +653,7 @@ class Message {
 	}
 
 	private function findSent($id) {
-	    if (count($this->sent)) {
+	    if (!empty($this->sent)) {
             foreach ( $this->sent as $message ) {
                 if ( $message['id'] == $id ) {
                     return true;
@@ -665,7 +665,7 @@ class Message {
 	}
 
 	private function findArchive($id) {
-        if (count($this->archived)) {
+        if (!empty($this->archived)) {
             foreach ( $this->archived as $message ) {
                 if ( $message['id'] == $id ) {
                     return true;
