@@ -26,7 +26,7 @@ if (WW == True)
         $cont = 1; 
         while ($row = mysqli_fetch_array($result)) 
         { 
-            $ally = $database->getAlliance($row[alliance]); 
+            $ally = $database->getAlliance($row['alliance']); 
             $query = @mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . $row['vref'] . ' ORDER BY `attack_time` ASC LIMIT 1'); 
             $row2 = @mysqli_fetch_assoc($query); 
         ?> 
