@@ -156,7 +156,7 @@ else {
         $sql = mysqli_query($GLOBALS['link'],"SELECT tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysqli_error($database->dblink));
         $winningalliancetag = mysqli_result($sql, 0);
 
-        $sql = mysqli_query($GLOBALS['link'],"SELECT ww_lastupdate FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
+        $sql = mysqli_query($GLOBALS['link'],"SELECT ww_lastupdate FROM ".TB_PREFIX."fdata WHERE vref = '$vref'");
         $finishconstruction = mysqli_result($sql, 0);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
