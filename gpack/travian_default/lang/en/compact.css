@@ -7534,42 +7534,34 @@ img.cropfinder_icon {
 div#build.gid27 div.artefact {
     background-position: center bottom;
     background-repeat: no-repeat;
+    padding-bottom: 170px;
 }
 div#build.gid27 div.artefact.image-1 {
     background-image: url("../../img/artefact/type-1.gif");
-    padding-bottom: 160px;
 }
 div#build.gid27 div.artefact.image-2 {
     background-image: url("../../img/artefact/type-2.gif");
-    padding-bottom: 223px;
 }
 div#build.gid27 div.artefact.image-4 {
     background-image: url("../../img/artefact/type-4.gif");
-    padding-bottom: 200px;
 }
 div#build.gid27 div.artefact.image-5 {
     background-image: url("../../img/artefact/type-5.gif");
-    padding-bottom: 157px;
 }
 div#build.gid27 div.artefact.image-6 {
     background-image: url("../../img/artefact/type-6.gif");
-    padding-bottom: 170px;
 }
 div#build.gid27 div.artefact.image-8 {
     background-image: url("../../img/artefact/type-8.gif");
-    padding-bottom: 160px;
 }
 div#build.gid27 div.artefact.image-9 {
     background-image: url("../../img/artefact/type-9.gif");
-    padding-bottom: 198px;
 }
 div#build.gid27 div.artefact.image-10 {
     background-image: url("../../img/artefact/type-10.gif");
-    padding-bottom: 161px;
 }
 div#build.gid27 div.artefact.image-fool {
     background-image: url("../../img/artefact/type-fool.gif");
-    padding-bottom: 252px;
 }
 div.forum table img.smiley, div.forum table#posts td.pcontent div.text img.smiley, div.messages img.smiley {
     background-image: url("../../img/f/smileys.gif");
