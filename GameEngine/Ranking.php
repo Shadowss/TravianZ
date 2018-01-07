@@ -271,6 +271,8 @@
                     ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 				}
 
+				$datas = array();
+
 				$result = (mysqli_query($GLOBALS['link'],$q));
 				while($row = mysqli_fetch_assoc($result)) {
 					$datas[] = $row;
