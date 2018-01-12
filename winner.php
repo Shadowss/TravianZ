@@ -155,6 +155,9 @@ else {
 
         $sql = mysqli_query($GLOBALS['link'],"SELECT tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'")or die(mysqli_error($database->dblink));
         $winningalliancetag = mysqli_result($sql, 0);
+
+        $sql = mysqli_query($GLOBALS['link'],"SELECT ww_lastupdate FROM ".TB_PREFIX."fdata WHERE vref = '$vref'");
+        $finishconstruction = mysqli_result($sql, 0);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -213,7 +216,7 @@ else {
 
 					The results: Day had long since passed into night, yet the workers in <?php echo "<a href=\"karte.php?d=$vref&c=".$generator->getMapCheck($vref)."\">$winningvillagename</a>"; ?>,
 					laboured on throught the wintery eve, every wary of the countless armies marching to destroy their work, knowing that they raced against time and the greatest
-					threat that had ever faced the free people. Their tireless struggles were rewarded at <b><?php echo date('H:i:s'); ?></b> on <b><?php echo date('d. M. Y'); ?></b> after a
+					threat that had ever faced the free people. Their tireless struggles were rewarded at <b><?php echo date('H:i:s', $finishconstruction); ?></b> on <b><?php echo date('d. M. Y', $finishconstruction); ?></b> after a
 					nameless worker laid the dinal stone in what will forever known as the greatest and most magnificent creation in all of history since the fall of the Natars<br /><br />
 
 					Together with the alliance "<?php echo "<a href=\"allianz.php?aid=$allianceid\">$winningalliancetag</a>"; ?>", "<?php echo "<a href=\"spieler.php?uid=$owner\">$username</a>"; ?>"

@@ -707,6 +707,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
  `f99` tinyint(2) NULL DEFAULT '0',
  `f99t` tinyint(2) NULL DEFAULT '0',
  `wwname` varchar(100) NULL DEFAULT 'World Wonder',
+ `ww_lastupdate` int(11) DEFAULT NULL,
  PRIMARY KEY (`vref`),
  KEY `f99` (`f99`),
  KEY `f99t` (`f99t`)
