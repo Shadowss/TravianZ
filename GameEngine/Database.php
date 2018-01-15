@@ -7673,9 +7673,21 @@ References: User ID/Message ID, Mode
         return self::$prisonersCacheByID[$id];
 	}
 
-	function getPrisoners3($from) {
-        return $this->getPrisoners($from, 1);
-	}
+	function getPrisoners3($from, $use_cache = true) { //change all this function arrange Dayran prisoners
+    		list($from) = $this->escape_input((int) $from);
+
+    	// first of all, check if we should be using cache and whether the field
+    	// required is already cached
+    	if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCacheByVillageAndFromIDs, $from)) && !is_null($cachedValue)) {
+        return $cachedValue;
+    	}
+
+	$q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
+	$result = mysqli_query($this->dblink,$q);
+
+    	self::$prisonersCacheByVillageAndFromIDs[$wid.$from] = $this->mysqli_fetch_all($result);
+    	return self::$prisonersCacheByVillageAndFromIDs[$from];
+	}//hasta aki
 
 	function deletePrisoners($id) {
         if (!is_array($id)) {
