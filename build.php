@@ -46,6 +46,7 @@ if ( isset( $_GET['id'] ) ) {
     if ( ! ctype_digit( preg_replace( "/[^a-zA-Z0-9_-]/", "", $_GET['id'] ) ) ) {
         $_GET['id'] = "1";
     }
+
     $checkBuildings = array( 0, 16, 17, 25, 26, 27 );
 
     if ( $_GET['id'] < 19 || ( isset( $_GET['gid'] ) && ! in_array( $_GET['gid'], $checkBuildings ) ) ) {
