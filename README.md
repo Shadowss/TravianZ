@@ -62,7 +62,7 @@ or you have a feature request to be included in the play.
 Many thanks to all those who recently played around with the project and tested it both, locally and on their 
 own servers. This includes [ZZJHONS](https://github.com/ZZJHONS), [DracoMilesX](https://github.com/DracoMilesX), 
 [phaze1G](https://github.com/phaze1G) and many others who were too shy to let us know that they use and enjoy 
-runnign this game :)
+running this game :)
 
 Also, our thanks go to all both, the original and occasional developers, especially [yi12345](https://github.com/yi12345/), 
 [advocaite](https://github.com/advocaite/), [brainiacX](https://github.com/brainiacX/), [ronix](https://github.com/ronix/), 
