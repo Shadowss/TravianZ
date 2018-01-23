@@ -163,15 +163,17 @@ MEDAL CATEGORY:
 				echo"<tr><td>Tribe Teutons</td><td></td><td></td><td>[#teuton]</td></tr>";
 				} else if($session->userinfo['tribe'] == 3) {
 				echo"<tr><td>Tribe Gauls</td><td></td><td></td><td>[#gaul]</td></tr>";
-				} else if($session->userinfo['access'] == 9 && $session->userinfo['username'] == "Shadow") {
+				} else if($session->userinfo['access'] == 9) {
 				echo"<tr><td>Administrator</td><td></td><td></td><td>[#MH]</td></tr>";
 				echo"<tr><td>Administrator</td><td></td><td></td><td>[#TEAM]</td></tr>";
-				echo"<tr><td>Administrator</td><td></td><td></td><td>[#EVENT]</td></tr>";
-				} else if($session->userinfo['access'] == 8 && $session->userinfo['username'] == "Shadow") {
+				} else if($session->userinfo['access'] == 8) {
 				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MH]</td></tr>";
 				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#TEAM]</td></tr>";
-				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#EVENT]</td></tr>";
-				} ?>
+				} else if($session->userinfo['username'] == "Shadow") {
+				echo"<tr><td>Shadow</td><td></td><td></td><td>[#MH]</td></tr>";
+				echo"<tr><td>Shadow</td><td></td><td></td><td>[#TEAM]</td></tr>";
+				echo"<tr><td>Shadow</td><td></td><td></td><td>[#EVENT]</td></tr>";
+				}?>
 				 </table></p>
 
 
