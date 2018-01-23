@@ -3317,7 +3317,7 @@ class MYSQLi_DB implements IDbConnection {
                     crop = IF(crop $sign $crop < 0, 0, IF(crop $sign $crop > maxcrop, maxcrop, crop $sign $crop))
                 WHERE
                     wref = " . $vid ;
-
+					
          return mysqli_query( $this->dblink, $q);
 	}
 

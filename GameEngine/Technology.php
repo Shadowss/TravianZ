@@ -191,7 +191,7 @@ class Technology {
 
         global $village,$$unit,$database;
         $unitarray = $$unit;
-		$res = $database->getVillage($village->wid);
+		$res = $database->getVillage($village->wid, 0, false);
 		if ($res['wood'] > $res['maxstore']){$res['wood'] = $res['maxstore'];}
 		if ($res['clay'] > $res['maxstore']){$res['clay'] = $res['maxstore'];}
 		if ($res['iron'] > $res['maxstore']){$res['iron'] = $res['maxstore'];}
