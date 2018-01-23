@@ -105,7 +105,7 @@ $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="
 //NATURE image (for anyone)
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['username'] == "Nature"){
-$profiel = preg_replace("/\[#NATURE]/is",'<img src="'.$gpack.'img/t/nature.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Nature Account</td></tr></table>\')">', $profiel, 1);
+$profiel = preg_replace("/\[#NATURE]/is",'<img src="'.$gpack.'img/t/nature.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Natures troops are the animals living in unoccupied oases. You can use the combat simulator to see whether you have enough troops to defeat the animals in an oasis you want to conquer, but remember that you can only raid oasis. Keep in mind that all the animals above Bear can kill its contemporary max tier travian troop in single combat. </td></tr></table>\')">', $profiel, 1);
 }
 
 //Taskmaster image (for anyone)
