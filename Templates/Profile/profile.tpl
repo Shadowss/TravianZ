@@ -88,17 +88,17 @@ include("menu.tpl"); ?>
 		</tr>
 				<?php
 /******************************
-INDELING CATEGORIEEN:
+MEDAL CATEGORY:
 ===============================
-== 1. Aanvallers top 10      ==
-== 2. Defence top 10         ==
-== 3. Klimmers top 10        ==
-== 4. Overvallers top 10     ==
-== 5. In att en def tegelijk ==
-== 6. in top 3 - aanval      ==
-== 7. in top 3 - verdediging ==
-== 8. in top 3 - klimmers    ==
-== 9. in top 3 - overval     ==
+== 1. Attackers top 10       ==
+== 2. Defender top 10         ==
+== 3. Climbers top 10        ==
+== 4. Robbers top 10     ==
+== 5. In att and def simultaneously ==
+== 6. in top 3 - Attacker      ==
+== 7. in top 3 - Defender ==
+== 8. in top 3 - Climbers    ==
+== 9. in top 3 - Robbers     ==
 ******************************/
 
 
@@ -166,9 +166,11 @@ INDELING CATEGORIEEN:
 				} else if($session->userinfo['access'] == 9 && $session->userinfo['username'] == "Shadow") {
 				echo"<tr><td>Administrator</td><td></td><td></td><td>[#MH]</td></tr>";
 				echo"<tr><td>Administrator</td><td></td><td></td><td>[#TEAM]</td></tr>";
+				echo"<tr><td>Administrator</td><td></td><td></td><td>[#EVENT]</td></tr>";
 				} else if($session->userinfo['access'] == 8 && $session->userinfo['username'] == "Shadow") {
 				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MH]</td></tr>";
 				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#TEAM]</td></tr>";
+				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#EVENT]</td></tr>";
 				} ?>
 				 </table></p>
 
