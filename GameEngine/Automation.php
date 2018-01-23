@@ -3213,7 +3213,7 @@ class Automation {
         if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
         }
-        if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
+        if ($reload) header("Location: ".$_SERVER['REQUEST_URI']);
     }
 
     function DelVillage($wref, $mode=0){
