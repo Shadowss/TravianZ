@@ -16,7 +16,7 @@
 [![GitHub followers](https://img.shields.io/github/followers/espadrine.svg?style=social&label=Follow)](https://github.com/Shadowss/TravianZ)
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/cata7007)
 ======
-TravianZ Version **v.8.3.3 BETA b4**
+TravianZ Version **v.8.3.3**
 ======
 **Note:** this game is still in a pre-release state, although at this point it is very playable, tested and found to be fairly stable
 
