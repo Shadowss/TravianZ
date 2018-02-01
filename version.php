@@ -101,7 +101,10 @@ $automation->isWinner();
 30. Armando<br />
 31. aggenkeech<br />
 32. Niko28<br />
-33. martinambrus<br />
+33. martinambrus<br /></b><br />
+<b><u><center>Released by: Shadow</u></b><br />
+<b>Visit: <a href="http://forum.ragezone.com/f583/travianz-version-modified-shadow-many-967580/">RageZone.com</a></b><br /></center></b><br />
+<b><center>Download from <u><a href="https://github.com/Shadowss/TravianZ/archive/master.zip">Github</a></u></b><br />
 </div>
 </div>
 <br /><br /><br /><br /><div id="side_info">
