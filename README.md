@@ -6,7 +6,7 @@
 [![license](https://img.shields.io/github/license/Shadowss/TravianZ.svg)]()
 [![GitHub last commit](https://img.shields.io/github/last-commit/Shadowss/TravianZ.svg)]()
 [![Proudly Coded in PHPStorm](https://img.shields.io/badge/coded%20in-PHPStorm-BD5CF3.svg)](https://www.jetbrains.com/buy/opensource/?product=phpstorm)
-[![Donate to this project on LiberaPay](https://img.shields.io/badge/LiberaPay-donate-F6C915.svg)](https://liberapay.com/martinambrus/donate)
+[![Donate to this project on LiberaPay](https://img.shields.io/badge/LiberaPay-donate-F6C915.svg)](https://liberapay.com/Shadowss/donate)
 [![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Watch how this was made on YouTube](https://img.shields.io/badge/The%20making%20of...-YouTube-FF0000.svg)](https://www.youtube.com/watch?v=1XiHhpGUmQg&list=PLzV5avt1FFHorlIeoL9YX0pdb9bj-FO84)
 ======
