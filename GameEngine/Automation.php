@@ -2124,19 +2124,22 @@ class Automation {
                         $totwood = $villageData['wood'];
                         $totcrop = $villageData['crop'];
                     }else{
-                        $cranny_eff = 0;
-
-                        // work out available resources.
-                        $this->updateORes($data['to']);
-                        $this->pruneOResource();
+                        $cranny_eff = 0;                       
 
                         if ($conqureby >0) { //10% from owner proc village owner - fix by ronix
+                            $this->updateRes($conqureby,$to['owner']);
+                            $this->pruneResource();
+                            
                             $villageData = $database->getVillageFields($conqureby,'clay, iron, wood, crop');
                             $totclay = intval($villageData['clay']/10);
                             $totiron = intval($villageData['iron']/10);
                             $totwood = intval($villageData['wood']/10);
                             $totcrop = intval($villageData['crop']/10);
                         }else{
+                            // work out available resources.
+                            $this->updateORes($data['to']);
+                            $this->pruneOResource();
+                            
                             $oasisData = $database->getOasisFields($data['to'],'clay, iron, wood, crop');
                             $totclay = $oasisData['clay'];
                             $totiron = $oasisData['iron'];
@@ -3014,7 +3017,12 @@ class Automation {
                                 if ($isoasis == 0){
                                     $database->modifyResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
                                 }else{
-                                    $database->modifyOasisResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                    if($conqureby > 0) //if it's an oasis but it's conquered by someone, resources must be modified in the owner village
+                                    {
+                                        $database->modifyResource($conqureby,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                    }else{
+                                        $database->modifyOasisResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                    }
                                 }
                                 $database->addMovement(6,$DefenderWref,$AttackerWref,$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
                                 $totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
