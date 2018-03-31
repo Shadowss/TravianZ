@@ -25,28 +25,30 @@ class multiSort {
 			if($i + 2 < func_num_args())
 				$type = func_get_arg($i + 2);
 
-			switch($type)
-			{
-				case 1: // Case insensitive natural.
-					$t = 'strcasenatcmp($a[' . $key . '], $b[' . $key . '])';
-					break;
-				case 2: // Numeric.
-					$t = '$a[' . $key . '] - $b[' . $key . ']';
-					break;
-				case 3: // Case sensitive string.
-					$t = 'strcmp($a[' . $key . '], $b[' . $key . '])';
-					break;
-				case 4: // Case insensitive string.
-					$t = 'strcasecmp($a[' . $key . '], $b[' . $key . '])';
-					break;
-				default: // Case sensitive natural.
-					$t = 'strnatcmp($a[' . $key . '], $b[' . $key . '])';
-					break;
-			}
+			$t = function($a, $b) use ($key)
+			{			    
+			    switch($type)
+			    {
+			        case 1: // Case insensitive natural.
+			            $result = strcasenatcmp($a[$key], $b[$key]);
+			            break;
+			        case 2: // Numeric.
+			            $result = $a[$key] - $b[$key];			 
+			            break;
+			        case 3: // Case sensitive string.
+			            $result = strcmp($a[$key], $b[$key]);	
+			            break;
+			        case 4: // Case insensitive string.
+			            $result = strcasecmp($a[$key], $b[$key]);	
+			            break;
+			        default: // Case sensitive natural.
+			            $result = strnatcmp($a[$key], $b[ $key]);
+			            break;                      
+			    }
+			    return $result*($order ? 1 : -1);
+			};
 
-			usort($array, function($a, $b) use ($order, $t) {
-				return ($order ? '' : '-') . ($t);
-			});
+			usort($array, $t);
 		}
 		return $array;
 	}

@@ -467,7 +467,7 @@
 
 					array_push($holder, $value);
 				}
-				$holder = $multisort->sorte($holder, "'x'", true, 2, "'y'", true, 2, "'pop'", false, 2);
+				$holder = $multisort->sorte($holder, "x", true, 2, "y", true, 2, "pop", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
@@ -506,7 +506,7 @@
 
 					array_push($holder, $value);
 				}
-				$holder = $multisort->sorte($holder, "'totalpop'", false, 2);
+				$holder = $multisort->sorte($holder, "totalpop", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
@@ -526,7 +526,7 @@
 
 					array_push($holder, $value);
 				}
-				$holder = $multisort->sorte($holder, "'experience'", false, 2);
+				$holder = $multisort->sorte($holder, "experience", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
@@ -554,7 +554,7 @@
 
 					array_push($holder, $value);
 				}
-				$holder = $multisort->sorte($holder, "'Aap'", false, 2);
+				$holder = $multisort->sorte($holder, "Aap", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
@@ -582,7 +582,7 @@
 
 					array_push($holder, $value);
 				}
-				$holder = $multisort->sorte($holder, "'Adp'", false, 2);
+				$holder = $multisort->sorte($holder, "Adp", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
