@@ -25,7 +25,7 @@ class multiSort {
 			if($i + 2 < func_num_args())
 				$type = func_get_arg($i + 2);
 
-			$t = function($a, $b) use ($key, $type)
+			$t = function($a, $b) use ($key, $type, $order)
 			{			    
 			    switch($type)
 			    {
