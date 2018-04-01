@@ -2253,14 +2253,9 @@ class Automation {
                     //catapults look :D
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
                     //check to see if can destroy village
-                    $hasArtefact = false;
                     if (count($varray) != 1 && $to['capital'] != 1 && !$database->villageHasArtefact($DefenderWref)) {
                         $can_destroy=1;
                     } else {
-                        if ($database->villageHasArtefact($DefenderWref)) {
-                            $hasArtefact = true;
-                        }
-
                         $can_destroy=0;
                     }
                     if ($isoasis == 1) $can_destroy=0;
@@ -2531,7 +2526,7 @@ class Automation {
                                             //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
                                             // note: at this point, we can use cache, since we've cleared it above
                                             if($this->getTypeLevel(35,$data['from']) == 0){
-                                                for ($i=0; $i<($data['t9']-$dead9); $i++){
+                                                for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
                                                     if (!isset($rand)) {
                                                         $rand = 0;
                                                     }
@@ -2543,7 +2538,7 @@ class Automation {
                                                     }
                                                 }
                                             }else{
-                                                for ($i=0; $i<($data['t9']-$dead9); $i++){
+                                                for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
                                                     $rand+=rand(5,15);
                                                 }
                                             }
