@@ -167,7 +167,7 @@ echo '<div class="clear dotted"></div><div class="text">'.$bbcode_post.'</div></
 		echo '<a href="allianz.php?s=2&fid2='.$arr['cat'].'&pid='.$arr['alliance'].'&tid='.$arr['id'].'&ac=newpost"><img id="fbtn_reply" class="dynamic_img"src="img/x.gif" alt="Replies" /></a>';
 	}
 	if($opt['opt5'] == 1){
-		echo '<a href="allianz.php?s=2&pid='.$aid.'&tid='.$arr['id'].'&admin=switch_admin" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
+		echo '<a href="allianz.php?s=2&fid2='.$arr['cat'].'&pid='.$aid.'&tid='.$arr['id'].'&admin=switch_admin" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 	}
 
 	 echo '</div>';
