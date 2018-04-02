@@ -143,7 +143,6 @@ class Building {
             header("Location: banned.php");
             exit;
         } else {
-            $page = basename($_SERVER['SCRIPT_NAME']);
             $levels = $database->getResourceLevel($village->wid);
             $progresses = $this->residenceOfPalaceBuildInProgress();
 
@@ -168,13 +167,7 @@ class Building {
                 )
             )
             ) {
-                if ( $tid > 18 ) {
-                    header( "Location: dorf2.php" );
-                    exit;
-                } else {
-                    header( "Location: dorf1.php" );
-                    exit;
-                }
+                $this->redirect($tid);
             }
 
             if (
@@ -183,8 +176,8 @@ class Building {
                 // let's see if we should allow building what we want where we want to
                 // (prevent building resource fields in the village
                 (
-                    ($page == 'dorf1.php' && $id >= 1 && $id <= 4) ||
-                    ($page == 'dorf2.php' && $id > 4)
+                    ($tid >= 1 && $tid <= 18 && $id >= 1 && $id <= 4) ||
+                    ($tid >= 19 && $id > 4)
                 ) &&
                 // check that we're not trying to change a standing building type
                 (
@@ -193,15 +186,24 @@ class Building {
                 )
             ) {
                 if ( !isset($_GET['master']) && $this->checkResource( $id, $tid ) != 4 ) {
-                    if ( $tid >= 19 ) {
-                        header( "Location: dorf2.php" );
-                        exit;
-                    } else {
-                        header( "Location: dorf1.php" );
-                        exit;
-                    }
-
-                    exit;
+                    $this->redirect($tid);
+                }
+                
+                // check if the building will be built with the master builder
+                if(isset($_GET['master'])){
+                    // if so, we have to check if it'll be built or upgraded
+                    if($levels['f'.$tid.'t'] == 0)
+                    {                 
+                        // the building will be built, we have to check if we can build it
+                        if(!$this->meetRequirement($id)){
+                            $this->redirect($tid);
+                        }
+                    }else{
+                        // the building will be upgraded, we have to check if we can upgrade it
+                        if($this->isMax($id, $tid, $this->isLoop($tid) + $this->isCurrent($tid))){
+                            $this->redirect($tid);
+                        }
+                    }                   
                 }
             } else {
                 header('Location: '.$_SERVER['SCRIPT_NAME']);
@@ -210,6 +212,22 @@ class Building {
         }
     }
 
+    /**
+     * Redirects to dorf1.php if we're building/upgrading resource fields otherwise in dorf2.php 
+     * 
+     * @param int $tid the id where the building is built/upgraded
+     */
+    
+    private function redirect($tid){
+        if ( $tid >= 19 ) {
+            header( "Location: dorf2.php" );
+            exit;
+        } else {
+            header( "Location: dorf1.php" );
+            exit;
+        }
+    }
+    
     public function procBuild($get) {
         global $session, $village, $database;
 
@@ -233,14 +251,8 @@ class Building {
 
             $level = $database->getResourceLevel( $village->wid );
             $database->addBuilding( $village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level[ 'f' . $get['id'] ] + 1 + count( $database->getBuildingByField( $village->wid, $get['id'] ) ) );
-
-            if ( $get['id'] > 18 ) {
-                header( "Location: dorf2.php" );
-                exit;
-            } else {
-                header( "Location: dorf1.php" );
-                exit;
-            }
+          
+            $this->redirect($get['id']);
         }
         if(isset($get['a']) && $get['c'] == $session->checker && isset($get['id'])) {
             if  ($get['id'] > 18 && ($get['id'] < 41 || $get['id'] == 99)){

@@ -4400,6 +4400,7 @@ References: User ID/Message ID, Mode
 			}
 			if($jobs[$i]['master'] == 1) {
 				$jobMaster = $i;
+				$level = $jobs[$i]['level'];
 			}
 		}
 		if(count($jobs) > 1 && ($jobs[0]['field'] == $jobs[1]['field'])) {
@@ -4432,6 +4433,10 @@ References: User ID/Message ID, Mode
 		if(count($jobs) > 3 && ($jobs[1]['field'] == $jobs[2]['field'] && $jobs[2]['field'] == $jobs[3]['field'])) {
 			$SameBuildCount = 7;
 		}
+		if(isset($jobMaster) && isset($level) && $level-1 <= 0){
+		    $SameBuildCount = 0;
+		}
+		
 		if($SameBuildCount > 0) {
 			if($SameBuildCount > 3){
 			if($SameBuildCount == 4 or $SameBuildCount == 5){
