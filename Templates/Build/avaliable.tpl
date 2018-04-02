@@ -146,7 +146,7 @@ include("avaliable/trapper.tpl");
 if($rallypoint == 0 && $rallypoint1 == 0 && $id != 40) {
 include("avaliable/rallypoint.tpl");
 }
-if($embassy == 0 && $embassy1 == 0 && $id != 39 && $id != 40) {
+if($embassy == 0 && $embassy1 == 0 && $id != 39 && $id != 40 && $mainbuilding >= 1) {
 include("avaliable/embassy.tpl");
 }
 //fix hero
