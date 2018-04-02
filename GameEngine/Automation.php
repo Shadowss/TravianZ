@@ -2124,19 +2124,22 @@ class Automation {
                         $totwood = $villageData['wood'];
                         $totcrop = $villageData['crop'];
                     }else{
-                        $cranny_eff = 0;
-
-                        // work out available resources.
-                        $this->updateORes($data['to']);
-                        $this->pruneOResource();
+                        $cranny_eff = 0;                       
 
                         if ($conqureby >0) { //10% from owner proc village owner - fix by ronix
+                            $this->updateRes($conqureby,$to['owner']);
+                            $this->pruneResource();
+                            
                             $villageData = $database->getVillageFields($conqureby,'clay, iron, wood, crop');
                             $totclay = intval($villageData['clay']/10);
                             $totiron = intval($villageData['iron']/10);
                             $totwood = intval($villageData['wood']/10);
                             $totcrop = intval($villageData['crop']/10);
                         }else{
+                            // work out available resources.
+                            $this->updateORes($data['to']);
+                            $this->pruneOResource();
+                            
                             $oasisData = $database->getOasisFields($data['to'],'clay, iron, wood, crop');
                             $totclay = $oasisData['clay'];
                             $totiron = $oasisData['iron'];
@@ -2250,14 +2253,9 @@ class Automation {
                     //catapults look :D
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
                     //check to see if can destroy village
-                    $hasArtefact = false;
                     if (count($varray) != 1 && $to['capital'] != 1 && !$database->villageHasArtefact($DefenderWref)) {
                         $can_destroy=1;
                     } else {
-                        if ($database->villageHasArtefact($DefenderWref)) {
-                            $hasArtefact = true;
-                        }
-
                         $can_destroy=0;
                     }
                     if ($isoasis == 1) $can_destroy=0;
@@ -2528,7 +2526,7 @@ class Automation {
                                             //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
                                             // note: at this point, we can use cache, since we've cleared it above
                                             if($this->getTypeLevel(35,$data['from']) == 0){
-                                                for ($i=0; $i<($data['t9']-$dead9); $i++){
+                                                for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
                                                     if (!isset($rand)) {
                                                         $rand = 0;
                                                     }
@@ -2540,7 +2538,7 @@ class Automation {
                                                     }
                                                 }
                                             }else{
-                                                for ($i=0; $i<($data['t9']-$dead9); $i++){
+                                                for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
                                                     $rand+=rand(5,15);
                                                 }
                                             }
@@ -3014,7 +3012,12 @@ class Automation {
                                 if ($isoasis == 0){
                                     $database->modifyResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
                                 }else{
-                                    $database->modifyOasisResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                    if($conqureby > 0) //if it's an oasis but it's conquered by someone, resources must be modified in the owner village
+                                    {
+                                        $database->modifyResource($conqureby,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                    }else{
+                                        $database->modifyOasisResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                    }
                                 }
                                 $database->addMovement(6,$DefenderWref,$AttackerWref,$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
                                 $totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];

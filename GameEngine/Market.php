@@ -290,7 +290,7 @@ class Market
                 array_push($holderarray,$value);
             }
         }
-        $this->onsale = $multisort->sorte($holderarray, "'duration'", true, 2);
+        $this->onsale = $multisort->sorte($holderarray, "duration", true, 2);
     }
 
     private function filterNeed($get)
