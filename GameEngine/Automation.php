@@ -2061,6 +2061,9 @@ class Automation {
                             $database->modifyHeroXp("experience",$defheroxp,$HeroID);
                         }
                     }
+                    
+                    // we don't need these two variables anymore
+                    unset($AttackerHeroID, $DefendersHeroID);
 
                     $database->modifyPoints(
                         $toF['owner'],
