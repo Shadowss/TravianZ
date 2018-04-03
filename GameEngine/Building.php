@@ -494,6 +494,13 @@ class Building {
 			$uprequire = $this->resourceRequired($id,$village->resarray['f'.$id.'t']);
 			$time = time() + $uprequire['time'];
 			$bindicate = $this->canBuild($id,$village->resarray['f'.$id.'t']);
+			
+			// don't allow building above max levels and don't allow building if it's in demolition
+			if ($bindicate == 1 || $bindicate == 10 || $bindicate == 11) {
+			    header("Location: dorf2.php");
+			    exit;
+			}
+			
 			$loop = ($bindicate == 9 ? 1 : 0);
 			$loopsame = 0;
 			if($loop == 1) {
@@ -524,11 +531,6 @@ class Building {
 				}
 			}
 			$level = $database->getResourceLevel($village->wid);
-
-			// don't allow building above max levels
-            if ($level['f'.$id] + 1 > count(${'bid'.$village->resarray['f'.$id.'t']})) {
-                return;
-            }
 
 			if($session->access!=BANNED){
 			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time+($loop==1?ceil(60/SPEED):0),0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
@@ -607,7 +609,7 @@ class Building {
                 }
                 $uprequire = $this->resourceRequired( $id, $tid );
                 $time      = time() + $uprequire['time'];
-                $bindicate = $this->canBuild( $id, $village->resarray[ 'f' . $id . 't' ] );
+                $bindicate = $this->canBuild( $id, $tid );
                 $loop      = ( $bindicate == 9 ? 1 : 0 );
                 if ( $loop == 1 ) {
                     foreach ( $this->buildArray as $build ) {
@@ -629,6 +631,9 @@ class Building {
                         header( "Location: banned.php" );
                         exit;
                     }
+                } else {
+                    header("location: dorf2.php");
+                    exit;
                 }
             } else {
                 header( "Location: dorf2.php" );
