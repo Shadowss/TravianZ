@@ -22,8 +22,8 @@ if ( isset( $_GET['newdid'] ) ) {
     header( "Location: " . $_SERVER['PHP_SELF'] . ( isset( $_GET['id'] ) ? '?id=' . $_GET['id'] : ( isset( $_GET['gid'] ) ? '?gid=' . $_GET['gid'] : '' ) ) );
     exit;
 }
-if ( isset( $_GET['id'] ) && $_GET['id'] == 99 && $village->natar == 0 ) {
-    header( "Location: dorf2.php" );
+if (isset($_GET['id']) && ($_GET['id'] < 1 || $_GET['id'] > 40 && ($_GET['id'] == 99 && $village->natar == 0 || $_GET['id'] != 99))) {
+    header("Location: dorf2.php");
     exit;
 }
 

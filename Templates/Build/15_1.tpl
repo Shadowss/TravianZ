@@ -19,7 +19,7 @@ if ($session->alliance) {
 
 if(!empty($_REQUEST["demolish"]) && $_REQUEST["c"] == $session->mchecker) {
 if($session->access != BANNED){
-    if($_REQUEST["type"] != null) {
+    if($_REQUEST["type"] != null && ($_REQUEST["type"] >= 19 && $_REQUEST["type"] <= 40 || $_REQUEST["type"] == 99)) {
         $type = $_REQUEST['type'];
         $demolish_permitted = $database->addDemolition($village->wid,$type);
         if ($demolish_permitted === true) {

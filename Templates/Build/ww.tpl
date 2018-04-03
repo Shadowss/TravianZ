@@ -20,7 +20,6 @@
 <h1><?php echo WONDER;?> <br /><span class="level"><?php echo LEVEL;?> <?php echo $village->resarray['f'.$id];?></span></h1>
 <p class="build_desc"><?php echo WONDER_DESC;?></p>
 <form action="GameEngine/Game/WorldWonderName.php" method="POST">
-<input type="hidden" name="vref" value="<?php echo $_SESSION['wid']; ?>" />
 <?php
 $vref = $_SESSION['wid'];
 $wwname = $database->getWWName($vref);
@@ -37,7 +36,7 @@ echo ''.WORLD_WONDER_NOTCHANGE_NAME.'.
     </form>
 	<?php
     if(isset($_GET['n'])) {
-		echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="Red"><b>'.WORLD_WONDER_NAME_CHANGED.'.</b></font>';
+		echo '<div style="text-align: center"><font color="Red"><b>'.WORLD_WONDER_NAME_CHANGED.'.</b></font></div><br />';
 		  }
 		  ?>
 
