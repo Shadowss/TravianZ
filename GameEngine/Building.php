@@ -219,11 +219,11 @@ class Building {
      */
     
     private function redirect($tid){
-        if ( $tid >= 19 ) {
-            header( "Location: dorf2.php" );
+        if ($tid >= 19) {
+            header("Location: dorf2.php");
             exit;
         } else {
-            header( "Location: dorf1.php" );
+            header("Location: dorf1.php");
             exit;
         }
     }
@@ -482,14 +482,7 @@ class Building {
 				if($jobs['master'] == 0){
 					$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],1);
 					}
-					if($jobs['field'] >= 19) {
-						header("Location: dorf2.php");
-						exit;
-					}
-					else {
-						header("Location: dorf1.php");
-						exit;
-					}
+					$this->redirect($jobs['field']);
 				}
 			}
 		}
@@ -541,14 +534,7 @@ class Building {
 			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time+($loop==1?ceil(60/SPEED):0),0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
 				$database->modifyResource($village->wid,$uprequire['wood'],$uprequire['clay'],$uprequire['iron'],$uprequire['crop'],0);
 				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]+($loopsame>0?2:1)),0);
-				if($id >= 19) {
-					header("Location: dorf2.php");
-					exit;
-				}
-				else {
-					header("Location: dorf1.php");
-					exit;
-				}
+				$this->redirect($id);
 			}
 			}else{
 			    header("Location: banned.php");
