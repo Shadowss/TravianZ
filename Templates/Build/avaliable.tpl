@@ -116,19 +116,19 @@ if((($granary == 0 && $granary1 == 0) || $granary == 20) && $mainbuilding >= 1 &
 }
 if($wall == 0 && $wall1 == 0) {
     if($session->tribe == 1 && $id != 39) {
-    include("avaliable/citywall.tpl");
+        include("avaliable/citywall.tpl");
     }
-if($session->tribe == 2 && $id != 39) {
-    include("avaliable/earthwall.tpl");
+    if($session->tribe == 2 && $id != 39) {
+        include("avaliable/earthwall.tpl");
     }
-if($session->tribe == 3 && $id != 39) {
-    include("avaliable/palisade.tpl");
+    if($session->tribe == 3 && $id != 39) {
+        include("avaliable/palisade.tpl");
     }
-if($session->tribe == 4 && $id != 39) {
-    include("avaliable/earthwall.tpl");
+    if($session->tribe == 4 && $id != 39) {
+        include("avaliable/earthwall.tpl");
     }
-if($session->tribe == 5 && $id != 39) {
-    include("avaliable/citywall.tpl");
+    if($session->tribe == 5 && $id != 39) {
+        include("avaliable/citywall.tpl");
     }
 }
 if((($warehouse == 0 && $warehouse1 == 0) || $warehouse == 20) && $mainbuilding >= 1 && $id != 39 && $id != 40) {
@@ -193,7 +193,7 @@ if($brickyard == 0 && $brickyard1 == 0 && $claypit >= 10 && $mainbuilding >= 5 &
 }
 if($sawmill == 0 && $sawmill1 == 0 && $woodcutter >= 10 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
     include("avaliable/sawmill.tpl");
-  }
+}
 if($ironfoundry == 0 && $ironfoundry1 == 0 && $ironmine >= 10 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
     include("avaliable/ironfoundry.tpl");
 }
@@ -252,43 +252,43 @@ if($armoury == 0 && ($mainbuilding <= 2 || $academy == 0)) {
     include("soon/armoury.tpl");
 }
 if($cropland <= 4) {
-   include("soon/grainmill.tpl");
+    include("soon/grainmill.tpl");
 }
 if(isset($marketplace) && $marketplace == 0 && ($mainbuilding <= 2 || $granary <= 0 || $warehouse <= 0)) {
-   include("soon/marketplace.tpl");
+    include("soon/marketplace.tpl");
 }
 if($residence == 0 && $mainbuilding <= 4) {
-   include("soon/residence.tpl");
+    include("soon/residence.tpl");
 }
 if($academy == 0 && ($mainbuilding <= 2 || $barrack <= 2)) {
-   include("soon/academy.tpl");
+    include("soon/academy.tpl");
 }
 if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4 && !$building->isCastleBuilt() && $village->natar == 0) {
-   include("soon/palace.tpl");
+    include("soon/palace.tpl");
 }
 if($blacksmith == 0 && ($academy <= 2 || $mainbuilding <= 2)) {
-   include("soon/blacksmith.tpl");
+    include("soon/blacksmith.tpl");
 }
 if($stonemasonslodge == 0 && $palace <= 2 && $palace != 0 && $mainbuilding >= 2 && $mainbuilding <= 4 && $residence == 0 && $village->capital == 1) {
-   include("soon/stonemason.tpl");
+    include("soon/stonemason.tpl");
 }
 if($stable == 0 && (($blacksmith <= 2 && $blacksmith != 0) || ($academy >= 2 && $academy <= 4))) {
-   include("soon/stable.tpl");
+    include("soon/stable.tpl");
 }
 if($treasury == 0 && $mainbuilding <= 9 && $mainbuilding >= 5 && $village->natar == 0) {
-   include("soon/treasury.tpl");
+    include("soon/treasury.tpl");
 }
 if($brickyard == 0 && $claypit <= 9 && $claypit >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
-   include("soon/brickyard.tpl");
+    include("soon/brickyard.tpl");
 }
 if($sawmill == 0 && $woodcutter <= 9 && $woodcutter >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
-   include("soon/sawmill.tpl");
+    include("soon/sawmill.tpl");
 }
 if($ironfoundry == 0 && $ironmine <= 9 && $ironmine >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
-   include("soon/ironfoundry.tpl");
+    include("soon/ironfoundry.tpl");
 }
 if($workshop == 0 && $academy <= 9 && $academy >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
-   include("soon/workshop.tpl");
+    include("soon/workshop.tpl");
 }
 if($tournamentsquare == 0 && $rallypoint <= 14 && $rallypoint >= 7) {
     include("soon/tsquare.tpl");
@@ -304,7 +304,7 @@ if($tradeoffice == 0 && $market <= 19 && $market >= 10 || $stable >= 5 && $stabl
 }
 if($session->tribe == 1 && $horsedrinkingtrough == 0 && $rallypoint <= 9 && $rallypoint >= 5 || $stable <= 19 && $stable >= 10 && $session->tribe == 1) {
     include("soon/horsedrinking.tpl");
-    }
+}
 if($brewery == 0 && $village->capital == 1 && $rallypoint <= 9 && $rallypoint >= 5 || $granary <= 19 && $granary >= 10 && $session->tribe == 2) {
     include("soon/brewery.tpl");
 }
@@ -323,62 +323,62 @@ href="javascript:show_build_list('all');"><?php echo SHOW_MORE;?></a></p>
 <div id="build_list_all" class="hide">
 <?php
 if($academy == 0 && ($mainbuilding == 1 || $barrack == 0)) {
-    include("soon/academy.tpl");
-    }
+    include_once("soon/academy.tpl");
+}
 if($palace == 0 && ($embassy == 0 || $mainbuilding <= 2) && $village->natar == 0) {
-    include("soon/palace.tpl");
-    }
+    include_once("soon/palace.tpl");
+}
 if($blacksmith == 0 && ($academy == 0 || $mainbuilding == 1)) {
-    include("soon/blacksmith.tpl");
-    }
+    include_once("soon/blacksmith.tpl");
+}
 if($stonemason == 0 && ($palace == 0 || $mainbuilding <= 2) && $residence == 0) {
-    include("soon/stonemason.tpl");
-    }
+    include_once("soon/stonemason.tpl");
+}
 if($stable == 0 && ($blacksmith == 0 || $academy <= 2)) {
-    include("soon/stable.tpl");
-    }
+    include_once("soon/stable.tpl");
+}
 if($treasury == 0 && $mainbuilding <= 5) {
-    include("soon/treasury.tpl");
-    }
+    include_once("soon/treasury.tpl");
+}
 if($brickyard == 0 && ($claypit <= 5 || $mainbuilding <= 2)) {
-    include("soon/brickyard.tpl");
-    }
+    include_once("soon/brickyard.tpl");
+}
 if($sawmill == 0 && ($woodcutter <= 5 || $mainbuilding <= 2)) {
-    include("soon/sawmill.tpl");
-    }
+    include_once("soon/sawmill.tpl");
+}
 if($ironfoundry == 0 && ($ironmine <= 5 || $mainbuilding <= 2)) {
-    include("soon/ironfoundry.tpl");
-    }
+    include_once("soon/ironfoundry.tpl");
+}
 if($workshop == 0 && ($academy <= 5 || $mainbuilding <= 2)) {
-    include("soon/workshop.tpl");
-    }
+    include_once("soon/workshop.tpl");
+}
 if($tournamentsquare == 0 && $rallypoint <= 7) {
-    include("soon/tsquare.tpl");
-    }
+    include_once("soon/tsquare.tpl");
+}
 if($bakery == 0 && ($grainmill == 0 || $cropland <= 5 || $mainbuilding <= 2)) {
-    include("soon/bakery.tpl");
-    }
+    include_once("soon/bakery.tpl");
+}
 if($townhall == 0 && ($mainbuilding <= 5 || $academy <= 5)) {
-    include("soon/townhall.tpl");
-    }
+    include_once("soon/townhall.tpl");
+}
 if($tradeoffice == 0 && ($market <= 10 || $stable <= 5)) {
-    include("soon/tradeoffice.tpl");
-    }
+    include_once("soon/tradeoffice.tpl");
+}
 if($session->tribe == 1 && $horsedrinkingtrough == 0 && ($rallypoint <= 5 || $stable <= 10)) {
-    include("soon/horsedrinking.tpl");
-    }
+    include_once("soon/horsedrinking.tpl");
+}
 if($brewery == 0 && ($rallypoint <= 5 || $granary <= 10) && $session->tribe == 2 && $village->capital == 1) {
-    include("soon/brewery.tpl");
-    }
+    include_once("soon/brewery.tpl");
+}
 if($greatbarracks == 0 && $barrack >= 15 && $village->capital == 0) {
-        include("soon/greatbarracks.tpl");
-    }
+    include_once("soon/greatbarracks.tpl");
+}
 if($greatstable == 0 && $stable >= 15 && $village->capital == 0) {
-        include("soon/greatstable.tpl");
-    }
+    include_once("soon/greatstable.tpl");
+}
 if($greatworkshop == 0 && $workshop >= 15 && $village->capital == 0 && GREAT_WKS) {
-        include("soon/greatworkshop.tpl");
-    }
+    include_once("soon/greatworkshop.tpl");
+}
 ?>
 </div><script type="text/javascript">
 function show_build_list(list) {
