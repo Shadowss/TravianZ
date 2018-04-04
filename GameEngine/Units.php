@@ -503,24 +503,38 @@ class Units {
                             }
                         }
                     }
-                }
+                }            
 
-                $validBuildings = [23, 31, 32, 33, 34, 36];
+                $rallyPointLevel = ($village->resarray)['f39'];
+                $invalidBuildings = [];
+                
+                // fill the array with the invalid buildings
+                if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
+                    for($i = 1; $i <= 37; $i++){
+                        if(!in_array($i, [10, 11])) $invalidBuildings[] = $i;
+                    }
+                }
+                else if($rallyPointLevel >= 5 && $rallyPointLevel < 10){
+                    for($i = 12; $i <= 37; $i++) $invalidBuildings[] = $i; 
+                }
+                else if($rallyPointLevel >= 10){
+                    $invalidBuildings = [23, 31, 32, 33, 34, 36];
+                }            
                 
                 if(isset($post['ctar1']) && $post['ctar1'] != 0){
-                    // check if the player have selected a valid building
-                    if($data['u8'] == 0 || in_array($post['ctar1'], $validBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
+                    // check if the player has selected a valid building
+                    if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
                         $post['ctar1'] = 0;
                     }
                 }
                 
                 if(isset($post['ctar2']) && $post['ctar2'] != 0){
                     // check if there are atleast 20 catapults
-                    if($data['u8'] < 20){
+                    if($data['u8'] < 20 || $rallyPointLevel != 20){
                         $post['ctar2'] = 0;
                     }else{
                         // check if the player has selected a valid building
-                        if(in_array($post['ctar2'], $validBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
+                        if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
                             $post['ctar2'] = 99;
                         }
                     }
