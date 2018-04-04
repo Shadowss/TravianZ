@@ -591,7 +591,7 @@ else{if(of.firstChild){of.removeChild(of.firstChild);}
 }
 }
 function te(_e,area){area.details={}
-;var ch=['x','y','nr','typ','querystring','img','dname','name','ew','ally','vid','atyp','atime'];for(var i=0;i<_e.length;i++){area.details[ch[i]]=_e[i];}
+;var ch=['x','y','nr','typ','querystring','img','atyp','dname','name','ew','ally','vid','atyp','atime'];for(var i=0;i<_e.length;i++){area.details[ch[i]]=_e[i];}
 area.details.normal_field=area.details.name===undefined&&area.details.typ==0;area.details.free_oasis=area.details.name===undefined&&area.details.typ!=0;area.details.occupied_oasis=area.details.name!==undefined&&area.details.typ!=0;area.details.village=area.details.name!==undefined&&area.details.typ==0;area.details.fresh={}
 ;area.details.classic_oasis=area.details.querystring==='';}
 function df(dh){switch(dh){case 1:return[3,3,3,9];case 2:return[3,4,5,6];case 3:return[4,4,4,6];case 4:return[4,5,3,6];case 5:return[5,3,4,6];case 6:return[1,1,1,15];case 7:return[4,4,3,7];case 8:return[3,4,4,7];case 9:return[4,3,4,7];case 10:return[3,5,4,6];case 11:return[4,3,5,6];case 12:return[5,4,3,6];default:return false;}
