@@ -60,7 +60,7 @@ $to = $database->getOMInfo($units[$y]['to']);}
             }
             ?>
            </tr></tbody>
-        <?php if($units[$y]['t8'] > 0 && $units[$y]['attack_type'] == 3){ ?>
+        <?php if($units[$y]['t8'] > 0 && $units[$y]['attack_type'] == 3 && !$database->isVillageOases($units[$y]['to'])){ ?>
         <tbody>
 			<tr>
 				<th><?php echo CATAPULT_TARGET;?></th>
