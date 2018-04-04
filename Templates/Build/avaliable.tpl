@@ -250,7 +250,7 @@ if($armoury == 0 && ($mainbuilding <= 2 || $academy == 0)) {
 if($cropland <= 4) {
     include("soon/grainmill.tpl");
 }
-if($marketplace == 0 && ($mainbuilding <= 2 || $granary <= 0 || $warehouse <= 0)) {
+if($market == 0 && ($mainbuilding <= 2 || $granary <= 0 || $warehouse <= 0)) {
     include("soon/marketplace.tpl");
 }
 if($residence == 0 && $mainbuilding <= 4) {
