@@ -98,10 +98,6 @@ $greatwarehouse1 = getTypeCount(38);
 $greatgranary1 = getTypeCount(39);
 $greatworkshop1 = getTypeCount(42);
 
-$residenceOrPalaceInProgress = $building->residenceOfPalaceBuildInProgress();
-$residenceBuildInProgress = $residenceOrPalaceInProgress['residence'];
-$palaceBuildInProgress = $residenceOrPalaceInProgress['palace'];
-
 ?>
 <div id="build" class="gid0"><h1><?php echo CONSTRUCT_NEW_BUILDING;?></h1>
 <?php
@@ -167,7 +163,7 @@ if($cropland >= 5 && $grainmill == 0 && $grainmill1 == 0 && $id != 39 && $id != 
 if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 && $id != 39 && $id != 40) {
     include("avaliable/marketplace.tpl");
 }
-if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0 && !$palaceBuildInProgress) {
+if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0 && $palace1 == 0) {
     include("avaliable/residence.tpl");
 }
 if($academy == 0 && $academy1 == 0 && $mainbuilding >= 3 && $barrack >= 3 && $id != 39 && $id != 40) {
@@ -254,7 +250,7 @@ if($armoury == 0 && ($mainbuilding <= 2 || $academy == 0)) {
 if($cropland <= 4) {
     include("soon/grainmill.tpl");
 }
-if(isset($marketplace) && $marketplace == 0 && ($mainbuilding <= 2 || $granary <= 0 || $warehouse <= 0)) {
+if($marketplace == 0 && ($mainbuilding <= 2 || $granary <= 0 || $warehouse <= 0)) {
     include("soon/marketplace.tpl");
 }
 if($residence == 0 && $mainbuilding <= 4) {
