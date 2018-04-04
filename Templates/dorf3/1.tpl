@@ -24,7 +24,7 @@
 		if (count($incoming_attacks) > 0) {
 			$inc_atts = count($incoming_attacks);
 			for($i=0;$i<count($incoming_attacks);$i++){
-				if($incoming_attacks[$i]['attack_type'] == 2) {
+			    if($incoming_attacks[$i]['attack_type'] == 1 || $incoming_attacks[$i]['attack_type'] == 2) {
 					$inc_atts -= 1;
 				}
 			}
