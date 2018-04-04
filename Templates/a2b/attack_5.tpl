@@ -228,6 +228,7 @@ $actionType = "Raid";
 
                                 <option value="27">Treasury</option>
                                 <option value="28">Trade office</option>
+                                <option value="35">Brewery</option>
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
@@ -282,6 +283,7 @@ $actionType = "Raid";
 
                                 <option value="27">Treasury</option>
                                 <option value="28">Trade office</option>
+                                <option value="35">Brewery</option>
                                 <?php } ?>
                                 <option value="38">Great warehouse</option>
                                 <option value="39">Great granary</option>
