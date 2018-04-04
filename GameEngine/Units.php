@@ -363,7 +363,7 @@ class Units {
         if ( $data['u11'] < 0 ) {
             $form->addError( "error", "You can't send negative units." );
         }
-
+                
         if ( $form->returnErrors() > 0 ) {
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
@@ -505,6 +505,28 @@ class Units {
                     }
                 }
 
+                $validBuildings = [23, 31, 32, 33, 34, 36];
+                
+                if(isset($post['ctar1']) && $post['ctar1'] != 0){
+                    // check if the player have selected a valid building
+                    if($data['u8'] == 0 || in_array($post['ctar1'], $validBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
+                        $post['ctar1'] = 0;
+                    }
+                }
+                
+                if(isset($post['ctar2']) && $post['ctar2'] != 0){
+                    // check if there are atleast 20 catapults
+                    if($data['u8'] < 20){
+                        $post['ctar2'] = 0;
+                    }else{
+                        // check if the player has selected a valid building
+                        if(in_array($post['ctar2'], $validBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
+                            $post['ctar2'] = 99;
+                        }
+                    }
+                }
+                
+                //TODO: check those instructions, i think that they're wrong 
                 if ( isset( $post['ctar1'] ) ) {
                     if ( $artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0 or $good_artefact == 1 ) {
                         if ( $post['ctar1'] != 40 or $post['ctar1'] != 27 and $iswwvilla == 1 ) {
@@ -512,12 +534,11 @@ class Units {
                         } else {
                             $post['ctar1'] = 99;
                         }
-                    } else {
-                        $post['ctar1'] = $post['ctar1'];
                     }
                 } else {
                     $post['ctar1'] = 0;
                 }
+                
                 if ( isset( $post['ctar2'] ) ) {
                     if ( $artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0 or $good_artefact == 1 ) {
                         if ( $post['ctar2'] != 40 or $post['ctar2'] != 27 and $iswwvilla == 1 ) {
@@ -525,15 +546,12 @@ class Units {
                         } else {
                             $post['ctar2'] = 99;
                         }
-                    } else {
-                        $post['ctar2'] = $post['ctar2'];
                     }
                 } else {
                     $post['ctar2'] = 0;
                 }
-                if ( isset( $post['spy'] ) ) {
-                    $post['spy'] = $post['spy'];
-                } else {
+                
+                if (!isset($post['spy'])) {
                     $post['spy'] = 0;
                 }
                 $abdata      = $database->getABTech( $village->wid );

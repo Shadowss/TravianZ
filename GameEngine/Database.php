@@ -7882,58 +7882,6 @@ References:
         return false;
     }
 
-	/***************************
-	Function checkAttack
-	Made by: Shadow
-	***************************/
-    // no need to cache this method
-    function checkAttack($wref, $toWref) {
-        list($wref, $toWref) = $this->escape_input((int) $wref, (int) $toWref);
-
-        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and (" . TB_PREFIX . "attacks.attack_type = 3 or " . TB_PREFIX . "attacks.attack_type = 4) ORDER BY endtime ASC";
-        $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-
-        if ($result['Total']) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-	/***************************
-	Function checkEnforce
-	Made by: Shadow
-	***************************/
-    // no need to cache this method
-	function checkEnforce($wref, $toWref) {
-	    list($wref, $toWref) = $this->escape_input((int) $wref, (int) $toWref);
-
-    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 2 ORDER BY endtime ASC";
-    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-    		if($result['Total']) {
-    		return true;
-     		}else{
-    		return false;
-    		}
-  	}
-
-	/***************************
-  	Function checkScout
-  	Made by: yi12345
-  	***************************/
-    // no need to cache this method
-	function checkScout($wref, $toWref) {
-	    list($wref, $toWref) = $this->escape_input((int) $wref, (int) $toWref);
-
-    		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement, " . TB_PREFIX . "attacks where " . TB_PREFIX . "movement.from = $wref and " . TB_PREFIX . "movement.to = $toWref and " . TB_PREFIX . "movement.ref = " . TB_PREFIX . "attacks.id and " . TB_PREFIX . "movement.proc = 0 and " . TB_PREFIX . "movement.sort_type = 3 and " . TB_PREFIX . "attacks.attack_type = 1 ORDER BY endtime ASC";
-    		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-    		if($result['Total']) {
-     		return true;
-    		}else{
-    		return false;
-     		}
-   	}
-
 };
 
 // database is not needed if we're displaying static pages
