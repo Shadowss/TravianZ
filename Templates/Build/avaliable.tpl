@@ -103,7 +103,7 @@ $residenceBuildInProgress = $residenceOrPalaceInProgress['residence'];
 $palaceBuildInProgress = $residenceOrPalaceInProgress['palace'];
 
 ?>
-<div id="build" class="gid0"><h1<?php echo CONSTRUCT_NEW_BUILDING;?></h1>
+<div id="build" class="gid0"><h1><?php echo CONSTRUCT_NEW_BUILDING;?></h1>
 <?php
 if($mainbuilding == 0 && $mainbuilding1 == 0 && $id != 39 && $id != 40) {
     include("avaliable/mainbuilding.tpl");
@@ -132,7 +132,7 @@ if($session->tribe == 5 && $id != 39) {
     }
 }
 if((($warehouse == 0 && $warehouse1 == 0) || $warehouse == 20) && $mainbuilding >= 1 && $id != 39 && $id != 40) {
-include("avaliable/warehouse.tpl");
+    include("avaliable/warehouse.tpl");
 }
 if((($greatwarehouse == 0 && $greatwarehouse1 == 0) || $greatwarehouse == 20) && $mainbuilding >= 10 && ($largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid || $village->natar==1) && ($id != 39 && $id != 40)) {
     include("avaliable/greatwarehouse.tpl");
@@ -141,96 +141,64 @@ if((($greatgranary == 0 && $greatgranary1 == 0) || $greatgranary == 20) && $main
     include("avaliable/greatgranary.tpl");
 }
 if((($trapper == 0 && $trapper1 == 0) || $trapper == 20) && $rallypoint >= 1 && $session->tribe == 3 && $id != 39 && $id != 40) {
-include("avaliable/trapper.tpl");
+    include("avaliable/trapper.tpl");
 }
 if($rallypoint == 0 && $rallypoint1 == 0 && $id != 40) {
-include("avaliable/rallypoint.tpl");
+    include("avaliable/rallypoint.tpl");
 }
 if($embassy == 0 && $embassy1 == 0 && $id != 39 && $id != 40 && $mainbuilding >= 1) {
-include("avaliable/embassy.tpl");
+    include("avaliable/embassy.tpl");
 }
 //fix hero
 if($hero == 0 && $hero1 == 0 && $mainbuilding >= 3 && $rallypoint >= 1 && $id != 39 && $id != 40) {
-include("avaliable/hero.tpl");
+    include("avaliable/hero.tpl");
 }
 //fix barracks
 if($rallypoint >= 1 && $mainbuilding >= 3 && $barrack == 0 && $barrack1 == 0 && $id != 39 && $id != 40) {
-include("avaliable/barracks.tpl");
+    include("avaliable/barracks.tpl");
 }
 if($mainbuilding >= 3 && $academy >= 1 && $armoury == 0 && $armoury1 == 0 && $id != 39 && $id != 40) {
-include("avaliable/armoury.tpl");
+    include("avaliable/armoury.tpl");
 }
 if($cropland >= 5 && $grainmill == 0 && $grainmill1 == 0 && $id != 39 && $id != 40) {
-include("avaliable/grainmill.tpl");
+    include("avaliable/grainmill.tpl");
 }
 //fix marketplace
 if($granary >= 1 && $warehouse >= 1 && $mainbuilding >= 3 && $market == 0 && $market1 == 0 && $id != 39 && $id != 40) {
-include("avaliable/marketplace.tpl");
+    include("avaliable/marketplace.tpl");
 }
 if($mainbuilding >= 5 && $residence == 0 && $residence1 == 0 && $id != 39 && $id != 40 && $palace == 0 && !$palaceBuildInProgress) {
-include("avaliable/residence.tpl");
+    include("avaliable/residence.tpl");
 }
 if($academy == 0 && $academy1 == 0 && $mainbuilding >= 3 && $barrack >= 3 && $id != 39 && $id != 40) {
-include("avaliable/academy.tpl");
+    include("avaliable/academy.tpl");
 }
-
-if($palace == 0 && $palace1 == 0 && $village->natar == 0 && $embassy >= 1 && $mainbuilding >= 5 && $id != 39 && $id != 40 && $residence == 0 && $residence1 == 0) {
-
-//Fix Castle
-//id user
-$user = $session->uid;
-
-
-//loop search village user
-$villages = $database->getProfileVillages($user);
-foreach ($villages as $villaggi_array){
-
-        //loop structure village
-    $query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".(int) $villaggi_array['wref']."");
-    $strutture= mysqli_fetch_array($query1);
-    if($strutture == false)
-        $strutture = [];
-//search Castle in array structure village
-$test = in_array(26,$strutture);
-
-if ($test){
-    break;
+if($palace == 0 && $palace1 == 0 && !$building->isCastleBuilt() && $village->natar == 0 && $embassy >= 1 && $mainbuilding >= 5 && $id != 39 && $id != 40 && $residence == 0 && $residence1 == 0) {
+    include("avaliable/palace.tpl");
 }
-
-}
-
-//if Castle no ready include palace.tpl
-if (!$test && !$residenceBuildInProgress){
-        include("avaliable/palace.tpl");
-}
-
-//end Fix
-}
-
-
 if($blacksmith == 0 && $blacksmith1 == 0 && $academy >= 3 && $mainbuilding >= 3 && $id != 39 && $id != 40) {
-include("avaliable/blacksmith.tpl");
+    include("avaliable/blacksmith.tpl");
 }
 if($stonemasonslodge == 0 && $stonemasonslodge1 == 0 && $palace >= 3 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
-include("avaliable/stonemason.tpl");
+    include("avaliable/stonemason.tpl");
 }
 if($stable == 0 && $stable1 == 0 && $blacksmith >= 3 && $academy >= 5 && $id != 39 && $id != 40) {
-include("avaliable/stable.tpl");
+    include("avaliable/stable.tpl");
 }
 if($treasury == 0 && $treasury1 == 0 && $village->natar == 0 && $mainbuilding >= 10 && $id != 39 && $id != 40) {
-include("avaliable/treasury.tpl");
+    include("avaliable/treasury.tpl");
 }
 if($brickyard == 0 && $brickyard1 == 0 && $claypit >= 10 && $mainbuilding >= 5 && $id != 39 && $id != 40 ) {
-include("avaliable/brickyard.tpl");
+    include("avaliable/brickyard.tpl");
 }
 if($sawmill == 0 && $sawmill1 == 0 && $woodcutter >= 10 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
-   include("avaliable/sawmill.tpl");
+    include("avaliable/sawmill.tpl");
   }
 if($ironfoundry == 0 && $ironfoundry1 == 0 && $ironmine >= 10 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
-   include("avaliable/ironfoundry.tpl");
+    include("avaliable/ironfoundry.tpl");
 }
 if($workshop == 0 && $workshop1 == 0 && $academy >= 10 && $mainbuilding >= 5 && $id != 39 && $id != 40) {
-   include("avaliable/workshop.tpl");
+    include("avaliable/workshop.tpl");
 }
 if($tournamentsquare == 0 && $tournamentsquare1 == 0 && $rallypoint >= 15 && $id != 39 && $id != 40) {
     include("avaliable/tsquare.tpl");
@@ -295,41 +263,8 @@ if($residence == 0 && $mainbuilding <= 4) {
 if($academy == 0 && ($mainbuilding <= 2 || $barrack <= 2)) {
    include("soon/academy.tpl");
 }
-if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4 && $village->natar == 0) {
-//Fix Castle
-//id user
-$user = $session->uid;
-
-//connect to DB
-//mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-//mysqli_select_db(SQL_DB);
-
-//loop search village user
-$villages = $database->getProfileVillages($user);
-foreach ($villages as $villaggi_array){
-
-        //loop structure village
-        $query1 = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."fdata WHERE vref = ".(int) $villaggi_array['wref']."");
-        $strutture= mysqli_fetch_array($query1);
-
-//search Castle in array structure village
-        if($strutture !== false)
-            $test = in_array(26,$strutture);
-        else
-            $test = in_array(26,[]);
-if ($test){
-        break;
-        }
-
-}
-
-
-//if Castle no ready include palace.tpl
-if (!$test){
-        include("soon/palace.tpl");
-}
-
-//end Fix
+if($embassy == 0 || $mainbuilding >= 2 && $mainbuilding <= 4 && !$building->isCastleBuilt() && $village->natar == 0) {
+   include("soon/palace.tpl");
 }
 if($blacksmith == 0 && ($academy <= 2 || $mainbuilding <= 2)) {
    include("soon/blacksmith.tpl");
@@ -445,7 +380,7 @@ if($greatworkshop == 0 && $workshop >= 15 && $village->capital == 0 && GREAT_WKS
         include("soon/greatworkshop.tpl");
     }
 ?>
-</div><script language="JavaScript" type="text/javascript">
+</div><script type="text/javascript">
 function show_build_list(list) {
     // aktuelle liste, aktueller link
     var build_list = document.getElementById('build_list_'+list);
