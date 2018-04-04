@@ -3219,7 +3219,8 @@ class Automation {
                     ,$troopsdead9
                     ,$troopsdead10
                     ,$troopsdead11
-                    ,$DefenderUnit);
+                    ,$DefenderUnit
+                    ,$info_trap);
 
                 #################################################
 
