@@ -642,6 +642,24 @@ class Building {
 		}
 	}
 
+	/**
+	 * Search through all user's villages if the castle is built or not
+	 * 
+	 * @return boolean Returns true if the castle is already built in the whole account, otherwise returns false
+	 */
+	
+	public function isCastleBuilt(){
+	    global $database, $session;
+	    
+	    $villages = $database->getProfileVillages($session->uid);
+	    foreach ($villages as $vil){
+	        if(in_array(26, $database->getResourceLevel($vil['wref']))){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
 	private function meetRequirement($id) {
 		global $village,$session,$database;
 		
@@ -678,7 +696,7 @@ class Building {
             case 23: return !$isBuilt || $this->getTypeLevel($id) == 10;
             case 24: return $this->getTypeLevel(22) >= 10 && $this->getTypeLevel(15) >= 10 && !$isBuilt;
             case 25: return $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(26) == 0 && !$isBuilt;
-            case 26: return $this->getTypeLevel(18) >= 1 && $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(25) == 0 && !$isBuilt;
+            case 26: return $this->getTypeLevel(18) >= 1 && $this->getTypeLevel(15) >= 5 && $this->getTypeLevel(25) == 0 && !$isBuilt && !$this->isCastleBuilt();
             case 27: return $this->getTypeLevel(15) >= 10 && !$isBuilt;
             case 28: return $this->getTypeLevel(17) == 20 && $this->getTypeLevel(20) >= 10 && !$isBuilt;
             case 29: return $this->getTypeLevel(19) == 20 && $village->capital == 0 && !$isBuilt;
