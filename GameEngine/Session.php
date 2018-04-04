@@ -273,7 +273,36 @@ class Session {
                     $this->CheckHeroReal();
                 }
 			}
-
+			
+			/**
+			 * Creates an array with the vrefs of attacked/scouted/reinforced villages and oasis
+			 * 
+			 */
+			
+			public function populateAttacks(){
+		        global $database, $village;
+		        
+		        $troopsMovement = $database->getMovement(3, $village->wid, 0);
+		        
+		        if(count($troopsMovement) > 0){
+		            foreach($troopsMovement as $movement)
+		            {
+		                switch($movement['attack_type']){
+		                    case 1:
+		                        $_SESSION['troops_movement']['scouts'][] = $movement['to'];
+		                        break;
+		                    case 2:
+		                        $_SESSION['troops_movement']['enforcements'][] = $movement['to'];
+		                        break;
+		                    case 3:
+		                    case 4:
+		                        $_SESSION['troops_movement']['attacks'][] = $movement['to'];
+		                        break;
+		                }
+		            }
+		        }	        	    
+			}
+			
 			private function SurfControl(){
 				if(SERVER_WEB_ROOT) {
 					$page = $_SERVER['SCRIPT_NAME'];
