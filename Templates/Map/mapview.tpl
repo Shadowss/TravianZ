@@ -35,6 +35,14 @@ else {
     $bigmid = $village->wid;
 }
 
+if(isset($_SESSION['troops_movement'])){
+    unset($_SESSION['troops_movement']);
+}
+
+if($session->plus){
+    $session->populateAttacks();
+} 
+
 $xm7 = ($x-7) < -WORLD_MAX? $x+WORLD_MAX+WORLD_MAX-6 : $x-7;
 $xm3 = ($x-3) < -WORLD_MAX? $x+WORLD_MAX+WORLD_MAX-2 : $x-3;
 $xm2 = ($x-2) < -WORLD_MAX? $x+WORLD_MAX+WORLD_MAX-1 : $x-2;
@@ -154,22 +162,18 @@ if (isset($neutralarray[0])) {
 //echo in_array($targetalliance,$friendarray);
 	$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $session->uid)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? ($friend==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : ($war==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : ($neutral==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $session->alliance? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
 
-	// Map Attacks by Shadow & MisterX
+	// Map Attacks by Shadow & MisterX - fixed by iopietro
 
-    	$att = '';
-    	if($session->plus) {
-        $wref = $village->wid;
-        $toWref =  $donnees['map_id'];
-
-        if ($database->checkAttack($wref,$toWref) != 0) {
-		$att = '<span class=\'m3\' ></span>';
-        }elseif ($database->checkEnforce($wref,$toWref) != 0) {
-		$att = '<span class=\'m9\' ></span>';
-		}elseif ($database->checkScout($wref,$toWref) != 0) {
-		$att = '<span class=\'m6\' ></span>';
-		}
-    	}
-
+	$att = "";
+	if(isset($_SESSION['troops_movement'])) {
+	    if (isset($_SESSION['troops_movement']['attacks']) && in_array($donnees['map_id'], $_SESSION['troops_movement']['attacks'])) {
+	        $att = '<span class=\'m3\' ></span>';
+	    }elseif (isset($_SESSION['troops_movement']['scouts']) && in_array($donnees['map_id'], $_SESSION['troops_movement']['scouts'])) {
+	        $att = '<span class=\'m6\' ></span>';
+	    }elseif (isset($_SESSION['troops_movement']['enforcements']) && in_array($donnees['map_id'], $_SESSION['troops_movement']['enforcements'])) {
+	        $att = '<span class=\'m9\' ></span>';
+	    }
+	}
 		
 	// Map content
 	if($donnees['ville_user']==3 && $donnees['ville_name']==PLANVILLAGE){
@@ -183,7 +187,7 @@ if (isset($neutralarray[0])) {
 
 	//Javascript map info
 	if($yrow!=7){
-		$map_js .= "[".$donnees['map_x'].",".$donnees['map_y'].",".$donnees['map_fieldtype'].",". ((!empty($donnees['map_oasis'])) ? $donnees['map_oasis'] : 0) .",\"d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."\",\"".$image."\"";
+		$map_js .= "[".$donnees['map_x'].",".$donnees['map_y'].",".$donnees['map_fieldtype'].",". ((!empty($donnees['map_oasis'])) ? $donnees['map_oasis'] : 0) .",\"d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."\",\"".$image."\",\"\"";
 		if($donnees['map_occupied']){
 			if($donnees['map_fieldtype'] != 0){
 				$map_js.= ",\"".$donnees['ville_name']."\",\"".$donnees['user_username']."\",\"".$donnees['ville_pop']."\",\"".$donnees['aliance_name']."\",\"".$donnees['user_tribe']."\"]\n";
