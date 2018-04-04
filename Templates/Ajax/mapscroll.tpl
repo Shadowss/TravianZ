@@ -5,8 +5,6 @@ include_once ("GameEngine/Lang/" . LANG . ".php");
 include_once("GameEngine/Generator.php");
 include_once("GameEngine/Database.php");
 
-//include("GameEngine/Session.php");
-
 if($y < $yy)	{$y = $y + (($yy - $y) /2);}
 else			{$y = $yy + (($y - $yy) /2);}
 
@@ -111,10 +109,22 @@ $image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($don
 if($donnees['ville_user']==3 && $donnees['ville_name']==PLANVILLAGE){
 $image = "o99";
 }
+
+    $att = "";
+    if(isset($_SESSION['troops_movement'])) {  
+        if (isset($_SESSION['troops_movement']['attacks']) && in_array($donnees['map_id'], $_SESSION['troops_movement']['attacks'])) {
+            $att = 3;
+        }elseif (isset($_SESSION['troops_movement']['scouts']) && in_array($donnees['map_id'], $_SESSION['troops_movement']['scouts'])) {
+            $att = 6;
+        }elseif (isset($_SESSION['troops_movement']['enforcements']) && in_array($donnees['map_id'], $_SESSION['troops_movement']['enforcements'])) {
+            $att = 9;
+        }
+    }
+
 	//Javascript map info
 	$regcount=0;
 	if($yrow!=7){
-		$map_js .= "[".$donnees['map_x'].",".$donnees['map_y'].",".$donnees['map_fieldtype'].",". ((!empty($donnees['map_oasis'])) ? $donnees['map_oasis'] : 0) .",\"d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."\",\"".$image."\"";
+		$map_js .= "[".$donnees['map_x'].",".$donnees['map_y'].",".$donnees['map_fieldtype'].",". ((!empty($donnees['map_oasis'])) ? $donnees['map_oasis'] : 0) .",\"d=".$donnees['map_id']."&c=".$generator->getMapCheck($donnees['map_id'])."\",\"".$image."\",\"".$att."\"";
 		if($donnees['map_occupied']){
 			if($donnees['map_fieldtype'] != 0){
 				$map_js.= ",\"".$donnees['ville_name']."\",\"".$donnees['user_username']."\",\"".$donnees['ville_pop']."\",\"".$donnees['aliance_name']."\",\"".$donnees['user_tribe']."\"]\n";
