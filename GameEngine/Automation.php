@@ -1118,7 +1118,7 @@ class Automation {
             if ($isSecondRow) {
                 if ($tbid > 0 || ($tbid == 0 && strpos($info_cat, 'The village has') === false)) {
                     $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " destroyed.";
+					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
                 }
 
                 // embassy level was changed
@@ -1128,7 +1128,7 @@ class Automation {
 
                 $info_cat .= "</td></tr></tbody>";
             } else {
-                $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " destroyed.";
+                $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
 
                 // embassy level was changed
                 if ($tbgid==18){
@@ -1175,7 +1175,7 @@ class Automation {
 
                 if ($tblevel == 1 && $totallvl == 0) {
                     // building was actually destroyed - recalculate population and remove village itself, if needed
-                    $info_cata = " destroyed.";
+                    $info_cata = " <b>destroyed</b>.";
                 } else {
                     // building was damaged to a lower level
                     $info_cata = " damaged from level <b>" . $tblevel . "</b> to level <b>" . $totallvl . "</b>.";
