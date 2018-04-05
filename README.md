@@ -1,5 +1,5 @@
 [![Code Triagers Badge](https://www.codetriage.com/shadowss/travianz/badges/users.svg)](https://www.codetriage.com/shadowss/travianz)
-[![Maintenance](https://img.shields.io/maintenance/no/2018.svg)]()
+[![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)]()
 [![GitHub Release](https://img.shields.io/github/release/Shadowss/TravianZ/all.svg)]()
 [![Github All Downloads](https://img.shields.io/github/downloads/Shadowss/TravianZ/total.svg)]()
 [![GitHub contributors](https://img.shields.io/github/contributors/Shadowss/TravianZ.svg)]()
