@@ -35,7 +35,7 @@ for($i=45;$i<=46;$i++) {
 					}
 					}
 					$dur=$generator->getTimeFormat($dur);
-		echo ($dur=="0:00:00")? "0:00:01":$dur;
+		echo $dur;
         echo "</div></td>
 					<td class=\"val\">
 						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"10\">

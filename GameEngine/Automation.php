@@ -1118,7 +1118,7 @@ class Automation {
             if ($isSecondRow) {
                 if ($tbid > 0 || ($tbid == 0 && strpos($info_cat, 'The village has') === false)) {
                     $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " destroyed.";
+					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
                 }
 
                 // embassy level was changed
@@ -1128,7 +1128,7 @@ class Automation {
 
                 $info_cat .= "</td></tr></tbody>";
             } else {
-                $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " destroyed.";
+                $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
 
                 // embassy level was changed
                 if ($tbgid==18){
@@ -1175,7 +1175,7 @@ class Automation {
 
                 if ($tblevel == 1 && $totallvl == 0) {
                     // building was actually destroyed - recalculate population and remove village itself, if needed
-                    $info_cata = " destroyed.";
+                    $info_cata = " <b>destroyed</b>.";
                 } else {
                     // building was damaged to a lower level
                     $info_cata = " damaged from level <b>" . $tblevel . "</b> to level <b>" . $totallvl . "</b>.";
@@ -3335,140 +3335,6 @@ class Automation {
         }
     }
 
-    private function sendTroopsBack($post) {
-        global $form, $database, $village, $generator, $session, $technology;
-
-        $enforce=$database->getEnforceArray($post['ckey'],0);
-        $to = $database->getVillage($enforce['from']);
-        $Gtribe = "";
-        if ($database->getUserField($to['owner'],'tribe',0) == '2'){ $Gtribe = "1"; } else if ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe = "2"; } else if ($database->getUserField($to['owner'],'tribe',0) == '4'){ $Gtribe = "3"; }else if ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe = "4"; }
-
-        for($i=1; $i<10; $i++){
-            if(isset($post['t'.$i])){
-                if($i!=10){
-                    if ($post['t'.$i] > $enforce['u'.$Gtribe.$i])
-                    {
-                        $form->addError("error","You can't send more units than you have");
-                        break;
-                    }
-
-                    if($post['t'.$i]<0)
-                    {
-                        $form->addError("error","You can't send negative units.");
-                        break;
-                    }
-                }
-            } else {
-                $post['t'.$i.'']='0';
-            }
-        }
-        if(isset($post['t11'])){
-            if ($post['t11'] > $enforce['hero'])
-            {
-                $form->addError("error","You can't send more units than you have");
-
-            }
-
-            if($post['t11']<0)
-            {
-                $form->addError("error","You can't send negative units.");
-
-            }
-        } else {
-            $post['t11']='0';
-        }
-
-        if($form->returnErrors() > 0) {
-            $_SESSION['errorarray'] = $form->getErrors();
-            $_SESSION['valuearray'] = $_POST;
-            header("Location: a2b.php");
-            exit;
-        } else {
-
-            //change units
-            $start = ($database->getUserField($to['owner'],'tribe',0)-1)*10+1;
-            $end = ($database->getUserField($to['owner'],'tribe',0)*10);
-
-            $j='1';
-            $units = [];
-            $amounts = [];
-            $modes = [];
-
-            for($i=$start;$i<=$end;$i++){
-                $units[] = $i;
-                $amounts[] = $post['t'.$j.''];
-                $modes[] = 0;
-                $j++;
-            }
-            $database->modifyEnforce($post['ckey'], $units, $amounts, $modes);
-
-            //get cord
-            $from = $database->getVillage($enforce['from']);
-            $fromcoor = $database->getCoor($enforce['from']);
-            $tocoor = $database->getCoor($enforce['vref']);
-            $fromCor = array('x'=>$tocoor['x'], 'y'=>$tocoor['y']);
-            $toCor = array('x'=>$fromcoor['x'], 'y'=>$fromcoor['y']);
-
-            $speeds = array();
-
-            //find slowest unit.
-            for($i=1;$i<=10;$i++){
-                if (isset($post['t'.$i])){
-                    if( $post['t'.$i] != '' && $post['t'.$i] > 0){
-                        if($unitarray) { reset($unitarray); }
-                        $unitarray = $GLOBALS["u".(($session->tribe-1)*10+$i)];
-                        $speeds[] = $unitarray['speed'];
-                    } else {
-                        $post['t'.$i.'']='0';
-                    }
-                } else {
-                    $post['t'.$i.'']='0';
-                }
-            }
-            if (isset($post['t11'])){
-                if( $post['t11'] != '' && $post['t11'] > 0){
-                    $hero_unit = getHeroField($from['owner'], 'unit');
-                    $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
-                } else {
-                    $post['t11']='0';
-                }
-            } else {
-                $post['t11']='0';
-            }
-            $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
-            $artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
-            $artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
-            if($artefact > 0){
-                $fastertroops = 3;
-            }else if($artefact1 > 0){
-                $fastertroops = 2;
-            }else if($artefact2 > 0){
-                $fastertroops = 1.5;
-            }else{
-                $fastertroops = 1;
-            }
-            $time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),1)/$fastertroops);
-            $foolartefact4 = $database->getFoolArtefactInfo(2,$from['wref'],$from['owner']);
-            if(count($foolartefact4) > 0){
-                foreach($foolartefact4 as $arte){
-                    if($arte['bad_effect'] == 1){
-                        $time *= $arte['effect2'];
-                    }else{
-                        $time /= $arte['effect2'];
-                        $time = round($endtime);
-                    }
-                }
-            }
-            $reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
-            $database->addMovement(4,$village->wid,$enforce['from'],$reference,$AttackArrivalTime,($time+$AttackArrivalTime));
-            $technology->checkReinf($post['ckey']);
-
-            header("Location: build.php?id=39");
-            exit;
-
-        }
-    }
-
     private function sendreinfunitsComplete() {
         global $bid23,$database,$battle,$session,$autoprefix;
 
@@ -4441,15 +4307,20 @@ class Automation {
                 $valuesUpdated = false;
                 if($timepast <= 0 && $train['amt'] > 0) {
                     $valuesUpdated = true;
-                    $timepast2 = $time - $train['timestamp2'];
-                    $trained = 1;
-                    while($timepast2 >= $train['eachtime']){
-                        $timepast2 -= $train['eachtime'];
-                        $trained += 1;
-                    }
-                    if($trained > $train['amt']){
+                    if($train['eachtime'] > 0){                       
+                        $timepast2 = $time - $train['timestamp2'];
+                        $trained = 1;
+                        while($timepast2 >= $train['eachtime']){
+                            $timepast2 -= $train['eachtime'];
+                            $trained += 1;
+                        }
+                        if($trained > $train['amt']){
+                            $trained = $train['amt'];
+                        }
+                    }else{
                         $trained = $train['amt'];
                     }
+                    
                     if($train['unit']>60 && $train['unit']!=99){
                         $database->modifyUnit($train['vref'],array($train['unit']-60),array($trained),array(1));
                     }else{

@@ -60,6 +60,19 @@ $to = $database->getOMInfo($units[$y]['to']);}
             }
             ?>
            </tr></tbody>
+        <?php if($units[$y]['t8'] > 0 && $units[$y]['attack_type'] == 3 && !$database->isVillageOases($units[$y]['to'])){ ?>
+        <tbody>
+			<tr>
+				<th><?php echo CATAPULT_TARGET;?></th>
+				<td style="text-align: center" colspan="5">
+					<?php echo $units[$y]['ctar1'] == 0 ? "Random" : $building->procResType($units[$y]['ctar1']); ?>
+				</td>
+				<td style="text-align: center" colspan="<?php if($units[$y]['t11'] == 0) {echo"5";}else{echo"6";}?>">
+					<?php echo $units[$y]['ctar2'] == 99 ? "Random" : ($units[$y]['ctar2'] == 0 ? "-" : $building->procResType($units[$y]['ctar2'])); ?>
+				</td>
+			</tr>
+		</tbody>
+		<?php } ?>
 		<tbody class="infos">
 			<tr>
 				<th><?php echo ARRIVAL;?></th>

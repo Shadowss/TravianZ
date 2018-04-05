@@ -628,6 +628,7 @@ define("TROOPS","Troops");
 define("TROOPSFROM","Troops");
 define("BOUNTY","Bounty");
 define("ARRIVAL","Arrival");
+define("CATAPULT_TARGET","Catapult target(s)");
 define("INCOMING_TROOPS","Incoming Troops");
 define("TROOPS_ON_THEIR_WAY","Troops on their way");
 define("OWN_TROOPS","Own troops");

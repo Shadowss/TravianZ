@@ -38,7 +38,7 @@ $dur=round(${'u'.$i}['time'] * ($bid29[$village->resarray['f'.$id]]['attri'] / 1
 					}
 					}
 					$dur=$generator->getTimeFormat($dur);
-echo ($dur=="0:00:00")? "0:00:01":$dur;
+echo $dur;
 
 //-- If available resources combined are not enough, remove NPC button
 $total_required = (int)(${'u'.$i}['wood'] + ${'u'.$i}['clay'] + ${'u'.$i}['iron'] + ${'u'.$i}['crop']);
