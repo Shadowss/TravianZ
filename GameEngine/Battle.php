@@ -583,7 +583,7 @@ class Battle {
         if($catp > 0 && $tblevel != 0) {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-            $wctp *= $catp+($att_ab8/1.5);
+            $wctp *= $catp + (round(200 * pow(1.0205,$att_ab8))/200);
             $artowner = $database->getVillageField( $DefenderWref, "owner" );
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
@@ -626,7 +626,7 @@ class Battle {
         if($ram > 0 && $walllevel != 0) {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-            $wctp *= ($ram/2) + ($att_ab7/1.5);
+            $wctp *= ($ram/2) + (round(200 * pow(1.0205,$att_ab7))/200);
             $artowner = $database->getVillageField( $DefenderWref, "owner" );
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));

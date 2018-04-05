@@ -1151,27 +1151,16 @@ class Automation {
         else
         // building/field was damaged, let's calculate the actual damage
         {
-            //TODO: MUST TO BE FIX This part goes also below 0 if u have a lot of catapults
-            // TODO: this whole math seems incorrect, it needs a revision, and potentially a rewrite
-            $totallvl = round( sqrt( pow( ( $tblevel + 0.5 ), 2 ) - ( ( !$twoRowsCatapultSetup ? (float) $battlepart[4] : (float) $battlepart[4] / 2 ) * 8 ) ) );
-            // sometimes this goes above the actual level, so in that case we just reverse everything
-            // and take the buiding down so many levels
-            if ($totallvl > $tblevel) {
-                $totallvl = $tblevel - ($totallvl - $tblevel);
-            }
-
-            // don't allow this to go below 0
-            if ($totallvl < 0) {
-                $totallvl = 0;
-            }
+            $totallvl = round($tblevel-((pow(M_E, ($twoRowsCatapultSetup ? ($battlepart[4]/$battlepart[3])/2 : $battlepart[4]/$battlepart[3]))-1) * ($tblevel/2)));
 
             // no damage to the building/field
-            if ( $tblevel == $totallvl ) {
+            if ($tblevel == $totallvl) {
                 $info_cata = " was not damaged.";
-            } else // building/field damaged, damage calculations to follow
+            } 
+            else // building/field damaged, damage calculations to follow
             {
                 // update $bdo, so we don't have to reselect later
-                $bdo[ 'f' . $catapultTarget ] = $totallvl;
+                $bdo['f' . $catapultTarget] = $totallvl;
 
                 if ($tblevel == 1 && $totallvl == 0) {
                     // building was actually destroyed - recalculate population and remove village itself, if needed
@@ -1181,16 +1170,16 @@ class Automation {
                     $info_cata = " damaged from level <b>" . $tblevel . "</b> to level <b>" . $totallvl . "</b>.";
                 }
 
-                $buildarray = $GLOBALS[ "bid" . $tbgid ];
+                $buildarray = $GLOBALS["bid" . $tbgid];
 
                 // (great) warehouse level was changed
-                if ( $tbgid == 10 || $tbgid == 38 ) {
-                    $database->setMaxStoreForVillage( $data['to'], $buildarray[ $tblevel ]['attri'] );
+                if ($tbgid == 10 || $tbgid == 38) {
+                    $database->setMaxStoreForVillage($data['to'], $buildarray[ $tblevel ]['attri']);
                 }
 
                 // (great) granary level was changed
-                if ( $tbgid == 11 || $tbgid == 39 ) {
-                    $database->setMaxCropForVillage( $data['to'], $buildarray[ $tblevel ]['attri'] );
+                if ($tbgid == 11 || $tbgid == 39) {
+                    $database->setMaxCropForVillage($data['to'], $buildarray[ $tblevel ]['attri']);
                 }
             }
 
@@ -1203,10 +1192,10 @@ class Automation {
                 $bdo['f'.$catapultTarget."t"] = 0;
             }
 
-            $database->setVillageLevel( $data['to'], $fieldsToSet, $fieldValuesToSet );
+            $database->setVillageLevel($data['to'], $fieldsToSet, $fieldValuesToSet);
 
             // recalculate population and check if the village shouldn't be destroyed at this point
-            $pop = $this->recountPop( $data['to'], false );
+            $pop = $this->recountPop($data['to'], false);
             if ($isoasis == 0) {
                 if($pop==0 && $can_destroy==1){
                     $village_destroyed = 1;
@@ -2295,7 +2284,7 @@ class Automation {
                                     
                                     $info_ram = "".$ram_pic.",Wall was not damaged.";
                                 }else{
-                                    $totallvl = round(sqrt(pow(($walllevel+0.5),2)-($battlepart[8]*8)));
+                                    $totallvl = round($walllevel-((pow(M_E, $battlepart[8]/$battlepart[7])-1) * ($walllevel/2)));
                                     if($walllevel == $totallvl){
                                         $info_ram = "".$ram_pic.",Wall was not damaged.";
                                     }else{
