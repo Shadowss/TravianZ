@@ -6113,9 +6113,7 @@ References: User ID/Message ID, Mode
                     }
                 }
             }
-            if ( $each == 0 ) {
-                $each = 1;
-            }
+
             $time2 = $now + $each;
             if ( count( $queued ) > 0 ) {
                 $time  += $queued[ count( $queued ) - 1 ]['timestamp'] - $now;

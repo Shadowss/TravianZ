@@ -4307,15 +4307,20 @@ class Automation {
                 $valuesUpdated = false;
                 if($timepast <= 0 && $train['amt'] > 0) {
                     $valuesUpdated = true;
-                    $timepast2 = $time - $train['timestamp2'];
-                    $trained = 1;
-                    while($timepast2 >= $train['eachtime']){
-                        $timepast2 -= $train['eachtime'];
-                        $trained += 1;
-                    }
-                    if($trained > $train['amt']){
+                    if($train['eachtime'] > 0){                       
+                        $timepast2 = $time - $train['timestamp2'];
+                        $trained = 1;
+                        while($timepast2 >= $train['eachtime']){
+                            $timepast2 -= $train['eachtime'];
+                            $trained += 1;
+                        }
+                        if($trained > $train['amt']){
+                            $trained = $train['amt'];
+                        }
+                    }else{
                         $trained = $train['amt'];
                     }
+                    
                     if($train['unit']>60 && $train['unit']!=99){
                         $database->modifyUnit($train['vref'],array($train['unit']-60),array($trained),array(1));
                     }else{
