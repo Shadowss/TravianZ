@@ -1870,6 +1870,22 @@ class MYSQLi_DB implements IDbConnection {
         }
     }
 
+    /**
+     * Used to get the population of the whole account
+     * 
+     * @param int $uid the user id
+     * @return int Returns the total population of the account
+     */
+    
+    function getTotalPopulation($uid){
+        list($uid) = $this->escape_input((int) $uid);
+        
+        $q = "SELECT Sum(pop) FROM " . TB_PREFIX . "vdata WHERE owner = ".$uid."";
+        $result = mysqli_query($this->dblink, $q);
+        $row = mysqli_fetch_row($result);
+        return $row[0];
+    }
+    
     function getVillageByWorldID($vid, $use_cache = true) {
         $array_passed = is_array($vid);
 

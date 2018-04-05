@@ -1434,8 +1434,8 @@ class Automation {
                     $att_tribe = $owntribe;
                     $def_tribe = $targettribe;
                     $residence = "0";
-                    $attpop = $fromF['pop'];
-                    $defpop = $toF['pop'];
+                    $attpop = 0;
+                    $defpop = 0;
                     $def_ab=array();
                     //get level of palace or residence
                     $residence = $database->getFieldLevelInVillage($data['to'], '25, 26', false);
@@ -1574,7 +1574,7 @@ class Automation {
                     $att_tribe = $owntribe;
                     $def_tribe = $targettribe;
                     $residence = 0;
-                    $attpop = $fromF['pop'];
+                    $attpop = 0;
                     $defpop = 100;
 
                     //type of attack
@@ -1607,6 +1607,18 @@ class Automation {
                 } else {
                     $varray1 = $database->getProfileVillages($from['owner'], 0, false);
                 }
+                
+                // total population of the defender
+                if($isoasis == 0){
+                    foreach($varray as $defenderVillage){
+                        $defpop += $defenderVillage['pop'];
+                    }
+                }       
+                
+                // total population of the attacker
+                foreach($varray1 as $attackerVillage){
+                    $attpop += $attackerVillage['pop'];
+                }              
 
                 //fix by ronix
                 for ($i=1;$i<=50;$i++) {
@@ -2603,8 +2615,8 @@ class Automation {
                                                 $newLevels_fieldNames = [];
                                                 $newLevels_fieldValues = [];
 
-                                                $pop1 = $database->getVillageField($data['from'],"pop");
-                                                $pop2 = $database->getVillageField($data['to'],"pop");
+                                                $pop1 = $database->getTotalPopulation($AttackerID);
+                                                $pop2 = $database->getTotalPopulation($DefenderID);
                                                 if($pop1 > $pop2){
                                                     $buildlevel = $database->getResourceLevel($data['to']);
 
