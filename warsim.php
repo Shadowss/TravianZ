@@ -83,8 +83,7 @@ if(isset($_POST['result'])) {
         }elseif ($_POST['result'][8]==0){
             echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$form->getValue('walllevel')."</b></p>";
         }else{
-            $demolish_ram=$_POST['result'][8]/$_POST['result'][7];
-            $totallvl = round(sqrt(pow(($form->getValue('walllevel')+0.5),2)-($_POST['result'][8]*8)));
+            $totallvl = round($form->getValue('walllevel')-((pow(M_E, $_POST['result'][8]/$_POST['result'][7])-1)*$form->getValue('walllevel')/2));
             echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$totallvl."</b></p>";
         }
     }
@@ -97,10 +96,7 @@ if(isset($_POST['result'])) {
         }elseif ($_POST['result'][4]==0){
             echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$form->getValue('kata')."</b></p></p>";
         }else{
-            $demolish=$_POST['result'][4]/$_POST['result'][3];
-            //$Katalife=round($_POST['result'][4]-($_POST['result'][4]*$_POST['result'][1]));
-            //$totallvl = round($form->getValue('kata')-($form->getValue('kata') * $demolish));
-            $totallvl = round(sqrt(pow(($form->getValue('kata')+0.5),2)-($_POST['result'][4]*8)));
+            $totallvl = round($form->getValue('kata')-((pow(M_E, $_POST['result'][4]/$_POST['result'][3])-1)*$form->getValue('kata')/2));
             echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$totallvl."</b></p>";
         }
     }
