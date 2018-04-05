@@ -156,14 +156,11 @@ class Automation {
             case 42: $build = "Great Workshop"; break;
             //default: $build = "Nothing had"; break;
         }
-        if ($build=="") {
-            if ($mode) { //true to destroy village
-                $build="The village has been";
-            }else{ //capital or only 1 village left.. not destroy
-                $build="Village can't be";
-            }
+        
+        if ($build=="" & !$mode) { //capital or only 1 village left.. not destroy
+            $build="Village can't be";
         }
-        if ($isoasis!=0) $build = "Oasis had";
+        
         return addslashes($build);
     }
 
@@ -1050,178 +1047,186 @@ class Automation {
     }
 
     private function resolveCatapultsDestruction(&$bdo, &$battlepart, &$info_cat, &$data, $catapultTarget, $twoRowsCatapultSetup, $isSecondRow, $catp_pic, $can_destroy, $isoasis, &$village_destroyed) {
-        global $database;
+        global $database, $bid34;
 
-        // currently targeted building/field level
-        $tblevel = (int) $bdo['f'.$catapultTarget];
-        // currently targetet building/field GID (ID of the building/field type - woodcutter, cropland, embassy...)
-        $tbgid = (int) $bdo['f'.$catapultTarget.'t'];
-        // currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
-        $tbid = (int) $catapultTarget;
-
-        // recalculate data for catapults
-        global $bid34;
-        $stonemason = 0;
-        foreach($bdo as $key=>$b){
-        if($b == 34 AND strpos($key, "t") !== false){
-        $stonemason = str_replace("t", "", $key);
-        $stonemason = $bdo[$stonemason];
-        }
-        }
-        if($stonemason > 0){
-        $stonemasonEffect = $bid34[$stonemason]['attri'] / 100;
-        }else{
-        $stonemasonEffect = 1;
-        }
-        $battlepart[3] = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[9]))/200) / $stonemasonEffect / $battlepart[10])) + 0.5);
-        // building/field destroyed
-        if ($battlepart[4]>$battlepart[3])
+        if(isset($catapultTarget))
         {
-            // prepare data to be updated
-            $fieldsToSet = ["f".$tbid];
-            $fieldValuesToSet = [0];
-
-            // update $bdo, so we don't have to reselect later
-            $bdo['f'.$catapultTarget] = 0;
-
-            if ($tbid >= 19 && $tbid != 99) {
-                $fieldsToSet[] = "f".$tbid."t";
-                $fieldValuesToSet[] = 0;
-                $bdo['f'.$catapultTarget."t"] = 0;
-            }
-
-            // update all that needs updating
-            $database->setVillageLevel($data['to'], $fieldsToSet, $fieldValuesToSet);
-
-            $buildarray = $GLOBALS["bid".$tbgid];
-
-            // (great) warehouse level was changed
-            if ($tbgid==10 || $tbgid==38) {
-                $database->setMaxStoreForVillage($data['to'], $buildarray[$tblevel]['attri']);
-            }
-
-            // (great) granary level was changed
-            if ($tbgid==11 || $tbgid==39) {
-                $database->setMaxCropForVillage($data['to'], $buildarray[$tblevel]['attri']);
-            }
-
-            // oasis cannot be destroyed
-            $pop=$this->recountPop($data['to'], false);
-            if ($isoasis == 0) {
-                if($pop==0 && $can_destroy==1){
-                    $village_destroyed = 1;
-                    // this will ensure the right $info_cat text
-                    $tbgid = 0;
+            // currently targeted building/field level
+            $tblevel = (int) $bdo['f'.$catapultTarget];
+            // currently targetet building/field GID (ID of the building/field type - woodcutter, cropland, embassy...)
+            $tbgid = (int) $bdo['f'.$catapultTarget.'t'];
+            // currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
+            $tbid = (int) $catapultTarget;
+            
+            // recalculate data for catapults
+            $stonemason = 0;
+            foreach($bdo as $key=>$b){
+                if($b == 34 AND strpos($key, "t") !== false){
+                    $stonemason = str_replace("t", "", $key);
+                    $stonemason = $bdo[$stonemason];
                 }
             }
-
-            if ($isSecondRow) {
-                if ($tbid > 0 || ($tbid == 0 && strpos($info_cat, 'The village has') === false)) {
-                    $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
-                }
-
-                // embassy level was changed
-                if ($tbgid==18){
-                    $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
-                }
-
-                $info_cat .= "</td></tr></tbody>";
-            } else {
-                $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
-
-                // embassy level was changed
-                if ($tbgid==18){
-                    $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
-                }
+            if($stonemason > 0){
+                $stonemasonEffect = $bid34[$stonemason]['attri'] / 100;
+            }else{
+                $stonemasonEffect = 1;
             }
-        }
-        // building/field not damaged
-        elseif ($battlepart[4]==0)
-        {
-            if ($isSecondRow) {
-                if ($tbid > 0 || ($tbid == 0 && strpos($info_cat, 'The village has') === false)) {
-                    $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " was not damaged.</td></tr></tbody>";
-                }
-            } else {
-                $info_cat = "" . $catp_pic . "," . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " was not damaged.";
-            }
-        }
-        else
-        // building/field was damaged, let's calculate the actual damage
-        {
-            $totallvl = round($tblevel-((pow(M_E, ($twoRowsCatapultSetup ? ($battlepart[4]/$battlepart[3])/2 : $battlepart[4]/$battlepart[3]))-1) * ($tblevel/2)));
-
-            // no damage to the building/field
-            if ($tblevel == $totallvl) {
-                $info_cata = " was not damaged.";
-            } 
-            else // building/field damaged, damage calculations to follow
+            $battlepart[3] = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[9]))/200) / $stonemasonEffect / $battlepart[10])) + 0.5);
+            
+            // building/field destroyed
+            if ($battlepart[4]>$battlepart[3])
             {
+                // prepare data to be updated
+                $fieldsToSet = ["f".$tbid];
+                $fieldValuesToSet = [0];
+                
                 // update $bdo, so we don't have to reselect later
-                $bdo['f' . $catapultTarget] = $totallvl;
-
-                if ($tblevel == 1 && $totallvl == 0) {
-                    // building was actually destroyed - recalculate population and remove village itself, if needed
-                    $info_cata = " <b>destroyed</b>.";
-                } else {
-                    // building was damaged to a lower level
-                    $info_cata = " damaged from level <b>" . $tblevel . "</b> to level <b>" . $totallvl . "</b>.";
+                $bdo['f'.$catapultTarget] = 0;
+                
+                if ($tbid >= 19 && $tbid != 99) {
+                    $fieldsToSet[] = "f".$tbid."t";
+                    $fieldValuesToSet[] = 0;
+                    $bdo['f'.$catapultTarget."t"] = 0;
                 }
-
-                $buildarray = $GLOBALS["bid" . $tbgid];
-
+                
+                // update all that needs updating
+                $database->setVillageLevel($data['to'], $fieldsToSet, $fieldValuesToSet);
+                
+                $buildarray = $GLOBALS["bid".$tbgid];
+                
                 // (great) warehouse level was changed
-                if ($tbgid == 10 || $tbgid == 38) {
-                    $database->setMaxStoreForVillage($data['to'], $buildarray[ $tblevel ]['attri']);
+                if ($tbgid==10 || $tbgid==38) {
+                    $database->setMaxStoreForVillage($data['to'], $buildarray[$tblevel]['attri']);
                 }
-
+                
                 // (great) granary level was changed
-                if ($tbgid == 11 || $tbgid == 39) {
-                    $database->setMaxCropForVillage($data['to'], $buildarray[ $tblevel ]['attri']);
+                if ($tbgid==11 || $tbgid==39) {
+                    $database->setMaxCropForVillage($data['to'], $buildarray[$tblevel]['attri']);
+                }
+                
+                // oasis cannot be destroyed
+                $pop=$this->recountPop($data['to'], false);
+                if ($isoasis == 0) {
+                    if($pop==0 && $can_destroy==1){
+                        $village_destroyed = 1;
+                    }
+                }
+                
+                if ($isSecondRow) {
+                    if ($tbid > 0) {
+                        $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
+					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
+                    }
+                    
+                    // embassy level was changed
+                    if ($tbgid==18){
+                        $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
+                    }
+                    
+                    $info_cat .= "</td></tr></tbody>";
+                } else {
+                    $info_cat = "" . $catp_pic . ", " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " <b>destroyed</b>.";
+                    
+                    // embassy level was changed
+                    if ($tbgid==18){
+                        $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
+                    }
                 }
             }
-
-            $fieldsToSet = ["f" . $tbid];
-            $fieldValuesToSet = [$totallvl];
-
-            if ($totallvl == 0) {
-                $fieldsToSet[] = "f" . $tbid . "t";
-                $fieldValuesToSet[] = 0;
-                $bdo['f'.$catapultTarget."t"] = 0;
-            }
-
-            $database->setVillageLevel($data['to'], $fieldsToSet, $fieldValuesToSet);
-
-            // recalculate population and check if the village shouldn't be destroyed at this point
-            $pop = $this->recountPop($data['to'], false);
-            if ($isoasis == 0) {
-                if($pop==0 && $can_destroy==1){
-                    $village_destroyed = 1;
-                    // this will ensure the right $info_cat text
-                    $tbgid = 0;
+            // building/field not damaged
+            elseif ($battlepart[4]==0)
+            {
+                if ($isSecondRow) {
+                    if ($tbid > 0) {
+                        $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
+					<img class=\"unit u" . $catp_pic . "\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> " . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " was not damaged.</td></tr></tbody>";
+                    }
+                } else {
+                    $info_cat = "" . $catp_pic . "," . $this->procResType( $tbgid, $can_destroy, $isoasis ) . " was not damaged.";
                 }
             }
-
-            if ($isSecondRow) {
-                $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
+            else
+            // building/field was damaged, let's calculate the actual damage
+            {
+                $totallvl = round($tblevel-((pow(M_E, ($twoRowsCatapultSetup ? ($battlepart[4]/$battlepart[3])/2 : $battlepart[4]/$battlepart[3]))-1) * ($tblevel/2)));
+                
+                // no damage to the building/field
+                if ($tblevel == $totallvl) {
+                    $info_cata = " was not damaged.";
+                }
+                else // building/field damaged, damage calculations to follow
+                {
+                    // update $bdo, so we don't have to reselect later
+                    $bdo['f' . $catapultTarget] = $totallvl;
+                    
+                    if ($tblevel == 1 && $totallvl == 0) {
+                        // building was actually destroyed - recalculate population and remove village itself, if needed
+                        $info_cata = " <b>destroyed</b>.";
+                    } else {
+                        // building was damaged to a lower level
+                        $info_cata = " damaged from level <b>" . $tblevel . "</b> to level <b>" . $totallvl . "</b>.";
+                    }
+                    
+                    $buildarray = $GLOBALS["bid" . $tbgid];
+                    
+                    // (great) warehouse level was changed
+                    if ($tbgid == 10 || $tbgid == 38) {
+                        $database->setMaxStoreForVillage($data['to'], $buildarray[ $tblevel ]['attri']);
+                    }
+                    
+                    // (great) granary level was changed
+                    if ($tbgid == 11 || $tbgid == 39) {
+                        $database->setMaxCropForVillage($data['to'], $buildarray[ $tblevel ]['attri']);
+                    }
+                }
+                
+                $fieldsToSet = ["f" . $tbid];
+                $fieldValuesToSet = [$totallvl];
+                
+                if ($totallvl == 0) {
+                    $fieldsToSet[] = "f" . $tbid . "t";
+                    $fieldValuesToSet[] = 0;
+                    $bdo['f'.$catapultTarget."t"] = 0;
+                }
+                
+                $database->setVillageLevel($data['to'], $fieldsToSet, $fieldValuesToSet);
+                
+                // recalculate population and check if the village shouldn't be destroyed at this point
+                $pop = $this->recountPop($data['to'], false);
+                if ($isoasis == 0) {
+                    if($pop==0 && $can_destroy==1){
+                        $village_destroyed = 1;
+                        // this will ensure the right $info_cat text
+                        $tbgid = 0;
+                    }
+                }
+                
+                if ($isSecondRow) {
+                    $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid,$can_destroy,$isoasis).$info_cata;
-
-                // embassy level was changed
-                if ( $tbgid == 18 ) {
-                    $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], $bdo['f'.$catapultTarget], false );
-                }
-
-                $info_cat .= "</td></tr></tbody>";
-            } else {
-                $info_cat = "" . $catp_pic . "," . $this->procResType( $tbgid, $can_destroy, $isoasis ) . $info_cata;
-
-                // embassy level was changed
-                if ( $tbgid == 18 ) {
-                    $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], $bdo['f'.$catapultTarget], false );
+                    
+                    // embassy level was changed
+                    if ( $tbgid == 18 ) {
+                        $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], $bdo['f'.$catapultTarget], false );
+                    }
+                    
+                    $info_cat .= "</td></tr></tbody>";
+                } else {
+                    $info_cat = "" . $catp_pic . "," . $this->procResType( $tbgid, $can_destroy, $isoasis ) . $info_cata;
+                    
+                    // embassy level was changed
+                    if ( $tbgid == 18 ) {
+                        $info_cat .= $database->checkEmbassiesAfterBattle( $data['to'], $bdo['f'.$catapultTarget], false );
+                    }
                 }
             }
+        }else{
+            if(!isset($info_cat) || empty($info_cat) || $info_cat == ","){
+                $info_cat = "".$catp_pic.", There are no buildings left to destroy";
+            }else if(strpos($info_cat, "There are no buildings left") === false){
+                $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
+                          <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> There are no buildings left to destroy.</td></tr></tbody>";
+            }       
         }
     }
 
@@ -2334,7 +2339,7 @@ class Automation {
                                             if ($i==41) $i=99;
                                             
                                             // 1st row of catapults pre-selected target calculations, if needed
-                                            if (!$catapults1TargetRandom && $bdo['f'.$i.'t'] == $catapultTarget && $bdo['f'.$i] > 0 && $catapultTarget != 31 && $catapultTarget != 32 && $catapultTarget != 33)
+                                            if (!$catapults1TargetRandom && $bdo['f'.$i.'t'] == $catapultTarget && $bdo['f'.$i] > 0 && $i != 40)
                                             {
                                                 $j++;
                                                 $_catapultsTarget1Levels[$j]=$bdo['f'.$i];
@@ -2365,7 +2370,7 @@ class Automation {
                                         for ($i=1;$i<=41;$i++)
                                         {
                                             if ($i==41) $i=99;
-                                            if ($bdo['f'.$i] > 0 && $catapultTarget != 31 && $catapultTarget != 32 && $catapultTarget != 33)
+                                            if ($bdo['f'.$i] > 0 && $i != 40)
                                             {
                                                 $list[] = $i;
                                             }
@@ -2396,7 +2401,7 @@ class Automation {
                                             if ($i==41) $i=99;
                                             
                                             // 2nd row of catapults pre-selected target calculations, if needed
-                                            if (!$catapults2TargetRandom && !$catapults2WillNotShoot && $bdo['f'.$i.'t'] == $catapultTarget2 && $bdo['f'.$i] > 0 && $catapultTarget2 != 31 && $catapultTarget2 != 32 && $catapultTarget2 != 33)
+                                            if (!$catapults2TargetRandom && !$catapults2WillNotShoot && $bdo['f'.$i.'t'] == $catapultTarget2 && $bdo['f'.$i] > 0 && $i != 40)
                                             {
                                                 $j++;
                                                 $_catapultsTarget2Levels[$j]=$bdo['f'.$i];
@@ -2427,7 +2432,7 @@ class Automation {
                                         for ($i=1;$i<=41;$i++)
                                         {
                                             if ($i==41) $i=99;
-                                            if ($bdo['f'.$i] > 0)
+                                            if ($bdo['f'.$i] > 0 && $i != 40)
                                             {
                                                 $list[] = $i;
                                             }
@@ -2785,7 +2790,7 @@ class Automation {
                         if(isset($village_destroyed) && $village_destroyed == 1 && $can_destroy==1){
                             //check if village pop=0 and no info destroy
                             if (strpos($info_cat,"The village has") === false) {
-                                $info_cat .= "<br><tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
+                                $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
                                           <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> The village has been destroyed.</td></tr></tbody>";
                             }
                         }
