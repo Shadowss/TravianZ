@@ -289,7 +289,7 @@ if($workshop == 0 && $academy <= 9 && $academy >= 5 && $mainbuilding >= 2 && $ma
 if($tournamentsquare == 0 && $rallypoint <= 14 && $rallypoint >= 7) {
     include("soon/tsquare.tpl");
 }
-if($bakery == 0 && $grainmill >= 1 && $grainmill <= 4 || $cropland >= 5 && $cropland <= 9 || $mainbuilding >= 2 && $mainbuilding <= 4) {
+if($bakery == 0 && $grainmill >= 1 && $grainmill <= 5 || $cropland >= 5 && $cropland <= 10 || $mainbuilding >= 2 && $mainbuilding <= 5) {
     include("soon/bakery.tpl");
 }
 if($townhall == 0 && ($mainbuilding <= 9 && $mainbuilding >= 5) || ($academy >= 5 && $academy <= 9)) {
