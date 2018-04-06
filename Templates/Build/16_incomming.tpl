@@ -82,7 +82,7 @@ if ($units[$y]['sort_type']==3){
                   <tbody class="infos">
 									<tr>
 										<th>'.ARRIVAL.'</th>
-										<td colspan="10">
+										<td colspan='.$colspan.'>
 										<div class="in small"><span id=timer'.$timer.'>'.$generator->getTimeFormat($units[$y]['endtime']-time()).'</span> h</div>';
 										    $datetime = $generator->procMtime($units[$y]['endtime']);
 										    echo "<div class=\"at small\">";
@@ -230,6 +230,7 @@ $oasis = $database->getMovement("6",$conqured['wref'],0);
 $total_for = count($oasis);
 for($y=0;$y < $total_for;$y++){
 $timer = $y+1;
+$to = $database->getOMInfo($oasis[$y]['to']);
 	if ($oasis[$y]['attack_type']==2){
 		$actionType = REINFORCEMENTFOR;
 	} else if ($oasis[$y]['attack_type']==3){
@@ -246,9 +247,9 @@ $timer = $y+1;
 		echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
                   <a href=\"karte.php?d=".$oasis[$y]['from']."&c=".$generator->getMapCheck($oasis[$y]['from'])."\">".$database->getVillageField($oasis[$y]['from'],"name")."</a></td>
                   <td colspan=\"$colspan\">";
-                  echo "<a href=\"spieler.php?uid=".$database->getVillageField($oasis[$y]['from'],"owner")."\">".$database->getUserField($database->getVillageField($oasis[$y]['from'],"owner"),"username",0)."'s troopslll</a>";
+                  echo "<a href=\"karte.php?d=".$oasis[$y]['to']."&c=".$generator->getMapCheck($oasis[$y]['to'])."\">".$actionType." ".$to['name']."</a>";
                   echo "</td></tr></thead><tbody class=\"units\">";
-                  $tribe = $database->getUserField($database->getVillageField($oasis[$y]['from'],"owner"),"tribe",0);
+                  $tribe = $database->getUserField($reinfowner,"tribe",0);
                   $start = ($tribe-1)*10+1;
 				  $end = ($tribe*10);
                   echo "<tr><th>&nbsp;</th>";
