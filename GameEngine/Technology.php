@@ -570,7 +570,7 @@ class Technology {
         return $upkeep;
 	}
 
-private function trainUnit($unit,$amt,$great=false) {
+    private function trainUnit($unit,$amt,$great=false) {
 		global $session,$database,${'u'.$unit},$building,$village,$bid19,$bid20,$bid21,$bid25,$bid26,$bid29,$bid30,$bid36,$bid41,$bid42;
 
 		if($this->getTech($unit) || $unit%10 <= 1 || $unit == 99) {
@@ -650,88 +650,68 @@ private function trainUnit($unit,$amt,$great=false) {
 	public function meetRRequirement($tech) {
 		global $session,$building;
 		switch($tech) {
-			case 2:
-			if($building->getTypeLevel(22) >= 1 && $building->getTypeLevel(13) >= 1) { return true; } else { return false; }
-			break;
-			case 3:
-			if($building->getTypeLevel(22) >= 5 && $building->getTypeLevel(12) >= 1) { return true; } else { return false; }
-			break;
+			case 2: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(13) >= 1;
+			case 3: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(12) >= 1;
+			
 			case 4:
-			case 23:
-			if($building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 1) { return true; } else { return false; }
-			break;
+			case 23: return$building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 1;
+
 			case 5:
-			case 25:
-			if($building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 5) { return true; } else { return false; }
-			break;
-			case 6:
-			if($building->getTypeLevel(22) >= 15 && $building->getTypeLevel(20) >= 10) { return true; } else { return false; }
-			break;
+			case 25: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 5;
+			
+			case 6: return $building->getTypeLevel(22) >= 15 && $building->getTypeLevel(20) >= 10;
+			
 			case 9:
-			case 29:
-			if($building->getTypeLevel(22) >= 20 && $building->getTypeLevel(16) >= 10) { return true; } else { return false; }
-			break;
+			case 29: return $building->getTypeLevel(22) >= 20 && $building->getTypeLevel(16) >= 10;
+
 			case 12:
 			case 32:
-			case 42:
-			if($building->getTypeLevel(22) >= 1 && $building->getTypeLevel(19) >= 3) { return true; } else { return false; }
-			break;
+			case 42: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(19) >= 3;
+
 			case 13:
 			case 33:
-			case 43:
-			if($building->getTypeLevel(22) >= 3 && $building->getTypeLevel(12) >= 1) { return true; } else { return false; }
-			break;
+			case 43: return $building->getTypeLevel(22) >= 3 && $building->getTypeLevel(12) >= 1;
+
 			case 14:
 			case 34:
-			case 44:
-			if($building->getTypeLevel(22) >= 1 && $building->getTypeLevel(15) >= 5) { return true; } else { return false; }
-			break;
+			case 44: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(15) >= 5;
+
 			case 15:
 			case 35:
-			case 45:
-			if($building->getTypeLevel(22) >= 1 && $building->getTypeLevel(20) >= 3) { return true; } else { return false; }
-			break;
+			case 45: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(20) >= 3;
+
 			case 16:
 			case 26:
 			case 36:
-			case 46:
-			if($building->getTypeLevel(22) >= 15 && $building->getTypeLevel(20) >= 10) { return true; } else { return false; }
-			break;
+			case 46: return $building->getTypeLevel(22) >= 15 && $building->getTypeLevel(20) >= 10;
+			
 			case 7:
 			case 17:
 			case 27:
 			case 37:
-			case 47:
-			if($building->getTypeLevel(22) >= 10 && $building->getTypeLevel(21) >= 1) { return true; } else { return false; }
-			break;
+			case 47: return $building->getTypeLevel(22) >= 10 && $building->getTypeLevel(21) >= 1;
+			
 			case 8:
 			case 18:
 			case 28:
 			case 38:
-			case 48:
-			if($building->getTypeLevel(22) >= 15 && $building->getTypeLevel(21) >= 10) { return true; } else { return false; }
-			break;
+			case 48: return $building->getTypeLevel(22) >= 15 && $building->getTypeLevel(21) >= 10;
+			
 			case 19:
 			case 39:
-			case 49:
-			if($building->getTypeLevel(22) >= 20 && $building->getTypeLevel(16) >= 5) { return true; } else { return false; }
-			break;
-			case 22:
-			if($building->getTypeLevel(22) >= 3 && $building->getTypeLevel(12) >= 1) { return true; } else { return false; }
-			break;
-			case 24:
-			if($building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 3) { return true; } else { return false; }
-			break;
+			case 49: return $building->getTypeLevel(22) >= 20 && $building->getTypeLevel(16) >= 5;
+			
+			case 22: return $building->getTypeLevel(22) >= 3 && $building->getTypeLevel(12) >= 1;
+			
+			case 24: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(20) >= 3;
 		}
 	}
 
 	private function researchTech($get) {
-		//global $database,$session,${'r'.$get['a']},$village,$logging;
 		global $database,$session,${'r'.$get['a']},$bid22,$building,$village,$logging;
 		if($this->meetRRequirement($get['a']) && $get['c'] == $session->mchecker) {
 			$data = ${'r'.$get['a']};
 			$time = time() + round(($data['time'] * ($bid22[$building->getTypeLevel(22)]['attri'] / 100))/SPEED);
-			//$time = time() + round($data['time']/SPEED);
 			$database->modifyResource($village->wid,$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
 			$database->addResearch($village->wid,"t".$get['a'],$time);
 			$logging->addTechLog($village->wid,"t".$get['a'],1);
@@ -741,15 +721,27 @@ private function trainUnit($unit,$amt,$great=false) {
 		exit;
 	}
 
+	//TODO: Merge these two functions in one function, they're very similar to each other
+	
 	private function upgradeSword($get) {
 		global $database,$session,$bid12,$building,$village,$logging;
 		$ABTech = $database->getABTech($village->wid);
-		$CurrentTech = $ABTech["b".$get['a']];
+		$ABUpgrades = $this->getABUpgrades('b');
+		$ABUpgradesCount = count($ABUpgrades);
+		
+		$ups = 0;
+		if(count($ABUpgradesCount) > 0){
+		    foreach($ABUpgrades as $upgrade){
+		        if(in_array(("b".$get['a']), $upgrade)) $ups++;
+		    }
+		}
+		
+		$CurrentTech = $ABTech["b".$get['a']]+$ups;
 		$unit = ($session->tribe-1)*10+intval($get['a']);
-		if(($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(12)) && $get['c'] == $session->mchecker) {
+		if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(12)) && $get['c'] == $session->mchecker) {
 			global ${'ab'.strval($unit)};
 			$data = ${'ab'.strval($unit)};
-			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid12[$building->getTypeLevel(12)]['attri'] / 100))/SPEED);
+			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid12[$building->getTypeLevel(12)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + 60 : 0);
 			if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
 				$database->addResearch($village->wid,"b".$get['a'],$time);
 				$logging->addTechLog($village->wid,"b".$get['a'],$CurrentTech+1);
@@ -763,12 +755,22 @@ private function trainUnit($unit,$amt,$great=false) {
 	private function upgradeArmour($get) {
 		global $database,$session,$bid13,$building,$village,$logging;
 		$ABTech = $database->getABTech($village->wid);
-		$CurrentTech = $ABTech["a".$get['a']];
+		$ABUpgrades = $this->getABUpgrades('a');
+		$ABUpgradesCount = count($ABUpgrades);
+		
+		$ups = 0;
+		if(count($ABUpgradesCount) > 0){
+		    foreach($ABUpgrades as $upgrade){
+		        if(in_array(("a".$get['a']), $upgrade)) $ups++;
+		    }
+		}
+		
+		$CurrentTech = $ABTech["a".$get['a']]+$ups;
 		$unit = ($session->tribe-1)*10+intval($get['a']);
-		if(($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(13)) && $get['c'] == $session->mchecker) {
+		if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(13)) && $get['c'] == $session->mchecker) {
 			global ${'ab'.strval($unit)};
 			$data = ${'ab'.strval($unit)};
-			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid13[$building->getTypeLevel(13)]['attri'] / 100))/SPEED);
+			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid13[$building->getTypeLevel(13)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + 60 : 0);
 			if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
 				$database->addResearch($village->wid,"a".$get['a'],$time);
 				$logging->addTechLog($village->wid,"a".$get['a'],$CurrentTech+1);
