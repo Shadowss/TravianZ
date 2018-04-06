@@ -123,34 +123,37 @@ class Battle {
 				//set the arrays with attacking and defending units
 				$attacker = array('u1'=>0,'u2'=>0,'u3'=>0,'u4'=>0,'u5'=>0,'u6'=>0,'u7'=>0,'u8'=>0,'u9'=>0,'u10'=>0,'u11'=>0,'u12'=>0,'u13'=>0,'u14'=>0,'u15'=>0,'u16'=>0,'u17'=>0,'u18'=>0,'u19'=>0,'u20'=>0,'u21'=>0,'u22'=>0,'u23'=>0,'u24'=>0,'u25'=>0,'u26'=>0,'u27'=>0,'u28'=>0,'u29'=>0,'u30'=>0,'u31'=>0,'u32'=>0,'u33'=>0,'u34'=>0,'u35'=>0,'u36'=>0,'u37'=>0,'u38'=>0,'u39'=>0,'u40'=>0,'u41'=>0,'u42'=>0,'u43'=>0,'u44'=>0,'u45'=>0,'u46'=>0,'u47'=>0,'u48'=>0,'u49'=>0,'u50'=>0);
 				$start = ($post['a1_v']-1)*10+1;
-				$index = 1;
 				$offhero=intval($post['h_off_bonus']);
 				$hero_strenght=intval($post['h_off']);
 				$deffhero=intval($post['h_def_bonus']);
-				for($i=$start;$i<=($start+9);$i++) {
-						$attacker['u'.$i] = $post['a1_'.$index];
-						if($index <=8) {
-								${'att_ab'.$index} = $post['f1_'.$index];
-						}
-						$index += 1;
+				for($i=$start, $index = 1;$i<=($start+9);$i++, $index++) {
+				    if(isset($post['a1_'.$index]) && !empty($post['a1_'.$index])) {
+				        $attacker['u'.$i] = $post['a1_'.$index];
+				    }else{
+				        $attacker['u'.$i] = 0;
+				    }
+				    
+				    if($index <=8) {
+				        ${'att_ab'.$index} = $post['f1_'.$index];
+				    }
 				}
 
 				$defender = array();
 				$defscout=0;
 				//fix by ronix
 				for($i=1;$i<=50;$i++) {
-						if(isset($post['a2_'.$i]) && $post['a2_'.$i] != "") {
-								$defender['u'.$i] = $post['a2_'.$i];
-								$def_ab[$i]=$post['f2_'.$i];
-								if($i == 4 || $i == 14 || $i == 23 || $i == 44){
-									$defscout+=$defender['u'.$i];
-								}
-
-						}
-						else {
-								$defender['u'.$i] = 0;
-								$def_ab[$i]=0;
-						}
+				    if(isset($post['a2_'.$i]) && !empty($post['a2_'.$i])) {
+				        $defender['u'.$i] = $post['a2_'.$i];
+				        $def_ab[$i]=$post['f2_'.$i];
+				        if($i == 4 || $i == 14 || $i == 23 || $i == 44){
+				            $defscout+=$defender['u'.$i];
+				        }
+				        
+				    }
+				    else {
+				        $defender['u'.$i] = 0;
+				        $def_ab[$i]=0;
+				    }
 				}
 				$deftribe = $post['tribe'];
 				$wall = 0;
@@ -375,7 +378,7 @@ class Battle {
                     $j = $i-$start+1;
                     if($Attacker['u'.$i]>0 && ($i == 4 || $i == 14 || $i == 23 || $i == 44)){
                         if(${'att_ab'.$abcount} > 0) {
-                                $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.00697, ${'att_ab'.$abcount}) - 1)) * $Attacker['u'.$i];// ^ ($Attacker['u'.$i]/100);
+                                $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * $Attacker['u'.$i];// ^ ($Attacker['u'.$i]/100);
                         }else{
                             $ap += $Attacker['u'.$i]*35;
                         }
@@ -403,9 +406,9 @@ class Battle {
                     $j = $i-$start+1;
                     if($abcount <= 8 && ${'att_ab'.$abcount} > 0) {
                         if(in_array($i,$calvary)) {
-                            $cap += (int) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
+                            $cap += (float) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
                         }else{
-                            $ap += (int) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
+                            $ap += (float) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
                         }
                     }else{
                         if(in_array($i,$calvary)) {
@@ -520,7 +523,7 @@ class Battle {
             $moralbonus = 1.0;
         }
 
-        if($involve >= 1000) {
+        if($involve >= 1000 && $type != 1) {
             $Mfactor = round(2*(1.8592-pow($involve,0.015)),4);
         }else{
             $Mfactor = 1.5;
@@ -772,7 +775,7 @@ class Battle {
                 global ${'u'.$y};
 
                 if($defenders['u'.$y]>0 && $def_ab[$y] > 0) {
-                    $dp +=  (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.00696, $def_ab[$y]) - 1)) * $defenders['u'.$y] * $defender_artefact;
+                    $dp += (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y] * $defender_artefact;
 
                     $def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
                     if(count($def_foolartefact) > 0){
