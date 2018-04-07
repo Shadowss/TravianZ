@@ -63,7 +63,7 @@ define("LOGIN_PASS_EMPTY","Enter password.");
 define("EMAIL_ERROR","Email does not match existing");
 define("PASS_MISMATCH","Passwords do not match");
 define("ALLI_OWNER","Please appoint an alliance owner before deleting");
-define("SIT_ERROR","Sitter already set or player inexistent");
+define("SIT_ERROR","Sitter already set or player not found");
 define("USR_NT_FOUND","Name does not exist.");
 define("LOGIN_PW_ERROR","The password is wrong.");
 define("WEL_TOPIC","Useful tips & information ");

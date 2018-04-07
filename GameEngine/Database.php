@@ -6014,7 +6014,7 @@ References: User ID/Message ID, Mode
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "research where vref = $vid";
+		$q = "SELECT * FROM " . TB_PREFIX . "research where vref = $vid ORDER BY timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
         $researchingCache[$vid] = $this->mysqli_fetch_all($result);
         return $researchingCache[$vid];
