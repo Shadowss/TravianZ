@@ -473,7 +473,7 @@ class Battle {
             if ($dp>0 || $cdp >0){
                 if($type==1) {
                     $dp *=  $wallMultiplier;
-                    $dp += $dp1 + 10;
+                    $dp += 10;
                 }else{                
                     $dp *= $wallMultiplier;
                     $cdp *= $wallMultiplier;
