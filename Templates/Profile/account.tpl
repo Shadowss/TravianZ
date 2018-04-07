@@ -3,7 +3,6 @@
 <?php include("menu.tpl"); ?>
 <form action="spieler.php" method="POST">
 <input type="hidden" name="ft" value="p3">
-<input type="hidden" name="uid" value="<?php echo $session->uid; ?>" />
 <table cellpadding="1" cellspacing="1" id="change_pass" class="account">
 <thead><tr>
     <th colspan="2">Change password</th>
@@ -22,8 +21,8 @@
     <td><input class="text" type="password" name="pw3" maxlength="30" /></td>
 </tr></tbody></table>
 <?php
-if($form->getError("pw") != "") {
-echo "<span class=\"error\">".$form->getError('pw')."</span>";
+if(!empty($passError = $form->getError("pw"))) {
+    echo "<span class=\"error\">".$passError."</span>";
 }
 ?>
 <table cellpadding="1" cellspacing="1" id="change_mail" class="account"><thead><tr>
@@ -42,8 +41,8 @@ echo "<span class=\"error\">".$form->getError('pw')."</span>";
         <td><input class="text" type="text" name="email_neu" /></td>
     </tr></tbody></table>
 <?php
-if($form->getError("email") != "") {
-echo "<span class=\"error\">".$form->getError('email')."</span>";
+if(!empty($emailError = $form->getError("email"))) {
+echo "<span class=\"error\">".$emailError."</span>";
 }
 ?>
     <table cellpadding="1" cellspacing="1" id="sitter" class="account"><thead>
@@ -96,8 +95,8 @@ echo "<a href=\"spieler.php?uid=".$sit['id']."\">".$database->getUserField($sit[
 ?>
 </td></tr></table>
 <?php
-if($form->getError("email") != "") {
-echo "<span class=\"error\">".$form->getError('email')."</span>";
+if(!empty($sitterError = $form->getError("sit"))) {
+    echo "<span class=\"error\">".$sitterError."</span>";
 }
 ?>
     <table cellpadding="1" cellspacing="1" id="del_acc" class="account"><thead>
@@ -117,7 +116,7 @@ echo "<a href=\"spieler.php?s=3&id=".$session->uid."&a=1&e=4\"><img
 		title=\"Cancel process\" /> </a>";
 		$time=$generator->getTimeFormat(($timestamp-time()));
         echo "The account will be deleted in <span
-		id=\"timer1\">".$time."</span> .</td>";
+		id=\"timer2\">".$time."</span> .</td>";
 }
 else {
 ?>
@@ -136,8 +135,8 @@ else {
         ?>
     </tr></tbody></table>
     <?php
-if($form->getError("del") != "") {
-echo "<span class=\"error\">".$form->getError("del")."</span>";
+if(!empty($deleteError = $form->getError("del"))) {
+    echo "<span class=\"error\">".$deleteError."</span>";
 }
 ?>
     <p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" /></p>

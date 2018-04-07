@@ -63,7 +63,7 @@ define("LOGIN_PASS_EMPTY","Enter password.");
 define("EMAIL_ERROR","Email does not match existing");
 define("PASS_MISMATCH","Passwords do not match");
 define("ALLI_OWNER","Please appoint an alliance owner before deleting");
-define("SIT_ERROR","Sitter already set");
+define("SIT_ERROR","Sitter already set or player inexistent");
 define("USR_NT_FOUND","Name does not exist.");
 define("LOGIN_PW_ERROR","The password is wrong.");
 define("WEL_TOPIC","Useful tips & information ");
@@ -79,6 +79,7 @@ define("ID_NO_EXIST","There is no user with the id ");
 define("SAME_NAME","You can't invite yourself");
 define("ALREADY_INVITED"," already invited");
 define("ALREADY_IN_ALLY"," already in this alliance");
+define("VAC_MODE_WRONG_DAYS","You've inserted a wrong number of days");
 
 //COPYRIGHT
 define("TRAVIAN_COPYRIGHT","TravianZ 100% Open Source Travian Clone.");
@@ -112,6 +113,7 @@ define("GO2MY_VILLAGE","Go to my village");
 define("VILLAGE_CENTER","Village centre");
 define("FINISH_GOLD","Finish all construction and research orders in this village immediately for 2 Gold?");
 define("WAITING_LOOP","(waiting loop)");
+define("CROP_NEGATIVE","Your crop production is negative, you'll neaver reach the amount of requested resources.");
 define("HRS","(hrs.)");
 define("DONE_AT","done at");
 define("CANCEL","cancel");

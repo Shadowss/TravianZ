@@ -133,8 +133,10 @@ class Battle {
 				        $attacker['u'.$i] = 0;
 				    }
 				    
-				    if($index <=8) {
+				    if($index <=8 && isset($post['f1_'.$index]) && !empty($post['f1_'.$index])) {
 				        ${'att_ab'.$index} = $post['f1_'.$index];
+				    }else{
+				        ${'att_ab'.$index} = 0;
 				    }
 				}
 
@@ -158,7 +160,7 @@ class Battle {
 				$deftribe = $post['tribe'];
 				$wall = 0;
 
-				if($post['kata'] == "") {
+				if(empty($post['kata'])) {
 						$post['kata'] = 0;
 				}
 
@@ -247,15 +249,24 @@ class Battle {
         global $bid34,$bid35,$database;
 
         // Define the array, with the units
-        $calvary = array(4,5,6,15,16,23,24,25,26,45,46);
-        $catapult = array(8,18,28,48);
-        $rams = array(7,17,27,47);
+        $calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 45, 46];
+        $catapult = [8, 18, 28, 48];
+        $rams = [7, 17, 27, 47];
         $catp = $ram = 0;
+        
         // Array to return the result of the calculation back
-        $result = array();
+        $result = [];
         $involve = 0;
         $winner = false;
+        
         // at 0 all partial results
+        
+        //cap = Cavalry attack points
+        //ap = Infantry attack points
+        //cdp = Cavalry attack points
+        //dp = Infantry defense points
+        //rap = Result attack points
+        //rdp = Result defense points
         $cap = $ap = $dp = $cdp = $rap = $rdp = 0;
 
         $att_artefact = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,3,0));
@@ -378,7 +389,7 @@ class Battle {
                     $j = $i-$start+1;
                     if($Attacker['u'.$i]>0 && ($i == 4 || $i == 14 || $i == 23 || $i == 44)){
                         if(${'att_ab'.$abcount} > 0) {
-                                $ap += (35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * $Attacker['u'.$i];// ^ ($Attacker['u'.$i]/100);
+                                $ap += round(35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1), 4) * $Attacker['u'.$i];
                         }else{
                             $ap += $Attacker['u'.$i]*35;
                         }
@@ -406,9 +417,9 @@ class Battle {
                     $j = $i-$start+1;
                     if($abcount <= 8 && ${'att_ab'.$abcount} > 0) {
                         if(in_array($i,$calvary)) {
-                            $cap += (float) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
+                            $cap += round(${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1), 4) * (int) $Attacker['u'.$i];
                         }else{
-                            $ap += (float) (${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1)) * (int) $Attacker['u'.$i];
+                            $ap += round(${'u'.$i}['atk'] + (${'u'.$i}['atk'] + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1), 4) * (int) $Attacker['u'.$i];
                         }
                     }else{
                         if(in_array($i,$calvary)) {
@@ -456,51 +467,54 @@ class Battle {
             // Factor = 1020 Wall Teuton
             // Factor = 1025 Wall Goul
             $factor = ($def_tribe == 1)? 1.030 : (($def_tribe == 2)? 1.020 : 1.025);
+            $wallMultiplier = round(pow($factor,$def_wall), 3);
             // Defense infantry = Infantry * Wall (%)
-            // Defense calvary calvary = * Wall (%)
-            if ($dp>0 || $cdp >0) {
+            // Defense calvary calvary = * Wall (%)          
+            if ($dp>0 || $cdp >0){
                 if($type==1) {
-                    $dp *=  pow($factor,$def_wall);
-                    $dp1 = 10 * pow($factor,$def_wall) * $def_wall;
-                    $dp +=$dp1;
-                }else{
-                    $dp *= pow($factor,$def_wall);
-                    $cdp *= pow($factor,$def_wall);
+                    $dp *=  $wallMultiplier;
+                    $dp += $dp1 + 10;
+                }else{                
+                    $dp *= $wallMultiplier;
+                    $cdp *= $wallMultiplier;
 
                     // Calculation of the Basic defense bonus "Residence"
-                    $dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)));
-                    $cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)));
+                    $dp += (2*(pow($residence,2)) + 10) * $wallMultiplier;
+                    $cdp += (2*(pow($residence,2)) + 10) * $wallMultiplier;
                 }
-            } else {
-                $dp = 10 * pow($factor,$def_wall) * $def_wall;
+            }else{
+                $dp = 10 * $wallMultiplier * $def_wall;
                 // Defense calvary calvary = * Wall (%)
-                $cdp = 10 * pow($factor,$def_wall) * $def_wall;
-                if($type!=1) {
+                $cdp = 10 * $wallMultiplier * $def_wall;
+                if($type != 1){
                     // Calculation of the Basic defense bonus "Residence"
-                    $dp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)));
-                    $cdp += ((2*(pow($residence,2)))*(pow($factor,$def_wall)));
-                }else $cdp=0;
+                    $dp += (2*(pow($residence,2)) + 10)*$wallMultiplier;
+                    $cdp += (2*(pow($residence,2)) + 10)*$wallMultiplier;
+                }else{
+                    $dp += 10;
+                    $cdp = 0;
+                }
             }
         }elseif($type!=1) {
             // Calculation of the Basic defense bonus "Residence"
-            $dp += (2*(pow($residence,2)));
-            $cdp += (2*(pow($residence,2)));
+            $dp += (2*(pow($residence,2)) + 10);
+            $cdp += (2*(pow($residence,2)) + 10);
         }
 
         // Formula for calculating points attackers (Infantry & Cavalry)
 
         if($AttackerWref != 0){
-            $rap = ($ap+$cap)+(($ap+$cap)/100*(isset($bid35[$this->getTypeLevel(35,$AttackerWref)]) ? $bid35[$this->getTypeLevel(35,$AttackerWref)]['attri'] : 0));
+            $rap = round(($ap+$cap)+(($ap+$cap)/100*(isset($bid35[$this->getTypeLevel(35,$AttackerWref)]) ? $bid35[$this->getTypeLevel(35,$AttackerWref)]['attri'] : 0)));
         }else{
-            $rap = $ap+$cap;
+            $rap = round($ap+$cap);
         }
 
         // Formula for calculating Defensive Points
 
         if ($rap==0)
-            $rdp = ($dp) + ($cdp) + 10;
+            $rdp = round(($dp) + ($cdp));
         else
-            $rdp = ($dp * ($ap/$rap)) + ($cdp * ($cap/$rap)) + 10;
+            $rdp = round(round($cap/$rap, 4)*($cdp) + round($ap/$rap, 4)*($dp));
 
 
         // The Winner is....:
@@ -510,25 +524,17 @@ class Battle {
 
         // Formula for calculating the Moral
         if($attpop > $defpop) {
-            if ($rap < $rdp) {
-                $moralbonus = min(1.5, pow(($defpop > 0 ? $attpop / $defpop : 0), (0.2*($rap/$rdp))));
-            }else{
-                if($defpop==0){
-                    $moralbonus = min(1.5, pow($attpop, 0.2));
-                }else{
-                    $moralbonus = min(1.5, pow(($defpop > 0 ? $attpop / $defpop : 0), 0.2));
-                }
-            }
+            $moralbonus = 1 / round(max(0.667, pow($defpop / $attpop, 0.2 * min(1, $rap / $rdp))), 3);  
         }else{
             $moralbonus = 1.0;
         }
 
         if($involve >= 1000 && $type != 1) {
-            $Mfactor = round(2*(1.8592-pow($involve,0.015)),4);
+            $Mfactor = 2*round((1.8592-pow($involve,0.015)),4);
         }else{
             $Mfactor = 1.5;
         }
-        if ($Mfactor < 1.25778){$Mfactor=1.25778;}elseif ($Mfactor > 1.5){$Mfactor=1.5;}
+        if ($Mfactor < 1.2578){$Mfactor=1.2578;}elseif ($Mfactor > 1.5){$Mfactor=1.5;}
             // Formula for calculating lost drives
             // $type = 1 scout, 2?
             // $type = 3 Normal, 4 Raid
@@ -557,12 +563,12 @@ class Battle {
         }else if($type == 3){
             // Attacker
 
-            $result[1] = ($winner)? round(pow((($rdp*$moralbonus)/$rap),$Mfactor),8) : 1;
+            $result[1] = ($winner)? pow((($rdp*$moralbonus)/$rap),$Mfactor) : 1;
             if ($result[1]>1) {$result[1]=1;$winner=false;$result['Winner'] = "defender";}
 
             // Defender
-            $result[2] = (!$winner)? round(pow(($rap/($rdp*$moralbonus)),$Mfactor),8) : 1;
-            if ($result[1]==1) {$result[2]=round(pow(($rap/($rdp*$moralbonus)),$Mfactor),8);}
+            $result[2] = (!$winner)? pow(($rap/($rdp*$moralbonus)),$Mfactor) : 1;
+            if ($result[1]==1) {$result[2]=pow(($rap/($rdp*$moralbonus)),$Mfactor);}
             if ($result[2]>1) {$result[2]=1;$result['Winner'] = "attacker";$winner=true;}
             // If attacked with "Hero"
             $ku = ($att_tribe-1)*10+9;
@@ -672,7 +678,7 @@ class Battle {
         $total_att_units = count($units['Att_unit']);
         $start = intval(($att_tribe-1)*10+1);
         $end = intval(($att_tribe*10));
-
+        
         for($i=$start;$i <= $end;$i++){
             $y = $i-(($att_tribe-1)*10);
             $result['casualties_attacker'][$y] = round($result[1]*$units['Att_unit'][$i]);
@@ -775,7 +781,7 @@ class Battle {
                 global ${'u'.$y};
 
                 if($defenders['u'.$y]>0 && $def_ab[$y] > 0) {
-                    $dp += (20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y] * $defender_artefact;
+                    $dp += round(20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1), 4) * $defenders['u'.$y] * $defender_artefact;
 
                     $def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
                     if(count($def_foolartefact) > 0){
@@ -822,8 +828,8 @@ class Battle {
                     $def_ab[$y] = 0;
                 }
                 if ($def_ab[$y]>0) {
-                    $dp +=  (${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y];
-                    $cdp += (${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1)) * $defenders['u'.$y];
+                    $dp +=  round(${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1), 4) * $defenders['u'.$y];
+                    $cdp += round(${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1), 4) * $defenders['u'.$y];
                 }else{
                     $dp += $defenders['u'.$y]*${'u'.$y}['di'];
                     $cdp += $defenders['u'.$y]*${'u'.$y}['dc'];
@@ -836,7 +842,6 @@ class Battle {
         $datadef['dp']=$dp;
         $datadef['cdp']=$cdp;
         $datadef['involve']=$invol;
-
         return $datadef;
 
     }

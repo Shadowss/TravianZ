@@ -20,7 +20,6 @@
 include("menu.tpl"); ?>
 <form action="spieler.php" method="POST">
 <input type="hidden" name="ft" value="p4">
-<input type="hidden" name="uid" value="<?php echo $session->uid; ?>" />
 
 <table cellpadding="1" cellspacing="1" id="del_acc" class="account"><thead>
 <tr>

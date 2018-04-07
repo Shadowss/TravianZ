@@ -23,7 +23,6 @@ $varmedal = $database->getProfileMedal($session->uid);
 include("menu.tpl"); ?>
 <form action="spieler.php" method="POST">
     <input type="hidden" name="ft" value="p1" />
-    <input type="hidden" name="uid" value="<?php echo $session->uid; ?>" />
     <input type="hidden" name="id" value="<?php echo (isset($id) ? $id : ''); ?>" />
 
     <table cellpadding="1" cellspacing="1" id="edit" ><thead>

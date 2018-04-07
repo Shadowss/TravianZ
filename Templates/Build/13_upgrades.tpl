@@ -84,6 +84,7 @@
 		foreach($ABups as $arms) {
 			$unit = ($session->tribe-1)*10 + substr($arms['tech'],1,2);
 			echo "<tr><td class=\"desc\"><img class=\"unit u$unit\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($unit)."\" title=\"".$technology->getUnitName($unit)."\" />".$technology->getUnitName($unit);
+			echo "<span class=\"none\"> (".LEVEL." ".($timer+$ups).")</span>";
 			if($timer > 1) echo "<span class=\"none\"> ".WAITING."</span>";
 			echo "</td>";
 			echo "<td class=\"dur\"><span id=\"timer$timer\">".$generator->getTimeFormat($arms['timestamp']-time())."</span></td>";

@@ -96,7 +96,6 @@ while($data = mysqli_fetch_assoc($query)) {
 <?php include("menu.tpl"); ?>
 <form action="spieler.php?s=2" method="POST">
   <input type="hidden" name="ft" value="p2">
-  <input type="hidden" name="uid" value="<?php echo $session->uid; ?>" />
   <table cellpadding="1" cellspacing="1" id="links">
     <thead>
       <tr>

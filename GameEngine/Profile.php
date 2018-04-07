@@ -93,13 +93,13 @@ class Profile {
 		global $database, $session;
 		$birthday = $post['jahr'].'-'.$post['monat'].'-'.$post['tag'];
 		$database->submitProfile($session->uid,$database->RemoveXSS($post['mw']),$database->RemoveXSS($post['ort']),$database->RemoveXSS($birthday),$database->RemoveXSS($post['be2']),$database->RemoveXSS($post['be1']));
-		$varray = $database->getProfileVillages($post['uid']);
+		$varray = $database->getProfileVillages($session->uid);
 			for($i=0;$i<=count($varray)-1;$i++) {
 				$k = trim($post['dname'.$i]);
 				$name = preg_replace("/[^a-zA-Z0-9_\-\s'\"]/", "", $k);
 				$database->setVillageName($varray[$i]['wref'],$database->RemoveXSS($name));
 		}  
-		header("Location: spieler.php?uid=".$post['uid']);
+		header("Location: spieler.php?uid=".$session->uid);
 		exit;
 	}
 
@@ -116,27 +116,23 @@ class Profile {
 		********************************************************/
 
 	private function setvactionmode($post){
-		global $database,$session,$form;
-		$set =false;
-		if($post['vac'] && $post['vac_days'] >=2 && $post['vac_days'] <=14) {
-		$database->setvacmode($post['uid'],$post['vac_days']);
-		$set =true;
-		}
-		else {
-		echo "Minimum days is 2";die();exit();
-		}
-		if($set){
-        unset($_SESSION['wid']);
-		$database->activeModify(addslashes($session->username),1);
-		$database->UpdateOnline("logout") or die(mysqli_error($database->dblink));
-		$session->Logout();
-		header("Location: login.php");
-		exit;
-		}else{
-		header("Location: spieler.php?s=5");
-		exit;
-		}
-		}
+	    global $database,$session,$form;
+
+	    if(isset($post['vac']) && $post['vac'] && isset($post['vac_days']) && $post['vac_days'] >=2 && $post['vac_days'] <=14){        
+	        unset($_SESSION['wid']);
+	        $database->setvacmode($session->uid,$post['vac_days']);
+	        $database->activeModify(addslashes($session->username),1);
+	        $database->UpdateOnline("logout") or die(mysqli_error($database->dblink));
+	        $session->Logout();
+	        header("Location: login.php");
+	        exit;
+	    }else{
+	        header("Location: spieler.php?s=".$session->uid);
+	        $form->add("vac", VAC_MODE_WRONG_DAYS);
+	        exit();
+	    }
+	    
+	}
 
 		/*******************************************************
 		Function to vacation mode - by advocaite and Shadow
@@ -146,55 +142,51 @@ class Profile {
 	private function updateAccount($post) {
 		global $database,$session,$form;
 
-		if($post['pw2'] == $post['pw3']) {
-			if($database->login($session->username,$post['pw1'])) {
-				if ($_POST['uid'] != $session->uid){
-                    die("Hacking Attempr");
-                } else {
-                    $database->updateUserField($post['uid'],"password",password_hash($post['pw2'], PASSWORD_BCRYPT,['cost' => 12]),1);
-				}
-			}
-			else {
-				$form->addError("pw",LOGIN_PW_ERROR);
-			}
-		}
-		else {
-			$form->addError("pw",PASS_MISMATCH);
+		if(!empty($post['pw1']) && !empty($post['pw2']) && !empty($post['pw3'])){
+		    if($post['pw2'] == $post['pw3']) {
+		        if($database->login($session->username,$post['pw1'])) {
+		            $database->updateUserField($session->uid,"password",password_hash($post['pw2'], PASSWORD_BCRYPT,['cost' => 12]),1);
+		        }else {
+		            $form->addError("pw",LOGIN_PW_ERROR);
+		        }
+		    }else {
+		        $form->addError("pw",PASS_MISMATCH);
+		    }
 		}
 
+		if(!empty($post['email_alt']) && !empty($post['email_neu'])){
+		    if($post['email_alt'] == $session->userinfo['email']) {
+		        $database->updateUserField($session->uid,"email",$post['email_neu'],1);
+		    }else {
+		        $form->addError("email",EMAIL_ERROR);
+		    }
+		}	
 
-		if($post['email_alt'] == $session->userinfo['email']) {
-			$database->updateUserField($post['uid'],"email",$post['email_neu'],1);
+		if(!empty($post['del_pw']) && $post['del']){
+		    if(password_verify($post['del_pw'], $session->userinfo['password'])) {
+		        $database->setDeleting($session->uid,0);
+		    }else {
+		        $form->addError("del",PASS_MISMATCH);
+		    }
 		}
-		else {
-			$form->addError("email",EMAIL_ERROR);
-		}
 
-
-		if($post['del'] && password_verify($post['del_pw'], $session->userinfo['password'])) {
-				$database->setDeleting($post['uid'],0);
-		}
-		else {
-			$form->addError("del",PASS_MISMATCH);
-		}
-
-
-		if($post['v1'] != "") {
+		if(!empty($post['v1'])) {
 			$sitid = $database->getUserField($post['v1'],"id",1);
 			if($sitid == $session->userinfo['sit1'] || $sitid == $session->userinfo['sit2']) {
 				$form->addError("sit",SIT_ERROR);
-			}
-			else if($sitid != $session->uid){
+			}else if($sitid != $session->uid){
 				if($session->userinfo['sit1'] == 0) {
-					$database->updateUserField($post['uid'],"sit1",$sitid,1);
-				}
-				else if($session->userinfo['sit2'] == 0) {
-					$database->updateUserField($post['uid'],"sit2",$sitid,1);
+				    $database->updateUserField($session->uid,"sit1",$sitid,1);
+				}else if($session->userinfo['sit2'] == 0) {
+				    $database->updateUserField($session->uid,"sit2",$sitid,1);
 				}
 			}
 		}
 
-		$_SESSION['errorarray'] = $form->getErrors();
+		if($form->returnErrors() > 0){
+		    $_SESSION['errorarray'] = $form->getErrors();
+		    $_SESSION['valuearray'] = $_POST;
+		}	
 		header("Location: spieler.php?s=3");
 		exit;
 	}
@@ -216,7 +208,7 @@ class Profile {
 
 	private function cancelDeleting($get) {
 		global $database,$session;
-		$database->setDeleting($get['id'],1);
+		$database->setDeleting($session->uid,1);
 		header("Location: spieler.php?s=".$get['s']);
 		exit;
 	}

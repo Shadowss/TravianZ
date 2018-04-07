@@ -53,7 +53,7 @@
 								<input class="text" type="text" name="a2_24" value="<?php echo $form->getValue('a2_24'); ?>" maxlength="10" title="Number Theutates Thunder" />
 							</td>
 							<td class="research">
-								<input class="text" type="text" name="f2_24" value="<?php echo $form->getValue('a2_24'); ?>" maxlength="2" title="Level Armoury Theutates Thunder" />
+								<input class="text" type="text" name="f2_24" value="<?php echo $form->getValue('f2_24'); ?>" maxlength="2" title="Level Armoury Theutates Thunder" />
 							</td></tr><tr>
 							<td class="ico">
 								<img src="img/x.gif" class="unit u25" title="Druidrider" alt="Druidrider" />

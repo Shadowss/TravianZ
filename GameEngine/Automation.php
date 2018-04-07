@@ -1575,7 +1575,7 @@ class Automation {
                     $def_tribe = $targettribe;
                     $residence = 0;
                     $attpop = 0;
-                    $defpop = 100;
+                    $defpop = 500;
 
                     //type of attack
                     if($dataarray[$data_num]['attack_type'] == 1){
