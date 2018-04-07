@@ -741,7 +741,7 @@ class Technology {
 		if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(12)) && $get['c'] == $session->mchecker) {
 			global ${'ab'.strval($unit)};
 			$data = ${'ab'.strval($unit)};
-			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid12[$building->getTypeLevel(12)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + 60 : 0);
+			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid12[$building->getTypeLevel(12)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + ceil(60/SPEED) : 0);
 			if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
 				$database->addResearch($village->wid,"b".$get['a'],$time);
 				$logging->addTechLog($village->wid,"b".$get['a'],$CurrentTech+1);
@@ -770,7 +770,7 @@ class Technology {
 		if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(13)) && $get['c'] == $session->mchecker) {
 			global ${'ab'.strval($unit)};
 			$data = ${'ab'.strval($unit)};
-			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid13[$building->getTypeLevel(13)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + 60 : 0);
+			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid13[$building->getTypeLevel(13)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + ceil(60/SPEED) : 0);
 			if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
 				$database->addResearch($village->wid,"a".$get['a'],$time);
 				$logging->addTechLog($village->wid,"a".$get['a'],$CurrentTech+1);
