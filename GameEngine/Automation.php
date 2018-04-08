@@ -2120,7 +2120,7 @@ class Automation {
                         }else{
                             $artefact_bouns = 1;
                         }
-                        $foolartefact = $database->getFoolArtefactInfo(7,(isset($vid) ? $vid : 0),$session->uid);
+                        $foolartefact = $database->getFoolArtefactInfo(7, (isset($vid) ? $vid : 0), $DefenderID);
                         if(count($foolartefact) > 0){
                             foreach($foolartefact as $arte){
                                 if($arte['bad_effect'] == 1){
@@ -5373,10 +5373,10 @@ class Automation {
                 $newtime = time()+MEDALINTERVAL;
                 $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".(int) $newtime;
                 $database->query($q);
-                $row['lastgavemedal'] = time()+MEDALINTERVAL;
-            }
-            $time = $row['lastgavemedal'] + MEDALINTERVAL;
-            if ($time < time()) $giveMedal = true;
+            }elseif($row['lastgavemedal'] != 0){
+                $time = $row['lastgavemedal'] + MEDALINTERVAL;
+                $giveMedal = $row['lastgavemedal'] < time();
+            }         
         }
 
         if($giveMedal && MEDALINTERVAL > 0){
