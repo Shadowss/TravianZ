@@ -99,8 +99,9 @@ class Automation {
     }
 
     public function isWinner() {
+        global $database;
         // check whether someone already built a level 100 Wonder of the World
-        $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99 = 100 and f99t = 40"), MYSQLI_ASSOC);
+        $q = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99 = 100 and f99t = 40"), MYSQLI_ASSOC);
         if($q['Total'] > 0)
         {
             header('Location: winner.php');
@@ -178,7 +179,7 @@ class Automation {
         }
         $this->recountCP($vid);
         $q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
-        mysqli_query($GLOBALS['link'],$q);
+        mysqli_query($database->dblink,$q);
         $owner = $database->getVillageField($vid,"owner");
         $this->procClimbers($owner);
 
@@ -201,7 +202,7 @@ class Automation {
         }
 
         $q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
-        mysqli_query($GLOBALS['link'],$q);
+        mysqli_query($database->dblink,$q);
 
         return $popTot;
 
@@ -669,7 +670,7 @@ class Automation {
 
                 //now can't be more than one winner if ww to level 100 is build by 2 users or more on same time
                 if ($indi['type'] == 40 && $indi['level'] == 100) {
-                    mysqli_query($GLOBALS['link'],"TRUNCATE ".TB_PREFIX."bdata");
+                    mysqli_query($database->dblink,"TRUNCATE ".TB_PREFIX."bdata");
                 }
 
                 // TODO: find out what exactly these conditions are for
@@ -875,7 +876,7 @@ class Automation {
         }
 
         // get the capital village from the natars
-        $query = mysqli_query($GLOBALS['link'],'SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysqli_error($database->dblink));
+        $query = mysqli_query($database->dblink,'SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysqli_error($database->dblink));
         $row = mysqli_fetch_assoc($query);
 
         // start the attacks
@@ -883,8 +884,8 @@ class Automation {
 
         // -.-
         $vid = (int) $vid;
-        mysqli_query($GLOBALS['link'],'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')');
-        mysqli_query($GLOBALS['link'],'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . ($endtime + 1) . ')');
+        mysqli_query($database->dblink,'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')');
+        mysqli_query($database->dblink,'INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . ($endtime + 1) . ')');
 
         // wave 1
         $ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20);
@@ -896,11 +897,13 @@ class Automation {
     }
 
     private function checkWWAttacks() {
-        $query = mysqli_query($GLOBALS['link'],'SELECT vid, attack_time FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time());
+        global $database;
+        
+        $query = mysqli_query($database->dblink,'SELECT vid, attack_time FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time());
         while ($row = mysqli_fetch_assoc($query))
         {
             // delete the attack
-            $query3 = mysqli_query($GLOBALS['link'],'DELETE FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . (int) $row['vid'] . ' AND `attack_time` = ' . (int) $row['attack_time']);
+            $query3 = mysqli_query($database->dblink,'DELETE FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . (int) $row['vid'] . ' AND `attack_time` = ' . (int) $row['attack_time']);
         }
     }
 
@@ -4618,7 +4621,7 @@ class Automation {
 
                 $villunits = $unitData[$hdata['wref']];
                 if($hdata['trainingtime'] < time() && $hdata['inrevive'] == 1){
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
+                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']."");
 
                     $columns[] = 'dead';
                     $columnValues[] = 0;
@@ -4637,7 +4640,7 @@ class Automation {
                 }
 
                 if($hdata['trainingtime'] < time() && $hdata['intraining'] == 1){
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
+                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $hdata['wref']);
 
                     $columns[] = 'dead';
                     $columnValues[] = 0;
@@ -4673,7 +4676,7 @@ class Automation {
             }
 
             if (count($lastUpdateIDs)) {
-                mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET lastupdate = $timeNow WHERE heroid IN(".implode(', ', $lastUpdateIDs).")");
+                mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET lastupdate = $timeNow WHERE heroid IN(".implode(', ', $lastUpdateIDs).")");
             }
         }
         if(file_exists("GameEngine/Prevention/updatehero.txt")) {
@@ -4685,11 +4688,11 @@ class Automation {
 
     // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
     private function updateStore() {
-        global $bid10, $bid38, $bid11, $bid39;
+        global $database, $bid10, $bid38, $bid11, $bid39;
 
-        $result = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'fdata`');
+        $result = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'fdata`');
 
-        mysqli_begin_transaction($GLOBALS['link']);
+        mysqli_begin_transaction($database->dblink);
         while ($row = mysqli_fetch_assoc($result))
         {
             $ress = $crop = 0;
@@ -4733,9 +4736,9 @@ class Automation {
                 $crop = STORAGE_BASE;
             }
 
-            mysqli_query($GLOBALS['link'],'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']);
+            mysqli_query($database->dblink,'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']);
         }
-        mysqli_commit($GLOBALS['link']);
+        mysqli_commit($database->dblink);
     }
 
     private function oasisResourcesProduce() {
@@ -4771,7 +4774,7 @@ class Automation {
 
         // continue...
         foreach($array as $user) {
-            $numusers = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE id = ".(int) $user['invited']), MYSQLI_ASSOC);
+            $numusers = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE id = ".(int) $user['invited']), MYSQLI_ASSOC);
             if($numusers['Total'] > 0){
                 $varray = count($database->getProfileVillages($user['id']));
                 if($varray > 1){
@@ -5145,7 +5148,7 @@ class Automation {
         $climbers = $ranking->getRank();
         if(count($ranking->getRank()) > 0){
             $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
-            $result = mysqli_query($GLOBALS['link'],$q);
+            $result = mysqli_query($database->dblink,$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
                 $week=($row['week']+1);
@@ -5194,7 +5197,7 @@ class Automation {
         $climbers = $ranking->getRank();
         if(count($ranking->getRank()) > 0){
             $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
-            $result = mysqli_query($GLOBALS['link'],$q);
+            $result = mysqli_query($database->dblink,$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
                 $week=($row['week']+1);
@@ -5316,7 +5319,7 @@ class Automation {
 
     public static function updateMax($leader) {
         global $bid18, $database;
-        $q = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "alidata where leader = ". (int) $leader), MYSQLI_ASSOC);
+        $q = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "alidata where leader = ". (int) $leader), MYSQLI_ASSOC);
         if ($q['Total'] > 0) {
             $villages = $database->getVillagesID2($leader);
             $max = 0;
@@ -5349,13 +5352,13 @@ class Automation {
         global $database,$session;
         $herodata=$database->getHero($session->uid,1);
         if ($herodata[0]['dead']==1){
-            mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 0 WHERE vref = ".(int) $session->villages[0]."");
+            mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 0 WHERE vref = ".(int) $session->villages[0]."");
         }
         if($herodata[0]['trainingtime'] <= time()) {
             if($herodata[0]['trainingtime'] != 0) {
                 if($herodata[0]['dead'] == 0) {
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "hero SET trainingtime = '0' WHERE heroid = " . $herodata[0]['heroid']);
-                    mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $session->villages[0]);
+                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET trainingtime = '0' WHERE heroid = " . $herodata[0]['heroid']);
+                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $session->villages[0]);
                 }
             }
         }
@@ -5372,7 +5375,7 @@ class Automation {
         //we may give away ribbons
         $giveMedal = false;
         $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
-        $result = mysqli_query($GLOBALS['link'],$q);
+        $result = mysqli_query($database->dblink,$q);
         if($result) {
             $row=mysqli_fetch_assoc($result);
             $stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
@@ -5391,7 +5394,7 @@ class Automation {
             //determine which week we are
 
             $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
-            $result = mysqli_query($GLOBALS['link'],$q);
+            $result = mysqli_query($database->dblink,$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
                 $week=($row['week']+1);
@@ -5402,7 +5405,7 @@ class Automation {
             //Do same for ally week
 
             $q = "SELECT week FROM ".TB_PREFIX."allimedal order by week DESC LIMIT 0, 1";
-            $result = mysqli_query($GLOBALS['link'],$q);
+            $result = mysqli_query($database->dblink,$q);
             if(mysqli_num_rows($result)) {
                 $row=mysqli_fetch_assoc($result);
                 $allyweek=($row['week']+1);
@@ -5412,67 +5415,67 @@ class Automation {
 
 
             //Attackers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, ap FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, ap FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
                 $img="t2_".($i)."";
                 $quer="insert into ".TB_PREFIX."medal (userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", 1, ".($i).", ".(int) $week.", '".$row['ap']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Defender of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, dp FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, dp FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
                 $img="t3_".($i)."";
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '2', ".($i).", '".(int) $week."', '".$row['dp']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Climbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, Rc FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, Rc FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
                 $img="t1_".($i)."";
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '3', ".($i).", '".(int) $week."', '".$row['Rc']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Rank climbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, clp FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, clp FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
                 $img="t6_".($i)."";
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '10', ".($i).", '".(int) $week."', '".$row['clp']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Robbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, RR FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, RR FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
                 $img="t4_".($i)."";
                 $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '4', ".($i).", '".(int) $week."', '".$row['RR']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Part of the bonus for top 10 attack + defense out
             //Top10 attackers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 //Top 10 defenders
-                $result2 = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+                $result2 = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
                 while($row2 = mysqli_fetch_array($result2)){
                     if($row['id']==$row2['id']){
 
                         $query3="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 5";
-                        $result3=mysqli_query($GLOBALS['link'],$query3);
+                        $result3=mysqli_query($database->dblink,$query3);
                         $row3=mysqli_fetch_row($result3);
 
                         //Look what color the ribbon must have
@@ -5490,7 +5493,7 @@ class Automation {
                                     break;
                             }
                             $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '5', '0', '".(int) $week."', '".$tekst."', '".$img."')";
-                            $resul=mysqli_query($GLOBALS['link'],$quer);
+                            $resul=mysqli_query($database->dblink,$quer);
                         }
                     }
                 }
@@ -5498,11 +5501,11 @@ class Automation {
 
             //you stand for 3rd / 5th / 10th time in the top 3 strikers
             //top10 attackers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=3";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5510,29 +5513,29 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t120_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '6', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x at present as it is so 5th medal (silver)
                 if($row1[0]=='5'){
                     $img="t121_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '6', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t122_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '6', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
 
             }
             //you stand for 3rd / 5th / 10th time in the top 10 attackers
             //top10 attackers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=10";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5540,29 +5543,29 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t130_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '12', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t131_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '12', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t132_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '12', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
 
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=3";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5570,29 +5573,29 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t140_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '7', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t141_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '7', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t142_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '7', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
 
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=10";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5600,30 +5603,30 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t150_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '13', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t151_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '13', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t152_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '13', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
 
             }
 
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top10 klimmers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=3";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5631,28 +5634,28 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t100_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '8', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t101_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '8', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t102_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '8', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top10 klimmers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=10";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5660,29 +5663,29 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t110_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '14', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t111_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '14', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t112_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '14', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
             }
 
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top3 rank climbers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=3";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5690,28 +5693,28 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t200_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '11', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t201_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '11', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t202_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '11', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
             }
             //je staat voor 3e / 5e / 10e keer in de top 10klimmers
             //Pak de top3 rank climbers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=10";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5719,29 +5722,29 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t210_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '16', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t211_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '16', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t212_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '16', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
             }
 
             //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
             //Pak de top10 overvallers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=3";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5749,28 +5752,28 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t160_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '9', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t161_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '9', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t162_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '9', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
             }
             //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
             //Pak de top10 overvallers
-            $result = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=10";
-                $result1=mysqli_query($GLOBALS['link'],$query1);
+                $result1=mysqli_query($database->dblink,$query1);
                 $row1=mysqli_fetch_row($result1);
 
 
@@ -5778,78 +5781,78 @@ class Automation {
                 if($row1[0]=='3'){
                     $img="t170_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '15', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //4x in gestaan, dit is 5e dus lintje (zilver)
                 if($row1[0]=='5'){
                     $img="t171_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '15', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
                 //9x at present as it is so 10th medal (gold)
                 if($row1[0]=='10'){
                     $img="t172_1";
                     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '15', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($GLOBALS['link'],$quer);
+                    $resul=mysqli_query($database->dblink,$quer);
                 }
             }
 
             //Put all true dens to 0
             $query="SELECT id FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
-            $result=mysqli_query($GLOBALS['link'],$query);
+            $result=mysqli_query($database->dblink,$query);
             $userIDs = [];
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
                 $userIDs[] = (int) $row[0];
             }
 
             if (count($userIDs)) {
-                mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id IN(".implode(', ', $userIDs).")");
+                mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id IN(".implode(', ', $userIDs).")");
             }
 
             //Start alliance Medals wooot
 
             //Aanvallers v/d Week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, ap FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, ap FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a2_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '1', ".($i).", '".$allyweek."', '".$row['ap']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Verdediger v/d Week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, dp FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, dp FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a3_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '2', ".($i).", '".$allyweek."', '".$row['dp']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Overvallers v/d Week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, RR FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, RR FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a4_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '4', ".($i).", '".$allyweek."', '".$row['RR']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
             //Rank climbers of the week
-            $result = mysqli_query($GLOBALS['link'],"SELECT id, clp FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, clp FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
             $i=0;     while($row = mysqli_fetch_array($result)){
                 $i++;    $img="a1_".($i)."";
                 $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '3', ".($i).", '".$allyweek."', '".$row['clp']."', '".$img."')";
-                $resul=mysqli_query($GLOBALS['link'],$quer);
+                $resul=mysqli_query($database->dblink,$quer);
             }
 
-            $result = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 //Pak de top10 verdedigers
-                $result2 = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
+                $result2 = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
                 while($row2 = mysqli_fetch_array($result2)){
                     if($row['id']==$row2['id']){
 
                         $query3="SELECT Count(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int) $row['id']." AND categorie = 5";
-                        $result3=mysqli_query($GLOBALS['link'],$query3);
+                        $result3=mysqli_query($database->dblink,$query3);
                         $row3=mysqli_fetch_row($result3);
 
                         //Look what color the ribbon must have
@@ -5867,14 +5870,14 @@ class Automation {
                                     break;
                             }
                             $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '5', '0', '".$allyweek."', '".$tekst."', '".$img."')";
-                            $resul=mysqli_query($GLOBALS['link'],$quer);
+                            $resul=mysqli_query($database->dblink,$quer);
                         }
                     }
                 }
             }
 
             $query="SELECT id FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
-            $result=mysqli_query($GLOBALS['link'],$query);
+            $result=mysqli_query($database->dblink,$query);
 
             $aliIDs = [];
             for ($i=0; $row=mysqli_fetch_row($result); $i++){
@@ -5882,7 +5885,7 @@ class Automation {
             }
 
             if (count($aliIDs)) {
-                mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0,RR=0,clp=0 WHERE id IN(".implode(', ', $aliIDs).")");
+                mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0,RR=0,clp=0 WHERE id IN(".implode(', ', $aliIDs).")");
             }
 
             $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$time;
@@ -5931,7 +5934,7 @@ class Automation {
                         $effect = rand(1,6);
                         break;
                 }
-                mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."artefacts SET kind = ". (int) $kind. ", bad_effect = $bad_effect, effect2 = $effect, lastupdate = $time WHERE id = ".(int) $artefact['id']);
+                mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."artefacts SET kind = ". (int) $kind. ", bad_effect = $bad_effect, effect2 = $effect, lastupdate = $time WHERE id = ".(int) $artefact['id']);
             }
         }
     }

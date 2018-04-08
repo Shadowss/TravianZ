@@ -130,7 +130,7 @@ $query2 = "SELECT
 			ORDER BY FIND_IN_SET(".TB_PREFIX."wdata.id,'$maparray2')";
 
 //echo $query2;
-$result2 = mysqli_query($GLOBALS['link'],$query2) or die(mysqli_error($database->dblink));
+$result2 = mysqli_query($database->dblink,$query2) or die(mysqli_error($database->dblink));
 
 $targetalliance = array();
 $neutralarray = array();

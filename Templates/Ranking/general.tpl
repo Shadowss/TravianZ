@@ -9,11 +9,11 @@
 | Copyright:   TravianX Project All rights reserved       |
 \** --------------------------------------------------- **/
 
-   $tribe1 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 1"), MYSQLI_ASSOC);
-   $tribe2 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 2"), MYSQLI_ASSOC);
-   $tribe3 = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 3"), MYSQLI_ASSOC);
+   $tribe1 = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 1"), MYSQLI_ASSOC);
+   $tribe2 = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 2"), MYSQLI_ASSOC);
+   $tribe3 = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 3"), MYSQLI_ASSOC);
    $tribes = array($tribe1['Total'], $tribe2['Total'], $tribe3['Total']);
-   $users = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5"), MYSQLI_ASSOC);
+   $users = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5"), MYSQLI_ASSOC);
    $users = $users['Total'];
 ?>
 
@@ -36,7 +36,7 @@
                 <th>Active players</th>
 
                 <td><?php
-                   $active = mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE timestamp > ".(time() - (3600*24))." AND tribe!=0 AND tribe!=4 AND tribe!=5"));
+                   $active = mysqli_num_rows(mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE timestamp > ".(time() - (3600*24))." AND tribe!=0 AND tribe!=4 AND tribe!=5"));
                    echo $active; ?></td>
             </tr>
 
@@ -44,7 +44,7 @@
                 <th>Players online</th>
 
                 <td><?php
-                    $online = mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE timestamp > ".(time() - (60*10))." AND tribe!=0 AND tribe!=4 AND tribe!=5");
+                    $online = mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE timestamp > ".(time() - (60*10))." AND tribe!=0 AND tribe!=4 AND tribe!=5");
                     if (!empty($online)) {
                    		echo mysqli_fetch_assoc($online)['Total'];
                    	} else {

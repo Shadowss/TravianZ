@@ -158,7 +158,7 @@ class Account {
 	   {
 			global $database;
 			$q = "SELECT act, username, password, email, tribe, location FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";
-			$result = mysqli_query($GLOBALS['link'],$q);
+			$result = mysqli_query($database->dblink,$q);
 			$dbarray = mysqli_fetch_array($result);
 			if($dbarray['act'] == $_POST['id']) {
 				$uid = $database->register($dbarray['username'],$dbarray['password'],$dbarray['email'],$dbarray['tribe'],"");
@@ -186,7 +186,7 @@ class Account {
 	private function Unreg() {
 		global $database;
 		$q = "SELECT password, username FROM ".TB_PREFIX."activate where id = ".(int) $_POST['id'];
-		$result = mysqli_query($GLOBALS['link'],$q);
+		$result = mysqli_query($database->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		if(password_verify($_POST['pw'], $dbarray['password'])) {
 			$database->unreg($dbarray['username']);

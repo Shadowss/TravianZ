@@ -32,8 +32,8 @@ echo <<<EOT
 EOT;
 }else{
 
-    $account = mysqli_real_escape_string($GLOBALS['link'],$_POST['username']);
-    $reward = mysqli_real_escape_string($GLOBALS['link'],$_POST['reward']);
+    $account = mysqli_real_escape_string($database->dblink,$_POST['username']);
+    $reward = mysqli_real_escape_string($database->dblink,$_POST['reward']);
     $valid=TRUE;
 
 
@@ -50,7 +50,7 @@ EOT;
     $plusTime = 604800; // 7 days
     $time = time();
     $giveplus = ($time + $plustime);
-    $accountCheck = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'"), MYSQLI_ASSOC) or die(mysqli_error($database->dblink));
+    $accountCheck = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'"), MYSQLI_ASSOC) or die(mysqli_error($database->dblink));
     if($accountCheck['Total'] <= 0){
         echo "<b>ERROR:</b><br />";
         echo "The account name you entered does not exist.";
@@ -60,7 +60,7 @@ EOT;
     if(!$valid) break;
     $valid=TRUE;
 
-    $plusCheck = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+    $plusCheck = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
     $pluss = mysqli_fetch_array($plusCheck);
 
     switch($reward){
@@ -102,17 +102,17 @@ echo' Please select the option you wish to activate or extend.<br>';
 
     if(mysqli_num_rows($plusCheck) > 0){ 
         if($time > $pluss[$key] ){
-            $editplus = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` + ('".$time."'+'".$plusTime."'),  `gold` =  `gold` - {$gldz}   WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+            $editplus = mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` + ('".$time."'+'".$plusTime."'),  `gold` =  `gold` - {$gldz}   WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
             echo "<META HTTP-EQUIV=Refresh CONTENT=\"2; {$url}\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
        }else
         if($time < $pluss[$key]){
-            $editplus = mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` +'".$plusTime."',  `gold` =  `gold` - {$gldz}  WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+            $editplus = mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` +'".$plusTime."',  `gold` =  `gold` - {$gldz}  WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
             echo "<META HTTP-EQUIV=Refresh CONTENT=\"2; {$url}\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
        
        }
     }
 else{
-        $insertplus = mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."users (`username`,`{$key}`, `gold`) VALUES ('".$session->username."', ('".$time."'+'".$plusTime."'),`gold` - {$gldz})") or die(mysqli_error($database->dblink));
+        $insertplus = mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."users (`username`,`{$key}`, `gold`) VALUES ('".$session->username."', ('".$time."'+'".$plusTime."'),`gold` - {$gldz})") or die(mysqli_error($database->dblink));
         echo "<META HTTP-EQUIV=Refresh CONTENT=\"3; {$url})\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
 	 }   
 }

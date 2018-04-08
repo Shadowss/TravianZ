@@ -2,7 +2,7 @@
 <?php 
 $basearray = $database->getMInfo($_GET['d']);
 $uinfo = $database->getVillage($basearray['id']);
-$oasis1 = mysqli_query($GLOBALS['link'],'SELECT conqured, owner FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysqli_real_escape_string($GLOBALS['link'],$_GET['d']));
+$oasis1 = mysqli_query($database->dblink,'SELECT conqured, owner FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysqli_real_escape_string($database->dblink,$_GET['d']));
 $oasis = mysqli_fetch_assoc($oasis1);
 $access=$session->access;
 $oasislink = '';
@@ -167,7 +167,7 @@ if($session->uid == $database->getVillage($_GET['d'])){
     }
 $toWref = $_GET['d'];
 if($session->alliance!=0){
-$result = mysqli_query($GLOBALS['link'],"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
 if($query != 0){
 while($row = mysqli_fetch_array($result)){
@@ -191,7 +191,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 
 <?php }
 }else{
-$result = mysqli_query($GLOBALS['link'],"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
 if($query != 0){
 while($row = mysqli_fetch_array($result)){
@@ -266,7 +266,7 @@ if($session->uid == $database->getVillage($_GET['d'])){
     }
 $toWref = $_GET['d'];
 if($session->alliance!=0){
-$result = mysqli_query($GLOBALS['link'],"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
 if($query != 0){
 while($row = mysqli_fetch_array($result)){
@@ -290,7 +290,7 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 
 <?php }
 }else{
-$result = mysqli_query($GLOBALS['link'],"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
 if($query != 0){
 while($row = mysqli_fetch_array($result)){
@@ -392,7 +392,7 @@ if($session->uid == $database->getVillage($_GET['d'])){
     }
 $toWref = $_GET['d'];
 if($session->alliance!=0){
-$result = mysqli_query($GLOBALS['link'],"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
 if($query != 0){
 while($row = mysqli_fetch_array($result)){
@@ -416,7 +416,7 @@ if($type==18 or $type==19 or $type==20 or $type==21 or $type==22){
 
 <?php }
 }else{
-$result = mysqli_query($GLOBALS['link'],"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
 if($query != 0){
 while($row = mysqli_fetch_array($result)){
@@ -508,12 +508,12 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 					<td class="none">
           <?php 
 		  if($basearray['fieldtype'] == 0){
-          $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysqli_escape_string($GLOBALS['link'],$_GET['d']));
+          $query1 = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysqli_escape_string($database->dblink,$_GET['d']));
 		  }else{
-          $query1 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_real_escape_string($GLOBALS['link'],$_GET['d']));
+          $query1 = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_real_escape_string($database->dblink,$_GET['d']));
 		  }
           $data1 = mysqli_fetch_assoc($query1);
-          $query2 = mysqli_query($GLOBALS['link'],'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
+          $query2 = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
           $data2 = mysqli_fetch_assoc($query2);
 			if($data2['access']=='0' or ($data2['access']== MULTIHUNTER && $data2['id'] == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access']=='9')) {
 			echo "&raquo; ".SENDTROOP." (".BAN.")";

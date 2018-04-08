@@ -197,8 +197,8 @@
 
 	if(isset($_GET['revive']) && $_GET['revive'] == 1 && isset($_GET['hid']) && $_GET['hid'] == $hero_datarow['heroid'] && $hero_datarow['inrevive'] == 0 && $hero_datarow['intraining'] == 0 && $hero_datarow['dead'] == 1){
 		if($session->access != BANNED){
-            mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".(int) $training_time2."', `wref` = '".(int) $village->wid."' WHERE `heroid` = ".(int) $_GET['hid']." AND `uid` = '".(int) $session->uid."'");
-			mysqli_query($GLOBALS['link'],"
+            mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".(int) $training_time2."', `wref` = '".(int) $village->wid."' WHERE `heroid` = ".(int) $_GET['hid']." AND `uid` = '".(int) $session->uid."'");
+			mysqli_query($database->dblink,"
 			    UPDATE " . TB_PREFIX . "vdata
 			        SET
 			            `wood` = `wood` - ".(int) $wood.",

@@ -244,7 +244,7 @@ class Message {
 
 		for($i = 1; $i <= 10; $i++) {
             if ( isset( $post[ 'n' . $i ] ) ) {
-                $message1 = mysqli_query( $GLOBALS['link'], "SELECT target, owner FROM " . TB_PREFIX . "mdata where id = " . (int) $post[ 'n' . $i ] . "" );
+                $message1 = mysqli_query( $database->dblink, "SELECT target, owner FROM " . TB_PREFIX . "mdata where id = " . (int) $post[ 'n' . $i ] . "" );
                 $message  = mysqli_fetch_array( $message1 );
 
                 if ( $message['target'] == $session->uid && $message['owner'] == $session->uid ) {
@@ -407,16 +407,16 @@ class Message {
 		// Vulnerability closed by Shadow
 
 		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
-		$res = mysqli_fetch_array(mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
+		$res = mysqli_fetch_array(mysqli_query($database->dblink,$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
 		$flood = $res['Total'];
 		if($flood > 5)
 		return; //flood
 
 		// Vulnerability closed by Shadow
 
-		$allmembersQ = mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE alliance='".$session->alliance."'");
+		$allmembersQ = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE alliance='".$session->alliance."'");
 		$userally = $database->getUserField($session->uid,"alliance",0);
-		$permission=mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT opt7 FROM ".TB_PREFIX."ali_permission WHERE uid='".$session->uid."'"));
+		$permission=mysqli_fetch_array(mysqli_query($database->dblink,"SELECT opt7 FROM ".TB_PREFIX."ali_permission WHERE uid='".$session->uid."'"));
 
 		if(WORD_CENSOR) {
             $topic = $this->wordCensor($topic);
@@ -505,7 +505,7 @@ class Message {
 
 		if ($security_check) {
     		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
-    		$res = mysqli_fetch_array(mysqli_query($GLOBALS['link'],$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
+    		$res = mysqli_fetch_array(mysqli_query($database->dblink,$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
     		$flood = $res['Total'];
     		if($flood > 5)
     		return; //flood

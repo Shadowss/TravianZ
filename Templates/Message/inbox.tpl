@@ -11,7 +11,7 @@
 		<th class="sent"><a href="nachrichten.php?o=1">Sent</a></th>
 	    </tr></thead><tfoot><tr><th>
 		<?php
-		$MyGold = mysqli_query($GLOBALS['link'],"SELECT plus FROM ".TB_PREFIX."users WHERE `id`='".(int) $session->uid."'") or die(mysqli_error($database->dblink));
+		$MyGold = mysqli_query($database->dblink,"SELECT plus FROM ".TB_PREFIX."users WHERE `id`='".(int) $session->uid."'") or die(mysqli_error($database->dblink));
 		$golds = mysqli_fetch_array($MyGold);
 		$date2=strtotime("NOW");
 		if ($golds['plus'] <= $date2) { ?>

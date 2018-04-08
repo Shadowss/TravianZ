@@ -17,7 +17,7 @@ AccessLogger::logRequest();
 
 $max_per_pass = 1000;
 
-if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".(int) $session->uid)) != '1') die("Hacking attemp!");
+if (mysqli_num_rows(mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".(int) $session->uid)) != '1') die("Hacking attemp!");
 
 if (@$_POST['submit'] == "Send")
 {
@@ -52,7 +52,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 	$_SESSION['m_subject'] = $database->escape($_SESSION['m_subject']);
 	$_SESSION['m_message'] = $database->escape($_SESSION['m_message']);
 
-	$users_count = mysqli_fetch_assoc(mysqli_query($GLOBALS['link'],"SELECT count(*) as count FROM ".TB_PREFIX."users WHERE id != 0"));
+	$users_count = mysqli_fetch_assoc(mysqli_query($database->dblink,"SELECT count(*) as count FROM ".TB_PREFIX."users WHERE id != 0"));
 	$users_count = $users_count['count'];
 	if ($_GET['from'] + $max_per_pass <= $users_count) $plus = $max_per_pass; else $plus = $users_count - $_GET['from'];
 	$sql = "INSERT INTO ".TB_PREFIX."mdata (`target`, `owner`, `topic`, `message`, `viewed`, `archived`, `send`, `time`,`deltarget`,`delowner`,`alliance`,`player`,`coor`,`report`) VALUES ";
@@ -78,7 +78,7 @@ if (isset($_GET['send']) && isset($_GET['from']))
 		$sql .= "($i, 0, '{$_SESSION['m_subject']}', \"{$_SESSION['m_message']}\", 0, 0, 0, ".time().",0,0,0,0,0,0),";
 	}
 	}
-	mysqli_query($GLOBALS['link'],$sql);
+	mysqli_query($database->dblink,$sql);
 	if (($users_count - $_GET['from']) > $max_per_pass) {
 	    header("Location: massmessage.php?send=true&from=",$_GET['from'] + $max_per_pass);
 	    exit;

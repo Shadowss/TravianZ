@@ -296,7 +296,7 @@ if ( isset( $_GET['mode'] ) && $_GET['mode'] == 'troops' && isset( $_GET['cancel
                 $end = $now + ( $now - $oldmovement[0]['starttime'] );
                 //echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;
                 $q2     = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
-                $lastid = mysqli_fetch_array( mysqli_query( $GLOBALS['link'], $q2 ) );
+                $lastid = mysqli_fetch_array( mysqli_query( $database->dblink, $q2 ) );
                 $newid  = $lastid['id'] + 1;
                 $q2     = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
                 $database->query( $q2 );
@@ -417,7 +417,6 @@ exit;
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");
 include("Templates/news.tpl");
-include("Templates/links.tpl");
 ?>
 </div>
 <div class="clear"></div>

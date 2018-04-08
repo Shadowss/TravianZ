@@ -135,9 +135,9 @@ $start_timer = $generator->pageLoadTimeStart();
 <?php
 
    define('PREFIX', TB_PREFIX);
-   $type15 = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 6");
-   $type9 = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 1");
-   $type_both = mysqli_query($GLOBALS['link'],"SELECT id,x,y,occupied,fieldtype FROM ".PREFIX."wdata WHERE fieldtype = 1 OR fieldtype = 6");
+   $type15 = mysqli_query($database->dblink,"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 6");
+   $type9 = mysqli_query($database->dblink,"SELECT id,x,y,occupied FROM ".PREFIX."wdata WHERE fieldtype = 1");
+   $type_both = mysqli_query($database->dblink,"SELECT id,x,y,occupied,fieldtype FROM ".PREFIX."wdata WHERE fieldtype = 1 OR fieldtype = 6");
 
    if(is_numeric($_GET['x']) AND is_numeric($_GET['y'])) {
 	   $coor['x'] = $_GET['x'];

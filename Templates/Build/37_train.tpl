@@ -34,10 +34,10 @@
 
 //check if there is unit needed in the village
 
-$result      = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."units WHERE `vref` = ".(int) $village->wid."");
+$result      = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."units WHERE `vref` = ".(int) $village->wid."");
 $units_array = mysqli_fetch_array($result);
 
-$count_hero = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = " . $database->escape($session->uid) . ""), MYSQLI_ASSOC);
+$count_hero = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = " . $database->escape($session->uid) . ""), MYSQLI_ASSOC);
 $count_hero = $count_hero['Total'];
 
 if ($count_hero < 3) {
@@ -667,9 +667,9 @@ $output.="<tr>
                 if($session->access != BANNED){
                     if($count_hero < 3){
                         $unitID = $_GET['train'];
-                        mysqli_query($GLOBALS['link'],"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES (".$database->escape($session->uid).", " . (int) $village->wid . ", 0, ".$unitID.", '".$database->escape($session->username)."', 0, 5, 0, 0, 100, 0, 0, 0, 0, ".round((time() + (${'u'.$unitID}['time'] / SPEED)*3)).", 50, 1)");
-                        mysqli_query($GLOBALS['link'],"UPDATE " . TB_PREFIX . "units SET `u$unitID` = `u$unitID` - 1 WHERE `vref` = " . (int) $village->wid);
-                        mysqli_query($GLOBALS['link'],"
+                        mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES (".$database->escape($session->uid).", " . (int) $village->wid . ", 0, ".$unitID.", '".$database->escape($session->username)."', 0, 5, 0, 0, 100, 0, 0, 0, 0, ".round((time() + (${'u'.$unitID}['time'] / SPEED)*3)).", 50, 1)");
+                        mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET `u$unitID` = `u$unitID` - 1 WHERE `vref` = " . (int) $village->wid);
+                        mysqli_query($database->dblink,"
 					    UPDATE " . TB_PREFIX . "vdata
 					        SET
 					            `wood` = `wood` - ".(int) ${'u'.$unitID}['wood'].",

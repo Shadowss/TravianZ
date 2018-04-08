@@ -80,7 +80,7 @@ if (isset($qact)){
 			$_SESSION['qst']= 3;
 			//Give Reward
 			if(!$session->plus){
-				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$user_sanitized."'") or die(mysqli_error($database->dblink));
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$user_sanitized."'") or die(mysqli_error($database->dblink));
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus','username');
 				$plus+=86400;
@@ -161,7 +161,7 @@ if (isset($qact)){
 			$_SESSION['qst']= 11;
 			//Give Reward
 			if(!$session->plus){
-				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$user_sanitized."'") or die(mysqli_error());
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$user_sanitized."'") or die(mysqli_error());
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus','username');
 				$plus+=172800;
@@ -348,7 +348,7 @@ if (isset($qact)){
 			$_SESSION['qst_time'] = time()+$skipp_time;
 			//Give Reward
 			if(!$session->plus){
-				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$user_sanitized."'") or die(mysqli_error());
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+86400 where `username`='".$user_sanitized."'") or die(mysqli_error());
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus','username');
 				$plus+=86400;
@@ -411,7 +411,7 @@ if (isset($qact)){
 			$_SESSION['qst']= 97;
 			//Give Reward 20 gold + 2 days plus
 			if(!$session->plus){
-				mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$user_sanitized."'") or die(mysqli_error());
+				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+172800 where `username`='".$user_sanitized."'") or die(mysqli_error());
 			} else {
 				$plus=$database->getUserField($_SESSION['username'],'plus','username');
 				$plus+=172800;

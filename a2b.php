@@ -196,7 +196,7 @@ if(isset($_GET['o'])) {
 
 			if ($prisoner['t11']>0){
 			    $p_qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner." AND dead = 0";
-				$p_resulth = mysqli_query($GLOBALS['link'],$p_qh);
+				$p_resulth = mysqli_query($database->dblink,$p_qh);
 				$p_hero_f=mysqli_fetch_array($p_resulth);
 				$p_hero_unit=$p_hero_f['unit'];
 				$p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
@@ -224,7 +224,7 @@ if(isset($_GET['o'])) {
 			$troops = $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
 			if($prisoner['t11'] > 0){
 			$p_owner = $database->getVillageField($prisoner['from'],"owner");
-			mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."hero SET `dead` = '1', `health` = '0' WHERE `uid` = '".$p_owner."' AND dead = 0");
+			mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."hero SET `dead` = '1', `health` = '0' WHERE `uid` = '".$p_owner."' AND dead = 0");
 			}
 			$database->modifyUnit($prisoner['wref'],array("99o"),array($troops),array(0));
 			$database->deletePrisoners($prisoner['id']);

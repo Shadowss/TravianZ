@@ -14,8 +14,8 @@ function getDistance($coorx1, $coory1, $coorx2, $coory2) {
    return round($dist, 1);
    }
 ?>
-<div class="gid27">
 <body>
+<div class="gid27">
 <table id="own" cellpadding="1" cellspacing="1">
 <thead>
 <tr>
@@ -83,7 +83,7 @@ Treasury <b>' . $reqlvl . '</b>, Effect <b>' . $effect . '</b>
 
 <tbody>
 <?php
-$count = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts"), MYSQLI_ASSOC);
+$count = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts"), MYSQLI_ASSOC);
 $count = $count['Total'];
 if($count == 0) {
                 echo '<td colspan="4" class="none">'.NO_ARTIFACTS_AREA.'</td>';
@@ -103,18 +103,18 @@ if($count == 0) {
 
         unset($reqlvl);
         unset($effect);
-        $arts = mysqli_query($GLOBALS['link'],"SELECT type, vref, id, name, size, owner, effect FROM " . TB_PREFIX . "artefacts");
+        $arts = mysqli_query($database->dblink,"SELECT type, vref, id, name, size, owner, effect FROM " . TB_PREFIX . "artefacts");
         $rows = array();
         while($row = mysqli_fetch_array($arts)) {
-                        $query = mysqli_query($GLOBALS['link'],'SELECT x, y FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . (int) $row['vref']);
-                        $coor2 = mysqli_fetch_assoc($query);
-
-                        
-                        $dist = round(getDistance($coor['x'], $coor['y'], $coor2['x'], $coor2['y']),1);
-
-                        $rows[$dist] = $row;
-
-                }
+            $query = mysqli_query($database->dblink,'SELECT x, y FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . (int) $row['vref']);
+            $coor2 = mysqli_fetch_assoc($query);
+            
+            
+            $dist = round(getDistance($coor['x'], $coor['y'], $coor2['x'], $coor2['y']),1);
+            
+            $rows[$dist] = $row;
+            
+        }
         ksort($rows);
         foreach($rows as $row) {
                 $wref = $village->wid;

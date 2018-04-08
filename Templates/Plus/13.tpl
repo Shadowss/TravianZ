@@ -1,6 +1,6 @@
 <!---<?php
 /*include("Templates/Plus/pmenu.tpl");
-    $MyVilId = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."vdata WHERE `wref`='".$village->wid."'") or die(mysqli_error($database->dblink));
+    $MyVilId = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."vdata WHERE `wref`='".$village->wid."'") or die(mysqli_error($database->dblink));
     $uuVilid = mysqli_fetch_array($MyVilId);
     $totalR = ($uuVilid['6']+$uuVilid['7']+$uuVilid['8']+$uuVilid['10']);
     $quart = ($totalR / 4);
@@ -21,10 +21,10 @@
 			<td align="center">
 <?php
 if($session->sit == 0) {
-	/* $MyGold = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+	/* $MyGold = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
     $golds = mysqli_fetch_array($MyGold);
 
-    $MyId = mysqli_query($GLOBALS['link'],"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+    $MyId = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
     $uuid = mysqli_fetch_array($MyId);
 
 	echo "<input type='text' name='T1' size='6' value=".$quart."></td>";
@@ -34,7 +34,7 @@ if($session->sit == 0) {
 	echo "<input type='text' name='T3' size='6' value=".$quart."></td>";
 			echo "<td align='center'>";
 	echo "<input type='text' name='T4' size='6' value=".$quart."></td>";
-mysqli_query($GLOBALS['link'],"UPDATE ".TB_PREFIX."users set gold = ".($session->gold-1)." where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set gold = ".($session->gold-1)." where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
  */
 }
 ?>

@@ -9,13 +9,13 @@ if($session->access!=BANNED){
 $displayarray = $database->getUserArray($session->uid,1);
 $forumcat = $database->ForumCat(htmlspecialchars($displayarray['alliance']));
 $ally = $session->alliance;
-$public = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 1"), MYSQLI_ASSOC);
+$public = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 1"), MYSQLI_ASSOC);
 $public1 = $public['Total'];
-$cofederation = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2"), MYSQLI_ASSOC);
+$cofederation = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2"), MYSQLI_ASSOC);
 $cofederation1 = $cofederation['Total'];
-$alliance = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0"), MYSQLI_ASSOC);
+$alliance = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0"), MYSQLI_ASSOC);
 $alliance1 = $alliance['Total'];
-$closed = mysqli_fetch_array(mysqli_query($GLOBALS['link'],"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3"), MYSQLI_ASSOC);
+$closed = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3"), MYSQLI_ASSOC);
 $closed1 = $closed['Total'];
 if($public1 != 0){
 ?>
