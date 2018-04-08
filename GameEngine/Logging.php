@@ -98,17 +98,11 @@ class Logging {
 		global $database;
 	}
 
-	public function debug($time,$uid,$debug_info) {
-		global $database;
-		list($time,$uid,$debug_info) = $database->escape_input((int) $time,(int) $uid,$debug_info);
-
-		//$debugFile = "/tmp/debug";
-		//$fh = fopen($debugFile, 'a') or die('No debug file');
-		//fwrite($fh,"\n".date("Y-m-d H:i:s")." : ".$time.",".$uid.",".$debug_info."\n");
-		//fclose($fh);
-
-		//$q = "INSERT INTO ".TB_PREFIX."debug_log (time,uid,debug_info) VALUES ($time,$uid,'$debug_info')";
-		//$database->query($q);
+	public function debug($debug_info, $time = 0) {
+		global $database, $generator;
+		list($debug_info) = $database->escape_input($debug_info);
+		
+		echo '<script>console.log('.json_encode(($time > 0 ? "[".$generator->procMtime($time)[1]."] " : "").$debug_info).')</script>';
 	}
 };
 

@@ -99,7 +99,6 @@ if($session->plus){
 <?php
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");
-include("Templates/links.tpl");
 ?>
 </div>
 <div class="clear"></div>

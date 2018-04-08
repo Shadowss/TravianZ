@@ -17,7 +17,7 @@ while($data = mysqli_fetch_assoc($query)) {
     $links[] = $data;
 }
 
-print '<br /><br /><table id="vlist" cellpadding="1" cellspacing="1"><thead><tr><td colspan="3"><a href="spieler.php?s=2">Links:</a></td></tr></thead><tbody>';
+print '<table cellpadding="1" cellspacing="1"><thead><tr><td colspan="3"><a href="spieler.php?s=2">Links:</a></td></tr></thead><tbody>';
 foreach($links as $link) {
    // Check, if the url is extern
    if(substr($link['url'], -1, 1) == '*') {

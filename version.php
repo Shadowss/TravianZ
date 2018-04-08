@@ -68,7 +68,7 @@ $automation->isWinner();
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 <?php include("Templates/version.tpl"); ?>
-<div id="products">
+<div id="products"><b>
 1. ronix - For coding above and beyond the call of duty<br />
 2. Dzoki - Version starter<br />
 3. Shadow - For coding above and beyond the call of duty<br />
@@ -101,10 +101,10 @@ $automation->isWinner();
 30. Armando<br />
 31. aggenkeech<br />
 32. Niko28<br />
-33. martinambrus<br /></b><br />
-<b><u><center>Released by: Shadow</u></b><br />
-<b>Visit: <a href="http://forum.ragezone.com/f583/travianz-version-modified-shadow-many-967580/">RageZone.com</a></b><br /></center></b><br />
-<b><center>Download from <u><a href="https://github.com/Shadowss/TravianZ/archive/master.zip">Github</a></u></b><br />
+33. martinambrus<br /></b></div><br />
+<div style="text-align: center"><b><u>Released by: Shadow</u></b><br /><br />
+<b>Visit: <a href="http://forum.ragezone.com/f583/travianz-version-modified-shadow-many-967580/">RageZone.com</a></b></div><br />
+<div style="text-align: center"><b>Download from <u><a href="https://github.com/Shadowss/TravianZ/archive/master.zip">Github</a></u></b><br />
 </div>
 </div>
 <br /><br /><br /><br /><div id="side_info">
@@ -112,7 +112,6 @@ $automation->isWinner();
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");
 include("Templates/news.tpl");
-include("Templates/links.tpl");
 ?>
 </div>
 <div class="clear"></div>

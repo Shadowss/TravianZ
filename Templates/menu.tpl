@@ -66,12 +66,13 @@ div.c1 {text-align: center}
             <a href="support.php"><b><?php echo SUPPORT;?></b></a>
             <?php
             	}
+            	include("Templates/links.tpl");
             ?>
-        <br></p>
+        </p>
 		<?php
 		$timestamp = $database->isDeleting($session->uid);
 		if($timestamp) {
-		echo "<td colspan=\"2\" class=\"count\">";
+		echo "<br /><td colspan=\"2\" class=\"count\">";
 		if($timestamp > time()+48*3600) {
 		echo "<a href=\"spieler.php?s=3&id=".$session->uid."&a=1&e=4\"><img
 		class=\"del\" src=\"img/x.gif\" alt=\"Cancel process\"
@@ -79,7 +80,7 @@ div.c1 {text-align: center}
 		}
 		$time=$generator->getTimeFormat(($timestamp-time()));
         echo "<a href=\"spieler.php?s=3\"> The account will be deleted in <span
-		id=\"timer1\">".$time."</span> .</a></td>";
+		id=\"timer1\">".$time."</span> .</a></td><br />";
 		}
 		?>
     </div><?php
@@ -88,11 +89,11 @@ div.c1 {text-align: center}
 
     <div id="content" class="village1">
         <h1><?php echo ANNOUNCEMENT; ?></h1>
-</br>
+		<br />
         <h3>Hi <?php echo $session->username; ?>,</h3>
         <?php include("Templates/text.tpl"); ?>
         <div class="c1">
-		</br>
+		<br />
             <h3><a href="dorf1.php?ok">&raquo; <?php echo GO2MY_VILLAGE; ?></a></h3>
         </div>
     </div>

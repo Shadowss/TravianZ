@@ -56,8 +56,7 @@ class Automation {
         {
             $this->demolitionComplete();
         }
-        // TODO: check if commenting-out this next line affected anything (it shouldn't) and should improve performance
-        //$this->updateStore();
+
         $this->delTradeRoute();
         $this->TradeRoute();
         if(!file_exists("GameEngine/Prevention/market.txt") or time()-filemtime("GameEngine/Prevention/market.txt")>50) {
@@ -2571,7 +2570,7 @@ class Automation {
                                             } else if (!$village_destroyed) {
                                                 // you took over the village
                                                 $villname = addslashes($database->getVillageField($data['to'],"name"));
-                                                $artifact = $database->getOwnArtefactInfo($data['to']);
+                                                $artifact = reset($database->getOwnArtefactInfo($data['to']));
 
                                                 $info_chief = "".$chief_pic.",Inhabitants of ".$villname." village decided to join your empire.";
 

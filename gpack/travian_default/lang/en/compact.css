@@ -396,6 +396,28 @@ div#side_navi p.deltimer a {
     padding: 0;
     text-align: center;
 }
+div#side_navi table {
+    background-color: #FFFFFF;
+    width: auto;
+    padding-left: 12px;
+}
+div#side_navi table td {
+    line-height: 18px;
+    padding: 0;
+    text-align: left;
+    white-space: nowrap;
+}
+div#side_navi table thead td {
+    background-color: #FFFFFF;
+    height: 22px;
+}
+div#side_navi td.dot {
+    padding: 0 6px;
+    width: 10px;
+}
+div#side_navi td.link {
+    padding-right: 10px;
+}
 div#side_info {
     float: left;
     padding-left: 10px;
@@ -5907,6 +5929,16 @@ div#side_navi p.deltimer a {
 }
 div#side_navi p.deltimer a span {
     color: #FF8000;
+}
+div#side_navi table thead td a {
+    color: black;
+    font-weight: bold;
+}
+div#side_navi table tbody td {
+    font-size: 11px;
+}
+div#side_navi td.link {
+    font-size: 13px;
 }
 div#side_info h6 {
     color: #FF8000;

@@ -15,10 +15,10 @@ include_once("GameEngine/Account.php");
 AccessLogger::logRequest();
 
 $max_per_pass = 1000;
-if (mysqli_num_rows(mysqli_query($GLOBALS['link'],"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
+if (mysqli_num_rows(mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
 
 if(isset($_GET['del'])){
-    mysqli_query($GLOBALS['link'], "UPDATE ".TB_PREFIX."users SET ok = 0");
+    mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."users SET ok = 0");
 }
 
 if (@$_POST['submit'] == "Send")
@@ -44,7 +44,7 @@ if (@isset($_POST['confirm']))
 		// $text = utf8_encode($text);
 		fwrite($fh, $text);
 
-        mysqli_query($GLOBALS['link'], "UPDATE ".TB_PREFIX."users SET ok = 1");
+		mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."users SET ok = 1");
 
 		$done = true;
 		} else { die("<br/><br/><br/>wrong"); }

@@ -86,7 +86,6 @@ include("Templates/Packages/5.tpl");
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");
 include("Templates/news.tpl");
-include("Templates/links.tpl");
 ?>
 </div>
 <div class="clear"></div>
