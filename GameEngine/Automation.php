@@ -1239,7 +1239,6 @@ class Automation {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
         }
 
-        $reload=false;
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/sendunits.txt", 'w');
         fclose($ourFileHandle);
         $time = time();
@@ -1300,7 +1299,6 @@ class Automation {
                     $DefenderUserData = $database->getUserArray($database->getVillageField($data['to'],"owner"), 1);
                     $Defender['id'] = $DefenderUserData["id"];
                     $DefenderID = $Defender['id'];
-                    if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
                     $targettribe = $DefenderUserData["tribe"];
                     $targetally = $DefenderUserData["alliance"];
                     $to = $database->getMInfo($data['to']);
@@ -1499,7 +1497,6 @@ class Automation {
                     $DefenderUserData = $database->getUserArray($database->getOasisField($data['to'],"owner"), 1);
                     $Defender['id'] = $DefenderUserData["id"];
                     $DefenderID = $Defender['id'];
-                    if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
                     $targettribe =  $DefenderUserData["tribe"];
                     $targetally = $DefenderUserData["alliance"];
                     $to = $database->getOMInfo($data['to']);
@@ -3238,7 +3235,6 @@ class Automation {
         if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
         }
-        if ($reload) header("Location: ".$_SERVER['REQUEST_URI']);
     }
 
     function DelVillage($wref, $mode=0){
@@ -3349,7 +3345,6 @@ class Automation {
         if(file_exists($autoprefix."GameEngine/Prevention/sendreinfunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendreinfunits.txt");
         }
-        $reload=false;
         $time = time();
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/sendreinfunits.txt", 'w');
         fclose($ourFileHandle);
@@ -3409,23 +3404,18 @@ class Automation {
 
                 if($data['from']==0){
                     $DefenderID = $database->getVillageField($data['to'],"owner");
-                    if (isset($AttackerID) && $session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
                     $database->addEnforce($data);
                     $reinf = $database->getEnforce($data['from'],$data['to']);
                     $database->modifyEnforce($reinf['id'],31,1,1);
                     $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
                     $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,'village of the elders reinforcement '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
                     $movementProcIDs[] = $data['moveid'];
-                    if ($session->uid==$DefenderID) $reload=true;
                 }else{
                     //set base things
                     $from = $database->getMInfo($data['from']);
                     $fromF = $database->getVillage($data['from']);
                     $AttackerID = $from['owner'];
                     $owntribe = $database->getUserField($AttackerID,"tribe",0);
-
-
-                    if ($session->uid==$AttackerID || $session->uid==$DefenderID) $reload=true;
 
                     //check to see if we're sending a hero between own villages and there's a Mansion at target village
                     $HeroTransfer=0;
@@ -3533,7 +3523,6 @@ class Automation {
         if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
             unlink("GameEngine/Prevention/sendreinfunits.txt");
         }
-        if($reload) header("Location: ".$_SERVER['PHP_SELF']);
     }
 
     private function returnunitsComplete() {
@@ -3543,7 +3532,6 @@ class Automation {
         }
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/returnunits.txt", 'w');
         fclose($ourFileHandle);
-        $reload=false;
         $time = time();
         $q = "
             SELECT
@@ -3712,7 +3700,6 @@ class Automation {
 
         foreach($dataarray as $data) {
             $ownerID = $database->getUserField($database->getVillageField($data['from'],"owner"),"id",0);
-            if ($session->uid==$ownerID) $reload=true;
             $to = $database->getMInfo($data['from']);
             $user = addslashes($database->getUserField($to['owner'],'username',0));
             $taken = $database->getVillageState($data['to']);
@@ -3765,7 +3752,6 @@ class Automation {
         if(file_exists("GameEngine/Prevention/settlers.txt")) {
             unlink("GameEngine/Prevention/settlers.txt");
         }
-        //if ($reload) header("Location: ".$_SERVER['PHP_SELF']);
     }
 
     private function researchComplete() {
