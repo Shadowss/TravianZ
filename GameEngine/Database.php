@@ -7230,16 +7230,8 @@ References: User ID/Message ID, Mode
             for ( $i = 19; $i <= 38; $i ++ ) {
                 if ( $AttackerFields[ 'f' . $i . 't' ] == 27 ) {
                     $attTresuaryLevel = $AttackerFields[ 'f' . $i ];
-                    if ( $attTresuaryLevel >= 10 ) {
-                        $villageartifact = true;
-                    } else {
-                        $villageartifact = false;
-                    }
-                    if ( $attTresuaryLevel >= 20 ) {
-                        $accountartifact = true;
-                    } else {
-                        $accountartifact = false;
-                    }
+                    $villageartifact = $attTresuaryLevel >= 10;
+                    $accountartifact = $attTresuaryLevel >= 20;
                 }
             }
 

@@ -157,7 +157,7 @@ class Automation {
             //default: $build = "Nothing had"; break;
         }
         
-        if ($build=="" & !$mode) { //capital or only 1 village left.. not destroy
+        if ($build=="" && !$mode) { //capital or only 1 village left.. not destroy
             $build="Village can't be";
         }
         
@@ -2705,10 +2705,10 @@ class Automation {
                     if(($data['t11']-$dead11-$traped11)> 0){ //hero
                         if ($heroxp == 0) {
                             $xp="";
-                            $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all";
+                            $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all.";
                         } else {
-                            $xp=" and gained ".$heroxp." XP from the battle";
-                            $info_hero = $hero_pic.",Your hero gained ".$heroxp." XP";
+                            $xp=" and gained ".$heroxp." XP from the battle.";
+                            $info_hero = $hero_pic.",Your hero gained ".$heroxp." XP.";
                         }
 
                         if ($isoasis != 0) { //oasis fix by ronix
@@ -2736,9 +2736,9 @@ class Automation {
                         } else {
                             global $form;
                             if ($heroxp == 0) {
-                                $xp=" no XP from the battle";
+                                $xp=" no XP from the battle.";
                             } else {
-                                $xp=" gained ".$heroxp." XP from the battle";
+                                $xp=" gained ".$heroxp." XP from the battle.";
                             }
                             $artifact = reset($database->getOwnArtefactInfo($data['to']));
                             if (!empty($artifact)) {
@@ -2746,6 +2746,10 @@ class Automation {
                                     if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
                                         $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
                                         $info_hero = $hero_pic.",Your hero is carrying home an artefact".$xp;
+                                        if($pop == 0){
+                                            $can_destroy = $village_destroyed = 1;
+                                            $info_hero .= ". The village has been destroyed.";
+                                        }
                                     } else {
                                         $info_hero = $hero_pic.",".$form->getError("error").$xp;
                                     }
@@ -2758,7 +2762,7 @@ class Automation {
                         if ($heroxp == 0) {
                             $xp="";
                         } else {
-                            $xp=" but gained ".$heroxp." XP from the battle";
+                            $xp=" but gained ".$heroxp." XP from the battle.";
                         }
                         if ($traped11>0) {
                             $info_hero = $hero_pic.",Your hero was trapped".$xp;
