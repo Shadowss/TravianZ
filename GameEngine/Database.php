@@ -7191,22 +7191,23 @@ References: User ID/Message ID, Mode
         $size1 = $size2 = $size3 = 0;
 
         $artifact = $this->getOwnArtefactInfo( $from );
-        if ( ! empty( $artifact ) ) {
+        if (!empty($artifact)) {
             $form->addError( "error", "Treasury is full. Your hero could not claim the artefact" );
-
             return false;
         }
-        $uid      = $session->uid;
-        $q        = "
-            SELECT Count(size) AS totals,
-                SUM(IF(size = '1',1,0)) small,
-                SUM(IF(size = '2',1,0)) great,
-                SUM(IF(size = '3',1,0)) `unique`
-                FROM " . TB_PREFIX . "artefacts WHERE owner = " . (int) $uid;
-        $result   = mysqli_query( $this->dblink, $q );
+        
+        $uid = $this->getVillageField($from, "owner");
+        $vuid = $this->getVillageField($vref, "owner");
+
+        $q = "SELECT Count(size) AS totals,
+              SUM(IF(size = '1',1,0)) small,
+              SUM(IF(size = '2',1,0)) great,
+              SUM(IF(size = '3',1,0)) `unique`
+              FROM " . TB_PREFIX . "artefacts WHERE owner = " . (int) $uid;
+        $result = mysqli_query( $this->dblink, $q );
         $artifact = $this->mysqli_fetch_all( $result )[0];
 
-        if ( $artifact['totals'] < 3 || $type == 11 ) {
+        if ( $artifact['totals'] < 3 || $type == 11 || $uid == $vuid) {
             $DefenderFields = $this->getResourceLevel( $vref );
             $defcanclaim    = true;
 
@@ -7242,7 +7243,7 @@ References: User ID/Message ID, Mode
                 }
             }
 
-            if ( ( $artifact['great'] > 0 || $artifact['unique'] > 0 ) && $size > 1 ) {
+            if (($artifact['great'] > 0 || $artifact['unique'] > 0) && $size > 1 && $uid != $vuid) {
                 $form->addError( "error", "Max num. of great/unique artefacts. Your hero could not claim the artefact" );
                 return false;
             }
