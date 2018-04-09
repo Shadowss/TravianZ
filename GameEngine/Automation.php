@@ -5033,7 +5033,7 @@ class Automation {
                                                 $maxcount = $units;
                                                 $maxtypeatt = $i;
                                                 $maxtype = $maxtypeatt + (($tribe - 1) * 10);
-                                                $att = $attack['moveid'];
+                                                $att = $attack;
                                             }
                                             $totalunits += $units;
                                         }
@@ -5042,7 +5042,7 @@ class Automation {
                                             $maxtype = "hero";
                                             $maxtypeatt = 11;
                                             $heroinfo = $database->getHero($starv['owner'])[0];
-                                            $att = $attack['moveid'];
+                                            $att = $attack;
                                         }
                                     }                                    
                                 } 
@@ -5107,9 +5107,9 @@ class Automation {
                         {
                             if($killunits < $totalunits) 
                             {
-                                $database->modifyAttack($att, $maxtypeatt, min($killunits, $maxcount));                                                              
+                                $database->modifyAttack($att['id'], $maxtypeatt, min($killunits, $maxcount));                                                              
                             }
-                            else $database->setMovementProc($att);                                                                                        
+                            else $database->setMovementProc($att['moveid']);                                                                                        
                         }
                         elseif(isset($maxtype))
                         {
