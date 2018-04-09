@@ -730,7 +730,7 @@ class Technology {
 		$ABUpgradesCount = count($ABUpgrades);
 		
 		$ups = 0;
-		if(count($ABUpgradesCount) > 0){
+		if($ABUpgradesCount > 0){
 		    foreach($ABUpgrades as $upgrade){
 		        if(in_array(("b".$get['a']), $upgrade)) $ups++;
 		    }
@@ -759,7 +759,7 @@ class Technology {
 		$ABUpgradesCount = count($ABUpgrades);
 		
 		$ups = 0;
-		if(count($ABUpgradesCount) > 0){
+		if($ABUpgradesCount > 0){
 		    foreach($ABUpgrades as $upgrade){
 		        if(in_array(("a".$get['a']), $upgrade)) $ups++;
 		    }

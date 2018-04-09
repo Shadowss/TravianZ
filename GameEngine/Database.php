@@ -1869,22 +1869,6 @@ class MYSQLi_DB implements IDbConnection {
             }
         }
     }
-
-    /**
-     * Used to get the population of the whole account
-     * 
-     * @param int $uid the user id
-     * @return int Returns the total population of the account
-     */
-    
-    function getTotalPopulation($uid){
-        list($uid) = $this->escape_input((int) $uid);
-        
-        $q = "SELECT Sum(pop) FROM " . TB_PREFIX . "vdata WHERE owner = ".$uid."";
-        $result = mysqli_query($this->dblink, $q);
-        $row = mysqli_fetch_row($result);
-        return $row[0];
-    }
     
     function getVillageByWorldID($vid, $use_cache = true) {
         $array_passed = is_array($vid);
@@ -7788,7 +7772,7 @@ References:
     function KillMyHero($id) {
         list( $id ) = $this->escape_input( (int) $id );
 
-        $q = "UPDATE " . TB_PREFIX . "hero set dead = 1, intraining = 0, inrevive = 0 where uid = " . $id . " AND dead = 0";
+        $q = "UPDATE " . TB_PREFIX . "hero set dead = 1, intraining = 0, inrevive = 0, health = 0 where uid = " . $id . " AND dead = 0";
 
         return mysqli_query( $this->dblink, $q );
     }

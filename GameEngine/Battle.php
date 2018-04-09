@@ -673,7 +673,7 @@ class Battle {
 
         }
 
-        $result[6] = pow($rap/$rdp*$moralbonus,$Mfactor);
+        $result[6] = pow($rap/($rdp*$moralbonus > 0 ? $rdp*$moralbonus : 1),$Mfactor);
 
         $total_att_units = count($units['Att_unit']);
         $start = intval(($att_tribe-1)*10+1);

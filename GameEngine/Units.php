@@ -239,7 +239,7 @@ class Units {
     
     public function returnTroops($wref,$mode=0) {
         global $database;
-        if (!mode) {
+        if (!$mode) {
             $getenforce=$database->getEnforceVillage($wref,0);
             foreach($getenforce as $enforce) {
                 $this->processReturnTroops($enforce);    
@@ -414,14 +414,10 @@ class Units {
                     array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
                 );
 
-                $data21 = $database->getUserField( $database->getVrefField( $village->wid, 'owner' )['owner'], 'tribe', 0 );
-                $eigen  = $database->getCoor( $village->wid );
-                $from   = array( 'x' => $eigen['x'], 'y' => $eigen['y'] );
-                $ander  = $database->getCoor( $data['to_vid'] );
-                $to     = array( 'x' => $ander['x'], 'y' => $ander['y'] );
-                $start  = ( $data21['tribe'] - 1 ) * 10 + 1;
-                $end    = ( $data21['tribe'] * 10 );
-
+                $fromcoor  = $database->getCoor( $village->wid );
+                $from   = array('x' => $fromcoor['x'], 'y' => $fromcoor['y']);
+                $tocoor  = $database->getCoor( $data['to_vid'] );
+                $to     = array('x' => $tocoor['x'], 'y' => $tocoor['y']);
                 $speeds = array();
                 $scout  = 1;
 

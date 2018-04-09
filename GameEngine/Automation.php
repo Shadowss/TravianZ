@@ -2614,8 +2614,9 @@ class Automation {
                                                 $newLevels_fieldNames = [];
                                                 $newLevels_fieldValues = [];
 
-                                                $pop1 = $database->getTotalPopulation($AttackerID);
-                                                $pop2 = $database->getTotalPopulation($DefenderID);
+                                                $poparray = $database->getVSumField([$AttackerID, $DefenderID] ,"pop");
+                                                $pop1 = $poparray[0]['Total'];
+                                                $pop2 = $poparray[1]['Total'];
                                                 if($pop1 > $pop2){
                                                     $buildlevel = $database->getResourceLevel($data['to']);
 
@@ -2746,9 +2747,11 @@ class Automation {
                                     if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
                                         $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
                                         $info_hero = $hero_pic.",Your hero is carrying home an artefact".$xp;
-                                        if($pop == 0){
+                                        
+                                        // if the defender pop is 0 with no artefact, then destroy the village
+                                        if($database->getVillageField($data['to'], "pop") == 0){
                                             $can_destroy = $village_destroyed = 1;
-                                            $info_hero .= ". The village has been destroyed.";
+                                            $info_hero .= " The village has been destroyed.";
                                         }
                                     } else {
                                         $info_hero = $hero_pic.",".$form->getError("error").$xp;
@@ -4893,15 +4896,14 @@ class Automation {
             if ($crop < $village_upkeep){
                 // add starv data
                 $database->setVillageField($village->wid, 'starv', $village_upkeep);
-                if($starv==0)
-                    $database->setVillageField($village->wid, 'starvupdate', time());
+                if($starv==0) $database->setVillageField($village->wid, 'starvupdate', time());
             }
             unset($crop,$unitarrays,$getvillage,$village_upkeep);
         }
 
         // load villages with minus prod
 
-        $starvarray = array();
+        $starvarray = [];
         $starvarray = $database->getStarvation();
 
         $vilIDs = [];
@@ -4912,17 +4914,17 @@ class Automation {
         $database->getEnforceVillage($vilIDs, 0);
         $database->getOasisEnforce($vilIDs, 2);
         $database->getOasisEnforce($vilIDs, 3);
+        $database->getMovement(3, $vilIDs, 0);
 
         foreach ($starvarray as $starv){
             $unitarrays = $this->getAllUnits($starv['wref']);
-            $howweeating=$this->getUpkeep($unitarrays, 0,$starv['wref']);
-            $upkeep = $starv['pop'] + $howweeating;
+            $upkeep = $starv['pop'] + $this->getUpkeep($unitarrays, 0, $starv['wref']);
 
-
+            //TODO: getting enforcements could be done by using a recursive function
+            
             // get enforce other player from oasis
             $enforceoasis = $database->getOasisEnforce($starv['wref'], 2);
-            $maxcount=0;
-            $totalunits=0;
+            $maxcount = $totalunits = 0;
             if(count($enforceoasis)>0){
                 foreach ($enforceoasis as $enforce){
                     for($i=1;$i<=50;$i++){
@@ -4930,33 +4932,36 @@ class Automation {
                         if($enforce['u'.$i] > $maxcount){
                             $maxcount = $enforce['u'.$i];
                             $maxtype = $i;
-                            $enf = $enforce['id'];
+                            $enf = $enforce;
                         }
                         $totalunits += $enforce['u'.$i];
                     }
-                    if($totalunits == 0){
+                    if($totalunits == 0 && $enforce['hero'] > 0){
                         $maxcount = $enforce['hero'];
                         $maxtype = "hero";
+                        $heroinfo = $database->getHero($database->getVillageField($enf['from'], "owner"))[0];
+                        $enf = $enforce;
                     }
-                    $other_reinf=true;
                 }
             }else{
                 //own troops from oasis
                 $enforceoasis = $database->getOasisEnforce($starv['wref'], 3);
                 if(count($enforceoasis)>0){
                     foreach ($enforceoasis as $enforce){
-                        for($i=1;$i<=50;$i++){
+                        for($i = 1; $i <= 50; $i++){
                             $units = $enforce['u'.$i];
                             if($enforce['u'.$i] > $maxcount){
                                 $maxcount = $enforce['u'.$i];
                                 $maxtype = $i;
-                                $enf = $enforce['id'];
+                                $enf = $enforce;
                             }
                             $totalunits += $enforce['u'.$i];
                         }
-                        if($totalunits == 0){
+                        if($totalunits == 0 && $enforce['hero'] > 0){
                             $maxcount = $enforce['hero'];
                             $maxtype = "hero";
+                            $heroinfo = $database->getHero($database->getVillageField($enf['from'], "owner"))[0];
+                            $enf = $enforce;
                         }
                     }
                 }else{
@@ -4964,18 +4969,20 @@ class Automation {
                     $enforcearray = $database->getEnforceVillage($starv['wref'], 2);
                     if(count($enforcearray)>0){
                         foreach ($enforcearray as $enforce){
-                            for($i = 0 ; $i <= 50 ; $i++){
+                            for($i = 1 ; $i <= 50 ; $i++){
                                 $units = (isset($enforce['u'.$i]) ? $enforce['u'.$i] : 0);
                                 if($units > $maxcount){
                                     $maxcount = $units;
                                     $maxtype = $i;
-                                    $enf = $enforce['id'];
+                                    $enf = $enforce;
                                 }
                                 $totalunits += $units;
                             }
-                            if($totalunits == 0){
+                            if($totalunits == 0 && $enforce['hero'] > 0){
                                 $maxcount = $enforce['hero'];
                                 $maxtype = "hero";
+                                $heroinfo = $database->getHero($database->getVillageField($enf['from'], "owner"))[0];
+                                $enf = $enforce;
                             }
                         }
                     }else{
@@ -4983,24 +4990,26 @@ class Automation {
                         $enforcearray = $database->getEnforceVillage($starv['wref'], 3);
                         if(count($enforcearray)>0){
                             foreach ($enforcearray as $enforce){
-                                for($i = 0 ; $i <= 50 ; $i++){
+                                for($i = 1 ; $i <= 50 ; $i++){
                                     $units = (isset($enforce['u'.$i]) ? $enforce['u'.$i] : 0);
                                     if($units > $maxcount){
                                         $maxcount = $units;
                                         $maxtype = $i;
-                                        $enf = $enforce['id'];
+                                        $enf = $enforce;
                                     }
                                     $totalunits += $units;
                                 }
-                                if($totalunits == 0){
+                                if($totalunits == 0 && $enforce['hero'] > 0){
                                     $maxcount = $enforce['hero'];
                                     $maxtype = "hero";
+                                    $heroinfo = $database->getHero($database->getVillageField($enf['from'], "owner"))[0];
+                                    $enf = $enforce;
                                 }
                             }
                         }else{
                             //get own unit
-                            $unitarray = $database->getUnit($starv['wref']);
-                            for($i = 0 ; $i <= 50 ; $i++){
+                            $unitarray = $database->getUnit($starv['wref']);                                                                                                                 
+                            for($i = 1 ; $i <= 50 ; $i++){
                                 $units = (isset($unitarray['u'.$i]) ? $unitarray['u'.$i] : 0);
                                 if($units > $maxcount){
                                     $maxcount = $units;
@@ -5009,9 +5018,35 @@ class Automation {
                                 $totalunits += $units;
                             }
                             if($totalunits == 0){
-                                $maxcount = $unitarray['hero'];
-                                $maxtype = "hero";
-                            }
+                                if($unitarray['hero'] > 0){
+                                    $maxcount = $unitarray['hero'];
+                                    $maxtype = "hero";
+                                    $heroinfo = $database->getHero($starv['owner'])[0];
+                                }else{
+                                    //get own travelling troops
+                                    $attackarray = $database->getMovement(3, $starv['wref'], 0);
+                                    $tribe = $database->getUserField($starv['owner'], "tribe", 0);
+                                    foreach ($attackarray as $attack){
+                                        for($i = 1 ; $i <= 10; $i++){
+                                            $units = (isset($attack['t'.$i]) ? $attack['t'.$i] : 0);
+                                            if($units > $maxcount){
+                                                $maxcount = $units;
+                                                $maxtypeatt = $i;
+                                                $maxtype = $maxtypeatt + (($tribe - 1) * 10);
+                                                $att = $attack['moveid'];
+                                            }
+                                            $totalunits += $units;
+                                        }
+                                        if($totalunits == 0 && $attack['t11'] > 0){
+                                            $maxcount = $attack['t11'];
+                                            $maxtype = "hero";
+                                            $maxtypeatt = 11;
+                                            $heroinfo = $database->getHero($starv['owner'])[0];
+                                            $att = $attack['moveid'];
+                                        }
+                                    }                                    
+                                } 
+                            }                                                
                         }
                     }
                 }
@@ -5020,102 +5055,81 @@ class Automation {
             // counting
 
             $timedif = $time-$starv['starvupdate'];
-            $skolko=$database->getCropProdstarv($starv['wref'])-$starv['starv'];
-            if($skolko<0){$golod=true;}
-            else{$golod=false;}
-            if($golod){
+            $skolko = $database->getCropProdstarv($starv['wref'])-$starv['starv'];
+            if($skolko < 0)
+            {
                 $starvsec = (abs($skolko)/3600);
                 $difcrop = ($timedif*$starvsec); //crop eat up over time
                 $newcrop = 0;
                 $oldcrop = $database->getVillageField($starv['wref'], 'crop');
-                if ($oldcrop > 100){ //if the grain is then tries to send all
+                if ($oldcrop > 100) //if the grain is then tries to send all
+                {
                     $difcrop = $difcrop-$oldcrop;
-                    if($difcrop < 0){
+                    if($difcrop < 0)
+                    {
                         $difcrop = 0;
                         $newcrop = $oldcrop-$difcrop;
                         $database->setVillageField($starv['wref'], 'crop', $newcrop);
                     }
                 }
+                
+                if($difcrop > 0)
+                {
+                    global ${'u'.$maxtype}, ${'h'.$heroinfo['unit'].'_full'};
 
-                if($difcrop > 0){
-                    global ${'u'.$maxtype};
+                    $hungry = [];
+                    $hungry = ($maxtype != "hero") ? ${'u'.$maxtype} : ${'h'.$heroinfo['unit'].'_full'}[min($heroinfo['level'], 60)];
 
-                    $hungry=array();
-                    $hungry=${'u'.$maxtype};
+                    if ($hungry['crop'] > 0 && $oldcrop <= 0) $killunits = ceil($difcrop/$hungry['crop']);
+                    else $killunits = 0;
 
-                    if ($hungry['crop']>0 && $oldcrop <=0) {
-                        $killunits = intval($difcrop/$hungry['crop']);
-                    }else $killunits=0;
+                    if($killunits > 0)
+                    {
+                        $pskolko = abs($skolko);
+                        if($killunits > $pskolko && $skolko < 0) $killunits = $pskolko;
 
-                    if($killunits > 0){
-                        $pskolko =  abs($skolko);
-                        if($killunits > $pskolko && $skolko <0){
-                            $killunits = $pskolko;
+                        if($maxtype == "hero" && $maxcount > 0)
+                        {
+                            $totalunits = $maxcount;
+                            $database->modifyHero("dead", 1, $heroinfo['heroid']);
+                            $database->modifyHero("health", 0, $heroinfo['heroid']);
                         }
-                        if (isset($enf)){
-                            if($killunits < $maxcount){
-                                $database->modifyEnforce($enf, $maxtype, $killunits, 0);
-                                $database->setVillageField(
-                                    $starv['wref'],
-                                    ['starv', 'starvupdate'],
-                                    [$upkeep, $time]
-                                );
-                                $database->modifyResource($starv['wref'],0,0,0,$hungry['crop'],1);
-
-                                if($maxtype == "hero"){
-                                    $heroid = $database->getHeroField($database->getVillageField($enf,"owner"),"heroid");
-                                    $database->modifyHero("dead", 1, $heroid);
-                                }
-                            }else{
-                                $database->deleteReinf($enf);
-                                $database->setVillageField(
-                                    $starv['wref'],
-                                    ['starv', 'starvupdate'],
-                                    [$upkeep, $time]
-                                );
+                        
+                        if (isset($enf))
+                        {
+                            if($killunits < $totalunits)
+                            {
+                                $database->modifyEnforce($enf['id'], $maxtype, min($killunits, $maxcount), 0);                                
                             }
-                        }else{
-                            if($killunits < $maxcount){
-                                $database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
-                                $database->setVillageField(
-                                    $starv['wref'],
-                                    ['starv', 'starvupdate'],
-                                    [$upkeep, $time]
-                                );
-                                $database->modifyResource($starv['wref'],0,0,0,$hungry['crop'],1);
-                                if($maxtype == "hero"){
-                                    $heroid = $database->getHeroField($starv['owner'],"heroid");
-                                    $database->modifyHero("dead", 1, $heroid);
-                                }
-                            }elseif($killunits > $maxcount){
-                                $killunits = $maxcount;
-                                $database->modifyUnit($starv['wref'], array($maxtype), array($killunits), array(0));
-                                $database->setVillageField(
-                                    $starv['wref'],
-                                    ['starv', 'starvupdate'],
-                                    [$upkeep, $time]
-                                );
-
-                                if($maxtype == "hero"){
-                                    $heroid = $database->getHeroField($starv['owner'],"heroid");
-                                    $database->modifyHero("dead", 1, $heroid);
-                                }
-                            }
+                            else $database->deleteReinf($enf['id']);                                                       
                         }
+                        elseif(isset($att))
+                        {
+                            if($killunits < $totalunits) 
+                            {
+                                $database->modifyAttack($att, $maxtypeatt, min($killunits, $maxcount));                                                              
+                            }
+                            else $database->setMovementProc($att);                                                                                        
+                        }
+                        elseif(isset($maxtype))
+                        {
+                            $database->modifyUnit($starv['wref'], [$maxtype], [min($killunits, $maxcount)], [0]);
+                        }
+                                                
+                        if($totalunits > 0)
+                        {
+                            $database->modifyResource($starv['wref'], 0, 0, 0, $hungry['crop'], 1);
+                            $database->setVillageField($starv['wref'], ['starv', 'starvupdate'], [$upkeep, $time]);  
+                        }                       
                     }
                 }
             }
 
             $crop = $database->getCropProdstarv($starv['wref'], false);
-            if ($crop > $upkeep){
-                $database->setVillageField(
-                    $starv['wref'],
-                    ['starv', 'starvupdate'],
-                    [0, 0]
-                );
-            }
+            
+            if ($crop > $upkeep) $database->setVillageField($starv['wref'], ['starv', 'starvupdate'], [0, 0]);         
 
-            unset ($starv,$unitarrays,$enforcearray,$enforce,$starvarray);
+            unset ($starv,$unitarrays,$enforcearray,$enforce,$starvarray,$enf,$att,$attackarray,$maxtype,$maxtypeatt,$heroinfo);
         }
 
         if(file_exists("GameEngine/Prevention/starvation.txt")) {
@@ -5133,10 +5147,10 @@ class Automation {
         if(file_exists("GameEngine/Prevention/climbers.txt")) {
             unlink("GameEngine/Prevention/climbers.txt");
         }
-        global $database,$ranking;
+        global $database, $ranking;
         $ranking->procRankArray();
         $climbers = $ranking->getRank();
-        if(count($ranking->getRank()) > 0){
+        if(count($climbers) > 0){
             $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($database->dblink,$q);
             if(mysqli_num_rows($result)) {
@@ -5150,28 +5164,34 @@ class Automation {
             foreach($array as $user){
                 $newrank = $ranking->getUserRank($user['id']);
                 if($week > 1){
-                    for($i=$newrank+1;$i<count($ranking->getRank());$i++) {
-                        $oldrank = $ranking->getUserRank($climbers[$i]['userid']);
-                        $totalpoints = $oldrank - $climbers[$i]['oldrank'];
-                        $database->removeclimberrankpop($climbers[$i]['userid'], $totalpoints);
-                        $database->updateoldrank($climbers[$i]['userid'], $oldrank);
+                    for($i=$newrank+1;$i<count($climbers);$i++) {
+                        if(isset($climbers[$i]['userid'])){
+                            $oldrank = $ranking->getUserRank($climbers[$i]['userid']);
+                            $totalpoints = $oldrank - $climbers[$i]['oldrank'];
+                            $database->removeclimberrankpop($climbers[$i]['userid'], $totalpoints);
+                            $database->updateoldrank($climbers[$i]['userid'], $oldrank);
+                        }                      
                     }
                     $database->updateoldrank($user['id'], $newrank);
                 }else{
-                    $totalpoints = count($ranking->getRank()) - $newrank;
+                    $totalpoints = count($climbers) - $newrank;
                     $database->setclimberrankpop($user['id'], $totalpoints);
                     $database->updateoldrank($user['id'], $newrank);
                     for($i=1;$i<$newrank;$i++){
-                        $oldrank = $ranking->getUserRank($climbers[$i]['userid']);
-                        $totalpoints = count($ranking->getRank()) - $oldrank;
-                        $database->setclimberrankpop($climbers[$i]['userid'], $totalpoints);
-                        $database->updateoldrank($climbers[$i]['userid'], $oldrank);
+                        if(isset($climbers[$i]['userid'])){
+                            $oldrank = $ranking->getUserRank($climbers[$i]['userid']);
+                            $totalpoints = count($climbers) - $oldrank;
+                            $database->setclimberrankpop($climbers[$i]['userid'], $totalpoints);
+                            $database->updateoldrank($climbers[$i]['userid'], $oldrank);
+                        }                     
                     }
-                    for($i=$newrank+1;$i<count($ranking->getRank());$i++){
-                        $oldrank = $ranking->getUserRank($climbers[$i]['userid']);
-                        $totalpoints = count($ranking->getRank()) - $oldrank;
-                        $database->setclimberrankpop($climbers[$i]['userid'], $totalpoints);
-                        $database->updateoldrank($climbers[$i]['userid'], $oldrank);
+                    for($i=$newrank+1;$i<count($climbers);$i++){
+                        if(isset($climbers[$i]['userid'])){
+                            $oldrank = $ranking->getUserRank($climbers[$i]['userid']);
+                            $totalpoints = count($climbers) - $oldrank;
+                            $database->setclimberrankpop($climbers[$i]['userid'], $totalpoints);
+                            $database->updateoldrank($climbers[$i]['userid'], $oldrank);
+                        }                      
                     }
                 }
             }
