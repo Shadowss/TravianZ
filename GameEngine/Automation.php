@@ -4963,7 +4963,7 @@ class Automation {
                 }                            
             }
 
-            // if the player has no troops, then exit from the function
+            // if the player has no troops, then continue to the next value in the foreach
             if(empty($starvingTroops)) continue;
             
             $tribe = $database->getUserField($starv['owner'], "tribe", 0);
