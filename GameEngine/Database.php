@@ -5786,17 +5786,18 @@ References: User ID/Message ID, Mode
 	}
 
     // no need to cache this method
-	function getUnitsNumber($vid, $use_cache = false) {
+	function getUnitsNumber($vid, $mode = 1, $use_cache = false) {
         list( $vid ) = $this->escape_input( (int) $vid );
 
         $dbarray     = $this->getUnit( $vid );
         $totalunits  = 0;
-        $movingunits = $this->getVillageMovement( $vid );
         for ( $i = 1; $i <= 50; $i ++ ) {
             $totalunits += $dbarray[ 'u' . $i ];
         }
-
-        $totalunits       += $dbarray['hero'];
+        
+        $totalunits += $dbarray['hero'];
+        if(!$mode) return $totalunits;
+      
         $movingunits      = $this->getVillageMovement( $vid );
         $reinforcingunits = $this->getEnforceArray( $vid, 1 );
         $owner            = $this->getVillageField( $vid, "owner" );
@@ -7557,6 +7558,27 @@ References: User ID/Message ID, Mode
         $q = "UPDATE " . TB_PREFIX . "prisoners set t1 = t1 + $t1, t2 = t2 + $t2, t3 = t3 + $t3, t4 = t4 + $t4, t5 = t5 + $t5, t6 = t6 + $t6, t7 = t7 + $t7, t8 = t8 + $t8, t9 = t9 + $t9, t10 = t10 + $t10, t11 = t11 + $t11 where wref = $wid and ".TB_PREFIX."prisoners.from = $from";
         $res = mysqli_query($this->dblink,$q);
         self::$prisonersCache = [];
+        return $res;
+    }
+
+    /**
+     * Used to modify prisoners through the inserted id
+     * 
+     * @param int $id The id where prisoners are in the database
+     * @param int $unit The type of the unit
+     * @param int $amount The amount of the unit you want to sum/subtract
+     * @param int $mode 0 for subtracting the inserted amount, 1 for adding it
+     * @return bool Returns false on failure and true on success 
+     */
+    
+    function modifyPrisoners($id, $unit, $amount, $mode) {
+        list($id, $unit, $amount, $mode) = $this->escape_input((int) $id,(int) $unit,(int) $amount,(int) $mode);
+        
+        $unit = 't'.$unit;
+        $prisoners = $unit." = ".$unit.(!$mode ? " - " : " + ").$amount;
+        
+        $q = "UPDATE " . TB_PREFIX . "prisoners set $prisoners WHERE id = $id";
+        $res = mysqli_query($this->dblink,$q);
         return $res;
     }
 
