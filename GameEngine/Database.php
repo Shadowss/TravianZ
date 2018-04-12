@@ -3576,7 +3576,7 @@ class MYSQLi_DB implements IDbConnection {
                         )
                     ) as level
                 FROM
-                    `s1_fdata`
+                    ".TB_PREFIX."fdata`
                 WHERE
                     vref = $vid
                     AND
@@ -7196,7 +7196,7 @@ References: User ID/Message ID, Mode
         $result = mysqli_query( $this->dblink, $q );
         $artifact = $this->mysqli_fetch_all( $result )[0];
 
-        if ( $artifact['totals'] < 3 || $type == 11 || $uid == $vuid) {
+        if ( $artifact['totals'] < 3 || $uid == $vuid) {
             $DefenderFields = $this->getResourceLevel( $vref );
             $defcanclaim    = true;
 

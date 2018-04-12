@@ -590,9 +590,14 @@ class Battle {
         }
         // Formula for the calculation of catapults needed
         if($catp > 0 && $tblevel != 0) {
-            $wctp = pow(($rap/$rdp),1.5);
-            $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-            $wctp *= $catp + (round(200 * pow(1.0205,$att_ab8))/200);
+            
+            //catapults upgrades
+            $upgrades = round(200 * pow(1.0205, $att_ab8) ) / 200; 
+            
+            $wctp = pow(($rap / $rdp), 1.5);
+            $wctp = ($wctp >= 1) ? 1 - 0.5 / $wctp : 0.5 * $wctp;
+            $wctp *= ($catp + $upgrades);
+            
             $artowner = $database->getVillageField( $DefenderWref, "owner" );
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
@@ -617,25 +622,31 @@ class Battle {
                     }
                 }
             }
-
-            if($stonemason==0){
-                $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab8))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-            }else{
-                $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab8))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-            }
-
-            // Number catapults to take down the building
-            $result[3] = $need;
-            //Number catapults nego
-            $result[4] = $wctp;
-            $result[5] = $moralbonus;
-            $result[9] = $att_ab8;
-            $result[10]=$strongerbuildings / $good_effect * $bad_effect;
+            
+            //catapults downgrades
+            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1) / $strongerbuildings / $good_effect * $bad_effect;
+            
+            //catapults moral
+            $catpMoral = pow($attpop / ($defpop > 0 ? $defpop : 1) , 0.3);
+            
+            // New level of the building (only for warsim.php)
+            $result[3] = $this->calculateNewBuildingLevel($catpMoral, $upgrades / $downgrades, $tblevel, $wctp, $catp);
+            $result[4] = $tblevel;
+            
+            // Results for Automation.php
+            $result['catapults']['moral'] = $catpMoral;
+            $result['catapults']['updown'] = $upgrades / $downgrades;
+            $result['catapults']['realAttackers'] = $wctp;
         }
+        
         if($ram > 0 && $walllevel != 0) {
-            $wctp = pow(($rap/$rdp),1.5);
-            $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
-            $wctp *= ($ram/2) + (round(200 * pow(1.0205,$att_ab7))/200);
+            
+            $upgrades = round(200 * pow(1.0205, $att_ab7)) / 200;
+            
+            $wctp = pow(($rap / $rdp), 1.5);
+            $wctp = ($wctp >= 1) ? 1 - 0.5 / $wctp : 0.5 * $wctp;
+            $wctp *= ($ram ) + $upgrades;
+            
             $artowner = $database->getVillageField( $DefenderWref, "owner" );
             $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
             $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
@@ -660,17 +671,17 @@ class Battle {
                     }
                 }
             }
-            if($stonemason==0){
-                $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab7))/200) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-            }else{
-                $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab7))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings / $good_effect * $bad_effect)) + 0.5);
-            }
-            // Number catapults to take down the building
-            $result[7] = $need;
 
-            // Number catapults to action
-            $result[8] = $wctp;
+            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1) / $strongerbuildings / $good_effect * $bad_effect;
+           
+            // New level of the building (only for warsim.php)
+            $result[7] = $this->calculateNewBuildingLevel(1, $upgrades / $downgrades, $walllevel, $wctp, $ram);
+            $result[8] = $walllevel;
 
+            // Results for Automation.php
+            $result['rams']['moral'] = 1;
+            $result['rams']['updown'] = $upgrades / $downgrades;
+            $result['rams']['realAttackers'] = $wctp;
         }
 
         $result[6] = pow($rap/($rdp*$moralbonus > 0 ? $rdp*$moralbonus : 1),$Mfactor);
@@ -844,6 +855,32 @@ class Battle {
         $datadef['involve']=$invol;
         return $datadef;
 
+    }
+    
+    /**
+     * Calculates the new building level, after catapults/rams have damaged it
+     * 
+     * @param float $moral The catapults/rams battle moral, 1 < moral < 3 => (Total attacker points / Total defender points)^3
+     * @param int $upDown (Upgrades / Downgrades) ratio of catapults/rams made in the Blacksmith
+     * @param int $actualLevel The level of the building before the battle
+     * @param int $realAttackers Effective catapults/rams involved in the building damage
+     * @param int $totalAttackers Total catapults/rams sent in the attack
+     * @return int Returns the new level of the damaged building
+     */
+    
+    public function CalculateNewBuildingLevel($moral, $upDown, $actualLevel, $realAttackers, $totalAttackers)
+    {
+        if($moral < 1) $moral = 1;
+        elseif($moral > 3) $moral = 3;
+        
+        $needMax = round(($moral * (pow($actualLevel, 2) + $actualLevel + 1) / (8 * $upDown)) + 0.5);
+        for($i = $actualLevel-1; $i >= 1; $i--)
+        {
+            $need = ($moral * (pow($i, 2) + $i + 1) / (8 * $upDown)) + 0.5;
+            if(min($realAttackers, $totalAttackers)/($needMax-$need) <= 1) break;
+        }
+        
+        return $i + 1;
     }
 };
 

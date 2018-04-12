@@ -75,29 +75,27 @@ if(isset($_POST['result'])) {
     echo $form->getValue('ktyp') == 0? "Normal" : "Raid";
     echo "</b></p>";
     echo "<p>";
-    if (isset($_POST['result'][7])&&isset($_POST['result'][8])){
+    if (isset($_POST['result'][7]) && isset($_POST['result'][8])){
         if ($form->getValue('ktyp') == 1) {
             echo "Hint: The ram does not work during a raid.<br>";
-        }elseif ($_POST['result'][8]>$_POST['result'][7]){
+        }elseif ($_POST['result'][7] == 0){
             echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>0</b></p>";
-        }elseif ($_POST['result'][8]==0){
+        }elseif ($_POST['result'][7] == $_POST['result'][8]){
             echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$form->getValue('walllevel')."</b></p>";
         }else{
-            $totallvl = round($form->getValue('walllevel')-((pow(M_E, $_POST['result'][8]/$_POST['result'][7])-1)*$form->getValue('walllevel')/2));
-            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$totallvl."</b></p>";
+            echo "Damage done by ram: from level <b>".$form->getValue('walllevel')."</b> to level <b>".$_POST['result'][7]."</b></p>";
         }
     }
 
-    if (isset($_POST['result'][3])&&isset($_POST['result'][4])){
+    if (isset($_POST['result'][3]) && isset($_POST['result'][4])){
         if ($form->getValue('ktyp') == 1) {
             echo "Hint: The catapult does not shoot during a raid.</p>";
-        }elseif ($_POST['result'][4]>$_POST['result'][3]){
+        }elseif ($_POST['result'][3] == 0){
             echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>0</b></p>";
-        }elseif ($_POST['result'][4]==0){
+        }elseif ($_POST['result'][3] == $_POST['result'][4]){
             echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$form->getValue('kata')."</b></p></p>";
         }else{
-            $totallvl = round($form->getValue('kata')-((pow(M_E, $_POST['result'][4]/$_POST['result'][3])-1)*$form->getValue('kata')/2));
-            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$totallvl."</b></p>";
+            echo "Damage done by catapult: from level <b>".$form->getValue('kata')."</b> to level <b>".$_POST['result'][3]."</b></p>";
         }
     }
 }
