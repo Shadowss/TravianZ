@@ -1266,15 +1266,15 @@ define("CONF_SERV_BEGINPROTECT_TOOLTIP","Protection, which prohibits a certain t
 define("CONF_SERV_REGOPEN","Register Open");
 define("CONF_SERV_REGOPEN_TOOLTIP","Allows to enable (True) or disable (False) the registration of players on the game server.");
 define("CONF_SERV_ACTIVMAIL","Activation Mail");
-define("CONF_SERV_ACTIVMAIL_TOOLTIP","If enabled, during registration it will be necessary to confirm email address. If disabled does not require confirmation of e-mail.");
+define("CONF_SERV_ACTIVMAIL_TOOLTIP","If enabled (Yes), during registration it will be necessary to confirm email address. If disabled (No) does not require confirmation of e-mail.");
 define("CONF_SERV_QUEST","Quest");
-define("CONF_SERV_QUEST_TOOLTIP","Enable or disable the quest on the game server.");
+define("CONF_SERV_QUEST_TOOLTIP","Enable (Yes) or disable (No) the quest on the game server.");
 define("CONF_SERV_QTYPE","Quest Type");
 define("CONF_SERV_QTYPE_TOOLTIP","The quest type can be official which is a bit shorter, and extended which is longer.");
 define("CONF_SERV_DLR","Demolish - Level required");
 define("CONF_SERV_DLR_TOOLTIP","The required level of the main building, on which can carry out the demolition of buildings in the village.");
 define("CONF_SERV_WWSTATS","World Wonder - Statistics");
-define("CONF_SERV_WWSTATS_TOOLTIP","Enable or disable the display in the statistics of villages with a Wonder of the World.");
+define("CONF_SERV_WWSTATS_TOOLTIP","Enable (True) or disable (False) the display in the statistics of villages with a Wonder of the World.");
 define("CONF_SERV_NTRTIME","Nature Troops Regeneration Time");
 define("CONF_SERV_NTRTIME_TOOLTIP","Time through which the nature troops will be restored in oases.");
 define("CONF_SERV_MEDALINTERVAL","Medal Interval");
