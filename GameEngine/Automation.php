@@ -1453,7 +1453,7 @@ class Automation {
                     }
 
                     $tblevel = 1;
-                    $stonemason = $database->getFieldLevelInVillage($data['to'], 34);;
+                    $stonemason = $database->getFieldLevelInVillage($data['to'], 34);
 
                     /*--------------------------------
                      // End village Battle part
