@@ -6924,6 +6924,7 @@ div#map a#map_makelarge img {
 }
 div#mbig a#map_popclose img {
     background-image: url("../../img/a/close.gif");
+    cursor: pointer;
     height: 22px;
     width: 22px;
 }
