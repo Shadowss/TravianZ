@@ -1803,6 +1803,10 @@ class MYSQLi_DB implements IDbConnection {
             // by loyalty updates required
             case 6: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE loyalty < 100";
                     break;
+                    
+            // villages without starvation data, Support, Natars, Taskmaster, Multihunter are all excluded
+            case 7: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE starv = 0 and owner > 5";
+                    break;
         }
 
         $result = mysqli_query($this->dblink,$q);
@@ -5614,7 +5618,7 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function modifyAttack2($aid, $unit, $amt) {
+	function modifyAttack2($aid, $unit, $amt, $mode = 1) {
 	    list($aid, $unit, $amt) = $this->escape_input((int) $aid, $unit, $amt);
 
 	    if (!is_array($unit)) {
@@ -5625,7 +5629,7 @@ References: User ID/Message ID, Mode
         $pairs = [];
 	    foreach ($unit as $index => $unitValue) {
 	        $unitValue = 't' . $this->escape($unitValue);
-            $pairs[] = $unitValue . ' = ' . $unitValue . ' + ' . (int) $amt[$index];
+            $pairs[] = $unitValue . ' = ' . $unitValue . (($mode) ? ' + ' : ' - ') . (int) $amt[$index];
         }
 
 		$q = "UPDATE " . TB_PREFIX . "attacks SET ".implode(', ', $pairs)." WHERE id = $aid";
@@ -7564,22 +7568,31 @@ References: User ID/Message ID, Mode
     /**
      * Used to modify prisoners through the inserted id
      * 
-     * @param int $id The id where prisoners are in the database
+     * @param int $id The prisoner id where prisoners are in the database
      * @param int $unit The type of the unit
      * @param int $amount The amount of the unit you want to sum/subtract
      * @param int $mode 0 for subtracting the inserted amount, 1 for adding it
      * @return bool Returns false on failure and true on success 
      */
     
-    function modifyPrisoners($id, $unit, $amount, $mode) {
-        list($id, $unit, $amount, $mode) = $this->escape_input((int) $id,(int) $unit,(int) $amount,(int) $mode);
+    function modifyPrisoners($id, $units, $amount, $mode) {
+        list($id, $units, $amount, $mode) = $this->escape_input((int) $id, $units, $amount,(int) $mode);
         
-        $unit = 't'.$unit;
-        $prisoners = $unit." = ".$unit.(!$mode ? " - " : " + ").$amount;
+        if (!is_array($units))
+        {
+            $units = [$units];
+            $amount = [$amount];
+        }
+               
+        $prisoners = [];
+        foreach($units as $index => $unit) 
+        {
+            $unit = 't'.$this->escape($unit);
+            $prisoners[] = $unit." = ".$unit.(!$mode ? " - " : " + ").(int)$amount[$index];
+        }
         
-        $q = "UPDATE " . TB_PREFIX . "prisoners set $prisoners WHERE id = $id";
-        $res = mysqli_query($this->dblink,$q);
-        return $res;
+        $q = "UPDATE " . TB_PREFIX . "prisoners set ".implode(', ', $prisoners)." WHERE id = $id"; 
+        return mysqli_query($this->dblink,$q);
     }
 
     function getPrisoners($wid,$mode=0, $use_cache = true) {

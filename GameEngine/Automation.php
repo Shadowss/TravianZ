@@ -4876,37 +4876,35 @@ class Automation {
      ************************************************/
 
     private function starvation() {
-        global $database, $village, $autoprefix;
+        global $database, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/starvation.txt")) {
             unlink($autoprefix."GameEngine/Prevention/starvation.txt");
         }
-        
+
         //starvation is disabled during Easter/Holidays/Christmas
         if(PEACE) return;
         
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/starvation.txt", 'w');
         fclose($ourFileHandle);
         $time = time();
-
-        //TODO: Starvation should be updated in every village!
         
-        //update starvation
-        $getvillage = $database->getVillage($village->wid);
-        $starv = $getvillage['starv'];
-        if ($getvillage['owner'] != 3 && $starv == 0) 
+        //update starvation in every village
+        $starvarray = $database->getProfileVillages(0, 7);
+        foreach($starvarray as $starv)
         {
-            $crop = $database->getCropProdstarv($village->wid);
-            $unitarrays = $this->getAllUnits($village->wid);
-            $village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
-            if ($crop < $village_upkeep)
+            $crop = $database->getCropProdstarv($starv['wref']);
+            $unitArrays = $this->getAllUnits($starv['wref']);
+            $villageUpkeep = $starv['pop'] + $this->getUpkeep($unitArrays, 0);
+            
+            if ($crop < $villageUpkeep)
             {
                 // add starv data
-                $database->setVillageField($village->wid, 'starv', $village_upkeep);
-                if($starv==0) $database->setVillageField($village->wid, 'starvupdate', time());
+                $database->setVillageFields($starv['wref'], ['starv', 'starvupdate'], [$villageUpkeep, time()]);
             }
-            unset($crop,$unitarrays,$getvillage,$village_upkeep);
-        }
+            
+            unset($crop, $unitArrays, $villageUpkeep);
+        }      
 
         // load villages with minus prod
 
@@ -4928,10 +4926,9 @@ class Automation {
         {
             $unitarrays = $this->getAllUnits($starv['wref']);
 
-            $upkeep = $starv['pop'] + $this->getUpkeep($unitarrays, 0, $starv['wref']);           
-            $maxcount = $totalunits = 0;
+            $upkeep = $starv['pop'] + $this->getUpkeep($unitarrays, 0, $starv['wref']);                    
             
-            $enforceArrays = $prisonerArrays = $unitArrays = $attackArrays = $allTroopsArray = $starvingTroops = [];
+            $enforceArrays = $prisonerArrays = $unitArrays = $attackArrays = $allTroopsArray = $starvingTroops = $killedUnits = [];
             
             $enforceArrays = [$database->getOasisEnforce($starv['wref'], 2),
                                  $database->getOasisEnforce($starv['wref'], 3),
@@ -4948,54 +4945,30 @@ class Automation {
             $allTroopsArray = [$enforceArrays, $prisonerArrays, $unitArrays, $attackArrays];
 
             // find the first not-empty array
-            for($type = 0; $type < count($allTroopsArray); $type++)
+            foreach($allTroopsArray as $type => $allTroops)
             {
-                if(!empty($allTroopsArray[$type]))
+                if(!empty($allTroops))
                 {
-                    for($subtype = 0; $subtype < count($allTroopsArray[$type]); $subtype++)
+                    foreach($allTroops as $subtype => $troops)
                     {
-                        if(!empty($allTroopsArray[$type][$subtype])) 
+                        if(!empty($troops))
                         {
-                            $starvingTroops = reset($allTroopsArray[$type][$subtype]);
+                            $starvingTroops = reset($troops);
                             break 2;
                         }
                     }
                 }                            
             }
 
-            // if the player has no troops, then continue to the next value in the foreach
-            if(empty($starvingTroops)) continue;
-            
-            $tribe = $database->getUserField($starv['owner'], "tribe", 0);
-            $start = ($special = in_array($type, [1, 3])) ? 1 : ($tribe - 1) * 10 + 1;
-            $end = ($special) ? 10 : $tribe * 10 ;
-            $utype = ($special) ? 't' : 'u';
-            $heroType = ($special) ? 't11' : 'hero';
-
-            for($i = $start ; $i <= $end ; $i++)
-            {
-                $units = (isset($starvingTroops[$utype.$i]) ? $starvingTroops[$utype.$i] : 0);
-                if($units > $maxcount){
-                    $maxcount = $units;
-                    $maxtype = $i;
-                }
-                $totalunits += $units;
-            }
-            $totalunits += isset($starvingTroops[$heroType]) ? $starvingTroops[$heroType] : 0;
-            
-            if($totalunits == 1 && $starvingTroops[$heroType] > 0)
-            {
-                $maxcount = $starvingTroops[$heroType];
-                $maxtype = "hero";
-                $starvingTroops['heroinfo'] = $database->getHero(($type == 2) ? $starv['owner'] : $database->getVillageField($starvingTroops['from'], "owner"))[0];          
-            }
+            // if the player has no troops, then skip the next instructions
+            if(empty($starvingTroops)) continue;    
+ 
             // counting
-
             $timedif = $time-$starv['starvupdate'];
-            $skolko = $database->getCropProdstarv($starv['wref'])-$starv['starv'];
-            if($skolko < 0)
+            $cropProd = $database->getCropProdstarv($starv['wref'])-$starv['starv'];
+            if($cropProd < 0)
             {
-                $starvsec = (abs($skolko)/3600);
+                $starvsec = (abs($cropProd)/3600);
                 $difcrop = ($timedif*$starvsec); //crop eat up over time
                 $newcrop = 0;
                 $oldcrop = $database->getVillageField($starv['wref'], 'crop');
@@ -5009,64 +4982,90 @@ class Automation {
                         $database->setVillageField($starv['wref'], 'crop', $newcrop);
                     }
                 }
-                
+
                 if($difcrop > 0)
                 {
-                    global ${'u'.$maxtype}, ${'h'.$starvingTroops['heroinfo']['unit'].'_full'};
+                    $tribe = $database->getUserField(($type == 2) ? $starv['owner'] : $database->getVillageField($starvingTroops['from'], "owner"), "tribe", 0);
+                    $start = ($special = in_array($type, [1, 3])) ? 1 : ($tribe - 1) * 10 + 1;
+                    $end = ($special) ? 10 : $tribe * 10 ;
+                    $utype = ($special) ? 't' : 'u';
+                    $heroType = ($special) ? 't11' : 'hero';
 
-                    $hungry = [];
-                    $hungry = ($maxtype != "hero") ? ${'u'.$maxtype} : ${'h'.$starvingTroops['heroinfo']['unit'].'_full'}[min($starvingTroops['heroinfo']['level'], 60)];
-
-                    if ($hungry['crop'] > 0 && $oldcrop <= 0) $killunits = ceil($difcrop/$hungry['crop']);
-                    else $killunits = 0;
-
-                    if($killunits > 0)
+                    $totalUnits = 0;
+                    $counting = true;
+                    while($difcrop > 0)
                     {
-                        $pskolko = abs($skolko);
-                        if($killunits > $pskolko && $skolko < 0) $killunits = $pskolko;
-
-                        if($maxtype == "hero" && $totalunits > 0)
+                        // search the highest troop
+                        $maxcount = $maxtype = 0;                    
+                        for($i = $start ; $i <= $end ; $i++)
                         {
-                            $database->modifyHero("dead", 1, $starvingTroops['heroinfo']['heroid']);
-                            $database->modifyHero("health", 0, $starvingTroops['heroinfo']['heroid']);
+                            $units = (isset($starvingTroops[$utype.$i]) ? $starvingTroops[$utype.$i] : 0);
+                            if($counting) $totalUnits += $units;
+                            if($units > $maxcount)
+                            {
+                                $maxcount = $units;
+                                $maxtype = $i;
+                            }                       
                         }
+                        if($counting) $counting = false;
                         
+                        if($maxtype > 0)
+                        {
+                            $starvingTroops[$utype.$maxtype]--;
+                            $killedUnits[$maxtype]++;                      
+                            $difcrop -= $GLOBALS['u'.(($special) ? $maxtype + ($tribe - 1) * 10 : $maxtype)]['crop'];
+                        }
+                        else break;
+                    }
+
+                    $totalKilledUnits = array_sum($killedUnits);
+                    if($starvingTroops[$heroType] > 0 && ($totalUnits == 0 || $totalUnits == $totalKilledUnits))
+                    {
+                        $totalKilledUnits += $starvingTroops[$heroType];
+                        $totalUnits += $starvingTroops[$heroType];
+                        $starvingTroops['heroinfo'] = $database->getHero(($type == 2) ? $starv['owner'] : $database->getVillageField(($type == 3 && $subtype == 1) ? $starvingTroops['to'] : $starvingTroops['from'], "owner"))[0];
+                        $database->modifyHero("dead", 1, $starvingTroops['heroinfo']['heroid']);
+                        $database->modifyHero("health", 0, $starvingTroops['heroinfo']['heroid']);
+                        $newCrop = $GLOBALS['h'.$starvingTroops['heroinfo']['unit'].'_full'][min($starvingTroops['heroinfo']['level'], 60)]['crop'] + $difcrop;              
+                    }
+                    else if($maxtype == 0) $newCrop = 0;
+                    else $newCrop = $GLOBALS['u'.$maxtype]['crop'];
+
+                    if($totalKilledUnits > 0)
+                    {                   
                         switch($type)
                         {
                             case 0:                                
-                                if($killunits < $totalunits) 
+                                if($totalKilledUnits < $totalUnits) 
                                 {
-                                    $database->modifyEnforce($starvingTroops['id'], $maxtype, min($killunits, $maxcount), 0);  
+                                    $database->modifyEnforce($starvingTroops['id'], array_keys($killedUnits), array_values($killedUnits), 0);  
                                 }                                                              
                                 else $database->deleteReinf($starvingTroops['id']);                         
                                 break;                        
                                 
                             case 1:                            
-                                if($killunits < $totalunits)
+                                if($totalKilledUnits < $totalUnits)
                                 {
-                                    $database->modifyPrisoners($starvingTroops['id'], $maxtype, min($killunits, $maxcount), 0);
+                                    $database->modifyPrisoners($starvingTroops['id'],  array_keys($killedUnits), array_values($killedUnits), 0);
                                 }
                                 else $database->deletePrisoners($starvingTroops['id']);
                                 break;
                                 
                             case 2:
-                                $database->modifyUnit($starv['wref'], [$maxtype], [min($killunits, $maxcount)], [0]);
+                                $database->modifyUnit($starv['wref'], array_keys($killedUnits), array_values($killedUnits), [0]);
                                 break;
                                 
                             case 3:
-                                if($killunits < $totalunits)
+                                if($totalKilledUnits < $totalUnits)
                                 {
-                                    $database->modifyAttack($starvingTroops['id'], $maxtype, min($killunits, $maxcount));
+                                    $database->modifyAttack2($starvingTroops['id'], array_keys($killedUnits), array_values($killedUnits), 0);
                                 }
                                 else $database->setMovementProc($starvingTroops['moveid'].(($subtype == 1) ? ", ".($starvingTroops['moveid'] + 1) : ""));
                                 break;
                         }
                         
-                        if($totalunits > 0)
-                        {
-                            $database->modifyResource($starv['wref'], 0, 0, 0, $hungry['crop'], 1);
-                            $database->setVillageField($starv['wref'], ['starv', 'starvupdate'], [$upkeep, $time]);  
-                        }                       
+                        $database->modifyResource($starv['wref'], 0, 0, 0, max(intval($newCrop), 0), 1);
+                        $database->setVillageField($starv['wref'], ['starv', 'starvupdate'], [$upkeep, $time]);                        
                     }
                 }
             }
@@ -5075,7 +5074,7 @@ class Automation {
             
             if ($crop > $upkeep) $database->setVillageField($starv['wref'], ['starv', 'starvupdate'], [0, 0]);         
 
-            unset ($starv, $unitarrays, $enforce, $starvarray, $maxtype, $type, $subtype);
+            unset ($unitarrays, $type, $subtype);
         }
 
         if(file_exists("GameEngine/Prevention/starvation.txt")) {
