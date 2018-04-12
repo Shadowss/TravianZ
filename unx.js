@@ -763,7 +763,7 @@ function li(step){step.i++;if(step.i==2){step.anm.style.visibility='visible';}
 for(var ji in step.target){step.current[ji]+=step.step[ji];}
 return step;}
 function ii(mi){if(mi===undefined){mi==false;}
-var ni=document.getElementById('ce');if(mi){var oi='<div class="popup3 quest"><a href="#" onClick="qst_handle()"><img src="img/x.gif" border="1" class="popup4" alt="Close"></a><div id="popup3"</div></div>';ni.innerHTML=oi;pi();qst_wfm();vc();qi(true);uc();}
+var ni=document.getElementById('ce');if(mi){var oi='<div class="popup3 quest"><a href="#" onClick="qst_handle()"><img src="img/x.gif" border="1" class="popup4" alt="Close" title="Close"></a><div id="popup3"</div></div>';ni.innerHTML=oi;pi();qst_wfm();vc();qi(true);uc();}
 else{ni.innerHTML='';qi(false);}
 }
 function qi(vis){if(!is_ie6){return;}

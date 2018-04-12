@@ -406,7 +406,7 @@ if (isset($neutralarray[0])) {
 <div id="map_content">
 	<div id="mbig">
 		<div id="lightframe">
-			<div id="darkframe"><a id="map_popclose" onClick="pb=document.getElementById('drag2');if(pb!=null){pb.innerHTML='';};return false;"><img src="img/x.gif" alt="close Map" title="close Map"></a>
+			<div id="darkframe"><a id="map_popclose" onClick="pb=document.getElementById('drag2');if(pb!=null){pb.innerHTML='';};return false;"><img src="img/x.gif" alt="Close Map" title="Close Map"></a>
 				<h1>Map(<span id="x"><?php echo $x;?></span>|<span id="y"><?php echo $y;?></span>)</h1>
 				<div id="map">
 					<script type="text/javascript">
