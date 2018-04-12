@@ -570,3 +570,36 @@ input#btn_back {width:97px; background-image: url(b/back.gif);}
 input#btn_forward {width:97px; background-image: url(b/forward.gif);}
 input#btn_demolish {width:97px; background-image: url(b/demolish.gif);}
 input#btn_search {width:97px; background-image: url(b/search.gif);}
+
+/* Start tooltips for the admin panel settings */
+.tooltip {
+    border-bottom: 1px dotted #000000;
+    color: #000000;
+    outline: none;
+    cursor: help;
+    text-decoration: none;
+    position: relative;
+}
+
+.tooltip span {
+    margin-left: -999em;
+    position: absolute;
+}
+
+.tooltip:hover span {
+    font-family: Calibri, Tahoma, Geneva, sans-serif;
+    position: absolute;
+    left: 1em;
+    top: 2em;
+    z-index: 99;
+    margin-left: 0;
+    width: 250px;
+}
+
+.classic {
+    padding: 0.8em 1em;
+    background: #FFFFAA;
+    border: 1px solid #FFAD33;
+    border-radius: 5px;
+}
+/* End of tooltips */

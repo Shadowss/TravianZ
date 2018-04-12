@@ -1227,6 +1227,74 @@ To build a Treasure Chamber (Treasury), you will need a Main Building level 10 a
 To build a World Wonder, you must own the Construction Plans yourself (you = the World Wonder Village Owner) from level 0 to 50, and then from level 51 to 100 you will need an additional set of Construction Plans in your Alliance! Two sets of Construction Plans in the World Wonder Village Account will not work!");
 define("WWVILLAGE","WW village");
 
+//Admin setting - Admin/Templates/config.tpl & editServerSet.tpl
+define("SERV_CONFIG","Server Configuration");
+define("SERV_SETT","Server Settings");
+define("EDIT_SERV_SETT","Edit Server Settings");
+define("SERV_VARIABLE","Variable");
+define("SERV_VALUE","Value");
+define("CONF_SERV_NAME","Server Name");
+define("CONF_SERV_NAME_TOOLTIP","Name of the game server.");
+define("CONF_SERV_STARTED","Server Started");
+define("CONF_SERV_STARTED_TOOLTIP","Time when the game server was started. This parameter can not be changed on the installed game server.");
+define("CONF_SERV_TIMEZONE","Server Timezone");
+define("CONF_SERV_TIMEZONE_TOOLTIP","Timezone of the game server.");
+define("CONF_SERV_LANG","Language");
+define("CONF_SERV_LANG_TOOLTIP","The language that is used in the admin panel and for everyone on the game server by default.");
+define("CONF_SERV_SERVSPEED","Server Speed");
+define("CONF_SERV_SERVSPEED_TOOLTIP","The speed of the game server. The higher the speed of the game server, the faster all buildings are built, the studies and improvements in the smithies are carried out, the troops are quickly built and the productivity of all resources is increased.");
+define("CONF_SERV_TROOPSPEED","Troop Speed");
+define("CONF_SERV_TROOPSPEED_TOOLTIP","Speed of movement of troops on the game server. The higher this indicator, the faster the troops move across the map.");
+define("CONF_SERV_EVASIONSPEED","Evasion Speed");
+define("CONF_SERV_EVASIONSPEED_TOOLTIP","The evasion speed is the time that troops spend on the road to return home after evasion an attack.");
+define("CONF_SERV_STORMULTIPLER","Storage Multipler");
+define("CONF_SERV_STORMULTIPLER_TOOLTIP","A multiplier for the storage capacity warehouse and granary. The value 1 is equal to the capacity of 80,000 of each resource at the maximum level. If you set the value to 2, then the capacity at the maximum level will be 160,000 of each resource.");
+define("CONF_SERV_TRADCAPACITY","Trader Capacity");
+define("CONF_SERV_TRADCAPACITY_TOOLTIP","A multiplier for the capacity of resources that can be carried by one trader. The value of 1 equals 500 capacity for the Romans, 750 for the Gauls, 1000 for the Teutons. If you set the value to 2, then the capacity of the transferred resources will double accordingly, 1000, 1500, 2000.");
+define("CONF_SERV_CRANCAPACITY","Cranny Capacity");
+define("CONF_SERV_CRANCAPACITY_TOOLTIP","A multiplier for the capacity of resources in Cranny, which can be saved from robbery. The value of 1 is equal to 1000 for Romans and Teutons, 2000 for Gauls. If you set the value to 2, then the capacity of the Cranny will double to 2000 and 4000 respectively.");
+define("CONF_SERV_TRAPCAPACITY","Trapper Capacity");
+define("CONF_SERV_TRAPCAPACITY_TOOLTIP","A multiplier for the capacity of the trap of the Gauls, which can capture enemy soldiers even before attacking the village. The value of 1 is equal to the capacity of 400 at the 20 level of construction. If you set the value to 2, then the capacity will be 800.");
+define("CONF_SERV_NATUNITSMULTIPLIER","Natars Units Multiplier");
+define("CONF_SERV_NATUNITSMULTIPLIER_TOOLTIP","At the moment, this parameter is responsible for the number of scouts of Natars, who will come to the scouting of the capital of each player, after the creation of the account of Natars. The multiplier of the created troops in the village is taken from the speed of the server and can not exceed 5.");
+define("CONF_SERV_MAPSIZE","Map Size");
+define("CONF_SERV_MAPSIZE_TOOLTIP","The size of the map of the game world. Can not be changed on an already installed game server.");
+define("CONF_SERV_VILLEXPSPEED","Village Expanding Speed");
+define("CONF_SERV_VILLEXPSPEED_TOOLTIP","Speed, which affects the expansion of the empire. With a slow speed more culture points are needed to found new village, with a fast speed the required number of culture points is reduced.");
+define("CONF_SERV_BEGINPROTECT","Beginners Protection");
+define("CONF_SERV_BEGINPROTECT_TOOLTIP","Protection, which prohibits a certain time to attack the villages of new players.");
+define("CONF_SERV_REGOPEN","Register Open");
+define("CONF_SERV_REGOPEN_TOOLTIP","Allows to enable (True) or disable (False) the registration of players on the game server.");
+define("CONF_SERV_ACTIVMAIL","Activation Mail");
+define("CONF_SERV_ACTIVMAIL_TOOLTIP","If enabled, during registration it will be necessary to confirm email address. If disabled does not require confirmation of e-mail.");
+define("CONF_SERV_QUEST","Quest");
+define("CONF_SERV_QUEST_TOOLTIP","Enable or disable the quest on the game server.");
+define("CONF_SERV_QTYPE","Quest Type");
+define("CONF_SERV_QTYPE_TOOLTIP","The quest type can be official which is a bit shorter, and extended which is longer.");
+define("CONF_SERV_DLR","Demolish - Level required");
+define("CONF_SERV_DLR_TOOLTIP","The required level of the main building, on which can carry out the demolition of buildings in the village.");
+define("CONF_SERV_WWSTATS","World Wonder - Statistics");
+define("CONF_SERV_WWSTATS_TOOLTIP","Enable or disable the display in the statistics of villages with a Wonder of the World.");
+define("CONF_SERV_NTRTIME","Nature Troops Regeneration Time");
+define("CONF_SERV_NTRTIME_TOOLTIP","Time through which the nature troops will be restored in oases.");
+define("CONF_SERV_MEDALINTERVAL","Medal Interval");
+define("CONF_SERV_MEDALINTERVAL_TOOLTIP","The time interval for issuing medals for the top players and alliances. If this parameter is changed on the installed server, the time interval changes after the subsequent issuance of the medals.");
+define("CONF_SERV_TOURNTHRES","Tourn Threshold");
+define("CONF_SERV_TOURNTHRES_TOOLTIP","The number of squares on the game map, after which Tournament Square will start working.");
+define("CONF_SERV_GWORKSHOP","Great Workshop");
+define("CONF_SERV_GWORKSHOP_TOOLTIP","Enable (True) or disable (False) the use of a Great Workshop in the game.");
+define("CONF_SERV_NATARSTAT","Show Natars in Statistics");
+define("CONF_SERV_NATARSTAT_TOOLTIP","Enable (True) or disable (False) the display of the Natars account in statistics.");
+define("CONF_SERV_PEACESYST","Peace system");
+define("CONF_SERV_PEACESYST_TOOLTIP","Enable or disable the Peace system. When the peace system is activated, players will be able to attack each other but instead of any actions in the reports there will be a congratulatory inscription. The troops will not die of hunger.");
+define("CONF_SERV_GRAPHICPACK","Graphic Pack");
+define("CONF_SERV_GRAPHICPACK_TOOLTIP","Enable (Yes) or disable (No) the ability to use the graphics package.");
+define("CONF_SERV_ERRORREPORT","Error Reporting");
+define("CONF_SERV_ERRORREPORT_TOOLTIP","Enable (Yes) or disable (No) the display of error reports on the game server.");
+
+//Admin setting - Admin/Templates/config.tpl & editPlusSet.tpl
+
+
 /*
 |--------------------------------------------------------------------------
 |   Index

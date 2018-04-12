@@ -18,27 +18,27 @@ function refresh(tz) {
 	document.getElementById('tz').innerHTML=tz;
 }
 </script>
-<h2><center>Server Configuration</center></h2>
+<h2><center><?php echo SERV_CONFIG ?></center></h2>
 	<form action="../GameEngine/Admin/Mods/editServerSet.php" method="POST">
 		<input type="hidden" name="id" id="id" value="<?php echo $_SESSION['id']; ?>">
 			<br />
 			<table id="profile" cellpadding="0" cellspacing="0">
 				<thead>
 					<tr>
-						<th colspan="2">Edit Server Setting</th>
+						<th colspan="2"><?php echo EDIT_SERV_SETT ?></th>
 					</tr>
 				</thead>
 				<tbody>
 				<tr>
-					<td width="50%">Server Name</td>
+					<td width="50%"><?php echo CONF_SERV_NAME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NAME_TOOLTIP ?></span></em></td>
 					<td width="50%"><input class="fm" name="servername" value="<?php echo SERVER_NAME;?>" style="width: 70%;"></td>
 				</tr>
 				<tr>
-					<td>Server Started</td>
+					<td><?php echo CONF_SERV_STARTED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_STARTED_TOOLTIP ?></span></em></td>
 					<td><?php echo "Date:".START_DATE." Time:".START_TIME;?></td>
 				</tr>
 					<tr>
-						<td>Server Timezone</td>
+						<td><?php echo CONF_SERV_TIMEZONE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_TIMEZONE_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="tzone" onChange="refresh(this.value)">
 								<option value="Africa/Dakar" <?php if (TIMEZONE=="Africa/Dakar") echo "selected";?>>Africa</option>
@@ -57,7 +57,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-                        <td>Language</td>
+                        <td><?php echo CONF_SERV_LANG ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_LANG_TOOLTIP ?></span></em></td>
                         <td>
                             <select name="lang">
                                 <option value="en" <?php if (LANG=="en") echo "selected";?>>English</option>
@@ -70,42 +70,42 @@ function refresh(tz) {
                         </td>
 					</tr>
 					<tr>
-						<td>Server Speed</td>
+						<td><?php echo CONF_SERV_SERVSPEED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_SERVSPEED_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="speed" value="<?php echo SPEED;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Troop Speed</td>
+						<td><?php echo CONF_SERV_TROOPSPEED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_TROOPSPEED_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="incspeed" value="<?php echo INCREASE_SPEED;?>" style="width: 20%;"></td>
 					</tr>
-						<td>Evasion Speed</td>
+						<td><?php echo CONF_SERV_EVASIONSPEED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_EVASIONSPEED_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="evasionspeed" value="<?php echo EVASION_SPEED;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Storage Multipler</td>
+						<td><?php echo CONF_SERV_STORMULTIPLER ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_STORMULTIPLER_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="storage_multiplier" value="<?php echo STORAGE_MULTIPLIER;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Trader Capacity</td>
+						<td><?php echo CONF_SERV_TRADCAPACITY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_TRADCAPACITY_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="tradercap" value="<?php echo TRADER_CAPACITY;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Cranny Capacity</td>
+						<td><?php echo CONF_SERV_CRANCAPACITY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_CRANCAPACITY_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="crannycap" value="<?php echo CRANNY_CAPACITY;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Trapper Capacity</td>
+						<td><?php echo CONF_SERV_TRAPCAPACITY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_TRAPCAPACITY_TOOLTIP ?></td>
 						<td><input class="fm" name="trappercap" value="<?php echo TRAPPER_CAPACITY;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Natars Units Multiplier</td>
+						<td><?php echo CONF_SERV_NATUNITSMULTIPLIER ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATUNITSMULTIPLIER_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="natars_units" value="<?php echo NATARS_UNITS;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Map Size</td>
+						<td><?php echo CONF_SERV_MAPSIZE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_MAPSIZE_TOOLTIP ?></span></em></td>
 						<td><?php echo WORLD_MAX;?>x<?php echo WORLD_MAX;?></td>
 					</tr>
 					<tr>
-						<td>Village Expanding Speed</td>
+						<td><?php echo CONF_SERV_VILLEXPSPEED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_VILLEXPSPEED_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="village_expand">
 								<option value="1" <?php if (CP=="1") echo "selected";?>>Slow</option>
@@ -114,7 +114,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Beginners Protection</td>
+						<td><?php echo CONF_SERV_BEGINPROTECT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_BEGINPROTECT_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="beginner">
 								<option value="7200" <?php if (PROTECTION=="7200") echo "selected";?>>2 hours</option>
@@ -131,7 +131,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Register Open</td>
+						<td><?php echo CONF_SERV_REGOPEN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_REGOPEN_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="reg_open">
 								<option value="True" <?php if(REG_OPEN==true) echo "selected";?>>True</option>
@@ -140,7 +140,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Activation Mail</td>
+						<td><?php echo CONF_SERV_ACTIVMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_ACTIVMAIL_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="activate">
 								<option value="true" <?php if (AUTH_EMAIL==true) echo "selected";?>>Yes</option>
@@ -149,7 +149,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Quest</td>
+						<td><?php echo CONF_SERV_QUEST ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_QUEST_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="quest">
 								<option value="true" <?php if(QUEST == true) echo "selected";?>>Yes</option>
@@ -158,7 +158,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Quest Type</td>
+						<td><?php echo CONF_SERV_QTYPE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_QTYPE_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="qtype">
 								<option value="25" <?php if(QTYPE == 25) echo "selected";?>>Travian Official</option>
@@ -167,7 +167,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Demolish - Level required</td>
+						<td><?php echo CONF_SERV_DLR ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_DLR_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="demolish">
 								<option value="5" <?php if(DEMOLISH_LEVEL_REQ == "5") echo "selected";?>>5</option>
@@ -178,7 +178,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>World Wonder - Statistics</td>
+						<td><?php echo CONF_SERV_WWSTATS ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_WWSTATS_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="ww">
 								<option value="True" <?php if(WW == true) echo "selected";?>>True</option>
@@ -186,7 +186,7 @@ function refresh(tz) {
 							</select>
 					</tr>
 					<tr>
-						<td>Nature Troops Regeneration Time</td>
+						<td><?php echo CONF_SERV_NTRTIME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NTRTIME_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="nature_regtime">
 								<option value="28800" <?php if(NATURE_REGTIME==28800) echo "selected";?>>8 hours</option>
@@ -200,7 +200,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Medal Interval</td>
+						<td><?php echo CONF_SERV_MEDALINTERVAL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_MEDALINTERVAL_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="medalinterval">
 								<option value="0" <?php if(MEDALINTERVAL==0) echo "selected";?>>none</option>
@@ -215,11 +215,11 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Tourn Threshold</td>
+						<td><?php echo CONF_SERV_TOURNTHRES ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_TOURNTHRES_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="ts_threshold" value="<?php echo TS_THRESHOLD;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
-						<td>Great Workshop</td>
+						<td><?php echo CONF_SERV_GWORKSHOP ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GWORKSHOP_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="great_wks">
 								<option value="True" <?php if(GREAT_WKS==true) echo "selected";?>>True</option>
@@ -228,7 +228,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Show Natars in Statistics</td>
+						<td><?php echo CONF_SERV_NATARSTAT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATARSTAT_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="show_natars">
 								<option value="True" <?php if(SHOW_NATARS==true) echo "selected";?>>True</option>
@@ -237,7 +237,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Peace System</td>
+						<td><?php echo CONF_SERV_PEACESYST ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_PEACESYST_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="peace">
 								<option value="0" <?php if(PEACE==0) echo "selected";?>>None</option>
@@ -249,7 +249,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Graphic Pack</td>
+						<td><?php echo CONF_SERV_GRAPHICPACK ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_GRAPHICPACK_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="gpack">
 								<option value="true" <?php if(GP_ENABLE==true) echo "selected";?>>Yes</option>
@@ -258,7 +258,7 @@ function refresh(tz) {
 						</td>
 					</tr>
 					<tr>
-						<td>Error Reporting</td>
+						<td><?php echo CONF_SERV_ERRORREPORT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_ERRORREPORT_TOOLTIP ?></span></em></td>
 						<td><select name="error">
 							<option value="error_reporting (E_ALL ^ E_NOTICE);" <?php if(ERROR_REPORT=="error_reporting (E_ALL ^ E_NOTICE);") echo "selected";?>>Yes</option>
 							<option value="error_reporting (0);" <?php if(ERROR_REPORT=="error_reporting (0);") echo "selected";?>>No</option>
