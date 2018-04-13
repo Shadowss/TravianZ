@@ -13,7 +13,7 @@ $tribe1 = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."u
 $tribe2 = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE tribe = 2");
 $tribe3 = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE tribe = 3");
 $tribes = Array(mysqli_num_rows($tribe1),mysqli_num_rows($tribe2),mysqli_num_rows($tribe3));
-$users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users")) - 1;
+$users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE tribe > 0 AND tribe < 4"));
 ?>
 
 <br /><br />
@@ -73,17 +73,17 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM
 			<tr>
 				<td>Romans</td>
 				<td><?php echo $tribes[0]; ?></td>
-				<td><?php $percents = 100*($tribes[0] / $users); echo $percents = intval ($percents); echo "%"; ?></td>
+				<td><?php echo ($users > 0) ? ($percents[0] = round(100 * ($tribes[0] / $users), 2))."%" : "---"; ?></td>
 			</tr>
 			<tr>
 				<td>Teutons</td>
 				<td><?php echo $tribes[1]; ?></td>
-				<td><?php $percents = 100*($tribes[1] / $users); echo $percents = intval ($percents); echo "%";?></td>
+				<td><?php echo ($users > 0) ? ($percents[1] = round(100 * ($tribes[1] / $users), 2))."%" : "---"; ?></td>
 			</tr>
 			<tr>
 				<td>Gauls</td>
 				<td><?php echo $tribes[2]; ?></td>
-				<td><?php $percents = 100*($tribes[2] / $users); echo $percents = intval ($percents); echo "%"; ?></td>
+				<td><?php echo ($users > 0) ? (100-$percents[0]-$percents[1])."%" : "---"; ?></td>
 			</tr>
 		</tbody>
 	</table>

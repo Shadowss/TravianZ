@@ -13,7 +13,7 @@
    $tribe2 = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 2"), MYSQLI_ASSOC);
    $tribe3 = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE tribe = 3"), MYSQLI_ASSOC);
    $tribes = array($tribe1['Total'], $tribe2['Total'], $tribe3['Total']);
-   $users = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE tribe!=0 AND tribe!=4 AND tribe!=5"), MYSQLI_ASSOC);
+   $users = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE tribe > 0 AND tribe < 4"), MYSQLI_ASSOC);
    $users = $users['Total'];
 ?>
 
@@ -74,55 +74,19 @@
             <tr>
                 <td>Romans</td>
 
-                <td><?php
-                   echo $tribes[0]; ?></td>
-
-                <td>
-		    <?php
-		    if($users > 0){
-                    $percents = 100 * (($tribes[0]) / $users);
-                    echo $percents = intval($percents);
-                    echo "%";
-		    }else{
-		    echo '---';
-		    }
-		    ?>
-
-		</td>
+                <td><?php echo $tribes[0]; ?></td>
+				<td><?php echo ($users > 0) ? ($percents[0] = round(100 * ($tribes[0] / $users), 2))."%" : '---'; ?></td>
             </tr>
-
             <tr>
                 <td>Teutons</td>
 
-                <td><?php
-                   echo $tribes[1]; ?></td>
-
-                <td><?php
-		    if($users > 0){
-                    $percents = 100 * ($tribes[1] / $users);
-                    echo $percents = intval($percents);
-                    echo "%";
-		    }else{
-		    echo '---';
-		    }
-		    ?></td>
+                <td><?php echo $tribes[1]; ?></td>
+				<td><?php echo ($users > 0) ? ($percents[1] = round(100 * ($tribes[1] / $users), 2))."%" : "---"; ?></td>
             </tr>
-
             <tr>
                 <td>Gauls</td>
-
-                <td><?php
-                   echo $tribes[2]; ?></td>
-
-                <td><?php
-		    if($users > 0){
-                    $percents = 100 * ($tribes[2] / $users);
-                   echo $percents = intval($percents);
-                    echo "%";
-		    }else{
-		    echo '---';
-		    }
-		    ?></td>
+                <td><?php echo $tribes[2]; ?></td>
+                <td><?php echo ($users > 0) ? (100-$percents[0]-$percents[1])."%" : '---'; ?></td>
             </tr>
         </tbody>
     </table>

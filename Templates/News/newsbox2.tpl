@@ -53,10 +53,7 @@ $online = mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_P
 </tr>
 <tr>
 <td><b>Peace system</b></td>
-<td><b>: <font color="Red"><?php
-			$peace_array=array("None","Normal","Christmas","New Year","Easter");
-			echo $peace_array[intval(PEACE)];
-			?></font></b></td>
+<td><b>: <font color="Red"><?php echo (["None", "Normal", "Christmas", "New Year", "Easter"])[PEACE]; ?></font></b></td>
 </tr>
 </table>
 </div>
