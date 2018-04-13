@@ -51,5 +51,12 @@ $online = mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_P
 <td><b>Server Start</b></td>
 <td><b>: <font color="Red"><?php echo START_DATE;?></font></b></td>
 </tr>
+<tr>
+<td><b>Peace system</b></td>
+<td><b>: <font color="Red"><?php
+			$peace_array=array("None","Normal","Christmas","New Year","Easter");
+			echo $peace_array[intval(PEACE)];
+			?></font></b></td>
+</tr>
 </table>
 </div>

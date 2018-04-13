@@ -53,6 +53,13 @@ $top_rank = mysqli_fetch_assoc(mysqli_query($database->dblink,"SELECT username F
 <td><b>: <font color="Red"><?php echo START_DATE;?></font></b></td>
 </tr>
 <tr>
+<td><b>Peace system</b></td>
+<td><b>: <font color="Red"><?php
+			$peace_array=array("None","Normal","Christmas","New Year","Easter");
+			echo $peace_array[intval(PEACE)];
+			?></font></b></td>
+</tr>
+<tr>
 <td><b>Best Player</td>
 <td><b>:  <font color="Red"><?php echo $top_rank['username'] ?></font></b></td>
 </tr>

@@ -173,7 +173,7 @@ function refresh(tz) {
 								<option value="5" <?php if(DEMOLISH_LEVEL_REQ == "5") echo "selected";?>>5</option>
 								<option value="10" <?php if(DEMOLISH_LEVEL_REQ == "10") echo "selected";?>>10 - Default</option>
 								<option value="15" <?php if(DEMOLISH_LEVEL_REQ == "15") echo "selected";?>>15</option>
-								<option value="20"> <?php if(DEMOLISH_LEVEL_REQ == "20") echo "selected";?>20</option>
+								<option value="20" <?php if(DEMOLISH_LEVEL_REQ == "20") echo "selected";?>>20</option>
 							</select>
 						</td>
 					</tr>
