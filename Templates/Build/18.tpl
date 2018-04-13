@@ -22,7 +22,7 @@ echo "
 	<tr>
 		<th>".NAME."</th>
 		<td>".$alliance->allianceArray['name']."</td>
-
+        <span class=\"error\">".$form->getError("ally3")."</span>
 	</tr>
 	<tr>
 		<td class=\"empty\" colspan=\"2\"></td>
@@ -36,7 +36,6 @@ echo "
     ?>
 <table cellpadding="1" cellspacing="1" id="join">
 <form method="post" action="build.php">
-<input type="hidden" name="id" value="<?php echo $id ?>">
 <input type="hidden" name="a" value="2">
 
 <thead><tr>
@@ -56,6 +55,7 @@ echo "
         }
         ?>
 	</tr></tbody></table>
+	<p class="error"><?php echo $form->getError("ally4"); ?></p>
     <?php
         if($alliance->gotInvite) {
         echo "<p class=\"error2\" style=\"color: #DD0000\">".$form->getError("ally_accept")."</p>";

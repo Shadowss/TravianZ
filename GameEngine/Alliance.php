@@ -182,7 +182,7 @@ class Alliance {
 					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has rejected the invitation.');
 				}
 			}
-			    header("Location: build.php?id=".$get['id']);
+			    header("Location: build.php?gid=18");
 			    exit;
 			}else{
 			    header("Location: banned.php");
@@ -241,7 +241,7 @@ class Alliance {
     			if($accept_error == 1){
     			    $form->addError("ally_accept", "The alliance can contain only ".$max." members at this moment.");
     			}else{
-    			    header("Location: build.php?id=" . $get['id']);
+    			    header("Location: build.php?gid=18");
     			    exit;
     			}
 			} else{
@@ -254,7 +254,7 @@ class Alliance {
 		Function to create an alliance
 		*****************************************/
 		private function createAlliance($post) {
-			global $form, $database, $session, $bid18, $village;
+			global $form, $database, $session, $bid18, $building;
 			if($session->access != BANNED){
 			if(!isset($post['ally1']) || $post['ally1'] == "") {
 				$form->addError("ally1", ATAG_EMPTY);
@@ -268,14 +268,20 @@ class Alliance {
 			if($database->aExist($post['ally2'], "name")) {
 				$form->addError("ally2", ANAME_EXIST);
 			}
+			if($session->alliance != 0){
+			    $form->addError("ally3", ALREADY_ALLY_MEMBER);
+			}
+			if($building->getTypeLevel(18) < 3){
+			    $form->addError("ally4", ALLY_TOO_LOW);
+			}
 			if($form->returnErrors() != 0) {
 				$_SESSION['errorarray'] = $form->getErrors();
 				$_SESSION['valuearray'] = $post;
-
-				header("Location: build.php?id=" . $post['id']);
+				if($building->getTypeLevel(18) > 0) header("Location: build.php?gid=18");
+				else header("Location: dorf2.php");
 				exit;
 			} else {
-				$max = $bid18[$village->resarray['f' . $post['id']]]['attri'];
+				$max = $bid18[$building->getTypeLevel(18)]['attri'];
 				$aid = $database->createAlliance($post['ally1'], $post['ally2'], $session->uid, $max);
 				$database->updateUserField($session->uid, "alliance", $aid, 1);
 				$database->procAllyPop($aid);
@@ -283,7 +289,7 @@ class Alliance {
 				$database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
 				// log the notice
 				$database->insertAlliNotice($aid, 'The alliance has been founded by <a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>.');
-				header("Location: build.php?id=" . $post['id']);
+				header("Location: build.php?gid=18");
 				exit;
 			}
 			}else{

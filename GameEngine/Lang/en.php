@@ -71,6 +71,8 @@ define("ATAG_EMPTY","Tag empty");
 define("ANAME_EMPTY","Name empty");
 define("ATAG_EXIST","Tag taken");
 define("ANAME_EXIST","Name taken");
+define("ALREADY_ALLY_MEMBER","You're already in an alliance");
+define("ALLY_TOO_LOW", "You must have a level 3 or greater alliance");
 define("NOT_OPENED_YET","Server not started yet.");
 define("REGISTER_CLOSED","The register is closed. You can't register to this server.");
 define("NAME_EMPTY","Please insert name");
