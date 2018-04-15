@@ -1,7 +1,5 @@
 <?php
-$prefix = "".TB_PREFIX."ndata";
-$limit = "ntype!=1 AND ntype!=2 AND ntype!=3 AND ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17 AND ntype!=18 AND ntype!=19";
-$sql = mysqli_query($database->dblink,"SELECT * FROM $prefix WHERE ally = ".(int) $session->alliance." AND $limit ORDER BY time DESC LIMIT 20");
+$sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype < 1 OR ntype > 3 AND ntype < 8 OR ntype > 19)  ORDER BY time DESC LIMIT 20");
 $query = mysqli_num_rows($sql);
 $outputList = '';
 $name = 1;
@@ -42,8 +40,8 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
     $outputList .= $database->getUserField($dataarray[0], "username", 0);
        
     $outputList .= $nn;
-    $outputList .= $database->getUserField($dataarray[28], "username", 0);
-    $getUserAlly = $database->getUserField($dataarray[0], "alliance", 0);
+    $outputList .= $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "username", 0);
+    $getUserAlly = $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "alliance", 0);
     $getAllyName = $database->getAllianceName($getUserAlly);
     
     if($getUserAlly==$session->alliance || !$getUserAlly){

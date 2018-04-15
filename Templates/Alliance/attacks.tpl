@@ -9,11 +9,11 @@ include("alli_menu.tpl");
 <h4 class="chartHeadline">Military events</h4>
 		<div id="submenu">
 			<a href="allianz.php?s=3&f=32">
-				<img src="img/x.gif" class="btn_def" alt="Defender" title="Defender" />
+				<img src="img/x.gif" class="<?php echo $_GET['f'] == 32 ? "active btn_def" : "btn_def";?>" alt="Defender" title="Defender" />
 			</a>
 
 			<a href="allianz.php?s=3&f=31">
-				<img src="img/x.gif" class="btn_off" alt="Attacker" title="Attacker" />
+				<img src="img/x.gif" class="<?php echo $_GET['f'] == 31 ? "active btn_off" : "btn_off";?>" alt="Attacker" title="Attacker" />
 			</a>
 		</div>
 <?php
@@ -83,7 +83,7 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
 	}else if($ntype==1 or $ntype==2 or $ntype==3 or $ntype==18 or $ntype==19){ 
 	    $getUserAlly = $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "alliance", 0);
     }else{
-    	$getUserAlly = $database->getUserField($dataarray[0], "alliance", 0);
+        $getUserAlly = $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "alliance", 0);
     }
     $getAllyName = $database->getAllianceName($getUserAlly);
     
