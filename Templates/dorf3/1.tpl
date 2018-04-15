@@ -13,7 +13,9 @@
 		$vid = $vil['wref'];
 		$vdata = $database->getVillage($vid);
 		$jobs = $database->getJobs($vid);
-		$unit = $database->getTraining($vid);
+		$units = $database->getTraining($vid);
+		$unitsArray = [];
+		foreach($units as $unit) $unitsArray[$unit['unit']] += $unit['amt'];
 		$totalmerchants = $building->getTypeLevel(17,$vid);
 		$availmerchants = $totalmerchants - $database->totalMerchantUsed($vid);
 		$incoming_attacks = $database->getMovement(3,$vid,1);
@@ -35,10 +37,10 @@
 		foreach($jobs as $b){
 			$bui .= '<a href="build.php?newdid='.$vid.'&id='.$b['field'].'"><img class="bau" src="img/x.gif" title="'.$building->procResType($b['type']).'" alt="'.$building->procResType($b['type']).'"></a>';
 		}	
-		foreach($unit as $c){
-			$gid = in_array($c['unit'],$unitsbytype['infantry'])?19:(in_array($c['unit'],$unitsbytype['cavalry'])?20:(in_array($c['unit'],$unitsbytype['siege'])?21:(in_array(($c['unit']-60),$unitsbytype['infantry'])?29:(in_array(($c['unit']-60),$unitsbytype['cavalry'])?30:($building->getTypeLevel(26)>0?26:25)))));
-			if($c['unit'] > 60) { $c['unit'] -= 60; }
-			$tro .= '<a href="build.php?newdid='.$vid.'&gid='.$gid.'"><img class="unit u'.$c['unit'].'" src="img/x.gif" title="'.$c['amt'].'x '.$technology->getUnitName($c['unit']).'" alt="'.$c['amt'].'x '.$technology->getUnitName($c['unit']).'"></a>';
+		foreach($unitsArray as $key => $c){
+			$gid = in_array($key, $unitsbytype['infantry'])?19:(in_array($key, $unitsbytype['cavalry'])?20:(in_array($key, $unitsbytype['siege'])?21:(in_array(($key-60), $unitsbytype['infantry'])?29:(in_array(($key-60), $unitsbytype['cavalry'])?30:($building->getTypeLevel(26)>0?26:25)))));
+			if($key > 60) { $key -= 60; }
+			$tro .= '<a href="build.php?newdid='.$vid.'&gid='.$gid.'"><img class="unit u'.$key.'" src="img/x.gif" title="'.$c.'x '.$technology->getUnitName($key).'" alt="'.$c.'x '.$technology->getUnitName($key).'"></a>';
 		}
 		if($vdata['capital'] == 1) { $class = 'hl'; } else {$class = ''; }
 
