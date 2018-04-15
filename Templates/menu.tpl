@@ -103,7 +103,6 @@ div.c1 {text-align: center}
         include("Templates/quest.tpl");
         include("Templates/news.tpl");
         include("Templates/multivillage.tpl");
-        include("Templates/links.tpl");
         ?>
     </div>
 
