@@ -22,9 +22,7 @@ include("alli_menu.tpl");
     }elseif($_GET['f']==32){
 		include "Templates/Alliance/attack-defender.tpl";
     }else{
-$prefix = "".TB_PREFIX."ndata";
-$limit = "ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17";
-$sql = mysqli_query($database->dblink,"SELECT * FROM $prefix WHERE ally = ".(int) $session->alliance." AND $limit ORDER BY time DESC LIMIT 20");
+$sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype < 8 OR ntype > 17) ORDER BY time DESC LIMIT 20");
 $query = mysqli_num_rows($sql);
 $outputList = '';
 $name = 1;
@@ -65,25 +63,25 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
     $outputList .= $database->getUserField($dataarray[0], "username", 0);
        
     $outputList .= $nn;
-    $outputList .= $database->getUserField($dataarray[28], "username", 0);
+    $outputList .= $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "username", 0);
 	if($ntype==0){ 
 	$isoasis = $database->isVillageOases($toWref);
 	if($isoasis == 0){
 	if($toWref != $village->wid){
-		$getUser = $database->getVillageField($toWref,owner);
+		$getUser = $database->getVillageField($toWref, "owner");
 		}else{
 		$getUser = $database->getVillageField($dataarray[1], "owner");
 		}
     }else{
 	if($toWref != $village->wid){
-		$getUser = $database->getOasisField($toWref,owner);
+		$getUser = $database->getOasisField($toWref, "owner");
 		}else{
 		$getUser = $database->getOasisField($dataarray[1], "owner");
 		}
 	}
 	$getUserAlly = $database->getUserField($getUser, "alliance", 0);
 	}else if($ntype==1 or $ntype==2 or $ntype==3 or $ntype==18 or $ntype==19){ 
-    	$getUserAlly = $database->getUserField($dataarray[28], "alliance", 0);
+	    $getUserAlly = $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "alliance", 0);
     }else{
     	$getUserAlly = $database->getUserField($dataarray[0], "alliance", 0);
     }
