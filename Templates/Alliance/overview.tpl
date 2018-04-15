@@ -1,10 +1,7 @@
 ﻿<?php
-if(isset($_GET['aid'])) {
-$aid = $_GET['aid'];
-}
-else {
-$aid = $session->alliance;
-}
+if(isset($_GET['aid'])) $aid = $_GET['aid'];
+else $aid = $session->alliance;
+
 $varmedal = $database->getProfileMedalAlly($aid);
 
 $allianceinfo = $database->getAlliance($aid);

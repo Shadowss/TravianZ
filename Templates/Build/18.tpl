@@ -47,7 +47,7 @@ echo "
     	foreach($alliance->inviteArray as $invite) {
         	 echo "<td class=\"abo\"><a href=\"build.php?id=".$id."&a=2&d=".$invite['id']."\"><img class=\"del\" src=\"img/x.gif\" alt=\"refuse\" title=\"".REFUSE."\" /></a></td>
         <td class=\"nam\"><a href=\"allianz.php?aid=".$invite['alliance']."\">&nbsp;".$database->getAllianceName($invite['alliance'])."</a></td>
-        <td class=\"acc\"><a href=\"build.php?id=".$id."&a=3&d=".$invite['id']."\">&nbsp;".ACCEPT."</a></td><tr>";
+        <td class=\"acc\"><a href=\"build.php?id=".$id."&a=3&d=".$invite['id']."\">&nbsp;".ACCEPT."</a></td>";
         }
         }
     else {

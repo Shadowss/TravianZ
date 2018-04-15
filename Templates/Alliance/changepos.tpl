@@ -1,14 +1,24 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
+if($database->getUserField($_POST['a_user'], "alliance", 0) != $session->alliance)
+{
+    $form->addError("perm", USER_NOT_IN_YOUR_ALLY);   
 }
-else {
-$aid = $session->alliance;
-}
-$playerData = $database->getAlliPermissions($_POST['a_user'], $session->alliance);
-$playername = $database->getUserField($_POST['a_user'],'username',0);
+elseif($_POST['a_user'] == $session->uid) $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS); 
 
+if($form->returnErrors() > 0)
+{
+    $_SESSION['errorarray'] = $form->getErrors();
+    $_SESSION['valuearray'] = $_POST;
+    header("Location: allianz.php?s=5");
+    exit;
+}
+
+if(!isset($aid)) $aid = $session->alliance;
+
+$playerData = $database->getAlliPermissions($_POST['a_user'], $aid);
+$playername = $database->getUserField($_POST['a_user'],'username',0);
 $allianceinfo = $database->getAlliance($aid);
+
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
 ?>

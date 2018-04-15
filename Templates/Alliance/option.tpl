@@ -1,17 +1,16 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
+if(!isset($aid)) $aid = $session->alliance;
+
 $allianceinfo = $database->getAlliance($aid);
+
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
-include("alli_menu.tpl"); 
+include_once("alli_menu.tpl"); 
 ?>
-<table cellpadding="1" cellspacing="1" id="options" class="small_option"><thead>
+<p class="error"><?php echo $form->getError("perm"); ?></p>
 <form method="POST" action="allianz.php">
 <input type="hidden" name="s" value="5">
+<table cellpadding="1" cellspacing="1" id="options" class="small_option">
+<thead>
 <tr>
 <th colspan="2">Options</th>
 </tr></thead><tbody>
@@ -82,4 +81,4 @@ if ($alliance->userPermArray['opt5']==1){
         </tbody>
 	</table>
 
-	<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" onclick="this.disabled=true;this.form.submit();"/></form></p>
+	<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" onclick="this.disabled=true;this.form.submit();"/></p></form>

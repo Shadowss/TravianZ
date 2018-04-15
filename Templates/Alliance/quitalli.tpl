@@ -1,10 +1,6 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
+if(!isset($aid)) $aid = $session->alliance;
+
 $allianceinfo = $database->getAlliance($aid);
 $isOwner      = ($aid && $database->isAllianceOwner($session->uid) == $aid);
 
@@ -15,13 +11,12 @@ if ($isOwner) {
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
 ?>
-<table cellpadding="1" cellspacing="1" id="quit" class="small_option"><thead>
-
 <form method="post" action="allianz.php">
 <input type="hidden" name="a" value="11">
 <input type="hidden" name="o" value="11">
 <input type="hidden" name="s" value="5">
 
+<table cellpadding="1" cellspacing="1" id="quit" class="small_option"><thead>
 <tr>
 <th colspan="2">Quit alliance</th>
 </tr>
@@ -80,6 +75,7 @@ include("alli_menu.tpl");
 		</th>
 	<td>
 		<input class="pass text" type="password" name="pw" maxlength="20">
+		<span class="error3"><?php echo $form->getError("pw"); ?></span>
 	</td>
 </tr>
 </tbody>
@@ -99,3 +95,4 @@ include("alli_menu.tpl");
     ?>
 
 <p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
+<p class="error"><?php echo $form->getError("founder"); ?></p>

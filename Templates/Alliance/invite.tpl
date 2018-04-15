@@ -1,23 +1,18 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
+if(!isset($aid)) $aid = $session->alliance;
+
 $allianceinfo = $database->getAlliance($aid);
 $allianceInvitations = $database->getAliInvitations($aid);
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
 ?>
 
-<table cellpadding="1" cellspacing="1" id="invite" class="small_option"><thead>
-
 <form method="post" action="allianz.php">
 <input type="hidden" name="s" value="5">
 <input type="hidden" name="o" value="4">
 <input type="hidden" name="a" value="4">
 
+<table cellpadding="1" cellspacing="1" id="invite" class="small_option"><thead>
 <tr>
 <th colspan="2">Invite a player into the alliance</th>
 </tr>

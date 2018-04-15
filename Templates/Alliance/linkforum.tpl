@@ -1,10 +1,6 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
+if(!isset($aid)) $aid = $session->alliance;
+
 $allianceinfo = $database->getAlliance($aid);
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
@@ -13,7 +9,7 @@ include("alli_menu.tpl");
 <input type="hidden" name="a" value="5">
 <input type="hidden" name="o" value="5">
 <input type="hidden" name="s" value="5">
-
+<table cellpadding="1" cellspacing="1"><thead>
 <tr>
 <th colspan="2">Link to the forum</th>
 </tr>
@@ -21,7 +17,8 @@ include("alli_menu.tpl");
 </thead><tbody>
 
 <tr><th>URL</th>
-<td><input class="link text" type="text" name="f_link" value="<?php echo $allianceinfo['forumlink']; ?>" maxlength="200"></td>
+<td><input class="link text" type="text" name="f_link" value="<?php echo isset($_POST['f_link']) ? $_POST['f_link']  : ((string)($allianceinfo['forumlink']) != "0" ? $allianceinfo['forumlink'] : ""); ?>" maxlength="200">
+</td>
 </tr>
 
 <tr>
@@ -29,4 +26,5 @@ include("alli_menu.tpl");
 </tr></tbody>
 </table>
 
-<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
+<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p></form>
+<p class="error"><?php echo $form->getError("perm"); ?></p>

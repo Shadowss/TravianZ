@@ -1,12 +1,9 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
+if(!isset($aid)) $aid = $session->alliance;
+
 $memberlist = $database->getAllMember($aid);
 $allianceinfo = $database->getAlliance($aid);
+
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
 ?>
@@ -44,4 +41,4 @@ include("alli_menu.tpl");
 					<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" />
 				</p>
 			</form>
-			<p class="error"></p>
+			<p class="error"><?php echo $form->getError("perm"); ?></p>

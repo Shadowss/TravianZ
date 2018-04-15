@@ -16,11 +16,8 @@
 */
 
 
-    if(isset($aid)) {
-        $aid = $aid;
-    } else {
-        $aid = $session->alliance;
-    }
+    if(!isset($aid)) $aid = $session->alliance;
+
     $allianceinfo = $database->getAlliance($aid);
     echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
     include("alli_menu.tpl"); 
@@ -77,7 +74,7 @@
         <div id="box">
             <p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK"></p>
 
-            <p class="error"></p>
+            <p class="error"><?php echo $form->getError("name"); ?></p>
         </div>
     </form>
 
@@ -96,19 +93,11 @@
         $alliance = $session->alliance;
         
         if(count($database->diplomacyOwnOffers($alliance))){
-            foreach($database->diplomacyOwnOffers($alliance) as $key => $value){
-                if($value['type'] == 1){
-                    $type = "Conf.";
-                } else if($value['type'] == 2){
-                    $type = "Nap";
-                } else if($value['type'] == 3){
-                    $type = "War";
-                }
-                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="101"><input type="hidden" name="id" value="'.$value['id'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$value['alli2'].'"><center>'.$database->getAllianceName($value['alli2']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
+            foreach($database->diplomacyOwnOffers($alliance) as $row){
+                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="101"><input type="hidden" name="id" value="'.$row['id'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$row['alli2'].'"><center>'.$database->getAllianceName($row['alli2']).'</a></center></td><td width="80"><center>'.(["Conf", "Nap", "War"])[$row['type']-1].'</center></td></tr>';
             }   
-        } else {
-            echo '<tr><td colspan="3" class="none">none</td></tr>';
         }
+        else echo '<tr><td colspan="3" class="none">none</td></tr>';
         ?>
             </tr>
         </tbody>
@@ -136,24 +125,14 @@
         </thead>
        
         <tbody>
-             <?php 
-        unset($type);
+        <?php
         $alliance = $session->alliance;
-        
         if(($dInvites = $database->diplomacyInviteCheck($alliance)) && count($dInvites)){
-            foreach($dInvites as $key => $row){
-                if($row['type'] == 1){
-                    $type = "Conf.";
-                } else if($row['type'] == 2){
-                    $type = "Nap";
-                } else if($row['type'] == 3){
-                    $type = "War";
-                }
-                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="102"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli1" value="'.$row['alli1'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></td></form><form method="post" action="allianz.php"><td width="18"><input type="hidden" name="o" value="103"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli2'].'"><input type="hidden" name="type" value="'.$row['type'].'"><input type="image" class="accept" src="img/x.gif" title="Accept" /></td></form><td><a href="allianz.php?aid='.$row['alli1'].'"><center>'.$database->getAllianceName($row['alli1']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
+            foreach($dInvites as $row){
+                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="102"><input type="hidden" name="id" value="'.$row['id'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></td></form><form method="post" action="allianz.php"><td width="18"><input type="hidden" name="o" value="103"><input type="hidden" name="id" value="'.$row['id'].'"><input type="image" class="accept" src="img/x.gif" title="Accept" /></td></form><td><a href="allianz.php?aid='.$row['alli1'].'"><center>'.$database->getAllianceName($row['alli1']).'</a></center></td><td width="80"><center>'.(["Conf", "Nap", "War"])[$row['type']-1].'</center></td></tr>';
             }   
-        } else {
-            echo '<tr><td colspan="3" class="none">none</td></tr>';
-        }
+        } 
+        else echo '<tr><td colspan="3" class="none">none</td></tr>';
         ?>
         </tbody>
     </table>
@@ -166,37 +145,15 @@
         </thead>
 
         <tbody>
-             <?php 
-        unset($type);
-        unset($row);
+		<?php
         $alliance = $session->alliance;
         
         if(($rels = $database->diplomacyExistingRelationships($alliance)) && count($rels)){
-            foreach($rels as $key => $row){
-                if($row['type'] == 1){
-                    $type = "Conf.";
-                } else if($row['type'] == 2){
-                    $type = "Nap";
-                } else if($row['type'] == 3){
-                    $type = "War";
-                }
-                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli2'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$row['alli1'].'"><center>'.$database->getAllianceName($row['alli1']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
+            foreach($rels as $row){
+                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.($row['alli1'] == $session->alliance ? $row['alli2'] : $row['alli1']).'"><center>'.$database->getAllianceName(($row['alli1'] == $session->alliance ? $row['alli2'] : $row['alli1'])).'</a></center></td><td width="80"><center>'.(["Conf", "Nap", "War"])[$row['type']-1].'</center></td></tr>';
             }   
-        } elseif(($rels = $database->diplomacyExistingRelationships2($alliance)) && count($rels)){
-            foreach($rels as $key => $row){
-                if($row['type'] == 1){
-                    $type = "Conf.";
-                } else if($row['type'] == 2){
-                    $type = "Nap";
-                } else if($row['type'] == 3){
-                    $type = "War";
-                }
-                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli1'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$row['alli2'].'"><center>'.$database->getAllianceName($row['alli2']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
-            }   
-        }else {
-            echo '<tr><td colspan="3" class="none">none</td></tr>';
         }
-        
+        else echo '<tr><td colspan="3" class="none">none</td></tr>';      
         ?>
         </tbody>
     </table>

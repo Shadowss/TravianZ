@@ -1,10 +1,6 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
+if(!isset($aid)) $aid = $session->alliance;
+
 $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
 
@@ -28,8 +24,12 @@ if($session->access!=BANNED){
 							<td>
 								<select name="a_user" class="name dropdown">
 								<?php
-                                foreach($memberlist as $member) {
-                                echo "<option value=".$member['id'].">".$member['username']."</option>";
+                                foreach($memberlist as $member) 
+                                {
+                                    if($member['id'] != $session->uid)
+                                    {
+                                        echo "<option value=".$member['id'].">".$member['username']."</option>";
+                                    }
                                 }
                                 ?>
                                 </select>
@@ -43,7 +43,6 @@ if($session->access!=BANNED){
 					<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" />
 				</p>
 			</form>
-			<p class="error"></p>
 <?php
 }else{
 	header("Location: banned.php");

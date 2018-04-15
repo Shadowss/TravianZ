@@ -1,11 +1,6 @@
 <?php
+if(!isset($aid)) $aid = $session->alliance;
 
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
 $varmedal = $database->getProfileMedalAlly($aid);
 $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
@@ -43,7 +38,7 @@ include("alli_menu.tpl");
 
 <tr>
 <th>Tag</td><td class="s7"><?php echo $allianceinfo['tag']; ?></th>
-<td rowspan="8" class="desc1"><textarea tabindex="1" name="be1"><?php echo stripslashes($allianceinfo['desc']); ?></textarea></td>
+<td rowspan="8" class="desc1"><textarea tabindex="1" name="be1"><?php echo isset($_POST['be1']) ? $_POST['be1'] : stripslashes($allianceinfo['desc']); ?></textarea></td>
 </tr>
 
 <tr>
@@ -66,7 +61,7 @@ include("alli_menu.tpl");
 
 <tr><td colspan="2" class="empty"></td></tr>
 
-<tr><td colspan="2" class="desc2"><textarea tabindex="2" name="be2"><?php echo stripslashes($allianceinfo['notice']); ?></textarea></td></tr>
+<tr><td colspan="2" class="desc2"><textarea tabindex="2" name="be2"><?php echo isset($_POST['be2']) ? $_POST['be2'] : stripslashes($allianceinfo['notice']); ?></textarea></td></tr>
     <p>
         <table cellspacing="1" cellpadding="2" class="tbg">
         <tr><td class="rbg" colspan="4">Medals</td></tr>

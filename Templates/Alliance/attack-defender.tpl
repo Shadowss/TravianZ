@@ -39,11 +39,11 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
     $outputList .= "<div><a href=\"berichte.php?id=".$id."&aid=".$ally."\">";
     if($ntype==0){ $nn = " scouts "; }else{ $nn = " attacks "; }
 
-    $outputList .= $database->getUserField($dataarray[0],username,0);
+    $outputList .= $database->getUserField($dataarray[0], "username", 0);
        
     $outputList .= $nn;
-    $outputList .= $database->getUserField($dataarray[28],username,0);
-    $getUserAlly = $database->getUserField($dataarray[0],alliance,0);
+    $outputList .= $database->getUserField($dataarray[28], "username", 0);
+    $getUserAlly = $database->getUserField($dataarray[0], "alliance", 0);
     $getAllyName = $database->getAllianceName($getUserAlly);
     
     if($getUserAlly==$session->alliance || !$getUserAlly){

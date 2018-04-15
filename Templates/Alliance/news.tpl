@@ -1,12 +1,7 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
-$allianceinfo = $database->getAlliance($aid);
+if(!isset($aid)) $aid = $session->alliance;
 
+$allianceinfo = $database->getAlliance($aid);
 $noticeArray = $database->readAlliNotice($aid);
 
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";

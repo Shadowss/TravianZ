@@ -1,10 +1,6 @@
 <?php
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
+if(!isset($aid)) $aid = $session->alliance;
+
 $allianceinfo = $database->getAlliance($aid);
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
@@ -66,30 +62,30 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
     $outputList .= "<div><a href=\"berichte.php?id=".$id."&aid=".$ally."\">";
     if($ntype==0){ $nn = " scouts "; }else{ $nn = " attacks "; }
 
-    $outputList .= $database->getUserField($dataarray[0],username,0);
+    $outputList .= $database->getUserField($dataarray[0], "username", 0);
        
     $outputList .= $nn;
-    $outputList .= $database->getUserField($dataarray[28],username,0);
+    $outputList .= $database->getUserField($dataarray[28], "username", 0);
 	if($ntype==0){ 
 	$isoasis = $database->isVillageOases($toWref);
 	if($isoasis == 0){
 	if($toWref != $village->wid){
 		$getUser = $database->getVillageField($toWref,owner);
 		}else{
-		$getUser = $database->getVillageField($dataarray[1],owner);
+		$getUser = $database->getVillageField($dataarray[1], "owner");
 		}
     }else{
 	if($toWref != $village->wid){
 		$getUser = $database->getOasisField($toWref,owner);
 		}else{
-		$getUser = $database->getOasisField($dataarray[1],owner);
+		$getUser = $database->getOasisField($dataarray[1], "owner");
 		}
 	}
-	$getUserAlly = $database->getUserField($getUser,alliance,0);
+	$getUserAlly = $database->getUserField($getUser, "alliance", 0);
 	}else if($ntype==1 or $ntype==2 or $ntype==3 or $ntype==18 or $ntype==19){ 
-    	$getUserAlly = $database->getUserField($dataarray[28],alliance,0);
+    	$getUserAlly = $database->getUserField($dataarray[28], "alliance", 0);
     }else{
-    	$getUserAlly = $database->getUserField($dataarray[0],alliance,0);
+    	$getUserAlly = $database->getUserField($dataarray[0], "alliance", 0);
     }
     $getAllyName = $database->getAllianceName($getUserAlly);
     

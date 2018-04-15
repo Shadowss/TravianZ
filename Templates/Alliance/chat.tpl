@@ -1,12 +1,7 @@
 <?php
 ////////////// made by TTMTT //////////////
+if(!isset($aid)) $aid = $session->alliance;
 
-if(isset($aid)) {
-$aid = $aid;
-}
-else {
-$aid = $session->alliance;
-}
 $allianceinfo = $database->getAlliance($aid);
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 

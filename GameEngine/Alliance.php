@@ -80,6 +80,16 @@ class Alliance {
 			}
 		}
 
+		/**
+		 * Redirects to the option menu if some errors were generated
+		 */
+		
+		public function redirect()
+		{
+		    header("location: allianz.php?s=5");
+		    exit;
+		}
+		
 		public function procAlliForm($post) {
 			if(isset($post['ft'])) {
 				switch($post['ft']) {
@@ -89,7 +99,7 @@ class Alliance {
 				}
 
 			}
-			if(isset($_POST['dipl']) and isset($_POST['a_name'])) {
+			if(isset($post['dipl']) && isset($post['a_name'])) {
 				$this->changediplomacy($post);
 			}
 
@@ -177,9 +187,9 @@ class Alliance {
 			global $database, $session;
 			if($session->access != BANNED){
 			foreach($this->inviteArray as $invite) {
-				if($invite['id'] == $get['d']) {
+			    if($invite['id'] == $get['d'] && $invite['uid'] == $session->uid) {
 					$database->removeInvitation($get['d']);
-					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has rejected the invitation.');
+					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has rejected the invitation.');
 				}
 			}
 			    header("Location: build.php?gid=18");
@@ -198,10 +208,10 @@ class Alliance {
 			if($session->access != BANNED){
 			$inviteArray = $database->getAliInvitations($session->alliance);
 			foreach($inviteArray as $invite) {
-				if($invite['id'] == $get['d']) {
-				$invitename = $database->getUserArray($invite['uid'], 1);
+			    if($invite['id'] == $get['d'] && $invite['alliance'] == $session->alliance && $this->userPermArray['opt4'] == 1) {
+				    $invitename = $database->getUserArray($invite['uid'], 1);
 					$database->removeInvitation($get['d']);
-					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has deleted the invitation for <a href="spieler.php?uid=' . $invitename['id'] . '">' . addslashes($invitename['username']) . '</a>.');
+					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has deleted the invitation for <a href="spieler.php?uid='.$invitename['id'].'">'.addslashes($invitename['username']).'</a>.');
 				}
 			}
 			    header("Location: allianz.php?delinvite");
@@ -229,7 +239,7 @@ class Alliance {
             					$database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
             					$database->createAlliPermissions($invite['uid'], $invite['alliance'], '', 0, 0, 0, 0, 0, 0, 0, 0);
             					// Log the notice
-            					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has joined the alliance.');
+            					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has joined the alliance.');
             				} else {
             				    $accept_error = 1;
             				    $max = $alliance_info['max'];
@@ -288,7 +298,7 @@ class Alliance {
 				// Asign Permissions
 				$database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
 				// log the notice
-				$database->insertAlliNotice($aid, 'The alliance has been founded by <a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a>.');
+				$database->insertAlliNotice($aid, 'The alliance has been founded by <a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a>.');
 				header("Location: build.php?gid=18");
 				exit;
 			}
@@ -303,34 +313,25 @@ class Alliance {
 		*****************************************/
 		private function changeAliName($get) {
 			global $form, $database, $session;
-			if($session->access != BANNED){
-			if(!isset($get['ally1']) || $get['ally1'] == "") {
-				$form->addError("ally1", ATAG_EMPTY);
-			}
-			if(!isset($get['ally2']) || $get['ally2'] == "") {
-				$form->addError("ally2", ANAME_EMPTY);
-			}
-			if($database->aExist($get['ally1'], "tag")) {
-				$form->addError("tag", ATAG_EXIST);
-			}
-			if($database->aExist($get['ally2'], "name")) {
-				$form->addError("name", ANAME_EXIST);
-			}
-			if($this->userPermArray['opt3'] == 0) {
-				$form->addError("perm", NO_PERMISSION);
-			}
-			if($form->returnErrors() != 0) {
-				$_SESSION['errorarray'] = $form->getErrors();
-				$_SESSION['valuearray'] = $post;
-				//header("Location: build.php?id=".$post['id']);
-			} else {
-				$database->setAlliName($session->alliance, $get['ally2'], $get['ally1']);
-				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance name.');
-			}
-			}else{
+			if($session->access == BANNED) {
 			    header("Location: banned.php");
 			    exit;
+			}
+			
+			if(!isset($get['ally1']) || $get['ally1'] == "") $form->addError("ally1", ATAG_EMPTY);
+			
+			if(!isset($get['ally2']) || $get['ally2'] == "") $form->addError("ally2", ANAME_EMPTY);
+			
+			if($database->aExist($get['ally1'], "tag")) $form->addError("ally1", ATAG_EXIST);
+			
+			if($database->aExist($get['ally2'], "name")) $form->addError("ally2", ANAME_EXIST);
+			
+			if($this->userPermArray['opt3'] == 0) $form->addError("perm", NO_PERMISSION);
+			
+			if($form->returnErrors() == 0) {
+				$database->setAlliName($session->alliance, $get['ally2'], $get['ally1']);
+				// log the notice
+				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has changed the alliance name.');
 			}
 		}
 
@@ -346,11 +347,10 @@ class Alliance {
 			if($form->returnErrors() != 0) {
 				$_SESSION['errorarray'] = $form->getErrors();
 				$_SESSION['valuearray'] = $post;
-				//header("Location: build.php?id=".$post['id']);
 			} else {
 				$database->submitAlliProfile($session->alliance, $post['be2'], $post['be1']);
 				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed the alliance description.');
+				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has changed the alliance description.');
 			}
 			}else{
 			    header("Location: banned.php");
@@ -361,23 +361,31 @@ class Alliance {
 		/*****************************************
 		Function to change the user permissions
 		*****************************************/
-		private function changeUserPermissions($post) {
+		private function changeUserPermissions($post)
+		{
 			global $database, $session, $form;
-			if($session->access != BANNED){
-			if($this->userPermArray['opt1'] == 0) {
-				$form->addError("perm", NO_PERMISSION);
-			}
-			if($form->returnErrors() != 0) {
-				$_SESSION['errorarray'] = $form->getErrors();
-				$_SESSION['valuearray'] = $post;
-				//header("Location: build.php?id=".$post['id']);
-			} else {
-				$database->updateAlliPermissions($post['a_user'], $session->alliance, $post['a_titel'], $post['e1'], $post['e2'], $post['e3'], $post['e4'], $post['e5'], $post['e6'], $post['e7']);
-				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has changed permissions.');
-			}
-			}else{
+			if($session->access == BANNED)
+			{
 			    header("Location: banned.php");
+			    exit;
+			}
+			
+			if($this->userPermArray['opt1'] == 0) $form->addError("perm", NO_PERMISSION);	
+			elseif($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance) $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
+			elseif($post['a_user'] == $session->uid) $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS);
+			else 
+			{
+			    $database->updateAlliPermissions($post['a_user'], $session->alliance, $post['a_titel'], $post['e1'], $post['e2'], $post['e3'], $post['e4'], $post['e5'], $post['e6'], $post['e7']);
+				// log the notice
+			    $database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has changed permissions of <a href="spieler.php?uid='.$post['a_user'].'">'.addslashes($database->getUserField($post['a_user'], "username", 0)).'</a>.');
+			    $form->addError("perm", ALLY_PERMISSIONS_UPDATED);
+			}
+			
+			if($form->returnErrors() > 0) 
+			{
+			    $_SESSION['errorarray'] = $form->getErrors();
+			    $_SESSION['valuearray'] = $post;
+			    header("Location: allianz.php?s=5");
 			    exit;
 			}
 		}
@@ -391,20 +399,23 @@ class Alliance {
 				$UserData = $database->getUserArray($post['a_user'], 1);
 				if($this->userPermArray['opt2'] == 0) {
 					$form->addError("perm", NO_PERMISSION);
+				} else if($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance){
+				    $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
 				} else if($UserData['id'] != $session->uid){
 					$database->updateUserField($post['a_user'], 'alliance', 0, 1);
 					$database->deleteAlliPermissions($post['a_user']);
 					$database->deleteAlliance($session->alliance);
 					// log the notice
-					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($post['a_user']) . '</a> has quit the alliance.');
-						if($session->alliance && $database->isAllianceOwner($UserData['id']) == $session->alliance){
+					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$UserData['id'].'">'.($kickedUsername = addslashes($database->getUserField($post['a_user'], "username", 0))).'</a> has been expelled from the alliance by <a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a>.');
+				    if($session->alliance && $database->isAllianceOwner($UserData['id']) == $session->alliance){
 						$newowner = $database->getAllMember2($session->alliance);
 						$newleader = $newowner['id'];
 						$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
 						$database->query($q);
 						$database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-						Automation::updateMax($newleader);
+						Automation::updateMax($newleader);						
 					}
+					$form->addError("perm", $kickedUsername.ALLY_USER_KICKED);
 				}
 			} else {
 			    header("Location: banned.php");
@@ -415,16 +426,18 @@ class Alliance {
 		Function to set forum link
 		*****************************************/
 		public function setForumLink($post) {
-			global $database, $session;
-			if($session->access != BANNED){
-				if(isset($post['f_link'])){
-				    $database->setAlliForumdblink($session->alliance, $post['f_link']);
-				    header("Location: allianz.php?s=5");
-				    exit;
-				}
-			}else{
+			global $database, $session, $form;
+			if($session->access == BANNED)
+			{
 			    header("Location: banned.php");
 			    exit;
+			}
+			
+			if($this->userPermArray['opt5'] == 0) $form->addError("perm", NO_PERMISSION);
+			else
+			{
+			    $database->setAlliForumdblink($session->alliance, $post['f_link']);
+			    $form->addError("perm", ALLY_FORUM_LINK_UPDATED);
 			}
 		}
 		/*****************************************
@@ -452,9 +465,9 @@ class Alliance {
 			global $database, $session, $form;
 			if($session->access != BANNED){
 			if(!isset($post['pw']) || $post['pw'] == "") {
-				$form->addError("pw1", PW_EMPTY);
+				$form->addError("pw", PW_EMPTY);
 			} elseif(!password_verify($post['pw'], $session->userinfo['password'])) {
-				$form->addError("pw2", PW_ERR);
+			    $form->addError("pw", LOGIN_PW_ERROR);
 			} else {
 			    // check whether this is not the founder leaving and if he is, see whether
 			    // his replacement has been selected
@@ -465,7 +478,7 @@ class Alliance {
 			    ) {
 				    // check that we have a valid new founder
 				    if (!isset($post['new_founder'])) {
-				        $form->addError("founder", 'founder was not selected');
+				        $form->addError("founder", 'Founder was not selected.');
 				        return;
 				    } else {
 				        $post['new_founder'] = (int) $post['new_founder'];
@@ -481,8 +494,8 @@ class Alliance {
     				    }
     				}
 
-    				if (!$validMemberFound) {
-    				    $form->addError("founder2", 'founder is not valid');
+    				if (!$validMemberFound || $post['new_founder'] == $session->uid) {
+    				    $form->addError("founder", 'Invalid founder.');
     				    return;
     				}
 
@@ -523,44 +536,49 @@ class Alliance {
 
 		private function changediplomacy($post) {
 			global $database, $session, $form;
-			if($session->access != BANNED){
-			$aName = $_POST['a_name'];
-			$aType = (int)intval($_POST['dipl']);
-			if($database->aExist($aName, "tag")) {
-				$allianceID = $database->getAllianceID($aName);
-				if($allianceID != $session->alliance) {
-					if($aType >= 1 and $aType <= 3) {
-						if(!$database->diplomacyInviteCheck2($session->alliance, $allianceID)) {
-							$database->diplomacyInviteAdd($session->alliance, $allianceID, $aType);
-							if($aType == 1){
-							$notice = "offer a confederation to";
-							}else if($aType == 2){
-							$notice = "offer non-aggression pact to";
-							}else if($aType == 3){
-							$notice = "declare war on";
-							}
-							$database->insertAlliNotice($session->alliance, '<a href="allianz.php?aid=' . $session->alliance . '">' . $database->getAllianceName($session->alliance) . '</a> '. $notice .' <a href="allianz.php?aid=' . $allianceID . '">' . $aName . '</a>.');
-							$form->addError("name", "Invite sended");
-						} else {
-							$form->addError("name", "You have already sended them a invite");
-						}
-
-					} else {
-						$form->addError("name", "wrong choice made");
-					}
-				} else {
-					$form->addError("name", "You can not invite your own alliance");
-				}
-			} else {
-				$form->addError("name", "Alliance does not exist");
-			}
-			}else{
+			if($session->access == BANNED) {			    
 			    header("Location: banned.php");
 			    exit;
 			}
+			if($this->userPermArray['opt6'] == 1){
+			    if(!empty($post['a_name']) || !empty($post['dipl'])){
+			        $aName = $post['a_name'];
+			        $aType = (int)intval($post['dipl']);
+			        if($database->aExist($aName, "tag")) {
+			            $allianceID = $database->getAllianceID($aName);
+			            if($allianceID != $session->alliance) {
+			                if($aType >= 1 and $aType <= 3) {
+			                    if(!$database->diplomacyInviteCheck2($session->alliance, $allianceID)) {
+			                        if($database->diplomacyCheckLimits($session->alliance, $aType)){
+			                            $database->diplomacyInviteAdd($session->alliance, $allianceID, $aType);
+			                            if($aType == 1){
+			                                $notice = OFFERED_CONFED_TO;
+			                            }else if($aType == 2){
+			                                $notice = OFFERED_NON_AGGRESION_PACT_TO;
+			                            }else if($aType == 3){
+			                                $notice = DECLARED_WAR_ON;
+			                            }
+			                            $database->insertAlliNotice($session->alliance, '<a href="allianz.php?aid='.$session->alliance.'">'.$database->getAllianceName($session->alliance).'</a> '.$notice.' <a href="allianz.php?aid='.$allianceID.'">'.$aName.'</a>.');
+			                            $database->insertAlliNotice($allianceID, '<a href="allianz.php?aid='.$session->alliance.'">'.$database->getAllianceName($session->alliance).'</a> '.$notice.' <a href="allianz.php?aid='.$allianceID.'">'.$aName.'</a>.');
+			                            $form->addError("name", INVITE_SENT);
+			                            
+			                        }
+			                        else $form->addError("name", ALLY_TOO_MUCH_PACTS);
+			                    } 
+			                    else $form->addError("name", INVITE_ALREADY_SENT);	                    
+			                } 
+			                else $form->addError("name", WRONG_DIPLOMACY);		                    		                
+			            }
+			            else $form->addError("name", CANNOT_INVITE_SAME_ALLY);			                
+			        } 
+			        else $form->addError("name", ALLY_DOESNT_EXISTS);
+			    }
+			    else $form->addError("name", NAME_OR_DIPL_EMPTY);
+			}
+			else $form->addError("name", NO_PERMISSION);
 		}
-	   }
+}
 
-	   $alliance = new Alliance;
+$alliance = new Alliance;
 
 ?>

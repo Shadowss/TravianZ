@@ -3107,10 +3107,10 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function diplomacyOwnOffers($session_alliance) {
-	    list($session_alliance) = $this->escape_input((int) $session_alliance);
+	function diplomacyOwnOffers($sessionAlliance) {
+	    list($sessionAlliance) = $this->escape_input((int) $sessionAlliance);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $session_alliance AND accepted = 0";
+	    $q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $sessionAlliance AND accepted = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -3125,32 +3125,32 @@ class MYSQLi_DB implements IDbConnection {
 		return $dbarray['id'];
 	}
 
-	function diplomacyCancelOffer($id) {
-	    list($id) = $this->escape_input((int) $id);
+	function diplomacyCancelOffer($id, $sessionAlliance) {
+	    list($id, $sessionAlliance) = $this->escape_input((int) $id, (int) $sessionAlliance);
 
-		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id";
+		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli1 = $sessionAlliance";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function diplomacyInviteAccept($id, $session_alliance) {
-	    list($id, $session_alliance) = $this->escape_input((int) $id, (int) $session_alliance);
+	function diplomacyInviteAccept($id, $sessionAlliance) {
+	    list($id, $sessionAlliance) = $this->escape_input((int) $id, (int) $sessionAlliance);
 
-		$q = "UPDATE " . TB_PREFIX . "diplomacy SET accepted = 1 WHERE id = $id AND alli2 = $session_alliance";
+	    $q = "UPDATE " . TB_PREFIX . "diplomacy SET accepted = 1 WHERE id = $id AND alli2 = $sessionAlliance";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function diplomacyInviteDenied($id, $session_alliance) {
-	    list($id, $session_alliance) = $this->escape_input((int) $id, (int) $session_alliance);
+	function diplomacyInviteDenied($id, $sessionAlliance) {
+	    list($id, $sessionAlliance) = $this->escape_input((int) $id, (int) $sessionAlliance);
 
-		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $session_alliance";
+	    $q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $sessionAlliance";
 		return mysqli_query($this->dblink,$q);
 	}
 
     // no need to cache this method
-	function diplomacyInviteCheck($session_alliance) {
-	    list($session_alliance) = $this->escape_input((int) $session_alliance);
+	function diplomacyInviteCheck($sessionAlliance) {
+	    list($sessionAlliance) = $this->escape_input((int) $sessionAlliance);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli2 = $session_alliance AND accepted = 0";
+	    $q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli2 = $sessionAlliance AND accepted = 0";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -3159,7 +3159,7 @@ class MYSQLi_DB implements IDbConnection {
 	function diplomacyInviteCheck2($ally1, $ally2) {
 	    list($ally1, $ally2) = $this->escape_input((int) $ally1, (int) $ally2);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $ally1 AND alli2 = $ally2 AND accepted = 0";
+		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE (alli1 = $ally1 OR alli2 = $ally1) AND (alli1 = $ally2 OR alli2 = $ally2)";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -3237,45 +3237,29 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
     // no need to cache this method
-	function diplomacyExistingRelationships($session_alliance) {
-	    list($session_alliance) = $this->escape_input((int) $session_alliance);
+	function diplomacyExistingRelationships($sessionAlliance) {
+	    list($sessionAlliance) = $this->escape_input((int) $sessionAlliance);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli2 = $session_alliance AND accepted = 1";
+	    $q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE (alli1 = $sessionAlliance OR alli2 = $sessionAlliance) AND accepted = 1";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
 
-    // no need to cache this method
-	function diplomacyExistingRelationships2($session_alliance) {
-	    list($session_alliance) = $this->escape_input((int) $session_alliance);
+	function diplomacyCancelExistingRelationship($id, $sessionAlliance) {
+	    list($id, $sessionAlliance) = $this->escape_input((int) $id, (int) $sessionAlliance);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $session_alliance AND accepted = 1";
-		$result = mysqli_query($this->dblink,$q);
-		return $this->mysqli_fetch_all($result);
-	}
-
-	function diplomacyCancelExistingRelationship($id, $session_alliance) {
-	    list($id, $session_alliance) = $this->escape_input((int) $id, (int) $session_alliance);
-
-		$q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE id = $id AND alli2 = $session_alliance OR id = $id AND alli1 = $session_alliance";
+	    $q = "DELETE FROM " . TB_PREFIX . "diplomacy WHERE (alli1 = $sessionAlliance OR alli2 = $sessionAlliance) AND id = $id ";
 		return mysqli_query($this->dblink,$q);
 	}
 
     // no need to cache this method
-	function checkDiplomacyInviteAccept($aid, $type) {
+	function diplomacyCheckLimits($aid, $type) {
 	    list($aid, $type) = $this->escape_input((int) $aid, (int) $type);
-
-		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $aid AND type = $type AND accepted = 1 OR alli2 = $aid AND type = $type AND accepted = 1";
+	    if($type == 3) return true;
+	    
+		$q = "SELECT Count(case when alli1 = $aid then 1 end) as Total1, Count(case when alli2 = $aid then 1 end) as Total2 FROM " . TB_PREFIX . "diplomacy WHERE type = $type";
 		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-		if($type == 3){
-			return true;
-		}else{
-		if($result['Total'] < 4) {
-			return true;
-		} else {
-			return false;
-		}
-		}
+		return $result['Total1'] < 3 && $result['Total2'] < 3;
 	}
 
 	function setAlliForumdblink($aid, $dblink) {
