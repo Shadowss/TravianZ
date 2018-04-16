@@ -34,13 +34,13 @@ include_once($autoprefix."GameEngine/Lang/en.php");
 
 class Technology {
 
-	public $unarray = array(1=>U1,U2,U3,U4,U5,U6,U7,U8,U9,U10,U11,U12,U13,U14,U15,U16,U17,U18,U19,U20,U21,U22,U23,U24,U25,U26,U27,U28,U29,U30,U31,U32,U33,U34,U35,U36,U37,U38,U39,U40,U41,U42,U43,U44,U45,U46,U47,U48,U49,U50,U99,U0);
+	public $unarray = [1 => U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11, U12, U13, U14, U15, U16, U17, U18, U19, U20, U21, U22, U23, U24, U25, U26, U27, U28, U29, U30, U31, U32, U33, U34, U35, U36, U37, U38, U39, U40, U41, U42, U43, U44, U45, U46, U47, U48, U49, U50 , U99, U0];
 
 	public function grabAcademyRes() {
 		global $village;
-		$holder = array();
+		$holder = [];
 		foreach($village->researching as $research) {
-			if(substr($research['tech'],0,1) == "t"){
+			if(substr($research['tech'], 0, 1) == "t"){
 				array_push($holder,$research);
 			}
 		}
@@ -312,81 +312,61 @@ class Technology {
 	public function meetTRequirement($unit) {
 		global $session;
 		switch($unit) {
-			case 1:
-			if($session->tribe == 1) { return true; } else { return false; }
-			break;
+		    
 			case 2:
 			case 3:
 			case 4:
 			case 5:
 			case 6:
 			case 7:
-			case 8:
-			if($this->getTech($unit) && $session->tribe == 1) { return true; } else { return false; }
-			break;
-			case 10:
-			if($session->tribe == 1) { return true; } else { return false; }
-			break;
-			case 11:
-			if($session->tribe == 2) { return true; } else { return false; }
-			break;
+			case 8: return $this->getTech($unit) && $session->tribe == 1;
+			
+			case 1:
+			case 10: return $session->tribe == 1;
+			
 			case 12:
 			case 13:
 			case 14:
 			case 15:
 			case 16:
 			case 17:
-			case 18:
-			if($session->tribe == 2 && $this->getTech($unit)) { return true; } else { return false; }
-			break;
-			case 20:
-			if($session->tribe == 2) { return true; } else { return false; }
-			break;
-			case 21:
-			if($session->tribe == 3) { return true; } else { return false; }
-			break;
+			case 18: return $session->tribe == 2 && $this->getTech($unit);
+
+			case 11:
+			case 20: return $session->tribe == 2;
+			
 			case 22:
 			case 23:
 			case 24:
 			case 25:
 			case 26:
 			case 27:
-			case 28:
-			if($session->tribe == 3 && $this->getTech($unit)) { return true; } else { return false; }
-			break;
-			case 30:
-			if($session->tribe == 3) { return true; } else { return false; }
-			break;
-			case 31:
-			if($session->tribe == 4) { return true; } else { return false; }
-			break;
+			case 28: return $session->tribe == 3 && $this->getTech($unit);
+			
+			case 21:
+			case 30: return $session->tribe == 3;
+			
 			case 32:
 			case 33:
 			case 34:
 			case 35:
 			case 36:
 			case 37:
-			case 38:
-			if($session->tribe == 4 && $this->getTech($unit)) { return true; } else { return false; }
-			break;
-			case 40:
-			if($session->tribe == 4) { return true; } else { return false; }
-			break;
-			case 41:
-			if($session->tribe == 5) { return true; } else { return false; }
-			break;
+			case 38: return $session->tribe == 4 && $this->getTech($unit);
+			
+			case 31:
+			case 40: return $session->tribe == 4;
+			    
 			case 42:
 			case 43:
 			case 44:
 			case 45:
 			case 46:
 			case 47:
-			case 48:
-			if($session->tribe == 5 && $this->getTech($unit)) { return true; } else { return false; }
-			break;
-			case 50:
-			if($session->tribe == 5) { return true; } else { return false; }
-			break;
+			case 48: return $session->tribe == 5 && $this->getTech($unit);
+
+			case 41:
+			case 50: return $session->tribe == 5;
 		}
 	}
 

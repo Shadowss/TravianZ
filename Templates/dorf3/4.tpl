@@ -26,7 +26,7 @@ foreach($varray as $vil){
 	$hasCel = $database->getVillageField($vid,'celebration');
 	if ($hasCel <> 0) { $timer++; }
 
-	if(isset($vdata) && isset($vdata['capital']) && $vdata['capital'] == 1){$class = 'hl';}else{$class = '';}
+	if($vid == $village->wid){$class = 'hl';}else{$class = '';}
 
 	echo '<tr class="'.$class.'"><td class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vil['name'].'</a></td>';
 	echo '<td class="cps">'.$cp.'</td>';

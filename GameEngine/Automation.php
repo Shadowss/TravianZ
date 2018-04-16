@@ -5355,7 +5355,7 @@ class Automation {
 
 
             //Attackers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, ap FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, ap FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5365,7 +5365,7 @@ class Automation {
             }
 
             //Defender of the week
-            $result = mysqli_query($database->dblink,"SELECT id, dp FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, dp FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5375,7 +5375,7 @@ class Automation {
             }
 
             //Climbers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, Rc FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, Rc FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY Rc DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5385,7 +5385,7 @@ class Automation {
             }
 
             //Rank climbers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, clp FROM ".TB_PREFIX."users ORDER BY clp DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, clp FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5395,7 +5395,7 @@ class Automation {
             }
 
             //Robbers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, RR FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id, RR FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC, id DESC Limit 10");
             $i=0;
             while($row = mysqli_fetch_array($result)){
                 $i++;
@@ -5406,11 +5406,11 @@ class Automation {
 
             //Part of the bonus for top 10 attack + defense out
             //Top10 attackers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 //Top 10 defenders
-                $result2 = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+                $result2 = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC, id DESC Limit 10");
                 while($row2 = mysqli_fetch_array($result2)){
                     if($row['id']==$row2['id']){
 
@@ -5441,7 +5441,7 @@ class Automation {
 
             //you stand for 3rd / 5th / 10th time in the top 3 strikers
             //top10 attackers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=3";
@@ -5471,7 +5471,7 @@ class Automation {
             }
             //you stand for 3rd / 5th / 10th time in the top 10 attackers
             //top10 attackers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY ap DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=10";
@@ -5501,7 +5501,7 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=3";
@@ -5531,7 +5531,7 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
             //Pak de top10 verdedigers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY dp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=10";
@@ -5562,7 +5562,7 @@ class Automation {
 
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top10 klimmers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=3";
@@ -5591,7 +5591,7 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top10 klimmers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY Rc DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY Rc DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=10";
@@ -5621,7 +5621,7 @@ class Automation {
 
             //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
             //Pak de top3 rank climbers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=3";
@@ -5650,7 +5650,7 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 10klimmers
             //Pak de top3 rank climbers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY clp DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=10";
@@ -5680,7 +5680,7 @@ class Automation {
 
             //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
             //Pak de top10 overvallers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=3";
@@ -5709,7 +5709,7 @@ class Automation {
             }
             //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
             //Pak de top10 overvallers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users ORDER BY RR DESC, id DESC Limit 10");
+            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC, id DESC Limit 10");
             while($row = mysqli_fetch_array($result)){
 
                 $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=10";
@@ -5738,7 +5738,7 @@ class Automation {
             }
 
             //Put all true dens to 0
-            $query="SELECT id FROM ".TB_PREFIX."users ORDER BY id+0 DESC";
+            $query="SELECT id FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY id+0 DESC";
             $result=mysqli_query($database->dblink,$query);
             $userIDs = [];
             for ($i=0; $row=mysqli_fetch_row($result); $i++){

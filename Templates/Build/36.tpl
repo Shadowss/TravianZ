@@ -66,8 +66,7 @@ include("next.tpl");
 				alt="Iron" title="<?php echo IRON; ?>" />10|</span><span><img class="r4" src="img/x.gif"
 				alt="Crop" title="<?php echo CROP; ?>" />20|</span><span><img class="r5" src="img/x.gif" alt="Crop consumption"
 				title="<?php echo CROP_COM; ?>" />0|<img class="clock" src="img/x.gif"
-				alt="Duration" title="<?php echo DURATION; ?>" /><?php $dur=$generator->getTimeFormat(round(${'u99'}['time'] * ($bid19[$village->resarray['f'.$id]]['attri']*TRAPPER_CAPACITY / 100) / SPEED)); 
-				echo ($dur=="0:00:00")? "0:00:01":$dur; ?></span>
+				alt="Duration" title="<?php echo DURATION; ?>" /><?php echo $generator->getTimeFormat(round(($bid19[$village->resarray['f'.$id]]['attri'] / 100) * ${'u99'}['time'] / SPEED)); ?></span>
 
 			</div>
 			</td>

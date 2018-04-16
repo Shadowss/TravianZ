@@ -38,11 +38,12 @@
 			$bui .= '<a href="build.php?newdid='.$vid.'&id='.$b['field'].'"><img class="bau" src="img/x.gif" title="'.$building->procResType($b['type']).'" alt="'.$building->procResType($b['type']).'"></a>';
 		}	
 		foreach($unitsArray as $key => $c){
-			$gid = in_array($key, $unitsbytype['infantry'])?19:(in_array($key, $unitsbytype['cavalry'])?20:(in_array($key, $unitsbytype['siege'])?21:(in_array(($key-60), $unitsbytype['infantry'])?29:(in_array(($key-60), $unitsbytype['cavalry'])?30:($building->getTypeLevel(26)>0?26:25)))));
+		    if($key == 99) $key = 51;
+			$gid = in_array($key, $unitsbytype['infantry'])?19:(in_array($key, $unitsbytype['cavalry'])?20:(in_array($key, $unitsbytype['siege'])?21:(in_array(($key-60), $unitsbytype['infantry'])?29:(in_array(($key-60), $unitsbytype['cavalry'])?30:($key == 51)?36:($building->getTypeLevel(26)>0?26:25)))));
 			if($key > 60) { $key -= 60; }
-			$tro .= '<a href="build.php?newdid='.$vid.'&gid='.$gid.'"><img class="unit u'.$key.'" src="img/x.gif" title="'.$c.'x '.$technology->getUnitName($key).'" alt="'.$c.'x '.$technology->getUnitName($key).'"></a>';
+			$tro .= '<a href="build.php?newdid='.$vid.'&gid='.$gid.'"><img class="unit u'.($key == 51 ? 99 : $key).'" src="img/x.gif" title="'.$c.'x '.$technology->getUnitName($key).'" alt="'.$c.'x '.$technology->getUnitName($key).'"></a>';
 		}
-		if($vdata['capital'] == 1) { $class = 'hl'; } else {$class = ''; }
+		if($vid == $village->wid) { $class = 'hl'; } else {$class = ''; }
 
 echo '
 <tr class="'.$class.'">

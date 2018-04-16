@@ -21,7 +21,7 @@ foreach($varray as $vil){
 	if($vdata['clay'] > $vdata['maxstore']) { $clay = $vdata['maxstore']; } else { $clay = $vdata['clay']; }
 	if($vdata['iron'] > $vdata['maxstore']) { $iron = $vdata['maxstore']; } else { $iron = $vdata['iron']; }
 	if($vdata['crop'] > $vdata['maxcrop'] ) { $crop = $vdata['maxcrop'];  } else { $crop = $vdata['crop']; }
-	if($vdata['capital'] == 1){$class = 'hl';}else{$class = '';}
+	if($vid == $village->wid){$class = 'hl';}else{$class = '';}
 	echo '
 	<tr class="'.$class.'"> 
 		<td class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vdata['name'].'</a></td>

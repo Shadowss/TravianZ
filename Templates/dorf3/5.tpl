@@ -18,7 +18,7 @@
 <?php
 	foreach($varray as $vil) {
 		$vid = $vil['wref'];
-		if(isset($vdata) && $vdata['capital'] == 1){$class = 'hl';}else{$class = '';}
+		if($vid == $village->wid){$class = 'hl';}else{$class = '';}
 
 		$units = $database->getEnforceVillage($vid,1);
 		array_unshift($units,$database->getUnit($vid));

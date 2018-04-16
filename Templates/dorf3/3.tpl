@@ -92,7 +92,7 @@ foreach($varray as $vil){
 	$percentI = floor($iron/($maxs/100));
 	$percentCr = floor($crop/($maxc/100));
   
-	if($vdata['capital'] == 1) {$class = 'hl';} else {$class = '';}  
+	if($vid == $village->wid) {$class = 'hl';} else {$class = '';}  
 	$cr = 95;   //warning percentage
 	if($percentW >= $cr) {$critW = 'crit';} else {$critW = '';}
 	if($percentC >= $cr) {$critC = 'crit';} else {$critC = '';}
