@@ -375,7 +375,7 @@ class Technology {
 		return (isset($village->techarray['t'.$tech]) && $village->techarray['t'.$tech] == 1);
 	}
 
-	private function procTrain($post,$great=false) {
+	private function procTrain($post, $great = false) {
 		global $session;
 		if($session->access != BANNED){
 			// first of all, check if we're not trying to train chieftain
@@ -391,28 +391,25 @@ class Technology {
                     (!empty($post['t49']) && !empty($post['t50']))
                 )
             ) {
-                $start = ( $session->tribe - 1 ) * 10 + 1;
-                $end   = ( $session->tribe * 10 );
-                for ( $i = $start; $i <= ( $end ); $i ++ ) {
-                    if ( isset( $post[ 't' . $i ] ) && $post[ 't' . $i ] != 0 ) {
-                        $amt = $post[ 't' . $i ];
-                        $amt = intval( $amt );
-                        if ( $amt < 0 ) {
-                            $amt = 1;
-                        }
-                        $this->trainUnit( $i, $amt, $great );
+                $start = ($session->tribe - 1) * 10 + 1;
+                $end   = ($session->tribe * 10);
+                for ($i = $start; $i <= $end; $i ++ ) {
+                    if (isset($post['t'.$i]) && $post['t'.$i] != 0) {
+                        $amt = intval($post['t'.$i]);
+                        if ($amt < 0) $amt = 1;
+                        $this->trainUnit($i, $amt, $great);
                     }
                 }
-                if ( $session->tribe == 3 ) {
-                    if ( isset( $post['t99'] ) && $post['t99'] != 0 ) {
-                        $amt = $post['t99'];
-                        $amt = intval( $amt );
-                        if ( $amt < 0 ) {
-                            $amt = 1;
-                        }
-                        $this->trainUnit( 99, $amt, $great );
+
+                if($session->tribe == 3)
+                {
+                    if (isset($post['t99']) && $post['t99'] != 0) {
+                        $amt = intval($post['t99']);
+                        if ($amt < 0) $amt = 1;
+                        $this->trainUnit(99, $amt, $great);
                     }
                 }
+             
                 header( "Location: build.php?id=" . $post['id'] );
                 exit;
             }
@@ -551,45 +548,55 @@ class Technology {
 	}
 
     private function trainUnit($unit,$amt,$great=false) {
-		global $session,$database,${'u'.$unit},$building,$village,$bid19,$bid20,$bid21,$bid25,$bid26,$bid29,$bid30,$bid36,$bid41,$bid42;
+		global $session, $database, ${'u'.$unit}, $building, $village, $bid19, $bid20, $bid21, $bid25, $bid26, $bid29, $bid30, $bid36, $bid41, $bid42;
 
-		if($this->getTech($unit) || $unit%10 <= 1 || $unit == 99) {
-			$footies = array(1,2,3,11,12,13,14,21,22,31,32,33,34,41,42,43,44);
-			$calvary = array(4,5,6,15,16,23,24,25,26,35,36,45,46);
-			$workshop = array(7,8,17,18,27,28,37,38,47,48);
-			$special = array(9,10,19,20,29,30,39,40,49,50);
-			$trapper = array(99);
-			if(in_array($unit,$footies)) {
+		if($this->getTech($unit) || $unit % 10 <= 1 || $unit == 99) {
+			$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44];
+			$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46];
+			$workshop = [7, 8, 17, 18, 27, 28, 37, 38, 47, 48];
+			$special = [9, 10, 19, 20, 29, 30, 39, 40, 49, 50];
+			$trapper = [99];
+			
+			//Check if the player is trying to train troops without the needed buildings
+			if((in_array($unit, $footies) && ($building->getTypeLevel(19) == 0 && $building->getTypeLevel(29) == 0)) ||
+			    (in_array($unit, $calvary) && ($building->getTypeLevel(20) == 0 && $building->getTypeLevel(30) == 0)) ||
+			    (in_array($unit, $workshop) && ($building->getTypeLevel(21) == 0 && $building->getTypeLevel(42) == 0)) ||
+			    (in_array($unit, $special) && ($building->getTypeLevel(25) < 10 && $building->getTypeLevel(26) < 10)) ||
+			    (in_array($unit, $trapper) && $building->getTypeLevel(36) == 0)) return;
+			
+			
+			if(in_array($unit, $footies)) {		    
 				if($great) {
 					$each = round(($bid29[$building->getTypeLevel(29)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 				} else {
 					$each = round(($bid19[$building->getTypeLevel(19)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 				}
 			}
-			if(in_array($unit,$calvary)) {
+			if(in_array($unit, $calvary)) {		    
 				if($great) {
 					$each = round(($bid30[$building->getTypeLevel(30)]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) * ${'u'.$unit}['time'] / SPEED);
 				} else {
 					$each = round(($bid20[$building->getTypeLevel(20)]['attri'] * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / 100) * ${'u'.$unit}['time'] / SPEED);
 				}
 			}
-			if(in_array($unit,$workshop)) {
+			if(in_array($unit, $workshop)) {	    
 				if($great) {
 					$each = round(($bid42[$building->getTypeLevel(42)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 				} else {
 					$each = round(($bid21[$building->getTypeLevel(21)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 				}
 			}
-			if(in_array($unit,$special)) {
+			if(in_array($unit, $special)) {			    
 				if($building->getTypeLevel(25) > 0){
 					$each = round(($bid25[$building->getTypeLevel(25)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 				} else {
 					$each = round(($bid26[$building->getTypeLevel(26)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 				}
 			}
-			if(in_array($unit,$trapper)) {
+			if(in_array($unit, $trapper)) {
+			    
 					$each = round(($bid19[$building->getTypeLevel(36)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
-			}
+			}	
 			if($unit%10 == 0 || $unit%10 == 9 && $unit != 99) {
 				$slots = $database->getAvailableExpansionTraining();
 				if($unit%10 == 0 && $slots['settlers'] <= $amt) { $amt = $slots['settlers']; }
