@@ -2090,7 +2090,7 @@ class Automation {
                     );
 
                     if ($isoasis == 0){
-                        // get toatal cranny value:
+                        // get total cranny value:
                         $buildarray = $database->getResourceLevel($data['to']);
                         $cranny = 0;
                         for($i=19;$i<39;$i++){
@@ -2126,7 +2126,8 @@ class Automation {
                                 }
                             }
                         }
-                        $cranny_eff = ($cranny * $atk_bonus)*$def_bonus*$artefact_bouns;
+                        $crannySpy = $cranny * $def_bonus * $artefact_bouns;
+                        $cranny_eff = $crannySpy * $atk_bonus;
 
                         // work out available resources.
                         $this->updateRes($data['to'],$to['owner']);
@@ -2779,7 +2780,7 @@ class Automation {
                                 elseif($palacelevel > 0) $info_spy .= $palaceimg." Palace level: <b>".$palacelevel."</b><br />";
                                 
                                 if($walllevel > 0) $info_spy .= $wallimg." Wall level: <b>".$walllevel."</b><br />";
-                                $info_spy .= $crannyimg." Total crannies capacity: <b>".$cranny."</b>";
+                                $info_spy .= $crannyimg." Total crannies capacity: <b>".$crannySpy."</b>";
                             }
                             else $info_spy = "".$spy_pic.", There are no informations to show";                                                   
                         }
