@@ -2767,7 +2767,7 @@ class Automation {
 	";
                         }else if($data['spy'] == 2){
                             if ($isoasis == 0){
-                                $walllevel = $database->getFieldLevelInVillage($data['to'], 31);
+                                $walllevel = $database->getFieldLevelInVillage($data['to'], '31, 32, 33');
                                 $residencelevel = $database->getFieldLevelInVillage($data['to'], 25);
                                 $palacelevel = $database->getFieldLevelInVillage($data['to'], 26);
                                 $residenceimg = "<img src=\"".GP_LOCATE."img/g/g25.gif\" height=\"20\" width=\"15\" alt=\"Residence\" title=\"Residence\" />";
