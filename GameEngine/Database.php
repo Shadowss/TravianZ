@@ -3560,7 +3560,7 @@ class MYSQLi_DB implements IDbConnection {
                         )
                     ) as level
                 FROM
-                    ".TB_PREFIX."fdata`
+                    ".TB_PREFIX."fdata
                 WHERE
                     vref = $vid
                     AND

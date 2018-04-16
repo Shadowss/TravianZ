@@ -367,8 +367,6 @@ class Units {
         if ( $data['u11'] < 0 ) {
             $form->addError( "error", "You can't send negative units." );
         }
-                
-        if($data['type'] < 1 || $data['type'] > 4) $form->addError("error", "Invalid attack type.");
         
         if($data['type'] != 1 && $post['spy'] != 0) $post['spy'] = 0;
         

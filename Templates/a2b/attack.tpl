@@ -333,14 +333,14 @@ $end = ($tribe*10);
                 ?><tbody class="infos">               
 		<tr>
 		<th>Destination:</th>
-        <td> colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
-                <?PHP
+        <td colspan="<?php echo !empty($process['t11']) ? 11 : 10; ?>">
+                <?php
 
                 echo"Warning: Catapult will <b>ONLY</b> shoot with a normal attack (they dont shoot with raids!)";
                 ?>
         </td>
         </tr>
-                <?PHP
+                <?php
             }
             ?>
 

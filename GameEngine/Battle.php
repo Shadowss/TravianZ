@@ -524,7 +524,7 @@ class Battle {
 
         // Formula for calculating the Moral
         if($attpop > $defpop) {
-            $moralbonus = 1 / round(max(0.667, pow($defpop / $attpop, 0.2 * min(1, $rap / $rdp))), 3);  
+            $moralbonus = 1 / round(max(0.667, pow($defpop / $attpop, 0.2 * min(1, $rap / ($rdp > 0 ? $rdp : 1)))), 3);  
         }else{
             $moralbonus = 1.0;
         }
