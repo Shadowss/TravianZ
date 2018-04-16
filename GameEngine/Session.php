@@ -63,7 +63,7 @@ class Session {
 			private $time;
 			var $logged_in = false;
 			var $referrer, $url;
-			var $username, $uid, $access, $plus, $tribe, $isAdmin, $alliance, $gold, $oldrank, $gpack;
+			var $username, $uid, $access, $plus, $tribe, $isAdmin, $alliance, $gold, $oldrank, $gpack, $goldclub;
 			var $bonus = 0;
 			var $bonus1 = 0;
 			var $bonus2 = 0;

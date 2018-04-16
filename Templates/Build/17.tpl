@@ -35,7 +35,7 @@ $userID = $database->getUserField($villageOwner,'id',0);
 }
 $maxcarry = $market->maxcarry;
 $maxcarry *= $market->merchantAvail();
-if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN))){
+if(isset($_POST['ft'])=='check' && (($_POST['send3'] > 1 && $_POST['send3'] < 3 && $session->goldclub) || $_POST['send3'] == 1) && $getwref != $village->wid && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN))){
 ?>
 <form method="POST" name="snd" action="build.php"> 
 <input type="hidden" name="ft" value="mk1">
@@ -72,20 +72,20 @@ if(isset($_POST['ft'])=='check' && $allres!=0 && $allres <= $maxcarry && ($_POST
 	<tbody><tr>
 		<th><?php echo COORDINATES;?>:</th>
         <?php
-		if($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
-        $getwref = $database->getVilWref($_POST['x'],$_POST['y']);
-		$getvilname = $database->getVillageField($getwref, "name");
-		$getvilowner = $database->getVillageField($getwref, "owner");
-		$getvilcoor['y'] = $_POST['y'];
-		$getvilcoor['x'] = $_POST['x'];
-		$time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
+		if(!empty($_POST['x']) && !empty($_POST['y']) && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
+          $getwref = $database->getVilWref($_POST['x'],$_POST['y']);
+		  $getvilname = $database->getVillageField($getwref, "name");
+		  $getvilowner = $database->getVillageField($getwref, "owner");
+		  $getvilcoor['y'] = $_POST['y'];
+		  $getvilcoor['x'] = $_POST['x'];
+		  $time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
 		}
-		else if($_POST['dname']!=""){
-		$getwref = $database->getVillageByName($_POST['dname']);
-		$getvilcoor = $database->getCoor($getwref);
-		$getvilname = $database->getVillageField($getwref, "name");
-		$getvilowner = $database->getVillageField($getwref, "owner");
-		$time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
+		else if(!empty($_POST['dname'])){
+		  $getwref = $database->getVillageByName($_POST['dname']);
+		  $getvilcoor = $database->getCoor($getwref);
+		  $getvilname = $database->getVillageField($getwref, "name");
+		  $getvilowner = $database->getVillageField($getwref, "owner");
+		  $time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
 		}
         ?>
 		<td><a href="karte.php?d=<?php echo $getwref; ?>&c=<?php echo $generator->getMapCheck($getwref); ?>"><?php echo $getvilname; ?>(<?php echo $getvilcoor['x']; ?>|<?php echo $getvilcoor['y']; ?>)<span class="clear"></span></a></td>
@@ -202,7 +202,7 @@ $coor['y'] = "";
 </table>
 <div class="clear"></div>
 <?php if($session->goldclub == 1){?>
-<p><select name="send3"><option value="1" selected="selected">1x</option><option value="2">2x</option><option value="3">3x</option></select><?php echo GO;?></p>
+<p><select name="send3"><option value="1" selected="selected">1x</option><option value="2">2x</option><option value="3">3x</option></select> <?php echo GO;?></p>
 <?php
 }else{
 ?>
@@ -215,10 +215,13 @@ $coor['y'] = "";
 $error = '';
 if(isset($_POST['ft'])=='check'){
 
-	if(!$checkexist){
+    if($form->returnErrors() > 0) $error = '<span class="error"><b>'.$form->getError("error").'</b></span>';
+    elseif(!$checkexist){
 		$error = '<span class="error"><b>'.NO_COORDINATES_SELECTED.'</b></span>';
 	}elseif($getwref == $village->wid){
 		$error = '<span class="error"><b>'.CANNOT_SEND_RESOURCES.'</b></span>';
+	}elseif($_POST['send3'] < 1 || $_POST['send3'] > 3 || ($_POST['send3'] > 1 && !$session->goldclub)){
+	    $error = '<span class="error"><b>'.INVALID_MERCHANTS_REPETITION.'</b></span>';
 	}elseif($userAccess == '0' or ($userAccess == MULTIHUNTER && $userID == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
 		$error = '<span class="error"><b>'.BANNED_CANNOT_SEND_RESOURCES.'.</b></span>';
     }elseif($_POST['r1']==0 && $_POST['r2']==0 && $_POST['r3']==0 && $_POST['r4']==0){

@@ -47,6 +47,20 @@ if($session->plus) {
  }
  ?>
 <div class="clear"></div><table id="range" cellpadding="1" cellspacing="1">
+<?php
+if(isset($_GET['e1']))
+{
+    echo "<p class=\"error2\">".NOT_ENOUGH_RESOURCES."</p>";
+}
+elseif(isset($_GET['e2']))
+{
+    echo "<p class=\"error2\">".INVALID_OFFER."</p>";
+}
+elseif(isset($_GET['e3']))
+{
+    echo "<p class=\"error2\">".NOT_ENOUGH_MERCHANTS."</p>";
+} 
+?>
 <thead><tr>
 	<th colspan="5"><a name="h2"></a><?php echo OFFERS_MARKETPLACE;?></th>
 </tr>
@@ -95,7 +109,7 @@ switch($market->onsale[$i]['gtype']) {
     echo "<td class=\"act none\">".NOT_ENOUGH_MERCHANTS."</td></tr>";
     }
     else if($session->access != BANNED){
-    echo "<td class=\"act\"><a href=\"build.php?id=$id&t=1&a=".$session->mchecker."&g=".$market->onsale[$i]['id']."\">".LUMBER."Accept offer</a></td>";
+    echo "<td class=\"act\"><a href=\"build.php?id=$id&t=1&a=".$session->mchecker."&g=".$market->onsale[$i]['id']."\">Accept offer</a></td>";
     }else{ 
 	echo "<td class=\"act\"><a href=\"banned.php\">".ACCEP_OFFER."</a></td>";
 	}

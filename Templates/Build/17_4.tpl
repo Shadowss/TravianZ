@@ -22,7 +22,7 @@ include("17_edit.tpl");
 }else{
 ?>
 
-<p><?php echo TRADE_ROUTES_DESC;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>">2.</p>
+<p><?php echo TRADE_ROUTES_DESC;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>.</p>
 
 <table id="npc" cellpadding="1" cellspacing="1"> 
 <thead>
@@ -61,7 +61,7 @@ echo "".TRADE_ROUTE_TO." <a href=karte.php?d=".$route['wid']."&c=".$generator->g
  | <a href="build.php?id=<?php echo $id; ?>&t=4&action=editRoute&routeid=<?php echo $routeid; ?>"><?php echo EDIT;?></a>
  | <a href="build.php?action=delRoute&routeid=<?php echo $routeid; ?>"><?php echo DELETE;?></a>
 	</th></tr></tfoot></table>
-		* <?php echo EXTEND_TRADE_ROUTES;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>">2
+		* <?php echo EXTEND_TRADE_ROUTES;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>
 <br>
 <div class="options">
     <a class="arrow" href="build.php?gid=17&t=4&create">» <?php echo CREATE_TRADE_ROUTES;?></a>
