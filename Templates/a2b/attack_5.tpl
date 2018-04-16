@@ -134,7 +134,7 @@ $actionType = "Raid";
 
                         <td><img src="img/x.gif" class="unit u42" title="Thorned Warrior" alt="Thorned Warrior"></td>
 
-                        <td><img src="img/x.gif" class="unit u43" title="Guardsman" alt="Guardsman></td>
+                        <td><img src="img/x.gif" class="unit u43" title="Guardsman" alt="Guardsman"></td>
 
                         <td><img src="img/x.gif" class="unit u44" title="Bird of Prey" alt="Bird of Prey"></td>
 
@@ -315,14 +315,14 @@ $actionType = "Raid";
             else if($process['c']=='4')
             {
                 ?><tbody class="infos">
-                <th>Destination:</th>
-
-            <td colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
+        <tr>
+        <th>Destination:</th>
+        <td> colspan="<?php if($process['t11'] != ''){ echo"11"; }else{ echo"10"; } ?>">
                 <?PHP
 
                 echo"Warning: Catapult will <b>ONLY</b> shoot with a normal attack (they dont shoot with raids!)";
                 ?>
-                </td>
+        </td>
 
         </tr>
                 <?PHP

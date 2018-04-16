@@ -89,7 +89,7 @@ class Units {
             $vid = $database->getVillageByName(stripslashes($post['dname']));
         }
         if (!empty($vid)) {
-            if($database->isVillageOases($vid) != 0){
+            if($database->isVillageOases($vid)){
                 $too = $database->getOasisField($vid,"conqured");
                 if($too == 0){
                     $disabledr ="disabled=disabled"; $disabled ="disabled=disabled";
@@ -122,12 +122,16 @@ class Units {
                 $disabled ="disabled=disabled";
             }
         }
-                if($disabledr != "" && $post['c'] == 2){
-                $form->addError("error","You can't reinforce this village/oasis");
+                if(!empty($disabledr) && $post['c'] == 2){
+                    $form->addError("error","You can't reinforce this village/oasis");
                 }
-                if($disabled != "" && $post['c'] == 3){
-                $form->addError("error","You can't attack this village/oasis with normal attack");
+                
+                if(!empty($disabled) && $post['c'] == 3){
+                    $form->addError("error","You can't attack this village/oasis with normal attack");
                 }
+                
+                if($post['c'] < 2 || $post['c'] > 4) $form->addError("error", "Invalid attack type.");
+                
                 if(empty($post['t1']) && empty($post['t2']) &&  empty($post['t3']) && empty($post['t4']) && empty($post['t5']) &&
                     empty($post['t6']) && empty($post['t7']) &&  empty($post['t8']) && empty($post['t9']) && empty($post['t10']) &&  empty($post['t11'])){
                 $form->addError("error","You need to mark min. one troop");
@@ -364,6 +368,10 @@ class Units {
             $form->addError( "error", "You can't send negative units." );
         }
                 
+        if($data['type'] < 1 || $data['type'] > 4) $form->addError("error", "Invalid attack type.");
+        
+        if($data['type'] != 1 && $post['spy'] != 0) $post['spy'] = 0;
+        
         if ( $form->returnErrors() > 0 ) {
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
@@ -415,11 +423,10 @@ class Units {
                 );
 
                 $fromcoor  = $database->getCoor( $village->wid );
-                $from   = array('x' => $fromcoor['x'], 'y' => $fromcoor['y']);
+                $from   = ['x' => $fromcoor['x'], 'y' => $fromcoor['y']];
                 $tocoor  = $database->getCoor( $data['to_vid'] );
-                $to     = array('x' => $tocoor['x'], 'y' => $tocoor['y']);
-                $speeds = array();
-                $scout  = 1;
+                $to     = ['x' => $tocoor['x'], 'y' => $tocoor['y']];
+                $speeds = [];
 
                 //find slowest unit.
                 for ( $i = 1; $i <= 10; $i ++ ) {

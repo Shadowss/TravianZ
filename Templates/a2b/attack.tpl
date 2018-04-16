@@ -72,10 +72,8 @@ $ckey= $generator->generateRandStr(6);
                (!empty($process['t10']) ? $process['t10'] : 0) +
                (!empty($process['t11']) ? $process['t11'] : 0);
  }
- if (isset($scout) && $scout==1 && isset($totalunits) && $totalunits==0) {
-if ($process['c'] != 2){
-$process['c'] = 1;
-}
+if (isset($scout) && $scout == 1 && isset($totalunits) && $totalunits == 0 && $process['c'] != 2) {
+    $process['c'] = 1;
 }
     $id = $database->addA2b($ckey,time(),$process['0'],$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,$process['c']);
 
@@ -332,16 +330,15 @@ $end = ($tribe*10);
             }
             else if($process['c']=='4')
             {
-                ?><tbody class="infos">
-                <th>Destination:</th>
-
-            <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
+                ?><tbody class="infos">               
+		<tr>
+		<th>Destination:</th>
+        <td> colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
                 <?PHP
 
                 echo"Warning: Catapult will <b>ONLY</b> shoot with a normal attack (they dont shoot with raids!)";
                 ?>
-                </td>
-
+        </td>
         </tr>
                 <?PHP
             }
