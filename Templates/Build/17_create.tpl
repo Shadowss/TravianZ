@@ -59,14 +59,14 @@
 					<th>
 						<?php echo COSTS;?>:					</th>
 					<td>
-						<img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"> 2
+						<img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"> <b>2</b>
 					</td>
 				</tr>
 				<tr>
 					<th>
 						<?php echo DURATION;?>:					</th>
 					<td>
-						7 <?php echo DAYS;?>
+						<b>7</b> <?php echo DAYS;?>
 					</td>
 				</tr>
 			</tbody></table>

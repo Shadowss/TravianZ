@@ -1,8 +1,8 @@
-<?php $edited_route = $database->getTradeRoute2($_GET['routeid']); ?>
+<?php $edited_route = $database->getTradeRoute2($_POST['routeid']); ?>
 <form action="build.php" method="post">
 		<div class="boxes boxesColor gray"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents cf">
-        <input type="hidden" name="action" value="editRoute">
-		<input type="hidden" name="routeid" value="<?php echo $_GET['routeid']; ?>">
+        <input type="hidden" name="action" value="editRoute2">
+		<input type="hidden" name="routeid" value="<?php echo $_POST['routeid']; ?>">
 			<table cellpadding="1" cellspacing="1" id="npc" class="transparent">
 			<thead>
 			<tr>

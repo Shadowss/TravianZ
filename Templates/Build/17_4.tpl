@@ -7,23 +7,19 @@
 </p> 
  
 <?php include("17_menu.tpl"); 
-
-if(isset($_GET['action'])){
+if(isset($_POST['action'])){
 $routeaccess = 1;
 }
 if(isset($_GET['create']) && $session->gold > 1){
 $routeaccess = 1;
 include("17_create.tpl");
-}else if($_GET['action'] == 'editRoute' && isset($_GET['routeid']) && $_GET['routeid'] != ""){
-$traderoute = $database->getTradeRouteUid($_GET['routeid']);
-if($traderoute == $session->uid){
+}else if($_POST['action'] == 'editRoute' && isset($_POST['routeid']) && !empty($_POST['routeid']) && $database->getTradeRouteUid($_POST['routeid']) == $session->uid){
 include("17_edit.tpl");
-}
 }else{
 ?>
 
 <p><?php echo TRADE_ROUTES_DESC;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>.</p>
-
+<form method="post" action ="build.php?id=34&t=4">
 <table id="npc" cellpadding="1" cellspacing="1"> 
 <thead>
 <tr>
@@ -41,7 +37,7 @@ $routes = $database->getTradeRoute($session->uid);
 foreach($routes as $route){
 ?>
 <tr>
-<th><label><input class="radio" type="radio" onclick="window.location.href = '?id=<?php echo $id; ?>&t=4&routeid=<?php echo $route['id']; ?>';" name="routeid" value="<?php echo $route['id']; ?>" <?php if($routeid == $route['id']) { echo "".CHECKED.""; } ?>></label></th>
+<th><label><input class="radio" type="radio" name="routeid" value="<?php echo $route['id']; ?>" <?php if($routeid == $route['id']) { echo "".CHECKED.""; } ?>></label></th>
 <th>
 <?php
 echo "".TRADE_ROUTE_TO." <a href=karte.php?d=".$route['wid']."&c=".$generator->getMapCheck($route['wid']).">".$database->getVillageField($route['wid'],"name")."</a>";
@@ -57,16 +53,18 @@ echo "".TRADE_ROUTE_TO." <a href=karte.php?d=".$route['wid']."&c=".$generator->g
 </th>
 	<th colspan="4">
    <?php $routeid=$routeid == 0? $routeid=0:$routeid; ?>	
-   <a href="build.php?action=extendRoute&routeid=<?php echo $routeid; ?>"><?php echo EXTEND;?></a>*
- | <a href="build.php?id=<?php echo $id; ?>&t=4&action=editRoute&routeid=<?php echo $routeid; ?>"><?php echo EDIT;?></a>
- | <a href="build.php?action=delRoute&routeid=<?php echo $routeid; ?>"><?php echo DELETE;?></a>
+   <button type="submit" name="action" value="extendRoute"><?php echo EXTEND;?>*</button>
+ | <button type="submit" name="action" value="editRoute"><?php echo EDIT;?></button>
+ | <button type="submit" name="action" value="delRoute"><?php echo DELETE;?></button>
 	</th></tr></tfoot></table>
+</form>
 		* <?php echo EXTEND_TRADE_ROUTES;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>
 <br>
 <div class="options">
     <a class="arrow" href="build.php?gid=17&t=4&create">» <?php echo CREATE_TRADE_ROUTES;?></a>
 </div>
 	</div>
+
 <?php
 }}else{
 header("Location: build.php?id=".$_GET['id']."");
