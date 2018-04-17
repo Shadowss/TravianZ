@@ -109,7 +109,7 @@ class Market
             header("Location: banned.php");
             exit;
         }
-        elseif(!$database->checkVilExist($getwref)) $form->addError("error", NO_COORDINATES_SELECTED);
+        elseif(!$database->checkVilExist($post['getwref'])) $form->addError("error", NO_COORDINATES_SELECTED);
         elseif($post['getwref'] == $village->wid) $form->addError("error", CANNOT_SEND_RESOURCES);
         elseif($post['send3'] < 1 || $post['send3'] > 3 || ($post['send3'] > 1 && !$session->goldclub)) $form->addError("error", INVALID_MERCHANTS_REPETITION);
         elseif($availableWood >= $post['r1'] && $availableClay >= $post['r2'] && $availableIron >= $post['r3'] && $availableCrop >= $post['r4'])
@@ -138,7 +138,7 @@ class Market
             }
             else $form->addError("error", TOO_FEW_MERCHANTS);
         }
-        else $form->addError("error","You cannot send more resources than you have");
+        else $form->addError("error", TOO_FEW_RESOURCES);
     }
 
     private function addOffer($post)
