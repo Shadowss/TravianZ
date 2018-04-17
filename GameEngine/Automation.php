@@ -3442,40 +3442,37 @@ class Automation {
 
                     if($data['t11'] != 0 || $troopsPresent) {
                         $temphero=$data['t11'];
-                        if ($HeroTransfer) $data['t11']=0;
+                        if ($HeroTransfer) $data['t11'] = 0;
                         //check if there is defence from town in to town
-                        $check=$database->getEnforce($data['to'],$data['from']);
-                        if (!isset($check['id'])){
-                            //no:
-                            $database->addEnforce($data);
-                        } else{
+                        $check = $database->getEnforce($data['to'], $data['from']);
+                        if (!isset($check['id'])) $database->addEnforce($data);
+                        else
+                        {
                             //yes
-                            $start = ($owntribe-1)*10+1;
-                            $end = ($owntribe*10);
+                            $start = ($owntribe - 1) * 10 + 1;
+                            $end = ($owntribe * 10);
+                            
                             //add unit.
-                            $j='1';
-                            for($i=$start;$i<=$end;$i++){
-                                if (!isset($t_units)) {
-                                    $t_units = '';
-                                }
-                                $t_units .= "u".$i."=u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');$j++;
+                            $t_units = '';
+                            for($i = $start, $j = 1; $i <= $end; $i++, $j++)
+                            {
+                                $t_units .= "u".$i." = u".$i." + ".$data['t'.$j].(($j > 9) ? '' : ', ');
                             }
+                            
                             $q = "UPDATE ".TB_PREFIX."enforcement set $t_units where id =".(int) $check['id'];
                             $database->query($q);
-                            $database->modifyEnforce($check['id'],'hero',$data['t11'],1);
+                            $database->modifyEnforce($check['id'], 'hero', $data['t11'], 1);
                         }
-                        $data['t11']=$temphero;
+                        $data['t11'] = $temphero;
                     }
                     //send rapport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].','.$data['t11'].'';
                     $data_fail = ''.$from['wref'].','.$from['owner'].','.$owntribe.','.$unitssend_att.'';
 
 
-                    if($isoasis == 0){
-                        $to_name=$to['name'];
-                    }else{
-                        $to_name="Oasis ".$database->getVillageField($to['conqured'],"name");
-                    }
+                    if($isoasis == 0) $to_name = $to['name'];    
+                    else $to_name = "Oasis ".$database->getVillageField($to['conqured'],"name");                 
+                    
                     $database->addNotice($from['owner'],$from['wref'],(isset($ownally) ? $ownally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
                     if($from['owner'] != $to['owner']) {
                         $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
@@ -3499,7 +3496,7 @@ class Automation {
 
                 //check empty reinforcement in rally point
                 $e_units='';
-                for ($i=1;$i<=50;$i++) {
+                for ($i=1; $i <= 50; $i++) {
                     $e_units.='u'.$i.'=0 AND ';
                 }
                 $e_units.='hero=0';
@@ -4145,34 +4142,23 @@ class Automation {
         $wood *= SPEED;
         return round($wood);
     }
+    
     private function bountyGetOWoodProd() {
-        global $session;
-        $wood = 0;
-        $wood += 40;
-        $wood *= SPEED;
-        return round($wood);
+        return round(SPEED * 40);
     }
+    
     private function bountyGetOClayProd() {
-        global $session;
-        $clay = 0;
-        $clay += 40;
-        $clay *= SPEED;
-        return round($clay);
-    }private function bountyGetOIronProd() {
-        global $session;
-        $iron = 0;
-        $iron += 40;
-        $iron *= SPEED;
-        return round($iron);
+        return round(SPEED * 40);
+    }
+    
+    private function bountyGetOIronProd() {
+        return round(SPEED * 40);
     }
 
     private function bountyGetOCropProd() {
-        global $session;
-        $crop = 0;
-        $clay += 40;
-        $crop *= SPEED;
-        return round($crop);
+        return round(SPEED * 40);
     }
+    
     private function bountyGetClayProd() {
         global $bid2,$bid6,$session;
         $clay = $brick = 0;

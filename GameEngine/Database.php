@@ -6170,7 +6170,7 @@ References: User ID/Message ID, Mode
         // first of all, check if we should be using cache and whether the field
         // required is already cached
         if ($use_cache && !$array_passed && isset(self::$villageFromReinforcementsCache[$vid[0].$from[0]]) && is_array(self::$villageFromReinforcementsCache[$vid[0].$from[0]]) && !count(self::$villageFromReinforcementsCache[$vid[0].$from[0]])) {
-            return $cachedValue;
+            return self::$villageFromReinforcementsCache[$vid[0].$from[0]];
         }  else if ($use_cache && $array_passed) {
             // check what we can return from cache
             $newVIDs = [];
@@ -6193,11 +6193,11 @@ References: User ID/Message ID, Mode
         } else if ($use_cache && !$array_passed && ($cachedValue = self::returnCachedContent(self::$villageFromReinforcementsCache, $vid[0].$from[0])) && !is_null($cachedValue)) {
             return $cachedValue;
         }
-
+        
         // build SELECT pairs
         $pairs = [];
         foreach ($vid as $index => $vidValue) {
-            $pairs[] = '(`from` = '.(int) $vidValue.' AND vref = '.(int) $from[$index].')';
+            $pairs[] = '(`from` = '.(int) $from[$index].' AND vref = '.(int) $vidValue.')';
         }
 
 		$q = "SELECT * FROM " . TB_PREFIX . "enforcement WHERE ".implode(' OR ', $pairs);
@@ -6209,7 +6209,7 @@ References: User ID/Message ID, Mode
         } else {
             if ($result && count($result)) {
                 foreach ( $result as $record ) {
-                    self::$villageFromReinforcementsCache[ $record['from'] . $record['vref'] ] = $record;
+                    self::$villageFromReinforcementsCache[$record['vref'].$record['from']] = $record;
                 }
             }
 
