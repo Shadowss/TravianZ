@@ -19,7 +19,7 @@ include("17_edit.tpl");
 ?>
 
 <p><?php echo TRADE_ROUTES_DESC;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>.</p>
-<form method="post" action ="build.php?id=34&t=4">
+<form method="post" action ="build.php?gid=17&t=4">
 <table id="npc" cellpadding="1" cellspacing="1"> 
 <thead>
 <tr>
@@ -30,8 +30,8 @@ include("17_edit.tpl");
 <th><?php echo TIME_LEFT;?></th>
 </tr></thead><tbody>
 <?php
-$routes = $database->getTradeRoute($session->uid);
-    if(count($routes) == 0) {
+$routes = $database->getTradeRoute($village->wid);
+    if(empty($routes)) {
     echo "<td colspan=\"5\" class=\"none\">".NO_TRADE_ROUTES.".</td></tr>";
     }else{
 foreach($routes as $route){

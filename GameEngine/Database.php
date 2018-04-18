@@ -4309,10 +4309,10 @@ References: User ID/Message ID, Mode
 	}
 
     // no need to cache this method
-	function getTradeRoute($uid) {
-	    list($uid) = $this->escape_input((int) $uid);
+	function getTradeRoute($from) {
+	    list($from) = $this->escape_input((int) $from);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "route where uid = $uid ORDER BY timestamp ASC";
+	    $q = "SELECT * FROM " . TB_PREFIX . "route where `from` = $from ORDER BY timestamp ASC";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
