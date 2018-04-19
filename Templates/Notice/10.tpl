@@ -1,15 +1,14 @@
 <?php
 $dataarray = explode(",",$message->readingNotice['data']);
-if ($database->getUserField($dataarray[0],'username',0)!="??") {
-    $user_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[0],'id',0)."\">".$database->getUserField($dataarray[0],'username',0)."</a>";
-}else{
-    $user_url="<font color=\"grey\"><b>??</b></font>";
+if ($database->getUserField($dataarray[0],'username',0) != "[?]") {
+    $user_url = "<a href=\"spieler.php?uid=".$database->getUserField($dataarray[0],'id',0)."\">".$database->getUserField($dataarray[0],'username',0)."</a>";
 }
-if($database->getVillageField($dataarray[1],'name')!="??") {
-    $from_url="<a href=\"karte.php?d=".$dataarray[1]."&c=".$generator->getMapCheck($dataarray[1])."\">".$database->getVillageField($dataarray[1],'name')."</a>";
-}else{
-    $from_url="<font color=\"grey\"><b>??</b></font>";
+else $user_url = "<font color=\"grey\"><b>[?]</b></font>";
+
+if($database->getVillageField($dataarray[1],'name') != "[?]") {
+    $from_url = "<a href=\"karte.php?d=".$dataarray[1]."&c=".$generator->getMapCheck($dataarray[1])."\">".$database->getVillageField($dataarray[1],'name')."</a>";
 }
+else $from_url = "<font color=\"grey\"><b>[?]</b></font>";
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">
 			<thead>
@@ -22,7 +21,7 @@ if($database->getVillageField($dataarray[1],'name')!="??") {
 				<?php
                 $date = $generator->procMtime($message->readingNotice['time']); ?>
 					<td class="sent">Sent:</td>
-					<td>on <?php echo $date[0]."<span> at ".$date[1]; ?></span> <span>hour</span></td>
+					<td>on <span><?php echo $date[0]." at ".$date[1]; ?></span> <span>hour</span></td>
 				</tr>
 			</thead>
 			<tbody>

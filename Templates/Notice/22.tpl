@@ -1,15 +1,7 @@
 <?php
 $dataarray = explode(",",$message->readingNotice['data']);
-if(isset($dataarray[14]) and $dataarray[14]!=0){$colspan="11";}else{$colspan="10";}
-if($dataarray[15] == 1){
-$image = "peace";
-}else if($dataarray[15] == 2){
-$image = "xmas";
-}else if($dataarray[15] == 3){
-$image = "newy";
-}else{
-$image = "easter";
-}
+$colspan = (isset($dataarray[14]) && $dataarray[14] > 0) ? 11 : 10;
+
 if($dataarray[15] == 1){
 $message1 = "".$database->getUserField($dataarray[0],"username",0)." visited ".$database->getUserField($dataarray[2],"username",0)."'s troops";
 }else if($dataarray[15] == 2){
@@ -31,7 +23,7 @@ $message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you 
 					<?php
                 $date = $generator->procMtime($message->readingNotice['time']); ?>
 					<td class="sent">Sent:</td>
-					<td>on <?php echo $date[0]."<span> at ".$date[1]; ?></span> <span>hour</span></td>
+					<td>on <span><?php echo $date[0]." at ".$date[1]; ?></span> <span>hour</span></td>
 				</tr>
 			</thead>
 			<tbody>
@@ -48,29 +40,27 @@ $message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you 
 <td>&nbsp;</td>
 <?php
 $tribe = $dataarray[3];
-$start = ($tribe-1)*10+1;
-for($i=$start;$i<=($start+9);$i++) {
+$start = ($tribe - 1) * 10 + 1;
+for($i = $start; $i <= ($start + 9); $i++) {
 	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
 }
-if(isset($dataarray[14]) and $dataarray[14]!=0){
+if(isset($dataarray[14]) && $dataarray[14] > 0){
 	echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
 }
 echo "</tr><tr><th>Troops</th>";
-for($i=4;$i<=13;$i++) {
-	if($dataarray[$i] == 0) {
-    	echo "<td class=\"none\">0</td>";
-    }
-    else {
-    	echo "<td>".$dataarray[$i]."</td>";
-    }
+
+for($i = 4; $i <= 13; $i++) {
+    if($dataarray[$i] == 0) echo "<td class=\"none\">0</td>";
+    else echo "<td>".$dataarray[$i]."</td>";
 }
-if(isset($dataarray[14]) and $dataarray[14]!=0){
+
+if(isset($dataarray[14]) && $dataarray[14] > 0){
 	echo "<td>$dataarray[14]</td>";
 }
 ?>
 </tbody>
 	<tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-	<img src="<?php echo GP_LOCATE; ?>img/r/<?php echo $image; ?>.gif" alt="Peace" title="Peace" />
+	<img src="<?php echo GP_LOCATE; ?>img/r/<?php echo (["peace", "xmas", "newy", "easter"])[$dataarray[15]-1]; ?>.gif" alt="Peace" title="Peace" />
 	<?php echo $message1; ?>
     </td></tr></tbody>
 </table>

@@ -1327,8 +1327,8 @@ class Automation {
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to'], false);
                     $enforcementarray = $database->getEnforceVillage($data['to'], 0);
+                    
                     if(count($enforcementarray) > 0) {
-
                         foreach($enforcementarray as $enforce) {
                             for($i=1;$i<=50;$i++) {
                                 if (!isset($enforDefender['u'.$i])) {
@@ -1343,29 +1343,18 @@ class Automation {
                             $enforDefender['hero'] += $enforce['hero'];
                         }
                     }
-                    for($i=1;$i<=50;$i++){
+                    
+                    for($i = 1; $i <= 50; $i++){
                         $def_ab[$i]=0;
-                        if(!isset($Defender['u'.$i])){
-                            $Defender['u'.$i] = 0;
-                        } else {
-                            if($Defender['u'.$i]=='' || $Defender['u'.$i] <= 0){
-                                $Defender['u'.$i] = 0;
-                            } else {
-                                if($i<=10){ $rom='1'; }
-                                else if($i<=20){ $ger='1'; }
-                                else if($i<=30){ $gal='1'; }
-                                else if($i<=40){ $nat='1'; }
-                                else if($i<=50){ $natar='1'; }
-                            }
+                        if(!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
+                            $Defender['u'.$i] = 0;                                                  
                         }
                     }
-                    if(!isset($Defender['hero'])){
-                        $Defender['hero'] = '0';
-                    } else {
-                        if($Defender['hero']=='' or $Defender['hero'] <= 0){
-                            $Defender['hero'] = 0;
-                        }
+                    
+                    if(!isset($Defender['hero']) || empty($Defender['hero']) || $Defender['hero'] < 0) {
+                        $Defender['hero'] = 0;            
                     }
+
                     //get attack units
                     $Attacker = array();
                     $start = ($owntribe-1)*10+1;
@@ -1481,28 +1470,15 @@ class Automation {
                             $enforDefender['hero'] += $enforce['hero'];
                         }
                     }
-                    for($i=1;$i<=50;$i++){
-                        if(!isset($Defender['u'.$i])){
-                            $Defender['u'.$i] = '0';
-                        } else {
-                            if($Defender['u'.$i]=='' or $Defender['u'.$i]<='0'){
-                                $Defender['u'.$i] = '0';
-                            } else {
-                                if($i<=10){ $rom='1'; }
-                                else if($i<=20){ $ger='1'; }
-                                else if($i<=30){ $gal='1'; }
-                                else if($i<=40){ $nat='1'; }
-                                else if($i<=50){ $natar='1'; }
-                            }
-
-                        }
+                    
+                    for($i = 1; $i <= 50; $i++){
+                        if(!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
+                            $Defender['u'.$i] = 0;                
+                        }                   
                     }
-                    if(!isset($Defender['hero'])){
-                        $Defender['hero'] = '0';
-                    } else {
-                        if($Defender['hero']=='' or $Defender['hero']<'0'){
-                            $Defender['hero'] = '0';
-                        }
+                    
+                    if(!isset($Defender['hero']) || empty($Defender['hero']) || $Defender['hero'] < 0) {
+                        $Defender['hero'] = 0;                
                     }
 
                     //get attack units
@@ -1637,13 +1613,15 @@ class Automation {
                             while($traps > 0)
                             {
                                 //There are some traps left, let's distribute them
-                                for($i = 1; $i <= 10 && $traps > 0; $i++, $traps--)
+                                for($i = 1; $i <= 10 && $traps > 0; $i++)
                                 {
-                                    ${'traped'.$i}++;
+                                    if($data['t'.$i] != 0) 
+                                    {
+                                        ${'traped'.$i}++;
+                                        $traps--;
+                                    }
                                 }
-                            } 
-                            
-                            $GLOBALS['logging']->debug($traped1." ".$multiplier." ".$traps." ".$totalTroops);
+                            }
                         }
                     }
                     
@@ -1718,31 +1696,37 @@ class Automation {
                         $unitssend_att_check=$unitssend_att;
                     }
 
+                    //Resetting the enforcements array
+                    for($i = 1; $i <= 50; $i++) $DefenderEnf['u'.$i] = 0;
+      
                     // our reinforcements count could have changed at this point, thus the re-select
-                    $enforcementarray2 = $database->getEnforceVillage($data['to'],0);
+                    $enforcementarray2 = $database->getEnforceVillage($data['to'], 0);
                     if(count($enforcementarray2) > 0) {
                         foreach($enforcementarray2 as $enforce2) {
+                            //TODO: Heroes must be divided by tribe
                             $Defender['hero'] += $enforce2['hero'];
-                            for ($i=1;$i<=50;$i++) {
-                                $Defender['u'.$i]+= $enforce2['u'.$i];
+                            for($i = 1; $i <= 50; $i++) {
+                                $DefenderEnf['u'.$i] += $enforce2['u'.$i];
                             }
-                        }
+                        }         
+                    }
+                    
+                    $totalsend_alldef = 0;
+                    $unitssend_def = [];
+                    
+                    //Own troops     
+                    $ownTroops = array_slice($Defender, ($targettribe - 1) * 10 + 1, 10);
+                    $totalsend_alldef = array_sum($ownTroops);
+                    $unitssend_def[0] = implode(",", $ownTroops);               
+                 
+                    //Reinforcements           
+                    for($i = 1; $i <= 5; $i++){
+                        $reinfTroops = array_slice($DefenderEnf, ($i - 1) * 10, 10);
+                        $totalsend_alldef += array_sum($reinfTroops);
+                        $unitssend_def[$i] = implode(",", $reinfTroops);
                     }
 
-                    $unitssend_def[1] = ''.$Defender['u1'].','.$Defender['u2'].','.$Defender['u3'].','.$Defender['u4'].','.$Defender['u5'].','.$Defender['u6'].','.$Defender['u7'].','.$Defender['u8'].','.$Defender['u9'].','.$Defender['u10'].'';
-                    $unitssend_def[2] = ''.$Defender['u11'].','.$Defender['u12'].','.$Defender['u13'].','.$Defender['u14'].','.$Defender['u15'].','.$Defender['u16'].','.$Defender['u17'].','.$Defender['u18'].','.$Defender['u19'].','.$Defender['u20'].'';
-                    $unitssend_def[3] = ''.$Defender['u21'].','.$Defender['u22'].','.$Defender['u23'].','.$Defender['u24'].','.$Defender['u25'].','.$Defender['u26'].','.$Defender['u27'].','.$Defender['u28'].','.$Defender['u29'].','.$Defender['u30'].'';
-                    $unitssend_def[4] = ''.$Defender['u31'].','.$Defender['u32'].','.$Defender['u33'].','.$Defender['u34'].','.$Defender['u35'].','.$Defender['u36'].','.$Defender['u37'].','.$Defender['u38'].','.$Defender['u39'].','.$Defender['u40'].'';
-                    $unitssend_def[5] = ''.$Defender['u41'].','.$Defender['u42'].','.$Defender['u43'].','.$Defender['u44'].','.$Defender['u45'].','.$Defender['u46'].','.$Defender['u47'].','.$Defender['u48'].','.$Defender['u49'].','.$Defender['u50'].'';
-                    $herosend_def = $Defender['hero'];
-                    $totalsend_alldef[1] = $Defender['u1']+$Defender['u2']+$Defender['u3']+$Defender['u4']+$Defender['u5']+$Defender['u6']+$Defender['u7']+$Defender['u8']+$Defender['u9']+$Defender['u10'];
-                    $totalsend_alldef[2] = $Defender['u11']+$Defender['u12']+$Defender['u13']+$Defender['u14']+$Defender['u15']+$Defender['u16']+$Defender['u17']+$Defender['u18']+$Defender['u19']+$Defender['u20'];
-                    $totalsend_alldef[3] = $Defender['u21']+$Defender['u22']+$Defender['u23']+$Defender['u24']+$Defender['u25']+$Defender['u26']+$Defender['u27']+$Defender['u28']+$Defender['u29']+$Defender['u30'];
-                    $totalsend_alldef[4] = $Defender['u31']+$Defender['u32']+$Defender['u33']+$Defender['u34']+$Defender['u35']+$Defender['u36']+$Defender['u37']+$Defender['u38']+$Defender['u39']+$Defender['u40'];
-                    $totalsend_alldef[5] = $Defender['u41']+$Defender['u42']+$Defender['u43']+$Defender['u44']+$Defender['u45']+$Defender['u46']+$Defender['u47']+$Defender['u48']+$Defender['u49']+$Defender['u50'];
-
-                    $totalsend_alldef =  $totalsend_alldef[1]+$totalsend_alldef[2]+$totalsend_alldef[3]+$totalsend_alldef[4]+$totalsend_alldef[5]+$herosend_def;
-
+                    $unitssend_deff[0] = '?,?,?,?,?,?,?,?,?,?,';
                     $unitssend_deff[1] = '?,?,?,?,?,?,?,?,?,?,';
                     $unitssend_deff[2] = '?,?,?,?,?,?,?,?,?,?,';
                     $unitssend_deff[3] = '?,?,?,?,?,?,?,?,?,?,';
@@ -1754,7 +1738,7 @@ class Automation {
                     ################FIXED BY SONGER################
                     #################################################
 
-                    for($i=1;$i<=11;$i++){
+                    for($i = 1; $i <= 11; $i++){
                         //MUST TO BE FIX : This is only for defender and still not properly coded
                         if (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) && $battlepart['casualties_attacker'][$i] <= 0) {
                             ${'dead'.$i} = 0;
@@ -1794,22 +1778,8 @@ class Automation {
                     $start = ($targettribe-1)*10+1;
                     $end = ($targettribe*10);
 
-                    if ( $targettribe == 1 ) {
-                        $u   = "";
-                        $rom = '1';
-                    } else if ( $targettribe == 2 ) {
-                        $u   = "1";
-                        $ger = '1';
-                    } else if ( $targettribe == 3 ) {
-                        $u   = "2";
-                        $gal = '1';
-                    } else if ( $targettribe == 4 ) {
-                        $u   = "3";
-                        $nat = '1';
-                    } else {
-                        $u     = "4";
-                        $natar = '1';
-                    } //FIX
+                    if ($targettribe == 1) $u = "";                    
+                    else $u = $targettribe - 1;
 
                     $unitModifications_units = [];
                     $unitModifications_amounts = [];
@@ -1847,23 +1817,22 @@ class Automation {
                         $life=''; $notlife=''; $wrong='0';
                         if($enforce['from'] != 0){
                             $tribe = $database->getUserArray($database->getVillageField($enforce['from'],"owner"), 1)["tribe"];
-                        }else{
-                            $tribe = 4;
                         }
+                        else $tribe = 4;                           
+                        
                         $start = ($tribe-1)*10+1;
                         $end = ($tribe*10);
                         unset($dead);
 
-                        if ( $tribe == 1 ) {
-                            $rom = '1';
-                        } else if ( $tribe == 2 ) {
-                            $ger = '1';
-                        } else if ( $tribe == 3 ) {
-                            $gal = '1';
-                        } else if ( $tribe == 4 ) {
-                            $nat = '1';
-                        } else {
-                            $natar = '1';
+                        switch($tribe)
+                        {
+                            case 1: $rom = 1; break;
+                            case 2: $ger = 1; break;
+                            case 3: $gal = 1; break;
+                            case 4: $nat = 1; break;
+                            
+                            case 5: 
+                            default: $natar = 1; break;                      
                         }
 
                         $enforceModificationsById = [];
@@ -1939,17 +1908,22 @@ class Automation {
                         }
                     }
                     $totalsend_att = $data['t1']+$data['t2']+$data['t3']+$data['t4']+$data['t5']+$data['t6']+$data['t7']+$data['t8']+$data['t9']+$data['t10']+$data['t11'];
-                    for ($i=1;$i<=50;$i++) {
+                    
+                    for ($i = 1; $i <= 50; $i++) {
                         if (!isset($alldead[$i])) {
                             $alldead[$i] = 0;
                         }
-                        $alldead[$i] += (isset($owndead[$i]) ? $owndead[$i] : 0);
                     }
+            
+                    $unitsdead_def[0] = implode(",", $owndead);
                     $unitsdead_def[1] = ''.$alldead['1'].','.$alldead['2'].','.$alldead['3'].','.$alldead['4'].','.$alldead['5'].','.$alldead['6'].','.$alldead['7'].','.$alldead['8'].','.$alldead['9'].','.$alldead['10'].'';
                     $unitsdead_def[2] = ''.$alldead['11'].','.$alldead['12'].','.$alldead['13'].','.$alldead['14'].','.$alldead['15'].','.$alldead['16'].','.$alldead['17'].','.$alldead['18'].','.$alldead['19'].','.$alldead['20'].'';
                     $unitsdead_def[3] = ''.$alldead['21'].','.$alldead['22'].','.$alldead['23'].','.$alldead['24'].','.$alldead['25'].','.$alldead['26'].','.$alldead['27'].','.$alldead['28'].','.$alldead['29'].','.$alldead['30'].'';
                     $unitsdead_def[4] = ''.$alldead['31'].','.$alldead['32'].','.$alldead['33'].','.$alldead['34'].','.$alldead['35'].','.$alldead['36'].','.$alldead['37'].','.$alldead['38'].','.$alldead['39'].','.$alldead['40'].'';
                     $unitsdead_def[5] = ''.$alldead['41'].','.$alldead['42'].','.$alldead['43'].','.$alldead['44'].','.$alldead['45'].','.$alldead['46'].','.$alldead['47'].','.$alldead['48'].','.$alldead['49'].','.$alldead['50'].'';
+                    
+                    //No troops returned
+                    $unitsdead_deff[0] = '?,?,?,?,?,?,?,?,?,?,';
                     $unitsdead_deff[1] = '?,?,?,?,?,?,?,?,?,?,';
                     $unitsdead_deff[2] = '?,?,?,?,?,?,?,?,?,?,';
                     $unitsdead_deff[3] = '?,?,?,?,?,?,?,?,?,?,';
@@ -2283,7 +2257,7 @@ class Automation {
                                 if (isset($empty)){
                                     $info_ram = "".$ram_pic.",There is no wall to destroy.";
                                 } elseif ($newLevel == 0){
-                                    $info_ram = "".$ram_pic.",Wall destroyed.";
+                                    $info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";
                                     $database->setVillageLevel($data['to'], ["f".$wallid, "f".$wallid."t"], [0, 0]);
                                     $pop = $this->recountPop($data['to']);
                                 }elseif ($newLevel == $walllevel){
@@ -2785,7 +2759,7 @@ class Automation {
                             else $info_spy = "".$spy_pic.", There are no informations to show";                                                   
                         }
 
-                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
+                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
                     }
                     else{
                         if(isset($village_destroyed) && $village_destroyed == 1 && $can_destroy==1){
@@ -2795,12 +2769,12 @@ class Automation {
                                           <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> The village has been destroyed.</td></tr></tbody>";
                             }
                         }
-                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.(isset($info_spy) ? $info_spy : '').',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
+                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$info_ram.','.$info_cat.','.$info_chief.','.(isset($info_spy) ? $info_spy : '').',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
                     }
 
                     // When all troops die, sends no info...send info
                     $info_troop= "None of your soldiers have returned";
-                    $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).','.$targettribe.',,,'.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
+                    $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,'.$targettribe.','.$unitssend_deff[0].','.$unitsdead_deff[0].','.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
 
                     //Undetected and detected in here.
                     if(!empty($scout)){
@@ -2811,7 +2785,7 @@ class Automation {
                                     $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                                     break;
                                 }else if($unitsdead_att == $unitssend_att && $defspy){ //fix by ronix
-                                    $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
+                                    $database->addNotice($to['owner'],$to['wref'],$targetally,20,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2.',,'.$info_troop,$AttackArrivalTime);
                                     break;
                                 }else if($defspy){ //fix by ronix
                                     $database->addNotice($to['owner'],$to['wref'],$targetally,21,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
@@ -3166,6 +3140,7 @@ class Automation {
                 unset(
                     $Attacker
                     ,$Defender
+                    ,$DefenderEnf
                     ,$enforce
                     ,$unitssend_att
                     ,$unitssend_def

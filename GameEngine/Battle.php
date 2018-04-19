@@ -872,15 +872,18 @@ class Battle {
     {
         if($moral < 1) $moral = 1;
         elseif($moral > 3) $moral = 3;
-        
-        $needMax = round(($moral * (pow($actualLevel, 2) + $actualLevel + 1) / (8 * $upDown)) + 0.5);
+
+        $needMax = round(($moral * (pow($actualLevel, 2) + $actualLevel + 1) / ($upDown == 0 ? 1 : 8 * $upDown)) + 0.5);
         for($i = $actualLevel-1; $i >= 1; $i--)
         {
-            $need = ($moral * (pow($i, 2) + $i + 1) / (8 * $upDown)) + 0.5;
-            if(min($realAttackers, $totalAttackers)/($needMax-$need) <= 1) break;
+            $need = ($moral * (pow($i, 2) + $i + 1) / ($upDown == 0 ? 1 : 8 * $upDown)) + 0.5;
+            if(min($realAttackers, $totalAttackers) / ($needMax - $need) <= 1) {
+                $i++;
+                break;
+            }
         }
         
-        return $i + 1;
+        return $i;
     }
 };
 

@@ -363,6 +363,40 @@ class Message {
 		}
 	}
 
+	/**
+	 * Not all notices have a corresponding .tpl file but with this function it's like they had it
+	 * 
+	 * @param int $type The type of the report (notice)
+	 * @return int Returns the new report type
+	 */
+	
+	public function getReportType($type)
+	{
+	    switch($type)
+	    {
+	        case 2:
+	        case 4:
+	        case 5:
+	        case 6:
+	        case 7: 
+	        case 18:
+	        case 20:
+	        case 21: return 1;
+	        
+	        case 11:
+	        case 12:
+	        case 13:
+	        case 14: return 10;
+	        
+	        case 16:
+	        case 17: return 15;
+	        
+	        case 19: return 3;        
+	    }
+	    
+	    return $type;
+	}
+	
 	public function loadNotes() {
 		global $session;
 		if(file_exists("GameEngine/Notes/" . md5($session->username) . ".txt")) {

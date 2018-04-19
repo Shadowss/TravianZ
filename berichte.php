@@ -93,50 +93,27 @@ if(isset($_GET['newdid'])) {
  ?>
 </div>
 <?php
-if ( isset( $_GET['aid'] ) ) {
-
-    if ( $_GET['aid'] != 0 ) {
-
-        if ( $session->alliance == $_GET['aid'] ) {
-
-            if ( isset( $_GET['id'] ) ) {
-                $ally = $database->getNotice2( preg_replace( "/[^a-zA-Z0-9_-]/", "", $_GET['id'] ), 'ally' );
-
-                if ( $session->alliance == $ally ) {
-                    $type = $database->getNotice2( preg_replace( "/[^a-zA-Z0-9_-]/", "", $_GET['id'] ), 'ntype' );
-
-                    if ( $type != 10 or $type != 11 or $type != 12 or $type != 13 or $type != 14 or $type != 15 or $type != 16 or $type != 17 ) {
-                        include( "Templates/Notice/" . $type . "x.tpl" );
-                    }
-                }
-            }
-        }
+if (isset($_GET['id'])) 
+{
+    if (isset($_GET['aid']) && $_GET['aid'] > 0 && $_GET['aid'] == $session->alliance)
+    {
+        $type = $database->getNotice2($_GET['id'], 'ntype');
+        if ($type >= 10 && $type <= 17) unset($type);
     }
-} else if ( isset( $_GET['vill'] ) ) {
-
-    if ( isset( $_GET['id'] ) ) {
-        $ally = $database->getNotice2( $_GET['id'], 'ally' );
-
-        if ( $database->getNotice2( preg_replace( "/[^a-zA-Z0-9_-]/", "", $_GET['id'] ), 'uid' ) == $session->uid ) {
-            $type = ( $message->readingNotice['ntype'] == 9 ) ? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
-            include( "Templates/Notice/" . $type . ".tpl" );
-        } else if ( $session->alliance == $ally ) {
-            $type = $database->getNotice2( $_GET['id'], 'ntype' );
-
-            if ( $type != 10 or $type != 11 or $type != 12 or $type != 13 or $type != 14 or $type != 15 or $type != 16 or $type != 17 ) {
-                include( "Templates/Notice/" . $type . "x.tpl" );
-            }
-        }
+    elseif(isset($_GET['vill']) && $database->getNotice2($_GET['id'], 'ally') == $session->alliance)
+    {
+        $type = $database->getNotice2($_GET['id'], 'ntype');
+        if ($type >= 10 && $type <= 17) unset($type);
     }
-
-} else if ( isset( $_GET['id'] ) ) {
-    if ( $database->getNotice2( preg_replace( "/[^a-zA-Z0-9_-]/", "", $_GET['id'] ), 'uid' ) == $session->uid ) {
-        $type = ( $message->readingNotice['ntype'] == 9 ) ? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
-        include( "Templates/Notice/" . $type . ".tpl" );
+    elseif($database->getNotice2(preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['id']), 'uid') == $session->uid) 
+    {
+        $type = ($message->readingNotice['ntype'] == 9) ? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
     }
-} else {
-    include( "Templates/Notice/all.tpl" );
+    
+    if(isset($type)) include("Templates/Notice/".$message->getReportType($type).".tpl");
+    unset($type);
 }
+else include("Templates/Notice/all.tpl");
 ?>
 </div>
 

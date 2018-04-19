@@ -897,7 +897,7 @@ class MYSQLi_DB implements IDbConnection {
         if ($result) {
             // will return the result
         } elseif($field=="username") {
-            $result = "??";
+            $result = "[?]";
         } else {
             $result = 0;
         }
@@ -2030,7 +2030,7 @@ class MYSQLi_DB implements IDbConnection {
         if($result){
             // will return the result
         }elseif($field=="name"){
-            $result = "??";
+            $result = "[?]";
         }else $result = 0;
 
         return $result;
@@ -4235,10 +4235,11 @@ References: User ID/Message ID, Mode
 
     function addNotice($uid, $toWref, $ally, $type, $topic, $data, $time = 0) {
     list($uid, $toWref, $ally, $type, $topic, $data, $time) = $this->escape_input((int) $uid, (int) $toWref, (int) $ally, (int) $type, $topic, $data, (int) $time);
-
-    	if($time == 0) {
-    	$time = time();
-    	}
+        
+        //We don't need to send reports to Nature or Natars
+        if($uid == 2 || $uid == 3) return;
+        if($time == 0) $time = time();
+    	
     	$q = "INSERT INTO " . TB_PREFIX . "ndata (id, uid, toWref, ally, topic, ntype, data, time, viewed) values (0,'$uid','$toWref','$ally','$topic',$type,'$data',$time,0)";
     	return mysqli_query($this->dblink,$q);
     }
