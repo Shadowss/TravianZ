@@ -6,7 +6,7 @@
 ##                       TRAVIANZ                         ##  
 ############################################################
 $dataarray = explode(",",$message->readingNotice['data']);
-$colspan = (isset($dataarray[173]) && $dataarray[173] > 0) ? 11 : 10;
+$colspan = (isset($dataarray[184]) && $dataarray[184] > 0) ? 11 : 10;
 $colspan2 = 10;
 
 //Attacker
@@ -66,7 +66,7 @@ $start = ($tribe - 1) * 10 + 1;
 for($i = $start; $i <= ($start + 9); $i++) {
 	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";
 }
-if(isset($dataarray[173]) && $dataarray[173] > 0){
+if(isset($dataarray[184]) && $dataarray[184] > 0){
 	echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
 }
 echo "</tr><tr><th>Troops</th>";
@@ -76,70 +76,70 @@ for($i = 3; $i <= 12; $i++) {
     else echo "<td>".$dataarray[$i]."</td>";
 }
 
-if(isset($dataarray[173]) && $dataarray[173] > 0){
-	echo "<td>$dataarray[173]</td>";
+if(isset($dataarray[184]) && $dataarray[184] > 0){
+	echo "<td>$dataarray[184]</td>";
 }
 echo "<tr><th>Casualties</th>";
 for($i = 13; $i <= 22; $i++) {
     if($dataarray[$i] == 0) echo "<td class=\"none\">0</td>";
     else echo "<td>".$dataarray[$i]."</td>";
 }
-if(isset($dataarray[173]) && $dataarray[173] > 0){
-    if ($dataarray[174] == 0) $tdclass='class="none"'; else $tdclass='';
-    echo "<td $tdclass>$dataarray[174]</td>";
+if(isset($dataarray[184]) && $dataarray[184] > 0){
+    if ($dataarray[185] == 0) $tdclass='class="none"'; else $tdclass='';
+    echo "<td $tdclass>$dataarray[185]</td>";
 }
-if($dataarray[175] > 0 || $dataarray[176] > 0 || $dataarray[177] > 0 || $dataarray[178] > 0 || $dataarray[179] > 0 || $dataarray[180] > 0 || $dataarray[181] > 0 || $dataarray[182] > 0 || $dataarray[183] > 0 || $dataarray[184] > 0 || $dataarray[185] > 0){
+if(array_sum(array_slice($dataarray, 186, 11)) > 0){
 echo "</tr><tr><th>Prisoners</th>";
 
-for($i = 175; $i <= 184; $i++) {
+for($i = 186; $i <= 195; $i++) {
     if($dataarray[$i] == 0) echo "<td class=\"none\">0</td>";
     else echo "<td>".$dataarray[$i]."</td>"; 
 }
 
-if(isset($dataarray[173]) && $dataarray[173] > 0){
-    if ($dataarray[185]==0) $tdclass='class="none"'; else $tdclass='';
-    echo "<td $tdclass>$dataarray[185]</td>";
+if(isset($dataarray[184]) && $dataarray[184] > 0){
+    if ($dataarray[196] == 0) $tdclass='class="none"'; else $tdclass='';
+    echo "<td $tdclass>$dataarray[196]</td>";
 }
 }  
-if (!empty($dataarray[187]) && !empty($dataarray[188])){ //ram
+if (!empty($dataarray[198]) && !empty($dataarray[199])){ //ram
 ?>
 	<tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-	<img class="unit u<?php echo $dataarray[187]; ?>" src="img/x.gif" alt="Ram" title="Ram" />
-	<?php echo $dataarray[188]; ?>
+	<img class="unit u<?php echo $dataarray[198]; ?>" src="img/x.gif" alt="Ram" title="Ram" />
+	<?php echo $dataarray[199]; ?>
     </td></tr></tbody>
 <?php } 
-if (!empty($dataarray[189]) && !empty($dataarray[190])){ //cata
+if (!empty($dataarray[200]) && !empty($dataarray[201])){ //cata
 ?>
 	<tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-	<img class="unit u<?php echo $dataarray[189]; ?>" src="img/x.gif" alt="Catapult" title="Catapult" />
-	<?php echo $dataarray[190]; ?>
+	<img class="unit u<?php echo $dataarray[200]; ?>" src="img/x.gif" alt="Catapult" title="Catapult" />
+	<?php echo $dataarray[201]; ?>
     </td></tr></tbody>
 <?php }
-if (!empty($dataarray[191]) && !empty($dataarray[192])){ //chief
+if (!empty($dataarray[202]) && !empty($dataarray[203])){ //chief
 ?>
 	<tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-	<img class="unit u<?php echo $dataarray[191]; ?>" src="img/x.gif" alt="Chief" title="Chief" />
-	<?php echo $dataarray[192]; ?>
+	<img class="unit u<?php echo $dataarray[202]; ?>" src="img/x.gif" alt="Chief" title="Chief" />
+	<?php echo $dataarray[203]; ?>
     </td></tr></tbody>
 <?php }
-if (!empty($dataarray[194]) && !empty($dataarray[195])){ //hero
+if (!empty($dataarray[205]) && !empty($dataarray[206])){ //hero
 ?>
 	<tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-	<img class="unit u<?php echo $dataarray[194]; ?>" src="img/x.gif" alt="Hero" title="Hero" />
-	<?php echo $dataarray[195]; ?>
+	<img class="unit u<?php echo $dataarray[205]; ?>" src="img/x.gif" alt="Hero" title="Hero" />
+	<?php echo $dataarray[206]; ?>
     </td></tr></tbody>
 <?php }
-if(isset($dataarray[193]) && !empty($dataarray[193])){ //No troops returned
+if(isset($dataarray[204]) && !empty($dataarray[204])){ //No troops returned
 ?>	
 	<tbody class="goods"><tr><th>Information</th><td colspan="<?php echo $colspan; ?>">
-	<?php echo $dataarray[193]; ?>
+	<?php echo $dataarray[204]; ?>
     </td></tr></tbody>
 <?php }?>
 </td></tr></tbody>
 </table>
 	
 <?php
-$target = $dataarray[33] - 1;
+$target = $dataarray[34] - 1;
 $start = ($target * 10) + 1;
 $troopsStart = ($target * 21) + 35;
 ?>

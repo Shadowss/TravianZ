@@ -101,7 +101,7 @@ if ($units[$y]['sort_type']==3){
                   <td colspan=\"10\">";
                   echo "<a>".VILLAGE_OF_THE_ELDERS_TROOPS."</a>";
                   echo "</td></tr></thead><tbody class=\"units\">";
-                  $tribe = $session->tribe;
+                  $tribe = 4;
                   $start = ($tribe-1)*10+1;
                   $end = ($tribe*10);
                   echo "<tr><th>&nbsp;</th>";

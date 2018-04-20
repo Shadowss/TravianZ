@@ -1,7 +1,7 @@
 <?php
 //reinforcement is underattack
 $dataarray = explode(",",$message->readingNotice['data']);
-$colspan = (isset($dataarray[24]) && $dataarray[24] > 0) ? 10 : 11;
+$colspan = (isset($dataarray[24]) && $dataarray[24] > 0) ? 11 : 10;
 if ($database->getUserField($dataarray[0], 'username', 0) != "[?]") {
     $user_url = "<a href=\"spieler.php?uid=".$database->getUserField($dataarray[0], 'id', 0)."\">".$database->getUserField($dataarray[0], 'username', 0)."</a>";
 }
@@ -46,23 +46,23 @@ for($i = $start; $i <= ($start + 9); $i++) {
 if(isset($dataarray[24]) && $dataarray[24] > 0){
 	echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
 }
-echo "</tr><tr><th>Troops</th>";
 
+echo "</tr><tr><th>Troops</th>";
 for($i = 4; $i <= 13; $i++) {
     if($dataarray[$i] == 0) echo "<td class=\"none\">0</td>";
     else echo "<td>".$dataarray[$i]."</td>";
 }
-
 if(isset($dataarray[24]) && $dataarray[24] > 0){
 	echo "<td>$dataarray[24]</td>";
 }
+
 echo "<tr><th>Casualties</th>";
 for($i = 14; $i <= 23; $i++) {
     if($dataarray[$i] == 0) echo "<td class=\"none\">0</td>";
     else echo "<td>".$dataarray[$i]."</td>";
 }
 if(isset($dataarray[24]) && $dataarray[24] > 0){
-	if ($dataarray[25] == 0){$tdclass = 'class="none"';}
+	if ($dataarray[25] == 0) $tdclass = 'class="none"';
 	echo "<td $tdclass>$dataarray[25]</td>";
 }
 ?>

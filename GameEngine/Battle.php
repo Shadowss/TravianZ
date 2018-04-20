@@ -873,17 +873,29 @@ class Battle {
         if($moral < 1) $moral = 1;
         elseif($moral > 3) $moral = 3;
 
-        $needMax = round(($moral * (pow($actualLevel, 2) + $actualLevel + 1) / ($upDown == 0 ? 1 : 8 * $upDown)) + 0.5);
-        for($i = $actualLevel-1; $i >= 1; $i--)
+        $needMax = round($this->CalculateNeededCatapults($moral, $upDown, $actualLevel));
+        if($needMax <= $realAttackers) return 0;
+        for($i = $actualLevel - 1; $i >= 1; $i--)
         {
-            $need = ($moral * (pow($i, 2) + $i + 1) / ($upDown == 0 ? 1 : 8 * $upDown)) + 0.5;
-            if(min($realAttackers, $totalAttackers) / ($needMax - $need) <= 1) {
-                $i++;
-                break;
-            }
+            $need = $this->CalculateNeededCatapults($moral, $upDown, $i);
+            if(min($realAttackers, $totalAttackers) / ($needMax - $need) <= 1) return ++$i;
         }
-        
-        return $i;
+ 
+        return $actualLevel;
+    }
+    
+    /**
+     * Calculate the needed catapults/rams to completely destroy a building/wall
+     * 
+     * @param float $moral The catapults/rams battle moral
+     * @param int $upDown (Upgrades / Downgrades) ratio of catapults/rams made in the Blacksmith
+     * @param int $actualLevel The level of the building before the battle
+     * @return float Returns the needed catapults/rams to destroy a building/wall
+     */
+    
+    public function CalculateNeededCatapults($moral, $upDown, $actualLevel)
+    {
+        return ($moral * (pow($actualLevel, 2) + $actualLevel + 1) / ($upDown == 0 ? 1 : 8 * $upDown)) + 0.5;
     }
 };
 
