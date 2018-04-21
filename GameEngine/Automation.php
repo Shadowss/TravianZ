@@ -10,7 +10,7 @@
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2018. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro                		       ##
 ##  Source code:   https://github.com/Shadowss/TravianZ		               ##
 ##                                                                             ##
@@ -34,7 +34,7 @@ class Automation {
         $this->procNewClimbers();
         $this->ClearUser();
         $this->ClearInactive();
-        $this->oasisResourcesProduce();
+        //$this->oasisResourcesProduce();
         $this->pruneResource();
         $this->pruneOResource();
         $this->checkWWAttacks();
@@ -2102,7 +2102,7 @@ class Automation {
                     }else{
                         $cranny_eff = 0;                       
 
-                        if ($conqureby >0) { //10% from owner proc village owner - fix by ronix
+                        if ($conqureby > 0) { //10% from owner proc village owner - fix by ronix
                             $this->updateRes($conqureby,$to['owner']);
                             $this->pruneResource();
                             
@@ -2116,7 +2116,7 @@ class Automation {
                             $this->updateORes($data['to']);
                             $this->pruneOResource();
                             
-                            $oasisData = $database->getOasisFields($data['to'],'clay, iron, wood, crop');
+                            $oasisData = $database->getOasisFields($data['to'], false);
                             $totclay = $oasisData['clay'];
                             $totiron = $oasisData['iron'];
                             $totwood = $oasisData['wood'];
@@ -2974,16 +2974,15 @@ class Automation {
                             // send the bounty on type 6.
                             if($type !== 1){
 
-                                $reference = $database->sendResource($steal[0],$steal[1],$steal[2],$steal[3],0,0);
+                                $reference = $database->sendResource($steal[0], $steal[1], $steal[2], $steal[3], 0, 0);
                                 if ($isoasis == 0){
-                                    $database->modifyResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                    $database->modifyResource($DefenderWref, $steal[0], $steal[1], $steal[2], $steal[3], 0);
                                 }else{
                                     if($conqureby > 0) //if it's an oasis but it's conquered by someone, resources must be modified in the owner village
                                     {
-                                        $database->modifyResource($conqureby,$steal[0],$steal[1],$steal[2],$steal[3],0);
-                                    }else{
-                                        $database->modifyOasisResource($DefenderWref,$steal[0],$steal[1],$steal[2],$steal[3],0);
+                                        $database->modifyResource($conqureby, $steal[0], $steal[1], $steal[2], $steal[3], 0);
                                     }
+                                    else $database->modifyOasisResource($DefenderWref, $steal[0], $steal[1], $steal[2], $steal[3], 0);                                  
                                 }
                                 $database->addMovement(6,$DefenderWref,$AttackerWref,$reference,$AttackArrivalTime,$endtime,1,0,0,0,0,$data['ref']);
                                 $totalstolengain=$steal[0]+$steal[1]+$steal[2]+$steal[3];
@@ -3781,12 +3780,11 @@ class Automation {
     }
     
     private function bountyLoadOTown($bountywid) {
-        global $database;
+        global $database;    
         $this->bountyinfoarray = $database->getOasisV($bountywid);
-        $this->bountyresarray = $database->getResourceLevel($bountywid);
         $this->bountypop = 2;
-
     }
+    
     private function bountyLoadTown($bountywid) {
         global $database;
         $this->bountyinfoarray = $database->getVillage($bountywid);
@@ -3794,7 +3792,6 @@ class Automation {
         $this->bountyoasisowned = $database->getOasis($bountywid);
         $this->bountyocounter = $this->bountysortOasis();
         $this->bountypop = $this->bountyinfoarray['pop'];
-
     }
 
     private function bountysortOasis() {
@@ -4029,12 +4026,12 @@ class Automation {
     }
 
     private function bountycalculateOProduction($bountywid) {
-        global $technology,$database;
         $this->bountyOproduction['wood'] = $this->bountyGetOWoodProd();
         $this->bountyOproduction['clay'] = $this->bountyGetOClayProd();
         $this->bountyOproduction['iron'] = $this->bountyGetOIronProd();
         $this->bountyOproduction['crop'] = $this->bountyGetOCropProd();
     }
+    
     private function bountycalculateProduction($bountywid,$uid) {
         global $technology,$database;
         $normalA = $database->getOwnArtefactInfoByType($bountywid,4);
@@ -4065,17 +4062,17 @@ class Automation {
         $nclay = ($this->bountyproduction['clay'] / 3600) * $timepast;
         $niron = ($this->bountyproduction['iron'] / 3600) * $timepast;
         $ncrop = ($this->bountyproduction['crop'] / 3600) * $timepast;
-        $database->modifyResource($bountywid,$nwood,$nclay,$niron,$ncrop,1);
+        $database->modifyResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);
         $database->updateVillage($bountywid);
     }
     private function bountyprocessOProduction($bountywid) {
         global $database;
         $timepast = time() - $this->bountyinfoarray['lastupdated'];
-        $nwood = ($this->bountyproduction['wood'] / 3600) * $timepast;
-        $nclay = ($this->bountyproduction['clay'] / 3600) * $timepast;
-        $niron = ($this->bountyproduction['iron'] / 3600) * $timepast;
-        $ncrop = ($this->bountyproduction['crop'] / 3600) * $timepast;
-        $database->modifyOasisResource($bountywid,$nwood,$nclay,$niron,$ncrop,1);
+        $nwood = ($this->bountyOproduction['wood'] / 3600) * $timepast;
+        $nclay = ($this->bountyOproduction['clay'] / 3600) * $timepast;
+        $niron = ($this->bountyOproduction['iron'] / 3600) * $timepast;
+        $ncrop = ($this->bountyOproduction['crop'] / 3600) * $timepast;
+        $database->modifyOasisResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);      
         $database->updateOasis($bountywid);
     }
 
@@ -4662,7 +4659,7 @@ class Automation {
         mysqli_commit($database->dblink);
     }
 
-    private function oasisResourcesProduce() {
+    /*private function oasisResourcesProduce() {
         global $database;
 
         $speedMultiplier = (8 * (SPEED/3600));
@@ -4679,7 +4676,7 @@ class Automation {
                     clay < 800 OR
                     iron < 800 OR
                     crop < 800");
-    }
+    }*/
 
     private function checkInvitedPlayes() {
         global $database;

@@ -2064,16 +2064,9 @@ class MYSQLi_DB implements IDbConnection {
         // return all data, don't waste time by selecting fields one by one
         $oasisArray = $this->getOasisV($ref, $use_cache);
         return (isset($oasisArray[$field]) ? $oasisArray[$field] : null);
-
-	    /*list($ref, $field) = $this->escape_input((int) $ref, $field);
-
-		$q = "SELECT $field FROM " . TB_PREFIX . "odata where wref = $ref";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
-		return $dbarray[$field];*/
 	}
 
-    function getOasisFields($ref, $fields, $use_cache = true) {
+    function getOasisFields($ref, $use_cache = true) {
         // return all data, don't waste time by selecting fields one by one
         return $this->getOasisV($ref, $use_cache);
 
@@ -3341,37 +3334,34 @@ class MYSQLi_DB implements IDbConnection {
         $negativeResources = false;
         $checkres = $this->getOasisV($vid);
 
-        if ( ! $mode ) {
-            $nwood = $checkres[0]['wood'] - $wood;
-            $nclay = $checkres[0]['clay'] - $clay;
-            $niron = $checkres[0]['iron'] - $iron;
-            $ncrop = $checkres[0]['crop'] - $crop;
+        if (!$mode) {
+            $nwood = $checkres['wood'] - $wood;
+            $nclay = $checkres['clay'] - $clay;
+            $niron = $checkres['iron'] - $iron;
+            $ncrop = $checkres['crop'] - $crop;
 
-            if ( $nwood < 0 or $nclay < 0 or $niron < 0 or $ncrop < 0 ) {
-                $negativeResources = true;
-            }
+            $negativeResources = $nwood < 0 || $nclay < 0 || $niron < 0 || $ncrop < 0;
 
-            $dwood = ( $nwood < 0 ) ? 0 : $nwood;
-            $dclay = ( $nclay < 0 ) ? 0 : $nclay;
-            $diron = ( $niron < 0 ) ? 0 : $niron;
-            $dcrop = ( $ncrop < 0 ) ? 0 : $ncrop;
+            $dwood = ($nwood < 0) ? 0 : $nwood;
+            $dclay = ($nclay < 0) ? 0 : $nclay;
+            $diron = ($niron < 0) ? 0 : $niron;
+            $dcrop = ($ncrop < 0) ? 0 : $ncrop;
         } else {
-            $nwood = $checkres[0]['wood'] + $wood;
-            $nclay = $checkres[0]['clay'] + $clay;
-            $niron = $checkres[0]['iron'] + $iron;
-            $ncrop = $checkres[0]['crop'] + $crop;
-            $dwood = ( $nwood > $checkres[0]['maxstore'] ) ? $checkres[0]['maxstore'] : $nwood;
-            $dclay = ( $nclay > $checkres[0]['maxstore'] ) ? $checkres[0]['maxstore'] : $nclay;
-            $diron = ( $niron > $checkres[0]['maxstore'] ) ? $checkres[0]['maxstore'] : $niron;
-            $dcrop = ( $ncrop > $checkres[0]['maxcrop'] ) ? $checkres[0]['maxcrop'] : $ncrop;
+            $nwood = $checkres['wood'] + $wood;
+            $nclay = $checkres['clay'] + $clay;
+            $niron = $checkres['iron'] + $iron;
+            $ncrop = $checkres['crop'] + $crop;
+            $dwood = ($nwood > $checkres['maxstore']) ? $checkres['maxstore'] : $nwood;
+            $dclay = ($nclay > $checkres['maxstore']) ? $checkres['maxstore'] : $nclay;
+            $diron = ($niron > $checkres['maxstore']) ? $checkres['maxstore'] : $niron;
+            $dcrop = ($ncrop > $checkres['maxcrop']) ? $checkres['maxcrop'] : $ncrop;
         }
 
-        if ( ! $negativeResources ) {
-            $q = "UPDATE " . TB_PREFIX . "odata set wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop where wref = " . $vid;
-            return mysqli_query( $this->dblink, $q );
-        } else {
-            return false;
+        if (!$negativeResources) {
+            $q = "UPDATE " . TB_PREFIX . "odata SET wood = $dwood, clay = $dclay, iron = $diron, crop = $dcrop WHERE wref = ".$vid;
+            return mysqli_query($this->dblink, $q);
         }
+        else return false;     
    	}
 
     function getFieldLevelInVillage($vid, $fieldType, $use_cache = true) {
