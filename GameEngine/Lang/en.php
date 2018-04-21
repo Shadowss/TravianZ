@@ -1379,7 +1379,43 @@ define("EDIT_NEWSBOX3","Newsbox 3");
 define("EDIT_NEWSBOX3_TOOLTIP","Enable or disable the display of the Newsbox 3. Displayed on the authorization page and on the game pages.");
 
 //Admin setting - Admin/Templates/config.tpl SQL Settings
+define("SQL_SETTINGS","SQL Settings");
+define("CONF_SQL_HOSTNAME","Hostname");
+define("CONF_SQL_HOSTNAME_TOOLTIP","The name of the server where MySQL is started (by default is: localhost).");
+define("CONF_SQL_PORT","Port");
+define("CONF_SQL_PORT_TOOLTIP","MySQL port for remote connection. The standard port for connecting is: 3306.");
+define("CONF_SQL_DBUSER","DB Username");
+define("CONF_SQL_DBUSER_TOOLTIP","The user name to connect to the database.");
+define("CONF_SQL_DBPASS","DB Password");
+define("CONF_SQL_DBPASS_TOOLTIP","Password from the user to connect to the database.");
+define("CONF_SQL_DBNAME","DB Name");
+define("CONF_SQL_DBNAME_TOOLTIP","Name of the database to which you are connecting.");
+define("CONF_SQL_TBPREFIX","Table Prefix");
+define("CONF_SQL_TBPREFIX_TOOLTIP","The prefix used for the database tables.");
+define("CONF_SQL_DBTYPE","DB Type");
+define("CONF_SQL_DBTYPE_TOOLTIP","The type of database used.");
 
+//Admin setting - Admin/Templates/config.tpl & editExtraSet.tpl
+define("EXTRA_SETT","Extra Settings");
+define("EDIT_EXTRA_SETT","Edit Extra Settings");
+define("CONF_EXTRA_LIMITMAIL","Limit Mailbox");
+define("CONF_EXTRA_LIMITMAIL_TOOLTIP","Enable (Yes) or disable (No) the mailbox limit.");
+define("CONF_EXTRA_MAXMAIL","Max number of mails");
+define("CONF_EXTRA_MAXMAIL_TOOLTIP","The maximum number of messages that can fit in the mailbox.");
+
+//Admin setting - Admin/Templates/config.tpl & editAdminInfo.tpl
+define("ADMIN_INFO","Admin Information");
+define("EDIT_ADMIN_INFO","Edit Admin Information");
+define("CONF_ADMIN_NAME","Admin Name");
+define("CONF_ADMIN_NAME_TOOLTIP","Name for the administrator account.");
+define("CONF_ADMIN_EMAIL","Admin E-Mail");
+define("CONF_ADMIN_EMAIL_TOOLTIP","The email address for the administrator account.");
+define("CONF_ADMIN_SHOWSTATS","Include Admin in Stats");
+define("CONF_ADMIN_SHOWSTATS_TOOLTIP","Enable (True) or disable (False) the display of the administrator account in the general statistics of players.");
+define("CONF_ADMIN_SUPPMESS","Include Support Messages");
+define("CONF_ADMIN_SUPPMESS_TOOLTIP","Enable (True) or disable (False) the sending of messages to the mailbox of the administrator addressed to Support.");
+define("CONF_ADMIN_RAIDATT","Allow Raided and Attacked");
+define("CONF_ADMIN_RAIDATT_TOOLTIP","Enable (True) or disable (False) the ability to Raided and Attacked an administrator.");
 
 /*
 |--------------------------------------------------------------------------

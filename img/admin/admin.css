@@ -590,8 +590,8 @@ input#btn_search {width:97px; background-image: url(b/search.gif);}
     font-family: Calibri, Tahoma, Geneva, sans-serif;
     font-size: 1.2em;
     position: absolute;
-    left: 1em;
-    top: 2em;
+    left: -2em;
+    bottom: 1em;
     z-index: 99;
     margin-left: 0;
     width: 250px;

@@ -311,7 +311,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 <table id="member">
 	<thead>
 		<tr>
-			<th>SQL Settings</th>
+			<th><?php echo SQL_SETTINGS ?></th>
 		</tr>
 	</thead>
 </table>
@@ -322,31 +322,31 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
-		<td>Hostname</td>
+		<td><?php echo CONF_SQL_HOSTNAME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SQL_HOSTNAME_TOOLTIP ?></span></em></td>
 		<td><?php echo SQL_SERVER;?></td>
 	</tr>
 	<tr>
-		<td>Port</td>
+		<td><?php echo CONF_SQL_PORT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SQL_PORT_TOOLTIP ?></span></em></td>
 		<td><?php echo SQL_PORT;?></td>
 	</tr>
 	<tr>
-		<td>DB Username</td>
+		<td><?php echo CONF_SQL_DBUSER ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SQL_DBUSER_TOOLTIP ?></span></em></td>
 		<td><?php echo SQL_USER;?></td>
 	</tr>
 	<tr>
-		<td>DB Password</td>
+		<td><?php echo CONF_SQL_DBPASS ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SQL_DBPASS_TOOLTIP ?></span></em></td>
 		<td>*********</td>
 	</tr>
 	<tr>
-		<td>DB Name</td>
+		<td><?php echo CONF_SQL_DBNAME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SQL_DBNAME_TOOLTIP ?></span></em></td>
 		<td><?php echo SQL_DB;?></td>
 	</tr>
 	<tr>
-		<td>Table Prefix</td>
+		<td><?php echo CONF_SQL_TBPREFIX ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SQL_TBPREFIX_TOOLTIP ?></span></em></td>
 		<td><?php echo TB_PREFIX;?></td>
 	</tr>
 	<tr>
-		<td>DB Type</td>
+		<td><?php echo CONF_SQL_DBTYPE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SQL_DBTYPE_TOOLTIP ?></span></em></td>
 		<td><?php if(DB_TYPE == 0) { echo "MYSQL"; } else if(DB_TYPE == 1) { echo "MYSQLi"; } ?></td>
 	</tr>
 </table>
@@ -354,7 +354,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 <table id="member">
   <thead>
 		<tr>
-			<th>Extra Settings <a href="admin.php?p=editExtraSet"><img src="../img/admin/edit.gif" title="Edit Extra Settings"></a></th>
+			<th><?php echo EXTRA_SETT ?> <a href="admin.php?p=editExtraSet"><img src="../img/admin/edit.gif" title="<?php echo EDIT_EXTRA_SETT ?>"></a></th>
 		</tr>
 	</thead>
 </table>
@@ -365,11 +365,11 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
-		<td>Limit Mailbox</td>
+		<td><?php echo CONF_EXTRA_LIMITMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_EXTRA_LIMITMAIL_TOOLTIP ?></span></em></td>
 		<td><?php if(LIMIT_MAILBOX == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(LIMIT_MAILBOX == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Max number of mails</td>
+		<td><?php echo CONF_EXTRA_MAXMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_EXTRA_MAXMAIL_TOOLTIP ?></span></em></td>
 		<td><?php if(LIMIT_MAILBOX == true){ echo MAX_MAIL; } else if(LIMIT_MAILBOX == false){ echo "<font color='Gray'>Limit mailbox disabled</font>"; } ?></td>
 	</tr>
 </table>
@@ -377,7 +377,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 <table id="member">
 	<thead>
 		<tr>
-			<th>Admin Information <a href="admin.php?p=editAdminInfo"><img src="../img/admin/edit.gif" title="Edit Admin Info"></a></th>
+			<th><?php echo ADMIN_INFO ?> <a href="admin.php?p=editAdminInfo"><img src="../img/admin/edit.gif" title="<?php echo EDIT_ADMIN_INFO ?>"></a></th>
 		</tr>
 	</thead>
 </table>
@@ -387,23 +387,23 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
-		<td>Admin Email</td>
-		<td><?php if(ADMIN_EMAIL == ''){ echo "<b><font color='Red'>No admin email defined!</b></font>"; } else if(ADMIN_EMAIL != ''){ echo ADMIN_EMAIL; } ?></td>
-	</tr>
-	<tr>
-		<td>Admin Name</td>
+		<td><?php echo CONF_ADMIN_NAME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_NAME_TOOLTIP ?></span></em></td>
 		<td><?php if(ADMIN_NAME == ''){ echo "<b><font color='Red'>No admin name defined!</b></font>"; } else if(ADMIN_NAME != ''){ echo ADMIN_NAME; } ?></td>
 	</tr>
 	<tr>
-		<td>Include Admin in Rank</td>
+		<td><?php echo CONF_ADMIN_EMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_EMAIL_TOOLTIP ?></span></em></td>
+		<td><?php if(ADMIN_EMAIL == ''){ echo "<b><font color='Red'>No admin email defined!</b></font>"; } else if(ADMIN_EMAIL != ''){ echo ADMIN_EMAIL; } ?></td>
+	</tr>
+	<tr>
+		<td><?php echo CONF_ADMIN_SHOWSTATS ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_SHOWSTATS_TOOLTIP ?></span></em></td>
 		<td><?php if(INCLUDE_ADMIN == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(INCLUDE_ADMIN == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Include Support Messages in Admin Mailbox</td>
+		<td><?php echo CONF_ADMIN_SUPPMESS ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_SUPPMESS_TOOLTIP ?></span></em></td>
 		<td><?php if(ADMIN_RECEIVE_SUPPORT_MESSAGES == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(ADMIN_RECEIVE_SUPPORT_MESSAGES == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Allow Administrative Accounts to be Raided and Attacked</td>
+		<td><?php echo CONF_ADMIN_RAIDATT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_ADMIN_RAIDATT_TOOLTIP ?></span></em></td>
 		<td><?php if(ADMIN_ALLOW_INCOMING_RAIDS == true){ echo "<b><font color='Green'>Yes</font></b>"; } else if(ADMIN_ALLOW_INCOMING_RAIDS == false){ echo "<b><font color='Red'>No</font></b>"; } ?></td>
 	</tr>
 </table>
