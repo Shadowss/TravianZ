@@ -950,13 +950,13 @@ class Automation {
         $dataarray = $database->query_return($q);
 
         foreach($dataarray as $data) {
-            $userData_from = $database->getUserFields($database->getVillageField($data['from'],"owner"),"alliance, tribe",0);
-            $userData_to = $database->getUserFields($database->getVillageField($data['to'],"owner"),"alliance, tribe",0);
+            $userData_from = $database->getUserFields($database->getVillageField($data['from'], "owner"), "alliance, tribe", 0);
+            $userData_to = $database->getUserFields($database->getVillageField($data['to'], "owner"), "alliance, tribe", 0);
 
-            if($data['wood'] >= $data['clay'] && $data['wood'] >= $data['iron'] && $data['wood'] >= $data['crop']){ $sort_type = "10"; }
-            elseif($data['clay'] >= $data['wood'] && $data['clay'] >= $data['iron'] && $data['clay'] >= $data['crop']){ $sort_type = "11"; }
-            elseif($data['iron'] >= $data['wood'] && $data['iron'] >= $data['clay'] && $data['iron'] >= $data['crop']){ $sort_type = "12"; }
-            elseif($data['crop'] >= $data['wood'] && $data['crop'] >= $data['clay'] && $data['crop'] >= $data['iron']){ $sort_type = "13"; }
+            if($data['wood'] >= $data['clay'] && $data['wood'] >= $data['iron'] && $data['wood'] >= $data['crop']) $sort_type = 10;
+            elseif($data['clay'] >= $data['wood'] && $data['clay'] >= $data['iron'] && $data['clay'] >= $data['crop']) $sort_type = 11;
+            elseif($data['iron'] >= $data['wood'] && $data['iron'] >= $data['clay'] && $data['iron'] >= $data['crop']) $sort_type = 12;
+            elseif($data['crop'] >= $data['wood'] && $data['crop'] >= $data['clay'] && $data['crop'] >= $data['iron']) $sort_type = 13;
 
             $to = $database->getMInfo($data['to']);
             $from = $database->getMInfo($data['from']);
@@ -1002,32 +1002,38 @@ class Automation {
         }
     }
 
-    private function sendResource2($wtrans,$ctrans,$itrans,$crtrans,$from,$to,$tribe,$send) {
+    private function sendResource2($wtrans, $ctrans, $itrans, $crtrans, $from, $to, $tribe, $send) {
         global $bid17,$bid28,$database,$generator,$logging;
 
         $availableWood = $database->getWoodAvailable($from);
         $availableClay = $database->getClayAvailable($from);
         $availableIron = $database->getIronAvailable($from);
         $availableCrop = $database->getCropAvailable($from);
-
-        if($availableWood >= $wtrans AND $availableClay >= $ctrans AND $availableIron >= $itrans AND $availableCrop >= $crtrans){
+        
+        if($availableWood + $availableClay + $availableIron + $availableCrop > 0)
+        {
+            if($availableWood < $wtrans) $wtrans = $availableWood;
+            if($availableClay < $ctrans) $ctrans = $availableClay;
+            if($availableIron < $itrans) $itrans = $availableIron;
+            if($availableCrop < $crtrans) $crtrans = $availableCrop;          
+            
             $merchant2 = ($this->getTypeLevel(17,$from) > 0)? $this->getTypeLevel(17,$from) : 0;
             $used2 = $database->totalMerchantUsed($from, false);
             $merchantAvail2 = $merchant2 - $used2;
             $maxcarry2 = ($tribe == 1)? 500 : (($tribe == 2)? 1000 : 750);
             $maxcarry2 *= TRADER_CAPACITY;
-
+            
             if($this->getTypeLevel(28,$from) != 0) {
                 $maxcarry2 *= $bid28[$this->getTypeLevel(28,$from)]['attri'] / 100;
             }
-
+            
             $resource = array($wtrans,$ctrans,$itrans,$crtrans);
             $reqMerc = ceil((array_sum($resource)-0.1)/$maxcarry2);
-
+            
             if($merchantAvail2 != 0 && $reqMerc <= $merchantAvail2) {
                 $coor = $database->getCoor($to);
                 $coor2 = $database->getCoor($from);
-
+                
                 if($database->getVillageState($to)) {
                     $timetaken = $generator->procDistanceTime($coor,$coor2,$tribe,0);
                     $res = $resource[0]+$resource[1]+$resource[2]+$resource[3];
@@ -1036,8 +1042,7 @@ class Automation {
                         $database->modifyResource($from,$resource[0],$resource[1],$resource[2],$resource[3],0);
                         $database->addMovement(0,$from,$to,$reference,microtime(true),microtime(true)+$timetaken,$send);
                     }
-                }
-
+                }           
             }
         }
     }

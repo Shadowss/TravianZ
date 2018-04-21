@@ -35,7 +35,7 @@ $userID = $database->getUserField($villageOwner,'id',0);
 }
 $maxcarry = $market->maxcarry;
 $maxcarry *= $market->merchantAvail();
-if(isset($_POST['ft'])=='check' && (($_POST['send3'] > 1 && $_POST['send3'] < 3 && $session->goldclub) || $_POST['send3'] == 1) && $getwref != $village->wid && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN))){
+if(isset($_POST['ft'])=='check' && (($_POST['send3'] > 1 && $_POST['send3'] <= 3 && $session->goldclub) || $_POST['send3'] == 1) && $getwref != $village->wid && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN))){
 ?>
 <form method="POST" name="snd" action="build.php"> 
 <input type="hidden" name="ft" value="mk1">
