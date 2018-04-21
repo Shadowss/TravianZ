@@ -1249,6 +1249,7 @@ To build a World Wonder, you must own the Construction Plans yourself (you = the
 define("WWVILLAGE","WW village");
 
 //Admin setting - Admin/Templates/config.tpl & editServerSet.tpl
+define("EDIT_BACK","Back");
 define("SERV_CONFIG","Server Configuration");
 define("SERV_SETT","Server Settings");
 define("EDIT_SERV_SETT","Edit Server Settings");
@@ -1314,6 +1315,70 @@ define("CONF_SERV_ERRORREPORT","Error Reporting");
 define("CONF_SERV_ERRORREPORT_TOOLTIP","Enable (Yes) or disable (No) the display of error reports on the game server.");
 
 //Admin setting - Admin/Templates/config.tpl & editPlusSet.tpl
+define("PLUS_CONFIGURATION","<b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> Configuration");
+define("PLUS_SETT","<b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> Settings");
+define("EDIT_PLUS_SETT","Edit <b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> Setting");
+define("EDIT_PLUS_SETT1","Edit PLUS Setting");
+define("CONF_PLUS_PAYPALEMAIL","<a href='https://www.paypal.com' target='_blank'>PayPal</a> E-Mail Address");
+define("CONF_PLUS_PAYPALEMAIL_TOOLTIP","The E-Mail Address specified at registration on PayPal.<br><font color='red'><b>Must be Business or Premier account!</b></font>");
+define("CONF_PLUS_CURRENCY","Payment Currency");
+define("CONF_PLUS_CURRENCY_TOOLTIP","The currency to be used for payment.");
+define("CONF_PLUS_PACKAGEGOLDA","Package \"A\" Amount of Gold");
+define("CONF_PLUS_PACKAGEGOLDA_TOOLTIP","The amount of gold issued for the payment of the package \"A\".");
+define("CONF_PLUS_PACKAGEPRICEA","Package \"A\" Amount of Price");
+define("CONF_PLUS_PACKAGEPRICEA_TOOLTIP","The amount necessary to pay the cost of package \"A\".");
+define("CONF_PLUS_PACKAGEGOLDB","Package \"B\" Amount of Gold");
+define("CONF_PLUS_PACKAGEGOLDB_TOOLTIP","The amount of gold issued for the payment of the package \"B\".");
+define("CONF_PLUS_PACKAGEPRICEB","Package \"B\" Amount of Price");
+define("CONF_PLUS_PACKAGEPRICEB_TOOLTIP","The amount necessary to pay the cost of package \"B\".");
+define("CONF_PLUS_PACKAGEGOLDC","Package \"C\" Amount of Gold");
+define("CONF_PLUS_PACKAGEGOLDC_TOOLTIP","The amount of gold issued for the payment of the package \"C\".");
+define("CONF_PLUS_PACKAGEPRICEC","Package \"C\" Amount of Price");
+define("CONF_PLUS_PACKAGEPRICEC_TOOLTIP","The amount necessary to pay the cost of package \"C\".");
+define("CONF_PLUS_PACKAGEGOLDD","Package \"D\" Amount of Gold");
+define("CONF_PLUS_PACKAGEGOLDD_TOOLTIP","The amount of gold issued for the payment of the package \"D\".");
+define("CONF_PLUS_PACKAGEPRICED","Package \"D\" Amount of Price");
+define("CONF_PLUS_PACKAGEPRICED_TOOLTIP","The amount necessary to pay the cost of package \"D\".");
+define("CONF_PLUS_PACKAGEGOLDE","Package \"E\" Amount of Gold");
+define("CONF_PLUS_PACKAGEGOLDE_TOOLTIP","The amount of gold issued for the payment of the package \"E\".");
+define("CONF_PLUS_PACKAGEPRICEE","Package \"E\" Amount of Price");
+define("CONF_PLUS_PACKAGEPRICEE_TOOLTIP","The amount necessary to pay the cost of package \"E\".");
+define("CONF_PLUS_ACCDURATION","<b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> account duration");
+define("CONF_PLUS_ACCDURATION_TOOLTIP","The duration of the game function <b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> for the account at the time of activation by the player.");
+define("CONF_PLUS_PRODUCTDURATION","+25% production duration");
+define("CONF_PLUS_PRODUCTDURATION_TOOLTIP","The duration of the game function +25% production duration for the account at the time of activation by the player.");
+
+//Admin setting - Admin/Templates/config.tpl & editLogSet.tpl
+define("LOG_SETT","Log Settings");
+define("EDIT_LOG_SETT","Edit Log Setting");
+define("CONF_LOG_BUILD","Log Build");
+define("CONF_LOG_BUILD_TOOLTIP","Enable (Yes) or disable (No) the display of logs for the construction of buildings in the village.");
+define("CONF_LOG_TECHNOLOGY","Log Technology");
+define("CONF_LOG_TECHNOLOGY_TOOLTIP","Enable (Yes) or disable (No) display logs to improve troops in Blacksmith and Armoury.");
+define("CONF_LOG_LOGIN","Log Login");
+define("CONF_LOG_LOGIN_TOOLTIP","Enable (Yes) or disable (No) the display logs players login the game.");
+define("CONF_LOG_GOLD","Log Gold");
+define("CONF_LOG_GOLD_TOOLTIP","Enable (Yes) or disable (No) the display of gold use logs in-game by players.");
+define("CONF_LOG_ADMIN","Log Admin");
+define("CONF_LOG_ADMIN_TOOLTIP","Enable (Yes) or disable (No) the display of logs for administrator actions in the control panel.");
+define("CONF_LOG_WAR","Log War");
+define("CONF_LOG_WAR_TOOLTIP","Enable (Yes) or disable (No) the display of logs attacks on players in the game.");
+define("CONF_LOG_MARKET","Log Market");
+define("CONF_LOG_MARKET_TOOLTIP","Enable (Yes) or disable (No) the display of the logs of the use of the market in the game by the players.");
+define("CONF_LOG_ILLEGAL","Log Illegal");
+define("CONF_LOG_ILLEGAL_TOOLTIP","Enable (Yes) or disable (No) the display of illegal logs. (I do not know exactly what it is)");
+
+//Admin setting - Admin/Templates/config.tpl & editNewsboxSet.tpl
+define("NEWSBOX_SETT","Newsbox Settings");
+define("EDIT_NEWSBOX_SETT","Edit Newsbox Setting");
+define("EDIT_NEWSBOX1","Newsbox 1");
+define("EDIT_NEWSBOX1_TOOLTIP","Enable or disable the display of the Newsbox 1. Displayed on the authorization page and on the game pages.");
+define("EDIT_NEWSBOX2","Newsbox 2");
+define("EDIT_NEWSBOX2_TOOLTIP","Enable or disable the display of the Newsbox 2. Displayed on the authorization page and on the game pages.");
+define("EDIT_NEWSBOX3","Newsbox 3");
+define("EDIT_NEWSBOX3_TOOLTIP","Enable or disable the display of the Newsbox 3. Displayed on the authorization page and on the game pages.");
+
+//Admin setting - Admin/Templates/config.tpl SQL Settings
 
 
 /*

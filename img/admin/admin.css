@@ -588,6 +588,7 @@ input#btn_search {width:97px; background-image: url(b/search.gif);}
 
 .tooltip:hover span {
     font-family: Calibri, Tahoma, Geneva, sans-serif;
+    font-size: 1.2em;
     position: absolute;
     left: 1em;
     top: 2em;
