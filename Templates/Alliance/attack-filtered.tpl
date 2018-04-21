@@ -1,11 +1,16 @@
 <?php
-$sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype != 0 AND ntype < 4 OR ntype > 17 AND ntype != 20 AND ntype != 21) ORDER BY time DESC LIMIT 20");
+$filterType = $_GET['f'];
+if($filterType == 31) $sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype != 0 AND ntype < 4 OR ntype > 17 AND ntype != 20 AND ntype != 21) ORDER BY time DESC LIMIT 20");
+elseif($filterType == 32) $sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype < 1 OR ntype > 3 AND ntype < 8 OR ntype > 19) ORDER BY time DESC LIMIT 20");
+    
 $query = mysqli_num_rows($sql);
 $outputList = '';
 $name = 1;
-if($query == 0) {
-    $outputList .= "<td colspan=\"4\" class=\"none\">There are no reports available.</td>";
-}else{
+
+if(!$query) $outputList .= "<td colspan=\"4\" class=\"none\">There are no reports available.</td>";
+else
+{
+
 while($row = mysqli_fetch_array($sql)){ 
 	$dataarray = explode(",",$row['data']);
     $id = $row["id"];
@@ -20,21 +25,20 @@ while($row = mysqli_fetch_array($sql)){
 	
     $outputList .= "<tr>";
 	$outputList .= "<td class=\"sub\">";
-if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
-    $type2 = '32';
-}else{
-    $type2 = '31';
-}
+	
+	if($ntype >= 4 && $ntype <= 7) $type2 = 32;
+	else $type2 = 31;
+
 	$outputList .= "<a href=\"allianz.php?s=3&f=".$type2."\">";
     $type = (isset($_GET['t']) && $_GET['t'] == 5)? $archive : $ntype;
-	if($type==18 or $type==19){
+    if((($type == 18 || $type == 19) && $filterType == 31) || (($type == 20 || $type == 21) && $filterType == 32)){
     $outputList .= "<img src=\"gpack/travian_default/img/scouts/$type.gif\" title=\"".$topic."\" />";
-	  }else{
+	}else{
     $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$topic."\">";
 	}
     $outputList .= "</a>";
     $outputList .= "<div><a href=\"berichte.php?id=".$id."&aid=".$ally."\">";
-    if($ntype==0){ $nn = " scouts "; }else{ $nn = " attacks "; }
+    if((($type == 18 || $type == 19) && $filterType == 31) || (($type == 20 || $type == 21) && $filterType == 32)) $nn = " scouts "; else $nn = " attacks "; 
 
     $outputList .= $database->getUserField($dataarray[0], "username", 0);
        
@@ -43,12 +47,9 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
     $getUserAlly = $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "alliance", 0);
     $getAllyName = $database->getAllianceName($getUserAlly);
     
-    if($getUserAlly==$session->alliance || !$getUserAlly){
-    	$allyName = "-";
-    }else{
-    	$allyName = "<a href=\"allianz.php?aid=".$getUserAlly."\">".$getAllyName."</a>";
-    }
-    
+    if(!$getUserAlly) $allyName = "-";
+    else $allyName = "<a href=\"allianz.php?aid=".$getUserAlly."\">".$getAllyName."</a>";
+
     $outputList .= "<td class=\"al\">".$allyName."</td>";
     $date = $generator->procMtime($time);
     $outputList .= "<td class=\"dat\">".$date[0]." ".date('H:i',$time)."</td>";
