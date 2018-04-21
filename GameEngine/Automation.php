@@ -4234,28 +4234,25 @@ class Automation {
                             $timepast2 -= $train['eachtime'];
                             $trained += 1;
                         }
-                        if($trained > $train['amt']){
-                            $trained = $train['amt'];
-                        }
-                    }else{
-                        $trained = $train['amt'];
+                        
+                        if($trained > $train['amt']) $trained = $train['amt'];
                     }
+                    else $trained = $train['amt'];               
                     
-                    if($train['unit']>60 && $train['unit']!=99){
-                        $database->modifyUnit($train['vref'],array($train['unit']-60),array($trained),array(1));
-                    }else{
-                        $database->modifyUnit($train['vref'],array($train['unit']),array($trained),array(1));
+                    if($train['unit'] > 60 && $train['unit'] != 99){
+                        $database->modifyUnit($train['vref'], [$train['unit'] - 60], [$trained], [1]);
                     }
-                    $database->updateTraining($train['id'],$trained,$trained*$train['eachtime']);
+                    else $database->modifyUnit($train['vref'], [$train['unit']], [$trained], [1]);
+                
+                    $database->updateTraining($train['id'], $trained, $trained * $train['eachtime']);
+                    
+                    if($train['amt'] - $trained <= 0) $database->trainUnit($train['id'], 0, 0, 0, 0, 1, 1);
                 }
 
                 if ($valuesUpdated) {
                     call_user_func(get_class($database).'::clearUnitsCache');
                 }
-
-                if($train['amt'] == 0){
-                    $database->trainUnit($train['id'],0,0,0,0,1,1);
-                }
+             
                 $crop = $database->getCropProdstarv($train['vref']);
                 $unitarrays = $this->getAllUnits($train['vref']);
                 $village = $database->getVillage($train['vref'], 0);
