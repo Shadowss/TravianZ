@@ -116,7 +116,7 @@ class Message {
 			}
 			if (!is_array($type)) { $type = array($type); }
 			$this->noticearray = $this->filter_by_value($database->getNotice($session->uid), "ntype", $type);
-			$this->notice = $this->filter_by_value($database->getNotice3($session->uid), "ntype", $type);
+			$this->notice = $this->filter_by_value($database->getNotice3($session->uid, $session->alliance), "ntype", $type);
 		}
 		if(isset($get['id'])) {
 			$this->readingNotice = $this->getReadNotice($get['id']);
@@ -228,7 +228,7 @@ class Message {
 
 	private function getNotice() {
 		global $database, $session;
-		$this->allNotice = $database->getNotice3($session->uid);
+		$this->allNotice = $database->getNotice3($session->uid, $session->alliance);
 		$this->noticearray = $this->filter_by_value_except($database->getNotice($session->uid), "ntype", 9);
 		$this->notice = $this->filter_by_value_except($this->allNotice, "ntype", 9);
 		$this->totalNotice = count($this->allNotice);
@@ -354,10 +354,10 @@ class Message {
 	}
 
 	private function getReadNotice($id) {
-		global $database;
+		global $database, $session;
 		foreach($this->allNotice as $notice) {
-			if($notice['id'] == $id) {
-				$database->noticeViewed($notice['id']);
+		    if($notice['id'] == $id) {
+		        if($notice['uid'] == $session->uid) $database->noticeViewed($notice['id']);
 				return $notice;
 			}
 		}
@@ -391,7 +391,9 @@ class Message {
 	        case 16:
 	        case 17: return 15;
 	        
-	        case 19: return 3;        
+	        case 19: return 3;   
+	        
+	        case 23: return 22;
 	    }
 	    
 	    return $type;

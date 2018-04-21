@@ -21,7 +21,7 @@ if($_GET['f'] == 31 || $_GET['f'] == 32) include "Templates/Alliance/attack-filt
 else
 {
 		
-$sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype < 8 OR ntype > 17) ORDER BY time DESC LIMIT 20");
+$sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype < 8 OR (ntype > 17 AND ntype < 22) OR (ntype = 22 AND ally = $session->alliance) OR (ntype = 23 AND ally != $session->alliance)) ORDER BY time DESC LIMIT 20");
 $query = mysqli_num_rows($sql);
 $outputList = '';
 $name = 1;
@@ -51,7 +51,8 @@ while($row = mysqli_fetch_array($sql)){
 
 	$outputList .= "<a href=\"allianz.php?s=3&f=".$type2."\">";
     $type = (isset($_GET['t']) && $_GET['t'] == 5)? $archive : $ntype;
-    if($type >= 18 && $type <= 21){
+    if($type == 23) $type = 22;
+    if($type >= 18 && $type <= 22){
     $outputList .= "<img src=\"gpack/travian_default/img/scouts/$type.gif\" title=\"".$topic."\" />";
 	  }else{
     $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$topic."\">";

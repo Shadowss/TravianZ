@@ -3,13 +3,13 @@ $dataarray = explode(",",$message->readingNotice['data']);
 $colspan = (isset($dataarray[14]) && $dataarray[14] > 0) ? 11 : 10;
 
 if($dataarray[15] == 1){
-$message1 = "".$database->getUserField($dataarray[0],"username",0)." visited ".$database->getUserField($dataarray[2],"username",0)."'s troops";
+$message1 = "".$database->getUserField($dataarray[0], "username", 0)." visited ".$database->getUserField($dataarray[2],"username",0)."'s troops";
 }else if($dataarray[15] == 2){
-$message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Merry Christmas";
+$message1 = "".$database->getUserField($dataarray[0], "username", 0)." wishes you Merry Christmas";
 }else if($dataarray[15] == 3){
-$message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Happy New Year";
+$message1 = "".$database->getUserField($dataarray[0], "username", 0)." wishes you Happy New Year";
 }else{
-$message1 = "".$database->getUserField($dataarray[0],"username",0)." wishes you Happy Easter";
+$message1 = "".$database->getUserField($dataarray[0], "username", 0)." wishes you Happy Easter";
 }
 ?>
 <table cellpadding="1" cellspacing="1" id="report_surround">

@@ -14,7 +14,7 @@ echo !$oasis['conqured']? UNOCCUOASIS : OCCUOASIS; echo " (".$basearray['x']."|"
 $otext = !$oasis['conqured']? UNOCCUOASIS : OCCUOASIS;
 } ?></h1>
 <?php if($basearray['occupied'] && $basearray['capital']) { echo "<div id=\"dmain\">(capital)</div>"; }
-if($uinfo['owner']==3 && $uinfo['name']==PLANVILLAGE){
+if($uinfo['owner'] == 3 && $uinfo['name'] == PLANVILLAGE){
 ?>
 <img src="img/x.gif" id="detailed_map" class="f99" alt="<?php echo PLANVILLAGE;?>" />
 <?php }else{ ?>
@@ -104,12 +104,13 @@ echo $tt."\"";
 $landd = explode("-",$tt);?> />
 <?php } ?>
 <div id="map_details">
-<?php if($basearray['fieldtype'] == 0) {
+<?php 
+if($basearray['fieldtype'] == 0) {
 if($oasis['owner'] == 2){
 ?>
 <table cellpadding="1" cellspacing="1" id="bonus" class="tableNone bonus">
 		<thead><tr>
-			<th>Bonus:</th>
+			<th><?php echo BONUS;?></th>
 		</tr></thead>
 		<tbody>
 <?php
@@ -125,7 +126,7 @@ if($oasis['owner'] == 2){
             <tbody>
             <?php         
         $unit = $database->getUnit($_GET['d']);
-        $unarray = array(31=>U31,U32,U33,U34,U35,U36,U37,U38,U39,U40);     
+        $unarray = array(31 => U31, U32, U33, U34, U35, U36, U37, U38, U39, U40);     
         $a = 0;
         for ($i = 31; $i <= 40; $i++) {
           if($unit['u'.$i]){
@@ -146,7 +147,7 @@ if($oasis['owner'] == 2){
           }                   
         }
         if($a == 10){
-        echo '<tr><td><?php echo NOTROOP;?></td></tr>';
+        echo '<tr><td>'.NOTROOP.'</td></tr>';
         }
 
      
@@ -160,22 +161,22 @@ if($oasis['owner'] == 2){
 		</tr></thead>
 		<tbody>
 		<?php
-if($session->uid == $database->getVillage($_GET['d'])){
-	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7";
-}else{
-	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17";
-    }
+if($session->uid == $database->getVillage($_GET['d'])['owner']){
+	$limit = "ntype > 3 AND ntype < 8";
+}
+else $limit = "ntype < 8 OR ntype > 17";
+
 $toWref = $_GET['d'];
-if($session->alliance!=0){
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+if($session->alliance != 0){
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
-if($query != 0){
+if($query){
 while($row = mysqli_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
-	$topic=$row['topic'];
+	$topic = $row['topic'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21){
+if($type >= 18 && $type <= 21){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
@@ -193,13 +194,13 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 }else{
 $result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
-if($query != 0){
+if($query){
 while($row = mysqli_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	$topic=$row['topic'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21){
+if($type >= 18 && $type <= 21){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
@@ -222,29 +223,29 @@ if($type==18 or $type==19 or $type==20 or $type==21){
         <?php 
         $uinfo = $database->getUserArray($oasis['owner'],1); ?>
 		<tbody><tr>
-			<th>Tribe</th>
+			<th><?php echo TRIBE;?></th>
 			<td><?php switch($uinfo['tribe']) { case 1: echo TRIBE1; break; case 2: echo TRIBE2; break; case 3: echo TRIBE3; break; case 4: echo TRIBE4; break; case 5: echo TRIBE5; break;} ?></td>
 		</tr>
 		<tr>
-			<th>Alliance</th>
+			<th><?php echo ALLIANCE;?></th>
 			<?php if($uinfo['alliance'] == 0){
 			echo '<td>-</td>';
 			} else echo '
 			<td><a href="allianz.php?aid='.$uinfo['alliance'].' ">'.$database->getUserAlliance($oasis['owner']).'</a></td>'; ?>
 		</tr>
 		<tr>
-			<th>Owner</th>
+			<th><?php echo OWNER;?></th>
 			<td><a href="spieler.php?uid=<?php echo $oasis['owner']; ?>"><?php echo $database->getUserField($oasis['owner'],'username',0); ?></a></td>
 		</tr>
 		<tr>
-			<th>Village</th>
+			<th><?php echo VILLAGE;?></th>
 			<td><a href="karte.php?d=<?php echo $oasis['conqured'];?>&c=<?php echo $generator->getMapCheck($oasis['conqured']);?>"><?php echo $database->getVillageField($oasis['conqured'], "name");?> </a></td>
 		</tr></tbody>
 	</table>
 
 <table cellpadding="1" cellspacing="1" id="bonus" class="tableNone bonus">
 		<thead><tr>
-			<th>Bonus:</th>
+			<th><?php echo BONUS;?></th>
 		</tr></thead>
 		<tbody>
 <?php
@@ -255,26 +256,26 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 	
 <table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone rep">
 		<thead><tr>
-			<th>Reports:</th>
+			<th><?php echo REPORT;?></th>
 		</tr></thead>
 		<tbody>
 		<?php
-if($session->uid == $database->getVillage($_GET['d'])){
-	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7 and ntype=20 and ntype=21";
-}else{
-	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14 and ntype!=15 and ntype!=16 and ntype!=17";
-    }
+if($session->uid == $database->getVillage($_GET['d'])['owner']){
+	$limit = "(ntype > 3 AND ntype < 8) OR ntype = 20 OR ntype = 21";
+}
+else $limit = "ntype < 8 OR ntype > 17";
+
 $toWref = $_GET['d'];
-if($session->alliance!=0){
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+if($session->alliance != 0){
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
-if($query != 0){
+if($query){
 while($row = mysqli_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
-	$topic=$row['topic'];
+	$topic = $row['topic'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21){
+if($type >= 18 && $type <= 21){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
@@ -292,13 +293,13 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 }else{
 $result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
-if($query != 0){
+if($query){
 while($row = mysqli_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
-	$topic=$row['topic'];
+	$topic = $row['topic'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21){
+if($type >= 18 && $type <= 21){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
@@ -315,7 +316,8 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 </tbody>
 </table>
 <?php
-}}else if (!$basearray['occupied']) {
+}
+}else if (!$basearray['occupied']) {
 ?>
 	<table cellpadding="1" cellspacing="1" id="distribution" class="tableNone">
 
@@ -385,22 +387,22 @@ if($type==18 or $type==19 or $type==20 or $type==21){
 		</tr></thead>
 		<tbody>
 		<?php
-if($session->uid == $database->getVillage($_GET['d'])){
-	$limit = "ntype=0 and ntype=4 and ntype=5 and ntype=6 and ntype=7";
-}else{
-	$limit = "ntype!=8 and ntype!=9 and ntype!=10 and ntype!=11 and ntype!=12 and ntype!=13 and ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17";
-    }
+if($session->uid == $database->getVillage($_GET['d'])['owner']){
+	$limit = "(ntype > 3 AND ntype < 8) OR ntype = 23";
+}
+else $limit = "(ntype < 8 OR (ntype > 17 AND ntype < 22)) OR ntype = 22";
+
 $toWref = $_GET['d'];
-if($session->alliance!=0){
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+if($session->alliance != 0){
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
-if($query != 0){
+if($query){
 while($row = mysqli_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
-	$type = $row['ntype'];
-	$topic=$row['topic'];
+	$type = ($row['ntype'] == 23) ? 22 : $row['ntype'];
+	$topic = $row['topic'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21 or $type==22){
+if($type >= 18 && $type <= 22){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
@@ -416,15 +418,15 @@ if($type==18 or $type==19 or $type==20 or $type==21 or $type==22){
 
 <?php }
 }else{
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE $limit AND uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
+$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
 $query = mysqli_num_rows($result);
-if($query != 0){
+if($query){
 while($row = mysqli_fetch_array($result)){
 	$dataarray = explode(",",$row['data']);
 	$type = $row['ntype'];
 	$topic=$row['topic'];
 	echo "<tr><td>";
-if($type==18 or $type==19 or $type==20 or $type==21){
+if($type >= 18 && $type <= 21){
     echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
 	}else{
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";

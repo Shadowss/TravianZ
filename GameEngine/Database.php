@@ -4270,7 +4270,7 @@ References: User ID/Message ID, Mode
         return self::$noticesCacheById[$id][$field];
 	}
 
-	function getNotice3($uid, $use_cache = true) {
+	function getNotice3($uid, $alliance, $use_cache = true) {
 	    list($uid) = $this->escape_input((int) $uid);
 
         // first of all, check if we should be using cache and whether the field
@@ -4279,8 +4279,8 @@ References: User ID/Message ID, Mode
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
-		$result = mysqli_query($this->dblink,$q);
+        $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ".($alliance > 0 ? 'OR ally = '.$alliance.'' : '')." ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
+        $result = mysqli_query($this->dblink,$q);
 
         $noticesCacheByUId[$uid] = $this->mysqli_fetch_all($result);
         return $noticesCacheByUId[$uid];

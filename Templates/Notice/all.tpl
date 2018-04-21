@@ -69,10 +69,11 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
     echo "<tr><td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->noticearray[$i-1]['id']."\" /></td>
 		<td class=\"sub\">";
         $type = (isset($_GET['t']) && $_GET['t'] == 5)? $message->noticearray[$i-1]['archive'] : $message->noticearray[$i-1]['ntype'];
-		if($type==15 or $type==16 or $type==17){
+        if($type == 23) $type = 22;
+        if($type >= 15 && $type <= 17){
 		$type = $type-11;
       echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
-	  }else if($type==18 or $type==19 or $type==20 or $type==21 or $type==22){
+	  }else if($type >= 18 && $type <= 22){
       echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
 	  }else{
       echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";

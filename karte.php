@@ -78,11 +78,10 @@ else{
 <?php include("Templates/header.tpl"); ?>
 <div id="mid">
 <?php include("Templates/menu.tpl");
-if(isset($_GET['d']) && isset($_GET['c'])) {
-	if($generator->getMapCheck($_GET['d']) == $_GET['c']) {
-	include("Templates/Map/vilview.tpl");
-	}
-	else {
+if(isset($_GET['d']) && !empty($_GET['d']) && isset($_GET['c']) && !empty($_GET['c'])) {
+    if($generator->getMapCheck($_GET['d']) == $_GET['c']) include("Templates/Map/vilview.tpl");
+	else 
+	{
 		header("Location: dorf1.php");
 		exit;
 	}

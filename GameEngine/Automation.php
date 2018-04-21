@@ -3075,8 +3075,9 @@ class Automation {
                     $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
                     $peace = PEACE;
                     $data2 = $from['owner'].','.$from['wref'].','.$to['owner'].','.$owntribe.','.$unitssend_att.','.$peace;
-                    $database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
-                    $database->addNotice($to['owner'],$to['wref'],$targetally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
+                    $time = time();
+                    $database->addNotice($from['owner'], $to['wref'], $ownally, 22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'', $data2, $time);
+                    $database->addNotice($to['owner'], $to['wref'], $targetally, 23,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'', $data2, $time);
                 }
 
                 //check if not natar tribe
@@ -3768,29 +3769,26 @@ class Automation {
     }
 
     private function updateRes($bountywid,$uid) {
-        global $session;
-
-
         $this->bountyLoadTown($bountywid);
         $this->bountycalculateProduction($bountywid,$uid);
         $this->bountyprocessProduction($bountywid);
     }
 
     private function updateORes($bountywid) {
-        global $session;
         $this->bountyLoadOTown($bountywid);
         $this->bountycalculateOProduction($bountywid);
         $this->bountyprocessOProduction($bountywid);
     }
+    
     private function bountyLoadOTown($bountywid) {
-        global $database,$session,$logging,$technology;
+        global $database;
         $this->bountyinfoarray = $database->getOasisV($bountywid);
         $this->bountyresarray = $database->getResourceLevel($bountywid);
         $this->bountypop = 2;
 
     }
     private function bountyLoadTown($bountywid) {
-        global $database,$session,$logging,$technology;
+        global $database;
         $this->bountyinfoarray = $database->getVillage($bountywid);
         $this->bountyresarray = $database->getResourceLevel($bountywid);
         $this->bountyoasisowned = $database->getOasis($bountywid);
@@ -4802,7 +4800,7 @@ class Automation {
     /************************************************
      Function for starvation - by brainiacX and Shadow
      Rework by ronix
-     Refacored by iopietro
+     Refactored by iopietro
      References:
      ************************************************/
 
@@ -5017,6 +5015,7 @@ class Automation {
     /************************************************
      Function for starvation - by brainiacX and Shadow
      Rework by ronix
+     Refactored by iopietro
      References:
      ************************************************/
 
