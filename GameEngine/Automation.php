@@ -584,7 +584,7 @@ class Automation {
     }
 
     private function buildComplete() {
-        global $database,$bid18,$bid10,$bid11,$bid38,$bid39;
+        global $database, $bid18, $bid10, $bid11, $bid38, $bid39;
 
         if(file_exists("GameEngine/Prevention/build.txt")) {
             unlink("GameEngine/Prevention/build.txt");
@@ -624,15 +624,9 @@ class Automation {
             $villageData = $database->getVillageFields($indi['wid'],'owner, maxcrop, maxstore, starv, pop');
             $villageOwner = $villageData['owner'];
             $villagesAffected[] = (int) $indi['wid'];
-            $level = $database->getFieldLevel($indi['wid'],$indi['field']);
             $fieldsToSet = [];
-
-            if (($level + 1) == $indi['level']){
-                $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
-            } else {
-                $indi['level'] = ($level + 1);
-                $q = "UPDATE ".TB_PREFIX."fdata set f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." where vref = ".(int) $indi['wid'];
-            }
+            
+            $q = "UPDATE ".TB_PREFIX."fdata SET f".$indi['field']." = ".$indi['level'].", f".$indi['field']."t = ".$indi['type']." WHERE vref = ".(int) $indi['wid'];
 
             if($database->query($q)) {
                 // this will be the level we brought the building to now
