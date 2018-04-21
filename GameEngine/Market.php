@@ -45,8 +45,8 @@ class Market
         else if(isset($get['t']) && $get['t'] == 2 && isset($get['a']) && $get['a'] == 5 && isset($get['del']))
         {
             //GET ALL FIELDS FROM MARKET
-            $type = $database->getMarketField($village->wid, "gtype");
-            $amt = $database->getMarketField($village->wid, "gamt");
+            $type = $database->getMarketField($village->wid, $get['del'], "gtype");
+            $amt = $database->getMarketField($village->wid, $get['del'], "gamt");
             $database->getResourcesBack($village->wid, $type, $amt);
             $database->addMarket($village->wid, $get['del'], 0, 0, 0, 0, 0, 0, 1);
             header("Location: build.php?id=".$get['id']."&t=2");

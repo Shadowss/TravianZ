@@ -5264,8 +5264,8 @@ References: User ID/Message ID, Mode
 	Made by: Dzoki
 	***************************/
 
-	function getMarketField($vref, $field, $use_cache = true) {
-        list($vref, $field) = $this->escape_input($vref, $field);
+	function getMarketField($vref, $id, $field, $use_cache = true) {
+	    list($vref, $id, $field) = $this->escape_input($vref, $id, $field);
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
@@ -5273,7 +5273,7 @@ References: User ID/Message ID, Mode
             return $cachedValue;
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "market where vref = '$vref' LIMIT 1";
+		$q = "SELECT * FROM " . TB_PREFIX . "market WHERE id = $id AND vref = $vref";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 
