@@ -13,19 +13,19 @@ if (!isset($_SESSION)) {
 }
 if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 ?>
-<h2><center>Server Configuration</center></h2>
+<h2><center><?php echo SERV_CONFIG ?></center></h2>
 	<form action="../GameEngine/Admin/Mods/editLogSet.php" method="POST">
 		<input type="hidden" name="id" id="id" value="<?php echo $_SESSION['id']; ?>">
 			<br />
 			<table id="profile" cellpadding="0" cellspacing="0">
 				<thead>
 					<tr>
-						<th colspan="2">Edit Log Setting</th>
+						<th colspan="2"><?php echo EDIT_LOG_SETT ?></th>
 					</tr>
 				</thead>
 				<tbody>
 				<tr>
-					<td width="50%">Log Building</td>
+					<td width="50%"><?php echo CONF_LOG_BUILD ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_BUILD_TOOLTIP ?></span></em></td>
 					<td width="50%">
 						<select name="log_build">
 							<option value="true" <?php if (LOG_BUILD==true) echo "selected";?>>Yes</option>
@@ -34,7 +34,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>
 				</tr>
 				<tr>
-					<td>Log Tech</td>
+					<td><?php echo CONF_LOG_TECHNOLOGY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_TECHNOLOGY_TOOLTIP ?></span></em></td>
 					<td>
 						<select name="log_tech">
 							<option value="true" <?php if (LOG_TECH==true) echo "selected";?>>Yes</option>
@@ -43,7 +43,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>	
 				</tr>
 				<tr>
-					<td>Log Login</td>
+					<td><?php echo CONF_LOG_LOGIN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_LOGIN_TOOLTIP ?></span></em></td>
 					<td>
 						<select name="log_login">
 							<option value="true" <?php if (LOG_LOGIN==true) echo "selected";?>>Yes</option>
@@ -52,7 +52,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>	
 				</tr>
 				<tr>
-					<td>Log Gold</td>
+					<td><?php echo CONF_LOG_GOLD ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_GOLD_TOOLTIP ?></span></em></td>
 					<td>
 						<select name="log_gold_fin">
 							<option value="true" <?php if (LOG_GOLD_FIN==true) echo "selected";?>>Yes</option>
@@ -61,7 +61,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>	
 				</tr>
 				<tr>
-					<td>Log Admin</td>
+					<td><?php echo CONF_LOG_ADMIN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_ADMIN_TOOLTIP ?></span></em></td>
 					<td>
 						<select name="log_admin">
 							<option value="true" <?php if (LOG_ADMIN==true) echo "selected";?>>Yes</option>
@@ -70,7 +70,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>	
 				</tr>
 				<tr>
-					<td>Log War</td>
+					<td><?php echo CONF_LOG_WAR ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_WAR_TOOLTIP ?></span></em></td>
 					<td>
 						<select name="log_war">
 							<option value="true" <?php if (LOG_WAR==true) echo "selected";?>>Yes</option>
@@ -79,7 +79,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>	
 				</tr>				
 				<tr>
-					<td>Log Market</td>
+					<td><?php echo CONF_LOG_MARKET ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_MARKET_TOOLTIP ?></span></em></td>
 					<td>
 						<select name="log_market">
 							<option value="true" <?php if (LOG_MARKET==true) echo "selected";?>>Yes</option>
@@ -88,7 +88,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>
 				</tr>
 				<tr>
-					<td>Log Illegal</td>
+					<td><?php echo CONF_LOG_ILLEGAL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_ILLEGAL_TOOLTIP ?></span></em></td>
 					<td>
 						<select name="log_illegal">
 							<option value="true" <?php if (LOG_ILLEGAL==true) echo "selected";?>>Yes</option>
@@ -102,7 +102,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 			</table>
 			<br />
 			<table width="100%">
-				<tr><td align="left"><a href="../Admin/admin.php?p=config"><< back</a></td>
+				<tr><td align="left"><a href="../Admin/admin.php?p=config"><< <?php echo EDIT_BACK ?></a></td>
 					<td align="right"><input type="image" border="0" src="../img/admin/b/ok1.gif"></td>
 				</tr>
 			</table>

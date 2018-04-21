@@ -158,66 +158,66 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
     <table id="member">
         <thead>
             <tr>
-                <th><b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> Settings <a href="admin.php?p=editPlusSet"><img src="../img/admin/edit.gif" title="Edit PLUS Setting"></a></th>
+                <th><?php echo PLUS_SETT ?> <a href="admin.php?p=editPlusSet"><img src="../img/admin/edit.gif" title="<?php echo EDIT_PLUS_SETT1 ?>"></a></th>
             </tr>
         </thead>
     </table>
 
   <table id="profile">
     <tr>
-        <td>PayPal E-Mail Address</td>
+        <td><?php echo CONF_PLUS_PAYPALEMAIL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PAYPALEMAIL_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'martin@martinambrus.com'); ?></td>
     </tr>
     <tr>
-        <td>Payment Currency</td>
+        <td><?php echo CONF_PLUS_CURRENCY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_CURRENCY_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
     </tr>
     <tr>
-        <td>Package "A" Amount of Gold</td>
+        <td><?php echo CONF_PLUS_PACKAGEGOLDA ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEGOLDA_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_A_GOLD') ? PLUS_PACKAGE_A_GOLD : 60); ?></td>
     </tr>
     <tr>
-        <td>Package "A" Amount of Price</td>
+        <td><?php echo CONF_PLUS_PACKAGEPRICEA ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEPRICEA_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_A_PRICE') ? PLUS_PACKAGE_A_PRICE : '1,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
     </tr>
     <tr>
-        <td>Package "B" Amount of Gold</td>
+        <td><?php echo CONF_PLUS_PACKAGEGOLDB ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEGOLDB_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_B_GOLD') ? PLUS_PACKAGE_B_GOLD : 120); ?></td>
     </tr>
     <tr>
-        <td>Package "B" Amount of Price</td>
+        <td><?php echo CONF_PLUS_PACKAGEPRICEB ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEPRICEB_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_B_PRICE') ? PLUS_PACKAGE_B_PRICE : '4,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
     </tr>
     <tr>
-        <td>Package "C" Amount of Gold</td>
+        <td><?php echo CONF_PLUS_PACKAGEGOLDC ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEGOLDC_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_C_GOLD') ? PLUS_PACKAGE_C_GOLD : 360); ?></td>
     </tr>
     <tr>
-        <td>Package "C" Amount of Price</td>
+        <td><?php echo CONF_PLUS_PACKAGEPRICEC ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEPRICEC_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_C_PRICE') ? PLUS_PACKAGE_C_PRICE : '9,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
     </tr>
     <tr>
-        <td>Package "D" Amount of Gold</td>
+        <td><?php echo CONF_PLUS_PACKAGEGOLDD ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEGOLDD_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_D_GOLD') ? PLUS_PACKAGE_D_GOLD : 1000); ?></td>
     </tr>
     <tr>
-        <td>Package "D" Amount of Price</td>
+        <td><?php echo CONF_PLUS_PACKAGEPRICED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEPRICED_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_D_PRICE') ? PLUS_PACKAGE_D_PRICE : '19,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
     </tr>
     <tr>
-        <td>Package "E" Amount of Gold</td>
+        <td><?php echo CONF_PLUS_PACKAGEGOLDE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEGOLDE_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_E_GOLD') ? PLUS_PACKAGE_E_GOLD : 2000); ?></td>
     </tr>
     <tr>
-        <td>Package "E" Amount of Price</td>
+        <td><?php echo CONF_PLUS_PACKAGEPRICEE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PACKAGEPRICEE_TOOLTIP ?></span></em></td>
         <td><?php echo (defined('PLUS_PACKAGE_E_PRICE') ? PLUS_PACKAGE_E_PRICE : '49,99') . ' ' . (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?></td>
     </tr>
     <tr>
-        <td><b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> account duration</td>
+        <td><?php echo CONF_PLUS_ACCDURATION ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_ACCDURATION_TOOLTIP ?></span></em></td>
         <td><?php if(PLUS_TIME >= 86400){ echo ''.(PLUS_TIME/86400).' Days'; } else if(PLUS_TIME < 86400){ echo ''.(PLUS_TIME/3600).' Hours'; } ?></td>
     </tr>
     <tr>
-        <td>+25% production duration</td>
+        <td><?php echo CONF_PLUS_PRODUCTDURATION ?> <em class="tooltip">?<span class="classic"><?php echo CONF_PLUS_PRODUCTDURATION_TOOLTIP ?></span></em></td>
         <td><?php if(PLUS_PRODUCTION >= 86400){ echo ''.(PLUS_PRODUCTION/86400).' Days'; } else if(PLUS_PRODUCTION < 86400){ echo ''.(PLUS_PRODUCTION/3600).' Hours'; } ?></td>
     </tr>
 </table>
@@ -225,46 +225,46 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 	<table id="member">
 		<thead>
 			<tr>
-				<th>Log Settings <a href="admin.php?p=editLogSet"><img src="../img/admin/edit.gif" title="Edit Log Setting"></a></th>
+				<th><?php echo LOG_SETT ?> <a href="admin.php?p=editLogSet"><img src="../img/admin/edit.gif" title="<?php echo EDIT_LOG_SETT ?>"></a></th>
 			</tr>
 		</thead>
 	</table>
 
   <table id="profile">
   <tr>
-		<td class="b">Variable</td>
-		<td class="b">Value</td>
+		<td class="b"><?php echo SERV_VARIABLE ?></td>
+		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
-		<td>Log Build</td>
+		<td><?php echo CONF_LOG_BUILD ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_BUILD_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_BUILD == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_BUILD == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Log Technology</td>
+		<td><?php echo CONF_LOG_TECHNOLOGY ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_TECHNOLOGY_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_TECH == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_TECH == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Log Login</td>
+		<td><?php echo CONF_LOG_LOGIN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_LOGIN_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_LOGIN == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_LOGIN == false){ echo "<b><font color='Red'>Disabled</font></b>";  } ?></td>
 	</tr>
 	<tr>
-		<td>Log Gold</td>
+		<td><?php echo CONF_LOG_GOLD ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_GOLD_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_GOLD_FIN == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_GOLD_FIN == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Log Admin</td>
+		<td><?php echo CONF_LOG_ADMIN ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_ADMIN_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_ADMIN == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_ADMIN == false){ echo "<b><font color='Red'>Disabled</font></b>";  } ?></td>
 	</tr>
 	<tr>
-		<td>Log War</td>
+		<td><?php echo CONF_LOG_WAR ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_WAR_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_WAR == true) {	echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_WAR == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Log Market</td>
+		<td><?php echo CONF_LOG_MARKET ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_MARKET_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_MARKET == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_MARKET == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?></td>
 	</tr>
 	<tr>
-		<td>Log Illegal</td>
+		<td><?php echo CONF_LOG_ILLEGAL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_LOG_ILLEGAL_TOOLTIP ?></span></em></td>
 		<td><?php if(LOG_ILLEGAL == true) { echo "<b><font color='Green'>Enabled</font></b>"; } else if(LOG_ILLEGAL == false){ echo "<b><font color='Red'>Disabled</font></b>";  } ?></td>
 	</tr>
 </table>
@@ -272,26 +272,26 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 <table id="member">
 	<thead>
 		<tr>
-			<th>Newsbox Settings <a href="admin.php?p=editNewsboxSet"><img src="../img/admin/edit.gif" title="Edit Newsbox Setting"></a></th>
+			<th><?php echo NEWSBOX_SETT ?> <a href="admin.php?p=editNewsboxSet"><img src="../img/admin/edit.gif" title="<?php echo EDIT_NEWSBOX_SETT ?>"></a></th>
 		</tr>
 	</thead>
 </table>
 
 <table id="profile">
 	<tr>
-		<td class="b">Variable</td>
-		<td class="b">Value</td>
+		<td class="b"><?php echo SERV_VARIABLE ?></td>
+		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
-		<td>Newsbox 1</td>
+		<td><?php echo EDIT_NEWSBOX1 ?> <em class="tooltip">?<span class="classic"><?php echo EDIT_NEWSBOX1_TOOLTIP ?></span></em></td>
 		<td><?php if(NEWSBOX1 == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(NEWSBOX1 == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?> </td>
 	</tr>
 	<tr>
-		<td>Newsbox 2</td>
+		<td><?php echo EDIT_NEWSBOX2 ?> <em class="tooltip">?<span class="classic"><?php echo EDIT_NEWSBOX2_TOOLTIP ?></span></em></td>
 		<td><?php if(NEWSBOX2 == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(NEWSBOX2 == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?> </td>
 	</tr>
 	<tr>
-		<td>Newsbox 3</td>
+		<td><?php echo EDIT_NEWSBOX3 ?> <em class="tooltip">?<span class="classic"><?php echo EDIT_NEWSBOX3_TOOLTIP ?></span></em></td>
 		<td><?php if(NEWSBOX3 == true){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(NEWSBOX3 == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?> </td>
 	</tr>
 	<tr>
@@ -318,8 +318,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 
 <table id="profile">
 	<tr>
-		<td class="b">Variable</td>
-		<td class="b">Value</td>
+		<td class="b"><?php echo SERV_VARIABLE ?></td>
+		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
 		<td>Hostname</td>
@@ -361,8 +361,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 
 <table id="profile">
 	<tr>
-		<td class="b">Variable</td>
-		<td class="b">Value</td>
+		<td class="b"><?php echo SERV_VARIABLE ?></td>
+		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
 		<td>Limit Mailbox</td>
@@ -383,8 +383,8 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 </table>
 <table id="profile">
   <tr>
-		<td class="b">Variable</td>
-		<td class="b">Value</td>
+		<td class="b"><?php echo SERV_VARIABLE ?></td>
+		<td class="b"><?php echo SERV_VALUE ?></td>
 	</tr>
 	<tr>
 		<td>Admin Email</td>
