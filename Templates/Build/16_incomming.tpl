@@ -24,7 +24,7 @@ if ($units[$y]['sort_type']==3){
 	$reinfowner = $database->getVillageField($units[$y]['from'],"owner");
 	if($units[$y]['attack_type'] != 1){
 	if($units[$y]['from'] != 0){
-				  if($units[$y]['t11'] != 0 && $reinfowner == $session->uid) {
+				  if($units[$y]['t11'] > 0 && $reinfowner == $session->uid) {
                   $colspan = 11;
 				  }else{
 				  $colspan = 10;
@@ -154,15 +154,15 @@ $to = $database->getMInfo($units[$y]['vref']);
 	<thead>
 		<tr>
 			<td class="role"><a href="karte.php?d=<?php echo $village->wid."&c=".$generator->getMapCheck($village->wid); ?>"><?php echo $village->vname; ?></a></td>
-			<td colspan="<?php if($units[$y]['t11'] != 0) {echo"11";}else{echo"10";}?>"><a href="karte.php?d=<?php echo $from['wref']."&c=".$generator->getMapCheck($from['wref']); ?>"><?php echo $actionType." ".$from['name']; ?></a></td>
+			<td colspan="<?php echo $units[$y]['t11'] > 0 ? 11 : 10 ?>"><a href="karte.php?d=<?php echo $from['wref']."&c=".$generator->getMapCheck($from['wref']); ?>"><?php echo $actionType." ".$from['name']; ?></a></td>
 		</tr>
 	</thead>
-	<tbody class="units">
+	<tbody class="units"><tr>
 			<?php
 				  $tribe = $session->tribe;
                   $start = ($tribe-1)*10+1;
                   $end = ($tribe*10);
-                  echo "<tr><th>&nbsp;</th>";
+                  echo "<th>&nbsp;</th>";
                   for($i=$start;$i<=($end);$i++) {
                   	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";	
                   }
@@ -183,30 +183,27 @@ $to = $database->getMInfo($units[$y]['vref']);
                 }
 			}
             ?>
-           </tr>
+           </tr></tbody>
             <?php
-            if (isset($res)) {
-                $totalres = $res['wood'] + $res['clay'] + $res['iron'] + $res['crop'];
-            } else {
-                $totalres = 0;
-            }
+            if (isset($res)) $totalres = $res['wood'] + $res['clay'] + $res['iron'] + $res['crop']; 
+            else $totalres = 0;
 
-			if($units[$y]['attack_type']!=2 and $units[$y]['attack_type']!=1 and $totalres != ""){?>
- <tr><th><?php echo BOUNTY;?></th>
+			if($units[$y]['attack_type'] != 2 && $units[$y]['attack_type'] != 1 && !empty($totalres)){?>
+ 			<tbody class="goods"><tr><th><?php echo BOUNTY;?></th>
 
-			<td colspan="<?php if($units[$y]['t11'] == 0) {echo"10";}else{echo"11";}?>">
+			<td colspan="<?php echo $units[$y]['t11'] == 0 ? 10 : 11; ?>">
 			<?php
 			$totalcarry = $units[$y]['t1']*${'u'.$start.''}['cap']+$units[$y]['t2']*${'u'.($start+1).''}['cap']+$units[$y]['t3']*${'u'.($start+2).''}['cap']+$units[$y]['t4']*${'u'.($start+3).''}['cap']+$units[$y]['t5']*${'u'.($start+4).''}['cap']+$units[$y]['t6']*${'u'.($start+5).''}['cap']+$units[$y]['t7']*${'u'.($start+6).''}['cap']+$units[$y]['t8']*${'u'.($start+7).''}['cap']+$units[$y]['t9']*${'u'.($start+8).''}['cap']+$units[$y]['t10']*${'u'.($start+9).''}['cap'];
-			echo "<div class=\"in small\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".$res['wood']."<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".$res['clay']."<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".$res['iron']."<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$res['crop']."</div>";
-			echo "<div class=\"in small\"><img class=\"car\" src=\"gpack/travian_default/img/a/car.gif\" alt=\"carry\" title=\"carry\"/>".$totalres."/".$totalcarry."</div>";
-            ?>
-           </tr>
+			echo "<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".$res['wood']." | <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".$res['clay']." | <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".$res['iron']." | <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$res['crop']."</div>";
+			echo "<div class=\"carry\"><img class=\"car\" src=\"img/x.gif\" alt=\"carry\" title=\"carry\"/>".$totalres."/".$totalcarry."</div>";
+			?>
+           </tr></tbody>
 		   <?php } ?>
 		   				    
 		<tbody class="infos">
 			<tr>
 				<th><?php echo ARRIVAL;?></th>
-				<td colspan="<?php if($units[$y]['t11'] == 0) {echo"10";}else{echo"11";}?>">
+				<td colspan="<?php echo $units[$y]['t11'] == 0 ? 10 : 11 ?>">
 				<?php
 				    echo "<div class=\"in small\"><span id=timer".$timer.">".$generator->getTimeFormat($units[$y]['endtime']-time())."</span> h</div>";
 				    $datetime = $generator->procMtime($units[$y]['endtime']);

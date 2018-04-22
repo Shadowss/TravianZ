@@ -4956,6 +4956,17 @@ div#build.gid16 table.troop_details tbody.units td {
 div#build.gid16 table.troop_details tbody.infos th, div#build.gid16 table.troop_details tbody.infos td {
     background-color: #F3F3F3;
 }
+div#build.gid16 table.troop_details tbody.goods td {
+    padding: 2px;
+    width: 7.2%;
+}
+div#build.gid16 table.troop_details tbody.goods div.res {
+    text-align: left;
+    white-space: nowrap;
+}
+div#build.gid16 table.troop_details tbody.goods div.carry {
+    text-align: right;
+}
 div#build.gid16 table.troop_details div {
     float: left;
     text-align: center;
