@@ -77,6 +77,7 @@ function refresh(tz) {
 						<td><?php echo CONF_SERV_TROOPSPEED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_TROOPSPEED_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="incspeed" value="<?php echo INCREASE_SPEED;?>" style="width: 20%;"></td>
 					</tr>
+                    <tr>
 						<td><?php echo CONF_SERV_EVASIONSPEED ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_EVASIONSPEED_TOOLTIP ?></span></em></td>
 						<td><input class="fm" name="evasionspeed" value="<?php echo EVASION_SPEED;?>" style="width: 20%;"></td>
 					</tr>
@@ -192,6 +193,8 @@ function refresh(tz) {
 								<option value="28800" <?php if(NATURE_REGTIME==28800) echo "selected";?>>8 hours</option>
 								<option value="36000" <?php if(NATURE_REGTIME==36000) echo "selected";?>>10 hours</option>
 								<option value="43200" <?php if(NATURE_REGTIME==43200) echo "selected";?>>12 hours</option>
+                                <option value="57600" <?php if(NATURE_REGTIME==57600) echo "selected";?>>16 hours</option>
+                                <option value="72000" <?php if(NATURE_REGTIME==72000) echo "selected";?>>20 hours</option>
 								<option value="86400" <?php if(NATURE_REGTIME==86400) echo "selected";?>>24 hours (1 day)</option>
 								<option value="172800" <?php if(NATURE_REGTIME==172800) echo "selected";?>>48 hours (2 days)</option>
 								<option value="259200" <?php if(NATURE_REGTIME==259200) echo "selected";?>>72 hours (3 days)</option>
@@ -269,7 +272,7 @@ function refresh(tz) {
 			</table>
 			<br />
 			<table width="100%">
-				<tr><td align="left"><a href="../Admin/admin.php?p=config"><< back</a></td>
+				<tr><td align="left"><a href="../Admin/admin.php?p=config"><< <?php echo EDIT_BACK ?></a></td>
 					<td align="right"><input type="image" border="0" src="../img/admin/b/ok1.gif"></td>
 				</tr>
 			</table>
