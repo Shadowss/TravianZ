@@ -47,12 +47,12 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/cleardeleting.txt") or time()-filemtime("GameEngine/Prevention/cleardeleting.txt")>50) {
             $this->clearDeleting();
         }
-        if (! file_exists("GameEngine/Prevention/build.txt") or time() - filemtime("GameEngine/Prevention/build.txt")>50)
+        if(!file_exists("GameEngine/Prevention/build.txt") or time() - filemtime("GameEngine/Prevention/build.txt")>50)
         {
             $this->buildComplete();
         }
         $this->MasterBuilder();
-        if (! file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt")>50)
+        if(!file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt")>50)
         {
             $this->demolitionComplete();
         }
@@ -2475,8 +2475,8 @@ class Automation {
 
                             //check for last village or capital
                             if($user_cps >= $need_cps){
-                                if(count($varray)!='1' AND $to['capital']!='1' AND $villexp < $canconquer){
-                                    if($to['owner']!=3 OR $to['name']!='WW Buildingplan'){
+                                if(count($varray) != 1 && $to['capital'] != 1 && $villexp < $canconquer){
+                                    if($to['owner'] != 3 || $to['name'] != 'WW Buildingplan'){
                                         // check for standing Palace or Residence
                                         // note: at this point, we can use cache, since we've cleared it above
                                         if ($database->getFieldLevelInVillage($data['to'], '25, 26')) {
@@ -2518,7 +2518,7 @@ class Automation {
                                                 $info_chief = "".$chief_pic.",Inhabitants of ".$villname." village decided to join your empire.";
 
                                                 if ($artifact['vref'] == $data['to']){
-                                                    $database->claimArtefact($data['to'], $data['to'], $database->getVillageField($data['from'],"owner"));
+                                                    $database->claimArtefact($data['to'], $data['to'], $database->getVillageField($data['from'], "owner"));
                                                 }
 
 
@@ -2648,8 +2648,8 @@ class Automation {
                             $xp="";
                             $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all.";
                         } else {
-                            $xp=" and gained ".$heroxp." XP from the battle.";
-                            $info_hero = $hero_pic.",Your hero gained ".$heroxp." XP.";
+                            $xp=" and gained <b>".$heroxp."</b> XP from the battle.";
+                            $info_hero = $hero_pic.",Your hero gained <b>".$heroxp."</b> XP.";
                         }
 
                         if ($isoasis != 0) { //oasis fix by ronix
@@ -2679,14 +2679,14 @@ class Automation {
                             if ($heroxp == 0) {
                                 $xp=" no XP from the battle.";
                             } else {
-                                $xp=" gained ".$heroxp." XP from the battle.";
+                                $xp=" gained <b>".$heroxp."</b> XP from the battle.";
                             }
                             $artifact = reset($database->getOwnArtefactInfo($data['to']));
                             if (!empty($artifact)) {
-                                if ($type=='3') {
-                                    if ($database->canClaimArtifact($data['from'],$artifact['vref'],$artifact['size'],$artifact['type'])) {
-                                        $database->claimArtefact($data['from'],$data['to'],$database->getVillageField($data['from'],"owner"));
-                                        $info_hero = $hero_pic.",Your hero is carrying home an artefact".$xp;
+                                if ($type == 3) {
+                                    if ($database->canClaimArtifact($data['from'], $artifact['vref'], $artifact['size'], $artifact['type'])) {
+                                        $database->claimArtefact($data['from'], $data['to'], $database->getVillageField($data['from'], "owner"));
+                                        $info_hero = $hero_pic.",Your hero is carrying home the artifact <b>".$artifact['name']."</b> and".$xp;
                                         
                                         // if the defender pop is 0 with no artefact, then destroy the village
                                         if($database->getVillageField($data['to'], "pop") == 0){
@@ -2697,7 +2697,7 @@ class Automation {
                                         $info_hero = $hero_pic.",".$form->getError("error").$xp;
                                     }
                                 }else{
-                                    $info_hero = $hero_pic.",Your hero could not claim the artefact during raid".$xp;
+                                    $info_hero = $hero_pic.",Your hero could not claim an artifact during raid".$xp;
                                 }
                             }
                         }
@@ -2705,7 +2705,7 @@ class Automation {
                         if ($heroxp == 0) {
                             $xp="";
                         } else {
-                            $xp=" but gained ".$heroxp." XP from the battle.";
+                            $xp=" but gained <b>".$heroxp."</b> XP from the battle.";
                         }
                         if ($traped11>0) {
                             $info_hero = $hero_pic.",Your hero was trapped".$xp;

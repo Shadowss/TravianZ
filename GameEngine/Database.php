@@ -2471,11 +2471,8 @@ class MYSQLi_DB implements IDbConnection {
 
 		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "vdata where wref = '$wref'";
 		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-		if ($result['Total']) {
-			return true;
-		} else {
-			return false;
-		}
+		
+		return $result['Total'];
 	}
 
 	// no need to cache this method
@@ -6953,10 +6950,10 @@ References: User ID/Message ID, Mode
 	}
 
     // no need to cache this method
-	function getOwnArtefactInfo($vref) {
+	function getOwnArtefactInfo($vref, $use_cache = true) {
 	    // load the data - type is irrelevant, since the method caches all data
         // then returns the one for our type
-        $this->getOwnArtefactInfoByType($vref, 1);
+        $this->getOwnArtefactInfoByType($vref, 1, $use_cache);
 
         // return what we've cached
         return (self::$artefactInfoByTypeCache[$vref]);
@@ -7143,7 +7140,43 @@ References: User ID/Message ID, Mode
 
 		$time = time();
 		$q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id, conquered = $time, active = 1 WHERE vref = $ovref";
-		return mysqli_query($this->dblink,$q);
+		
+		if(mysqli_query($this->dblink, $q))
+		{ 
+		    $artifactID = reset($this->getOwnArtefactInfo($vref, false))['id'];
+		    return $this->addArtifactsChronology($artifactID, $id, $vref, $time);
+		}
+		else return false;
+	}
+	
+	/**
+	 * Retrieves the chronology of one specific artifact
+	 * 
+	 * @param int $artefactid The id of the artifact
+	 * @return array Returns the chronology for the passed artifact
+	 */
+	
+	function getArtifactsChronology($artifactID){
+	    list($artifactID) = $this->escape_input((int) $artifactID);
+
+	    $q = "SELECT * FROM " . TB_PREFIX . "artefacts_chrono WHERE artefactid = $artifactID ORDER BY conqueredtime ASC";
+	    $result = mysqli_query($this->dblink, $q);
+	    return $this->mysqli_fetch_all($result);
+	}
+	
+	/**
+	 * Stores when an artifact was conquered and who had conquered it
+	 * 
+	 * @param int $artefactid The id of the artifact
+	 * @param int $vref The vref of the village that has conquered the artifact
+	 * @return bool Return true if the query was successful, false otherwise
+	 */
+	
+	function addArtifactsChronology($artifactID, $uid, $vref, $conqueredTime){
+	    list($artifactID, $uid, $vref, $conqueredTime) = $this->escape_input((int) $artifactID, (int) $uid, (int) $vref, (int) $conqueredTime);
+
+	    $q = "INSERT INTO " . TB_PREFIX . "artefacts_chrono (artefactid, uid, vref, conqueredtime) VALUES ('$artifactID', '$uid', '$vref', '$conqueredTime')";
+	    return mysqli_query($this->dblink, $q);
 	}
 
     // no need to cache this method
@@ -7224,7 +7257,7 @@ References: User ID/Message ID, Mode
         }
     }
 
-// no need to cache this method
+    // no need to cache this method
 	function getArtefactDetails($id) {
 	    list($id) = $this->escape_input((int) $id);
 

@@ -1,3 +1,14 @@
+-- 23.04.2018 -> new table
+CREATE TABLE IF NOT EXISTS `s1_artefacts_chrono` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `artefactid` int(11) NULL,
+  `uid` int(11) NULL,
+  `vref` int(11) NULL,
+  `conqueredtime` int(11) NULL,
+  PRIMARY KEY (`id`),
+  KEY `artefactid-conqueredtime` (`artefactid`,`conqueredtime`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
 -- 7.01.2018 -> new column
 ALTER TABLE s1_fdata ADD `ww_lastupdate` int(11) NULL DEFAULT NULL AFTER `wwname`;
 

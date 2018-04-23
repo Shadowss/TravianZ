@@ -1016,6 +1016,7 @@ define("TROOPS_MAKE_SLOWEST","troops make slowest with");
 define("YOU_CONSTRUCT","you can construct ");
 define("CRANNY_INCREASED","cranny capacity is increased by");
 define("CRANNY_DECRESE","cranny capacity is decrese by");
+define("NO_PREVIOUS_OWNERS","There are no previous owners.");
 define("TREASURY_DESC","The riches of your empire are kept in the treasury. The treasury has room for one treasure. After you have captured an artefact it takes 24 hours on a normal server or 12 hours on a thrice speed server to be effective.");
 
 define("TRADEOFFICE","Trade Office");

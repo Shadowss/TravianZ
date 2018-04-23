@@ -213,6 +213,25 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for `%PREFIX%artefacts_chrono`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts_chrono` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `artefactid` int(11) NULL,
+  `uid` int(11) NULL,
+  `vref` int(11) NULL,
+  `conqueredtime` int(11) NULL,
+  PRIMARY KEY (`id`),
+  KEY `artefactid-conqueredtime` (`artefactid`,`conqueredtime`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+--
+-- Table structure for table `%PREFIX%artefacts_chrono`
+--
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `%PREFIX%alidata`
 --
 
