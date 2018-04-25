@@ -18,6 +18,28 @@
 @import "../../modules/new_images.css";
 
 
+/* New login button */
+  .trav_buttons {
+  padding: 1px;
+    border-radius: 5px;
+    padding-left:20px;
+    padding-right: 20px;
+    border: 1px solid #71d000;
+    background-image: linear-gradient(to bottom,#fdfdfd,#c6c6c6);
+    cursor: pointer;
+    color: #7a7a7a;
+    text-align: center;
+}
+.trav_buttons:hover {
+    border-color: #a6ac9f;
+}
+.trav_buttons:active {
+    border-color: #71d000 !important;
+    background: #fff !important;
+}
+
+/* Old buttons */
+
 input#btn_login {width:97px; background-image: url(b/login.gif);}
 input#btn_signup {width:97px; background-image: url(b/signup.gif);}
 input#btn_ok {width:47px; background-image: url(b/ok.gif);}
