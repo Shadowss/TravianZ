@@ -2063,6 +2063,7 @@ class Automation {
                         }
 
                         //cranny efficiency
+                        //TODO: Needs to be connected to a function
                         $atk_bonus = ($owntribe == 2)? (4/5) : 1;
                         $def_bonus = ($targettribe == 3)? 2 : 1;
                         $to_owner = $database->getVillageField($data['to'],"owner");
@@ -2922,31 +2923,9 @@ class Automation {
                     //to here
                     // If the dead units not equal the ammount sent they will return and report
                     if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
-                    {
-                        $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
-                        $artefact1 = count($database->getOwnUniqueArtefactInfo2($from['wref'],2,1,1));
-                        $artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
-                        if($artefact > 0){
-                            $fastertroops = 3;
-                        }else if($artefact1 > 0){
-                            $fastertroops = 2;
-                        }else if($artefact2 > 0){
-                            $fastertroops = 1.5;
-                        }else{
-                            $fastertroops = 1;
-                        }
-                        $endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
-                        $foolartefact2 = $database->getFoolArtefactInfo(2,$from['wref'],$from['owner']);
-                        if(count($foolartefact2) > 0){
-                            foreach($foolartefact2 as $arte){
-                                if($arte['bad_effect'] == 1){
-                                    $endtime *= $arte['effect2'];
-                                }else{
-                                    $endtime /= $arte['effect2'];
-                                    $endtime = round($endtime);
-                                }
-                            }
-                        }
+                    {                       
+                        $troopsTime = $this->procDistanceTime($from, $to, min($speeds), 1);
+                        $endtime = $database->getTroopsWalkingTime($from['owner'], $from['wref'], 2, $troopsTime);
                         $endtime += $AttackArrivalTime;
                         if($type == 1) {
                             if($from['owner'] == 3) { //fix natar report by ronix
@@ -3026,54 +3005,29 @@ class Automation {
                     $herosend_att = $data['t11'];
                     $unitssend_att= $unitssend_att1.','.$herosend_att;
 
-                    $speeds = array();
+                    $speeds = [];
 
                     //find slowest unit.
-                    for($i=1;$i<=10;$i++)
+                    //TODO: Needs to be made as a function
+                    for($i = 1; $i <= 10; $i++)
                     {
                         if ($data['t'.$i] > 0) {
-                            if($unitarray) { reset($unitarray); }
                             $unitarray = $GLOBALS["u".(($owntribe-1)*10+$i)];
                             $speeds[] = $unitarray['speed'];
                         }
                     }
 
-                    if ($herosend_att>0){
+                    if ($herosend_att > 0){
                         $hero_unit = $database->getHeroField($from['owner'], 'unit');
                         $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
                     }
 
-                    $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
-                    $artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
-                    $artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
-
-                    if($artefact > 0){
-                        $fastertroops = 3;
-                    }else if($artefact1 > 0){
-                        $fastertroops = 2;
-                    }else if($artefact2 > 0){
-                        $fastertroops = 1.5;
-                    }else{
-                        $fastertroops = 1;
-                    }
-
-                    $endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
-                    $foolartefact3 = $database->getFoolArtefactInfo(2,$from['wref'],$from['owner']);
-
-                    if(count($foolartefact3) > 0){
-                        foreach($foolartefact3 as $arte){
-                            if($arte['bad_effect'] == 1){
-                                $endtime *= $arte['effect2'];
-                            }else{
-                                $endtime /= $arte['effect2'];
-                                $endtime = round($endtime);
-                            }
-                        }
-                    }
+                    $troopsTime = $this->procDistanceTime($from, $to, min($speeds), 1);
+                    $endtime = $database->getTroopsWalkingTime($from['owner'], $from['wref'], 2, $troopsTime);                
                     $endtime += $AttackArrivalTime;
-                    //$endtime += microtime(true);
+
                     $database->setMovementProc($data['moveid']);
-                    $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],$AttackArrivalTime,$endtime);
+                    $database->addMovement(4, $to['wref'], $from['wref'], $data['ref'], $AttackArrivalTime, $endtime);
                     $peace = PEACE;
                     $data2 = $from['owner'].','.$from['wref'].','.$to['owner'].','.$owntribe.','.$unitssend_att.','.$peace;
                     $time = time();
@@ -5863,37 +5817,33 @@ class Automation {
     private function artefactOfTheFool() {
         global $database;
         $time = time();
-        $q = "SELECT id, size FROM " . TB_PREFIX . "artefacts where type = 8 and active = 1 and lastupdate <= ".($time - 86400);
+        $q = "SELECT id, size FROM " . TB_PREFIX . "artefacts where type = 8 AND active = 1 AND lastupdate <= ".($time - (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
         $array = $database->query_return($q);
         if ($array) {
             foreach($array as $artefact) {
-                $kind = rand(1,7);
+                $kind = rand(1, 7);
                 while($kind == 6){
-                    $kind = rand(1,7);
+                    $kind = rand(1, 7);
                 }
-                if($artefact['size'] != 3){
-                    $bad_effect = rand(0,1);
-                }else{
-                    $bad_effect = 0;
-                }
+                if($artefact['size'] != 3) $bad_effect = rand(0, 1);
+                else $bad_effect = 0;
+
                 switch($kind) {
                     case 1:
-                        $effect = rand(1,5);
+                        $effect = rand(1, 5);
                         break;
                     case 2:
-                        $effect = rand(1,3);
+                        $effect = rand(1, 3);
                         break;
                     case 3:
-                        $effect = rand(3,10);
+                        $effect = rand(3, 10);
                         break;
                     case 4:
-                        $effect = rand(2,4);
-                        break;
                     case 5:
-                        $effect = rand(2,4);
+                        $effect = rand(2, 4);
                         break;
                     case 7:
-                        $effect = rand(1,6);
+                        $effect = rand(1, 6);
                         break;
                 }
                 mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."artefacts SET kind = ". (int) $kind. ", bad_effect = $bad_effect, effect2 = $effect, lastupdate = $time WHERE id = ".(int) $artefact['id']);

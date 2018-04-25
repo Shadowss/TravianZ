@@ -332,62 +332,42 @@ class Units {
         global $form, $database, $village, $generator, $session;
 
         $data   = $database->getA2b( $post['timestamp_checksum'], $post['timestamp'] );
-        $Gtribe = "";
+        $Gtribe = ($session->tribe == 1) ? "" : $session->tribe - 1;
 
-        if ( $session->tribe == '2' ) {
-            $Gtribe = "1";
-        } else if ( $session->tribe == '3' ) {
-            $Gtribe = "2";
-        } else if ( $session->tribe == '4' ) {
-            $Gtribe = "3";
-        } else if ( $session->tribe == '5' ) {
-            $Gtribe = "4";
-        }
+        for ($i = 1; $i < 10; $i++) {
+            if (isset($data['u'.$i])) {
 
-        for ( $i = 1; $i < 10; $i ++ ) {
-            if ( isset( $data[ 'u' . $i ] ) ) {
-
-                if ( $data[ 'u' . $i ] > $village->unitarray[ 'u' . $Gtribe . $i ] ) {
-                    $form->addError( "error", "You can't send more units than you have" );
+                if ($data['u'.$i] > $village->unitarray['u'.$Gtribe.$i]) {
+                    $form->addError("error", "You can't send more units than you have");
                     break;
                 }
 
-                if ( $data[ 'u' . $i ] < 0 ) {
-                    $form->addError( "error", "You can't send negative units." );
+                if ($data[ 'u'.$i ] < 0) {
+                    $form->addError("error", "You can't send negative units.");
                     break;
                 }
 
             }
         }
 
-        if ( $data['u11'] > $village->unitarray['hero'] ) {
-            $form->addError( "error", "You can't send more units than you have" );
+        if ($data['u11'] > $village->unitarray['hero']) {
+            $form->addError( "error", "You can't send more units than you have");
         }
 
-        if ( $data['u11'] < 0 ) {
-            $form->addError( "error", "You can't send negative units." );
+        if ($data['u11'] < 0) {
+            $form->addError( "error", "You can't send negative units.");
         }
         
         if($data['type'] != 1 && $post['spy'] != 0) $post['spy'] = 0;
         
-        if ( $form->returnErrors() > 0 ) {
+        if ($form->returnErrors() > 0) {
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
             header( "Location: a2b.php" );
             exit;
         } else {
-            if ( $session->access != BANNED ) {
-                if ( $session->tribe == 1 ) {
-                    $u = "";
-                } elseif ( $session->tribe == 2 ) {
-                    $u = "1";
-                } elseif ( $session->tribe == 3 ) {
-                    $u = "2";
-                } elseif ( $session->tribe == 4 ) {
-                    $u = "3";
-                } else {
-                    $u = "4";
-                }
+            if ($session->access != BANNED) {
+                $u = ($session->tribe == 1) ? "" : $session->tribe - 1;
 
                 $database->modifyUnit(
                     $village->wid,
@@ -417,7 +397,7 @@ class Units {
                         $data['u10'],
                         $data['u11']
                     ),
-                    array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+                    array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
                 );
 
                 $fromcoor  = $database->getCoor( $village->wid );
@@ -427,84 +407,49 @@ class Units {
                 $speeds = [];
 
                 //find slowest unit.
-                for ( $i = 1; $i <= 10; $i ++ ) {
-                    if ( isset( $data[ 'u' . $i ] ) ) {
-                        if ( $data[ 'u' . $i ] != '' && $data[ 'u' . $i ] > 0 ) {
-                            if ( $unitarray ) {
-                                reset( $unitarray );
+                for ($i = 1; $i <= 10; $i ++) {
+                    if (isset( $data['u'.$i] ) ) {
+                        if (!empty($data['u'.$i]) && $data['u'.$i] > 0) {
+                            if ($unitarray) {
+                                reset($unitarray);
                             }
-                            $unitarray = $GLOBALS[ "u" . ( ( $session->tribe - 1 ) * 10 + $i ) ];
+                            $unitarray = $GLOBALS["u".(($session->tribe - 1) * 10 + $i)];
                             $speeds[]  = $unitarray['speed'];
                         }
                     }
                 }
-                if ( isset( $data['u11'] ) ) {
-                    if ( $data['u11'] != '' && $data['u11'] > 0 ) {
-                        $heroarray = $database->getHero( $session->uid );
-                        $herodata  = $GLOBALS[ "u" . $heroarray[0]['unit'] ];
+                if (isset($data['u11'])) {
+                    if (!empty($data['u11']) && $data['u11'] > 0) {
+                        $heroarray = $database->getHero( $session->uid);
+                        $herodata  = $GLOBALS['u'.$heroarray[0]['unit']];
                         $speeds[]  = $herodata['speed'];
                     }
                 }
-                $artefact  = count( $database->getOwnUniqueArtefactInfo2( $session->uid, 2, 3, 0 ) );
-                $artefact1 = count( $database->getOwnUniqueArtefactInfo2( $village->wid, 2, 1, 1 ) );
-                $artefact2 = count( $database->getOwnUniqueArtefactInfo2( $session->uid, 2, 2, 0 ) );
-                if ( $artefact > 0 ) {
-                    $fastertroops = 3;
-                } else if ( $artefact1 > 0 ) {
-                    $fastertroops = 2;
-                } else if ( $artefact2 > 0 ) {
-                    $fastertroops = 1.5;
-                } else {
-                    $fastertroops = 1;
-                }
-                $time         = round( $generator->procDistanceTime( $from, $to, min( $speeds ), 1 ) / $fastertroops );
-                $foolartefact = $database->getFoolArtefactInfo( 2, $village->wid, $session->uid );
-                if ( count( $foolartefact ) > 0 ) {
-                    foreach ( $foolartefact as $arte ) {
-                        if ( $arte['bad_effect'] == 1 ) {
-                            $time *= $arte['effect2'];
-                        } else {
-                            $time /= $arte['effect2'];
-                            $time = round( $time );
-                        }
-                    }
-                }
-                $to_owner = $database->getVillageField( $data['to_vid'], "owner" );
+
+                $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
+                $time = $database->getTroopsWalkingTime($session->uid, $village->wid, 2, $troopsTime);  
+                
+                $to_owner = $database->getVillageField($data['to_vid'], "owner");
+                
                 // Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
                 // If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
                 // Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
-                // Fixed by Advocaite and Shadow
-                $q       = mysqli_fetch_array( mysqli_query( $database->dblink, "SELECT Count(*) as Total FROM " . TB_PREFIX . "fdata WHERE f99t = '40' AND vref = " . (int) $data['to_vid'] ), MYSQLI_ASSOC );
-                $isThere = $q['Total'];
-                if ( $isThere > 0 ) {
-                    $iswwvilla     = 1;
-                    $artefact_2    = count( $database->getOwnUniqueArtefactInfo2( $to_owner, 7, 3, 0 ) );
-                    $artefact1_2   = count( $database->getOwnUniqueArtefactInfo2( $data['to_vid'], 7, 1, 1 ) );
-                    $artefact2_2   = count( $database->getOwnUniqueArtefactInfo2( $to_owner, 7, 2, 0 ) );
-                    $foolartefact2 = $database->getFoolArtefactInfo( 7, $data['to_vid'], $to_owner );
-                    $good_artefact = 0;
-                    if ( count( $foolartefact2 ) > 0 ) {
-                        foreach ( $foolartefact2 as $arte ) {
-                            if ( $arte['bad_effect'] == 0 ) {
-                                $good_artefact = 1;
-                            }
+                // Fixed by Advocaite and Shadow - Optimized by iopietro
+
+                $isThere = $database->getFieldLevelInVillage($data['to_vid'], 40);
+                $iswwvilla     = $isThere > 0 ? 1 : 0;
+                $good_artefact = 0;
+                $artefact_2    = count($database->getOwnUniqueArtefactInfo2($to_owner, 7, 3, 0));
+                $artefact1_2   = count($database->getOwnUniqueArtefactInfo2($data['to_vid'], 7, 1, 1));
+                $artefact2_2   = count($database->getOwnUniqueArtefactInfo2($to_owner, 7, 2, 0));
+                $foolartefact2 = $database->getFoolArtefactInfo(7, $data['to_vid'], $to_owner);          
+                if(count($foolartefact2) > 0) {
+                    foreach ($foolartefact2 as $arte) {
+                        if ($arte['bad_effect'] == 0) {
+                            $good_artefact = 1;
                         }
                     }
-                } else {
-                    $artefact_2    = count( $database->getOwnUniqueArtefactInfo2( $to_owner, 7, 3, 0 ) );
-                    $artefact1_2   = count( $database->getOwnUniqueArtefactInfo2( $data['to_vid'], 7, 1, 1 ) );
-                    $artefact2_2   = count( $database->getOwnUniqueArtefactInfo2( $to_owner, 7, 2, 0 ) );
-                    $foolartefact2 = $database->getFoolArtefactInfo( 7, $data['to_vid'], $to_owner );
-                    $iswwvilla     = 0;
-                    $good_artefact = 0;
-                    if ( count( $foolartefact2 ) > 0 ) {
-                        foreach ( $foolartefact2 as $arte ) {
-                            if ( $arte['bad_effect'] == 0 ) {
-                                $good_artefact = 1;
-                            }
-                        }
-                    }
-                }            
+                }    
 
                 $rallyPointLevel = ($village->resarray)['f39'];
                 $invalidBuildings = [];
@@ -540,61 +485,59 @@ class Units {
                         }
                     }
                 }
+
+                //TODO: Check those strings I do think they're wrong
                 
-                //TODO: check those instructions, i think that they're wrong 
-                if ( isset( $post['ctar1'] ) ) {
-                    if ( $artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0 or $good_artefact == 1 ) {
-                        if ( $post['ctar1'] != 40 or $post['ctar1'] != 27 and $iswwvilla == 1 ) {
+                if (isset($post['ctar1'])) {
+                    if ($artefact_2 > 0 || $artefact1_2 > 0 || $artefact2_2 > 0 || $good_artefact == 1) {
+                        if ($post['ctar1'] != 40 || $post['ctar1'] != 27 && $iswwvilla == 1) {
                             $post['ctar1'] = 99;
                         } else {
                             $post['ctar1'] = 99;
                         }
                     }
-                } else {
-                    $post['ctar1'] = 0;
-                }
+                } 
+                else $post['ctar1'] = 0;
                 
-                if ( isset( $post['ctar2'] ) ) {
-                    if ( $artefact_2 > 0 or $artefact1_2 > 0 or $artefact2_2 > 0 or $good_artefact == 1 ) {
-                        if ( $post['ctar2'] != 40 or $post['ctar2'] != 27 and $iswwvilla == 1 ) {
+                if(isset( $post['ctar2'])) {
+                    if ($artefact_2 > 0 || $artefact1_2 > 0 || $artefact2_2 > 0 || $good_artefact == 1) {
+                        if ($post['ctar2'] != 40 || $post['ctar2'] != 27 && $iswwvilla == 1) {
                             $post['ctar2'] = 99;
                         } else {
                             $post['ctar2'] = 99;
                         }
                     }
-                } else {
-                    $post['ctar2'] = 0;
                 }
+                else $post['ctar2'] = 0;
                 
-                if (!isset($post['spy'])) {
-                    $post['spy'] = 0;
-                }
-                $abdata      = $database->getABTech( $village->wid );
-                $reference   = $database->addAttack( ( $village->wid ), $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], $data['type'], $post['ctar1'], $post['ctar2'], $post['spy'], $abdata['b1'], $abdata['b2'], $abdata['b3'], $abdata['b4'], $abdata['b5'], $abdata['b6'], $abdata['b7'], $abdata['b8'] );
-                $checkexist  = $database->checkVilExist( $data['to_vid'] );
-                $checkoexist = $database->checkOasisExist( $data['to_vid'] );
-                if ( $checkexist or $checkoexist ) {
-                    $database->addMovement( 3, $village->wid, $data['to_vid'], $reference, time(), ( $time + time() ) );
-                    if ( ( $database->hasBeginnerProtection( $village->wid ) == 1 ) && ( $checkexist ) ) {
-                        mysqli_query( $database->dblink, "UPDATE " . TB_PREFIX . "users SET protect = 0 WHERE id = " . (int) $session->uid );
+                if(!isset($post['spy'])) $post['spy'] = 0;
+                
+                $abdata      = $database->getABTech($village->wid);
+                $reference   = $database->addAttack(($village->wid), $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], $data['type'], $post['ctar1'], $post['ctar2'], $post['spy'], $abdata['b1'], $abdata['b2'], $abdata['b3'], $abdata['b4'], $abdata['b5'], $abdata['b6'], $abdata['b7'], $abdata['b8']);
+                $checkexist  = $database->checkVilExist($data['to_vid']);
+                $checkoexist = $database->checkOasisExist($data['to_vid']);
+                if($checkexist || $checkoexist) {
+                    $database->addMovement(3, $village->wid, $data['to_vid'], $reference, time(), ($time + time()));
+                    if ($database->hasBeginnerProtection($village->wid) == 1 && $checkexist) {
+                        mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "users SET protect = 0 WHERE id = ".(int) $session->uid);
                     }
                 }
 
-                if ( $form->returnErrors() > 0 ) {
+                if($form->returnErrors() > 0) {
                     $_SESSION['errorarray'] = $form->getErrors();
                     $_SESSION['valuearray'] = $_POST;
-                    header( "Location: a2b.php" );
+                    header("Location: a2b.php" );
                     exit;
                 }
 
                 // prevent re-use of the same attack via re-POSTing the same data
                 $database->remA2b($data['id']);
 
-                header( "Location: build.php?id=39" );
+                header("Location: build.php?id=39");
                 exit;
 
             } else {
-                header( "Location: banned.php" );
+                header("Location: banned.php");
                 exit;
             }
         }
@@ -607,16 +550,7 @@ class Units {
             $enforceoasis = $database->getOasisEnforceArray( $post['ckey'], 0 );
             if ( ( $enforce['from'] == $village->wid ) || ( $enforce['vref'] == $village->wid ) || ( $enforceoasis['conqured'] == $village->wid ) ) {
                 $to     = $database->getVillage( $enforce['from'] );
-                $Gtribe = "";
-                if ( $database->getUserField( $to['owner'], 'tribe', 0 ) == '2' ) {
-                    $Gtribe = "1";
-                } else if ( $database->getUserField( $to['owner'], 'tribe', 0 ) == '3' ) {
-                    $Gtribe = "2";
-                } else if ( $database->getUserField( $to['owner'], 'tribe', 0 ) == '4' ) {
-                    $Gtribe = "3";
-                } else if ( $database->getUserField( $to['owner'], 'tribe', 0 ) == '5' ) {
-                    $Gtribe = "4";
-                }
+                $Gtribe = ($ownerTribe = $database->getUserField( $to['owner'], 'tribe', 0)) == 1 ? "" : $ownerTribe - 1;
 
                 for ( $i = 1; $i < 10; $i ++ ) {
                     if ( isset( $post[ 't' . $i ] ) ) {
@@ -705,36 +639,14 @@ class Units {
                         if ( $post['t11'] != '' && $post['t11'] > 0 ) {
                             $hero_unit = $database->getHeroField($from['owner'], 'unit');
                             $speeds[]  = $GLOBALS[ 'u' . $hero_unit ]['speed'];
-                        } else {
-                            $post['t11'] = '0';
                         }
-                    } else {
-                        $post['t11'] = '0';
-                    }
-                    $artefact  = count( $database->getOwnUniqueArtefactInfo2( $session->uid, 2, 3, 0 ) );
-                    $artefact1 = count( $database->getOwnUniqueArtefactInfo2( $village->wid, 2, 1, 1 ) );
-                    $artefact2 = count( $database->getOwnUniqueArtefactInfo2( $session->uid, 2, 2, 0 ) );
-                    if ( $artefact > 0 ) {
-                        $fastertroops = 3;
-                    } else if ( $artefact1 > 0 ) {
-                        $fastertroops = 2;
-                    } else if ( $artefact2 > 0 ) {
-                        $fastertroops = 1.5;
-                    } else {
-                        $fastertroops = 1;
-                    }
-                    $time          = round( $generator->procDistanceTime( $fromCor, $toCor, min( $speeds ), 1 ) / $fastertroops );
-                    $foolartefact2 = $database->getFoolArtefactInfo( 2, $village->wid, $session->uid );
-                    if ( count( $foolartefact2 ) > 0 ) {
-                        foreach ( $foolartefact2 as $arte ) {
-                            if ( $arte['bad_effect'] == 1 ) {
-                                $time *= $arte['effect2'];
-                            } else {
-                                $time /= $arte['effect2'];
-                                $time = round( $time );
-                            }
-                        }
-                    }
+                        else  $post['t11'] = 0;         
+                    } 
+                    else $post['t11'] = 0;
+
+                    $troopsTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), 1);
+                    $time = $database->getTroopsWalkingTime($session->uid, $village->wid, 2, $troopsTime);
+                    
                     $reference = $database->addAttack( $enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0 );
                     $database->addMovement( 4, $village->wid, $enforce['from'], $reference, time(), ( $time + time() ) );
                     $technology->checkReinf( $post['ckey'], false );

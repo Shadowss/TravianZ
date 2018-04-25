@@ -53,7 +53,7 @@ switch($kind){
         break;
 }
 
-$bonus = $betterorbadder." ".$effecty;
+$bonus = $betterorbadder." (<b>".str_replace(["(", ")"], "" , $effecty)."</b>)";
 ?>
 
 <div class="artefact image-<?php echo str_replace(['type', '.gif'], '', $artefact['img']); ?>">

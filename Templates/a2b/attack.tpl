@@ -1,107 +1,35 @@
 <?php
-// Temp
+$ckey = $generator->generateRandStr(6);
 
-$eigen = $database->getCoor($village->wid);
+ if (!isset($process['t1']) || $process['t1'] == ''){  $t1 = 0; }else{  $t1 = $process['t1']; }
+ if (!isset($process['t2']) || $process['t2'] == ''){  $t2 = 0; }else{  $t2 = $process['t2']; }
+ if (!isset($process['t3']) || $process['t3'] == ''){  $t3 = 0; }else{  $t3 = $process['t3']; if ($session->tribe == 3) $scout=1; }
+ if (!isset($process['t4']) || $process['t4'] == ''){  $t4 = 0; }else{  $t4 = $process['t4']; if ($session->tribe == 1 || $session->tribe == 2 || $session->tribe == 4 || $session->tribe == 5) $scout=1; }
+ if (!isset($process['t5']) || $process['t5'] == ''){  $t5 = 0; }else{  $t5 = $process['t5']; }
+ if (!isset($process['t6']) || $process['t6'] == ''){  $t6 = 0; }else{  $t6 = $process['t6']; }
+ if (!isset($process['t7']) || $process['t7'] == ''){  $t7 = 0; }else{  $t7 = $process['t7']; }
+ if (!isset($process['t8']) || $process['t8'] == ''){  $t8 = 0; }else{  $t8 = $process['t8']; }
+ if (!isset($process['t9']) || $process['t9'] == ''){  $t9 = 0; }else{  $t9 = $process['t9']; }
+ if (!isset($process['t10']) || $process['t10'] == ''){  $t10 = 0; }else{  $t10 = $process['t10']; }
+ if (!isset($process['t11']) || $process['t11'] == ''){  $t11 = 0; }else{  $t11 = $process['t11']; $showhero=1; }
+ 
 
-$from = array('x'=>$eigen['x'], 'y'=>$eigen['y']);
-
-$to = array('x'=>$coor['x'], 'y'=>$coor['y']);
-
-      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
-			if($artefact > 0){
-			$fastertroops = 3;
-			}else if($artefact1 > 0){
-			$fastertroops = 2;
-			}else if($artefact2 > 0){
-			$fastertroops = 1.5;
-			}else{
-			$fastertroops = 1;
-			}
-$time = round($generator->procDistanceTime($from,$to,300,0)/$fastertroops);
-$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$session->uid);
-if(count($foolartefact) > 0){
-foreach($foolartefact as $arte){
-if($arte['bad_effect'] == 1){
-$time *= $arte['effect2'];
-}else{
-$time /= $arte['effect2'];
-$time = round($time);
+for($i = 1; $i <= 11; $i++){
+    $totalunits += (($i != 3 && $session->tribe == 3) ||
+                    ($i != 4 && $session->tribe != 3)) ? (!empty($process['t'.$i]) ? $process['t'.$i] : 0) : 0;
 }
-}
-}
-
-// Temp
-
-$ckey= $generator->generateRandStr(6);
-
-
- if (!isset($process['t1']) || $process['t1'] == ''){  $t1='0'; }else{  $t1=$process['t1']; }
- if (!isset($process['t2']) || $process['t2'] == ''){  $t2='0'; }else{  $t2=$process['t2']; }
- if (!isset($process['t3']) || $process['t3'] == ''){  $t3='0'; }else{  $t3=$process['t3']; if ($session->tribe == 3){ $scout=1; } }
- if (!isset($process['t4']) || $process['t4'] == ''){  $t4='0'; }else{  $t4=$process['t4']; if ($session->tribe == 1 || $session->tribe == 2 || $session->tribe == 4 || $session->tribe == 5){ $scout=1;} }
- if (!isset($process['t5']) || $process['t5'] == ''){  $t5='0'; }else{  $t5=$process['t5']; }
- if (!isset($process['t6']) || $process['t6'] == ''){  $t6='0'; }else{  $t6=$process['t6']; }
- if (!isset($process['t7']) || $process['t7'] == ''){  $t7='0'; }else{  $t7=$process['t7']; }
- if (!isset($process['t8']) || $process['t8'] == ''){  $t8='0'; }else{  $t8=$process['t8']; }
- if (!isset($process['t9']) || $process['t9'] == ''){  $t9='0'; }else{  $t9=$process['t9']; }
- if (!isset($process['t10']) || $process['t10'] == ''){  $t10='0'; }else{  $t10=$process['t10']; }
- if (!isset($process['t11']) || $process['t11'] == ''){  $t11='0'; }else{  $t11=$process['t11']; $showhero=1;}
- if ($session->tribe == 3){
- $totalunits = (!empty($process['t1']) ? $process['t1'] : 0) +
-               (!empty($process['t2']) ? $process['t2'] : 0) +
-               (!empty($process['t4']) ? $process['t4'] : 0) +
-               (!empty($process['t5']) ? $process['t5'] : 0) +
-               (!empty($process['t6']) ? $process['t6'] : 0) +
-               (!empty($process['t7']) ? $process['t7'] : 0) +
-               (!empty($process['t8']) ? $process['t8'] : 0) +
-               (!empty($process['t9']) ? $process['t9'] : 0) +
-               (!empty($process['t10']) ? $process['t10'] : 0) +
-               (!empty($process['t11']) ? $process['t11'] : 0);
-
- }else{
- $totalunits = (!empty($process['t1']) ? $process['t1'] : 0) +
-               (!empty($process['t2']) ? $process['t2'] : 0) +
-               (!empty($process['t3']) ? $process['t3'] : 0) +
-               (!empty($process['t5']) ? $process['t5'] : 0) +
-               (!empty($process['t6']) ? $process['t6'] : 0) +
-               (!empty($process['t7']) ? $process['t7'] : 0) +
-               (!empty($process['t8']) ? $process['t8'] : 0) +
-               (!empty($process['t9']) ? $process['t9'] : 0) +
-               (!empty($process['t10']) ? $process['t10'] : 0) +
-               (!empty($process['t11']) ? $process['t11'] : 0);
- }
+ 
 if (isset($scout) && $scout == 1 && isset($totalunits) && $totalunits == 0 && $process['c'] != 2) {
     $process['c'] = 1;
 }
-    $id = $database->addA2b($ckey,time(),$process['0'],$t1,$t2,$t3,$t4,$t5,$t6,$t7,$t8,$t9,$t10,$t11,$process['c']);
+$id = $database->addA2b($ckey, time(), $process['0'], $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, $process['c']);
 
-
-
-if ($process['c']==1){
-
-$actionType = "Scout";
-
-}else if ($process['c']==2){
-
-$actionType = "Reinforcement";
-
-}elseif ($process['c']==3){
-
-$actionType = "Normal attack";
-
-}else{
-
-$actionType = "Raid";
-
-}
+$actionType = (["Scout", "Reinforcement", "Normal attack", "Raid"])[$process['c'] - 1];
 
 $uid = $session->uid;
-
 $tribe = $session->tribe;
-$start = ($tribe-1)*10+1;
-$end = ($tribe*10);
+$start = ($tribe - 1) * 10 + 1;
+$end = $tribe * 10;
 ?>
 
 <h1><?php echo $actionType." to ".$process[1]; ?></h1>
@@ -204,12 +132,12 @@ $end = ($tribe*10);
     <?php } ?>
 
 
-        <?php if(isset($kata) AND $process['c']!='2'){?><tr>
+        <?php if(isset($kata) && $process['c'] != 2){?><tr>
 
-            <?php if($process['c']=='3'){ ?><tbody class="cata">
+            <?php if($process['c']== 3){ ?><tbody class="cata">
                 <tr>
                     <th>Destination:</th>
-                    <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
+                    <td colspan="<?php echo !empty($process['t11']) ? 11 : 10; ?>">
 
                         <select name="ctar1" class="dropdown">
                             <option value="0">Random</option>
@@ -356,86 +284,42 @@ $end = ($tribe*10);
 
 
             <?php
-            $speeds = array();
-
+            $speeds = [];
             $scout = 1;
-
-                //find slowest unit.
-
-                for($i=1;$i<=11;$i++)
-
-                {
-
-                    if (isset($process['t'.$i]))
-
-                    {
-
-                        if( $process['t'.$i] != '' && $process['t'.$i] > 0)
-
+            
+            //find slowest unit.
+            for($i = 1; $i <= 11; $i++)         
+            {             
+                if (isset($process['t'.$i]))            
+                {               
+                    if(!empty($process['t'.$i]) && $process['t'.$i] > 0)             
+                    {                     
+                        if ($i < 11) $speeds[] = ${'u'.(($session->tribe-1) * 10 + $i)}['speed'];     
+                        else
                         {
-
-                if ($i<11)
-                    $speeds[] = ${'u'.(($session->tribe-1)*10+$i)}['speed'];
-                else
-                {
-                    $hero_unit = $database->getHeroField($uid, 'unit');
-                    $speeds[] = ${'u'.$hero_unit}['speed'];
-                }
-
-                            if($i != 4)
-
-                                $scout = 0;
-
+                            $hero_unit = $database->getHeroField($uid, 'unit');
+                            $speeds[] = ${'u'.$hero_unit}['speed'];
                         }
-
-
-
-                    }
-
+                        if($i != 4) $scout = 0;   
+                    } 
                 }
+            }
 
-
-
-
-
-            if($scout)
-
-                $process['c'] = 1;
-
-            $artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
-			if($artefact > 0){
-			$fastertroops = 3;
-			}else if($artefact1 > 0){
-			$fastertroops = 2;
-			}else if($artefact2 > 0){
-			$fastertroops = 1.5;
-			}else{
-			$fastertroops = 1;
-			}
-                $time = round($generator->procDistanceTime($from,$to,min($speeds),1)/$fastertroops);
-				$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$session->uid);
-				if(count($foolartefact) > 0){
-				foreach($foolartefact as $arte){
-				if($arte['bad_effect'] == 1){
-				$time *= $arte['effect2'];
-				}else{
-				$time /= $arte['effect2'];
-				$time = round($time);
-				}
-				}
-				}
-
+            if($scout) $process['c'] = 1;
+            
+            $ownVillage = $database->getCoor($village->wid);      
+            $from = ['x' => $ownVillage['x'], 'y' => $ownVillage['y']];            
+            $to = ['x' => $coor['x'], 'y' => $coor['y']];
+  
+            $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
+            $time = $database->getTroopsWalkingTime($session->uid, $village->wid, 2, $troopsTime);
             ?>
 
-
-
-            <td colspan="<?php if(!empty($process['t11'])){ echo"11"; }else{ echo"10"; } ?>">
+            <td colspan="<?php echo !empty($process['t11']) ? 11 : 10; ?>">
 
             <div class="in">in <?php echo $generator->getTimeFormat($time); ?></div>
 
-            <div class="at">at <span id="tp2"> <?php echo $generator->procMtime(date('U')+$time,9)?></span><span> hours</span></div>
+            <div class="at">at <span id="tp2"> <?php echo $generator->procMtime(date('U') + $time, 9)?></span><span> hours</span></div>
 
             </td>
 
@@ -457,10 +341,10 @@ $end = ($tribe*10);
 <input name="c" value="3" type="hidden">
 
 <?php
-    if(($database->hasBeginnerProtection($village->wid)==1)&&($database->hasBeginnerProtection($process['0'])==0)){
-  	echo"<span style=\"color: #DD0000\"><b>Caution:</b> Attacking a player will lose the protection!</span>";
+    if($database->hasBeginnerProtection($village->wid) == 1 && $database->hasBeginnerProtection($process['0']) == 0){
+        echo"<span style=\"color: #DD0000\"><b>Caution:</b> Attacking a player will lose the protection!</span>";
     }
-    if($database->hasBeginnerProtection($process['0'])==1) {
+    if($database->hasBeginnerProtection($process['0']) == 1) {
         echo"<b>User presently has beginners protection</b>";
     } else {
 ?>

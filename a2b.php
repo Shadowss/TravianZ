@@ -154,7 +154,7 @@ if(isset($_GET['o'])) {
 				if($enforce['vref'] == $village->wid) {
 					$to = $database->getVillage($enforce['from']);
 					$ckey = $w;
-					include ("Templates/a2b/sendback_" . $database->getUserField($to['owner'], 'tribe', 0) . ".tpl");
+					include ("Templates/a2b/sendback.tpl");
 				} else {
 					include ("Templates/a2b/units_" . $session->tribe . ".tpl");
 					include ("Templates/a2b/search.tpl");
@@ -166,7 +166,7 @@ if(isset($_GET['o'])) {
 					if($enforce['from'] == $village->wid || $enforceoasis['conqured']==$village->wid) {
 						$to = $database->getVillage($enforce['from']);
 						$ckey = $r;
-						include ("Templates/a2b/sendback_" . $database->getUserField($to['owner'], 'tribe', 0) . ".tpl");
+						include ("Templates/a2b/sendback.tpl");
 					} else {
 						include ("Templates/a2b/units_" . $session->tribe . ".tpl");
 						include ("Templates/a2b/search.tpl");
@@ -201,20 +201,10 @@ if(isset($_GET['o'])) {
 				$p_hero_unit=$p_hero_f['unit'];
 				$p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
 			}
-
-            $p_artefact = count($database->getOwnUniqueArtefactInfo2($p_owner,2,3,0));
-			$p_artefact1 = count($database->getOwnUniqueArtefactInfo2($prisoner['from'],2,1,1));
-			$p_artefact2 = count($database->getOwnUniqueArtefactInfo2($p_owner,2,2,0));
-			if($p_artefact > 0){
-			$p_fastertroops = 3;
-			}else if($p_artefact1 > 0){
-			$p_fastertroops = 2;
-			}else if($p_artefact2 > 0){
-			$p_fastertroops = 1.5;
-			}else{
-			$p_fastertroops = 1;
-			}
-			$p_time = round($automation->procDistanceTime($p_to,$p_from,min($p_speeds),1)/$p_fastertroops);
+			
+			$troopsTime = $automation->procDistanceTime($p_to, $p_from, min($p_speeds), 1);
+			$p_time = $database->getTroopsWalkingTime($p_owner, $prisoner['from'], 2, $troopsTime);
+			
 			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
 			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,time(),($p_time+time()));
 			$troops = $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];

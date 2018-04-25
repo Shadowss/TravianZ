@@ -53,9 +53,9 @@ echo "".TRADE_ROUTE_TO." <a href=karte.php?d=".$route['wid']."&c=".$generator->g
 </th>
 	<th colspan="4">
    <?php $routeid=$routeid == 0? $routeid=0:$routeid; ?>	
-   <button type="submit" name="action" value="extendRoute"><?php echo EXTEND;?>*</button>
- | <button type="submit" name="action" value="editRoute"><?php echo EDIT;?></button>
- | <button type="submit" name="action" value="delRoute"><?php echo DELETE;?></button>
+   <button type="submit" name="action" value="extendRoute" id="btn_id" class="trav_buttons"><b><?php echo EXTEND;?>*</b></button>
+ | <button type="submit" name="action" value="editRoute" id="btn_id" class="trav_buttons"><b><?php echo EDIT;?></b></button>
+ | <button type="submit" name="action" value="delRoute" id="btn_id" class="trav_buttons"><b><?php echo DELETE;?></b></button>
 	</th></tr></tfoot></table>
 </form>
 		* <?php echo EXTEND_TRADE_ROUTES;?> <img src="../../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="<?php echo GOLD;?>"><b>2</b>

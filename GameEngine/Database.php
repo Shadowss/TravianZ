@@ -3504,7 +3504,11 @@ class MYSQLi_DB implements IDbConnection {
                                                                                                                                                                                     IF(
                                                                                                                                                                                         f40t IN ($fieldType),
                                                                                                                                                                                         f40,
-                                                                                                                                                                                        0
+                                                                                                                                                                                        IF(
+                                                                                                                                                                                            f99t IN ($fieldType),
+                                                                                                                                                                                            f99,
+                                                                                                                                                                                            0
+                                                                                                                                                                                        )
                                                                                                                                                                                     )
                                                                                                                                                                                 )
                                                                                                                                                                             )
@@ -3635,7 +3639,7 @@ class MYSQLi_DB implements IDbConnection {
                     OR
                     f40t IN ($fieldType)
                     OR
-                    f99 IN ($fieldType))
+                    f99t IN ($fieldType))
                 LIMIT 1
         ");
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -6942,6 +6946,50 @@ References: User ID/Message ID, Mode
 		return $slots;
 	}
 
+	/**
+	 * Calculates how much time troops spend to walk from a village to another, counting artifacts
+	 * 
+	 * @param int $uid The User ID
+	 * @param int $vid The village ID
+	 * @param int $time The old time, without multipliers
+	 * @return int Returns the new time, multiplied or divided by artifacts bonus or malus
+	 */
+
+	function getTroopsWalkingTime($uid, $vid, $kind, $time){
+	    list($uid, $vid, $time) = $this->escape_input((int) $uid,(int) $vid, $time);
+
+	    $artefacts = $foolArefacts = [];
+	    $multiplier = [2, 3, 1.5];
+
+	    $artefacts[] = count($this->getOwnUniqueArtefactInfo2($vid, $kind, 1, 1)); //Village effect
+	    $artefacts[] = count($this->getOwnUniqueArtefactInfo2($uid, $kind, 3, 0)); //Unique effect
+	    $artefacts[] = count($this->getOwnUniqueArtefactInfo2($uid, $kind, 2, 0)); //Account effect
+	    
+	    $fasterTroops = 1;
+	    for($i = 0; $i < count($artefacts); $i++)
+	    {
+	        if($artefacts[$i] > 0) {
+	            $fasterTroops = $multiplier[$i];
+	            break;
+	        }
+	    }
+
+	    $foolArefacts[] = $this->getOwnUniqueArtefactInfo2($vid, 8, 1, 1); //Village effect
+	    $foolArefacts[] = $this->getOwnUniqueArtefactInfo2($uid, 8, 3, 0); //Unique effect
+   
+	    $foolEffect = 1;
+	    for($i = 0; $i < count($foolArefacts); $i++)
+	    {
+	        if(count($foolArefacts[$i]) > 0 && $foolArefacts[$i]['kind'] == $kind) 
+	        {
+	            $foolEffect = $foolArefacts[$i]['bad_effect'] == 1 ? $foolArefacts[$i]['effect2'] : 1 / $foolArefacts[$i]['effect2'];
+	            break;
+	        }
+	    }
+	    
+	    return round(($time / $fasterTroops) * $foolEffect);
+	}
+	
 	function addArtefact($vref, $owner, $type, $size, $name, $desc, $effect, $img) {
         list($vref, $owner, $type, $size, $name, $desc, $effect, $img) = $this->escape_input($vref, $owner, $type, $size, $name, $desc, $effect, $img);
 
@@ -7067,8 +7115,8 @@ References: User ID/Message ID, Mode
         return (isset(self::$artefactDataCache[$id.$mode][$size.$type]) ? self::$artefactDataCache[$id.$mode][$size.$type] : []);
 	}
 
-	function getFoolArtefactInfo($type,$vid,$uid, $use_cache = true) {
-	    list($type,$vid,$uid) = $this->escape_input((int) $type,(int) $vid,(int) $uid);
+	function getFoolArtefactInfo($type, $vid, $uid, $use_cache = true) {
+	    list($type, $vid, $uid) = $this->escape_input((int) $type, (int) $vid, (int) $uid);
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
@@ -7199,7 +7247,7 @@ References: User ID/Message ID, Mode
 	function getInactiveArtifacts($time){
 	    list($time) = $this->escape_input($time);
 	    
-	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 0 AND owner > 5 AND conquered < $time ORDER BY conquered ASC, size ASC";
+	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 0 AND owner > 5 AND conquered <= $time ORDER BY conquered ASC, size ASC";
 	    $result = mysqli_query($this->dblink, $q);
 	    return $this->mysqli_fetch_all($result);
 	}

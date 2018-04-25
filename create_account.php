@@ -520,30 +520,21 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
 		unset($i);
 		unset($vname);
 		unset($effect);
-		$vname = FOOL_SMALLVILLAGE;
-		$effect = '';
-		for($i = 0; $i < 5; $i++) {
-			Artefact($uid, 8, 2, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'typefool.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
 		$vname = FOOL_UNIQUEVILLAGE;
 		$effect = '';
 		for($i = 0; $i < 1; $i++) {
 			Artefact($uid, 8, 3, FOOL_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'typefool.gif');
 		}
+		
 		$myFile = "Templates/text.tpl";
 		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");
 		$text = file_get_contents("Templates/text_format.tpl");
 		$text = preg_replace("'%TEKST%'",ARTEFACT ,$text);
 		fwrite($fh, $text);
 
-        $query="UPDATE ".TB_PREFIX."users SET ok = 1";
-
+        $query = "UPDATE ".TB_PREFIX."users SET ok = 1";
 		echo "Done";
-}elseif(User::exists($database,'Natars'))    {
+}elseif(User::exists($database, 'Natars'))    {
 ?>
 <p>
 <span class="c2">Error: Natar account already exist</span>
