@@ -89,6 +89,9 @@ class Automation {
         if(!file_exists("GameEngine/Prevention/settlers.txt") or time()-filemtime("GameEngine/Prevention/settlers.txt")>50) {
             $this->sendSettlersComplete();
         }
+        if(!file_exists("GameEngine/Prevention/artifacts.txt") or time() - filemtime("GameEngine/Prevention/artifacts.txt") > 60) {
+            $this->activateArtifacts();
+        }
         $this->updateGeneralAttack();
         $this->checkInvitedPlayes();
         $this->updateStore();
@@ -3698,6 +3701,78 @@ class Automation {
 
         if(file_exists("GameEngine/Prevention/settlers.txt")) {
             unlink("GameEngine/Prevention/settlers.txt");
+        }
+    }
+    
+    private function activateArtifacts() {
+        global $database, $autoprefix;
+        
+        if(file_exists($autoprefix."GameEngine/Prevention/artifacts.txt")) {
+            unlink($autoprefix."GameEngine/Prevention/artifacts.txt");
+        }
+        
+        //Check if there's at least one artifact, if not, return
+        if(!$database->areArtifactsSpawned()) return;
+        
+        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/artifacts.txt", 'w');
+        fclose($ourFileHandle);
+        
+        //Get all inactive artifacts that have to be activated --> (24 hours / Speed of the server)
+        $time = time();
+        $artifacts = $database->getInactiveArtifacts(round($time - (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED)))));
+
+        if(!empty($artifacts)){
+            
+            //Cache inactive artifacts by owner
+            $inactiveArtifactsCache = [];
+            foreach($artifacts as $artifact) $inactiveArtifactsCache[$artifact['owner']][] = $artifact;         
+
+            foreach($inactiveArtifactsCache as $owner => $inactiveArtifacts){
+
+                //Initialize the array
+                $activeArtifacts = [];
+                
+                //Get cached active artifacts
+                $ownArtifacts = $database->getOwnArtifactsSum($owner, true);
+
+                //Activate activable artifacts
+                foreach($inactiveArtifacts as $artifact){
+                    if($ownArtifacts['totals'] < 3) {
+                        if($artifact['size'] == 1){ //Village effect
+                            $database->activateArtifact($artifact['id']);
+                            $ownArtifacts['totals']++;
+                            $ownArtifacts['small']++;
+                        }elseif($artifact['size'] == 2 && !$ownArtifacts['great']){ //Account effect
+                            $database->activateArtifact($artifact['id']);
+                            $ownArtifacts['totals']++;
+                            $ownArtifacts['great']++;
+                        }elseif($artifact['size'] == 3 && !$ownArtifacts['unique']){ //Unique effect
+                            $database->activateArtifact($artifact['id']);
+                            $ownArtifacts['totals']++;
+                            $ownArtifacts['unique']++;
+                        }
+                    }elseif($ownArtifacts['small'] == 3 && $artifact['size'] > 1){
+                        //If we've 3 village effect artifacts activated and at least one account/unique effect not activated
+                        //then we need to deactivate the most recent village effect artifact and activate the oldest account
+                        //or unique effect artifact
+                        
+                        //Deactivate the most recent village effect artifact
+                        $database->activateArtifact($database->getNewestArtifactBySize($owner, 1)['id'], 0);
+                        
+                        //Activate the great/unique artifact
+                        $database->activateArtifact($artifact['id']);     
+                        
+                        $ownArtifacts['small']--;
+                        $ownArtifacts['totals']++;
+                        if($size == 2) $ownArtifacts['great']++;
+                        else $ownArtifacts['unique']++;
+                    }
+                }
+            }
+        }
+        
+        if(file_exists("GameEngine/Prevention/artifacts.txt")) {
+            unlink("GameEngine/Prevention/artifacts.txt");
         }
     }
 

@@ -7018,7 +7018,7 @@ References: User ID/Message ID, Mode
             return (isset($cachedValue[$type.$size]) ? $cachedValue[$type.$size] : []);
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id";
+        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id ";
         $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
         // cache all types and return the requested one
@@ -7139,7 +7139,7 @@ References: User ID/Message ID, Mode
 	    list($vref, $ovref, $id) = $this->escape_input((int) $vref, (int) $ovref, (int) $id);
 
 		$time = time();
-		$q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id, conquered = $time, active = 1 WHERE vref = $ovref";
+		$q = "UPDATE " . TB_PREFIX . "artefacts SET vref = $vref, owner = $id, conquered = $time, active = 0 WHERE vref = $ovref";
 		
 		if(mysqli_query($this->dblink, $q))
 		{ 
@@ -7179,15 +7179,90 @@ References: User ID/Message ID, Mode
 	    return mysqli_query($this->dblink, $q);
 	}
 
+	/**
+	 * 
+	 * @return bool Returns if artefacts are already out or not
+	 */
+	
+	function areArtifactsSpawned(){
+	    $q = "SELECT Count(*) as Total FROM ".TB_PREFIX."artefacts LIMIT 1";
+	    $result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
+	    return $result['Total'] > 0;
+	}
+	
+	/**
+	 * Get all inactive artifacts which can be activated
+	 * 
+	 * @return bool Returns all inactive artifacts
+	 */
+	
+	function getInactiveArtifacts($time){
+	    list($time) = $this->escape_input($time);
+	    
+	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 0 AND owner > 5 AND conquered < $time ORDER BY conquered ASC, size ASC";
+	    $result = mysqli_query($this->dblink, $q);
+	    return $this->mysqli_fetch_all($result);
+	}
+	
+	/**
+	 * Get the sum of active artifacts by user ID, divided by: total, great, small and unique
+	 * 
+	 * @param int $uid The User ID of the player
+	 * @param bool $mode True if you want only active artifacts, false if you want all artifacts
+	 * @return array Returns the artifacts sum of the account, divided by: total, great, small and unique
+	 */
+	
+	function getOwnArtifactsSum($uid, $mode = false){
+	    list($uid) = $this->escape_input((int) $uid, $mode);
+	    
+	    $q = "SELECT Count(size) AS totals,
+              SUM(IF(size = '1', 1, 0)) small,
+              SUM(IF(size = '2', 1, 0)) great,
+              SUM(IF(size = '3', 1, 0)) `unique`
+              FROM " . TB_PREFIX . "artefacts WHERE owner = ".(int) $uid.($mode ? " AND active = 1" : "");
+	    $result = mysqli_query($this->dblink, $q);
+	    return $this->mysqli_fetch_all($result)[0];
+	}
+	
+	/**
+	 * Activate an artifact by his id
+	 * 
+	 * @param int $id The id of the artifact
+	 * @return bool Returns true if the query was successful, false otherwise
+	 */
+	
+	function activateArtifact($id, $mode = 1){
+	    list($id) = $this->escape_input((int) $id);
+	    
+	    $time = time();
+	    $q = "UPDATE " . TB_PREFIX . "artefacts SET active = $mode WHERE id = $id";
+	    return mysqli_query($this->dblink, $q);
+	}
+	
+	/**
+	 * Get the newest active artifact by size
+	 * 
+	 * @param int $size The size of the artifcat (village, account, unique)
+	 * @return array Returns the newest active artifact infomations by size
+	 */
+	
+	function getNewestArtifactBySize($id, $size){
+	    list($id, $size) = $this->escape_input((int) $id, (int) $size);
+	    
+	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 1 AND owner = $id AND size = $size ORDER BY conquered DESC LIMIT 1";
+	    $result = mysqli_query($this->dblink, $q);
+	    return mysqli_fetch_array($result);
+	}
+	
     // no need to cache this method
-    public function canClaimArtifact($from,$vref,$size,$type) {
+    public function canClaimArtifact($from, $vref, $size, $type) {
         list($size,$type) = $this->escape_input((int) $size,(int) $type);
 
         //fix by Ronix
         global $session, $form;
         $size1 = $size2 = $size3 = 0;
 
-        $artifact = $this->getOwnArtefactInfo( $from );
+        $artifact = $this->getOwnArtefactInfo($from);
         if (!empty($artifact)) {
             $form->addError( "error", "Treasury is full. Your hero could not claim the artefact" );
             return false;
@@ -7196,13 +7271,7 @@ References: User ID/Message ID, Mode
         $uid = $this->getVillageField($from, "owner");
         $vuid = $this->getVillageField($vref, "owner");
 
-        $q = "SELECT Count(size) AS totals,
-              SUM(IF(size = '1',1,0)) small,
-              SUM(IF(size = '2',1,0)) great,
-              SUM(IF(size = '3',1,0)) `unique`
-              FROM " . TB_PREFIX . "artefacts WHERE owner = " . (int) $uid;
-        $result = mysqli_query( $this->dblink, $q );
-        $artifact = $this->mysqli_fetch_all( $result )[0];
+        $artifact = $database->getOwnArtifactsSum($uid);
 
         if ( $artifact['totals'] < 3 || $uid == $vuid) {
             $DefenderFields = $this->getResourceLevel( $vref );

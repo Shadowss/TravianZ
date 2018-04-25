@@ -8,8 +8,11 @@ if($artefact['size'] == 1 && $artefact['type'] != 11){
     $effect = ACCOUNT;
 }
 
+$activationTime = 86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED));
+
 if($artefact['owner'] == 3) $active = "-";
-elseif (!$artefact['active']) $active = date("Y-m-d H:i:s",$artefact['conquered'] + 86400);
+elseif(!$artefact['active'] && $artefact['conquered'] < time() - $activationTime) $active = "<b>Can't be activated</b>";
+elseif (!$artefact['active']) $active = date("Y-m-d H:i:s", $artefact['conquered'] + $activationTime);
 else $active = "<b>".ACTIVE."</b>";
                     
 //// Added by brainiac - thank you
