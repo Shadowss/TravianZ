@@ -121,7 +121,7 @@ echo $form->getError('agree');
 		<input class="check" type="checkbox" name="agb" value="1" <?php echo $form->getRadio('agb',1); ?>/><?php echo ACCEPT_RULES; ?></p>
 
 <p class="btn">
-	<input type="image" value="anmelden" name="s1" id="btn_signup" class="dynamic_img" src="img/x.gif" alt="register"/>
+	<button value="anmelden" name="s1" id="btn_signup" class="trav_buttons" alt="register button"/> Register </button> 
 </p>
 </form>
 
