@@ -573,34 +573,45 @@ input#btn_search {width:97px; background-image: url(b/search.gif);}
 
 /* Start tooltips for the admin panel settings */
 .tooltip {
-    border-bottom: 1px dotted #000000;
-    color: #000000;
-    outline: none;
-    cursor: help;
-    text-decoration: none;
     position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    cursor: help;
 }
 
-.tooltip span {
-    margin-left: -999em;
-    position: absolute;
-}
-
-.tooltip:hover span {
-    font-family: Calibri, Tahoma, Geneva, sans-serif;
-    font-size: 1.2em;
-    position: absolute;
-    left: -2em;
-    bottom: 1em;
-    z-index: 99;
-    margin-left: 0;
+.tooltip .classic {
+    visibility: hidden;
     width: 250px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    font-style: normal;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    z-index: 99;
+    bottom: 120%;
+    left: 50%;
+    margin-left: -40px;
+    
+    /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
+    opacity: 0;
+    transition: opacity 1s;
 }
 
-.classic {
-    padding: 0.8em 1em;
-    background: #FFFFAA;
-    border: 1px solid #FFAD33;
-    border-radius: 5px;
+.tooltip .classic::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 40px;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+.tooltip:hover .classic {
+    visibility: visible;
+    opacity: 1;
 }
 /* End of tooltips */
