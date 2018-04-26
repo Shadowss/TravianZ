@@ -7,7 +7,7 @@ include("menu.tpl");
 <div id="block">
 	<input type="hidden" name="ft" value="m6" />
 	<textarea name="notizen" id="notice"><?php echo $message->note; ?></textarea>
-	<p class="btn"><input id="btn_save" type="image" value="" name="s1" src="img/x.gif" class="dynamic_img" alt"save" /><br />
+	<p class="btn"><button id="btn_save" value="" name="s1" class="trav_buttons" alt"save" /> Save </button><br />
 	&nbsp;</p>
 </div>
 </form>
