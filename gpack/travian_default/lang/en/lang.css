@@ -29,6 +29,7 @@
     cursor: pointer;
     color: #7a7a7a;
     text-align: center;
+    font-weight: 700;
 }
 .trav_buttons:hover {
     border-color: #a6ac9f;
