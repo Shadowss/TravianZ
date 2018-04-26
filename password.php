@@ -106,7 +106,7 @@ if(!isset($_REQUEST['npw'])){
 			</p>
 
 			<p>
-				<input type="image" value="ok" name="s1" src="img/x.gif" class="dynamic_img" id="btn_ok" alt="OK" />
+				<button value="ok" name="s1" class="trav_buttons" id="btn_ok" alt="OK" /> ok </button>
 			</p>
 		</form>
 <?php

@@ -162,7 +162,7 @@ if(count($target) > 0) {
 </tr></tbody>
 </table>
 
-<p class="btn"><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
+<p class="btn"><button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" /> OK </button></p>
 </form>
 </div>
 <br /><br /><br /><br /><div id="side_info">
