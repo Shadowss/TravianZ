@@ -7319,7 +7319,7 @@ References: User ID/Message ID, Mode
         $uid = $this->getVillageField($from, "owner");
         $vuid = $this->getVillageField($vref, "owner");
 
-        $artifact = $database->getOwnArtifactsSum($uid);
+        $artifact = $this->getOwnArtifactsSum($uid);
 
         if ( $artifact['totals'] < 3 || $uid == $vuid) {
             $DefenderFields = $this->getResourceLevel( $vref );
