@@ -992,7 +992,7 @@ define("OWN_ARTIFACTS","Own artefacts");
 define("CONQUERED","Conquered");
 define("DISTANCE","Distance");
 define("EFFECT","Effect");
-define("ACCOUNT","account");
+define("ACCOUNT","Account");
 define("SMALL_ARTIFACTS","Small artefacts");
 define("LARGE_ARTIFACTS","Large artefacts");
 define("NO_ARTIFACTS","There is no artefacts.");

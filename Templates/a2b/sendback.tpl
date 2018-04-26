@@ -146,7 +146,7 @@ $end = $att_tribe * 10;
 			}
 
 			$troopsTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), 1);
-			$time = $database->getTroopsWalkingTime($session->uid, $village->wid, 2, $troopsTime);
+			$time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
 			?>
 
 			<td colspan="10">

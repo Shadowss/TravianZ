@@ -36,3 +36,4 @@ $units = $database->getUnit($village['wref']);
 		</td>
 	</tbody>
 </table>
+<?php }?>

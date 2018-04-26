@@ -676,30 +676,29 @@ class Building {
             case 40:
                 $wwlevel = $village->resarray['f99'];
 
-                if ( $wwlevel > 50 ) {
-                    $needed_plan = 1;
-                } else {
-                    $needed_plan = 0;
-                }
+                if($wwlevel > 50) $needed_plan = 1;  
+                else $needed_plan = 0;
 
                 $wwbuildingplan = 0;
-                $villages       = $database->getVillagesID( $session->uid );
-                foreach ( $villages as $village1 ) {
-                    $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
-                    if ( $plan > 0 ) {
+                $villages = $database->getVillagesID( $session->uid );
+                foreach($villages as $village1) {
+                    $plan = count($database->getOwnArtefactInfoByType2($village1, 11));
+                    if($plan > 0){
                         $wwbuildingplan = 1;
+                        break;
                     }
                 }
 
-                if ( $session->alliance != 0 ) {
-                    $alli_users = $database->getUserByAlliance( $session->alliance );
-                    foreach ( $alli_users as $users ) {
-                        $villages = $database->getVillagesID( $users['id'] );
-                        if ( $users['id'] != $session->uid ) {
-                            foreach ( $villages as $village1 ) {
-                                $plan = count( $database->getOwnArtefactInfoByType2( $village1, 11 ) );
-                                if ( $plan > 0 ) {
+                if($session->alliance != 0) {
+                    $alli_users = $database->getUserByAlliance($session->alliance);
+                    foreach($alli_users as $users) {
+                        $villages = $database->getVillagesID($users['id']);
+                        if($users['id'] != $session->uid) {
+                            foreach($villages as $village1) {
+                                $plan = count($database->getOwnArtefactInfoByType2($village1, 11 ));
+                                if($plan > 0) {
                                     $wwbuildingplan += 1;
+                                    break;
                                 }
                             }
                         }

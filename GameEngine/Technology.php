@@ -499,52 +499,12 @@ class Technology {
             }
         }
 
-        //   $unit = "hero";
-        //   global $$unit;
-        //   $dataarray = $$unit;
-        if ( $prisoners == 0 ) {
-            if ( ! isset( $array['hero'] ) ) {
-                $array['hero'] = 0;
-            }
-            $upkeep += $array['hero'] * 6;
-        } else {
-            if ( ! isset( $array['t11'] ) ) {
-                $array['t11'] = 0;
-            }
-            $upkeep += $array['t11'] * 6;
-        }
-
-        $artefact  = count( $database->getOwnUniqueArtefactInfo2( $session->uid, 4, 3, 0 ) );
-        $artefact1 = count( $database->getOwnUniqueArtefactInfo2( $vid, 4, 1, 1 ) );
-        $artefact2 = count( $database->getOwnUniqueArtefactInfo2( $session->uid, 4, 2, 0 ) );
-
-        if ( $artefact > 0 ) {
-            $upkeep /= 2;
-            $upkeep = round( $upkeep );
-        } else if ( $artefact1 > 0 ) {
-            $upkeep /= 2;
-            $upkeep = round( $upkeep );
-        } else if ( $artefact2 > 0 ) {
-            $upkeep /= 4;
-            $upkeep = round( $upkeep );
-            $upkeep *= 3;
-        }
-
-        $foolartefact = $database->getFoolArtefactInfo( 4, $vid, $session->uid );
-
-        if ( count( $foolartefact ) > 0 ) {
-            var_dump($foolartefact);
-            foreach ( $foolartefact as $arte ) {
-                if ( $arte['bad_effect'] == 1 ) {
-                    $upkeep *= $arte['effect2'];
-                } else {
-                    $upkeep /= $arte['effect2'];
-                    $upkeep = round( $upkeep );
-                }
-            }
-        }
-
-        return $upkeep;
+        $unit = ($prisoners > 0) ? 't11' : 'hero';
+        
+        if(!isset($array[$unit])) $array[$unit] = 0;
+        $upkeep += $array[$unit] * 6;
+        
+        return $database->getArtifactsValueInfluence($session->uid, $vid, 4, $upkeep);
 	}
 
     private function trainUnit($unit,$amt,$great=false) {
@@ -627,9 +587,9 @@ class Technology {
 			$clay = ${'u'.$unit}['clay'] * $amt * ($great?3:1);
 			$iron = ${'u'.$unit}['iron'] * $amt * ($great?3:1);
 			$crop = ${'u'.$unit}['crop'] * $amt * ($great?3:1);
-			$time = $each*$amt;
-			if($database->modifyResource($village->wid,$wood,$clay,$iron,$crop,0) && $amt > 0) {
-				$database->trainUnit($village->wid,$unit+($great?60:0),$amt,${'u'.$unit}['pop'],$each,time()+$time,0);
+
+			if($database->modifyResource($village->wid, $wood , $clay, $iron, $crop, 0) && $amt > 0) {
+				$database->trainUnit($village->wid, $unit + ($great ? 60 : 0), $amt, ${'u'.$unit}['pop'], $each, 0);
 			}
 		}
 	}

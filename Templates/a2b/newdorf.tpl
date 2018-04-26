@@ -8,36 +8,13 @@ $newvillage = $database->getMInfo($_GET['id']);
 $eigen = $database->getCoor($village->wid);
 $from = array('x'=>$eigen['x'], 'y'=>$eigen['y']);
 $to = array('x'=>$newvillage['x'], 'y'=>$newvillage['y']);
-      		$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,2,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,2,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,2,2,0));
-			if($artefact > 0){
-			$fastertroops = 3;
-			}else if($artefact1 > 0){
-			$fastertroops = 2;
-			}else if($artefact2 > 0){
-			$fastertroops = 1.5;
-			}else{
-			$fastertroops = 1;
-			}
-$time = round($generator->procDistanceTime($from,$to,300,0)/$fastertroops);
-$foolartefact = $database->getFoolArtefactInfo(2,$village->wid,$session->uid);
-if(count($foolartefact) > 0){
-foreach($foolartefact as $arte){
-if($arte['bad_effect'] == 1){
-$time *= $arte['effect2'];
-}else{
-$time /= $arte['effect2'];
-$time = round($time);
-}
-}
-}
+      		
+$troopsTime = $generator->procDistanceTime($from, $to, 300, 0);
+$time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
+
 //-- Prevent user from founding a new village if there are not enough settlers
-//-- fix by AL-Kateb
-$tempunits = $database->getUnit($village->coor['id']);
-$settler_key = "u" . $session->userinfo['tribe'] . "0";
-$settlers = (int)$tempunits[$settler_key];
-if($settlers < 3){
+//-- fix by AL-Kateb - Semplified by iopietro
+if($village->unitarray['u'.$session->tribe.'0'] < 3){
 	header("location: dorf1.php");
 	exit;
 }

@@ -2063,34 +2063,11 @@ class Automation {
                         }
 
                         //cranny efficiency
-                        //TODO: Needs to be connected to a function
                         $atk_bonus = ($owntribe == 2)? (4/5) : 1;
                         $def_bonus = ($targettribe == 3)? 2 : 1;
-                        $to_owner = $database->getVillageField($data['to'],"owner");
-                        $artefact_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,3,0));
-                        $artefact1_2 = count($database->getOwnUniqueArtefactInfo2($data['to'],7,1,1));
-                        $artefact2_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,2,0));
-                        if($artefact_2 > 0){
-                            $artefact_bouns = 6;
-                        }else if($artefact1_2 > 0){
-                            $artefact_bouns = 3;
-                        }else if($artefact2_2 > 0){
-                            $artefact_bouns = 2;
-                        }else{
-                            $artefact_bouns = 1;
-                        }
-                        $foolartefact = $database->getFoolArtefactInfo(7, (isset($vid) ? $vid : 0), $DefenderID);
-                        if(count($foolartefact) > 0){
-                            foreach($foolartefact as $arte){
-                                if($arte['bad_effect'] == 1){
-                                    $cranny_eff *= $arte['effect2'];
-                                }else{
-                                    $cranny_eff /= $arte['effect2'];
-                                    $cranny_eff = round($cranny_eff);
-                                }
-                            }
-                        }
-                        $crannySpy = $cranny * $def_bonus * $artefact_bouns;
+                        $to_owner = $database->getVillageField($data['to'], "owner");                       
+                        
+                        $crannySpy = $database->getArtifactsValueInfluence($to_owner, $data['to'], 7, $cranny * $def_bonus);
                         $cranny_eff = $crannySpy * $atk_bonus;
 
                         // work out available resources.
@@ -2840,30 +2817,9 @@ class Automation {
                                                 $p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
                                             }
 
-                                            $p_artefact = count($database->getOwnUniqueArtefactInfo2($p_owner,2,3,0));
-                                            $p_artefact1 = count($database->getOwnUniqueArtefactInfo2($prisoner['from'],2,1,1));
-                                            $p_artefact2 = count($database->getOwnUniqueArtefactInfo2($p_owner,2,2,0));
-                                            if($p_artefact > 0){
-                                                $p_fastertroops = 3;
-                                            }else if($p_artefact1 > 0){
-                                                $p_fastertroops = 2;
-                                            }else if($p_artefact2 > 0){
-                                                $p_fastertroops = 1.5;
-                                            }else{
-                                                $p_fastertroops = 1;
-                                            }
-                                            $p_time = round($this->procDistanceTime($p_to,$p_from,min($p_speeds),1)/$p_fastertroops);
-                                            $foolartefact1 = $database->getFoolArtefactInfo(2,$prisoner['from'],$p_owner);
-                                            if(count($foolartefact1) > 0){
-                                                foreach($foolartefact1 as $arte){
-                                                    if($arte['bad_effect'] == 1){
-                                                        $p_time *= $arte['effect2'];
-                                                    }else{
-                                                        $p_time /= $arte['effect2'];
-                                                        $p_time = round($p_time);
-                                                    }
-                                                }
-                                            }
+                                            $troopsTime = $this->procDistanceTime($p_to, $p_from, min($p_speeds), 1);
+                                            $p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
+                                            
                                             $p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
                                             $movementType[] = 4;
                                             $movementFrom[] = $prisoner['wref'];
@@ -2925,7 +2881,7 @@ class Automation {
                     if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
                     {                       
                         $troopsTime = $this->procDistanceTime($from, $to, min($speeds), 1);
-                        $endtime = $database->getTroopsWalkingTime($from['owner'], $from['wref'], 2, $troopsTime);
+                        $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);
                         $endtime += $AttackArrivalTime;
                         if($type == 1) {
                             if($from['owner'] == 3) { //fix natar report by ronix
@@ -3023,7 +2979,7 @@ class Automation {
                     }
 
                     $troopsTime = $this->procDistanceTime($from, $to, min($speeds), 1);
-                    $endtime = $database->getTroopsWalkingTime($from['owner'], $from['wref'], 2, $troopsTime);                
+                    $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);                
                     $endtime += $AttackArrivalTime;
 
                     $database->setMovementProc($data['moveid']);
@@ -3696,11 +3652,11 @@ class Automation {
                             $database->activateArtifact($artifact['id']);
                             $ownArtifacts['totals']++;
                             $ownArtifacts['small']++;
-                        }elseif($artifact['size'] == 2 && !$ownArtifacts['great']){ //Account effect
+                        }elseif($artifact['size'] == 2 && !$ownArtifacts['unique'] && !$ownArtifacts['great']){ //Account effect
                             $database->activateArtifact($artifact['id']);
                             $ownArtifacts['totals']++;
                             $ownArtifacts['great']++;
-                        }elseif($artifact['size'] == 3 && !$ownArtifacts['unique']){ //Unique effect
+                        }elseif($artifact['size'] == 3 && !$ownArtifacts['unique'] && !$ownArtifacts['great']){ //Unique effect
                             $database->activateArtifact($artifact['id']);
                             $ownArtifacts['totals']++;
                             $ownArtifacts['unique']++;
@@ -4005,52 +3961,14 @@ class Automation {
             }
         }
 
-        //   $unit = "hero";
-        //   global $$unit;
-        //   $dataarray = $$unit;
-        if ( $prisoners == 0 ) {
-            if ( ! isset( $array['hero'] ) ) {
-                $array['hero'] = 0;
-            }
-            $upkeep += $array['hero'] * 6;
-        } else {
-            if ( ! isset( $array['t11'] ) ) {
-                $array['t11'] = 0;
-            }
-            $upkeep += $array['t11'] * 6;
-        }
+        $unit = ($prisoners > 0) ? 't11' : 'hero';
+        
+        if(!isset($array[$unit])) $array[$unit] = 0;
+        $upkeep += $array[$unit] * 6;
 
-        $who       = $database->getVillageField( $vid, "owner" );
-        $artefact  = count( $database->getOwnUniqueArtefactInfo2( $who, 4, 3, 0 ) );
-        $artefact1 = count( $database->getOwnUniqueArtefactInfo2( $vid, 4, 1, 1 ) );
-        $artefact2 = count( $database->getOwnUniqueArtefactInfo2( $who, 4, 2, 0 ) );
-
-        if ( $artefact > 0 ) {
-            $upkeep /= 2;
-            $upkeep = round( $upkeep );
-        } else if ( $artefact1 > 0 ) {
-            $upkeep /= 2;
-            $upkeep = round( $upkeep );
-        } else if ( $artefact2 > 0 ) {
-            $upkeep /= 4;
-            $upkeep = round( $upkeep );
-            $upkeep *= 3;
-        }
-
-        $foolartefact = $database->getFoolArtefactInfo( 4, $vid, $who );
-
-        if ( count( $foolartefact ) > 0 ) {
-            foreach ( $foolartefact as $arte ) {
-                if ( $arte['bad_effect'] == 1 ) {
-                    $upkeep *= $arte['effect2'];
-                } else {
-                    $upkeep /= $arte['effect2'];
-                    $upkeep = round( $upkeep );
-                }
-            }
-        }
-
-        return $upkeep;
+        $who = $database->getVillageField($vid, "owner");
+        
+        return $database->getArtifactsValueInfluence($who, $vid, 4, $upkeep);
     }
 
     private function bountycalculateOProduction($bountywid) {
@@ -4060,27 +3978,12 @@ class Automation {
         $this->bountyOproduction['crop'] = $this->bountyGetOCropProd();
     }
     
-    private function bountycalculateProduction($bountywid,$uid) {
-        global $technology,$database;
-        $normalA = $database->getOwnArtefactInfoByType($bountywid,4);
-        $largeA = $database->getOwnUniqueArtefactInfo($uid,4,2);
-        $uniqueA = $database->getOwnUniqueArtefactInfo($uid,4,3);
-        $upkeep = $this->getUpkeep($this->getAllUnits($bountywid),0);
+    private function bountycalculateProduction($bountywid, $uid) {
+        $upkeep = $this->getUpkeep($this->getAllUnits($bountywid), 0);
         $this->bountyproduction['wood'] = $this->bountyGetWoodProd();
         $this->bountyproduction['clay'] = $this->bountyGetClayProd();
         $this->bountyproduction['iron'] = $this->bountyGetIronProd();
-        if ($uniqueA['size']==3 && $uniqueA['owner']==$uid){
-            $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-(($upkeep)-round($upkeep*0.50));
-
-        }else if ($normalA['type']==4 && $normalA['size']==1 && $normalA['owner']==$uid){
-            $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-(($upkeep)-round($upkeep*0.25));
-
-        }else if ($largeA['size']==2 && $largeA['owner']==$uid){
-            $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-(($upkeep)-round($upkeep*0.25));
-
-        }else{
-            $this->bountyproduction['crop'] = $this->bountyGetCropProd()-$this->bountypop-$upkeep;
-        }
+        $this->bountyproduction['crop'] = $this->bountyGetCropProd() - $this->bountypop - $upkeep;
     }
 
     private function bountyprocessProduction($bountywid) {
@@ -4280,7 +4183,7 @@ class Automation {
                 
                     $database->updateTraining($train['id'], $trained, $trained * $train['eachtime']);
                     
-                    if($train['amt'] - $trained <= 0) $database->trainUnit($train['id'], 0, 0, 0, 0, 1, 1);
+                    if($train['amt'] - $trained <= 0) $database->trainUnit($train['id'], 0, 0, 0, 0, 1);
                 }
 
                 if ($valuesUpdated) {
@@ -5822,9 +5725,9 @@ class Automation {
         if ($array) {
             foreach($array as $artefact) {
                 $kind = rand(1, 7);
-                while($kind == 6){
-                    $kind = rand(1, 7);
-                }
+                
+                while($kind == 6) $kind = rand(1, 7);
+                    
                 if($artefact['size'] != 3) $bad_effect = rand(0, 1);
                 else $bad_effect = 0;
 

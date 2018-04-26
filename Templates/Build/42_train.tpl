@@ -1,22 +1,8 @@
 <?php
-  			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,5,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,5,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,5,2,0));
-			if($artefact > 0){
-			$artefact_bonus = 2;
-			$artefact_bonus2 = 1;
-			}else if($artefact1 > 0){
-			$artefact_bonus = 2;
-			$artefact_bonus2 = 1;
-			}else if($artefact2 > 0){
-			$artefact_bonus = 4;
-			$artefact_bonus2 = 3;
-			}else{
-			$artefact_bonus = 1;
-			$artefact_bonus2 = 1;
-			}
+$success = 0;
     for ($i=($session->tribe-1)*10+7;$i<=($session->tribe-1)*10+8;$i++) {
         if ($technology->getTech($i)) {  
+            $success++;
 echo "<tr><td class=\"desc\">
 <div class=\"tit\">
 <img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
@@ -24,20 +10,8 @@ echo "<tr><td class=\"desc\">
 </div>
 <div class=\"details\">
 <img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"".LUMBER."\" />".(${'u'.$i}['wood']*3)."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"".CLAY."\" />".(${'u'.$i}['clay']*3)."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"".IRON."\" />".(${'u'.$i}['iron']*3)."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"".CROP."\" />".(${'u'.$i}['crop']*3)."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"".CROP_COM."\" />".${'u'.$i}['pop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />";
-$dur=round(${'u'.$i}['time'] * ($bid42[$village->resarray['f'.$id]]['attri'] / 100) / SPEED * $artefact_bonus2 / $artefact_bonus);
-					$foolartefact = $database->getFoolArtefactInfo(5,$village->wid,$session->uid);
-					if(count($foolartefact) > 0){
-					foreach($foolartefact as $arte){
-					if($arte['bad_effect'] == 1){
-					$dur *= $arte['effect2'];
-					}else{
-					$dur /= $arte['effect2'];
-					$dur = round($dur);
-					}
-					}
-					}
-					$dur=$generator->getTimeFormat($dur);
-echo $dur;
+$dur = $database->getArtifactsValueInfluence($session->uid, $village->wid, 5, round(${'u'.$i}['time'] * ($bid42[$village->resarray['f'.$id]]['attri'] / 100) / SPEED));
+echo $generator->getTimeFormat($dur);
 
 //-- If available resources combined are not enough, remove NPC button
 $total_required = (int)(${'u'.$i}['wood'] + ${'u'.$i}['clay'] + ${'u'.$i}['iron'] + ${'u'.$i}['crop']);
@@ -51,4 +25,7 @@ echo "</div>
 <td class=\"max\"><a href=\"#\" onClick=\"document.snd.t".$i.".value=".$technology->maxUnit($i,true)."; return false;\">(".$technology->maxUnit($i,true).")</a></td></tr></tbody>";
         }
     }
+if($success == 0) {
+    echo "<tr><td colspan=\"3\"><div class=\"none\" align=\"center\">".AVAILABLE_ACADEMY."</div></td></tr>";
+}
 ?>

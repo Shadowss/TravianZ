@@ -312,7 +312,7 @@ $end = $tribe * 10;
             $to = ['x' => $coor['x'], 'y' => $coor['y']];
   
             $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
-            $time = $database->getTroopsWalkingTime($session->uid, $village->wid, 2, $troopsTime);
+            $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
             ?>
 
             <td colspan="<?php echo !empty($process['t11']) ? 11 : 10; ?>">

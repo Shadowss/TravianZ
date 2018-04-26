@@ -6029,87 +6029,46 @@ References: User ID/Message ID, Mode
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function trainUnit($vid, $unit, $amt, $pop, $each, $time, $mode) {
-	    list($vid, $unit, $amt, $pop, $each, $time, $mode) = $this->escape_input((int) $vid, (int) $unit, (int) $amt, (int) $pop, (int) $each, (int) $time, $mode);
+	function trainUnit($vid, $unit, $amt, $pop, $each, $mode) {
+	    list($vid, $unit, $amt, $pop, $each, $mode) = $this->escape_input((int) $vid, (int) $unit, (int) $amt, (int) $pop, (int) $each, $mode);
 
 		global $village, $building, $session, $technology;
 
 		if(!$mode) {
-			$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,35,36,37,38,39,40,41,42,43,44);
+			$barracks = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
 			// fix by brainiac - THANK YOU
-			$greatbarracks = array(61,62,63,71,72,73,74,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
-			$stables = array(4,5,6,15,16,23,24,25,26,45,46);
-			$greatstables = array(64,65,66,75,76,83,84,85,86,105,106);
-			$workshop = array(7,8,17,18,27,28,47,48);
-			$greatworkshop = array(67,68,77,78,87,88,107,108);
-			$residence = array(9,10,19,20,29,30,49,50);
-			$trapper = array(99);
+			$greatbarracks = [61, 62, 63, 71, 72, 73, 74, 81, 82, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104];
+			$stables = [4, 5, 6, 15, 16, 23, 24, 25, 26, 45, 46];
+			$greatstables = [64, 65, 66, 75, 76, 83, 84, 85, 86, 105, 106];
+			$workshop = [7, 8, 17, 18, 27, 28, 47, 48];
+			$greatworkshop = [67, 68, 77, 78, 87, 88, 107, 108];
+			$residence = [9, 10, 19, 20, 29, 30, 49, 50];
+			$trapper = [99];
 
-			if(in_array($unit, $barracks)) {
-				$queued = $technology->getTrainingList(1);
-			} elseif(in_array($unit, $stables)) {
-				$queued = $technology->getTrainingList(2);
-			} elseif(in_array($unit, $workshop)) {
-				$queued = $technology->getTrainingList(3);
-			} elseif(in_array($unit, $residence)) {
-				$queued = $technology->getTrainingList(4);
-			} elseif(in_array($unit, $greatstables)) {
-				$queued = $technology->getTrainingList(6);
-			} elseif(in_array($unit, $greatbarracks)) {
-				$queued = $technology->getTrainingList(5);
-			} elseif(in_array($unit, $greatworkshop)) {
-				$queued = $technology->getTrainingList(7);
-			} elseif(in_array($unit, $trapper)) {
-				$queued = $technology->getTrainingList(8);
-			}
+			if(in_array($unit, $barracks)) $queued = $technology->getTrainingList(1);	
+		    elseif(in_array($unit, $stables)) $queued = $technology->getTrainingList(2);				
+		    elseif(in_array($unit, $workshop)) $queued = $technology->getTrainingList(3);
+	        elseif(in_array($unit, $residence)) $queued = $technology->getTrainingList(4);
+	        elseif(in_array($unit, $greatbarracks)) $queued = $technology->getTrainingList(5);
+            elseif(in_array($unit, $greatstables)) $queued = $technology->getTrainingList(6);	
+			elseif(in_array($unit, $greatworkshop)) $queued = $technology->getTrainingList(7);
+			elseif(in_array($unit, $trapper)) $queued = $technology->getTrainingList(8);
+		
 			$now = time();
-
-            $uid       = $this->getVillageField( $vid, "owner" );
-            $artefact  = count( $this->getOwnUniqueArtefactInfo2( $uid, 5, 3, 0 ) );
-            $artefact1 = count( $this->getOwnUniqueArtefactInfo2( $vid, 5, 1, 1 ) );
-            $artefact2 = count( $this->getOwnUniqueArtefactInfo2( $uid, 5, 2, 0 ) );
-            if ( $artefact > 0 ) {
-                $time = $now + round( ( $time - $now ) / 2 );
-                $each /= 2;
-                $each = round( $each );
-            } else if ( $artefact1 > 0 ) {
-                $time = $now + round( ( $time - $now ) / 2 );
-                $each /= 2;
-                $each = round( $each );
-            } else if ( $artefact2 > 0 ) {
-                $time = $now + round( ( $time - $now ) / 4 * 3 );
-                $each /= 4;
-                $each = round( $each );
-                $each *= 3;
-                $each = round( $each );
-            }
-            $foolartefact = $this->getFoolArtefactInfo( 5, $vid, $uid );
-            if ( count( $foolartefact ) > 0 ) {
-                foreach ( $foolartefact as $arte ) {
-                    if ( $arte['bad_effect'] == 1 ) {
-                        $each *= $arte['effect2'];
-                    } else {
-                        $each /= $arte['effect2'];
-                        $each = round( $each );
-                    }
-                }
-            }
-
+            $uid = $this->getVillageField($vid, "owner");
+            $each = $this->getArtifactsValueInfluence($uid, $vid, 5, $each);
+            
             $time2 = $now + $each;
-            if ( count( $queued ) > 0 ) {
-                $time  += $queued[ count( $queued ) - 1 ]['timestamp'] - $now;
-                $time2 += $queued[ count( $queued ) - 1 ]['timestamp'] - $now;
-            }
-	// TROOPS MAKE SUM IN BARAKS , ETC
-	//if($queued[count($queued) - 1]['unit'] == $unit){
-	//$time = $amt*$queued[count($queued) - 1]['eachtime'];
-	//$q = "UPDATE " . TB_PREFIX . "training SET amt = amt + $amt, timestamp = timestamp + $time WHERE id = ".$queued[count($queued) - 1]['id']."";
-	//}else{
-			$q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$time,$each,$time2)";
-	//}
-		} else {
-			$q = "DELETE FROM " . TB_PREFIX . "training where id = $vid";
-		}
+            $time = $now + ($each * $amt);
+            if(count($queued) > 0){
+                $time  += $queued[count($queued) - 1]['timestamp'] - $now;
+                $time2 += $queued[count($queued) - 1]['timestamp'] - $now;
+            }            
+            
+			$q = "INSERT INTO " . TB_PREFIX . "training values (0, $vid, $unit, $amt, $pop, $time, $each, $time2)";
+		} 
+		else $q = "DELETE FROM " . TB_PREFIX . "training where id = $vid";
+		
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -6947,29 +6906,30 @@ References: User ID/Message ID, Mode
 	}
 
 	/**
-	 * Calculates how much time troops spend to walk from a village to another, counting artifacts
+	 * Calculates how much artifacts affect troops speed, cranny efficency, etc.
 	 * 
 	 * @param int $uid The User ID
 	 * @param int $vid The village ID
-	 * @param int $time The old time, without multipliers
-	 * @return int Returns the new time, multiplied or divided by artifacts bonus or malus
+	 * @param int $kind The kind of the artifact
+	 * @param float $multiplicand The value which needs to be multiplied
+	 * @return int Returns the new value, multiplied or divided by artifacts bonus or malus
 	 */
 
-	function getTroopsWalkingTime($uid, $vid, $kind, $time){
-	    list($uid, $vid, $time) = $this->escape_input((int) $uid,(int) $vid, $time);
+	function getArtifactsValueInfluence($uid, $vid, $kind, $multiplicand){
+	    list($uid, $vid, $kind, $multiplicand) = $this->escape_input((int) $uid,(int) $vid, $kind, $multiplicand);
 
 	    $artefacts = $foolArefacts = [];
-	    $multiplier = [2, 3, 1.5];
+	    $multipliers = [1 => [4, 5, 3], 2 => [1/2, 1/3, 2/3], 3 => [5, 10, 3], 4 => [1/2, 1/2, 3/4], 5 => [1/2, 1/2, 3/4], 7 => [3, 6, 2]];
 
 	    $artefacts[] = count($this->getOwnUniqueArtefactInfo2($vid, $kind, 1, 1)); //Village effect
 	    $artefacts[] = count($this->getOwnUniqueArtefactInfo2($uid, $kind, 3, 0)); //Unique effect
 	    $artefacts[] = count($this->getOwnUniqueArtefactInfo2($uid, $kind, 2, 0)); //Account effect
 	    
-	    $fasterTroops = 1;
+	    $multiplier = 1;
 	    for($i = 0; $i < count($artefacts); $i++)
 	    {
 	        if($artefacts[$i] > 0) {
-	            $fasterTroops = $multiplier[$i];
+	            $multiplier = $multipliers[$kind][$i];
 	            break;
 	        }
 	    }
@@ -6982,12 +6942,35 @@ References: User ID/Message ID, Mode
 	    {
 	        if(count($foolArefacts[$i]) > 0 && $foolArefacts[$i]['kind'] == $kind) 
 	        {
-	            $foolEffect = $foolArefacts[$i]['bad_effect'] == 1 ? $foolArefacts[$i]['effect2'] : 1 / $foolArefacts[$i]['effect2'];
+	            $foolEffect = $foolArefacts[$i]['bad_effect'] == 1 ? 1 / $foolArefacts[$i]['effect2'] : $foolArefacts[$i]['effect2'];
 	            break;
 	        }
 	    }
 	    
-	    return round(($time / $fasterTroops) * $foolEffect);
+	    if(in_array($kind, [2, 4, 5])) $foolEffect = 1 / $foolEffect;
+	    
+	    return ($multiplicand == 1 ) ? $multiplicand * $multiplier * $foolEffect : round($multiplicand * $multiplier * $foolEffect);
+	}
+	
+	/**
+	 * Get the total artifacts sum, divided by small, great and unique, by kind
+	 * 
+	 * @param int $uid The User ID
+	 * @param int $vid The Village ID
+	 * @param int $kind The kind of the artifact
+	 * @return array Returns the total artifacts sum divided by size
+	 */
+	
+	function getArtifactsSumByKind($uid, $vid, $kind){
+	    list($uid, $vid, $kind) = $this->escape_input((int) $uid, (int) $vid, (int) $kind);
+
+	    $q = "SELECT SUM(IF((size = '1' AND vref = $vid) OR size > '1', 1, 0)) totals,
+              SUM(IF(size = '1' AND vref = $vid, 1, 0)) small,
+              SUM(IF(size = '2', 1, 0)) great,
+              SUM(IF(size = '3', 1, 0)) `unique`
+              FROM " . TB_PREFIX . "artefacts WHERE owner = ".(int) $uid." AND active = 1 AND (type = $kind OR kind = $kind)";
+	    $result = mysqli_query($this->dblink, $q);
+	    return $this->mysqli_fetch_all($result)[0];    
 	}
 	
 	function addArtefact($vref, $owner, $type, $size, $name, $desc, $effect, $img) {
@@ -7276,6 +7259,7 @@ References: User ID/Message ID, Mode
 	 * Activate an artifact by his id
 	 * 
 	 * @param int $id The id of the artifact
+	 * @param int $mode 1 for activating an artifact, 0 for deactivating it
 	 * @return bool Returns true if the query was successful, false otherwise
 	 */
 	
@@ -7307,12 +7291,11 @@ References: User ID/Message ID, Mode
         list($size,$type) = $this->escape_input((int) $size,(int) $type);
 
         //fix by Ronix
-        global $session, $form;
-        $size1 = $size2 = $size3 = 0;
+        global $form;
 
         $artifact = $this->getOwnArtefactInfo($from);
         if (!empty($artifact)) {
-            $form->addError( "error", "Treasury is full. Your hero could not claim the artefact" );
+            $form->addError("error", "Treasury is full. Your hero could not claim the artefact");
             return false;
         }
         
@@ -7325,51 +7308,41 @@ References: User ID/Message ID, Mode
             $DefenderFields = $this->getResourceLevel( $vref );
             $defcanclaim    = true;
 
-            for ( $i = 19; $i <= 38; $i ++ ) {
-                if ( $DefenderFields[ 'f' . $i . 't' ] == 27 ) {
-                    $defTresuaryLevel = $DefenderFields[ 'f' . $i ];
-                    if ( $defTresuaryLevel > 0 ) {
+            for ($i = 19; $i <= 38; $i++) {
+                if ($DefenderFields['f'.$i.'t'] == 27) {
+                    $defTresuaryLevel = $DefenderFields['f'.$i];
+                    if ($defTresuaryLevel > 0) {
                         $defcanclaim = false;
-                        $form->addError( "error", "Treasury has not been destroyed. Your hero could not claim the artefact" );
-
+                        $form->addError("error", "Treasury has not been destroyed. Your hero could not claim the artefact");
                         return false;
-                    } else {
-                        $defcanclaim = true;
                     }
+                    else $defcanclaim = true;
                 }
             }
 
             $AttackerFields = $this->getResourceLevel( $from, 2 );
 
-            for ( $i = 19; $i <= 38; $i ++ ) {
-                if ( $AttackerFields[ 'f' . $i . 't' ] == 27 ) {
-                    $attTresuaryLevel = $AttackerFields[ 'f' . $i ];
+            for($i = 19; $i <= 38; $i++) {
+                if($AttackerFields['f'.$i.'t'] == 27) {
+                    $attTresuaryLevel = $AttackerFields['f'.$i];
                     $villageartifact = $attTresuaryLevel >= 10;
                     $accountartifact = $attTresuaryLevel >= 20;
                 }
             }
 
-            if (($artifact['great'] > 0 || $artifact['unique'] > 0) && $size > 1 && $uid != $vuid) {
+            if(($artifact['great'] > 0 || $artifact['unique'] > 0) && $size > 1 && $uid != $vuid) {
                 $form->addError( "error", "Max num. of great/unique artefacts. Your hero could not claim the artefact" );
                 return false;
             }
 
-            if ( ( $size == 1 && ( $villageartifact || $accountartifact ) ) || ( ( $size == 2 || $size == 3 ) && $accountartifact ) ) {
+            if(($size == 1 && ($villageartifact || $accountartifact)) || (($size == 2 || $size == 3) && $accountartifact)) {
                 return true;
-                /*
-                    if($this->getVillageField($from,"capital")==1 && $type==11) {
-                                $form->addError("error","Ancient Construction Plan cannot kept in capital village");
-                                return FALSE;
-                            }else{
-                                return TRUE;
-                            }
-                */
             } else {
-                $form->addError( "error", "Your level treasury is low. Your hero could not claim the artefact" );
+                $form->addError("error", "Your level treasury is low. Your hero could not claim the artefact");
                 return false;
             }
         } else {
-            $form->addError( "error", "Max num. of artefacts. Your hero could not claim the artefact" );
+            $form->addError("error", "Max num. of artefacts. Your hero could not claim the artefact");
             return false;
         }
     }

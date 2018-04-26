@@ -46,8 +46,7 @@ for($i=32;$i<=39;$i++) {
                     echo "<td class=\"none\">
 					".RESEARCH_IN_PROGRESS."</td></tr>";
                 }
-                else {
-				else if($session->access != BANNED){
+                else if($session->access != BANNED){
                 echo "</td>";
                     echo "<td class=\"act\">
 					<a class=\"research\" href=\"build.php?id=$id&amp;a=$i&amp;c=".$session->mchecker."\">".RESEARCH."</a></td></tr>";

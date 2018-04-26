@@ -5,6 +5,7 @@ $units = $database->getMovement("34",$village->wid,1);
 $total_for = count($units);
 $send = $database->getMovement("1",$village->wid,1);
 $total_for2 = count($send);
+$artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3);
 for($y=0;$y < $total_for;$y++){
 for($i=0;$i < $total_for2;$i++){
 if($units[$y]['ref'] == $send[$i]['ref2']){
@@ -61,14 +62,9 @@ if ($units[$y]['sort_type']==3){
                 echo $units[$y]['t'.$i]."</td>";
 				}
 				  }}else{
-				$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,3,3,0));
-				$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,3,1,1));
-				$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,3,2,0));
-				$foolartefact = count($database->getFoolArtefactInfo(3,$village->wid,$session->uid));
-				$total_artefact = $artefact + $artefact1 + $artefact2 + $foolartefact;
-				  if($total_artefact == 0){
+				  if($artifactsSum['totals'] == 0){
                  		echo "<td class=\"none\">?</td>";
-                  }else{
+				  }else{
 				  if($units[$y]['t'.$i] == 0) {
                     echo "<td class=\"none\">0</td>";
 				  }else{
@@ -273,11 +269,7 @@ $to = $database->getOMInfo($oasis[$y]['to']);
                 echo $oasis[$y]['t'.$i]."</td>";
 				}
 				  }}else{
-				$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,3,3,0));
-				$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,3,1,1));
-				$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,3,2,0));
-				$total_artefact = $artefact + $artefact1 + $artefact2;
-				  if($totalunits > $building->getTypeLevel(16) && $total_artefact == 0){
+				  if($artifactsSum['totals'] == 0){
                  		echo "<td class=\"none\">?</td>";
                   }else{
 				  if($oasis[$y]['t'.$i] == 0) {

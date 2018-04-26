@@ -203,7 +203,7 @@ if(isset($_GET['o'])) {
 			}
 			
 			$troopsTime = $automation->procDistanceTime($p_to, $p_from, min($p_speeds), 1);
-			$p_time = $database->getTroopsWalkingTime($p_owner, $prisoner['from'], 2, $troopsTime);
+			$p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
 			
 			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
 			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,time(),($p_time+time()));

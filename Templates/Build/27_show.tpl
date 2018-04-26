@@ -52,8 +52,8 @@ switch($kind){
         $betterorbadder = $artefactBadEffect ? SPIES_INCREASE : SPIES_DECRESE;
         break;
 }
+$bonus = isset($betterorbadder) ? $betterorbadder." (<b>".str_replace(["(", ")"], "" , $effecty)."</b>)" : "<b>Not yet active</b>";
 
-$bonus = $betterorbadder." (<b>".str_replace(["(", ")"], "" , $effecty)."</b>)";
 ?>
 
 <div class="artefact image-<?php echo str_replace(['type', '.gif'], '', $artefact['img']); ?>">

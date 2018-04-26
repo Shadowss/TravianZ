@@ -263,68 +263,42 @@ class Units {
     private function processReturnTroops($enforce) {
         global $database, $generator;
         $to = $database->getVillage($enforce['from']);
-        $Gtribe = "";
-        if ($database->getUserField($to['owner'],'tribe',0) ==  '2'){ $Gtribe = "1"; }
-        else if ($database->getUserField($to['owner'],'tribe',0) == '3'){ $Gtribe =  "2"; }
-        else if ($database->getUserField($to['owner'],'tribe',0) ==  '4'){ $Gtribe = "3"; }
-        else if  ($database->getUserField($to['owner'],'tribe',0) == '5'){ $Gtribe =  "4"; }
+        $Gtribe = ($tribe = $database->getUserField($to['owner'], 'tribe',0)) == 1 ? "" : $tribe - 1;
                     
-        $start = ($database->getUserField($to['owner'],'tribe',0)-1)*10+1;
-        $end = ($database->getUserField($to['owner'],'tribe',0)*10);
+        $start = ($database->getUserField($to['owner'], 'tribe', 0) - 1) * 10 + 1;
+        $end = ($database->getUserField($to['owner'] ,'tribe', 0) * 10);
 
         $from = $database->getVillage($enforce['from']);
         $fromcoor = $database->getCoor($enforce['from']);
         $tocoor = $database->getCoor($enforce['vref']);
-        $fromCor = array('x'=>$tocoor['x'], 'y'=>$tocoor['y']);
-        $toCor = array('x'=>$fromcoor['x'], 'y'=>$fromcoor['y']);
+        $fromCor = ['x' => $tocoor['x'], 'y' => $tocoor['y']];
+        $toCor = ['x' => $fromcoor['x'], 'y' => $fromcoor['y']];
 
-        $speeds = array();
+        $speeds = [];
 
         //find slowest unit.
-        for($i=$start;$i<=$end;$i++){
+        for($i = $start; $i <= $end; $i++){
         
             if(intval($enforce['u'.$i]) > 0){
                 if($unitarray) { reset($unitarray); }
                 $unitarray = $GLOBALS["u".$i];
                 $speeds[] = $unitarray['speed'];
             }else{
-                $enforce['u'.$i]='0';
+                $enforce['u'.$i] = 0;
             }
         }
-        if( intval($enforce['hero']) > 0){
+        
+        if(intval($enforce['hero']) > 0){
             $hero_unit = $database->getHeroField($from['owner'], 'unit');
             $speeds[]  = $GLOBALS['u'.$hero_unit]['speed'];
-        }else{
-            $enforce['hero']='0';
         }
-            
-        $artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
-        $artefact1 = count($database->getOwnUniqueArtefactInfo2($enforce['from'],2,1,1));
-        $artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
-        if($artefact > 0){
-            $fastertroops = 3;
-        }else if($artefact1 > 0){
-            $fastertroops = 2;
-        }else if($artefact2 > 0){
-            $fastertroops = 1.5;
-        }else{
-            $fastertroops = 1;
-        }
-        $time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),$enforce['from'])/$fastertroops);
-            
-        $foolartefact2 = $database->getFoolArtefactInfo(2,$enforce['from'],$from['owner']);
-        if(count($foolartefact2) > 0){
-            foreach($foolartefact2 as $arte){
-                if($arte['bad_effect'] == 1){
-                    $time *= $arte['effect2'];
-                }else{
-                    $time /= $arte['effect2'];
-                    $time = round($time);
-                }
-            }
-        }
-        $reference =  $database->addAttack($enforce['from'],$enforce['u'.$start],$enforce['u'.($start+1)],$enforce['u'.($start+2)],$enforce['u'.($start+3)],$enforce['u'.($start+4)],$enforce['u'.($start+5)],$enforce['u'.($start+6)],$enforce['u'.($start+7)],$enforce['u'.($start+8)],$enforce['u'.($start+9)],$enforce['hero'],2,0,0,0,0);
-        $database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,time(),($time+time()));
+        else $enforce['hero'] = 0;
+       
+        $troopsTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), $enforce['from']);
+        $time = $database->getArtifactsValueInfluence($from['owner'], $enforce['from'], 2, $troopsTime);
+        
+        $reference =  $database->addAttack($enforce['from'], $enforce['u'.$start], $enforce['u'.($start + 1)], $enforce['u'.($start + 2)], $enforce['u'.($start + 3)], $enforce['u'.($start + 4)], $enforce['u'.($start + 5)], $enforce['u'.($start + 6)], $enforce['u'.($start + 7)], $enforce['u'.($start + 8)], $enforce['u'.($start + 9)], $enforce['hero'], 2, 0, 0, 0, 0);
+        $database->addMovement(4, $enforce['vref'], $enforce['from'], $reference, time(), ($time + time()));
         $database->deleteReinf($enforce['id']);
     }
     
@@ -427,29 +401,15 @@ class Units {
                 }
 
                 $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
-                $time = $database->getTroopsWalkingTime($session->uid, $village->wid, 2, $troopsTime);  
-                
-                $to_owner = $database->getVillageField($data['to_vid'], "owner");
+                $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);  
                 
                 // Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
                 // If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
                 // Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
                 // Fixed by Advocaite and Shadow - Optimized by iopietro
 
-                $isThere = $database->getFieldLevelInVillage($data['to_vid'], 40);
-                $iswwvilla     = $isThere > 0 ? 1 : 0;
-                $good_artefact = 0;
-                $artefact_2    = count($database->getOwnUniqueArtefactInfo2($to_owner, 7, 3, 0));
-                $artefact1_2   = count($database->getOwnUniqueArtefactInfo2($data['to_vid'], 7, 1, 1));
-                $artefact2_2   = count($database->getOwnUniqueArtefactInfo2($to_owner, 7, 2, 0));
-                $foolartefact2 = $database->getFoolArtefactInfo(7, $data['to_vid'], $to_owner);          
-                if(count($foolartefact2) > 0) {
-                    foreach ($foolartefact2 as $arte) {
-                        if ($arte['bad_effect'] == 0) {
-                            $good_artefact = 1;
-                        }
-                    }
-                }    
+                $to_owner = $database->getVillageField($data['to_vid'], "owner");
+                $rivalsGreatConfusion = $database->getArtifactsSumByKind($to_owner, $data['to_vid'], 7);                    
 
                 $rallyPointLevel = ($village->resarray)['f39'];
                 $invalidBuildings = [];
@@ -486,24 +446,18 @@ class Units {
                     }
                 }
 
-                //TODO: Check those strings I do think they're wrong
-                
-                if (isset($post['ctar1'])) {
-                    if ($artefact_2 > 0 || $artefact1_2 > 0 || $artefact2_2 > 0 || $good_artefact == 1) {
-                        if ($post['ctar1'] != 40 || $post['ctar1'] != 27 && $iswwvilla == 1) {
-                            $post['ctar1'] = 99;
-                        } else {
-                            $post['ctar1'] = 99;
+                if(isset($post['ctar1'])) {
+                    if($rivalsGreatConfusion['totals'] > 0) {
+                        if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
+                            $post['ctar1'] = 0;
                         }
                     }
                 } 
                 else $post['ctar1'] = 0;
                 
-                if(isset( $post['ctar2'])) {
-                    if ($artefact_2 > 0 || $artefact1_2 > 0 || $artefact2_2 > 0 || $good_artefact == 1) {
-                        if ($post['ctar2'] != 40 || $post['ctar2'] != 27 && $iswwvilla == 1) {
-                            $post['ctar2'] = 99;
-                        } else {
+                if(isset($post['ctar2']) && $post['ctar2'] > 0) {
+                    if($rivalsGreatConfusion['totals'] > 0) {
+                        if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
                             $post['ctar2'] = 99;
                         }
                     }
@@ -645,7 +599,7 @@ class Units {
                     else $post['t11'] = 0;
 
                     $troopsTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), 1);
-                    $time = $database->getTroopsWalkingTime($session->uid, $village->wid, 2, $troopsTime);
+                    $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
                     
                     $reference = $database->addAttack( $enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0 );
                     $database->addMovement( 4, $village->wid, $enforce['from'], $reference, time(), ( $time + time() ) );

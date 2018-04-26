@@ -268,31 +268,12 @@ class Battle {
         //rap = Result attack points
         //rdp = Result defense points
         $cap = $ap = $dp = $cdp = $rap = $rdp = 0;
-
-        $att_artefact = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,3,0));
-        $att_artefact1 = count($database->getOwnUniqueArtefactInfo2($AttackerWref,3,1,1));
-        $att_artefact2 = count($database->getOwnUniqueArtefactInfo2($AttackerID,3,2,0));
-        if($att_artefact > 0){
-            $attacker_artefact = 10;
-        }else if($att_artefact1 > 0){
-            $attacker_artefact = 5;
-        }else if($att_artefact2 > 0){
-            $attacker_artefact = 3;
-        }else{
-            $attacker_artefact = 1;
-        }
-        $def_artefact = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,3,0));
-        $def_artefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,3,1,1));
-        $def_artefact2 = count($database->getOwnUniqueArtefactInfo2($DefenderID,3,2,0));
-        if($def_artefact > 0){
-            $defender_artefact = 10;
-        }else if($att_artefact1 > 0){
-            $defender_artefact = 5;
-        }else if($def_artefact2 > 0){
-            $defender_artefact = 3;
-        }else{
-            $defender_artefact = 1;
-        }
+        
+        //Get involved artifacts
+        $attacker_artefact = $database->getArtifactsValueInfluence($AttackerID, $AttackerWref, 3, 1);
+        $defender_artefact = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 3, 1);
+        $strongerbuildings = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 1, 1);
+        
         if(isset($Attacker['uhero']) && $Attacker['uhero'] != 0){
             $atkhero = $this->getBattleHero($AttackerID);
         }
@@ -383,32 +364,20 @@ class Battle {
         }
 
         if($type == 1) {//scout
-
-                for($i=$start;$i<=$end;$i++) {
+                for($i = $start;$i <= $end; $i++) {
                     global ${'u'.$i};
-                    $j = $i-$start+1;
-                    if($Attacker['u'.$i]>0 && ($i == 4 || $i == 14 || $i == 23 || $i == 44)){
+                    $j = $i - $start + 1;
+                    if($Attacker['u'.$i] > 0 && ($i == 4 || $i == 14 || $i == 23 || $i == 44)){
                         if(${'att_ab'.$abcount} > 0) {
-                                $ap += round(35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1), 4) * $Attacker['u'.$i];
-                        }else{
-                            $ap += $Attacker['u'.$i]*35;
+                            $ap += round(35 + (35 + 300 * ${'u'.$i}['pop'] / 7) * (pow(1.007, ${'att_ab'.$abcount}) - 1), 4) * $Attacker['u'.$i];
                         }
+                        else $ap += $Attacker['u'.$i] * 35;
                     }
                     $involve += $Attacker['u'.$i];
                     $units['Att_unit'][$i] = $Attacker['u'.$i];
 
                 }
-                $att_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
-                if(count($att_foolartefact) > 0){
-                    foreach($att_foolartefact as $arte){
-                        if($arte['bad_effect'] == 1){
-                            $ap *= $arte['effect2'];
-                        }else{
-                            $ap /= $arte['effect2'];
-                            $ap = round($ap);
-                        }
-                    }
-                }
+                $ap *= $attacker_artefact;
 
             }else{ //type=3 normal 4=raid
                 $abcount = 1;
@@ -598,33 +567,8 @@ class Battle {
             $wctp = ($wctp >= 1) ? 1 - 0.5 / $wctp : 0.5 * $wctp;
             $wctp *= ($catp + $upgrades);
             
-            $artowner = $database->getVillageField( $DefenderWref, "owner" );
-            $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-            $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
-            $bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-            if($bartefact > 0){
-                $strongerbuildings = 5;
-            }elseif($bartefact1 > 0){
-                $strongerbuildings = 4;
-            }elseif($bartefact2 > 0){
-                $strongerbuildings = 3;
-            }else{
-                $strongerbuildings = 1;
-            }
-            $good_effect = $bad_effect = 1;
-            $foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
-            if(count($foolartefact) > 0){
-                foreach($foolartefact as $arte){
-                    if($arte['bad_effect'] == 1){
-                        $bad_effect = $arte['effect2'];
-                    }else{
-                        $good_effect = $arte['effect2'];
-                    }
-                }
-            }
-            
             //catapults downgrades
-            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1) / $strongerbuildings / $good_effect * $bad_effect;
+            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1) / $strongerbuildings;
             
             //catapults moral
             $catpMoral = pow($attpop / ($defpop > 0 ? $defpop : 1) , 0.3);
@@ -645,32 +589,7 @@ class Battle {
             
             $wctp = pow(($rap / $rdp), 1.5);
             $wctp = ($wctp >= 1) ? 1 - 0.5 / $wctp : 0.5 * $wctp;
-            $wctp *= ($ram ) + $upgrades;
-            
-            $artowner = $database->getVillageField( $DefenderWref, "owner" );
-            $bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
-            $bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
-            $bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
-            if($bartefact > 0){
-                $strongerbuildings = 5;
-            }else if($bartefact1 > 0){
-                $strongerbuildings = 4;
-            }else if($bartefact2 > 0){
-                $strongerbuildings = 3;
-            }else{
-                $strongerbuildings = 1;
-            }
-            $good_effect = $bad_effect = 1;
-            $foolartefact = $database->getFoolArtefactInfo(3,$DefenderWref,$artowner);
-            if(count($foolartefact) > 0){
-                foreach($foolartefact as $arte){
-                    if($arte['bad_effect'] == 1){
-                        $bad_effect = $arte['effect2'];
-                    }else{
-                        $good_effect = $arte['effect2'];
-                    }
-                }
-            }
+            $wctp *= ($ram) + $upgrades;
 
             $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1) / $strongerbuildings / $good_effect * $bad_effect;
            
@@ -779,82 +698,60 @@ class Battle {
         return $result;
     }
 
-    public function getDataDefScout($defenders,$def_ab,$defender_artefact,$AttackerWref,$AttackerID) {
-        global $database;
-        $abcount=1;
-        $invol=0;
-        $dp=0;
-        $cdp=0;
-        $detected=0;
+    public function getDataDefScout($defenders, $def_ab, $defender_artefact, $AttackerWref, $AttackerID) {
+        $abcount = 1;
+        $invol = $dp = $cdp = $detected = 0;
 
-        for($y=4;$y<=54;$y++) {
+        for($y = 4; $y <= 54; $y++) {
             if($y == 4 || $y == 14 || $y == 23 || $y == 44){
                 global ${'u'.$y};
 
-                if($defenders['u'.$y]>0 && $def_ab[$y] > 0) {
+                if($defenders['u'.$y] > 0 && $def_ab[$y] > 0) {
                     $dp += round(20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1), 4) * $defenders['u'.$y] * $defender_artefact;
-
-                    $def_foolartefact = $database->getFoolArtefactInfo(3,$AttackerWref,$AttackerID);
-                    if(count($def_foolartefact) > 0){
-                        foreach($def_foolartefact as $arte){
-                            if($arte['bad_effect'] == 1){
-                                $dp *= $arte['effect2'];
-                            }else{
-                                $dp /= $arte['effect2'];
-                                $dp = round($dp);
-                            }
-                        }
-                    }
                 }else {
-                    if($defenders['u'.$y]>0) {
+                    if($defenders['u'.$y] > 0) {
                         $dp +=  $defenders['u'.$y]* 20 * $defender_artefact;
                     }
 
                     $units['Def_unit'][$y] = $defenders['u'.$y];
-                    if($units['Def_unit'][$y] > 0){
-                        $detected = 1;
-                    }
+                    if($units['Def_unit'][$y] > 0) $detected = 1;
                 }
                 $invol += $defenders['u'.$y]; //total troops
                 $units['Def_unit'][$y] = $defenders['u'.$y];
             }
         }
 
-        $datadef['dp']=$dp;
-        $datadef['cdp']=$cdp;
-        $datadef['detect']=($detected==1)? 1:0;
-        $datadef['involve']=$invol;
+        $datadef['dp'] = $dp;
+        $datadef['cdp'] = $cdp;
+        $datadef['detect'] = $detected;
+        $datadef['involve'] = $invol;
         return $datadef;
     }
 
     public function getDataDef($defenders,$def_ab) {
-
-        $dp=0;
-        $cdp=0;
-        $invol=0;
-        for($y=1;$y<=50;$y++) {
+        $dp = $cdp = $invol = 0;
+        for($y = 1;$y <= 50; $y++) {
             global ${'u'.$y};
-            if ($defenders['u'.$y]>0) {
+            if ($defenders['u'.$y] > 0) {
                 if (!isset($def_ab[$y])) {
                     $def_ab[$y] = 0;
                 }
-                if ($def_ab[$y]>0) {
+                if ($def_ab[$y] > 0) {
                     $dp +=  round(${'u'.$y}['di'] + (${'u'.$y}['di'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1), 4) * $defenders['u'.$y];
                     $cdp += round(${'u'.$y}['dc'] + (${'u'.$y}['dc'] + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1), 4) * $defenders['u'.$y];
                 }else{
-                    $dp += $defenders['u'.$y]*${'u'.$y}['di'];
-                    $cdp += $defenders['u'.$y]*${'u'.$y}['dc'];
+                    $dp += $defenders['u'.$y] * ${'u'.$y}['di'];
+                    $cdp += $defenders['u'.$y] * ${'u'.$y}['dc'];
                 }
 
             }
             $invol += $defenders['u'.$y]; //total troops
             $units['Def_unit'][$y] = $defenders['u'.$y];
         }
-        $datadef['dp']=$dp;
-        $datadef['cdp']=$cdp;
-        $datadef['involve']=$invol;
+        $datadef['dp'] = $dp;
+        $datadef['cdp'] = $cdp;
+        $datadef['involve'] = $invol;
         return $datadef;
-
     }
     
     /**

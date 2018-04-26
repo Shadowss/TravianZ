@@ -652,28 +652,10 @@ class adm_DB {
 			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
 			$artefact1 = count($database->getOwnUniqueArtefactInfo2($enforce['from'],2,1,1));
 			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
-			if($artefact > 0){
-				$fastertroops = 3;
-			}else if($artefact1 > 0){
-				$fastertroops = 2;
-			}else if($artefact2 > 0){
-				$fastertroops = 1.5;
-			}else{
-				$fastertroops = 1;
-			}
-			$time = round($this->procDistanceTime($fromCor,$toCor,min($speeds),$enforce['from'])/$fastertroops);
-
-			$foolartefact2 = $database->getFoolArtefactInfo(2,$enforce['from'],$from['owner']);
-			if(count($foolartefact2) > 0){
-				foreach($foolartefact2 as $arte){
-					if($arte['bad_effect'] == 1){
-						$time *= $arte['effect2'];
-					}else{
-						$time /= $arte['effect2'];
-						$time = round($time);
-					}
-				}
-			}
+			
+			$troopsTime = $this->procDistanceTime($fromCor, $toCor, min($speeds), $enforce['from']);
+			$time = $database->getArtifactsValueInfluence($from['owner'], $enforce['from'], 2, $troopsTime);
+			
 			$reference =  $database->addAttack($enforce['from'],$enforce['u'.$start],$enforce['u'.($start+1)],$enforce['u'.($start+2)],$enforce['u'.($start+3)],$enforce['u'.($start+4)],$enforce['u'.($start+5)],$enforce['u'.($start+6)],$enforce['u'.($start+7)],$enforce['u'.($start+8)],$enforce['u'.($start+9)],$enforce['hero'],2,0,0,0,0);
 			$database->addMovement(4,$wref,$enforce['from'],$reference,time(),($time+time()));
 			$database->deleteReinf($enforce['id']);
@@ -937,40 +919,13 @@ class adm_DB {
 			}
 			}
 		}
-		 //   $unit = "hero";
-		 //   global $$unit;
-		 //   $dataarray = $$unit;
-		 if($prisoners == 0){
-			$upkeep += (isset($array['hero'])? $array['hero'] * 6:0);
-		 }else{
-			$upkeep += (isset($array['t11'])? $array['t11'] * 6:0);
-		 }
-			$artefact = count($database->getOwnUniqueArtefactInfo2($uid,4,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($vid,4,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($uid,4,2,0));
-			if($artefact > 0){
-			$upkeep /= 2;
-			$upkeep = round($upkeep);
-			}else if($artefact1 > 0){
-			$upkeep /= 2;
-			$upkeep = round($upkeep);
-			}else if($artefact2 > 0){
-			$upkeep /= 4;
-			$upkeep = round($upkeep);
-			$upkeep *= 3;
-			}
-			$foolartefact = $database->getFoolArtefactInfo(4,$vid,$uid);
-			if(count($foolartefact) > 0){
-			foreach($foolartefact as $arte){
-			if($arte['bad_effect'] == 1){
-			$upkeep *= $arte['effect2'];
-			}else{
-			$upkeep /= $arte['effect2'];
-			$upkeep = round($upkeep);
-			}
-			}
-			}
-		return $upkeep;
+
+		$unit = ($prisoners > 0) ? 't11' : 'hero';
+		
+		if(!isset($array[$unit])) $array[$unit] = 0;
+		$upkeep += $array[$unit] * 6;
+
+		return $database->getArtifactsValueInfluence($uid, $vid, 4, $upkeep);
 	}
 
 };

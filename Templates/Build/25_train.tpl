@@ -1,20 +1,4 @@
 <?php
-			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,5,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,5,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,5,2,0));
-			if($artefact > 0){
-			$artefact_bonus = 2;
-			$artefact_bonus2 = 1;
-			}else if($artefact1 > 0){
-			$artefact_bonus = 2;
-			$artefact_bonus2 = 1;
-			}else if($artefact2 > 0){
-			$artefact_bonus = 4;
-			$artefact_bonus2 = 3;
-			}else{
-			$artefact_bonus = 1;
-			$artefact_bonus2 = 1;
-			}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -27,7 +11,7 @@
 
 	$slots = $database->getAvailableExpansionTraining();
 
-	if ($slots['settlers']+$slots['chiefs']>0) { ?>
+	if ($slots['settlers'] + $slots['chiefs']>0) { ?>
 
 <form method="POST" name="snd" action="build.php">
 <input type="hidden" name="id" value="<?php echo $id; ?>" />
@@ -52,20 +36,8 @@ echo "<tr><td class=\"desc\">
 <img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
 <a href=\"#\" onClick=\"return Popup(".$i.",1);\">".$technology->getUnitName($i)."</a> <span class=\"info\">(".AVAILABLE.": ".$village->unitarray['u'.$i].")</span></div>
 <div class=\"details\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"".LUMBER."\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"".CLAY."\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"".IRON."\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"".CROP."\" />".${'u'.$i}['crop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"duration\" title=\"".DURATION."\" />";
-$dur=round(${'u'.$i}['time'] * ($bid25[$village->resarray['f'.$id]]['attri'] / 100) / SPEED * $artefact_bonus2 / $artefact_bonus);
-					$foolartefact = $database->getFoolArtefactInfo(5,$village->wid,$session->uid);
-					if(count($foolartefact) > 0){
-					foreach($foolartefact as $arte){
-					if($arte['bad_effect'] == 1){
-					$dur *= $arte['effect2'];
-					}else{
-					$dur /= $arte['effect2'];
-					$dur = round($dur);
-					}
-					}
-					}
-					$dur=$generator->getTimeFormat($dur);
-echo $dur;
+$dur = $database->getArtifactsValueInfluence($session->uid, $village->wid, 5, round(${'u'.$i}['time'] * ($bid25[$village->resarray['f'.$id]]['attri'] / 100) / SPEED));
+echo $generator->getTimeFormat($dur);
 //-- If available resources combined are not enough, remove NPC button
 $total_required = (int)(${'u'.$i}['wood'] + ${'u'.$i}['clay'] + ${'u'.$i}['iron'] + ${'u'.$i}['crop']);
 

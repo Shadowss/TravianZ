@@ -85,44 +85,13 @@
                             }
                         }
                     }
+                    
+                    $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
+                    $time = $database->getArtifactsValueInfluence($getFLData['owner'], $getFLData['wref'], 2, $troopsTime);
 
-                    $artefact  = count( $database->getOwnUniqueArtefactInfo2( $getFLData['owner'], 2, 3, 0 ) );
-                    $artefact1 = count( $database->getOwnUniqueArtefactInfo2( $getFLData['wref'], 2, 1, 1 ) );
-                    $artefact2 = count( $database->getOwnUniqueArtefactInfo2( $getFLData['owner'], 2, 2, 0 ) );
-
-                    if ( $artefact > 0 ) {
-                        $fastertroops = 3;
-                    } else if ( $artefact1 > 0 ) {
-                        $fastertroops = 2;
-                    } else if ( $artefact2 > 0 ) {
-                        $fastertroops = 1.5;
-                    } else {
-                        $fastertroops = 1;
-                    }
-
-                    $time         = round( $generator->procDistanceTime( $from, $to, min( $speeds ), 1 ) / $fastertroops );
-                    $foolartefact = $database->getFoolArtefactInfo( 2, $village->wid, $session->uid );
-
-                    if ( count( $foolartefact ) > 0 ) {
-                        foreach ( $foolartefact as $arte ) {
-                            if ( $arte['bad_effect'] == 1 ) {
-                                $time *= $arte['effect2'];
-                            } else {
-                                $time /= $arte['effect2'];
-                                $time = round( $time );
-                            }
-                        }
-                    }
-
-                    if ( $data['u7'] > 0 ) {
-                        $ctar1 = 99;
-                    } else {
-                        $ctar1 = 0;
-                    }
-
-                    $ctar2      = 0;
-                    $abdata     = $database->getABTech( $getFLData['wref'] );
-                    $reference  = $database->addAttack( ( $getFLData['wref'] ), $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], $data['type'], $ctar1, $ctar2, 0, $abdata['b1'], $abdata['b2'], $abdata['b3'], $abdata['b4'], $abdata['b5'], $abdata['b6'], $abdata['b7'], $abdata['b8'] );
+                    $ctar1 = $ctar2 = 0;
+                    $abdata = $database->getABTech( $getFLData['wref'] );
+                    $reference = $database->addAttack( ( $getFLData['wref'] ), $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], $data['type'], $ctar1, $ctar2, 0, $abdata['b1'], $abdata['b2'], $abdata['b3'], $abdata['b4'], $abdata['b5'], $abdata['b6'], $abdata['b7'], $abdata['b8'] );
                     $totalunits = $data['u1'] + $data['u2'] + $data['u3'] + $data['u4'] + $data['u5'] + $data['u6'] + $data['u7'] + $data['u8'] + $data['u9'] + $data['u10'] + $data['u11'];
 
                     $units   = [];
