@@ -1,5 +1,7 @@
 <?php
 
+use App\Database\IDbConnection;
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -67,7 +69,7 @@ class Units {
                 }
 
                 case "5":
-                if (isset($post['a'])&& $post['a']== "new"){
+                if (isset($post['a']) && $post['a']== "new"){
                     $this->Settlers($post);
                 }else{
                 $post = $this->loadUnits($post);
@@ -217,7 +219,7 @@ class Units {
                 // another variable that will define the flag is raised and is being sent and the type of shipping
                 $villageName = $database->getVillageField($id,'name');
                 $speed= 300;
-                $timetaken = $generator->procDistanceTime($coor,$village->coor,INCREASE_SPEED,1);
+                $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
                 array_push($post, "$id", "$villageName", "$villageOwner","$timetaken");
                 return $post;
 
@@ -232,7 +234,7 @@ class Units {
                 } else if (isset($id)) {
                 $villageName = $database->getOasisField($id,"name");
                 $speed= 300;
-                $timetaken = $generator->procDistanceTime($coor,$village->coor,INCREASE_SPEED,1);
+                $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
                 array_push($post, "$id", "$villageName", "2","$timetaken");
                 return $post;
 
@@ -241,7 +243,7 @@ class Units {
 
     }
     
-    public function returnTroops($wref,$mode=0) {
+    public function returnTroops($wref, $mode = 0) {
         global $database;
         if (!$mode) {
             $getenforce=$database->getEnforceVillage($wref,0);
@@ -263,38 +265,9 @@ class Units {
     private function processReturnTroops($enforce) {
         global $database, $generator;
         $to = $database->getVillage($enforce['from']);
-        $Gtribe = ($tribe = $database->getUserField($to['owner'], 'tribe',0)) == 1 ? "" : $tribe - 1;
-                    
-        $start = ($database->getUserField($to['owner'], 'tribe', 0) - 1) * 10 + 1;
-        $end = ($database->getUserField($to['owner'] ,'tribe', 0) * 10);
-
-        $from = $database->getVillage($enforce['from']);
-        $fromcoor = $database->getCoor($enforce['from']);
-        $tocoor = $database->getCoor($enforce['vref']);
-        $fromCor = ['x' => $tocoor['x'], 'y' => $tocoor['y']];
-        $toCor = ['x' => $fromcoor['x'], 'y' => $fromcoor['y']];
-
-        $speeds = [];
-
-        //find slowest unit.
-        for($i = $start; $i <= $end; $i++){
+        $tribe = $database->getUserField($to['owner'], 'tribe', 0);
         
-            if(intval($enforce['u'.$i]) > 0){
-                if($unitarray) { reset($unitarray); }
-                $unitarray = $GLOBALS["u".$i];
-                $speeds[] = $unitarray['speed'];
-            }else{
-                $enforce['u'.$i] = 0;
-            }
-        }
-        
-        if(intval($enforce['hero']) > 0){
-            $hero_unit = $database->getHeroField($from['owner'], 'unit');
-            $speeds[]  = $GLOBALS['u'.$hero_unit]['speed'];
-        }
-        else $enforce['hero'] = 0;
-       
-        $troopsTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), $enforce['from']);
+        $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $enforce, 1);
         $time = $database->getArtifactsValueInfluence($from['owner'], $enforce['from'], 2, $troopsTime);
         
         $reference =  $database->addAttack($enforce['from'], $enforce['u'.$start], $enforce['u'.($start + 1)], $enforce['u'.($start + 2)], $enforce['u'.($start + 3)], $enforce['u'.($start + 4)], $enforce['u'.($start + 5)], $enforce['u'.($start + 6)], $enforce['u'.($start + 7)], $enforce['u'.($start + 8)], $enforce['u'.($start + 9)], $enforce['hero'], 2, 0, 0, 0, 0);
@@ -345,7 +318,7 @@ class Units {
 
                 $database->modifyUnit(
                     $village->wid,
-                    array(
+                    [
                         $u . "1",
                         $u . "2",
                         $u . "3",
@@ -357,8 +330,8 @@ class Units {
                         $u . "9",
                         $u . $session->tribe . "0",
                         "hero"
-                    ),
-                    array(
+                    ],
+                    [
                         $data['u1'],
                         $data['u2'],
                         $data['u3'],
@@ -370,37 +343,11 @@ class Units {
                         $data['u9'],
                         $data['u10'],
                         $data['u11']
-                    ),
-                    array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+                    ],
+                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 );
 
-                $fromcoor  = $database->getCoor( $village->wid );
-                $from   = ['x' => $fromcoor['x'], 'y' => $fromcoor['y']];
-                $tocoor  = $database->getCoor( $data['to_vid'] );
-                $to     = ['x' => $tocoor['x'], 'y' => $tocoor['y']];
-                $speeds = [];
-
-                //find slowest unit.
-                for ($i = 1; $i <= 10; $i ++) {
-                    if (isset( $data['u'.$i] ) ) {
-                        if (!empty($data['u'.$i]) && $data['u'.$i] > 0) {
-                            if ($unitarray) {
-                                reset($unitarray);
-                            }
-                            $unitarray = $GLOBALS["u".(($session->tribe - 1) * 10 + $i)];
-                            $speeds[]  = $unitarray['speed'];
-                        }
-                    }
-                }
-                if (isset($data['u11'])) {
-                    if (!empty($data['u11']) && $data['u11'] > 0) {
-                        $heroarray = $database->getHero( $session->uid);
-                        $herodata  = $GLOBALS['u'.$heroarray[0]['unit']];
-                        $speeds[]  = $herodata['speed'];
-                    }
-                }
-
-                $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
+                $troopsTime = $this->getWalkingTroopsTime($village->wid, $data['to_vid'], $session->uid, $session->tribe, $data, 1, 'u');
                 $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);  
                 
                 // Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
@@ -510,12 +457,12 @@ class Units {
                     if ( isset( $post[ 't' . $i ] ) ) {
                         if ( $i != 10 ) {
                             if ( $post[ 't' . $i ] > $enforce[ 'u' . $Gtribe . $i ] ) {
-                                $form->addError( "error", "You can't send more units than you have" );
+                                $form->addError( "error", "You can't send back more units than you have" );
                                 break;
                             }
 
                             if ( $post[ 't' . $i ] < 0 ) {
-                                $form->addError( "error", "You can't send negative units." );
+                                $form->addError( "error", "You can't send back negative units." );
                                 break;
                             }
                         }
@@ -525,11 +472,11 @@ class Units {
                 }
                 if ( isset( $post['t11'] ) ) {
                     if ( $post['t11'] > $enforce['hero'] ) {
-                        $form->addError( "error", "You can't send more units than you have" );
+                        $form->addError( "error", "You can't send back more units than you have" );
                     }
 
                     if ( $post['t11'] < 0 ) {
-                        $form->addError( "error", "You can't send negative units." );
+                        $form->addError( "error", "You can't send back negative units." );
                     }
                 } else {
                     $post['t11'] = '0';
@@ -543,8 +490,9 @@ class Units {
                 } else {
 
                     //change units
-                    $start = ( $database->getUserField( $to['owner'], 'tribe', 0 ) - 1 ) * 10 + 1;
-                    $end   = ( $database->getUserField( $to['owner'], 'tribe', 0 ) * 10 );
+                    $tribe = $database->getUserField($to['owner'], 'tribe', 0);
+                    $start = ($tribe - 1 ) * 10 + 1;
+                    $end = $tribe * 10 ;
 
                     $units = [];
                     $amounts = [];
@@ -562,48 +510,15 @@ class Units {
                     $amounts[] = $post['t11'];
                     $modes[] = 0;
 
-                    $database->modifyEnforce( $post['ckey'], $units, $amounts, $modes );
-                    $j ++;
-                    //get cord
-                    $from     = $database->getVillage( $enforce['from'] );
-                    $fromcoor = $database->getCoor( $enforce['from'] );
-                    $tocoor   = $database->getCoor( $enforce['vref'] );
-                    $fromCor  = array( 'x' => $tocoor['x'], 'y' => $tocoor['y'] );
-                    $toCor    = array( 'x' => $fromcoor['x'], 'y' => $fromcoor['y'] );
-
-                    $speeds = array();
-
-                    //find slowest unit.
-                    for ( $i = 1; $i <= 10; $i ++ ) {
-                        if ( isset( $post[ 't' . $i ] ) ) {
-                            if ( $post[ 't' . $i ] != '' && $post[ 't' . $i ] > 0 ) {
-                                if ( $unitarray ) {
-                                    reset( $unitarray );
-                                }
-                                $unitarray = $GLOBALS[ "u" . ( ( $session->tribe - 1 ) * 10 + $i ) ];
-                                $speeds[]  = $unitarray['speed'];
-                            } else {
-                                $post[ 't' . $i . '' ] = '0';
-                            }
-                        } else {
-                            $post[ 't' . $i . '' ] = '0';
-                        }
-                    }
-                    if ( isset( $post['t11'] ) ) {
-                        if ( $post['t11'] != '' && $post['t11'] > 0 ) {
-                            $hero_unit = $database->getHeroField($from['owner'], 'unit');
-                            $speeds[]  = $GLOBALS[ 'u' . $hero_unit ]['speed'];
-                        }
-                        else  $post['t11'] = 0;         
-                    } 
-                    else $post['t11'] = 0;
-
-                    $troopsTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), 1);
+                    $database->modifyEnforce($post['ckey'], $units, $amounts, $modes);
+                    $j++;
+                    
+                    $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $post, 1, 't');
                     $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
                     
-                    $reference = $database->addAttack( $enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0 );
-                    $database->addMovement( 4, $village->wid, $enforce['from'], $reference, time(), ( $time + time() ) );
-                    $technology->checkReinf( $post['ckey'], false );
+                    $reference = $database->addAttack($enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0 );
+                    $database->addMovement(4, $village->wid, $enforce['from'], $reference, time(), ($time + time()));
+                    $technology->checkReinf($post['ckey'], false );
 
                     header( "Location: build.php?id=39&refresh=1" );
                     exit;
@@ -626,48 +541,34 @@ class Units {
     
     public function Settlers($post) {
         global $form, $database, $village, $session;
-		//-- Prevent user from founding a new village if there are not enough settlers
-		//-- fix by AL-Kateb
-        $tempunits = $database->getUnit($village->coor['id']);
-        $settler_key = "u" . $session->userinfo['tribe'] . "0";
-        $settlers = (int)$tempunits[$settler_key];
-		if($settlers < 3){
-			header("location: dorf1.php");
-			exit;
-		}
-		//--
 		
-        if ( $session->access != BANNED ) {
-            $mode       = CP;
-            $total      = count( $database->getProfileVillages( $session->uid ) );
-            $need_cps   = ${'cp' . $mode}[ $total + 1 ];
-            $cps        = $session->cp;
-            $rallypoint = $database->getResourceLevel( $village->wid );
-            if ( $rallypoint['f39'] > 0 ) {
-                if ( $cps >= $need_cps ) {
-                    $unit = ( $session->tribe * 10 );
-                    $database->modifyResource( $village->wid, 750, 750, 750, 750, 0 );
-                    $database->modifyUnit( $village->wid, array( $unit ), array( 3 ), array( 0 ) );
-                    $database->addMovement( 5, $village->wid, $post['s'], 0, time(), time() + $post['timestamp'] );
-                    header( "Location: build.php?id=39" );
-                    exit;
+        if ($session->access != BANNED) {
+            $mode = CP;
+            $total = count($database->getProfileVillages($session->uid));
+            $need_cps = ${'cp'.$mode}[$total + 1];
+            $cps = $session->cp;
+            $rallypoint = $database->getResourceLevel($village->wid);
 
-                    if ( $form->returnErrors() > 0 ) {
-                        $_SESSION['errorarray'] = $form->getErrors();
-                        $_SESSION['valuearray'] = $_POST;
-                        header( "Location: a2b.php" );
-                        exit;
-                    }
-                } else {
-                    header( "Location: build.php?id=39" );
-                    exit;
+            //-- Prevent user from founding a new village if there are not enough settlers or the player put an invalid village ID or an already occupied one
+            //-- fix by AL-Kateb - Semplified and additions by iopietro
+            if ($rallypoint['f39'] > 0 && $village->unitarray['u'.$session->tribe.'0'] >= 3 && isset($post['s']) && ($newvillage = $database->getMInfo($post['s']))['id'] > 0 && $newvillage['occupied'] == 0 && $newvillage['oasistype'] == 0) {
+                if ($cps >= $need_cps) {
+                    $troopsTime = $this->getWalkingTroopsTime($village->wid, $newvillage['id'], 0, 0, [300], 0);
+                    $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
+                    
+                    $unit = ($session->tribe * 10);
+                    $database->modifyResource($village->wid, 750, 750, 750, 750, 0);
+                    $database->modifyUnit($village->wid, [$unit], [3], [0]);
+                    $database->addMovement(5, $village->wid, $post['s'], 0, time(), time() + $time);
                 }
+                header("Location: build.php?id=39");
+                exit;
             } else {
-                header( "Location: dorf1.php" );
+                header("Location: dorf1.php");
                 exit;
             }
         } else {
-            header( "Location: banned.php" );
+            header("Location: banned.php");
             exit;
         }
     }
@@ -772,6 +673,65 @@ class Units {
             
             return $heroes;
         }
+    }
+    
+    /**
+     * Get how much time troops spend to walk from a village to another
+     * 
+     * @param int $from The start village ID
+     * @param int $to The target village ID
+     * @param int $owner The owner of the troops
+     * @param int $tribe The tribe of the owner's troops
+     * @param array $unitArray The array containing troops count if mode is 0, otherwise it'll contains the troop speed
+     * @param int $mode How the time should be calculated
+     * @return int Returns the time troops take to walk from a village to another
+     */
+    
+    public function getWalkingTroopsTime($from, $to, $owner, $tribe, $unitArray, $mode, $unit = ""){
+        global $generator, $database;
+
+        $fromCoor = $database->getCoor($from);
+        $toCoor = $database->getCoor($to);
+        $fromCor = ['x' => $fromCoor['x'], 'y' => $fromCoor['y']];
+        $toCor = ['x' => $toCoor['x'], 'y' => $toCoor['y']];
+        
+        if(!$mode) return $generator->procDistanceTime($fromCor, $toCor, $unitArray[0], $mode);
+
+        $start = ($tribe - 1) * 10 + 1;
+        $end = $tribe * 10;
+        
+        $speeds = [];
+        
+        //Find slowest unit
+        if(!empty($unit)){
+            for($i = 1; $i <= 11; $i++){
+                if(isset($unitArray[$unit.$i]) && $unitArray[$unit.$i] > 0) $unitArray[$i - 1] = $unitArray[$unit.$i];
+                else $unitArray[$i - 1] = 0;
+            }    
+        }else{
+            for($i = $start; $i <= $end; $i++){
+                if(isset($unitArray['u'.$i]) && $unitArray['u'.$i] > 0) $unitArray[$i - $start] = $unitArray['u'.$i];
+                else $unitArray[$i - $start] = 0;
+            } 
+            
+            if(isset($unitArray['hero']) && $unitArray['hero'] > 0){
+                $unitArray[10] = $unitArray['hero'];
+            }
+            else $unitArray[10] = 0;
+        }
+
+        for($i = 0; $i <= 9; $i++){
+            if(isset($unitArray[$i]) && $unitArray[$i] > 0){
+                $speeds[] = $GLOBALS['u'.($i + $start)]['speed'];
+            }
+        }
+        
+        if(isset($unitArray[10]) && $unitArray[10] > 0){
+            $heroUnit = $database->getHeroField($owner, 'unit');
+            $speeds[]  = $GLOBALS['u'.$heroUnit]['speed'];
+        }
+
+        return $generator->procDistanceTime($fromCor, $toCor, min($speeds), $mode);     
     }
 };
 

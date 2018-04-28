@@ -283,35 +283,8 @@ $end = $tribe * 10;
 
 
 
-            <?php
-            $speeds = [];
-            $scout = 1;
-            
-            //find slowest unit.
-            for($i = 1; $i <= 11; $i++)         
-            {             
-                if (isset($process['t'.$i]))            
-                {               
-                    if(!empty($process['t'.$i]) && $process['t'.$i] > 0)             
-                    {                     
-                        if ($i < 11) $speeds[] = ${'u'.(($session->tribe-1) * 10 + $i)}['speed'];     
-                        else
-                        {
-                            $hero_unit = $database->getHeroField($uid, 'unit');
-                            $speeds[] = ${'u'.$hero_unit}['speed'];
-                        }
-                        if($i != 4) $scout = 0;   
-                    } 
-                }
-            }
-
-            if($scout) $process['c'] = 1;
-            
-            $ownVillage = $database->getCoor($village->wid);      
-            $from = ['x' => $ownVillage['x'], 'y' => $ownVillage['y']];            
-            $to = ['x' => $coor['x'], 'y' => $coor['y']];
-  
-            $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
+            <?php               
+            $troopsTime = $units->getWalkingTroopsTime($village->wid, $process[0], $session->uid, $session->tribe, $process, 1, 't');
             $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
             ?>
 

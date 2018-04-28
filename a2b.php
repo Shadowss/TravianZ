@@ -175,34 +175,9 @@ if(isset($_GET['o'])) {
 			$prisoner = $database->getPrisonersByID($delprisoners);
 			if($prisoner['wref'] == $village->wid){
 			$p_owner = $database->getVillageField($prisoner['from'],"owner");
-            $p_eigen = $database->getCoor($prisoner['wref']);
-            $p_from = array('x'=>$p_eigen['x'], 'y'=>$p_eigen['y']);
-            $p_ander = $database->getCoor($prisoner['from']);
-            $p_to = array('x'=>$p_ander['x'], 'y'=>$p_ander['y']);
 			$p_tribe = $database->getUserField($p_owner,"tribe",0);
-
-            $p_speeds = array();
-
-            //find slowest unit.
-            for($i=1;$i<=10;$i++){
-                if ($prisoner['t'.$i]){
-                    if($prisoner['t'.$i] != '' && $prisoner['t'.$i] > 0){
-                        if($p_unitarray) { reset($p_unitarray); }
-                        $p_unitarray = $GLOBALS["u".(($p_tribe-1)*10+$i)];
-                        $p_speeds[] = $p_unitarray['speed'];
-                    }
-                }
-            }
-
-			if ($prisoner['t11']>0){
-			    $p_qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $p_owner." AND dead = 0";
-				$p_resulth = mysqli_query($database->dblink,$p_qh);
-				$p_hero_f=mysqli_fetch_array($p_resulth);
-				$p_hero_unit=$p_hero_f['unit'];
-				$p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
-			}
 			
-			$troopsTime = $automation->procDistanceTime($p_to, $p_from, min($p_speeds), 1);
+			$troopsTime = $units->getWalkingTroopsTime($prisoner['from'], $prisoner['wref'], $p_owner, $p_tribe, $prisoner, 1, 't');
 			$p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
 			
 			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);

@@ -343,7 +343,7 @@ class Automation {
     }
 
     private function clearDeleting() {
-        global $autoprefix;
+        global $autoprefix, $units;
         if(file_exists($autoprefix."GameEngine/Prevention/cleardeleting.txt")) {
             unlink($autoprefix."GameEngine/Prevention/cleardeleting.txt");
         }
@@ -435,10 +435,9 @@ class Automation {
 
                     foreach($enforcement as $enforce) {
                         $time = microtime(true);
-                        $fromcoor = $database->getCoor($enforce['vref']);
-                        $tocoor = $database->getCoor($enforce['from']);
-                        $targettribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
-                        $time2 = $this->procDistanceTime($tocoor,$fromcoor,$targettribe,0);
+                        $targetOwner = $database->getVillageField($enforce['from'], "owner");
+                        $targettribe = $database->getUserField($targetOwner, "tribe", 0);
+                        $time2 = $units->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $targetOwner, $targettribe, $enforce, 1);
                         $start = 10*($targettribe-1);
                         for($i=1;$i<11;$i++){
                             $unit = $start + $i;
@@ -942,7 +941,7 @@ class Automation {
     }
 
     private function marketComplete() {
-        global $database, $autoprefix;
+        global $database, $autoprefix, $units;
         if(file_exists($autoprefix."GameEngine/Prevention/market.txt")) {
             unlink($autoprefix."GameEngine/Prevention/market.txt");
         }
@@ -972,10 +971,8 @@ class Automation {
                 $database->addNotice($from['owner'],$to['wref'],$ownally,$sort_type,''.addslashes($from['name']).' send resources to '.addslashes($to['name']).'',''.$from['owner'].','.$from['wref'].','.$data['wood'].','.$data['clay'].','.$data['iron'].','.$data['crop'].'',$data['endtime']);
             }
             $database->modifyResource($data['to'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],1);
-            $tocoor = $database->getCoor($data['from']);
-            $fromcoor = $database->getCoor($data['to']);
             $targettribe = $userData_to["tribe"];
-            $endtime = $this->procDistanceTime($tocoor,$fromcoor,$targettribe,0) + $data['endtime'];
+            $endtime = $units->getWalkingTroopsTime($data['from'], $data['to'], 0, 0, [$targettribe], 0) + $data['endtime'];
             $database->addMovement(2,$data['to'],$data['from'],$data['merchant'],time(),$endtime,$data['send'],$data['wood'],$data['clay'],$data['iron'],$data['crop']);
             $database->setMovementProc($data['moveid']);
         }
@@ -1006,7 +1003,7 @@ class Automation {
     }
 
     private function sendResource2($wtrans, $ctrans, $itrans, $crtrans, $from, $to, $tribe, $send) {
-        global $bid17,$bid28,$database,$generator,$logging;
+        global $bid17, $bid28, $database, $units;
 
         $availableWood = $database->getWoodAvailable($from);
         $availableClay = $database->getClayAvailable($from);
@@ -1033,12 +1030,9 @@ class Automation {
             $resource = array($wtrans,$ctrans,$itrans,$crtrans);
             $reqMerc = ceil((array_sum($resource)-0.1)/$maxcarry2);
             
-            if($merchantAvail2 != 0 && $reqMerc <= $merchantAvail2) {
-                $coor = $database->getCoor($to);
-                $coor2 = $database->getCoor($from);
-                
+            if($merchantAvail2 != 0 && $reqMerc <= $merchantAvail2) {                
                 if($database->getVillageState($to)) {
-                    $timetaken = $generator->procDistanceTime($coor,$coor2,$tribe,0);
+                    $timetaken = $units->getWalkingTroopsTime($from, $to, 0, 0, [$tribe], 0);
                     $res = $resource[0]+$resource[1]+$resource[2]+$resource[3];
                     if($res!=0){
                         $reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0);
@@ -1587,7 +1581,7 @@ class Automation {
                     //impossible to attack or scout NATAR Capital Village
                     if ($NatarCapital)
                     {
-                        for($i=1;$i<=11;$i++) ${'traped'.$i} = $data['t'.$i];
+                        for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $data['t'.$i];
                     }
                     elseif(empty($scout))
                     {
@@ -1757,7 +1751,7 @@ class Automation {
                         if (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) && $battlepart['casualties_attacker'][$i] <= 0) {
                             ${'dead'.$i} = 0;
                         } else if (isset($data['t'.$i]) && isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) && $battlepart['casualties_attacker'][$i] > $data['t'.$i]) {
-                            ${'dead'.$i}=$data['t'.$i];
+                            ${'dead'.$i} = $data['t'.$i];
                         } else {
                             ${'dead'.$i} = (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) ? $battlepart['casualties_attacker'][$i] : 0);
                         }
@@ -2178,48 +2172,20 @@ class Automation {
                             }
                     }
 
-                    //work out time of return
-                    $start = ($owntribe-1)*10+1;
-                    $end = ($owntribe*10);
-
-                    $unitspeeds = array(6,5,7,16,14,10,4,3,4,5,
-                        7,7,6,9,10,9,4,3,4,5,
-                        7,6,17,19,16,13,4,3,4,5,
-                        7,7,6,9,10,9,4,3,4,5,
-                        7,7,6,9,10,9,4,3,4,5);
-
-                    $speeds = array();
-
-                    //find slowest unit.
-                    for($i=1;$i<=10;$i++)
-                    {
-                        if ($data['t'.$i] > $battlepart['casualties_attacker'][$i]) {
-                            if($unitarray) { reset($unitarray); }
-                            $unitarray = $GLOBALS["u".(($owntribe-1)*10+$i)];
-                            $speeds[] = $unitarray['speed'];
-                        }
-                    }
-                    if ($herosend_att>0){
-                        $hero_unit = $database->getHeroField($from['owner'], 'unit');
-                        $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
-                    }
-
                     // Data for when troops return.
-
                     //catapults look :D
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
                     //check to see if can destroy village
                     if (count($varray) != 1 && $to['capital'] != 1 && !$database->villageHasArtefact($DefenderWref)) {
-                        $can_destroy=1;
-                    } else {
-                        $can_destroy=0;
+                        $can_destroy = 1;
                     }
+                    else $can_destroy = 0;
 
                     if($isoasis == 0)
                     {
-                        if ($type=='3')
+                        if ($type == 3)
                         {
-                            if (($data['t7']-$traped7)>0){
+                            if (($data['t7'] - $traped7) > 0){
                                 $newLevel = $battle->CalculateNewBuildingLevel($battlepart['rams']['moral'], $battlepart['rams']['updown'], $walllevel, $battlepart['rams']['realAttackers'], $data['t7']);
                                 if (isset($empty)){
                                     $info_ram = "".$ram_pic.",There is no wall to destroy.";
@@ -2241,11 +2207,8 @@ class Automation {
                                 
                                 // village has been destroyed
                                 if ($pop <= 0) {
-                                    if ($can_destroy==1) {
-                                        $info_cat = "".$catp_pic.", Village already destroyed.";
-                                    } else {
-                                        $info_cat = "".$catp_pic.", Village can\'t be destroyed.";
-                                    }
+                                    if ($can_destroy == 1) $info_cat = "".$catp_pic.", Village already destroyed.";                                      
+                                    else $info_cat = "".$catp_pic.", Village can\'t be destroyed.";    
                                 }
                                 else
                                 {
@@ -2395,7 +2358,7 @@ class Automation {
 
                     //chiefing village
                     //there are senators
-                    if(($data['t9']-$dead9-$traped9)>0 && $isoasis==0){
+                    if(($data['t9']- $dead9- $traped9) > 0 && $isoasis == 0){
                         if ($type=='3') {
 
                             $palacelevel = $database->getResourceLevel($from['wref']);
@@ -2601,7 +2564,7 @@ class Automation {
                                                 $database->setVillageField($data['from'],$exp,$value);
 
                                                 //remove oasis related to village
-                                                $units->returnTroops($data['to'],1);
+                                                $units->returnTroops($data['to'], 1);
                                                 $chiefing_village = 1;
                                                 
 												//Remove trade routes related to village
@@ -2791,33 +2754,9 @@ class Automation {
                                         $neutral = ($neutralarray[0]['alli1'] > 0 && $neutralarray[0]['alli2'] > 0 && $p_alliance > 0) && ($neutralarray[0]['alli1'] == $ownally || $neutralarray[0]['alli2'] == $ownally) && ($ownally != $p_alliance && $ownally && $p_alliance);
 
                                         if($p_alliance == $ownally || $friend || $neutral){
-                                            $p_tribe = $database->getUserField($p_owner,"tribe",0);
+                                            $p_tribe = $database->getUserField($p_owner, "tribe", 0);
 
-                                            $p_eigen = $database->getCoor($prisoner['wref']);
-                                            $p_from = array('x'=>$p_eigen['x'], 'y'=>$p_eigen['y']);
-                                            $p_ander = $database->getCoor($prisoner['from']);
-                                            $p_to = array('x'=>$p_ander['x'], 'y'=>$p_ander['y']);
-                                            $p_tribe = $database->getUserField($p_owner,"tribe",0);
-
-                                            $p_speeds = array();
-
-                                            //find slowest unit.
-                                            for($i = 1; $i <= 10; $i++){
-                                                if ($prisoner['t'.$i]){
-                                                    if(!empty($prisoner['t'.$i]) && $prisoner['t'.$i] > 0){
-                                                        if($p_unitarray) { reset($p_unitarray); }
-                                                        $p_unitarray = $GLOBALS["u".(($p_tribe-1)*10+$i)];
-                                                        $p_speeds[] = $p_unitarray['speed'];
-                                                    }
-                                                }
-                                            }
-
-                                            if ($prisoner['t11'] > 0){
-                                                $p_hero_unit = $database->getHeroField($p_owner, 'unit');
-                                                $p_speeds[] = $GLOBALS['u'.$p_hero_unit]['speed'];
-                                            }
-
-                                            $troopsTime = $this->procDistanceTime($p_to, $p_from, min($p_speeds), 1);
+                                            $troopsTime = $units->getWalkingTroopsTime($prisoner['from'], $prisoner['wref'], $p_owner, $p_tribe, $prisoner, 1, 't');
                                             $p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
                                             
                                             $p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
@@ -2880,7 +2819,9 @@ class Automation {
                     // If the dead units not equal the ammount sent they will return and report
                     if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0)
                     {                       
-                        $troopsTime = $this->procDistanceTime($from, $to, min($speeds), 1);
+                        $returningTroops = [];
+                        for($i = 1; $i <= 11; $i++) $returningTroops['t'.$i] = $data['t'.$i] - ${'traped'.$i} - ${'dead'.$i};
+                        $troopsTime = $units->getWalkingTroopsTime($from['wref'], $to['wref'], $from['owner'], $owntribe, $returningTroops, 1, 't');
                         $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);
                         $endtime += $AttackArrivalTime;
                         if($type == 1) {
@@ -2960,25 +2901,8 @@ class Automation {
                     $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
                     $herosend_att = $data['t11'];
                     $unitssend_att= $unitssend_att1.','.$herosend_att;
-
-                    $speeds = [];
-
-                    //find slowest unit.
-                    //TODO: Needs to be made as a function
-                    for($i = 1; $i <= 10; $i++)
-                    {
-                        if ($data['t'.$i] > 0) {
-                            $unitarray = $GLOBALS["u".(($owntribe-1)*10+$i)];
-                            $speeds[] = $unitarray['speed'];
-                        }
-                    }
-
-                    if ($herosend_att > 0){
-                        $hero_unit = $database->getHeroField($from['owner'], 'unit');
-                        $speeds[] = $GLOBALS['u'.$hero_unit]['speed'];
-                    }
-
-                    $troopsTime = $this->procDistanceTime($from, $to, min($speeds), 1);
+                    
+                    $troopsTime = $units->getWalkingTroopsTime($from['wref'], $to['wref'], $from['owner'], $owntribe, $data, 1, 't');
                     $endtime = $database->getArtifactsValueInfluence($from['owner'], $from['wref'], 2, $troopsTime);                
                     $endtime += $AttackArrivalTime;
 
@@ -4207,51 +4131,6 @@ class Automation {
         if(file_exists("GameEngine/Prevention/training.txt")) {
             unlink("GameEngine/Prevention/training.txt");
         }
-    }
-
-    public function procDistanceTime($coor,$thiscoor,$ref,$mode) {
-        global $bid14,$database,$generator;
-        $resarray = $database->getResourceLevel($generator->getBaseID($coor['x'],$coor['y']));
-        $xdistance = ABS($thiscoor['x'] - $coor['x']);
-        if($xdistance > WORLD_MAX) {
-            $xdistance = (2*WORLD_MAX+1) - $xdistance;
-        }
-        $ydistance = ABS($thiscoor['y'] - $coor['y']);
-        if($ydistance > WORLD_MAX) {
-            $ydistance = (2*WORLD_MAX+1) - $ydistance;
-        }
-        $distance = SQRT(POW($xdistance,2)+POW($ydistance,2));
-        if(!$mode) {
-            if($ref == 1) {
-                $speed = 16;
-            }
-            else if($ref == 2) {
-                $speed = 12;
-            }
-            else if($ref == 3) {
-                $speed = 24;
-            }
-            else if($ref == 300) {
-                $speed = 5;
-            }
-            else {
-                $speed = 1;
-            }
-        }
-        else {
-            $speed = $ref;
-            if($this->getsort_typeLevel(14,$resarray) != 0 && $distance >= TS_THRESHOLD) {
-                $speed = $speed * ($bid14[$this->getsort_typeLevel(14,$resarray)]['attri']/100) ;
-            }
-        }
-
-
-        if($speed!=0){
-            return round(($distance/$speed) * 3600 / INCREASE_SPEED);
-        }else{
-            return round($distance * 3600 / INCREASE_SPEED);
-        }
-
     }
 
     private function getsort_typeLevel($tid,$resarray) {

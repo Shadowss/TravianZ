@@ -35,8 +35,8 @@ class MyGenerator {
 	   return substr($encode,0,$length);
    }
 
-   public function procDistanceTime($coor,$thiscoor,$ref,$mode) {
-		global $bid28,$bid14,$building;
+   public function procDistanceTime($coor, $thiscoor, $ref, $mode) {
+		global $bid28, $bid14, $building;
 		$xdistance = ABS($thiscoor['x'] - $coor['x']);
 		if($xdistance > WORLD_MAX) {
 			$xdistance = (2 * WORLD_MAX + 1) - $xdistance;
@@ -46,34 +46,21 @@ class MyGenerator {
 			$ydistance = (2 * WORLD_MAX + 1) - $ydistance;
 		}
 		$distance = SQRT(POW($xdistance,2)+POW($ydistance,2));
-		if(!$mode) {
-			if($ref == 1) {
-				$speed = 16;
-			}
-			else if($ref == 2) {
-				$speed = 12;
-			}
-			else if($ref == 3) {
-				$speed = 24;
-			}
-			else if($ref == 300) {
-				$speed = 5;
-			}
-			else {
-				$speed = 1;
-			}
-		}
-		else {
+		if(!$mode){    
+			if($ref == 1) $speed = 16;		
+			else if($ref == 2) $speed = 12;
+			else if($ref == 3) $speed = 24;			
+			else if($ref == 300) $speed = 5;			
+			else $speed = 1;		
+		}else{
 			$speed = $ref;
 			if($building->getTypeLevel(14) != 0 && $distance >= TS_THRESHOLD) {
-				$speed = $speed * ($bid14[$building->gettypeLevel(14)]['attri']/100) ;
+				$speed *= ($bid14[$building->gettypeLevel(14)]['attri'] / 100) ;
 			}
 		}
-		if($speed!=0){
-		return round(($distance/$speed) * 3600 / INCREASE_SPEED);
-		}else{
-		return round($distance * 3600 / INCREASE_SPEED);
-		}
+		
+		if($speed != 0) return round(($distance / $speed) * 3600 / INCREASE_SPEED);
+		else return round($distance * 3600 / INCREASE_SPEED);
 	}
 
    public function getTimeFormat($time) {

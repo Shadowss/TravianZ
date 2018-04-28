@@ -78,14 +78,14 @@ if(isset($_POST['ft'])=='check' && (($_POST['send3'] > 1 && $_POST['send3'] <= 3
 		  $getvilowner = $database->getVillageField($getwref, "owner");
 		  $getvilcoor['y'] = $_POST['y'];
 		  $getvilcoor['x'] = $_POST['x'];
-		  $time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
+		  $time = $generator->procDistanceTime($getvilcoor, $village->coor, $session->tribe, 0);
 		}
 		else if(!empty($_POST['dname'])){
 		  $getwref = $database->getVillageByName($_POST['dname']);
 		  $getvilcoor = $database->getCoor($getwref);
 		  $getvilname = $database->getVillageField($getwref, "name");
 		  $getvilowner = $database->getVillageField($getwref, "owner");
-		  $time = $generator->procDistanceTime($getvilcoor,$village->coor,$session->tribe,0);
+		  $time = $generator->procDistanceTime($getvilcoor, $village->coor, $session->tribe, 0);
 		}
         ?>
 		<td><a href="karte.php?d=<?php echo $getwref; ?>&c=<?php echo $generator->getMapCheck($getwref); ?>"><?php echo $getvilname; ?>(<?php echo $getvilcoor['x']; ?>|<?php echo $getvilcoor['y']; ?>)<span class="clear"></span></a></td>

@@ -3,9 +3,6 @@ $to = $database->getVillage($enforce['from']);
 $fromcoor = $database->getCoor($enforce['from']);
 $tocoor = $database->getCoor($enforce['vref']);
 
-$fromCor = ['x'=>$tocoor['x'], 'y'=>$tocoor['y']];
-$toCor = ['x'=>$fromcoor['x'], 'y'=>$fromcoor['y']];
-
 $att_tribe = $database->getUserField($to['owner'],'tribe',0);
 $start = ($att_tribe - 1) * 10 + 1;
 $end = $att_tribe * 10;
@@ -124,28 +121,7 @@ $end = $att_tribe * 10;
 			<th>Arrived:</th>
 
 			<?php
-			$speeds = [];
-			//find slowest unit.
-			for($i = $start; $i <= $end; $i++)
-			{
-			    if (isset($enforce['u'.$i]))
-			    {
-			        if(!empty($enforce['u'.$i]) && $enforce['u'.$i] > 0)
-			        {
-			            $speeds[] = ${'u'.$i}['speed'];
-			        }
-			    }
-			}
-			
-			if ($enforce['hero']>0){
-                $qh = "SELECT unit FROM ".TB_PREFIX."hero WHERE uid = ".(int) $to['owner']." AND dead = 0"; 
-                $resulth = mysqli_query($database->dblink,$qh); 
-                $hero_f=mysqli_fetch_array($resulth); 
-                $hero_unit=$hero_f['unit']; 
-                $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
-			}
-
-			$troopsTime = $generator->procDistanceTime($fromCor, $toCor, min($speeds), 1);
+			$troopsTime = $units->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $att_tribe, $enforce, 1);
 			$time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
 			?>
 

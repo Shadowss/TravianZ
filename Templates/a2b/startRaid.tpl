@@ -60,33 +60,8 @@
                     $id   = $database->addA2b( $ckey, $time_now, $wref, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, 4 );
 
                     $data = $database->getA2b( $ckey, $time_now );
-
-                    $eigen = $database->getCoor( $getFLData['wref'] );
-                    $from  = array( 'x' => $eigen['x'], 'y' => $eigen['y'] );
-
-                    $ander = $database->getCoor( $data['to_vid'] );
-                    $to    = array( 'x' => $ander['x'], 'y' => $ander['y'] );
-
-                    $start = ( $tribe - 1 ) * 10 + 1;
-                    $end   = ( $tribe * 10 );
-
-                    $speeds = array();
-                    $scout  = 1;
-
-                    //find slowest unit.
-                    for ( $i = 1; $i <= 10; $i ++ ) {
-                        if ( $data[ 'u' . $i ] ) {
-                            if ( $data[ 'u' . $i ] != '' && $data[ 'u' . $i ] > 0 ) {
-                                if ( $unitarray ) {
-                                    reset( $unitarray );
-                                }
-                                $unitarray = $GLOBALS[ "u" . ( ( $tribe - 1 ) * 10 + $i ) ];
-                                $speeds[]  = $unitarray['speed'];
-                            }
-                        }
-                    }
                     
-                    $troopsTime = $generator->procDistanceTime($from, $to, min($speeds), 1);
+                    $troopsTime = $units->getWalkingTroopsTime($getFLData['wref'], $data['to_vid'], $session->uid, $session->tribe, $data, 1, 'u');
                     $time = $database->getArtifactsValueInfluence($getFLData['owner'], $getFLData['wref'], 2, $troopsTime);
 
                     $ctar1 = $ctar2 = 0;
@@ -114,8 +89,8 @@
                     $amounts[] = $data['u11'];
                     $modes[]   = 0;
 
-                    $database->modifyUnit( $getFLData['wref'], $units, $amounts, $modes );
-                    $database->addMovement( 3, $getFLData['wref'], $data['to_vid'], $reference, time(), ( $time + time() ) );
+                    $database->modifyUnit($getFLData['wref'], $units, $amounts, $modes);
+                    $database->addMovement(3, $getFLData['wref'], $data['to_vid'], $reference, time(), ($time + time()));
 
                     // prevent re-use of the same attack via re-POSTing the same data
                     $database->remA2b( $id );

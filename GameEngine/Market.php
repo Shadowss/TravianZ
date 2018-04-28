@@ -123,7 +123,7 @@ class Market
                 $coor = $database->getCoor($id);
                 if($database->getVillageState($id))
                 {
-                    $timetaken = $generator->procDistanceTime($coor,$village->coor,$session->tribe,0);
+                    $timetaken = $generator->procDistanceTime($coor, $village->coor, $session->tribe, 0);
                     $res = $resource[0]+$resource[1]+$resource[2]+$resource[3];
                     if($res!=0)
                     {
@@ -308,7 +308,7 @@ class Market
         foreach($displayarray as $value)
         {
             $targetcoor = $database->getCoor($value['vref']);
-            $duration = $generator->procDistanceTime($targetcoor,$village->coor,$session->tribe,0);
+            $duration = $generator->procDistanceTime($targetcoor, $village->coor, $session->tribe, 0);
             if($duration <= ($value['maxtime'] * 3600) || $value['maxtime'] == 0)
             {
                 $value['duration'] = $duration;
