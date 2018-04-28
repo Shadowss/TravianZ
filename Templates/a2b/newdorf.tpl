@@ -78,7 +78,7 @@ echo '</pre>';
 <?php
 if ($wood>749 && $clay>749 && $iron>749 && $crop>749) {
 ?>
-<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img"  alt="OK" src="img/x.gif" onclick="this.disabled=true;this.form.submit();"/>
+<button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();" /> Ok </button>
 <?php
 } else {
   echo "<span class=\"c2\"><b>Not enough resource</b></span>";

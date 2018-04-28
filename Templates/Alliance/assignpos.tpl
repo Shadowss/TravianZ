@@ -40,7 +40,7 @@ if($session->access!=BANNED){
 				<p>
 					<input type="hidden" name="o" value="1">
 					<input type="hidden" name="s" value="5">
-					<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" />
+					<button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button>
 				</p>
 			</form>
 <?php

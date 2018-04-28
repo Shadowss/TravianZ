@@ -22,7 +22,7 @@
 	</tr></tbody>
 	</table>
 	
-	<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p><table cellpadding="1" cellspacing="1" id="join">
+	<p><button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button></form></p><table cellpadding="1" cellspacing="1" id="join">
 	
 	<?php }else{ ?>
 	<table cellpadding="1" cellspacing="1" id="found">

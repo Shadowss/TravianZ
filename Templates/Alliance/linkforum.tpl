@@ -26,5 +26,5 @@ include("alli_menu.tpl");
 </tr></tbody>
 </table>
 
-<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p></form>
+<p><button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button></p></form>
 <p class="error"><?php echo $form->getError("perm"); ?></p>

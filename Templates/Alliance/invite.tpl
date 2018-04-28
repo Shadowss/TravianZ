@@ -21,7 +21,7 @@ include("alli_menu.tpl");
 <td><input class="name text" type="text" name="a_name" maxlength="30"><span class="error"></span></td>
 </tr>
 </tbody></table>
-<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" onclick="this.disabled=true;this.form.submit();"/></form> </p>
+<p><button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();" /> Ok </button></form> </p>
 
 <p class="error"><?php echo $form->getError("name1"); ?><br /><?php echo $form->getError("name2"); ?><br /><?php echo $form->getError("name3"); ?><br /><?php echo $form->getError("name4"); ?><br /><?php echo $form->getError("name5"); ?><br /><?php echo $form->getError("perm"); ?></p><br />
 <table cellpadding="1" cellspacing="1" id="invitations" class="small_option"><thead>
