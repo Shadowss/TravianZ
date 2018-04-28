@@ -52,7 +52,7 @@ $coor['y']=$form->getValue("y");
     </tr>
 </tbody></table>
 
-        <input value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" type="image" onclick="this.disabled=true;this.form.submit();">
+       <button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();" /> Ok </button>
     </form>
 <p class="error"><?php echo $form->getError("error"); ?></p>
 </div>

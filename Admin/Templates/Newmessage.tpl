@@ -59,7 +59,7 @@ if(isset($id))
 				<textarea id="message" name="message" style="background-image: url('../<?php echo GP_LOCATE; ?>img/msg/underline.gif'); background-repeat: repeat; font-size: 12px; border: medium none; height: 258px; line-height: 16px; width: 412px; font-family: Verdana,Arial,Helvetica,sans-serif;">Message Here</textarea>
 			</div>
 			<p class="btn">
-				<input type="image" value="submit" name="s1" id="btn_send" class="dynamic_img clicked" src="../img/admin/x.gif" alt="send" tabindex="4;">
+				<button value="submit" name="s1" id="btn_send" class="trav_buttons" alt="send" tabindex="4;">Send</button>
 			</p>
 			<div id="read_foot" class="msg_foot"></div>
 		</div>
