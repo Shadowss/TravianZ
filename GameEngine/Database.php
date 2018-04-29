@@ -1568,6 +1568,20 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE wref = ".$wref;
 		return mysqli_query($this->dblink,$q);
 	}
+	
+	/**
+	 * Remove all oasis of a specified village
+	 * 
+	 * @param int $vid The village ID of the oasis owner
+	 * @return bool Returns true if the query was successful, false otherwise
+	 */
+	
+	function removeOasesByVid($vid) {
+	    list($vid) = $this->escape_input((int) $vid);
+	    
+	    $q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE conqured = ".$vid;
+	    return mysqli_query($this->dblink, $q);
+	}
 
 
 	/***************************
@@ -6886,8 +6900,7 @@ References: User ID/Message ID, Mode
 			$chiefslots = 0;
 		}
 
-		$slots = array("chiefs" => $chiefslots, "settlers" => $settlerslots);
-		return $slots;
+		return ["chiefs" => $chiefslots, "settlers" => $settlerslots];
 	}
 
 	/**

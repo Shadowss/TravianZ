@@ -3012,8 +3012,6 @@ class Automation {
         $database->query($q);
         $q = "DELETE FROM ".TB_PREFIX."market where vref = $wref";
         $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."odata where wref = $wref";
-        $database->query($q);
         $q = "DELETE FROM ".TB_PREFIX."research where vref = $wref";
         $database->query($q);
         $q = "DELETE FROM ".TB_PREFIX."tdata where vref = $wref";
@@ -3028,9 +3026,12 @@ class Automation {
         $database->query($q);
         $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
         $database->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."route where wid = $wref OR `from` = $wref";
+        $database->query($q);
         $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $wref AND sort_type=4) OR (`from` = $wref AND sort_type=3))";
         $database->query($q);
-
+        $database->removeOasesByVid($wref);
+        
         $getmovement = $database->getMovement(3,$wref,1);
 
         $moveIDs = [];
