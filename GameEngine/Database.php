@@ -6824,6 +6824,7 @@ References: User ID/Message ID, Mode
 		$chiefs = $row['R2'];
 
 		$settlers += 3 * count($this->getMovement(5, $village->wid, 0));
+		
 		$current_movement = $this->getMovement(3, $village->wid, 0);
 		if(!empty($current_movement)) {
 			foreach($current_movement as $build) {
@@ -6831,20 +6832,7 @@ References: User ID/Message ID, Mode
 				$chiefs += $build['t9'];
 			}
 		}
-		$current_movement = $this->getMovement(3, $village->wid, 1);
-		if(!empty($current_movement)) {
-			foreach($current_movement as $build) {
-				$settlers += $build['t10'];
-				$chiefs += $build['t9'];
-			}
-		}
-		$current_movement = $this->getMovement(4, $village->wid, 0);
-		if(!empty($current_movement)) {
-			foreach($current_movement as $build) {
-				$settlers += $build['t10'];
-				$chiefs += $build['t9'];
-			}
-		}
+
 		$current_movement = $this->getMovement(4, $village->wid, 1);
 		if(!empty($current_movement)) {
 			foreach($current_movement as $build) {
@@ -6882,24 +6870,21 @@ References: User ID/Message ID, Mode
 				}
 			}
 		}
-		// TODO: trapped settlers/chiefs calculation required
-		$settlerslots = ($maxslots * 3)  - $chiefs - $settlers;
 
-		// don't allow training of settlers if there is at least 1 chief in the village
-        if ($chiefs > 0) {
-            $settlerslots = 0;
-        }
+		$trappedTroops = $this->getPrisoners($village->wid, 1);
+		if(!empty($trappedTroops)){
+		    foreach($trappedTroops as $trapped){
+		        $settlers += $trapped['t10'];
+		        $chiefs += $trapped['t9'];
+		    }
+		}
 
+		$settlerslots = ($maxslots * 3) - ($chiefs * 3) - $settlers;
 		$chiefslots = $maxslots - $chiefs - floor(($settlers + 2) / 3);
 
 		if(!$technology->getTech(($session->tribe - 1) * 10 + 9)) {
 			$chiefslots = 0;
 		}
-
-        // don't allow training of chieftains if there is at least 1 settler in the village
-        if ($settlers > 0) {
-            $chiefslots = 0;
-        }
 
 		$slots = array("chiefs" => $chiefslots, "settlers" => $settlerslots);
 		return $slots;

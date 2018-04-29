@@ -1,20 +1,4 @@
 <?php
-			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,5,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,5,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,5,2,0));
-			if($artefact > 0){
-			$artefact_bonus = 2;
-			$artefact_bonus2 = 1;
-			}else if($artefact1 > 0){
-			$artefact_bonus = 2;
-			$artefact_bonus2 = 1;
-			}else if($artefact2 > 0){
-			$artefact_bonus = 4;
-			$artefact_bonus2 = 3;
-			}else{
-			$artefact_bonus = 1;
-			$artefact_bonus2 = 1;
-			}
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -27,7 +11,7 @@
 
 	$slots = $database->getAvailableExpansionTraining();
 
-	if ($slots['settlers']+$slots['chiefs']>0) { ?>
+	if ($slots['settlers'] + $slots['chiefs'] > 0) { ?>
 
 <form method="POST" name="snd" action="build.php">
 <input type="hidden" name="id" value="<?php echo $id; ?>" />
@@ -43,9 +27,9 @@
 </thead>
 <tbody>
 <?php
-		for ($i=($session->tribe-1)*10+9;$i<=($session->tribe*10);$i++) {
-			if ($slots['settlers']>0 && $i%10==0 || $slots['chiefs']>0 && $i%10==9 && $session->tribe != 4) {
-			       $maxunit = MIN($technology->maxUnit($i),($i%10==0?$slots['settlers']:$slots['chiefs']));
+		for ($i = ($session->tribe - 1) * 10 + 9; $i <= $session->tribe * 10; $i++) {
+			if ($slots['settlers'] > 0 && $i % 10 == 0 || $slots['chiefs'] > 0 && $i % 10 == 9 && $session->tribe != 4) {
+			       $maxunit = MIN($technology->maxUnit($i), ($i % 10 == 0 ? $slots['settlers'] : $slots['chiefs']));
 
 echo "<tr><td class=\"desc\">
 <div class=\"tit\">
@@ -73,8 +57,8 @@ echo "<td class=\"val\"><input type=\"text\" class=\"text\" name=\"t".$i."\" val
 </p>
 </form>
 <?php
-	} else {
-		echo '<div class="c">'.PALACE_TRAIN_DESC.'</div>';
-	}
+	} 
+	else echo '<div class="c">'.PALACE_TRAIN_DESC.'</div>';
+	
     include ("26_progress.tpl");
 ?>

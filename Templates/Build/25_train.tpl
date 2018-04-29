@@ -27,9 +27,9 @@
 </thead>
 <tbody>
 <?php
-		for ($i=($session->tribe-1)*10+9;$i<=($session->tribe*10);$i++) {
-			if ($slots['settlers']>0 && $i%10==0 || $slots['chiefs']>0 && $i%10==9 && $session->tribe != 4) {
-			       $maxunit = MIN($technology->maxUnit($i),($i%10==0?$slots['settlers']:$slots['chiefs']));
+		for ($i = ($session->tribe - 1) * 10 + 9; $i <= ($session->tribe * 10); $i++) {
+			if ($slots['settlers'] > 0 && $i % 10 == 0 || $slots['chiefs'] > 0 && $i % 10 == 9 && $session->tribe != 4) {
+			       $maxunit = MIN($technology->maxUnit($i), ($i % 10 == 0 ? $slots['settlers'] : $slots['chiefs']));
 
 echo "<tr><td class=\"desc\">
 <div class=\"tit\">
@@ -56,8 +56,8 @@ echo "<td class=\"val\"><input type=\"text\" class=\"text\" name=\"t".$i."\" val
 </p>
 </form>
 <?php
-	} else {
-		echo '<div class="c">'.RESIDENCE_TRAIN_DESC.'</div>';
-	}
+	} 
+	else echo '<div class="c">'.RESIDENCE_TRAIN_DESC.'</div>';
+
     include ("25_progress.tpl");
 ?>
