@@ -1453,14 +1453,14 @@ class Automation {
                     $toF = $database->getOasisV($data['to']);
                     $conqureby=$toF['conqured'];
                     //get defence units
-                    $enforDefender = array();
+                    $enforDefender = [];
                     $rom = $ger = $gal = $nat = $natar = 0;
                     $Defender = $database->getUnit($data['to'], false);
                     $enforcementarray = $database->getEnforceVillage($data['to'],0);
 
                     if(count($enforcementarray) > 0) {
                         foreach($enforcementarray as $enforce) {
-                            for($i=1;$i<=50;$i++) {
+                            for($i = 1;$i <= 50; $i++) {
                                 $enforDefender['u'.$i] += $enforce['u'.$i];
                             }
                             $enforDefender['hero'] += $enforce['hero'];
@@ -1470,7 +1470,7 @@ class Automation {
                     for($i = 1; $i <= 50; $i++){
                         if(!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
                             $Defender['u'.$i] = 0;                
-                        }                   
+                        }
                     }
                     
                     if(!isset($Defender['hero']) || empty($Defender['hero']) || $Defender['hero'] < 0) {
@@ -1681,20 +1681,16 @@ class Automation {
                     //fix by ronix
                     //MUST TO BE FIX : You need to filter these values
                     //filter_input_array($battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby));
-                    if (!isset($walllevel)) {
-                        $walllevel = 0;
-                    }
+                    if (!isset($walllevel)) $walllevel = 0;
 
                     $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $enforcementarray);
 
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
                     $herosend_att = $data['t11'];
-                    if ($herosend_att>0){
-                        $unitssend_att_check=$unitssend_att.','.$data['t11'];
-                    }else{
-                        $unitssend_att_check=$unitssend_att;
-                    }
+                   
+                    if ($herosend_att > 0) $unitssend_att_check=$unitssend_att.','.$data['t11'];      
+                    else  $unitssend_att_check=$unitssend_att;            
 
                     //Resetting the enforcement arrays
                     for($i = 1; $i <= 50; $i++) { 
@@ -1754,24 +1750,6 @@ class Automation {
                             ${'dead'.$i} = $data['t'.$i];
                         } else {
                             ${'dead'.$i} = (isset($battlepart['casualties_attacker']) && isset($battlepart['casualties_attacker'][$i]) ? $battlepart['casualties_attacker'][$i] : 0);
-                        }
-                    }
-                    //if the defender does not have spies, the attacker will not die spies.	FIXED BY Armando
-                    if(!empty($scout) && $scout){
-                        $spy_def_Detect=0;
-                        for($i=1;$i<=(50);$i++) {
-                            if($i == 4 || $i == 14 || $i == 23 || $i == 34 || $i == 44){
-                                if($Defender['u'.$i]>0) {
-                                    $spy_def_Detect=$i;
-                                    break;
-                                }
-                            }
-                        }
-                        if($spy_def_Detect==0) {
-                            $dead3=0;
-                            $dead4=0;
-                            $battlepart['casualties_attacker'][3]=0;
-                            $battlepart['casualties_attacker'][4]=0;
                         }
                     }
 
