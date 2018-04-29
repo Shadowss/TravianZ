@@ -43,7 +43,7 @@ include("menu.tpl");
     <input type="hidden" name="ft" value="m1" />
 	<input type="hidden" name="t" value="1" />
 	<p class="btn">
-		<input type="image" value="" name="s1" id="btn_reply" class="dynamic_img" src="img/x.gif" alt="answer" />
+		<button value="" name="s1" id="btn_reply" class="trav_buttons" alt="answer" /> Answer </button>
 	</p>
 </div>
 <div id="read_foot" class="msg_foot"></div>

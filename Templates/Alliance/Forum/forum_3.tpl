@@ -44,7 +44,7 @@ $show_cat = $database->ForumCat($session->alliance);
 		</tr>
 	</tbody></table>
 
-	<p class="btn"><input type="image" id="fbtn_ok" value="ok" name="s1" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
+	<p class="btn"><button id="fbtn_ok" value="ok" name="s1" class="trav_buttons" alt="OK" /> Ok </button></form></p>
 <?php }else{
 header("Location: banned.php");
 exit;

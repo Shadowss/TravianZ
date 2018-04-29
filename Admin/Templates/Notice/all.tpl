@@ -19,13 +19,13 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
 		<?php } else { ?>
 		<input class="check" type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);" />
 		<?php } ?></th>
-			<th class="buttons"><input name="del" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" value="delete" alt="delete" />
+			<th class="buttons"><button name="del" id="btn_delete" class="trav_buttons" value="delete" alt="delete" /> Delete </button>
             <?php if($session->plus) {
 			if(isset($_GET['t']) && $_GET['t'] == 5) {
-				echo "<input name=\"start\" type=\"image\" value=\"back\" alt=\"back\" id=\"btn_back\" class=\"dynamic_img\" src=\"img/x.gif\" />";
+				echo "<button name=\"start\" value=\"back\" alt=\"back\" id=\"btn_back\" class=\"trav_buttons\" /> Back </button>";
 			}
 			else {
-				echo "<input name=\"archive\" type=\"image\" value=\"Archive\" alt=\"Archive\" id=\"btn_archiv\" class=\"dynamic_img\" src=\"img/x.gif\" />";
+				echo "<button name=\"archive\" value=\"Archive\" alt=\"Archive\" id=\"btn_archiv\" class=\"trav_buttons\" /> Archive </button>";
 			}
 			}?>
             </th>

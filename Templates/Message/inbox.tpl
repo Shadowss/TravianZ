@@ -20,8 +20,8 @@
 		<?php } ?>
 	    </th>
 	    <th colspan="2" class="buttons">
-		<input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" />
-		<?php if($session->plus) { echo "<input name=\"archive\" value=\"Archive\" type=\"image\" id=\"btn_archiv\" class=\"dynamic_img\" src=\"img/x.gif\" alt=\"Archive\" />"; } ?>
+		<button name="delmsg" value="delete" id="btn_delete" class="trav_buttons" alt="delete" /> Delete </button>
+		<?php if($session->plus) { echo "<button name=\"archive\" value=\"Archive\" id=\"btn_archiv\" class=\"trav_buttons\" alt=\"Archive\" /> Archive </button>"; } ?>
 		<input name="ft" value="m3" type="hidden" />
 	    </th><th class="navi"><?php
 		if(!isset($_GET['s']) && count($message->inbox1) < 10) {

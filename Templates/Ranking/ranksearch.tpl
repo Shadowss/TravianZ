@@ -10,7 +10,7 @@ if(!isset($_GET['id'])){ $_GET['id']='1'; }
 								<span class="or">or</span>
 								<span>name<input type="text" class="text name" maxlength="30" name="name" value="<?php if(!is_numeric($search)) {echo $search; } ?>" /></span>
                                 <input type="hidden" name="ft" value="r<?php echo isset($_GET['id'])? $_GET['id'] : 1; ?>" />
-								<input type="image" value="submit" name="submit" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" />
+								<button value="submit" name="submit" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button>
 							</div>
 							</form>
 							<div class="navi">

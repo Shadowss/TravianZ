@@ -18,7 +18,7 @@ $database->updateUserField($session->uid,gpack,$_POST["custom_url"],1);
 <li>Your browser does not support Graphic Packs hosted on your computer and needs them to be online, with a path starting with '<b>http://</b>'.</li>
 </ul>			<form action="spieler.php" method="post">
 				<input type="hidden" name="s" value="4">
-				<div class="btn"><input type="image" alt="OK" src="img/x.gif" value="ok" class="dynamic_img" id="btn_ok"></div>
+				<div class="btn"><button alt="OK" value="ok" class="trav_buttons" id="btn_ok"> Ok </button></div>
 			</form>
 		</div>
 
@@ -32,7 +32,7 @@ $database->updateUserField($session->uid,gpack,$_POST["custom_url"],1);
 			<form action="spieler.php" method="post">
 				<input type="hidden" name="s" value="4">
 				<input type="hidden" name="custom_url" value="<?php echo $_GET["custom_url"]; ?>">
-				<div class="btn"><input type="image" alt="save" src="img/x.gif" value="save" class="dynamic_img" id="btn_save" name="gp_activate_button"></div>
+				<div class="btn"><button alt="save" value="save" class="trav_buttons" id="btn_save" name="gp_activate_button"> Save </button></div>
 			</form>
 		</div>
 	</div>
@@ -71,7 +71,7 @@ $database->updateUserField($session->uid,gpack,$_POST["custom_url"],1);
             </tr>
         </tbody>
     </table>
-    <p class="btn"><input type="image" alt="OK" src="img/x.gif" name="gp_selection_button" value="ok" class="dynamic_img" id="btn_ok" /></p>
+    <p class="btn"><button alt="OK" name="gp_selection_button" value="ok" class="trav_buttons" id="btn_ok" /> Ok </button></p>
     </form>
 
 

@@ -28,7 +28,7 @@ Then the activation code will be send again</div>
 			</tr>
 		</table>
 		<p class="btn">
-			<input type="image" src="img/x.gif" class="dynamic_img" id="btn_delete" alt="delete" value="delete" name="delreports" />
+			<button class="trav_buttons" id="btn_delete" alt="delete" value="delete" name="delreports" /> Delete </button>
 		</p>
 		</form>
         </div>

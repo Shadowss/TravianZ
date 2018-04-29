@@ -26,12 +26,12 @@ $wwname = $database->getWWName($vref);
 
 if($village->resarray['f'.$id] < 0){
 echo ''.WORLD_WONDER_CHANGE_NAME.'.
-			<center><br />'.WORLD_WONDER_NAME.': <input class="text" name="wwname" id="wwname" disabled="disabled" value="'.$wwname.'" maxlength="20"></center><p class="btn"><input type="image" value="" tabindex="9" name="s1" disabled="disabled" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>';
+			<center><br />'.WORLD_WONDER_NAME.': <input class="text" name="wwname" id="wwname" disabled="disabled" value="'.$wwname.'" maxlength="20"></center><p class="btn"><button value="" tabindex="9" name="s1" disabled="disabled" id="btn_ok" class="trav_buttons"  alt="OK" /> Ok </button></p>';
 } else if($village->resarray['f'.$id] > 0 and $village->resarray['f'.$id] < 11) {
-echo '<center><br />'.WORLD_WONDER_NAME.': <input class="text" name="wwname" id="wwname" value="'.$wwname.'" maxlength="20"></center><p class="btn"><input type="image" value="" tabindex="9" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>'; 
+echo '<center><br />'.WORLD_WONDER_NAME.': <input class="text" name="wwname" id="wwname" value="'.$wwname.'" maxlength="20"></center><p class="btn"><button value="" tabindex="9" name="s1" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button></p>'; 
 } else if ($village->resarray['f'.$id] > 10){
 echo ''.WORLD_WONDER_NOTCHANGE_NAME.'.
-			<center><br />'.WORLD_WONDER_NAME.': <input class="text" name="wwname" id="wwname" disabled="disabled" value="'.$wwname.'" maxlength="20"></center><p class="btn"><input type="image" value="" tabindex="9" name="s1" disabled="disabled" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>';
+			<center><br />'.WORLD_WONDER_NAME.': <input class="text" name="wwname" id="wwname" disabled="disabled" value="'.$wwname.'" maxlength="20"></center><p class="btn"><button value="" tabindex="9" name="s1" disabled="disabled" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button></p>';
 }?>
     </form>
 	<?php
