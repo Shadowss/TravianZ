@@ -7695,7 +7695,7 @@ References: User ID/Message ID, Mode
         return mysqli_query($this->dblink,$q);
     }
 
-    function getPrisoners($wid,$mode=0, $use_cache = true) {
+    function getPrisoners($wid,$mode = 0, $use_cache = true) {
         $array_passed = is_array($wid);
         $mode = (int) $mode;
 
@@ -7751,12 +7751,12 @@ References: User ID/Message ID, Mode
             self::$prisonersCache[$wid[0].$mode] = (count($result) ? [$result] : []);
         } else {
             if ($result && count($result)) {
-                if (!isset(self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ])) {
-                    self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ] = [];
+                if (!isset(self::$prisonersCache[$record[($mode ? 'from' : 'wref')].$mode])) {
+                    self::$prisonersCache[$record[($mode ? 'from' : 'wref' )].$mode] = [];
                 }
 
-                foreach ( $result as $record ) {
-                    self::$prisonersCache[ $record[ ( $mode ? 'from' : 'wref' ) ] . $mode ][] = $record;
+                foreach ($result as $record) {
+                    self::$prisonersCache[$record[($mode ? 'from' : 'wref')].$mode][] = $record;
                 }
             }
 

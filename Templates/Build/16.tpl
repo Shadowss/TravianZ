@@ -222,6 +222,7 @@ if(count($database->getPrisoners3($village->wid)) > 0) {
             echo "<h4>".PRISONERS."</h4>";
             foreach($database->getPrisoners3($village->wid) as $prisoners) {
                         $colspan = 10+$prisoners['t11'];
+                        $colspan2 = $colspan + 1;
                   echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
 <a href=\"karte.php?d=".$prisoners['wref']."&c=".$generator->getMapCheck($prisoners['wref'])."\">".$database->getVillageField($prisoners['wref'],"name")."</a></td>
 <td colspan=\"$colspan\">";
@@ -251,15 +252,15 @@ echo $prisoners['t'.$i]."</td>";
                                         echo "<td>".$prisoners['t11']."</td>";
                                  }
 echo "</tr></tbody>
-<tbody class=\"infos\"><tr><th>".UPKEEP."</th><td colspan=\"$colspan\"><div class='sup'>".$technology->getUpkeep($prisoners,$tribe,0,1)."<img class=\"r4\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" />".PER_HR."</div><div class='sback'><a href='a2b.php?delprisoners=".$prisoners['id']."'>".KILL."</a></div></td></tr>";
+<tbody class=\"infos\"><tr><th>".UPKEEP."</th><td colspan=\"$colspan2\"><div class='sup'>".$technology->getUpkeep($prisoners,$tribe,0,1)."<img class=\"r4\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" />".PER_HR."</div><div class='sback'><a href='a2b.php?delprisoners=".$prisoners['id']."'>".KILL."</a></div></td></tr>";
 echo "</tbody></table>";
 }
 }
 if(count($database->getPrisoners($village->wid)) > 0) {
             echo "<h4>".PRISONERS."</h4>";
             foreach($database->getPrisoners($village->wid) as $prisoners) {
-                        $colspan = 10+$prisoners['t11'];
-                        $colspan2 = 11+$prisoners['t11'];
+                        $colspan = 10 + $prisoners['t11'];
+                        $colspan2 = $colspan + 1;
                   echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
 <a href=\"karte.php?d=".$prisoners['from']."&c=".$generator->getMapCheck($prisoners['from'])."\">".$database->getVillageField($prisoners['from'],"name")."</a></td>
 <td colspan=\"$colspan\">";
@@ -289,7 +290,7 @@ echo $prisoners['t'.$i]."</td>";
                                         echo "<td>".$prisoners['t11']."</td>";
                                  }
 echo "</tr></tbody>
-<tbody class=\"infos\"><tr><td colspan=\"11\"><div class='sup'><img class=\"r6\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" /></div><div class='sback'><a href='a2b.php?delprisoners=".$prisoners['id']."'>".SEND_BACK."</a></div></td></tr>";
+<tbody class=\"infos\"><tr><td colspan=\"$colspan2\"><div class='sup'><img class=\"r6\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" /></div><div class='sback'><a href='a2b.php?delprisoners=".$prisoners['id']."'>".SEND_BACK."</a></div></td></tr>";
 echo "</tbody></table>";
 }
 }
