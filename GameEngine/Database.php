@@ -1562,27 +1562,19 @@ class MYSQLi_DB implements IDbConnection {
 	    return true;
 	}
 
-	function removeOases($wref) {
-	    list($wref) = $this->escape_input((int) $wref);
-
-		$q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE wref = ".$wref;
-		return mysqli_query($this->dblink,$q);
-	}
-	
 	/**
-	 * Remove all oasis of a specified village
-	 * 
-	 * @param int $vid The village ID of the oasis owner
+	 * Remove all oasis of a specified village if the mode is 1, if it's 0, then it'll remove only the selected oasis
+	 *
+	 * @param int $vid The village ID (mode = 1)/oasis ID (mode = 0) of the oasis owner
 	 * @return bool Returns true if the query was successful, false otherwise
 	 */
 	
-	function removeOasesByVid($vid) {
-	    list($vid) = $this->escape_input((int) $vid);
-	    
-	    $q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE conqured = ".$vid;
-	    return mysqli_query($this->dblink, $q);
-	}
+	function removeOases($wref, $mode = 0) {
+	    list($wref) = $this->escape_input((int) $wref);
 
+		$q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE ".(!$mode ? "wref = $wref" : "conqured = $wref");
+		return mysqli_query($this->dblink,$q);
+	}
 
 	/***************************
 	Function to retrieve type of village via ID
@@ -1592,8 +1584,6 @@ class MYSQLi_DB implements IDbConnection {
         // retrieve this value from the full village data cache
         return $this->getVillageByWorldID($wref, $use_cache)['fieldtype'];
 	}
-
-
 
 	/*****************************************
 	Function to retrieve if is ocuped via ID
@@ -3953,16 +3943,30 @@ class MYSQLi_DB implements IDbConnection {
         return mysqli_query($this->dblink,$q);
     }
 
-    function clearExpansionSlot($id) {
-        $id = (int) $id;
+    function clearExpansionSlot($id, $mode = 0) {
+        list($id) = $this->escape_input((int) $id);
 
-        $pairs = [];
-        for($i = 1; $i <= 3; $i++) {
-            $pairs[] = 'exp'.$i.' = 0';
+        if(!$mode){
+            $pairs = [];
+            for($i = 1; $i <= 3; $i++) {
+                $pairs[] = 'exp'.$i.' = 0';
+            }
+            
+            $q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(',', $pairs)." WHERE wref = " . $id;
+        }else{
+            $q = "
+                UPDATE
+                    ".TB_PREFIX."vdata
+                SET
+                    exp1 = IF(exp1 = $id, 0, exp1),
+                    exp2 = IF(exp2 = $id, 0, exp2),
+                    exp3 = IF(exp3 = $id, 0, exp3)
+                WHERE
+                    exp1 = $id OR
+                    exp2 = $id OR
+                    exp3 = $id";
         }
-
-        $q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(',', $pairs)." WHERE wref = " . $id;
-        mysqli_query($this->dblink,$q);
+        mysqli_query($this->dblink, $q);
     }
 
     // no need to cache this method

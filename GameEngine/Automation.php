@@ -354,104 +354,11 @@ class Automation {
         if(count($needDelete) > 0) {
             foreach($needDelete as $need) {
                 $needVillage = $database->getVillagesID($need['uid']);
-                foreach($needVillage as $village) {
-                    $village = (int) $village;
+                
+                //Delete all villages
+                foreach($needVillage as $village) $this->DelVillage((int) $village);
 
-                    $q = "DELETE FROM ".TB_PREFIX."abdata where vref = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."bdata where wid = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."enforcement where `from` = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."fdata where vref = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."market where vref = ".$village;
-                    $database->query($q);
-
-                    $q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, loyalty = 100, owner = 2, name = 'Unoccupied Oasis' where wref = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."research where vref = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."tdata where vref = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."training where vref =".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."units where vref =".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."farmlist where wref =".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = ".$village;
-                    $database->query($q);
-
-                    $q = "DELETE FROM ".TB_PREFIX."vdata where wref = ".$village;
-                    $database->query($q);
-
-                    $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = ".$village;
-                    $database->query($q);
-                    $getmovement = $database->getMovement(3,$village,1);
-
-                    foreach($getmovement as $movedata) {
-                        $time = microtime(true);
-                        $time2 = $time - $movedata['starttime'];
-                        $database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
-                        $database->setMovementProc($movedata['moveid']);
-                    }
-
-                    $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $village AND sort_type=4) OR (`from` = $village AND sort_type=3))";
-                    $database->query($q);
-                    $getprisoners = $database->getPrisoners($village);
-
-                    foreach($getprisoners as $pris) {
-                        $troops = 0;
-                        for($i=1;$i<12;$i++){
-                            $troops += $pris['t'.$i];
-                        }
-                        $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-                        $database->deletePrisoners($pris['id']);
-                    }
-
-                    $getprisoners = $database->getPrisoners3($village);
-
-                    foreach($getprisoners as $pris) {
-                        $troops = 0;
-                        for($i=1;$i<12;$i++){
-                            $troops += $pris['t'.$i];
-                        }
-                        $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
-                        $database->deletePrisoners($pris['id']);
-                    }
-
-                    $enforcement = $database->getEnforceVillage($village,0);
-
-                    foreach($enforcement as $enforce) {
-                        $time = microtime(true);
-                        $targetOwner = $database->getVillageField($enforce['from'], "owner");
-                        $targettribe = $database->getUserField($targetOwner, "tribe", 0);
-                        $time2 = $units->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $targetOwner, $targettribe, $enforce, 1);
-                        $start = 10*($targettribe-1);
-                        for($i=1;$i<11;$i++){
-                            $unit = $start + $i;
-                            $post['t'.$i] = (isset($enforce['u'.$unit]) ? $enforce['u'.$unit] : 0);
-                        }
-                        $post['t11'] = $enforce['hero'];
-                        $reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
-                        $database->addMovement(4,$enforce['vref'],$enforce['from'],$reference,$time,$time+$time2);
-                        $q = "DELETE FROM ".TB_PREFIX."enforcement where id = ".(int) $enforce['id'];
-                        $database->query($q);
-                    }
-                }
-
-                for($i=0;$i<20;$i++){
+                for($i = 0;$i < 20; $i++){
                     $q = "SELECT id FROM ".TB_PREFIX."users where friend".$i." = ".(int) $need['uid']." or friend".$i."wait = ".(int) $need['uid']."";
                     $array = $database->query_return($q);
                     foreach($array as $friend){
@@ -2336,16 +2243,12 @@ class Automation {
 
                     //chiefing village
                     //there are senators
-                    if(($data['t9']- $dead9- $traped9) > 0 && $isoasis == 0){
-                        if ($type=='3') {
-
+                    if(($data['t9'] - $dead9 - $traped9) > 0 && $isoasis == 0){
+                        if ($type == 3) {
                             $palacelevel = $database->getResourceLevel($from['wref']);
-                            for($i=1;$i<=40;$i++) {
-                                if($palacelevel['f'.$i.'t'] == 26){
-                                    $plevel = $i;
-                                }else if($palacelevel['f'.$i.'t'] == 25){
-                                    $plevel = $i;
-                                }
+                            for($i = 1; $i <= 40; $i++) {
+                                if($palacelevel['f'.$i.'t'] == 26) $plevel = $i;      
+                                elseif($palacelevel['f'.$i.'t'] == 25) $plevel = $i;
                             }
                             if($palacelevel['f'.$plevel.'t'] == 26){
                                 if($palacelevel['f'.$plevel] < 10){
@@ -2410,28 +2313,23 @@ class Automation {
                                         if(!isset($nochiefing)){
                                             //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
                                             // note: at this point, we can use cache, since we've cleared it above
-                                            if($this->getTypeLevel(35,$data['from']) == 0){
-                                                for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
-                                                    if (!isset($rand)) {
-                                                        $rand = 0;
-                                                    }
+                                            if($this->getTypeLevel(35, $data['from']) == 0){
+                                                for ($i = 0; $i < ($data['t9'] - $dead9 - $traped9); $i++){
+                                                    if (!isset($rand)) $rand = 0;
 
-                                                    if($owntribe == 1){
-                                                        $rand += rand(20,30);
-                                                    }else{
-                                                        $rand += rand(20,25);
-                                                    }
+                                                    if($owntribe == 1) $rand += rand(20, 30);                                                       
+                                                    else $rand += rand(20, 25);
                                                 }
                                             }else{
-                                                for ($i=0; $i<($data['t9']-$dead9-$traped9); $i++){
-                                                    $rand+=rand(5,15);
+                                                for ($i = 0; $i < ($data['t9'] - $dead9 - $traped9); $i++){
+                                                    $rand += rand(5, 15);
                                                 }
                                             }
 
                                             // loyalty is more than 0
-                                            if (($toF['loyalty']-$rand) > 0) {
+                                            if (($toF['loyalty'] - $rand) > 0) {
                                                 $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty']-$rand)."</b>.";
-                                                $database->setVillageField($data['to'],'loyalty',($toF['loyalty']-$rand));
+                                                $database->setVillageField($data['to'], 'loyalty', ($toF['loyalty'] - $rand));
                                             } else if (!$village_destroyed) {
                                                 // you took over the village
                                                 $villname = addslashes($database->getVillageField($data['to'],"name"));
@@ -2442,7 +2340,6 @@ class Automation {
                                                 if ($artifact['vref'] == $data['to']){
                                                     $database->claimArtefact($data['to'], $data['to'], $database->getVillageField($data['from'], "owner"));
                                                 }
-
 
                                                 $database->setVillageFields(
                                                     $data['to'],
@@ -2462,6 +2359,10 @@ class Automation {
 
                                                 //delete reinforcement
                                                 $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = ".(int) $data['to'];
+                                                $database->query($q);
+                                                
+                                                //delete trade routes
+                                                $q = "DELETE FROM ".TB_PREFIX."route where wid = ".(int) $data['to']." OR `from` =".(int) $data['to'];
                                                 $database->query($q);
 
                                                 //no units can stay in the village itself
@@ -2521,6 +2422,9 @@ class Automation {
                                                 $newLevels_fieldNames[] = "f40t";
                                                 $newLevels_fieldValues[] = 0;
 
+                                                //clear expansion slot in the village which founded the conquered one
+                                                $database->clearExpansionSlot($data['to'], 1);
+
                                                 $expArray = $database->getVillageFields($data['from'], 'exp1, exp2, exp3');
                                                 $exp1 = $expArray['exp1'];
                                                 $exp2 = $expArray['exp2'];
@@ -2539,7 +2443,7 @@ class Automation {
                                                     $value = $data['to'];
                                                 }
 
-                                                $database->setVillageField($data['from'],$exp,$value);
+                                                $database->setVillageField($data['from'], $exp, $value);
 
                                                 //remove oasis related to village
                                                 $units->returnTroops($data['to'], 1);
@@ -2548,8 +2452,7 @@ class Automation {
 												//Remove trade routes related to village
 												$database->deleteTradeRoutesByVillage($data['to']);
 												
-                                                // update data in the database
-                                                $database->clearExpansionSlot($data['to']);
+                                                // update data in the database                                            
                                                 $database->setVillageLevel($data['to'], $newLevels_fieldNames, $newLevels_fieldValues);
                                             }
                                         }
@@ -3002,7 +2905,7 @@ class Automation {
         }
     }
 
-    function DelVillage($wref, $mode=0){
+    function DelVillage($wref){
         global $database, $units;
         $database->clearExpansionSlot($wref);
         $wref = (int) $wref;
@@ -3030,7 +2933,7 @@ class Automation {
         $database->query($q);
         $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $wref AND sort_type=4) OR (`from` = $wref AND sort_type=3))";
         $database->query($q);
-        $database->removeOasesByVid($wref);
+        $database->removeOases($wref, 1);
         
         $getmovement = $database->getMovement(3,$wref,1);
 
@@ -3066,40 +2969,26 @@ class Automation {
         $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
         $database->query($q);
 
-        if (mysqli_affected_rows($database->dblink)>0) {
+        if (mysqli_affected_rows($database->dblink) > 0) {
             $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
             $database->query($q);
 
             // clear expansion slots, if this village is an expansion of any other village
-            $q = "
-                UPDATE
-                    ".TB_PREFIX."vdata
-                SET
-                    exp1 = IF(exp1 = $wref, 0, exp1),
-                    exp2 = IF(exp2 = $wref, 0, exp2),
-                    exp3 = IF(exp3 = $wref, 0, exp3)
-                WHERE
-                    exp1 = $wref OR
-                    exp2 = $wref OR
-                    exp3 = $wref";
-            $database->query($q);
+            $database->clearExpansionSlot($wref, 1);
 
             $getprisoners = $database->getPrisoners($wref);
             foreach($getprisoners as $pris) {
                 $troops = 0;
-                for($i=1;$i<12;$i++){
-                    $troops += $pris['t'.$i];
-                }
-                $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+                for($i = 1; $i < 12; $i++) $troops += $pris['t'.$i];
+                $database->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
                 $database->deletePrisoners($pris['id']);
             }
+            
             $getprisoners = $database->getPrisoners3($wref);
             foreach($getprisoners as $pris) {
                 $troops = 0;
-                for($i=1;$i<12;$i++){
-                    $troops += $pris['t'.$i];
-                }
-                $database->modifyUnit($pris['wref'],array("99o"),array($troops),array(0));
+                for($i = 1;$i < 12; $i++) $troops += $pris['t'.$i];
+                $database->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
                 $database->deletePrisoners($pris['id']);
             }
         }
