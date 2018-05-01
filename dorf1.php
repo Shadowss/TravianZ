@@ -24,9 +24,8 @@ if(isset($_GET['newdid'])) {
     $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$database->escape((int) $_GET['newdid'])." WHERE id=".$session->uid);  
 	header("Location: ".$_SERVER['PHP_SELF']);
 	exit;
-} else {
-	$building->procBuild($_GET);
-}
+} 
+else $building->procBuild($_GET);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -81,9 +80,7 @@ include("Templates/movement.tpl");
 include("Templates/production.tpl");
 include("Templates/troops.tpl");
 
-if($building->NewBuilding) {
-	include("Templates/Building.tpl");
-}
+if($building->NewBuilding) include("Templates/Building.tpl");
 ?>
 </div>
 <br /><br /><br /><br /><div id="side_info">

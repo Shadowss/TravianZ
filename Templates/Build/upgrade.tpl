@@ -1,7 +1,7 @@
 <?php
 
 $bid = $village->resarray['f'.$id.'t'];
-$bindicate = $building->canBuild($id,$bid);
+$bindicate = $building->canBuild($id, $bid);
 if($bindicate == 1) {
 	echo "<p><span class=\"none\">".MAX_LEVEL."</span></p>";
 } else if($bindicate == 10) {

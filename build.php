@@ -28,9 +28,9 @@ if (isset($_GET['id']) && ($_GET['id'] < 1 || $_GET['id'] > 40 && ($_GET['id'] =
 }
 
 $pagestart = $generator->pageLoadTimeStart();
-$alliance->procAlliForm( $_POST );
-$technology->procTech( $_POST );
-$market->procMarket( $_POST );
+$alliance->procAlliForm($_POST);
+$technology->procTech($_POST);
+$market->procMarket($_POST);
 
 if ( isset( $_GET['gid'] ) ) {
     $_GET['id'] = strval( $building->getTypeField( preg_replace( "/[^a-zA-Z0-9_-]/", "", $_GET['gid'] ) ) );
@@ -67,10 +67,8 @@ if ( isset( $_GET['id'] ) ) {
     }
 }
 
-if ($session->goldclub == 1 && count($session->villages) > 1 ) {
-    if (isset($_POST['routeid'])) {
-        $routeid = $_POST['routeid'];
-    }
+if ($session->goldclub == 1 && count($session->villages) > 1) {
+    if (isset($_POST['routeid'])) $routeid = $_POST['routeid'];
 
     if (isset($_POST['action']) && $_POST['action'] == 'addRoute') {
         if ($session->access != BANNED) {
