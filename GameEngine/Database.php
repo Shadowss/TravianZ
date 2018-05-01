@@ -1808,7 +1808,7 @@ class MYSQLi_DB implements IDbConnection {
             case 6: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE loyalty < 100";
                     break;
                     
-            // villages without starvation data, Support, Natars, Taskmaster, Multihunter are all excluded
+            // villages without starvation data, Support, Nature, Natars, Taskmaster, Multihunter are all excluded
             case 7: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE starv = 0 and owner > 5";
                     break;
         }

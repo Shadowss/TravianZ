@@ -394,20 +394,28 @@ class Units {
                 }
 
                 if(isset($post['ctar1'])) {
-                    if($rivalsGreatConfusion['totals'] > 0) {
-                        if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                            $post['ctar1'] = 0;
+                    //Is the Brewery built?
+                    if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+                        if($rivalsGreatConfusion['totals'] > 0) {
+                            if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
+                                $post['ctar1'] = 0;
+                            }
                         }
                     }
+                    else $post['ctar1'] = 0;               
                 } 
                 else $post['ctar1'] = 0;
                 
                 if(isset($post['ctar2']) && $post['ctar2'] > 0) {
-                    if($rivalsGreatConfusion['totals'] > 0) {
-                        if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                            $post['ctar2'] = 99;
+                    //Is the Brewery built?
+                    if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+                        if($rivalsGreatConfusion['totals'] > 0) {
+                            if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
+                                $post['ctar2'] = 99;
+                            }
                         }
                     }
+                    else $post['ctar2'] = 99;
                 }
                 else $post['ctar2'] = 0;
                 

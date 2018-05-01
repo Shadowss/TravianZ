@@ -2185,33 +2185,21 @@ class Automation {
                     if(($data['t9'] - $dead9 - $traped9) > 0 && $isoasis == 0){
                         if ($type == 3) {
                             $palacelevel = $database->getResourceLevel($from['wref']);
+                            
                             for($i = 1; $i <= 40; $i++) {
                                 if($palacelevel['f'.$i.'t'] == 26) $plevel = $i;      
                                 elseif($palacelevel['f'.$i.'t'] == 25) $plevel = $i;
                             }
-                            if($palacelevel['f'.$plevel.'t'] == 26){
-                                if($palacelevel['f'.$plevel] < 10){
-                                    $canconquer = 0;
-                                }
-                                elseif($palacelevel['f'.$plevel] < 15){
-                                    $canconquer = 1;
-                                }
-                                elseif($palacelevel['f'.$plevel] < 20){
-                                    $canconquer = 2;
-                                }
-                                else{
-                                    $canconquer = 3;
-                                }
+                            
+                            if($palacelevel['f'.$plevel.'t'] == 26){                            
+                                if($palacelevel['f'.$plevel] < 10) $canconquer = 0;
+                                elseif($palacelevel['f'.$plevel] < 15) $canconquer = 1;
+                                elseif($palacelevel['f'.$plevel] < 20) $canconquer = 2;
+                                else $canconquer = 3;                              
                             }else if($palacelevel['f'.$plevel.'t'] == 25){
-                                if($palacelevel['f'.$plevel] < 10){
-                                    $canconquer = 0;
-                                }
-                                elseif($palacelevel['f'.$plevel] < 20){
-                                    $canconquer = 1;
-                                }
-                                else{
-                                    $canconquer = 2;
-                                }
+                                if($palacelevel['f'.$plevel] < 10) $canconquer = 0;
+                                elseif($palacelevel['f'.$plevel] < 20) $canconquer = 1;
+                                else $canconquer = 2;
                             }
 
                             $expArray = $database->getVillageFields($from['wref'], 'exp1, exp2, exp3');
@@ -2219,22 +2207,14 @@ class Automation {
                             $exp2 = $expArray['exp2'];
                             $exp3 = $expArray['exp3'];
 
-                            if($exp1 == 0){
-                                $villexp = 0;
-                            }
-                            elseif($exp2 == 0){
-                                $villexp = 1;
-                            }
-                            elseif($exp3 == 0){
-                                $villexp = 2;
-                            }
-                            else{
-                                $villexp = 3;
-                            }
+                            if($exp1 == 0) $villexp = 0;
+                            elseif($exp2 == 0) $villexp = 1;               
+                            elseif($exp3 == 0) $villexp = 2;                       
+                            else $villexp = 3;
+                        
                             $mode = CP;
                             $cp_mode = $GLOBALS['cp'.$mode];
-                            $need_cps = $cp_mode[count($varray1)+1];
-
+                            $need_cps = $cp_mode[count($varray1) + 1];
                             $user_cps = $database->getUserArray($from['owner'], 1)['cp'];
 
                             //check for last village or capital
@@ -2252,23 +2232,33 @@ class Automation {
                                         if(!isset($nochiefing)){
                                             //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
                                             // note: at this point, we can use cache, since we've cleared it above
-                                            if($this->getTypeLevel(35, $data['from']) == 0){
-                                                for ($i = 0; $i < ($data['t9'] - $dead9 - $traped9); $i++){
-                                                    if (!isset($rand)) $rand = 0;
-
-                                                    if($owntribe == 1) $rand += rand(20, 30);                                                       
-                                                    else $rand += rand(20, 25);
-                                                }
-                                            }else{
-                                                for ($i = 0; $i < ($data['t9'] - $dead9 - $traped9); $i++){
-                                                    $rand += rand(5, 15);
-                                                }
-                                            }
+                                            $time = time();
+                                            $reducedLoyaltyTotal = $reducedLoyalty = 0;
+                                            for ($i = 0; $i < ($data['t9'] - $dead9 - $traped9); $i++){
+                                                
+                                                //Random factor, which depends on the attacking tribe
+                                                if($owntribe == 1) $reducedLoyalty = rand(20, 30);
+                                                else $reducedLoyalty = rand(20, 25);
+                                                
+                                                //If a Big Party is active in the attacking village
+                                                if($from['celebration'] > $time && $from['type'] == 2) $reducedLoyalty += 5;
+                                                
+                                                //If a Big Party is active in the target village
+                                                if($to['celebration'] > $time && $to['type'] == 2) $reducedLoyalty -= 5;
+                                                
+                                                //Moral bonus
+                                                $reducedLoyalty /= $battlepart['moralBonus'];
+                                                
+                                                //If the brewery is built (Teutons only)
+                                                if($owntribe == 2 && $this->getTypeLevel(35, $data['from']) > 0) $reducedLoyalty /= 2;
+                                                
+                                                $reducedLoyaltyTotal += $reducedLoyalty;
+                                            }                                            
 
                                             // loyalty is more than 0
-                                            if (($toF['loyalty'] - $rand) > 0) {
-                                                $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty']-$rand)."</b>.";
-                                                $database->setVillageField($data['to'], 'loyalty', ($toF['loyalty'] - $rand));
+                                            if (($toF['loyalty'] - $reducedLoyaltyTotal) > 0) {
+                                                $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty'] - $reducedLoyaltyTotal)."</b>.";
+                                                $database->setVillageField($data['to'], 'loyalty', ($toF['loyalty'] - $reducedLoyaltyTotal));
                                             } else if (!$village_destroyed) {
                                                 // you took over the village
                                                 $villname = addslashes($database->getVillageField($data['to'],"name"));
@@ -3991,7 +3981,7 @@ class Automation {
             $id = $vil['wref'];
             $type = $vil['type'];
             $user = $vil['owner'];
-            if($type == 1){$cp = 500;}else if($type == 2){$cp = 2000;}
+            $cp = ($type == 1) ? 500 : 2000;           
             $database->clearCel($id);
             $database->setCelCp($user,$cp);
         }
@@ -4017,13 +4007,11 @@ class Automation {
                 $type = $database->getFieldType($vil['vref'],$vil['buildnumber']);
                 $level = $database->getFieldLevel($vil['vref'],$vil['buildnumber']);
 
-                if ($level < 0) {
-                    $level = 0;
-                }
+                if ($level < 0) $level = 0;
 
                 $buildarray = $GLOBALS["bid".$type];
 
-                if ($type==10 || $type==38) {
+                if ($type == 10 || $type == 38) {
                     $database->query("
                         UPDATE ".TB_PREFIX."vdata
                             SET
@@ -4032,7 +4020,7 @@ class Automation {
                                 wref=".(int) $vil['vref']);
                 }
 
-                if ($type==11 || $type==39) {
+                if ($type == 11 || $type == 39) {
                     $database->query("
                         UPDATE ".TB_PREFIX."vdata
                             SET
@@ -4041,23 +4029,23 @@ class Automation {
                                 wref=".(int) $vil['vref']);
                 }
 
-                if ($level==1) { $clear=",f".$vil['buildnumber']."t=0"; } else { $clear=""; }
+                if ($level == 1) $clear = ",f".$vil['buildnumber']."t=0";
+                else $clear = "";
 
-                if ($village->natar==1 && $type==40) $clear=""; //fix by ronix
+                if ($village->natar == 1 && $type == 40) $clear=""; //fix by ronix
 
-                $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".(($level-1 >= 0) ? $level-1 : 0).$clear." WHERE vref=".(int) $vil['vref'];
+                $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".(($level - 1 >= 0) ? $level - 1 : 0).$clear." WHERE vref=".(int) $vil['vref'];
                 $database->query($q);
 
-                $pop = $this->getPop($type,$level-1);
-                $database->modifyPop($vil['vref'],$pop[0],1);
-                $this->procClimbers($database->getVillageField($vil['vref'],'owner'));
+                $pop = $this->getPop($type, $level - 1);
+                $database->modifyPop($vil['vref'], $pop[0], 1);
+                $this->procClimbers($database->getVillageField($vil['vref'], 'owner'));
                 $database->delDemolition($vil['vref'], true);
 
-                if ($type==18){
-                    Automation::updateMax($database->getVillageField($vil['vref'],'owner'));
-                }
+                if ($type == 18) Automation::updateMax($database->getVillageField($vil['vref'], 'owner'));
             }
         }
+        
         if(file_exists("GameEngine/Prevention/demolition.txt")) {
             unlink("GameEngine/Prevention/demolition.txt");
         }
@@ -4490,11 +4478,11 @@ class Automation {
  
             // counting
             $timedif = $time-$starv['starvupdate'];
-            $cropProd = $database->getCropProdstarv($starv['wref'])-$starv['starv'];
+            $cropProd = $database->getCropProdstarv($starv['wref']) - $starv['starv'];
             if($cropProd < 0)
             {
-                $starvsec = (abs($cropProd)/3600);
-                $difcrop = ($timedif*$starvsec); //crop eat up over time
+                $starvsec = (abs($cropProd) / 3600);
+                $difcrop = ($timedif * $starvsec); //crop eat up over time
                 $newcrop = 0;
                 $oldcrop = $database->getVillageField($starv['wref'], 'crop');
                 if ($oldcrop > 100) //if the grain is then tries to send all
@@ -4508,7 +4496,7 @@ class Automation {
                     }
                 }
 
-                if($difcrop > 0)
+                if($difcrop > 0 && $oldcrop <= 0)
                 {
                     $tribe = $database->getUserField(($type == 2) ? $starv['owner'] : $database->getVillageField($starvingTroops['from'], "owner"), "tribe", 0);
                     $start = ($special = in_array($type, [1, 3])) ? 1 : ($tribe - 1) * 10 + 1;
