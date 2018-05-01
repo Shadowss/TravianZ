@@ -575,8 +575,16 @@ input#btn_search {width:97px; background-image: url(b/search.gif);}
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
-    cursor: help;
+    width: 12px;
+    height: 12px;
+    line-height: 13px;
+    border: 1px solid #dae0e4;
+    border-radius: 2px;
+    text-align: center;
+    font-style: normal;
+    color: #90a4ae;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 .tooltip .classic {
@@ -590,13 +598,14 @@ input#btn_search {width:97px; background-image: url(b/search.gif);}
     padding: 10px;
     position: absolute;
     z-index: 99;
-    bottom: 120%;
+    bottom: 150%;
     left: 50%;
     margin-left: -40px;
+    font-weight: normal;
     
     /* Fade in tooltip - takes 1 second to go from 0% to 100% opac: */
     opacity: 0;
-    transition: opacity 1s;
+    transition: opacity 0.5s;
 }
 
 .tooltip .classic::after {
