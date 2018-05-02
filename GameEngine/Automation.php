@@ -295,51 +295,44 @@ class Automation {
         return round($dist, 1);
     }
 
-    public function getTypeLevel($tid,$vid) {
-        global $village,$database;
-        $keyholder = array();
+    public function getTypeLevel($tid, $vid) {
+        global $village, $database;
+        
+        $keyholder = [];
 
         $resourcearray = $database->getResourceLevel($vid);
-
-        foreach(array_keys($resourcearray,$tid) as $key) {
+        foreach(array_keys($resourcearray, $tid) as $key) {
             if(strpos($key,'t')) {
                 $key = preg_replace("/[^0-9]/", '', $key);
                 array_push($keyholder, $key);
             }
         }
+        
         $element = count($keyholder);
         if($element >= 2) {
             if($tid <= 4) {
                 $temparray = array();
-                for($i=0;$i<=$element-1;$i++) {
+                for($i = 0; $i <= $element - 1; $i++) {
                     array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
                 }
                 foreach ($temparray as $key => $val) {
-                    if ($val == max($temparray))
-                        $target = $key;
+                    if ($val == max($temparray)) $target = $key;                        
                 }
             }
             else {
                 $target = 0;
-                for($i=1;$i<=$element-1;$i++) {
+                for($i = 1; $i <= $element - 1; $i++) {
                     if($resourcearray['f'.$keyholder[$i]] > $resourcearray['f'.$keyholder[$target]]) {
                         $target = $i;
                     }
                 }
             }
         }
-        else if($element == 1) {
-            $target = 0;
-        }
-        else {
-            return 0;
-        }
-        if($keyholder[$target] != "") {
-            return $resourcearray['f'.$keyholder[$target]];
-        }
-        else {
-            return 0;
-        }
+        else if($element == 1) $target = 0;
+        else return 0;
+
+        if(!empty($keyholder[$target])) return $resourcearray['f'.$keyholder[$target]];
+        else return 0;
     }
 
     private function clearDeleting() {
@@ -598,17 +591,8 @@ class Automation {
                 $dbIdsToDelete[] = (int) $indi['id'];
             }
 
-            $crop = $database->getCropProdstarv($indi['wid']);
-            $unitarrays = $this->getAllUnits($indi['wid']);
-            $upkeep = $villageData['pop'] + $this->getUpkeep($unitarrays, 0);
-            $starv = $villageData["starv"];
-            if ($crop < $upkeep) {
-                // add starv data
-                $fieldsToSet['starv'] = $upkeep;
-                if($starv==0){
-                    $fieldsToSet['starvupdate'] = $time;
-                }
-            }
+            //Update starvation data
+            $this->addStarvationData($indi['wid']);
 
             // update the requested fields, all at once
             $database->setVillageFields($indi['wid'], array_keys($fieldsToSet), array_values($fieldsToSet));
@@ -924,14 +908,14 @@ class Automation {
             if($availableIron < $itrans) $itrans = $availableIron;
             if($availableCrop < $crtrans) $crtrans = $availableCrop;          
             
-            $merchant2 = ($this->getTypeLevel(17,$from) > 0)? $this->getTypeLevel(17,$from) : 0;
+            $merchant2 = ($this->getTypeLevel(17, $from) > 0)? $this->getTypeLevel(17, $from) : 0;
             $used2 = $database->totalMerchantUsed($from, false);
             $merchantAvail2 = $merchant2 - $used2;
             $maxcarry2 = ($tribe == 1)? 500 : (($tribe == 2)? 1000 : 750);
             $maxcarry2 *= TRADER_CAPACITY;
             
-            if($this->getTypeLevel(28,$from) != 0) {
-                $maxcarry2 *= $bid28[$this->getTypeLevel(28,$from)]['attri'] / 100;
+            if($this->getTypeLevel(28, $from) != 0) {
+                $maxcarry2 *= $bid28[$this->getTypeLevel(28, $from)]['attri'] / 100;
             }
             
             $resource = array($wtrans,$ctrans,$itrans,$crtrans);
@@ -1101,7 +1085,7 @@ class Automation {
     }
 
     private function sendunitsComplete() {
-        global $bid23,$bid34,$database,$battle,$village,$technology,$logging,$generator,$session,$units,$autoprefix;
+        global $bid19, $bid23, $bid34, $u99, $database, $battle, $village, $technology, $logging, $generator, $session, $units, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
@@ -2523,7 +2507,7 @@ class Automation {
                         if($type == 3 && $totalsend_att - ($totaldead_att + $totaltraped_att) > 0){                          
                             $prisoners = $database->getPrisoners([$to['wref']], 0, false)[$to['wref'].'0'];
                             if(count($prisoners) > 0){
-                                $anothertroops = $mytorops = 0;
+                                $anothertroops = $mytroops = $ownDeads = $anotherDeads = 0;
                                 $prisoners2delete = [];
                                 $movementType = [];
                                 $movementFrom = [];
@@ -2538,12 +2522,18 @@ class Automation {
 
                                     //If troops are coming from the same village, add it to the returing troops
                                     if ($prisoner['from'] == $from['wref']) {
+                                        for($i = 1; $i <= 11; $i++){
+                                            $deadPrisoners = round($prisoner['t'.$i] / 4);
+                                            $mytroops += $prisoner['t'.$i];
+                                            $ownDeads += $deadPrisoners; 
+                                            $prisoner['t'.$i] -= $deadPrisoners;
+                                        }
+                                        
                                         $database->modifyAttack2(
                                             $data['ref'],
                                             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
                                             [$prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'], $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11']]
-                                        );
-                                        for($i = 1; $i <= 11; $i++) $mytroops += $prisoner['t'.$i];                                      
+                                        );             
                                         $prisoners2delete[] = $prisoner['id'];
                                     } else {
                                         $p_alliance = $database->getUserField($p_owner, "alliance",0);
@@ -2555,20 +2545,28 @@ class Automation {
                                         if($p_alliance == $ownally || $friend || $neutral){
                                             $p_tribe = $database->getUserField($p_owner, "tribe", 0);
 
+                                            for($i = 1; $i <= 11; $i++){
+                                                $deadPrisoners = round($prisoner['t'.$i] / 4);
+                                                if($p_owner == $from['owner']){
+                                                    $mytroops += $prisoner['t'.$i];
+                                                    $ownDeads += $deadPrisoners;                                   
+                                                }else{
+                                                    $anothertroops += $prisoner['t'.$i];
+                                                    $anotherDeads += $deadPrisoners;
+                                                }
+                                                $prisoner['t'.$i] -= $deadPrisoners;
+                                            } 
+                                            
                                             $troopsTime = $units->getWalkingTroopsTime($prisoner['from'], $prisoner['wref'], $p_owner, $p_tribe, $prisoner, 1, 't');
                                             $p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
                                             
-                                            $p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
+                                            $p_reference = $database->addAttack($prisoner['from'], $prisoner['t1'], $prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'], $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11'], 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
                                             $movementType[] = 4;
                                             $movementFrom[] = $prisoner['wref'];
                                             $movementTo[] = $prisoner['from'];
                                             $movementRef[] = $p_reference;
                                             $movementTime[] = $utime;
-                                            $movementEndtime[] = $p_time + $utime;
-                                            for($i = 1; $i <= 11; $i++){
-                                                if($p_owner == $from['owner']) $mytroops += $prisoner['t'.$i];
-                                                else $anothertroops += $prisoner['t'.$i];
-                                            }                                         
+                                            $movementEndtime[] = $p_time + $utime;                                                      
                                             $prisoners2delete[] = $prisoner['id'];
                                         }
                                     }
@@ -2580,23 +2578,33 @@ class Automation {
 
                                 $database->deletePrisoners($prisoners2delete);
 
+                                $ownDeadsText = ($ownAlive = $mytroops - $ownDeads) > 0 ? " of which <b>".$ownAlive."</b> have been saved" : "";
+                                $anotherDeadsText = ($anotherAlive = $anothertroops - $anotherDeads) > 0 ? " of which <b>".$anotherAlive."</b> have been saved" : "";
+                                
+                                //Add dead troops to the "General attacks" tab
+                                $database->addGeneralAttack($ownDeads + $anotherDeads);
+                                
+                                //Calculate new traps which have to be repaired
                                 $newtraps = round(($mytroops + $anothertroops) / 3);
-                                $database->modifyUnit(
-                                    $data['to'],
-                                    ['99', '99o'],
-                                    [$newtraps, $mytroops + $anothertroops],
-                                    [0, 0]
-											 
-                                );
+                                
+                                //Reset traps
+                                $database->modifyUnit($data['to'], ['99', '99o'], [$mytroops + $anothertroops, $mytroops + $anothertroops], [0, 0]);
+                                
+                                //Repair needed traps            
+                                if($newtraps > 0){
+                                    $repairDuration = $database->getArtifactsValueInfluence($to['owner'], $to['wref'], 5, round(($bid19[max($this->getTypeLevel(36, $to['wref']), 1)]['attri'] / 100) * $u99['time'] / SPEED));
+                                    $database->trainUnit($to['wref'], 99, $newtraps, $u99['pop'], $repairDuration, 0);
+                                }
+                                
                                 $trapper_pic = "<img src=\"".GP_LOCATE."img/u/98.gif\" alt=\"Trap\" title=\"Trap\" />";
                                 $p_username = $database->getUserField($from['owner'], "username", 0);
 
                                 if($mytroops > 0 && $anothertroops > 0){
-                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> released <b>".$mytroops."</b> from his troops and <b>".$anothertroops."</b> friendly troops.";
+                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText." and <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
                                 }elseif($mytroops > 0){
-                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> released <b>".$mytroops."</b> from his troops.";
+                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> freed <b>".$mytroops."</b> from his troops".$ownDeadsText.".";
                                 }elseif($anothertroops > 0){
-                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> released <b>".$anothertroops."</b> friendly troops.";
+                                    $info_trap = "".$trapper_pic." <b>".$p_username."</b> freed <b>".$anothertroops."</b> friendly troops".$anotherDeadsText.".";
                                 }
                             }
                         }
@@ -2681,15 +2689,11 @@ class Automation {
                             $database->addNotice($from['owner'],$to['wref'],$ownally,3,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data_fail,$AttackArrivalTime);
                         }
                     }
-                    if($type == 3 or $type == 4){
-                        $database->addGeneralAttack($totalattackdead);
-                    }
+                    if($type == 3 || $type == 4) $database->addGeneralAttack($totalattackdead);
 
                     if (!isset($village_destroyed)) $village_destroyed = 0;
 
-                    if ($village_destroyed == 1 && $can_destroy==1) {
-                        $this->DelVillage($data['to']);
-                    }
+                    if ($village_destroyed == 1 && $can_destroy == 1) $this->DelVillage($data['to']);
                 }else{
                     //units attack string for battleraport
                     $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -2709,22 +2713,8 @@ class Automation {
                     $database->addNotice($to['owner'], $to['wref'], $targetally, 23,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'', $data2, $time);
                 }
 
-                //check if not natar tribe
-                $getvillage = $database->getVillage($to['wref']);
-                if ($getvillage['owner']!=3) {
-                    $crop = $database->getCropProdstarv($to['wref'], false);
-                    $unitarrays = $this->getAllUnits($to['wref'], false);
-                    $village_upkeep = $getvillage['pop'] + $this->getUpkeep($unitarrays, 0);
-                    $starv = $getvillage['starv'];
-
-                    if ($crop < $village_upkeep){
-                        // add starv data
-                        $database->setVillageField($to['wref'], 'starv', $village_upkeep);
-                        if($starv==0)
-                            $database->setVillageField($to['wref'], 'starvupdate', time());
-                    }
-                    unset($crop,$unitarrays,$getvillage,$village_upkeep);
-                }
+                //Update starvation data
+                $this->addStarvationData($to['wref']);
                 
 				//Returning units back to village is not necessary because it will be taken care when processing movement			
 				// Fix by AL-Kateb
@@ -2986,13 +2976,12 @@ class Automation {
                     $owntribe = $database->getUserField($AttackerID,"tribe",0);
 
                     //check to see if we're sending a hero between own villages and there's a Mansion at target village
-                    $HeroTransfer=0;
-                    $troopsPresent=0;
+                    $HeroTransfer = $troopsPresent = 0;
                     if($data['t11'] != 0) {
                         if($AttackerID == $DefenderID) {
                             // only add hero if we're sending him alone
                             if (
-                                ($this->getTypeLevel(37,$data['to']) > 0) &&
+                                ($this->getTypeLevel(37, $data['to']) > 0) &&
                                 ($data['t1'] == 0) &&
                                 ($data['t2'] == 0) &&
                                 ($data['t3'] == 0) &&
@@ -3005,21 +2994,23 @@ class Automation {
                                 ($data['t10'] == 0)
                             ) {
                                 //don't reinforce, addunit instead
-                                $database->modifyUnit($data['to'],array("hero"),array(1),array(1));
+                                $database->modifyUnit($data['to'], ["hero"], [1], [1]);
                                 $heroid = $database->getHeroField($DefenderID, 'heroid');
-                                $database->modifyHero("wref",$data['to'],$heroid,0);
+                                $database->modifyHero("wref", $data['to'], $heroid, 0);
                                 $HeroTransfer = 1;
                             }
                         }
                     }
-                    for($i=1;$i<=10;$i++) {
-                        if($data['t'.$i]>0) {
-                            $troopsPresent = 1; break;
+                    
+                    for($i = 1;$i <= 10; $i++) {
+                        if($data['t'.$i] > 0) {
+                            $troopsPresent = 1; 
+                            break;
                         }
                     }
 
                     if($data['t11'] != 0 || $troopsPresent) {
-                        $temphero=$data['t11'];
+                        $temphero = $data['t11'];
                         if ($HeroTransfer) $data['t11'] = 0;
                         //check if there is defence from town in to town
                         $check = $database->getEnforce($data['to'], $data['from']);
@@ -3059,26 +3050,15 @@ class Automation {
                     $movementProcIDs[] = $data['moveid'];
                 }
 
-                $crop = $database->getCropProdstarv($data['to']);
-                $unitarrays = $this->getAllUnits($data['to']);
-                $village = $database->getVillage($data['to']);
-                $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-                $starv = $database->getVillageField($data['to'],"starv");
-                if ($crop < $upkeep){
-                    // add starv data
-                    $database->setVillageField($data['to'], 'starv', $upkeep);
-                    if($starv==0){
-                        $database->setVillageField($data['to'], 'starvupdate', $time);
-                    }
-                }
+                //Update starvation data
+                $this->addStarvationData($data['to']);
 
                 //check empty reinforcement in rally point
-                $e_units='';
-                for ($i=1; $i <= 50; $i++) {
-                    $e_units.='u'.$i.'=0 AND ';
-                }
-                $e_units.='hero=0';
-                $q="DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".(int) $data['to']." OR `from`=".(int) $data['to'].")";
+                $e_units = '';
+                for ($i = 1; $i <= 50; $i++) $e_units.= 'u'.$i.'= 0 AND ';
+                
+                $e_units.= 'hero = 0';
+                $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".(int) $data['to']." OR `from`=".(int) $data['to'].")";
                 $database->query($q);
             }
 
@@ -3146,18 +3126,9 @@ class Automation {
 								 
                         );
                     $movementProcIDs[] = $data['moveid'];
-                    $crop = $database->getCropProdstarv($data['to']);
-                    $unitarrays = $this->getAllUnits($data['to']);
-                    $village = $database->getVillage($data['to']);
-                    $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-                    $starv = $database->getVillageField($data['to'],"starv");
-                    if ($crop < $upkeep){
-                        // add starv data
-                        $database->setVillageField($data['to'], 'starv', $upkeep);
-                        if($starv==0){
-                            $database->setVillageField($data['to'], 'starvupdate', $time);
-                        }
-                    }
+                    
+                    //Update starvation data
+                    $this->addStarvationData($data['to']);
 
                     // make sure we don't process duplicate movements until the big bad bug which inserts them into DB is fixed
                     $wavesData[$data['from'].$data['to'].$data['starttime'].$data['endtime']] = true;
@@ -3189,18 +3160,9 @@ class Automation {
             $database->modifyResource($data['to'],$data['wood'],$data['clay'],$data['iron'],$data['crop'],1);
             //$database->updateVillage($data['to']);
             $movementProcIDs[] = $data['moveid'];
-            $crop = $database->getCropProdstarv($data['to']);
-            $unitarrays = $this->getAllUnits($data['to']);
-            $village = $database->getVillage($data['to']);
-            $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-            $starv = $database->getVillageField($data['to'],"starv");
-            if ($crop < $upkeep){
-                // add starv data
-                $database->setVillageField($data['to'], 'starv', $upkeep);
-                if($starv==0){
-                    $database->setVillageField($data['to'], 'starvupdate', $time);
-                }
-            }
+            
+            //Update starvation data
+            $this->addStarvationData($data['to']);
         }
 
         $database->setMovementProc(implode(', ', $movementProcIDs));
@@ -3352,7 +3314,7 @@ class Automation {
 
                 //Activate activable artifacts
                 foreach($inactiveArtifacts as $artifact){
-                    if($ownArtifacts['totals'] < 3) {
+                    if($ownArtifacts['totals'] < 3){
                         if($artifact['size'] == 1){ //Village effect
                             $database->activateArtifact($artifact['id']);
                             $ownArtifacts['totals']++;
@@ -3379,7 +3341,7 @@ class Automation {
                         
                         $ownArtifacts['small']--;
                         $ownArtifacts['totals']++;
-                        if($size == 2) $ownArtifacts['great']++;
+                        if($artifact['size'] == 2) $ownArtifacts['great']++;
                         else $ownArtifacts['unique']++;
                     }
                 }
@@ -3413,18 +3375,12 @@ class Automation {
             $sort_type = substr($data['tech'],0,1);
             switch($sort_type) {
                 case "t":
-                    if (!isset($tdata[$data['vref']])) {
-                        $tdata[$data['vref']] = [];
-                    }
-
+                    if (!isset($tdata[$data['vref']])) $tdata[$data['vref']] = [];
                     $tdata[$data['vref']][] = $data['tech'].' = 1';
                     break;
                 case "a":
                 case "b":
-                    if (!isset($abdata[$data['vref']])) {
-                        $abdata[$data['vref']] = [];
-                    }
-
+                    if (!isset($abdata[$data['vref']])) $abdata[$data['vref']] = [];
                     $abdata[$data['vref']][] = $data['tech']." = ".$data['tech']." + 1";
                     break;
             }
@@ -3489,38 +3445,38 @@ class Automation {
             switch($oasis['type']) {
                 case 1:
                 case 2:
-                    $wood += 1;
+                    $wood++;
                     break;
                 case 3:
-                    $wood += 1;
-                    $crop += 1;
+                    $wood++;
+                    $crop++;
                     break;
                 case 4:
                 case 5:
-                    $clay += 1;
+                    $clay++;
                     break;
                 case 6:
-                    $clay += 1;
-                    $crop += 1;
+                    $clay++;
+                    $crop++;
                     break;
                 case 7:
                 case 8:
-                    $iron += 1;
+                    $iron++;
                     break;
                 case 9:
-                    $iron += 1;
-                    $crop += 1;
+                    $iron++;
+                    $crop++;
                     break;
                 case 10:
                 case 11:
-                    $crop += 1;
+                    $crop++;
                     break;
                 case 12:
                     $crop += 2;
                     break;
             }
         }
-        return array($wood,$clay,$iron,$crop);
+        return [$wood, $clay, $iron, $crop];
     }
 
     function getAllUnits($base, $use_cache = true) {
@@ -3711,7 +3667,23 @@ class Automation {
         $database->modifyOasisResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);      
         $database->updateOasis($bountywid);
     }
+    
+    private function bountyGetOWoodProd() {
+        return round(SPEED * 40);
+    }
+    
+    private function bountyGetOClayProd() {
+        return round(SPEED * 40);
+    }
+    
+    private function bountyGetOIronProd() {
+        return round(SPEED * 40);
+    }
 
+    private function bountyGetOCropProd() {
+        return round(SPEED * 40);
+    }
+    
     private function bountyGetWoodProd() {
         global $bid1,$bid5,$session;
         $wood = $sawmill = 0;
@@ -3733,22 +3705,6 @@ class Automation {
         }
         $wood *= SPEED;
         return round($wood);
-    }
-    
-    private function bountyGetOWoodProd() {
-        return round(SPEED * 40);
-    }
-    
-    private function bountyGetOClayProd() {
-        return round(SPEED * 40);
-    }
-    
-    private function bountyGetOIronProd() {
-        return round(SPEED * 40);
-    }
-
-    private function bountyGetOCropProd() {
-        return round(SPEED * 40);
     }
     
     private function bountyGetClayProd() {
@@ -3891,22 +3847,10 @@ class Automation {
                     if($train['amt'] - $trained <= 0) $database->trainUnit($train['id'], 0, 0, 0, 0, 1);
                 }
 
-                if ($valuesUpdated) {
-                    call_user_func(get_class($database).'::clearUnitsCache');
-                }
+                if ($valuesUpdated) call_user_func(get_class($database).'::clearUnitsCache');
              
-                $crop = $database->getCropProdstarv($train['vref']);
-                $unitarrays = $this->getAllUnits($train['vref']);
-                $village = $database->getVillage($train['vref'], 0);
-                $upkeep = $village['pop'] + $this->getUpkeep($unitarrays, 0);
-                $starv = $database->getVillageField($train['vref'],"starv");
-                if ($crop < $upkeep){
-                    // add starv data
-                    $database->setVillageField($train['vref'], 'starv', $upkeep);
-                    if($starv==0){
-                        $database->setVillageField($train['vref'], 'starvupdate', $time);
-                    }
-                }
+                //Update starvation data
+                $this->addStarvationData($train['vref']);
             }
         }
         if(file_exists("GameEngine/Prevention/training.txt")) {
@@ -3914,56 +3858,35 @@ class Automation {
         }
     }
 
-    private function getsort_typeLevel($tid,$resarray) {
-        global $village;
+    private function getsort_typeLevel($tid, $resarray) {
+        $keyholder = [];
 
-        $keyholder = array();
-
-        foreach(array_keys($resarray,$tid) as $key) {
-            if(strpos($key,'t')) {
+        foreach(array_keys($resarray, $tid) as $key) {
+            if(strpos($key, 't')) {
                 $key = preg_replace("/[^0-9]/", '', $key);
                 array_push($keyholder, $key);
             }
         }
 
         $element = count($keyholder);
-
         if($element >= 2) {
-
             if($tid <= 4) {
-                $temparray = array();
+                $temparray = [];
 
-                for($i=0;$i<=$element-1;$i++) {
-                    array_push($temparray,$resarray['f'.$keyholder[$i]]);
+                for($i = 0; $i <= $element - 1; $i++) {
+                    array_push($temparray, $resarray['f'.$keyholder[$i]]);
                 }
 
                 foreach ($temparray as $key => $val) {
-                    if ($val == max($temparray))
-                        $target = $key;
+                    if ($val == max($temparray)) $target = $key;                   
                 }
             }
-            else {
-                /*for($i=0;$i<=$element-1;$i++) {
-                 //if($resarray['f'.$keyholder[$i]] != $this->getsort_typeMaxLevel($tid)) {
-                 //    $target = $i;
-                 //}
-                 }
-                 */
-            }
         }
-        else if($element == 1) {
-            $target = 0;
-        }
-        else {
-            return 0;
-        }
+        else if($element == 1) $target = 0;
+        else return 0;
 
-        if($keyholder[$target] != "") {
-            return $resarray['f'.$keyholder[$target]];
-        }
-        else {
-            return 0;
-        }
+        if(!empty($keyholder[$target])) return $resarray['f'.$keyholder[$target]];
+        else return 0;
     }
 
     private function celebrationComplete() {
@@ -3983,7 +3906,7 @@ class Automation {
             $user = $vil['owner'];
             $cp = ($type == 1) ? 500 : 2000;           
             $database->clearCel($id);
-            $database->setCelCp($user,$cp);
+            $database->setCelCp($user, $cp);
         }
 
         if(file_exists("GameEngine/Prevention/celebration.txt")) {
@@ -4032,7 +3955,7 @@ class Automation {
                 if ($level == 1) $clear = ",f".$vil['buildnumber']."t=0";
                 else $clear = "";
 
-                if ($village->natar == 1 && $type == 40) $clear=""; //fix by ronix
+                if ($village->natar == 1 && $type == 40) $clear = ""; //fix by ronix
 
                 $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".(($level - 1 >= 0) ? $level - 1 : 0).$clear." WHERE vref=".(int) $vil['vref'];
                 $database->query($q);
@@ -4077,35 +4000,26 @@ class Automation {
                 $lastUpdateTime = $timeNow;
                 $newHealth = -1;
 
-                if((time()-$hdata['lastupdate'])>=1){
-                    if($hdata['health']<100 and $hdata['health']>0){
-                        if(SPEED <= 10){
-                            $speed = SPEED;
-                        }else if(SPEED <= 100){
-                            $speed = ceil(SPEED/10);
-                        }else{
-                            $speed = ceil(SPEED/100);
-                        }
+                if((time()-$hdata['lastupdate']) >= 1){
+                    if($hdata['health'] < 100 and $hdata['health'] > 0){
+                        if(SPEED <= 10) $speed = SPEED;                           
+                        else if(SPEED <= 100) $speed = ceil(SPEED / 10);                           
+                        else $speed = ceil(SPEED / 100);
 
-                        $reg = $hdata['health']+$hdata['regeneration']*5*$speed/86400*(time()-$hdata['lastupdate']);
+                        $reg = $hdata['health'] + $hdata['regeneration'] * 5 * $speed / 86400 * (time() - $hdata['lastupdate']);
 
-                        if($reg <= 100){
-                            $newHealth = $reg;
-                        }else{
-                            $newHealth = 100;
-                        }
+                        if($reg <= 100) $newHealth = $reg;                        
+                        else $newHealth = 100;                      
                     }
                 }
 
                 $herolevel = $hdata['level'];
-                $newLevel = -1;
+                $newLevel = - 1;
                 $scorePoints = false;
-                for ($i = $herolevel+1; $i < 100; $i++){
+                for ($i = $herolevel + 1; $i < 100; $i++){
                     if($hdata['experience'] >= $hero_levels[$i]){
                         $newLevel = $i;
-                        if ($i < 99) {
-                            $scorePoints = true;
-                        }
+                        if ($i < 99) $scorePoints = true;
                     }
                 }
 
@@ -4174,9 +4088,7 @@ class Automation {
                     $lastUpdateIDs[] = $hdata['heroid'];
                 }
 
-                if (count($columns)) {
-                    $database->modifyHero( $columns, $columnValues, $hdata['heroid'], $modes );
-                }
+                if (count($columns)) $database->modifyHero($columns, $columnValues, $hdata['heroid'], $modes);
             }
 
             if (count($lastUpdateIDs)) {
@@ -4194,7 +4106,7 @@ class Automation {
     private function updateStore() {
         global $database, $bid10, $bid38, $bid11, $bid39;
 
-        $result = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'fdata`');
+        $result = mysqli_query($database->dblink, 'SELECT * FROM `' . TB_PREFIX . 'fdata`');
 
         mysqli_begin_transaction($database->dblink);
         while ($row = mysqli_fetch_assoc($result))
@@ -4202,23 +4114,25 @@ class Automation {
             $ress = $crop = 0;
             for ($i = 19; $i < 40; ++$i)
             {
+                //Warehouse
                 if ($row['f' . $i . 't'] == 10)
                 {
                     $ress += ((isset($bid10[$row['f' . $i]]) && isset($bid10[$row['f' . $i]]['attri'])) ? $bid10[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
                 }
 
+                //Great warehouse
                 if ($row['f' . $i . 't'] == 38)
                 {
                     $ress += ((isset($bid38[$row['f' . $i]]) && isset($bid38[$row['f' . $i]]['attri'])) ? $bid38[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
                 }
-
-
-
+                
+                //Granary
                 if ($row['f' . $i . 't'] == 11)
                 {
                     $crop += ((isset($bid11[$row['f' . $i]]) && isset($bid11[$row['f' . $i]]['attri'])) ? $bid11[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
                 }
-
+              
+                //Great granary
                 if ($row['f' . $i . 't'] == 39)
                 {
                     $crop += ((isset($bid39[$row['f' . $i]]) && isset($bid39[$row['f' . $i]]['attri'])) ? $bid39[$row['f' . $i]]['attri'] * STORAGE_MULTIPLIER : 0);
@@ -4227,18 +4141,11 @@ class Automation {
 
             // no need for update, since we didn't find any warehouses or granaries
             // and maximums would have been set to correct values inside prune* functions already
-            if ($ress == 0 && $crop == 0) {
-                continue;
-            }
+            if ($ress == 0 && $crop == 0) continue;
 
             // maxstore nor maxcrop can go below the minimum threshold
-            if ($ress < STORAGE_BASE) {
-                $ress = STORAGE_BASE;
-            }
-
-            if ($crop < STORAGE_BASE) {
-                $crop = STORAGE_BASE;
-            }
+            if ($ress < STORAGE_BASE) $ress = STORAGE_BASE;
+            if ($crop < STORAGE_BASE) $crop = STORAGE_BASE;
 
             mysqli_query($database->dblink,'UPDATE `' . TB_PREFIX . 'vdata` SET `maxstore` = ' . (int) $ress . ', `maxcrop` = ' . (int) $crop . ' WHERE `wref` = ' . (int) $row['vref']);
         }
@@ -4309,12 +4216,12 @@ class Automation {
         $array = $database->query_return($q);
 
         foreach($array as $master) {
-            $owner = $database->getVillageField($master['wid'],'owner');
-            $tribe = $database->getUserField($owner,'tribe',0);
-            $villwood = $database->getVillageField($master['wid'],'wood');
-            $villclay = $database->getVillageField($master['wid'],'clay');
-            $villiron = $database->getVillageField($master['wid'],'iron');
-            $villcrop = $database->getVillageField($master['wid'],'crop');
+            $owner = $database->getVillageField($master['wid'], 'owner');
+            $tribe = $database->getUserField($owner, 'tribe', 0);
+            $villwood = $database->getVillageField($master['wid'], 'wood');
+            $villclay = $database->getVillageField($master['wid'], 'clay');
+            $villiron = $database->getVillageField($master['wid'], 'iron');
+            $villcrop = $database->getVillageField($master['wid'], 'crop');
             $type = $master['type'];
             $level = $master['level'];
             $buildarray = $GLOBALS["bid".$type];
@@ -4322,10 +4229,9 @@ class Automation {
             $buildclay = $buildarray[$level]['clay'];
             $buildiron = $buildarray[$level]['iron'];
             $buildcrop = $buildarray[$level]['crop'];
-            $ww = count($database->getBuildingByType($master['wid'],40));
+            $ww = count($database->getBuildingByType($master['wid'], 40));
 
             if($tribe == 1){
-
                 if($master['field'] < 19){
                     $dorf1Buildings = $database->getDorf1Building($master['wid']);
                     $bdata = count($dorf1Buildings);
@@ -4344,17 +4250,11 @@ class Automation {
                 $bdata1 = $dorf1Buildings;
             }
 
-            if($database->getUserField($owner,'plus',0) > time() or $ww > 0){
-
-                if($bbdata < 2){
-                    $inbuild = 2;
-                }else{
-                    $inbuild = 1;
-                }
-
-            }else{
-                $inbuild = 1;
+            if($database->getUserField($owner, 'plus', 0) > time() || $ww > 0){
+                if($bbdata < 2) $inbuild = 2;                
+                else $inbuild = 1;
             }
+            else $inbuild = 1;
 
             $usergold = $database->getUserField($owner,'gold',0);
 
@@ -4363,30 +4263,52 @@ class Automation {
 
                 if(!empty($bdata1)){
                     foreach($bdata1 as $master1) {
-                        $time += ($master1['timestamp']-time());
+                        $time += ($master1['timestamp'] - time());
                     }
                 }
 
-                if($bdata == 0){
-                    $database->updateBuildingWithMaster($master['id'],$time,0);
-                }else{
-                    $database->updateBuildingWithMaster($master['id'],$time,1);
-                }
+                if($bdata == 0) $database->updateBuildingWithMaster($master['id'], $time, 0);                  
+                else $database->updateBuildingWithMaster($master['id'], $time, 1);              
 
-                $gold = $usergold-1;
-                $database->updateUserField($owner,'gold',$gold,1);
-                $database->modifyResource($master['wid'],$buildwood,$buildclay,$buildiron,$buildcrop,0);
+                $database->updateUserField($owner, 'gold', --$usergold, 1);
+                $database->modifyResource($master['wid'], $buildwood, $buildclay, $buildiron, $buildcrop, 0);
             }
         }
     }
 
-    /************************************************
-     Function for starvation - by brainiacX and Shadow
-     Rework by ronix
-     Refactored by iopietro
-     References:
-     ************************************************/
-
+    /**
+     * Adds the starvation data in villages with a negative value of crop
+     * 
+     * @param int $wref The village ID where the crop is negative
+     */
+    
+    private function addStarvationData($wref){
+        global $database;
+        
+        $getVillage = $database->getVillage($wref);
+        
+        //Exlude Support, Nature, Natars, TaskMaster and Multihunter
+        if ($getVillage['owner'] > 5){
+            $crop = $database->getCropProdstarv($wref, false);
+            $unitArrays = $this->getAllUnits($wref, false);
+            $villageUpkeep = $getVillage['pop'] + $this->getUpkeep($unitArrays, 0);
+            $starv = $getVillage['starv'];
+            
+            if ($crop < $villageUpkeep){
+                
+                //Add starvation data
+                $database->setVillageField($wref, 'starv', $villageUpkeep);
+                $database->setVillageFields($wref, ['starv', 'starvupdate'], [$villageUpkeep, time()]);
+            }
+        }
+    }
+    
+    /**
+     * Function for starvation - by brainiacX and Shadow
+     * Rework by ronix
+     * Refactored by iopietro
+     */
+    
     //TODO: This function needs to be splitted in many subfunctions (for TravianZ refactor)
     private function starvation() {
         global $database, $autoprefix;
@@ -4404,23 +4326,9 @@ class Automation {
         
         //update starvation in every village
         $starvarray = $database->getProfileVillages(0, 7);
-        foreach($starvarray as $starv)
-        {
-            $crop = $database->getCropProdstarv($starv['wref']);
-            $unitArrays = $this->getAllUnits($starv['wref']);
-            $villageUpkeep = $starv['pop'] + $this->getUpkeep($unitArrays, 0);
-            
-            if ($crop < $villageUpkeep)
-            {
-                // add starv data
-                $database->setVillageFields($starv['wref'], ['starv', 'starvupdate'], [$villageUpkeep, time()]);
-            }
-            
-            unset($crop, $unitArrays, $villageUpkeep);
-        }      
+        foreach($starvarray as $starv) $this->addStarvationData($starv['wref']);
 
         // load villages with minus prod
-
         $starvarray = [];
         $starvarray = $database->getStarvation();
 
@@ -4560,8 +4468,13 @@ class Automation {
                                 if($totalKilledUnits < $totalUnits)
                                 {
                                     $database->modifyPrisoners($starvingTroops['id'],  array_keys($killedUnits), array_values($killedUnits), 0);
+                                    $database->modifyUnit($starvingTroops['wref'], ["99o"], [$totalKilledUnits], [0]);
                                 }
-                                else $database->deletePrisoners($starvingTroops['id']);
+                                else
+                                { 
+                                    $database->deletePrisoners($starvingTroops['id']);
+                                    $database->modifyUnit($starvingTroops['wref'], ["99o"], [$totalUnits], [0]);
+                                }
                                 break;
                                 
                             case 2:
@@ -4595,29 +4508,23 @@ class Automation {
         }
     }
 
-    /************************************************
-     Function for starvation - by brainiacX and Shadow
-     Rework by ronix
-     Refactored by iopietro
-     References:
-     ************************************************/
-
     private function procNewClimbers() {
         if(file_exists("GameEngine/Prevention/climbers.txt")) {
             unlink("GameEngine/Prevention/climbers.txt");
         }
         global $database, $ranking;
+        
         $ranking->procRankArray();
         $climbers = $ranking->getRank();
         if(count($climbers) > 0){
             $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
             $result = mysqli_query($database->dblink,$q);
             if(mysqli_num_rows($result)) {
-                $row=mysqli_fetch_assoc($result);
-                $week=($row['week']+1);
-            } else {
-                $week='1';
+                $row = mysqli_fetch_assoc($result);
+                $week = $row['week'] + 1;
             }
+            else $week = 1;
+
             $q = "SELECT id FROM ".TB_PREFIX."users where oldrank = 0 and id > 5";
             $array = $database->query_return($q);
             foreach($array as $user){
@@ -4662,6 +4569,7 @@ class Automation {
 
     private function procClimbers($uid) {
         global $database, $ranking;
+        
         $ranking->procRankArray();
         $climbers = $ranking->getRank();
         if(count($ranking->getRank()) > 0){
@@ -4669,10 +4577,10 @@ class Automation {
             $result = mysqli_query($database->dblink,$q);
             if(mysqli_num_rows($result)) {
                 $row = mysqli_fetch_assoc($result);
-                $week = ($row['week'] + 1);
-            } else {
-                $week = 1;
+                $week = $row['week'] + 1;
             }
+            else $week = 1;
+
             $myrank = $ranking->getUserRank($uid);
             if(isset($climbers[$myrank]['oldrank']) && $climbers[$myrank]['oldrank'] > $myrank){
                 for($i = $myrank + 1; $i <= $climbers[$myrank]['oldrank']; $i++) {
@@ -4779,23 +4687,20 @@ class Automation {
 
     private function regenerateOasisTroops() {
         global $database;
-        $time = time();
-        $time2 = NATURE_REGTIME;
-        $timeFinal = $time - $time2;
+        
+        $timeFinal = time() - NATURE_REGTIME;
         $q = "SELECT wref FROM " . TB_PREFIX . "odata where conqured = 0 and lastupdated2 < $timeFinal";
         $array = $database->query_return($q);
         if (count($array)) {
             $ids = [];
-            foreach($array as $oasis) {
-                $ids[] = $oasis['wref'];
-            }
-
+            foreach($array as $oasis) $ids[] = $oasis['wref'];
             $database->regenerateOasisUnits($ids, true);
         }
     }
 
     public static function updateMax($leader) {
         global $bid18, $database;
+        
         $q = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "alidata where leader = ". (int) $leader), MYSQLI_ASSOC);
         if ($q['Total'] > 0) {
             $villages = $database->getVillagesID2($leader);
@@ -4826,7 +4731,7 @@ class Automation {
     }
 
     private function checkReviveHero(){
-        global $database,$session;
+        global $database, $session;
         $herodata = $database->getHero($session->uid, 1);
         if ($herodata[0]['dead'] == 1){
             mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 0 WHERE vref = ".(int) $session->villages[0]."");
@@ -4841,13 +4746,13 @@ class Automation {
         }
     }
 
-    /************************************************
-     Function for automate medals - by yi12345 and Shadow
-     References:
-     ************************************************/
-
+    /**
+     * Function for automate medals - by yi12345 and Shadow
+     *
+     */
+    
     function medals(){
-        global $ranking,$database;
+        global $ranking, $database;
 
         //we may give away ribbons
         $giveMedal = false;
@@ -5369,11 +5274,6 @@ class Automation {
             $database->query($q);
         }
     }
-
-    /************************************************
-     Function for automate medals - by yi12345 and Shadow
-     References:
-     ************************************************/
 
     private function artefactOfTheFool() {
         global $database;

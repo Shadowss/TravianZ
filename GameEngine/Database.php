@@ -855,7 +855,7 @@ class MYSQLi_DB implements IDbConnection {
         return $ret;
 	}
 
-	// no n eed to cache this method
+	// no need to cache this method
 	function getSitee($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
 
@@ -6111,13 +6111,13 @@ References: User ID/Message ID, Mode
 			else{$unit = 'u' . $unit;}
 
             ++$i;
-            //Fixed part of negativ troops (double troops) - by InCube
+            //Fixed part of negative troops (double troops) - by InCube
             $array_amt[$i] = (int) $array_amt[$i] < 0 ? 0 : $array_amt[$i];
-            //Fixed part of negativ troops (double troops) - by InCube
+            //Fixed part of negative troops (double troops) - by InCube
             $units .= $unit.' = '.$unit.' '.(($array_mode[$i] == 1)? '+':'-').'  '.($array_amt[$i] ? $array_amt[$i] : 0).(($number > $i+1) ? ', ' : '');
 		}
 		$q = "UPDATE ".TB_PREFIX."units set $units WHERE vref = $vref";
-		return mysqli_query($this->dblink,$q);
+		return mysqli_query($this->dblink, $q);
 	}
 
 	function getEnforce($vid, $from, $use_cache = true) {

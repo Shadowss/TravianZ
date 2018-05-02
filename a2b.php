@@ -163,7 +163,7 @@ if(isset($_GET['o'])) {
 				if(isset($r)) {
 					$enforce = $database->getEnforceArray($r, 0);
 					$enforceoasis=$database->getOasisEnforceArray($r, 0);
-					if($enforce['from'] == $village->wid || $enforceoasis['conqured']==$village->wid) {
+					if($enforce['from'] == $village->wid || $enforceoasis['conqured'] == $village->wid) {
 						$to = $database->getVillage($enforce['from']);
 						$ckey = $r;
 						include ("Templates/a2b/sendback.tpl");
@@ -171,32 +171,10 @@ if(isset($_GET['o'])) {
 						include ("Templates/a2b/units_" . $session->tribe . ".tpl");
 						include ("Templates/a2b/search.tpl");
 					}
-				} else if(isset($delprisoners)){
-			$prisoner = $database->getPrisonersByID($delprisoners);
-			if($prisoner['wref'] == $village->wid){
-			$p_owner = $database->getVillageField($prisoner['from'],"owner");
-			$p_tribe = $database->getUserField($p_owner,"tribe",0);
-			
-			$troopsTime = $units->getWalkingTroopsTime($prisoner['from'], $prisoner['wref'], $p_owner, $p_tribe, $prisoner, 1, 't');
-			$p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
-			
-			$p_reference = $database->addAttack($prisoner['from'],$prisoner['t1'],$prisoner['t2'],$prisoner['t3'],$prisoner['t4'],$prisoner['t5'],$prisoner['t6'],$prisoner['t7'],$prisoner['t8'],$prisoner['t9'],$prisoner['t10'],$prisoner['t11'],3,0,0,0,0,0,0,0,0,0,0,0);
-			$database->addMovement(4,$prisoner['wref'],$prisoner['from'],$p_reference,time(),($p_time+time()));
-			$troops = $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
-			$database->modifyUnit($prisoner['wref'],array("99o"),array($troops),array(0));
-			$database->deletePrisoners($prisoner['id']);
-				}else if($prisoner['from'] == $village->wid){
-			$troops = $prisoner['t1']+$prisoner['t2']+$prisoner['t3']+$prisoner['t4']+$prisoner['t5']+$prisoner['t6']+$prisoner['t7']+$prisoner['t8']+$prisoner['t9']+$prisoner['t10']+$prisoner['t11'];
-			if($prisoner['t11'] > 0){
-			$p_owner = $database->getVillageField($prisoner['from'],"owner");
-			mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."hero SET `dead` = '1', `health` = '0' WHERE `uid` = '".$p_owner."' AND dead = 0");
-			}
-			$database->modifyUnit($prisoner['wref'],array("99o"),array($troops),array(0));
-			$database->deletePrisoners($prisoner['id']);
 				}
-				header("Location: build.php?id=39");
-				exit;
-				} else {
+				else if(isset($delprisoners) && !empty($delprisoners)) $units->deletePrisoners($delprisoners);			
+				else 
+				{
 					if(isset($process['0'])) {
 						$coor = $database->getCoor($process['0']);
 						include ("Templates/a2b/attack.tpl");
@@ -205,7 +183,6 @@ if(isset($_GET['o'])) {
 						include ("Templates/a2b/search.tpl");
 					}
 				}
-
 ?>
 
 <br /><br /><br /><br /><div id="side_info">

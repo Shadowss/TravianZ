@@ -52,7 +52,7 @@ switch($kind){
         $betterorbadder = $artefactBadEffect ? SPIES_INCREASE : SPIES_DECRESE;
         break;
 }
-$bonus = isset($betterorbadder) ? $betterorbadder." (<b>".str_replace(["(", ")"], "" , $effecty)."</b>)" : "<b>Not yet active</b>";
+$bonus = isset($betterorbadder) ? $betterorbadder." (<b>".str_replace(["(", ")"], "" , $effecty)."</b>)" : (($kind == 11 && $artefact['active']) ? "<b>".WW_BUILDING_PLAN."</b>" : "<b>Not yet active</b>");
 
 ?>
 

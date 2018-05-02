@@ -1,7 +1,4 @@
 <?php
-
-use App\Database\IDbConnection;
-
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -19,110 +16,96 @@ use App\Database\IDbConnection;
 #################################################################################
 
 class Units {
-    public $sending,$recieving,$return = array();
+    public $sending, $recieving, $return = [];
 
     public function procUnits($post) {
         if(isset($post['c'])) {
-            if (!isset($post['disabled'])) {
-                $post['disabled'] = '';
-            }
+            if (!isset($post['disabled'])) $post['disabled'] = '';
 
             switch($post['c']) {
-
                 case "1":
-                if (isset($post['a'])&& $post['a']==533374){
-                $this->sendTroops($post);
-                }else{
-                $post = $this->loadUnits($post);
-                return $post;
-                }
-                break;
-
+                    if (isset($post['a'])&& $post['a']==533374){
+                        $this->sendTroops($post);
+                    }else{
+                        $post = $this->loadUnits($post);
+                        return $post;
+                    }
+                    break;
+                    
                 case "2":
-                if (isset($post['a'])&& $post['a']==533374 && $post['disabled'] == ""){
-                $this->sendTroops($post);
-                }else{
-                $post = $this->loadUnits($post);
-                return $post;
-                }
-                break;
-
+                    if (isset($post['a'])&& $post['a']==533374 && $post['disabled'] == ""){
+                        $this->sendTroops($post);
+                    }else{
+                        $post = $this->loadUnits($post);
+                        return $post;
+                    }
+                    break;
+                    
                 case "8":
-                $this->sendTroopsBack($post);
-                break;
-
+                    $this->sendTroopsBack($post);
+                    break;
+                    
                 case "3":
-                if (isset($post['a'])&& $post['a']==533374 && $post['disabled'] == ""){
-                $this->sendTroops($post);
-                }else{
-                $post = $this->loadUnits($post);
-                return $post;
-                }
-                break;
-
+                    if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
+                    else{
+                        $post = $this->loadUnits($post);
+                        return $post;
+                    }
+                    break;
+                    
                 case "4":
-                if (isset($post['a'])&& $post['a']==533374){
-                    $this->sendTroops($post);
-                }else{
-                $post = $this->loadUnits($post);
-                return $post;
-                }
-
+                    if (isset($post['a']) && $post['a'] == 533374) $this->sendTroops($post);
+                    else{
+                        $post = $this->loadUnits($post);
+                        return $post;
+                    }
+                    
                 case "5":
-                if (isset($post['a']) && $post['a']== "new"){
-                    $this->Settlers($post);
-                }else{
-                $post = $this->loadUnits($post);
-                return $post;
-                }
-                break;
+                    if (isset($post['a']) && $post['a'] == "new") $this->Settlers($post);
+                    else
+                    {
+                        $post = $this->loadUnits($post);
+                        return $post;
+                    }
             }
         }
     }
+    
     private function loadUnits($post) {
         global $database,$village,$session,$generator,$logging,$form;
                 // Search by town name
                 // Coordinates and look confirm name people
-        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
-            $vid = $database->getVilWref($post['x'],$post['y']);
-            unset($post['dname']);
-            unset($_POST['dname']);
-        }else if(isset($post['dname']) && $post['dname']!=""){
+        if(isset($post['x']) && isset($post['y']) && !empty($post['x']) && !empty($post['y'])) {
+            $vid = $database->getVilWref($post['x'], $post['y']);
+            unset($post['dname'], $_POST['dname']);
+        }else if(isset($post['dname']) && !empty($post['dname'])){
             $vid = $database->getVillageByName(stripslashes($post['dname']));
         }
         if (!empty($vid)) {
             if($database->isVillageOases($vid)){
                 $too = $database->getOasisField($vid,"conqured");
-                if($too == 0){
-                    $disabledr ="disabled=disabled"; $disabled ="disabled=disabled";
-                }else{
-                    $disabledr ="";
-                    if($session->sit == 0){
-                        $disabled ="";
-                    }else{
-                        $disabled ="disabled=disabled";
-                    }
+                if($too == 0) $disabled = $disabledr ="disabled=disabled";                   
+                else
+                {
+                    $disabledr = "";
+                    if($session->sit == 0) $disabled = "";
+                    else $disabled ="disabled=disabled";
                 }
             }else{
                 $too = $database->getVillage($vid);
                 if($too['owner'] == 3){
-                    $disabledr ="disabled=disabled"; $disabled ="";
+                    $disabledr = "disabled=disabled";
+                    $disabled = "";
                 }else{
-                    $disabledr ="";
-                    if($session->sit == 0){
-                        $disabled ="";
-                    }else{
-                        $disabled ="disabled=disabled";
-                    }
+                    $disabledr = "";
+                    if($session->sit == 0) $disabled = "";                     
+                    else $disabled ="disabled=disabled";
                 }
             }
         }else{
-            $disabledr ="";
-            if($session->sit == 0){
-                $disabled ="";
-            }else{
-                $disabled ="disabled=disabled";
-            }
+            $disabledr = "";
+            if($session->sit == 0) $disabled = "";    
+            else $disabled ="disabled=disabled";
         }
                 if(!empty($disabledr) && $post['c'] == 2){
                     $form->addError("error","You can't reinforce this village/oasis");
@@ -134,8 +117,8 @@ class Units {
                 
                 if($post['c'] < 2 || $post['c'] > 4) $form->addError("error", "Invalid attack type.");
                 
-                if(empty($post['t1']) && empty($post['t2']) &&  empty($post['t3']) && empty($post['t4']) && empty($post['t5']) &&
-                    empty($post['t6']) && empty($post['t7']) &&  empty($post['t8']) && empty($post['t9']) && empty($post['t10']) &&  empty($post['t11'])){
+                if(empty($post['t1']) && empty($post['t2']) && empty($post['t3']) && empty($post['t4']) && empty($post['t5']) &&
+                    empty($post['t6']) && empty($post['t7']) && empty($post['t8']) && empty($post['t9']) && empty($post['t10']) && empty($post['t11'])){
                 $form->addError("error","You need to mark min. one troop");
                 }
 
@@ -143,31 +126,29 @@ class Units {
                 $form->addError("error","Insert name or coordinates");
                 }
 
-                if(isset($post['dname']) && $post['dname'] != "") {
+                if(isset($post['dname']) && !empty($post['dname'])) {
                     $id = $database->getVillageByName(stripslashes($post['dname']));
-                    if (!isset($id)){
-                    $form->addError("error","Village do not exist");
-                    }else{
-                    $coor = $database->getCoor($id);
-                    }
+                    
+                    if (!isset($id)) $form->addError("error","Village do not exist");
+                    else $coor = $database->getCoor($id);
                 }
 		
                 // People search by coordinates
                 // We confirm and seek coordinate coordinates Village
-        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
-            $coor = array('x'=>$post['x'], 'y'=>$post['y']);
-            $id = $generator->getBaseID($coor['x'],$coor['y']);
-            if (!$database->getVillageState($id)){
-                $form->addError("error","Coordinates do not exist");
-            }
+        if(isset($post['x']) && isset($post['y']) && !empty($post['x']) && !empty($post['y'])) {
+            $coor = ['x' => $post['x'], 'y' => $post['y']];
+            $id = $generator->getBaseID($coor['x'], $coor['y']);
+            
+            if (!$database->getVillageState($id)) $form->addError("error","Coordinates do not exist");
         }   
+        
         if (!empty($coor)) {    
-            if ($session->tribe == 1){$Gtribe = "";}elseif  ($session->tribe == 2){$Gtribe = "1";}elseif ($session->tribe ==  3){$Gtribe = "2";}elseif ($session->tribe == 4){$Gtribe = "3";}elseif  ($session->tribe == 5){$Gtribe = "4";}
-            for($i=1; $i<12; $i++){
+            $Gtribe = $session->tribe == 1 ? "" : $session->tribe - 1;
+            for($i = 1; $i < 12; $i++){
                 if(isset($post['t'.$i])){
-                    if ($i<10) $troophave=$village->unitarray['u'.$Gtribe.$i];
-                    if ($i==10)$troophave=$village->unitarray['u'.floor(intval($Gtribe)+1)*$i];
-                    if ($i==11)$troophave=$village->unitarray['hero'];
+                    if ($i < 10) $troophave = $village->unitarray['u'.$Gtribe.$i];
+                    if ($i == 10) $troophave = $village->unitarray['u'.floor(intval($Gtribe) + 1) * $i];
+                    if ($i == 11) $troophave = $village->unitarray['hero'];
                                         
                     if (intval($post['t'.$i]) > $troophave){
                         $form->addError("error","You can't send more units than you have");
@@ -184,63 +165,61 @@ class Units {
                 }
             }
         }
-                if (isset($id) && $database->isVillageOases($id) == 0) {
-                if($database->hasBeginnerProtection($id)==1) {
-                    $form->addError("error","Player is under beginners protection. You can't attack him");
-                }
-
-                //check if banned/admin:
-                $villageOwner = $database->getVillageField($id,'owner');
-                $userAccess = $database->getUserField($villageOwner,'access',0);
-                $userID = $database->getUserField($villageOwner,'id',0);
-                if($userAccess == '0' or ($userAccess == MULTIHUNTER && $userID == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
-                                $form->addError("error","Player is Banned. You can't attack him");
-                                //break;
-                    }
-                //check if vacation mode:
-                    if($database->getvacmodexy($id)){
-                                $form->addError("error","User is on vacation mode");
-                                //break;
-                    }
-
-                //check if attacking same village that units are in
-                    if($id == $village->wid){
-                                $form->addError("error","You cant attack same village you are sending from.");
-                                //break;
-                    }
-                // We process the array with the errors given in the form
-                if($form->returnErrors() > 0) {
-                    $_SESSION['errorarray'] = $form->getErrors();
-                    $_SESSION['valuearray'] = $_POST;
-                    header("Location: a2b.php");
-                    exit;
-                }else{
+        
+        if(isset($id) && $database->isVillageOases($id) == 0) {
+            if($database->hasBeginnerProtection($id) == 1) {
+                $form->addError("error","Player is under beginners protection. You can't attack him");
+            }
+            
+            //check if banned/admin:
+            $villageOwner = $database->getVillageField($id,'owner');
+            $userAccess = $database->getUserField($villageOwner,'access',0);
+            $userID = $database->getUserField($villageOwner,'id',0);
+            if($userAccess == 0 or ($userAccess == MULTIHUNTER && $userID == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
+                $form->addError("error","Player is Banned. You can't attack him");
+                //break;
+            }
+            //check if vacation mode:
+            if($database->getvacmodexy($id)){
+                $form->addError("error","User is on vacation mode");
+                //break;
+            }
+            
+            //check if attacking same village that units are in
+            if($id == $village->wid){
+                $form->addError("error","You cant attack same village you are sending from.");
+                //break;
+            }
+            // We process the array with the errors given in the form
+            if($form->returnErrors() > 0) {
+                $_SESSION['errorarray'] = $form->getErrors();
+                $_SESSION['valuearray'] = $_POST;
+                header("Location: a2b.php");
+                exit;
+            }else{
                 // We must return an array with $ post, which contains all the data more
                 // another variable that will define the flag is raised and is being sent and the type of shipping
                 $villageName = $database->getVillageField($id,'name');
                 $speed= 300;
                 $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
                 array_push($post, "$id", "$villageName", "$villageOwner","$timetaken");
-                return $post;
-
+                return $post;               
             }
-                  }else{
-
-                      if($form->returnErrors() > 0) {
-                    $_SESSION['errorarray'] = $form->getErrors();
-                    $_SESSION['valuearray'] = $_POST;
-                    header("Location: a2b.php");
-                    exit;
-                } else if (isset($id)) {
+        }else{           
+            if($form->returnErrors() > 0) {
+                $_SESSION['errorarray'] = $form->getErrors();
+                $_SESSION['valuearray'] = $_POST;
+                header("Location: a2b.php");
+                exit;
+            } else if (isset($id)) {
                 $villageName = $database->getOasisField($id,"name");
                 $speed= 300;
                 $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
                 array_push($post, "$id", "$villageName", "2","$timetaken");
                 return $post;
-
+                
             }
-                  }
-
+        }
     }
     
     public function returnTroops($wref, $mode = 0) {
@@ -681,6 +660,60 @@ class Units {
             
             return $heroes;
         }
+    }
+    
+    /**
+     * Function to kill/release prisoners
+     * 
+     * @param int the ID of the prisoners you want to release
+     */
+    
+    public function deletePrisoners($id){
+        global $village, $database, $session, $building, $bid19, $u99;
+        
+        $prisoner = $database->getPrisonersByID($id);
+        $troops = 0;
+        if($prisoner['wref'] == $village->wid){
+            $p_owner = $database->getVillageField($prisoner['from'], "owner");
+            $p_tribe = $database->getUserField($p_owner, "tribe", 0);
+            
+            $troopsTime = $this->getWalkingTroopsTime($prisoner['from'], $prisoner['wref'], $p_owner, $p_tribe, $prisoner, 1, 't');
+            $p_time = $database->getArtifactsValueInfluence($p_owner, $prisoner['from'], 2, $troopsTime);
+            
+            $p_reference = $database->addAttack($prisoner['from'], $prisoner['t1'],$prisoner['t2'], $prisoner['t3'], $prisoner['t4'], $prisoner['t5'], $prisoner['t6'], $prisoner['t7'], $prisoner['t8'], $prisoner['t9'], $prisoner['t10'], $prisoner['t11'], 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            $database->addMovement(4, $prisoner['wref'], $prisoner['from'], $p_reference, time(), ($p_time + time()));
+            
+            for($i = 1; $i <= 11; $i++) $troops += $prisoner['t'.$i];
+            
+            //Reset traps
+            $database->modifyUnit($village->wid, ["99", "99o"], [$troops, $troops], [0, 0]);            
+            $repairDuration = $database->getArtifactsValueInfluence($session->uid, $village->wid, 5, round(($bid19[max($building->getTypeLevel(36, $village->wid), 1)]['attri'] / 100) * $u99['time'] / SPEED));
+            $database->trainUnit($village->wid, 99, $troops, $u99['pop'], $repairDuration, 0);           
+            
+            $database->deletePrisoners($prisoner['id']);
+        }else if($prisoner['from'] == $village->wid){    
+            $prisonersToOwner = $database->getVillageField($prisoner['wref'], "owner");
+            
+            for($i = 1; $i <= 11; $i++) $troops += $prisoner['t'.$i];
+            
+            if($prisoner['t11'] > 0){
+                $p_owner = $database->getVillageField($prisoner['from'], "owner");
+                mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."hero SET `dead` = '1', `health` = '0' WHERE `uid` = '".$p_owner."' AND dead = 0");
+            }
+        
+            //Reset traps
+            $database->modifyUnit($prisoner['wref'], ["99", "99o"], [$troops, $troops], [0, 0]);   
+            
+            if(($troops = round($troops / 3)) > 0){
+                $repairDuration = $database->getArtifactsValueInfluence($prisonersToOwner, $prisoner['wref'], 5, round(($bid19[max($building->getTypeLevel(36, $prisoner['wref']), 1)]['attri'] / 100) * $u99['time'] / SPEED));
+                $database->trainUnit($prisoner['wref'], 99, $troops, $u99['pop'], $repairDuration, 0);
+            }                       
+            
+            $database->deletePrisoners($prisoner['id']);
+        }
+        
+        header("Location: build.php?id=39");
+        exit;
     }
     
     /**

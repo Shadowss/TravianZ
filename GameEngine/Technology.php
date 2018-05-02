@@ -507,7 +507,7 @@ class Technology {
         return $database->getArtifactsValueInfluence($session->uid, $vid, 4, $upkeep);
 	}
 
-    private function trainUnit($unit,$amt,$great=false) {
+    private function trainUnit($unit, $amt, $great = false) {
 		global $session, $database, ${'u'.$unit}, $building, $village, $bid19, $bid20, $bid21, $bid25, $bid26, $bid29, $bid30, $bid36, $bid41, $bid42;
 
 		if($this->getTech($unit) || $unit % 10 <= 1 || $unit == 99) {
@@ -557,36 +557,32 @@ class Technology {
 			    
 					$each = round(($bid19[$building->getTypeLevel(36)]['attri'] / 100) * ${'u'.$unit}['time'] / SPEED);
 			}	
-			if($unit%10 == 0 || $unit%10 == 9 && $unit != 99) {
-				$slots = $database->getAvailableExpansionTraining();
-				if($unit%10 == 0 && $slots['settlers'] <= $amt) { $amt = $slots['settlers']; }
-				if($unit%10 == 9 && $slots['chiefs'] <= $amt) { $amt = $slots['chiefs']; }
+			if($unit % 10 == 0 || $unit % 10 == 9 && $unit != 99) {
+			    $slots = $database->getAvailableExpansionTraining();
+			    if($unit % 10 == 0 && $slots['settlers'] <= $amt) $amt = $slots['settlers'];
+			    if($unit % 10 == 9 && $slots['chiefs'] <= $amt) $amt = $slots['chiefs'];
 			} else {
-			if($unit != 99){
-				if($this->maxUnit($unit,$great) < $amt) {
-					$amt = 0;
-				}
-			}else{
-			$trainlist = $this->getTrainingList(8);
-			foreach($trainlist as $train) {
-			$train_amt += $train['amt'];
+			    if($unit != 99){
+			        if($this->maxUnit($unit, $great) < $amt) $amt = 0;
+			    }else{
+			        $trainlist = $this->getTrainingList(8);
+			        
+			        foreach($trainlist as $train) $train_amt += $train['amt'];
+			        
+			        $max = 0;
+			        for($i = 19; $i < 41; $i++){
+			            if($village->resarray['f'.$i.'t'] == 36){
+			                $max += $bid36[$village->resarray['f'.$i]]['attri']*TRAPPER_CAPACITY;
+			            }
+			        }
+			        $max1 = $max - ($village->unitarray['u99'] + $train_amt);
+			        if($max1 < $amt) $amt = 0;
+			    }
 			}
-			$max = 0;
-			for($i=19;$i<41;$i++){
-			if($village->resarray['f'.$i.'t'] == 36){
-			$max += $bid36[$village->resarray['f'.$i]]['attri']*TRAPPER_CAPACITY;
-			}
-			}
-			$max1 = $max - ($village->unitarray['u99'] + $train_amt);
-				if($max1 < $amt) {
-					$amt = 0;
-				}
-			}
-			}
-			$wood = ${'u'.$unit}['wood'] * $amt * ($great?3:1);
-			$clay = ${'u'.$unit}['clay'] * $amt * ($great?3:1);
-			$iron = ${'u'.$unit}['iron'] * $amt * ($great?3:1);
-			$crop = ${'u'.$unit}['crop'] * $amt * ($great?3:1);
+			$wood = ${'u'.$unit}['wood'] * $amt * ($great ? 3 : 1);
+			$clay = ${'u'.$unit}['clay'] * $amt * ($great ? 3 : 1);
+			$iron = ${'u'.$unit}['iron'] * $amt * ($great ? 3 : 1);
+			$crop = ${'u'.$unit}['crop'] * $amt * ($great ? 3 : 1);
 
 			if($database->modifyResource($village->wid, $wood , $clay, $iron, $crop, 0) && $amt > 0) {
 				$database->trainUnit($village->wid, $unit + ($great ? 60 : 0), $amt, ${'u'.$unit}['pop'], $each, 0);
