@@ -68,7 +68,7 @@ running this game :)
 
 Also, our thanks go to all both, the original and occasional developers, especially [yi12345](https://github.com/yi12345/), 
 [advocaite](https://github.com/advocaite/), [brainiacX](https://github.com/brainiacX/), [ronix](https://github.com/ronix/), 
-[MisterX](https://github.com/MisterX/), [Elio](https://github.com/Elio/) and many others who were part of this 
+[MisterX](https://github.com/MisterX/), [Elio](https://github.com/eliopinho/) and many others who were part of this 
 project's history.
 
 Last but not least, our thanks go to [JetBrains](https://www.jetbrains.com/) for lending us a one-year full-featured 
