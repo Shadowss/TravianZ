@@ -2280,9 +2280,8 @@ class Automation {
 
                                                 //no units can stay in the village itself
                                                 $units2reset = [];
-                                                for ($u = 1; $u <= 50; $u++) {
-                                                    $units2reset[] = 'u'.$u.' = 0';
-                                                }
+                                                for ($u = 1; $u <= 50; $u++) $units2reset[] = 'u'.$u.' = 0';
+
                                                 $units2reset[] = 'u99 = 0';
                                                 $units2reset[] = 'u99o = 0';
                                                 $units2reset[] = 'hero = 0';
@@ -2298,10 +2297,9 @@ class Automation {
                                                 $pop2 = $poparray[1]['Total'];
                                                 if($pop1 > $pop2){
                                                     $buildlevel = $database->getResourceLevel($data['to']);
-
-                                                    for ($i=1; $i<=39; $i++){
+                                                    for ($i = 1; $i <= 39; $i++){
                                                         if($buildlevel['f'.$i]!=0){
-                                                            if($buildlevel['f'.$i."t"]!=35 && $buildlevel['f'.$i."t"]!=36 && $buildlevel['f'.$i."t"]!=41){
+                                                            if($buildlevel['f'.$i."t"] != 35 && $buildlevel['f'.$i."t"] != 36 && $buildlevel['f'.$i."t"] != 41){
                                                                 $leveldown = $buildlevel['f'.$i]-1;
                                                                 $newLevels_fieldNames[] = "f".$i;
                                                                 $newLevels_fieldValues[] = $leveldown;
@@ -2321,8 +2319,8 @@ class Automation {
                                                         }
                                                     }
 
-                                                    if ($buildlevel['f99']!=0) {
-                                                        $leveldown = $buildlevel['f99']-1;
+                                                    if ($buildlevel['f99'] != 0) {
+                                                        $leveldown = $buildlevel['f99'] - 1;
                                                         $newLevels_fieldNames[] = "f99";
                                                         $newLevels_fieldValues[] = $leveldown;
                                                     }
@@ -2381,12 +2379,12 @@ class Automation {
                         $info_chief = "".$chief_pic.",Could not reduce cultural points during raid";        
                     }
 
-                    if(($data['t11'] - $dead11 - $traped11)> 0){ //hero
+                    if(($data['t11'] - $dead11 - $traped11) > 0){ //hero
                         if ($heroxp == 0) {
-                            $xp="";
+                            $xp = "";
                             $info_hero = $hero_pic.",Your hero had nothing to kill therefore gains no XP at all.";
                         } else {
-                            $xp=" and gained <b>".$heroxp."</b> XP from the battle.";
+                            $xp = " and gained <b>".$heroxp."</b> XP from the battle.";
                             $info_hero = $hero_pic.",Your hero gained <b>".$heroxp."</b> XP.";
                         }
 
@@ -2449,7 +2447,7 @@ class Automation {
 				 <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".round($totclay)." |
 				 <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".round($totiron)." |
 				 <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".round($totcrop)."</div>
-				 <div class=\"carry\"><img class=\"car\" src=\"img/x.gif\" alt=\"carry\" title=\"carry\" />Total Resources : ".round($totwood+$totclay+$totiron+$totcrop)."</div>
+				 <div class=\"carry\"><img class=\"car\" src=\"img/x.gif\" alt=\"carry\" title=\"carry\" />Total Resources: ".round($totwood+$totclay+$totiron+$totcrop)."</div>
 	";
                         }else if($data['spy'] == 2){
                             if ($isoasis == 0){
@@ -3685,108 +3683,82 @@ class Automation {
     }
     
     private function bountyGetWoodProd() {
-        global $bid1,$bid5,$session;
+        global $bid1, $bid5;
+        
         $wood = $sawmill = 0;
-        $woodholder = array();
-        for($i=1;$i<=38;$i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 1) {
-                array_push($woodholder,'f'.$i);
-            }
-            if($this->bountyresarray['f'.$i.'t'] == 5) {
-                $sawmill = $this->bountyresarray['f'.$i];
-            }
+        $woodholder = [];
+        for($i = 1; $i <= 38; $i++) {
+            if($this->bountyresarray['f'.$i.'t'] == 1) array_push($woodholder,'f'.$i);
+            if($this->bountyresarray['f'.$i.'t'] == 5) $sawmill = $this->bountyresarray['f'.$i];
         }
-        for($i=0;$i<=count($woodholder)-1;$i++) { $wood+= $bid1[$this->bountyresarray[$woodholder[$i]]]['prod']; }
-        if($sawmill >= 1) {
-            $wood += $wood /100 * $bid5[$sawmill]['attri'];
-        }
-        if($this->bountyocounter[0] != 0) {
-            $wood += $wood*0.25*$this->bountyocounter[0];
-        }
-        $wood *= SPEED;
-        return round($wood);
+        
+        for($i = 0; $i <= count($woodholder) - 1; $i++) $wood += $bid1[$this->bountyresarray[$woodholder[$i]]]['prod'];
+        
+        if($sawmill >= 1) $wood += $wood / 100 * $bid5[$sawmill]['attri'];
+        if($this->bountyocounter[0] != 0) $wood += $wood * 0.25 * $this->bountyocounter[0];
+
+        return round($wood * SPEED);
     }
     
     private function bountyGetClayProd() {
-        global $bid2,$bid6,$session;
+        global $bid2, $bid6;
+        
         $clay = $brick = 0;
-        $clayholder = array();
-        for($i=1;$i<=38;$i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 2) {
-                array_push($clayholder,'f'.$i);
-            }
-            if($this->bountyresarray['f'.$i.'t'] == 6) {
-                $brick = $this->bountyresarray['f'.$i];
-            }
+        $clayholder = [];
+        for($i = 1; $i <= 38; $i++) {
+            if($this->bountyresarray['f'.$i.'t'] == 2) array_push($clayholder,'f'.$i);
+            if($this->bountyresarray['f'.$i.'t'] == 6) $brick = $this->bountyresarray['f'.$i];
         }
-        for($i=0;$i<=count($clayholder)-1;$i++) { $clay+= $bid2[$this->bountyresarray[$clayholder[$i]]]['prod']; }
-        if($brick >= 1) {
-            $clay += $clay /100 * $bid6[$brick]['attri'];
-        }
-        if($this->bountyocounter[1] != 0) {
-            $clay += $clay*0.25*$this->bountyocounter[1];
-        }
-        $clay *= SPEED;
-        return round($clay);
+        
+        for($i = 0; $i <= count($clayholder) - 1; $i++) $clay+= $bid2[$this->bountyresarray[$clayholder[$i]]]['prod'];
+        
+        if($brick >= 1) $clay += $clay / 100 * $bid6[$brick]['attri'];
+        if($this->bountyocounter[1] != 0) $clay += $clay * 0.25 * $this->bountyocounter[1];
+
+        return round($clay * SPEED);
     }
 
     private function bountyGetIronProd() {
-        global $bid3,$bid7,$session;
+        global $bid3, $bid7;
+        
         $iron = $foundry = 0;
         $ironholder = array();
-        for($i=1;$i<=38;$i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 3) {
-                array_push($ironholder,'f'.$i);
-            }
-            if($this->bountyresarray['f'.$i.'t'] == 7) {
-                $foundry = $this->bountyresarray['f'.$i];
-            }
+        for($i = 1; $i <= 38; $i++) {
+            if($this->bountyresarray['f'.$i.'t'] == 3) array_push($ironholder,'f'.$i);               
+            if($this->bountyresarray['f'.$i.'t'] == 7) $foundry = $this->bountyresarray['f'.$i];
         }
-        for($i=0;$i<=count($ironholder)-1;$i++) { $iron+= $bid3[$this->bountyresarray[$ironholder[$i]]]['prod']; }
-        if($foundry >= 1) {
-            $iron += $iron /100 * $bid7[$foundry]['attri'];
-        }
-        if($this->bountyocounter[2] != 0) {
-            $iron += $iron*0.25*$this->bountyocounter[2];
-        }
-        $iron *= SPEED;
-        return round($iron);
+        
+        for($i = 0; $i <= count($ironholder) - 1; $i++) $iron+= $bid3[$this->bountyresarray[$ironholder[$i]]]['prod'];
+        
+        if($foundry >= 1) $iron += $iron / 100 * $bid7[$foundry]['attri'];
+        if($this->bountyocounter[2] != 0) $iron += $iron * 0.25 * $this->bountyocounter[2];
+
+        return round($iron * SPEED);
     }
 
     private function bountyGetCropProd() {
-        global $bid4,$bid8,$bid9,$session;
+        global $bid4, $bid8, $bid9;
+        
         $crop = $grainmill = $bakery = 0;
-        $cropholder = array();
-        for($i=1;$i<=38;$i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 4) {
-                array_push($cropholder,'f'.$i);
-            }
-            if($this->bountyresarray['f'.$i.'t'] == 8) {
-                $grainmill = $this->bountyresarray['f'.$i];
-            }
-            if($this->bountyresarray['f'.$i.'t'] == 9) {
-                $bakery = $this->bountyresarray['f'.$i];
-            }
+        $cropholder = [];
+        for($i = 1; $i <= 38;$i++) {
+            if($this->bountyresarray['f'.$i.'t'] == 4) array_push($cropholder,'f'.$i);
+            if($this->bountyresarray['f'.$i.'t'] == 8) $grainmill = $this->bountyresarray['f'.$i];
+            if($this->bountyresarray['f'.$i.'t'] == 9) $bakery = $this->bountyresarray['f'.$i];
         }
-        for($i=0;$i<=count($cropholder)-1;$i++) { $crop+= $bid4[$this->bountyresarray[$cropholder[$i]]]['prod']; }
-        if($grainmill >= 1) {
-            $crop += $crop /100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
-        }
-        if($bakery >= 1) {
-            $crop += $crop /100 * (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);
-        }
-        if($this->bountyocounter[3] != 0) {
-            $crop += $crop*0.25*$this->bountyocounter[3];
-        }
-        if(!empty($bountyresarray['vref']) &&  is_numeric($bountyresarray['vref'])){
+        for($i = 0; $i <= count($cropholder) - 1; $i++) $crop+= $bid4[$this->bountyresarray[$cropholder[$i]]]['prod'];
+        
+        if($grainmill >= 1) $crop += $crop / 100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
+        if($bakery >= 1) $crop += $crop / 100 * (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);                
+        if($this->bountyocounter[3] != 0) $crop += $crop * 0.25 * $this->bountyocounter[3];       
+        
+        if(!empty($bountyresarray['vref']) && is_numeric($bountyresarray['vref'])){
             $who=$database->getVillageField($bountyresarray['vref'],"owner");
-            $croptrue=$database->getUserField($who,"b4",0);
-            if($croptrue > time()) {
-                $crop*=1.25;
-            }
+            $croptrue = $database->getUserField($who, "b4", 0);
+            if($croptrue > time()) $crop *= 1.25;
         }
-        $crop *= SPEED;
-        return round($crop);
+        
+        return round($crop * SPEED);
     }
 
     private function trainingComplete() {

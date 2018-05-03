@@ -69,6 +69,7 @@ class Session {
 			var $bonus2 = 0;
 			var $bonus3 = 0;
 			var $bonus4 = 0;
+			var $timer = 0;
 			var $checker, $mchecker;
 			public $userinfo = array();
 			private $userarray = array();

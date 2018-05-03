@@ -84,7 +84,7 @@ div.c1 {text-align: center}
 		}
 		?>
     </div><?php
-    if($_SESSION['ok']=='1'){
+    if($_SESSION['ok'] == 1){
     ?>
 
     <div id="content" class="village1">
@@ -99,10 +99,10 @@ div.c1 {text-align: center}
     </div>
 
     <div id="side_info">
-        <?php
-        include("Templates/quest.tpl");
-        include("Templates/news.tpl");
+        <?php 
         include("Templates/multivillage.tpl");
+        include("Templates/quest.tpl");
+        include("Templates/news.tpl");        
         ?>
     </div>
 

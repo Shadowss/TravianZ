@@ -1,10 +1,9 @@
 <?php
 $units = $database->getMovement(3,$village->wid,0);
 $total_for = count($units);
-$timer = 0;
 
 for($y=0;$y<$total_for;$y++){
-$timer += 1;
+$session->timer++;
 
 if($units[$y]['attack_type'] == 2){
 	$attack_type = REINFORCEMENTFOR;
@@ -78,7 +77,7 @@ $to = $database->getOMInfo($units[$y]['to']);}
 				<th><?php echo ARRIVAL;?></th>
 				<td colspan="<?php if($units[$y]['t11'] == 0) {echo"10";}else{echo"11";}?>">
 				<?php
-				    echo "<div class=\"in small\"><span id=timer$timer>".$generator->getTimeFormat($units[$y]['endtime']-time())."</span> h</div>";
+				echo "<div class=\"in small\"><span id=timer$session->timer>".$generator->getTimeFormat($units[$y]['endtime']-time())."</span> h</div>";
 				    $datetime = $generator->procMtime($units[$y]['endtime']);
 				    echo "<div class=\"at\">";
 				    if($datetime[0] != "today") {
@@ -104,7 +103,7 @@ $to = $database->getOMInfo($units[$y]['to']);}
         $total_for = count($settlers);
 
 for($y=0;$y<$total_for;$y++){
-$timer += 1;
+    $session->timer++;
 
 ?>
 <table class="troop_details" cellpadding="1" cellspacing="1">
@@ -147,7 +146,7 @@ $timer += 1;
                 <th><?php echo ARRIVAL;?></th>
                 <td colspan="<?php if($units[$y]['t11'] == 0) {echo"10";}else{echo"11";}?>">
                 <?php
-                    echo "<div class=\"in small\"><span id=timer$timer>".$generator->getTimeFormat($settlers[$y]['endtime']-time())."</span> h</div>";
+                echo "<div class=\"in small\"><span id=timer$session->timer>".$generator->getTimeFormat($settlers[$y]['endtime']-time())."</span> h</div>";
                     $datetime = $generator->procMtime($settlers[$y]['endtime']);
                     echo "<div class=\"at small\">";
                     if($datetime[0] != "today") {
