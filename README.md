@@ -57,6 +57,7 @@ or you have a feature request to be included in the play.
 * [AL-Kateb](https://github.com/AL-Kateb) - developer
 * [martinambrus](https://github.com/martinambrus) - alumni developer
 * [Vladyslav](https://github.com/velhbxtyrj) - rigorous game tester
+* [phaze1G](https://github.com/phaze1G) - game designer / css support
 
 **Thanks**
 
