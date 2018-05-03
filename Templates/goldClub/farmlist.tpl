@@ -1,10 +1,10 @@
 <?php
 
-if(isset($_GET['t'])==99 && isset($_GET['action'])==0) {
+if(isset($_GET['t']) == 99 && isset($_GET['action']) == 0) {
 
-if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList' && $_POST['did']!="" && $_POST['name']!=""){
+if(isset($_GET['t']) == 99 && isset($_POST['action']) == 'addList' && !empty($_POST['did']) && !empty($_POST['name'])){
     $database->createFarmList($_POST['did'], $session->uid, $_POST['name']);
-}else if(isset($_GET['t'])==99 && isset($_POST['action'])=='addList'){
+}else if(isset($_GET['t']) == 99 && isset($_POST['action']) == 'addList'){
 	header("Location: build.php?gid=16&t=99&action=addList");
 	exit;
 }
@@ -31,12 +31,12 @@ while($row = mysqli_fetch_array($sql)){
                             <?php echo $lvname; ?> - <?php echo $lname; ?>
                             <img alt="Loading..." class="loading hide" src="img/x.gif" align="absmiddle">
                         </div>
-                        <div class="openedClosedSwitch switchOpened">                        </div>
+                        <div class="openedClosedSwitch switchOpened"></div>
                         <div class="clear"></div>
                     </div>
-                    <div class="listContent ">
-                                                    <div class="detail">
-    <table class="list" cellpadding="1" cellspacing="1">
+	<div class="listContent ">
+    <div class="detail">
+    <table id="raidList" cellpadding="1" cellspacing="1">
         <thead>
             <tr>
                 <td class="checkbox edit"></td>
@@ -44,7 +44,7 @@ while($row = mysqli_fetch_array($sql)){
                 <td class="ew sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'ew');">Pop</td>
                 <td class="distance sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'distance');">Distance</td>
                 <td class="troops sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'troops');">Troops</td>
-                <td class="lastRaid sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'lastRaid');">LastRaid</td>
+                <td class="lastRaid sortable" onclick="Travian.Game.RaidList.sort(<?php echo $lid; ?>, 'lastRaid');">Last raid</td>
                 <td class="action"></td>
             </tr>
         </thead>
@@ -54,7 +54,7 @@ while($row = mysqli_fetch_array($sql)){
 $sql2 = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".(int) $lid." ORDER BY distance ASC");
 $query2 = mysqli_num_rows($sql2);
 if($query2 == 0) {        
-    echo '<td class="noData" colspan="7">There is not any raid list.</td>';
+    echo '<td class="noData" colspan="7">There are no village.</td>';
 }else{
 while($row = mysqli_fetch_array($sql2)){ 
 $id= $row['id'];$lid = $row['lid'];$towref = $row['towref'];$x = $row['x'];$y = $row['y'];
@@ -240,11 +240,12 @@ while($row2 = mysqli_fetch_array($getnotice)){
         <label for="raidListMarkAll<?php echo $lid; ?>">Select All</label>
     </div>
 
-    <div class="addSlot">
-<a href="build.php?id=39&t=99&action=addraid&lid=<?php echo $lid; ?>">Add Raid</a>
+<div class="addSlot"><br />
+<button type="button" class="trav_buttons" onclick="window.location.href = '?gid=16&t=99&action=addraid&lid=<?php echo $lid; ?>';">Add Raid</button>
+<button type="submit" class="trav_buttons" value="Start Raid">Start Raid</button>
 </div>
-<div class="clear"></div>
 
+<div class="clear"></div><br /><br />
 <div class="troopSelection">
 <?php
 /*
@@ -261,8 +262,7 @@ for($i=$start;$i<=$end;$i++){
 ?>
         <div class="clear"></div>
 </div>
-
-<button type="submit" value="Start Raid"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Start Raid</div></div></button>                                            </div>
+</div>
 </form>
 
 

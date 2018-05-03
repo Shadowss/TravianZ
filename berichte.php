@@ -95,7 +95,7 @@ if(isset($_GET['newdid'])) {
 <?php
 if (isset($_GET['id'])) 
 {
-    if (isset($_GET['aid']) && $_GET['aid'] > 0 && $_GET['aid'] == $session->alliance)
+    if (isset($_GET['aid']) && $_GET['aid'] > 0 && $_GET['aid'] == $session->alliance && $database->getNotice2($_GET['id'], 'ally') == $session->alliance)
     {
         $type = $database->getNotice2($_GET['id'], 'ntype');
         if ($type >= 10 && $type <= 17) unset($type);

@@ -10,8 +10,7 @@
 	    $sql1 = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."units WHERE vref = ".(int) $getFLData['wref']));
         $sid = $row['id'];
         $wref = $row['towref'];
-        $t1 = $row['t1'];$t2 = $row['t2'];$t3 = $row['t3'];$t4 = $row['t4'];$t5 = $row['t5'];
-        $t6 = $row['t6'];$t7 = $row['t7'];$t8 = $row['t8'];$t9 = $row['t9'];$t10 = $row['t10'];
+        for($i = 1; $i <= 10; $i++) ${'t'.$i} = $row['t'.$i];
         $t11 = 0;
 		$villageOwner = $database->getVillageField($wref,'owner');
 		$userAccess = $database->getUserField($villageOwner,'access',0);
@@ -60,7 +59,7 @@
                     $id   = $database->addA2b( $ckey, $time_now, $wref, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10, $t11, 4 );
 
                     $data = $database->getA2b( $ckey, $time_now );
-                    
+
                     $troopsTime = $units->getWalkingTroopsTime($getFLData['wref'], $data['to_vid'], $session->uid, $session->tribe, $data, 1, 'u');
                     $time = $database->getArtifactsValueInfluence($getFLData['owner'], $getFLData['wref'], 2, $troopsTime);
 
@@ -69,7 +68,7 @@
                     $reference = $database->addAttack( ( $getFLData['wref'] ), $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], $data['type'], $ctar1, $ctar2, 0, $abdata['b1'], $abdata['b2'], $abdata['b3'], $abdata['b4'], $abdata['b5'], $abdata['b6'], $abdata['b7'], $abdata['b8'] );
                     $totalunits = $data['u1'] + $data['u2'] + $data['u3'] + $data['u4'] + $data['u5'] + $data['u6'] + $data['u7'] + $data['u8'] + $data['u9'] + $data['u10'] + $data['u11'];
 
-                    $units   = [];
+                    $troops   = [];
                     $amounts = [];
                     $modes   = [];
 
@@ -80,16 +79,16 @@
                           $unitKey = $uname2 . ($u < 10 ? $u : 0);
                         }
 
-                        $units[]   = $unitKey;
+                        $troops[]   = $unitKey;
                         $amounts[] = $data[ 'u' . $u];
                         $modes[]   = 0;
                     }
 
-                    $units[]   = 'hero';
+                    $troops[]   = 'hero';
                     $amounts[] = $data['u11'];
                     $modes[]   = 0;
 
-                    $database->modifyUnit($getFLData['wref'], $units, $amounts, $modes);
+                    $database->modifyUnit($getFLData['wref'], $troops, $amounts, $modes);
                     $database->addMovement(3, $getFLData['wref'], $data['to_vid'], $reference, time(), ($time + time()));
 
                     // prevent re-use of the same attack via re-POSTing the same data

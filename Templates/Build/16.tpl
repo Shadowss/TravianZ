@@ -8,14 +8,8 @@
 <h1><?php echo RALLYPOINT;?> <span class="level"><?php echo LEVEL;?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 <p class="build_desc"><?php echo RALLYPOINT_DESC;?></p>
 
-<div id="textmenu">
-                <a href="build.php?id=<?php echo $id; ?>"><?php echo OVERVIEW;?></a> |
-                <a href="a2b.php"><?php echo SEND_TROOPS;?></a> |
-                <a href="warsim.php"><?php echo Q20_RESP1;?></a> <?php if($session->goldclub==1){ ?>|
-                <a href="build.php?id=<?php echo $id; ?>&amp;t=99">Gold Club</a>
-                <?php } ?>
-                </div>
 <?php
+include_once("16_menu.tpl");
 $units_type = $database->getMovement("34",$village->wid,1);
 $settlers = $database->getMovement("7",$village->wid,1);
 $oasis_incoming = 0;

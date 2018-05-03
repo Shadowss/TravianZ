@@ -17,12 +17,12 @@ include_once( "GameEngine/Village.php" );
 include_once( "GameEngine/Units.php" );
 AccessLogger::logRequest();
 
-if ( isset( $_GET['newdid'] ) ) {
+if(isset($_GET['newdid'])){
     $_SESSION['wid'] = $_GET['newdid'];
-    header( "Location: " . $_SERVER['PHP_SELF'] . ( isset( $_GET['id'] ) ? '?id=' . $_GET['id'] : ( isset( $_GET['gid'] ) ? '?gid=' . $_GET['gid'] : '' ) ) );
+    header("Location: " . $_SERVER['PHP_SELF'].(isset($_GET['id']) ? '?id='.$_GET['id'] : (isset($_GET['gid']) ? '?gid='.$_GET['gid'] : '')));
     exit;
 }
-if (isset($_GET['id']) && ($_GET['id'] < 1 || $_GET['id'] > 40 && ($_GET['id'] == 99 && $village->natar == 0 || $_GET['id'] != 99))) {
+if(isset($_GET['id']) && ($_GET['id'] < 1 || $_GET['id'] > 40 && ($_GET['id'] == 99 && $village->natar == 0 || $_GET['id'] != 99))){
     header("Location: dorf2.php");
     exit;
 }
@@ -47,7 +47,7 @@ if ( isset( $_GET['id'] ) ) {
         $_GET['id'] = "1";
     }
 
-    $checkBuildings = array( 0, 16, 17, 25, 26, 27 );
+    $checkBuildings = [0, 16, 17, 25, 26, 27];
 
     if ( $_GET['id'] < 19 || ( isset( $_GET['gid'] ) && ! in_array( $_GET['gid'], $checkBuildings ) ) ) {
         $_GET['t'] = "";
@@ -188,75 +188,65 @@ if ($session->goldclub == 1 && count($session->villages) > 1) {
     }
 }
 
-if ( $session->goldclub == 1 ) {
-    if ( isset( $_GET['t'] ) == 99 ) {
+if ($session->goldclub == 1) {
+    if (isset($_GET['t']) == 99) {
+        if(isset($_GET['action'])){
+            if($_GET['action'] == 'addList') $create = 1;
+            elseif($_GET['action'] == 'addraid') $create = 2;
+            elseif($_GET['action'] == 'showSlot' && $_GET['eid']) $create = 3; 
+        }       
+        else $create = 0;
 
-        if ( isset( $_GET['action'] ) && $_GET['action'] == 'addList' ) {
-            $create = 1;
-        } else if ( isset( $_GET['action'] ) && $_GET['action'] == 'addraid' ) {
-            $create = 2;
-        } else if ( isset( $_GET['action'] ) && $_GET['action'] == 'showSlot' && $_GET['eid'] ) {
-            $create = 3;
-        } else {
-            $create = 0;
+        if(isset($_GET['slid']) && $_GET['slid']){
+            $FLData = $database->getFLData($_GET['slid']);
+            if ($FLData['owner'] == $session->uid) $checked[$_GET['slid']] = 1;
         }
 
-        if ( isset( $_GET['slid'] ) && $_GET['slid'] ) {
-            $FLData = $database->getFLData( $_GET['slid'] );
-            if ( $FLData['owner'] == $session->uid ) {
-                $checked[ $_GET['slid'] ] = 1;
-            }
-        }
-
-        if ( isset( $_GET['action'] ) && $_GET['action'] == 'deleteList' ) {
-            $database->delFarmList( $_GET['lid'], $session->uid );
-            header( "Location: build.php?id=39&t=99" );
+        if(isset($_GET['action']) && $_GET['action'] == 'deleteList') {
+            $database->delFarmList($_GET['lid'], $session->uid);
+            header("Location: build.php?id=39&t=99");
             exit;
-        } elseif ( isset( $_GET['action'] ) && $_GET['action'] == 'deleteSlot' ) {
-            $database->delSlotFarm( $_GET['eid'] );
-            header( "Location: build.php?id=39&t=99" );
+        } elseif(isset($_GET['action']) && $_GET['action'] == 'deleteSlot') {
+            $database->delSlotFarm($_GET['eid'], $session->uid, $_GET['lid']);
+            header("Location: build.php?id=39&t=99");
             exit;
         }
 
-        if ( isset( $_POST['action'] ) && $_POST['action'] == 'startRaid' ) {
-            if ( $session->access != BANNED ) {
-                include( "Templates/a2b/startRaid.tpl" );
-            } else {
-                header( "Location: banned.php" );
+        if(isset($_POST['action'] ) && $_POST['action'] == 'startRaid') {
+            if($session->access != BANNED) include("Templates/a2b/startRaid.tpl");               
+            else
+            {
+                header( "Location: banned.php");
                 exit;
             }
         }
 
-        if ( isset( $_GET['slid'] ) && is_numeric( $_GET['slid'] ) ) {
-            $FLData = $database->getFLData( $_GET['slid'] );
-            if ( $FLData['owner'] == $session->uid ) {
-                $checked[ $_GET['slid'] ] = 1;
-            }
+        if(isset($_GET['slid']) && is_numeric($_GET['slid'])) {
+            $FLData = $database->getFLData($_GET['slid']);
+            if ($FLData['owner'] == $session->uid) $checked[$_GET['slid']] = 1;
         }
 
-        if ( isset( $_GET['evasion'] ) && is_numeric( $_GET['evasion'] ) ) {
-            $evasionvillage = $database->getVillage( $_GET['evasion'] );
-            if ( $evasionvillage['owner'] == $session->uid ) {
-                $database->setVillageEvasion( $_GET['evasion'] );
-            }
-            header( "Location: build.php?id=39&t=99" );
+        if(isset($_GET['evasion']) && is_numeric($_GET['evasion'])) {
+            $evasionvillage = $database->getVillage($_GET['evasion']);
+            if($evasionvillage['owner'] == $session->uid) $database->setVillageEvasion($_GET['evasion']);
+            
+            header("Location: build.php?id=39&t=99");
             exit;
         }
 
-        if ( isset( $_POST['maxevasion'] ) && is_numeric( $_POST['maxevasion'] ) ) {
-            $database->updateUserField( $session->uid, "maxevasion", $_POST['maxevasion'], 1 );
-            header( "Location: build.php?id=39&t=99" );
+        if (isset($_POST['maxevasion']) && is_numeric($_POST['maxevasion'])) {
+            $database->updateUserField($session->uid, "maxevasion", $_POST['maxevasion'], 1);
+            header("Location: build.php?id=39&t=99" );
             exit;
         }
     }
-} else {
-    $create = 0;
 }
+else $create = 0;
 
-if ( isset( $_POST['a'] ) == 533374 && isset( $_POST['id'] ) == 39 ) {
-    if ( $session->access != BANNED ) {
-        $units->Settlers( $_POST );
-    } else {
+if(isset($_POST['a']) == 533374 && isset($_POST['id']) == 39) {
+    if($session->access != BANNED) $units->Settlers($_POST);   
+    else 
+    {
         header( "Location: banned.php" );
         exit;
     }
@@ -296,9 +286,7 @@ if ( isset( $_GET['mode'] ) && $_GET['mode'] == 'troops' && isset( $_GET['cancel
         exit;
     }
 }
-if ( isset( $_GET['id'] ) ) {
-    $automation->isWinner();
-}
+if(isset($_GET['id'])) $automation->isWinner();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -345,47 +333,32 @@ if ( isset( $_GET['id'] ) ) {
 <div id="content"  class="build">
 <?php
 if(isset($_GET['id']) || isset($_GET['gid']) || $route == 1 || isset($_POST['routeid']) || isset($_GET['buildingFinish'])) {
-	if(isset($_GET['s']))
-	{
-		if (!ctype_digit($_GET['s'])) {
-			$_GET['s'] = null;
-		}
-	}
-	if(isset($_GET['t']))
-	{
-		if (!ctype_digit($_GET['t'])) {
-			$_GET['t'] = null;
-		}
-	}
-	if (!ctype_digit($_GET['id'])) {
-		$_GET['id'] = "1";
-	}
+    
+    if(isset($_GET['s']) && !ctype_digit($_GET['s'])) $_GET['s'] = null;
+    if(isset($_GET['t']) && !ctype_digit($_GET['t'])) $_GET['t'] = null;
+	if (!ctype_digit($_GET['id'])) $_GET['id'] = 1;
+
 	$id = $_GET['id'];
-	if($id=='99' AND $village->resarray['f99t'] == 40){
-	include("Templates/Build/ww.tpl");
-	} else
-	if($village->resarray['f'.$_GET['id'].'t'] == 0 && $_GET['id'] >= 19) {
+	if($_GET['id'] == 99 && $village->resarray['f99t'] == 40){
+	   include("Templates/Build/ww.tpl");
+	} elseif($village->resarray['f'.$_GET['id'].'t'] == 0 && $_GET['id'] >= 19) {
 		include("Templates/Build/avaliable.tpl");
 	}
 	else {
 		if(isset($_GET['t'])) {
-			if($_GET['t'] == 1) {
-			$_SESSION['loadMarket'] = 1;
-			}
+		    if($_GET['t'] == 1) $_SESSION['loadMarket'] = 1;
 			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['t'].".tpl");
-		} else
-		if(isset($_GET['s'])) {
+		} elseif(isset($_GET['s'])) {
 			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['s'].".tpl");
 		}
-		else {
-			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
-		}
+		else include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
+		
 		if((isset($_GET['buildingFinish'])) && $_GET['buildingFinish'] == 1) {
         	if($session->gold >= 2) {
             		$building->finishAll("build.php?gid=".$_GET['id']."&ty=".$_GET['ty']);
             		exit;
         	}
-        	}
+        }
 	}
 }else{
 header("Location: ".$_SERVER['PHP_SELF']."?id=39");
@@ -428,9 +401,8 @@ echo round(($generator->pageLoadTimeEnd()-$pagestart)*1000);
 	// update TITLE to include building name, as it's not very possible to do in PHP in current codebase
 	if (document.getElementsByTagName('h1').length) {
 		document.title = document.title + ' » » ' + document.getElementsByTagName('h1')[0].innerHTML.replace(/(<([^>]+)>)/ig,"");
-	} else {
-		document.title + ' » » New Building'
-	}
+	} 
+	else document.title + ' » » New Building'
 </script>
 </body>
 </html>

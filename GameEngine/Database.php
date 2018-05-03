@@ -7411,10 +7411,10 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function delSlotFarm($id) {
-	    list($id) = $this->escape_input((int) $id);
-
-		$q = "DELETE FROM " . TB_PREFIX . "raidlist where id = $id";
+	function delSlotFarm($id, $owner, $lid) {
+	    list($id, $owner, $lid) = $this->escape_input((int) $id, (int) $owner, (int) $lid);
+	    
+		$q = "DELETE FROM " . TB_PREFIX . "raidlist WHERE id = $id AND lid = $lid AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner)";
 		return mysqli_query($this->dblink,$q);
 	}
 

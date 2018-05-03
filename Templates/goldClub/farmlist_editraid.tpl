@@ -1,65 +1,67 @@
 <?php
 if(isset($_GET['action']) == 'editSlot' && $_GET['eid']) {
-$eiddata = $database->getRaidList($_GET['eid']);
-$x = $eiddata['x'];
-$y = $eiddata['y'];
-$t1 = $eiddata['t1'];$t2 = $eiddata['t2'];$t3 = $eiddata['t3'];$t4 = $eiddata['t4'];$t5 = $eiddata['t5'];$t6 = $eiddata['t6'];$t7 = $eiddata['t7'];$t8 = $eiddata['t8'];$t9 = $eiddata['t9'];$t10 = $eiddata['t10'];
-$FLData = $database->getFLData($eiddata['lid']);
+    $eiddata = $database->getRaidList($_GET['eid']);
+    $x = $eiddata['x'];
+    $y = $eiddata['y'];
+    for($i = 1; $i <= 10; $i++) ${'t'.$i} = $eiddata['t'.$i];
+    $FLData = $database->getFLData($eiddata['lid']);
 }
 
 if(isset($_POST['action']) == 'editSlot' && $_POST['eid']) {
-if($_POST['target_id'] != ""){
-$Wref = $_POST['target_id'];
-$WrefCoor = $database->getCoor($Wref);
-$WrefX = $WrefCoor['x'];
-$WrefY = $WrefCoor['y'];
-$type = $database->getVillageType2($Wref);
-$oasistype = $type['oasistype'];
-$vdata = $database->getVillage($Wref);
-}elseif($_POST['x']!="" && $_POST['y']!="" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
-$Wref = $database->getVilWref($_POST['x'], $_POST['y']);
-$WrefX = $_POST['x'];
-$WrefY = $_POST['y'];
-$type = $database->getVillageType2($Wref);
-$oasistype = $type['oasistype'];
-$vdata = $database->getVillage($Wref);
-}
-$troops = "".$_POST['t1']."+".$_POST['t2']."+".$_POST['t3']."+".$_POST['t4']."+".$_POST['t5']."+".$_POST['t6']."+".$_POST['t7']."+".$_POST['t8']."+".$_POST['t9']."+".$_POST['t10']."";
+    if(!empty($_POST['target_id'])){
+        $Wref = $_POST['target_id'];
+        $WrefCoor = $database->getCoor($Wref);
+        $WrefX = $WrefCoor['x'];
+        $WrefY = $WrefCoor['y'];
+        $type = $database->getVillageType2($Wref);
+        $oasistype = $type;
+        $vdata = $database->getVillage($Wref);
+    }elseif(!empty($_POST['x']) && !empty($_POST['y']) && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
+        $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
+        $WrefX = $_POST['x'];
+        $WrefY = $_POST['y'];
+        $type = $database->getVillageType2($Wref);
+        $oasistype = $type;
+        $vdata = $database->getVillage($Wref);
+    }
 
-    if($_POST['x']=="" && $_POST['y']=="" && $_POST['target_id'] == ""){
-    	$errormsg .= "Enter coordinates.";
-    }elseif(($_POST['x']=="" || $_POST['y']=="") && $_POST['target_id'] == ""){
-    	$errormsg .= "Enter the correct coordinates.";
-    }elseif($oasistype == 0 && $vdata == 0){
-    	$errormsg .= "There is no village on those coordinates.";
-    }elseif($troops == "0"){
-     	$errormsg .= "No troops has been selected.";
-    }else{
+    $troops = 0;
+    for($i = 1; $i <= 10; $i++) $troops += $_POST['t'.$i];
+    
+    if(empty($_POST['x']) && empty($_POST['y']) && empty($_POST['target_id'])) $errormsg = "Enter coordinates.";
+    elseif((empty($_POST['x']) || empty($_POST['y'])) && empty($_POST['target_id'])) $errormsg = "Enter the correct coordinates.";  	
+    elseif($oasistype == 0 && $vdata == 0) $errormsg = "There is no village on those coordinates."; 	
+    elseif($troops == 0) $errormsg = "No troops has been selected.";
+    elseif($database->hasBeginnerProtection($Wref) == 1) $errormsg = "Player under protection."; 
+    elseif($_POST['target_id'] == $village->wid || $vdata['wref'] == $village->wid) $errormsg = "You can't attack the same village you send troops from.";
+    else
+    {
 
-		if($_POST['target_id'] != ""){
-		$Wref = $_POST['target_id'];
-		$WrefCoor = $database->getCoor($Wref);
-		$WrefX = $WrefCoor['x'];
-		$WrefY = $WrefCoor['y'];
+		if(!empty($_POST['target_id'])){
+		    $Wref = $_POST['target_id'];
+		    $WrefCoor = $database->getCoor($Wref);
+		    $WrefX = $WrefCoor['x'];
+		    $WrefY = $WrefCoor['y'];
 		}else{
-		$Wref = $database->getVilWref($_POST['x'], $_POST['y']);
-		$WrefX = $_POST['x'];
-		$WrefY = $_POST['y'];
+		    $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
+		    $WrefX = $_POST['x'];
+		    $WrefY = $_POST['y'];
 		}
 		$coor = $database->getCoor($village->wid);
 
-            function getDistance($coorx1, $coory1, $coorx2, $coory2) {
-   				$max = 2 * WORLD_MAX + 1;
-   				$x1 = intval($coorx1);
-   				$y1 = intval($coory1);
-   				$x2 = intval($coorx2);
-   				$y2 = intval($coory2);
-   				$distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
-   				$distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
-   				$dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
-   				return round($dist, 1);
-   			}
-            $distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);
+		function getDistance($coorx1, $coory1, $coorx2, $coory2) {
+		    $max = 2 * WORLD_MAX + 1;
+		    $x1 = intval($coorx1);
+		    $y1 = intval($coory1);
+		    $x2 = intval($coorx2);
+		    $y2 = intval($coory2);
+		    $distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
+		    $distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
+		    $dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
+		    return round($dist, 1);
+		}
+		
+		$distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);
             
 		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
         
@@ -87,7 +89,7 @@ $lid2 = $getlid['lid'];
 		<input type="hidden" name="eid" value="<?php echo $_GET['eid']; ?>">
         <input type="hidden" name="lid" value="<?php echo $lid2; ?>">
 			
-			<table cellpadding="1" cellspacing="1" class="transparent">
+			<table cellpadding="1" cellspacing="1" class="transparent" id="raidList">
 				<tbody><tr>
 					<th>Farm Name:</th><?php echo $_GET["lid"]; ?>
 					<td>
@@ -117,13 +119,14 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 					<label for="xCoordInput">X:</label>
 					<input value="<?php echo $x; ?>" name="x" id="xCoordInput" class="text coordinates x ">
 				</div>
+				<br />
 				<div class="yCoord">
 					<label for="yCoordInput">Y:</label>
 					<input value="<?php echo $y; ?>" name="y" id="yCoordInput" class="text coordinates y ">
 				</div>
 				<div class="clear"></div>
 			</div>
-								<div class="targetSelect">
+								<div class="targetSelect"><br />
 							<label class="lastTargets">Last targets:</label>
 							<select name="target_id">
 <?php
@@ -159,9 +162,9 @@ $vill[$towref] = 1;
 				</div>
 		<?php include "Templates/goldClub/trooplist.tpl"; ?>
 
-		
-<button type="submit" value="save" name="save" id="save"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Save</div></div></button>&nbsp;
-<button type="button" value="delete" name="delete" id="delete" onclick="window.location.href = '?gid=16&t=99&action=deleteSlot&eid=<?php echo $_GET["eid"]; ?>';"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Delete</div></div></button>
+<br />		
+<button type="submit" value="save" name="save" id="save" class="trav_buttons">Save</button>&nbsp;
+<button type="button" value="delete" name="delete" id="delete" class="trav_buttons" onclick="window.location.href = '?gid=16&t=99&action=deleteSlot&eid=<?php echo $_GET["eid"]; ?>&lid=<?php echo $eiddata['lid']; ?>';">Delete</button>
 </form>
 </div>
 <?php

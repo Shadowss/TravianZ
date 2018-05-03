@@ -112,59 +112,10 @@ class Automation {
         }
     }
 
-    public function procResType($ref,$mode=0,$isoasis=0) {
-        global $session;
-        switch($ref) {
-            case 1: $build = "Woodcutter"; break;
-            case 2: $build = "Clay Pit"; break;
-            case 3: $build = "Iron Mine"; break;
-            case 4: $build = "Cropland"; break;
-            case 5: $build = "Sawmill"; break;
-            case 6: $build = "Brickyard"; break;
-            case 7: $build = "Iron Foundry"; break;
-            case 8: $build = "Grain Mill"; break;
-            case 9: $build = "Bakery"; break;
-            case 10: $build = "Warehouse"; break;
-            case 11: $build = "Granary"; break;
-            case 12: $build = "Blacksmith"; break;
-            case 13: $build = "Armoury"; break;
-            case 14: $build = "Tournament Square"; break;
-            case 15: $build = "Main Building"; break;
-            case 16: $build = "Rally Point"; break;
-            case 17: $build = "Marketplace"; break;
-            case 18: $build = "Embassy"; break;
-            case 19: $build = "Barracks"; break;
-            case 20: $build = "Stable"; break;
-            case 21: $build = "Workshop"; break;
-            case 22: $build = "Academy"; break;
-            case 23: $build = "Cranny"; break;
-            case 24: $build = "Town Hall"; break;
-            case 25: $build = "Residence"; break;
-            case 26: $build = "Palace"; break;
-            case 27: $build = "Treasury"; break;
-            case 28: $build = "Trade Office"; break;
-            case 29: $build = "Great Barracks"; break;
-            case 30: $build = "Great Stable"; break;
-            case 31: $build = "City Wall"; break;
-            case 32: $build = "Earth Wall"; break;
-            case 33: $build = "Palisade"; break;
-            case 34: $build = "Stonemason's Lodge"; break;
-            case 35: $build = "Brewery"; break;
-            case 36: $build = "Trapper"; break;
-            case 37: $build = "Hero's Mansion"; break;
-            case 38: $build = "Great Warehouse"; break;
-            case 39: $build = "Great Granary"; break;
-            case 40: $build = "Wonder of the World"; break;
-            case 41: $build = "Horse Drinking Trough"; break;
-            case 42: $build = "Great Workshop"; break;
-            //default: $build = "Nothing had"; break;
-        }
-        
-        if ($build=="" && !$mode) { //capital or only 1 village left.. not destroy
-            $build="Village can't be";
-        }
-        
-        return addslashes($build);
+    public function procResType($ref, $mode = 0) {
+        global $building;
+        //Capital or only 1 village left = cannot be destroyed
+        return addslashes(empty($build = $building->procResType($ref)) && !$mode ? "Village can't be" : $build);
     }
 
     function recountPop($vid, $use_cache = true){
@@ -187,7 +138,6 @@ class Automation {
         $this->procClimbers($owner);
 
         return $popTot;
-
     }
 
     function recountCP($vid){
@@ -208,7 +158,6 @@ class Automation {
         mysqli_query($database->dblink,$q);
 
         return $popTot;
-
     }
 
     function buildingPOP($f,$lvl){
@@ -248,37 +197,38 @@ class Automation {
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/loyalty.txt", 'w');
         fclose($ourFileHandle);
         global $database;
-        $array = array();
+        
+        $array = [];
         $array = $database->getProfileVillages(0, 6);
         if(!empty($array)) {
             foreach($array as $loyalty) {
                 if (($t25_level = $this->getTypeLevel(25, $loyalty['wref'])) >= 1) {
                     $value = $t25_level;
-                }elseif(($t26_level = $this->getTypeLevel(26,$loyalty['wref'])) >= 1){
+                }elseif(($t26_level = $this->getTypeLevel(26, $loyalty['wref'])) >= 1){
                     $value = $t26_level;
-                } else {
-                    $value = 0;
                 }
-                $newloyalty = min(100,$loyalty['loyalty']+$value*(time()-$loyalty['lastupdate2'])/(60*60));
-                $q = "UPDATE ".TB_PREFIX."vdata SET loyalty = $newloyalty, lastupdate2=".time()." WHERE wref = '".$loyalty['wref']."'";
-                $database->query($q);
+                else $value = 0;
+                
+                if($value > 0){
+                    $newloyalty = min(100, $loyalty['loyalty'] + $value * (time() - $loyalty['lastupdate2']) / 3600);
+                    $q = "UPDATE ".TB_PREFIX."vdata SET loyalty = $newloyalty, lastupdate2=".time()." WHERE wref = '".$loyalty['wref']."'";
+                    $database->query($q);
+                }            
             }
         }
-        $array = array();
+        
+        $array = [];
         $q = "SELECT conqured, loyalty, lastupdated, wref FROM ".TB_PREFIX."odata WHERE loyalty < 100";
         $array = $database->query_return($q);
         if(!empty($array)) {
             foreach($array as $loyalty) {
-                if(($t25_level = $this->getTypeLevel(25,$loyalty['conqured'])) >= 1){
-                    $value = $t25_level;
-                }elseif(($t26_level = $this->getTypeLevel(26,$loyalty['conqured'])) >= 1){
-                    $value = $t26_level;
-                } else {
-                    $value = 0;
-                }
-                $newloyalty = min(100,$loyalty['loyalty']+$value*(time()-$loyalty['lastupdated'])/(60*60));
-                $q = "UPDATE ".TB_PREFIX."odata SET loyalty = $newloyalty, lastupdated=".time()." WHERE wref = '".$loyalty['wref']."'";
-                $database->query($q);
+                $value = $this->getTypeLevel(37, $loyalty['conqured']);   
+                
+                if($value > 0){
+                    $newloyalty = min(100, $loyalty['loyalty'] + $value * (time() - $loyalty['lastupdated']) / 3600);
+                    $q = "UPDATE ".TB_PREFIX."odata SET loyalty = $newloyalty, lastupdated=".time()." WHERE wref = '".$loyalty['wref']."'";
+                    $database->query($q);
+                }              
             }
         }
     }
@@ -991,7 +941,7 @@ class Automation {
                 if ($isSecondRow) {
                     if ($tbid > 0) {
                         $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy, $isoasis)." <b>destroyed</b>.";
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy)." <b>destroyed</b>.";
                     }
                     
                     // embassy level was changed
@@ -1001,7 +951,7 @@ class Automation {
                     
                     $info_cat .= "</td></tr></tbody>";
                 } else {
-                    $info_cat = "".$catp_pic.", ".$this->procResType($tbgid, $can_destroy, $isoasis)." <b>destroyed</b>.";
+                    $info_cat = "".$catp_pic.", ".$this->procResType($tbgid, $can_destroy)." <b>destroyed</b>.";
                     
                     // embassy level was changed
                     if ($tbgid==18){
@@ -1015,10 +965,10 @@ class Automation {
                 if ($isSecondRow) {
                     if ($tbid > 0) {
                         $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy, $isoasis)." was not damaged.</td></tr></tbody>";
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy)." was not damaged.</td></tr></tbody>";
                     }
                 } else {
-                    $info_cat = "".$catp_pic.",".$this->procResType($tbgid, $can_destroy, $isoasis)." was not damaged.";
+                    $info_cat = "".$catp_pic.",".$this->procResType($tbgid, $can_destroy)." was not damaged.";
                 }
             }
             else
@@ -1057,7 +1007,7 @@ class Automation {
                 
                 if ($isSecondRow) {
                     $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
-					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy, $isoasis).$info_cata;
+					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy).$info_cata;
                     
                     // embassy level was changed
                     if ($tbgid == 18) {
@@ -1066,7 +1016,7 @@ class Automation {
                     
                     $info_cat .= "</td></tr></tbody>";
                 } else {
-                    $info_cat = "" . $catp_pic . "," . $this->procResType($tbgid, $can_destroy,$isoasis).$info_cata;
+                    $info_cat = "" . $catp_pic . "," . $this->procResType($tbgid, $can_destroy).$info_cata;
                     
                     // embassy level was changed
                     if ($tbgid == 18) {

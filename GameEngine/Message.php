@@ -15,7 +15,7 @@ class Message {
 	public $note;
 	public $inbox, $inbox1, $sent, $sent1, $reading, $reply, $archived, $archived1, $noticearray, $notice, $readingNotice = array();
 	private $totalMessage, $totalNotice;
-	private $allNotice = array();
+	private $allNotice = [];
 
 	function __construct() {
         $req_file = basename($_SERVER['PHP_SELF']);
@@ -118,6 +118,7 @@ class Message {
 			$this->noticearray = $this->filter_by_value($database->getNotice($session->uid), "ntype", $type);
 			$this->notice = $this->filter_by_value($database->getNotice3($session->uid, $session->alliance), "ntype", $type);
 		}
+		
 		if(isset($get['id'])) {
 			$this->readingNotice = $this->getReadNotice($get['id']);
 		}
