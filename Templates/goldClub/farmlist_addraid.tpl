@@ -30,8 +30,7 @@ if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
     elseif($database->hasBeginnerProtection($Wref) == 1) $errormsg = "Player under protection.";  
     elseif($_POST['target_id'] == $village->wid || $vdata['wref'] == $village->wid) $errormsg = "You can't attack the same village you send troops from.";   
     else
-    {
-    
+    {   
 		if(!empty($_POST['target_id'])){
 		    $Wref = $_POST['target_id'];
 		    $WrefCoor = $database->getCoor($Wref);
@@ -58,7 +57,7 @@ if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
         }
             
         $distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY); 
-        $database->addSlotFarm($_POST['lid'], $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
+        $database->addSlotFarm($_POST['lid'], $session->uid, $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
         
         header("Location: build.php?id=39&t=99");
 		exit;
@@ -73,11 +72,8 @@ if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
 </b></font>
     
     <form action="build.php?id=39&t=99&action=addraid&lid=<?php echo $_GET['lid']; ?>" method="post">
-        <div class="boxes boxesColor gray"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents cf">
-        
+        <div class="boxes boxesColor gray"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents cf">   
         <input type="hidden" name="action" value="addSlot">
-        
-            
             <table cellpadding="1" cellspacing="1" class="transparent" id="raidList">
                 <tbody><tr>
                     <th>List name:</th>

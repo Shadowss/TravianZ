@@ -2,7 +2,7 @@
 
 if(isset($_GET['t']) == 99 && isset($_GET['action']) == 0) {
 
-if(isset($_GET['t']) == 99 && isset($_POST['action']) == 'addList' && !empty($_POST['did']) && !empty($_POST['name'])){
+if(isset($_GET['t']) == 99 && isset($_POST['action']) == 'addList' && !empty($_POST['did']) && !empty($_POST['name']) && $database->getVillageField($_POST['did'], 'owner') == $session->uid){
     $database->createFarmList($_POST['did'], $session->uid, $_POST['name']);
 }else if(isset($_GET['t']) == 99 && isset($_POST['action']) == 'addList'){
 	header("Location: build.php?gid=16&t=99&action=addList");
@@ -23,7 +23,6 @@ while($row = mysqli_fetch_array($sql)){
 					<input type="hidden" name="action" value="startRaid">
 					<input type="hidden" name="a" value="c35">
 					<input type="hidden" name="sort" value="distance">
-                    <input type="hidden" name="tribe" value="<?php echo $session->tribe; ?>">
 					<input type="hidden" name="direction" value="asc">
 					<input type="hidden" name="lid" value="<?php echo $lid; ?>">
                         <div class="listTitleText">
@@ -53,19 +52,21 @@ while($row = mysqli_fetch_array($sql)){
 <?php
 $sql2 = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."raidlist WHERE lid = ".(int) $lid." ORDER BY distance ASC");
 $query2 = mysqli_num_rows($sql2);
-if($query2 == 0) {        
+if(!$query2) {        
     echo '<td class="noData" colspan="7">There are no village.</td>';
 }else{
 while($row = mysqli_fetch_array($sql2)){ 
-$id= $row['id'];$lid = $row['lid'];$towref = $row['towref'];$x = $row['x'];$y = $row['y'];
-if($village->wid == $towref){
-    $distance = '0';
-}else{
-    $distance = $row['distance'];
-}
+$id = $row['id'];
+$lid = $row['lid'];
+$towref = $row['towref'];
+$x = $row['x'];
+$y = $row['y'];
 
-$t1 = $row['t1'];$t2 = $row['t2'];$t3 = $row['t3'];$t4 = $row['t4'];$t5 = $row['t5'];$t6 = $row['t6'];$t7 = $row['t7'];
-$t8 = $row['t8'];$t9 = $row['t9'];$t10 = $row['t10'];
+if($village->wid == $towref) $distance = '0';
+else $distance = $row['distance'];
+
+for($i = 1; $i <= 10; $i++) ${'t'.$i} = $row['t'.$i];
+
 $vdata = $database->getVillage($towref);
 
 ?>
@@ -80,29 +81,21 @@ $vdata = $database->getVillage($towref);
             <td class="village">
             <?php
 
-        $incoming_attacks = $database->getMovement(3,$towref,1);
-        $att = '';
-
-        if (count($incoming_attacks) > 0) {
-            $inc_atts = count($incoming_attacks);
-                if($incoming_attacks[$i]['attack_type'] == 2) {
-                    $inc_atts -= 1;
-                }
-            if($inc_atts > 0) {
-                echo '<img class="att2" src="img/x.gif" title="Incoming Attacker" />';
+            $incoming_attacks = $database->getMovement(3, $towref, 1);      
+            if (($inc_atts = count($incoming_attacks)) > 0) {
+                foreach($incoming_attacks as $attack){
+                    if($attack['attack_type'] != 4) $inc_atts -= 1;
+                }          
+                if($inc_atts > 0) echo '<img class="att2" src="img/x.gif" title="'.OWN_ATTACKING_TROOPS.'" />';
             }
-        }
         ?>
                 <label for="slot<?php echo $id; ?>">
                 <?php
                     $oasistype = $database->getVillageType2($towref);
                     if($oasistype != 0){
-                        $thisVillageName = 'Oasis';
+                        $thisVillageName = $database->getOasisField($towref, 'conqured') ? OCCUOASIS : UNOCCUOASIS;
                     }
-                    else
-                    {
-                        $thisVillageName = $vdata["name"];
-                    }
+                    else $thisVillageName = $vdata["name"];
                 ?>
                 <span class="coordinates coordinatesWithText">
                 <span class="coordText"><?php echo $thisVillageName; ?></span>
@@ -119,70 +112,13 @@ $vdata = $database->getVillage($towref);
             <td class="troops">
 
 <?php
-    if($session->tribe == 1){
-        if($t1 != 0){
-            echo '<div class="troopIcon"><img class="unit u1" title="'.U1.'" src="img/x.gif"><span class="troopIconAmount">'.$t1.'</span></div>'; }
-        if($t2 != 0){
-            echo '<div class="troopIcon"><img class="unit u2" title="'.U2.'" src="img/x.gif"><span class="troopIconAmount">'.$t2.'</span></div>'; }
-        if($t3 != 0){
-            echo '<div class="troopIcon"><img class="unit u3" title="'.U3.'" src="img/x.gif"><span class="troopIconAmount">'.$t3.'</span></div>'; }
-        if($t4 != 0){
-            echo '<div class="troopIcon"><img class="unit u4" title="'.U4.'" src="img/x.gif"><span class="troopIconAmount">'.$t4.'</span></div>'; }
-        if($t5 != 0){
-            echo '<div class="troopIcon"><img class="unit u5" title="'.U5.'" src="img/x.gif"><span class="troopIconAmount">'.$t5.'</span></div>'; }
-        if($t6 != 0){
-            echo '<div class="troopIcon"><img class="unit u6" title="'.U6.'" src="img/x.gif"><span class="troopIconAmount">'.$t6.'</span></div>'; }
-        if($t7 != 0){
-            echo '<div class="troopIcon"><img class="unit u7" title="'.U7.'" src="img/x.gif"><span class="troopIconAmount">'.$t7.'</span></div>'; }
-        if($t8 != 0){
-            echo '<div class="troopIcon"><img class="unit u8" title="'.U8.'" src="img/x.gif"><span class="troopIconAmount">'.$t8.'</span></div>'; }
-        if($t9 != 0){
-            echo '<div class="troopIcon"><img class="unit u9" title="'.U9.'" src="img/x.gif"><span class="troopIconAmount">'.$t9.'</span></div>'; }
-        if($t10 != 0){
-            echo '<div class="troopIcon"><img class="unit u10" title="'.U10.'" src="img/x.gif"><span class="troopIconAmount">'.$t10.'</span></div>'; }
-    }elseif($session->tribe == 2){
-        if($t1 != 0){
-            echo '<div class="troopIcon"><img class="unit u11" title="'.U11.'" src="img/x.gif"><span class="troopIconAmount">'.$t1.'</span></div>'; }
-        if($t2 != 0){
-            echo '<div class="troopIcon"><img class="unit u12" title="'.U12.'" src="img/x.gif"><span class="troopIconAmount">'.$t2.'</span></div>'; }
-        if($t3 != 0){
-            echo '<div class="troopIcon"><img class="unit u13" title="'.U13.'" src="img/x.gif"><span class="troopIconAmount">'.$t3.'</span></div>'; }
-        if($t4 != 0){
-            echo '<div class="troopIcon"><img class="unit u14" title="'.U14.'" src="img/x.gif"><span class="troopIconAmount">'.$t4.'</span></div>'; }
-        if($t5 != 0){
-            echo '<div class="troopIcon"><img class="unit u15" title="'.U15.'" src="img/x.gif"><span class="troopIconAmount">'.$t5.'</span></div>'; }
-        if($t6 != 0){
-            echo '<div class="troopIcon"><img class="unit u16" title="'.U16.'" src="img/x.gif"><span class="troopIconAmount">'.$t6.'</span></div>'; }
-        if($t7 != 0){
-            echo '<div class="troopIcon"><img class="unit u17" title="'.U17.'" src="img/x.gif"><span class="troopIconAmount">'.$t7.'</span></div>'; }
-        if($t8 != 0){
-            echo '<div class="troopIcon"><img class="unit u18" title="'.U18.'" src="img/x.gif"><span class="troopIconAmount">'.$t8.'</span></div>'; }
-        if($t9 != 0){
-            echo '<div class="troopIcon"><img class="unit u19" title="'.U19.'" src="img/x.gif"><span class="troopIconAmount">'.$t9.'</span></div>'; }
-        if($t10 != 0){
-            echo '<div class="troopIcon"><img class="unit u20" title="'.U20.'" src="img/x.gif"><span class="troopIconAmount">'.$t10.'</span></div>'; }
-
-    }elseif($session->tribe == 3){
-        if($t1 != 0){
-            echo '<div class="troopIcon"><img class="unit u21" title="'.U21.'" src="img/x.gif"><span class="troopIconAmount">'.$t1.'</span></div>'; }
-        if($t2 != 0){
-            echo '<div class="troopIcon"><img class="unit u22" title="'.U22.'" src="img/x.gif"><span class="troopIconAmount">'.$t2.'</span></div>'; }
-        if($t3 != 0){
-            echo '<div class="troopIcon"><img class="unit u23" title="'.U23.'" src="img/x.gif"><span class="troopIconAmount">'.$t3.'</span></div>'; }
-        if($t4 != 0){
-            echo '<div class="troopIcon"><img class="unit u24" title="'.U24.'" src="img/x.gif"><span class="troopIconAmount">'.$t4.'</span></div>'; }
-        if($t5 != 0){
-            echo '<div class="troopIcon"><img class="unit u25" title="'.U25.'" src="img/x.gif"><span class="troopIconAmount">'.$t5.'</span></div>'; }
-        if($t6 != 0){
-            echo '<div class="troopIcon"><img class="unit u26" title="'.U26.'" src="img/x.gif"><span class="troopIconAmount">'.$t6.'</span></div>'; }
-        if($t7 != 0){
-            echo '<div class="troopIcon"><img class="unit u27" title="'.U27.'" src="img/x.gif"><span class="troopIconAmount">'.$t7.'</span></div>'; }
-        if($t8 != 0){
-            echo '<div class="troopIcon"><img class="unit u28" title="'.U28.'" src="img/x.gif"><span class="troopIconAmount">'.$t8.'</span></div>'; }
-        if($t9 != 0){
-            echo '<div class="troopIcon"><img class="unit u29" title="'.U29.'" src="img/x.gif"><span class="troopIconAmount">'.$t9.'</span></div>'; }
-        if($t10 != 0){
-            echo '<div class="troopIcon"><img class="unit u30" title="'.U30.'" src="img/x.gif"><span class="troopIconAmount">'.$t10.'</span></div>'; }
+    $start = ($session->tribe - 1) * 10 + 1;
+    $end = $session->tribe * 10;
+    
+    for($i = $start; $i <= $end; $i++){
+    	if(${'t'.($i - $start + 1)} > 0){
+    		echo '<div class="troopIcon"><img class="unit u'.$i.'" title="'.$technology->getUnitName($i).'" src="img/x.gif"><span class="troopIconAmount">'.${'t'.($i - $start + 1)}.'</span></div>';
+    	}
     }
 ?>
             
@@ -200,18 +136,10 @@ while($row2 = mysqli_fetch_array($getnotice)){
     $type2 = $row2['ntype'];
     echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row2['ntype']."\" title=\"".$noticeClass[$type2]."\"> ";
     
-    $allres = ($dataarray[25]+$dataarray[26]+$dataarray[27]+$dataarray[28]);
+    $allres = $dataarray[25] + $dataarray[26] + $dataarray[27] + $dataarray[28];
     $carry = $dataarray[29];
-    
-    if ($dataarray[25]+$dataarray[26]+$dataarray[27]+$dataarray[28] == 0) {
-    echo "<img title=\"bounty: ".$allres." resouces max carry: ".$carry." resouces.\" src=\"img/x.gif\" class=\"carry empty\">";
-    
-    } elseif ($dataarray[25]+$dataarray[26]+$dataarray[27]+$dataarray[28] != $dataarray[29]) {
-    echo "<img title=\"bounty: ".$allres." resouces. max carry: ".$carry." resouces.\" src=\"img/x.gif\" class=\"carry half\">";
-    
-    } else {
-    echo "<img title=\"bounty: ".$allres." resouces. max carry: ".$carry." resouces.\" src=\"img/x.gif\" class=\"carry full\">";
-    }
+
+    echo "<img title=\"$allres/$carry\" src=\"img/x.gif\" class=\"carry\"/>";
     
     $date = $generator->procMtime($row2['time']);
     echo "<a href=\"berichte.php?id=".$row2['id']."\">".$date[0]." ".date('H:i',$row2['time'])."</a> ";
@@ -361,13 +289,15 @@ $NUM1++;
 </script>
     <?php } ?>
 
-<?php if($create == 1){
-$hideevasion = 1;
-include("Templates/goldClub/farmlist_add.tpl");
+<?php 
+if($create == 1){
+	$hideevasion = 1;
+	include("Templates/goldClub/farmlist_add.tpl");
 }else if($create == 2){
-$hideevasion = 1;
-include("Templates/goldClub/farmlist_addraid.tpl");
+	$hideevasion = 1;
+	include("Templates/goldClub/farmlist_addraid.tpl");
 }else if($create == 3){
-$hideevasion = 1;
-include("Templates/goldClub/farmlist_editraid.tpl");
+	$hideevasion = 1;
+	include("Templates/goldClub/farmlist_editraid.tpl");
 }
+?>

@@ -212,8 +212,8 @@ if ($session->goldclub == 1) {
             exit;
         }
 
-        if(isset($_POST['action'] ) && $_POST['action'] == 'startRaid') {
-            if($session->access != BANNED) include("Templates/a2b/startRaid.tpl");               
+        if(isset($_POST['action']) && $_POST['action'] == 'startRaid') {
+            if($session->access != BANNED) $units->startRaidList($_POST);             
             else
             {
                 header( "Location: banned.php");

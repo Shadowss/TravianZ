@@ -7,7 +7,7 @@ if(isset($_GET['action']) == 'editSlot' && $_GET['eid']) {
     $FLData = $database->getFLData($eiddata['lid']);
 }
 
-if(isset($_POST['action']) == 'editSlot' && $_POST['eid']) {
+if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET['eid']) && isset($_POST['lid']) && !empty($_POST['lid'])) {
     if(!empty($_POST['target_id'])){
         $Wref = $_POST['target_id'];
         $WrefCoor = $database->getCoor($Wref);
@@ -61,9 +61,8 @@ if(isset($_POST['action']) == 'editSlot' && $_POST['eid']) {
 		    return round($dist, 1);
 		}
 		
-		$distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);
-            
-		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
+		$distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);  
+		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $database->getRaidList($_GET['eid'])['lid'], $session->uid, $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
         
         header("Location: build.php?id=39&t=99");
 		exit;
@@ -73,7 +72,7 @@ if($FLData['owner'] == $session->uid){
 ?>
 
 <div id="raidListSlot">
-	<h4>Add Slot</h4>
+	<h4>Edit Slot</h4>
 <font color="#FF0000"><b>    
 <?php echo $errormsg; ?>
 </b></font>
@@ -85,13 +84,10 @@ if($FLData['owner'] == $session->uid){
 $getlid = $database->getRaidList($database->escape($_GET["eid"]));
 $lid2 = $getlid['lid'];
 ?>
-		<input type="hidden" name="action" value="editSlot">
-		<input type="hidden" name="eid" value="<?php echo $_GET['eid']; ?>">
-        <input type="hidden" name="lid" value="<?php echo $lid2; ?>">
-			
+		<input type="hidden" name="action" value="editSlot">			
 			<table cellpadding="1" cellspacing="1" class="transparent" id="raidList">
 				<tbody><tr>
-					<th>Farm Name:</th><?php echo $_GET["lid"]; ?>
+					<th>List name:</th><?php echo $_GET["lid"]; ?>
 					<td>
 						<select onchange="getTargetsByLid();" id="lid" name="lid">
 <?php
@@ -103,7 +99,8 @@ $lowner = $row["owner"];
 $lwref = $row["wref"];
 $lvname = $database->getVillageField($row["wref"], 'name');
 
-	if($lid==$lid2){ $selected = 'selected=""'; }else{ $selected = ''; }
+	if($lid == $lid2) $selected = 'selected=""'; 
+	else $selected = '';
 	echo '<option value="'.$lid.'" '.$selected.'>'.$lvname.' - '.$lname.'</option>';
 }
 ?>	
@@ -111,7 +108,7 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 					</td>
 				</tr>
 				<tr>
-					<th>Select target:</th>
+					<th>Target village:</th>
 					<td class="target">
 						
 			<div class="coordinatesInput">
@@ -133,24 +130,23 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 $getwref = "SELECT id, towref FROM ".TB_PREFIX."raidlist WHERE lid = ".(int) $lid2;
 $arraywref = $database->query_return($getwref);
 	echo '<option value="">Select village</option>';
-if(mysqli_num_rows(mysqli_query($database->dblink,$getwref)) != 0){
-foreach($arraywref as $row){
-$towref = $row["towref"];
-$tocoor = $database->getCoor($towref);
-$totype = $database->getVillageType2($towref);
-$tooasistype = $type['oasistype'];
-if($tooasistype == 0){
-$tovname = $database->getVillageField($towref, 'name');
-}else{
-$tovname = $database->getOasisField($towref, 'name');
-}
-if($row["id"] == $_GET['eid']){ $selected = 'selected=""'; }else{ $selected = ''; }
-if($vill[$towref] == 0){
-	echo '<option value="'.$towref.'" '.$selected.'>'.$tovname.'('.$tocoor['x'].'|'.$tocoor['y'].')</option>';
-}
-$vill[$towref] = 1;
-}
-}
+if(mysqli_num_rows(mysqli_query($database->dblink, $getwref)) != 0){
+		foreach($arraywref as $row){
+			$towref = $row["towref"];
+			$tocoor = $database->getCoor($towref);
+			$totype = $database->getVillageType2($towref);
+			$tooasistype = $type['oasistype'];
+			if($tooasistype == 0) $tovname = $database->getVillageField($towref, 'name');			
+			else $tovname = $database->getOasisField($towref, 'name');
+					
+			if($row["id"] == $_GET['eid']) $selected = 'selected=""';
+			else $selected = '';
+			if($vill[$towref] == 0){
+				echo '<option value="' . $towref . '" ' . $selected . '>' . $tovname . '(' . $tocoor['x'] . '|' . $tocoor['y'] . ')</option>';
+			}
+			$vill[$towref] = 1;
+		}
+	}
 ?>
 							</select>
 						</div>

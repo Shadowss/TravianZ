@@ -49,7 +49,7 @@ class Technology {
 
 	public function getABUpgrades($type='a') {
 		global $village;
-		$holder = array();
+		$holder = [];
 		foreach($village->researching as $research) {
 			if(substr($research['tech'],0,1) == $type){
 				array_push($holder,$research);
@@ -111,16 +111,17 @@ class Technology {
 	public function getTrainingList($type) {
 		global $database,$village;
 		$trainingarray = $database->getTraining($village->wid);
-		$listarray = array();
-		$barracks = array(1,2,3,11,12,13,14,21,22,31,32,33,34,35,36,37,38,39,40,41,42,43,44);
+		$listarray = [];
+		$barracks = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
 		// fix by brainiac - THANK YOU
-		$greatbarracks = array(61,62,63,71,72,73,74,81,82,91,92,93,94,95,96,97,98,99,100,101,102,103,104);
-		$stables = array(4,5,6,15,16,23,24,25,26,45,46);
-		$greatstables = array(64,65,66,75,76,83,84,85,86,105,106);
-		$workshop = array(7,8,17,18,27,28,47,48);
-		$greatworkshop = array(67,68,77,78,87,88,107,108);
-		$residence = array(9,10,19,20,29,30,49,50);
-		$trapper = array(99);
+		$greatbarracks = [61, 62, 63, 71, 72, 73, 74, 81, 82, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104];
+		$stables = [4, 5, 6, 15, 16, 23, 24, 25, 26, 45, 46];
+		$greatstables = [64, 65, 66, 75, 76, 83, 84, 85, 86, 105, 106];
+		$workshop = [7, 8, 17, 18, 27, 28, 47, 48];
+		$greatworkshop = [67, 68, 77, 78, 87, 88, 107, 108];
+		$residence = [9, 10, 19, 20, 29, 30, 49, 50];
+		$trapper = [99];
+		
 		if(count($trainingarray) > 0) {
 			foreach($trainingarray as $train) {
 				if($type == 1 && in_array($train['unit'],$barracks)) {
@@ -165,11 +166,11 @@ class Technology {
 
 	public function getUnitList() {
 		global $database,$village;
-		$unitarray = func_num_args() == 1? $database->getUnit(func_get_arg(0)) : $village->unitall;
-		$listArray = array();
-		for($i=1;$i<count($this->unarray);$i++) {
-			$holder = array();
-			if(!empty($unitarray['u'.$i]) && $unitarray['u'.$i] != 0 && $unitarray['u'.$i] != "") {
+		$unitarray = func_num_args() == 1 ? $database->getUnit(func_get_arg(0)) : $village->unitall;
+		$listArray = [];
+		for($i = 1; $i < count($this->unarray); $i++) {
+			$holder = [];
+			if(!empty($unitarray['u'.$i]) && $unitarray['u'.$i] > 0 && !empty($unitarray['u'.$i])) {
 				$holder['id'] = $i;
 				$holder['name'] = $this->unarray[$i];
 				$holder['amt'] = $unitarray['u'.$i];
@@ -177,65 +178,62 @@ class Technology {
 			}
 		}
 
-		if($unitarray['hero'] != 0 && $unitarray['hero'] != "") {
+		if($unitarray['hero'] > 0 && !empty($unitarray['hero'])) {
 				$holder['id'] = "hero";
 				$holder['name'] = $this->unarray[$i];
 				$holder['amt'] = $unitarray['hero'];
 				array_push($listArray,$holder);
-			}
+		}
 		return $listArray;
 	}
 
 	public function maxUnit($unit,$great=false) {
-		$unit = "u".$unit;
-
-        global $village,$$unit,$database;
-        $unitarray = $$unit;
+		$unit = "u" . $unit;
+		global $village, $$unit, $database;
+		
+		$unitarray = $$unit;
 		$res = $database->getVillage($village->wid, 0, false);
-		if ($res['wood'] > $res['maxstore']){$res['wood'] = $res['maxstore'];}
-		if ($res['clay'] > $res['maxstore']){$res['clay'] = $res['maxstore'];}
-		if ($res['iron'] > $res['maxstore']){$res['iron'] = $res['maxstore'];}
-		if ($res['crop'] > $res['maxcrop']){$res['crop'] = $res['maxcrop'];}
-		$woodcalc = floor($res['wood'] / ($unitarray['wood'] * ($great?3:1)));
-		$claycalc = floor($res['clay'] / ($unitarray['clay'] * ($great?3:1)));
-		$ironcalc = floor($res['iron'] / ($unitarray['iron'] * ($great?3:1)));
-		if($res['crop']>0){
-		$cropcalc = floor($res['crop'] / ($unitarray['crop'] * ($great?3:1)));
-		}else{
-		$cropcalc = 0;
-		}
-		if($unit != "u99"){
-		$popcalc = floor($village->getProd("crop")/$unitarray['pop']);
-		}else{
-		$popcalc = $village->getProd("crop");
-		}
-		return min($woodcalc,$claycalc,$ironcalc,$cropcalc);
+		if($res['wood'] > $res['maxstore']) $res['wood'] = $res['maxstore'];
+		if($res['clay'] > $res['maxstore']) $res['clay'] = $res['maxstore'];
+		if($res['iron'] > $res['maxstore']) $res['iron'] = $res['maxstore'];
+		if($res['crop'] > $res['maxcrop']) $res['crop'] = $res['maxcrop'];
+			
+		
+		$woodcalc = floor($res['wood'] / ($unitarray['wood'] * ($great ? 3 : 1)));
+		$claycalc = floor($res['clay'] / ($unitarray['clay'] * ($great ? 3 : 1)));
+		$ironcalc = floor($res['iron'] / ($unitarray['iron'] * ($great ? 3 : 1)));
+		
+		if($res['crop'] > 0) $cropcalc = floor($res['crop'] / ($unitarray['crop'] * ($great ? 3 : 1)));
+		else $cropcalc = 0;
+
+		if($unit != "u99") $popcalc = floor($village->getProd("crop") / $unitarray['pop']);		
+		else $popcalc = $village->getProd("crop");
+	
+		return min($woodcalc, $claycalc, $ironcalc, $cropcalc);
 	}
 
 	public function maxUnitPlus($unit,$great=false) {
-		$unit = "u".$unit;
-
-        global $village,$$unit,$database;
+		$unit = "u" . $unit;	
+		global $village, $$unit, $database;
+		
 		$unitarray = $$unit;
 		$res = $database->getVillage($village->wid);
-		$totalres = $res['wood']+$res['clay']+$res['iron']+$res['crop'];
-		$totalresunit = ($unitarray['wood'] * ($great?3:1))+($unitarray['clay'] * ($great?3:1))+($unitarray['iron'] * ($great?3:1))+($unitarray['crop'] * ($great?3:1));
-		$max =round($totalres/$totalresunit);
+		$totalres = $res['wood'] + $res['clay'] + $res['iron'] + $res['crop'];
+		$totalresunit = ($unitarray['wood'] * ($great ? 3 : 1)) + ($unitarray['clay'] * ($great ? 3 : 1)) + ($unitarray['iron'] * ($great ? 3 : 1)) + ($unitarray['crop'] * ($great ? 3 : 1));
+		$max = round($totalres / $totalresunit);
 		return $max;
 	}
 
 	public function getUnits() {
-		global $database,$village;
-		if(func_num_args() == 1) {
-			$base = func_get_arg(0);
-		}
-		$ownunit = func_num_args() == 2? func_get_arg(0) : $database->getUnit($base);
-		$enforcementarray = func_num_args() == 2? func_get_arg(1) : $database->getEnforceVillage($base,0);
-		if(count($enforcementarray) > 0) {
-			foreach($enforcementarray as $enforce) {
-				for($i=1;$i<=50;$i++) {
-					$ownunit['u'.$i] += $enforce['u'.$i];
-				}
+		global $database, $village;
+		
+		if(func_num_args() == 1) $base = func_get_arg(0);
+
+		$ownunit = func_num_args() == 2 ? func_get_arg(0) : $database->getUnit($base);
+		$enforcementarray = func_num_args() == 2 ? func_get_arg(1) : $database->getEnforceVillage($base, 0);
+		if(count($enforcementarray) > 0){
+			foreach($enforcementarray as $enforce){
+				for($i = 1; $i <= 50; $i++) $ownunit['u'.$i] += $enforce['u'.$i];
 			}
 		}
 		return $ownunit;
@@ -243,70 +241,71 @@ class Technology {
 
     function getAllUnits($base,$InVillageOnly=False,$mode=0) {
         global $database;
-        $ownunit = $database->getUnit($base);
-        $ownunit['u99'] -= $ownunit['u99'];
-        $ownunit['u99o'] -= $ownunit['u99o'];
-        $enforcementarray = $database->getEnforceVillage($base,0);
-        if(count($enforcementarray) > 0) {
-            foreach($enforcementarray as $enforce) {
-                for($i=1;$i<=50;$i++) {
-                    $ownunit['u'.$i] += $enforce['u'.$i];
-                }
-                $ownunit['hero'] += $enforce['hero'];
-            }
-        }
-        if ($mode==0) {
-            $enforceoasis=$database->getOasisEnforce($base,0);
-            if(count($enforceoasis) > 0) {
-                foreach($enforceoasis as $enforce) {
-                    for($i=1;$i<=50;$i++) {
-                        $ownunit['u'.$i] += $enforce['u'.$i];
-                    }
-                    $ownunit['hero'] += $enforce['hero'];
-                }
-            }
-            $enforceoasis1=$database->getOasisEnforce($base,1);
-            if(count($enforceoasis1) > 0) {
-                foreach($enforceoasis1 as $enforce) {
-                    for($i=1;$i<=50;$i++) {
-                        $ownunit['u'.$i] += $enforce['u'.$i];
-                    }
-                    $ownunit['hero'] += $enforce['hero'];
-                }
-            }
-
-            $prisoners = $database->getPrisoners($base,1);
-            if(!empty($prisoners)) {
-                foreach($prisoners as $prisoner){
-                    $owner = $database->getVillageField($base,"owner");
-                    $ownertribe = $database->getUserField($owner,"tribe",0);
-                    $start = ($ownertribe-1)*10+1;
-                    $end = ($ownertribe*10);
-                    for($i=$start;$i<=$end;$i++) {
-                        $j = $i-$start+1;
-                        $ownunit['u'.$i] += $prisoner['t'.$j];
-                    }
-                    $ownunit['hero'] += $prisoner['t11'];
-                }
-            }
-        }
-        if(!$InVillageOnly) {
-            $movement = $database->getVillageMovement($base);
-            if(!empty($movement)) {
-                for($i=1;$i<=50;$i++) {
-                    if (!isset($ownunit['u'.$i])) {
-                        $ownunit['u'.$i] = 0;
-                    }
-                    $ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
-                }
-
-                if (!isset($ownunit['hero'])) {
-                    $ownunit['hero'] = 0;
-                }
-                $ownunit['hero'] += (isset($movement['hero']) ? $movement['hero'] : 0);
-            }
-        }
-        return $ownunit;
+		
+		$ownunit = $database->getUnit($base);
+		$ownunit['u99'] -= $ownunit['u99'];
+		$ownunit['u99o'] -= $ownunit['u99o'];
+		$enforcementarray = $database->getEnforceVillage($base, 0);
+		if(count($enforcementarray) > 0){
+			foreach($enforcementarray as $enforce){
+				for($i = 1; $i <= 50; $i++){
+					$ownunit['u' . $i] += $enforce['u' . $i];
+				}
+				$ownunit['hero'] += $enforce['hero'];
+			}
+		}
+		if($mode == 0){
+			$enforceoasis = $database->getOasisEnforce($base, 0);
+			if(count($enforceoasis) > 0){
+				foreach($enforceoasis as $enforce){
+					for($i = 1; $i <= 50; $i++){
+						$ownunit['u' . $i] += $enforce['u' . $i];
+					}
+					$ownunit['hero'] += $enforce['hero'];
+				}
+			}
+			$enforceoasis1 = $database->getOasisEnforce($base, 1);
+			if(count($enforceoasis1) > 0){
+				foreach($enforceoasis1 as $enforce){
+					for($i = 1; $i <= 50; $i++){
+						$ownunit['u' . $i] += $enforce['u' . $i];
+					}
+					$ownunit['hero'] += $enforce['hero'];
+				}
+			}
+			
+			$prisoners = $database->getPrisoners($base, 1);
+			if(!empty($prisoners)){
+				foreach($prisoners as $prisoner){
+					$owner = $database->getVillageField($base, "owner");
+					$ownertribe = $database->getUserField($owner, "tribe", 0);
+					$start = ($ownertribe - 1) * 10 + 1;
+					$end = ($ownertribe * 10);
+					for($i = $start; $i <= $end; $i++){
+						$j = $i - $start + 1;
+						$ownunit['u' . $i] += $prisoner['t' . $j];
+					}
+					$ownunit['hero'] += $prisoner['t11'];
+				}
+			}
+		}
+		if(!$InVillageOnly){
+			$movement = $database->getVillageMovement($base);
+			if(!empty($movement)){
+				for($i = 1; $i <= 50; $i++){
+					if(!isset($ownunit['u' . $i])){
+						$ownunit['u' . $i] = 0;
+					}
+					$ownunit['u' . $i] += (isset($movement['u' . $i]) ? $movement['u' . $i] : 0);
+				}
+				
+				if(!isset($ownunit['hero'])){
+					$ownunit['hero'] = 0;
+				}
+				$ownunit['hero'] += (isset($movement['hero']) ? $movement['hero'] : 0);
+			}
+		}
+		return $ownunit;
     }
 
 	public function meetTRequirement($unit) {
@@ -419,92 +418,44 @@ class Technology {
 	    }
 	}
 
-	public function getUpkeep($array,$type,$vid=0,$prisoners=0) {
-        global $database, $session, $village;
+	public function getUpkeep($array, $type, $vid = 0, $prisoners = 0) {
+        global $database, $village;
 
-        if ( $vid == 0 ) {
-            $vid = $village->wid;
+        if ($vid == 0) $vid = $village->wid;
+        $upkeep = 0;
+        $horsedrinking = $database->getFieldLevelInVillage($vid, 41);
+        
+        if(!$type){
+            $start = 1;
+            $end = 50;
+        }else{
+            $start = ($type - 1) * 10 + 1;
+            $end = $type * 10;
         }
 
-        $buildarray = array();
-        $buildarray = $database->getResourceLevel( $vid );
-        $upkeep     = 0;
-
-        switch ( $type ) {
-            case 0:
-                $start = 1;
-                $end   = 50;
-                break;
-            case 1:
-                $start = 1;
-                $end   = 10;
-                break;
-            case 2:
-                $start = 11;
-                $end   = 20;
-                break;
-            case 3:
-                $start = 21;
-                $end   = 30;
-                break;
-            case 4:
-                $start = 31;
-                $end   = 40;
-                break;
-            case 5:
-                $start = 41;
-                $end   = 50;
-                break;
-        }
-
-        for ( $j = 19; $j <= 38; $j ++ ) {
-            if ( $buildarray[ 'f' . $j . 't' ] == 41 ) {
-                $horsedrinking = $j;
-                break;
-            }
-        }
-
-        for ( $i = $start; $i <= $end; $i ++ ) {
-            $k     = $i - $start + 1;
-            $unit  = "u" . $i;
-            $unit2 = "t" . $k;
-            global $$unit;
+        for ($i = $start; $i <= $end; $i ++) {
+            $k = $i - $start + 1;
+            $unit = $prisoners == 0 ? "u" . $i : "t" . $k;
+            
+            global $$unit; 
             $dataarray = $$unit;
-            if ( $prisoners == 0 ) {
-                if ( isset( $horsedrinking ) ) {
-                    if ( ( $i == 4 && $buildarray[ 'f' . $horsedrinking ] >= 10 )
-                         || ( $i == 5 && $buildarray[ 'f' . $horsedrinking ] >= 15 )
-                         || ( $i == 6 && $buildarray[ 'f' . $horsedrinking ] == 20 )
-                    ) {
-                        $upkeep += (( $dataarray['pop'] - 1 ) * $array[ $unit ]);
-                    } else {
-                        $upkeep += ($dataarray['pop'] * $array[ $unit ]);
-                    }
-                } else {
-                    $upkeep += ($dataarray['pop'] * $array[ $unit ]);
+
+            if($horsedrinking > 0) {
+                if (($i == 4 && $horsedrinking >= 10) || ($i == 5 && $horsedrinking >= 15) || ( $i == 6 && $horsedrinking == 20)) {
+                    $upkeep += ($dataarray['pop'] - 1) * $array[$unit];
                 }
-            } else {
-                if ( isset( $horsedrinking ) ) {
-                    if ( ( $i == 4 && $buildarray[ 'f' . $horsedrinking ] >= 10 )
-                         || ( $i == 5 && $buildarray[ 'f' . $horsedrinking ] >= 15 )
-                         || ( $i == 6 && $buildarray[ 'f' . $horsedrinking ] == 20 )
-                    ) {
-                        $upkeep += (( $dataarray['pop'] - 1 ) * $array[ $unit2 ]);
-                    } else {
-                        $upkeep += ($dataarray['pop'] * $array[ $unit2 ]);
-                    }
-                } else {
-                    $upkeep += ($dataarray['pop'] * $array[ $unit2 ]);
-                }
+                else $upkeep += ($dataarray['pop'] * $array[$unit]);
             }
+            else $upkeep += ($dataarray['pop'] * $array[$unit]);    
         }
 
         $unit = ($prisoners > 0) ? 't11' : 'hero';
         
         if(!isset($array[$unit])) $array[$unit] = 0;
         $upkeep += $array[$unit] * 6;
+        $who = $database->getVillageField($vid, "owner");
         
-        return $database->getArtifactsValueInfluence($session->uid, $vid, 4, $upkeep);
+        return ceil($database->getArtifactsValueInfluence($who, $vid, 4, $upkeep, false));
 	}
 
     private function trainUnit($unit, $amt, $great = false) {
@@ -591,7 +542,7 @@ class Technology {
 	}
 
 	public function meetRRequirement($tech) {
-		global $session,$building;
+		global $session, $building;
 		switch($tech) {
 			case 2: return $building->getTypeLevel(22) >= 1 && $building->getTypeLevel(13) >= 1;
 			case 3: return $building->getTypeLevel(22) >= 5 && $building->getTypeLevel(12) >= 1;
@@ -735,7 +686,7 @@ class Technology {
         return mysqli_affected_rows($database->dblink);
     }
 
-	public function calculateAvaliable($id,$resarray=array()) {
+	public function calculateAvaliable($id, $resarray = []) {
 		global $village,$generator,${'r'.$id};
 		if(count($resarray)==0) {
 			$resarray['wood'] = ${'r'.$id}['wood'];

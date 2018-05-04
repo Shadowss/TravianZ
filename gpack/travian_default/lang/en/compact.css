@@ -6862,6 +6862,11 @@ div#map div#map_content div span.m6 {
 div#map div#map_content div span.m9 {
     background-image: url("../../img/m/mret.gif");
 }
+img.carry {
+    background: url("../../img/a/car.gif") no-repeat scroll 0 0 transparent;
+    height: 12px;
+    width: 18px;
+}
 img.iReport {
     background-image: url("../../img/a/report_icons.gif");
     height: 17px;

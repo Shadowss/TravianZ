@@ -253,9 +253,9 @@ class Battle {
         $cap = $ap = $dp = $cdp = $rap = $rdp = 0;
         
         //Get involved artifacts
-        $attacker_artefact = $database->getArtifactsValueInfluence($AttackerID, $AttackerWref, 3, 1);
-        $defender_artefact = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 3, 1);
-        $strongerbuildings = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 1, 1);
+        $attacker_artefact = $database->getArtifactsValueInfluence($AttackerID, $AttackerWref, 3, 1, false);
+        $defender_artefact = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 3, 1, false);
+        $strongerbuildings = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 1, 1, false);
         
         if(isset($Attacker['uhero']) && $Attacker['uhero'] != 0){
             $atkhero = $this->getBattleHero($AttackerID);

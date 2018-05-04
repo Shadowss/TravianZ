@@ -648,10 +648,6 @@ class adm_DB {
 			} else {
 				$enforce['hero']='0';
 			}
-
-			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
-			$artefact1 = count($database->getOwnUniqueArtefactInfo2($enforce['from'],2,1,1));
-			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
 			
 			$troopsTime = $this->procDistanceTime($fromCor, $toCor, min($speeds), $enforce['from']);
 			$time = $database->getArtifactsValueInfluence($from['owner'], $enforce['from'], 2, $troopsTime);
@@ -663,27 +659,15 @@ class adm_DB {
 	}
 
 
-	public function calculateProduction($wid,$uid,$b1,$b2,$b3,$b4,$fdata,$ocounter,$pop) {
-		global $technology,$database;
-		$normalA = $database->getOwnArtefactInfoByType($wid,4);
-		$largeA = $database->getOwnUniqueArtefactInfo($uid,4,2);
-		$uniqueA = $database->getOwnUniqueArtefactInfo($uid,4,3);
-		$upkeep = $this->getUpkeep($this->getAllUnits($wid),0,$wid,$uid);
-
-
-		$production=array();
+	public function calculateProduction($wid, $uid, $b1, $b2, $b3, $b4, $fdata, $ocounter, $pop) {
+		global $technology, $database;
+		
+		$upkeep = $technology->getUpkeep($this->getAllUnits($wid), 0, $wid);
+		$production = [];
 		$production['wood'] = $this->getWoodProd($fdata, $ocounter,$b1);
 		$production['clay'] = $this->getClayProd($fdata, $ocounter,$b2);
 		$production['iron'] = $this->getIronProd($fdata, $ocounter,$b3);
-		if ($uniqueA['size']==3 && $uniqueA['owner']==$uid){
-			$production['crop'] = $this->getCropProd($fdata, $ocounter,$b4)-$pop-(($upkeep)-round($upkeep*0.50));
-		}elseif ($normalA['type']==4 && $normalA['size']==1 && $normalA['owner']==$uid){
-			$production['crop'] = $this->getCropProd($fdata, $ocounter,$b4)-$pop-(($upkeep)-round($upkeep*0.25));
-		}else if ($largeA['size']==2 && $largeA['owner']==$uid){
-			$production['crop'] = $this->getCropProd($fdata, $ocounter,$b4)-$pop-(($upkeep)-round($upkeep*0.25));
-		}else{
-			$production['crop'] = $this->getCropProd($fdata, $ocounter,$b4)-$pop-$upkeep;
-		}
+		$production['crop'] = $this->getCropProd($fdata, $ocounter,$b4) - $pop - $upkeep;
 		return $production;
 	}
 
@@ -852,82 +836,6 @@ class adm_DB {
 		}
 		return $ownunit;
 	}
-
-	public function getUpkeep($array,$type,$vid,$uid,$prisoners=0) {
-		global $database;
-		$buildarray = array();
-		$buildarray = $database->getResourceLevel($vid);
-		$upkeep = 0;
-		switch($type) {
-			case 0:
-			$start = 1;
-			$end = 50;
-			break;
-			case 1:
-			$start = 1;
-			$end = 10;
-			break;
-			case 2:
-			$start = 11;
-			$end = 20;
-			break;
-			case 3:
-			$start = 21;
-			$end = 30;
-			break;
-			case 4:
-			$start = 31;
-			$end = 40;
-			break;
-			case 5:
-			$start = 41;
-			$end = 50;
-			break;
-		}
-		for($i=$start;$i<=$end;$i++) {
-			$k = $i-$start+1;
-			$unit = "u".$i;
-			$unit2 = "t".$k;
-			global $$unit;
-			$dataarray = $$unit;
-			for($j=19;$j<=38;$j++) {
-			if($buildarray['f'.$j.'t'] == 41) {
-			$horsedrinking = $j;
-			}
-			}
-			if($prisoners == 0){
-			if(isset($horsedrinking)){
-			if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
-			|| ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
-			|| ($i==6 && $buildarray['f'.$horsedrinking] == 20)) {
-			$upkeep += ($dataarray['pop']-1) * $array[$unit];
-			} else {
-			$upkeep += $dataarray['pop'] * $array[$unit];
-			}}else{
-			$upkeep += $dataarray['pop'] * $array[$unit];
-			}
-			}else{
-			if(isset($horsedrinking)){
-			if(($i==4 && $buildarray['f'.$horsedrinking] >= 10)
-			|| ($i==5 && $buildarray['f'.$horsedrinking] >= 15)
-			|| ($i==6 && $buildarray['f'.$horsedrinking] == 20)) {
-			$upkeep += ($dataarray['pop']-1) * $array[$unit2];
-			} else {
-			$upkeep += $dataarray['pop'] * $array[$unit2];
-			}}else{
-			$upkeep += $dataarray['pop'] * $array[$unit2];
-			}
-			}
-		}
-
-		$unit = ($prisoners > 0) ? 't11' : 'hero';
-		
-		if(!isset($array[$unit])) $array[$unit] = 0;
-		$upkeep += $array[$unit] * 6;
-
-		return $database->getArtifactsValueInfluence($uid, $vid, 4, $upkeep);
-	}
-
 };
 
 $admin = new adm_DB;

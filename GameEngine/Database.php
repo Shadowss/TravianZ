@@ -225,11 +225,6 @@ class MYSQLi_DB implements IDbConnection {
         $artefactDataCache = [],
 
         /**
-         * @var array Cache of fool artefacts.
-         */
-        $foolArtefactCache = [],
-
-        /**
          * @var array Cache of own artefact infos, from the simple SQL select.
          */
         $artefactInfoSimpleCache = [],
@@ -4307,6 +4302,17 @@ References: User ID/Message ID, Mode
 		return $this->mysqli_fetch_all($result);
 	}
 
+    /**
+    * Delete expired trade routes
+    * 
+    */
+	
+	function delTradeRoute() {
+	    $time = time();
+	    $q = "DELETE from " . TB_PREFIX . "route where timeleft < $time";
+	    return mysqli_query($this->dblink, $q);
+	}
+	
 	function createTradeRoute($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time) {
 	    list($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time) = $this->escape_input((int) $uid,(int) $wid,(int) $from,(int) $r1,(int) $r2,(int) $r3,(int) $r4,(int) $start,(int) $deliveries,(int) $merchant,(int) $time);
 
@@ -6917,8 +6923,8 @@ References: User ID/Message ID, Mode
 	 * @return int Returns the new value, multiplied or divided by artifacts bonus or malus
 	 */
 
-	function getArtifactsValueInfluence($uid, $vid, $kind, $multiplicand){
-	    list($uid, $vid, $kind, $multiplicand) = $this->escape_input((int) $uid,(int) $vid, $kind, $multiplicand);
+	function getArtifactsValueInfluence($uid, $vid, $kind, $multiplicand, $round = true){
+	    list($uid, $vid, $kind, $multiplicand, $round) = $this->escape_input((int) $uid,(int) $vid, $kind, $multiplicand, $round);
 
 	    $artefacts = $foolArefacts = [];
 	    $multipliers = [1 => [4, 5, 3], 2 => [1/2, 1/3, 2/3], 3 => [5, 10, 3], 4 => [1/2, 1/2, 3/4], 5 => [1/2, 1/2, 3/4], 7 => [3, 6, 2]];
@@ -6951,7 +6957,7 @@ References: User ID/Message ID, Mode
 	    
 	    if(in_array($kind, [2, 4, 5])) $foolEffect = 1 / $foolEffect;
 	    
-	    return ($multiplicand == 1 ) ? $multiplicand * $multiplier * $foolEffect : round($multiplicand * $multiplier * $foolEffect);
+	    return !$round ? $multiplicand * $multiplier * $foolEffect : round($multiplicand * $multiplier * $foolEffect);
 	}
 	
 	/**
@@ -7098,56 +7104,6 @@ References: User ID/Message ID, Mode
         }
 
         return (isset(self::$artefactDataCache[$id.$mode][$size.$type]) ? self::$artefactDataCache[$id.$mode][$size.$type] : []);
-	}
-
-	function getFoolArtefactInfo($type, $vid, $uid, $use_cache = true) {
-	    list($type, $vid, $uid) = $this->escape_input((int) $type, (int) $vid, (int) $uid);
-
-        // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && isset(self::$foolArtefactCache[$vid]) && is_array(self::$foolArtefactCache[$vid]) && !count(self::$foolArtefactCache[$vid])) {
-            return [];
-        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$foolArtefactCache, $vid)) && !is_null($cachedValue)) {
-            $data = [];
-            // prepare the data as requested
-            if (isset($cachedValue[$type.$uid])) {
-                foreach ($cachedValue[$type.$uid] as $row) {
-                    if ($row['type'] == 8 && $row['kind'] == $type && $row['owner'] == $uid && $row['size'] > 1 && $row['active'] > 1) {
-                        $data[] = $row;
-                    }
-                }
-            }
-            return $data;
-        }
-
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vid"; //" AND ((type = 8 AND kind = $type) OR (owner = $uid AND size > 1 AND active = 1 AND type = 8 AND kind = $type))";
-		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
-
-        // cache all types and return the requested one
-        if (count($result)) {
-            foreach ($result as $arteInfo) {
-                if (!isset(self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']])) {
-                    self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']] = [];
-                }
-
-                self::$foolArtefactCache[$vid][$arteInfo['type'].$arteInfo['owner']][] = $arteInfo;
-            }
-        } else {
-            self::$foolArtefactCache[$vid] = [];
-        }
-
-        if (
-            isset(self::$foolArtefactCache[$vid][$type.$uid]) &&
-            self::$foolArtefactCache[$vid][$type.$uid]['type'] == 8 &&
-            self::$foolArtefactCache[$vid][$type.$uid]['kind'] == $type &&
-            self::$foolArtefactCache[$vid][$type.$uid]['owner'] == $uid &&
-            self::$foolArtefactCache[$vid][$type.$uid]['size'] > 1 &&
-            self::$foolArtefactCache[$vid][$type.$uid]['active'] > 1
-        ) {
-            return self::$foolArtefactCache[$vid][$type.$uid];
-        } else {
-            return [];
-        }
 	}
 
 	function villageHasArtefact($vref) {
@@ -7425,17 +7381,17 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function addSlotFarm($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
-        list($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
+	function addSlotFarm($lid, $owner, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
+        list($lid, $owner, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input($lid, $owner, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
 
-		$q = "INSERT INTO " . TB_PREFIX . "raidlist (`lid`, `towref`, `x`, `y`, `distance`, `t1`, `t2`, `t3`, `t4`, `t5`, `t6`, `t7`, `t8`, `t9`, `t10`) VALUES ('$lid', '$towref', '$x', '$y', '$distance', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6', '$t7', '$t8', '$t9', '$t10')";
+		$q = "INSERT INTO " . TB_PREFIX . "raidlist (`lid`, `towref`, `x`, `y`, `distance`, `t1`, `t2`, `t3`, `t4`, `t5`, `t6`, `t7`, `t8`, `t9`, `t10`) SELECT '$lid', '$towref', '$x', '$y', '$distance', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6', '$t7', '$t8', '$t9', '$t10' WHERE EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner)";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function editSlotFarm($eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
-	    list($eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input((int) $eid, $lid, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
+	function editSlotFarm($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
+		list($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input((int) $eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
 
-		$q = "UPDATE " . TB_PREFIX . "raidlist set lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6', t7 = '$t7', t8 = '$t8', t9 = '$t9', t10 = '$t10' WHERE id = $eid";
+		$q = "UPDATE " . TB_PREFIX . "raidlist SET lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6', t7 = '$t7', t8 = '$t8', t9 = '$t9', t10 = '$t10' WHERE id = $eid AND lid = $oldLid AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner) AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $oldLid AND owner = $owner)";
 		return mysqli_query($this->dblink,$q);
 	}
 

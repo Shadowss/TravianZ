@@ -89,7 +89,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $villa
     	echo "<span class=\"none\">".UPGRADE_GRANARY.".</span>";
     }
     else if($bindicate == 7) {
-	if($village->allcrop - $village->pop - $automation->getUpkeep($village->unitall, 0) > 0){
+	if($village->allcrop - $village->pop - $technology->getUpkeep($village->unitall, 0) > 0){
     	$neededtime = $building->calculateAvaliable($id,$village->resarray['f'.$id.'t'],1+$loopsame+$doublebuild+$master);
     	echo "<span class=\"none\">".ENOUGH_RESOURCES." ".$neededtime[0]." at  ".$neededtime[1]."</span>";
 	}else{
