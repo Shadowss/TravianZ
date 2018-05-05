@@ -503,27 +503,26 @@ class Units {
                     $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $post, 1, 't');
                     $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
                     
-                    $reference = $database->addAttack($enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0 );
-                    $database->addMovement(4, $village->wid, $enforce['from'], $reference, time(), ($time + time()));
-                    $technology->checkReinf($post['ckey'], false );
+                    $reference = $database->addAttack($enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0);
+					$database->addMovement(4, $village->wid, $enforce['from'], $reference, time(), ($time + time()));
+					$technology->checkReinf($post['ckey'], false);
 
-                    header( "Location: build.php?id=39&refresh=1" );
-                    exit;
-
-                }
-            } else {
-                $form->addError( "error", "You cant change someones troops." );
-                if ( $form->returnErrors() > 0 ) {
-                    $_SESSION['errorarray'] = $form->getErrors();
-                    $_SESSION['valuearray'] = $_POST;
-                    header( "Location: a2b.php" );
-                    exit;
-                }
-            }
-        } else {
-            header( "Location: banned.php" );
-            exit;
-        }
+                    header("Location: build.php?id=39&refresh=1");
+					exit();
+				}
+			}else{
+				$form->addError("error", "You cant change someones troops.");
+				if($form->returnErrors() > 0){
+					$_SESSION['errorarray'] = $form->getErrors();
+					$_SESSION['valuearray'] = $_POST;
+					header("Location: a2b.php");
+					exit();
+				}
+			}
+		}else{
+			header("Location: banned.php");
+			exit();
+		}
     }
     
     public function Settlers($post) {

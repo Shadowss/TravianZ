@@ -225,12 +225,9 @@ $input = preg_replace_callback(
     function($matches) {
         global $database;
         
-        $report = count($database->getNotice4((int) $matches[1]));
-        if (count($report)) {
-            return "<a href=berichte.php?id=".$matches[1].">".$matches[2]."</a>";
-        } else {
-            return $matches[2];
-        }
+        $report = count($database->getNotice2((int) $matches[1]));
+  	    if (count($report)) return "<a href=berichte.php?id=".$matches[1].">".$matches[2]."</a>";          
+    	else return $matches[2];
     },
     $input);
 

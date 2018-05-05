@@ -234,9 +234,7 @@ if(isset($_POST['password']) && $_POST['password'] != ""){
             }
         }
 
-        if ($counter > 0) {
-            $database->addMovement( $type, $from, $to, $ref, $time, $endtime );
-        }
+        if ($counter > 0) $database->addMovement($type, $from, $to, $ref, $time, $endtime);
 
 /**
  * SMALL ARTEFACTS

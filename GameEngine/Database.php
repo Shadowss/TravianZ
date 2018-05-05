@@ -360,11 +360,6 @@ class MYSQLi_DB implements IDbConnection {
         $noticesCacheById = [],
 
         /**
-         * @var array Cache of notices by user ID.
-         */
-        $noticesCacheByUId = [],
-
-        /**
          * @var array Cache of merchants used count.
          */
         $merchantsUseCountCache = [],
@@ -4257,7 +4252,7 @@ References: User ID/Message ID, Mode
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function getNotice2($id, $field, $use_cache = true) {
+	function getNotice2($id, $field = null, $use_cache = true) {
         list($id, $field) = $this->escape_input((int) $id, $field);
 
         // first of all, check if we should be using cache and whether the field
@@ -4271,27 +4266,7 @@ References: User ID/Message ID, Mode
 		$dbarray = mysqli_fetch_array($result);
 
         self::$noticesCacheById[$id] = $dbarray;
-        return self::$noticesCacheById[$id][$field];
-	}
-
-	function getNotice3($uid, $alliance, $use_cache = true) {
-	    list($uid) = $this->escape_input((int) $uid);
-
-        // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && ($cachedValue = self::returnCachedContent(self::$noticesCacheByUId, $uid)) && !is_null($cachedValue)) {
-            return $cachedValue;
-        }
-
-        $q = "SELECT * FROM " . TB_PREFIX . "ndata where uid = $uid ".($alliance > 0 ? 'OR ally = '.$alliance.'' : '')." ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
-        $result = mysqli_query($this->dblink,$q);
-
-        $noticesCacheByUId[$uid] = $this->mysqli_fetch_all($result);
-        return $noticesCacheByUId[$uid];
-	}
-
-	function getNotice4($id, $use_cache = true) {
-	    return $this->getNotice2($id, $use_cache);
+        return is_null($field) ? self::$noticesCacheById[$id] : self::$noticesCacheById[$id][$field];
 	}
 
 	function getUnViewNotice($uid) {

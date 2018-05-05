@@ -379,13 +379,12 @@ class adm_DB {
 
             mysqli_query($this->connection, $q);
 
-			$getmovement = $database->getMovement(3,$wref,1);
-			foreach($getmovement as $movedata) {
+			$getmovement = $database->getMovement(3, $wref, 1);
+			foreach($getmovement as $movedata){
 				$time = microtime(true);
 				$time2 = $time - $movedata['starttime'];
 				$database->setMovementProc($movedata['moveid']);
-				$database->addMovement(4,$movedata['to'],$movedata['from'],$movedata['ref'],$time,$time+$time2);
-			//$database->setMovementProc($movedata['moveid']);
+				$database->addMovement(4, $movedata['to'], $movedata['from'], $movedata['ref'], $time, $time + $time2);
 			}
 
 			//check	return enforcement from del village
@@ -652,8 +651,8 @@ class adm_DB {
 			$troopsTime = $this->procDistanceTime($fromCor, $toCor, min($speeds), $enforce['from']);
 			$time = $database->getArtifactsValueInfluence($from['owner'], $enforce['from'], 2, $troopsTime);
 			
-			$reference =  $database->addAttack($enforce['from'],$enforce['u'.$start],$enforce['u'.($start+1)],$enforce['u'.($start+2)],$enforce['u'.($start+3)],$enforce['u'.($start+4)],$enforce['u'.($start+5)],$enforce['u'.($start+6)],$enforce['u'.($start+7)],$enforce['u'.($start+8)],$enforce['u'.($start+9)],$enforce['hero'],2,0,0,0,0);
-			$database->addMovement(4,$wref,$enforce['from'],$reference,time(),($time+time()));
+			$reference = $database->addAttack($enforce['from'], $enforce['u' . $start], $enforce['u' . ($start + 1)], $enforce['u' . ($start + 2)], $enforce['u' . ($start + 3)], $enforce['u' . ($start + 4)], $enforce['u' . ($start + 5)], $enforce['u' . ($start + 6)], $enforce['u' . ($start + 7)], $enforce['u' . ($start + 8)], $enforce['u' . ($start + 9)], $enforce['hero'], 2, 0, 0, 0, 0);
+			$database->addMovement(4, $wref, $enforce['from'], $reference, time(), ($time + time()));
 			$database->deleteReinf($enforce['id']);
 		}
 	}

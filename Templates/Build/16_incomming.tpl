@@ -1,5 +1,5 @@
 <?php
-include_once ("GameEngine/Data/unitdata.php");
+include_once("GameEngine/Data/unitdata.php");
 
 $units = $database->getMovement(34, $village->wid, 1);
 $total_for = count($units);
@@ -7,12 +7,6 @@ $send = $database->getMovement(1, $village->wid, 1);
 $total_for2 = count($send);
 $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 3);
 for($y = 0; $y < $total_for; $y++){
-	for($i = 0; $i < $total_for2; $i++){
-		if($units[$y]['ref'] == $send[$i]['ref2']){
-			$res1 = mysqli_query($database->dblink, "SELECT wood, clay, iron, crop FROM ".TB_PREFIX."send where id = ".(int)$send[$i]['ref']."");
-			$res = mysqli_fetch_array($res1);
-		}
-	}
 	$session->timer++;
 	if($units[$y]['sort_type'] == 3){
 		if($units[$y]['attack_type'] == 2) $actionType = REINFORCEMENTFOR;
@@ -162,10 +156,8 @@ for($y = 0; $y < $total_for; $y++){
            </tr>
 	</tbody>
             <?php
-		if(isset($res)) $totalres = $res['wood'] + $res['clay'] + $res['iron'] + $res['crop'];
-		else $totalres = 0;
-		
-		if($units[$y]['attack_type'] != 2 && $units[$y]['attack_type'] != 1 && !empty($totalres)){
+        $totalres = $units[$y]['wood'] + $units[$y]['clay'] + $units[$y]['iron'] + $units[$y]['crop'];		
+		if($units[$y]['attack_type'] != 2 && $units[$y]['attack_type'] != 1 && $totalres > 0){
 			?>
  			<tbody class="goods">
 		<tr>
@@ -175,11 +167,9 @@ for($y = 0; $y < $total_for; $y++){
 			<?php
 			$totalcarry = 0;
 			for($i = 0; $i <= 9; $i++) $totalcarry += $units[$y]['t'.($i + 1)] * ${'u'.($start + $i)}['cap'];
-			echo "<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".$res['wood']." | <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".$res['clay']." | <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".$res['iron']." | <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$res['crop']."</div>";
+			echo "<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".$units[$y]['wood']." | <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".$units[$y]['clay']." | <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".$units[$y]['iron']." | <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".$units[$y]['crop']."</div>";
 			echo "<div class=\"carry\"><img class=\"car\" src=\"img/x.gif\" alt=\"carry\" title=\"carry\"/>".$totalres."/".$totalcarry."</div>";
-			?>
-           
-		
+			?>	
 		</tr>
 	</tbody>
 		   <?php } ?>
@@ -202,7 +192,6 @@ for($y = 0; $y < $total_for; $y++){
 </table>
 <?php
 	}
-	unset($res, $res1);
 }
 $array = $database->getOasis($village->wid);
 foreach($array as $conqured){

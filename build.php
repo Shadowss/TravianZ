@@ -252,39 +252,28 @@ if(isset($_POST['a']) == 533374 && isset($_POST['id']) == 39) {
     }
 }
 
-if ( isset( $_GET['mode'] ) && $_GET['mode'] == 'troops' && isset( $_GET['cancel'] ) && $_GET['cancel'] == 1 ) {
-    if ( $session->access != BANNED ) {
-        $oldmovement = $database->getMovementById( $_GET['moveid'] );
-        $now         = time();
-
-        if ( ( $now - $oldmovement[0]['starttime'] ) < 90 && $oldmovement[0]['from'] == $village->wid ) {
-
-            $qc      = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement where proc = 0 and moveid = " . $database->escape( (int) $_GET['moveid'] );
-            $resultc = mysqli_fetch_array( mysqli_query( $database->dblink, $qc ), MYSQLI_ASSOC );
-
-            if ( $resultc['Total'] == 1 ) {
-
-                $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = " . $database->escape( (int) $_GET['moveid'] );
-                $database->query( $q );
-                $end = $now + ( $now - $oldmovement[0]['starttime'] );
-                //echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;
-                $q2     = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
-                $lastid = mysqli_fetch_array( mysqli_query( $database->dblink, $q2 ) );
-                $newid  = $lastid['id'] + 1;
-                $q2     = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
-                $database->query( $q2 );
-                $database->addMovement( 4, $oldmovement[0]['to'], $oldmovement[0]['from'], $oldmovement[0]['ref'], $now, $end );
-
-
-                $database->addMovement( 6, $oldmovement[0]['to'], $oldmovement[0]['from'], $newid, $now, $end );
-            }
-        }
-        header( "Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id'] );
-        exit;
-    } else {
-        header( "Location: banned.php" );
-        exit;
-    }
+if(isset($_GET['mode']) && $_GET['mode'] == 'troops' && isset($_GET['cancel']) && $_GET['cancel'] == 1){
+	if($session->access != BANNED){
+		$oldmovement = $database->getMovementById($_GET['moveid']);
+		$now = time();
+		if(($now - $oldmovement[0]['starttime']) < 90 && $oldmovement[0]['from'] == $village->wid){	
+			$qc = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
+			$resultc = mysqli_fetch_array(mysqli_query($database->dblink, $qc), MYSQLI_ASSOC);
+			if($resultc['Total'] == 1){			
+				$q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
+				$database->query($q);
+				$end = $now + ($now - $oldmovement[0]['starttime']);
+				$q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
+				$lastid = mysqli_fetch_array(mysqli_query($database->dblink, $q2));
+				$database->addMovement(4, $oldmovement[0]['to'], $oldmovement[0]['from'], $oldmovement[0]['ref'], $now, $end);
+			}
+		}
+		header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id']);
+		exit();
+	}else{
+		header("Location: banned.php");
+		exit();
+	}
 }
 if(isset($_GET['id'])) $automation->isWinner();
 ?>

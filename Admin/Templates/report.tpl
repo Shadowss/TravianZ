@@ -11,12 +11,13 @@
 include_once("../GameEngine/Generator.php");
 include_once("../GameEngine/Technology.php");
 include_once("../GameEngine/Message.php");
-if ($_GET['bid']){
-$rep = $database->getNotice4($_GET['bid']);
-}else
-$sql = "SELECT * FROM ".TB_PREFIX."ndata ORDER BY time DESC ";
-$result = mysqli_query($GLOBALS["link"], $sql);
-$rep1 = $database->mysqli_fetch_all($result);
+if ($_GET['bid']) $rep = $database->getNotice2($_GET['bid']);
+else
+{
+	$sql = "SELECT * FROM " . TB_PREFIX . "ndata ORDER BY time DESC ";
+	$result = mysqli_query($GLOBALS["link"], $sql);
+	$rep1 = $database->mysqli_fetch_all($result);
+}
 if($rep1)
 {
 	//$att = $database->getUserArray($rep1['uid'],1);
@@ -47,13 +48,8 @@ if($rep)
 	<div id="content" class="reports">
 		<h1>Reporte</h1>
 <?php 
-$type = $rep[0]['ntype'];
-		include("Notice/".$type.".tpl");
-
+	$type = $rep[0]['ntype'];
+	include ("Notice/" . $type . ".tpl");
 }
-else
-{
-	echo "Report ID ".$_GET['bid']." doesn't exist!";
-}
-
+else echo "Report ID ".$_GET['bid']." doesn't exist!";
 ?>

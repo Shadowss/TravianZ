@@ -12,8 +12,8 @@
 
 class Market
 {
-    public $onsale,$onmarket,$sending,$recieving,$return = array();
-    public $maxcarry,$merchant,$used;
+    public $onsale, $onmarket, $sending, $recieving, $return = [];
+	public $maxcarry, $merchant, $used;
 
     public function procMarket($post)
     {
@@ -114,8 +114,8 @@ class Market
         elseif($post['send3'] < 1 || $post['send3'] > 3 || ($post['send3'] > 1 && !$session->goldclub)) $form->addError("error", INVALID_MERCHANTS_REPETITION);
         elseif($availableWood >= $post['r1'] && $availableClay >= $post['r2'] && $availableIron >= $post['r3'] && $availableCrop >= $post['r4'])
         {
-            $resource = array($wtrans,$ctrans,$itrans,$crtrans);
-            $reqMerc = ceil((array_sum($resource)-0.1)/$this->maxcarry);
+            $resource = [$wtrans, $ctrans, $itrans, $crtrans];
+			$reqMerc = ceil((array_sum($resource) - 0.1) / $this->maxcarry);
 
             if($this->merchantAvail() > 0 && $reqMerc <= $this->merchantAvail())
             {
@@ -124,14 +124,13 @@ class Market
                 if($database->getVillageState($id))
                 {
                     $timetaken = $generator->procDistanceTime($coor, $village->coor, $session->tribe, 0);
-                    $res = $resource[0]+$resource[1]+$resource[2]+$resource[3];
-                    if($res!=0)
-                    {
-                        $reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0);
-                        $database->modifyResource($village->wid,$resource[0],$resource[1],$resource[2],$resource[3],0);
-                        $database->addMovement(0,$village->wid,$id,$reference,time(),time()+$timetaken,$post['send3']);
-                        $logging->addMarketLog($village->wid,1,array($resource[0],$resource[1],$resource[2],$resource[3],$id));
-                    }
+					$res = $resource[0] + $resource[1] + $resource[2] + $resource[3];
+					if($res != 0){
+						$reference = $database->sendResource($resource[0], $resource[1], $resource[2], $resource[3], $reqMerc, 0);
+						$database->modifyResource($village->wid, $resource[0], $resource[1], $resource[2], $resource[3], 0);
+						$database->addMovement(0, $village->wid, $id, $reference, time(), time() + $timetaken, $post['send3']);
+						$logging->addMarketLog($village->wid, 1, [$resource[0], $resource[1], $resource[2], $resource[3], $id]);
+					}
                 }
                 header("Location: build.php?id=".$post['id']);
                 exit;
@@ -251,7 +250,6 @@ class Market
             }
         }
         
-        
         // We don't have enough resources
         if($infoarray['wamt'] > ([$village->awood, $village->aclay, $village->airon, $village->acrop])[$infoarray['wtype']])
         {
@@ -271,7 +269,7 @@ class Market
             exit;
         }
         
-        $myresource = $hisresource = array(1=>0,0,0,0);
+        $myresource = $hisresource = [ 1=> 0, 0, 0, 0];
         $myresource[$infoarray['wtype']] = $infoarray['wamt'];
         $mysendid = $database->sendResource($myresource[1],$myresource[2],$myresource[3],$myresource[4],$reqMerc,0);
         $hisresource[$infoarray['gtype']] = $infoarray['gamt'];
@@ -289,13 +287,13 @@ class Market
             [$timestamp, $timestamp],
             [$mytime + $timestamp, $histime + $timestamp]
         );
-        $resource = array(1=>0,0,0,0);
-        $resource[$infoarray['wtype']] = $infoarray['wamt'];
-        $database->modifyResource($village->wid, $resource[1], $resource[2], $resource[3], $resource[4] , 0);
-        $database->setMarketAcc($get['g']);
-        $database->removeAcceptedOffer($get['g']);
-        $logging->addMarketLog($village->wid,2,array($infoarray['vref'],$get['g']));
-        header("Location: build.php?id=".$get['id']);
+        $resource = [1 => 0, 0, 0, 0];
+		$resource[$infoarray['wtype']] = $infoarray['wamt'];
+		$database->modifyResource($village->wid, $resource[1], $resource[2], $resource[3], $resource[4], 0);
+		$database->setMarketAcc($get['g']);
+		$database->removeAcceptedOffer($get['g']);
+		$logging->addMarketLog($village->wid, 2, [$infoarray['vref'], $get['g']]);
+		header("Location: build.php?id=" . $get['id']);
         exit;
     }
 
@@ -304,7 +302,7 @@ class Market
         global $database,$village,$session,$multisort,$generator;
 
         $displayarray = $database->getMarket($village->wid,1);
-        $holderarray = array();
+        $holderarray = [];
         foreach($displayarray as $value)
         {
             $targetcoor = $database->getCoor($value['vref']);
@@ -320,57 +318,36 @@ class Market
 
     private function filterNeed($get)
     {
-        if(isset($get['v']) || isset($get['s']) || isset($get['b']))
-        {
-            $holder = $holder2 = array();
-            if(isset($get['v']) && $get['v'] == "1:1")
-            {
-                foreach($this->onsale as $equal)
-                {
-                    if($equal['wamt'] <= $equal['gamt'])
-                    {
-                        array_push($holder,$equal);
-                    }
-                }
-            }
-            else
-            {
-                $holder = $this->onsale;
-            }
-            foreach($holder as $sale)
-            {
-                if(isset($get['s']) && isset($get['b']))
-                {
-                    if($sale['gtype'] == $get['s'] && $sale['wtype'] == $get['b'])
-                    {
-                        array_push($holder2,$sale);
-                    }
-                }
-                else if(isset($get['s']) && !isset($get['b']))
-                {
-                    if($sale['gtype'] == $get['s'])
-                    {
-                        array_push($holder2,$sale);
-                    }
-                }
-                else if(isset($get['b']) && !isset($get['s']))
-                {
-                    if($sale['wtype'] == $get['b'])
-                    {
-                        array_push($holder2,$sale);
-                    }
-                }
-                else
-                {
-                    $holder2 = $holder;
-                }
-            }
-            $this->onsale = $holder2;
+        if(isset($get['v']) || isset($get['s']) || isset($get['b'])){
+			$holder = $holder2 = [];
+			if(isset($get['v']) && $get['v'] == "1:1"){
+				foreach($this->onsale as $equal){
+					if($equal['wamt'] <= $equal['gamt']){
+						array_push($holder, $equal);
+					}
+				}
+			}
+			else $holder = $this->onsale;			
+			
+			foreach($holder as $sale){
+				if(isset($get['s']) && isset($get['b'])){
+					if($sale['gtype'] == $get['s'] && $sale['wtype'] == $get['b']){
+						array_push($holder2, $sale);
+					}
+				}else if(isset($get['s']) && !isset($get['b'])){
+					if($sale['gtype'] == $get['s']){
+						array_push($holder2, $sale);
+					}
+				}else if(isset($get['b']) && !isset($get['s'])){
+					if($sale['wtype'] == $get['b']){
+						array_push($holder2, $sale);
+					}
+				}
+				else $holder2 = $holder;
+			}
+			$this->onsale = $holder2;
         }
-        else
-        {
-            $this->loadOnsale();
-        }
+        else $this->loadOnsale();
     }
 
     private function tradeResource($post)

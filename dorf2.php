@@ -21,9 +21,8 @@ if(isset($_GET['newdid'])) {
     $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$database->escape((int) $_GET['newdid'])." WHERE id=".$session->uid);
 	header("Location: ".$_SERVER['PHP_SELF']);
 	exit;
-}else{
-$building->procBuild($_GET);
 }
+else $building->procBuild($_GET);
 
 $automation->isWinner();
 ?>

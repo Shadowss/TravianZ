@@ -1,5 +1,7 @@
 <?php
-$noticeClass = array("Scout Report","Won as attacker without losses","Won as attacker with losses","Lost as attacker with losses","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Lost as defender without losses","Reinforcement arrived","","Wood Delivered","Clay Delivered","Iron Delivered","Crop Delivered","","Won as defender without losses","Won as defender with losses","Lost as defender with losses","Won scouting as attacker","Lost scouting as attacker","Won scouting as defender","Lost scouting as defender","Scout Report");
+$noticeClass = ["Scout Report", "Won as attacker without losses", "Won as attacker with losses", "Lost as attacker with losses", "Won as defender without losses", "Won as defender with losses", "Lost as defender with losses", "Lost as defender without losses", "Reinforcement arrived", "",
+		"Wood Delivered", "Clay Delivered", "Iron Delivered", "Crop Delivered", "", "Won as defender without losses", "Won as defender with losses", "Lost as defender with losses", "Won scouting as attacker", "Lost scouting as attacker", "Won scouting as defender", "Lost scouting as defender",
+		"Scout Report"];
 ?>
 <form method="post" action="berichte.php" name="msg">
 <table cellpadding="1" cellspacing="1" id="overview"
@@ -55,41 +57,35 @@ $noticeClass = array("Scout Report","Won as attacker without losses","Won as att
 	<tbody>
 <?php
 
-    if(isset($_GET['s'])) {
-    $s = $_GET['s'];
-    }
-    else {
-    $s = 0;
-    }
+if(isset($_GET['s'])) $s = $_GET['s'];
+else $s = 0;
 
-      $name = 1;
-	  $count = 0;
-    for($i=(1+$s);$i<=(10+$s);$i++) {
-    if(count($message->noticearray) >= $i) {
-    echo "<tr><td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->noticearray[$i-1]['id']."\" /></td>
+$name = 1;
+$count = 0;
+for($i = (1 + $s); $i <= (10 + $s); $i++){
+	if(count($message->noticearray) >= $i){
+		echo "<tr><td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n" . $name . "\" value=\"" . $message->noticearray[$i - 1]['id'] . "\" /></td>
 		<td class=\"sub\">";
-        $type = (isset($_GET['t']) && $_GET['t'] == 5)? $message->noticearray[$i-1]['archive'] : $message->noticearray[$i-1]['ntype'];
-        if($type == 23) $type = 22;
-        if($type >= 15 && $type <= 17){
-		$type = $type-11;
-      echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
-	  }else if($type >= 18 && $type <= 22){
-      echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
-	  }else{
-      echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"".$noticeClass[$type]."\" title=\"".$noticeClass[$type]."\" />";
-	  }
-     echo "<div><a href=\"berichte.php?id=".$message->noticearray[$i-1]['id']."\">".$message->noticearray[$i-1]['topic']."</a> ";
-    if($message->noticearray[$i-1]['viewed'] == 0) {
-    echo "(new)";
-    }
-    $date = $generator->procMtime($message->noticearray[$i-1]['time']);
-	echo "</div></td><td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
-        }
-        $name++;
-    }
-    if(count($message->noticearray) == 0) {
-     echo "<td colspan=\"3\" class=\"none\">There are no reports available.</td></tr>";
-    }
+		$type = (isset($_GET['t']) && $_GET['t'] == 5) ? $message->noticearray[$i - 1]['archive'] : $message->noticearray[$i - 1]['ntype'];
+		if($type == 23) $type = 22;
+		if($type >= 15 && $type <= 17){
+			$type = $type - 11;
+			echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
+		}else if($type >= 18 && $type <= 22){
+			echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
+		}else{
+			echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
+		}
+		echo "<div><a href=\"berichte.php?id=" . $message->noticearray[$i - 1]['id'] . "\">" . $message->noticearray[$i - 1]['topic'] . "</a> ";
+		if($message->noticearray[$i - 1]['viewed'] == 0){
+			echo "(new)";
+		}
+		$date = $generator->procMtime($message->noticearray[$i - 1]['time']);
+		echo "</div></td><td class=\"dat\">" . $date[0] . " " . $date[1] . "</td></tr>";
+	}
+	$name++;
+}
+if(count($message->noticearray) == 0) echo "<td colspan=\"3\" class=\"none\">There are no reports available.</td></tr>";
     ?>
 </tbody>
 
