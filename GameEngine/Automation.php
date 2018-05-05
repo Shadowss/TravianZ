@@ -986,7 +986,7 @@ class Automation {
                 $AttackArrivalTime = $data['endtime'];
                 $AttackerWref = $data['from'];
                 $DefenderWref = $data['to'];
-                $NatarCapital=false;
+                $NatarCapital = false;
 
                 $Attacker['id'] = $database->getUserArray($database->getVillageField($data['from'],"owner"), 1)["id"];
                 $AttackerID = $Attacker['id'];
@@ -1003,26 +1003,26 @@ class Automation {
                     $targetally = $DefenderUserData["alliance"];
                     $to = $database->getMInfo($data['to']);
                     $toF = $database->getVillage($data['to']);
-                    $conqureby=0;
-                    $NatarCapital= ($toF['owner'] == 3 && $toF['capital']==1);
-                    if(!isset($to['name']) || $to['name']=='') $to['name']="??";
+                    $conqureby = 0;
+					$NatarCapital = ($toF['owner'] == 3 && $toF['capital'] == 1);
+					if(!isset($to['name']) || $to['name'] == '') $to['name'] = "[?]";
 
                     $DefenderUnit = [];
-                    $DefenderUnit = $database->getUnit($data['to']);
-                    $evasion = $toF["evasion"];
-                    $maxevasion = $DefenderUserData["maxevasion"];
-                    $gold = $DefenderUserData["gold"];
-                    $playerunit = (( $targettribe - 1 ) * 10);
-                    $cannotsend = 0;
-                    $movements = $database->getMovement("34",$data['to'],1);
-                    for($y=0;$y < count($movements);$y++){
-                        if (property_exists($units, $y)) {
-                            $returntime = $units->$y['endtime']-time();
-                            if($units->$y['sort_type'] == 4 && $units->$y['from'] != 0 && $returntime <= 10){
-                                $cannotsend = 1;
-                            }
-                        }
-                    }
+					$DefenderUnit = $database->getUnit($data['to']);
+					$evasion = $toF["evasion"];
+					$maxevasion = $DefenderUserData["maxevasion"];
+					$gold = $DefenderUserData["gold"];
+					$playerunit = (($targettribe - 1) * 10);
+					$cannotsend = 0;
+					$movements = $database->getMovement("34", $data['to'], 1);
+					for($y = 0; $y < count($movements); $y++){
+						if(property_exists($units, $y)){
+							$returntime = $units->$y['endtime'] - time();
+							if($units->$y['sort_type'] == 4 && $units->$y['from'] != 0 && $returntime <= 10){
+								$cannotsend = 1;
+							}
+						}
+					}
 
                     if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0 && $dataarray[$data_num]['attack_type'] > 2){
                         $evaded = true;
@@ -1030,15 +1030,15 @@ class Automation {
                         $evasionUnitModifications_units = [];
                         $evasionUnitModifications_amounts = [];
                         $evasionUnitModifications_modes = [];
-                        for($i=1;$i<=10;$i++){
-                            $playerunit += $i;
-                            $data['u'.$i] = $DefenderUnit['u'.$playerunit];
-                            $evasionUnitModifications_units[] = $playerunit;
-                            $evasionUnitModifications_amounts[] = $DefenderUnit['u'.$playerunit];
-                            $evasionUnitModifications_modes[] = 0;
-                            $playerunit -= $i;
-                            $totaltroops += $data['u'.$i];
-                        }
+                        for($i = 1; $i <= 10; $i++){
+							$playerunit += $i;
+							$data['u' . $i] = $DefenderUnit['u' . $playerunit];
+							$evasionUnitModifications_units[] = $playerunit;
+							$evasionUnitModifications_amounts[] = $DefenderUnit['u' . $playerunit];
+							$evasionUnitModifications_modes[] = 0;
+							$playerunit -= $i;
+							$totaltroops += $data['u' . $i];
+						}
 
                         $data['u11'] = $DefenderUnit['hero'];
                         $totaltroops += $data['u11'];
@@ -1065,12 +1065,12 @@ class Automation {
                     
                     if(count($enforcementarray) > 0) {
                         foreach($enforcementarray as $enforce) {
-                            for($i=1;$i<=50;$i++) {
-                                if (!isset($enforDefender['u'.$i])) {
-                                    $enforDefender['u'.$i] = 0;
-                                }
-                                $enforDefender['u'.$i] += $enforce['u'.$i];
-                            }
+                            for($i = 1; $i <= 50; $i++){
+								if(!isset($enforDefender['u'.$i])){
+									$enforDefender['u'.$i] = 0;
+								}
+								$enforDefender['u'.$i] += $enforce['u'.$i];
+							}
 
                             if (!isset($enforDefender['hero'])) {
                                 $enforDefender['hero'] = 0;
@@ -1163,14 +1163,14 @@ class Automation {
                      // End village Battle part
                      --------------------------------*/
                 }else{
-                    $DefenderUserData = $database->getUserArray($database->getOasisField($data['to'],"owner"), 1);
-                    $Defender['id'] = $DefenderUserData["id"];
-                    $DefenderID = $Defender['id'];
-                    $targettribe =  $DefenderUserData["tribe"];
-                    $targetally = $DefenderUserData["alliance"];
-                    $to = $database->getOMInfo($data['to']);
-                    $toF = $database->getOasisV($data['to']);
-                    $conqureby=$toF['conqured'];
+                    $DefenderUserData = $database->getUserArray($database->getOasisField($data['to'], "owner"), 1);
+					$Defender['id'] = $DefenderUserData["id"];
+					$DefenderID = $Defender['id'];
+					$targettribe = $DefenderUserData["tribe"];
+					$targetally = $DefenderUserData["alliance"];
+					$to = $database->getOMInfo($data['to']);
+					$toF = $database->getOasisV($data['to']);
+					$conqureby = $toF['conqured'];
                     //get defence units
                     $enforDefender = [];
                     $rom = $ger = $gal = $nat = $natar = 0;
@@ -1243,15 +1243,11 @@ class Automation {
                 
                 // total population of the defender
                 if($isoasis == 0){
-                    foreach($varray as $defenderVillage){
-                        $defpop += $defenderVillage['pop'];
-                    }
+                	foreach($varray as $defenderVillage) $defpop += $defenderVillage['pop'];
                 }       
                 
                 // total population of the attacker
-                foreach($varray1 as $attackerVillage){
-                    $attpop += $attackerVillage['pop'];
-                }              
+                foreach($varray1 as $attackerVillage) $attpop += $attackerVillage['pop'];          
 
                 //fix by ronix
                 for ($i = 1; $i <= 50; $i++) {
@@ -1830,8 +1826,9 @@ class Automation {
                     // Data for when troops return.
                     //catapults look :D
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
+                    
                     //check to see if can destroy village
-                    if (count($varray) != 1 && $to['capital'] != 1 && !$database->villageHasArtefact($DefenderWref)) {
+                    if (count($varray) > 1 && !$database->villageHasArtefact($DefenderWref)) {
                         $can_destroy = 1;
                     }
                     else $can_destroy = 0;
@@ -2044,7 +2041,7 @@ class Automation {
 
                             //check for last village or capital
                             if($user_cps >= $need_cps){
-                                if(count($varray) != 1 && $to['capital'] != 1 && $villexp < $canconquer){
+                                if(count($varray) > 1 && $to['capital'] != 1 && $villexp < $canconquer){
                                     if($to['owner'] != 3 || $to['name'] != 'WW Buildingplan'){
                                         // check for standing Palace or Residence
                                         // note: at this point, we can use cache, since we've cleared it above
@@ -2526,7 +2523,26 @@ class Automation {
 
                     if (!isset($village_destroyed)) $village_destroyed = 0;
 
-                    if ($village_destroyed == 1 && $can_destroy == 1) $this->DelVillage($data['to']);
+                    if ($village_destroyed == 1 && $can_destroy == 1) 
+                    {                 	
+                    	if($to['capital'] == 1){
+                    		$mostPopulatedVillage = [];
+                    		//Search for the most populated village
+                    		foreach($varray as $village){
+                    			if($village['wref'] != $data['to'] && (empty($mostPopulatedVillage) || $mostPopulatedVillage['pop'] < $village['pop'])){
+                    				$mostPopulatedVillage = $village;
+                    			}
+                    		}
+                    		//Set the new capital
+                    		$database->changeCapital($mostPopulatedVillage['wref']);
+                    	}
+                    	
+                    	//Delete the village
+                    	$this->DelVillage($data['to']);
+                    	
+                    	//Reassign the hero, if dead and assigned to the deleted village
+                    	$database->reassignHero($data['to']);
+                    }
                 }else{
                     //units attack string for battleraport
                     $unitssend_att1 = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -2671,7 +2687,7 @@ class Automation {
         $database->query($q);
         $database->removeOases($wref, 1);
         
-        $getmovement = $database->getMovement(3,$wref,1);
+        $getmovement = $database->getMovement(3, $wref, 1);
 
         $moveIDs = [];
         $time = microtime(true);
@@ -2699,7 +2715,7 @@ class Automation {
         $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = $wref";
         $database->query($q);
 
-        //check    return enforcement from del village
+        //check return enforcement from del village
         $units->returnTroops($wref);
 
         $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
@@ -2778,71 +2794,61 @@ class Automation {
             // calculate reinforcements data
             $movementProcIDs = [];
             foreach($dataarray as $data) {
-                $isoasis = $database->isVillageOases($data['to']);
-                if($isoasis == 0){
-                    $to = $database->getMInfo($data['to']);
-                    $toF = $database->getVillage($data['to']);
-                    $DefenderID = $to['owner'];
-                    $targettribe = $database->getUserField($DefenderID,"tribe",0);
-                    $conqureby=0;
-                }else{
-                    $to = $database->getOMInfo($data['to']);
-                    $toF = $database->getOasisV($data['to']);
-                    $DefenderID = $to['owner'];
-                    $targettribe = $database->getUserField($DefenderID,"tribe",0);
-                    $conqureby=$toF['conqured'];
-                }
+				$isoasis = $database->isVillageOases($data['to']);
+				if($isoasis == 0){
+					$to = $database->getMInfo($data['to']);
+					$toF = $database->getVillage($data['to']);
+					$DefenderID = $to['owner'];
+					$targettribe = $database->getUserField($DefenderID, "tribe", 0);
+					$conqureby = 0;
+				}else{
+					$to = $database->getOMInfo($data['to']);
+					$toF = $database->getOasisV($data['to']);
+					$DefenderID = $to['owner'];
+					$targettribe = $database->getUserField($DefenderID, "tribe", 0);
+					$conqureby = $toF['conqured'];
+				}
 
                 if($data['from'] == 0){
-                    $DefenderID = $database->getVillageField($data['to'], "owner");
-                    $database->addEnforce($data);
-                    $reinf = $database->getEnforce($data['to'], $data['from']);
-                    $database->modifyEnforce($reinf['id'], 31, 1, 1);
-                    $data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
-                    $database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement '.addslashes($to['name']), $data_fail, $AttackArrivalTime);
-                    $movementProcIDs[] = $data['moveid'];
-                }else{
+					$DefenderID = $database->getVillageField($data['to'], "owner");
+					$database->addEnforce($data);
+					$reinf = $database->getEnforce($data['to'], $data['from']);
+					$database->modifyEnforce($reinf['id'], 31, 1, 1);
+					$data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
+					$database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, $AttackArrivalTime);
+					$movementProcIDs[] = $data['moveid'];
+				}else{
                     //set base things
                     $from = $database->getMInfo($data['from']);
                     $fromF = $database->getVillage($data['from']);
                     $AttackerID = $from['owner'];
                     $owntribe = $database->getUserField($AttackerID,"tribe",0);
-
-                    //check to see if we're sending a hero between own villages and there's a Mansion at target village
-                    $HeroTransfer = $troopsPresent = 0;
-                    if($data['t11'] != 0) {
-                        if($AttackerID == $DefenderID) {
-                            // only add hero if we're sending him alone
-                            if (
-                                ($this->getTypeLevel(37, $data['to']) > 0) &&
-                                ($data['t1'] == 0) &&
-                                ($data['t2'] == 0) &&
-                                ($data['t3'] == 0) &&
-                                ($data['t4'] == 0) &&
-                                ($data['t5'] == 0) &&
-                                ($data['t6'] == 0) &&
-                                ($data['t7'] == 0) &&
-                                ($data['t8'] == 0) &&
-                                ($data['t9'] == 0) &&
-                                ($data['t10'] == 0)
-                            ) {
+                   
+                    $HeroTransfer = $troopsPresent = 0;              
+                    for($i = 1;$i <= 10; $i++) {
+                    	if($data['t'.$i] > 0) {
+                    		$troopsPresent = 1;
+                    		break;
+                    	}
+                    }
+                    
+                    //check if the hero is present and we're not sending him to an occupied oasis
+                    //only add hero if we're sending him alone
+                    if($data['t11'] > 0 && !$isoasis && !$troopsPresent) {
+                    	//check if we're sending a hero between own villages
+                        if($AttackerID == $DefenderID) {             
+                            //check if there's a Mansion at target village
+                            if($this->getTypeLevel(37, $data['to']) > 0){
                                 //don't reinforce, addunit instead
                                 $database->modifyUnit($data['to'], ["hero"], [1], [1]);
                                 $heroid = $database->getHeroField($DefenderID, 'heroid');
-                                $database->modifyHero("wref", $data['to'], $heroid, 0);
+                                $database->modifyHero("wref", $data['to'], $heroid);
                                 $HeroTransfer = 1;
                             }
                         }
-                    }
-                    
-                    for($i = 1;$i <= 10; $i++) {
-                        if($data['t'.$i] > 0) {
-                            $troopsPresent = 1; 
-                            break;
-                        }
-                    }
+                    }                   
 
-                    if($data['t11'] != 0 || $troopsPresent) {
+                    if($data['t11'] > 0 || $troopsPresent) {
                         $temphero = $data['t11'];
                         if ($HeroTransfer) $data['t11'] = 0;
                         //check if there is defence from town in to town

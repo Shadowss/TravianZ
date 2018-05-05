@@ -73,8 +73,8 @@ class Units {
     
     private function loadUnits($post) {
         global $database,$village,$session,$generator,$logging,$form;
-                // Search by town name
-                // Coordinates and look confirm name people
+        // Search by town name
+        // Coordinates and look confirm name people
         if(isset($post['x']) && isset($post['y']) && !empty($post['x']) && !empty($post['y'])) {
             $vid = $database->getVilWref($post['x'], $post['y']);
             unset($post['dname'], $post['dname']);
@@ -224,25 +224,23 @@ class Units {
     
     public function returnTroops($wref, $mode = 0) {
         global $database;
-        if (!$mode) {
-            $getenforce=$database->getEnforceVillage($wref,0);
-            foreach($getenforce as $enforce) {
-                $this->processReturnTroops($enforce);    
-            }
-        }    
-        //check oasis
-        $getenforce1=$database->getOasisEnforce($wref,1);
-        foreach($getenforce1 as $enforce) {
-            $this->processReturnTroops($enforce);
-        }
-        //set oasis to default
-        if (count($getenforce1)>0) {
-            $database->regenerateOasisUnits($getenforce1[0]['vref']);
-        }    
+        
+        if(!$mode){
+			$getenforce = $database->getEnforceVillage($wref, 0);
+			foreach($getenforce as $enforce) $this->processReturnTroops($enforce);
+		}
+		
+		// check oasis
+		$getenforce1 = $database->getOasisEnforce($wref, 1);
+		foreach($getenforce1 as $enforce) $this->processReturnTroops($enforce);
+		
+		// set oasis to default
+		if(count($getenforce1) > 0) $database->regenerateOasisUnits($getenforce1[0]['vref']);
     }
 
     private function processReturnTroops($enforce) {
         global $database, $generator;
+        
         $to = $database->getVillage($enforce['from']);
         $tribe = $database->getUserField($to['owner'], 'tribe', 0);
         

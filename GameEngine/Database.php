@@ -1012,12 +1012,9 @@ class MYSQLi_DB implements IDbConnection {
 	function getVrefCapital($ref) {
 	    $vdata = $this->getProfileVillages($ref);
 
-	    foreach ($vdata as $village) {
-	        if ($village['capital']) {
-	            return $village;
-            }
+	    foreach($vdata as $village){
+	    	if($village['capital']) return $village;
         }
-
         return false;
 	}
 
@@ -7938,7 +7935,37 @@ References:
         }
         return false;
     }
-
+    
+    /**
+     * Register the hero to the capital village and kills it
+     * 
+     * @param int $wref The village ID where the hero is registered
+     * @return bool Return true if the query was successful, false otherwise
+     */
+    
+    function reassignHero($wref){
+    	$q = "UPDATE 
+					".TB_PREFIX."hero AS hero
+			  INNER JOIN ".TB_PREFIX."vdata AS vdata
+					ON vdata.owner = hero.uid AND vdata.capital = 1
+		      SET 
+					hero.dead = 1, hero.health = 0, hero.wref = vdata.wref
+		      WHERE 
+					hero.wref = $wref";
+    	return mysqli_query($this->dblink, $q);
+    }
+    
+    /**
+     * Changed the actual capital with a new one
+     * 
+     * @param int $wref The village ID that will became the new capital
+     * @return bool Return true if the query was successful, false otherwise
+     */
+    
+    function changeCapital($wref){
+    	$q = "UPDATE ".TB_PREFIX."vdata SET capital = 1 WHERE wref = $wref";
+    	return mysqli_query($this->dblink, $q);
+    }
 };
 
 // database is not needed if we're displaying static pages
