@@ -7399,7 +7399,7 @@ References: User ID/Message ID, Mode
 	}
 
 	function getCropProdstarv($wref, $use_cache = true) {
-	    global $bid4,$bid8,$bid9,$sesion,$technology;
+	    global $bid4, $bid8, $bid9, $sesion, $technology;
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
@@ -7407,75 +7407,48 @@ References: User ID/Message ID, Mode
             return $cachedValue;
         }
 
-	    $wood = 0;
-	    $cropo = 0;
-	    $clay = 0;
-	    $iron = 0;
+	    $wood = $cropo = $clay = $iron = 0;
 		$basecrop = $grainmill = $bakery = 0;
 		$owner = $this->getVrefField($wref, 'owner', $use_cache);
 		$bonus = $this->getUserField($owner, 'b4', 0);
 
 		$buildarray = $this->getResourceLevel($wref);
-		$cropholder = array();
-		for($i=1;$i<=38;$i++) {
-			if($buildarray['f'.$i.'t'] == 4) {
-				array_push($cropholder,'f'.$i);
-			}
-			if($buildarray['f'.$i.'t'] == 8) {
-				$grainmill = $buildarray['f'.$i];
-			}
-			if($buildarray['f'.$i.'t'] == 9) {
-				$bakery = $buildarray['f'.$i];
-			}
+		$cropholder = [];
+		for($i = 1; $i <= 38; $i++){
+			if($buildarray['f'.$i.'t'] == 4) array_push($cropholder, 'f' . $i);
+			if($buildarray['f'.$i.'t'] == 8) $grainmill = $buildarray['f' . $i];
+			if($buildarray['f'.$i.'t'] == 9) $bakery = $buildarray['f' . $i];
 		}
+		
 		$q = "SELECT type FROM `" . TB_PREFIX . "odata` WHERE conqured = ".(int) $wref;
 		$oasis = $this->query_return($q);
 		foreach($oasis as $oa){
 			switch($oa['type']) {
-                case 1:
-                case 2:
-                    $wood += 1;
-                    break;
                 case 3:
-                    $wood  += 1;
-                    $cropo += 1;
-                    break;
-                case 4:
-                case 5:
-                    $clay += 1;
-                    break;
                 case 6:
-                    $clay  += 1;
-                    $cropo += 1;
-                    break;
-                case 7:
-                case 8:
-                    $iron += 1;
-                    break;
                 case 9:
-                    $iron  += 1;
-                    $cropo += 1;
-                    break;
                 case 10:
                 case 11:
-                    $cropo += 1;
+                    $cropo ++;
                     break;
                 case 12:
                     $cropo += 2;
                     break;
 			}
 		}
-        for ( $i = 0; $i <= count( $cropholder ) - 1; $i ++ ) {
-            $basecrop += $bid4[ $buildarray[ $cropholder[ $i ] ] ]['prod'];
-        }
-        $crop = $basecrop + $basecrop * 0.25 * $cropo;
-        if ( $grainmill >= 1 || $bakery >= 1 ) {
-            $crop += $basecrop / 100 * ( ( isset( $bid8[ $grainmill ]['attri'] ) ? $bid8[ $grainmill ]['attri'] : 0 ) + ( isset( $bid9[ $bakery ]['attri'] ) ? $bid9[ $bakery ]['attri'] : 0 ) );
-        }
-        if ( $bonus > time() ) {
-            $crop *= 1.25;
-        }
-        $crop *= SPEED;
+		
+        for($i = 0; $i <= count($cropholder) - 1; $i++){
+			$basecrop += $bid4[$buildarray[$cropholder[$i]]]['prod'];
+		}
+		$crop = $basecrop + $basecrop * 0.25 * $cropo;
+		
+		if($grainmill >= 1 || $bakery >= 1){
+			$crop += $basecrop / 100 * ((isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0) + (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0));
+		}
+		if($bonus > time()){
+			$crop *= 1.25;
+		}
+		$crop *= SPEED;
 
         self::$cropProductionStarvationValueCache[$wref] = $crop;
         return self::$cropProductionStarvationValueCache[$wref];
@@ -7944,6 +7917,8 @@ References:
      */
     
     function reassignHero($wref){
+    	list($wref) = $this->escape_input($wref);
+    	
     	$q = "UPDATE 
 					".TB_PREFIX."hero AS hero
 			  INNER JOIN ".TB_PREFIX."vdata AS vdata
@@ -7962,8 +7937,10 @@ References:
      * @return bool Return true if the query was successful, false otherwise
      */
     
-    function changeCapital($wref){
-    	$q = "UPDATE ".TB_PREFIX."vdata SET capital = 1 WHERE wref = $wref";
+    function changeCapital($wref, $mode = 1){
+    	list($wref, $mode) = $this->escape_input($wref, $mode);
+    	
+    	$q = "UPDATE ".TB_PREFIX."vdata SET capital = ".$mode." WHERE wref = $wref";
     	return mysqli_query($this->dblink, $q);
     }
 };

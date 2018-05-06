@@ -129,15 +129,14 @@ class Automation {
         for ($i = 1; $i <= 40; $i++) {
             $lvl = $fdata["f".$i];
             $building = $fdata["f".$i."t"];
-            if($building){
-                $popTot += $this->buildingPOP($building,$lvl);
-            }
+			if($building) $popTot += $this->buildingPOP($building, $lvl);
         }
+        
         $this->recountCP($vid);
-        $q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
-        mysqli_query($database->dblink,$q);
-        $owner = $database->getVillageField($vid,"owner");
-        $this->procClimbers($owner);
+		$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
+		mysqli_query($database->dblink, $q);
+		$owner = $database->getVillageField($vid, "owner");
+		$this->procClimbers($owner);
 
         return $popTot;
     }
@@ -552,9 +551,7 @@ class Automation {
         }
 
         // update statistical data for affected villages
-        foreach ($villagesAffected as $affected_id) {
-            $this->recountPop( $affected_id );
-        }
+        foreach ($villagesAffected as $affected_id) $this->recountPop($affected_id);
 
         // update data that can be done in one swoop instead of using multiple update queries
         // no special checks for Romans
@@ -2182,27 +2179,31 @@ class Automation {
                                                 if($exp1 == 0){
                                                     $exp = 'exp1';
                                                     $value = $data['to'];
-                                                }
-                                                elseif($exp2 == 0){
+                                                }elseif($exp2 == 0){
                                                     $exp = 'exp2';
                                                     $value = $data['to'];
-                                                }
-                                                else{
+                                                }else{
                                                     $exp = 'exp3';
                                                     $value = $data['to'];
                                                 }
 
                                                 $database->setVillageField($data['from'], $exp, $value);
 
-                                                //remove oasis related to village
+                                                //Remove oasis related to village
                                                 $units->returnTroops($data['to'], 1);
                                                 $chiefing_village = 1;
                                                 
 												//Remove trade routes related to village
 												$database->deleteTradeRoutesByVillage($data['to']);
 												
-                                                // update data in the database                                            
+                                                //Update data in the database                                            
                                                 $database->setVillageLevel($data['to'], $newLevels_fieldNames, $newLevels_fieldValues);
+                                           
+                                                //Recount the population
+                                                $pop = $this->recountPop($data['to'], false);
+                                                
+                                                //Kill and reassign the hero to the capital village, if registered in the conquered one
+                                                $database->reassignHero($data['to']);
                                             }
                                         }
                                     }
@@ -3973,11 +3974,9 @@ class Automation {
             $unitArrays = $this->getAllUnits($wref, false);
             $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);
             $starv = $getVillage['starv'];
-            
+
             if ($crop < $villageUpkeep){
-                
                 //Add starvation data
-                $database->setVillageField($wref, 'starv', $villageUpkeep);
                 $database->setVillageFields($wref, ['starv', 'starvupdate'], [$villageUpkeep, time()]);
             }
         }
@@ -4059,10 +4058,10 @@ class Automation {
             }
 
             // if the player has no troops, then skip the next instructions
-            if(empty($starvingTroops)) continue;    
- 
-            // counting
-            $timedif = $time-$starv['starvupdate'];
+            if(empty($starvingTroops)) continue;
+				
+			// counting
+			$timedif = $time - $starv['starvupdate'];
             $cropProd = $database->getCropProdstarv($starv['wref']) - $starv['starv'];
             if($cropProd < 0){
                 $starvsec = (abs($cropProd) / 3600);
@@ -4164,7 +4163,7 @@ class Automation {
             }
 
             $crop = $database->getCropProdstarv($starv['wref'], false);        
-            if ($crop > 0) $database->setVillageField($starv['wref'], ['starv', 'starvupdate'], [0, 0]);         
+            if ($crop > $upkeep) $database->setVillageFields($starv['wref'], ['starv', 'starvupdate'], [0, 0]);         
 
             unset ($unitarrays, $type, $subtype);
         }
