@@ -3974,7 +3974,6 @@ class Automation {
             $unitArrays = $this->getAllUnits($wref, false);
             $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);
             $starv = $getVillage['starv'];
-
             if ($crop < $villageUpkeep){
                 //Add starvation data
                 $database->setVillageFields($wref, ['starv', 'starvupdate'], [$villageUpkeep, time()]);
@@ -4156,7 +4155,7 @@ class Automation {
                                 break;
                         }
                         
-                        $database->modifyResource($starv['wref'], 0, 0, 0, max(intval($newCrop), 0), 1);
+                        $database->modifyResource($starv['wref'], 0, 0, 0, max($newCrop, 0), 1);
                         $database->setVillageField($starv['wref'], ['starv', 'starvupdate'], [$upkeep, $time]);                        
                     }
                 }

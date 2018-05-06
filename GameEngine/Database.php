@@ -3274,7 +3274,7 @@ class MYSQLi_DB implements IDbConnection {
 	/////////////ADDED BY BRAINIAC - THANK YOU
 
 	 function modifyResource($vid, $wood, $clay, $iron, $crop, $mode) {
-	     list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, (int) $wood, (int) $clay, (int) $iron, (int) $crop, $mode);
+	     list($vid, $wood, $clay, $iron, $crop, $mode) = $this->escape_input((int) $vid, $wood, $clay, $iron, $crop, $mode);
          $sign = (!$mode ? '-' : '+');
 
          $q = "
@@ -7407,17 +7407,16 @@ References: User ID/Message ID, Mode
             return $cachedValue;
         }
 
-	    $wood = $cropo = $clay = $iron = 0;
-		$basecrop = $grainmill = $bakery = 0;
+        $basecrop = $grainmill = $bakery = $cropo = 0;
 		$owner = $this->getVrefField($wref, 'owner', $use_cache);
 		$bonus = $this->getUserField($owner, 'b4', 0);
 
 		$buildarray = $this->getResourceLevel($wref);
 		$cropholder = [];
 		for($i = 1; $i <= 38; $i++){
-			if($buildarray['f'.$i.'t'] == 4) array_push($cropholder, 'f' . $i);
-			if($buildarray['f'.$i.'t'] == 8) $grainmill = $buildarray['f' . $i];
-			if($buildarray['f'.$i.'t'] == 9) $bakery = $buildarray['f' . $i];
+			if($buildarray['f'.$i.'t'] == 4) array_push($cropholder, 'f'.$i);
+			if($buildarray['f'.$i.'t'] == 8) $grainmill = $buildarray['f'.$i];
+			if($buildarray['f'.$i.'t'] == 9) $bakery = $buildarray['f'.$i];
 		}
 		
 		$q = "SELECT type FROM `" . TB_PREFIX . "odata` WHERE conqured = ".(int) $wref;
@@ -7440,14 +7439,14 @@ References: User ID/Message ID, Mode
         for($i = 0; $i <= count($cropholder) - 1; $i++){
 			$basecrop += $bid4[$buildarray[$cropholder[$i]]]['prod'];
 		}
+		
 		$crop = $basecrop + $basecrop * 0.25 * $cropo;
 		
 		if($grainmill >= 1 || $bakery >= 1){
 			$crop += $basecrop / 100 * ((isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0) + (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0));
 		}
-		if($bonus > time()){
-			$crop *= 1.25;
-		}
+		if($bonus > time()) $crop *= 1.25;
+
 		$crop *= SPEED;
 
         self::$cropProductionStarvationValueCache[$wref] = $crop;
