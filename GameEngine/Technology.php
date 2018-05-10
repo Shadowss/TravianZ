@@ -453,6 +453,9 @@ class Technology {
         $upkeep += $array[$index] * 6;
         $who = $database->getVillageField($vid, "owner");
         
+        //If it's a WW village, halve the crop consumption
+        if($database->getVillageField($vid, "natar") == 1) $upkeep /= 2;
+        
         return ceil($database->getArtifactsValueInfluence($who, $vid, 4, $upkeep, false));
 	}
 

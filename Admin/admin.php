@@ -496,10 +496,6 @@ if (!empty($_GET['p'])) {
 												<a href="#"><b>Users</b></a>
 												<a href="?p=addUsers">Create Users</a>
 												<br />
-												<a href="#"><b>Natars</b></a>
-												<a href="?p=natarend">Add WW Villages</a>
-												<a href="?p=natarbuildingplan">Add WW Building Plan Villages</a>
-												<br />
 												<a href="#"><b>Admin:</b></a>
 												<a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a>
 												<a href="?p=config">Server Settings</a>
