@@ -265,7 +265,8 @@ class Account {
 	}
 
 	function generateBase($kid, $uid, $username) {
-		global $database, $message;
+		global $database;
+		$message = new Message();
 		
 		if($kid == 0) $kid = rand(1,4);
 		else $kid = $_POST['kid'];
