@@ -130,7 +130,14 @@ class Process {
 		$findReplace["%WW%"] = $_POST['ww'];
 		$findReplace["%SHOW_NATARS%"] = $_POST['show_natars'];
 		$findReplace["%NATARS_UNITS%"] = $_POST['natars_units'];
+		$findReplace["%NATARS_SPAWN_TIME%"] = $_POST['natars_spawn_time'];
+		$findReplace["%NATARS_WW_SPAWN_TIME%"] = $_POST['natars_ww_spawn_time'];
+		$findReplace["%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%"] = $_POST['natars_ww_building_plan_spawn_time'];
 		$findReplace["%NATURE_REGTIME%"] = $_POST['nature_regtime'];
+		$findReplace["%OASIS_WOOD_MULTIPLIER%"] = $_POST['oasis_wood_multiplier'];
+		$findReplace["%OASIS_CLAY_MULTIPLIER%"] = $_POST['oasis_clay_multiplier'];
+		$findReplace["%OASIS_IRON_MULTIPLIER%"] = $_POST['oasis_iron_multiplier'];
+		$findReplace["%OASIS_CROP_MULTIPLIER%"] = $_POST['oasis_crop_multiplier'];
 		$findReplace["%T4_COMING%"] = $_POST['t4_coming'];
 		$findReplace["%REG_OPEN%"] = $_POST['reg_open'];
 		$findReplace["%PEACE%"] = $_POST['peace'];

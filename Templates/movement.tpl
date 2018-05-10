@@ -20,13 +20,7 @@ if($aantal > 0){
 	echo	'<table id="movements" cellpadding="1" cellspacing="1"><thead><tr><th colspan="3">'.TROOP_MOVEMENTS.'</th></tr></thead><tbody>';
 }
 
-$NextArrival = array();
-$NextArrival1 = array();
-$NextArrival2 = array();
-$NextArrival3 = array();
-$NextArrival4 = array();
-$NextArrival5 = array();
-$NextArrival6 = array();
+$NextArrival = $NextArrival1 = $NextArrival2 = $NextArrival3 = $NextArrival4 = $NextArrival5 = $NextArrival6 = [];
 
 /* Units coming back from Reinf,attack,raid,evasion or reinf to my town */
 $aantal = count($database->getMovement(4,$village->wid,1))+count($database->getMovement(7,$village->wid,1));
@@ -64,8 +58,7 @@ if($aantal > 0){
 	}
 	}
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
-	$timer += 1;
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 }
 
 /* attack/raid on you! */
@@ -89,8 +82,7 @@ if($aantal > 0){
 		}
 	}
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival1)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
-	$timer += 1;
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival1)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 }
 
 /* on attack, raid */
@@ -112,8 +104,7 @@ if($aantal > 0){
 			}
 		}
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival2)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
-	$timer += 1;
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival2)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 }
 
 /* Units send to reinf. (to other town) */
@@ -135,8 +126,7 @@ if($lala > 0){
 			}
 		}
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$lala.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival3)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
-	$timer += 1;
+	<td><div class="mov"><span class="'.$aclass.'">'.$lala.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival3)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 }
 
 /* Found NEW VILLAGE by Shadow */
@@ -154,9 +144,7 @@ if($aantal > 0){
 			}
 			
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival5)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
-	$timer += 1;
-
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival5)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 }
 
 /* Attacks on Oasis (to my oasis) by Shadow */
@@ -186,7 +174,5 @@ if($aantal > 0){
 			}
 			
 	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.$timer.'">'.$generator->getTimeFormat(min($NextArrival6)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
-	$timer += 1;
-
+	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival6)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
 }

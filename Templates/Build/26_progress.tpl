@@ -17,7 +17,7 @@
 			echo $train['amt']." ".$train['name']."</td><td class=\"dur\">";
 			if ($TrainCount == 1 ) {
 				$NextFinished = $generator->getTimeFormat($train['timestamp2']-time());
-				echo "<span id=timer1>".$generator->getTimeFormat($train['timestamp']-time())."</span>";
+				echo "<span id=timer".++$session->timer.">".$generator->getTimeFormat($train['timestamp']-time())."</span>";
 			} else {
 				echo $generator->getTimeFormat($train['eachtime']*$train['amt']);
 			}
@@ -28,7 +28,7 @@
             }
 			echo $time[1];
 		} ?>
-		</tr><tr class="next"><td colspan="3"><?php echo UNIT_FINISHED; ?> <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
+		</tr><tr class="next"><td colspan="3"><?php echo UNIT_FINISHED; ?> <span id="timer<?php echo ++$session->timer; ?>"><?php echo $NextFinished; ?></span></td></tr>
 		</tbody></table>
     <?php }
 ?>

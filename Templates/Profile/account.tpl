@@ -116,7 +116,7 @@ echo "<a href=\"spieler.php?s=3&id=".$session->uid."&a=1&e=4\"><img
 		title=\"Cancel process\" /> </a>";
 		$time=$generator->getTimeFormat(($timestamp-time()));
         echo "The account will be deleted in <span
-		id=\"timer2\">".$time."</span> .</td>";
+		id=\"timer".++$session->timer."\">".$time."</span> .</td>";
 }
 else {
 ?>

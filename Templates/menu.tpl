@@ -67,20 +67,23 @@ div.c1 {text-align: center}
             <?php
             	}
             	include("Templates/links.tpl");
+            	include("Templates/natars.tpl")
             ?>
         </p>
 		<?php
 		$timestamp = $database->isDeleting($session->uid);
-		if($timestamp) {
+		if($timestamp){
 		echo "<br /><td colspan=\"2\" class=\"count\">";
-		if($timestamp > time()+48*3600) {
-		echo "<a href=\"spieler.php?s=3&id=".$session->uid."&a=1&e=4\"><img
-		class=\"del\" src=\"img/x.gif\" alt=\"Cancel process\"
-		title=\"Cancel process\" /> </a>";
+		
+		if($timestamp > time() + 172800){
+			echo "<a href=\"spieler.php?s=3&id=" . $session->uid . "&a=1&e=4\"><img
+			class=\"del\" src=\"img/x.gif\" alt=\"Cancel process\"
+			title=\"Cancel process\" /> </a>";
 		}
-		$time=$generator->getTimeFormat(($timestamp-time()));
-        echo "<a href=\"spieler.php?s=3\"> The account will be deleted in <span
-		id=\"timer1\">".$time."</span> .</a></td><br />";
+		
+		$time = $generator->getTimeFormat(($timestamp - time()));
+		echo "<a href=\"spieler.php?s=3\"> The account will be deleted in <span
+		id=\"timer" . ++$session->timer . "\">" . $time . "</span> .</a></td><br />";
 		}
 		?>
     </div><?php

@@ -95,7 +95,19 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
         </tr>
         <tr>
             <td><span class="f9 c6">Natars Units Multiplier:</span></td>
-            <td width="140"><input type="text" name="natars_units" id="natars_units" value="100" size="3"></td>
+            <td width="140"><input type="text" name="natars_units" id="natars_units" value="100" size="3"></td>         
+        </tr>
+        <tr>
+        	<td><span class="f9 c6">Natars Spawn (Days):</span></td>
+            <td width="140"><input type="text" name="natars_spawn_time" id="natars_spawn_time" value="260" size="3"></td>
+        </tr>
+        <tr>
+        	<td><span class="f9 c6">WW building plan spawn (Days):</span></td>
+            <td width="140"><input type="text" name="natars_ww_spawn_time" id="natars_ww_spawn_time" value="260" size="3"></td>           
+        </tr>
+        <tr>
+        	<td><span class="f9 c6">WW spawn (Days):</span></td>
+            <td width="140"><input type="text" name="natars_ww_building_plan_spawn_time" id="natars_ww_building_plan_spawn_time" value="260" size="3"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">World size:</span></td>
@@ -176,6 +188,22 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                     <option value="86400">24 hours</option>
                 </select>
             </td>
+        </tr>
+        <tr>
+        	<td><span class="f9 c6">Oasis wood production multiplier:</span></td>
+            <td width="140"><input type="text" name="oasis_wood_multiplier" id="oasis_wood_multiplier" value="40"></td>                    
+        </tr>
+        <tr>
+        	<td><span class="f9 c6">Oasis clay production multiplier:</span></td>
+            <td width="140"><input type="text" name="oasis_clay_multiplier" id="oasis_clay_multiplier" value="40"></td>
+        </tr>
+        <tr>
+        	<td><span class="f9 c6">Oasis iron production multiplier:</span></td>
+            <td width="140"><input type="text" name="oasis_iron_multiplier" id="oasis_iron_multiplier" value="40"></td>
+        </tr>
+        <tr>
+        	<td><span class="f9 c6">Oasis crop production multiplier:</span></td>
+            <td width="140"><input type="text" name="oasis_crop_multiplier" id="oasis_crop_multiplier" value="40"></td>
         </tr>
         <tr>
         <tr class="hover">

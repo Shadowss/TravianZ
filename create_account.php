@@ -93,466 +93,59 @@ AccessLogger::logRequest();
 /**
  * Functions
  */
-if(isset($_POST['password']) && $_POST['password'] != ""){
-		function generateBase($kid, $uid, $username) {
-			global $database, $message;
-			if($kid == 0) {
-				$kid = rand(1, 4);
-			} else {
-			    $kid = (isset($_POST['kid']) ? $_POST['kid'] : '');
-			}
-
-			$wid = $database->generateBase($kid);
-			$database->setFieldTaken($wid);
-			$database->addVillage($wid, $uid, $username, 1);
-			$database->addResourceFields($wid, $database->getVillageType($wid));
-			$database->addUnits($wid);
-			$database->addTech($wid);
-			$database->addABTech($wid);
-			$database->updateUserField($uid, "access", USER, 1);
-			$message->sendWelcome($uid, $username);
-		}
+if(!User::exists($database, 'Natars')){
 
 /**
- * Creating account & capital village - Fixed by Shadow - cata7007@gmail.com / Skype : cata7007
+ * Creating account & capital village - Fixed by Shadow - cata7007@gmail.com / Skype : cata7007 - reworked by iopietro
  */
 
-		$username = "Natars";
-		$password = password_hash($_POST['password'], PASSWORD_BCRYPT,['cost' => 12]);
-		$email = "natars@noreply.com";
-		$tribe = 5;
-		$desc = "***************************
-				[#natars]
-			***************************";
+		$database->createNatars();
 
-		$q = "INSERT INTO " . TB_PREFIX . "users (id,username,password,access,email,timestamp,tribe,location,act,protect) VALUES (3, '$username', '$password', " . USER . ", '$email', ".time().", $tribe, '', '', 0)";
-		mysqli_query($database->dblink,$q);
-		unset($q);
-		$uid = $database->getUserField($username, 'id', 1);
-		$arrayXY=array();
-        $arrayXY=array
-        (
-            array(WORLD_MAX, WORLD_MAX),
-            array(WORLD_MAX, -WORLD_MAX),
-            array(-WORLD_MAX, -WORLD_MAX),
-            array(WORLD_MAX-1, WORLD_MAX),
-            array(WORLD_MAX, WORLD_MAX-1),
-            array(-WORLD_MAX, WORLD_MAX-1),
-            array(WORLD_MAX-1, -WORLD_MAX),
-            array(WORLD_MAX-1, WORLD_MAX-1),
-            array(WORLD_MAX, -WORLD_MAX+1),
-            array(WORLD_MAX-1, -WORLD_MAX+1),
-            array(-WORLD_MAX+1, -WORLD_MAX+1),
-            array(WORLD_MAX-2, WORLD_MAX),
-            array(WORLD_MAX-2, -WORLD_MAX),
-            array(WORLD_MAX-2, WORLD_MAX-1),
-            array(WORLD_MAX-1, WORLD_MAX-2),
-            array(-WORLD_MAX+2, WORLD_MAX),
-            array(-WORLD_MAX+2, WORLD_MAX-1),
-            array(-WORLD_MAX+2, -WORLD_MAX+2)
-        );
-        $status=0;
-        $i=0;
-        while ($i<=17) {
-            $wid = $database->getVilWref($arrayXY[$i][0],$arrayXY[$i][1]);
-            $status = $database->getVillageState($wid);
-            $i++;
-            if ($status==0) break;
-        }
-        if($status != 0) { //have taken then random
-            generateBase(0, $uid, $username);
-            $status = 1;
-        }
-        if($status == 0) {
-            $database->setFieldTaken($wid);
-            $database->addVillage($wid, $uid, $username, 1);
-            $database->addResourceFields($wid, $database->getVillageType($wid));
-            $database->addUnits($wid);
-            $database->addTech($wid);
-            $database->addABTech($wid);
-            $database->updateUserField($uid, "access", USER, 1);
-        }
-
-        $wid = $database->getVillage($uid, 2);
-        $q = "UPDATE " . TB_PREFIX . "vdata SET pop = 834 WHERE owner = ".(int) $uid;
-        mysqli_query($database->dblink,$q) or die(mysqli_error($database->dblink));
-        $q2 = "UPDATE " . TB_PREFIX . "users SET access = 2 WHERE id = ".(int) $uid;
-        mysqli_query($database->dblink,$q2) or die(mysqli_error($database->dblink));
-        if(SPEED > 3) {
-            $speed = 5;
-        } else {
-            $speed = SPEED;
-        }
-        $q3 = "UPDATE " . TB_PREFIX . "units SET u41 = " . (64700 * $speed) . ", u42 = " . (295231 * $speed) . ", u43 = " . (180747 * $speed) . ", u44 = " . (20000 * $speed) . ", u45 = " . (364401 * $speed) . ", u46 = " . (217602 * $speed) . ", u47 = " . (2034 * $speed) . ", u48 = " . (1040 * $speed) . " , u49 = " . (1 * $speed) . ", u50 = " . (9 * $speed) . " WHERE vref = " . (int) $wid['wref'] . "";
-        mysqli_query($database->dblink,$q3) or die(mysqli_error($database->dblink));
-        $q4 = "UPDATE " . TB_PREFIX . "users SET desc2 = '$desc' WHERE id = ".(int) $uid;
-        mysqli_query($database->dblink,$q4) or die(mysqli_error($database->dblink));
-
-/**
- * SCOUTING ALL PLAYERS FIX BY MisterX
- */
-        $natar = $database->getVillage($uid, 3);
-  		$multiplier = NATARS_UNITS;
-  		$array = $database->getProfileVillages(0, 1);
-        $sendspytroops = 1500 * $multiplier;
-        $refs = [];
-        $vils = [];
-  		foreach($array as $vill){
-  		    $refs[] = $database->addAttack($natar['wref'], 0, 0, 0, $sendspytroops, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
-            $vils[] = $vill['wref'];
-  		}
-
-        $type = [];
-  		$from = [];
-  		$to = [];
-  		$ref = [];
-  		$time = [];
-  		$timeValue = time();
-  		$endtime = [];
-  		$endtimeValue = $timeValue + 10000;
-  		$counter = 0;
-
-  		foreach ($refs as $index => $refID) {
-  		    $type[] = 3;
-  		    $from[] = $natar['wref'];
-  		    $to[] = $vils[$index];
-  		    $ref[] = $refID;
-  		    $time[] = $timeValue;
-  		    $endtime[] = $endtimeValue;
-
-  		    // limit the insert, so it can push through any reasonable network limits imposed
-  		    if (++$counter > 25) {
-                $database->addMovement($type, $from, $to, $ref, $time, $endtime);
-
-                $type = [];
-                $from = [];
-                $to = [];
-                $ref = [];
-                $time = [];
-                $endtime = [];
-                $counter = 0;
-            }
-        }
-
-        if ($counter > 0) $database->addMovement($type, $from, $to, $ref, $time, $endtime);
-
-/**
- * SMALL ARTEFACTS
- */
-		function Artefact($uid, $type, $size, $art_name, $village_name, $desc, $effect, $img) {
-			global $database;
-			$kid = rand(1, 4);
-			$wid = $database->generateBase($kid, 1);
-			$database->addArtefact($wid, $uid, $type, $size, $art_name, $desc, $effect, $img);
-			$database->setFieldTaken($wid);
-			$database->addVillage($wid, $uid, $village_name, '0');
-			$database->addResourceFields($wid, $database->getVillageType($wid));
-			$database->addUnits($wid);
-			$database->addTech($wid);
-			$database->addABTech($wid);
-			mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "vdata SET pop = 163 WHERE wref = ".(int) $wid);
-			mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "vdata SET name = '$village_name' WHERE wref = ".(int) $wid);
-			if(SPEED > 3) {
-				$speed = 5;
-			} else {
-				$speed = SPEED;
-			}
-			if($size == 1) {
-			    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(1000, 2000) * $speed) . ", u42 = " . (rand(1500, 2000) * $speed) . ", u43 = " . (rand(2300, 2800) * $speed) . ", u44 = " . (rand(25, 75) * $speed) . ", u45 = " . (rand(1200, 1900) * $speed) . ", u46 = " . (rand(1500, 2000) * $speed) . ", u47 = " . (rand(500, 900) * $speed) . ", u48 = " . (rand(100, 300) * $speed) . " , u49 = " . (rand(1, 5) * $speed) . ", u50 = " . (rand(1, 5) * $speed) . " WHERE vref = " . (int) $wid . "");
-			    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 10, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = ".(int) $wid);
-			} elseif($size == 2) {
-			    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(2000, 4000) * $speed) . ", u42 = " . (rand(3000, 4000) * $speed) . ", u43 = " . (rand(4600, 5600) * $speed) . ", u44 = " . (rand(50, 150) * $speed) . ", u45 = " . (rand(2400, 3800) * $speed) . ", u46 = " . (rand(3000, 4000) * $speed) . ", u47 = " . (rand(1000, 1800) * $speed) . ", u48 = " . (rand(200, 600) * $speed) . " , u49 = " . (rand(2, 10) * $speed) . ", u50 = " . (rand(2, 10) * $speed) . " WHERE vref = " . (int) $wid . "");
-			    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 20, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = ".(int) $wid);
-			} elseif($size == 3) {
-			    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET u41 = " . (rand(4000, 8000) * $speed) . ", u42 = " . (rand(6000, 8000) * $speed) . ", u43 = " . (rand(9200, 11200) * $speed) . ", u44 = " . (rand(100, 300) * $speed) . ", u45 = " . (rand(4800, 7600) * $speed) . ", u46 = " . (rand(6000, 8000) * $speed) . ", u47 = " . (rand(2000, 3600) * $speed) . ", u48 = " . (rand(400, 1200) * $speed) . " , u49 = " . (rand(4, 20) * $speed) . ", u50 = " . (rand(4, 20) * $speed) . " WHERE vref = " . (int) $wid . "");
-			    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "fdata SET f22t = 27, f22 = 10, f28t = 25, f28 = 20, f19t = 23, f19 = 10, f32t = 23, f32 = 10 WHERE vref = ".(int) $wid);
-			}
-		}
-
-/**
- * THE ARCHITECTS
- */
-
-		$desc = ARCHITECTS_DESC;
-
-
-		$vname = ARCHITECTS_SMALLVILLAGE;
-		$effect = '(4x)';
-		for($i = 0; $i < 6; $i++) {
-			Artefact($uid, 1, 1, ARCHITECTS_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = ARCHITECTS_LARGEVILLAGE;
-		$effect = '(3x)';
-		for($i = 0; $i < 4; $i++) {
-			Artefact($uid, 1, 2, ARCHITECTS_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = ARCHITECTS_UNIQUEVILLAGE;
-		$effect = '(5x)';
-		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 1, 3, ARCHITECTS_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type2.gif');
-		}
-
-/**
- * MILITARY HASTE
- */
-
-
-		$desc = HASTE_DESC;
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = HASTE_SMALLVILLAGE;
-		$effect = '(2x)';
-		for($i = 0; $i < 6; $i++) {
-			Artefact($uid, 2, 1, HASTE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = HASTE_LARGEVILLAGE;
-		$effect = '(1.5x)';
-		for($i = 0; $i < 4; $i++) {
-			Artefact($uid, 2, 2, HASTE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = HASTE_UNIQUEVILLAGE;
-		$effect = '(3x)';
-		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 2, 3, HASTE_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type4.gif');
-		}
-
-/**
- * HAWK'S EYESIGHT
- */
-
-
-		$desc =  EYESIGHT_DESC;
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = EYESIGHT_SMALLVILLAGE;
-		$effect = '(5x)';
-		for($i = 0; $i < 6; $i++) {
-			Artefact($uid, 3, 1, EYESIGHT_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = EYESIGHT_LARGEVILLAGE;
-		$effect = '(3x)';
-		for($i = 0; $i < 4; $i++) {
-			Artefact($uid, 3, 2, EYESIGHT_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = EYESIGHT_UNIQUEVILLAGE;
-		$effect = '(10x)';
-		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 3, 3, EYESIGHT_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type5.gif');
-		}
-
-/**
- * THE DIET
- */
-
-
-		$desc = DIET_DESC;
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = DIET_SMALLVILLAGE;
-		$effect = '(50%)';
-		for($i = 0; $i < 6; $i++) {
-			Artefact($uid, 4, 1, DIET_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = DIET_LARGEVILLAGE;
-		$effect = '(25%)';
-		for($i = 0; $i < 4; $i++) {
-			Artefact($uid, 4, 2, DIET_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = DIET_UNIQUEVILLAGE;
-		$effect = '(50%)';
-		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 4, 3, DIET_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type6.gif');
-		}
-
-
-/**
- * ACADEMIC ADVANCEMENT
- */
-
-
-		$desc = ACADEMIC_DESC;
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = ACADEMIC_SMALLVILLAGE;
-		$effect = '(50%)';
-		for($i = 0; $i < 6; $i++) {
-			Artefact($uid, 5, 1, ACADEMIC_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = ACADEMIC_LARGEVILLAGE;
-		$effect = '(25%)';
-		for($i = 0; $i < 4; $i++) {
-			Artefact($uid, 5, 2, ACADEMIC_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = ACADEMIC_UNIQUEVILLAGE;
-		$effect = '(50%)';
-		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 5, 3, ACADEMIC_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type8.gif');
-		}
-
-
-/**
- * STORAGE MASTER PLAN
- */
-
-
-		$desc = STORAGE_DESC;
-
-		unset($i);
-		unset($vname);
-		unset($effect);;
-		$vname = STORAGE_SMALLVILLAGE;
-		$effect = '(GG&GW)';
-		for($i = 0; $i < 6; $i++) {
-			Artefact($uid, 6, 1, STORAGE_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type9.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = STORAGE_LARGEVILLAGE;
-		$effect = '(GG&GW)';
-		for($i = 0; $i < 4; $i++) {
-			Artefact($uid, 6, 2, STORAGE_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type9.gif');
-		}
-
-
-/**
- * RIVAL'S CONFUSION
- */
-
-
-		$desc = CONFUSION_DESC;
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = CONFUSION_SMALLVILLAGE;
-		$effect = '(200)';
-		for($i = 0; $i < 6; $i++) {
-			Artefact($uid, 7, 1, CONFUSION_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type10.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = CONFUSION_LARGEVILLAGE;
-		$effect = '(100)';
-		for($i = 0; $i < 4; $i++) {
-			Artefact($uid, 7, 2, CONFUSION_LARGE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type10.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = CONFUSION_UNIQUEVILLAGE;
-		$effect = '(500)';
-		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 7, 3, CONFUSION_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'type10.gif');
-		}
-
-
-/**
- * ARTEFACT OF THE FOOL
- */
-
-
-		$desc = FOOL_DESC;
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = FOOL_SMALLVILLAGE;
-		$effect = '';
-		for($i = 0; $i < 5; $i++) {
-			Artefact($uid, 8, 1, FOOL_SMALL, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'typefool.gif');
-		}
-
-		unset($i);
-		unset($vname);
-		unset($effect);
-		$vname = FOOL_UNIQUEVILLAGE;
-		$effect = '';
-		for($i = 0; $i < 1; $i++) {
-			Artefact($uid, 8, 3, FOOL_UNIQUE, '' . $vname . '', '' . $desc . '', '' . $effect . '', 'typefool.gif');
-		}
+		$artifactArrays =  [ARCHITECTS_DESC => [["type" => 1, "size" => 1, "name" => ARCHITECTS_SMALL, "vname" => ARCHITECTS_SMALLVILLAGE, "effect" => "(4x)", "quantity" => 6, "img" => 2],
+												["type" => 1, "size" => 2, "name" => ARCHITECTS_LARGE, "vname" => ARCHITECTS_LARGEVILLAGE, "effect" => "(3x)", "quantity" => 4, "img" => 2],
+												["type" => 1, "size" => 3, "name" => ARCHITECTS_UNIQUE,"vname" => ARCHITECTS_UNIQUEVILLAGE, "effect" => "(5x)", "quantity" => 1, "img" => 2]],
+				
+								HASTE_DESC => [["type" => 2, "size" => 1, "name" => HASTE_SMALL, "vname" => HASTE_SMALLVILLAGE, "effect" => "(2x)", "quantity" => 6, "img" => 4],
+												["type" => 2, "size" => 2, "name" => HASTE_LARGE, "vname" => HASTE_LARGEVILLAGE, "effect" => "(1.5x)", "quantity" => 4, "img" => 4],
+												["type" => 2, "size" => 3, "name" => HASTE_UNIQUE, "vname" => HASTE_UNIQUEVILLAGE, "effect" => "(3x)", "quantity" => 1, "img" => 4]],
+				
+							 EYESIGHT_DESC => [["type" => 3, "size" => 1, "name" => EYESIGHT_SMALL, "vname" => EYESIGHT_SMALLVILLAGE, "effect" => "(5x)", "quantity" => 6, "img" => 5],
+												["type" => 3, "size" => 2, "name" => EYESIGHT_LARGE, "vname" => EYESIGHT_LARGEVILLAGE, "effect" => "(3x)", "quantity" => 4, "img" => 5],
+												["type" => 3, "size" => 3, "name" => EYESIGHT_UNIQUE, "vname" => EYESIGHT_UNIQUEVILLAGE, "effect" => "(10x)", "quantity" => 1, "img" => 5]],
+				
+								 DIET_DESC => [["type" => 4, "size" => 1, "name" => DIET_SMALL, "vname" => DIET_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 6],
+												["type" => 4, "size" => 2, "name" => DIET_LARGE, "vname" => DIET_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 6],
+												["type" => 4, "size" => 3, "name" => DIET_UNIQUE, "vname" => DIET_UNIQUEVILLAGE, "effect" => "(50%)", "quantity" => 1, "img" => 6]],
+				
+							 ACADEMIC_DESC => [["type" => 5, "size" => 1, "name" => ACADEMIC_SMALL, "vname" => ACADEMIC_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 8],
+												["type" => 5, "size" => 2, "name" => ACADEMIC_LARGE, "vname" => ACADEMIC_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 8],
+												["type" => 5, "size" => 3, "name" => ACADEMIC_UNIQUE, "vname" => ACADEMIC_UNIQUEVILLAGE, "effect" => "(50%)", "quantity" => 1, "img" => 8]],
+				
+							   STORAGE_DESC => [["type" => 6, "size" => 1, "name" => STORAGE_SMALL, "vname" => STORAGE_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 9],
+											    ["type" => 6, "size" => 2, "name" => STORAGE_LARGE, "vname" => STORAGE_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 9]],
+				
+							 CONFUSION_DESC => [["type" => 7, "size" => 1, "name" => CONFUSION_SMALL, "vname" => CONFUSION_SMALLVILLAGE, "effect" => "(200)", "quantity" => 6, "img" => 10],
+												["type" => 7, "size" => 2, "name" => CONFUSION_LARGE, "vname" => CONFUSION_LARGEVILLAGE, "effect" => "(100)", "quantity" => 4, "img" => 10],
+												["type" => 7, "size" => 3, "name" => CONFUSION_UNIQUE, "vname" => CONFUSION_UNIQUEVILLAGE, "effect" => "(500)", "quantity" => 1, "img" => 10]],
+				
+								  FOOL_DESC => [["type" => 8, "size" => 1, "name" => FOOL_SMALL, "vname" => FOOL_SMALLVILLAGE, "effect" => "", "quantity" => 5, "img" => "fool"],
+												["type" => 8, "size" => 3, "name" => FOOL_UNIQUE, "vname" => FOOL_UNIQUEVILLAGE, "effect" => "", "quantity" => 1, "img" => "fool"]]];
 		
-		$myFile = "Templates/text.tpl";
-		$fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: templates/text.tpl");
-		$text = file_get_contents("Templates/text_format.tpl");
-		$text = preg_replace("'%TEKST%'",ARTEFACT ,$text);
-		fwrite($fh, $text);
-
-        $query = "UPDATE ".TB_PREFIX."users SET ok = 1";
-		echo "Done";
-}elseif(User::exists($database, 'Natars'))    {
+  		//Add artefacts and their villages
+  		$database->addArtifactVillages($artifactArrays);
+  		
+  		//Write the system message
+  		$database->displaySystemMessage(ARTEFACT);
+        
+        echo '<p><span class=\"c2\">Done: Natars created and artifacts spawned!</span></p>';
+}else{
 ?>
 <p>
-<span class="c2">Error: Natar account already exist</span>
+<span class="c2">Error: Natar account already exists</span>
 </p>
 <?php
-}else {
+}
 ?>
-<form action="create_account.php" method="post">
-
-<p>
-	<span>Choose Password</span>
-</p>
-<table>
-	<tr><td>Password:</td><td><input type="password" name="password" value="" /></td></tr>
-</table>
-
-	<div style="text-align: center">
-	<input type="submit" name="Submit" id="Submit" value="Submit" /></div>
-</form>
-<?php } ?>
 </div>
 <br /><br /><br /><br /><div id="side_info">
 <?php

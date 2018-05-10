@@ -93,7 +93,7 @@
 	<table id="distribution" cellpadding="1" cellspacing="1">
         <thead>
             <tr>
-            <?php echo "<tr class='next'><th>".HERO_READY."<span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
+            <?php echo "<tr class='next'><th>".HERO_READY."<span id=timer".++$session->timer.">" . $timeleft . "</span></th></tr>"; ?>
             </tr>
         </thead>
             

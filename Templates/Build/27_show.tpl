@@ -1,5 +1,10 @@
 <?php
 $artefact = $database->getArtefactDetails($_GET['show']);
+if(empty($artefact)){
+	header("location: build.php?gid=27");
+	exit;
+}
+
 if($artefact['size'] == 1 && $artefact['type'] != 11){
     $reqlvl = 10;
     $effect = VILLAGE;
@@ -9,11 +14,17 @@ if($artefact['size'] == 1 && $artefact['type'] != 11){
 }
 
 $activationTime = 86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED));
+$time = time();
+$nextEffect = "-";
 
 if($artefact['owner'] == 3) $active = "-";
-elseif(!$artefact['active'] && $artefact['conquered'] < time() - $activationTime) $active = "<b>Can't be activated</b>";
+elseif(!$artefact['active'] && $artefact['conquered'] < $time - $activationTime) $active = "<b>Can't be activated</b>";
 elseif (!$artefact['active']) $active = date("Y-m-d H:i:s", $artefact['conquered'] + $activationTime);
-else $active = "<b>".ACTIVE."</b>";
+else
+{
+	$active = "<b>".ACTIVE."</b>";
+	$nextEffect = date("Y-m-d H:i:s", $artefact['lastupdate'] + (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
+}
                     
 //// Added by brainiac - thank you
 if ($artefact['type'] == 8)
@@ -120,6 +131,14 @@ $bonus = isset($betterorbadder) ? $betterorbadder." (<b>".str_replace(["(", ")"]
 <th><?php echo TIME_ACTIVATION; ?></th>
 <td><?php echo $active;?></td>
 </tr>
+
+<?php if($artefact['type'] == 8){?>
+<tr>
+<th><?php echo NEXT_EFFECT; ?></th>
+<td><?php echo $nextEffect;?></td>
+</tr>
+<?php }?>
+
 </tbody></table>
 <table class="art_details" cellpadding="1" cellspacing="1">
 <thead>

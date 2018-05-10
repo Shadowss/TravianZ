@@ -28,10 +28,6 @@ class Automation {
     private $bountyOinfoarray = [];
     private $bountyOproduction = [];
     private $bountyOpop = 1;
-    const bountyOWoodProd = 40 * SPEED;
-    const bountyOClayProd = 40 * SPEED;
-    const bountyOIronProd = 40 * SPEED;
-    const bountyOCropProd = 40 * SPEED;
     
     public function __construct() {
         $this->procNewClimbers();
@@ -90,6 +86,15 @@ class Automation {
         }
         if(!file_exists("GameEngine/Prevention/settlers.txt") or time() - filemtime("GameEngine/Prevention/settlers.txt") > 50) {
             $this->sendSettlersComplete();
+        }
+        if(!file_exists("GameEngine/Prevention/spawnNatars.txt") or time() - filemtime("GameEngine/Prevention/spawnNatars.txt") > 120) {
+        	$this->spawnNatars();
+        }
+        if(!file_exists("GameEngine/Prevention/spawnWWVillages.txt") or time() - filemtime("GameEngine/Prevention/spawnWWVillages.txt") > 120) {
+        	$this->spawnWWVillages();
+        }
+        if(!file_exists("GameEngine/Prevention/spawnWWBuildingPlans.txt") or time() - filemtime("GameEngine/Prevention/spawnWWBuildingPlans.txt") > 120) {
+        	$this->spawnWWBuildingPlans();
         }
         if(!file_exists("GameEngine/Prevention/artifacts.txt") or time() - filemtime("GameEngine/Prevention/artifacts.txt") > 60) {
             $this->activateArtifacts();
@@ -247,7 +252,7 @@ class Automation {
     }
 
     public function getTypeLevel($tid, $vid) {
-        global $village, $database;
+        global $database;
         
         $keyholder = [];
 
@@ -287,15 +292,21 @@ class Automation {
     }
 
     private function clearDeleting() {
-        global $autoprefix, $units;
+    	global $autoprefix, $units, $database;
+    	
         if(file_exists($autoprefix."GameEngine/Prevention/cleardeleting.txt")) {
             unlink($autoprefix."GameEngine/Prevention/cleardeleting.txt");
         }
-        global $database;
+
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/cleardeleting.txt", 'w');
         fclose($ourFileHandle);
+        
         $needDelete = $database->getNeedDelete();
         if(count($needDelete) > 0) {
+        	
+        	//Remove the time limit, otherwise deleting players with 80 or more villages couldn't be deleted in one run
+        	@set_time_limit(0);
+        	
             foreach($needDelete as $need) {
                 $needVillage = $database->getVillagesID($need['uid']);
                 
@@ -932,7 +943,7 @@ class Automation {
     }
 
     private function sendunitsComplete() {
-        global $bid19, $bid23, $bid34, $u99, $database, $battle, $village, $technology, $logging, $generator, $session, $units, $autoprefix;
+        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $logging, $generator, $units, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
@@ -2748,7 +2759,7 @@ class Automation {
     }
 
     private function sendreinfunitsComplete() {
-        global $bid23,$database,$battle,$session,$autoprefix;
+        global $bid23, $database, $battle, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/sendreinfunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendreinfunits.txt");
@@ -3004,7 +3015,7 @@ class Automation {
     }
 
     private function sendSettlersComplete() {
-        global $database, $building, $session, $autoprefix;
+        global $database, $building, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/settlers.txt")) {
             unlink($autoprefix."GameEngine/Prevention/settlers.txt");
@@ -3092,6 +3103,160 @@ class Automation {
             unlink("GameEngine/Prevention/settlers.txt");
         }
     }
+    
+    /**
+     * Create the Natars account and spawn artifacts
+     *
+     */
+    
+    private function spawnNatars(){
+    	global $database, $autoprefix;
+    	
+    	if(file_exists($autoprefix."GameEngine/Prevention/spawnNatars.txt")) {
+    		unlink($autoprefix."GameEngine/Prevention/spawnNatars.txt");
+    	}
+    	
+    	//Check if Natars account is already created and if the time
+    	//is come and we have to create Natars and spawn their artifacts
+    	if($database->areArtifactsSpawned() || COMMENCE + (NATARS_SPAWN_TIME * 86400) > time()) return;
+    	
+    	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnNatars.txt", 'w');
+    	fclose($ourFileHandle);
+    	
+    	//Create the Natars account and his capital
+    	$database->createNatars();
+
+    	//Artifacts constants
+    	$artifactArrays =  [ARCHITECTS_DESC => [["type" => 1, "size" => 1, "name" => ARCHITECTS_SMALL, "vname" => ARCHITECTS_SMALLVILLAGE, "effect" => "(4x)", "quantity" => 6, "img" => 2],
+    											["type" => 1, "size" => 2, "name" => ARCHITECTS_LARGE, "vname" => ARCHITECTS_LARGEVILLAGE, "effect" => "(3x)", "quantity" => 4, "img" => 2],
+    											["type" => 1, "size" => 3, "name" => ARCHITECTS_UNIQUE,"vname" => ARCHITECTS_UNIQUEVILLAGE, "effect" => "(5x)", "quantity" => 1, "img" => 2]],
+    			
+    							 HASTE_DESC => [["type" => 2, "size" => 1, "name" => HASTE_SMALL, "vname" => HASTE_SMALLVILLAGE, "effect" => "(2x)", "quantity" => 6, "img" => 4],
+    											["type" => 2, "size" => 2, "name" => HASTE_LARGE, "vname" => HASTE_LARGEVILLAGE, "effect" => "(1.5x)", "quantity" => 4, "img" => 4],
+    							 				["type" => 2, "size" => 3, "name" => HASTE_UNIQUE, "vname" => HASTE_UNIQUEVILLAGE, "effect" => "(3x)", "quantity" => 1, "img" => 4]],
+    			
+    						  EYESIGHT_DESC => [["type" => 3, "size" => 1, "name" => EYESIGHT_SMALL, "vname" => EYESIGHT_SMALLVILLAGE, "effect" => "(5x)", "quantity" => 6, "img" => 5],
+    											["type" => 3, "size" => 2, "name" => EYESIGHT_LARGE, "vname" => EYESIGHT_LARGEVILLAGE, "effect" => "(3x)", "quantity" => 4, "img" => 5],
+    											["type" => 3, "size" => 3, "name" => EYESIGHT_UNIQUE, "vname" => EYESIGHT_UNIQUEVILLAGE, "effect" => "(10x)", "quantity" => 1, "img" => 5]],
+    			
+    							  DIET_DESC => [["type" => 4, "size" => 1, "name" => DIET_SMALL, "vname" => DIET_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 6],
+    											["type" => 4, "size" => 2, "name" => DIET_LARGE, "vname" => DIET_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 6],
+    											["type" => 4, "size" => 3, "name" => DIET_UNIQUE, "vname" => DIET_UNIQUEVILLAGE, "effect" => "(50%)", "quantity" => 1, "img" => 6]],
+    			
+    						  ACADEMIC_DESC => [["type" => 5, "size" => 1, "name" => ACADEMIC_SMALL, "vname" => ACADEMIC_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 8],
+    											["type" => 5, "size" => 2, "name" => ACADEMIC_LARGE, "vname" => ACADEMIC_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 8],
+    											["type" => 5, "size" => 3, "name" => ACADEMIC_UNIQUE, "vname" => ACADEMIC_UNIQUEVILLAGE, "effect" => "(50%)", "quantity" => 1, "img" => 8]],
+    			
+    						   STORAGE_DESC => [["type" => 6, "size" => 1, "name" => STORAGE_SMALL, "vname" => STORAGE_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 9],
+    											["type" => 6, "size" => 2, "name" => STORAGE_LARGE, "vname" => STORAGE_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 9]],
+    			
+    						 CONFUSION_DESC => [["type" => 7, "size" => 1, "name" => CONFUSION_SMALL, "vname" => CONFUSION_SMALLVILLAGE, "effect" => "(200)", "quantity" => 6, "img" => 10],
+    											["type" => 7, "size" => 2, "name" => CONFUSION_LARGE, "vname" => CONFUSION_LARGEVILLAGE, "effect" => "(100)", "quantity" => 4, "img" => 10],
+    											["type" => 7, "size" => 3, "name" => CONFUSION_UNIQUE, "vname" => CONFUSION_UNIQUEVILLAGE, "effect" => "(500)", "quantity" => 1, "img" => 10]],
+    			
+    							  FOOL_DESC => [["type" => 8, "size" => 1, "name" => FOOL_SMALL, "vname" => FOOL_SMALLVILLAGE, "effect" => "", "quantity" => 5, "img" => "fool"],
+    											["type" => 8, "size" => 3, "name" => FOOL_UNIQUE, "vname" => FOOL_UNIQUEVILLAGE, "effect" => "", "quantity" => 1, "img" => "fool"]]];
+    	
+    	//Add artifacts and their villages
+    	$database->addArtifactVillages($artifactArrays);
+    	
+    	//Write the system message
+    	$database->displaySystemMessage(ARTEFACT);
+    	
+    	if(file_exists("GameEngine/Prevention/spawnNatars.txt")) {
+    		unlink("GameEngine/Prevention/spawnNatars.txt");
+    	}
+    }
+    
+    /**
+     * Spawn WW Villages
+     *
+     */
+    
+    private function spawnWWVillages(){
+    	global $database, $autoprefix;
+    	
+    	if(file_exists($autoprefix."GameEngine/Prevention/spawnWWVillages.txt")) {
+    		unlink($autoprefix."GameEngine/Prevention/spawnWWVillages.txt");
+    	}
+    	
+    	//Check if Natars account has already been created, if WW villages have already been spawned
+    	//and if it's the time to spawn them or not
+    	if(!$database->areArtifactsSpawned() || $database->areWWVillagesSpawned() || COMMENCE + (NATARS_WW_SPAWN_TIME * 86400) > time()) return;
+    	
+    	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnWWVillages.txt", 'w');
+    	fclose($ourFileHandle);
+    	
+    	//WW village Natars' troops
+    	$unitArrays =  [41 => rand(50, 1200) * NATARS_UNITS,
+    					42 => rand(100 , 1400) * NATARS_UNITS,
+    					43 => rand(200, 1600) * NATARS_UNITS,
+    					44 => rand(10, 50) * NATARS_UNITS,
+    					45 => rand(48, 1700) * NATARS_UNITS,
+    					46 => rand(60, 1800) * NATARS_UNITS,
+    					47 => rand(200, 1600) * NATARS_UNITS,
+    					48 => rand(40, 200) * NATARS_UNITS,
+    					49 => rand(4, 20) * NATARS_UNITS,
+    					50 => rand(5, 25) * NATARS_UNITS];
+
+    	//WW village buildings
+    	$buildingArrays = ["f99t" => 40, "f99" => 0, "f39t" => 16, "f39" => 1, "f19t" => 17, "f19" => 20, "f20t" => 11,
+    					   "f20" => 20, "f21t" => 15, "f21" => 20, "f22t" => 10, "f22" => 20, "f23t" => 22, "f23" => 10, 
+    					   "f24t" => 25, "f24" => 10, "f26t" => 0, "f26" => 0, "f27t" => 19, "f27" => 10, "f31t" => 23, "f31" => 10];
+
+    	$villageArrays = $wids = [];
+    	for($i = 1; $i <= 13; $i++) $villageArrays[] = ['wid' => 0, 'kid' => ($i == 13 ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0];
+    	
+    	$wids = $database->generateVillages($villageArrays, 3, "Natars");
+    	
+    	foreach($wids as $wid){
+    		$database->modifyUnit($wid, array_keys($unitArrays), array_values($unitArrays), [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+    		$database->setVillageLevel($wid, array_keys($buildingArrays), array_values($buildingArrays));
+    		$database->setVillageFields($wid, ['natar', 'name'], [1, WWVILLAGE]);
+    		$this->recountPop($wid);
+    	}
+    	
+    	if(file_exists("GameEngine/Prevention/spawnWWVillages.txt")) {
+    		unlink("GameEngine/Prevention/spawnWWVillages.txt");
+    	}
+    }
+    
+    /**
+     * Spawn WW Building plans
+     * 
+     */
+    
+    private function spawnWWBuildingPlans(){
+    	global $database, $autoprefix;
+    	
+    	if(file_exists($autoprefix."GameEngine/Prevention/spawnWWBuildingPlans.txt")) {
+    		unlink($autoprefix."GameEngine/Prevention/spawnWWBuildingPlans.txt");
+    	}
+    	
+    	//Check if Natars account is already spawned, if WW building plans have already been spawned
+    	//and if it's the time to spawn them or not
+    	if(!$database->areArtifactsSpawned() || $database->areArtifactsSpawned(true) || COMMENCE + (NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400) > time()) return;
+    	
+    	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnWWBuildingPlans.txt", 'w');
+    	fclose($ourFileHandle);
+    	
+    	$artifactArrays =  [PLAN_DESC => [["type" => 11, "size" => 1, "name" => PLAN,"vname" => PLANVILLAGE, "effect" => "", "quantity" => 13, "img" => 1]]];
+    	
+    	//Add the artifacts and villages
+    	$database->addArtifactVillages($artifactArrays);
+    	
+    	//Set the system message to contain the infos of the WW building plans
+    	$database->displaySystemMessage(PLAN_INFO);	
+    	
+    	if(file_exists("GameEngine/Prevention/spawnWWBuildingPlans.txt")) {
+    		unlink("GameEngine/Prevention/spawnWWBuildingPlans.txt");
+    	}
+    }
+    
+    /**
+     * Automatically activate all artifacts that need to be activated
+     *
+     */
     
     private function activateArtifacts() {
         global $database, $autoprefix;
@@ -3352,10 +3517,10 @@ class Automation {
     }
 
     private function bountycalculateOProduction($bountywid) {
-        $this->bountyOproduction['wood'] = self::bountyOWoodProd;
-        $this->bountyOproduction['clay'] = self::bountyOClayProd;
-        $this->bountyOproduction['iron'] = self::bountyOIronProd;
-        $this->bountyOproduction['crop'] = self::bountyOCropProd;
+        $this->bountyOproduction['wood'] = OASIS_WOOD_PRODUCTION;
+        $this->bountyOproduction['clay'] = OASIS_CLAY_PRODUCTION;
+        $this->bountyOproduction['iron'] = OASIS_IRON_PRODUCTION;
+        $this->bountyOproduction['crop'] = OASIS_CROP_PRODUCTION;
     }
     
     private function bountycalculateProduction($bountywid, $uid) {
@@ -3596,7 +3761,7 @@ class Automation {
     }
 
     private function demolitionComplete() {
-        global $building,$database,$village,$autoprefix;
+        global $building, $database, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/demolition.txt")) {
             unlink($autoprefix."GameEngine/Prevention/demolition.txt");
@@ -3636,7 +3801,7 @@ class Automation {
                 if ($level == 1) $clear = ",f".$vil['buildnumber']."t=0";
                 else $clear = "";
 
-                if ($village->natar == 1 && $type == 40) $clear = ""; //fix by ronix
+                if ($database->getVillageField($vil['vref'], 'natar') == 1 && $type == 40) $clear = ""; //fix by ronix - fixed by iopietro
 
                 $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".(($level - 1 >= 0) ? $level - 1 : 0).$clear." WHERE vref=".(int) $vil['vref'];
                 $database->query($q);
@@ -3656,10 +3821,12 @@ class Automation {
     }
 
     private function updateHero() {
+        global $database, $hero_levels;
+        
         if(file_exists("GameEngine/Prevention/updatehero.txt")) {
-            unlink("GameEngine/Prevention/updatehero.txt");
+        	unlink("GameEngine/Prevention/updatehero.txt");
         }
-        global $database,$hero_levels;
+        
         $harray = $database->getHero();
         if(!empty($harray)){
             // first of all, prepare all unit data at once for these heroes
@@ -4391,22 +4558,6 @@ class Automation {
             }
             $q = "UPDATE ".TB_PREFIX."alidata set max = ".(int) $max." where leader = ".(int) $leader;
             $database->query($q);
-        }
-    }
-
-    private function checkReviveHero(){
-        global $database, $session;
-        $herodata = $database->getHero($session->uid, 1);
-        if ($herodata[0]['dead'] == 1){
-            mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 0 WHERE vref = ".(int) $session->villages[0]."");
-        }
-        if($herodata[0]['trainingtime'] <= time()) {
-            if($herodata[0]['trainingtime'] != 0) {
-                if($herodata[0]['dead'] == 0) {
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET trainingtime = '0' WHERE heroid = " . $herodata[0]['heroid']);
-                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".(int) $session->villages[0]);
-                }
-            }
         }
     }
 

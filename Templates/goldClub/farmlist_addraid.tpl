@@ -1,6 +1,4 @@
 <?php
-$FLData = $database->getFLData($_GET['lid']);
-if($FLData['owner'] == $session->uid){
 if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
     
     $troops = 0;
@@ -56,7 +54,7 @@ if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
             return round($dist, 1);
         }
             
-        $distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY); 
+        $distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);
         $database->addSlotFarm($_POST['lid'], $session->uid, $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
         
         header("Location: build.php?id=39&t=99");
@@ -71,7 +69,7 @@ if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
 <?php echo $errormsg; ?>
 </b></font>
     
-    <form action="build.php?id=39&t=99&action=addraid&lid=<?php echo $_GET['lid']; ?>" method="post">
+    <form action="build.php?id=39&t=99&action=addraid" method="post">
         <div class="boxes boxesColor gray"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents cf">   
         <input type="hidden" name="action" value="addSlot">
             <table cellpadding="1" cellspacing="1" class="transparent" id="raidList">
@@ -81,17 +79,16 @@ if(isset($_POST['action']) == 'addSlot' && $_POST['lid']) {
                         <select name="lid">
 <?php
 
-$sql = mysqli_query($database->dblink,"SELECT id, name, owner, wref FROM ".TB_PREFIX."farmlist WHERE owner = ".(int) $session->uid." ORDER BY name ASC");
-while($row = mysqli_fetch_array($sql)){ 
-$lid = $row["id"];
-$lname = $row["name"];
-$lowner = $row["owner"];
-$lwref = $row["wref"];
-$lvname = $database->getVillageField($row["wref"], 'name');
-    if($_GET['lid']==$lid){
-        $selected = 'selected=""';
-        }else{ $selected = ''; }
-    echo '<option value="'.$lid.'" '.$selected.'>'.$lvname.' - '.$lname.'</option>';
+$sql = mysqli_query($database->dblink, "SELECT id, name, owner, wref FROM ".TB_PREFIX."farmlist WHERE owner = ".(int)$session->uid." ORDER BY name ASC");
+	while($row = mysqli_fetch_array($sql)){
+		$lid = $row["id"];
+		$lname = $row["name"];
+		$lowner = $row["owner"];
+		$lwref = $row["wref"];
+		$lvname = $database->getVillageField($row["wref"], 'name');
+		if($_GET['lid'] == $lid) $selected = 'selected=""';
+		else $selected = '';
+		echo '<option value="'.$lid.'" '.$selected.'>'.$lvname.' - '.$lname.'</option>';
 }
 ?>    
                         </select>
@@ -126,12 +123,11 @@ if(mysqli_num_rows(mysqli_query($database->dblink,$getwref)) != 0){
         $towref = $row["towref"];
         $tocoor = $database->getCoor($towref);
         $totype = $database->getVillageType2($towref);
-        $tooasistype = $type['oasistype'];
-        if($tooasistype == 0) $tovname = $database->getVillageField($towref, 'name');
+        if($totype == 0) $tovname = $database->getVillageField($towref, 'name');
         else $tovname = $database->getOasisField($towref, 'name');
         
         if($vill[$towref] == 0){
-            echo '<option value="'.$towref.'">'.$tovname.'('.$tocoor['x'].'|'.$tocoor['y'].')</option>';
+            echo '<option value="'.$towref.'">'.$tovname.' ('.$tocoor['x'].'|'.$tocoor['y'].')</option>';
         }
         $vill[$towref] = 1;
     }
@@ -147,13 +143,6 @@ if(mysqli_num_rows(mysqli_query($database->dblink,$getwref)) != 0){
                 </div>
         <?php include("Templates/goldClub/trooplist2.tpl"); ?>
 <br />
-<button type="submit" value="save" name="save" id="save" class="trav_buttons">Save</button>
-        
+<button type="submit" value="save" name="save" id="save" class="trav_buttons">Create</button>
 </form>
 </div>
-<?php
-}else{
-header("Location: build.php?id=39&t=99");
-exit;
-}
-?>

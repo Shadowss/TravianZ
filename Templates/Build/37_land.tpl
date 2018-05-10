@@ -27,8 +27,8 @@ if($session->access != BANNED){
 <tbody>
 
 <?php
-
-	for ($i=0; $i<count($oasisarray); $i++) {
+if(!empty($oasisarray)){
+	for($i = 0; $i < count($oasisarray); $i++){
 		$oasiscoor = $database->getCoor($oasisarray[$i]['wref']); 
 ?>
 <tr>
@@ -78,6 +78,13 @@ if($session->access != BANNED){
 	}
 ?></td>
 </tr>
-<?php } ?>
+<?php 
+} 
+}else{
+?>
+<tr>
+<td class="none" colspan="4"><?php echo NO_OASIS; ?></td>
+</tr>
+<?php }?>
 </tbody>
 </table>

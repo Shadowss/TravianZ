@@ -30,9 +30,6 @@ $building->loadBuilding();
 		</tr></thead>
 		<tbody>
         <?php 
-        if(!isset($timer)) {
-        $timer = 1;
-        }
 		$BuildingList = array();
         foreach($building->buildArray as $jobs) {
 		if($jobs['master'] == 0){
@@ -43,11 +40,10 @@ $building->loadBuilding();
             if($jobs['loopcon'] == 1) {
             	echo " (waiting loop)";
             }
-            echo "</td><td>in <span id=\"timer".$timer."\">";
+            echo "</td><td>in <span id=\"timer".++$session->timer."\">";
             echo $generator->getTimeFormat($jobs['timestamp']-time());
             echo "</span> hrs.</td>";
             echo "<td>done at ".date('H:i', $jobs['timestamp'])."</td></tr>";
-            $timer +=1;
 		}else{
         	echo "<tr><td class=\"ico\"><a href=\"?d=".$jobs['id']."&a=0&c=$session->checker\">";
             echo "<img src=\"img/x.gif\" class=\"del\" title=\"cancel\" alt=\"cancel\" /></a></td><td>";

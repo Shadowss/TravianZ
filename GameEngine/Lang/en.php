@@ -707,6 +707,7 @@ define("WEST","West");
 //other
 define("VILLAGE","Village");
 define("OASIS","Oasis");
+define("NO_OASIS", "You do not own any oases.");
 define("PLAYER","Player");
 
 //LOGIN.php
@@ -987,7 +988,7 @@ define("PALACE_DESC","The king or queen of the empire lives in the palace. Only 
 
 define("TREASURY","Treasury");
 define("ARTIFACTS_AREA","Artefacts in your area");
-define("NO_ARTIFACTS_AREA","There is no artefacts in your area.");
+define("NO_ARTIFACTS_AREA","There are no artefacts in your area.");
 define("OWN_ARTIFACTS","Own artefacts");
 define("CONQUERED","Conquered");
 define("DISTANCE","Distance");
@@ -995,13 +996,14 @@ define("EFFECT","Effect");
 define("ACCOUNT","Account");
 define("SMALL_ARTIFACTS","Small artefacts");
 define("LARGE_ARTIFACTS","Large artefacts");
-define("NO_ARTIFACTS","There is no artefacts.");
+define("NO_ARTIFACTS","There are no artefacts.");
 define("ANY_ARTIFACTS","You do not own any artefacts.");
 define("OWNER","Owner");
 define("AREA_EFFECT","Area of effect");
 define("REQUIRED_LEVEL","Required level");
 define("TIME_CONQUER","Time of conquer");
 define("TIME_ACTIVATION","Time of activation");
+define("NEXT_EFFECT"," Next effect");
 define("FORMER_OWNER","Former owner(s)");
 define("BUILDING_STRONGER","Building stronger with");
 define("BUILDING_WEAKER","Building weaker with");

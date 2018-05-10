@@ -40,9 +40,7 @@ class Technology {
 		global $village;
 		$holder = [];
 		foreach($village->researching as $research) {
-			if(substr($research['tech'], 0, 1) == "t"){
-				array_push($holder,$research);
-			}
+			if(substr($research['tech'], 0, 1) == "t") array_push($holder, $research);
 		}
 		return $holder;
 	}
@@ -51,29 +49,27 @@ class Technology {
 		global $village;
 		$holder = [];
 		foreach($village->researching as $research) {
-			if(substr($research['tech'],0,1) == $type){
-				array_push($holder,$research);
-			}
+			if(substr($research['tech'], 0, 1) == $type) array_push($holder, $research);
 		}
 		return $holder;
 	}
 
-	public function isResearch($tech,$type) {
+	public function isResearch($tech, $type) {
 		global $village;
-		if(count($village->researching) == 0) {
-			return false;
-		}
-		else {
+		
+		if(count($village->researching) == 0) return false;			
+		else
+		{
 		switch($type) {
 			case 1: $string = "t"; break;
 			case 2: $string = "a"; break;
 			case 3: $string = "b"; break;
 		}
+		
 		foreach($village->researching as $research) {
-			if($research['tech'] == $string.$tech) {
-				return true;
-			}
+			if($research['tech'] == $string.$tech) return true;
 		}
+		
 		return false;
 		}
 	}
@@ -435,24 +431,26 @@ class Technology {
 
         for ($i = $start; $i <= $end; $i ++) {
             $k = $i - $start + 1;
-            $unit = $prisoners == 0 ? "u" . $i : "t" . $k;
+            
+            $unit = "u".$i;
+            $index = $prisoners == 0 ? $unit : "t".$k;        
             
             global $$unit; 
             $dataarray = $$unit;
 
             if($horsedrinking > 0) {
                 if (($i == 4 && $horsedrinking >= 10) || ($i == 5 && $horsedrinking >= 15) || ( $i == 6 && $horsedrinking == 20)) {
-                    $upkeep += ($dataarray['pop'] - 1) * $array[$unit];
+                	$upkeep += ($dataarray['pop'] - 1) * $array[$index];
                 }
-                else $upkeep += ($dataarray['pop'] * $array[$unit]);
+                else $upkeep += ($dataarray['pop'] * $array[$index]);
             }
-            else $upkeep += ($dataarray['pop'] * $array[$unit]);    
+            else $upkeep += ($dataarray['pop'] * $array[$index]);    
         }
 
-        $unit = ($prisoners > 0) ? 't11' : 'hero';
+        $index = $prisoners > 0 ? 't11' : 'hero';
         
-        if(!isset($array[$unit])) $array[$unit] = 0;
-        $upkeep += $array[$unit] * 6;
+        if(!isset($array[$index])) $array[$index] = 0;
+        $upkeep += $array[$index] * 6;
         $who = $database->getVillageField($vid, "owner");
         
         return ceil($database->getArtifactsValueInfluence($who, $vid, 4, $upkeep, false));

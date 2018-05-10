@@ -80,20 +80,19 @@
     if($totalUps > 0) {
 		echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\"><thead><tr><td>".UPGRADING."</td><td>".DURATION."</td><td>".COMPLETE."</td></tr>
 </thead><tbody>";
-		$timer = 1;
 		foreach($ABups as $arms) {
-		    $ABUnit = substr($arms['tech'],1,2);
-		    $abdata['a'.$ABUnit]++;
-		    $unit = ($session->tribe-1)*10 + $ABUnit;
+			$count++;
+		    $ABUnit = substr($arms['tech'], 1, 2);
+			$abdata['a' . $ABUnit]++;
+			$unit = ($session->tribe - 1) * 10 + $ABUnit;
 			echo "<tr><td class=\"desc\"><img class=\"unit u$unit\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($unit)."\" title=\"".$technology->getUnitName($unit)."\" />".$technology->getUnitName($unit);
 			echo "<span class=\"none\"> (".LEVEL." ".$abdata['a'.$ABUnit].")</span>";
-			if($timer > 1) echo "<span class=\"none\"> ".WAITING."</span>";
+			if($count > 1) echo "<span class=\"none\"> ".WAITING."</span>";
 			echo "</td>";
-			echo "<td class=\"dur\"><span id=\"timer$timer\">".$generator->getTimeFormat($arms['timestamp']-time())."</span></td>";
+			echo "<td class=\"dur\"><span id=\"timer".++$session->timer."\">".$generator->getTimeFormat($arms['timestamp']-time())."</span></td>";
 			$date = $generator->procMtime($arms['timestamp']);
 			echo "<td class=\"fin\"><span>".$date[1]."</span><span> hrs</span></td>";
 			echo "</tr>";
-			$timer +=1;
 		}
 		echo "</tbody></table>";
 	}

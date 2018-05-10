@@ -135,14 +135,14 @@ if(mysqli_num_rows(mysqli_query($database->dblink, $getwref)) != 0){
 			$towref = $row["towref"];
 			$tocoor = $database->getCoor($towref);
 			$totype = $database->getVillageType2($towref);
-			$tooasistype = $type['oasistype'];
-			if($tooasistype == 0) $tovname = $database->getVillageField($towref, 'name');			
+			if($totype == 0) $tovname = $database->getVillageField($towref, 'name');			
 			else $tovname = $database->getOasisField($towref, 'name');
 					
 			if($row["id"] == $_GET['eid']) $selected = 'selected=""';
 			else $selected = '';
+			
 			if($vill[$towref] == 0){
-				echo '<option value="' . $towref . '" ' . $selected . '>' . $tovname . '(' . $tocoor['x'] . '|' . $tocoor['y'] . ')</option>';
+				echo '<option value="'.$towref.'" '.$selected.'>'.$tovname.' ('.$tocoor['x'].'|'.$tocoor['y'].')</option>';
 			}
 			$vill[$towref] = 1;
 		}

@@ -200,62 +200,59 @@ class Account {
 	}
 
 	private function Login() {
-		global $database,$session,$form;
+		global $database, $session, $form;
+		
 		$user = $_POST['user'];
-		if(!isset($_POST['user']) || $_POST['user'] == "") {
-			$form->addError("user",$user);
+		if(!isset($_POST['user']) || empty($_POST['user'])){
+			$form->addError("user", $user);
+		}else if(!User::exists($database, $_POST['user'])){
+			$form->addError("user", USR_NT_FOUND);
 		}
-		else if(!User::exists($database,$_POST['user'])) {
-			$form->addError("user",USR_NT_FOUND);
-		}
-		if(!isset($_POST['pw']) || $_POST['pw'] == "") {
-			$form->addError("pw",LOGIN_PASS_EMPTY);
-		}
-		else if(!$database->login($_POST['user'],$_POST['pw']) && !$database->sitterLogin($_POST['user'],$_POST['pw'])) {
-            // try activation data if the user was not found
-            if (!$userData) {
-                $activateData = $database->getActivateField( $_POST['user'], 'act', 1 );
-
-                if ( $activateData != "" ) {
-                    $form->addError( "activate", $_POST['user'] );
-                } else {
-                    $form->addError("pw",LOGIN_PW_ERROR);
-                }
-            } else {
-                $form->addError("pw",LOGIN_PW_ERROR);
-            }
+		if(!isset($_POST['pw']) || empty($_POST['pw'])){
+			$form->addError("pw", LOGIN_PASS_EMPTY);
+		}else if(!$database->login($_POST['user'], $_POST['pw']) && !$database->sitterLogin($_POST['user'], $_POST['pw'])){
+			// try activation data if the user was not found
+			if(!$userData){
+				$activateData = $database->getActivateField($_POST['user'], 'act', 1);
+				
+				if(!empty($activateData)) $form->addError("activate", $_POST['user']);
+				
+				else $form->addError("pw", LOGIN_PW_ERROR);
+			}
+			else $form->addError("pw", LOGIN_PW_ERROR);
 		}
 
 		$userData = $database->getUserArray($_POST['user'], 0);
-
+			
 		// Vacation mode by Shadow
-		if($userData["vac_mode"] == 1 && $userData["vac_time"] > time()) {
-    		$form->addError("vacation","Vacation mode is still enabled");
+		if($userData["vac_mode"] == 1 && $userData["vac_time"] > time()){
+			$form->addError("vacation", "Vacation mode is still enabled");
 		}
-
+		
 		// Vacation mode by Shadow
-		if($form->returnErrors() > 0) {
+		if($form->returnErrors() > 0){
 			$_SESSION['errorarray'] = $form->getErrors();
 			$_SESSION['valuearray'] = $_POST;
-
+			
 			header("Location: login.php");
-			exit;
-		} else {
-    		// Vacation mode by Shadow
-    		$database->removevacationmode($userData['id']);
-    		// Vacation mode by Shadow
-    		if($database->login($_POST['user'],$_POST['pw'])){
-    			$database->UpdateOnline("login" ,$_POST['user'],time(),$userData['id']);
-    		}else if($database->sitterLogin($_POST['user'],$_POST['pw'])){
-    			$database->UpdateOnline("sitter" ,$_POST['user'],time(),$userData['id']);
-    		}
-    			setcookie("COOKUSR",$_POST['user'],time()+COOKIE_EXPIRE,COOKIE_PATH);
-    			$session->login($_POST['user']);
+			exit();
+		}else{
+			// Vacation mode by Shadow
+			$database->removevacationmode($userData['id']);
+			// Vacation mode by Shadow
+			if($database->login($_POST['user'], $_POST['pw'])){
+				$database->UpdateOnline("login", $_POST['user'], time(), $userData['id']);
+			}else if($database->sitterLogin($_POST['user'], $_POST['pw'])){
+				$database->UpdateOnline("sitter", $_POST['user'], time(), $userData['id']);
+			}
+			setcookie("COOKUSR", $_POST['user'], time() + COOKIE_EXPIRE, COOKIE_PATH);
+			$session->login($_POST['user']);
 		}
 	}
 
 	private function Logout() {
-		global $session,$database;
+		global $session, $database;
+		
 		unset($_SESSION['wid']);
 		$database->activeModify(addslashes($session->username),1);
 		$database->UpdateOnline("logout") or die(mysqli_error($database->dblink));
@@ -264,34 +261,18 @@ class Account {
 
 	private function validEmail($email) {
 	  $regexp="/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i";
-	  if ( !preg_match($regexp, $email) ) {
-		   return false;
-	  }
-	  return true;
+	  return preg_match($regexp, $email);
 	}
 
-	function generateBase($kid,$uid,$username) {
-		global $database,$message;
-		if($kid == 0) {
-			$kid = rand(1,4);
-		}
-		else{
-			$kid = $_POST['kid'];
-		}
-
-		$wid = $database->generateBase($kid,0);
-		$database->setFieldTaken($wid);
-		$database->addVillage($wid,$uid,$username,1);
-		$database->addResourceFields($wid,$database->getVillageType($wid));
-		$database->addUnits($wid);
-		$database->addTech($wid);
-		$database->addABTech($wid);
-		$database->updateUserField($uid,"access",USER,1);
-
-		$message = new Message();
-		$message->sendWelcome($uid,$username);
+	function generateBase($kid, $uid, $username) {
+		global $database, $message;
+		
+		if($kid == 0) $kid = rand(1,4);
+		else $kid = $_POST['kid'];
+		
+		$database->generateVillages([['wid' => 0, 'kid' => $kid, 'capital' => 1]], $uid, $username);
+		$message->sendWelcome($uid, $username);
 	}
-
 };
 $account = new Account;
 ?>
