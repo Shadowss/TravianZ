@@ -238,7 +238,6 @@ if(isset($_POST['ft'])=='check'){
 <?php } ?>
 <p><?php echo MERCHANT_CARRY;?> <b><?php echo $market->maxcarry; ?></b> <?php echo UNITS_OF_RESOURCE;?> </p>
 <?php
-$timer = 1;
 if(count($market->recieving) > 0) { 
 echo "<h4>".MERCHANT_COMING.":</h4>";
     foreach($market->recieving as $recieve) {
@@ -247,7 +246,7 @@ echo "<h4>".MERCHANT_COMING.":</h4>";
 	echo "<thead><tr><td><a href=\"spieler.php?uid=$villageowner\">".$database->getUserField($villageowner,"username",0)."</a></td>";
     echo "<td><a href=\"karte.php?d=".$recieve['from']."&c=".$generator->getMapCheck($recieve['from'])."\">".TRANSPORT_FROM." ".$database->getVillageField($recieve['from'],"name")."</a></td>";
     echo "</tr></thead><tbody><tr><th>".ARRIVAL_IN."</th><td>";
-    echo "<div class=\"in\"><span id=timer$timer>".$generator->getTimeFormat($recieve['endtime']-time())."</span> h</div>";
+    echo "<div class=\"in\"><span id=timer".++$session->timer.">".$generator->getTimeFormat($recieve['endtime']-time())."</span> h</div>";
     $datetime = $generator->procMtime($recieve['endtime']);
     echo "<div class=\"at\">";
     if($datetime[0] != "today") {
@@ -257,7 +256,6 @@ echo "<h4>".MERCHANT_COMING.":</h4>";
     echo "</td></tr></tbody> <tr class=\"res\"> <th>".RESOURCES."</th> <td colspan=\"2\"><span class=\"f10\">";
     echo "<img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"".LUMBER."\" />".$recieve['wood']." | <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"".CLAY."\" />".$recieve['clay']." | <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"".IRON."\" />".$recieve['iron']." | <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"".CROP."\" />".$recieve['crop']."</td></tr></tbody>";
     echo "</table>";
-    $timer +=1;
     }
 }
 if(count($market->sending) > 0) {
@@ -269,7 +267,7 @@ if(count($market->sending) > 0) {
         echo "<thead><tr> <td><a href=\"spieler.php?uid=$villageowner\">$ownername</a></td>";
         echo "<td><a href=\"karte.php?d=".$send['to']."&c=".$generator->getMapCheck($send['to'])."\">".TRANSPORT_TO." ".$database->getVillageField($send['to'],"name")."</a></td>";
         echo "</tr></thead> <tbody><tr> <th>".ARRIVAL_IN."</th> <td>";
-        echo "<div class=\"in\"><span id=timer".$timer.">".$generator->getTimeFormat($send['endtime']-time())."</span> h</div>";
+        echo "<div class=\"in\"><span id=timer".++$session->timer.">".$generator->getTimeFormat($send['endtime']-time())."</span> h</div>";
         $datetime = $generator->procMtime($send['endtime']);
         echo "<div class=\"at\">";
         if($datetime[0] != "today") {
@@ -279,7 +277,6 @@ if(count($market->sending) > 0) {
         echo "</td> </tr> <tr class=\"res\"> <th>".RESOURCES."</th><td>";
         echo "<img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"".LUMBER."\" />".$send['wood']." | <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"".CLAY."\" />".$send['clay']." | <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"".IRON."\" />".$send['iron']." | <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"".CROP."\" />".$send['crop']."</td></tr></tbody>";
         echo "</table>";
-        $timer += 1;
     }
 }
 if(count($market->return) > 0) {
@@ -291,7 +288,7 @@ if(count($market->return) > 0) {
         echo "<thead><tr> <td><a href=\"spieler.php?uid=$villageowner\">$ownername</a></td>";
         echo "<td><a href=\"karte.php?d=".$return['from']."&c=".$generator->getMapCheck($return['from'])."\">".RETURNFROM." ".$database->getVillageField($return['from'],"name")."</a></td>";
         echo "</tr></thead> <tbody><tr> <th>".ARRIVAL_IN."</th> <td>";
-        echo "<div class=\"in\"><span id=timer".$timer.">".$generator->getTimeFormat($return['endtime']-time())."</span> h</div>";
+        echo "<div class=\"in\"><span id=timer".++$session->timer.">".$generator->getTimeFormat($return['endtime']-time())."</span> h</div>";
         $datetime = $generator->procMtime($return['endtime']);
         echo "<div class=\"at\">";
         if($datetime[0] != "today") {
@@ -300,7 +297,6 @@ if(count($market->return) > 0) {
         echo "".AT." ".$datetime[1]."</div>";
         echo "</td> </tr>";
         echo "</tbody></table>";
-        $timer += 1;
     }
 }
 include("upgrade.tpl");

@@ -35,8 +35,9 @@ class MyGenerator {
 	   return substr($encode,0,$length);
    }
 
-   public function procDistanceTime($coor, $thiscoor, $ref, $mode) {
+   public function procDistanceTime($coor, $thiscoor, $ref, $mode, $vid = 0) {
 		global $bid28, $bid14, $building;
+		
 		$xdistance = ABS($thiscoor['x'] - $coor['x']);
 		if($xdistance > WORLD_MAX) {
 			$xdistance = (2 * WORLD_MAX + 1) - $xdistance;
@@ -54,8 +55,8 @@ class MyGenerator {
 			else $speed = 1;		
 		}else{
 			$speed = $ref;
-			if($building->getTypeLevel(14) != 0 && $distance >= TS_THRESHOLD) {
-				$speed *= ($bid14[$building->gettypeLevel(14)]['attri'] / 100) ;
+			if(($tSquareLevel = $building->getTypeLevel(14, $vid)) > 0 && $distance >= TS_THRESHOLD) {
+				$speed *= ($bid14[$tSquareLevel]['attri'] / 100) ;
 			}
 		}
 		

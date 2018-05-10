@@ -733,7 +733,7 @@ class Units {
         $fromCor = ['x' => $fromCoor['x'], 'y' => $fromCoor['y']];
         $toCor = ['x' => $toCoor['x'], 'y' => $toCoor['y']];
         
-        if(!$mode) return $generator->procDistanceTime($fromCor, $toCor, $unitArray[0], $mode);
+        if(!$mode) return $generator->procDistanceTime($fromCor, $toCor, $unitArray[0], $mode, $from);
 
         $start = ($tribe - 1) * 10 + 1;
         $end = $tribe * 10;

@@ -12,10 +12,10 @@
 <map name="map1" id="map1">
 <?php
 if($building->walling()) {
-	$wtitle = $building->procResType($building->walling())." Level ".$village->resarray['f40'];
+	$wtitle = Building::procResType($building->walling())." Level ".$village->resarray['f40'];
 }
 else {
-	$wtitle = ($village->resarray['f40'] == 0)? "Outer building site" : $building->procResType($village->resarray['f40t'],0)." Level ".$village->resarray['f40'];
+	$wtitle = ($village->resarray['f40'] == 0)? "Outer building site" : Building::procResType($village->resarray['f40t'],0)." Level ".$village->resarray['f40'];
 }
 ?>
 	<area href="build.php?id=40" title="<?php echo $wtitle; ?>" coords="325,225,180" shape="circle" alt="" />
@@ -29,14 +29,14 @@ for($t=19;$t<=39;$t++) {
 if ($village->natar==1 && ( $t== 25 || $t == 26 || $t == 29 || $t == 30 || $t == 33 )) {
     if ($t==33) {
         if($village->resarray['f99'] != 0) {
-            $title = $building->procResType(40). " Level ".$village->resarray['f99'];
-        }else $title = $building->procResType(40);
+        	$title = Building::procResType(40). " Level ".$village->resarray['f99'];
+        }else $title = Building::procResType(40);
         
         echo "<area href=\"build.php?id=99\" title=\"$title\" coords=\"190,170,80\" shape=\"circle\"/>";
     }    
 } else {
         if($village->resarray['f'.$t.'t'] != 0) {
-            $title = $building->procResType($village->resarray['f'.$t.'t']). " Level ".$village->resarray['f'.$t];
+        	$title = Building::procResType($village->resarray['f'.$t.'t']). " Level ".$village->resarray['f'.$t];
         }else{
             $title = "Building site";
             if(($t == 39) && ($village->resarray['f'.$t] == 0)) {
@@ -72,13 +72,13 @@ for ($i=1;$i<=20;$i++) {
     $text = "Building site";
     $img = "iso";
         if($village->resarray['f'.($i+18).'t'] != 0) {
-            $text = $building->procResType($village->resarray['f'.($i+18).'t'])." Level ".$village->resarray['f'.($i+18)];
+        	$text = Building::procResType($village->resarray['f'.($i+18).'t'])." Level ".$village->resarray['f'.($i+18)];
             $img = "g".$village->resarray['f'.($i+18).'t'];
        }
     foreach($building->buildArray as $job) {
     	if($job['field'] == ($i+18)) {
         	$img = 'g'.$job['type'].'b';
-            $text = $building->procResType($job['type'])." Level ".$village->resarray['f'.$job['field']];
+        	$text = Building::procResType($job['type'])." Level ".$village->resarray['f'.$job['field']];
         }
     }
 	echo "<img src=\"img/x.gif\" class=\"building d$i $img\" alt=\"$text\" />";

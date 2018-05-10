@@ -120,13 +120,13 @@ class Automation {
     }
 
     public function procResType($ref, $mode = 0) {
-        global $building;
         //Capital or only 1 village left = cannot be destroyed
-        return addslashes(empty($build = $building->procResType($ref)) && !$mode ? "Village can't be" : $build);
+        return addslashes(empty($build = Building::procResType($ref)) && !$mode ? "Village can't be" : $build);
     }
 
     function recountPop($vid, $use_cache = true){
         global $database;
+        
         $vid = (int) $vid;
         $fdata = $database->getResourceLevel($vid, $use_cache);
         $popTot = 0;
@@ -148,6 +148,7 @@ class Automation {
 
     function recountCP($vid){
         global $database;
+        
         $vid = (int) $vid;
         $fdata = $database->getResourceLevel($vid);
         $popTot = 0;
@@ -3015,7 +3016,7 @@ class Automation {
     }
 
     private function sendSettlersComplete() {
-        global $database, $building, $autoprefix;
+        global $database, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/settlers.txt")) {
             unlink($autoprefix."GameEngine/Prevention/settlers.txt");
@@ -3761,7 +3762,7 @@ class Automation {
     }
 
     private function demolitionComplete() {
-        global $building, $database, $autoprefix;
+        global $database, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/demolition.txt")) {
             unlink($autoprefix."GameEngine/Prevention/demolition.txt");

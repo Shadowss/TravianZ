@@ -35,7 +35,7 @@ $building->loadBuilding();
 		if($jobs['master'] == 0){
         	echo "<tr><td class=\"ico\"><a href=\"?d=".$jobs['id']."&a=0&c=$session->checker\">";
             echo "<img src=\"img/x.gif\" class=\"del\" title=\"cancel\" alt=\"cancel\" /></a></td><td>";
-			echo $building->procResType($jobs['type'])." (Level ".$jobs['level'].")";
+			echo Building::procResType($jobs['type'])." (Level ".$jobs['level'].")";
 			if($jobs['loopcon'] == 0) { $BuildingList[] = $jobs['field']; }
             if($jobs['loopcon'] == 1) {
             	echo " (waiting loop)";
@@ -47,7 +47,7 @@ $building->loadBuilding();
 		}else{
         	echo "<tr><td class=\"ico\"><a href=\"?d=".$jobs['id']."&a=0&c=$session->checker\">";
             echo "<img src=\"img/x.gif\" class=\"del\" title=\"cancel\" alt=\"cancel\" /></a></td><td>";
-			echo $building->procResType($jobs['type'])."<span class=\"none\"> (Level ".$jobs['level'].")</span>";
+            echo Building::procResType($jobs['type'])."<span class=\"none\"> (Level ".$jobs['level'].")</span>";
 			}
       	}
         ?>

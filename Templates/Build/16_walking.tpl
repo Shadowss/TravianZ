@@ -64,10 +64,10 @@ $to = $database->getOMInfo($units[$y]['to']);}
 			<tr>
 				<th><?php echo CATAPULT_TARGET;?></th>
 				<td style="text-align: center" colspan="5">
-					<?php echo $units[$y]['ctar1'] == 0 ? "Random" : $building->procResType($units[$y]['ctar1']); ?>
+					<?php echo $units[$y]['ctar1'] == 0 ? "Random" : Building::procResType($units[$y]['ctar1']); ?>
 				</td>
 				<td style="text-align: center" colspan="<?php if($units[$y]['t11'] == 0) {echo"5";}else{echo"6";}?>">
-					<?php echo $units[$y]['ctar2'] == 99 ? "Random" : ($units[$y]['ctar2'] == 0 ? "-" : $building->procResType($units[$y]['ctar2'])); ?>
+					<?php echo $units[$y]['ctar2'] == 99 ? "Random" : ($units[$y]['ctar2'] == 0 ? "-" : Building::procResType($units[$y]['ctar2'])); ?>
 				</td>
 			</tr>
 		</tbody>

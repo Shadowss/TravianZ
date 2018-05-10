@@ -19,9 +19,7 @@
 		$totalmerchants = $building->getTypeLevel(17,$vid);
 		$availmerchants = $totalmerchants - $database->totalMerchantUsed($vid);
 		$incoming_attacks = $database->getMovement(3,$vid,1);
-		$bui = '';
-		$tro = '';
-		$att = '';
+		$bui = $tro = $att = '';
 
 		if (count($incoming_attacks) > 0) {
 			$inc_atts = count($incoming_attacks);
@@ -35,7 +33,7 @@
 			}
 		}
 		foreach($jobs as $b){
-			$bui .= '<a href="build.php?newdid='.$vid.'&id='.$b['field'].'"><img class="bau" src="img/x.gif" title="'.$building->procResType($b['type']).'" alt="'.$building->procResType($b['type']).'"></a>';
+			$bui .= '<a href="build.php?newdid='.$vid.'&id='.$b['field'].'"><img class="bau" src="img/x.gif" title="'.Building::procResType($b['type']).'" alt="'.Building::procResType($b['type']).'"></a>';
 		}	
 		foreach($unitsArray as $key => $c){
 		    if($key == 99) $key = 51;

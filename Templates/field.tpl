@@ -27,7 +27,7 @@ if (count($jobs)) {
 }
 
 for ($i=1; $i<=18; $i++) {
-    echo "	<area href=\"build.php?id=$i\" coords=\"$coorarray[$i]\" shape=\"circle\" title=\"".$building->procResType($arrayVillage['f'.$i.'t'])." Level ".$arrayVillage['f'.$i].(isset($activeFields[$i]) ? ' (upgrade in progress)' : '')."\"/>\r\n";
+	echo "	<area href=\"build.php?id=$i\" coords=\"$coorarray[$i]\" shape=\"circle\" title=\"".Building::procResType($arrayVillage['f'.$i.'t'])." Level ".$arrayVillage['f'.$i].(isset($activeFields[$i]) ? ' (upgrade in progress)' : '')."\"/>\r\n";
 }
 ?>
 	<area href="dorf2.php" coords="144,131,36" shape="circle" title="Village centre" alt="" />

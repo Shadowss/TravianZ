@@ -293,7 +293,7 @@ class Building {
 		return false;
 	}
 
-	public function procResType($ref) {
+	public static function procResType($ref) {
 		switch($ref) {
 			case 1: return "Woodcutter";
 			case 2: return "Clay Pit";
@@ -429,7 +429,7 @@ class Building {
 			
 			if($database->addBuilding($village->wid, $id, $village->resarray['f'.$id.'t'], $loop, $time + ($loop == 1 ? ceil(60 / SPEED) : 0), 0, $level['f'.$id] + 1 + count($database->getBuildingByField($village->wid, $id)))) {
 				$database->modifyResource($village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0);
-				$logging->addBuildLog($village->wid, $this->procResType($village->resarray['f'.$id.'t']), ($village->resarray['f'.$id] + ($loopsame > 0 ? 2 : 1)), 0);
+				$logging->addBuildLog($village->wid, self::procResType($village->resarray['f'.$id.'t']), ($village->resarray['f'.$id] + ($loopsame > 0 ? 2 : 1)), 0);
 				$this->redirect($id);
 			}
 		}
@@ -470,10 +470,10 @@ class Building {
 			}
 			
 			$level = $database->getResourceLevel($village->wid);
-			if($database->addBuilding($village->wid,$id,$village->resarray['f'.$id.'t'],$loop,$time,0,0,$level['f'.$id] + 1 + count($database->getBuildingByField($village->wid,$id)))) {
-				$logging->addBuildLog($village->wid,$this->procResType($village->resarray['f'.$id.'t']),($village->resarray['f'.$id]-1),2);
+			if($database->addBuilding($village->wid, $id, $village->resarray['f'.$id.'t'], $loop, $time, 0, 0, $level['f'.$id] + 1 + count($database->getBuildingByField($village->wid, $id)))){
+				$logging->addBuildLog($village->wid, self::procResType($village->resarray['f'.$id.'t']), ($village->resarray['f'.$id] - 1), 2);
 				header("Location: dorf2.php");
-				exit;
+				exit();
 			}
 		}
 	}
@@ -506,7 +506,7 @@ class Building {
 		    if($this->meetRequirement($tid)) {        
 		        $level = $database->getResourceLevel($village->wid);
 		        if($database->addBuilding($village->wid, $id, $tid, $loop, $time, 0, $level['f' . $id] + 1 + count($database->getBuildingByField($village->wid, $id)))){
-		            $logging->addBuildLog($village->wid, $this->procResType($tid), ($village->resarray['f' . $id] + 1), 1);
+		            $logging->addBuildLog($village->wid, self::procResType($tid), ($village->resarray['f' . $id] + 1), 1);
 		            $database->modifyResource($village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0);
 		            header("Location: dorf2.php");
 		            exit;
@@ -668,47 +668,34 @@ class Building {
 		}
 	}
 
-	public function isMax($id,$field,$loop=0) {
+	public function isMax($id, $field, $loop = 0) {
 		$name = "bid".$id;
 		global $$name,$village,$session;
 		$dataarray = $$name;
 
 		// special case for Multihunter login which mathematically (because of the resarray length)
 		// allows for building resource fields above level 20
-		if ($session->tribe == 0) {
-		    return $village->resarray['f'.$field] == 20;
-		}
+		if ($session->tribe == 0) return $village->resarray['f'.$field] == 20;
 
 		if($id <= 4) {
-			if($village->capital == 1) {
-				return ($village->resarray['f'.$field] == (count($dataarray) - 1 - $loop));
-			}
-			else {
-				return ($village->resarray['f'.$field] == (count($dataarray) - 11 - $loop));
-			}
+			if($village->capital == 1) return ($village->resarray['f'.$field] == (count($dataarray) - 1 - $loop));
+			else return ($village->resarray['f'.$field] == (count($dataarray) - 11 - $loop));
 		}
-		else {
-		    return ($village->resarray['f'.$field] == count($dataarray) - $loop);
-		}
+		else return ($village->resarray['f'.$field] == count($dataarray) - $loop);
 	}
 
-	public function getTypeLevel($tid,$vid=0) {
-		global $village,$database,$session;
+	public function getTypeLevel($tid, $vid = 0) {
+		global $village, $database, $session;
 
 		// Support would not have a village, so this is irrelevant
-		if ($session->uid  == 1) {
-		    return 0;
-		}
+		if ($session->uid  == 1) return 0;
 
-		$keyholder = array();
+		$keyholder = [];
 
-		if($vid == 0) {
-			$resourcearray = $village->resarray;
-		} else {
-			$resourcearray = $database->getResourceLevel($vid);
-		}
+		if($vid == 0) $resourcearray = $village->resarray;		
+		else $resourcearray = $database->getResourceLevel($vid);
 
-		foreach(array_keys($resourcearray,$tid) as $key) {
+		foreach(array_keys($resourcearray, $tid) as $key) {
 			if(strpos($key,'t')) {
 				$key = preg_replace("/[^0-9]/", '', $key);
 				array_push($keyholder, $key);
@@ -718,51 +705,41 @@ class Building {
 		$element = count($keyholder);
 
 		// if we count more than 1 instance of the building (mostly resource fields)
-		if($element >= 2) {
-		    // resource field
-			if($tid <= 4) {
-				$temparray = array();
-
-				for($i=0;$i<=$element-1;$i++) {
-				    // collect current field level
-					array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
+		if($element >= 2){
+			// resource field
+			if($tid <= 4){
+				$temparray = [];
+				
+				for($i = 0; $i <= $element - 1; $i++){
+					// collect current field level
+					array_push($temparray, $resourcearray['f'.$keyholder[$i]]);
 				}
-
+				
 				// find out the maximum field level for this village
 				$maValue = max($temparray);
-				foreach ($temparray as $key => $val) {
-				    if ($val == $maValue) {
-					   $target = $key;
+				foreach($temparray as $key => $val){
+					if($val == $maValue){
+						$target = $key;
 					}
 				}
-			}
-			// village building
-			else {
+			}else{ // village building
 				$target = 0;
-
+				
 				// find the highest level built for this building type
-				for($i=1;$i<=$element-1;$i++) {
-					if($resourcearray['f'.$keyholder[$i]] > $resourcearray['f'.$keyholder[$target]]) {
+				for($i = 1; $i <= $element - 1; $i++){
+					if($resourcearray['f'.$keyholder[$i]] > $resourcearray['f'.$keyholder[$target]]){
 						$target = $i;
 					}
 				}
 			}
 		}
+		
 		// if we count only a single building
-		else if($element == 1) {
-			$target = 0;
-		}
-		// no building matching search criteria
-		else {
-			return 0;
-		}
-
-		if($keyholder[$target] != "") {
-			return $resourcearray['f'.$keyholder[$target]];
-		}
-		else {
-			return 0;
-		}
+		else if($element == 1) $target = 0;
+		else return 0; // no building matching search criteria
+		
+		if(!empty($keyholder[$target])) return $resourcearray['f'.$keyholder[$target]];
+		else return 0;
 	}
 
 
