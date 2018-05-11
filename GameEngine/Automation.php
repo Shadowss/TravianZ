@@ -3218,7 +3218,7 @@ class Automation {
     	}
 	    
 	//Write the system message
-    	$database->displaySystemMessage(WWVILLAGE);
+    	$database->displaySystemMessage(WWVILLAGEMSG);
     	
     	if(file_exists("GameEngine/Prevention/spawnWWVillages.txt")) {
     		unlink("GameEngine/Prevention/spawnWWVillages.txt");
