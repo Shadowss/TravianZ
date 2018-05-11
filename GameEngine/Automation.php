@@ -3216,6 +3216,9 @@ class Automation {
     		$database->setVillageFields($wid, ['natar', 'name'], [1, WWVILLAGE]);
     		$this->recountPop($wid);
     	}
+	    
+	//Write the system message
+    	$database->displaySystemMessage(WWVILLAGE);
     	
     	if(file_exists("GameEngine/Prevention/spawnWWVillages.txt")) {
     		unlink("GameEngine/Prevention/spawnWWVillages.txt");
