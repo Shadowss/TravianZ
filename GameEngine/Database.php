@@ -4380,14 +4380,14 @@ References: User ID/Message ID, Mode
 
 		$x = "UPDATE " . TB_PREFIX . "fdata SET f" . $field . "t=" . $type . " WHERE vref=" . $wid;
 		mysqli_query($this->dblink,$x);
-		$q = "INSERT into " . TB_PREFIX . "bdata values (0,$wid,$field,$type,$loop,$time,$master,$level)";
+		$q = "INSERT into " . TB_PREFIX . "bdata values (0, $wid, $field, $type, $loop, $time, $master, $level)";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function removeBuilding($d) {
 	    list($d) = $this->escape_input((int) $d);
-
 		global $building, $village;
+		
 		$jobLoopconID = -1;
 		$SameBuildCount = 0;
 		$jobs = $building->buildArray;
@@ -4395,7 +4395,7 @@ References: User ID/Message ID, Mode
 			if($jobs[$i]['id'] == $d) {
 				$jobDeleted = $i;
 			}
-			if($jobs[$i]['loopcon'] == 1) {
+			if($jobs[$i]['loopcon'] == 1 && $jobs[$i]['master'] == 0) {
 				$jobLoopconID = $i;
 			}
 			if($jobs[$i]['master'] == 1) {
@@ -4433,77 +4433,73 @@ References: User ID/Message ID, Mode
 		if(count($jobs) > 3 && ($jobs[1]['field'] == $jobs[2]['field'] && $jobs[2]['field'] == $jobs[3]['field'])) {
 			$SameBuildCount = 7;
 		}
-		if(isset($jobMaster) && isset($level) && $level-1 <= 0){
+		if(isset($jobMaster) && isset($level) && $level - 1 <= 0){
 		    $SameBuildCount = 0;
 		}
 		
-		if($SameBuildCount > 0) {
-			if($SameBuildCount > 3){
-			if($SameBuildCount == 4 or $SameBuildCount == 5){
-			if($jobDeleted == 0){
-			$uprequire = $building->resourceRequired($jobs[1]['field'],$jobs[1]['type'],1);
-			$time = $uprequire['time'];
-			$timestamp = $time+time();
-			$q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=".$timestamp." WHERE id=".(int) $jobs[1]['id'];
-				mysqli_query($this->dblink,$q);
-			}
-			}else if($SameBuildCount == 6){
-			if($jobDeleted == 0){
-			$uprequire = $building->resourceRequired($jobs[2]['field'],$jobs[2]['type'],1);
-			$time = $uprequire['time'];
-			$timestamp = $time+time();
-			$q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=".$timestamp." WHERE id=".(int) $jobs[2]['id'];
-				mysqli_query($this->dblink,$q);
-			}
-			}else if($SameBuildCount == 7){
-			if($jobDeleted == 1){
-			$uprequire = $building->resourceRequired($jobs[2]['field'],$jobs[2]['type'],1);
-			$time = $uprequire['time'];
-			$timestamp = $time+time();
-			$q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=".$timestamp." WHERE id=".(int) $jobs[2]['id'];
-				mysqli_query($this->dblink,$q);
-			}
-			}
-			if($SameBuildCount < 8){
-			$uprequire1 = $building->resourceRequired($jobs[$jobMaster]['field'],$jobs[$jobMaster]['type'],2);
-			$time1 = $uprequire1['time'];
-			$timestamp1 = $time1;
-			$q1 = "UPDATE " . TB_PREFIX . "bdata SET level=level-1,timestamp=".$timestamp1." WHERE id=".(int) $jobs[$jobMaster]['id'];
-				mysqli_query($this->dblink,$q1);
-			}else{
-			$uprequire1 = $building->resourceRequired($jobs[$jobMaster]['field'],$jobs[$jobMaster]['type'],1);
-			$time1 = $uprequire1['time'];
-			$timestamp1 = $time1;
-			$q1 = "UPDATE " . TB_PREFIX . "bdata SET level=level-1,timestamp=".$timestamp1." WHERE id=".(int) $jobs[$jobMaster]['id'];
-				mysqli_query($this->dblink,$q1);
-			}
-			}else if($d == $jobs[floor($SameBuildCount / 3)]['id'] || $d == $jobs[floor($SameBuildCount / 2) + 1]['id']) {
-			    $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . (int) $jobs[floor($SameBuildCount / 3)]['timestamp'] . " WHERE master = 0 AND id > ".$d." and (ID=" . (int) $jobs[floor($SameBuildCount / 3)]['id'] . " OR ID=" . (int) $jobs[floor($SameBuildCount / 2) + 1]['id'] . ")";
-				mysqli_query($this->dblink,$q);
-			}
-		} else {
-            if($jobs[$jobDeleted]['field'] >= 19) {
-                $x = "SELECT f" . $jobs[$jobDeleted]['field'] . " FROM " . TB_PREFIX . "fdata WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
-                $result = mysqli_query($this->dblink,$x);
-                $fieldlevel = mysqli_fetch_row($result);
-                    if($fieldlevel[0] == 0) {
-                    if ($village->natar==1 && $jobs[$jobDeleted]['field']==99) { //fix by ronix
-                    }else{
-                        $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
-                        mysqli_query($this->dblink,$x);
+		if ($SameBuildCount > 0) {
+            if ($SameBuildCount > 3) {
+                if ($SameBuildCount == 4 || $SameBuildCount == 5) {
+                    if ($jobDeleted == 0) {
+                        $uprequire = $building->resourceRequired($jobs[1]['field'], $jobs[1]['type'], 1);
+                        $time = $uprequire['time'];
+                        $timestamp = $time + time();
+                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . $timestamp . " WHERE id=" . (int) $jobs[1]['id'];
+                        mysqli_query($this->dblink, $q);
+                    }
+                } else if ($SameBuildCount == 6) {
+                    if ($jobDeleted == 0) {
+                        $uprequire = $building->resourceRequired($jobs[2]['field'], $jobs[2]['type'], 1);
+                        $time = $uprequire['time'];
+                        $timestamp = $time + time();
+                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . $timestamp . " WHERE id=" . (int) $jobs[2]['id'];
+                        mysqli_query($this->dblink, $q);
+                    }
+                } else if ($SameBuildCount == 7) {
+                    if ($jobDeleted == 1) {
+                        $uprequire = $building->resourceRequired($jobs[2]['field'], $jobs[2]['type'], 1);
+                        $time = $uprequire['time'];
+                        $timestamp = $time + time();
+                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . $timestamp . " WHERE id=" . (int) $jobs[2]['id'];
+                        mysqli_query($this->dblink, $q);
                     }
                 }
-			}
-			if(($jobLoopconID >= 0) && ($jobs[$jobDeleted]['loopcon'] != 1)) {
-				if(($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19) || sizeof($jobs) < 3) {
-					$uprequire = $building->resourceRequired($jobs[$jobLoopconID]['field'], $jobs[$jobLoopconID]['type']);
-					$x = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,timestamp=" . (time() + (int) $uprequire['time']) . " WHERE wid=" . (int) $jobs[$jobDeleted]['wid'] . " AND loopcon=1 AND master=0";
-					mysqli_query($this->dblink,$x);
-				}
-			}
-		}
-		$q = "DELETE FROM " . TB_PREFIX . "bdata where id = $d";
-		return mysqli_query($this->dblink,$q);
+                if ($SameBuildCount < 8) {
+                    $uprequire = $building->resourceRequired($jobs[$jobMaster]['field'], $jobs[$jobMaster]['type'], 2);
+                    $q1 = "UPDATE " . TB_PREFIX . "bdata SET level=level-1,timestamp=" . $uprequire['time'] . " WHERE id=" . (int) $jobs[$jobMaster]['id'];
+                    mysqli_query($this->dblink, $q1);
+                } else {
+                    $uprequire = $building->resourceRequired($jobs[$jobMaster]['field'], $jobs[$jobMaster]['type'], 1);
+                    $q1 = "UPDATE " . TB_PREFIX . "bdata SET level=level-1,timestamp=" . $uprequire['time'] . " WHERE id=" . (int) $jobs[$jobMaster]['id'];
+                    mysqli_query($this->dblink, $q1);
+                }
+            } else if ($d == $jobs[floor($SameBuildCount / 3)]['id'] || $d == $jobs[floor($SameBuildCount / 2) + 1]['id']) {
+                $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . (int) $jobs[floor($SameBuildCount / 3)]['timestamp'] . " WHERE master = 0 AND id > " . $d . " and (ID=" . (int) $jobs[floor($SameBuildCount / 3)]['id'] . " OR ID=" . (int) $jobs[floor($SameBuildCount / 2) + 1]['id'] . ")";
+                mysqli_query($this->dblink, $q);
+            }
+        } else {
+            if ($jobs[$jobDeleted]['field'] >= 19) {
+                $x = "SELECT f" . $jobs[$jobDeleted]['field'] . " FROM " . TB_PREFIX . "fdata WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
+                $result = mysqli_query($this->dblink, $x);
+                $fieldlevel = mysqli_fetch_row($result);
+                if ($fieldlevel[0] == 0) {
+                    if ($village->natar == 1 && $jobs[$jobDeleted]['field'] == 99) { // fix by ronix
+                    } else {
+                        $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
+                        mysqli_query($this->dblink, $x);
+                    }
+                }
+            }
+            if (($jobLoopconID >= 0) && ($jobs[$jobDeleted]['loopcon'] != 1)) {
+                if (($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19) || sizeof($jobs) < 4) {
+                    $uprequire = $building->resourceRequired($jobs[$jobLoopconID]['field'], $jobs[$jobLoopconID]['type']);
+                    $x = "UPDATE " . TB_PREFIX . "bdata SET loopcon = 0,timestamp=" . (time() + (int) $uprequire['time']) . " WHERE wid=" . (int) $jobs[$jobDeleted]['wid'] . " AND loopcon = 1 AND master = 0";
+                    mysqli_query($this->dblink, $x);
+                }
+            }
+        }
+        $q = "DELETE FROM " . TB_PREFIX . "bdata where id = $d";
+        return mysqli_query($this->dblink, $q);
 	}
 
 	function addDemolition($wid, $field) {
@@ -5037,9 +5033,7 @@ References: User ID/Message ID, Mode
         // return all master jobs
         $data = [];
         foreach ($bdata as $row) {
-            if ($row['master'] == 1) {
-                $data[] = $row;
-            }
+            if ($row['master'] == 1) $data[] = $row;
         }
 
 		return $data;
@@ -5139,9 +5133,7 @@ References: User ID/Message ID, Mode
         // return all non-master jobs for field type under 19
         $data = [];
         foreach ($bdata as $row) {
-            if ($row['master'] == 0 && $row['field'] < 19) {
-                $data[] = $row;
-            }
+            if ($row['master'] == 0 && $row['field'] < 19) $data[] = $row;
         }
 
         return $data;
@@ -5154,18 +5146,16 @@ References: User ID/Message ID, Mode
         // return all non-master jobs for field type above 18
         $data = [];
         foreach ($bdata as $row) {
-            if ($row['master'] == 0 && $row['field'] > 18) {
-                $data[] = $row;
-            }
+            if ($row['master'] == 0 && $row['field'] > 18) $data[] = $row;
         }
 
         return $data;
 	}
 
-	function updateBuildingWithMaster($id, $time,$loop) {
-	    list($id, $time,$loop) = $this->escape_input((int) $id, (int) $time,(int) $loop);
+	function updateBuildingWithMaster($id, $time, $loop) {
+	    list($id, $time, $loop) = $this->escape_input((int) $id, (int) $time, (int) $loop);
 
-		$q = "UPDATE " . TB_PREFIX . "bdata SET master = 0, timestamp = ".$time.",loopcon = ".$loop." WHERE id = ".$id."";
+		$q = "UPDATE " . TB_PREFIX . "bdata SET master = 0, timestamp = ".$time.", loopcon = ".$loop." WHERE id = ".$id."";
 		return mysqli_query($this->dblink,$q);
 	}
 

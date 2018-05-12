@@ -3176,7 +3176,7 @@ class Automation {
     
     private function spawnWWVillages(){
     	global $database, $autoprefix;
-    	
+
     	if(file_exists($autoprefix."GameEngine/Prevention/spawnWWVillages.txt")) {
     		unlink($autoprefix."GameEngine/Prevention/spawnWWVillages.txt");
     	}
@@ -3217,7 +3217,7 @@ class Automation {
     		$this->recountPop($wid);
     	}
 	    
-	//Write the system message
+	    //Write the system message
     	$database->displaySystemMessage(WWVILLAGEMSG);
     	
     	if(file_exists("GameEngine/Prevention/spawnWWVillages.txt")) {
@@ -4064,10 +4064,11 @@ class Automation {
 
     private function MasterBuilder() {
         global $database;
+        
         $q = "SELECT id, wid, type, level, field, timestamp FROM ".TB_PREFIX."bdata WHERE master = 1";
         $array = $database->query_return($q);
 
-        foreach($array as $master) {
+        foreach($array as $master) {      
             $owner = $database->getVillageField($master['wid'], 'owner');
             $tribe = $database->getUserField($owner, 'tribe', 0);
             $villwood = $database->getVillageField($master['wid'], 'wood');
@@ -4085,21 +4086,17 @@ class Automation {
 
             if($tribe == 1){
                 if($master['field'] < 19){
-                    $dorf1Buildings = $database->getDorf1Building($master['wid']);
-                    $bdata = count($dorf1Buildings);
+                    $bdata = $database->getDorf1Building($master['wid']);
+                    $bdataTotal = count($bdata);
                     $bbdata = count($database->getDorf2Building($master['wid']));
-                    $bdata1 = $dorf1Buildings;
                 }else{
-                    $dorf2Buildings = $database->getDorf2Building($master['wid']);
-                    $bdata = count($database->getDorf2Building($master['wid']));
+                    $bdata = $database->getDorf2Building($master['wid']);
+                    $bdataTotal = count($bdata);
                     $bbdata = count($database->getDorf1Building($master['wid']));
-                    $bdata1 = $database->getDorf2Building($master['wid']);
                 }
-
             }else{
-                $dorf1Buildings = $database->getDorf1Building($master['wid']);
-                $bdata = $bbdata = count($dorf1Buildings) + count($database->getDorf2Building($master['wid']));
-                $bdata1 = $dorf1Buildings;
+                $bdata = array_merge($database->getDorf1Building($master['wid']), $database->getDorf2Building($master['wid']));
+                $bdataTotal = $bbdata = count($bdata);          
             }
 
             if($database->getUserField($owner, 'plus', 0) > time() || $ww > 0){
@@ -4108,19 +4105,17 @@ class Automation {
             }
             else $inbuild = 1;
 
-            $usergold = $database->getUserField($owner,'gold',0);
+            $usergold = $database->getUserField($owner, 'gold', 0);
 
-            if($bdata < $inbuild && $buildwood < $villwood && $buildclay < $villclay && $buildiron < $villiron && $buildcrop < $villcrop && $usergold > 0){
-                $time = $master['timestamp']+time();
+            if($bdataTotal < $inbuild && $buildwood <= $villwood && $buildclay <= $villclay && $buildiron <= $villiron && $buildcrop <= $villcrop && $usergold > 0){
+                $time = $master['timestamp'] + time();
 
-                if(!empty($bdata1)){
-                    foreach($bdata1 as $master1) {
-                        $time += ($master1['timestamp'] - time());
-                    }
+                if(!empty($bdata)){
+                    foreach($bdata as $masterLoop) $time += ($masterLoop['timestamp'] - time());
                 }
 
-                if($bdata == 0) $database->updateBuildingWithMaster($master['id'], $time, 0);                  
-                else $database->updateBuildingWithMaster($master['id'], $time, 1);              
+                if($bdataTotal == 0) $database->updateBuildingWithMaster($master['id'], $time, 0);                  
+                else $database->updateBuildingWithMaster($master['id'], $time, 1);             
 
                 $database->updateUserField($owner, 'gold', --$usergold, 1);
                 $database->modifyResource($master['wid'], $buildwood, $buildclay, $buildiron, $buildcrop, 0);

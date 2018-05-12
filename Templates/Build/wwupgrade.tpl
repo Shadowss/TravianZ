@@ -20,7 +20,6 @@ if ( $building->allowWwUpgrade() ) {
         $doublebuild = ( $building->isCurrent( $id ) && $building->isLoop( $id ) ) ? 1 : 0;
         $master      = count( $database->getMasterJobsByField( $village->wid, $id ) );
         $uprequire   = $building->resourceRequired( $id, $village->resarray[ 'f' . $id . 't' ], 1 + $loopsame + $doublebuild + $master );
-        $mastertime  = $uprequire['time'];
 ?>
 <p id="contract">
     <b><?php echo COSTS_UPGRADING_LEVEL; ?> <?php echo $village->resarray[ 'f' . $id ] + 1 + $loopsame + $doublebuild + $master; ?>
@@ -50,7 +49,7 @@ if ( $building->allowWwUpgrade() ) {
                 <?php
                 if ( $id <= 18 ) {
                     if ( $session->gold >= 1 && $village->master == 0 ) {
-                        echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
+                        echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
                         echo '<font color="#B3B3B3">(' . COSTS . ': <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="Gold" title="' . GOLD . '"/>1)</font>';
                     } else {
                         echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
@@ -58,7 +57,7 @@ if ( $building->allowWwUpgrade() ) {
                     }
                 } else {
                     if ( $session->gold >= 1 && $village->master == 0 ) {
-                        echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
+                        echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
                         echo '<font color="#B3B3B3">(' . COSTS . ': <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="Gold" title="' . GOLD . '"/>1)</font>';
                     } else {
                         echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
@@ -73,7 +72,7 @@ if ( $building->allowWwUpgrade() ) {
                 <?php
                 if ( $id <= 18 ) {
                     if ( $session->gold >= 1 && $village->master == 0 ) {
-                        echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
+                        echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
                         echo '<font color="#B3B3B3">(' . COSTS . ': <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="Gold" title="' . GOLD . '"/>1)</font>';
                     } else {
                         echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
@@ -81,7 +80,7 @@ if ( $building->allowWwUpgrade() ) {
                     }
                 } else {
                     if ( $session->gold >= 1 && $village->master == 0 ) {
-                        echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
+                        echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
                         echo '<font color="#B3B3B3">(' . COSTS . ': <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="Gold" title="' . GOLD . '"/>1)</font>';
                     } else {
                         echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
@@ -107,7 +106,7 @@ if ( $building->allowWwUpgrade() ) {
             <?php
             if ( $id <= 18 ) {
                 if ( $session->gold >= 1 && $village->master == 0 ) {
-                    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
+                    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
                     echo '<font color="#B3B3B3">(' . COSTS . ': <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="Gold" title="' . GOLD . '"/>1)</font>';
                 } else {
                     echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
@@ -115,7 +114,7 @@ if ( $building->allowWwUpgrade() ) {
                 }
             } else {
                 if ( $session->gold >= 1 && $village->master == 0 ) {
-                    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
+                    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id\">" . CONSTRUCTING_MASTER_BUILDER . " </a>";
                     echo '<font color="#B3B3B3">(' . COSTS . ': <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="Gold" title="' . GOLD . '"/>1)</font>';
                 } else {
                     echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";

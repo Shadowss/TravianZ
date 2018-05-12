@@ -9,18 +9,16 @@ if($bindicate == 1) {
 } else if($bindicate == 11) {
 	echo "<p><span class=\"none\">".BUILDING_BEING_DEMOLISHED."</span></p>";
 } else {
-	$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
-	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
+	$loopsame = ($building->isCurrent($id) || $building->isLoop($id)) ? 1 : 0;
+	$doublebuild = ($building->isCurrent($id) && $building->isLoop($id)) ? 1 : 0;
 	$master = count($database->getMasterJobsByField($village->wid,$id));
 
 	// master and loopsame would have duplicated level display,
     // so we need to decrease loopsame if master is the only job left
-    if ($master == 1 && $loopsame == 1) {
-        $loopsame = 0;
-    }
+	if ($master == 1 && $loopsame == 1) $loopsame = 0;
+
     //-- If available resources combined are not enough, remove NPC button
-	$uprequire = $building->resourceRequired($id,$village->resarray['f'.$id.'t'],1+$loopsame+$doublebuild+$master);
-	$mastertime = $uprequire['time'];
+	$uprequire = $building->resourceRequired($id,$village->resarray['f'.$id.'t'],1 + $loopsame + $doublebuild + $master);
 ?>
 <?php
 $total_required = (int)($uprequire['wood'] + $uprequire['clay'] + $uprequire['iron'] + $uprequire['crop']);
@@ -38,7 +36,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $villa
 <?php
 	if($id <= 18) {
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -46,7 +44,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $villa
 	}
 	}else{
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -62,7 +60,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $villa
 <?php
 	if($id <= 18) {
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -70,7 +68,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $villa
 	}
 	}else{
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -100,7 +98,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $villa
 <?php
 	if($id <= 18) {
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf1.php?master=$bid&id=$id&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";
@@ -108,7 +106,7 @@ if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $villa
 	}
 	}else{
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">".CONSTRUCTING_MASTER_BUILDER." </a>";
 		echo '<font color="#B3B3B3">('.COSTS.': <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="'.GOLD.'"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">".CONSTRUCTING_MASTER_BUILDER."</span>";

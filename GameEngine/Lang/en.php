@@ -919,16 +919,16 @@ define("TRAINING","Training");
 define("FINISHED","Finished");
 define("UNIT_FINISHED","The next unit will be finished in");
 define("AVAILABLE","Available");
-define("TRAINING_COMMENCE_BARRACKS","Training can commence when barracks are completed.");
+define("TRAINING_COMMENCE_BARRACKS","Training can commence when barracks is completed.");
 define("BARRACKS_DESC","All foot soldiers are trained in the barracks. The higher the level of the barracks, the faster the troops are trained.");
 
 define("STABLE","Stable");
 define("AVAILABLE_ACADEMY","No units available. Research at academy");
-define("TRAINING_COMMENCE_STABLE","Training can commence when stable are completed.");
+define("TRAINING_COMMENCE_STABLE","Training can commence when stable is completed.");
 define("STABLE_DESC","Cavalry can be trained in the stable. The higher its level the faster the troops are trained.");
 
 define("WORKSHOP","Workshop");
-define("TRAINING_COMMENCE_WORKSHOP","Training can commence when workshop are completed.");
+define("TRAINING_COMMENCE_WORKSHOP","Training can commence when workshop is completed.");
 define("WORKSHOP_DESC","Siege engines like catapults and rams can be built in the workshop. The higher its level the faster the units are produced.");
 
 define("ACADEMY","Academy");
@@ -987,6 +987,7 @@ define("SECURITY_CHANGE_CAPITAL","Are you sure, that you want to change your cap
 define("PALACE_DESC","The king or queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.");
 
 define("TREASURY","Treasury");
+define("TREASURY_COMMENCE","Artifacts can be viewed when treasury is completed.");
 define("ARTIFACTS_AREA","Artefacts in your area");
 define("NO_ARTIFACTS_AREA","There are no artefacts in your area.");
 define("OWN_ARTIFACTS","Own artefacts");
@@ -1028,11 +1029,11 @@ define("MERCHANT_LEVEL","Merchant load at level");
 define("TRADEOFFICE_DESC","In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.");
 
 define("GREATBARRACKS","Great Barracks");
-define("TRAINING_COMMENCE_GREATBARRACKS","Training can commence when great barracks are completed.");
+define("TRAINING_COMMENCE_GREATBARRACKS","Training can commence when great barracks is completed.");
 define("GREATBARRACKS_DESC","Foot soldiers are trained in the great barracks. The higher the level of the barracks, the faster the troops are trained.");
 
 define("GREATSTABLE","Great Stable");
-define("TRAINING_COMMENCE_GREATSTABLE","Training can commence when great stables are completed.");
+define("TRAINING_COMMENCE_GREATSTABLE","Training can commence when great stable is completed.");
 define("GREATSTABLE_DESC","Cavalry can be trained in the great stable. The higher its level the faster the troops are trained.");
 
 define("CITYWALL","City Wall");
@@ -1063,7 +1064,7 @@ define("TRAPS","Traps");
 define("TRAP","Trap");
 define("CURRENT_HAVE","Your currently have");
 define("WHICH_OCCUPIED","of which are occupied.");
-define("TRAINING_COMMENCE_TRAPPER","Training can commence when trapper are completed.");
+define("TRAINING_COMMENCE_TRAPPER","Training can commence when trapper is completed.");
 define("TRAPPER_DESC","The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won't be able to harm your village anymore.");
 
 define("HEROSMANSION","Hero's Mansion");
@@ -1186,11 +1187,12 @@ define("FOOL_SMALL","Artefact of the slight fool");
 define("FOOL_SMALLVILLAGE","Pendant of Mischief");
 define("FOOL_UNIQUE","Artefact of the unique fool");
 define("FOOL_UNIQUEVILLAGE","Forbidden Manuscript");
-define("ARTEFACT","NATARS ARTIFACTS
+define("WWVILLAGE","WW village");
+define("ARTEFACT","<h1><b>Natars Artifacts</b></h1>
 
 Whispering rumors echo through the villages, sharing legends told only by the best storytellers. It refers to NATARS, the most feared warrior of the TRAVIAN world. Their killing is the dream of any hero, the purpose of any fighter. No one knows how NATARS got to get such power, and their warriors so cruel. Determined to discover the source of the NATARS power, the fighters send a group of elite spies to spy them. I do not go through many hours and come back with fear in their eyes and balancing fantastic theories: it seems that the natural power comes from the mysterious objects they call artifacts that they stole from our ancestors. Try to steal the artefacts of her, and you can control their power.
 
-PHOTO MUST BE INSERTED HERE
+<img src=\"img/x.gif\" class=\"ArtifactsAnnouncement\">
 
 The time has come for claiming artifacts. Collaborate with your alliance and bring your worriors to get these wanted objects. However, NATARS will not give up without war to the artefacts ... nor your enemies. If you are successful in retrieving artifacts and you will be able to reject enemies, you will be able to collect the rewards. Your buildings will become incredibly strong and mightest, and the troops will be much faster and will consume less food. Capture the artifacts, bring glory over your empire and become new legends for your followers.
 
@@ -1211,7 +1213,7 @@ The construction plans are conquerable immediately when they appear to the serve
 There will be a countdown in game, showing the exact time of the release, 5 days prior to the launch. ");
 
 //WW Village Release Message
-define("WWVILLAGEMSG","Wonder of World Village
+define("WWVILLAGEMSG","<h1><b>Wonder of the World Villages</b></h1>
 
 Countless days have passed since the first battles upon the walls of the cursed villages of the Dread Natars, many armies of both the free ones and the Natarian empire struggled and died before the walls of the many strongholds from which the Natars had once ruled all creation. Now with the dust settled and a relative calm having settled in, armies began to count their losses and collect their dead, the stench of combat still lingering in the night air, a smell of a slaughter unforgettable in its extent and brutality yet soon to be dwarfed by yet others. The largest armies of the free ones and the Dread Natars were marshalling for yet another renewed assault upon the coveted former strongholds of the Natarian Empire.
 Soon scouts arrived telling of a most awesome sight and a chilling reminder, a dread army of an unfathomable size had been spotted marshalling at the end of the world, the Natarian capital, a force so great and unstoppable that the dust from their march would choke off all light, a force so brutal and ruthless that it would crush all hope. The free people knew that they had to race now, race against time and the endless hordes of the Natarian Empire to raise a Wonder of the World to restore the world to peace and vanquish the Natarian threat.
@@ -1219,7 +1221,7 @@ But to raise such a great Wonder would be no easy task, one would need construct
 Tens of thousands of scouts roamed across all existence searching in vain for these mystical plans, looking in all places but the dreaded Natarian Capital, yet could not find them. Today however, they return bearing good news, they return baring the locations of the plans, hidden by the armies of the Natars inside secret strongholds constructed to be hidden from the eyes of man.
 Now begins the final stretch, when the greatest armies of the Free people and the Natars will clash across the world for the fate of all that lies under heaven. This is the war that will echo across the eons, this is your war, and here you shall etch your name across history, here you shall become legend.
 
-PHOTO MUST BE INSERTED HERE
+<img src=\"img/x.gif\" class=\"WWVillagesAnnouncement\" title=\"".WWVILLAGE."\" alt=\"".WWVILLAGE."\">
 
 To conquer one, the following things must happen:
 
@@ -1235,13 +1237,13 @@ To build a WW, you must own a plan yourself (you = the WW village owner) from lv
 
 The construction plans are conquerable immediately when they appear to the server. 
 
-There will be a countdown in game, showing the exact time of the release, 5 days prior to the launch. ");
+There will be a countdown in game, showing the exact time of the release, ".(5 / SPEED)." days prior to the launch. ");
 
 //Building Plans
 define("PLAN","Ancient Construction Plan");
 define("PLANVILLAGE","WW Buildingplan");
 define("PLAN_DESC","With this ancient construction plan you will able to build World Wonder to level 50. to build further, your alliance must hold at least two plans.");
-define("PLAN_INFO","World Wonder Construction Plans 
+define("PLAN_INFO","<h1><b>World Wonder Construction Plans</b></h1>
 
 
 Many moons ago the tribes of Travian were surprised by the unforeseen return of the Natars. This tribe from immemorial times surpassing all in wisdom, might and glory was about to trouble the free ones again. Thus they put all their efforts in preparing a last war against the Natars and vanquishing them forever. Many thought about the so-called 'Wonders of the World', a construction of many legends, as the only solution. It was told that it would render anyone invincible once completed. Ultimately making the constructors the rulers and conquerors of all known Travian. 
@@ -1254,7 +1256,7 @@ Today, however, this last secret will be revealed. Deprivations and endeavors of
 
 In the end, we will see whether the free tribes of Travian can once again outwit the Natars and vanquish them once and for all. Do not be so foolish as to assume that the Natars will leave without a fight, though!
 
-
+<img src=\"img/x.gif\" class=\"WWBuildingPlansAnnouncement\" title=\"".PLAN."\" alt=\"".PLAN."\">
 
 To steal a set of Construction Plans from the Natars, the following things must happen:
 - You must Attack the village (NOT Raid!)
@@ -1269,7 +1271,6 @@ NOTE: If the above criteria is not met during the attack, the next attack on tha
 To build a Treasure Chamber (Treasury), you will need a Main Building level 10 and the village MUST NOT be  contain a World Wonder.
 
 To build a World Wonder, you must own the Construction Plans yourself (you = the World Wonder Village Owner) from level 0 to 50, and then from level 51 to 100 you will need an additional set of Construction Plans in your Alliance! Two sets of Construction Plans in the World Wonder Village Account will not work!");
-define("WWVILLAGE","WW village");
 
 //Admin setting - Admin/Templates/config.tpl & editServerSet.tpl
 define("EDIT_BACK","Back");

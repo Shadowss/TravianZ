@@ -4,8 +4,7 @@ unset($_GET['bid']);
 $bindicator = $building->canBuild($id,$bid);
 $loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
 $doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
-$uprequire = $building->resourceRequired($id,$bid);
-$mastertime = $uprequire['time'];
+$uprequire = $building->resourceRequired($id, $bid);
 ?>
 <td class="res">
 			<img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /><?php echo $uprequire['wood']; ?> | <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $uprequire['clay']; ?> | <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $uprequire['iron']; ?> | <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $uprequire['crop']; ?> | <img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" /><?php echo $uprequire['pop']; ?> | <img class="clock" src="img/x.gif" alt="duration" title="duration" /><?php echo $generator->getTimeFormat($uprequire['time']);
@@ -23,7 +22,7 @@ $mastertime = $uprequire['time'];
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">Constructing with master builder </a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">Constructing with master builder</span>";
@@ -37,7 +36,7 @@ $mastertime = $uprequire['time'];
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">Constructing with master builder </a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">Constructing with master builder</span>";
@@ -61,7 +60,7 @@ $mastertime = $uprequire['time'];
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime&c=$session->checker\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">Constructing with master builder </a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
 		echo "<span class=\"none\">Constructing with master builder</span>";

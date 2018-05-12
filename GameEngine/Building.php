@@ -186,17 +186,18 @@ class Building {
                 $this->canProcess($village->resarray['f'.$get['a'].'t'],$get['a']);
                 $this->upgradeBuilding($get['a']);
             }
-        }elseif(isset($get['master']) && isset($get['id']) && isset($get['time']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker)) {
-            $this->canProcess($get['master'],$get['id']);
+        }elseif(isset($get['master']) && isset($get['id']) && $session->gold >= 1 && $session->goldclub && $village->master == 0 && (isset($get['c']) && $get['c']== $session->checker)) {
+            $this->canProcess($get['master'], $get['id']);
             $session->changeChecker();
             $level = $database->getResourceLevel($village->wid);
-            $database->addBuilding( $village->wid, $get['id'], $get['master'], 1, $get['time'], 1, $level['f' . $get['id']] + 1 + count($database->getBuildingByField($village->wid, $get['id'])));
+            $time = $this->resourceRequired($get['id'], $get['master'])['time'];
+            $database->addBuilding($village->wid, $get['id'], $get['master'], 1, $time, 1, $level['f'.$get['id']] + 1 + count($database->getBuildingByField($village->wid, $get['id'])));
             $this->redirect($get['id']);
         }elseif(isset($get['a']) && $get['c'] == $session->checker && isset($get['id'])) {
             if($get['id'] > 18 && ($get['id'] < 41 || $get['id'] == 99)){
             	$session->changeChecker();
-            	$this->canProcess($get['a'],$get['id']);
-            	$this->constructBuilding($get['id'],$get['a']);
+            	$this->canProcess($get['a'], $get['id']);
+            	$this->constructBuilding($get['id'], $get['a']);
             }
         }
         elseif(isset($get['buildingFinish']) && $session->plus && intval($session->gold) >= 2 && $session->sit == 0) $this->finishAll();
@@ -450,7 +451,7 @@ class Building {
 			$time = time() + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
 			$loop = 0;
 			if($this->inner == 1 || $this->basic == 1) {
-				if(($session->plus or $village->resarray['f'.$id.'t']==40)&& $this->plus == 0) {
+				if(($session->plus || $village->resarray['f'.$id.'t']==40)&& $this->plus == 0) {
 					$loop = 1;
 				}
 			}
@@ -780,9 +781,9 @@ class Building {
             foreach ($this->buildArray as $jobs) {
                 if ($jobs['wid']==$village->wid) {
                     $wwvillage = $database->getResourceLevel($jobs['wid']);
-                    if ($wwvillage['f99t']!=40) {
+                    if ($wwvillage['f99t'] != 40) {
                         $level = $jobs['level'];
-                        if ($jobs['type'] != 25 AND $jobs['type'] != 26 AND $jobs['type'] != 40) {
+                        if ($jobs['type'] != 25 && $jobs['type'] != 26 && $jobs['type'] != 40) {
                             $resource = $this->resourceRequired($jobs['field'],$jobs['type']);
                             // master builder involved
                             if ($jobs['master'] != 0) {
@@ -830,7 +831,7 @@ class Building {
                                 $q = "UPDATE ".TB_PREFIX."fdata set f".$jobs['field']." = ".$jobs['level'].", f".$jobs['field']."t = ".$jobs['type']." where vref = ".$jobs['wid'];
                             }
 
-                            if (!isset($exclude_master) && $database->query($q) && ($enought_res == 1 or $jobs['master'] == 0)) {
+                            if (!isset($exclude_master) && $database->query($q) && ($enought_res == 1 || $jobs['master'] == 0)) {
                                 $database->modifyPop($jobs['wid'],$resource['pop'],0);
                                 $database->addCP($jobs['wid'],$resource['cp']);
                                 $deletIDs[] = (int) $jobs['id'];
@@ -887,56 +888,52 @@ class Building {
         }
     }
 
-	public function resourceRequired($id,$tid,$plus=1) {
+	public function resourceRequired($id, $tid, $plus = 1) {
 		$name = "bid".$tid;
-		global $$name,$village,$bid15;
+		global $$name, $village, $bid15;
+		
 		$dataarray = $$name;
-		$wood = $dataarray[$village->resarray['f'.$id]+$plus]['wood'];
-		$clay = $dataarray[$village->resarray['f'.$id]+$plus]['clay'];
-		$iron = $dataarray[$village->resarray['f'.$id]+$plus]['iron'];
-		$crop = $dataarray[$village->resarray['f'.$id]+$plus]['crop'];
-		$pop = $dataarray[$village->resarray['f'.$id]+$plus]['pop'];
-		if ($tid == 15) {
-			if($this->getTypeLevel(15) == 0) {
-				$time = round($dataarray[$village->resarray['f'.$id]+$plus]['time']/ SPEED *5);
+		$wood = $dataarray[$village->resarray['f'.$id] + $plus]['wood'];
+		$clay = $dataarray[$village->resarray['f'.$id] + $plus]['clay'];
+		$iron = $dataarray[$village->resarray['f'.$id] + $plus]['iron'];
+		$crop = $dataarray[$village->resarray['f'.$id] + $plus]['crop'];
+		$pop = $dataarray[$village->resarray['f'.$id] + $plus]['pop'];
+		
+		if($tid == 15){
+		    if($this->getTypeLevel(15) == 0) $time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] / SPEED * 5);			
+			else $time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] / SPEED);
+		}else{
+			if($this->getTypeLevel(15) > 0) {
+				$time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] * ($bid15[$this->getTypeLevel(15)]['attri'] /100)  / SPEED);
 			}
-			else {
-				$time = round($dataarray[$village->resarray['f'.$id]+$plus]['time'] / SPEED);
-			}
+			else $time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] * 5 / SPEED);
 		}
-		else {
-			if($this->getTypeLevel(15) != 0) {
-				$time = round($dataarray[$village->resarray['f'.$id]+$plus]['time'] * ($bid15[$this->getTypeLevel(15)]['attri']/100)  / SPEED);
-			}
-			else {
-				$time = round($dataarray[$village->resarray['f'.$id]+$plus]['time']*5 / SPEED);
-			}
-		}
-		$cp = $dataarray[$village->resarray['f'.$id]+$plus]['cp'];
-		return array("wood"=>$wood,"clay"=>$clay,"iron"=>$iron,"crop"=>$crop,"pop"=>$pop,"time"=>$time,"cp"=>$cp);
+		
+		$cp = $dataarray[$village->resarray['f'.$id] + $plus]['cp'];
+		return ["wood" => $wood, "clay" => $clay, "iron" => $iron, "crop" => $crop, "pop" => $pop, "time" => $time,"cp" => $cp];
 	}
 
 	public function getTypeField($type) {
 		global $village;
-		for($i=19;$i<=40;$i++) {
-			if($village->resarray['f'.$i.'t'] == $type) {
-				return $i;
-			}
+		
+		for($i = 19; $i <= 40; $i++) {
+		    if($village->resarray['f'.$i.'t'] == $type) return $i;
 		}
 	}
 
-	public function calculateAvaliable($id,$tid,$plus=1) {
-		global $village,$generator;
-		$uprequire = $this->resourceRequired($id,$tid,$plus);
-		$rwood = $uprequire['wood']-$village->awood;
-		$rclay = $uprequire['clay']-$village->aclay;
-		$rcrop = $uprequire['crop']-$village->acrop;
-		$riron = $uprequire['iron']-$village->airon;
+	public function calculateAvaliable($id, $tid, $plus = 1) {
+		global $village, $generator;
+		
+		$uprequire = $this->resourceRequired($id, $tid, $plus);
+		$rwood = $uprequire['wood'] - $village->awood;
+		$rclay = $uprequire['clay'] - $village->aclay;
+		$rcrop = $uprequire['crop'] - $village->acrop;
+		$riron = $uprequire['iron'] - $village->airon;
 		$rwtime = $rwood / $village->getProd("wood") * 3600;
-		$rcltime = $rclay / $village->getProd("clay")* 3600;
-		$rctime = $rcrop / $village->getProd("crop")* 3600;
-		$ritime = $riron / $village->getProd("iron")* 3600;
-		$reqtime = max($rwtime,$rctime,$rcltime,$ritime);
+		$rcltime = $rclay / $village->getProd("clay") * 3600;
+		$rctime = $rcrop / $village->getProd("crop") * 3600;
+		$ritime = $riron / $village->getProd("iron") * 3600;
+		$reqtime = max($rwtime, $rctime, $rcltime, $ritime);
 		$reqtime += time();
 		return $generator->procMtime($reqtime);
 	}

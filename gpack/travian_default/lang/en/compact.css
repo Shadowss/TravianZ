@@ -6964,6 +6964,30 @@ img.online4 {
 img.online5 {
     background-position: -60px 0;
 }
+img.WWVillagesAnnouncement {
+    background-image: url("../../img/artefact/WWVillagesAnnouncement.gif");
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 196px;
+    height: 324px;
+}
+img.ArtifactsAnnouncement {
+    background-image: url("../../img/artefact/ArtifactsAnnouncement.gif");
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 378px;
+    height: 157px;
+}
+img.WWBuildingPlansAnnouncement{
+	background-image: url("../../img/artefact/type-1.gif");
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 551px;
+    height: 168px;
+}
 h1 img.point {
     background-image: url("../../img/u/point.gif");
     height: 16px;
