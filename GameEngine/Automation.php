@@ -812,9 +812,12 @@ class Automation {
             
             $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], $battlepart['catapults']['updown'], $tblevel, $battlepart['catapults']['realAttackers'], $data['t8']);
 
+            //If that building was present in the building queue, we have to modify his level or remove it
+            $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel]);
+            
             // building/field destroyed
             if ($newLevel == 0)
-            {
+            {       
                 // prepare data to be updated
                 $fieldsToSet = ["f".$tbid];
                 $fieldValuesToSet = [0];
@@ -834,20 +837,18 @@ class Automation {
                 $buildarray = $GLOBALS["bid".$tbgid];
                 
                 // (great) warehouse level was changed
-                if ($tbgid==10 || $tbgid==38) {
+                if ($tbgid == 10 || $tbgid == 38) {
                     $database->setMaxStoreForVillage($data['to'], $buildarray[$newLevel]['attri']);
                 }
                 
                 // (great) granary level was changed
-                if ($tbgid==11 || $tbgid==39) {
+                if ($tbgid == 11 || $tbgid == 39) {
                     $database->setMaxCropForVillage($data['to'], $buildarray[$newLevel]['attri']);
                 }
                 
                 // oasis cannot be destroyed
                 $pop = $this->recountPop($data['to'], false);
-                if ($isoasis == 0) {
-                    if($pop == 0 && $can_destroy == 1) $village_destroyed = 1;
-                }
+                if ($isoasis == 0 && $pop == 0 && $can_destroy == 1) $village_destroyed = 1;
                 
                 if ($isSecondRow) {
                     if ($tbid > 0) {
@@ -856,7 +857,7 @@ class Automation {
                     }
                     
                     // embassy level was changed
-                    if ($tbgid==18){
+                    if ($tbgid == 18){
                         $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
                     }
                     
@@ -865,15 +866,14 @@ class Automation {
                     $info_cat = "".$catp_pic.", ".$this->procResType($tbgid, $can_destroy)." <b>destroyed</b>.";
                     
                     // embassy level was changed
-                    if ($tbgid==18){
+                    if ($tbgid == 18){
                         $info_cat .= $database->checkEmbassiesAfterBattle($data['to'], $bdo['f'.$catapultTarget], false);
                     }
                 }
             }
             // building/field not damaged
-            elseif ($newLevel == $tblevel)
-            {
-                if ($isSecondRow) {
+            elseif($newLevel == $tblevel){
+                if($isSecondRow) {
                     if ($tbid > 0) {
                         $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
 					<img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> ".$this->procResType($tbgid, $can_destroy)." was not damaged.</td></tr></tbody>";
@@ -882,9 +882,9 @@ class Automation {
                     $info_cat = "".$catp_pic.",".$this->procResType($tbgid, $can_destroy)." was not damaged.";
                 }
             }
-            else
             // building/field was damaged, let's calculate the actual damage
-            {              
+            else
+            { 
                 // update $bdo, so we don't have to reselect later
                 $bdo['f'.$catapultTarget] = $newLevel;
                 

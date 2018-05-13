@@ -33,10 +33,9 @@
 
             $count = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts"), MYSQLI_ASSOC);
 		    $count = $count['Total'];
-        if($count == 0) {
-        	echo '<td colspan="4" class="none">'.NO_ARTIFACTS.'</td>';
-        } else {
-
+		if($count == 0) echo '<td colspan="4" class="none">'.NO_ARTIFACTS.'</td>';	
+        else 
+        {
 
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 1");
         	while($row = mysqli_fetch_array($artefact)) {
@@ -56,8 +55,6 @@
             
             <?php
 
-        	unset($artefact);
-        	unset($row);
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 2");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
@@ -76,8 +73,6 @@
             
             <?php
 
-        	unset($artefact);
-        	unset($row);
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 3");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
@@ -96,8 +91,6 @@
             
             <?php
 
-        	unset($artefact);
-        	unset($row);
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 4");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
@@ -115,8 +108,6 @@
             
             <?php
 
-        	unset($artefact);
-        	unset($row);
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 5");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
@@ -134,8 +125,6 @@
             
             <?php
 
-        	unset($artefact);
-        	unset($row);
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 6");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
@@ -153,8 +142,6 @@
             
             <?php
 
-        	unset($artefact);
-        	unset($row);
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 7");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
@@ -172,22 +159,6 @@
             
             <?php
 
-        	unset($artefact);
-        	unset($row);
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 2 AND type = 8");
-        	while($row = mysqli_fetch_array($artefact)) {
-        		echo '<tr>';
-        		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
-        		echo '<td class="nam">';
-        		echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">Treasury <b>10</b>, Effect <b>Account</b></div>';
-        		echo '</td>';
-        		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
-        		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
-        		echo '</tr>';
-        	}
-
-        	unset($artefact);
-        	unset($row);
         	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 8");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
@@ -198,6 +169,20 @@
         		echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
         		echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
         		echo '</tr>';
+        	}
+        	?>
+        	<tr><td colspan="4"></td></tr>
+        	<?php
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE type = 11");
+        	while($row = mysqli_fetch_array($artefact)) {
+        	    echo '<tr>';
+        	    echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
+        	    echo '<td class="nam">';
+        	    echo '<a href="build.php?id=' . $id . '&show='.$row['id'].'">' . $row['name'] . '</a> <span class="bon">' . $row['effect'] . '</span><div class="info">'.TREASURY.' <b>10</b>, '.EFFECT.' <b>'.VILLAGE.'</b></div>';
+        	    echo '</td>';
+        	    echo '<td class="pla"><a href="karte.php?d=' . $row['vref'] . '&c=' . $generator->getMapCheck($row['vref']) . '">' . $database->getUserField($row['owner'], "username", 0) . '</a></td>';
+        	    echo '<td class="al"><a href="allianz.php?aid=' . $database->getUserField($row['owner'], "alliance", 0) . '">' . $database->getAllianceName($database->getUserField($row['owner'], "alliance", 0)) . '</a></td>';
+        	    echo '</tr>';
         	}
         }
 ?>

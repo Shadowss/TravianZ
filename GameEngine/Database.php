@@ -4941,7 +4941,7 @@ References: User ID/Message ID, Mode
 	}
 
 	function checkEmbassiesAfterBattle($vid, $current_level, $use_cache = true) {
-        $userData = $this->getUserArray($this->getVillageField($vid,"owner"), 1);
+        $userData = $this->getUserArray($this->getVillageField($vid, "owner"), 1);
 
         Automation::updateMax($this->getVillageField($vid,"owner"));
         $allianceStatus = $this->checkAllianceEmbassiesStatus([
@@ -4951,16 +4951,29 @@ References: User ID/Message ID, Mode
             'lvl'      => $current_level
         ], false, $use_cache);
 
-        if ($allianceStatus === false) {
-            return ' This player\'s alliance has been dispersed.';
-        } else if ($allianceStatus === 0) {
-            return ' Player was forced to leave their alliance.';
-        } else {
-            // all is good, no need to append additional alliance-related text
-            return '';
-        }
+        if ($allianceStatus === false) return ' This player\'s alliance has been dispersed.';    
+	    else if ($allianceStatus === 0) return ' Player was forced to leave their alliance.';          
+	    else return ''; // all is good, no need to append additional alliance-related text 
     }
 
+    /**
+     * Modify or delete a building being constructed/in queue
+     * 
+     * @param int The village ID
+     * @param int $field The field where the building is located
+     * @param array $levels The new level of the building and the old one
+     * @return bool Returns true if the query was successful, false otherwise
+     */
+    
+    function modifyBData($wid, $field, $levels){
+        list($wid, $field, $levels) = $this->escape_input((int) $wid, (int) $field, $levels);
+        
+        if($levels[0] == 0) $q = "DELETE FROM " .TB_PREFIX. "bdata WHERE wid = $wid AND field = $field";    
+        else $q = "UPDATE " .TB_PREFIX. "bdata SET level = level - $levels[1] + $levels[0] WHERE wid = $wid AND field = $field";
+ 
+        return mysqli_query($this->dblink, $q);
+    }
+    
     private function getBData($wid, $use_cache = true) {
 	    $wid = (int) $wid;
 
