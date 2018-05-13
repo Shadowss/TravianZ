@@ -810,7 +810,7 @@ class Automation {
             // currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
             $tbid = (int) $catapultTarget;          
             
-            $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], $battlepart['catapults']['updown'], $tblevel, $battlepart['catapults']['realAttackers'], $data['t8']);
+            $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], $battlepart['catapults']['updown'], $tblevel, $battlepart['catapults']['realAttackers']  / ($twoRowsCatapultSetup ? 2 : 1), $data['t8'] / ($twoRowsCatapultSetup ? 2 : 1));
 
             //If that building was present in the building queue, we have to modify his level or remove it
             $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel]);
