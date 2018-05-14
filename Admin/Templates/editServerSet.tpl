@@ -101,6 +101,18 @@ function refresh(tz) {
 						<td><input class="fm" name="natars_units" value="<?php echo NATARS_UNITS;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
+						<td><?php echo CONF_SERV_NATARS_SPAWN_TIME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATARS_SPAWN_TIME_TOOLTIP ?></span></em></td>
+						<td><input class="fm" name="natars_spawn_time" value="<?php echo NATARS_SPAWN_TIME;?>" style="width: 20%;"></td>
+					</tr>
+					<tr>
+						<td><?php echo CONF_SERV_NATARS_WW_SPAWN_TIME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATARS_WW_SPAWN_TIME_TOOLTIP ?></span></em></td>
+						<td><input class="fm" name="natars_ww_spawn_time" value="<?php echo NATARS_WW_SPAWN_TIME;?>" style="width: 20%;"></td>
+					</tr>
+					<tr>
+						<td><?php echo CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME_TOOLTIP ?></span></em></td>
+						<td><input class="fm" name="natars_ww_building_plan_spawn_time" value="<?php echo NATARS_WW_BUILDING_PLAN_SPAWN_TIME;?>" style="width: 20%;"></td>
+					</tr>
+					<tr>
 						<td><?php echo CONF_SERV_MAPSIZE ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_MAPSIZE_TOOLTIP ?></span></em></td>
 						<td><?php echo WORLD_MAX;?>x<?php echo WORLD_MAX;?></td>
 					</tr>
@@ -189,17 +201,33 @@ function refresh(tz) {
 						<td><?php echo CONF_SERV_NTRTIME ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_NTRTIME_TOOLTIP ?></span></em></td>
 						<td>
 							<select name="nature_regtime">
-								<option value="28800" <?php if(NATURE_REGTIME==28800) echo "selected";?>>8 hours</option>
-								<option value="36000" <?php if(NATURE_REGTIME==36000) echo "selected";?>>10 hours</option>
-								<option value="43200" <?php if(NATURE_REGTIME==43200) echo "selected";?>>12 hours</option>
-                                <option value="57600" <?php if(NATURE_REGTIME==57600) echo "selected";?>>16 hours</option>
-                                <option value="72000" <?php if(NATURE_REGTIME==72000) echo "selected";?>>20 hours</option>
-								<option value="86400" <?php if(NATURE_REGTIME==86400) echo "selected";?>>24 hours (1 day)</option>
-								<option value="172800" <?php if(NATURE_REGTIME==172800) echo "selected";?>>48 hours (2 days)</option>
-								<option value="259200" <?php if(NATURE_REGTIME==259200) echo "selected";?>>72 hours (3 days)</option>
-								<option value="432000" <?php if(NATURE_REGTIME==432000) echo "selected";?>>120 hours (5 days)</option>
+								<option value="28800" <?php if(NATURE_REGTIME == 28800) echo "selected";?>>8 hours</option>
+								<option value="36000" <?php if(NATURE_REGTIME == 36000) echo "selected";?>>10 hours</option>
+								<option value="43200" <?php if(NATURE_REGTIME == 43200) echo "selected";?>>12 hours</option>
+                                <option value="57600" <?php if(NATURE_REGTIME == 57600) echo "selected";?>>16 hours</option>
+                                <option value="72000" <?php if(NATURE_REGTIME == 72000) echo "selected";?>>20 hours</option>
+								<option value="86400" <?php if(NATURE_REGTIME == 86400) echo "selected";?>>24 hours (1 day)</option>
+								<option value="172800" <?php if(NATURE_REGTIME == 172800) echo "selected";?>>48 hours (2 days)</option>
+								<option value="259200" <?php if(NATURE_REGTIME == 259200) echo "selected";?>>72 hours (3 days)</option>
+								<option value="432000" <?php if(NATURE_REGTIME == 432000) echo "selected";?>>120 hours (5 days)</option>
 							</select>
 						</td>
+					</tr>
+					<tr>
+						<td><?php echo CONF_SERV_OASIS_WOOD_PROD_MULT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_OASIS_WOOD_PROD_MULT_TOOLTIP ?></span></em></td>
+						<td><input class="fm" name="oasis_wood_multiplier" value="<?php echo OASIS_WOOD_MULTIPLIER;?>" style="width: 20%;"></td>
+					</tr>
+					<tr>
+						<td><?php echo CONF_SERV_OASIS_CLAY_PROD_MULT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_OASIS_CLAY_PROD_MULT_TOOLTIP ?></span></em></td>
+						<td><input class="fm" name="oasis_clay_multiplier" value="<?php echo OASIS_CLAY_MULTIPLIER;?>" style="width: 20%;"></td>
+					</tr>
+					<tr>
+						<td><?php echo CONF_SERV_OASIS_IRON_PROD_MULT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_OASIS_IRON_PROD_MULT_TOOLTIP ?></span></em></td>
+						<td><input class="fm" name="oasis_iron_multiplier" value="<?php echo OASIS_IRON_MULTIPLIER;?>" style="width: 20%;"></td>
+					</tr>
+					<tr>
+						<td><?php echo CONF_SERV_OASIS_CROP_PROD_MULT ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_OASIS_CROP_PROD_MULT_TOOLTIP ?></span></em></td>
+						<td><input class="fm" name="oasis_crop_multiplier" value="<?php echo OASIS_CROP_MULTIPLIER;?>" style="width: 20%;"></td>
 					</tr>
 					<tr>
 						<td><?php echo CONF_SERV_MEDALINTERVAL ?> <em class="tooltip">?<span class="classic"><?php echo CONF_SERV_MEDALINTERVAL_TOOLTIP ?></span></em></td>

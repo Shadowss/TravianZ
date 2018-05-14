@@ -4386,118 +4386,55 @@ References: User ID/Message ID, Mode
 
 	function removeBuilding($d) {
 	    list($d) = $this->escape_input((int) $d);
-		global $building, $village;
+		global $building, $village, $session;
+
+		//Variables initialization
+		$jobToDelete = [];
+		$canBeRemoved = true;
+		$time = time();
+		$newTime = $loopTime = 0;
 		
-		$jobLoopconID = -1;
-		$SameBuildCount = 0;
+		//Search the job which needs to be deleted
 		$jobs = $building->buildArray;
-		for($i = 0; $i < sizeof($jobs); $i++) {
-			if($jobs[$i]['id'] == $d) {
-				$jobDeleted = $i;
+		foreach($jobs as $job){	
+			//We need to modify waiting loop orders
+			if(!empty($jobToDelete) && $job['loopcon'] == 1 && ($session->tribe != 1 || $session->tribe == 1 && (($jobToDelete['field'] <= 18 && $job['field'] <= 18) ||  ($jobToDelete['field'] >= 19 && $job['field'] >= 19)))){
+				
+				//Does this job have the same field of the deleted one?
+				$sameBuilding = $jobToDelete['field'] == $job['field'] ? 1 : 0;
+				
+				//Can the building be completely removed from the village?
+				if($sameBuilding && $canBeRemoved) $canBeRemoved = !$sameBuilding;
+				
+				//Get the time required to upgrade the building at the given level	
+				$newTime = $building->resourceRequired($job['field'], 
+						$job['type'], 
+						$job['level'] - $village->resarray['f'.$job['field']] - $sameBuilding)['time'];
+				
+				//Increase the looptime
+				$loopTime += $newTime;
+				
+				//Update the values
+				$q = "UPDATE
+							" .TB_PREFIX. "bdata
+ 					  SET
+							".($job['master'] ? "" : "loopcon = 0,")."
+							timestamp = ".($job['master'] ? $newTime : $loopTime + $time)."
+							".($sameBuilding ? ", level = level - 1" : "")."
+					  WHERE
+							id = ".$job['id'];
+				mysqli_query($this->dblink, $q);
+						
 			}
-			if($jobs[$i]['loopcon'] == 1 && $jobs[$i]['master'] == 0) {
-				$jobLoopconID = $i;
-			}
-			if($jobs[$i]['master'] == 1) {
-				$jobMaster = $i;
-				$level = $jobs[$i]['level'];
-			}
-		}
-		if(count($jobs) > 1 && ($jobs[0]['field'] == $jobs[1]['field'])) {
-			$SameBuildCount = 1;
-		}
-		if(count($jobs) > 2 && ($jobs[0]['field'] == $jobs[2]['field'])) {
-			$SameBuildCount = 2;
-		}
-		if(count($jobs) > 2 && ($jobs[1]['field'] == $jobs[2]['field'])) {
-			$SameBuildCount = 3;
-		}
-		if(count($jobs) > 3 && ($jobs[0]['field'] == $jobs[3]['field'])) {
-			$SameBuildCount = 8;
-		}
-		if(count($jobs) > 3 && ($jobs[1]['field'] == $jobs[3]['field'])) {
-			$SameBuildCount = 9;
-		}
-		if(count($jobs) > 3 && ($jobs[2]['field'] == $jobs[3]['field'])) {
-			$SameBuildCount = 10;
-		}
-		if(count($jobs) > 2 && ($jobs[0]['field'] == $jobs[1]['field'] && $jobs[1]['field'] == $jobs[2]['field'])) {
-			$SameBuildCount = 4;
-		}
-		if(count($jobs) > 3 && ($jobs[0]['field'] == $jobs[1]['field'] && $jobs[1]['field'] == $jobs[3]['field'])) {
-			$SameBuildCount = 5;
-		}
-		if(count($jobs) > 3 && ($jobs[0]['field'] == $jobs[2]['field'] && $jobs[2]['field'] == $jobs[3]['field'])) {
-			$SameBuildCount = 6;
-		}
-		if(count($jobs) > 3 && ($jobs[1]['field'] == $jobs[2]['field'] && $jobs[2]['field'] == $jobs[3]['field'])) {
-			$SameBuildCount = 7;
-		}
-		if(isset($jobMaster) && isset($level) && $level - 1 <= 0){
-		    $SameBuildCount = 0;
+			
+			//We found the job that needs to be deleted
+			if($job['id'] == $d) $jobToDelete = $job;
+		}	
+
+		if($canBeRemoved && $jobToDelete['field'] > 18 && $jobToDelete['type'] != 99 && $jobToDelete['level'] - 1 == 0){
+			$this->setVillageLevel($village->wid, ["f".$jobToDelete['field']."t"], [0]);
 		}
 		
-		if ($SameBuildCount > 0) {
-            if ($SameBuildCount > 3) {
-                if ($SameBuildCount == 4 || $SameBuildCount == 5) {
-                    if ($jobDeleted == 0) {
-                        $uprequire = $building->resourceRequired($jobs[1]['field'], $jobs[1]['type'], 1);
-                        $time = $uprequire['time'];
-                        $timestamp = $time + time();
-                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . $timestamp . " WHERE id=" . (int) $jobs[1]['id'];
-                        mysqli_query($this->dblink, $q);
-                    }
-                } else if ($SameBuildCount == 6) {
-                    if ($jobDeleted == 0) {
-                        $uprequire = $building->resourceRequired($jobs[2]['field'], $jobs[2]['type'], 1);
-                        $time = $uprequire['time'];
-                        $timestamp = $time + time();
-                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . $timestamp . " WHERE id=" . (int) $jobs[2]['id'];
-                        mysqli_query($this->dblink, $q);
-                    }
-                } else if ($SameBuildCount == 7) {
-                    if ($jobDeleted == 1) {
-                        $uprequire = $building->resourceRequired($jobs[2]['field'], $jobs[2]['type'], 1);
-                        $time = $uprequire['time'];
-                        $timestamp = $time + time();
-                        $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . $timestamp . " WHERE id=" . (int) $jobs[2]['id'];
-                        mysqli_query($this->dblink, $q);
-                    }
-                }
-                if ($SameBuildCount < 8) {
-                    $uprequire = $building->resourceRequired($jobs[$jobMaster]['field'], $jobs[$jobMaster]['type'], 2);
-                    $q1 = "UPDATE " . TB_PREFIX . "bdata SET level=level-1,timestamp=" . $uprequire['time'] . " WHERE id=" . (int) $jobs[$jobMaster]['id'];
-                    mysqli_query($this->dblink, $q1);
-                } else {
-                    $uprequire = $building->resourceRequired($jobs[$jobMaster]['field'], $jobs[$jobMaster]['type'], 1);
-                    $q1 = "UPDATE " . TB_PREFIX . "bdata SET level=level-1,timestamp=" . $uprequire['time'] . " WHERE id=" . (int) $jobs[$jobMaster]['id'];
-                    mysqli_query($this->dblink, $q1);
-                }
-            } else if ($d == $jobs[floor($SameBuildCount / 3)]['id'] || $d == $jobs[floor($SameBuildCount / 2) + 1]['id']) {
-                $q = "UPDATE " . TB_PREFIX . "bdata SET loopcon=0,level=level-1,timestamp=" . (int) $jobs[floor($SameBuildCount / 3)]['timestamp'] . " WHERE master = 0 AND id > " . $d . " and (ID=" . (int) $jobs[floor($SameBuildCount / 3)]['id'] . " OR ID=" . (int) $jobs[floor($SameBuildCount / 2) + 1]['id'] . ")";
-                mysqli_query($this->dblink, $q);
-            }
-        } else {
-            if ($jobs[$jobDeleted]['field'] >= 19) {
-                $x = "SELECT f" . $jobs[$jobDeleted]['field'] . " FROM " . TB_PREFIX . "fdata WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
-                $result = mysqli_query($this->dblink, $x);
-                $fieldlevel = mysqli_fetch_row($result);
-                if ($fieldlevel[0] == 0) {
-                    if ($village->natar == 1 && $jobs[$jobDeleted]['field'] == 99) { // fix by ronix
-                    } else {
-                        $x = "UPDATE " . TB_PREFIX . "fdata SET f" . $jobs[$jobDeleted]['field'] . "t=0 WHERE vref=" . (int) $jobs[$jobDeleted]['wid'];
-                        mysqli_query($this->dblink, $x);
-                    }
-                }
-            }
-            if (($jobLoopconID >= 0) && ($jobs[$jobDeleted]['loopcon'] != 1)) {
-                if (($jobs[$jobLoopconID]['field'] <= 18 && $jobs[$jobDeleted]['field'] <= 18) || ($jobs[$jobLoopconID]['field'] >= 19 && $jobs[$jobDeleted]['field'] >= 19) || sizeof($jobs) < 4) {
-                    $uprequire = $building->resourceRequired($jobs[$jobLoopconID]['field'], $jobs[$jobLoopconID]['type']);
-                    $x = "UPDATE " . TB_PREFIX . "bdata SET loopcon = 0,timestamp=" . (time() + (int) $uprequire['time']) . " WHERE wid=" . (int) $jobs[$jobDeleted]['wid'] . " AND loopcon = 1 AND master = 0";
-                    mysqli_query($this->dblink, $x);
-                }
-            }
-        }
         $q = "DELETE FROM " . TB_PREFIX . "bdata where id = $d";
         return mysqli_query($this->dblink, $q);
 	}
