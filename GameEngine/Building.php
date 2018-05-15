@@ -23,7 +23,7 @@ class Building {
 	private $maxConcurrent;
 	private $allocated;
 	private $basic,$inner,$plus = 0;
-	public $buildArray = array();
+	public $buildArray = [];
 
 	public function __construct() {
 		global $session;
@@ -369,7 +369,7 @@ class Building {
 		foreach($this->buildArray as $jobs) {
 			if($jobs['id'] == $d) {
 				$uprequire = $this->resourceRequired($jobs['field'], $jobs['type']);
-				if($database->removeBuilding($d)) {
+				if($database->removeBuilding($d, $session->tribe, $village->wid, $village->resarray)) {
 				    if($jobs['master'] == 0) $database->modifyResource($village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 1);
 					$this->redirect($jobs['field']);
 				}

@@ -733,23 +733,18 @@ class MYSQLi_DB implements IDbConnection {
         list($username, $password, $email, $tribe, $act) = $this->escape_input($username, $password, $email, $tribe, $act);
 
 		$time = time();
-        	$stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
-		if($stime > time()){
-		$time = $stime;
-		}
+        $stime = strtotime(START_DATE) - strtotime(date('m/d/Y')) + strtotime(START_TIME);
+        if($stime > $time) $time = $stime;
 		$timep = $time + PROTECTION;
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime,is_bcrypt) VALUES ('$username', '$password', " . USER . ", '$email', $time, " . (int) $tribe . ", '$act', $timep, $time, $time,1)";
-		if(mysqli_query($this->dblink,$q)) {
-			return mysqli_insert_id($this->dblink);
-		} else {
+		if(mysqli_query($this->dblink,$q)) return mysqli_insert_id($this->dblink);		
+		else 
+		{
 		    // if an error has occured, we probably don't have DB converted to handle bcrypt passwords yet
 		    $q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, " . (int) $tribe . ", '$act', $timep, $time, $time)";
-		    if(mysqli_query($this->dblink,$q)) {
-		        return mysqli_insert_id($this->dblink);
-		    } else {
-			    return false;
-		    }
+		    if(mysqli_query($this->dblink,$q)) return mysqli_insert_id($this->dblink);	      
+		    else return false;
 		}
 	}
 
@@ -4384,32 +4379,43 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function removeBuilding($d) {
-	    list($d) = $this->escape_input((int) $d);
-		global $building, $village, $session;
+	/**
+	 * Called when removing a queued building by a player or because destroyed by catapults
+	 * 
+	 * @param int $d The ID of the building which needs to be deleted
+	 * @param int $tribe The tribe of the player
+	 * @param int $wid The village ID of the player
+	 * @param array $fieldsArray Optional, the array containing the village building/resource fields
+	 * @return bool Returns true if the building was delete successfully, false otherwise
+	 */
+	
+	function removeBuilding($d, $tribe, $wid, $fieldsArray = []) {
+		list($d, $tribe, $wid, $fieldsArray) = $this->escape_input((int) $d, (int) $tribe, (int) $wid, $fieldsArray);
+		global $building;
 
 		//Variables initialization
 		$jobToDelete = [];
 		$canBeRemoved = true;
 		$time = time();
 		$newTime = $loopTime = 0;
+		if(empty($fieldsArray)) $fieldsArray = $this->getResourceLevel($wid);
+		$jobs = $this->getJobs($wid);
 		
-		//Search the job which needs to be deleted
-		$jobs = $building->buildArray;
+		//Search the job which needs to be deleted	
 		foreach($jobs as $job){	
 			//We need to modify waiting loop orders
-			if(!empty($jobToDelete) && $job['loopcon'] == 1 && ($session->tribe != 1 || $session->tribe == 1 && (($jobToDelete['field'] <= 18 && $job['field'] <= 18) ||  ($jobToDelete['field'] >= 19 && $job['field'] >= 19)))){
+			if(!empty($jobToDelete) && $job['loopcon'] == 1 && ($tribe != 1 || $tribe == 1 && (($jobToDelete['field'] <= 18 && $job['field'] <= 18) ||  ($jobToDelete['field'] >= 19 && $job['field'] >= 19)))){
 				
 				//Does this job have the same field of the deleted one?
 				$sameBuilding = $jobToDelete['field'] == $job['field'] ? 1 : 0;
 				
 				//Can the building be completely removed from the village?
-				if($sameBuilding && $canBeRemoved) $canBeRemoved = !$sameBuilding;
+				if($sameBuilding && $canBeRemoved) $canBeRemoved = !$sameBuilding;		
 				
 				//Get the time required to upgrade the building at the given level	
 				$newTime = $building->resourceRequired($job['field'], 
 						$job['type'], 
-						$job['level'] - $village->resarray['f'.$job['field']] - $sameBuilding)['time'];
+						$job['level'] - $fieldsArray['f'.$job['field']] - $sameBuilding)['time'];
 				
 				//Increase the looptime
 				$loopTime += $newTime;
@@ -4432,7 +4438,7 @@ References: User ID/Message ID, Mode
 		}	
 
 		if($canBeRemoved && $jobToDelete['field'] > 18 && $jobToDelete['type'] != 99 && $jobToDelete['level'] - 1 == 0){
-			$this->setVillageLevel($village->wid, ["f".$jobToDelete['field']."t"], [0]);
+			$this->setVillageLevel($wid, ["f".$jobToDelete['field']."t"], [0]);
 		}
 		
         $q = "DELETE FROM " . TB_PREFIX . "bdata where id = $d";
@@ -4899,16 +4905,18 @@ References: User ID/Message ID, Mode
      * @param int The village ID
      * @param int $field The field where the building is located
      * @param array $levels The new level of the building and the old one
-     * @return bool Returns true if the query was successful, false otherwise
+     * @param int $tribe The player's tribe
      */
     
-    function modifyBData($wid, $field, $levels){
-        list($wid, $field, $levels) = $this->escape_input((int) $wid, (int) $field, $levels);
+    function modifyBData($wid, $field, $levels, $tribe){
+    	list($wid, $field, $levels, $tribe) = $this->escape_input((int) $wid, (int) $field, (int) $levels, (int) $tribe);
         
-        if($levels[0] == 0) $q = "DELETE FROM " .TB_PREFIX. "bdata WHERE wid = $wid AND field = $field";    
-        else $q = "UPDATE " .TB_PREFIX. "bdata SET level = level - $levels[1] + $levels[0] WHERE wid = $wid AND field = $field";
- 
-        return mysqli_query($this->dblink, $q);
+        if($levels[0] == 0){ 
+        	$q = "SELECT id FROM " .TB_PREFIX. "bdata WHERE wid = $wid AND field = $field";
+        	$orders = $this->mysqli_fetch_all(mysqli_query($this->dblink, $q));
+        	foreach($orders as $order) $this->removeBuilding($order['id'], $tribe, $wid);
+        }
+        else mysqli_query($this->dblink, $q = "UPDATE " .TB_PREFIX. "bdata SET level = level - $levels[1] + $levels[0] WHERE wid = $wid AND field = $field");
     }
     
     private function getBData($wid, $use_cache = true) {

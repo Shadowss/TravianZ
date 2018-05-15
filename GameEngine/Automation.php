@@ -798,7 +798,7 @@ class Automation {
         }
     }
 
-    private function resolveCatapultsDestruction(&$bdo, &$battlepart, &$info_cat, &$data, $catapultTarget, $twoRowsCatapultSetup, $isSecondRow, $catp_pic, $can_destroy, $isoasis, &$village_destroyed) {
+    private function resolveCatapultsDestruction(&$bdo, &$battlepart, &$info_cat, &$data, $catapultTarget, $twoRowsCatapultSetup, $isSecondRow, $catp_pic, $can_destroy, $isoasis, &$village_destroyed, $tribe) {
         global $battle, $database, $bid34;
 
         if(isset($catapultTarget))
@@ -813,7 +813,7 @@ class Automation {
             $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], $battlepart['catapults']['updown'], $tblevel, $battlepart['catapults']['realAttackers']  / ($twoRowsCatapultSetup ? 2 : 1), $data['t8'] / ($twoRowsCatapultSetup ? 2 : 1));
 
             //If that building was present in the building queue, we have to modify his level or remove it
-            $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel]);
+            $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel], $tribe);
             
             // building/field destroyed
             if ($newLevel == 0)
@@ -1940,7 +1940,7 @@ class Automation {
                                      * resolve 1st row of catapults
                                      */
                                     $village_destroyed = 0;
-                                    $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget, !$catapults2WillNotShoot, false, $catp_pic, $can_destroy, $isoasis, $village_destroyed);
+                                    $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget, !$catapults2WillNotShoot, false, $catp_pic, $can_destroy, $isoasis, $village_destroyed, $targettribe);
                                     
                                     /**
                                      * SECOND CATAPULTS ROW
@@ -1998,7 +1998,7 @@ class Automation {
                                      * resolve 2nd row of catapults
                                      */
                                     if (!$catapults2WillNotShoot) {
-                                        $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget2, true, true, $catp_pic, $can_destroy, $isoasis, $village_destroyed);
+                                        $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget2, true, true, $catp_pic, $can_destroy, $isoasis, $village_destroyed, $targettribe);
                                     }
                                     
                                     // clear resource levels cache, since we might have destroyed buildings/fields by now
