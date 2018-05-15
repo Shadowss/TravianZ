@@ -98,7 +98,7 @@ class Logging {
 		global $database;
 	}
 
-	public function debug($debug_info, $time = 0) {
+	public static function debug($debug_info, $time = 0) {
 		global $database, $generator;
 		list($debug_info) = $database->escape_input($debug_info);
 		
@@ -107,5 +107,4 @@ class Logging {
 };
 
 $logging = new Logging;
-//$logging->debug(time(),2,'Logging.php loaded');
 ?>

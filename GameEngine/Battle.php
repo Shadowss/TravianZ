@@ -250,7 +250,9 @@ class Battle {
         //dp = Infantry defense points
         //rap = Result attack points
         //rdp = Result defense points
+        //detected = Detected or not by enemy spies
         $cap = $ap = $dp = $cdp = $rap = $rdp = 0;
+        $detected = false;
         
         //Get involved artifacts
         $attacker_artefact = $database->getArtifactsValueInfluence($AttackerID, $AttackerWref, 3, 1, false);
@@ -269,7 +271,7 @@ class Battle {
             $dp += $datadefScout['dp'];
             $cdp += $datadefScout['cdp'];
             $involve = $datadefScout['involve'];
-            if ($datadefScout['detect'] == 1) $detected = 1;
+            if(!$detected && $datadefScout['detect']) $detected = $datadefScout['detect'];
         }else{
             $datadef = $this->getDataDef($Defender, $def_ab);
             $dp += $datadef['dp'];
@@ -319,7 +321,7 @@ class Battle {
                     $dp += $datadefScout['dp'];
                     $cdp += $datadefScout['cdp'];
                     $involve = $datadefScout['involve'];
-                    if ($datadefScout['detect'] == 1) $detected = 1;
+                    if(!$detected && $datadefScout['detect']) $detected = $datadefScout['detect'];
                 }else{
                     $datadef = $this->getDataDef($defenders, $def_ab);
                     $dp += $datadef['dp'];
@@ -419,7 +421,7 @@ class Battle {
             // Defense infantry = Infantry * Wall (%)
             // Defense calvary calvary = * Wall (%)          
             if ($dp > 0 || $cdp > 0){
-                if($type==1) {
+                if($type == 1) {
                     $dp *=  $wallMultiplier;
                     $dp += 10;
                 }else{                
@@ -486,24 +488,22 @@ class Battle {
             $holder = pow((($rdp * $moralbonus) / $rap), $Mfactor);
             if($holder > 1) $holder = 1;
             if ($rdp > $rap) $holder = 1;
-
-            // Attacker
-            $result[1] = $holder;
             
             //Birds of Prey cannot die when scouting
             //Spies cannot die if the attacked village has no defending spies
-            if ($att_tribe == 5 || !$detected) $result[1] = 0;
+            //Attacker result
+            $result[1] = ($att_tribe == 5 || !$detected) ? 0 : $holder;
 
-            // Defender
+            //Defender result
             $result[2] = 0;
         }else if($type == 2){
 
         }else if($type == 4) {
             $holder = ($winner) ? pow((($rdp * $moralbonus) / $rap), $Mfactor) : pow(($rap / ($rdp * $moralbonus)), $Mfactor);
             $holder = $holder / (1 + $holder);
-            // Attacker
+            //Attacker result
             $result[1] = $winner ? $holder : 1 - $holder;
-            // Defender
+            //Defender result
             $result[2] = $winner ? 1 - $holder : $holder;
             $ram -= round($ram * $result[1] / 100);
             $catp -= round($catp * $result[1] / 100);
@@ -686,22 +686,23 @@ class Battle {
 
     public function getDataDefScout($defenders, $def_ab, $defender_artefact) {
         $abcount = 1;
-        $invol = $dp = $cdp = $detected = 0;
+        $invol = $dp = $cdp = 0;
+        $detected = false;
         
-        for($y = 4; $y <= 54; $y++) {
+        for($y = 4; $y <= 50; $y++) {
             if($y == 4 || $y == 14 || $y == 23 || $y == 44){
                 global ${'u'.$y};
 
-                if($defenders['u'.$y] > 0 && $def_ab[$y] > 0) {
+                if($defenders['u'.$y] > 0 && $def_ab[$y] > 0){
                     $dp += round(20 + (20 + 300 * ${'u'.$y}['pop'] / 7) * (pow(1.007, $def_ab[$y]) - 1), 4) * $defenders['u'.$y] * $defender_artefact;
-                }else {
-                    if($defenders['u'.$y] > 0) {
-                        $dp +=  $defenders['u'.$y] * 20 * $defender_artefact;
-                    }
-
-                    $units['Def_unit'][$y] = $defenders['u'.$y];
-                    if($units['Def_unit'][$y] > 0) $detected = 1;
+                    $detected = true;
+                }else{
+                	if($defenders['u'.$y] > 0){
+                		$dp +=  $defenders['u'.$y] * 20 * $defender_artefact;
+                		$detected = true;
+                	}
                 }
+                
                 $invol += $defenders['u'.$y]; //total troops
                 $units['Def_unit'][$y] = $defenders['u'.$y];
             }
