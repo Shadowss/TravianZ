@@ -1,3 +1,6 @@
+-- 16.05.2018 -> dropped four columns
+ALTER TABLE `s1_raidlist` DROP `t7`, DROP `t8`, DROP `t9`, DROP `t10`;
+
 -- 23.04.2018 -> new table
 CREATE TABLE IF NOT EXISTS `s1_artefacts_chrono` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

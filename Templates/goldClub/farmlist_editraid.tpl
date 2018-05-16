@@ -3,8 +3,14 @@ if(isset($_GET['action']) == 'editSlot' && $_GET['eid']) {
     $eiddata = $database->getRaidList($_GET['eid']);
     $x = $eiddata['x'];
     $y = $eiddata['y'];
-    for($i = 1; $i <= 10; $i++) ${'t'.$i} = $eiddata['t'.$i];
+    for($i = 1; $i <= 6; $i++) ${'t'.$i} = $eiddata['t'.$i];
     $FLData = $database->getFLData($eiddata['lid']);
+    
+    //Check if we're editing one of ours raidlists
+    if($FLData['owner'] != $session->uid){
+    	header("Location: build.php?id=39&t=99");
+    	exit;
+    }
 }
 
 if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET['eid']) && isset($_POST['lid']) && !empty($_POST['lid'])) {
@@ -26,7 +32,9 @@ if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET[
     }
 
     $troops = 0;
-    for($i = 1; $i <= 10; $i++) $troops += $_POST['t'.$i];
+    for($i = 1; $i <= 6; $i++){
+    	if(!in_array($i + ($session->tribe - 1) * 10, [4, 14, 23])) $troops += $_POST['t'.$i];
+    }
     
     if(empty($_POST['x']) && empty($_POST['y']) && empty($_POST['target_id'])) $errormsg = "Enter coordinates.";
     elseif((empty($_POST['x']) || empty($_POST['y'])) && empty($_POST['target_id'])) $errormsg = "Enter the correct coordinates.";  	
@@ -36,7 +44,6 @@ if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET[
     elseif($_POST['target_id'] == $village->wid || $vdata['wref'] == $village->wid) $errormsg = "You can't attack the same village you send troops from.";
     else
     {
-
 		if(!empty($_POST['target_id'])){
 		    $Wref = $_POST['target_id'];
 		    $WrefCoor = $database->getCoor($Wref);
@@ -47,28 +54,15 @@ if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET[
 		    $WrefX = $_POST['x'];
 		    $WrefY = $_POST['y'];
 		}
-		$coor = $database->getCoor($village->wid);
-
-		function getDistance($coorx1, $coory1, $coorx2, $coory2) {
-		    $max = 2 * WORLD_MAX + 1;
-		    $x1 = intval($coorx1);
-		    $y1 = intval($coory1);
-		    $x2 = intval($coorx2);
-		    $y2 = intval($coory2);
-		    $distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
-		    $distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
-		    $dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
-		    return round($dist, 1);
-		}
 		
-		$distance = getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);  
-		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $database->getRaidList($_GET['eid'])['lid'], $session->uid, $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6'], $_POST['t7'], $_POST['t8'], $_POST['t9'], $_POST['t10']);
+		$coor = $database->getCoor($village->wid);
+		$distance = $database->getDistance($coor['x'], $coor['y'], $WrefX, $WrefY);  
+		$database->editSlotFarm($_GET['eid'], $_POST['lid'], $database->getRaidList($_GET['eid'])['lid'], $session->uid, $Wref, $WrefX, $WrefY, $distance, $_POST['t1'], $_POST['t2'], $_POST['t3'], $_POST['t4'], $_POST['t5'], $_POST['t6']);
         
         header("Location: build.php?id=39&t=99");
 		exit;
 }
 }
-if($FLData['owner'] == $session->uid){
 ?>
 
 <div id="raidListSlot">
@@ -95,8 +89,6 @@ $sql = mysqli_query($database->dblink,"SELECT id, name, owner, wref FROM ".TB_PR
 while($row = mysqli_fetch_array($sql)){ 
 $lid = $row["id"];
 $lname = $row["name"];
-$lowner = $row["owner"];
-$lwref = $row["wref"];
 $lvname = $database->getVillageField($row["wref"], 'name');
 
 	if($lid == $lid2) $selected = 'selected=""'; 
@@ -127,26 +119,25 @@ $lvname = $database->getVillageField($row["wref"], 'name');
 							<label class="lastTargets">Last targets:</label>
 							<select name="target_id">
 <?php
-$getwref = "SELECT id, towref FROM ".TB_PREFIX."raidlist WHERE lid = ".(int) $lid2;
+$getwref = "SELECT movement.to, movement.ref, attacks.* FROM ".TB_PREFIX."movement as movement INNER JOIN ".TB_PREFIX."attacks as attacks ON attacks.id = movement.ref WHERE attacks.attack_type = 4 AND movement.proc = 1 AND movement.from = ".$village->wid;
 $arraywref = $database->query_return($getwref);
-	echo '<option value="">Select village</option>';
+echo '<option value="">Select village</option>';
 if(mysqli_num_rows(mysqli_query($database->dblink, $getwref)) != 0){
-		foreach($arraywref as $row){
-			$towref = $row["towref"];
-			$tocoor = $database->getCoor($towref);
-			$totype = $database->getVillageType2($towref);
-			if($totype == 0) $tovname = $database->getVillageField($towref, 'name');			
-			else $tovname = $database->getOasisField($towref, 'name');
-					
-			if($row["id"] == $_GET['eid']) $selected = 'selected=""';
-			else $selected = '';
-			
-			if($vill[$towref] == 0){
-				echo '<option value="'.$towref.'" '.$selected.'>'.$tovname.' ('.$tocoor['x'].'|'.$tocoor['y'].')</option>';
-			}
-			$vill[$towref] = 1;
-		}
+	foreach($arraywref as $row){
+		$towref = $row["to"];
+		$vilInfo = $database->getVillageByWorldID($towref);
+		if($vilInfo['fieldtype'] > 0 && !$vilInfo['occupied']) continue;
+		$tocoor = $database->getCoor($towref);
+		if($vilInfo['oasistype'] == 0) $tovname = $database->getVillageField($towref, 'name');
+		else $tovname = $database->getOasisField($towref, 'name');
+		
+		if($row["id"] == $_GET['eid']) $selected = 'selected=""';
+		else $selected = '';
+		
+		if($vill[$towref] == 0) echo '<option value="'.$towref.'">'.$tovname.' ('.$tocoor['x'].'|'.$tocoor['y'].')</option>';
+		$vill[$towref] = 1;
 	}
+}
 ?>
 							</select>
 						</div>
@@ -163,9 +154,3 @@ if(mysqli_num_rows(mysqli_query($database->dblink, $getwref)) != 0){
 <button type="button" value="delete" name="delete" id="delete" class="trav_buttons" onclick="window.location.href = '?gid=16&t=99&action=deleteSlot&eid=<?php echo $_GET["eid"]; ?>&lid=<?php echo $eiddata['lid']; ?>';">Delete</button>
 </form>
 </div>
-<?php
-}else{
-header("Location: build.php?id=39&t=99");
-exit;
-}
-?>

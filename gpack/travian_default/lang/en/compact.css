@@ -6400,6 +6400,9 @@ div#build.gid16 table#raidList thead a {
     color: black;
     font-weight: normal;
 }
+div#build.gid16 table#raidList input.text{
+    width: 75px;
+}
 div.map table#raidFavs thead a {
     color: black;
     font-weight: normal;

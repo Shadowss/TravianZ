@@ -19,7 +19,7 @@
 						<select id="did" name="did">
 <?php
 	for($i = 1; $i <= count($session->villages); $i++){
-		if($session->villages[$i-1] == $village->wid) $select = 'selected="selected"';
+		if($session->villages[$i - 1] == $village->wid) $select = 'selected="selected"';
 		else $select = '';
     
 		echo "<option value=\"".$session->villages[$i-1]."\" ".$select.">".$database->getVillageField($session->villages[$i-1],'name')."</option>";

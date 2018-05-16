@@ -1470,6 +1470,27 @@ class MYSQLi_DB implements IDbConnection {
             return self::$oasisTroopsCountCache[$vref];
 	}
 
+	/**
+	 * Calculates the distance from a village to another
+	 * 
+	 * @param int $coorx1 X coordinate of the first village
+	 * @param int $coory1 Y coordinate of the second village
+	 * @param int $coorx2 X coordinate of the first village
+	 * @param int $coory2 Y coordinate of the second village
+	 * @return int Returns the calculated distance
+	 */
+	
+	public function getDistance($coorx1, $coory1, $coorx2, $coory2) {
+		$max = 2 * WORLD_MAX + 1;
+		$x1 = intval($coorx1);
+		$y1 = intval($coory1);
+		$x2 = intval($coorx2);
+		$y2 = intval($coory2);
+		$distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
+		$distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
+		return round(sqrt(pow($distanceX, 2) + pow($distanceY, 2)), 1);
+	}
+	
     public function canConquerOasis($vref, $wref, $use_cache = true) {
         list($vref,$wref) = $this->escape_input($vref,$wref);
 
@@ -1592,7 +1613,7 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	/*****************************************
-	Function to retrieve if is ocuped via ID
+	Function to retrieve if is occupied via ID
 	References: Village ID
 	*****************************************/
 	function getVillageState($wref, $use_cache = true) {
@@ -2458,15 +2479,6 @@ class MYSQLi_DB implements IDbConnection {
 	function getVillageType2($wref) {
         // retirieve form cache
         return $this->getVillageByWorldID($wref, $use_cache)['oasistype'];
-	}
-
-	// no need to cache this method
-	function getFLData($id) {
-	    list($id) = $this->escape_input((int) $id);
-
-		$q = "SELECT * FROM " . TB_PREFIX . "farmlist where id = $id LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		return mysqli_fetch_array($result);
 	}
 
 	// no need to cache this method
@@ -7493,18 +7505,13 @@ References: User ID/Message ID, Mode
 	}
 
     // no need to cache this method
-	function getVilFarmlist($wref) {
-	    list($wref) = $this->escape_input((int) $wref);
-		$q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE wref = ' . $wref . ' ORDER BY wref ASC LIMIT 1';
+	function getVilFarmlist($uid) {
+		list($uid) = $this->escape_input((int) $uid);
+		
+		$q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE owner = '.$uid.' ORDER BY wref ASC LIMIT 1';
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-
-		if($dbarray['id']!=0) {
-				return true;
-			} else {
-				return false;
-			}
-
+		return $dbarray['id'] > 0;
 	}
 
     // no need to cache this method
@@ -7512,15 +7519,35 @@ References: User ID/Message ID, Mode
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT * FROM " . TB_PREFIX . "raidlist WHERE id = ".$id." LIMIT 1";
+		$result = mysqli_query($this->dblink, $q);
+		return mysqli_fetch_array($result);
+	}
+	
+	/**
+	 * Get all informations about a farm list
+	 * 
+	 * @param int $id The farmlist ID
+	 * @return array Returns the seleted farm list informations
+	 */
+
+	function getFLData($id) {
+		list($id) = $this->escape_input((int) $id);
+		
+		$q = "SELECT * FROM " . TB_PREFIX . "farmlist where id = $id LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}
+	
 
 	function delFarmList($id, $owner) {
 	    list($id, $owner) = $this->escape_input((int) $id, (int) $owner);
 
 		$q = "DELETE FROM " . TB_PREFIX . "farmlist where id = $id and owner = $owner";
-		return mysqli_query($this->dblink,$q);
+		if(mysqli_query($this->dblink, $q) && mysqli_affected_rows($this->dblink) > 0){
+			$q = "DELETE FROM " . TB_PREFIX . "raidlist where lid = $id";
+			return mysqli_query($this->dblink, $q);
+		}
+		return false;
 	}
 
 	function delSlotFarm($id, $owner, $lid) {
@@ -7537,17 +7564,17 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function addSlotFarm($lid, $owner, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
-        list($lid, $owner, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input($lid, $owner, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
+	function addSlotFarm($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6) {
+        list($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6) = $this->escape_input($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6);
 
-		$q = "INSERT INTO " . TB_PREFIX . "raidlist (`lid`, `towref`, `x`, `y`, `distance`, `t1`, `t2`, `t3`, `t4`, `t5`, `t6`, `t7`, `t8`, `t9`, `t10`) SELECT '$lid', '$towref', '$x', '$y', '$distance', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6', '$t7', '$t8', '$t9', '$t10' WHERE EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner)";
+		$q = "INSERT INTO " . TB_PREFIX . "raidlist (`lid`, `towref`, `x`, `y`, `distance`, `t1`, `t2`, `t3`, `t4`, `t5`, `t6`) VALUES ('$lid', '$towref', '$x', '$y', '$distance', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6')";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function editSlotFarm($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) {
-		list($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10) = $this->escape_input((int) $eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6, $t7, $t8, $t9, $t10);
+	function editSlotFarm($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6) {
+		list($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6) = $this->escape_input((int) $eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6);
 
-		$q = "UPDATE " . TB_PREFIX . "raidlist SET lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6', t7 = '$t7', t8 = '$t8', t9 = '$t9', t10 = '$t10' WHERE id = $eid AND lid = $oldLid AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner) AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $oldLid AND owner = $owner)";
+		$q = "UPDATE " . TB_PREFIX . "raidlist SET lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6' WHERE id = $eid AND lid = $oldLid AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner) AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $oldLid AND owner = $owner)";
 		return mysqli_query($this->dblink,$q);
 	}
 

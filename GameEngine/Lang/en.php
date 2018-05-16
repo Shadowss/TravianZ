@@ -677,6 +677,8 @@ define("NOTROOP","no troops");
 //map
 define("DETAIL","Details");
 define("ABANDVALLEY","Abandoned valley");
+define("OCCUPIED","Occupied");
+define("UNOCCUPIED","Unoccupied");
 define("UNOCCUOASIS","Unoccupied oasis");
 define("OCCUOASIS","Occupied oasis");
 define("THERENOINFO","There is no<br>information available.");
@@ -708,6 +710,7 @@ define("WEST","West");
 define("VILLAGE","Village");
 define("OASIS","Oasis");
 define("NO_OASIS", "You do not own any oases.");
+define("NO_VILLAGES", "There are no villages.");
 define("PLAYER","Player");
 
 //LOGIN.php

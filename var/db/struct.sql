@@ -1257,10 +1257,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
  `t4` int(11) NULL,
  `t5` int(11) NULL,
  `t6` int(11) NULL,
- `t7` int(11) NULL,
- `t8` int(11) NULL,
- `t9` int(11) NULL,
- `t10` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `lid-distance` (`lid`, `distance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

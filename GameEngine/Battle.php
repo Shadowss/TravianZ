@@ -250,7 +250,7 @@ class Battle {
         //dp = Infantry defense points
         //rap = Result attack points
         //rdp = Result defense points
-        //detected = Detected or not by enemy spies
+        //detected = Detected or not by defender spies
         $cap = $ap = $dp = $cdp = $rap = $rdp = 0;
         $detected = false;
         
