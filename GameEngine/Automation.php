@@ -4573,11 +4573,11 @@ class Automation {
         $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
         $result = mysqli_query($database->dblink,$q);
         if($result) {
-            $row=mysqli_fetch_assoc($result);
-            $stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
+            $row = mysqli_fetch_assoc($result);
+            $stime = strtotime(START_DATE) - strtotime(date('m/d/Y')) + strtotime(START_TIME);
             if($row['lastgavemedal'] == 0 && $stime < time()){
-                $newtime = time()+MEDALINTERVAL;
-                $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".(int) $newtime;
+            	$newtime = strtotime('next monday');
+                $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal = ".(int) $newtime;
                 $database->query($q);
             }elseif($row['lastgavemedal'] != 0){
                 $time = $row['lastgavemedal'] + MEDALINTERVAL;
