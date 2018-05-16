@@ -14,7 +14,9 @@ if(isset($_GET['action']) == 'editSlot' && $_GET['eid']) {
 }
 
 if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET['eid']) && isset($_POST['lid']) && !empty($_POST['lid'])) {
-    if(!empty($_POST['target_id'])){
+    
+	$FLData = $database->getFLData($_POST['lid']);
+	if(!empty($_POST['target_id'])){
         $Wref = $_POST['target_id'];
         $WrefCoor = $database->getCoor($Wref);
         $WrefX = $WrefCoor['x'];
@@ -41,7 +43,7 @@ if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET[
     elseif($oasistype == 0 && $vdata == 0) $errormsg = "There is no village on those coordinates."; 	
     elseif($troops == 0) $errormsg = "No troops has been selected.";
     elseif($database->hasBeginnerProtection($Wref) == 1) $errormsg = "Player under protection."; 
-    elseif($_POST['target_id'] == $village->wid || $vdata['wref'] == $village->wid) $errormsg = "You can't attack the same village you send troops from.";
+    elseif($_POST['target_id'] == $FLData['wref'] || $vdata['wref'] == $FLData['wref']) $errormsg = "You can't attack the same village you're sending troops from.";
     else
     {
 		if(!empty($_POST['target_id'])){

@@ -1,6 +1,6 @@
 - shouldn't we create accounts from middle towards corners, not middle-corners-everywhere?
 + change "incoming attacker" title of the raid list icon when actually attacking a farm (it should be "Own attacking troops")
-- change "select all" button to actually select all checkboxes via JS, not via page reload
++ change "select all" button to actually select all checkboxes via JS, not via page reload
 - make sure that when auto-removing inactive players, anyone who have units going there + anyone with them in their raid lists etc. gets notified and sorted out
 - display "send troops" link for own villages, so we don't have to enter coordinates or search by name (which can search good name but wrong owner!)
 - check the following queries for performing stuff on DB rather than in PHP:
