@@ -41,22 +41,23 @@ if (!$autoloader_found) {
 class Alliance {
 
 		public $gotInvite = false;
-		public $inviteArray = array();
-		public $allianceArray = array();
-		public $userPermArray = array();
+		public $inviteArray = [];
+		public $allianceArray = [];
+		public $userPermArray = [];
 
 		public function procAlliance($get) {
 			global $session, $database;
 
-			if($session->alliance != 0) {
+			if($session->alliance > 0) {
 				$this->allianceArray = $database->getAlliance($session->alliance);
 				// Permissions Array
 				// [id] => id [uid] => uid [alliance] => alliance [opt1] => X [opt2] => X [opt3] => X [opt4] => X [opt5] => X [opt6] => X [opt7] => X [opt8] => X
 				$this->userPermArray = $database->getAlliPermissions($session->uid, $session->alliance);
 			} else {
 				$this->inviteArray = $database->getInvitation($session->uid);
-				$this->gotInvite = count($this->inviteArray) == 0 ? false : true;
+				$this->gotInvite = count($this->inviteArray) > 0;
 			}
+			
 			if(isset($get['a'])) {
 				switch($get['a']) {
 					case 2:
@@ -65,8 +66,6 @@ class Alliance {
 					case 3:
 						$this->acceptInvite($get);
 						break;
-					default:
-						break;
 				}
 			}
 			if(isset($get['o'])) {
@@ -74,20 +73,37 @@ class Alliance {
 					case 4:
 						$this->delInvite($get);
 						break;
-					default:
-						break;
 				}
 			}
 		}
 
 		/**
-		 * Redirects to the option menu if some errors were generated
+		 * Determines if a player can act with the forum (edit/delete/create things, etc.)
+		 * 
+		 * @param array $datas The array which contains: [aid, alliance, forum_perm, admin, owner] 
+		 * @return bool Returns true if you are able to act, false otherwise
 		 */
 		
-		public function redirect()
+		public static function canAct($datas, $mode = 0){
+			global $database, $session;
+
+			return ($database->CheckEditRes($datas['aid']) == 1 && ((($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
+					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'])) &&
+					($mode || (isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin"))) ||
+					$datas['owner'] == $session->uid));
+		}
+		
+		/**
+		 * Redirects to the forum selection
+		 * 
+		 * @param array $get Contains the values of a GET request
+		 */
+		
+		public function redirect($get)
 		{
-		    header("location: allianz.php?s=5");
-		    exit;
+			header("Location: allianz.php?s=2".(isset($get['fid']) && !empty($get['fid']) ? "&fid=".$get['fid']."" : "").
+					(isset($get['admin']) && !empty($get['admin']) ? "&admin=switch_admin" : ""));
+			exit;
 		}
 		
 		public function procAlliForm($post) {
@@ -99,27 +115,20 @@ class Alliance {
 				}
 
 			}
-			if(isset($post['dipl']) && isset($post['a_name'])) {
-				$this->changediplomacy($post);
-			}
+			
+			if(isset($post['dipl']) && isset($post['a_name'])) $this->changediplomacy($post);
 
 			if(isset($post['s'])) {
 				if(isset($post['o'])) {
 					switch($post['o']) {
 						case 1:
-							if(isset($_POST['a'])) {
-								$this->changeUserPermissions($post);
-							}
+							if(isset($_POST['a'])) $this->changeUserPermissions($post);
 							break;
 						case 2:
-							if(isset($_POST['a_user'])) {
-								$this->kickAlliUser($post);
-							}
+							if(isset($_POST['a_user'])) $this->kickAlliUser($post);
 							break;
 						case 4:
-							if(isset($_POST['a']) && $_POST['a'] == 4) {
-								$this->sendInvite($post);
-							}
+							if(isset($_POST['a']) && $_POST['a'] == 4) $this->sendInvite($post);
 							break;
 						case 3:
 							$this->updateAlliProfile($post);
@@ -446,16 +455,16 @@ class Alliance {
 		public function Vote($post) {
 			global $database, $session;
 			if($session->access != BANNED){
-			if($database->checkSurvey($post['tid']) && !$database->checkVote($post['tid'], $session->uid)){
-			$survey = $database->getSurvey($post['tid']);
-			$text = ''.$survey['voted'].','.$session->uid.',';
-			$database->Vote($post['tid'], $post['vote'], $text);
-			}
-			    header("Location: allianz.php?s=2&fid2=".$post['fid2']."&pid=".$post['pid']."&tid=".$post['tid']);
-			    exit;
+				if($database->checkSurvey($post['tid']) && !$database->checkVote($post['tid'], $session->uid)){
+					$survey = $database->getSurvey($post['tid']);
+					$text = ''.$survey['voted'].','.$session->uid.',';
+					$database->Vote($post['tid'], $post['vote'], $text);
+				}
+				header("Location: allianz.php?s=2&fid2=".$post['fid2']."&tid=".$post['tid']);
+				exit;
 			}else{
-			    header("Location: banned.php");
-			    exit;
+				header("Location: banned.php");
+				exit;
 			}
 		}
 		/*****************************************

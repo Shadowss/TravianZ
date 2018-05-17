@@ -5,9 +5,17 @@
 ##                     FIX BY RONIX                       ##
 ##                       TRAVIANZ                         ##
 ############################################################
-if($session->access!=BANNED){
+if($session->access == BANNED){
+	header("Location: banned.php");
+	exit;
+}
+
 $topic_id = $_GET['idt'];
 $topics = $database->ShowTopic($topic_id);
+
+//Check if we're editing a valid answer (topic)
+if(empty($topics)) $alliance->redirect($_GET);
+
 foreach($topics as $top) {
 	$title = stripslashes($top['title']);
 	$ans = stripslashes($top['post']);
@@ -19,7 +27,7 @@ foreach($topics as $top) {
 	$report0 = $top['report0'];
 }
 ?>
-<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['pid']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['idt']; ?>">
+<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&tid=<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="tid" value="<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="alliance0" value="<?php echo $alliance0; ?>">
@@ -35,9 +43,7 @@ foreach($topics as $top) {
 	<tr>
 		<th>Thread</th>
 		<td><?php echo $title; ?></td>
-
 	</tr>
-
 	<tr>
 	<td>
 	</td><td>
@@ -81,8 +87,3 @@ foreach($topics as $top) {
 
 	<p class="btn"><input  type="image" id="fbtn_ok" value="ok" name="s1" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
 <span style="color: #DD0000"><b>Warning:</b> you can't use the values <b>[message]</b> or <b>[/message]</b> in your post because it can cause problem with bbcode system.</span>
-	<?php }else{
-header("Location: banned.php");
-exit;
-}
-?>

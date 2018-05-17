@@ -745,6 +745,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sorting` int(11) NOT NULL,
   `owner` varchar(255) DEFAULT NULL,
   `alliance` int(11) NOT NULL,
   `forum_name` varchar(255) DEFAULT NULL,

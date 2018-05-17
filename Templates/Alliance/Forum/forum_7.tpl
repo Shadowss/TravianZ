@@ -1,17 +1,23 @@
 <?php
 //////////////// made by TTMTT ////////////////
-if($session->access!=BANNED){
-$tid = $_GET['tid'];
-$topics = $database->ShowTopic($tid);
-foreach($topics as $arr) {
-	$title = stripslashes($arr['title']);
+if($session->access == BANNED){
+	header("Location: banned.php");
+	exit;
 }
+	
+$tid = $_GET['tid'];
+$topic = reset($database->ShowTopic($tid));
+
+//Check if we're creating a post for a valid topic
+if(empty($topic)) $alliance->redirect($_GET);
+
+$title = stripslashes($topic['title']);
+
 ?>
-<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&pid=<?php echo $_GET['pid']; ?>&tid=<?php echo $_GET['tid']; ?>">
+<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $topic['cat']; ?>&tid=<?php echo $_GET['tid']; ?>">
 	<input type="hidden" name="s" value="2">
-	<input type="hidden" name="pid" value="<?php echo $_GET['pid']; ?>">
 	<input type="hidden" name="tid" value="<?php echo $_GET['tid']; ?>">
-	<input type="hidden" name="fid2" value="<?php echo $_GET['fid2']; ?>">
+	<input type="hidden" name="fid2" value="<?php echo $topic['cat']; ?>">
 	<input type="hidden" name="newpost" value="1">
 
 	<input type="hidden" name="checkstr" value="c0d"><table cellpadding="1" cellspacing="1" id="new_post"><thead>
@@ -71,8 +77,3 @@ foreach($topics as $arr) {
 
 <p class="btn"><input type="image" id="fbtn_ok" value="ok" name="s1" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
 <span style="color: #DD0000"><b>Warning:</b> you can't use the values <b>[message]</b> or <b>[/message]</b> in your post because it can cause problem with bbcode system.</span>
-<?php }else{
-header("Location: banned.php");
-exit;
-}
-?>

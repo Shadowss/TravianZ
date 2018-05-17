@@ -1,3 +1,6 @@
+-- 18.05.2018 -> added a new column
+ALTER TABLE s1_forum_cat ADD `sorting` int(11) NOT NULL AFTER `id`
+
 -- 16.05.2018 -> dropped four columns
 ALTER TABLE `s1_raidlist` DROP `t7`, DROP `t8`, DROP `t9`, DROP `t10`;
 

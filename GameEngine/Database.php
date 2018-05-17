@@ -2373,7 +2373,7 @@ class MYSQLi_DB implements IDbConnection {
 	function ForumCat($id) {
         list($id) = $this->escape_input($id);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' ORDER BY id";
+		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' ORDER BY sorting DESC, id";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -2413,11 +2413,7 @@ class MYSQLi_DB implements IDbConnection {
 
 		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_topic where cat = $id";
 		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-		if ($result['Total']) {
-			return true;
-		} else {
-			return false;
-		}
+		return $result['Total'] > 0;
 	}
 
     // no need to cache this method
@@ -2426,11 +2422,7 @@ class MYSQLi_DB implements IDbConnection {
 
 		$q = "SELECT Count(*) as Total from " . TB_PREFIX . "forum_edit where alliance = $alli";
 		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-		if ($result['Total']) {
-			return true;
-		} else {
-			return false;
-		}
+		return $result['Total'] > 0;
 	}
 
     // no need to cache this method
@@ -2510,6 +2502,18 @@ class MYSQLi_DB implements IDbConnection {
 		}
 	}
 
+	function MoveForum($id, $area, $ally, $mode){
+		list($id, $area, $ally, $mode) = $this->escape_input((int) $id, (int) $area, (int) $ally, $mode);
+		
+		$q = "UPDATE
+					".TB_PREFIX."forum_cat
+		      SET
+					sorting = (SELECT * FROM(SELECT ".(!$mode ? "MIN" : "MAX")."(sorting) FROM ".TB_PREFIX."forum_cat WHERE forum_area = $area AND alliance = $ally AND id != $id) f) ".(!$mode ? "-" : "+")." 1
+		      WHERE
+					id = $id";
+		return mysqli_query($this->dblink, $q);
+	}
+	
 	function UpdateEditTopic($id, $title, $cat) {
 	    list($id, $title, $cat) = $this->escape_input((int) $id, $title, $cat);
 
@@ -2517,17 +2521,17 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function UpdateEditForum($id, $name, $des) {
-	    list($id, $name, $des) = $this->escape_input((int) $id, $name, $des);
+	function UpdateEditForum($id, $name, $des, $ally) {
+	    list($id, $name, $des, $ally) = $this->escape_input((int) $id, $name, $des, (int) $ally);
 
-		$q = "UPDATE " . TB_PREFIX . "forum_cat set forum_name = '$name', forum_des = '$des' where id = $id";
+		$q = "UPDATE " . TB_PREFIX . "forum_cat SET forum_name = '$name', forum_des = '$des' WHERE id = $id AND alliance = $ally";
 		return mysqli_query($this->dblink,$q);
 	}
 
 	function StickTopic($id, $mode) {
-	    list($id, $mode) = $this->escape_input((int) $id, $mode);
+	    list($id, $mode) = $this->escape_input((int) $id, (int) $mode);
 
-		$q = "UPDATE " . TB_PREFIX . "forum_topic set stick = '$mode' where id = $id";
+		$q = "UPDATE " . TB_PREFIX . "forum_topic SET stick = $mode WHERE id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -2579,7 +2583,7 @@ class MYSQLi_DB implements IDbConnection {
 	function CreatForum($owner, $alli, $name, $des, $area) {
         list($owner, $alli, $name, $des, $area) = $this->escape_input($owner, $alli, $name, $des, $area);
 
-		$q = "INSERT into " . TB_PREFIX . "forum_cat values (0,'$owner','$alli','$name','$des','$area')";
+		$q = "INSERT into " . TB_PREFIX . "forum_cat values (0, 0,'$owner','$alli','$name','$des','$area')";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
@@ -2719,7 +2723,8 @@ class MYSQLi_DB implements IDbConnection {
         list($id, $post, $alliance, $player, $coor, $report) = $this->escape_input((int) $id, $post, (int) $alliance, (int) $player, (int) $coor, (int) $report);
 
         $q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post', alliance0 = $alliance, player0 = $player, coor0 = $coor, report0 = $report where id = $id";
-        return mysqli_query($this->dblink,$q);
+
+        return mysqli_query($this->dblink, $q);
     }
 
     function EditUpdatePost($id, $post, $alliance, $player, $coor, $report) {
@@ -2840,9 +2845,8 @@ class MYSQLi_DB implements IDbConnection {
 		if(mysqli_num_rows($result)) {
 		    $result = mysqli_fetch_assoc($result);
 			$result = $result['id'];
-		} else {
-			$result = false;
-		}
+		} 
+		else $result = false;
 
         self::$allianceOwnerCheckCache[$id] = $result;
         return self::$allianceOwnerCheckCache[$id];

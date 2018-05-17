@@ -88,6 +88,7 @@ define("OFFERED_CONFED_TO","offered a confederation to");
 define("ALLY_TOO_MUCH_PACTS","Either You cannot offer more pacts of this kind or this alliance has reached the limit for this kind of patcs");
 define("ALLY_PERMISSIONS_UPDATED","Permissions updated");
 define("ALLY_FORUM_LINK_UPDATED", "Forum link updated");
+define("NO_FORUMS_YET","There are no forums yet.");
 define("ALLY_USER_KICKED"," has been kicked from the alliance");
 define("NOT_OPENED_YET","Server not started yet.");
 define("REGISTER_CLOSED","The register is closed. You can't register to this server.");
