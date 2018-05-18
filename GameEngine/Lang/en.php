@@ -825,6 +825,7 @@ define("DEMOLITION_OF","Demolition of ");
 define("MAINBUILDING_DESC","In the main building the village's master builders live. The higher its level the faster your master builders complete the construction of new buildings.");
 
 define("RALLYPOINT","Rally Point");
+define("RALLYPOINT_COMMENCE","Troops movement will be displayed when the ".RALLYPOINT." is completed");
 define("OVERVIEW","Overview");
 define("REINFORCEMENT","Reinforcement");
 define("EVASION_SETTINGS","evasion settings");

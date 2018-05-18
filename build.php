@@ -344,8 +344,8 @@ if(isset($_GET['id']) || isset($_GET['gid']) || $route == 1 || isset($_POST['rou
 		
 		if((isset($_GET['buildingFinish'])) && $_GET['buildingFinish'] == 1) {
         	if($session->gold >= 2) {
-            		$building->finishAll("build.php?gid=".$_GET['id']."&ty=".$_GET['ty']);
-            		exit;
+        		$building->finishAll("build.php?gid=".$_GET['id']."&ty=".$_GET['ty']);
+        		exit;
         	}
         }
 	}

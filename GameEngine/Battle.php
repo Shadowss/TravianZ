@@ -26,30 +26,24 @@ class Battle {
 			// receive form and process
 			if(isset($post['a1_v']) && (isset($post['a2_v1']) || isset($post['a2_v2']) || isset($post['a2_v3']) || isset($post['a2_v4']))) {
 				$_POST['mytribe'] = $post['a1_v'];
-				$target = array();
-				if(isset($post['a2_v1'])) {
-					array_push($target,1);
-				}
-				if(isset($post['a2_v2'])) {
-					array_push($target,2);
-				}
-				if(isset($post['a2_v3'])) {
-					array_push($target,3);
-				}
-				if(isset($post['a2_v4'])) {
-					array_push($target,4);
-				}
-				if(isset($post['a2_v5'])) {
-					array_push($target,5);
-				}
+				
+				$target = [];
+				if(isset($post['a2_v1'])) array_push($target, 1);
+				if(isset($post['a2_v2'])) array_push($target, 2);
+				if(isset($post['a2_v3'])) array_push($target, 3);
+				if(isset($post['a2_v4'])) array_push($target, 4);
+				if(isset($post['a2_v5'])) array_push($target, 5);
+
 				$_POST['target'] = $target;
 				if(isset($post['h_off_bonus'])) {
-					if (intval($post['h_off_bonus'])>20) {$post['h_off_bonus']=20;}
-				}else $post['h_off_bonus']=0;
+					if (intval($post['h_off_bonus']) > 20) $post['h_off_bonus'] = 20;
+				}
+				else $post['h_off_bonus']=0;
 
 				if(isset($post['h_def_bonus'])) {
-					if (intval($post['h_def_bonus'])>20) {$post['h_def_bonus']=20;}
-				}else $post['h_def_bonus']=0;
+					if (intval($post['h_def_bonus']) > 20) $post['h_def_bonus'] = 20;
+				}
+				else $post['h_def_bonus']=0;
 
 				if(isset($post['a1_1'])) {
 					$sum = $sum2 = $post['walllevel'] = 0;
@@ -110,17 +104,18 @@ class Battle {
 		}
 
 		private function getBattleHeroSim($attbonus) {
-		    global $database;
-            $h_atk =0;
+            $h_atk = 0;
             $h_ob = 1 + 0.010 * $attbonus;
 
-            return array('unit'=>16,'atk'=>$h_atk,'ob'=>$h_ob);
+            return ['unit' => 16,'atk' => $h_atk,'ob' => $h_ob];
 		}
 
 		private function simulate($post) {
 				//set the arrays with attacking and defending units
-				$attacker = ['u1' => 0,'u2' =>0 ,'u3' =>0 ,'u4'=>0,'u5'=>0,'u6'=>0,'u7'=>0,'u8'=>0,'u9'=>0,'u10'=>0,'u11'=>0,'u12'=>0,'u13'=>0,'u14'=>0,'u15'=>0,'u16'=>0,'u17'=>0,'u18'=>0,'u19'=>0,'u20'=>0,'u21'=>0,'u22'=>0,'u23'=>0,'u24'=>0,'u25'=>0,'u26'=>0,'u27'=>0,'u28'=>0,'u29'=>0,'u30'=>0,'u31'=>0,'u32'=>0,'u33'=>0,'u34'=>0,'u35'=>0,'u36'=>0,'u37'=>0,'u38'=>0,'u39'=>0,'u40'=>0,'u41'=>0,'u42'=>0,'u43'=>0,'u44'=>0,'u45'=>0,'u46'=>0,'u47'=>0,'u48'=>0,'u49'=>0,'u50'=>0];
-				$start = ($post['a1_v']-1)*10+1;
+				$attacker = ['u1' => 0, 'u2' => 0, 'u3' => 0, 'u4' => 0, 'u5' => 0, 'u6' => 0, 'u7' => 0, 'u8' => 0, 'u9' => 0, 'u10' => 0, 'u11' => 0, 'u12' => 0, 'u13' => 0, 'u14' => 0, 'u15' => 0, 'u16' => 0, 'u17' => 0, 'u18' => 0, 'u19' => 0, 'u20' => 0, 'u21' => 0, 'u22' => 0, 'u23' => 0, 'u24' => 0,
+				'u25' => 0, 'u26' => 0, 'u27' => 0, 'u28' => 0, 'u29' => 0, 'u30' => 0, 'u31' => 0, 'u32' => 0, 'u33' => 0, 'u34' => 0, 'u35' => 0, 'u36' => 0, 'u37' => 0, 'u38' => 0, 'u39' => 0, 'u40' => 0, 'u41' => 0, 'u42' => 0, 'u43' => 0, 'u44' => 0, 'u45' => 0, 'u46' => 0, 'u47' => 0, 'u48' => 0,
+				'u49' => 0, 'u50' => 0];
+				$start = ($post['a1_v'] - 1) * 10 + 1;
 				$offhero = intval($post['h_off_bonus']);
 				$hero_strenght = intval($post['h_off']);
 				$deffhero = intval($post['h_def_bonus']);
@@ -188,10 +183,10 @@ class Battle {
 	 public function getTypeLevel($tid,$vid) {
 		global $village,$database;
 
-		$keyholder = array();
+		$keyholder = [];
 		$resourcearray = $database->getResourceLevel($vid);
 
-		foreach(array_keys($resourcearray,$tid) as $key) {
+		foreach(array_keys($resourcearray, $tid) as $key) {
 			if(strpos($key,'t')) {
 				$key = preg_replace("/[^0-9]/", '', $key);
 				array_push($keyholder, $key);
@@ -201,9 +196,9 @@ class Battle {
 		$element = count($keyholder);
 		if($element >= 2) {
 			if($tid <= 4) {
-				$temparray = array();
-				for($i=0;$i<=$element-1;$i++) {
-					array_push($temparray,$resourcearray['f'.$keyholder[$i]]);
+				$temparray = [];
+				for($i = 0; $i <= $element - 1; $i++){
+					array_push($temparray, $resourcearray['f'.$keyholder[$i]]);
 				}
 				foreach ($temparray as $key => $val) {
 					if ($val == max($temparray))
@@ -228,7 +223,7 @@ class Battle {
 	}
 
     //1 raid 0 normal
-    function calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,$offhero,$hero_strenght,$deffhero,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $defReinforcements = null) {
+    function calculateBattle($Attacker, $Defender, $def_wall, $att_tribe, $def_tribe, $residence, $attpop, $defpop, $type, $def_ab, $att_ab1, $att_ab2, $att_ab3, $att_ab4, $att_ab5, $att_ab6, $att_ab7, $att_ab8, $tblevel, $stonemason, $walllevel, $offhero, $hero_strenght, $deffhero, $AttackerID, $DefenderID, $AttackerWref, $DefenderWref, $conqureby, $defReinforcements = null) {
         global $bid34, $bid35, $database;
 
         // Define the array, with the units
@@ -258,11 +253,12 @@ class Battle {
         $attacker_artefact = $database->getArtifactsValueInfluence($AttackerID, $AttackerWref, 3, 1, false);
         $defender_artefact = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 3, 1, false);
         $strongerbuildings = $database->getArtifactsValueInfluence($DefenderID, $DefenderWref, 1, 1, false);
+        $isWWVillage = $database->getVillageField($DefenderWref, 'natar');
         
-        if(isset($Attacker['uhero']) && $Attacker['uhero'] != 0){
+        if(isset($Attacker['uhero']) && $Attacker['uhero'] > 0){
             $atkhero = $this->getBattleHero($AttackerID);
         }
-        if(isset($Defender['hero']) && $Defender['hero'] != 0){
+        if(isset($Defender['hero']) && $Defender['hero'] > 0){
             $defenderhero = $this->getBattleHero($DefenderID);
         }
         //own defender units
@@ -397,13 +393,13 @@ class Battle {
                     $ap += $atkhero['atk'];
                 }
 
-                if ($offhero !=0 || $hero_strenght !=0) {
+                if ($offhero > 0 || $hero_strenght > 0) {
                     $atkhero= $this->getBattleHeroSim($offhero);
                     $ap *= $atkhero['ob'];
                     $cap *= $atkhero['ob'];
                     $ap += $hero_strenght;
                 }
-                if ($deffhero != 0) {
+                if ($deffhero > 0) {
                     $dfdhero = $this->getBattleHeroSim($deffhero);
                     $dp *= $dfdhero['ob'];
                     $cdp *= $dfdhero['ob'];
@@ -468,14 +464,13 @@ class Battle {
         $winner = ($rap > $rdp);
 
         // Formula for calculating the Moral
-        if($attpop > $defpop) {
+        // WW villages aren't affected by this moral bonus
+        if($attpop > $defpop && !$isWWVillage) {
             $moralbonus = 1 / round(max(0.667, pow($defpop / $attpop, 0.2 * min(1, $rap / ($rdp > 0 ? $rdp : 1)))), 3);  
         }
         else $moralbonus = 1.0;
 
-        if($involve >= 1000 && $type != 1) {
-            $Mfactor = 2 * round((1.8592 - pow($involve, 0.015)), 4);
-        }
+        if($involve >= 1000 && $type != 1) $Mfactor = 2 * round((1.8592 - pow($involve, 0.015)), 4);
         else $Mfactor = 1.5;
         
         if ($Mfactor < 1.2578) $Mfactor = 1.2578;
@@ -496,8 +491,6 @@ class Battle {
 
             //Defender result
             $result[2] = 0;
-        }else if($type == 2){
-
         }else if($type == 4) {
             $holder = ($winner) ? pow((($rdp * $moralbonus) / $rap), $Mfactor) : pow(($rap / ($rdp * $moralbonus)), $Mfactor);
             $holder = $holder / (1 + $holder);

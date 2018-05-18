@@ -1377,7 +1377,7 @@ class Automation {
                     //filter_input_array($battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby));
                     if (!isset($walllevel)) $walllevel = 0;
 
-                    $battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby, $enforcementarray);
+                    $battlepart = $battle->calculateBattle($Attacker, $Defender, $def_wall, $att_tribe, $def_tribe, $residence, $attpop, $defpop, $type, $def_ab, $att_ab1, $att_ab2, $att_ab3, $att_ab4, $att_ab5, $att_ab6, $att_ab7, $att_ab8, $tblevel, $stonemason, $walllevel, 0, 0, 0, $AttackerID, $DefenderID, $AttackerWref, $DefenderWref, $conqureby, $enforcementarray);
 
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
@@ -3119,7 +3119,7 @@ class Automation {
     	
     	//Check if Natars account is already created and if the time
     	//is come and we have to create Natars and spawn their artifacts
-    	if($database->areArtifactsSpawned() || COMMENCE + (NATARS_SPAWN_TIME * 86400) > time()) return;
+    	if($database->areArtifactsSpawned() || strtotime(START_DATE) + (NATARS_SPAWN_TIME * 86400) > time()) return;
     	
     	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnNatars.txt", 'w');
     	fclose($ourFileHandle);
@@ -3183,7 +3183,7 @@ class Automation {
     	
     	//Check if Natars account has already been created, if WW villages have already been spawned
     	//and if it's the time to spawn them or not
-    	if(!$database->areArtifactsSpawned() || $database->areWWVillagesSpawned() || COMMENCE + (NATARS_WW_SPAWN_TIME * 86400) > time()) return;
+    	if(!$database->areArtifactsSpawned() || $database->areWWVillagesSpawned() || strtotime(START_DATE) + (NATARS_WW_SPAWN_TIME * 86400) > time()) return;
     	
     	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnWWVillages.txt", 'w');
     	fclose($ourFileHandle);
@@ -3239,7 +3239,7 @@ class Automation {
     	
     	//Check if Natars account is already spawned, if WW building plans have already been spawned
     	//and if it's the time to spawn them or not
-    	if(!$database->areArtifactsSpawned() || $database->areArtifactsSpawned(true) || COMMENCE + (NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400) > time()) return;
+    	if(!$database->areArtifactsSpawned() || $database->areArtifactsSpawned(true) || strtotime(START_DATE) + (NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400) > time()) return;
     	
     	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnWWBuildingPlans.txt", 'w');
     	fclose($ourFileHandle);

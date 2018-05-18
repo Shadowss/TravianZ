@@ -1,32 +1,17 @@
 <?php 
-$time = time();
-$artifactsSpawn = (COMMENCE + NATARS_SPAWN_TIME * 86400) - $time;
-$wwSpawn = (COMMENCE + NATARS_WW_SPAWN_TIME * 86400) - $time;
-$wwBuildingPlansSpawn = (COMMENCE + NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400) - $time;
+$time = time(); //The actual time
+$startDate = strtotime(START_DATE); //When the server has started
 $daysToDisplay = 432000 / SPEED; //5 days / SPEED of the server
+$spawnTimeArray = ["Artifacts" => ($startDate + NATARS_SPAWN_TIME * 86400) - $time,
+				   "WW villages" => ($startDate + NATARS_WW_SPAWN_TIME * 86400) - $time,
+				   "WW building plans" => ($startDate + NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400) - $time];
 
-if($artifactsSpawn <= $daysToDisplay && $artifactsSpawn > 0){
+foreach($spawnTimeArray as $text => $spawnTime){
+	if($spawnTime <= $daysToDisplay && $spawnTime > 0){
 ?>
 <br /><br />
 <div>
-	<span><b>Artifacts</b> will spawn in: </span>
-	<span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat($artifactsSpawn); ?></span>
+	<span><b><?php echo $text; ?></b> will spawn in: </span>
+	<span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat($spawnTime); ?></span>
 </div>
-<?php } 
-
-if($wwSpawn <= $daysToDisplay && $wwSpawn > 0){
-?>
-<br /><br />
-<div>
-	<span><b>WW villages</b> will spawn in: </span>
-	<span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat($wwSpawn); ?></span>
-</div>
-<?php }
-
-if($wwBuildingPlansSpawn <= $daysToDisplay && $wwBuildingPlansSpawn > 0){ ?>
-<br /><br />
-<div>
-	<span><b>WW building plans</b> will spawn in: </span>
-	<span id="timer<?php echo ++$session->timer; ?>"><?php echo $generator->getTimeFormat($wwBuildingPlansSpawn); ?></span>
-</div>
-<?php } ?>
+<?php }} ?>

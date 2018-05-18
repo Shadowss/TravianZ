@@ -200,7 +200,7 @@ class Building {
             	$this->constructBuilding($get['id'], $get['a']);
             }
         }
-        elseif(isset($get['buildingFinish']) && $session->plus && intval($session->gold) >= 2 && $session->sit == 0) $this->finishAll();
+        elseif(isset($get['buildingFinish']) && $session->gold >= 2 && $session->sit == 0) $this->finishAll();
     }
 
 	public function canBuild($id, $tid) {
@@ -762,9 +762,9 @@ class Building {
 	}
 
     public function finishAll($redirect_url = '') {
-        global $database,$session,$logging,$village,$bid18,$bid10,$bid11,$technology,$_SESSION;
+        global $database, $session, $logging, $village, $bid18, $bid10, $bid11, $technology, $_SESSION;
 
-        if ($session->access!=BANNED) {
+        if ($session->access != BANNED) {
             // will be true if we should decrease player's gold by 2
             // for the immediate completion action
             $countPlus2Gold  = false;
@@ -779,7 +779,7 @@ class Building {
             $deletIDs = [];
 
             foreach ($this->buildArray as $jobs) {
-                if ($jobs['wid']==$village->wid) {
+                if ($jobs['wid'] == $village->wid) {
                     $wwvillage = $database->getResourceLevel($jobs['wid']);
                     if ($wwvillage['f99t'] != 40) {
                         $level = $jobs['level'];

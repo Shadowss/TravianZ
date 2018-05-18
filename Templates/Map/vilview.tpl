@@ -127,30 +127,23 @@ if($oasis['owner'] == 2){
             <?php         
         $unit = $database->getUnit($_GET['d']);
         $unarray = array(31 => U31, U32, U33, U34, U35, U36, U37, U38, U39, U40);     
-        $a = 0;
+        $troopsPresent = false;
         for ($i = 31; $i <= 40; $i++) {
-          if($unit['u'.$i]){
-          	// assemble oasis warsim link
-          	if ($basearray['fieldtype'] == 0) {
-          		if (!$oasislink) {
-          			$oasislink = rtrim(HOMEPAGE, '/').'/warsim.php?target=4';
-          		}
-          		$oasislink .= '&amp;u'.$i.'='.$unit['u'.$i];
-          	}
-            echo '<tr>';
-                      echo '<td class="ico"><img class="unit u'.$i.'" src="img/x.gif" alt="'.$unarray[$i].'" title="'.$unarray[$i].'" /></td>';
-                      echo '<td class="val">'.$unit['u'.$i].'</td>';
-                      echo '<td class="desc">'.$unarray[$i].'</td>';
-                      echo '</tr>';                                             
-                  }else{
-            $a = $a+1;
-          }                   
+        	if($unit['u'.$i] > 0){
+        		// assemble oasis warsim link
+        		if ($basearray['fieldtype'] == 0) {
+        			if (!$oasislink) $oasislink = rtrim(HOMEPAGE, '/').'/warsim.php?target=4';
+        			$oasislink .= '&amp;u'.$i.'='.$unit['u'.$i];
+        		}
+        		echo '<tr>';
+        		echo '<td class="ico"><img class="unit u'.$i.'" src="img/x.gif" alt="'.$unarray[$i].'" title="'.$unarray[$i].'" /></td>';
+        		echo '<td class="val">'.$unit['u'.$i].'</td>';
+        		echo '<td class="desc">'.$unarray[$i].'</td>';
+        		echo '</tr>';
+        		$troopsPresent = true;
+        	}
         }
-        if($a == 10){
-        echo '<tr><td>'.NOTROOP.'</td></tr>';
-        }
-
-     
+        if(!$troopsPresent) echo '<tr><td>'.NOTROOP.'</td></tr>';
       ?>
         </tbody>
         </table>
@@ -459,33 +452,25 @@ if($type >= 18 && $type <= 21){
 		<td class="none"><?php 
       $mode = CP; 
       $total = count($database->getProfileVillages($session->uid)); 
-      $need_cps = ${'cp'.$mode}[$total+1]; 
-      $cps = floor($database->getUserField($session->uid, 'cp',0));      
-      
-      if($cps >= $need_cps) {
-        $enough_cp = true;
-      } else {
-        $enough_cp = false;
-      }
+      $need_cps = ${'cp'.$mode}[$total + 1]; 
+      $cps = floor($database->getUserField($session->uid, 'cp',0));
+      $enough_cp = $cps >= $need_cps;
       
 	
-	if($village->unitarray['u'.$session->tribe.'0'] >= 3 AND $enough_cp AND $village->resarray['f39']) {
-        $test = "<a href=\"a2b.php?id=".$_GET['d']."&amp;s=1\">&raquo;  ".FNEWVILLAGE."</a>";
-    } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 AND !$enough_cp) {
-        $test = "&raquo; ".FNEWVILLAGE." ($cps/$need_cps ".CULTUREPOINT.")";
+	if($village->unitarray['u'.$session->tribe.'0'] >= 3 && $enough_cp && $village->resarray['f39'] > 0) {
+		$text = "<a href=\"a2b.php?id=".$_GET['d']."&amp;s=1\">&raquo;  ".FNEWVILLAGE."</a>";
+    } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 && !$enough_cp) {
+    	$text = "&raquo; ".FNEWVILLAGE." ($cps/$need_cps ".CULTUREPOINT.")";
     } elseif(!$village->resarray['f39']) {
-        $test = "&raquo; ".FNEWVILLAGE." (".BUILDRALLY.")"; 
+    	$text = "&raquo; ".FNEWVILLAGE." (".BUILDRALLY.")"; 
 	} else {
-        $test = "&raquo; ".FNEWVILLAGE." (".$village->unitarray['u'.$session->tribe.'0']."/3 ".SETTLERSAVAIL.")";
+        $text = "&raquo; ".FNEWVILLAGE." (".$village->unitarray['u'.$session->tribe.'0']."/3 ".SETTLERSAVAIL.")";
     }
  	
- 	if ($basearray['fieldtype']==0) {
- 		if ($village->resarray['f39']==0) {
- 			if ($basearray['owner'] == $session->uid) {
- 				echo "<a href=\"build.php?id=39\">&raquo; ".RAID." $otext (".BUILDRALLY.")</a>";
- 			} else {
- 				echo "&raquo; ".RAID." $otext (".BUILDRALLY.")";
- 			}
+ 	if ($basearray['fieldtype'] == 0) {
+ 		if ($village->resarray['f39'] == 0) {
+ 			if ($basearray['owner'] == $session->uid) echo "<a href=\"build.php?id=39\">&raquo; ".RAID." $otext (".BUILDRALLY.")</a>";
+ 			else echo "&raquo; ".RAID." $otext (".BUILDRALLY.")";
  		} else {
  			echo "<a href=\"a2b.php?z=".$_GET['d']."&o\">&raquo; ".RAID." $otext</a>";
  		}
@@ -499,9 +484,8 @@ if($type >= 18 && $type <= 21){
 			</td>
 <?php
 		}
- 	} else {
- 		echo "$test";
  	}
+ 	else echo $text;
 	?>
 		</tr>
         <?php } 
@@ -517,12 +501,12 @@ if($type >= 18 && $type <= 21){
           $data1 = mysqli_fetch_assoc($query1);
           $query2 = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
           $data2 = mysqli_fetch_assoc($query2);
-			if($data2['access']=='0' or ($data2['access']== MULTIHUNTER && $data2['id'] == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access']=='9')) {
+			if($data2['access'] == 0 || ($data2['access']== MULTIHUNTER && $data2['id'] == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access'] == 9)) {
 			echo "&raquo; ".SENDTROOP." (".BAN.")";
 		  } else if($data2['vac_mode']=='1') {
 			echo "&raquo; Send troops. (Vacation mode on)";
           } else if($data2['protect'] < time()) {
-            echo $village->resarray['f39']? "<a href=\"a2b.php?s=2&z=".$_GET['d']."\">&raquo; ".SENDTROOP : "&raquo; ".SENDTROOP." (".BUILDRALLY.")"; 
+            echo $village->resarray['f39'] > 0 ? "<a href=\"a2b.php?s=2&z=".$_GET['d']."\">&raquo; ".SENDTROOP : "&raquo; ".SENDTROOP." (".BUILDRALLY.")"; 
           } else {
             echo "&raquo; ".SENDTROOP." (".BEGINPRO.")";
           }
@@ -532,7 +516,7 @@ if($type >= 18 && $type <= 21){
 					    	<tr>
 					<td class="none">
 					<?php
-			if($data2['access']=='0' or ($data2['access']== MULTIHUNTER && $data2['id'] == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access']=='9')) {
+			if($data2['access']== 0 || ($data2['access'] == MULTIHUNTER && $data2['id'] == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access'] == 9)) {
 			echo "&raquo; ".SENDMERC." (".BAN.")";
 			} else if($data2['vac_mode']=='1') {
 			echo "&raquo; Send merchant(s). (Vacation mode on)";
