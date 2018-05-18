@@ -87,7 +87,7 @@ class Alliance {
 		public static function canAct($datas, $mode = 0){
 			global $database, $session;
 
-			return ($database->CheckEditRes($datas['aid']) == 1 && ((($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
+			return (/*$database->CheckEditRes($datas['aid']) == 1 && */((($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
 					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'])) &&
 					($mode || (isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin"))) ||
 					$datas['owner'] == $session->uid));
@@ -99,9 +99,9 @@ class Alliance {
 		 * @param array $get Contains the values of a GET request
 		 */
 		
-		public function redirect($get)
+		public function redirect($get = null)
 		{
-			header("Location: allianz.php?s=2".(isset($get['fid']) && !empty($get['fid']) ? "&fid=".$get['fid']."" : "").
+			header("Location: allianz.php?s=2".(isset($get['fid']) && !empty($get['fid']) && $get['admin'] != 'pos' ? "&fid=".$get['fid']."" : "").
 					(isset($get['admin']) && !empty($get['admin']) ? "&admin=switch_admin" : ""));
 			exit;
 		}

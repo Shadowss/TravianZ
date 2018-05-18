@@ -32,7 +32,7 @@ $title = stripslashes($showTopic['title']);
 			<td>Move topic</td>
 			<td><select class="dropdown" name="fid">
 <?php
-$show_cat = $database->ForumCat($session->alliance);
+	$show_cat = $database->ForumCat($session->alliance);
 	foreach($show_cat as $cats) {
 		if($cats['id'] == $_GET['fid']) echo '<option value="'.$cats['id'].'" selected>'.stripslashes($cats['forum_name']).'</option>';
 		else echo '<option value="'.$cats['id'].'">'.stripslashes($cats['forum_name']).'</option>';

@@ -30,11 +30,13 @@ if(isset($_POST['new']) && $opt['opt5'] == 1 &&
 	$database->CreatForum($forum_owner, $aid, $forum_name, $forum_des, $forum_area);
 }
 
-if(isset($_POST['edittopic']) && $opt['opt5'] == 1 && 
+if(isset($_POST['edittopic']) && 
    isset($_POST['fid']) && !empty($_POST['fid']) &&
    isset($_POST['tid']) && !empty($_POST['tid']) &&
    isset($_POST['thema']) && !empty($_POST['thema']) &&
-   $database->ForumCatAlliance($_POST['fid']) == $session->alliance)
+   Alliance::canAct(['aid' => $aid, 'alliance' => ($topic = reset($database->ShowTopic($_POST['tid'])))['alliance'], 
+	                 'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $topic['owner']], 1) &&
+   (($forumData = reset($database->ForumCatEdit($_POST['fid'])))['alliance'] == $session->alliance || $forumData['forum_area'] == 1))
 {
 	$topic_name = $_POST['thema'];
 	$topic_cat = $_POST['fid'];
@@ -57,7 +59,8 @@ if(isset($_POST['editforum']) && $opt['opt5'] == 1 &&
 }
 
 if(isset($_POST['newtopic']) && isset($_POST['thema']) && isset($_POST['text']) && isset($_POST['fid'])
-		&& !empty($_POST['thema']) && !empty($_POST['text']) && !empty($_POST['fid'])){
+   && !empty($_POST['thema']) && !empty($_POST['text']) && !empty($_POST['fid']) &&
+  (($forumData = reset($database->ForumCatEdit($_POST['fid'])))['alliance'] == $session->alliance || $forumData['forum_area'] == 1)){
 	$title = $_POST['thema'];
 	$text = $_POST['text'];
 	$cat = $_POST['fid'];
@@ -140,70 +143,72 @@ if(isset($_POST['newtopic']) && isset($_POST['thema']) && isset($_POST['text']) 
 	}
 }
 
-if(isset($_POST['newpost'])){
-	$text = $_POST['text'];
+if(isset($_POST['newpost']) && isset($_POST['text']) && !empty($_POST['text']) &&
+   isset($_POST['tid']) && !empty($_POST['tid']) &&
+   isset($_POST['fid2']) && !empty($_POST['fid2']) &&
+   (($forumData = reset($database->ForumCatEdit($_POST['fid2'])))['alliance'] == $session->alliance || $forumData['forum_area'] == 1))
+{
+   	$text = $_POST['text'];
 	$tids = $_POST['tid'];
 	$fid2 = $_POST['fid2'];
 	$owner = $session->uid;
-	if(!empty($text)){
-		if(!preg_match('/\[message\]/', $text) && !preg_match('/\[\/message\]/', $text)){
-			$text = "[message]".$text."[/message]";
-			$alliances = $player = $coor = $report = 0;
-			for($i = 0; $i <= $alliances; $i++){
-				if(preg_match('/\[alliance'.$i.'\]/', $text) && preg_match('/\[\/alliance'.$i.'\]/', $text)){
-					$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
-					if(preg_match('/\[alliance'.$i.'\]/', $alliance1) && preg_match('/\[\/alliance'.$i.'\]/', $alliance1)){
-						$j = $i + 1;
-						$alliance2 = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $text);
-						$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '[alliance'.$j.']', $alliance1);
-						$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance'.$j.']', $alliance1);
-						$text = $alliance2."[/alliance".$i."]".$alliance1;
-						$alliances += 1;
-					}
+	if(!preg_match('/\[message\]/', $text) && !preg_match('/\[\/message\]/', $text)){
+		$text = "[message]".$text."[/message]";
+		$alliances = $player = $coor = $report = 0;
+		for($i = 0; $i <= $alliances; $i++){
+			if(preg_match('/\[alliance'.$i.'\]/', $text) && preg_match('/\[\/alliance'.$i.'\]/', $text)){
+				$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
+				if(preg_match('/\[alliance'.$i.'\]/', $alliance1) && preg_match('/\[\/alliance'.$i.'\]/', $alliance1)){
+					$j = $i + 1;
+					$alliance2 = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $text);
+					$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '[alliance'.$j.']', $alliance1);
+					$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance'.$j.']', $alliance1);
+					$text = $alliance2."[/alliance".$i."]".$alliance1;
+					$alliances += 1;
 				}
 			}
-			for($i = 0; $i <= $player; $i++){
-				if(preg_match('/\[player'.$i.'\]/', $text) && preg_match('/\[\/player'.$i.'\]/', $text)){
-					$player1 = preg_replace('/\[message\](.*?)\[\/player'.$i.'\]/is', '', $text);
-					if(preg_match('/\[player'.$i.'\]/', $player1) && preg_match('/\[\/player'.$i.'\]/', $player1)){
-						$j = $i + 1;
-						$player2 = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $text);
-						$player1 = preg_replace('/\[player'.$i.'\]/', '[player'.$j.']', $player1);
-						$player1 = preg_replace('/\[\/player'.$i.'\]/', '[/player'.$j.']', $player1);
-						$text = $player2."[/player".$i."]".$player1;
-						$player += 1;
-					}
-				}
-			}
-			for($i = 0; $i <= $coor; $i++){
-				if(preg_match('/\[coor'.$i.'\]/', $text) && preg_match('/\[\/coor'.$i.'\]/', $text)){
-					$coor1 = preg_replace('/\[message\](.*?)\[\/coor'.$i.'\]/is', '', $text);
-					if(preg_match('/\[coor'.$i.'\]/', $coor1) && preg_match('/\[\/coor'.$i.'\]/', $coor1)){
-						$j = $i + 1;
-						$coor2 = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $text);
-						$coor1 = preg_replace('/\[coor'.$i.'\]/', '[coor'.$j.']', $coor1);
-						$coor1 = preg_replace('/\[\/coor'.$i.'\]/', '[/coor'.$j.']', $coor1);
-						$text = $coor2."[/coor".$i."]".$coor1;
-						$coor += 1;
-					}
-				}
-			}
-			for($i = 0; $i <= $report; $i++){
-				if(preg_match('/\[report'.$i.'\]/', $text) && preg_match('/\[\/report'.$i.'\]/', $text)){
-					$report1 = preg_replace('/\[message\](.*?)\[\/report'.$i.'\]/is', '', $text);
-					if(preg_match('/\[report'.$i.'\]/', $report1) && preg_match('/\[\/report'.$i.'\]/', $report1)){
-						$j = $i + 1;
-						$report2 = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $text);
-						$report1 = preg_replace('/\[report'.$i.'\]/', '[report'.$j.']', $report1);
-						$report1 = preg_replace('/\[\/report'.$i.'\]/', '[/report'.$j.']', $report1);
-						$text = $report2."[/report".$i."]".$report1;
-						$report += 1;
-					}
-				}
-			}
-			$database->UpdatePostDate($tids);
-			$database->CreatPost($text, $tids, $owner, $alliances, $player, $coor, $report, $fid2);
 		}
+		for($i = 0; $i <= $player; $i++){
+			if(preg_match('/\[player'.$i.'\]/', $text) && preg_match('/\[\/player'.$i.'\]/', $text)){
+				$player1 = preg_replace('/\[message\](.*?)\[\/player'.$i.'\]/is', '', $text);
+				if(preg_match('/\[player'.$i.'\]/', $player1) && preg_match('/\[\/player'.$i.'\]/', $player1)){
+					$j = $i + 1;
+					$player2 = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $text);
+					$player1 = preg_replace('/\[player'.$i.'\]/', '[player'.$j.']', $player1);
+					$player1 = preg_replace('/\[\/player'.$i.'\]/', '[/player'.$j.']', $player1);
+					$text = $player2."[/player".$i."]".$player1;
+					$player += 1;
+				}
+			}
+		}
+		for($i = 0; $i <= $coor; $i++){
+			if(preg_match('/\[coor'.$i.'\]/', $text) && preg_match('/\[\/coor'.$i.'\]/', $text)){
+				$coor1 = preg_replace('/\[message\](.*?)\[\/coor'.$i.'\]/is', '', $text);
+				if(preg_match('/\[coor'.$i.'\]/', $coor1) && preg_match('/\[\/coor'.$i.'\]/', $coor1)){
+					$j = $i + 1;
+					$coor2 = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $text);
+					$coor1 = preg_replace('/\[coor'.$i.'\]/', '[coor'.$j.']', $coor1);
+					$coor1 = preg_replace('/\[\/coor'.$i.'\]/', '[/coor'.$j.']', $coor1);
+					$text = $coor2."[/coor".$i."]".$coor1;
+					$coor += 1;
+				}
+			}
+		}
+		for($i = 0; $i <= $report; $i++){
+			if(preg_match('/\[report'.$i.'\]/', $text) && preg_match('/\[\/report'.$i.'\]/', $text)){
+				$report1 = preg_replace('/\[message\](.*?)\[\/report'.$i.'\]/is', '', $text);
+				if(preg_match('/\[report'.$i.'\]/', $report1) && preg_match('/\[\/report'.$i.'\]/', $report1)){
+					$j = $i + 1;
+					$report2 = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $text);
+					$report1 = preg_replace('/\[report'.$i.'\]/', '[report'.$j.']', $report1);
+					$report1 = preg_replace('/\[\/report'.$i.'\]/', '[/report'.$j.']', $report1);
+					$text = $report2."[/report".$i."]".$report1;
+					$report += 1;
+				}
+			}
+		}
+		$database->UpdatePostDate($tids);
+		$database->CreatPost($text, $tids, $owner, $alliances, $player, $coor, $report, $fid2);
 	}
 }
 
@@ -396,8 +401,10 @@ if($_GET['admin'] == "switch_admin"){
 	}
 }
 
-if($_GET['admin'] == "pos" && isset($_GET['res']) && isset($_GET['bid']) && isset($_GET['fid']) && !empty($_GET['fid']) && $opt['opt5'] == 1){
-	$database->moveForum($_GET['fid'], $_GET['bid'], $session->alliance, $_GET['res']); //Move the forum to the top/bottom of the list
+if($_GET['admin'] == "pos" && isset($_GET['res']) && isset($_GET['fid']) && !empty($_GET['fid']) && $opt['opt5'] == 1 &&
+   ($forumData = reset($database->ForumCatEdit($_GET['fid'])))['alliance'] == $session->alliance)
+{
+	$database->moveForum($_GET['fid'], $forumData['forum_area'], $session->alliance, $_GET['res']); //Move the forum to the top/bottom of the list
 	$alliance->redirect($_GET);
 }
 elseif(isset($_GET['admin']) && !empty($_GET['admin']) && isset($_GET['idt']) && !empty($_GET['idt'])){
@@ -478,17 +485,6 @@ elseif($_GET['admin'] == "editforum" && $opt['opt5'] == 1) include("Forum/forum_
 elseif(isset($_GET['tid'])){
 	if(isset($_GET['ac'])) include ("Forum/forum_7.tpl"); //New post
 	else include ("Forum/forum_6.tpl"); //Showtopic
-}else{
-	if($database->CheckForum($aid)) include("Forum/forum_2.tpl");	
-	else if($opt['opt5'] == 1){
-		if($session->access == BANNED){
-			echo '<p class="error">Forum is not created yet</p><p>
-			<a href="banned.php"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a></p>';
-		}else{
-			echo '<p class="error">Forum is not created yet</p><p>
-			<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a></p>';
-		}
-	}
-	else echo '<p class="error">Forum is not created yet</p>';
 }
+else include("Forum/forum_2.tpl");
 ?>

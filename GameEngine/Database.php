@@ -2256,11 +2256,7 @@ class MYSQLi_DB implements IDbConnection {
 
 		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "forum_cat where alliance = $id";
 		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-		if ($result['Total']) {
-			return true;
-		} else {
-			return false;
-		}
+		return $result['Total'] > 0; 
 	}
 
     // no need to refactor this method
@@ -2373,7 +2369,7 @@ class MYSQLi_DB implements IDbConnection {
 	function ForumCat($id) {
         list($id) = $this->escape_input($id);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' ORDER BY sorting DESC, id";
+		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' OR forum_area = 1 ORDER BY sorting DESC, id";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -2508,7 +2504,7 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "UPDATE
 					".TB_PREFIX."forum_cat
 		      SET
-					sorting = (SELECT * FROM(SELECT ".(!$mode ? "MIN" : "MAX")."(sorting) FROM ".TB_PREFIX."forum_cat WHERE forum_area = $area AND alliance = $ally AND id != $id) f) ".(!$mode ? "-" : "+")." 1
+					sorting = (SELECT * FROM(SELECT ".(!$mode ? "MIN" : "MAX")."(sorting) FROM ".TB_PREFIX."forum_cat WHERE forum_area = $area ".($area != 1 ? "AND alliance = $ally" : "")." AND id != $id) f) ".(!$mode ? "-" : "+")." 1
 		      WHERE
 					id = $id";
 		return mysqli_query($this->dblink, $q);

@@ -47,7 +47,7 @@ if($ChckTopic){
 			$post_dates = date('m/d/y, H:i a',$arrs['date']);
 			$owner_topics = $database->getUserArray($arrs['owner'],1);
 		}
-		
+
 		echo '<tr><td class="ico">';
 		if(Alliance::canAct($checkArray))
 		{

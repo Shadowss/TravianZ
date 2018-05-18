@@ -14,7 +14,7 @@ $opt = $database->getAlliPermissions($session->uid, $aid);
 $displayarray = $database->getUserArray($session->uid, 1);
 $forumcat = $database->ForumCat(htmlspecialchars($displayarray['alliance']));
 $ally = $session->alliance;
-$public = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 1"), MYSQLI_ASSOC);
+$public = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE forum_area = 1"), MYSQLI_ASSOC);
 $confederation = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2"), MYSQLI_ASSOC);
 $alliance = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0"), MYSQLI_ASSOC);
 $closed = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3"), MYSQLI_ASSOC);
@@ -43,6 +43,9 @@ if($count == 0) echo "<tr><td colspan=\"4\" style=\"text-align: center\">".NO_FO
 foreach($forumcat as $arr){
 	if($arr['forum_area'] != $index) continue;
 	
+	$checkArray = ['aid' => $aid, 'alliance' => $arr['alliance'], 'forum_perm' => $opt['opt5'],
+			'owner' => 0, 'admin' => $_GET['admin']];
+	
 	$countop = $database->CountCat($arr['id']);
 	$lpost = $owner = "";
 	if($countop > 0){
@@ -65,13 +68,11 @@ foreach($forumcat as $arr){
 	}
 
 	echo '<tr><td class="ico">';
-	if($database->CheckEditRes($aid) == 1 && ($database->isAllianceOwner($session->uid) == $arr['alliance'] || $opt['opt5'] == 1) && isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin"){
-		echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid='.$index.'&admin=pos&res=1" title="To top">
+	if(Alliance::canAct($checkArray)){
+		echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&res=1&admin=pos" title="To top">
 			<img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit">
-			<img src="img/x.gif" alt="edit" /></a><br />
-			<a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid='.$index.'&admin=pos&res=0" title="To bottom">
-			<img src="img/x.gif" alt="To bottom" /></a>
-			<a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete">
+			<img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&res=0&admin=pos" title="To bottom">
+			<img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete">
 			<img src="img/x.gif" alt="delete" /></a>';
 	}
 	else echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
