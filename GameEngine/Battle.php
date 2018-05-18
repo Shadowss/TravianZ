@@ -464,7 +464,7 @@ class Battle {
         $winner = ($rap > $rdp);
 
         // Formula for calculating the Moral
-        // WW villages aren't affected by this moral bonus
+        // WW villages aren't affected by this bonus
         if($attpop > $defpop && !$isWWVillage) {
             $moralbonus = 1 / round(max(0.667, pow($defpop / $attpop, 0.2 * min(1, $rap / ($rdp > 0 ? $rdp : 1)))), 3);  
         }

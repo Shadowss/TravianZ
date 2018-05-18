@@ -10,14 +10,14 @@ include("next.tpl");
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
-			<th><?php echo CURRENT_WOOD_BONUS; ?></th>
-			<td><b><?php echo $bid6[$village->resarray['f'.$id]]['attri']; ?></b> <?php echo PERCENT; ?></td>
+			<th><?php echo CURRENT_CLAY_BONUS; ?></th>
+			<td><b><?php echo $village->resarray['f'.$id] > 0 ? $bid6[$village->resarray['f'.$id]]['attri'] : 0; ?></b> <?php echo PERCENT; ?></td>
 		</tr>
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
 		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
-		if($next<=5){
+		if($next <= 5){
         ?>
 			<th><?php echo CLAY_BONUS_LEVEL; ?> <?php echo $next; ?>:</th>
 			<td><b><?php echo $bid6[$next]['attri']; ?></b> <?php echo PERCENT; ?></td>

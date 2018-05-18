@@ -11,12 +11,12 @@ include("next.tpl");
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
 			<th><?php echo CURRENT_MERCHANT; ?></th>
-			<td><b><?php echo $bid28[$village->resarray['f'.$id]]['attri']; ?></b> <?php echo PERCENT; ?></td>
+			<td><b><?php echo $village->resarray['f'.$id] > 0 ? $bid28[$village->resarray['f'.$id]]['attri'] : 100; ?></b> <?php echo PERCENT; ?></td>
 		</tr>
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
+		$next = $village->resarray['f'.$id] + 1 + $loopsame + $doublebuild + $master;
 		if($next<=20){
         ?>
 			<th><?php echo MERCHANT_LEVEL; ?> <?php echo $next; ?>:</th>

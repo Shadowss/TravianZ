@@ -11,13 +11,13 @@ include("next.tpl");
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
 			<th><?php echo CURRENT_CONSTRUCTION_TIME; ?></th>
-			<td><b><?php echo round($bid15[$village->resarray['f'.$id]]['attri']); ?></b> <?php echo PERCENT; ?></td>
+			<td><b><?php echo $village->resarray['f'.$id] > 0 ? round($bid15[$village->resarray['f'.$id]]['attri']) : 300; ?></b> <?php echo PERCENT; ?></td>
 		</tr>
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
-		if($next<=20){
+		$next = $village->resarray['f'.$id] + 1 + $loopsame + $doublebuild + $master;
+		if($next <= 20){
         ?>
 			<th><?php echo CONSTRUCTION_TIME_LEVEL; ?> <?php echo $next; ?>:</th>
 			<td><b><?php echo round($bid15[$next]['attri']); ?></b> <?php echo PERCENT; ?></td>

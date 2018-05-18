@@ -8,12 +8,12 @@ include("next.tpl");
 <table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
 			<th><?php echo DEFENCE_NOW; ?></th>
-			<td><b><?php echo $bid33[$village->resarray['f'.$id]]['attri']; ?></b> <?php echo PERCENT; ?></td>
+			<td><b><?php echo $village->resarray['f'.$id] > 0 ? $bid33[$village->resarray['f'.$id]]['attri'] : 0; ?></b> <?php echo PERCENT; ?></td>
 		</tr><tr>
         <?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
-		if($next<=20){
+			$next = $village->resarray['f'.$id] + 1 + $loopsame + $doublebuild + $master;
+		if($next <= 20){
         ?>
 			<th><?php echo DEFENCE_LEVEL; ?> <?php echo $next; ?>:</th>
 

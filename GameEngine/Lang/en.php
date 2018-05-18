@@ -1113,6 +1113,7 @@ define("WORLD_WONDER_NOTCHANGE_NAME","You can not change the name of the World W
 define("WORLD_WONDER_NAME_CHANGED","Name changed");
 
 define("HORSEDRINKING","Horse Drinking Trough");
+define("EXTRA_BONUS","Extra bonus");
 define("HORSEDRINKING_DESC","The horse drinking trough of the Romans decreases the training time of cavalry and the upkeep of these troops as well.");
 
 define("GREATWORKSHOP","Great Workshop");
