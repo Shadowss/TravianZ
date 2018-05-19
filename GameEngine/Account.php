@@ -154,7 +154,7 @@ class Account {
 	}
 
 	private function Activate() {
-		if(START_DATE < date('m/d/Y') or START_DATE == date('m/d/Y') && START_TIME <= date('H:i'))
+		if(START_DATE < date('d.m.Y') or START_DATE == date('d.m.Y') && START_TIME <= date('H:i'))
 	   {
 			global $database;
 			$q = "SELECT act, username, password, email, tribe, location FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";

@@ -733,7 +733,7 @@ class MYSQLi_DB implements IDbConnection {
         list($username, $password, $email, $tribe, $act) = $this->escape_input($username, $password, $email, $tribe, $act);
 
 		$time = time();
-        $stime = strtotime(START_DATE) - strtotime(date('m/d/Y')) + strtotime(START_TIME);
+        $stime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
         if($stime > $time) $time = $stime;
 		$timep = $time + PROTECTION;
 		$time = time();
