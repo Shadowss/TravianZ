@@ -12,13 +12,13 @@ if($session->access == BANNED){
 
 $topicID = $_GET['idt'];
 $showTopic = reset($database->ShowTopic($topicID));
+$forumData = reset($database->ForumCatEdit($showTopic['cat']));
 $title = stripslashes($showTopic['title']);
 ?>
 <form method="post" action="allianz.php?s=2&fid=<?php echo $_GET['fid']; ?>">
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="tid" value="<?php echo $topicID; ?>">
 	<input type="hidden" name="edittopic" value="1">
-
 	<table cellpadding="1" cellspacing="1" id="edit_topic"><thead>
 		<tr>
 	        <td colspan="2">Edit topic</td>
@@ -32,8 +32,11 @@ $title = stripslashes($showTopic['title']);
 			<td>Move topic</td>
 			<td><select class="dropdown" name="fid">
 <?php
-	$show_cat = $database->ForumCat($session->alliance);
+	$show_cat = $database->ForumCat($forumData['alliance']);
 	foreach($show_cat as $cats) {
+		//If the forum has no alliance, show only his public forums
+		if($forumData['alliance'] == 0 && $forumData['owner'] != $cats['owner']) continue;
+
 		if($cats['id'] == $_GET['fid']) echo '<option value="'.$cats['id'].'" selected>'.stripslashes($cats['forum_name']).'</option>';
 		else echo '<option value="'.$cats['id'].'">'.stripslashes($cats['forum_name']).'</option>';
 	}

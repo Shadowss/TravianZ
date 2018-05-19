@@ -19,9 +19,10 @@ $confederation = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Coun
 $alliance = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0"), MYSQLI_ASSOC);
 $closed = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3"), MYSQLI_ASSOC);
 $countArray = [$alliance['Total'], $public['Total'], $confederation['Total'], $closed['Total']];
-$forumArea = ["Alliance Forum", "Public Forum", "Confederation Forum", "Closed Forum"];
+$forumArea = ["Alliance Forum(s)", "Public Forum(s)", "Confederation Forum(s)", "Closed Forum(s)"];
 
 foreach($countArray as $index => $count){
+	if($session->alliance > 0 || ($session->alliance == 0 && $index == 1)){
 ?>
 <table cellpadding="1" cellspacing="1" id="public">
 	<thead>
@@ -36,15 +37,15 @@ foreach($countArray as $index => $count){
 			<td>&nbsp;Last post&nbsp;</td>
 		</tr>
 	</thead>
-	<tbody>
+<tbody>
 <?php
-if($count == 0) echo "<tr><td colspan=\"4\" style=\"text-align: center\">".NO_FORUMS_YET."</td></tr>";
-
+		if($count == 0) echo "<tr><td colspan=\"4\" style=\"text-align: center\">".NO_FORUMS_YET."</td></tr>";
+	}
 foreach($forumcat as $arr){
-	if($arr['forum_area'] != $index) continue;
+	if($arr['forum_area'] != $index || ($session->alliance == 0 && $arr['forum_area'] != 1)) continue;
 	
 	$checkArray = ['aid' => $aid, 'alliance' => $arr['alliance'], 'forum_perm' => $opt['opt5'],
-			'owner' => 0, 'admin' => $_GET['admin']];
+			'owner' => $arr['owner'], 'admin' => $_GET['admin'], 'forum_owner' => $arr['owner']];
 	
 	$countop = $database->CountCat($arr['id']);
 	$lpost = $owner = "";
@@ -92,10 +93,10 @@ foreach($forumcat as $arr){
 </table>
 <?php } ?>
 <p>
-		<?php
-		if(isset($opt['opt5']) && $opt['opt5'] == 1){
-			echo '<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a>
-				<a href="allianz.php?s='.$ids.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
-		}
-		?>
+<?php
+echo '<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a>';
+if(isset($opt['opt5']) && $opt['opt5'] == 1){
+	echo '<a href="allianz.php?s='.$ids.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
+}
+?>
 </p>

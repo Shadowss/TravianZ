@@ -5,7 +5,10 @@
 ##                     FIX BY RONIX                       ##
 ##                       TRAVIANZ                         ##
 ############################################################
-if($session->access!=BANNED){
+if($session->access == BANNED){
+	header("Location: banned.php");
+	exit;
+}
 ?>
 <script language="JavaScript" type="text/javascript">
 
@@ -128,9 +131,11 @@ function showCheckList() {
 
 	<tr>
 		<th>Forum type</th>
-		<td><select class="dropdown" id="bid" name="bid" onchange="showCheckList();"><option value="1">Public Forum</option><option value="2">Confederation Forum</option><option value="0"selected>Alliance Forum</option><option value="3">Closed Forum</option></select></td>
+		<td><select class="dropdown" id="bid" name="bid" onchange="showCheckList();"><option value="1">Public Forum</option><?php if($session->alliance == 0 && $opt['opt5'] == 1) { ?><option value="2">Confederation Forum</option><option value="0" selected>Alliance Forum</option><option value="3">Closed Forum</option><?php } ?></select></td>
 	</tr>
-	</tbody></table><table cellpadding="1" cellspacing="1" id="ally_list"><thead>
+	</tbody></table>
+<?php if($session->alliance > 0 && $opt['opt5'] == 1){ ?>
+<table cellpadding="1" cellspacing="1" id="ally_list"><thead>
 	<tr>
 
         <th colspan="3">Open for more alliances</th>
@@ -178,15 +183,9 @@ function showCheckList() {
 		</td>
 	</tr>
 </tbody></table>
-
 <script language="JavaScript" type="text/javascript">
 	showCheckList();
 
 </script>
-
+<?php } ?>
 <p class="btn"><input type="image" id="fbtn_ok" value="ok" name="s1" class="dynamic_img" src="img/x.gif" alt="OK" /></p></form>
-<?php }else{
-header("Location: banned.php");
-exit;
-}
-?>

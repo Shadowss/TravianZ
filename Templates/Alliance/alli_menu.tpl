@@ -1,4 +1,4 @@
-<?php if($session->alliance == $aid) {
+<?php if($session->alliance == $aid && $session->alliance > 0) {
 ?>
 <div id="textmenu">
    <a href="allianz.php" <?php if(!isset($_GET['s']) && !isset($_POST['s'])) { echo "class=\"selected\""; } ?>>Overview</a>

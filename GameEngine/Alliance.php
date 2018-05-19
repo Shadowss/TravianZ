@@ -80,7 +80,7 @@ class Alliance {
 		/**
 		 * Determines if a player can act with the forum (edit/delete/create things, etc.)
 		 * 
-		 * @param array $datas The array which contains: [aid, alliance, forum_perm, admin, owner] 
+		 * @param array $datas The array which contains: [aid, alliance, forum_perm, admin, owner, forum_owner] 
 		 * @return bool Returns true if you are able to act, false otherwise
 		 */
 		
@@ -88,9 +88,51 @@ class Alliance {
 			global $database, $session;
 
 			return (/*$database->CheckEditRes($datas['aid']) == 1 && */((($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
-					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'])) &&
+					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'])) && $session->alliance > 0 &&
 					($mode || (isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin"))) ||
-					$datas['owner'] == $session->uid));
+					$datas['owner'] == $session->uid) || ($datas['forum_owner'] == $session->uid && $datas['alliance'] == 0));
+		}
+		
+		/**
+		 * Create two string, representing alliances ID and users ID which can see a specific forum
+		 * 
+		 * @param int $alliancesID A list of alliances ID
+		 * @param int $alliancesName A list of alliances Name
+		 * @param int $usersID A list of users ID
+		 * @param int $usersName A list of users name
+		 * @return array Returns the two string, composed by alliances ID and users ID
+		 */
+		
+		public function createForumVisiblity($alliancesID, $alliancesName, $usersID, $usersName){
+			global $database, $session;
+			
+			$alliances = $users = [];
+			
+			//Deduplicate alliances
+			if(!empty($alliancesID)){
+				foreach($alliancesID as $alliance){
+					if(!empty($alliance) && is_numeric($alliance) && $database->aExist($alliance, 'id')  && $alliance != $session->alliance) $alliances[$alliance] = true;
+				}
+			}	
+			if(!empty($alliancesName)){
+				foreach($alliancesName as $alliance){
+					if(!empty($alliance) && !empty($allianceID = $database->getAllianceID($alliance)) && $allianceID != $session->alliance) $alliances[$allianceID] = true;
+				}
+			}
+			
+			//Deduplicate users
+			if(!empty($usersID)){
+				foreach($usersID as $user) {
+					if(!empty($user) && is_numeric($user) && ($userAlly = $database->getUserAllianceID($user)) > 0 && $userAlly != $session->alliance && $database->getUserField($user, 'username', 0) != "[?]" && $user != $session->uid) $users[$user] = true;
+				}
+			}
+			if(!empty($usersName)){
+				foreach($usersName as $user){
+					if(!empty($user) && !empty($userID = $database->getUserField($user, 'id', 1)) && $userID != $session->uid && ($userAlly = $database->getUserAllianceID($userID)) > 0 && $userAlly != $session->alliance) $users[$userID] = true;
+				}
+			}
+			
+			return ['alliances' => implode(',', array_keys($alliances)), 'users' => implode(',', array_keys($users))];
 		}
 		
 		/**

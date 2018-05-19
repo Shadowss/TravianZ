@@ -751,6 +751,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
   `forum_name` varchar(255) DEFAULT NULL,
   `forum_des` text,
   `forum_area` varchar(255) DEFAULT NULL,
+  `display_to_alliances` text,
+  `display_to_users` text,
   PRIMARY KEY (`id`),
   KEY `alliance-forum_area` (`alliance`,`forum_area`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

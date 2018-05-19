@@ -14,20 +14,32 @@ if(!isset($aid)){
 
 $allianceinfo = $database->getAlliance($aid);
 $opt = $database->getAlliPermissions($session->uid, $aid);
-echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
+echo $aid > 0 ? "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>" : "<h1>Forum</h1>";
 include ("alli_menu.tpl");
 $ids = $_GET['s'];
 
-if(isset($_POST['new']) && $opt['opt5'] == 1 && 
+if(isset($_POST['new']) && 
    isset($_POST['u1']) && !empty($_POST['u1']) &&
    isset($_POST['u2']) && !empty($_POST['u2']) &&
    isset($_POST['bid']) && $_POST['bid'] >= 0 && $_POST['bid'] <= 3)
 {
+	//Initialization
+	$forumViewable['alliances'] = $forumViewable['users'] = "";
+	
+	//Check if the user has admin permissions or not
+	$cantEdit = $session->alliance == 0 || !$opt['opt5'];
+	if($cantEdit && $_POST['bid'] != 1) $_POST['bid'] = 1;
+	
+	//Ignore it if the forum is public
+	if($_POST['bid'] != 1) {
+		$forumViewable = $alliance->createForumVisiblity($_POST['allys_by_id'], $_POST['allys_by_name'], $_POST['users_by_id'], $_POST['users_by_name']);
+	}
+	
 	$forum_name = $_POST['u1'];
 	$forum_des = $_POST['u2'];
 	$forum_owner = $session->uid;
 	$forum_area = $_POST['bid'];
-	$database->CreatForum($forum_owner, $aid, $forum_name, $forum_des, $forum_area);
+	$database->CreatForum($forum_owner, $cantEdit ? 0 : $session->alliance, $forum_name, $forum_des, $forum_area, $forumViewable['alliances'], $forumViewable['users']);
 }
 
 if(isset($_POST['edittopic']) && 
@@ -35,27 +47,40 @@ if(isset($_POST['edittopic']) &&
    isset($_POST['tid']) && !empty($_POST['tid']) &&
    isset($_POST['thema']) && !empty($_POST['thema']) &&
    Alliance::canAct(['aid' => $aid, 'alliance' => ($topic = reset($database->ShowTopic($_POST['tid'])))['alliance'], 
-	                 'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $topic['owner']], 1) &&
-   (($forumData = reset($database->ForumCatEdit($_POST['fid'])))['alliance'] == $session->alliance || $forumData['forum_area'] == 1))
+	                 'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $topic['owner'],
+   					 'forum_owner' => ($forumData = reset($database->ForumCatEdit($_POST['fid'])))['owner']], 1) &&
+   ($forumData['alliance'] == $session->alliance || $forumData['forum_area'] == 1))
 {
+	//Additional security checks
+	$oldForumData = reset($database->ForumCatEdit($topic['cat']));
+	if($oldForumData['alliance'] == 0 && $oldForumData['owner'] != $forumData['owner']) $_POST['fid'] = $oldForumData['id'];
+	
 	$topic_name = $_POST['thema'];
 	$topic_cat = $_POST['fid'];
 	$topic_id = $_POST['tid'];
 	$database->UpdateEditTopic($topic_id, $topic_name, $topic_cat);
 }
 
-if(isset($_POST['editforum']) && $opt['opt5'] == 1 &&
+if(isset($_POST['editforum']) &&
    isset($_POST['fid']) && !empty($_POST['fid']) &&
    isset($_POST['u1']) && !empty($_POST['u1']) &&
    isset($_POST['u2']) && !empty($_POST['u2']) &&
-   $database->ForumCatAlliance($_POST['fid']) == $session->alliance)
+   (($database->ForumCatAlliance($_POST['fid']) == $session->alliance && $opt['opt5'] == 1) || 
+   ($forumData = reset($database->ForumCatEdit($_POST['fid'])))['owner'] == $session->uid && $forumData['alliance'] == 0))
 {
+	$forumViewable['alliances'] = $forumViewable['users'] = "";
+	
+	//Ignore it if the forum is public
+	if($forumData['forum_area'] != 1) {
+		$forumViewable = $alliance->createForumVisiblity($_POST['allys_by_id'], $_POST['allys_by_name'], $_POST['users_by_id'], $_POST['users_by_name']);
+	}
+	
 	$forum_name = $_POST['u1'];
 	$forum_name = htmlspecialchars($forum_name);
 	$forum_des = $_POST['u2'];
 	$forum_des = htmlspecialchars($forum_des);
 	$forum_id = $_POST['fid'];
-	$database->UpdateEditForum($forum_id, $forum_name, $forum_des, $session->alliance);
+	$database->UpdateEditForum($forum_id, $forum_name, $forum_des, $session->alliance, $forumViewable['alliances'], $forumViewable['users']);
 }
 
 if(isset($_POST['newtopic']) && isset($_POST['thema']) && isset($_POST['text']) && isset($_POST['fid'])
@@ -214,96 +239,99 @@ if(isset($_POST['newpost']) && isset($_POST['text']) && !empty($_POST['text']) &
 
 if(isset($_POST['editans']) && isset($_POST['text']) && !empty($_POST['text'])
    && isset($_POST['tid']) && !empty($_POST['tid']) &&
-		Alliance::canAct(['aid' => $aid, 'alliance' => ($topic = reset($database->ShowTopic($_POST['tid'])))['alliance'],
-				'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $topic['owner']], 1)){
-
-	$text = $_POST['text'];
+   Alliance::canAct(['aid' => $aid, 'alliance' => ($topic = reset($database->ShowTopic($_POST['tid'])))['alliance'],
+		'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $topic['owner'],
+		'forum_owner' => reset($database->ForumCatEdit($topic['cat']))['owner']], 1))
+{
+   	$text = $_POST['text'];
 	$topic_id = $_POST['tid'];
-
+	
 	$text = preg_replace('/\[message\]/', '', $text);
 	$text = preg_replace('/\[\/message\]/', '', $text);
 	for($i = 0; $i <= $_POST['alliance0']; $i++){
-		$text = preg_replace('/\[alliance'.$i.'\]/', '[alliance0]', $text);
-		$text = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance0]', $text);
+		$text = preg_replace('/\[alliance' . $i . '\]/', '[alliance0]', $text);
+		$text = preg_replace('/\[\/alliance' . $i . '\]/', '[/alliance0]', $text);
 	}
 	for($i = 0; $i <= $_POST['player0']; $i++){
-		$text = preg_replace('/\[player'.$i.'\]/', '[player0]', $text);
-		$text = preg_replace('/\[\/player'.$i.'\]/', '[/player0]', $text);
+		$text = preg_replace('/\[player' . $i . '\]/', '[player0]', $text);
+		$text = preg_replace('/\[\/player' . $i . '\]/', '[/player0]', $text);
 	}
 	for($i = 0; $i <= $_POST['coor0']; $i++){
-		$text = preg_replace('/\[coor'.$i.'\]/', '[coor0]', $text);
-		$text = preg_replace('/\[\/coor'.$i.'\]/', '[/coor0]', $text);
+		$text = preg_replace('/\[coor' . $i . '\]/', '[coor0]', $text);
+		$text = preg_replace('/\[\/coor' . $i . '\]/', '[/coor0]', $text);
 	}
 	for($i = 0; $i <= $_POST['report0']; $i++){
-		$text = preg_replace('/\[report'.$i.'\]/', '[report0]', $text);
-		$text = preg_replace('/\[\/report'.$i.'\]/', '[/report0]', $text);
+		$text = preg_replace('/\[report' . $i . '\]/', '[report0]', $text);
+		$text = preg_replace('/\[\/report' . $i . '\]/', '[/report0]', $text);
 	}
-
+	
 	if(!preg_match('/\[message\]/', $text) && !preg_match('/\[\/message\]/', $text)){
-		$text = "[message]".$text."[/message]";
+		$text = "[message]" . $text . "[/message]";
 		$alliances = $player = $coor = $report = 0;
 		for($i = 0; $i <= $alliances; $i++){
-			if(preg_match('/\[alliance'.$i.'\]/', $text) && preg_match('/\[\/alliance'.$i.'\]/', $text)){
-				$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance'.$i.'\]/is', '', $text);
-				if(preg_match('/\[alliance'.$i.'\]/', $alliance1) && preg_match('/\[\/alliance'.$i.'\]/', $alliance1)){
+			if(preg_match('/\[alliance' . $i . '\]/', $text) && preg_match('/\[\/alliance' . $i . '\]/', $text)){
+				$alliance1 = preg_replace('/\[message\](.*?)\[\/alliance' . $i . '\]/is', '', $text);
+				if(preg_match('/\[alliance' . $i . '\]/', $alliance1) && preg_match('/\[\/alliance' . $i . '\]/', $alliance1)){
 					$j = $i + 1;
-					$alliance2 = preg_replace('/\[\/alliance'.$i.'\](.*?)\[\/message\]/is', '', $text);
-					$alliance1 = preg_replace('/\[alliance'.$i.'\]/', '[alliance'.$j.']', $alliance1);
-					$alliance1 = preg_replace('/\[\/alliance'.$i.'\]/', '[/alliance'.$j.']', $alliance1);
-					$text = $alliance2."[/alliance".$i."]".$alliance1;
+					$alliance2 = preg_replace('/\[\/alliance' . $i . '\](.*?)\[\/message\]/is', '', $text);
+					$alliance1 = preg_replace('/\[alliance' . $i . '\]/', '[alliance' . $j . ']', $alliance1);
+					$alliance1 = preg_replace('/\[\/alliance' . $i . '\]/', '[/alliance' . $j . ']', $alliance1);
+					$text = $alliance2 . "[/alliance" . $i . "]" . $alliance1;
 					$alliances += 1;
 				}
 			}
 		}
 		for($i = 0; $i <= $player; $i++){
-			if(preg_match('/\[player'.$i.'\]/', $text) && preg_match('/\[\/player'.$i.'\]/', $text)){
-				$player1 = preg_replace('/\[message\](.*?)\[\/player'.$i.'\]/is', '', $text);
-				if(preg_match('/\[player'.$i.'\]/', $player1) && preg_match('/\[\/player'.$i.'\]/', $player1)){
+			if(preg_match('/\[player' . $i . '\]/', $text) && preg_match('/\[\/player' . $i . '\]/', $text)){
+				$player1 = preg_replace('/\[message\](.*?)\[\/player' . $i . '\]/is', '', $text);
+				if(preg_match('/\[player' . $i . '\]/', $player1) && preg_match('/\[\/player' . $i . '\]/', $player1)){
 					$j = $i + 1;
-					$player2 = preg_replace('/\[\/player'.$i.'\](.*?)\[\/message\]/is', '', $text);
-					$player1 = preg_replace('/\[player'.$i.'\]/', '[player'.$j.']', $player1);
-					$player1 = preg_replace('/\[\/player'.$i.'\]/', '[/player'.$j.']', $player1);
-					$text = $player2."[/player".$i."]".$player1;
+					$player2 = preg_replace('/\[\/player' . $i . '\](.*?)\[\/message\]/is', '', $text);
+					$player1 = preg_replace('/\[player' . $i . '\]/', '[player' . $j . ']', $player1);
+					$player1 = preg_replace('/\[\/player' . $i . '\]/', '[/player' . $j . ']', $player1);
+					$text = $player2 . "[/player" . $i . "]" . $player1;
 					$player += 1;
 				}
 			}
 		}
 		for($i = 0; $i <= $coor; $i++){
-			if(preg_match('/\[coor'.$i.'\]/', $text) && preg_match('/\[\/coor'.$i.'\]/', $text)){
-				$coor1 = preg_replace('/\[message\](.*?)\[\/coor'.$i.'\]/is', '', $text);
-				if(preg_match('/\[coor'.$i.'\]/', $coor1) && preg_match('/\[\/coor'.$i.'\]/', $coor1)){
+			if(preg_match('/\[coor' . $i . '\]/', $text) && preg_match('/\[\/coor' . $i . '\]/', $text)){
+				$coor1 = preg_replace('/\[message\](.*?)\[\/coor' . $i . '\]/is', '', $text);
+				if(preg_match('/\[coor' . $i . '\]/', $coor1) && preg_match('/\[\/coor' . $i . '\]/', $coor1)){
 					$j = $i + 1;
-					$coor2 = preg_replace('/\[\/coor'.$i.'\](.*?)\[\/message\]/is', '', $text);
-					$coor1 = preg_replace('/\[coor'.$i.'\]/', '[coor'.$j.']', $coor1);
-					$coor1 = preg_replace('/\[\/coor'.$i.'\]/', '[/coor'.$j.']', $coor1);
-					$text = $coor2."[/coor".$i."]".$coor1;
+					$coor2 = preg_replace('/\[\/coor' . $i . '\](.*?)\[\/message\]/is', '', $text);
+					$coor1 = preg_replace('/\[coor' . $i . '\]/', '[coor' . $j . ']', $coor1);
+					$coor1 = preg_replace('/\[\/coor' . $i . '\]/', '[/coor' . $j . ']', $coor1);
+					$text = $coor2 . "[/coor" . $i . "]" . $coor1;
 					$coor += 1;
 				}
 			}
 		}
 		for($i = 0; $i <= $report; $i++){
-			if(preg_match('/\[report'.$i.'\]/', $text) && preg_match('/\[\/report'.$i.'\]/', $text)){
-				$report1 = preg_replace('/\[message\](.*?)\[\/report'.$i.'\]/is', '', $text);
-				if(preg_match('/\[report'.$i.'\]/', $report1) && preg_match('/\[\/report'.$i.'\]/', $report1)){
+			if(preg_match('/\[report' . $i . '\]/', $text) && preg_match('/\[\/report' . $i . '\]/', $text)){
+				$report1 = preg_replace('/\[message\](.*?)\[\/report' . $i . '\]/is', '', $text);
+				if(preg_match('/\[report' . $i . '\]/', $report1) && preg_match('/\[\/report' . $i . '\]/', $report1)){
 					$j = $i + 1;
-					$report2 = preg_replace('/\[\/report'.$i.'\](.*?)\[\/message\]/is', '', $text);
-					$report1 = preg_replace('/\[report'.$i.'\]/', '[report'.$j.']', $report1);
-					$report1 = preg_replace('/\[\/report'.$i.'\]/', '[/report'.$j.']', $report1);
-					$text = $report2."[/report".$i."]".$report1;
+					$report2 = preg_replace('/\[\/report' . $i . '\](.*?)\[\/message\]/is', '', $text);
+					$report1 = preg_replace('/\[report' . $i . '\]/', '[report' . $j . ']', $report1);
+					$report1 = preg_replace('/\[\/report' . $i . '\]/', '[/report' . $j . ']', $report1);
+					$text = $report2 . "[/report" . $i . "]" . $report1;
 					$report += 1;
 				}
 			}
 		}
-
+		
 		$database->EditUpdateTopic($topic_id, $text, $alliances, $player, $coor, $report);
 	}
+   	
 }
 
 if(isset($_POST['editpost']) && isset($_POST['text']) && !empty($_POST['text']) &&
 		isset($_POST['pod']) && !empty($_POST['pod']) &&
 		Alliance::canAct(['aid' => $aid, 
-				'alliance' => reset($database->ShowTopic(($post = reset($database->ShowPostEdit($_POST['pod'])))['topic']))['alliance'], 
-				'forum_perm' => $opt['opt5'], 'owner' => $post['owner'], 'admin' => $_GET['admin']], 1))
+				'alliance' => ($topic = reset($database->ShowTopic(($post = reset($database->ShowPostEdit($_POST['pod'])))['topic'])))['alliance'], 
+				'forum_perm' => $opt['opt5'], 'owner' => $post['owner'], 'admin' => $_GET['admin'],
+				'forum_owner' => ($forumData = reset($database->ForumCatEdit($topic['cat'])))['owner']], 1))
 {
 	
 	$text = $_POST['text'];
@@ -401,18 +429,20 @@ if($_GET['admin'] == "switch_admin"){
 	}
 }
 
-if($_GET['admin'] == "pos" && isset($_GET['res']) && isset($_GET['fid']) && !empty($_GET['fid']) && $opt['opt5'] == 1 &&
-   ($forumData = reset($database->ForumCatEdit($_GET['fid'])))['alliance'] == $session->alliance)
+if($_GET['admin'] == "pos" && isset($_GET['res']) && isset($_GET['fid']) && !empty($_GET['fid']) &&
+  (($database->ForumCatAlliance($_GET['fid']) == $session->alliance && $opt['opt5'] == 1) ||
+  ($forumData = reset($database->ForumCatEdit($_GET['fid'])))['owner'] == $session->uid && $forumData['alliance'] == 0))
 {
 	$database->moveForum($_GET['fid'], $forumData['forum_area'], $session->alliance, $_GET['res']); //Move the forum to the top/bottom of the list
 	$alliance->redirect($_GET);
 }
-elseif(isset($_GET['admin']) && !empty($_GET['admin']) && isset($_GET['idt']) && !empty($_GET['idt'])){
+elseif(isset($_GET['idt']) && !empty($_GET['idt'])){
 	
 	//Get the post informations
 	$topicID = $_GET['idt'];
 	$post = reset($database->ShowTopic($topicID));
-	$checkArray = ['aid' => $aid, 'alliance' => $post['alliance'], 'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $post['owner']];
+	$checkArray = ['aid' => $aid, 'alliance' => $post['alliance'], 'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 
+			'owner' => $post['owner'], 'forum_owner' => reset($database->ForumCatEdit($post['cat']))['owner']];
 
 	//Exit if we've the rights to modify it
 	if(!Alliance::canAct($checkArray, 1)) $alliance->redirect($_GET);
@@ -451,9 +481,9 @@ elseif(isset($_GET['admin']) && !empty($_GET['admin']) && isset($_GET['idt']) &&
 
 	if($_GET['admin'] != "edittopic" && $_GET['admin'] != "editans") $alliance->redirect($_GET);
 }
-elseif($_GET['admin'] == "delforum" && $opt['opt5'] == 1 &&
-   !empty($catToDelete = reset($database->ForumCatEdit($_GET['idf']))) &&
-   $catToDelete['alliance'] == $session->alliance)
+elseif($_GET['admin'] == "delforum" && isset($_GET['idf']) && !empty($_GET['idf']) &&
+	  (($database->ForumCatAlliance($_GET['idf']) == $session->alliance && $opt['opt5'] == 1) ||
+	  ($forumData = reset($database->ForumCatEdit($_GET['idf'])))['owner'] == $session->uid && $forumData['alliance'] == 0))
 {
 	$database->DeleteCat($_GET['idf']); // delete forum
 	$alliance->redirect($_GET);
@@ -462,18 +492,20 @@ elseif($_GET['admin'] == "delpost" && isset($_GET['pod']) && !empty($_GET['pod']
 		isset($_GET['tid']) && !empty($_GET['tid']) &&
 		isset($_GET['fid2']) && !empty($_GET['fid2']) &&
 		Alliance::canAct(['aid' => $aid, 'alliance' => reset($database->ShowTopic($_GET['tid']))['alliance'], 'forum_perm' => $opt['opt5'],
-		'owner' => reset($database->ShowPostEdit($_GET['pod']))['owner'], 'admin' => $_GET['admin']], 1))
+				'owner' => reset($database->ShowPostEdit($_GET['pod']))['owner'], 'admin' => $_GET['admin'],
+				'forum_owner' => reset($database->ForumCatEdit($_GET['fid2']))['owner']], 1))
 {
 	$database->DeletePost($_GET['pod']); //Delete post
 	header("Location: allianz.php?s=2&fid2=".$_GET['fid2']."&tid=".$_GET['tid']);
 	exit;
 }
-elseif($_GET['admin'] == "newforum" && $opt['opt5'] == 1) include("Forum/forum_1.tpl"); // new forum
+elseif($_GET['admin'] == "newforum") include("Forum/forum_1.tpl"); //New forum
 elseif($_GET['admin'] == "editpost" && isset($_GET['pod']) && !empty($_GET['pod']) &&
 		isset($_GET['tid']) && !empty($_GET['tid']) &&
 		isset($_GET['fid']) && !empty($_GET['fid']) &&
 		Alliance::canAct(['aid' => $aid, 'alliance' => reset($database->ShowTopic($_GET['tid']))['alliance'], 'forum_perm' => $opt['opt5'],
-				'owner' => reset($database->ShowPostEdit($_GET['pod']))['owner'], 'admin' => $_GET['admin']], 1)) //Edit post
+				'owner' => reset($database->ShowPostEdit($_GET['pod']))['owner'], 'admin' => $_GET['admin'],
+				'forum_owner' => reset($database->ForumCatEdit($_GET['fid']))['owner']], 1)) //Edit post
 {
 	include("Forum/forum_10.tpl");
 }
@@ -481,10 +513,10 @@ elseif(isset($_GET['fid'])){
 	if(isset($_GET['ac'])) include("Forum/forum_5.tpl"); //New topic	
 	else include("Forum/forum_4.tpl"); //Show topics
 }
-elseif($_GET['admin'] == "editforum" && $opt['opt5'] == 1) include("Forum/forum_8.tpl"); // edit forum	
+elseif($_GET['admin'] == "editforum") include("Forum/forum_8.tpl"); //Edit forum	
 elseif(isset($_GET['tid'])){
 	if(isset($_GET['ac'])) include ("Forum/forum_7.tpl"); //New post
-	else include ("Forum/forum_6.tpl"); //Showtopic
+	else include ("Forum/forum_6.tpl"); //Show topic
 }
 else include("Forum/forum_2.tpl");
 ?>
