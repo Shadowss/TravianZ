@@ -57,6 +57,7 @@ div.c1 {text-align: center}
         	}
         ?>
         <p>
+       		<a href="allianz.php?s=2"><b><?php echo FORUM;?></b></a>
             <a href="rules.php"><b><?php echo GAME_RULES;?></b></a>
             <?php
             	// no support for support :-D

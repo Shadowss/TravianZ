@@ -11,7 +11,8 @@ if($session->access == BANNED){
 }
 
 $cat_id = $_GET['fid'];
-$CatName = stripslashes($database->ForumCatName($cat_id));
+$forumData = reset($database->ForumCatEdit($cat_id));
+$CatName = stripslashes($forumData['forum_name']);
 
 //Check if we're viewing a valid forum
 if(empty($CatName)) $alliance->redirect($_GET);
@@ -34,7 +35,7 @@ $Topics = array_merge($database->ForumCatTopic($cat_id), $database->ForumCatTopi
 if($ChckTopic){
 	foreach($Topics as $arrs) {
 		$checkArray = ['aid' => $aid, 'alliance' => $arrs['alliance'], 'forum_perm' => $opt['opt5'],
-				'owner' => $arrs['owner'], 'admin' => $_GET['admin']];
+				'owner' => $arrs['owner'], 'admin' => $_GET['admin'], 'forum_owner' => $forumData['owner']];
 		
 		$CountPosts = $database->CountPost($arrs['id']);
 		$lposts = $database->LastPost($arrs['id']);

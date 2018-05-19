@@ -11,11 +11,15 @@ if($session->access == BANNED){
 }
 
 $forumData = reset($database->ForumCatEdit($_GET['idf']));
-if(empty($forumData) || $forumData['alliance'] != $session->alliance) $alliance->redirect($_GET);
+if(empty($forumData) || ($forumData['alliance'] > 0 && ($forumData['alliance'] != $session->alliance || !$opt['opt5'])) ||
+		($forumData['alliance'] == 0 && $forumData['owner'] != $session->uid)) $alliance->redirect($_GET);
+
+$users = $alliances = [];
 
 $cat_name = stripslashes($forumData['forum_name']);
 $cat_des = stripslashes($forumData['forum_des']);
-
+if(!empty($forumData['display_to_alliances'])) $alliances = explode(',', $forumData['display_to_alliances']);
+if(!empty($forumData['display_to_users'])) $users = explode(',', $forumData['display_to_users']);
 ?>
 <script language="JavaScript" type="text/javascript">
 
@@ -113,4 +117,80 @@ $cat_des = stripslashes($forumData['forum_des']);
 		<th>Description</th>
 		<td><input class="text" type="text" name="u2" value="<?php echo $cat_des; ?>" maxlength="38"></td>
 	</tr>
-</table><p class="btn"><input type="image" value="ok" name="s1" id="fbtn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
+</table>
+<?php if($forumData['forum_area'] != 1){ ?>
+<table cellpadding="1" cellspacing="1" id="ally_list"><thead>
+	<tr>
+
+        <th colspan="3">Open for more alliances</th>
+	</tr>
+	<tr>
+		<td>Alliance ID</td>
+		<td>Tag:</td>
+		<td>Add</td>
+	</tr>
+
+	</thead><tbody>
+	<?php for($i = 0; $i < count($alliances); $i++){?>
+	<tr>
+		<td class="ally">
+			<input class="text" type="text" id="allys_by_id_<?php echo $i; ?>" disabled="disabled" maxlength="15" name="allys_by_id[<?php echo $i; ?>]" onkeyup="checkInputs(<?php echo $i; ?>,'allys');" />
+		</td>
+		<td class="tag">
+			<input class="text" type="text" id="allys_by_name_<?php echo $i; ?>" value="<?php echo $database->getAlliance($alliances[$i])['tag']; ?>" maxlength="15" name="allys_by_name[<?php echo $i; ?>]" onkeyup="checkInputs(<?php echo $i; ?>,'allys');" />
+		</td>
+		<td class="ad"></td>
+	</tr>
+	<?php } ?>
+	<tr>
+		<td class="ally">
+			<input class="text" type="text" id="allys_by_id_<?php echo $i; ?>" name="allys_by_id[<?php echo $i; ?>]" maxlength="15" onkeyup="checkInputs(<?php echo $i; ?>,'allys');" />
+		</td>
+		<td class="tag">
+			<input class="text" type="text" id="allys_by_name_<?php echo $i; ?>" name="allys_by_name[<?php echo $i; ?>]" maxlength="15" onkeyup="checkInputs(<?php echo $i; ?>,'allys');" />
+		</td>
+		<td class="ad">
+			<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow('ally_list')" />
+		</td>
+	</tr>
+</table><table cellpadding="1" cellspacing="1" id="user_list"><thead>
+	<tr>
+        <th colspan="3">Open forum for the following players</th>
+	</tr>
+	<tr>
+		<td>User ID</td>
+		<td>Name:</td>
+		<td>Add</td>
+	</tr>
+	</thead><tbody>
+	<?php for($i = 0; $i < count($users); $i++){?>
+	<tr>
+		<td class="id">
+			<input class="text" type="text" id="users_by_id_<?php echo $i; ?>" disabled="disabled" name="users_by_id[<?php echo $i; ?>]" maxlength="15" onkeyup="checkInputs(<?php echo $i; ?>,'users');" />
+		</td>
+
+		<td class="pla">
+			<input class="text" type="text" id="users_by_name_<?php echo $i; ?>" value="<?php echo $database->getUserField($users[$i], 'username', 0); ?>" name="users_by_name[<?php echo $i; ?>]" maxlength="50" onkeyup="checkInputs(<?php echo $i; ?>,'users');" />
+		</td>
+		<td class="ad"></td>
+	</tr>
+	<?php } ?>
+	<tr>
+		<td class="id">
+			<input class="text" type="text" id="users_by_id_<?php echo $i; ?>" maxlength="15" name="users_by_id[<?php echo $i; ?>]" onkeyup="checkInputs(<?php echo $i; ?>,'users');" />
+		</td>
+
+		<td class="pla">
+			<input class="text" type="text" id="users_by_name_<?php echo $i; ?>" maxlength="50" name="users_by_name[<?php echo $i; ?>]" onkeyup="checkInputs(<?php echo $i; ?>,'users');" />
+		</td>
+		<td class="ad">
+			<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow('user_list')" />
+		</td>
+	</tr>
+</tbody></table>
+
+<script type="text/javascript">
+	showCheckList();
+</script>
+<?php } ?>
+<p class="btn"><input type="image" value="ok" name="s1" id="fbtn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p></form>

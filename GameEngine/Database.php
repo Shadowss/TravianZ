@@ -2517,10 +2517,10 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function UpdateEditForum($id, $name, $des, $ally) {
-	    list($id, $name, $des, $ally) = $this->escape_input((int) $id, $name, $des, (int) $ally);
+	function UpdateEditForum($id, $name, $des, $ally, $alliances, $users) {
+		list($id, $name, $des, $ally, $alliances, $users) = $this->escape_input((int) $id, $name, $des, (int) $ally, $alliances, $users);
 
-		$q = "UPDATE " . TB_PREFIX . "forum_cat SET forum_name = '$name', forum_des = '$des' WHERE id = $id AND alliance = $ally";
+		$q = "UPDATE " . TB_PREFIX . "forum_cat SET forum_name = '$name', forum_des = '$des', display_to_alliances = '$alliances', display_to_users = '$users' WHERE id = $id AND alliance = $ally";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -2576,10 +2576,10 @@ class MYSQLi_DB implements IDbConnection {
 		return $this->mysqli_fetch_all($result);
 	}
 
-	function CreatForum($owner, $alli, $name, $des, $area) {
-        list($owner, $alli, $name, $des, $area) = $this->escape_input($owner, $alli, $name, $des, $area);
+	function CreatForum($owner, $alli, $name, $des, $area, $alliances, $users) {
+		list($owner, $alli, $name, $des, $area, $alliances, $users) = $this->escape_input($owner, $alli, $name, $des, $area, $alliances, $users);
 
-		$q = "INSERT into " . TB_PREFIX . "forum_cat values (0, 0,'$owner','$alli','$name','$des','$area')";
+		$q = "INSERT into " . TB_PREFIX . "forum_cat values (0, 0,'$owner','$alli','$name','$des','$area','$alliances','$users')";
 		mysqli_query($this->dblink,$q);
 		return mysqli_insert_id($this->dblink);
 	}
@@ -2870,11 +2870,7 @@ class MYSQLi_DB implements IDbConnection {
 
 		$q = "SELECT $type FROM " . TB_PREFIX . "alidata where $type = '$ref'";
 		$result = mysqli_query($this->dblink,$q);
-		if(mysqli_num_rows($result)) {
-			return true;
-		} else {
-			return false;
-		}
+		return mysqli_num_rows($result);
 	}
 
 	function modifyPoints($aid, $points, $amt) {

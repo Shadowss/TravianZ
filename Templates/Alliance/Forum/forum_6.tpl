@@ -21,7 +21,8 @@ $posts = $database->ShowPost($tid);
 foreach($topics as $arr){
 	$cat_id = $arr['cat'];
 	$owner = $database->getUserArray($arr['owner'], 1);
-	$CatName = stripslashes($database->ForumCatName($cat_id));
+	$forumData = reset($database->ForumCatEdit($cat_id));
+	$CatName = stripslashes($forumData['forum_name']);
 	$allianceinfo = $database->getAlliance($owner['alliance']);
 }
 $date = date('m/d/y H:i a', $arr['date']);
@@ -68,7 +69,7 @@ $bbcode_topic = stripslashes(nl2br($bbcoded));
 			<td class="pcontent"><div class="posted">created: <?php echo $date; ?></div>
 <?php
 $checkArray = ['aid' => $aid, 'alliance' => $arr['alliance'], 'forum_perm' => $opt['opt5'],
-		'owner' => $arr['owner'], 'admin' => $_GET['admin']];
+		'owner' => $arr['owner'], 'admin' => $_GET['admin'], 'forum_owner' => $forumData['owner']];
 
 if(Alliance::canAct($checkArray)){
 	echo '<div class="admin"><a class="edit" href="allianz.php?s=2&idt='.$arr['id'].'&admin=editans"><img src="img/x.gif" title="edit" alt="edit" /></a><a class="fdel" href="?s=2&fid='.$arr['cat'].'&idt='.$arr['id'].'&admin=deltopic" onClick="return confirm(\'confirm delete?\');"><img src="img/x.gif" title="delete" alt="delete" /></a></div><br />';
@@ -146,7 +147,7 @@ if($database->checkSurvey($arr['id'])){
 foreach($posts as $po){
 	$topic = reset($database->ShowTopic($po['topic']));
 	$checkArray = ['aid' => $aid, 'alliance' => $topic['alliance'], 'forum_perm' => $opt['opt5'],
-			'owner' => $po['owner'], 'admin' => $_GET['admin']];
+			'owner' => $po['owner'], 'admin' => $_GET['admin'], 'forum_owner' => $forumData['owner']];
 	
 	$date = date('m/d/y H:i a', $po['date']);
 	$countAu = $database->CountTopic($po['owner']);

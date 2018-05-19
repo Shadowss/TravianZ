@@ -1,3 +1,6 @@
+-- 19.05.2018 -> added two new columns
+ALTER TABLE s1_forum_cat ADD (`display_to_alliances` text,  `display_to_users` text)
+  
 -- 18.05.2018 -> added a new column
 ALTER TABLE s1_forum_cat ADD `sorting` int(11) NOT NULL AFTER `id`
 
