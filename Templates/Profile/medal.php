@@ -34,7 +34,7 @@ $remainingDay     = floor($secondsDiff/(3600*24));
 $left = \App\Utils\DateTime::getTimeFormat($secondsDiff);
 $profiel = preg_replace("/\[#0]/is",'<img src="'.$gpack.'img/t/tn.gif" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>This player has '.$left.' hours of beginners protection left.</td></tr></table>\')">', $profiel, 1);
 } else {
-$geregistreerd=date('d-m-Y', ($displayarray['regtime']));
+$geregistreerd=date('d.m.Y', ($displayarray['regtime']));
 $profiel = preg_replace("/\[#0]/is",'<img src="'.$gpack.'img/t/tnd.gif" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>This player registered his account on '.$geregistreerd.'.</td></tr></table>\')">', $profiel, 1);
 }
 

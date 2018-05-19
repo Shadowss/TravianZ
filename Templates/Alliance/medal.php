@@ -22,7 +22,7 @@ INDELING CATEGORIEEN:
 == 8. in top 3 - klimmers    ==
 == 9. in top 3 - overval     ==
 ******************************/
-//$geregistreerd=date('d-m-Y', ($allianceinfo['timestamp']));
+//$geregistreerd=date('d.m.Y', ($allianceinfo['timestamp']));
 
 $profiel = preg_replace("/\[war]/s",'At war with<br>'.$database->getAllianceWar($aid), $profiel, 1); 
 $profiel = preg_replace("/\[ally]/s",'Confederacies<br>'.$database->getAllianceDipProfile($aid,1), $profiel, 1); 

@@ -25,7 +25,7 @@
 		<tbody> 
 			<tr>
 				<td class="hab"><input type="text" class="fm" name="duration" value="1"></td>
-				<td class="hab"><input type="text" class="fm" name="start" value="<?php echo date('d-m-Y H:i:s', strtotime("now")); ?>"></td>
+				<td class="hab"><input type="text" class="fm" name="start" value="<?php echo date('d.m.Y H:i:s', strtotime("now")); ?>"></td>
 			</tr>
 			<tr>
 				<td>Default: 1 Hour<br />Value: Hours (0.5) for 30 mins</td>
