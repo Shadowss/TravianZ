@@ -45,9 +45,9 @@ The email will be sent to following address: <span class="important"><?php echo 
                 </p> 
             </div> 
             </div> 
-        <?php if(START_DATE > date('m/d/Y') or START_DATE == date('m/d/Y') && START_TIME <= date('H:i')){ ?> 
+        <?php if(START_DATE > date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')){ ?> 
 <br/><center><big>Activation Availble in: </big></center>
-<script language="JavaScript">
+<script>
 TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
 CountActive = true;
 CountStepper = -1;
@@ -117,7 +117,7 @@ CountBack(gsecs);
 <?php }}else{ ?> 
             <p> 
                 <?php  
-if(START_DATE > date('m/d/Y') or START_DATE == date('m/d/Y') && START_TIME <= date('H:i')){
+                if(START_DATE > date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')){
 				?>
 <br/><center><big>Activation Availble in: </big></center>
 <script language="JavaScript">

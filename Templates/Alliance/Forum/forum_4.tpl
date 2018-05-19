@@ -42,10 +42,10 @@ if($ChckTopic){
 			foreach($lposts as $post) {
 			}
 		if($database->CheckLastPost($arrs['id'])){
-			$post_dates = date('m/d/y, H:i a',$post['date']);
+			$post_dates = date('d.m.y, H:i a',$post['date']);
 			$owner_topics = $database->getUserArray($post['owner'],1);
 		}else{
-			$post_dates = date('m/d/y, H:i a',$arrs['date']);
+			$post_dates = date('d.m.y, H:i a',$arrs['date']);
 			$owner_topics = $database->getUserArray($arrs['owner'],1);
 		}
 

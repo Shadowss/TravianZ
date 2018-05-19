@@ -25,7 +25,7 @@ foreach($topics as $arr){
 	$CatName = stripslashes($forumData['forum_name']);
 	$allianceinfo = $database->getAlliance($owner['alliance']);
 }
-$date = date('m/d/y H:i a', $arr['date']);
+$date = date('d.m.y H:i a', $arr['date']);
 $varray = $database->getProfileVillages($arr['owner']);
 
 $totalpop = 0;
@@ -149,7 +149,7 @@ foreach($posts as $po){
 	$checkArray = ['aid' => $aid, 'alliance' => $topic['alliance'], 'forum_perm' => $opt['opt5'],
 			'owner' => $po['owner'], 'admin' => $_GET['admin'], 'forum_owner' => $forumData['owner']];
 	
-	$date = date('m/d/y H:i a', $po['date']);
+	$date = date('d.m.y H:i a', $po['date']);
 	$countAu = $database->CountTopic($po['owner']);
 	$varray = $database->getProfileVillages($po['owner']);
 	$totalpop = 0;

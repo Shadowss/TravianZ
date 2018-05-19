@@ -46,7 +46,7 @@ class MYSQLi_DB {
 
 	function register($username, $password, $email, $tribe, $act) {
 		$time = time();
-        	$stime = strtotime(START_DATE)-strtotime(date(\'m/d/Y\'))+strtotime(START_TIME);
+        	$stime = strtotime(START_DATE)-strtotime(date(\'d.m.y\'))+strtotime(START_TIME);
 		if($stime > time()){
 		$time = $stime;
 		}

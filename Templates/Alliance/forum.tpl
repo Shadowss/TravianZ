@@ -155,7 +155,7 @@ if(isset($_POST['newtopic']) && isset($_POST['thema']) && isset($_POST['text']) 
 					$ends_date = $_POST['month']."/".$_POST['day']."/".$_POST['year'];
 					if($_POST['meridiem'] == 1) $_POST['hour'] += 12;
 					$ends_time = $_POST['hour'].":".$_POST['minute'];
-					$ends = strtotime($ends_date) - strtotime(date('m/d/Y')) + strtotime($ends_time);
+					$ends = strtotime($ends_date) - strtotime(date('d.m.y')) + strtotime($ends_time);
 				}
 				
 				for($i = 1; $i <= 8; $i++) if(isset($_POST['option_'.$i]) && !empty($_POST['option_'.$i])) $survey = true;

@@ -46,7 +46,7 @@ AccessLogger::logRequest();
 <div id="content"  class="activate">
 <?php
 
-	if(isset($_GET['e']) && (START_DATE < date('m/d/Y') or START_DATE == date('m/d/Y') && START_TIME <= date('H:i')))
+	if(isset($_GET['e']) && (START_DATE < date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')))
 	{
 		switch($_GET['e'])
 		{

@@ -81,7 +81,7 @@ else
 <h5><img class="img_u04" src="img/x.gif" alt="login" /></h5>
 <p><?php echo COOKIES; ?></p>
 <?php
-$stime = strtotime(START_DATE)-strtotime(date('m/d/Y'))+strtotime(START_TIME);
+$stime = strtotime(START_DATE) - strtotime(date('d.m.y')) + strtotime(START_TIME);
 if($stime > time()){
 ?>
 <br/><div style="text-align: center"><big>Server will start in: </big></div>

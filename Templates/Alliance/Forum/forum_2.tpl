@@ -56,11 +56,11 @@ foreach($forumcat as $arr){
 			if($database->CheckLastTopic($arr['id'])){
 				//If there are no posts yet, show the topic
 				if($database->CheckLastPost($las['id']) == 0){
-					$lpost = date('m/d/y H:i a', $las['date']);
+					$lpost = date('d.m.y H:i a', $las['date']);
 					$owner = $database->getUserArray($las['owner'], 1);
 				}else{
 					foreach($lpos as $pos){
-						$lpost = date('m/d/y H:i a', $pos['date']);
+						$lpost = date('d.m.y H:i a', $pos['date']);
 						$owner = $database->getUserArray($pos['owner'], 1);
 					}
 				}			
