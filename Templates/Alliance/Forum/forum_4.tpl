@@ -64,7 +64,7 @@ if($ChckTopic){
 			}
 			echo $locks.'<a class="edit" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=edittopic" title="edit"><img src="img/x.gif" alt="edit" /></a><br />'.$pin.'<a class="fdel" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=deltopic" title="delete"><img src="img/x.gif" alt="delete" onClick="return confirm(\'confirm delete?\');" /></a>';
 		}elseif($arrs['close'] == 1){
-			echo '<img class="folder_'.($arrs['stick'] == 1 ? 'sticky_' : 'lock').'lock" src="img/x.gif" alt="Closed Thread without new posts" title="Closed Thread without new posts" />';
+			echo '<img class="folder_'.($arrs['stick'] == 1 ? 'sticky_' : '').'lock" src="img/x.gif" alt="Closed Thread without new posts" title="Closed Thread without new posts" />';
 		}else{
 			echo '<img class="folder'.($arrs['stick'] == 1 ? '_sticky' : '').'" src="img/x.gif" alt="'.($arrs['stick'] == 1 ? 'Important ' : '').'Thread without new posts" title="'.($arrs['stick'] == 1 ? 'Important ' : '').'Thread without new posts" />';
 		}

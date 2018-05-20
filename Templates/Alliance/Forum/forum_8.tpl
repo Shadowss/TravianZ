@@ -11,7 +11,7 @@ if($session->access == BANNED){
 }
 
 $forumData = reset($database->ForumCatEdit($_GET['idf']));
-if(empty($forumData) || ($session->alliance == 0 && $session->access != ADMIN) ||
+if(empty($forumData) || ($forumData['alliance'] == 0 && $session->access != ADMIN) ||
   ($forumData['alliance'] > 0 && ($forumData['alliance'] != $session->alliance ||
   (!$opt['opt5'] && $session->access != ADMIN)))) $alliance->redirect($_GET);
 

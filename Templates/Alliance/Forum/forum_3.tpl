@@ -38,8 +38,6 @@ $canBeMoved = $forumData['forum_area'] == 1 && $session->access == 9;
 			<td><select class="dropdown" name="fid">
 <?php
 	$show_cat = $database->ForumCat($forumData['alliance']);
-	if($canBeMoved) $show_cat = array_merge($show_cat, $database->ForumCat($session->alliance));
-			
 	foreach($show_cat as $cats) {
 		if($session->access == 9 && $cats['owner'] != $session->uid) continue;
 		

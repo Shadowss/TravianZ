@@ -41,7 +41,7 @@ if(isset($_POST['new']) &&
 	$forum_des = $_POST['u2'];
 	$forum_owner = $session->uid;
 	$forum_area = $_POST['bid'];
-	$database->CreatForum($forum_owner, $session->alliance, $forum_name, $forum_des, $forum_area, $forumViewable['alliances'], $forumViewable['users']);
+	$database->CreatForum($forum_owner, $session->access == ADMIN ? 0 : $session->alliance, $forum_name, $forum_des, $forum_area, $forumViewable['alliances'], $forumViewable['users']);
 }
 
 if(isset($_POST['edittopic']) && 
@@ -52,7 +52,7 @@ if(isset($_POST['edittopic']) &&
 		'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $topic['owner'],
    		'forum_owner' => ($forumData = reset($database->ForumCatEdit($_POST['fid'])))['owner']], 1) &&
    (($forumData['forum_area'] != 1 && reset($database->ForumCatEdit($topic['cat']))['forum_area'] != 1 && $forumData['alliance'] == $session->alliance) ||
-   $forumData['id'] == $topic['cat'] || $session->access == ADMIN))
+   		$forumData['id'] == $topic['cat'] || ($session->access == ADMIN && $forumData['alliance'] = 0)))
 {
 	$topic_name = $_POST['thema'];
 	$topic_cat = $_POST['fid'];
@@ -227,8 +227,9 @@ elseif(isset($_GET['idt']) && !empty($_GET['idt'])){
 	if($_GET['admin'] != "edittopic" && $_GET['admin'] != "editans") $alliance->redirect($_GET);
 }
 elseif($_GET['admin'] == "delforum" && isset($_GET['idf']) && !empty($_GET['idf']) &&
-	  (($database->ForumCatAlliance($_GET['idf']) == $session->alliance && $opt['opt5'] == 1) ||
-	  ($forumData = reset($database->ForumCatEdit($_GET['idf'])))['owner'] == $session->uid && $forumData['alliance'] == 0))
+	  ((($database->ForumCatAlliance($_GET['idf']) == $session->alliance && $opt['opt5'] == 1) ||
+	  ($forumData = reset($database->ForumCatEdit($_GET['idf'])))['owner'] == $session->uid) ||
+	  ($forumData['alliance'] == 0 && $session->access == ADMIN)))
 {
 	$database->DeleteCat($_GET['idf']); // delete forum
 	$alliance->redirect($_GET);
