@@ -70,10 +70,11 @@ class Session {
 			var $bonus3 = 0;
 			var $bonus4 = 0;
 			var $timer = 0;
+			var $sharedForums = [];
 			var $checker, $mchecker;
-			public $userinfo = array();
-			private $userarray = array();
-			var $villages = array();
+			public $userinfo = [];
+			private $userarray = [];
+			var $villages = [];
 
 			function __construct() {
         		global $database; //TienTN fix
@@ -238,6 +239,7 @@ class Session {
 
 			private function PopulateVar() {
 				global $database;
+				
 				$this->userarray = $this->userinfo = $database->getUserArray($_SESSION['username'], 0);
 				$this->username = $this->userarray['username'];
 				$this->uid = $_SESSION['id_user'] =  $this->userarray['id'];
@@ -257,6 +259,7 @@ class Session {
 				$this->cp = floor($this->userarray['cp']);
 				$this->gold = $this->userarray['gold'];
 				$this->oldrank = $this->userarray['oldrank'];
+				$this->sharedForums = $database->getSharedForums($this->uid, $this->alliance);
 				$_SESSION['ok'] = $this->userarray['ok'];
 				if($this->userarray['b1'] > $this->time) {
 					$this->bonus1 = 1;

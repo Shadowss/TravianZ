@@ -627,7 +627,7 @@ class MYSQLi_DB implements IDbConnection {
     function mysqli_fetch_all($result) {
         list($result) = $this->escape_input($result);
 
-        $all = array();
+        $all = [];
         if($result) {
             while($row = mysqli_fetch_assoc($result)) {
                 $all[] = $row;
@@ -2250,12 +2250,105 @@ class MYSQLi_DB implements IDbConnection {
         return $this->getVillageByWorldID($wref, $use_cache);
 	}
 
+	/**
+	 * Get shared forums (and confederation forums), based on user ID and alliance ID
+	 * 
+	 * @param int $uid The user ID
+	 * @param int $alliance The alliance ID
+	 * @return array Returns all user's shared forums
+	 */
+	
+	function getSharedForums($uid, $alliance){
+		list($uid, $alliance) = $this->escape_input((int) $uid, (int) $alliance);
+		
+		$allianceForums = $confForums = $closedForums = [];
+		
+		$q = 	"SELECT * FROM 
+					".TB_PREFIX."forum_cat 
+				WHERE 
+					display_to_alliances 
+				LIKE
+					'%,$alliance,%'
+				OR
+					display_to_alliances 
+				LIKE
+					'%,$alliance%'
+				OR
+					display_to_alliances 
+				LIKE
+					'%$alliance,%'
+				OR
+					display_to_alliances 
+				LIKE
+					'%$alliance%'
+				OR
+					display_to_users
+				LIKE 
+					'%,$uid,%'
+				OR
+					display_to_users 
+				LIKE 
+					'%,$uid%'
+				OR
+					display_to_users 
+				LIKE 
+					'%$uid,%'
+				OR
+					display_to_users 
+				LIKE 
+					'%$uid%'
+				";
+		$result = mysqli_query($this->dblink, $q);
+		while($row = mysqli_fetch_assoc($result)) {
+			switch($row['forum_area']){
+				case 0: $allianceForums[] = $row; break;
+				case 2: $confForums[] = $row; break;
+				case 3: $closedForums[] = $row; break;
+			}
+		}	
+
+		//Get the alliance confederation forums
+		if($alliance > 0){
+			$confederations = $this->diplomacyExistingRelationships($alliance);
+			if(!empty($confederations)){
+				foreach($confederations as $confederation){
+					if($confederation['type'] == 1){
+						$confederationForums = $this->ForumCat($confederation['alli1'] == $alliance ? $confederation['alli2'] : $confederation['alli1'], 1);	
+						if(!empty($confederationForums)){
+							foreach($confederationForums as $forum){
+								if($forum['forum_area'] == 2) $confForums[] = $forum;
+							}
+						}
+					}
+				}	
+			}		
+		}
+
+		return ['alliance' => $allianceForums, 'confederation' => $confForums, 'closed' => $closedForums];
+	}
+	
+	/**
+	 * Get the total amount of the wanted forum, based on alliance and the forum area
+	 * 
+	 * @param int $forumArea The forum Area 0 = alliance, 1 = public, 2 = confederation, 3 = closed
+	 * @param int $ally The alliance ID
+	 * @return int Returns the total amount of the wanted forum
+	 */
+	
+	function countForums($forumArea, $ally){
+		list($forumArea, $ally) = $this->escape_input((int) $forumArea, (int) $ally);
+		
+		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE ".($ally != -1 ? "alliance = $ally AND" : "")." forum_area = $forumArea";
+		$result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC	);
+		return $result['Total'];
+	}
+	
     // no need to refactor this method
 	function CheckForum($id) {
 	    list($id) = $this->escape_input((int) $id);
 
 		$q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "forum_cat where alliance = $id";
-		$result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
+		$result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
 		return $result['Total'] > 0; 
 	}
 
@@ -2366,10 +2459,10 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
     // no need to cache this method
-	function ForumCat($id) {
-        list($id) = $this->escape_input($id);
+	function ForumCat($id, $mode = 0) {
+        list($id, $mode) = $this->escape_input($id, $mode);
 
-		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' OR forum_area = 1 ORDER BY sorting DESC, id";
+		$q = "SELECT * from " . TB_PREFIX . "forum_cat where alliance = '$id' ".(!$mode ? "OR forum_area = 1" : "")." ORDER BY sorting DESC, id";
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
@@ -3179,16 +3272,13 @@ class MYSQLi_DB implements IDbConnection {
 		$array = $this->query_return($q);
 		$text = "";
 
-		if ($array) {
-    		foreach($array as $row){
-    			if($row['alli1'] == $aid){
-    			$alliance = $this->getAlliance($row['alli2']);
-    			}elseif($row['alli2'] == $aid){
-    			$alliance = $this->getAlliance($row['alli1']);
-    			}
-    			$text .= "";
-    			$text .= "<a href=allianz.php?aid=".$alliance['id'].">".$alliance['tag']."</a><br> ";
-    		}
+		if($array){
+			foreach($array as $row){
+				if($row['alli1'] == $aid) $alliance = $this->getAlliance($row['alli2']);			
+				elseif($row['alli2'] == $aid) $alliance = $this->getAlliance($row['alli1']);
+				$text .= "";
+				$text .= "<a href=allianz.php?aid=" . $alliance['id'] . ">" . $alliance['tag'] . "</a><br> ";
+			}
 		}
 		if(strlen($text) == 0){
 			$text = "-<br>";

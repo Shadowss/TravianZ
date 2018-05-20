@@ -19,7 +19,7 @@ if(empty($CatName)) $alliance->redirect($_GET);
 
 $opt = $database->getAlliPermissions($session->uid, $aid);
 $ChckTopic = $database->CheckCatTopic($cat_id);
-$Topics = array_merge($database->ForumCatTopic($cat_id), $database->ForumCatTopicStick($cat_id));
+$Topics = array_merge($database->ForumCatTopicStick($cat_id), $database->ForumCatTopic($cat_id));
 ?>
 <h4><a href="allianz.php?s=2">Alliance</a> -> <a href="allianz.php?s=2&fid=<?php echo $cat_id; ?>"><?php echo $CatName; ?></a></h4><table cellpadding="1" cellspacing="1" id="topics"><thead>
 	<tr>

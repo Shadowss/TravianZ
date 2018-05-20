@@ -13,12 +13,17 @@ if($session->access == BANNED){
 $opt = $database->getAlliPermissions($session->uid, $aid);
 $displayarray = $database->getUserArray($session->uid, 1);
 $forumcat = $database->ForumCat(htmlspecialchars($displayarray['alliance']));
-$ally = $session->alliance;
-$public = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE forum_area = 1"), MYSQLI_ASSOC);
-$confederation = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2"), MYSQLI_ASSOC);
-$alliance = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0"), MYSQLI_ASSOC);
-$closed = mysqli_fetch_array(mysqli_query($database->dblink, "SELECT Count(*) as Total FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3"), MYSQLI_ASSOC);
-$countArray = [$alliance['Total'], $public['Total'], $confederation['Total'], $closed['Total']];
+
+$forumcat = array_merge($forumcat, 
+						$session->sharedForums['alliance'],
+						$session->sharedForums['confederation'], 
+						$session->sharedForums['closed']);
+
+$countArray = [$database->countForums(0, $session->alliance) + count($session->sharedForums['alliance']), 
+			   $database->countForums(1, -1),
+			   $database->countForums(2, $session->alliance) + count($session->sharedForums['confederation']), 
+			   $database->countForums(3, $session->alliance) + count($session->sharedForums['closed'])];
+
 $forumArea = ["Alliance Forum(s)", "Public Forum(s)", "Confederation Forum(s)", "Closed Forum(s)"];
 
 foreach($countArray as $index => $count){

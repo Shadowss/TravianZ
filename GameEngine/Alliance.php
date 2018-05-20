@@ -44,7 +44,7 @@ class Alliance {
 		public $inviteArray = [];
 		public $allianceArray = [];
 		public $userPermArray = [];
-
+		
 		public function procAlliance($get) {
 			global $session, $database;
 
@@ -75,6 +75,25 @@ class Alliance {
 						break;
 				}
 			}
+		}
+		
+		/**
+		 * Determines if a forum is accessible or not
+		 * 
+		 * @param int $forumID The forum ID
+		 * @return bool Returns if the forum is accessible or not
+		 */
+		
+		public function isForumAccessible($forumID){
+			global $session;
+			
+			//Loop through the shared forums and try to find the passed one
+			foreach($session->sharedForums as $forums){
+				foreach($forums as $forum){
+					if($forum['id'] == $forumID) return true;
+				}
+			}
+			return false;
 		}
 		
 		/**
@@ -110,28 +129,36 @@ class Alliance {
 			global $database, $session;
 			
 			$alliances = $users = [];
-			
+			//TODO: Reduce the code of this part and cache existing diplomacy relationship
 			//Deduplicate alliances
 			if(!empty($alliancesID)){
 				foreach($alliancesID as $alliance){
-					if(!empty($alliance) && is_numeric($alliance) && $database->aExist($alliance, 'id')  && $alliance != $session->alliance) $alliances[$alliance] = true;
+					if(!empty($alliance) && is_numeric($alliance) && $database->aExist($alliance, 'id')  && $alliance != $session->alliance && empty($database->diplomacyExistingRelationships($alliance))){
+						$alliances[$alliance] = true;
+					}
 				}
 			}	
 			if(!empty($alliancesName)){
 				foreach($alliancesName as $alliance){
-					if(!empty($alliance) && !empty($allianceID = $database->getAllianceID($alliance)) && $allianceID != $session->alliance) $alliances[$allianceID] = true;
+					if(!empty($alliance) && !empty($allianceID = $database->getAllianceID($alliance)) && $allianceID != $session->alliance && empty($database->diplomacyExistingRelationships($allianceID))){
+						$alliances[$allianceID] = true;
+					}
 				}
 			}
 			
 			//Deduplicate users
 			if(!empty($usersID)){
 				foreach($usersID as $user) {
-					if(!empty($user) && is_numeric($user) && ($userAlly = $database->getUserAllianceID($user)) > 0 && $userAlly != $session->alliance && $database->getUserField($user, 'username', 0) != "[?]" && $user != $session->uid) $users[$user] = true;
+					if(!empty($user) && is_numeric($user) && ($userAlly = $database->getUserAllianceID($user)) > 0 && $userAlly != $session->alliance && $database->getUserField($user, 'username', 0) != "[?]" && $user != $session->uid && empty($database->diplomacyExistingRelationships($userAlly))) {
+						$users[$user] = true;
+					}
 				}
 			}
 			if(!empty($usersName)){
 				foreach($usersName as $user){
-					if(!empty($user) && !empty($userID = $database->getUserField($user, 'id', 1)) && $userID != $session->uid && ($userAlly = $database->getUserAllianceID($userID)) > 0 && $userAlly != $session->alliance) $users[$userID] = true;
+					if(!empty($user) && !empty($userID = $database->getUserField($user, 'id', 1)) && $userID != $session->uid && ($userAlly = $database->getUserAllianceID($userID)) > 0 && $userAlly != $session->alliance && empty($database->diplomacyExistingRelationships($userAlly))) {
+						$users[$userID] = true;
+					}
 				}
 			}
 			

@@ -35,13 +35,13 @@ if(isset($_GET['fid']) || isset($_GET['fid2'])){
 	$fid = preg_replace("/[^0-9]/","",!empty($_GET['fid']) ? $_GET['fid'] : $_GET['fid2']);
 	$forum_type = reset($database->ForumCatEdit($fid));
 	if (!empty($forum_type)) {
-		if(!empty($forum_type['forum_name']) && $forum_type['forum_area'] != 1){
+		if($forum_type['forum_area'] != 1 && !$alliance->isForumAccessible($fid)){
 			if($forum_type['alliance'] != $session->alliance){
 				header("Location: ".$_SERVER['PHP_SELF']);
 				exit;
 			}
 		}
-	}	
+	}
 }
 if(isset($_GET['aid']) || isset($_GET['fid']) || isset($_GET['fid2']) ||
 		$session->alliance > 0 || ($session->alliance == 0 && isset($_GET['s']) && $_GET['s'] == 2)){
@@ -50,33 +50,33 @@ if(isset($_GET['aid']) || isset($_GET['fid']) || isset($_GET['fid2']) ||
 <html>
 <head>
 	<title><?php
-	echo SERVER_NAME . ' &raquo; &raquo; &raquo; Alliance ';
+	echo SERVER_NAME.' &raquo; &raquo; &raquo; Alliance ';
 	
 	if(!empty($_GET['s'])){
 		switch($_GET['s']){
 			case '2' :
 				if($session->alliance == 0) echo 'Forum (No alliance)';
-				else echo 'Forum (' . $alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'] . ')';
+				else echo 'Forum ('.$alliance->allianceArray['tag'].' - '.$alliance->allianceArray['name'].')';
 				break;
 			
 			case '6' :
-				echo 'Chat (' . $alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'] . ')';
+				echo 'Chat ('.$alliance->allianceArray['tag'].' - '.$alliance->allianceArray['name'].')';
 				break;
 			
 			case '3' :
-				echo 'Attacks (' . $alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'] . ')';
+				echo 'Attacks ('.$alliance->allianceArray['tag'].' - '.$alliance->allianceArray['name'].')';
 				break;
 			
 			case '4' :
-				echo 'News (' . $alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'] . ')';
+				echo 'News ('.$alliance->allianceArray['tag'].' - '.$alliance->allianceArray['name'].')';
 				break;
 			
 			case '5' :
-				echo 'Options (' . $alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'] . ')';
+				echo 'Options ('.$alliance->allianceArray['tag'].' - '.$alliance->allianceArray['name'].')';
 				break;
 		}
 	}
-	else echo $alliance->allianceArray['tag'] . ' - ' . $alliance->allianceArray['name'];
+	else echo $alliance->allianceArray['tag'].' - '.$alliance->allianceArray['name'];
 
 ?></title>
 	<link rel="shortcut icon" href="favicon.ico"/>
@@ -102,12 +102,12 @@ if(isset($_GET['aid']) || isset($_GET['fid']) || isset($_GET['fid2']) ||
 
 	   if($session->gpack == null || GP_ENABLE == false) {
 		echo "
-	<link href='" . GP_LOCATE . "travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='" . GP_LOCATE . "lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
 	   } else {
 		echo "
-	<link href='" . $session->gpack . "travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='" . $session->gpack . "lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
 	   }
 
 ?>
@@ -205,7 +205,7 @@ $userPermissions = $database->getAlliPermissions($session->uid, $session->allian
 			}
 			// Options
 		}else{
-			header("Location: " . $_SERVER['PHP_SELF']);
+			header("Location: ".$_SERVER['PHP_SELF']);
 			exit();
 		}
 	}else if(isset($_GET['delinvite'])){
