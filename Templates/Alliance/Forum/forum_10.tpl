@@ -24,21 +24,13 @@ foreach($posts as $pos){
 	$poss = stripslashes($pos['post']);
 	$poss = preg_replace('/\[message\]/', '', $poss);
 	$poss = preg_replace('/\[\/message\]/', '', $poss);
-	$alliance0 = $pos['alliance0'];
-	$player0 = $pos['player0'];
 	$owner = $pos['owner'];
-	$coor0 = $pos['coor0'];
-	$report0 = $pos['report0'];
 }
 	?>
 <form method="post" name="post"
 	action="allianz.php?s=2&fid2=<?php echo $topics['cat']; ?>&tid=<?php echo $topics['id']; ?>">
 	<input type="hidden" name="s" value="2"> <input type="hidden"
 		name="pod" value="<?php echo $_GET['pod']; ?>"> <input type="hidden"
-		name="alliance0" value="<?php echo $alliance0; ?>"> <input
-		type="hidden" name="player0" value="<?php echo $player0; ?>"> <input
-		type="hidden" name="coor0" value="<?php echo $coor0; ?>"> <input
-		type="hidden" name="report0" value="<?php echo $report0; ?>"> <input
 		type="hidden" name="editpost" value="1">
 	<table cellpadding="1" cellspacing="1" id="edit_post">
 		<thead>
@@ -66,14 +58,14 @@ foreach($posts as $pos){
 							</a> <a href="javascript:void(0);" bbType="d" bbTag="u">
 								<div title="underlined" alt="underlined"
 									class="bbButton bbUnderscore"></div>
-							</a> <a href="javascript:void(0);" bbType="d" bbTag="alliance0">
+							</a> <a href="javascript:void(0);" bbType="d" bbTag="alliance">
 								<div title="Alliance" alt="Alliance" class="bbButton bbAlliance"></div>
-							</a> <a href="javascript:void(0);" bbType="d" bbTag="player0">
+							</a> <a href="javascript:void(0);" bbType="d" bbTag="player">
 								<div title="Player" alt="Player" class="bbButton bbPlayer"></div>
-							</a> <a href="javascript:void(0);" bbType="d" bbTag="coor0">
+							</a> <a href="javascript:void(0);" bbType="d" bbTag="coor">
 								<div title="Coordinates" alt="Coordinates"
 									class="bbButton bbCoordinate"></div>
-							</a> <a href="javascript:void(0);" bbType="d" bbTag="report0">
+							</a> <a href="javascript:void(0);" bbType="d" bbTag="report">
 								<div title="Report" alt="Report" class="bbButton bbReport"></div>
 							</a> <a href="javascript:void(0);" bbWin="resources"
 								id="text_resourceButton">

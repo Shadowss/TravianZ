@@ -76,7 +76,7 @@ class Alliance {
 				}
 			}
 		}
-
+		
 		/**
 		 * Determines if a player can act with the forum (edit/delete/create things, etc.)
 		 * 
@@ -87,10 +87,13 @@ class Alliance {
 		public static function canAct($datas, $mode = 0){
 			global $database, $session;
 
-			return (/*$database->CheckEditRes($datas['aid']) == 1 && */((($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
-					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'])) && $session->alliance > 0 &&
-					($mode || (isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin"))) ||
-					$datas['owner'] == $session->uid) || ($datas['forum_owner'] == $session->uid && $datas['alliance'] == 0));
+			$hasSwitchedToAdmin = isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin";
+
+			return (/*$database->CheckEditRes($datas['aid']) == 1 && */($datas['alliance'] > 0 && (($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
+					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'])) &&
+					($mode || $hasSwitchedToAdmin)) ||
+					($datas['owner'] == $session->uid && $session->access != ADMIN)) ||
+					($session->access == ADMIN && ($mode || $hasSwitchedToAdmin)));
 		}
 		
 		/**

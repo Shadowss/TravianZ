@@ -11,8 +11,9 @@ if($session->access == BANNED){
 }
 
 $forumData = reset($database->ForumCatEdit($_GET['idf']));
-if(empty($forumData) || ($forumData['alliance'] > 0 && ($forumData['alliance'] != $session->alliance || !$opt['opt5'])) ||
-		($forumData['alliance'] == 0 && $forumData['owner'] != $session->uid)) $alliance->redirect($_GET);
+if(empty($forumData) || ($session->alliance == 0 && $session->access != ADMIN) ||
+  ($forumData['alliance'] > 0 && ($forumData['alliance'] != $session->alliance ||
+  (!$opt['opt5'] && $session->access != ADMIN)))) $alliance->redirect($_GET);
 
 $users = $alliances = [];
 
@@ -21,7 +22,7 @@ $cat_des = stripslashes($forumData['forum_des']);
 if(!empty($forumData['display_to_alliances'])) $alliances = explode(',', $forumData['display_to_alliances']);
 if(!empty($forumData['display_to_users'])) $users = explode(',', $forumData['display_to_users']);
 ?>
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 
     function addRow(element_id) {
     	// element_id: user_list, ally_list

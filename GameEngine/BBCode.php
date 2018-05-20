@@ -3,7 +3,7 @@
 include_once ("config.php");
 include_once ("Lang/".LANG.".php");
 
-$pattern = array();
+$pattern = [];
 $pattern[0] = "/\[b\](.*?)\[\/b\]/is";
 $pattern[1] = "/\[i\](.*?)\[\/i\]/is";
 $pattern[2] = "/\[u\](.*?)\[\/u\]/is";
@@ -94,7 +94,7 @@ $pattern[86] = "/\*veryangry\*/";
 $pattern[87] = "/\*veryhappy\*/";
 $pattern[88] = "/\;\)/";
 
-$replace = array();
+$replace = [];
 $replace[0] = "<b>$1</b>";
 $replace[1] = "<i>$1</i>";
 $replace[2] = "<u>$1</u>";
@@ -195,12 +195,9 @@ $input = preg_replace_callback(
     function($matches) {
         global $database;
 
-        $aname = $database->getAllianceID($matches[1]);
-        if ($aname) {
-            return "<a href=allianz.php?aid=$aname>".$matches[2]."</a>";
-        } else {
-            return $matches[2];
-        }
+        $aname = $database->getAllianceName($matches[2]);
+        if (!empty($aname)) return "<a href=allianz.php?aid=$matches[2]>".$aname."</a>";    
+    	else return "Alliance not found!";
     },
     $input);
 
@@ -210,12 +207,9 @@ $input = preg_replace_callback(
     function($matches) {
         global $database;
         
-        $uname = $database->getUserField((int) $matches[1], "id", 0);
-        if ($uname) {
-            return "<a href=spieler.php?uid=$uname>".$matches[2]."</a>";
-        } else {
-            return $matches[2];
-        }
+        $uname = $database->getUserField((int) $matches[2], "username", 0);
+        if (!empty($uname) && $uname != "[?]")  return "<a href=spieler.php?uid=$matches[2]>".$uname."</a>";       
+        else return "Player not found!";
     },
     $input);
 
@@ -224,10 +218,12 @@ $input = preg_replace_callback(
     "/\[report(\d{0,20})\]([^\]]*)\[\/report\d{0,20}\]/is",
     function($matches) {
         global $database;
-        
-        $report = count($database->getNotice2((int) $matches[1]));
-  	    if (count($report)) return "<a href=berichte.php?id=".$matches[1].">".$matches[2]."</a>";          
-    	else return $matches[2];
+		
+        $reportID = $matches[1] > 0 ? $matches[1] : $matches[2];
+        $report = $database->getNotice2((int) $reportID, null, false);
+
+        if (!empty($report)) return "<a href=berichte.php?id=".$reportID.">".$report['topic']."</a>";          
+    	else return "Report not found!";
     },
     $input);
 
@@ -235,15 +231,25 @@ $input = preg_replace_callback(
 $input = preg_replace_callback(
     "/\[coor(\d{0,20})\]([^\]]*)\[\/coor\d{0,20}\]/is",
     function($matches) {
-        global $generator;
-
-        $cwref = $generator->getMapCheck($matches[1]);
-        return "<a href=karte.php?d=".$matches[1]."&amp;c=".$cwref.">".$matches[2]."</a>";
+        global $generator, $database;
+        
+        $name = "";
+        $coordinates = explode("|", $matches[2]);
+        $wRef = $database->getVilWref($coordinates[0], $coordinates[1]);
+        $cwref = $generator->getMapCheck($wRef);
+        $state = $database->getVillageType($wRef);
+        if($state > 0){
+        	if($database->getVillageState($wRef)) $name = $database->getVillageField($wRef, 'name');
+        	else $name = ABANDVALLEY;
+        }
+        else $name = $database->getOasisInfo($wRef)['name'];
+        
+        if(!empty($name)) return "<a href=karte.php?d=".$wRef."&amp;c=".$cwref.">".$name." (".$coordinates[0]."|".$coordinates[1].")"."</a>";
+        return "Village not found!";
     },
     $input);
 
 $input = preg_replace('/\[message\]/', '', $input);
 $input = preg_replace('/\[\/message\]/', '', $input);
 $bbcoded = preg_replace($pattern, $replace, $input);
-
 ?>

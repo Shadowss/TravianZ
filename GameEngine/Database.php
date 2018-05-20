@@ -2517,10 +2517,10 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function UpdateEditForum($id, $name, $des, $ally, $alliances, $users) {
-		list($id, $name, $des, $ally, $alliances, $users) = $this->escape_input((int) $id, $name, $des, (int) $ally, $alliances, $users);
+	function UpdateEditForum($id, $name, $des, $alliances, $users) {
+		list($id, $name, $des, $alliances, $users) = $this->escape_input((int) $id, $name, $des, $alliances, $users);
 
-		$q = "UPDATE " . TB_PREFIX . "forum_cat SET forum_name = '$name', forum_des = '$des', display_to_alliances = '$alliances', display_to_users = '$users' WHERE id = $id AND alliance = $ally";
+		$q = "UPDATE " . TB_PREFIX . "forum_cat SET forum_name = '$name', forum_des = '$des', display_to_alliances = '$alliances', display_to_users = '$users' WHERE id = $id";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -2584,11 +2584,11 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_insert_id($this->dblink);
 	}
 
-    function CreatTopic($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) {
-        list($title, $post, $cat, $owner, $alli, $ends, $alliance, $player, $coor, $report) = $this->escape_input($title, $post, (int) $cat, (int) $owner, (int) $alli, (int) $ends, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+    function CreatTopic($title, $post, $cat, $owner, $alli, $ends) {
+        list($title, $post, $cat, $owner, $alli, $ends) = $this->escape_input($title, $post, (int) $cat, (int) $owner, (int) $alli, (int) $ends);
 
         $date = time();
-        $q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post',$date, $date, $cat, $owner, $alli, $ends, 0, 0, $alliance, $player, $coor, $report)";
+        $q = "INSERT into " . TB_PREFIX . "forum_topic values (0,'$title','$post',$date, $date, $cat, $owner, $alli, $ends, 0, 0)";
         mysqli_query($this->dblink,$q);
         return mysqli_insert_id($this->dblink);
     }
@@ -2671,12 +2671,12 @@ class MYSQLi_DB implements IDbConnection {
 	        FORUM SUREY
 	*************************/
 
-    function CreatPost($post, $tids, $owner, $alliance, $player, $coor, $report, $fid2 = 0) {
+    function CreatPost($post, $tids, $owner, $fid2 = 0) {
         global $message, $session;
-        list($post, $tids, $owner, $alliance, $player, $coor, $report, $fid2) = $this->escape_input($post, (int) $tids, $owner, (int) $alliance, (int) $player, (int) $coor, (int) $report, (int) $fid2);
+        list($post, $tids, $owner, $fid2) = $this->escape_input($post, (int) $tids, $owner, (int) $fid2);
 
         $date = time();
-        $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post',$tids,'$owner','$date',$alliance,$player,$coor,$report)";
+        $q = "INSERT into " . TB_PREFIX . "forum_post values (0,'$post',$tids,'$owner','$date')";
         mysqli_query($this->dblink,$q);
         $postID = mysqli_insert_id($this->dblink);
 
@@ -2715,18 +2715,18 @@ class MYSQLi_DB implements IDbConnection {
 		return mysqli_query($this->dblink,$q);
 	}
 
-    function EditUpdateTopic($id, $post, $alliance, $player, $coor, $report) {
-        list($id, $post, $alliance, $player, $coor, $report) = $this->escape_input((int) $id, $post, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+    function EditUpdateTopic($id, $post) {
+        list($id, $post) = $this->escape_input((int) $id, $post);
 
-        $q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post', alliance0 = $alliance, player0 = $player, coor0 = $coor, report0 = $report where id = $id";
+        $q = "UPDATE " . TB_PREFIX . "forum_topic set post = '$post' where id = $id";
 
         return mysqli_query($this->dblink, $q);
     }
 
-    function EditUpdatePost($id, $post, $alliance, $player, $coor, $report) {
-        list($id, $post, $alliance, $player, $coor, $report) = $this->escape_input((int) $id, $post, (int) $alliance, (int) $player, (int) $coor, (int) $report);
+    function EditUpdatePost($id, $post) {
+        list($id, $post) = $this->escape_input((int) $id, $post);
 
-       	$q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post', alliance0 = $alliance, player0 = $player, coor0 = $coor, report0 = $report where id = $id";
+       	$q = "UPDATE " . TB_PREFIX . "forum_post set post = '$post' where id = $id";
         return mysqli_query($this->dblink,$q);
     }
 

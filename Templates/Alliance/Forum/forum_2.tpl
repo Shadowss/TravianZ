@@ -94,8 +94,8 @@ foreach($forumcat as $arr){
 <?php } ?>
 <p>
 <?php
-echo '<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a>';
-if(isset($opt['opt5']) && $opt['opt5'] == 1){
+if(isset($opt['opt5']) && $opt['opt5'] == 1 || $session->access == ADMIN){
+	echo '<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a>';
 	echo '<a href="allianz.php?s='.$ids.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 }
 ?>

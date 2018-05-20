@@ -9,6 +9,9 @@ if($session->access == BANNED){
 	header("Location: banned.php");
 	exit;
 }
+
+if($session->access != ADMIN && ($session->alliance == 0 || ($session->alliance > 0 && !$opt['opt5']))) $alliance->redirect($_GET);
+
 ?>
 <script language="JavaScript" type="text/javascript">
 
@@ -131,10 +134,10 @@ function showCheckList() {
 
 	<tr>
 		<th>Forum type</th>
-		<td><select class="dropdown" id="bid" name="bid" onchange="showCheckList();"><option value="1">Public Forum</option><?php if($session->alliance == 0 && $opt['opt5'] == 1) { ?><option value="2">Confederation Forum</option><option value="0" selected>Alliance Forum</option><option value="3">Closed Forum</option><?php } ?></select></td>
+		<td><select class="dropdown" id="bid" name="bid" onchange="showCheckList();"><?php if($session->access == ADMIN){ ?><option value="1">Public Forum</option><?php }else{ ?><option value="2">Confederation Forum</option><option value="0" selected>Alliance Forum</option><option value="3">Closed Forum</option><?php } ?></select></td>
 	</tr>
 	</tbody></table>
-<?php if($session->alliance > 0 && $opt['opt5'] == 1){ ?>
+<?php if($session->access != ADMIN){ ?>
 <table cellpadding="1" cellspacing="1" id="ally_list"><thead>
 	<tr>
 
