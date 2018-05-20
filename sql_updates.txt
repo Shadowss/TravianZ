@@ -1,3 +1,16 @@
+-- 20.05.2018 -> dropped eight columns
+ALTER TABLE `s1_forum_topic`
+  DROP `alliance0`,
+  DROP `player0`,
+  DROP `coor0`,
+  DROP `report0`;
+
+ALTER TABLE `s1_forum_post`
+  DROP `alliance0`,
+  DROP `player0`,
+  DROP `coor0`,
+  DROP `report0`;
+
 -- 19.05.2018 -> added two new columns
 ALTER TABLE s1_forum_cat ADD (`display_to_alliances` text,  `display_to_users` text)
   
