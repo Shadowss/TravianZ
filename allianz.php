@@ -29,7 +29,6 @@ if(isset($_GET['newdid'])) {
 		exit;
 	}
 }
-if(isset($_GET['s'])) $automation->isWinner();
 
 if(isset($_GET['fid']) || isset($_GET['fid2'])){
 	$fid = preg_replace("/[^0-9]/","",!empty($_GET['fid']) ? $_GET['fid'] : $_GET['fid2']);

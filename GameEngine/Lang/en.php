@@ -1335,13 +1335,13 @@ define("CONF_SERV_WWSTATS_TOOLTIP","Enable (True) or disable (False) the display
 define("CONF_SERV_NTRTIME","Nature Troops Regeneration Time");
 define("CONF_SERV_NTRTIME_TOOLTIP","Time through which the nature troops will be restored in oases.");
 define("CONF_SERV_OASIS_WOOD_PROD_MULT","Oasis Wood Production Multiplier");
-define("CONF_SERV_OASIS_WOOD_PROD_MULT_TOOLTIP","Multiply the base oasis production (40) of wood");
+define("CONF_SERV_OASIS_WOOD_PROD_MULT_TOOLTIP","The base wood oasis production");
 define("CONF_SERV_OASIS_CLAY_PROD_MULT","Oasis Clay Production Multiplier");
-define("CONF_SERV_OASIS_CLAY_PROD_MULT_TOOLTIP","Multiply the base oasis production (40) of clay");
+define("CONF_SERV_OASIS_CLAY_PROD_MULT_TOOLTIP","The base clay oasis production");
 define("CONF_SERV_OASIS_IRON_PROD_MULT","Oasis Iron Production Multiplier");
-define("CONF_SERV_OASIS_IRON_PROD_MULT_TOOLTIP","Multiply the base oasis production (40) of iron");
+define("CONF_SERV_OASIS_IRON_PROD_MULT_TOOLTIP","The base iron oasis production");
 define("CONF_SERV_OASIS_CROP_PROD_MULT","Oasis Crop Production Multiplier");
-define("CONF_SERV_OASIS_CROP_PROD_MULT_TOOLTIP","Multiply the base oasis production (40) of crop");
+define("CONF_SERV_OASIS_CROP_PROD_MULT_TOOLTIP","The base crop oasis production");
 define("CONF_SERV_MEDALINTERVAL","Medal Interval");
 define("CONF_SERV_MEDALINTERVAL_TOOLTIP","The time interval for issuing medals for the top players and alliances. If this parameter is changed on the installed server, the time interval changes after the subsequent issuance of the medals.");
 define("CONF_SERV_TOURNTHRES","Tourn Threshold");

@@ -23,10 +23,8 @@ if(isset($_GET['newdid'])) {
 	header("Location: ".$_SERVER['PHP_SELF']);
 	exit;
 }
-else {
-	$building->procBuild($_GET);
-}
-$automation->isWinner();
+else $building->procBuild($_GET);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -94,63 +92,62 @@ $automation->isWinner();
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 <?php
-if(isset($_GET['id'])) {
-$id = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']);
-} else {
-$id = "";
+if(isset($_GET['id'])){
+	$id = preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['id']);
+} 
+else $id = "";
+
+if(empty($id)) include ("Templates/Plus/1.tpl");
+
+if($id == 1){
+	include ("Templates/Plus/3.tpl");
 }
-if ($id == "") {
-include("Templates/Plus/1.tpl");
+if($id == 2){
+	include ("Templates/Plus/2.tpl");
 }
-if ($id == 1) {
-include("Templates/Plus/3.tpl");
+if($id == 3){
+	include ("Templates/Plus/3.tpl");
 }
-if ($id == 2) {
-include("Templates/Plus/2.tpl");
+if($id == 4){
+	include ("Templates/Plus/4.tpl");
 }
-if ($id == 3) {
-include("Templates/Plus/3.tpl");
+if(isset($_GET['mail']) && $id == 5){
+	include ("Templates/Plus/invite.tpl");
+}else if($id == 5){
+	include ("Templates/Plus/5.tpl");
 }
-if ($id == 4) {
-include("Templates/Plus/4.tpl");
+if($id == 7){
+	include ("Templates/Plus/7.tpl");
 }
-if (isset($_GET['mail']) && $id == 5){
-include("Templates/Plus/invite.tpl");
-}else if ($id == 5) {
-include("Templates/Plus/5.tpl");
+if($id == 8){
+	include ("Templates/Plus/8.tpl");
 }
-if ($id == 7) {
-include("Templates/Plus/7.tpl");
+if($id == 9){
+	include ("Templates/Plus/9.tpl");
 }
-if ($id == 8) {
-include("Templates/Plus/8.tpl");
+if($id == 10){
+	include ("Templates/Plus/10.tpl");
 }
-if ($id == 9) {
-include("Templates/Plus/9.tpl");
+if($id == 11){
+	include ("Templates/Plus/11.tpl");
 }
-if ($id == 10) {
-include("Templates/Plus/10.tpl");
+if($id == 12){
+	include ("Templates/Plus/12.tpl");
 }
-if ($id == 11) {
-include("Templates/Plus/11.tpl");
+if($id == 13){
+	include ("Templates/Plus/13.tpl");
 }
-if ($id == 12) {
-include("Templates/Plus/12.tpl");
+if($id == 14){
+	include ("Templates/Plus/14.tpl");
 }
-if ($id == 13) {
-include("Templates/Plus/13.tpl");
+if($id == 15){
+	include ("Templates/Plus/15.tpl");
 }
-if ($id == 14) {
-include("Templates/Plus/14.tpl");
+if($id > 15){
+	include ("Templates/Plus/3.tpl");
 }
-if ($id == 15) {
-include("Templates/Plus/15.tpl");
-}
-if ($id > 15) {
-include("Templates/Plus/3.tpl");
-}
-if(isset($_POST['mail'])) {
-$mailer->sendInvite($_POST['mail'],$session->uid,$_POST['text']);
+if(isset($_POST['mail'])){
+	$mailer->sendInvite($_POST['mail'], $session->uid, $_POST['text']);
 }
 ?>
 

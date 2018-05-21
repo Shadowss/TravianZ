@@ -36,17 +36,21 @@ class MyGenerator {
    }
 
    public function procDistanceTime($coor, $thiscoor, $ref, $mode, $vid = 0) {
-		global $bid28, $bid14, $building;
+		global $database, $bid28, $bid14, $village;
+
+		if($vid == 0) $vid = $village->wid;
 		
 		$xdistance = ABS($thiscoor['x'] - $coor['x']);
 		if($xdistance > WORLD_MAX) {
 			$xdistance = (2 * WORLD_MAX + 1) - $xdistance;
 		}
+		
 		$ydistance = ABS($thiscoor['y'] - $coor['y']);
 		if($ydistance > WORLD_MAX) {
 			$ydistance = (2 * WORLD_MAX + 1) - $ydistance;
 		}
-		$distance = SQRT(POW($xdistance,2)+POW($ydistance,2));
+		
+		$distance = SQRT(POW($xdistance,2) + POW($ydistance,2));
 		if(!$mode){    
 			if($ref == 1) $speed = 16;		
 			else if($ref == 2) $speed = 12;
@@ -55,35 +59,33 @@ class MyGenerator {
 			else $speed = 1;		
 		}else{
 			$speed = $ref;
-			if(($tSquareLevel = $building->getTypeLevel(14, $vid)) > 0 && $distance >= TS_THRESHOLD) {
+			if(($tSquareLevel = $database->getFieldLevelInVillage($vid, 14)) > 0 && $distance >= TS_THRESHOLD) {
 				$speed *= ($bid14[$tSquareLevel]['attri'] / 100) ;
 			}
 		}
 		
-		if($speed != 0) return round(($distance / $speed) * 3600 / INCREASE_SPEED);
+		if($speed > 0) return round(($distance / $speed) * 3600 / INCREASE_SPEED);
 		else return round($distance * 3600 / INCREASE_SPEED);
 	}
 
-   public function getTimeFormat($time) {
-	   $min = 0;
-	   $hr = 0;
-	   $days = 0;
-	   while($time >= 60) :
-		   $time -= 60;
-		   $min += 1;
-	   endwhile;
-	   while ($min >= 60) :
-		   $min -= 60;
-		   $hr += 1;
-	   endwhile;
-	   if ($min < 10) {
-		   $min = "0".$min;
-	   }
-	   if($time < 10) {
-		   $time = "0".$time;
-	   }
-		return $hr.":".$min.":".$time;
-   }
+	public function getTimeFormat($time) {
+		$min = $hr = $days = 0;
+		
+		while($time >= 60){
+			$time -= 60;
+			$min += 1;
+		}
+		
+		while($min >= 60){
+			$min -= 60;
+			$hr += 1;
+		}
+		
+		if($min < 10) $min = "0" . $min;
+		if($time < 10) $time = "0" . $time;
+		
+		return $hr . ":" . $min . ":" . $time;
+	}
 
 public function procMtime($time, $pref = 3) {
 		/*

@@ -23,48 +23,52 @@ class Units {
             if (!isset($post['disabled'])) $post['disabled'] = '';
 
             switch($post['c']) {
-                case "1":
-                    if (isset($post['a'])&& $post['a']==533374){
-                        $this->sendTroops($post);
-                    }else{
+                case 1:
+                	if (isset($post['a']) && $post['a'] == 533374) $this->sendTroops($post);
+                	else
+                	{	
                         $post = $this->loadUnits($post);
                         return $post;
                     }
                     break;
                     
-                case "2":
-                    if (isset($post['a'])&& $post['a']==533374 && $post['disabled'] == ""){
-                        $this->sendTroops($post);
-                    }else{
+                case 2:
+                    if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
+                    else
+                    {
                         $post = $this->loadUnits($post);
                         return $post;
                     }
                     break;
          
-                case "3":
+                case 3:
                     if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
-                    else{
+                    else
+                    {
                         $post = $this->loadUnits($post);
                         return $post;
                     }
                     break;
                     
-                case "4":
+                case 4:
                     if (isset($post['a']) && $post['a'] == 533374) $this->sendTroops($post);
-                    else{
+                    else
+                    {
                         $post = $this->loadUnits($post);
                         return $post;
                     }
+                    break;
                     
-                case "5":
+                case 5:
                     if (isset($post['a']) && $post['a'] == "new") $this->Settlers($post);
                     else
                     {
                         $post = $this->loadUnits($post);
                         return $post;
                     }
+                    break;
                     
-                case "8":
+                case 8:
                 	$this->sendTroopsBack($post);
                 	break;
             }
@@ -72,7 +76,7 @@ class Units {
     }
     
     private function loadUnits($post) {
-        global $database,$village,$session,$generator,$logging,$form;
+        global $database, $village, $session, $generator, $logging, $form;
         // Search by town name
         // Coordinates and look confirm name people
         if(isset($post['x']) && isset($post['y']) && !empty($post['x']) && !empty($post['y'])) {
@@ -175,7 +179,7 @@ class Units {
             $villageOwner = $database->getVillageField($id,'owner');
             $userAccess = $database->getUserField($villageOwner,'access',0);
             $userID = $database->getUserField($villageOwner,'id',0);
-            if($userAccess == 0 or ($userAccess == MULTIHUNTER && $userID == 5) or (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
+            if($userAccess == 0 || ($userAccess == MULTIHUNTER && $userID == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
                 $form->addError("error","Player is Banned. You can't attack him");
                 //break;
             }
@@ -200,7 +204,7 @@ class Units {
                 // We must return an array with $ post, which contains all the data more
                 // another variable that will define the flag is raised and is being sent and the type of shipping
                 $villageName = $database->getVillageField($id,'name');
-                $speed= 300;
+                $speed = 300;
                 $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
                 array_push($post, "$id", "$villageName", "$villageOwner","$timetaken");
                 return $post;               
@@ -213,7 +217,7 @@ class Units {
                 exit;
             } else if (isset($id)) {
                 $villageName = $database->getOasisField($id,"name");
-                $speed= 300;
+                $speed = 300;
                 $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
                 array_push($post, "$id", "$villageName", "2","$timetaken");
                 return $post;
@@ -239,7 +243,7 @@ class Units {
     }
 
     private function processReturnTroops($enforce) {
-        global $database, $generator;
+        global $database;
         
         $to = $database->getVillage($enforce['from']);
         $tribe = $database->getUserField($to['owner'], 'tribe', 0);
@@ -253,7 +257,7 @@ class Units {
     }
     
     private function sendTroops($post) {
-        global $form, $database, $village, $generator, $session;
+        global $form, $database, $village, $session;
 
         $data   = $database->getA2b( $post['timestamp_checksum'], $post['timestamp'] );
         $Gtribe = ($session->tribe == 1) ? "" : $session->tribe - 1;
@@ -430,7 +434,7 @@ class Units {
     }
 
     private function sendTroopsBack($post) {
-        global $form, $database, $village, $generator, $session, $technology;
+        global $form, $database, $village, $session, $technology;
         if ( $session->access != BANNED ) {
             $enforce      = $database->getEnforceArray( $post['ckey'], 0 );
             $enforceoasis = $database->getOasisEnforceArray( $post['ckey'], 0 );

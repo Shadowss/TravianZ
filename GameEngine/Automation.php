@@ -108,17 +108,6 @@ class Automation {
         $this->artefactOfTheFool();
     }
 
-    public function isWinner() {
-        global $database;
-        // check whether someone already built a level 100 Wonder of the World
-        $q = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99 = 100 and f99t = 40"), MYSQLI_ASSOC);
-        if($q['Total'] > 0)
-        {
-            header('Location: winner.php');
-            exit;
-        }
-    }
-
     public function procResType($ref, $mode = 0) {
         //Capital or only 1 village left = cannot be destroyed
         return addslashes(empty($build = Building::procResType($ref)) && !$mode ? "Village can't be" : $build);
@@ -167,9 +156,10 @@ class Automation {
         return $popTot;
     }
 
-    function buildingPOP($f,$lvl){
+    function buildingPOP($f, $lvl){
         $name = "bid".$f;
         global $$name;
+        
         $popT = 0;
         $dataarray = $$name;
 
@@ -179,9 +169,10 @@ class Automation {
         return $popT;
     }
 
-    function buildingCP($f,$lvl){
+    function buildingCP($f, $lvl){
         $name = "bid".$f;
         global $$name;
+        
         $popT = 0;
         $dataarray = $$name;
 
@@ -293,7 +284,7 @@ class Automation {
     }
 
     private function clearDeleting() {
-    	global $autoprefix, $units, $database;
+    	global $autoprefix, $database;
     	
         if(file_exists($autoprefix."GameEngine/Prevention/cleardeleting.txt")) {
             unlink($autoprefix."GameEngine/Prevention/cleardeleting.txt");
@@ -950,7 +941,7 @@ class Automation {
     }
 
     private function sendunitsComplete() {
-        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $logging, $generator, $units, $autoprefix;
+        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $logging, $units, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
@@ -2689,6 +2680,7 @@ class Automation {
 
     function DelVillage($wref){
         global $database, $units;
+        
         $database->clearExpansionSlot($wref);
         $wref = (int) $wref;
         $q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";

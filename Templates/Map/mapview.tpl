@@ -23,25 +23,19 @@ if(isset($_GET['z'])) {
     $y = $currentcoor['y'];
 	$x = $currentcoor['x'];
     $bigmid = $_GET['z'];
-}
-else if(isset($_POST['xp']) && isset($_POST['yp'])){
+}else if(isset($_POST['xp']) && isset($_POST['yp'])){
 	$x = $_POST['xp'];
     $y = $_POST['yp'];
     $bigmid = $generator->getBaseID($x,$y);
-}
-else {
+}else{
     $y = $village->coor['y'];
 	$x = $village->coor['x'];
     $bigmid = $village->wid;
 }
 
-if(isset($_SESSION['troops_movement'])){
-    unset($_SESSION['troops_movement']);
-}
+if(isset($_SESSION['troops_movement'])) unset($_SESSION['troops_movement']);
 
-if($session->plus){
-    $session->populateAttacks();
-} 
+if($session->plus) $session->populateAttacks();
 
 $xm7 = ($x-7) < -WORLD_MAX? $x+WORLD_MAX+WORLD_MAX-6 : $x-7;
 $xm3 = ($x-3) < -WORLD_MAX? $x+WORLD_MAX+WORLD_MAX-2 : $x-3;

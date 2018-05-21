@@ -19,26 +19,21 @@ AccessLogger::logRequest();
 
 $profile->procProfile($_POST);
 $profile->procSpecial($_GET);
-if(isset($_GET['newdid'])) {
+if(isset($_GET['newdid'])){
 	$_SESSION['wid'] = $_GET['newdid'];
 	if(isset($_GET['s'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?s=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['s']));
-	exit;
+		header("Location: ".$_SERVER['PHP_SELF']."?s=".preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['s']));
+		exit();
 	}else if(isset($_GET['uid'])){
-	header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['uid']));
-	exit;
+		header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['uid']));
+		exit();
 	}else{
-	header("Location: ".$_SERVER['PHP_SELF']);
-	exit;
+		header("Location: ".$_SERVER['PHP_SELF']);
+		exit();
+	}
 }
-}
-else {
-	$building->procBuild($_GET);
-}
+else $building->procBuild($_GET);
 
-if(isset($_GET['s'])){
-$automation->isWinner();
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

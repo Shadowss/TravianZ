@@ -4997,6 +4997,12 @@ References: User ID/Message ID, Mode
 	    else return ''; // all is good, no need to append additional alliance-related text 
     }
 
+    function isThereAWinner(){
+    	$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."fdata WHERE f99 = 100 and f99t = 40";
+    	$result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
+    	return $result['Total'] > 0;
+    }
+    
     /**
      * Modify or delete a building being constructed/in queue
      * 

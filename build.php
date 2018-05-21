@@ -275,7 +275,7 @@ if(isset($_GET['mode']) && $_GET['mode'] == 'troops' && isset($_GET['cancel']) &
 		exit();
 	}
 }
-if(isset($_GET['id'])) $automation->isWinner();
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -295,13 +295,13 @@ if(isset($_GET['id'])) $automation->isWinner();
 	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
-	echo "
-	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+		echo "
+		<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
+		<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
 	} else {
-	echo "
-	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
-	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+		echo "
+		<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
+		<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
 	}
 	?>
 	<script type="text/javascript">
