@@ -109,10 +109,10 @@ class Alliance {
 			$hasSwitchedToAdmin = isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin";
 
 			return (/*$database->CheckEditRes($datas['aid']) == 1 && */($datas['alliance'] > 0 && (($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
-					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'])) &&
-					($mode || $hasSwitchedToAdmin)) ||
+					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance']))) ||
 					($datas['owner'] == $session->uid && $session->access != ADMIN)) ||
-					($session->access == ADMIN && ($mode || $hasSwitchedToAdmin)));
+					($session->access == ADMIN))  &&
+					($mode || $hasSwitchedToAdmin);
 		}
 		
 		/**

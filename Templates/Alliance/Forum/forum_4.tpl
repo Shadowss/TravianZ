@@ -11,11 +11,13 @@ if($session->access == BANNED){
 }
 
 $cat_id = $_GET['fid'];
-$forumData = reset($database->ForumCatEdit($cat_id));
-$CatName = stripslashes($forumData['forum_name']);
+$forumInfo = $database->ForumCatEdit($cat_id);
 
 //Check if we're viewing a valid forum
-if(empty($CatName)) $alliance->redirect($_GET);
+if(empty($forumInfo)) $alliance->redirect($_GET);
+
+$forumData = reset($forumInfo);
+$CatName = stripslashes($forumData['forum_name']);
 
 $opt = $database->getAlliPermissions($session->uid, $aid);
 $ChckTopic = $database->CheckCatTopic($cat_id);
@@ -84,8 +86,6 @@ echo '<tr>
 	</tbody></table><p>
 	<a href="allianz.php?s=2&pid=<?php echo $aid; ?>&fid=<?php echo $cat_id; ?>&ac=newtopic"><img id="fbtn_post" class="dynamic_img" src="img/x.gif" alt="Post new thread" /></a> 
 <?php
-	if((isset($opt['opt5']) && $opt['opt5']== 1) || $session->access == ADMIN){
-		echo '<a href="allianz.php?s=2&fid='.$cat_id.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
-	}
+echo '<a href="allianz.php?s=2&fid='.$cat_id.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 ?>
 	</p>

@@ -23,8 +23,9 @@ class Battle {
 
 		public function procSim($post) {
 			global $form;
+			
 			// receive form and process
-			if(isset($post['a1_v']) && (isset($post['a2_v1']) || isset($post['a2_v2']) || isset($post['a2_v3']) || isset($post['a2_v4']))) {
+			if(isset($post['a1_v']) && (isset($post['a2_v1']) || isset($post['a2_v2']) || isset($post['a2_v3']) || isset($post['a2_v4']))){
 				$_POST['mytribe'] = $post['a1_v'];
 				
 				$target = [];
@@ -33,59 +34,54 @@ class Battle {
 				if(isset($post['a2_v3'])) array_push($target, 3);
 				if(isset($post['a2_v4'])) array_push($target, 4);
 				if(isset($post['a2_v5'])) array_push($target, 5);
-
+				
 				$_POST['target'] = $target;
-				if(isset($post['h_off_bonus'])) {
-					if (intval($post['h_off_bonus']) > 20) $post['h_off_bonus'] = 20;
+				if(isset($post['h_off_bonus'])){
+					if(intval($post['h_off_bonus']) > 20) $post['h_off_bonus'] = 20;
 				}
-				else $post['h_off_bonus']=0;
-
-				if(isset($post['h_def_bonus'])) {
-					if (intval($post['h_def_bonus']) > 20) $post['h_def_bonus'] = 20;
+				else $post['h_off_bonus'] = 0;
+					
+				if(isset($post['h_def_bonus'])){
+					if(intval($post['h_def_bonus']) > 20) $post['h_def_bonus'] = 20;
 				}
-				else $post['h_def_bonus']=0;
-
-				if(isset($post['a1_1'])) {
-					$sum = $sum2 = $post['walllevel'] = 0;
-					for($i=1;$i<=10;$i++) {
-					    $sum += (!empty($post['a1_'.$i]) ? $post['a1_'.$i] : 0);
+				else $post['h_def_bonus'] = 0;
+				
+				$sum = 0;
+				for($i = 1; $i <= 10; $i++) $sum += (!empty($post['a1_'.$i]) ? $post['a1_'.$i] : 0);
+				
+				if($sum > 0){
+					$post['palast'] = intval($post['palast']);
+					if($post['palast'] > 20) $post['palast'] = 20;
+					
+					for($i = 1; $i <= 5; $i++){
+						if(isset($post['wall'.$i])){
+							$post['wall'.$i] = intval($post['wall'.$i]);
+							if($post['wall'.$i] > 20) $post['wall'.$i] = 20;
+							elseif($post['wall'.$i] < 0) $post['wall'.$i] = 0;
+							$post['walllevel'] = $post['wall'.$i];
+						}
 					}
-					if($sum > 0) {
-						$post['palast'] = intval($post['palast']);
-						if($post['palast'] > 20) $post['palast'] = 20;
 
-						if(isset($post['wall1'])) {
-							$post['wall1'] = intval($post['wall1']);
-							if ($post['wall1'] > 20) $post['wall1']=20;
-							if ($post['walllevel']==0) $post['walllevel']=$post['wall1'];
-						}
-						if(isset($post['wall2'])) {
-							$post['wall2'] = intval($post['wall2']);
-							if ($post['wall2'] > 20) $post['wall2']=20;
-							if ($post['walllevel']==0) $post['walllevel']=$post['wall2'];
-						}
-						if(isset($post['wall3'])) {
-							$post['wall3'] = intval($post['wall3']);
-							if ($post['wall3'] > 20) $post['wall3']=20;
-							if ($post['walllevel']==0) $post['walllevel']=$post['wall3'];
-						}
-						if(isset($post['wall4'])) {
-							$post['wall4'] = intval($post['wall4']);
-							if ($post['wall4'] > 20) $post['wall4']=20;
-							if ($post['walllevel']==0) $post['walllevel']=$post['wall4'];
-						}
-						if(isset($post['wall5'])) {
-							$post['wall5'] = intval($post['wall5']);
-							if ($post['wall5'] > 20) $post['wall5']=20;
-							if ($post['walllevel']==0) $post['walllevel']=$post['wall5'];
-						}
-						$post['tribe'] = $target[0];
+					$post['tribe'] = $target[0];
+					$_POST['result'] = $this->simulate($post);
+					$newWallLevel = $_POST['result'][7];
+					$oldWallLevel = $_POST['result'][8];
+					
+					//If the wall level is reduce, we have to re-do the whole battle
+					if($newWallLevel != $oldWallLevel){
+						$post['walllevel'] = $newWallLevel;
 						$_POST['result'] = $this->simulate($post);
-						$form->valuearray = $post;
+						
+						//Reset the datas
+						$_POST['result'][7] = $newWallLevel;
+						$_POST['result'][8] = $post['walllevel'] = $oldWallLevel;
 					}
+					
+					$form->valuearray = $post;
 				}
 			}
 		}
+		
 		private function getBattleHero($uid) {
 			global $database;
 			$heroarray = $database->getHero($uid);
@@ -551,19 +547,21 @@ class Battle {
             $wctp *= ($catp + $upgrades);
             
             //catapults downgrades
-            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1) / $strongerbuildings;
+            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1);
             
             //catapults moral
             $catpMoral = pow($attpop / ($defpop > 0 ? $defpop : 1) , 0.3);
             
             // New level of the building (only for warsim.php)
-            $result[3] = $this->calculateNewBuildingLevel($catpMoral, $upgrades / $downgrades, $tblevel, $wctp, $catp);
+            $result[3] = $this->calculateNewBuildingLevel($catpMoral, $upgrades, $downgrades, $tblevel, $wctp, $catp, $strongerbuildings);
             $result[4] = $tblevel;
             
             // Results for Automation.php
             $result['catapults']['moral'] = $catpMoral;
-            $result['catapults']['updown'] = $upgrades / $downgrades;
+            $result['catapults']['upgrades'] = $upgrades;
+            $result['catapults']['downgrades'] = $downgrades;
             $result['catapults']['realAttackers'] = $wctp;
+            $result['catapults']['strongerBuildings'] = $strongerbuildings;
         }
         
         if($ram > 0 && $walllevel != 0) {
@@ -574,16 +572,18 @@ class Battle {
             $wctp = ($wctp >= 1) ? 1 - 0.5 / $wctp : 0.5 * $wctp;
             $wctp *= ($ram) + $upgrades;
 
-            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1) / $strongerbuildings;
+            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1);
            
             // New level of the building (only for warsim.php)
-            $result[7] = $this->calculateNewBuildingLevel(1, $upgrades / $downgrades, $walllevel, $wctp, $ram);
+            $result[7] = $this->calculateNewBuildingLevel(1, $upgrades, $downgrades, $walllevel, $wctp, $ram, $strongerbuildings * 5);
             $result[8] = $walllevel;
 
             // Results for Automation.php
             $result['rams']['moral'] = 1;
-            $result['rams']['updown'] = $upgrades / $downgrades;
+            $result['rams']['upgrades'] = $upgrades;
+            $result['rams']['downgrades'] = $downgrades;
             $result['rams']['realAttackers'] = $wctp;
+            $result['rams']['strongerBuildings'] = $strongerbuildings * 5;
         }
 
         $result[6] = pow($rap / ($rdp * $moralbonus > 0 ? $rdp * $moralbonus : 1), $Mfactor);
@@ -738,23 +738,25 @@ class Battle {
      * Calculates the new building level, after catapults/rams have damaged it
      * 
      * @param float $moral The catapults/rams battle moral, 1 < moral < 3 => (Total attacker points / Total defender points)^3
-     * @param int $upDown (Upgrades / Downgrades) ratio of catapults/rams made in the Blacksmith
+     * @param int $upgrades Upgrades of catapults/rams made in the blacksmith
+     * @param int $downgrades Defender bonuses, such as the stonemason's lodge
      * @param int $actualLevel The level of the building before the battle
      * @param int $realAttackers Effective catapults/rams involved in the building damage
      * @param int $totalAttackers Total catapults/rams sent in the attack
+     * @param int $strongerBuildings Indicates the defender artifacts bonus against catapults
      * @return int Returns the new level of the damaged building
      */
     
-    public function CalculateNewBuildingLevel($moral, $upDown, $actualLevel, $realAttackers, $totalAttackers)
+    public function CalculateNewBuildingLevel($moral, $upgrades, $downgrades, $actualLevel, $realAttackers, $totalAttackers, $strongerBuildings)
     {
         if($moral < 1) $moral = 1;
         elseif($moral > 3) $moral = 3;
 
-        $needMax = round($this->CalculateNeededCatapults($moral, $upDown, $actualLevel));
+        $needMax = round($this->CalculateNeededCatapults($moral, $upgrades / ($downgrades * $strongerBuildings), $actualLevel));
         if($needMax <= $realAttackers) return 0;
         for($i = $actualLevel - 1; $i >= 1; $i--)
         {
-            $need = $this->CalculateNeededCatapults($moral, $upDown, $i);
+        	$need = $this->CalculateNeededCatapults($moral, $upgrades / ($downgrades * $strongerBuildings), $i);
             if(min($realAttackers, $totalAttackers) / ($needMax - $need) <= 1) return ++$i;
         }
  
@@ -765,7 +767,7 @@ class Battle {
      * Calculate the needed catapults/rams to completely destroy a building/wall
      * 
      * @param float $moral The catapults/rams battle moral
-     * @param int $upDown (Upgrades / Downgrades) ratio of catapults/rams made in the Blacksmith
+     * @param int $upDown (Upgrades / Downgrades / Stronger buildings) ratio of catapults/rams
      * @param int $actualLevel The level of the building before the battle
      * @return float Returns the needed catapults/rams to destroy a building/wall
      */

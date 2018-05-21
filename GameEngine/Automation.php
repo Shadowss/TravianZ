@@ -810,7 +810,13 @@ class Automation {
             // currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
             $tbid = (int) $catapultTarget;          
             
-            $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], $battlepart['catapults']['updown'], $tblevel, $battlepart['catapults']['realAttackers']  / ($twoRowsCatapultSetup ? 2 : 1), $data['t8'] / ($twoRowsCatapultSetup ? 2 : 1));
+            $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], 
+            											   $battlepart['catapults']['upgrades'],
+            											   $battlepart['catapults']['downgrades'], 
+            											   $tblevel, 
+            											   $battlepart['catapults']['realAttackers']  / ($twoRowsCatapultSetup ? 2 : 1),
+            											   $data['t8'] / ($twoRowsCatapultSetup ? 2 : 1), 
+            											   ($catapultTarget == 40 ? 1 : $battlepart['catapults']['strongerBuildings']));
 
             //If that building was present in the building queue, we have to modify his level or remove it
             $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel], $tribe);
@@ -1157,12 +1163,11 @@ class Automation {
                     //rams attack
                     if (($data['t7']) > 0 && $type == 3) {
                         $basearraywall = $to;
-                        if (($walllevel = $database->getFieldLevel($basearraywall['wref'],40, false)) > 0){
+                        if (($walllevel = $database->getFieldLevel($basearraywall['wref'], 40, false)) > 0){
                             $wallgid = $database->getFieldLevel($basearraywall['wref'],"40t");
                             $wallid = 40;
                             $w = 4;
                         }
-                        else $empty = 1;
                     }
 
                     $tblevel = 1;
@@ -1226,7 +1231,7 @@ class Automation {
                     $Attacker['uhero'] = $dataarray[$data_num]['t11'];
                     $hero_pic = "hero";
                     //need to set these variables.
-                    $def_wall = 1;
+                    $def_wall = 0;
                     $att_tribe = $owntribe;
                     $def_tribe = $targettribe;
                     $residence = 0;
@@ -1240,7 +1245,7 @@ class Automation {
                     $att_ab1 = $att_ab2 = $att_ab3 = $att_ab4 = $att_ab5 = $att_ab6 = $att_ab7 = $att_ab8 = 0;
                     $def_ab[31] = $def_ab[32] = $def_ab[33] = $def_ab[34] = $def_ab[35] = $def_ab[36] = $def_ab[37] = $def_ab[38] = 0;
 
-                    $empty = 1;
+                    $walllevel = 0;
                     $tblevel = 0;
                     $stonemason = 0;
                 }
@@ -1379,12 +1384,203 @@ class Automation {
 
                     $battlepart = $battle->calculateBattle($Attacker, $Defender, $def_wall, $att_tribe, $def_tribe, $residence, $attpop, $defpop, $type, $def_ab, $att_ab1, $att_ab2, $att_ab3, $att_ab4, $att_ab5, $att_ab6, $att_ab7, $att_ab8, $tblevel, $stonemason, $walllevel, 0, 0, 0, $AttackerID, $DefenderID, $AttackerWref, $DefenderWref, $conqureby, $enforcementarray);
 
+                    //Data for when troops return.
+                    //catapults look :D
+                    $info_cat = $info_chief = $info_ram = $info_hero = ",";
+                    
+                    //check to see if can destroy village
+                    if (count($varray) > 1 && !$database->villageHasArtefact($DefenderWref)) {
+                    	$can_destroy = 1;
+                    }
+                    else $can_destroy = 0;
+                    
+                    if($isoasis == 0){
+                    	if ($type == 3){
+                    		if (($data['t7'] - $traped7) > 0){
+                    			if($walllevel > 0){
+                    				$newLevel = $battle->CalculateNewBuildingLevel($battlepart['rams']['moral'],
+                    															   $battlepart['rams']['upgrades'],
+                    														       $battlepart['rams']['downgrades'],
+                    															   $walllevel,
+                    															   $battlepart['rams']['realAttackers'],
+                    															   $data['t7'],
+                    															   $battlepart['rams']['strongerBuildings']);
+                    				
+                    				if ($newLevel == 0){
+                    					$info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";
+                    					$database->setVillageLevel($data['to'], ["f".$wallid, "f".$wallid."t"], [0, 0]);
+                    					$pop = $this->recountPop($data['to']);
+                    				}elseif ($newLevel == $walllevel){
+                    					$info_ram = "".$ram_pic.",Wall was not damaged.";
+                    				}else{
+                    					$info_ram = "".$ram_pic.",Wall damaged from level <b>".$walllevel."</b> to level <b>".$newLevel."</b>.";
+                    					$database->setVillageLevel($data['to'],"f".$wallid."",$newLevel);
+                    				}
+                    				
+                    				//If the wall got damaged/destroyed during the attack
+                    				//we need to recalculate the whole battle
+                    				if($newLevel != $walllevel){
+                    					$battlepart = $battle->calculateBattle($Attacker, $Defender, $newLevel, $att_tribe, $def_tribe, $residence, $attpop, $defpop, $type, $def_ab, $att_ab1, $att_ab2, $att_ab3, $att_ab4, $att_ab5, $att_ab6, $att_ab7, $att_ab8, $tblevel, $stonemason, $newLevel, 0, 0, 0, $AttackerID, $DefenderID, $AttackerWref, $DefenderWref, $conqureby, $enforcementarray);
+                    				}
+                    			}
+                    			else $info_ram = "".$ram_pic.",There is no wall to destroy.";
+                    		}
+                    		
+                    		if (($data['t8'] - $traped8) > 0)
+                    		{
+                    			$pop = $this->recountPop($data['to']);
+                    			
+                    			// village has been destroyed
+                    			if ($pop <= 0) {
+                    				if ($can_destroy == 1) $info_cat = "".$catp_pic.", Village already destroyed.";
+                    				else $info_cat = "".$catp_pic.", Village can\'t be destroyed.";
+                    			}
+                    			else
+                    			{
+                    				// village stands, let's do the damage
+                    				/**
+                    				 * FIRST CATAPULTS ROW
+                    				 */
+                    				
+                    				$basearray = $data['to'];
+                    				$bdo = $database->getResourceLevel($basearray, false);
+                    				$catapultTarget = $data['ctar1'];
+                    				$catapultTarget2 = (isset($data['ctar2']) ? $data['ctar2'] : 0);
+                    				
+                    				$catapults1TargetRandom = ($catapultTarget == 0);
+                    				$catapults2WillNotShoot = ($catapultTarget2 == 0);
+                    				$catapults2TargetRandom = ($catapults2WillNotShoot || $catapultTarget2 == 99);
+                    				
+                    				// we're manually targetting 1st and/or 2nd row of catapults
+                    				if (!$catapults1TargetRandom)
+                    				{
+                    					$_catapultsTarget1Levels = [];
+                    					$__catapultsTarget1AltTargets = [];
+                    					
+                    					// calculate targets for 1st rows of catapults
+                    					$j = 0;
+                    					for ($i = 1; $i <= 41; $i++)
+                    					{
+                    						if ($i == 41) $i = 99;
+                    						
+                    						// 1st row of catapults pre-selected target calculations, if needed
+                    						if (!$catapults1TargetRandom && $bdo['f'.$i.'t'] == $catapultTarget && $bdo['f'.$i] > 0 && $i != 40)
+                    						{
+                    							$j++;
+                    							$_catapultsTarget1Levels[$j]=$bdo['f'.$i];
+                    							$__catapultsTarget1AltTargets[$j]=$i;
+                    						}
+                    					}
+                    					
+                    					// if we couldn't find a suitable target for 1st row of catapults,
+                    					// select a random target instead
+                    					if (!$catapults1TargetRandom) {
+                    						if ( count( $_catapultsTarget1Levels ) > 0 ) {
+                    							if ( max( $_catapultsTarget1Levels ) <= 0 ) {
+                    								$catapultTarget = 0;
+                    							} else {
+                    								$catapultTarget = $__catapultsTarget1AltTargets[rand( 1, $j )];
+                    							}
+                    						} else {
+                    							$catapultTarget = 0;
+                    							$catapults1TargetRandom = true;
+                    						}
+                    					}
+                    				}
+                    				
+                    				// 1st row of catapults set to target randomly
+                    				if ($catapults1TargetRandom)
+                    				{
+                    					$list = [];
+                    					for ($i = 1; $i <= 41; $i++)
+                    					{
+                    						if ($i == 41) $i = 99;
+                    						if ($bdo['f'.$i] > 0 && $i != 40) $list[] = $i;
+                    					}
+                    					$catapultTarget = $list[rand(0, count($list) - 1)];
+                    				}
+                    				
+                    				/**
+                    				 * resolve 1st row of catapults
+                    				 */
+                    				$village_destroyed = 0;
+                    				$this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget, !$catapults2WillNotShoot, false, $catp_pic, $can_destroy, $isoasis, $village_destroyed, $targettribe);
+                    				
+                    				/**
+                    				 * SECOND CATAPULTS ROW
+                    				 */
+                    				
+                    				// we're manually targetting 2nd row of catapults
+                    				if (!$catapults2TargetRandom)
+                    				{
+                    					$_catapultsTarget2Levels = [];
+                    					$__catapultsTarget2AltTargets = [];
+                    					
+                    					// calculate targets for 2nd rows of catapults
+                    					$j = 0;
+                    					for ($i = 1; $i <= 41; $i++)
+                    					{
+                    						if ($i == 41) $i = 99;
+                    						
+                    						// 2nd row of catapults pre-selected target calculations, if needed
+                    						if (!$catapults2TargetRandom && !$catapults2WillNotShoot && $bdo['f'.$i.'t'] == $catapultTarget2 && $bdo['f'.$i] > 0 && $i != 40)
+                    						{
+                    							$j++;
+                    							$_catapultsTarget2Levels[$j] = $bdo['f'.$i];
+                    							$__catapultsTarget2AltTargets[$j] = $i;
+                    						}
+                    					}
+                    					
+                    					// if we couldn't find a suitable target for 2nd row of catapults,
+                    					// select a random target instead
+                    					if (!$catapults2TargetRandom) {
+                    						if (count($_catapultsTarget2Levels) > 0 ) {
+                    							if (max($_catapultsTarget2Levels) <= 0 ) {
+                    								$catapultTarget2 = 99;
+                    							}
+                    							else $catapultTarget2 = $__catapultsTarget2AltTargets[rand( 1, $j )];
+                    						} else {
+                    							$catapultTarget2 = 99;
+                    							$catapults2TargetRandom = true;
+                    						}
+                    					}
+                    				}
+                    				
+                    				// 2nd row of catapults set to target randomly
+                    				if ($catapults2TargetRandom && !$catapults2WillNotShoot)
+                    				{
+                    					$list = [];
+                    					for ($i = 1; $i <= 41; $i++)
+                    					{
+                    						if ($i == 41) $i = 99;
+                    						if ($bdo['f'.$i] > 0 && $i != 40) $list[] = $i;
+                    					}
+                    					$catapultTarget2 = $list[ rand(0, count($list) - 1) ];
+                    				}
+                    				
+                    				/**
+                    				 * resolve 2nd row of catapults
+                    				 */
+                    				if (!$catapults2WillNotShoot) {
+                    					$this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget2, true, true, $catp_pic, $can_destroy, $isoasis, $village_destroyed, $targettribe);
+                    				}
+                    				
+                    				// clear resource levels cache, since we might have destroyed buildings/fields by now
+                    				call_user_func(get_class($database).'::clearResourseLevelsCache');
+                    			}
+                    		}
+                    	} elseif (($data['t7'] - $traped7) > 0) {
+                    		$info_ram = "".$ram_pic.",Hint: The ram does not work during a raid.";
+                    	}
+                    }
+                    else $can_destroy = 0;  
+                    
                     //units attack string for battleraport
                     $unitssend_att = ''.$data['t1'].','.$data['t2'].','.$data['t3'].','.$data['t4'].','.$data['t5'].','.$data['t6'].','.$data['t7'].','.$data['t8'].','.$data['t9'].','.$data['t10'].'';
                     $herosend_att = $data['t11'];
                    
-                    if ($herosend_att > 0) $unitssend_att_check=$unitssend_att.','.$data['t11'];      
-                    else  $unitssend_att_check=$unitssend_att;            
+                    if ($herosend_att > 0) $unitssend_att_check = $unitssend_att.','.$data['t11'];      
+                    else  $unitssend_att_check = $unitssend_att;            
 
                     //Resetting the enforcement arrays
                     for($i = 1; $i <= 50; $i++) { 
@@ -1643,7 +1839,7 @@ class Automation {
                     $troopsdead6 = $dead6;
                     $troopsdead7 = $dead7;
                     $troopsdead8 = $dead8;
-                    $troopsdead9 = $dead9+1;
+                    $troopsdead9 = $dead9 + 1;
                     $troopsdead10 = $dead10;
                     $troopsdead11 = $dead11;
                     
@@ -1830,186 +2026,7 @@ class Automation {
                                 $btotal -= $max_steal;
                             }
                         }
-                    }
-
-                    // Data for when troops return.
-                    //catapults look :D
-                    $info_cat = $info_chief = $info_ram = $info_hero = ",";
-                    
-                    //check to see if can destroy village
-                    if (count($varray) > 1 && !$database->villageHasArtefact($DefenderWref)) {
-                        $can_destroy = 1;
-                    }
-                    else $can_destroy = 0;
-
-                    if($isoasis == 0)
-                    {
-                        if ($type == 3)
-                        {
-                            if (($data['t7'] - $traped7) > 0){
-                                $newLevel = $battle->CalculateNewBuildingLevel($battlepart['rams']['moral'], $battlepart['rams']['updown'], $walllevel, $battlepart['rams']['realAttackers'], $data['t7']);
-                                if (isset($empty)){
-                                    $info_ram = "".$ram_pic.",There is no wall to destroy.";
-                                } elseif ($newLevel == 0){
-                                    $info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";
-                                    $database->setVillageLevel($data['to'], ["f".$wallid, "f".$wallid."t"], [0, 0]);
-                                    $pop = $this->recountPop($data['to']);
-                                }elseif ($newLevel == $walllevel){
-                                    $info_ram = "".$ram_pic.",Wall was not damaged.";
-                                }else{
-                                    $info_ram = "".$ram_pic.",Wall damaged from level <b>".$walllevel."</b> to level <b>".$newLevel."</b>.";
-                                    $database->setVillageLevel($data['to'],"f".$wallid."",$newLevel);
-                                }
-                            }
-                            
-                            if (($data['t8'] - $traped8) > 0)
-                            {
-                                $pop = $this->recountPop($data['to']);
-                                
-                                // village has been destroyed
-                                if ($pop <= 0) {
-                                    if ($can_destroy == 1) $info_cat = "".$catp_pic.", Village already destroyed.";                                      
-                                    else $info_cat = "".$catp_pic.", Village can\'t be destroyed.";    
-                                }
-                                else
-                                {
-                                    // village stands, let's do the damage
-                                    /**
-                                     * FIRST CATAPULTS ROW
-                                     */
-                                    
-                                    $basearray = $data['to'];
-                                    $bdo = $database->getResourceLevel($basearray, false);
-                                    $catapultTarget = $data['ctar1'];
-                                    $catapultTarget2 = (isset($data['ctar2']) ? $data['ctar2'] : 0);
-                                    
-                                    $catapults1TargetRandom = ($catapultTarget == 0);
-                                    $catapults2WillNotShoot = ($catapultTarget2 == 0);
-                                    $catapults2TargetRandom = ($catapults2WillNotShoot || $catapultTarget2 == 99);
-                                    
-                                    // we're manually targetting 1st and/or 2nd row of catapults
-                                    if (!$catapults1TargetRandom)
-                                    {
-                                        $_catapultsTarget1Levels = [];
-                                        $__catapultsTarget1AltTargets = [];
-                                        
-                                        // calculate targets for 1st rows of catapults
-                                        $j = 0;
-                                        for ($i = 1; $i <= 41; $i++)
-                                        {
-                                            if ($i == 41) $i = 99;
-                                            
-                                            // 1st row of catapults pre-selected target calculations, if needed
-                                            if (!$catapults1TargetRandom && $bdo['f'.$i.'t'] == $catapultTarget && $bdo['f'.$i] > 0 && $i != 40)
-                                            {
-                                                $j++;
-                                                $_catapultsTarget1Levels[$j]=$bdo['f'.$i];
-                                                $__catapultsTarget1AltTargets[$j]=$i;
-                                            }
-                                        }
-                                        
-                                        // if we couldn't find a suitable target for 1st row of catapults,
-                                        // select a random target instead
-                                        if (!$catapults1TargetRandom) {
-                                            if ( count( $_catapultsTarget1Levels ) > 0 ) {
-                                                if ( max( $_catapultsTarget1Levels ) <= 0 ) {
-                                                    $catapultTarget = 0;
-                                                } else {
-                                                    $catapultTarget = $__catapultsTarget1AltTargets[rand( 1, $j )];
-                                                }
-                                            } else {
-                                                $catapultTarget = 0;
-                                                $catapults1TargetRandom = true;
-                                            }
-                                        }
-                                    }
-                                    
-                                    // 1st row of catapults set to target randomly
-                                    if ($catapults1TargetRandom)
-                                    {
-                                        $list = [];
-                                        for ($i = 1; $i <= 41; $i++)
-                                        {
-                                            if ($i == 41) $i = 99;
-                                            if ($bdo['f'.$i] > 0 && $i != 40) $list[] = $i;
-                                        }
-                                        $catapultTarget = $list[rand(0, count($list) - 1)];
-                                    }
-                                    
-                                    /**
-                                     * resolve 1st row of catapults
-                                     */
-                                    $village_destroyed = 0;
-                                    $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget, !$catapults2WillNotShoot, false, $catp_pic, $can_destroy, $isoasis, $village_destroyed, $targettribe);
-                                    
-                                    /**
-                                     * SECOND CATAPULTS ROW
-                                     */
-                                    
-                                    // we're manually targetting 2nd row of catapults
-                                    if (!$catapults2TargetRandom)
-                                    {
-                                        $_catapultsTarget2Levels = [];
-                                        $__catapultsTarget2AltTargets = [];
-                                        
-                                        // calculate targets for 2nd rows of catapults
-                                        $j = 0;
-                                        for ($i = 1; $i <= 41; $i++)
-                                        {
-                                            if ($i == 41) $i = 99;
-                                            
-                                            // 2nd row of catapults pre-selected target calculations, if needed
-                                            if (!$catapults2TargetRandom && !$catapults2WillNotShoot && $bdo['f'.$i.'t'] == $catapultTarget2 && $bdo['f'.$i] > 0 && $i != 40)
-                                            {
-                                                $j++;
-                                                $_catapultsTarget2Levels[$j] = $bdo['f'.$i];
-                                                $__catapultsTarget2AltTargets[$j] = $i;
-                                            }
-                                        }
-                                        
-                                        // if we couldn't find a suitable target for 2nd row of catapults,
-                                        // select a random target instead
-                                        if (!$catapults2TargetRandom) {
-                                            if (count($_catapultsTarget2Levels) > 0 ) {
-                                                if (max($_catapultsTarget2Levels) <= 0 ) {
-                                                    $catapultTarget2 = 99;
-                                                } 
-                                                else $catapultTarget2 = $__catapultsTarget2AltTargets[rand( 1, $j )];                                                                                  
-                                            } else {
-                                                $catapultTarget2 = 99;
-                                                $catapults2TargetRandom = true;
-                                            }
-                                        }
-                                    }
-                                    
-                                    // 2nd row of catapults set to target randomly
-                                    if ($catapults2TargetRandom && !$catapults2WillNotShoot)
-                                    {
-                                        $list = [];
-                                        for ($i = 1; $i <= 41; $i++)
-                                        {
-                                            if ($i == 41) $i = 99;
-                                            if ($bdo['f'.$i] > 0 && $i != 40) $list[] = $i;
-                                        }
-                                        $catapultTarget2 = $list[ rand(0, count($list) - 1) ];
-                                    }
-                                    
-                                    /**
-                                     * resolve 2nd row of catapults
-                                     */
-                                    if (!$catapults2WillNotShoot) {
-                                        $this->resolveCatapultsDestruction($bdo, $battlepart, $info_cat, $data, $catapultTarget2, true, true, $catp_pic, $can_destroy, $isoasis, $village_destroyed, $targettribe);
-                                    }
-                                    
-                                    // clear resource levels cache, since we might have destroyed buildings/fields by now
-                                    call_user_func(get_class($database).'::clearResourseLevelsCache');
-                                }
-                            }
-                        } elseif (($data['t7'] - $traped7) > 0) {
-                            $info_ram = "".$ram_pic.",Hint: The ram does not work during a raid.";
-                        }
-                    }
-                    else $can_destroy = 0;                      
+                    }                    
 
                     //chiefing village
                     //there are senators

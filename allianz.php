@@ -33,7 +33,14 @@ if(isset($_GET['s'])) $automation->isWinner();
 
 if(isset($_GET['fid']) || isset($_GET['fid2'])){
 	$fid = preg_replace("/[^0-9]/","",!empty($_GET['fid']) ? $_GET['fid'] : $_GET['fid2']);
-	$forum_type = reset($database->ForumCatEdit($fid));
+	$forumInfos = $database->ForumCatEdit($fid);
+	
+	if(empty($forumInfos)){
+		header("Location: ".$_SERVER['PHP_SELF']);
+		exit;
+	}
+	
+	$forum_type = reset($forumInfos);
 	if (!empty($forum_type)) {
 		if($forum_type['forum_area'] != 1 && !$alliance->isForumAccessible($fid)){
 			if($forum_type['alliance'] != $session->alliance){
