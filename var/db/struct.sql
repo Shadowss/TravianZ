@@ -754,7 +754,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
   `display_to_alliances` text,
   `display_to_users` text,
   PRIMARY KEY (`id`),
-  KEY `alliance-forum_area` (`alliance`,`forum_area`)
+  KEY `alliance-forum_area` (`alliance`,`forum_area`),
+  KEY `display_to_alliances` (`display_to_alliances`(11)),
+  KEY `display_to_users` (`display_to_users`(11)),
+  KEY `sorting` (`sorting`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

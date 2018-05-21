@@ -1,3 +1,8 @@
+-- 21.05.2018 -> added three indexes
+ALTER TABLE `s1_forum_cat` ADD INDEX `display_to_alliances` (`display_to_alliances`(11));
+ALTER TABLE `s1_forum_cat` ADD INDEX `display_to_users` (`display_to_users`(11)); 
+ALTER TABLE `s1_forum_cat` ADD INDEX `sorting` (`sorting`);
+
 -- 20.05.2018 -> dropped eight columns
 ALTER TABLE `s1_forum_topic`
   DROP `alliance0`,
