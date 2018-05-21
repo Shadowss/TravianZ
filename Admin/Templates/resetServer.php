@@ -45,7 +45,7 @@ mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."diplomacy");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."enforcement");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."farmlist");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."fdata");
-mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."forum_cat");
+mysqli_query($GLOBALS["link"], "DELETE FROM ".TB_PREFIX."forum_cat WHERE forum_area != 1");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."forum_edit");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."forum_post");
 mysqli_query($GLOBALS["link"], "TRUNCATE TABLE ".TB_PREFIX."forum_survey");
