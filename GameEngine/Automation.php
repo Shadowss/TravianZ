@@ -231,18 +231,6 @@ class Automation {
         }
     }
 
-    private function getfieldDistance($coorx1, $coory1, $coorx2, $coory2) {
-        $max = 2 * WORLD_MAX + 1;
-        $x1 = intval($coorx1);
-        $y1 = intval($coory1);
-        $x2 = intval($coorx2);
-        $y2 = intval($coory2);
-        $distanceX = min(abs($x2 - $x1), abs($max - abs($x2 - $x1)));
-        $distanceY = min(abs($y2 - $y1), abs($max - abs($y2 - $y1)));
-        $dist = sqrt(pow($distanceX, 2) + pow($distanceY, 2));
-        return round($dist, 1);
-    }
-
     public function getTypeLevel($tid, $vid) {
         global $database;
         
@@ -687,6 +675,7 @@ class Automation {
 
     private function marketComplete() {
         global $database, $autoprefix, $units;
+        
         if(file_exists($autoprefix."GameEngine/Prevention/market.txt")) {
             unlink($autoprefix."GameEngine/Prevention/market.txt");
         }
@@ -941,7 +930,7 @@ class Automation {
     }
 
     private function sendunitsComplete() {
-        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $logging, $units, $autoprefix;
+        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units, $autoprefix;
 
         if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
@@ -1001,7 +990,8 @@ class Automation {
                 $from = $database->getMInfo($data['from']);
                 $fromF = $database->getVillage($data['from']);
 
-                if ($isoasis == 0){ //village
+                //It's a village
+                if ($isoasis == 0){
                     $DefenderUserData = $database->getUserArray($database->getVillageField($data['to'],"owner"), 1);
                     $Defender['id'] = $DefenderUserData["id"];
                     $DefenderID = $Defender['id'];
@@ -1011,7 +1001,7 @@ class Automation {
                     $toF = $database->getVillage($data['to']);
                     $conqureby = 0;
 					$NatarCapital = ($toF['owner'] == 3 && $toF['capital'] == 1);
-					if(!isset($to['name']) || $to['name'] == '') $to['name'] = "[?]";
+					if(!isset($to['name']) || empty($to['name'])) $to['name'] = "[?]";
 
                     $DefenderUnit = [];
 					$DefenderUnit = $database->getUnit($data['to']);
@@ -1019,18 +1009,19 @@ class Automation {
 					$maxevasion = $DefenderUserData["maxevasion"];
 					$gold = $DefenderUserData["gold"];
 					$playerunit = (($targettribe - 1) * 10);
-					$cannotsend = 0;
-					$movements = $database->getMovement("34", $data['to'], 1);
+					$cannotsend = false;
+					
+					$movements = $database->getMovement(34, $data['to'], 1);
 					for($y = 0; $y < count($movements); $y++){
 						if(property_exists($units, $y)){
 							$returntime = $units->$y['endtime'] - time();
 							if($units->$y['sort_type'] == 4 && $units->$y['from'] != 0 && $returntime <= 10){
-								$cannotsend = 1;
+								$cannotsend = true;
 							}
 						}
 					}
 
-                    if($evasion == 1 && $maxevasion > 0 && $gold > 1 && $cannotsend == 0 && $dataarray[$data_num]['attack_type'] > 2){
+                    if($evasion == 1 && $maxevasion > 0 && $gold > 1 && !$cannotsend && $dataarray[$data_num]['attack_type'] > 2){
                         $evaded = true;
                         $totaltroops = 0;
                         $evasionUnitModifications_units = [];
@@ -1063,6 +1054,7 @@ class Automation {
                         // modify units in DB
                         $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
                     }
+                    
                     //get defence units
                     $enforDefender = [];
                     $rom = $ger = $gal = $nat = $natar = 0;
@@ -1086,7 +1078,7 @@ class Automation {
                     }
                     
                     for($i = 1; $i <= 50; $i++){
-                        $def_ab[$i]=0;
+                        $def_ab[$i] = 0;
                         if(!isset($Defender['u'.$i]) || empty($Defender['u'.$i]) || $Defender['u'.$i] < 0) {
                             $Defender['u'.$i] = 0;                                                  
                         }
@@ -1142,14 +1134,14 @@ class Automation {
                     $att_ab7 = $att_ab['b7'];
                     $att_ab8 = $att_ab['b8'];
                     $armory = $database->getABTech($data['to']); // Armory level
-                    $def_ab[$ud+1] = $armory['a1'];
-                    $def_ab[$ud+2] = $armory['a2'];
-                    $def_ab[$ud+3] = $armory['a3'];
-                    $def_ab[$ud+4] = $armory['a4'];
-                    $def_ab[$ud+5] = $armory['a5'];
-                    $def_ab[$ud+6] = $armory['a6'];
-                    $def_ab[$ud+7] = $armory['a7'];
-                    $def_ab[$ud+8] = $armory['a8'];
+                    $def_ab[$ud + 1] = $armory['a1'];
+                    $def_ab[$ud + 2] = $armory['a2'];
+                    $def_ab[$ud + 3] = $armory['a3'];
+                    $def_ab[$ud + 4] = $armory['a4'];
+                    $def_ab[$ud + 5] = $armory['a5'];
+                    $def_ab[$ud + 6] = $armory['a6'];
+                    $def_ab[$ud + 7] = $armory['a7'];
+                    $def_ab[$ud + 8] = $armory['a8'];
 
                     //rams attack
                     if (($data['t7']) > 0 && $type == 3) {
@@ -1164,10 +1156,8 @@ class Automation {
                     $tblevel = 1;
                     $stonemason = $database->getFieldLevelInVillage($data['to'], 34);
 
-                    /*--------------------------------
-                     // End village Battle part
-                     --------------------------------*/
-                }else{
+                }else{ //It's an oasis
+                	
                     $DefenderUserData = $database->getUserArray($database->getOasisField($data['to'], "owner"), 1);
 					$Defender['id'] = $DefenderUserData["id"];
 					$DefenderID = $Defender['id'];
@@ -1221,12 +1211,11 @@ class Automation {
                     }
                     $Attacker['uhero'] = $dataarray[$data_num]['t11'];
                     $hero_pic = "hero";
+                    
                     //need to set these variables.
-                    $def_wall = 0;
+                    $def_wall = $residence = $attpop = 0;
                     $att_tribe = $owntribe;
                     $def_tribe = $targettribe;
-                    $residence = 0;
-                    $attpop = 0;
                     $defpop = 500;
 
                     //type of attack
@@ -1236,9 +1225,7 @@ class Automation {
                     $att_ab1 = $att_ab2 = $att_ab3 = $att_ab4 = $att_ab5 = $att_ab6 = $att_ab7 = $att_ab8 = 0;
                     $def_ab[31] = $def_ab[32] = $def_ab[33] = $def_ab[34] = $def_ab[35] = $def_ab[36] = $def_ab[37] = $def_ab[38] = 0;
 
-                    $walllevel = 0;
-                    $tblevel = 0;
-                    $stonemason = 0;
+                    $walllevel = $tblevel = $stonemason = 0;
                 }
 
                 $varray = $database->getProfileVillages($to['owner'], 0, false);
@@ -1268,11 +1255,10 @@ class Automation {
                     if($targettribe == 1) $def_spy = $enforDefender['u4'];                       
                     elseif($targettribe == 2) $def_spy = $enforDefender['u14'];                      
                     elseif($targettribe == 3) $def_spy = $enforDefender['u23'];                      
-                    elseif($targettribe == 5) $def_spy = $enforDefender['u54'];
+                    elseif($targettribe == 5) $def_spy = $enforDefender['u44'];
 
                     //impossible to attack or scout NATAR Capital Village
-                    if ($NatarCapital)
-                    {
+                    if ($NatarCapital){
                         for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $data['t'.$i];
                     }
                     elseif(empty($scout))
@@ -1282,8 +1268,7 @@ class Automation {
                         $totalTroops = 0;
                         for($i = 1; $i <= 11; $i++) $totalTroops += $data['t'.$i];               
                         
-                        if($traps >= $totalTroops)
-                        {
+                        if($traps >= $totalTroops){
                             for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $data['t'.$i];
                         }
                         else
@@ -1291,20 +1276,16 @@ class Automation {
                             $multiplier = $traps / $totalTroops;
                             
                             //The hero is excluded, because it can be only trapped if traps > totalTroops
-                            for($i = 1; $i <= 10; $i++)
-                            {
+                            for($i = 1; $i <= 10; $i++){
                                 $trappedUnits = intval($data['t'.$i] * $multiplier);
                                 ${'traped'.$i} = $trappedUnits;
                                 $traps -= $trappedUnits;
                             }
 
-                            while($traps > 0)
-                            {
+                            while($traps > 0){
                                 //There are some traps left, let's distribute them
-                                for($i = 1; $i <= 10 && $traps > 0; $i++)
-                                {
-                                    if($data['t'.$i] != 0) 
-                                    {
+                                for($i = 1; $i <= 10 && $traps > 0; $i++){
+                                    if($data['t'.$i] != 0){
                                         ${'traped'.$i}++;
                                         $traps--;
                                     }
@@ -1313,26 +1294,23 @@ class Automation {
                         }
                     }
                     
-                    if(empty($scout) || $NatarCapital)
-                    {
-                        for ($i = 1; $i <= 11; $i++) 
-                        {
+                    if(empty($scout) || $NatarCapital){
+                        for ($i = 1; $i <= 11; $i++){
                             if (!isset(${'traped'.$i})) ${'traped'.$i} = 0;
                             $totaltraped_att += ${'traped'.$i};
                         }
                         
                         $database->modifyUnit($data['to'], ["99o"], [$totaltraped_att], [1]);
-                        for($i = $start; $i <= $end; $i++) 
-                        {
+                        
+                        for($i = $start; $i <= $end; $i++){
                             $j = $i-$start+1;
                             $Attacker['u'.$i] -= ${'traped'.$j};
                         }
                         $Attacker['uhero'] -= $traped11;
-                        if($totaltraped_att > 0)
-                        {
+                        
+                        if($totaltraped_att > 0){
                             $prisoners2 = $database->getPrisoners2($data['to'], $data['from'], false);
-                            if(empty($prisoners2))
-                            {
+                            if(empty($prisoners2)){
                                 $database->addPrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
                             }else{
                                 $database->updatePrisoners($data['to'],$data['from'],$traped1,$traped2,$traped3,$traped4,$traped5,$traped6,$traped7,$traped8,$traped9,$traped10,$traped11);
@@ -1342,7 +1320,7 @@ class Automation {
                     
                     // we need to save the attacker heroid before the battle
                     if(isset($Attacker['uhero']) && $Attacker['uhero'] > 0){
-                        $AttackerHeroID = $database->getHeroField($from['owner'],"heroid");
+                        $AttackerHeroID = $database->getHeroField($from['owner'], "heroid");
                     }
                     
                     // and the defender(s) heroid
@@ -1361,7 +1339,7 @@ class Automation {
                     if(count($enforcementarray) > 0){
                         foreach($enforcementarray as $enforcement){
                             if($enforcement['hero'] > 0){
-                                $heroOwner = $database->getVillageField($enforcement['from'],"owner");
+                                $heroOwner = $database->getVillageField($enforcement['from'], "owner");
                                 $DefendersHeroID[] = $database->getHeroField($heroOwner, "heroid");
                             }                          
                         }
@@ -1385,6 +1363,7 @@ class Automation {
                     }
                     else $can_destroy = 0;
                     
+                    //Catapults and rams management
                     if($isoasis == 0){
                     	if ($type == 3){
                     		if (($data['t7'] - $traped7) > 0){
@@ -1641,8 +1620,10 @@ class Automation {
                     $dead = [];
                     $owndead = [];
                     $alldead = [];
+                    
                     for($i = 1; $i <= 50; $i++) $alldead[$i] = 0;
                     $heroAttackDead = $dead11;
+                    
                     //kill own defence
                     $unitlist = $database->getUnit($data['to'], false);
                     $start = ($targettribe-1)*10+1;
@@ -2933,6 +2914,7 @@ class Automation {
 
     private function returnunitsComplete() {
         global $database, $autoprefix;
+        
         if(file_exists($autoprefix."GameEngine/Prevention/returnunits.txt")) {
             unlink($autoprefix."GameEngine/Prevention/returnunits.txt");
         }
@@ -3415,13 +3397,15 @@ class Automation {
     }
     
     private function bountyLoadOTown($bountywid) {
-        global $database;    
+        global $database;  
+        
         $this->bountyinfoarray = $database->getOasisV($bountywid);
         $this->bountypop = 2;
     }
     
     private function bountyLoadTown($bountywid) {
         global $database;
+        
         $this->bountyinfoarray = $database->getVillage($bountywid);
         $this->bountyresarray = $database->getResourceLevel($bountywid);
         $this->bountyoasisowned = $database->getOasis($bountywid);
@@ -3473,60 +3457,60 @@ class Automation {
         global $database;
 
         $ownunit = $database->getUnit($base, $use_cache);
-        $enforcementarray = $database->getEnforceVillage($base, 0);
-
-        if(count($enforcementarray) > 0) {
-            foreach($enforcementarray as $enforce) {
-                for($i=1;$i<=50;$i++) {
-                    $ownunit['u'.$i] += $enforce['u'.$i];
-                }
-            }
-        }
-
-        $enforceoasis=$database->getOasisEnforce($base, 0, $use_cache);
-        if(count($enforceoasis) > 0) {
-            foreach($enforceoasis as $enforce) {
-                for($i=1;$i<=50;$i++) {
-                    $ownunit['u'.$i] += $enforce['u'.$i];
-                }
-            }
-        }
-
-        $enforceoasis1=$database->getOasisEnforce($base, 1, $use_cache);
-        if(count($enforceoasis1) > 0) {
-            foreach($enforceoasis1 as $enforce) {
-                for($i=1;$i<=50;$i++) {
-                    $ownunit['u'.$i] += $enforce['u'.$i];
-                }
-            }
-        }
-
-        $movement = $database->getVillageMovement($base);
-        if(!empty($movement)) {
-            for($i=1;$i<=50;$i++) {
-                if (!isset($ownunit['u'.$i])) {
-                    $ownunit['u'.$i] = 0;
-                }
-
-                $ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
-            }
-        }
-
-        $prisoners = $database->getPrisoners($base, 1);
-        if(!empty($prisoners)) {
-            foreach($prisoners as $prisoner){
-                $owner = $database->getVillageField($base,"owner");
-                $ownertribe = $database->getUserField($owner,"tribe",0);
-                $start = ($ownertribe-1)*10+1;
-                $end = ($ownertribe*10);
-                for($i=$start;$i<=$end;$i++) {
-                    $j = $i-$start+1;
-                    $ownunit['u'.$i] += $prisoner['t'.$j];
-                }
-                $ownunit['hero'] += $prisoner['t11'];
-            }
-        }
-        return $ownunit;
+		$enforcementarray = $database->getEnforceVillage($base, 0);
+		
+		if(count($enforcementarray) > 0){
+			foreach($enforcementarray as $enforce){
+				for($i = 1; $i <= 50; $i++){
+					$ownunit['u'.$i] += $enforce['u'.$i];
+				}
+			}
+		}
+		
+		$enforceoasis = $database->getOasisEnforce($base, 0, $use_cache);
+		if(count($enforceoasis) > 0){
+			foreach($enforceoasis as $enforce){
+				for($i = 1; $i <= 50; $i++){
+					$ownunit['u'.$i] += $enforce['u'.$i];
+				}
+			}
+		}
+		
+		$enforceoasis1 = $database->getOasisEnforce($base, 1, $use_cache);
+		if(count($enforceoasis1) > 0){
+			foreach($enforceoasis1 as $enforce){
+				for($i = 1; $i <= 50; $i++){
+					$ownunit['u'.$i] += $enforce['u'.$i];
+				}
+			}
+		}
+		
+		$movement = $database->getVillageMovement($base);
+		if(!empty($movement)){
+			for($i = 1; $i <= 50; $i++){
+				if(!isset($ownunit['u' . $i])){
+					$ownunit['u'.$i] = 0;
+				}
+				
+				$ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
+			}
+		}
+		
+		$prisoners = $database->getPrisoners($base, 1);
+		if(!empty($prisoners)){
+			foreach($prisoners as $prisoner){
+				$owner = $database->getVillageField($base, "owner");
+				$ownertribe = $database->getUserField($owner, "tribe", 0);
+				$start = ($ownertribe - 1) * 10 + 1;
+				$end = ($ownertribe * 10);
+				for($i = $start; $i <= $end; $i++){
+					$j = $i - $start + 1;
+					$ownunit['u'.$i] += $prisoner['t'.$j];
+				}
+				$ownunit['hero'] += $prisoner['t11'];
+			}
+		}
+		return $ownunit;
     }
 
     private function bountycalculateOProduction($bountywid) {
@@ -3593,11 +3577,11 @@ class Automation {
         $clay = $brick = 0;
         $clayholder = [];
         for($i = 1; $i <= 38; $i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 2) array_push($clayholder,'f'.$i);
+            if($this->bountyresarray['f'.$i.'t'] == 2) array_push($clayholder, 'f'.$i);
             if($this->bountyresarray['f'.$i.'t'] == 6) $brick = $this->bountyresarray['f'.$i];
         }
         
-        for($i = 0; $i <= count($clayholder) - 1; $i++) $clay+= $bid2[$this->bountyresarray[$clayholder[$i]]]['prod'];
+        for($i = 0; $i <= count($clayholder) - 1; $i++) $clay += $bid2[$this->bountyresarray[$clayholder[$i]]]['prod'];
         
         if($brick >= 1) $clay += $clay / 100 * $bid6[$brick]['attri'];
         if($this->bountyocounter[1] != 0) $clay += $clay * 0.25 * $this->bountyocounter[1];
@@ -3611,11 +3595,11 @@ class Automation {
         $iron = $foundry = 0;
         $ironholder = [];
         for($i = 1; $i <= 38; $i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 3) array_push($ironholder,'f'.$i);               
+            if($this->bountyresarray['f'.$i.'t'] == 3) array_push($ironholder, 'f'.$i);               
             if($this->bountyresarray['f'.$i.'t'] == 7) $foundry = $this->bountyresarray['f'.$i];
         }
         
-        for($i = 0; $i <= count($ironholder) - 1; $i++) $iron+= $bid3[$this->bountyresarray[$ironholder[$i]]]['prod'];
+        for($i = 0; $i <= count($ironholder) - 1; $i++) $iron += $bid3[$this->bountyresarray[$ironholder[$i]]]['prod'];
         
         if($foundry >= 1) $iron += $iron / 100 * $bid7[$foundry]['attri'];
         if($this->bountyocounter[2] != 0) $iron += $iron * 0.25 * $this->bountyocounter[2];
@@ -3629,11 +3613,11 @@ class Automation {
         $crop = $grainmill = $bakery = 0;
         $cropholder = [];
         for($i = 1; $i <= 38;$i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 4) array_push($cropholder,'f'.$i);
+            if($this->bountyresarray['f'.$i.'t'] == 4) array_push($cropholder, 'f'.$i);
             if($this->bountyresarray['f'.$i.'t'] == 8) $grainmill = $this->bountyresarray['f'.$i];
             if($this->bountyresarray['f'.$i.'t'] == 9) $bakery = $this->bountyresarray['f'.$i];
         }
-        for($i = 0; $i <= count($cropholder) - 1; $i++) $crop+= $bid4[$this->bountyresarray[$cropholder[$i]]]['prod'];
+        for($i = 0; $i <= count($cropholder) - 1; $i++) $crop += $bid4[$this->bountyresarray[$cropholder[$i]]]['prod'];
         
         if($grainmill >= 1) $crop += $crop / 100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
         if($bakery >= 1) $crop += $crop / 100 * (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);                
@@ -4034,6 +4018,7 @@ class Automation {
 
     private function checkInvitedPlayes() {
         global $database;
+        
         $q = "SELECT id, invited FROM ".TB_PREFIX."users WHERE invited > 0";
         $array = $database->query_return($q);
 
@@ -4176,7 +4161,7 @@ class Automation {
         $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/starvation.txt", 'w');
         fclose($ourFileHandle);
         $time = time();
-        
+
         //update starvation in every village
         $starvarray = $database->getProfileVillages(0, 7);
         foreach($starvarray as $starv) $this->addStarvationData($starv['wref']);
@@ -4342,17 +4327,21 @@ class Automation {
             unset ($unitarrays, $type, $subtype);
         }
 
-        if(file_exists("GameEngine/Prevention/starvation.txt")) {
-            unlink("GameEngine/Prevention/starvation.txt");
+        if(file_exists($autoprefix."GameEngine/Prevention/starvation.txt")) {
+        	unlink($autoprefix."GameEngine/Prevention/starvation.txt");
         }
     }
 
     private function procNewClimbers() {
-        if(file_exists("GameEngine/Prevention/climbers.txt")) {
-            unlink("GameEngine/Prevention/climbers.txt");
+    	global $database, $ranking, $autoprefix;
+    	
+    	if(file_exists($autoprefix."GameEngine/Prevention/climbers.txt")) {
+    		unlink($autoprefix."GameEngine/Prevention/climbers.txt");
         }
-        global $database, $ranking;
         
+        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/climbers.txt", 'w');
+        fclose($ourFileHandle);
+
         $ranking->procRankArray();
         $climbers = $ranking->getRank();
         if(count($climbers) > 0){
@@ -4401,8 +4390,9 @@ class Automation {
                 }
             }
         }
-        if(file_exists("GameEngine/Prevention/climbers.txt")) {
-            unlink("GameEngine/Prevention/climbers.txt");
+        
+        if(file_exists($autoprefix."GameEngine/Prevention/climbers.txt")) {
+        	unlink($autoprefix."GameEngine/Prevention/climbers.txt");
         }
     }
 
@@ -5100,6 +5090,7 @@ class Automation {
 
     private function artefactOfTheFool() {
         global $database;
+        
         $time = time();
         $q = "SELECT id, size FROM " . TB_PREFIX . "artefacts where type = 8 AND active = 1 AND lastupdate <= ".($time - (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
         $array = $database->query_return($q);

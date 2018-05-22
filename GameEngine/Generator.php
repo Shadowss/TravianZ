@@ -13,26 +13,22 @@ class MyGenerator {
 
 	public function generateRandID(){
 		return md5($this->generateRandStr(16));
-		}
+	}
 
    public function generateRandStr($length){
 	  $randstr = "";
-	  for($i=0; $i<$length; $i++){
-		 $randnum = mt_rand(0,61);
-		 if($randnum < 10){
-			$randstr .= chr($randnum+48);
-		 }else if($randnum < 36){
-			$randstr .= chr($randnum+55);
-		 }else{
-			$randstr .= chr($randnum+61);
-		 }
-	  }
-	  return $randstr;
+		for($i = 0; $i < $length; $i++){
+			$randnum = mt_rand(0, 61);
+			if($randnum < 10) $randstr .= chr($randnum + 48);
+			else if($randnum < 36) $randstr .= chr($randnum + 55);
+			else $randstr .= chr($randnum + 61);
+		}
+		return $randstr;
    }
 
-   public function encodeStr($str,$length) {
+   public function encodeStr($str, $length) {
 	   $encode = md5($str);
-	   return substr($encode,0,$length);
+	   return substr($encode, 0 ,$length);
    }
 
    public function procDistanceTime($coor, $thiscoor, $ref, $mode, $vid = 0) {
@@ -41,14 +37,10 @@ class MyGenerator {
 		if($vid == 0) $vid = $village->wid;
 		
 		$xdistance = ABS($thiscoor['x'] - $coor['x']);
-		if($xdistance > WORLD_MAX) {
-			$xdistance = (2 * WORLD_MAX + 1) - $xdistance;
-		}
+		if($xdistance > WORLD_MAX) $xdistance = (2 * WORLD_MAX + 1) - $xdistance;
 		
 		$ydistance = ABS($thiscoor['y'] - $coor['y']);
-		if($ydistance > WORLD_MAX) {
-			$ydistance = (2 * WORLD_MAX + 1) - $ydistance;
-		}
+		if($ydistance > WORLD_MAX) $ydistance = (2 * WORLD_MAX + 1) - $ydistance;
 		
 		$distance = SQRT(POW($xdistance,2) + POW($ydistance,2));
 		if(!$mode){    
@@ -87,65 +79,61 @@ class MyGenerator {
 		return $hr . ":" . $min . ":" . $time;
 	}
 
-public function procMtime($time, $pref = 3) {
+	public function procMtime($time, $pref = 3){
 		/*
-		$timezone = 7;
-		switch($timezone) {
-			case 7:
-			$time -= 3600;
-			break;
-		}
-		*/
-//      $time += 3600*0; //Edit this yourself
-      $time += 0; //Edit this yourself
-
-$today = date('d',time())-1;
-if (date('Ymd',time()) == date('Ymd',$time)) {
-	$day = "today";
-	}elseif($today == date('d',$time)){
-	$day = "yesterday";
-	}
-		else {
-			switch($pref) {
-			case 1:
-			$day = date("m/j/y",$time);
-			break;
-			case 2:
-			$day = date("j/m/y",$time);
-			break;
-			case 3:
-			$day = date("j.m.y",$time);
-			break;
-			default:
-			$day = date("y/m/j",$time);
-			break;
+		 * $timezone = 7;
+		 * switch($timezone) {
+		 * case 7:
+		 * $time -= 3600;
+		 * break;
+		 * }
+		 */
+		// $time += 3600*0; //Edit this yourself
+		$time += 0; // Edit this yourself
+		
+		$today = date('d', time()) - 1;
+		if(date('Ymd', time()) == date('Ymd', $time)) $day = "today";			
+		elseif($today == date('d', $time)) $day = "yesterday";		
+		else
+		{
+			switch($pref){
+				case 1 :
+					$day = date("m/j/y", $time);
+					break;
+				case 2 :
+					$day = date("j/m/y", $time);
+					break;
+				case 3 :
+					$day = date("j.m.y", $time);
+					break;
+				default :
+					$day = date("y/m/j", $time);
+					break;
 			}
 		}
-		$new = date("H:i:s",$time);
-		if ($pref=="9"||$pref==9)
-			return $new;
-		else
-			return array($day,$new);
+		$new = date("H:i:s", $time);
+		if($pref == "9" || $pref == 9) return $new;
+		else return array($day, $new);
 	}
 
 
-	public function getBaseID($x,$y) {
-	return ((WORLD_MAX-$y) * (WORLD_MAX*2+1)) + (WORLD_MAX +$x + 1);
+	public function getBaseID($x, $y){
+		return ((WORLD_MAX - $y) * (WORLD_MAX * 2 + 1)) + (WORLD_MAX + $x + 1);
 	}
 
-	public function getMapCheck($wref) {
-		return substr(md5($wref),5,2);
+	public function getMapCheck($wref){
+		return substr(md5($wref), 5, 2);
 	}
 
-	public function pageLoadTimeStart() {
-		if (isset($_SERVER["REQUEST_TIME_FLOAT"])) return $_SERVER["REQUEST_TIME_FLOAT"];
+	public function pageLoadTimeStart(){
+		if(isset($_SERVER["REQUEST_TIME_FLOAT"])) return $_SERVER["REQUEST_TIME_FLOAT"];
 		$starttime = microtime(true);
 		$startarray = explode(" ", $starttime);
 		//$starttime = $startarray[1] + $startarray[0];
 		return $startarray[0];
 	}
 
-	public function pageLoadTimeEnd() {
+	public function pageLoadTimeEnd(){
 		$endtime = microtime(true);
 		$endarray = explode(" ", $endtime);
 		//$endtime = $endarray[1] + $endarray[0];
