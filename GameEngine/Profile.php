@@ -17,7 +17,7 @@ class Profile {
 		
 		if($session->access == BANNED){
 			header("Location: banned.php");
-			exit();
+			exit;
 		}
 		
 		if(isset($post['ft'])) {
@@ -42,7 +42,7 @@ class Profile {
 		
 		if($session->access == BANNED){
 			header("Location: banned.php");
-			exit();
+			exit;
 		}
 		
 		if(isset($get['e'])) {
@@ -72,7 +72,7 @@ class Profile {
 		}
 		
 		header("Location: spieler.php?uid=".$session->uid);
-		exit();
+		exit;
 	}
 
 	private function gpack($post) {
@@ -99,11 +99,11 @@ class Profile {
 			$database->UpdateOnline("logout");
 			$session->Logout();
 			header("Location: login.php");
-			exit();
+			exit;
 	    }else{
 	    	$form->add("vac", VAC_MODE_WRONG_DAYS);
 	        header("Location: spieler.php?s=".$session->uid);        
-	        exit();
+	        exit;
 	    }
 	    
 	}

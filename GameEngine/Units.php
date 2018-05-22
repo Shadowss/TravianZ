@@ -773,7 +773,7 @@ class Units {
             $speeds[]  = $GLOBALS['u'.$heroUnit]['speed'];
         }
 
-        return $generator->procDistanceTime($fromCor, $toCor, min($speeds), $mode);     
+        return $generator->procDistanceTime($fromCor, $toCor, min($speeds), $mode, $from);     
     }
     
     public function startRaidList($post){   
