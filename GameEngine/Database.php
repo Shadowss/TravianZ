@@ -3996,11 +3996,10 @@ class MYSQLi_DB implements IDbConnection {
     function setVillageName($vid, $name) {
         list($vid, $name) = $this->escape_input((int) $vid, $name);
 
-        if(!empty($name))
-        {
-        $q = "UPDATE " . TB_PREFIX . "vdata set name = '$name' where wref = $vid";
-        return mysqli_query($this->dblink,$q);
-        }
+        if(!empty($name)){
+			$q = "UPDATE " . TB_PREFIX . "vdata set name = '$name' where wref = $vid";
+			return mysqli_query($this->dblink, $q);
+		}
     }
 
     function modifyPop($vid, $pop, $mode) {
