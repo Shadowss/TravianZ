@@ -184,8 +184,6 @@ foreach($posts as $po){
 <?php
 if(empty($arr['close'])){
 	echo '<a href="allianz.php?s=2&tid='.$arr['id'].'&ac=newpost"><img id="fbtn_reply" class="dynamic_img"src="img/x.gif" alt="Replies" /></a>';
-}
-if($opt['opt5'] == 1 || $session->access == ADMIN){
 	echo '<a href="allianz.php?s=2&tid='.$arr['id'].((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 }
 ?>
