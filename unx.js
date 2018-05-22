@@ -1,6 +1,14 @@
 window.dlang = 'ar';  // edit it to en if fullscreen map not working
 window.reloading = false;
+var xhttp = new XMLHttpRequest();
 var timer=new Object();var ab=new Object();var bb=new Object();var cb=db();var eb=0;var auto_reload=1;var fb=new Object();var	is_opera=window.opera!==undefined;var	is_ie=document.all!==undefined&&window.opera===undefined;var is_ie6p=document.compatMode!==undefined&&document.all!==undefined&&window.opera===undefined;var is_ie7=document.documentElement!==undefined&&document.documentElement.style.maxHeight!==undefined;var is_ie6=is_ie6p&&!is_ie7;var is_ff2p=window.Iterator!==undefined;var is_ff3p=document.getElementsByClassName!==undefined;var is_ff2=is_ff2p&&!is_ff3p
+
+automation();
+function automation() {
+	this.xhttp.open("GET", "GameEngine/Automation.php", true);
+	this.xhttp.send();
+	setTimeout(function(){ automation(); }, 1500);
+}
 function gb(){return hb('height');}
 function ib(){return hb('width');}
 function hb(jb){var kb=0,lb=0;if(typeof(window.innerWidth)=='number'){kb=window.innerWidth;lb=window.innerHeight;}

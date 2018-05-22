@@ -317,5 +317,5 @@ class Village {
 };
 $village = new Village;
 $building = new Building;
-include_once("Automation.php");
+//include_once("Automation.php");
 ?>

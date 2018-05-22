@@ -16,6 +16,26 @@
 ##                                                                             ##
 #################################################################################
 
+include_once("Database.php");
+include_once("Data/buidata.php");
+include_once("Data/unitdata.php");
+include_once("Data/hero_full.php");
+include_once("Units.php");
+include_once("Battle.php");
+include_once("Technology.php");
+include_once("Ranking.php");
+include_once("Generator.php");
+include_once("Multisort.php");
+
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+	$autoprefix = str_repeat('../', $i);
+	if (file_exists($autoprefix.'autoloader.php')) {
+		// we have our path, let's leave
+		break;
+	}
+}
+
 class Automation {
 
     private $bountyresarray = [];
