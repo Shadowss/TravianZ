@@ -28,98 +28,45 @@ include_once("Generator.php");
 include_once("Multisort.php");
 include_once("Building.php");
 
-$autoprefix = '';
-for ($i = 0; $i < 5; $i++) {
-	$autoprefix = str_repeat('../', $i);
-	if (file_exists($autoprefix.'autoloader.php')) {
-		// we have our path, let's leave
-		break;
-	}
-}
-
 class Automation {
 
-    private $bountyresarray = [];
-    private $bountyinfoarray = [];
-    private $bountyproduction = [];
-    private $bountyocounter = [];
-    private $bountyunitall = [];
-    private $bountypop;
-    private $bountyOresarray = [];
-    private $bountyOinfoarray = [];
-    private $bountyOproduction = [];
-    private $bountyOpop = 1;
-    
     public function __construct() {
+    	
+    	$autoprefix = "";
+    	for ($i = 0; $i < 5; $i++) {
+    		$autoprefix = str_repeat('../', $i);
+    		if (file_exists($autoprefix.'autoloader.php')) {
+    			// we have our path, let's leave
+    			break;
+    		}
+    	}
+    	
         $this->procNewClimbers();
         $this->ClearUser();
         $this->ClearInactive();
-        //$this->oasisResourcesProduce();
         $this->pruneResource();
         $this->pruneOResource();
         $this->checkWWAttacks();
-        if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time() - filemtime("GameEngine/Prevention/culturepoints.txt") > 50) {
-            $this->culturePoints();
-        }
-        if(!file_exists("GameEngine/Prevention/updatehero.txt") or time() - filemtime("GameEngine/Prevention/updatehero.txt") > 50) {
-            $this->updateHero();
-        }
-        if(!file_exists("GameEngine/Prevention/cleardeleting.txt") or time() - filemtime("GameEngine/Prevention/cleardeleting.txt") > 50) {
-            $this->clearDeleting();
-        }
-        if(!file_exists("GameEngine/Prevention/build.txt") or time() - filemtime("GameEngine/Prevention/build.txt") > 50)
-        {
-            $this->buildComplete();
-        }
-        $this->MasterBuilder();
-        if(!file_exists("GameEngine/Prevention/demolition.txt") or time() - filemtime("GameEngine/Prevention/demolition.txt") > 50)
-        {
-            $this->demolitionComplete();
-        }
         $this->delTradeRoute();
         $this->TradeRoute();
-        if(!file_exists("GameEngine/Prevention/market.txt") or time() - filemtime("GameEngine/Prevention/market.txt") > 50) {
-            $this->marketComplete();
+        
+        $methodsArrays = ["culturePoints", "updateHero", "clearDeleting", "buildComplete",
+        				  "demolitionComplete", "marketComplete", "researchComplete",
+        				  "trainingComplete", "starvation", "celebrationComplete",
+        				  "sendUnitsComplete", "loyaltyRegeneration", "sendreinfunitsComplete",
+        				  "returnunitsComplete", "sendSettlersComplete", "spawnNatars",
+        				  "spawnWWVillages", "spawnWWBuildingPlans", "activateArtifacts"];
+        
+        foreach($methodsArrays as $method){
+        	$file = fopen($autoprefix."GameEngine/Prevention/".$method.".txt", "w");
+        	if(flock($file, LOCK_EX)) {
+        		call_user_func(array($this, $method));
+        		flock($file, LOCK_UN);     		
+        	}
+        	fclose($file);
         }
-        if(!file_exists("GameEngine/Prevention/research.txt") or time() - filemtime("GameEngine/Prevention/research.txt") > 50) {
-            $this->researchComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/training.txt") or time() - filemtime("GameEngine/Prevention/training.txt") > 50) {
-            $this->trainingComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/starvation.txt") or time() - filemtime("GameEngine/Prevention/starvation.txt") > 50) {
-            $this->starvation();
-        }
-        if(!file_exists("GameEngine/Prevention/celebration.txt") or time() - filemtime("GameEngine/Prevention/celebration.txt") > 50) {
-            $this->celebrationComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/sendunits.txt") or time() - filemtime("GameEngine/Prevention/sendunits.txt") > 50) {
-            $this->sendunitsComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/loyalty.txt") or time() - filemtime("GameEngine/Prevention/loyalty.txt") > 60) {
-            $this->loyaltyRegeneration();
-        }
-        if(!file_exists("GameEngine/Prevention/sendreinfunits.txt") or time() - filemtime("GameEngine/Prevention/sendreinfunits.txt") > 50) {
-            $this->sendreinfunitsComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/returnunits.txt") or time() - filemtime("GameEngine/Prevention/returnunits.txt") > 50) {
-            $this->returnunitsComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/settlers.txt") or time() - filemtime("GameEngine/Prevention/settlers.txt") > 50) {
-            $this->sendSettlersComplete();
-        }
-        if(!file_exists("GameEngine/Prevention/spawnNatars.txt") or time() - filemtime("GameEngine/Prevention/spawnNatars.txt") > 120) {
-        	$this->spawnNatars();
-        }
-        if(!file_exists("GameEngine/Prevention/spawnWWVillages.txt") or time() - filemtime("GameEngine/Prevention/spawnWWVillages.txt") > 120) {
-        	$this->spawnWWVillages();
-        }
-        if(!file_exists("GameEngine/Prevention/spawnWWBuildingPlans.txt") or time() - filemtime("GameEngine/Prevention/spawnWWBuildingPlans.txt") > 120) {
-        	$this->spawnWWBuildingPlans();
-        }
-        if(!file_exists("GameEngine/Prevention/artifacts.txt") or time() - filemtime("GameEngine/Prevention/artifacts.txt") > 60) {
-            $this->activateArtifacts();
-        }
+        
+        $this->MasterBuilder();
         $this->updateGeneralAttack();
         $this->checkInvitedPlayes();
         $this->updateStore();
@@ -204,18 +151,7 @@ class Automation {
     }
 
     private function loyaltyRegeneration() {
-        global $autoprefix;
-
-        if(file_exists($autoprefix."GameEngine/Prevention/loyalty.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/loyalty.txt");
-        }
-        //fix by ronix
-        //create new file to check filetime
-        //not every click regenerate but 1 minute or after
-
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/loyalty.txt", 'w');
-        fclose($ourFileHandle);
-        global $database;
+    	global $database;
         
         $array = [];
         $array = $database->getProfileVillages(0, 6);
@@ -293,14 +229,7 @@ class Automation {
     }
 
     private function clearDeleting() {
-    	global $autoprefix, $database;
-    	
-        if(file_exists($autoprefix."GameEngine/Prevention/cleardeleting.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/cleardeleting.txt");
-        }
-
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/cleardeleting.txt", 'w');
-        fclose($ourFileHandle);
+    	global $database;
         
         $needDelete = $database->getNeedDelete();
         if(count($needDelete) > 0) {
@@ -354,9 +283,6 @@ class Automation {
                 $q = "DELETE FROM ".TB_PREFIX."deleting where uid = ".(int) $need['uid'];
                 $database->query($q);
             }
-        }
-        if(file_exists("GameEngine/Prevention/cleardeleting.txt")) {
-            unlink("GameEngine/Prevention/cleardeleting.txt");
         }
     }
 
@@ -442,23 +368,11 @@ class Automation {
     private function culturePoints() {
         global $database;
 
-        if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
-            unlink("GameEngine/Prevention/culturepoints.txt");
-        }
-
         $database->updateVSumField('cp');
-
-        if(file_exists("GameEngine/Prevention/culturepoints.txt")) {
-            unlink("GameEngine/Prevention/culturepoints.txt");
-        }
     }
 
     private function buildComplete() {
         global $database, $bid18, $bid10, $bid11, $bid38, $bid39;
-
-        if(file_exists("GameEngine/Prevention/build.txt")) {
-            unlink("GameEngine/Prevention/build.txt");
-        }
 
         $time = time();
         // IDs of villages that were affected by this building completion update,
@@ -583,10 +497,6 @@ class Automation {
         if (count($dbIdsToDelete)) {
             $database->query( "DELETE FROM " . TB_PREFIX . "bdata WHERE id IN(" . implode( ',', $dbIdsToDelete ) . ")" );
         }
-
-        if(file_exists("GameEngine/Prevention/build.txt")) {
-            unlink("GameEngine/Prevention/build.txt");
-        }
     }
 
     // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
@@ -695,13 +605,8 @@ class Automation {
     }
 
     private function marketComplete() {
-        global $database, $autoprefix, $units;
-        
-        if(file_exists($autoprefix."GameEngine/Prevention/market.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/market.txt");
-        }
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/market.txt", 'w');
-        fclose($ourFileHandle);
+        global $database, $units;
+
         $time = microtime(true);
         $q = "SELECT s.wood, s.clay, s.iron, s.crop, `to`, `from`, endtime, merchant, send, moveid FROM ".TB_PREFIX."movement m, ".TB_PREFIX."send s WHERE m.ref = s.id AND m.proc = 0 AND sort_type = 0 AND endtime < $time";
         $dataarray = $database->query_return($q);
@@ -750,10 +655,6 @@ class Automation {
                 $send = $data1['send']-1;
                 $this->sendResource2($data1['wood'],$data1['clay'],$data1['iron'],$data1['crop'],$data1['to'],$data1['from'],$targettribe1,$send);
             }
-        }
-
-        if(file_exists("GameEngine/Prevention/market.txt")) {
-            unlink("GameEngine/Prevention/market.txt");
         }
     }
 
@@ -951,14 +852,8 @@ class Automation {
     }
 
     private function sendunitsComplete() {
-        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units, $autoprefix;
+        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units;
 
-        if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
-        }
-
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/sendunits.txt", 'w');
-        fclose($ourFileHandle);
         $time = time();
         $q = "
             SELECT
@@ -1921,7 +1816,7 @@ class Automation {
                         $cranny_eff = $crannySpy * $atk_bonus;
 
                         // work out available resources.
-                        $this->updateRes($data['to'], $to['owner']);
+                        $this->updateRes($data['to']);
                         $this->pruneResource();
 
                         $villageData = $database->getVillageFields($data['to'], 'clay, iron, wood, crop', false);
@@ -1933,7 +1828,7 @@ class Automation {
                         $cranny_eff = 0;                       
 
                         if ($conqureby > 0) { //10% from owner proc village owner - fix by ronix - exploit fixed by iopietro
-                            $this->updateRes($conqureby, $to['owner']);
+                            $this->updateRes($conqureby);
                             $this->pruneResource();
                             
                             $villageData = $database->getVillageFields($conqureby, 'clay, iron, wood, crop', false);
@@ -2674,10 +2569,6 @@ class Automation {
 
             }
         }
-
-        if(file_exists($autoprefix."GameEngine/Prevention/sendunits.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/sendunits.txt");
-        }
     }
 
     function DelVillage($wref){
@@ -2771,14 +2662,9 @@ class Automation {
     }
 
     private function sendreinfunitsComplete() {
-        global $bid23, $database, $battle, $autoprefix;
+        global $bid23, $database, $battle;
 
-        if(file_exists($autoprefix."GameEngine/Prevention/sendreinfunits.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/sendreinfunits.txt");
-        }
         $time = time();
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/sendreinfunits.txt", 'w');
-        fclose($ourFileHandle);
         $q = "
             SELECT
                 `to`, `from`, moveid,
@@ -2927,20 +2813,11 @@ class Automation {
 
             $database->setMovementProc(implode(', ', $movementProcIDs));
         }
-
-        if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
-            unlink("GameEngine/Prevention/sendreinfunits.txt");
-        }
     }
 
     private function returnunitsComplete() {
-        global $database, $autoprefix;
-        
-        if(file_exists($autoprefix."GameEngine/Prevention/returnunits.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/returnunits.txt");
-        }
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/returnunits.txt", 'w');
-        fclose($ourFileHandle);
+        global $database;
+
         $time = time();
         $q = "
             SELECT
@@ -2959,10 +2836,6 @@ class Automation {
                 endtime < $time";
         $dataarray = $database->query_return($q);
 
-        // because of a yet-to-be-discovered but, movements sometimes get inserted into the database twice,
-        // so we need to de-duplicate them here by checking for the same wave properties sent out at the
-        // same time (i.e. with exactly the same timestamp)
-        $wavesData = [];
         if ($dataarray && count($dataarray)) {
             // preload village data
             $vilIDs = [];
@@ -2976,31 +2849,26 @@ class Automation {
 
             $movementProcIDs = [];
             foreach($dataarray as $data) {
-                if (!isset($wavesData[$data['from'].$data['to'].$data['starttime'].$data['endtime']])) {
-                    $tribe = $database->getUserField($database->getVillageField($data['to'], "owner"), "tribe", 0);
-                    $u = $tribe == 1 ? "" : $tribe - 1;
-                    $database->modifyUnit(
-                        $data['to'],
-                        [$u."1", $u."2", $u."3", $u."4", $u."5", $u."6", $u."7", $u."8", $u."9", $tribe."0", "hero"],
-                        [$data['t1'], $data['t2'], $data['t3'], $data['t4'], $data['t5'], $data['t6'], $data['t7'], $data['t8'], $data['t9'], $data['t10'], $data['t11']],
-                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]							 
-                        );
-                    
-                    //If there's at least 1 resource, add it to the village
-                    if($data['wood'] + $data['clay'] + $data['iron'] + $data['crop'] > 0){
-                    	$database->modifyResource($data['to'], $data['wood'], $data['clay'], $data['iron'], $data['crop'], 1);
-                    }        
-                    
-                    $movementProcIDs[] = $data['moveid'];
-                    
-                    //Update starvation data
-                    $this->addStarvationData($data['to']);
-
-                    // make sure we don't process duplicate movements until the big bad bug which inserts them into DB is fixed
-                    $wavesData[$data['from'].$data['to'].$data['starttime'].$data['endtime']] = true;
-                } // duplicate record, just mark it as processed
-                else $movementProcIDs[] = $data['moveid'];
+            	$tribe = $database->getUserField($database->getVillageField($data['to'], "owner"), "tribe", 0);
+            	$u = $tribe == 1 ? "" : $tribe - 1;
+            	$database->modifyUnit(
+            			$data['to'],
+            			[$u."1", $u."2", $u."3", $u."4", $u."5", $u."6", $u."7", $u."8", $u."9", $tribe."0", "hero"],
+            			[$data['t1'], $data['t2'], $data['t3'], $data['t4'], $data['t5'], $data['t6'], $data['t7'], $data['t8'], $data['t9'], $data['t10'], $data['t11']],
+            			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            			);
+            	
+            	//If there's at least 1 resource, add it to the village
+            	if($data['wood'] + $data['clay'] + $data['iron'] + $data['crop'] > 0){
+            		$database->modifyResource($data['to'], $data['wood'], $data['clay'], $data['iron'], $data['crop'], 1);
+            	}
+            	
+            	$movementProcIDs[] = $data['moveid'];
+            	
+            	//Update starvation data
+            	$this->addStarvationData($data['to']);
             }
+            
             $database->setMovementProc(implode(', ', $movementProcIDs));
             $this->pruneResource();
         }
@@ -3021,21 +2889,11 @@ class Automation {
             }
             $database->setMovementProc(implode(', ', $movementProcIDs));
         }
-
-        if(file_exists("GameEngine/Prevention/returnunits.txt")) {
-            unlink("GameEngine/Prevention/returnunits.txt");
-        }
     }
 
     private function sendSettlersComplete() {
-        global $database, $autoprefix;
+        global $database;
 
-        if(file_exists($autoprefix."GameEngine/Prevention/settlers.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/settlers.txt");
-        }
-        
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/settlers.txt", 'w');
-        fclose($ourFileHandle);
         $time = microtime(true);
         $q = "SELECT `to`, `from`, moveid, starttime, ref FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 5 and endtime < $time";
 
@@ -3112,9 +2970,6 @@ class Automation {
         $database->addTech($addTechWrefs);
         $database->addABTech($addABTechWrefs);
 
-        if(file_exists("GameEngine/Prevention/settlers.txt")) {
-            unlink("GameEngine/Prevention/settlers.txt");
-        }
     }
     
     /**
@@ -3123,18 +2978,11 @@ class Automation {
      */
     
     private function spawnNatars(){
-    	global $database, $autoprefix;
-    	
-    	if(file_exists($autoprefix."GameEngine/Prevention/spawnNatars.txt")) {
-    		unlink($autoprefix."GameEngine/Prevention/spawnNatars.txt");
-    	}
+    	global $database;
     	
     	//Check if Natars account is already created and if the time
     	//is come and we have to create Natars and spawn their artifacts
     	if($database->areArtifactsSpawned() || strtotime(START_DATE) + (NATARS_SPAWN_TIME * 86400) > time()) return;
-    	
-    	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnNatars.txt", 'w');
-    	fclose($ourFileHandle);
     	
     	//Create the Natars account and his capital
     	$database->createNatars();
@@ -3175,10 +3023,6 @@ class Automation {
     	
     	//Write the system message
     	$database->displaySystemMessage(ARTEFACT);
-    	
-    	if(file_exists("GameEngine/Prevention/spawnNatars.txt")) {
-    		unlink("GameEngine/Prevention/spawnNatars.txt");
-    	}
     }
     
     /**
@@ -3187,18 +3031,11 @@ class Automation {
      */
     
     private function spawnWWVillages(){
-    	global $database, $autoprefix;
-
-    	if(file_exists($autoprefix."GameEngine/Prevention/spawnWWVillages.txt")) {
-    		unlink($autoprefix."GameEngine/Prevention/spawnWWVillages.txt");
-    	}
+    	global $database;
     	
     	//Check if Natars account has already been created, if WW villages have already been spawned
     	//and if it's the time to spawn them or not
     	if(!$database->areArtifactsSpawned() || $database->areWWVillagesSpawned() || strtotime(START_DATE) + (NATARS_WW_SPAWN_TIME * 86400) > time()) return;
-    	
-    	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnWWVillages.txt", 'w');
-    	fclose($ourFileHandle);
     	
     	//WW village Natars' troops
     	$unitArrays =  [41 => rand(50, 1200) * NATARS_UNITS,
@@ -3231,10 +3068,6 @@ class Automation {
 	    
 	    //Write the system message
     	$database->displaySystemMessage(WWVILLAGEMSG);
-    	
-    	if(file_exists("GameEngine/Prevention/spawnWWVillages.txt")) {
-    		unlink("GameEngine/Prevention/spawnWWVillages.txt");
-    	}
     }
     
     /**
@@ -3243,18 +3076,11 @@ class Automation {
      */
     
     private function spawnWWBuildingPlans(){
-    	global $database, $autoprefix;
-    	
-    	if(file_exists($autoprefix."GameEngine/Prevention/spawnWWBuildingPlans.txt")) {
-    		unlink($autoprefix."GameEngine/Prevention/spawnWWBuildingPlans.txt");
-    	}
+    	global $database;
     	
     	//Check if Natars account is already spawned, if WW building plans have already been spawned
     	//and if it's the time to spawn them or not
     	if(!$database->areArtifactsSpawned() || $database->areArtifactsSpawned(true) || strtotime(START_DATE) + (NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400) > time()) return;
-    	
-    	$ourFileHandle = fopen($autoprefix."GameEngine/Prevention/spawnWWBuildingPlans.txt", 'w');
-    	fclose($ourFileHandle);
     	
     	$artifactArrays =  [PLAN_DESC => [["type" => 11, "size" => 1, "name" => PLAN,"vname" => PLANVILLAGE, "effect" => "", "quantity" => 13, "img" => 1]]];
     	
@@ -3262,11 +3088,7 @@ class Automation {
     	$database->addArtifactVillages($artifactArrays);
     	
     	//Set the system message to contain the infos of the WW building plans
-    	$database->displaySystemMessage(PLAN_INFO);	
-    	
-    	if(file_exists("GameEngine/Prevention/spawnWWBuildingPlans.txt")) {
-    		unlink("GameEngine/Prevention/spawnWWBuildingPlans.txt");
-    	}
+    	$database->displaySystemMessage(PLAN_INFO);
     }
     
     /**
@@ -3275,17 +3097,10 @@ class Automation {
      */
     
     private function activateArtifacts() {
-        global $database, $autoprefix;
-        
-        if(file_exists($autoprefix."GameEngine/Prevention/artifacts.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/artifacts.txt");
-        }
+        global $database;
         
         //Check if there's at least one artifact, if not, return
         if(!$database->areArtifactsSpawned()) return;
-        
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/artifacts.txt", 'w');
-        fclose($ourFileHandle);
         
         //Get all inactive artifacts that have to be activated --> (24 hours / Speed of the server)
         $time = time();
@@ -3340,21 +3155,10 @@ class Automation {
                 }
             }
         }
-        
-        if(file_exists("GameEngine/Prevention/artifacts.txt")) {
-            unlink("GameEngine/Prevention/artifacts.txt");
-        }
     }
 
     private function researchComplete() {
-        global $database, $autoprefix;
-
-        if(file_exists($autoprefix."GameEngine/Prevention/research.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/research.txt");
-        }
-
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/research.txt", 'w');
-        fclose($ourFileHandle);
+        global $database;
 
         $time = time();
         $deleteIDs = [];
@@ -3399,44 +3203,55 @@ class Automation {
             $q = "DELETE FROM " . TB_PREFIX . "research where id IN(" . implode( ', ', $deleteIDs ) . ")";
             $database->query( $q );
         }
-
-        if(file_exists("GameEngine/Prevention/research.txt")) {
-            unlink("GameEngine/Prevention/research.txt");
-        }
-    }
-
-    private function updateRes($bountywid, $uid) {
-        $this->bountyLoadTown($bountywid);
-        $this->bountycalculateProduction($bountywid, $uid);
-        $this->bountyprocessProduction($bountywid);
     }
 
     private function updateORes($bountywid) {
-        $this->bountyLoadOTown($bountywid);
-        $this->bountycalculateOProduction($bountywid);
-        $this->bountyprocessOProduction($bountywid);
+    	global $database;
+    	
+    	$oasisInfoArray = $database->getOasisV($bountywid);
+    	$timepast = time() - $oasisInfoArray['lastupdated'];
+    	$nwood = (OASIS_WOOD_PRODUCTION / 3600) * $timepast;
+    	$nclay = (OASIS_CLAY_PRODUCTION / 3600) * $timepast;
+    	$niron = (OASIS_IRON_PRODUCTION / 3600) * $timepast;
+    	$ncrop = (OASIS_CROP_PRODUCTION / 3600) * $timepast;
+    	$database->modifyOasisResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);
+    	$database->updateOasis($bountywid);
     }
     
-    private function bountyLoadOTown($bountywid) {
-        global $database;  
-        
-        $this->bountyinfoarray = $database->getOasisV($bountywid);
-        $this->bountypop = 2;
-    }
-    
-    private function bountyLoadTown($bountywid) {
-        global $database;
-        
-        $this->bountyinfoarray = $database->getVillage($bountywid);
-        $this->bountyresarray = $database->getResourceLevel($bountywid);
-        $this->bountyoasisowned = $database->getOasis($bountywid);
-        $this->bountyocounter = $this->bountysortOasis();
-        $this->bountypop = $this->bountyinfoarray['pop'];
+    private function updateRes($bountywid) {
+    	global $database, $technology;
+    	
+    	//Get village infos
+    	$villageInfoArray = $database->getVillage($bountywid);
+    	
+    	//Get building and resource fields array
+    	$resArray = $database->getResourceLevel($bountywid, false);
+    	
+    	//Get oasis array
+    	$oasisArray = $database->getOasis($bountywid);
+    	
+    	//Get an array with the numbers of the oasis
+    	$numberOfOasis = $this->bountysortOasis($oasisArray);
+    	
+    	//Set the village population
+    	$villagePopulation = $villageInfoArray['pop'];
+    	
+    	//Get the upkeep of the village
+    	$upkeep = $technology->getUpkeep($this->getAllUnits($bountywid), 0, $bountywid);   	
+ 
+    	//Calculate the produced resources
+    	$timepast = time() - $villageInfoArray['lastupdate'];
+    	$nwood = ($this->bountyGetWoodProd($resArray, $numberOfOasis) / 3600) * $timepast;
+    	$nclay = ($this->bountyGetClayProd($resArray, $numberOfOasis) / 3600) * $timepast;
+    	$niron = ($this->bountyGetIronProd($resArray, $numberOfOasis) / 3600) * $timepast;
+    	$ncrop = (($this->bountyGetCropProd($resArray, $numberOfOasis) - $villagePopulation - $upkeep) / 3600) * $timepast;
+    	$database->modifyResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);
+    	$database->updateVillage($bountywid);
     }
 
-    private function bountysortOasis() {
+    private function bountysortOasis($oasisArray) {
         $crop = $clay = $wood = $iron = 0;
-        foreach ($this->bountyoasisowned as $oasis) {
+        foreach ($oasisArray as $oasis) {
             switch($oasis['type']) {
                 case 1:
                 case 2:
@@ -3533,119 +3348,79 @@ class Automation {
 		}
 		return $ownunit;
     }
-
-    private function bountycalculateOProduction($bountywid) {
-        $this->bountyOproduction['wood'] = OASIS_WOOD_PRODUCTION;
-        $this->bountyOproduction['clay'] = OASIS_CLAY_PRODUCTION;
-        $this->bountyOproduction['iron'] = OASIS_IRON_PRODUCTION;
-        $this->bountyOproduction['crop'] = OASIS_CROP_PRODUCTION;
-    }
     
-    private function bountycalculateProduction($bountywid, $uid) {
-        global $technology;
-        
-        $upkeep = $technology->getUpkeep($this->getAllUnits($bountywid), 0, $bountywid);
-        $this->bountyproduction['wood'] = $this->bountyGetWoodProd();
-        $this->bountyproduction['clay'] = $this->bountyGetClayProd();
-        $this->bountyproduction['iron'] = $this->bountyGetIronProd();
-        $this->bountyproduction['crop'] = $this->bountyGetCropProd() - $this->bountypop - $upkeep;
-    }
-
-    private function bountyprocessProduction($bountywid) {
-        global $database;
-        
-        $timepast = time() - $this->bountyinfoarray['lastupdate'];
-        $nwood = ($this->bountyproduction['wood'] / 3600) * $timepast;
-        $nclay = ($this->bountyproduction['clay'] / 3600) * $timepast;
-        $niron = ($this->bountyproduction['iron'] / 3600) * $timepast;
-        $ncrop = ($this->bountyproduction['crop'] / 3600) * $timepast;
-        $database->modifyResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);
-        $database->updateVillage($bountywid);
-    }
-    private function bountyprocessOProduction($bountywid) {
-        global $database;
-        
-        $timepast = time() - $this->bountyinfoarray['lastupdated'];
-        $nwood = ($this->bountyOproduction['wood'] / 3600) * $timepast;
-        $nclay = ($this->bountyOproduction['clay'] / 3600) * $timepast;
-        $niron = ($this->bountyOproduction['iron'] / 3600) * $timepast;
-        $ncrop = ($this->bountyOproduction['crop'] / 3600) * $timepast;
-        $database->modifyOasisResource($bountywid, $nwood, $nclay, $niron, $ncrop, 1);      
-        $database->updateOasis($bountywid);
-    }
-    
-    private function bountyGetWoodProd() {
+    private function bountyGetWoodProd($resArray, $oasisNumber) {
         global $bid1, $bid5;
         
         $wood = $sawmill = 0;
         $woodholder = [];
         for($i = 1; $i <= 38; $i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 1) array_push($woodholder,'f'.$i);
-            if($this->bountyresarray['f'.$i.'t'] == 5) $sawmill = $this->bountyresarray['f'.$i];
+        	if($resArray['f'.$i.'t'] == 1) array_push($woodholder,'f'.$i);
+            if($resArray['f'.$i.'t'] == 5) $sawmill = $resArray['f'.$i];
         }
         
-        for($i = 0; $i <= count($woodholder) - 1; $i++) $wood += $bid1[$this->bountyresarray[$woodholder[$i]]]['prod'];
+        for($i = 0; $i <= count($woodholder) - 1; $i++) $wood += $bid1[$resArray[$woodholder[$i]]]['prod'];
         
         if($sawmill >= 1) $wood += $wood / 100 * $bid5[$sawmill]['attri'];
-        if($this->bountyocounter[0] != 0) $wood += $wood * 0.25 * $this->bountyocounter[0];
+        if($oasisNumber[0] > 0) $wood += $wood * 0.25 * $oasisNumber[0];
 
         return round($wood * SPEED);
     }
     
-    private function bountyGetClayProd() {
+    private function bountyGetClayProd($resArray, $oasisNumber) {
         global $bid2, $bid6;
         
         $clay = $brick = 0;
         $clayholder = [];
         for($i = 1; $i <= 38; $i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 2) array_push($clayholder, 'f'.$i);
-            if($this->bountyresarray['f'.$i.'t'] == 6) $brick = $this->bountyresarray['f'.$i];
+        	if($resArray['f'.$i.'t'] == 2) array_push($clayholder, 'f'.$i);
+        	if($resArray['f'.$i.'t'] == 6) $brick = $resArray['f'.$i];
         }
         
-        for($i = 0; $i <= count($clayholder) - 1; $i++) $clay += $bid2[$this->bountyresarray[$clayholder[$i]]]['prod'];
+        for($i = 0; $i <= count($clayholder) - 1; $i++) $clay += $bid2[$resArray[$clayholder[$i]]]['prod'];
         
         if($brick >= 1) $clay += $clay / 100 * $bid6[$brick]['attri'];
-        if($this->bountyocounter[1] != 0) $clay += $clay * 0.25 * $this->bountyocounter[1];
+        if($oasisNumber[1] > 0) $clay += $clay * 0.25 * $oasisNumber[1];
 
         return round($clay * SPEED);
     }
 
-    private function bountyGetIronProd() {
+    private function bountyGetIronProd($resArray, $oasisNumber) {
         global $bid3, $bid7;
         
         $iron = $foundry = 0;
         $ironholder = [];
         for($i = 1; $i <= 38; $i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 3) array_push($ironholder, 'f'.$i);               
-            if($this->bountyresarray['f'.$i.'t'] == 7) $foundry = $this->bountyresarray['f'.$i];
+        	if($resArray['f'.$i.'t'] == 3) array_push($ironholder, 'f'.$i);               
+        	if($resArray['f'.$i.'t'] == 7) $foundry = $resArray['f'.$i];
         }
         
-        for($i = 0; $i <= count($ironholder) - 1; $i++) $iron += $bid3[$this->bountyresarray[$ironholder[$i]]]['prod'];
+        for($i = 0; $i <= count($ironholder) - 1; $i++) $iron += $bid3[$resArray[$ironholder[$i]]]['prod'];
         
         if($foundry >= 1) $iron += $iron / 100 * $bid7[$foundry]['attri'];
-        if($this->bountyocounter[2] != 0) $iron += $iron * 0.25 * $this->bountyocounter[2];
+        if($oasisNumber[2] > 0) $iron += $iron * 0.25 * $oasisNumber[2];
 
         return round($iron * SPEED);
     }
 
-    private function bountyGetCropProd() {
-        global $bid4, $bid8, $bid9;
+    private function bountyGetCropProd($resArray, $oasisNumber) {
+        global $bid4, $bid8, $bid9, $database;
         
         $crop = $grainmill = $bakery = 0;
         $cropholder = [];
         for($i = 1; $i <= 38;$i++) {
-            if($this->bountyresarray['f'.$i.'t'] == 4) array_push($cropholder, 'f'.$i);
-            if($this->bountyresarray['f'.$i.'t'] == 8) $grainmill = $this->bountyresarray['f'.$i];
-            if($this->bountyresarray['f'.$i.'t'] == 9) $bakery = $this->bountyresarray['f'.$i];
+        	if($resArray['f'.$i.'t'] == 4) array_push($cropholder, 'f'.$i);
+        	if($resArray['f'.$i.'t'] == 8) $grainmill = $resArray['f'.$i];
+        	if($resArray['f'.$i.'t'] == 9) $bakery = $resArray['f'.$i];
         }
-        for($i = 0; $i <= count($cropholder) - 1; $i++) $crop += $bid4[$this->bountyresarray[$cropholder[$i]]]['prod'];
+        for($i = 0; $i <= count($cropholder) - 1; $i++) $crop += $bid4[$resArray[$cropholder[$i]]]['prod'];
         
         if($grainmill >= 1) $crop += $crop / 100 * (isset($bid8[$grainmill]['attri']) ? $bid8[$grainmill]['attri'] : 0);
         if($bakery >= 1) $crop += $crop / 100 * (isset($bid9[$bakery]['attri']) ? $bid9[$bakery]['attri'] : 0);                
-        if($this->bountyocounter[3] != 0) $crop += $crop * 0.25 * $this->bountyocounter[3];       
+        if($oasisNumber[3] > 0) $crop += $crop * 0.25 * $oasisNumber[3];       
         
-        if(!empty($bountyresarray['vref']) && is_numeric($bountyresarray['vref'])){
-            $who=$database->getVillageField($bountyresarray['vref'],"owner");
+        if(!empty($resArray['vref']) && is_numeric($resArray['vref'])){
+        	$who = $database->getVillageField($resArray['vref'], "owner");
             $croptrue = $database->getUserField($who, "b4", 0);
             if($croptrue > time()) $crop *= 1.25;
         }
@@ -3654,15 +3429,9 @@ class Automation {
     }
 
     private function trainingComplete() {
-        global $database, $autoprefix;
-
-        if(file_exists($autoprefix."GameEngine/Prevention/training.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/training.txt");
-        }
+        global $database;
 
         $time = time();
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/training.txt", 'w');
-        fclose($ourFileHandle);
         $trainlist = $database->getTrainingList();
         if(count($trainlist) > 0){
             // preload village data
@@ -3717,9 +3486,6 @@ class Automation {
                 $this->addStarvationData($train['vref']);
             }
         }
-        if(file_exists("GameEngine/Prevention/training.txt")) {
-            unlink("GameEngine/Prevention/training.txt");
-        }
     }
 
     private function getsort_typeLevel($tid, $resarray) {
@@ -3754,14 +3520,7 @@ class Automation {
     }
 
     private function celebrationComplete() {
-        global $database, $autoprefix;
-
-        if(file_exists($autoprefix."GameEngine/Prevention/celebration.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/celebration.txt");
-        }
-
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/celebration.txt", 'w');
-        fclose($ourFileHandle);
+        global $database;
 
         $varray = $database->getCel();
         foreach($varray as $vil){
@@ -3772,21 +3531,10 @@ class Automation {
             $database->clearCel($id);
             $database->setCelCp($user, $cp);
         }
-
-        if(file_exists("GameEngine/Prevention/celebration.txt")) {
-            unlink("GameEngine/Prevention/celebration.txt");
-        }
     }
 
     private function demolitionComplete() {
-        global $database, $autoprefix;
-
-        if(file_exists($autoprefix."GameEngine/Prevention/demolition.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/demolition.txt");
-        }
-
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/demolition.txt", 'w');
-        fclose($ourFileHandle);
+        global $database;
 
         $varray = $database->getDemolition();
         foreach($varray as $vil) {
@@ -3832,18 +3580,11 @@ class Automation {
                 if ($type == 18) Automation::updateMax($database->getVillageField($vil['vref'], 'owner'));
             }
         }
-        
-        if(file_exists("GameEngine/Prevention/demolition.txt")) {
-            unlink("GameEngine/Prevention/demolition.txt");
-        }
+
     }
 
     private function updateHero() {
         global $database, $hero_levels;
-        
-        if(file_exists("GameEngine/Prevention/updatehero.txt")) {
-        	unlink("GameEngine/Prevention/updatehero.txt");
-        }
         
         $harray = $database->getHero();
         if(!empty($harray)){
@@ -3961,11 +3702,6 @@ class Automation {
                 mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "hero SET lastupdate = $timeNow WHERE heroid IN(".implode(', ', $lastUpdateIDs).")");
             }
         }
-        if(file_exists("GameEngine/Prevention/updatehero.txt")) {
-            unlink("GameEngine/Prevention/updatehero.txt");
-        }
-
-
     }
 
     // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
@@ -4170,17 +3906,11 @@ class Automation {
     
     //TODO: This function needs to be splitted in many subfunctions (for TravianZ refactor)
     private function starvation() {
-        global $database, $technology, $autoprefix;
-
-        if(file_exists($autoprefix."GameEngine/Prevention/starvation.txt")) {
-            unlink($autoprefix."GameEngine/Prevention/starvation.txt");
-        }
+        global $database, $technology;
 
         //starvation is disabled during Easter/Holidays/Christmas
         if(PEACE) return;
         
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/starvation.txt", 'w');
-        fclose($ourFileHandle);
         $time = time();
 
         //update starvation in every village
@@ -4347,21 +4077,10 @@ class Automation {
 
             unset ($unitarrays, $type, $subtype);
         }
-
-        if(file_exists($autoprefix."GameEngine/Prevention/starvation.txt")) {
-        	unlink($autoprefix."GameEngine/Prevention/starvation.txt");
-        }
     }
 
     private function procNewClimbers() {
-    	global $database, $ranking, $autoprefix;
-    	
-    	if(file_exists($autoprefix."GameEngine/Prevention/climbers.txt")) {
-    		unlink($autoprefix."GameEngine/Prevention/climbers.txt");
-        }
-        
-        $ourFileHandle = fopen($autoprefix."GameEngine/Prevention/climbers.txt", 'w');
-        fclose($ourFileHandle);
+    	global $database, $ranking;
 
         $ranking->procRankArray();
         $climbers = $ranking->getRank();
@@ -4410,10 +4129,6 @@ class Automation {
                     }
                 }
             }
-        }
-        
-        if(file_exists($autoprefix."GameEngine/Prevention/climbers.txt")) {
-        	unlink($autoprefix."GameEngine/Prevention/climbers.txt");
         }
     }
 

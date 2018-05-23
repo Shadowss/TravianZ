@@ -1567,11 +1567,8 @@ class MYSQLi_DB implements IDbConnection {
 	function regenerateOasisUnits($wid, $automation = false) {
 	    global $autoprefix;
 
-	    if (is_array($wid)) {
-	        $wid = '(' . implode('),(', $wid) . ')';
-	    } else {
-	        $wid = '(' . (int) $wid . ')';
-	    }
+	    if (is_array($wid)) $wid = '(' . implode('),(', $wid) . ')';	        
+	    else $wid = '(' . (int) $wid . ')';
 
 	    // load the oasis regeneration (in-game) and units generation (during install) SQL file
 	    // and replace village IDs for the given $wid
@@ -1582,9 +1579,7 @@ class MYSQLi_DB implements IDbConnection {
 	    // fetch results of the multi-query in order to allow subsequent query() and multi_query() calls to work
 	    while (mysqli_more_results($this->dblink) && mysqli_next_result($this->dblink)) {;}
 
-	    if (!$result) {
-	        return false;
-	    }
+	    if (!$result) return false;
 
 	    return true;
 	}
