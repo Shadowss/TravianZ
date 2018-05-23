@@ -4477,6 +4477,36 @@ References: User ID/Message ID, Mode
 	}
 
 	/**
+	 * Get the time required to build a specified building
+	 * 
+	 * @param int $id The ID where the building is located
+	 * @param int $tid The type of the building
+	 * @param int $plus The construction queue count
+	 * @param int $wref The village ID
+	 * @param array $buildingArray The array containing the buildings in the village
+	 * @return int Returns the building time
+	 */
+	
+	function getBuildingTime($id, $tid, $plus, $wref, $buildingArray) {
+		list($id, $tid, $plus, $wref, $buildingArray) = $this->escape_input((int) $id, (int) $tid, (int) $plus, (int) $wref, $buildingArray);
+		global ${'bid'.$tid}, $bid15;
+		
+		$dataArray = ${'bid'.$tid};
+		
+		//Check if we've the main building or not
+		$mainBuilding = $this->getFieldLevelInVillage($wref, 15);
+		if($tid == 15){
+			if($mainBuilding == 0) return round($dataArray[$buildingArray['f'.$id] + $plus]['time'] / SPEED * 5);
+			else return round($dataArray[$buildingArray['f'.$id] + $plus]['time'] / SPEED);
+		}else{
+			if($mainBuilding > 0) {
+				return round($dataArray[$buildingArray['f'.$id] + $plus]['time'] * ($bid15[$mainBuilding]['attri'] / 100)  / SPEED);
+			}
+			else return round($dataArray[$buildingArray['f'.$id] + $plus]['time'] * 5 / SPEED);
+		}
+	}
+	
+	/**
 	 * Called when removing a queued building by a player or because destroyed by catapults
 	 * 
 	 * @param int $d The ID of the building which needs to be deleted
@@ -4488,7 +4518,6 @@ References: User ID/Message ID, Mode
 	
 	function removeBuilding($d, $tribe, $wid, $fieldsArray = []) {
 		list($d, $tribe, $wid, $fieldsArray) = $this->escape_input((int) $d, (int) $tribe, (int) $wid, $fieldsArray);
-		global $building;
 
 		//Variables initialization
 		$jobToDelete = [];
@@ -4510,9 +4539,12 @@ References: User ID/Message ID, Mode
 				if($sameBuilding && $canBeRemoved) $canBeRemoved = !$sameBuilding;		
 				
 				//Get the time required to upgrade the building at the given level	
-				$newTime = $building->resourceRequired($job['field'], 
+				$newTime = $this->getBuildingTime(
+						$job['field'],
 						$job['type'], 
-						$job['level'] - $fieldsArray['f'.$job['field']] - $sameBuilding)['time'];
+						$job['level'] - $fieldsArray['f'.$job['field']] - $sameBuilding, 
+						$wid, 
+						$fieldsArray);
 				
 				//Increase the looptime
 				$loopTime += $newTime;

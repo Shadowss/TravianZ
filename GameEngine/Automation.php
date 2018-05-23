@@ -26,6 +26,7 @@ include_once("Technology.php");
 include_once("Ranking.php");
 include_once("Generator.php");
 include_once("Multisort.php");
+include_once("Building.php");
 
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {

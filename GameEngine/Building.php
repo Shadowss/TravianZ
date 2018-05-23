@@ -479,8 +479,8 @@ class Building {
 		}
 	}
 
-	private function constructBuilding($id,$tid) {
-		global $database,$village,$session,$logging;
+	private function constructBuilding($id, $tid) {
+		global $database, $village, $session, $logging;
 
 		if($session->access == BANNED) {
 		    header("Location: banned.php");
@@ -890,7 +890,7 @@ class Building {
 
 	public function resourceRequired($id, $tid, $plus = 1) {
 		$name = "bid".$tid;
-		global $$name, $village, $bid15;
+		global $$name, $village, $bid15, $database;
 		
 		$dataarray = $$name;
 		$wood = $dataarray[$village->resarray['f'.$id] + $plus]['wood'];
@@ -898,19 +898,10 @@ class Building {
 		$iron = $dataarray[$village->resarray['f'.$id] + $plus]['iron'];
 		$crop = $dataarray[$village->resarray['f'.$id] + $plus]['crop'];
 		$pop = $dataarray[$village->resarray['f'.$id] + $plus]['pop'];
-		
-		if($tid == 15){
-		    if($this->getTypeLevel(15) == 0) $time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] / SPEED * 5);			
-			else $time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] / SPEED);
-		}else{
-			if($this->getTypeLevel(15) > 0) {
-				$time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] * ($bid15[$this->getTypeLevel(15)]['attri'] /100)  / SPEED);
-			}
-			else $time = round($dataarray[$village->resarray['f'.$id] + $plus]['time'] * 5 / SPEED);
-		}
-		
+		$time = $database->getBuildingTime($id, $tid, $plus, $village->wid, $village->resarray);	
 		$cp = $dataarray[$village->resarray['f'.$id] + $plus]['cp'];
-		return ["wood" => $wood, "clay" => $clay, "iron" => $iron, "crop" => $crop, "pop" => $pop, "time" => $time,"cp" => $cp];
+		
+		return ["wood" => $wood, "clay" => $clay, "iron" => $iron, "crop" => $crop, "pop" => $pop, "time" => $time, "cp" => $cp];
 	}
 
 	public function getTypeField($type) {

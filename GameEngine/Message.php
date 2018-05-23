@@ -502,17 +502,15 @@ class Message {
 		$user = $database->getUserField($recieve, "id", 1);
 
 		// Vulnerability closed by Shadow
-
 		if ($security_check) {
     		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
-    		$res = mysqli_fetch_array(mysqli_query($database->dblink,$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
+    		$res = mysqli_fetch_array(mysqli_query($database->dblink,$q), MYSQLI_ASSOC);
     		$flood = $res['Total'];
-    		if($flood > 5)
-    		return; //flood
+    		
+    		if($flood > 5) return; //flood
 		}
 
 		// Vulnerability closed by Shadow
-
 		if(WORD_CENSOR) {
 			$topic = $this->wordCensor($topic);
 			$text = $this->wordCensor($text);
