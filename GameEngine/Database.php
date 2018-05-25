@@ -4741,7 +4741,7 @@ References: User ID/Message ID, Mode
 	 */
 	public function checkAllianceEmbassiesStatus($userData, $demolition = false, $use_cache = true) {
 	    // TODO: refactor this and break it into more smaler methods
-	    global $session;
+	    //global $session;
 
 	    if ($userData['alliance']) {
             // check whether this player is an alliance owner
@@ -4760,9 +4760,9 @@ References: User ID/Message ID, Mode
 
                     // unset the alliance in session, if we're evicting
                     // currently logged-in player
-                    if ($session->uid == $userData['id']) {
-                        $_SESSION['alliance_user'] = 0;
-                    }
+                    //if ($session->uid == $userData['id']) {
+                    //    $_SESSION['alliance_user'] = 0;
+                    //}
 
                     // notify them via in-game messaging, if we come from a demolition,
                     // otherwise return a result which can be used in battle reports
@@ -6130,7 +6130,7 @@ References: User ID/Message ID, Mode
 	function trainUnit($vid, $unit, $amt, $pop, $each, $mode) {
 	    list($vid, $unit, $amt, $pop, $each, $mode) = $this->escape_input((int) $vid, (int) $unit, (int) $amt, (int) $pop, (int) $each, $mode);
 
-		global $village, $building, $session, $technology;
+		global $technology;
 
 		if(!$mode) {
 			$barracks = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44];
@@ -7532,23 +7532,17 @@ References: User ID/Message ID, Mode
 	
     // no need to cache this method
     public function canClaimArtifact($from, $vref, $size, $type) {
-        list($size,$type) = $this->escape_input((int) $size,(int) $type);
-
-        //fix by Ronix
-        global $form;
+        list($size, $type) = $this->escape_input((int) $size, (int) $type);
 
         $artifact = $this->getOwnArtefactInfo($from);
-        if (!empty($artifact)) {
-            $form->addError("error", "Treasury is full. Your hero could not claim the artefact");
-            return false;
-        }
+        if (!empty($artifact)) return  "Treasury is full. Your hero could not claim the artefact";
         
         $uid = $this->getVillageField($from, "owner");
         $vuid = $this->getVillageField($vref, "owner");
 
         $artifact = $this->getOwnArtifactsSum($uid);
 
-        if ( $artifact['totals'] < 3 || $uid == $vuid) {
+        if ($artifact['totals'] < 3 || $uid == $vuid) {
             $DefenderFields = $this->getResourceLevel( $vref );
             $defcanclaim    = true;
 
@@ -7557,8 +7551,7 @@ References: User ID/Message ID, Mode
                     $defTresuaryLevel = $DefenderFields['f'.$i];
                     if ($defTresuaryLevel > 0) {
                         $defcanclaim = false;
-                        $form->addError("error", "Treasury has not been destroyed. Your hero could not claim the artefact");
-                        return false;
+                        return "Treasury has not been destroyed. Your hero could not claim the artefact";                   
                     }
                     else $defcanclaim = true;
                 }
@@ -7575,20 +7568,15 @@ References: User ID/Message ID, Mode
             }
 
             if(($artifact['great'] > 0 || $artifact['unique'] > 0) && $size > 1 && $uid != $vuid) {
-                $form->addError( "error", "Max num. of great/unique artefacts. Your hero could not claim the artefact" );
-                return false;
+                return "Max num. of great/unique artefacts. Your hero could not claim the artefact";
             }
 
             if(($size == 1 && ($villageartifact || $accountartifact)) || (($size == 2 || $size == 3) && $accountartifact)) {
-                return true;
-            } else {
-                $form->addError("error", "Your level treasury is low. Your hero could not claim the artefact");
-                return false;
+                return "";
             }
-        } else {
-            $form->addError("error", "Max num. of artefacts. Your hero could not claim the artefact");
-            return false;
-        }
+            else return "Your level treasury is low. Your hero could not claim the artefact";
+        } 
+        else return "Max num. of artefacts. Your hero could not claim the artefact";
     }
 
     // no need to cache this method
@@ -7728,7 +7716,7 @@ References: User ID/Message ID, Mode
 	}
 
 	function getCropProdstarv($wref, $use_cache = true) {
-	    global $bid4, $bid8, $bid9, $sesion, $technology;
+	    global $bid4, $bid8, $bid9, $technology;
 
         // first of all, check if we should be using cache and whether the field
         // required is already cached
@@ -7841,27 +7829,27 @@ References: User ID/Message ID, Mode
     // no need to cache this method
 	function checkFriends($uid) {
         list($uid) = $this->escape_input($uid);
-
         global $session;
-        $user = $this->getUserArray( $uid, 1 );
-        for ( $i = 0; $i <= 19; $i ++ ) {
-            if ( $user[ 'friend' . $i ] == 0 && $user[ 'friend' . $i . 'wait' ] == 0 ) {
-                for ( $j = $i + 1; $j <= 19; $j ++ ) {
-                    $k = $j - 1;
-                    if ( $user[ 'friend' . $j ] != 0 ) {
-                        $friend = $this->getUserField( $uid, "friend" . $j, 0 );
-                        $this->addFriend( $uid, "friend" . $k, $friend );
-                        $this->deleteFriend( $uid, "friend" . $j );
-                    }
-
-                    if ( $user[ 'friend' . $j . 'wait' ] == 0 ) {
-                        $friendwait = $this->getUserField( $uid, "friend" . $j . "wait", 0 );
-                        $this->addFriend( $session->uid, "friend" . $k . "wait", $friendwait );
-                        $this->deleteFriend( $uid, "friend" . $j . "wait" );
-                    }
-                }
-            }
-        }
+        
+		$user = $this->getUserArray($uid, 1);
+		for($i = 0; $i <= 19; $i++){
+			if($user['friend'.$i] == 0 && $user['friend'.$i.'wait'] == 0){
+				for($j = $i + 1; $j <= 19; $j++){
+					$k = $j - 1;
+					if($user['friend'.$j] != 0){
+						$friend = $this->getUserField($uid, "friend".$j, 0);
+						$this->addFriend($uid, "friend".$k, $friend);
+						$this->deleteFriend($uid, "friend".$j);
+					}
+					
+					if($user['friend'.$j.'wait'] == 0){
+						$friendwait = $this->getUserField($uid, "friend".$j."wait", 0);
+						$this->addFriend($session->uid, "friend".$k."wait", $friendwait);
+						$this->deleteFriend($uid, "friend".$j."wait");
+					}
+				}
+			}
+		}
 	}
 
 	function setVillageEvasion($vid) {

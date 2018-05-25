@@ -24,9 +24,7 @@ class Form {
 			unset($_SESSION['errorarray']);
 			unset($_SESSION['valuearray']);
 		}
-		else {
-			$this->errorcount = 0;
-		}
+		else $this->errorcount = 0;
 	}
 
 	public function addError($field,$error) {
@@ -38,18 +36,14 @@ class Form {
 		if(array_key_exists($field,$this->errorarray)) {
 			return $this->errorarray[$field];
 		}
-		else {
-			return "";
-		}
+		else return "";
 	}
 
 	public function getValue($field) {
 		if(array_key_exists($field,$this->valuearray)) {
 			return $this->valuearray[$field];
 		}
-		else {
-			return "";
-		}
+		else return "";
 	}
 	
 	public function setValue($field, $value) {
@@ -60,18 +54,14 @@ class Form {
 		if(array_key_exists($field,$this->valuearray) && $this->valuearray[$field] != $cookie) {
 			return $this->valuearray[$field];
 		}
-		else {
-			return $cookie;
-		}
+		else return $cookie;
 	}
 
 	public function getRadio($field,$value) {
 		if(array_key_exists($field,$this->valuearray) && $this->valuearray[$field] == $value) {
 			return "checked";
 		}
-		else {
-			return "";
-		}
+		else return "";
 	}
 
 	public function returnErrors() {
