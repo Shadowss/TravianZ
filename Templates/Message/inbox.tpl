@@ -20,7 +20,7 @@
 		<?php } ?>
 	    </th>
 	    <th colspan="2" class="buttons">
-		<button name="delmsg" value="delete" id="btn_delete" class="trav_buttons" alt="delete" /> Delete </button>
+		<button name="delmsg" value="delete" id="btn_delete" class="trav_buttons"> Delete </button>
 		<?php if($session->plus) { echo "<button name=\"archive\" value=\"Archive\" id=\"btn_archiv\" class=\"trav_buttons\" alt=\"Archive\" /> Archive </button>"; } ?>
 		<input name="ft" value="m3" type="hidden" />
 	    </th><th class="navi"><?php

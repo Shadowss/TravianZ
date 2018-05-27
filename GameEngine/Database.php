@@ -4239,7 +4239,6 @@ References: User ID/Message ID, Mode
             }
         }
 
-		global $session;
 		switch($mode) {
 			case 1:
 				$q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
@@ -4252,19 +4251,13 @@ References: User ID/Message ID, Mode
 				break;
 			case 4:
 			    $show_target = $session->uid;
-
-			    if ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES) {
-			        $show_target .= ',1';
-                }
-
-                if ($session->access == MULTIHUNTER) {
-                    $show_target .= ',5';
-                }
+			    if ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES) $show_target .= ',1';
+                if ($session->access == MULTIHUNTER) $show_target .= ',5';
 
 			    $q = "UPDATE " . TB_PREFIX . "mdata set viewed = 1 where id = $id AND target IN(".$show_target.")";
 				break;
 			case 5:
-				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,viewed = 1 where id IN(".implode(', ', $id).")";
+				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1, viewed = 1 where id IN(".implode(', ', $id).")";
 				break;
 			case 6:
 				$q = "SELECT * FROM " . TB_PREFIX . "mdata where target IN($id) and send = 0 and archived = 1 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
@@ -4273,7 +4266,7 @@ References: User ID/Message ID, Mode
 				$q = "UPDATE " . TB_PREFIX . "mdata set delowner = 1 where id IN(".implode(', ', $id).")";
 				break;
 			case 8:
-				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1,delowner = 1,viewed = 1 where IN(".implode(', ', $id).")";
+				$q = "UPDATE " . TB_PREFIX . "mdata set deltarget = 1, delowner = 1, viewed = 1 where id IN(".implode(', ', $id).")";
 				break;
 			case 9:
 			    $q = "SELECT * FROM " . TB_PREFIX . "mdata WHERE target IN($id) and send = 0 and archived = 0 and deltarget = 0 ORDER BY time ".(isset($_GET['o']) && $_GET['o'] == 1 ? 'ASC' : 'DESC');
@@ -4289,9 +4282,8 @@ References: User ID/Message ID, Mode
 		if($mode <= 3 || $mode == 6 || $mode > 8) {
 			$result = mysqli_query($this->dblink,$q);
 			return $this->mysqli_fetch_all($result);
-		} else {
-			return mysqli_query($this->dblink,$q);
 		}
+		else return mysqli_query($this->dblink,$q);
 	}
 
 	function unarchiveNotice($id) {

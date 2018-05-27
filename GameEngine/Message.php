@@ -48,6 +48,7 @@ class Message {
 	}
 
 	public function procMessage($post) {
+
 		if(isset($post['ft'])) {
 			switch($post['ft']) {
 				case "m1":
@@ -61,12 +62,9 @@ class Message {
 				case "m3":
 				case "m4":
 				case "m5":
-					if(isset($post['delmsg_x'])) {
-    					$this->removeMessage($post);
-	    				$this->header($get);
-					}
-					if(isset($post['archive_x'])) $this->archiveMessage($post);
-					if(isset($post['start_x'])) $this->unarchiveMessage($post);
+					if(isset($post['delmsg']))$this->removeMessage($post);
+					if(isset($post['archive'])) $this->archiveMessage($post);
+					if(isset($post['start'])) $this->unarchiveMessage($post);
 					break;
 				case "m6":
 					$this->createNote($post);
@@ -209,7 +207,7 @@ class Message {
 
 	private function removeMessage($post) {
 		global $database, $session;
-		
+
 		$post = $database->escape($post);
 		$mode5updates = $mode7updates = $mode8updates = [];
 		
@@ -218,9 +216,7 @@ class Message {
 				$message1 = mysqli_query($database->dblink, "SELECT target, owner FROM " . TB_PREFIX . "mdata where id = " . (int)$post['n' . $i] . "");
 				$message = mysqli_fetch_array($message1);
 				
-				if($message['target'] == $session->uid && $message['owner'] == $session->uid){
-					$mode8updates[] = $post['n' . $i];
-				}
+				if($message['target'] == $session->uid && $message['owner'] == $session->uid) $mode8updates[] = $post['n' . $i];
 				else if($message['target'] == $session->uid) $mode5updates[] = $post['n' . $i];
 				else if($message['owner'] == $session->uid) $mode7updates[] = $post['n' . $i];
 			}
@@ -239,11 +235,8 @@ class Message {
 
 		$archIDs = [];
 		for($i = 1; $i <= 10; $i++) {
-			if(isset($post['n' . $i])) {
-                $archIDs[] = $post['n' . $i];
-			}
+			if(isset($post['n'.$i])) $archIDs[] = $post['n'.$i];
 		}
-
         $database->setArchived($archIDs);
 
 		header("Location: nachrichten.php");
@@ -255,11 +248,8 @@ class Message {
 
 		$normIDs = [];
 		for($i = 1; $i <= 10; $i++) {
-			if(isset($post['n' . $i])) {
-                $normIDs[] = $post['n' . $i];
-			}
+			if(isset($post['n'.$i])) $normIDs[] = $post['n'.$i];
 		}
-		
         $database->setNorm($normIDs);
 
 		header("Location: nachrichten.php");
@@ -626,12 +616,11 @@ class Message {
 	}
 
 	private function findInbox($id) {
-        if(count($this->inbox)){
+        if(!empty($this->inbox)){
 			foreach($this->inbox as $message){
 				if($message['id'] == $id) return true;
 			}
 		}
-		
 		return false;
 	}
 
@@ -640,8 +629,7 @@ class Message {
 			foreach($this->sent as $message){
 				if($message['id'] == $id) return true;
 			}
-		}
-		
+		}	
 		return false;
 	}
 

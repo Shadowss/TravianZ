@@ -13,7 +13,7 @@ include("menu.tpl");
 		<input class="check" type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);" />
 	</th>
 	<th colspan="2" class="buttons">
-		<button name="delmsg" value="delete" id="btn_delete" class="trav_buttons" alt="delete" /> Delete </button <button name="start" value="Back" alt="Back" id="btn_back" class="trav_buttons" /> Back </button</th>
+		<button name="delmsg" value="delete" id="btn_delete" class="trav_buttons">Delete</button> <button name="start" value="Back" id="btn_back" class="trav_buttons">Back</button></th>
         <th class="navi"><?php
     if(!isset($_GET['s']) && count($message->archived1) < 10) {
         echo "&laquo;&raquo;";

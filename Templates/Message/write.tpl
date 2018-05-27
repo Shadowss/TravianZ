@@ -96,7 +96,7 @@ Reply: ".$database->getUserField($id,'username',0)."
 			</script>
 					<p class="btn">
 		<input type="hidden" name="ft" value="m2" />
-		<input type="image" value="" name="s1" id="btn_send" class="dynamic_img" src="img/x.gif" alt="send" onclick="this.disabled=true;this.form.submit();" tabindex=4; />
+		<button name="delmsg" value="" id="btn_save" class="trav_buttons" onclick="this.disabled=true;this.form.submit();" tabindex="4">Send</button>
 		<?php
 			if ($session->access == ADMIN && ADMIN_RECEIVE_SUPPORT_MESSAGES && !empty($_GET['mid'])) {
 		?><br />
