@@ -802,7 +802,7 @@ class Units {
 			
 			for($i = 1; $i <= 6; $i++) ${'t'.$i} = $raidList['t'.$i];
 
-			$villageOwner = $database->getVillageField($wref, 'owner');
+			$villageOwner = !$database->isVillageOases($wref) ? $database->getVillageField($wref, 'owner') : 2;
 			$userAccess = $database->getUserField($villageOwner, 'access', 0);
 			$userID = $database->getUserField($villageOwner, 'id', 0);
 			
