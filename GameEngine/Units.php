@@ -76,19 +76,40 @@ class Units {
     }
     
     private function loadUnits($post) {
-        global $database, $village, $session, $generator, $logging, $form;
+        global $form;
+        
+        if(!empty($error = $this->checkErrors($post))) {
+            $form->addError("error", $error);
+            $_SESSION['errorarray'] = $form->getErrors();
+            $_SESSION['valuearray'] = $_POST;
+            header("Location: a2b.php");
+            exit;
+        }
+        else return $post;
+    }
+    
+    /**
+     * Gets an error if the user did a mistake
+     * 
+     * @param array $post The array containing all of the needed informations
+     * @return string Returns the errors, or empty if no errors was found
+     */
+    
+    public function checkErrors(&$post){
+        global $database, $village, $session, $generator;
+        
         // Search by town name
         // Coordinates and look confirm name people
-        if(isset($post['x']) && isset($post['y']) && !empty($post['x']) && !empty($post['y'])) {
+        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
             $vid = $database->getVilWref($post['x'], $post['y']);
             unset($post['dname'], $post['dname']);
-        }else if(isset($post['dname']) && !empty($post['dname'])){
-            $vid = $database->getVillageByName(stripslashes($post['dname']));
         }
+        else if(isset($post['dname']) && !empty($post['dname'])) $vid = $database->getVillageByName(stripslashes($post['dname']));
+        
         if (!empty($vid)) {
-            if($database->isVillageOases($vid)){
-                $too = $database->getOasisField($vid,"conqured");
-                if($too == 0) $disabled = $disabledr ="disabled=disabled";                   
+            if($isOasis = $database->isVillageOases($vid)){
+                $too = $database->getOasisField($vid, "conqured");
+                if($too == 0) $disabled = $disabledr ="disabled=disabled";
                 else
                 {
                     $disabledr = "";
@@ -102,128 +123,84 @@ class Units {
                     $disabled = "";
                 }else{
                     $disabledr = "";
-                    if($session->sit == 0) $disabled = "";                     
+                    if($session->sit == 0) $disabled = "";
                     else $disabled ="disabled=disabled";
                 }
             }
         }else{
             $disabledr = "";
-            if($session->sit == 0) $disabled = "";    
+            if($session->sit == 0) $disabled = "";
             else $disabled ="disabled=disabled";
         }
-                if(!empty($disabledr) && $post['c'] == 2){
-                    $form->addError("error","You can't reinforce this village/oasis");
-                }
-                
-                if(!empty($disabled) && $post['c'] == 3){
-                    $form->addError("error","You can't attack this village/oasis with normal attack");
-                }
-                
-                if($post['c'] < 2 || $post['c'] > 4) $form->addError("error", "Invalid attack type.");
-                
-                if(empty($post['t1']) && empty($post['t2']) && empty($post['t3']) && empty($post['t4']) && empty($post['t5']) &&
-                    empty($post['t6']) && empty($post['t7']) && empty($post['t8']) && empty($post['t9']) && empty($post['t10']) && empty($post['t11'])){
-                $form->addError("error","You need to mark min. one troop");
-                }
-
-                if(!empty($post['dname']) && !empty($post['x']) && !empty($post['y'])){
-                $form->addError("error","Insert name or coordinates");
-                }
-
-                if(isset($post['dname']) && !empty($post['dname'])) {
-                    $id = $database->getVillageByName(stripslashes($post['dname']));
-                    
-                    if (!isset($id)) $form->addError("error","Village do not exist");
-                    else $coor = $database->getCoor($id);
-                }
-		
-                // People search by coordinates
-                // We confirm and seek coordinate coordinates Village
-        if(isset($post['x']) && isset($post['y']) && !empty($post['x']) && !empty($post['y'])) {
+        
+        if(!empty($disabledr) && $post['c'] == 2) return "You can't reinforce this village/oasis";   
+        if(!empty($disabled) && $post['c'] == 3) return "You can't attack this village/oasis with normal attack";     
+        if($post['c'] < 2 || $post['c'] > 4) return "Invalid attack type.";
+            
+        //check if at least one troops has been selected
+        for($i = 1; $i <= 11; $i++) $selectedTroops += empty($post['t'.$i]) ? 0 : $post['t'.$i];        
+        if($selectedTroops == 0) return "You need to select min. one troop";
+        
+        if(!empty($post['dname']) && $post['x'] != "" && $post['y'] != "") return "Insert name or coordinates";
+        
+        if(isset($post['dname']) && !empty($post['dname'])) {
+            $id = $database->getVillageByName(stripslashes($post['dname']));
+            
+            if (!isset($id)) return "Village doesn't exist";
+            else $coor = $database->getCoor($id);
+        }
+            
+        // People search by coordinates
+        // We confirm and seek coordinate coordinates Village
+        if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
             $coor = ['x' => $post['x'], 'y' => $post['y']];
             $id = $generator->getBaseID($coor['x'], $coor['y']);
             
-            if (!$database->getVillageState($id)) $form->addError("error","Coordinates do not exist");
-        }   
+            if (!$database->getVillageState($id)) return "Coordinates do not exist";
+        }
         
-        if (!empty($coor)) {    
+        if (!empty($coor)) {
             $Gtribe = $session->tribe == 1 ? "" : $session->tribe - 1;
             for($i = 1; $i < 12; $i++){
                 if(isset($post['t'.$i])){
-                    if ($i < 10) $troophave = $village->unitarray['u'.$Gtribe.$i];
-                    if ($i == 10) $troophave = $village->unitarray['u'.floor(intval($Gtribe) + 1) * $i];
-                    if ($i == 11) $troophave = $village->unitarray['hero'];
-                                        
-                    if (intval($post['t'.$i]) > $troophave){
-                        $form->addError("error","You can't send more units than you have");
-                        break;
-                    }
-                    if(intval($post['t'.$i])<0){
-                        $form->addError("error","You can't send negative units.");
-                        break;
-                    }
-                    if(preg_match('/[^0-9]/',$post['t'.$i])){
-                        $form->addError("error","Special characters can't entered");
-                        break;
-                    } 
+                    if($i < 10) $troophave = $village->unitarray['u'.$Gtribe.$i];
+                    if($i == 10) $troophave = $village->unitarray['u'.floor(intval($Gtribe) + 1) * $i];
+                    if($i == 11) $troophave = $village->unitarray['hero'];
+                    
+                    if(intval($post['t'.$i]) > $troophave) return "You can't send more units than you have";
+                    if(intval($post['t'.$i]) < 0) return "You can't send negative units.";
+                    if(preg_match('/[^0-9]/',$post['t'.$i])) return "Special characters can't entered";
                 }
             }
         }
         
-        if(isset($id) && $database->isVillageOases($id) == 0) {
-            if($database->hasBeginnerProtection($id) == 1) {
-                $form->addError("error","Player is under beginners protection. You can't attack him");
-            }
+        if(isset($id)) {
+            //check if the attacked village/oasis' owner is under beginners protection
+            if($database->hasBeginnerProtection($id) == 1) return "Player is under beginners protection. You can't attack him";
+            
+            //check if it's an oasis or not
+            $villageInfo = (!$isOasis) ? $database->getVillage($id) : $database->getOasisV($id);
             
             //check if banned/admin:
-            $villageOwner = $database->getVillageField($id,'owner');
-            $userAccess = $database->getUserField($villageOwner,'access',0);
-            $userID = $database->getUserField($villageOwner,'id',0);
+            $villageOwner = $villageInfo['owner'];
+            $userAccess = $database->getUserField($villageOwner, 'access', 0);
+            $userID = $database->getUserField($villageOwner, 'id', 0);
+            //check if he's an Admin and if he's attackable
             if($userAccess == 0 || ($userAccess == MULTIHUNTER && $userID == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)){
-                $form->addError("error","Player is Banned. You can't attack him");
-                //break;
-            }
-            //check if vacation mode:
-            if($database->getvacmodexy($id)){
-                $form->addError("error","User is on vacation mode");
-                //break;
+                return "Player is Banned. You can't attack him";
             }
             
+            //check if the user' is on the vacation mode:
+            if($database->getvacmodexy($id)) return "User is on vacation mode";
+            
             //check if attacking same village that units are in
-            if($id == $village->wid){
-                $form->addError("error","You cant attack same village you are sending from.");
-                //break;
-            }
-            // We process the array with the errors given in the form
-            if($form->returnErrors() > 0) {
-                $_SESSION['errorarray'] = $form->getErrors();
-                $_SESSION['valuearray'] = $_POST;
-                header("Location: a2b.php");
-                exit;
-            }else{
-                // We must return an array with $ post, which contains all the data more
-                // another variable that will define the flag is raised and is being sent and the type of shipping
-                $villageName = $database->getVillageField($id,'name');
-                $speed = 300;
-                $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
-                array_push($post, "$id", "$villageName", "$villageOwner","$timetaken");
-                return $post;               
-            }
-        }else{           
-            if($form->returnErrors() > 0) {
-                $_SESSION['errorarray'] = $form->getErrors();
-                $_SESSION['valuearray'] = $_POST;
-                header("Location: a2b.php");
-                exit;
-            } else if (isset($id)) {
-                $villageName = $database->getOasisField($id,"name");
-                $speed = 300;
-                $timetaken = $generator->procDistanceTime($coor, $village->coor, INCREASE_SPEED, 1);
-                array_push($post, "$id", "$villageName", "2","$timetaken");
-                return $post;
-                
-            }
+            if($id == $village->wid) return "You cant attack same village you are sending from.";
         }
+        
+        //no errors, we can add the additional information to the post array
+        array_push($post, $id, $villageInfo['name'], $villageInfo['owner'], 0);
+        
+        return "";
     }
     
     public function returnTroops($wref, $mode = 0) {
@@ -259,33 +236,25 @@ class Units {
     private function sendTroops($post) {
         global $form, $database, $village, $session;
 
-        $data   = $database->getA2b( $post['timestamp_checksum'], $post['timestamp'] );
+        $data = $database->getA2b($post['timestamp_checksum']);
         $Gtribe = ($session->tribe == 1) ? "" : $session->tribe - 1;
 
         for ($i = 1; $i < 10; $i++) {
             if (isset($data['u'.$i])) {
-
                 if ($data['u'.$i] > $village->unitarray['u'.$Gtribe.$i]) {
                     $form->addError("error", "You can't send more units than you have");
                     break;
                 }
 
-                if ($data[ 'u'.$i ] < 0) {
+                if ($data['u'.$i] < 0) {
                     $form->addError("error", "You can't send negative units.");
                     break;
                 }
-
             }
         }
 
-        if ($data['u11'] > $village->unitarray['hero']) {
-            $form->addError( "error", "You can't send more units than you have");
-        }
-
-        if ($data['u11'] < 0) {
-            $form->addError( "error", "You can't send negative units.");
-        }
-        
+        if ($data['u11'] > $village->unitarray['hero']) $form->addError("error", "You can't send more units than you have");
+        if ($data['u11'] < 0) $form->addError("error", "You can't send negative units.");   
         if($data['type'] != 1 && $post['spy'] != 0) $post['spy'] = 0;
         
         if ($form->returnErrors() > 0) {
@@ -425,7 +394,6 @@ class Units {
 
                 header("Location: build.php?id=39");
                 exit;
-
             } else {
                 header("Location: banned.php");
                 exit;
@@ -802,7 +770,9 @@ class Units {
 			
 			for($i = 1; $i <= 6; $i++) ${'t'.$i} = $raidList['t'.$i];
 
-			$villageOwner = !$database->isVillageOases($wref) ? $database->getVillageField($wref, 'owner') : 2;
+			if(!$database->isVillageOases($wref)) $villageOwner = $database->getVillageField($wref, 'owner');
+		    else $villageOwner = $database->getOasisField($wref, 'owner');
+		    
 			$userAccess = $database->getUserField($villageOwner, 'access', 0);
 			$userID = $database->getUserField($villageOwner, 'id', 0);
 			
@@ -825,9 +795,8 @@ class Units {
 				//Send the attack
 				if($canSend){				
 					$ckey = $generator->generateRandStr(6);
-					$time_now = time();
-					$id = $database->addA2b($ckey, $time_now, $wref, $t1, $t2, $t3, $t4, $t5, $t6, 0, 0, 0, 0, 0, 4);
-					$data = $database->getA2b($ckey, $time_now);
+					$id = $database->addA2b($ckey, 0, $wref, $t1, $t2, $t3, $t4, $t5, $t6, 0, 0, 0, 0, 0, 4);
+					$data = $database->getA2b($ckey);
 					
 					$troopsTime = $this->getWalkingTroopsTime($getFLData['wref'], $data['to_vid'], $session->uid, $session->tribe, $data, 1, 'u');
 					$time = $database->getArtifactsValueInfluence($getFLData['owner'], $getFLData['wref'], 2, $troopsTime);

@@ -13,8 +13,7 @@ if($session->access == BANNED){
 $opt = $database->getAlliPermissions($session->uid, $aid);
 $displayarray = $database->getUserArray($session->uid, 1);
 $forumcat = $database->ForumCat(htmlspecialchars($displayarray['alliance']));
-
-$forumcat = array_merge($forumcat, 
+$forumcat = array_merge(!empty($forumcat) ? $forumcat : [], 
 						$session->sharedForums['alliance'],
 						$session->sharedForums['confederation'], 
 						$session->sharedForums['closed']);

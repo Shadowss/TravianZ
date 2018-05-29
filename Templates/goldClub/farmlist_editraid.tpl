@@ -24,7 +24,7 @@ if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET[
         $type = $database->getVillageType2($Wref);
         $oasistype = $type;
         $vdata = $database->getVillage($Wref);
-    }elseif(!empty($_POST['x']) && !empty($_POST['y']) && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
+    }elseif($_POST['x'] != "" && $_POST['y'] != "" && is_numeric($_POST['x']) && is_numeric($_POST['y'])){
         $Wref = $database->getVilWref($_POST['x'], $_POST['y']);
         $WrefX = $_POST['x'];
         $WrefY = $_POST['y'];
@@ -38,8 +38,8 @@ if(isset($_POST['action']) == 'editSlot' && isset($_GET['eid']) && !empty($_GET[
     	if(!in_array($i + ($session->tribe - 1) * 10, [4, 14, 23])) $troops += $_POST['t'.$i];
     }
     
-    if(empty($_POST['x']) && empty($_POST['y']) && empty($_POST['target_id'])) $errormsg = "Enter coordinates.";
-    elseif((empty($_POST['x']) || empty($_POST['y'])) && empty($_POST['target_id'])) $errormsg = "Enter the correct coordinates.";  	
+    if($_POST['x'] == "" && $_POST['y'] == "" && empty($_POST['target_id'])) $errormsg = "Enter coordinates.";
+    elseif(($_POST['x'] == "" || $_POST['y'] == "") && empty($_POST['target_id'])) $errormsg = "Enter the correct coordinates.";  	
     elseif($oasistype == 0 && $vdata == 0) $errormsg = "There is no village on those coordinates."; 	
     elseif($troops == 0) $errormsg = "No troops has been selected.";
     elseif($database->hasBeginnerProtection($Wref) == 1) $errormsg = "Player under protection."; 

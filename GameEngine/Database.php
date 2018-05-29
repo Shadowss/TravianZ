@@ -796,18 +796,12 @@ class MYSQLi_DB implements IDbConnection {
 	public function hasBeginnerProtection($vid) {
         list($vid) = $this->escape_input($vid);
 
-        $q = "SELECT u.protect FROM ".TB_PREFIX."users u,".TB_PREFIX."vdata v WHERE u.id=v.owner AND v.wref=".(int) $vid." LIMIT 1";
+        $q = "SELECT u.protect FROM ".TB_PREFIX."users u,".TB_PREFIX."vdata v,".TB_PREFIX."odata o WHERE (u.id = v.owner AND v.wref = ".(int) $vid.") OR (u.id = o.owner AND o.wref = ".(int) $vid.") LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		if(!empty($dbarray)) {
-			if(time()<$dbarray[0]) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
+		
+		if(!empty($dbarray)) return time() < $dbarray[0];			
+	    else return false;
 	}
 
 	function updateUserField($ref, $field, $value, $switch) {
@@ -2294,12 +2288,14 @@ class MYSQLi_DB implements IDbConnection {
 					'%$uid%'
 				";
 		$result = mysqli_query($this->dblink, $q);
-		while($row = mysqli_fetch_assoc($result)) {
-			switch($row['forum_area']){
-				case 0: $allianceForums[] = $row; break;
-				case 2: $confForums[] = $row; break;
-				case 3: $closedForums[] = $row; break;
-			}
+		if(!empty($result)){
+		    while($row = mysqli_fetch_assoc($result)) {
+		        switch($row['forum_area']){
+		            case 0: $allianceForums[] = $row; break;
+		            case 2: $confForums[] = $row; break;
+		            case 3: $closedForums[] = $row; break;
+		        }
+		    }
 		}	
 
 		//Get the alliance confederation forums
@@ -5370,12 +5366,14 @@ References: User ID/Message ID, Mode
 		return mysqli_fetch_assoc($result);
 	}
 
-	/***************************
-	Function to add market offer
-	Mode 0: Add
-	Mode 1: Cancel
-	References: Village, Give, Amt, Want, Amt, Time, Alliance, Mode
-	***************************/
+   /**
+	* Function to add market offer
+	* 
+	* Mode 0: Add
+	* Mode 1: Cancel
+	* References: Village, Give, Amt, Want, Amt, Time, Alliance, Mode
+	*/
+	
 	function addMarket($vid, $gtype, $gamt, $wtype, $wamt, $time, $alliance, $merchant, $mode) {
 	    list($vid, $gtype, $gamt, $wtype, $wamt, $time, $alliance, $merchant, $mode) = $this->escape_input((int) $vid, (int) $gtype, (int) $gamt, (int) $wtype, (int) $wamt, (int) $time, (int) $alliance, (int) $merchant, $mode);
 
@@ -5579,16 +5577,13 @@ References: User ID/Message ID, Mode
     }
 
 	// no need to cache this method
-	function getA2b($ckey, $check) {
-        list($ckey, $check) = $this->escape_input($ckey, $check);
+	function getA2b($ckey) {
+        list($ckey) = $this->escape_input($ckey);
 
-		$q = "SELECT * from " . TB_PREFIX . "a2b where ckey = '" . $ckey . "' AND time_check = '" . $check . "'";
+		$q = "SELECT * from " . TB_PREFIX . "a2b where ckey = '" . $ckey . "'";
 		$result = mysqli_query($this->dblink,$q);
-		if($result) {
-			return mysqli_fetch_assoc($result);
-		} else {
-			return false;
-		}
+		if($result) return mysqli_fetch_assoc($result);
+        else return false;
 	}
 
 	function addMovement($type, $from, $to, $ref, $time, $endtime, $send = 1, $wood = 0, $clay = 0, $iron = 0, $crop = 0, $ref2 = 0) {
@@ -8044,57 +8039,55 @@ References: User ID/Message ID, Mode
 		self::$prisonersCache = [];
 	}
 
-/*****************************************
-Function to vacation mode - by advocaite
-References:
-*****************************************/
+    /*****************************************
+    Function to vacation mode - by advocaite
+    References:
+    *****************************************/
 
-   function setvacmode($uid,$days) {
-       // TODO: refactor vacation mode
-       return;
+   function setvacmode($uid, $days)
+    {
+        // TODO: refactor vacation mode
+        return;
+        
+        list ($uid, $days) = $this->escape_input((int) $uid, (int) $days);
+        $days1 = 60 * 60 * 24 * $days;
+        $time = time() + $days1;
+        $q = "UPDATE " . TB_PREFIX . "users SET vac_mode = '1' , vac_time=" . $time . " WHERE id=" . $uid . "";
+        $result = mysqli_query($this->dblink, $q);
+    }
 
-       list($uid,$days) = $this->escape_input((int) $uid,(int) $days);
-     $days1 =60*60*24*$days;
-     $time =time()+$days1;
-     $q ="UPDATE ".TB_PREFIX."users SET vac_mode = '1' , vac_time=".$time." WHERE id=".$uid."";
-	 $result =mysqli_query($this->dblink,$q);
-     }
+    function removevacationmode($uid)
+    {
+        // TODO: refactor vacation mode
+        return;
+        
+        list ($uid) = $this->escape_input((int) $uid);
+        $q = "UPDATE " . TB_PREFIX . "users SET vac_mode = '0' , vac_time='0' WHERE id=" . $uid . "";
+        $result = mysqli_query($this->dblink, $q);
+    }
 
-   function removevacationmode($uid) {
-       // TODO: refactor vacation mode
-       return;
-
-       list($uid) = $this->escape_input((int) $uid);
-     $q ="UPDATE ".TB_PREFIX."users SET vac_mode = '0' , vac_time='0' WHERE id=".$uid."";
-     $result =mysqli_query($this->dblink,$q);
-     }
-
-   function getvacmodexy($wref) {
-       // TODO: refactor vacation mode
-       return;
-
-       list($wref) = $this->escape_input((int) $wref);
-	$q = "SELECT id,oasistype,occupied FROM " . TB_PREFIX . "wdata where id = $wref";
-     $result = mysqli_query($this->dblink,$q);
-     $dbarray = mysqli_fetch_array($result);
-     if($dbarray['occupied'] != 0 && $dbarray['oasistype'] == 0) {
-         $q1 = "SELECT owner FROM " . TB_PREFIX . "vdata where wref = ".(int) $dbarray['id']."";
-     $result1 = mysqli_query($this->dblink,$q1);
-     $dbarray1 = mysqli_fetch_array($result1);
-     if($dbarray1['owner'] != 0){
-         $q2 = "SELECT vac_mode,vac_time FROM " . TB_PREFIX . "users where id = ".(int) $dbarray1['owner']."";
-     $result2 = mysqli_query($this->dblink,$q2);
-     $dbarray2 = mysqli_fetch_array($result2);
-     if($dbarray2['vac_mode'] ==1){
-     return true;
-     }else{
-     return false;
-     }
-     }
-     } else {
-     return false;
-     }
-   }
+    function getvacmodexy($wref)
+    {
+        // TODO: refactor vacation mode
+        return;
+        
+        list ($wref) = $this->escape_input((int) $wref);
+        $q = "SELECT id,oasistype,occupied FROM " . TB_PREFIX . "wdata where id = $wref";
+        $result = mysqli_query($this->dblink, $q);
+        $dbarray = mysqli_fetch_array($result);
+        if ($dbarray['occupied'] != 0 && $dbarray['oasistype'] == 0) {
+            $q1 = "SELECT owner FROM " . TB_PREFIX . "vdata where wref = " . (int) $dbarray['id'] . "";
+            $result1 = mysqli_query($this->dblink, $q1);
+            $dbarray1 = mysqli_fetch_array($result1);
+            if ($dbarray1['owner'] != 0) {
+                $q2 = "SELECT vac_mode,vac_time FROM " . TB_PREFIX . "users where id = " . (int) $dbarray1['owner'] . "";
+                $result2 = mysqli_query($this->dblink, $q2);
+                $dbarray2 = mysqli_fetch_array($result2);
+                return $dbarray2['vac_mode'] == 1;
+            }
+        } 
+        else return false;
+    }
 
     // no need to cache this method
     function getHeroDeadReviveOrInTraining($id) {
@@ -8102,11 +8095,7 @@ References:
 
         $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "hero WHERE `uid` = $id AND dead = 0 AND inrevive = 0 AND intraining = 0";
         $result = mysqli_fetch_array(mysqli_query($this->dblink,$q), MYSQLI_ASSOC);
-        if ($result['Total'] > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $result['Total'] > 0;
     }
 
 	/***************************
@@ -8117,7 +8106,6 @@ References:
         list( $id ) = $this->escape_input( (int) $id );
 
         $q = "UPDATE " . TB_PREFIX . "hero set dead = 1, intraining = 0, inrevive = 0, health = 0 where uid = " . $id . " AND dead = 0";
-
         return mysqli_query( $this->dblink, $q );
     }
 

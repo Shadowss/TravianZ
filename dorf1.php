@@ -17,8 +17,10 @@ include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
 if(isset($_GET['ok'])){
-	$database->updateUserField($session->uid,'ok','0','1'); $_SESSION['ok'] = '0';
+	$database->updateUserField($session->uid,'ok', 0, 1);
+	$_SESSION['ok'] = '0';
 }
+
 if(isset($_GET['newdid'])) {
     $_SESSION['wid'] = $_GET['newdid'];
     $database->query("UPDATE ".TB_PREFIX."users SET village_select=".$database->escape((int) $_GET['newdid'])." WHERE id=".$session->uid);  
