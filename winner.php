@@ -64,7 +64,7 @@ else {
 	AND " . TB_PREFIX . "users.id = userid
 	)allitag
 	FROM " . TB_PREFIX . "users
-	WHERE " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . "
+	WHERE " . TB_PREFIX . "users.access < ".(INCLUDE_ADMIN ? "10" : "8")." AND " . TB_PREFIX . "users.id > 4
 	ORDER BY totalpop DESC, totalvillages DESC, username ASC";
 
         $result = (mysqli_query($database->dblink,$q));
