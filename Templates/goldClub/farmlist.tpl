@@ -119,8 +119,7 @@ $noticeClass = ["Scout Report", "Won as attacker without losses", "Won as attack
 						"Reinforcement arrived", "", "Wood Delivered", "Clay Delivered", "Iron Delivered", "Crop Delivered", "", "Won as defender without losses", "Won as defender with losses", "Lost as defender with losses", "Won scouting as attacker", "Lost scouting as attacker",
 						"Won scouting as defender", "Lost scouting as defender"];
 
-$limits = "(ntype < 4 OR ntype = 18 OR ntype = 19)";
-$getnotice = mysqli_query($database->dblink,"SELECT ntype, data, time, id FROM ".TB_PREFIX."ndata WHERE $limits AND toWref = ".(int) $towref." AND uid = ".(int) $session->uid." ORDER BY time DESC Limit 1");
+$getnotice = mysqli_query($database->dblink,"SELECT ntype, data, time, id FROM ".TB_PREFIX."ndata WHERE ntype < 4 AND toWref = ".(int) $towref." AND uid = ".(int) $session->uid." ORDER BY time DESC Limit 1");
 if(mysqli_num_rows($getnotice) > 0){
 while($row2 = mysqli_fetch_array($getnotice)){
     $dataarray = explode(",",$row2['data']);
