@@ -7,9 +7,10 @@ if($session->access == BANNED){
 	
 $tid = $_GET['tid'];
 $topic = reset($database->ShowTopic($tid));
+$forumData = reset($database->ForumCatEdit($topic['cat']));
 
 //Check if we're creating a post for a valid topic
-if(empty($topic)) $alliance->redirect($_GET);
+if(empty($topic) || $topic['close'] == 1 || ($forumData['forum_area'] == 3 && !$opt['opt5'])) $alliance->redirect($_GET);
 
 $title = stripslashes($topic['title']);
 

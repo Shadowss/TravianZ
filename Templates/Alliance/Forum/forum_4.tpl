@@ -84,8 +84,12 @@ echo '<tr>
 }
 ?>
 	</tbody></table><p>
+	<?php 
+	if($forumData['forum_area'] != 3 || ($forumData['forum_area'] == 3 && $opt['opt5'] == 1)){
+	?>
 	<a href="allianz.php?s=2&pid=<?php echo $aid; ?>&fid=<?php echo $cat_id; ?>&ac=newtopic"><img id="fbtn_post" class="dynamic_img" src="img/x.gif" alt="Post new thread" /></a> 
 <?php
 echo '<a href="allianz.php?s=2&fid='.$cat_id.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
+	}
 ?>
 	</p>

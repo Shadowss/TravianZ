@@ -2268,8 +2268,8 @@ class MYSQLi_DB implements IDbConnection {
 					'%$alliance,%'
 				OR
 					display_to_alliances 
-				LIKE
-					'%$alliance%'
+				=
+					'$alliance'
 				OR
 					display_to_users
 				LIKE 
@@ -2284,8 +2284,8 @@ class MYSQLi_DB implements IDbConnection {
 					'%$uid,%'
 				OR
 					display_to_users 
-				LIKE 
-					'%$uid%'
+				= 
+					'$uid'
 				";
 		$result = mysqli_query($this->dblink, $q);
 		if(!empty($result)){
@@ -2472,7 +2472,7 @@ class MYSQLi_DB implements IDbConnection {
         list($id) = $this->escape_input($id);
 
 		$q = "SELECT alliance from " . TB_PREFIX . "forum_cat where id = $id LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
+		$result = mysqli_query($this->dblink, $q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['alliance'];
 	}

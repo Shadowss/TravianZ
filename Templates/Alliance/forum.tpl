@@ -5,7 +5,7 @@
 // # FIX BY RONIX ##
 // # TRAVIANZ ##
 // ###########################################################
-
+//TODO: Rework the whole code of this section...
 if(!isset($aid)){
 	if(isset($_GET['fid']) && !empty($_GET['fid'])) $aid = $database->ForumCatAlliance($_GET['fid']);
 	else if(isset($_GET['fid2']) && !empty($_GET['fid2'])) $aid = $database->ForumCatAlliance($_GET['fid2']);
@@ -83,8 +83,9 @@ if(isset($_POST['editforum']) &&
 
 if(isset($_POST['newtopic']) && isset($_POST['thema']) && isset($_POST['text']) && isset($_POST['fid'])
    && !empty($_POST['thema']) && !empty($_POST['text']) && !empty($_POST['fid']) &&
-   (($forumData = reset($database->ForumCatEdit($_POST['fid'])))['alliance'] == $session->alliance || 
-   $forumData['forum_area'] == 1 || $alliance->isForumAccessible($_POST['fid'])))
+   ((($forumData = reset($database->ForumCatEdit($_POST['fid'])))['alliance'] == $session->alliance || 
+   $forumData['forum_area'] == 1 || $alliance->isForumAccessible($_POST['fid'])) && 
+   ($forumData['forum_area'] != 3 || ($forumData['forum_area'] == 3 && $opt['opt5'] == 1))))
 {
 	$title = $_POST['thema'];
 	$text = $_POST['text'];
@@ -117,8 +118,10 @@ if(isset($_POST['newtopic']) && isset($_POST['thema']) && isset($_POST['text']) 
 if(isset($_POST['newpost']) && isset($_POST['text']) && !empty($_POST['text']) &&
    isset($_POST['tid']) && !empty($_POST['tid']) &&
    isset($_POST['fid2']) && !empty($_POST['fid2']) &&
-   (($forumData = reset($database->ForumCatEdit($_POST['fid2'])))['alliance'] == $session->alliance || 
-   $forumData['forum_area'] == 1 || $alliance->isForumAccessible($_POST['fid2'])))
+   ((($forumData = reset($database->ForumCatEdit($_POST['fid2'])))['alliance'] == $session->alliance || 
+   $forumData['forum_area'] == 1 || $alliance->isForumAccessible($_POST['fid2'])) &&
+   (($forumData['forum_area'] != 3 && !reset($database->ShowTopic($_POST['tid']))['close'])
+   || ($forumData['forum_area'] == 3 && $opt['opt5'] == 1))))
 {
    	$text = $_POST['text'];
 	$tids = $_POST['tid'];

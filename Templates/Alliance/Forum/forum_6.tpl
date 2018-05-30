@@ -182,7 +182,7 @@ foreach($posts as $po){
 </table>
 <div style="margin-top: 15px;">
 <?php
-if(empty($arr['close'])){
+if(!$arr['close'] && ($forumData['forum_area'] != 3 || ($forumData['forum_area'] == 3 && $opt['opt5'] == 1))){
 	echo '<a href="allianz.php?s=2&tid='.$arr['id'].'&ac=newpost"><img id="fbtn_reply" class="dynamic_img"src="img/x.gif" alt="Replies" /></a>';
 	echo '<a href="allianz.php?s=2&tid='.$arr['id'].((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 }

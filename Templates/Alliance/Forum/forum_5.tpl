@@ -10,6 +10,12 @@ if($session->access == BANNED){
 	exit;
 }
 
+$cat_id = $_GET['fid'];
+$forumData = reset($database->ForumCatEdit($cat_id));
+
+//Check if we can create the thread or not
+if($forumData['forum_area'] == 3 && !$opt['opt5']) $alliance->redirect($_GET);
+
 ?>
 <form method="post" name="post" action="allianz.php?s=2&fid=<?php echo $_GET['fid']; ?>">
 	<input type="hidden" name="newtopic" value="1">
