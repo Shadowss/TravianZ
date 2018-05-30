@@ -1,9 +1,9 @@
 <?php
-if($database->getUserField($_POST['a_user'], "alliance", 0) != $session->alliance)
-{
-    $form->addError("perm", USER_NOT_IN_YOUR_ALLY);   
+if($database->getUserField($_POST['a_user'], "alliance", 0) != $session->alliance){
+    $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
 }
 elseif($_POST['a_user'] == $session->uid) $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS); 
+elseif($database->isAllianceOwner($_POST['a_user'])) $form->addError("perm", CANT_EDIT_LEADER_PERMISSIONS); 
 
 if($form->returnErrors() > 0)
 {

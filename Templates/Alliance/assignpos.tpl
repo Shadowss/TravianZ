@@ -24,10 +24,8 @@ if($session->access!=BANNED){
 							<td>
 								<select name="a_user" class="name dropdown">
 								<?php
-                                foreach($memberlist as $member) 
-                                {
-                                    if($member['id'] != $session->uid)
-                                    {
+                                foreach($memberlist as $member){
+                                    if($member['id'] != $session->uid && !$database->isAllianceOwner($member['id'])){
                                         echo "<option value=".$member['id'].">".$member['username']."</option>";
                                     }
                                 }
@@ -40,7 +38,7 @@ if($session->access!=BANNED){
 				<p>
 					<input type="hidden" name="o" value="1">
 					<input type="hidden" name="s" value="5">
-					<button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button>
+					<button value="ok" name="s1" id="btn_ok" class="trav_buttons">OK</button>
 				</p>
 			</form>
 <?php

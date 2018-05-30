@@ -452,8 +452,9 @@ class Alliance {
 			}
 			
 			if($this->userPermArray['opt1'] == 0) $form->addError("perm", NO_PERMISSION);	
-			elseif($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance) $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
+			elseif($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance) $form->addError("perm", USER_NOT_IN_YOUR_ALLY);		
 			elseif($post['a_user'] == $session->uid) $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS);
+			elseif($database->isAllianceOwner($_POST['a_user'])) $form->addError("perm", CANT_EDIT_LEADER_PERMISSIONS);
 			else 
 			{
 			    $database->updateAlliPermissions($post['a_user'], $session->alliance, $post['a_titel'], $post['e1'], $post['e2'], $post['e3'], $post['e4'], $post['e5'], $post['e6'], $post['e7']);

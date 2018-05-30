@@ -75,6 +75,7 @@ define("ALREADY_ALLY_MEMBER","You're already in an alliance");
 define("ALLY_TOO_LOW", "You must have a level 3 or greater embassy");
 define("USER_NOT_IN_YOUR_ALLY","This user is not in your alliance!");
 define("CANT_EDIT_YOUR_PERMISSIONS","You can't edit your own permissions!");
+define("CANT_EDIT_LEADER_PERMISSIONS","Alliance leader's permissions can't be edited!");
 define("NO_PERMISSION", "You don't have enough permissions!");
 define("NAME_OR_DIPL_EMPTY", "Name or diplomacy empty");
 define("ALLY_DOESNT_EXISTS","Alliance does not exist");
