@@ -2223,9 +2223,8 @@ class Automation {
                             else $info_spy = "".$spy_pic.", There are no informations to show";                                                   
                         }
 
-                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
-                    }
-                    else{
+                        $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.','.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.',,'.$unitstraped_att;
+                    }else{
                         if(isset($village_destroyed) && $village_destroyed == 1 && $can_destroy==1){
                             //check if village pop=0 and no info destroy
                             if (strpos($info_cat,"The village has") === false) {
@@ -2237,7 +2236,7 @@ class Automation {
                     }
 
                     // When all troops die, sends no info...send info
-                    $info_troop= "None of your soldiers have returned";
+                    $info_troop = "None of your soldiers have returned";
                     $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_deff[0].','.$unitsdead_deff[0].','.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
 
                     //Undetected and detected in here.
