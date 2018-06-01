@@ -4991,7 +4991,7 @@ References: User ID/Message ID, Mode
                     // if no members are left in it
                     $this->deleteAlliance($userData['alliance']);
 
-                    return (isset($newLeaderFound) && $newLeaderFound === true;
+                    return isset($newLeaderFound) && $newLeaderFound === true;
                 }
             }
         }
