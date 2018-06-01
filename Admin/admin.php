@@ -68,8 +68,8 @@ if (!empty($_GET['p'])) {
             $subpage = 'Ban/Unban Players';
             break;
 
-        case 'maintenence':
-            $subpage = 'Server Maintenence';
+        case 'maintenance':
+            $subpage = 'Server Maintenance';
             break;
 
         case 'cleanban':
@@ -473,7 +473,7 @@ if (!empty($_GET['p'])) {
 												<br />
 												<a href="#"><b>Ban</b></a>
 												<a href="?p=ban">Ban/Unban Players</a>
-												<a href="?p=maintenence">Server Maintenence</a>
+												<a href="?p=maintenance">Server Maintenance</a>
 												<a href="?p=cleanban">Clean Banlist Data</a>
 												<br />
 												<a href="#"><b>Gold</b></a>

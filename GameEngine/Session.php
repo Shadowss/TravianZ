@@ -173,6 +173,7 @@ class Session {
         		}
 
         		if($user && ($admin || isset($_SESSION['sessid']))) {
+        		    $this->maintenance();
         		    $this->isWinner();
         			
         		    // check if this is not a support user, for who only messages and statistics are available
@@ -193,6 +194,18 @@ class Session {
         		else return false;
     		}
 
+    		/**
+    		 * Called when the server is under maintenance
+    		 * 
+    		 */
+    		
+    		function maintenance(){
+    		    if($_SESSION['ok'] == 2 && basename($_SERVER['PHP_SELF']) != 'maintenance.php'){
+    		        header('Location: maintenance.php');
+    		        exit;
+    		    }
+    		}
+    		
     		/**
     		 * Called when there's a player who built a WW to level 100
     		 * 
