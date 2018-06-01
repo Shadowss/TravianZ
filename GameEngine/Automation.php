@@ -2234,9 +2234,13 @@ class Automation {
                         }
                         $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.','.$info_ram.','.$info_cat.','.$info_chief.','.(isset($info_spy) ? $info_spy : '').',,'.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.','.$unitstraped_att;
                     }
-
-                    // When all troops die, sends no info...send info
-                    $info_troop = "None of your soldiers have returned";
+                  
+                    if($totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) <= 0){
+                        $info_troop = "None of your soldiers returned.";
+                    }
+                    else $info_troop = "";
+                    
+                    //When all of the attacker's troops die, send no informations
                     $data_fail = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.','.$steal[0].','.$steal[1].','.$steal[2].','.$steal[3].','.$battlepart['bounty'].','.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_deff[0].','.$unitsdead_deff[0].','.$rom.','.$unitssend_deff[1].','.$unitsdead_deff[1].','.$ger.','.$unitssend_deff[2].','.$unitsdead_deff[2].','.$gal.','.$unitssend_deff[3].','.$unitsdead_deff[3].','.$nat.','.$unitssend_deff[4].','.$unitsdead_deff[4].','.$natar.','.$unitssend_deff[5].','.$unitsdead_deff[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.',,,'.$data['t11'].','.$dead11.','.$unitstraped_att.',,'.$info_ram.','.$info_cat.','.$info_chief.','.$info_troop.','.$info_hero;
 
                     //Undetected and detected in here.
@@ -2361,10 +2365,9 @@ class Automation {
                             }
                         }
                         
-                        $info_troop = "";
                         $data2 = $data2.','.(isset($info_trap) ? addslashes($info_trap) : '').',,'.$info_troop.','.$info_hero;
 
-                        if($totalsend_alldef == 0){
+                        if($totalsend_alldef == 0 && $totalsend_att - ($totaldead_att + (isset($totaltraped_att) ? $totaltraped_att : 0)) > 0){
                             $database->addNotice($to['owner'],$to['wref'],$targetally,7,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
                         }else if($totaldead_alldef == 0){
                             $database->addNotice($to['owner'],$to['wref'],$targetally,4,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,$AttackArrivalTime);

@@ -316,7 +316,7 @@ class Message {
 	}
 
 	/**
-	 * Not all notices have a corresponding .tpl file but with this function it's like they had it
+	 * Not all notices have a corresponding .tpl file but with this method it's like they have it
 	 * 
 	 * @param int $type The type of the report (notice)
 	 * @return int Returns the new report type
@@ -333,19 +333,19 @@ class Message {
 	        case 7: 
 	        case 18:
 	        case 20:
-	        case 21: return 1;
+	        case 21: return 1; //General attacking reports
 	        
 	        case 11:
 	        case 12:
 	        case 13:
-	        case 14: return 10;
+	        case 14: return 10; //Merchants reports
 	        
 	        case 16:
-	        case 17: return 15;
+	        case 17: return 15; //Reinforcements attacked
 	        
-	        case 19: return 3;   
+	        case 19: return 3; //No troops have returned
 	        
-	        case 23: return 22;
+	        case 23: return 22; //Festive reports
 	    }
 	    
 	    return $type;
@@ -397,10 +397,9 @@ class Message {
 		// Vulnerability closed by Shadow
 
 		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
-		$res = mysqli_fetch_array(mysqli_query($database->dblink,$q) or die(mysqli_error($database->dblink). " query  ".$q), MYSQLI_ASSOC);
-		$flood = $res['Total'];
-		if($flood > 5)
-		return; //flood
+		$res = mysqli_fetch_array(mysqli_query($database->dblink,$q), MYSQLI_ASSOC);
+		if($res['Total'] > 5) return; //flooding prevention
+
 
 		// Vulnerability closed by Shadow
 
@@ -413,9 +412,7 @@ class Message {
             $text = $this->wordCensor($text);
 		}
 
-		if($topic == "") {
-		    $topic = "No subject";
-		}
+		if($topic == "") $topic = "No subject";
 
 		if(!preg_match('/\[message\]/',$text) && !preg_match('/\[\/message\]/',$text)){
             $text = "[message]".$text."[/message]";
@@ -495,9 +492,7 @@ class Message {
 		if ($security_check) {
     		$q = "SELECT Count(*) as Total FROM ".TB_PREFIX."mdata WHERE owner='".$session->uid."' AND time > ".(time() - 60);
     		$res = mysqli_fetch_array(mysqli_query($database->dblink,$q), MYSQLI_ASSOC);
-    		$flood = $res['Total'];
-    		
-    		if($flood > 5) return; //flood
+    		if($res['Total'] > 5) return; //flooding prevention
 		}
 
 		// Vulnerability closed by Shadow
