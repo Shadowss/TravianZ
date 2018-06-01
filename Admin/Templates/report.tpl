@@ -18,15 +18,15 @@ else
 	$result = mysqli_query($GLOBALS["link"], $sql);
 	$rep1 = $database->mysqli_fetch_all($result);
 }
+
 if($rep1)
 {
-	//$att = $database->getUserArray($rep1['uid'],1);
 	?>
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>travian.css?e21d2" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?e21d2" rel="stylesheet" type="text/css">
-	<h1>Under Construction</h1>
+	<h1>Reports</h1>
 	<div id="content" class="reports" style="padding: 0;">
 	<?php
 		include("Notice/all.tpl");
@@ -34,22 +34,23 @@ if($rep1)
 	</div>
 	<?php
 }
-if($rep)
-{ ?>
+elseif($rep)
+{ 
+?>
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>travian.css?e21d2" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?e21d2" rel="stylesheet" type="text/css">
-	
 	<br />
-
-	<span class="b">reporte de</span>: <?php echo $database->getUserField($rep[0]['uid'],'username',0);?><br />
+	<span class="b">Report of</span>: <?php echo $database->getUserField($rep['uid'],'username',0);?><br />
 
 	<div id="content" class="reports">
-		<h1>Reporte</h1>
+		<h1>Report</h1>
 <?php 
-	$type = $rep[0]['ntype'];
-	include ("Notice/" . $type . ".tpl");
+    $message = New Message();
+	$type = $rep['ntype'];
+	$message->readingNotice['data'] = $rep['data'];
+	include ("../Templates/Notice/" . $message->getReportType($type) . ".tpl");
 }
 else echo "Report ID ".$_GET['bid']." doesn't exist!";
 ?>

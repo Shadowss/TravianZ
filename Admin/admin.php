@@ -527,46 +527,26 @@ if (!empty($_GET['p'])) {
 							<?php
 								if($funct->CheckLogin())
 								{
-									if($_POST or $_GET)
+									if($_POST || $_GET)
 									{
 										if($_GET['p'] and $_GET['p']!="search")
 										{
 											$filename = 'Templates/'.$_GET['p'].'.tpl';
-											if(file_exists($filename))
-											{
-												include($filename);
-											}
-											else
-											{
-												include('Templates/404.tpl');
-											}
+											if(file_exists($filename)) include($filename);
+											else include('Templates/404.tpl');
 										}
-										else
-										{
-											include('Templates/search.tpl');
-										}
+										else include('Templates/search.tpl');
+
 										if(isset($_POST['p']) && isset($_POST['s']) && $_POST['p'] and $_POST['s'])
 										{
 											$filename = 'Templates/results_'.$_POST['p'].'.tpl';
-											if(file_exists($filename))
-											{
-												include($filename);
-											}
-											else
-											{
-												include('Templates/404.tpl');
-											}
+											if(file_exists($filename)) include($filename);
+											else include('Templates/404.tpl');
 										}
 									}
-									else
-									{
-										include('Templates/home.tpl');
-									}
+									else include('Templates/home.tpl');
 								}
-								else
-								{
-									include('Templates/login.tpl');
-								}
+								else include('Templates/login.tpl');
 							?>
 						</div>
 					</div>

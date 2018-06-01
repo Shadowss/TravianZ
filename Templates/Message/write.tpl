@@ -74,7 +74,7 @@ echo "re1:".strip_tags($message->reply['topic']); }} ?>" maxlength="35" onkeyup=
 					<a href="javascript:void(0);" bbWin="smilies" id="message_smilieButton"><div title="smilies" alt="smilies" class="bbButton bbSmilie"></div></a>
 					<a href="javascript:void(0);" bbWin="troops" id="message_troopButton"><div title="troops" alt="troops" class="bbButton bbTroop"></div></a>
 					<a href="javascript:void(0);" id="message_previewButton" bbArea="message">
-					<!--<div title="preview" alt="preview" class="bbButton bbPreview"></div>//-->
+					<div title="preview" alt="preview" class="bbButton bbPreview"></div>
 					</a>
 					<div class="clear"></div>
 					<div id="message_toolbarWindows">
