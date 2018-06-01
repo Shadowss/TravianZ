@@ -4766,6 +4766,7 @@ References: User ID/Message ID, Mode
                             0,
                             0,
                             true);
+                        $this->deleteAlliPermissions($userData['id']);
                     } else {
                         // player has been removed from the alliance
                         $this->sendMessage(
@@ -4779,7 +4780,7 @@ References: User ID/Message ID, Mode
                             0,
                             0,
                             true);
-
+                        $this->deleteAlliPermissions($userData['id']);
                         return 0;
                     }
 
@@ -4841,6 +4842,7 @@ References: User ID/Message ID, Mode
                                 0,
                                 0,
                                 true);
+                            $this->deleteAlliPermissions($member['id']);
                         }
 
                         mysqli_query($this->dblink, 'UPDATE '.TB_PREFIX.'users SET alliance = 0 WHERE id IN('.implode(',', $evicts).")");
@@ -4918,6 +4920,7 @@ References: User ID/Message ID, Mode
                                     0,
                                     true);
                             }
+                            $this->deleteAlliPermissions($member['id']);
                         } else {
                             // let's determine whether to keep currently attacked player
                             // in the alliance or not
@@ -4953,6 +4956,7 @@ References: User ID/Message ID, Mode
                                             0,
                                             true);
                                 }
+                                $this->deleteAlliPermissions($member['id']);
                             }
 
                             // evict current player from the alliance
@@ -4979,6 +4983,7 @@ References: User ID/Message ID, Mode
                                     0,
                                     true);
                             }
+                            $this->deleteAlliPermissions($userData['id']);
                         }
                     }
 
@@ -4986,7 +4991,7 @@ References: User ID/Message ID, Mode
                     // if no members are left in it
                     $this->deleteAlliance($userData['alliance']);
 
-                    return ((isset($newLeaderFound) && $newLeaderFound === true) ? true : false);
+                    return (isset($newLeaderFound) && $newLeaderFound === true;
                 }
             }
         }

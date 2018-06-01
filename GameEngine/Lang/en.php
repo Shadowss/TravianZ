@@ -98,7 +98,8 @@ define("NAME_NO_EXIST","There is no user with the name ");
 define("ID_NO_EXIST","There is no user with the id ");
 define("SAME_NAME","You can't invite yourself");
 define("ALREADY_INVITED"," already invited");
-define("ALREADY_IN_ALLY"," already in this alliance");
+define("ALREADY_IN_ALLY"," is already in this alliance");
+define("ALREADY_IN_AN_ALLY"," is already in an alliance");
 define("VAC_MODE_WRONG_DAYS","You've inserted a wrong number of days");
 
 //COPYRIGHT

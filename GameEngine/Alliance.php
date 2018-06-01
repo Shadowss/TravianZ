@@ -224,17 +224,19 @@ class Alliance {
 			if($session->access != BANNED){
 			$UserData = $database->getUserArray(stripslashes($post['a_name']), 0);
 			if($this->userPermArray['opt4'] == 0) {
-				$form->addError("perm", NO_PERMISSION);
+				$form->addError("name", NO_PERMISSION);
 			}elseif(!isset($post['a_name']) || $post['a_name'] == "") {
-				$form->addError("name1", NAME_EMPTY);
+				$form->addError("name", NAME_EMPTY);
 			}elseif(!User::exists($database, $post['a_name'])) {
-				$form->addError("name2", NAME_NO_EXIST."".stripslashes(stripslashes($post['a_name'])));
+				$form->addError("name", NAME_NO_EXIST."".stripslashes(stripslashes($post['a_name'])));
 			}elseif($UserData['id'] == $session->uid) {
-				$form->addError("name3", SAME_NAME);
+				$form->addError("name", SAME_NAME);
 			}elseif($database->getInvitation2($UserData['id'],$session->alliance)) {
-				$form->addError("name4", $post['a_name'].ALREADY_INVITED);
+				$form->addError("name", $post['a_name'].ALREADY_INVITED);
 			}elseif($UserData['alliance'] == $session->alliance) {
-				$form->addError("name5", $post['a_name'].ALREADY_IN_ALLY);
+				$form->addError("name", $post['a_name'].ALREADY_IN_ALLY);
+			}elseif($UserData['alliance'] > 0) {
+			    $form->addError("name", $post['a_name'].ALREADY_IN_AN_ALLY);
 			}else{
 				// Obtenemos la informacion necesaria
 				$aid = $session->alliance;
