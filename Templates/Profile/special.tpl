@@ -24,7 +24,7 @@
 	</td>
 	</tr>
 	<tr>
-	<td><b>Multihunter:</b><br>The Multihunters are responsible for the compliance with the <a href="/rules.php" target="_blank">game rules</a>. If you have questions about the rules or want to report a violation, you can message a Multihunter.<br />
+	<td><b>Multihunter:</b><br>The Multihunters are responsible for the compliance with the <a href="rules.php"><b><?php echo GAME_RULES;?></b></a>. If you have questions about the rules or want to report a violation, you can message a Multihunter.<br />
 	 <a href="nachrichten.php?t=1&amp;id=0">&raquo; Write message</a>
 	</td>
 	</tr>
