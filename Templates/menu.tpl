@@ -63,7 +63,7 @@ div.c1 {text-align: center}
             	// no support for support :-D
             	if ($_SESSION['id_user'] != 1) {
             ?>
-            <a href="support.php"><b><?php echo SUPPORT;?></b></a>
+            <a href="spieler.php?uid=1"><b><?php echo SUPPORT;?></b></a>
             <?php
             	}
             	include("Templates/links.tpl");
