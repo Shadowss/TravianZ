@@ -86,7 +86,7 @@
 			}
 			$date = $generator->procMtime($message->inbox1[$i-1]['time']);
 			if($message->inbox1[$i-1]['owner'] <= 1) {
-			echo "</td><td class=\"send\"><a href=\"support.php\"><u>".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</u></a></td>
+			echo "</td><td class=\"send\"><a href=\"spieler.php?uid=1\"><u>".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</u></a></td>
 		    <td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
 		    }
 		    else {
