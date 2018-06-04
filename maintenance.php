@@ -86,7 +86,9 @@ if($_SESSION['ok'] == 2){
 			<div id="mid">
 				<?php include("Templates/menu.tpl"); ?>
 				<div id="content" class="village2" style="font-size: 20pt;text-align: center">
-					<p><b>Server is under maintenance</b></p>
+					<p><b>Presently, the server is not available due to maintenance.</b></p>
+					<img src="img/lol.PNG">
+					<p><b>This take a few minutes. In the meantime you can drink a coffee.</b></p>
 				</div>
 				<br /><br /><br /><br /><div id="side_info">
 					<?php
