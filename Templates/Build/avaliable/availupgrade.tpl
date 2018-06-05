@@ -9,7 +9,10 @@ $uprequire = $building->resourceRequired($id, $bid);
 <td class="res">
 			<img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /><?php echo $uprequire['wood']; ?> | <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $uprequire['clay']; ?> | <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $uprequire['iron']; ?> | <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $uprequire['crop']; ?> | <img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" /><?php echo $uprequire['pop']; ?> | <img class="clock" src="img/x.gif" alt="duration" title="duration" /><?php echo $generator->getTimeFormat($uprequire['time']);
 
-                   if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                   //-- If available resources combined are not enough, remove NPC button
+                   $total_required = (int)($uprequire['wood'] + $uprequire['clay'] + $uprequire['iron'] + $uprequire['crop']);
+
+                   if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
                    echo "|<a href=\"build.php?gid=17&t=3&r1=".$uprequire['wood']."&r2=".$uprequire['clay']."&r3=".$uprequire['iron']."&r4=".$uprequire['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                  } ?></td>
 		</tr>
