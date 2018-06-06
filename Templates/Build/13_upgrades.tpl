@@ -40,6 +40,9 @@
 		        if($abdata['a'.$j] == 20) {
 					echo "<td class=\"act\"><div class=\"none\">".MAXIMUM_LEVEL."</div></td></tr>";
 				}
+				else if ($building->getTypeLevel(13) <= $abdata['a'.$j]+$ups) {
+				    echo "<td class=\"act\"><div class=\"none\">".UPGRADE_ARMOURY."</div></td></tr>";
+				}
 				else if(${'ab'.$i}[$abdata['a'.$j]+1+$ups]['wood'] > $village->maxstore || ${'ab'.$i}[$abdata['a'.$j]+1+$ups]['clay'] > $village->maxstore || ${'ab'.$i}[$abdata['a'.$j]+1+$ups]['iron'] > $village->maxstore) {
 					echo "<td class=\"act\"><div class=\"none\">".EXPAND_WAREHOUSE."</div></td></tr>";
 				}
@@ -54,10 +57,7 @@
 						echo "<br><span class=\"none\">".CROP_NEGATIVE."</span></div></td>";
 					}
 		            echo "<td class=\"act\"><div class=\"none\">".TOO_FEW_RESOURCES."</div></td></tr>";
-				}
-				else if ($building->getTypeLevel(13) <= $abdata['a'.$j]+$ups) {
-					echo "<td class=\"act\"><div class=\"none\">".UPGRADE_ARMOURY."</div></td></tr>";
-				}
+				}				
 				else if ($totalUps == 1 && !$session->plus || $totalUps > 1) {
 					echo "<td class=\"act\"><div class=\"none\">".UPGRADE_IN_PROGRESS."</div></td></tr>";
 				}
