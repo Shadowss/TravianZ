@@ -112,12 +112,26 @@ if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
 <form action="<?php echo $_SERVER['PHP_SELF']; ?>?s" method="post">
  <table>
   <tr>
-   <td width="100">Search for:</td>
+   <td width="100">Cropper Type:</td>
    <td width="250">
 	<input type="radio" class="radio" name="type" value="15" <?php if($_GET['s'] == 1) echo 'checked="checked"'; ?> /> 15 crop
 	<input type="radio" class="radio" name="type" value="9" <?php if($_GET['s'] == 2) echo 'checked="checked"'; ?> /> 9 crop
 	<input type="radio" class="radio" name="type" value="both" <?php if($_GET['s'] == 3) echo 'checked="checked"'; ?> /> both<br />
    </td>
+  </tr>
+    <tr>
+   <td width="100">Oasis Crop Bonus (at least):</td>
+   <td>
+	 <select class="dropdown" name="bonus_getreide">
+			<option value="all" selected="selected">either</option>
+			<option value="25" >+25%</option>
+			<option value="50" >+50%</option>
+			<option value="75" >+75%</option>
+			<option value="100" >+100%</option>
+			<option value="125" >+125%</option>
+			<option value="150" >+150%</option>
+	 </select>
+	</td>
   </tr>
   <tr>
    <td>Startposition:</td>
@@ -128,6 +142,7 @@ if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
   </tr>
  </table>
 </form>
+
 
 <?php
 $fieldType = ($_GET['s'] == 1) ? "fieldtype = 6" : (($_GET['s'] == 2) ? "fieldtype = 1" : "fieldtype = 1 OR fieldtype = 6");
@@ -143,10 +158,11 @@ if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
 
 if($_GET['s'] >= 1 && $_GET['s'] <= 3) {
 ?>
+
 <table id="member">
 	<thead>
 	<tr>
-		<th colspan='5'>Crop Finder - 9c and 15c</th>
+		<th colspan='6'>Crop Finder - 9c and 15c</th>
 	</tr>
 	<tr>
 		<td>Type</td>
@@ -154,6 +170,7 @@ if($_GET['s'] >= 1 && $_GET['s'] <= 3) {
 		<td>Owner</td>
 		<td>Occupied</td>
 		<td>Distance</td>
+		<td>Oasis</td>
 	</tr>
 	</thead><tbody>
 
@@ -177,6 +194,7 @@ foreach($rows as $row) {
 		echo "<td><b><font color=\"red\">".OCCUPIED."</b></font></td>";
 	}
 	echo "<td><div style=\"text-align: center\">".$database->getDistance($coor['x'], $coor['y'], $row['x'], $row['y'])."</div></td>";
+	echo "<td>-</td>";
 }
 ?>
 
