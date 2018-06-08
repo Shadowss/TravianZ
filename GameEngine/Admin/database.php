@@ -661,12 +661,13 @@ class adm_DB {
 	public function calculateProduction($wid, $uid, $b1, $b2, $b3, $b4, $fdata, $ocounter, $pop) {
 		global $technology, $database;
 		
+		$isNatar = $database->getVillageField($wid, "natar");
 		$upkeep = $technology->getUpkeep($this->getAllUnits($wid), 0, $wid);
 		$production = [];
 		$production['wood'] = $this->getWoodProd($fdata, $ocounter,$b1);
 		$production['clay'] = $this->getClayProd($fdata, $ocounter,$b2);
 		$production['iron'] = $this->getIronProd($fdata, $ocounter,$b3);
-		$production['crop'] = $this->getCropProd($fdata, $ocounter,$b4) - $pop - $upkeep;
+		$production['crop'] = $this->getCropProd($fdata, $ocounter,$b4) - (!$isNatar ? $pop : round($pop / 2)) - $upkeep;
 		return $production;
 	}
 

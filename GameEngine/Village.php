@@ -157,7 +157,7 @@ class Village {
 		$this->production['wood'] = $this->getWoodProd();
 		$this->production['clay'] = $this->getClayProd();
 		$this->production['iron'] = $this->getIronProd();
-		$this->production['crop'] = $this->getCropProd() - $this->pop - $upkeep;
+		$this->production['crop'] = $this->getCropProd() - (!$this->natar ? $this->pop : round($this->pop / 2)) - $upkeep;
 	}
 
 	private function processProduction() {

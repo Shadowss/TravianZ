@@ -22,11 +22,12 @@ class Building {
 	public $NewBuilding = false;
 	private $maxConcurrent;
 	private $allocated;
-	private $basic,$inner,$plus = 0;
+	private $basic, $inner, $plus = 0;
 	public $buildArray = [];
 
 	public function __construct() {
 		global $session;
+		
 		$this->maxConcurrent = BASIC_MAX;
 		
 		if(ALLOW_ALL_TRIBE || $session->tribe == 1) $this->maxConcurrent += INNER_MAX;	

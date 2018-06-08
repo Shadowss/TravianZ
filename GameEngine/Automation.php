@@ -425,7 +425,7 @@ class Automation {
 
                     if($level == 1 && $max == STORAGE_BASE) $max = STORAGE_BASE;
                     
-                    if ($level != 1) $max -= ${'bid'.$indi['type']}[$level-1]['attri'] * STORAGE_MULTIPLIER;
+                    if ($level != 1) $max -= ${'bid'.$indi['type']}[$level - 1]['attri'] * STORAGE_MULTIPLIER;
 
                     $max += ${'bid'.$indi['type']}[$level]['attri'] * STORAGE_MULTIPLIER;
 
@@ -433,9 +433,7 @@ class Automation {
                 }
 
                 // if we updated Embassy, update maximum members that the alliance can take
-                if($indi['type'] == 18){
-                    Automation::updateMax($villageOwner);
-                }
+                if($indi['type'] == 18) Automation::updateMax($villageOwner);
 
                 // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de >
                 if ($indi['type'] == 40 && ($indi['level'] % 5 == 0 || $indi['level'] > 95) && $indi['level'] != 100) {
@@ -449,15 +447,12 @@ class Automation {
 
                 // TODO: find out what exactly these conditions are for
                 // no special military conditioning for Teutons and Gauls
-                if ($database->getUserField($villageOwner, "tribe", 0) != 1) {
-                    $loopconUpdates[$indi['wid']] = '';
-                } else {
+                if ($database->getUserField($villageOwner, "tribe", 0) != 1) $loopconUpdates[$indi['wid']] = '';                 
+                else
+                {
                     // special condition for Roman military buildings
-                    if ($indi['field'] > 18) {
-                        $loopconUpdates[$indi['wid']] = ' AND field > 18';
-                    } else {
-                        $loopconUpdates[$indi['wid']] = ' AND field < 19';
-                    }
+                    if ($indi['field'] > 18) $loopconUpdates[$indi['wid']] = ' AND field > 18';                    
+                    else $loopconUpdates[$indi['wid']] = ' AND field < 19';                                      
                 }
 
                 // Update ww last finish upgrade
@@ -477,7 +472,7 @@ class Automation {
         }
 
         // update statistical data for affected villages
-        foreach ($villagesAffected as $affected_id) $this->recountPop($affected_id);
+        foreach ($villagesAffected as $affected_id) $this->recountPop($affected_id, false);
 
         // update data that can be done in one swoop instead of using multiple update queries
         // no special checks for Romans
@@ -3039,16 +3034,16 @@ class Automation {
     	if(!$database->areArtifactsSpawned() || $database->areWWVillagesSpawned() || strtotime(START_DATE) + (NATARS_WW_SPAWN_TIME * 86400) > time()) return;
     	
     	//WW village Natars' troops
-    	$unitArrays =  [41 => rand(50, 1200) * NATARS_UNITS,
-    					42 => rand(100 , 1400) * NATARS_UNITS,
-    					43 => rand(200, 1600) * NATARS_UNITS,
-    					44 => rand(10, 50) * NATARS_UNITS,
-    					45 => rand(48, 1700) * NATARS_UNITS,
-    					46 => rand(60, 1800) * NATARS_UNITS,
-    					47 => rand(200, 1600) * NATARS_UNITS,
-    					48 => rand(40, 200) * NATARS_UNITS,
-    					49 => rand(4, 20) * NATARS_UNITS,
-    					50 => rand(5, 25) * NATARS_UNITS];
+    	$unitArrays =  [41 => rand(500, 12000) * NATARS_UNITS,
+    					42 => rand(1000 , 14000) * NATARS_UNITS,
+    					43 => rand(2000, 16000) * NATARS_UNITS,
+    					44 => rand(100, 500) * NATARS_UNITS,
+    					45 => rand(480, 17000) * NATARS_UNITS,
+    					46 => rand(600, 18000) * NATARS_UNITS,
+    					47 => rand(2000, 16000) * NATARS_UNITS,
+    					48 => rand(400, 2000) * NATARS_UNITS,
+    					49 => rand(40, 200) * NATARS_UNITS,
+    					50 => rand(50, 250) * NATARS_UNITS];
 
     	//WW village buildings
     	$buildingArrays = ["f99t" => 40, "f99" => 0, "f39t" => 16, "f39" => 1, "f19t" => 17, "f19" => 20, "f20t" => 11,
@@ -3234,8 +3229,8 @@ class Automation {
     	//Get an array with the numbers of the oasis
     	$numberOfOasis = $this->bountysortOasis($oasisArray);
     	
-    	//Set the village population
-    	$villagePopulation = $villageInfoArray['pop'];
+    	//Set the village population (if WW Villages, it's halved)
+    	$villagePopulation = !$villageInfoArray['natar'] ? $villageInfoArray['pop'] : round($villageInfoArray['pop'] / 2);
     	
     	//Get the upkeep of the village
     	$upkeep = $technology->getUpkeep($this->getAllUnits($bountywid), 0, $bountywid);   	

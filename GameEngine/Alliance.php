@@ -396,18 +396,21 @@ class Alliance {
 		*****************************************/
 		private function changeAliName($get) {
 			global $form, $database, $session;
+			
 			if($session->access == BANNED) {
 			    header("Location: banned.php");
 			    exit;
 			}
 			
+			$userAlly = $database->getAlliance($session->alliance);
+			
 			if(!isset($get['ally1']) || $get['ally1'] == "") $form->addError("ally1", ATAG_EMPTY);
 			
 			if(!isset($get['ally2']) || $get['ally2'] == "") $form->addError("ally2", ANAME_EMPTY);
 			
-			if($database->aExist($get['ally1'], "tag")) $form->addError("ally1", ATAG_EXIST);
+			if($get['ally1'] != $userAlly['tag'] && $database->aExist($get['ally1'], "tag")) $form->addError("ally1", ATAG_EXIST);
 			
-			if($database->aExist($get['ally2'], "name")) $form->addError("ally2", ANAME_EXIST);
+			if($get['ally2'] != $userAlly['name'] && $database->aExist($get['ally2'], "name")) $form->addError("ally2", ANAME_EXIST);
 			
 			if($this->userPermArray['opt3'] == 0) $form->addError("perm", NO_PERMISSION);
 			
@@ -415,6 +418,11 @@ class Alliance {
 				$database->setAlliName($session->alliance, $get['ally2'], $get['ally1']);
 				// log the notice
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has changed the alliance name.');
+				$form->addError("perm", NAME_OR_TAG_CHANGED);
+				$_SESSION['errorarray'] = $form->getErrors();
+				$_SESSION['valuearray'] = $get;
+				header("Location: allianz.php?s=5");
+			    exit;
 			}
 		}
 
@@ -427,7 +435,7 @@ class Alliance {
 			if($this->userPermArray['opt3'] == 0) {
 				$form->addError("perm", NO_PERMISSION);
 			}
-			if($form->returnErrors() != 0) {
+			if($form->returnErrors() > 0) {
 				$_SESSION['errorarray'] = $form->getErrors();
 				$_SESSION['valuearray'] = $post;
 			} else {
