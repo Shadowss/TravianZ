@@ -44,71 +44,78 @@ $profiel = preg_replace("/\[#natars]/is",'<img src="'.$gpack.'img/t/t10_2.jpg" b
 $profiel = preg_replace("/\[#WW]/is",'<img src="'.$gpack.'img/t/g40_11-ltr.png" width="250" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Official World Wonder Village</td></tr></table>\')">', $profiel, 1);
 }
 
-//romans image
+//romans image - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['tribe'] == "1"){
 $profiel = preg_replace("/\[#roman]/is",'<img src="'.$gpack.'../../img/rpage/Roman1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Romans : Because of its high level of social and technological development the Romans are masters at building and its coordination. Also, their troops are part of the elite in Travian. They are very balanced and useful in attacking and defending.</td></tr></table>\')">', $profiel, 1);
 }
 
-//Gauls image
+//Gauls image - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['tribe'] == "2"){
 $profiel = preg_replace("/\[#teuton]/is",'<img src="'.$gpack.'../../img/rpage/Teuton1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Teutons : The Teutons are the most aggressive tribe. Their troops are notorious and feared for their rage and frenzy when they attack. They move around as a plundering horde, not even afraid of death. </td></tr></table>\')">', $profiel, 1);
 }
 
-//Teutons image
+//Teutons image - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['tribe'] == "3"){
 $profiel = preg_replace("/\[#gaul]/is",'<img src="'.$gpack.'../../img/rpage/Gaul1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Gauls : The Gauls are the most peaceful of all three tribes in Travian. Their troops are trained for an excellent defence, but their ability to attack can still compete with the other two tribes. The Gauls are born riders and their horses are famous for their speed. This means that their riders can hit the enemy exactly where they can cause the most damage and swiftly take care of them.</td></tr></table>\')">', $profiel, 1);
 }
 
-//Shadow image
+//Shadow image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['username'] == "Shadow"){
 $profiel = preg_replace("/\[#SHADOW]/is",'<img src="'.$gpack.'img/t/shadow.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Official Server Administrator</td></tr></table>\')">', $profiel, 1);
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Multihunter is an official Travian position mainly used for enforcement of Travian rules within a server. Multihunters all use the account named Multihunter with its only village located in (0|0). A Multihunter may not play on the server on which they are the Multihunter, but be an active player on other servers. </td></tr></table>\')">', $profiel, 1);
 $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Travian is a persistent, browser-based, massively multiplayer, online real-time strategy game developed by the German software company Travian Games. It was originally written and released in June 2004 by Gerhard Müller. Set in classical antiquity, Travian is a predominantly militaristic real-time strategy game.</td></tr></table>\')">', $profiel, 1);
-$profiel = preg_replace("/\[#EVENT]/is",'<img src="'.$gpack.'img/t/t10_1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>You played on Travian Hammelburg Event. Congrats !</td></tr></table>\')">', $profiel, 1);	
+$profiel = preg_replace("/\[#EVENT]/is",'<img src="'.$gpack.'img/t/t10_1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>You played on Travian Hammelburg Event. Congrats !</td></tr></table>\')">', $profiel, 1);
 }
 
-//Multihunter image
+// WW Winner IMAGES - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
+// Added by Shadow - cata7007@gmail.com / Skype : cata7007
+if($displayarray['username'] == "Shadow"){
+$profiel = preg_replace("/\[#WWBUILDER]/is",'<img src="'.$gpack.'img/t/builderWW.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>This player is WW Builder.</td></tr></table>\')">', $profiel, 1);
+$profiel = preg_replace("/\[#WINNERWW]/is",'<img src="'.$gpack.'img/t/winnerww.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>World of Wonder WINNER.</td></tr></table>\')">', $profiel, 1);
+}
+
+//Multihunter image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['username'] == "Multihunter"){
 $profiel = preg_replace("/\[#MULTIHUNTER]/is",'<img src="'.$gpack.'img/t/t6_1.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Official Server Global Multihunter</td></tr></table>\')">', $profiel, 1);
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Multihunter is an official Travian position mainly used for enforcement of Travian rules within a server. Multihunters all use the account named Multihunter with its only village located in (0|0). A Multihunter may not play on the server on which they are the Multihunter, but be an active player on other servers. </td></tr></table>\')">', $profiel, 1);
 }
 
-//Travian Team image
+//Travian Team image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['username'] == "Multihunter"){
 $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Travian is a persistent, browser-based, massively multiplayer, online real-time strategy game developed by the German software company Travian Games. It was originally written and released in June 2004 by Gerhard Müller. Set in classical antiquity, Travian is a predominantly militaristic real-time strategy game.</td></tr></table>\')">', $profiel, 1);
 }
 
-//Travian Team image
+//Travian Team image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['access'] == "9"){
 $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Travian is a persistent, browser-based, massively multiplayer, online real-time strategy game developed by the German software company Travian Games. It was originally written and released in June 2004 by Gerhard Müller. Set in classical antiquity, Travian is a predominantly militaristic real-time strategy game.</td></tr></table>\')">', $profiel, 1);
 }
 
-//Multihunter image (for anyone)
+//Multihunter image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['access'] == "9"){
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Multihunter is an official Travian position mainly used for enforcement of Travian rules within a server. Multihunters all use the account named Multihunter with its only village located in (0|0). A Multihunter may not play on the server on which they are the Multihunter, but be an active player on other servers. </td></tr></table>\')">', $profiel, 1);
 }
 
-//Multihunter image (for anyone)
+//Multihunter image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['access'] == "8"){
 $profiel = preg_replace("/\[#MH]/is",'<img src="'.$gpack.'img/t/MH.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>The Multihunter is an official Travian position mainly used for enforcement of Travian rules within a server. Multihunters all use the account named Multihunter with its only village located in (0|0). A Multihunter may not play on the server on which they are the Multihunter, but be an active player on other servers. </td></tr></table>\')">', $profiel, 1);
 }
 
-//NATURE image (for anyone)
+//NATURE image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['username'] == "Nature"){
 $profiel = preg_replace("/\[#NATURE]/is",'<img src="'.$gpack.'img/t/nature.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Natures troops are the animals living in unoccupied oases. You can use the combat simulator to see whether you have enough troops to defeat the animals in an oasis you want to conquer, but remember that you can only raid oasis. Keep in mind that all the animals above Bear can kill its contemporary max tier travian troop in single combat. </td></tr></table>\')">', $profiel, 1);
 }
 
-//Taskmaster image (for anyone)
+//Taskmaster image  - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007
 if($displayarray['username'] == "Taskmaster"){
 $profiel = preg_replace("/\[#TASKMASTER]/is",'<img src="'.$gpack.'img/t/taskmaster.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Taskmaster Account</td></tr></table>\')">', $profiel, 1);
