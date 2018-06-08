@@ -1099,7 +1099,7 @@ define("RESET","reset");
 define("YOUR_POINT_UNTIL"," your points until you are level ");
 define("OR_LOWER"," or lower!");
 define("YOUR_HERO_HAS","Your hero has ");
-define("OF_HIT_POINTS","of his hit points.");
+define("OF_HIT_POINTS","of his life points");
 define("ERROR_NAME_SHORT","Error: name too short");
 define("HEROSMANSION_DESC","In the Hero's mansion you can train your own hero and at level 10, 15 and 20 you can conquer oases with Hero in the immediate vicinity.");
 
