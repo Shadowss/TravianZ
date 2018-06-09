@@ -161,7 +161,8 @@ class Technology {
 	}
 
 	public function getUnitList() {
-		global $database,$village;
+		global $database, $village;
+		
 		$unitarray = func_num_args() == 1 ? $database->getUnit(func_get_arg(0)) : $village->unitall;
 		$listArray = [];
 		for($i = 1; $i < count($this->unarray); $i++) {
@@ -170,15 +171,15 @@ class Technology {
 				$holder['id'] = $i;
 				$holder['name'] = $this->unarray[$i];
 				$holder['amt'] = $unitarray['u'.$i];
-				array_push($listArray,$holder);
+				array_push($listArray, $holder);
 			}
 		}
 
 		if($unitarray['hero'] > 0 && !empty($unitarray['hero'])) {
-				$holder['id'] = "hero";
-				$holder['name'] = $this->unarray[$i];
-				$holder['amt'] = $unitarray['hero'];
-				array_push($listArray,$holder);
+		    $holder['id'] = "hero";
+		    $holder['name'] = $this->unarray[$i];
+		    $holder['amt'] = $unitarray['hero'];
+		    array_push($listArray, $holder);
 		}
 		return $listArray;
 	}
@@ -235,7 +236,7 @@ class Technology {
 		return $ownunit;
 	}
 
-    function getAllUnits($base,$InVillageOnly=False,$mode=0) {
+    function getAllUnits($base, $InVillageOnly = false, $mode=0) {
         global $database;
 		
 		$ownunit = $database->getUnit($base);
@@ -285,19 +286,16 @@ class Technology {
 				}
 			}
 		}
+		
 		if(!$InVillageOnly){
 			$movement = $database->getVillageMovement($base);
 			if(!empty($movement)){
 				for($i = 1; $i <= 50; $i++){
-					if(!isset($ownunit['u' . $i])){
-						$ownunit['u' . $i] = 0;
-					}
-					$ownunit['u' . $i] += (isset($movement['u' . $i]) ? $movement['u' . $i] : 0);
+				    if(!isset($ownunit['u'.$i])) $ownunit['u'.$i] = 0;
+					$ownunit['u'.$i] += (isset($movement['u'.$i]) ? $movement['u'.$i] : 0);
 				}
 				
-				if(!isset($ownunit['hero'])){
-					$ownunit['hero'] = 0;
-				}
+				if(!isset($ownunit['hero'])) $ownunit['hero'] = 0;
 				$ownunit['hero'] += (isset($movement['hero']) ? $movement['hero'] : 0);
 			}
 		}

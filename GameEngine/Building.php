@@ -60,42 +60,15 @@ class Building {
                 }
             }
 
-            // check if we should allow building the WW this high
-            if($wwHighestLevelFound >= 50) $needed_plan = 2;   
-            else $needed_plan = 1;       
-
-            // count building plans
-            if($needed_plan) {
-                $wwbuildingplan = 0;
-                $planFoundInOwnersVillage = false;
-                $villages = $database->getVillagesID( $session->uid );
-
-                foreach($villages as $village1){
-                    $plan = count($database->getOwnArtefactInfoByType2($village1, 11));
-                    if($plan > 0){
-                        $wwbuildingplan = 1;
-                        $planFoundInOwnersVillage = true;
-                    }
-                }
-
-                if($session->alliance > 0) {
-                    $alli_users = $database->getUserByAlliance($session->alliance);
-                    foreach($alli_users as $users){
-                        $villages = $database->getVillagesID($users['id']);
-                        if($users['id'] != $session->uid){
-                            foreach($villages as $village1){
-                                $plan = count($database->getOwnArtefactInfoByType2($village1, 11 ));
-                                if($plan > 0) $wwbuildingplan++;
-                            }
-                        }
-                    }
-                }
-
-                if($needed_plan == 1) $cached = ($wwbuildingplan >= $needed_plan && $planFoundInOwnersVillage);                  
-                else $cached = $wwbuildingplan >= $needed_plan;
-                
-            } 
-            else $cached = true; // no need for building plans, we can still upgrade WW           
+            //Get our WW construction plans
+            $userHasWWConstructionPlans = $database->getWWConstructionPlans($session->uid);
+            
+            //Get ally WW construction plans
+            $allyHasWWConstructionPlans = $session->alliance > 0 ? $database->getWWConstructionPlans($session->uid, $session->alliance) : false;
+            
+            //Check if we should allow building the WW this high
+            if($wwHighestLevelFound < 50) $cached = $userHasWWConstructionPlans;
+            else $cached = $userHasWWConstructionPlans && $allyHasWWConstructionPlans;
         }
         
         return $cached;
@@ -593,40 +566,8 @@ class Building {
 
             // great granary can only be built with artefact or in Natar villages
             case 39: return $this->getTypeLevel(15) >= 10 && (!$isBuilt || $this->getTypeLevel($id) == 20) && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 1, 0)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)));
-            case 40:
-                $wwlevel = $village->resarray['f99'];
-
-                if($wwlevel > 50) $needed_plan = 1;  
-                else $needed_plan = 0;
-
-                $wwbuildingplan = 0;
-                $villages = $database->getVillagesID( $session->uid );
-                foreach($villages as $village1) {
-                    $plan = count($database->getOwnArtefactInfoByType2($village1, 11));
-                    if($plan > 0){
-                        $wwbuildingplan = 1;
-                        break;
-                    }
-                }
-
-                if($session->alliance != 0) {
-                    $alli_users = $database->getUserByAlliance($session->alliance);
-                    foreach($alli_users as $users) {
-                        $villages = $database->getVillagesID($users['id']);
-                        if($users['id'] != $session->uid) {
-                            foreach($villages as $village1) {
-                                $plan = count($database->getOwnArtefactInfoByType2($village1, 11 ));
-                                if($plan > 0) {
-                                    $wwbuildingplan ++;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                return $village->natar == 1 && $wwbuildingplan > $needed_plan;
-
+            
+            case 40: return $this->allowWwUpgrade();
             case 41: return $this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20 && $session->tribe == 1 && !$isBuilt;
             case 42: return GREAT_WKS && $this->getTypeLevel(21) == 20 && $village->capital == 0 && !$isBuilt;
             default: return false;

@@ -4549,7 +4549,7 @@ References: User ID/Message ID, Mode
 			if($job['id'] == $d) $jobToDelete = $job;
 		}	
 
-		if($canBeRemoved && $jobToDelete['field'] > 18 && $jobToDelete['type'] != 99 && $jobToDelete['level'] - 1 == 0){
+		if($canBeRemoved && $jobToDelete['field'] > 18 && $jobToDelete['field'] != 99 && $jobToDelete['level'] - 1 == 0){
 			$this->setVillageLevel($wid, ["f".$jobToDelete['field']."t"], [0]);
 		}
 		
@@ -6584,57 +6584,48 @@ References: User ID/Message ID, Mode
 
 		$vinfo = $this->getVillage($id);
 		$vtribe = $this->getUserField($vinfo['owner'], "tribe", 0);
-        $movingunits = array();
+        $movingunits = [];
+        
 		$outgoingarray = $this->getMovement(3, $id, 0);
 		if(!empty($outgoingarray) && count($outgoingarray)) {
 			foreach($outgoingarray as $out) {
 				for($i = 1; $i <= 10; $i++) {
-				    if (!isset($movingunits['u' . (($vtribe - 1) * 10 + $i)])) {
-				        $movingunits['u' . (($vtribe - 1) * 10 + $i)] = 0;
+				    if (!isset($movingunits['u'.(($vtribe - 1) * 10 + $i)])) {
+				        $movingunits['u'.(($vtribe - 1) * 10 + $i)] = 0;
 				    }
 
-				    if (!isset($out['t' . $i])) {
-                        $out['t' . $i] = 0;
-                    }
-
-					$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $out['t' . $i];
+				    if (!isset($out['t'.$i])) $out['t'.$i] = 0;
+					$movingunits['u'.(($vtribe - 1) * 10 + $i)] += $out['t'.$i];
 				}
 
-				if (!isset($movingunits['hero'])) {
-				    $movingunits['hero'] = 0;
-				}
-
-				if (!isset($out['t11'])) {
-                    $out['t11'] = 0;
-                }
-
+				if (!isset($movingunits['hero'])) $movingunits['hero'] = 0;
+				if (!isset($out['t11'])) $out['t11'] = 0;
+				
 				$movingunits['hero'] += $out['t11'];
 			}
 		}
+		
 		$returningarray = $this->getMovement(4, $id, 1);
 		if(!empty($returningarray) && count($returningarray)) {
 			foreach($returningarray as $ret) {
-				if($ret['attack_type'] != 1) {
-					for($i = 1; $i <= 10; $i++) {
-					    if (!isset($movingunits['u' . (($vtribe - 1) * 10 + $i)])) {
-					        $movingunits['u' . (($vtribe - 1) * 10 + $i)] = 0;
-					    }
-						$movingunits['u' . (($vtribe - 1) * 10 + $i)] += $ret['t' . $i];
-					}
-
-					if (!isset($movingunits['hero'])) {
-					    $movingunits['hero'] = 0;
-					}
-					$movingunits['hero'] += $ret['t11'];
-				}
+			    for($i = 1; $i <= 10; $i++) {
+			        if (!isset($movingunits['u'.(($vtribe - 1) * 10 + $i)])) {
+			            $movingunits['u'.(($vtribe - 1) * 10 + $i)] = 0;
+			        }
+			        $movingunits['u'.(($vtribe - 1) * 10 + $i)] += $ret['t' . $i];
+			    }
+			    
+			    if (!isset($movingunits['hero'])) $movingunits['hero'] = 0;
+			    $movingunits['hero'] += $ret['t11'];
 			}
 		}
+		
 		$settlerarray = $this->getMovement(5, $id, 0);
 		if(!empty($settlerarray)) {
-		    if (!isset($movingunits['u' . ($vtribe * 10)])) {
-		        $movingunits['u' . ($vtribe * 10)] = 0;
+		    if (!isset($movingunits['u'.($vtribe * 10)])) {
+		        $movingunits['u'.($vtribe * 10)] = 0;
 		    }
-			$movingunits['u' . ($vtribe * 10)] += 3 * count($settlerarray);
+			$movingunits['u'.($vtribe * 10)] += 3 * count($settlerarray);
 		}
 		return $movingunits;
 	}
@@ -7251,6 +7242,31 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink, $q);
 	}
 
+	function getWWConstructionPlans($uid, $alliance = 0){
+	    list($uid, $alliance) = $this->escape_input((int) $uid, $alliance);
+	    
+	    if(!$alliance){
+	        $q = "SELECT
+			        Count(*) as Total
+              FROM
+                    ".TB_PREFIX."artefacts
+              WHERE
+                    owner = ".$uid." AND type = 11 AND active = 1";
+	    }else{
+	        $q = "SELECT
+			        Count(*) as Total
+              FROM
+                    ".TB_PREFIX."artefacts AS artefacts
+			  INNER JOIN ".TB_PREFIX."users AS users
+					ON users.id != ".$uid." AND users.alliance = ".$alliance." AND artefacts.owner = users.id AND artefacts.type = 11
+		      WHERE
+					users.id > 4 AND artefacts.active = 1";
+	    }
+            
+	    $result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
+	    return $result['Total'] > 0;
+	}
+	
     // no need to cache this method
 	function getOwnArtefactInfo($vref, $use_cache = true) {
 	    // load the data - type is irrelevant, since the method caches all data

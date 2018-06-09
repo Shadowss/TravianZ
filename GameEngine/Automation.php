@@ -2042,7 +2042,7 @@ class Automation {
                                                 $poparray = $database->getVSumField([$AttackerID, $DefenderID] ,"pop");
                                                 $pop1 = $poparray[0]['Total'];
                                                 $pop2 = $poparray[1]['Total'];
-                                                if($pop1 > $pop2){
+                                                if($pop1 > $pop2 && $targettribe != 5){
                                                     $buildlevel = $database->getResourceLevel($data['to']);
                                                     for ($i = 1; $i <= 39; $i++){
                                                         if($buildlevel['f'.$i]!=0){
@@ -2171,7 +2171,7 @@ class Automation {
                                         $info_hero = $hero_pic.",Your hero is carrying home the artifact <b>".$artifact['name']."</b> and".$xp;
                                         
                                         // if the defender pop is 0 with no artefact, then destroy the village
-                                        if($database->getVillageField($data['to'], "pop") == 0){
+                                        if($database->getVillageField($data['to'], "pop") == 0 || $targettribe == 5){
                                             $can_destroy = $village_destroyed = 1;
                                             $info_hero .= " The village has been destroyed.";
                                         }
