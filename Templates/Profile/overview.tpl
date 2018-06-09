@@ -1,11 +1,17 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       overview.tpl                                                ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       01.09.2013 						       	 				   ##
+##  Filename       overview.php                                                ##
 ##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Fixed by:      Shadow / Skype : cata7007                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/	       	   			   ##
 ##                                                                             ##
 #################################################################################
 
@@ -162,11 +168,11 @@ include("menu2.tpl");
 </table><table cellpadding="1" cellspacing="1" id="villages">
     <thead>
     <tr>
-        <th colspan="3">Villages</th>
+        <th colspan="4">Villages</th>
     </tr>
     <tr>
         <td>Name</td>
-
+        <td>Oasis</td>
         <td>Inhabitants</td>
         <td>Coordinates</td>
     </tr>
@@ -178,7 +184,47 @@ include("menu2.tpl");
         if($vil['capital'] == 1) {
         echo "<span class=\"none3\"> (capital)</span>";
         }
-        echo "</td>";
+		echo "<td class=\"oases\"></td>";
+		
+		// OASIS PART - must to be activated from install part
+		
+		$prefix = "".TB_PREFIX."odata";
+		$uid = $_GET['uid']; $wref = $vil['wref'];
+		$sql = mysqli_query("SELECT * FROM $prefix WHERE owner = $uid AND conqured = $wref");
+		while($row = mysqli_fetch_array($sql)){
+		$type = $row["type"];
+		switch($type) {
+		case 1:
+		case 2:
+		echo  "<img class='r1' src='img/x.gif' title='Lumber'>";
+		break;
+		case 3:
+		echo  "<img class='r1' src='img/x.gif' title='Lumber'> <img class='r4' src='img/x.gif' title='Crop'>";
+		break;
+		case 4:
+		case 5:
+		echo  "<img class='r2' src='img/x.gif' title='Clay'>";
+		break;
+		case 6:
+		echo  "<img class='r2' src='img/x.gif' title='Clay'> <img class='r4' src='img/x.gif' title='Crop'>";
+		case 7:
+		case 8:
+		echo  "<img class='r3' src='img/x.gif' title='Iron'>";
+		break;
+		case 9:
+		echo  "<img class='r3' src='img/x.gif' title='Iron'> <img class='r4' src='img/x.gif' title='Crop'>";
+		break;
+		case 10:
+		case 11:
+		case 12:
+		echo  "<img class='r4' src='img/x.gif' title='Crop'>";
+		break;
+		}
+		}
+		
+		// OASIS PART - must to be activated from install part
+		
+		echo "</td>";
         echo "<td class=\"hab\">".$vil['pop']."</td><td class=\"aligned_coords\">";
         echo "<div class=\"cox\">(".$coor['x']."</div><div class=\"pi\">|</div><div class=\"coy\">".$coor['y'].")</div></td></tr>";
     }
