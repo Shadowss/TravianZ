@@ -19,11 +19,11 @@ $nextEffect = "-";
 
 if($artefact['owner'] == 3) $active = "-";
 elseif(!$artefact['active'] && $artefact['conquered'] < $time - $activationTime) $active = "<b>Can't be activated</b>";
-elseif (!$artefact['active']) $active = date("Y-m-d H:i:s", $artefact['conquered'] + $activationTime);
+elseif (!$artefact['active']) $active = date("d.m.Y H:i:s", $artefact['conquered'] + $activationTime);
 else
 {
 	$active = "<b>".ACTIVE."</b>";
-	$nextEffect = date("Y-m-d H:i:s", $artefact['lastupdate'] + (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
+	$nextEffect = date("d.m.Y H:i:s", $artefact['lastupdate'] + (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
 }
                     
 //// Added by brainiac - thank you
@@ -124,7 +124,7 @@ $bonus = isset($betterorbadder) ? $betterorbadder." (<b>".str_replace(["(", ")"]
 
 <tr>
 <th><?php echo TIME_CONQUER; ?></th>
-<td><?php echo ($artefact['owner'] != 3) ? date("Y-m-d H:i:s",$artefact['conquered']) : "-";?></td>
+<td><?php echo ($artefact['owner'] != 3) ? date("d.m.Y H:i:s",$artefact['conquered']) : "-";?></td>
 </tr>
 
 <tr>
@@ -166,7 +166,7 @@ foreach($owners as $owner){
 <span class="none">[?]</span>
 <?php }?>
 </td>
-<td><span class="none"><?php echo date("Y-m-d H:i:s", $owner['conqueredtime']);?></span></td>
+<td><span class="none"><?php echo date("d.m.Y H:i:s", $owner['conqueredtime']);?></span></td>
 </tr>
 <?php 
 } 
