@@ -113,7 +113,9 @@ mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."fdata SET
 	f39  = '".$_POST['id39level']."', 
 	f39t = '".$_POST['id39gid']."', 
 	f40  = '".$_POST['id40level']."', 
-	f40t = '".$_POST['id40gid']."' 
+	f40t = '".$_POST['id40gid']."',
+    f99 = '".$_POST['id99level']."',
+    f99t = '".$_POST['id99gid']."' 
 	WHERE vref = $id") or die(mysqli_error($database->dblink));
 
 header("Location: ../../../Admin/admin.php?p=village&did=".$id."");

@@ -29,8 +29,7 @@ if(isset($id))
 			<div id="content" class="village1" style="min-height: 264px;">
 				<div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>" style="float: left;">
 					<?php
-						for($f = 1; $f <19; $f++)
-						{
+						for($f = 1; $f < 19; $f++){
 							##$gid = $fdata['f'.($f).'t'];
 							##$level = $fdata['f'.($f)];
 							echo "<img src=\"../img/x.gif\" class=\"reslevel rf".$f." level".$f."\">";
@@ -42,16 +41,13 @@ if(isset($id))
 			<div id="content" class="village2" style="padding: 0; margin-left: -20px;">
 				<div id="village_map" class="d2_0">
 					<?php
-					for($b =1; $b <21; $b++)
-					{
-
+					for($b = 1; $b < 21; $b++){
 						echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">";
 					}
 					?>
 					<div id="levels" class="on">
 						<?php
-							for($b =1; $b <21; $b++)
-							{
+							for($b = 1; $b < 21; $b++){
 								echo "<div class=\"d$b\">".($b + 18)."</div>";
 							}
 						?>
@@ -71,8 +67,7 @@ if(isset($id))
 				</thead>
 				<tbody>
 					<?php
-						for($i = 1; $i<=42; $i++)
-						{
+						for($i = 1; $i <= 42; $i++){
 							$bu = $funct->procResType($i);
 							echo '
 							<tr>
@@ -102,16 +97,12 @@ if(isset($id))
 			</thead>
 			<tbody>
 				<?php
-				for ($i = 1; $i <= 40; $i++)
-				{
-					if($fdata['f'.$i.'t'] == 0)
-					{
-						$bu = "-";
-					}
-					else
-					{
-						$bu = $funct->procResType($fdata['f'.$i.'t']);
-					}
+				for ($i = 1; $i <= 41; $i++){
+				    if($i == 41) $i = 99;
+				    
+				    if($fdata['f'.$i.'t'] == 0) $bu = "-";			
+				    else $bu = $funct->procResType($fdata['f'.$i.'t']);
+
 					echo '
 						<tr>
 							<td class="on">'.$i.'</td>
@@ -131,7 +122,7 @@ if(isset($id))
 		<div id="content" class="village1" style="min-height: 264px;">
 			<div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>" style="float: left;">
 				<?php
-					for($f = 1; $f <19; $f++)
+					for($f = 1; $f < 19; $f++)
 					{
 						$gid = $fdata['f'.($f).'t'];
 						$level = $fdata['f'.($f)];
@@ -144,64 +135,71 @@ if(isset($id))
 		<br />
 
 		<br /><br />
-
+	<?php 
+	
+	$WWLevel = $fdata['f99t'];
+	$wallLevel = $fdata['f40t'];
+	if($wallLevel == 0) $wallType = "d2_0";
+	else 
+	{
+	    switch($user['tribe']){
+	        case 1:
+	        case 5:
+	        default: $wallType = "d2_11"; break;
+	        
+	        case 2: $wallType = "d2_12"; break;
+	        case 3: $wallType = "d2_1"; break;
+	    }
+	}
+	
+	?>	
 		<div id="content" class="village2">
 		<h1><?php echo $village['name']; ?></h1>
-		<div id="village_map" class="d2_0">
+		<div id="village_map" class="<?php echo $wallType; ?>">
 			<?php
-			for($b =1; $b <21; $b++)
-			{
+			for($b =1; $b < 21; $b++){
 				$gid = $fdata['f'.($b + 18).'t'];
-				if($gid >0)
-				{
-					echo "<img src=\"../img/x.gif\" class=\"building d".$b." g".$gid."\">";
-				}
-				elseif($gid ==0)
-				{
-					echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">";
-				}
-			}
-			$rp=16;
+				if($gid >0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." g".$gid."\">";
+				elseif($gid == 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">";		
+			}		
+			
+			$rp = 16;
 			$rplevel = $fdata['f'.$rp];
-			if($rplevel > 0)
-			{
-				echo "<img src=\"../img/x.gif\" class=\"dx1 g16\">";
-			}
-			elseif($rplevel ==0)
-			{
-				echo "<img src=\"../img/x.gif\" class=\"dx1 g16e\">";
-			}
-
+			
+			if($rplevel > 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16\">";
+			elseif($rplevel == 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16e\">";
+			
             $resourcearray = $database->getResourceLevel($village['wref']);
             if($resourcearray['f99t'] == 40) {
                 if($resourcearray['f99'] >= 0 && $resourcearray['f99'] <= 19) {
-                    echo '<img class="ww g40" src="img/x.gif" alt="Worldwonder">'; }
-                if($resourcearray['f99'] >= 20 && $resourcearray['f99'] <= 39) {
-                    echo '<img class="ww g40_1" src="img/x.gif" alt="Worldwonder">'; }
-                if($resourcearray['f99'] >= 40 && $resourcearray['f99'] <= 59) {
-                    echo '<img class="ww g40_2" src="img/x.gif" alt="Worldwonder">'; }
-                if($resourcearray['f99'] >= 60 && $resourcearray['f99'] <= 79) {
-                    echo '<img class="ww g40_3" src="img/x.gif" alt="Worldwonder">'; }
-                if($resourcearray['f99'] >= 80 && $resourcearray['f99'] <= 99) {
-                    echo '<img class="ww g40_4" src="img/x.gif" alt="Worldwonder">'; }
-                if($resourcearray['f99'] == 100) {
-                    echo '<img class="ww g40_5" src="img/x.gif" alt="Worldwonder">'; }
+                    echo '<img class="ww g40" src="img/x.gif" alt="Worldwonder">'; 
+                }
+                elseif($resourcearray['f99'] >= 20 && $resourcearray['f99'] <= 39) {
+                    echo '<img class="ww g40_1" src="img/x.gif" alt="Worldwonder">';
+                }
+                elseif($resourcearray['f99'] >= 40 && $resourcearray['f99'] <= 59) {
+                    echo '<img class="ww g40_2" src="img/x.gif" alt="Worldwonder">';
+                }
+                elseif($resourcearray['f99'] >= 60 && $resourcearray['f99'] <= 79) {
+                    echo '<img class="ww g40_3" src="img/x.gif" alt="Worldwonder">'; 
+                }
+                elseif($resourcearray['f99'] >= 80 && $resourcearray['f99'] <= 99) {
+                    echo '<img class="ww g40_4" src="img/x.gif" alt="Worldwonder">';
+                }
+                elseif($resourcearray['f99'] == 100) {
+                    echo '<img class="ww g40_5" src="img/x.gif" alt="Worldwonder">';
+                }
             }
 			?>
 			<div id="levels" class="on">
 				<?php
-					for($b =1; $b <21; $b++)
-					{
+					for($b = 1; $b < 21; $b++){
 						$level = $fdata['f'.($b + 18)];
-						if($level >0)
-						{
-							echo "<div class=\"d$b\">$level</div>";
-						}
+						if($level > 0) echo "<div class=\"d$b\">$level</div>";
 					}
-					if($rplevel >0)
-					{
-						echo "<div class=\"l39\">".$fdata['f'.($b + 18)]."</div>";
-					}
+					if($rplevel > 0) echo "<div class=\"l39\">".$fdata['f39']."</div>";
+					if($wallLevel > 0) echo "<div class=\"l40\">".$fdata['f40']."</div>";
+					if($WWLevel > 0) echo "<div class=\"d40\">".$fdata['f99']."</div>";
 				?>
 			</div>
 		</div>
