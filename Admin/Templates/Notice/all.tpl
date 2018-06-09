@@ -1,6 +1,6 @@
 <?php
 $noticeClass =
-    ["Scout Report",
+["Scout Report",
     "Won as attacker without losses",
     "Won as attacker with losses",
     "Lost as attacker with losses",
@@ -24,38 +24,17 @@ $noticeClass =
     "Lost scouting as defender",
     "Scout Report"];
 ?>
-<form method="post" action="berichte.php" name="msg">
 	<table cellpadding="1" cellspacing="1" id="overview"
 		class="row_table_data">
 		<thead>
 			<tr>
-				<th colspan="2">Subject:</th>
-				<th class="sent"><a href="berichte.php?s=0&amp;o=1">Sent</a></th>
+				<th colspan="1">Subject:</th>
+				<th class="sent"><a href="admin.php?p=report&s=0&amp;o=1">Sent</a></th>
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
-				<th><?php
-    $MyGold = mysqli_query($GLOBALS["link"], "SELECT * FROM " . TB_PREFIX . "users WHERE `id`='" . $session->uid . "'") or die(mysqli_error($database->dblink));
-    $golds = mysqli_fetch_array($MyGold);
-    $date2 = strtotime("NOW");
-    if ($golds['plus'] <= $date2) {
-        ?>
-		<?php } else { ?>
-		<input class="check" type="checkbox" id="s10" name="s10"
-					onclick="Allmsg(this.form);" />
-		<?php } ?></th>
 				<th class="buttons">
-            <?php
-            
-if ($session->plus) {
-                if (isset($_GET['t']) && $_GET['t'] == 5) {
-                    echo "<button name=\"start\" value=\"back\" alt=\"back\" id=\"btn_back\" class=\"trav_buttons\" /> Back </button>";
-                } else {
-                    echo "<button name=\"archive\" value=\"Archive\" alt=\"Archive\" id=\"btn_archiv\" class=\"trav_buttons\" /> Archive </button>";
-                }
-            }
-            ?>
             </th>
 				<th class=navi>
                         <?php
@@ -73,45 +52,35 @@ if ($session->plus) {
                             }
                         }
                         ?>
-     </th>
+     	</th>
 			</tr>
 		</tfoot>
 		<tbody>
 <?php
 
-if (isset($_GET['s'])) {
-    $s = $_GET['s'];
-} else {
-    $s = 0;
-}
+if (isset($_GET['s'])) $s = $_GET['s'];  
+else $s = 0;
 
-$name = 1;
-$count = 0;
 for ($i = (1 + $s); $i <= (10 + $s); $i ++) {
     if (count($rep1) >= $i) {
-        echo "<tr><td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n" . $name . "\" value=\"" . $rep1[$i - 1]['id'] . "\" /></td>
+        echo "<tr>
 		<td class=\"sub\">";
         $type = $rep1[$i - 1]['ntype'];
-        if ($type >= 15 || $type <= 17) {
-            // $type = $type-11;
+        if($type == 23) $type = 22;
+        if ($type >= 15 && $type <= 17) {
+            $type -= 11;
             echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
-        } else if ($type >= 18 || $type <= 22) {
-            echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
+        } else if ($type >= 18 && $type <= 22) {
+            echo "<img src=\"../gpack/travian_default/img/scouts/$type.gif\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
         } else {
             echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
         }
         echo "<div><a href=\"admin.php?p=report&bid=" . $rep1[$i - 1]['id'] . "\">" . $rep1[$i - 1]['topic'] . "</a> ";
-        if ($rep1[$i - 1]['viewed'] == 0) {
-            echo "(new)";
-        }
         $date = $generator->procMtime($rep1[$i - 1]['time']);
         echo "</div></td><td class=\"dat\">" . $date[0] . " " . $date[1] . "</td></tr>";
     }
-    $name ++;
 }
-if (count($rep1) == 0) {
-    echo "<td colspan=\"3\" class=\"none\">There are no reports available.</td></tr>";
-    }
-    ?>
+if (count($rep1) == 0) echo "<td colspan=\"2\" class=\"none\">There are no reports available.</td></tr>";
+?>
 </tbody>
 </table>

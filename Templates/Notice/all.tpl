@@ -69,7 +69,7 @@ for($i = (1 + $s); $i <= (10 + $s); $i++){
 		$type = (isset($_GET['t']) && $_GET['t'] == 5) ? $message->noticearray[$i - 1]['archive'] : $message->noticearray[$i - 1]['ntype'];
 		if($type == 23) $type = 22;
 		if($type >= 15 && $type <= 17){
-			$type = $type - 11;
+			$type -= 11;
 			echo "<img src=\"img/x.gif\" class=\"iReport iReport$type\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";
 		}else if($type >= 18 && $type <= 22){
 			echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"" . $noticeClass[$type] . "\" title=\"" . $noticeClass[$type] . "\" />";

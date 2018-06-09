@@ -9,28 +9,36 @@ $dataarray = explode(",",$message->readingNotice['data']);
 $colspan = (isset($dataarray[184]) && $dataarray[184] > 0) ? 11 : 10;
 $colspan2 = 10;
 
+if(!isset($isAdmin)){
+    $mapUrl = "karte.php?d=";
+    $playerUrl = "spieler.php?uid=";
+}elseif($isAdmin){
+    $mapUrl = "admin.php?p=village&did=";
+    $playerUrl = "admin.php?p=player&uid=";
+}
+
 //Attacker
 if ($database->getUserField($dataarray[0], 'username', 0) != "[?]") {
-	$user_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[0], 'id', 0)."\">".$database->getUserField($dataarray[0], 'username', 0)."</a>";
+	$user_url="<a href=\"".$playerUrl.$database->getUserField($dataarray[0], 'id', 0)."\">".$database->getUserField($dataarray[0], 'username', 0)."</a>";
 }
 else $user_url="<font color=\"grey\"><b>[?]</b></font>";
 	
 
 if($database->getVillageField($dataarray[1],'name') != "[?]") {
-	$from_url="<a href=\"karte.php?d=".$dataarray[1]."&c=".$generator->getMapCheck($dataarray[1])."\">".$database->getVillageField($dataarray[1], 'name')."</a>";
+	$from_url="<a href=\"".$mapUrl.$dataarray[1]."&c=".$generator->getMapCheck($dataarray[1])."\">".$database->getVillageField($dataarray[1], 'name')."</a>";
 }
 else $from_url="<font color=\"grey\"><b>[?]</b></font>";
 
 //defender
 if ($database->getUserField($dataarray[28], 'username', 0) != "[?]") {
-	$defuser_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[28], 'id', 0)."\">".$database->getUserField($dataarray[28], 'username', 0)."</a>";
+	$defuser_url="<a href=\"".$playerUrl.$database->getUserField($dataarray[28], 'id', 0)."\">".$database->getUserField($dataarray[28], 'username', 0)."</a>";
 }
 else $defuser_url="<font color=\"grey\"><b>[?]</b></font>";
     
 if($database->isVillageOases($dataarray[29])){
-    $deffrom_url="<a href=\"karte.php?d=".$dataarray[29]."&c=".$generator->getMapCheck($dataarray[29])."\">".$dataarray[30]."</a>";
+    $deffrom_url="<a href=\"".$mapUrl.$dataarray[29]."&c=".$generator->getMapCheck($dataarray[29])."\">".$dataarray[30]."</a>";
 }elseif($database->getVillageField($dataarray[29], 'name') != "[?]") {
-    $deffrom_url="<a href=\"karte.php?d=".$dataarray[29]."&c=".$generator->getMapCheck($dataarray[29])."\">".$database->getVillageField($dataarray[29], 'name')."</a>";
+    $deffrom_url="<a href=\"".$mapUrl.$dataarray[29]."&c=".$generator->getMapCheck($dataarray[29])."\">".$database->getVillageField($dataarray[29], 'name')."</a>";
 }
 else $deffrom_url="<font color=\"grey\"><b>[?]</b></font>";
 ?>

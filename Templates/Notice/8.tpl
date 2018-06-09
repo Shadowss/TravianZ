@@ -2,13 +2,21 @@
 $dataarray = explode(",",$message->readingNotice['data']);
 $colspan = (!empty($dataarray[13]) && $dataarray[13] > 0) ? 11 : 10;
 
+if(!isset($isAdmin)){
+    $mapUrl = "karte.php?d=";
+    $playerUrl = "spieler.php?uid=";
+}elseif($isAdmin){
+    $mapUrl = "admin.php?p=village&did=";
+    $playerUrl = "admin.php?p=player&uid=";
+}
+
 if ($database->getUserField($dataarray[1], 'username', 0) != "[?]" || $dataarray[1] == 0) {
-    $user_url="<a href=\"spieler.php?uid=".$database->getUserField($dataarray[1], "id", 0)."\">".($dataarray[1] == 0 ? "taskmaster" : $database->getUserField($dataarray[1], 'username', 0))."</a>";
+    $user_url="<a href=\"".$playerUrl.$database->getUserField($dataarray[1], "id", 0)."\">".($dataarray[1] == 0 ? "taskmaster" : $database->getUserField($dataarray[1], 'username', 0))."</a>";
 }
 else $user_url="<font color=\"grey\"><b>[?]</b></font>";
 
 if($database->getVillageField($dataarray[0],'name') != "[?]" || $dataarray[0] == 0) {
-     $from_url=($dataarray[0] == 0)? "village of the elders" : "<a href=\"karte.php?d=".$dataarray[0]."&c=".$generator->getMapCheck($dataarray[0])."\">".$database->getVillageField($dataarray[0], 'name')."</a>";
+     $from_url=($dataarray[0] == 0)? "village of the elders" : "<a href=\"".$mapUrl.$dataarray[0]."&c=".$generator->getMapCheck($dataarray[0])."\">".$database->getVillageField($dataarray[0], 'name')."</a>";
 }
 else $from_url="<font color=\"grey\"><b>[?]</b></font>";
 ?>

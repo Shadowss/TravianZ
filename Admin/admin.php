@@ -49,7 +49,11 @@ if (!empty($_GET['p'])) {
             break;
 
         case 'report':
-            $subpage = 'Players Reported';
+            $subpage = 'Players Report';
+            break;
+            
+        case 'message':
+            $subpage = 'Players Message';
             break;
 
         case 'map':
@@ -459,7 +463,8 @@ if (!empty($_GET['p'])) {
 												<a href="?p=online">Online Users</a>
 												<a href="?p=notregistered">Players Not Activated</a>
 												<a href="?p=inactive">Players Inactivate</a>
-												<a href="?p=report">Players Reported</a>
+												<a href="?p=report">Players Report</a>
+												<a href="?p=msg">Players Message</a>
 												<a href="?p=map">Map</a>
 												<br />
 												<a href="#"><b>Search</b></a>

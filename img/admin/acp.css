@@ -197,14 +197,6 @@ td.email {
 #report_content table thead th, #report_content table tfoot th {font-weight:bold; text-align:center; background:url(un/a/c2.gif) repeat;}
 #report_content table thead td, #report_content table tfoot td {text-align:center; background-color:#F3F3F3;}
 
-#report_content table td, #report_content, table th {
-    border:1px solid silver;
-    font-size:13px;
-    font-weight:normal;
-    text-align:left;
-    vertical-align:middle;
-}
-
 /* read report - content */
 #report_content {padding:15px 2px 0px;}
 #report_content table {margin-bottom:15px;}

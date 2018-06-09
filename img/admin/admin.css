@@ -17,10 +17,10 @@ font-family: Verdana, Arial, Helvetica, sans-serif;
 /* Fix */
 .online1, .online2, .online3, .online4, .online5 {width:12px; height:12px;}
 /* Oberer Layer mit Menue ohne Werbung */
-#ltop1 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
+#ltop1 {position:relative; padding-left: 25%; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
 
 /* Oberer Layer mit Menue mit Werbung */
-#ltop2 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mw.gif); background-repeat:repeat-x; left:0px; top:0px;}
+#ltop2 {position:relative; padding-left: 25%; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mw.gif); background-repeat:repeat-x; left:0px; top:0px;}
 
 /* - VERALTET - Oberer Layer mit Mindestbreite fuer IE6 */
 /*#ltop3 {width:777px;} */
@@ -29,7 +29,7 @@ font-family: Verdana, Arial, Helvetica, sans-serif;
 #ltop4 {width:911px;}
 
 /* Den gesamten mittleren Teil umschliessendes Div */
-#lmidall {position:relative; min-width:980px;}
+#lmidall {background-image: none; float: none; height: auto; margin: 0 auto; width: 980px;}
 
 /* Den gesamten mittleren Teil umschliessendes Div */
 #lmidlc {position:relative; min-width:682px; float:left;}
@@ -461,8 +461,8 @@ background-image: url(../un/a/c2.gif);
 a.gen,a.genmed,a.gensmall { color: #71D000; text-decoration: none; }
 a.gen:hover,a.genmed:hover,a.gensmall:hover        { color: #00BC00; text-decoration: underline; }
 
-th        {
-color: #FFFFFF; font-size: 11px; font-weight : bold;
+th {
+color: #000000; font-size: 11px; font-weight : bold;
 background-color: #777777; height: 22px;
 background-image: url(../un/a/c3.gif);
 }
