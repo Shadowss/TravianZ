@@ -1,6 +1,5 @@
 <?php
-$textArray = ["Natars Spawn", "WW Spawn", "WW Plan Spawn"];
-$newTextArray = ["Natars Tribe", "WW Village", "Construction Plan"];
+$textArray = [["Natars Spawn", "WW Spawn", "WW Plan Spawn"], ["Natars Tribe", "WW Village", "Construction Plan"]];
 $spawnTimeArray = [NATARS_SPAWN_TIME, NATARS_WW_SPAWN_TIME, NATARS_WW_BUILDING_PLAN_SPAWN_TIME];
 $areSpawned = [$database->areArtifactsSpawned(), $database->areWWVillagesSpawned(), $database->areArtifactsSpawned(true)];
 
@@ -12,8 +11,8 @@ $areSpawned = [$database->areArtifactsSpawned(), $database->areWWVillagesSpawned
 <tr>
 <td><b>
 <?php
-    if($areSpawned[$i]) echo $newTextArray[$i];
-    else echo $textArray[$i];
+    if($areSpawned[$i]) echo $textArray[1][$i];
+    else echo $textArray[0][$i];
     ?></b></td>
 <td><b>: <font color="Red"><?php
     if($areSpawned[$i]) echo "Released";
