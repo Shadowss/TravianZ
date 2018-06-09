@@ -25,7 +25,7 @@ if(!empty($allMessages)){
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
 	<link href="../<?php echo GP_LOCATE; ?>travian.css?e21d2" rel="stylesheet" type="text/css">
-	<h1>Players Messages</h1>
+	<h1>Players Message</h1>
 	<div id="content" class="messages" style="padding: 0;">
 	<?php
 		include("Message/inbox.tpl");

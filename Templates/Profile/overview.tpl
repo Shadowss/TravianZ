@@ -48,10 +48,12 @@ include("menu2.tpl");
     <tr>
         <th colspan="2">Player <?php echo $displayarray['username']; ?></th>
     </tr>
-<?php if($displayarray['access']==ADMIN){ echo "<tr><th colspan='2'><font color='Red'><center><b>This player is Admin.</b></font></center></th></tr>"; } ?>      
-<?php if($displayarray['access']==MULTIHUNTER){ echo "<tr><th colspan='2'><font color='Blue'><center><b>This player is Multihunter.</b></font></center></th></tr>"; } ?>
-<?php if($displayarray['access']==BANNED){ echo "<tr><th colspan='2'><font color='Green'><center><b>This player is BANNED.</b></font></center></th></tr>"; } ?>
-<?php if($displayarray['vac_mode']==1){ echo "<tr><th colspan='2'><font color='Maroon'><center><b>This player is on VACATION.</b></font></center></th></tr>"; } ?>
+<?php 
+if($displayarray['access'] == ADMIN) echo "<tr><th colspan='2'><font color='Red'><center><b>This player is Admin.</b></font></center></th></tr>";  
+if($displayarray['access'] == MULTIHUNTER) echo "<tr><th colspan='2'><font color='Blue'><center><b>This player is Multihunter.</b></font></center></th></tr>";
+if($displayarray['access'] == BANNED) echo "<tr><th colspan='2'><font color='Green'><center><b>This player is BANNED.</b></font></center></th></tr>";
+if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon'><center><b>This player is on VACATION.</b></font></center></th></tr>"; 
+?>
     <tr>
         <td>Details</td>
         <td>Description</td>
@@ -65,7 +67,7 @@ include("menu2.tpl");
         <td class="details">
             <table cellpadding="0" cellspacing="0">
  
-<?php if($displayarray['access']==BANNED){ echo "<tr><td colspan='2'><center><b>Banned</b></center></td></tr>"; } ?>
+<?php if($displayarray['access'] == BANNED){ echo "<tr><td colspan='2'><center><b>Banned</b></center></td></tr>"; } ?>
 
 			<tr>
 
@@ -75,29 +77,17 @@ include("menu2.tpl");
             <tr>
                 <th>Tribe</th>
                 <td><?php 
-                if($displayarray['tribe'] == 1) {
-                echo "Roman";
-                }
-                else if($displayarray['tribe'] == 2) {
-                echo "Teutons";
-                }
-                else if($displayarray['tribe'] == 3) {
-                echo "Gauls";
-                }
-				else if($displayarray['tribe'] == 4) {
-                echo "Nature";
-                
-                }else if($displayarray['tribe'] == 5) {
-                echo "Natars";
-                }				?></td>
+                $tribeArrays = [TRIBE1, TRIBE2, TRIBE3, TRIBE4, TRIBE5];
+                echo $tribeArrays[$displayarray['tribe'] - 1];
+                ?></td>
             </tr>
 
             <tr>
                 <th>Alliance</th>
-                <td><?php if($displayarray['alliance'] == 0) {
-                echo "-";
-                }
-                else {
+                <td><?php
+                if($displayarray['alliance'] == 0) echo "-";
+                else 
+                {
                 $displayalliance = $database->getAllianceName($displayarray['alliance']);
                 echo "<a href=\"allianz.php?aid=".$displayarray['alliance']."\">".$displayalliance."</a>";
                 } ?></td>
@@ -114,21 +104,21 @@ include("menu2.tpl");
             <?php 
 			//Date of Birth
             if(isset($displayarray['birthday']) && $displayarray['birthday'] != 0) {
-			$age = date('Y') - substr($displayarray['birthday'],0,4);
-				if ((date('m') - substr($displayarray['birthday'],5,2)) < 0){$age --;}
-				elseif ((date('m') - substr($displayarray['birthday'],5,2)) == 0){
-					if(date('d') < substr($displayarray['birthday'],8,2)){$age --;}
+			    $age = date('Y') - substr($displayarray['birthday'], 0, 4);
+				if ((date('m') - substr($displayarray['birthday'], 5, 2)) < 0) $age --;
+				elseif ((date('m') - substr($displayarray['birthday'], 5, 2)) == 0){
+					if(date('d') < substr($displayarray['birthday'], 8, 2)) $age --;
 				}
             echo "<tr><th>Age</th><td>$age</td></tr>";
             }
 			//Gender
             if(isset($displayarray['gender']) && $displayarray['gender'] != 0) {
-            $gender = ($displayarray['gender']== 1)? "Male" : "Female";
-            echo "<tr><th>Gender</th><td>".$gender."</td></tr>";
+                $gender = ($displayarray['gender']== 1)? "Male" : "Female";
+                echo "<tr><th>Gender</th><td>".$gender."</td></tr>";
             }
 			//Location
             if($displayarray['location'] != "") {
-            echo "<tr><th>Location</th><td>".$displayarray['location']."</td></tr>";
+                echo "<tr><th>Location</th><td>".$displayarray['location']."</td></tr>";
             }
             ?>
             <tr>
@@ -159,10 +149,7 @@ include("menu2.tpl");
             <div><?php echo nl2br($profiel[1]); ?>
             
             </div>
-            
-            </div>
         </td>
-
     </tr>
     </tbody>
 </table><table cellpadding="1" cellspacing="1" id="villages">
@@ -181,48 +168,41 @@ include("menu2.tpl");
     foreach($varray as $vil) {
     	$coor = $database->getCoor($vil['wref']);
     	echo "<tr><td class=\"nam\"><a href=\"karte.php?d=".$vil['wref']."&amp;c=".$generator->getMapCheck($vil['wref'])."\">".$vil['name']."</a>";
-        if($vil['capital'] == 1) {
-        echo "<span class=\"none3\"> (capital)</span>";
+    	if($vil['capital'] == 1) echo "<span class=\"none3\"> (capital)</span>";
+		echo "<td class=\"oases\">";
+		
+		// OASIS PART - must to be activated from install part
+	       
+		$oases = $database->getOasis($vil['wref']);	
+		foreach ($oases as $oasis){
+            switch ($oasis['type']) {
+                case 1:
+                case 2:
+                    echo "<img class='r1' src='img/x.gif' title='+25% Lumber'> ";
+                    break;
+                case 3:
+                    echo "<img class='r1' src='img/x.gif' title='+25% Lumber'><img class='r4' src='img/x.gif' title='+25% Crop'> ";
+                    break;
+                case 4:
+                case 5:
+                    echo "<img class='r2' src='img/x.gif' title='+25% Clay'> ";
+                    break;
+                case 6:
+                    echo "<img class='r2' src='img/x.gif' title='+25% Clay'><img class='r4' src='img/x.gif' title='+25% Crop'> ";
+                case 7:
+                case 8:
+                    echo "<img class='r3' src='img/x.gif' title='+25% Iron'> ";
+                    break;
+                case 9:
+                    echo "<img class='r3' src='img/x.gif' title='+25% Iron'><img class='r4' src='img/x.gif' title='+25% Crop'> ";
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                    echo "<img class='r4' src='img/x.gif' title='+50% Crop'> ";
+                    break;
+            }
         }
-		echo "<td class=\"oases\"></td>";
-		
-		// OASIS PART - must to be activated from install part
-		
-		$prefix = "".TB_PREFIX."odata";
-		$uid = $_GET['uid']; $wref = $vil['wref'];
-		$sql = mysqli_query("SELECT * FROM $prefix WHERE owner = $uid AND conqured = $wref");
-		while($row = mysqli_fetch_array($sql)){
-		$type = $row["type"];
-		switch($type) {
-		case 1:
-		case 2:
-		echo  "<img class='r1' src='img/x.gif' title='Lumber'>";
-		break;
-		case 3:
-		echo  "<img class='r1' src='img/x.gif' title='Lumber'> <img class='r4' src='img/x.gif' title='Crop'>";
-		break;
-		case 4:
-		case 5:
-		echo  "<img class='r2' src='img/x.gif' title='Clay'>";
-		break;
-		case 6:
-		echo  "<img class='r2' src='img/x.gif' title='Clay'> <img class='r4' src='img/x.gif' title='Crop'>";
-		case 7:
-		case 8:
-		echo  "<img class='r3' src='img/x.gif' title='Iron'>";
-		break;
-		case 9:
-		echo  "<img class='r3' src='img/x.gif' title='Iron'> <img class='r4' src='img/x.gif' title='Crop'>";
-		break;
-		case 10:
-		case 11:
-		case 12:
-		echo  "<img class='r4' src='img/x.gif' title='Crop'>";
-		break;
-		}
-		}
-		
-		// OASIS PART - must to be activated from install part
 		
 		echo "</td>";
         echo "<td class=\"hab\">".$vil['pop']."</td><td class=\"aligned_coords\">";

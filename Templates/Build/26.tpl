@@ -4,7 +4,7 @@ if(time() - (!empty($_SESSION['time_p']) ? $_SESSION['time_p'] : 0) > 5){
 	$_SESSION['error_p'] = '';
 }
 
-if($_POST and $_GET['action'] == 'change_capital'){
+if($_POST and $_GET['action'] == 'change_capital' && !$village->capital){
 	$pass = mysqli_escape_string($database->dblink, $_POST['pass']);
 	$query = mysqli_query($database->dblink, 'SELECT password FROM `'.TB_PREFIX.'users` WHERE `id` = '.(int)$session->uid);
 	$data = mysqli_fetch_assoc($query);
@@ -16,29 +16,31 @@ if($_POST and $_GET['action'] == 'change_capital'){
 		if($data2['vref'] != $village->wid){
 			for($i = 1; $i <= 18; ++$i){
 				if($data2['f'.$i] > 10){
-					$query2 = mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'` = 10 WHERE `vref` = '.(int)$data2['vref']) or die(mysqli_error($database->dblink));
+					$query2 = mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'` = 10 WHERE `vref` = '.(int)$data2['vref']);
 				}
 			}
 			for($i = 19; $i <= 40; ++$i){
 				if($data2['f'.$i.'t'] == 34){
-					$query3 = mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'t` = 0, `f'.$i.'` = 0 WHERE `vref` = '.(int)$data2['vref']) or die(mysqli_error($database->dblink));
+					$query3 = mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'t` = 0, `f'.$i.'` = 0 WHERE `vref` = '.(int)$data2['vref']);
 				}
 			}
 			
 			for($i = 19; $i <= 40; ++$i){
 				if($data2['f'.$i.'t'] == 29 || $data2['f'.$i.'t'] == 30 || $data2['f'.$i.'t'] == 38 || $data2['f'.$i.'t'] == 39 || $data2['f'.$i.'t'] == 42){
-					$query3 = mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'t` = 0, `f'.$i.'` = 0 WHERE `vref` = '.(int)$village->wid) or die(mysqli_error($database->dblink));
+					$query3 = mysqli_query($database->dblink, 'UPDATE `'.TB_PREFIX.'fdata` SET `f'.$i.'t` = 0, `f'.$i.'` = 0 WHERE `vref` = '.(int)$village->wid);
 				}
 			}	
 			
 			$database->changeCapital((int)$data1['wref'], 0);
 			$database->changeCapital($village->wid);
+			header("location: build.php?gid=26");
+			exit;
 		}
 	}else{
 		$error = '<br /><font color="red">'.LOGIN_PW_ERROR.'</font><br />';
 		$_SESSION['error_p'] = $error;
 		$_SESSION['time_p'] = time();
-		print '<script language="javascript">location.href="build.php?id='.$building->getTypeField(26).'&confirm=yes";</script>';
+		echo '<script language="javascript">location.href="build.php?id='.$building->getTypeField(26).'&confirm=yes";</script>';
 	}
 }
 ?>
@@ -62,7 +64,7 @@ else echo '<div class="c">'.PALACE_TRAIN_DESC.'</div>';
 ?>
 
 <?php
-if($village->capital == $village->wid) {
+if($village->capital == 1) {
 ?>
 <p class="none"><?php echo CAPITAL; ?></p>
 <?php
