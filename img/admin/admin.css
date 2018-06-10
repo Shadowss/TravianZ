@@ -8,6 +8,7 @@ margin-bottom:0px;
 margin-left:0px;
 margin-right:0px;
 font-family: Verdana, Arial, Helvetica, sans-serif;
+overflow-x: hidden;
 }
 
 .none {
@@ -17,10 +18,10 @@ font-family: Verdana, Arial, Helvetica, sans-serif;
 /* Fix */
 .online1, .online2, .online3, .online4, .online5 {width:12px; height:12px;}
 /* Oberer Layer mit Menue ohne Werbung */
-#ltop1 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
+#ltop1 {position:relative; padding-left: 25%; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
 
 /* Oberer Layer mit Menue mit Werbung */
-#ltop2 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mw.gif); background-repeat:repeat-x; left:0px; top:0px;}
+#ltop2 {position:relative; padding-left: 25%; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mw.gif); background-repeat:repeat-x; left:0px; top:0px;}
 
 /* - VERALTET - Oberer Layer mit Mindestbreite fuer IE6 */
 /*#ltop3 {width:777px;} */
