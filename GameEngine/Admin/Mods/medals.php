@@ -24,23 +24,19 @@ for ($i = 0; $i < 5; $i++) {
 
 include_once($autoprefix."GameEngine/Database.php");
 
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
+if(isset($_POST['medalid']) && !empty($_POST['medalid']) && is_numeric($_POST['medalid'])){
+    $medalID = (int) $_POST['medalid'];
+    mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."medal set del = 1 WHERE id = ".$medalID."");
+}
+elseif(isset($_POST['userid']) && !empty($_POST['userid']) && is_numeric($_POST['userid'])){
+    $userID = (int) $_POST['userid'];
+    mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."medal set del = 1 WHERE userid = ".$userID."");
+}
 
-$medalid = (int) $_POST['medalid'];
-$uid = (int) $_POST['uid'];
-$admid = (int) $_POST['admid'];
+$admidID = (int) $_SESSION['id'];
+$name = $database->getUserField($adminID, "name", 0);
+//TODO: Make a dedicated method for logging
+mysqli_query($database->dblink, "INSERT INTO ".TB_PREFIX."admin_log values (0, $admid, 'Deleted medal id [#".$medalid."] from the user <a href=\'admin.php?p=player&uid=$uid\'>$name</a> ',".time().")");
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."medal set del = 1 WHERE id = ".$medalid."");
-
-$name = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT name FROM ".TB_PREFIX."users WHERE id= ".$uid.""), MYSQLI_ASSOC);
-$name = $name['name'];
-
-mysqli_query($GLOBALS["link"], "Insert into ".TB_PREFIX."admin_log values (0,$admid,'Deleted medal id [#".$medalid."] from the user <a href=\'admin.php?p=player&uid=$uid\'>$name</a> ',".time().")");
-
-
-$deleteweek = (int) $_POST['medalweek'];
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."medal set del = 1 WHERE week = ".$deleteweek."");
-
-header("Location: ../../../Admin/admin.php?p=player&uid=".$uid."");
+header("Location: ../../../Admin/admin.php?p=player&uid=".$_POST['uid']."");
 ?>

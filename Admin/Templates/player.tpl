@@ -21,20 +21,14 @@ if(isset($id))
 	$varray = $database->getProfileVillages($id);
 	$refreshiconfrm = "../img/admin/refresh.png";
 	$refreshicon  = "<img src=\"".$refreshiconfrm."\">";
-	if($user)
-	{
+	if($user){
 		$totalpop = 0;
-		foreach($varray as $vil)
-		{
-			$totalpop += $vil['pop'];
-		}
+		foreach($varray as $vil) $totalpop += $vil['pop'];
+
 		include('search2.tpl');
 		echo "<br />";
 		$deletion = false;
-		if($deletion)
-		{
-			include("playerdeletion.tpl");
-		}
+		if($deletion) include("playerdeletion.tpl");
 
         include("playerinfo.tpl");
         include("playerheroinfo.tpl");
@@ -88,9 +82,6 @@ if(isset($id))
 		</table>
 		<?php
 	}
-	else
-	{
-		include("404.tpl");
-	}
+	else include("404.tpl");
 }
 ?>
