@@ -15,6 +15,7 @@ if(mysqli_num_rows($MyGold)){
     if($session->gold == 0) echo "<p>You currently don't own gold.</p>";   
     else echo "<p>You currently have <b> $session->gold </b>  gold</p>";
 }
+
  ?>
 
 
@@ -55,7 +56,7 @@ $date2 = strtotime("NOW");
 
 if ($datetimep == 0) echo "get PLUS<br>";
 else
-{
+
     if ($datetimep <= $date2) {
         print "Your PLUS advantage has ended.<br>";
         mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = '0' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
@@ -477,7 +478,7 @@ if (mysqli_num_rows($MyGold)) {
 }} else {
     echo '<a href="plus.php?id=3"><span class="none">On';}
 }
- ?>
+?>
     </span></a></td>
         </tr>
         </tbody>
