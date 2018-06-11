@@ -17,9 +17,6 @@ if(mysqli_num_rows($MyGold)){
 }
 
  ?>
-
-
-
     <table class="plusFunctions" cellpadding="1" cellspacing="1">
         <thead>
             <tr>
@@ -56,7 +53,7 @@ $date2 = strtotime("NOW");
 
 if ($datetimep == 0) echo "get PLUS<br>";
 else
-
+{
     if ($datetimep <= $date2) {
         print "Your PLUS advantage has ended.<br>";
         mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = '0' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
@@ -100,6 +97,7 @@ if (mysqli_num_rows($MyGold)) {
 
 } else {
     echo '<a href="plus.php?s=1"><span class="none">too little gold';}
+}
 }
  ?>
     </span></a></td>
@@ -339,7 +337,7 @@ echo "<b>  ".($holdmr4). "</b> mins</font>";
             echo ''.(PLUS_PRODUCTION/3600).' Hours';
             } ?></td>
             <td class="cost"><img src="img/x.gif" class="gold" alt="Gold" title="Gold" />5</td>
-            <td <span class="none">
+            <td> <span class="none">
 <?php
 if ($session->access != BANNED){
 if (mysqli_num_rows($MyGold)) {
