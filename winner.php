@@ -23,7 +23,7 @@ $start_timer = $generator->pageLoadTimeStart();
 use App\Utils\AccessLogger;
 
 if (!function_exists('mysqli_result')) {
-    function mysqli_result($res, $row, $field=0) {
+    function mysqli_result($res, $row, $field = 0) {
         $res->data_seek($row);
         $datarow = $res->fetch_array();
         return $datarow[$field];
@@ -38,7 +38,6 @@ if(isset($_GET['newdid'])) {
 	header("Location: ".$_SERVER['PHP_SELF']);
 	exit;
 }
-else $building->procBuild($_GET);
 
 	$sql = mysqli_query($database->dblink,"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
 	$winner = mysqli_num_rows($sql);
