@@ -6678,6 +6678,65 @@ img.r4 {
 img.r5 {
     background-position: -84px 0;
 }
+img.r100,
+img.r200,
+img.r300,
+img.r400,
+img.r500,
+img.r600,
+img.r700,
+img.r800,
+img.r900,
+img.r1000,
+img.r1100 {
+  height: 21px;
+  width: 25px;
+  background-image: url(../../img/a/resNew2.png);
+}
+
+img.r100 {
+  background-position: 0px 0px;
+}
+
+img.r200 {
+  background-position: 0px -21px;
+}
+
+img.r300 {
+  background-position: 0px -42px;
+}
+
+img.r400 {
+  background-position: 0px -63px;
+}
+
+img.r500 {
+  background-position: 0px -84px;
+}
+
+img.r600 {
+  background-position: 0px -105px;
+}
+
+img.r700 {
+  background-position: 0px -126px;
+}
+
+img.r800 {
+  background-position: 0px -147px;
+}
+
+img.r900 {
+  background-position: 0px -168px;
+}
+
+img.r1000 {
+  background-position: 0px -189px;
+}
+
+img.r1100 {
+  background-position: 0px -210px;
+}
 img.attack_symbol_grey, img.attack_symbol_green, img.attack_symbol_yellow, img.attack_symbol_red {
     background-image: url("../../img/a/mark_attack.gif");
     height: 12px;

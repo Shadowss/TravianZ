@@ -169,7 +169,7 @@ if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon
     	$coor = $database->getCoor($vil['wref']);
     	echo "<tr><td class=\"nam\"><a href=\"karte.php?d=".$vil['wref']."&amp;c=".$generator->getMapCheck($vil['wref'])."\">".$vil['name']."</a>";
     	if($vil['capital'] == 1) echo "<span class=\"none3\"> (capital)</span>";
-		echo "<td class=\"oases\">";
+		echo "<td class=\"hab\">";
 		
 		// OASIS PART - must to be activated from install part
 	       
@@ -178,28 +178,31 @@ if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon
             switch ($oasis['type']) {
                 case 1:
                 case 2:
-                    echo "<img class='r1' src='img/x.gif' title='+25% Lumber'> ";
+                    echo "<img class='r100' src='img/x.gif' title='+25% Lumber'> ";
                     break;
                 case 3:
-                    echo "<img class='r1' src='img/x.gif' title='+25% Lumber'><img class='r4' src='img/x.gif' title='+25% Crop'> ";
+                    echo "<img class='r200' src='img/x.gif' title='+25% Lumber +25% Crop'> ";
                     break;
                 case 4:
                 case 5:
-                    echo "<img class='r2' src='img/x.gif' title='+25% Clay'> ";
+                    echo "<img class='r400' src='img/x.gif' title='+25% Clay'> ";
                     break;
                 case 6:
-                    echo "<img class='r2' src='img/x.gif' title='+25% Clay'><img class='r4' src='img/x.gif' title='+25% Crop'> ";
+                    echo "<img class='r500' src='img/x.gif' title='+25% Clay +25% Crop'> ";
+                    break;
                 case 7:
                 case 8:
-                    echo "<img class='r3' src='img/x.gif' title='+25% Iron'> ";
+                    echo "<img class='r700' src='img/x.gif' title='+25% Iron'> ";
                     break;
                 case 9:
-                    echo "<img class='r3' src='img/x.gif' title='+25% Iron'><img class='r4' src='img/x.gif' title='+25% Crop'> ";
+                    echo "<img class='r800' src='img/x.gif' title='+25% Iron +25% Crop'> ";
                     break;
                 case 10:
                 case 11:
+                    echo "<img class='r1000' src='img/x.gif' title='+25% Crop'> ";
+                    break;
                 case 12:
-                    echo "<img class='r4' src='img/x.gif' title='+50% Crop'> ";
+                    echo "<img class='r1100' src='img/x.gif' title='+50% Crop'> ";
                     break;
             }
         }
