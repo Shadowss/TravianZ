@@ -17,29 +17,23 @@ $building->loadBuilding();
 			<?php
             
             if($session->gold >= 2) {
-			if($session->access!=BANNED){
-            ?> <a href="?buildingFinish=1" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="Finish all construction and research orders in this village immediately for 2 Gold?"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
-			<?php
-			}else{
-            ?> <a href="banned.php" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="Finish all construction and research orders in this village immediately for 2 Gold?"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
-		<?php
-			}
+            ?> 
+            	<a href="?buildingFinish=1" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="Finish all construction and research orders in this village immediately for 2 Gold?"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
+			<?php 
             }
             ?>
             </th>
 		</tr></thead>
 		<tbody>
         <?php 
-		$BuildingList = array();
         foreach($building->buildArray as $jobs) {
 		if($jobs['master'] == 0){
         	echo "<tr><td class=\"ico\"><a href=\"?d=".$jobs['id']."&a=0&c=$session->checker\">";
             echo "<img src=\"img/x.gif\" class=\"del\" title=\"cancel\" alt=\"cancel\" /></a></td><td>";
 			echo Building::procResType($jobs['type'])." (Level ".$jobs['level'].")";
-			if($jobs['loopcon'] == 0) { $BuildingList[] = $jobs['field']; }
-            if($jobs['loopcon'] == 1) {
-            	echo " (waiting loop)";
-            }
+
+			if($jobs['loopcon'] == 1) echo " (waiting loop)";
+
             echo "</td><td>in <span id=\"timer".++$session->timer."\">";
             echo $generator->getTimeFormat($jobs['timestamp']-time());
             echo "</span> hrs.</td>";

@@ -5,10 +5,6 @@
 // # FIX BY RONIX ##
 // # TRAVIANZ ##
 // ###########################################################
-if($session->access == BANNED){
-	header("Location: banned.php");
-	exit();
-}
 
 $opt = $database->getAlliPermissions($session->uid, $aid);
 $displayarray = $database->getUserArray($session->uid, 1);

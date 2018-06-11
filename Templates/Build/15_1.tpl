@@ -1,39 +1,25 @@
 <?php
-$ty=(isset($_GET['ty']))? $_GET['ty']:"";
+$ty = (isset($_GET['ty']))? $_GET['ty']:"";
 if(isset($_REQUEST["cancel"]) && $_REQUEST["cancel"] == "1") {
-if($session->access != BANNED){
     $database->delDemolition($village->wid);
     header("Location: build.php?gid=15&ty=$ty&cancel=0&demolish=0");
 	exit;
-}else{
-	header("Location: banned.php");
-	exit;
-}
 }
 
-if ($session->alliance) {
-	$memberCount = $database->countAllianceMembers($session->alliance);
-} else {
-	$memberCount = 0;
-}
+if($session->alliance) $memberCount = $database->countAllianceMembers($session->alliance);
+else $memberCount = 0;
 
 if(!empty($_REQUEST["demolish"]) && $_REQUEST["c"] == $session->mchecker) {
-if($session->access != BANNED){
     if($_REQUEST["type"] != null && ($_REQUEST["type"] >= 19 && $_REQUEST["type"] <= 40 || $_REQUEST["type"] == 99)) {
         $type = $_REQUEST['type'];
         $demolish_permitted = $database->addDemolition($village->wid,$type);
         if ($demolish_permitted === true) {
-        	$session->changeChecker();
-        	header("Location: build.php?gid=15&ty=$type&cancel=0&demolish=0");
-        } else {
-        	header("Location: build.php?gid=15&ty=$type&nodemolish=".$demolish_permitted);
-        }
-		exit;
+            $session->changeChecker();
+            header("Location: build.php?gid=15&ty=$type&cancel=0&demolish=0");
+        } 
+        else header("Location: build.php?gid=15&ty=$type&nodemolish=".$demolish_permitted);
+        exit;
     }
-}else{
-	header("Location: banned.php");
-	exit;
-}
 }
 
 if($village->resarray['f'.$id] >= DEMOLISH_LEVEL_REQ) {
@@ -46,13 +32,9 @@ if($village->resarray['f'.$id] >= DEMOLISH_LEVEL_REQ) {
         echo "<a href='build.php?id=".$_GET['id']."&ty=".$ty."&cancel=1'><img src='img/x.gif' class='del' title='".CANCEL."' alt='cancel'></a> ";
         echo "".DEMOLITION_OF." ".$building->procResType($VillageResourceLevels['f'.$Demolition['buildnumber'].'t']).": <span id=timer1>".$generator->getTimeFormat($Demolition['timetofinish']-time())."</span>";
             if($session->gold >= 2) {
-            if($session->access!=BANNED){
-            ?> <a href="?id=15&buildingFinish=1&ty=<?php echo $ty;?>" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="<?php echo FINISH_GOLD; ?>"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
+            ?> 
+            <a href="?id=15&buildingFinish=1&ty=<?php echo $ty;?>" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="<?php echo FINISH_GOLD; ?>"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
             <?php
-            }else{
-            ?> <a href="banned.php" title="<?php echo FINISH_GOLD; ?>"><img class="clock" alt="Finish all construction and research orders in this village immediately for 2 Gold?" src="img/x.gif"/></a>
-        <?php
-            }
 }
 echo "</b>";
 } else {

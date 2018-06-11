@@ -370,46 +370,42 @@ class Technology {
 
 	private function procTrain($post, $great = false) {
 		global $session;
-		if($session->access != BANNED){
-			// first of all, check if we're not trying to train chieftain
-            // and settlers together - which we cannot, since that can result
-            // in 1 chieftain and 3 settlers, then conquering a village, then
-            // founding a new one, all with only 1 available slot
-            if (
-                !(
-                    (!empty($post['t9']) && !empty($post['t10'])) ||
-                    (!empty($post['t19']) && !empty($post['t20'])) ||
-                    (!empty($post['t29']) && !empty($post['t30'])) ||
-                    (!empty($post['t39']) && !empty($post['t40'])) ||
-                    (!empty($post['t49']) && !empty($post['t50']))
-                )
-            ) {
-                $start = ($session->tribe - 1) * 10 + 1;
-                $end   = ($session->tribe * 10);
-                for ($i = $start; $i <= $end; $i ++ ) {
-                    if (isset($post['t'.$i]) && $post['t'.$i] != 0) {
-                        $amt = intval($post['t'.$i]);
-                        if ($amt < 0) $amt = 1;
-                        $this->trainUnit($i, $amt, $great);
-                    }
-                }
-
-                if($session->tribe == 3)
-                {
-                    if (isset($post['t99']) && $post['t99'] != 0) {
-                        $amt = intval($post['t99']);
-                        if ($amt < 0) $amt = 1;
-                        $this->trainUnit(99, $amt, $great);
-                    }
-                }
-             
-                header( "Location: build.php?id=" . $post['id'] );
-                exit;
-            }
-	    }else{
-		    header("Location: banned.php");
-		    exit;
-	    }
+			
+		// first of all, check if we're not trying to train chieftain
+		// and settlers together - which we cannot, since that can result
+		// in 1 chieftain and 3 settlers, then conquering a village, then
+		// founding a new one, all with only 1 available slot
+		if (
+		    !(
+		        (!empty($post['t9']) && !empty($post['t10'])) ||
+		        (!empty($post['t19']) && !empty($post['t20'])) ||
+		        (!empty($post['t29']) && !empty($post['t30'])) ||
+		        (!empty($post['t39']) && !empty($post['t40'])) ||
+		        (!empty($post['t49']) && !empty($post['t50']))
+		        )
+		    ) {
+		        $start = ($session->tribe - 1) * 10 + 1;
+		        $end   = ($session->tribe * 10);
+		        for ($i = $start; $i <= $end; $i ++ ) {
+		            if (isset($post['t'.$i]) && $post['t'.$i] != 0) {
+		                $amt = intval($post['t'.$i]);
+		                if ($amt < 0) $amt = 1;
+		                $this->trainUnit($i, $amt, $great);
+		            }
+		        }
+		        
+		        if($session->tribe == 3)
+		        {
+		            if (isset($post['t99']) && $post['t99'] != 0) {
+		                $amt = intval($post['t99']);
+		                if ($amt < 0) $amt = 1;
+		                $this->trainUnit(99, $amt, $great);
+		            }
+		        }
+		        
+		        header( "Location: build.php?id=" . $post['id'] );
+		        exit;
+		    }
 	}
 
 	public function getUpkeep($array, $type, $vid = 0, $prisoners = 0) {

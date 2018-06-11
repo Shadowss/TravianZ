@@ -5,7 +5,7 @@ $start_timer = $generator->pageLoadTimeStart();
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       banned.php                                                  ##
+##  Filename       packages.php                                                  ##
 ##  Developed by:  yi12345                                                     ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##                                                                             ##
@@ -17,7 +17,6 @@ include_once("GameEngine/Village.php");
 AccessLogger::logRequest();
 
 $id = $_GET['id'];
-if($session->access != BANNED){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -112,6 +111,3 @@ echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
 <div id="ce"></div>
 </body>
 </html>
-<?php
-}
-else{header("Location: banned.php");exit;}?>

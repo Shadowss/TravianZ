@@ -1,6 +1,6 @@
 <?php
 //////////////     made by alq0rsan, improved by evader   /////////////////////////
-if($session->access != BANNED && $session->gold >= 5){
+if($session->gold >= 5){
     $MyGold = mysqli_query($database->dblink,"SELECT gold, b1 FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
     $golds = mysqli_fetch_array($MyGold);
 	if($session->sit == 0) {
@@ -23,9 +23,6 @@ if($session->access != BANNED && $session->gold >= 5){
 		}
 	}
 	header("Location: plus.php?id=3");
-	exit;
-} else {
-	header("Location: banned.php");
 	exit;
 }
 ?>

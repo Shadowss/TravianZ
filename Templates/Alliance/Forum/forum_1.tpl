@@ -5,10 +5,6 @@
 ##                     FIX BY RONIX                       ##
 ##                       TRAVIANZ                         ##
 ############################################################
-if($session->access == BANNED){
-	header("Location: banned.php");
-	exit;
-}
 
 if($session->access != ADMIN && ($session->alliance == 0 || ($session->alliance > 0 && !$opt['opt5']))) $alliance->redirect($_GET);
 

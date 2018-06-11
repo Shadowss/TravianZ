@@ -1,9 +1,5 @@
 <?php
 //////////////// made by TTMTT ////////////////
-if($session->access == BANNED){
-	header("Location: banned.php");
-	exit;
-}
 	
 $tid = $_GET['tid'];
 $topic = reset($database->ShowTopic($tid));

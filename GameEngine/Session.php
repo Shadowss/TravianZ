@@ -172,7 +172,7 @@ class Session {
         		    $admin = true;
         		}
 
-        		if($user && ($admin || isset($_SESSION['sessid']))) {
+        		if($user && ($admin || isset($_SESSION['sessid']))) {        		    
         		    $this->maintenance();
         		    $this->isWinner();
         			
@@ -187,6 +187,10 @@ class Session {
 
         			//Get and Populate Data
         			$this->PopulateVar();
+        			
+        			//Check if the player is banned
+        			$this->isBanned();
+        			
         			//update database
         			$database->updateActiveUser($user, $this->time);
             		return true;
@@ -194,6 +198,18 @@ class Session {
         		else return false;
     		}
 
+    		/**
+    		 * Called if the player is banned
+    		 *
+    		 */
+    		
+    		function isBanned(){
+    		    if($this->access == BANNED && !in_array(basename($_SERVER['PHP_SELF']), ['banned.php', 'nachrichten.php', 'rules.php'])){
+    		        header('Location: banned.php');
+    		        exit;
+    		    }
+    		}
+    		
     		/**
     		 * Called when the server is under maintenance
     		 * 

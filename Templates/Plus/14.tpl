@@ -1,6 +1,6 @@
 <?php
 //////////////     made by alq0rsan   /////////////////////////
-if($session->access != BANNED){
+
     $MyVilId = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."vdata WHERE `wref`='".$village->wid."'") or die(mysqli_error($database->dblink));
     $uuVilid = mysqli_fetch_array($MyVilId);
 
@@ -25,8 +25,5 @@ echo "failed";
 
 header("Location: plus.php?id=3");
 exit;
-}else{
-header("Location: banned.php");
-exit;
-}
+
  ?>

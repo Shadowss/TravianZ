@@ -253,278 +253,264 @@ class Units {
             }
         }
 
-        if ($data['u11'] > $village->unitarray['hero']) $form->addError("error", "You can't send more units than you have");
-        if ($data['u11'] < 0) $form->addError("error", "You can't send negative units.");   
+        if($data['u11'] > $village->unitarray['hero']) $form->addError("error", "You can't send more units than you have");
+        if($data['u11'] < 0) $form->addError("error", "You can't send negative units.");   
         if($data['type'] != 1 && $post['spy'] != 0) $post['spy'] = 0;
         
-        if ($form->returnErrors() > 0) {
+        if($form->returnErrors() > 0){
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
             header( "Location: a2b.php" );
             exit;
-        } else {
-            if ($session->access != BANNED) {
-                $u = ($session->tribe == 1) ? "" : $session->tribe - 1;
-
-                $database->modifyUnit(
-                    $village->wid,
-                    [
-                        $u . "1",
-                        $u . "2",
-                        $u . "3",
-                        $u . "4",
-                        $u . "5",
-                        $u . "6",
-                        $u . "7",
-                        $u . "8",
-                        $u . "9",
-                        $u . $session->tribe . "0",
-                        "hero"
-                    ],
-                    [
-                        $data['u1'],
-                        $data['u2'],
-                        $data['u3'],
-                        $data['u4'],
-                        $data['u5'],
-                        $data['u6'],
-                        $data['u7'],
-                        $data['u8'],
-                        $data['u9'],
-                        $data['u10'],
-                        $data['u11']
-                    ],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        }else{
+            $u = ($session->tribe == 1) ? "" : $session->tribe - 1;
+            
+            $database->modifyUnit(
+                $village->wid,
+                [
+                    $u . "1",
+                    $u . "2",
+                    $u . "3",
+                    $u . "4",
+                    $u . "5",
+                    $u . "6",
+                    $u . "7",
+                    $u . "8",
+                    $u . "9",
+                    $u . $session->tribe . "0",
+                    "hero"
+                ],
+                [
+                    $data['u1'],
+                    $data['u2'],
+                    $data['u3'],
+                    $data['u4'],
+                    $data['u5'],
+                    $data['u6'],
+                    $data['u7'],
+                    $data['u8'],
+                    $data['u9'],
+                    $data['u10'],
+                    $data['u11']
+                ],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 );
-
-                $troopsTime = $this->getWalkingTroopsTime($village->wid, $data['to_vid'], $session->uid, $session->tribe, $data, 1, 'u');
-                $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);  
-                
-                // Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
-                // If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
-                // Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
-                // Fixed by Advocaite and Shadow - Optimized by iopietro
-
-                $to_owner = $database->getVillageField($data['to_vid'], "owner");
-                $rivalsGreatConfusion = $database->getArtifactsSumByKind($to_owner, $data['to_vid'], 7);                    
-
-                $rallyPointLevel = ($village->resarray)['f39'];
-                $invalidBuildings = [];
-                
-                // fill the array with the invalid buildings
-                if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
-                    for($i = 1; $i <= 37; $i++){
-                        if(!in_array($i, [10, 11])) $invalidBuildings[] = $i;
-                    }
+            
+            $troopsTime = $this->getWalkingTroopsTime($village->wid, $data['to_vid'], $session->uid, $session->tribe, $data, 1, 'u');
+            $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
+            
+            // Check if have WW owner have artefact Rivals great confusion or Artefact of the unique fool with that effect
+            // If is a WW village you can target on WW , if is not a WW village catapults will target randomly.
+            // Like it says : Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact.
+            // Fixed by Advocaite and Shadow - Optimized by iopietro
+            
+            $to_owner = $database->getVillageField($data['to_vid'], "owner");
+            $rivalsGreatConfusion = $database->getArtifactsSumByKind($to_owner, $data['to_vid'], 7);
+            
+            $rallyPointLevel = ($village->resarray)['f39'];
+            $invalidBuildings = [];
+            
+            // fill the array with the invalid buildings
+            if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
+                for($i = 1; $i <= 37; $i++){
+                    if(!in_array($i, [10, 11])) $invalidBuildings[] = $i;
                 }
-                else if($rallyPointLevel >= 5 && $rallyPointLevel < 10){
-                    for($i = 12; $i <= 37; $i++) $invalidBuildings[] = $i; 
+            }
+            else if($rallyPointLevel >= 5 && $rallyPointLevel < 10){
+                for($i = 12; $i <= 37; $i++) $invalidBuildings[] = $i;
+            }
+            else if($rallyPointLevel >= 10){
+                $invalidBuildings = [23, 31, 32, 33, 34, 36];
+            }
+            
+            if(isset($post['ctar1']) && $post['ctar1'] != 0){
+                // check if the player has selected a valid building
+                if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
+                    $post['ctar1'] = 0;
                 }
-                else if($rallyPointLevel >= 10){
-                    $invalidBuildings = [23, 31, 32, 33, 34, 36];
-                }            
-                
-                if(isset($post['ctar1']) && $post['ctar1'] != 0){
+            }
+            
+            if(isset($post['ctar2']) && $post['ctar2'] != 0){
+                // check if there are atleast 20 catapults
+                if($data['u8'] < 20 || $rallyPointLevel != 20){
+                    $post['ctar2'] = 0;
+                }else{
                     // check if the player has selected a valid building
-                    if($rallyPointLevel < 3 || $data['u8'] == 0 || in_array($post['ctar1'], $invalidBuildings) || $post['ctar1'] < 0 || $post['ctar1'] > 40){
-                        $post['ctar1'] = 0;
+                    if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
+                        $post['ctar2'] = 99;
                     }
                 }
-                
-                if(isset($post['ctar2']) && $post['ctar2'] != 0){
-                    // check if there are atleast 20 catapults
-                    if($data['u8'] < 20 || $rallyPointLevel != 20){
-                        $post['ctar2'] = 0;
-                    }else{
-                        // check if the player has selected a valid building
-                        if(in_array($post['ctar2'], $invalidBuildings) || ($post['ctar2'] < 0 || $post['ctar2'] > 40 && $post['ctar2'] != 99)){
+            }
+            
+            if(isset($post['ctar1'])) {
+                //Is the Brewery built?
+                if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+                    if($rivalsGreatConfusion['totals'] > 0) {
+                        if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
+                            $post['ctar1'] = 0;
+                        }
+                    }
+                }
+                else $post['ctar1'] = 0;
+            }
+            else $post['ctar1'] = 0;
+            
+            if(isset($post['ctar2']) && $post['ctar2'] > 0) {
+                //Is the Brewery built?
+                if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
+                    if($rivalsGreatConfusion['totals'] > 0) {
+                        if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
                             $post['ctar2'] = 99;
                         }
                     }
                 }
-
-                if(isset($post['ctar1'])) {
-                    //Is the Brewery built?
-                    if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
-                        if($rivalsGreatConfusion['totals'] > 0) {
-                            if($post['ctar1'] != 40 && ($post['ctar1'] != 27 || ($post['ctar1'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                                $post['ctar1'] = 0;
-                            }
-                        }
-                    }
-                    else $post['ctar1'] = 0;               
-                } 
-                else $post['ctar1'] = 0;
-                
-                if(isset($post['ctar2']) && $post['ctar2'] > 0) {
-                    //Is the Brewery built?
-                    if($session->tribe != 2 || $database->getFieldLevelInVillage($village->wid, 35) == 0){
-                        if($rivalsGreatConfusion['totals'] > 0) {
-                            if ($post['ctar2'] != 40 && ($post['ctar2'] != 27 || ($post['ctar2'] == 27 && $rivalsGreatConfusion['unique'] > 0))) {
-                                $post['ctar2'] = 99;
-                            }
-                        }
-                    }
-                    else $post['ctar2'] = 99;
+                else $post['ctar2'] = 99;
+            }
+            else $post['ctar2'] = 0;
+            
+            if(!isset($post['spy'])) $post['spy'] = 0;
+            
+            $abdata      = $database->getABTech($village->wid);
+            $reference   = $database->addAttack(($village->wid), $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], $data['type'], $post['ctar1'], $post['ctar2'], $post['spy'], $abdata['b1'], $abdata['b2'], $abdata['b3'], $abdata['b4'], $abdata['b5'], $abdata['b6'], $abdata['b7'], $abdata['b8']);
+            $checkexist  = $database->checkVilExist($data['to_vid']);
+            $checkoexist = $database->checkOasisExist($data['to_vid']);
+            if($checkexist || $checkoexist) {
+                $database->addMovement(3, $village->wid, $data['to_vid'], $reference, time(), ($time + time()));
+                if ($database->hasBeginnerProtection($village->wid) == 1 && $checkexist) {
+                    mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "users SET protect = 0 WHERE id = ".(int) $session->uid);
                 }
-                else $post['ctar2'] = 0;
-                
-                if(!isset($post['spy'])) $post['spy'] = 0;
-                
-                $abdata      = $database->getABTech($village->wid);
-                $reference   = $database->addAttack(($village->wid), $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], $data['type'], $post['ctar1'], $post['ctar2'], $post['spy'], $abdata['b1'], $abdata['b2'], $abdata['b3'], $abdata['b4'], $abdata['b5'], $abdata['b6'], $abdata['b7'], $abdata['b8']);
-                $checkexist  = $database->checkVilExist($data['to_vid']);
-                $checkoexist = $database->checkOasisExist($data['to_vid']);
-                if($checkexist || $checkoexist) {
-                    $database->addMovement(3, $village->wid, $data['to_vid'], $reference, time(), ($time + time()));
-                    if ($database->hasBeginnerProtection($village->wid) == 1 && $checkexist) {
-                        mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "users SET protect = 0 WHERE id = ".(int) $session->uid);
-                    }
-                }
-
-                if($form->returnErrors() > 0) {
-                    $_SESSION['errorarray'] = $form->getErrors();
-                    $_SESSION['valuearray'] = $_POST;
-                    header("Location: a2b.php" );
-                    exit;
-                }
-
-                // prevent re-use of the same attack via re-POSTing the same data
-                $database->remA2b($data['id']);
-
-                header("Location: build.php?id=39");
-                exit;
-            } else {
-                header("Location: banned.php");
+            }
+            
+            if($form->returnErrors() > 0) {
+                $_SESSION['errorarray'] = $form->getErrors();
+                $_SESSION['valuearray'] = $_POST;
+                header("Location: a2b.php" );
                 exit;
             }
+            
+            // prevent re-use of the same attack via re-POSTing the same data
+            $database->remA2b($data['id']);
+            
+            header("Location: build.php?id=39");
+            exit;
         }
     }
 
     private function sendTroopsBack($post) {
         global $form, $database, $village, $session, $technology;
-        if ( $session->access != BANNED ) {
-            $enforce      = $database->getEnforceArray( $post['ckey'], 0 );
-            $enforceoasis = $database->getOasisEnforceArray( $post['ckey'], 0 );
-            if ( ( $enforce['from'] == $village->wid ) || ( $enforce['vref'] == $village->wid ) || ( $enforceoasis['conqured'] == $village->wid ) ) {
-                $to     = $database->getVillage( $enforce['from'] );
-                $Gtribe = ($ownerTribe = $database->getUserField( $to['owner'], 'tribe', 0)) == 1 ? "" : $ownerTribe - 1;
 
-                for ( $i = 1; $i < 10; $i ++ ) {
-                    if ( isset( $post[ 't' . $i ] ) ) {
-                        if ( $i != 10 ) {
-                            if ( $post[ 't' . $i ] > $enforce[ 'u' . $Gtribe . $i ] ) {
-                                $form->addError( "error", "You can't send back more units than you have" );
-                                break;
-                            }
-
-                            if ( $post[ 't' . $i ] < 0 ) {
-                                $form->addError( "error", "You can't send back negative units." );
-                                break;
-                            }
+        $enforce      = $database->getEnforceArray( $post['ckey'], 0 );
+        $enforceoasis = $database->getOasisEnforceArray( $post['ckey'], 0 );
+        if ( ( $enforce['from'] == $village->wid ) || ( $enforce['vref'] == $village->wid ) || ( $enforceoasis['conqured'] == $village->wid ) ) {
+            $to     = $database->getVillage( $enforce['from'] );
+            $Gtribe = ($ownerTribe = $database->getUserField( $to['owner'], 'tribe', 0)) == 1 ? "" : $ownerTribe - 1;
+            
+            for ( $i = 1; $i < 10; $i ++ ) {
+                if ( isset( $post[ 't' . $i ] ) ) {
+                    if ( $i != 10 ) {
+                        if ( $post[ 't' . $i ] > $enforce[ 'u' . $Gtribe . $i ] ) {
+                            $form->addError( "error", "You can't send back more units than you have" );
+                            break;
                         }
-                    } else {
-                        $post[ 't' . $i . '' ] = '0';
-                    }
-                }
-                if ( isset( $post['t11'] ) ) {
-                    if ( $post['t11'] > $enforce['hero'] ) {
-                        $form->addError( "error", "You can't send back more units than you have" );
-                    }
-
-                    if ( $post['t11'] < 0 ) {
-                        $form->addError( "error", "You can't send back negative units." );
+                        
+                        if ( $post[ 't' . $i ] < 0 ) {
+                            $form->addError( "error", "You can't send back negative units." );
+                            break;
+                        }
                     }
                 } else {
-                    $post['t11'] = '0';
+                    $post[ 't' . $i . '' ] = '0';
                 }
-
-                if ( $form->returnErrors() > 0 ) {
-                    $_SESSION['errorarray'] = $form->getErrors();
-                    $_SESSION['valuearray'] = $_POST;
-                    header( "Location: a2b.php" );
-                    exit;
-                } else {
-
-                    //change units
-                    $tribe = $database->getUserField($to['owner'], 'tribe', 0);
-                    $start = ($tribe - 1 ) * 10 + 1;
-                    $end = $tribe * 10 ;
-
-                    $units = [];
-                    $amounts = [];
-                    $modes = [];
-
-                    $j = 1;
-                    for ( $i = $start; $i <= $end; $i ++ ) {
-                        $units[] = $i;
-                        $amounts[] = $post[ 't' . $j . '' ];
-                        $modes[] = 0;
-                        $j ++;
-                    }
-
-                    $units[] = 'hero';
-                    $amounts[] = $post['t11'];
+            }
+            if ( isset( $post['t11'] ) ) {
+                if ( $post['t11'] > $enforce['hero'] ) {
+                    $form->addError( "error", "You can't send back more units than you have" );
+                }
+                
+                if ( $post['t11'] < 0 ) {
+                    $form->addError( "error", "You can't send back negative units." );
+                }
+            } else {
+                $post['t11'] = '0';
+            }
+            
+            if ( $form->returnErrors() > 0 ) {
+                $_SESSION['errorarray'] = $form->getErrors();
+                $_SESSION['valuearray'] = $_POST;
+                header( "Location: a2b.php" );
+                exit;
+            } else {
+                
+                //change units
+                $tribe = $database->getUserField($to['owner'], 'tribe', 0);
+                $start = ($tribe - 1 ) * 10 + 1;
+                $end = $tribe * 10 ;
+                
+                $units = [];
+                $amounts = [];
+                $modes = [];
+                
+                $j = 1;
+                for ( $i = $start; $i <= $end; $i ++ ) {
+                    $units[] = $i;
+                    $amounts[] = $post[ 't' . $j . '' ];
                     $modes[] = 0;
-
-                    $database->modifyEnforce($post['ckey'], $units, $amounts, $modes);
-                    $j++;
-                    
-                    $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $post, 1, 't');
-                    $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
-                    
-                    $reference = $database->addAttack($enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0);
-					$database->addMovement(4, $village->wid, $enforce['from'], $reference, time(), ($time + time()));
-					$technology->checkReinf($post['ckey'], false);
-
-                    header("Location: build.php?id=39&refresh=1");
-					exit();
-				}
-			}else{
-				$form->addError("error", "You cant change someones troops.");
-				if($form->returnErrors() > 0){
-					$_SESSION['errorarray'] = $form->getErrors();
-					$_SESSION['valuearray'] = $_POST;
-					header("Location: a2b.php");
-					exit();
-				}
-			}
-		}else{
-			header("Location: banned.php");
-			exit();
-		}
+                    $j ++;
+                }
+                
+                $units[] = 'hero';
+                $amounts[] = $post['t11'];
+                $modes[] = 0;
+                
+                $database->modifyEnforce($post['ckey'], $units, $amounts, $modes);
+                $j++;
+                
+                $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $post, 1, 't');
+                $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
+                
+                $reference = $database->addAttack($enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0);
+                $database->addMovement(4, $village->wid, $enforce['from'], $reference, time(), ($time + time()));
+                $technology->checkReinf($post['ckey'], false);
+                
+                header("Location: build.php?id=39&refresh=1");
+                exit();
+            }
+        }else{
+            $form->addError("error", "You cant change someones troops.");
+            if($form->returnErrors() > 0){
+                $_SESSION['errorarray'] = $form->getErrors();
+                $_SESSION['valuearray'] = $_POST;
+                header("Location: a2b.php");
+                exit();
+            }
+        }
     }
     
     public function Settlers($post) {
         global $form, $database, $village, $session;
-		
-        if ($session->access != BANNED) {
-            $mode = CP;
-            $total = count($database->getProfileVillages($session->uid));
-            $need_cps = ${'cp'.$mode}[$total + 1];
-            $cps = $session->cp;
-            $rallypoint = $database->getResourceLevel($village->wid);
 
-            //-- Prevent user from founding a new village if there are not enough settlers or the player put an invalid village ID or an already occupied one
-            //-- fix by AL-Kateb - Semplified and additions by iopietro
-            if ($rallypoint['f39'] > 0 && $village->unitarray['u'.$session->tribe.'0'] >= 3 && isset($post['s']) && ($newvillage = $database->getMInfo($post['s']))['id'] > 0 && $newvillage['occupied'] == 0 && $newvillage['oasistype'] == 0) {
-                if ($cps >= $need_cps) {
-                    $troopsTime = $this->getWalkingTroopsTime($village->wid, $newvillage['id'], 0, 0, [300], 0);
-                    $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
-                    
-                    $unit = ($session->tribe * 10);
-                    $database->modifyResource($village->wid, 750, 750, 750, 750, 0);
-                    $database->modifyUnit($village->wid, [$unit], [3], [0]);
-                    $database->addMovement(5, $village->wid, $post['s'], 0, time(), time() + $time);
-                }
-                header("Location: build.php?id=39");
-                exit;
-            } else {
-                header("Location: dorf1.php");
-                exit;
+        $mode = CP;
+        $total = count($database->getProfileVillages($session->uid));
+        $need_cps = ${'cp'.$mode}[$total + 1];
+        $cps = $session->cp;
+        $rallypoint = $database->getResourceLevel($village->wid);
+        
+        //-- Prevent user from founding a new village if there are not enough settlers or the player put an invalid village ID or an already occupied one
+        //-- fix by AL-Kateb - Semplified and additions by iopietro
+        if ($rallypoint['f39'] > 0 && $village->unitarray['u'.$session->tribe.'0'] >= 3 && isset($post['s']) && ($newvillage = $database->getMInfo($post['s']))['id'] > 0 && $newvillage['occupied'] == 0 && $newvillage['oasistype'] == 0) {
+            if ($cps >= $need_cps) {
+                $troopsTime = $this->getWalkingTroopsTime($village->wid, $newvillage['id'], 0, 0, [300], 0);
+                $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
+                
+                $unit = ($session->tribe * 10);
+                $database->modifyResource($village->wid, 750, 750, 750, 750, 0);
+                $database->modifyUnit($village->wid, [$unit], [3], [0]);
+                $database->addMovement(5, $village->wid, $post['s'], 0, time(), time() + $time);
             }
+            header("Location: build.php?id=39");
+            exit;
         } else {
-            header("Location: banned.php");
+            header("Location: dorf1.php");
             exit;
         }
     }

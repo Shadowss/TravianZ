@@ -12,7 +12,6 @@ include("Templates/Plus/pmenu.tpl");
     <h2>How is it done?</h2>
 
     <h3>1) Invite your friends via Email</h3>
-<?php if($session->access != BANNED){ ?>
 	<form action="plus.php" method="POST">
     <p><input class="mail" name="mail" value=""></p>
 	<p>Own text:</p>
@@ -21,9 +20,6 @@ hi, please use this link.
 <?php echo HOMEPAGE.(substr(HOMEPAGE, -1)=="/" ? "":"/"); ?>anmelden.php?uid=ref_<?php echo $session->uid; ?>
 </textarea></p>
 	</form>
-<?php }else{ ?>
-    <p><a href="banned.php">&raquo; Invite by e-mail</a></p>
-<?php } ?>
     <h3>2) Copy your personal REF-Link and share it!</h3><span class="notice">Your personal REF Link:</span>
     <br>
     <span class="link"><?php echo HOMEPAGE.(substr(HOMEPAGE, -1)=="/" ? "":"/");?>anmelden.php?uid=ref_<?php echo $session->uid; ?></span>

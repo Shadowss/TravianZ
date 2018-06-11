@@ -94,6 +94,7 @@ class Market
         $ctrans = str_replace("-", "", $ctrans);
         $itrans = str_replace("-", "", $itrans);
         $crtrans = str_replace("-", "", $crtrans);
+        
         // preload all village data, since we're retrieving some of those separately below
         $database->getVillage($village->wid);
 
@@ -101,15 +102,11 @@ class Market
         $availableClay = $database->getClayAvailable($village->wid);
         $availableIron = $database->getIronAvailable($village->wid);
         $availableCrop = $database->getCropAvailable($village->wid);
-		//check if vacation mode:
+        
+		//check if on vacation:
         if($database->getvacmodexy($id)) $form->addError("error", USER_ON_VACATION);
 
-        if($session->access == BANNED)
-        {
-            header("Location: banned.php");
-            exit;
-        }
-        elseif(!$database->checkVilExist($post['getwref'])) $form->addError("error", NO_COORDINATES_SELECTED);
+        if(!$database->checkVilExist($post['getwref'])) $form->addError("error", NO_COORDINATES_SELECTED);
         elseif($post['getwref'] == $village->wid) $form->addError("error", CANNOT_SEND_RESOURCES);
         elseif($post['send3'] < 1 || $post['send3'] > 3 || ($post['send3'] > 1 && !$session->goldclub)) $form->addError("error", INVALID_MERCHANTS_REPETITION);
         elseif($availableWood >= $post['r1'] && $availableClay >= $post['r2'] && $availableIron >= $post['r3'] && $availableCrop >= $post['r4'])
@@ -190,13 +187,7 @@ class Market
             $availableIron = $database->getIronAvailable($village->wid);
             $availableCrop = $database->getCropAvailable($village->wid);
 
-            if($session->access == BANNED)
-            {
-                header("Location: banned.php");
-                exit;
-            }
-
-            elseif($availableWood >= $wood && $availableClay >= $clay && $availableIron >= $iron && $availableCrop >= $crop)
+            if($availableWood >= $wood && $availableClay >= $clay && $availableIron >= $iron && $availableCrop >= $crop)
             {
                 $reqMerc = 1;
 
@@ -355,18 +346,10 @@ class Market
         global $session,$database,$village;
 
         $wwvillage = $database->getResourceLevel($village->wid);
-        if($wwvillage['f99t'] != 40)
-        {
-            if($session->userinfo['gold'] >= 3)
-            {
-                //check if there are too many resources
-                if($session->access == BANNED)
-                {
-                    header("Location: banned.php");
-                    exit;
-                }
-                else if (($post['m2'][0]+$post['m2'][1]+$post['m2'][2]+$post['m2'][3])<=(round($village->awood)+round($village->aclay)+round($village->airon)+round($village->acrop)))
-                {
+        if($wwvillage['f99t'] != 40){
+            if($session->userinfo['gold'] >= 3){
+                //Check if there are too many resources
+                if(($post['m2'][0]+$post['m2'][1]+$post['m2'][2]+$post['m2'][3])<=(round($village->awood)+round($village->aclay)+round($village->airon)+round($village->acrop))){
                     $database->setVillageField(
                         $village->wid,
                         ["wood", "clay", "iron", "crop"],
@@ -375,15 +358,11 @@ class Market
                     $database->modifyGold($session->uid, 3, 0);
                     header("Location: build.php?id=".$post['id']."&t=3&c");;
                     exit;
-                }
-                else
-                {
+                }else{
                     header("Location: build.php?id=".$post['id']."&t=3");
                     exit;
                 }
-            }
-            else
-            {
+            }else{
                 header("Location: build.php?id=".$post['id']."&t=3");
                 exit;
             }

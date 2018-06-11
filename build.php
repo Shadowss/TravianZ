@@ -71,120 +71,94 @@ if ($session->goldclub == 1 && count($session->villages) > 1) {
     if (isset($_POST['routeid'])) $routeid = $_POST['routeid'];
 
     if (isset($_POST['action']) && $_POST['action'] == 'addRoute') {
-        if ($session->access != BANNED) {
-            if ($session->gold >= 2 && $session->goldclub == 1) {
-                for ($i = 1; $i <= 4; $i ++) {
-                    if (empty($_POST['r'.$i])) {
-                        $_POST['r'.$i] = 0;
-                    }
-                }
-
-                $totalres = preg_replace("/[^0-9]/", "", $_POST['r1']) + preg_replace("/[^0-9]/", "", $_POST['r2']) + preg_replace("/[^0-9]/", "", $_POST['r3']) + preg_replace("/[^0-9]/", "", $_POST['r4']);
-                $reqMerc  = ceil(($totalres - 0.1) / $market->maxcarry);
-                $second   = date("s");
-                $minute   = date("i");
-                $hour     = date("G") - $_POST['start'];
-
-                if (date("G") > $_POST['start']) $day = 1;      
-                else $day = 0;             
-
-                $timestamp = strtotime("-$hour hours -$second second -$minute minutes +$day day");
-
-                if ($totalres > 0 && $_POST['tvillage'] != $village->wid && in_array($_POST['tvillage'], $session->villages) && ($_POST['start'] >= 0 && $_POST['start'] <= 23) && ($_POST['deliveries'] >= 1 && $_POST['deliveries'] <= 3)) {
-                    $database->createTradeRoute($session->uid, $_POST['tvillage'], $village->wid, $_POST['r1'], $_POST['r2'], $_POST['r3'], $_POST['r4'], $_POST['start'], $_POST['deliveries'], $reqMerc, $timestamp);
-                    $route = 1;
-                    header("Location: build.php?gid=17&t=4");
-                    exit;            
-                } else {
-                    $route = 1;
-                    header("Location: build.php?gid=17&t=4&create");
-                    exit;                 
-                }
+        if ($session->gold >= 2 && $session->goldclub == 1) {
+            for ($i = 1; $i <= 4; $i ++) {
+                if (empty($_POST['r'.$i])) $_POST['r'.$i] = 0;
             }
-        } else {
-            $route = 0;
-            header("Location: banned.php");
-            exit;
+            
+            $totalres = preg_replace("/[^0-9]/", "", $_POST['r1']) + preg_replace("/[^0-9]/", "", $_POST['r2']) + preg_replace("/[^0-9]/", "", $_POST['r3']) + preg_replace("/[^0-9]/", "", $_POST['r4']);
+            $reqMerc  = ceil(($totalres - 0.1) / $market->maxcarry);
+            $second   = date("s");
+            $minute   = date("i");
+            $hour     = date("G") - $_POST['start'];
+            
+            if (date("G") > $_POST['start']) $day = 1;
+            else $day = 0;
+            
+            $timestamp = strtotime("-$hour hours -$second second -$minute minutes +$day day");
+            
+            if ($totalres > 0 && $_POST['tvillage'] != $village->wid && in_array($_POST['tvillage'], $session->villages) && ($_POST['start'] >= 0 && $_POST['start'] <= 23) && ($_POST['deliveries'] >= 1 && $_POST['deliveries'] <= 3)) {
+                $database->createTradeRoute($session->uid, $_POST['tvillage'], $village->wid, $_POST['r1'], $_POST['r2'], $_POST['r3'], $_POST['r4'], $_POST['start'], $_POST['deliveries'], $reqMerc, $timestamp);
+                $route = 1;
+                header("Location: build.php?gid=17&t=4");
+                exit;
+            } else {
+                $route = 1;
+                header("Location: build.php?gid=17&t=4&create");
+                exit;
+            }
         }
     }
 
     if (isset($_POST['routeid']) && isset($_POST['action']) && $_POST['action'] == 'extendRoute') {
-        if ($session->access != BANNED) {
-            if ($session->gold >= 2 && $session->goldclub == 1) {
-                $traderoute = $database->getTradeRouteUid($_POST['routeid']);
-                if ($traderoute == $session->uid) {
-                    $database->editTradeRoute($_POST['routeid'], "timeleft", 604800, 1);
-                    $newgold = $session->gold - 2;
-                    $database->updateUserField($session->uid, 'gold', $newgold, 1);                      
+        if ($session->gold >= 2 && $session->goldclub == 1) {
+            $traderoute = $database->getTradeRouteUid($_POST['routeid']);
+            if ($traderoute == $session->uid) {
+                $database->editTradeRoute($_POST['routeid'], "timeleft", 604800, 1);
+                $newgold = $session->gold - 2;
+                $database->updateUserField($session->uid, 'gold', $newgold, 1);
+            }
+        }
+        $route = 1;
+        unset($routeid);
+        header("Location: build.php?gid=17&t=4");
+        exit;
+    }
+
+    if (isset($_POST['routeid']) && isset($_POST['action']) && $_POST['action'] == 'editRoute2') {
+        if($session->goldclub == 1){
+            for ($i = 1; $i <= 4; $i ++) {
+                if (empty($_POST['r'.$i])) {
+                    $_POST['r'.$i] = 0;
                 }
-            }    
+            }
+            $totalres = preg_replace("/[^0-9]/", "", $_POST['r1']) + preg_replace("/[^0-9]/", "", $_POST['r2']) + preg_replace("/[^0-9]/", "", $_POST['r3']) + preg_replace("/[^0-9]/", "", $_POST['r4']);
+            $reqMerc  = ceil(($totalres - 0.1) / $market->maxcarry);
+            
+            $traderoute = $database->getTradeRouteUid($_POST['routeid']);
+            if ($totalres > 0 && $traderoute == $session->uid && ($_POST['start'] >= 0 && $_POST['start'] <= 23) && ($_POST['deliveries'] >= 1 && $_POST['deliveries'] <= 3)) {
+                $database->editTradeRoute($_POST['routeid'], "wood", $_POST['r1'], 0);
+                $database->editTradeRoute($_POST['routeid'], "clay", $_POST['r2'], 0);
+                $database->editTradeRoute($_POST['routeid'], "iron", $_POST['r3'], 0);
+                $database->editTradeRoute($_POST['routeid'], "crop", $_POST['r4'], 0);
+                $database->editTradeRoute($_POST['routeid'], "start", $_POST['start'], 0);
+                $database->editTradeRoute($_POST['routeid'], "deliveries", $_POST['deliveries'], 0);
+                $database->editTradeRoute($_POST['routeid'], "merchant", $reqMerc, 0);
+                $second = date("s");
+                $minute = date("i");
+                $hour   = date("G") - $_POST['start'];
+                if (date("G") > $_POST['start'])  $day = 1;
+                else $day = 0;
+                $timestamp = strtotime("-$hour hours -$second seconds -$minute minutes +$day day");
+                $database->editTradeRoute($_POST['routeid'], "timestamp", $timestamp, 0);
+            }
+            
             $route = 1;
             unset($routeid);
             header("Location: build.php?gid=17&t=4");
             exit;
-        } else {
-            $route = 0;
-            header("Location: banned.php");
-            exit;
-        }
-    }
-
-    if (isset($_POST['routeid']) && isset($_POST['action']) && $_POST['action'] == 'editRoute2') {
-        if ($session->access != BANNED) {
-            if($session->goldclub == 1){
-                for ($i = 1; $i <= 4; $i ++) {
-                    if (empty($_POST['r'.$i])) {
-                        $_POST['r'.$i] = 0;
-                    }
-                }
-                $totalres = preg_replace("/[^0-9]/", "", $_POST['r1']) + preg_replace("/[^0-9]/", "", $_POST['r2']) + preg_replace("/[^0-9]/", "", $_POST['r3']) + preg_replace("/[^0-9]/", "", $_POST['r4']);
-                $reqMerc  = ceil(($totalres - 0.1) / $market->maxcarry);
-                
-                $traderoute = $database->getTradeRouteUid($_POST['routeid']);
-                if ($totalres > 0 && $traderoute == $session->uid && ($_POST['start'] >= 0 && $_POST['start'] <= 23) && ($_POST['deliveries'] >= 1 && $_POST['deliveries'] <= 3)) {
-                    $database->editTradeRoute($_POST['routeid'], "wood", $_POST['r1'], 0);
-                    $database->editTradeRoute($_POST['routeid'], "clay", $_POST['r2'], 0);
-                    $database->editTradeRoute($_POST['routeid'], "iron", $_POST['r3'], 0);
-                    $database->editTradeRoute($_POST['routeid'], "crop", $_POST['r4'], 0);
-                    $database->editTradeRoute($_POST['routeid'], "start", $_POST['start'], 0);
-                    $database->editTradeRoute($_POST['routeid'], "deliveries", $_POST['deliveries'], 0);
-                    $database->editTradeRoute($_POST['routeid'], "merchant", $reqMerc, 0);
-                    $second = date("s");
-                    $minute = date("i");
-                    $hour   = date("G") - $_POST['start'];
-                    if (date("G") > $_POST['start'])  $day = 1;
-                    else $day = 0;
-                    $timestamp = strtotime("-$hour hours -$second seconds -$minute minutes +$day day");
-                    $database->editTradeRoute($_POST['routeid'], "timestamp", $timestamp, 0);
-                }
-                
-                $route = 1;
-                unset($routeid);
-                header("Location: build.php?gid=17&t=4");
-                exit;               
-            } else {
-                $route = 0;
-                header("Location: banned.php");
-                exit;
-            }
         } 
     }
 
     if (isset($_POST['routeid']) && isset($_POST['action']) && $_POST['action'] == 'delRoute') {
-        if ($session->access != BANNED ) {
-            if($session->goldclub == 1){
-                $traderoute = $database->getTradeRouteUid($_POST['routeid']);
-                if ($traderoute == $session->uid) $database->deleteTradeRoute($_POST['routeid']);
-                $route = 1;
-                unset($routeid);
-                header("Location: build.php?gid=17&t=4");
-                exit;          
-            } else {
-                $route = 0;
-                header("Location: banned.php");
-                exit;
-            }
-        }        
+        if($session->goldclub == 1){
+            $traderoute = $database->getTradeRouteUid($_POST['routeid']);
+            if ($traderoute == $session->uid) $database->deleteTradeRoute($_POST['routeid']);
+            $route = 1;
+            unset($routeid);
+            header("Location: build.php?gid=17&t=4");
+            exit;
+        }
     }
 }
 
@@ -212,14 +186,7 @@ if ($session->goldclub == 1) {
             exit;
         }
 
-        if(isset($_POST['action']) && $_POST['action'] == 'startRaid') {
-            if($session->access != BANNED) $units->startRaidList($_POST);             
-            else
-            {
-                header( "Location: banned.php");
-                exit;
-            }
-        }
+        if(isset($_POST['action']) && $_POST['action'] == 'startRaid') $units->startRaidList($_POST);
 
         if(isset($_GET['slid']) && is_numeric($_GET['slid'])) {
             $FLData = $database->getFLData($_GET['slid']);
@@ -243,37 +210,25 @@ if ($session->goldclub == 1) {
 }
 else $create = 0;
 
-if(isset($_POST['a']) == 533374 && isset($_POST['id']) == 39) {
-    if($session->access != BANNED) $units->Settlers($_POST);   
-    else 
-    {
-        header( "Location: banned.php" );
-        exit;
-    }
-}
+if(isset($_POST['a']) == 533374 && isset($_POST['id']) == 39) $units->Settlers($_POST);
 
 if(isset($_GET['mode']) && $_GET['mode'] == 'troops' && isset($_GET['cancel']) && $_GET['cancel'] == 1){
-	if($session->access != BANNED){
-		$oldmovement = $database->getMovementById($_GET['moveid']);
-		$now = time();
-		if(($now - $oldmovement[0]['starttime']) < 90 && $oldmovement[0]['from'] == $village->wid){	
-			$qc = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
-			$resultc = mysqli_fetch_array(mysqli_query($database->dblink, $qc), MYSQLI_ASSOC);
-			if($resultc['Total'] == 1){			
-				$q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
-				$database->query($q);
-				$end = $now + ($now - $oldmovement[0]['starttime']);
-				$q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
-				$lastid = mysqli_fetch_array(mysqli_query($database->dblink, $q2));
-				$database->addMovement(4, $oldmovement[0]['to'], $oldmovement[0]['from'], $oldmovement[0]['ref'], $now, $end);
-			}
-		}
-		header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id']);
-		exit();
-	}else{
-		header("Location: banned.php");
-		exit();
-	}
+    $oldmovement = $database->getMovementById($_GET['moveid']);
+    $now = time();
+    if(($now - $oldmovement[0]['starttime']) < 90 && $oldmovement[0]['from'] == $village->wid){
+        $qc = "SELECT Count(*) as Total FROM " . TB_PREFIX . "movement where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
+        $resultc = mysqli_fetch_array(mysqli_query($database->dblink, $qc), MYSQLI_ASSOC);
+        if($resultc['Total'] == 1){
+            $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = " . $database->escape((int)$_GET['moveid']);
+            $database->query($q);
+            $end = $now + ($now - $oldmovement[0]['starttime']);
+            $q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
+            $lastid = mysqli_fetch_array(mysqli_query($database->dblink, $q2));
+            $database->addMovement(4, $oldmovement[0]['to'], $oldmovement[0]['from'], $oldmovement[0]['ref'], $now, $end);
+        }
+    }
+    header("Location: " . $_SERVER['PHP_SELF'] . "?id=" . $_GET['id']);
+    exit();
 }
 
 ?>

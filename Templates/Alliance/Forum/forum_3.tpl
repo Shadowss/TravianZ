@@ -5,10 +5,6 @@
 ##                     FIX BY RONIX                       ##
 ##                       TRAVIANZ                         ##
 ############################################################
-if($session->access == BANNED){
-	header("Location: banned.php");
-	exit;
-}
 
 $topicID = $_GET['idt'];
 $showTopic = reset($database->ShowTopic($topicID));

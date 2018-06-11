@@ -5,10 +5,6 @@
 ##                     FIX BY RONIX                       ##
 ##                       TRAVIANZ                         ##
 ############################################################
-if($session->access == BANNED){
-	header("Location: banned.php");
-	exit;
-}
 
 $forumData = reset($database->ForumCatEdit($_GET['idf']));
 if(empty($forumData) || ($forumData['alliance'] == 0 && $session->access != ADMIN) ||

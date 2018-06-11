@@ -5,8 +5,7 @@ $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
 
 echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
-include("alli_menu.tpl"); 
-if($session->access!=BANNED){
+include("alli_menu.tpl");
 ?>
 			<form method="post" action="allianz.php">
 				<table cellpadding="1" cellspacing="1" id="position" class="small_option">
@@ -41,9 +40,3 @@ if($session->access!=BANNED){
 					<button value="ok" name="s1" id="btn_ok" class="trav_buttons">OK</button>
 				</p>
 			</form>
-<?php
-}else{
-	header("Location: banned.php");
-	exit;
-}
-?>

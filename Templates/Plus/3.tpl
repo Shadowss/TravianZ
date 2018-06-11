@@ -1,22 +1,19 @@
 <?php
 
-    $MyGold = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-    $golds = mysqli_fetch_array($MyGold);
+$MyGold = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+$golds = mysqli_fetch_array($MyGold);
 
 include("Templates/Plus/pmenu.tpl");
 
 
-    $MyGold = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-    $golds = mysqli_fetch_array($MyGold);
+$MyGold = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+$golds = mysqli_fetch_array($MyGold);
 
-        $today = date("mdHi");
+$today = date("mdHi");
 
-if (mysqli_num_rows($MyGold)) {
-    if($session->gold == 0) {
-        echo "<p>You currently don't own gold.</p>";
-} else {
-        echo "<p>You currently have <b> $session->gold </b>  gold</p>";
-}
+if(mysqli_num_rows($MyGold)){
+    if($session->gold == 0) echo "<p>You currently don't own gold.</p>";   
+    else echo "<p>You currently have <b> $session->gold </b>  gold</p>";
 }
  ?>
 
@@ -44,24 +41,25 @@ if (mysqli_num_rows($MyGold)) {
                 <b><font color="#71D000">P</font><font color="#FF6F0F">l</font><font color="#71D000">u</font><font color="#FF6F0F">s</font></b> Account<br />
         <span class="run">
 <?php
-$datetimep=$golds['plus'];
-$datetime1=$golds['b1'];
-$datetime2=$golds['b2'];
-$datetime3=$golds['b3'];
-$datetime4=$golds['b4'];
-$datetimeap=$golds['ap'];
-$datetimedp=$golds['dp'];
+$datetimep = $golds['plus'];
+$datetime1 = $golds['b1'];
+$datetime2 = $golds['b2'];
+$datetime3 = $golds['b3'];
+$datetime4 = $golds['b4'];
+$datetimeap = $golds['ap'];
+$datetimedp = $golds['dp'];
+
 //Retrieve the current date/time
-$date2=strtotime("NOW");
+$date2 = strtotime("NOW");
 
 
- if ($datetimep == 0) {
-     print "get PLUS<br>";
-    }else
- if ($datetimep <= $date2) {
-     print "Your PLUS advantage has ended.<br>";
-mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = '0' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-     } else {
+if ($datetimep == 0) echo "get PLUS<br>";
+else
+{
+    if ($datetimep <= $date2) {
+        print "Your PLUS advantage has ended.<br>";
+        mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = '0' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
+    } else {
 
 $holdtotmin=(($datetimep-$date2)/60);
 $holdtothr=(($datetimep-$date2)/3600);

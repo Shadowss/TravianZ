@@ -647,12 +647,11 @@ $output.="<tr>
 
             // check for a valid unit value
             if (in_array($_GET['train'], $validationArray)) {
-                if($session->access != BANNED){
-                    if($count_hero < 3){
-                        $unitID = $_GET['train'];
-                        mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES (".$database->escape($session->uid).", " . (int) $village->wid . ", 0, ".$unitID.", '".$database->escape($session->username)."', 0, 5, 0, 0, 100, 0, 0, 0, 0, ".round((time() + (${'u'.$unitID}['time'] / SPEED)*3)).", 50, 1)");
-                        mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET `u$unitID` = `u$unitID` - 1 WHERE `vref` = " . (int) $village->wid);
-                        mysqli_query($database->dblink,"
+                if($count_hero < 3){
+                    $unitID = $_GET['train'];
+                    mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."hero (`uid`, `wref`, `regeneration`, `unit`, `name`, `level`, `points`, `experience`, `dead`, `health`, `attack`, `defence`, `attackbonus`, `defencebonus`, `trainingtime`, `autoregen`, `intraining`) VALUES (".$database->escape($session->uid).", " . (int) $village->wid . ", 0, ".$unitID.", '".$database->escape($session->username)."', 0, 5, 0, 0, 100, 0, 0, 0, 0, ".round((time() + (${'u'.$unitID}['time'] / SPEED)*3)).", 50, 1)");
+                    mysqli_query($database->dblink,"UPDATE " . TB_PREFIX . "units SET `u$unitID` = `u$unitID` - 1 WHERE `vref` = " . (int) $village->wid);
+                    mysqli_query($database->dblink,"
 					    UPDATE " . TB_PREFIX . "vdata
 					        SET
 					            `wood` = `wood` - ".(int) ${'u'.$unitID}['wood'].",
@@ -661,13 +660,9 @@ $output.="<tr>
 					            `crop` = `crop` - ".(int) ${'u'.$unitID}['crop']."
                             WHERE
                                 `wref` = " . (int) $village->wid);
-                    }
-                    header("Location: build.php?id=".$id."");
-                    exit;
-                }else{
-                    header("Location: banned.php");
-                    exit;
                 }
+                header("Location: build.php?id=".$id."");
+                exit;
             }
         }
 

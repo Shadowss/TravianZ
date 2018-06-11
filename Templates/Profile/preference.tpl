@@ -20,75 +20,68 @@ if(isset($_GET['del']) && is_numeric($_GET['del'])){
 #################################################################################
 // Save new link or just edit a link
 if($_POST) {
-    $links = array();
+    $links = [];
     
     // let's do some complicated code x'D
     foreach($_POST as $key => $value) {
-	if(substr($key, 0, 2) == 'nr') {
-	    $i = substr($key, 2);
-	    $links[$i]['nr'] = mysqli_real_escape_string($database->dblink, $value);
-	}
-	
-	if(substr($key, 0, 2) == 'id') {
-	    $i = substr($key, 2);
-	    $links[$i]['id'] = mysqli_real_escape_string($database->dblink, $value);
-	}
-	
-	if(substr($key, 0, 8) == 'linkname') {
-	    $i = substr($key, 8);
-	    $links[$i]['linkname'] = mysqli_real_escape_string($database->dblink, $value);
-	}
-	
-	if(substr($key, 0, 8) == 'linkziel') {
-	    $i = substr($key, 8);
-	    $links[$i]['linkziel'] = mysqli_real_escape_string($database->dblink, $value);
-	}
+        if(substr($key, 0, 2) == 'nr') {
+            $i = substr($key, 2);
+            $links[$i]['nr'] = mysqli_real_escape_string($database->dblink, $value);
+        }
+        
+        if(substr($key, 0, 2) == 'id') {
+            $i = substr($key, 2);
+            $links[$i]['id'] = mysqli_real_escape_string($database->dblink, $value);
+        }
+        
+        if(substr($key, 0, 8) == 'linkname') {
+            $i = substr($key, 8);
+            $links[$i]['linkname'] = mysqli_real_escape_string($database->dblink, $value);
+        }
+        
+        if(substr($key, 0, 8) == 'linkziel') {
+            $i = substr($key, 8);
+            $links[$i]['linkziel'] = mysqli_real_escape_string($database->dblink, $value);
+        }
     }
     
     // Save
     foreach($links as $link) {
-	settype($link['nr'], 'int');
-	
-	if(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) == '') {
-	    // Add new link
-	    $userid = (int) $session->uid;
-	    if($session->access!=BANNED){
-	        $query = mysqli_query($database->dblink,'INSERT INTO `' . TB_PREFIX . 'links` (`userid`, `name`, `url`, `pos`) VALUES (' . $userid . ', \'' . $link['linkname'] . '\', \'' . $link['linkziel'] . '\', ' . $link['nr'] . ')');
-		}else{
-		header("Location: banned.php");
-		exit;
-		}
-		} elseif(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) != '') {
-	    // Update link
-		    $query = mysqli_query($database->dblink,'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
-	    $data = mysqli_fetch_assoc($query);
-	    
-	    // May the user update this entry?
-	    if($data['userid'] == $session->uid) {
-	        $query2 = mysqli_query($database->dblink,'UPDATE `' . TB_PREFIX . 'links` SET `name` = \'' . $link['linkname'] . '\', `url` = \'' . $link['linkziel'] . '\', `pos` = ' . $link['nr'] . ' WHERE `id` = ' . $link['id']);
-	    }
-	} elseif(trim($link['nr']) == '' AND trim($link['linkname']) == '' AND trim($link['linkziel']) == '' AND trim($link['id']) != '') {
-	    // Delete entry
-	    $query = mysqli_query($database->dblink,'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
-	    $data = mysqli_fetch_assoc($query);
-	    
-	    // May the user delete this entry?
-	    if($data['userid'] == $session->uid) {
-	        $query2 = mysqli_query($database->dblink,'DELETE FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
-	    }
-	}
+        settype($link['nr'], 'int');
+        
+        if(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) == '') {
+            // Add new link
+            $userid = (int) $session->uid;
+            $query = mysqli_query($database->dblink,'INSERT INTO `' . TB_PREFIX . 'links` (`userid`, `name`, `url`, `pos`) VALUES (' . $userid . ', \'' . $link['linkname'] . '\', \'' . $link['linkziel'] . '\', ' . $link['nr'] . ')');
+            
+        } elseif(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) != '') {
+            // Update link
+            $query = mysqli_query($database->dblink,'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+            $data = mysqli_fetch_assoc($query);
+            
+            // May the user update this entry?
+            if($data['userid'] == $session->uid) {
+                $query2 = mysqli_query($database->dblink,'UPDATE `' . TB_PREFIX . 'links` SET `name` = \'' . $link['linkname'] . '\', `url` = \'' . $link['linkziel'] . '\', `pos` = ' . $link['nr'] . ' WHERE `id` = ' . $link['id']);
+            }
+        } elseif(trim($link['nr']) == '' AND trim($link['linkname']) == '' AND trim($link['linkziel']) == '' AND trim($link['id']) != '') {
+            // Delete entry
+            $query = mysqli_query($database->dblink,'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+            $data = mysqli_fetch_assoc($query);
+            
+            // May the user delete this entry?
+            if($data['userid'] == $session->uid) {
+                $query2 = mysqli_query($database->dblink,'DELETE FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+            }
+        }
     }
-    
-    print '<meta http-equiv="refresh" content="0">';
+    echo '<meta http-equiv="refresh" content="0">';
 }
 
 
 // Fetch all links
 $query = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . (int) $session->uid . ' ORDER BY `pos` ASC') or die(mysqli_error($database->dblink));
-$links = array();
-while($data = mysqli_fetch_assoc($query)) {
-    $links[] = $data;
-}
+$links = [];
+while($data = mysqli_fetch_assoc($query)) $links[] = $data;
 ?>
 
 <h1>Player profile</h1>

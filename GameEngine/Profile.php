@@ -11,14 +11,8 @@
 
 
 class Profile {
-
 	public function procProfile($post) {
 		global $session;
-		
-		if($session->access == BANNED){
-			header("Location: banned.php");
-			exit;
-		}
 		
 		if(isset($post['ft'])) {
 			switch($post['ft']) {
@@ -39,11 +33,6 @@ class Profile {
 
 	public function procSpecial($get) {
 		global $session;
-		
-		if($session->access == BANNED){
-			header("Location: banned.php");
-			exit;
-		}
 		
 		if(isset($get['e'])) {
 			switch($get['e']) {
