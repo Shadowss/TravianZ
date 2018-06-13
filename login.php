@@ -158,9 +158,9 @@ CountBack(gsecs);
 <input type="hidden" name="ft" value="a4" />
 <script type="text/javascript">
 Element.implement({
-	 //imgid: falls zu dem link ein pfeil geh?rt kann dieser "auf/zugeklappt" werden
+	 //imgid: if an arrow belongs to the link this can be "opened"
 	 showOrHide: function(imgid) {
-		 //einblenden
+		 //insert
 		 if (this.getStyle('display') == 'none')
 		 {
 			 if (imgid != '')
@@ -168,7 +168,7 @@ Element.implement({
 				 $(imgid).className = 'open';
 			 }
 		 }
-		 //ausblenden
+		 //hide
 		 else
 		 {
 			 if (imgid != '')
