@@ -243,8 +243,11 @@ if(isset($_GET['newdid'])) {
 			<div id="stime">
 				<div id="ltime">
 					<div id="ltimeWrap">
-						Calculated in <b><?php echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);?></b> ms
-						<br/>Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+						<?php echo CALCULATED_IN;?> <b><?php
+echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
+?></b> ms
+
+<br /><?php echo SEVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 					</div>
 				</div>
 			</div>
