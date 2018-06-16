@@ -3889,7 +3889,7 @@ class Automation {
             $starv = $getVillage['starv'];
             if ($crop < $villageUpkeep){
                 //Add starvation data
-                $database->setVillageFields($wref, ['starv', 'starvupdate'], [$villageUpkeep, time()]);
+                $database->setVillageFields($wref, ['starv'], [$villageUpkeep]);
             }
         }
     }
