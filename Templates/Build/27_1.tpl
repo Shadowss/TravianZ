@@ -45,7 +45,7 @@ Treasury <b>' . $reqlvl . '</b>, Effect <b>' . $effect . '</b>
 </div>
 </td>';
         echo '<td class="pla"><a href="karte.php?d=' . $artefact['vref'] . '&c=' . $generator->getMapCheck($artefact['vref']) . '">' . $database->getVillageField($artefact['vref'], "name") . '</a></td>';
-        echo '<td class="dist">' . date("d/m/Y H:i", $artefact['conquered']) . '</td></tr>';
+        echo '<td class="dist">' . date("d.m.Y H:i", $artefact['conquered']) . '</td></tr>';
 }
                 }
 
