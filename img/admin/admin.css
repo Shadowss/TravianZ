@@ -527,7 +527,7 @@ table#profile thead th, table#profile tfoot th {background-image:url(../un/a/c2.
 table#profile thead td, table#profile tfoot td {background-color:#F3F3F3; text-align:center; width:50%;}
 table#profile tbody th, table#profile tbody td {text-align:left;}
 table#profile td.details {width:50%; height:156px; padding:0px; vertical-align:top; border-bottom:none;}
-table#profile td.details table {border-collapse:collapse; line-height:16px; margin-top:0px; width:100%;}
+table#profile td.details table {border-collapse:collapse; line-height:16px; margin-top:0px; width:100%; height:100%}
 table#profile td.details table th {width:50%; border-left:none; border-top:none; background:none;}
 table#profile td.details table td {border-right:none; border-left:none; border-top:none; text-align:left;}
 table#profile td.desc1, table#profile td.desc2 {width:50%; padding:0px 7px; vertical-align:middle;}
@@ -571,6 +571,17 @@ input#btn_back {width:97px; background-image: url(b/back.gif);}
 input#btn_forward {width:97px; background-image: url(b/forward.gif);}
 input#btn_demolish {width:97px; background-image: url(b/demolish.gif);}
 input#btn_search {width:97px; background-image: url(b/search.gif);}
+
+.desc1div {
+    width: 235px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.desc2div {
+    width: 234px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
 
 /* Start tooltips for the admin panel settings */
 .tooltip {

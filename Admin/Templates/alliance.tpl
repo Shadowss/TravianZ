@@ -151,9 +151,9 @@ if($_GET['aid'])
 								</tr>
 								<tr>
 									<td class="desc2" colspan="2">
-										<center>
+										<center><div class="desc2div">
 											<?php echo nl2br($alidata['desc']); ?>
-										</center>
+										</div></center>
 									</td>
 								</tr>
 								<tr>
@@ -163,9 +163,9 @@ if($_GET['aid'])
 						</table>
 					</td>
 						<td class="desc1">
-							<center>
+							<center><div class="desc1div">
 								<?php echo nl2br($alidata['notice']); ?>
-							</center>
+							</div></center>
 						</td>
 					</tr>
 				</tr>
