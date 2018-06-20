@@ -154,7 +154,7 @@ if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon
     </tbody>
 </table>
 <?php
-    if(NEW_FUNCTIONS_OASIS == false) {
+    if(!NEW_FUNCTIONS_OASIS) {
         echo "<table cellpadding=\"1\" cellspacing=\"1\" id=\"villages\">
                   <thead>
                     <tr>

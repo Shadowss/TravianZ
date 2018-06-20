@@ -245,7 +245,7 @@ class Alliance {
 				// Log the notice
 				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($UserData['username']) . '</a> into the alliance.');
 				// send invitation via in-game messages
-                if(NEW_FUNCTIONS_ALLIANCE_INVITATION == false) return;
+                if(!NEW_FUNCTIONS_ALLIANCE_INVITATION) return;
                 else {
                     $database->sendMessage(
 				    $UserData['id'],
