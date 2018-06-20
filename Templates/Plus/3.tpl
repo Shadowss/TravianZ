@@ -71,6 +71,7 @@ else
         $holdmr = intval($holdtotmin - (($holdhr * 60) + ($holdtotday * 1440)));
         echo "<b> " . ($holdmr) . "</b> mins</font>";
     }
+}
     ?>
     </span></td>
 			<td class="dur"><?php
@@ -101,7 +102,6 @@ if (PLUS_TIME >= 86400) {
             echo '<a href="plus.php?s=1"><span class="none">too little gold';
         }
     }
-}
 ?>
     </span></a>
 			</td>

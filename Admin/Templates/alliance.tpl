@@ -91,7 +91,7 @@ if($_GET['aid'])
 										$player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".(int) $row['uid'].""));
 										if($row['opt1'] == 1) { $position1 = "Assign To Position"; } else { $position1 = "No Assigning Positions"; }
 										if($row['opt2'] == 1) { $position2 = "Kick Players"; } else { $position2 = "No Kicking Players"; }
-										if($row['opt3'] == 1) { $position3 = "Change Alliance Description"; } else { $position3 = "No Changing Description"; }
+										if($row['opt3'] == 1) { $position3 = "Change Description"; } else { $position3 = "No Changing Description"; }
 										if($row['opt4'] == 1) { $position4 = "Invite Players"; } else { $position4 = "No Invitations"; }
 										if($row['opt5'] == 1) { $position5 = "Manage Forums"; } else { $position5 = "No Forum Management"; }
 										if($row['opt6'] == 1) { $position6 = "Alliance Diplomacy"; } else { $position6 = "No Diplomacy"; }
@@ -151,9 +151,9 @@ if($_GET['aid'])
 								</tr>
 								<tr>
 									<td class="desc2" colspan="2">
-										<center>
-											<?php echo nl2br($alidata['desc']); ?>
-										</center>
+										<center><div class="desc2div">
+											<?php echo nl2br($alidata['notice']); ?>
+										</div></center>
 									</td>
 								</tr>
 								<tr>
@@ -163,9 +163,9 @@ if($_GET['aid'])
 						</table>
 					</td>
 						<td class="desc1">
-							<center>
-								<?php echo nl2br($alidata['notice']); ?>
-							</center>
+							<center><div class="desc1div">
+								<?php echo nl2br($alidata['desc']); ?>
+							</div></center>
 						</td>
 					</tr>
 				</tr>

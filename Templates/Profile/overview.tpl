@@ -146,7 +146,7 @@ if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon
 
         </td>
         <td class="desc1" >
-            <div><?php echo nl2br($profiel[1]); ?>
+            <div class="desc1div"><?php echo nl2br($profiel[1]); ?>
             
             </div>
         </td>
