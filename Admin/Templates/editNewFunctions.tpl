@@ -28,8 +28,26 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					<td width="50%">Display oasis in profile <em class="tooltip">?<span class="classic">Turns on or off the display of oases of each village in the player profile</span></em></td>
 					<td width="50%">
                         <select name="new_functions_oasis">
-								<option value="True" <?php if(NEW_FUNCTIONS_OASIS==true) echo "selected";?>>True</option>
-								<option value="False" <?php if(NEW_FUNCTIONS_OASIS==false) echo "selected";?>>False</option>
+								<option value="True" <?php if(NEW_FUNCTIONS_OASIS == true) echo "selected";?>>True</option>
+								<option value="False" <?php if(NEW_FUNCTIONS_OASIS == false) echo "selected";?>>False</option>
+						</select>
+                    </td>
+				</tr>
+                <tr>
+					<td>Alliance invitation message <em class="tooltip">?<span class="classic">Enable (Disable) sending an in-game message to the player, if he was invited to the alliance</span></em></td>
+					<td>
+                        <select name="new_functions_alliance_invitation">
+								<option value="True" <?php if(NEW_FUNCTIONS_ALLIANCE_INVITATION == true) echo "selected";?>>True</option>
+								<option value="False" <?php if(NEW_FUNCTIONS_ALLIANCE_INVITATION == false) echo "selected";?>>False</option>
+						</select>
+                    </td>
+				</tr>
+                <tr>
+					<td>New Alliance & Embassy Mechanics <em class="tooltip">?<span class="classic">For this setting, you can find more information on the link: <a href="https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics" target="_blank">https://github.com</a></span></em></td>
+					<td>
+                        <select name="new_functions_embassy_mechanics">
+								<option value="True" <?php if(NEW_FUNCTIONS_EMBASSY_MECHANICS == true) echo "selected";?>>True</option>
+								<option value="False" <?php if(NEW_FUNCTIONS_EMBASSY_MECHANICS == false) echo "selected";?>>False</option>
 						</select>
                     </td>
 				</tr>

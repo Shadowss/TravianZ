@@ -144,6 +144,8 @@ class Process {
         
         //New Mechanics and Functions
         $findReplace["%NEW_FUNCTIONS_OASIS%"] = $_POST['new_functions_oasis'];
+        $findReplace["%NEW_FUNCTIONS_ALLIANCE_INVITATION%"] = $_POST['new_functions_alliance_invitation'];
+        $findReplace["%NEW_FUNCTIONS_EMBASSY_MECHANICS%"] = $_POST['new_functions_embassy_mechanics'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 

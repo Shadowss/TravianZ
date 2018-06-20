@@ -179,24 +179,32 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td>
 	</tr>
 	</table>
-<table id="member">
-	<thead>
-		<tr>
-		<th>New Mechanics and Functions <a href="admin.php?p=editNewFunctions"><img src="../img/admin/edit.gif" title="Edit New Mechanics and Functions"></a></th>
-		</tr>
-	</thead>
-</table>
+    <table id="member">
+        <thead>
+            <tr>
+                <th>New Mechanics and Functions <a href="admin.php?p=editNewFunctions"><img src="../img/admin/edit.gif" title="Edit New Mechanics and Functions"></a></th>
+            </tr>
+        </thead>
+    </table>
 
-<table id="profile">
-	<tr>
-		<td class="b"><?php echo SERV_VARIABLE ?></td>
-		<td class="b"><?php echo SERV_VALUE ?></td>
-	</tr>
-	<tr>
-		<td>Display oasis in profile <em class="tooltip">?<span class="classic">Turns on or off the display of oases of each village in the player profile</span></em></td>
-        <td><?php echo NEW_FUNCTIONS_OASIS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
-	</tr>
-</table>
+    <table id="profile">
+        <tr>
+            <td class="b"><?php echo SERV_VARIABLE ?></td>
+            <td class="b"><?php echo SERV_VALUE ?></td>
+        </tr>
+        <tr>
+            <td>Display oasis in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of oases of each village in the player profile</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_OASIS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+        <tr>
+            <td>Alliance invitation message <em class="tooltip">?<span class="classic">Enable (Disable) sending an in-game message to the player, if he was invited to the alliance</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_ALLIANCE_INVITATION ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+        <tr>
+            <td>New Alliance & Embassy Mechanics <em class="tooltip">?<span class="classic">For this setting, you can find more information on the link: <a href="https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics" target="_blank">https://github.com</a></span></em></td>
+            <td><?php echo NEW_FUNCTIONS_EMBASSY_MECHANICS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+    </table>
     <table id="member">
         <thead>
             <tr>

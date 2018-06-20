@@ -282,6 +282,24 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 </select>
             </td>
         </tr>
+        <tr>
+            <td><span class="f9 c6">Alliance invitation message:</span></td>
+            <td>
+                <select name="new_functions_alliance_invitation">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="f9 c6">New Alliance & Embassy Mechanics:</span></td>
+            <td>
+                <select name="new_functions_embassy_mechanics">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
     </table>
     </p>
     <p>
