@@ -296,7 +296,10 @@ define("ADMIN_RECEIVE_SUPPORT_MESSAGES", %ASUPPMSGS%);
 // ***** Allow Admin accounts to be raided and attacked
 define("ADMIN_ALLOW_INCOMING_RAIDS", %ARAIDS%);
 
-
+/////////////////////////////////////////////////
+//   ****  NEW MECHANICS AND FUNCTIONS  ****   //
+/////////////////////////////////////////////////
+define("NEW_FUNCTIONS_OASIS", %NEW_FUNCTIONS_OASIS%);
 
 //////////////////////////////////////////
 //   ****  DO NOT EDIT SETTINGS  ****   //

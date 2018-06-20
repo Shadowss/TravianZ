@@ -141,6 +141,9 @@ class Process {
 		$findReplace["%T4_COMING%"] = $_POST['t4_coming'];
 		$findReplace["%REG_OPEN%"] = $_POST['reg_open'];
 		$findReplace["%PEACE%"] = $_POST['peace'];
+        
+        //New Mechanics and Functions
+        $findReplace["%NEW_FUNCTIONS_OASIS%"] = $_POST['new_functions_oasis'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 

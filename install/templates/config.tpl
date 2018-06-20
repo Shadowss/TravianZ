@@ -268,7 +268,20 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 </select>
             </td>
         </tr>
+    </table>
+    </p>
+    <p>
+        <span class="f10 c">NEW MECHANICS AND FUNCTIONS RELATED</span>
+    <table>
         <tr>
+            <td><span class="f9 c6">Display oasis in profile:</span></td>
+            <td>
+                <select name="new_functions_oasis">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
     </table>
     </p>
     <p>

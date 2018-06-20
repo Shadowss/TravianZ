@@ -42,6 +42,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$INCLUDE_ADMIN=(INCLUDE_ADMIN==false)? "false":"true";
 		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
 		$ADMINS_RAIDABLE = (ADMIN_ALLOW_INCOMING_RAIDS == false ? 'false' : 'true');
+        $NEW_FUNCTIONS_OASIS = (NEW_FUNCTIONS_OASIS == false ? 'false' : 'true');
 
 		$text = file_get_contents("constant_format.tpl");
 		$text = preg_replace("'%ERRORREPORT%'", $_POST['error'], $text);
@@ -115,6 +116,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);
 		$text = preg_replace("'%HOMEPAGE%'", HOMEPAGE, $text);
 		$text = preg_replace("'%SERVER%'", SERVER, $text);
+        $text = preg_replace("'%NEW_FUNCTIONS_OASIS%'", $NEW_FUNCTIONS_OASIS, $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);

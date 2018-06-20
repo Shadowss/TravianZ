@@ -179,7 +179,24 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td><b><?php echo (ERROR_REPORT=="error_reporting (0);")? "No": "Yes";?></b></td>
 	</tr>
 	</table>
+<table id="member">
+	<thead>
+		<tr>
+		<th>New Mechanics and Functions <a href="admin.php?p=editNewFunctions"><img src="../img/admin/edit.gif" title="Edit New Mechanics and Functions"></a></th>
+		</tr>
+	</thead>
+</table>
 
+<table id="profile">
+	<tr>
+		<td class="b"><?php echo SERV_VARIABLE ?></td>
+		<td class="b"><?php echo SERV_VALUE ?></td>
+	</tr>
+	<tr>
+		<td>Display oasis in profile <em class="tooltip">?<span class="classic">Turns on or off the display of oases of each village in the player profile</span></em></td>
+        <td><?php echo NEW_FUNCTIONS_OASIS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+	</tr>
+</table>
     <table id="member">
         <thead>
             <tr>
