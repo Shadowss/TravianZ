@@ -43,9 +43,10 @@ function inaktiv() {event.srcElement.className='fl2'; }
 
 function del(e,id){
 if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); }
+if(e == 'arti'){ var conf = confirm('Dou you really want delete artifact id '+id+'?'); }
 if(e == 'unban'){ var conf = confirm('Dou you really want unban player '+id+'?'); }
 if(e == 'stopDel'){ var conf = confirm('Dou you really want stop deleting user '+id+'?'); }
-if(conf){return true;}else{return false;}
+return conf;
 }
 
 </script>

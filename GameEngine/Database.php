@@ -7299,7 +7299,7 @@ References: User ID/Message ID, Mode
             return (isset($cachedValue[$type]) ? $cachedValue[$type] : []);
         }
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref ORDER BY size";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND del = 0 ORDER BY size";
 		$result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
 		// cache all types and return the requested one
@@ -7394,8 +7394,8 @@ References: User ID/Message ID, Mode
 	
 	function deleteArtifact($id){
 	    list($id) = $this->escape_input((int) $id);
-	    
-	    $q = "UPDATE " . TB_PREFIX . "artefacts WHERE id = $id SET del = 1";
+
+	    $q = "UPDATE " . TB_PREFIX . "artefacts SET del = 1 WHERE id = $id";
 	    
 	    return mysqli_query($this->dblink, $q);
 	}

@@ -48,6 +48,6 @@ $artifactInfo = Artifacts::getArtifactInfo($artifact);
 </table>
 	<?php
 	
-	if($village['owner'] != 3) echo '<a href="admin.php?p=returnArtifact&artid='.$artifact['id'].'">Return to Natars</a>';
+	if($village['owner'] != 3) echo '<a href="admin.php?action=returnArtifact&artid='.$artifact['id'].'">Return to Natars</a>';
 	?>
 	
