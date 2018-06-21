@@ -200,11 +200,13 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  `bad_effect` tinyint(1) NULL DEFAULT '0',
  `effect2` tinyint(2) NULL DEFAULT '0',
  `lastupdate` int(11) NULL DEFAULT '0', 
+ `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
  KEY `owner-active` (`owner`,`active`),
  KEY `vref-type-kind` (`vref`,`type`,`kind`) USING BTREE,
  KEY `active-type-lastupdate` (`active`,`type`,`lastupdate`),
- KEY `size-type` (`size`, `type`)
+ KEY `size-type` (`size`, `type`),
+ KEY `active-owner-conquered-del` (`active`, `owner`, `conquered`, `del`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --

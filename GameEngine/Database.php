@@ -7385,6 +7385,21 @@ References: User ID/Message ID, Mode
         return (isset(self::$artefactDataCache[$id.$mode][$size.$type]) ? self::$artefactDataCache[$id.$mode][$size.$type] : []);
 	}
 
+	/**
+	 * Delete an artifact
+	 * 
+	 * @param int $id The artifact ID
+	 * @return bool Return true if the query was successful, false otherwise
+	 */
+	
+	function deleteArtifact($id){
+	    list($id) = $this->escape_input((int) $id);
+	    
+	    $q = "UPDATE " . TB_PREFIX . "artefacts WHERE id = $id SET del = 1";
+	    
+	    return mysqli_query($this->dblink, $q);
+	}
+	
 	function villageHasArtefact($vref) {
         // this is a somewhat non-ideal, externally non-changeable way of caching
         // but since we're only ever going to be calling this from a single point of Automation,
@@ -7482,7 +7497,7 @@ References: User ID/Message ID, Mode
 	function getInactiveArtifacts($time){
 	    list($time) = $this->escape_input($time);
 	    
-	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 0 AND owner > 5 AND conquered <= $time ORDER BY conquered ASC, size ASC";
+	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 0 AND owner > 5 AND conquered <= $time AND del = 0 ORDER BY conquered ASC, size ASC";
 	    $result = mysqli_query($this->dblink, $q);
 	    return $this->mysqli_fetch_all($result);
 	}

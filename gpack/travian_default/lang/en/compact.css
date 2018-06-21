@@ -7629,36 +7629,36 @@ div.forum table#topics td.last img.latest_reply {
     height: 9px;
     width: 18px;
 }
-div#build.gid27 table td.icon img {
+table td.icon img {
     background-image: url("../../img/misc/artefacts.gif");
     height: 16px;
     width: 16px;
 }
-div#build.gid27 table td.icon img.artefact_icon_ww {
+table td.icon img.artefact_icon_ww {
     background-position: 0 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_1 {
+table td.icon img.artefact_icon_1 {
     background-position: -16px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_2 {
+table td.icon img.artefact_icon_2 {
     background-position: -32px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_3 {
+table td.icon img.artefact_icon_3 {
     background-position: -48px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_4 {
+table td.icon img.artefact_icon_4 {
     background-position: -64px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_5 {
+table td.icon img.artefact_icon_5 {
     background-position: -80px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_6 {
+table td.icon img.artefact_icon_6 {
     background-position: -96px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_7 {
+table td.icon img.artefact_icon_7 {
     background-position: -112px 0;
 }
-div#build.gid27 table td.icon img.artefact_icon_8 {
+table td.icon img.artefact_icon_8 {
     background-position: -128px 0;
 }
 img.cropfinder_icon {

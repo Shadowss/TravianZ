@@ -267,7 +267,9 @@ class Automation {
                 if (isset($alliance)) {
                     $database->deleteAlliance($alliance);
                 }
-
+                $q = "UPDATE ".TB_PREFIX."artefacts where owner = ".(int) $need['uid']." SET del = 1";
+                $database->query($q);
+                
                 $q = "DELETE FROM ".TB_PREFIX."hero where uid = ".(int) $need['uid'];
                 $database->query($q);
 

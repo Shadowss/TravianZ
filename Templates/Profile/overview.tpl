@@ -166,10 +166,12 @@ if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon
     </thead><tbody>
     <?php 
     foreach($varray as $vil) {
+        $hasArtifact = $database->villageHasArtefact($vil['wref']);
     	$coor = $database->getCoor($vil['wref']);
     	echo "<tr><td class=\"nam\"><a href=\"karte.php?d=".$vil['wref']."&amp;c=".$generator->getMapCheck($vil['wref'])."\">".$vil['name']."</a>";
-    	if($vil['capital'] == 1) echo "<span class=\"none3\"> (capital)</span>";
-		echo "<td class=\"hab\">";
+    	if($vil['capital'] == 1) echo "<span class=\"none3\"> (capital) </span>";
+    	if($hasArtifact) echo "<span class=\"none3\"> (artifact) </span>";
+    	echo "<td class=\"hab\">";
 		
 		// OASIS PART - must to be activated from install part
 	       

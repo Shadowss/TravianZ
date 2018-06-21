@@ -10,7 +10,7 @@
 ##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
 ##  Improved:      aggenkeech                                                  ##
 #################################################################################
-if($_SESSION['access'] < 8) die("Access Denied: You are not Admin!");
+include_once("../GameEngine/Generator.php");
 
 $id = $_GET['did'];
 if(isset($id)){
@@ -21,26 +21,29 @@ if(isset($id)){
 	$fdata = $database->getResourceLevel($village['wref']);
 	$units = $database->getUnit($village['wref']);
 	$abtech = $database->getABTech($id); // Armory/blacksmith level
-	if($type == 1){ $typ = array(3,3,3,9); }
-	elseif($type == 2){ $typ = array(3,4,5,6); }
-	elseif($type == 3){ $typ = array(4,4,4,6); }
-	elseif($type == 4){ $typ = array(4,5,3,6); }
-	elseif($type == 5){ $typ = array(5,3,4,6); }
-	elseif($type == 6){ $typ = array(1,1,1,15); }
-	elseif($type == 7){ $typ = array(4,4,3,7); }
-	elseif($type == 8){ $typ = array(3,4,4,7); }
-	elseif($type == 9){ $typ = array(4,3,4,7); }
-	elseif($type == 10){ $typ = array(3,5,4,6); }
-	elseif($type == 11){ $typ = array(4,5,3,6); }
-	elseif($type == 12){ $typ = array(5,4,3,6); }
+	
+	switch($type){
+	    case 1: $typ = [3, 3, 3, 9]; break;
+	    case 2: $typ = [3, 4, 5, 6]; break;
+	    case 3: $typ = [4, 4, 4, 6]; break;
+	    case 4: $typ = [4, 5, 3, 6]; break;
+	    case 5: $typ = [5, 3, 4, 6]; break;
+	    case 6: $typ = [1, 1, 1, 15]; break;
+	    case 7: $typ = [4, 4, 3, 7]; break;
+	    case 8: $typ = [3, 4, 4, 7]; break;
+	    case 9: $typ = [4, 3, 4, 7]; break;
+	    case 10: $typ = [3, 5, 4, 6]; break;
+	    case 11: $typ = [4, 5, 3, 6]; break;
+	    case 12: $typ = [5, 4, 3, 6]; break;
+	}
+
 	$ocounter = [];
 	$wood = $clay = $iron =$crop = 0;
 	$q = "SELECT o.*, w.x, w.y FROM ".TB_PREFIX."odata AS o LEFT JOIN ".TB_PREFIX."wdata AS w ON o.wref=w.id WHERE conqured = ".(int) $village['wref'];
 	$result = $database->query_return($q);
-	if(!empty($result) > 0){
+	if(!empty($result)){
 		    $newResult = [];
-			foreach($result as $row)
-			{
+			foreach($result as $row){
 				$type = $row['type'];
                 if ( $type == 1 ) {
                     $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%';
@@ -90,15 +93,6 @@ if(isset($id)){
 	$production=$admin->calculateProduction($id,$user['id'],$user['b1'],$user['b2'],$user['b3'],$user['b4'],$fdata, $ocounter, $village['pop']);
 	$refreshiconfrm = "../img/admin/refresh.png";
 	$refreshicon  = "<img src=\"".$refreshiconfrm."\">";
-
-	class MyGenerator
-	{
-		public function getMapCheck($wref)
-		{
-			return substr(md5($wref), 5, 2);
-		}
-	};
-	$generator = new MyGenerator;
 
 	if($village && $user){
 		include("search2.tpl"); ?>
@@ -280,7 +274,10 @@ if(isset($id)){
 			include('troopUpgrades.tpl');
 		?>
 
-
+		<?php
+			include('artifact.tpl');
+		?>
+		
 		<a href="admin.php?p=editVillage&did=<?php echo $_GET['did']; ?>" title="Edit Village">
 		<div id="content" class="village1" style="min-height: 264px;">
 			<div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>" style="float: left;">

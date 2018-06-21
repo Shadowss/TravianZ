@@ -1,3 +1,7 @@
+-- 21.06.2018 -> added one column and one index
+ALTER TABLE `s1_artefacts` ADD `del` TINYINT(1) NULL DEFAULT '0' AFTER `lastupdate`;
+ALTER TABLE `testtravian`.`s1_artefacts` ADD INDEX `active-owner-conquered-del` (`active`, `owner`, `conquered`, `del`);
+
 -- 21.05.2018 -> added three indexes
 ALTER TABLE `s1_forum_cat` ADD INDEX `display_to_alliances` (`display_to_alliances`(11));
 ALTER TABLE `s1_forum_cat` ADD INDEX `display_to_users` (`display_to_users`(11)); 
