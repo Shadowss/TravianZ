@@ -3203,9 +3203,15 @@ td.cbg2 {
 .ddb {
     float: left;
 }
+.desc1div {
+    width: 236px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
 .desc2div {
-    overflow: hidden;
     width: 235px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 div.activation_time {
     padding-left: 5px;

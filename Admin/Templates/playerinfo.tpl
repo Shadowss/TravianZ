@@ -261,9 +261,9 @@
 								</td>
 							</tr>
 						</table>
-					<td class="desc1">
+					<td class="desc1"><div class="desc1div">
 						<center><?php echo nl2br($profiel[1]); ?></center>
-					</td>
+					</div></td>
 				</tr>
 			</tbody>
 		</table>

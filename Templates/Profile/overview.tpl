@@ -18,7 +18,7 @@
 $ranking->procRankReq($_GET);
 $_GET['uid'] = preg_replace("/[^0-9]/","",$_GET['uid']);
 $displayarray = $database->getUserArray($_GET['uid'],1);
- 
+
 
 $varmedal = $database->getProfileMedal($_GET['uid']);
 
@@ -29,7 +29,7 @@ $profiel=explode("".md5('skJkev3')."", $profiel);
 $varray = $database->getProfileVillages($_GET['uid']);
 $totalpop = 0;
 foreach($varray as $vil) {
-	$totalpop += $vil['pop'];
+    $totalpop += $vil['pop'];
 }
 ?>
 <h1>Player profile</h1>
@@ -146,72 +146,76 @@ if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon
 
         </td>
         <td class="desc1" >
-            <div><?php echo nl2br($profiel[1]); ?>
+            <div class="desc1div"><?php echo nl2br($profiel[1]); ?>
             
             </div>
         </td>
     </tr>
     </tbody>
-</table><table cellpadding="1" cellspacing="1" id="villages">
-    <thead>
-    <tr>
-        <th colspan="4">Villages</th>
-    </tr>
-    <tr>
-        <td>Name</td>
-        <td>Oasis</td>
-        <td>Inhabitants</td>
-        <td>Coordinates</td>
-    </tr>
-    </thead><tbody>
-    <?php 
-    foreach($varray as $vil) {
-        $hasArtifact = $database->villageHasArtefact($vil['wref']);
-    	$coor = $database->getCoor($vil['wref']);
-    	echo "<tr><td class=\"nam\"><a href=\"karte.php?d=".$vil['wref']."&amp;c=".$generator->getMapCheck($vil['wref'])."\">".$vil['name']."</a>";
-    	if($vil['capital'] == 1) echo "<span class=\"none3\"> (capital) </span>";
-    	if($hasArtifact) echo "<span class=\"none3\"> (artifact) </span>";
-    	echo "<td class=\"hab\">";
-		
-		// OASIS PART - must to be activated from install part
-	       
-		$oases = $database->getOasis($vil['wref']);	
-		foreach ($oases as $oasis){
-            switch ($oasis['type']) {
-                case 1:
-                case 2:
-                    echo "<img class='r100' src='img/x.gif' title='+25% Lumber'> ";
-                    break;
-                case 3:
-                    echo "<img class='r200' src='img/x.gif' title='+25% Lumber +25% Crop'> ";
-                    break;
-                case 4:
-                case 5:
-                    echo "<img class='r400' src='img/x.gif' title='+25% Clay'> ";
-                    break;
-                case 6:
-                    echo "<img class='r500' src='img/x.gif' title='+25% Clay +25% Crop'> ";
-                    break;
-                case 7:
-                case 8:
-                    echo "<img class='r700' src='img/x.gif' title='+25% Iron'> ";
-                    break;
-                case 9:
-                    echo "<img class='r800' src='img/x.gif' title='+25% Iron +25% Crop'> ";
-                    break;
-                case 10:
-                case 11:
-                    echo "<img class='r1000' src='img/x.gif' title='+25% Crop'> ";
-                    break;
-                case 12:
-                    echo "<img class='r1100' src='img/x.gif' title='+50% Crop'> ";
-                    break;
-            }
+</table>
+
+<table cellpadding="1" cellspacing="1" id="villages">
+<thead>
+	 <tr>
+		<th colspan="<?php echo NEW_FUNCTIONS_OASIS ? 4 : 3; ?>">Villages</th>
+     </tr>
+     <tr>
+    	<td>Name</td>
+    	<?php if(NEW_FUNCTIONS_OASIS){ ?> 	
+    	<td>Oasis</td>
+    	<?php } ?>	
+    	<td>Inhabitants</td>
+    	<td>Coordinates</td>	
+	</tr>
+</thead>
+<tbody>
+<?php 
+        foreach($varray as $vil) {
+            $hasArtifact = $database->villageHasArtefact($vil['wref']);
+            $coor = $database->getCoor($vil['wref']);
+            echo "<tr><td class=\"nam\"><a href=\"karte.php?d=".$vil['wref']."&amp;c=".$generator->getMapCheck($vil['wref'])."\">".$vil['name']."</a>";
+            if($vil['capital'] == 1) echo "<span class=\"none3\"> (capital)</span>";
+            if($hasArtifact) echo "<span class=\"none3\"> (artifact) </span>";
+            
+            if(NEW_FUNCTIONS_OASIS){
+                echo "<td class=\"hab\">";
+                $oases = $database->getOasis($vil['wref']);
+                foreach ($oases as $oasis) {
+                    switch ($oasis['type']) {
+                        case 1:
+                        case 2:
+                            echo "<img class='r100' src='img/x.gif' title='+25% Lumber'> ";
+                            break;
+                        case 3:
+                            echo "<img class='r200' src='img/x.gif' title='+25% Lumber +25% Crop'> ";
+                            break;
+                        case 4:
+                        case 5:
+                            echo "<img class='r400' src='img/x.gif' title='+25% Clay'> ";
+                            break;
+                        case 6:
+                            echo "<img class='r500' src='img/x.gif' title='+25% Clay +25% Crop'> ";
+                            break;
+                        case 7:
+                        case 8:
+                            echo "<img class='r700' src='img/x.gif' title='+25% Iron'> ";
+                            break;
+                        case 9:
+                            echo "<img class='r800' src='img/x.gif' title='+25% Iron +25% Crop'> ";
+                            break;
+                        case 10:
+                        case 11:
+                            echo "<img class='r1000' src='img/x.gif' title='+25% Crop'> ";
+                            break;
+                        case 12:
+                            echo "<img class='r1100' src='img/x.gif' title='+50% Crop'> ";
+                            break;
+                    }
+                }
+                echo "</td>";
+            }      
+            echo "<td class=\"hab\">".$vil['pop']."</td><td class=\"aligned_coords\">";
+            echo "<div class=\"cox\">(".$coor['x']."</div><div class=\"pi\">|</div><div class=\"coy\">".$coor['y'].")</div></td></tr>";
         }
-		
-		echo "</td>";
-        echo "<td class=\"hab\">".$vil['pop']."</td><td class=\"aligned_coords\">";
-        echo "<div class=\"cox\">(".$coor['x']."</div><div class=\"pi\">|</div><div class=\"coy\">".$coor['y'].")</div></td></tr>";
-    }
-    ?>
-        </tbody></table>
+        echo "</tbody></table>";
+?>

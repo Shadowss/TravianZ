@@ -48,6 +48,9 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEWSBOX2=(NEWSBOX2==false)? "false":"true";
 		$NEWSBOX3=(NEWSBOX3==false)? "false":"true";
 		$LIMIT_MAILBOX=(LIMIT_MAILBOX==false)? "false":"true";
+        $NEW_FUNCTIONS_OASIS = (NEW_FUNCTIONS_OASIS == false ? 'false' : 'true');
+        $NEW_FUNCTIONS_ALLIANCE_INVITATION = (NEW_FUNCTIONS_ALLIANCE_INVITATION == false ? 'false' : 'true');
+        $NEW_FUNCTIONS_EMBASSY_MECHANICS = (NEW_FUNCTIONS_EMBASSY_MECHANICS == false ? 'false' : 'true');
 
 		$text = file_get_contents("constant_format.tpl");
 		$text = preg_replace("'%ERRORREPORT%'", $ERRORREPORT, $text);
@@ -123,6 +126,9 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);
 		$text = preg_replace("'%HOMEPAGE%'", HOMEPAGE, $text);
 		$text = preg_replace("'%SERVER%'", SERVER, $text);
+        $text = preg_replace("'%NEW_FUNCTIONS_OASIS%'", $NEW_FUNCTIONS_OASIS, $text);
+        $text = preg_replace("'%NEW_FUNCTIONS_ALLIANCE_INVITATION%'", $NEW_FUNCTIONS_ALLIANCE_INVITATION, $text);
+        $text = preg_replace("'%NEW_FUNCTIONS_EMBASSY_MECHANICS%'", $NEW_FUNCTIONS_EMBASSY_MECHANICS, $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);

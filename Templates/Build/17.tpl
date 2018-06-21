@@ -31,11 +31,12 @@ else if(!empty($_POST['dname'])){
 if(isset($checkexist) && $checkexist){
 $villageOwner = $database->getVillageField($getwref,'owner');
 $userAccess = $database->getUserField($villageOwner,'access',0);
+$userVacation = $database->getUserField($villageOwner,'vac_mode',0);
 $userID = $database->getUserField($villageOwner,'id',0);
 }
 $maxcarry = $market->maxcarry;
 $maxcarry *= $market->merchantAvail();
-if(isset($_POST['ft'])=='check' && (($_POST['send3'] > 1 && $_POST['send3'] <= 3 && $session->goldclub) || $_POST['send3'] == 1) && $getwref != $village->wid && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN))){
+if(isset($_POST['ft'])=='check' && (($_POST['send3'] > 1 && $_POST['send3'] <= 3 && $session->goldclub) || $_POST['send3'] == 1) && $getwref != $village->wid && $allres!=0 && $allres <= $maxcarry && ($_POST['x']!="" && $_POST['y']!="" or $_POST['dname']!="") && $checkexist && ($userAccess == 2 || $userAccess == MULTIHUNTER || (ADMIN_ALLOW_INCOMING_RAIDS && $userAccess == ADMIN)) && $userVacation == 0){
 ?>
 <form method="POST" name="snd" action="build.php"> 
 <input type="hidden" name="ft" value="mk1">
@@ -226,6 +227,8 @@ if(isset($_POST['ft'])=='check'){
 		$error = '<span class="error"><b>'.BANNED_CANNOT_SEND_RESOURCES.'.</b></span>';
     }elseif($_POST['r1']==0 && $_POST['r2']==0 && $_POST['r3']==0 && $_POST['r4']==0){
 		$error = '<span class="error"><b>'.RESOURCES_NO_SELECTED.'.</b></span>';
+	}elseif($userVacation == '1') {
+		$error = '<span class="error"><b>Player is on vacation mode. You cannot send resources to him.</b></span>';
     }elseif(!$_POST['x'] && !$_POST['y'] && !$_POST['dname']){
 		$error = '<span class="error"><b>'.ENTER_COORDINATES.'.</b></span>';
     }elseif($allres > $maxcarry){
