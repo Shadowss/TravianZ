@@ -28,7 +28,7 @@ since the installer logic has changed and you would just crash your old version
 * [Wiki](https://github.com/Shadowss/TravianZ/wiki)
 * [Game Mechanics](http://travian.wikia.com/wiki/Travian_Wiki)
 * [The Making Of](https://www.youtube.com/watch?v=1XiHhpGUmQg&list=PLzV5avt1FFHorlIeoL9YX0pdb9bj-FO84) - YouTube Videos about this project
-* [Donate to TravianZ](https://liberapay.com/martinambrus/donate)
+* [Donate to TravianZ](https://www.paypal.me/cata7007)
 
 **Minimum requirements:**
 * [PHP](http://php.net/) 7.0.0+
