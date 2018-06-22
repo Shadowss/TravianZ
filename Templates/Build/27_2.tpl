@@ -30,14 +30,14 @@
     		</thead>
     		<tbody>
             <?php
-
-            $count = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts"), MYSQLI_ASSOC);
+            //TODO: Merge this in a unique foreach
+            $count = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts WHERE del = 0"), MYSQLI_ASSOC);
 		    $count = $count['Total'];
 		if($count == 0) echo '<td colspan="4" class="none">'.NO_ARTIFACTS.'</td>';	
         else 
         {
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 1");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 1 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -55,7 +55,7 @@
             
             <?php
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 2");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 2 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -73,7 +73,7 @@
             
             <?php
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 3");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 3 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -91,7 +91,7 @@
             
             <?php
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 4");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 4 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -108,7 +108,7 @@
             
             <?php
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 5");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 5 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -125,7 +125,7 @@
             
             <?php
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 6");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 6 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -142,7 +142,7 @@
             
             <?php
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 7");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 7 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -159,7 +159,7 @@
             
             <?php
 
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 8");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE size = 1 AND type = 8 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         		echo '<tr>';
         		echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';
@@ -173,7 +173,7 @@
         	?>
         	<tr><td colspan="4"></td></tr>
         	<?php
-        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE type = 11");
+        	$artefact = mysqli_query($database->dblink,"SELECT type, id, name, effect, vref, owner FROM `" . TB_PREFIX . "artefacts` WHERE type = 11 AND del = 0");
         	while($row = mysqli_fetch_array($artefact)) {
         	    echo '<tr>';
         	    echo '<td class="icon"><img class="artefact_icon_' . $row['type'] . '" src="img/x.gif" alt="" title=""></td>';

@@ -7033,7 +7033,7 @@ References: User ID/Message ID, Mode
               SUM(IF(size = '1' AND vref = $vid, 1, 0)) small,
               SUM(IF(size = '2', 1, 0)) great,
               SUM(IF(size = '3', 1, 0)) `unique`
-              FROM " . TB_PREFIX . "artefacts WHERE owner = ".(int) $uid." AND active = 1 AND (type = $kind OR kind = $kind)";
+              FROM " . TB_PREFIX . "artefacts WHERE owner = ".$uid." AND active = 1 AND (type = $kind OR kind = $kind) AND del = 0";
 	    $result = mysqli_query($this->dblink, $q);
 	    return $this->mysqli_fetch_all($result)[0];    
 	}
@@ -7251,7 +7251,7 @@ References: User ID/Message ID, Mode
               FROM
                     ".TB_PREFIX."artefacts
               WHERE
-                    owner = ".$uid." AND type = 11 AND active = 1";
+                    owner = ".$uid." AND type = 11 AND active = 1 AND del = 0";
 	    }else{
 	        $q = "SELECT
 			        Count(*) as Total
@@ -7260,7 +7260,7 @@ References: User ID/Message ID, Mode
 			  INNER JOIN ".TB_PREFIX."users AS users
 					ON users.id != ".$uid." AND users.alliance = ".$alliance." AND artefacts.owner = users.id AND artefacts.type = 11
 		      WHERE
-					users.id > 4 AND artefacts.active = 1";
+					users.id > 4 AND artefacts.active = 1 AND artefacts.del = 0";
 	    }
             
 	    $result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
@@ -7336,7 +7336,7 @@ References: User ID/Message ID, Mode
             return (isset($cachedValue[$type.$size]) ? $cachedValue[$type.$size] : []);
         }
 
-        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id ";
+        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND del = 0";
         $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
         // cache all types and return the requested one
@@ -7366,7 +7366,7 @@ References: User ID/Message ID, Mode
             return (isset($cachedValue[$size.$type]) ? $cachedValue[$size.$type] : []);
         }
 
-        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE ".(!$mode ? 'owner' : 'vref')." = $id AND active = 1";
+        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE ".(!$mode ? 'owner' : 'vref')." = $id AND active = 1 AND del = 0";
         $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
         // cache all types and return the requested one
@@ -7411,7 +7411,7 @@ References: User ID/Message ID, Mode
             return $cachedData[$vref];
         }
 
-        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts WHERE vref = $vref";
+        $q = "SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND del = 0";
         $result = mysqli_fetch_array(mysqli_query($this->dblink, $q), MYSQLI_ASSOC);
         $cachedData[$vref] = $result['Total'];
 
@@ -7517,7 +7517,7 @@ References: User ID/Message ID, Mode
               SUM(IF(size = '1', 1, 0)) small,
               SUM(IF(size = '2', 1, 0)) great,
               SUM(IF(size = '3', 1, 0)) `unique`
-              FROM " . TB_PREFIX . "artefacts WHERE owner = ".(int) $uid.($mode ? " AND active = 1" : "");
+              FROM " . TB_PREFIX . "artefacts WHERE owner = ".(int) $uid.($mode ? " AND active = 1 AND del = 0" : "");
 	    $result = mysqli_query($this->dblink, $q);
 	    return $this->mysqli_fetch_all($result)[0];
 	}
@@ -7548,7 +7548,7 @@ References: User ID/Message ID, Mode
 	function getNewestArtifactBySize($id, $size){
 	    list($id, $size) = $this->escape_input((int) $id, (int) $size);
 	    
-	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 1 AND owner = $id AND size = $size ORDER BY conquered DESC LIMIT 1";
+	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE active = 1 AND owner = $id AND size = $size AND del = 0 ORDER BY conquered DESC LIMIT 1";
 	    $result = mysqli_query($this->dblink, $q);
 	    return mysqli_fetch_array($result);
 	}
@@ -7606,7 +7606,7 @@ References: User ID/Message ID, Mode
 	function getArtefactDetails($id) {
 	    list($id) = $this->escape_input((int) $id);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = " . $id . " LIMIT 1";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = ".$id." AND del = 0 LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
 	}

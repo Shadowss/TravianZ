@@ -21,22 +21,22 @@ $coor = $database->getCoor($wref);
 <tbody>
 <?php
 
-if (count($artefact1)==0){
-                echo '<tr><td colspan="4" class="none">'.ANY_ARTIFACTS.'</td></tr>';
-        } else {
-                foreach($artefact1 as $artefact){
-                $coor2 = $database->getCoor($artefact['vref']);
-                    if($artefact['size'] == 1 && $artefact['type'] != 11){
-                       $reqlvl = 10;
-                       $effect = "village";
-                   }else{
-                                         if($artefact['type'] != 11){
-                       $reqlvl = 20;
-                                         }else{
-                                         $reqlvl = 10;
-                                         }
-$effect = "account";
-}
+if (empty($artefact1)) echo '<tr><td colspan="4" class="none">'.ANY_ARTIFACTS.'</td></tr>';
+else 
+{
+    foreach($artefact1 as $artefact){
+        $coor2 = $database->getCoor($artefact['vref']);
+        if($artefact['size'] == 1 && $artefact['type'] != 11){
+            $reqlvl = 10;
+            $effect = "village";
+        }else{
+            if($artefact['type'] != 11){
+                $reqlvl = 20;
+            }else{
+                $reqlvl = 10;
+            }
+            $effect = "account";
+        }
         echo '<tr><td class="icon"><img class="artefact_icon_' . $artefact['type'] . '" src="img/x.gif"></td>';
         echo '<td class="nam">
 <a href="build.php?id=' . $id . '&show='.$artefact['id'].'">' . $artefact['name'] . '</a> <span class="bon">' . $artefact['effect'] . '</span>
@@ -46,8 +46,8 @@ Treasury <b>' . $reqlvl . '</b>, Effect <b>' . $effect . '</b>
 </td>';
         echo '<td class="pla"><a href="karte.php?d=' . $artefact['vref'] . '&c=' . $generator->getMapCheck($artefact['vref']) . '">' . $database->getVillageField($artefact['vref'], "name") . '</a></td>';
         echo '<td class="dist">' . date("d.m.Y H:i", $artefact['conquered']) . '</td></tr>';
+    }
 }
-                }
 
 ?>
 </tbody>
@@ -72,13 +72,13 @@ Treasury <b>' . $reqlvl . '</b>, Effect <b>' . $effect . '</b>
 
 <tbody>
 <?php
-$count = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts"), MYSQLI_ASSOC);
+$count = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM " . TB_PREFIX . "artefacts WHERE del = 0"), MYSQLI_ASSOC);
 $count = $count['Total'];
 if($count == 0) echo '<td colspan="4" class="none">'.NO_ARTIFACTS_AREA.'</td>';
 else 
 { 
-    $arts = mysqli_query($database->dblink,"SELECT type, vref, id, name, size, owner, effect FROM " . TB_PREFIX . "artefacts");
-    $rows = array();
+    $arts = mysqli_query($database->dblink,"SELECT type, vref, id, name, size, owner, effect FROM " . TB_PREFIX . "artefacts WHERE del = 0");
+    $rows = [];
     while($row = mysqli_fetch_array($arts)) {
         $query = mysqli_query($database->dblink,'SELECT x, y FROM `' . TB_PREFIX . 'wdata` WHERE `id` = ' . (int) $row['vref']);
         $coor2 = mysqli_fetch_assoc($query);
