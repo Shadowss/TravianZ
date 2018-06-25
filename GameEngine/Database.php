@@ -2766,28 +2766,29 @@ class MYSQLi_DB implements IDbConnection {
 
         // create a message notification for each person subscribed to this topic
         // ... for now it's everyone who ever posted there, there is no real un/subscription yet
-        if ($fid2 !== 0) {
-            $q = "SELECT DISTINCT owner FROM ".TB_PREFIX . "forum_post WHERE topic = $tids";
-            $result = mysqli_query($this->dblink, $q);
-            if ($result->num_rows) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    if ($row['owner'] != $owner) {
-                        $this->sendMessage(
-                            (int) $row['owner'],
-                            4,
-                            'New Message in Alliance Forum',
-                            "Hi!\n\n<a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$this->escape($session->username)."</a> posted a new message into your common topic. Here\\'s a link that will get you there: <a href=\"".rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>",
-                            0,
-                            0,
-                            0,
-                            0,
-                            0,
-                            true);
+        if(NEW_FUNCTIONS_FORUM_POST_MESSAGE){
+            if ($fid2 !== 0) {
+                $q = "SELECT DISTINCT owner FROM ".TB_PREFIX . "forum_post WHERE topic = $tids";
+                $result = mysqli_query($this->dblink, $q);
+                if ($result->num_rows) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        if ($row['owner'] != $owner) {
+                            $this->sendMessage(
+                                (int) $row['owner'],
+                                4,
+                                'New Message in Forum',
+                                "Hi!\n\n<a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$this->escape($session->username)."</a> posted a new message into your common topic. Here\\'s a link that will get you there: <a href=\"".rtrim(SERVER, '/')."/allianz.php?s=2&amp;pid=2&amp;fid2=$fid2&amp;tid=$tids\">forum link</a>\n\nYours sincerely,\n<i>Server Robot :)</i>",
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                true);
+                        }
                     }
                 }
             }
         }
-
         return $postID;
     }
 
@@ -7173,9 +7174,9 @@ References: User ID/Message ID, Mode
 		$email = "natars@noreply.com";
 		$uid = 3;
 		$tribe = 5;
-		$desc = "***************************
+		$desc = "**************************
 				[#natars]
-			***************************";
+			**************************";
 		
 		$q = "INSERT INTO ".TB_PREFIX."users (id, username, password, access, email, timestamp, tribe, protect, desc2) VALUES ('$uid', '$username', '$password', ".USER.", '$email', ".time().", $tribe, 0, '$desc')";
 		mysqli_query($this->dblink, $q);

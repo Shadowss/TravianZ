@@ -204,6 +204,22 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
             <td>New Alliance & Embassy Mechanics <em class="tooltip">?<span class="classic">For this setting, you can find more information on the link: <a href="https://github.com/Shadowss/TravianZ/wiki/New-Alliance-&-Embassy-Mechanics" target="_blank">https://github.com</a></span></em></td>
             <td><?php echo NEW_FUNCTIONS_EMBASSY_MECHANICS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
+        <tr>
+            <td>New forum post message <em class="tooltip">?<span class="classic">Enable (Disable) if a player leaves at least one message in the thread on the forum, he will receive in-game messages about the fact that new messages have appeared in the same thread (i.e. is technically "subscribed to")</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_FORUM_POST_MESSAGE ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+        <tr>
+            <td>Tribes images in profile <em class="tooltip">?<span class="classic">Enable (Disable) displaying images of tribes with a description in the players profile</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_TRIBE_IMAGES ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+        <tr>
+            <td>MHs images in profile <em class="tooltip">?<span class="classic">Enable (Disable) displaying images of Multihunters with a description in the MHs profile</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_MHS_IMAGES ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+        <tr>
+            <td>Display artifact in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the artifact in the player profile, opposite the corresponding village in which it is located</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_DISPLAY_ARTIFACT ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
     </table>
     <table id="member">
         <thead>

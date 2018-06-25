@@ -300,6 +300,42 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 </select>
             </td>
         </tr>
+        <tr>
+            <td><span class="f9 c6">New forum post message:</span></td>
+            <td>
+                <select name="new_functions_forum_post_message">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="f9 c6">Tribes images in profile:</span></td>
+            <td>
+                <select name="new_functions_tribe_images">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="f9 c6">MHs images in profile:</span></td>
+            <td>
+                <select name="new_functions_mhs_images">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="f9 c6">Display artifact in profile:</span></td>
+            <td>
+                <select name="new_functions_display_artifact">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
     </table>
     </p>
     <p>

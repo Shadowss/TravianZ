@@ -141,11 +141,15 @@ class Process {
 		$findReplace["%T4_COMING%"] = $_POST['t4_coming'];
 		$findReplace["%REG_OPEN%"] = $_POST['reg_open'];
 		$findReplace["%PEACE%"] = $_POST['peace'];
-        
-        //New Mechanics and Functions
-        $findReplace["%NEW_FUNCTIONS_OASIS%"] = $_POST['new_functions_oasis'];
-        $findReplace["%NEW_FUNCTIONS_ALLIANCE_INVITATION%"] = $_POST['new_functions_alliance_invitation'];
-        $findReplace["%NEW_FUNCTIONS_EMBASSY_MECHANICS%"] = $_POST['new_functions_embassy_mechanics'];
+
+		//New Mechanics and Functions
+		$findReplace["%NEW_FUNCTIONS_OASIS%"] = $_POST['new_functions_oasis'];
+		$findReplace["%NEW_FUNCTIONS_ALLIANCE_INVITATION%"] = $_POST['new_functions_alliance_invitation'];
+		$findReplace["%NEW_FUNCTIONS_EMBASSY_MECHANICS%"] = $_POST['new_functions_embassy_mechanics'];
+		$findReplace["%NEW_FUNCTIONS_FORUM_POST_MESSAGE%"] = $_POST['new_functions_forum_post_message'];
+		$findReplace["%NEW_FUNCTIONS_TRIBE_IMAGES%"] = $_POST['new_functions_tribe_images'];
+		$findReplace["%NEW_FUNCTIONS_MHS_IMAGES%"] = $_POST['new_functions_mhs_images'];
+		$findReplace["%NEW_FUNCTIONS_DISPLAY_ARTIFACT%"] = $_POST['new_functions_display_artifact'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 

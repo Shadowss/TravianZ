@@ -30,8 +30,8 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 
 		$SUPPORT_MSGS_IN_ADMIN = (ADMIN_RECEIVE_SUPPORT_MESSAGES == false ? 'false' : 'true');
 		$ADMINS_RAIDABLE = (ADMIN_ALLOW_INCOMING_RAIDS == false ? 'false' : 'true');
-        $REG_OPEN = (REG_OPEN == false ? 'false' : 'true');
-        $QUEST = (QUEST == false ? 'false' : 'true');
+		$REG_OPEN = (REG_OPEN == false ? 'false' : 'true');
+		$QUEST = (QUEST == false ? 'false' : 'true');
 
 		// SERVER SETTINGS - we need to keep these intact
 		$text = preg_replace("'%ERRORREPORT%'", ERROR_REPORT, $text);
@@ -105,9 +105,13 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%DOMAIN%'", DOMAIN, $text);
 		$text = preg_replace("'%HOMEPAGE%'", HOMEPAGE, $text);
 		$text = preg_replace("'%SERVER%'", SERVER, $text);
-        $text = preg_replace("'%NEW_FUNCTIONS_OASIS%'", $_POST['new_functions_oasis'], $text);
-        $text = preg_replace("'%NEW_FUNCTIONS_ALLIANCE_INVITATION%'", $_POST['new_functions_alliance_invitation'], $text);
-        $text = preg_replace("'%NEW_FUNCTIONS_EMBASSY_MECHANICS%'", $_POST['new_functions_embassy_mechanics'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_OASIS%'", $_POST['new_functions_oasis'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_ALLIANCE_INVITATION%'", $_POST['new_functions_alliance_invitation'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_EMBASSY_MECHANICS%'", $_POST['new_functions_embassy_mechanics'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_FORUM_POST_MESSAGE%'", $_POST['new_functions_forum_post_message'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_TRIBE_IMAGES%'", $_POST['new_functions_tribe_images'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_MHS_IMAGES%'", $_POST['new_functions_mhs_images'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_ARTIFACT%'", $_POST['new_functions_display_artifact'], $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);

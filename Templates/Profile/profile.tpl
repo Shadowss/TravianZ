@@ -156,22 +156,31 @@ MEDAL CATEGORY:
 			 	 </tr>
 				<?php
 				// Added by Shadow - cata7007@gmail.com / Skype : cata7007
-				if($session->userinfo['tribe'] == 1) {
-				echo"<tr><td>Tribe Romans</td><td></td><td></td><td>[#roman]</td></tr>";
-				} else if($session->userinfo['tribe'] == 2) {
-				echo"<tr><td>Tribe Teutons</td><td></td><td></td><td>[#teuton]</td></tr>";
-				} else if($session->userinfo['tribe'] == 3) {
-				echo"<tr><td>Tribe Gauls</td><td></td><td></td><td>[#gaul]</td></tr>";
-				} else if($session->userinfo['access'] == 9) {
-				echo"<tr><td>Administrator</td><td></td><td></td><td>[#MH]</td></tr>";
-				echo"<tr><td>Administrator</td><td></td><td></td><td>[#TEAM]</td></tr>";
-				} else if($session->userinfo['access'] == 8) {
-				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MH]</td></tr>";
-				echo"<tr><td>Multihunter</td><td></td><td></td><td>[#TEAM]</td></tr>";
-				} else if($session->userinfo['username'] == "Shadow") {
-				echo"<tr><td>Shadow</td><td></td><td></td><td>[#MH]</td></tr>";
-				echo"<tr><td>Shadow</td><td></td><td></td><td>[#TEAM]</td></tr>";
-				echo"<tr><td>Shadow</td><td></td><td></td><td>[#EVENT]</td></tr>";
+				if(NEW_FUNCTIONS_TRIBE_IMAGES){
+					if($session->userinfo['tribe'] == 1){
+						echo"<tr><td>Tribe Romans</td><td></td><td></td><td>[#roman]</td></tr>";
+					}elseif($session->userinfo['tribe'] == 2){
+						echo"<tr><td>Tribe Teutons</td><td></td><td></td><td>[#teuton]</td></tr>";
+					}elseif($session->userinfo['tribe'] == 3){
+						echo"<tr><td>Tribe Gauls</td><td></td><td></td><td>[#gaul]</td></tr>";
+					}
+				}
+				if(NEW_FUNCTIONS_MHS_IMAGES){
+					if($session->userinfo['access'] == 9){
+						echo"<tr><td>Administrator</td><td></td><td></td><td>[#MULTIHUNTER]</td></tr>";
+						echo"<tr><td>Administrator</td><td></td><td></td><td>[#MH]</td></tr>";
+						echo"<tr><td>Administrator</td><td></td><td></td><td>[#TEAM]</td></tr>";
+					}elseif($session->userinfo['access'] == 8){
+						echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MULTIHUNTER]</td></tr>";
+						echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MH]</td></tr>";
+						echo"<tr><td>Multihunter</td><td></td><td></td><td>[#TEAM]</td></tr>";
+					}
+				}
+				if($session->userinfo['username'] == "Shadow"){
+					echo"<tr><td>Shadow</td><td></td><td></td><td>[#SHADOW]</td></tr>";
+					echo"<tr><td>Shadow</td><td></td><td></td><td>[#MH]</td></tr>";
+					echo"<tr><td>Shadow</td><td></td><td></td><td>[#TEAM]</td></tr>";
+					echo"<tr><td>Shadow</td><td></td><td></td><td>[#EVENT]</td></tr>";
 				}?>
 				 </table></p>
 
