@@ -220,6 +220,10 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
             <td>Display artifact in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the artifact in the player profile, opposite the corresponding village in which it is located</span></em></td>
             <td><?php echo NEW_FUNCTIONS_DISPLAY_ARTIFACT ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
+		<tr>
+            <td>Vacation Mode <em class="tooltip">?<span class="classic">Enable (Disable) vacation mode, will be displayed or hidden in the player profile menu</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_VACATION ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
     </table>
     <table id="member">
         <thead>
