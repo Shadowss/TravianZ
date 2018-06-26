@@ -8081,33 +8081,26 @@ References: User ID/Message ID, Mode
     References:
     *****************************************/
 
-   function setvacmode($uid, $days)
-    {
+   function setvacmode($uid, $days) {
         // TODO: refactor vacation mode
-        return;
-        
         list ($uid, $days) = $this->escape_input((int) $uid, (int) $days);
         $days1 = 60 * 60 * 24 * $days;
         $time = time() + $days1;
         $q = "UPDATE " . TB_PREFIX . "users SET vac_mode = '1' , vac_time=" . $time . " WHERE id=" . $uid . "";
         $result = mysqli_query($this->dblink, $q);
+		return;
     }
 
-    function removevacationmode($uid)
-    {
+    function removevacationmode($uid){
         // TODO: refactor vacation mode
-        return;
-        
         list ($uid) = $this->escape_input((int) $uid);
         $q = "UPDATE " . TB_PREFIX . "users SET vac_mode = '0' , vac_time='0' WHERE id=" . $uid . "";
         $result = mysqli_query($this->dblink, $q);
+		return;
     }
 
-    function getvacmodexy($wref)
-    {
+    function getvacmodexy($wref){
         // TODO: refactor vacation mode
-        return;
-        
         list ($wref) = $this->escape_input((int) $wref);
         $q = "SELECT id,oasistype,occupied FROM " . TB_PREFIX . "wdata where id = $wref";
         $result = mysqli_query($this->dblink, $q);
