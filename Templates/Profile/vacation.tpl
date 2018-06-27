@@ -1,3 +1,5 @@
+<?php if(NEW_FUNCTIONS_VACATION){
+?>
 <h1>Player profile</h1>
 
 <?php 
@@ -78,3 +80,9 @@ echo "<span class=\"error\">".$form->getError("vac")."</span>";
 ?>
     <p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" /></p>
 </form>
+<?php
+}else{
+	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
+	exit;
+}
+?>
