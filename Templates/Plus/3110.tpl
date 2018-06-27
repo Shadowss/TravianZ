@@ -57,7 +57,7 @@ $free = $session->uid;
                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
     
                       <!-- Identify your business so that you can collect the payments. -->
-                      <input type="hidden" name="business" value="<?php echo (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'martin@martinambrus.com'); ?>">
+                      <input type="hidden" name="business" value="<?php echo (defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com'); ?>">
                     
                       <!-- Specify a Buy Now button. -->
                       <input type="hidden" name="cmd" value="_xclick">
