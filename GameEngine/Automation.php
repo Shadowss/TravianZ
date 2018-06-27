@@ -3048,9 +3048,19 @@ class Automation {
     					50 => rand(50, 250) * NATARS_UNITS];
 
     	//WW village buildings
-    	$buildingArrays = ["f99t" => 40, "f99" => 0, "f39t" => 16, "f39" => 1, "f19t" => 17, "f19" => 20, "f20t" => 11,
-    					   "f20" => 20, "f21t" => 15, "f21" => 20, "f22t" => 10, "f22" => 20, "f23t" => 22, "f23" => 10, 
-    					   "f24t" => 25, "f24" => 10, "f26t" => 0, "f26" => 0, "f27t" => 19, "f27" => 10, "f31t" => 23, "f31" => 10];
+		$buildingArrays = [
+						//WW of the 0th level, Main Building of the 10th level, Marketplace of the 1th level, Delete Main Building of the 1th level
+							"f99t" => 40, "f99" => 0, "f22t" => 15, "f22" => 10, "f34t" => 17, "f34" => 1, "f26t" => 0, "f26" => 0, 
+						//Warehouse of the 20th & 10th level, Granary of the 20th & 10th level
+							"f20t" => 10, "f20" => 20, "f19t" => 10, "f19" => 10, "f23t" => 11, "f23" => 20, "f27t" => 11, "f27" => 10, 
+						//All Woodcutter of the 5th level
+							"f1t" => 1, "f1" => 5, "f3t" => 1, "f3" => 5, "f14t" => 1, "f14" => 5, "f17t" => 1, "f17" => 5, 
+						//All Clay Pit of the 5th level
+							"f5t" => 2, "f5" => 5, "f6t" => 2, "f6" => 5, "f16t" => 2, "f16" => 5, "f18t" => 2, "f18" => 5, 
+						//All Iron Mine of the 5th level
+							"f4t" => 3, "f4" => 5, "f7t" => 3, "f7" => 5, "f10t" => 3, "f10" => 5, "f11t" => 3, "f11" => 5, 
+						//All Cropland of the 6th level
+							"f2t" => 4, "f2" => 6, "f8t" => 4, "f8" => 6, "f9t" => 4, "f9" => 6, "f12t" => 4, "f12" => 6, "f13t" => 4, "f13" => 6, "f15t" => 4, "f15" => 6];
 
     	$villageArrays = $wids = [];
     	for($i = 1; $i <= 13; $i++) $villageArrays[] = ['wid' => 0, 'kid' => ($i == 13 ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0];
@@ -3060,8 +3070,8 @@ class Automation {
     	foreach($wids as $wid){
     		$database->modifyUnit($wid, array_keys($unitArrays), array_values($unitArrays), [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
     		$database->setVillageLevel($wid, array_keys($buildingArrays), array_values($buildingArrays));
-    		$database->setVillageFields($wid, ['natar', 'name'], [1, WWVILLAGE]);
-    		$this->recountPop($wid);
+    		$database->setVillageFields($wid, ['natar', 'pop', 'name'], [1, 233, WWVILLAGE]);
+    //		$this->recountPop($wid); //it is necessary to comment out otherwise the population will be 198
     	}
 	    
 	    //Write the system message
