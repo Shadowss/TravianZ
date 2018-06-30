@@ -7079,7 +7079,16 @@ References: User ID/Message ID, Mode
 									50 => rand(1 * $multiplier, 5 * $multiplier) * NATARS_UNITS];
 					
 					//Set the buildings and their levels
-					$buildingArrays = ["f22t" => 27, "f22" => ($artifact['size'] == 1 ? 10 : 20), "f28t" => 25, "f28" => 10, "f19t" => 23, "f19" => 10, "f32t" => 23, "f32" => 10];
+					$buildingArrays = [
+									//Treasury of the 20th level, Residence of the 10th level, Rally Point of the 1th level
+										"f22t" => 27, "f22" => 20, "f28t" => 25, "f28" => 10, "f39t" => 16, "f39" => 1, 
+									//18 Cranny of the 10th level
+										"f19t" => 23, "f19" => 10, "f20t" => 23, "f20" => 10, "f21t" => 23, "f21" => 10, 
+										"f23t" => 23, "f23" => 10, "f24t" => 23, "f24" => 10, "f25t" => 23, "f25" => 10, 
+										"f26t" => 23, "f26" => 10, "f27t" => 23, "f27" => 10, "f29t" => 23, "f29" => 10, 
+										"f30t" => 23, "f30" => 10, "f31t" => 23, "f31" => 10, "f32t" => 23, "f32" => 10, 
+										"f33t" => 23, "f33" => 10, "f34t" => 23, "f34" => 10, "f35t" => 23, "f35" => 10, 
+										"f36t" => 23, "f36" => 10, "f37t" => 23, "f37" => 10, "f38t" => 23, "f38" => 10];
 					
 					$this->modifyUnit($wid, array_keys($unitArrays), array_values($unitArrays), [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
 					$this->setVillageLevel($wid, array_keys($buildingArrays), array_values($buildingArrays));

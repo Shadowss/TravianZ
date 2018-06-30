@@ -319,8 +319,7 @@ if(isset($id)){
 				elseif($gid == 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">";
 			}
 			
-			$rp = 16;
-			$rplevel = $fdata['f'.$rp];
+			$rplevel = $fdata['f39t'];
 			
 			if($rplevel > 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16\">";
 			elseif($rplevel == 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16e\">";
