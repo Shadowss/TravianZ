@@ -4319,13 +4319,14 @@ class Automation {
             $row = mysqli_fetch_assoc($result);
             $stime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
             if($row['lastgavemedal'] == 0 && $stime < time()){
-            	$newtime = strtotime('next monday');
+                $setDays = round(MEDALINTERVAL / 86400);
+                $newtime = $setDays < 7 ? strtotime(($setDays + 1).'day midnight') : strtotime('next monday');
                 $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal = ".(int) $newtime;
                 $database->query($q);
             }elseif($row['lastgavemedal'] != 0){
                 $time = $row['lastgavemedal'] + MEDALINTERVAL;
                 $giveMedal = $row['lastgavemedal'] < time();
-            }         
+            }
         }
 
         if($giveMedal && MEDALINTERVAL > 0){
