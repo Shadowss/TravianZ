@@ -351,13 +351,15 @@ if (!empty($_GET['p'])) {
 	<head>
 		<link rel="shortcut icon" href="favicon.ico"/>
 		<title>Admin Panel - <?php echo $subpage; ?></title>
-		<link rel=stylesheet type="text/css" href="../img/admin/admin.css">
-		<link rel=stylesheet type="text/css" href="../img/admin/acp.css">
-		<link rel=stylesheet type="text/css" href="../img/img.css">
-		<script src="/mt-full.js?423cb"  type="text/javascript"></script>
-		<script src="ajax.js" type="text/javascript"></script>
-		<script src="../new.js?0faab" type="text/javascript"></script>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" type="text/css" href="../img/admin/admin.css">
+		<link rel="stylesheet" type="text/css" href="../img/admin/acp.css">
+		<link rel="stylesheet" type="text/css" href="../img/img.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script type="text/javascript" src="jquery.cookie.js"></script>
+		<script type="text/javascript" src="/mt-full.js?423cb"></script>
+		<script type="text/javascript" src="ajax.js"></script>
+		<script type="text/javascript" src="../new.js?0faab"></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta http-equiv="imagetoolbar" content="no">
 	</head>
 	<body>
@@ -434,129 +436,182 @@ if (!empty($_GET['p'])) {
 			}
 
 		</script>
+		<!-- Start Accordeon Menu -->
+		<script type="text/javascript">
+		$(document).ready(function () {
+			var checkCookie = $.cookie("sub-nav");
+			if (checkCookie != "") {
+				$('#menu > li.sub > a:eq('+checkCookie+')').addClass('active').next().show();
+			}
+			$('#menu > li.sub > a').click(function(){
+				var navIndex = $('#menu > li.sub > a').index(this);
+				$.cookie("sub-nav", navIndex);
+				$('#menu li ul').slideUp();
+				if ($(this).next().is(":visible")){
+					$(this).next().slideUp();
+				} else {
+					$(this).next().slideToggle();
+				}
+				return false;
+				$('#menu li a').removeClass('active');
+				$(this).addClass('active');
+			});
+			var checkCookie = $.cookie("sub-link");
+			if (checkCookie != "") {
+				$('#menu > li.sub > ul li a:eq('+checkCookie+')').addClass('active');
+			}
+			$('.sub ul li a').click(function(){
+				var subIndex = $('.sub ul li a').index(this);
+				$.cookie("sub-link", subIndex);
+				$('.sub ul li a').removeClass('active');
+				$(this).addClass('active');
+			});
+		});
+		</script>
+		<!-- End Accordeon Menu -->
 		<div id="ltop1">
-			<div style="position:relative; width:231px; height:100px; float:left;">
+			<div style="position:relative; height:100px; float:left;">
 				<img src="../img/x.gif" width="1" height="1">
 			</div>
-			<img class="fl2" src="../img/admin/x1.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x2.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x3.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x4.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x5.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"></div>
-			<div id="lmidall">
-				<div id="lmidlc">
-					<div id="lleft" style="width: 160px;">
+			<p class="center-img">
+				<img class="fl2" src="../img/admin/x1.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
+				<img class="fl2" src="../img/admin/x2.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
+				<img class="fl2" src="../img/admin/x3.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
+				<img class="fl2" src="../img/admin/x4.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
+				<img class="fl2" src="../img/admin/x5.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
+			</p>
+		</div>
+		<div id="lmidall">
+			<div id="lmidlc">
+				<div id="lleft" style="width: 230px;">
+					<p class="center-img">
 						<a href="<?php echo HOMEPAGE; ?>"><img src="../img/en/a/travian0.gif" class="logo_plus" width="116" height="60" border="0"></a>
-						<table id="navi_table" cellspacing="0" cellpadding="0" style="width: 150px;">
-							<tr>
-								<td class="menu">
-									<?php
-										if($funct->CheckLogin())
-										{?>
-											<?php
-											if($_SESSION['access'] == ADMIN)
-											{ ?>
-												<a href="<?php echo HOMEPAGE; ?>">Server Homepage</a>
-												<a href="admin.php">Control Panel Home</a>
-												<a href="<?php echo rtrim(SERVER, '/'); ?>/dorf1.php">Return to the server</a>
-												<!-- <a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</font></b></a>-->
-												<br />
-												<a href="?action=logout">Logout</a>
-												<br />
-												<a href="#"><b>Server Info</b></a>
-												<a href="?p=server_info">Server Info</a>
-												<a href="?p=online">Online Users</a>
-												<a href="?p=notregistered">Players Not Activated</a>
-												<a href="?p=inactive">Players Inactivate</a>
-												<a href="?p=report">Players Report</a>
-												<a href="?p=msg">Players Message</a>
-												<a href="?p=map">Map</a>
-												<br />
-												<a href="#"><b>Search</b></a>
-												<a href="?p=search">General Search</a>
-												<a href="?p=message">Search IGMs/Reports</a>
-												<br />
-												<a href="#"><b>Messages</b></a>
-												<a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">Read In-Game Messages</a>
-												<a href="<?php echo rtrim(SERVER, '/'); ?>/massmessage.php">Create Mass Message</a>
-												<a href="<?php echo rtrim(SERVER, '/'); ?>/sysmsg.php">Create System Message</a>
-												<br />
-												<a href="#"><b>Ban</b></a>
-												<a href="?p=ban">Ban/Unban Players</a>
-												<a href="?p=maintenance">Server Maintenance</a>
-												<a href="?p=cleanban">Clean Banlist Data</a>
-												<br />
-												<a href="#"><b>Gold</b></a>
-												<a href="?p=gold">Give All Free Gold</a>
-												<a href="?p=usergold">Give Free Gold To Specific User</a>
-												<a href="?p=maintenenceResetGold">Reset Gold</a>
-												<br />
-												<a href="#"><b>Medals</b></a>
-												<a href="?p=delmedal">Delete Player Medals</a>
-												<a href="?p=delallymedal">Delete Ally Medals</a>
-												<br />
-												<a href="#"><b>Plus</b></a>
-												<a href="?p=givePlus">Give All Plus</a>
-												<a href="?p=maintenenceResetPlus">Reset Plus</a>
-												<br />
-												<a href="#"><b>Res Bonus</b></a>
-												<a href="?p=givePlusRes">Give All Res Bonus</a>
-												<a href="?p=maintenenceResetPlusBonus">Reset Res Bonus</a>
-												<br />
-												<a href="#"><b>Users</b></a>
-												<a href="?p=addUsers">Create Users</a>
-												<br />
-												<a href="#"><b>Admin:</b></a>
-												<a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a>
-												<a href="?p=config">Server Settings</a>
-												<a href="?p=resetServer">Server Resetting</a>
-												<?php
-											}
-											else if($_SESSION['access'] == MULTIHUNTER)
-											{ ?>
-												<a href="admin.php">MCP Home</a>
-												<a href="<?php echo HOMEPAGE; ?>">Homepage</a>
-												<a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">In-Game Messages</a>
-												<a href="#"></a><a href="#"></a>
-												<a href="?p=server_info">Server Info</a>
-												<a href="?p=online">Online users</a>
-												<a href="?p=search">Search</a>
-												<a href="?p=message">Msg/Rep</a>
-												<a href="?p=ban">Ban</a>
-												<a href="#"></a><a href="#"></a><a href="#"></a>
-												<a href="?action=logout">Logout</a><?php
-											}
-										}
-									?>
-								</td>
-							</tr>
-						</table>
-					</div>
-					<div id="lmid1">
-						<div id="lmid3">
-							<?php
-								if($funct->CheckLogin())
+					</p>
+					<!-- Start Accordeon Menu -->
+					<?php
+						if($funct->CheckLogin())
+						{
+							if($_SESSION['access'] == ADMIN)
+							{
+					?>
+					<ul id="menu">
+						<li><a href="<?php echo HOMEPAGE; ?>">Server Homepage</a></li>
+						<li><a href="admin.php">Control Panel Home</a></li>
+						<li><a href="<?php echo rtrim(SERVER, '/'); ?>/dorf1.php">Return to the server</a></li>
+						<li><a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</font></b></a></li>
+						<li><a href="?action=logout">Logout</a></li>
+						<li class="sub"><a href="#">Server Info</a>
+							<ul>
+								<li><a href="?p=server_info">Server Info</a></li>
+								<li><a href="?p=online">Online Users</a></li>
+								<li><a href="?p=notregistered">Players Not Activated</a></li>
+								<li><a href="?p=inactive">Players Inactivate</a></li>
+								<li><a href="?p=report">Players Report</a></li>
+								<li><a href="?p=msg">Players Message</a></li>
+								<li><a href="?p=map">Map</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Search</a>
+							<ul>
+								<li><a href="?p=search">General Search</a></li>
+								<li><a href="?p=message">Search IGMs/Reports</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Messages</a>
+							<ul>
+								<li><a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">Read In-Game Messages</a></li>
+								<li><a href="<?php echo rtrim(SERVER, '/'); ?>/massmessage.php">Create Mass Message</a></li>
+								<li><a href="<?php echo rtrim(SERVER, '/'); ?>/sysmsg.php">Create System Message</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Ban</a>
+							<ul>
+								<li><a href="?p=ban">Ban/Unban Players</a></li>
+								<li><a href="?p=maintenance">Server Maintenance</a></li>
+								<li><a href="?p=cleanban">Clean Banlist Data</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Gold</a>
+							<ul>
+								<li><a href="?p=gold">Give All Free Gold</a></li>
+								<li><a href="?p=usergold">Give Free Gold To Specific User</a></li>
+								<li><a href="?p=maintenenceResetGold">Reset Gold</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Plus</a>
+							<ul>
+								<li><a href="?p=givePlus">Give All Plus</a></li>
+								<li><a href="?p=maintenenceResetPlus">Reset Plus</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Res Bonus</a>
+							<ul>
+								<li><a href="?p=givePlusRes">Give All Res Bonus</a></li>
+								<li><a href="?p=maintenenceResetPlusBonus">Reset Res Bonus</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Users</a>
+							<ul>
+								<li><a href="?p=addUsers">Create Users</a></li>
+							</ul>
+						</li>
+						<li class="sub"><a href="#">Admin</a>
+							<ul>
+								<li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
+								<li><a href="?p=config">Server Settings</a></li>
+								<li><a href="?p=resetServer">Server Resetting</a></li>
+							</ul>
+						</li>
+					</ul>
+					<?php
+							} else if($_SESSION['access'] == MULTIHUNTER) {
+					?>
+					<ul id="menu">
+						<li><a href="<?php echo HOMEPAGE; ?>">Server Homepage</a></li>
+						<li><a href="admin.php">Control Panel Home</a></li>
+						<li><a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">In-Game Messages</a></li>
+						<li><a href="?p=server_info">Server Info</a></li>
+						<li><a href="?p=online">Online users</a></li>
+						<li><a href="?p=search">Search</a></li>
+						<li><a href="?p=message">Msg/Rep</a></li>
+						<li><a href="?p=ban">Ban</a></li>
+						<li><a href="?action=logout">Logout</a></li>
+					</ul>
+					<?php
+							}
+						}
+					?>
+					<!-- End Accordeon Menu -->
+				</div>
+				<div id="lmid1">
+					<div id="lmid3">
+						<?php
+							if($funct->CheckLogin())
+							{
+								if($_POST || $_GET)
 								{
-									if($_POST || $_GET)
+									if($_GET['p'] and $_GET['p']!="search")
 									{
-										if($_GET['p'] and $_GET['p']!="search")
-										{
-											$filename = 'Templates/'.$_GET['p'].'.tpl';
-											if(file_exists($filename)) include($filename);
-											else include('Templates/404.tpl');
-										}
-										else include('Templates/search.tpl');
-
-										if(isset($_POST['p']) && isset($_POST['s']) && $_POST['p'] and $_POST['s'])
-										{
-											$filename = 'Templates/results_'.$_POST['p'].'.tpl';
-											if(file_exists($filename)) include($filename);
-											else include('Templates/404.tpl');
-										}
+										$filename = 'Templates/'.$_GET['p'].'.tpl';
+										if(file_exists($filename)) include($filename);
+										else include('Templates/404.tpl');
 									}
-									else include('Templates/home.tpl');
+									else include('Templates/search.tpl');
+
+									if(isset($_POST['p']) && isset($_POST['s']) && $_POST['p'] and $_POST['s'])
+									{
+										$filename = 'Templates/results_'.$_POST['p'].'.tpl';
+										if(file_exists($filename)) include($filename);
+										else include('Templates/404.tpl');
+									}
 								}
-								else include('Templates/login.tpl');
-							?>
-						</div>
+								else include('Templates/home.tpl');
+							}
+							else include('Templates/login.tpl');
+						?>
 					</div>
 				</div>
+			</div>
 			<div id="lright1"></div>
 			<div id="ce"></div>
 		</div>

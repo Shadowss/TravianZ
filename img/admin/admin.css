@@ -1,24 +1,24 @@
-BODY
-{
-COLOR: #000;
-font-size:10pt;
-background:#FFF;
-margin-top:0px;
-margin-bottom:0px;
-margin-left:0px;
-margin-right:0px;
-font-family: Verdana, Arial, Helvetica, sans-serif;
-overflow-x: hidden;
+body {
+  color: #000;
+  font-size:10pt;
+  background:#FFF;
+  margin:0px;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+.center-img {
+  text-align: center;
 }
 
 .none {
-    color:#C0C0C0;
+  color:#C0C0C0;
 }
 
 /* Fix */
 .online1, .online2, .online3, .online4, .online5 {width:12px; height:12px;}
 /* Oberer Layer mit Menue ohne Werbung */
-#ltop1 {position:relative; padding-left: 25%; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
+#ltop1 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
 
 /* Oberer Layer mit Menue mit Werbung */
 #ltop2 {position:relative; padding-left: 25%; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mw.gif); background-repeat:repeat-x; left:0px; top:0px;}
@@ -95,7 +95,6 @@ overflow-x: hidden;
 #lplz1 {position:relative; width:250px; height:310px; float:left;}
 #lplz2, #lplz3 {position:relative; height:400px; width:500px;}
 
-
 /* Textmenue: Punkt1 | Punkt2 | Punkt3 */
 .txt_menue {font-size:10pt;}
 
@@ -124,7 +123,6 @@ li.dl {margin-top:2px;}
 #n3 {background-image:url(../un/l/n3.gif);}
 #n4 {background-image:url(../un/l/n4.gif);}
 
-
 /* - VERALTET - Abstand der oberen Navigation von Links */
 /* #navileft {margin-left:231px;} */
 
@@ -151,13 +149,11 @@ li.dl {margin-top:2px;}
 .c5 {color:#FF0000;}
 .c6 {color:#B500A3;}
 
-
 /* Dicke Schrift */
 .b {font-weight:bold}
 
 /* Duenne Schrift */
 .t {font-weight:normal;}
-
 
 /* Links */
 a:link, a:visited { color: #71D000; text-decoration: none; font-weight:bold;}
@@ -167,27 +163,9 @@ a:hover {color: #00BC00; text-decoration: none; font-weight:bold;}
 a:link.clink, a:visited.clink, a:active.clink {color:#666; text-decoration:none; font-weight:normal;}
 a:hover.clink {color:#00C000; text-decoration:none; font-weight:normal;}
 
-
-/* Navi Table left */
-#navi_table {width:116px;}
-
-/* Navigation links */
-.menu {font-weight: normal; FONT-SIZE: 12px;}
-.menu a,.menu a:link,.menu a:active,.menu a:visited {font-weight:normal; display:block; color:#000; padding-left:12px; FONT-SIZE:12px; padding-bottom:3px; padding-TOP:3px;}
-.menu a:hover {color:#00C000; cursor:pointer; background-image:url(../un/a/n12.gif); background-repeat:no-repeat;}
-
-
-
-
 h1, h2, h3, span, form, img, li {margin:0; padding:0;}
 h1 {font-size:18pt;}
 h2 {font-size:13.5pt;}
-
-
-
-
-
-
 
 /* Hintergrundbild fuer kleine Karte */
 .mbg {background-image:url(../un/m/map.jpg); z-index:1;}
@@ -220,7 +198,6 @@ table.map_infobox_grey tr {background-color: #FFF;}
 /* Koordinatenanzeige auf grosser Karte links oben */
 .map_show_xy_xxl {position:absolute; width:200px; height:80px; z-index:500; left:10px; top:10px;}
 
-
 /* Koordinaten xy der kleinen Karte */
 .mx1,.mx2,.mx3,.mx4,.mx5,.mx6,.mx7,.my1,.my2,.my3,.my4,.my5,.my6,.my7 {position:absolute; z-index:30; width:35px; height:12px; font-size:7pt; text-align:center;}
 
@@ -239,7 +216,6 @@ table.map_infobox_grey tr {background-color: #FFF;}
 .my3{left:158px; top:130px;}
 .my2{left:194px; top:110px;}
 .my1{left:230px; top:90px;}
-
 
 /* Felder kleine Karte */
 .mt1{position:absolute; z-index:1; left:229px; top:57px;}
@@ -297,7 +273,6 @@ table.map_infobox_grey tr {background-color: #FFF;}
 .mt47{position:absolute; z-index:11; left:161px; top:257px;}
 .mt48{position:absolute; z-index:12; left:198px; top:277px;}
 .mt49{position:absolute; z-index:13; left:235px; top:297px;}
-
 
 /* Div Layer fur die Details auf der rechten Seite */
 .map_details_right {position:absolute; width:230px; height:110px; z-index:3; left:325px; top:100px;}
@@ -410,7 +385,6 @@ input.f80 { width:80px;}
 input.f30 { width:30px;}
 input.std {font-weight:bold; font-size:8pt; height:14pt;} /* Berichte, Nachrichten verschieben */
 
-
 /* Rahmenfarbe der Tabelle */
 .tbg {background-color: #C0C0C0; width:100%; text-align:center; font-size:10pt;}
 
@@ -419,7 +393,6 @@ table.tbg tr {background-color: #FFFFFF;}
 
 /* Hintergrundbild f&uuml;r Tabellenkopf  */
 .rbg {background-color: #FFFFFF; font-weight:bold; background-image: url(../un/a/c2.gif);}
-
 
 /* Tabellenzeile Grau */
 table.tbg tr.cbg1 td, td.cbg1 {background-color:#F5F5F5}
@@ -441,7 +414,6 @@ table.tbg td.re {border-right:1px solid #71D000}
 .dtbl {width:73px; font-size:11px;}
 .dlist1, .dlist3 {width:35px;}
 .dlist2 {width:3px; font-size:10px;}
-
 
 /* Allianz Forum */
 .forumline  {background-color: #000000; border: 1px #c0c0c0 solid;}
@@ -472,7 +444,6 @@ td.row1  {background-color:#FFF;}
 td.row11 {background-color:#FFF; PADDING-Left:4px;}
 td.row12 {background-color:#FFF; PADDING-Left:6px; PADDING-RIGHT:6px;}
 td.row2  {background-color:#FEFEFE; }
-
 
 .maintitle {
         font-weight: bold; font-size: 22px; font-family: "Trebuchet MS",Verdana, Arial, Helvetica, sans-serif;
@@ -543,7 +514,6 @@ table#member td.ra {width:5%; text-align:right;}
 table#member td.hab {width:25%; text-align:center;}
 table#member td.vil {width:20%; text-align:center;}
 table#member td.on {width:5%; text-align:center;}
-
 
 .dropdown {border:#71D000 solid; border-width:1px; font-size:10pt;}
 input.dynamic_img, img.dynamic_img {
@@ -636,3 +606,89 @@ input#btn_search {width:97px; background-image: url(b/search.gif);}
     opacity: 1;
 }
 /* End of tooltips */
+
+/* Start Accordeon Menu */
+#menu {
+	width: 220px;
+	border: 1px solid #999;
+	margin: 0 auto;
+    padding: 0;
+    list-style: none;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    font: normal 14px Helvetica, Arial, sans-serif;
+}
+
+#menu li a {
+	display: block;
+    position: relative;
+	padding: 10px 15px;
+	background: #ccc;
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #999;
+	text-decoration: none;
+    text-shadow: 0px 1px 1px #ffffff;
+	color: #606060;
+}
+
+#menu li a:hover,
+#menu li a.active {
+	background: rgb(190, 190, 190);
+    text-shadow: 0px 1px 1px #ffffff;
+	color: #3b3b3b;
+}
+
+#menu li ul {
+	display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#menu li ul li a {
+    font-size: 12px;
+	padding: 8px 15px;
+	background: #ececec;
+	border-bottom: 1px dotted #ccc;
+}
+#menu li ul li a:after {
+    content: "»";
+    float: left;
+    margin-right: 6px;
+    line-height: 1em;
+}
+#menu li ul li a:hover,
+#menu li ul li a.active {
+    background: #dedede;
+    color: green;
+    padding-left: 18px;
+}
+/* selector */
+#menu li.sub > a:before {
+    content: '';
+    height: 6px;
+    width: 6px;
+    display: block;
+    border: 1px solid #606060;
+    border-right-width: 0;
+    border-top-width: 0;
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    position: absolute;
+    right: 20px;
+    top: 14px;
+}
+/* active selector */
+#menu li.sub > a:hover:before,
+#menu li.sub > a.active:before{
+  border: 1px solid #00a00c;
+  border-right-width: 0;
+  border-top-width: 0;
+}
+/* End Accordeon Menu */
