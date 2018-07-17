@@ -117,7 +117,7 @@ MEDAL CATEGORY:
         $titel="Robber of the week";
         break;
     case "5":
-        $titel="Top 10 of both attackers and defenders";
+        $titel="Top 10 of both Attackers and Defenders";
         break;
     case "6":
         $titel="Top 3 of Attackers of week ".$medal['points']." in a row";
@@ -138,7 +138,19 @@ MEDAL CATEGORY:
         $titel="Top 3 of Rank climbers of week ".$medal['points']." in a row";
         break;
     case "12":
-        $titel="Top 10 of Rank Attackers of week ".$medal['points']." in a row";
+        $titel="Top 10 of Attackers of week ".$medal['points']." in a row";
+        break;
+	case "13":
+        $titel="Top 10 of Defenders of week ".$medal['points']." in a row";
+        break;
+	case "14":
+        $titel="Top 10 of Pop climbers of week ".$medal['points']." in a row";
+        break;
+	case "15":
+        $titel="Top 10 of Robbers of week ".$medal['points']." in a row";
+        break;
+	case "16":
+        $titel="Top 10 of Rank climbers of week ".$medal['points']." in a row";
         break;
 	}
 				 echo"<tr>
