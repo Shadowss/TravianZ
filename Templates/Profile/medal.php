@@ -134,7 +134,7 @@ switch ($medal['categorie']) {
 		$woord="Resources";
         break;
 	 case "5":
-        $titel="Receiving this medal shows that you where in the top 10 of both attackers and defenders of the week.";
+        $titel="Receiving this medal shows that you where in the top 10 of both Attackers and Defenders of the week.";
         $bonus[$medal['id']]=1;
 		break;
 	 case "6":
@@ -158,7 +158,7 @@ switch ($medal['categorie']) {
         $woord="Ranks";
         break;
          case "11":
-        $titel="Receiving this medal shows that you were in the top 3 of the Rank Climbers of the week ".$medal['points']." in a row.";
+        $titel="Receiving this medal shows that you were in the top 3 Rank Climbers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
         break;
          case "12":
