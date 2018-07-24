@@ -111,7 +111,7 @@ class funct
                 if(!isset($selectedArtifact) || !isset($artifactQuantity) || !isset($playerId) || empty($selectedArtifact) ||
                           !is_numeric($artifactQuantity) || !is_numeric($playerId) || strpos($selectedArtifact, ':') === false ||
                           $database->getUserField($playerId, "username", 0) == "[?]"){
-                    header("location: admin.php");
+                    header("location: admin.php?p=artifacts&error=0");
                     exit;          
                 }
                 
@@ -125,7 +125,7 @@ class funct
 
                 //Check if the artifact has been found or if doesn't exist
                 if(empty($chosenArtifact)){
-                    header("location: admin.php");
+                    header("location: admin.php?p=artifacts&error=1");
                     exit; 
                 }
 

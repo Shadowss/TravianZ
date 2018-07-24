@@ -19,48 +19,44 @@ $search = $_SESSION['search'];
 		<tr><td></td><td>Player</td><td>Alliance</td><td>Population</td><td>Villages</td></tr>
 		</thead><tbody>  
         <?php
+        $rankArray = $ranking->getRank();
         if(isset($_GET['rank'])){
-		$multiplier = 1;
-			if(is_numeric($_GET['rank'])) {
-				if($_GET['rank'] > count($ranking->getRank())) {
-				$_GET['rank'] = count($ranking->getRank())-1;
-				}
-				while($_GET['rank'] > (20*$multiplier)) {
-					$multiplier +=1;
-				}
-			$start = 20*$multiplier-19;
-			} else { $start = ($_SESSION['start']+1); }
-		} else { $start = ($_SESSION['start']+1); }
+            $multiplier = 1;
+            if(is_numeric($_GET['rank'])) {
+                if($_GET['rank'] > count($rankArray)) {
+                    $_GET['rank'] = count($rankArray) - 1;
+                }
+                while($_GET['rank'] > (20 * $multiplier)) $multiplier++;
+                
+                $start = 20 * $multiplier - 19;
+            }
+            else $start = ($_SESSION['start'] + 1);
+        }
+        else $start = ($_SESSION['start'] + 1);
+        
         if(count($database->getUserByTribe(2)) > 0) {
-        	$ranking = $ranking->getRank(); 
-            for($i=$start;$i<($start+20);$i++) {
-            	if(isset($ranking[$i]['username'])  && $ranking[$i] != "pad") {
-                	if($i == $search) {
-                    echo "<tr class=\"hl\"><td class=\"ra fc\" >";
-                    }
-                    else {
-                    echo "<tr><td class=\"ra \" >";
-                    }
+            for($i = $start; $i< $start + 20; $i++) {
+                if(isset($rankArray[$i]['username'])  && $rankArray[$i] != "pad") {
+                    if($i == $search) echo "<tr class=\"hl\"><td class=\"ra fc\" >";
+                    else echo "<tr><td class=\"ra \" >";
+                    
                     echo $i.".</td><td class=\"pla \" >";
-						if($ranking[$i]['access'] > 2){
-						echo"<u><a href=\"spieler.php?uid=".$ranking[$i]['userid']."\">".$ranking[$i]['username']."</a></u>";
-						} else {
-						echo"<a href=\"spieler.php?uid=".$ranking[$i]['userid']."\">".$ranking[$i]['username']."</a>";
-						}
-					echo"</td><td class=\"al\" >";
-                    if($ranking[$i]['alliance'] != 0) {
-                    echo "<a href=\"allianz.php?aid=".$ranking[$i]['alliance']."\">".$ranking[$i]['aname']."</a>";
+                    if(isset($rankArray[$i]['access']) && $rankArray[$i]['access'] > 2){
+                        echo"<u><a href=\"spieler.php?uid=".$rankArray[$i]['userid']."\">".$rankArray[$i]['username']."</a></u>";
+                    } else {
+                        echo"<a href=\"spieler.php?uid=".$rankArray[$i]['userid']."\">".$rankArray[$i]['username']."</a>";
                     }
-                    else {
-                    echo "-";
+                    echo"</td><td class=\"al\" >";
+                    if($rankArray[$i]['alliance'] > 0) {
+                        echo "<a href=\"allianz.php?aid=".$rankArray[$i]['alliance']."\">".$rankArray[$i]['aname']."</a>";
                     }
-                    echo "</td><td class=\"pop\" >".$ranking[$i]['totalpop']."</td><td class=\"vil\">".$ranking[$i]['totalvillage']."</td></tr>";
+                    else echo "-";
+                    
+                    echo "</td><td class=\"pop\" >".$rankArray[$i]['totalpop']."</td><td class=\"vil\">".$rankArray[$i]['totalvillage']."</td></tr>";
                 }
             }
         }
-        else {
-        	echo "<td class=\"none\" colspan=\"5\">No users found</td>";
-        }
+        else echo "<td class=\"none\" colspan=\"5\">No users found</td>";
         ?>
  </tbody>
 </table>

@@ -2,16 +2,16 @@
 class Artifacts
 {
 
-    public const 
+    const 
     
     /**
-     * @var integer Default Natars' uid
+     * @var int Default Natars' uid
      */
     
     NATARS_UID = 3,
     
     /**
-     * @var integer Default Natars' tribe
+     * @var int Default Natars' tribe
      */
     
     NATARS_TRIBE = 5,
@@ -128,7 +128,7 @@ class Artifacts
         "f2" => 6, "f8" => 6, "f9" => 6, "f12" => 6, "f13" => 6, "f15" => 6],
     
     /**
-     * @var integer The base amount of Natars' spying units, used when Natars account is created
+     * @var int The base amount of Natars' spying units, used when Natars account is created
      */
      
     NATARS_BASE_SPY = 1500;
@@ -178,7 +178,7 @@ class Artifacts
     }
     
     /**
-     * Called when Natars account need to be created, creates his account and capital village
+     * Called when Natars account needs to be created, creates his account and capital village
      *
      */
     
