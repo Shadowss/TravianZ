@@ -17,6 +17,7 @@
 // # Source code: https://github.com/Shadowss/TravianZ ##
 // # ##
 // ################################################################################
+include_once("../GameEngine/Artifacts.php");
 class funct
 {
 
@@ -28,6 +29,8 @@ class funct
     function Act($get)
     {
         global $admin, $database;
+        
+        $artifact = new Artifacts();
         
         switch ($get['action']) {
             case "recountPop":
@@ -74,12 +77,66 @@ class funct
             case "logout":
                 $this->LogOut();
                 break;
-            case "delArtifact":
-                if(isset($_GET['artid']) && is_numeric($_GET['artid'])) $database->deleteArtifact($_GET['artid']);               
-                break;
-            case "returnArtifact":
                 
+            case "delArtifact":
+                if(isset($_GET['artid']) && is_numeric($_GET['artid'])) $database->updateArtifactDetails($_GET['artid'], ['del' => 1]);               
                 break;
+                
+            case "returnArtifact":
+                //Check if the artifact id is valid
+                if(!isset($_GET['artid']) || !is_numeric($_GET['artid'])){
+                    header("location: admin.php");
+                    exit;
+                }
+                
+                //Get the informations of the artifact
+                $artifactInfo = $database->getArtefactDetails($_GET['artid'], $_GET['del']);
+
+                //Check if the artifact exists
+                if(empty($artifactInfo) || $artifactInfo['owner'] == Artifacts::NATARS_UID) {
+                    header("location: admin.php");
+                    exit;
+                }
+
+                $artifact->returnArtifactToNatars($artifactInfo);
+                break;
+                
+            case "addArtifacts":
+                
+                $selectedArtifact = $_POST['selectedArtifact'];
+                $artifactQuantity = $_POST['artifactQuantity'];
+                $playerId = $_POST['playerId'];
+                
+                //Check if the inputs are valid
+                if(!isset($selectedArtifact) || !isset($artifactQuantity) || !isset($playerId) || empty($selectedArtifact) ||
+                          !is_numeric($artifactQuantity) || !is_numeric($playerId) || strpos($selectedArtifact, ':') === false ||
+                          $database->getUserField($playerId, "username", 0) == "[?]"){
+                    header("location: admin.php");
+                    exit;          
+                }
+                
+                //The first element [0] is the type of the artifact, the second one [1] is the size of it
+                //and the third one, is the artifact description
+                $selectedArtifact = explode(":", $selectedArtifact);
+ 
+                //Add the chosen artifact(s)
+                $artifactsArray = array_merge(Artifacts::NATARS_ARTIFACTS, Artifacts::NATARS_WW_BUILDING_PLANS);
+                $chosenArtifact = $artifactsArray[$selectedArtifact[2]][$selectedArtifact[1] - 1];
+
+                //Check if the artifact has been found or if doesn't exist
+                if(empty($chosenArtifact)){
+                    header("location: admin.php");
+                    exit; 
+                }
+
+                //Create the artifacts array
+                $chosenArtifact['quantity'] = $artifactQuantity;
+                $artifactArrays[$selectedArtifact[2]][] = $chosenArtifact;
+
+                //Add the artifacts
+                $artifact->addArtifactVillages($artifactArrays, $playerId);
+                break;
+                
             case "killHero":
                 $varray = $database->getProfileVillages($get['uid']);
                 $killhero = false;

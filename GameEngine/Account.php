@@ -134,10 +134,10 @@ class Account {
 				}
 			}
 			else {
-			    $uid = $database->register($_POST['name'],password_hash($_POST['pw'], PASSWORD_BCRYPT,['cost' => 12]),$_POST['email'],$_POST['vid'],$act);
+			    $uid = $database->register($_POST['name'], password_hash($_POST['pw'], PASSWORD_BCRYPT, ['cost' => 12]), $_POST['email'], $_POST['vid'], $act);
 				if($uid) {
-					setcookie("COOKUSR",$_POST['name'],time()+COOKIE_EXPIRE,COOKIE_PATH);
-					setcookie("COOKEMAIL",$_POST['email'],time()+COOKIE_EXPIRE,COOKIE_PATH);
+					setcookie("COOKUSR" , $_POST['name'], time() + COOKIE_EXPIRE,COOKIE_PATH);
+					setcookie("COOKEMAIL" , $_POST['email'], time() + COOKIE_EXPIRE,COOKIE_PATH);
 					$database->updateUserField(
 						$uid,
                         ["act", "invited"],
@@ -145,7 +145,7 @@ class Account {
                         1
                     );
 
-					$this->generateBase($_POST['kid'],$uid,$_POST['name']);
+					$this->generateBase($_POST['kid'], $uid, $_POST['name']);
 					header("Location: login.php");
 					exit;
 				}
@@ -154,37 +154,38 @@ class Account {
 	}
 
 	private function Activate() {
-		if(START_DATE < date('d.m.Y') or START_DATE == date('d.m.Y') && START_TIME <= date('H:i'))
-	   {
-			global $database;
-			$q = "SELECT act, username, password, email, tribe, location FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";
-			$result = mysqli_query($database->dblink,$q);
-			$dbarray = mysqli_fetch_array($result);
-			if($dbarray['act'] == $_POST['id']) {
-				$uid = $database->register($dbarray['username'],$dbarray['password'],$dbarray['email'],$dbarray['tribe'],"");
-				if($uid) {
-				$database->unreg($dbarray['username']);
-				$this->generateBase($dbarray['location'],$uid,$dbarray['username']);
-				header("Location: activate.php?e=2");
-				exit;
-				}
-			}
-			else
-			{
-				header("Location: activate.php?e=3");
-				exit;
-			}
-	   }
-	   else
-	   {
-			header("Location: activate.php");
-			exit;
-	   }
-
+	    global $database;
+	    
+	    if(START_DATE < date('d.m.Y') or START_DATE == date('d.m.Y') && START_TIME <= date('H:i'))
+	    {
+	        $q = "SELECT act, username, password, email, tribe, location FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";
+	        $result = mysqli_query($database->dblink,$q);
+	        $dbarray = mysqli_fetch_array($result);
+	        if($dbarray['act'] == $_POST['id']) {
+	            $uid = $database->register($dbarray['username'], $dbarray['password'], $dbarray['email'], $dbarray['tribe'], "");
+	            if($uid) {
+	                $database->unreg($dbarray['username']);
+	                $this->generateBase($dbarray['location'],$uid,$dbarray['username']);
+	                header("Location: activate.php?e=2");
+	                exit;
+	            }
+	        }
+	        else
+	        {
+	            header("Location: activate.php?e=3");
+	            exit;
+	        }
+	    }
+	    else
+	    {
+	        header("Location: activate.php");
+	        exit;
+	    }
 	}
 
 	private function Unreg() {
 		global $database;
+		
 		$q = "SELECT password, username FROM ".TB_PREFIX."activate where id = ".(int) $_POST['id'];
 		$result = mysqli_query($database->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -271,7 +272,7 @@ class Account {
 		if($kid == 0) $kid = rand(1,4);
 		else $kid = $_POST['kid'];
 		
-		$database->generateVillages([['wid' => 0, 'kid' => $kid, 'capital' => 1]], $uid, $username);
+		$database->generateVillages([['wid' => 0, 'mode' => 0, 'type' => 3, 'kid' => $kid, 'capital' => 1, 'pop' => 2, 'name' => null, 'natar' => 0]], $uid, $username);
 		$message->sendWelcome($uid, $username);
 	}
 };

@@ -100,11 +100,11 @@ else
         else
         {
             // Register them and build the village
-            $uid = $database->register($userName, password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]), $email, $tribe ,$act);
+            $uid = $database->register($userName, password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]), $email, $tribe, $act);
             if($uid)
             {
                 /*
-*   [MENTION=6887]Tod[/MENTION]O
+*   [MENTION=6887]Todo[/MENTION]
 *
 * Allow option to create (random) bigger villages,
 * upgrade fields, granary, warehouse, wall etc
@@ -130,12 +130,12 @@ else
                     // already exists
                     $protection = time();
                     mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET
-protect = '".$protection."'
-WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
+                                        protect = '".$protection."'
+                                        WHERE id = ".(int) $uid) or die(mysqli_error($database->dblink));
                 }
 
                 $database->updateUserField($uid,"act","",1);
-                $wid = $database->generateBase($kid);
+                $wid = $database->generateBase($kid, 1);
                 $database->setFieldTaken($wid);
 
                 //calculate random generate value and level building

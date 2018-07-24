@@ -29,7 +29,11 @@ $artifactInfo = Artifacts::getArtifactInfo($artifact);
 <tr>
 <th><?php echo OWNER; ?></th>
 <td>
-<a href="spieler.php?uid=<?php echo $artifact['owner'];?>"><?php echo $database->getUserField($artifact['owner'], "username", 0);?></a>
+<?php if(($artifactOwnerUsername = $database->getUserField($artifact['owner'], "username", 0)) != "[?]"){?>
+<a href="spieler.php?uid=<?php echo $artifact['owner'];?>"><?php echo $artifactOwnerUsername; ?></a>
+<?php }else{?>
+<font color="grey"><span>[?]</span></font>
+<?php } ?>
 </td>
 </tr>
 <tr>
@@ -38,7 +42,7 @@ $artifactInfo = Artifacts::getArtifactInfo($artifact);
 <?php if($database->checkVilExist($artifact['vref'])){?>
 <a href="karte.php?d=<?php echo $artifact['vref'];?>&c=<?php echo $generator->getMapCheck($artifact['vref']);?>"><?php echo $database->getVillageField($artifact['vref'], "name");?> </a>
 <?php }else{?>
-<span>[?]</span>
+<font color="grey"><span>[?]</span></font>
 <?php }?>
 </td>
 </tr>
@@ -103,7 +107,13 @@ if(!empty($owners)){
 foreach($owners as $owner){
 ?>
 <tr>
-<td><span class="none"><a href="spieler.php?uid=<?php echo $owner['uid'];?>"><?php echo $database->getUserField($owner['uid'], "username", 0);?></a></span></td>
+<td>
+<?php if(($artifactChronoOwnerUsername = $database->getUserField($owner['uid'], "username", 0)) != "[?]"){?>
+<span class="none"><a href="spieler.php?uid=<?php echo $owner['uid'];?>"><?php echo $artifactChronoOwnerUsername;?></a></span>
+<?php }else{?>
+<span class="none">[?]</span>
+<?php }?>
+</td>
 <td>
 <?php if($database->checkVilExist($owner['vref'])){?>
 <span class="none"><a href="karte.php?d=<?php echo $owner['vref'];?>&c=<?php echo $generator->getMapCheck($owner['vref']);?>"><?php echo $database->getVillageField($owner['vref'], "name");?></a></span>

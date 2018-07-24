@@ -27,11 +27,21 @@ include_once("Ranking.php");
 include_once("Generator.php");
 include_once("Multisort.php");
 include_once("Building.php");
+include_once("Artifacts.php");
 
 class Automation {
 
+    /**
+     * @var object The artifacts class, used to create Natars, artifacts and obtaining info about them
+     */
+    
+    private $artifacts;
+    
     public function __construct() {
     	
+        //Classes initialization
+        $this->artifacts = new Artifacts();
+        
     	$autoprefix = "";
     	for ($i = 0; $i < 5; $i++) {
     		$autoprefix = str_repeat('../', $i);
@@ -238,13 +248,16 @@ class Automation {
         	@set_time_limit(0);
         	
             foreach($needDelete as $need) {
-                $needVillage = $database->getVillagesID($need['uid']);
+                $need['uid'] = (int) $need['uid'];
+                
+                //Get the villages which have to be deleted
+                $needVillages = $database->getVillagesID($need['uid']);
                 
                 //Delete all villages
-                foreach($needVillage as $village) $this->DelVillage((int) $village);
+                $database->DelVillage($needVillages);
 
                 for($i = 0;$i < 20; $i++){
-                    $q = "SELECT id FROM ".TB_PREFIX."users where friend".$i." = ".(int) $need['uid']." or friend".$i."wait = ".(int) $need['uid']."";
+                    $q = "SELECT id FROM ".TB_PREFIX."users where friend".$i." = ".$need['uid']." or friend".$i."wait = ".$need['uid']."";
                     $array = $database->query_return($q);
                     foreach($array as $friend){
                         $database->deleteFriend($friend['id'],"friend".$i);
@@ -264,25 +277,21 @@ class Automation {
                     Automation::updateMax($newleader);
                 }
 
-                if (isset($alliance)) {
-                    $database->deleteAlliance($alliance);
-                }
-                $q = "UPDATE ".TB_PREFIX."artefacts where owner = ".(int) $need['uid']." SET del = 1";
-                $database->query($q);
+                if (isset($alliance)) $database->deleteAlliance($alliance);
                 
-                $q = "DELETE FROM ".TB_PREFIX."hero where uid = ".(int) $need['uid'];
+                $q = "DELETE FROM ".TB_PREFIX."hero where uid = ".$need['uid'];
                 $database->query($q);
 
-                $q = "DELETE FROM ".TB_PREFIX."mdata where target = ".(int) $need['uid']." or owner = ".(int) $need['uid'];
+                $q = "DELETE FROM ".TB_PREFIX."mdata where target = ".$need['uid']." or owner = ".$need['uid'];
                 $database->query($q);
 
-                $q = "DELETE FROM ".TB_PREFIX."ndata where uid = ".(int) $need['uid'];
+                $q = "DELETE FROM ".TB_PREFIX."ndata where uid = ".$need['uid'];
                 $database->query($q);
 
-                $q = "DELETE FROM ".TB_PREFIX."users where id = ".(int) $need['uid'];
+                $q = "DELETE FROM ".TB_PREFIX."users where id = ".$need['uid'];
                 $database->query($q);
 
-                $q = "DELETE FROM ".TB_PREFIX."deleting where uid = ".(int) $need['uid'];
+                $q = "DELETE FROM ".TB_PREFIX."deleting where uid = ".$need['uid'];
                 $database->query($q);
             }
         }
@@ -2454,7 +2463,7 @@ class Automation {
                     	}
                     	
                     	//Delete the village
-                    	$this->DelVillage($data['to']);
+                    	$database->DelVillage($data['to']);
                     	
                     	//Reassign the hero, if dead and assigned to the deleted village
                     	$database->reassignHero($data['to']);
@@ -2565,96 +2574,6 @@ class Automation {
 
                 #################################################
 
-            }
-        }
-    }
-
-    function DelVillage($wref){
-        global $database, $units;
-        
-        $database->clearExpansionSlot($wref);
-        $wref = (int) $wref;
-        $q = "DELETE FROM ".TB_PREFIX."abdata where vref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."bdata where wid = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."market where vref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."research where vref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."tdata where vref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."fdata where vref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."training where vref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."units where vref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."farmlist where wref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."raidlist where towref = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."route where wid = $wref OR `from` = $wref";
-        $database->query($q);
-        $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` = $wref AND sort_type=4) OR (`from` = $wref AND sort_type=3))";
-        $database->query($q);
-        $database->removeOases($wref, 1);
-        
-        $getmovement = $database->getMovement(3, $wref, 1);
-
-        $moveIDs = [];
-        $time = microtime(true);
-        $types = [];
-        $froms = [];
-        $tos = [];
-        $refs = [];
-        $times = [];
-        $endtimes = [];
-
-        foreach($getmovement as $movedata) {
-            $time2 = $time - $movedata['starttime'];
-            $moveIDs[] = $movedata['moveid'];
-            $types[] = 4;
-            $froms[] = $movedata['to'];
-            $tos[] = $movedata['from'];
-            $refs[] = $movedata['ref'];
-            $times[] = $time;
-            $endtimes[] = $time+$time2;
-        }
-
-        $database->setMovementProc(implode(', ', $moveIDs));
-        $database->addMovement($types, $froms, $tos, $refs, $times, $endtimes);
-
-        $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = $wref";
-        $database->query($q);
-
-        //check return enforcement from del village
-        $units->returnTroops($wref);
-
-        $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` = $wref";
-        $database->query($q);
-
-        if (mysqli_affected_rows($database->dblink) > 0) {
-            $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id = $wref";
-            $database->query($q);
-
-            // clear expansion slots, if this village is an expansion of any other village
-            $database->clearExpansionSlot($wref, 1);
-
-            $getprisoners = $database->getPrisoners($wref);
-            foreach($getprisoners as $pris) {
-                $troops = 0;
-                for($i = 1; $i < 12; $i++) $troops += $pris['t'.$i];
-                $database->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
-                $database->deletePrisoners($pris['id']);
-            }
-            
-            $getprisoners = $database->getPrisoners3($wref);
-            foreach($getprisoners as $pris) {
-                $troops = 0;
-                for($i = 1;$i < 12; $i++) $troops += $pris['t'.$i];
-                $database->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
-                $database->deletePrisoners($pris['id']);
             }
         }
     }
@@ -2983,41 +2902,7 @@ class Automation {
     	if($database->areArtifactsSpawned() || strtotime(START_DATE) + (NATARS_SPAWN_TIME * 86400) > time()) return;
     	
     	//Create the Natars account and his capital
-    	$database->createNatars();
-
-    	//Artifacts constants
-    	$artifactArrays =  [ARCHITECTS_DESC => [["type" => 1, "size" => 1, "name" => ARCHITECTS_SMALL, "vname" => ARCHITECTS_SMALLVILLAGE, "effect" => "(4x)", "quantity" => 6, "img" => 2],
-    											["type" => 1, "size" => 2, "name" => ARCHITECTS_LARGE, "vname" => ARCHITECTS_LARGEVILLAGE, "effect" => "(3x)", "quantity" => 4, "img" => 2],
-    											["type" => 1, "size" => 3, "name" => ARCHITECTS_UNIQUE,"vname" => ARCHITECTS_UNIQUEVILLAGE, "effect" => "(5x)", "quantity" => 1, "img" => 2]],
-    			
-    							 HASTE_DESC => [["type" => 2, "size" => 1, "name" => HASTE_SMALL, "vname" => HASTE_SMALLVILLAGE, "effect" => "(2x)", "quantity" => 6, "img" => 4],
-    											["type" => 2, "size" => 2, "name" => HASTE_LARGE, "vname" => HASTE_LARGEVILLAGE, "effect" => "(1.5x)", "quantity" => 4, "img" => 4],
-    							 				["type" => 2, "size" => 3, "name" => HASTE_UNIQUE, "vname" => HASTE_UNIQUEVILLAGE, "effect" => "(3x)", "quantity" => 1, "img" => 4]],
-    			
-    						  EYESIGHT_DESC => [["type" => 3, "size" => 1, "name" => EYESIGHT_SMALL, "vname" => EYESIGHT_SMALLVILLAGE, "effect" => "(5x)", "quantity" => 6, "img" => 5],
-    											["type" => 3, "size" => 2, "name" => EYESIGHT_LARGE, "vname" => EYESIGHT_LARGEVILLAGE, "effect" => "(3x)", "quantity" => 4, "img" => 5],
-    											["type" => 3, "size" => 3, "name" => EYESIGHT_UNIQUE, "vname" => EYESIGHT_UNIQUEVILLAGE, "effect" => "(10x)", "quantity" => 1, "img" => 5]],
-    			
-    							  DIET_DESC => [["type" => 4, "size" => 1, "name" => DIET_SMALL, "vname" => DIET_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 6],
-    											["type" => 4, "size" => 2, "name" => DIET_LARGE, "vname" => DIET_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 6],
-    											["type" => 4, "size" => 3, "name" => DIET_UNIQUE, "vname" => DIET_UNIQUEVILLAGE, "effect" => "(50%)", "quantity" => 1, "img" => 6]],
-    			
-    						  ACADEMIC_DESC => [["type" => 5, "size" => 1, "name" => ACADEMIC_SMALL, "vname" => ACADEMIC_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 8],
-    											["type" => 5, "size" => 2, "name" => ACADEMIC_LARGE, "vname" => ACADEMIC_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 8],
-    											["type" => 5, "size" => 3, "name" => ACADEMIC_UNIQUE, "vname" => ACADEMIC_UNIQUEVILLAGE, "effect" => "(50%)", "quantity" => 1, "img" => 8]],
-    			
-    						   STORAGE_DESC => [["type" => 6, "size" => 1, "name" => STORAGE_SMALL, "vname" => STORAGE_SMALLVILLAGE, "effect" => "(50%)", "quantity" => 6, "img" => 9],
-    											["type" => 6, "size" => 2, "name" => STORAGE_LARGE, "vname" => STORAGE_LARGEVILLAGE, "effect" => "(25%)", "quantity" => 4, "img" => 9]],
-    			
-    						 CONFUSION_DESC => [["type" => 7, "size" => 1, "name" => CONFUSION_SMALL, "vname" => CONFUSION_SMALLVILLAGE, "effect" => "(200)", "quantity" => 6, "img" => 10],
-    											["type" => 7, "size" => 2, "name" => CONFUSION_LARGE, "vname" => CONFUSION_LARGEVILLAGE, "effect" => "(100)", "quantity" => 4, "img" => 10],
-    											["type" => 7, "size" => 3, "name" => CONFUSION_UNIQUE, "vname" => CONFUSION_UNIQUEVILLAGE, "effect" => "(500)", "quantity" => 1, "img" => 10]],
-    			
-    							  FOOL_DESC => [["type" => 8, "size" => 1, "name" => FOOL_SMALL, "vname" => FOOL_SMALLVILLAGE, "effect" => "", "quantity" => 10, "img" => "fool"],
-    											["type" => 8, "size" => 3, "name" => FOOL_UNIQUE, "vname" => FOOL_UNIQUEVILLAGE, "effect" => "", "quantity" => 1, "img" => "fool"]]];
-    	
-    	//Add artifacts and their villages
-    	$database->addArtifactVillages($artifactArrays);
+    	$this->artifacts->createNatars();
     	
     	//Write the system message
     	$database->displaySystemMessage(ARTEFACT);
@@ -3035,44 +2920,8 @@ class Automation {
     	//and if it's the time to spawn them or not
     	if(!$database->areArtifactsSpawned() || $database->areWWVillagesSpawned() || strtotime(START_DATE) + (NATARS_WW_SPAWN_TIME * 86400) > time()) return;
     	
-    	//WW village Natars' troops
-    	$unitArrays =  [41 => rand(500, 12000) * NATARS_UNITS,
-    					42 => rand(1000 , 14000) * NATARS_UNITS,
-    					43 => rand(2000, 16000) * NATARS_UNITS,
-    					44 => rand(100, 500) * NATARS_UNITS,
-    					45 => rand(480, 17000) * NATARS_UNITS,
-    					46 => rand(600, 18000) * NATARS_UNITS,
-    					47 => rand(2000, 16000) * NATARS_UNITS,
-    					48 => rand(400, 2000) * NATARS_UNITS,
-    					49 => rand(40, 200) * NATARS_UNITS,
-    					50 => rand(50, 250) * NATARS_UNITS];
-
-    	//WW village buildings
-		$buildingArrays = [
-						//WW of the 0th level, Main Building of the 10th level, Marketplace of the 1th level, Delete Main Building of the 1th level
-							"f99t" => 40, "f99" => 0, "f22t" => 15, "f22" => 10, "f34t" => 17, "f34" => 1, "f26t" => 0, "f26" => 0, 
-						//Warehouse of the 20th & 10th level, Granary of the 20th & 10th level
-							"f20t" => 10, "f20" => 20, "f19t" => 10, "f19" => 10, "f23t" => 11, "f23" => 20, "f27t" => 11, "f27" => 10, 
-						//All Woodcutter of the 5th level
-							"f1t" => 1, "f1" => 5, "f3t" => 1, "f3" => 5, "f14t" => 1, "f14" => 5, "f17t" => 1, "f17" => 5, 
-						//All Clay Pit of the 5th level
-							"f5t" => 2, "f5" => 5, "f6t" => 2, "f6" => 5, "f16t" => 2, "f16" => 5, "f18t" => 2, "f18" => 5, 
-						//All Iron Mine of the 5th level
-							"f4t" => 3, "f4" => 5, "f7t" => 3, "f7" => 5, "f10t" => 3, "f10" => 5, "f11t" => 3, "f11" => 5, 
-						//All Cropland of the 6th level
-							"f2t" => 4, "f2" => 6, "f8t" => 4, "f8" => 6, "f9t" => 4, "f9" => 6, "f12t" => 4, "f12" => 6, "f13t" => 4, "f13" => 6, "f15t" => 4, "f15" => 6];
-
-    	$villageArrays = $wids = [];
-    	for($i = 1; $i <= 13; $i++) $villageArrays[] = ['wid' => 0, 'kid' => ($i == 13 ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0];
-    	
-    	$wids = $database->generateVillages($villageArrays, 3, "Natars");
-    	
-    	foreach($wids as $wid){
-    		$database->modifyUnit($wid, array_keys($unitArrays), array_values($unitArrays), [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-    		$database->setVillageLevel($wid, array_keys($buildingArrays), array_values($buildingArrays));
-    		$database->setVillageFields($wid, ['natar', 'pop', 'name'], [1, 233, WWVILLAGE]);
-    //		$this->recountPop($wid); //it is necessary to comment out otherwise the population will be 198
-    	}
+    	//Create WW villages
+    	$this->artifacts->createWWVillages();
 	    
 	    //Write the system message
     	$database->displaySystemMessage(WWVILLAGEMSG);
@@ -3090,10 +2939,8 @@ class Automation {
     	//and if it's the time to spawn them or not
     	if(!$database->areArtifactsSpawned() || $database->areArtifactsSpawned(true) || strtotime(START_DATE) + (NATARS_WW_BUILDING_PLAN_SPAWN_TIME * 86400) > time()) return;
     	
-    	$artifactArrays =  [PLAN_DESC => [["type" => 11, "size" => 1, "name" => PLAN,"vname" => PLANVILLAGE, "effect" => "", "quantity" => 13, "img" => 1]]];
-    	
-    	//Add the artifacts and villages
-    	$database->addArtifactVillages($artifactArrays);
+    	//Create WW building plans
+    	$this->artifacts->createWWBuildingPlans();
     	
     	//Set the system message to contain the infos of the WW building plans
     	$database->displaySystemMessage(PLAN_INFO);
@@ -3110,59 +2957,8 @@ class Automation {
         //Check if there's at least one artifact, if not, return
         if(!$database->areArtifactsSpawned()) return;
         
-        //Get all inactive artifacts that have to be activated --> (24 hours / Speed of the server)
-        $time = time();
-        $artifacts = $database->getInactiveArtifacts(round($time - (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED)))));
-
-        if(!empty($artifacts)){
-            
-            //Cache inactive artifacts by owner
-            $inactiveArtifactsCache = [];
-            foreach($artifacts as $artifact) $inactiveArtifactsCache[$artifact['owner']][] = $artifact;         
-
-            foreach($inactiveArtifactsCache as $owner => $inactiveArtifacts){
-
-                //Initialize the array
-                $activeArtifacts = [];
-                
-                //Get cached active artifacts
-                $ownArtifacts = $database->getOwnArtifactsSum($owner, true);
-
-                //Activate activable artifacts
-                foreach($inactiveArtifacts as $artifact){
-                    if($ownArtifacts['totals'] < 3){
-                        if($artifact['size'] == 1){ //Village effect
-                            $database->activateArtifact($artifact['id']);
-                            $ownArtifacts['totals']++;
-                            $ownArtifacts['small']++;
-                        }elseif($artifact['size'] == 2 && !$ownArtifacts['unique'] && !$ownArtifacts['great']){ //Account effect
-                            $database->activateArtifact($artifact['id']);
-                            $ownArtifacts['totals']++;
-                            $ownArtifacts['great']++;
-                        }elseif($artifact['size'] == 3 && !$ownArtifacts['unique'] && !$ownArtifacts['great']){ //Unique effect
-                            $database->activateArtifact($artifact['id']);
-                            $ownArtifacts['totals']++;
-                            $ownArtifacts['unique']++;
-                        }
-                    }elseif($ownArtifacts['small'] == 3 && $artifact['size'] > 1){
-                        //If we've 3 village effect artifacts activated and at least one account/unique effect not activated
-                        //then we need to deactivate the most recent village effect artifact and activate the oldest account
-                        //or unique effect artifact
-                        
-                        //Deactivate the most recent village effect artifact
-                        $database->activateArtifact($database->getNewestArtifactBySize($owner, 1)['id'], 0);
-                        
-                        //Activate the great/unique artifact
-                        $database->activateArtifact($artifact['id']);     
-                        
-                        $ownArtifacts['small']--;
-                        $ownArtifacts['totals']++;
-                        if($artifact['size'] == 2) $ownArtifacts['great']++;
-                        else $ownArtifacts['unique']++;
-                    }
-                }
-            }
-        }
+        //Activate the artifacts that need to be activated
+        $this->artifacts->activateArtifacts();
     }
 
     private function researchComplete() {
@@ -4837,7 +4633,7 @@ class Automation {
         global $database;
         
         $time = time();
-        $q = "SELECT id, size FROM " . TB_PREFIX . "artefacts where type = 8 AND active = 1 AND lastupdate <= ".($time - (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
+        $q = "SELECT id, size FROM " . TB_PREFIX . "artefacts where type = 8 AND active = 1 AND del = 0 AND lastupdate <= ".($time - (86400 / (SPEED == 2 ? 1.5 : (SPEED == 3 ? 2 : SPEED))));
         $array = $database->query_return($q);
         if ($array) {
             foreach($array as $artefact) {

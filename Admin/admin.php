@@ -23,6 +23,7 @@ include_once("../GameEngine/Database.php");
 include_once ("../GameEngine/Lang/" . LANG . ".php");
 include_once("../GameEngine/Admin/database.php");
 include_once("../GameEngine/Data/buidata.php");
+include_once("../GameEngine/Artifacts.php");
 
 include('Templates/ver.tpl');
 include('Templates/update_latest.tpl');
@@ -58,6 +59,10 @@ if (!empty($_GET['p'])) {
 
         case 'map':
             $subpage = 'Map';
+            break;
+            
+        case 'artifacts':
+            $subpage = 'Artifacts';
             break;
 
         case 'search':
@@ -118,14 +123,6 @@ if (!empty($_GET['p'])) {
 
         case 'addUsers':
             $subpage = 'Create Users';
-            break;
-
-        case 'natarend':
-            $subpage = 'Add WW Villages';
-            break;
-
-        case 'natarbuildingplan':
-            $subpage = 'Add WW Building Plan Villages';
             break;
 
         case 'admin_log':
@@ -498,7 +495,7 @@ if (!empty($_GET['p'])) {
 						<li><a href="<?php echo HOMEPAGE; ?>">Server Homepage</a></li>
 						<li><a href="admin.php">Control Panel Home</a></li>
 						<li><a href="<?php echo rtrim(SERVER, '/'); ?>/dorf1.php">Return to the server</a></li>
-						<li><a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</font></b></a></li>
+						<li><a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</b></font></a></li>
 						<li><a href="?action=logout">Logout</a></li>
 						<li class="sub"><a href="#">Server Info</a>
 							<ul>
@@ -509,6 +506,7 @@ if (!empty($_GET['p'])) {
 								<li><a href="?p=report">Players Report</a></li>
 								<li><a href="?p=msg">Players Message</a></li>
 								<li><a href="?p=map">Map</a></li>
+								<li><a href="?p=artifacts">Artifacts</a></li>
 							</ul>
 						</li>
 						<li class="sub"><a href="#">Search</a>

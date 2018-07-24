@@ -1,6 +1,6 @@
 <?php
-$normalA = $database->getOwnArtefactInfoByType($village->wid,6);
-$largeA = $database->getOwnUniqueArtefactInfo($session->uid,6,2);
+$artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 6);
+$GreatGranaryWarehouseBuildable = $artifactsSum['small'] > 0 || $artifactsSum['large'] > 0;
 
 $mainbuilding = $building->getTypeLevel(15);
 $cranny = $building->getTypeLevel(23);
@@ -130,10 +130,10 @@ if($wall == 0 && $wall1 == 0) {
 if((($warehouse == 0 && $warehouse1 == 0) || $warehouse == 20) && $mainbuilding >= 1 && $id != 39 && $id != 40) {
     include("avaliable/warehouse.tpl");
 }
-if((($greatwarehouse == 0 && $greatwarehouse1 == 0) || $greatwarehouse == 20) && $mainbuilding >= 10 && ($largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid || $village->natar==1) && ($id != 39 && $id != 40)) {
+if((($greatwarehouse == 0 && $greatwarehouse1 == 0) || $greatwarehouse == 20) && $mainbuilding >= 10 && ($GreatGranaryWarehouseBuildable || $village->natar == 1) && ($id != 39 && $id != 40)) {
     include("avaliable/greatwarehouse.tpl");
 }
-if((($greatgranary == 0 && $greatgranary1 == 0) || $greatgranary == 20) && $mainbuilding >= 10 && ($largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid || $village->natar==1) && ($id != 39 && $id != 40)) {
+if((($greatgranary == 0 && $greatgranary1 == 0) || $greatgranary == 20) && $mainbuilding >= 10 && ($GreatGranaryWarehouseBuildable  || $village->natar == 1) && ($id != 39 && $id != 40)) {
     include("avaliable/greatgranary.tpl");
 }
 if((($trapper == 0 && $trapper1 == 0) || $trapper == 20) && $rallypoint >= 1 && $session->tribe == 3 && $id != 39 && $id != 40) {
@@ -232,10 +232,10 @@ if($id != 39 && $id != 40) {
 if($rallypoint == 0 && $session->tribe == 3 && $trapper == 0 ) {
 include("soon/trapper.tpl");
 }
-if($mainbuilding < 10 && $warehouse < 10 && $village->capital == 0 && $largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid ) {
+if($mainbuilding < 10 && $warehouse < 10 && $village->capital == 0 && $GreatGranaryWarehouseBuildable) {
     include("soon/greatwarehouse.tpl");
 }
-if($mainbuilding < 10 && $granary < 10 && $village->capital == 0 && $largeA['owner'] == $session->uid || $normalA['vref'] == $village->wid ) {
+if($mainbuilding < 10 && $granary < 10 && $village->capital == 0 && $GreatGranaryWarehouseBuildable) {
     include("soon/greatgranary.tpl");
 }
 if($hero == 0 && ($mainbuilding <= 2 || $rallypoint == 0)){

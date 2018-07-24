@@ -32,7 +32,7 @@ $artifactInfo = Artifacts::getArtifactInfo($artifact);
 		</tr>
 	<?php }else{ ?>
 		<tr>
-			<td><a href="?action=delArtifact&artid=<?php echo $artifact['id']; ?>" onClick="return del('arti', <?php echo $artifact['id']; ?>)"><img src="../img/admin/del.gif"></a></td>
+			<td><a href="?action=delArtifact&artid=<?php echo $artifact['id']; ?>&del=0" onClick="return del('arti', <?php echo $artifact['id']; ?>)"><img src="../img/admin/del.gif"></a></td>
 			<td class="icon"><img class="artefact_icon_<?php echo $artifact['type']; ?>" src="../img/x.gif"></td>
 			<td colspan="1"><div style="text-align: center"><?php echo $artifact['name']; ?></div></td>
 			<td colspan="1"><div style="text-align: center"><?php echo $artifactInfo['bonus']; ?></div></td>
@@ -48,6 +48,6 @@ $artifactInfo = Artifacts::getArtifactInfo($artifact);
 </table>
 	<?php
 	
-	if($village['owner'] != 3) echo '<a href="admin.php?action=returnArtifact&artid='.$artifact['id'].'">Return to Natars</a>';
+	if($village['owner'] != 3 && !empty($artifact)) echo '<a href="admin.php?action=returnArtifact&artid='.$artifact['id'].'">Return to Natars</a>';
 	?>
 	

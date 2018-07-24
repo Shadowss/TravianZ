@@ -42,10 +42,10 @@ function aktiv() {this.srcElement.className='fl1'; }
 function inaktiv() {event.srcElement.className='fl2'; }
 
 function del(e,id){
-if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); }
-if(e == 'arti'){ var conf = confirm('Dou you really want delete artifact id '+id+'?'); }
-if(e == 'unban'){ var conf = confirm('Dou you really want unban player '+id+'?'); }
-if(e == 'stopDel'){ var conf = confirm('Dou you really want stop deleting user '+id+'?'); }
+if(e == 'did'){ var conf = confirm('Do you really want to delete village id '+id+'?'); }
+if(e == 'arti'){ var conf = confirm('Do you really want to delete artifact id '+id+'?'); }
+if(e == 'unban'){ var conf = confirm('Do you really want to unban player '+id+'?'); }
+if(e == 'stopDel'){ var conf = confirm('Do you really want to stop deleting user '+id+'?'); }
 return conf;
 }
 
@@ -86,30 +86,22 @@ return conf;
 
   if($funct->CheckLogin()){
 	if($_POST or $_GET){
-	  if($_GET['p'] and $_GET['p']!="search"){
+	  if($_GET['p'] && $_GET['p'] != "search"){
 		  $filename = '../Templates/Admin/'.$_GET['p'].'.tpl';
-		  if(file_exists($filename)){
-			include($filename);
-		  }else{
-			include('../Templates/Admin/404.tpl');
-		  }
-	  }else{
-		include('../Templates/Admin/search.tpl');
+		  if(file_exists($filename)) include($filename);
+		  else include('../Templates/Admin/404.tpl');
 	  }
-	  if($_POST['p'] and $_POST['s']){
+	  else include('../Templates/Admin/search.tpl');
+	  
+	  if($_POST['p'] && $_POST['s']){
 		$filename = '../Templates/Admin/results_'.$_POST['p'].'.tpl';
-		  if(file_exists($filename)){
-			include($filename);
-		  }else{
-			include('../Templates/Admin/404.tpl');
-		  }
+		if(file_exists($filename)) include($filename);
+		else include('../Templates/Admin/404.tpl');
 	  }
-	}else{
-	  include('../Templates/Admin/home.tpl');
 	}
-  }else{
-	include('../Templates/Admin/login.tpl');
+	else include('../Templates/Admin/home.tpl');
   }
+  else include('../Templates/Admin/login.tpl');
 ?>
 
 </div>

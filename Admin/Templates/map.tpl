@@ -96,21 +96,22 @@ if ($check1 == "" && $check2 == "" && $check3 == "") $criteria = "";
 					    $player_info = $database->query_return($q);
 					    
 					    foreach($player_info as $p_array) {
-					        $p_name = $p_array['username'];
-					        $p_village = mysqli_real_escape_string($database->dblink, $p_array['name']);
+					        $p_name = htmlspecialchars(mysqli_escape_string($database->dblink, $p_array['username']));
+					        $p_village = htmlspecialchars(mysqli_escape_string($database->dblink, $p_array['name']));
 					        $p_coor = "(".$p_array['x']."|".$p_array['y'].")";
 					        $p_pop = $p_array['pop'];
                             $p_tribe = $array_tribe[$p_array['tribe']];
 					        
 					        $p_info ="<a href=\"?p=village&did=".$p_array['wref']."\" target=\"_blank\"><img src=\"../img/admin/map_".(isset($p_array['size']) ? "1".$p_array['size'] : ($p_array['access'] != ADMIN ? $p_array['tribe'] : 0)).".gif\" border=\"0\" onmouseout=\"med_closeDescription()\" onmousemove=\"med_mouseMoveHandler(arguments[0],'<ul class=\'p_info\'><li>Player name: <b>$p_name</b></li><li>Village name : <b>$p_village</b></li><li>Coordinate: <b>$p_coor</b></li><li>Population: <b>$p_pop</b></li><li>Tribe: <b>$p_tribe</b></li>".($check3 != "" && isset($p_array['size']) ? "<li>Artifact effect: <b>".$artifactsEffect[$p_array['size']]."</b></li>" : "")."</ul>')\"></a>";
 					        
-					        //250px = 0
-					        $xdiv = 250 / WORLD_MAX;
-					        if($p_array['x'] < 0) $p_x = 250 - intval(abs($p_array['x']) * $xdiv); //-
-					        elseif($p_array['x'] > 0) $p_x = 250 + intval(abs($p_array['x']) * $xdiv); //+		        
-					        if($p_array['y'] < 0) $p_y = 250 + intval(abs($p_array['y']) * $xdiv); //-			        
-					        elseif($p_array['y'] > 0) $p_y = 250 - intval(abs($p_array['y']) * $xdiv); //+
-					        if($p_array['x'] == 0 && $p_array['y'] == 0) $p_x = $p_y = 250; //multihunter
+					        //245px = 0
+					        $pixelDiv = 245;
+					        $xdiv = $pixelDiv / WORLD_MAX;
+					        if($p_array['x'] <= 0) $p_x = $pixelDiv - intval(abs($p_array['x']) * $xdiv); //-x
+					        elseif($p_array['x'] >= 0) $p_x = $pixelDiv + intval(abs($p_array['x']) * $xdiv); //+x		
+					        
+					        if($p_array['y'] <= 0) $p_y = $pixelDiv + intval(abs($p_array['y']) * $xdiv); //-y			        
+					        elseif($p_array['y'] >= 0) $p_y = $pixelDiv - intval(abs($p_array['y']) * $xdiv); //+y
 					        
 					        echo '<div style="left:'.$p_x.'px; top:'.$p_y.'px; position:absolute">'.$p_info.'</div>';
 					    }

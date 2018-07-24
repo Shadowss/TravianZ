@@ -225,11 +225,6 @@ class MYSQLi_DB implements IDbConnection {
         $artefactDataCache = [],
 
         /**
-         * @var array Cache of own artefact infos, from the simple SQL select.
-         */
-        $artefactInfoSimpleCache = [],
-
-        /**
          * @var array Cache of own artefact infos by type.
          */
         $artefactInfoByTypeCache = [],
@@ -428,9 +423,7 @@ class MYSQLi_DB implements IDbConnection {
 	    $this->dbname   = $dbname;
 
 	    // connect to the DB
-		if (!$this->connect()) {
-		    die(mysqli_error($this->dblink));
-		}
+	    if (!$this->connect()) die(mysqli_error($this->dblink));
 
 		// we will operate in UTF8
 		mysqli_query($this->dblink,"SET NAMES 'UTF8'");
@@ -670,9 +663,8 @@ class MYSQLi_DB implements IDbConnection {
 
         if (isset($arrayVariable[$arrayStructure]) && !empty($arrayVariable[$arrayStructure])) {
             return $arrayVariable[$arrayStructure];
-        } else {
-            return null;
-        }
+        } 
+        else return null;
     }
 
     /**
@@ -729,21 +721,23 @@ class MYSQLi_DB implements IDbConnection {
 		return $this->dblink;
 	}
 
-	function register($username, $password, $email, $tribe, $act) {
-        list($username, $password, $email, $tribe, $act) = $this->escape_input($username, $password, $email, $tribe, $act);
+	function register($username, $password, $email, $tribe, $act, $uid = 0, $desc = null) {
+        list($username, $password, $email, $tribe, $act, $uid, $desc) = $this->escape_input($username, $password, $email, (int) $tribe, $act, (int) $uid, $desc);
 
 		$time = time();
-        $stime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
-        if($stime > $time) $time = $stime;
-		$timep = $time + PROTECTION;
-		$time = time();
-		$q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime,is_bcrypt) VALUES ('$username', '$password', " . USER . ", '$email', $time, " . (int) $tribe . ", '$act', $timep, $time, $time,1)";
-		if(mysqli_query($this->dblink,$q)) return mysqli_insert_id($this->dblink);		
+        $startTime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
+
+        //If we're registering the Natars tribe, the protection must be 0
+		$protectionTime = $uid != 3 ? (($startTime > $time) ? $stime : $time) + PROTECTION : 0;
+
+		$q = "INSERT INTO " . TB_PREFIX . "users (id, username, password, access, email, timestamp, tribe, act, protect, lastupdate, regtime, desc2, is_bcrypt) VALUES ($uid, '$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $protectionTime, $time, $time, '$desc', 1)";
+		
+		if(mysqli_query($this->dblink, $q)) return mysqli_insert_id($this->dblink);		
 		else 
 		{
 		    // if an error has occured, we probably don't have DB converted to handle bcrypt passwords yet
-		    $q = "INSERT INTO " . TB_PREFIX . "users (username,password,access,email,timestamp,tribe,act,protect,lastupdate,regtime) VALUES ('$username', '$password', " . USER . ", '$email', $time, " . (int) $tribe . ", '$act', $timep, $time, $time)";
-		    if(mysqli_query($this->dblink,$q)) return mysqli_insert_id($this->dblink);	      
+		    $q = "INSERT INTO " . TB_PREFIX . "users (id, username, password, access, email, timestamp, tribe, act, protect, lastupdate, regtime, desc2) VALUES ($uid, '$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $protectionTime, $time, $time, '$desc')";
+		    if(mysqli_query($this->dblink, $q)) return mysqli_insert_id($this->dblink);	      
 		    else return false;
 		}
 	}
@@ -753,11 +747,8 @@ class MYSQLi_DB implements IDbConnection {
 
 		$time = time();
 		$q = "INSERT INTO " . TB_PREFIX . "activate (username,password,access,email,tribe,timestamp,location,act,act2) VALUES ('$username', '$password', " . USER . ", '$email', " . (int) $tribe .", $time, $locate, '$act', '$act2')";
-				if(mysqli_query($this->dblink,$q)) {
-			return mysqli_insert_id($this->dblink);
-		} else {
-			return false;
-		}
+		if(mysqli_query($this->dblink,$q)) return mysqli_insert_id($this->dblink);
+		else return false;
 	}
 
 	function unreg($username) {
@@ -842,7 +833,8 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
-
+    
+	//TODO: Remove this function to use the more general one
 	// no need to cache this method
 	function getVilWref($x, $y) {
 	    list($x, $y) = $this->escape_input((int) $x, (int) $y);
@@ -851,6 +843,28 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		return $dbarray['id'];
+	}
+	
+	/**
+	 * Converts from coordinates to village IDs
+	 * 
+	 * @param array $coordinatesArray The coordinates array, containing the coordinates which need to be converted
+	 * @return array Returns the converted coordinates
+	 */
+	
+	function getVilWrefs($coordinatesArray) {
+	    list($coordinatesArray) = $this->escape_input($coordinatesArray);
+	    
+	    if(!is_array($coordinatesArray[0])) $coordinatesArray = [$coordinatesArray];
+	    
+	    $conditions = [];
+	    foreach($coordinatesArray as $coordinate) $conditions[] = "(x = ".$coordinate[0]." AND y = ".$coordinate[1].")";
+	    
+	    $q = "SELECT id FROM " . TB_PREFIX . "wdata WHERE ".implode(" OR ", $conditions);
+	    $result = mysqli_query($this->dblink, $q);
+	    
+	    while($row = mysqli_fetch_assoc($result)) $wids[] = $row['id'];
+	    return $wids;
 	}
 
 	function removeMeSit($uid, $uid2) {
@@ -1250,66 +1264,94 @@ class MYSQLi_DB implements IDbConnection {
 		}
 	}
 
-	// if $respect_gametime is false, we generate user base really anywhere
-	// and that means we can generate farms closer to the middle of the map as well
-	// ... otherwise we'd only generate farms at corner edges in late game, which
-	//     sucks for people in the middle who registered too soon
-	function generateBase($sector, $mode=1, $respect_gametime = true) {
-        list($sector, $mode) = $this->escape_input($sector, $mode);
+	/**
+	 * Generates a list of "free to take" villages
+	 * 
+	 * @param int $sector The map sector, + | -, - | + , + | +, - | - (0 and > 3, 1, 2, 3)
+	 * @param int $mode 0 if villages need be generated under certain filters, 1 if not
+	 * @param bool $respect_gametime If is false, we generate user base really anywhere
+	 * and that means we can generate farms closer to the middle of the map as well.
+	 * Otherwise we'd only generate farms at corner edges in late game, which
+	 * sucks for people in the middle who registered too soon
+	 * @param int $numberOfVillages Number of villages which need to be generated
+	 * @return array Return the generated villages 
+	 */ 
+	
+	function generateBase($sector, $mode = 0, $numberOfVillages = 1) {
+	    list($sector, $mode, $numberOfVillages) = $this->escape_input((int) $sector, (int) $mode, (int)$numberOfVillages);
 
         // don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
         @set_time_limit(0);
-        $num_rows = 0;
-        $count_while = 0;
+        $num_rows = $count = 0;
+        $villages = [];
+        $time = time();
+        
+        while ($numberOfVillages > 0) {
+            switch($mode){
+                case 0:
+                    $daysPassedFromStart = ($time - strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME)) / 86400;
 
-        // random position on the map - used when generating farms via Admin
-        if (!$respect_gametime) $rand = rand(1,4);
+                    $radiusMin = min(round(pow(2 * ($daysPassedFromStart / 5 * SPEED), 2)), round(pow(WORLD_MAX * 0.8, 2)) + round(pow(WORLD_MAX * 0.8, 2)));
+                    $radiusMax = min(round(pow(4 * ($daysPassedFromStart / 5 * SPEED), 2)), pow(WORLD_MAX, 2) + pow(WORLD_MAX, 2));
+                    break;
+                    
+                case 1:
+                default:
+                    $radiusMin = 1;
+                    $radiusMax = pow(WORLD_MAX, 2);
+                    break;
+                    
+                case 2: //Small artifacts & WW building plans
+                    $radiusMin = round(pow(WORLD_MAX * 0.50, 2));
+                    $radiusMax = round(pow(WORLD_MAX * 0.75, 2));
+                    break;
+                
+                case 3: //Large artifacts
+                    $radiusMin = round(pow(WORLD_MAX * 0.35, 2));
+                    $radiusMax = round(pow(WORLD_MAX * 0.55, 2));
+                    break;
+                
+                case 4: //Unique artifacts
+                    $radiusMin = round(pow(WORLD_MAX * 0.05, 2));
+                    $radiusMax = round(pow(WORLD_MAX * 0.25, 2));
+                    break;
 
-        while (!$num_rows) {
-            if (!$mode) {
-                $gamesday = time() - COMMENCE;
-				// TODO: scale these with game speed?
-				if((!$respect_gametime && $rand === 1) || ($respect_gametime && $gamesday < 3600 * 24 * 10 && $count_while == 0)){ // 10 day
-					$wide1 = 1;
-					$wide2 = 20;
-				}elseif((!$respect_gametime && $rand === 2) || ($respect_gametime && $gamesday < 3600 * 24 * 20 && $count_while == 1)){ // 20 day
-					$wide1 = 20;
-					$wide2 = 40;
-				}elseif((!$respect_gametime && $rand === 3) || ($respect_gametime && $gamesday < 3600 * 24 * 30 && $count_while == 2)){ // 30 day
-					$wide1 = 40;
-					$wide2 = 80;
-				}else{ // over 30 day
-					$wide1 = 80;
-					$wide2 = WORLD_MAX;
-				}
-            }else {
-                $wide1 = 1;
-				$wide2 = WORLD_MAX;
+                case 5: //WW villages
+                    $radiusMin = round(pow(WORLD_MAX * 0.8, 2));
+                    $radiusMax = round(pow(WORLD_MAX, 2));
+                    break;
             }
 
             switch($sector){
-                case 1:
-                    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x- y+
-                    break;
-                case 2:
-                    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y > $wide1 and y < $wide2) and occupied = 0"; //x+ y+
-                    break;
-                case 3:
-                    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x < -$wide1 and x > -$wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x- y-
-                    break;
-                default:
-                    $q = "Select * from ".TB_PREFIX."wdata where fieldtype = 3 and (x > $wide1 and x < $wide2) and (y < -$wide1 and y > -$wide2) and occupied = 0"; //x+ y-
+                case 1: $sector = "x <= 0 AND y >= 0"; break; // - | +       
+                case 2: $sector = "x >= 0 AND y >= 0"; break; // + | +                   
+                case 3: $sector = "x <= 0 AND y <= 0"; break; // - | -            
+                default: $sector = "x >= 0 AND y <= 0"; // + | -                 
             }
+
+            //Choose villages beetween two circumferences, by using their formula (x^2 + y^2 = r^2)
+            $q = "SELECT id FROM ".TB_PREFIX."wdata WHERE fieldtype = 3 AND ($sector) AND (POWER(x, 2) + POWER(y, 2) >= $radiusMin AND POWER(x, 2) + POWER(y, 2) <= $radiusMax) AND occupied = 0 ORDER BY RAND() LIMIT $numberOfVillages";
+            $result = mysqli_query($this->dblink, $q);
             
-            $result = mysqli_query($this->dblink,$q);
-            $num_rows = mysqli_num_rows($result);
-            $count_while++;
+            //Prevent an infinite loop
+            $resultedRows = mysqli_num_rows($result);
+            if($resultedRows == 0 && $count >= 20) break;
+            
+            //Fill the villages array
+            $villages = array_merge($villages, $this->mysqli_fetch_all($result));
+            
+            $num_rows += $resultedRows;
+            $numberOfVillages -= $resultedRows;
+            $count++;
+            
+            //If there are no more free cells in that sector, it have to be changed
+            //This instruction will be used only (in the next cicle(s)) if not all wids have been generated yet
+            $sector = rand(1, 4);
         }
 
-        $result = $this->mysqli_fetch_all($result);
-        $base = rand(0, ($num_rows - 1));
+        foreach($villages as $village) $wids[] = $village['id'];
 
-        return $result[$base]['id'];
+        return $num_rows == 1 ? $wids[0] : $wids;
     }
 
 	function setFieldTaken($id) {
@@ -1331,83 +1373,129 @@ class MYSQLi_DB implements IDbConnection {
 	 * @param array $villageArrays The array of the villages which have to be created
 	 * @param int $uid The user ID
 	 * @param string $username The username of the future owner
+	 * @param array $troopsArray The troops that need to be added in the village(s)
+	 * @param array $buildingsArray The buildings that need to be created in the village(s)
 	 * @return array Returns the created villages ID
 	 */
 	
-	function generateVillages($villageArrays, $uid, $username){	
-		list($villageArrays, $uid, $username) = $this->escape_input($villageArrays, (int) $uid, $username);
+	function generateVillages($villageArrays, $uid, $username, $troopsArray = null, $buildingsArray = null){	
+	    list($villageArrays, $uid, $username, $troopsArray, $buildingsArray) = $this->escape_input($villageArrays, (int) $uid, $username, $troopsArray, $buildingsArray);
 		
-		$wids = [];		
+	    $wids = $takenWids = $countedWids = $generatedWids = $i = [];
+	    
+	    //Count each kid in its own array, to check how many villages must be created
+	    foreach($villageArrays as $village){
+	        if($village['wid'] == 0) $countedWids[$village['mode']][$village['kid']]++;
+	    }
+	    
+	    //Generate the number of desired village for each kid
+	    //and merge them with the more general "wids" array
+	    foreach($countedWids as $mode => $totalCount){
+	        foreach($totalCount as $sector => $count){
+	            $generatedWids = $this->generateBase($sector, $mode, $count);
+	            $wids[$mode] = array_merge((array)$wids[$mode], !is_array($generatedWids) ? [$generatedWids] : $generatedWids);
+	            if(empty($i[$mode])) $i[$mode] = 0;
+	        }
+	    }
+	    
+	    //Create the villages
 		foreach($villageArrays as $village){
-			if($village['wid'] == 0) $village['wid'] = $this->generateBase($village['kid'], 0);
-			$this->addVillage($village['wid'], $uid, $username, $village['capital']);
-			$this->addResourceFields($village['wid'], $this->getVillageType($village['wid']));
-			$wids[] = $village['wid'];
+		    
+		    //Check if the village wid isn't already set and assing one among the generated ones
+		    if($village['wid'] == 0) $village['wid'] = $wids[$village['mode']][$i[$village['mode']]++];
+		    
+		    //Merge the wids into an unique array
+		    $takenWids[] = $village['wid'];
+		    $villageTypes[] = $village['type'];
+		    
+		    //Add the village and its buildings		    
+			$this->addVillage($village['wid'], $uid, $username, $village['capital'], $village['pop'], $village['name'], $village['natar']);
 		}
 		
-		$this->setFieldTaken($wids);
-		$this->addUnits($wids);
-		$this->addTech($wids);
-		$this->addABTech($wids);
-		
-		return count($wids) > 1 ? $wids : $wids[0];
+        //Create tables for the just generated villages
+		$this->addResourceFields($takenWids, $villageTypes, $buildingsArray);
+		$this->setFieldTaken($takenWids);
+		$this->addUnits($takenWids, $troopsArray);
+		$this->addTech($takenWids);
+		$this->addABTech($takenWids);
+
+		return count($takenWids) > 1 ? $takenWids : $takenWids[0];
 	}
 	
-	function addVillage($wid, $uid, $username, $capital) {
-	    list($wid, $uid, $username, $capital) = $this->escape_input((int) $wid, (int) $uid, $username, (int) $capital);
+	/**
+	 * 
+	 * Create a village
+	 * 
+	 * @param int $wid The village ID
+	 * @param int $uid The User ID, the village's owner
+	 * @param string $username The username
+	 * @param int $capital 1 if it's a capital village, 0 otherwise
+	 * @param int $pop The default village population
+	 * @param string $villageName The default village name
+	 * @return bool Returns true if the query was successful, false otherwise
+	 */
+	
+	function addVillage($wid, $uid, $username, $capital, $pop = 2, $villageName = null, $isNatar = 0) {
+	    list($wid, $uid, $username, $capital, $pop, $villageName, $isNatar) = $this->escape_input((int) $wid, (int) $uid, $username, (int) $capital, (int) $pop, $villageName, (int) $isNatar);
 
 	    $total = count($this->getVillagesID($uid));
-	    if($total >= 1) $vname = $username . "\'s village " . ($total + 1);
-		else $vname = $username . "\'s village";
-		
+	    if($villageName == null) $villageName = $username."\'s village ".($total >= 1 ? $total + 1 : "");
+
 		$time = time();
-		$q = "INSERT into " . TB_PREFIX . "vdata (wref, owner, name, capital, pop, cp, celebration, wood, clay, iron, maxstore, crop, maxcrop, lastupdate, created) values ($wid, $uid, '$vname', $capital, 2, 1, 0, 750, 750, 750, ".STORAGE_BASE.", 750, ".STORAGE_BASE.", $time, $time)";
+		$q = "INSERT into " . TB_PREFIX . "vdata (wref, owner, name, capital, pop, cp, celebration, wood, clay, iron, maxstore, crop, maxcrop, lastupdate, created, natar) values ($wid, $uid, '$villageName', $capital, $pop, 1, 0, 750, 750, 750, ".STORAGE_BASE.", 750, ".STORAGE_BASE.", $time, $time, $isNatar)";
 		return mysqli_query($this->dblink,$q);
 	}
 
-	function addResourceFields($vid, $type) {
-	    list($vid, $type) = $this->escape_input((int) $vid, $type);
+	/**
+	 * 
+	 * Add the buildings tables to a specified village(s), and its relative buildings
+	 * 
+	 * @param mixed $vid The village ID(s)
+	 * @param mixed $type int if there's only one village, array if there are multiple villages
+	 * @param array $buildingsArray divided in two portion, which contains the types (unidimensional array) and the values of the
+	 *              buildings that need to be added (bidimensional array)
+	 * @return bool Return true if the query was successful, false otherwise
+	 */
+	
+	function addResourceFields($vids, $types, $buildingsArray = null) {
+	    list($vids, $types, $buildingsArray) = $this->escape_input($vids, $types, $buildingsArray);
 
-		switch($type) {
-			case 1:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 2:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,3,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 3:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,1,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 4:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,1,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 5:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,1,4,1,3,1,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 6:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,4,4,1,3,4,4,4,4,4,4,4,4,4,4,4,2,4,4,1,15)";
-				break;
-			case 7:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,1,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 8:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,3,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 9:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,3,4,4,1,1,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 10:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,3,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			case 11:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,3,1,1,3,1,4,4,3,3,2,2,3,1,4,4,2,4,4,1,15)";
-				break;
-			case 12:
-				$q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,1,4,1,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-				break;
-			default: $q = "INSERT into " . TB_PREFIX . "fdata (vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t,f26,f26t) values($vid,4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2,1,15)";
-		}
-		return mysqli_query($this->dblink,$q);
+	    if(!is_array($vids)){
+	        $vids = [$vids];
+	        $types = [$types];
+	    }
+
+	    //Set the default villages structure (resources fields and main building)
+	    $defaultVillage = "vref,f1t,f2t,f3t,f4t,f5t,f6t,f7t,f8t,f9t,f10t,f11t,f12t,f13t,f14t,f15t,f16t,f17t,f18t"
+	                       .($buildingsArray != null ? ",".implode(",",$buildingsArray[0]) : ",f26,f26t");
+	    $defaultValues = [];
+	    
+		//Select the village type and assemble the building values
+	    foreach($vids as $index => $vid){
+	        $stringValues = "";
+	        $stringValues .= "(".$vid.",";
+	        switch($types[$index]) {            
+	            case 1: $stringValues .= "4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 2: $stringValues .= "3,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 3: $stringValues .= "1,4,1,3,2,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 4: $stringValues .= "1,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 5: $stringValues .= "1,4,1,3,1,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 6: $stringValues .= "4,4,1,3,4,4,4,4,4,4,4,4,4,4,4,2,4,4"; break;
+	            case 7: $stringValues .= "1,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 8: $stringValues .= "3,4,4,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 9: $stringValues .= "3,4,4,1,1,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 10: $stringValues .= "3,4,1,2,2,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            case 11: $stringValues .= "3,1,1,3,1,4,4,3,3,2,2,3,1,4,4,2,4,4"; break;
+	            case 12: $stringValues .= "1,4,1,1,2,2,3,4,4,3,3,4,4,1,4,2,1,2"; break;
+	            default: $stringValues .= "4,4,1,4,4,2,3,4,4,3,3,4,4,1,4,2,1,2";
+	        }
+	        
+	        $stringValues .= $buildingsArray != null ? ",".implode(",",$buildingsArray[1][$index]).")" : ",1,15)";
+	        $defaultValues[] = $stringValues;
+	    }
+	
+	    $q = "INSERT INTO " . TB_PREFIX . "fdata ($defaultVillage) values".implode(",",$defaultValues);
+		return mysqli_query($this->dblink, $q);
 	}
 
     function isVillageOases($wref, $use_cache = true) {
@@ -1581,14 +1669,17 @@ class MYSQLi_DB implements IDbConnection {
 	/**
 	 * Remove all oasis of a specified village if the mode is 1, if it's 0, then it'll remove only the selected oasis
 	 *
-	 * @param int $vid The village ID (mode = 1)/oasis ID (mode = 0) of the oasis owner
+	 * @param mixed $wref The village ID(s) (mode = 1)/oasis ID (mode = 0) of the oasis owner
 	 * @return bool Returns true if the query was successful, false otherwise
 	 */
 	
 	function removeOases($wref, $mode = 0) {
 	    list($wref) = $this->escape_input((int) $wref);
 
-		$q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE ".(!$mode ? "wref = $wref" : "conqured = $wref");
+	    if(!is_array($wref)) $wref = [$wref];
+	    $wrefs = implode(",", $wref);
+	    
+		$q = "UPDATE ".TB_PREFIX."odata SET conqured = 0, owner = 2, name = 'Unoccupied Oasis' WHERE ".(!$mode ? "wref IN($wrefs)" : "conqured IN($wrefs)");
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -1613,6 +1704,23 @@ class MYSQLi_DB implements IDbConnection {
             $vil = $this->getVillageByWorldID($wref, $use_cache);
             return ($vil['occupied'] != 0 || $vil['oasistype'] != 0);
         }
+	}
+	
+	/**
+	 * Get the first free village, if there's one
+	 * 
+	 * @param array $wids The village IDs
+	 * @return int Returns the wid of the first free village, if they're all taken, returns 0
+	 */
+	
+	function getFreeVillage($wids){
+	    list($wids) = $this->escape_input($wids);
+	    
+	    if(!is_array($wids)) $wids = [$wids];
+	    
+	    $q = "SELECT id FROM ".TB_PREFIX."wdata WHERE id IN(".implode(",", $wids).") AND occupied = 0 AND oasistype = 0 LIMIT 1";
+	    $result = mysqli_query($this->dblink, $q);
+	    return mysqli_num_rows($result) > 0 ? mysqli_fetch_array($result)[0] : 0;
 	}
 
 	// no need to refactor this method
@@ -4038,28 +4146,141 @@ class MYSQLi_DB implements IDbConnection {
         return mysqli_query($this->dblink,$q);
     }
 
+    /**
+     * Delete a single village or multiple ones
+     *
+     * @param mixed $wref The Village ID(s)
+     */
+    
+    function DelVillage($wref){
+        list($wref) = $this->escape_input($wref);
+        global $units;
+        
+        //Check if we've to delete a single village or multiple ones
+        if(!is_array($wref)) $wref = [$wref];
+        
+        //Create the list of village IDs
+        $wrefs = implode(", ", $wref);        
+        
+        $this->clearExpansionSlot($wref);
+        $q = "DELETE FROM ".TB_PREFIX."abdata where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."bdata where wid IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."market where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."research where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."tdata where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."fdata where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."training where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."units where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."farmlist where wref IN($wrefs)";
+        $this->query($q);
+        $q = "UPDATE ".TB_PREFIX."artefacts SET del = 1 where vref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."raidlist where towref IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."route where wid IN($wrefs) OR `from` IN($wrefs)";
+        $this->query($q);
+        $q = "DELETE FROM ".TB_PREFIX."movement where proc = 0 AND ((`to` IN($wrefs) AND sort_type = 4) OR (`from` IN($wrefs) AND sort_type = 3))";
+        $this->query($q);
+        $this->removeOases($wref, 1);
+        
+        $getmovement = $this->getMovement(3, $wref, 1);
+        
+        $moveIDs = [];
+        $time = microtime(true);
+        $types = [];
+        $froms = [];
+        $tos = [];
+        $refs = [];
+        $times = [];
+        $endtimes = [];
+        
+        foreach($getmovement as $movedata) {
+            $time2 = $time - $movedata['starttime'];
+            $moveIDs[] = $movedata['moveid'];
+            $types[] = 4;
+            $froms[] = $movedata['to'];
+            $tos[] = $movedata['from'];
+            $refs[] = $movedata['ref'];
+            $times[] = $time;
+            $endtimes[] = $time+$time2;
+        }
+        
+        $this->setMovementProc(implode(', ', $moveIDs));
+        $this->addMovement($types, $froms, $tos, $refs, $times, $endtimes);
+        
+        $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` IN($wrefs)";
+        $this->query($q);
+        
+        //check return enforcement from del village
+        foreach($wref as $w) $units->returnTroops($w);
+
+        $q = "DELETE FROM ".TB_PREFIX."vdata WHERE `wref` IN($wrefs)";
+        $this->query($q);
+        
+        if (mysqli_affected_rows($this->dblink) > 0) {
+            $q = "UPDATE ".TB_PREFIX."wdata set occupied = 0 where id IN($wrefs)";
+            $this->query($q);
+            
+            // clear expansion slots, if this village is an expansion of any other village
+            $this->clearExpansionSlot($wref, 1);
+            
+            $getprisoners = $this->getPrisoners($wref);
+            foreach($getprisoners as $pris) {
+                $troops = 0;
+                for($i = 1; $i < 12; $i++) $troops += $pris['t'.$i];
+                $this->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
+                $this->deletePrisoners($pris['id']);
+            }
+            
+            $getprisoners = $this->getPrisoners($wref, 1);
+            foreach($getprisoners as $pris) {
+                $troops = 0;
+                for($i = 1; $i < 12; $i++) $troops += $pris['t'.$i];
+                $this->modifyUnit($pris['wref'], ["99o"], [$troops], [0]);
+                $this->deletePrisoners($pris['id']);
+            }
+        }
+    }
+    
+    /**
+     * Clear the expansion slots of a specified village(s)
+     * 
+     * @param mixed $id The village ID(s)
+     * @param number $mode 0 If there's the need to clear all expansion slots of a village,
+     *        1 if there's the need to clear a single expansion slot of a village 
+     */
+    
     function clearExpansionSlot($id, $mode = 0) {
         list($id) = $this->escape_input((int) $id);
 
-        if(!$mode){
+        if(!is_array($id)) $id = [$id];
+        $ids = implode(",", $id);
+        
+        if(!$mode){ 
             $pairs = [];
-            for($i = 1; $i <= 3; $i++) {
-                $pairs[] = 'exp'.$i.' = 0';
-            }
+            for($i = 1; $i <= 3; $i++) $pairs[] = 'exp'.$i.' = 0';
             
-            $q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(',', $pairs)." WHERE wref = " . $id;
+            $q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(',', $pairs)." WHERE wref IN($ids)";
         }else{
             $q = "
                 UPDATE
                     ".TB_PREFIX."vdata
                 SET
-                    exp1 = IF(exp1 = $id, 0, exp1),
-                    exp2 = IF(exp2 = $id, 0, exp2),
-                    exp3 = IF(exp3 = $id, 0, exp3)
+                    exp1 = IF(exp1 IN($ids), 0, exp1),
+                    exp2 = IF(exp2 IN($ids), 0, exp2),
+                    exp3 = IF(exp3 IN($ids), 0, exp3)
                 WHERE
-                    exp1 = $id OR
-                    exp2 = $id OR
-                    exp3 = $id";
+                    exp1 IN($ids) OR
+                    exp2 IN($ids) OR
+                    exp3 IN($ids)";
         }
         mysqli_query($this->dblink, $q);
     }
@@ -5774,16 +5995,31 @@ References: User ID/Message ID, Mode
 	    return $this->getAllMember($aid, 1);
 	}
 
-	function addUnits($vid) {
-	    if (!is_array($vid)) {
-	        $vid = [$vid];
-        }
+	/**
+	 * Add the unit table(s) and troops if presents
+	 * 
+	 * @param mixed $vid The villaged ID(s)
+	 * @param array $troopsArray divided in two portion, which contains the types (unidimensional array) and the values of the
+	 *              troops that need to be added (bidimensional array)
+	 * @return bool Returns true if the query was successful, false otherwise
+	 */
+	
+	function addUnits($vid, $troopsArray = null) {
+	    list($vid, $type, $values) = $this->escape_input($vid, $type, $values);
+	    
+	    if (!is_array($vid)) $vid = [$vid];
+	    $types = $values = "";
+	    
+	    if($troopsArray != null){
+	        $types = $troopsArray[0];
+	        $values = $troopsArray[1];
+	        
+	        $types = ",u".implode(",u", $types);
+	    }    
+	    
+	    foreach ($vid as $index => $vidValue) $vid[$index] = (int) $vidValue.($troopsArray != null ? ",".implode(",", $values[$index]) : "");
 
-        foreach ($vid as $index => $vidValue) {
-	        $vid[$index] = (int) $vidValue;
-        }
-
-		$q = "INSERT into " . TB_PREFIX . "units (vref) values (".implode('),(', $vid).")";
+        $q = "INSERT into " . TB_PREFIX . "units (vref$types) values (".implode('),(', $vid).")";
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -7040,64 +7276,6 @@ References: User ID/Message ID, Mode
 	}
 	
 	/**
-	 * Creates villages and puts the desired artifacts in it
-	 * 
-	 * @param array $artifactArrays The array containing the artifacts to insert
-	 * @param int $uid The owner's user ID (Natars)
-	 */
-	
-	function addArtifactVillages($artifactArrays, $uid = 3) {
-		list($artifactArrays, $uid) = $this->escape_input($artifactArrays, (int) $uid);
-		
-		foreach($artifactArrays as $desc => $artifactType){
-			foreach($artifactType as $artifact){
-				for($i = 0; $i < $artifact['quantity']; $i++){							
-					$kid = rand(1, 4);
-					$wid = $this->generateBase($kid, 1);
-					$this->addArtefact($wid, $uid, $artifact['type'], $artifact['size'], $artifact['name'], $desc, $artifact['effect'], "type".$artifact['img'].".gif");
-					$this->setFieldTaken($wid);
-					$this->addVillage($wid, $uid, $artifact['vname'], 0);
-					$this->addResourceFields($wid, $this->getVillageType($wid));
-					$this->addUnits($wid);
-					$this->addTech($wid);
-					$this->addABTech($wid);
-					
-					//Set the population to 163 and the name of the village
-					$this->setVillageFields($wid, ['pop', 'name'], [163, $artifact['vname']]);
-					
-					//Set the unit arrays (1, 2 or 4)
-					$multiplier = $artifact['size'] == 3 ? 4 : $artifact['size'];
-					$unitArrays =  [41 => rand(1000 * $multiplier, 2000 * $multiplier) * NATARS_UNITS,
-									42 => rand(1500 * $multiplier, 2000 * $multiplier) * NATARS_UNITS,
-									43 => rand(2300 * $multiplier, 2800 * $multiplier) * NATARS_UNITS,
-									44 => rand(25 * $multiplier, 75 * $multiplier) * NATARS_UNITS,
-									45 => rand(1200 * $multiplier, 1900 * $multiplier) * NATARS_UNITS,
-									46 => rand(1500 * $multiplier, 2000 * $multiplier) * NATARS_UNITS,
-									47 => rand(500 * $multiplier, 900 * $multiplier) * NATARS_UNITS,
-									48 => rand(100 * $multiplier, 300 * $multiplier) * NATARS_UNITS,
-									49 => rand(1 * $multiplier, 5 * $multiplier) * NATARS_UNITS,
-									50 => rand(1 * $multiplier, 5 * $multiplier) * NATARS_UNITS];
-					
-					//Set the buildings and their levels
-					$buildingArrays = [
-									//Treasury of the 20th level, Residence of the 10th level, Rally Point of the 1th level
-										"f22t" => 27, "f22" => 20, "f28t" => 25, "f28" => 10, "f39t" => 16, "f39" => 1, 
-									//18 Cranny of the 10th level
-										"f19t" => 23, "f19" => 10, "f20t" => 23, "f20" => 10, "f21t" => 23, "f21" => 10, 
-										"f23t" => 23, "f23" => 10, "f24t" => 23, "f24" => 10, "f25t" => 23, "f25" => 10, 
-										"f26t" => 23, "f26" => 10, "f27t" => 23, "f27" => 10, "f29t" => 23, "f29" => 10, 
-										"f30t" => 23, "f30" => 10, "f31t" => 23, "f31" => 10, "f32t" => 23, "f32" => 10, 
-										"f33t" => 23, "f33" => 10, "f34t" => 23, "f34" => 10, "f35t" => 23, "f35" => 10, 
-										"f36t" => 23, "f36" => 10, "f37t" => 23, "f37" => 10, "f38t" => 23, "f38" => 10];
-					
-					$this->modifyUnit($wid, array_keys($unitArrays), array_values($unitArrays), [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
-					$this->setVillageLevel($wid, array_keys($buildingArrays), array_values($buildingArrays));
-				}
-			}
-		}
-	}
-	
-	/**
 	 * Display a system message to all players
 	 * 
 	 * @param string $message The text of the system message that will be written and displayed to all players
@@ -7118,120 +7296,6 @@ References: User ID/Message ID, Mode
 	}
 	
 	/**
-	 * Called when Natars account has been created
-	 *  
-	 * @param int $wid The village ID of the Natars' capital
-	 */
-	
-	function scoutAllPlayers($wid){
-		list($wid) = $this->escape_input((int) $wid);
-		
-		$array = $this->getProfileVillages(0, 1);
-		$refs = [];
-		$vils = [];
-		
-		foreach($array as $vill){
-			$refs[] = $this->addAttack($wid, 0, 0, 0, 1500 * NATARS_UNITS, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 20, 0, 0, 0, 0);
-			$vils[] = $vill['wref'];
-		}
-		
-		$type = [];
-		$from = [];
-		$to = [];
-		$ref = [];
-		$time = [];
-		$timeValue = time();
-		$endtime = [];
-		$endtimeValue = $timeValue + round(10000 / SPEED);
-		$counter = 0;
-		
-		foreach ($refs as $index => $refID) {
-			$type[] = 3;
-			$from[] = $wid;
-			$to[] = $vils[$index];
-			$ref[] = $refID;
-			$time[] = $timeValue;
-			$endtime[] = $endtimeValue;
-			
-			// limit the insert, so it can push through any reasonable network limits imposed
-			if (++$counter > 25) {
-				$this->addMovement($type, $from, $to, $ref, $time, $endtime);
-				
-				$type = [];
-				$from = [];
-				$to = [];
-				$ref = [];
-				$time = [];
-				$endtime = [];
-				$counter = 0;
-			}
-		}
-		
-		if ($counter > 0) $this->addMovement($type, $from, $to, $ref, $time, $endtime);
-	}
-	
-	/**
-	 * Called when Natars account have to be created, creates his account and capital village
-	 * 
-	 */
-	
-	function createNatars(){
-		
-		//Create the Natars account
-		$username = "Natars";
-		$password = $this->getUserField(5, 'password', 0);
-		$email = "natars@noreply.com";
-		$uid = 3;
-		$tribe = 5;
-		$desc = "**************************
-				[#natars]
-			**************************";
-		
-		$q = "INSERT INTO ".TB_PREFIX."users (id, username, password, access, email, timestamp, tribe, protect, desc2) VALUES ('$uid', '$username', '$password', ".USER.", '$email', ".time().", $tribe, 0, '$desc')";
-		mysqli_query($this->dblink, $q);
-		
-		//Coordinate arrays of possible villages
-		$arrayXY = [[WORLD_MAX, WORLD_MAX],
-				[WORLD_MAX, -WORLD_MAX],
-				[-WORLD_MAX, -WORLD_MAX],
-				[WORLD_MAX - 1, WORLD_MAX],
-				[WORLD_MAX, WORLD_MAX - 1],
-				[-WORLD_MAX, WORLD_MAX - 1],
-				[WORLD_MAX - 1, -WORLD_MAX],
-				[WORLD_MAX - 1, WORLD_MAX - 1],
-				[WORLD_MAX, -WORLD_MAX + 1],
-				[WORLD_MAX - 1, -WORLD_MAX + 1],
-				[-WORLD_MAX + 1, -WORLD_MAX + 1],
-				[WORLD_MAX - 2, WORLD_MAX],
-				[WORLD_MAX - 2, -WORLD_MAX],
-				[WORLD_MAX - 2, WORLD_MAX - 1],
-				[WORLD_MAX - 1, WORLD_MAX - 2],
-				[-WORLD_MAX + 2, WORLD_MAX],
-				[-WORLD_MAX + 2, WORLD_MAX - 1],
-				[-WORLD_MAX + 2, -WORLD_MAX + 2]];
-		
-		//Search if there's one spot left
-		for($i = 0; $i <= 17; $i++){
-			$wid = $this->getVilWref($arrayXY[$i][0], $arrayXY[$i][1]);
-			$status = $this->getVillageState($wid);
-			if($status == 0){
-				//The village isn't taken, let's occupy it
-				$this->generateVillages([['wid' => $wid, 'kid' => 0, 'capital' => 1]], $uid, $username);
-				break;
-			}
-		}
-		
-		//All villages are taken, then select a random village
-		if($status > 0) $wid = $this->generateVillages([['wid' => 0, 'kid' => 0, 'capital' => 1]], $uid, $username);
-		
-		//Set the capital pop to 834
-		$this->setVillageField($wid, 'pop', 834);
-
-		//Scouts all players		
-		$this->scoutAllPlayers($wid);
-	}
-	
-	/**
 	 * Called when a system message is sent or Natars/Artifacts have been spawned
 	 * 
 	 * @param int $value 1 to make a system message visible to all users, 0 to hide it 
@@ -7245,10 +7309,18 @@ References: User ID/Message ID, Mode
 		return mysqli_query($this->dblink, $q);
 	}
 	
-	function addArtefact($vref, $owner, $type, $size, $name, $desc, $effect, $img) {
-        list($vref, $owner, $type, $size, $name, $desc, $effect, $img) = $this->escape_input($vref, $owner, $type, $size, $name, $desc, $effect, $img);
+	function addArtefacts($wids, $artifactsArray) {
+	    list($wids, $artifactsArray) = $this->escape_input($wids, $artifactsArray);
 
-		$q = "INSERT INTO `" . TB_PREFIX . "artefacts` (`vref`, `owner`, `type`, `size`, `conquered`, `name`, `desc`, `effect`, `img`, `active`) VALUES ('$vref', '$owner', '$type', '$size', '" . time() . "', '$name', '$desc', '$effect', '$img', '0')";
+	    if(!is_array($wids)) $wids = [$wids];
+	    
+	    $time = time();
+	    
+	    foreach($artifactsArray as $index => $artifact){
+	        $values[] = "(".$wids[$index].",".$artifact['owner'].",".$artifact['type'].",".$artifact['size'].",".$time.",'".$artifact['name']."','".$artifact['desc']."','".$artifact['effect']."','".$artifact['img']."', 0)";
+	    }
+	    
+		$q = "INSERT INTO `" . TB_PREFIX . "artefacts` (`vref`, `owner`, `type`, `size`, `conquered`, `name`, `desc`, `effect`, `img`, `active`) VALUES ".implode(",", $values);
 		return mysqli_query($this->dblink, $q);
 	}
 
@@ -7287,16 +7359,20 @@ References: User ID/Message ID, Mode
         return (self::$artefactInfoByTypeCache[$vref]);
 	}
 
-    // no need to cache this method
-	function getOwnArtefactInfo3($uid) {
-        // load the data - type and size are irrelevant, since the method caches all data
-        // then returns the one for our type and size
-        $this->getOwnUniqueArtefactInfo($uid, 1, 1);
+    // no need to cache this method since its called one time only
+	function getOwnArtefactsInfo($uid) {
+        list($uid) = $this->escape_input((int) $uid);
+	    
+	    $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $uid AND del = 0";
+	    $result = mysqli_query($this->dblink, $q);
 
-        // return what we've cached
-        return (self::$artefactInfoSimpleCache[$uid]);
+	    return $this->mysqli_fetch_all($result);
 	}
 
+	function getOwnArtefactInfoByType2($vref, $type, $use_cache = true) {
+	    return $this->getOwnArtefactInfoByType($vref, $type, $use_cache);
+	}
+	
 	function getOwnArtefactInfoByType($vref, $type, $use_cache = true) {
         $vref = (int) $vref;
         $type = (int) $type;
@@ -7331,40 +7407,6 @@ References: User ID/Message ID, Mode
         return (isset(self::$artefactInfoByTypeCache[$vref][$type]) ? self::$artefactInfoByTypeCache[$vref][$type] : []);
 	}
 
-	function getOwnArtefactInfoByType2($vref, $type, $use_cache = true) {
-        return $this->getOwnArtefactInfoByType($vref, $type, $use_cache);
-	}
-
-	function getOwnUniqueArtefactInfo($id, $type, $size, $use_cache = true) {
-	    list($id, $type, $size) = $this->escape_input((int) $id, (int) $type, (int) $size);
-
-        // first of all, check if we should be using cache and whether the field
-        // required is already cached
-        if ($use_cache && isset(self::$artefactInfoSimpleCache[$id]) && is_array(self::$artefactInfoSimpleCache[$id]) && !count(self::$artefactInfoSimpleCache[$id])) {
-            return [];
-        } else if ($use_cache && ($cachedValue = self::returnCachedContent(self::$artefactInfoSimpleCache, $id)) && !is_null($cachedValue)) {
-            return (isset($cachedValue[$type.$size]) ? $cachedValue[$type.$size] : []);
-        }
-
-        $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE owner = $id AND del = 0";
-        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
-
-        // cache all types and return the requested one
-        if (count($result)) {
-            foreach ($result as $arteInfo) {
-                if (!isset(self::$artefactInfoSimpleCache[$arteInfo['owner']])) {
-                    self::$artefactInfoSimpleCache[$arteInfo['owner']] = [];
-                }
-
-                self::$artefactInfoSimpleCache[$arteInfo['owner']][$arteInfo['type'].$arteInfo['size']] = $arteInfo;
-            }
-        } else {
-            self::$artefactInfoSimpleCache[$id] = [];
-        }
-
-        return (isset(self::$artefactInfoSimpleCache[$id][$type.$size]) ? self::$artefactInfoSimpleCache[$id][$type.$size] : []);
-	}
-
 	function getOwnUniqueArtefactInfo2($id, $type, $size, $mode, $use_cache = true) {
 	    list($id, $type, $size, $mode) = $this->escape_input((int) $id, (int) $type, (int) $size, $mode);
 
@@ -7396,18 +7438,15 @@ References: User ID/Message ID, Mode
 	}
 
 	/**
-	 * Delete an artifact
-	 * 
-	 * @param int $id The artifact ID
-	 * @return bool Return true if the query was successful, false otherwise
+	 * Get deleted artifacts
+	 *
+	 * @return array Returns the deleted artifacts
 	 */
 	
-	function deleteArtifact($id){
-	    list($id) = $this->escape_input((int) $id);
-
-	    $q = "UPDATE " . TB_PREFIX . "artefacts SET del = 1 WHERE id = $id";
-	    
-	    return mysqli_query($this->dblink, $q);
+	function getDeletedArtifacts(){   
+	    $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE del = 1";
+	    $result = mysqli_query($this->dblink, $q);
+	    return $this->mysqli_fetch_all($result);
 	}
 	
 	function villageHasArtefact($vref) {
@@ -7470,6 +7509,21 @@ References: User ID/Message ID, Mode
 
 	    $q = "INSERT INTO " . TB_PREFIX . "artefacts_chrono (artefactid, uid, vref, conqueredtime) VALUES ('$artifactID', '$uid', '$vref', '$conqueredTime')";
 	    return mysqli_query($this->dblink, $q);
+	}
+	
+	/**
+	 * @param mixed $size The integer/array which contains the artifacts size(s)
+	 * @return int Returns if there are at least one not deleted artifact
+	 */
+	
+	function getArtifactsBysize($size){
+	    list($size) = $this->escape_input($size);
+	    
+	    if(!is_array($size)) $size = [$size];
+	    
+	    $q = "SELECT * FROM ".TB_PREFIX."artefacts WHERE size IN(".implode(',', $size).") AND del = 0 ORDER BY id ASC";
+	    $result = mysqli_query($this->dblink, $q);
+	    return $this->mysqli_fetch_all($result);
 	}
 	
 	/**
@@ -7612,13 +7666,39 @@ References: User ID/Message ID, Mode
         else return "Max num. of artefacts. Your hero could not claim the artefact";
     }
 
-    // no need to cache this method
-	function getArtefactDetails($id) {
-	    list($id) = $this->escape_input((int) $id);
+    /**
+     * Get the informations of a single artifact
+     * 
+     * @param int $id The artifact id
+     * @param int $del If 0, it will search not-deleted artifacts, and vice versa with 1
+     * @return array Returns the artefact informations
+     */
+    
+	function getArtefactDetails($id, $del = 0) {
+	    list($id, $del) = $this->escape_input((int) $id, (int) $del);
 
-		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = ".$id." AND del = 0 LIMIT 1";
+		$q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE id = ".$id." AND del = ".$del." LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		return mysqli_fetch_array($result);
+	}
+	
+	/**
+	 * Update an artifact with a specified fields => values array
+	 * 
+	 * @param int $id The artifact ID
+	 * @param array $detailsArray Contains the fields to update and the relative values
+	 * @return bool Returns true if the query was successful, false otherwise
+	 */
+	
+	function updateArtifactDetails($id, $detailsArray){
+	    list($id, $detailsArray) = $this->escape_input((int) $id, $detailsArray);
+	    
+	    $values = [];
+	    foreach($detailsArray as $field => $value) $values[] = $field."=".$value;
+	    
+	    $q = "UPDATE ".TB_PREFIX."artefacts SET ".implode(",", $values)." WHERE id = $id";
+	    echo $q;
+	    return mysqli_query($this->dblink, $q);
 	}
 
     // no need to cache this method
@@ -7945,7 +8025,7 @@ References: User ID/Message ID, Mode
         return mysqli_query($this->dblink,$q);
     }
 
-    function getPrisoners($wid,$mode = 0, $use_cache = true) {
+    function getPrisoners($wid, $mode = 0, $use_cache = true) {
         $array_passed = is_array($wid);
         $mode = (int) $mode;
 
@@ -8054,21 +8134,21 @@ References: User ID/Message ID, Mode
         return self::$prisonersCacheByID[$id];
 	}
 
-	function getPrisoners3($from, $use_cache = true) { //change all this function arrange Dayran prisoners
-    		list($from) = $this->escape_input((int) $from);
-
-    	// first of all, check if we should be using cache and whether the field
-    	// required is already cached
-    	if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCacheByVillageAndFromIDs, $from)) && !is_null($cachedValue)) {
-        return $cachedValue;
-    	}
-
-	$q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
-	$result = mysqli_query($this->dblink,$q);
-
-    	self::$prisonersCacheByVillageAndFromIDs[$wid.$from] = $this->mysqli_fetch_all($result);
-    	return self::$prisonersCacheByVillageAndFromIDs[$from];
-	}//hasta aki
+	function getPrisoners3($from, $use_cache = true) {
+	    list($from) = $this->escape_input((int) $from);
+	    
+	    // first of all, check if we should be using cache and whether the field
+	    // required is already cached
+	    if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCacheByVillageAndFromIDs, $from)) && !is_null($cachedValue)) {
+	        return $cachedValue;
+	    }
+	    
+	    $q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
+	    $result = mysqli_query($this->dblink,$q);
+	    
+	    self::$prisonersCacheByVillageAndFromIDs[$wid.$from] = $this->mysqli_fetch_all($result);
+	    return self::$prisonersCacheByVillageAndFromIDs[$from];
+	}
 
 	function deletePrisoners($id) {
         if (!is_array($id)) {
