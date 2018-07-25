@@ -131,8 +131,14 @@ class Artifacts
      * @var int The base amount of Natars' spying units, used when Natars account is created
      */
      
-    NATARS_BASE_SPY = 1500;
+    NATARS_BASE_SPY = 1500,
 
+    /**
+     * @var int the base amount of Natars' WW villages 
+     */
+    
+    NATARS_BASE_WW_VILLAGES = 13;
+    
     public 
     
     /**
@@ -311,12 +317,12 @@ class Artifacts
      * 
      */
     
-    public function createWWVillages(){
+    public function createWWVillages($numberOfVillages = self::NATARS_BASE_WW_VILLAGES, $uid = self::NATARS_UID){
         global $database;
         
         $villageArrays = $troopArrays = $buildingArrays = $wids = [];
-        for($i = 1; $i <= 13; $i++){
-            $villageArrays[] = ['wid' => 0, 'mode' => 5, 'type' => 3, 'kid' => ($i == 13 ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0, 'pop' => 233, 'name' => WWVILLAGE, 'natar' => 1];
+        for($i = 1; $i <= $numberOfVillages; $i++){
+            $villageArrays[] = ['wid' => 0, 'mode' => 5, 'type' => 3, 'kid' => ($i == $numberOfVillages ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0, 'pop' => 233, 'name' => WWVILLAGE, 'natar' => 1];
             $troopArrays[1][] = array_values(($this->natarsWWVillagesUnits)());
             $buildingArrays[1][] = array_values(self::NATARS_WW_VILLAGES_BUILDINGS);
         }
@@ -324,7 +330,7 @@ class Artifacts
         $troopArrays[0] = array_keys(($this->natarsWWVillagesUnits)());
         $buildingArrays[0] = array_keys(self::NATARS_WW_VILLAGES_BUILDINGS);
         
-        $wids = $database->generateVillages($villageArrays, self::NATARS_UID, TRIBE5, $troopArrays, $buildingArrays);
+        $wids = $database->generateVillages($villageArrays, $uid, null, $troopArrays, $buildingArrays);
     }
     
     /**

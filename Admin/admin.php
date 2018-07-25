@@ -61,8 +61,8 @@ if (!empty($_GET['p'])) {
             $subpage = 'Map';
             break;
             
-        case 'artifacts':
-            $subpage = 'Artifacts';
+        case 'natars':
+            $subpage = 'Natars Management';
             break;
 
         case 'search':
@@ -506,7 +506,7 @@ if (!empty($_GET['p'])) {
 								<li><a href="?p=report">Players Report</a></li>
 								<li><a href="?p=msg">Players Message</a></li>
 								<li><a href="?p=map">Map</a></li>
-								<li><a href="?p=artifacts">Artifacts</a></li>
+								<li><a href="?p=natars">Natars Management</a></li>
 							</ul>
 						</li>
 						<li class="sub"><a href="#">Search</a>

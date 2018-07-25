@@ -31,7 +31,7 @@ if (WW == True)
             $row2 = @mysqli_fetch_assoc($query); 
         ?> 
         <tr> 
-              <td><?php echo $count++; ?>.</td> 
+              <td><?php echo ++$count; ?>.</td> 
             <td><?php echo "<a href=\"karte.php?d=" . $row['vref'] . "&amp;c=" . $generator->getMapCheck($row['vref']) . "\">"; ?><?php echo $row['username']; ?></a></td> 
               <td><?php echo $row['wwname']; ?></td> 
             <td><a href="allianz.php?aid=<?php echo $ally['id']; ?>"><?php echo $ally['tag']; ?></a></td> 

@@ -93,10 +93,15 @@ class funct
                 $artifactInfo = $database->getArtefactDetails($_GET['artid'], $_GET['del']);
 
                 //Check if the artifact exists
-                if(empty($artifactInfo) || $artifactInfo['owner'] == Artifacts::NATARS_UID) {
+                if(empty($artifactInfo)) {
+                    header("location: admin.php");
+                    exit;
+                }elseif($artifactInfo['owner'] == Artifacts::NATARS_UID){
+                    $database->updateArtifactDetails($_GET['artid'], ['del' => 0]);
                     header("location: admin.php");
                     exit;
                 }
+
 
                 $artifact->returnArtifactToNatars($artifactInfo);
                 break;
@@ -104,14 +109,14 @@ class funct
             case "addArtifacts":
                 
                 $selectedArtifact = $_POST['selectedArtifact'];
-                $artifactQuantity = $_POST['artifactQuantity'];
-                $playerId = $_POST['playerId'];
+                $artifactQuantity = (int)$_POST['artifactQuantity'];
+                $playerId = (int)$_POST['playerId'];
                 
                 //Check if the inputs are valid
                 if(!isset($selectedArtifact) || !isset($artifactQuantity) || !isset($playerId) || empty($selectedArtifact) ||
-                          !is_numeric($artifactQuantity) || !is_numeric($playerId) || strpos($selectedArtifact, ':') === false ||
-                          $database->getUserField($playerId, "username", 0) == "[?]"){
-                    header("location: admin.php?p=artifacts&error=0");
+                          !is_numeric($artifactQuantity) || $artifactQuantity <= 0 || $artifactQuantity > 999 || !is_numeric($playerId) || 
+                          strpos($selectedArtifact, ':') === false  || $database->getUserField($playerId, "username", 0) == "[?]"){
+                    header("location: admin.php?p=natars&error=0");
                     exit;          
                 }
                 
@@ -125,7 +130,7 @@ class funct
 
                 //Check if the artifact has been found or if doesn't exist
                 if(empty($chosenArtifact)){
-                    header("location: admin.php?p=artifacts&error=1");
+                    header("location: admin.php?p=natars&error=1");
                     exit; 
                 }
 
@@ -136,6 +141,21 @@ class funct
                 //Add the artifacts
                 $artifact->addArtifactVillages($artifactArrays, $playerId);
                 break;
+                
+            case "addWWVillages":
+                
+                $numberOfVillages = (int)$_POST['numberOfVillages'];
+                $playerId = (int)$_POST['playerId'];
+                
+                //Check if the inserted values are valid
+                if(!is_numeric($numberOfVillages) || $numberOfVillages <= 0 || $numberOfVillages > 999
+                    || !is_numeric($playerId) || $database->getUserField($playerId, "username", 0) == "[?]"){
+                        header("location: admin.php?p=natars&error=2");
+                }
+
+                //Create the desired WW villages
+                $artifact->createWWVillages($numberOfVillages, $playerId);
+                break;     
                 
             case "killHero":
                 $varray = $database->getProfileVillages($get['uid']);

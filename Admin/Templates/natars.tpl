@@ -5,7 +5,7 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 <link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
 <link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
 
-<h1>Artifacts</h1>
+<h1>Artifacts management</h1>
 <form method="post" action="../Admin/admin.php?action=addArtifacts">
 <table id="member">
   <thead>
@@ -28,8 +28,7 @@ $deletedArtifacts = $database->getDeletedArtifacts();
 				$artifactArrays = array_merge(Artifacts::NATARS_ARTIFACTS, Artifacts::NATARS_WW_BUILDING_PLANS);
 				foreach($artifactArrays as $desc => $artifactType){
 				    foreach($artifactType as $artifact){
-				        echo '
-                             <option value="'.$artifact['type'].':'.$artifact['size'].':'.$desc.'">'.$artifact['name'].'</option>';
+				        echo '<option value="'.$artifact['type'].':'.$artifact['size'].':'.$desc.'">'.$artifact['name'].'</option>';
 				    }
 				}
 				        
@@ -117,8 +116,39 @@ $deletedArtifacts = $database->getDeletedArtifacts();
     }
 	?>
 	</tbody>
-</table>
+</table><br />
 
+<h1>WW villages management</h1>
+<form method="post" action="../Admin/admin.php?action=addWWVillages">
+<table id="member">
+  <thead>
+	<tr>
+		<th colspan="2">Add WW village(s)</th>
+	</tr>
+	<tr>
+		<td>Number of village(s)</td>
+		<td>Player id</td>
+	</tr>
+  </thead>
+  </tbody>
+	<tr>
+		<td>
+			<div style="text-align: center">
+				<input type="number" value="1" min="1" max="999" name="numberOfVillages">
+			</div>
+		</td>
+		<td>
+			<div style="text-align: center">
+				<input type="text" value="<?php echo Artifacts::NATARS_UID; ?>" name="playerId">
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><div style="text-align: center"><button id="addWWVillages" class="trav_buttons" value="add" name="addWWVillages" onclick="this.disabled=true;this.form.submit();"> Add </button></div></td>
+	</tr>
+   </tbody>
+</table>
+</form>
 
 <script type="text/javascript">
 	function changeArtifactImage(){
