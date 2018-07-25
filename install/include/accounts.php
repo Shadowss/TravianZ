@@ -52,13 +52,13 @@
 		    mysqli_query($database->dblink, "INSERT INTO " . TB_PREFIX . "users SET username = '".$database->escape($_POST['aname'])."', password = '" . password_hash($_POST['apass'], PASSWORD_BCRYPT, ['cost' => 12]) . "', email = '".$database->escape($_POST['aemail'])."', tribe = ".(int) $_POST['atribe'].", access = 9, is_bcrypt = 1") OR DIE (mysqli_error($database->dblink));
 		    $uid = mysqli_insert_id($database->dblink);
 		    $admin_village_created = false;
-		    $xcoor = 50;
+		    $xcoor = round(WORLD_MAX / 2);
             $addUnitsWrefs = [];
             $addTechWrefs = [];
             $addABTechWrefs = [];
 
 		    while (!$admin_village_created) {
-    		    $wid = $admin->getWref($xcoor++, 50);
+    		    $wid = $admin->getWref($xcoor++, round(WORLD_MAX / 2));
     		    $status = $database->getVillageState($wid);
     		    if($status == 0) {
     		        $database->setFieldTaken($wid);
