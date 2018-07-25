@@ -7697,7 +7697,6 @@ References: User ID/Message ID, Mode
 	    foreach($detailsArray as $field => $value) $values[] = $field."=".$value;
 	    
 	    $q = "UPDATE ".TB_PREFIX."artefacts SET ".implode(",", $values)." WHERE id = $id";
-	    echo $q;
 	    return mysqli_query($this->dblink, $q);
 	}
 
@@ -7858,7 +7857,7 @@ References: User ID/Message ID, Mode
                 case 9:
                 case 10:
                 case 11:
-                    $cropo ++;
+                    $cropo++;
                     break;
                 case 12:
                     $cropo += 2;
@@ -7883,6 +7882,41 @@ References: User ID/Message ID, Mode
         return self::$cropProductionStarvationValueCache[$wref];
 	}
 
+	/**
+	 * Adds the starvation data in villages with a negative value of crop
+	 *
+	 * @param int $wref The village ID where the crop is negative
+	 */
+	
+	public function addStarvationData($wref){
+	    global $technology;
+	    
+	    $getVillage = $this->getVillage($wref);
+	    
+	    //Exlude Support, Nature, Natars, TaskMaster and Multihunter
+	    if ($getVillage['owner'] > 5){	        
+	        $crop = $this->getCropProdstarv($wref, false);
+	        $unitArrays = $technology->getAllUnits($wref, false, 0, false);
+	        $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);
+	        $starv = $getVillage['starv'];
+	        
+	        if ($crop < $villageUpkeep){
+	            //Add starvation data
+	            $fields = ['starv'];
+	            $values = [$villageUpkeep];
+	            
+	            //Update the starvupdate if it's set to 0
+	            if($getVillage['starvupdate'] == 0) {
+	                $fields[] = 'starvupdate';
+	                $values[] = time();
+	            }
+
+	            //Update the starvation datas
+	            $this->setVillageFields($wref, $fields, $values);
+	        }
+	    }
+	}
+	
 	//general statistics
 
 	function addGeneralAttack($casualties) {

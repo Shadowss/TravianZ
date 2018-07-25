@@ -236,13 +236,13 @@ class Technology {
 		return $ownunit;
 	}
 
-    function getAllUnits($base, $InVillageOnly = false, $mode=0) {
+    function getAllUnits($base, $InVillageOnly = false, $mode = 0, $useCache = true) {
         global $database;
 		
-		$ownunit = $database->getUnit($base);
+        $ownunit = $database->getUnit($base, $useCache);
 		$ownunit['u99'] -= $ownunit['u99'];
 		$ownunit['u99o'] -= $ownunit['u99o'];
-		$enforcementarray = $database->getEnforceVillage($base, 0);
+		$enforcementarray = $database->getEnforceVillage($base, 0, $useCache);
 		if(count($enforcementarray) > 0){
 			foreach($enforcementarray as $enforce){
 				for($i = 1; $i <= 50; $i++){
@@ -252,7 +252,7 @@ class Technology {
 			}
 		}
 		if($mode == 0){
-			$enforceoasis = $database->getOasisEnforce($base, 0);
+		    $enforceoasis = $database->getOasisEnforce($base, 0, $useCache);
 			if(count($enforceoasis) > 0){
 				foreach($enforceoasis as $enforce){
 					for($i = 1; $i <= 50; $i++){
@@ -261,7 +261,7 @@ class Technology {
 					$ownunit['hero'] += $enforce['hero'];
 				}
 			}
-			$enforceoasis1 = $database->getOasisEnforce($base, 1);
+			$enforceoasis1 = $database->getOasisEnforce($base, 1, $useCache);
 			if(count($enforceoasis1) > 0){
 				foreach($enforceoasis1 as $enforce){
 					for($i = 1; $i <= 50; $i++){
@@ -271,7 +271,7 @@ class Technology {
 				}
 			}
 			
-			$prisoners = $database->getPrisoners($base, 1);
+			$prisoners = $database->getPrisoners($base, 1, $useCache);
 			if(!empty($prisoners)){
 				foreach($prisoners as $prisoner){
 					$owner = $database->getVillageField($base, "owner");

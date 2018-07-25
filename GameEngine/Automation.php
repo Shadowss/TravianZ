@@ -383,7 +383,7 @@ class Automation {
     }
 
     private function buildComplete() {
-        global $database, $bid18, $bid10, $bid11, $bid38, $bid39;
+        global $database, $technology, $bid18, $bid10, $bid11, $bid38, $bid39;
 
         $time = time();
         // IDs of villages that were affected by this building completion update,
@@ -476,7 +476,7 @@ class Automation {
             }
 
             //Update starvation data
-            $this->addStarvationData($indi['wid']);
+            $database->addStarvationData($indi['wid']);
 
             // update the requested fields, all at once
             $database->setVillageFields($indi['wid'], array_keys($fieldsToSet), array_values($fieldsToSet));
@@ -2488,7 +2488,7 @@ class Automation {
                 }
 
                 //Update starvation data
-                $this->addStarvationData($to['wref']);
+                $database->addStarvationData($to['wref']);
                 
 				//Returning units back to village is not necessary because it will be taken care when processing movement			
 				// Fix by AL-Kateb
@@ -2579,7 +2579,7 @@ class Automation {
     }
 
     private function sendreinfunitsComplete() {
-        global $bid23, $database, $battle;
+        global $bid23, $database, $technology, $battle;
 
         $time = time();
         $q = "
@@ -2717,7 +2717,7 @@ class Automation {
                 }
 
                 //Update starvation data
-                $this->addStarvationData($data['to']);
+                $database->addStarvationData($data['to']);
 
                 //check empty reinforcement in rally point
                 $e_units = '';
@@ -2733,7 +2733,7 @@ class Automation {
     }
 
     private function returnunitsComplete() {
-        global $database;
+        global $database, $technology;
 
         $time = time();
         $q = "
@@ -2783,7 +2783,7 @@ class Automation {
             	$movementProcIDs[] = $data['moveid'];
             	
             	//Update starvation data
-            	$this->addStarvationData($data['to']);
+            	$database->addStarvationData($data['to']);
             }
             
             $database->setMovementProc(implode(', ', $movementProcIDs));
@@ -3233,7 +3233,7 @@ class Automation {
     }
 
     private function trainingComplete() {
-        global $database;
+        global $database, $technology;
 
         $time = time();
         $trainlist = $database->getTrainingList();
@@ -3287,7 +3287,7 @@ class Automation {
                 if ($valuesUpdated) call_user_func(get_class($database).'::clearUnitsCache');
              
                 //Update starvation data
-                $this->addStarvationData($train['vref']);
+                $database->addStarvationData($train['vref']);
             }
         }
     }
@@ -3677,30 +3677,6 @@ class Automation {
             }
         }
     }
-
-    /**
-     * Adds the starvation data in villages with a negative value of crop
-     * 
-     * @param int $wref The village ID where the crop is negative
-     */
-    
-    private function addStarvationData($wref){
-        global $database, $technology;
-        
-        $getVillage = $database->getVillage($wref);
-        
-        //Exlude Support, Nature, Natars, TaskMaster and Multihunter
-        if ($getVillage['owner'] > 5){
-            $crop = $database->getCropProdstarv($wref, false);
-            $unitArrays = $this->getAllUnits($wref, false);
-            $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);
-            $starv = $getVillage['starv'];
-            if ($crop < $villageUpkeep){
-                //Add starvation data
-                $database->setVillageFields($wref, ['starv'], [$villageUpkeep]);
-            }
-        }
-    }
     
     /**
      * Function for starvation - by brainiacX and Shadow
@@ -3712,23 +3688,23 @@ class Automation {
     private function starvation() {
         global $database, $technology;
 
-        //starvation is disabled during Easter/Holidays/Christmas
+        //Starvation is disabled during Easter/Holidays/Christmas
         if(PEACE) return;
         
         $time = time();
 
-        //update starvation in every village
+        //Update starvation in every village
         $starvarray = $database->getProfileVillages(0, 7);
-        foreach($starvarray as $starv) $this->addStarvationData($starv['wref']);
+        foreach($starvarray as $starv) $database->addStarvationData($starv['wref']);
 
-        // load villages with minus prod
+        //Load villages with minus prod
         $starvarray = [];
         $starvarray = $database->getStarvation();
 
         $vilIDs = [];
         foreach ($starvarray as $starv) $vilIDs[] = $starv['wref'];
         
-        // cache
+        //Cache
         $database->getEnforceVillage($vilIDs, 0);
         $database->getOasisEnforce($vilIDs, 2);
         $database->getOasisEnforce($vilIDs, 3);
@@ -3758,7 +3734,7 @@ class Automation {
 
             $allTroopsArray = [$enforceArrays, $prisonerArrays, $unitArrays, $attackArrays];
 
-            // find the first not-empty array
+            //Find the first not-empty array
             foreach($allTroopsArray as $type => $allTroops)
             {
                 if(!empty($allTroops)){
@@ -3771,10 +3747,10 @@ class Automation {
                 }                            
             }
 
-            // if the player has no troops, then skip the next instructions
+            //If the player has no troops, then skip the next instructions
             if(empty($starvingTroops)) continue;
 				
-			// counting
+			//Counting
 			$timedif = $time - $starv['starvupdate'];
             $cropProd = $database->getCropProdstarv($starv['wref']) - $starv['starv'];
             if($cropProd < 0){
@@ -3783,7 +3759,7 @@ class Automation {
                 $newcrop = 0;
                 $oldcrop = $database->getVillageField($starv['wref'], 'crop');
                 
-                //if the grain is then tries to send all
+                //If the grain is then tries to send all
                 if ($oldcrop > 100){
                     $difcrop = $difcrop - $oldcrop;
 					if($difcrop < 0){
@@ -3804,7 +3780,7 @@ class Automation {
                     $counting = true;
                     while($difcrop > 0)
                     {
-                        // search the highest troop
+                        //S earch the highest troop
                         $maxcount = $maxtype = 0;                    
                         for($i = $start ; $i <= $end ; $i++)
                         {
@@ -3837,10 +3813,8 @@ class Automation {
                     else if($maxtype == 0) $newCrop = 0;
                     else $newCrop = $GLOBALS['u'.$maxtype]['crop'];
 
-                    if($totalKilledUnits > 0)
-                    {                   
-                        switch($type)
-                        {
+                    if($totalKilledUnits > 0){                   
+                        switch($type){
                             case 0:                                
                                 if($totalKilledUnits < $totalUnits){
                                     $database->modifyEnforce($starvingTroops['id'], array_keys($killedUnits), array_values($killedUnits), 0);  

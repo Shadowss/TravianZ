@@ -13,25 +13,23 @@
 if(!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 include_once("../../Database.php");
+include_once("../../Technology.php");
+include_once("../../Data/unitdata.php");
 
-$id = $_POST['id'];
+$id = (int)$_POST['id'];
 $village = $database->getVillage($id);  
-$user = $database->getUserArray($village['owner'],1);  
-$units="";
-	$tribe = $user['tribe'];
-	if($tribe ==1){ $u = 0;}
-	if($tribe ==2){ $u = 10;}
-	if($tribe ==3){ $u = 20;}
-	if($tribe ==4){ $u = 30;}
-	if($tribe ==5){ $u = 40;}
-	if($tribe ==6){ $u = 50;}
+$user = $database->getUserArray($village['owner'],1);
+$units = "";
+$tribe = $user['tribe'];
+$u = ($tribe - 1) * 10;
 
-for($i=1; $i<11; $i++) {
-	$units.="u".($u+$i)."=".$database->escape($_POST['u'.($u+$i)].(($i < 10) ? ", " : ""));
+for($i = 1; $i < 11; $i++) {
+	$units.="u".($u + $i)."=".$database->escape($_POST['u'.($u + $i)].(($i < 10) ? ", " : ""));
 }
-$q = "UPDATE ".TB_PREFIX."units SET ".$units." WHERE vref = ".(int) $id;
+
+$q = "UPDATE ".TB_PREFIX."units SET ".$units." WHERE vref = ".$id;
 $database->query($q);
 $database->query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed troop amounts in village <a href=\'admin.php?p=village&did=$id\'>$id</a> ',".time().")");
-
+$database->addStarvationData($id);
 header("Location: ../../../Admin/admin.php?p=village&did=".$id."&d");
 ?>
