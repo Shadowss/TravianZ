@@ -63,7 +63,7 @@
     		    if($status == 0) {
     		        $database->setFieldTaken($wid);
     		        $database->addVillage($wid, $uid, $_POST['aname'], 1);
-    		        $database->addResourceFields($wid, $database->getVillageType($wid));
+    		        $database->addResourceFields($wid, $database->getVillageType($wid, false));
                     $addUnitsWrefs[] = $wid;
                     $addTechWrefs[] = $wid;
                     $addABTechWrefs[] = $wid;
@@ -84,8 +84,8 @@
 		$status = $database->getVillageState($wid);
 		if($status == 0) {
 			$database->setFieldTaken($wid);
-			$database->addVillage($wid, $uid, 'Multihunter', '0');
-			$database->addResourceFields($wid, $database->getVillageType($wid));
+			$database->addVillage($wid, $uid, 'Multihunter', 0);
+			$database->addResourceFields($wid, $database->getVillageType($wid, false));
 			$database->addUnits($wid);
 			$database->addTech($wid);
 			$database->addABTech($wid);
