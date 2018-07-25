@@ -2184,7 +2184,7 @@ class Automation {
                                         // if the defender pop is 0 with no artefact, then destroy the village
                                         if($database->getVillageField($data['to'], "pop") == 0 || $targettribe == 5){
                                             $can_destroy = $village_destroyed = 1;
-                                            $info_hero .= " The village has been destroyed.";
+                                            if(strpos($info_cat, "The village has") === false) $info_hero .= " The village has been destroyed.";
                                         }
                                     }
                                     else $info_hero = $hero_pic.",".$artifactError.$xp;
@@ -2233,7 +2233,7 @@ class Automation {
                     }else{
                         if(isset($village_destroyed) && $village_destroyed == 1 && $can_destroy==1){
                             //check if village pop=0 and no info destroy
-                            if (strpos($info_cat,"The village has") === false) {
+                            if (strpos($info_cat, "The village has") === false) {
                                 $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
                                           <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> The village has been destroyed.</td></tr></tbody>";
                             }
