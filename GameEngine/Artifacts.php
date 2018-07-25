@@ -91,7 +91,7 @@ class Artifacts
      * @var array WW building plans Natars' artifacts
      */
     
-    NATARS_WW_BUILDING_PLANS =  [PLAN_DESC => [["type" => 11, "size" => 1, "name" => PLAN,"vname" => PLANVILLAGE, "effect" => "", "quantity" => 13, "img" => 1]]],
+    NATARS_WW_BUILDING_PLANS =  [PLAN_DESC => [["type" => 11, "size" => 1, "name" => PLAN, "vname" => PLANVILLAGE, "effect" => "", "quantity" => 13, "img" => 1]]],
                                     
     /**
      * @var array Natars' normal artifacts buildings
@@ -411,10 +411,11 @@ class Artifacts
         global $database;
         
         //Set the village arrays
+        $artifactArrays = array_merge(self::NATARS_ARTIFACTS, self::NATARS_WW_BUILDING_PLANS);
         $villageArrays = [['wid' => 0, 'mode' => $artifactArray['size'] + 1, 'type' => 3,
             'kid' => rand(1, 4), 'capital' => 0, 'pop' => 163,
-            'name' => self::NATARS_ARTIFACTS[$artifactArray['desc']][$artifactArray['size'] - 1]['vname'],
-            'natar' => $artifactArray['type'] != 11 ? 0 : 1]];
+            'name' => $artifactArrays[$artifactArray['desc']][$artifactArray['size'] - 1]['vname'],
+            'natar' => 0]];
         
         //Set the unit arrays
         $multiplier = $artifactArray['size'] == 3 ? 4 : $artifactArray['size'];
@@ -427,7 +428,7 @@ class Artifacts
         //Set the buildings array
         $artifactBuildings[1][] = array_values(self::NATARS_ARTIFACTS_BUILDINGS);
         $artifactBuildings[0] = array_keys(self::NATARS_ARTIFACTS_BUILDINGS);
-        
+
         //Generate the village
         $wid = $database->generateVillages($villageArrays, self::NATARS_UID, TRIBE5, $artifactTroops, $artifactBuildings);
         
