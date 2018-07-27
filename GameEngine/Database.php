@@ -808,11 +808,8 @@ class MYSQLi_DB implements IDbConnection {
             $pairs[] = $this->escape($fieldName) . ' = ' . (Math::isInt($value[$index]) ? $value[$index] : '"'.$this->escape($value[$index]).'"');
         }
 
-		if(!$switch) {
-			$q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where username = '$ref'";
-		} else {
-		    $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where id = " . (int) $ref;
-		}
+        if(!$switch) $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where username = '$ref'";		
+        else $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where id = " . (int) $ref;
 
 		// update cached values
 		if ($ret = mysqli_query($this->dblink,$q)) {
@@ -1138,20 +1135,20 @@ class MYSQLi_DB implements IDbConnection {
 	function modifyGold($userid, $amt, $mode) {
 	    list($userid, $amt, $mode) = $this->escape_input((int) $userid, (int) $amt, $mode);
 
-		if(!$mode) {
-			$q = "UPDATE " . TB_PREFIX . "users set gold = gold - $amt where id = $userid";
-		} else {
-			$q = "UPDATE " . TB_PREFIX . "users set gold = gold + $amt where id = $userid";
-		}
+	    if(!$mode) $q = "UPDATE " . TB_PREFIX . "users set gold = gold - $amt where id = $userid";		
+		else $q = "UPDATE " . TB_PREFIX . "users set gold = gold + $amt where id = $userid";
+		
 		return mysqli_query($this->dblink,$q);
 	}
 
-	/*****************************************
-	Function to retrieve user array via Username or ID
-	Mode 0: Search by Username
-	Mode 1: Search by ID
-	References: Alliance ID
-	*****************************************/
+	/**
+	 * Retrieves the user array via Username or ID
+	 * 
+	 * @param int $ref The user ID or the username
+	 * @param int $mode 0 --> Search by username, 1 --> Search by user ID	 
+	 * @param bool $use_cache Will use the cache if true
+	 * @return array Returns the user array
+	 */
 
 	function getUserArray($ref, $mode, $use_cache = true) {
         list($ref, $mode) = $this->escape_input($ref, $mode);
@@ -1162,11 +1159,9 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		if(!$mode) {
-			$q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
-		} else {
-		    $q = "SELECT * FROM " . TB_PREFIX . "users where id = " . (int) $ref . " LIMIT 1";
-		}
+        if(!$mode) $q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
+		else $q = "SELECT * FROM " . TB_PREFIX . "users where id = " . (int) $ref . " LIMIT 1";
+		
 		$result = mysqli_query($this->dblink,$q);
 
         self::$fieldsCache[$ref.$mode] = mysqli_fetch_array($result);

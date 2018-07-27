@@ -269,9 +269,10 @@ class Artifacts
      *
      * @param array $artifactArrays The array containing the artifacts to insert
      * @param int $uid The owner's user ID (Natars)
+     * @param bool $addTroops Add troops to the village if true, and vice versa if false
      */
     
-    public function addArtifactVillages($artifactArrays, $uid = self::NATARS_UID) {
+    public function addArtifactVillages($artifactArrays, $uid = self::NATARS_UID, $addTroops = true) {
         global $database;
 
         //Variables initialization
@@ -290,7 +291,7 @@ class Artifacts
                     $unitArrays = ($this->natarsArtifactsUnits)($multiplier);
                     
                     //Generate the unit arrays
-                    $artifactTroops[1][] = array_values($unitArrays);
+                    if($addTroops) $artifactTroops[1][] = array_values($unitArrays);
                     $artifactBuildings[1][] = array_values(self::NATARS_ARTIFACTS_BUILDINGS);
                     
                     //Generate the artifacts array
@@ -302,11 +303,11 @@ class Artifacts
         }    
         
         //Set the unit types by using the last $unitArrays
-        $artifactTroops[0] = array_keys($unitArrays);
+        if($addTroops) $artifactTroops[0] = array_keys($unitArrays);
         $artifactBuildings[0] = array_keys(self::NATARS_ARTIFACTS_BUILDINGS);
         
         //Generate the wids
-        $wids = array_merge($wids, (array)$database->generateVillages($artifactVillages, $uid, TRIBE5, $artifactTroops, $artifactBuildings));
+        $wids = array_merge($wids, (array)$database->generateVillages($artifactVillages, $uid, TRIBE5, $addTroops ? $artifactTroops : null, $artifactBuildings));
         
         //Create the artifacts for the generated wids
         $database->addArtefacts($wids, $artifactsToAdd);
@@ -315,22 +316,25 @@ class Artifacts
     /**
      * Called when WW villages need to be created
      * 
+     * @param int $numberOfVillages The number of villages that have to be added
+     * @param int $uid The player ID
+     * @param bool $addTroops Add troops to the village if true, and vice versa if false
      */
     
-    public function createWWVillages($numberOfVillages = self::NATARS_BASE_WW_VILLAGES, $uid = self::NATARS_UID){
+    public function createWWVillages($numberOfVillages = self::NATARS_BASE_WW_VILLAGES, $uid = self::NATARS_UID, $addTroops = true){
         global $database;
         
         $villageArrays = $troopArrays = $buildingArrays = $wids = [];
         for($i = 1; $i <= $numberOfVillages; $i++){
             $villageArrays[] = ['wid' => 0, 'mode' => 5, 'type' => 3, 'kid' => ($i == $numberOfVillages ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0, 'pop' => 233, 'name' => WWVILLAGE, 'natar' => 1];
-            $troopArrays[1][] = array_values(($this->natarsWWVillagesUnits)());
+            if($addTroops) $troopArrays[1][] = array_values(($this->natarsWWVillagesUnits)());
             $buildingArrays[1][] = array_values(self::NATARS_WW_VILLAGES_BUILDINGS);
         }
 
-        $troopArrays[0] = array_keys(($this->natarsWWVillagesUnits)());
+        if($addTroops) $troopArrays[0] = array_keys(($this->natarsWWVillagesUnits)());
         $buildingArrays[0] = array_keys(self::NATARS_WW_VILLAGES_BUILDINGS);
         
-        $wids = $database->generateVillages($villageArrays, $uid, null, $troopArrays, $buildingArrays);
+        $wids = $database->generateVillages($villageArrays, $uid, null, $addTroops ? $troopArrays : null, $buildingArrays);
     }
     
     /**

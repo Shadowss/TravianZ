@@ -102,7 +102,7 @@ class funct
                     exit;
                 }
 
-
+                //Return the artifacts to the Natars' account
                 $artifact->returnArtifactToNatars($artifactInfo);
                 break;
                 
@@ -139,7 +139,7 @@ class funct
                 $artifactArrays[$selectedArtifact[2]][] = $chosenArtifact;
 
                 //Add the artifacts
-                $artifact->addArtifactVillages($artifactArrays, $playerId);
+                $artifact->addArtifactVillages($artifactArrays, $playerId, $playerId == Artifacts::NATARS_UID);
                 break;
                 
             case "addWWVillages":
@@ -154,7 +154,7 @@ class funct
                 }
 
                 //Create the desired WW villages
-                $artifact->createWWVillages($numberOfVillages, $playerId);
+                $artifact->createWWVillages($numberOfVillages, $playerId, $playerId == Artifacts::NATARS_UID);
                 break;     
                 
             case "killHero":
