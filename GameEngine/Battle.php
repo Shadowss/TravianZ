@@ -8,7 +8,7 @@
 ##  Filename       Battle.php                                                  ##
 ##  Developed by:  Dzoki & Dixie   					       ##
 ##  Fixed by:      Shadow 				  		       ##
-##  Thanks to:     Akakori & Elmar                                             ##
+##  Thanks to:     Akakori, Elmar & Kirilloid                                  ##
 ##  Reworked and Fix by:   ronix                                               ##
 ##  Fixed by:      InCube - double troops				       ##
 ##  License:       TravianZ Project                                            ##
@@ -21,6 +21,21 @@
 
 class Battle {
 
+        /**
+        * 
+        * @author Kirilloid --> https://github.com/kirilloid/travian/blob/master/src/model/base/combat.ts
+        * @var double The number of attacking catapults: 1 = 100%, 0 = 0%
+        * 
+        */
+    
+        private $sigma;
+        
+        public function __construct(){
+            
+            $this->sigma = function($x) { return ($x > 1 ? 2 - $x ** -1.5 : $x ** 1.5) / 2; }; 
+            
+        }
+        
 		public function procSim($post) {
 			global $form;
 			
@@ -374,10 +389,10 @@ class Battle {
                     $abcount += 1;
                     
                     // Points catapult the attacker
-                    if(in_array($i,$catapult)) $catp += (int) $Attacker['u'.$i];
+                    if(in_array($i, $catapult)) $catp += (int) $Attacker['u'.$i];
 
                     // Points of the Rams attacker
-                    if(in_array($i,$rams)) $ram += (int) $Attacker['u'.$i];
+                    if(in_array($i, $rams)) $ram += (int) $Attacker['u'.$i];
 
                     $involve += (int) $Attacker['u'.$i];
                     $units['Att_unit'][$i] = (int) $Attacker['u'.$i];
@@ -459,7 +474,7 @@ class Battle {
         $result['Defend_points'] = $rdp;
         $winner = ($rap > $rdp);
 
-        // Formula for calculating the Moral
+        // Formula for calculating the Morale bonus
         // WW villages aren't affected by this bonus
         if($attpop > $defpop && !$isWWVillage) {
             $moralbonus = 1 / round(max(0.667, pow($defpop / $attpop, 0.2 * min(1, $rap / ($rdp > 0 ? $rdp : 1)))), 3);  
@@ -533,57 +548,54 @@ class Battle {
                 }
                 $result['hero_fealthy'] = $fealthy;
             }
+            
             $ram -= ($winner) ? round($ram * $result[1] / 100) : round($ram * $result[2] / 100);
             $catp -= ($winner) ? round($catp * $result[1] / 100) : round($catp * $result[2] / 100);
         }
-        // Formula for the calculation of catapults needed
+
         if($catp > 0 && $tblevel != 0) {
             
-            //catapults upgrades
-            $upgrades = round(200 * pow(1.0205, $att_ab8) ) / 200; 
+            //Catapults blacksmith upgrades
+            $upgrades = round(200 * pow(1.0205, $att_ab8)) / 200; 
             
-            $wctp = pow(($rap / $rdp), 1.5);
-            $wctp = ($wctp >= 1) ? 1 - 0.5 / $wctp : 0.5 * $wctp;
-            $wctp *= ($catp + $upgrades);
-            
-            //catapults downgrades
-            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1);
-            
-            //catapults moral
-            $catpMoral = pow($attpop / ($defpop > 0 ? $defpop : 1) , 0.3);
-            
-            // New level of the building (only for warsim.php)
-            $result[3] = $this->calculateNewBuildingLevel($catpMoral, $upgrades, $downgrades, $tblevel, $wctp, $catp, $strongerbuildings);
+            //Buildings durability
+            $durability = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1);
+
+            //Calculates the catapults morale bonus
+            $catpMoraleBonus = min(max(($attpop / ($defpop > 0 ? $defpop : 1)) ** 0.3, 1), 3);
+
+            //New level of the building (only for warsim.php)
+            $catapultsDamage = $this->calculateCatapultsDamage($catp, $upgrades, $durability, $rap / $rdp, $strongerbuildings, $catpMoraleBonus);
+            $result[3] = $this->calculateNewBuildingLevel($tblevel, $catapultsDamage);
             $result[4] = $tblevel;
             
-            // Results for Automation.php
-            $result['catapults']['moral'] = $catpMoral;
+            //Results for Automation.php          
             $result['catapults']['upgrades'] = $upgrades;
-            $result['catapults']['downgrades'] = $downgrades;
-            $result['catapults']['realAttackers'] = $wctp;
+            $result['catapults']['durability'] = $durability;
+            $result['catapults']['attackDefenseRatio'] = $rap / $rdp;
             $result['catapults']['strongerBuildings'] = $strongerbuildings;
+            $result['catapults']['moraleBonus'] = $catpMoraleBonus;
         }
         
         if($ram > 0 && $walllevel != 0) {
             
+            //Rams blacksmith upgrades
             $upgrades = round(200 * pow(1.0205, $att_ab7)) / 200;
-            
-            $wctp = pow(($rap / $rdp), 1.5);
-            $wctp = ($wctp >= 1) ? 1 - 0.5 / $wctp : 0.5 * $wctp;
-            $wctp *= ($ram) + $upgrades;
 
-            $downgrades = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1);
+            //Building durability
+            $durability = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1);
            
             // New level of the building (only for warsim.php)
-            $result[7] = $this->calculateNewBuildingLevel(1, $upgrades, $downgrades, $walllevel, $wctp, $ram, $strongerbuildings * 5);
+            $ramsDamage = $this->calculateCatapultsDamage($ram, $upgrades, $durability, $rap / $rdp, $strongerbuildings, 1);
+            $result[7] = $this->calculateNewBuildingLevel($walllevel, $ramsDamage);
             $result[8] = $walllevel;
 
             // Results for Automation.php
-            $result['rams']['moral'] = 1;
             $result['rams']['upgrades'] = $upgrades;
-            $result['rams']['downgrades'] = $downgrades;
-            $result['rams']['realAttackers'] = $wctp;
-            $result['rams']['strongerBuildings'] = $strongerbuildings * 5;
+            $result['rams']['durability'] = $durability;
+            $result['rams']['attackDefenseRatio'] = $rap / $rdp;
+            $result['rams']['strongerBuildings'] = $strongerbuildings;
+            $result['rams']['moraleBonus'] = 1;
         }
 
         $result[6] = pow($rap / ($rdp * $moralbonus > 0 ? $rdp * $moralbonus : 1), $Mfactor);
@@ -608,7 +620,7 @@ class Battle {
 
             if ($hero_health <= $damage_health || $damage_health > 90){
                 //hero die
-                $result['casualties_attacker']['11'] = 1;
+                $result['casualties_attacker'][11] = 1;
                 mysqli_query($database->dblink,"update " . TB_PREFIX . "hero set `dead` = 1, `health` = 0 where `heroid`=".(int) $hero_id);
             }else{
                 mysqli_query($database->dblink,"update " . TB_PREFIX . "hero set `health`=`health`-".(int) $damage_health." where `heroid`=".(int) $hero_id);
@@ -735,46 +747,41 @@ class Battle {
     }
     
     /**
-     * Calculates the new building level, after catapults/rams have damaged it
+     * @author Kirilloid --> https://github.com/kirilloid/travian/blob/master/src/model/base/combat.ts
      * 
-     * @param float $moral The catapults/rams battle moral, 1 < moral < 3 => (Total attacker points / Total defender points)^3
-     * @param int $upgrades Upgrades of catapults/rams made in the blacksmith
-     * @param int $downgrades Defender bonuses, such as the stonemason's lodge
-     * @param int $actualLevel The level of the building before the battle
-     * @param int $realAttackers Effective catapults/rams involved in the building damage
-     * @param int $totalAttackers Total catapults/rams sent in the attack
-     * @param int $strongerBuildings Indicates the defender artifacts bonus against catapults
-     * @return int Returns the new level of the damaged building
+     * Calculates the new building level, after damaging it
+     * 
+     * @param int $oldLevel The old building level
+     * @param float $damage The damage done by catapults
+     * @return int Returns the new building level
      */
     
-    public function CalculateNewBuildingLevel($moral, $upgrades, $downgrades, $actualLevel, $realAttackers, $totalAttackers, $strongerBuildings)
-    {
-        if($moral < 1) $moral = 1;
-        elseif($moral > 3) $moral = 3;
-
-        $needMax = round($this->CalculateNeededCatapults($moral, $upgrades / ($downgrades * $strongerBuildings), $actualLevel));
-        if($needMax <= $realAttackers) return 0;
-        for($i = $actualLevel - 1; $i >= 1; $i--)
-        {
-        	$need = $this->CalculateNeededCatapults($moral, $upgrades / ($downgrades * $strongerBuildings), $i);
-            if(min($realAttackers, $totalAttackers) / ($needMax - $need) <= 1) return ++$i;
-        }
- 
-        return $actualLevel;
+    public function calculateNewBuildingLevel($oldLevel, $damage){
+        $damage -= 0.5;
+        if ($damage < 0) return $oldLevel;
+        
+        while ($damage >= $oldLevel && $oldLevel) $damage -= $oldLevel--;
+        
+        return $oldLevel;
     }
     
     /**
-     * Calculate the needed catapults/rams to completely destroy a building/wall
+     * @author Kirilloid --> https://github.com/kirilloid/travian/blob/master/src/model/base/combat.ts
      * 
-     * @param float $moral The catapults/rams battle moral
-     * @param int $upDown (Upgrades / Downgrades / Stronger buildings) ratio of catapults/rams
-     * @param int $actualLevel The level of the building before the battle
-     * @return float Returns the needed catapults/rams to destroy a building/wall
+     * Calculates the damage done by catapults
+     * 
+     * @param int $catapultsQuantity The quantity of catapults which take part in the attack
+     * @param double $catapultsUpgrade The catapults upgrade multiplier, affected by the cataputls level in the blacksmith
+     * @param double $durability The building durability, affected by the stonemason's lodge
+     * @param double $ADRatio The attack points / defensive points ratio
+     * @param double $strongerBuildings The artifacts multiplier, which strengthens the building, affected by durability artifacts
+     * @param double $moraleBonus The defender morale bonus
+     * @return double Returns the damage done by catapults
      */
     
-    public function CalculateNeededCatapults($moral, $upDown, $actualLevel)
-    {
-        return ($moral * (pow($actualLevel, 2) + $actualLevel + 1) / ($upDown == 0 ? 1 : 8 * $upDown)) + 0.5;
+    public function calculateCatapultsDamage($catapultsQuantity, $catapultsUpgrade, $durability, $ADRatio, $strongerBuildings, $moraleBonus){
+        $catapultsEfficiency = floor($catapultsQuantity / ($durability * $strongerBuildings));
+        return 4 * ($this->sigma)($ADRatio) * $catapultsEfficiency * $catapultsUpgrade / $moraleBonus;
     }
 };
 

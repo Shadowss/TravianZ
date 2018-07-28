@@ -855,7 +855,9 @@ class MYSQLi_DB implements IDbConnection {
 	    if(!is_array($coordinatesArray[0])) $coordinatesArray = [$coordinatesArray];
 	    
 	    $conditions = [];
-	    foreach($coordinatesArray as $coordinate) $conditions[] = "(x = ".$coordinate[0]." AND y = ".$coordinate[1].")";
+	    foreach($coordinatesArray as $coordinate){
+	        $conditions[] = "(x = ".round($coordinate[0])." AND y = ".round($coordinate[1]).")";
+	    }
 	    
 	    $q = "SELECT id FROM " . TB_PREFIX . "wdata WHERE ".implode(" OR ", $conditions);
 	    $result = mysqli_query($this->dblink, $q);

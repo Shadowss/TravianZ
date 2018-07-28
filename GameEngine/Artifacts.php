@@ -35,23 +35,18 @@ class Artifacts
      */
     
     NATARS_CAPITAL_COORDINATES = [[WORLD_MAX, WORLD_MAX],
+                                       [WORLD_MAX, 0],
                                        [WORLD_MAX, -WORLD_MAX],
+                                       [0, -WORLD_MAX],
                                        [-WORLD_MAX, -WORLD_MAX],
-                                       [WORLD_MAX - 1, WORLD_MAX],
-                                       [WORLD_MAX, WORLD_MAX - 1],
-                                       [-WORLD_MAX, WORLD_MAX - 1],
-                                       [WORLD_MAX - 1, -WORLD_MAX],
-                                       [WORLD_MAX - 1, WORLD_MAX - 1],
-                                       [WORLD_MAX, -WORLD_MAX + 1],
-                                       [WORLD_MAX - 1, -WORLD_MAX + 1],
-                                       [-WORLD_MAX + 1, -WORLD_MAX + 1],
-                                       [WORLD_MAX - 2, WORLD_MAX],
-                                       [WORLD_MAX - 2, -WORLD_MAX],
-                                       [WORLD_MAX - 2, WORLD_MAX - 1],
-                                       [WORLD_MAX - 1, WORLD_MAX - 2],
-                                       [-WORLD_MAX + 2, WORLD_MAX],
-                                       [-WORLD_MAX + 2, WORLD_MAX - 1],
-                                       [-WORLD_MAX + 2, -WORLD_MAX + 2]],
+                                       [-WORLD_MAX, 0],
+                                       [-WORLD_MAX, WORLD_MAX],
+                                       [0, WORLD_MAX],
+                                       [WORLD_MAX / 10, WORLD_MAX / 20],
+                                       [WORLD_MAX / 10, -WORLD_MAX / 10],
+                                       [-WORLD_MAX / 20, -WORLD_MAX / 10],
+                                       [-WORLD_MAX / 10, 0],
+                                       [-WORLD_MAX / 20, WORLD_MAX / 10]],
     
     /**
      * @var array Normal Natars' artifacts

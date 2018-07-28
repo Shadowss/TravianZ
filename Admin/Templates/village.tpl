@@ -253,7 +253,7 @@ if(isset($id)){
 						foreach($newResult as $row){
 							echo "
 							<tr>
-								<td><a href=\"?action=delOas&oid=".$row['wref']."\" onClick=\"return del('oas',".$row['wref'].")\"><img src=\"../img/admin/del.gif\"></a></td>
+								<td><a href=\"?action=delOas&oid=".$row['wref']."&did=".$_GET['did']."\" onClick=\"return del('oas',".$row['wref'].")\"><img src=\"../img/admin/del.gif\"></a></td>
 								<td class=\"hab\">".$row['name']."</td>
 								<td class=\"hab\"><a href=\"../karte.php?d=".$row['wref']."&c=".$generator->getMapCheck($row['wref'])."\" target=\"blank\">(".$row['x']."|".$row['y'].")</a></td>
 								<td class=\"hab\">".round($row['loyalty'])."%</td>

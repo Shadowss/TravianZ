@@ -18,6 +18,9 @@
 // # ##
 // ################################################################################
 include_once("../GameEngine/Artifacts.php");
+include_once("../GameEngine/Units.php");
+include_once("../GameEngine/Generator.php");
+
 class funct
 {
 
@@ -28,7 +31,7 @@ class funct
 
     function Act($get)
     {
-        global $admin, $database;
+        global $admin, $database, $units, $generator;
         
         $artifact = new Artifacts();
         
@@ -71,8 +74,8 @@ class funct
                 // add ban
                 break;
             case "delOas":
-                $database->query('UPDATE ' . TB_PREFIX . 'odata SET conqured = 0, owner = 2, name = "Unoccupied Oasis" WHERE wref = ' . $get['oid']);
-                // oaza
+                $units->returnTroops($get['did'], 1);
+                $database->removeOases($get['oid']);
                 break;
             case "logout":
                 $this->LogOut();

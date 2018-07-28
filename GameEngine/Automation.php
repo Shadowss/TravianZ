@@ -711,27 +711,33 @@ class Automation {
 
         if(isset($catapultTarget))
         {
-            // currently targeted building/field level
+            //Currently targeted building/field level
             $tblevel = (int) $bdo['f'.$catapultTarget];
-            // currently targetet building/field GID (ID of the building/field type - woodcutter, cropland, embassy...)
+            //Currently targetet building/field GID (ID of the building/field type - woodcutter, cropland, embassy...)
             $tbgid = (int) $bdo['f'.$catapultTarget.'t'];
-            // currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
+            //Currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
             $tbid = (int) $catapultTarget;          
             
-            $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], 
-            											   $battlepart['catapults']['upgrades'],
-            											   $battlepart['catapults']['downgrades'], 
-            											   $tblevel, 
-            											   $battlepart['catapults']['realAttackers']  / ($twoRowsCatapultSetup ? 2 : 1),
-            											   $data['t8'] / ($twoRowsCatapultSetup ? 2 : 1), 
-            											   ($catapultTarget == 40 ? 1 : $battlepart['catapults']['strongerBuildings']));
+            //If we're targeting the WW
+            if($catapultTarget == 40){
+                $battlepart['catapults']['strongerBuildings'] = 1;
+                $battlepart['catapults']['moraleBonus'] = 1;
+            }
+            
+            $catapultsDamage = $battle->calculateCatapultsDamage($data['t8'],
+                                                                 $battlepart['catapults']['upgrades'],                                                                											   
+            											         $battlepart['catapults']['durability'],
+                                                                 $battlepart['catapults']['attackDefenseRatio'],                                                               
+            											         $battlepart['catapults']['strongerBuildings'],
+                                                                 $battlepart['catapults']['moraleBonus']);
+            
+            $newLevel = $battle->calculateNewBuildingLevel($tblevel, $catapultsDamage / ($twoRowsCatapultSetup ? 2 : 1));
 
             //If that building was present in the building queue, we have to modify his level or remove it
             $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel], $tribe);
             
             // building/field destroyed
-            if ($newLevel == 0)
-            {       
+            if ($newLevel == 0){       
                 // prepare data to be updated
                 $fieldsToSet = ["f".$tbid];
                 $fieldValuesToSet = [0];
@@ -1266,11 +1272,8 @@ class Automation {
                             }                          
                         }
                     }
-                    
-                    //to battle.php
+
                     //fix by ronix
-                    //MUST TO BE FIX : You need to filter these values
-                    //filter_input_array($battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby));
                     if (!isset($walllevel)) $walllevel = 0;
 
                     $battlepart = $battle->calculateBattle($Attacker, $Defender, $def_wall, $att_tribe, $def_tribe, $residence, $attpop, $defpop, $type, $def_ab, $att_ab1, $att_ab2, $att_ab3, $att_ab4, $att_ab5, $att_ab6, $att_ab7, $att_ab8, $tblevel, $stonemason, $walllevel, 0, 0, 0, $AttackerID, $DefenderID, $AttackerWref, $DefenderWref, $conqureby, $enforcementarray);
@@ -1286,17 +1289,18 @@ class Automation {
                     else $can_destroy = 0;
                     
                     //Catapults and rams management
+                    //TODO: Move this in Battle.php
                     if($isoasis == 0){
                     	if ($type == 3){
                     		if (($data['t7'] - $traped7) > 0){
                     			if($walllevel > 0){
-                    				$newLevel = $battle->CalculateNewBuildingLevel($battlepart['rams']['moral'],
-                    															   $battlepart['rams']['upgrades'],
-                    														       $battlepart['rams']['downgrades'],
-                    															   $walllevel,
-                    															   $battlepart['rams']['realAttackers'],
-                    															   $data['t7'],
-                    															   $battlepart['rams']['strongerBuildings']);
+                    			    $ramsDamage = $battle->calculateCatapultsDamage($data['t7'],
+                    			                                                    $battlepart['rams']['upgrades'], 
+                    			                                                    $battlepart['rams']['durability'], 
+                    			                                                    $battlepart['rams']['attackDefenseRatio'], 
+                    			                                                    $battlepart['rams']['strongerBuildings'], 
+                    			                                                    $battlepart['rams']['moraleBonus']);
+                    				$newLevel = $battle->calculateNewBuildingLevel($walllevel, $ramsDamage);
                     				
                     				if ($newLevel == 0){
                     					$info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";

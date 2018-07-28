@@ -224,6 +224,7 @@ class Units {
         
         $to = $database->getVillage($enforce['from']);
         $tribe = $database->getUserField($to['owner'], 'tribe', 0);
+        $start = ($tribe - 1) * 10 + 1;
         
         $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $enforce, 1);
         $time = $database->getArtifactsValueInfluence($from['owner'], $enforce['from'], 2, $troopsTime);
