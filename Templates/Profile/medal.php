@@ -99,6 +99,12 @@ if($displayarray['username'] == "Taskmaster"){
 $profiel = preg_replace("/\[#TASKMASTER]/is",'<img src="'.$gpack.'img/t/taskmaster.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Taskmaster Account</td></tr></table>\')">', $profiel, 1);
 }
 
+//veteran & veteran_5a IMAGES
+
+        $profiel = preg_replace("/\[#g2300]/is",'<img src="'.$gpack.'img/t/Veteran_Medal.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player<br><br>Medal achieved for playing 3 years of Travian.</td></tr></table>\')">', $profiel, 1);
+        $profiel = preg_replace("/\[#g2301]/is",'<img src="'.$gpack.'img/t/5year_medal.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player 5a<br><br>Medal achieved for playing 5 years of Travian.</td></tr></table>\')">', $profiel, 1);
+
+
 //de lintjes
 /******************************
 INDELING CATEGORIEEN:

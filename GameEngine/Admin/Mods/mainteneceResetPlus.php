@@ -34,5 +34,5 @@ if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not 
 
 mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET plus = '0' WHERE id !=0");
 
-header("Location: ../../../Admin/admin.php?p=resetPlusBonus&g");
+header("Location: ../../../Admin/admin.php?p=maintenenceResetPlus&g");
 ?>

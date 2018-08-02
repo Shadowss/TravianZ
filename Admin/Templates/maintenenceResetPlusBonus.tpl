@@ -14,7 +14,7 @@
 	<table id="member" cellpadding="1" cellspacing="1" >
 		<thead>
 			<tr>
-				<th colspan="2">Reset All Players Plus</th>
+				<th colspan="2">Reset All Players Resource Bonus</th>
 			</tr> 
 		</thead>
 		<tbody> 
@@ -27,6 +27,6 @@
 <?php
 if(isset($_GET['g']))
 {
-	echo '<font color="red">All Players Plus Resource Bonus Reset</font>';
+	echo '<br><br><font color="red"><b>All Players Resource Bonus Reset</b></font>';
 }
 ?>

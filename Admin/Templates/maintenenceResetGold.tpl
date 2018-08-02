@@ -27,6 +27,6 @@
 <?php
 if(isset($_GET['g']))
 {
-	echo '<font color="red">All Players Gold Reset</font>';
+	echo '<br><br><font color="red"><b>All Players Gold Reset</b></font>';
 }
 ?>

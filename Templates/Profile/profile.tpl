@@ -166,6 +166,18 @@ MEDAL CATEGORY:
 				   <td></td>
 				   <td>[#0]</td>
 			 	 </tr>
+				 <tr>
+				   <td>veteran</td>
+				   <td></td>
+				   <td></td>
+				   <td>[#g2300]</td>
+			 	 </tr>
+				 <tr>
+				   <td>veteran_5a</td>
+				   <td></td>
+				   <td></td>
+				   <td>[#g2301]</td>
+			 	 </tr>
 				<?php
 				// Added by Shadow - cata7007@gmail.com / Skype : cata7007
 				if(NEW_FUNCTIONS_TRIBE_IMAGES){
@@ -199,4 +211,3 @@ MEDAL CATEGORY:
 
 	<p class="btn"><input type="image" value="" tabindex="9" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
     </form>
-

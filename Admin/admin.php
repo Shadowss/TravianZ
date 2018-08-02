@@ -61,8 +61,8 @@ if (!empty($_GET['p'])) {
             $subpage = 'Map';
             break;
             
-        case 'artifacts':
-            $subpage = 'Artifacts';
+        case 'natars':
+            $subpage = 'Natars Management';
             break;
 
         case 'search':
@@ -506,7 +506,7 @@ if (!empty($_GET['p'])) {
 								<li><a href="?p=report">Players Report</a></li>
 								<li><a href="?p=msg">Players Message</a></li>
 								<li><a href="?p=map">Map</a></li>
-								<li><a href="?p=artifacts">Artifacts</a></li>
+								<li><a href="?p=natars">Natars Management</a></li>
 							</ul>
 						</li>
 						<li class="sub"><a href="#">Search</a>
@@ -536,14 +536,10 @@ if (!empty($_GET['p'])) {
 								<li><a href="?p=maintenenceResetGold">Reset Gold</a></li>
 							</ul>
 						</li>
-						<li class="sub"><a href="#">Plus</a>
+						<li class="sub"><a href="#">Plus & Res Bonus</a>
 							<ul>
 								<li><a href="?p=givePlus">Give All Plus</a></li>
 								<li><a href="?p=maintenenceResetPlus">Reset Plus</a></li>
-							</ul>
-						</li>
-						<li class="sub"><a href="#">Res Bonus</a>
-							<ul>
 								<li><a href="?p=givePlusRes">Give All Res Bonus</a></li>
 								<li><a href="?p=maintenenceResetPlusBonus">Reset Res Bonus</a></li>
 							</ul>

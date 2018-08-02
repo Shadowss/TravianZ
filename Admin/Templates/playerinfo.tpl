@@ -230,7 +230,7 @@
 							</tr>
 
 							<tr>
-								<td colspan="2"><a href="?p=editPlus&uid=<?php echo $user['id']; ?>">&raquo; Edit Plus & Bonus</a></td>
+								<td colspan="2"><a href="?p=editPlus&uid=<?php echo $user['id']; ?>">&raquo; Edit Plus & Res Bonus</a></td>
 							</tr>
 
 							<tr>

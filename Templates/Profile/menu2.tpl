@@ -4,6 +4,11 @@
  | <span class=none><b>Preferences</b></span>
  | <span class=none><b>Account</b></span>
  <?php
+  if(NEW_FUNCTIONS_VACATION){
+ ?>
+ | <span class=none><b>Vacation</b></span>
+ <?php
+ }
  if(GP_ENABLE) {
  ?>
  | <span class=none><b>Graphic pack</b></span>
