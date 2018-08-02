@@ -61,6 +61,7 @@ or you have a feature request to be included in the play.
 
 **Thanks**
 
+A big thanks to [Kirilloid](https://github.com/kirilloid) who helped us a lot with the Battle System formulas.
 Many thanks to all those who recently played around with the project and tested it both, locally and on their 
 own servers. This includes [ZZJHONS](https://github.com/ZZJHONS), [DracoMilesX](https://github.com/DracoMilesX), 
 [phaze1G](https://github.com/phaze1G) and many others who were too shy to let us know that they use and enjoy 

@@ -11,7 +11,7 @@
 
 		class Ranking {
 
-			public $rankarray = array();
+			public $rankarray = [];
 			private $rlastupdate;
 
 			public function getRank() {
@@ -20,14 +20,15 @@
 
 			public function getUserRank($id) {
 			    global $database;
+			    
 				$ranking = $this->getRank();
 				$users = "SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8");
 				$users2 = mysqli_fetch_array(mysqli_query($database->dblink,$users), MYSQLI_ASSOC);
 				$users2 = $users2['Total'];
-				$users3 = $users2+1;
+				$users3 = $users2 + 1;
 				$myrank = 0;
 				if(count($ranking) > 0) {
-					for($i=0;$i<($users3);$i++) {
+					for($i = 0;$i < $users3; $i++) {
 						if( isset( $ranking[$i]['userid'] ) ) {
 							if($ranking[$i]['userid'] == $id && $ranking[$i] != "pad") {
 								$myrank = $i;
@@ -197,31 +198,25 @@
 			}
 
 			public function searchRank($name, $field) {
-				while(1) {
-    //$key = key($this->rankarray);
-       for($key=0;$key<count($this->rankarray);$key++){
-        if($this->rankarray[$key]!="pad") {
-        if($this->rankarray[$key][$field] == $name) {
-            return $key;
-            break;
-        }
-       }
-      }
-						if(!next($this->rankarray)) {
-						if($field != "userid"){
-							return $name;
-							break;
-						}else{
-							return 0;
-							break;
-						}
-						}
-
-				}
+			    
+			    while(1) {
+			        //$key = key($this->rankarray);
+			        for($key = 0; $key < count($this->rankarray); $key++){
+			            if($this->rankarray[$key]!="pad") {
+			                if($this->rankarray[$key][$field] == $name) return $key;
+			            }
+			        }
+			        if(!next($this->rankarray)) {
+			            if($field != "userid") return $name;    
+			            else return 0;
+			        }
+			        
+			    }
 			}
 
 			public function procRankArray() {
 				global $multisort, $database;
+				
 				if($GLOBALS['db']->countUser() > 0){
 				$holder = array();
 				if(SHOW_NATARS == True){
@@ -272,12 +267,10 @@
                     ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 				}
 
-				$datas = array();
+				$datas = [];
 
 				$result = (mysqli_query($database->dblink,$q));
-				while($row = mysqli_fetch_assoc($result)) {
-					$datas[] = $row;
-				}
+				while($row = mysqli_fetch_assoc($result)) $datas[] = $row;
 
 				if (count($datas)) {
 					foreach($datas as $result) {
@@ -292,12 +285,12 @@
 					}
 				}
 
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
+				$newholder = ["pad"];
+				foreach($holder as $key) array_push($newholder, $key);
+				
 				$this->rankarray = $newholder;
-			}
+				
+			    }
 			}
 
 			public function procRankRaceArray($race) {

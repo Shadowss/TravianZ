@@ -72,7 +72,7 @@ if(isset($_POST['result'])) {
         include("Templates/Simulator/res_d".$tar.".tpl");
     }
     echo "<p>Type of attack: <b>";
-    echo $form->getValue('ktyp') == 0? "Normal" : "Raid";
+    echo $form->getValue('ktyp') == 0 ? "Normal" : "Raid";
     echo "</b></p>";
     echo "<p>";
     if (isset($_POST['result'][7]) && isset($_POST['result'][8])){

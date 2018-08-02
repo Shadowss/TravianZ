@@ -383,7 +383,7 @@ class Automation {
     }
 
     private function buildComplete() {
-        global $database, $bid18, $bid10, $bid11, $bid38, $bid39;
+        global $database, $technology, $bid18, $bid10, $bid11, $bid38, $bid39;
 
         $time = time();
         // IDs of villages that were affected by this building completion update,
@@ -476,7 +476,7 @@ class Automation {
             }
 
             //Update starvation data
-            $this->addStarvationData($indi['wid']);
+            $database->addStarvationData($indi['wid']);
 
             // update the requested fields, all at once
             $database->setVillageFields($indi['wid'], array_keys($fieldsToSet), array_values($fieldsToSet));
@@ -711,27 +711,33 @@ class Automation {
 
         if(isset($catapultTarget))
         {
-            // currently targeted building/field level
+            //Currently targeted building/field level
             $tblevel = (int) $bdo['f'.$catapultTarget];
-            // currently targetet building/field GID (ID of the building/field type - woodcutter, cropland, embassy...)
+            //Currently targetet building/field GID (ID of the building/field type - woodcutter, cropland, embassy...)
             $tbgid = (int) $bdo['f'.$catapultTarget.'t'];
-            // currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
+            //Currently targeted building/field ID in the database (fdata, the fID field, e.g. f1, f2, f3...)
             $tbid = (int) $catapultTarget;          
             
-            $newLevel = $battle->CalculateNewBuildingLevel($battlepart['catapults']['moral'], 
-            											   $battlepart['catapults']['upgrades'],
-            											   $battlepart['catapults']['downgrades'], 
-            											   $tblevel, 
-            											   $battlepart['catapults']['realAttackers']  / ($twoRowsCatapultSetup ? 2 : 1),
-            											   $data['t8'] / ($twoRowsCatapultSetup ? 2 : 1), 
-            											   ($catapultTarget == 40 ? 1 : $battlepart['catapults']['strongerBuildings']));
+            //If we're targeting the WW
+            if($catapultTarget == 40){
+                $battlepart['catapults']['strongerBuildings'] = 1;
+                $battlepart['catapults']['moraleBonus'] = 1;
+            }
+            
+            $catapultsDamage = $battle->calculateCatapultsDamage($data['t8'],
+                                                                 $battlepart['catapults']['upgrades'],                                                                											   
+            											         $battlepart['catapults']['durability'],
+                                                                 $battlepart['catapults']['attackDefenseRatio'],                                                               
+            											         $battlepart['catapults']['strongerBuildings'],
+                                                                 $battlepart['catapults']['moraleBonus']);
+            
+            $newLevel = $battle->calculateNewBuildingLevel($tblevel, $catapultsDamage / ($twoRowsCatapultSetup ? 2 : 1));
 
             //If that building was present in the building queue, we have to modify his level or remove it
             $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel], $tribe);
             
             // building/field destroyed
-            if ($newLevel == 0)
-            {       
+            if ($newLevel == 0){       
                 // prepare data to be updated
                 $fieldsToSet = ["f".$tbid];
                 $fieldValuesToSet = [0];
@@ -1266,11 +1272,8 @@ class Automation {
                             }                          
                         }
                     }
-                    
-                    //to battle.php
+
                     //fix by ronix
-                    //MUST TO BE FIX : You need to filter these values
-                    //filter_input_array($battlepart = $battle->calculateBattle($Attacker,$Defender,$def_wall,$att_tribe,$def_tribe,$residence,$attpop,$defpop,$type,$def_ab,$att_ab1,$att_ab2,$att_ab3,$att_ab4,$att_ab5,$att_ab6,$att_ab7,$att_ab8,$tblevel,$stonemason,$walllevel,0,0,0,$AttackerID,$DefenderID,$AttackerWref,$DefenderWref,$conqureby));
                     if (!isset($walllevel)) $walllevel = 0;
 
                     $battlepart = $battle->calculateBattle($Attacker, $Defender, $def_wall, $att_tribe, $def_tribe, $residence, $attpop, $defpop, $type, $def_ab, $att_ab1, $att_ab2, $att_ab3, $att_ab4, $att_ab5, $att_ab6, $att_ab7, $att_ab8, $tblevel, $stonemason, $walllevel, 0, 0, 0, $AttackerID, $DefenderID, $AttackerWref, $DefenderWref, $conqureby, $enforcementarray);
@@ -1286,17 +1289,18 @@ class Automation {
                     else $can_destroy = 0;
                     
                     //Catapults and rams management
+                    //TODO: Move this in Battle.php
                     if($isoasis == 0){
                     	if ($type == 3){
                     		if (($data['t7'] - $traped7) > 0){
                     			if($walllevel > 0){
-                    				$newLevel = $battle->CalculateNewBuildingLevel($battlepart['rams']['moral'],
-                    															   $battlepart['rams']['upgrades'],
-                    														       $battlepart['rams']['downgrades'],
-                    															   $walllevel,
-                    															   $battlepart['rams']['realAttackers'],
-                    															   $data['t7'],
-                    															   $battlepart['rams']['strongerBuildings']);
+                    			    $ramsDamage = $battle->calculateCatapultsDamage($data['t7'],
+                    			                                                    $battlepart['rams']['upgrades'], 
+                    			                                                    $battlepart['rams']['durability'], 
+                    			                                                    $battlepart['rams']['attackDefenseRatio'], 
+                    			                                                    $battlepart['rams']['strongerBuildings'], 
+                    			                                                    $battlepart['rams']['moraleBonus']);
+                    				$newLevel = $battle->calculateNewBuildingLevel($walllevel, $ramsDamage);
                     				
                     				if ($newLevel == 0){
                     					$info_ram = "".$ram_pic.",Wall <b>destroyed</b>.";
@@ -2184,7 +2188,7 @@ class Automation {
                                         // if the defender pop is 0 with no artefact, then destroy the village
                                         if($database->getVillageField($data['to'], "pop") == 0 || $targettribe == 5){
                                             $can_destroy = $village_destroyed = 1;
-                                            $info_hero .= " The village has been destroyed.";
+                                            if(strpos($info_cat, "The village has") === false) $info_hero .= " The village has been destroyed.";
                                         }
                                     }
                                     else $info_hero = $hero_pic.",".$artifactError.$xp;
@@ -2233,7 +2237,7 @@ class Automation {
                     }else{
                         if(isset($village_destroyed) && $village_destroyed == 1 && $can_destroy==1){
                             //check if village pop=0 and no info destroy
-                            if (strpos($info_cat,"The village has") === false) {
+                            if (strpos($info_cat, "The village has") === false) {
                                 $info_cat .= "<tbody class=\"goods\"><tr><th>Information</th><td colspan=\"11\">
                                           <img class=\"unit u".$catp_pic."\" src=\"img/x.gif\" alt=\"Catapult\" title=\"Catapult\" /> The village has been destroyed.</td></tr></tbody>";
                             }
@@ -2488,7 +2492,7 @@ class Automation {
                 }
 
                 //Update starvation data
-                $this->addStarvationData($to['wref']);
+                $database->addStarvationData($to['wref']);
                 
 				//Returning units back to village is not necessary because it will be taken care when processing movement			
 				// Fix by AL-Kateb
@@ -2579,7 +2583,7 @@ class Automation {
     }
 
     private function sendreinfunitsComplete() {
-        global $bid23, $database, $battle;
+        global $bid23, $database, $technology, $battle;
 
         $time = time();
         $q = "
@@ -2717,7 +2721,7 @@ class Automation {
                 }
 
                 //Update starvation data
-                $this->addStarvationData($data['to']);
+                $database->addStarvationData($data['to']);
 
                 //check empty reinforcement in rally point
                 $e_units = '';
@@ -2733,7 +2737,7 @@ class Automation {
     }
 
     private function returnunitsComplete() {
-        global $database;
+        global $database, $technology;
 
         $time = time();
         $q = "
@@ -2783,7 +2787,7 @@ class Automation {
             	$movementProcIDs[] = $data['moveid'];
             	
             	//Update starvation data
-            	$this->addStarvationData($data['to']);
+            	$database->addStarvationData($data['to']);
             }
             
             $database->setMovementProc(implode(', ', $movementProcIDs));
@@ -3233,7 +3237,7 @@ class Automation {
     }
 
     private function trainingComplete() {
-        global $database;
+        global $database, $technology;
 
         $time = time();
         $trainlist = $database->getTrainingList();
@@ -3287,7 +3291,7 @@ class Automation {
                 if ($valuesUpdated) call_user_func(get_class($database).'::clearUnitsCache');
              
                 //Update starvation data
-                $this->addStarvationData($train['vref']);
+                $database->addStarvationData($train['vref']);
             }
         }
     }
@@ -3677,30 +3681,6 @@ class Automation {
             }
         }
     }
-
-    /**
-     * Adds the starvation data in villages with a negative value of crop
-     * 
-     * @param int $wref The village ID where the crop is negative
-     */
-    
-    private function addStarvationData($wref){
-        global $database, $technology;
-        
-        $getVillage = $database->getVillage($wref);
-        
-        //Exlude Support, Nature, Natars, TaskMaster and Multihunter
-        if ($getVillage['owner'] > 5){
-            $crop = $database->getCropProdstarv($wref, false);
-            $unitArrays = $this->getAllUnits($wref, false);
-            $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);
-            $starv = $getVillage['starv'];
-            if ($crop < $villageUpkeep){
-                //Add starvation data
-                $database->setVillageFields($wref, ['starv'], [$villageUpkeep]);
-            }
-        }
-    }
     
     /**
      * Function for starvation - by brainiacX and Shadow
@@ -3712,23 +3692,23 @@ class Automation {
     private function starvation() {
         global $database, $technology;
 
-        //starvation is disabled during Easter/Holidays/Christmas
+        //Starvation is disabled during Easter/Holidays/Christmas
         if(PEACE) return;
         
         $time = time();
 
-        //update starvation in every village
+        //Update starvation in every village
         $starvarray = $database->getProfileVillages(0, 7);
-        foreach($starvarray as $starv) $this->addStarvationData($starv['wref']);
+        foreach($starvarray as $starv) $database->addStarvationData($starv['wref']);
 
-        // load villages with minus prod
+        //Load villages with minus prod
         $starvarray = [];
         $starvarray = $database->getStarvation();
 
         $vilIDs = [];
         foreach ($starvarray as $starv) $vilIDs[] = $starv['wref'];
         
-        // cache
+        //Cache
         $database->getEnforceVillage($vilIDs, 0);
         $database->getOasisEnforce($vilIDs, 2);
         $database->getOasisEnforce($vilIDs, 3);
@@ -3758,7 +3738,7 @@ class Automation {
 
             $allTroopsArray = [$enforceArrays, $prisonerArrays, $unitArrays, $attackArrays];
 
-            // find the first not-empty array
+            //Find the first not-empty array
             foreach($allTroopsArray as $type => $allTroops)
             {
                 if(!empty($allTroops)){
@@ -3771,10 +3751,10 @@ class Automation {
                 }                            
             }
 
-            // if the player has no troops, then skip the next instructions
+            //If the player has no troops, then skip the next instructions
             if(empty($starvingTroops)) continue;
 				
-			// counting
+			//Counting
 			$timedif = $time - $starv['starvupdate'];
             $cropProd = $database->getCropProdstarv($starv['wref']) - $starv['starv'];
             if($cropProd < 0){
@@ -3783,7 +3763,7 @@ class Automation {
                 $newcrop = 0;
                 $oldcrop = $database->getVillageField($starv['wref'], 'crop');
                 
-                //if the grain is then tries to send all
+                //If the grain is then tries to send all
                 if ($oldcrop > 100){
                     $difcrop = $difcrop - $oldcrop;
 					if($difcrop < 0){
@@ -3804,7 +3784,7 @@ class Automation {
                     $counting = true;
                     while($difcrop > 0)
                     {
-                        // search the highest troop
+                        //S earch the highest troop
                         $maxcount = $maxtype = 0;                    
                         for($i = $start ; $i <= $end ; $i++)
                         {
@@ -3837,10 +3817,8 @@ class Automation {
                     else if($maxtype == 0) $newCrop = 0;
                     else $newCrop = $GLOBALS['u'.$maxtype]['crop'];
 
-                    if($totalKilledUnits > 0)
-                    {                   
-                        switch($type)
-                        {
+                    if($totalKilledUnits > 0){                   
+                        switch($type){
                             case 0:                                
                                 if($totalKilledUnits < $totalUnits){
                                     $database->modifyEnforce($starvingTroops['id'], array_keys($killedUnits), array_values($killedUnits), 0);  

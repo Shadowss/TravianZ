@@ -1031,6 +1031,7 @@ define("YOU_CONSTRUCT","You can construct ");
 define("CRANNY_INCREASED","Cranny capacity is increased by");
 define("CRANNY_DECRESE","Cranny capacity is decrese by");
 define("WW_BUILDING_PLAN","You can build the Wonder of the World");
+define("NO_WW","There are no Wonders of the World");
 define("NO_PREVIOUS_OWNERS","There are no previous owners.");
 define("TREASURY_DESC","The riches of your empire are kept in the treasury. The treasury has room for one treasure. After you have captured an artefact it takes 24 hours on a normal server or 12 hours on a thrice speed server to be effective.");
 

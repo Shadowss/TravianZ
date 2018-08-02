@@ -5,9 +5,7 @@ if(!is_numeric($_SESSION['search'])) {
 <?php
     $search = 0;
 }
-else {
-$search = $_SESSION['search'];
-}
+else $search = $_SESSION['search'];
 ?>
 <table cellpadding="1" cellspacing="1" id="alliance" class="row_table_data">
 			<thead>
@@ -19,36 +17,34 @@ $search = $_SESSION['search'];
 		<tr><td></td><td>Alliance</td><td>Player</td><td>&Oslash;</td><td>Points</td></tr>
 		</thead><tbody>  
         <?php
+        $rankArray = $ranking->getRank();
         if(isset($_GET['rank'])){
-		$multiplier = 1;
-			if(is_numeric($_GET['rank'])) {
-				if($_GET['rank'] > count($ranking->getRank())) {
-				$_GET['rank'] = count($ranking->getRank())-1;
-				}
-				while($_GET['rank'] > (20*$multiplier)) {
-					$multiplier +=1;
-				}
-			$start = 20*$multiplier-19;
-			} else { $start = ($_SESSION['start']+1); }
-		} else { $start = ($_SESSION['start']+1); }
-        if(count($ranking->getRank()) > 0) {
-        	$ranking = $ranking->getRank();
-            for($i=$start;$i<($start+20);$i++) {
-            	if(isset($ranking[$i]['name']) && $ranking[$i] != "pad") {
-                	if($i == $search) {
-                    echo "<tr class=\"hl\"><td class=\"ra fc\" >";
-                    }
-                    else {
-                    echo "<tr><td class=\"ra \" >";
-                    }
-                    echo $i.".</td><td class=\"al \" ><a href=\"allianz.php?aid=".$ranking[$i]['id']."\">".$ranking[$i]['tag']."</a></td><td class=\"pla \" >";
-                    echo $ranking[$i]['players']."</td><td class=\"av \" >".$ranking[$i]['avg']."</td><td class=\"po \">".$ranking[$i]['totalpop']."</td></tr>";
+            $multiplier = 1;
+            if(is_numeric($_GET['rank'])) {
+                if($_GET['rank'] > count($rankArray)) {
+                    $_GET['rank'] = count($rankArray) - 1;
+                }
+                
+                while($_GET['rank'] > (20*$multiplier))  $multiplier++;
+
+                $start = 20 * $multiplier - 19;
+            }
+            else $start = ($_SESSION['start'] + 1);
+        } 
+        else $start = ($_SESSION['start'] + 1);
+
+        if(count($rankArray) > 1) {
+            for($i = $start; $i < $start + 20; $i++) {
+                if(isset($rankArray[$i]['name']) && $rankArray[$i] != "pad") {
+                    if($i == $search) echo "<tr class=\"hl\"><td class=\"ra fc\" >";
+                    else echo "<tr><td class=\"ra \" >";
+
+                    echo $i.".</td><td class=\"al \" ><a href=\"allianz.php?aid=".$rankArray[$i]['id']."\">".$rankArray[$i]['tag']."</a></td><td class=\"pla \" >";
+                    echo $rankArray[$i]['players']."</td><td class=\"av \" >".$rankArray[$i]['avg']."</td><td class=\"po \">".$rankArray[$i]['totalpop']."</td></tr>";
                 }
             }
         }
-        else {
-        	echo "<td class=\"none\" colspan=\"5\">No alliance's found</td>";
-        }
+        else echo "<td class=\"none\" colspan=\"5\">No alliances found</td>";
         ?>
  </tbody>
 </table>

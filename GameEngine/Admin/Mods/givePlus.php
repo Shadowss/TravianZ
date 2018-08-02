@@ -30,14 +30,6 @@ for ($i = 0; $i < 5; $i++) {
 
 include_once($autoprefix."GameEngine/Database.php");
 
-$session = (int) $_POST['admid'];
-
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
-
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
-
 $sql = "SELECT id FROM ".TB_PREFIX."users ORDER BY ID DESC LIMIT 1";
 $loops = mysqli_result(mysqli_query($GLOBALS["link"], $sql), 0);
 

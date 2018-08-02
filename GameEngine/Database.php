@@ -808,11 +808,8 @@ class MYSQLi_DB implements IDbConnection {
             $pairs[] = $this->escape($fieldName) . ' = ' . (Math::isInt($value[$index]) ? $value[$index] : '"'.$this->escape($value[$index]).'"');
         }
 
-		if(!$switch) {
-			$q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where username = '$ref'";
-		} else {
-		    $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where id = " . (int) $ref;
-		}
+        if(!$switch) $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where username = '$ref'";		
+        else $q = "UPDATE " . TB_PREFIX . "users SET ".implode(', ', $pairs)." where id = " . (int) $ref;
 
 		// update cached values
 		if ($ret = mysqli_query($this->dblink,$q)) {
@@ -858,7 +855,9 @@ class MYSQLi_DB implements IDbConnection {
 	    if(!is_array($coordinatesArray[0])) $coordinatesArray = [$coordinatesArray];
 	    
 	    $conditions = [];
-	    foreach($coordinatesArray as $coordinate) $conditions[] = "(x = ".$coordinate[0]." AND y = ".$coordinate[1].")";
+	    foreach($coordinatesArray as $coordinate){
+	        $conditions[] = "(x = ".round($coordinate[0])." AND y = ".round($coordinate[1]).")";
+	    }
 	    
 	    $q = "SELECT id FROM " . TB_PREFIX . "wdata WHERE ".implode(" OR ", $conditions);
 	    $result = mysqli_query($this->dblink, $q);
@@ -1138,20 +1137,20 @@ class MYSQLi_DB implements IDbConnection {
 	function modifyGold($userid, $amt, $mode) {
 	    list($userid, $amt, $mode) = $this->escape_input((int) $userid, (int) $amt, $mode);
 
-		if(!$mode) {
-			$q = "UPDATE " . TB_PREFIX . "users set gold = gold - $amt where id = $userid";
-		} else {
-			$q = "UPDATE " . TB_PREFIX . "users set gold = gold + $amt where id = $userid";
-		}
+	    if(!$mode) $q = "UPDATE " . TB_PREFIX . "users set gold = gold - $amt where id = $userid";		
+		else $q = "UPDATE " . TB_PREFIX . "users set gold = gold + $amt where id = $userid";
+		
 		return mysqli_query($this->dblink,$q);
 	}
 
-	/*****************************************
-	Function to retrieve user array via Username or ID
-	Mode 0: Search by Username
-	Mode 1: Search by ID
-	References: Alliance ID
-	*****************************************/
+	/**
+	 * Retrieves the user array via Username or ID
+	 * 
+	 * @param int $ref The user ID or the username
+	 * @param int $mode 0 --> Search by username, 1 --> Search by user ID	 
+	 * @param bool $use_cache Will use the cache if true
+	 * @return array Returns the user array
+	 */
 
 	function getUserArray($ref, $mode, $use_cache = true) {
         list($ref, $mode) = $this->escape_input($ref, $mode);
@@ -1162,11 +1161,9 @@ class MYSQLi_DB implements IDbConnection {
             return $cachedValue;
         }
 
-		if(!$mode) {
-			$q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
-		} else {
-		    $q = "SELECT * FROM " . TB_PREFIX . "users where id = " . (int) $ref . " LIMIT 1";
-		}
+        if(!$mode) $q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
+		else $q = "SELECT * FROM " . TB_PREFIX . "users where id = " . (int) $ref . " LIMIT 1";
+		
 		$result = mysqli_query($this->dblink,$q);
 
         self::$fieldsCache[$ref.$mode] = mysqli_fetch_array($result);
@@ -7697,7 +7694,6 @@ References: User ID/Message ID, Mode
 	    foreach($detailsArray as $field => $value) $values[] = $field."=".$value;
 	    
 	    $q = "UPDATE ".TB_PREFIX."artefacts SET ".implode(",", $values)." WHERE id = $id";
-	    echo $q;
 	    return mysqli_query($this->dblink, $q);
 	}
 
@@ -7858,7 +7854,7 @@ References: User ID/Message ID, Mode
                 case 9:
                 case 10:
                 case 11:
-                    $cropo ++;
+                    $cropo++;
                     break;
                 case 12:
                     $cropo += 2;
@@ -7883,6 +7879,41 @@ References: User ID/Message ID, Mode
         return self::$cropProductionStarvationValueCache[$wref];
 	}
 
+	/**
+	 * Adds the starvation data in villages with a negative value of crop
+	 *
+	 * @param int $wref The village ID where the crop is negative
+	 */
+	
+	public function addStarvationData($wref){
+	    global $technology;
+	    
+	    $getVillage = $this->getVillage($wref);
+	    
+	    //Exlude Support, Nature, Natars, TaskMaster and Multihunter
+	    if ($getVillage['owner'] > 5){	        
+	        $crop = $this->getCropProdstarv($wref, false);
+	        $unitArrays = $technology->getAllUnits($wref, false, 0, false);
+	        $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);
+	        $starv = $getVillage['starv'];
+	        
+	        if ($crop < $villageUpkeep){
+	            //Add starvation data
+	            $fields = ['starv'];
+	            $values = [$villageUpkeep];
+	            
+	            //Update the starvupdate if it's set to 0
+	            if($getVillage['starvupdate'] == 0) {
+	                $fields[] = 'starvupdate';
+	                $values[] = time();
+	            }
+
+	            //Update the starvation datas
+	            $this->setVillageFields($wref, $fields, $values);
+	        }
+	    }
+	}
+	
 	//general statistics
 
 	function addGeneralAttack($casualties) {

@@ -2,16 +2,16 @@
 class Artifacts
 {
 
-    public const 
+    const 
     
     /**
-     * @var integer Default Natars' uid
+     * @var int Default Natars' uid
      */
     
     NATARS_UID = 3,
     
     /**
-     * @var integer Default Natars' tribe
+     * @var int Default Natars' tribe
      */
     
     NATARS_TRIBE = 5,
@@ -35,23 +35,18 @@ class Artifacts
      */
     
     NATARS_CAPITAL_COORDINATES = [[WORLD_MAX, WORLD_MAX],
+                                       [WORLD_MAX, 0],
                                        [WORLD_MAX, -WORLD_MAX],
+                                       [0, -WORLD_MAX],
                                        [-WORLD_MAX, -WORLD_MAX],
-                                       [WORLD_MAX - 1, WORLD_MAX],
-                                       [WORLD_MAX, WORLD_MAX - 1],
-                                       [-WORLD_MAX, WORLD_MAX - 1],
-                                       [WORLD_MAX - 1, -WORLD_MAX],
-                                       [WORLD_MAX - 1, WORLD_MAX - 1],
-                                       [WORLD_MAX, -WORLD_MAX + 1],
-                                       [WORLD_MAX - 1, -WORLD_MAX + 1],
-                                       [-WORLD_MAX + 1, -WORLD_MAX + 1],
-                                       [WORLD_MAX - 2, WORLD_MAX],
-                                       [WORLD_MAX - 2, -WORLD_MAX],
-                                       [WORLD_MAX - 2, WORLD_MAX - 1],
-                                       [WORLD_MAX - 1, WORLD_MAX - 2],
-                                       [-WORLD_MAX + 2, WORLD_MAX],
-                                       [-WORLD_MAX + 2, WORLD_MAX - 1],
-                                       [-WORLD_MAX + 2, -WORLD_MAX + 2]],
+                                       [-WORLD_MAX, 0],
+                                       [-WORLD_MAX, WORLD_MAX],
+                                       [0, WORLD_MAX],
+                                       [WORLD_MAX / 10, WORLD_MAX / 20],
+                                       [WORLD_MAX / 10, -WORLD_MAX / 10],
+                                       [-WORLD_MAX / 20, -WORLD_MAX / 10],
+                                       [-WORLD_MAX / 10, 0],
+                                       [-WORLD_MAX / 20, WORLD_MAX / 10]],
     
     /**
      * @var array Normal Natars' artifacts
@@ -91,7 +86,7 @@ class Artifacts
      * @var array WW building plans Natars' artifacts
      */
     
-    NATARS_WW_BUILDING_PLANS =  [PLAN_DESC => [["type" => 11, "size" => 1, "name" => PLAN,"vname" => PLANVILLAGE, "effect" => "", "quantity" => 13, "img" => 1]]],
+    NATARS_WW_BUILDING_PLANS =  [PLAN_DESC => [["type" => 11, "size" => 1, "name" => PLAN, "vname" => PLANVILLAGE, "effect" => "", "quantity" => 13, "img" => 1]]],
                                     
     /**
      * @var array Natars' normal artifacts buildings
@@ -128,11 +123,17 @@ class Artifacts
         "f2" => 6, "f8" => 6, "f9" => 6, "f12" => 6, "f13" => 6, "f15" => 6],
     
     /**
-     * @var integer The base amount of Natars' spying units, used when Natars account is created
+     * @var int The base amount of Natars' spying units, used when Natars account is created
      */
      
-    NATARS_BASE_SPY = 1500;
+    NATARS_BASE_SPY = 1500,
 
+    /**
+     * @var int the base amount of Natars' WW villages 
+     */
+    
+    NATARS_BASE_WW_VILLAGES = 13;
+    
     public 
     
     /**
@@ -178,7 +179,7 @@ class Artifacts
     }
     
     /**
-     * Called when Natars account need to be created, creates his account and capital village
+     * Called when Natars account needs to be created, creates his account and capital village
      *
      */
     
@@ -263,9 +264,10 @@ class Artifacts
      *
      * @param array $artifactArrays The array containing the artifacts to insert
      * @param int $uid The owner's user ID (Natars)
+     * @param bool $addTroops Add troops to the village if true, and vice versa if false
      */
     
-    public function addArtifactVillages($artifactArrays, $uid = self::NATARS_UID) {
+    public function addArtifactVillages($artifactArrays, $uid = self::NATARS_UID, $addTroops = true) {
         global $database;
 
         //Variables initialization
@@ -284,7 +286,7 @@ class Artifacts
                     $unitArrays = ($this->natarsArtifactsUnits)($multiplier);
                     
                     //Generate the unit arrays
-                    $artifactTroops[1][] = array_values($unitArrays);
+                    if($addTroops) $artifactTroops[1][] = array_values($unitArrays);
                     $artifactBuildings[1][] = array_values(self::NATARS_ARTIFACTS_BUILDINGS);
                     
                     //Generate the artifacts array
@@ -296,11 +298,11 @@ class Artifacts
         }    
         
         //Set the unit types by using the last $unitArrays
-        $artifactTroops[0] = array_keys($unitArrays);
+        if($addTroops) $artifactTroops[0] = array_keys($unitArrays);
         $artifactBuildings[0] = array_keys(self::NATARS_ARTIFACTS_BUILDINGS);
         
         //Generate the wids
-        $wids = array_merge($wids, (array)$database->generateVillages($artifactVillages, $uid, TRIBE5, $artifactTroops, $artifactBuildings));
+        $wids = array_merge($wids, (array)$database->generateVillages($artifactVillages, $uid, TRIBE5, $addTroops ? $artifactTroops : null, $artifactBuildings));
         
         //Create the artifacts for the generated wids
         $database->addArtefacts($wids, $artifactsToAdd);
@@ -309,22 +311,25 @@ class Artifacts
     /**
      * Called when WW villages need to be created
      * 
+     * @param int $numberOfVillages The number of villages that have to be added
+     * @param int $uid The player ID
+     * @param bool $addTroops Add troops to the village if true, and vice versa if false
      */
     
-    public function createWWVillages(){
+    public function createWWVillages($numberOfVillages = self::NATARS_BASE_WW_VILLAGES, $uid = self::NATARS_UID, $addTroops = true){
         global $database;
         
         $villageArrays = $troopArrays = $buildingArrays = $wids = [];
-        for($i = 1; $i <= 13; $i++){
-            $villageArrays[] = ['wid' => 0, 'mode' => 5, 'type' => 3, 'kid' => ($i == 13 ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0, 'pop' => 233, 'name' => WWVILLAGE, 'natar' => 1];
-            $troopArrays[1][] = array_values(($this->natarsWWVillagesUnits)());
+        for($i = 1; $i <= $numberOfVillages; $i++){
+            $villageArrays[] = ['wid' => 0, 'mode' => 5, 'type' => 3, 'kid' => ($i == $numberOfVillages ? rand(1, 4) : ($i % 4) + 1), 'capital' => 0, 'pop' => 233, 'name' => WWVILLAGE, 'natar' => 1];
+            if($addTroops) $troopArrays[1][] = array_values(($this->natarsWWVillagesUnits)());
             $buildingArrays[1][] = array_values(self::NATARS_WW_VILLAGES_BUILDINGS);
         }
 
-        $troopArrays[0] = array_keys(($this->natarsWWVillagesUnits)());
+        if($addTroops) $troopArrays[0] = array_keys(($this->natarsWWVillagesUnits)());
         $buildingArrays[0] = array_keys(self::NATARS_WW_VILLAGES_BUILDINGS);
         
-        $wids = $database->generateVillages($villageArrays, self::NATARS_UID, TRIBE5, $troopArrays, $buildingArrays);
+        $wids = $database->generateVillages($villageArrays, $uid, null, $addTroops ? $troopArrays : null, $buildingArrays);
     }
     
     /**
@@ -411,10 +416,11 @@ class Artifacts
         global $database;
         
         //Set the village arrays
+        $artifactArrays = array_merge(self::NATARS_ARTIFACTS, self::NATARS_WW_BUILDING_PLANS);
         $villageArrays = [['wid' => 0, 'mode' => $artifactArray['size'] + 1, 'type' => 3,
             'kid' => rand(1, 4), 'capital' => 0, 'pop' => 163,
-            'name' => self::NATARS_ARTIFACTS[$artifactArray['desc']][$artifactArray['size'] - 1]['vname'],
-            'natar' => $artifactArray['type'] != 11 ? 0 : 1]];
+            'name' => $artifactArrays[$artifactArray['desc']][$artifactArray['size'] - 1]['vname'],
+            'natar' => 0]];
         
         //Set the unit arrays
         $multiplier = $artifactArray['size'] == 3 ? 4 : $artifactArray['size'];
@@ -427,7 +433,7 @@ class Artifacts
         //Set the buildings array
         $artifactBuildings[1][] = array_values(self::NATARS_ARTIFACTS_BUILDINGS);
         $artifactBuildings[0] = array_keys(self::NATARS_ARTIFACTS_BUILDINGS);
-        
+
         //Generate the village
         $wid = $database->generateVillages($villageArrays, self::NATARS_UID, TRIBE5, $artifactTroops, $artifactBuildings);
         
