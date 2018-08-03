@@ -1,18 +1,19 @@
 body {
   color: #000;
-  font-size:10pt;
-  background:#FFF;
-  margin:0px;
+  font-size: 10pt;
+  background: #FFF;
+  margin: 0;
   font-family: Verdana, Arial, Helvetica, sans-serif;
   overflow-x: hidden;
 }
 
 .center-img {
+  margin: 0;
   text-align: center;
 }
 
 .none {
-  color:#C0C0C0;
+  color: #C0C0C0;
 }
 
 /* Fix */
