@@ -1283,7 +1283,7 @@ class Automation {
                     $info_cat = $info_chief = $info_ram = $info_hero = ",";
                     
                     //check to see if can destroy village
-                    if (count($varray) > 1 && !$database->villageHasArtefact($DefenderWref)) {
+                    if (count($varray) > 1 && !$database->villageHasArtefact($DefenderWref) && !$to['natar']) {
                     	$can_destroy = 1;
                     }
                     else $can_destroy = 0;
