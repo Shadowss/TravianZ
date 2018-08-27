@@ -221,8 +221,16 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
             <td><?php echo NEW_FUNCTIONS_DISPLAY_ARTIFACT ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
 		<tr>
+            <td>Display wonder in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the wonder in the player profile, opposite the corresponding village in which it is located</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_DISPLAY_WONDER ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+		<tr>
             <td>Vacation Mode <em class="tooltip">?<span class="classic">Enable (Disable) vacation mode, will be displayed or hidden in the player profile menu</span></em></td>
             <td><?php echo NEW_FUNCTIONS_VACATION ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+		<tr>
+            <td>Catapult targets <em class="tooltip">?<span class="classic">Enable (Disable) the display of the targets of the catapults in the rally point that were sent by you</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
     </table>
     <table id="member">

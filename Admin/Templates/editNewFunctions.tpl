@@ -88,11 +88,29 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>
 				</tr>
 				<tr>
+					<td>Display wonder in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the wonder in the player profile, opposite the corresponding village in which it is located</span></em></td>
+					<td>
+						<select name="new_functions_display_wonder">
+							<option value="True" <?php if(NEW_FUNCTIONS_DISPLAY_WONDER == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_DISPLAY_WONDER == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<td>Vacation Mode <em class="tooltip">?<span class="classic">Enable (Disable) vacation mode, will be displayed or hidden in the player profile menu</span></em></td>
 					<td>
 						<select name="new_functions_vacation">
 							<option value="True" <?php if(NEW_FUNCTIONS_VACATION == true) echo "selected";?>>True</option>
 							<option value="False" <?php if(NEW_FUNCTIONS_VACATION == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Catapult targets <em class="tooltip">?<span class="classic">Enable (Disable) the display of the targets of the catapults in the rally point that were sent by you</span></em></td>
+					<td>
+						<select name="new_functions_display_catapult_target">
+							<option value="True" <?php if(NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET == false) echo "selected";?>>False</option>
 						</select>
 					</td>
 				</tr>

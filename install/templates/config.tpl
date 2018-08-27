@@ -337,9 +337,27 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
             </td>
         </tr>
 		<tr>
+            <td><span class="f9 c6">Display wonder in profile:</span></td>
+            <td>
+                <select name="new_functions_display_wonder">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+		<tr>
             <td><span class="f9 c6">Vacation Mode:</span></td>
             <td>
                 <select name="new_functions_vacation">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+		<tr>
+            <td><span class="f9 c6">Catapult targets:</span></td>
+            <td>
+                <select name="new_functions_display_catapult_target">
                     <option value="true">true</option>
                     <option value="false" selected="selected">false</option>
                 </select>

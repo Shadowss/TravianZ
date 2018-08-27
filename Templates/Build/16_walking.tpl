@@ -59,8 +59,9 @@ $to = $database->getOMInfo($units[$y]['to']);}
             }
             ?>
            </tr></tbody>
-        <?php if($units[$y]['t8'] > 0 && $units[$y]['attack_type'] == 3 && !$database->isVillageOases($units[$y]['to'])){ ?>
-        <tbody>
+        <?php if(NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET){
+			if($units[$y]['t8'] > 0 && $units[$y]['attack_type'] == 3 && !$database->isVillageOases($units[$y]['to'])){ ?>
+		<tbody>
 			<tr>
 				<th><?php echo CATAPULT_TARGET;?></th>
 				<td style="text-align: center" colspan="5">
@@ -71,7 +72,8 @@ $to = $database->getOMInfo($units[$y]['to']);}
 				</td>
 			</tr>
 		</tbody>
-		<?php } ?>
+			<?php }
+		} ?>
 		<tbody class="infos">
 			<tr>
 				<th><?php echo ARRIVAL;?></th>

@@ -150,7 +150,9 @@ class Process {
 		$findReplace["%NEW_FUNCTIONS_TRIBE_IMAGES%"] = $_POST['new_functions_tribe_images'];
 		$findReplace["%NEW_FUNCTIONS_MHS_IMAGES%"] = $_POST['new_functions_mhs_images'];
 		$findReplace["%NEW_FUNCTIONS_DISPLAY_ARTIFACT%"] = $_POST['new_functions_display_artifact'];
+		$findReplace["%NEW_FUNCTIONS_DISPLAY_WONDER%"] = $_POST['new_functions_display_wonder'];
 		$findReplace["%NEW_FUNCTIONS_VACATION%"] = $_POST['new_functions_vacation'];
+		$findReplace["%NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET%"] = $_POST['new_functions_display_catapult_target'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 
