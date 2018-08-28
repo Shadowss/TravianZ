@@ -8,7 +8,7 @@ body {
 }
 
 .center-img {
-  margin: 0;
+  margin: 0 0 15px 0;
   text-align: center;
 }
 
@@ -37,7 +37,7 @@ body {
 #lmidlc {position:relative; min-width:682px; float:left;}
 
 /* Div mit linkem Menue */
-#lleft {position:relative; width:130px; height:450px; z-index:3; float:left; left:0px; top:-7px;}
+#lleft {position:relative; width:230px; height:450px; z-index:3; float:left; left:0px; top:-7px;}
 
 /* Mittlerer Layer */
 #lmid1 {position:relative; width:552px; float:left; border:0px;}

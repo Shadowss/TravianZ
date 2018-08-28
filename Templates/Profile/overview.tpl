@@ -174,12 +174,12 @@ if($displayarray['vac_mode'] == 1) echo "<tr><th colspan='2'><font color='Maroon
             $hasArtifact = $database->villageHasArtefact($vil['wref']);
             $coor = $database->getCoor($vil['wref']);
             echo "<tr><td class=\"nam\"><a href=\"karte.php?d=".$vil['wref']."&amp;c=".$generator->getMapCheck($vil['wref'])."\">".$vil['name']."</a>";
-            if($vil['capital'] == 1) echo "<span class=\"none3\"> (capital)</span>";
+            if($vil['capital'] == 1) echo "<span class=\"none3\"> (Capital)</span>";
             if(NEW_FUNCTIONS_DISPLAY_ARTIFACT){
-                if($hasArtifact) echo "<span class=\"none3\"> (artifact)</span>";
+                if($hasArtifact) echo "<span class=\"none3\"> (Artifact)</span>";
             }
 			if(NEW_FUNCTIONS_DISPLAY_WONDER){
-				if($vil['natar'] == 1) echo "<span class=\"none3\"> (wonder)</span>";
+				if($vil['natar'] == 1) echo "<span class=\"none3\"> (WoW)</span>";
 			}
             
             if(NEW_FUNCTIONS_OASIS){

@@ -38,7 +38,7 @@ div.c1 {text-align: center}
         <a id="logo" href="<?php echo HOMEPAGE; ?>" name="logo"><img src="img/x.gif" <?php if($session->plus) { echo "class=\"logo_plus\""; } ?> alt="Travian"></a>
 
 
-        <p><a href="<?php echo HOMEPAGE; ?>"><?php echo HOME; ?></a> <a href="spieler.php?uid=<?php echo $session->uid; ?>"><?php echo PROFILE; ?></a> <a href="#" onclick="return Popup(0,0,1);"><?php echo INSTRUCT; ?></a> <?php if($session->access == MULTIHUNTER) {
+        <p><a href="<?php echo HOMEPAGE; ?>"><?php echo HOME; ?></a> <a href="#" onclick="return Popup(0,0,1);"><?php echo $lang['index'][0][2]; ?></a> <a href="spieler.php?uid=<?php echo $session->uid; ?>"><?php echo PROFILE; ?></a> <?php if($session->access == MULTIHUNTER) {
 
                     echo "<a href=\"Admin/admin.php\"><font color=\"Blue\">Multihunter Panel</font></a>";
                     } ?> <?php if($session->access == ADMIN) {
@@ -46,24 +46,21 @@ div.c1 {text-align: center}
                     echo "<a href=\"massmessage.php\">".MASS_MESSAGE."</a>";
                     echo "<a href=\"sysmsg.php\">".SYSTEM_MESSAGE."</a>";
                     } ?> <a href="logout.php"><?php echo LOGOUT;?></a></p>
-        <?php
-        	// no PLUS needed for Support
-        	if ($_SESSION['id_user'] != 1) {
-        ?>
         <p>
-            <a href="plus.php?id=3"><?php echo SERVER_NAME; ?> <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
+            <a href="allianz.php?s=2"><?php echo FORUM;?></a>
         </p>
-        <?php
-        	}
-        ?>
         <p>
-       		<a href="allianz.php?s=2"><b><?php echo FORUM;?></b></a>
-            <a href="rules.php"><b><?php echo GAME_RULES;?></b></a>
+		    <?php
+        	// no PLUS needed for Support
+        	    if ($_SESSION['id_user'] != 1) {
+            ?>
+			<a href="plus.php?id=3"><!--<?php echo SERVER_NAME; ?>-->Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
             <?php
+        	    }
             	// no support for support :-D
             	if ($_SESSION['id_user'] != 1) {
             ?>
-            <a href="spieler.php?uid=1"><b><?php echo SUPPORT;?></b></a>
+            <a href="spieler.php?uid=1"><?php echo SUPPORT;?></a>
             <?php
             	}
             	include("Templates/links.tpl");

@@ -480,7 +480,7 @@ if (!empty($_GET['p'])) {
 		</div>
 		<div id="lmidall">
 			<div id="lmidlc">
-				<div id="lleft" style="width: 230px;">
+				<div id="lleft">
 					<p class="center-img">
 						<a href="<?php echo HOMEPAGE; ?>"><img src="../img/en/a/travian0.gif" class="logo_plus" width="116" height="60" border="0"></a>
 					</p>
@@ -495,7 +495,7 @@ if (!empty($_GET['p'])) {
 						<li><a href="<?php echo HOMEPAGE; ?>">Server Homepage</a></li>
 						<li><a href="admin.php">Control Panel Home</a></li>
 						<li><a href="<?php echo rtrim(SERVER, '/'); ?>/dorf1.php">Return to the server</a></li>
-						<li><a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</b></font></a></li>
+						<!--<li><a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</b></font></a></li>-->
 						<li><a href="?action=logout">Logout</a></li>
 						<li class="sub"><a href="#">Server Info</a>
 							<ul>
