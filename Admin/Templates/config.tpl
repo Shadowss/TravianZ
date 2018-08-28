@@ -232,6 +232,10 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
             <td>Catapult targets <em class="tooltip">?<span class="classic">Enable (Disable) the display of the targets of the catapults in the rally point that were sent by you</span></em></td>
             <td><?php echo NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
+		<tr>
+            <td>Manual on Nature and Natars <em class="tooltip">?<span class="classic">Enable (Disable) displaying information in the Manual about the troops of Nature and Natars</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_MANUAL_NATURENATARS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
     </table>
     <table id="member">
         <thead>

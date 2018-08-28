@@ -3,14 +3,16 @@
 <img class="troops" src="img/x.gif" alt="Troops" title="Troops" />
 <img class="buildings" src="img/x.gif" alt="Buildings" title="Buildings" />
 <ul>
-    <li><a href="manual.php?s=1&amp;typ=1">The troops</a></li>
+<li><a href="manual.php?s=1&amp;typ=1">The troops</a></li>
 
 <ul>
 	<li><a href="manual.php?typ=2&amp;s=1">Romans</a></li>
 	<li><a href="manual.php?typ=2&amp;s=2">Teutons</a></li>
 	<li><a href="manual.php?typ=2&amp;s=3">Gauls</a></li>
+	<?php if(NEW_FUNCTIONS_MANUAL_NATURENATARS){ ?>
 	<li><a href="manual.php?typ=2&amp;s=4">Nature</a></li>
 	<li><a href="manual.php?typ=2&amp;s=5">Natars</a></li>
+	<?php } ?>
 </ul>
 
 <br />
@@ -23,8 +25,8 @@
 	<li><a href="manual.php?typ=3&amp;s=3">Infrastructure</a></li>
 </ul>
 
-    <br />
-    <li><a href="anleitung.php?s=3" target="_blank">Travian FAQ <img class="external" src="img/x.gif" alt="new window" title="new window" /></a><br>This ingame help just gives you brief information. More information is available at the <a href="http://travian.wikia.com/wiki/Travian_Wiki" target=blank>Fandom Travian Wiki</a>.</li><br />
+<br />
+<li><a href="anleitung.php?s=3" target="_blank">Travian FAQ <img class="external" src="img/x.gif" alt="new window" title="new window" /></a><br>This ingame help just gives you brief information. More information is available at the <a href="http://travian.wikia.com/wiki/Travian_Wiki" target=blank>Fandom Travian Wiki</a>.</li><br />
 </ul>
 <map id="nav" name="nav">
     <area href="manual.php?typ=3&amp;s=3" title="back" coords="0,0,45,18" shape="rect" alt="" />

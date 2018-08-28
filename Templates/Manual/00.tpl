@@ -6,11 +6,13 @@
 <li><a href="manual.php?s=1&amp;typ=2">The troops</a></li>
 
 <ul>
-    <li><a href="manual.php?typ=2&amp;s=1">Romans</a></li>
-    <li><a href="manual.php?typ=2&amp;s=2">Teutons</a></li>
-    <li><a href="manual.php?typ=2&amp;s=3">Gauls</a></li>
-    <li><a href="manual.php?typ=2&amp;s=4">Nature</a></li>
-    <li><a href="manual.php?typ=2&amp;s=5">Natars</a></li>
+	<li><a href="manual.php?typ=2&amp;s=1">Romans</a></li>
+	<li><a href="manual.php?typ=2&amp;s=2">Teutons</a></li>
+	<li><a href="manual.php?typ=2&amp;s=3">Gauls</a></li>
+	<?php if(NEW_FUNCTIONS_MANUAL_NATURENATARS){ ?>
+	<li><a href="manual.php?typ=2&amp;s=4">Nature</a></li>
+	<li><a href="manual.php?typ=2&amp;s=5">Natars</a></li>
+	<?php } ?>
 </ul>
 
 <br />

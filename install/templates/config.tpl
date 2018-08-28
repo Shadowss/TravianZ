@@ -363,6 +363,15 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 </select>
             </td>
         </tr>
+		<tr>
+            <td><span class="f9 c6">Manual on Nature and Natars:</span></td>
+            <td>
+                <select name="new_functions_manual_naturenatars">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
     </table>
     </p>
     <p>

@@ -114,6 +114,15 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<td>Manual on Nature and Natars <em class="tooltip">?<span class="classic">Enable (Disable) displaying information in the Manual about the troops of Nature and Natars</span></em></td>
+					<td>
+						<select name="new_functions_manual_naturenatars">
+							<option value="True" <?php if(NEW_FUNCTIONS_MANUAL_NATURENATARS == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_MANUAL_NATURENATARS == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<br />

@@ -115,6 +115,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_WONDER%'", $_POST['new_functions_display_wonder'], $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_VACATION%'", $_POST['new_functions_vacation'], $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET%'", $_POST['new_functions_display_catapult_target'], $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_MANUAL_NATURENATARS%'", $_POST['new_functions_manual_naturenatars'], $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);
