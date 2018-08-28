@@ -16,7 +16,7 @@
 #################################################################################
 
 if(isset($_GET['err']) && $_GET['err'] == 1) {
-	echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">At least MultiHunter &amp; Support password are required in this form.</span></div><br /><br />";
+	echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">At least Multihunter &amp; Support password are required in this form.</span></div><br /><br />";
 }
 
 if(isset($_GET['err']) && $_GET['err'] == 2) {

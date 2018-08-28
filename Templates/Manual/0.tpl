@@ -3,7 +3,7 @@
 <img class="troops" src="img/x.gif" alt="Troops" title="Troops" />
 <img class="buildings" src="img/x.gif" alt="Buildings" title="Buildings" />
 <ul>
-<li><a href="manual.php?s=1&amp;typ=1">The troops</a></li>
+<li><a href="manual.php?s=1&amp;typ=2">The troops</a></li>
 
 <ul>
 	<li><a href="manual.php?typ=2&amp;s=1">Romans</a></li>

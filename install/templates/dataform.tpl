@@ -33,17 +33,17 @@ if(isset($_GET['err']) && $_GET['err'] == 1) {
 		<table>
 			<tr>
 				<td>
-					Warning: This can take some time. Please wait until the next page has been loaded. Click Create to proceed...
-					<br />
-					<br />
+					<b>Warning</b>: This can take some time. Please wait until the next page has been loaded. Click Create to proceed...
+					<br>
+					<br>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					<center>
-						<input type="submit" name="Submit" id="Submit" value="Create" onClick="return proceed()" />
-						<br />
-						<br />
+						<input type="submit" name="Submit" id="Submit" value="Create..." onClick="return proceed()">
+						<br>
+						<br>
 					</center>
 				</td>
 			</tr>

@@ -26,14 +26,29 @@ echo "<br /><hr /><br /><div class=\"headline\"><span class=\"f10 c5\">Existing 
 }
 ?>
 <form action="process.php" method="post" id="dataform">
-<input type="hidden" name="subwdata" value="1">
-
-        <p>
-        <span class="f10 c">Create World Data</span>
-<table>
-<tr><td><b>Warning</b>: This can take some time. Wait till the next page has been loaded! Click Create to proceed..</td></tr>
-<tr><td><center><input type="submit" name="Submit" id="Submit" value="Create.." onClick="return proceed()"></center></td></tr>
-</table>
-        </p>
+	<input type="hidden" name="subwdata" value="1">
+	
+	<p>
+		<span class="f10 c">Create World Data</span>
+		
+		<table>
+			<tr>
+				<td>
+					<b>Warning</b>: This can take some time. Please wait until the next page has been loaded. Click Create to proceed...
+					<br>
+					<br>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<center>
+						<input type="submit" name="Submit" id="Submit" value="Create..." onClick="return proceed()">
+						<br>
+						<br>
+					</center>
+				</td>
+			</tr>
+		</table>
+	</p>
 </form>
 </div>
