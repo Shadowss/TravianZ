@@ -46,6 +46,9 @@ else $search = $_SESSION['search'];
              }
          }
          else echo "<td class=\"none\" colspan=\"5\">No villages found</td>";
+		 ?>
+ </tbody>
+</table>
+<?php
 include("ranksearch.tpl");
 ?>
-</tbody></table>
