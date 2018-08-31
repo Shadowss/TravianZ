@@ -123,6 +123,33 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<td>Direct links placement <em class="tooltip">?<span class="classic">If Enabled, then the Direct links will be placed in the left menu, if Disabled then Direct links will be placed in the right menu as in the original Travian</span></em></td>
+					<td>
+						<select name="new_functions_display_links">
+							<option value="True" <?php if(NEW_FUNCTIONS_DISPLAY_LINKS == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_DISPLAY_LINKS == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Medal Veteran Player <em class="tooltip">?<span class="classic">Enable (Disable) medal achieved for playing 3 years of Travian</span></em></td>
+					<td>
+						<select name="new_functions_medal_3year">
+							<option value="True" <?php if(NEW_FUNCTIONS_MEDAL_3YEAR == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_MEDAL_3YEAR == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Medal Veteran Player 5a <em class="tooltip">?<span class="classic">Enable (Disable) medal achieved for playing 5 years of Travian</span></em></td>
+					<td>
+						<select name="new_functions_medal_5year">
+							<option value="True" <?php if(NEW_FUNCTIONS_MEDAL_5YEAR == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_MEDAL_5YEAR == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<br />

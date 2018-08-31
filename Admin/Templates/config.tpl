@@ -236,6 +236,18 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
             <td>Manual on Nature and Natars <em class="tooltip">?<span class="classic">Enable (Disable) displaying information in the Manual about the troops of Nature and Natars</span></em></td>
             <td><?php echo NEW_FUNCTIONS_MANUAL_NATURENATARS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
+		<tr>
+            <td>Direct links placement <em class="tooltip">?<span class="classic">If Enabled, then the Direct links will be placed in the left menu, if Disabled then Direct links will be placed in the right menu as in the original Travian</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_DISPLAY_LINKS ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+		<tr>
+            <td>Medal Veteran Player <em class="tooltip">?<span class="classic">Enable (Disable) medal achieved for playing 3 years of Travian</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_MEDAL_3YEAR ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+		<tr>
+            <td>Medal Veteran Player 5a <em class="tooltip">?<span class="classic">Enable (Disable) medal achieved for playing 5 years of Travian</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_MEDAL_5YEAR ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
     </table>
     <table id="member">
         <thead>

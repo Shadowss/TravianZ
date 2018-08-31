@@ -372,6 +372,33 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 </select>
             </td>
         </tr>
+		<tr>
+            <td><span class="f9 c6">Direct links placement:</span></td>
+            <td>
+                <select name="new_functions_display_links">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+		<tr>
+            <td><span class="f9 c6">Medal Veteran Player:</span></td>
+            <td>
+                <select name="new_functions_medal_3year">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
+		<tr>
+            <td><span class="f9 c6">Medal Veteran Player 5a:</span></td>
+            <td>
+                <select name="new_functions_medal_5year">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
     </table>
     </p>
     <p>

@@ -100,9 +100,12 @@ $profiel = preg_replace("/\[#TASKMASTER]/is",'<img src="'.$gpack.'img/t/taskmast
 }
 
 //veteran & veteran_5a IMAGES
-
-        $profiel = preg_replace("/\[#g2300]/is",'<img src="'.$gpack.'img/t/Veteran_Medal.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player<br><br>Medal achieved for playing 3 years of Travian.</td></tr></table>\')">', $profiel, 1);
-        $profiel = preg_replace("/\[#g2301]/is",'<img src="'.$gpack.'img/t/5year_medal.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player 5a<br><br>Medal achieved for playing 5 years of Travian.</td></tr></table>\')">', $profiel, 1);
+if(NEW_FUNCTIONS_MEDAL_3YEAR){
+	$profiel = preg_replace("/\[#g2300]/is",'<img src="'.$gpack.'img/t/Veteran_Medal.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player<br><br>Medal achieved for playing 3 years of Travian.</td></tr></table>\')">', $profiel, 1);
+}
+if(NEW_FUNCTIONS_MEDAL_5YEAR){
+	$profiel = preg_replace("/\[#g2301]/is",'<img src="'.$gpack.'img/t/5year_medal.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player 5a<br><br>Medal achieved for playing 5 years of Travian.</td></tr></table>\')">', $profiel, 1);
+}
 
 
 //de lintjes
@@ -139,56 +142,54 @@ switch ($medal['categorie']) {
         $titel="Robbers of the week";
 		$woord="Resources";
         break;
-	 case "5":
+	case "5":
         $titel="Receiving this medal shows that you where in the top 10 of both Attackers and Defenders of the week.";
         $bonus[$medal['id']]=1;
 		break;
-	 case "6":
+	case "6":
         $titel="Receiving this medal shows that you were in the top 3 Attackers of the week ".$medal['points']." in a row";
         $bonus[$medal['id']]=1;
 		break;
-	 case "7":
+	case "7":
         $titel="Receiving this medal shows that you were in the top 3 Defenders of the week ".$medal['points']." in a row";
         $bonus[$medal['id']]=1;
 		break;
-	 case "8":
+	case "8":
         $titel="Receiving this medal shows that you were in the top 3 Pop Climbers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
 		break;
-	 case "9":
+	case "9":
         $titel="Receiving this medal shows that you were in the top 3 Robbers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
 		break;
-     	 case "10":
+    case "10":
         $titel="Rank Climbers of the week.";
         $woord="Ranks";
         break;
-         case "11":
+    case "11":
         $titel="Receiving this medal shows that you were in the top 3 Rank Climbers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
         break;
-         case "12":
+    case "12":
         $titel="Receiving this medal shows that you were in the top 10 Attackers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
         break;
-        case "13":
+    case "13":
         $titel="Receiving this medal shows that you were in the top 10 Defenders of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
         break;
-        case "14":
+    case "14":
         $titel="Receiving this medal shows that you were in the top 10 Pop Climbers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
         break;
-        case "15":
+    case "15":
         $titel="Receiving this medal shows that you were in the top 10 Robbers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
         break;
-        case "16":
+    case "16":
         $titel="Receiving this medal shows that you were in the top 10 Rank Climbers of the week ".$medal['points']." in a row.";
         $bonus[$medal['id']]=1;
         break;
-
-
 }
 
 if(isset($bonus[$medal['id']])){

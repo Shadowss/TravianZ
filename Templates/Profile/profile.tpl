@@ -166,19 +166,25 @@ MEDAL CATEGORY:
 				   <td></td>
 				   <td>[#0]</td>
 			 	 </tr>
-				 <tr>
-				   <td>veteran</td>
-				   <td></td>
-				   <td></td>
-				   <td>[#g2300]</td>
-			 	 </tr>
-				 <tr>
-				   <td>veteran_5a</td>
-				   <td></td>
-				   <td></td>
-				   <td>[#g2301]</td>
-			 	 </tr>
-				<?php
+				 <?php
+				 if(NEW_FUNCTIONS_MEDAL_3YEAR){
+					 echo "<tr>
+						<td>veteran</td>
+						<td></td>
+						<td></td>
+						<td>[#g2300]</td>
+					 </tr>";
+				 }
+				 
+				 if(NEW_FUNCTIONS_MEDAL_5YEAR){
+					 echo "<tr>
+						<td>veteran_5a</td>
+						<td></td>
+						<td></td>
+						<td>[#g2301]</td>
+					 </tr>";
+				 }
+				 
 				// Added by Shadow - cata7007@gmail.com / Skype : cata7007
 				if(NEW_FUNCTIONS_TRIBE_IMAGES){
 					if($session->userinfo['tribe'] == 1){

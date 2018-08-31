@@ -85,6 +85,10 @@ include("Templates/Packages/5.tpl");
 include("Templates/multivillage.tpl");
 include("Templates/quest.tpl");
 include("Templates/news.tpl");
+if(!NEW_FUNCTIONS_DISPLAY_LINKS) {
+	echo "<br><br><br><br>";
+	include("Templates/links.tpl");
+}
 ?>
 </div>
 <div class="clear"></div>

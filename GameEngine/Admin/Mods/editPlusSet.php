@@ -42,6 +42,9 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEW_FUNCTIONS_VACATION = (NEW_FUNCTIONS_VACATION == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET = (NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MANUAL_NATURENATARS = (NEW_FUNCTIONS_MANUAL_NATURENATARS == false ? 'false' : 'true');
+		$NEW_FUNCTIONS_DISPLAY_LINKS = (NEW_FUNCTIONS_DISPLAY_LINKS == false ? 'false' : 'true');
+		$NEW_FUNCTIONS_MEDAL_3YEAR = (NEW_FUNCTIONS_MEDAL_3YEAR == false ? 'false' : 'true');
+		$NEW_FUNCTIONS_MEDAL_5YEAR = (NEW_FUNCTIONS_MEDAL_5YEAR == false ? 'false' : 'true');
 
 		// SERVER SETTINGS - we need to keep these intact
 		$text = preg_replace("'%ERRORREPORT%'", ERROR_REPORT, $text);
@@ -126,6 +129,9 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTIONS_VACATION%'", $NEW_FUNCTIONS_VACATION, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET%'", $NEW_FUNCTIONS_DISPLAY_CATAPULT_TARGET, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MANUAL_NATURENATARS%'", $NEW_FUNCTIONS_MANUAL_NATURENATARS, $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_DISPLAY_LINKS%'", $NEW_FUNCTIONS_DISPLAY_LINKS, $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_3YEAR%'", $NEW_FUNCTIONS_MEDAL_3YEAR, $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_5YEAR%'", $NEW_FUNCTIONS_MEDAL_5YEAR, $text);
 
 		// PLUS SETTINGS
 		$text = preg_replace("'%PLUS_TIME%'", $_POST['plus_time'], $text);
