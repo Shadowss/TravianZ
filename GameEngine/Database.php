@@ -1902,7 +1902,7 @@ class MYSQLi_DB implements IDbConnection {
 
         switch ($mode) {
             // by owner ID
-            case 0: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner IN(".implode(', ', $uid).") ORDER BY capital DESC,pop DESC";
+            case 0: $q = "SELECT * FROM " . TB_PREFIX . "vdata WHERE owner IN(".implode(', ', $uid).") ORDER BY pop DESC";
                     break;
 
             // capital villages where owner is a real player (i.e. not Natars etc.)
@@ -7796,7 +7796,7 @@ References: User ID/Message ID, Mode
     // no need to cache this method
 	function getArrayMemberVillage($uid) {
 	    list($uid) = $this->escape_input((int) $uid);
-		$q = 'SELECT a.wref, a.name, b.x, b.y from '.TB_PREFIX.'vdata AS a left join '.TB_PREFIX.'wdata AS b ON b.id = a.wref where owner = '.$uid.' order by capital DESC,pop DESC';
+		$q = 'SELECT a.wref, a.name, b.x, b.y from '.TB_PREFIX.'vdata AS a left join '.TB_PREFIX.'wdata AS b ON b.id = a.wref where owner = '.$uid.' ORDER BY name ASC';
 		$result = mysqli_query($this->dblink,$q);
 		$array = $this->mysqli_fetch_all($result);
 		return $array;
