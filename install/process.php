@@ -157,6 +157,7 @@ class Process {
 		$findReplace["%NEW_FUNCTIONS_DISPLAY_LINKS%"] = $_POST['new_functions_display_links'];
 		$findReplace["%NEW_FUNCTIONS_MEDAL_3YEAR%"] = $_POST['new_functions_medal_3year'];
 		$findReplace["%NEW_FUNCTIONS_MEDAL_5YEAR%"] = $_POST['new_functions_medal_5year'];
+		$findReplace["%NEW_FUNCTIONS_MEDAL_10YEAR%"] = $_POST['new_functions_medal_10year'];
 
 		fwrite($gameConfig, str_replace(array_keys($findReplace), array_values($findReplace), $text));
 

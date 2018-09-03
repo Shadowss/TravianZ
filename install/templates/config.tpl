@@ -399,6 +399,15 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 </select>
             </td>
         </tr>
+		<tr>
+            <td><span class="f9 c6">Medal Veteran Player 10a:</span></td>
+            <td>
+                <select name="new_functions_medal_10year">
+                    <option value="true">true</option>
+                    <option value="false" selected="selected">false</option>
+                </select>
+            </td>
+        </tr>
     </table>
     </p>
     <p>

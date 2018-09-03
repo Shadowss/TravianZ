@@ -106,6 +106,9 @@ if(NEW_FUNCTIONS_MEDAL_3YEAR){
 if(NEW_FUNCTIONS_MEDAL_5YEAR){
 	$profiel = preg_replace("/\[#g2301]/is",'<img src="'.$gpack.'img/t/5year_medal.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player 5a<br><br>Medal achieved for playing 5 years of Travian.</td></tr></table>\')">', $profiel, 1);
 }
+if(NEW_FUNCTIONS_MEDAL_10YEAR){
+	$profiel = preg_replace("/\[#g2302]/is",'<img src="'.$gpack.'img/t/10_year_medal.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Veteran Player 10a<br><br>Medal achieved for playing 10 years of Travian.</td></tr></table>\')">', $profiel, 1);
+}
 
 
 //de lintjes

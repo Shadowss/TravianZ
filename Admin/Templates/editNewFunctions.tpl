@@ -88,7 +88,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 					</td>
 				</tr>
 				<tr>
-					<td>Display wonder in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the wonder in the player profile, opposite the corresponding village in which it is located</span></em></td>
+					<td>Display WoW in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the wonder in the player profile, opposite the corresponding village in which it is located</span></em></td>
 					<td>
 						<select name="new_functions_display_wonder">
 							<option value="True" <?php if(NEW_FUNCTIONS_DISPLAY_WONDER == true) echo "selected";?>>True</option>
@@ -147,6 +147,15 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 						<select name="new_functions_medal_5year">
 							<option value="True" <?php if(NEW_FUNCTIONS_MEDAL_5YEAR == true) echo "selected";?>>True</option>
 							<option value="False" <?php if(NEW_FUNCTIONS_MEDAL_5YEAR == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>Medal Veteran Player 10a <em class="tooltip">?<span class="classic">Enable (Disable) medal achieved for playing 10 years of Travian</span></em></td>
+					<td>
+						<select name="new_functions_medal_10year">
+							<option value="True" <?php if(NEW_FUNCTIONS_MEDAL_10YEAR == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_MEDAL_10YEAR == false) echo "selected";?>>False</option>
 						</select>
 					</td>
 				</tr>

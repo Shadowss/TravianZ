@@ -221,7 +221,7 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
             <td><?php echo NEW_FUNCTIONS_DISPLAY_ARTIFACT ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
 		<tr>
-            <td>Display wonder in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the wonder in the player profile, opposite the corresponding village in which it is located</span></em></td>
+            <td>Display WoW in profile <em class="tooltip">?<span class="classic">Enable (Disable) the display of the wonder in the player profile, opposite the corresponding village in which it is located</span></em></td>
             <td><?php echo NEW_FUNCTIONS_DISPLAY_WONDER ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
 		<tr>
@@ -247,6 +247,10 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<tr>
             <td>Medal Veteran Player 5a <em class="tooltip">?<span class="classic">Enable (Disable) medal achieved for playing 5 years of Travian</span></em></td>
             <td><?php echo NEW_FUNCTIONS_MEDAL_5YEAR ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
+        </tr>
+		<tr>
+            <td>Medal Veteran Player 10a <em class="tooltip">?<span class="classic">Enable (Disable) medal achieved for playing 10 years of Travian</span></em></td>
+            <td><?php echo NEW_FUNCTIONS_MEDAL_10YEAR ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></td>
         </tr>
     </table>
     <table id="member">

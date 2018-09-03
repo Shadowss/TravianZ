@@ -185,6 +185,15 @@ MEDAL CATEGORY:
 					 </tr>";
 				 }
 				 
+				 if(NEW_FUNCTIONS_MEDAL_10YEAR){
+					 echo "<tr>
+						<td>veteran_10a</td>
+						<td></td>
+						<td></td>
+						<td>[#g2302]</td>
+					 </tr>";
+				 }
+				 
 				// Added by Shadow - cata7007@gmail.com / Skype : cata7007
 				if(NEW_FUNCTIONS_TRIBE_IMAGES){
 					if($session->userinfo['tribe'] == 1){

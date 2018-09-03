@@ -54,7 +54,7 @@ div.c1 {text-align: center}
         	// no PLUS needed for Support
         	    if ($_SESSION['id_user'] != 1) {
             ?>
-			<a href="plus.php?id=3"><!--<?php echo SERVER_NAME; ?>-->Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
+			<a href="plus.php?id=3"><!--<?php echo SERVER_NAME; ?>-->TravianZ <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
             <?php
         	    }
             	// no support for support :-D
