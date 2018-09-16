@@ -75,11 +75,11 @@ else{
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl");
+<?php include("templates/menu.tpl");
 if(isset($_GET['d']) && !empty($_GET['d']) && isset($_GET['c']) && !empty($_GET['c'])) {
-    if($generator->getMapCheck($_GET['d']) == $_GET['c']) include("Templates/Map/vilview.tpl");
+    if($generator->getMapCheck($_GET['d']) == $_GET['c']) include("templates/Map/vilview.tpl");
 	else 
 	{
 		header("Location: dorf1.php");
@@ -87,14 +87,14 @@ if(isset($_GET['d']) && !empty($_GET['d']) && isset($_GET['c']) && !empty($_GET[
 	}
 }
 else {
-	include("Templates/Map/mapview.tpl");
+	include("templates/Map/mapview.tpl");
 }
 ?>
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -103,8 +103,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

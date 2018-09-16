@@ -78,10 +78,10 @@ function chkFormular () {
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
-<?php include("Templates/support.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
+<?php include("templates/support.tpl"); ?>
 <h1>Support</h1>
 <p>You can use the following form to submit your request to the Support.<br />Please take a bit of time to answer the form questions in as much detail as possible, so that we can answer your request quickly and in length. <br />Please note that without a valid email address, your request will not get processed.
 <br><br><b>Bug reports, login errors, general questions and feedback</b></p>
@@ -143,9 +143,9 @@ function chkFormular () {
 </div>
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -154,8 +154,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

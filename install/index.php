@@ -131,7 +131,7 @@ function proceed() {
 
 		<div class="clear"></div>
 
-<?php include("../Templates/footer.tpl"); ?>
+<?php include("../templates/footer.tpl"); ?>
 	</div>
 
 	<div id="ce"></div>

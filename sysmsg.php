@@ -104,9 +104,9 @@ if (@isset($_POST['confirm']))
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
 
 <div id="content"  class="login">
 <?php if (@!$NextStep && @!$NextStep2 && @!$done){?>
@@ -174,7 +174,7 @@ System Message was sent
 			<div class="footer-stopper outgame"></div>
 			<div class="clear"></div>
 
-<?php include("Templates/footer.tpl"); ?>
+<?php include("templates/footer.tpl"); ?>
 <div id="ce"></div>
 </body>
 </html>

@@ -1,18 +1,18 @@
 <?php
-#################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
-## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Filename       Math.php                                                    ##
-##  Developed by:  martinambrus                                                ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2017. All rights reserved.                ##
-##  URLs:          https://travian.martinambrus.com                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
-#################################################################################
 
-namespace App\Utils;
+/*
+ * This file is part of the TravianZ Project
+ *
+ * Source code: <https://github.com/Shadowss/TravianZ/>
+ *
+ * Author: martinambrus <https://github.com/martinambrus>
+ *
+ * License: GNU GPL-3.0 <https://github.com/Shadowss/TravianZ/blob/master/LICENSE>
+ *
+ * Copyright 2010-2018 TravianZ Team
+ */
+
+namespace TravianZ\Utils;
 
 /**
  *
@@ -21,14 +21,40 @@ namespace App\Utils;
  * @author martinambrus
  *
  */
-class Math {
+class Math
+{
 
-    public static function isInt($val) {
-        return (is_numeric($val) && intval($val) === $val);
+    /**
+     * Determines if a number is integer
+     * 
+     * @param mixed $val
+     * @return bool
+     */
+    public static function isInt($val): bool
+    {
+        return (is_numeric($val) && intval($val) == $val);
     }
 
-    public static function isFloat($val) {
-        return (is_numeric($val) && floatval($val) === $val);
+    /**
+     * Determines if a number is float
+     * 
+     * @param mixed $val
+     * @return bool
+     */
+    public static function isFloat($val): bool
+    {
+        return (is_numeric($val) && floatval($val) == $val);
     }
-
+    
+    /**
+     * Round a number to the nearest integer precision
+     *
+     * @param number $number The number
+     * @param int $precision The precision
+     * @return int Returns the rounded number
+     */
+    public static function roundWithPrecision($number, int $precision): int
+    {
+        return (int) ($precision * round($number / $precision));
+    }
 }

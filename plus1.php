@@ -55,9 +55,9 @@ else {
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
 <?php
 if(isset($_GET['id'])) {
 $id = $_GET['id'];
@@ -65,16 +65,16 @@ $id = $_GET['id'];
 $id = "";
 }
 if ($id == 110) {
-include("Templates/Plus/110.tpl");
+include("templates/Plus/110.tpl");
 }
 if ($id == 111) {
-include("Templates/Plus/111.tpl");
+include("templates/Plus/111.tpl");
 }
 if ($id == 112) {
-include("Templates/Plus/112.tpl");
+include("templates/Plus/112.tpl");
 }
 if ($id == 113) {
-include("Templates/Plus/113.tpl");
+include("templates/Plus/113.tpl");
 }
 if ($id == 114) {
 include("Templates/Plus/114.tpl");
@@ -83,7 +83,7 @@ if ($id == 116) {
 include("Templates/Plus/116.tpl");
 }
 if ($id == 3110) {
-include("Templates/Plus/3110.tpl");
+include("templates/Plus/3110.tpl");
 }
 ?>
 
@@ -91,8 +91,8 @@ include("Templates/Plus/3110.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

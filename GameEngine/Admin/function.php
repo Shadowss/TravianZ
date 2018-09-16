@@ -17,6 +17,8 @@
 // # Source code: https://github.com/Shadowss/TravianZ ##
 // # ##
 // ################################################################################
+use TravianZ\Village\Units;
+
 include_once("../GameEngine/Artifacts.php");
 include_once("../GameEngine/Units.php");
 include_once("../GameEngine/Generator.php");
@@ -74,7 +76,7 @@ class funct
                 // add ban
                 break;
             case "delOas":
-                $units->returnTroops($get['did'], 1);
+                Units::returnTroops($get['did'], 1);
                 $database->removeOases($get['oid']);
                 break;
             case "logout":

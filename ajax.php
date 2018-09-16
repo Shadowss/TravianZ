@@ -41,10 +41,10 @@ switch($_GET['f']) {
 		$yy = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['yy']);
 		$howmany = $x - $xx;
 		if($howmany == 12 || $howmany == -12) {
-			include("Templates/Ajax/mapscroll2.tpl");
+			include("templates/Ajax/mapscroll2.tpl");
 		}
 		else {
-		include("Templates/Ajax/mapscroll.tpl");
+		include("templates/Ajax/mapscroll.tpl");
 		}
 		break;
 	case 'kp':
@@ -72,9 +72,9 @@ switch($_GET['f']) {
         session_start();
     }
     if (isset($_SESSION['qtyp']) && $_SESSION['qtyp']==37) {
-        include("Templates/Ajax/quest_core.tpl");
+        include("templates/Ajax/quest_core.tpl");
     }else{
-        include("Templates/Ajax/quest_core25.tpl");
+        include("templates/Ajax/quest_core25.tpl");
     }    
         break;
 }

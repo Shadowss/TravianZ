@@ -39,3 +39,6 @@ GameEngine/Admin/Mods/constant_format.tpl
 # These 2 files change frequently on the server but not in the repository code.
 Templates/text.tpl
 var/log/access.log
+/test.php
+/templates_c/
+/composer.phar

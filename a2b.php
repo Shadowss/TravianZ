@@ -12,7 +12,7 @@ $start_timer = $generator->pageLoadTimeStart();
 // # ##
 // ################################################################################
 
-use App\Utils\AccessLogger;
+use TravianZ\Utils\AccessLogger;
 
 include_once ("GameEngine/Village.php");
 AccessLogger::logRequest();
@@ -123,29 +123,29 @@ echo GP_LOCATE;
 		<div id="dynamic_header"></div>
 <?php
 
-include("Templates/header.tpl");
+include("templates/header.tpl");
 
 ?>
 <div id="mid">
 <?php
 
-include("Templates/menu.tpl");
+include("templates/menu.tpl");
 
 ?>
 <div id="content" class="a2b">
 <?php
 
 if(!empty($id)){
-	include ("Templates/a2b/newdorf.tpl");
+	include ("templates/sendUnits/newVillage.tpl");
 }else if(isset($w)){
 	$enforce = $database->getEnforceArray($w, 0);
 	if($enforce['vref'] == $village->wid){
 		$to = $database->getVillage($enforce['from']);
 		$ckey = $w;
-		include("Templates/a2b/sendback.tpl");
+		include("templates/sendUnits/sendBack.tpl");
 	}else{
 		include("Templates/a2b/units_".$session->tribe.".tpl");
-		include("Templates/a2b/search.tpl");
+		include("templates/sendUnits/search.tpl");
 	}
 }else if(isset($r)){
 	$enforce = $database->getEnforceArray($r, 0);
@@ -153,19 +153,19 @@ if(!empty($id)){
 	if($enforce['from'] == $village->wid || $enforceoasis['conqured'] == $village->wid){
 		$to = $database->getVillage($enforce['from']);
 		$ckey = $r;
-		include("Templates/a2b/sendback.tpl");
+		include("templates/sendUnits/sendBack.tpl");
 	}else{
 		include ("Templates/a2b/units_".$session->tribe.".tpl");
-		include("Templates/a2b/search.tpl");
+		include("templates/sendUnits/search.tpl");
 	}
 }else if(isset($delprisoners) && !empty($delprisoners)) $units->deletePrisoners($delprisoners);
 else{
 	if(isset($process['0'])){
 		$coor = $database->getCoor($process['0']);
-		include("Templates/a2b/attack.tpl");
+		include("templates/sendUnits/attack.tpl");
 	}else{
 		include("Templates/a2b/units_".$session->tribe.".tpl");
-		include("Templates/a2b/search.tpl");
+		include("templates/sendUnits/search.tpl");
 	}
 }
 ?>
@@ -176,9 +176,9 @@ else{
 				<br />
 				<div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 				<div class="clear"></div>
@@ -187,8 +187,8 @@ include("Templates/news.tpl");
 			<div class="clear"></div>
 <?php
 
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 
 ?>
 <div id="stime">

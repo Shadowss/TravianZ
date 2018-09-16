@@ -12,7 +12,7 @@ include_once("../GameEngine/Generator.php");
 include_once("../GameEngine/Technology.php");
 include_once("../GameEngine/Message.php");
 
-if(isset($_GET['nid']) && is_numeric($_GET['nid'])) $msg = $database->getMessage($_GET['nid'], 3);
+if(isset($_GET['nid']) && is_numeric($_GET['nid'])) $msg = $database->getMessage($_GET['nid'], 3, $session->access, $session->uid);
 else
 {
     $sql = "SELECT * FROM " . TB_PREFIX . "mdata ORDER BY time DESC ";

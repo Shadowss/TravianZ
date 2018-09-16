@@ -1,17 +1,18 @@
 <?php
-#################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
-## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Filename       IDbConnection.php                                           ##
-##  Developed by:  martinambrus                                                ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2017. All rights reserved.                ##
-##  URLs:          https://travian.martinambrus.com                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
-#################################################################################
-namespace App\Database;
+
+/*
+ * This file is part of the TravianZ Project
+ *
+ * Source code: <https://github.com/Shadowss/TravianZ/>
+ *
+ * Author: martinambrus <https://github.com/martinambrus>
+ *
+ * License: GNU GPL-3.0 <https://github.com/Shadowss/TravianZ/blob/master/LICENSE>
+ *
+ * Copyright 2010-2018 TravianZ Team
+ */
+
+namespace TravianZ\Database;
 
 /**
  * Defines database connection class structure
@@ -50,10 +51,10 @@ interface IDbConnection {
      * 
      * @return bool Returns true if a connection exists, false otherwise.
      */
-    public function is_connected();
+    public function isConnected();
     
     /**
-     * Prepares and executes a MySQL query and returns the result.
+     * Prepares and executes a MySQLi query and returns the result.
      * -> SELECT statements will return a mysqli_result
      * -> INSERT, UPDATE, DELETE, REPLACE statements will return an integer
      *    (last insert ID for INSERTs, number of affected rows for everything else)
@@ -69,6 +70,6 @@ interface IDbConnection {
      * @return mixed  Returns either a mysqli_result or a number. If number is returned, it will be last insert ID
      *                for INSERTs or number of affected rows for anything else.
      */
-    public function query_new($statement, ...$params);
+    public function queryNew(string $statement, ...$params);
 }
 

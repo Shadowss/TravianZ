@@ -1,0 +1,10 @@
+<div id="raidListSlot">
+	<h4>{$smarty.const.ADD_RAID}</h4>
+
+	{include file=$smarty.const.TEMPLATES_DIR|cat:'error.tpl'}
+
+	<form action="build.php?id={$parameters['id']}&t=3" method="post">	
+		{include file=$smarty.const.TEMPLATES_DIR|cat:'goldClub/farmListRaid.tpl'}
+		<button type="submit" value="createFarmListRaid" name="action" id="save" class="trav_buttons">{$smarty.const.CREATE}</button>
+	</form>
+</div>

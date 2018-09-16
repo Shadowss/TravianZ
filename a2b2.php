@@ -62,10 +62,10 @@ else $building->procBuild($_GET);
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
-<?php include("Templates/Plus/pmenu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
+<?php include("templates/Plus/pmenu.tpl"); ?>
 <h1>Account transactions</h1>
 <div id="products">
 <?php
@@ -342,9 +342,9 @@ $golds1 = mysqli_fetch_array($MyGold);
 </div>
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -353,8 +353,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

@@ -88,63 +88,63 @@ else $building->procBuild($_GET);
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
 <?php
 if(isset($_GET['id'])){
 	$id = preg_replace("/[^a-zA-Z0-9_-]/", "", $_GET['id']);
 } 
 else $id = "";
 
-if(empty($id)) include ("Templates/Plus/1.tpl");
+if(empty($id)) include ("templates/Plus/1.tpl");
 
 if($id == 1){
-	include ("Templates/Plus/3.tpl");
+	include ("templates/Plus/3.tpl");
 }
 if($id == 2){
-	include ("Templates/Plus/2.tpl");
+	include ("templates/Plus/2.tpl");
 }
 if($id == 3){
-	include ("Templates/Plus/3.tpl");
+	include ("templates/Plus/3.tpl");
 }
 if($id == 4){
-	include ("Templates/Plus/4.tpl");
+	include ("templates/Plus/4.tpl");
 }
 if(isset($_GET['mail']) && $id == 5){
-	include ("Templates/Plus/invite.tpl");
+	include ("templates/Plus/invite.tpl");
 }else if($id == 5){
-	include ("Templates/Plus/5.tpl");
+	include ("templates/Plus/5.tpl");
 }
 if($id == 7){
-	include ("Templates/Plus/7.tpl");
+	include ("templates/Plus/7.tpl");
 }
 if($id == 8){
-	include ("Templates/Plus/8.tpl");
+	include ("templates/Plus/8.tpl");
 }
 if($id == 9){
-	include ("Templates/Plus/9.tpl");
+	include ("templates/Plus/9.tpl");
 }
 if($id == 10){
-	include ("Templates/Plus/10.tpl");
+	include ("templates/Plus/10.tpl");
 }
 if($id == 11){
-	include ("Templates/Plus/11.tpl");
+	include ("templates/Plus/11.tpl");
 }
 if($id == 12){
-	include ("Templates/Plus/12.tpl");
+	include ("templates/Plus/12.tpl");
 }
 if($id == 13){
-	include ("Templates/Plus/13.tpl");
+	include ("templates/Plus/13.tpl");
 }
 if($id == 14){
-	include ("Templates/Plus/14.tpl");
+	include ("templates/Plus/14.tpl");
 }
 if($id == 15){
-	include ("Templates/Plus/15.tpl");
+	include ("templates/Plus/15.tpl");
 }
 if($id > 15){
-	include ("Templates/Plus/3.tpl");
+	include ("templates/Plus/3.tpl");
 }
 if(isset($_POST['mail'])){
 	$mailer->sendInvite($_POST['mail'], $session->uid, $_POST['text']);
@@ -153,9 +153,9 @@ if(isset($_POST['mail'])){
 
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -164,8 +164,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

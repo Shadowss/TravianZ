@@ -55,13 +55,13 @@ $id = $_GET['id'];
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
 <div id="content"  class="village1">
 <?php
 if ($id == "") {
-include("Templates/Plus/1.tpl");
+include("templates/Plus/1.tpl");
 }
 if ($id == 1) {
 include("Templates/Packages/3.tpl");
@@ -82,9 +82,9 @@ include("Templates/Packages/5.tpl");
 </div>
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -93,8 +93,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl")
+include("templates/footer.tpl");
+include("templates/res.tpl")
 ?>
 <div id="stime">
 <div id="ltime">

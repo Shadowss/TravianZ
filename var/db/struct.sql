@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
   `act` varchar(10) DEFAULT NULL,
   `timestamp` int(11) DEFAULT '0',
   `location` text,
-  `act2` varchar(10) DEFAULT NULL,
+  `invite` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
@@ -120,25 +120,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
 --
 -- Dumping data for table `%PREFIX%activate`
 --
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `%PREFIX%active`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%active` (
- `username` varchar(100) NOT NULL,
- `timestamp` int(11) NULL,
- PRIMARY KEY (`username`),
- KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `%PREFIX%active`
---
-
 
 -- --------------------------------------------------------
 
@@ -1041,16 +1022,16 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
  `owner` int(11) NULL,
  `topic` varchar(100) NULL,
  `message` text NULL,
- `viewed` tinyint(1) NULL,
- `archived` tinyint(1) NULL,
- `send` tinyint(1) NULL,
+ `viewed` tinyint(1) NULL DEFAULT '0',
+ `archived` tinyint(1) NULL DEFAULT '0',
+ `send` tinyint(1) NULL DEFAULT '0',
  `time` int(11) NULL DEFAULT '0',
- `deltarget` int(11) NULL,
- `delowner` int(11) NULL,
- `alliance` int(11) NULL,
- `player` int(11) NULL,
- `coor` int(11) NULL,
- `report` int(11) NULL,
+ `deltarget` int(11) NULL DEFAULT '0',
+ `delowner` int(11) NULL DEFAULT '0',
+ `alliance` int(11) NULL DEFAULT '0',
+ `player` int(11) NULL DEFAULT '0',
+ `coor` int(11) NULL DEFAULT '0',
+ `report` int(11) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
  KEY `target-time` (`target`,`time`) USING BTREE,
  KEY `owner` (`owner`),
@@ -1185,26 +1166,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
 
 --
 -- Dumping data for table `%prefix%odata`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `%prefix%online`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
- `name` varchar(32) NULL,
- `uid` int(11) NULL,
- `time` varchar(32) NULL,
- `sit` tinyint(1) NULL,
- UNIQUE KEY `name` (`name`),
- KEY `uid` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `%prefix%online`
 --
 
 -- --------------------------------------------------------
@@ -1537,7 +1498,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `sit1` int(11) DEFAULT '0',
   `sit2` int(11) DEFAULT '0',
   `alliance` int(11) DEFAULT '0',
-  `sessid` varchar(100) DEFAULT NULL,
   `act` varchar(10) DEFAULT NULL,
   `timestamp` int(11) DEFAULT '0',
   `ap` int(11) DEFAULT '0',
@@ -1598,11 +1558,10 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `friend18wait` int(11) DEFAULT '0',
   `friend19wait` int(11) DEFAULT '0',
   `maxevasion` mediumint(3) DEFAULT '0',
-  `village_select` bigint(20) DEFAULT NULL,
+  `actualvillage` bigint(20) DEFAULT NULL,
   `vac_time` varchar(255) DEFAULT '0',
   `vac_mode` int(2) DEFAULT '0',
   `vactwoweeks` varchar(255) DEFAULT '0',
-  `is_bcrypt` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`),
@@ -1621,11 +1580,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
 -- Dumping data for table `%prefix%users`
 --
 
-INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `access`, `gold`, `gender`, `birthday`, `location`, `desc1`, `desc2`, `plus`, `b1`, `b2`, `b3`, `b4`, `sit1`, `sit2`, `alliance`, `sessid`, `act`, `timestamp`, `ap`, `apall`, `dp`, `dpall`, `protect`, `quest`, `gpack`, `cp`, `lastupdate`, `RR`, `Rc`, `ok`, `is_bcrypt`) VALUES
-(5, 'Multihunter', '', 'multihunter@travianz.game', 1, 9, 0, 0, '1970-01-01', '', '[#MH]', '[#MULTIHUNTER]', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1),
-(1, 'Support', '', 'support@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1),
-(2, 'Nature', '', 'nature@travianz.game', 4, 2, 0, 0, '1970-01-01', '', '[#NATURE]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1),
-(4, 'Taskmaster', '', 'taskmaster@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '[#TASKMASTER]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1);
+INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `access`, `gold`, `gender`, `birthday`, `location`, `desc1`, `desc2`, `plus`, `b1`, `b2`, `b3`, `b4`, `sit1`, `sit2`, `alliance`, `act`, `timestamp`, `ap`, `apall`, `dp`, `dpall`, `protect`, `quest`, `gpack`, `cp`, `lastupdate`, `RR`, `Rc`, `ok`) VALUES
+(5, 'Multihunter', '', 'multihunter@travianz.game', 1, 9, 0, 0, '1970-01-01', '', '[#MH]', '[#MULTIHUNTER]', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(1, 'Support', '', 'support@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(2, 'Nature', '', 'nature@travianz.game', 4, 2, 0, 0, '1970-01-01', '', '[#NATURE]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(4, 'Taskmaster', '', 'taskmaster@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '[#TASKMASTER]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 

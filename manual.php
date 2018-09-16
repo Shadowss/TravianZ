@@ -41,16 +41,16 @@ if (isset($_GET['typ']) && !ctype_digit($_GET['typ'])) {
 	$_GET['typ'] = null;
 }
 if(!isset($_GET['typ']) && !isset($_GET['s'])) {
-	include("Templates/Manual/00.tpl");
+	include("templates/Manual/00.tpl");
 }
 else if (!isset($_GET['typ']) && $_GET['s'] == 1) {
-	include("Templates/Manual/00.tpl");
+	include("templates/Manual/00.tpl");
 }
 else if (!isset($_GET['typ']) && $_GET['s'] == 2) {
-	include("Templates/Manual/direct.tpl");
+	include("templates/Manual/direct.tpl");
 }
 else if (isset($_GET['typ']) && $_GET['typ'] == 5 && $_GET['s'] == 3) {
-	include("Templates/Manual/medal.tpl");
+	include("templates/Manual/medal.tpl");
 }
 else {
 	if(isset($_GET['gid'])) {

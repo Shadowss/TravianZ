@@ -52,8 +52,8 @@ if(isset($id))
 	<thead>
 	<tr>
 		<td colspan="3">
-			<button style="float: right" name="save" id="btn_save" class="trav_buttons" value="save" alt="save" /> Save </button>
-			<button style="float: left" name="back" id="btn_back" class="trav_buttons" value="back" alt="back" onclick="return go_url('../Admin/admin.php?p=village&did=<?php echo $_GET["did"];?>')" /> Back </button>
+			<button style="float: right" name="save" id="btn_save" class="trav_buttons" value="save"> Save </button>
+			<button style="float: left" name="back" id="btn_back" class="trav_buttons" value="back" onclick="return go_url('../Admin/admin.php?p=village&did=<?php echo $_GET["did"];?>')"> Back </button>
 		</td>
 	</tr>
 	</thead>	

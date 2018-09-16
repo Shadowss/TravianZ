@@ -57,9 +57,9 @@ $battle->procSim($_POST);
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
 <div id="content"  class="warsim">
 <h1>Combat simulator</h1>
 <form action="warsim.php" method="post">
@@ -132,7 +132,7 @@ if(count($target) > 0) {
 	foreach($target as $tar) {
 		include("Templates/Simulator/def_".$tar.".tpl");
 	}
-	include("Templates/Simulator/def_end.tpl");
+	include("templates/simulator/def_end.tpl");
 	echo "<div class=\"clear\"></div>";
 }
 ?>
@@ -167,9 +167,9 @@ if(count($target) > 0) {
 </div>
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -178,8 +178,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

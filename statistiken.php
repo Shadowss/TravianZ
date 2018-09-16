@@ -20,7 +20,7 @@ $__start = $generator->pageLoadTimeStart();
 if(isset($_GET['rank'])){ $_POST['rank']=$_GET['rank']; }
 $_GET['aid'] = $session->alliance;
 $_GET['hero'] = count($database->getHero($session->uid));
-$ranking->procRankReq($_GET);
+$ranking->procRankReq($_GET, $session->uid, $village->wid);
 $ranking->procRank($_POST);
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
@@ -96,9 +96,9 @@ if(isset($_GET['newdid'])) {
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
 		<div id="content"  class="statistics">
 <h1>Statistics</h1>
 <div id="textmenu">
@@ -115,54 +115,54 @@ if(isset($_GET['newdid'])) {
 if(isset($_GET['id'])) {
 	switch($_GET['id']) {
 		case 31:
-			include("Templates/Ranking/player_attack.tpl");
+			include("templates/Ranking/player_attack.tpl");
 			break;
 		case 32:
-			include("Templates/Ranking/player_defend.tpl");
+			include("templates/Ranking/player_defend.tpl");
 			break;
 		case 7:
-			include("Templates/Ranking/player_top10.tpl");
+			include("templates/Ranking/player_top10.tpl");
 			break;
 		case 2:
-			include("Templates/Ranking/villages.tpl");
+			include("templates/Ranking/villages.tpl");
 			break;
 		case 4:
-			include("Templates/Ranking/alliance.tpl");
+			include("templates/Ranking/alliance.tpl");
 			break;
 		case 8:
-			include("Templates/Ranking/heroes.tpl");
+			include("templates/Ranking/heroes.tpl");
 			break;
 		case 11:
-			include("Templates/Ranking/player_1.tpl");
+			include("templates/Ranking/player_1.tpl");
 			break;
 		case 12:
-			include("Templates/Ranking/player_2.tpl");
+			include("templates/Ranking/player_2.tpl");
 			break;
 		case 13:
-			include("Templates/Ranking/player_3.tpl");
+			include("templates/Ranking/player_3.tpl");
 			break;
 		case 41:
-			include("Templates/Ranking/alliance_attack.tpl");
+			include("templates/Ranking/alliance_attack.tpl");
 			break;
 		case 42:
-			include("Templates/Ranking/alliance_defend.tpl");
+			include("templates/Ranking/alliance_defend.tpl");
 			break;
 		case 43:
-			include("Templates/Ranking/ally_top10.tpl");
+			include("templates/Ranking/ally_top10.tpl");
 			break;
 		case 0:
-			include("Templates/Ranking/general.tpl");
+			include("templates/Ranking/general.tpl");
 			break;
 		case 1:
-			include("Templates/Ranking/overview.tpl");
+			include("templates/Ranking/overview.tpl");
 			break;
 		case 99:
-			include("Templates/Ranking/ww.tpl");
+			include("templates/Ranking/ww.tpl");
 			break;
 	}
 }
 else {
-	include("Templates/Ranking/overview.tpl");
+	include("templates/Ranking/overview.tpl");
 }
 ?>
  </div>
@@ -173,9 +173,9 @@ else {
 
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
  </div>
 <div class="clear"></div>
@@ -184,8 +184,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

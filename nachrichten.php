@@ -46,12 +46,12 @@ if(isset($_GET['delfriend']) && is_numeric($_GET['delfriend'])){
 		if($friendwait1 == $session->uid){
 			$database->deleteFriend($friend, "friend".$i."wait");
 		}
-		$database->checkFriends($friend);
+		$database->checkFriends($friend, $session->uid);
 	}
 	
 	$database->deleteFriend($session->uid, "friend".$_GET['delfriend']);
 	$database->deleteFriend($session->uid, "friend".$_GET['delfriend']."wait");
-	$database->checkFriends($session->uid);
+	$database->checkFriends($session->uid, $session->uid);
 	header("Location: ".$_SERVER['PHP_SELF']."?t=1");
 	exit();
 }
@@ -114,13 +114,13 @@ if(isset($_GET['confirm']) && is_numeric($_GET['confirm'])){
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 
 <div id="mid">
-<?php include("Templates/menu.tpl");
+<?php include("templates/menu.tpl");
 if(isset($_GET['id']) && (!isset($_GET['t']) || $_GET['t'] == '2a')) {
 	$message->loadMessage($_GET['id']);
-	include("Templates/Message/read.tpl");
+	include("templates/Message/read.tpl");
 }
 else if(isset($_GET['t'])) {
 	switch($_GET['t']) {
@@ -128,37 +128,37 @@ else if(isset($_GET['t'])) {
 		if(isset($_GET['id'])) {
 		    $id = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']);
 		}
-		include("Templates/Message/write.tpl");
+		include("templates/Message/write.tpl");
 		break;
 		case 2:
-		include("Templates/Message/sent.tpl");
+		include("templates/Message/sent.tpl");
 		break;
 		case 3:
 		if($session->plus) {
-			include("Templates/Message/archive.tpl");
+			include("templates/Message/archive.tpl");
 		}
 		break;
 		case 4:
 		if($session->plus) {
 			$message->loadNotes();
-			include("Templates/Message/notes.tpl");
+			include("templates/Message/notes.tpl");
 		}
 		break;
 		default:
-		include("Templates/Message/inbox.tpl");
+		include("templates/Message/inbox.tpl");
 		break;
 	}
 }
 else {
-	include("Templates/Message/inbox.tpl");
+	include("templates/Message/inbox.tpl");
 }
 			?>
 
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -166,8 +166,8 @@ include("Templates/news.tpl");
 <div class="footer-stopper"></div>
 <div class="clear"></div>
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

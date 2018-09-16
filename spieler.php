@@ -73,9 +73,9 @@ else $building->procBuild($_GET);
 <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
 <div id="dynamic_header">
 	</div>
-<?php include("Templates/header.tpl"); ?>
+<?php include("templates/header.tpl"); ?>
 <div id="mid">
-<?php include("Templates/menu.tpl"); ?>
+<?php include("templates/menu.tpl"); ?>
 <script type="text/javascript">
 				function getMouseCoords(e) {
 					var coords = {};
@@ -128,30 +128,30 @@ if(isset($_GET['uid'])) {
 	if($_GET['uid'] >= 2) {
 		$user = $database->getUserArray(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['uid']),1);
 		if(isset($user['id'])){
-			include("Templates/Profile/overview.tpl");
+			include("templates/Profile/overview.tpl");
 		} else {
-			include("Templates/Profile/notfound.tpl");
+			include("templates/Profile/notfound.tpl");
 		}
 	}
 	else {
-		include("Templates/Profile/special.tpl");
+		include("templates/Profile/special.tpl");
 	}
 }
 else if (isset($_GET['s'])) {
 	if($_GET['s'] == 1) {
-		include("Templates/Profile/profile.tpl");
+		include("templates/Profile/profile.tpl");
 	}
 	if($_GET['s'] == 2) {
-		include("Templates/Profile/preference.tpl");
+		include("templates/Profile/preference.tpl");
 	}
 	if($_GET['s'] == 3) {
-		include("Templates/Profile/account.tpl");
+		include("templates/Profile/account.tpl");
 	}
 	if($_GET['s'] == 4) {
-		include("Templates/Profile/graphic.tpl");
+		include("templates/Profile/graphic.tpl");
 	}
 	if($_GET['s'] == 5) {
-	include("Templates/Profile/vacation.tpl");
+	include("templates/Profile/vacation.tpl");
 	}
 	if($_GET['s'] > 5 or $session->sit == 1) {
 	header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$session->uid));
@@ -163,9 +163,9 @@ else if (isset($_GET['s'])) {
 
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
  </div>
 <div class="clear"></div>
@@ -174,8 +174,8 @@ include("Templates/news.tpl");
 <div class="clear"></div>
 
 <?php
-include("Templates/footer.tpl");
-include("Templates/res.tpl");
+include("templates/footer.tpl");
+include("templates/res.tpl");
 ?>
 <div id="stime">
 <div id="ltime">

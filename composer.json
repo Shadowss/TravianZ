@@ -1,0 +1,10 @@
+{
+	"autoload" : {
+		"psr-4" : {
+			"TravianZ\\" : "src/"
+		}
+	},
+	"require" : {
+		"smarty/smarty" : "3.1.32"
+	}
+}

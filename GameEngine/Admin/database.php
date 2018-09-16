@@ -629,9 +629,6 @@ class adm_DB {
 					if($unitarray) { reset($unitarray); }
 					$unitarray = $GLOBALS["u".$i];
 					$speeds[] = $unitarray['speed'];
-					//echo print_r(array_keys($speeds))."unitspd\n".$i."trib\n";
-
-
 				} else {
 					$enforce['u'.$i]='0';
 				}
@@ -662,7 +659,7 @@ class adm_DB {
 		global $technology, $database;
 		
 		$isNatar = $database->getVillageField($wid, "natar");
-		$upkeep = $technology->getUpkeep($this->getAllUnits($wid), 0, $wid);
+		$upkeep = $database->getUpkeep($this->getAllUnits($wid), 0, $wid);
 		$production = [];
 		$production['wood'] = $this->getWoodProd($fdata, $ocounter,$b1);
 		$production['clay'] = $this->getClayProd($fdata, $ocounter,$b2);

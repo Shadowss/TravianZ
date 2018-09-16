@@ -34,7 +34,7 @@ if($session->plus){
 	<script type="text/javascript">window.addEvent('domready', start);</script>
 </head>
 <body onload="start()"><?php
-	include("Templates/Map/mapviewlarge.tpl");?>
+	include("templates/Map/mapviewlarge.tpl");?>
 	<div id="ce"></div>
 </body>
 </html>

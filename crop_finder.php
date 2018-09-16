@@ -87,12 +87,12 @@ $start_timer = $generator->pageLoadTimeStart();
 	</div>
 <?php
 
-   include ("Templates/header.tpl");
+   include ("templates/header.tpl");
 
 ?>
 <div id="mid">
 <?php
-include ("Templates/menu.tpl");
+include ("templates/menu.tpl");
 if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
 	$coor2['x'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['x']);
 	$coor2['y'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['y']);
@@ -207,9 +207,9 @@ foreach($rows as $row) {
 </div>
 <br /><br /><br /><br /><div id="side_info">
 <?php
-include("Templates/multivillage.tpl");
-include("Templates/quest.tpl");
-include("Templates/news.tpl");
+include("templates/multivillage.tpl");
+include("templates/quest.tpl");
+include("templates/news.tpl");
 ?>
 </div>
 <div class="clear"></div>
@@ -219,8 +219,8 @@ include("Templates/news.tpl");
 
 <?php
 
-   include ("Templates/footer.tpl");
-   include ("Templates/res.tpl");
+   include ("templates/footer.tpl");
+   include ("templates/res.tpl");
 
 ?>
 <div id="stime">

@@ -188,9 +188,9 @@ if(isset($_GET['newdid'])) {
 		<div class="wrapper">
 			<img style="filter: chroma();" src="img/x.gif" id="msfilter" alt="" />
 			<div id="dynamic_header"></div>
-			<?php include("Templates/header.tpl"); ?>
+			<?php include("templates/header.tpl"); ?>
 			<div id="mid">
-				<?php include("Templates/menu.tpl"); ?>
+				<?php include("templates/menu.tpl"); ?>
 				<div id="content" class="village2" style="font-size: 9pt;">
 					<img src="./gpack/travian_default/img/misc/win.png" align="right" style="padding-top: 40px;" />
 					<p>
@@ -220,16 +220,16 @@ if(isset($_GET['newdid'])) {
 					<br />
 					Best Regards,<br />
 					<?php echo SERVER_NAME; ?> Team<br /><br /><br /><br />
-					<small><i>(By: TravianZ team v8.3.4)</i></small></p>
+					<small><i>(By: TravianZ team v9.0.0)</i></small></p>
 
 					<br /><br />
 					<div style="text-align: center"><a href="dorf1.php">&raquo; Continue</a></div>
 				</div>
 				<br /><br /><br /><br /><div id="side_info">
 					<?php
-					include("Templates/multivillage.tpl");
-					include("Templates/quest.tpl");
-					include("Templates/news.tpl");
+					include("templates/multivillage.tpl");
+					include("templates/quest.tpl");
+					include("templates/news.tpl");
 					?>
 				</div>
 				<div class="clear"></div>
@@ -237,8 +237,8 @@ if(isset($_GET['newdid'])) {
 			<div class="footer-stopper"></div>
 			<div class="clear"></div>
 			<?php
-			include("Templates/res.tpl");
-			include("Templates/footer.tpl");
+			include("templates/res.tpl");
+			include("templates/footer.tpl");
 			?>
 			<div id="stime">
 				<div id="ltime">

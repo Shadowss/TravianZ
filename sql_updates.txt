@@ -1,6 +1,293 @@
+-- 14.09.2018 changed a column name
+ALTER TABLE `s1_wdata` CHANGE `oasistype` `oasestype` TINYINT(2) NULL DEFAULT NULL;
+
+-- 12.09.2018 added a column, dropped an index, changed 8 columns attribute and 2 columns default value
+ALTER TABLE `s1_reports` ADD `from` INT NOT NULL AFTER `owner`;
+ALTER TABLE `s1_reports` DROP INDEX `uid-viewed`;
+ALTER TABLE `s1_raidlist` CHANGE `lid` `lid` INT(11) NOT NULL DEFAULT '0', CHANGE `to` `to` INT(11) NOT NULL DEFAULT '0', CHANGE `u1` `u1` INT(11) NOT NULL DEFAULT '0', CHANGE `u2` `u2` INT(11) NOT NULL DEFAULT '0', CHANGE `u3` `u3` INT(11) NOT NULL DEFAULT '0', CHANGE `u4` `u4` INT(11) NOT NULL DEFAULT '0', CHANGE `u5` `u5` INT(11) NOT NULL DEFAULT '0', CHANGE `u6` `u6` INT(11) NOT NULL DEFAULT '0';
+
+-- 11.09.2018 dropped a column, changed 5 columns name and changed a column default value
+ALTER TABLE `s1_raidlist` DROP `distance`;
+ALTER TABLE `s1_ndata` CHANGE `toWref` `to` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `s1_ndata` CHANGE `ntype` `type` TINYINT(1) NULL DEFAULT NULL;
+ALTER TABLE `s1_ndata` CHANGE `uid` `owner` INT(11) NULL DEFAULT NULL; 
+ALTER TABLE `s1_ndata` CHANGE `archive` `archived` TINYINT(1) NULL DEFAULT '0', CHANGE `del` `deleted` TINYINT(1) NULL DEFAULT '0'; 
+RENAME TABLE `s1_ndata` TO `s1_reports`;
+RENAME TABLE `s1_mdata` TO `s1_messages`;
+ALTER TABLE `s1_reports` CHANGE `viewed` `viewed` TINYINT(1) NULL DEFAULT '0';
+
+-- 10.09.2018 changed 2 columns name, dropped 2 columns
+ALTER TABLE `s1_raidlist` CHANGE `towref` `to` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `s1_farmlist` CHANGE `wref` `from` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `s1_raidlist` DROP `x`, DROP `y`;
+
+-- 30.08.2018 dropped a table, deleted a columns, changed a column, changed 6 columns default value and changed 6 columns attribute
+DROP TABLE `s1_demolition`
+ALTER TABLE `s1_bdata` DROP `loopcon`;
+ALTER TABLE `s1_bdata` CHANGE `wid` `wid` INT(11) NOT NULL DEFAULT '0', CHANGE `field` `field` TINYINT(2) NOT NULL DEFAULT '0', CHANGE `type` `type` TINYINT(2) NOT NULL DEFAULT '0', CHANGE `timestamp` `timestamp` INT(11) NOT NULL DEFAULT '0', CHANGE `master` `sort` TINYINT(1) NOT NULL DEFAULT '0', CHANGE `level` `level` TINYINT(3) NOT NULL DEFAULT '0';
+
+-- 29.08.2018 added a new column
+ALTER TABLE `s1_training` ADD `finishtime` INT(11) NOT NULL DEFAULT '0' AFTER `lasttrainedtime`;
+
+-- 28.08.2018 changed 12 default columns value, 12 columns attribute, a column name, an index and deleted a column 
+ALTER TABLE `s1_route` CHANGE `uid` `uid` INT(11) NOT NULL DEFAULT '0', CHANGE `wid` `to` INT(11) NOT NULL DEFAULT '0', CHANGE `from` `from` INT(11) NOT NULL DEFAULT '0', CHANGE `wood` `wood` INT(5) NOT NULL DEFAULT '0', CHANGE `clay` `clay` INT(5) NOT NULL DEFAULT '0', CHANGE `iron` `iron` INT(5) NOT NULL DEFAULT '0', CHANGE `crop` `crop` INT(5) NOT NULL DEFAULT '0', CHANGE `start` `start` TINYINT(2) NOT NULL DEFAULT '0', CHANGE `deliveries` `deliveries` TINYINT(1) NOT NULL DEFAULT '0', CHANGE `merchant` `merchant` INT(11) NOT NULL DEFAULT '0', CHANGE `timestamp` `timestamp` INT(11) NOT NULL DEFAULT '0', CHANGE `timeleft` `timeleft` INT(11) NOT NULL DEFAULT '0';
+ALTER TABLE `s1_route` DROP `merchant`
+ALTER TABLE `s1_route` DROP INDEX `wid`, ADD INDEX `from` (`from`) USING BTREE;
+
+-- 27.08.2018 changed 5 columns name, 9 columns default value, removed and added an index,
+              changed one column data type, changed 21 columns attribute
+ALTER TABLE `s1_market` CHANGE `gtype` `offered` TINYINT(1) NULL DEFAULT '1';
+ALTER TABLE `s1_market` CHANGE `wtype` `wanted` TINYINT(1) NULL DEFAULT '1';
+ALTER TABLE `s1_market` CHANGE `gamt` `offeredAmount` INT(11) NULL DEFAULT '0';
+ALTER TABLE `s1_market` CHANGE `wamt` `wantedAmount` INT(11) NULL DEFAULT '0';
+ALTER TABLE `s1_market` CHANGE `vref` `vref` INT(11) NULL DEFAULT '0', CHANGE `accept` `accept` TINYINT(1) NULL DEFAULT '0', CHANGE `maxtime` `maxtime` INT(11) NULL DEFAULT '0', CHANGE `alliance` `alliance` INT(11) NULL DEFAULT '0', CHANGE `merchant` `merchant` TINYINT(2) NULL DEFAULT '0';
+ALTER TABLE `s1_market` CHANGE `merchant` `merchants` TINYINT(2) NULL DEFAULT '0';
+ALTER TABLE `s1_market` ADD INDEX `vref-accept-alliance` (`vref`, `accept`, `alliance`);
+ALTER TABLE `s1_market` DROP INDEX `vref-accept-merchants`
+ALTER TABLE `s1_market` CHANGE `maxtime` `maxtime` TINYINT(2) NULL DEFAULT '0';
+ALTER TABLE `s1_market` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `vref` `vref` INT(11) NOT NULL DEFAULT '0', CHANGE `offered` `offered` TINYINT(1) NOT NULL DEFAULT '1', CHANGE `offeredAmount` `offeredAmount` INT(11) NOT NULL DEFAULT '0', CHANGE `wanted` `wanted` TINYINT(1) NOT NULL DEFAULT '1', CHANGE `wantedAmount` `wantedAmount` INT(11) NOT NULL DEFAULT '0', CHANGE `accept` `accept` TINYINT(1) NOT NULL DEFAULT '0', CHANGE `maxtime` `maxtime` TINYINT(2) NOT NULL DEFAULT '0', CHANGE `alliance` `alliance` INT(11) NOT NULL DEFAULT '0', CHANGE `merchants` `merchants` TINYINT(2) NOT NULL DEFAULT '0';
+ALTER TABLE `s1_movement` CHANGE `moveid` `moveid` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `from` `from` INT(11) NOT NULL DEFAULT '0', CHANGE `to` `to` INT(11) NOT NULL DEFAULT '0', CHANGE `ref` `ref` INT(11) NOT NULL DEFAULT '0', CHANGE `starttime` `starttime` INT(11) NOT NULL DEFAULT '0', CHANGE `endtime` `endtime` INT(11) NOT NULL DEFAULT '0', CHANGE `proc` `proc` TINYINT(1) NOT NULL DEFAULT '0', CHANGE `merchants` `merchants` TINYINT(1) NOT NULL DEFAULT '0', CHANGE `wood` `wood` INT(11) NOT NULL DEFAULT '0', CHANGE `clay` `clay` INT(11) NOT NULL DEFAULT '0', CHANGE `iron` `iron` INT(11) NOT NULL DEFAULT '0', CHANGE `crop` `crop` INT(11) NOT NULL DEFAULT '0', CHANGE `type` `type` INT(11) NOT NULL DEFAULT '0';
+
+-- 26.08.2018 added a column
+ALTER TABLE `s1_movement` ADD `repetitions` TINYINT(1) NOT NULL DEFAULT '0' AFTER `merchants`;
+
+-- 25.08.2018 changed a column name
+ALTER TABLE `s1_movement` CHANGE `send` `merchants` TINYINT(1) NULL DEFAULT '0';
+
+-- 23.08.2018 changed 5 columns default value
+ALTER TABLE `s1_movement` CHANGE `send` `send` TINYINT(1) NULL DEFAULT '0', CHANGE `wood` `wood` INT(11) NULL DEFAULT '0', CHANGE `clay` `clay` INT(11) NULL DEFAULT '0', CHANGE `iron` `iron` INT(11) NULL DEFAULT '0', CHANGE `crop` `crop` INT(11) NULL DEFAULT '0';
+
+-- 21.08.2018 changed 8 columns type, dropped 9 tables, changed a table name, added 2 columns, added an index and changed a column name
+ALTER TABLE `s1_tdata` CHANGE `t2` `t2` INT(11) NULL DEFAULT '0', CHANGE `t3` `t3` INT(11) NULL DEFAULT '0', CHANGE `t4` `t4` INT(11) NULL DEFAULT '0', CHANGE `t5` `t5` INT(11) NULL DEFAULT '0', CHANGE `t6` `t6` INT(11) NULL DEFAULT '0', CHANGE `t7` `t7` INT(11) NULL DEFAULT '0', CHANGE `t8` `t8` INT(11) NULL DEFAULT '0', CHANGE `t9` `t9` INT(11) NULL DEFAULT '0';
+DROP TABLE `s1_ww_attacks`, `s1_research`, `s1_ali_log`, `s1_build_log`, `s1_gold_fin_log`, `s1_illegal_log`, `s1_login_log`, `s1_market_log`, `s1_tech_log`;
+RENAME TABLE `s1_admin_log` TO `s1_logs`;
+ALTER TABLE `s1_logs` ADD `type` INT(11) NOT NULL DEFAULT '0' AFTER `time`;
+ALTER TABLE `s1_logs` ADD INDEX `type` (`type`); 
+ALTER TABLE `s1_tdata` ADD `tribe` TINYINT NOT NULL DEFAULT '0' AFTER `t9`;
+ALTER TABLE `s1_units` CHANGE `u12o` `u13` INT(11) NULL DEFAULT '0';
+
+-- 16.08.2018 dropped 40 columns, changed a column name, changed a column default value
+ALTER TABLE `s1_users`
+  DROP `friend0`,
+  DROP `friend1`,
+  DROP `friend2`,
+  DROP `friend3`,
+  DROP `friend4`,
+  DROP `friend5`,
+  DROP `friend6`,
+  DROP `friend7`,
+  DROP `friend8`,
+  DROP `friend9`,
+  DROP `friend10`,
+  DROP `friend11`,
+  DROP `friend12`,
+  DROP `friend13`,
+  DROP `friend14`,
+  DROP `friend15`,
+  DROP `friend16`,
+  DROP `friend17`,
+  DROP `friend18`,
+  DROP `friend19`,
+  DROP `friend0wait`,
+  DROP `friend1wait`,
+  DROP `friend2wait`,
+  DROP `friend3wait`,
+  DROP `friend4wait`,
+  DROP `friend5wait`,
+  DROP `friend6wait`,
+  DROP `friend7wait`,
+  DROP `friend8wait`,
+  DROP `friend9wait`,
+  DROP `friend10wait`,
+  DROP `friend11wait`,
+  DROP `friend12wait`,
+  DROP `friend13wait`,
+  DROP `friend14wait`,
+  DROP `friend15wait`,
+  DROP `friend16wait`,
+  DROP `friend17wait`,
+  DROP `friend18wait`,
+  DROP `friend19wait`;
+  ALTER TABLE `s1_users` CHANGE `village_select` `actualvillage` BIGINT(20) NULL DEFAULT '0';
+
+-- 14.08.2018 added 2 columns, 2 indexes, changed 2 columns name, dropped 2 columns and changed 6 columns default value
+ALTER TABLE `s1_training` ADD INDEX `great` (`great`);
+ALTER TABLE `s1_training` CHANGE `timestamp2` `lasttrainedtime` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `s1_training` DROP `timestamp`;
+ALTER TABLE `s1_training` DROP `pop`;
+ALTER TABLE `s1_training` CHANGE `amt` `amount` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `s1_training` CHANGE `vref` `vref` INT(11) NULL DEFAULT '0', CHANGE `unit` `unit` TINYINT(2) NULL DEFAULT '0', CHANGE `amount` `amount` INT(11) NULL DEFAULT '0', CHANGE `eachtime` `eachtime` INT(11) NULL DEFAULT '0', CHANGE `lasttrainedtime` `lasttrainedtime` INT(11) NULL DEFAULT '0';
+ALTER TABLE `s1_password` ADD INDEX `used` (`used`);
+ALTER TABLE `s1_password` CHANGE `timestamp` `timestamp` INT NULL DEFAULT '0';
+
+-- 12.08.2018 added one and changed one column
+ALTER TABLE `s1_prisoners` CHANGE `wref` `vref` INT(11) NULL DEFAULT NULL;
+
+-- 11.08.2018 -> changed 2 index names, added two indexes
+ALTER TABLE `s1_movement` DROP INDEX `from-proc-sort_type`, ADD INDEX `from-proc-sort_type` (`from`, `proc`) USING BTREE;
+ALTER TABLE `s1_movement` DROP INDEX `proc-sort_type-endtime`, ADD INDEX `proc-endtime` (`proc`, `endtime`) USING BTREE;
+ALTER TABLE `s1_movement` ADD INDEX `to` (`to`);
+ALTER TABLE `s1_hero` ADD UNIQUE `wref` (`wref`);
+
+-- 10.08.2018 -> changed 28 columns name, dropped 100 columns, added 2 columns,
+			     changed elevel columns default value, and changed an index name
+ALTER TABLE `s1_attacks` CHANGE `t1` `u1` INT(11) NULL DEFAULT '0', CHANGE `t2` `u2` INT(11) NULL DEFAULT '0', CHANGE `t3` `u3` INT(11) NULL DEFAULT '0', CHANGE `t4` `u4` INT(11) NULL DEFAULT '0', CHANGE `t5` `u5` INT(11) NULL DEFAULT '0', CHANGE `t6` `u6` INT(11) NULL DEFAULT '0', CHANGE `t7` `u7` INT(11) NULL DEFAULT '0', CHANGE `t8` `u8` INT(11) NULL DEFAULT '0', CHANGE `t9` `u9` INT(11) NULL DEFAULT '0', CHANGE `t10` `u10` INT(11) NULL DEFAULT '0', CHANGE `t11` `u11` INT(11) NULL DEFAULT '0';
+ALTER TABLE `s1_units`
+  DROP `u12`,
+  DROP `u13`,
+  DROP `u14`,
+  DROP `u15`,
+  DROP `u16`,
+  DROP `u17`,
+  DROP `u18`,
+  DROP `u19`,
+  DROP `u20`,
+  DROP `u21`,
+  DROP `u22`,
+  DROP `u23`,
+  DROP `u24`,
+  DROP `u25`,
+  DROP `u26`,
+  DROP `u27`,
+  DROP `u28`,
+  DROP `u29`,
+  DROP `u30`,
+  DROP `u31`,
+  DROP `u32`,
+  DROP `u33`,
+  DROP `u34`,
+  DROP `u35`,
+  DROP `u36`,
+  DROP `u37`,
+  DROP `u38`,
+  DROP `u39`,
+  DROP `u40`,
+  DROP `u41`,
+  DROP `u42`,
+  DROP `u43`,
+  DROP `u44`,
+  DROP `u45`,
+  DROP `u46`,
+  DROP `u47`,
+  DROP `u48`,
+  DROP `u49`,
+  DROP `u50`,
+  DROP `hero`;
+ALTER TABLE `s1_enforcement`
+  DROP `u12`,
+  DROP `u13`,
+  DROP `u14`,
+  DROP `u15`,
+  DROP `u16`,
+  DROP `u17`,
+  DROP `u18`,
+  DROP `u19`,
+  DROP `u20`,
+  DROP `u21`,
+  DROP `u22`,
+  DROP `u23`,
+  DROP `u24`,
+  DROP `u25`,
+  DROP `u26`,
+  DROP `u27`,
+  DROP `u28`,
+  DROP `u29`,
+  DROP `u30`,
+  DROP `u31`,
+  DROP `u32`,
+  DROP `u33`,
+  DROP `u34`,
+  DROP `u35`,
+  DROP `u36`,
+  DROP `u37`,
+  DROP `u38`,
+  DROP `u39`,
+  DROP `u40`,
+  DROP `u41`,
+  DROP `u42`,
+  DROP `u43`,
+  DROP `u44`,
+  DROP `u45`,
+  DROP `u46`,
+  DROP `u47`,
+  DROP `u48`,
+  DROP `u49`,
+  DROP `u50`,
+  DROP `hero`;
+ALTER TABLE `s1_odata` CHANGE `conqured` `conquered` INT(11) NULL DEFAULT NULL;
+ALTER TABLE `s1_odata` DROP INDEX `conqured`, ADD INDEX `conquered` (`conquered`) USING BTREE;
+ALTER TABLE `s1_prisoners` CHANGE `t1` `u1` INT(11) NULL DEFAULT '0', CHANGE `t2` `u2` INT(11) NULL DEFAULT '0', CHANGE `t3` `u3` INT(11) NULL DEFAULT '0', CHANGE `t4` `u4` INT(11) NULL DEFAULT '0', CHANGE `t5` `u5` INT(11) NULL DEFAULT '0', CHANGE `t6` `u6` INT(11) NULL DEFAULT '0', CHANGE `t7` `u7` INT(11) NULL DEFAULT '0', CHANGE `t8` `u8` INT(11) NULL DEFAULT '0', CHANGE `t9` `u9` INT(11) NULL DEFAULT '0', CHANGE `t10` `u10` INT(11) NULL DEFAULT '0', CHANGE `t11` `u11` INT(11) NULL DEFAULT '0';
+ALTER TABLE `s1_tdata`
+  DROP `t12`,
+  DROP `t13`,
+  DROP `t14`,
+  DROP `t15`,
+  DROP `t16`,
+  DROP `t17`,
+  DROP `t18`,
+  DROP `t19`,
+  DROP `t22`,
+  DROP `t23`,
+  DROP `t24`,
+  DROP `t25`,
+  DROP `t26`,
+  DROP `t27`,
+  DROP `t28`,
+  DROP `t29`,
+  DROP `t32`,
+  DROP `t33`,
+  DROP `t34`,
+  DROP `t35`,
+  DROP `t36`,
+  DROP `t37`,
+  DROP `t38`,
+  DROP `t39`,
+  DROP `t42`,
+  DROP `t43`,
+  DROP `t44`,
+  DROP `t45`,
+  DROP `t46`,
+  DROP `t47`,
+  DROP `t48`,
+  DROP `t49`;
+ALTER TABLE `s1_units` CHANGE `u99` `u12` INT(11) NULL DEFAULT '0', CHANGE `u99o` `u12o` INT(11) NULL DEFAULT '0';
+
+-- 09.08.2018 -> dropped one table and 10 columns, added 2 columns and changed 16 columns default value
+DROP TABLE `s1_send`;
+ALTER TABLE `s1_attacks`
+  DROP `b1`,
+  DROP `b2`,
+  DROP `b3`,
+  DROP `b4`,
+  DROP `b5`,
+  DROP `b6`,
+  DROP `b7`,
+  DROP `b8`;
+ALTER TABLE `s1_attacks` CHANGE `vref` `vref` INT(11) NULL DEFAULT '0', CHANGE `t1` `t1` INT(11) NULL DEFAULT '0', CHANGE `t2` `t2` INT(11) NULL DEFAULT '0', CHANGE `t3` `t3` INT(11) NULL DEFAULT '0', CHANGE `t4` `t4` INT(11) NULL DEFAULT '0', CHANGE `t4` `t4` INT(11) NULL DEFAULT NULL, CHANGE `t5` `t5` INT(11) NULL DEFAULT '0', CHANGE `t6` `t6` INT(11) NULL DEFAULT '0', CHANGE `t7` `t7` INT(11) NULL DEFAULT '0', CHANGE `t8` `t8` INT(11) NULL DEFAULT '0', CHANGE `t9` `t9` INT(11) NULL DEFAULT '0', CHANGE `t10` `t10` INT(11) NULL DEFAULT '0', CHANGE `t11` `t11` INT(11) NULL DEFAULT '0', CHANGE `attack_type` `attack_type` TINYINT(1) NULL DEFAULT '0', CHANGE `ctar1` `ctar1` INT(11) NULL DEFAULT '0', CHANGE `ctar2` `ctar2` INT(11) NULL DEFAULT '0', CHANGE `spy` `spy` INT(11) NULL DEFAULT '0';
+ALTER TABLE `s1_movement` DROP `sort_type`;
+ALTER TABLE `s1_attacks` DROP `attack_type`;
+ALTER TABLE `s1_movement` DROP `ref2`;
+ALTER TABLE `s1_movement` ADD `type` INT NULL DEFAULT '0';
+ALTER TABLE `s1_raidlist` CHANGE `t1` `u1` INT(11) NULL DEFAULT '0', CHANGE `t2` `u2` INT(11) NULL DEFAULT '0', CHANGE `t3` `u3` INT(11) NULL DEFAULT '0', CHANGE `t4` `u4` INT(11) NULL DEFAULT '0', CHANGE `t5` `u5` INT(11) NULL DEFAULT '0', CHANGE `t6` `u6` INT(11) NULL DEFAULT '0';
+
+-- 07.08.2018 -> dropped one column and changed 8 columns default value
+ALTER TABLE `s1_activate` DROP `act2`;
+ALTER TABLE `s1_mdata` CHANGE `viewed` `viewed` TINYINT(1) NULL DEFAULT '0', CHANGE `archived` `archived` TINYINT(1) NULL DEFAULT '0', CHANGE `send` `send` TINYINT(1) NULL DEFAULT '0', CHANGE `deltarget` `deltarget` INT(11) NULL DEFAULT '0', CHANGE `delowner` `delowner` INT(11) NULL DEFAULT '0', CHANGE `alliance` `alliance` INT(11) NULL DEFAULT '0', CHANGE `player` `player` INT(11) NULL DEFAULT '0', CHANGE `coor` `coor` INT(11) NULL DEFAULT '0';
+
+-- 04.08.2018 -> dropped one table and one column
+DROP TABLE `s1_online`;
+ALTER TABLE `s1_users` DROP `sessid`; 
+
+-- 03.08.2018 -> added one column and dropped one table
+ALTER TABLE `s1_activate` ADD `invite` INT(11) NOT NULL DEFAULT '0';
+DROP TABLE `s1_active`;
+
+-- 02.08.2018 -> dropped one column
+ALTER TABLE `s1_users` DROP `is_bcrypt`; 
+
 -- 21.06.2018 -> added one column and one index
 ALTER TABLE `s1_artefacts` ADD `del` TINYINT(1) NULL DEFAULT '0' AFTER `lastupdate`;
-ALTER TABLE `testtravian`.`s1_artefacts` ADD INDEX `active-owner-conquered-del` (`active`, `owner`, `conquered`, `del`);
+ALTER TABLE `s1_artefacts` ADD INDEX `active-owner-conquered-del` (`active`, `owner`, `conquered`, `del`);
 
 -- 21.05.2018 -> added three indexes
 ALTER TABLE `s1_forum_cat` ADD INDEX `display_to_alliances` (`display_to_alliances`(11));
