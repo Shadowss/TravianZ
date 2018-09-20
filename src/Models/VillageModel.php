@@ -61,7 +61,7 @@ class VillageModel extends Model
         if (isset($parameters['GET']['newdid'])) {
             $this->session->getUser()->changeSelectedVillage($parameters['GET']['newdid']);
         }
-        
+
         $selectedVillage = new Village(
             Database::getInstance(), 
             $this->session->getUser(),

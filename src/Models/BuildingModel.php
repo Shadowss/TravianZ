@@ -19,29 +19,25 @@ use TravianZ\Account\Session;
 use TravianZ\Data\GetInformations;
 use TravianZ\Data\Validator;
 use TravianZ\Data\Buildings\Academy;
+use TravianZ\Data\Buildings\MainBuilding;
 use TravianZ\Data\Buildings\Marketplace;
 use TravianZ\Data\Buildings\Palace;
+use TravianZ\Data\Buildings\RallyPoint;
+use TravianZ\Data\Movements\Raid;
 use TravianZ\Data\Movements\ReturningTrade;
 use TravianZ\Data\Movements\Trade;
 use TravianZ\Database\Database;
 use TravianZ\Entity\Building;
-use TravianZ\Entity\Training;
 use TravianZ\Entity\TrainingField;
 use TravianZ\Entity\Village;
+use TravianZ\Entity\Villages;
 use TravianZ\Enums\BuildingEnums;
+use TravianZ\Enums\BuildingJobEnums;
 use TravianZ\Enums\ResearchEnums;
 use TravianZ\Exceptions\InvalidParametersException;
 use TravianZ\Factory\BuildingsFactory;
-use TravianZ\Factory\UnitsFactory;
 use TravianZ\Mvc\Model;
 use TravianZ\Utils\Generator;
-use TravianZ\Enums\BuildingJobEnums;
-use TravianZ\Data\Buildings\MainBuilding;
-use TravianZ\Data\Buildings\Residence;
-use TravianZ\Enums\UnitEnums;
-use TravianZ\Entity\Villages;
-use TravianZ\Data\Buildings\RallyPoint;
-use TravianZ\Data\Movements\Raid;
 
 /**
  * @author iopietro
@@ -181,7 +177,7 @@ class BuildingModel extends Model
                 $selectedBuilding = BuildingsFactory::newBuilding(
                     $building->id,
                     $building->position,
-                    $building->level + $sameBuilding + 1
+                    $building->level
                 );
                 
                 // Set the building ID
@@ -192,7 +188,7 @@ class BuildingModel extends Model
         }    
 
         // If the building is more than level 0, check if an action can be executed
-        if ($selectedBuilding->level - $sameBuilding - 1 > 0) {
+        if ($selectedBuilding->level > 0) {
             // Get the class method name to call
             $methodToCall = 'manage'.str_replace(' ', '', $selectedBuilding);
             $results = [];
@@ -204,6 +200,9 @@ class BuildingModel extends Model
             }
         }
 
+        // Increase building level
+        $selectedBuilding->level += $sameBuilding + 1;
+        
         // Get the village infomations
         $villageInformations = $this->getVillageInformations($selectedVillage);
         
@@ -708,6 +707,15 @@ class BuildingModel extends Model
         return ['villageExpansions' => $villageExpansions];
     }
     
+    /**
+     * Manage the rally point
+     * 
+     * @param RallyPoint $building
+     * @param Village $village
+     * @param array $parameters
+     * @throws InvalidParametersException
+     * @return array
+     */
     private function manageRallyPoint(RallyPoint $building, Village $village, array $parameters): array
     {
         // Check if the menu parameter is valid
@@ -727,15 +735,53 @@ class BuildingModel extends Model
         $action = self::RALLY_POINT_ACTIONS[$parameters['GET']['t']];
         $results = [];
 
-        // Execute the marketplace selected action
+        // Execute the rally point selected action
         if (method_exists($this, $action)) {
             $results = $this->$action($building, $village, $parameters);
         }
-        
+
         return array_merge_recursive(
             $results,
             ['parameters' => ['t' => $parameters['GET']['t']]]
         ); 
+    }
+    
+    /**
+     * View the rally point movements
+     * 
+     * @param RallyPoint $building
+     * @param Village $village
+     * @param array $parameters
+     * @return array
+     */
+    private function rallyPointViewMovements(RallyPoint $building, Village $village, array $parameters): array
+    {
+    	// Check if there is a movement to send
+    	$results = $this->rallyPointSendUnits($building, $village, $parameters);
+    	
+    	return $results ?? [];
+    }
+
+    /**
+     * Send units to another village
+     * 
+     * @param RallyPoint $building
+     * @param Village $village
+     * @param array $parameters
+     * @return array
+     */
+    private function rallyPointSendUnits(RallyPoint $building, Village $village, array $parameters): array 
+    {
+    	// Check if there's an action to execute
+    	// TODO: Don't repeat it every time
+    	if (isset($parameters['POST']['action'])) {
+    		$action = $parameters['POST']['action'];
+    		if (method_exists($building, $action)) {
+    			$results = $building->$action($village, $parameters['POST']);
+    		}
+    	}
+
+    	return $results ?? [];
     }
     
     /**

@@ -15,6 +15,9 @@ use TravianZ\Enums\VillageEnums;
 use TravianZ\Factory\MovementsFactory;
 use TravianZ\Factory\UnitsFactory;
 use TravianZ\Utils\Generator;
+use TravianZ\Data\Users\Nature;
+use TravianZ\Factory\BuildingsFactory;
+use TravianZ\Enums\BuildingEnums;
 
 final class RallyPoint extends Building
 {
@@ -86,6 +89,30 @@ final class RallyPoint extends Building
     ];
     
     /**
+     * @var array The set of rules to prepare a movement
+     */
+    const PREPARE_MOVEMENT_RULES = [
+    	'c' => 'isRequired|isInt|minValue=1|maxValue=4'
+    ];
+    
+    /**
+     * @var array The set of rules to get a village by name
+     */
+    const PREPARE_MOVEMENT_VILLAGE_NAME_RULES = [
+    	'targetVillageName' => 'isRequired'
+    ];
+    
+    /**
+     * @var array The set of rules for sending units
+     */
+    const SEND_UNITS_RULES = [
+    	'ckey' => 'isRequired',
+    	'ctar1' => 'isInt|minValue=0|maxValue=42',
+    	'ctar2' => 'isInt|minValue=-1|maxValue=42',
+    	'spy' => 'isInt|minValue=1|maxValue=2'
+    ];
+    
+    /**
      * @var Validator
      */
     private $validator;
@@ -123,6 +150,26 @@ final class RallyPoint extends Building
         
         $this->validator = new Validator();
     }
+	
+	/**
+	 * {@inheritdoc}
+	 * @see \TravianZ\Entity\Building::getBonus()
+	 */
+	public function getBonus(){
+		// Initialize
+		$bonus = [];
+		
+		// Loop through the bonuses
+		for($i = $this->level; $i >= 1; $i--){
+			if(!isset($this->bonus[$i])){
+				continue;
+			}
+
+			$bonus = array_replace_recursive($bonus, $this->bonus[$i]);
+		}
+		
+		return $bonus;
+	}
     
     /**
      * Update the user's evasion settings
@@ -133,7 +180,7 @@ final class RallyPoint extends Building
     public function updateEvasionSettings(Village $village, array $parameters): array
     {
         // Check if the parameters are valid
-        if (!empty((new Validator())->validateInputs($parameters, self::UPDATE_EVASION_SETTINGS_RULES))) {
+        if (!empty($this->validator->validateInputs($parameters, self::UPDATE_EVASION_SETTINGS_RULES))) {
             return ['error' => INVALID_MAX_EVASIONS];
         }
 
@@ -283,7 +330,71 @@ final class RallyPoint extends Building
         }
 
         return $worldCellToCheck;
+    } 
+    
+    /**
+     * Check the correctness of a sending units attemp
+     *
+     * @param Village $village
+     * @param array $parameters
+     * @return string|Village|Oases Returns an error or the target village/oases on success
+     */
+    public function checkSendingUnits(Village $village, array $parameters)
+    {
+    	// Check if the inserted units are valid
+    	if (!empty($error = $this->checkUnits($village, $parameters))) {
+    		return $error;
+    	}
+    	
+    	// Check if the inserted units aren't enough
+    	foreach ($parameters['units'] as $type => $unit) {
+    		if ($unit > $village->getUnits()[$type]->amount) {
+    			return CANNOT_SEND_MORE_UNITS_THAN_HAVE;
+    		}
+    	}
+    	
+    	// Check if the attack type is valid
+    	if (!empty($this->validator->validateInputs($parameters, self::PREPARE_MOVEMENT_RULES))) {
+    		return INVALID_ATTACK_TYPE;
+    	}
+    	
+    	// Check if a village name was inserted
+    	if (empty($this->validator->validateInputs($parameters, self::PREPARE_MOVEMENT_VILLAGE_NAME_RULES))) {
+    		$worldCellToCheck = new Village(
+    				$this->getDatabase(),
+    				null,
+    				0,
+    				$parameters['targetVillageName']
+    		);
+
+    		// Check if the village/oases is null or doesn't exists
+    		if (
+    			is_null($worldCellToCheck) ||
+    			$worldCellToCheck->getState() == VillageEnums::DOES_NOT_EXIST
+    		) {
+    			return VILLAGE_DOES_NOT_EXIST;
+    		}  
+    	}
+    	
+    	// Check parameters correctness
+    	$worldCellToCheck = $this->checkRaid($village, $worldCellToCheck, $parameters);
+    	
+    	// If it's an oases, check if it can be normal attacked or enforced
+    	if (
+    		$worldCellToCheck instanceof Oases &&
+    		$worldCellToCheck->owner instanceof Nature
+    	) {
+    		if ($parameters['c'] == MovementEnums::NORMAL) {
+    			return CANT_NORMAL_ATTACK_OASES;
+    		} elseif ($parameters['c'] == MovementEnums::REINFORCEMENT) {
+    			return CANT_ENFORCE_OASES;
+    		}
+    	}
+    	
+    	// Return the error/Village/Oases
+    	return $worldCellToCheck;
     }
+    
 
     /**
      * Check the correctness of a farm list raid
@@ -693,6 +804,311 @@ final class RallyPoint extends Building
         
         // Add the movements
         $this->addMovements($village, $movements);
+    }
+    
+    /**
+     * Prepare the units to send
+     * 
+     * @param Village $village
+     * @param array $movements
+     */
+    public function prepareUnitsToSend(Village $village, array $parameters): array
+    {
+    	// Check if the attack type is not a spy attack
+    	if ($parameters['c'] == MovementEnums::SPY) {
+    		$toWorldCell = INVALID_ATTACK_TYPE;
+    	} else {
+    		// Check the parameters validity
+    		$toWorldCell = $this->checkSendingUnits($village, $parameters); 
+    	}
+    	
+    	if (is_string($toWorldCell)) {
+    		return [
+    				'error' => $toWorldCell,
+    				'targetVillageName' => $parameters['targetVillageName'],
+    				'units' => $parameters['units'],
+    				'c' => $parameters['c'],
+    				'x' => $parameters['x'],
+    				'y' => $parameters['y'],
+    		];
+    	}
+    	
+    	// Initialize
+    	$units = [];
+    	$spy = $parameters['c'] != MovementEnums::REINFORCEMENT;
+    	$catapultTargets = [];
+    	$catapultTargetBuildings = [];
+    	
+    	// Check if it's a normal attack and there is atleast one catapult
+    	if ($parameters['c'] == MovementEnums::NORMAL && $parameters['units'][8] > 0) {
+    		$catapultTargets = $this->getBonus();
+    	}
+    	
+    	// Set the buildings
+    	foreach ($catapultTargets as $type => $targets) {
+    		foreach ($targets as $buildingID) {
+    			$building = BuildingsFactory::newBuilding($buildingID, 0, 0);
+    			$catapultTarget['id'] = $building->id;
+    			$catapultTarget['name'] = $building->name;
+    			$catapultTargetBuildings[$type][] = $catapultTarget;
+    		}
+    	}
+
+    	// Create the units and check if it's a spy attack
+    	for ($i = 1; $i <= 10; $i++) {
+    		// Set the units to 0, if empty
+    		if ($parameters['units'][$i] == '') {
+    			$parameters['units'][$i] = 0;
+    		}
+
+    		$units[$i] = UnitsFactory::create($village->owner->tribe, $i, $parameters['units'][$i]);
+    		
+    		if (
+    			$spy &&
+    			$units[$i]->amount > 0 && 
+    			$units[$i]->classes[1] != UnitEnums::SCOUT
+    		) {
+    			$spy = false;
+    		}
+    	}
+    	
+    	// Set the hero if present
+    	if ($parameters['units'][11] > 0) {
+    		$units[$i] = $village->getUnits()[11];
+    	}
+    	
+    	// If it's a spy attack, change the attack type
+    	if ($spy) {
+    		$parameters['c'] = MovementEnums::SPY;
+    	}
+    	
+    	// Get the walking units time
+    	$walkingUnitsTime = Generator::getWalkingUnitsTime($village, $toWorldCell, $units);
+    	
+	    // Add the prepared movement on the database and return the needed informations
+    	return [
+    			'ckey' => $this->addPreparedUnits($village, $toWorldCell, $parameters['units'], $parameters['c']),
+    			'units' => $parameters['units'],
+    			'prepareUnits' => true,
+    			'targetVillageVref' => $toWorldCell->vref,
+    			'targetVillageMapCheck' => Generator::getMapCheck($toWorldCell->vref),
+    			'targetVillageName' => $toWorldCell->name,
+    			'targetVillageCoordinates' => $toWorldCell->coordinates,
+    			'targetOwnerId' => $toWorldCell->owner->id,
+    			'targetOwnerUsername' => $toWorldCell->owner->username,
+    			'arrivalTime' => [
+    					Generator::getTimeFormat($walkingUnitsTime),
+    					Generator::procMtime($walkingUnitsTime + time())[1]
+    			],
+    			'c' => $parameters['c'],
+    			'catapultTargetBuildings' => $catapultTargetBuildings,
+    			'x' => $parameters['x'],
+    			'y' => $parameters['y'],
+    	];
+    }
+    
+    /**
+     * Add prepared units on the database
+     * 
+     * @param Village $fromVillage The sender village
+     * @param WorldCell $toWorldCell The target village
+     * @param array $units The units [type => amount]
+     * @param int $type The movement type
+     * @return string Returns the generated prepared units key
+     */
+    public function addPreparedUnits(Village $fromVillage, WorldCell $toWorldCell, array $units, int $type): string
+    {
+    	// Generate the string identifier
+    	$stringIdentifier = Generator::generateRandStr(10);
+    	
+    	// Delete any previously prepared units
+    	$sql = 'DELETE FROM
+                    ' . TB_PREFIX . 'a2b
+                WHERE
+					`from` = ?';
+
+    	$this->getDatabase()->queryNew($sql, $fromVillage->vref);
+
+    	$sql = 'INSERT INTO
+                    ' . TB_PREFIX . 'a2b
+                    (ckey, `from`, `to`, u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, type)
+                VALUES
+                    (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+
+    	$this->getDatabase()->queryNew(
+    			$sql,
+    			$stringIdentifier,
+    			$fromVillage->vref,
+    			$toWorldCell->vref,
+    			$units[1] ?? 0,
+    			$units[2] ?? 0,
+    			$units[3] ?? 0,
+    			$units[4] ?? 0,
+    			$units[5] ?? 0,
+    			$units[6] ?? 0,
+    			$units[7] ?? 0,
+    			$units[8] ?? 0,
+    			$units[9] ?? 0,
+    			$units[10] ?? 0,
+    			$units[11] ?? 0,
+    			$type
+    	);
+    	
+    	return $stringIdentifier;
+    }
+
+    /**
+     * Send previously prepared units
+     *
+     * @param Village $village
+     * @param array $movements
+     */
+    public function sendUnits(Village $village, array $parameters): array
+    {
+    	// Check the parameters validity
+    	if (!empty($this->validator->validateInputs($parameters, self::SEND_UNITS_RULES))) {
+    		return [];
+    	}
+
+    	// Get the prepared units from the passed key
+    	$preparedUnits = $this->getPreparedUnits($parameters['ckey']);
+
+    	// Check if there are no prepared units with that key
+    	if (empty($preparedUnits)) {
+    		return [];
+    	}
+
+    	// Initialize
+    	$validTargets = 0;
+    	
+    	// Check the catapult targets correctness
+    	foreach ($this->getBonus() as $validCatapultTargets) {
+    		foreach ($validCatapultTargets as $buildingID) {    			
+    			// Check if the selected targets are on the list
+    			if (
+    				 ($parameters['ctar1'] == BuildingEnums::EMPTY || 
+    				 $parameters['ctar1'] == $buildingID) ||
+    				 ($parameters['ctar2'] == BuildingEnums::EMPTY || 
+    				 $parameters['ctar2'] == -1 || 
+    				 $parameters['ctar2'] == $buildingID)
+    			) {
+    				$validTargets++;
+    			}
+
+    			if ($validTargets == 2) {
+    				break;
+    			}
+    		}
+    	}
+    	
+    	// Check if the selected targets are valid
+    	if ($validTargets < 2) {
+    		return [];
+    	}
+    	
+    	// Check the units correctness
+    	$toWorldCell = $this->checkSendingUnits($village, $preparedUnits);
+
+    	// Check if the units aren't valid
+    	if (is_string($toWorldCell)) {
+    		return [];
+    	}
+    	
+    	// Initialize
+    	$units = [];
+    	$time = time();
+    	
+    	// Create the units
+    	for ($i = 1; $i <= 10; $i++) {
+    		$units[$i] = UnitsFactory::create($village->owner->tribe, $i, $preparedUnits['units'][$i]);
+    	}
+    	
+    	// Set the hero if present
+    	if ($parameters['units'][11] > 0) {
+    		$units[$i] = $village->getUnits()[11];
+    	}
+    	
+    	// Create the movement
+    	$movement = MovementsFactory::create(
+    			$preparedUnits['c'], 
+    			$this->getDatabase(), 
+    			0, 
+    			$village, 
+    			$toWorldCell, 
+    			$time,
+    			$time + Generator::getWalkingUnitsTime($village, $toWorldCell, $units), 
+    			[],
+    			$units,
+    			0,
+    			0,
+    			0,
+    			[$parameters['ctar1'], $parameters['ctar2']] ?? [],
+    			$parameters['spy'] ?? 0
+    	);
+    	
+    	// Add the movement to the database
+    	$movement->add();
+    	
+    	// Remove the units from the village
+    	$village->updateUnits($units, true);
+    	
+    	// Delete the prepared units
+    	$this->deletePreparedUnits($parameters['ckey']);
+    	
+    	// Add the movement locally
+    	$village->addMovement($movement);
+    	
+    	return [];
+    }
+    
+    /**
+     * Get previously prepared units
+     * 
+     * @param string $key The prepared units key
+     * @return array Returns an array, containing all the prepared movement informations
+     */
+    public function getPreparedUnits(string $key): array
+    {
+    	$sql = 'SELECT * FROM
+                    ' . TB_PREFIX . 'a2b
+                WHERE
+                    ckey = ?';
+    	
+    	$res = $this->getDatabase()->queryNew($sql, $key)[0];
+    	
+    	// If the units don't exist, return
+    	if (empty($res)) {
+    		return [];
+    	}
+    	
+    	// Initialize
+    	$informations = [
+    		'lastTarget' => $res['to'],
+    		'c' => $res['type'],
+    		'units' => []
+    	];
+    	
+    	// Create the units array
+    	for($i = 1; $i <= 11; $i++) {
+    		$informations['units'][$i] = $res['u'.$i];
+    	}
+    	
+    	return $informations;
+    }
+    
+    /**
+     * Delete prepared units from the database
+     * 
+     * @param string $key The prepared units key
+     */
+    public function deletePreparedUnits(string $key)
+    {
+    	$sql = 'DELETE FROM
+                    ' . TB_PREFIX . 'a2b
+                WHERE
+                    ckey = ?';
+    	
+    	$this->getDatabase()->queryNew($sql, $key);
     }
     
     /**

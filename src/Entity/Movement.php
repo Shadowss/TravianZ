@@ -64,7 +64,7 @@ abstract class Movement
     /**
      * @var IDbConnection
      */
-    private $db;
+    protected $db;
     
     public function __construct(
         IDbConnection $db,

@@ -1,3 +1,12 @@
+-- 19.09.2018 added a column, an index, changed 15 columns default value and 14 columns attribute
+ALTER TABLE `s1_a2b` ADD `from` INT(11) NOT NULL AFTER `ckey`;
+ALTER TABLE `s1_a2b` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT, CHANGE `ckey` `ckey` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0', CHANGE `from` `from` INT(11) NOT NULL DEFAULT '0', CHANGE `to` `to` INT(11) NOT NULL DEFAULT '0', CHANGE `u1` `u1` INT(11) NOT NULL DEFAULT '0', CHANGE `u2` `u2` INT(11) NOT NULL DEFAULT '0', CHANGE `u3` `u3` INT(11) NOT NULL DEFAULT '0', CHANGE `u4` `u4` INT(11) NOT NULL DEFAULT '0', CHANGE `u5` `u5` INT(11) NOT NULL DEFAULT '0', CHANGE `u6` `u6` INT(11) NOT NULL DEFAULT '0', CHANGE `u7` `u7` INT(11) NOT NULL DEFAULT '0', CHANGE `u8` `u8` INT(11) NOT NULL DEFAULT '0', CHANGE `u9` `u9` INT(11) NOT NULL DEFAULT '0', CHANGE `u10` `u10` INT(11) NOT NULL DEFAULT '0', CHANGE `u11` `u11` INT(11) NOT NULL DEFAULT '0', CHANGE `type` `type` SMALLINT(1) NOT NULL DEFAULT '0';
+ALTER TABLE `s1_a2b` ADD INDEX `from` (`from`);
+
+-- 18.09.2018 dropped a column and changed a column name
+ALTER TABLE `s1_a2b` DROP `time_check`;
+ALTER TABLE `s1_a2b` CHANGE `to_vid` `to` INT(11) NULL DEFAULT NULL;
+
 -- 14.09.2018 changed a column name
 ALTER TABLE `s1_wdata` CHANGE `oasistype` `oasestype` TINYINT(2) NULL DEFAULT NULL;
 

@@ -670,7 +670,7 @@ define("NW","North West");
 define("NE","North East");
 define("SW","South West");
 define("SE","South East");
-define("RANDOM","random");
+define("RANDOM","Random");
 define("ACCEPT_RULES"," I accept the game rules and general terms and conditions.");
 define("ONE_PER_SERVER","Each player may only own ONE account per server.");
 define("BEFORE_REGISTER","Before you register an account you should read the <a href='../anleitung.php' target='_blank'>instructions</a> of Travian ro1 to see the specific advantages and disadvantages of the three tribes.");
@@ -746,6 +746,9 @@ define("OK","Ok");
 define("SENDTROOP","Send troops");
 define("TROOP","Troops");
 define("NOTROOP","no troops");
+define("MILITARY","Military");
+define("INFRASTRUCTURE","Infastructure");
+define("RESOURCES","Resources");
 
 //map
 define("X","X");
@@ -810,6 +813,20 @@ define("WE_LOOKED","We looked 404 times already but can't find anything");
 //TIME RELATED
 define("CALCULATED","Calculated in");
 define("SERVER_TIME","Server time:");
+
+//SEND UNITS
+define("INVALID_ATTACK_TYPE","Invalid attack type");
+define("CANT_NORMAL_ATTACK_OASES","You can't normal attack this oases");
+define("CANT_ENFORCE_OASES","You can't enforce this oases");
+define("DESTINATION","Destination");
+define("IN","in");
+define("TO","to");
+define("ARRIVED","Arrived");
+define("OPTIONS","Options");
+define("WARNING_UNDER_PROTECTION","<b>Caution:</b> Attacking a player will make you lose the protection!");
+define("SCOUT_RES_AND_UNITS","Scout resources and troops");
+define("SCOUT_DEF_AND_UNITS","Scout defences and troops");
+define("CANNOT_SEND_MORE_UNITS_THAN_HAVE","You cannot send more units than you have");
 
 //FARM LIST
 define("EDIT","edit");
@@ -1364,7 +1381,7 @@ But to raise such a great Wonder would be no easy task, one would need construct
 Tens of thousands of scouts roamed across all existence searching in vain for these mystical plans, looking in all places but the dreaded Natarian Capital, yet could not find them. Today however, they return bearing good news, they return baring the locations of the plans, hidden by the armies of the Natars inside secret strongholds constructed to be hidden from the eyes of man.
 Now begins the final stretch, when the greatest armies of the Free people and the Natars will clash across the world for the fate of all that lies under heaven. This is the war that will echo across the eons, this is your war, and here you shall etch your name across history, here you shall become legend.
 
-<img src=\"img/x.gif\" class=\"WWVillagesAnnouncement\" title=\"".WWVILLAGE."\" alt=\"".WWVILLAGE."\">
+<img src=\"img/x.gif\" class=\"WWVillagesAnnouncement\" title=\"".WW_VILLAGE."\" alt=\"".WW_VILLAGE."\">
 
 To conquer one, the following things must happen:
 

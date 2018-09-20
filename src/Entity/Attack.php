@@ -89,20 +89,20 @@ abstract class Attack extends Movement
         $this->id = $this->ref = $this->db->queryNew(
             $sql,
             $this->from->vref,
-            $this->units[1]->amount,
-            $this->units[2]->amount,
-            $this->units[3]->amount,
-            $this->units[4]->amount,
-            $this->units[5]->amount,
-            $this->units[6]->amount,
-            $this->units[7]->amount,
-            $this->units[8]->amount,
-            $this->units[9]->amount,
-            $this->units[10]->amount,
-            $this->units[11]->amount,
-            $this->catapultTargets[0],
-            $this->catapultTargets[1],
-            $this->spy
+        	$this->units[1]->amount ?? 0,
+        	$this->units[2]->amount ?? 0,
+        	$this->units[3]->amount ?? 0,
+        	$this->units[4]->amount ?? 0,
+        	$this->units[5]->amount ?? 0,
+        	$this->units[6]->amount ?? 0,
+        	$this->units[7]->amount ?? 0,
+        	$this->units[8]->amount ?? 0,
+        	$this->units[9]->amount ?? 0,
+        	$this->units[10]->amount ?? 0,
+        	$this->units[11]->amount ?? 0,
+            $this->catapultTargets[0] ?? 0,
+        	$this->catapultTargets[1] ?? 0,
+        	$this->spy ?? 0
         );   
         
         return parent::addMovement();

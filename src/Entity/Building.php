@@ -86,7 +86,7 @@ abstract class Building
     /**
      * @var array The bonus provided by this building
      */
-    private $bonus;
+    protected $bonus;
     
     /**
      * @var array The prerequisites needed to build this building

@@ -102,7 +102,7 @@ div.messages {
     padding: 43px 25px 0;
     width: 502px;
 }
-div.a2b {
+div.gid16 {
     padding: 43px 25px 0;
     width: 502px;
 }
@@ -5527,44 +5527,44 @@ div.quest div#qstd table.altquest td.ra {
 div.quest div#qstd table.altquest td.desc {
     text-align: left;
 }
-div.a2b table th, div.a2b table td {
+div.gid16 table th, div.gid16 table td {
     padding: 2px 7px;
 }
-div.a2b table#troops {
+div.gid16 table#troops {
     background-color: #FFFFFF;
     border: 1px dashed #C0C0C0;
 }
-div.a2b table#troops td.column-first {
+div.gid16 table#troops td.column-first {
     padding-left: 8px;
 }
-div.a2b table#troops td.column-last {
+div.gid16 table#troops td.column-last {
     padding-right: 8px;
 }
-div.a2b table#troops td.line-first {
+div.gid16 table#troops td.line-first {
     padding-top: 8px;
 }
-div.a2b table#troops td.line-last {
+div.gid16 table#troops td.line-last {
     padding-bottom: 8px;
 }
-div.a2b table#troops td.large {
+div.gid16 table#troops td.large {
     width: 26%;
 }
-div.a2b table#troops td.regular {
+div.gid16 table#troops td.regular {
     width: 25%;
 }
-div.a2b table#troops td.small {
+div.gid16 table#troops td.small {
     width: 23%;
 }
-div.a2b table#troops img {
+div.gid16 table#troops img {
     bottom: 3px;
     margin-right: 2px;
     position: relative;
     vertical-align: bottom;
 }
-div.a2b table#troops input.text {
+div.gid16 table#troops input.text {
     width: 30px;
 }
-div.a2b table#troops input.disabled {
+div.gid16 table#troops input.disabled {
     background-color: #EEEEEE;
     border-color: #AAAAAA;
 }
@@ -5593,7 +5593,7 @@ body.presto div.gid16 table#coords td.sel input.radio {
 * + html div.gid16 table#coords td.sel input.radio {
     top: -2px;
 }
-div.gid16 table#coords td.vil *, div.a2b table#coords td.target * {
+div.gid16 table#coords td.vil *, div.gid16 table#coords td.target * {
     float: left;
     margin-right: 10px;
 }
@@ -5606,46 +5606,46 @@ div.gid16 table#coords td.target input.text {
 div.gid16 table#short_info {
     background-color: #FFFFFF;
 }
-div.a2b table#short_info th {
+div.gid16 table#short_info th {
     padding-left: 0;
     width: 15%;
 }
-div.a2b table.troop_details tbody th {
+div.gid16 table.troop_details tbody th {
     width: 20%;
 }
-div.a2b table.troop_details tbody.units td {
+div.gid16 table.troop_details tbody.units td {
     padding: 2px;
     text-align: center;
     width: 7.2%;
 }
-div.a2b table.troop_details tbody.units input.text {
+div.gid16 table.troop_details tbody.units input.text {
     width: 73%;
 }
-div.a2b table.troop_details tbody.options input.radio {
+div.gid16 table.troop_details tbody.options input.radio {
     margin-right: 2px;
     position: relative;
     top: 2px;
 }
-body.presto div.a2b table.troop_details tbody.options input.radio {
+body.presto div.gid16 table.troop_details tbody.options input.radio {
     top: 0;
 }
-body.ie6 div.a2b table.troop_details tbody.options input.radio, body.ie7 div.a2b table.troop_details tbody.options input.radio {
+body.ie6 div.gid16 table.troop_details tbody.options input.radio, body.ie7 div.gid16 table.troop_details tbody.options input.radio {
     top: -2px;
 }
-div.a2b table.troop_details tbody.cata select.dropdown {
+div.gid16 table.troop_details tbody.cata select.dropdown {
     margin: 1px 0;
 }
-div.a2b table.troop_details tbody.infos th, div.a2b table.troop_details tbody.infos td {
+div.gid16 table.troop_details tbody.infos th, div.gid16 table.troop_details tbody.infos td {
     background-color: #F5F5F5;
 }
-div.a2b table.troop_details tbody.infos div {
+div.gid16 table.troop_details tbody.infos div {
     text-align: center;
     width: 49%;
 }
-div.a2b table.troop_details tbody.infos div.in {
+div.gid16 table.troop_details tbody.infos div.in {
     float: left;
 }
-div.a2b table.troop_details tbody.infos div.at {
+div.gid16 table.troop_details tbody.infos div.at {
     float: right;
 }
 div.cropfinder table#croplist th, div.cropfinder table#croplist td {
@@ -6532,16 +6532,16 @@ div.quest div.rew p.ta_aw {
 div.quest div#qstd span.org {
     font-style: normal;
 }
-div.a2b p.error {
+div.gid16 p.error {
     font-weight: bold;
 }
-div.a2b span.info {
+div.gid16 span.info {
     font-size: 11px;
 }
-div.a2b table#troops td {
+div.gid16 table#troops td {
     font-size: 11px;
 }
-div.a2b table#troops span.none {
+div.gid16 table#troops span.none {
     font-weight: bold;
 }
 div.gid16 table#coords td.or {

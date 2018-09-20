@@ -3,7 +3,7 @@
 		<tr>
 			<td class="sel">
 				<label> 
-					<input class="radio" name="c" value="2" type="radio"> {$smarty.const.REINFORCEMENT}
+					<input class="radio" name="c" value="2" type="radio" {if !isset($c) || $c == 2}checked="checked"{/if}> {$smarty.const.REINFORCEMENT}
 				</label>
 			</td>
 
@@ -14,7 +14,7 @@
 		<tr>
 			<td class="sel">
 				<label> 
-					<input class="radio" name="c" value="3" type="radio"> {$smarty.const.NORMALATTACK}
+					<input class="radio" name="c" value="3" type="radio" {if isset($c) && $c == 3}checked="checked"{/if}> {$smarty.const.NORMALATTACK}
 				</label>
 			</td>
 			<td class="or">{$smarty.const.OR}</td>
@@ -22,7 +22,7 @@
 		<tr>
 			<td class="sel">
 				<label> 
-					<input class="radio" name="c" value="4" type="radio"> {$smarty.const.RAID}
+					<input class="radio" name="c" value="4" type="radio" {if isset($c) && $c == 4}checked="checked"{/if}> {$smarty.const.RAID}
 				</label>
 			</td>
 
@@ -36,4 +36,4 @@
 	</tbody>
 </table>
 <br />
-<button value="prepareUnitsToSend" name="action" id="btn_ok" class="trav_buttons" onclick="this.disabled=true;this.form.submit();"> {$smarty.const.OK} </button>
+<button value="prepareUnitsToSend" name="action" id="btn_ok" class="trav_buttons"> {$smarty.const.OK} </button>

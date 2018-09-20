@@ -382,6 +382,7 @@ trait GetInformations
             'gold' => $session->getUser()->gold,
             'tribe' => $session->getUser()->tribe,
             'alliance' => $session->getUser()->alliance,
+        	'underBeginnerProtection' => $session->getUser()->isUnderBeginnerProtection(),
             'maxEvasion' => $session->getUser()->maxEvasion,
             'questNumber' => $session->getUser()->questNumber,
             'selectedVillage' => $session->getUser()->selectedVillage,

@@ -196,42 +196,58 @@ abstract class BuildingsFactory
             case BuildingEnums::RALLY_POINT:
                 return [
                 1 => [],
-                3 => [BuildingEnums::WAREHOUSE, BuildingEnums::GRANARY],
+                3 => [
+                		2 => 
+                		[
+                				BuildingEnums::WAREHOUSE, 
+                		    	BuildingEnums::GRANARY
+						]
+                	],
                 5 => [
-                        BuildingEnums::WOODCUTTER,
-                        BuildingEnums::CLAY_PIT, 
-                        BuildingEnums::IRON_MINE,
-                        BuildingEnums::CROPLAND,
-                        BuildingEnums::SAWMILL,
-                        BuildingEnums::BRICKYARD,
-                        BuildingEnums::IRON_FOUNDRY,
-                        BuildingEnums::GRAIN_MILL,
-                        BuildingEnums::BAKERY
+                        0 => 
+                        [
+                        		BuildingEnums::WOODCUTTER,
+                        		BuildingEnums::CLAY_PIT, 
+                        		BuildingEnums::IRON_MINE,
+                        		BuildingEnums::CROPLAND,
+                        		BuildingEnums::SAWMILL,
+                        		BuildingEnums::BRICKYARD,
+                        		BuildingEnums::IRON_FOUNDRY,
+                        		BuildingEnums::GRAIN_MILL,
+                        		BuildingEnums::BAKERY
+                        ]
                 ],
                 10 => [
-                        BuildingEnums::ACADEMY, 
-                        BuildingEnums::ARMOURY,
-                        BuildingEnums::BARRACKS,
-                        BuildingEnums::BLACKSMITH,
-                        BuildingEnums::BREWERY,
-                        BuildingEnums::EMBASSY,
-                        BuildingEnums::GREAT_BARRACKS,
-                        BuildingEnums::GREAT_STABLE,
-                        BuildingEnums::GREAT_WORKSHOP,
-                        BuildingEnums::HERO_MANSION,
-                        BuildingEnums::HORSE_DRINKING_TROUGH,
-                        BuildingEnums::MAIN_BUILDING,
-                        BuildingEnums::MARKETPLACE,
-                        BuildingEnums::PALACE,
-                        BuildingEnums::RALLY_POINT,
-                        BuildingEnums::RESIDENCE,
-                        BuildingEnums::STABLE,
-                        BuildingEnums::TOURNAMENT_SQUARE,
-                        BuildingEnums::TOWN_HALL,
-                        BuildingEnums::TRADE_OFFICE,
-                        BuildingEnums::TREASURY,
-                        BuildingEnums::WONDER_OF_THE_WORLD,
-                        BuildingEnums::WORKSHOP
+                		1 => 
+                		[
+                				BuildingEnums::ACADEMY, 
+                				BuildingEnums::BARRACKS,
+                				BuildingEnums::STABLE,
+                				BuildingEnums::WORKSHOP,
+                				BuildingEnums::ARMOURY,
+                				BuildingEnums::BLACKSMITH,
+                				BuildingEnums::RALLY_POINT,
+                				BuildingEnums::GREAT_BARRACKS,
+                				BuildingEnums::GREAT_STABLE,
+                				BuildingEnums::GREAT_WORKSHOP,
+                				BuildingEnums::HERO_MANSION,
+                				BuildingEnums::TOURNAMENT_SQUARE
+                		],
+
+                		2 => 
+                		[
+                				2 => BuildingEnums::BREWERY,
+                		        BuildingEnums::EMBASSY,
+                		 		BuildingEnums::HORSE_DRINKING_TROUGH,
+                				BuildingEnums::MAIN_BUILDING,
+                				BuildingEnums::MARKETPLACE,
+                				BuildingEnums::PALACE,
+                				BuildingEnums::RESIDENCE,
+                				BuildingEnums::TOWN_HALL,
+                				BuildingEnums::TRADE_OFFICE,
+                				BuildingEnums::TREASURY,
+                				BuildingEnums::WONDER_OF_THE_WORLD
+                		]
                 ]
                 ];
             case BuildingEnums::MARKETPLACE:
