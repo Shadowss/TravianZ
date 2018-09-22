@@ -101,7 +101,7 @@ abstract class Attack extends Movement
         	$this->units[10]->amount ?? 0,
         	$this->units[11]->amount ?? 0,
             $this->catapultTargets[0] ?? 0,
-        	$this->catapultTargets[1] ?? 0,
+        	$this->catapultTargets[1] ?? -1,
         	$this->spy ?? 0
         );   
         

@@ -38,6 +38,8 @@ use TravianZ\Exceptions\InvalidParametersException;
 use TravianZ\Factory\BuildingsFactory;
 use TravianZ\Mvc\Model;
 use TravianZ\Utils\Generator;
+use TravianZ\Data\Buildings\Brewery;
+use TravianZ\Entity\BeerFest;
 
 /**
  * @author iopietro
@@ -878,5 +880,34 @@ class BuildingModel extends Model
             $results ?? [],
             ['villageFarmLists' => $farmLists]
         );
+    }
+    
+    /**
+     * Manage the brewery
+     * 
+     * @param Brewery $building
+     * @param Village $village
+     * @param array $parameters
+     */
+    public function manageBrewery(Brewery $building, Village $village, array $parameters)
+    {        
+        // Check if there's an action to execute
+        // TODO: Don't repeat it every time
+        if (isset($parameters['POST']['action'])) {
+            $action = $parameters['POST']['action'];
+            if (method_exists($building, $action)) {
+                $results = $building->$action($village, $parameters['POST']);
+            }
+        }
+
+        return [
+            'beerFest' => [
+                'neededResources' => BeerFest::NEEDED_RESOURCES,
+                'duration' => Generator::getTimeFormat(BeerFest::BASE_DURATION),
+                'error' => $village->owner->isBeerFestActive() ?
+                Generator::getTimeFormat($village->owner->getBeerFestEndTime() - $this->time) :
+                (empty($building->checkEnoughBeerFestResources($village)) ? TOO_FEW_RESOURCES : '')
+            ]
+        ];       
     }
 }

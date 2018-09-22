@@ -69,13 +69,11 @@
             <tr>
                 <th>{$smarty.const.DESTINATION}:</th>
                 <td colspan="{$colspan}">
-                    {$targetName = 'ctar1'}
-                    {$randomTargetValue = 0}
+                    {$targetType = 1}
                     {include file=$smarty.const.TEMPLATES_DIR|cat:'sendUnits/catapultTargets.tpl'}
 
         			{if $units[8] >= 20}
-        				{$targetName = 'ctar2'}
-            			{$randomTargetValue = -1}
+        				{$targetType = 2}
            				{include file=$smarty.const.TEMPLATES_DIR|cat:'sendUnits/catapultTargets.tpl'}
         			{/if}
         		</td>

@@ -155,7 +155,12 @@ final class RallyPoint extends Building
 	 * {@inheritdoc}
 	 * @see \TravianZ\Entity\Building::getBonus()
 	 */
-	public function getBonus(){
+	public function getBonus(int $level = 0){
+	    // Check if a level has been defined
+	    if ($level > 0) {
+	        return $this->bonus[$level];
+	    }
+		
 		// Initialize
 		$bonus = [];
 		
@@ -841,7 +846,7 @@ final class RallyPoint extends Building
     	
     	// Check if it's a normal attack and there is atleast one catapult
     	if ($parameters['c'] == MovementEnums::NORMAL && $parameters['units'][8] > 0) {
-    		$catapultTargets = $this->getBonus();
+    		$catapultTargets = $this->getBonus($village->owner->isBeerFestActive() ? 1 : 0);
     	}
     	
     	// Set the buildings
@@ -849,7 +854,7 @@ final class RallyPoint extends Building
     		foreach ($targets as $buildingID) {
     			$building = BuildingsFactory::newBuilding($buildingID, 0, 0);
     			$catapultTarget['id'] = $building->id;
-    			$catapultTarget['name'] = $building->name;
+    			$catapultTarget['name'] = $buildingID == BuildingEnums::EMPTY ? RANDOM : $building->name;
     			$catapultTargetBuildings[$type][] = $catapultTarget;
     		}
     	}
@@ -980,27 +985,32 @@ final class RallyPoint extends Building
 
     	// Initialize
     	$validTargets = 0;
-    	
+
     	// Check the catapult targets correctness
-    	foreach ($this->getBonus() as $validCatapultTargets) {
+    	foreach ($this->getBonus($village->owner->isBeerFestActive() ? 1 : 0) as $validCatapultTargets) {
     		foreach ($validCatapultTargets as $buildingID) {    			
     			// Check if the selected targets are on the list
-    			if (
-    				 ($parameters['ctar1'] == BuildingEnums::EMPTY || 
-    				 $parameters['ctar1'] == $buildingID) ||
-    				 ($parameters['ctar2'] == BuildingEnums::EMPTY || 
-    				 $parameters['ctar2'] == -1 || 
-    				 $parameters['ctar2'] == $buildingID)
-    			) {
+    			if ($parameters['ctar1'] == $buildingID) {
     				$validTargets++;
     			}
 
+    			// Check if the selected targets are on the list
+    			// and if there are more than 20 catapults, in case of double target
+    			if (
+    			    ($parameters['ctar2'] ?? - 1) == -1 ||
+    			    ($parameters['ctar2'] == $buildingID &&
+    			    $preparedUnits['units'][8] >= 20)
+    			) {
+    			    $validTargets++;
+    			}
+
+    			// If all targets are valid, break the for
     			if ($validTargets == 2) {
     				break;
     			}
     		}
     	}
-    	
+
     	// Check if the selected targets are valid
     	if ($validTargets < 2) {
     		return [];
@@ -1024,7 +1034,7 @@ final class RallyPoint extends Building
     	}
     	
     	// Set the hero if present
-    	if ($parameters['units'][11] > 0) {
+    	if ($preparedUnits['units'][11] > 0) {
     		$units[$i] = $village->getUnits()[11];
     	}
     	

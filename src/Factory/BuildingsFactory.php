@@ -195,16 +195,21 @@ abstract class BuildingsFactory
                 return array_combine(range(0, 20), range(100, 300, 10));
             case BuildingEnums::RALLY_POINT:
                 return [
-                1 => [],
+                1 => [
+                        0 =>
+                        [
+                                BuildingEnums::EMPTY
+                        ]
+                     ],
                 3 => [
-                		2 => 
+                		3 => 
                 		[
                 				BuildingEnums::WAREHOUSE, 
                 		    	BuildingEnums::GRANARY
 						]
-                	],
+                	 ],
                 5 => [
-                        0 => 
+                        1 => 
                         [
                         		BuildingEnums::WOODCUTTER,
                         		BuildingEnums::CLAY_PIT, 
@@ -218,7 +223,7 @@ abstract class BuildingsFactory
                         ]
                 ],
                 10 => [
-                		1 => 
+                		2 => 
                 		[
                 				BuildingEnums::ACADEMY, 
                 				BuildingEnums::BARRACKS,
@@ -234,7 +239,7 @@ abstract class BuildingsFactory
                 				BuildingEnums::TOURNAMENT_SQUARE
                 		],
 
-                		2 => 
+                		3 => 
                 		[
                 				2 => BuildingEnums::BREWERY,
                 		        BuildingEnums::EMBASSY,

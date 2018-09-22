@@ -128,6 +128,11 @@ class User
     public $selectedVillage;
     
     /**
+     * @var int The beer fest end time
+     */
+    private $beerFestTime;
+    
+    /**
      * @var bool Determines if the User has enabled the vacation mode.
      */
     private $vacationModeEnabled;
@@ -297,8 +302,6 @@ class User
         $this->access = $res['access'];
         $this->beginnerProtectionEndTime = $res['protect'];
         $this->ok = $res['ok'];
-        $this->vacationModeEnabled = $res['vac_mode'];
-        $this->vacationTime = $res['vac_time'];
         $this->questNumber = $res['quest'];
         $this->maxEvasion = $res['maxevasion'];
         $this->selectedVillage = $res['actualvillage'];
@@ -306,6 +309,9 @@ class User
         // Set private properties
         $this->sitters = [$res['sit1'], $res['sit2']];
         $this->password = $res['password'];
+        $this->beerFestTime = $res['beerfest'];
+        $this->vacationModeEnabled = $res['vac_mode'];
+        $this->vacationTime = $res['vac_time'];
         
         // Set the User's villages
         $this->setVillages();
@@ -349,6 +355,34 @@ class User
     public function isOnVacation(): bool
     {
         return $this->vacationModeEnabled && $this->vacationTime > time();
+    }
+    
+    /**
+     * Check if the user is on vacation
+     *
+     * @return bool Returns true if the User is on vaction, false otherwise
+     */
+    public function isBeerFestActive(): bool
+    {
+        return $this->beerFestTime > time();
+    }
+    
+    /**
+     * Get the beer fest end time
+     *
+     * @return bool Returns the beer fest end time
+     */
+    public function getBeerFestEndTime(): int
+    {
+        return $this->beerFestTime;
+    }
+    
+    /**
+     * Set the beer fest end time
+     */
+    public function setBeerFestEndTime(int $newTime)
+    {
+        $this->beerFestTime = $newTime;
     }
     
     /**

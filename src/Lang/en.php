@@ -686,6 +686,10 @@ define("PASSWORD_SENT", "If the email address exists, a new password has been se
 define("PASSWORD_SET_SUCCESS", "The password was set successfully.");
 define("NEW_PASSWORD_ERROR", "Invalid code, password or the password has already been set.");
 
+//BEER FEST
+define("BEER_FEST","Beer fest");
+define("CELEBRATION","Celebration");
+
 //ATTACKS ETC.
 define("TROOP_MOVEMENTS","Troop Movements:");
 define("ARRIVING_REINF_TROOPS","Arriving reinforcing troops");

@@ -37,7 +37,7 @@
 					<td class="none">{$research.error}</td>
 				{else}
 					<td class="act">
-						<a class="research" href="build.php?id={$parameters['id']}&amp;a={$unit}&amp;c={$sessionChecker}">{$smarty.const.RESEARCH}</a>
+						<a class="research" href="build.php?id={$parameters['id']}&a={$unit}&c={$sessionChecker}">{$smarty.const.RESEARCH}</a>
 					</td>
 				{/if}
 			</tr>
