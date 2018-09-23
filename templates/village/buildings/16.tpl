@@ -5,7 +5,7 @@
 	{elseif $parameters['t'] == 1}
 		{include file=$smarty.const.TEMPLATES_DIR|cat:'village/buildings/rallyPoint/sendUnits.tpl'}
 	{elseif $parameters['t'] == 2}
-		{include file=$smarty.const.TEMPLATES_DIR|cat:'simulator/.tpl'}
+		{include file=$smarty.const.TEMPLATES_DIR|cat:'village/buildings/rallyPoint/simulator.tpl'}
 	{elseif $parameters['t'] == 3}
 		{include file=$smarty.const.TEMPLATES_DIR|cat:'village/buildings/rallyPoint/goldClub.tpl'}
 	{/if}

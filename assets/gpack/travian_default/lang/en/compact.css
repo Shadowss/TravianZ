@@ -3000,19 +3000,19 @@ div.plus table#gold_features {
 div.plus table.plusFunctions {
     margin-bottom: 25px;
 }
-div.warsim table#select {
+div.gid16 table#select {
     margin-top: 10px;
 }
-div.warsim table#attacker {
+div.gid16 table#attacker {
     float: left;
 }
-div.warsim table#defender {
+div.gid16 table#defender {
     float: right;
 }
-div.warsim table.fill_in {
+div.gid16 table.fill_in {
     margin-bottom: 15px;
 }
-div.warsim table.results {
+div.gid16 table.results {
     margin-top: 15px;
 }
 div.banned_cn table {
