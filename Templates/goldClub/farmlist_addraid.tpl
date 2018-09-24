@@ -30,7 +30,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'addSlot' && isset($_POST['lid
     }
 
     if($_POST['x'] == "" && $_POST['y'] == "" && empty($_POST['target_id'])) $errormsg = "Enter coordinates.";
-    elseif(($_POST['x'] = "" || $_POST['y'] = "") && empty($_POST['target_id'])) $errormsg = "Enter the correct coordinates.";	
+    elseif(($_POST['x'] == "" || $_POST['y'] == "") && empty($_POST['target_id'])) $errormsg = "Enter the correct coordinates.";	
     elseif($oasistype == 0 && $vdata == 0) $errormsg = "There is no village on those coordinates.";   	
     elseif($troops == 0) $errormsg = "No troops has been selected.";   	
     elseif($database->hasBeginnerProtection($Wref) == 1) $errormsg = "Player under protection.";  
