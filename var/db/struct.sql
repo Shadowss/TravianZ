@@ -1180,7 +1180,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
  KEY `crop` (`crop`),
  KEY `loyalty` (`loyalty`),
  KEY `maxcrop` (`maxcrop`),
- KEY `maxstore` (`maxstore`)
+ KEY `maxstore` (`maxstore`),
+ KEY `owner` (`owner`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

@@ -329,7 +329,7 @@ class Building {
 	}
 
 	private function removeBuilding($d) {
-		global $database, $village;
+		global $database, $village, $session;
 		foreach($this->buildArray as $jobs) {
 			if($jobs['id'] == $d) {
 				$uprequire = $this->resourceRequired($jobs['field'], $jobs['type']);
@@ -537,10 +537,10 @@ class Building {
             case 37: return $this->getTypeLevel(15) >= 3 && $this->getTypeLevel(16) >= 1 && !$isBuilt;
 
             // great warehouse can only be built with artefact or in Natar villages
-            case 38: return $this->getTypeLevel(15) >= 10 && (!$isBuilt || $this->getTypeLevel($id) == 20) && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($village->wid, 6, 1, 0)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)));
+            case 38: return $this->getTypeLevel(15) >= 10 && (!$isBuilt || $this->getTypeLevel($id) == 20) && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($village->wid, 6, 1, 1)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)));
 
             // great granary can only be built with artefact or in Natar villages
-            case 39: return $this->getTypeLevel(15) >= 10 && (!$isBuilt || $this->getTypeLevel($id) == 20) && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($village->wid, 6, 1, 0)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)));
+            case 39: return $this->getTypeLevel(15) >= 10 && (!$isBuilt || $this->getTypeLevel($id) == 20) && ($village->natar == 1 || count($database->getOwnUniqueArtefactInfo2($village->wid, 6, 1, 1)) || count($database->getOwnUniqueArtefactInfo2($session->uid, 6, 2, 0)));
             
             case 40: return $this->allowWwUpgrade();
             case 41: return $this->getTypeLevel(16) >= 10 && $this->getTypeLevel(20) == 20 && $session->tribe == 1 && !$isBuilt;
@@ -749,7 +749,6 @@ class Building {
                         
                         if (!isset($exclude_master) && $database->query($q) && ($enought_res == 1 || $jobs['master'] == 0)) {
                             $database->modifyPop($jobs['wid'],$resource['pop'],0);
-                            $database->addCP($jobs['wid'],$resource['cp']);
                             $deletIDs[] = (int) $jobs['id'];
                             if($jobs['type'] == 18) {
                                 $owner = $database->getVillageField($jobs['wid'],"owner");
@@ -796,10 +795,38 @@ class Building {
             }
         }
         
+	self::recountCP($database, $village->wid);
+	    
         header("Location: ".($redirect_url ? $redirect_url : $session->referrer));
         exit;
     }
 
+    public static function recountCP($database, $vid){        
+        $vid = (int) $vid;
+        $fdata = $database->getResourceLevel($vid);
+        $cpTot = 0;
+
+        for ($i = 1; $i <= 40; $i++) {
+            $lvl = $fdata["f".$i];
+            $building = $fdata["f".$i."t"];
+            if($building){
+                $cpTot += self::buildingCP($building,$lvl);
+            }
+        }
+
+        $q = "UPDATE ".TB_PREFIX."vdata set cp = $cpTot where wref = $vid";
+        mysqli_query($database->dblink,$q);
+    }
+	
+    public static function buildingCP($f, $lvl){
+        $name = "bid".$f;
+        global $$name;
+
+        $dataarray = $$name;
+
+        return ((isset($dataarray[$lvl]) && isset($dataarray[$lvl]['cp'])) ? $dataarray[$lvl]['cp'] : 0);
+    }
+	
 	public function resourceRequired($id, $tid, $plus = 1) {
 		$name = "bid".$tid;
 		global $$name, $village, $bid15, $database;

@@ -785,9 +785,13 @@ class MYSQLi_DB implements IDbConnection {
 
 	// no need to cache this method
 	public function hasBeginnerProtection($vid) {
-        list($vid) = $this->escape_input($vid);
-
-        $q = "SELECT u.protect FROM ".TB_PREFIX."users u,".TB_PREFIX."vdata v,".TB_PREFIX."odata o WHERE (u.id = v.owner AND v.wref = ".(int) $vid.") OR (u.id = o.owner AND o.wref = ".(int) $vid.") LIMIT 1";
+        list($vid) = $this->escape_input((int) $vid);
+        $q = "SELECT u.protect 
+              FROM ". TB_PREFIX ."users u 
+              JOIN ". TB_PREFIX ."vdata v ON u.id = v.owner
+              JOIN ". TB_PREFIX ."odata o ON u.id = o.owner
+              WHERE v.wref = ". $vid ." OR o.wref = ". $vid . " 
+              LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
 		
@@ -1289,7 +1293,7 @@ class MYSQLi_DB implements IDbConnection {
                     $daysPassedFromStart = ($time - strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME)) / 86400;
 
                     $radiusMin = min(round(pow(2 * ($daysPassedFromStart / 5 * SPEED), 2)), round(pow(WORLD_MAX * 0.8, 2)) + round(pow(WORLD_MAX * 0.8, 2)));
-                    $radiusMax = min(round(pow(4 * ($daysPassedFromStart / 5 * SPEED), 2)), pow(WORLD_MAX, 2) + pow(WORLD_MAX, 2));
+                    $radiusMax = min(round(pow(4 * ($daysPassedFromStart / 5 * SPEED), 2)) + pow($count, 2), pow(WORLD_MAX, 2) + pow(WORLD_MAX, 2));
                     break;
                     
                 case 1:
@@ -1320,19 +1324,19 @@ class MYSQLi_DB implements IDbConnection {
             }
 
             switch($sector){
-                case 1: $sector = "x <= 0 AND y >= 0"; break; // - | +       
-                case 2: $sector = "x >= 0 AND y >= 0"; break; // + | +                   
-                case 3: $sector = "x <= 0 AND y <= 0"; break; // - | -            
-                default: $sector = "x >= 0 AND y <= 0"; // + | -                 
+                case 1: $newSector = "x <= 0 AND y >= 0"; break; // - | +       
+                case 2: $newSector = "x >= 0 AND y >= 0"; break; // + | +                   
+                case 3: $newSector = "x <= 0 AND y <= 0"; break; // - | -            
+                default: $newSector = "x >= 0 AND y <= 0"; // + | -                 
             }
 
             //Choose villages beetween two circumferences, by using their formula (x^2 + y^2 = r^2)
-            $q = "SELECT id FROM ".TB_PREFIX."wdata WHERE fieldtype = 3 AND ($sector) AND (POWER(x, 2) + POWER(y, 2) >= $radiusMin AND POWER(x, 2) + POWER(y, 2) <= $radiusMax) AND occupied = 0 ORDER BY RAND() LIMIT $numberOfVillages";
+            $q = "SELECT id FROM ".TB_PREFIX."wdata WHERE fieldtype = 3 AND ($newSector) AND (POWER(x, 2) + POWER(y, 2) >= $radiusMin AND POWER(x, 2) + POWER(y, 2) <= $radiusMax) AND occupied = 0 ORDER BY RAND() LIMIT $numberOfVillages";
             $result = mysqli_query($this->dblink, $q);
-            
+
             //Prevent an infinite loop
             $resultedRows = mysqli_num_rows($result);
-            if($resultedRows == 0 && $count >= 20) break;
+            if($resultedRows == 0 && $count >= WORLD_MAX * 2) break;
             
             //Fill the villages array
             $villages = array_merge($villages, $this->mysqli_fetch_all($result));
@@ -1343,7 +1347,7 @@ class MYSQLi_DB implements IDbConnection {
             
             //If there are no more free cells in that sector, it have to be changed
             //This instruction will be used only (in the next cicle(s)) if not all wids have been generated yet
-            $sector = rand(1, 4);
+            if ($count > intval(WORLD_MAX / 10)) $sector = rand(1, 4);
         }
 
         foreach($villages as $village) $wids[] = $village['id'];
@@ -4727,12 +4731,12 @@ References: User ID/Message ID, Mode
 		$time = time();
 		$newTime = $loopTime = 0;
 		if(empty($fieldsArray)) $fieldsArray = $this->getResourceLevel($wid);
-		$jobs = $this->getJobs($wid);
+		$jobs = $this->getJobsOrderByID($wid);
 		
 		//Search the job which needs to be deleted	
 		foreach($jobs as $job){	
 			//We need to modify waiting loop orders
-			if(!empty($jobToDelete) && $job['loopcon'] == 1 && ($tribe != 1 || $tribe == 1 && (($jobToDelete['field'] <= 18 && $job['field'] <= 18) ||  ($jobToDelete['field'] >= 19 && $job['field'] >= 19)))){
+			if(!empty($jobToDelete) && $job['loopcon'] == 1 && ($tribe != 1 || ($tribe == 1 && (($jobToDelete['field'] <= 18 && $job['field'] <= 18) || ($jobToDelete['field'] >= 19 && $job['field'] >= 19))))){
 				
 				//Does this job have the same field of the deleted one?
 				$sameBuilding = $jobToDelete['field'] == $job['field'] ? 1 : 0;
@@ -5261,7 +5265,7 @@ References: User ID/Message ID, Mode
         else mysqli_query($this->dblink, $q = "UPDATE " .TB_PREFIX. "bdata SET level = level - $levels[1] + $levels[0] WHERE wid = $wid AND field = $field");
     }
     
-    private function getBData($wid, $use_cache = true) {
+    private function getBData($wid, $use_cache = true, $orderByID = false) {
 	    $wid = (int) $wid;
 
         // first of all, check if we should be using cache and whether the field
@@ -5272,7 +5276,7 @@ References: User ID/Message ID, Mode
             return self::$buildingsUnderConstructionCache[$wid];
         }
 
-        $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by master,timestamp ASC";
+        $q = "SELECT * FROM " . TB_PREFIX . "bdata where wid = $wid order by ".(!$orderByID ? "master,timestamp" : "id")." ASC";
         $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
         self::$buildingsUnderConstructionCache[$wid] = $result;
@@ -5282,6 +5286,10 @@ References: User ID/Message ID, Mode
     // do not cache output, as building jobs can change when using instant build (PLUS) etc.
 	function getJobs($wid) {
 	    return $this->getBData($wid, false);
+	}
+	
+	function getJobsOrderByID($wid) {
+	    return $this->getBData($wid, false, true);
 	}
 
 	function FinishWoodcutter($wid) {
@@ -7781,7 +7789,12 @@ References: User ID/Message ID, Mode
 
 	function addSlotFarm($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6) {
         list($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6) = $this->escape_input($lid, $towref, $x, $y, $distance, $t1, $t2, $t3, $t4, $t5, $t6);
-
+        
+	for($i = 1; $i <= 6; $i++) {
+            if (${'t'.$i} == '') {
+                ${'t'.$i} = 0;
+            }
+        }
 		$q = "INSERT INTO " . TB_PREFIX . "raidlist (`lid`, `towref`, `x`, `y`, `distance`, `t1`, `t2`, `t3`, `t4`, `t5`, `t6`) VALUES ('$lid', '$towref', '$x', '$y', '$distance', '$t1', '$t2', '$t3', '$t4', '$t5', '$t6')";
 		return mysqli_query($this->dblink,$q);
 	}
@@ -7789,6 +7802,11 @@ References: User ID/Message ID, Mode
 	function editSlotFarm($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6) {
 		list($eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6) = $this->escape_input((int) $eid, $lid, $oldLid, $owner, $wref, $x, $y, $dist, $t1, $t2, $t3, $t4, $t5, $t6);
 
+	for($i = 1; $i <= 6; $i++) {
+            if (${'t'.$i} == '') {
+                ${'t'.$i} = 0;
+            }
+        }
 		$q = "UPDATE " . TB_PREFIX . "raidlist SET lid = '$lid', towref = '$wref', x = '$x', y = '$y', t1 = '$t1', t2 = '$t2', t3 = '$t3', t4 = '$t4', t5 = '$t5', t6 = '$t6' WHERE id = $eid AND lid = $oldLid AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $lid AND owner = $owner) AND EXISTS(SELECT 1 FROM " . TB_PREFIX . "farmlist WHERE id = $oldLid AND owner = $owner)";
 		return mysqli_query($this->dblink,$q);
 	}

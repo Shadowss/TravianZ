@@ -104,32 +104,11 @@ class Automation {
 			if($building) $popTot += $this->buildingPOP($building, $lvl);
         }
         
-        $this->recountCP($vid);
+        Building::recountCP($database, $vid);
 		$q = "UPDATE ".TB_PREFIX."vdata set pop = $popTot where wref = $vid";
 		mysqli_query($database->dblink, $q);
 		$owner = $database->getVillageField($vid, "owner");
 		$this->procClimbers($owner);
-
-        return $popTot;
-    }
-
-    function recountCP($vid){
-        global $database;
-        
-        $vid = (int) $vid;
-        $fdata = $database->getResourceLevel($vid);
-        $popTot = 0;
-
-        for ($i = 1; $i <= 40; $i++) {
-            $lvl = $fdata["f".$i];
-            $building = $fdata["f".$i."t"];
-            if($building){
-                $popTot += $this->buildingCP($building,$lvl);
-            }
-        }
-
-        $q = "UPDATE ".TB_PREFIX."vdata set cp = $popTot where wref = $vid";
-        mysqli_query($database->dblink,$q);
 
         return $popTot;
     }
@@ -143,19 +122,6 @@ class Automation {
 
         for ($i = 0; $i <= $lvl; $i++) {
             $popT += ((isset($dataarray[$i]) && isset($dataarray[$i]['pop'])) ? $dataarray[$i]['pop'] : 0);
-        }
-        return $popT;
-    }
-
-    function buildingCP($f, $lvl){
-        $name = "bid".$f;
-        global $$name;
-        
-        $popT = 0;
-        $dataarray = $$name;
-
-        for ($i = 0; $i <= $lvl; $i++) {
-            $popT += ((isset($dataarray[$i]) && isset($dataarray[$i]['cp'])) ? $dataarray[$i]['cp'] : 0);
         }
         return $popT;
     }
@@ -2642,7 +2608,7 @@ class Automation {
 
                 if($data['from'] == 0){
 					$DefenderID = $database->getVillageField($data['to'], "owner");
-					$database->addEnforce($data);
+					$database->addEnforce(['from' => $data['from'], 'to' => $data['to'], 't1' => 0, 't2' => 0, 't3' => 0, 't4' => 0, 't5' => 0, 't6' => 0, 't7' => 0, 't8' => 0, 't9' => 0, 't10' => 0, 't11' => 0]);
 					$reinf = $database->getEnforce($data['to'], $data['from']);
 					$database->modifyEnforce($reinf['id'], 31, 1, 1);
 					$data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';

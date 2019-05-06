@@ -242,7 +242,7 @@ class Market
         }
         
         // We don't have enough resources
-        if($infoarray['wamt'] > ([$village->awood, $village->aclay, $village->airon, $village->acrop])[$infoarray['wtype']])
+        if($infoarray['wamt'] > ([$village->awood, $village->aclay, $village->airon, $village->acrop])[$infoarray['wtype'] - 1])
         {
             header("Location: build.php?id=".$get['id']."&t=1&e1");
             exit;
