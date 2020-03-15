@@ -152,7 +152,7 @@ class Village {
 		global $technology, $database, $session;
 
 		// clear cache, since we're updating village data
-        call_user_func(get_class($database).'::clearVillageCache');
+                call_user_func(get_class($database).'::clearVillageCache');
 		$upkeep = $technology->getUpkeep($this->unitall, 0, $this->wid);
 		$this->production['wood'] = $this->getWoodProd();
 		$this->production['clay'] = $this->getClayProd();
@@ -168,6 +168,9 @@ class Village {
 		$nclay = min(($this->production['clay'] / 3600) * $timepast, $this->maxstore);
 		$niron = min(($this->production['iron'] / 3600) * $timepast, $this->maxstore);
 		$ncrop = min(($this->production['crop'] / 3600) * $timepast, $this->maxcrop);
+		
+		// clear cache, since we're updating village data
+                call_user_func(get_class($database).'::clearVillageCache');
 		
 		$database->modifyResource($this->wid, $nwood, $nclay, $niron, $ncrop, 1);
 		$database->updateVillage($this->wid);
