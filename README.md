@@ -1,7 +1,7 @@
 [![Code Triagers Badge](https://www.codetriage.com/shadowss/travianz/badges/users.svg)](https://www.codetriage.com/shadowss/travianz)
 [![Maintenance](https://img.shields.io/maintenance/yes/2018.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub Release](https://img.shields.io/github/release/Shadowss/TravianZ/all.svg)](https://github.com/Shadowss/TravianZ)
-[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)](https://github.com/Shadowss/TravianZ)
+[![Github All Releases](https://img.shields.io/github/downloads/Shadowss/TravianZ/total.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub contributors](https://img.shields.io/github/contributors/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
 [![license](https://img.shields.io/github/license/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub last commit](https://img.shields.io/github/last-commit/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
@@ -10,10 +10,10 @@
 [![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Watch how this was made on YouTube](https://img.shields.io/badge/The%20making%20of...-YouTube-FF0000.svg)](https://www.youtube.com/watch?v=1XiHhpGUmQg&list=PLzV5avt1FFHorlIeoL9YX0pdb9bj-FO84)
 ======
-[![GitHub forks](https://img.shields.io/github/forks/badges/shields.svg?style=social&label=Fork)](https://github.com/Shadowss/TravianZ)
-[![GitHub stars](https://img.shields.io/github/stars/badges/shields.svg?style=social&label=Stars)](https://github.com/Shadowss/TravianZ)
-[![GitHub watchers](https://img.shields.io/github/watchers/badges/shields.svg?style=social&label=Watch)](https://github.com/Shadowss/TravianZ)
-[![GitHub followers](https://img.shields.io/github/followers/espadrine.svg?style=social&label=Follow)](https://github.com/Shadowss/TravianZ)
+[![GitHub forks](https://img.shields.io/github/forks/Shadowss/TravianZ.svg?style=social&label=Fork)](https://github.com/Shadowss/TravianZ)
+[![GitHub stars](https://img.shields.io/github/stars/Shadowss/TravianZ.svg?style=social&label=Stars)](https://github.com/Shadowss/TravianZ)
+[![GitHub watchers](https://img.shields.io/github/watchers/Shadowss/TravianZ.svg?style=social&label=Watch)](https://github.com/Shadowss/TravianZ)
+[![GitHub followers](https://img.shields.io/github/followers/Shadowss.svg?style=social&label=Follow)](https://github.com/Shadowss/TravianZ)
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/cata7007)
 ======
 TravianZ Version **v.8.3.4**
