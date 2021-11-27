@@ -1,4 +1,3 @@
-======
 TravianZ Version **v.8.3.4**
 ======
 **Note:** this game is still in a pre-release state, although at this point it is very playable, tested and found to be fairly stable
