@@ -14,7 +14,7 @@ else
 	<?php  include("Templates/goldClub/farmlist.tpl"); ?>
 </div>
 <br />
-<?php if($hideevasion == 0){ ?>
+<?php if( !isset( $hideevasion ) || $hideevasion == 0){ ?>
 <table id="raidList" cellpadding="1" cellspacing="1">
         <thead>
             <tr>

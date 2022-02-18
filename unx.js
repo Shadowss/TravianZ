@@ -4,10 +4,13 @@ var xhttp = new XMLHttpRequest();
 var timer=new Object();var ab=new Object();var bb=new Object();var cb=db();var eb=0;var auto_reload=1;var fb=new Object();var	is_opera=window.opera!==undefined;var	is_ie=document.all!==undefined&&window.opera===undefined;var is_ie6p=document.compatMode!==undefined&&document.all!==undefined&&window.opera===undefined;var is_ie7=document.documentElement!==undefined&&document.documentElement.style.maxHeight!==undefined;var is_ie6=is_ie6p&&!is_ie7;var is_ff2p=window.Iterator!==undefined;var is_ff3p=document.getElementsByClassName!==undefined;var is_ff2=is_ff2p&&!is_ff3p
 
 automation();
-function automation() {
-	this.xhttp.open("GET", "GameEngine/Automation.php", true);
-	this.xhttp.send();
-	//setTimeout(function(){ automation(); }, 1000);
+function automation( callback ) {
+	if ( typeof callback == 'function' ) {
+		xhttp.addEventListener("load", callback);
+	}
+	xhttp.open("GET", "GameEngine/Automation.php", true);
+	xhttp.send();
+	setTimeout(function(){ automation(); }, 30000);
 }
 function gb(){return hb('height');}
 function ib(){return hb('width');}
@@ -29,7 +32,16 @@ t+=vb;
 } else {
 t='0:00:00';
 if (!window.reloading) {
-	document.location.reload();
+	// reload after automation is ran
+	automation( function() {
+		document.location.reload();
+	} );
+
+	// backup timer in case automation XHR fails
+	setTimeout(function() {
+		document.location.reload();
+	}, 15000);
+
 	window.reloading = true;
 }
 }
@@ -95,7 +107,17 @@ function executeCounter(){
 	    bb[i] = null;
 	    eb = 1;
 	    if (!window.reloading) {
-	    	setTimeout(function(){window.location.href = window.location.href;},1000);
+	    	setTimeout(function() {
+					// reload after automation is ran
+					automation( function() {
+						window.location.href = window.location.href;
+					} );
+
+					// backup timer in case automation XHR fails
+					setTimeout(function() {
+						window.location.href = window.location.href;
+					}, 15000);
+				},1000);
 	    	window.reloading = true;
 	    }
 	}
@@ -276,15 +298,6 @@ jd.send(ld);}
 function md(nd){var od='';var pd=true;for(var qd in nd){od+=(pd?'':'&')+qd+'='+window.encodeURI(nd[qd]);if(pd){pd=false;}
 }
 return od;}
-function mreload(){param='reload=auto';url=window.location.href;if(url.indexOf(param)==-1){if(url.indexOf('?')==-1){url+='?'+param;}
-else
-{url+='&'+param;}
-}
-if (!window.reloading) {
-	document.location.href=url;
-	window.reloading = true;
-}
-}
 var rd={'index':0,'dir':0,'size':null,'fields':[],'cindex':0,'usealternate':false};
 var m_c=rd;
 var sd;

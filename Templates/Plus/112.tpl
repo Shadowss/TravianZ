@@ -118,7 +118,7 @@ $free = $session->uid;
                       <input type="hidden" name="cmd" value="_xclick">
                     
                       <!-- Specify details about the item that buyers will purchase. -->
-                      <input type="hidden" name="item_name" value="<?php echo SERVER_NAME . ' Package C Gold Pack'; ?>">
+                      <input type="hidden" name="item_name" value="<?php echo SERVER_NAME . ' Package C Gold Pack (' . $session->username . ')'; ?>">
                       <input type="hidden" name="amount" value="<?php echo (defined('PLUS_PACKAGE_C_PRICE') ? str_replace(",", ".", PLUS_PACKAGE_C_PRICE) : '9,99'); ?>">
                       <input type="hidden" name="currency_code" value="<?php echo (defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR'); ?>">
                     

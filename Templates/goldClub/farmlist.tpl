@@ -166,13 +166,16 @@ while($row2 = mysqli_fetch_array($getnotice)){
 <button type="button" class="trav_buttons" onclick="window.location.href = '?gid=16&t=99&action=addraid';">Add Raid</button>
 <button type="submit" class="trav_buttons" value="Start Raid">Start Raid</button>
 </div><br />
-</form>
 <?php } ?>
 <div class="options">
     <a class="arrow" href="build.php?gid=16&t=99&action=addList">Create a new list</a>
 </div>
 <?php
 }
+
+?>
+</form>
+<?php
 
 if($create == 1){
 	$hideevasion = 1;

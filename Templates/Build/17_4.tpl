@@ -13,7 +13,7 @@ $routeaccess = 1;
 if(isset($_GET['create']) && $session->gold > 1){
 $routeaccess = 1;
 include("17_create.tpl");
-}else if($_POST['action'] == 'editRoute' && isset($_POST['routeid']) && !empty($_POST['routeid']) && $database->getTradeRouteUid($_POST['routeid']) == $session->uid){
+}else if(isset($_POST['action']) && $_POST['action'] == 'editRoute' && isset($_POST['routeid']) && !empty($_POST['routeid']) && $database->getTradeRouteUid($_POST['routeid']) == $session->uid){
 include("17_edit.tpl");
 }else{
 ?>
@@ -52,7 +52,13 @@ echo "".TRADE_ROUTE_TO." <a href=karte.php?d=".$route['wid']."&c=".$generator->g
 <th>
 </th>
 	<th colspan="4">
-   <?php $routeid=$routeid == 0? $routeid=0:$routeid; ?>	
+   <?php
+   if ( isset( $routeid ) ) {
+     $routeid = $routeid == 0? $routeid=0:$routeid;
+   } else {
+     $routeid = 0;
+   }
+   ?>
    <button type="submit" name="action" value="extendRoute" id="btn_id" class="trav_buttons"><b><?php echo EXTEND;?>*</b></button>
  | <button type="submit" name="action" value="editRoute" id="btn_id" class="trav_buttons"><b><?php echo EDIT;?></b></button>
  | <button type="submit" name="action" value="delRoute" id="btn_id" class="trav_buttons"><b><?php echo DELETE;?></b></button>

@@ -1,11 +1,11 @@
-<h2>Embassy</h2>
+<h2><?php echo EMBASSY ?></h2>
 
 <table class="new_building" cellpadding="1" cellspacing="1">
 	<tbody><tr>
-		<td class="desc">The embassy is a place for diplomats. The higher its level the more options the king gains.</td>
+		<td class="desc"><?php echo EMBASSY_DESC ?></td>
 		<td rowspan="3" class="bimg">
 							<a href="#" onClick="return Popup(18,4);">
-				<img class="building g18" src="img/x.gif" alt="Embassy" title="Embassy" /></a>
+				<img class="building g18" src="img/x.gif" alt="<?php echo EMBASSY ?>" title="<?php echo EMBASSY ?>" /></a>
 					</td>
 	</tr>
 	<tr>

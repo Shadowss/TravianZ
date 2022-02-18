@@ -18,6 +18,7 @@
 // (0) = disabled
 define("ERROR_REPORT","%ERRORREPORT%");
 %ERROR%
+define('AUTOMATION_LOCK_FILE_NAME', 'automation.lck');
 
 //////////////////////////////////
 // *****  SERVER SETTINGS  *****//
@@ -117,9 +118,9 @@ define("SHOW_NATARS",%SHOW_NATARS%);
 define("NATARS_UNITS",%NATARS_UNITS%); 
 
 // ***** Natars Spawn Time
-define("NATARS_SPAWN_TIME",%NATARS_SPAWN_TIME%); 
-define("NATARS_WW_SPAWN_TIME",%NATARS_WW_SPAWN_TIME%); 
-define("NATARS_WW_BUILDING_PLAN_SPAWN_TIME",%NATARS_WW_BUILDING_PLAN_SPAWN_TIME%); 
+define("NATARS_SPAWN_TIME", round( %NATARS_SPAWN_TIME% / SPEED ));
+define("NATARS_WW_SPAWN_TIME", round( %NATARS_WW_SPAWN_TIME% / SPEED ));
+define("NATARS_WW_BUILDING_PLAN_SPAWN_TIME", round( %NATARS_WW_BUILDING_PLAN_SPAWN_TIME% / SPEED ));
 
 // ***** Nature troops regeneration time
 define("NATURE_REGTIME",%NATURE_REGTIME%); 

@@ -20,15 +20,17 @@ $start_timer = $generator->pageLoadTimeStart();
 	   exit;
    }
 
-   if($_POST['type'] == 15) {
-	   header("Location: ".$_SERVER['PHP_SELF']."?s=1&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
-	   exit;
-   } elseif($_POST['type'] == 9) {
-	   header("Location: ".$_SERVER['PHP_SELF']."?s=2&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
-	   exit;
-   } elseif($_POST['type'] == 'both') {
-	   header("Location: ".$_SERVER['PHP_SELF']."?s=3&x=" . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['x']) . '&y=' . preg_replace("/[^a-zA-Z0-9_-]/","",$_POST['y']));
-	   exit;
+   if ( !empty( $_POST['type'] ) ) {
+     if ( $_POST['type'] == 15 ) {
+       header( "Location: " . $_SERVER['PHP_SELF'] . "?s=1&x=" . preg_replace( "/[^a-zA-Z0-9_-]/", "", $_POST['x'] ) . '&y=' . preg_replace( "/[^a-zA-Z0-9_-]/", "", $_POST['y'] ) );
+       exit;
+     } elseif ( $_POST['type'] == 9 ) {
+       header( "Location: " . $_SERVER['PHP_SELF'] . "?s=2&x=" . preg_replace( "/[^a-zA-Z0-9_-]/", "", $_POST['x'] ) . '&y=' . preg_replace( "/[^a-zA-Z0-9_-]/", "", $_POST['y'] ) );
+       exit;
+     } elseif ( $_POST['type'] == 'both' ) {
+       header( "Location: " . $_SERVER['PHP_SELF'] . "?s=3&x=" . preg_replace( "/[^a-zA-Z0-9_-]/", "", $_POST['x'] ) . '&y=' . preg_replace( "/[^a-zA-Z0-9_-]/", "", $_POST['y'] ) );
+       exit;
+     }
    }
 
 ?>
@@ -93,7 +95,7 @@ $start_timer = $generator->pageLoadTimeStart();
 <div id="mid">
 <?php
 include ("Templates/menu.tpl");
-if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
+if( !empty( $_GET['x'] ) && !empty( $_GET['y'] ) && is_numeric($_GET['x']) && is_numeric($_GET['y']) ) {
 	$coor2['x'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['x']);
 	$coor2['y'] = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['y']);
 } else {
@@ -114,9 +116,9 @@ if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
   <tr>
    <td width="100">Cropper Type:</td>
    <td width="250">
-	<input type="radio" class="radio" name="type" value="15" <?php if($_GET['s'] == 1) echo 'checked="checked"'; ?> /> 15 crop
-	<input type="radio" class="radio" name="type" value="9" <?php if($_GET['s'] == 2) echo 'checked="checked"'; ?> /> 9 crop
-	<input type="radio" class="radio" name="type" value="both" <?php if($_GET['s'] == 3) echo 'checked="checked"'; ?> /> both<br />
+	<input type="radio" class="radio" name="type" value="15" <?php if ( !empty( $_GET['s'] ) &&  $_GET['s'] == 1 ) echo 'checked="checked"'; ?> /> 15 crop
+	<input type="radio" class="radio" name="type" value="9" <?php if ( !empty( $_GET['s'] ) && $_GET['s'] == 2 ) echo 'checked="checked"'; ?> /> 9 crop
+	<input type="radio" class="radio" name="type" value="both" <?php if ( !empty( $_GET['s'] ) && $_GET['s'] == 3 ) echo 'checked="checked"'; ?> /> both<br />
    </td>
   </tr>
     <tr>
@@ -145,10 +147,10 @@ if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
 
 
 <?php
-$fieldType = ($_GET['s'] == 1) ? "fieldtype = 6" : (($_GET['s'] == 2) ? "fieldtype = 1" : "fieldtype = 1 OR fieldtype = 6");
+$fieldType = ( !empty( $_GET['s'] ) && $_GET['s'] == 1) ? "fieldtype = 6" : ( ( !empty( $_GET['s'] ) && $_GET['s'] == 2 ) ? "fieldtype = 1" : "fieldtype = 1 OR fieldtype = 6");
 $type = mysqli_query($database->dblink,"SELECT id, x, y, occupied, fieldtype FROM ".TB_PREFIX."wdata WHERE $fieldType");
 
-if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
+if ( !empty( $_GET['x'] ) && is_numeric($_GET['x']) && !empty( $_GET['y'] ) && is_numeric($_GET['y'])) {
 	$coor['x'] = $_GET['x'];
 	$coor['y'] = $_GET['y'];
 } else {
@@ -156,7 +158,7 @@ if(is_numeric($_GET['x']) && is_numeric($_GET['y'])) {
 	$coor = $database->getCoor($wref);
 }
 
-if($_GET['s'] >= 1 && $_GET['s'] <= 3) {
+if ( !empty( $_GET['s'] ) &&  $_GET['s'] >= 1 && $_GET['s'] <= 3 ) {
 ?>
 
 <table id="member">

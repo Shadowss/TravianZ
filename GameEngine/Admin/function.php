@@ -17,9 +17,9 @@
 // # Source code: https://github.com/Shadowss/TravianZ ##
 // # ##
 // ################################################################################
-include_once("../GameEngine/Artifacts.php");
-include_once("../GameEngine/Units.php");
-include_once("../GameEngine/Generator.php");
+include_once(__DIR__ . "/../Artifacts.php");
+include_once(__DIR__ . "/../Units.php");
+include_once(__DIR__ . "/../Generator.php");
 
 class funct
 {

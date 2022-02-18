@@ -152,7 +152,7 @@ class Village {
 		global $technology, $database, $session;
 
 		// clear cache, since we're updating village data
-                call_user_func(get_class($database).'::clearVillageCache');
+        call_user_func(get_class($database).'::clearVillageCache');
 		$upkeep = $technology->getUpkeep($this->unitall, 0, $this->wid);
 		$this->production['wood'] = $this->getWoodProd();
 		$this->production['clay'] = $this->getClayProd();
@@ -168,9 +168,6 @@ class Village {
 		$nclay = min(($this->production['clay'] / 3600) * $timepast, $this->maxstore);
 		$niron = min(($this->production['iron'] / 3600) * $timepast, $this->maxstore);
 		$ncrop = min(($this->production['crop'] / 3600) * $timepast, $this->maxcrop);
-		
-		// clear cache, since we're updating village data
-                call_user_func(get_class($database).'::clearVillageCache');
 		
 		$database->modifyResource($this->wid, $nwood, $nclay, $niron, $ncrop, 1);
 		$database->updateVillage($this->wid);
@@ -320,5 +317,18 @@ class Village {
 };
 $village = new Village;
 $building = new Building;
-//include_once("Automation.php");
+
+// if automation is not currently running, run it for this user,
+// so if they are waiting for some automation to take place
+// (units, resources, buildings...), the script will calculate that
+// before showing the page
+// ... this is a quick fix for automation being called async by AJAX
+//     and users seeing old values on their page even though new values
+//     already exist after the initial AJAX call
+if ( !file_exists( AUTOMATION_LOCK_FILE_NAME ) ) {
+	define( 'AUTOMATION_MANUAL_RUN', true );
+	// this file is auto-removed by the Automation.php script
+	file_put_contents( AUTOMATION_LOCK_FILE_NAME, '' );
+	include_once("Automation.php");
+}
 ?>

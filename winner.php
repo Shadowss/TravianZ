@@ -220,7 +220,7 @@ if(isset($_GET['newdid'])) {
 					<br />
 					Best Regards,<br />
 					<?php echo SERVER_NAME; ?> Team<br /><br /><br /><br />
-					<small><i>(By: TravianZ team v8.3.4)</i></small></p>
+					<small><i>(By: TravianZ team v8.3.5)</i></small></p>
 
 					<br /><br />
 					<div style="text-align: center"><a href="dorf1.php">&raquo; Continue</a></div>

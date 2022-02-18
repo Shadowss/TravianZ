@@ -19,7 +19,7 @@
 
 
 if(isset($_GET['z'])) {
-	$currentcoor = $database->getCoor($_GET['z']);++$requse2;
+	$currentcoor = $database->getCoor($_GET['z']);
     $y = $currentcoor['y'];
 	$x = $currentcoor['x'];
     $bigmid = $_GET['z'];

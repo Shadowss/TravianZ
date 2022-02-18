@@ -59,7 +59,7 @@
             echo "<p class=\"error2\">".NOT_ENOUGH_MERCHANTS."</p>"; 
         } 
         
-        echo "<br /><p>Merchants: ".$market->merchantAvail()."/".$market->merchant."</p>"; 
+        echo "<br /><p>".MERCHANT.": " .$market->merchantAvail()."/".$market->merchant."</p>"; 
     ?> 
     <input type="image" tabindex="8" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" <?php //if(!$market->merchantAvail()) { echo "DISABLED"; }?>/></p> 
 </form> 

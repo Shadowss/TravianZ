@@ -1,6 +1,6 @@
 <?php
 $artifactsSum = $database->getArtifactsSumByKind($session->uid, $village->wid, 6);
-$GreatGranaryWarehouseBuildable = $artifactsSum['small'] > 0 || $artifactsSum['large'] > 0;
+$GreatGranaryWarehouseBuildable = $artifactsSum['small'] > 0 || $artifactsSum['great'] > 0;
 
 $mainbuilding = $building->getTypeLevel(15);
 $cranny = $building->getTypeLevel(23);
@@ -274,16 +274,16 @@ if($stable == 0 && (($blacksmith <= 2 && $blacksmith != 0) || ($academy >= 2 && 
 if($treasury == 0 && $mainbuilding <= 9 && $mainbuilding >= 5 && $village->natar == 0) {
     include("soon/treasury.tpl");
 }
-if($brickyard == 0 && $claypit <= 9 && $claypit >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
+if($brickyard == 0 && ( ($claypit <= 9 && $claypit >= 5) || $claypit == 10 ) && $mainbuilding >= 2) {
     include("soon/brickyard.tpl");
 }
-if($sawmill == 0 && $woodcutter <= 9 && $woodcutter >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
+if($sawmill == 0 && ( ( $woodcutter <= 9 && $woodcutter >= 5 ) || $woodcutter == 10 ) && $mainbuilding >= 2) {
     include("soon/sawmill.tpl");
 }
-if($ironfoundry == 0 && $ironmine <= 9 && $ironmine >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
+if($ironfoundry == 0 && ( ( $ironmine <= 9 && $ironmine >= 5 ) || $ironmine == 10 ) && $mainbuilding >= 2) {
     include("soon/ironfoundry.tpl");
 }
-if($workshop == 0 && $academy <= 9 && $academy >= 5 && $mainbuilding >= 2 && $mainbuilding <= 4) {
+if($workshop == 0 && $academy <= 9 && $academy >= 5 && $mainbuilding >= 2) {
     include("soon/workshop.tpl");
 }
 if($tournamentsquare == 0 && $rallypoint <= 14 && $rallypoint >= 7) {
@@ -327,7 +327,7 @@ if($palace == 0 && ($embassy == 0 || $mainbuilding <= 2) && $village->natar == 0
 if($blacksmith == 0 && ($academy == 0 || $mainbuilding == 1)) {
     include_once("soon/blacksmith.tpl");
 }
-if($stonemason == 0 && ($palace == 0 || $mainbuilding <= 2) && $residence == 0) {
+if($stonemasonslodge == 0 && ($palace == 0 || $mainbuilding <= 2) && $residence == 0) {
     include_once("soon/stonemason.tpl");
 }
 if($stable == 0 && ($blacksmith == 0 || $academy <= 2)) {

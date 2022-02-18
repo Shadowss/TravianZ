@@ -348,17 +348,31 @@ class Market
         $wwvillage = $database->getResourceLevel($village->wid);
         if($wwvillage['f99t'] != 40){
             if($session->userinfo['gold'] >= 3){
+                // check that we're not trying to sell more resources that we actually have
+                if (
+                  (int) $post['m2'][0] < 0 && round($village->awood) + (int) $post['m2'][0] < 0
+                  ||
+                  (int) $post['m2'][1] < 0 && round($village->aclay) + (int) $post['m2'][1] < 0
+                  ||
+                  (int) $post['m2'][2] < 0 && round($village->airon) + (int) $post['m2'][2] < 0
+                  ||
+                  (int) $post['m2'][3] < 0 && round($village->acrop) + (int) $post['m2'][3] < 0
+                ) {
+                    header("Location: build.php?id=".$post['id']."&t=3");
+                    exit;
+                }
+
                 //Check if there are too many resources
-                if(($post['m2'][0]+$post['m2'][1]+$post['m2'][2]+$post['m2'][3])<=(round($village->awood)+round($village->aclay)+round($village->airon)+round($village->acrop))){
+                if ( ((int) $post['m2'][0] + (int) $post['m2'][1] + (int) $post['m2'][2] + (int) $post['m2'][3] ) <= ( round($village->awood) + round($village->aclay) + round($village->airon) + round($village->acrop) ) ) {
                     $database->setVillageField(
                         $village->wid,
                         ["wood", "clay", "iron", "crop"],
                         [$post['m2'][0], $post['m2'][1], $post['m2'][2], $post['m2'][3]]
                     );
                     $database->modifyGold($session->uid, 3, 0);
-                    header("Location: build.php?id=".$post['id']."&t=3&c");;
+                    header("Location: build.php?id=".$post['id']."&t=3&c");
                     exit;
-                }else{
+                } else {
                     header("Location: build.php?id=".$post['id']."&t=3");
                     exit;
                 }

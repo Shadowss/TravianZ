@@ -19,7 +19,7 @@ foreach($topics as $top) {
 	$ans = preg_replace('/\[\/message\]/', '', $ans);
 }
 ?>
-<form method="post" name="post" action="allianz.php?s=2&fid2=<?php echo $_GET['fid2']; ?>&tid=<?php echo $_GET['idt']; ?>">
+<form method="post" name="post" action="allianz.php?s=2&tid=<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="s" value="2">
 	<input type="hidden" name="tid" value="<?php echo $_GET['idt']; ?>">
 	<input type="hidden" name="editans" value="1">

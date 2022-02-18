@@ -81,12 +81,14 @@ else
 <h5><img class="img_u04" src="img/x.gif" alt="login" /></h5>
 <p><?php echo COOKIES; ?></p>
 <?php
-$stime = strtotime(START_DATE) - strtotime(date('d.m.y')) + strtotime(START_TIME);
-if($stime > time()){
+$stime = strtotime( date( 'm/d/Y H:i', strtotime(START_DATE . ' ' . START_TIME ) ) );
+
+// check whether the server has started or is yet to start
+if ( $stime > $time ){
 ?>
 <br/><div style="text-align: center"><big>Server will start in: </big></div>
 <script language="JavaScript">
-TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
+TargetDate = "<?php echo date( 'm/d/Y H:i', strtotime(START_DATE . ' ' . START_TIME ) ); ?>";
 CountActive = true;
 CountStepper = -1;
 LeadingZero = true;

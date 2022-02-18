@@ -258,50 +258,51 @@ class Building {
 		return false;
 	}
 
-	public static function procResType($ref) {
+		public static function procResType($ref) {
 		switch($ref) {
-			case 1: return "Woodcutter";
-			case 2: return "Clay Pit";
-			case 3: return "Iron Mine";
-			case 4: return "Cropland";
-			case 5: return "Sawmill";
-			case 6: return "Brickyard";
-			case 7: return "Iron Foundry";
-			case 8: return "Grain Mill";
-			case 9: return "Bakery";
-			case 10: return "Warehouse";
-			case 11: return "Granary";
-			case 12: return "Blacksmith";
-			case 13: return "Armoury";
-			case 14: return "Tournament Square";
-			case 15: return "Main Building";
-			case 16: return "Rally Point";
-			case 17: return "Marketplace";
-			case 18: return "Embassy";
-			case 19: return "Barracks";
-			case 20: return "Stable";
-			case 21: return "Workshop";
-			case 22: return "Academy";
-			case 23: return "Cranny";
-			case 24: return "Town Hall";
-			case 25: return "Residence";
-			case 26: return "Palace";
-			case 27: return "Treasury";
-			case 28: return "Trade Office";
-			case 29: return "Great Barracks";
-			case 30: return "Great Stable";
-			case 31: return "City Wall";
-			case 32: return "Earth Wall";
-			case 33: return "Palisade";
-			case 34: return "Stonemason's Lodge";
-			case 35: return "Brewery";
-			case 36: return "Trapper";
-			case 37: return "Hero's Mansion";
-			case 38: return "Great Warehouse";
-			case 39: return "Great Granary";
-			case 40: return "Wonder of the World";
-			case 41: return "Horse Drinking Trough";
-			case 42: return "Great Workshop";
+			
+			case 1: return WOODCUTTER;
+			case 2: return CLAYPIT;
+		        case 3: return IRONMINE;
+			case 4: return CROPLAND;
+			case 5: return SAWMILL;
+			case 6: return BRICKYARD;
+			case 7: return IRONFOUNDRY;
+			case 8: return GRAINMILL;
+			case 9: return BAKERY;
+			case 10: return WAREHOUSE;
+			case 11: return GRANARY;
+			case 12: return BLACKSMITH;
+			case 13: return ARMOURY;
+			case 14: return TOURNAMENTSQUARE;
+			case 15: return MAINBUILDING;
+			case 16: return RALLYPOINT;
+			case 17: return MARKETPLACE;
+			case 18: return EMBASSY;
+			case 19: return BARRACKS;
+			case 20: return STABLE;
+			case 21: return WORKSHOP;
+			case 22: return ACADEMY;
+			case 23: return CRANNY;
+			case 24: return TOWNHALL;
+		        case 25: return RESIDENCE;
+			case 26: return PALACE;
+			case 27: return TREASURY;
+			case 28: return TRADEOFFICE;
+			case 29: return GREATBARRACKS;
+			case 30: return GREATSTABLE;
+			case 31: return CITYWALL;
+			case 32: return EARTHWALL;
+			case 33: return PALISADE;
+			case 34: return STONEMASON;
+			case 35: return BREWERY;
+			case 36: return TRAPPER;
+			case 37: return HEROSMANSION;
+			case 38: return GREATWAREHOUSE;
+			case 39: return GREATGRANARY;
+			case 40: return WONDER;
+			case 41: return HORSEDRINKING;
+			case 42: return GREATWORKSHOP;
 			default: return "Error";
 		}
 	}
@@ -832,6 +833,11 @@ class Building {
 		global $$name, $village, $bid15, $database;
 		
 		$dataarray = $$name;
+
+		if ( !$$name ) {
+			return ["wood" => 0, "clay" => 0, "iron" => 0, "crop" => 0, "pop" => 0, "time" => 0, "cp" => 0];
+		}
+
 		$wood = $dataarray[$village->resarray['f'.$id] + $plus]['wood'];
 		$clay = $dataarray[$village->resarray['f'.$id] + $plus]['clay'];
 		$iron = $dataarray[$village->resarray['f'.$id] + $plus]['iron'];

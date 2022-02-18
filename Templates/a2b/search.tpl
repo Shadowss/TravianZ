@@ -1,11 +1,21 @@
-<table id="coords" cellpadding="1" cellspacing="1">
+<?php
+  if ( !empty( $form ) && $form->valuearray ) {
+    if ( !empty( $form->valuearray['disabled'] ) ) {
+      $disabled = $form->valuearray['disabled'];
+    }
+
+    if ( !empty( $form->valuearray['disabledr'] ) ) {
+      $disabledr = $form->valuearray['disabledr'];
+    }
+  }
+?><table id="coords" cellpadding="1" cellspacing="1">
 <input type="hidden" name="disabledr" value="<?php echo (isset($disabledr) ? $disabledr : ''); ?>">
 <input type="hidden" name="disabled" value="<?php echo (isset($disabled) ? $disabled : ''); ?>">
     <tbody><tr>
         <td class="sel">
 
             <label>
-                <input class="radio" name="c" <?php if (!isset($checked) || !$checked) {?> checked=checked <?php }?>value="2" type="radio" <?php echo (isset($disabledr) ? $disabledr : ''); ?>>
+                <input class="radio" name="c" <?php if ( ( !isset($disabledr) || !$disabledr ) && ( !isset($checked) || !$checked ) ) {?> checked=checked <?php }?>value="2" type="radio" <?php echo (isset($disabledr) ? $disabledr : ''); ?>>
                 Reinforcement
             </label>
         </td>
@@ -29,7 +39,12 @@
     <tr>
         <td class="sel">
             <label>
-                <input class="radio" name="c" <?php echo (isset($checked) ? $checked : ''); ?> value="4" type="radio">
+                <input class="radio" name="c" <?php
+                  if ( ( isset($disabledr) && $disabledr ) && ( isset($disabled) && $disabled ) ) {
+                    $checked = ' checked="checked"';
+                  }
+                  echo ( ( isset($checked) ? $checked : '' ) );
+                ?> value="4" type="radio">
                 Raid
             </label>
         </td>

@@ -138,7 +138,7 @@ if(isset($_POST['newpost']) && isset($_POST['text']) && !empty($_POST['text']) &
 if(isset($_POST['editans']) && isset($_POST['text']) && !empty($_POST['text'])
    && isset($_POST['tid']) && !empty($_POST['tid']) &&
    Alliance::canAct(['aid' => $aid, 'alliance' => ($topic = reset($database->ShowTopic($_POST['tid'])))['alliance'],
-		'forum_perm' => $opt['opt5'], 'admin' => $_GET['admin'], 'owner' => $topic['owner'],
+		'forum_perm' => $opt['opt5'], 'admin' => ( !empty( $_GET['admin'] ) ? $_GET['admin'] : '' ), 'owner' => $topic['owner'],
 		'forum_owner' => reset($database->ForumCatEdit($topic['cat']))['owner']], 1))
 {
    	$text = $_POST['text'];

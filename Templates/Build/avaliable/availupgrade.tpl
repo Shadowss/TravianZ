@@ -20,15 +20,15 @@ $uprequire = $building->resourceRequired($id, $bid);
 			<td class="link">
 <?php
      if($bindicator == 2) {
-     echo "<span class=\"none\">The workers are already at work.</span>";
+     echo "<span class=\"none\">" . WORKERS_ALREADY_WORK_WAITING . "</span>";
 	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">" . CONSTRUCTING_MASTER_BUILDER . "</a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
-		echo "<span class=\"none\">Constructing with master builder</span>";
+		echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}
 	}
@@ -39,10 +39,10 @@ $uprequire = $building->resourceRequired($id, $bid);
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">" . CONSTRUCTING_MASTER_BUILDER . "</a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
-		echo "<span class=\"none\">Constructing with master builder</span>";
+		echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}
 	}
@@ -58,24 +58,24 @@ $uprequire = $building->resourceRequired($id, $bid);
      }
      else if($bindicator == 7) {
     	$neededtime = $building->calculateAvaliable($id,$bid);
-    	echo "<span class=\"none\">Enough resources ".$neededtime[0]." at  ".$neededtime[1]."</span>";
+    	echo "<span class=\"none\">" .ENOUGH_RESOURCES . " " .$neededtime[0]." at  ".$neededtime[1]."</span>";
 	if($session->goldclub == 1){
 ?>	</br>
 <?php
 	if($session->gold >= 1 && $village->master == 0){
-	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">Constructing with master builder </a>";
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&c=$session->checker\">" . CONSTRUCTING_MASTER_BUILDER . "</a>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}else{
-		echo "<span class=\"none\">Constructing with master builder</span>";
+		echo "<span class=\"none\">" . CONSTRUCTING_MASTER_BUILDER . "</span>";
 		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
 	}
 	}
      }
      else if($bindicator == 8) {
 	 if($session->access!=BANNED){
-     	echo "<a class=\"build\" href=\"dorf2.php?a=$bid&id=$id&c=".$session->checker."\">Construct building.</a>";
+     	echo "<a class=\"build\" href=\"dorf2.php?a=$bid&id=$id&c=".$session->checker."\">". CONSTRUCT_BUILD."</a>";
 	 }else{
-		echo "<a class=\"build\" href=\"banned.php\">Construct building.</a>";
+		echo "<a class=\"build\" href=\"banned.php\">". CONSTRUCT_BUILD."</a>";
 	 }
      }
      else if($bindicator == 9) {

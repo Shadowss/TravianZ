@@ -109,6 +109,7 @@ define("TRAVIAN_COPYRIGHT","TravianZ 100% Open Source Travian Clone.");
 //BUILD.TPL
 define("CUR_PROD","Current production");
 define("NEXT_PROD","Production at level ");
+define("CONSTRUCT_BUILD","Construct Building");
 
 //BUILDINGS
 define("B1","Woodcutter");
@@ -143,6 +144,7 @@ define("LOYALTY","Loyalty");
 define("CALCULATED_IN","Calculated in");
 define("SEVER_TIME","Server time:");
 define("HI","HI");
+define("P_IN","in");
 
 //QUEST
 define("Q_CONTINUE","Continue with the next task.");
@@ -594,6 +596,9 @@ define("BECOME_COMUNITY","Become part of our community now!");
 define("BECOME_COMUNITY2","Become a part of one of<br>the biggest gaming<br>communities in the<br>world.");
 define("NEWS","News");
 define("SCREENSHOTS","Screenshots");
+define("FAQ","FAQ");
+define("SPIELREGELN","Rules");
+define("AGB","Terms and Conditions");
 define("LEARN1","Upgrade your fields and mines to increase your resource production. You will need resources to construct buildings and train soldiers.");
 define("LEARN2","Construct and expand the buildings in your village. Buildings improve your overall infrastructure, increase your resource production and allow you to research, train and upgrade your troops.");
 define("LEARN3","View and interact with your surroundings. You can make new friends or new enemies, make use of the nearby oases and observe as your empire grows and becomes stronger.");
@@ -832,7 +837,7 @@ define("RALLYPOINT_COMMENCE","Troops movement will be displayed when the ".RALLY
 define("OVERVIEW","Overview");
 define("REINFORCEMENT","Reinforcement");
 define("EVASION_SETTINGS","evasion settings");
-define("SEND_TROOPS_AWAY_MAX","Send troops away a maximun of");
+define("SEND_TROOPS_AWAY_MAX","Send troops away a maximum of");
 define("TIMES","times");
 define("PER_EVASION","per evasion");
 define("RALLYPOINT_DESC","Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.");

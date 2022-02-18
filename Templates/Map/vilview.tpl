@@ -14,7 +14,7 @@ echo !$oasis['conqured']? UNOCCUOASIS : OCCUOASIS; echo " (".$basearray['x']."|"
 $otext = !$oasis['conqured']? UNOCCUOASIS : OCCUOASIS;
 } ?></h1>
 <?php if($basearray['occupied'] && $basearray['capital']) { echo "<div id=\"dmain\">(capital)</div>"; }
-if($uinfo['owner'] == 3 && $uinfo['name'] == PLANVILLAGE){
+if($uinfo && $uinfo['owner'] == 3 && $uinfo['name'] == PLANVILLAGE){
 ?>
 <img src="img/x.gif" id="detailed_map" class="f99" alt="<?php echo PLANVILLAGE;?>" />
 <?php }else{ ?>
@@ -154,7 +154,8 @@ if($oasis['owner'] == 2){
 		</tr></thead>
 		<tbody>
 		<?php
-if($session->uid == $database->getVillage($_GET['d'])['owner']){
+$vilData = $database->getVillage($_GET['d']);
+if( $vilData && $session->uid == $vilData['owner'] ){
 	$limit = "ntype > 3 AND ntype < 8";
 }
 else $limit = "ntype < 8 OR ntype > 17";

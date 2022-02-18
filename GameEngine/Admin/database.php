@@ -296,6 +296,12 @@ class adm_DB {
 	}
 
 	$dbarray = mysqli_fetch_array($result);
+		   
+		   if ( !$dbarray ) {
+		    mysqli_query($this->connection,"Insert into ".TB_PREFIX."admin_log values (0,'X','<font color=\'red\'><b>IP: ".$_SERVER['REMOTE_ADDR']." tried to log in with username <u> $username</u> but access was denied!</font></b>',".time().")");
+	    	return false;
+	    }
+
 
 	// even if we didn't do a DB conversion for bcrypt passwords,
 	// we still need to check if this password wasn't encrypted via password_hash,

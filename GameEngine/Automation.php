@@ -16,6 +16,27 @@
 ##                                                                             ##
 #################################################################################
 
+// make sure we only run the automation script once and wait until it's done,
+// so concurrent AJAX calls from many different users won't overload the server
+if ( !defined('AUTOMATION_MANUAL_RUN') ) {
+    if ( file_exists( AUTOMATION_LOCK_FILE_NAME ) ) {
+        // check that the file is not too old, in which case our PHP script hung
+        // and we need to remove the lock and run automation again
+        $fileTime = filemtime( AUTOMATION_LOCK_FILE_NAME );
+
+        // allow for 60 seconds of old automation script processing time, which is still way too plenty
+        if ( ! $fileTime || time() - $fileTime > 60 ) {
+            @unlink( AUTOMATION_LOCK_FILE_NAME );
+        } else {
+            // automation file exists and is valid, don't run another automation
+            exit;
+        }
+    } else {
+        // create automation lock file
+        file_put_contents( AUTOMATION_LOCK_FILE_NAME, '' );
+    }
+}
+
 include_once("Database.php");
 include_once("Data/buidata.php");
 include_once("Data/unitdata.php");
@@ -721,15 +742,17 @@ class Automation {
                 $database->setVillageLevel($data['to'], $fieldsToSet, $fieldValuesToSet);
                 
                 $buildarray = $GLOBALS["bid".$tbgid];
-                
-                // (great) warehouse level was changed
-                if ($tbgid == 10 || $tbgid == 38) {
-                    $database->setMaxStoreForVillage($data['to'], $buildarray[$newLevel]['attri']);
-                }
-                
-                // (great) granary level was changed
-                if ($tbgid == 11 || $tbgid == 39) {
-                    $database->setMaxCropForVillage($data['to'], $buildarray[$newLevel]['attri']);
+
+                if ( isset( $buildarray[$newLevel] ) ) {
+                    // (great) warehouse level was changed
+                    if ($tbgid == 10 || $tbgid == 38) {
+                        $database->setMaxStoreForVillage($data['to'], $buildarray[$newLevel]['attri']);
+                    }
+
+                    // (great) granary level was changed
+                    if ($tbgid == 11 || $tbgid == 39) {
+                        $database->setMaxCropForVillage($data['to'], $buildarray[$newLevel]['attri']);
+                    }
                 }
                 
                 // oasis cannot be destroyed
@@ -1191,6 +1214,9 @@ class Automation {
                     if(empty($scout) || $NatarCapital){
                         for ($i = 1; $i <= 11; $i++){
                             if (!isset(${'traped'.$i})) ${'traped'.$i} = 0;
+                            if ( !isset($totaltraped_att) ) {
+                                $totaltraped_att = 0;
+                            }
                             $totaltraped_att += ${'traped'.$i};
                         }
                         
@@ -1733,6 +1759,9 @@ class Automation {
 
                     for($i = 1; $i <= 10; $i++){
                         $unitarray = $GLOBALS["u".(($att_tribe - 1) * 10 + $i)];
+                        if ( !isset($totalpoint_def) ) {
+                            $totalpoint_def = 0;
+                        }
                         $totalpoint_def += (${'dead'.$i}*$unitarray['pop']);
                     }
 
@@ -3765,6 +3794,9 @@ class Automation {
                         
                         if($maxtype > 0){
                             $starvingTroops[$utype.$maxtype]--;
+                            if ( !isset($killedUnits[$maxtype]) ) {
+                                $killedUnits[$maxtype] = 0;
+                            }
                             $killedUnits[$maxtype]++;                      
                             $difcrop -= $GLOBALS['u'.(($special) ? $maxtype + ($tribe - 1) * 10 : $maxtype)]['crop'];
                         }
@@ -4612,4 +4644,7 @@ class Automation {
     }
 }
 $automation = new Automation;
+
+// remove automation lock file
+@unlink( AUTOMATION_LOCK_FILE_NAME );
 ?>
