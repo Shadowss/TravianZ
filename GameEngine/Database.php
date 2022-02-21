@@ -1135,7 +1135,7 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "SELECT timestamp from " . TB_PREFIX . "deleting where uid = $uid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		return ( $dbarray ? $dbarray['timestamp'] : false );
+		return $dbarray['timestamp'];
 	}
 
 	function modifyGold($userid, $amt, $mode) {
@@ -3853,7 +3853,7 @@ class MYSQLi_DB implements IDbConnection {
         ");
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-        self::$fieldLevelsInVillageSearchCache[$vid.$fieldType] = ( $row ? $row['level'] : 0 );
+        self::$fieldLevelsInVillageSearchCache[$vid.$fieldType] = $row['level'];
         return self::$fieldLevelsInVillageSearchCache[$vid.$fieldType];
     }
 
@@ -5257,13 +5257,12 @@ References: User ID/Message ID, Mode
     function modifyBData($wid, $field, $levels, $tribe){
     	list($wid, $field, $levels, $tribe) = $this->escape_input((int) $wid, (int) $field, (int) $levels, (int) $tribe);
         
-        if ( is_array( $levels ) && $levels[0] == 0){
+        if($levels[0] == 0){ 
         	$q = "SELECT id FROM " .TB_PREFIX. "bdata WHERE wid = $wid AND field = $field";
         	$orders = $this->mysqli_fetch_all(mysqli_query($this->dblink, $q));
         	foreach($orders as $order) $this->removeBuilding($order['id'], $tribe, $wid);
-        } else {
-          mysqli_query( $this->dblink, $q = "UPDATE " . TB_PREFIX . "bdata SET level = level - $levels[1] + $levels[0] WHERE wid = $wid AND field = $field" );
         }
+        else mysqli_query($this->dblink, $q = "UPDATE " .TB_PREFIX. "bdata SET level = level - $levels[1] + $levels[0] WHERE wid = $wid AND field = $field");
     }
     
     private function getBData($wid, $use_cache = true, $orderByID = false) {
@@ -6011,7 +6010,7 @@ References: User ID/Message ID, Mode
 	 */
 	
 	function addUnits($vid, $troopsArray = null) {
-	    list($vid) = $this->escape_input($vid);
+	    list($vid, $type, $values) = $this->escape_input($vid, $type, $values);
 	    
 	    if (!is_array($vid)) $vid = [$vid];
 	    $types = $values = "";
@@ -6119,22 +6118,12 @@ References: User ID/Message ID, Mode
         $end              = ( $ownertribe * 10 );
 
         for ( $i = $start; $i <= $end; $i ++ ) {
-          if ( $movingunits ) {
             $totalunits += $movingunits[ 'u' . $i ];
-          }
-
-          if ( $reinforcingunits ) {
             $totalunits += $reinforcingunits[ 'u' . $i ];
-          }
         }
 
-        if ( $movingunits ) {
-          $totalunits += $movingunits['hero'];
-        }
-
-        if ( $reinforcingunits ) {
-          $totalunits += $reinforcingunits['hero'];
-        }
+        $totalunits += $movingunits['hero'];
+        $totalunits += $reinforcingunits['hero'];
 
 		return $totalunits;
 	}
@@ -6439,7 +6428,7 @@ References: User ID/Message ID, Mode
             //Fixed part of negative troops (double troops) - by InCube
             $array_amt[$i] = (int) $array_amt[$i] < 0 ? 0 : $array_amt[$i];
             //Fixed part of negative troops (double troops) - by InCube
-            $units .= $unit.' = '.$unit.' '.((isset($array_mode) && $array_mode[$i] == 1)? '+':'-').'  '.( isset($array_amt[$i]) ? $array_amt[$i] : 0).(($number > $i+1) ? ', ' : '');
+            $units .= $unit.' = '.$unit.' '.(($array_mode[$i] == 1)? '+':'-').'  '.($array_amt[$i] ? $array_amt[$i] : 0).(($number > $i+1) ? ', ' : '');
 		}
 		$q = "UPDATE ".TB_PREFIX."units set $units WHERE vref = $vref";
 		return mysqli_query($this->dblink, $q);
@@ -7175,16 +7164,22 @@ References: User ID/Message ID, Mode
 			}
 		}
 
-		$q = "SELECT (u10+u20+u30) as sumsettlers FROM " . TB_PREFIX . "enforcement WHERE `from` = ".(int) $village->wid;
+		$q = "SELECT (u10+u20+u30) FROM " . TB_PREFIX . "enforcement WHERE `from` = ".(int) $village->wid;
 		$result = mysqli_query($this->dblink,$q);
-		while($settlersrow = mysqli_fetch_array($result)) {
-		    $settlers += $settlersrow["sumsettlers"];
+		$row = mysqli_fetch_row($result);
+		if(!empty($row)) {
+			foreach($row as $reinf) {
+				$settlers += $reinf[0];
+			}
 		}
 
-		$q = "SELECT (u9+u19+u29) as sumchiefs FROM " . TB_PREFIX . "enforcement WHERE `from` = ".(int) $village->wid;
+		$q = "SELECT (u9+u19+u29) FROM " . TB_PREFIX . "enforcement WHERE `from` = ".(int) $village->wid;
 		$result = mysqli_query($this->dblink,$q);
-		while($chiefsrow = mysqli_fetch_array($result)) {
-		    $chiefs += $chiefsrow["sumchiefs"];
+		$row = mysqli_fetch_row($result);
+		if(!empty($row)) {
+			foreach($row as $reinf) {
+				$chiefs += $reinf[0];
+			}
 		}
 
 		$trainlist = $technology->getTrainingList(4);
@@ -7739,7 +7734,7 @@ References: User ID/Message ID, Mode
 		$q = 'SELECT * FROM ' . TB_PREFIX . 'farmlist WHERE owner = '.$uid.' ORDER BY wref ASC LIMIT 1';
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		return ( $dbarray && $dbarray['id'] > 0 );
+		return $dbarray['id'] > 0;
 	}
 
     // no need to cache this method
@@ -7914,7 +7909,7 @@ References: User ID/Message ID, Mode
 	    $getVillage = $this->getVillage($wref);
 	    
 	    //Exlude Support, Nature, Natars, TaskMaster and Multihunter
-	    if ($getVillage && $getVillage['owner'] > 5){
+	    if ($getVillage['owner'] > 5){	        
 	        $crop = $this->getCropProdstarv($wref, false);
 	        $unitArrays = $technology->getAllUnits($wref, false, 0, false);
 	        $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);
