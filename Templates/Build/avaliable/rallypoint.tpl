@@ -1,4 +1,4 @@
-	<h2><?php echo RALLYPOINT ?></h2>
+<h2><?php echo RALLYPOINT ?></h2>
 
 <table class="new_building" cellpadding="1" cellspacing="1">
 	<tbody><tr>
