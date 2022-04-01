@@ -1,18 +1,18 @@
-<h2>Great Workshop</h2>
+<h2><?php echo GREATSTABLE ?></h2>
         <table class="new_building" cellpadding="1" cellspacing="1">
                 <tbody><tr>
-                        <td class="desc">In the great workshop siege engines like catapults and rams can be built, albeit at triple the cost of a standard unit. The higher its level the faster units are produced.</td>
+                        <td class="desc"><?php echo GREATSTABLE_DESC ?></td>
                         <td rowspan="3" class="bimg">
-                                <a href="#" onClick="return Popup(42,4);">
-                                <img class="building g42" src="img/x.gif" alt="Great Workshop" title="Great Workshop" /></a>
+                                <a href="#" onClick="return Popup(30,4);">
+                                <img class="building g30" src="img/x.gif" alt="<?php echo GREATSTABLE ?>" title="<?php echo GREATSTABLE ?>" /></a>
                         </td>
                 </tr>
                 <tr>
-                <td class="requ">Prerequisites</td>
+                <td class="requ"><?php echo PREREQUISITES ?></td>
                 </tr>
                 <tr>
                         <td>
-                                <a href="#" onClick="return Popup(21,4);">Workshop</a> <span title="+20">Level 20</span>, <strike>Capital</strike>
+                                <a href="#" onClick="return Popup(20,4);"><?php echo STABLE ?></a> <span title="+20"><?php echo LEVEL ?> 20</span>, <strike><?php echo CAPITAL ?></strike>
                         </td>
                 </tr></tbody>
         </table>
