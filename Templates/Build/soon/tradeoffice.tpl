@@ -1,18 +1,18 @@
-<h2>Trade Office</h2>
+<h2><?php echo TRADEOFFICE ?></h2>
 	<table class="new_building" cellpadding="1" cellspacing="1">
 		<tbody><tr>
-			<td class="desc">In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.</td>
+			<td class="desc"><?php echo TRADEOFFICE_DESC ?></td>
 			<td rowspan="3" class="bimg">
 				<a href="#" onClick="return Popup(28,4);">
-				<img class="building g28" src="img/x.gif" alt="Trade Office" title="Trade Office" /></a>
+				<img class="building g28" src="img/x.gif" alt="<?php echo TRADEOFFICE ?>" title="<?php echo TRADEOFFICE ?>" /></a>
 			</td>
 		</tr>
 		<tr>
-		<td class="requ">Prerequisites</td>
+		<td class="requ"><?php echo PREREQUISITES ?></td>
 		</tr>
 		<tr>
 			<td>
-				<a href="#" onClick="return Popup(17,4);">Marketplace</a> <span title="+20">Level 20</span>, <a href="#" onClick="return Popup(20,4);">Stable</a> <span title="+10">Level 10</span>
+				<a href="#" onClick="return Popup(17,4);"><?php echo MARKETPLACE ?></a> <span title="+20"><?php echo LEVEL ?> 20</span>, <a href="#" onClick="return Popup(20,4);"><?php echo STABLE ?></a> <span title="+10"><?php echo LEVEL ?> 10</span>
 			</td>
 		</tr></tbody>
 	</table>
