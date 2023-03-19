@@ -2,21 +2,23 @@ version: '3.8'
 
 services:
   web:
-    build: .
+    build: . # this will build the image using Dockerfile and the files in the same dir
+    # image: unclechuen/travianz:latest # this image is built using Dockerfile along with the whole repository
     container_name: travianz
     ports:
-      - "8080:80"
+      - "80:80"
     volumes:
       - ./html:/var/www/html
     restart: always
 
   db:
-    container_name: MySQL_database
+    container_name: MySQL
     image: mysql
     ports:
       - "3306:3306"
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: RootPassword
+      MYSQL_DATABASE: travian
     volumes:
       - ./db:/var/lib/mysql
