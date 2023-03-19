@@ -8,5 +8,8 @@ else
     cp -R /var/www/container_files/* /var/www/html/
 fi
 
+chown -R www-data:www-data /var/www/html
+chmod -R 777 /var/www/html
+
 # Start the Apache server in the foreground
 exec apache2-foreground

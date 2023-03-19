@@ -15,7 +15,7 @@ COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh && \
     chown -R www-data:www-data /var/www/container_files/ && \
-    chmod -R 755 /var/www/container_files/
+    chmod -R 777 /var/www/container_files/
 
 EXPOSE 80
 
