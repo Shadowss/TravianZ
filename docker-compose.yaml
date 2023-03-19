@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: travianz
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/var/www/html
+    restart: always
+
+  db:
+    container_name: MySQL_database
+    image: mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: RootPassword
+    volumes:
+      - ./db:/var/lib/mysql
