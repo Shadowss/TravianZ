@@ -3016,6 +3016,8 @@ class MYSQLi_DB implements IDbConnection {
 
 	function setAlliName($aid, $name, $tag) {
 	    list($aid, $name, $tag) = $this->escape_input((int) $aid, $name, $tag);
+        $name = $this->RemoveXSS($name);
+        $name = $this->RemoveXSS($tag);
 
 		$q = "UPDATE " . TB_PREFIX . "alidata set name = '$name', tag = '$tag' where id = $aid";
 		return mysqli_query($this->dblink,$q);
