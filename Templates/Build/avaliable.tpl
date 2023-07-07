@@ -111,19 +111,19 @@ if((($granary == 0 && $granary1 == 0) || $granary == 20) && $mainbuilding >= 1 &
     include("avaliable/granary.tpl");
 }
 if($wall == 0 && $wall1 == 0) {
-    if($session->tribe == 1 && $id != 39) {
+    if($session->tribe == 1 && $id == 40) {
         include("avaliable/citywall.tpl");
     }
-    if($session->tribe == 2 && $id != 39) {
+    if($session->tribe == 2 && $id == 40) {
         include("avaliable/earthwall.tpl");
     }
-    if($session->tribe == 3 && $id != 39) {
+    if($session->tribe == 3 && $id == 40) {
         include("avaliable/palisade.tpl");
     }
-    if($session->tribe == 4 && $id != 39) {
+    if($session->tribe == 4 && $id == 40) {
         include("avaliable/earthwall.tpl");
     }
-    if($session->tribe == 5 && $id != 39) {
+    if($session->tribe == 5 && $id == 40) {
         include("avaliable/citywall.tpl");
     }
 }
@@ -139,7 +139,7 @@ if((($greatgranary == 0 && $greatgranary1 == 0) || $greatgranary == 20) && $main
 if((($trapper == 0 && $trapper1 == 0) || $trapper == 20) && $rallypoint >= 1 && $session->tribe == 3 && $id != 39 && $id != 40) {
     include("avaliable/trapper.tpl");
 }
-if($rallypoint == 0 && $rallypoint1 == 0 && $id != 40) {
+if($rallypoint == 0 && $rallypoint1 == 0 && $id == 39) {
     include("avaliable/rallypoint.tpl");
 }
 if($embassy == 0 && $embassy1 == 0 && $id != 39 && $id != 40 && $mainbuilding >= 1) {
