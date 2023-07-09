@@ -69,6 +69,7 @@ switch($_GET['f']) {
         $qact3=null;
     	}  
     if (!isset($_SESSION)) {
+		session_name('TRAVIAN_SESSION');
         session_start();
     }
     if (isset($_SESSION['qtyp']) && $_SESSION['qtyp']==37) {
