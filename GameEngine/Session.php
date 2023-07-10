@@ -1,6 +1,16 @@
 <?php
 use App\Entity\User;
 
+$sessionTime = 365 * 24 * 60 * 60;
+$sessionName = "my_session";
+session_set_cookie_params($sessionTime);
+session_name($sessionName);
+session_start();
+
+if (isset($_COOKIE[$sessionName])) {
+    setcookie($sessionName, $_COOKIE[$sessionName], time() + $sessionTime, "/");
+}
+
 ob_start(); // Enesure, that no more header already been sent error not showing up again
 mb_internal_encoding("UTF-8"); // Add for utf8 varriables.
 
@@ -81,7 +91,6 @@ class Session {
 
 				$this->time = time();
 				if (!isset($_SESSION)) {
-					session_name('TRAVIAN_SESSION');
 					session_start();
 				}
 
@@ -141,7 +150,6 @@ class Session {
 			}
 
 			public function Logout() {
-				session_name('TRAVIAN_SESSION');
 				global $database;
 				$this->logged_in = false;
 				$database->updateUserField($_SESSION['username'], "sessid", "", 0);
