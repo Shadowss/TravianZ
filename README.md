@@ -35,7 +35,6 @@ since the installer logic has changed and you would just crash your old version
 * [PHP](http://php.net/) 7.0.0+
 * [MySQL Community Server](https://dev.mysql.com/downloads/mysql/) 5.5+
   * or alternatively, [MariaDB](https://downloads.mariadb.org/) 5.5+
-  * please see also the compatibility notes on [this Wiki page](https://github.com/Shadowss/TravianZ/wiki/Known-Bugs)
  * Runs fine on Ubuntu 20, Apache2 2.4, MySQL Server 8.0 and PHP 7.4
 
 **Dedicated or shared hosting?**
