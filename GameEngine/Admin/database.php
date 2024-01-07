@@ -82,6 +82,7 @@ class adm_DB {
 	        $bcrypted = false;
 	    }
 
+		$username = htmlspecialchars($username);
 	    if($pwOk) {
 	        // update password to bcrypt, if correct
 	        if (!$dbarray['is_bcrypt'] && !$bcrypted) {

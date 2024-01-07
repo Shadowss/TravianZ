@@ -36,12 +36,12 @@ if($_POST) {
         
         if(substr($key, 0, 8) == 'linkname') {
             $i = substr($key, 8);
-            $links[$i]['linkname'] = mysqli_real_escape_string($database->dblink, $value);
+            $links[$i]['linkname'] = htmlspecialchars(mysqli_real_escape_string($database->dblink, $value));
         }
         
         if(substr($key, 0, 8) == 'linkziel') {
             $i = substr($key, 8);
-            $links[$i]['linkziel'] = mysqli_real_escape_string($database->dblink, $value);
+            $links[$i]['linkziel'] = htmlspecialchars(mysqli_real_escape_string($database->dblink, $value));
         }
     }
     

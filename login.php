@@ -186,7 +186,7 @@ Element.implement({
 	<tbody>
 		<tr class="top">
 			<th><?php echo NAME; ?></th>
-			<td><input class="text" type="text" name="user" value="<?php echo stripslashes(stripslashes(stripslashes($form->getDiff("user",$_COOKIE['COOKUSR'])))); ?>" maxlength="30" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
+			<td><input class="text" type="text" name="user" value="<?php echo htmlspecialchars($form->getDiff("user",$_COOKIE['COOKUSR'])); ?>" maxlength="30" autocomplete='off' /> <span class="error"> <?php echo $form->getError("user"); ?></span></td>
 		</tr>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>
