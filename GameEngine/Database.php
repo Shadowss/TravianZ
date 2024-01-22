@@ -436,9 +436,17 @@ class MYSQLi_DB implements IDbConnection {
 	public function connect() {
 	    // try to connect
         try {
-            $this->dblink = mysqli_connect( $this->hostname, $this->username, $this->password, $this->dbname, $this->port );
+            $cert_path = __DIR__ . '/ca-certificate.crt';
+            $this->dblink = mysqli_init();
+            $this->dblink->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
+            $this->dblink->ssl_set(NULL, NULL, $cert_path, NULL, NULL);
+            $this->dblink->real_connect($this->hostname, $this->username, $this->password, $this->dbname, $this->port);
         } catch (\Exception $exception) {
-            $this->dblink = mysqli_connect( $this->hostname . ':' . $this->port, $this->username, $this->password );
+            $cert_path = __DIR__ . '/ca-certificate.crt';
+            $this->dblink = mysqli_init();
+            $this->dblink->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
+            $this->dblink->ssl_set(NULL, NULL, $cert_path, NULL, NULL);
+            $this->dblink->real_connect($this->hostname . ':' . $this->port, $this->username, $this->password);
 
             // return on error
             if (mysqli_error($this->dblink)) {
