@@ -12,28 +12,32 @@
 // don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 @set_time_limit(0);
 
-class Process {
+class Process
+{
 
-	function __construct() {
-		if(isset($_POST['subconst'])) {
+	function __construct()
+	{
+		if (isset($_POST['subconst'])) {
 			$this->constForm();
 		} else
-			if(isset($_POST['substruc'])) {
+			if (isset($_POST['substruc'])) {
 				$this->createStruc();
 			} else
-				if(isset($_POST['subwdata'])) {
+				if (isset($_POST['subwdata'])) {
 					$this->createWdata();
 				} else
-					if(isset($_POST['subacc'])) {
+					if (isset($_POST['subacc'])) {
 						$this->createAcc();
-						} else {
-							header("Location: index.php");
-						}
+					} else {
+						header("Location: index.php");
+					}
 	}
 
-	private function constForm() {
-	    $configFile = "../GameEngine/config.php";
+	private function constForm()
+	{
+		$configFile = "../GameEngine/config.php";
 		$configTemplateFile = "../GameEngine/Admin/Mods/constant_format.tpl";
+		print('asd');
 
 		$gameConfig = @fopen($configFile, 'w') or die("<br/><br/><br/>Can't create or update file: GameEngine\config.php");
 
@@ -49,13 +53,13 @@ class Process {
 
 		// continue with text replacements
 		$findReplace = [];
-		
+
 		$findReplace["%SERVERNAME%"] = $_POST['servername'];
 		$findReplace["%SSTARTDATE%"] = $_POST['start_date'];
 		$findReplace["%SSTARTTIME%"] = $_POST['start_time'];
 
-		$tz = explode(",",$_POST['tzone']);
-        $findReplace["%STIMEZONE%"] = $tz[1];
+		$tz = explode(",", $_POST['tzone']);
+		$findReplace["%STIMEZONE%"] = $tz[1];
 		$findReplace["%LANG%"] = $_POST['lang'];
 		$findReplace["%SPEED%"] = $_POST['speed'];
 		$findReplace["%INCSPEED%"] = $_POST['incspeed'];
@@ -94,7 +98,7 @@ class Process {
 		$findReplace["%ACTIVATE%"] = $_POST['activate'];
 		$findReplace["%ARANK%"] = 'false';
 		$findReplace["%QUEST%"] = $_POST['quest'];
-		$findReplace["%QTYPE%"] = $_POST['qtype'];  
+		$findReplace["%QTYPE%"] = $_POST['qtype'];
 		$findReplace["%BEGINNER%"] = $_POST['beginner'];
 		$findReplace["%STARTTIME%"] = time();
 		$findReplace["%DOMAIN%"] = $_POST['domain'];
@@ -173,49 +177,51 @@ class Process {
 	/**
 	 * Creates database structure for the game.
 	 */
-	function createStruc() {
-	    global $database;
+	function createStruc()
+	{
+		global $database;
 
-	    include ("../GameEngine/config.php");
-	    include ("../GameEngine/Database.php");
-	    include ("../GameEngine/Admin/database.php");
+		include("../GameEngine/config.php");
+		include("../GameEngine/Database.php");
+		include("../GameEngine/Admin/database.php");
 
-	    // create table structure
-	    $result = $database->createDbStructure();
-        if ($result === false) {
-            header("Location: index.php?s=2&err=1");
-            exit;
-        } else if ($result === -1) {
-	        header("Location: index.php?s=2&c=1");
-	        exit;
-	    }
+		// create table structure
+		$result = $database->createDbStructure();
+		if ($result === false) {
+			header("Location: index.php?s=2&err=1");
+			exit;
+		} else if ($result === -1) {
+			header("Location: index.php?s=2&c=1");
+			exit;
+		}
 
-    	header("Location: index.php?s=3");
-    	exit;
+		header("Location: index.php?s=3");
+		exit;
 	}
 
 	/**
 	 * Generates map data and populates it with oasis.
 	 */
-	function createWdata() {
-	    global $database;
+	function createWdata()
+	{
+		global $database;
 
-	    include ("../GameEngine/config.php");
-	    include ("../GameEngine/Database.php");
-	    include ("../GameEngine/Admin/database.php");
+		include("../GameEngine/config.php");
+		include("../GameEngine/Database.php");
+		include("../GameEngine/Admin/database.php");
 
-	    // populate world data
-	    $result = $database->populateWorldData();
-	    if ($result === false) {
-	        header("Location: index.php?s=3&err=1");
-	        exit;
-	    } else if ($result === -1) {
-	        header("Location: index.php?s=3&c=1");
-	        exit;
-	    }
+		// populate world data
+		$result = $database->populateWorldData();
+		if ($result === false) {
+			header("Location: index.php?s=3&err=1");
+			exit;
+		} else if ($result === -1 || $result === -2 || $result === -3) {
+			header("Location: index.php?s=3&c=1&msg=" . $result);
+			exit;
+		}
 
-	    header("Location: index.php?s=4");
-	    exit;
+		header("Location: index.php?s=4");
+		exit;
 	}
 
 }

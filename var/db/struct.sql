@@ -8,7 +8,7 @@
 -- PHP Version: 5.3.5
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
+SET sql_require_primary_key = 0;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  `kind` tinyint(1) NULL DEFAULT '0',
  `bad_effect` tinyint(1) NULL DEFAULT '0',
  `effect2` tinyint(2) NULL DEFAULT '0',
- `lastupdate` int(11) NULL DEFAULT '0', 
+ `lastupdate` int(11) NULL DEFAULT '0',
  `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
  KEY `owner-active` (`owner`,`active`),
@@ -361,17 +361,17 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
  `t10` int(11) NULL,
  `t11` int(11) NULL,
  `attack_type` tinyint(1) NULL,
- `ctar1` int(11) NULL, 
+ `ctar1` int(11) NULL,
  `ctar2` int(11) NULL,
- `spy` int(11) NULL, 
- `b1` tinyint(1) NULL, 
- `b2` tinyint(1) NULL, 
- `b3` tinyint(1) NULL, 
- `b4` tinyint(1) NULL, 
- `b5` tinyint(1) NULL, 
- `b6` tinyint(1) NULL, 
- `b7` tinyint(1) NULL, 
- `b8` tinyint(1) NULL, 
+ `spy` int(11) NULL,
+ `b1` tinyint(1) NULL,
+ `b2` tinyint(1) NULL,
+ `b3` tinyint(1) NULL,
+ `b4` tinyint(1) NULL,
+ `b5` tinyint(1) NULL,
+ `b6` tinyint(1) NULL,
+ `b7` tinyint(1) NULL,
+ `b8` tinyint(1) NULL,
  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1650,7 +1650,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
 `crop` float(12,2) NULL,
 `maxcrop` int(11) NULL,
 `lastupdate` int(11) NULL,
-`lastupdate2` int(11) NULL DEFAULT '0', 
+`lastupdate2` int(11) NULL DEFAULT '0',
 `loyalty` float(9,6) NULL DEFAULT '100',
 `exp1` int(11) NULL DEFAULT '0',
 `exp2` int(11) NULL DEFAULT '0',

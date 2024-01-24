@@ -1,13 +1,14 @@
 -- ----------------------------------------------------------------------------------------
 -- oasis regeneration script
 -- used during installation, server reset, oasis reset & automation (nature repopulation)
--- 
+--
 -- author: martinambrus
 -- ----------------------------------------------------------------------------------------
 
+SET SQL_SAFE_UPDATES = 0;
 
 -- Nature regeneration time.
--- 
+--
 -- type:        int
 -- description: when > -1, used to update the last oasis reset time (Automation nature regeneration)
 --               when == -1, used to reset oasis data into original state (conquered > unoccupied)
@@ -22,21 +23,22 @@ SET @natureRegTime = %NATURE_REG_TIME%;
 -- or define them once in a string and use FIND_IN_SET() for lookups,
 -- which is TERRIBLE, performance-wise (since it doesn't use indexes).
 
+DROP TABLE IF EXISTS %PREFIX%oids;
 CREATE TEMPORARY TABLE %PREFIX%oids (id INT NOT NULL, PRIMARY KEY (id));
-INSERT INTO %PREFIX%oids VALUES %VILLAGEID%;
+INSERT INTO %PREFIX%oids VALUES (%VILLAGEID%);
 
 
 
 -- Equivalent to "VILLAGEID === -1" (in PHP). Determines whether we have
 -- any single oasis to actually update (mode = conquered > unocupied)
 -- or we're updating 1 or more specific oasis (mode = install, server reset, Automation's nature regen).
- 
+
 SET @noVillage = ((SELECT id FROM %PREFIX%oids LIMIT 1) = -1);
 
 
 
 
--- faster access to first oasis ID, so we don't need to reselect all the time below 
+-- faster access to first oasis ID, so we don't need to reselect all the time below
 SET @firstVillage = (SELECT id FROM %PREFIX%oids LIMIT 1);
 
 -- minimum and maximum number of units for oasis with "high" field set to 0

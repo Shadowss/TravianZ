@@ -1,14 +1,11 @@
 <Files "*.tpl">
-	Order Allow,Deny
-	Deny from all
+    Require all denied
 </Files>
 
 <Files "*.sql">
-    Order Allow,Deny
-    Deny from all
+    Require all denied
 </Files>
 
 <Files "*.log">
-    Order Allow,Deny
-    Deny from all
+    Require all denied
 </Files>

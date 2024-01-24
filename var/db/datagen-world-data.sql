@@ -59,37 +59,37 @@ INSERT INTO %PREFIX%wdata
             x, y,
 
             -- create a random image name for the field or the oasis square
-            IF (@otype = 0, CONCAT("t", (FLOOR(0 + RAND() * 9)) ), CONCAT("o", @otype) ) as image
+            IF (@otype = 0, CONCAT('t', (FLOOR(0 + RAND() * 9)) ), CONCAT('o', @otype) ) as image
         FROM
 
             -- the following select will generate a number from -%WORLDSIZE% to +%WORLDSIZE% as an X coordinate
             -- (courtesy of Unreason, https://stackoverflow.com/a/2652051/467164)
-            -- this first line will keep incrementing @row until we run out of all the data provided by the "t" subselects below
-            (SELECT @row := @row + 1 as x FROM 
+            -- this first line will keep incrementing @row until we run out of all the data provided by the 't' subselects below
+            (SELECT @row := @row + 1 as x FROM
 
-            -- t and t2 each contain 10 rows of dummy data,
-            -- cartesian product of these is 10^4, i.e. 10000 rows of dummy data
-            -- and the outer select is just mysql version of rownumber
-            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t,
-            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+                -- t and t2 each contain 10 rows of dummy data,
+                -- cartesian product of these is 10^4, i.e. 10000 rows of dummy data
+                -- and the outer select is just mysql version of rownumber
+                (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t,
+                (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
 
-            -- in t3, we only need 9 rows of dummy data, as 400 is currently the maximum allowed map size (i.e. -400 to +400)
-            -- which brings us to `t1` x `t2` x `t3` = 10 x 10 x 9 = 900 (we need 900 not 800 because coordinates start at 0,0 not 1,1)
-            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8) t3,
+                -- in t3, we only need 9 rows of dummy data, as 400 is currently the maximum allowed map size (i.e. -400 to +400)
+                -- which brings us to `t1` x `t2` x `t3` = 10 x 10 x 9 = 900 (we need 900 not 800 because coordinates start at 0,0 not 1,1)
+                (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8) t3,
 
-            -- here we tell MySQL where to start, so if we have a world 100x100, this will set @row to -101
-            -- (not -100 because the first select already increments the @row by 1, so we'd start at -99 instead)
-            (SELECT @row := (-%WORLDSIZE% - 1)) as beginning
+                -- here we tell MySQL where to start, so if we have a world 100x100, this will set @row to -101
+                -- (not -100 because the first select already increments the @row by 1, so we'd start at -99 instead)
+                (SELECT @row := (-%WORLDSIZE% - 1)) as beginning
             ) as x,
 
             -- this query is the same as previous query for X coordinate but will generate numbers
             -- for the Y coordinate - both of these joined together this way will generate data such as:
             -- -100, 100; -99, 100; -98, 100 ...
-            (SELECT @row2 := @row2 - 1 as y FROM 
-            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t,
-            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
-            (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8) t3,
-            (SELECT @row2 := (%WORLDSIZE% + 1)) as beginning
+            (SELECT @row2 := @row2 - 1 as y FROM
+                (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t,
+                (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+                (select 0 union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8) t3,
+                (SELECT @row2 := (%WORLDSIZE% + 1)) as beginning
             ) as y
         WHERE
             x BETWEEN -%WORLDSIZE% AND %WORLDSIZE%
@@ -128,7 +128,7 @@ INSERT INTO %PREFIX%odata
         -- owner (2 = Nature)
         2,
         -- name for this square
-        "Unoccupied Oasis",
+        'Unoccupied Oasis',
         -- how many units would be (re)generated for this oasis, based on its type
         CASE
             WHEN oasistype < 4 THEN 1
