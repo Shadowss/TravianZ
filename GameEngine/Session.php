@@ -80,7 +80,9 @@ class Session {
         		global $database; //TienTN fix
 
 				$this->time = time();
-				if (!isset($_SESSION)) session_start();
+				if (!isset($_SESSION)) {
+					session_start();
+				}
 
 				$this->logged_in = $this->checkLogin();
 

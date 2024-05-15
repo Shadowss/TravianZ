@@ -1356,6 +1356,7 @@ class MYSQLi_DB implements IDbConnection {
     }
 
 	function setFieldTaken($id) {
+        if(empty($id)) return;
         if (!is_array($id)) {
             $id = [$id];
         }
@@ -5659,6 +5660,8 @@ References: User ID/Message ID, Mode
             list($moveid) = $this->escape_input($moveid);
         }
 
+        if(empty($moveid)) return;
+
         // rather than re-selecting data and updating cache here, let's just
         // flush the cache and let it re-cach itself as neccessary
         self::$marketMovementCache = [];
@@ -6016,6 +6019,7 @@ References: User ID/Message ID, Mode
 	function addUnits($vid, $troopsArray = null) {
 	    list($vid, $type, $values) = $this->escape_input($vid, $type, $values);
 	    
+        if(empty($vid)) return;
 	    if (!is_array($vid)) $vid = [$vid];
 	    $types = $values = "";
 	    
@@ -6205,6 +6209,7 @@ References: User ID/Message ID, Mode
 	}
 
 	function addTech($vid) {
+        if(empty($vid)) return;
         if (!is_array($vid)) {
             $vid = [$vid];
         }
@@ -6218,6 +6223,7 @@ References: User ID/Message ID, Mode
 	}
 
 	function addABTech($vid) {
+        if(empty($vid)) return;
         if (!is_array($vid)) {
             $vid = [$vid];
         }
@@ -7060,9 +7066,13 @@ References: User ID/Message ID, Mode
         try {
             // check that we don't have the structure in place already
             // (we'd have at least 1 user present, since 4 are being created by default - Support, Nature, Multihunter & Taskmaster)
-            $data_exist = $this->query_return("SELECT * FROM " . TB_PREFIX . "users LIMIT 1");
-            if ($data_exist && count($data_exist)) {
-                return false;
+            try {
+                $data_exist = $this->query_return("SELECT * FROM " . TB_PREFIX . "users LIMIT 1");
+                if ($data_exist && count($data_exist)) {
+                    return false;
+                }
+            } catch (\Exception $e) {
+
             }
 
             // load the DB structure SQL file
@@ -7077,6 +7087,7 @@ References: User ID/Message ID, Mode
                 return false;
             }
         } catch (\Exception $e) {
+            echo($e);
             return -1;
         }
 

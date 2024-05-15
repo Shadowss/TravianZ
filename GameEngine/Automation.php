@@ -19,21 +19,23 @@
 // make sure we only run the automation script once and wait until it's done,
 // so concurrent AJAX calls from many different users won't overload the server
 if ( !defined('AUTOMATION_MANUAL_RUN') ) {
-    if ( file_exists( AUTOMATION_LOCK_FILE_NAME ) ) {
-        // check that the file is not too old, in which case our PHP script hung
-        // and we need to remove the lock and run automation again
-        $fileTime = filemtime( AUTOMATION_LOCK_FILE_NAME );
-
-        // allow for 60 seconds of old automation script processing time, which is still way too plenty
-        if ( ! $fileTime || time() - $fileTime > 60 ) {
-            @unlink( AUTOMATION_LOCK_FILE_NAME );
+    if(defined('AUTOMATION_LOCK_FILE_NAME')){
+        if ( file_exists( AUTOMATION_LOCK_FILE_NAME ) ) {
+            // check that the file is not too old, in which case our PHP script hung
+            // and we need to remove the lock and run automation again
+            $fileTime = filemtime( AUTOMATION_LOCK_FILE_NAME );
+    
+            // allow for 60 seconds of old automation script processing time, which is still way too plenty
+            if ( ! $fileTime || time() - $fileTime > 60 ) {
+                @unlink( AUTOMATION_LOCK_FILE_NAME );
+            } else {
+                // automation file exists and is valid, don't run another automation
+                exit;
+            }
         } else {
-            // automation file exists and is valid, don't run another automation
-            exit;
+            // create automation lock file
+            file_put_contents( AUTOMATION_LOCK_FILE_NAME, '' );
         }
-    } else {
-        // create automation lock file
-        file_put_contents( AUTOMATION_LOCK_FILE_NAME, '' );
     }
 }
 
