@@ -12,6 +12,10 @@
 // don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 @set_time_limit(0);
 
+if (file_exists("../var/installed")) {
+	die("<span class='f18 c5'>ERROR!</span><br />Installation appears to have been completed.<br />If this is an error remove /var/installed file in install directory.");
+}
+
 class Process {
 
 	function __construct() {

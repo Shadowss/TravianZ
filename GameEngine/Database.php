@@ -3016,6 +3016,8 @@ class MYSQLi_DB implements IDbConnection {
 
 	function setAlliName($aid, $name, $tag) {
 	    list($aid, $name, $tag) = $this->escape_input((int) $aid, $name, $tag);
+        $name = $this->RemoveXSS($name);
+        $tag = $this->RemoveXSS($tag);
 
 		$q = "UPDATE " . TB_PREFIX . "alidata set name = '$name', tag = '$tag' where id = $aid";
 		return mysqli_query($this->dblink,$q);
@@ -3109,6 +3111,8 @@ class MYSQLi_DB implements IDbConnection {
 	*****************************************/
 	function createAlliance($tag, $name, $uid, $max) {
 	    list($tag, $name, $uid, $max) = $this->escape_input($tag, $name, (int) $uid, (int) $max);
+        $tag = $this->RemoveXSS($tag);
+        $name = $this->RemoveXSS($name);
 
 	    $q = "INSERT into " . TB_PREFIX . "alidata values (0,'$name','$tag',$uid,0,0,0,'','',$max,0,0,0,0,0,0,0,0,0)";
 		mysqli_query($this->dblink,$q);
