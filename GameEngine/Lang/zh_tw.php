@@ -142,7 +142,8 @@ define("DONE_AT","完成于");
 define("CANCEL","取消");
 define("LOYALTY","忠诚度");
 define("CALCULATED_IN","响应延迟");
-define("SEVER_TIME","服务器时间:");
+define("CALCULATED","响应延迟");
+define("SERVER_TIME","服务器时间:");
 define("HI","嗨");
 define("P_IN","在");
 
@@ -738,10 +739,6 @@ define("START_NOW","现在启动");
 //404.php
 define("NOTHING_HERE","这儿什么也没有!");
 define("WE_LOOKED","我们找了 404 次，但什么都没有发现");
-
-//TIME RELATED
-define("CALCULATED","响应延迟");
-define("SERVER_TIME","服务器时间:");
 
 //MASSMESSAGE.php
 define("MASS","消息内容");

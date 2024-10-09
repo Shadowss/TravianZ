@@ -143,7 +143,8 @@ define("DONE_AT","done at");
 define("CANCEL","cancel");
 define("LOYALTY","Loyalty");
 define("CALCULATED_IN","Calculated in");
-define("SEVER_TIME","Server time:");
+define("CALCULATED","Calculated in");
+define("SERVER_TIME","Server time:");
 define("HI","HI");
 define("P_IN","in");
 
@@ -739,10 +740,6 @@ define("START_NOW","START NOW");
 //404.php
 define("NOTHING_HERE","Nothing here!");
 define("WE_LOOKED","We looked 404 times already but can't find anything");
-
-//TIME RELATED
-define("CALCULATED","Calculated in");
-define("SERVER_TIME","Server time:");
 
 //MASSMESSAGE.php
 define("MASS","Message Content");
