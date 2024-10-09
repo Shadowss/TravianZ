@@ -103,7 +103,7 @@ echo "<td colspan=\"2\"><div class=\"none\" align=\"center\">".RESEARCH_AVAILABL
 			</tr>";
      }
      if(!$technology->meetRRequirement(49) && !$technology->getTech(49)) {
-     echo "	<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u49\" title=\"".U49."\" alt=\"".U43."\" src=\"img/x.gif\"/>
+     echo "	<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u49\" title=\"".U49."\" alt=\"".U49."\" src=\"img/x.gif\"/>
 			<a onclick=\"return Popup(49, 1);\" href=\"#\">".U49."</a></div></td><td class=\"cond\">
 			<a href=\"#\" onclick=\"return Popup(16, 4);\">".RALLYPOINT." </a><span title=\"+4\">".LEVEL." 5</span><br /><a href=\"#\" onclick=\"return Popup(22, 4);\">
             ".ACADEMY." </a><span title=\"+17\">".LEVEL." 20</span></td></tr>";
