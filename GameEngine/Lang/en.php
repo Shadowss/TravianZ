@@ -143,7 +143,6 @@ define("DONE_AT","done at");
 define("CANCEL","cancel");
 define("LOYALTY","Loyalty");
 define("CALCULATED_IN","Calculated in");
-define("CALCULATED","Calculated in");
 define("SERVER_TIME","Server time:");
 define("HI","HI");
 define("P_IN","in");

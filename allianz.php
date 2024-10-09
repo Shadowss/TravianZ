@@ -315,7 +315,7 @@ include("Templates/res.tpl");
 <div id="ltimeWrap">
 <?php
 
-	   echo CALCULATED;
+	   echo CALCULATED_IN;
 
 ?> <b><?php
 

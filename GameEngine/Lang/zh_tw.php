@@ -142,7 +142,6 @@ define("DONE_AT","完成于");
 define("CANCEL","取消");
 define("LOYALTY","忠诚度");
 define("CALCULATED_IN","响应延迟");
-define("CALCULATED","响应延迟");
 define("SERVER_TIME","服务器时间:");
 define("HI","嗨");
 define("P_IN","在");
