@@ -71,12 +71,12 @@ define("ATAG_EMPTY","Tag empty");
 define("ANAME_EMPTY","Name empty");
 define("ATAG_EXIST","Tag taken");
 define("ANAME_EXIST","Name taken");
-define("ALREADY_ALLY_MEMBER","You're already in an alliance");
+define("ALREADY_ALLY_MEMBER","You&#39;re already in an alliance");
 define("ALLY_TOO_LOW", "You must have a level 3 or greater embassy");
 define("USER_NOT_IN_YOUR_ALLY","This user is not in your alliance!");
-define("CANT_EDIT_YOUR_PERMISSIONS","You can't edit your own permissions!");
-define("CANT_EDIT_LEADER_PERMISSIONS","Alliance leader's permissions can't be edited!");
-define("NO_PERMISSION", "You don't have enough permissions!");
+define("CANT_EDIT_YOUR_PERMISSIONS","You can&#39;t edit your own permissions!");
+define("CANT_EDIT_LEADER_PERMISSIONS","Alliance leader&#39;s permissions can&#39;t be edited!");
+define("NO_PERMISSION", "You don&#39;t have enough permissions!");
 define("NAME_OR_DIPL_EMPTY", "Name or diplomacy empty");
 define("ALLY_DOESNT_EXISTS","Alliance does not exist");
 define("CANNOT_INVITE_SAME_ALLY","You cannot invite your own alliance");
@@ -92,16 +92,16 @@ define("ALLY_FORUM_LINK_UPDATED", "Forum link updated");
 define("NO_FORUMS_YET","There are no forums yet.");
 define("ALLY_USER_KICKED"," has been kicked from the alliance");
 define("NOT_OPENED_YET","Server not started yet.");
-define("REGISTER_CLOSED","The register is closed. You can't register to this server.");
+define("REGISTER_CLOSED","The register is closed. You can&#39;t register to this server.");
 define("NAME_EMPTY","Please insert name");
 define("NAME_NO_EXIST","There is no user with the name ");
 define("ID_NO_EXIST","There is no user with the id ");
-define("SAME_NAME","You can't invite yourself");
+define("SAME_NAME","You can&#39;t invite yourself");
 define("ALREADY_INVITED"," already invited");
 define("ALREADY_IN_ALLY"," is already in this alliance");
 define("ALREADY_IN_AN_ALLY"," is already in an alliance");
 define("NAME_OR_TAG_CHANGED","Name or Tag changed");
-define("VAC_MODE_WRONG_DAYS","You've inserted a wrong number of days");
+define("VAC_MODE_WRONG_DAYS","You&#39;ve inserted a wrong number of days");
 
 //COPYRIGHT
 define("TRAVIAN_COPYRIGHT","TravianZ 100% Open Source Travian Clone.");
@@ -137,7 +137,7 @@ define("GO2MY_VILLAGE","Go to my village");
 define("VILLAGE_CENTER","Village centre");
 define("FINISH_GOLD","Finish all construction and research orders in this village immediately for 2 Gold?");
 define("WAITING_LOOP","(waiting loop)");
-define("CROP_NEGATIVE","Your crop production is negative, you'll neaver reach the amount of requested resources.");
+define("CROP_NEGATIVE","Your crop production is negative, you&#39;ll neaver reach the amount of requested resources.");
 define("HRS","(hrs.)");
 define("DONE_AT","done at");
 define("CANCEL","cancel");
@@ -164,21 +164,21 @@ define("Q1_RESP","Yes, that way you gain more lumber.I helped a bit and complete
 define("Q1_REWARD","Woodcutter instantly completed.");
 
 define("Q2","Task 2: Crop");
-define("Q2_DESC","Now your subjects are hungry from working all day. Extend a cropland to improve your subjects' supply. Come back here once the building is complete.");
+define("Q2_DESC","Now your subjects are hungry from working all day. Extend a cropland to improve your subjects&#39; supply. Come back here once the building is complete.");
 define("Q2_ORDER","Order:<\/p>Extend one cropland.");
 define("Q2_RESP","Very good. Now your subjects have enough to eat again...");
 define("Q2_REWARD","Your reward:<\/p>1 day Travian");
 
-define("Q3","Task 3: Your Village's Name");
-define("Q3_DESC","Creative as you are you can grant your village the ultimate name.<br \/><br \/>Click on 'profile' in the left hand menu and then select 'change profile'...");
-define("Q3_ORDER","Order:<\/p>Change your village's name to something nice.");
+define("Q3","Task 3: Your Village&#39;s Name");
+define("Q3_DESC","Creative as you are you can grant your village the ultimate name.<br \/><br \/>Click on &#39;profile&#39; in the left hand menu and then select &#39;change profile&#39;...");
+define("Q3_ORDER","Order:<\/p>Change your village&#39;s name to something nice.");
 define("Q3_RESP","Wow, a great name for their village. It could have been the name of my village!...");
 
 define("Q4","Task 4: Other Players");
-define("Q4_DESC","In ". SERVER_NAME ." you play along with billions of other players. Click 'statistics' in the top menu to look up your rank and enter it here.");
+define("Q4_DESC","In ". SERVER_NAME ." you play along with billions of other players. Click &#39;statistics&#39; in the top menu to look up your rank and enter it here.");
 define("Q4_ORDER","Order:<\/p>Look for your rank in the statistics and enter it here.");
 define("Q4_BUTN","complete task");
-define("Q4_RESP","Exactly! That's your rank.");
+define("Q4_RESP","Exactly! That&#39;s your rank.");
 
 define("Q5","Task 5: Two Building Orders");
 define("Q5_DESC","Build an iron mine and a clay pit. Of iron and clay one can never have enough.");
@@ -186,7 +186,7 @@ define("Q5_ORDER","Order:<\/p><ul><li>Extend one iron mine.<\/li><li>Extend one 
 define("Q5_RESP","As you noticed, building orders take rather long. The world of ". SERVER_NAME ." will continue to spin even if you are offline. Even in a few months there will be many new things for you to discover.<br \/><br \/>The best thing to do is occasionally checking your village and giving you subjects new tasks to do.");
 
 define("Q6","Task 6: Messages");
-define("Q6_DESC","You can talk to other players using the messaging system. I sent a message to you. Read it and come back here.<br \/><br \/>P.S. Don't forget: on the left the reports, on the right the messages.");
+define("Q6_DESC","You can talk to other players using the messaging system. I sent a message to you. Read it and come back here.<br \/><br \/>P.S. Don&#39;t forget: on the left the reports, on the right the messages.");
 define("Q6_ORDER","Order:<\/p>Read your new message.");
 define("Q6_RESP","You received it? Very good.<br \/><br \/>Here is some Gold. With Gold you can do several things, e.g. extend your   in the left hand menu.");
 define("Q6_RESP1","-Account or increase your resource production.To do so click ");
@@ -200,7 +200,7 @@ define("Q7_ORDER","Order:<\/p>Extend one more of each resource tile to level 1."
 define("Q7_RESP","Very good, great develop of resources production.");
 
 define("Q8","Task 8: Huge Army!");
-define("Q8_DESC","Now I've got a very special quest for you. I am hungry. Give me 200 crop!<br \/><br \/>In return I will try to organize a huge army to protect your village.");
+define("Q8_DESC","Now I&#39;ve got a very special quest for you. I am hungry. Give me 200 crop!<br \/><br \/>In return I will try to organize a huge army to protect your village.");
 define("Q8_ORDER","Order:<\/p>Send 200 crop to the taskmaster.");
 define("Q8_BUTN","Send crop");
 define("Q8_NOCROP","No Enough Crop!");
@@ -218,7 +218,7 @@ define("Q10_REWARD","Your reward:<\/p>2 day Travian");
 
 define("Q11","Task 11: Neighbours!");
 define("Q11_DESC","Around you, there are many different villages. One of them is named. ");
-define("Q11_DESC1"," Click on 'map' in the header menu and look for that village. The name of your neighbours' villages can be seen when hovering your mouse over any of them.");
+define("Q11_DESC1"," Click on &#39;map&#39; in the header menu and look for that village. The name of your neighbours&#39; villages can be seen when hovering your mouse over any of them.");
 define("Q11_ORDER","Order:</p>Look for the coordinates of ");
 define("Q11_ORDER1","and enter them here.");
 define("Q11_RESP","Exactly, there ");
@@ -226,9 +226,9 @@ define("Q11_RESP1"," Village! As many resources as you reach this village. Well,
 define("Q11_BUTN","complete task");
 
 define("Q12","Task 12: Cranny");
-define("Q12_DESC","It's getting time to erect a cranny. The world of <?php echo SERVER_NAME; ?> is dangerous.<br \/><br \/>Many players live by stealing other players' resources. Build a cranny to hide some of your resources from enemies.");
+define("Q12_DESC","It&#39;s getting time to erect a cranny. The world of <?php echo SERVER_NAME; ?> is dangerous.<br \/><br \/>Many players live by stealing other players&#39; resources. Build a cranny to hide some of your resources from enemies.");
 define("Q12_ORDER","Order:<\/p>Construct a Cranny.");
-define("Q12_RESP","Well done, now it's way harder for your mean fellow players to plunder your village.<br \/><br \/>If under attack, your villagers will hide the resources in the Cranny all on their own.");
+define("Q12_RESP","Well done, now it&#39;s way harder for your mean fellow players to plunder your village.<br \/><br \/>If under attack, your villagers will hide the resources in the Cranny all on their own.");
 
 define("Q13","Task 13: To Two.");
 define("Q13_DESC","In <?php echo SERVER_NAME; ?> there is always something to do! Extend one woodcutter, one clay pit, one iron mine and one cropland to level 2 each.");
@@ -236,7 +236,7 @@ define("Q13_ORDER","Order:<\/p>Extend one of each resource tile to level 2.");
 define("Q13_RESP","Very good, your village grows and thrives!");
 
 define("Q14","Task 14: Instructions");
-define("Q14_DESC","In the ingame instructions you can find short information texts about different buildings and types of units.<br \/><br \/>Click on 'instructions' at the left to find out how much lumber is required for the barracks.");
+define("Q14_DESC","In the ingame instructions you can find short information texts about different buildings and types of units.<br \/><br \/>Click on &#39;instructions&#39; at the left to find out how much lumber is required for the barracks.");
 define("Q14_ORDER","Order:<\/p>Enter how much lumber barracks cost");
 define("Q14_BUTN","complete task");
 define("Q14_RESP","Exactly! Barracks cost 210 lumber.");
@@ -249,7 +249,7 @@ define("Q15_RESP","Well done. The main building level 3 has been completed.<br><
 define("Q16","Task 16: Advanced!");
 define("Q16_DESC","Look up your rank in the player statistics again and enjoy your progress.");
 define("Q16_ORDER","Order:<\/p>Look for your rank in the statistics and enter it here.");
-define("Q16_RESP","Well done! That's your current rank.");
+define("Q16_RESP","Well done! That&#39;s your current rank.");
 
 define("Q17","Task 17: Weapons or Dough");
 define("Q17_DESC","Now you have to make a decision: Either trade peacefully or become a dreaded warrior.<br \/><br \/>For the marketplace you need a granary, for the barracks you need a rally point.");
@@ -298,8 +298,8 @@ define("Q24_RESP","Congratulations! Your village grows and thrives...");
 define("Q28","Task 22: Alliance.");
 define("Q28_DESC","Teamwork is important in Travian. Players who work together organise themselves in alliances. Get an invitation from an alliance in your region and join this alliance. Alternatively, you can found your own alliance. To do this, you need a level 3 embassy.");
 define("Q28_ORDER","Order:<\/p>Join an alliance or found one on your own.");
-define("Q28_RESP","Is good! Now you're in a union called");
-define("Q28_RESP1",", and you're a member of their alliance with the faster you'll progress...");
+define("Q28_RESP","Is good! Now you&#39;re in a union called");
+define("Q28_RESP1",", and you&#39;re a member of their alliance with the faster you&#39;ll progress...");
 
 define("Q29","Task 23: Main Building to Level 5");
 define("Q29_DESC","To be able to build a palace or residence, you will need a main building at level 5.");
@@ -312,7 +312,7 @@ define("Q30_ORDER","Order:<\/p>Upgrade your granary to level 3.");
 define("Q30_RESP","Granary is level 3 now...");
 
 define("Q31","Task 25: Warehouse to Level 7");
-define("Q31_DESC"," To make sure your resources won't overflow, you should upgrade your warehouse.");
+define("Q31_DESC"," To make sure your resources won&#39;t overflow, you should upgrade your warehouse.");
 define("Q31_ORDER","Order:<\/p>Upgrade your warehouse to level 7.");
 define("Q31_RESP","Warehouse has upgraded to level 7...");
 
@@ -341,7 +341,7 @@ define("Q36"," Task 30: Build a ");
 define("Q36_DESC","Now that you have trained some soldiers, you should build a ");
 define("Q36_DESC1"," too. It increases the base defence and your soldiers will receive a defensive bonus.");
 define("Q36_ORDER","Order:<\/p>Build a ");
-define("Q36_RESP","That's what I'm talking about. A ");
+define("Q36_RESP","That&#39;s what I&#39;m talking about. A ");
 define("Q36_RESP1"," Very useful. It increases the defence of the troops in the village.");
 
 define("Q37","Tasks");
@@ -361,14 +361,14 @@ define("T8","2 days Travian ");
 //Quest 25
 define("Q25_7","Task 7: Neighbours!");
 define("Q25_7_DESC","Around you, there are many different villages. One of them is named. ");
-define("Q25_7_DESC1","Click 'Map' in the head menu and look for that village. The name of your neighbours' villages can be seen once you hover your mouse over any of them.");
+define("Q25_7_DESC1","Click &#39;Map&#39; in the head menu and look for that village. The name of your neighbours&#39; villages can be seen once you hover your mouse over any of them.");
 define("Q25_7_ORDER","<\/p><b>Order:</b><br>Look for the coordinates of ");
 define("Q25_7_ORDER1","and enter them here.");
 define("Q25_7_RESP","Exactly, there ");
 define("Q25_7_RESP1"," Village! As many resources as you reach this village. Well, almost as much ...");
 
 define("Q25_8","Task 8: Huge Army!");
-define("Q25_8_DESC","Now I've got a very special Quest for you. I am hungry. Give me 200 crop!<br \/><br \/>In return I will try to organize a huge army to protect your village.");
+define("Q25_8_DESC","Now I&#39;ve got a very special Quest for you. I am hungry. Give me 200 crop!<br \/><br \/>In return I will try to organize a huge army to protect your village.");
 define("Q25_8_ORDER","Order:<\/p>Send 200 crop to the taskmaster.");
 define("Q25_8_BUTN","Send crop");
 define("Q25_8_NOCROP","No Enough Crop!");
@@ -380,7 +380,7 @@ define("Q25_9_RESP","Very good, great development of resource production.");
 
 define("Q25_10","Task 10: Comming Soon!");
 define("Q25_10_DESC","Now there is time for a small break until the gigantic army I sent you arrives.<br \/><br \/>Until then you can explore the map or extend a few resource tiles.");
-define("Q25_10_ORDER","Order:<\/p>Wait for the taskmaster's army to arrive");
+define("Q25_10_ORDER","Order:<\/p>Wait for the taskmaster&#39;s army to arrive");
 define("Q25_10_RESP","Now a huge army from taskmaster has arrive to protect your village");
 define("Q25_10_REWARD","Your reward:<\/p>2 days more of Travian");
 
@@ -400,9 +400,9 @@ define("Q25_13_ORDER","Order:<\/p>Write the code <b>[#0]<\/b> into your profile 
 define("Q25_13_RESP","Well done! Now everyone can see what a great warrior the world is approached by.");
 
 define("Q25_14","Task 14: Cranny");
-define("Q25_14_DESC","It's getting time to erect a cranny. The world of <b>" . SERVER_NAME. "</b> is dangerous.<br \/><br \/>Many players live by stealing other players' resources. Build a cranny to hide some of your resources from enemies.");
+define("Q25_14_DESC","It&#39;s getting time to erect a cranny. The world of <b>" . SERVER_NAME. "</b> is dangerous.<br \/><br \/>Many players live by stealing other players&#39; resources. Build a cranny to hide some of your resources from enemies.");
 define("Q25_14_ORDER","Order:<\/p>Construct a Cranny.");
-define("Q25_14_RESP","Well done, now it's way harder for your mean fellow players to plunder your village.<br \/><br \/>If under attack, your villagers will hide the resources in the Cranny all on their own.");
+define("Q25_14_RESP","Well done, now it&#39;s way harder for your mean fellow players to plunder your village.<br \/><br \/>If under attack, your villagers will hide the resources in the Cranny all on their own.");
 
 define("Q25_15","Task 15: To Two.");
 define("Q25_15_DESC","In <b>" . SERVER_NAME. "</b> there is always something to do! Extend one woodcutter, one clay pit, one iron mine and one cropland to level 2 each.");
@@ -410,7 +410,7 @@ define("Q25_15_ORDER","Order:<\/p>Extend one of each resource tile to level 2.")
 define("Q25_15_RESP","Very good, your village grows and thrives!");
 
 define("Q25_16","Task 16: Instructions");
-define("Q25_16_DESC","In the ingame instructions you can find short information texts about different buildings and types of units.<br \/><br \/>Click on 'instructions' at the left to find out how much lumber is required for the barracks.");
+define("Q25_16_DESC","In the ingame instructions you can find short information texts about different buildings and types of units.<br \/><br \/>Click on &#39;instructions&#39; at the left to find out how much lumber is required for the barracks.");
 define("Q25_16_ORDER","Order:<\/p>Enter how much lumber barracks cost");
 define("Q25_16_BUTN","complete task");
 define("Q25_16_RESP","Exactly! Barracks cost 210 lumber.");
@@ -423,7 +423,7 @@ define("Q25_17_RESP","Well done. The main building level 3 has been completed.<b
 define("Q25_18","Task 18: Advanced!");
 define("Q25_18_DESC","Look up your rank in the player statistics again and enjoy your progress.");
 define("Q25_18_ORDER","Order:<\/p>Look for your rank in the statistics and enter it here.");
-define("Q25_18_RESP","Well done! That's your current rank.");
+define("Q25_18_RESP","Well done! That&#39;s your current rank.");
 
 define("Q25_19","Task 19: Weapons or Dough");
 define("Q25_19_DESC","Now you have to make a decision: Either trade peacefully or become a dreaded warrior.<br \/><br \/>For the marketplace you need a granary, for the barracks you need a rally point.");
@@ -465,7 +465,7 @@ define("Q25_25_RESP1","Combat Simulator");
 define("Q25_25_RESP2","to see how many troops you need to successfully fight one rat without losses.");
 
 define("Q25_26","Task 22: Everything to 2.");
-define("Q25_26_DESC","Now it's time again to extend the cornerstones of might and wealth! This time level 1 is not enough... it will take a while but in the end it will be worth it. Extend all your resource tiles to level 2!");
+define("Q25_26_DESC","Now it&#39;s time again to extend the cornerstones of might and wealth! This time level 1 is not enough... it will take a while but in the end it will be worth it. Extend all your resource tiles to level 2!");
 define("Q25_26_ORDER","Order:<\/p>Extend all resource tiles to level 2.");
 define("Q25_26_RESP","Congratulations! Your village grows and thrives...");
 
@@ -482,8 +482,8 @@ define("Q25_28_RESP","Yes! You can wait invitation from an alliance or create yo
 define("Q25_29","Task 25: Alliance.");
 define("Q25_29_DESC","Teamwork is important in Travian. Players who work together organise themselves in alliances. Get an invitation from an alliance in your region and join this alliance. Alternatively, you can found your own alliance. To do this, you need a level 3 embassy.");
 define("Q25_29_ORDER","Order:<\/p>Join an alliance or found your own alliance.");
-define("Q25_29_RESP","Well done! Now you're in a union called");
-define("Q25_29_RESP1",", and you're a member of their alliance.<br>Working together you will all progress faster...");
+define("Q25_29_RESP","Well done! Now you&#39;re in a union called");
+define("Q25_29_RESP1",", and you&#39;re a member of their alliance.<br>Working together you will all progress faster...");
 
 define("Q25_30","Tasks");
 define("Q25_30_DESC","All tasks achieved!");
@@ -604,7 +604,7 @@ define("LEARN1","Upgrade your fields and mines to increase your resource product
 define("LEARN2","Construct and expand the buildings in your village. Buildings improve your overall infrastructure, increase your resource production and allow you to research, train and upgrade your troops.");
 define("LEARN3","View and interact with your surroundings. You can make new friends or new enemies, make use of the nearby oases and observe as your empire grows and becomes stronger.");
 define("LEARN4","Follow your improvement and success and compare yourself to other players. Look at the Top 10 rankings and fight to win a weekly medal.");
-define("LEARN5","Receive detailed reports about your adventures, trades and battles. Don't forget to check the brand new reports about the happenings taking place in your surroundings.");
+define("LEARN5","Receive detailed reports about your adventures, trades and battles. Don&#39;t forget to check the brand new reports about the happenings taking place in your surroundings.");
 define("LEARN6","Exchange information and conduct diplomacy with other players. Always remember that communication is the key to winning new friends and solving old conflicts.");
 define("LOGIN_TO","Log in to ". SERVER_NAME);
 define("REGIN_TO","Register in ". SERVER_NAME);
@@ -738,7 +738,7 @@ define("START_NOW","START NOW");
 
 //404.php
 define("NOTHING_HERE","Nothing here!");
-define("WE_LOOKED","We looked 404 times already but can't find anything");
+define("WE_LOOKED","We looked 404 times already but can&#39;t find anything");
 
 //MASSMESSAGE.php
 define("MASS","Message Content");
@@ -747,7 +747,7 @@ define("MASS_COLOR","Message color:");
 define("MASS_REQUIRED","All fields required");
 define("MASS_UNITS","Images (units):");
 define("MASS_SHOWHIDE","Show/Hide");
-define("MASS_READ","Read this: after adding smilie, you have to add left or right after number otherwise image will won't work");
+define("MASS_READ","Read this: after adding smilie, you have to add left or right after number otherwise image will won&#39;t work");
 define("MASS_CONFIRM","Confirmation");
 define("MASS_REALLY","Do you really want to send MassIGM?");
 define("MASS_ABORT","Aborting right now");
@@ -788,11 +788,11 @@ define("WAREHOUSE","Warehouse");
 define("CURRENT_CAPACITY","Current capacity:");
 define("CAPACITY_LEVEL","Capacity at level");
 define("RESOURCE_UNITS","Resource units");
-define("WAREHOUSE_DESC","The resources wood, clay and iron are stored in your Warehouse. By increasing its level you increase your Warehouse's capacity.");
+define("WAREHOUSE_DESC","The resources wood, clay and iron are stored in your Warehouse. By increasing its level you increase your Warehouse&#39;s capacity.");
 
 define("GRANARY","Granary");
 define("CROP_UNITS","Crop units");
-define("GRANARY_DESC","Crop produced by your farms is stored in the Granary. By increasing its level you increase the Granary's capacity.");
+define("GRANARY_DESC","Crop produced by your farms is stored in the Granary. By increasing its level you increase the Granary&#39;s capacity.");
 
 define("BLACKSMITH","Blacksmith");
 define("ACTION","Action");
@@ -809,12 +809,12 @@ define("TOO_FEW_RESOURCES","Too few<br>resources");
 define("UPGRADING","Upgrading");
 define("DURATION","Duration");
 define("COMPLETE","Complete");
-define("BLACKSMITH_DESC","In the blacksmith's melting furnaces your warriors' weapons are enhanced. By increasing its level you can order the fabrication of even better weapons.");
+define("BLACKSMITH_DESC","In the blacksmith&#39;s melting furnaces your warriors&#39; weapons are enhanced. By increasing its level you can order the fabrication of even better weapons.");
 
 define("ARMOURY","Armoury");
 define("UPGRADE_ARMOURY","Upgrade<br>Armoury");
 define("UPGRADES_COMMENCE_ARMOURY","Upgrades can commence when armoury is completed.");
-define("ARMOURY_DESC","In the armoury's melting furnaces your warriors' armour is enhanced. By increasing its level you can order the fabrication of even better armour.");
+define("ARMOURY_DESC","In the armoury&#39;s melting furnaces your warriors&#39; armour is enhanced. By increasing its level you can order the fabrication of even better armour.");
 
 define("TOURNAMENTSQUARE","Tournament Square");
 define("CURRENT_SPEED","Current speed bonus:");
@@ -827,7 +827,7 @@ define("CONSTRUCTION_TIME_LEVEL","Construction time at level");
 define("DEMOLITION_BUILDING","Demolition of the building:</h2><p>If you no longer need a building, you can order the demolition of the building.</p>");
 define("DEMOLISH","Demolish");
 define("DEMOLITION_OF","Demolition of ");
-define("MAINBUILDING_DESC","In the main building the village's master builders live. The higher its level the faster your master builders complete the construction of new buildings.");
+define("MAINBUILDING_DESC","In the main building the village&#39;s master builders live. The higher its level the faster your master builders complete the construction of new buildings.");
 
 define("RALLYPOINT","Rally Point");
 define("RALLYPOINT_COMMENCE","Troops movement will be displayed when the ".RALLYPOINT." is completed");
@@ -837,7 +837,7 @@ define("EVASION_SETTINGS","evasion settings");
 define("SEND_TROOPS_AWAY_MAX","Send troops away a maximum of");
 define("TIMES","times");
 define("PER_EVASION","per evasion");
-define("RALLYPOINT_DESC","Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.");
+define("RALLYPOINT_DESC","Your village&#39;s troops meet here. From here you can send them out to conquer, raid or reinforce other villages.");
 
 define("MARKETPLACE","Marketplace");
 define("MERCHANT","Merchants");
@@ -857,8 +857,8 @@ define("TOO_FEW_MERCHANTS","Too few merchants");
 define("OWN_MERCHANTS_ONWAY","Own merchants on the way");
 define("MERCHANTS_RETURNING","Merchants returning");
 define("TRANSPORT_TO","Transport to");
-define("I_AN_SEARCHING","I'm searching");
-define("I_AN_OFFERING","I'm offering");
+define("I_AN_SEARCHING","I&#39;m searching");
+define("I_AN_OFFERING","I&#39;m offering");
 define("OFFERS_MARKETPLACE","Offers at the marketplace");
 define("NO_AVAILABLE_OFFERS","No offers at the marketplace");
 define("OFFERED_TO_ME","Offered<br>to me");
@@ -886,7 +886,7 @@ define("DISTRIBUTE_RESOURCES","Distribute resources at (step 1 of 2)");
 define("OF","of");
 define("NPC_COMPLETED","NPC completed");
 define("BACK_BUILDING","Back to building");
-define("YOU_CAN_NAT_NPC_WW","You can't use NPC trade in WW village.");
+define("YOU_CAN_NAT_NPC_WW","You can&#39;t use NPC trade in WW village.");
 define("NPC_TRADING","NPC trading");
 define("SEND_RESOURCES","Send Resources");
 define("BUY","Buy");
@@ -918,7 +918,7 @@ define("JOIN_ALLIANCE","join alliance");
 define("REFUSE","refuse");
 define("ACCEPT","accept");
 define("NO_INVITATIONS","There are no invitations available.");
-define("NO_CREATE_ALLIANCE","Banned player can't create an alliance.");
+define("NO_CREATE_ALLIANCE","Banned player can&#39;t create an alliance.");
 define("FOUND_ALLIANCE","found alliance");
 define("EMBASSY_DESC","The embassy is a place for diplomats. The higher its level the more options the king gains.");
 
@@ -986,14 +986,14 @@ define("DATE","Date");
 define("CONQUERED_BY_VILLAGE","Villages founded or conquered by this village");
 define("NONE_CONQUERED_BY_VILLAGE","No other village has been founded or conquered by this village yet.");
 define("RESIDENCE_CULTURE_DESC","In order to extend your empire you need culture points. These culture points increase in the course of time and do so faster as your building levels increase.");
-define("RESIDENCE_LOYALTY_DESC","By attacking with senators, chiefs or chieftains a village's loyalty can be brought down. If it reaches zero, the village joins the realm of the attacker. The loyalty of this village is currently at ");
+define("RESIDENCE_LOYALTY_DESC","By attacking with senators, chiefs or chieftains a village&#39;s loyalty can be brought down. If it reaches zero, the village joins the realm of the attacker. The loyalty of this village is currently at ");
 define("RESIDENCE_DESC","The residence is a small palace, where the king or queen lives when (s)he visits the village. The residence protects the village against enemies who want to conquer it.");
 
 define("PALACE","Palace");
 define("PALACE_CONSTRUCTION","Palace under construction");
 define("PALACE_TRAIN_DESC","In order to found a new village you need a level 10, 15 or 20 palace and 3 settlers. In order to conquer a new village you need a level 10, 15 or 20 palace and a senator, chief or chieftain.");
 define("CHANGE_CAPITAL","change capital");
-define("SECURITY_CHANGE_CAPITAL","Are you sure, that you want to change your capital?<br /><b>You can\'t undo this!</b><br />For security you must enter your password to confirm:<br />");
+define("SECURITY_CHANGE_CAPITAL","Are you sure, that you want to change your capital?<br /><b>You can&#39;t undo this!</b><br />For security you must enter your password to confirm:<br />");
 define("PALACE_DESC","The king or queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.");
 
 define("TREASURY","Treasury");
@@ -1040,7 +1040,7 @@ define("TREASURY_DESC","The riches of your empire are kept in the treasury. The 
 define("TRADEOFFICE","Trade Office");
 define("CURRENT_MERCHANT","Current merchant load:");
 define("MERCHANT_LEVEL","Merchant load at level");
-define("TRADEOFFICE_DESC","In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.");
+define("TRADEOFFICE_DESC","In the trade office the merchants&#39; carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.");
 
 define("GREATBARRACKS","Great Barracks");
 define("TRAINING_COMMENCE_GREATBARRACKS","Training can commence when great barracks is completed.");
@@ -1053,18 +1053,18 @@ define("GREATSTABLE_DESC","Cavalry can be trained in the great stable. The highe
 define("CITYWALL","City Wall");
 define("DEFENCE_NOW","Defence Bonus now:");
 define("DEFENCE_LEVEL","Defence Bonus at level");
-define("CITYWALL_DESC","By building a City Wall you can protect your village against the barbarian hordes of your enemies. The higher the wall's level, the higher the bonus given to your forces' defence.");
+define("CITYWALL_DESC","By building a City Wall you can protect your village against the barbarian hordes of your enemies. The higher the wall&#39;s level, the higher the bonus given to your forces&#39; defence.");
 
 define("EARTHWALL","Earth Wall");
-define("EARTHWALL_DESC","By building a Earth Wall you can protect your village against the barbarian hordes of your enemies. The higher the wall's level, the higher the bonus given to your forces' defence.");
+define("EARTHWALL_DESC","By building a Earth Wall you can protect your village against the barbarian hordes of your enemies. The higher the wall&#39;s level, the higher the bonus given to your forces&#39; defence.");
 
 define("PALISADE","Palisade");
-define("PALISADE_DESC","By building a Palisade you can protect your village against the barbarian hordes of your enemies. The higher the wall's level, the higher the bonus given to your forces' defence.");
+define("PALISADE_DESC","By building a Palisade you can protect your village against the barbarian hordes of your enemies. The higher the wall&#39;s level, the higher the bonus given to your forces&#39; defence.");
 
-define("STONEMASON","Stonemason's Lodge");
+define("STONEMASON","Stonemason&#39;s Lodge");
 define("CURRENT_STABILITY","Current stability bonus:");
 define("STABILITY_LEVEL","Stability bonus at level");
-define("STONEMASON_DESC","The stonemason's lodge is an expert at cutting stone. The further the building is extended the higher the stability of the village's buildings.");
+define("STONEMASON_DESC","The stonemason&#39;s lodge is an expert at cutting stone. The further the building is extended the higher the stability of the village&#39;s buildings.");
 
 define("BREWERY","Brewery");
 define("CURRENT_BONUS","Current bonus:");
@@ -1079,9 +1079,9 @@ define("TRAP","Trap");
 define("CURRENT_HAVE","Your currently have");
 define("WHICH_OCCUPIED","of which are occupied.");
 define("TRAINING_COMMENCE_TRAPPER","Training can commence when trapper is completed.");
-define("TRAPPER_DESC","The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won't be able to harm your village anymore.");
+define("TRAPPER_DESC","The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won&#39;t be able to harm your village anymore.");
 
-define("HEROSMANSION","Hero's Mansion");
+define("HEROSMANSION","Hero&#39;s Mansion");
 define("HERO_READY","Hero will be ready in ");
 define("NAME_CHANGED","Hero name has been changed");
 define("NOT_UNITS","Not available units");
@@ -1105,7 +1105,7 @@ define("OR_LOWER"," or lower!");
 define("YOUR_HERO_HAS","Your hero has ");
 define("OF_HIT_POINTS","of his life points");
 define("ERROR_NAME_SHORT","Error: name too short");
-define("HEROSMANSION_DESC","In the Hero's mansion you can train your own hero and at level 10, 15 and 20 you can conquer oases with Hero in the immediate vicinity.");
+define("HEROSMANSION_DESC","In the Hero&#39;s mansion you can train your own hero and at level 10, 15 and 20 you can conquer oases with Hero in the immediate vicinity.");
 
 define("GREATWAREHOUSE","Great Warehouse");
 define("GREATWAREHOUSE_DESC","Wood, clay and iron are stored in the warehouse. The great warehouse offers you more space and keeps your goods drier and safer than the normal one.");
@@ -1260,7 +1260,7 @@ define("PLAN_DESC","With this ancient construction plan you will able to build W
 define("PLAN_INFO","<h1><b>World Wonder Construction Plans</b></h1>
 
 
-Many moons ago the tribes of Travian were surprised by the unforeseen return of the Natars. This tribe from immemorial times surpassing all in wisdom, might and glory was about to trouble the free ones again. Thus they put all their efforts in preparing a last war against the Natars and vanquishing them forever. Many thought about the so-called 'Wonders of the World', a construction of many legends, as the only solution. It was told that it would render anyone invincible once completed. Ultimately making the constructors the rulers and conquerors of all known Travian. 
+Many moons ago the tribes of Travian were surprised by the unforeseen return of the Natars. This tribe from immemorial times surpassing all in wisdom, might and glory was about to trouble the free ones again. Thus they put all their efforts in preparing a last war against the Natars and vanquishing them forever. Many thought about the so-called &#39;Wonders of the World&#39;, a construction of many legends, as the only solution. It was told that it would render anyone invincible once completed. Ultimately making the constructors the rulers and conquerors of all known Travian. 
 
 However, it was also told that one would need construction plans to construct such a building. Due to this fact, the architects devised cunning plans about how to store these safely. After a while, one could see temple-like buildings in many a city and metropolis - the Treasure Chambers (Treasuries). 
 
