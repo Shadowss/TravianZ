@@ -114,68 +114,62 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM
 				<th colspan="10">Troops on the Server</th>
 			</tr>
 			<?php
-				for($i=1; $i<11; $i++)
-				{
+				$cells = ['SUM(hero) as hero'];
+
+				for($i=1; $i<51; $i++) {
+					array_push($cells, 'SUM(u'.$i.') AS u'.$i);
+				}
+
+				$units_villages = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."units"));
+				$units_enforcements = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."enforcement"));
+
+				for($i=1; $i<11; $i++) {
 					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
 				}
+
 				echo '</thead><tbody>';
-				for($i=1; $i<11; $i++)
-				{
-					$t = mysqli_query($GLOBALS["link"], "SELECT SUM(u".$i.") AS sumof FROM ".TB_PREFIX."units");
-					$troop = mysqli_fetch_assoc($t);
-					echo '<td class="on">'.$troop['sumof'].'</td>';
+				for($i=1; $i<11; $i++) {
+					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
 				}
 
 				echo "</tr>";
-				for($i=11; $i<21; $i++)
-				{
+				for($i=11; $i<21; $i++) {
 					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
 				}
+
 				echo '</thead><tbody>';
-				for($i=11; $i<21; $i++)
-				{
-					$t = mysqli_query($GLOBALS["link"], "SELECT SUM(u".$i.") AS sumof FROM ".TB_PREFIX."units");
-					$troop = mysqli_fetch_assoc($t);
-					echo '<td class="on">'.$troop['sumof'].'</td>';
+				for($i=11; $i<21; $i++) {
+					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
 				}
 
 				echo "</tr>";
-				for($i=21; $i<31; $i++)
-				{
+				for($i=21; $i<31; $i++) {
 					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
 				}
+
 				echo '</thead><tbody>';
-				for($i=21; $i<31; $i++)
-				{
-					$t = mysqli_query($GLOBALS["link"], "SELECT SUM(u".$i.") AS sumof FROM ".TB_PREFIX."units");
-					$troop = mysqli_fetch_assoc($t);
-					echo '<td class="on">'.$troop['sumof'].'</td>';
+				for($i=21; $i<31; $i++) {
+					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
 				}
 
 				echo "</tr>";
-				for($i=31; $i<41; $i++)
-				{
+				for($i=31; $i<41; $i++) {
 					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
 				}
+
 				echo '</thead><tbody>';
-				for($i=31; $i<41; $i++)
-				{
-					$t = mysqli_query($GLOBALS["link"], "SELECT SUM(u".$i.") AS sumof FROM ".TB_PREFIX."units");
-					$troop = mysqli_fetch_assoc($t);
-					echo '<td class="on">'.$troop['sumof'].'</td>';
+				for($i=31; $i<41; $i++) {
+					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
 				}
 
 				echo "</tr>";
-				for($i=41; $i<51; $i++)
-				{
+				for($i=41; $i<51; $i++) {
 					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
 				}
+
 				echo '</thead><tbody>';
-				for($i=41; $i<51; $i++)
-				{
-					$t = mysqli_query($GLOBALS["link"], "SELECT SUM(u".$i.") AS sumof FROM ".TB_PREFIX."units");
-					$troop = mysqli_fetch_assoc($t);
-					echo '<td class="on">'.$troop['sumof'].'</td>';
+				for($i=41; $i<51; $i++) {
+					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
 				}
 			?>
 		</tbody>
