@@ -40,7 +40,7 @@ class Battle {
 			global $form;
 			
 			// receive form and process
-			if(isset($post['a1_v']) && (isset($post['a2_v1']) || isset($post['a2_v2']) || isset($post['a2_v3']) || isset($post['a2_v4']))){
+			if(isset($post['a1_v']) && (isset($post['a2_v1']) || isset($post['a2_v2']) || isset($post['a2_v3']) || isset($post['a2_v4']) || isset($post['a2_v5']))){
 				$_POST['mytribe'] = $post['a1_v'];
 				
 				$target = [];
