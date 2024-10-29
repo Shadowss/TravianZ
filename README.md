@@ -54,8 +54,8 @@ or you have a feature request to be included in the play.
 
 **The team**
 * [Shadowss](https://github.com/Shadowss) - project owner and an occasional developer / tester
-* [iopietro](https://github.com/iopietro) - lead developer
-* [AL-Kateb](https://github.com/AL-Kateb) - developer
+* [iopietro](https://github.com/iopietro) - alumni developer
+* [AL-Kateb](https://github.com/AL-Kateb) - alumni developer
 * [martinambrus](https://github.com/martinambrus) - alumni developer
 * [Vladyslav](https://github.com/velhbxtyrj) - rigorous game tester
 * [phaze1G](https://github.com/phaze1G) - game designer / css support
