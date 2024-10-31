@@ -9,11 +9,11 @@
 ##  Enhanced:      aggenkeech                                                  ##
 #################################################################################
 
-$tribe1 = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE tribe = 1");
-$tribe2 = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE tribe = 2");
-$tribe3 = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE tribe = 3");
+$tribe1 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 1");
+$tribe2 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 2");
+$tribe3 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 3");
 $tribes = Array(mysqli_num_rows($tribe1),mysqli_num_rows($tribe2),mysqli_num_rows($tribe3));
-$users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE tribe > 0 AND tribe < 4"));
+$users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe > 0 AND tribe < 4"));
 ?>
 
 <br /><br />
@@ -30,12 +30,12 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM
 			</tr>
 			<tr>
 				<td>Active players</td>
-				<td><?php $result = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."active"); $num_rows = mysqli_num_rows($result); echo $num_rows; ?></td>
+				<td><?php $result = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."active"); $num_rows = mysqli_num_rows($result); echo $num_rows; ?></td>
 			</tr>
 			<tr>
 				<td>Players online</td>
 				<td><?php $t =time();
-				$result = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE timestamp > ".($t - 300)) or die(mysqli_error($database->dblink));
+				$result = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE timestamp > ".($t - 300)) or die(mysqli_error($database->dblink));
 				$num_rows = mysqli_num_rows($result);
 				echo $num_rows;?>
 				</td>
@@ -43,7 +43,7 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM
 			<tr>
 				<td>Players Banned</td>
 				<td><?php
-				$result = mysqli_query($GLOBALS["link"], "SELECT SQL_CACHE * FROM ".TB_PREFIX."users WHERE access = 0");
+				$result = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE access = 0");
 				$num_rows = mysqli_num_rows($result);
 				echo $num_rows; ?>
 				</td>
