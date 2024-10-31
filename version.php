@@ -100,9 +100,9 @@ else $building->procBuild($_GET);
 31. aggenkeech<br />
 32. Niko28<br />
 33. martinambrus - alumni developer<br />
-34. iopietro - lead developer<br />
+34. iopietro - alumni developer<br />
 35. Vladyslav - rigorous game tester<br />
-36. AL-Kateb - developer</b></div><br />
+36. AL-Kateb - alumni developer</b></div><br />
 <div style="text-align: center"><b><u>Released by: TravianZ Team</u></b><br /><br />
 <b>Visit: <a href="http://forum.ragezone.com/f583/travianz-version-modified-shadow-many-967580/">RageZone.com</a></b></div><br />
 <div style="text-align: center"><b>Download from <u><a href="https://github.com/Shadowss/TravianZ/archive/master.zip">Github</a></u></b><br />
