@@ -705,26 +705,14 @@ class MYSQLi_DB implements IDbConnection {
 	    $arg_list = func_get_args();
 	    $ret = [];
 
-		for ($i = 0; $i < $numargs; $i++) {
-			if (is_array($arg_list[$i])) {
-				// array handling
-				$escaped_array = [];
-				foreach ($arg_list[$i] as $item) {
-					if (is_string($item)) {
-						$item = stripslashes($item);
-						$escaped_array[] = mysqli_real_escape_string($this->dblink, $item);
-					} else {
-						$escaped_array[] = (int)$item;
-					}
-				}
-				$res[] = $escaped_array;
-			} elseif (is_string($arg_list[$i])) {
-				$arg_list[$i] = stripslashes($arg_list[$i]);
-				$res[] = mysqli_real_escape_string($this->dblink, $arg_list[$i]);
-			} else {
-				$res[] = (int)$arg_list[$i];
-			}
-		}
+	    for ($i = 0; $i < $numargs; $i++) {
+	        if (is_string($arg_list[$i])) {
+               $arg_list[$i] = stripslashes($arg_list[$i]);
+	           $res[] = mysqli_real_escape_string($this->dblink, $arg_list[$i]);
+	        } else {
+	           $res[] = $arg_list[$i];
+	        }
+	    }
 
 	    return $res;
 	}
