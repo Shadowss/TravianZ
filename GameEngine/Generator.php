@@ -118,8 +118,6 @@ class MyGenerator {
 
 
 	public function getBaseID($x, $y){
-		# broken -> return ((WORLD_MAX - $y) * (WORLD_MAX * 2 + 1)) + (WORLD_MAX + $x + 1);
-		# OK     -> return ((WORLD_MAX - $y) * (WORLD_MAX * 2 + 1)) + (WORLD_MAX - $x + 1);
 		return ((WORLD_MAX - $y) * (WORLD_MAX * 2 + 1)) + (WORLD_MAX + $x + 1);
 	}
 
