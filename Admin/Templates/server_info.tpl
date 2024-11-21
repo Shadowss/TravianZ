@@ -7,6 +7,7 @@
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
 ##  Enhanced:      aggenkeech                                                  ##
+##  Improoved by:  Shadow                                                      ##
 #################################################################################
 
 $tribe1 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 1");
@@ -15,12 +16,10 @@ $tribe3 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE
 $tribes = Array(mysqli_num_rows($tribe1),mysqli_num_rows($tribe2),mysqli_num_rows($tribe3));
 $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe > 0 AND tribe < 4"));
 ?>
-
-<br /><br />
 	<table id="profile">
 		<thead>
 			<tr>
-				<th colspan="2">Player Information</th>
+				<th colspan="2">World Information</th>
 			</tr>
 		 </thead>
 		 <tbody>
@@ -56,6 +55,10 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREF
 				echo $num_rows;
             ?>
 				</td>
+			</tr>
+			<tr>
+				<td>Total Population</td>
+			<td><?php $pop = mysqli_query($database->dblink,"SELECT SUM(pop) AS sumofpop FROM ".TB_PREFIX."vdata");  $getpop = mysqli_fetch_assoc($pop);  echo $getpop['sumofpop']; ?></td>
 			</tr>
 		</tbody>
 	</table>
