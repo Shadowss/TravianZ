@@ -611,12 +611,6 @@ define("U58","Monster Catapult");
 define("U59","Monster Chief");
 define("U60","Monster Settler");
 
-// RESOURCES
-define("R1","木材");
-define("R2","黏土");
-define("R3","铁矿");
-define("R4","粮食");
-
 //INDEX.php
 define("LOGIN","登录");
 define("PLAYERS","玩家");
