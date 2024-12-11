@@ -396,16 +396,16 @@ define("Q36_RESP1"," Very useful. It increases the defence of the troops in the 
 define("Q37","Tasks");
 define("Q37_DESC","All tasks achieved!");
 
-define("OPT3","Resource overview");
-define("T","Your resource deliveries");
-define("T1","Delivery");
-define("T2","Delivery time");
-define("T3","Status");
-define("T4","fetch");
-define("T5","fetched");
-define("T6","on hold");
-define("T7","1 day Travian ");
-define("T8","2 days Travian ");
+define("RESOURCES_OVERVIEW","Resource overview");
+define("YOUR_RES_DELIVERIES","Your resource deliveries");
+define("DELIVERY","Delivery");
+define("DELIVERY_TIME","Delivery time");
+define("STATUS","Status");
+define("FETCH","fetch");
+define("FETCHED","fetched");
+define("ON_HOLD","on hold");
+define("ONE_DAY_OF_TRAVIAN","1 day Travian ");
+define("TWO_DAYS_OF_TRAVIAN","2 days Travian ");
 
 //Quest 25
 define("Q25_7","任务 7: Neighbours!");
