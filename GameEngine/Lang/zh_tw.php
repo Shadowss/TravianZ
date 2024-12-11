@@ -580,6 +580,8 @@ define("MODERATOR","管理员");
 define("ACTIVE","活跃");
 define("ONLINE","在线");
 define("TUTORIAL","教程");
+define("FAQ","Faq");
+define("SPIELREGELN","Game Rules");
 define("PLAYER_STATISTICS","玩家数据");
 define("TOTAL_PLAYERS","共有 ".PLAYERS." 名玩家");
 define("ACTIVE_PLAYERS","活跃玩家");
@@ -710,11 +712,13 @@ define("BUILDMARKET","建造市场");
 define("PERHOUR","每小时");
 define("BONUS","激励");
 define("MAP","地图");
+define("LARGE_MAP", "Large Map");
 define("CROPFINDER","找田工具");
 define("NORTH","北");
 define("EAST","东");
 define("SOUTH","南");
 define("WEST","西");
+define("CLOSE_MAP", "Close Map");
 
 //other
 define("VILLAGE","村庄");
