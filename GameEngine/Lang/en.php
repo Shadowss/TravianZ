@@ -662,9 +662,6 @@ define("STARTED"," The server started ". round((time()-COMMENCE)/86400) ." days 
 define("NICKNAME","Nickname");
 define("EMAIL","Email");
 define("PASSWORD","Password");
-define("ROMANS","Romans");
-define("TEUTONS","Teutons");
-define("GAULS","Gauls");
 define("NW","North West");
 define("NE","North East");
 define("SW","South West");

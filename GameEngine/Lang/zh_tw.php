@@ -662,9 +662,6 @@ define("STARTED"," 服务器启动于 ". round((time()-COMMENCE)/86400) ." 天�
 define("NICKNAME","昵称");
 define("EMAIL","邮箱");
 define("PASSWORD","密码");
-define("ROMANS","罗马");
-define("TEUTONS","条顿");
-define("GAULS","高卢");
 define("NW","西北");
 define("NE","东北");
 define("SW","西南");
