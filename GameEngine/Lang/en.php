@@ -720,7 +720,6 @@ define("NORMALATTACK","Normal Attack");
 define("RAID","Raid");
 define("OR","or");
 define("SENDTROOP","Send troops");
-define("TROOP","Troops");
 define("NOTROOP","no troops");
 
 //map

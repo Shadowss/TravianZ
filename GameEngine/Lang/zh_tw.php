@@ -720,7 +720,6 @@ define("NORMALATTACK","强攻");
 define("RAID","掠夺");
 define("OR","或");
 define("SENDTROOP","派遣部队");
-define("TROOP","部队");
 define("NOTROOP","无部队");
 
 //map
