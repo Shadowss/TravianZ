@@ -1057,18 +1057,18 @@ define("SECURITY_CHANGE_CAPITAL","Are you sure, that you want to change your cap
 define("PALACE_DESC","The king or queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.");
 
 define("TREASURY","Treasury");
-define("TREASURY_COMMENCE","Artifacts can be viewed when treasury is completed.");
-define("ARTIFACTS_AREA","Artefacts in your area");
-define("NO_ARTIFACTS_AREA","There are no artefacts in your area.");
-define("OWN_ARTIFACTS","Own artefacts");
+define("TREASURY_COMMENCE","Artefacts can be viewed when treasury is completed.");
+define("ARTEFACTS_AREA","Artefacts in your area");
+define("NO_ARTEFACTS_AREA","There are no artefacts in your area.");
+define("OWN_ARTEFACTS","Own artefacts");
 define("CONQUERED","Conquered");
 define("DISTANCE","Distance");
 define("EFFECT","Effect");
 define("ACCOUNT","Account");
-define("SMALL_ARTIFACTS","Small artefacts");
-define("LARGE_ARTIFACTS","Large artefacts");
-define("NO_ARTIFACTS","There are no artefacts.");
-define("ANY_ARTIFACTS","You do not own any artefacts.");
+define("SMALL_ARTEFACTS","Small artefacts");
+define("LARGE_ARTEFACTS","Large artefacts");
+define("NO_ARTEFACTS","There are no artefacts.");
+define("ANY_ARTEFACTS","You do not own any artefacts.");
 define("OWNER","Owner");
 define("AREA_EFFECT","Area of effect");
 define("VILLAGE_EFFECT","Village effect");
@@ -1249,7 +1249,7 @@ define("STATUS_UPDATED", "Your Status has been updated");
 
 define("ARTEFACT1", "Artefact");
 //artefact
-define("ARCHITECTS_DESC","All buildings in the area of effect are stronger. This means that you will need more catapults to damage buildings protected by this artifacts powers.");
+define("ARCHITECTS_DESC","All buildings in the area of effect are stronger. This means that you will need more catapults to damage buildings protected by this artefacts powers.");
 define("ARCHITECTS_SMALL","The architects slight secret");
 define("ARCHITECTS_SMALLVILLAGE","Diamond Chisel");
 define("ARCHITECTS_LARGE","The architects great secret");
@@ -1263,62 +1263,62 @@ define("HASTE_LARGE","The great titan boots");
 define("HASTE_LARGEVILLAGE","Golden Chariot");
 define("HASTE_UNIQUE","The unique titan boots");
 define("HASTE_UNIQUEVILLAGE","Pheidippides Sandals");
-define("EYESIGHT_DESC","All spies (Scouts, Pathfinders, and Equites Legati) increase their spying ability. In addition, with all versions of this artifact you can see the incoming TYPE of troops but not how many there are.");
+define("EYESIGHT_DESC","All spies (Scouts, Pathfinders, and Equites Legati) increase their spying ability. In addition, with all versions of this artefact you can see the incoming TYPE of troops but not how many there are.");
 define("EYESIGHT_SMALL","The eagles slight eyes");
 define("EYESIGHT_SMALLVILLAGE","Tale of a Rat");
 define("EYESIGHT_LARGE","The eagles great eyes");
 define("EYESIGHT_LARGEVILLAGE","Generals Letter");
 define("EYESIGHT_UNIQUE","The eagles unique eyes");
 define("EYESIGHT_UNIQUEVILLAGE","Diary of Sun Tzu");
-define("DIET_DESC","All troops in the artifacts range consume less wheat, making it possible to maintain a larger army.");
+define("DIET_DESC","All troops in the artefacts range consume less wheat, making it possible to maintain a larger army.");
 define("DIET_SMALL","Slight diet control");
 define("DIET_SMALLVILLAGE","Silver Platter");
 define("DIET_LARGE","Great diet control");
 define("DIET_LARGEVILLAGE","Sacred Hunting Bow");
 define("DIET_UNIQUE","Unique diet control");
 define("DIET_UNIQUEVILLAGE","King Arthurs Chalice");
-define("ACADEMIC_DESC","Troops are built a certain percentage faster within the scope of the artifact.");
+define("ACADEMIC_DESC","Troops are built a certain percentage faster within the scope of the artefact.");
 define("ACADEMIC_SMALL","The trainers slight talent");
 define("ACADEMIC_SMALLVILLAGE","Scribed Soldiers Oath");
 define("ACADEMIC_LARGE","The trainers great talent");
 define("ACADEMIC_LARGEVILLAGE","Declaration of War");
 define("ACADEMIC_UNIQUE","The trainers unique talent");
 define("ACADEMIC_UNIQUEVILLAGE","Memoirs of Alexander the Great");
-define("STORAGE_DESC","With this building plan you are able to build the Great Granary or Great Warehouse in the Village with the artifact, or the whole account depending on the artifact. As long as you posses that artifact you are able to build and enlarge those buildings.");
+define("STORAGE_DESC","With this building plan you are able to build the Great Granary or Great Warehouse in the Village with the artefact, or the whole account depending on the artefact. As long as you posses that artefact you are able to build and enlarge those buildings.");
 define("STORAGE_SMALL","Slight storage masterplan");
 define("STORAGE_SMALLVILLAGE","Builders Sketch");
 define("STORAGE_LARGE","Great storage masterplan");
 define("STORAGE_LARGEVILLAGE","Babylonian Tablet");
-define("CONFUSION_DESC","Cranny capacity is increased by a certain amount for each type of artifact. Catapults can only shoot random on villages within this artifacts power. Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artifact. When aiming at a resource field only random resource fields can be hit, when aiming at a building only random buildings can be hit.");
+define("CONFUSION_DESC","Cranny capacity is increased by a certain amount for each type of artefact. Catapults can only shoot random on villages within this artefacts power. Exceptions are the WW which can always be targeted and the treasure chamber which can always be targeted, except with the unique artefact. When aiming at a resource field only random resource fields can be hit, when aiming at a building only random buildings can be hit.");
 define("CONFUSION_SMALL","Rivals slight confusion");
 define("CONFUSION_SMALLVILLAGE","Map of the Hidden Caverns");
 define("CONFUSION_LARGE","Rivals great confusion");
 define("CONFUSION_LARGEVILLAGE","Bottomless Satchel");
 define("CONFUSION_UNIQUE","Rivals unique confusion");
 define("CONFUSION_UNIQUEVILLAGE","Trojan Horse");
-define("FOOL_DESC","Every 24 hours it gets a random effect, bonus, or penalty (all are possible with the exception of great warehouse, great granary and WW building plans). They change effect AND scope every 24 hours. The unique artifact will always take positive bonuses.");
+define("FOOL_DESC","Every 24 hours it gets a random effect, bonus, or penalty (all are possible with the exception of great warehouse, great granary and WW building plans). They change effect AND scope every 24 hours. The unique artefact will always take positive bonuses.");
 define("FOOL_SMALL","Artefact of the slight fool");
 define("FOOL_SMALLVILLAGE","Pendant of Mischief");
 define("FOOL_UNIQUE","Artefact of the unique fool");
 define("FOOL_UNIQUEVILLAGE","Forbidden Manuscript");
 define("WWVILLAGE","WW village");
-define("ARTEFACT","<h1><b>Natars Artifacts</b></h1>
+define("ARTEFACT","<h1><b>Natars Artefacts</b></h1>
 
-Whispering rumors echo through the villages, sharing legends told only by the best storytellers. It refers to NATARS, the most feared warrior of the TRAVIAN world. Their killing is the dream of any hero, the purpose of any fighter. No one knows how NATARS got to get such power, and their warriors so cruel. Determined to discover the source of the NATARS power, the fighters send a group of elite spies to spy them. I do not go through many hours and come back with fear in their eyes and balancing fantastic theories: it seems that the natural power comes from the mysterious objects they call artifacts that they stole from our ancestors. Try to steal the artefacts of her, and you can control their power.
+Whispering rumors echo through the villages, sharing legends told only by the best storytellers. It refers to NATARS, the most feared warrior of the TRAVIAN world. Their killing is the dream of any hero, the purpose of any fighter. No one knows how NATARS got to get such power, and their warriors so cruel. Determined to discover the source of the NATARS power, the fighters send a group of elite spies to spy them. I do not go through many hours and come back with fear in their eyes and balancing fantastic theories: it seems that the natural power comes from the mysterious objects they call artefacts that they stole from our ancestors. Try to steal the artefacts of her, and you can control their power.
 
 <img src=\"img/x.gif\" class=\"ArtifactsAnnouncement\">
 
-The time has come for claiming artifacts. Collaborate with your alliance and bring your worriors to get these wanted objects. However, NATARS will not give up without war to the artefacts ... nor your enemies. If you are successful in retrieving artifacts and you will be able to reject enemies, you will be able to collect the rewards. Your buildings will become incredibly strong and mightest, and the troops will be much faster and will consume less food. Capture the artifacts, bring glory over your empire and become new legends for your followers.
+The time has come for claiming artefacts. Collaborate with your alliance and bring your worriors to get these wanted objects. However, NATARS will not give up without war to the artefacts ... nor your enemies. If you are successful in retrieving artefacts and you will be able to reject enemies, you will be able to collect the rewards. Your buildings will become incredibly strong and mightest, and the troops will be much faster and will consume less food. Capture the artefacts, bring glory over your empire and become new legends for your followers.
 
 To steal one, the following things must happen:
 
 1. You must attack the village (NO Raid!)
 2. WIN the Attack
 3. Destroy the treasury
-4. An empty treasury level 10 for SMALL ARTIFACTS and level 20 for LARGE ARTIFACT must be in the village where that attack came from
+4. An empty treasury level 10 for SMALL ARTEFACTS and level 20 for LARGE ARTEFACT must be in the village where that attack came from
 5. Have a hero in an attack
 
-If not, the next attack on that village, winning with a hero and empty treasury will take the artifact.
+If not, the next attack on that village, winning with a hero and empty treasury will take the artefact.
 
 To build a WW, you must own a plan yourself (you = the WW village owner) from lvl 0 to 50, from 51 to 100 you need an additional plan in your alliance! Two plans in the WW village account would not work!
 
@@ -1417,9 +1417,9 @@ define("CONF_SERV_CRANCAPACITY_TOOLTIP","A multiplier for the capacity of resour
 define("CONF_SERV_TRAPCAPACITY","Trapper Capacity");
 define("CONF_SERV_TRAPCAPACITY_TOOLTIP","A multiplier for the capacity of the trap of the Gauls, which can capture enemy soldiers even before attacking the village. The value of 1 is equal to the capacity of 400 at the 20 level of construction. If you set the value to 2, then the capacity will be 800.");
 define("CONF_SERV_NATUNITSMULTIPLIER","Natars Units Multiplier");
-define("CONF_SERV_NATUNITSMULTIPLIER_TOOLTIP","This parameter is responsible for the number of troops of Natars, on artifacts and WW villages.");
+define("CONF_SERV_NATUNITSMULTIPLIER_TOOLTIP","This parameter is responsible for the number of troops of Natars, on artefacts and WW villages.");
 define("CONF_SERV_NATARS_SPAWN_TIME","Natars Spawn");
-define("CONF_SERV_NATARS_SPAWN_TIME_TOOLTIP","After how long Natars and artifacts will spawn from the start date of the server, in days");
+define("CONF_SERV_NATARS_SPAWN_TIME_TOOLTIP","After how long Natars and artefacts will spawn from the start date of the server, in days");
 define("CONF_SERV_NATARS_WW_SPAWN_TIME","World Wonders Spawn");
 define("CONF_SERV_NATARS_WW_SPAWN_TIME_TOOLTIP","After how long WW villages will spawn from the start date of the server, in days");
 define("CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME","WW Building Plan Spawn");
