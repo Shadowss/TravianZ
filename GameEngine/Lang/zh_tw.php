@@ -132,7 +132,7 @@ define("CROP_COM",CROP."消耗");
 define("PER_HR","每小时");
 define("PRODUCTION","产量");
 define("CAPITAL1","Capital");
-define("MULTI_V_HEADER","村民");
+define("VILLAGES","村民");
 define("ANNOUNCEMENT","公告");
 define("GO2MY_VILLAGE","返回我的村庄");
 define("VILLAGE_CENTER","村庄大楼");
