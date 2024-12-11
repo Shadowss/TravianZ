@@ -275,12 +275,12 @@ define("Q11_RESP1"," Village! As many resources as you reach this village. Well,
 define("Q11_BUTN","complete task");
 
 define("Q12","Task 12: Cranny");
-define("Q12_DESC","It&#39;s getting time to erect a cranny. The world of <?php echo SERVER_NAME; ?> is dangerous.<br><br>Many players live by stealing other players&#39; resources. Build a cranny to hide some of your resources from enemies.");
+define("Q12_DESC","It&#39;s getting time to erect a cranny. The world of ".SERVER_NAME." is dangerous.<br><br>Many players live by stealing other players&#39; resources. Build a cranny to hide some of your resources from enemies.");
 define("Q12_ORDER","Order:</p>Construct a Cranny.");
 define("Q12_RESP","Well done, now it&#39;s way harder for your mean fellow players to plunder your village.<br><br>If under attack, your villagers will hide the resources in the Cranny all on their own.");
 
 define("Q13","Task 13: To Two.");
-define("Q13_DESC","In <?php echo SERVER_NAME; ?> there is always something to do! Extend one woodcutter, one clay pit, one iron mine and one cropland to level 2 each.");
+define("Q13_DESC","In ".SERVER_NAME." there is always something to do! Extend one woodcutter, one clay pit, one iron mine and one cropland to level 2 each.");
 define("Q13_ORDER","Order:</p>Extend one of each resource tile to level 2.");
 define("Q13_RESP","Very good, your village grows and thrives!");
 
