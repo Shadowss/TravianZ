@@ -11,7 +11,7 @@
 ?>
 <table id="troops" cellpadding="1" cellspacing="1">
 <thead><tr>
-	<th colspan="3"><?php echo TROOPS_DORF; ?></th>
+	<th colspan="3"><?php echo TROOPS; ?></th>
 </tr></thead><tbody>
 <?php
 $troops = $technology->getAllUnits($village->wid,True,1);
