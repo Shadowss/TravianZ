@@ -130,7 +130,7 @@ define("CROP","Crop");
 define("LEVEL","Level");
 define("CROP_COM",CROP." consumption");
 define("PER_HR","per hour");
-define("PROD_HEADER","Production");
+define("PRODUCTION","Production");
 define("CAPITAL1","Capital");
 define("MULTI_V_HEADER","Villages");
 define("ANNOUNCEMENT","Announcement");

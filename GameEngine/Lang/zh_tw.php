@@ -130,7 +130,7 @@ define("CROP","粮食");
 define("LEVEL","等级");
 define("CROP_COM",CROP."消耗");
 define("PER_HR","每小时");
-define("PROD_HEADER","产量");
+define("PRODUCTION","产量");
 define("CAPITAL1","Capital");
 define("MULTI_V_HEADER","村民");
 define("ANNOUNCEMENT","公告");
