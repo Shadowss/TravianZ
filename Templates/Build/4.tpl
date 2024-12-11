@@ -2,10 +2,10 @@
 include("next.tpl");
 ?>
 <div id="build" class="gid4"><a href="#" onClick="return Popup(4,4);" class="build_logo">
-	<img class="building g4" src="img/x.gif" alt="<?php echo B4; ?>" title="<?php echo B4; ?>" />
+	<img class="building g4" src="img/x.gif" alt="<?php echo CROPLAND; ?>" title="<?php echo CROPLAND; ?>" />
 </a>
-<h1><?php echo B4; ?> <span class="level"><?php echo LEVEL." "; echo $village->resarray['f'.$id];?></span></h1>
-<p class="build_desc"><?php echo B4_DESC; ?></p>
+<h1><?php echo CROPLAND; ?> <span class="level"><?php echo LEVEL." "; echo $village->resarray['f'.$id];?></span></h1>
+<p class="build_desc"><?php echo CROPLAND_DESC; ?></p>
 
 <table cellpadding="1" cellspacing="1" id="build_value">
 	<tr>

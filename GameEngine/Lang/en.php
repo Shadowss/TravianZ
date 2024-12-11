@@ -112,16 +112,6 @@ define("CUR_PROD","Current production");
 define("NEXT_PROD","Production at level ");
 define("CONSTRUCT_BUILD","Construct Building");
 
-//BUILDINGS
-define("B1","Woodcutter");
-define("B1_DESC","The Woodcutter cuts down trees in order to produce lumber. The further you extend the woodcutter the more lumber is produced by him.");
-define("B2","Clay Pit");
-define("B2_DESC","Clay is produced here. By increasing its level you increase its clay production.");
-define("B3","Iron Mine");
-define("B3_DESC","Here miners produce the precious resource iron. By increasing the mine`s level you increase its iron production.");
-define("B4","Cropland");
-define("B4_DESC","Your population`s food is produced here. By increasing the farm`s level you increase its crop production.");
-
 //DORF1
 define("LUMBER","Lumber");
 define("CLAY","Clay");
@@ -814,9 +804,13 @@ define("MASS_SENT","Mass IGM was sent");
 
 //BUILDINGS
 define("WOODCUTTER","Woodcutter");
+define("WOODCUTTER_DESC","The Woodcutter cuts down trees in order to produce lumber. The further you extend the woodcutter the more lumber is produced by him");
 define("CLAYPIT","Clay Pit");
+define("CLAYPIT_DESC","Clay is produced here. By increasing its level you increase its clay production.");
 define("IRONMINE","Iron Mine");
+define("IRONMINE_DESC","Here miners produce the precious resource iron. By increasing the mine`s level you increase its iron production.");
 define("CROPLAND","Cropland");
+define("CROPLAND_DESC","Your population`s food is produced here. By increasing the farm`s level you increase its crop production.");
 
 define("SAWMILL","Sawmill");
 define("SAWMILL_DESC","Here wood delivered by your Woodcutters is processed. Based on its level your sawmill can increase your wood production by up to 25 percent.");

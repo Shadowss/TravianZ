@@ -112,16 +112,6 @@ define("CUR_PROD","当前产量");
 define("NEXT_PROD","产量，等级 ");
 define("CONSTRUCT_BUILD","建造建筑");
 
-//BUILDINGS
-define("B1","伐木场");
-define("B1_DESC","伐木场的工人们砍倒树木，生产木材。伐木场的等级越高，木材的产能越高。");
-define("B2","黏土坑");
-define("B2_DESC","黏土坑生产黏土。黏土坑的等级越高，黏土的产能越高。");
-define("B3","铁矿场");
-define("B3_DESC","在这里，矿工们挖出宝贵的金属。铁矿场的等级越高，铁矿的产能越高。");
-define("B4","农田");
-define("B4_DESC","你的人民和士兵的食物在这里产出。农田的等级越高，粮食的产能越高。");
-
 //DORF1
 define("LUMBER","木材");
 define("CLAY","黏土");
@@ -814,9 +804,13 @@ define("MASS_SENT","全体 IGM 已送出");
 
 //BUILDINGS
 define("WOODCUTTER","伐木场");
+define("WOODCUTTER_DESC","伐木场的工人们砍倒树木，生产木材。伐木场的等级越高，木材的产能越高。");
 define("CLAYPIT","黏土坑");
+define("CLAYPIT_DESC","黏土坑生产黏土。黏土坑的等级越高，黏土的产能越高。");
 define("IRONMINE","铁矿场");
+define("IRONMINE_DESC","在这里，矿工们挖出宝贵的金属。铁矿场的等级越高，铁矿的产能越高。");
 define("CROPLAND","农田");
+define("CROPLAND_DESC","你的人民和士兵的食物在这里产出。农田的等级越高，粮食的产能越高。");
 
 define("SAWMILL","锯木厂");
 define("SAWMILL_DESC","木材被送到这里进一步处理。根据锯木厂的等级，木材产量可以提升至多 25% 。");
