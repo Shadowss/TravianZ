@@ -151,7 +151,7 @@ define("MS","ms");
 define("SERVER_TIME","服务器时间:");
 define("REMAINING_GOLD","Remaining gold");
 
-// HEADER && MENU && Messages
+// HEADER && MENU && Messages && Reports
 define("REPORTS", "Reports");
 define("MESSAGES", "Messages");
 define("PLUS_MENU", "Plus menu");
@@ -190,6 +190,21 @@ define("ONLINE_S5", "Inactive");
 define("WAIT_FOR_CONFIRM", "Wait for confirm");
 define("CONFIRM", "Confirm");
 define("WRITE_MESS_WARN", "<b>Warning:</b> you can&#39;t use the values <b>[message]</b> or <b>[/message]</b> in your message because it can cause problem with bbcode system");
+define("NO_REPORTS", "There are no reports available");
+define("ATTACKER", "Attacker");
+define("NATAR_COUNTERFORCE", "Natar Counterforce");
+define("FROM_THE_VILL", "from the village");
+define("CASUALTIES", "Casualties");
+define("INFORMATION", "Information");
+define("CARRY", "carry");
+define("DEFENDER", "Defender");
+define("VISITED", "visited");
+define("HIS_TROOPS", "&#39;s troops");
+define("WISHES_YOU", "wishes you");
+define("X_MAS", "Merry Christmas");
+define("NEW_YEAR", "Happy New Year");
+define("EASTER", "Happy Easter");
+define("PEACE", "Peace");
 
 //QUEST
 define("Q_CONTINUE","继续下一个任务。");
@@ -712,6 +727,7 @@ define("FROM","从");
 define("SEND_TROOPS","派遣部队");
 define("TASKMASTER","任务官");
 define("TO_THE_TASK","To the task");
+define("VILLAGE_OF_THE_ELDERS","village of the elders");
 define("VILLAGE_OF_THE_ELDERS_TROOPS","旧部队的村庄");
 
 //SEND TROOP
@@ -1192,6 +1208,46 @@ define("CONSTRUCT_NEW_BUILDING","建造新建筑");
 define("SHOWSOON_AVAILABLE_BUILDINGS","显示即将可用的建筑");
 define("HIDESOON_AVAILABLE_BUILDINGS","隐藏即将可用的建筑");
 
+// gold plus
+define("GOLD_SHOP", "Gold Shop");
+define("PACKAGE_A", "Package A");
+define("PACKAGE_B", "Package B");
+define("PACKAGE_C", "Package C");
+define("PACKAGE_D", "Package D");
+define("PACKAGE_E", "Package E");
+define("PAYMENT_METHOD", "Payment Method");
+define("PACKAGES_NOT_REFUND", "None of the packages are refundable");
+define("PLUS_FUNC", "Plus function");
+define("REMAINING", "Remaining");
+define("MINS", "mins");
+define("ACTIVATE", "Activate");
+define("TOO_LITTLE_GOLD", "Too little gold");
+define("GOLD_ON", "On"); // "attack on" and "gold feature on" can be not the same in different languages
+define("PLUS_END", "Your PLUS advantage has ended");
+define("NPC", "NPC");
+define("NO_GOLD", "You currently don&#39;t own gold");
+define("GOLD_CLUB", "Gold Club");
+define("NOW", "now");
+define("NPC_TRADE_GOLD", "Trade with the NPC merchant");
+define("COMPLETE_CONSTRUCTION_R_GOLD", "Complete construction orders and researches in this village now (does not work for Palace and Residence)");
+define("FOR_GAME_SERVER", "Whole game round");
+define("HAVE_NO_INVITED", "You have not brought in any new players yet");
+define("INVITE_FRIENDS_GOLD", "Invite friends and receive free Gold");
+define("NEED_MORE_GOLD", "You need more gold");
+define("ADD_PLUS_FAIL", "Failed plus attempt");
+define("ADD_BONUS_LUMBER_FAIL", "Failed lumber attempt");
+define("ADD_BONUS_CLAY_FAIL", "Failed clay attempt");
+define("ADD_BONUS_IRON_FAIL", "Failed iron attempt");
+define("ADD_BONUS_CROP_FAIL", "Failed crop attempt");
+define("SELECT_GOLD_OPTION", "Please select the option you wish to activate or extend");
+define("GET_NOW", "Get Now");
+define("BUY_NOW", "Buy Now");
+define("SELECT_REWARD", "Select reward");
+define("VIP_ACCOUNT", "VIP Account");
+define("USER_NOT_EXISTS", "The account name you entered does not exist");
+define("STATUS_UPDATED", "Your Status has been updated");
+
+define("ARTEFACT1", "Artefact");
 //artefact
 define("ARCHITECTS_DESC","All buildings in the area of effect are stronger. This means that you will need more catapults to damage buildings protected by this artifacts powers.");
 define("ARCHITECTS_SMALL","The architects slight secret");
