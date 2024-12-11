@@ -26,6 +26,7 @@ define("TRIBE6","Monsters");
 define("HOME","Homepage");
 define("INSTRUCT","Instructions");
 define("ADMIN_PANEL","Admin Panel");
+define("MH_PANEL","Multihunter Panel");
 define("MASS_MESSAGE","Mass Message");
 define("LOGOUT","Logout");
 define("PROFILE","Profile");
@@ -138,14 +139,57 @@ define("VILLAGE_CENTER","Village centre");
 define("FINISH_GOLD","Finish all construction and research orders in this village immediately for 2 Gold?");
 define("WAITING_LOOP","(waiting loop)");
 define("CROP_NEGATIVE","Your crop production is negative, you&#39;ll neaver reach the amount of requested resources.");
+define("HR","h.");
 define("HRS","(hrs.)");
 define("DONE_AT","done at");
 define("CANCEL","cancel");
 define("LOYALTY","Loyalty");
 define("CALCULATED_IN","Calculated in");
-define("SERVER_TIME","Server time:");
 define("HI","HI");
 define("P_IN","in");
+define("MS","ms");
+define("SERVER_TIME","Server time:");
+define("REMAINING_GOLD","Remaining gold");
+
+// HEADER && MENU && Messages
+define("REPORTS", "Reports");
+define("MESSAGES", "Messages");
+define("PLUS_MENU", "Plus menu");
+define("LINKS", "Links");
+define("CANCEL_PROCESS", "Cancel process");
+define("ACCOUNT_DELETING", "The account will be deleted in");
+define("INBOX", "Inbox");
+define("WRITE", "Write");
+define("SENT", "Sent");
+define("SEND", "Send");
+define("ARCHIVE", "Archive");
+define("NOTES", "Notes");
+define("SUBJECT", "Subject");
+define("SENDER", "Sender");
+define("RECIPIENT", "Recipient");
+define("BACK", "Back");
+define("NEW", "new");
+define("UNREAD", "unread");
+define("NO_MESS", "There are no messages available");
+define("NO_MESS_IN_ARCHIVE", NO_MESS." in the archive");
+define("NO_MESS_SENT", "There are no sent messages available");
+define("MESS_FOR_SUP", "Message for Support");
+define("MESS_FOR_MH", "Message for Multihunter");
+define("SEND_AS_SUP", "Send as Support");
+define("SEND_AS_MH", "Send as Multihunter");
+define("SAVE", "Save");
+define("ANSWER", "Answer");
+define("REPLY", "Reply");
+define("ADDRESSBOOK", "Addressbook");
+define("CLOSE_ADDRESSBOOK", "Close Addressbook");
+define("ONLINE_S1", "Now online");
+define("ONLINE_S2", "Offline");
+define("ONLINE_S3", "Last 3 days");
+define("ONLINE_S4", "Last 7 days");
+define("ONLINE_S5", "Inactive");
+define("WAIT_FOR_CONFIRM", "Wait for confirm");
+define("CONFIRM", "Confirm");
+define("WRITE_MESS_WARN", "<b>Warning:</b> you can&#39;t use the values <b>[message]</b> or <b>[/message]</b> in your message because it can cause problem with bbcode system");
 
 //QUEST
 define("Q_CONTINUE","Continue with the next task.");
@@ -675,6 +719,7 @@ define("KILL","Kill");
 define("FROM","From");
 define("SEND_TROOPS","Send troops");
 define("TASKMASTER","Taskmaster");
+define("TO_THE_TASK","To the task");
 define("VILLAGE_OF_THE_ELDERS_TROOPS","village of the elders troops");
 
 //SEND TROOP
@@ -719,9 +764,11 @@ define("EAST","East");
 define("SOUTH","South");
 define("WEST","West");
 define("CLOSE_MAP", "Close Map");
+define("AND", "and");
 
 //other
 define("VILLAGE","Village");
+define("STATISTICS","Statistics");
 define("OASIS","Oasis");
 define("NO_OASIS", "You do not own any oases.");
 define("NO_VILLAGES", "There are no villages.");
@@ -808,7 +855,7 @@ define("MAXIMUM_LEVEL","Maximum<br>level");
 define("EXPAND_WAREHOUSE","Expand<br>warehouse");
 define("EXPAND_GRANARY","Expand<br>granary");
 define("ENOUGH_RESOURCES","Enough resources");
-define("CROP_NEGATIVE ","Crop production is negative so you will never reach the required resources");
+define("CROP_NEGATIVE ","Crop production is negative so you will never reach the required resources"); // todo rm doubling
 define("TOO_FEW_RESOURCES","Too few<br>resources");
 define("UPGRADING","Upgrading");
 define("DURATION","Duration");
@@ -842,6 +889,7 @@ define("SEND_TROOPS_AWAY_MAX","Send troops away a maximum of");
 define("TIMES","times");
 define("PER_EVASION","per evasion");
 define("RALLYPOINT_DESC","Your village&#39;s troops meet here. From here you can send them out to conquer, raid or reinforce other villages.");
+define("COMBAT_SIMULATOR", "Combat Simulator");
 
 define("MARKETPLACE","Marketplace");
 define("MERCHANT","Merchants");
@@ -876,7 +924,8 @@ define("MAX_TIME_TRANSPORT","max. time of transport");
 define("OWN_ALLIANCE_ONLY","own alliance only");
 define("INVALID_OFFER","Invalid offer");
 define("INVALID_MERCHANTS_REPETITION","Invalid merchants repetition rate");
-define("USER_ON_VACATION","User is on vacation mode");
+define("USER_ON_VACATION","Player is on vacation mode");
+define("VACATION_MODE", "Vacation mode");
 define("NOT_ENOUGH_RESOURCES","Not enough resources");
 define("OFFER","Offer");
 define("SEARCH","Search");
@@ -1080,7 +1129,7 @@ define("CURRENT_TRAPS","Currect maximum traps to train:");
 define("TRAPS_LEVEL","Maximum traps to train at level");
 define("TRAPS","Traps");
 define("TRAP","Trap");
-define("CURRENT_HAVE","Your currently have");
+define("CURRENT_HAVE","You currently have");
 define("WHICH_OCCUPIED","of which are occupied.");
 define("TRAINING_COMMENCE_TRAPPER","Training can commence when trapper is completed.");
 define("TRAPPER_DESC","The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won&#39;t be able to harm your village anymore.");
@@ -1258,6 +1307,7 @@ The construction plans are conquerable immediately when they appear to the serve
 There will be a countdown in game, showing the exact time of the release, ".(5 / SPEED)." days prior to the launch. ");
 
 //Building Plans
+define("WILL_SPAWN_IN","will spawn in");
 define("PLAN","Ancient Construction Plan");
 define("PLANVILLAGE","WW Buildingplan");
 define("PLAN_DESC","With this ancient construction plan you will able to build World Wonder to level 50. to build further, your alliance must hold at least two plans.");

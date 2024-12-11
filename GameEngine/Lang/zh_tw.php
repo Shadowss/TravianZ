@@ -26,6 +26,7 @@ define("TRIBE6","野兽");
 define("HOME","主页");
 define("INSTRUCT","说明");
 define("ADMIN_PANEL","管理员面板");
+define("MH_PANEL","Multihunter Panel");
 define("MASS_MESSAGE","群发消息");
 define("LOGOUT","登出");
 define("PROFILE","档案");
@@ -138,14 +139,57 @@ define("VILLAGE_CENTER","村庄大楼");
 define("FINISH_GOLD","将使用 2 金币瞬间完成本村的所有建筑和研究队列");
 define("WAITING_LOOP","(队列中)");
 define("CROP_NEGATIVE","你的粮食产量为负，因此不可能抵达需求的粮食数目。");
+define("HR","h.");
 define("HRS","(小时)");
 define("DONE_AT","完成于");
 define("CANCEL","取消");
 define("LOYALTY","忠诚度");
 define("CALCULATED_IN","响应延迟");
-define("SERVER_TIME","服务器时间:");
 define("HI","嗨");
 define("P_IN","在");
+define("MS","ms");
+define("SERVER_TIME","服务器时间:");
+define("REMAINING_GOLD","Remaining gold");
+
+// HEADER && MENU && Messages
+define("REPORTS", "Reports");
+define("MESSAGES", "Messages");
+define("PLUS_MENU", "Plus menu");
+define("LINKS", "Links");
+define("CANCEL_PROCESS", "Cancel process");
+define("ACCOUNT_DELETING", "The account will be deleted in");
+define("INBOX", "Inbox");
+define("WRITE", "Write");
+define("SENT", "Sent");
+define("SEND", "Send");
+define("ARCHIVE", "Archive");
+define("NOTES", "Notes");
+define("SUBJECT", "Subject");
+define("SENDER", "Sender");
+define("RECIPIENT", "Recipient");
+define("BACK", "Back");
+define("NEW", "new");
+define("UNREAD", "unread");
+define("NO_MESS", "There are no messages available");
+define("NO_MESS_IN_ARCHIVE", NO_MESS." in the archive");
+define("NO_MESS_SENT", "There are no sent messages available");
+define("MESS_FOR_SUP", "Message for Support");
+define("MESS_FOR_MH", "Message for Multihunter");
+define("SEND_AS_SUP", "Send as Support");
+define("SEND_AS_MH", "Send as Multihunter");
+define("SAVE", "Save");
+define("ANSWER", "Answer");
+define("REPLY", "Reply");
+define("ADDRESSBOOK", "Addressbook");
+define("CLOSE_ADDRESSBOOK", "Close Addressbook");
+define("ONLINE_S1", "Now online");
+define("ONLINE_S2", "Offline");
+define("ONLINE_S3", "Last 3 days");
+define("ONLINE_S4", "Last 7 days");
+define("ONLINE_S5", "Inactive");
+define("WAIT_FOR_CONFIRM", "Wait for confirm");
+define("CONFIRM", "Confirm");
+define("WRITE_MESS_WARN", "<b>Warning:</b> you can&#39;t use the values <b>[message]</b> or <b>[/message]</b> in your message because it can cause problem with bbcode system");
 
 //QUEST
 define("Q_CONTINUE","继续下一个任务。");
@@ -675,6 +719,7 @@ define("KILL","击杀");
 define("FROM","从");
 define("SEND_TROOPS","派遣部队");
 define("TASKMASTER","任务官");
+define("TO_THE_TASK","To the task");
 define("VILLAGE_OF_THE_ELDERS_TROOPS","旧部队的村庄");
 
 //SEND TROOP
@@ -719,9 +764,11 @@ define("EAST","东");
 define("SOUTH","南");
 define("WEST","西");
 define("CLOSE_MAP", "Close Map");
+define("AND", "and");
 
 //other
 define("VILLAGE","村庄");
+define("STATISTICS","Statistics");
 define("OASIS","绿洲");
 define("NO_OASIS", "你尚未占领绿洲。");
 define("NO_VILLAGES", "那里没有村庄。");
@@ -842,6 +889,7 @@ define("SEND_TROOPS_AWAY_MAX","Send troops away a maximum of");
 define("TIMES","times");
 define("PER_EVASION","per evasion");
 define("RALLYPOINT_DESC","村庄的部队在这里集合。你可以在这里派遣部队去征服、掠夺、侦查或增援其他地方。");
+define("COMBAT_SIMULATOR", "Combat Simulator");
 
 define("MARKETPLACE","市场");
 define("MERCHANT","商人");
@@ -877,6 +925,7 @@ define("OWN_ALLIANCE_ONLY","仅限联盟");
 define("INVALID_OFFER","报价不再可用");
 define("INVALID_MERCHANTS_REPETITION","不可用的商人重复次数");
 define("USER_ON_VACATION","用户正在度假");
+define("VACATION_MODE", "Vacation mode");
 define("NOT_ENOUGH_RESOURCES","资源不足");
 define("OFFER","报价");
 define("SEARCH","搜索");
@@ -1258,6 +1307,7 @@ The construction plans are conquerable immediately when they appear to the serve
 There will be a countdown in game, showing the exact time of the release, ".(5 / SPEED)." days prior to the launch. ");
 
 //Building Plans
+define("WILL_SPAWN_IN","will spawn in");
 define("PLAN","Ancient Construction Plan");
 define("PLANVILLAGE","WW Buildingplan");
 define("PLAN_DESC","With this ancient construction plan you will able to build World Wonder to level 50. to build further, your alliance must hold at least two plans.");
