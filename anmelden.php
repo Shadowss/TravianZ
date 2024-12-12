@@ -93,17 +93,17 @@ if(REG_OPEN == true){ ?>
 			<th colspan="2"><img src="img/x.gif" class="img_u07" alt="starting position" /></th>
 		</tr>
 		<tr>
-			<td class="nat"><label><input class="radio" type="radio" name="vid" value="1" <?php echo $form->getRadio('vid',1); ?> />&nbsp;<?php echo ROMANS; ?></label></td>
+			<td class="nat"><label><input class="radio" type="radio" name="vid" value="1" <?php echo $form->getRadio('vid',1); ?> />&nbsp;<?php echo TRIBE1; /* Romans */ ?></label></td>
 			<td class="pos1"><label><input class="radio" type="radio" name="kid" value="0" checked="checked" />&nbsp;<?php echo RANDOM; ?></label></td>
 			<td class="pos2">&nbsp;</td>
 		</tr>
 		<tr>
-			<td><label><input class="radio" type="radio" name="vid" value="2" <?php echo $form->getRadio('vid',2); ?> />&nbsp;<?php echo TEUTONS; ?></label></td>
+			<td><label><input class="radio" type="radio" name="vid" value="2" <?php echo $form->getRadio('vid',2); ?> />&nbsp;<?php echo TRIBE2; /* Teutons */ ?></label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="1" <?php echo $form->getRadio('kid',1); ?> />&nbsp;<?php echo NW; ?> <b>(-|+)</b>&nbsp;</label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="2" <?php echo $form->getRadio('kid',2); ?> />&nbsp;<?php echo NE; ?> <b>(+|+)</b></label></td>
 		</tr>
 		<tr class="btm">
-			<td><label><input class="radio" type="radio" name="vid" value="3" <?php echo $form->getRadio('vid',3); ?> />&nbsp;<?php echo GAULS; ?></label></td>
+			<td><label><input class="radio" type="radio" name="vid" value="3" <?php echo $form->getRadio('vid',3); ?> />&nbsp;<?php echo TRIBE3; /* Gauls */ ?></label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="3" <?php echo $form->getRadio('kid',3); ?> />&nbsp;<?php echo SW; ?> <b>(-|-)</b></label></td>
 			<td><label><input class="radio" type="radio" name="kid" value="4" <?php echo $form->getRadio('kid',4); ?> />&nbsp;<?php echo SE; ?> <b>(+|-)</b></label></td>
 		</tr>

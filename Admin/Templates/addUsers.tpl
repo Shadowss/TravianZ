@@ -81,13 +81,13 @@ Submitting this form will create new Users<br>(and their home Villages) on your 
                     $tribe = RANDOM;
                     break;
                 case '1':
-                    $tribe = ROMANS;
+                    $tribe = TRIBE1; // Romans
                     break;
                 case '2':
-                    $tribe = TEUTONS;
+                    $tribe = TRIBE2; // Teutons
                     break;
                 case '3':
-                    $tribe = GAULS;
+                    $tribe = TRIBE3; // Gauls
                     break;
                 default:
                     // Should never reach here
@@ -157,9 +157,9 @@ Beginners Protection &nbsp;&nbsp;<input type ="checkbox" name="users_protection"
 <br><br>
 Tribe:<br>
 <label><input type="radio" name="tribe" value="0" checked> &nbsp;<?php echo RANDOM; ?></label><br>
-<label><input type="radio" name="tribe" value="1"> &nbsp;<?php echo ROMANS; ?></label><br>
-<label><input type="radio" name="tribe" value="2"> &nbsp;<?php echo TEUTONS; ?></label><br>
-<label><input type="radio" name="tribe" value="3"> &nbsp;<?php echo GAULS; ?></label><br>
+<label><input type="radio" name="tribe" value="1"> &nbsp;<?php echo TRIBE1; /* Romans */ ?></label><br>
+<label><input type="radio" name="tribe" value="2"> &nbsp;<?php echo TRIBE2; /* Teutons */ ?></label><br>
+<label><input type="radio" name="tribe" value="3"> &nbsp;<?php echo TRIBE3; /* Gauls */ ?></label><br>
 <br><br>
 <input type="submit" value="Create Users">
 </form>

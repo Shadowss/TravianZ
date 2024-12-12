@@ -16,7 +16,7 @@ if (!isset($id)) {
 if(count($session->villages) > 1){
 ?>
 <table id="vlist" cellpadding="1" cellspacing="1">
-   <thead><tr><td colspan="3"><a href="dorf3.php" accesskey="9"><?php echo MULTI_V_HEADER; ?>:</a></td></tr></thead>
+   <thead><tr><td colspan="3"><a href="dorf3.php" accesskey="9"><?php echo VILLAGES; ?>:</a></td></tr></thead>
 	<tbody><?php
 		$returnVillageArray = $database->getArrayMemberVillage($session->uid);
 if(isset($_GET['w'])) {

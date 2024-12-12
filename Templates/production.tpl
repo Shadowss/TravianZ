@@ -11,7 +11,7 @@
 ?>
 <table id="production" cellpadding="1" cellspacing="1">
 	<thead><tr>
-			<th colspan="4"><?php echo PROD_HEADER; ?>:</th>
+			<th colspan="4"><?php echo PRODUCTION; ?>:</th>
 	</tr></thead><tbody>	
 	<tr>
 		<td class="ico"><img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" /></td>

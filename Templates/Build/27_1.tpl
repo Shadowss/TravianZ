@@ -11,7 +11,7 @@ $coor = $database->getCoor($wref);
 <table id="own" cellpadding="1" cellspacing="1">
 <thead>
 <tr>
-<th colspan="4"><?php echo OWN_ARTIFACTS; ?></th>
+<th colspan="4"><?php echo OWN_ARTEFACTS; ?></th>
 </tr>
 <tr>
 <td></td>
@@ -24,7 +24,7 @@ $coor = $database->getCoor($wref);
 <tbody>
 <?php
 
-if (empty($ownArtifacts)) echo '<tr><td colspan="4" class="none">'.ANY_ARTIFACTS.'</td></tr>';
+if (empty($ownArtifacts)) echo '<tr><td colspan="4" class="none">'.ANY_ARTEFACTS.'</td></tr>';
 else 
 {
     foreach($ownArtifacts as $ownArtifact){
@@ -49,7 +49,7 @@ else
 <table id="near" cellpadding="1" cellspacing="1">
 <thead>
 <tr>
-<th colspan="4"><?php echo ARTIFACTS_AREA; ?></th>
+<th colspan="4"><?php echo ARTEFACTS_AREA; ?></th>
 </tr>
 
 <tr>
@@ -66,7 +66,7 @@ else
 <tbody>
 <?php
 $artifacts = $database->getArtifactsBysize([1, 2, 3]);
-if(count($artifacts) == 0) echo '<td colspan="4" class="none">'.NO_ARTIFACTS_AREA.'</td>';
+if(count($artifacts) == 0) echo '<td colspan="4" class="none">'.NO_ARTEFACTS_AREA.'</td>';
 else
 {
     $rows = [];
