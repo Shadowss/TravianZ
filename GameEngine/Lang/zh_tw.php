@@ -197,7 +197,7 @@ define('EASTER', 'Happy Easter');
 define('PEACE', 'Peace');
 
 define('GOLD', '金币');
-define('GOLD_IMG', '<img src="/img/x.gif" class="gold" alt="'.GOLD.'" title="'.GOLD.'">');
+define('GOLD_IMG', '<img src=\"/img/x.gif\" class=\"gold\" alt=\"'.GOLD.'\" title=\"'.GOLD.'\">');
 
 //QUEST
 define('Q_CONTINUE', '继续下一个任务。');
