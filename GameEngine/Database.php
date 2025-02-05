@@ -3593,269 +3593,99 @@ class MYSQLi_DB implements IDbConnection {
         // please don't scream...
         // with the current table structure, there really IS NOT another way
         // (except for stored procedures, which we can't rely on to be allowed on the server)
-        $result = mysqli_query($this->dblink,"
-                SELECT
-                    IF(
-                        f1t IN ($fieldType),
-                        f1,
-                        IF(
-                            f2t IN ($fieldType),
-                            f2,
-                            IF(
-                                f3t IN ($fieldType),
-                                f3,
-                                IF(
-                                    f4t IN ($fieldType),
-                                    f4,
-                                    IF(
-                                        f5t IN ($fieldType),
-                                        f5,
-                                        IF(
-                                            f6t IN ($fieldType),
-                                            f6,
-                                            IF(
-                                                f7t IN ($fieldType),
-                                                f7,
-                                                IF(
-                                                    f8t IN ($fieldType),
-                                                    f8,
-                                                    IF(
-                                                        f9t IN ($fieldType),
-                                                        f9,
-                                                        IF(
-                                                            f10t IN ($fieldType),
-                                                            f10,
-                                                            IF(
-                                                                f11t IN ($fieldType),
-                                                                f11,
-                                                                IF(
-                                                                    f12t IN ($fieldType),
-                                                                    f12,
-                                                                    IF(
-                                                                        f13t IN ($fieldType),
-                                                                        f13,
-                                                                        IF(
-                                                                            f14t IN ($fieldType),
-                                                                            f14,
-                                                                            IF(
-                                                                                f15t IN ($fieldType),
-                                                                                f15,
-                                                                                IF(
-                                                                                    f16t IN ($fieldType),
-                                                                                    f16,
-                                                                                    IF(
-                                                                                        f17t IN ($fieldType),
-                                                                                        f17,
-                                                                                        IF(
-                                                                                            f18t IN ($fieldType),
-                                                                                            f18,
-                                                                                            IF(
-                                                                                                f19t IN ($fieldType),
-                                                                                                f19,
-                                                                                                IF(
-                                                                                                    f20t IN ($fieldType),
-                                                                                                    f20,
-                                                                                                    IF(
-                                                                                                        f20t IN ($fieldType),
-                                                                                                        f20,
-                                                                                                        IF(
-                                                                                                            f21t IN ($fieldType),
-                                                                                                            f21,
-                                                                                                            IF(
-                                                                                                                f22t IN ($fieldType),
-                                                                                                                f22,
-                                                                                                                IF(
-                                                                                                                    f23t IN ($fieldType),
-                                                                                                                    f23,
-                                                                                                                    IF(
-                                                                                                                        f24t IN ($fieldType),
-                                                                                                                        f24,
-                                                                                                                        IF(
-                                                                                                                            f25t IN ($fieldType),
-                                                                                                                            f25,
-                                                                                                                            IF(
-                                                                                                                                f26t IN ($fieldType),
-                                                                                                                                f26,
-                                                                                                                                IF(
-                                                                                                                                    f27t IN ($fieldType),
-                                                                                                                                    f27,
-                                                                                                                                    IF(
-                                                                                                                                        f28t IN ($fieldType),
-                                                                                                                                        f28,
-                                                                                                                                        IF(
-                                                                                                                                            f29t IN ($fieldType),
-                                                                                                                                            f29,
-                                                                                                                                            IF(
-                                                                                                                                                f30t IN ($fieldType),
-                                                                                                                                                f30,
-                                                                                                                                                IF(
-                                                                                                                                                    f31t IN ($fieldType),
-                                                                                                                                                    f31,
-                                                                                                                                                    IF(
-                                                                                                                                                        f32t IN ($fieldType),
-                                                                                                                                                        f32,
-                                                                                                                                                        IF(
-                                                                                                                                                            f33t IN ($fieldType),
-                                                                                                                                                            f33,
-                                                                                                                                                            IF(
-                                                                                                                                                                f34t IN ($fieldType),
-                                                                                                                                                                f34,
-                                                                                                                                                                IF(
-                                                                                                                                                                    f35t IN ($fieldType),
-                                                                                                                                                                    f35,
-                                                                                                                                                                    IF(
-                                                                                                                                                                        f36t IN ($fieldType),
-                                                                                                                                                                        f36,
-                                                                                                                                                                        IF(
-                                                                                                                                                                            f37t IN ($fieldType),
-                                                                                                                                                                            f37,
-                                                                                                                                                                            IF(
-                                                                                                                                                                                f38t IN ($fieldType),
-                                                                                                                                                                                f38,
-                                                                                                                                                                                IF(
-                                                                                                                                                                                    f39t IN ($fieldType),
-                                                                                                                                                                                    f39,
-                                                                                                                                                                                    IF(
-                                                                                                                                                                                        f40t IN ($fieldType),
-                                                                                                                                                                                        f40,
-                                                                                                                                                                                        IF(
-                                                                                                                                                                                            f99t IN ($fieldType),
-                                                                                                                                                                                            f99,
-                                                                                                                                                                                            0
-                                                                                                                                                                                        )
-                                                                                                                                                                                    )
-                                                                                                                                                                                )
-                                                                                                                                                                            )
-                                                                                                                                                                        )
-                                                                                                                                                                    )
-                                                                                                                                                                )
-                                                                                                                                                            )
-                                                                                                                                                        )
-                                                                                                                                                    )
-                                                                                                                                                )
-                                                                                                                                            )
-                                                                                                                                        )
-                                                                                                                                    )
-                                                                                                                                )
-                                                                                                                            )
-                                                                                                                        )
-                                                                                                                    )
-                                                                                                                )
-                                                                                                            )
-                                                                                                        )
-                                                                                                    )
-                                                                                                )
-                                                                                            )
-                                                                                        )
-                                                                                    )
-                                                                                )
-                                                                            )
-                                                                        )
-                                                                    )
-                                                                )
-                                                            )
-                                                        )
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    ) as level
-                FROM
-                    ".TB_PREFIX."fdata
-                WHERE
-                    vref = $vid
-                    AND
-                    (f1t IN ($fieldType)
-                    OR
-                    f2t IN ($fieldType)
-                    OR
-                    f3t IN ($fieldType)
-                    OR
-                    f4t IN ($fieldType)
-                    OR
-                    f5t IN ($fieldType)
-                    OR
-                    f6t IN ($fieldType)
-                    OR
-                    f7t IN ($fieldType)
-                    OR
-                    f8t IN ($fieldType)
-                    OR
-                    f9t IN ($fieldType)
-                    OR
-                    f10t IN ($fieldType)
-                    OR
-                    f11t IN ($fieldType)
-                    OR
-                    f12t IN ($fieldType)
-                    OR
-                    f13t IN ($fieldType)
-                    OR
-                    f14t IN ($fieldType)
-                    OR
-                    f15t IN ($fieldType)
-                    OR
-                    f16t IN ($fieldType)
-                    OR
-                    f17t IN ($fieldType)
-                    OR
-                    f18t IN ($fieldType)
-                    OR
-                    f19t IN ($fieldType)
-                    OR
-                    f20t IN ($fieldType)
-                    OR
-                    f20t IN ($fieldType)
-                    OR
-                    f21t IN ($fieldType)
-                    OR
-                    f22t IN ($fieldType)
-                    OR
-                    f23t IN ($fieldType)
-                    OR
-                    f24t IN ($fieldType)
-                    OR
-                    f25t IN ($fieldType)
-                    OR
-                    f26t IN ($fieldType)
-                    OR
-                    f27t IN ($fieldType)
-                    OR
-                    f28t IN ($fieldType)
-                    OR
-                    f29t IN ($fieldType)
-                    OR
-                    f30t IN ($fieldType)
-                    OR
-                    f30t IN ($fieldType)
-                    OR
-                    f31t IN ($fieldType)
-                    OR
-                    f32t IN ($fieldType)
-                    OR
-                    f33t IN ($fieldType)
-                    OR
-                    f34t IN ($fieldType)
-                    OR
-                    f35t IN ($fieldType)
-                    OR
-                    f36t IN ($fieldType)
-                    OR
-                    f37t IN ($fieldType)
-                    OR
-                    f38t IN ($fieldType)
-                    OR
-                    f39t IN ($fieldType)
-                    OR
-                    f40t IN ($fieldType)
-                    OR
-                    f99t IN ($fieldType))
-                LIMIT 1
-        ");
+        $result = mysqli_query($this->dblink, 'SELECT '.
+         'CASE '.
+           'WHEN `f1t` IN ('.$fieldType.') THEN `f1` '.
+           'WHEN `f2t` IN ('.$fieldType.') THEN `f2` '.
+           'WHEN `f3t` IN ('.$fieldType.') THEN `f3` '.
+           'WHEN `f4t` IN ('.$fieldType.') THEN `f4` '.
+           'WHEN `f5t` IN ('.$fieldType.') THEN `f5` '.
+           'WHEN `f6t` IN ('.$fieldType.') THEN `f6` '.
+           'WHEN `f7t` IN ('.$fieldType.') THEN `f7` '.
+           'WHEN `f8t` IN ('.$fieldType.') THEN `f8` '.
+           'WHEN `f9t` IN ('.$fieldType.') THEN `f9` '.
+           'WHEN `f10t` IN ('.$fieldType.') THEN `f10` '.
+           'WHEN `f11t` IN ('.$fieldType.') THEN `f11` '.
+           'WHEN `f12t` IN ('.$fieldType.') THEN `f12` '.
+           'WHEN `f13t` IN ('.$fieldType.') THEN `f13` '.
+           'WHEN `f14t` IN ('.$fieldType.') THEN `f14` '.
+           'WHEN `f15t` IN ('.$fieldType.') THEN `f15` '.
+           'WHEN `f16t` IN ('.$fieldType.') THEN `f16` '.
+           'WHEN `f17t` IN ('.$fieldType.') THEN `f17` '.
+           'WHEN `f18t` IN ('.$fieldType.') THEN `f18` '.
+           'WHEN `f19t` IN ('.$fieldType.') THEN `f19` '.
+           'WHEN `f20t` IN ('.$fieldType.') THEN `f20` '.
+           'WHEN `f21t` IN ('.$fieldType.') THEN `f21` '.
+           'WHEN `f22t` IN ('.$fieldType.') THEN `f22` '.
+           'WHEN `f23t` IN ('.$fieldType.') THEN `f23` '.
+           'WHEN `f24t` IN ('.$fieldType.') THEN `f24` '.
+           'WHEN `f25t` IN ('.$fieldType.') THEN `f25` '.
+           'WHEN `f26t` IN ('.$fieldType.') THEN `f26` '.
+           'WHEN `f27t` IN ('.$fieldType.') THEN `f27` '.
+           'WHEN `f28t` IN ('.$fieldType.') THEN `f28` '.
+           'WHEN `f29t` IN ('.$fieldType.') THEN `f29` '.
+           'WHEN `f30t` IN ('.$fieldType.') THEN `f30` '.
+           'WHEN `f31t` IN ('.$fieldType.') THEN `f31` '.
+           'WHEN `f32t` IN ('.$fieldType.') THEN `f32` '.
+           'WHEN `f33t` IN ('.$fieldType.') THEN `f33` '.
+           'WHEN `f34t` IN ('.$fieldType.') THEN `f34` '.
+           'WHEN `f35t` IN ('.$fieldType.') THEN `f35` '.
+           'WHEN `f36t` IN ('.$fieldType.') THEN `f36` '.
+           'WHEN `f37t` IN ('.$fieldType.') THEN `f37` '.
+           'WHEN `f38t` IN ('.$fieldType.') THEN `f38` '.
+           'WHEN `f39t` IN ('.$fieldType.') THEN `f39` '.
+           'WHEN `f40t` IN ('.$fieldType.') THEN `f40` '.
+           'WHEN `f99t` IN ('.$fieldType.') THEN `f99` '.
+           'ELSE 0 '.
+         'END AS level '.
+         'FROM `'.TB_PREFIX.'fdata` '.
+         'WHERE '.
+           '`vref` = '.$vid.' '.
+           'AND ('.
+          '`f1t` IN ('.$fieldType.') OR '.
+          '`f2t` IN ('.$fieldType.') OR '.
+          '`f3t` IN ('.$fieldType.') OR '.
+          '`f4t` IN ('.$fieldType.') OR '.
+          '`f5t` IN ('.$fieldType.') OR '.
+          '`f6t` IN ('.$fieldType.') OR '.
+          '`f7t` IN ('.$fieldType.') OR '.
+          '`f8t` IN ('.$fieldType.') OR '.
+          '`f9t` IN ('.$fieldType.') OR '.
+          '`f10t` IN ('.$fieldType.') OR '.
+          '`f11t` IN ('.$fieldType.') OR '.
+          '`f12t` IN ('.$fieldType.') OR '.
+          '`f13t` IN ('.$fieldType.') OR '.
+          '`f14t` IN ('.$fieldType.') OR '.
+          '`f15t` IN ('.$fieldType.') OR '.
+          '`f16t` IN ('.$fieldType.') OR '.
+          '`f17t` IN ('.$fieldType.') OR '.
+          '`f18t` IN ('.$fieldType.') OR '.
+          '`f19t` IN ('.$fieldType.') OR '.
+          '`f20t` IN ('.$fieldType.') OR '.
+          '`f20t` IN ('.$fieldType.') OR '.
+          '`f21t` IN ('.$fieldType.') OR '.
+          '`f22t` IN ('.$fieldType.') OR '.
+          '`f23t` IN ('.$fieldType.') OR '.
+          '`f24t` IN ('.$fieldType.') OR '.
+          '`f25t` IN ('.$fieldType.') OR '.
+          '`f26t` IN ('.$fieldType.') OR '.
+          '`f27t` IN ('.$fieldType.') OR '.
+          '`f28t` IN ('.$fieldType.') OR '.
+          '`f29t` IN ('.$fieldType.') OR '.
+          '`f30t` IN ('.$fieldType.') OR '.
+          '`f30t` IN ('.$fieldType.') OR '.
+          '`f31t` IN ('.$fieldType.') OR '.
+          '`f32t` IN ('.$fieldType.') OR '.
+          '`f33t` IN ('.$fieldType.') OR '.
+          '`f34t` IN ('.$fieldType.') OR '.
+          '`f35t` IN ('.$fieldType.') OR '.
+          '`f36t` IN ('.$fieldType.') OR '.
+          '`f37t` IN ('.$fieldType.') OR '.
+          '`f38t` IN ('.$fieldType.') OR '.
+          '`f39t` IN ('.$fieldType.') OR '.
+          '`f40t` IN ('.$fieldType.') OR '.
+          '`f99t` IN ('.$fieldType.')) '.
+         'LIMIT 1');
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
         self::$fieldLevelsInVillageSearchCache[$vid.$fieldType] = $row['level'];
