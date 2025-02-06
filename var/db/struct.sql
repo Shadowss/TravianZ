@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
  `type` smallint(1) NULL,
  PRIMARY KEY (`id`),
  KEY `ckey` (`ckey`(25))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%a2b`
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
  `b7` tinyint(2) NULL DEFAULT '0',
  `b8` tinyint(2) NULL DEFAULT '0',
  PRIMARY KEY (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%abdata`
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%activate` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%activate`
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%admin_log` (
  `log` text NULL,
  `time` int(25) NULL,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=80 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%admin_log`
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
  PRIMARY KEY (`id`),
  KEY `week` (`week`),
  KEY `allyid` (`allyid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -207,7 +207,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
  KEY `active-type-lastupdate` (`active`,`type`,`lastupdate`),
  KEY `size-type` (`size`, `type`),
  KEY `active-owner-conquered-del` (`active`, `owner`, `conquered`, `del`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `%PREFIX%artefacts`
@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts_chrono` (
   `conqueredtime` int(11) NULL,
   PRIMARY KEY (`id`),
   KEY `artefactid-conqueredtime` (`artefactid`,`conqueredtime`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `%PREFIX%artefacts_chrono`
@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alidata` (
  KEY `tag` (`tag`),
  KEY `name` (`name`),
  KEY `leader` (`leader`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%alidata`
@@ -284,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_invite` (
  PRIMARY KEY (`id`),
  KEY `alliance-accept` (`alliance`, `accept`),
  KEY `uid` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%ali_invite`
@@ -304,7 +304,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_log` (
  `date` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `aid` (`aid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%ali_log`
@@ -333,7 +333,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ali_permission` (
  PRIMARY KEY (`id`),
  UNIQUE KEY `uid-alliance` (`uid`, `alliance`) USING BTREE,
  KEY `alliance` (`alliance`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%ali_permission`
@@ -373,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
  `b7` tinyint(1) NULL, 
  `b8` tinyint(1) NULL, 
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%attacks`
@@ -397,7 +397,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%banlist` (
   `active` tinyint(1) UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `active-end` (`active`,`end`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%banlist`
@@ -424,7 +424,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
  KEY `timestamp` (`timestamp`),
  KEY `master-timestamp` (`master`,`timestamp`) USING BTREE,
  KEY `wid` (`wid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%bdata`
@@ -443,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%build_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%build_log`
@@ -464,7 +464,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
  `date` varchar(255) NULL,
  `msg` varchar(255) NULL,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%chat`
@@ -479,7 +479,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%config` (
  `lastgavemedal` int(11) NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO `%PREFIX%config` VALUES (0);
 
 --
@@ -518,7 +518,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
  `timetofinish` int(11) NULL,
  PRIMARY KEY (`vref`),
  KEY `timetofinish` (`timetofinish`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%demolition`
@@ -541,7 +541,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%diplomacy` (
  KEY `alli1` (`alli1`),
  KEY `alli2` (`alli2`),
  KEY `type-accepted` (`type`,`accepted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Dumping data for table `%prefix%diplomacy`
 --
@@ -611,7 +611,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`),
  KEY `from` (`from`,`hero`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%enforcement`
@@ -630,7 +630,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
  `name` varchar(100) NULL,
  PRIMARY KEY (`id`),
  KEY `wref` (`wref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%farmlist`
@@ -760,7 +760,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_cat` (
   KEY `display_to_alliances` (`display_to_alliances`(11)),
   KEY `display_to_users` (`display_to_users`(11)),
   KEY `sorting` (`sorting`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%forum_cat`
@@ -779,7 +779,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_edit` (
  `result` varchar(255) NULL,
  PRIMARY KEY (`id`),
  KEY `alliance` (`alliance`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%forum_edit`
@@ -800,7 +800,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_post` (
   `date` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
  KEY `topic-owner` (`topic`,`owner`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%forum_post`
@@ -834,7 +834,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_survey` (
  `vote8` int(11) NULL DEFAULT '0',
  `voted` text NULL,
  `ends` int(11) NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%forum_survey`
@@ -861,7 +861,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
   `stick` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `cat-stick` (`cat`, `stick`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%forum_topic`
@@ -881,7 +881,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
  `shown` tinyint(1) NULL,
  PRIMARY KEY (`id`),
  KEY `shown` (`shown`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%general`
@@ -899,7 +899,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
  `wid` int(11) NULL,
  `log` text NULL,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%gold_fin_log`
@@ -938,7 +938,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
  KEY `lastupdate` (`lastupdate`),
  KEY `inrevive` (`inrevive`),
  KEY `intraining` (`intraining`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%hero`
@@ -958,7 +958,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%illegal_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%illegal_log`
@@ -977,7 +977,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%login_log` (
  `ip` varchar(15) NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%login_log`
@@ -1003,7 +1003,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%market` (
  `merchant` tinyint(2) NULL,
  PRIMARY KEY (`id`),
  KEY `vref-accept-merchant` (`vref`,`accept`,`merchant`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%market`
@@ -1022,7 +1022,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%market_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%market_log`
@@ -1055,7 +1055,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
  KEY `target-time` (`target`,`time`) USING BTREE,
  KEY `owner` (`owner`),
  KEY `target-viewed` (`target`,`viewed`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%mdata`
@@ -1079,7 +1079,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%medal` (
  `del` tinyint(1) NULL DEFAULT '0',
  PRIMARY KEY (`id`),
  KEY `week` (`week`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%medal`
@@ -1111,7 +1111,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   KEY `ref` (`ref`),
   KEY `from-proc-sort_type` (`from`,`proc`,`sort_type`),
   KEY `proc-sort_type-endtime` (`proc`,`sort_type`,`endtime`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%movement`
@@ -1142,7 +1142,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
  KEY `del` (`del`),
  KEY `toWref` (`toWref`),
  KEY `uid-viewed` (`uid`,`viewed`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%ndata`
@@ -1232,7 +1232,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%prisoners` (
  PRIMARY KEY (`id`),
  KEY `wref` (`wref`),
  KEY `from` (`from`,`t11`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%PREFIX%prisoners`
@@ -1260,7 +1260,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
  `t6` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `lid-distance` (`lid`, `distance`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%raidlist`
@@ -1281,7 +1281,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`),
  KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%research`
@@ -1314,7 +1314,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
  KEY `timestamp` (`timestamp`),
  KEY `timeleft` (`timeleft`),
  KEY `uid-timestamp` (`uid`, `timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%route`
@@ -1335,7 +1335,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%send` (
  `crop` int(11) NULL,
  `merchant` tinyint(2) NULL,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%send`
@@ -1410,7 +1410,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%tech_log` (
  `log` text NULL,
  `date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%tech_log`
@@ -1434,7 +1434,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
  `timestamp2` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%training`
@@ -1548,7 +1548,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `protect` int(11) DEFAULT NULL,
   `quest` tinyint(2) DEFAULT NULL,
   `quest_time` int(11) DEFAULT NULL,
-  `gpack` varchar(255) DEFAULT 'gpack/travian_default/',
+  `gpack` varchar(255) DEFAULT '/gpack/travian_default/',
   `cp` float(14,5) DEFAULT '1.00000',
   `lastupdate` int(11) DEFAULT NULL,
   `RR` int(255) DEFAULT '0',
@@ -1616,17 +1616,19 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   KEY `sit1` (`sit1`),
   KEY `sit2` (`sit2`),
   KEY `gold` (`gold`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%users`
 --
 
 INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `access`, `gold`, `gender`, `birthday`, `location`, `desc1`, `desc2`, `plus`, `b1`, `b2`, `b3`, `b4`, `sit1`, `sit2`, `alliance`, `sessid`, `act`, `timestamp`, `ap`, `apall`, `dp`, `dpall`, `protect`, `quest`, `gpack`, `cp`, `lastupdate`, `RR`, `Rc`, `ok`, `is_bcrypt`) VALUES
-(5, 'Multihunter', '', 'multihunter@travianz.game', 1, 9, 0, 0, '1970-01-01', '', '[#MH]', '[#MULTIHUNTER]', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1),
-(1, 'Support', '', 'support@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1),
-(2, 'Nature', '', 'nature@travianz.game', 4, 2, 0, 0, '1970-01-01', '', '[#NATURE]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1),
-(4, 'Taskmaster', '', 'taskmaster@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '[#TASKMASTER]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0, 1);
+(1, 'Support', '', 'support@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1),
+(2, 'Nature', '', 'nature@travianz.game', 4, 2, 0, 0, '1970-01-01', '', '[#NATURE]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1),
+(4, 'Taskmaster', '', 'taskmaster@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '[#TASKMASTER]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1),
+(5, 'Multihunter', '', 'multihunter@travianz.game', 1, 9, 0, 0, '1970-01-01', '', '[#MH]', '[#MULTIHUNTER]', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1);
+
+ALTER TABLE `%PREFIX%users` AUTO_INCREMENT=6;
 
 -- --------------------------------------------------------
 
@@ -1674,7 +1676,7 @@ KEY `loyalty` (`loyalty`),
 KEY `exp1` (`exp1`),
 KEY `exp2` (`exp2`),
 KEY `exp3` (`exp3`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%vdata`
@@ -1699,7 +1701,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
  KEY `occupied` (`occupied`),
  KEY `fieldtype` (`fieldtype`),
  KEY `x-y` (`x`, `y`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%wdata`
