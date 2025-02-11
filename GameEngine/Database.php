@@ -785,19 +785,20 @@ class MYSQLi_DB implements IDbConnection {
 
 	// no need to cache this method
 	public function hasBeginnerProtection($vid) {
-        list($vid) = $this->escape_input((int) $vid);
-        $q = "SELECT u.protect 
-              FROM ". TB_PREFIX ."users u 
-              JOIN ". TB_PREFIX ."vdata v ON u.id = v.owner
-              JOIN ". TB_PREFIX ."odata o ON u.id = o.owner
-              WHERE v.wref = ". $vid ." OR o.wref = ". $vid . " 
-              LIMIT 1";
-		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
-		
-		if(!empty($dbarray)) return time() < $dbarray[0];			
-	    else return false;
+	list($vid) = $this->escape_input($vid);
+    	$q = "SELECT u.protect FROM ".TB_PREFIX."users u,".TB_PREFIX."vdata v WHERE u.id=v.owner AND v.wref=".(int) $vid." LIMIT 1";
+	$result = mysqli_query($this->dblink,$q);
+	$dbarray = mysqli_fetch_array($result);
+	if(!empty($dbarray)) {
+		if(time()<$dbarray[0]) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return false;
 	}
+}
 
 	function updateUserField($ref, $field, $value, $switch) {
         list($ref) = $this->escape_input($ref);
