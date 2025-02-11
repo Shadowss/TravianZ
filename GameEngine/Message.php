@@ -6,7 +6,7 @@
 | Credits:     All the developers including the leaders:  |
 |              Advocaite & Dzoki & Donnchadh              |
 |                                                         |
-| Copyright:   TravianX Project All rights reserved       |
+| Copyright:   TravianZ Project All rights reserved       |
 \** --------------------------------------------------- **/
 
 class Message {

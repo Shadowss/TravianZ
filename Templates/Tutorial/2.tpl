@@ -5,14 +5,14 @@
 ##                                                                             ##
 ## --------------------------------------------------------------------------- ##
 ##                                                                             ##
-##  Project:       ZravianX                                                    ##
+##  Project:       TravianZ                                                    ##
 ##  Version:       2011.11.06                                                  ##
 ##  Filename:      Templates/Travian/3.6/Tutorial/2.tpl                        ##
 ##  Edited by:     ZZJHONS                                                     ##
 ##  License:       Creative Commons BY-NC-SA 3.0                               ##
-##  Copyright:     ZravianX (c) 2011 - All rights reserved                     ##
-##  URLs:          http://zravianx.zzjhons.com                                 ##
-##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
+##  Copyright:     TravianZ (c) 2025 - All rights reserved                     ##
+##  URLs:          http://travian.shadowss.ro                                  ##
+##  Source code:   https://github.com/Shadowss/TravianZ                        ##
 ##                                                                             ##
 #################################################################################
 ?>

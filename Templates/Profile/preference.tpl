@@ -15,7 +15,7 @@ if(isset($_GET['del']) && is_numeric($_GET['del'])){
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro 				       	 		   ##
-##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/	       	               ##
 ##                                                                             ##
 #################################################################################
 // Save new link or just edit a link

@@ -4,9 +4,9 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       renameVillage.tpl                                           ##
 ##  Developed by:  Dzoki & Advocatie                                           ##
-##  License:       TravianX Project                                            ##
+##  License:       TravianZ Project                                            ##
 ##  Thanks to:     Dzoki & itay2277(Edit troops)                               ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2011. All rights reserved.                ##
 #################################################################################
 
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");

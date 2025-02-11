@@ -4,7 +4,7 @@
 | ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
 +---------------------------------------------------------+
 | Released by:   Dzoki < dzoki.travian@gmail.com >        |
-| Copyright:     TravianX Project All rights reserved     |
+| Copyright:     TravianZ Project All rights reserved     |
 \** --------------------------------------------------- **/
 		if(!is_numeric($_SESSION['search'])) {
 		?>

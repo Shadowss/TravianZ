@@ -5,8 +5,8 @@
 ##  Filename       Protection.php                                              ##
 ##  Developed by:  SlimShady                                                   ##
 ##  Edited by:     Dzoki & Dixie                                               ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 

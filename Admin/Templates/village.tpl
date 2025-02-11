@@ -7,7 +7,7 @@
 ##  License:       TravianX Project                                            ##
 ##  Thanks to:     Dzoki & itay2277(Edit some additions)                       ##
 ##  Fix by:        ronix (some additions)                                      ##
-##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##  Improved:      aggenkeech                                                  ##
 #################################################################################
 include_once("../GameEngine/Generator.php");

@@ -2996,7 +2996,7 @@ class MYSQLi_DB implements IDbConnection {
 			$q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where username = '$ref' LIMIT 1";
 		}
 		$result = mysqli_query($this->dblink,$q);
-		$dbarray = mysqli_fetch_array($result);
+		//$dbarray = mysqli_fetch_array($result); - some error in here !
 		return $dbarray[$field];
 	}
 

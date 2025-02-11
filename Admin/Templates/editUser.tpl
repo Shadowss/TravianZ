@@ -5,8 +5,8 @@
 ##  Filename       editUser.tpl                                                ##
 ##  Developed by:  Dzoki                                                       ##
 ##  Reworked:      aggenkeech                                                  ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2012. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 

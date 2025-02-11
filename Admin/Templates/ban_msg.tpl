@@ -4,7 +4,7 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       ban_msq.tpl                                                 ##
 ##  Developed by:  yi12345                                                     ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 $time = time();

@@ -1,22 +1,22 @@
 <?php
 
-// ################################################################################
-// # ##
-// # -= YOU MUST NOT REMOVE OR CHANGE THIS NOTICE =- ##
-// # ##
-// # --------------------------------------------------------------------------- ##
-// # ##
-// # Project: TravianZ ##
-// # Version: 05.03.2014 ##
-// # Filename: Admin/function.php ##
-// # Developed by: Dzoki ##
-// # Edited by: Shadow and ronix ##
-// # License: Creative Commons BY-NC-SA 3.0 ##
-// # Copyright: TravianZ (c) 2014 - All rights reserved ##
-// # URLs: http://travian.shadowss/ro ##
-// # Source code: https://github.com/Shadowss/TravianZ ##
-// # ##
-// ################################################################################
+#################################################################################
+##                                                                             ##
+##              -= YOU MUST NOT REMOVE OR CHANGE THIS NOTICE =-                ##
+##                                                                             ##
+## --------------------------------------------------------------------------- ##
+##                                                                             ##
+##  Project:       TravianZ                                                    ##
+##  Version:       05.03.2014                                                  ##
+##  Filename:      GameEngine/Admin/function.php                               ##
+##  Developed by:  Dzoki                                                       ##
+##  Edited by:     Shadow and ronix                                            ##
+##  License:       Creative Commons BY-NC-SA 3.0                               ##
+##  Copyright:     TravianZ (c) 2014 - All rights reserved                     ##
+##  URLs:          http://travian.shadowss.ro                                  ##
+##  Source code:   https://github.com/Shadowss/TravianZ	                       ##
+##                                                                             ##
+#################################################################################
 include_once(__DIR__ . "/../Artifacts.php");
 include_once(__DIR__ . "/../Units.php");
 include_once(__DIR__ . "/../Generator.php");
