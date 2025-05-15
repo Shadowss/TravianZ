@@ -30,6 +30,7 @@ include('Templates/update_latest.tpl');
 $up_avl = $latest - $ver ;
 
 $subpage = 'Login';
+$not_include_mootools_js = false;
 
 if (!empty($_GET['p'])) {
     switch ($_GET['p']) {
@@ -60,7 +61,12 @@ if (!empty($_GET['p'])) {
         case 'map':
             $subpage = 'Map';
             break;
-            
+        
+		case 'map_tile':
+			$subpage = 'Map Tile';
+			$not_include_mootools_js = true;
+			break;	
+			
         case 'natars':
             $subpage = 'Natars Management';
             break;
@@ -353,9 +359,15 @@ if (!empty($_GET['p'])) {
 		<link rel="stylesheet" type="text/css" href="../img/img.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.cookie.js"></script>
+		<?php
+		if($not_include_mootools_js){}else{
+		?>
 		<script type="text/javascript" src="/mt-full.js?423cb"></script>
 		<script type="text/javascript" src="ajax.js"></script>
 		<script type="text/javascript" src="../new.js?0faab"></script>
+		<?php
+		}
+		?>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta http-equiv="imagetoolbar" content="no">
 	</head>
@@ -506,6 +518,7 @@ if (!empty($_GET['p'])) {
 								<li><a href="?p=report">Players Report</a></li>
 								<li><a href="?p=msg">Players Message</a></li>
 								<li><a href="?p=map">Map</a></li>
+								<li><a href="?p=map_tile">Map Tile</a></li>
 								<li><a href="?p=natars">Natars Management</a></li>
 							</ul>
 						</li>

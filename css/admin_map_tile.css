@@ -1,0 +1,32 @@
+/* reset sime game map css for display in admin panel */
+
+div.map{
+padding:0;
+width:74px
+}
+
+div.map div#map{
+height:74px;
+top:0;
+width:74px
+}
+
+div.map div#map div#map_content{
+background:none;
+height:74px;
+left:0;
+top:0;
+width:74px
+}
+
+div#map_coords form input#btn_ok{
+position:relative;
+top:6px
+}
+
+div#map_coords form input#btn_save{
+display:inline-block;
+position:relative;
+top:4px;
+left:5px
+}
