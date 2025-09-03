@@ -42,7 +42,7 @@ else $building->procBuild($_GET);
 	<script src="mt-full.js?0faab" type="text/javascript"></script>
 	<script src="unx.js?f4b7i" type="text/javascript"></script>
 	<script src="new.js?0faab" type="text/javascript"></script>
-	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7j" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
 	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?e21d2" rel="stylesheet" type="text/css" />
 	<?php
 	if($session->gpack == null || GP_ENABLE == false) {
@@ -71,7 +71,7 @@ else $building->procBuild($_GET);
 <?php include("Templates/menu.tpl"); ?>
 <div id="content"  class="village1">
 <h1><?php echo $village->vname; if($village->loyalty!='100'){ if($village->loyalty>'33'){ $color="gr"; }else{ $color="re"; } ?><div id="loyality" class="<?php echo $color; ?>"><?php echo LOYALTY; ?> <?php echo floor($village->loyalty); ?>%</div><?php } ?></h1>
-<div id="cap" align="left"><?php if($village->capital!='0') { echo "<font color=gray>(".CAPITAL_LABEL.")</font>"; } ?></div>
+<div id="cap" align="left"><?php if($village->capital!='0') { echo "<font color=gray>(".CAPITAL1.")</font>"; } ?></div>
 <?php include("Templates/field.tpl");
 $timer = 1;
 ?>
@@ -112,7 +112,7 @@ include("Templates/res.tpl");
 echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
 ?></b> ms
 
-<br /><?php echo SEVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+<br /><?php echo SERVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
 	</div>
 </div>

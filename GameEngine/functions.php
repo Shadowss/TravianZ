@@ -3,7 +3,7 @@
 ##                                                        ##
 ##     Test functions so far mini template parser         ##
 ##     Author : Advocaite                                 ##
-##     Project : TravianX                                 ##
+##     Project : TravianZ                                 ##
 ##                                                        ##
 ############################################################
 function addSub($subName, $sub)

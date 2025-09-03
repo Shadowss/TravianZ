@@ -1,8 +1,17 @@
-body {
-    background-color: #FFFFFF;
-    direction: ltr;
-    margin: 0;
-    text-align: left;
+BODY
+{
+COLOR: #6495ED; /* 1 */
+font-size:10pt;
+font-weight:light; /*  2 */
+font-style:italic; /* 3 */
+background:#FFF;
+background:url(img/bg.gif); /* 4  */
+background-repeat:repeat; /* 5  */
+margin-top:0px;
+margin-bottom:0px;
+margin-left:0px;
+margin-right:0px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
 }
 img {
     border: 0 none;
@@ -7040,7 +7049,7 @@ img.WWVillagesAnnouncement {
     width: 196px;
     height: 324px;
 }
-img.ArtifactsAnnouncement {
+img.ArtefactsAnnouncement {
     background-image: url("../../img/artefact/ArtifactsAnnouncement.gif");
     display: block;
     margin-left: auto;

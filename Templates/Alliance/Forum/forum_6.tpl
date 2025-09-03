@@ -27,7 +27,7 @@ $totalpop = 0;
 foreach($varray as $vil) $totalpop += $vil['pop'];
 
 $countAu = $database->CountTopic($arr['owner']);
-$tribeArray = [ROMANS, TEUTONS, GAULS];
+$tribeArray = [TRIBE1, TRIBE2, TRIBE3];
 $displayarray = $database->getUserArray($arr['owner'], 1);
 $trip = $tribeArray[$displayarray['tribe'] - 1];
 

@@ -19,7 +19,7 @@
         <table id="show_artefacts" cellpadding="1" cellspacing="1">
     		<thead>
     			<tr>
-			    	<th colspan="4"><?php echo LARGE_ARTIFACTS; ?></th>
+			    	<th colspan="4"><?php echo LARGE_ARTEFACTS; ?></th>
     			</tr>
     			<tr>
     				<td></td>
@@ -33,7 +33,7 @@
 
             $artifactsArray = $database->getArtifactsBysize([2, 3]);
             if(count($artifactsArray) == 0) {
-                echo '<td colspan="4" class="none">'.NO_ARTIFACTS.'</td>';
+                echo '<td colspan="4" class="none">'.NO_ARTEFACTS.'</td>';
             } else {    
                 $previous = "";
                 foreach($artifactsArray as $artifact){

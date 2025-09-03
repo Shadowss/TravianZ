@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       playerheroinfo.tpl                                          ##
+##  Filename       editHero.tpl                                                ##
 ##  Developed by:  ronix                                                       ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##

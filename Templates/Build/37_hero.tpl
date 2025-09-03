@@ -46,7 +46,7 @@ if (isset($_POST['name']) && !empty($_POST['name'])) {
     </tr> 
     <tr> 
         <th><?php echo DEFENCE; ?></th> 
-        <td class="val"><?php echo $hero_info['di'] . "/" . $hero_info['dc']; ?></td> 
+        <td class="val"><?php echo $hero_info['dc'] . "/" . $hero_info['di']; ?></td> 
         <td class="xp"><img class="bar" src="img/x.gif" style="width:<?php echo (2*$hero_info['defence'])+1; ?>px;" alt="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>"  title="<?php echo ($hero_info['di']) . "/" . ($hero_info['dc']); ?>" /></td> 
         <td class="up"><span class="none"> 
         <?php 

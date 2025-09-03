@@ -121,7 +121,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(1,2)
                 )
@@ -177,7 +177,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(3)
                 )
@@ -231,7 +231,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(4,5)
                 )
@@ -283,7 +283,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(6)
                 )
@@ -334,7 +334,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(7,8)
                 )
@@ -386,7 +386,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(9)
                 )
@@ -439,7 +439,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(10,11)
                 )
@@ -500,7 +500,7 @@ UPDATE %PREFIX%units u
                         SELECT
                             id
                         FROM
-                            s1_wdata
+                            %PREFIX%wdata
                         WHERE
                             oasistype IN(12)
                 )

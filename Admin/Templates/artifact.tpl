@@ -28,7 +28,7 @@ $artifactInfo = Artifacts::getArtifactInfo($artifact);
 	if(empty($artifact)){
 	?>
 		<tr>
-			<td colspan="8"><div style="text-align: center"><?php echo NO_ARTIFACTS; ?></div></td>
+			<td colspan="8"><div style="text-align: center"><?php echo NO_ARTEFACTS; ?></div></td>
 		</tr>
 	<?php }else{ ?>
 		<tr>

@@ -4,14 +4,14 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       troops.tpl                                                  ##
 ##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 ?>
 <table id="troops" cellpadding="1" cellspacing="1">
 <thead><tr>
-	<th colspan="3"><?php echo TROOPS_DORF; ?></th>
+	<th colspan="3"><?php echo TROOPS; ?></th>
 </tr></thead><tbody>
 <?php
 $troops = $technology->getAllUnits($village->wid,True,1);

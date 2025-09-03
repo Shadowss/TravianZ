@@ -6,7 +6,7 @@
 ##  Developed by:  Dzoki & Advocatie                                           ##
 ##  License:       TravianZ Project                                            ##
 ##  Reworks by:    ronix                                                       ##
-##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 

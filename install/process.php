@@ -3,14 +3,24 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					                           ##
+##  Version:       01.09.2013 						                           ##
 ##  Filename       process.php                                                 ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Developed by:  Shadow			                                           ##
+##  Fixed by:      Shadow / Skype : cata7007 and Armando                       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				                   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/         	           ##
 ##                                                                             ##
 #################################################################################
 
 // don't let SQL time out when 30-500 seconds (depending on php.ini) is not enough
 @set_time_limit(0);
+
+if (file_exists("../var/installed")) {
+	die("<span class='f18 c5'>ERROR!</span><br />Installation appears to have been completed.<br />If this is an error remove /var/installed file in install directory.");
+}
 
 class Process {
 

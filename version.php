@@ -99,10 +99,11 @@ else $building->procBuild($_GET);
 30. Armando<br />
 31. aggenkeech<br />
 32. Niko28<br />
-33. martinambrus - alumni developer<br />
-34. iopietro - lead developer<br />
-35. Vladyslav - rigorous game tester<br />
-36. AL-Kateb - developer</b></div><br />
+33. 221V - Developer<br />
+34. martinambrus - alumni developer<br />
+35. iopietro - alumni developer<br />
+36. Vladyslav - rigorous game tester<br />
+37. AL-Kateb - alumni developer</b></div><br />
 <div style="text-align: center"><b><u>Released by: TravianZ Team</u></b><br /><br />
 <b>Visit: <a href="http://forum.ragezone.com/f583/travianz-version-modified-shadow-many-967580/">RageZone.com</a></b></div><br />
 <div style="text-align: center"><b>Download from <u><a href="https://github.com/Shadowss/TravianZ/archive/master.zip">Github</a></u></b><br />
@@ -135,7 +136,7 @@ include("Templates/res.tpl");
 echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
 ?></b> ms
 
-<br /><?php echo SEVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+<br /><?php echo SERVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
 	</div>
 </div>

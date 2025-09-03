@@ -15,7 +15,7 @@ if(isset($_GET['del']) && is_numeric($_GET['del'])){
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro 				       	 		   ##
-##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/	       	               ##
 ##                                                                             ##
 #################################################################################
 // Save new link or just edit a link
@@ -36,12 +36,12 @@ if($_POST) {
         
         if(substr($key, 0, 8) == 'linkname') {
             $i = substr($key, 8);
-            $links[$i]['linkname'] = mysqli_real_escape_string($database->dblink, $value);
+            $links[$i]['linkname'] = htmlspecialchars(mysqli_real_escape_string($database->dblink, $value));
         }
         
         if(substr($key, 0, 8) == 'linkziel') {
             $i = substr($key, 8);
-            $links[$i]['linkziel'] = mysqli_real_escape_string($database->dblink, $value);
+            $links[$i]['linkziel'] = htmlspecialchars(mysqli_real_escape_string($database->dblink, $value));
         }
     }
     

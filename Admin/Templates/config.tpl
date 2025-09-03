@@ -6,7 +6,7 @@
 ##  Developed by:  Dzoki                                                       ##
 ##  Rework by:     ronix                                                       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 if(!isset($_SESSION)) session_start();

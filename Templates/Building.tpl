@@ -4,8 +4,8 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       Building.tpl                                                ##
 ##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 $building->loadBuilding();
@@ -30,7 +30,7 @@ $building->loadBuilding();
 		if($jobs['master'] == 0){
         	echo "<tr><td class=\"ico\"><a href=\"?d=".$jobs['id']."&a=0&c=$session->checker\">";
             echo "<img src=\"img/x.gif\" class=\"del\" title=\"cancel\" alt=\"cancel\" /></a></td><td>";
-			echo Building::procResType($jobs['type'])." (Level ".$jobs['level'].")";
+			echo "<a href=build.php?id=". $jobs['field'] . ">".Building::procResType($jobs['type'])."</a> (Level ".$jobs['level'].").";
 
 			if($jobs['loopcon'] == 1) echo " (waiting loop)";
 

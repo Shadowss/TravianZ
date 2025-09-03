@@ -8,7 +8,7 @@ $start_timer = $generator->pageLoadTimeStart();
 | Credits:     All the developers including the leaders:  |
 |              Advocaite & Dzoki & Donnchadh              |
 |                                                         |
-| Copyright:   TravianX Project All rights reserved       |
+| Copyright:   TravianZ Project All rights reserved       |
 \** --------------------------------------------------- **/
 
 ?><?php
@@ -126,7 +126,7 @@ div.c1 {text-align: center}
 echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
 ?></b> ms
 
-<br /><?php echo SEVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+<br /><?php echo SERVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
             </div>
         </div>
     </div>

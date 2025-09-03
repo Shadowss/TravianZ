@@ -5,8 +5,8 @@
 ##  Filename       movement.tpl                                                ##
 ##  Developed by:  Dzoki                                                       ##
 ##  Updated by:    Shadow                                                      ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 $oases = 0;

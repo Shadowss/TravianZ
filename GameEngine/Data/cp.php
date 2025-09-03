@@ -5,8 +5,8 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       cp.php                                                      ##
 ##  Developed by:  G3n3s!s & JimJam & LoppyLukas                               ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 

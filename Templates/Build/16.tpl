@@ -62,9 +62,9 @@ if($village->resarray['f39'] > 0){
 <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'], "name")."</a></td>
 <td colspan=\"$colspan\">";
 				if(LANG == "es"){
-					echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".TROOPSFROM." ".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." </a>";
+					echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".TROOPS." ".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." </a>";
 				}else{
-					echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." ".TROOPSFROM."</a>";
+					echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." ".TROOPS."</a>";
 				}
 				echo "</td></tr></thead><tbody class=\"units\">";
 				$tribe = $database->getUserField($database->getVillageField($enforce['from'], "owner"), "tribe", 0);
@@ -190,9 +190,9 @@ if($village->resarray['f39'] > 0){
 <a href=\"karte.php?d=".$enforce['vref']."&c=".$generator->getMapCheck($enforce['vref'])."\">".$database->getVillageField($enforce['conqured'], "name")."</a></td>
 <td colspan=\"$colspan\">";
 			if(LANG == "es"){
-				echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".TROOPSFROM." ".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." </a> ".FROM." <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'], "name")."</a>";
+				echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".TROOPS." ".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." </a> ".FROM." <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'], "name")."</a>";
 			}else{
-				echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." ".TROOPSFROM."</a> ".FROM." <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'], "name")."</a>";
+				echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'], "owner")."\">".$database->getUserField($database->getVillageField($enforce['from'], "owner"), "username", 0)." ".TROOPS."</a> ".FROM." <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'], "name")."</a>";
 			}
 			echo "</td></tr></thead><tbody class=\"units\">";
 			$tribe = $database->getUserField($database->getVillageField($enforce['from'], "owner"), "tribe", 0);

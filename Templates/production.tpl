@@ -4,14 +4,14 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       production.tpl                                              ##
 ##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 ?>
 <table id="production" cellpadding="1" cellspacing="1">
 	<thead><tr>
-			<th colspan="4"><?php echo PROD_HEADER; ?>:</th>
+			<th colspan="4"><?php echo PRODUCTION; ?>:</th>
 	</tr></thead><tbody>	
 	<tr>
 		<td class="ico"><img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" /></td>

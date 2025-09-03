@@ -121,7 +121,7 @@ if($oasis['owner'] == 2){
 	
 <table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone">
             <thead><tr>
-                <th colspan="3"><?php echo TROOP;?>:</th>
+                <th colspan="3"><?php echo TROOPS;?>:</th>
             </tr></thead>
             <tbody>
             <?php         

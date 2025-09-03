@@ -1,5 +1,5 @@
 [![Code Triagers Badge](https://www.codetriage.com/shadowss/travianz/badges/users.svg)](https://www.codetriage.com/shadowss/travianz)
-[![Maintenance](https://img.shields.io/maintenance/yes/2022.svg)](https://github.com/Shadowss/TravianZ)
+[![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub Release](https://img.shields.io/github/release/Shadowss/TravianZ/all.svg)](https://github.com/Shadowss/TravianZ)
 [![Github All Releases](https://img.shields.io/github/downloads/Shadowss/TravianZ/total.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub contributors](https://img.shields.io/github/contributors/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
@@ -35,7 +35,6 @@ since the installer logic has changed and you would just crash your old version
 * [PHP](http://php.net/) 7.0.0+
 * [MySQL Community Server](https://dev.mysql.com/downloads/mysql/) 5.5+
   * or alternatively, [MariaDB](https://downloads.mariadb.org/) 5.5+
-  * please see also the compatibility notes on [this Wiki page](https://github.com/Shadowss/TravianZ/wiki/Known-Bugs)
  * Runs fine on Ubuntu 20, Apache2 2.4, MySQL Server 8.0 and PHP 7.4
 
 **Dedicated or shared hosting?**
@@ -55,8 +54,8 @@ or you have a feature request to be included in the play.
 
 **The team**
 * [Shadowss](https://github.com/Shadowss) - project owner and an occasional developer / tester
-* [iopietro](https://github.com/iopietro) - lead developer
-* [AL-Kateb](https://github.com/AL-Kateb) - developer
+* [iopietro](https://github.com/iopietro) - alumni developer
+* [AL-Kateb](https://github.com/AL-Kateb) - alumni developer
 * [martinambrus](https://github.com/martinambrus) - alumni developer
 * [Vladyslav](https://github.com/velhbxtyrj) - rigorous game tester
 * [phaze1G](https://github.com/phaze1G) - game designer / css support

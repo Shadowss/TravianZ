@@ -6,7 +6,7 @@
 ##  Version        8.0                                                         ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2013-2014. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2013-2025. All rights reserved.                ##
 ##  Modified by:   Shadow and ronix                                            ##
 ##                                                                             ##
 #################################################################################

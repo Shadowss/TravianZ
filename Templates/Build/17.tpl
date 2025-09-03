@@ -179,7 +179,7 @@ if(isset($_POST['ft'])=='check' && (($_POST['send3'] > 1 && $_POST['send3'] <= 3
 		<td class="mer"><?php echo MERCHANT;?> <?php echo $market->merchantAvail(); ?>/<?php echo $market->merchant; ?></td> 
 	</tr> 
 		<td class="vil"> 
-			<span><?php echo MULTI_V_HEADER;?>:</span> 
+			<span><?php echo VILLAGES;?>:</span>
 			<input class="text" type="text" name="dname" value="" maxlength="30" tabindex="5"> 
 		</td> 
 	<tr> 

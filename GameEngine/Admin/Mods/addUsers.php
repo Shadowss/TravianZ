@@ -1,12 +1,15 @@
 <?php
-#########################################################
-## Filename addUsers.php                               ##
-## Created by: KFCSpike                                ##
-## Contributors: KFCSpike                              ##
-## Improve by: ronix                                   ##
-## License: TravianZ Project                           ##
-## Copyright: TravianZ (c) 2014. All rights reserved.  ##
-#########################################################
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       addUsers.php                                                ##
+##  Created by     KFCSpike                                                    ##
+##  Improve by     ronix                                                       ##
+##  Developed by:  Shadow                                                      ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 
 use App\Entity\User;
 

@@ -6,7 +6,7 @@
 | Credits:     All the developers including the leaders:  |
 |              Advocaite & Dzoki & Donnchadh              |
 |                                                         |
-| Copyright:   TravianX Project All rights reserved       |
+| Copyright:   TravianZ Project All rights reserved       |
 \** --------------------------------------------------- **/
 
 		class Ranking {
@@ -163,7 +163,7 @@
 			private function getStart($search) {
 				$multiplier = 1;
 				if(!is_numeric($search)) {
-					$_SESSION['search'] = $search;
+					$_SESSION['search'] = htmlspecialchars($search);
 				} else {
 					if($search > count($this->rankarray)) {
 						$search = count($this->rankarray) - 1;
@@ -172,8 +172,8 @@
 						$multiplier += 1;
 					}
 					$start = 20 * $multiplier - 19 - 1;
-					$_SESSION['search'] = $search;
-					$_SESSION['start'] = $start;
+					$_SESSION['search'] = htmlspecialchars($search);
+					$_SESSION['start'] = htmlspecialchars($start);
 				}
 			}
 
