@@ -1731,14 +1731,35 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%password` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%ww_attacks` (
- `vid` int(25) DEFAULT NULL,
+  `vid` int(25) DEFAULT NULL,
   `attack_time` int(11) DEFAULT NULL,
   KEY `attack_time` (`attack_time`),
   KEY `vid` (`vid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 --
--- Dumping data for table `%prefix%password`
+-- Dumping data for table `%prefix%ww_attacks`
 --
 
 -- --------------------------------------------------------
+--
+-- Table structure for table `%prefix%croppers`
+--
+
+CREATE TABLE IF NOT EXISTS %PREFIX%croppers (
+	wref INT UNSIGNED NOT NULL PRIMARY KEY,
+	x INT NOT NULL,
+	y INT NOT NULL,
+	fieldtype TINYINT UNSIGNED NOT NULL, -- 1 = 9c, 6 = 15c
+	best_oasis_bonus TINYINT UNSIGNED NOT NULL, -- 0,25,50,75,100,125,150
+	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	CHECK (best_oasis_bonus IN (0,25,50,75,100,125,150))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE INDEX idx_ft_bonus_xy ON %PREFIX%croppers (fieldtype, best_oasis_bonus, x, y);
+CREATE INDEX idx_xy ON %PREFIX%croppers (x, y);
+CREATE INDEX idx_bonus ON %PREFIX%croppers (best_oasis_bonus);
+
+--
+-- Dumping data for table `%prefix%croppers`
+--
