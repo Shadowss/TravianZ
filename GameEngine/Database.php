@@ -619,26 +619,25 @@ class MYSQLi_DB implements IDbConnection {
     References: lietuvis10
     ***************************/
 	 
-	public function getBestOasisCropBonus($x, $y) {
-	$x = (int)$x;
-	$y = (int)$y;
-	
-	// Adjust oasis type codes if your fork differs:
-	// - 50% crop only: type IN (12)
-	// - 25% crop (pure or mixed w/ wood/clay/iron): type IN (4,9,10,11)
-	
-	$sql = "SELECT COALESCE(SUM(bonus), 0) AS total FROM (SELECT CASE
-	WHEN o.type IN (12) THEN 50 WHEN o.type IN (4,9,10,11) THEN 25 ELSE 0
-	END AS bonus FROM " . TB_PREFIX . "wdata w JOIN " . TB_PREFIX . "odata o ON o.wref = w.id
-	WHERE w.fieldtype = 0 AND ABS(w.x - $x) <= 3 AND ABS(w.y - $y) <= 3
-	AND o.type IN (12,4,9,10,11) -- only crop-giving oases ORDER BY bonus DESC LIMIT 3) t";
+public function getBestOasisCropBonus($x, $y) {
+    $x = (int)$x;
+    $y = (int)$y;
 
-	$q = mysqli_query($this->dblink, $sql);
-	$row = mysqli_fetch_assoc($q);
-	$total = (int)($row['total'] ?? 0);
-	if ($total > 150) $total = 150; // safety cap
-	return $total;
-	}
+    // Adjust oasis type codes if your fork differs:
+    //  - 50% crop only: type IN (12)
+    //  - 25% crop (pure or mixed w/ wood/clay/iron): type IN (4,9,10,11)
+    $sql = "SELECT COALESCE(SUM(bonus), 0) AS total FROM (SELECT CASE
+            WHEN o.type IN (12) THEN 50 WHEN o.type IN (4,9,10,11) THEN 25 ELSE 0
+            END AS bonus FROM " . TB_PREFIX . "wdata w JOIN " . TB_PREFIX . "odata o ON o.wref = w.id
+            WHERE w.fieldtype = 0 AND ABS(w.x - $x) <= 3 AND ABS(w.y - $y) <= 3 AND o.type IN (12,4,9,10,11)
+            ORDER BY bonus DESC LIMIT 3) t";
+
+    $q = mysqli_query($this->dblink, $sql);
+    $row = mysqli_fetch_assoc($q);
+    $total = (int)($row['total'] ?? 0);
+    if ($total > 150) $total = 150; // safety cap
+    return $total;
+}
 
     /***************************
     Function to process MYSQLi->fetch_all (Only exist in MYSQL)
