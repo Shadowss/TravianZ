@@ -897,13 +897,13 @@ if(_i.cookie){var date=new Date();date.setTime(date.getTime()+300000);document.c
 if(_i.fest&&he('dorf2')){document.getElementById('content').innerHTML+=_i.fest;}
 window.setTimeout(ti,30);}
 function he(bj){return window.location.href.indexOf(bj+'.php')!=-1;}
-function vil_levels_toggle(){var cj=$('levels'),dj=$('lswitch');cj.toggleClass('on');dj.toggleClass('on');if(cj.hasClass('on')){document.cookie='t3l=1; expires=Wed, 1 Jan 2020 00:00:00 GMT';}
+function vil_levels_toggle(){var cj=$('levels'),dj=$('lswitch');cj.toggleClass('on');dj.toggleClass('on');if(cj.hasClass('on')){document.cookie='t3l=1; expires=Wed, 1 Jan 2030 00:00:00 GMT';}
 else{document.cookie='t3l=1; expires=Thu, 01-Jan-1970 00:00:01 GMT';}
 }
-function gmwd(){if(is_ff2&&document.getElementById("gmwi").offsetWidth<50){document.cookie="a3=2; expires=Wed, 1 Jan 2020 00:00:00 GMT";}
-else{document.cookie="a3=1; expires=Wed, 1 Jan 2020 00:00:00 GMT";}
+function gmwd(){if(is_ff2&&document.getElementById("gmwi").offsetWidth<50){document.cookie="a3=2; expires=Wed, 1 Jan 2030 00:00:00 GMT";}
+else{document.cookie="a3=1; expires=Wed, 1 Jan 2030 00:00:00 GMT";}
 }
-function gmc(){document.getElementById("gmw").style.display="none";document.cookie="a3=3; expires=Wed, 1 Jan 2020 00:00:00 GMT";}
+function gmc(){document.getElementById("gmw").style.display="none";document.cookie="a3=3; expires=Wed, 1 Jan 2030 00:00:00 GMT";}
 function documentWidth() {
     return Math.max(
         document.documentElement.clientWidth,
