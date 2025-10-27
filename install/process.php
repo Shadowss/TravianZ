@@ -207,26 +207,26 @@ class Process {
 	/**
 	 * Generates map data and populates it with oasis.
 	 */
-	function createWdata() {
-	    global $database;
+		function createWdata() {
+			global $database;
 
-	    include ("../GameEngine/config.php");
-	    include ("../GameEngine/Database.php");
-	    include ("../GameEngine/Admin/database.php");
+			include ("../GameEngine/config.php");
+			include ("../GameEngine/Database.php");
+			include ("../GameEngine/Admin/database.php");
 
-	    // populate world data
-	    $result = $database->populateWorldData();
-	    if ($result === false) {
-	        header("Location: index.php?s=3&err=1");
-	        exit;
-	    } else if ($result === -1) {
-	        header("Location: index.php?s=3&c=1");
-	        exit;
-	    }
+			// 1) Populate world data
+			$result = $database->populateWorldData();
+			if ($result === false) {
+				header("Location: index.php?s=3&err=1");
+				exit;
+			} else if ($result === -1) {
+				header("Location: index.php?s=3&c=1");
+				exit;
+			}
 
-	    header("Location: index.php?s=4");
-	    exit;
-	}
+			header("Location: index.php?s=3&startCroppers=1");
+			exit;
+		}
 
 }
 ;
