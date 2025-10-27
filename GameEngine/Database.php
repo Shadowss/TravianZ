@@ -6995,6 +6995,141 @@ References: User ID/Message ID, Mode
         return true;
     }
 
+
+	/*** Build/rebuild the croppers precompute table from wdata. */
+	
+		public function TotalCroppers(): int {
+			$TBP   = defined('TB_PREFIX') ? TB_PREFIX : 's1_';
+			$WDATA = $TBP . 'wdata';
+
+			$res = mysqli_query($this->dblink, "SELECT COUNT(*) AS cnt FROM `$WDATA` WHERE fieldtype IN (1,6)");
+			if (!$res) {
+				throw new Exception('Count query failed: ' . mysqli_error($this->dblink));
+			}
+
+			$row = mysqli_fetch_assoc($res);
+			return (int)($row['cnt'] ?? 0);
+		}
+	
+		public function populateCroppers(int $countTotal = 0, bool $truncateFirst = false, int $batch = 20000, ?callable $reporter = null ): array {
+			
+			@set_time_limit(0);
+			@ini_set('memory_limit', '1G');
+
+			$TBP        = defined('TB_PREFIX') ? TB_PREFIX : 's1_';
+			$CROP_TABLE = $TBP . 'croppers';
+			$WDATA      = $TBP . 'wdata';
+
+			// Count once if caller didn't
+			if ($countTotal <= 0) {
+				$row = mysqli_fetch_assoc(mysqli_query($this->dblink,
+					"SELECT COUNT(*) cnt FROM `$WDATA` WHERE fieldtype IN (1,6)"));
+				$countTotal = (int)($row['cnt'] ?? 0);
+			}
+
+			if ($truncateFirst) {
+				if (!mysqli_query($this->dblink, "TRUNCATE TABLE `$CROP_TABLE`")) {
+					return ['ok'=>false,'msg'=>'TRUNCATE failed: '.mysqli_error($this->dblink)];
+				}
+			}
+
+			// Session-level speed knobs (local to this connection)
+			@mysqli_query($this->dblink, "SET innodb_flush_log_at_trx_commit=2");
+			@mysqli_query($this->dblink, "SET sync_binlog=0");
+			@mysqli_query($this->dblink, "SET unique_checks=0");
+			@mysqli_query($this->dblink, "SET foreign_key_checks=0");
+
+			// Read big windows; write in safe slices to avoid max_allowed_packet
+			if ($batch < 1000)   $batch = 1000;
+			if ($batch > 100000) $batch = 100000;
+			if($countTotal < 1000) $sliceSize = 200;
+			elseif($countTotal < 5000) $sliceSize = 500;
+			elseif($countTotal > 5000) $sliceSize = 1000;
+
+			$total  = 0;
+			$lastId = 0;
+
+			// Cursor pagination (no OFFSET)
+			while (true) {
+				$res = mysqli_query(
+					$this->dblink,
+					"SELECT id AS wref, x, y, fieldtype
+					 FROM `$WDATA`
+					 WHERE fieldtype IN (1,6) AND id > $lastId
+					 ORDER BY id ASC
+					 LIMIT $batch"
+				);
+				if (!$res) {
+					return ['ok'=>false,'msg'=>'SELECT failed: '.mysqli_error($this->dblink),'processed'=>$total,'target'=>$countTotal];
+				}
+
+				$rows = [];
+				while ($r = mysqli_fetch_assoc($res)) { $rows[] = $r; }
+				if (!$rows) break;
+
+				mysqli_begin_transaction($this->dblink);
+
+				$n = count($rows);
+				for ($i = 0; $i < $n; $i += $sliceSize) {
+					$chunk  = array_slice($rows, $i, $sliceSize);
+					$values = [];
+
+					foreach ($chunk as $r) {
+						$x = (int)$r['x'];
+						$y = (int)$r['y'];
+
+						// Your existing helper:
+						$bonus = (int)$this->getBestOasisCropBonus($x, $y);
+						if ($bonus < 0)   $bonus = 0;
+						if ($bonus > 150) $bonus = 150;
+
+						$values[] = sprintf("(%d,%d,%d,%d,%d)",
+							(int)$r['wref'], $x, $y, (int)$r['fieldtype'], $bonus
+						);
+					}
+
+					if ($values) {
+						// ODKU is cheaper than REPLACE (no DELETE)
+						$sql = "INSERT INTO `$CROP_TABLE`
+								(`wref`,`x`,`y`,`fieldtype`,`best_oasis_bonus`)
+								VALUES ".implode(',', $values)."
+								ON DUPLICATE KEY UPDATE
+								  `x`=VALUES(`x`),
+								  `y`=VALUES(`y`),
+								  `fieldtype`=VALUES(`fieldtype`),
+								  `best_oasis_bonus`=VALUES(`best_oasis_bonus`)";
+						if (!mysqli_query($this->dblink, $sql)) {
+							mysqli_rollback($this->dblink);
+							return ['ok'=>false,'msg'=>'INSERT failed: '.mysqli_error($this->dblink),'processed'=>$total,'target'=>$countTotal];
+						}
+					}
+
+					// progress after each slice
+					$total += count($chunk);
+					if ($reporter) {
+						$pct = $countTotal ? min(100, (int)floor(($total / $countTotal) * 100)) : 0;
+						$reporter($total, $countTotal, $pct);
+					}
+				}
+
+				mysqli_commit($this->dblink);
+
+				// advance cursor
+				$lastId = (int)$rows[$n - 1]['wref'];
+			}
+
+			// Restore checks (optional)
+			@mysqli_query($this->dblink, "SET unique_checks=1");
+			@mysqli_query($this->dblink, "SET foreign_key_checks=1");
+
+			// Analyze once at the end
+			@mysqli_query($this->dblink, "ANALYZE TABLE `$CROP_TABLE`");
+
+			if ($reporter) { $reporter($total, $countTotal, 100); }
+			return ['ok'=>true,'msg'=>'Croppers populated','processed'=>$total,'target'=>$countTotal];
+		}
+	
+
     // no need to cache, not used in any loops or more than once for each page load
 	public function getAvailableExpansionTraining() {
 		global $building, $session, $technology, $village;
