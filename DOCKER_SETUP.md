@@ -22,14 +22,18 @@ This Docker Compose setup allows you to run TravianZ without installing PHP, MyS
 
 3. **Configure the installation:**
 
-   When you reach the database configuration step, use these settings:
-   - **Hostname:** `db`
-   - **Port:** `3306`
+   When you reach the database configuration step, the form will be **automatically pre-filled** with the correct Docker values:
+   - **Hostname:** `db` (Docker service name)
+   - **Port:** `3306` (internal MySQL port)
    - **Username:** `travianz`
    - **Password:** `travianz_pass`
    - **Database name:** `travianz`
    - **Prefix:** `s1_` (or your choice)
    - **Type:** MYSQLi
+
+   You can simply accept these defaults and continue with the installation.
+
+   **Note:** Port `3307` is for accessing the database from your host machine (outside Docker), but the web container uses the internal port `3306`.
 
    For the server URL settings:
    - **Server:** `http://localhost:8081/`
