@@ -416,23 +416,23 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
     <table>
         <tr>
             <td><span class="f9 c6">Hostname:</span></td>
-            <td><input name="sserver" type="text" id="sserver" value="localhost"></td>
+            <td><input name="sserver" type="text" id="sserver" value="<?php echo getenv('DB_HOST') ?: 'localhost'; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Port:</span></td>
-            <td><input name="sport" type="text" id="sport" value="3306"></td>
+            <td><input name="sport" type="text" id="sport" value="<?php echo getenv('DB_PORT') ?: '3306'; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Username:</span></td>
-            <td><input name="suser" type="text" id="suser" value=""></td>
+            <td><input name="suser" type="text" id="suser" value="<?php echo getenv('DB_USER') ?: ''; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Password:</span></td>
-            <td><input type="password" name="spass" id="spass"></td>
+            <td><input type="password" name="spass" id="spass" value="<?php echo getenv('DB_PASSWORD') ?: ''; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">DB name:</span></td>
-            <td><input type="text" name="sdb" id="sdb"></td>
+            <td><input type="text" name="sdb" id="sdb" value="<?php echo getenv('DB_NAME') ?: ''; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Prefix:</span></td>
