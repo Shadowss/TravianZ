@@ -40,11 +40,31 @@ This Docker Compose setup allows you to run TravianZ without installing PHP, MyS
    - **Domain:** `http://localhost:8081/`
    - **Homepage:** `http://localhost:8081/`
 
+   When you reach the admin accounts step, the form will be **automatically pre-filled** with default credentials:
+   - **Multihunter password:** `admin`
+   - **Support password:** `admin`
+   - **Admin name:** `admin`
+   - **Admin email:** `admin@email.com`
+   - **Admin password:** `admin`
+
+   **IMPORTANT:** These are default development credentials. Change them immediately in production!
+
 4. **Complete the installation:**
    Follow the web installer steps to complete the setup.
 
-5. **Access your game:**
-   After installation, navigate to:
+5. **Run post-installation cleanup:**
+   After the web installation finishes, run the cleanup script:
+   ```bash
+   docker compose exec web docker-post-install.sh
+   ```
+
+   This script will:
+   - Remove/rename the install directory
+   - Set secure file permissions
+   - Configure writable directories for game operations
+
+6. **Access your game:**
+   Your game is now ready at:
    ```
    http://localhost:8081/
    ```
@@ -74,14 +94,62 @@ View database logs:
 docker compose logs -f db
 ```
 
-## Troubleshooting
+## Post-Installation Tasks
 
-### Permission Issues
-If you encounter permission issues, run:
+### Setting Up Cron Jobs (Recommended)
+
+TravianZ uses a hybrid automation system:
+- **When players are online**: JavaScript automatically triggers game automation every 30 seconds
+- **When no players are online**: Without cron, the game "pauses" until someone logs in
+
+**Why you need cron**: To keep the game world running 24/7 even when no players are online. Cron handles:
+- Building construction completion
+- Troop training and movement completion
+- Market trade completion
+- Loyalty regeneration
+- Troop spawning and battles
+- Other time-based game mechanics
+
+**Note about resources**: Village resources are calculated on-demand based on production rates and time elapsed. They don't need active cron generation.
+
+**Setup host cron (recommended):**
+
+Add to your host crontab (`crontab -e`):
 ```bash
-docker compose exec web chown -R www-data:www-data /var/www/html
-docker compose exec web chmod -R 755 /var/www/html
+* * * * * docker-compose -f /full/path/to/docker-compose.yml exec -T web php /var/www/html/cron.php >> /tmp/travianz-cron.log 2>&1
 ```
+
+For example, if your TravianZ is in `/home/theo/work/TravianZ`:
+```bash
+* * * * * docker-compose -f /home/theo/work/TravianZ/docker-compose.yml exec -T web php /var/www/html/cron.php >> /tmp/travianz-cron.log 2>&1
+```
+
+**Verify cron is working:**
+```bash
+# Wait a minute after adding to crontab, then check:
+cat /tmp/travianz-cron.log
+# Should show: Cron completed at [timestamp]
+
+# Or watch it in real-time:
+tail -f /tmp/travianz-cron.log
+```
+
+**Manual test:**
+```bash
+docker-compose exec -T web php /var/www/html/cron.php
+# Should output: Cron completed at [timestamp]
+```
+
+### Securing the Admin Panel (Recommended)
+
+The Admin panel at `/Admin` should be protected. You can use Apache's `.htaccess` or configure authentication:
+
+```bash
+# Create .htpasswd file inside the container
+docker compose exec web htpasswd -c /var/www/html/Admin/.htpasswd admin
+```
+
+## Troubleshooting
 
 ### Database Connection Issues
 Make sure the database service is healthy before accessing the installer:

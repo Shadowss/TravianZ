@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     git \
+    cron \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install mysqli pdo pdo_mysql \
@@ -32,9 +33,14 @@ RUN { \
 # Set working directory
 WORKDIR /var/www/html
 
-# Set proper permissions for Apache
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+# Copy entrypoint and utility scripts
+COPY docker-entrypoint.sh /usr/local/bin/
+COPY docker-post-install.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/docker-post-install.sh
 
 # Expose port 80
 EXPOSE 80
+
+# Use custom entrypoint to set permissions at runtime
+ENTRYPOINT ["docker-entrypoint.sh"]

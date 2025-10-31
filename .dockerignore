@@ -4,3 +4,5 @@
 docker-compose.yml
 Dockerfile
 .dockerignore
+.claude
+.ai

@@ -31,7 +31,7 @@ if(isset($_GET['err']) && $_GET['err'] == 2) {
 	<span class="f10 c">Multihunter account</span>
 		<table>
 			<tr><td>Name:</td><td><input type="text" name="mhuser" id="mhuser" value="Multihunter" disabled="disabled"></td></tr>
-			<tr><td>Password:</td><td><input type="password" name="mhpw" id="mhpw" value=""></td></tr>
+			<tr><td>Password:</td><td><input type="password" name="mhpw" id="mhpw" value="<?php echo getenv('MULTIHUNTER_PASSWORD') ?: 'admin'; ?>"></td></tr>
 			<tr><td>Note: Rember this password! You need it for the Admin</td><td></td></tr>
 		</table>
 </p>
@@ -40,7 +40,7 @@ if(isset($_GET['err']) && $_GET['err'] == 2) {
 	<span class="f10 c">Support account</span>
 		<table>
 			<tr><td>Name:</td><td><input type="text" name="suser" id="suser" value="Support" disabled="disabled"></td></tr>
-			<tr><td>Password:</td><td><input type="password" name="spw" id="spw" value=""></td></tr>
+			<tr><td>Password:</td><td><input type="password" name="spw" id="spw" value="<?php echo getenv('SUPPORT_PASSWORD') ?: 'admin'; ?>"></td></tr>
 			<tr><td>Note: Rember this password! You need it for the Admin</td><td></td></tr>
 		</table>
 </p>
@@ -50,15 +50,15 @@ if(isset($_GET['err']) && $_GET['err'] == 2) {
     <table>
         <tr>
             <td><span class="f9 c6">Admin name:</span></td>
-            <td><input type="text" name="aname" id="aname" value=""></td>
+            <td><input type="text" name="aname" id="aname" value="<?php echo getenv('ADMIN_USERNAME') ?: 'admin'; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Admin email:</span></td>
-            <td><input type="text" name="aemail" id="aemail" value=""></td>
+            <td><input type="text" name="aemail" id="aemail" value="<?php echo getenv('ADMIN_EMAIL') ?: 'admin@email.com'; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Admin password:</span></td>
-            <td><input type="password" name="apass" id="apass" value=""></td>
+            <td><input type="password" name="apass" id="apass" value="<?php echo getenv('ADMIN_PASSWORD') ?: 'admin'; ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Admin tribe:</span></td>
