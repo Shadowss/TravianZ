@@ -1031,7 +1031,7 @@ define('CRANNY', 'Cranny');
 define('CURRENT_HIDDEN_UNITS', 'Currently hidden units per resource:');
 define('HIDDEN_UNITS_LEVEL', 'Hidden units per resource at level');
 define('UNITS', 'units');
-define('CRANNY_DESC', 'The cranny hides some of your resources in case the village gets attacked. These resources cannot get stolen.<br>At level 1 the cranny can hold 200 of each resource. The capacity of Gallic crannies is 1.5 times larger.<br>If a Teutonic hero attacks a village, crannies can hide only 80% of their normal capacity');
+define('CRANNY_DESC', 'The cranny hides some of your resources in case the village gets attacked. These resources cannot get stolen.<br>At level 1 the cranny can hold '.(100*((int)CRANNY_CAPACITY)).' of each resource. The capacity of Gallic crannies is 1.5 times larger.<br>If a Teutonic hero attacks a village, crannies can hide only 80% of their normal capacity');
 
 define('TOWNHALL', 'Town Hall');
 define('CELEBRATIONS_COMMENCE_TOWNHALL', 'Celebrations can commence when the town hall is completed.');
