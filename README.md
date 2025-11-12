@@ -20,8 +20,28 @@ TravianZ Version **v.8.3.5** - BETA 1
 ======
 **Note:** this game is still in a pre-release state, although at this point it is very playable, tested and found to be fairly stable
 
-**WARNING:** please note that ***this is in no way an upgrade*** from the old 8.3.2 version, so please ***do not try to just copy your files over***, 
+**WARNING:** please note that ***this is in no way an upgrade*** from the old 8.3.2 version, so please ***do not try to just copy your files over***,
 since the installer logic has changed and you would just crash your old version
+
+**Docker Quick Start:**
+
+Get up and running quickly with Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/Shadowss/TravianZ.git
+cd TravianZ
+
+# Copy environment file
+cp .env.example .env
+
+# Start containers
+docker-compose up -d
+
+# Open browser to http://localhost:8080/install
+```
+
+For detailed Docker setup instructions, see [DOCKER_README.md](DOCKER_README.md)
 
 **Quick links:**
 * [Download and Updates](https://github.com/Shadowss/TravianZ) &raquo;&raquo; https://github.com/Shadowss/TravianZ
