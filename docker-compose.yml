@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: travianz-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html
+      - ./var:/var/www/html/var
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+    depends_on:
+      - db
+    networks:
+      - travianz-network
+    restart: unless-stopped
+
+  db:
+    image: mysql:5.7
+    container_name: travianz-db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-travian}
+      MYSQL_USER: ${MYSQL_USER:-travianz}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-travianzpass}
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./var/db:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - travianz-network
+    restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password --sql_mode=""
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: travianz-phpmyadmin
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+    networks:
+      - travianz-network
+    restart: unless-stopped
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  travianz-network:
+    driver: bridge
