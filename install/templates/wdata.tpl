@@ -18,6 +18,7 @@
 ##                                                                             ##
 #################################################################################
 
+<?php
 // install/wdata.tpl
 
 include_once('../GameEngine/config.php');
@@ -85,10 +86,13 @@ $autoStartCroppers = isset($_GET['startCroppers']) && $_GET['startCroppers'] ===
     var left = COUNTDOWN_SECS;
     box.style.display = 'block';
     cdEl.textContent = left;
-    var t = setInterval(function(){
+    var t = setInterval(function () {
       left--;
       cdEl.textContent = left;
-      if (left <= 0) { clearInterval(t); window.location.href = NEXT_URL; }
+      if (left <= 0) {
+        clearInterval(t);
+        window.location.href = NEXT_URL;
+      }
     }, 1000);
   }
 
@@ -107,7 +111,18 @@ $autoStartCroppers = isset($_GET['startCroppers']) && $_GET['startCroppers'] ===
       return;
     }
 
+    var MAX_RETRIES = 3;
+    var retries = 0;
+
     var es = new EventSource('ajax_croppers.php');
+
+    es.onopen = function () {
+      // When a connection (re)opens and we had errors before, log a small note
+      if (!finished && retries > 0) {
+        plog.textContent += "Reconnected to server.\n";
+        plog.scrollTop = plog.scrollHeight;
+      }
+    };
 
     es.onmessage = function (e) {
       // Ignore non-JSON messages (pings / blanks)
@@ -115,12 +130,15 @@ $autoStartCroppers = isset($_GET['startCroppers']) && $_GET['startCroppers'] ===
 
       try {
         var d = JSON.parse(e.data);
-        var pct   = (d.pct  || 0)|0;
-        var done  = (d.done || 0)|0;
-        var total = (d.total|| 0)|0;
+        var pct   = (d.pct  || 0) | 0;
+        var done  = (d.done || 0) | 0;
+        var total = (d.total|| 0) | 0;
 
         // If we've already finished, ignore further events
         if (finished) return;
+
+        // Valid data received -> reset retry counter
+        retries = 0;
 
         pbar.style.width = pct + '%';
         pinfo.textContent = done + ' / ' + total + ' (' + pct + '%)';
@@ -133,6 +151,16 @@ $autoStartCroppers = isset($_GET['startCroppers']) && $_GET['startCroppers'] ===
         if (pct >= 100) {
           finished = true;
           plog.textContent += "✅ Completed!\n";
+          plog.scrollTop = plog.scrollHeight;
+          es.close();
+          startCountdown();
+        }
+
+        // Optional: handle explicit error flag from server if you ever send it
+        if (d.error) {
+          finished = true;
+          plog.textContent += "❌ " + (d.msg || "Server reported an error.") + "\n";
+          plog.scrollTop = plog.scrollHeight;
           es.close();
           startCountdown();
         }
@@ -143,9 +171,21 @@ $autoStartCroppers = isset($_GET['startCroppers']) && $_GET['startCroppers'] ===
     };
 
     es.onerror = function () {
-      // Don’t spam after we’re done; otherwise let EventSource reconnect silently
-      if (!finished) {
-        plog.textContent += "Connection hiccup, retrying…\n";
+      // Don’t spam after we’re done
+      if (finished) return;
+
+      retries++;
+      plog.textContent += "⚠ Connection hiccup (" + retries + "/" + MAX_RETRIES + "), retrying…\n";
+      plog.scrollTop = plog.scrollHeight;
+
+      // EventSource will auto-reconnect by itself; we just decide when to give up
+      if (retries >= MAX_RETRIES) {
+        finished = true;
+        plog.textContent += "❌ Too many connection failures — skipping croppers build.\n";
+        plog.scrollTop = plog.scrollHeight;
+        es.close();
+        // Reuse the same countdown UI to move on
+        startCountdown();
       }
     };
   }
@@ -155,6 +195,7 @@ $autoStartCroppers = isset($_GET['startCroppers']) && $_GET['startCroppers'] ===
   });
 })();
 </script>
+
 
                 </td>
             </tr>
