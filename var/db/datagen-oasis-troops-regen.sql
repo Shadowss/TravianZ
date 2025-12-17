@@ -50,7 +50,7 @@ SET @firstVillage = (SELECT id FROM %PREFIX%oids LIMIT 1);
 
 -- minimum and maximum number of units for oasis with "high" field set to 0
 SET @minUnitsForOasis0 = GREATEST(5, FLOOR(5 * @growthFactor));
-SET @maxUnitsForOasis0 = LEAST(FLOOR(@minUnitsForOasis0 + 5  + (@playerCount * 1.5) * @growthFactor)), 30);
+SET @maxUnitsForOasis0 = LEAST(FLOOR(@minUnitsForOasis0 + 5  + (@playerCount * 1.5) * @growthFactor), 30);
 
 -- minimum and maximum number of units for oasis with "high" field set to 1
 SET @minUnitsForOasis1 = GREATEST(10, FLOOR(10 * @growthFactor));
