@@ -1,206 +1,553 @@
-<?php
-
-#################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
-## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Version:       28.10.2025                    			                   ## 
-##  Filename       wdata.tpl                                                   ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
-##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		           ##
-##  Fixed by:      InCube - double troops				                       ##
-##  Fixed by:      lietuvis10 - crop finder				                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		 	       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		       	           ## 
-##                                                                             ##
-#################################################################################
-
-?>
-
-<?php
-// install/wdata.tpl
-
-include_once('../GameEngine/config.php');
-
-if (isset($_GET['c']) && $_GET['c'] == '1') {
-    echo '<br /><hr /><br /><div class="headline"><span class="f10 c5">Error creating wdata. Check configuration or file.</span></div><br><br>';
-}
-if (isset($_GET['err']) && $_GET['err'] == '1') {
-    echo '<br /><hr /><br /><div class="headline"><span class="f10 c5">Existing World Data found in the database! Please empty tables <i>'
-        . TB_PREFIX . 'odata, ' . TB_PREFIX . 'units, ' . TB_PREFIX . 'vdata, ' . TB_PREFIX . 'wdata</i> before continuing.</span></div><br /><br />';
-}
-
-$autoStartCroppers = isset($_GET['startCroppers']) && $_GET['startCroppers'] === '1';
-?>
-
-<form action="process.php" method="post" id="dataform">
-    <input type="hidden" name="subwdata" value="1" />
-
-    <p>
-        <span class="f10 c">Create World Data</span>
-
-        <table>
-            <tr>
-                <td>
-                    <b>Warning</b>: This can take some time. Please wait until the next page has been loaded.
-                    Click Create to proceed...
-                    <br /><br />
-
-                    <!-- Submit block (hidden when autoStartCroppers=1) -->
-                    <div id="submitWrap" style="display:<?php echo $autoStartCroppers ? 'none' : 'block'; ?>;">
-                        <center>
-                            <input type="submit" name="Submit" id="Submit" value="Create..." onClick="return proceed()" />
-                            <br /><br />
-                        </center>
-                    </div>
-
-                    <!-- Progress UI (shown when startCroppers=1) -->
-                    <div id="progressBox" style="display:<?php echo $autoStartCroppers ? 'block' : 'none'; ?>; margin-top:20px;">
-                        <div style="font-weight:bold;margin-bottom:6px;">Building croppers…</div>
-
-                        <div style="background:#ddd;border-radius:8px;overflow:hidden;height:20px;max-width:500px;">
-                            <!-- Orange bar to match Travian vibes -->
-                            <div id="pbar" style="background:#f6a21a;height:100%;width:0%;transition:width .2s;"></div>
-                        </div>
-
-                        <div id="pinfo" style="margin-top:6px;font-size:13px;color:#333;">Starting…</div>
-
-                        <pre id="plog" style="margin-top:10px;background:#f9f9f9;border:1px solid #ddd;border-radius:8px;padding:8px;font-size:12px;max-height:200px;overflow:auto;"></pre>
-
-                        <!-- Continue button appears on completion -->
-						<div id="autoNext" style="display:none;margin-top:10px;">
-						  Proceeding to next step in <b id="cd">3</b>…
-						</div>
-                    </div>
-
-<script>
-(function () {
-  var NEXT_URL = 'index.php?s=4'; // your next step
-  var COUNTDOWN_SECS = 3;
-  var finished = false;
-
-  function startCountdown() {
-    var box = document.getElementById('autoNext');
-    var cdEl = document.getElementById('cd');
-    var left = COUNTDOWN_SECS;
-    box.style.display = 'block';
-    cdEl.textContent = left;
-    var t = setInterval(function () {
-      left--;
-      cdEl.textContent = left;
-      if (left <= 0) {
-        clearInterval(t);
-        window.location.href = NEXT_URL;
-      }
-    }, 1000);
-  }
-
-  function startCroppersBuild() {
-    var box  = document.getElementById('progressBox');
-    var pbar = document.getElementById('pbar');
-    var pinfo= document.getElementById('pinfo');
-    var plog = document.getElementById('plog');
-
-    var submitWrap = document.getElementById('submitWrap');
-    if (submitWrap) submitWrap.style.display = 'none';
-    box.style.display = 'block';
-
-    if (!('EventSource' in window)) {
-      plog.textContent += "Your browser does not support live progress.\n";
-      return;
-    }
-
-    var MAX_RETRIES = 3;
-    var retries = 0;
-
-    var es = new EventSource('ajax_croppers.php');
-
-    es.onopen = function () {
-      // When a connection (re)opens and we had errors before, log a small note
-      if (!finished && retries > 0) {
-        plog.textContent += "Reconnected to server.\n";
-        plog.scrollTop = plog.scrollHeight;
-      }
-    };
-
-    es.onmessage = function (e) {
-      // Ignore non-JSON messages (pings / blanks)
-      if (!e.data || e.data.charCodeAt(0) !== 123 /* '{' */) return;
-
-      try {
-        var d = JSON.parse(e.data);
-        var pct   = (d.pct  || 0) | 0;
-        var done  = (d.done || 0) | 0;
-        var total = (d.total|| 0) | 0;
-
-        // If we've already finished, ignore further events
-        if (finished) return;
-
-        // Valid data received -> reset retry counter
-        retries = 0;
-
-        pbar.style.width = pct + '%';
-        pinfo.textContent = done + ' / ' + total + ' (' + pct + '%)';
-
-        if (d.msg) {
-          plog.textContent += d.msg + "\n";
-          plog.scrollTop = plog.scrollHeight;
-        }
-
-        if (pct >= 100) {
-          finished = true;
-          plog.textContent += "✅ Completed!\n";
-          plog.scrollTop = plog.scrollHeight;
-          es.close();
-          startCountdown();
-        }
-
-        // Optional: handle explicit error flag from server if you ever send it
-        if (d.error) {
-          finished = true;
-          plog.textContent += "❌ " + (d.msg || "Server reported an error.") + "\n";
-          plog.scrollTop = plog.scrollHeight;
-          es.close();
-          startCountdown();
-        }
-      } catch (err) {
-        // Silently ignore parsing problems now that we guard by '{'
-        // plog.textContent += "Parse error.\n";
-      }
-    };
-
-    es.onerror = function () {
-      // Don’t spam after we’re done
-      if (finished) return;
-
-      retries++;
-      plog.textContent += "⚠ Connection hiccup (" + retries + "/" + MAX_RETRIES + "), retrying…\n";
-      plog.scrollTop = plog.scrollHeight;
-
-      // EventSource will auto-reconnect by itself; we just decide when to give up
-      if (retries >= MAX_RETRIES) {
-        finished = true;
-        plog.textContent += "❌ Too many connection failures — skipping croppers build.\n";
-        plog.scrollTop = plog.scrollHeight;
-        es.close();
-        // Reuse the same countdown UI to move on
-        startCountdown();
-      }
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    <?php if ($autoStartCroppers) { echo 'startCroppersBuild();'; } ?>
-  });
-})();
-</script>
+-- ----------------------------------------------------------------------------------------
+-- oasis regeneration script
+-- used during installation, server reset, oasis reset & automation (nature repopulation)
+-- 
+-- author: martinambrus
+-- ----------------------------------------------------------------------------------------
 
 
-                </td>
-            </tr>
-        </table>
-    </p>
-</form>
-</div>
+-- Nature regeneration time.
+-- 
+-- type:        int
+-- description: when > -1, used to update the last oasis reset time (Automation nature regeneration)
+--               when == -1, used to reset oasis data into original state (conquered > unoccupied)
+
+SET @natureRegTime = %NATURE_REG_TIME%;
+
+
+
+-- A temporary table with oasis village ID(s).
+-- Used instead of variable so we can work with it as with array.
+-- The only other option would be to repeat IDs replacements below
+-- or define them once in a string and use FIND_IN_SET() for lookups,
+-- which is TERRIBLE, performance-wise (since it doesn't use indexes).
+
+CREATE TEMPORARY TABLE %PREFIX%oids (id INT NOT NULL, PRIMARY KEY (id));
+INSERT INTO %PREFIX%oids VALUES %VILLAGEID%;
+
+
+
+-- Equivalent to "VILLAGEID === -1" (in PHP). Determines whether we have
+-- any single oasis to actually update (mode = conquered > unocupied)
+-- or we're updating 1 or more specific oasis (mode = install, server reset, Automation's nature regen).
+ 
+SET @noVillage = ((SELECT id FROM %PREFIX%oids LIMIT 1) = -1);
+
+-- Get the number of players and calculate growth factor
+SELECT COUNT(*) INTO @playerCount FROM %PREFIX%users WHERE tribe != 0;
+SET @growthFactor = LEAST(1.0, GREATEST(0.3, @playerCount / 100));
+
+-- faster access to first oasis ID, so we don't need to reselect all the time below 
+SET @firstVillage = (SELECT id FROM %PREFIX%oids LIMIT 1);
+
+-- minimum and maximum number of units for oasis with "high" field set to 0
+SET @minUnitsForOasis0 = 5;
+SET @maxUnitsForOasis0 = FLOOR(5  + (@playerCount * 1));
+
+-- minimum and maximum number of units for oasis with "high" field set to 1
+SET @minUnitsForOasis1 = 10;
+SET @maxUnitsForOasis1 = FLOOR(10 + (@playerCount * 1.5));
+
+-- minimum and maximum number of units for oasis with "high" field set to 2
+SET @minUnitsForOasis2 = 20;
+SET @maxUnitsForOasis2 = FLOOR(15 + (@playerCount * 2));
+
+-- Setting a maximum for every type of Oasis so large servers won't turn oasis into fortresses
+SET @maxUnitsForOasis0 = LEAST(@maxUnitsForOasis0, 30);
+SET @maxUnitsForOasis1 = LEAST(@maxUnitsForOasis1, 60);
+SET @maxUnitsForOasis2 = LEAST(@maxUnitsForOasis2, 90);
+
+-- ----------------------------------------
+-- reset oasis data (conquered > unoccupied)
+-- ------------------------------------------
+UPDATE %PREFIX%odata
+    SET
+        conqured = 0,
+        wood = 800,
+        iron = 800,
+        clay = 800,
+        maxstore = 800,
+        crop = 800,
+        maxcrop = 800,
+        lastupdated = UNIX_TIMESTAMP(),
+        lastupdated2 = UNIX_TIMESTAMP(),
+        loyalty=100,
+        owner=2,
+        name='Unoccupied Oasis'
+    WHERE
+        @natureRegTime = -1
+        AND
+        conqured = @firstVillage;
+
+-- ---------------------------------------------
+-- remove past reports (conquered > unoccupied)
+-- ---------------------------------------------
+DELETE FROM %PREFIX%ndata
+    WHERE
+        @natureRegTime = -1
+        AND
+        toWref = @firstVillage;
+
+
+-- ----------------------------------------------------------------
+-- update next regeneration time (Automation, nature regeneration)
+-- ----------------------------------------------------------------
+UPDATE
+    %PREFIX%odata
+SET
+    lastupdated2 = UNIX_TIMESTAMP() + @natureRegTime
+WHERE
+    @natureRegTime > -1
+    AND
+    wref IN ( SELECT id FROM %PREFIX%oids );
+
+
+-- -----------------------------------------------------------------------
+-- update number of units depending on the oasis type                  --
+-- the more lucrative the oasis is, the better defense will it get :-P --
+-- -----------------------------------------------------------------------
+
+
+-- +25% lumber oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u.u35 = u.u35 + (FLOOR(5 + RAND() * 10) * @growthFactor),
+        u36 = u36 + (FLOOR(0 + RAND() * 5) * @growthFactor),
+        u37 = u37 + (FLOOR(0 + RAND() * 5) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(1,2)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND
+        (
+            u35 <= (
+                CASE o.high
+                    WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                    WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                    WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+                END
+            )
+            OR u36 <= (
+                CASE o.high
+                    WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                    WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                    WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+                END
+            )
+            OR u37 <= (
+                CASE o.high
+                    WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                    WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                    WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+                END
+            )
+        );
+
+-- +25% lumber and +25% crop oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u35 = u35 + (FLOOR(5 + RAND() * 15) * @growthFactor),
+        u36 = u36 + (FLOOR(0 + RAND() * 5) * @growthFactor),
+        u37 = u37 + (FLOOR(0 + RAND() * 5) * @growthFactor),
+        u38 = u38 + (FLOOR(0 + RAND() * 5) * @growthFactor),
+        u40 = u40 + (FLOOR(0 + RAND() * 3) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(3)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND
+        (
+            u36 <= (
+                CASE o.high
+                    WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                    WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                    WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+                END
+            )
+            OR u37 <= (
+                CASE o.high
+                    WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                    WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                    WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+                END
+            )
+            OR u38 <= (
+                CASE o.high
+                    WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                    WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                    WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+                END
+            )
+        );
+
+-- +25% clay oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u31 = u31 + (FLOOR(10 + RAND() * 15) * @growthFactor),
+        u32 = u32 + (FLOOR(5 + RAND() * 15) * @growthFactor),
+        u35 = u35 + (FLOOR(0 + RAND() * 10) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(4,5)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND u31 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u32 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u35 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        );
+
+-- +25% clay and +25% crop oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u31 = u31 + (FLOOR(15 + RAND() * 20) * @growthFactor),
+        u32 = u32 + (FLOOR(10 + RAND() * 15) * @growthFactor),
+        u35 = u35 + (FLOOR(0 + RAND() * 10) * @growthFactor),
+        u40 = u40 + (FLOOR(0 + RAND() * 3) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(6)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND u31 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u32 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u35 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        );
+
+-- +25% iron oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u31 = u31 + (FLOOR(10 + RAND() * 15) * @growthFactor),
+        u32 = u32 + (FLOOR(5 + RAND() * 15) * @growthFactor),
+        u34 = u34 + (FLOOR(0 + RAND() * 10) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(7,8)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND u31 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u32 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u34 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        );
+
+-- +25% iron and +25% crop oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u31 = u31 + (FLOOR(15 + RAND() * 20) * @growthFactor),
+        u32 = u32 + (FLOOR(10 + RAND() * 15) * @growthFactor),
+        u34 = u34 + (FLOOR(0 + RAND() * 10) * @growthFactor),
+        u39 = u39 + (FLOOR(0 + RAND() * 3) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(9)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND u31 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u32 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u34 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        );
+
+-- +25% crop oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u31 = u31 + (FLOOR(5 + RAND() * 15) * @growthFactor),
+        u33 = u33 + (FLOOR(5 + RAND() * 10) * @growthFactor),
+        u37 = u37 + (FLOOR(0 + RAND() * 10) * @growthFactor),
+        u38 = u38 + (FLOOR(0 + RAND() * 5) * @growthFactor),
+        u39 = u39 + (FLOOR(0 + RAND() * 5) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(10,11)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND u31 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u33 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u37 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u38 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        );
+
+-- +50% crop oasis
+UPDATE %PREFIX%units u
+    JOIN %PREFIX%odata o
+    ON u.vref = o.wref
+    SET
+        u31 = u31 + (FLOOR(10 + RAND() * 15) * @growthFactor),
+        u33 = u33 + (FLOOR(5 + RAND() * 10) * @growthFactor),
+        u37 = u37 + (FLOOR(0 + RAND() * 10) * @growthFactor),
+        u38 = u38 + (FLOOR(0 + RAND() * 5) * @growthFactor),
+        u39 = u39 + (FLOOR(0 + RAND() * 5) * @growthFactor),
+        u40 = u40 + (FLOOR(0 + RAND() * 3) * @growthFactor)
+    WHERE
+        (
+            (
+                @firstVillage = -1
+                AND
+                vref IN(
+                        SELECT
+                            id
+                        FROM
+                            %PREFIX%wdata
+                        WHERE
+                            oasistype IN(12)
+                )
+            )
+            OR
+            (
+                @firstVillage > -1
+                AND
+                vref IN ( SELECT id FROM %PREFIX%oids )
+            )
+        )
+        AND u31 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u33 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u37 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u38 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        )
+        AND u39 <= (
+            CASE o.high
+                WHEN 0 THEN (FLOOR(@minUnitsForOasis0 + RAND() * @maxUnitsForOasis0))
+                WHEN 1 THEN (FLOOR(@minUnitsForOasis1 + RAND() * @maxUnitsForOasis1))
+                WHEN 2 THEN (FLOOR(@minUnitsForOasis2 + RAND() * @maxUnitsForOasis2))
+            END
+        );
