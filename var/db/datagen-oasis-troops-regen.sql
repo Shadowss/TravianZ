@@ -33,24 +33,32 @@ INSERT INTO %PREFIX%oids VALUES %VILLAGEID%;
  
 SET @noVillage = ((SELECT id FROM %PREFIX%oids LIMIT 1) = -1);
 
--- Get the number of players and calculate growth factor
+-- Get the number of players
 SELECT COUNT(*) INTO @playerCount FROM %PREFIX%users WHERE tribe != 0;
-SET @growthFactor = LEAST(1.0, GREATEST(0.3, @playerCount / 100));
+
+-- Calculate average progression for all real players (owner > 6) from culture points (CP) and population of villages (pop)
+SELECT AVG(pop + cp) INTO @avgVillageCP FROM %PREFIX%vdata WHERE owner > 6;
+
+-- ----------------------------------------------------------------
+-- Calculate growth factor based on player progression
+-- Scale between 0.3 and 3.0
+-- ----------------------------------------------------------------
+SET @growthFactor = LEAST(3.0, GREATEST(0.3, @avgPlayerProgress / 1000));
 
 -- faster access to first oasis ID, so we don't need to reselect all the time below 
 SET @firstVillage = (SELECT id FROM %PREFIX%oids LIMIT 1);
 
 -- minimum and maximum number of units for oasis with "high" field set to 0
-SET @minUnitsForOasis0 = 5;
-SET @maxUnitsForOasis0 = FLOOR(5  + (@playerCount * 1));
+SET @minUnitsForOasis0 = GREATEST(5, FLOOR(5 * @growthFactor));
+SET @maxUnitsForOasis0 = LEAST(FLOOR(5  + (@playerCount * 1) * @growthFactor), 30);
 
 -- minimum and maximum number of units for oasis with "high" field set to 1
-SET @minUnitsForOasis1 = 10;
-SET @maxUnitsForOasis1 = FLOOR(10 + (@playerCount * 1.5));
+SET @minUnitsForOasis1 = GREATEST(10, FLOOR(10 * @growthFactor));
+SET @maxUnitsForOasis1 = LEAST(FLOOR(10 + (@playerCount * 1.5) * @growthFactor), 60);
 
 -- minimum and maximum number of units for oasis with "high" field set to 2
-SET @minUnitsForOasis2 = 20;
-SET @maxUnitsForOasis2 = FLOOR(15 + (@playerCount * 2));
+SET @minUnitsForOasis2 = GREATEST(20, FLOOR(20 * @growthFactor));
+SET @maxUnitsForOasis2 = LEAST(FLOOR(15 + (@playerCount * 2) * @growthFactor), 90);
 
 -- Setting a maximum for every type of Oasis so large servers won't turn oasis into fortresses
 SET @maxUnitsForOasis0 = LEAST(@maxUnitsForOasis0, 30);
