@@ -50,15 +50,15 @@ SET @firstVillage = (SELECT id FROM %PREFIX%oids LIMIT 1);
 
 -- minimum and maximum number of units for oasis with "high" field set to 0
 SET @minUnitsForOasis0 = GREATEST(5, FLOOR(5 * @growthFactor));
-SET @maxUnitsForOasis0 = LEAST(FLOOR(minUnitsForOasis0 + 5  + (@playerCount * 1.5) * @growthFactor)), 30);
+SET @maxUnitsForOasis0 = LEAST(FLOOR(@minUnitsForOasis0 + 5  + (@playerCount * 1.5) * @growthFactor)), 30);
 
 -- minimum and maximum number of units for oasis with "high" field set to 1
 SET @minUnitsForOasis1 = GREATEST(10, FLOOR(10 * @growthFactor));
-SET @maxUnitsForOasis1 = LEAST(FLOOR(minUnitsForOasis1 + 10 + (@playerCount * 2) * @growthFactor), 60);
+SET @maxUnitsForOasis1 = LEAST(FLOOR(@minUnitsForOasis1 + 10 + (@playerCount * 2) * @growthFactor), 60);
 
 -- minimum and maximum number of units for oasis with "high" field set to 2
 SET @minUnitsForOasis2 = GREATEST(20, FLOOR(20 * @growthFactor));
-SET @maxUnitsForOasis2 = LEAST(FLOOR(minUnitsForOasis2 + 15 + (@playerCount * 3) * @growthFactor), 90);
+SET @maxUnitsForOasis2 = LEAST(FLOOR(@minUnitsForOasis2 + 15 + (@playerCount * 3) * @growthFactor), 90);
 
 -- Setting a maximum for every type of Oasis so large servers won't turn oasis into fortresses
 SET @maxUnitsForOasis0 = LEAST(@maxUnitsForOasis0, 30);
