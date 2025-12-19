@@ -185,7 +185,7 @@ SET
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END),
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype = 3))
@@ -249,7 +249,7 @@ SET
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END),
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype = 6))
@@ -278,7 +278,7 @@ SET
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END),
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype IN (7,8)))
@@ -313,7 +313,7 @@ SET
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END),
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype = 9))
@@ -354,7 +354,7 @@ SET
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END),
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype IN (10,11)))
@@ -401,7 +401,7 @@ SET
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END),
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype = 12))
