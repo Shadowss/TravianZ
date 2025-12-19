@@ -121,30 +121,24 @@ WHERE
 UPDATE %PREFIX%units u
 JOIN %PREFIX%odata o ON u.vref = o.wref
 SET
-    u.u35 = LEAST(
-        u.u35 + FLOOR((5 + RAND() * 10) * @growthFactor),
+    u.u35 = LEAST(u.u35 + FLOOR((5 + RAND() * 10) * @growthFactor),
         CASE o.high
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END
-    ),
-    u.u36 = LEAST(
-        u.u36 + FLOOR((0 + RAND() * 5) * @growthFactor),
+        END),
+    u.u36 = LEAST(u.u36 + FLOOR((0 + RAND() * 5) * @growthFactor),
         CASE o.high
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END
-    ),
-    u.u37 = LEAST(
-        u.u37 + FLOOR((0 + RAND() * 5) * @growthFactor),
+        END),
+    u.u37 = LEAST(u.u37 + FLOOR((0 + RAND() * 5) * @growthFactor),
         CASE o.high
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END
-    )
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype IN (1,2)))
@@ -214,7 +208,7 @@ SET
             WHEN 0 THEN FLOOR(@minUnitsForOasis0 + RAND() * (@maxUnitsForOasis0 - @minUnitsForOasis0))
             WHEN 1 THEN FLOOR(@minUnitsForOasis1 + RAND() * (@maxUnitsForOasis1 - @minUnitsForOasis1))
             WHEN 2 THEN FLOOR(@minUnitsForOasis2 + RAND() * (@maxUnitsForOasis2 - @minUnitsForOasis2))
-        END),
+        END)
 WHERE
 (
     (@firstVillage = -1 AND u.vref IN (SELECT id FROM %PREFIX%wdata WHERE oasistype IN (4,5)))
