@@ -34,10 +34,10 @@ INSERT INTO %PREFIX%oids VALUES %VILLAGEID%;
 SET @noVillage = ((SELECT id FROM %PREFIX%oids LIMIT 1) = -1);
 
 -- Get the number of players
-SELECT COUNT(*) INTO @playerCount FROM %PREFIX%users WHERE tribe != 0;
+SELECT COUNT(*) INTO @playerCount FROM %PREFIX%users WHERE id > 6;
 
 -- Calculate average progression for all real players (owner > 6) from culture points (CP) and population of villages (pop)
-SELECT AVG(pop + cp) INTO @avgPlayerProgress FROM %PREFIX%vdata WHERE owner > 6;
+SELECT IFNULL(AVG(pop + cp), 0) INTO @avgPlayerProgress FROM %PREFIX%vdata WHERE owner > 6;
 
 -- ----------------------------------------------------------------
 -- Calculate growth factor based on player progression
