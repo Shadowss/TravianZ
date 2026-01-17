@@ -1,44 +1,54 @@
-FROM php:7.4-apache
+FROM php:7.4-fpm-alpine3.16
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libjpeg-dev \
-    libfreetype6-dev \
-    libzip-dev \
+# Install runtime dependencies
+RUN apk add --no-cache \
+    bash \
+    git \
     zip \
     unzip \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+    libpng \
+    libjpeg-turbo \
+    freetype \
+    libzip \
+    oniguruma \
+    icu
+
+# Install build dependencies
+RUN apk add --no-cache --virtual .build-deps \
+    $PHPIZE_DEPS \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
+    icu-dev
 
 # Configure and install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+RUN docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
     && docker-php-ext-install -j$(nproc) \
-    gd \
-    mysqli \
-    pdo \
-    pdo_mysql \
-    zip
-
-# Enable Apache modules
-RUN a2enmod rewrite headers
+        gd \
+        mysqli \
+        pdo \
+        pdo_mysql \
+        zip \
+        intl \
+    && apk del .build-deps
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application files
-COPY . /var/www/html/
+# Copy application
+COPY . .
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/html/var
+# Permissions (FPM runs as www-data)
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www \
+    && mkdir -p /var/www/html/var \
+    && chown -R www-data:www-data /var/www/html/var
 
-# Configure Apache to use /var/www/html as DocumentRoot
-RUN sed -i 's!/var/www/html!/var/www/html!g' /etc/apache2/sites-available/000-default.conf
+# Expose PHP-FPM port
+EXPOSE 9000
 
-# Expose port 80
-EXPOSE 80
-
-# Start Apache
-CMD ["apache2-foreground"]
+# Start PHP-FPM
+CMD ["php-fpm"]
