@@ -9,193 +9,136 @@
 ##                                                                             ##
 #################################################################################
 
-class MyGenerator
-{
-    /* ===============================
-       RANDOM GENERATORS
-    =============================== */
+class MyGenerator {
 
-    public function generateRandID()
-    {
-        return md5($this->generateRandStr(16));
-    }
+	public function generateRandID(){
+		return md5($this->generateRandStr(16));
+	}
 
-    public function generateRandStr($length)
-    {
-        $length = (int)$length;
-        if ($length <= 0) return '';
+   public function generateRandStr($length){
+	  $randstr = "";
+		for($i = 0; $i < $length; $i++){
+			$randnum = random_int(0, 61);
+			if($randnum < 10) $randstr .= chr($randnum + 48);
+			else if($randnum < 36) $randstr .= chr($randnum + 55);
+			else $randstr .= chr($randnum + 61);
+		}
+		return $randstr;
+   }
 
-        // Hard cap to prevent abuse
-        if ($length > 256) $length = 256;
+   public function encodeStr($str, $length) {
+	   $encode = md5($str);
+	   return substr($encode, 0 ,$length);
+   }
 
-        $randstr = '';
+   public function procDistanceTime($coor, $thiscoor, $ref, $mode, $vid = 0) {
+		global $database, $bid28, $bid14, $village;
 
-        for ($i = 0; $i < $length; $i++) {
-            $randnum = random_int(0, 61);
+		if($vid == 0) $vid = $village->wid;
+		
+		$xdistance = ABS($thiscoor['x'] - $coor['x']);
+		if($xdistance > WORLD_MAX) $xdistance = (2 * WORLD_MAX + 1) - $xdistance;
+		
+		$ydistance = ABS($thiscoor['y'] - $coor['y']);
+		if($ydistance > WORLD_MAX) $ydistance = (2 * WORLD_MAX + 1) - $ydistance;
+		
+		$distance = SQRT(POW($xdistance,2) + POW($ydistance,2));
+		if(!$mode){    
+			if($ref == 1) $speed = 16;		
+			else if($ref == 2) $speed = 12;
+			else if($ref == 3) $speed = 24;			
+			else if($ref == 300) $speed = 5;			
+			else $speed = 1;		
+		}else{
+			$speed = $ref;
+			if(($tSquareLevel = $database->getFieldLevelInVillage($vid, 14)) > 0 && $distance >= TS_THRESHOLD) {
+				$speed *= ($bid14[$tSquareLevel]['attri'] / 100) ;
+			}
+		}
+		
+		if($speed > 0) return round(($distance / $speed) * 3600 / INCREASE_SPEED);
+		else return round($distance * 3600 / INCREASE_SPEED);
+	}
 
-            if ($randnum < 10) {
-                $randstr .= chr($randnum + 48);
-            } elseif ($randnum < 36) {
-                $randstr .= chr($randnum + 55);
-            } else {
-                $randstr .= chr($randnum + 61);
-            }
-        }
+	public function getTimeFormat($time) {
+		$min = $hr = $days = 0;
+		
+		while($time >= 60){
+			$time -= 60;
+			$min += 1;
+		}
+		
+		while($min >= 60){
+			$min -= 60;
+			$hr += 1;
+		}
+		
+		if($min < 10) $min = "0" . $min;
+		if($time < 10) $time = "0" . $time;
+		
+		return $hr . ":" . $min . ":" . $time;
+	}
 
-        return $randstr;
-    }
+	public function procMtime($time, $pref = 3){
+		/*
+		 * $timezone = 7;
+		 * switch($timezone) {
+		 * case 7:
+		 * $time -= 3600;
+		 * break;
+		 * }
+		 */
+		// $time += 3600*0; //Edit this yourself
+		$time += 0; // Edit this yourself
+		
+		$today = date('d', time()) - 1;
+		if(date('Ymd', time()) == date('Ymd', $time)) $day = "today";			
+		elseif($today == date('d', $time)) $day = "yesterday";		
+		else
+		{
+			switch($pref){
+				case 1 :
+					$day = date("m/j/y", $time);
+					break;
+				case 2 :
+					$day = date("j/m/y", $time);
+					break;
+				case 3 :
+					$day = date("j.m.y", $time);
+					break;
+				default :
+					$day = date("y/m/j", $time);
+					break;
+			}
+		}
+		$new = date("H:i:s", $time);
+		if($pref == "9" || $pref == 9) return $new;
+		else return array($day, $new);
+	}
 
-    public function encodeStr($str, $length)
-    {
-        $length = (int)$length;
-        if ($length <= 0) return '';
 
-        $hash = md5((string)$str);
+	public function getBaseID($x, $y){
+		return ((WORLD_MAX - $y) * (WORLD_MAX * 2 + 1)) + (WORLD_MAX + $x + 1);
+	}
 
-        if ($length > 32) $length = 32;
+	public function getMapCheck($wref){
+		return substr(md5($wref), 5, 2);
+	}
 
-        return substr($hash, 0, $length);
-    }
+	public function pageLoadTimeStart(){
+		if(isset($_SERVER["REQUEST_TIME_FLOAT"])) return $_SERVER["REQUEST_TIME_FLOAT"];
+		$starttime = microtime(true);
+		$startarray = explode(" ", $starttime);
+		//$starttime = $startarray[1] + $startarray[0];
+		return $startarray[0];
+	}
 
-    /* ===============================
-       DISTANCE / TIME CALCULATIONS
-    =============================== */
+	public function pageLoadTimeEnd(){
+		$endtime = microtime(true);
+		$endarray = explode(" ", $endtime);
+		//$endtime = $endarray[1] + $endarray[0];
+		return $endarray[0];
+	}
 
-    public function procDistanceTime($coor, $thiscoor, $ref, $mode, $vid = 0)
-    {
-        global $database, $bid28, $bid14, $village;
-
-        if ($vid == 0 && isset($village->wid)) {
-            $vid = (int)$village->wid;
-        }
-
-        $x1 = (int)$thiscoor['x'];
-        $y1 = (int)$thiscoor['y'];
-        $x2 = (int)$coor['x'];
-        $y2 = (int)$coor['y'];
-
-        $xdistance = abs($x1 - $x2);
-        if ($xdistance > WORLD_MAX) {
-            $xdistance = (2 * WORLD_MAX + 1) - $xdistance;
-        }
-
-        $ydistance = abs($y1 - $y2);
-        if ($ydistance > WORLD_MAX) {
-            $ydistance = (2 * WORLD_MAX + 1) - $ydistance;
-        }
-
-        $distance = sqrt(pow($xdistance, 2) + pow($ydistance, 2));
-
-        if (!$mode) {
-            switch ((int)$ref) {
-                case 1:   $speed = 16; break;
-                case 2:   $speed = 12; break;
-                case 3:   $speed = 24; break;
-                case 300: $speed = 5;  break;
-                default:  $speed = 1;  break;
-            }
-        } else {
-            $speed = (float)$ref;
-
-            if ($speed > 0) {
-                $tSquareLevel = (int)$database->getFieldLevelInVillage($vid, 14);
-
-                if ($tSquareLevel > 0 && $distance >= TS_THRESHOLD) {
-                    if (isset($bid14[$tSquareLevel]['attri'])) {
-                        $speed *= ($bid14[$tSquareLevel]['attri'] / 100);
-                    }
-                }
-            }
-        }
-
-        if ($speed <= 0) {
-            return round($distance * 3600 / INCREASE_SPEED);
-        }
-
-        return round(($distance / $speed) * 3600 / INCREASE_SPEED);
-    }
-
-    /* ===============================
-       TIME FORMATTING
-    =============================== */
-
-    public function getTimeFormat($time)
-    {
-        $time = (int)$time;
-        if ($time < 0) $time = 0;
-
-        $hr = floor($time / 3600);
-        $min = floor(($time % 3600) / 60);
-        $sec = $time % 60;
-
-        return sprintf("%d:%02d:%02d", $hr, $min, $sec);
-    }
-
-    public function procMtime($time, $pref = 3)
-    {
-        $time = (int)$time;
-        $pref = (int)$pref;
-
-        $today = date('Ymd');
-        $target = date('Ymd', $time);
-
-        if ($today === $target) {
-            $day = "today";
-        } elseif (date('Ymd', strtotime("-1 day")) === $target) {
-            $day = "yesterday";
-        } else {
-            switch ($pref) {
-                case 1: $day = date("m/j/y", $time); break;
-                case 2: $day = date("j/m/y", $time); break;
-                case 3: $day = date("j.m.y", $time); break;
-                default:$day = date("y/m/j", $time); break;
-            }
-        }
-
-        $clock = date("H:i:s", $time);
-
-        if ($pref === 9) {
-            return $clock;
-        }
-
-        return [$day, $clock];
-    }
-
-    /* ===============================
-       MAP HELPERS
-    =============================== */
-
-    public function getBaseID($x, $y)
-    {
-        $x = (int)$x;
-        $y = (int)$y;
-
-        return ((WORLD_MAX - $y) * (WORLD_MAX * 2 + 1)) + (WORLD_MAX + $x + 1);
-    }
-
-    public function getMapCheck($wref)
-    {
-        $wref = (int)$wref;
-        return substr(md5((string)$wref), 5, 2);
-    }
-
-    /* ===============================
-       PAGE LOAD TIMERS
-    =============================== */
-
-    public function pageLoadTimeStart()
-    {
-        if (isset($_SERVER["REQUEST_TIME_FLOAT"])) {
-            return (float)$_SERVER["REQUEST_TIME_FLOAT"];
-        }
-
-        return microtime(true);
-    }
-
-    public function pageLoadTimeEnd()
-    {
-        return microtime(true);
-    }
-}
-
-$generator = new MyGenerator();
+};
+$generator = new MyGenerator;

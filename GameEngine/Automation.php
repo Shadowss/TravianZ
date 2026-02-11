@@ -880,29 +880,12 @@ class Automation {
         $totalattackdead = $data_num = 0;
 
         if ($dataarray && count($dataarray)) {
-        // preload village data
+            // preload village data
             $vilIDs = [];
-        foreach ($dataarray as $data) {
-		$moveid = (int)$data['moveid'];
-
-		// ===============================
-		// ATOMIC CLAIM (Race condition fix)
-		// ===============================
-		$claimQuery = "UPDATE " . TB_PREFIX . "movement 
-                   SET proc = 1 
-                   WHERE moveid = $moveid AND proc = 0";
-		mysqli_query($database->dblink, $claimQuery);
-		// If this process didn't successfully claim it,
-		// another process already did — skip it.
-		if (mysqli_affected_rows($database->dblink) !== 1) {
-        continue;
-		}
-		// ===============================
-		// SAFE: Now process this battle
-		// ===============================
+            foreach($dataarray as $data) {
                 $vilIDs[$data['from']] = true;
                 $vilIDs[$data['to']] = true;
-        }
+            }
             $vilIDs = array_keys($vilIDs);
             $database->getProfileVillages($vilIDs, 5);
             $database->getUnit($vilIDs);
@@ -2750,90 +2733,81 @@ class Automation {
         }
     }
 
-private function returnunitsComplete() {
-	    if (!$this->acquireFunctionLock('returnunits', 2)) {
-        return; // Another process is handling returns
-    }
-    
-    try {
-        // ... existing logic with atomic per-record processing ...
-    } finally {
-        $this->releaseFunctionLock('returnunits');
-    }
-    global $database, $technology;
-    $time = time();
-    
-    // Get pending returns
-    $q = "SELECT moveid FROM " . TB_PREFIX . "movement 
-          WHERE proc = 0 AND sort_type = 4 AND endtime < $time";
-    $pendingMoves = $database->query_return($q);
-    
-    if (!$pendingMoves) return;
-    
-    foreach ($pendingMoves as $move) {
-        $moveid = (int)$move['moveid'];
-        
-        // ATOMIC: Claim this movement record
-        $claimQuery = "UPDATE " . TB_PREFIX . "movement 
-                       SET proc = 1 
-                       WHERE moveid = $moveid AND proc = 0";
-        mysqli_query($database->dblink, $claimQuery);
-        
-        // Only process if WE claimed it
-        if (mysqli_affected_rows($database->dblink) !== 1) {
-            continue; // Another process got it
-        }
-        
-        // Now safe to process - we have exclusive ownership
-        $dataQuery = "SELECT m.*, a.t1, a.t2, a.t3, a.t4, a.t5, a.t6, 
-                             a.t7, a.t8, a.t9, a.t10, a.t11
-                      FROM " . TB_PREFIX . "movement m
-                      JOIN " . TB_PREFIX . "attacks a ON m.ref = a.id
-                      WHERE m.moveid = $moveid";
-        $result = mysqli_query($database->dblink, $dataQuery);
-        $data = mysqli_fetch_assoc($result);
-        
-        if (!$data) continue;
-        
-        try {
-            // Process troop return
-            $tribe = $database->getUserField(
-                $database->getVillageField($data['to'], "owner"), 
-                "tribe", 0
-            );
-            
-            if ($tribe <= 0) continue;
-            
-            $u = $tribe == 1 ? "" : $tribe - 1;
-            $database->modifyUnit(
-                $data['to'],
-                [$u."1", $u."2", $u."3", $u."4", $u."5", 
-                 $u."6", $u."7", $u."8", $u."9", $tribe."0", "hero"],
-                [$data['t1'], $data['t2'], $data['t3'], $data['t4'], $data['t5'], 
-                 $data['t6'], $data['t7'], $data['t8'], $data['t9'], $data['t10'], 
-                 $data['t11']],
-                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-            );
-            
-            // Add resources
-            if ($data['wood'] + $data['clay'] + $data['iron'] + $data['crop'] > 0) {
-                $database->modifyResource(
-                    $data['to'], 
-                    $data['wood'], $data['clay'], $data['iron'], $data['crop'], 
-                    1
-                );
+    private function returnunitsComplete() {
+        global $database, $technology;
+
+        $time = time();
+        $q = "
+            SELECT
+                `to`, `from`, moveid, starttime, endtime, wood, clay, iron, crop,
+                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11
+            FROM
+                ".TB_PREFIX."movement,
+                ".TB_PREFIX."attacks
+            WHERE
+                ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id
+                AND
+                ".TB_PREFIX."movement.proc = 0
+                AND
+                ".TB_PREFIX."movement.sort_type = 4
+                AND
+                endtime < $time";
+        $dataarray = $database->query_return($q);
+
+        if ($dataarray && count($dataarray)) {
+            // preload village data
+            $vilIDs = [];
+            foreach($dataarray as $data) {
+                $vilIDs[$data['from']] = true;
+                $vilIDs[$data['to']] = true;
+            }
+            $database->getProfileVillages(array_keys($vilIDs), 5);
+            $database->getOasisEnforce($vilIDs, 0);
+            $database->getOasisEnforce($vilIDs, 1);
+
+            $movementProcIDs = [];
+            foreach($dataarray as $data) {
+            	$tribe = $database->getUserField($database->getVillageField($data['to'], "owner"), "tribe", 0);
+            	$u = $tribe == 1 ? "" : $tribe - 1;
+            	$database->modifyUnit(
+            			$data['to'],
+            			[$u."1", $u."2", $u."3", $u."4", $u."5", $u."6", $u."7", $u."8", $u."9", $tribe."0", "hero"],
+            			[$data['t1'], $data['t2'], $data['t3'], $data['t4'], $data['t5'], $data['t6'], $data['t7'], $data['t8'], $data['t9'], $data['t10'], $data['t11']],
+            			[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+            			);
+            	
+            	//If there's at least 1 resource, add it to the village
+            	if($data['wood'] + $data['clay'] + $data['iron'] + $data['crop'] > 0){
+            		$database->modifyResource($data['to'], $data['wood'], $data['clay'], $data['iron'], $data['crop'], 1);
+            	}
+            	
+            	$movementProcIDs[] = $data['moveid'];
+            	
+            	//Update starvation data
+            	$database->addStarvationData($data['to']);
             }
             
-            $database->addStarvationData($data['to']);
-            
-        } catch (Throwable $e) {
-            error_log("returnunitsComplete error moveid $moveid: " . $e->getMessage());
-            // proc=1 already set, so it won't retry infinitely
+            $database->setMovementProc(implode(', ', $movementProcIDs));
+            $this->pruneResource();
+        }
+
+        // Settlers
+        $q = "SELECT `to`, moveid FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
+        $dataarray = $database->query_return($q);
+        $movementProcIDs = [];
+
+        if ($dataarray && count($dataarray)) {
+            foreach($dataarray as $data) {
+                $tribe = $database->getUserField($database->getVillageField($data['to'], "owner"), "tribe", 0);
+                $database->modifyUnit($data['to'], [$tribe."0"], [3], [1]);
+                
+                //If a settling is canceled, add 750 for each resource type
+                $database->modifyResource($data['to'], 750, 750, 750, 750, 1);
+                $movementProcIDs[] = $data['moveid'];
+            }
+            $database->setMovementProc(implode(', ', $movementProcIDs));
         }
     }
-    
-    $this->pruneResource();
-}
 
     private function sendSettlersComplete() {
         global $database;
@@ -4632,26 +4606,6 @@ private function returnunitsComplete() {
             $database->query($q);
         }
     }
-	
-	// Add to Automation.php - new helper method
-	private function acquireFunctionLock($functionName, $timeout = 5) {
-    global $database;
-    
-    $lockName = "automation_$functionName";
-    $result = mysqli_query($database->dblink, 
-        "SELECT GET_LOCK('$lockName', $timeout) as acquired"
-    );
-    $row = mysqli_fetch_assoc($result);
-    
-    return ($row && $row['acquired'] == 1);
-	}
-
-	private function releaseFunctionLock($functionName) {
-    global $database;
-    
-    $lockName = "automation_$functionName";
-    mysqli_query($database->dblink, "SELECT RELEASE_LOCK('$lockName')");
-	}
 
     private function artefactOfTheFool() {
         global $database;
