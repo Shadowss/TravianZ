@@ -1037,6 +1037,24 @@ class MYSQLi_DB implements IDbConnection {
 		$result = mysqli_query($this->dblink,$q);
 		return $this->mysqli_fetch_all($result);
 	}
+	
+	// Add to Database.php
+	function checkAttackRateLimit($uid, $maxPerMinute = 30) {
+    $uid = (int)$uid;
+    $oneMinuteAgo = time() - 60;
+    
+    // Count recent attacks from this user
+    $q = "SELECT COUNT(*) as cnt FROM " . TB_PREFIX . "movement m
+          JOIN " . TB_PREFIX . "vdata v ON m.from = v.wref
+          WHERE v.owner = $uid 
+          AND m.sort_type = 3 
+          AND m.starttime > $oneMinuteAgo";
+    
+    $result = mysqli_query($this->dblink, $q);
+    $row = mysqli_fetch_assoc($result);
+    
+    return ($row['cnt'] < $maxPerMinute);
+	}
 
 	function getVrefField($ref, $field, $use_cache = true) {
         return $this->getVillage($ref, 0, $use_cache)[$field];

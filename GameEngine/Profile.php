@@ -5,187 +5,292 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       Profile.php                                                 ##
 ##  License:       TravianZ Project                                            ##
+##  Refactor:      Shadow  		                                               ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 
-
 class Profile {
-	public function procProfile($post) {
-		global $session;
-		
-		if(isset($post['ft'])) {
-			switch($post['ft']) {
-				case "p1" :
-					$this->updateProfile($post);
-					break;
-				case "p3" :
-					$this->updateAccount($post);
-					break;
-				case "p4" :
-					$this->setvactionmode($post);
-					break;
-			}
-		}
-		
-		if(isset($post['s']) && $post['s'] == 4) $this->gpack($post);
-	}
 
-	public function procSpecial($get) {
-		global $session;
-		
-		if(isset($get['e'])) {
-			switch($get['e']) {
-				case 2 :
-					$this->removeMeSit($get);
-					break;
-				case 3 :
-					$this->removeSitter($get);
-					break;
-				case 4 :
-					$this->cancelDeleting($get);
-					break;
-			}
-		}
-	}
+    /* ===================================================== */
+    /* ================= MAIN PROCESS ====================== */
+    /* ===================================================== */
 
-	private function updateProfile($post) {
-		global $database, $session;
-		
-		$birthday = $post['jahr'].'-'.$post['monat'].'-'.$post['tag'];
-		$database->submitProfile($session->uid, $database->RemoveXSS($post['mw']), $database->RemoveXSS($post['ort']), $database->RemoveXSS($birthday), $database->RemoveXSS($post['be2']), $database->RemoveXSS($post['be1']));
-		$varray = $database->getProfileVillages($session->uid);
-		
-		for($i = 0; $i < count($varray); $i++){
-			$database->setVillageName($varray[$i]['wref'], $database->RemoveXSS(trim($post['dname'.$i])));
-		}
-		
-		header("Location: spieler.php?uid=".$session->uid);
-		exit;
-	}
+    public function procProfile($post) {
 
-	private function gpack($post) {
-		global $database, $session;
-		
-		$database->gpack($database->RemoveXSS($session->uid),$database->RemoveXSS($post['custom_url']));
-		header("Location: spieler.php?uid=".$session->uid);
-		exit;
-	}
-	
-	/**
-	 * Function to vacation mode - by advocaite and Shadow
-	 * 
-	 * @param array $post The $_POST array
-	 */
+        if(!isset($post['ft'])) return;
 
-	private function setvactionmode($post){
-	    global $database, $session, $form;
+        switch($post['ft']) {
 
-	    if(isset($post['vac']) && $post['vac'] && isset($post['vac_days']) && $post['vac_days'] >= 2 && $post['vac_days'] <= 14){        
-	        unset($_SESSION['wid']);
-			$database->setvacmode($session->uid, $post['vac_days']);
-			$database->activeModify(addslashes($session->username), 1);
-			$database->UpdateOnline("logout");
-			$session->Logout();
-			header("Location: login.php");
-			exit;
-	    }else{
-	    	$form->add("vac", VAC_MODE_WRONG_DAYS);
-	        header("Location: spieler.php?s=".$session->uid);        
-	        exit;
-	    }
-	    
-	}
+            case "p1":
+                $this->updateProfile($post);
+                break;
 
-	/**
-	 * Function to vacation mode - by advocaite and Shadow
-	 * 
-	 * @param array $post The $_POST array
-	 */
+            case "p3":
+                $this->updateAccount($post);
+                break;
 
-	private function updateAccount($post) {
-		global $database, $session, $form;
+            case "p4":
+                $this->setVacationMode($post);
+                break;
+        }
 
-		if(!empty($post['pw1']) && !empty($post['pw2']) && !empty($post['pw3'])){
-			if($post['pw2'] == $post['pw3']){
-				if($database->login($session->username, $post['pw1'])){
-					$database->updateUserField($session->uid, "password", password_hash($post['pw2'], PASSWORD_BCRYPT, ['cost' => 12]), 1);
-				}
-				else $form->addError("pw", LOGIN_PW_ERROR);
-			}
-			else $form->addError("pw", PASS_MISMATCH);
-		}
+        if(isset($post['s']) && (int)$post['s'] === 4) {
+            $this->gpack($post);
+        }
+    }
 
-		if(!empty($post['email_alt']) && !empty($post['email_neu'])){
-			if($post['email_alt'] == $session->userinfo['email']){
-				$database->updateUserField($session->uid, "email", $post['email_neu'], 1);
-			}
-			else $form->addError("email", EMAIL_ERROR);
-		}
-		
-		if(!empty($post['del_pw']) && $post['del']){
-			if(password_verify($post['del_pw'], $session->userinfo['password'])){
-				$database->setDeleting($session->uid, 0);
-			}
-			else $form->addError("del", PASS_MISMATCH);	
-		}
-		
-		if(!empty($post['v1'])){
-			$sitid = $database->getUserField($post['v1'], "id", 1);
-			if($sitid == $session->userinfo['sit1'] || $sitid == $session->userinfo['sit2']){
-				$form->addError("sit", SIT_ERROR);
-			}else if($sitid != $session->uid){
-				if($session->userinfo['sit1'] == 0){
-					$database->updateUserField($session->uid, "sit1", $sitid, 1);
-				}else if($session->userinfo['sit2'] == 0){
-					$database->updateUserField($session->uid, "sit2", $sitid, 1);
-				}
-			}
-		}
-		
-		if($form->returnErrors() > 0){
-			$_SESSION['errorarray'] = $form->getErrors();
-			$_SESSION['valuearray'] = $_POST;
-		}	
-		
-		header("Location: spieler.php?s=3");
-		exit;
-	}
+    public function procSpecial($get) {
 
-	private function removeSitter($get) {
-		global $database,$session;
+        if(!isset($get['e'])) return;
 
-		if($get['a'] == $session->checker) {
-			if($session->userinfo['sit'.$get['type']] == $get['id']) {
-				$database->updateUserField($session->uid,"sit".$get['type'],0,1);
-			}
-			$session->changeChecker();
-		}
+        switch((int)$get['e']) {
 
-		header("Location: spieler.php?s=".$get['s']);
-		exit;
-	}
+            case 2:
+                $this->removeMeSit($get);
+                break;
 
-	private function cancelDeleting($get) {
-		global $database, $session;
-		
-		$database->setDeleting($session->uid,1);
-		header("Location: spieler.php?s=".$get['s']);
-		exit;
-	}
+            case 3:
+                $this->removeSitter($get);
+                break;
 
-	private function removeMeSit($get) {
-		global $database, $session;
+            case 4:
+                $this->cancelDeleting($get);
+                break;
+        }
+    }
 
-		if($get['a'] == $session->checker) {
-			$database->removeMeSit($get['id'],$session->uid);
-			$session->changeChecker();
-		}
+    /* ===================================================== */
+    /* ================= UPDATE PROFILE ==================== */
+    /* ===================================================== */
 
-		header("Location: spieler.php?s=".$get['s']);
-		exit;
-	}
-};
+    private function updateProfile($post) {
+
+        global $database, $session;
+
+        $uid = (int)$session->uid;
+
+        $year  = (int)$post['jahr'];
+        $month = (int)$post['monat'];
+        $day   = (int)$post['tag'];
+
+        $birthday = $year.'-'.$month.'-'.$day;
+
+        $mw  = $database->RemoveXSS(trim($post['mw']));
+        $ort = $database->RemoveXSS(trim($post['ort']));
+        $be2 = $database->RemoveXSS(trim($post['be2']));
+        $be1 = $database->RemoveXSS(trim($post['be1']));
+
+        $database->submitProfile($uid, $mw, $ort, $birthday, $be2, $be1);
+
+        $villages = $database->getProfileVillages($uid);
+
+        if(is_array($villages)) {
+            for($i = 0; $i < count($villages); $i++) {
+
+                if(isset($post['dname'.$i])) {
+                    $name = trim($post['dname'.$i]);
+                    $name = $database->RemoveXSS($name);
+
+                    $database->setVillageName(
+                        (int)$villages[$i]['wref'],
+                        $name
+                    );
+                }
+            }
+        }
+
+        header("Location: spieler.php?uid=".$uid);
+        exit;
+    }
+
+    /* ===================================================== */
+    /* ================= GP PACK =========================== */
+    /* ===================================================== */
+
+    private function gpack($post) {
+
+        global $database, $session;
+
+        $uid = (int)$session->uid;
+
+        if(isset($post['custom_url'])) {
+
+            $url = trim($post['custom_url']);
+            $url = $database->RemoveXSS($url);
+
+            $database->gpack($uid, $url);
+        }
+
+        header("Location: spieler.php?uid=".$uid);
+        exit;
+    }
+
+    /* ===================================================== */
+    /* ================= VACATION MODE ===================== */
+    /* ===================================================== */
+
+    private function setVacationMode($post){
+
+        global $database, $session, $form;
+
+        $days = isset($post['vac_days']) ? (int)$post['vac_days'] : 0;
+
+        if(isset($post['vac']) && $post['vac'] && $days >= 2 && $days <= 14){
+
+            unset($_SESSION['wid']);
+
+            $database->setvacmode((int)$session->uid, $days);
+            $database->activeModify($session->username, 1);
+            $database->UpdateOnline("logout");
+
+            $session->Logout();
+
+            header("Location: login.php");
+            exit;
+        }
+
+        $form->addError("vac", VAC_MODE_WRONG_DAYS);
+
+        header("Location: spieler.php?s=".$session->uid);
+        exit;
+    }
+
+    /* ===================================================== */
+    /* ================= UPDATE ACCOUNT ==================== */
+    /* ===================================================== */
+
+    private function updateAccount($post) {
+
+        global $database, $session, $form;
+
+        $uid = (int)$session->uid;
+
+        /* ---- PASSWORD CHANGE ---- */
+
+        if(!empty($post['pw1']) && !empty($post['pw2']) && !empty($post['pw3'])) {
+
+            if($post['pw2'] === $post['pw3']) {
+
+                if($database->login($session->username, $post['pw1'])) {
+
+                    $hash = password_hash($post['pw2'], PASSWORD_BCRYPT, array('cost' => 12));
+                    $database->updateUserField($uid, "password", $hash, 1);
+
+                } else {
+                    $form->addError("pw", LOGIN_PW_ERROR);
+                }
+
+            } else {
+                $form->addError("pw", PASS_MISMATCH);
+            }
+        }
+
+        /* ---- EMAIL CHANGE ---- */
+
+        if(!empty($post['email_alt']) && !empty($post['email_neu'])) {
+
+            $newEmail = filter_var($post['email_neu'], FILTER_VALIDATE_EMAIL);
+
+            if($post['email_alt'] === $session->userinfo['email'] && $newEmail) {
+                $database->updateUserField($uid, "email", $newEmail, 1);
+            } else {
+                $form->addError("email", EMAIL_ERROR);
+            }
+        }
+
+        /* ---- ACCOUNT DELETE ---- */
+
+        if(!empty($post['del_pw']) && !empty($post['del'])) {
+
+            if(password_verify($post['del_pw'], $session->userinfo['password'])) {
+                $database->setDeleting($uid, 0);
+            } else {
+                $form->addError("del", PASS_MISMATCH);
+            }
+        }
+
+        /* ---- SITTER ADD ---- */
+
+        if(!empty($post['v1'])) {
+
+            $sitID = (int)$database->getUserField($post['v1'], "id", 1);
+
+            if($sitID > 0 && $sitID !== $uid) {
+
+                if($sitID == $session->userinfo['sit1'] ||
+                   $sitID == $session->userinfo['sit2']) {
+
+                    $form->addError("sit", SIT_ERROR);
+
+                } else {
+
+                    if((int)$session->userinfo['sit1'] === 0) {
+                        $database->updateUserField($uid, "sit1", $sitID, 1);
+                    } elseif((int)$session->userinfo['sit2'] === 0) {
+                        $database->updateUserField($uid, "sit2", $sitID, 1);
+                    }
+                }
+            }
+        }
+
+        if($form->returnErrors() > 0) {
+            $_SESSION['errorarray'] = $form->getErrors();
+            $_SESSION['valuearray'] = $_POST;
+        }
+
+        header("Location: spieler.php?s=3");
+        exit;
+    }
+
+    /* ===================================================== */
+    /* ================= REMOVE SITTER ===================== */
+    /* ===================================================== */
+
+    private function removeSitter($get) {
+
+        global $database, $session;
+
+        $type = isset($get['type']) ? (int)$get['type'] : 0;
+        $id   = isset($get['id']) ? (int)$get['id'] : 0;
+
+        if(isset($get['a']) && $get['a'] == $session->checker) {
+
+            if((int)$session->userinfo['sit'.$type] === $id) {
+                $database->updateUserField($session->uid, "sit".$type, 0, 1);
+            }
+
+            $session->changeChecker();
+        }
+
+        header("Location: spieler.php?s=".(int)$get['s']);
+        exit;
+    }
+
+    private function cancelDeleting($get) {
+
+        global $database, $session;
+
+        $database->setDeleting((int)$session->uid, 1);
+
+        header("Location: spieler.php?s=".(int)$get['s']);
+        exit;
+    }
+
+    private function removeMeSit($get) {
+
+        global $database, $session;
+
+        if(isset($get['a']) && $get['a'] == $session->checker) {
+
+            $database->removeMeSit((int)$get['id'], (int)$session->uid);
+            $session->changeChecker();
+        }
+
+        header("Location: spieler.php?s=".(int)$get['s']);
+        exit;
+    }
+
+}
 
 $profile = new Profile;
-?>

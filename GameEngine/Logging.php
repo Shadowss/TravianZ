@@ -5,106 +5,187 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       Logging.php                                                 ##
 ##  License:       TravianZ Project                                            ##
+##  Refactor by:   Shadow                                                      ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 
 class Logging {
 
-	public function addIllegal($uid,$ref,$type) {
-		global $database;
-		list($uid,$ref,$type) = $database->escape_input((int) $uid,$ref,$type);
-		if(LOG_ILLEGAL) {
-			$log = "Attempted to ";
-			switch($type) {
-				case 1:
-				$log .= "access village $ref";
-				break;
-			}
-			$q = "Insert into ".TB_PREFIX."illegal_log SET user = $uid, log = '$log'";
-			$database->query($q);
-		}
-	}
+    /* ==============================
+       INTERNAL SAFE EXECUTOR
+    ============================== */
 
-	public function addLoginLog($id,$ip) {
-		global $database;
-		list($id,$ip) = $database->escape_input((int) $id,$ip);
-		if(LOG_LOGIN) {
-			$q = "Insert into ".TB_PREFIX."login_log SET uid = $id, ip = '".$_SERVER['REMOTE_ADDR']."'";
-			$database->query($q);
-		}
-	}
+    private function safeInsert($query, $types, $params) {
+        global $database;
 
-	public function addBuildLog($wid,$building,$level,$type) {
-		global $database;
-		list($wid,$building,$level,$type) = $database->escape_input((int) $wid,$building,$level,$type);
-		if(LOG_BUILD) {
-			if($type) {
-				$log = "Start Construction of ";
-			}
-			else {
-				$log = "Start Upgrade of ";
-			}
-			$log .= $building." to level ".$level;
-			$q = "Insert into ".TB_PREFIX."build_log SET wid = $wid, log = '$log'";
-			$database->query($q);
-		}
-	}
+        $stmt = mysqli_prepare($database->dblink, $query);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, $types, ...$params);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+        }
+    }
 
-	public function addTechLog($wid,$tech,$level) {
-		global $database;
-		list($wid,$tech,$level) = $database->escape_input((int) $wid,$tech,$level);
-		if(LOG_TECH) {
-			$log = "Upgrading of tech ".$tech." to level ".$level;
-			$q = "Insert into ".TB_PREFIX."tech_log SET wid = $wid, log = '$log'";
-			$database->query($q);
-		}
-	}
+    /* ==============================
+       ILLEGAL LOG
+    ============================== */
 
-	public function goldFinLog($wid) {
-		global $database;
-		list($wid) = $database->escape_input((int) $wid);
-		if(LOG_GOLD_FIN) {
-			$log = "Finish construction and research with gold";
-			$q = "Insert into ".TB_PREFIX."gold_fin_log values (0,$wid,'$log')";
-			$database->query($q);
-		}
-	}
+    public function addIllegal($uid, $ref, $type) {
+        if (!LOG_ILLEGAL) return;
 
-	public function addAdminLog() {
-		global $database;
-	}
+        $uid = (int)$uid;
+        $ref = (string)$ref;
+        $type = (int)$type;
 
-	public function addMarketLog($wid,$type,$data) {
-		global $database;
-		list($wid,$type,$data) = $database->escape_input((int) $wid,$type,$data);
-		if(LOG_MARKET) {
-			if($type == 1) {
-				$log = "Sent ".$data[0].",".$data[1].",".$data[2].",".$data[3]." to village ".$data[4];
-			}
-			else if($type == 2) {
-				$log = "Traded resource between ".$wid." and ".$data[0]." market ref is ".$data[1];
-			}
-			$q = "Insert into ".TB_PREFIX."market_log SET wid = $wid, log = '$log'";
-			$database->query($q);
-		}
-	}
+        $log = "Attempted to ";
+        if ($type === 1) {
+            $log .= "access village " . $ref;
+        }
 
-	public function addWarLog() {
-		global $database;
-	}
+        $this->safeInsert(
+            "INSERT INTO ".TB_PREFIX."illegal_log (user, log) VALUES (?, ?)",
+            "is",
+            array($uid, $log)
+        );
+    }
 
-	public function clearLogs() {
-		global $database;
-	}
+    /* ==============================
+       LOGIN LOG
+    ============================== */
 
-	public static function debug($debug_info, $time = 0) {
-		global $database, $generator;
-		list($debug_info) = $database->escape_input($debug_info);
-		
-		echo '<script>console.log('.json_encode(($time > 0 ? "[".$generator->procMtime($time)[1]."] " : "").$debug_info).')</script>';
-	}
-};
+    public function addLoginLog($id, $ip) {
+        if (!LOG_LOGIN) return;
 
-$logging = new Logging;
-?>
+        $id = (int)$id;
+        $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+
+        $this->safeInsert(
+            "INSERT INTO ".TB_PREFIX."login_log (uid, ip) VALUES (?, ?)",
+            "is",
+            array($id, $ip)
+        );
+    }
+
+    /* ==============================
+       BUILD LOG
+    ============================== */
+
+    public function addBuildLog($wid, $building, $level, $type) {
+        if (!LOG_BUILD) return;
+
+        $wid = (int)$wid;
+        $building = (string)$building;
+        $level = (int)$level;
+        $type = (int)$type;
+
+        $log = $type
+            ? "Start Construction of "
+            : "Start Upgrade of ";
+
+        $log .= $building . " to level " . $level;
+
+        $this->safeInsert(
+            "INSERT INTO ".TB_PREFIX."build_log (wid, log) VALUES (?, ?)",
+            "is",
+            array($wid, $log)
+        );
+    }
+
+    /* ==============================
+       TECH LOG
+    ============================== */
+
+    public function addTechLog($wid, $tech, $level) {
+        if (!LOG_TECH) return;
+
+        $wid = (int)$wid;
+        $tech = (string)$tech;
+        $level = (int)$level;
+
+        $log = "Upgrading of tech " . $tech . " to level " . $level;
+
+        $this->safeInsert(
+            "INSERT INTO ".TB_PREFIX."tech_log (wid, log) VALUES (?, ?)",
+            "is",
+            array($wid, $log)
+        );
+    }
+
+    /* ==============================
+       GOLD FINISH LOG
+    ============================== */
+
+    public function goldFinLog($wid) {
+        if (!LOG_GOLD_FIN) return;
+
+        $wid = (int)$wid;
+        $log = "Finish construction and research with gold";
+
+        $this->safeInsert(
+            "INSERT INTO ".TB_PREFIX."gold_fin_log (wid, log) VALUES (?, ?)",
+            "is",
+            array($wid, $log)
+        );
+    }
+
+    /* ==============================
+       MARKET LOG
+    ============================== */
+
+    public function addMarketLog($wid, $type, $data) {
+        if (!LOG_MARKET) return;
+
+        $wid = (int)$wid;
+        $type = (int)$type;
+
+        if (!is_array($data)) return;
+
+        if ($type === 1) {
+            $log = "Sent "
+                . (int)$data[0] . ","
+                . (int)$data[1] . ","
+                . (int)$data[2] . ","
+                . (int)$data[3]
+                . " to village " . (int)$data[4];
+        }
+        elseif ($type === 2) {
+            $log = "Traded resource between "
+                . $wid . " and "
+                . (int)$data[0]
+                . " market ref is "
+                . (int)$data[1];
+        } else {
+            return;
+        }
+
+        $this->safeInsert(
+            "INSERT INTO ".TB_PREFIX."market_log (wid, log) VALUES (?, ?)",
+            "is",
+            array($wid, $log)
+        );
+    }
+
+    /* ==============================
+       DEBUG (SAFE)
+    ============================== */
+
+    public static function debug($debug_info, $time = 0) {
+        global $generator;
+
+        $prefix = '';
+
+        if ($time > 0 && isset($generator)) {
+            $t = $generator->procMtime($time);
+            if (is_array($t) && isset($t[1])) {
+                $prefix = "[" . $t[1] . "] ";
+            }
+        }
+
+        $safe = json_encode($prefix . (string)$debug_info, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+
+        echo "<script>console.log(" . $safe . ");</script>";
+    }
+}
+
+$logging = new Logging();

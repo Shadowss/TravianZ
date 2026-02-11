@@ -9,67 +9,107 @@
 ##                                                                             ##
 #################################################################################
 
-class Form {
+class Form
+{
+    private array $errorarray = [];
+    public array $valuearray = [];
+    private int $errorcount = 0;
 
-	private $errorarray = array();
-	public $valuearray = array();
-	private $errorcount;
+    public function __construct()
+    {
+        if (
+            isset($_SESSION['errorarray'], $_SESSION['valuearray']) &&
+            is_array($_SESSION['errorarray']) &&
+            is_array($_SESSION['valuearray'])
+        ) {
 
-	public function __construct() {
-		if(isset($_SESSION['errorarray']) && isset($_SESSION['valuearray'])) {
-			$this->errorarray = $_SESSION['errorarray'];
-			$this->valuearray = $_SESSION['valuearray'];
-			$this->errorcount = count($this->errorarray);
+            // Defensive copy (avoid reference issues)
+            $this->errorarray = $this->sanitizeArray($_SESSION['errorarray']);
+            $this->valuearray = $this->sanitizeArray($_SESSION['valuearray']);
+            $this->errorcount = count($this->errorarray);
 
-			unset($_SESSION['errorarray']);
-			unset($_SESSION['valuearray']);
-		}
-		else $this->errorcount = 0;
-	}
+            unset($_SESSION['errorarray'], $_SESSION['valuearray']);
+        }
+    }
 
-	public function addError($field,$error) {
-		$this->errorarray[$field] = $error;
-		$this->errorcount = count($this->errorarray);
-	}
+    /* ==============================
+       INTERNAL SANITIZER
+    ============================== */
 
-	public function getError($field) {
-		if(array_key_exists($field,$this->errorarray)) {
-			return $this->errorarray[$field];
-		}
-		else return "";
-	}
+    private function sanitizeArray(array $array): array
+    {
+        $clean = [];
 
-	public function getValue($field) {
-		if(array_key_exists($field,$this->valuearray)) {
-			return $this->valuearray[$field];
-		}
-		else return "";
-	}
-	
-	public function setValue($field, $value) {
-        $this->valuearray[$field] = $value;
-	}
+        foreach ($array as $key => $value) {
 
-	public function getDiff($field,$cookie) {
-		if(array_key_exists($field,$this->valuearray) && $this->valuearray[$field] != $cookie) {
-			return $this->valuearray[$field];
-		}
-		else return $cookie;
-	}
+            // Force string keys
+            $safeKey = (string)$key;
 
-	public function getRadio($field,$value) {
-		if(array_key_exists($field,$this->valuearray) && $this->valuearray[$field] == $value) {
-			return "checked";
-		}
-		else return "";
-	}
+            // Prevent object injection / unexpected types
+            if (is_scalar($value) || is_null($value)) {
+                $clean[$safeKey] = $value;
+            } else {
+                $clean[$safeKey] = '';
+            }
+        }
 
-	public function returnErrors() {
-		return $this->errorcount;
-	}
+        return $clean;
+    }
 
-	public function getErrors() {
-		return $this->errorarray;
-	}
-};
-?>
+    /* ==============================
+       PUBLIC API (UNCHANGED BEHAVIOR)
+    ============================== */
+
+    public function addError($field, $error): void
+    {
+        $this->errorarray[(string)$field] = $error;
+        $this->errorcount = count($this->errorarray);
+    }
+
+    public function getError($field)
+    {
+        return $this->errorarray[(string)$field] ?? "";
+    }
+
+    public function getValue($field)
+    {
+        return $this->valuearray[(string)$field] ?? "";
+    }
+
+    public function setValue($field, $value): void
+    {
+        $this->valuearray[(string)$field] = $value;
+    }
+
+    public function getDiff($field, $cookie)
+    {
+        $field = (string)$field;
+
+        if (isset($this->valuearray[$field]) && $this->valuearray[$field] != $cookie) {
+            return $this->valuearray[$field];
+        }
+
+        return $cookie;
+    }
+
+    public function getRadio($field, $value)
+    {
+        $field = (string)$field;
+
+        if (isset($this->valuearray[$field]) && $this->valuearray[$field] == $value) {
+            return "checked";
+        }
+
+        return "";
+    }
+
+    public function returnErrors(): int
+    {
+        return $this->errorcount;
+    }
+
+    public function getErrors(): array
+    {
+        return $this->errorarray;
+    }
+}
