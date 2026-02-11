@@ -1,12 +1,11 @@
 [![Code Triagers Badge](https://www.codetriage.com/shadowss/travianz/badges/users.svg)](https://www.codetriage.com/shadowss/travianz)
-[![Maintenance](https://img.shields.io/maintenance/yes/2024.svg)](https://github.com/Shadowss/TravianZ)
+[![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub Release](https://img.shields.io/github/release/Shadowss/TravianZ/all.svg)](https://github.com/Shadowss/TravianZ)
 [![Github All Releases](https://img.shields.io/github/downloads/Shadowss/TravianZ/total.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub contributors](https://img.shields.io/github/contributors/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
 [![license](https://img.shields.io/github/license/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub last commit](https://img.shields.io/github/last-commit/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
 [![Proudly Coded in PHPStorm](https://img.shields.io/badge/coded%20in-PHPStorm-BD5CF3.svg)](https://www.jetbrains.com/buy/opensource/?product=phpstorm)
-[![Donate to this project on LiberaPay](https://img.shields.io/badge/LiberaPay-donate-F6C915.svg)](https://liberapay.com/Shadowss/donate)
 [![Join the chat at https://gitter.im/TravianZ-V8/Lobby](https://badges.gitter.im/TravianZ-V8/Lobby.svg)](https://gitter.im/TravianZ-V8/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Watch how this was made on YouTube](https://img.shields.io/badge/The%20making%20of...-YouTube-FF0000.svg)](https://www.youtube.com/watch?v=1XiHhpGUmQg&list=PLzV5avt1FFHorlIeoL9YX0pdb9bj-FO84)
 ======
@@ -17,12 +16,32 @@
 [![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/cata7007)
 ======
 
-TravianZ Version **v.8.3.5**
+TravianZ Version **v.8.3.5** - BETA 1
 ======
 **Note:** this game is still in a pre-release state, although at this point it is very playable, tested and found to be fairly stable
 
-**WARNING:** please note that ***this is in no way an upgrade*** from the old 8.3.2 version, so please ***do not try to just copy your files over***, 
+**WARNING:** please note that ***this is in no way an upgrade*** from the old 8.3.2 version, so please ***do not try to just copy your files over***,
 since the installer logic has changed and you would just crash your old version
+
+**Docker Quick Start:**
+
+Get up and running quickly with Docker:
+
+```bash
+# Clone the repository
+git clone https://github.com/Shadowss/TravianZ.git
+cd TravianZ
+
+# Copy environment file
+cp .env.example .env
+
+# Start containers
+docker-compose up -d
+
+# Open browser to http://localhost:8080/install
+```
+
+For detailed Docker setup instructions, see [DOCKER_README.md](DOCKER_README.md)
 
 **Quick links:**
 * [Download and Updates](https://github.com/Shadowss/TravianZ) &raquo;&raquo; https://github.com/Shadowss/TravianZ
@@ -54,6 +73,7 @@ or you have a feature request to be included in the play.
 
 **The team**
 * [Shadowss](https://github.com/Shadowss) - project owner and an occasional developer / tester
+* [lietuvis10](https://github.com/lietuvis10) - active developer
 * [iopietro](https://github.com/iopietro) - alumni developer
 * [AL-Kateb](https://github.com/AL-Kateb) - alumni developer
 * [martinambrus](https://github.com/martinambrus) - alumni developer

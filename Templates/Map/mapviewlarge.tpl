@@ -15,6 +15,7 @@
 ##                                                                             ##
 #################################################################################
 
+
 if(isset($_GET['z'])){
     $currentcoor = $database->getCoor($_GET['z']);
     $y = $currentcoor['y'];
@@ -316,8 +317,7 @@ $targetalliance=$donnees["aliance_id"];
 $friendarray=$database->getAllianceAlly($donnees["aliance_id"],1);
 $neutralarray=$database->getAllianceAlly($donnees["aliance_id"],2);
 $enemyarray=$database->getAllianceWar2($donnees["aliance_id"]);
-//var_dump($friendarray);
-//echo "(".$friendarray[0]['alli1'].">0 or ".$donnees["aliance_id"].">0) and (".$friendarray[0]['alli1']."==".$donnees["aliance_id"]." or ".$friendarray[0]['alli2']."==".$donnees["aliance_id"].") and (".$session->alliance." != ".$targetalliance." and ".$session->alliance." and ".$targetalliance.")<br>\n";
+
 if (isset($friendarray[0])) {
 	$friend = (($friendarray[0]['alli1']>0 and $friendarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($friendarray[0]['alli1']==$session->alliance or $friendarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
 }else $friend='0';
@@ -328,11 +328,6 @@ if (isset($neutralarray[0])) {
 	$neutral = (($neutralarray[0]['alli1']>0 and $neutralarray[0]['alli2']>0 and $donnees["aliance_id"]>0) and ($neutralarray[0]['alli1']==$session->alliance or $neutralarray[0]['alli2']==$session->alliance) and ($session->alliance != $targetalliance and $session->alliance and $targetalliance)) ? '1':'0';
 }else $neutral='0';
 
-//echo $targetalliance.">>";
-//var_dump($friendarray);
-//echo"|||<br>";
-//var_dump($arraydiplo);
-//echo in_array($targetalliance,$friendarray);
 	$image = ($donnees['map_occupied'] == 1 && $donnees['map_fieldtype'] > 0)?(($donnees['ville_user'] == $session->uid)? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b30': 'b20' :'b10' : 'b00') : (($targetalliance != 0)? ($friend==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b31': 'b21' :'b11' : 'b01') : ($war==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b32': 'b22' :'b12' : 'b02') : ($neutral==1? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b35': 'b25' :'b15' : 'b05') : ($targetalliance == $session->alliance? ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b33': 'b23' :'b13' : 'b03') : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))))) : ($donnees['ville_pop']>=100? $donnees['ville_pop']>= 250?$donnees['ville_pop']>=500? 'b34': 'b24' :'b14' : 'b04'))) : $donnees['map_image'];
 
     // Map Attacks by Shadow and MisterX - Fixed by iopietro
@@ -441,6 +436,7 @@ if (isset($neutralarray[0])) {
 						m_c.ad = [[<?php echo $map_js?>];
 						m_c.z = {"x":<?php echo $x ?>,"y":<?php echo $y ?>};
 						m_c.size = 13;
+						m_c.world_max = <?php echo WORLD_MAX; ?>; //lietuvis10 fix
 						var mdim = {"x":13,"y":13,"rad":6}
 						var mmode = 0;
 						function init_local(){map_init();}
