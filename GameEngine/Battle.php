@@ -279,18 +279,20 @@ class Battle {
             $cdp += $datadefScout['cdp'];
             $involve = $datadefScout['involve'];
             if(!$detected && $datadefScout['detect']) $detected = $datadefScout['detect'];
-        }else{
+       }else{
             $datadef = $this->getDataDef($Defender, $def_ab);
-            $dp += $datadef['dp'];
-            $cdp += $datadef['cdp'];
+            $own_dp = $datadef['dp'];
+            $own_cdp = $datadef['cdp'];
             $involve = $datadef['involve'];
             if(isset($Defender['hero']) && $Defender['hero'] != 0){
                 $units['Def_unit']['hero'] = $Defender['hero'];
-                $cdp += $defenderhero['dc'];
-                $dp += $defenderhero['di'];
-                $dp *= $defenderhero['db'];
-                $cdp *= $defenderhero['db'];
+                $own_cdp += $defenderhero['dc'];
+                $own_dp += $defenderhero['di'];
+                $own_dp *= $defenderhero['db'];
+                $own_cdp *= $defenderhero['db'];
             }
+            $dp += $own_dp;
+            $cdp += $own_cdp;
         }
         $DefendersAll = (!is_null($defReinforcements) ? $database->getEnforceVillage($DefenderWref, 0) : $defReinforcements);
 
@@ -329,21 +331,23 @@ class Battle {
                     $cdp += $datadefScout['cdp'];
                     $involve = $datadefScout['involve'];
                     if(!$detected && $datadefScout['detect']) $detected = $datadefScout['detect'];
-                }else{
+               }else{
                     $datadef = $this->getDataDef($defenders, $def_ab);
-                    $dp += $datadef['dp'];
-                    $cdp += $datadef['cdp'];
-                    $involve = $datadef['involve'];
-                }
-                $reinfowner = $database->getVillageField($fromvillage, "owner");
-                $defhero = $this->getBattleHero($reinfowner);
-                
-                //calculate def hero from enforcement
-                if($defenders['hero'] != 0){
-                    $cdp += $defhero['dc'];
-                    $dp += $defhero['di'];
-                    $dp *= $defhero['db'];
-                    $cdp *= $defhero['db'];
+                    $reinf_dp = $datadef['dp'];
+                    $reinf_cdp = $datadef['cdp'];
+                    $involve += $datadef['involve'];
+                    $reinfowner = $database->getVillageField($fromvillage, "owner");
+                    $defhero = $this->getBattleHero($reinfowner);
+
+                    
+                    if($defenders['hero'] != 0 && $type != 1){
+                        $reinf_cdp += $defhero['dc'];
+                        $reinf_dp += $defhero['di'];
+                        $reinf_dp *= $defhero['db'];
+                        $reinf_cdp *= $defhero['db'];
+                    }
+                    $dp += $reinf_dp;
+                    $cdp += $reinf_cdp;
                 }
             }
         }
