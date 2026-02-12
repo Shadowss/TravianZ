@@ -25,7 +25,7 @@ include("alli_menu.tpl");
 								<?php
                                 foreach($memberlist as $member){
                                     //NOT WORKING IF I ACTIVATE THIS LINE 
-									if($member['id'] != $session->uid && !$database->isAllianceOwner($member['id'])){
+					//if($member['id'] != $session->uid && !$database->isAllianceOwner($member['id'])){
                                         echo "<option value=".$member['id'].">".$member['username']."</option>";
                                     }
                                 }

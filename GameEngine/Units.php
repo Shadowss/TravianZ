@@ -310,15 +310,7 @@ class Units {
             
             $rallyPointLevel = ($village->resarray)['f39'];
             $invalidBuildings = [];
-			
-			//Add Rate Limiting per Player - RECOMMENDED
-            if (!$database->checkAttackRateLimit($session->uid, 30)) {
-			$form->addError("error", "Too many attacks. Please wait.");
-			$_SESSION['errorarray'] = $form->getErrors();
-			header("Location: a2b.php");
-			exit;
-			//Add Rate Limiting per Player - RECOMMENDED
-}
+            
             // fill the array with the invalid buildings
             if($rallyPointLevel >= 3 && $rallyPointLevel < 5){
                 for($i = 1; $i <= 37; $i++){
