@@ -722,8 +722,10 @@ class Automation {
             
             $newLevel = $battle->calculateNewBuildingLevel($tblevel, $catapultsDamage / ($twoRowsCatapultSetup ? 2 : 1));
 
-            //If that building was present in the building queue, we have to modify his level or remove it
-            $database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel], $tribe);
+            //fix: Only modify build queue if actual damage was dealt
+			if ($newLevel < $tblevel) {
+				$database->modifyBData($data['to'], $tbid, [$newLevel, $tblevel], $tribe);
+			}
             
             // building/field destroyed
             if ($newLevel == 0){       
