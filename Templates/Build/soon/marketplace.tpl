@@ -3,7 +3,7 @@
 		<tbody><tr>
 			<td class="desc"><?php echo MARKETPLACE_DESC ?></td>
 			<td rowspan="3" class="bimg">
-				<a href="#" onClick="return Popup(24,4);">
+				<a href="#" onClick="return Popup(17,4);">
 				<img class="building g17" src="img/x.gif" alt="<?php echo MARKETPLACE ?>" title="<?php echo MARKETPLACE ?>" /></a>
 			</td>
 		</tr>
