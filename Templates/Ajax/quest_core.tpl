@@ -65,6 +65,7 @@ if (isset($qact)){
 			//Get reward: Resources: Every 24 hours (1 speed)  24/speed=hours
 			//Gold: 25 gold
 		case 'skip':
+			if ($check_quest != 0) break;
 			$database->updateUserField($_SESSION['username'],'quest','90',0);
 			$_SESSION['qst']= 90;
 			break;
