@@ -15,6 +15,13 @@ include_once("GameEngine/Account.php");
 AccessLogger::logRequest();
 
 $max_per_pass = 1000;
+
+// Default flow flags used later in template conditions.
+$NextStep = false;
+$NextStep2 = false;
+$done = false;
+$Interupt = false;
+
 if (mysqli_num_rows(mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE access = 9 AND id = ".$session->uid)) != '1') die("Hacking attempt!");
 
 if(isset($_GET['del'])){

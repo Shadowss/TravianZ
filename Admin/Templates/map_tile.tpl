@@ -13,6 +13,7 @@
 #################################################################################
 
 function get_map_tile_info($coord_x, $coord_y){ // todo mv to queries file
+  $tbp = TB_PREFIX;
   $q = 'SELECT map_data.`id` AS village_id, map_data.`fieldtype`, map_data.`oasistype`, map_data.`occupied`, map_data.`image`, '.
    'oasis_data.`type`, '.
    'CASE '.
@@ -21,10 +22,10 @@ function get_map_tile_info($coord_x, $coord_y){ // todo mv to queries file
      'ELSE village_data.`owner` '.
    'END AS owner_id, '.
    'u.`username` '.
-   'FROM (SELECT * FROM `s1_wdata` WHERE `x` = '.$coord_x.' AND `y` = '.$coord_y.') AS map_data '.
-   'LEFT JOIN `s1_odata` AS oasis_data ON map_data.`id` = oasis_data.`wref` '.
-   'LEFT JOIN `s1_vdata` AS village_data ON village_data.`wref` = map_data.`id` '.
-   'LEFT JOIN s1_users AS u ON u.`id` = COALESCE(oasis_data.`owner`, village_data.`owner`, 0);'; // todo check this db tables fields -- del doublings like oasistype = '2' and image = 'o2'
+   'FROM (SELECT * FROM `'.$tbp.'wdata` WHERE `x` = '.$coord_x.' AND `y` = '.$coord_y.') AS map_data '.
+   'LEFT JOIN `'.$tbp.'odata` AS oasis_data ON map_data.`id` = oasis_data.`wref` '.
+   'LEFT JOIN `'.$tbp.'vdata` AS village_data ON village_data.`wref` = map_data.`id` '.
+   'LEFT JOIN `'.$tbp.'users` AS u ON u.`id` = COALESCE(oasis_data.`owner`, village_data.`owner`, 0);'; // todo check this db tables fields -- del doublings like oasistype = '2' and image = 'o2'
   $result = mysqli_query($GLOBALS['link'], $q);
   return mysqli_fetch_assoc($result);
 }
