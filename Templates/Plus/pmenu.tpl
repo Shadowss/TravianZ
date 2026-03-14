@@ -6,7 +6,7 @@
         if(!isset($_GET['id']) && @(basename($_SERVER['REQUEST_URI']) !== 'a2b2.php')) {
         	echo "class=\"selected\"";
         }
-        if(isset($_GET['id']) && ($_GET['id'] == 1) || strlen($_GET['id']) === 3) {
+        if(isset($_GET['id']) && (($_GET['id'] == 1) || strlen((string)$_GET['id']) === 3)) {
         	echo "class=\"selected\"";
         }
 

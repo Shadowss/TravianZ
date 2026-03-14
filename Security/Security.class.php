@@ -71,13 +71,15 @@ class Security
         if(self::$instance === NULL)
         {
             // Check for magic quotes
-            if(get_magic_quotes_runtime())
+            if(function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime())
             {
                 // Dear lord!! This is bad and deprected. Sort it out ;)
-                set_magic_quotes_runtime(0);
+                if(function_exists('set_magic_quotes_runtime')) {
+                    set_magic_quotes_runtime(0);
+                }
             }
             
-            if(get_magic_quotes_gpc())
+            if(function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc())
             {
                 // This is also bad and deprected. See http://php.net/magic_quotes for more information.
                 $this->magic_quotes_gpc = TRUE;

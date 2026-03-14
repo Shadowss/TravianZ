@@ -24,7 +24,7 @@ class Units {
 
             switch($post['c']) {
                 case 1:
-                	if (isset($post['a']) && $post['a'] == 533374) $this->sendTroops($post);
+                    if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
                 	else
                 	{	
                         $post = $this->loadUnits($post);
@@ -51,7 +51,7 @@ class Units {
                     break;
                     
                 case 4:
-                    if (isset($post['a']) && $post['a'] == 533374) $this->sendTroops($post);
+                    if (isset($post['a']) && $post['a'] == 533374 && empty($post['disabled'])) $this->sendTroops($post);
                     else
                     {
                         $post = $this->loadUnits($post);
@@ -97,12 +97,24 @@ class Units {
     
     public function checkErrors(&$post){
         global $database, $village, $session, $generator;
+
+        if(isset($post['x'])) $post['x'] = trim($post['x']);
+        if(isset($post['y'])) $post['y'] = trim($post['y']);
+
+        if(isset($post['x']) && isset($post['y']) && $post['x'] !== "" && $post['y'] !== ""){
+            if(!preg_match('/^-?\d+$/', $post['x']) || !preg_match('/^-?\d+$/', $post['y'])) return "Invalid coordinates";
+
+            $post['x'] = (int) $post['x'];
+            $post['y'] = (int) $post['y'];
+
+            if(abs($post['x']) > WORLD_MAX || abs($post['y']) > WORLD_MAX) return "Coordinates do not exist";
+        }
         
         // Search by town name
         // Coordinates and look confirm name people
         if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") {
             $vid = $database->getVilWref($post['x'], $post['y']);
-            unset($post['dname'], $post['dname']);
+            unset($post['dname']);
         }
         else if(isset($post['dname']) && !empty($post['dname'])) $vid = $database->getVillageByName(stripslashes($post['dname']));
         

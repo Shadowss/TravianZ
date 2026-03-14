@@ -52,6 +52,22 @@ $datetimedp = $golds['dp'];
 // Retrieve the current date/time
 $date2 = strtotime("NOW");
 
+function formatRemainingTime($endTimestamp, $nowTimestamp) {
+    $remaining = (int)$endTimestamp - (int)$nowTimestamp;
+    if ($remaining <= 0) {
+        return '';
+    }
+
+    $days = intdiv($remaining, 86400);
+    $remaining %= 86400;
+    $hours = intdiv($remaining, 3600);
+    $remaining %= 3600;
+    $mins = intdiv($remaining, 60);
+    $secs = $remaining % 60;
+
+    return 'Remaining: <b>'.$days.'</b> days <b>'.$hours.'</b> hours <b>'.$mins.'</b> mins <b>'.$secs.'</b> secs (until '.date('H:i:s', (int)$endTimestamp).')';
+}
+
 if ($datetimep == 0) echo "get PLUS<br>";
 else 
 {
@@ -59,17 +75,7 @@ else
         print "Your PLUS advantage has ended.<br>";
         mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "users set plus = '0' where `id`='" . $session->uid . "'") or die(mysqli_error($database->dblink));
     } else {
-        
-        $holdtotmin = (($datetimep - $date2) / 60);
-        $holdtothr = (($datetimep - $date2) / 3600);
-        $holdtotday = intval(($datetimep - $date2) / 86400);
-        echo "<font color='#B3B3B3' size='1'>Remaining: <b>" . $holdtotday . "</b> days";
-        
-        $holdhr = intval($holdtothr - ($holdtotday * 24));
-        echo " <b>" . ($holdhr) . "</b> hours ";
-        
-        $holdmr = intval($holdtotmin - (($holdhr * 60) + ($holdtotday * 1440)));
-        echo "<b> " . ($holdmr) . "</b> mins</font>";
+        echo "<font color='#B3B3B3' size='1'>" . formatRemainingTime($datetimep, $date2) . "</font>";
     }
 }
     ?>
@@ -120,23 +126,8 @@ if (PLUS_TIME >= 86400) {
 <?php
 
 $tl_b1 = $golds['b1'];
-if ($tl_b1 < $date2) {
-    print " ";
-} else {
-    $holdtotmin1 = (($tl_b1 - $date2) / 60);
-    $holdtothr1 = (($tl_b1 - $date2) / 3600);
-    $holdtotday1 = intval(($tl_b1 - $date2) / 86400);
-    $holdhr1 = intval($holdtothr1 - ($holdtotday1 * 24));
-    $holdmr1 = intval($holdtotmin1 - (($holdhr1 * 60) + ($holdtotday1 * 1440)));
-}
-
-if ($tl_b1 < $date2) {
-    print " ";
-} else {
-    
-    echo "<font color='#B3B3B3' size='1'>Remaining <b> " . $holdtotday1 . "</b> days ";
-    echo "<b>  " . ($holdhr1) . "</b> hours ";
-    echo "<b>  " . ($holdmr1) . "</b> mins</font> ";
+if ($tl_b1 >= $date2) {
+    echo "<font color='#B3B3B3' size='1'>" . formatRemainingTime($tl_b1, $date2) . "</font> ";
 }
 ?>
 &nbsp;    </span>
@@ -189,23 +180,8 @@ if ($session->access != BANNED) {
 <?php
 
 $tl_b2 = $golds['b2'];
-if ($tl_b2 < $date2) {
-    print " ";
-} else {
-    $holdtotmin2 = (($tl_b2 - $date2) / 60);
-    $holdtothr2 = (($tl_b2 - $date2) / 3600);
-    $holdtotday2 = intval(($tl_b2 - $date2) / 86400);
-    $holdhr2 = intval($holdtothr2 - ($holdtotday2 * 24));
-    $holdmr2 = intval($holdtotmin2 - (($holdhr2 * 60) + ($holdtotday2 * 1440)));
-}
-
-if ($tl_b2 < $date2) {
-    print " ";
-} else {
-    
-    echo "<font color='#B3B3B3' size='1'>Remaining: <b> " . $holdtotday2 . "</b> days ";
-    echo "<b>  " . ($holdhr2) . "</b> hours ";
-    echo "<b>  " . ($holdmr2) . "</b> mins<font>";
+if ($tl_b2 >= $date2) {
+    echo "<font color='#B3B3B3' size='1'>" . formatRemainingTime($tl_b2, $date2) . "</font>";
 }
 ?>
 &nbsp;    </span>
@@ -259,23 +235,8 @@ if ($session->access != BANNED) {
 <?php
 
 $tl_b3 = $golds['b3'];
-if ($tl_b3 < $date2) {
-    print " ";
-} else {
-    $holdtotmin3 = (($tl_b3 - $date2) / 60);
-    $holdtothr3 = (($tl_b3 - $date2) / 3600);
-    $holdtotday3 = intval(($tl_b3 - $date2) / 86400);
-    $holdhr3 = intval($holdtothr3 - ($holdtotday3 * 24));
-    $holdmr3 = intval($holdtotmin3 - (($holdhr3 * 60) + ($holdtotday3 * 1440)));
-}
-
-if ($tl_b3 < $date2) {
-    print " ";
-} else {
-    
-    echo "<font color='#B3B3B3' size='1'>Remaining: <b> " . $holdtotday3 . "</b> days ";
-    echo "<b>  " . ($holdhr3) . "</b> hours ";
-    echo "<b>  " . ($holdmr3) . "</b> mins</font>";
+if ($tl_b3 >= $date2) {
+    echo "<font color='#B3B3B3' size='1'>" . formatRemainingTime($tl_b3, $date2) . "</font>";
 }
 ?>
 &nbsp;    </span>
@@ -327,23 +288,8 @@ if ($session->access != BANNED) {
 <?php
 
 $tl_b4 = $golds['b4'];
-if ($tl_b4 < $date2) {
-    print " ";
-} else {
-    $holdtotmin4 = (($tl_b4 - $date2) / 60);
-    $holdtothr4 = (($tl_b4 - $date2) / 3600);
-    $holdtotday4 = intval(($tl_b4 - $date2) / 86400);
-    $holdhr4 = intval($holdtothr4 - ($holdtotday4 * 24));
-    $holdmr4 = intval($holdtotmin4 - (($holdhr4 * 60) + ($holdtotday4 * 1440)));
-}
-
-if ($tl_b4 < $date2) {
-    print " ";
-} else {
-    
-    echo "<font color='#B3B3B3' size='1'>Remaining: <b> " . $holdtotday4 . "</b> days ";
-    echo "<b>  " . ($holdhr4) . "</b> hours ";
-    echo "<b>  " . ($holdmr4) . "</b> mins</font>";
+if ($tl_b4 >= $date2) {
+    echo "<font color='#B3B3B3' size='1'>" . formatRemainingTime($tl_b4, $date2) . "</font>";
 }
 ?>
 &nbsp;    </span>
