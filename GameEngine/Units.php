@@ -276,6 +276,14 @@ class Units {
             header( "Location: a2b.php" );
             exit;
         }else{
+            if (empty($data['id']) || !$database->claimA2b((int)$data['id'], $post['timestamp_checksum'])) {
+                $form->addError("error", "This troop send request was already processed. Please try again.");
+                $_SESSION['errorarray'] = $form->getErrors();
+                $_SESSION['valuearray'] = $_POST;
+                header("Location: a2b.php");
+                exit;
+            }
+
             $u = ($session->tribe == 1) ? "" : $session->tribe - 1;
             
             $database->modifyUnit(
@@ -400,9 +408,6 @@ class Units {
                 header("Location: a2b.php" );
                 exit;
             }
-            
-            // prevent re-use of the same attack via re-POSTing the same data
-            $database->remA2b($data['id']);
             
             header("Location: build.php?id=39");
             exit;

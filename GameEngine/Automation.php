@@ -856,6 +856,20 @@ class Automation {
         }
     }
 
+    private function claimMovementRecord($moveid) {
+        global $database;
+
+        $moveid = (int)$moveid;
+        if ($moveid <= 0) {
+            return false;
+        }
+
+        $q = "UPDATE ".TB_PREFIX."movement SET proc = 1 WHERE moveid = $moveid AND proc = 0";
+        mysqli_query($database->dblink, $q);
+
+        return (mysqli_affected_rows($database->dblink) === 1);
+    }
+
     private function sendunitsComplete() {
         global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units;
 
@@ -2625,8 +2639,11 @@ class Automation {
             $database->getVillageByWorldID($vilIDs);
 
             // calculate reinforcements data
-            $movementProcIDs = [];
             foreach($dataarray as $data) {
+                if (!$this->claimMovementRecord($data['moveid'])) {
+                    continue;
+                }
+
 				$isoasis = $database->isVillageOases($data['to']);
 				if($isoasis == 0){
 					$to = $database->getMInfo($data['to']);
@@ -2649,7 +2666,6 @@ class Automation {
 					$database->modifyEnforce($reinf['id'], 31, 1, 1);
 					$data_fail = '0,0,4,1,0,0,0,0,0,0,0,0,0,0';
 					$database->addNotice($to['owner'], $to['wref'], (isset($targetally) ? $targetally : 0), 8, 'village of the elders reinforcement ' . addslashes($to['name']), $data_fail, $AttackArrivalTime);
-					$movementProcIDs[] = $data['moveid'];
 				}else{
                     //set base things
                     $from = $database->getMInfo($data['from']);
@@ -2718,8 +2734,6 @@ class Automation {
                     if($from['owner'] != $to['owner']) {
                         $database->addNotice($to['owner'],$to['wref'],(isset($targetally) ? $targetally : 0),8,''.addslashes($from['name']).' reinforcement '.addslashes($to_name).'',$data_fail,(isset($AttackArrivalTime) ? $AttackArrivalTime : time()));
                     }
-                    //update status
-                    $movementProcIDs[] = $data['moveid'];
                 }
 
                 //Update starvation data
@@ -2733,8 +2747,6 @@ class Automation {
                 $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE ".$e_units." AND (vref=".(int) $data['to']." OR `from`=".(int) $data['to'].")";
                 $database->query($q);
             }
-
-            $database->setMovementProc(implode(', ', $movementProcIDs));
         }
     }
 
@@ -2770,8 +2782,11 @@ class Automation {
             $database->getOasisEnforce($vilIDs, 0);
             $database->getOasisEnforce($vilIDs, 1);
 
-            $movementProcIDs = [];
             foreach($dataarray as $data) {
+                if (!$this->claimMovementRecord($data['moveid'])) {
+                    continue;
+                }
+
             	$tribe = $database->getUserField($database->getVillageField($data['to'], "owner"), "tribe", 0);
             	$u = $tribe == 1 ? "" : $tribe - 1;
             	$database->modifyUnit(
@@ -2786,31 +2801,28 @@ class Automation {
             		$database->modifyResource($data['to'], $data['wood'], $data['clay'], $data['iron'], $data['crop'], 1);
             	}
             	
-            	$movementProcIDs[] = $data['moveid'];
-            	
             	//Update starvation data
             	$database->addStarvationData($data['to']);
             }
-            
-            $database->setMovementProc(implode(', ', $movementProcIDs));
+
             $this->pruneResource();
         }
 
         // Settlers
         $q = "SELECT `to`, moveid FROM ".TB_PREFIX."movement where ref = 0 and proc = '0' and sort_type = '4' and endtime < $time";
         $dataarray = $database->query_return($q);
-        $movementProcIDs = [];
-
         if ($dataarray && count($dataarray)) {
             foreach($dataarray as $data) {
+                if (!$this->claimMovementRecord($data['moveid'])) {
+                    continue;
+                }
+
                 $tribe = $database->getUserField($database->getVillageField($data['to'], "owner"), "tribe", 0);
                 $database->modifyUnit($data['to'], [$tribe."0"], [3], [1]);
                 
                 //If a settling is canceled, add 750 for each resource type
                 $database->modifyResource($data['to'], 750, 750, 750, 750, 1);
-                $movementProcIDs[] = $data['moveid'];
             }
-            $database->setMovementProc(implode(', ', $movementProcIDs));
         }
     }
 
@@ -2821,7 +2833,6 @@ class Automation {
         $q = "SELECT `to`, `from`, moveid, starttime, ref FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 5 and endtime < $time";
 
         $dataarray = $database->query_return($q);
-        $movementProcIDs = [];
         $fieldIDs = [];
         $addUnitsWrefs = [];
         $addTechWrefs = [];
@@ -2845,6 +2856,10 @@ class Automation {
         $database->getVillageByWorldID($vilIDs);
 
         foreach($dataarray as $data) {
+            if (!$this->claimMovementRecord($data['moveid'])) {
+                continue;
+            }
+
             $ownerID = $database->getUserField($database->getVillageField($data['from'], "owner"), "id", 0);
 			$to = $database->getMInfo($data['from']);
 			$user = addslashes($database->getUserField($to['owner'], 'username', 0));
@@ -2856,7 +2871,6 @@ class Automation {
                 $addUnitsWrefs[] = $data['to'];
                 $addTechWrefs[] = $data['to'];
                 $addABTechWrefs[] = $data['to'];
-                $movementProcIDs[] = $data['moveid'];
                 
 				$exp1 = $database->getVillageField($data['from'], 'exp1');
 				$exp2 = $database->getVillageField($data['from'], 'exp2');
@@ -2882,12 +2896,10 @@ class Automation {
                 $refs[] = $data['ref'];
                 $times[] = $time;
                 $endtimes[] = $time + ($time - $data['starttime']);
-                $movementProcIDs[] = $data['moveid'];
             }
         }
 
         $database->addMovement($types, $froms, $tos, $refs, $times, $endtimes);
-        $database->setMovementProc(implode(', ', $movementProcIDs));
         $database->setFieldTaken($fieldIDs);
         $database->addUnits($addUnitsWrefs);
         $database->addTech($addTechWrefs);
