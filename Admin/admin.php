@@ -131,6 +131,10 @@ if (!empty($_GET['p'])) {
             $subpage = 'Create Users';
             break;
 
+        case 'users':
+            $subpage = 'Users List';
+            break;
+
         case 'admin_log':
             $subpage = 'Admin Log';
             break;
@@ -559,6 +563,7 @@ if (!empty($_GET['p'])) {
 						</li>
 						<li class="sub"><a href="#">Users</a>
 							<ul>
+                                <li><a href="?p=users">List Users</a></li>
 								<li><a href="?p=addUsers">Create Users</a></li>
 							</ul>
 						</li>

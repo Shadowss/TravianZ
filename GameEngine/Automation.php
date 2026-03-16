@@ -1192,7 +1192,7 @@ class Automation {
                         if($traps >= $totalTroops){
                             for($i = 1; $i <= 11; $i++) ${'traped'.$i} = $data['t'.$i];
                         }
-                        else
+                        else if($totalTroops > 0)
                         {
                             $multiplier = $traps / $totalTroops;
                             
@@ -1212,6 +1212,9 @@ class Automation {
                                     }
                                 }
                             }
+                        }
+                        else {
+                            for($i = 1; $i <= 11; $i++) ${'traped'.$i} = 0;
                         }
                     }
                     
