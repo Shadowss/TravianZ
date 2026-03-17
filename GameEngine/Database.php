@@ -5684,6 +5684,16 @@ References: User ID/Message ID, Mode
         return mysqli_query($this->dblink,$q);
     }
 
+    function claimA2b($id, $ckey) {
+        $id = (int)$id;
+        list($ckey) = $this->escape_input($ckey);
+
+        $q = "DELETE FROM " . TB_PREFIX . "a2b WHERE id = $id AND ckey = '".$ckey."' LIMIT 1";
+        mysqli_query($this->dblink, $q);
+
+        return (mysqli_affected_rows($this->dblink) === 1);
+    }
+
 	// no need to cache this method
 	function getA2b($ckey) {
         list($ckey) = $this->escape_input($ckey);

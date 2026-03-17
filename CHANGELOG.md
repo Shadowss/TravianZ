@@ -6,6 +6,19 @@ Format inspired by Keep a Changelog and Semantic Versioning principles.
 
 ## [Unreleased]
 
+### Fixed
+- Troop duplication race-condition hardening for issue #98.
+- `sendunitsComplete()` now uses atomic per-record movement claim (`proc = 1` only when current worker owns the row) before processing reinforcements.
+- `returnunitsComplete()` now uses the same atomic claim flow for returning troops and canceled-settler returns.
+- `sendSettlersComplete()` now claims movement rows atomically before processing settle/return outcomes.
+
+### Security and Safety
+- Added idempotent A2B request claiming in troop send flow to prevent duplicate processing from concurrent/replayed submissions.
+- Introduced `claimA2b()` in database layer and consumed it in `sendTroops()` before any troop/resource mutation.
+
+### Changed
+- Movement completion status updates for the hardened flows are now claim-first (atomic) instead of late batch marking.
+
 ## [2026-03-14] - Stability, PHP 8, Docker and Installer Hardening
 
 ### Added
