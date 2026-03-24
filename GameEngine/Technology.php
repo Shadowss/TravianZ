@@ -593,12 +593,18 @@ class Technology {
 
 	private function researchTech($get) {
 		global $database,$session,${'r'.$get['a']},$bid22,$building,$village,$logging;
-		if($this->meetRRequirement($get['a']) && $get['c'] == $session->mchecker) {
-			$data = ${'r'.$get['a']};
-			$time = time() + round(($data['time'] * ($bid22[$building->getTypeLevel(22)]['attri'] / 100))/SPEED);
-			$database->modifyResource($village->wid,$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
-			$database->addResearch($village->wid,"t".$get['a'],$time);
-			$logging->addTechLog($village->wid,"t".$get['a'],1);
+		if (!$database->getResearchLock($village->wid)) return;
+		try {
+			$village->researching = $database->getResearching($village->wid, false);
+			if($this->meetRRequirement($get['a']) && $get['c'] == $session->mchecker) {
+				$data = ${'r'.$get['a']};
+				$time = time() + round(($data['time'] * ($bid22[$building->getTypeLevel(22)]['attri'] / 100))/SPEED);
+				$database->modifyResource($village->wid,$data['wood'],$data['clay'],$data['iron'],$data['crop'],0);
+				$database->addResearch($village->wid,"t".$get['a'],$time);
+				$logging->addTechLog($village->wid,"t".$get['a'],1);
+			}
+		} finally {
+			$database->releaseResearchLock($village->wid);
 		}
 		$session->changeChecker();
 		header("Location: build.php?id=".$get['id']);
@@ -609,27 +615,33 @@ class Technology {
 	
 	private function upgradeSword($get) {
 		global $database,$session,$bid12,$building,$village,$logging;
-		$ABTech = $database->getABTech($village->wid);
-		$ABUpgrades = $this->getABUpgrades('b');
-		$ABUpgradesCount = count($ABUpgrades);
-		
-		$ups = 0;
-		if($ABUpgradesCount > 0){
-		    foreach($ABUpgrades as $upgrade){
-		        if(in_array(("b".$get['a']), $upgrade)) $ups++;
-		    }
-		}
-		
-		$CurrentTech = $ABTech["b".$get['a']]+$ups;
-		$unit = ($session->tribe-1)*10+intval($get['a']);
-		if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(12)) && $get['c'] == $session->mchecker) {
-			global ${'ab'.strval($unit)};
-			$data = ${'ab'.strval($unit)};
-			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid12[$building->getTypeLevel(12)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + ceil(60/SPEED) : 0);
-			if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
-				$database->addResearch($village->wid,"b".$get['a'],$time);
-				$logging->addTechLog($village->wid,"b".$get['a'],$CurrentTech+1);
+		if (!$database->getResearchLock($village->wid)) return;
+		try {
+			$ABTech = $database->getABTech($village->wid, false);
+			$village->researching = $database->getResearching($village->wid, false);
+			$ABUpgrades = $this->getABUpgrades('b');
+			$ABUpgradesCount = count($ABUpgrades);
+
+			$ups = 0;
+			if($ABUpgradesCount > 0){
+			    foreach($ABUpgrades as $upgrade){
+			        if(in_array(("b".$get['a']), $upgrade)) $ups++;
+			    }
 			}
+
+			$CurrentTech = $ABTech["b".$get['a']]+$ups;
+			$unit = ($session->tribe-1)*10+intval($get['a']);
+			if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(12)) && $get['c'] == $session->mchecker) {
+				global ${'ab'.strval($unit)};
+				$data = ${'ab'.strval($unit)};
+				$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid12[$building->getTypeLevel(12)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + ceil(60/SPEED) : 0);
+				if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
+					$database->addResearch($village->wid,"b".$get['a'],$time);
+					$logging->addTechLog($village->wid,"b".$get['a'],$CurrentTech+1);
+				}
+			}
+		} finally {
+			$database->releaseResearchLock($village->wid);
 		}
 		$session->changeChecker();
 		header("Location: build.php?id=".$get['id']);
@@ -638,27 +650,33 @@ class Technology {
 
 	private function upgradeArmour($get) {
 		global $database,$session,$bid13,$building,$village,$logging;
-		$ABTech = $database->getABTech($village->wid);
-		$ABUpgrades = $this->getABUpgrades('a');
-		$ABUpgradesCount = count($ABUpgrades);
-		
-		$ups = 0;
-		if($ABUpgradesCount > 0){
-		    foreach($ABUpgrades as $upgrade){
-		        if(in_array(("a".$get['a']), $upgrade)) $ups++;
-		    }
-		}
-		
-		$CurrentTech = $ABTech["a".$get['a']]+$ups;
-		$unit = ($session->tribe-1)*10+intval($get['a']);
-		if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(13)) && $get['c'] == $session->mchecker) {
-			global ${'ab'.strval($unit)};
-			$data = ${'ab'.strval($unit)};
-			$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid13[$building->getTypeLevel(13)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + ceil(60/SPEED) : 0);
-			if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
-				$database->addResearch($village->wid,"a".$get['a'],$time);
-				$logging->addTechLog($village->wid,"a".$get['a'],$CurrentTech+1);
+		if (!$database->getResearchLock($village->wid)) return;
+		try {
+			$ABTech = $database->getABTech($village->wid, false);
+			$village->researching = $database->getResearching($village->wid, false);
+			$ABUpgrades = $this->getABUpgrades('a');
+			$ABUpgradesCount = count($ABUpgrades);
+
+			$ups = 0;
+			if($ABUpgradesCount > 0){
+			    foreach($ABUpgrades as $upgrade){
+			        if(in_array(("a".$get['a']), $upgrade)) $ups++;
+			    }
 			}
+
+			$CurrentTech = $ABTech["a".$get['a']]+$ups;
+			$unit = ($session->tribe-1)*10+intval($get['a']);
+			if(($ABUpgradesCount < 2 && $session->plus || $ABUpgradesCount == 0) && ($this->getTech($unit) || ($unit % 10) == 1) && ($CurrentTech < $building->getTypeLevel(13)) && $get['c'] == $session->mchecker) {
+				global ${'ab'.strval($unit)};
+				$data = ${'ab'.strval($unit)};
+				$time = time() + round(($data[$CurrentTech+1]['time'] * ($bid13[$building->getTypeLevel(13)]['attri'] / 100))/SPEED) + ($ABUpgradesCount > 0 ? ($ABUpgrades[$ABUpgradesCount-1]['timestamp'] - time()) + ceil(60/SPEED) : 0);
+				if ($database->modifyResource($village->wid,$data[$CurrentTech+1]['wood'],$data[$CurrentTech+1]['clay'],$data[$CurrentTech+1]['iron'],$data[$CurrentTech+1]['crop'],0)) {
+					$database->addResearch($village->wid,"a".$get['a'],$time);
+					$logging->addTechLog($village->wid,"a".$get['a'],$CurrentTech+1);
+				}
+			}
+		} finally {
+			$database->releaseResearchLock($village->wid);
 		}
 		$session->changeChecker();
 		header("Location: build.php?id=".$get['id']);

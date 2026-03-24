@@ -4556,6 +4556,18 @@ References: User ID/Message ID, Mode
 		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('build_village_$wid')");
 	}
 
+	function getResearchLock($wid) {
+		$wid = (int) $wid;
+		$result = mysqli_query($this->dblink, "SELECT GET_LOCK('research_village_$wid', 10) AS locked");
+		$row = mysqli_fetch_assoc($result);
+		return $row['locked'] == 1;
+	}
+
+	function releaseResearchLock($wid) {
+		$wid = (int) $wid;
+		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('research_village_$wid')");
+	}
+
 	/**
 	 * Get the time required to build a specified building
 	 * 
