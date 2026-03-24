@@ -309,6 +309,9 @@ class Building {
 
 	public function loadBuilding() {
 		global $database,$village,$session;
+		$this->basic = 0;
+		$this->inner = 0;
+		$this->plus = 0;
 		$this->buildArray = $database->getJobs($village->wid);
 		$this->allocated = count($this->buildArray);
 		if($this->allocated > 0) {
@@ -344,131 +347,153 @@ class Building {
 
 	private function upgradeBuilding($id) {
 		global $database, $village, $session, $logging, ${'bid'.$village->resarray['f'.$id.'t']};
-		
-		if($this->allocated < $this->maxConcurrent) {
-			$uprequire = $this->resourceRequired($id,$village->resarray['f'.$id.'t']);
-			$time = time() + $uprequire['time'];
-			$bindicate = $this->canBuild($id,$village->resarray['f'.$id.'t']);
-			
-			// don't allow building above max levels and don't allow building if it's in demolition
-			if (in_array($bindicate, [1, 2, 3, 10, 11])) {
-			    header("Location: dorf2.php");
-			    exit;
-			}
-			
-			$loop = ($bindicate == 9 ? 1 : 0);
-			$loopsame = 0;
-			if($loop == 1) {
-				foreach($this->buildArray as $build) {
-					if($build['field'] == $id) {
-						$loopsame++;
-						$uprequire = $this->resourceRequired($id, $village->resarray['f'.$id.'t'], ($loopsame > 0 ? 2 : 1));
-					}
+
+		if(!$database->getBuildLock($village->wid)) return;
+		try {
+			$this->loadBuilding();
+
+			if($this->allocated < $this->maxConcurrent) {
+				$uprequire = $this->resourceRequired($id,$village->resarray['f'.$id.'t']);
+				$time = time() + $uprequire['time'];
+				$bindicate = $this->canBuild($id,$village->resarray['f'.$id.'t']);
+
+				// don't allow building above max levels and don't allow building if it's in demolition
+				if (in_array($bindicate, [1, 2, 3, 10, 11])) {
+				    $database->releaseBuildLock($village->wid);
+				    header("Location: dorf2.php");
+				    exit;
 				}
-				if($session->tribe == 1 || ALLOW_ALL_TRIBE) {
-					if($id >= 19) {
-						foreach($this->buildArray as $build) {
-							if($build['field'] >= 19) {
-								$time = $build['timestamp'] + $uprequire['time'];
+
+				$loop = ($bindicate == 9 ? 1 : 0);
+				$loopsame = 0;
+				if($loop == 1) {
+					foreach($this->buildArray as $build) {
+						if($build['field'] == $id) {
+							$loopsame++;
+							$uprequire = $this->resourceRequired($id, $village->resarray['f'.$id.'t'], ($loopsame > 0 ? 2 : 1));
+						}
+					}
+					if($session->tribe == 1 || ALLOW_ALL_TRIBE) {
+						if($id >= 19) {
+							foreach($this->buildArray as $build) {
+								if($build['field'] >= 19) {
+									$time = $build['timestamp'] + $uprequire['time'];
+								}
+							}
+						}
+						else {
+							foreach($this->buildArray as $build) {
+								if($build['field'] <= 18) {
+									$time = $build['timestamp'] + $uprequire['time'];
+								}
 							}
 						}
 					}
 					else {
-						foreach($this->buildArray as $build) {
-							if($build['field'] <= 18) {
-								$time = $build['timestamp'] + $uprequire['time'];
-							}
-						}
+						$time = $this->buildArray[0]['timestamp'] + $uprequire['time'];
 					}
 				}
-				else {
-					$time = $this->buildArray[0]['timestamp'] + $uprequire['time'];
+				$level = $database->getResourceLevel($village->wid);
+
+
+				if($database->addBuilding($village->wid, $id, $village->resarray['f'.$id.'t'], $loop, $time + ($loop == 1 ? ceil(60 / SPEED) : 0), 0, $level['f'.$id] + 1 + count($database->getBuildingByField($village->wid, $id)))) {
+					$database->modifyResource($village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0);
+					$logging->addBuildLog($village->wid, self::procResType($village->resarray['f'.$id.'t']), ($village->resarray['f'.$id] + ($loopsame > 0 ? 2 : 1)), 0);
+					$this->redirect($id);
 				}
 			}
-			$level = $database->getResourceLevel($village->wid);
-
-			
-			if($database->addBuilding($village->wid, $id, $village->resarray['f'.$id.'t'], $loop, $time + ($loop == 1 ? ceil(60 / SPEED) : 0), 0, $level['f'.$id] + 1 + count($database->getBuildingByField($village->wid, $id)))) {
-				$database->modifyResource($village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0);
-				$logging->addBuildLog($village->wid, self::procResType($village->resarray['f'.$id.'t']), ($village->resarray['f'.$id] + ($loopsame > 0 ? 2 : 1)), 0);
-				$this->redirect($id);
-			}
+		} finally {
+			$database->releaseBuildLock($village->wid);
 		}
 	}
 
 		private function downgradeBuilding($id) {
 		global $database, $village, $session, $logging;
-		
-		if($this->allocated < $this->maxConcurrent) {
-			$name = "bid".$village->resarray['f'.$id.'t'];
-			global $$name;
-			$dataarray = $$name;
-			$time = time() + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
-			$loop = 0;
-			if($this->inner == 1 || $this->basic == 1) {
-				if(($session->plus || $village->resarray['f'.$id.'t']==40)&& $this->plus == 0) {
-					$loop = 1;
+
+		if(!$database->getBuildLock($village->wid)) return;
+		try {
+			$this->loadBuilding();
+
+			if($this->allocated < $this->maxConcurrent) {
+				$name = "bid".$village->resarray['f'.$id.'t'];
+				global $$name;
+				$dataarray = $$name;
+				$time = time() + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
+				$loop = 0;
+				if($this->inner == 1 || $this->basic == 1) {
+					if(($session->plus || $village->resarray['f'.$id.'t']==40)&& $this->plus == 0) {
+						$loop = 1;
+					}
 				}
-			}
-			if($loop == 1) {
-				if($session->tribe == 1 || ALLOW_ALL_TRIBE) {
-					if($id >= 19) {
-						foreach($this->buildArray as $build) {
-							if($build['field'] >= 19) {
-								$time = $build['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
+				if($loop == 1) {
+					if($session->tribe == 1 || ALLOW_ALL_TRIBE) {
+						if($id >= 19) {
+							foreach($this->buildArray as $build) {
+								if($build['field'] >= 19) {
+									$time = $build['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
+								}
 							}
 						}
 					}
+					else {
+						$time = $this->buildArray[0]['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
+					}
 				}
-				else {
-					$time = $this->buildArray[0]['timestamp'] + round($dataarray[$village->resarray['f'.$id]-1]['time'] / 4);
+
+				$level = $database->getResourceLevel($village->wid);
+				if($database->addBuilding($village->wid, $id, $village->resarray['f'.$id.'t'], $loop, $time, 0, 0, $level['f'.$id] + 1 + count($database->getBuildingByField($village->wid, $id)))){
+					$logging->addBuildLog($village->wid, self::procResType($village->resarray['f'.$id.'t']), ($village->resarray['f'.$id] - 1), 2);
+					header("Location: dorf2.php");
+					exit();
 				}
 			}
-			
-			$level = $database->getResourceLevel($village->wid);
-			if($database->addBuilding($village->wid, $id, $village->resarray['f'.$id.'t'], $loop, $time, 0, 0, $level['f'.$id] + 1 + count($database->getBuildingByField($village->wid, $id)))){
-				$logging->addBuildLog($village->wid, self::procResType($village->resarray['f'.$id.'t']), ($village->resarray['f'.$id] - 1), 2);
-				header("Location: dorf2.php");
-				exit();
-			}
+		} finally {
+			$database->releaseBuildLock($village->wid);
 		}
 	}
 
 	private function constructBuilding($id, $tid) {
 		global $database, $village, $session, $logging;
-		
-		if($this->allocated < $this->maxConcurrent) {              
-		    if($tid == 16) $id = 39;
-		    elseif($tid == 31 || $tid == 32 || $tid == 33) $id = 40;
-		    
-		    $uprequire = $this->resourceRequired($id, $tid);
-		    $time = time() + $uprequire['time'];
-		    $bindicate = $this->canBuild($id, $tid);
-		    $loop = ($bindicate == 9 ? 1 : 0);
-		    
-		    if($loop == 1) {
-		        foreach( $this->buildArray as $build) {
-		            if($build['field'] >= 19 || ($session->tribe <> 1 && !ALLOW_ALL_TRIBE)) {
-		                $time = $build['timestamp'] + ceil(60 / SPEED) + $uprequire['time'];
-		            }
-		        }
-		    }
-		    
-		    if($this->meetRequirement($tid)) {        
-		        $level = $database->getResourceLevel($village->wid);
-		        if($database->addBuilding($village->wid, $id, $tid, $loop, $time, 0, $level['f' . $id] + 1 + count($database->getBuildingByField($village->wid, $id)))){
-		            $logging->addBuildLog($village->wid, self::procResType($tid), ($village->resarray['f' . $id] + 1), 1);
-		            $database->modifyResource($village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0);
-		            header("Location: dorf2.php");
-		            exit;
-		        }
-		    }else{
-		        header("location: dorf2.php");
-		        exit;
-		    }
-		}else{
-		    header("Location: dorf2.php");
-		    exit;
+
+		if(!$database->getBuildLock($village->wid)) return;
+		try {
+			$this->loadBuilding();
+
+			if($this->allocated < $this->maxConcurrent) {
+			    if($tid == 16) $id = 39;
+			    elseif($tid == 31 || $tid == 32 || $tid == 33) $id = 40;
+
+			    $uprequire = $this->resourceRequired($id, $tid);
+			    $time = time() + $uprequire['time'];
+			    $bindicate = $this->canBuild($id, $tid);
+			    $loop = ($bindicate == 9 ? 1 : 0);
+
+			    if($loop == 1) {
+			        foreach( $this->buildArray as $build) {
+			            if($build['field'] >= 19 || ($session->tribe <> 1 && !ALLOW_ALL_TRIBE)) {
+			                $time = $build['timestamp'] + ceil(60 / SPEED) + $uprequire['time'];
+			            }
+			        }
+			    }
+
+			    if($this->meetRequirement($tid)) {
+			        $level = $database->getResourceLevel($village->wid);
+			        if($database->addBuilding($village->wid, $id, $tid, $loop, $time, 0, $level['f' . $id] + 1 + count($database->getBuildingByField($village->wid, $id)))){
+			            $logging->addBuildLog($village->wid, self::procResType($tid), ($village->resarray['f' . $id] + 1), 1);
+			            $database->modifyResource($village->wid, $uprequire['wood'], $uprequire['clay'], $uprequire['iron'], $uprequire['crop'], 0);
+			            header("Location: dorf2.php");
+			            exit;
+			        }
+			    }else{
+			        header("location: dorf2.php");
+			        exit;
+			    }
+			}else{
+			    header("Location: dorf2.php");
+			    exit;
+			}
+		} finally {
+			$database->releaseBuildLock($village->wid);
 		}
 	}
 
