@@ -447,6 +447,8 @@ class Technology {
     private function trainUnit($unit, $amt, $great = false) {
 		global $session, $database, ${'u'.$unit}, $building, $village, $bid19, $bid20, $bid21, $bid25, $bid26, $bid29, $bid30, $bid36, $bid41, $bid42;
 
+		if (!$database->getTrainingLock($village->wid)) return;
+		try {
 		if($this->getTech($unit) || $unit % 10 <= 1 || $unit == 99) {
 			$footies = [1, 2, 3, 11, 12, 13, 14, 21, 22, 31, 32, 33, 34, 41, 42, 43, 44];
 			$calvary = [4, 5, 6, 15, 16, 23, 24, 25, 26, 35, 36, 45, 46];
@@ -528,6 +530,9 @@ class Technology {
 			if($database->modifyResource($village->wid, $wood , $clay, $iron, $crop, 0) && $amt > 0) {
 				$database->trainUnit($village->wid, $unit + ($great ? 60 : 0), $amt, ${'u'.$unit}['pop'], $each, 0);
 			}
+		}
+		} finally {
+			$database->releaseTrainingLock($village->wid);
 		}
 	}
 
