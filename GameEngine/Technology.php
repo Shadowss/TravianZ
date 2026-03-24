@@ -702,11 +702,19 @@ class Technology {
 			$resarray['iron'] = ${'r'.$id}['iron'];
 			$resarray['crop'] = ${'r'.$id}['crop'];
 		}
-		$rwtime = ($resarray['wood']-$village->awood) / $village->getProd("wood") * 3600;
-		$rcltime = ($resarray['clay']-$village->aclay) / $village->getProd("clay") * 3600;
-		$ritime = ($resarray['iron']-$village->airon) / $village->getProd("iron") * 3600;
-		$rctime = ($resarray['crop']-$village->acrop) / $village->getProd("crop") * 3600;
-		if($village->getProd("crop") >= 0) {
+		$woodNeed = $resarray['wood'] - $village->awood;
+		$clayNeed = $resarray['clay'] - $village->aclay;
+		$ironNeed = $resarray['iron'] - $village->airon;
+		$cropNeed = $resarray['crop'] - $village->acrop;
+		$woodProd = $village->getProd("wood");
+		$clayProd = $village->getProd("clay");
+		$ironProd = $village->getProd("iron");
+		$cropProd = $village->getProd("crop");
+		$rwtime = ($woodNeed <= 0) ? 0 : ($woodProd > 0 ? $woodNeed / $woodProd * 3600 : 0);
+		$rcltime = ($clayNeed <= 0) ? 0 : ($clayProd > 0 ? $clayNeed / $clayProd * 3600 : 0);
+		$ritime = ($ironNeed <= 0) ? 0 : ($ironProd > 0 ? $ironNeed / $ironProd * 3600 : 0);
+		$rctime = ($cropNeed <= 0) ? 0 : ($cropProd != 0 ? $cropNeed / $cropProd * 3600 : 0);
+		if($cropProd >= 0) {
 			$reqtime = max($rwtime,$rcltime,$ritime,$rctime) + time();
 		} else {
 			$reqtime = max($rwtime,$rcltime,$ritime);

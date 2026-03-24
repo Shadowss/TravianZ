@@ -434,28 +434,40 @@ class MYSQLi_DB implements IDbConnection {
 	 * @see \App\Database\IDbConnection::connect()
 	 */
 	public function connect() {
-	    // try to connect
-        try {
-            $this->dblink = mysqli_connect( $this->hostname, $this->username, $this->password, $this->dbname, $this->port );
-        } catch (\Exception $exception) {
-            $this->dblink = mysqli_connect( $this->hostname . ':' . $this->port, $this->username, $this->password );
+        $host = (string) $this->hostname;
+        $port = (int) $this->port;
+        if ($port <= 0) $port = 3306;
 
-            // return on error
-            if (mysqli_error($this->dblink)) {
-                return false;
+        // If host is in form host:port (common in env files), split it once.
+        if (strpos($host, ':') !== false && substr_count($host, ':') === 1) {
+            $hostPort = explode(':', $host, 2);
+            if (isset($hostPort[0], $hostPort[1]) && is_numeric($hostPort[1])) {
+                $host = $hostPort[0];
+                $port = (int) $hostPort[1];
             }
-
-            // select the DB to use
-            mysqli_select_db($this->dblink, $this->dbname);
         }
 
-	    // return on error
-	    if (mysqli_error($this->dblink)) {
-	        return false;
-	    } else {
-	        // connected and DB exists, we're good to go
-	        return true;
-	    }
+        $attempts = 15;
+        $waitMicros = 1000000; // 1 second
+
+        for ($i = 0; $i < $attempts; $i++) {
+            try {
+                $this->dblink = mysqli_connect($host, $this->username, $this->password, $this->dbname, $port);
+            } catch (\Throwable $exception) {
+                $this->dblink = false;
+            }
+
+            if ($this->dblink instanceof \mysqli) {
+                return true;
+            }
+
+            // During container startup DB may still be booting.
+            if ($i < $attempts - 1) {
+                usleep($waitMicros);
+            }
+        }
+
+        return false;
 	}
 
 	/**
@@ -1162,7 +1174,7 @@ public function getBestOasisCropBonus($x, $y) {
 		$q = "SELECT timestamp from " . TB_PREFIX . "deleting where uid = $uid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
-		return $dbarray['timestamp'];
+        return isset($dbarray['timestamp']) ? (int)$dbarray['timestamp'] : 0;
 	}
 
 	function modifyGold($userid, $amt, $mode) {
@@ -1728,10 +1740,10 @@ public function getBestOasisCropBonus($x, $y) {
 	function getVillageState($wref, $use_cache = true) {
         // retrieve this value from the full village data cache
         if ($use_cache && ($cachedValue = self::returnCachedContent(self::$villageFieldsCacheByWorldID, $wref)) && !is_null($cachedValue)) {
-            return ($cachedValue['occupied'] != 0 || $cachedValue['oasistype'] != 0);
+            return (((int)($cachedValue['occupied'] ?? 0)) != 0 || ((int)($cachedValue['oasistype'] ?? 0)) != 0);
         } else {
             $vil = $this->getVillageByWorldID($wref, $use_cache);
-            return ($vil['occupied'] != 0 || $vil['oasistype'] != 0);
+            return (((int)($vil['occupied'] ?? 0)) != 0 || ((int)($vil['oasistype'] ?? 0)) != 0);
         }
 	}
 	
@@ -2075,7 +2087,7 @@ public function getBestOasisCropBonus($x, $y) {
 
         // return a single value
         if (!$array_passed) {
-            self::$villageFieldsCacheByWorldID[$vid[0]] = $result[0];
+            self::$villageFieldsCacheByWorldID[$vid[0]] = (isset($result[0]) && is_array($result[0])) ? $result[0] : [];
         } else {
             if ($result && count($result)) {
                 foreach ( $result as $record ) {
@@ -3715,7 +3727,7 @@ public function getBestOasisCropBonus($x, $y) {
          'LIMIT 1');
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
-        self::$fieldLevelsInVillageSearchCache[$vid.$fieldType] = $row['level'];
+        self::$fieldLevelsInVillageSearchCache[$vid.$fieldType] = isset($row['level']) ? (int)$row['level'] : 0;
         return self::$fieldLevelsInVillageSearchCache[$vid.$fieldType];
     }
 
@@ -3730,9 +3742,9 @@ public function getBestOasisCropBonus($x, $y) {
 
 		$q = "SELECT f" . $field . " from " . TB_PREFIX . "fdata where vref = $vid LIMIT 1";
 		$result = mysqli_query($this->dblink,$q);
-		$row = mysqli_fetch_array($result);
+        $row = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
 
-        self::$resourceLevelsCache[$vid.$field] = $row["f" . $field];
+        self::$resourceLevelsCache[$vid.$field] = (is_array($row) && array_key_exists("f".$field, $row)) ? (int)$row["f" . $field] : 0;
         return self::$resourceLevelsCache[$vid.$field];
 	}
 
@@ -5696,6 +5708,16 @@ References: User ID/Message ID, Mode
         return mysqli_query($this->dblink,$q);
     }
 
+    function claimA2b($id, $ckey) {
+        $id = (int)$id;
+        list($ckey) = $this->escape_input($ckey);
+
+        $q = "DELETE FROM " . TB_PREFIX . "a2b WHERE id = $id AND ckey = '".$ckey."' LIMIT 1";
+        mysqli_query($this->dblink, $q);
+
+        return (mysqli_affected_rows($this->dblink) === 1);
+    }
+
 	// no need to cache this method
 	function getA2b($ckey) {
         list($ckey) = $this->escape_input($ckey);
@@ -5898,22 +5920,36 @@ References: User ID/Message ID, Mode
 	 */
 	
 	function addUnits($vid, $troopsArray = null) {
-	    list($vid, $type, $values) = $this->escape_input($vid, $type, $values);
+        list($vid) = $this->escape_input($vid);
 	    
         if(empty($vid)) return;
 	    if (!is_array($vid)) $vid = [$vid];
-	    $types = $values = "";
+        $types = "";
+        $typeKeys = [];
+        $values = [];
 	    
 	    if($troopsArray != null){
-	        $types = $troopsArray[0];
+            $typeKeys = $troopsArray[0];
 	        $values = $troopsArray[1];
 	        
-	        $types = ",u".implode(",u", $types);
+            $types = ",u".implode(",u", $typeKeys);
 	    }    
 	    
-	    foreach ($vid as $index => $vidValue) $vid[$index] = (int) $vidValue.($troopsArray != null ? ",".implode(",", $values[$index]) : "");
+        foreach ($vid as $index => $vidValue) $vid[$index] = (int) $vidValue.($troopsArray != null ? ",".implode(",", $values[$index]) : "");
 
-        $q = "INSERT into " . TB_PREFIX . "units (vref$types) values (".implode('),(', $vid).")";
+        $duplicateUpdate = "";
+        if(!empty($typeKeys)){
+            $duplicateColumns = [];
+            foreach($typeKeys as $typeKey){
+                $typeKey = (int) $typeKey;
+                $duplicateColumns[] = "u".$typeKey."=VALUES(u".$typeKey.")";
+            }
+            $duplicateUpdate = " ON DUPLICATE KEY UPDATE ".implode(', ', $duplicateColumns);
+        }else{
+            $duplicateUpdate = " ON DUPLICATE KEY UPDATE vref=vref";
+        }
+
+        $q = "INSERT into " . TB_PREFIX . "units (vref$types) values (".implode('),(', $vid).")".$duplicateUpdate;
 		return mysqli_query($this->dblink,$q);
 	}
 
@@ -6989,11 +7025,45 @@ References: User ID/Message ID, Mode
     public function populateWorldData() {
         global $autoprefix;
 
+        $wdataTable = TB_PREFIX . "wdata";
+        $droppedIndexes = [];
+
         try {
             // check if we don't already have world data
-            $data_exist = $this->query_return("SELECT * FROM " . TB_PREFIX . "wdata LIMIT 1");
+            $data_exist = $this->query_return("SELECT * FROM " . $wdataTable . " LIMIT 1");
             if ($data_exist && count($data_exist)) {
                 return false;
+            }
+
+            // Best-effort session tuning for faster bulk inserts.
+            $sessionTuningStatements = [
+                "SET SESSION innodb_flush_log_at_trx_commit=2",
+                "SET SESSION sync_binlog=0",
+                "SET SESSION unique_checks=0",
+                "SET SESSION foreign_key_checks=0",
+            ];
+            foreach ($sessionTuningStatements as $stmt) {
+                try {
+                    mysqli_query($this->dblink, $stmt);
+                } catch (Throwable $e) {
+                    // Ignore tuning failures, they are not required for correctness.
+                }
+            }
+
+            // Temporarily drop secondary indexes before heavy INSERT .. SELECT.
+            // Recreated at the end to speed up map generation on larger worlds.
+            $indexesToDrop = ['occupied', 'fieldtype', 'x-y'];
+            foreach ($indexesToDrop as $indexName) {
+                try {
+                    $escapedIndexName = mysqli_real_escape_string($this->dblink, $indexName);
+                    $res = mysqli_query($this->dblink, "SHOW INDEX FROM `{$wdataTable}` WHERE Key_name = '{$escapedIndexName}'");
+                    if ($res && mysqli_num_rows($res) > 0) {
+                        mysqli_query($this->dblink, "ALTER TABLE `{$wdataTable}` DROP INDEX `{$indexName}`");
+                        $droppedIndexes[$indexName] = true;
+                    }
+                } catch (Throwable $e) {
+                    // If we can't drop an index, continue with generation anyway.
+                }
             }
 
             // load the data generation SQL file
@@ -7012,8 +7082,31 @@ References: User ID/Message ID, Mode
             if (!$result) {
                 return -1;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return -1;
+        } finally {
+            // Recreate dropped indexes to keep runtime query performance unchanged.
+            if (!empty($droppedIndexes)) {
+                try {
+                    if (isset($droppedIndexes['occupied'])) {
+                        mysqli_query($this->dblink, "CREATE INDEX `occupied` ON `{$wdataTable}` (`occupied`)");
+                    }
+                    if (isset($droppedIndexes['fieldtype'])) {
+                        mysqli_query($this->dblink, "CREATE INDEX `fieldtype` ON `{$wdataTable}` (`fieldtype`)");
+                    }
+                    if (isset($droppedIndexes['x-y'])) {
+                        mysqli_query($this->dblink, "CREATE INDEX `x-y` ON `{$wdataTable}` (`x`, `y`)");
+                    }
+                } catch (Throwable $e) {
+                    // Best effort only; installation can proceed and indexes may be rebuilt manually if needed.
+                }
+            }
+
+            // Restore conservative defaults for this session (best effort).
+            try { mysqli_query($this->dblink, "SET SESSION unique_checks=1"); } catch (Throwable $e) {}
+            try { mysqli_query($this->dblink, "SET SESSION foreign_key_checks=1"); } catch (Throwable $e) {}
+            try { mysqli_query($this->dblink, "SET SESSION innodb_flush_log_at_trx_commit=1"); } catch (Throwable $e) {}
+            try { mysqli_query($this->dblink, "SET SESSION sync_binlog=1"); } catch (Throwable $e) {}
         }
 
         return true;
@@ -7036,121 +7129,171 @@ References: User ID/Message ID, Mode
 		}
 	
 		public function populateCroppers(int $countTotal = 0, bool $truncateFirst = false, int $batch = 20000, ?callable $reporter = null ): array {
-			
-			@set_time_limit(0);
-			@ini_set('memory_limit', '1G');
+            @set_time_limit(0);
+            @ini_set('memory_limit', '1G');
 
-			$TBP        = defined('TB_PREFIX') ? TB_PREFIX : 's1_';
-			$CROP_TABLE = $TBP . 'croppers';
-			$WDATA      = $TBP . 'wdata';
+            $TBP        = defined('TB_PREFIX') ? TB_PREFIX : 's1_';
+            $CROP_TABLE = $TBP . 'croppers';
+            $WDATA      = $TBP . 'wdata';
 
-			// Count once if caller didn't
-			if ($countTotal <= 0) {
-				$row = mysqli_fetch_assoc(mysqli_query($this->dblink,
-					"SELECT COUNT(*) cnt FROM `$WDATA` WHERE fieldtype IN (1,6)"));
-				$countTotal = (int)($row['cnt'] ?? 0);
-			}
+            $total = 0;
+            $inTransaction = false;
 
-			if ($truncateFirst) {
-				if (!mysqli_query($this->dblink, "TRUNCATE TABLE `$CROP_TABLE`")) {
-					return ['ok'=>false,'msg'=>'TRUNCATE failed: '.mysqli_error($this->dblink)];
-				}
-			}
+            try {
+                if ($countTotal <= 0) {
+                    $row = mysqli_fetch_assoc(mysqli_query($this->dblink, "SELECT COUNT(*) cnt FROM `$WDATA` WHERE fieldtype IN (1,6)"));
+                    $countTotal = (int)($row['cnt'] ?? 0);
+                }
 
-			// Session-level speed knobs (local to this connection)
-			@mysqli_query($this->dblink, "SET innodb_flush_log_at_trx_commit=2");
-			@mysqli_query($this->dblink, "SET sync_binlog=0");
-			@mysqli_query($this->dblink, "SET unique_checks=0");
-			@mysqli_query($this->dblink, "SET foreign_key_checks=0");
+                if ($truncateFirst && !mysqli_query($this->dblink, "TRUNCATE TABLE `$CROP_TABLE`")) {
+                    return ['ok'=>false,'msg'=>'TRUNCATE failed: '.mysqli_error($this->dblink)];
+                }
 
-			// Read big windows; write in safe slices to avoid max_allowed_packet
-			if ($batch < 1000)   $batch = 1000;
-			if ($batch > 100000) $batch = 100000;
-			if($countTotal < 1000) $sliceSize = 200;
-			elseif($countTotal < 5000) $sliceSize = 500;
-			elseif($countTotal > 5000) $sliceSize = 1000;
+                $sessionTuningStatements = [
+                    "SET SESSION innodb_flush_log_at_trx_commit=2",
+                    "SET SESSION sync_binlog=0",
+                    "SET SESSION unique_checks=0",
+                    "SET SESSION foreign_key_checks=0",
+                ];
+                foreach($sessionTuningStatements as $stmt){
+                    try {
+                        mysqli_query($this->dblink, $stmt);
+                    } catch (Throwable $e) {
+                        // Ignore tuning failures, they are not required for correctness.
+                    }
+                }
 
-			$total  = 0;
-			$lastId = 0;
+                if ($batch < 1000) $batch = 1000;
+                if ($batch > 100000) $batch = 100000;
+                if($countTotal < 1000) $sliceSize = 200;
+                elseif($countTotal < 5000) $sliceSize = 500;
+                else $sliceSize = 1000;
 
-			// Cursor pagination (no OFFSET)
-			while (true) {
-				$res = mysqli_query(
-					$this->dblink,
-					"SELECT id AS wref, x, y, fieldtype
-					 FROM `$WDATA`
-					 WHERE fieldtype IN (1,6) AND id > $lastId
-					 ORDER BY id ASC
-					 LIMIT $batch"
-				);
-				if (!$res) {
-					return ['ok'=>false,'msg'=>'SELECT failed: '.mysqli_error($this->dblink),'processed'=>$total,'target'=>$countTotal];
-				}
+                $lastId = 0;
+                while (true) {
+                    $res = mysqli_query(
+                        $this->dblink,
+                        "SELECT id AS wref, x, y, fieldtype
+                         FROM `$WDATA`
+                         WHERE fieldtype IN (1,6) AND id > $lastId
+                         ORDER BY id ASC
+                         LIMIT $batch"
+                    );
+                    if (!$res) {
+                        return ['ok'=>false,'msg'=>'SELECT failed: '.mysqli_error($this->dblink),'processed'=>$total,'target'=>$countTotal];
+                    }
 
-				$rows = [];
-				while ($r = mysqli_fetch_assoc($res)) { $rows[] = $r; }
-				if (!$rows) break;
+                    $rows = [];
+                    while ($r = mysqli_fetch_assoc($res)) { $rows[] = $r; }
+                    if (!$rows) break;
 
-				mysqli_begin_transaction($this->dblink);
+                    mysqli_begin_transaction($this->dblink);
+                    $inTransaction = true;
 
-				$n = count($rows);
-				for ($i = 0; $i < $n; $i += $sliceSize) {
-					$chunk  = array_slice($rows, $i, $sliceSize);
-					$values = [];
+                    $n = count($rows);
+                    for ($i = 0; $i < $n; $i += $sliceSize) {
+                        $chunk  = array_slice($rows, $i, $sliceSize);
+                        $values = [];
 
-					foreach ($chunk as $r) {
-						$x = (int)$r['x'];
-						$y = (int)$r['y'];
+                        // Compute oasis crop bonus in batch for the whole chunk.
+                        $bonusByWref = [];
+                        $wrefs = [];
+                        foreach ($chunk as $r) {
+                            $wrefs[] = (int)$r['wref'];
+                        }
 
-						// Your existing helper:
-						$bonus = (int)$this->getBestOasisCropBonus($x, $y);
-						if ($bonus < 0)   $bonus = 0;
-						if ($bonus > 150) $bonus = 150;
+                        if (!empty($wrefs)) {
+                            $bonusSql = "SELECT
+                                    c.id AS wref,
+                                    LEAST(
+                                        150,
+                                        (50 * LEAST(SUM(CASE WHEN od.type = 12 THEN 1 ELSE 0 END), 3)) +
+                                        (25 * LEAST(
+                                            GREATEST(3 - LEAST(SUM(CASE WHEN od.type = 12 THEN 1 ELSE 0 END), 3), 0),
+                                            SUM(CASE WHEN od.type IN (4,9,10,11) THEN 1 ELSE 0 END)
+                                        ))
+                                    ) AS bonus
+                                FROM `$WDATA` c
+                                LEFT JOIN `$WDATA` o
+                                    ON o.fieldtype = 0
+                                   AND o.x BETWEEN (c.x - 3) AND (c.x + 3)
+                                   AND o.y BETWEEN (c.y - 3) AND (c.y + 3)
+                                LEFT JOIN `{$TBP}odata` od
+                                    ON od.wref = o.id
+                                   AND od.type IN (12,4,9,10,11)
+                                WHERE c.id IN (".implode(',', $wrefs).")
+                                GROUP BY c.id";
 
-						$values[] = sprintf("(%d,%d,%d,%d,%d)",
-							(int)$r['wref'], $x, $y, (int)$r['fieldtype'], $bonus
-						);
-					}
+                            $bonusRes = mysqli_query($this->dblink, $bonusSql);
+                            if (!$bonusRes) {
+                                mysqli_rollback($this->dblink);
+                                $inTransaction = false;
+                                return ['ok'=>false,'msg'=>'BONUS SELECT failed: '.mysqli_error($this->dblink),'processed'=>$total,'target'=>$countTotal];
+                            }
 
-					if ($values) {
-						// ODKU is cheaper than REPLACE (no DELETE)
-						$sql = "INSERT INTO `$CROP_TABLE`
-								(`wref`,`x`,`y`,`fieldtype`,`best_oasis_bonus`)
-								VALUES ".implode(',', $values)."
-								ON DUPLICATE KEY UPDATE
-								  `x`=VALUES(`x`),
-								  `y`=VALUES(`y`),
-								  `fieldtype`=VALUES(`fieldtype`),
-								  `best_oasis_bonus`=VALUES(`best_oasis_bonus`)";
-						if (!mysqli_query($this->dblink, $sql)) {
-							mysqli_rollback($this->dblink);
-							return ['ok'=>false,'msg'=>'INSERT failed: '.mysqli_error($this->dblink),'processed'=>$total,'target'=>$countTotal];
-						}
-					}
+                            while ($bonusRow = mysqli_fetch_assoc($bonusRes)) {
+                                $bonusByWref[(int)$bonusRow['wref']] = (int)($bonusRow['bonus'] ?? 0);
+                            }
+                        }
 
-					// progress after each slice
-					$total += count($chunk);
-					if ($reporter) {
-						$pct = $countTotal ? min(100, (int)floor(($total / $countTotal) * 100)) : 0;
-						$reporter($total, $countTotal, $pct);
-					}
-				}
+                        foreach ($chunk as $r) {
+                            $x = (int)$r['x'];
+                            $y = (int)$r['y'];
+                            $bonus = (int)($bonusByWref[(int)$r['wref']] ?? 0);
+                            if ($bonus < 0) $bonus = 0;
+                            if ($bonus > 150) $bonus = 150;
+                            $values[] = sprintf("(%d,%d,%d,%d,%d)", (int)$r['wref'], $x, $y, (int)$r['fieldtype'], $bonus);
+                        }
 
-				mysqli_commit($this->dblink);
+                        if ($values) {
+                            $sql = "INSERT INTO `$CROP_TABLE`
+                                    (`wref`,`x`,`y`,`fieldtype`,`best_oasis_bonus`)
+                                    VALUES ".implode(',', $values)."
+                                    ON DUPLICATE KEY UPDATE
+                                      `x`=VALUES(`x`),
+                                      `y`=VALUES(`y`),
+                                      `fieldtype`=VALUES(`fieldtype`),
+                                      `best_oasis_bonus`=VALUES(`best_oasis_bonus`)";
+                            if (!mysqli_query($this->dblink, $sql)) {
+                                mysqli_rollback($this->dblink);
+                                $inTransaction = false;
+                                return ['ok'=>false,'msg'=>'INSERT failed: '.mysqli_error($this->dblink),'processed'=>$total,'target'=>$countTotal];
+                            }
+                        }
 
-				// advance cursor
-				$lastId = (int)$rows[$n - 1]['wref'];
-			}
+                        $total += count($chunk);
+                        if ($reporter) {
+                            $pct = $countTotal ? min(100, (int)floor(($total / $countTotal) * 100)) : 0;
+                            $reporter($total, $countTotal, $pct);
+                        }
+                    }
 
-			// Restore checks (optional)
-			@mysqli_query($this->dblink, "SET unique_checks=1");
-			@mysqli_query($this->dblink, "SET foreign_key_checks=1");
+                    mysqli_commit($this->dblink);
+                    $inTransaction = false;
+                    $lastId = (int)$rows[$n - 1]['wref'];
+                }
 
-			// Analyze once at the end
-			@mysqli_query($this->dblink, "ANALYZE TABLE `$CROP_TABLE`");
+                foreach(["SET SESSION unique_checks=1", "SET SESSION foreign_key_checks=1"] as $stmt){
+                    try {
+                        mysqli_query($this->dblink, $stmt);
+                    } catch (Throwable $e) {
+                        // Ignore restore failures if the engine does not support the setting.
+                    }
+                }
 
-			if ($reporter) { $reporter($total, $countTotal, 100); }
-			return ['ok'=>true,'msg'=>'Croppers populated','processed'=>$total,'target'=>$countTotal];
+                @mysqli_query($this->dblink, "ANALYZE TABLE `$CROP_TABLE`");
+                if ($reporter) { $reporter($total, $countTotal, 100); }
+                return ['ok'=>true,'msg'=>'Croppers populated','processed'=>$total,'target'=>$countTotal];
+            } catch (Throwable $e) {
+                if ($inTransaction) {
+                    try {
+                        mysqli_rollback($this->dblink);
+                    } catch (Throwable $rollbackException) {
+                        // Ignore rollback errors after fatal DB exceptions.
+                    }
+                }
+                return ['ok'=>false,'msg'=>$e->getMessage(),'processed'=>$total,'target'=>$countTotal];
+            }
 		}
 	
 

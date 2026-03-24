@@ -890,10 +890,14 @@ class Building {
 		$rclay = $uprequire['clay'] - $village->aclay;
 		$rcrop = $uprequire['crop'] - $village->acrop;
 		$riron = $uprequire['iron'] - $village->airon;
-		$rwtime = $rwood / $village->getProd("wood") * 3600;
-		$rcltime = $rclay / $village->getProd("clay") * 3600;
-		$rctime = $rcrop / $village->getProd("crop") * 3600;
-		$ritime = $riron / $village->getProd("iron") * 3600;
+		$woodProd = $village->getProd("wood");
+		$clayProd = $village->getProd("clay");
+		$cropProd = $village->getProd("crop");
+		$ironProd = $village->getProd("iron");
+		$rwtime = ($rwood <= 0) ? 0 : ($woodProd > 0 ? $rwood / $woodProd * 3600 : 0);
+		$rcltime = ($rclay <= 0) ? 0 : ($clayProd > 0 ? $rclay / $clayProd * 3600 : 0);
+		$rctime = ($rcrop <= 0) ? 0 : ($cropProd > 0 ? $rcrop / $cropProd * 3600 : 0);
+		$ritime = ($riron <= 0) ? 0 : ($ironProd > 0 ? $riron / $ironProd * 3600 : 0);
 		$reqtime = max($rwtime, $rctime, $rcltime, $ritime);
 		$reqtime += time();
 		return $generator->procMtime($reqtime);

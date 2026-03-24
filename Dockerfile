@@ -1,9 +1,9 @@
-FROM php:7.4-apache
+FROM php:8.3-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpng-dev \
-    libjpeg-dev \
+    libjpeg62-turbo-dev \
     libfreetype6-dev \
     libzip-dev \
     zip \
@@ -26,18 +26,14 @@ RUN a2enmod rewrite headers
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application files
-COPY . /var/www/html/
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/html/var
+# Runtime source code is bind-mounted by docker-compose.
+# Keep only minimal folder bootstrap inside the image.
+RUN mkdir -p /var/www/html/var
 
 # Configure Apache to use /var/www/html as DocumentRoot
 RUN sed -i 's!/var/www/html!/var/www/html!g' /etc/apache2/sites-available/000-default.conf
 
-# Expose port 80
+# Expose Apache port
 EXPOSE 80
 
 # Start Apache
