@@ -1,4 +1,4 @@
- <?php
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -12,10 +12,12 @@
 include_once("../../GameEngine/config.php");
 include_once("../../GameEngine/Database.php");
 
-if (!isset($_SESSION)) {
- session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+	session_start();
 }
-if($_SESSION['access'] != ADMIN) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+if (!isset($_SESSION['access']) || (int)$_SESSION['access'] !== (int)ADMIN) {
+	die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+}
 set_time_limit(0);
 // TODO: truncate ALL tables (in a single query, not like this),
 //       then perform install steps (createDbStructure() && populateWorldData())

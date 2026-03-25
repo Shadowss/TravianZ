@@ -477,6 +477,8 @@ class Battle {
         $result['Attack_points'] = $rap;
         $result['Defend_points'] = $rdp;
         $winner = ($rap > $rdp);
+        $safeRap = max(1, (float) $rap);
+        $safeRdp = max(1, (float) $rdp);
 
         // Formula for calculating the Morale bonus
         // WW villages aren't affected by this bonus
@@ -495,7 +497,7 @@ class Battle {
         // $type = 1 Scout, 2 Enforcement
         // $type = 3 Normal, 4 Raid
         if($type == 1){
-            $holder = pow((($rdp * $moralbonus) / $rap), $Mfactor);
+            $holder = pow((($rdp * $moralbonus) / $safeRap), $Mfactor);
             if($holder > 1) $holder = 1;
             if ($rdp > $rap) $holder = 1;
             
@@ -507,7 +509,7 @@ class Battle {
             //Defender result
             $result[2] = 0;
         }else if($type == 4) {
-            $holder = ($winner) ? pow((($rdp * $moralbonus) / $rap), $Mfactor) : pow(($rap / ($rdp * $moralbonus)), $Mfactor);
+            $holder = ($winner) ? pow((($rdp * $moralbonus) / $safeRap), $Mfactor) : pow(($safeRap / max($safeRdp * $moralbonus, 1)), $Mfactor);
             $holder = $holder / (1 + $holder);
             //Attacker result
             $result[1] = $winner ? $holder : 1 - $holder;
@@ -518,7 +520,7 @@ class Battle {
         }else if($type == 3){
             
             // Attacker
-            $result[1] = ($winner) ? pow((($rdp * $moralbonus) / $rap), $Mfactor) : 1;
+            $result[1] = ($winner) ? pow((($rdp * $moralbonus) / $safeRap), $Mfactor) : 1;
             
             if ($result[1] > 1){
                 $result[1] = 1;
@@ -527,9 +529,9 @@ class Battle {
             }
 
             // Defender
-            $result[2] = (!$winner) ? pow(($rap / ($rdp * $moralbonus)), $Mfactor) : 1;
+            $result[2] = (!$winner) ? pow(($safeRap / max($safeRdp * $moralbonus, 1)), $Mfactor) : 1;
             
-            if ($result[1] == 1) $result[2] = pow(($rap / ($rdp * $moralbonus)), $Mfactor);
+            if ($result[1] == 1) $result[2] = pow(($safeRap / max($safeRdp * $moralbonus, 1)), $Mfactor);
 
             if ($result[2] > 1) {
                 $result[2] = 1;
@@ -569,14 +571,14 @@ class Battle {
             $catpMoraleBonus = min(max(($attpop / ($defpop > 0 ? $defpop : 1)) ** 0.3, 1), 3);
 
             //New level of the building (only for warsim.php)
-            $catapultsDamage = $this->calculateCatapultsDamage($catp, $upgrades, $durability, $rap / $rdp, $strongerbuildings, $catpMoraleBonus);
+            $catapultsDamage = $this->calculateCatapultsDamage($catp, $upgrades, $durability, $safeRap / $safeRdp, $strongerbuildings, $catpMoraleBonus);
             $result[3] = $this->calculateNewBuildingLevel($tblevel, $catapultsDamage);
             $result[4] = $tblevel;
             
             //Results for Automation.php          
             $result['catapults']['upgrades'] = $upgrades;
             $result['catapults']['durability'] = $durability;
-            $result['catapults']['attackDefenseRatio'] = $rap / $rdp;
+            $result['catapults']['attackDefenseRatio'] = $safeRap / $safeRdp;
             $result['catapults']['strongerBuildings'] = $strongerbuildings;
             $result['catapults']['moraleBonus'] = $catpMoraleBonus;
         }
@@ -590,19 +592,19 @@ class Battle {
             $durability = ($stonemason > 0 ? $bid34[$stonemason]['attri'] / 100 : 1);
            
             // New level of the building (only for warsim.php)
-            $ramsDamage = $this->calculateCatapultsDamage($ram, $upgrades, $durability, $rap / $rdp, $strongerbuildings, 1);
+            $ramsDamage = $this->calculateCatapultsDamage($ram, $upgrades, $durability, $safeRap / $safeRdp, $strongerbuildings, 1);
             $result[7] = $this->calculateNewBuildingLevel($walllevel, $ramsDamage);
             $result[8] = $walllevel;
 
             // Results for Automation.php
             $result['rams']['upgrades'] = $upgrades;
             $result['rams']['durability'] = $durability;
-            $result['rams']['attackDefenseRatio'] = $rap / $rdp;
+            $result['rams']['attackDefenseRatio'] = $safeRap / $safeRdp;
             $result['rams']['strongerBuildings'] = $strongerbuildings;
             $result['rams']['moraleBonus'] = 1;
         }
 
-        $result[6] = pow($rap / ($rdp * $moralbonus > 0 ? $rdp * $moralbonus : 1), $Mfactor);
+        $result[6] = pow($safeRap / max($safeRdp * $moralbonus, 1), $Mfactor);
         $result['moralBonus'] = $moralbonus;
         
         $total_att_units = count($units['Att_unit']);

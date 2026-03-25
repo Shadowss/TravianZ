@@ -12,7 +12,11 @@ include_once("../GameEngine/Generator.php");
 include_once("../GameEngine/Technology.php");
 include_once("../GameEngine/Message.php");
 
-if(isset($_GET['nid']) && is_numeric($_GET['nid'])) $msg = $database->getMessage($_GET['nid'], 3);
+$msg = [];
+$allMessages = [];
+$nid = (isset($_GET['nid']) && is_numeric($_GET['nid'])) ? (int) $_GET['nid'] : 0;
+
+if($nid > 0) $msg = $database->getMessage($nid, 3);
 else
 {
     $sql = "SELECT * FROM " . TB_PREFIX . "mdata ORDER BY time DESC ";
@@ -75,5 +79,5 @@ echo stripslashes(nl2br($bbcoded));
 	<div id="read_foot" class="msg_foot"></div>
 	</div><?php
 }
-else echo "Message ID ".$_GET['nid']." doesn't exist!";
+else echo "Message ID ".$nid." doesn't exist!";
 ?>

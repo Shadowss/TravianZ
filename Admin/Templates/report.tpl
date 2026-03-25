@@ -12,7 +12,13 @@ include_once("../GameEngine/Generator.php");
 include_once("../GameEngine/Technology.php");
 include_once("../GameEngine/Message.php");
 
-if ($_GET['bid']) $rep = $database->getNotice2($_GET['bid']);
+$rep = null;
+$rep1 = [];
+$bid = isset($_GET['bid']) ? (int) $_GET['bid'] : 0;
+
+if ($bid > 0) {
+	$rep = $database->getNotice2($bid);
+}
 else
 {
 	$sql = "SELECT * FROM " . TB_PREFIX . "ndata ORDER BY time DESC ";
@@ -20,7 +26,7 @@ else
 	$rep1 = $database->mysqli_fetch_all($result);
 }
 
-if($rep1)
+if(!empty($rep1))
 {
 	?>
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
@@ -34,7 +40,7 @@ if($rep1)
 	</div>
 	<?php
 }
-elseif($rep)
+elseif(!empty($rep))
 { 
 ?>
 	<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
@@ -50,5 +56,5 @@ elseif($rep)
 	$message->readingNotice = $rep;
 	include ("../Templates/Notice/".$message->getReportType($rep['ntype']).".tpl");
 }
-else echo "Report ID ".$_GET['bid']." doesn't exist!";
+else echo "Report ID ".$bid." doesn't exist!";
 ?>

@@ -67,8 +67,8 @@ $reporter = function($done, $target, $pct) use (&$lastPing) {
     if (connection_aborted()) { exit; } // client left
 };
 
-// Run it (fresh world => truncateFirst=true; big batch on dedicated server)
-$out = $database->populateCroppers($total, true, 20000, $reporter);
+// Run it (fresh world => truncateFirst=true). Slightly smaller batch keeps progress updates more frequent.
+$out = $database->populateCroppers($total, true, 2000, $reporter);
 
 if (!empty($out['ok'])) {
     sse_send([
@@ -79,6 +79,7 @@ if (!empty($out['ok'])) {
     ]);
 } else {
     sse_send([
+        'error'=>true,
         'pct'=>0,
         'done'=>0,
         'total'=>(int)$total,

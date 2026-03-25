@@ -42,6 +42,27 @@ $csrf = $_SESSION['csrf_cb'];
 
 function h($s){ return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
 
+function indexExists($db, $tableName, $indexName) {
+    $sql = "SELECT 1 FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = '".mysqli_real_escape_string($db, $tableName)."' AND index_name = '".mysqli_real_escape_string($db, $indexName)."' LIMIT 1";
+    $result = mysqli_query($db, $sql);
+    if (!$result) {
+        return false;
+    }
+    return mysqli_num_rows($result) > 0;
+}
+
+function createIndexIfMissing($db, $tableName, $indexName, $columnsSql) {
+    if (!indexExists($db, $tableName, $indexName)) {
+        mysqli_query($db, "CREATE INDEX `{$indexName}` ON `{$tableName}` ({$columnsSql})");
+    }
+}
+
+function dropIndexIfExists($db, $tableName, $indexName) {
+    if (indexExists($db, $tableName, $indexName)) {
+        mysqli_query($db, "DROP INDEX `{$indexName}` ON `{$tableName}`");
+    }
+}
+
 // Ensure table exists (minimal schema, unsigned tinyints)
 mysqli_query($database->dblink, "CREATE TABLE IF NOT EXISTS `$CROP_TABLE` (
   `wref` INT UNSIGNED NOT NULL PRIMARY KEY,
@@ -53,10 +74,10 @@ mysqli_query($database->dblink, "CREATE TABLE IF NOT EXISTS `$CROP_TABLE` (
   CHECK (`best_oasis_bonus` IN (0,25,50,75,100,125,150))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
-// Helpful indexes (ignore errors if already exist)
-@mysqli_query($database->dblink, "CREATE INDEX `idx_ft_bonus_xy` ON `$CROP_TABLE` (`fieldtype`, `best_oasis_bonus`, `x`, `y`)");
-@mysqli_query($database->dblink, "CREATE INDEX `idx_xy` ON `$CROP_TABLE` (`x`, `y`)");
-@mysqli_query($database->dblink, "CREATE INDEX `idx_bonus` ON `$CROP_TABLE` (`best_oasis_bonus`)");
+// Helpful indexes (idempotent, avoids PHP8 mysqli duplicate-index exceptions)
+createIndexIfMissing($database->dblink, $CROP_TABLE, 'idx_ft_bonus_xy', '`fieldtype`, `best_oasis_bonus`, `x`, `y`');
+createIndexIfMissing($database->dblink, $CROP_TABLE, 'idx_xy', '`x`, `y`');
+createIndexIfMissing($database->dblink, $CROP_TABLE, 'idx_bonus', '`best_oasis_bonus`');
 
 // ---------- Helpers ----------
 function worldSizeLabel(): string {
@@ -110,12 +131,12 @@ if ($action === 'truncate') {
     $notice = "Croppers table truncated.";
 }
 if ($action === 'reindex') {
-    @mysqli_query($database->dblink, "DROP INDEX `idx_ft_bonus_xy` ON `$CROP_TABLE`");
-    @mysqli_query($database->dblink, "DROP INDEX `idx_xy` ON `$CROP_TABLE`");
-    @mysqli_query($database->dblink, "DROP INDEX `idx_bonus` ON `$CROP_TABLE`");
-    @mysqli_query($database->dblink, "CREATE INDEX `idx_ft_bonus_xy` ON `$CROP_TABLE` (`fieldtype`, `best_oasis_bonus`, `x`, `y`)");
-    @mysqli_query($database->dblink, "CREATE INDEX `idx_xy` ON `$CROP_TABLE` (`x`, `y`)");
-    @mysqli_query($database->dblink, "CREATE INDEX `idx_bonus` ON `$CROP_TABLE` (`best_oasis_bonus`)");
+    dropIndexIfExists($database->dblink, $CROP_TABLE, 'idx_ft_bonus_xy');
+    dropIndexIfExists($database->dblink, $CROP_TABLE, 'idx_xy');
+    dropIndexIfExists($database->dblink, $CROP_TABLE, 'idx_bonus');
+    createIndexIfMissing($database->dblink, $CROP_TABLE, 'idx_ft_bonus_xy', '`fieldtype`, `best_oasis_bonus`, `x`, `y`');
+    createIndexIfMissing($database->dblink, $CROP_TABLE, 'idx_xy', '`x`, `y`');
+    createIndexIfMissing($database->dblink, $CROP_TABLE, 'idx_bonus', '`best_oasis_bonus`');
     $notice = "Indexes rebuilt.";
 }
 if ($action === 'estimate') {

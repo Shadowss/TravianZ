@@ -19,6 +19,64 @@
 if(isset($_GET['c']) && $_GET['c'] == 1) {
 echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php check cmod.</span></div><br>";
 }
+
+@session_start();
+
+$envPath = dirname(__DIR__, 2) . '/.env';
+$envDefaults = [];
+if(file_exists($envPath)) {
+    $lines = @file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if(is_array($lines)) {
+        foreach($lines as $line) {
+            $line = trim($line);
+            if($line === '' || $line[0] === '#') {
+                continue;
+            }
+
+            $eqPos = strpos($line, '=');
+            if($eqPos === false) {
+                continue;
+            }
+
+            $key = trim(substr($line, 0, $eqPos));
+            $value = trim(substr($line, $eqPos + 1));
+            if($key === '') {
+                continue;
+            }
+
+            if((strlen($value) >= 2) && (($value[0] === '"' && substr($value, -1) === '"') || ($value[0] === "'" && substr($value, -1) === "'"))) {
+                $value = substr($value, 1, -1);
+            }
+
+            $envDefaults[$key] = $value;
+        }
+
+        // Resolve ${VAR} references using parsed values first, then process env.
+        foreach($envDefaults as $key => $value) {
+            $envDefaults[$key] = preg_replace_callback('/\$\{([A-Z0-9_]+)\}/i', function($m) use ($envDefaults) {
+                $ref = $m[1];
+                if(isset($envDefaults[$ref])) return $envDefaults[$ref];
+                $fromEnv = getenv($ref);
+                return ($fromEnv !== false) ? $fromEnv : '';
+            }, $value);
+        }
+    }
+}
+
+$dbHost = $envDefaults['DB_HOST'] ?? 'localhost';
+$dbPort = $envDefaults['DB_PORT'] ?? '3306';
+$dbUser = $envDefaults['MARIADB_USER'] ?? ($envDefaults['MYSQL_USER'] ?? '');
+$dbPass = $envDefaults['MARIADB_PASSWORD'] ?? ($envDefaults['MYSQL_PASSWORD'] ?? '');
+$dbName = $envDefaults['MARIADB_DATABASE'] ?? ($envDefaults['MYSQL_DATABASE'] ?? '');
+
+if(empty($_SESSION['install_random_prefix'])) {
+    try {
+        $_SESSION['install_random_prefix'] = 's' . substr(bin2hex(random_bytes(2)), 0, 4) . '_';
+    } catch (Throwable $e) {
+        $_SESSION['install_random_prefix'] = 's' . str_pad((string) mt_rand(0, 9999), 4, '0', STR_PAD_LEFT) . '_';
+    }
+}
+$dbPrefix = $_SESSION['install_random_prefix'];
 ?>
 
 <form action="process.php" method="post" id="dataform">
@@ -41,6 +99,7 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
                 <select name="tzone" onChange="refresh(this.value)">
                     <option value="1,Africa/Dakar" <?php if ($tz==1) echo "selected";?>>Africa</option>
                     <option value="2,America/New_York" <?php if ($tz==2) echo "selected";?>>America</option>
+                    <option value="13,America/Sao_Paulo" <?php if ($tz==13) echo "selected";?>>Brazil (Sao Paulo)</option>
                     <option value="3,Antarctica/Casey" <?php if ($tz==3) echo "selected";?>>Antarctica</option>
                     <option value="4,Arctic/Longyearbyen" <?php if ($tz==4) echo "selected";?>>Arctic</option>
                     <option value="5,Asia/Kuala_Lumpur" <?php if ($tz==5) echo "selected";?>>Asia</option>
@@ -416,27 +475,27 @@ echo "<div class=\"headline\"><span class=\"f10 c5\">Error creating constant.php
     <table>
         <tr>
             <td><span class="f9 c6">Hostname:</span></td>
-            <td><input name="sserver" type="text" id="sserver" value="localhost"></td>
+            <td><input name="sserver" type="text" id="sserver" value="<?php echo htmlspecialchars($dbHost, ENT_QUOTES, 'UTF-8'); ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Port:</span></td>
-            <td><input name="sport" type="text" id="sport" value="3306"></td>
+            <td><input name="sport" type="text" id="sport" value="<?php echo htmlspecialchars($dbPort, ENT_QUOTES, 'UTF-8'); ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Username:</span></td>
-            <td><input name="suser" type="text" id="suser" value=""></td>
+            <td><input name="suser" type="text" id="suser" value="<?php echo htmlspecialchars($dbUser, ENT_QUOTES, 'UTF-8'); ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Password:</span></td>
-            <td><input type="password" name="spass" id="spass"></td>
+            <td><input type="password" name="spass" id="spass" value="<?php echo htmlspecialchars($dbPass, ENT_QUOTES, 'UTF-8'); ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">DB name:</span></td>
-            <td><input type="text" name="sdb" id="sdb"></td>
+            <td><input type="text" name="sdb" id="sdb" value="<?php echo htmlspecialchars($dbName, ENT_QUOTES, 'UTF-8'); ?>"></td>
         </tr>
         <tr>
             <td><span class="f9 c6">Prefix:</span></td>
-            <td><input type="text" name="prefix" id="prefix" value="s1_" size="5"></td>
+            <td><input type="text" name="prefix" id="prefix" value="<?php echo htmlspecialchars($dbPrefix, ENT_QUOTES, 'UTF-8'); ?>" size="7"></td>
         </tr>
         <td><span class="f9 c6">Type:</span></td>
         <td>

@@ -29,21 +29,21 @@ cp .env.example .env
 Edit `.env` file to set your database credentials:
 
 ```env
-MYSQL_ROOT_PASSWORD=yourStrongRootPassword
-MYSQL_DATABASE=travian
-MYSQL_USER=travianz
-MYSQL_PASSWORD=yourStrongPassword
+MARIADB_ROOT_PASSWORD=yourStrongRootPassword
+MARIADB_DATABASE=travian
+MARIADB_USER=travianz
+MARIADB_PASSWORD=yourStrongPassword
 ```
 
 ### 3. Start the Containers
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This command will:
 - Build the TravianZ web application container
-- Start a MySQL 5.7 database container
+- Start a MariaDB (latest) database container
 - Start a phpMyAdmin container for database management
 - Set up a network for all containers to communicate
 
@@ -75,35 +75,35 @@ After starting the containers, the following services will be available:
 
 - **TravianZ Web Application:** http://localhost:8080
 - **phpMyAdmin:** http://localhost:8081
-- **MySQL Database:** localhost:3306 (for external connections)
+- **MariaDB Database:** localhost:3306 (for external connections)
 
 ## Container Management
 
 ### View Running Containers
 
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 ### View Logs
 
 ```bash
 # All containers
-docker-compose logs
+docker compose logs
 
 # Specific container
-docker-compose logs web
-docker-compose logs db
-docker-compose logs phpmyadmin
+docker compose logs web
+docker compose logs db
+docker compose logs phpmyadmin
 
 # Follow logs in real-time
-docker-compose logs -f web
+docker compose logs -f web
 ```
 
 ### Stop Containers
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### Stop and Remove All Data
@@ -111,13 +111,13 @@ docker-compose down
 **WARNING:** This will delete all database data!
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ### Restart Containers
 
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### Rebuild Containers
@@ -125,8 +125,8 @@ docker-compose restart
 If you make changes to the Dockerfile or application code:
 
 ```bash
-docker-compose down
-docker-compose up -d --build
+docker compose down
+docker compose up -d --build
 ```
 
 ## Accessing the Containers
@@ -160,12 +160,12 @@ docker exec -it travianz-web chmod -R 777 /var/www/html/var
 
 1. Make sure the database container is running:
    ```bash
-   docker-compose ps
+  docker compose ps
    ```
 
 2. Check database logs:
    ```bash
-   docker-compose logs db
+  docker compose logs db
    ```
 
 3. Verify the hostname is set to `db` (not `localhost` or `127.0.0.1`)
@@ -176,7 +176,7 @@ If you need to start the installation over:
 
 1. Stop containers:
    ```bash
-   docker-compose down -v
+  docker compose down -v
    ```
 
 2. Remove the installed flag:
@@ -187,14 +187,14 @@ If you need to start the installation over:
 
 3. Start containers again:
    ```bash
-   docker-compose up -d
+  docker compose up -d
    ```
 
 4. Access the installation wizard again at http://localhost:8080/install
 
 ### Port Already in Use
 
-If port 8080 or 8081 is already in use, edit `docker-compose.yml` and change the ports:
+If port 8080 or 8081 is already in use, edit `docker compose` configuration (`docker-compose.yml`) and change the ports:
 
 ```yaml
 services:
@@ -211,13 +211,13 @@ services:
 ### Backup Database
 
 ```bash
-docker exec travianz-db mysqldump -u root -p travian > backup_$(date +%Y%m%d).sql
+docker exec travianz-db mariadb-dump -u root -p travian > backup_$(date +%Y%m%d).sql
 ```
 
 ### Restore Database
 
 ```bash
-docker exec -i travianz-db mysql -u root -p travian < backup_20231125.sql
+docker exec -i travianz-db mariadb -u root -p travian < backup_20231125.sql
 ```
 
 ### Backup Application Files
@@ -237,7 +237,7 @@ For production environments, consider the following:
 
 2. **Use SSL/TLS:** Set up a reverse proxy (nginx/traefik) with Let's Encrypt
 
-3. **Limit Database Access:** Remove the database port exposure in `docker-compose.yml`
+3. **Limit Database Access:** Remove the database port exposure in the `docker compose` configuration (`docker-compose.yml`)
 
 4. **Regular Backups:** Set up automated backup scripts
 
@@ -257,15 +257,14 @@ services:
 
 ## Performance Optimization
 
-### MySQL Tuning
+### MariaDB Tuning
 
-Edit `docker-compose.yml` to add MySQL configuration:
+Edit `docker-compose.yml` to add MariaDB configuration:
 
 ```yaml
 services:
   db:
     command: >
-      --default-authentication-plugin=mysql_native_password
       --sql_mode=""
       --max_connections=200
       --innodb_buffer_pool_size=512M
@@ -299,8 +298,8 @@ To update TravianZ to the latest version:
 
 ```bash
 git pull origin main
-docker-compose down
-docker-compose up -d --build
+docker compose down
+docker compose up -d --build
 ```
 
 ## Support
