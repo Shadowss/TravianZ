@@ -4580,6 +4580,18 @@ References: User ID/Message ID, Mode
 		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('research_village_$wid')");
 	}
 
+	function getTrainingLock($wid) {
+		$wid = (int) $wid;
+		$result = mysqli_query($this->dblink, "SELECT GET_LOCK('train_village_$wid', 10) AS locked");
+		$row = mysqli_fetch_assoc($result);
+		return $row['locked'] == 1;
+	}
+
+	function releaseTrainingLock($wid) {
+		$wid = (int) $wid;
+		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('train_village_$wid')");
+	}
+
 	/**
 	 * Get the time required to build a specified building
 	 * 
