@@ -62,9 +62,9 @@
             $name1 = 'unknown';
         }
 
-		if(isset($_GET['land'])) {
+		if(isset($_GET['land']) && $village->resarray['f' . $id] >= 1) {
             include_once("37_land.tpl");
-		} else {
+		} else if ($village->resarray['f' . $id] >= 1) {
             $include_training = true;
             $include_revive = false;
             if (isset($heroes) && is_array($heroes) && count($heroes)) {
