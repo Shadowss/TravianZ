@@ -4592,6 +4592,18 @@ References: User ID/Message ID, Mode
 		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('train_village_$wid')");
 	}
 
+	function getEnforceLock($id) {
+		$id = (int) $id;
+		$result = mysqli_query($this->dblink, "SELECT GET_LOCK('enforce_$id', 10) AS locked");
+		$row = mysqli_fetch_assoc($result);
+		return $row['locked'] == 1;
+	}
+
+	function releaseEnforceLock($id) {
+		$id = (int) $id;
+		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('enforce_$id')");
+	}
+
 	/**
 	 * Get the time required to build a specified building
 	 * 

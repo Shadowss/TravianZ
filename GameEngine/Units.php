@@ -417,90 +417,99 @@ class Units {
     private function sendTroopsBack($post) {
         global $form, $database, $village, $session, $technology;
 
-        $enforce      = $database->getEnforceArray( $post['ckey'], 0 );
-        $enforceoasis = $database->getOasisEnforceArray( $post['ckey'], 0 );
-        if ( ( $enforce['from'] == $village->wid ) || ( $enforce['vref'] == $village->wid ) || ( $enforceoasis['conqured'] == $village->wid ) ) {
-            $to     = $database->getVillage( $enforce['from'] );
-            $Gtribe = ($ownerTribe = $database->getUserField( $to['owner'], 'tribe', 0)) == 1 ? "" : $ownerTribe - 1;
-            
-            for ( $i = 1; $i < 10; $i ++ ) {
-                if ( isset( $post[ 't' . $i ] ) ) {
-                    if ( $i != 10 ) {
-                        if ( $post[ 't' . $i ] > $enforce[ 'u' . $Gtribe . $i ] ) {
-                            $form->addError( "error", "You can't send back more units than you have" );
-                            break;
+        if (!$database->getEnforceLock($post['ckey'])) return;
+        try {
+            // Re-fetch after lock to prevent TOCTOU race condition
+            $enforce      = $database->getEnforceArray( $post['ckey'], 0 );
+            $enforceoasis = $database->getOasisEnforceArray( $post['ckey'], 0 );
+            if ( ( $enforce['from'] == $village->wid ) || ( $enforce['vref'] == $village->wid ) || ( $enforceoasis['conqured'] == $village->wid ) ) {
+                $to     = $database->getVillage( $enforce['from'] );
+                $Gtribe = ($ownerTribe = $database->getUserField( $to['owner'], 'tribe', 0)) == 1 ? "" : $ownerTribe - 1;
+
+                for ( $i = 1; $i < 10; $i ++ ) {
+                    if ( isset( $post[ 't' . $i ] ) ) {
+                        if ( $i != 10 ) {
+                            if ( $post[ 't' . $i ] > $enforce[ 'u' . $Gtribe . $i ] ) {
+                                $form->addError( "error", "You can't send back more units than you have" );
+                                break;
+                            }
+
+                            if ( $post[ 't' . $i ] < 0 ) {
+                                $form->addError( "error", "You can't send back negative units." );
+                                break;
+                            }
                         }
-                        
-                        if ( $post[ 't' . $i ] < 0 ) {
-                            $form->addError( "error", "You can't send back negative units." );
-                            break;
-                        }
+                    } else {
+                        $post[ 't' . $i . '' ] = '0';
+                    }
+                }
+                if ( isset( $post['t11'] ) ) {
+                    if ( $post['t11'] > $enforce['hero'] ) {
+                        $form->addError( "error", "You can't send back more units than you have" );
+                    }
+
+                    if ( $post['t11'] < 0 ) {
+                        $form->addError( "error", "You can't send back negative units." );
                     }
                 } else {
-                    $post[ 't' . $i . '' ] = '0';
+                    $post['t11'] = '0';
                 }
-            }
-            if ( isset( $post['t11'] ) ) {
-                if ( $post['t11'] > $enforce['hero'] ) {
-                    $form->addError( "error", "You can't send back more units than you have" );
-                }
-                
-                if ( $post['t11'] < 0 ) {
-                    $form->addError( "error", "You can't send back negative units." );
-                }
-            } else {
-                $post['t11'] = '0';
-            }
-            
-            if ( $form->returnErrors() > 0 ) {
-                $_SESSION['errorarray'] = $form->getErrors();
-                $_SESSION['valuearray'] = $_POST;
-                header( "Location: a2b.php" );
-                exit;
-            } else {
-                
-                //change units
-                $tribe = $database->getUserField($to['owner'], 'tribe', 0);
-                $start = ($tribe - 1 ) * 10 + 1;
-                $end = $tribe * 10 ;
-                
-                $units = [];
-                $amounts = [];
-                $modes = [];
-                
-                $j = 1;
-                for ( $i = $start; $i <= $end; $i ++ ) {
-                    $units[] = $i;
-                    $amounts[] = $post[ 't' . $j . '' ];
+
+                if ( $form->returnErrors() > 0 ) {
+                    $_SESSION['errorarray'] = $form->getErrors();
+                    $_SESSION['valuearray'] = $_POST;
+                    $database->releaseEnforceLock($post['ckey']);
+                    header( "Location: a2b.php" );
+                    exit;
+                } else {
+
+                    //change units
+                    $tribe = $database->getUserField($to['owner'], 'tribe', 0);
+                    $start = ($tribe - 1 ) * 10 + 1;
+                    $end = $tribe * 10 ;
+
+                    $units = [];
+                    $amounts = [];
+                    $modes = [];
+
+                    $j = 1;
+                    for ( $i = $start; $i <= $end; $i ++ ) {
+                        $units[] = $i;
+                        $amounts[] = $post[ 't' . $j . '' ];
+                        $modes[] = 0;
+                        $j ++;
+                    }
+
+                    $units[] = 'hero';
+                    $amounts[] = $post['t11'];
                     $modes[] = 0;
-                    $j ++;
+
+                    $database->modifyEnforce($post['ckey'], $units, $amounts, $modes);
+                    $j++;
+
+                    $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $post, 1, 't');
+                    $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
+
+                    $reference = $database->addAttack($enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0);
+                    $database->addMovement(4, $village->wid, $enforce['from'], $reference, time(), ($time + time()));
+                    $technology->checkReinf($post['ckey'], false);
+
+                    $database->releaseEnforceLock($post['ckey']);
+                    header("Location: build.php?id=39&refresh=1");
+                    exit();
                 }
-                
-                $units[] = 'hero';
-                $amounts[] = $post['t11'];
-                $modes[] = 0;
-                
-                $database->modifyEnforce($post['ckey'], $units, $amounts, $modes);
-                $j++;
-                
-                $troopsTime = $this->getWalkingTroopsTime($enforce['from'], $enforce['vref'], $to['owner'], $tribe, $post, 1, 't');
-                $time = $database->getArtifactsValueInfluence($session->uid, $village->wid, 2, $troopsTime);
-                
-                $reference = $database->addAttack($enforce['from'], $post['t1'], $post['t2'], $post['t3'], $post['t4'], $post['t5'], $post['t6'], $post['t7'], $post['t8'], $post['t9'], $post['t10'], $post['t11'], 2, 0, 0, 0, 0);
-                $database->addMovement(4, $village->wid, $enforce['from'], $reference, time(), ($time + time()));
-                $technology->checkReinf($post['ckey'], false);
-                
-                header("Location: build.php?id=39&refresh=1");
-                exit();
+            }else{
+                $form->addError("error", "You cant change someones troops.");
+                if($form->returnErrors() > 0){
+                    $_SESSION['errorarray'] = $form->getErrors();
+                    $_SESSION['valuearray'] = $_POST;
+                    $database->releaseEnforceLock($post['ckey']);
+                    header("Location: a2b.php");
+                    exit();
+                }
             }
-        }else{
-            $form->addError("error", "You cant change someones troops.");
-            if($form->returnErrors() > 0){
-                $_SESSION['errorarray'] = $form->getErrors();
-                $_SESSION['valuearray'] = $_POST;
-                header("Location: a2b.php");
-                exit();
-            }
+        } finally {
+            $database->releaseEnforceLock($post['ckey']);
         }
     }
     
