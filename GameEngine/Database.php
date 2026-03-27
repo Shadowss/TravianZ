@@ -1384,9 +1384,6 @@ public function getBestOasisCropBonus($x, $y) {
             $numberOfVillages -= $resultedRows;
             $count++;
             
-            //If there are no more free cells in that sector, it have to be changed
-            //This instruction will be used only (in the next cicle(s)) if not all wids have been generated yet
-            if ($count > intval(WORLD_MAX / 10)) $sector = rand(1, 4);
         }
 
         foreach($villages as $village) $wids[] = $village['id'];
