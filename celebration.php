@@ -20,7 +20,7 @@ if(isset($_GET['newdid'])){
 }
 if($village->resarray['f'.$_GET['id'].'t'] == 24 and $village->currentcel == 0){
 	if(!empty($_GET['type']) && $_GET['type'] == 1){
-		if(6400 < $village->awood || 6650 < $village->aclay || 5940 < $village->airon || 1340 < $village->acrop){
+		if(6400 <= $village->awood && 6650 <= $village->aclay && 5940 <= $village->airon && 1340 <= $village->acrop){
 			$endtime = ($sc[$village->resarray['f'.$_GET['id']]]/ SPEED) + time();
 			$wood = 6400;
 			$clay = 6650;
@@ -31,7 +31,7 @@ if($village->resarray['f'.$_GET['id'].'t'] == 24 and $village->currentcel == 0){
 		}
 	}
 	elseif(!empty($_GET['type']) && $_GET['type'] == 2){
-		if(29700 < $village->awood || 33250 < $village->aclay || 32000 < $village->airon || 6700 < $village->acrop){
+		if(29700 <= $village->awood && 33250 <= $village->aclay && 32000 <= $village->airon && 6700 <= $village->acrop){
 			$endtime = ($gc[$village->resarray['f'.$_GET['id']]]/ SPEED) + time();
 			$wood= 29700;
 			$clay= 33250;
