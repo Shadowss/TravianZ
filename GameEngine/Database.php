@@ -5599,6 +5599,24 @@ References: User ID/Message ID, Mode
         return self::$merchantsUseCountCache[$vid];
 	}
 
+	/***************************
+	Function to acquire/release MySQL advisory lock for merchant operations
+	Prevents race conditions when sending merchants concurrently
+	***************************/
+	function getMerchantLock($vid, $timeout = 10)
+	{
+		$lockName = TB_PREFIX . 'merchant_' . (int)$vid;
+		$result = mysqli_query($this->dblink, "SELECT GET_LOCK('$lockName', $timeout) AS lock_acquired");
+		$row = mysqli_fetch_assoc($result);
+		return $row['lock_acquired'] == 1;
+	}
+
+	function releaseMerchantLock($vid)
+	{
+		$lockName = TB_PREFIX . 'merchant_' . (int)$vid;
+		mysqli_query($this->dblink, "SELECT RELEASE_LOCK('$lockName')");
+	}
+
 	function getMovement($type, $village, $mode, $use_cache = true) {
         $array_passed = is_array($village);
 

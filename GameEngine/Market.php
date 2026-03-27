@@ -114,6 +114,10 @@ class Market
             $resource = [$wtrans, $ctrans, $itrans, $crtrans];
 			$reqMerc = ceil((array_sum($resource) - 0.1) / $this->maxcarry);
 
+            // Acquire merchant lock to prevent race condition
+            $database->getMerchantLock($village->wid);
+            $this->used = $database->totalMerchantUsed($village->wid, false);
+
             if($this->merchantAvail() > 0 && $reqMerc <= $this->merchantAvail())
             {
                 $id = $post['getwref'];
@@ -129,10 +133,15 @@ class Market
 						$logging->addMarketLog($village->wid, 1, [$resource[0], $resource[1], $resource[2], $resource[3], $id]);
 					}
                 }
+                $database->releaseMerchantLock($village->wid);
                 header("Location: build.php?id=".$post['id']);
                 exit;
             }
-            else $form->addError("error", TOO_FEW_MERCHANTS);
+            else
+            {
+                $database->releaseMerchantLock($village->wid);
+                $form->addError("error", TOO_FEW_MERCHANTS);
+            }
         }
         else $form->addError("error", TOO_FEW_RESOURCES);
     }
@@ -197,6 +206,10 @@ class Market
 
                     if(($wood+$clay+$iron+$crop) > $this->maxcarry*$reqMerc) $reqMerc += 1;
                 }
+                // Acquire merchant lock to prevent race condition
+                $database->getMerchantLock($village->wid);
+                $this->used = $database->totalMerchantUsed($village->wid, false);
+
                 if($this->merchantAvail() > 0 && $reqMerc <= $this->merchantAvail())
                 {
                     if($database->modifyResource($village->wid,$wood,$clay,$iron,$crop,0))
@@ -207,12 +220,14 @@ class Market
                         $database->addMarket($village->wid,$post['rid1'],$post['m1'],$post['rid2'],$post['m2'],$time,$alliance,$reqMerc,0);
                     }
                     // Enough merchants
+                    $database->releaseMerchantLock($village->wid);
                     header("Location: build.php?id=".$post['id']."&t=2");
                     exit;
                 }
                 else
                 {
                     // Not enough merchants
+                    $database->releaseMerchantLock($village->wid);
                     header("Location: build.php?id=".$post['id']."&t=2&e3");
                     exit;
                 }
@@ -254,12 +269,23 @@ class Market
         {
             header("Location: build.php?id=".$get['id']."&t=1&e2");
             exit;
-        } // We don't have enough merchants
-        elseif($reqMerc > $this->merchantAvail()){ 
+        } // We don't have enough merchants (initial check before lock)
+        elseif($reqMerc > $this->merchantAvail()){
             header("Location: build.php?id=".$get['id']."&t=1&e3");
             exit;
         }
-        
+
+        // Acquire merchant lock to prevent race condition
+        $database->getMerchantLock($village->wid);
+        $this->used = $database->totalMerchantUsed($village->wid, false);
+
+        if($reqMerc > $this->merchantAvail())
+        {
+            $database->releaseMerchantLock($village->wid);
+            header("Location: build.php?id=".$get['id']."&t=1&e3");
+            exit;
+        }
+
         $myresource = $hisresource = [ 1=> 0, 0, 0, 0];
         $myresource[$infoarray['wtype']] = $infoarray['wamt'];
         $mysendid = $database->sendResource($myresource[1],$myresource[2],$myresource[3],$myresource[4],$reqMerc,0);
@@ -284,6 +310,7 @@ class Market
 		$database->setMarketAcc($get['g']);
 		$database->removeAcceptedOffer($get['g']);
 		$logging->addMarketLog($village->wid, 2, [$infoarray['vref'], $get['g']]);
+		$database->releaseMerchantLock($village->wid);
 		header("Location: build.php?id=" . $get['id']);
         exit;
     }
