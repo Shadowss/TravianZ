@@ -3024,15 +3024,40 @@ public function getBestOasisCropBonus($x, $y) {
 	// no need to cache this method
 	function getAlliancePermission($ref, $field, $mode) {
         list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
+		$mode = (int)$mode;
+		$ref = (int)$ref;
 
-		if(!$mode) {
-		    $q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where uid = ". (int) $ref . " LIMIT 1";
-		} else {
-			$q = "SELECT $field FROM " . TB_PREFIX . "ali_permission where username = '$ref' LIMIT 1";
+		// 🔒 Validazione del campo (prevenzione SQL injection indiretta)
+		$allowed_fields = ['ap1', 'ap2', 'ap3', 'ap4', 'ap5', 'ap6', 'ap7', 'ap8', 'ap9', 'ap10', 'owner', 'admin'];
+		if (!in_array($field, $allowed_fields)) {
+		error_log("Invalid field in getAlliancePermission: $field");
+		return false;
 		}
-		$result = mysqli_query($this->dblink,$q);
-		//$dbarray = mysqli_fetch_array($result); - some error in here !
-		return $dbarray[$field];
+
+		// Costruisci la query
+		if (!$mode) {
+		$q = "SELECT `$field` FROM " . TB_PREFIX . "ali_permission WHERE uid = $ref LIMIT 1";
+		} else {
+		$q = "SELECT `$field` FROM " . TB_PREFIX . "ali_permission WHERE username = '$ref' LIMIT 1";
+		}
+
+		// Esegui query
+		$result = mysqli_query($this->dblink, $q);
+
+		// 🔴 Controllo errore query
+		if (!$result) {
+		error_log("SQL Error in getAlliancePermission: " . mysqli_error($this->dblink) . " | Query: $q");
+		return false;
+		}
+
+		// 🔍 Nessun risultato?
+		if (mysqli_num_rows($result) == 0) {
+		return false;
+		}
+
+		// ✅ Estrai e restituisci il valore
+		$row = mysqli_fetch_array($result);
+		return $row[$field];
 	}
 
 	function getAlliance($id, $use_cache = true) {
