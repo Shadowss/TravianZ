@@ -3027,35 +3027,35 @@ public function getBestOasisCropBonus($x, $y) {
 		$mode = (int)$mode;
 		$ref = (int)$ref;
 
-		// 🔒 Validazione del campo (prevenzione SQL injection indiretta)
+		// 🔒 Field validation (indirect SQL injection prevention)
 		$allowed_fields = ['ap1', 'ap2', 'ap3', 'ap4', 'ap5', 'ap6', 'ap7', 'ap8', 'ap9', 'ap10', 'owner', 'admin'];
 		if (!in_array($field, $allowed_fields)) {
 		error_log("Invalid field in getAlliancePermission: $field");
 		return false;
 		}
 
-		// Costruisci la query
+		// Build the query
 		if (!$mode) {
 		$q = "SELECT `$field` FROM " . TB_PREFIX . "ali_permission WHERE uid = $ref LIMIT 1";
 		} else {
 		$q = "SELECT `$field` FROM " . TB_PREFIX . "ali_permission WHERE username = '$ref' LIMIT 1";
 		}
 
-		// Esegui query
+		// Run query
 		$result = mysqli_query($this->dblink, $q);
 
-		// 🔴 Controllo errore query
+		// 🔴 Query error check
 		if (!$result) {
 		error_log("SQL Error in getAlliancePermission: " . mysqli_error($this->dblink) . " | Query: $q");
 		return false;
 		}
 
-		// 🔍 Nessun risultato?
+		// 🔍 No results?
 		if (mysqli_num_rows($result) == 0) {
 		return false;
 		}
 
-		// ✅ Estrai e restituisci il valore
+		// ✅ Extract and return the value
 		$row = mysqli_fetch_array($result);
 		return $row[$field];
 	}
