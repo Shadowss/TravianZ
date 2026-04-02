@@ -24,8 +24,8 @@ include("alli_menu.tpl");
 								<select name="a_user" class="name dropdown">
 								<?php
                                 foreach($memberlist as $member){
-                                    //NOT WORKING IF I ACTIVATE THIS LINE 
-					//if($member['id'] != $session->uid && !$database->isAllianceOwner($member['id'])){
+                                    //Activate line below but still not working to give permission to other users in alliace
+									if($member['id'] != $session->uid && !$database->isAllianceOwner($member['id'])){
                                         echo "<option value=".$member['id'].">".$member['username']."</option>";
                                     }
                                 }
