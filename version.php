@@ -117,7 +117,8 @@ $developers = [
     ["AL-Kateb", "Alumni Developer"],
 	["hdmaniak2", " Active Developer"],
 	["newtcv", " Active Developer"],
-	["AlinV2V", " Active Developer"]
+	["AlinV2V", " Active Developer"],
+	["lietuvis10", " Active Developer"]
 ];
 
 // Primele 9 carduri normale
