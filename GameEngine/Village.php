@@ -168,7 +168,7 @@ class Village {
 		$nclay = min(($this->production['clay'] / 3600) * $timepast, $this->maxstore);
 		$niron = min(($this->production['iron'] / 3600) * $timepast, $this->maxstore);
 		$ncrop = min(($this->production['crop'] / 3600) * $timepast, $this->maxcrop);
-		
+		call_user_func(get_class($database).'::clearVillageCache');
 		$database->modifyResource($this->wid, $nwood, $nclay, $niron, $ncrop, 1);
 		$database->updateVillage($this->wid);
         $this->LoadTown(true);
