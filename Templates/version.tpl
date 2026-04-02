@@ -1,5 +1,10 @@
-	<div id="content"  class="plus">
-<h1>TravianZ <font color="#71D000">V</font><font color="#FF6F0F">E</font><font  color="#71D000">R</font><font color="#FF6F0F">S</font><font  color="#71D000">I</font><font color="#FF6F0F">O</font><font  color="#71D000">N</font> CREDITS </h1>
-<div id="textmenu">
-
+<div id="content"  class="plus">
+<center><h1>©️ Credits & Acknowledgements</h1></center>
+    <div id="textmenu">
+        <center><p><em>Standing on the shoulders of giants.</em></p></center>
+        <p>
+            Our project is a continuation and adaptation of a classic game emulator. 
+            We owe immense gratitude to the original developers who paved the way. 
+            Their foundational work has been invaluable in creating this experience.
+        </p>
 </div>

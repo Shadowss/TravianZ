@@ -66,47 +66,169 @@ else $building->procBuild($_GET);
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 <?php include("Templates/version.tpl"); ?>
-<div id="products"><b>
-1. ronix - For coding above and beyond the call of duty<br />
-2. Dzoki - Version starter<br />
-3. Shadow - For coding above and beyond the call of duty<br />
-4. Advocaite - For coding above and beyond the call of duty<br />
-5. yi12345 - It's always a pleasure<br />
-6. NarcisRO - bug hunter<br />
-7. brainiacX - For being able to code, when we needed code the most<br />
-8. InCube<br />
-9. akshay9<br />
-10. KFCSpike<br />
-11. nean<br />
-12. hexcoded<br />
-13. SlimZ<br />
-14. inblackhole<br />
-15. elio - Your advise is always welcome<br />
-16. AL3XAND3R or MisterX - For keeping the faith<br />
-17. Mr.php<br />
-18. Akakori<br />
-19. G3n3s!s<br />
-20. JimJam<br />
-21. LoppyLukas<br />
-22. Dixie<br />
-23. ZZJHONS<br />
-24. songeriux<br />
-25. TTMMTT<br />
-26. Donnchadh<br />
-27. DesPlus<br />
-28. Marvin<br />
-29. noonn<br />
-30. Armando<br />
-31. aggenkeech<br />
-32. Niko28<br />
-33. 221V - Developer<br />
-34. martinambrus - alumni developer<br />
-35. iopietro - alumni developer<br />
-36. Vladyslav - rigorous game tester<br />
-37. AL-Kateb - alumni developer</b></div><br />
-<div style="text-align: center"><b><u>Released by: TravianZ Team</u></b><br /><br />
-<b>Visit: <a href="http://forum.ragezone.com/f583/travianz-version-modified-shadow-many-967580/">RageZone.com</a></b></div><br />
-<div style="text-align: center"><b>Download from <u><a href="https://github.com/Shadowss/TravianZ/archive/master.zip">Github</a></u></b><br />
+<div id="products">
+<h1 style="text-align:center; margin-bottom:30px;">🏛️ Honoring the Original Developers</h1>
+
+<div class="grid-container" style="
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+">
+<?php
+$developers = [
+    ["ronix", "Developer & Contributor"],
+    ["Dzoki", "Version starter"],
+    ["Shadow", "Project Owner / Dev"],
+    ["Advocaite", "Developer & Contributor"],
+    ["yi12345", "Alumni Developer"],
+    ["NarcisRO", "bug hunter"],
+    ["brainiacX", "Alumni Developer"],
+    ["InCube", "Alumni Developer"],
+    ["akshay9", "Alumni Developer"],
+    ["KFCSpike", "Alumni Developer"],
+    ["nean", "Alumni Developer"],
+    ["hexcoded", "Alumni Developer"],
+    ["SlimZ", "Alumni Developer"],
+    ["inblackhole", "Alumni Developer"],
+    ["elio", "Your advise is always welcome"],
+    ["AL3XAND3R or MisterX", "For keeping the faith"],
+    ["Mr.php", "Alumni Developer"],
+    ["Akakori", "Original Developer"],
+    ["G3n3s!s", "Alumni Developer"],
+    ["JimJam", "Alumni Developer"],
+    ["LoppyLukas", "Alumni Developer"],
+    ["Dixie", "Alumni Developer"],
+    ["ZZJHONS", "Alumni Developer"],
+    ["songeriux", "Alumni Developer"],
+    ["TTMMTT", "Alumni Developer"],
+    ["Donnchadh", "Alumni Developer"],
+    ["DesPlus", "Alumni Developer"],
+    ["Marvin", "Alumni Developer"],
+    ["noonn", "Alumni Developer"],
+    ["Armando", "Alumni Developer"],
+    ["aggenkeech", "Alumni Developer"],
+    ["Niko28", "Alumni Developer"],
+    ["221V", "Developer"],
+    ["martinambrus", "Alumni Developer"],
+    ["iopietro", "Alumni Developer"],
+    ["Vladyslav", "Rigorous game tester"],
+    ["AL-Kateb", "Alumni Developer"]
+];
+
+// Primele 9 carduri normale
+for ($i = 0; $i < 9; $i++) {
+    $dev = $developers[$i];
+    echo '<div class="developer-card" style="
+        background: linear-gradient(135deg, #fefefe, #e6f0ff);
+        border: 2px solid #3399ff;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+        text-align: center;
+        transition: all 0.3s ease;
+    " onmouseover="this.style.transform=\'translateY(-8px) scale(1.03)\'; this.style.boxShadow=\'6px 6px 20px rgba(0,0,0,0.3)\';" onmouseout="this.style.transform=\'translateY(0) scale(1)\'; this.style.boxShadow=\'3px 3px 10px rgba(0,0,0,0.2)\';">
+        <div class="developer-name" style="font-weight:bold; font-size:1.2em; color:#004080;">'.$dev[0].'</div>
+        <div class="developer-role" style="margin-top:8px; font-size:1em; color:#003366;">'.$dev[1].'</div>
+    </div>';
+}
+
+// Cardul "Others" pentru restul
+$others = array_slice($developers, 9);
+$others_text = '';
+foreach($others as $dev){
+    $others_text .= $dev[0] . " — " . $dev[1] . "<br>";
+}
+
+echo '<div class="developer-card" style="
+        background: linear-gradient(135deg, #fefefe, #e6f0ff);
+        border: 2px solid #3399ff;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+        text-align: center;
+        transition: all 0.3s ease;
+        grid-column: span 3;
+    " onmouseover="this.style.transform=\'translateY(-8px) scale(1.03)\'; this.style.boxShadow=\'6px 6px 20px rgba(0,0,0,0.3)\';" onmouseout="this.style.transform=\'translateY(0) scale(1)\'; this.style.boxShadow=\'3px 3px 10px rgba(0,0,0,0.2)\';">
+        <div class="developer-name" style="font-weight:bold; font-size:1.2em; color:#004080;">+ '.count($others).' Others</div>
+        <div class="developer-role" style="margin-top:8px; font-size:1em; color:#003366; text-align:left; max-height:250px; overflow-y:auto;">'.$others_text.'</div>
+    </div>';
+?>
+</div>
+
+<div class="footer-cards" style="
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: nowrap;
+">
+
+    <!-- TravianZ Team -->
+    <a href="#" style="text-decoration:none; flex:1;">
+        <div style="
+            background: linear-gradient(135deg, #fff3e6, #ffe6ff);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100px; /* egal cu cardurile developerilor */
+        " onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='6px 6px 20px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='3px 3px 10px rgba(0,0,0,0.2)';">
+            <div style="font-weight:bold; font-size:0.95em; color:#cc6600;">Released by</div>
+            <div style="font-weight:bold; font-size:1.2em; margin-top:5px;">
+                <span style="color:orange;">T</span><span style="color:green;">r</span><span style="color:orange;">a</span><span style="color:green;">v</span><span style="color:orange;">i</span><span style="color:green;">a</span><span style="color:orange;">n</span><span style="color:green;">Z</span>
+            </div>
+            <div style="font-weight:bold; font-size:1em; color:#800000; margin-top:5px;">Team</div>
+        </div>
+    </a>
+
+    <!-- PayPal Donate -->
+    <a href="https://paypal.me/cata7007" target="_blank" style="text-decoration:none; flex:1;">
+        <div style="
+            background: #e6f7ff;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        " onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='6px 6px 20px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='3px 3px 10px rgba(0,0,0,0.2)';">
+            <img src="https://www.paypalobjects.com/webstatic/icon/pp258.png" alt="PayPal Donate" style="width:40px; height:40px; margin-bottom:8px;">
+            <div style="font-weight:bold; font-size:1.1em; color:#004080;">Donate</div>
+        </div>
+    </a>
+
+    <!-- GitHub -->
+    <a href="https://github.com/Shadowss/TravianZ/archive/master.zip" target="_blank" style="text-decoration:none; flex:1;">
+        <div style="
+            background: #f0f0f0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        " onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='6px 6px 20px rgba(0,0,0,0.3)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='3px 3px 10px rgba(0,0,0,0.2)';">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" style="width:35px; height:35px; margin-bottom:8px;">
+            <div style="font-weight:bold; font-size:1.1em; color:#24292f;">GitHub</div>
+            <div style="margin-top:3px; font-size:0.9em; color:#333;">Download</div>
+        </div>
+    </a>
+
+</div>
 </div>
 </div>
 <br /><br /><br /><br /><div id="side_info">
