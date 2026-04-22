@@ -73,11 +73,11 @@ include("alli_menu.tpl");
             </tr><tr>
                     <td colspan="2" class="empty"></td>
                 </tr>
-                <?php
+				<?php
                 foreach($memberlist as $member) {
 
                 //rank name
-                $rank = $database->getAlliancePermission($member['id'],"rank",0);
+                $rank = $database->getAlliancePermission($member['id'], "rank", $aid);
 
                 //username
                 $name = $database->getUserField($member['id'],"username",0);
@@ -86,24 +86,21 @@ include("alli_menu.tpl");
                 if($rank == ''){
                 echo '';
                 }
-
+				
                 //if there is user rank defined, user will be printed
                 else if($rank != ''){
                 echo "<tr>";
                 echo "<th>".stripslashes($rank)."</th>";
-                echo "<td><a href='spieler.php?uid=".$member['id']."'>".$name."</td>";
+                echo "<td><a href='spieler.php?uid=".$member['id']."'>".$name."</a></td>";
                 echo "</tr>";
                 }
 				}
-			if($allianceinfo['forumlink'] != '' && $allianceinfo['forumlink'] != '0'){
+				if($allianceinfo['forumlink'] != '' && $allianceinfo['forumlink'] != '0'){
                 echo "<tr>";
-                echo "<td><a href='".$allianceinfo['forumlink']."'>» to the forum</td>";
+                echo "<td><a href='".$allianceinfo['forumlink']."'>» to the forum</a></td>";
                 echo "</tr>";
                 }else{
-			?>
-                <tr>
-                <td colspan="2" class="emmty"></td>
-            </tr>
+			?>				
 			<?php } ?>
             <tr>
                 <td class="desc2" colspan="2">

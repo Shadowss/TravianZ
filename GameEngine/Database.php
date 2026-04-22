@@ -3022,42 +3022,35 @@ public function getBestOasisCropBonus($x, $y) {
 	}
 
 	// no need to cache this method
-	function getAlliancePermission($ref, $field, $mode) {
-        list($ref, $field, $mode) = $this->escape_input($ref, $field, $mode);
-		$mode = (int)$mode;
-		$ref = (int)$ref;
+	
+	function getAlliancePermission($uid, $field, $alliance) {
+    $uid = (int)$uid;
+    $alliance = (int)$alliance;
 
-		// 🔒 Field validation (indirect SQL injection prevention)
-		$allowed_fields = ['ap1', 'ap2', 'ap3', 'ap4', 'ap5', 'ap6', 'ap7', 'ap8', 'ap9', 'ap10', 'owner', 'admin'];
-		if (!in_array($field, $allowed_fields)) {
-		error_log("Invalid field in getAlliancePermission: $field");
-		return false;
-		}
+    // whitelist câmpuri permise
+    $allowed_fields = ['ap1','ap2','ap3','ap4','ap5','ap6','ap7','ap8','ap9','ap10','owner','admin','rank'];
 
-		// Build the query
-		if (!$mode) {
-		$q = "SELECT `$field` FROM " . TB_PREFIX . "ali_permission WHERE uid = $ref LIMIT 1";
-		} else {
-		$q = "SELECT `$field` FROM " . TB_PREFIX . "ali_permission WHERE username = '$ref' LIMIT 1";
-		}
+    if (!in_array($field, $allowed_fields)) {
+        error_log("Invalid field in getAlliancePermission: $field");
+        return false;
+    }
 
-		// Run query
-		$result = mysqli_query($this->dblink, $q);
+    $q = "SELECT `$field` FROM " . TB_PREFIX . "ali_permission WHERE uid = $uid AND alliance = $alliance LIMIT 1";
 
-		// 🔴 Query error check
-		if (!$result) {
-		error_log("SQL Error in getAlliancePermission: " . mysqli_error($this->dblink) . " | Query: $q");
-		return false;
-		}
+    $result = mysqli_query($this->dblink, $q);
 
-		// 🔍 No results?
-		if (mysqli_num_rows($result) == 0) {
-		return false;
-		}
+    if (!$result) {
+        error_log("SQL Error in getAlliancePermission: " . mysqli_error($this->dblink) . " | Query: $q");
+        return false;
+    }
 
-		// ✅ Extract and return the value
-		$row = mysqli_fetch_array($result);
-		return $row[$field];
+    if (mysqli_num_rows($result) == 0) {
+        return false;
+    }
+
+    $row = mysqli_fetch_assoc($result);
+
+    return $row[$field];
 	}
 
 	function getAlliance($id, $use_cache = true) {
