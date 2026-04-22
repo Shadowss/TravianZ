@@ -3309,10 +3309,10 @@ public function getBestOasisCropBonus($x, $y) {
 	Function to update alliance permissions
 	References:
 	*****************************************/
-	function updateAlliPermissions($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7) {
-	    list($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7) = $this->escape_input((int) $uid, (int) $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7);
-
-        // update cache
+	
+	function updateAlliPermissions($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7){
+		list($uid, $aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7) = $this->escape_input((int)$uid, (int)$aid, $rank, $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7);
+		        // update cache
         if (isset(self::$alliancePermissionsCache[$uid.$aid])) {
             self::$alliancePermissionsCache[ $uid . $aid ]['rank'] = $rank;
             self::$alliancePermissionsCache[ $uid . $aid ]['opt1'] = $opt1;
@@ -3324,11 +3324,14 @@ public function getBestOasisCropBonus($x, $y) {
             self::$alliancePermissionsCache[ $uid . $aid ]['opt7'] = $opt7;
             self::$alliancePermissionsCache[ $uid . $aid ]['opt8'] = $opt8;
         }
-
-		$q = "UPDATE " . TB_PREFIX . "ali_permission SET rank = '$rank', opt1 = '$opt1', opt2 = '$opt2', opt3 = '$opt3', opt4 = '$opt4', opt5 = '$opt5', opt6 = '$opt6', opt7 = '$opt7' where uid = $uid && alliance =$aid";
-		return mysqli_query($this->dblink,$q);
+	$q = "UPDATE " . TB_PREFIX . "ali_permission SET `rank` = '$rank',opt1 = '$opt1', opt2 = '$opt2', opt3 = '$opt3', opt4 = '$opt4', opt5 = '$opt5', opt6 = '$opt6', opt7 = '$opt7' WHERE uid = $uid AND alliance = $aid LIMIT 1";
+    $result = mysqli_query($this->dblink, $q);
+    if(!$result) {
+        die("SQL ERROR: " . mysqli_error($this->dblink) . "<br><br>" . $q);
+    }
+    return true;
 	}
-
+	
 	/*****************************************
 	Function to read alliance permissions
 	References: ID, notice, description

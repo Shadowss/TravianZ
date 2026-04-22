@@ -178,6 +178,10 @@ class Alliance {
 			exit;
 		}
 		
+		/*****************************************
+		Function to process of sending Forms
+		*****************************************/
+		
 		public function procAlliForm($post) {
 			if(isset($post['ft'])) {
 				switch($post['ft']) {
@@ -185,9 +189,7 @@ class Alliance {
 						$this->createAlliance($post);
 						break;
 				}
-
-			}
-			
+							}
 			if(isset($post['dipl']) && isset($post['a_name'])) $this->changediplomacy($post);
 
 			if(isset($post['s'])) {
@@ -424,30 +426,58 @@ class Alliance {
 		/*****************************************
 		Function to change the user permissions
 		*****************************************/
-		private function changeUserPermissions($post)
-		{
+		private function changeUserPermissions($post){
 			global $database, $session, $form;
-
-			if($this->userPermArray['opt1'] == 0) $form->addError("perm", NO_PERMISSION);	
-			elseif($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance) $form->addError("perm", USER_NOT_IN_YOUR_ALLY);		
-			elseif($post['a_user'] == $session->uid) $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS);
-			elseif($database->isAllianceOwner($_POST['a_user'])) $form->addError("perm", CANT_EDIT_LEADER_PERMISSIONS);
-			else 
-			{
-			    $database->updateAlliPermissions($post['a_user'], $session->alliance, $post['a_titel'], $post['e1'], $post['e2'], $post['e3'], $post['e4'], $post['e5'], $post['e6'], $post['e7']);
-				// log the notice
-			    $database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has changed permissions of <a href="spieler.php?uid='.$post['a_user'].'">'.addslashes($database->getUserField($post['a_user'], "username", 0)).'</a>.');
-			    $form->addError("perm", ALLY_PERMISSIONS_UPDATED);
-			}
-			
-			if($form->returnErrors() > 0) 
-			{
-			    $_SESSION['errorarray'] = $form->getErrors();
-			    $_SESSION['valuearray'] = $post;
-			    header("Location: allianz.php?s=5");
-			    exit;
-			}
+		if($this->userPermArray['opt1'] == 0) {
+        $form->addError("perm", NO_PERMISSION);
 		}
+		elseif($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance) {
+        $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
+		}
+		elseif($post['a_user'] == $session->uid) {
+        $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS);
+		}
+		elseif($database->isAllianceOwner($post['a_user'])) {
+        $form->addError("perm", CANT_EDIT_LEADER_PERMISSIONS);
+		}
+		else
+		{
+        // normalize checkbox values (CRITICAL FIX)
+        $opt1 = isset($post['e1']) ? 1 : 0;
+        $opt2 = isset($post['e2']) ? 1 : 0;
+        $opt3 = isset($post['e3']) ? 1 : 0;
+        $opt4 = isset($post['e4']) ? 1 : 0;
+        $opt5 = isset($post['e5']) ? 1 : 0;
+        $opt6 = isset($post['e6']) ? 1 : 0;
+        $opt7 = isset($post['e7']) ? 1 : 0;
+        $rank = isset($post['a_titel']) ? $post['a_titel'] : '';
+        $ok = $database->updateAlliPermissions(
+            (int)$post['a_user'],
+            (int)$session->alliance,
+            $rank,
+            $opt1,$opt2,$opt3,$opt4,$opt5,$opt6,$opt7
+        );
+        if(!$ok) {
+            $form->addError("perm", "DB UPDATE FAILED");
+        } else {
+            $database->insertAlliNotice(
+                $session->alliance,
+                '<a href="spieler.php?uid='.$session->uid.'">'.
+                addslashes($session->username).
+                '</a> has changed permissions of '.
+                addslashes($database->getUserField($post['a_user'], "username", 0)).'.'
+            );
+            $_SESSION['success'] = ALLY_PERMISSIONS_UPDATED;
+        }
+    }
+    if($form->returnErrors() > 0)
+    {
+        $_SESSION['errorarray'] = $form->getErrors();
+        $_SESSION['valuearray'] = $post;
+        header("Location: allianz.php?s=5");
+        exit;
+    }
+}
 		/*****************************************
 		Function to kick a user from alliance
 		*****************************************/

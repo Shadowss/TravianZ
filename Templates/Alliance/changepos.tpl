@@ -93,7 +93,7 @@ include("alli_menu.tpl");
 						<input type="hidden" name="a" value="1">
 						<input type="hidden" name="o" value="1">
 						<input type="hidden" name="s" value="5">
-					  <input type="hidden" name="a_user" value="<?php echo (isset($_POST['a_user']) ? $_POST['a_user'] : ''); ?>">
+					    <input type="hidden" name="a_user" value="<?php echo (isset($_POST['a_user']) ? $_POST['a_user'] : ''); ?>">
 						<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" />
   </p>
 				</form>
