@@ -78,10 +78,10 @@ else $building->procBuild($_GET);
 ">
 <?php
 $developers = [
-    ["ronix", "Developer & Contributor"],
+    ["ronix", "Developer"],
     ["Dzoki", "Version starter"],
-    ["Shadow", "Project Owner / Dev"],
-    ["Advocaite", "Developer & Contributor"],
+    ["Shadow", "Project Owner"],
+    ["Advocaite", "Developer"],
     ["yi12345", "Alumni Developer"],
     ["NarcisRO", "bug hunter"],
     ["brainiacX", "Alumni Developer"],
@@ -114,7 +114,11 @@ $developers = [
     ["martinambrus", "Alumni Developer"],
     ["iopietro", "Alumni Developer"],
     ["Vladyslav", "Rigorous game tester"],
-    ["AL-Kateb", "Alumni Developer"]
+    ["AL-Kateb", "Alumni Developer"],
+	["hdmaniak2", " Active Developer"],
+	["newtcv", " Active Developer"],
+	["AlinV2V", " Active Developer"],
+	["lietuvis10", " Active Developer"]
 ];
 
 // Primele 9 carduri normale
