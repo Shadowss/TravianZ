@@ -509,7 +509,7 @@ if (!empty($_GET['p'])) {
 					?>
 					<ul id="menu">
 						<li><a href="<?php echo HOMEPAGE; ?>">Server Homepage</a></li>
-						<li><a href="admin.php">Control Panel Home</a></li>
+						<li><a href="index.php">Control Panel Home</a></li>
 						<li><a href="<?php echo rtrim(SERVER, '/'); ?>/dorf1.php">Return to the server</a></li>
 						<!--<li><a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</b></font></a></li>-->
 						<li><a href="?action=logout">Logout</a></li>
@@ -580,7 +580,7 @@ if (!empty($_GET['p'])) {
 					?>
 					<ul id="menu">
 						<li><a href="<?php echo HOMEPAGE; ?>">Server Homepage</a></li>
-						<li><a href="admin.php">Control Panel Home</a></li>
+						<li><a href="index.php">Control Panel Home</a></li>
 						<li><a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">In-Game Messages</a></li>
 						<li><a href="?p=server_info">Server Info</a></li>
 						<li><a href="?p=online">Online users</a></li>

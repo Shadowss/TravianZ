@@ -20,7 +20,7 @@
 
 <img src="../<?php echo GP_LOCATE; ?>lang/en/t1/login.gif">
 
-<form method="post" action="admin.php">
+<form method="post" action="index.php">
 	<input type="hidden" name="action" value="login">
 	<p class="old_p1">
 		<table width="75%" cellspacing="1" cellpadding="0" id="profile">
