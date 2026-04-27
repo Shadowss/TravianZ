@@ -79,23 +79,55 @@ class Profile {
 	 */
 
 	private function setvactionmode($post){
-	    global $database, $session, $form;
+		global $database, $session;
 
-	    if(isset($post['vac']) && $post['vac'] && isset($post['vac_days']) && $post['vac_days'] >= 2 && $post['vac_days'] <= 14){        
-	        unset($_SESSION['wid']);
-			$database->setvacmode($session->uid, $post['vac_days']);
-			$database->activeModify(addslashes($session->username), 1);
-			$database->UpdateOnline("logout");
-			$session->Logout();
-			header("Location: login.php");
-			exit;
-	    }else{
-	    	$form->add("vac", VAC_MODE_WRONG_DAYS);
-	        header("Location: spieler.php?s=".$session->uid);        
-	        exit;
-	    }
-	    
-	}
+    if(isset($post['vac']) && $post['vac'] && isset($post['vac_days']) && $post['vac_days'] >= 2 && $post['vac_days'] <= 14){
+
+	$check = $database->checkVacationRequirements($session->uid);
+	
+	if($check !== true){
+
+    $messages = [
+        "TROOPS_MOVING" => "There are no outgoing troops",
+        "INCOMING_TROOPS" => "There are no incoming troops",
+        "REINFORCEMENTS" => "You have reinforcements on your villages",
+        "WW" => "You own a Wonder of the World",
+        "ARTEFACTS" => "You own artefacts",
+        "PROTECTION" => "You are still under beginner protection",
+        "PRISONERS_IN" => "No units trapped in your traps",
+		"PRISONERS_OUT" => "No units in enemy traps",
+        "MARKET" => "Marketplace transport active",
+		"ACCOUNT_DELETION" => "Account is scheduled for deletion"
+    ];
+
+    $output = "";
+
+    foreach($check as $err){
+        $output .= ($messages[$err] ?? $err) . "<br>";
+    }
+
+    $_SESSION['vac_error'] = $output;
+
+    header("Location: spieler.php?s=5");
+    exit;
+}
+
+        // TOTUL OK → intră în vacanță
+        unset($_SESSION['wid']);
+        $database->setvacmode($session->uid, $post['vac_days']);
+        $database->activeModify(addslashes($session->username), 1);
+        $database->UpdateOnline("logout");
+        $session->Logout();
+
+        header("Location: login.php");
+        exit;
+
+    } else {
+        $_SESSION['vac_error'] = "Vacation days must be between 2 and 14";
+        header("Location: spieler.php?s=5");
+        exit;
+    }
+}
 
 	/**
 	 * Function to vacation mode - by advocaite and Shadow

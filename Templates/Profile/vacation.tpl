@@ -1,8 +1,7 @@
-<?php if(NEW_FUNCTIONS_VACATION){
-?>
+<?php if(NEW_FUNCTIONS_VACATION){ ?>
 <h1>Player profile</h1>
 
-<?php 
+<?php
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -11,7 +10,7 @@
 ##  Version:       01.09.2013 						       	 				   ##
 ##  Filename       vacation.php                                                ##
 ##  Developed by:  Advocaite                                                   ##
-##  Fixed by:      Shadow / Skype : cata7007                                   ##
+##  Fixed & Remake:Shadow					                                   ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro 				       	 		   ##
@@ -20,69 +19,148 @@
 #################################################################################
 
 include("menu.tpl"); ?>
+
+<?php
+$tribe = (int)$session->tribe;
+$check = $database->checkVacationRequirements($session->uid);
+$errors = is_array($check) ? $check : [];
+$canActivate = empty($errors);
+function vac_ok($key, $errors){
+    return !in_array($key, $errors);
+}
+?>
+
 <form action="spieler.php" method="POST">
 <input type="hidden" name="ft" value="p4">
 
-<table cellpadding="1" cellspacing="1" id="del_acc" class="account"><thead>
-<tr>
-    <th colspan="2">Vacation Mode</th>
+<div class="vacationBox">
 
-</tr>
-</thead><tbody>
-<tr>
-	<td class="note" colspan="2">If you plan on being away for an extended period of time and do not wish to set a sitter, you can set your account to Holiday Mode. During this time your account will stop produceing resource , CP , research , trops , etc , and stop receiving attacks , reinforcements, raid , essentially freezing your account. Remember, this just freezes your Travian, not time. If you are a member of Gold Club it will run out during this time and if you have automatic renewal selected, the automatic renewal feature will be cancelled while in Holiday Mode.Please Note you must set min of 2 days vaction mode and NO MORE THEN 14 days.</td>
-		</tr><tr>
-		
+    <center><h2>Vacation Mode</h2></center>
+    <br>
 
-<div>
-<h4 class="round">General description</h4>
-	Use vacation mode to protect your villages during you are away.<br/>
-	During the vacation will be inactive next actions:<br/>
-<ul>
-<li>Send or receive troops</li>
-<li>Start new construction order</li>
-<li>Use market</li>
-<li>Train new troops</li>
-<li>Join to an alliance</li>
-<li>Delete account</li>
-</ul></div>
+    <?php
+    // 🔴 AICI AFIȘEZI ERORILE VACATION (IMPORTANT)
+    if(isset($_SESSION['vac_error'])){
+        echo "<div class='error' style='background:#900;color:#fff;padding:10px;margin-bottom:10px;'>"
+            .nl2br($_SESSION['vac_error']).
+            "</div>";
 
-<h4 class="round">Conditions</h4>
-        <ul>
-           <li>No troops in movement</li>
-		   <li>No troops on way to other villages</li>
-		   <li>No troops send to reinforcements other villages</li>
-		   <li>No player have reinforcements on your villages</li>
-		   <li>Do not have Wonder World</li>
-		   <li>Do not have any artefacts</li>
-		   <li>You are no longer in player protections</li>
-		   <li>Do not have any troops in your traps</li>
-		   <li>Your account is not in deletion process.</li>        
-		   </ul>
+        unset($_SESSION['vac_error']);
+    }
+    ?>
+
+    <div class="vacationDesc">
+        If you plan on being away for an extended period of time and do not wish to set a sitter,
+        you can activate <b>Vacation Mode</b>. During this time your account is essentially frozen.
+        No resources, troops or research will progress and your villages cannot be attacked.
+        Remember, this just freezes your Travian, not time.
+        <br><br>
+        Minimum vacation: <b>2 days</b><br>
+        Maximum vacation: <b>14 days</b>
     </div>
-	</div>
+
+    <div class="vacationGrid">
+
+        <div class="vacationColumn">
+            <h4>Inactive during vacation</h4>
+            <ul class="vacList">
+                <li>Send or receive troops</li>
+                <li>Start new construction order</li>
+                <li>Use market</li>
+                <li>Train new troops</li>
+                <li>Join an alliance</li>
+                <li>Delete account</li>
+            </ul>
+        </div>
+
+        <div class="vacationColumn">
+            <h3>Requirements</h3>
+            <ul class="vacList">
+<li style="color:<?= vac_ok('TROOPS_MOVING',$errors) ? 'green':'red' ?>">
+    There are no outgoing troops
+</li>
+
+<li style="color:<?= vac_ok('INCOMING_TROOPS',$errors) ? 'green':'red' ?>">
+    There are no incoming troops
+</li>
+
+<li style="color:<?= vac_ok('REINFORCEMENTS',$errors) ? 'green':'red' ?>">
+    No reinforcing troops sent/receive
+</li>
+
+<li style="color:<?= vac_ok('WW',$errors) ? 'green':'red' ?>">
+    No ownership of a Wonder of the World village
+</li>
+
+<li style="color:<?= vac_ok('ARTEFACTS',$errors) ? 'green':'red' ?>">
+    No ownership of an artifact village
+</li>
+
+<li style="color:<?= vac_ok('PROTECTION',$errors) ? 'green':'red' ?>">
+    No beginner’s protection
+</li>
+
+<li style="color:<?= (vac_ok('PRISONERS_IN',$errors) && vac_ok('PRISONERS_OUT',$errors)) ? 'green':'red' ?>">
+    <?php if($tribe == 3){ ?>
+        No units in your traps
+    <?php } else { ?>
+        No troops in enemy traps
+    <?php } ?>
+</li>
+
+<li style="color:<?= vac_ok('MARKET',$errors) ? 'green':'red' ?>">
+    No marketplace activity
+</li>
+
+<li style="color:<?= vac_ok('ACCOUNT_DELETION',$errors) ? 'green':'red' ?>">
+    Account is not scheduled for deletion
+</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="vacationActivate">
+
+        <label>
+            <input type="radio" name="vac" value="1">
+            Activate Vacation Mode
+        </label>
+
+        <input type="number" name="vac_days" value="2" min="2" max="14">
+
+        <span>days</span>
+
+    </div>
+
+<div class="vacationButton">
+<?php if($canActivate){ ?>
+	<input type="image" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save">
+<?php } else { ?>
+    <div style="padding:10px; background:#300; color:#fff; font-weight:bold; text-align:center; border-radius:5px;">
+        Vacation mode cannot be activated – requirements not met
+    </div>
+<?php } ?>
 </div>
 
+</div>
 
-<th>Want to activate Vacation Mode?</th>
-        <td class="del_selection">
-            <label><input class="radio" type="radio" name="vac" value="1" /> Yes</label>
-            <label><input class="text" type="text" name="vac_days" value="2" /></label>
-        </td>
-    </tr>
-  
-     </tbody></table>
-    <?php
-// Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($form->getError("vac") != "") {
-echo "<span class=\"error\">".$form->getError("vac")."</span>";
-}
-?>
-    <p class="btn"><input type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" /></p>
 </form>
-<?php
-}else{
-	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
-	exit;
-}
-?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const vacInput = document.querySelector('input[name="vac_days"]');
+
+    if (vacInput) {
+        vacInput.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+});
+</script>
+<?php }else{
+    header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
+    exit;
+} ?>

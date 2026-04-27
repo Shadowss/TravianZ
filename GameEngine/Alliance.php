@@ -47,7 +47,6 @@ class Alliance {
 		
 		public function procAlliance($get) {
 			global $session, $database;
-
 			if($session->alliance > 0) {
 				$this->allianceArray = $database->getAlliance($session->alliance);
 				// Permissions Array
@@ -57,7 +56,6 @@ class Alliance {
 				$this->inviteArray = $database->getInvitation($session->uid);
 				$this->gotInvite = count($this->inviteArray) > 0;
 			}
-			
 			if(isset($get['a'])) {
 				switch($get['a']) {
 					case 2:
@@ -86,7 +84,6 @@ class Alliance {
 		
 		public function isForumAccessible($forumID){
 			global $session;
-			
 			//Loop through the shared forums and try to find the passed one
 			foreach($session->sharedForums as $forums){
 				foreach($forums as $forum){
@@ -105,9 +102,7 @@ class Alliance {
 		
 		public static function canAct($datas, $mode = 0){
 			global $database, $session;
-
 			$hasSwitchedToAdmin = isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin";
-
 			return (/*$database->CheckEditRes($datas['aid']) == 1 && */($datas['alliance'] > 0 && (($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
 					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance']))) ||
 					($datas['owner'] == $session->uid && $session->access != ADMIN)) ||

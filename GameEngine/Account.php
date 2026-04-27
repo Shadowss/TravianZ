@@ -81,7 +81,6 @@ class Account {
 			else if(User::exists($database,$_POST['name'])) {
 				$form->addError("name",USRNM_TAKEN);
 			}
-
 		}
 		if(!isset($_POST['pw']) || trim($_POST['pw']) == "") {
 			$form->addError("pw",PW_EMPTY);
@@ -116,8 +115,6 @@ class Account {
             $form->addError("invt",$_POST['invited']);
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
-
-
             header("Location: anmelden.php");
             exit;
         }
@@ -144,7 +141,6 @@ class Account {
                         ["", $_POST['invited']],
                         1
                     );
-
 					$this->generateBase($_POST['kid'], $uid, $_POST['name']);
 					header("Location: login.php");
 					exit;
@@ -155,7 +151,6 @@ class Account {
 
 	private function Activate() {
 	    global $database;
-	    
 	    if(START_DATE < date('d.m.Y') or START_DATE == date('d.m.Y') && START_TIME <= date('H:i'))
 	    {
 	        $q = "SELECT act, username, password, email, tribe, location FROM ".TB_PREFIX."activate where act = '".$database->escape($_POST['id'])."'";
@@ -185,7 +180,6 @@ class Account {
 
 	private function Unreg() {
 		global $database;
-		
 		$q = "SELECT password, username FROM ".TB_PREFIX."activate where id = ".(int) $_POST['id'];
 		$result = mysqli_query($database->dblink,$q);
 		$dbarray = mysqli_fetch_array($result);
@@ -202,7 +196,6 @@ class Account {
 
 	private function Login() {
 		global $database, $session, $form;
-		
 		$user = $_POST['user'];
 		if(!isset($_POST['user']) || empty($_POST['user'])){
 			$form->addError("user", $user);
@@ -222,15 +215,10 @@ class Account {
 			}
 			else $form->addError("pw", LOGIN_PW_ERROR);
 		}
-
 		$userData = $database->getUserArray($_POST['user'], 0);
-			
-		// Vacation mode by Shadow
 		if($userData["vac_mode"] == 1 && $userData["vac_time"] > time()){
 			$form->addError("vacation", "Vacation mode is still enabled");
 		}
-		
-		// Vacation mode by Shadow
 		if($form->returnErrors() > 0){
 			$_SESSION['errorarray'] = $form->getErrors();
 			$_SESSION['valuearray'] = $_POST;
@@ -238,9 +226,7 @@ class Account {
 			header("Location: login.php");
 			exit();
 		}else{
-			// Vacation mode by Shadow
 			$database->removevacationmode($userData['id']);
-			// Vacation mode by Shadow
 			if($database->login($_POST['user'], $_POST['pw'])){
 				$database->UpdateOnline("login", $_POST['user'], time(), $userData['id']);
 			}else if($database->sitterLogin($_POST['user'], $_POST['pw'])){
@@ -252,8 +238,7 @@ class Account {
 	}
 
 	private function Logout() {
-		global $session, $database;
-		
+		global $session, $database;	
 		unset($_SESSION['wid']);
 		$database->activeModify(addslashes($session->username),1);
 		$database->UpdateOnline("logout") or die(mysqli_error($database->dblink));
@@ -268,10 +253,8 @@ class Account {
 	function generateBase($kid, $uid, $username) {
 		global $database;
 		$message = new Message();
-		
 		if($kid == 0) $kid = rand(1,4);
 		else $kid = $_POST['kid'];
-		
 		$database->generateVillages([['wid' => 0, 'mode' => 0, 'type' => 3, 'kid' => $kid, 'capital' => 1, 'pop' => 2, 'name' => null, 'natar' => 0]], $uid, $username);
 		$message->sendWelcome($uid, $username);
 	}

@@ -97,6 +97,13 @@ $database->updateUserField($session->uid,gpack,$_POST["custom_url"],1);
 
                     <td class="down"><a href="gpack/download/travian_default.zip" target="_blank">Download</a></td>
                 </tr>
+				<tr>
+                    <td class="nam">Travian T4 Style</td>
+                                        <td class="size">4</td>
+                    <td class="act"><a href="spieler.php?s=4&gp_type=custom&custom_url=gpack/travian_t4/">Activate</a></td>
+
+                    <td class="down"><a href="gpack/download/travian_default.zip" target="_blank">Download</a></td>
+                </tr>
                     </tbody>
     </table>
     <?php

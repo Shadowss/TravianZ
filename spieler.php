@@ -125,38 +125,58 @@ else $building->procBuild($_GET);
 		<div id="content"  class="player">
 <?php
 if(isset($_GET['uid'])) {
-	if($_GET['uid'] >= 2) {
-		$user = $database->getUserArray(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['uid']),1);
-		if(isset($user['id'])){
-			include("Templates/Profile/overview.tpl");
-		} else {
-			include("Templates/Profile/notfound.tpl");
-		}
-	}
-	else {
-		include("Templates/Profile/special.tpl");
-	}
+
+    if($_GET['uid'] >= 2) {
+
+        $user = $database->getUserArray(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['uid']),1);
+
+        if(isset($user['id'])){
+
+            // 🔴 SHOW VACATION ERROR (IMPORTANT)
+            if(isset($_SESSION['vac_error'])){
+                echo "<div class='error'>".nl2br($_SESSION['vac_error'])."</div>";
+                unset($_SESSION['vac_error']);
+            }
+
+            include("Templates/Profile/overview.tpl");
+
+        } else {
+            include("Templates/Profile/notfound.tpl");
+        }
+
+    } else {
+        include("Templates/Profile/special.tpl");
+    }
+
 }
 else if (isset($_GET['s'])) {
-	if($_GET['s'] == 1) {
-		include("Templates/Profile/profile.tpl");
-	}
-	if($_GET['s'] == 2) {
-		include("Templates/Profile/preference.tpl");
-	}
-	if($_GET['s'] == 3) {
-		include("Templates/Profile/account.tpl");
-	}
-	if($_GET['s'] == 4) {
-		include("Templates/Profile/graphic.tpl");
-	}
-	if($_GET['s'] == 5) {
-	include("Templates/Profile/vacation.tpl");
-	}
-	if($_GET['s'] > 5 or $session->sit == 1) {
-	header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$session->uid));
-	exit;
-	}
+
+    if($_GET['s'] == 1) {
+
+        include("Templates/Profile/profile.tpl");
+    }
+
+    if($_GET['s'] == 2) {
+        include("Templates/Profile/preference.tpl");
+    }
+
+    if($_GET['s'] == 3) {
+        include("Templates/Profile/account.tpl");
+    }
+
+    if($_GET['s'] == 4) {
+        include("Templates/Profile/graphic.tpl");
+    }
+
+    if($_GET['s'] == 5) {
+
+        include("Templates/Profile/vacation.tpl");
+    }
+
+    if($_GET['s'] > 5 or $session->sit == 1) {
+        header("Location: ".$_SERVER['PHP_SELF']."?uid=".preg_replace("/[^a-zA-Z0-9_-]/","",$session->uid));
+        exit;
+    }
 }
 ?>
 </div>

@@ -8496,8 +8496,183 @@ References: User ID/Message ID, Mode
                 return $dbarray2['vac_mode'] == 1;
             }
         } 
-        else return false;
+        else 
+		return 
+	false;
     }
+	
+	/*****************************************
+    Function to vacation mode remake by Shadow
+    References: Shadow 
+    *****************************************/
+	
+	function checkVacationRequirements($uid){
+		$uid = (int)$uid;
+		$time = time();
+		$errors = [];
+
+    // 1. Troops moving OUT
+    $q = "SELECT COUNT(*) as num
+          FROM ".TB_PREFIX."movement m
+          JOIN ".TB_PREFIX."vdata v ON v.wref = m.from
+          WHERE v.owner=$uid 
+          AND m.proc=0 
+          AND m.endtime > $time
+		  AND m.sort_type = 3";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){ die("SQL ERROR (TROOPS_MOVING): ".mysqli_error($this->dblink)); }
+
+    $row = mysqli_fetch_assoc($res);
+    if((int)$row['num'] > 0) $errors[] = "TROOPS_MOVING";
+
+
+    // 2. Incoming troops
+    $q = "SELECT COUNT(*) as num
+          FROM ".TB_PREFIX."movement m
+          JOIN ".TB_PREFIX."vdata v ON v.wref = m.to
+          WHERE v.owner=$uid 
+          AND m.proc=0 
+          AND m.endtime > $time
+		  AND (m.sort_type = 3 OR m.sort_type = 4)";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){ die("SQL ERROR (INCOMING): ".mysqli_error($this->dblink)); }
+
+    $row = mysqli_fetch_assoc($res);
+    if((int)$row['num'] > 0) $errors[] = "INCOMING_TROOPS";
+
+
+    // 3. Reinforcements
+    $q = "SELECT COUNT(*) as num
+      FROM ".TB_PREFIX."enforcement e
+      JOIN ".TB_PREFIX."vdata v ON v.wref = e.vref
+      WHERE v.owner = $uid
+      AND e.from != e.vref";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){ die("SQL ERROR (REINFORCEMENTS): ".mysqli_error($this->dblink)); }
+
+    $row = mysqli_fetch_assoc($res);
+    if((int)$row['num'] > 0) $errors[] = "REINFORCEMENTS";
+
+
+    // 4. Wonder of the World
+    $q = "SELECT COUNT(*) as num
+          FROM ".TB_PREFIX."fdata f
+          JOIN ".TB_PREFIX."vdata v ON v.wref=f.vref
+          WHERE v.owner=$uid AND f.f99t=40";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){ die("SQL ERROR (WW): ".mysqli_error($this->dblink)); }
+
+    $row = mysqli_fetch_assoc($res);
+    if((int)$row['num'] > 0) $errors[] = "WW";
+
+
+    // 5. Artefacts
+    $q = "SELECT COUNT(*) as num 
+          FROM ".TB_PREFIX."artefacts 
+          WHERE owner=$uid";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){ die("SQL ERROR (ARTEFACTS): ".mysqli_error($this->dblink)); }
+
+    $row = mysqli_fetch_assoc($res);
+    if((int)$row['num'] > 0) $errors[] = "ARTEFACTS";
+
+
+    // 6. Beginner protection (FIXAT)
+    $q = "SELECT protect 
+          FROM ".TB_PREFIX."users 
+          WHERE id=$uid";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){ die("SQL ERROR (PROTECTION): ".mysqli_error($this->dblink)); }
+
+    $row = mysqli_fetch_assoc($res);
+
+    $protect = (int)$row['protect'];
+
+    if($protect > 0 && $protect > $time){
+        $errors[] = "PROTECTION";
+    }
+
+
+     // =========================
+    // 7. PRISONERS (FIX FINAL)
+    // =========================
+
+    // 7.1 Enemy troops trapped in your villages
+    $q = "SELECT COUNT(*) as num
+          FROM ".TB_PREFIX."prisoners p
+          JOIN ".TB_PREFIX."vdata v ON v.wref = p.wref
+          WHERE v.owner = $uid";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){
+        die("SQL ERROR (PRISONERS_IN): ".mysqli_error($this->dblink));
+    }
+
+    $row = mysqli_fetch_assoc($res);
+    $hasEnemyTrapped = (int)$row['num'];
+
+
+    // 7.2 Your troops trapped in enemy villages
+    $q = "SELECT COUNT(*) as num
+          FROM ".TB_PREFIX."prisoners p
+          JOIN ".TB_PREFIX."vdata v ON v.wref = p.from
+          WHERE v.owner = $uid";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){
+        die("SQL ERROR (PRISONERS_OUT): ".mysqli_error($this->dblink));
+    }
+
+    $row = mysqli_fetch_assoc($res);
+    $hasOwnCaptured = (int)$row['num'];
+
+
+    // FINAL RULE
+    if($hasEnemyTrapped > 0){
+        $errors[] = "PRISONERS_IN";
+    }
+
+    if($hasOwnCaptured > 0){
+        $errors[] = "PRISONERS_OUT";
+    }
+
+    // 8. Marketplace
+	$q = "SELECT COUNT(*) as num
+		FROM ".TB_PREFIX."movement m
+		JOIN ".TB_PREFIX."vdata v ON v.wref = m.from
+		WHERE v.owner = $uid
+		AND m.proc = 0
+		AND m.endtime > $time
+		AND m.sort_type = 0";
+
+    $res = mysqli_query($this->dblink,$q);
+    if(!$res){ die("SQL ERROR (MARKET): ".mysqli_error($this->dblink)); }
+
+    $row = mysqli_fetch_assoc($res);
+    if((int)$row['num'] > 0) $errors[] = "MARKET";
+
+	// 9. Account deletion
+	$q = "SELECT timestamp 
+		FROM ".TB_PREFIX."deleting 
+		WHERE uid = $uid";
+
+	$res = mysqli_query($this->dblink,$q);
+	if(!$res){ die("SQL ERROR (DELETING): ".mysqli_error($this->dblink)); }
+
+	$row = mysqli_fetch_assoc($res);
+
+	if(!empty($row['timestamp']) && $row['timestamp'] > $time){
+    $errors[] = "ACCOUNT_DELETION";
+	}
+
+    return empty($errors) ? true : $errors;
+}
 
     // no need to cache this method
     function getHeroDeadReviveOrInTraining($id) {
