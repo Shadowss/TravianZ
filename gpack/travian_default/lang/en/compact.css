@@ -3,7 +3,7 @@ BODY
 COLOR: #6495ED; /* 1 */
 font-size:10pt;
 font-weight:light; /*  2 */
-font-style:italic; /* 3 */
+font-style:normal; /* 3 */
 background:#FFF;
 background:url(img/bg.gif); /* 4  */
 background-repeat:repeat; /* 5  */
