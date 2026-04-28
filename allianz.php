@@ -2,6 +2,19 @@
 include_once("GameEngine/Generator.php");
 $start_timer = $generator->pageLoadTimeStart();
 
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                                                    ##
+##  Filename       allianz.php                                                 ##
+##  Developed by:  Dzoki                                                       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
+##                                                                             ##
+#################################################################################
+
 //fix by ronix
 use App\Utils\AccessLogger;
 

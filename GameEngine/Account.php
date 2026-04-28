@@ -115,6 +115,8 @@ class Account {
             $form->addError("invt",$_POST['invited']);
             $_SESSION['errorarray'] = $form->getErrors();
             $_SESSION['valuearray'] = $_POST;
+
+
             header("Location: anmelden.php");
             exit;
         }
@@ -208,25 +210,26 @@ class Account {
 			// try activation data if the user was not found
 			if(!$userData){
 				$activateData = $database->getActivateField($_POST['user'], 'act', 1);
-				
 				if(!empty($activateData)) $form->addError("activate", $_POST['user']);
-				
 				else $form->addError("pw", LOGIN_PW_ERROR);
 			}
 			else $form->addError("pw", LOGIN_PW_ERROR);
 		}
 		$userData = $database->getUserArray($_POST['user'], 0);
+		// Vacation mode by Shadow
 		if($userData["vac_mode"] == 1 && $userData["vac_time"] > time()){
 			$form->addError("vacation", "Vacation mode is still enabled");
-		}
+		}	
+		// Vacation mode by Shadow
 		if($form->returnErrors() > 0){
 			$_SESSION['errorarray'] = $form->getErrors();
 			$_SESSION['valuearray'] = $_POST;
-			
 			header("Location: login.php");
 			exit();
 		}else{
+			// Vacation mode by Shadow
 			$database->removevacationmode($userData['id']);
+			// Vacation mode by Shadow
 			if($database->login($_POST['user'], $_POST['pw'])){
 				$database->UpdateOnline("login", $_POST['user'], time(), $userData['id']);
 			}else if($database->sitterLogin($_POST['user'], $_POST['pw'])){
@@ -238,7 +241,7 @@ class Account {
 	}
 
 	private function Logout() {
-		global $session, $database;	
+		global $session, $database;
 		unset($_SESSION['wid']);
 		$database->activeModify(addslashes($session->username),1);
 		$database->UpdateOnline("logout") or die(mysqli_error($database->dblink));

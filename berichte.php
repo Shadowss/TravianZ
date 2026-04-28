@@ -5,10 +5,13 @@ $start_timer = $generator->pageLoadTimeStart();
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       berichte.php                                                 ##
-##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  Project:       TravianZ                                                    ##
+##  Filename       berichte.php                                                ##
+##  Developed by:  yi12345                                                     ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
 ##                                                                             ##
 #################################################################################
 

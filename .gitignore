@@ -42,3 +42,4 @@ var/log/access.log
 
 # Docker environment file with sensitive credentials
 .env
+*.lnk

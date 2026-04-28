@@ -1,4 +1,18 @@
 <?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                                                    ##
+##  Filename       autoloader.php                                              ##
+##  Developed by:  Dzoki                                                       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
+##                                                                             ##
+#################################################################################
+
     function autoloadClass($class) {
         // strip the App classname's namespace
         $clazz = str_replace(['App\\', '\\'], ['', '/'], $class);
