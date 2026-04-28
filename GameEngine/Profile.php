@@ -88,8 +88,8 @@ class Profile {
 	if($check !== true){
 
     $messages = [
-        "TROOPS_MOVING" => "There are no outgoing troops",
-        "INCOMING_TROOPS" => "There are no incoming troops",
+        "TROOPS_MOVING" => "You still have troops moving",
+        "INCOMING_TROOPS" => "You have incoming troops",
         "REINFORCEMENTS" => "You have reinforcements on your villages",
         "WW" => "You own a Wonder of the World",
         "ARTEFACTS" => "You own artefacts",
