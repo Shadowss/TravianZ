@@ -153,76 +153,133 @@ MEDAL CATEGORY:
         $titel="Top 10 of Rank climbers of week ".$medal['points']." in a row";
         break;
 	}
-				 echo"<tr>
-				   <td> ".$titel."</td>
-				   <td>".$medal['plaats']."</td>
-				   <td>".$medal['week']."</td>
-				   <td>[#".$medal['id']."]</td>
-			 	 </tr>";
-				 } ?>
-				 <tr>
-				   <td>Beginners Protection</td>
-				   <td></td>
-				   <td></td>
-				   <td>[#0]</td>
-			 	 </tr>
-				 <?php
-				 if(NEW_FUNCTIONS_MEDAL_3YEAR){
-					 echo "<tr>
-						<td>veteran</td>
-						<td></td>
-						<td></td>
-						<td>[#g2300]</td>
-					 </tr>";
-				 }
-				 
-				 if(NEW_FUNCTIONS_MEDAL_5YEAR){
-					 echo "<tr>
-						<td>veteran_5a</td>
-						<td></td>
-						<td></td>
-						<td>[#g2301]</td>
-					 </tr>";
-				 }
-				 
-				 if(NEW_FUNCTIONS_MEDAL_10YEAR){
-					 echo "<tr>
-						<td>veteran_10a</td>
-						<td></td>
-						<td></td>
-						<td>[#g2302]</td>
-					 </tr>";
-				 }
-				 
-				// Added by Shadow - cata7007@gmail.com / Skype : cata7007
-				if(NEW_FUNCTIONS_TRIBE_IMAGES){
-					if($session->userinfo['tribe'] == 1){
-						echo"<tr><td>Tribe Romans</td><td></td><td></td><td>[#roman]</td></tr>";
-					}elseif($session->userinfo['tribe'] == 2){
-						echo"<tr><td>Tribe Teutons</td><td></td><td></td><td>[#teuton]</td></tr>";
-					}elseif($session->userinfo['tribe'] == 3){
-						echo"<tr><td>Tribe Gauls</td><td></td><td></td><td>[#gaul]</td></tr>";
-					}
-				}
-				if(NEW_FUNCTIONS_MHS_IMAGES){
-					if($session->userinfo['access'] == 9){
-						echo"<tr><td>Administrator</td><td></td><td></td><td>[#MULTIHUNTER]</td></tr>";
-						echo"<tr><td>Administrator</td><td></td><td></td><td>[#MH]</td></tr>";
-						echo"<tr><td>Administrator</td><td></td><td></td><td>[#TEAM]</td></tr>";
-					}elseif($session->userinfo['access'] == 8){
-						echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MULTIHUNTER]</td></tr>";
-						echo"<tr><td>Multihunter</td><td></td><td></td><td>[#MH]</td></tr>";
-						echo"<tr><td>Multihunter</td><td></td><td></td><td>[#TEAM]</td></tr>";
-					}
-				}
-				if($session->userinfo['username'] == "Shadow"){
-					echo"<tr><td>Shadow</td><td></td><td></td><td>[#SHADOW]</td></tr>";
-					echo"<tr><td>Shadow</td><td></td><td></td><td>[#MH]</td></tr>";
-					echo"<tr><td>Shadow</td><td></td><td></td><td>[#TEAM]</td></tr>";
-					echo"<tr><td>Shadow</td><td></td><td></td><td>[#EVENT]</td></tr>";
-				}?>
-				 </table></p>
+echo "<tr>
+<td>".$titel."</td>
+<td>".$medal['plaats']."</td>
+<td>".$medal['week']."</td>
+<td><a href='#' onclick=\"insertMedal('[#".$medal['id']."]'); return false;\">[#".$medal['id']."]</a></td>
+</tr>";
+} ?>
+
+<tr>
+<td>Beginners Protection</td>
+<td></td>
+<td></td>
+<td><a href="#" onclick="insertMedal('[#0]'); return false;">[#0]</a></td>
+</tr>
+
+<?php
+
+if(NEW_FUNCTIONS_MEDAL_3YEAR){
+echo "<tr>
+<td>veteran</td>
+<td></td>
+<td></td>
+<td><a href='#' onclick=\"insertMedal('[#g2300]'); return false;\">[#g2300]</a></td>
+</tr>";
+}
+
+if(NEW_FUNCTIONS_MEDAL_5YEAR){
+echo "<tr>
+<td>veteran_5a</td>
+<td></td>
+<td></td>
+<td><a href='#' onclick=\"insertMedal('[#g2301]'); return false;\">[#g2301]</a></td>
+</tr>";
+}
+
+if(NEW_FUNCTIONS_MEDAL_10YEAR){
+echo "<tr>
+<td>veteran_10a</td>
+<td></td>
+<td></td>
+<td><a href='#' onclick=\"insertMedal('[#g2302]'); return false;\">[#g2302]</a></td>
+</tr>";
+}
 
 
+// TRIBE
+if(NEW_FUNCTIONS_TRIBE_IMAGES){
+    if($session->userinfo['tribe'] == 1){
+        echo "<tr><td>Tribe Romans</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#roman]'); return false;\">[#roman]</a></td></tr>";
+    }elseif($session->userinfo['tribe'] == 2){
+        echo "<tr><td>Tribe Teutons</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#teuton]'); return false;\">[#teuton]</a></td></tr>";
+    }elseif($session->userinfo['tribe'] == 3){
+        echo "<tr><td>Tribe Gauls</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#gaul]'); return false;\">[#gaul]</a></td></tr>";
+    }
+}
+
+
+// MHS
+if(NEW_FUNCTIONS_MHS_IMAGES){
+    if($session->userinfo['access'] == 9){
+
+        echo "<tr><td>Administrator</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#MULTIHUNTER]'); return false;\">[#MULTIHUNTER]</a></td></tr>";
+
+        echo "<tr><td>Administrator</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#MH]'); return false;\">[#MH]</a></td></tr>";
+
+        echo "<tr><td>Administrator</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#TEAM]'); return false;\">[#TEAM]</a></td></tr>";
+
+    }elseif($session->userinfo['access'] == 8){
+
+        echo "<tr><td>Multihunter</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#MULTIHUNTER]'); return false;\">[#MULTIHUNTER]</a></td></tr>";
+
+        echo "<tr><td>Multihunter</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#MH]'); return false;\">[#MH]</a></td></tr>";
+
+        echo "<tr><td>Multihunter</td><td></td><td></td>
+        <td><a href='#' onclick=\"insertMedal('[#TEAM]'); return false;\">[#TEAM]</a></td></tr>";
+    }
+}
+
+
+// SHADOW
+if($session->userinfo['username'] == "Shadow"){
+
+    echo "<tr><td>Shadow</td><td></td><td></td>
+    <td><a href='#' onclick=\"insertMedal('[#SHADOW]'); return false;\">[#SHADOW]</a></td></tr>";
+
+    echo "<tr><td>Shadow</td><td></td><td></td>
+    <td><a href='#' onclick=\"insertMedal('[#MH]'); return false;\">[#MH]</a></td></tr>";
+
+    echo "<tr><td>Shadow</td><td></td><td></td>
+    <td><a href='#' onclick=\"insertMedal('[#TEAM]'); return false;\">[#TEAM]</a></td></tr>";
+
+    echo "<tr><td>Shadow</td><td></td><td></td>
+    <td><a href='#' onclick=\"insertMedal('[#EVENT]'); return false;\">[#EVENT]</a></td></tr>";
+}
+?>
+</table></p>
+
+<script>
+function insertMedal(code) {
+    const textarea = document.querySelector('textarea[name="be1"]');
+
+    if (!textarea) return;
+
+    // focus pe textarea
+    textarea.focus();
+
+    // poziția cursorului
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    // inserare text
+    textarea.value = textarea.value.substring(0, start) + code + textarea.value.substring(end);
+
+    // mută cursorul după text
+    textarea.selectionStart = textarea.selectionEnd = start + code.length;
+
+    // scroll sus la textarea
+    textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+</script>
 	<p class="btn"><input type="image" value="" tabindex="9" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></p>
     </form>
