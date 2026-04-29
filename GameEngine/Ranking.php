@@ -19,8 +19,7 @@
 			}
 
 			public function getUserRank($id) {
-			    global $database;
-			    
+			    global $database;   
 				$ranking = $this->getRank();
 				$users = "SELECT Count(*) as Total FROM " . TB_PREFIX . "users WHERE access < " . (INCLUDE_ADMIN ? "10" : "8");
 				$users2 = mysqli_fetch_array(mysqli_query($database->dblink,$users), MYSQLI_ASSOC);
@@ -200,7 +199,6 @@
 			public function searchRank($name, $field) {
 			    
 			    while(1) {
-			        //$key = key($this->rankarray);
 			        for($key = 0; $key < count($this->rankarray); $key++){
 			            if($this->rankarray[$key]!="pad") {
 			                if($this->rankarray[$key][$field] == $name) return $key;
@@ -221,17 +219,14 @@
 				$holder = array();
 				if(SHOW_NATARS == True){
 					$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.oldrank oldrank, " . TB_PREFIX . "users.alliance alliance, (
-
 					SELECT SUM( " . TB_PREFIX . "vdata.pop )
 					FROM " . TB_PREFIX . "vdata
 					WHERE " . TB_PREFIX . "vdata.owner = userid
 					)totalpop, (
-
 					SELECT COUNT( " . TB_PREFIX . "vdata.wref )
 					FROM " . TB_PREFIX . "vdata
 					WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
 					)totalvillages, (
-
 					SELECT " . TB_PREFIX . "alidata.tag
 					FROM " . TB_PREFIX . "alidata, " . TB_PREFIX . "users
 					WHERE " . TB_PREFIX . "alidata.id = " . TB_PREFIX . "users.alliance
@@ -244,17 +239,14 @@
                     ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 				} else {
 					$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.oldrank oldrank, " . TB_PREFIX . "users.alliance alliance, (
-
 					SELECT SUM( " . TB_PREFIX . "vdata.pop )
 					FROM " . TB_PREFIX . "vdata
 					WHERE " . TB_PREFIX . "vdata.owner = userid
 					)totalpop, (
-
 					SELECT COUNT( " . TB_PREFIX . "vdata.wref )
 					FROM " . TB_PREFIX . "vdata
 					WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
 					)totalvillages, (
-
 					SELECT " . TB_PREFIX . "alidata.tag
 					FROM " . TB_PREFIX . "alidata, " . TB_PREFIX . "users
 					WHERE " . TB_PREFIX . "alidata.id = " . TB_PREFIX . "users.alliance
@@ -268,7 +260,6 @@
 				}
 
 				$datas = [];
-
 				$result = (mysqli_query($database->dblink,$q));
 				while($row = mysqli_fetch_assoc($result)) $datas[] = $row;
 
@@ -287,7 +278,6 @@
 
 				$newholder = ["pad"];
 				foreach($holder as $key) array_push($newholder, $key);
-				
 				$this->rankarray = $newholder;
 				
 			    }
@@ -296,24 +286,17 @@
 			public function procRankRaceArray($race) {
 				global $multisort, $database;
 				$race = $database->escape((int) $race);
-				//$array = $GLOBALS['db']->getRanking();
 				$holder = array();
-				//$value['totalvillage'] = count($GLOBALS['db']->getVillagesID($value['id']));
-				//$value['totalvillage'] = count($GLOBALS['db']->getVillagesID($value['id']));
-				//$value['totalpop'] = $GLOBALS['db']->getVSumField($value['id'],"pop");
-				//$value['aname'] = $GLOBALS['db']->getAllianceName($value['alliance']);
 				$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.tribe tribe, " . TB_PREFIX . "users.username username," . TB_PREFIX . "users.alliance alliance, (
 
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
 			FROM " . TB_PREFIX . "vdata
 			WHERE " . TB_PREFIX . "vdata.owner = userid
 			)totalpop, (
-
 			SELECT COUNT( " . TB_PREFIX . "vdata.wref )
 			FROM " . TB_PREFIX . "vdata
 			WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
 			)totalvillages, (
-
 			SELECT " . TB_PREFIX . "alidata.tag
 			FROM " . TB_PREFIX . "alidata, " . TB_PREFIX . "users
 			WHERE " . TB_PREFIX . "alidata.id = " . TB_PREFIX . "users.alliance
@@ -324,15 +307,11 @@
             AND " . TB_PREFIX . "users.id > 5
 			ORDER BY totalpop DESC, totalvillages DESC, userid DESC";
 
-
 				$result = (mysqli_query($database->dblink,$q));
 				while($row = mysqli_fetch_assoc($result)) {
 					$datas[] = $row;
 				}
-
 				if(mysqli_num_rows($result)) {
-
-
 					foreach($datas as $result) {
 						$value['userid'] = $result['userid'];
 						$value['username'] = $result['username'];
@@ -340,7 +319,6 @@
 						$value['aname'] = $result['allitag'];
 						$value['totalpop'] = $result['totalpop'];
 						$value['totalvillage'] = $result['totalvillages'];
-						//SELECT (SELECT SUM(".TB_PREFIX."vdata.pop) FROM ".TB_PREFIX."vdata WHERE ".TB_PREFIX."vdata.owner = 2)  totalpop, (SELECT COUNT(".TB_PREFIX."vdata.wref) FROM ".TB_PREFIX."vdata WHERE ".TB_PREFIX."vdata.owner = 2) totalvillages, (SELECT ".TB_PREFIX."alidata.tag FROM ".TB_PREFIX."alidata WHERE ".TB_PREFIX."alidata.id = ".TB_PREFIX."users.alliance AND ".TB_PREFIX."users.id = 2);
 						array_push($holder, $value);
 					}
 				} else {
@@ -352,7 +330,6 @@
 					$value['totalvillage'] = "";
 					array_push($holder, $value);
 				}
-				//$holder = $multisort->sorte($holder, "'totalvillage'", false, 2, "'totalpop'", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
@@ -362,18 +339,12 @@
 
 			public function procAttRankArray() {
 				global $multisort, $database;
-				//$array = $GLOBALS['db']->getRanking();
 				$holder = array();
-
-				//$value['totalvillage'] = count($GLOBALS['db']->getVillagesID($value['id']));
-				//$value['totalpop'] = $GLOBALS['db']->getVSumField($value['id'],"pop");
 				$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.apall,  (
-
 			SELECT COUNT( " . TB_PREFIX . "vdata.wref )
 			FROM " . TB_PREFIX . "vdata
 			WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
 			)totalvillages, (
-
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
 			FROM " . TB_PREFIX . "vdata
 			WHERE " . TB_PREFIX . "vdata.owner = userid
@@ -386,7 +357,6 @@
 				while($row = mysqli_Fetch_assoc($result)) {
 					$datas[] = $row;
 				}
-
 				foreach($datas as $key => $row) {
 					$value['userid'] = $row['userid'];
 					$value['username'] = $row['username'];
@@ -397,8 +367,6 @@
 					array_push($holder, $value);
 					printf("\n<!-- %s %s %s %s -->\n", $value['username'], $value['totalvillages'], $value['totalpop'], $value['apall']);
 				}
-
-				//$holder = $multisort->sorte($holder, "'ap'", false, 2, "'totalvillages'", false, 2, "'ap'", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
@@ -408,16 +376,12 @@
 
 			public function procDefRankArray() {
 			    global $database;
-				//global $GLOBALS['db'], $multisort;
-				//$array = $GLOBALS['db']->getRanking();
 				$holder = array();
 				$q = "SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.dpall,  (
-
 			SELECT COUNT( " . TB_PREFIX . "vdata.wref )
 			FROM " . TB_PREFIX . "vdata
 			WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
 			)totalvillages, (
-
 			SELECT SUM( " . TB_PREFIX . "vdata.pop )
 			FROM " . TB_PREFIX . "vdata
 			WHERE " . TB_PREFIX . "vdata.owner = userid
@@ -430,7 +394,6 @@
 				while($row = mysqli_Fetch_assoc($result)) {
 					$datas[] = $row;
 				}
-
 				foreach($datas as $key => $row) {
 					$value['userid'] = $row['userid'];
 					$value['username'] = $row['username'];
@@ -441,8 +404,6 @@
 					array_push($holder, $value);
 
 				}
-
-				//$holder = $multisort->sorte($holder, "'dpall'", false, 2, "'totalvillage'", false, 2, "'dpall'", false, 2);
 				$newholder = array("pad");
 				foreach($holder as $key) {
 					array_push($newholder, $key);
@@ -474,11 +435,9 @@
 				global $multisort, $database;
 				$array = $GLOBALS['db']->getARanking();
 				$holder = array();
-
 				foreach($array as $value) {
 					$memberlist = $GLOBALS['db']->getAllMember($value['id']);
 					$totalpop = 0;
-
                     $memberIDs = [];
                     foreach($memberlist as $member) {
                         $memberIDs[] = $member['id'];
@@ -490,7 +449,6 @@
                             $totalpop += $row['Total'];
                         }
                     }
-
 					$value['players'] = count($memberlist);
 					$value['totalpop'] = $totalpop;
 					if(!isset($value['avg'])) {
@@ -498,7 +456,6 @@
 					} else {
 						$value['avg'] = 0;
 					}
-
 					array_push($holder, $value);
 				}
 				$holder = $multisort->sorte($holder, "totalpop", false, 2);
@@ -518,7 +475,6 @@
 					$value['level'];
 					$value['name'];
 					$value['uid'];
-
 					array_push($holder, $value);
 				}
 				$holder = $multisort->sorte($holder, "experience", false, 2);
@@ -537,7 +493,7 @@
 					$memberlist = $GLOBALS['db']->getAllMember($value['id']);
 					$totalap = 0;
 					foreach($memberlist as $member) {
-						$totalap += $member['ap'];
+					$totalap += $member['ap'];
 					}
 					$value['players'] = count($memberlist);
 					$value['totalap'] = $totalap;
@@ -546,7 +502,6 @@
 					} else {
 						$value['avg'] = 0;
 					}
-
 					array_push($holder, $value);
 				}
 				$holder = $multisort->sorte($holder, "Aap", false, 2);
@@ -574,7 +529,6 @@
 					} else {
 						$value['avg'] = 0;
 					}
-
 					array_push($holder, $value);
 				}
 				$holder = $multisort->sorte($holder, "Adp", false, 2);
