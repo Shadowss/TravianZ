@@ -2,11 +2,13 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       anleitung.php                                               ##
+##  Project:       TravianZ                                                    ##
+##  Filename       tutorial.php                                                ##
 ##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Fixed bt:      Shadow                                                      ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
 ##                                                                             ##
 #################################################################################
 
@@ -34,57 +36,25 @@ AccessLogger::logRequest();
 <body class="webkit contentPage">
 <div class="wrapper">
 <div id="country_select">
-
 </div>
 <div id="header">
 	<h1>Welcome to <?php echo SERVER_NAME; ?></h1>
 </div>
-
 <div id="navigation">
-
 <a href="index.php" class="home"><img src="img/x.gif" alt="Travian"/></a>
-
 	<table class="menu">
-
 	<tr>
-
 		<td><a href="tutorial.php"><span>Tutorial</span></a></td>
-
 		<td><a href="anleitung.php"><span>Manual</span></a></td>
-
 		<td><a href="http://forum.travian.com/" target="_blank"><span>Forum</span></a></td>
-
-
-
-
-
 		<td><a href="index.php?signup"><span>Register</span></a></td>
-
 		<td><a href="index.php?login"><span>Login</span></a></td>
-
 </tr>
-
 	</table>
-
 </div>
-
-
-
-
-
-
 <div id="content">
-
-	<div class="grit">
-
-
+<div class="grit">
 <h1>Tutorial</h1>
-
-
-
-
-
-
 					<?php
 						if(!isset($_GET['s'])) {
 						$_GET['s'] = ""; }
@@ -101,51 +71,19 @@ AccessLogger::logRequest();
 						if ($_GET['s'] == "5") {
 						include("Templates/Tutorial/5.tpl"); }
 					?>
-
-
-
 </ul>
-
 <div class="footer"></div>
-
 </div>
-
 </div>
-
 <div id="iframe_layer" class="overlay">
-
-
-
 <div class="mask closer"></div>
-
-
-
-
-
-
-
 <div class="overlay_content">
-
 <a href="index.php" class="closer"><img class="dynamic_img" alt="Close" src="img/un/x.gif" /></a>
-
 <h2>Anleitung</h2>
-
-
-
 <div id="frame_box" >
-
 </div>
-
 <div class="footer"></div>
-
 </div>
-
-
-
 </div>
-
-
-
-
 </body>
 </html>

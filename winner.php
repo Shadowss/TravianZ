@@ -3,21 +3,21 @@ include_once("GameEngine/Generator.php");
 $start_timer = $generator->pageLoadTimeStart();
 
 #################################################################################
-## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- 			        ##
+## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- 			        			##
 ## ---------------------------------------------------------------------------  ##
-## Project:     TravianZ 							##
-## Version:     18.02.2014 							##
-## Description: When the player builds Wonder of the World      		##
-##              to level 100 the winner details are shown.      		##
-##              tells the players the game is over              		##
-## Authors:     aggenkeech - and a little help from Eyas95      		##
-## Page:        winner.php                                      		##
-## Fixed by:    Shadow  							##
-## License:     TravianZ Project 						##
-## Copyright:   TravianZ (c) 2010-2013. All rights reserved. 			##
-## URLs:        http://travian.shadowss.ro 					##
-## Source code: https://github.com/Shadowss/TravianZ/	 			##
-## 										##
+## Project:     TravianZ 														##
+## Version:     18.02.2014 														##
+## Description: When the player builds Wonder of the World      				##
+##              to level 100 the winner details are shown.      				##
+##              tells the players the game is over              				##
+## Authors:     aggenkeech - and a little help from Eyas95      				##
+## Page:        winner.php                                      				##
+## Fixed by:    Shadow  														##
+## License:     TravianZ Project 												##
+## Copyright:   TravianZ (c) 2010-2026. All rights reserved. 					##
+## URLs:        http://travian.shadowss.ro 										##
+## Source code: https://github.com/Shadowss/TravianZ/	 						##
+## 																				##
 #################################################################################
 
 use App\Utils\AccessLogger;
@@ -39,31 +39,32 @@ if(isset($_GET['newdid'])) {
 	exit;
 }
 
-	$sql = mysqli_query($database->dblink,"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
-	$winner = mysqli_num_rows($sql);
+/*
+|--------------------------------------------------------------------------
+| CHECK WW WINNER EXISTS
+|--------------------------------------------------------------------------
+*/
 
-	if($winner > 0){
+$sql = mysqli_query($database->dblink,"SELECT 1 FROM " . TB_PREFIX . "fdata WHERE f99 = '100' AND f99t = '40' LIMIT 1");
+$winner = mysqli_fetch_row($sql);
+if ($winner) {
 
-        ## Get Rankings for Ranking Section
-## Top 3 Population
-        $q = "
-	SELECT ".TB_PREFIX."users.id userid, ".TB_PREFIX."users.username username,".TB_PREFIX."users.alliance alliance, (
-	SELECT SUM( ".TB_PREFIX."vdata.pop )
-	FROM ".TB_PREFIX."vdata
-	WHERE ".TB_PREFIX."vdata.owner = userid
-	)totalpop, (
-		SELECT COUNT( " . TB_PREFIX . "vdata.wref )
-	FROM " . TB_PREFIX . "vdata
-	WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
-	)totalvillages, (
-	SELECT " . TB_PREFIX . "alidata.tag
-	FROM " . TB_PREFIX . "alidata, " . TB_PREFIX . "users
-	WHERE " . TB_PREFIX . "alidata.id = " . TB_PREFIX . "users.alliance
-	AND " . TB_PREFIX . "users.id = userid
-	)allitag
-	FROM " . TB_PREFIX . "users
-	WHERE " . TB_PREFIX . "users.access < ".(INCLUDE_ADMIN ? "10" : "8")." AND " . TB_PREFIX . "users.tribe <= 3
-	ORDER BY totalpop DESC, totalvillages DESC, username ASC";
+    /*
+    |--------------------------------------------------------------------------
+    | TOP POPULATION
+    |--------------------------------------------------------------------------
+    */
+
+    $q = "SELECT 
+        u.id AS userid,
+        u.username,
+        u.alliance,
+        (SELECT SUM(v.pop) FROM " . TB_PREFIX . "vdata v WHERE v.owner = u.id) AS totalpop,
+        (SELECT COUNT(v.wref) FROM " . TB_PREFIX . "vdata v WHERE v.owner = u.id AND v.type != 99) AS totalvillages,
+        (SELECT a.tag FROM " . TB_PREFIX . "alidata a WHERE a.id = u.alliance) AS allitag
+    FROM " . TB_PREFIX . "users u
+    WHERE u.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND u.tribe <= 3
+    ORDER BY totalpop DESC, totalvillages DESC, u.username ASC";
 
         $result = (mysqli_query($database->dblink,$q));
         while($row = mysqli_fetch_assoc($result)) $datas[] = $row;
@@ -75,21 +76,23 @@ if(isset($_GET['newdid'])) {
             $value['aname'] = $result['allitag'];
             $value['totalpop'] = $result['totalpop'];
             $value['totalvillage'] = $result['totalvillages'];
-        }
-        ## Top Attacker
-        $q = "
-	SELECT " . TB_PREFIX . "users.id userid, " . TB_PREFIX . "users.username username, " . TB_PREFIX . "users.apall,  (
-	SELECT COUNT( " . TB_PREFIX . "vdata.wref )
-	FROM " . TB_PREFIX . "vdata
-	WHERE " . TB_PREFIX . "vdata.owner = userid AND type != 99
-	)totalvillages, (
-	SELECT SUM( " . TB_PREFIX . "vdata.pop )
-	FROM " . TB_PREFIX . "vdata
-			WHERE " . TB_PREFIX . "vdata.owner = userid
-	)pop
-	FROM " . TB_PREFIX . "users
-	WHERE " . TB_PREFIX . "users.apall >= 0 AND " . TB_PREFIX . "users.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND " . TB_PREFIX . "users.tribe <= 3
-	ORDER BY " . TB_PREFIX . "users.apall DESC, pop DESC, username ASC";
+		}
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOP ATTACKER
+    |--------------------------------------------------------------------------
+    */
+
+    $q = "SELECT 
+        u.id AS userid,
+        u.username,
+        u.apall,
+        (SELECT COUNT(v.wref) FROM " . TB_PREFIX . "vdata v WHERE v.owner = u.id AND v.type != 99) AS totalvillages,
+        (SELECT SUM(v.pop) FROM " . TB_PREFIX . "vdata v WHERE v.owner = u.id) AS pop
+    FROM " . TB_PREFIX . "users u
+    WHERE u.apall >= 0 AND u.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND u.tribe <= 3
+    ORDER BY u.apall DESC, pop DESC, u.username ASC";
 
         $result = mysqli_query($database->dblink,$q);
         while($row = mysqli_fetch_assoc($result)) $attacker[] = $row;
@@ -101,20 +104,23 @@ if(isset($_GET['newdid'])) {
             $value['totalpop'] = $row['pop'];
             $value['apall'] = $row['apall'];
         }
-        ## Top Defender
-        $q = "
-	SELECT ".TB_PREFIX."users.id userid, ".TB_PREFIX."users.username username, ".TB_PREFIX."users.dpall,  (
-	SELECT COUNT(".TB_PREFIX."vdata.wref)
-	FROM ".TB_PREFIX."vdata
-	WHERE ".TB_PREFIX."vdata.owner = userid AND type != 99
-	)totalvillages, (
-	SELECT SUM(".TB_PREFIX."vdata.pop)
-	FROM ". TB_PREFIX . "vdata
-	WHERE ". TB_PREFIX . "vdata.owner = userid
-	)pop
-	FROM ".TB_PREFIX."users
-	WHERE ". TB_PREFIX."users.dpall >= 0 AND ".TB_PREFIX."users.access < ".(INCLUDE_ADMIN ? "10" : "8")." AND ".TB_PREFIX."users.tribe <= 3
-	ORDER BY ".TB_PREFIX."users.dpall DESC, pop DESC, username ASC";
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOP DEFENDER
+    |--------------------------------------------------------------------------
+    */
+
+    $q = "SELECT 
+        u.id AS userid,
+        u.username,
+        u.dpall,
+        (SELECT COUNT(v.wref) FROM " . TB_PREFIX . "vdata v WHERE v.owner = u.id AND v.type != 99) AS totalvillages,
+        (SELECT SUM(v.pop) FROM " . TB_PREFIX . "vdata v WHERE v.owner = u.id) AS pop
+    FROM " . TB_PREFIX . "users u
+    WHERE u.dpall >= 0 AND u.access < " . (INCLUDE_ADMIN ? "10" : "8") . " AND u.tribe <= 3
+    ORDER BY u.dpall DESC, pop DESC, u.username ASC";
+
         $result = mysqli_query($database->dblink,$q);
         while($row = mysqli_fetch_assoc($result)) $defender[] = $row;
 
@@ -126,27 +132,43 @@ if(isset($_GET['newdid'])) {
             $value['dpall'] = $row['dpall'];
         }
 
-        ## Get WW Winner Details
-        $sql = mysqli_query($database->dblink,"SELECT vref FROM ".TB_PREFIX."fdata WHERE f99 = '100' and f99t = '40'");
-        $vref = mysqli_result($sql, 0);
+    /*
+    |--------------------------------------------------------------------------
+    | WW WINNER DETAILS
+    |--------------------------------------------------------------------------
+    */
 
-        $winningvillagename = $database->getVillage($vref)['name'];
-        $owner = $database->getVillage($vref)['owner'];
+    $q = "SELECT 
+        f.vref,
+        f.ww_lastupdate,
+        v.name AS village_name,
+        v.owner AS owner_id,
+        u.username,
+        a.id AS alliance_id,
+        a.name AS alliance_name,
+        a.tag AS alliance_tag
+    FROM " . TB_PREFIX . "fdata f
+    LEFT JOIN " . TB_PREFIX . "vdata v ON v.wref = f.vref
+    LEFT JOIN " . TB_PREFIX . "users u ON u.id = v.owner
+    LEFT JOIN " . TB_PREFIX . "alidata a ON a.id = u.alliance
+    WHERE f.f99 = '100' AND f.f99t = '40'
+    LIMIT 1";
 
-        $sql = mysqli_query($database->dblink,"SELECT username FROM ".TB_PREFIX."users WHERE id = '$owner'");
-        $username = mysqli_result($sql, 0);
+    $result = mysqli_query($database->dblink, $q);
+    $row = mysqli_fetch_assoc($result);
 
-        $sql = mysqli_query($database->dblink,"SELECT alliance FROM ".TB_PREFIX."users WHERE id = '$owner'");
-        $allianceid = mysqli_result($sql, 0);
-
-        $sql = mysqli_query($database->dblink,"SELECT name, tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'");
-        $winningalliance = mysqli_result($sql, 0);
-
-        $sql = mysqli_query($database->dblink,"SELECT tag FROM ".TB_PREFIX."alidata WHERE id = '$allianceid'");
-        $winningalliancetag = mysqli_result($sql, 0);
-
-        $sql = mysqli_query($database->dblink,"SELECT ww_lastupdate FROM ".TB_PREFIX."fdata WHERE vref = '$vref'");
-        $finishconstruction = mysqli_result($sql, 0);
+    if ($row) {
+        $vref = $row['vref'];
+        $winningvillagename = $row['village_name'];
+        $owner = $row['owner_id'];
+        $username = $row['username'];
+        $allianceid = $row['alliance_id'];
+        $winningalliance = $row['alliance_name'];
+        $winningalliancetag = $row['alliance_tag'];
+        $finishconstruction = $row['ww_lastupdate'];
+    } else {
+        $vref = 0;
+    }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

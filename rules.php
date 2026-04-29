@@ -5,10 +5,13 @@ $start_timer = $generator->pageLoadTimeStart();
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                                                    ##
 ##  Filename       rules.php                                                   ##
-##  Developed by:  FurkicanLove                               		       ##
-##  License:       TravianWorldZ Project                                       ##
-##  Copyright:     TravianWorldZ (c) 2011. All rights reserved.                ##
+##  Developed by:  FurkicanLove                                                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
 ##                                                                             ##
 #################################################################################
 

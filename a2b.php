@@ -2,15 +2,23 @@
 include_once ("GameEngine/Generator.php");
 $start_timer = $generator->pageLoadTimeStart();
 
-// ################################################################################
-// # -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =- ##
-// # --------------------------------------------------------------------------- ##
-// # Filename a2b.php ##
-// # Developed by: Dzoki ##
-// # License: TravianX Project ##
-// # Copyright: TravianX (c) 2010-2011. All rights reserved. ##
-// # ##
-// ################################################################################
+#################################################################################
+##                                                                             ##
+##              -= YOU MUST NOT REMOVE OR CHANGE THIS NOTICE =-                ##
+##                                                                             ##
+## --------------------------------------------------------------------------- ##
+##                                                                             ##
+##  Project:       TravianZ                                                    ##
+##  Version:       29.04.2026                                                  ##
+##  Filename:      a2b.php                                 					   ##
+##  Developed by:  Dzoki & Advocaite & Donnchadh                               ##
+##  Reworked by:   Shadow                                                      ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2018. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
+##                                                                             ##
+#################################################################################
 
 use App\Utils\AccessLogger;
 

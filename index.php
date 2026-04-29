@@ -7,15 +7,15 @@ use App\Utils\AccessLogger;
 ##                                                                             ##
 ## --------------------------------------------------------------------------- ##
 ##                                                                             ##
-##  Project:       ZravianX                                                    ##
-##  Version:       2011.11.30                                                  ##
+##  Project:       TravianZ                                                    ##
+##  Version:       29.04.2026                                                  ##
 ##  Filename:      index.php                            					   ##
 ##  Developed by:  Dzoki & Advocaite & Donnchadh                               ##
 ##  Reworked by:   ZZJHONS                                                     ##
-##  License:       Creative Commons BY-NC-SA 3.0                               ##
-##  Copyright:     ZravianX (c) 2011 - All rights reserved                     ##
-##  URLs:          http://zravianx.zzjhons.com                                 ##
-##  Source code:   http://www.github.com/ZZJHONS/ZravianX                      ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2018. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
 ##                                                                             ##
 #################################################################################
 
@@ -90,7 +90,7 @@ AccessLogger::logRequest();
 				<tr>
 					<td><a href="tutorial.php"><span><?php echo TUTORIAL; ?></span></a></td>
 					<td><a href="anleitung.php"><span><?php echo $lang['index'][0][2]; ?></span></a></td>
-					<td><a href="http://forum.travian.com/" target="_blank"><span><?php echo FORUM; ?></span></a></td>
+					<td><a href="https://github.com/Shadowss/TravianZ/discussions" target="_blank"><span><?php echo FORUM; ?></span></a></td>
 					<td><a href="?signup" class="signup_link mark"><span><?php echo $lang['register']; ?></span></a></td>
 					<td><a href="?login" class="login_link"><span><?php echo LOGIN; ?></span></a></td>
 				</tr>
