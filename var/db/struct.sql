@@ -1635,7 +1635,7 @@ INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `ac
 (1, 'Support', '', 'support@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1),
 (2, 'Nature', '', 'nature@travianz.game', 4, 2, 0, 0, '1970-01-01', '', '[#NATURE]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1),
 (4, 'Taskmaster', '', 'taskmaster@travianz.game', 0, 8, 0, 0, '1970-01-01', '', '[#TASKMASTER]', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1),
-(5, 'Multihunter', '', 'multihunter@travianz.game', 1, 9, 0, 0, '1970-01-01', '', '[#MH]', '[#MULTIHUNTER]', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1);
+(5, 'Multihunter', '', 'multihunter@travianz.game', 1, 8, 0, 0, '1970-01-01', '', '[#MH]', '[#MULTIHUNTER]', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, '/gpack/travian_default/', 1, 0, 0, 0, 0, 1);
 
 ALTER TABLE `%PREFIX%users` AUTO_INCREMENT=6;
 
