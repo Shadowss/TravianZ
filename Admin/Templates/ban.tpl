@@ -18,8 +18,12 @@ if(isset($_POST['action']) && $_POST['action'] == 'addBan')
     // =========================
     // ❌ BLOCK SYSTEM USERS
     // =========================
+	
     $blocked = array(1,2,3,4,5);
 
+    // =========================
+    // VALIDARE UID
+    // =========================
     if($uid <= 0)
     {
         $error = "Invalid User ID!";
@@ -47,7 +51,7 @@ if(isset($_POST['action']) && $_POST['action'] == 'addBan')
         else
         {
             // =========================
-            // ❌ CHECK ALREADY BANNED
+            // CHECK ALREADY ACTIVE BAN
             // =========================
             $check = mysqli_query($database->dblink, "
                 SELECT id 
@@ -65,9 +69,11 @@ if(isset($_POST['action']) && $_POST['action'] == 'addBan')
             {
                 $user = mysqli_fetch_assoc($userCheck);
                 $name = $user['username'];
-
                 $end = ($time > 0) ? (time() + $time) : 0;
 
+                // =========================
+                // INSERT BAN (ACTIVE)
+                // =========================
                 mysqli_query($database->dblink, "
                     INSERT INTO ".TB_PREFIX."banlist
                     (uid,name,reason,time,end,admin,active)
@@ -82,9 +88,20 @@ if(isset($_POST['action']) && $_POST['action'] == 'addBan')
 }
 
 // =========================
-// BAN LIST
+// ACTIVE BANS
 // =========================
 $bannedUsers = $admin->search_banned();
+
+// =========================
+// HISTORY (inactive bans)
+// =========================
+$banHistory = mysqli_query($database->dblink, "
+    SELECT * 
+    FROM ".TB_PREFIX."banlist 
+    WHERE active = 0 
+    ORDER BY id DESC 
+    LIMIT 50
+");
 ?>
 
 <style>
@@ -136,9 +153,7 @@ $bannedUsers = $admin->search_banned();
         <tbody>
             <tr>
                 <td>User ID</td>
-                <td>
-                    <input type="text" class="fm" name="uid">
-                </td>
+                <td><input type="text" class="fm" name="uid"></td>
             </tr>
 
             <tr>
@@ -189,12 +204,12 @@ $bannedUsers = $admin->search_banned();
 </form>
 
 <!-- =========================
-     BAN LIST
+     ACTIVE BANS
      ========================= -->
 <table id="member" cellpadding="1" cellspacing="1">
     <thead>
         <tr>
-            <th colspan="6">Banned Players (<?php echo count($bannedUsers); ?>)</th>
+            <th colspan="6">Active Bans (<?php echo count($bannedUsers); ?>)</th>
         </tr>
         <tr>
             <td><b>Username</b></td>
@@ -208,31 +223,29 @@ $bannedUsers = $admin->search_banned();
     <?php
     if($bannedUsers)
     {
-        for ($i = 0; $i <= count($bannedUsers)-1; $i++)
+        foreach($bannedUsers as $b)
         {
-            $name = $database->getUserField($bannedUsers[$i]['uid'],'username',0);
+            $name = $database->getUserField($b['uid'],'username',0);
 
             if($name == '')
             {
-                $name = $bannedUsers[$i]['name'];
+                $name = $b['name'];
                 $link = "<span class=\"c b\">[".$name."]</span>";
             }
             else
             {
-                $link = '<a href="?p=player&uid='.$bannedUsers[$i]['uid'].'">'.$name.'</a>';
+                $link = '<a href="?p=player&uid='.$b['uid'].'">'.$name.'</a>';
             }
 
-            $end = $bannedUsers[$i]['end']
-                ? date("d.m.y H:i",$bannedUsers[$i]['end'])
-                : '*';
+            $end = $b['end'] ? date("d.m.y H:i",$b['end']) : '*';
 
             echo '
             <tr>
                 <td>'.$link.'</td>
-                <td>'.date("d.m.y H:i",$bannedUsers[$i]['time']).' - '.$end.'</td>
-                <td>'.$bannedUsers[$i]['reason'].'</td>
+                <td>'.date("d.m.y H:i",$b['time']).' - '.$end.'</td>
+                <td>'.$b['reason'].'</td>
                 <td class="on">
-                    <a href="?action=delBan&uid='.$bannedUsers[$i]['uid'].'&id='.$bannedUsers[$i]['id'].'">
+                    <a href="?action=delBan&uid='.$b['uid'].'&id='.$b['id'].'">
                         <img src="../img/admin/del.gif" class="del">
                     </a>
                 </td>
@@ -241,7 +254,48 @@ $bannedUsers = $admin->search_banned();
     }
     else
     {
-        echo '<tr><td colspan="6" class="on">No Players are Banned</td></tr>';
+        echo '<tr><td colspan="6">No active bans</td></tr>';
+    }
+    ?>
+    </tbody>
+</table>
+
+<br><br>
+
+<!-- =========================
+     BAN HISTORY
+     ========================= -->
+<table id="member" cellpadding="1" cellspacing="1">
+    <thead>
+        <tr>
+            <th colspan="6">Ban History (Inactive)</th>
+        </tr>
+        <tr>
+            <td><b>Username</b></td>
+            <td><b>Length</b></td>
+            <td><b>Reason</b></td>
+        </tr>
+    </thead>
+
+    <tbody>
+    <?php
+    if($banHistory && mysqli_num_rows($banHistory) > 0)
+    {
+        while($h = mysqli_fetch_assoc($banHistory))
+        {
+            $end = $h['end'] ? date("d.m.y H:i",$h['end']) : '*';
+
+            echo '
+            <tr>
+                <td>'.$h['name'].'</td>
+                <td>'.date("d.m.y H:i",$h['time']).' - '.$end.'</td>
+                <td>'.$h['reason'].'</td>
+            </tr>';
+        }
+    }
+    else
+    {
+        echo '<tr><td colspan="3">No ban history</td></tr>';
     }
     ?>
     </tbody>
