@@ -6,7 +6,7 @@
 ##  Version        8.0                                                         ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2013-2025. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##
 ##  Modified by:   Shadow and ronix                                            ##
 ##                                                                             ##
 #################################################################################
@@ -365,8 +365,8 @@ $requse = 0;
 ##  Filename       config.php                                                  ##
 ##  Version        4.8.5                                                       ##
 ##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 

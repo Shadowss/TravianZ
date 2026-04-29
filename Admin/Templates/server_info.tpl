@@ -10,6 +10,13 @@
 ##  Improoved by:  Shadow                                                      ##
 #################################################################################
 
+function formatNum($n) {
+    if ($n >= 1000000000) return round($n / 1000000000, 2).'B';
+    if ($n >= 1000000) return round($n / 1000000, 2).'M';
+    if ($n >= 1000) return round($n / 1000, 1).'K';
+    return $n;
+}
+
 $tribe1 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 1");
 $tribe2 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 2");
 $tribe3 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 3");
@@ -112,70 +119,74 @@ $users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREF
 		</tbody>
 	</table>
 </div>
-	<table id="member">
-		<thead>
-			<tr>
-				<th colspan="10">Troops on the Server</th>
-			</tr>
-			<?php
-				$cells = ['SUM(hero) as hero'];
 
-				for($i=1; $i<51; $i++) {
-					array_push($cells, 'SUM(u'.$i.') AS u'.$i);
-				}
+<table id="member">
+	<thead>
+		<tr>
+			<th colspan="10">Troops on the Server</th>
+		</tr>
+		<?php
+			$cells = ['SUM(hero) as hero'];
+			for($i=1; $i<51; $i++) {
+				array_push($cells, 'SUM(u'.$i.') AS u'.$i);
+			}
 
-				$units_villages = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."units"));
-				$units_enforcements = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."enforcement"));
+			$units_villages = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."units"));
+			$units_enforcements = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."enforcement"));
 
-				for($i=1; $i<11; $i++) {
-					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-				}
+			for($i=1; $i<11; $i++) {
+				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
+			}
 
-				echo '</thead><tbody>';
-				for($i=1; $i<11; $i++) {
-					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
-				}
+			echo '</thead><tbody>';
+			for($i=1; $i<11; $i++) {
+				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
+				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
+			}
 
-				echo "</tr>";
-				for($i=11; $i<21; $i++) {
-					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-				}
+			echo "</tr>";
+			for($i=11; $i<21; $i++) {
+				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
+			}
 
-				echo '</thead><tbody>';
-				for($i=11; $i<21; $i++) {
-					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
-				}
+			echo '</tr><tr>';
+			for($i=11; $i<21; $i++) {
+				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
+				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
+			}
 
-				echo "</tr>";
-				for($i=21; $i<31; $i++) {
-					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-				}
+			echo "</tr>";
+			for($i=21; $i<31; $i++) {
+				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
+			}
 
-				echo '</thead><tbody>';
-				for($i=21; $i<31; $i++) {
-					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
-				}
+			echo '</tr><tr>';
+			for($i=21; $i<31; $i++) {
+				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
+				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
+			}
 
-				echo "</tr>";
-				for($i=31; $i<41; $i++) {
-					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-				}
+			echo "</tr>";
+			for($i=31; $i<41; $i++) {
+				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
+			}
 
-				echo '</thead><tbody>';
-				for($i=31; $i<41; $i++) {
-					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
-				}
+			echo '</tr><tr>';
+			for($i=31; $i<41; $i++) {
+				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
+				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
+			}
 
-				echo "</tr>";
-				for($i=41; $i<51; $i++) {
-					echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-				}
+			echo "</tr>";
+			for($i=41; $i<51; $i++) {
+				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
+			}
 
-				echo '</thead><tbody>';
-				for($i=41; $i<51; $i++) {
-					echo '<td class="on">'.($units_villages['u'.$i] + $units_enforcements['u'.$i]).'</td>';
-				}
-			?>
-		</tbody>
-	</table>
-<div>
+			echo '</tr><tr>';
+			for($i=41; $i<51; $i++) {
+				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
+				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
+			}
+		?>
+	</tbody>
+</table>

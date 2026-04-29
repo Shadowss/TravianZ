@@ -4,16 +4,12 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       28.10.2025                    			                   ## 
-##  Filename       wdata.tpl                                                   ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
-##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		           ##
-##  Fixed by:      InCube - double troops				                       ##
-##  Fixed by:      lietuvis10 - crop finder				                       ##
+##  Filename       dataform.php                                                ##
+##  Developed by:  Dzoki                                                       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		 	       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		       	           ## 
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		           ##
+##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
 ##                                                                             ##
 #################################################################################
 
