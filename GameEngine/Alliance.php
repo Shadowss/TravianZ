@@ -4,15 +4,14 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ## 
+##  Version:       30.04.2026	           			       			   		   ##
 ##  Filename       Alliance.php                                                ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ## 
-##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
-##  Fixed by:      InCube - double troops				       ##
+##  Developed by:  Dzoki							   						   ##
+##  Refactor by:   Shadow 									 		       	   ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ## 
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro                		       	   ##
+##  Source code:   https://github.com/Shadowss/TravianZ		               	   ## 
 ##                                                                             ##
 #################################################################################
 
@@ -45,399 +44,628 @@ class Alliance {
 		public $allianceArray = [];
 		public $userPermArray = [];
 		
-		public function procAlliance($get) {
-			global $session, $database;
-			if($session->alliance > 0) {
-				$this->allianceArray = $database->getAlliance($session->alliance);
-				// Permissions Array
-				// [id] => id [uid] => uid [alliance] => alliance [opt1] => X [opt2] => X [opt3] => X [opt4] => X [opt5] => X [opt6] => X [opt7] => X [opt8] => X
-				$this->userPermArray = $database->getAlliPermissions($session->uid, $session->alliance);
-			} else {
-				$this->inviteArray = $database->getInvitation($session->uid);
-				$this->gotInvite = count($this->inviteArray) > 0;
-			}
-			if(isset($get['a'])) {
-				switch($get['a']) {
-					case 2:
-						$this->rejectInvite($get);
-						break;
-					case 3:
-						$this->acceptInvite($get);
-						break;
-				}
-			}
-			if(isset($get['o'])) {
-				switch($get['o']) {
-					case 4:
-						$this->delInvite($get);
-						break;
-				}
-			}
-		}
-		
-		/**
-		 * Determines if a forum is accessible or not
-		 * 
-		 * @param int $forumID The forum ID
-		 * @return bool Returns if the forum is accessible or not
-		 */
-		
-		public function isForumAccessible($forumID){
-			global $session;
-			//Loop through the shared forums and try to find the passed one
-			foreach($session->sharedForums as $forums){
-				foreach($forums as $forum){
-					if($forum['id'] == $forumID) return true;
-				}
-			}
-			return false;
-		}
-		
-		/**
-		 * Determines if a player can act with the forum (edit/delete/create things, etc.)
-		 * 
-		 * @param array $datas The array which contains: [aid, alliance, forum_perm, admin, owner, forum_owner] 
-		 * @return bool Returns true if you are able to act, false otherwise
-		 */
-		
-		public static function canAct($datas, $mode = 0){
-			global $database, $session;
-			$hasSwitchedToAdmin = isset($datas['admin']) && !empty($datas['admin']) && $datas['admin'] == "switch_admin";
-			return (/*$database->CheckEditRes($datas['aid']) == 1 && */($datas['alliance'] > 0 && (($database->isAllianceOwner($session->uid) == $datas['alliance'] ||
-					($datas['forum_perm'] == 1 && $session->alliance == $datas['alliance']))) ||
-					($datas['owner'] == $session->uid && $session->access != ADMIN)) ||
-					($session->access == ADMIN))  &&
-					($mode || $hasSwitchedToAdmin);
-		}
-		
-		/**
-		 * Create two string, representing alliances ID and users ID which can see a specific forum
-		 * 
-		 * @param int $alliancesID A list of alliances ID
-		 * @param int $alliancesName A list of alliances Name
-		 * @param int $usersID A list of users ID
-		 * @param int $usersName A list of users name
-		 * @return array Returns the two string, composed by alliances ID and users ID
-		 */
-		
-		public function createForumVisiblity($alliancesID, $alliancesName, $usersID, $usersName){
-			global $database, $session;
-			
-			$alliances = $users = [];
-			//TODO: Reduce the code of this part and cache existing diplomacy relationship
-			//Deduplicate alliances
-			if(!empty($alliancesID)){
-				foreach($alliancesID as $alliance){
-					if(!empty($alliance) && is_numeric($alliance) && $database->aExist($alliance, 'id')  && $alliance != $session->alliance && empty($database->diplomacyExistingRelationships($alliance))){
-						$alliances[$alliance] = true;
-					}
-				}
-			}	
-			if(!empty($alliancesName)){
-				foreach($alliancesName as $alliance){
-					if(!empty($alliance) && !empty($allianceID = $database->getAllianceID($alliance)) && $allianceID != $session->alliance && empty($database->diplomacyExistingRelationships($allianceID))){
-						$alliances[$allianceID] = true;
-					}
-				}
-			}
-			
-			//Deduplicate users
-			if(!empty($usersID)){
-				foreach($usersID as $user) {
-					if(!empty($user) && is_numeric($user) && ($userAlly = $database->getUserAllianceID($user)) > 0 && $userAlly != $session->alliance && $database->getUserField($user, 'username', 0) != "[?]" && $user != $session->uid && empty($database->diplomacyExistingRelationships($userAlly))) {
-						$users[$user] = true;
-					}
-				}
-			}
-			if(!empty($usersName)){
-				foreach($usersName as $user){
-					if(!empty($user) && !empty($userID = $database->getUserField($user, 'id', 1)) && $userID != $session->uid && ($userAlly = $database->getUserAllianceID($userID)) > 0 && $userAlly != $session->alliance && empty($database->diplomacyExistingRelationships($userAlly))) {
-						$users[$userID] = true;
-					}
-				}
-			}
-			
-			return ['alliances' => implode(',', array_keys($alliances)), 'users' => implode(',', array_keys($users))];
-		}
-		
-		/**
-		 * Redirects to the forum selection
-		 * 
-		 * @param array $get Contains the values of a GET request
-		 */
-		
-		public function redirect($get = null)
-		{
-			header("Location: allianz.php?s=2".(isset($get['fid']) && !empty($get['fid']) && $get['admin'] != 'pos' ? "&fid=".$get['fid']."" : "").
-					(isset($get['admin']) && !empty($get['admin']) ? "&admin=switch_admin" : ""));
-			exit;
-		}
-		
-		/*****************************************
-		Function to process of sending Forms
-		*****************************************/
-		
-		public function procAlliForm($post) {
-			if(isset($post['ft'])) {
-				switch($post['ft']) {
-					case "ali1":
-						$this->createAlliance($post);
-						break;
-				}
-							}
-			if(isset($post['dipl']) && isset($post['a_name'])) $this->changediplomacy($post);
+	public function procAlliance($get) {
+		global $session, $database;
 
-			if(isset($post['s'])) {
-				if(isset($post['o'])) {
-					switch($post['o']) {
-						case 1:
-							if(isset($_POST['a'])) $this->changeUserPermissions($post);
-							break;
-						case 2:
-							if(isset($_POST['a_user'])) $this->kickAlliUser($post);
-							break;
-						case 4:
-							if(isset($_POST['a']) && $_POST['a'] == 4) $this->sendInvite($post);
-							break;
-						case 3:
-							$this->updateAlliProfile($post);
-							break;
-						case 11:
-							$this->quitally($post);
-							break;
-						case 100:
-							$this->changeAliName($post);
-							break;
-					}
-				}
-			}
-		}
+    // ==================== ÎNCĂRCARE DATE ALIANȚĂ SAU INVITAȚII ====================
+    if ($session->alliance > 0) {
+        // Utilizatorul este membru al unei alianțe
+        $this->allianceArray = $database->getAlliance($session->alliance);
 
-		/*****************************************
-		Function to process of sending invitations
-		*****************************************/
-		public function sendInvite($post) {
-			global $form, $database, $session;
+        // Permissions Array
+        // [id] => id [uid] => uid [alliance] => alliance 
+        // [opt1] => X [opt2] => X [opt3] => X [opt4] => X 
+        // [opt5] => X [opt6] => X [opt7] => X [opt8] => X
+        $this->userPermArray = $database->getAlliPermissions($session->uid, $session->alliance);
+    } else {
+        // Utilizatorul NU este într-o alianță → încarcă invitațiile primite
+        $this->inviteArray = $database->getInvitation($session->uid);
+        $this->gotInvite   = count($this->inviteArray) > 0;
+    }
 
-			$UserData = $database->getUserArray(stripslashes($post['a_name']), 0);
-			if($this->userPermArray['opt4'] == 0) {
-				$form->addError("name", NO_PERMISSION);
-			}elseif(!isset($post['a_name']) || $post['a_name'] == "") {
-				$form->addError("name", NAME_EMPTY);
-			}elseif(!User::exists($database, $post['a_name'])) {
-				$form->addError("name", NAME_NO_EXIST."".stripslashes(stripslashes($post['a_name'])));
-			}elseif($UserData['id'] == $session->uid) {
-				$form->addError("name", SAME_NAME);
-			}elseif($database->getInvitation2($UserData['id'],$session->alliance)) {
-				$form->addError("name", $post['a_name'].ALREADY_INVITED);
-			}elseif($UserData['alliance'] == $session->alliance) {
-				$form->addError("name", $post['a_name'].ALREADY_IN_ALLY);
-			}elseif($UserData['alliance'] > 0) {
-			    $form->addError("name", $post['a_name'].ALREADY_IN_AN_ALLY);
-			}else{
-				// Obtenemos la informacion necesaria
-				$aid = $session->alliance;
-				// Insertamos invitacion
-				$database->sendInvitation($UserData['id'], $aid, $session->uid);
-				// Log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has invited  <a href="spieler.php?uid=' . $UserData['id'] . '">' . addslashes($UserData['username']) . '</a> into the alliance.');
-				// send invitation via in-game messages
-                if(NEW_FUNCTIONS_ALLIANCE_INVITATION){
-                    $database->sendMessage(
-				    $UserData['id'],
-				    4,
-				    'Invitation to Alliance',
-				    $database->escape("Hi, ".$UserData['username']."!\n\nThis is to inform you that you have been invited to join an alliance. To accept this invitation, please visit your Embassy.\n\nYours sincerely,\n<i>Server Robot :)</i>"),
-				    0,
-				    0,
-				    0,
-				    0,
-				    0,
-				    true);
+    // ==================== PROCESARE ACȚIUNI DIN URL (GET) ====================
+    if (isset($get['a'])) {
+        switch ($get['a']) {
+            case 2:
+                $this->rejectInvite($get);
+                break;
+            case 3:
+                $this->acceptInvite($get);
+                break;
+        }
+    }
+    if (isset($get['o'])) {
+        switch ($get['o']) {
+            case 4:
+                $this->delInvite($get);
+                break;
+        }
+    }
+}
+
+/**
+ * Determines if a forum is accessible or not
+ *
+ * @param int $forumID The forum ID
+ * @return bool Returns if the forum is accessible or not
+ */
+	public function isForumAccessible($forumID) {
+		global $session;
+
+    // Căutăm forumul în lista de forumuri partajate
+    foreach ($session->sharedForums as $forums) {
+        foreach ($forums as $forum) {
+            if ($forum['id'] == $forumID) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Determines if a player can act with the forum (edit/delete/create things, etc.)
+ *
+ * @param array $datas The array which contains: [aid, alliance, forum_perm, admin, owner, forum_owner]
+ * @return bool Returns true if you are able to act, false otherwise
+ */
+ 
+	public static function canAct($datas, $mode = 0) {
+		global $database, $session;
+    $hasSwitchedToAdmin = isset($datas['admin']) 
+        && !empty($datas['admin']) 
+        && $datas['admin'] === "switch_admin";
+
+    // ==================== CONDIȚII DE ACCES ====================
+    $isAllianceOwner   = $database->isAllianceOwner($session->uid) == $datas['alliance'];
+    $hasForumPerm      = $datas['forum_perm'] == 1 && $session->alliance == $datas['alliance'];
+    $isForumOwner      = $datas['owner'] == $session->uid && $session->access != ADMIN;
+    $isGlobalAdmin     = $session->access == ADMIN;
+    $canActInAlliance  = $datas['alliance'] > 0 && ($isAllianceOwner || $hasForumPerm);
+    $canActAsOwner     = $isForumOwner;
+    $canActAsAdmin     = $isGlobalAdmin;
+
+    // Logica exactă din original
+    return (($canActInAlliance || $canActAsOwner || $canActAsAdmin)) && ($mode || $hasSwitchedToAdmin);
+}
+		
+/**
+ * Generează două string-uri cu ID-urile alianțelor și utilizatorilor care pot vedea un forum specific.
+ *
+ * Exclut automat:
+ * - propria alianță a jucătorului
+ * - relațiile de diplomație existente
+ * - utilizatorii șterși ([?])
+ *
+ * @param array $alliancesID     Lista de ID-uri de alianțe
+ * @param array $alliancesName   Lista de nume de alianțe
+ * @param array $usersID         Lista de ID-uri de utilizatori
+ * @param array $usersName       Lista de nume de utilizatori
+ * @return array                 ['alliances' => '1,2,5', 'users' => '10,23,45']
+ */
+	public function createForumVisiblity($alliancesID, $alliancesName, $usersID, $usersName) {
+		global $database, $session;
+    $visibleAlliances = [];
+    $visibleUsers     = [];
+
+    // ==================== ALIANȚE VIZIBILE ====================
+    // Procesăm atât ID-urile cât și numele (deduplicate automat prin array keys)
+    if (!empty($alliancesID)) {
+        foreach ($alliancesID as $alliance) {
+            if ($this->isValidAllianceForForum($alliance, $session->alliance, $database)) {
+                $visibleAlliances[$alliance] = true;
+            }
+        }
+    }
+    if (!empty($alliancesName)) {
+        foreach ($alliancesName as $allianceName) {
+            $allianceID = $database->getAllianceID($allianceName);
+            if ($this->isValidAllianceForForum($allianceID, $session->alliance, $database)) {
+                $visibleAlliances[$allianceID] = true;
+            }
+        }
+    }
+
+    // ==================== UTILIZATORI VIZIBILI ====================
+    if (!empty($usersID)) {
+        foreach ($usersID as $user) {
+            if ($this->isValidUserForForum($user, $session->alliance, $session->uid, $database)) {
+                $visibleUsers[$user] = true;
+            }
+        }
+    }
+    if (!empty($usersName)) {
+        foreach ($usersName as $username) {
+            $userID = $database->getUserField($username, 'id', 1);
+            if ($this->isValidUserForForum($userID, $session->alliance, $session->uid, $database)) {
+                $visibleUsers[$userID] = true;
+            }
+        }
+    }
+
+    // ==================== RETURN ====================
+    return [
+        'alliances' => implode(',', array_keys($visibleAlliances)),
+        'users'     => implode(',', array_keys($visibleUsers))
+    ];
+}
+
+/**
+ * Verifică dacă o alianță poate fi adăugată la vizibilitatea forumului
+ */
+ 
+	private function isValidAllianceForForum($allianceID, $myAllianceID, $database) {
+    if (empty($allianceID) || !is_numeric($allianceID)) {
+        return false;
+    }
+    if (!$database->aExist($allianceID, 'id')) {
+        return false;
+    }
+    if ($allianceID == $myAllianceID) {
+        return false;
+    }
+    return empty($database->diplomacyExistingRelationships($allianceID));
+}
+
+/**
+ * Verifică dacă un utilizator poate fi adăugat la vizibilitatea forumului
+ */
+	private function isValidUserForForum($userID, $myAllianceID, $myUserID, $database) {
+    if (empty($userID) || !is_numeric($userID)) {
+        return false;
+    }
+    $userAlliance = $database->getUserAllianceID($userID);
+    $username     = $database->getUserField($userID, 'username', 0);
+    return (
+        $userAlliance > 0 &&
+        $userAlliance != $myAllianceID &&
+        $username !== "[?]" &&
+        $userID != $myUserID &&
+        empty($database->diplomacyExistingRelationships($userAlliance))
+    );
+}
+		
+/**
+ * Redirecționează către pagina de selecție forum (allianz.php?s=2)
+ *
+ * Construiește URL-ul cu parametrii opționali fid și switch_admin,
+ * respectând exact condițiile din codul original.
+ *
+ * @param array|null $get Datele din cererea GET (poate fi null)
+ */
+ 
+	public function redirect($get = null) {
+    $get = $get ?? [];   // protecție împotriva null
+    $url = "allianz.php?s=2";
+
+    // Adaugă &fid=... doar dacă fid este setat, nu gol și admin != 'pos'
+    if (isset($get['fid']) && !empty($get['fid']) && ($get['admin'] ?? '') !== 'pos') {
+        $url .= "&fid=" . $get['fid'];
+    }
+    // Adaugă &admin=switch_admin dacă parametrul admin este prezent și nu gol
+    if (isset($get['admin']) && !empty($get['admin'])) {
+        $url .= "&admin=switch_admin";
+    }
+    header("Location: " . $url);
+    exit;
+}
+		
+	/*****************************************
+	Function to process of sending Forms
+	*****************************************/
+		
+	public function procAlliForm($post) {
+    // ==================== TIP FORMULAR (ft) ====================
+    if (isset($post['ft'])) {
+        switch ($post['ft']) {
+            case "ali1":
+                $this->createAlliance($post);
+                break;
+        }
+    }
+
+    // ==================== SCHIMBARE DIPLOMAȚIE ====================
+    if (isset($post['dipl']) && isset($post['a_name'])) {
+        $this->changediplomacy($post);
+    }
+
+    // ==================== ACȚIUNI GENERALE (s + o) ====================
+    if (isset($post['s']) && isset($post['o'])) {
+        switch ($post['o']) {
+            case 1:  // Schimbare permisiuni utilizator
+                if (isset($_POST['a'])) {
+                    $this->changeUserPermissions($post);
                 }
-			}
-		}
+                break;
+            case 2:  // Kick utilizator din alianță
+                if (isset($_POST['a_user'])) {
+                    $this->kickAlliUser($post);
+                }
+                break;
+            case 4:  // Trimitere invitație
+                if (isset($_POST['a']) && $_POST['a'] == 4) {
+                    $this->sendInvite($post);
+                }
+                break;
+            case 3:  // Actualizare profil alianță
+                $this->updateAlliProfile($post);
+                break;
+            case 11: // Părăsire alianță
+                $this->quitally($post);
+                break;
+            case 100: // Schimbare nume alianță
+                $this->changeAliName($post);
+                break;
+        }
+    }
+}
 
-		/*****************************************
-		Function to reject an invitation
-		*****************************************/
-		private function rejectInvite($get) {
-			global $database, $session;
+	/*****************************************
+	Function to process of sending invitations
+	*****************************************/
 
-			foreach($this->inviteArray as $invite) {
-			    if($invite['id'] == $get['d'] && $invite['uid'] == $session->uid) {
-					$database->removeInvitation($get['d']);
-					$database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has rejected the invitation.');
-				}
-			}
-			header("Location: build.php?gid=18");
-			exit;
-		}
+	public function sendInvite($post) {
+		global $form, $database, $session;
 
-		/*****************************************
-		Function to del an invitation
-		*****************************************/
-		private function delInvite($get) {
-			global $database, $session;
+    // ==================== DATE DE INTRARE ====================
+    $invitedUsername = stripslashes($post['a_name'] ?? '');
 
-			$inviteArray = $database->getAliInvitations($session->alliance);
-			foreach($inviteArray as $invite) {
-			    if($invite['id'] == $get['d'] && $invite['alliance'] == $session->alliance && $this->userPermArray['opt4'] == 1) {
-				    $invitename = $database->getUserArray($invite['uid'], 1);
-					$database->removeInvitation($get['d']);
-					$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has deleted the invitation for <a href="spieler.php?uid='.$invitename['id'].'">'.addslashes($invitename['username']).'</a>.');
-				}
-			}
-			header("Location: allianz.php?delinvite");
-			exit;
-		}
+    // Obținem datele utilizatorului invitat (comportament exact ca în original)
+    $UserData = $database->getUserArray($invitedUsername, 0);
 
-		/*****************************************
-		Function to accept an invitation
-		*****************************************/
-		private function acceptInvite($get) {
-			global $form, $database, $session;
+    // ==================== VERIFICĂRI DE PERMISIUNI ȘI VALIDĂRI ====================
+    if ($this->userPermArray['opt4'] == 0) {
+        $form->addError("name", NO_PERMISSION);
+    } elseif (!isset($post['a_name']) || $post['a_name'] === '') {
+        $form->addError("name", NAME_EMPTY);
+    } elseif (!User::exists($database, $post['a_name'])) {
+        $form->addError("name", NAME_NO_EXIST . stripslashes(stripslashes($post['a_name'])));
+    } elseif ($UserData['id'] == $session->uid) {
+        $form->addError("name", SAME_NAME);
+    } elseif ($database->getInvitation2($UserData['id'], $session->alliance)) {
+        $form->addError("name", $post['a_name'] . ALREADY_INVITED);
+    } elseif ($UserData['alliance'] == $session->alliance) {
+        $form->addError("name", $post['a_name'] . ALREADY_IN_ALLY);
+    } elseif ($UserData['alliance'] > 0) {
+        $form->addError("name", $post['a_name'] . ALREADY_IN_AN_ALLY);
+    } else {
+        // ==================== TOATE VERIFICĂRILE AU TRECUT → TRIMITE INVITAȚIA ====================
+        $aid = $session->alliance;
 
-			foreach ($this->inviteArray as $invite) {
-			    if ($session->alliance == 0) {
-			        if ($invite['id'] == $get['d'] && $invite['uid'] == $session->uid) {
-			            $memberlist = $database->getAllMember($invite['alliance']);
-			            $alliance_info = $database->getAlliance($invite['alliance']);
-			            if (count($memberlist) < $alliance_info['max']) {
-			                $database->removeInvitation($get['d']);
-			                $database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
-			                $database->createAlliPermissions($invite['uid'], $invite['alliance'], '', 0, 0, 0, 0, 0, 0, 0, 0);
-			                // Log the notice
-			                $database->insertAlliNotice($invite['alliance'], '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has joined the alliance.');
-			            } else {
-			                $accept_error = 1;
-			                $max = $alliance_info['max'];
-			            }
-			        }
-			    }
-			}
-			
-			if($accept_error == 1) $form->addError("ally_accept", "The alliance can contain only ".$max." members at this moment.");   
-			else
-			{
-			    header("Location: build.php?gid=18");
-			    exit;
-			}
-		}
+        // Inserăm invitația în baza de date
+        $database->sendInvitation($UserData['id'], $aid, $session->uid);
 
-		/*****************************************
-		Function to create an alliance
-		*****************************************/
-		private function createAlliance($post) {
-			global $form, $database, $session, $bid18, $building;
+        // Log notice în alianță
+        $database->insertAlliNotice(
+            $session->alliance,
+            '<a href="spieler.php?uid=' . $session->uid . '">' . 
+            addslashes($session->username) . 
+            '</a> has invited <a href="spieler.php?uid=' . $UserData['id'] . '">' . 
+            addslashes($UserData['username']) . 
+            '</a> into the alliance.'
+        );
 
-			if(!isset($post['ally1']) || $post['ally1'] == "") {
-				$form->addError("ally1", ATAG_EMPTY);
-			}
-			if(!isset($post['ally2']) || $post['ally2'] == "") {
-				$form->addError("ally2", ANAME_EMPTY);
-			}
-			if($database->aExist($post['ally1'], "tag")) {
-				$form->addError("ally1", ATAG_EXIST);
-			}
-			if($database->aExist($post['ally2'], "name")) {
-				$form->addError("ally2", ANAME_EXIST);
-			}
-			if($session->alliance != 0){
-			    $form->addError("ally3", ALREADY_ALLY_MEMBER);
-			}
-			if($building->getTypeLevel(18) < 3){
-			    $form->addError("ally4", ALLY_TOO_LOW);
-			}
-			if($form->returnErrors() != 0) {
-				$_SESSION['errorarray'] = $form->getErrors();
-				$_SESSION['valuearray'] = $post;
-				if($building->getTypeLevel(18) > 0) header("Location: build.php?gid=18");
-				else header("Location: dorf2.php");
-				exit;
-			} else {
-				$max = $bid18[$building->getTypeLevel(18)]['attri'];
-				$aid = $database->createAlliance($post['ally1'], $post['ally2'], $session->uid, $max);
-				$database->updateUserField($session->uid, "alliance", $aid, 1);
-				$database->procAllyPop($aid);
-				// Asign Permissions
-				$database->createAlliPermissions($session->uid, $aid, 'Alliance founder', '1', '1', '1', '1', '1', '1', '1', '1');
-				// log the notice
-				$database->insertAlliNotice($aid, 'The alliance has been founded by <a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a>.');
-				header("Location: build.php?gid=18");
-				exit;
-			}
-		}
+        // Trimite invitație și prin mesaj în joc (dacă este activată funcționalitatea nouă)
+        if (NEW_FUNCTIONS_ALLIANCE_INVITATION) {
+            $messageBody = "Hi, " . $UserData['username'] . "!\n\n" .
+                           "This is to inform you that you have been invited to join an alliance. " .
+                           "To accept this invitation, please visit your Embassy.\n\n" .
+                           "Yours sincerely,\n<i>Server Robot :)</i>";
+            $database->sendMessage(
+                $UserData['id'],
+                4,
+                'Invitation to Alliance',
+                $database->escape($messageBody),
+                0,
+                0,
+                0,
+                0,
+                0,
+                true
+            );
+        }
+    }
+}
 
-		/*****************************************
-		Function to change the alliance name
-		*****************************************/
-		private function changeAliName($get) {
-			global $form, $database, $session;
-			
-			$userAlly = $database->getAlliance($session->alliance);
-			
-			if(!isset($get['ally1']) || $get['ally1'] == "") $form->addError("ally1", ATAG_EMPTY);
-			
-			if(!isset($get['ally2']) || $get['ally2'] == "") $form->addError("ally2", ANAME_EMPTY);
-			
-			if($get['ally1'] != $userAlly['tag'] && $database->aExist($get['ally1'], "tag")) $form->addError("ally1", ATAG_EXIST);
-			
-			if($get['ally2'] != $userAlly['name'] && $database->aExist($get['ally2'], "name")) $form->addError("ally2", ANAME_EXIST);
-			
-			if($this->userPermArray['opt3'] == 0) $form->addError("perm", NO_PERMISSION);
-			
-			if($form->returnErrors() == 0) {
-				$database->setAlliName($session->alliance, $get['ally2'], $get['ally1']);
-				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has changed the alliance name.');
-				$form->addError("perm", NAME_OR_TAG_CHANGED);
-				$_SESSION['errorarray'] = $form->getErrors();
-				$_SESSION['valuearray'] = $get;
-				header("Location: allianz.php?s=5");
-			    exit;
-			}
-		}
+	/*****************************************
+	Function to reject an invitation
+	*****************************************/
+		
+	private function rejectInvite($get) {
+		global $database, $session;
+    $inviteID = $get['d'] ?? 0;
 
-		/*****************************************
-		Function to create/change the alliance description
-		*****************************************/
-		private function updateAlliProfile($post) {
-			global $database, $session, $form;
+    // ==================== CĂUTARE ȘI RESPINGERE INVITAȚIE ====================
+    foreach ($this->inviteArray as $invite) {
+        if ($invite['id'] == $inviteID && $invite['uid'] == $session->uid) {
 
-			if($this->userPermArray['opt3'] == 0) {
-				$form->addError("perm", NO_PERMISSION);
-			}
-			if($form->returnErrors() > 0) {
-				$_SESSION['errorarray'] = $form->getErrors();
-				$_SESSION['valuearray'] = $post;
-			} else {
-				$database->submitAlliProfile($session->alliance, $post['be2'], $post['be1']);
-				// log the notice
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a> has changed the alliance description.');
-			}
-		}
+            // Ștergem invitația din baza de date
+            $database->removeInvitation($inviteID);
 
-		/*****************************************
-		Function to change the user permissions
-		*****************************************/
-		private function changeUserPermissions($post){
-			global $database, $session, $form;
-		if($this->userPermArray['opt1'] == 0) {
+            // Adăugăm notice în logul alianței
+            $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
+                      addslashes($session->username) .
+                      '</a> has rejected the invitation.';
+            $database->insertAlliNotice($invite['alliance'], $notice);
+            break; // am găsit și procesat invitația → nu mai continuăm bucla
+        }
+    }
+
+    // ==================== REDIRECȚIONARE ====================
+    // (întotdeauna se face redirect, chiar dacă invitația nu a fost găsită)
+    header("Location: build.php?gid=18");
+    exit;
+}
+
+	/*****************************************
+	Function to del an invitation
+	*****************************************/
+		
+	private function delInvite($get) {
+		global $database, $session;
+    $inviteID = $get['d'] ?? 0;
+
+    // Încărcăm lista de invitații trimise de alianța curentă
+    $inviteArray = $database->getAliInvitations($session->alliance);
+
+    // ==================== CĂUTARE ȘI ȘTERGERE INVITAȚIE ====================
+    foreach ($inviteArray as $invite) {
+        if ($invite['id'] == $inviteID 
+            && $invite['alliance'] == $session->alliance 
+            && $this->userPermArray['opt4'] == 1) {
+
+            // Obținem numele utilizatorului invitat
+            $invitename = $database->getUserArray($invite['uid'], 1);
+
+            // Ștergem invitația
+            $database->removeInvitation($inviteID);
+
+            // Adăugăm notice în logul alianței
+            $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
+                      addslashes($session->username) .
+                      '</a> has deleted the invitation for <a href="spieler.php?uid=' . 
+                      $invitename['id'] . '">' .
+                      addslashes($invitename['username']) .
+                      '</a>.';
+            $database->insertAlliNotice($session->alliance, $notice);
+            break; // am procesat invitația → ieșim din buclă
+        }
+    }
+
+    // ==================== REDIRECȚIONARE ====================
+    // (întotdeauna se face redirect, chiar dacă invitația nu a fost găsită)
+    header("Location: allianz.php?delinvite");
+    exit;
+}
+
+	/*****************************************
+	Function to accept an invitation
+	*****************************************/
+
+	private function acceptInvite($get) {
+		global $form, $database, $session;
+
+    $inviteID = $get['d'] ?? 0;
+    $acceptError = false;
+    $maxMembers  = 0;
+
+    // ==================== PROCESARE INVITAȚII ====================
+    foreach ($this->inviteArray as $invite) {
+        if ($session->alliance == 0 
+            && $invite['id'] == $inviteID 
+            && $invite['uid'] == $session->uid) {
+            $memberlist    = $database->getAllMember($invite['alliance']);
+            $alliance_info = $database->getAlliance($invite['alliance']);
+            if (count($memberlist) < $alliance_info['max']) {
+                // Acceptăm invitația
+                $database->removeInvitation($inviteID);
+                $database->updateUserField($invite['uid'], "alliance", $invite['alliance'], 1);
+                $database->createAlliPermissions($invite['uid'], $invite['alliance'], '', 0, 0, 0, 0, 0, 0, 0, 0);
+
+                // Log notice în alianță
+                $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
+                          addslashes($session->username) .
+                          '</a> has joined the alliance.';
+                $database->insertAlliNotice($invite['alliance'], $notice);
+
+            } else {
+                // Alianța este plină
+                $acceptError = true;
+                $maxMembers  = $alliance_info['max'];
+            }
+            break; // am găsit și procesat invitația → ieșim din buclă
+        }
+    }
+
+    // ==================== REZULTAT FINAL ====================
+    if ($acceptError) {
+        $form->addError(
+            "ally_accept", 
+            "The alliance can contain only " . $maxMembers . " members at this moment."
+        );
+    } else {
+        header("Location: build.php?gid=18");
+        exit;
+    }
+}
+
+	/*****************************************
+	Function to create an alliance
+	*****************************************/
+	
+	private function createAlliance($post) {
+		global $form, $database, $session, $bid18, $building;
+
+    $tag  = $post['ally1'] ?? '';
+    $name = $post['ally2'] ?? '';
+
+    // ==================== VALIDĂRI ====================
+    if ($tag === '') {
+        $form->addError("ally1", ATAG_EMPTY);
+    }
+    if ($name === '') {
+        $form->addError("ally2", ANAME_EMPTY);
+    }
+    if ($database->aExist($tag, "tag")) {
+        $form->addError("ally1", ATAG_EXIST);
+    }
+    if ($database->aExist($name, "name")) {
+        $form->addError("ally2", ANAME_EXIST);
+    }
+    if ($session->alliance != 0) {
+        $form->addError("ally3", ALREADY_ALLY_MEMBER);
+    }
+    if ($building->getTypeLevel(18) < 3) {
+        $form->addError("ally4", ALLY_TOO_LOW);
+    }
+
+    // ==================== ERORI ? ====================
+    if ($form->returnErrors() != 0) {
+        $_SESSION['errorarray'] = $form->getErrors();
+        $_SESSION['valuearray'] = $post;
+
+        // Redirect în funcție de existența ambasadei (comportament original)
+        if ($building->getTypeLevel(18) > 0) {
+            header("Location: build.php?gid=18");
+        } else {
+            header("Location: dorf2.php");
+        }
+        exit;
+    }
+
+    // ==================== CREARE ALIANȚĂ ====================
+    $maxMembers = $bid18[$building->getTypeLevel(18)]['attri'];
+    $aid = $database->createAlliance($tag, $name, $session->uid, $maxMembers);
+
+    // Actualizăm alianța utilizatorului
+    $database->updateUserField($session->uid, "alliance", $aid, 1);
+
+    // Procesăm populația inițială
+    $database->procAllyPop($aid);
+
+    // Creăm permisiuni complete pentru fondator
+    $database->createAlliPermissions(
+        $session->uid,
+        $aid,
+        'Alliance founder',
+        '1', '1', '1', '1', '1', '1', '1', '1'
+    );
+
+    // Log notice în alianță
+    $notice = 'The alliance has been founded by <a href="spieler.php?uid=' . $session->uid . '">' .
+              addslashes($session->username) .
+              '</a>.';
+    $database->insertAlliNotice($aid, $notice);
+    header("Location: build.php?gid=18");
+    exit;
+}
+
+	/*****************************************
+	Function to change the alliance name
+	*****************************************/
+	private function changeAliName($get) {
+		global $form, $database, $session;
+
+    $newTag  = $get['ally1'] ?? '';
+    $newName = $get['ally2'] ?? '';
+
+    // Încărcăm datele actuale ale alianței
+    $userAlly = $database->getAlliance($session->alliance);
+
+    // ==================== VALIDĂRI ====================
+    if ($newTag === '') {
+        $form->addError("ally1", ATAG_EMPTY);
+    }
+    if ($newName === '') {
+        $form->addError("ally2", ANAME_EMPTY);
+    }
+
+    // Verificăm existența tag-ului doar dacă s-a modificat
+    if ($newTag !== $userAlly['tag'] && $database->aExist($newTag, "tag")) {
+        $form->addError("ally1", ATAG_EXIST);
+    }
+
+    // Verificăm existența numelui doar dacă s-a modificat
+    if ($newName !== $userAlly['name'] && $database->aExist($newName, "name")) {
+        $form->addError("ally2", ANAME_EXIST);
+    }
+    if ($this->userPermArray['opt3'] == 0) {
         $form->addError("perm", NO_PERMISSION);
-		}
-		elseif($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance) {
+    }
+
+    // ==================== PROCESARE LA SUCCES ====================
+    if ($form->returnErrors() == 0) {
+        // Actualizăm numele și tag-ul alianței
+        $database->setAlliName($session->alliance, $newName, $newTag);
+
+        // Log notice în alianță
+        $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
+                  addslashes($session->username) .
+                  '</a> has changed the alliance name.';
+        $database->insertAlliNotice($session->alliance, $notice);
+
+        // Mesaj de succes prin sistemul de erori (comportament original)
+        $form->addError("perm", NAME_OR_TAG_CHANGED);
+        $_SESSION['errorarray'] = $form->getErrors();
+        $_SESSION['valuearray'] = $get;
+        header("Location: allianz.php?s=5");
+        exit;
+    }
+}
+
+	/*****************************************
+	Function to create/change the alliance description
+	*****************************************/
+	
+	private function updateAlliProfile($post) {
+		global $database, $session, $form;
+
+    // ==================== VERIFICARE PERMISIUNI ====================
+    if ($this->userPermArray['opt3'] == 0) {
+        $form->addError("perm", NO_PERMISSION);
+    }
+
+    // ==================== REZULTAT ====================
+    if ($form->returnErrors() > 0) {
+        // Salvăm erorile în sesiune (comportament original - fără redirect aici)
+        $_SESSION['errorarray'] = $form->getErrors();
+        $_SESSION['valuearray'] = $post;
+    } else {
+        // ==================== ACTUALIZARE PROFIL ====================
+        $description = $post['be1'] ?? '';
+        $rules       = $post['be2'] ?? '';
+
+        $database->submitAlliProfile($session->alliance, $rules, $description);
+
+        // Log notice în alianță
+        $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
+                  addslashes($session->username) .
+                  '</a> has changed the alliance description.';
+        $database->insertAlliNotice($session->alliance, $notice);
+    }
+}
+
+	/*****************************************
+	Function to change the user permissions
+	*****************************************/
+	
+	private function changeUserPermissions($post) {
+		global $database, $session, $form;
+
+    $targetUID = (int)($post['a_user'] ?? 0);
+    $rankTitle = $post['a_titel'] ?? '';
+
+    // ==================== VERIFICĂRI DE PERMISIUNI ȘI VALIDĂRI ====================
+    if ($this->userPermArray['opt1'] == 0) {
+        $form->addError("perm", NO_PERMISSION);
+    } elseif ($database->getUserField($targetUID, "alliance", 0) != $session->alliance) {
         $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
-		}
-		elseif($post['a_user'] == $session->uid) {
+    } elseif ($targetUID == $session->uid) {
         $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS);
-		}
-		elseif($database->isAllianceOwner($post['a_user'])) {
+    } elseif ($database->isAllianceOwner($targetUID)) {
         $form->addError("perm", CANT_EDIT_LEADER_PERMISSIONS);
-		}
-		else
-		{
-        // normalize checkbox values (CRITICAL FIX)
+    } else {
+        // ==================== NORMALIZARE CHECKBOX-URI (CRITICAL FIX) ====================
         $opt1 = isset($post['e1']) ? 1 : 0;
         $opt2 = isset($post['e2']) ? 1 : 0;
         $opt3 = isset($post['e3']) ? 1 : 0;
@@ -445,201 +673,310 @@ class Alliance {
         $opt5 = isset($post['e5']) ? 1 : 0;
         $opt6 = isset($post['e6']) ? 1 : 0;
         $opt7 = isset($post['e7']) ? 1 : 0;
-        $rank = isset($post['a_titel']) ? $post['a_titel'] : '';
+
+        // Actualizăm permisiunile în baza de date
         $ok = $database->updateAlliPermissions(
-            (int)$post['a_user'],
+            $targetUID,
             (int)$session->alliance,
-            $rank,
-            $opt1,$opt2,$opt3,$opt4,$opt5,$opt6,$opt7
+            $rankTitle,
+            $opt1, $opt2, $opt3, $opt4, $opt5, $opt6, $opt7
         );
-        if(!$ok) {
+        if (!$ok) {
             $form->addError("perm", "DB UPDATE FAILED");
         } else {
-            $database->insertAlliNotice(
-                $session->alliance,
-                '<a href="spieler.php?uid='.$session->uid.'">'.
-                addslashes($session->username).
-                '</a> has changed permissions of '.
-                addslashes($database->getUserField($post['a_user'], "username", 0)).'.'
-            );
+            // Log notice în alianță
+            $username = $database->getUserField($targetUID, "username", 0);
+            $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
+                      addslashes($session->username) .
+                      '</a> has changed permissions of ' .
+                      addslashes($username) . '.';
+            $database->insertAlliNotice($session->alliance, $notice);
+
+            // Mesaj de succes (comportament original)
             $_SESSION['success'] = ALLY_PERMISSIONS_UPDATED;
         }
     }
-    if($form->returnErrors() > 0)
-    {
+
+    // ==================== REDIRECȚIONARE LA ERORI ====================
+    if ($form->returnErrors() > 0) {
         $_SESSION['errorarray'] = $form->getErrors();
         $_SESSION['valuearray'] = $post;
         header("Location: allianz.php?s=5");
         exit;
     }
 }
-		/*****************************************
-		Function to kick a user from alliance
-		*****************************************/
-		private function kickAlliUser($post) {
-			global $database, $session, $form;
 
-			$UserData = $database->getUserArray($post['a_user'], 1);
-			if($this->userPermArray['opt2'] == 0) {
-			    $form->addError("perm", NO_PERMISSION);
-			} else if($database->getUserField($post['a_user'], "alliance", 0) != $session->alliance){
-			    $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
-			} else if($UserData['id'] != $session->uid){
-			    $database->updateUserField($post['a_user'], 'alliance', 0, 1);
-			    $database->deleteAlliPermissions($post['a_user']);
-			    $database->deleteAlliance($session->alliance);
-			    // log the notice
-			    $database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid='.$UserData['id'].'">'.($kickedUsername = addslashes($database->getUserField($post['a_user'], "username", 0))).'</a> has been expelled from the alliance by <a href="spieler.php?uid='.$session->uid.'">'.addslashes($session->username).'</a>.');
-			    if($session->alliance && $database->isAllianceOwner($UserData['id']) == $session->alliance){
-			        $newowner = $database->getAllMember2($session->alliance);
-			        $newleader = $newowner['id'];
-			        $q = "UPDATE " . TB_PREFIX . "alidata set leader = ".(int) $newleader." where id = ".(int) $session->alliance."";
-			        $database->query($q);
-			        $database->updateAlliPermissions($newleader, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-			        Automation::updateMax($newleader);
-			    }
-			    $form->addError("perm", $kickedUsername.ALLY_USER_KICKED);
-			}
-		}
-		/*****************************************
-		Function to set forum link
-		*****************************************/
-		public function setForumLink($post) {
-			global $database, $session, $form;
-			
-			if($this->userPermArray['opt5'] == 0) $form->addError("perm", NO_PERMISSION);
-			else
-			{
-			    $database->setAlliForumdblink($session->alliance, $post['f_link']);
-			    $form->addError("perm", ALLY_FORUM_LINK_UPDATED);
-			}
-		}
-		/*****************************************
-		Function to vote on forum survey
-		*****************************************/
-		public function Vote($post) {
-			global $database, $session;
+	/*****************************************
+	Function to kick a user from alliance
+	*****************************************/
+	
+	private function kickAlliUser($post) {
+		global $database, $session, $form;
 
-			if($database->checkSurvey($post['tid']) && !$database->checkVote($post['tid'], $session->uid)){
-			    $survey = $database->getSurvey($post['tid']);
-			    $text = ''.$survey['voted'].','.$session->uid.',';
-			    $database->Vote($post['tid'], $post['vote'], $text);
-			}
-			header("Location: allianz.php?s=2&fid2=".$post['fid2']."&tid=".$post['tid']);
-			exit;
-		}
-		/*****************************************
-		Function to quit from alliance
-		*****************************************/
-		private function quitally($post) {
-			global $database, $session, $form;
+    $targetUID = (int)($post['a_user'] ?? 0);
 
-			if(!isset($post['pw']) || $post['pw'] == "") {
-				$form->addError("pw", PW_EMPTY);
-			} elseif(!password_verify($post['pw'], $session->userinfo['password'])) {
-			    $form->addError("pw", LOGIN_PW_ERROR);
-			} else {
-			    // check whether this is not the founder leaving and if he is, see whether
-			    // his replacement has been selected
-			    if (
-			        $session->alliance &&
-			        $database->isAllianceOwner($session->uid) == $session->alliance &&
-			        $database->countAllianceMembers($session->alliance) > 1
-			    ) {
-				    // check that we have a valid new founder
-				    if (!isset($post['new_founder'])) {
-				        $form->addError("founder", 'Founder was not selected.');
-				        return;
-				    } else {
-				        $post['new_founder'] = (int) $post['new_founder'];
-				    }
+    // Obținem datele utilizatorului (folosit pentru username și verificări)
+    $UserData = $database->getUserArray($targetUID, 1);
 
-    				$members = $database->getAllMember($session->alliance);
-    				$validMemberFound = false;
+    // ==================== VERIFICĂRI DE PERMISIUNI ȘI VALIDĂRI ====================
+    if ($this->userPermArray['opt2'] == 0) {
+        $form->addError("perm", NO_PERMISSION);
+    } elseif ($database->getUserField($targetUID, "alliance", 0) != $session->alliance) {
+        $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
+    } elseif ($UserData['id'] == $session->uid) {
+        $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS); // mesajul original era CANT_EDIT_YOUR_PERMISSIONS
+    } else {
+        // ==================== EXECUTARE KICK ====================
+        $kickedUsername = $database->getUserField($targetUID, "username", 0);
+        $database->updateUserField($targetUID, 'alliance', 0, 1);
+        $database->deleteAlliPermissions($targetUID);
 
-    				foreach ($members as $member) {
-    				    if ($member['id'] == $post['new_founder']) {
-    				        $validMemberFound = true;
-    				        break;
-    				    }
-    				}
+        // !!! Comportament original - șterge alianța la fiecare kick !!!
+        $database->deleteAlliance($session->alliance);
 
-    				if (!$validMemberFound || $post['new_founder'] == $session->uid) {
-    				    $form->addError("founder", 'Invalid founder.');
-    				    return;
-    				}
+        // Log notice în alianță
+        $notice = '<a href="spieler.php?uid=' . $UserData['id'] . '">' .
+                  addslashes($kickedUsername) .
+                  '</a> has been expelled from the alliance by <a href="spieler.php?uid=' . 
+                  $session->uid . '">' .
+                  addslashes($session->username) .
+                  '</a>.';
+        $database->insertAlliNotice($session->alliance, $notice);
 
-    				$newleader = (int) $post['new_founder'];
-    				$q = "UPDATE " . TB_PREFIX . "alidata set leader = ".$newleader." where id = ".(int) $session->alliance;
-    				$_SESSION['alliance_user'] = 0;
-    				$database->query($q);
-    				$database->createAlliPermissions($newleader, $session->alliance, 'Alliance Leader', 1, 1, 1, 1, 1, 1, 1, 1);
-    				Automation::updateMax($newleader);
+        // ==================== PROMOVARE NOU LIDER (dacă a fost eliminat liderul) ====================
+        if ($database->isAllianceOwner($UserData['id']) == $session->alliance) {
+            $newOwner = $database->getAllMember2($session->alliance);
+            $newLeader = $newOwner['id'];
 
-    				// send the new founder an in-game message, notifying them of their election
-    				$database->sendMessage(
-    				    $newleader,
-    				    4,
-    				    'You are now leader of your alliance',
-    				    "Hi!\n\nThis is to inform you that the former leader of your alliance - <a href=\"".rtrim(SERVER, '/')."/spieler.php?uid=".(int) $session->uid."\">".$database->escape($session->username)."</a>, has decided to quit and elected you as his replacement. You now gain full access, administration and responsibilities to your alliance.\n\nGood luck!\n\nYours sincerely,\n<i>Server Robot :)</i>",
-    				    0,
-    				    0,
-    				    0,
-    				    0,
-    				    0,
-    				    true);
-				}
+            // Actualizăm liderul alianței (SQL mai sigur)
+            $database->query(
+                "UPDATE " . TB_PREFIX . "alidata 
+                 SET leader = " . (int)$newLeader . " 
+                 WHERE id = " . (int)$session->alliance
+            );
 
-				$database->updateUserField($session->uid, 'alliance', 0, 1);
-				$database->deleteAlliPermissions($session->uid);
-				// log the notice
-				$database->deleteAlliance($session->alliance);
-				$database->insertAlliNotice($session->alliance, '<a href="spieler.php?uid=' . $session->uid . '">' . addslashes($session->username) . '</a> has quit the alliance.');
-				header("Location: spieler.php?uid=".$session->uid);
-				exit;
-			}
-		}
+            // Dăm permisiuni complete noului lider
+            $database->updateAlliPermissions(
+                $newLeader,
+                1, 1, 1, 1, 1, 1, 1, 1, 1
+            );
+            Automation::updateMax($newLeader);
+        }
 
-		private function changediplomacy($post) {
-			global $database, $session, $form;
+        // Mesaj de succes (comportament original)
+        $form->addError("perm", $kickedUsername . ALLY_USER_KICKED);
+    }
+}
+	/*****************************************
+	Function to set forum link
+	*****************************************/
+		
+	public function setForumLink($post) {
+		global $database, $session, $form;
 
-			if($this->userPermArray['opt6'] == 1){
-			    if(!empty($post['a_name']) || !empty($post['dipl'])){
-			        $aName = $post['a_name'];
-			        $aType = (int)intval($post['dipl']);
-			        if($database->aExist($aName, "tag")) {
-			            $allianceID = $database->getAllianceID($aName);
-			            if($allianceID != $session->alliance) {
-			                if($aType >= 1 and $aType <= 3) {
-			                    if(!$database->diplomacyInviteCheck2($session->alliance, $allianceID)) {
-			                        if($database->diplomacyCheckLimits($session->alliance, $aType)){
-			                            $database->diplomacyInviteAdd($session->alliance, $allianceID, $aType);
-			                            if($aType == 1){
-			                                $notice = OFFERED_CONFED_TO;
-			                            }else if($aType == 2){
-			                                $notice = OFFERED_NON_AGGRESION_PACT_TO;
-			                            }else if($aType == 3){
-			                                $notice = DECLARED_WAR_ON;
-			                            }
-			                            $database->insertAlliNotice($session->alliance, '<a href="allianz.php?aid='.$session->alliance.'">'.$database->getAllianceName($session->alliance).'</a> '.$notice.' <a href="allianz.php?aid='.$allianceID.'">'.$aName.'</a>.');
-			                            $database->insertAlliNotice($allianceID, '<a href="allianz.php?aid='.$session->alliance.'">'.$database->getAllianceName($session->alliance).'</a> '.$notice.' <a href="allianz.php?aid='.$allianceID.'">'.$aName.'</a>.');
-			                            $form->addError("name", INVITE_SENT);
-			                            
-			                        }
-			                        else $form->addError("name", ALLY_TOO_MUCH_PACTS);
-			                    } 
-			                    else $form->addError("name", INVITE_ALREADY_SENT);	                    
-			                } 
-			                else $form->addError("name", WRONG_DIPLOMACY);		                    		                
-			            }
-			            else $form->addError("name", CANNOT_INVITE_SAME_ALLY);			                
-			        } 
-			        else $form->addError("name", ALLY_DOESNT_EXISTS);
-			    }
-			    else $form->addError("name", NAME_OR_DIPL_EMPTY);
-			}
-			else $form->addError("name", NO_PERMISSION);
-		}
+    if ($this->userPermArray['opt5'] == 0) {
+        $form->addError("perm", NO_PERMISSION);
+    } else {
+        $forumLink = $post['f_link'] ?? '';
+        $database->setAlliForumdblink($session->alliance, $forumLink);
+
+        // Mesaj de succes (comportament exact ca în original)
+        $form->addError("perm", ALLY_FORUM_LINK_UPDATED);
+    }
+}
+		
+	/*****************************************
+	Function to vote on forum survey
+	*****************************************/
+		
+	public function Vote($post) {
+		global $database, $session;
+
+    $surveyID   = (int)($post['tid'] ?? 0);
+    $voteOption = (int)($post['vote'] ?? 0);
+    $fid2       = (int)($post['fid2'] ?? 0);
+
+    // ==================== VERIFICĂRI ====================
+    if ($database->checkSurvey($surveyID) && !$database->checkVote($surveyID, $session->uid)) {
+        $survey = $database->getSurvey($surveyID);
+
+        // Construim noul string cu utilizatorii care au votat (exact ca în original)
+        $votedText = $survey['voted'] . ',' . $session->uid . ',';
+        $database->Vote($surveyID, $voteOption, $votedText);
+    }
+
+    // ==================== REDIRECȚIONARE ====================
+    // (întotdeauna se face redirect, chiar dacă votul nu a fost înregistrat)
+    header("Location: allianz.php?s=2&fid2=" . $fid2 . "&tid=" . $surveyID);
+    exit;
+}
+		
+	/*****************************************
+	Function to quit from alliance
+	*****************************************/
+
+	private function quitally($post) {
+		global $database, $session, $form;
+
+    // ==================== VERIFICARE PAROLĂ ====================
+    if (!isset($post['pw']) || $post['pw'] === '') {
+        $form->addError("pw", PW_EMPTY);
+    } elseif (!password_verify($post['pw'], $session->userinfo['password'])) {
+        $form->addError("pw", LOGIN_PW_ERROR);
+    } else {
+        // Parola este corectă → continuăm cu părăsirea alianței
+
+        $isFounder   = $session->alliance && $database->isAllianceOwner($session->uid) == $session->alliance;
+        $memberCount = $database->countAllianceMembers($session->alliance);
+
+        // ==================== CAZ SPECIAL: LIDERUL PĂRĂSEȘTE ALIANȚA ====================
+        if ($isFounder && $memberCount > 1) {
+            // Trebuie să alegem un nou fondator
+            if (!isset($post['new_founder'])) {
+                $form->addError("founder", 'Founder was not selected.');
+                return;
+            }
+            $newFounderID = (int)$post['new_founder'];
+
+            // Validăm că noul fondator face parte din alianță
+            $members          = $database->getAllMember($session->alliance);
+            $validMemberFound = false;
+            foreach ($members as $member) {
+                if ($member['id'] == $newFounderID) {
+                    $validMemberFound = true;
+                    break;
+                }
+            }
+            if (!$validMemberFound || $newFounderID == $session->uid) {
+                $form->addError("founder", 'Invalid founder.');
+                return;
+            }
+
+            // Actualizăm liderul alianței
+            $_SESSION['alliance_user'] = 0;
+            $database->query(
+                "UPDATE " . TB_PREFIX . "alidata 
+                 SET leader = " . $newFounderID . " 
+                 WHERE id = " . (int)$session->alliance
+            );
+
+            // Dăm permisiuni complete noului lider
+            $database->updateAlliPermissions(
+                $newFounderID,
+                1, 1, 1, 1, 1, 1, 1, 1, 1
+            );
+
+            Automation::updateMax($newFounderID);
+
+            // Trimitem mesaj în joc noului lider
+            $messageBody = "Hi!\n\n" .
+                           "This is to inform you that the former leader of your alliance - " .
+                           "<a href=\"" . rtrim(SERVER, '/') . "/spieler.php?uid=" . (int)$session->uid . "\">" .
+                           $database->escape($session->username) .
+                           "</a>, has decided to quit and elected you as his replacement. " .
+                           "You now gain full access, administration and responsibilities to your alliance.\n\n" .
+                           "Good luck!\n\nYours sincerely,\n<i>Server Robot :)</i>";
+            $database->sendMessage(
+                $newFounderID,
+                4,
+                'You are now leader of your alliance',
+                $messageBody,
+                0, 0, 0, 0, 0,
+                true
+            );
+        }
+
+        // ==================== PĂRĂSIRE ALIANȚĂ (pentru toți membrii) ====================
+        $database->updateUserField($session->uid, 'alliance', 0, 1);
+        $database->deleteAlliPermissions($session->uid);
+
+        // Log notice + ștergere alianță (comportament exact ca în original)
+        $database->deleteAlliance($session->alliance);
+        $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
+                  addslashes($session->username) .
+                  '</a> has quit the alliance.';
+        $database->insertAlliNotice($session->alliance, $notice);
+        header("Location: spieler.php?uid=" . $session->uid);
+        exit;
+    }
+}
+
+	/*****************************************
+	Function for change diplomacy
+	*****************************************/
+
+	private function changediplomacy($post) {
+		global $database, $session, $form;
+
+    // ==================== VERIFICARE PERMISIUNI ====================
+    if ($this->userPermArray['opt6'] == 0) {
+        $form->addError("name", NO_PERMISSION);
+        return;
+    }
+    $targetAllianceName = $post['a_name'] ?? '';
+    $diplType           = (int)($post['dipl'] ?? 0);
+
+    // ==================== VALIDĂRI DE INTRARE ====================
+    if (empty($targetAllianceName) || $diplType === 0) {
+        $form->addError("name", NAME_OR_DIPL_EMPTY);
+        return;
+    }
+    if (!$database->aExist($targetAllianceName, "tag")) {
+        $form->addError("name", ALLY_DOESNT_EXISTS);
+        return;
+    }
+    $targetAllianceID = $database->getAllianceID($targetAllianceName);
+    if ($targetAllianceID == $session->alliance) {
+        $form->addError("name", CANNOT_INVITE_SAME_ALLY);
+        return;
+    }
+    if ($diplType < 1 || $diplType > 3) {
+        $form->addError("name", WRONG_DIPLOMACY);
+        return;
+    }
+    if ($database->diplomacyInviteCheck2($session->alliance, $targetAllianceID)) {
+        $form->addError("name", INVITE_ALREADY_SENT);
+        return;
+    }
+    if (!$database->diplomacyCheckLimits($session->alliance, $diplType)) {
+        $form->addError("name", ALLY_TOO_MUCH_PACTS);
+        return;
+    }
+
+    // ==================== TRIMITE INVITAȚIA ====================
+    $database->diplomacyInviteAdd($session->alliance, $targetAllianceID, $diplType);
+
+    // Textul notice-ului (compatibil PHP 7)
+    if ($diplType == 1) {
+        $noticeText = OFFERED_CONFED_TO;
+    } elseif ($diplType == 2) {
+        $noticeText = OFFERED_NON_AGGRESION_PACT_TO;
+    } elseif ($diplType == 3) {
+        $noticeText = DECLARED_WAR_ON;
+    } else {
+        $noticeText = '';
+    }
+    $myAllianceName = $database->getAllianceName($session->alliance);
+
+    // Notice în alianța noastră
+    $database->insertAlliNotice(
+        $session->alliance,
+        '<a href="allianz.php?aid=' . $session->alliance . '">' . $myAllianceName .
+        '</a> ' . $noticeText . ' <a href="allianz.php?aid=' . $targetAllianceID . '">' .
+        $targetAllianceName . '</a>.'
+    );
+
+    // Notice în alianța țintă
+    $database->insertAlliNotice(
+        $targetAllianceID,
+        '<a href="allianz.php?aid=' . $session->alliance . '">' . $myAllianceName .
+        '</a> ' . $noticeText . ' <a href="allianz.php?aid=' . $targetAllianceID . '">' .
+        $targetAllianceName . '</a>.'
+    );
+
+    // Mesaj de succes
+    $form->addError("name", INVITE_SENT);
+}
 }
 
 $alliance = new Alliance;

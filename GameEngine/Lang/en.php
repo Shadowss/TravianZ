@@ -62,6 +62,7 @@ define('TRIBE_EMPTY', '<li>Please choose a tribe.</li>');
 define('AGREE_ERROR', '<li>You have to agree to the game rules and the general terms & conditions in order to register.</li>');
 define('LOGIN_USR_EMPTY', 'Enter name.');
 define('LOGIN_PASS_EMPTY', 'Enter password.');
+define('LOGIN_VACATION', 'Vacation mode is still enable.');
 define('EMAIL_ERROR', 'Email does not match existing');
 define('PASS_MISMATCH', 'Passwords do not match');
 define('ALLI_OWNER', 'Please appoint an alliance owner before deleting');
