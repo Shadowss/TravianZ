@@ -115,6 +115,7 @@ if(REG_OPEN == true){ ?>
 
 <ul class="important">
 <?php
+echo $form->getError('winner');
 echo $form->getError('tribe');
 echo $form->getError('agree');
 ?>

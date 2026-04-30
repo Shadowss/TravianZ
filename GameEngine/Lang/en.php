@@ -57,6 +57,7 @@ define('PW_INSECURE', '(Password insecure. Please choose a more secure one.)');
 define('EMAIL_EMPTY', '(Email Empty)');
 define('EMAIL_INVALID', '(Invalid email address)');
 define('EMAIL_TAKEN', '(Email is already in use)');
+define('WINNER_ERROR', '<li>The server has ended! No more registrations can be made.</li>');
 define('TRIBE_EMPTY', '<li>Please choose a tribe.</li>');
 define('AGREE_ERROR', '<li>You have to agree to the game rules and the general terms & conditions in order to register.</li>');
 define('LOGIN_USR_EMPTY', 'Enter name.');

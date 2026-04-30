@@ -62,6 +62,13 @@ class Account {
 
 	private function Signup() {
 		global $database,$form,$mailer,$generator,$session;
+		
+	// ==================== VERIFICARE WINNER ====================
+    $sql = mysqli_query($database->dblink, "SELECT 1 FROM " . TB_PREFIX . "fdata WHERE f99 = '100' AND f99t = '40' LIMIT 1");
+    $winner = mysqli_fetch_row($sql);
+    if ($winner) {
+        $form->addError("winner", WINNER_ERROR);
+    }
 		if(!isset($_POST['name']) || trim($_POST['name']) == "") {
 			$form->addError("name",USRNM_EMPTY);
 		}

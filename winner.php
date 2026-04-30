@@ -217,33 +217,31 @@ if ($winner) {
 					<img src="./gpack/travian_default/img/misc/win.png" align="right" style="padding-top: 40px;" />
 					<p>
 					<b>Dear <?php echo SERVER_NAME; ?> Players,</b>
-					<br /><br />
+					<br /><br /><br /><br />
 					All good things must come to an end, and so too must this age. Once solomon was given a ring, upon which was inscribed a message that could take away all
 					the joys or sorrows of the world, that message was roughly translated "this too shall pass". It is both our joy and sorrow to announce to all Players that
-					this too has now passed! We hope you enjoyed your time with us as much as we enjoyed serving you and thank you for staying until the very end!<br /><br />
-
-					The results: Day had long since passed into night, yet the workers in <?php echo "<a href=\"karte.php?d=$vref&c=".$generator->getMapCheck($vref)."\">$winningvillagename</a>"; ?>,
+					this too has now passed! We hope you enjoyed your time with us as much as we enjoyed serving you and thank you for staying until the very end!<br />
+					<center><h3 style="color:#3498db;">📜 The Results</h3></center>
+					Day had long since passed into night, yet the workers in <?php echo "<a href=\"karte.php?d=$vref&c=".$generator->getMapCheck($vref)."\">$winningvillagename</a>"; ?>,
 					laboured on throught the wintery eve, every wary of the countless armies marching to destroy their work, knowing that they raced against time and the greatest
 					threat that had ever faced the free people. Their tireless struggles were rewarded at <b><?php echo date('H:i:s', $finishconstruction); ?></b> on <b><?php echo date('d. M. Y', $finishconstruction); ?></b> after a
-					nameless worker laid the dinal stone in what will forever known as the greatest and most magnificent creation in all of history since the fall of the Natars<br /><br />
-
+					nameless worker laid the dinal stone in what will forever known as the greatest and most magnificent creation in all of history since the fall of the Natars<br />
 					Together with the alliance "<?php echo "<a href=\"allianz.php?aid=$allianceid\">$winningalliancetag</a>"; ?>", "<?php echo "<a href=\"spieler.php?uid=$owner\">$username</a>"; ?>"
 					was the first to finish the Wonder of the World, using millions of resources whilst also protecting it with hundereds of thousands of brave defenders. It is therefore <b><?php echo "<a href=\"spieler.php?uid=$owner\">$username</a>"; ?></b>
-					who recieves the title "Winner of this era"!<br /><br />
-
-
-					"<a href="spieler.php?uid=<?php echo $datas[0]['userid']; ?>" title="Total Villages: <?php echo $datas[0]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[0]['totalpop']; ?>"><?php echo $datas[0]['username']; ?></a>" was the ruler over the largest personal empire, followed closely by "<a href="spieler.php?uid=<?php echo $datas[1]['userid']; ?>" title="Total Villages: <?php echo $datas[1]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[1]['totalpop']; ?>"><?php echo $datas[1]['username']; ?></a>" and "<a href="spieler.php?uid=<?php echo $datas[2]['userid']; ?>" title="Total Villages: <?php echo $datas[2]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[2]['totalpop']; ?>"><?php echo $datas[2]['username']; ?></a>".<br /><br />
-					Without requiring any introduction, "<a href="spieler.php?uid=<?php echo $attacker[0]['userid']; ?>" title="Total Villages: <?php echo $attacker[0]['totalvillages']; echo "\n"; ?>Attack Points: <?php echo $attacker[0]['apall']; ?>"><?php echo $attacker[0]['username']; ?></a>" was quickly recognized in the gathered crowd, with shades of awe and fear. Building a reputation for cunning and cruel tactics on the battlefield, he is known as the most ruthless of the attackers. Together, with glancing gaze and the glory of the won battles, there are "<a href="spieler.php?uid=<?php echo $attacker[1]['userid']; ?>" title="Total Villages: <?php echo $attacker[1]['totalvillages']; echo "\n"; ?>Attack Points: <?php echo $attacker[1]['apall']; ?>"><?php echo $attacker[1]['username']; ?></a>" and "<a href="spieler.php?uid=<?php echo $attacker[2]['userid']; ?>" title="Total Villages: <?php echo $attacker[2]['totalvillages']; echo "\n"; ?>Attack Points: <?php echo $attacker[2]['apall']; ?>"><?php echo $attacker[2]['username']; ?></a>" commanders of the second and third army of attack. Their skill in the battle will inspire legends in the coming era.<br /><br />
+					who recieves the title "Winner of this era"!<br />
+					<center><h3 style="color:#f39c12;">👑 Top Players</h3></center>
+					"<a href="spieler.php?uid=<?php echo $datas[0]['userid']; ?>" title="Total Villages: <?php echo $datas[0]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[0]['totalpop']; ?>"><?php echo $datas[0]['username']; ?></a>" was the ruler over the largest personal empire, followed closely by "<a href="spieler.php?uid=<?php echo $datas[1]['userid']; ?>" title="Total Villages: <?php echo $datas[1]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[1]['totalpop']; ?>"><?php echo $datas[1]['username']; ?></a>" and "<a href="spieler.php?uid=<?php echo $datas[2]['userid']; ?>" title="Total Villages: <?php echo $datas[2]['totalvillages']; echo "\n";?>Total Population: <?php echo $datas[2]['totalpop']; ?>"><?php echo $datas[2]['username']; ?></a>".<br />
+					<center><h3 style="color:#e74c3c;">⚔️ Top Attackers</h3></center>
+					Without requiring any introduction, "<a href="spieler.php?uid=<?php echo $attacker[0]['userid']; ?>" title="Total Villages: <?php echo $attacker[0]['totalvillages']; echo "\n"; ?>Attack Points: <?php echo $attacker[0]['apall']; ?>"><?php echo $attacker[0]['username']; ?></a>" was quickly recognized in the gathered crowd, with shades of awe and fear. Building a reputation for cunning and cruel tactics on the battlefield, he is known as the most ruthless of the attackers. Together, with glancing gaze and the glory of the won battles, there are "<a href="spieler.php?uid=<?php echo $attacker[1]['userid']; ?>" title="Total Villages: <?php echo $attacker[1]['totalvillages']; echo "\n"; ?>Attack Points: <?php echo $attacker[1]['apall']; ?>"><?php echo $attacker[1]['username']; ?></a>" and "<a href="spieler.php?uid=<?php echo $attacker[2]['userid']; ?>" title="Total Villages: <?php echo $attacker[2]['totalvillages']; echo "\n"; ?>Attack Points: <?php echo $attacker[2]['apall']; ?>"><?php echo $attacker[2]['username']; ?></a>" commanders of the second and third army of attack. Their skill in the battle will inspire legends in the coming era.<br />
+					<center><h3 style="color:#2ecc71;">🛡️ Top Defenders</h3></center>
 					"<a href="spieler.php?uid=<?php echo $defender[0]['userid']; ?>" title="Total Villages: <?php echo $defender[0]['totalvillages']; echo "\n"; ?>Defence Points: <?php echo $defender[0]['dpall'];?>"><?php echo $defender[0]['username']; ?></a>" was greeted by the gathered, while following the procession to the top. A brilliant strategist and champion of the people, he is known throughout the world as the greatest defender ever to protect a city. Next to honor, "<a href="spieler.php?uid=<?php echo $defender[1]['userid']; ?>" title="Total Villages: <?php echo $defender[1]['totalvillages']; echo "\n"; ?>Defence Points: <?php echo $defender[1]['dpall'];?>"><?php echo $defender[1]['username']; ?></a> and "<a href="spieler.php?uid=<?php echo $defender[2]['userid']; ?>" title="Total Villages: <?php echo $defender[2]['totalvillages']; echo "\n"; ?>Defence Points: <?php echo $defender[2]['dpall'];?>"><?php echo $defender[2]['username']; ?></a>" the commanders of the second and third armies of brave defenders look proudly at the grateful crowd.
-					<br />
 					<p>Warriors, leaders, heroes, stood together, looking over the world they explored and conquered. Although the feast will end and people will go back to their daily lives again, this day will remain in their memory forever.</p>
-					<br />
 					<p>We, the TravianZ Team, thank you and we look forward to a new adventure in a new TravianZ world.</p>
-					<br />
-					Best Regards,<br />
-					<?php echo SERVER_NAME; ?> Team<br /><br /><br /><br />
-					<small><i>(By: TravianZ team v8.3.5)</i></small></p>
-
+					Best Regards,
+					<?php echo SERVER_NAME; ?> Team<br />
+					 <p style="text-align:center;font-size:12px;color:#777;">
+					(By: TravianZ team v8.3.5)</p>
+					</p>
 					<br /><br />
 					<div style="text-align: center"><a href="dorf1.php">&raquo; Continue</a></div>
 				</div>
@@ -270,9 +268,9 @@ if ($winner) {
 				<div id="ltime">
 					<div id="ltimeWrap">
 						<?php echo CALCULATED_IN;?> <b><?php
-echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
-?></b> ms
-
+				echo round(($generator->pageLoadTimeEnd()-$start_timer)*1000);
+				?>
+</b> ms
 <br /><?php echo SERVER_TIME;?> <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 					</div>
 				</div>
