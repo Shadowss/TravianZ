@@ -816,7 +816,8 @@ class Building {
         if (count($stillbuildingarray) == 1) {
             if($stillbuildingarray[0]['loopcon'] == 1) {
                 //$q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0,timestamp=".(time()+$stillbuildingarray[0]['timestamp']-$innertimestamp)." WHERE id=".$stillbuildingarray[0]['id'];
-                $q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0 WHERE id=".(int) $stillbuildingarray[0]['id'];
+                $loopDelay = ceil(60 / SPEED);
+                $q = "UPDATE ".TB_PREFIX."bdata SET loopcon=0, timestamp = timestamp - ".$loopDelay." WHERE id=".(int) $stillbuildingarray[0]['id'];
                 $database->query($q);
             }
         }

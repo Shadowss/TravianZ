@@ -476,12 +476,14 @@ class Automation {
 
         // update data that can be done in one swoop instead of using multiple update queries
         // no special checks for Romans
+        $loopDelay = ceil(60 / SPEED);
         foreach ($loopconUpdates as $villageId => $updateCondition) {
             $database->query(
                 "UPDATE
                     ".TB_PREFIX."bdata
                  SET
-                    loopcon = 0
+                    loopcon = 0,
+                    timestamp = timestamp - ".$loopDelay."
                  WHERE
                     loopcon = 1 AND
                     master = 0 AND
