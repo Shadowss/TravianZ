@@ -5,7 +5,7 @@
 ##  Filename       index.php                                                   ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 ?>

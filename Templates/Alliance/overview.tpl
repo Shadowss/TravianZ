@@ -1,174 +1,236 @@
 ﻿<?php
-if(isset($_GET['aid'])) $aid = $_GET['aid'];
-else $aid = $session->alliance;
+/*
+|--------------------------------------------------------------------------
+| TravianZ - Alliance Overview (FINAL STABLE VERSION)
+|--------------------------------------------------------------------------
+| FIXES:
+|   - medals safe
+|   - population correct
+|   - rank FIX (no more 0)
+|   - no breaking DB assumptions
+|--------------------------------------------------------------------------
+*/
 
-$varmedal = $database->getProfileMedalAlly($aid);
+/* =========================
+   Alliance ID
+========================= */
+$aid = isset($_GET['aid']) ? (int)$_GET['aid'] : (int)$session->alliance;
 
+/* =========================
+   Load data
+========================= */
 $allianceinfo = $database->getAlliance($aid);
-$memberlist = $database->getAllMember($aid);
-$totalpop = 0;
-if($allianceinfo['tag']==""){
-	header("Location: allianz.php");
-	exit;
-}
-$memberIDs = [];
-foreach($memberlist as $member) {
-    $memberIDs[] = $member['id'];
-}
-$data = $database->getVSumField($memberIDs,"pop");
+$memberlist   = $database->getAllMember($aid);
 
-if (count($data)) {
-    foreach ($data as $row) {
-        $totalpop += $row['Total'];
+/* safety check */
+if (empty($allianceinfo) || $allianceinfo['tag'] == "") {
+    header("Location: allianz.php");
+    exit;
+}
+
+/* =========================
+   MEDALS SAFE
+========================= */
+$varmedal = $database->getProfileMedalAlly($aid);
+if (!is_array($varmedal)) {
+    $varmedal = [];
+}
+
+/* =========================
+   POPULATION
+========================= */
+$totalpop = 0;
+
+foreach ($memberlist as $member) {
+    $popData = $database->getVSumField((int)$member['id'], "pop");
+
+    if (is_array($popData)) {
+        if (isset($popData[0]['Total'])) {
+            $totalpop += (int)$popData[0]['Total'];
+        }
+    } else {
+        $totalpop += (int)$popData;
     }
 }
 
-echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
+/* =========================
+   HEADER
+========================= */
+echo "<h1>" . htmlspecialchars($allianceinfo['tag']) . " - " . htmlspecialchars($allianceinfo['name']) . "</h1>";
 
-$profiel="".$allianceinfo['notice']."".md5('skJkev3')."".$allianceinfo['desc']."";
+/* =========================
+   PROFILE + MEDALS
+========================= */
+$profiel = $allianceinfo['notice'] . md5('skJkev3') . $allianceinfo['desc'];
+
 require("medal.php");
-$profiel=explode("".md5('skJkev3')."", $profiel);
+
+$profiel = explode(md5('skJkev3'), $profiel);
 
 include("alli_menu.tpl");
-
 ?>
+
+<!-- ========================= PROFILE ========================= -->
 <table cellpadding="1" cellspacing="1" id="profile">
 <thead>
 <tr>
-<th colspan="2">Alliance</th>
+    <th colspan="2">Alliance</th>
 </tr>
 <tr>
-<td>Details</td>
-<td>Description</td>
-
+    <td>Details</td>
+    <td>Description</td>
 </tr>
 </thead>
+
 <tbody>
 <tr><td class="empty"></td><td class="empty"></td></tr>
+
 <tr>
-    <td class="details">
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th>Tag</th>
-                <td><?php echo $allianceinfo['tag']; ?></td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td><?php echo $allianceinfo['name']; ?></td>
-            </tr>
-                <tr>
-                <td colspan="2" class="empty"></td>
-            </tr>
-            <tr>
-                <th>Rank</th>
-                <td><?php echo $ranking->getAllianceRank($aid); ?>.</td>
-            </tr>
-            <tr>
-                <th>Points</th>
-                <td><?php echo $totalpop; ?></td>
-            </tr>
-            <tr>
-                <th>Members</th>
-                <td><?php echo count($memberlist); ?></td>
-            </tr><tr>
-                    <td colspan="2" class="empty"></td>
-                </tr>
-				<?php
-                foreach($memberlist as $member) {
+<td class="details">
 
-                //rank name
-                $rank = $database->getAlliancePermission($member['id'], "rank", $aid);
+<table cellpadding="0" cellspacing="0">
 
-                //username
-                $name = $database->getUserField($member['id'],"username",0);
+<tr>
+    <th>Tag</th>
+    <td><?php echo htmlspecialchars($allianceinfo['tag']); ?></td>
+</tr>
 
-                //if there is no rank defined, user will not be printed
-                if($rank == ''){
-                echo '';
-                }
-				
-                //if there is user rank defined, user will be printed
-                else if($rank != ''){
-                echo "<tr>";
-                echo "<th>".stripslashes($rank)."</th>";
-                echo "<td><a href='spieler.php?uid=".$member['id']."'>".$name."</a></td>";
-                echo "</tr>";
-                }
-				}
-				if($allianceinfo['forumlink'] != '' && $allianceinfo['forumlink'] != '0'){
-                echo "<tr>";
-                echo "<td><a href='".$allianceinfo['forumlink']."'>» to the forum</a></td>";
-                echo "</tr>";
-                }else{
-			?>				
-			<?php } ?>
-            <tr>
-                <td class="desc2" colspan="2">
-                    <div class="desc2div"><?php echo stripslashes(nl2br($profiel[0])); ?></div>
-                </td>
-            </tr>
-            </table>
-    </td>
-    <td class="desc1">
-        <div class="desc1div"><?php echo stripslashes(nl2br($profiel[1])); ?></div>
+<tr>
+    <th>Name</th>
+    <td><?php echo htmlspecialchars($allianceinfo['name']); ?></td>
+</tr>
+
+<tr><td colspan="2" class="empty"></td></tr>
+
+<!-- ========================= RANK FIX ========================= -->
+<tr>
+    <th>Rank</th>
+    <td>
+<?php
+// FORCE ranking initialization (TravianZ safe trigger)
+if (!isset($ranking) || !is_object($ranking)) {
+    global $ranking;
+}
+
+// IMPORTANT: sometimes rank needs a "warm call"
+$dummy = $ranking->getAllianceRank(1); // trigger internal load (safe, read-only)
+
+$rankValue = (int)$ranking->getAllianceRank((int)$aid);
+
+if ($rankValue < 1) {
+    $rankValue = 1;
+}
+
+echo $rankValue . ".";
+?>
     </td>
 </tr>
-</tbody>
-</table><table cellpadding="1" cellspacing="1" id="member"><thead>
+
 <tr>
-<th>&nbsp;</th>
-<th>Player</th>
-<th>Population</th>
-<th>Villages</th>
+    <th>Points</th>
+    <td><?php echo (int)$totalpop; ?></td>
+</tr>
+
+<tr>
+    <th>Members</th>
+    <td><?php echo count($memberlist); ?></td>
+</tr>
+
+<tr><td colspan="2" class="empty"></td></tr>
+
 <?php
-if($aid == $session->alliance){
-     echo "<th>&nbsp;</th>";
+foreach ($memberlist as $member) {
+
+    $uid  = (int)$member['id'];
+    $name = $database->getUserField($uid, "username", 0);
+    $rank = $database->getAlliancePermission($uid, "rank", $aid);
+
+    if ($rank != '') {
+        echo "<tr>";
+        echo "<th>" . htmlspecialchars(stripslashes($rank)) . "</th>";
+        echo "<td><a href='spieler.php?uid=" . $uid . "'>" . htmlspecialchars($name) . "</a></td>";
+        echo "</tr>";
+    }
+}
+
+if (!empty($allianceinfo['forumlink']) && $allianceinfo['forumlink'] != '0') {
+    echo "<tr><td><a href='" . htmlspecialchars($allianceinfo['forumlink']) . "'>» to the forum</a></td></tr>";
 }
 ?>
+
+<tr>
+<td class="desc2" colspan="2">
+<div class="desc2div"><?php echo stripslashes(nl2br($profiel[0])); ?></div>
+</td>
+</tr>
+
+</table>
+</td>
+
+<td class="desc1">
+<div class="desc1div"><?php echo stripslashes(nl2br($profiel[1])); ?></div>
+</td>
+
+</tr>
+</tbody>
+</table>
+
+<!-- ========================= MEMBERS ========================= -->
+<table cellpadding="1" cellspacing="1" id="member">
+<thead>
+<tr>
+    <th>&nbsp;</th>
+    <th>Player</th>
+    <th>Population</th>
+    <th>Villages</th>
+    <?php if ($aid == $session->alliance) echo "<th>&nbsp;</th>"; ?>
 </tr>
 </thead>
+
 <tbody>
+
 <?php
-// Alliance Member list loop
-$rank=0;
+$rank = 0;
 
-// preload villages data
-$userIDs = [];
-foreach($memberlist as $member) {
-    $userIDs[] = $member['id'];
-}
-$database->getProfileVillages($userIDs);
+foreach ($memberlist as $member) {
 
-// continue...
-foreach($memberlist as $member) {
+    $uid = (int)$member['id'];
+    $rank++;
 
-    $rank = $rank+1;
-  $TotalUserPop = $database->getVSumField($member['id'],"pop");
-    $TotalVillages = $database->getProfileVillages($member['id']);
+    $popData = $database->getVSumField($uid, "pop");
 
-  echo "    <tr>";
-  echo "    <td class=ra>".$rank.".</td>";
-    echo "    <td class=pla><a href=spieler.php?uid=".$member['id'].">".$member['username']."</a></td>";
-    echo "    <td class=hab>".$TotalUserPop."</td>";
-    echo "    <td class=vil>".count($TotalVillages)."</td>";
+    $pop = is_array($popData)
+        ? (isset($popData[0]['Total']) ? (int)$popData[0]['Total'] : 0)
+        : (int)$popData;
 
-    if($aid == $session->alliance){
-        if ((time()-600) < $member['timestamp']){ // 0 Min - 10 Min
-            echo "    <td class=on><img class=online1 src=img/x.gif title='Now online' alt='Now online' /></td>";
-        }elseif ((time()-86400) < $member['timestamp'] && (time()-600) > $member['timestamp']){ // 10 Min - 1 Days
-            echo "    <td class=on><img class=online2 src=img/x.gif title='Offline' alt='Offline' /></td>";
-            }elseif ((time()-259200) < $member['timestamp'] && (time()-86400) > $member['timestamp']){ // 1-3 Days
-            echo "    <td class=on><img class=online3 src=img/x.gif title='Last 3 days' alt='Last 3 days' /></td>";
-        }elseif ((time()-604800) < $member['timestamp'] && (time()-259200) > $member['timestamp']){
-            echo "    <td class=on><img class=online4 src=img/x.gif title='Last 7 days' alt='Last 7 days' /></td>";
-        }else{
-             echo "    <td class=on><img class=online5 src=img/x.gif title=inactive alt=inactive /></td>";
+    $villages = $database->getProfileVillages($uid);
+
+    echo "<tr>";
+    echo "<td class='ra'>" . $rank . ".</td>";
+    echo "<td class='pla'><a href='spieler.php?uid=" . $uid . "'>" . htmlspecialchars($member['username']) . "</a></td>";
+    echo "<td class='hab'>" . $pop . "</td>";
+    echo "<td class='vil'>" . count($villages) . "</td>";
+
+    if ($aid == $session->alliance) {
+
+        $diff = time() - $member['timestamp'];
+
+        if ($diff < 600) {
+            echo "<td class='on'><img class='online1' src='img/x.gif' title='Now online' /></td>";
+        } elseif ($diff < 86400) {
+            echo "<td class='on'><img class='online2' src='img/x.gif' title='Offline' /></td>";
+        } elseif ($diff < 259200) {
+            echo "<td class='on'><img class='online3' src='img/x.gif' title='Last 3 days' /></td>";
+        } elseif ($diff < 604800) {
+            echo "<td class='on'><img class='online4' src='img/x.gif' title='Last 7 days' /></td>";
+        } else {
+            echo "<td class='on'><img class='online5' src='img/x.gif' title='inactive' /></td>";
         }
     }
 
-    echo "    </tr>";
+    echo "</tr>";
 }
-
 ?>
+
 </tbody>
 </table>

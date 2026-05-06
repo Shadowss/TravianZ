@@ -1,19 +1,81 @@
+<?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       06.05.2026 						       	 				   ##
+##  Filename       menu.tpl                                                    ##
+##  Refactored by  Shadow					                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
+##                                                                             ##
+#################################################################################
+
+// determinăm UID sigur (evităm repetarea directă $_GET peste tot)
+$menuUid = isset($_GET['uid']) ? (int)$_GET['uid'] : (int)$session->uid;
+
+// helper simplu pentru "selected"
+$selectedUid = isset($_GET['uid']);
+$sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
+?>
+
 <div id="textmenu">
-   <a href="spieler.php?uid=<?php if(isset($_GET['uid'])) { echo $_GET['uid']; } else { echo $session->uid; } ?>" <?php if(isset($_GET['uid'])) { echo "class=\"selected\""; } ?>>Overview</a>
- | <a href="spieler.php?s=1" <?php if(isset($_GET['s']) && $_GET['s'] == 1) { echo "class=\"selected\""; } ?>>Profile</a>
- | <a href="spieler.php?s=2" <?php if(isset($_GET['s']) && $_GET['s'] == 2) { echo "class=\"selected\""; } ?>>Preferences</a>
- | <a href="spieler.php?s=3" <?php if(isset($_GET['s']) && $_GET['s'] == 3) { echo "class=\"selected\""; } ?>>Account</a>
- <?php
- if(NEW_FUNCTIONS_VACATION){
- ?>
- | <a href="spieler.php?s=5" <?php if(isset($_GET['s']) && $_GET['s'] == 5) { echo "class=\"selected\""; } ?>>Vacation</a>
- <?php
- }
- if(GP_ENABLE) {
- ?>
- | <a href="spieler.php?s=4" <?php if(isset($_GET['s']) && $_GET['s'] == 4) { echo "class=\"selected\""; } ?>>Graphic pack</a>
- <?php
- }
- ?>
+
+    <!-- ================= OVERVIEW ================= -->
+    <a href="spieler.php?uid=<?php echo $menuUid; ?>"
+       <?php echo $selectedUid ? 'class="selected"' : ''; ?>>
+        Overview
+    </a>
+
+    |
+
+    <!-- ================= PROFILE ================= -->
+    <a href="spieler.php?s=1"
+       <?php echo ($sParam === 1) ? 'class="selected"' : ''; ?>>
+        Profile
+    </a>
+
+    |
+
+    <!-- ================= PREFERENCES ================= -->
+    <a href="spieler.php?s=2"
+       <?php echo ($sParam === 2) ? 'class="selected"' : ''; ?>>
+        Preferences
+    </a>
+
+    |
+
+    <!-- ================= ACCOUNT ================= -->
+    <a href="spieler.php?s=3"
+       <?php echo ($sParam === 3) ? 'class="selected"' : ''; ?>>
+        Account
+    </a>
+
+    <?php
+    // ================= VACATION MODE =================
+    if (defined('NEW_FUNCTIONS_VACATION') && NEW_FUNCTIONS_VACATION) {
+    ?>
+        |
+        <a href="spieler.php?s=5"
+           <?php echo ($sParam === 5) ? 'class="selected"' : ''; ?>>
+            Vacation
+        </a>
+    <?php
+    }
+
+    // ================= GRAPHIC PACK =================
+    if (defined('GP_ENABLE') && GP_ENABLE) {
+    ?>
+        |
+        <a href="spieler.php?s=4"
+           <?php echo ($sParam === 4) ? 'class="selected"' : ''; ?>>
+            Graphic pack
+        </a>
+    <?php
+    }
+    ?>
 
 </div>

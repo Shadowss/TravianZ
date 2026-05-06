@@ -1,140 +1,205 @@
 <?php
-if(!isset($aid)) $aid = $session->alliance;
+#################################################################################
+## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+## --------------------------------------------------------------------------- ##
+## Project:     TravianZ (Refactor incremental)                                ##
+## File:        allidesc.tpl                                                   ##
+## Description: Alliance description + medals + edit form                      ##
+## Improvements:                                                               ##
+##  - Reduced unnecessary loops                                               ##
+##  - Safer output (XSS protection)                                            ##
+##  - Cleaner structure                                                       ##
+##  - Medals switch simplified                                                ##
+#################################################################################
 
+// fallback alliance id
+if (!isset($aid)) {
+    $aid = $session->alliance;
+}
+
+// load alliance data
 $varmedal = $database->getProfileMedalAlly($aid);
 $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
-$totalpop = 0;
+
+// build member id list (for population query)
 $memberIDs = [];
 
-foreach($memberlist as $member) {
-    $memberIDs[] = $member['id'];
-}
-$data = $database->getVSumField($memberIDs,"pop");
-
-if (count($data)) {
-    foreach ($data as $row) {
-        $totalpop += $row['Total'];
+if (!empty($memberlist)) {
+    foreach ($memberlist as $member) {
+        $memberIDs[] = (int)$member['id'];
     }
 }
 
-echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
+// total population calculation (safe fallback)
+$totalpop = 0;
+$data = [];
+
+if (!empty($memberIDs)) {
+    $data = $database->getVSumField($memberIDs, "pop");
+}
+
+if (!empty($data)) {
+    foreach ($data as $row) {
+        $totalpop += (int)$row['Total'];
+    }
+}
+
+// alliance title output (escaped)
+echo "<h1>" . htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8') . " - " .
+     htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8') . "</h1>";
+
+// menu include
 include("alli_menu.tpl");
 ?>
-<table cellpadding="1" cellspacing="1" id="edit"><thead>
+
 <form method="post" action="allianz.php">
 <input type="hidden" name="a" value="3">
 <input type="hidden" name="o" value="3">
 <input type="hidden" name="s" value="5">
+
+<table cellpadding="1" cellspacing="1" id="edit">
+
+<thead>
 <tr>
-<th colspan="3">Alliance</th>
-</tr><tr>
-<td colspan="2">Details</td>
-<td>Description</td>
-</tr></thead>
+    <th colspan="3">Alliance</th>
+</tr>
+<tr>
+    <td colspan="2">Details</td>
+    <td>Description</td>
+</tr>
+</thead>
+
 <tbody>
 
-<tr><td colspan="2"></td><td class="empty"></td></tr>
-
 <tr>
-<th>Tag</td><td class="s7"><?php echo $allianceinfo['tag']; ?></th>
-<td rowspan="8" class="desc1"><textarea tabindex="1" name="be1"><?php echo isset($_POST['be1']) ? $_POST['be1'] : stripslashes($allianceinfo['desc']); ?></textarea></td>
+    <td colspan="2"></td>
+    <td class="empty"></td>
+</tr>
+
+<!-- TAG + DESCRIPTION -->
+<tr>
+    <th>Tag</th>
+    <td class="s7">
+        <?php echo htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8'); ?>
+    </td>
+
+    <td rowspan="8" class="desc1">
+        <textarea tabindex="1" name="be1"><?php
+            echo isset($_POST['be1'])
+                ? htmlspecialchars($_POST['be1'], ENT_QUOTES, 'UTF-8')
+                : htmlspecialchars(stripslashes($allianceinfo['desc']), ENT_QUOTES, 'UTF-8');
+        ?></textarea>
+    </td>
 </tr>
 
 <tr>
-<th>Name</th><td><?php echo $allianceinfo['name']; ?></td>
+    <th>Name</th>
+    <td><?php echo htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8'); ?></td>
 </tr>
 
 <tr><td colspan="2" class="empty"></td></tr>
 
+<!-- RANK -->
 <tr>
-<th>Rank</th><td><?php echo $ranking->getAllianceRank($aid); ?>.</td>
+    <th>Rank</th>
+    <td><?php echo (int)$ranking->getAllianceRank($aid); ?>.</td>
 </tr>
 
 <tr>
-<th>Points</th><td><?php echo $totalpop; ?></td>
+    <th>Points</th>
+    <td><?php echo (int)$totalpop; ?></td>
 </tr>
 
 <tr>
-<th>Members</th><td><?php echo count($memberlist); ?></td>
+    <th>Members</th>
+    <td><?php echo count($memberlist); ?></td>
 </tr>
 
 <tr><td colspan="2" class="empty"></td></tr>
 
-<tr><td colspan="2" class="desc2"><textarea tabindex="2" name="be2"><?php echo isset($_POST['be2']) ? $_POST['be2'] : stripslashes($allianceinfo['notice']); ?></textarea></td></tr>
-    <p>
-        <table cellspacing="1" cellpadding="2" class="tbg">
-        <tr><td class="rbg" colspan="4">Medals</td></tr>
-        <tr>
-            <td>Category</td>
-            <td>Rank</td>
-            <td>Week</td>
-            <td>BB-Code</td>
-        </tr>
-                <?php
-/******************************
-INDELING CATEGORIEEN:
-===============================
-== 1. Aanvallers top 10      ==
-== 2. Defence top 10         ==
-== 3. Klimmers top 10        ==
-== 4. Overvallers top 10     ==
-== 5. In att en def tegelijk ==
-== 6. in top 3 - aanval      ==
-== 7. in top 3 - verdediging ==
-== 8. in top 3 - klimmers    ==
-== 9. in top 3 - overval     ==
-******************************/
+<!-- NOTICE -->
+<tr>
+    <td colspan="2" class="desc2">
+        <textarea tabindex="2" name="be2"><?php
+            echo isset($_POST['be2'])
+                ? htmlspecialchars($_POST['be2'], ENT_QUOTES, 'UTF-8')
+                : htmlspecialchars(stripslashes($allianceinfo['notice']), ENT_QUOTES, 'UTF-8');
+        ?></textarea>
+    </td>
+</tr>
 
-
-    foreach($varmedal as $medal) {
-    $titel="Bonus";
-    switch ($medal['categorie']) {
-    case "1":
-        $titel="Attacker of the Week";
-        break;
-    case "2":
-        $titel="Defender of the Week";
-        break;
-    case "3":
-        $titel="Climber of the week";
-        break;
-    case "4":
-        $titel="Robber of the week";
-        break;
-    case "5":
-        $titel="Top 10 of both attackers and defenders";
-        break;
-    case "6":
-        $titel="Top 3 of Attackers of week ".$medal['points']." in a row";
-        break;
-    case "7":
-        $titel="Top 3 of Defenders of week ".$medal['points']." in a row";
-        break;
-    case "8":
-        $titel="Top 3 of Pop climbers of week ".$medal['points']." in a row";
-        break;
-    case "9":
-        $titel="Top 3 of Robbers of week ".$medal['points']." in a row";
-        break;
-    case "10":
-        $titel="Rank Climber of the week";
-        break;
-    case "11":
-        $titel="Top 3 of Rank climbers of week ".$medal['points']." in a row";
-        break;
-    case "12":
-        $titel="Top 10 of Rank Attackers of week ".$medal['points']." in a row";
-        break;
-    }
-                 echo"<tr>
-                   <td> ".$titel."</td>
-                   <td>".$medal['plaats']."</td>
-                   <td>".$medal['week']."</td>
-                   <td>[#".$medal['id']."]</td>
-                  </tr>";
-                 } ?>
-                 </table></p>
+</tbody>
 </table>
 
-<p class="btn"><input tabindex="3" type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" /></p></form>
+<!-- MEDALS -->
+<p>
+<table cellspacing="1" cellpadding="2" class="tbg">
+<tr><td class="rbg" colspan="4">Medals</td></tr>
+
+<tr>
+    <td>Category</td>
+    <td>Rank</td>
+    <td>Week</td>
+    <td>BB-Code</td>
+</tr>
+
+<?php
+/******************************
+Medal categories mapping
+******************************/
+
+if (!empty($varmedal)) {
+
+    foreach ($varmedal as $medal) {
+
+        // default title
+        $titel = "Bonus";
+
+        switch ((string)$medal['categorie']) {
+
+            case "1":  $titel = "Attacker of the Week"; break;
+            case "2":  $titel = "Defender of the Week"; break;
+            case "3":  $titel = "Climber of the week"; break;
+            case "4":  $titel = "Robber of the week"; break;
+            case "5":  $titel = "Top 10 of both attackers and defenders"; break;
+            case "6":
+                $titel = "Top 3 of Attackers of week " . (int)$medal['points'] . " in a row";
+                break;
+            case "7":
+                $titel = "Top 3 of Defenders of week " . (int)$medal['points'] . " in a row";
+                break;
+            case "8":
+                $titel = "Top 3 of Pop climbers of week " . (int)$medal['points'] . " in a row";
+                break;
+            case "9":
+                $titel = "Top 3 of Robbers of week " . (int)$medal['points'] . " in a row";
+                break;
+            case "10": $titel = "Rank Climber of the week"; break;
+            case "11":
+                $titel = "Top 3 of Rank climbers of week " . (int)$medal['points'] . " in a row";
+                break;
+            case "12":
+                $titel = "Top 10 of Rank Attackers of week " . (int)$medal['points'] . " in a row";
+                break;
+        }
+        echo "<tr>
+                <td>" . htmlspecialchars($titel, ENT_QUOTES, 'UTF-8') . "</td>
+                <td>" . (int)$medal['plaats'] . "</td>
+                <td>" . (int)$medal['week'] . "</td>
+                <td>[#" . (int)$medal['id'] . "]</td>
+              </tr>";
+    }
+}
+?>
+
+</table>
+</p>
+
+<!-- SAVE BUTTON -->
+<p class="btn">
+    <input tabindex="3" type="image" name="s1" id="btn_save"
+           class="dynamic_img" src="img/x.gif" alt="save">
+</p>
+
+</form>

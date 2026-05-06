@@ -136,7 +136,13 @@ echo $getpop['sumofpop'];
         <tbody>
             <tr>
                 <td><img src="./<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="Gold"> Gold</td>
-                <td><?php $gold = mysqli_query($GLOBALS["link"], "SELECT SUM(gold) AS sumofgold FROM ".TB_PREFIX."users"); $getgold=mysqli_fetch_assoc($gold); echo $getgold['sumofgold']; ?></td>
+                <td>
+<?php 
+$gold = mysqli_query($database->dblink, "SELECT SUM(gold) AS sumofgold FROM ".TB_PREFIX."users"); 
+$getgold = mysqli_fetch_assoc($gold); 
+echo $getgold['sumofgold'] ?? 0; 
+?>
+</td>
             </tr>
         </tbody>
     </table> 

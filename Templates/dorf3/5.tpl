@@ -1,72 +1,182 @@
 <?php
-	include('menu.tpl');
+/**
+ * ==========================================================
+ * 5.tpl - OWN TROOPS SAFE PERFORMANCE PATCH
+ * ==========================================================
+ * - Logică 100% păstrată (TravianZ compatible)
+ * - Compatibil PHP 5.6 / 7+
+ * - Reducere iterări redundante
+ * - Fix isset + init arrays
+ * - Optimizare sumare unități + movement
+ * - Comentarii pentru mentenanță
+ * ==========================================================
+ */
+
+include('menu.tpl');
 ?>
+
 <table id="troops" cellpadding="1" cellspacing="1">
-<thead><tr><th colspan="12">Own troops</th></tr><tr>
+
+<thead>
+
+<tr>
+	<th colspan="12">Own troops</th>
+</tr>
+
+<tr>
+
 <?php
-	$varray = $database->getProfileVillages($session->uid);
+$varray = $database->getProfileVillages($session->uid);
 ?>
+
 <td>Village</td>
+
 <?php
-	for ($i=($session->tribe-1)*10+1; $i<=($session->tribe)*10; $i++) {
-		echo '<td><img class="unit u'.$i.'" src="img/x.gif"></td>';
-		$unit_total['u'.$i] = 0;
-	}
-	echo '<td><img class="unit uhero" src="img/x.gif"></td>';
+// ==========================================================
+// UNIT HEADERS (tribe-based)
+// ==========================================================
+$unit_start = ($session->tribe - 1) * 10 + 1;
+$unit_end   = ($session->tribe) * 10;
+
+$unit_total = [];
+
+for ($i = $unit_start; $i <= $unit_end; $i++) {
+	echo '<td><img class="unit u'.$i.'" src="img/x.gif" alt=""></td>';
+	$unit_total['u'.$i] = 0;
+}
+
+// hero column
+$unit_total['hero'] = 0;
+echo '<td><img class="unit uhero" src="img/x.gif" alt=""></td>';
 ?>
-</tr></thead><tbody>
+
+</tr>
+
+</thead>
+
+<tbody>
+
 <?php
-	foreach($varray as $vil) {
-		$vid = $vil['wref'];
-		if($vid == $village->wid){$class = 'hl';}else{$class = '';}
+// ==========================================================
+// VILLAGES LOOP
+// ==========================================================
+foreach ($varray as $vil) {
 
-		$units = $database->getEnforceVillage($vid,1);
-		array_unshift($units,$database->getUnit($vid));
+	$vid = $vil['wref'];
 
-		echo '<tr class="'.$class.'"><td class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vil['name'].'</a></td>';
-		$movement = $database->getVillageMovement($vid);
-		for ($i=($session->tribe-1)*10+1; $i<=($session->tribe)*10; $i++) {
-			$uni['u'.$i] = 0;
-			foreach($units as $unit) {
-				$uni['u'.$i] += $unit['u'.$i];
-				$unit_total['u'.$i] += $unit['u'.$i];
+	$class = ($vid == $village->wid) ? 'hl' : '';
+
+	// base + reinforcement troops
+	$units = $database->getEnforceVillage($vid, 1);
+	array_unshift($units, $database->getUnit($vid));
+
+	// movement troops (incoming/outgoing)
+	$movement = $database->getVillageMovement($vid);
+
+	// reset per village
+	$uni = [];
+
+	// init counters per unit type
+	for ($i = $unit_start; $i <= $unit_end; $i++) {
+		$key = 'u'.$i;
+		$uni[$key] = 0;
+	}
+
+	$uni['hero'] = 0;
+
+	// ==========================================================
+	// SUM BASE + ENFORCEMENTS
+	// ==========================================================
+	foreach ($units as $unit) {
+
+		for ($i = $unit_start; $i <= $unit_end; $i++) {
+			$key = 'u'.$i;
+
+			if (isset($unit[$key])) {
+				$uni[$key] += $unit[$key];
+				$unit_total[$key] += $unit[$key];
 			}
-			    if (isset($movement['u'.$i])) {
-                    $uni[ 'u' . $i ] += $movement[ 'u' . $i ];
-                    $unit_total['u'.$i] += $movement['u'.$i];
-                }
-			if($uni['u'.$i] !=0){$cl = '';}else{$cl = 'none';}
-			echo '<td class="'.$cl.'">'.$uni['u'.$i].'</td>';
 		}
-		$uni['hero'] = 0;
-		if (!isset($unit_total['hero'])) {
-            $unit_total['hero'] = 0;
-        }
-		foreach($units as $unit) {
+
+		// hero
+		if (isset($unit['hero'])) {
 			$uni['hero'] += $unit['hero'];
 			$unit_total['hero'] += $unit['hero'];
 		}
-
-		if (isset($movement['hero'])) {
-            $uni['hero']        += $movement['hero'];
-            $unit_total['hero'] += $movement['hero'];
-        }
-
-		if($uni['hero'] !=0){$cl = '';}else{$cl = 'none';}
-		echo '<td class="'.$cl.'">'.$uni['hero'].'</td>';
-		echo '</tr>';
 	}
+
+	// ==========================================================
+	// MOVEMENT ADDITION
+	// ==========================================================
+	for ($i = $unit_start; $i <= $unit_end; $i++) {
+		$key = 'u'.$i;
+
+		if (isset($movement[$key])) {
+			$uni[$key] += $movement[$key];
+			$unit_total[$key] += $movement[$key];
+		}
+	}
+
+	if (isset($movement['hero'])) {
+		$uni['hero'] += $movement['hero'];
+		$unit_total['hero'] += $movement['hero'];
+	}
+
+	// ==========================================================
+	// OUTPUT ROW
+	// ==========================================================
+	echo '<tr class="'.$class.'">';
+
+	echo '<td class="vil fc">
+			<a href="dorf1.php?newdid='.$vid.'">'.$vil['name'].'</a>
+		  </td>';
+
+	// units
+	for ($i = $unit_start; $i <= $unit_end; $i++) {
+		$key = 'u'.$i;
+
+		$val = $uni[$key];
+
+		$cl = ($val != 0) ? '' : 'none';
+
+		echo '<td class="'.$cl.'">'.$val.'</td>';
+	}
+
+	// hero
+	$heroVal = $uni['hero'];
+	$cl = ($heroVal != 0) ? '' : 'none';
+
+	echo '<td class="'.$cl.'">'.$heroVal.'</td>';
+
+	echo '</tr>';
+}
 ?>
+
+<!-- ==========================================================
+     SUM ROW
+========================================================== -->
 
 <tr>
-<th>Sum</th>
-<?php
-	for ($i=($session->tribe-1)*10+1; $i<=($session->tribe)*10; $i++) {
-		if($unit_total['u'.$i] !=0){$cl = '';}else{$cl = 'none';}
-		echo '<td class="'.$cl.'">'.$unit_total['u'.$i].'</td>';
-	}
-	if($unit_total['hero'] !=0){$cl = '';}else{$cl = 'none';}
-	echo '<td class="'.$cl.'">'.$unit_total['hero'].'</td>';
+	<th>Sum</th>
 
+<?php
+for ($i = $unit_start; $i <= $unit_end; $i++) {
+	$key = 'u'.$i;
+
+	$val = isset($unit_total[$key]) ? $unit_total[$key] : 0;
+
+	$cl = ($val != 0) ? '' : 'none';
+
+	echo '<td class="'.$cl.'">'.$val.'</td>';
+}
+
+$heroTotal = $unit_total['hero'];
+$cl = ($heroTotal != 0) ? '' : 'none';
+
+echo '<td class="'.$cl.'">'.$heroTotal.'</td>';
 ?>
-</tr></tbody></table>
+
+</tr>
+
+</tbody>
+</table>

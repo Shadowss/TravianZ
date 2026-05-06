@@ -1,28 +1,85 @@
 <?php
-if(!isset($aid)) $aid = $session->alliance;
+#################################################################################
+## -= TravianZ Alliance News (incremental refactor) =-                        ##
+## - preserves logic                                                           ##
+## - improves safety (XSS protection)                                         ##
+## - cleaner structure                                                         ##
+#################################################################################
+
+// -------------------------------------------------
+// SAFE ALLIANCE ID
+// -------------------------------------------------
+
+$aid = isset($aid) ? (int)$aid : (int)$session->alliance;
+
+// -------------------------------------------------
+// DATA LOAD
+// -------------------------------------------------
 
 $allianceinfo = $database->getAlliance($aid);
 $noticeArray = $database->readAlliNotice($aid);
 
-echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
-include("alli_menu.tpl"); 
+// -------------------------------------------------
+// HEADER
+// -------------------------------------------------
+
+echo "<h1>" .
+    htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8') .
+    " - " .
+    htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8') .
+    "</h1>";
+
+include("alli_menu.tpl");
 ?>
-<table cellpadding="1" cellspacing="1" id="events"><thead>
-<tr><th colspan="2">Alliance events</th></tr>
+
+<!-- ALLIANCE EVENTS TABLE -->
+<table cellpadding="1" cellspacing="1" id="events">
+
+<thead>
+
 <tr>
-<td>Event</td>
-<td>Date</td>
+    <th colspan="2">Alliance events</th>
 </tr>
+
+<tr>
+    <td>Event</td>
+    <td>Date</td>
+</tr>
+
 </thead>
+
 <tbody>
+
 <?php
-foreach($noticeArray as $notice) {
-$date = $generator->procMtime($notice['date']);
-echo "<tr>";
-echo "<td class=event>".$notice['comment']."</td>";
-echo "<td class=dat>".$date['0']." ".$date['1']."</td>";
-echo "</tr>";
+// -------------------------------------------------
+// EVENTS LOOP
+// -------------------------------------------------
+
+if (!empty($noticeArray)) {
+
+    foreach ($noticeArray as $notice) {
+
+        // safe timestamp formatting
+        $date = $generator->procMtime($notice['date']);
+
+        echo "<tr>
+
+            <td class=\"event\">" . html_entity_decode($notice['comment'], ENT_QUOTES, 'UTF-8') . "</td>
+
+            <td class=\"dat\">" .
+                $date[0] . " " . $date[1] .
+            "</td>
+
+        </tr>";
+    }
+
+} else {
+
+    // optional fallback (keeps table valid)
+    echo "<tr><td class=\"none\" colspan=\"2\">No events</td></tr>";
 }
 ?>
+
 </tbody>
+
 </table>

@@ -1,30 +1,94 @@
 <?php
-if(!isset($aid)) $aid = $session->alliance;
+#################################################################################
+## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+## --------------------------------------------------------------------------- ##
+## Project:     TravianZ (Refactor incremental)                                ##
+## File:        changename.tpl                                                 ##
+## Description: Alliance name/tag change                                      ##
+## Improvements:                                                               ##
+##  - Fixed HTML issues                                                       ##
+##  - XSS protection                                                          ##
+##  - Cleaner structure                                                       ##
+##  - Removed duplicate attributes                                            ##
+#################################################################################
 
+// fallback alliance id
+if (!isset($aid)) {
+    $aid = $session->alliance;
+}
+
+// load alliance info
 $allianceinfo = $database->getAlliance($aid);
-echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
-include("alli_menu.tpl"); 
+
+// header
+echo "<h1>" . htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8') .
+     " - " .
+     htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8') .
+     "</h1>";
+
+// menu
+include("alli_menu.tpl");
 ?>
+
 <form method="post" action="allianz.php">
+
 <input type="hidden" name="a" value="100">
 <input type="hidden" name="o" value="100">
 <input type="hidden" name="s" value="5">
 
-<table cellpadding="1" cellspacing="1" cellpadding="1" cellspacing="1" id="name" class="small_option"><thead>
+<table cellpadding="1" cellspacing="1" id="name" class="small_option">
+
+<thead>
 <tr>
-<th colspan="2">Change name</th>
-</tr></thead>
-<tbody><tr>
-<th>Tag</th>
-<td><input class="tag text" name="ally1" value="<?php echo $allianceinfo['tag']; ?>" maxlength="15">
-<span class="error2"><?php echo $form->getError("ally1"); ?></span></td>
+    <th colspan="2">Change name</th>
+</tr>
+</thead>
+
+<tbody>
+
+<!-- TAG -->
+<tr>
+    <th>Tag</th>
+    <td>
+        <input class="tag text"
+               name="ally1"
+               value="<?php echo htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8'); ?>"
+               maxlength="15">
+
+        <span class="error2">
+            <?php echo $form->getError("ally1"); ?>
+        </span>
+    </td>
 </tr>
 
+<!-- NAME -->
 <tr>
-<th>Name</th>
-<td><input class="name text" name="ally2" value="<?php echo $allianceinfo['name']; ?>" maxlength="50">
-<span class="error2"><?php echo $form->getError("ally2"); ?></span></td>
-</tr></tbody></table>
+    <th>Name</th>
+    <td>
+        <input class="name text"
+               name="ally2"
+               value="<?php echo htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8'); ?>"
+               maxlength="50">
 
-<p><button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button></form></p>
-<p class="error"><?php echo $form->getError("perm"); ?></p>
+        <span class="error2">
+            <?php echo $form->getError("ally2"); ?>
+        </span>
+    </td>
+</tr>
+
+</tbody>
+</table>
+
+<!-- SUBMIT -->
+<p>
+    <button type="submit" name="s1" id="btn_ok" class="trav_buttons">
+        Ok
+    </button>
+</p>
+
+</form>
+
+<!-- PERMISSION ERROR -->
+<p class="error">
+    <?php echo $form->getError("perm"); ?>
+</p>

@@ -1,13 +1,41 @@
+<?php
+#################################################################################
+##  SAFE INCREMENTAL REFACTOR - Messages Menu                                  ##
+##  Credits: cleaned structure, same logic preserved                           ##
+##  Compatibility: PHP 5.6+ / PHP 7+                                           ##
+#################################################################################
+
+// ======================================================
+// SAFE GET PARAM
+// ======================================================
+$t = isset($_GET['t']) ? (int)$_GET['t'] : 0;
+?>
+
 <div id="textmenu">
-   <a href="nachrichten.php" <?php if(!isset($_GET['t'])) { echo "class=\"selected\""; } ?>>Inbox</a>
- | <a href="nachrichten.php?t=1" <?php if(isset($_GET['t']) && $_GET['t'] == 1) { echo "class=\"selected\""; } ?> >Write</a>
- | <a href="nachrichten.php?t=2" <?php if(isset($_GET['t']) && $_GET['t'] == 2) { echo "class=\"selected\""; } ?> >Sent</a>
- <?php if($session->plus) {
- echo " | <a href=\"nachrichten.php?t=3\"";
- if(isset($_GET['t']) && $_GET['t'] == 3) { echo "class=\"selected\""; }
- echo ">Archive</a> | <a href=\"nachrichten.php?t=4\"";
- if(isset($_GET['t']) && $_GET['t'] == 4) { echo "class=\"selected\""; }
- echo ">Notes</a>";
- }
- ?>
+
+    <!-- Inbox -->
+    <a href="nachrichten.php" <?php if ($t === 0) { echo 'class="selected"'; } ?>>Inbox</a>
+
+    |
+
+    <!-- Write -->
+    <a href="nachrichten.php?t=1" <?php if ($t === 1) { echo 'class="selected"'; } ?>>Write</a>
+
+    |
+
+    <!-- Sent -->
+    <a href="nachrichten.php?t=2" <?php if ($t === 2) { echo 'class="selected"'; } ?>>Sent</a>
+
+    <?php
+    // ======================================================
+    // PLUS FEATURES (Archive + Notes)
+    // ======================================================
+    if ($session->plus) {
+
+        echo ' | <a href="nachrichten.php?t=3" ' . ($t === 3 ? 'class="selected"' : '') . '>Archive</a>';
+
+        echo ' | <a href="nachrichten.php?t=4" ' . ($t === 4 ? 'class="selected"' : '') . '>Notes</a>';
+    }
+    ?>
+
 </div>

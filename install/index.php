@@ -7,7 +7,7 @@ include("templates/script.tpl");
 if(!isset($_GET['s'])) {
 	$_GET['s']=0;
 }
-$tz=(isset($_GET['t']))? (int)$_GET['t'] : 13;
+$tz=(isset($_GET['t']))? (int)$_GET['t'] : 8;
     switch($tz) {
         case 1: $t_zone="Africa/Dakar";break;
         case 2: $t_zone="America/New_York";break;

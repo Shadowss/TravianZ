@@ -1,31 +1,47 @@
-<?php if(NEW_FUNCTIONS_VACATION){ ?>
-<h1>Player profile</h1>
-
 <?php
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ      					       		 		  	   ##
-##  Version:       01.09.2013 						       	 				   ##
-##  Filename       vacation.php                                                ##
+##  Version:       06.05.2026 						       	 				   ##
+##  Filename       vacation.tpl                                                ##
 ##  Developed by:  Advocaite                                                   ##
-##  Fixed & Remake:Shadow					                                   ##
+##  Refactored by  Shadow					                                   ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro 				       	 		   ##
 ##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
 ##                                                                             ##
 #################################################################################
 
-include("menu.tpl"); ?>
+if (NEW_FUNCTIONS_VACATION) {
+
+?>
+
+<!-- =========================
+     PAGE HEADER
+========================= -->
+
+<h1>Player profile</h1>
+<?php include("menu.tpl"); ?>
 
 <?php
-$tribe = (int)$session->tribe;
+
+// -----------------------------------------------------
+// Tribe + validation check
+// -----------------------------------------------------
+$tribe = (int) $session->tribe;
+
+// ensure safe return type
 $check = $database->checkVacationRequirements($session->uid);
 $errors = is_array($check) ? $check : [];
+
 $canActivate = empty($errors);
-function vac_ok($key, $errors){
+
+// helper function
+function vac_ok($key, $errors)
+{
     return !in_array($key, $errors);
 }
 ?>
@@ -39,11 +55,11 @@ function vac_ok($key, $errors){
     <br>
 
     <?php
-    // 🔴 AICI AFIȘEZI ERORILE VACATION (IMPORTANT)
-    if(isset($_SESSION['vac_error'])){
+    // ERROR DISPLAY (unchanged logic, safer output)
+    if (isset($_SESSION['vac_error'])) {
         echo "<div class='error' style='background:#900;color:#fff;padding:10px;margin-bottom:10px;'>"
-            .nl2br($_SESSION['vac_error']).
-            "</div>";
+            . nl2br(htmlspecialchars($_SESSION['vac_error'], ENT_QUOTES, 'UTF-8')) .
+        "</div>";
 
         unset($_SESSION['vac_error']);
     }
@@ -76,45 +92,47 @@ function vac_ok($key, $errors){
         <div class="vacationColumn">
             <h3>Requirements</h3>
             <ul class="vacList">
-<li style="color:<?= vac_ok('TROOPS_MOVING',$errors) ? 'green':'red' ?>">
-    There are no outgoing troops
-</li>
 
-<li style="color:<?= vac_ok('INCOMING_TROOPS',$errors) ? 'green':'red' ?>">
-    There are no incoming troops
-</li>
+                <li style="color:<?= vac_ok('TROOPS_MOVING',$errors) ? 'green':'red' ?>">
+                    There are no outgoing troops
+                </li>
 
-<li style="color:<?= vac_ok('REINFORCEMENTS',$errors) ? 'green':'red' ?>">
-    No reinforcing troops sent/receive
-</li>
+                <li style="color:<?= vac_ok('INCOMING_TROOPS',$errors) ? 'green':'red' ?>">
+                    There are no incoming troops
+                </li>
 
-<li style="color:<?= vac_ok('WW',$errors) ? 'green':'red' ?>">
-    No ownership of a Wonder of the World village
-</li>
+                <li style="color:<?= vac_ok('REINFORCEMENTS',$errors) ? 'green':'red' ?>">
+                    No reinforcing troops sent/receive
+                </li>
 
-<li style="color:<?= vac_ok('ARTEFACTS',$errors) ? 'green':'red' ?>">
-    No ownership of an artifact village
-</li>
+                <li style="color:<?= vac_ok('WW',$errors) ? 'green':'red' ?>">
+                    No ownership of a Wonder of the World village
+                </li>
 
-<li style="color:<?= vac_ok('PROTECTION',$errors) ? 'green':'red' ?>">
-    No beginner’s protection
-</li>
+                <li style="color:<?= vac_ok('ARTEFACTS',$errors) ? 'green':'red' ?>">
+                    No ownership of an artifact village
+                </li>
 
-<li style="color:<?= (vac_ok('PRISONERS_IN',$errors) && vac_ok('PRISONERS_OUT',$errors)) ? 'green':'red' ?>">
-    <?php if($tribe == 3){ ?>
-        No units in your traps
-    <?php } else { ?>
-        No troops in enemy traps
-    <?php } ?>
-</li>
+                <li style="color:<?= vac_ok('PROTECTION',$errors) ? 'green':'red' ?>">
+                    No beginner’s protection
+                </li>
 
-<li style="color:<?= vac_ok('MARKET',$errors) ? 'green':'red' ?>">
-    No marketplace activity
-</li>
+                <li style="color:<?= (vac_ok('PRISONERS_IN',$errors) && vac_ok('PRISONERS_OUT',$errors)) ? 'green':'red' ?>">
+                    <?php if ($tribe == 3) { ?>
+                        No units in your traps
+                    <?php } else { ?>
+                        No troops in enemy traps
+                    <?php } ?>
+                </li>
 
-<li style="color:<?= vac_ok('ACCOUNT_DELETION',$errors) ? 'green':'red' ?>">
-    Account is not scheduled for deletion
-</li>
+                <li style="color:<?= vac_ok('MARKET',$errors) ? 'green':'red' ?>">
+                    No marketplace activity
+                </li>
+
+                <li style="color:<?= vac_ok('ACCOUNT_DELETION',$errors) ? 'green':'red' ?>">
+                    Account is not scheduled for deletion
+                </li>
+
             </ul>
         </div>
 
@@ -133,20 +151,22 @@ function vac_ok($key, $errors){
 
     </div>
 
-<div class="vacationButton">
-<?php if($canActivate){ ?>
-	<input type="image" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save">
-<?php } else { ?>
-    <div style="padding:10px; background:#300; color:#fff; font-weight:bold; text-align:center; border-radius:5px;">
-        Vacation mode cannot be activated – requirements not met
+    <div class="vacationButton">
+    <?php if ($canActivate) { ?>
+        <input type="image" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save">
+    <?php } else { ?>
+        <div style="padding:10px;background:#300;color:#fff;font-weight:bold;text-align:center;border-radius:5px;">
+            Vacation mode cannot be activated – requirements not met
+        </div>
+    <?php } ?>
     </div>
-<?php } ?>
-</div>
 
 </div>
 
 </form>
+
 <script>
+// prevent accidental submit via Enter
 document.addEventListener('DOMContentLoaded', function () {
     const vacInput = document.querySelector('input[name="vac_days"]');
 
@@ -160,7 +180,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 </script>
-<?php }else{
+
+<?php
+} else {
     header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
     exit;
-} ?>
+}
+?>

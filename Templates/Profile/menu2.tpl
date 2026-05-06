@@ -1,19 +1,49 @@
+<?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       06.05.2026 						       	 				   ##
+##  Filename       menu.tpl                                                    ##
+##  Refactored by  Shadow					                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
+##                                                                             ##
+#################################################################################
+
+// UID sigur (evităm repetarea $_GET)
+$menuUid = isset($_GET['uid']) ? (int)$_GET['uid'] : (int)$session->uid;
+$hasUid  = isset($_GET['uid']);
+?>
+
 <div id="textmenu">
-   <a href="spieler.php?uid=<?php if(isset($_GET['uid'])) { echo $_GET['uid']; } else { echo $session->uid; } ?>" <?php if(isset($_GET['uid'])) { echo "class=\"selected\""; } ?>>Overview</a>
- | <span class=none><b>Profile</b></span>
- | <span class=none><b>Preferences</b></span>
- | <span class=none><b>Account</b></span>
- <?php
-  if(NEW_FUNCTIONS_VACATION){
- ?>
- | <span class=none><b>Vacation</b></span>
- <?php
- }
- if(GP_ENABLE) {
- ?>
- | <span class=none><b>Graphic pack</b></span>
- <?php
- }
- ?>
+
+    <!-- ================= OVERVIEW (ACTIVE) ================= -->
+    <a href="spieler.php?uid=<?php echo $menuUid; ?>"
+       <?php echo $hasUid ? 'class="selected"' : ''; ?>>
+        Overview
+    </a>
+
+    |
+
+    <!-- ================= DISABLED ITEMS ================= -->
+    <span class="none"><b>Profile</b></span>
+    |
+    <span class="none"><b>Preferences</b></span>
+    |
+    <span class="none"><b>Account</b></span>
+
+    <?php if (defined('NEW_FUNCTIONS_VACATION') && NEW_FUNCTIONS_VACATION) { ?>
+        |
+        <span class="none"><b>Vacation</b></span>
+    <?php } ?>
+
+    <?php if (defined('GP_ENABLE') && GP_ENABLE) { ?>
+        |
+        <span class="none"><b>Graphic pack</b></span>
+    <?php } ?>
 
 </div>

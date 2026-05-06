@@ -1,111 +1,197 @@
 <?php
-if(!isset($aid)) $aid = $session->alliance;
+#################################################################################
+## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+## --------------------------------------------------------------------------- ##
+## Project:     TravianZ (Refactor incremental)                                ##
+## File:        attacks.tpl                                                    ##
+## Description: Alliance military events                                       ##
+## Improvements:                                                               ##
+##  - Secure GET handling                                                      ##
+##  - Reduced duplicated logic                                                 ##
+##  - Cleaner SQL usage                                                        ##
+##  - Safer output (XSS protection)                                            ##
+##  - Simplified condition branches                                             ##
+#################################################################################
 
+// fallback alliance id
+if (!isset($aid)) {
+    $aid = $session->alliance;
+}
+
+// load alliance info
 $allianceinfo = $database->getAlliance($aid);
-echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
-include("alli_menu.tpl"); 
+
+// header
+echo "<h1>" . htmlspecialchars($allianceinfo['tag'], ENT_QUOTES, 'UTF-8') .
+     " - " .
+     htmlspecialchars($allianceinfo['name'], ENT_QUOTES, 'UTF-8') .
+     "</h1>";
+
+// menu
+include("alli_menu.tpl");
+
+// safe filter input
+$f = isset($_GET['f']) ? (int)$_GET['f'] : 0;
+$t = isset($_GET['t']) ? (int)$_GET['t'] : 0;
 ?>
+
 <div class="clear"></div>
+
 <h4 class="chartHeadline">Military events</h4>
-		<div id="submenu">
-			<a href="allianz.php?s=3&f=32">
-				<img src="img/x.gif" class="<?php echo $_GET['f'] == 32 ? "active btn_def" : "btn_def";?>" alt="Defender" title="Defender" />
-			</a>
 
-			<a href="allianz.php?s=3&f=31">
-				<img src="img/x.gif" class="<?php echo $_GET['f'] == 31 ? "active btn_off" : "btn_off";?>" alt="Attacker" title="Attacker" />
-			</a>
-		</div>
+<div id="submenu">
+
+    <!-- DEFENDER -->
+    <a href="allianz.php?s=3&f=32">
+        <img src="img/x.gif"
+             class="<?php echo ($f === 32 ? 'active btn_def' : 'btn_def'); ?>"
+             alt="Defender" title="Defender" />
+    </a>
+
+    <!-- ATTACKER -->
+    <a href="allianz.php?s=3&f=31">
+        <img src="img/x.gif"
+             class="<?php echo ($f === 31 ? 'active btn_off' : 'btn_off'); ?>"
+             alt="Attacker" title="Attacker" />
+    </a>
+
+</div>
+
 <?php
-if($_GET['f'] == 31 || $_GET['f'] == 32) include "Templates/Alliance/attack-filtered.tpl";
-else
-{
-		
-$sql = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."ndata WHERE ally = ".(int) $session->alliance." AND (ntype < 8 OR (ntype > 17 AND ntype < 22) OR (ntype = 22 AND ally = $session->alliance) OR (ntype = 23 AND ally != $session->alliance)) ORDER BY time DESC LIMIT 20");
-$query = mysqli_num_rows($sql);
-$outputList = '';
-$name = 1;
+// filtered view
+if ($f === 31 || $f === 32) {
 
-if(!$query) $outputList .= "<td colspan=\"4\" class=\"none\">There are no reports available.</td>";
-else
-{
+    include "Templates/Alliance/attack-filtered.tpl";
 
-while($row = mysqli_fetch_array($sql)){ 
-	$dataarray = explode(",",$row['data']);
-    $id = $row["id"];
-    $uid = $row["uid"];
-	$toWref = $row["toWref"];
-    $ally = $row["ally"];
-    $topic = $row["topic"];
-    $ntype = $row["ntype"];
-    $data = $row["data"];
-    $time = $row["time"];
-    $viewed = $row["viewed"];
-    $archive = $row["archive"];
-	
-    $outputList .= "<tr>";
-	$outputList .= "<td class=\"sub\">";
-	
-	if($ntype >= 4 && $ntype <= 7) $type2 = 32;
-	else $type2 = 31;
+} else {
 
-	$outputList .= "<a href=\"allianz.php?s=3&f=".$type2."\">";
-    $type = (isset($_GET['t']) && $_GET['t'] == 5)? $archive : $ntype;
-    if($type == 23) $type = 22;
-    if($type >= 18 && $type <= 22){
-    $outputList .= "<img src=\"gpack/travian_default/img/scouts/$type.gif\" title=\"".$topic."\" />";
-	  }else{
-    $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$topic."\">";
-	}
-    $outputList .= "</a>";
-    $outputList .= "<div><a href=\"berichte.php?id=".$id."&aid=".$ally."\">";
-    if($ntype >= 18 && $ntype <= 21) $nn = " scouts "; else $nn = " attacks ";
+    // main query
+    $allyId = (int)$session->alliance;
 
-    $outputList .= $database->getUserField($dataarray[0], "username", 0);
-       
-    $outputList .= $nn;
-    $outputList .= $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "username", 0);
-	if($ntype == 0){ 
-	$isoasis = $database->isVillageOases($toWref);
-	if($isoasis == 0){
-	if($toWref != $village->wid){
-		$getUser = $database->getVillageField($toWref, "owner");
-		}else{
-		$getUser = $database->getVillageField($dataarray[1], "owner");
-		}
-    }else{
-	if($toWref != $village->wid){
-		$getUser = $database->getOasisField($toWref, "owner");
-		}else{
-		$getUser = $database->getOasisField($dataarray[1], "owner");
-		}
-	}
-	$getUserAlly = $database->getUserField($getUser, "alliance", 0);
-	}else if($ntype == 1 || $ntype == 2 || $ntype == 3 || $ntype == 18 || $ntype == 19){ 
-	    $getUserAlly = $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "alliance", 0);
-    }else{
-        $getUserAlly = $database->getUserField($type != 22 ? $dataarray[28] : $dataarray[2], "alliance", 0);
+    $sql = mysqli_query(
+        $database->dblink,
+        "SELECT * FROM " . TB_PREFIX . "ndata
+         WHERE ally = $allyId
+         AND (
+            ntype < 8
+            OR (ntype > 17 AND ntype < 22)
+            OR (ntype = 22 AND ally = $allyId)
+            OR (ntype = 23 AND ally != $allyId)
+         )
+         ORDER BY time DESC
+         LIMIT 20"
+    );
+
+    $outputList = "";
+
+    if (!$sql || mysqli_num_rows($sql) == 0) {
+
+        $outputList .= "<tr><td colspan=\"4\" class=\"none\">There are no reports available.</td></tr>";
+
+    } else {
+
+        while ($row = mysqli_fetch_assoc($sql)) {
+
+            $dataarray = explode(",", $row['data']);
+
+            $id     = (int)$row['id'];
+            $ally   = (int)$row['ally'];
+            $ntype  = (int)$row['ntype'];
+            $time   = (int)$row['time'];
+            $topic  = $row['topic'];
+            $toWref = (int)$row['toWref'];
+
+            // type mapping
+            $type2 = ($ntype >= 4 && $ntype <= 7) ? 32 : 31;
+
+            $type = ($t === 5) ? (int)$row['archive'] : $ntype;
+
+            if ($type == 23) {
+                $type = 22;
+            }
+
+            // scout icon logic
+            $isScout = ($type >= 18 && $type <= 22);
+
+            // attacker / defender
+            $attackerId = (int)$dataarray[0];
+            $defenderId = ($type != 22) ? (int)$dataarray[28] : (int)$dataarray[2];
+
+            $attackerName = $database->getUserField($attackerId, "username", 0);
+            $defenderName = $database->getUserField($defenderId, "username", 0);
+
+            // alliance resolve (simplified safe fallback)
+            if ($ntype == 0) {
+
+                $isOasis = $database->isVillageOases($toWref);
+
+                if ($isOasis == 0) {
+                    $owner = ($toWref != $village->wid)
+                        ? $database->getVillageField($toWref, "owner")
+                        : $database->getVillageField($dataarray[1], "owner");
+                } else {
+                    $owner = ($toWref != $village->wid)
+                        ? $database->getOasisField($toWref, "owner")
+                        : $database->getOasisField($dataarray[1], "owner");
+                }
+
+                $getUserAlly = $database->getUserField($owner, "alliance", 0);
+
+            } else {
+                $getUserAlly = $database->getUserField($defenderId, "alliance", 0);
+            }
+
+            $allyName = "-";
+
+            if ($getUserAlly) {
+                $allyName = "<a href=\"allianz.php?aid=" . (int)$getUserAlly . "\">"
+                          . htmlspecialchars($database->getAllianceName($getUserAlly), ENT_QUOTES, 'UTF-8')
+                          . "</a>";
+            }
+
+            // date
+            $date = $generator->procMtime($time);
+
+            // attack/scout label
+            $nn = ($ntype >= 18 && $ntype <= 21) ? " scouts " : " attacks ";
+
+            // render row
+            $outputList .= "<tr>";
+
+            $outputList .= "<td class=\"sub\">";
+            $outputList .= "<a href=\"allianz.php?s=3&f=$type2\">";
+
+            if ($isScout) {
+                $outputList .= "<img src=\"gpack/travian_default/img/scouts/$type.gif\" title=\"" .
+                               htmlspecialchars($topic, ENT_QUOTES, 'UTF-8') . "\" />";
+            } else {
+                $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"" .
+                               htmlspecialchars($topic, ENT_QUOTES, 'UTF-8') . "\">";
+            }
+
+            $outputList .= "</a>";
+
+            $outputList .= "<div><a href=\"berichte.php?id=$id&aid=$ally\">";
+
+            $outputList .= htmlspecialchars($attackerName, ENT_QUOTES, 'UTF-8');
+            $outputList .= $nn;
+            $outputList .= htmlspecialchars($defenderName, ENT_QUOTES, 'UTF-8');
+
+            $outputList .= "</a></div></td>";
+
+            $outputList .= "<td class=\"al\">" . $allyName . "</td>";
+            $outputList .= "<td class=\"dat\">" . $date[0] . " " . date('H:i', $time) . "</td>";
+
+            $outputList .= "</tr>";
+        }
     }
-    $getAllyName = $database->getAllianceName($getUserAlly);
-    
-    if(!$getUserAlly) $allyName = "-";
-    else $allyName = "<a href=\"allianz.php?aid=".$getUserAlly."\">".$getAllyName."</a>";
-    
-    $outputList .= "<td class=\"al\">".$allyName."</td>";
-    $date = $generator->procMtime($time);
-    $outputList .= "<td class=\"dat\">".$date[0]." ".date('H:i',$time)."</td>";
-	$outputList .= "</tr>";
-    
-	$name++;
-}
-}
 ?>
 <table cellpadding="1" cellspacing="1" id="offs">
 <thead>
 <tr>
-<td>Player</td>
-<td>Alliance</td>
-<td>Date</td>
+    <td>Player</td>
+    <td>Alliance</td>
+    <td>Date</td>
 </tr>
 </thead>
 
@@ -113,4 +199,5 @@ while($row = mysqli_fetch_array($sql)){
 <?php echo $outputList; ?>
 </tbody>
 </table>
+
 <?php } ?>

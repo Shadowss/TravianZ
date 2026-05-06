@@ -25,10 +25,6 @@ include_once("../GameEngine/Admin/database.php");
 include_once("../GameEngine/Data/buidata.php");
 include_once("../GameEngine/Artifacts.php");
 
-include('Templates/ver.tpl');
-include('Templates/update_latest.tpl');
-$up_avl = $latest - $ver ;
-
 $subpage = 'Login';
 $not_include_mootools_js = false;
 

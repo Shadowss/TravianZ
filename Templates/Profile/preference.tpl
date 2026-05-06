@@ -1,95 +1,182 @@
 <?php 
-if(isset($_GET['del']) && is_numeric($_GET['del'])){
-	$database->removeLinks($_GET['del'],$session->uid);
-	header("Location: spieler.php?s=2");
-	exit;
-}
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ      					       		 		  	   ##
-##  Version:       01.09.2013 						       	 				   ##
-##  Filename       preference.php                                              ##
-##  Developed by:  Dzoki                                                       ##
-##  Fixed by:      Shadow / Skype : cata7007                                   ##
+##  Version:       06.05.2026 						       	 				   ##
+##  Filename       preference.tpl                                              ##
+##  Refactored by  Shadow					                                   ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##  URLs:          http://travian.shadowss.ro 				       	 		   ##
-##  Source code:   http://github.com/Shadowss/TravianZ/	       	               ##
+##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
 ##                                                                             ##
 #################################################################################
-// Save new link or just edit a link
-if(isset($_POST['ft']) && $_POST['ft'] == 'p3'){
+
+// =========================
+// DELETE LINK ACTION
+// =========================
+if (isset($_GET['del']) && is_numeric($_GET['del'])) {
+
+    $delId = (int)$_GET['del'];
+
+    // remove user link safely (owner check handled inside function)
+    $database->removeLinks($delId, $session->uid);
+
+    header("Location: spieler.php?s=2");
+    exit;
+}
+
+// =========================
+// LEGACY EARLY EXIT
+// =========================
+if (isset($_POST['ft']) && $_POST['ft'] == 'p3') {
     return;
 }
 
-if(isset($_POST['nr0']) || isset($_POST['id0']) || isset($_POST['linkname0']) || isset($_POST['linkziel0'])) {
+// =========================
+// SAVE / UPDATE LINKS
+// =========================
+if (
+    isset($_POST['nr0']) ||
+    isset($_POST['id0']) ||
+    isset($_POST['linkname0']) ||
+    isset($_POST['linkziel0'])
+) {
+
     $links = [];
-    
-    // let's do some complicated code x'D
-    foreach($_POST as $key => $value) {
-        if(substr($key, 0, 2) == 'nr') {
+
+    // =========================
+    // PARSE POST DATA
+    // =========================
+    foreach ($_POST as $key => $value) {
+
+        $value = trim($value);
+
+        // position field
+        if (strpos($key, 'nr') === 0) {
             $i = substr($key, 2);
-            $links[$i]['nr'] = mysqli_real_escape_string($database->dblink, $value);
+            $links[$i]['nr'] = (int)$value;
         }
-        
-        if(substr($key, 0, 2) == 'id') {
+
+        // id field
+        if (strpos($key, 'id') === 0) {
             $i = substr($key, 2);
-            $links[$i]['id'] = mysqli_real_escape_string($database->dblink, $value);
+            $links[$i]['id'] = (int)$value;
         }
-        
-        if(substr($key, 0, 8) == 'linkname') {
+
+        // link name (escaped for SQL safety)
+        if (strpos($key, 'linkname') === 0) {
             $i = substr($key, 8);
-            $links[$i]['linkname'] = htmlspecialchars(mysqli_real_escape_string($database->dblink, $value));
+            $links[$i]['linkname'] = mysqli_real_escape_string($database->dblink, $value);
         }
-        
-        if(substr($key, 0, 8) == 'linkziel') {
+
+        // link url (escaped for SQL safety)
+        if (strpos($key, 'linkziel') === 0) {
             $i = substr($key, 8);
-            $links[$i]['linkziel'] = htmlspecialchars(mysqli_real_escape_string($database->dblink, $value));
+            $links[$i]['linkziel'] = mysqli_real_escape_string($database->dblink, $value);
         }
     }
-    
-    // Save
-    foreach($links as $link) {
-        settype($link['nr'], 'int');
-        
-        if(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) == '') {
-            // Add new link
-            $userid = (int) $session->uid;
-            $query = mysqli_query($database->dblink,'INSERT INTO `' . TB_PREFIX . 'links` (`userid`, `name`, `url`, `pos`) VALUES (' . $userid . ', \'' . $link['linkname'] . '\', \'' . $link['linkziel'] . '\', ' . $link['nr'] . ')');
-            
-        } elseif(trim($link['nr']) != '' AND trim($link['linkname']) != '' AND trim($link['linkziel']) != '' AND trim($link['id']) != '') {
-            // Update link
-            $query = mysqli_query($database->dblink,'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+
+    // =========================
+    // PROCESS LINKS (ADD / UPDATE / DELETE)
+    // =========================
+    foreach ($links as $link) {
+
+        $nr   = isset($link['nr']) ? (int)$link['nr'] : 0;
+        $id   = isset($link['id']) ? (int)$link['id'] : 0;
+        $name = isset($link['linkname']) ? trim($link['linkname']) : '';
+        $url  = isset($link['linkziel']) ? trim($link['linkziel']) : '';
+
+        // =========================
+        // ADD NEW LINK
+        // =========================
+        if ($nr !== 0 && $name !== '' && $url !== '' && $id === 0) {
+
+            $userid = (int)$session->uid;
+
+            mysqli_query(
+                $database->dblink,
+                "INSERT INTO `" . TB_PREFIX . "links`
+                (`userid`, `name`, `url`, `pos`)
+                VALUES
+                ($userid, '$name', '$url', $nr)"
+            );
+
+        // =========================
+        // UPDATE EXISTING LINK
+        // =========================
+        } elseif ($nr !== 0 && $name !== '' && $url !== '' && $id > 0) {
+
+            $id = (int)$id;
+
+            $query = mysqli_query(
+                $database->dblink,
+                "SELECT userid FROM `" . TB_PREFIX . "links` WHERE id = $id"
+            );
+
             $data = mysqli_fetch_assoc($query);
-            
-            // May the user update this entry?
-            if($data['userid'] == $session->uid) {
-                $query2 = mysqli_query($database->dblink,'UPDATE `' . TB_PREFIX . 'links` SET `name` = \'' . $link['linkname'] . '\', `url` = \'' . $link['linkziel'] . '\', `pos` = ' . $link['nr'] . ' WHERE `id` = ' . $link['id']);
+
+            // ownership check
+            if ($data && (int)$data['userid'] === (int)$session->uid) {
+
+                mysqli_query(
+                    $database->dblink,
+                    "UPDATE `" . TB_PREFIX . "links`
+                     SET name='$name', url='$url', pos=$nr
+                     WHERE id=$id"
+                );
             }
-        } elseif(trim($link['nr']) == '' AND trim($link['linkname']) == '' AND trim($link['linkziel']) == '' AND trim($link['id']) != '') {
-            // Delete entry
-            $query = mysqli_query($database->dblink,'SELECT userid FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+
+        // =========================
+        // DELETE EMPTY ENTRY
+        // =========================
+        } elseif ($nr === 0 && $name === '' && $url === '' && $id > 0) {
+
+            $id = (int)$id;
+
+            $query = mysqli_query(
+                $database->dblink,
+                "SELECT userid FROM `" . TB_PREFIX . "links` WHERE id = $id"
+            );
+
             $data = mysqli_fetch_assoc($query);
-            
-            // May the user delete this entry?
-            if($data['userid'] == $session->uid) {
-                $query2 = mysqli_query($database->dblink,'DELETE FROM `' . TB_PREFIX . 'links` WHERE `id` = ' . $link['id']);
+
+            // ownership check
+            if ($data && (int)$data['userid'] === (int)$session->uid) {
+
+                mysqli_query(
+                    $database->dblink,
+                    "DELETE FROM `" . TB_PREFIX . "links` WHERE id = $id"
+                );
             }
         }
     }
+
+    // legacy refresh behavior
     echo '<meta http-equiv="refresh" content="0">';
 }
 
+// =========================
+// LOAD LINKS
+// =========================
+$query = mysqli_query(
+    $database->dblink,
+    "SELECT * FROM `" . TB_PREFIX . "links`
+     WHERE userid = " . (int)$session->uid . "
+     ORDER BY pos ASC"
+) or die(mysqli_error($database->dblink));
 
-// Fetch all links
-$query = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'links` WHERE `userid` = ' . (int) $session->uid . ' ORDER BY `pos` ASC') or die(mysqli_error($database->dblink));
 $links = [];
-while($data = mysqli_fetch_assoc($query)) $links[] = $data;
+while ($data = mysqli_fetch_assoc($query)) {
+    $links[] = $data;
+}
 
-//Code for preference (map,timezone,timeformat,etc.)
-
-if(isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
+// =========================
+// USER SETTINGS SAVE
+// =========================
+if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
 
     $v1 = isset($_POST['v1']) ? 1 : 0;
     $v2 = isset($_POST['v2']) ? 1 : 0;
@@ -99,21 +186,22 @@ if(isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
     $v5 = isset($_POST['v5']) ? 1 : 0;
     $v6 = isset($_POST['v6']) ? 1 : 0;
 
-    $timezone = isset($_POST['timezone']) ? intval($_POST['timezone']) : 1;
-    $tformat = isset($_POST['tformat']) ? intval($_POST['tformat']) : 0;
+    $timezone = isset($_POST['timezone']) ? (int)$_POST['timezone'] : 1;
+    $tformat  = isset($_POST['tformat']) ? (int)$_POST['tformat'] : 0;
 
+    // update user preferences
     $database->query("
-        UPDATE ".TB_PREFIX."users SET
-        v1 = $v1,
-        v2 = $v2,
-        v3 = $v3,
-        map = $map,
-        v4 = $v4,
-        v5 = $v5,
-        v6 = $v6,
-        timezone = $timezone,
-        tformat = $tformat
-        WHERE id = ".$session->uid."
+        UPDATE " . TB_PREFIX . "users SET
+        v1=$v1,
+        v2=$v2,
+        v3=$v3,
+        map=$map,
+        v4=$v4,
+        v5=$v5,
+        v6=$v6,
+        timezone=$timezone,
+        tformat=$tformat
+        WHERE id=" . (int)$session->uid . "
     ");
 
     header("Location: spieler.php?s=2");
@@ -121,73 +209,152 @@ if(isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
 }
 ?>
 
+<!-- =========================
+     PAGE HEADER
+========================= -->
 <h1>Player profile</h1>
 
 <?php include("menu.tpl"); ?>
+
+<!-- =========================
+     DIRECT LINKS TABLE
+========================= -->
 <form action="spieler.php?s=2" method="POST">
 <input type="hidden" name="ft" value="p2">
-  <table cellpadding="1" cellspacing="1" id="links">
-    <thead>
-      <tr>
-	<th colspan="4">Direct links</th>
-      </tr>
-      <tr>
-	<td>Delete</td>
-	<td>No.</td>
-	<td>Link name</td>
-	<td>Link target</td>
-      </tr>
-    </thead>      
-    <tbody>
-	  <?php $i = 0; foreach($links as $link): ?>
-      <tr>
-	  <td>
-	  <a href="spieler.php?del=<?php echo $link['id']; ?>&s=2"><img class="del" src="img/x.gif" alt="delete" title="delete"></a>
-	  </td>
-	 <td class="nr"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="nr<?php print $i; ?>" value="<?php print $link['pos']; ?>" size="1" maxlength="3" /><input type="hidden" name="id<?php print $i; ?>" value="<?php print $link['id']; ?>" /></td>
-	 <td class="nam"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkname<?php print $i; ?>" value="<?php print $link['name']; ?>" maxlength="30" /></td>
-	 <td class="txt"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="<?php print $link['url']; ?>" maxlength="255" /></td>          
-      </tr>
-      <?php ++$i; $last_pos = $link['pos']; endforeach; ?>
-      <tr>
-	<td></td>
-	<td class="nr"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="nr<?php print $i; ?>" value="<?php print ($last_pos + 1); ?>" size="1" maxlength="3"></td>
-	<td class="nam"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkname<?php print $i; ?>" value="" maxlength="30"></td>
-	<td class="txt"><input <?php if(!$session->plus){echo"disabled";} ?> class="text" type="text" name="linkziel<?php print $i; ?>" value="" maxlength="255"></td>
-      </tr>
-    </tbody>
-  </table>
 
+<table cellpadding="1" cellspacing="1" id="links">
+    <thead>
+        <tr>
+            <th colspan="4">Direct links</th>
+        </tr>
+        <tr>
+            <td>Delete</td>
+            <td>No.</td>
+            <td>Link name</td>
+            <td>Link target</td>
+        </tr>
+    </thead>
+
+    <tbody>
+    <?php
+    $i = 0;
+    $last_pos = 0;
+
+    foreach ($links as $link):
+        $last_pos = (int)$link['pos'];
+    ?>
+
+        <tr>
+            <td>
+                <a href="spieler.php?del=<?php echo (int)$link['id']; ?>&s=2">
+                    <img class="del" src="img/x.gif" alt="delete" title="delete">
+                </a>
+            </td>
+
+            <td class="nr">
+                <input <?php if (!$session->plus) echo "disabled"; ?>
+                       class="text"
+                       type="text"
+                       name="nr<?php echo $i; ?>"
+                       value="<?php echo (int)$link['pos']; ?>"
+                       size="1"
+                       maxlength="3" />
+
+                <input type="hidden"
+                       name="id<?php echo $i; ?>"
+                       value="<?php echo (int)$link['id']; ?>" />
+            </td>
+
+            <td class="nam">
+                <input <?php if (!$session->plus) echo "disabled"; ?>
+                       class="text"
+                       type="text"
+                       name="linkname<?php echo $i; ?>"
+                       value="<?php echo htmlspecialchars($link['name'], ENT_QUOTES, 'UTF-8'); ?>"
+                       maxlength="30" />
+            </td>
+
+            <td class="txt">
+                <input <?php if (!$session->plus) echo "disabled"; ?>
+                       class="text"
+                       type="text"
+                       name="linkziel<?php echo $i; ?>"
+                       value="<?php echo htmlspecialchars($link['url'], ENT_QUOTES, 'UTF-8'); ?>"
+                       maxlength="255" />
+            </td>
+        </tr>
+
+    <?php
+    $i++;
+    endforeach;
+    ?>
+
+        <!-- NEW EMPTY ROW -->
+        <tr>
+            <td></td>
+            <td class="nr">
+                <input <?php if (!$session->plus) echo "disabled"; ?>
+                       class="text"
+                       type="text"
+                       name="nr<?php echo $i; ?>"
+                       value="<?php echo ($last_pos + 1); ?>"
+                       size="1"
+                       maxlength="3">
+            </td>
+
+            <td class="nam">
+                <input <?php if (!$session->plus) echo "disabled"; ?>
+                       class="text"
+                       type="text"
+                       name="linkname<?php echo $i; ?>"
+                       value=""
+                       maxlength="30">
+            </td>
+
+            <td class="txt">
+                <input <?php if (!$session->plus) echo "disabled"; ?>
+                       class="text"
+                       type="text"
+                       name="linkziel<?php echo $i; ?>"
+                       value=""
+                       maxlength="255">
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<!-- =========================
+     AUTO COMPLETION
+========================= -->
 <table cellpadding="1" cellspacing="1" id="completion" class="set">
 <thead>
 <tr><th colspan="2">Auto completion</th></tr>
 <tr><td colspan="2">Used for rally point and marketplace:</td></tr>
 </thead>
 <tbody>
+
 <tr>
-<td class="sel">
-<input class="check" type="checkbox" name="v1" value="1" <?php if($session->userinfo['v1']) echo 'checked'; ?>>
-</td>
+<td class="sel"><input class="check" type="checkbox" name="v1" value="1" <?php if($session->userinfo['v1']) echo 'checked'; ?>></td>
 <td>own villages</td>
 </tr>
 
 <tr>
-<td class="sel">
-<input class="check" type="checkbox" name="v2" value="1" <?php if($session->userinfo['v2']) echo 'checked'; ?>>
-</td>
+<td class="sel"><input class="check" type="checkbox" name="v2" value="1" <?php if($session->userinfo['v2']) echo 'checked'; ?>></td>
 <td>villages of the surroundings</td>
 </tr>
 
 <tr>
-<td class="sel">
-<input class="check" type="checkbox" name="v3" value="1" <?php if($session->userinfo['v3']) echo 'checked'; ?>>
-</td>
+<td class="sel"><input class="check" type="checkbox" name="v3" value="1" <?php if($session->userinfo['v3']) echo 'checked'; ?>></td>
 <td>villages from players of the alliance</td>
 </tr>
+
 </tbody>
 </table>
 
-
+<!-- =========================
+     LARGE MAP
+========================= -->
 <table cellpadding="1" cellspacing="1" id="big_map" class="set">
 <thead>
 <tr><th colspan="2">Large map</th></tr>
@@ -202,7 +369,9 @@ if(isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
 </tbody>
 </table>
 
-
+<!-- =========================
+     REPORT FILTER
+========================= -->
 <table cellpadding="1" cellspacing="1" id="report_filter" class="set">
 <thead>
 <tr><th colspan="2">Report filter</th></tr>
@@ -210,30 +379,26 @@ if(isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
 <tbody>
 
 <tr>
-<td class="sel">
-<input class="check" type="checkbox" name="v4" value="1" <?php if($session->userinfo['v4']) echo 'checked'; ?>>
-</td>
+<td class="sel"><input class="check" type="checkbox" name="v4" value="1" <?php if($session->userinfo['v4']) echo 'checked'; ?>></td>
 <td>No reports for transfers to own villages.</td>
 </tr>
 
 <tr>
-<td class="sel">
-<input class="check" type="checkbox" name="v5" value="1" <?php if($session->userinfo['v5']) echo 'checked'; ?>>
-</td>
+<td class="sel"><input class="check" type="checkbox" name="v5" value="1" <?php if($session->userinfo['v5']) echo 'checked'; ?>></td>
 <td>No reports for transfers to foreign villages.</td>
 </tr>
 
 <tr>
-<td class="sel">
-<input class="check" type="checkbox" name="v6" value="1" <?php if($session->userinfo['v6']) echo 'checked'; ?>>
-</td>
+<td class="sel"><input class="check" type="checkbox" name="v6" value="1" <?php if($session->userinfo['v6']) echo 'checked'; ?>></td>
 <td>No reports for transfers from foreign villages.</td>
 </tr>
 
 </tbody>
 </table>
 
-
+<!-- =========================
+     TIME SETTINGS
+========================= -->
 <table cellpadding="1" cellspacing="1" id="time" class="set">
 <thead>
 <tr><th colspan="2">Time preferences</th></tr>
@@ -288,30 +453,14 @@ if(isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
 </td>
 </tr>
 
-
 <tr>
 <th>Date</th>
 <td>
 
-<label>
-<input class="radio" type="radio" name="tformat" value="0" <?php if($session->userinfo['tformat']==0) echo 'checked'; ?>>
-EU (dd.mm.yy 24h)
-</label><br />
-
-<label>
-<input class="radio" type="radio" name="tformat" value="1" <?php if($session->userinfo['tformat']==1) echo 'checked'; ?>>
-US (mm/dd/yy 12h)
-</label><br />
-
-<label>
-<input class="radio" type="radio" name="tformat" value="2" <?php if($session->userinfo['tformat']==2) echo 'checked'; ?>>
-UK (dd/mm/yy 12h)
-</label><br />
-
-<label>
-<input class="radio" type="radio" name="tformat" value="3" <?php if($session->userinfo['tformat']==3) echo 'checked'; ?>>
-ISO (yy/mm/dd 24h)
-</label>
+<label><input class="radio" type="radio" name="tformat" value="0" <?php if($session->userinfo['tformat']==0) echo 'checked'; ?>> EU (dd.mm.yy 24h)</label><br>
+<label><input class="radio" type="radio" name="tformat" value="1" <?php if($session->userinfo['tformat']==1) echo 'checked'; ?>> US (mm/dd/yy 12h)</label><br>
+<label><input class="radio" type="radio" name="tformat" value="2" <?php if($session->userinfo['tformat']==2) echo 'checked'; ?>> UK (dd/mm/yy 12h)</label><br>
+<label><input class="radio" type="radio" name="tformat" value="3" <?php if($session->userinfo['tformat']==3) echo 'checked'; ?>> ISO (yy/mm/dd 24h)</label>
 
 </td>
 </tr>
@@ -319,9 +468,12 @@ ISO (yy/mm/dd 24h)
 </tbody>
 </table>
 
-
+<!-- =========================
+     SAVE BUTTON
+========================= -->
 <p class="btn">
-<td colspan="4"><input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></td>
+<input type="image" value="" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" />
 </p>
+
 </form>
 
