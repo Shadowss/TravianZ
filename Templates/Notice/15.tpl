@@ -9,13 +9,17 @@
 
 $dataarray = explode(",", $message->readingNotice['data']);
 
-// ======================== URL BASE ========================
-if (!isset($isAdmin)) {
+// ======================== URL SETUP ========================
+
+// detectare admin REAL (nu variabilă nesigură)
+$isAdmin = (isset($session) && isset($session->access) && $session->access >= 8);
+
+if ($isAdmin) {
+    $mapUrl = "Admin/admin.php?p=village&did=";
+    $playerUrl = "Admin/admin.php?p=player&uid=";
+} else {
     $mapUrl = "karte.php?d=";
     $playerUrl = "spieler.php?uid=";
-} else {
-    $mapUrl = "admin.php?p=village&did=";
-    $playerUrl = "admin.php?p=player&uid=";
 }
 
 // ======================== CONFIG ========================

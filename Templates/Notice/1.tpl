@@ -17,12 +17,16 @@ $colspan = $hasHero ? 11 : 10;
 $spy = !empty($dataarray[177]) && !empty($dataarray[176]) && empty($dataarray[195]);
 
 // ======================== URL SETUP ========================
-if (!isset($isAdmin)) {
+
+// detectare admin REAL (nu variabilă nesigură)
+$isAdmin = (isset($session) && isset($session->access) && $session->access >= 8);
+
+if ($isAdmin) {
+    $mapUrl = "Admin/admin.php?p=village&did=";
+    $playerUrl = "Admin/admin.php?p=player&uid=";
+} else {
     $mapUrl = "karte.php?d=";
     $playerUrl = "spieler.php?uid=";
-} else {
-    $mapUrl = "admin.php?p=village&did=";
-    $playerUrl = "admin.php?p=player&uid=";
 }
 
 // ======================== ATTACKER DATA (CACHED) ========================

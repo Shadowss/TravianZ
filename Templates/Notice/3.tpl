@@ -14,13 +14,17 @@ $hasHero = (isset($dataarray[184]) && $dataarray[184] > 0);
 $colspan  = $hasHero ? 11 : 10;
 $colspan2 = 10;
 
-// ======================== URL BASE ========================
-if (!isset($isAdmin)) {
+// ======================== URL SETUP ========================
+
+// detectare admin REAL (nu variabilă nesigură)
+$isAdmin = (isset($session) && isset($session->access) && $session->access >= 8);
+
+if ($isAdmin) {
+    $mapUrl = "Admin/admin.php?p=village&did=";
+    $playerUrl = "Admin/admin.php?p=player&uid=";
+} else {
     $mapUrl = "karte.php?d=";
     $playerUrl = "spieler.php?uid=";
-} else {
-    $mapUrl = "admin.php?p=village&did=";
-    $playerUrl = "admin.php?p=player&uid=";
 }
 
 // ======================== ATTACKER (CACHED DB CALLS) ========================
