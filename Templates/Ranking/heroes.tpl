@@ -1,71 +1,125 @@
 <?php
 
-/** --------------------------------------------------- **\
-| ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
-+---------------------------------------------------------+
-| Released by:   Dzoki < dzoki.travian@gmail.com >        |
-| Copyright:     TravianZ Project All rights reserved     |
-\** --------------------------------------------------- **/
-		if(!is_numeric($_SESSION['search'])) {
-		?>
-			<center><font color=orange size=2><p class=\"error\">The hero <b>"<?php echo $_SESSION['search']; ?>"</b> does not exist.</p></font></center>
-		<?php
-			$search = 0;
-		} else {
-        	$search = $_SESSION['search'];
-        }
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       01.09.2013 						       	 				   ##
+##  Filename       heroes.tpl                                                  ##
+##  Refactored by  Shadow					                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
+##                                                                             ##
+#################################################################################
 
+// ================= SEARCH VALIDATION =================
+if (!isset($_SESSION['search']) || !is_numeric($_SESSION['search'])) {
 ?>
-
-		<table cellpadding="1" cellspacing="1" id="heroes" class="row_table_data">
-			<thead>
-				<tr>
-					<th colspan="5">
-						The most experienced heroes											</th>
-				</tr>
-		<tr><td></td><td>Hero</td><td>Player</td><td>Level</td><td>Experience</td></tr>
-		</thead><tbody>
-        <?php
-        $rankArray = $ranking->getRank();
-        if(isset($_GET['rank'])){
-            $multiplier = 1;
-            if(is_numeric($_GET['rank'])) {
-                if($_GET['rank'] > count($rankArray)) {
-                    $_GET['rank'] = count($rankArray) - 1;
-                }
-                
-                while($_GET['rank'] > (20 * $multiplier))  $multiplier++;
-                
-                $start = 20 * $multiplier - 19;
-            }
-            else $start = ($_SESSION['start'] + 1);
-        }
-        else $start = ($_SESSION['start'] + 1);
-        
-        if(count($rankArray) > 1) {
-        	for($i = $start; $i < $start + 20; $i++) {
-        	    if(isset($rankArray[$i]['name']) && $rankArray[$i] != "pad") {
-        			if($i == $search) echo "<tr class=\"hl \"><td class=\"ra  fc\" >";
-        			else echo "<tr><td class=\"ra \" >";
-
-        			echo $i . ".</td>
-					<td class=\"hero \">
-					<img class=\"unit u" . $rankArray[$i]['unit'] . "\" alt=\"\" title=\"\" src=\"img/x.gif\"> " . $rankArray[$i]['name'] . "</td>
-					<td class=\"pla \"><center><a href=\"spieler.php?uid=" . $rankArray[$i]['uid'] . "\">" . $rankArray[$i]['owner'] . "</a></center></td>
-					<td class=\"lev \">" . $rankArray[$i]['level'] . "</td>
-					<td class=\"xp \">" . $rankArray[$i]['experience'] . "</td>
-					</tr>
-					";
-        		}
-        	}
-        }
-        else echo "<td class=\"none\" colspan=\"5\">No heros found</td>";
-
-?>
- </tbody>
-</table>
+    <center>
+        <font color="orange" size="2">
+            <p class="error">
+                The hero <b>"<?php echo htmlspecialchars(isset($_SESSION['search']) ? $_SESSION['search'] : '', ENT_QUOTES, 'UTF-8'); ?>"</b> does not exist.
+            </p>
+        </font>
+    </center>
 <?php
+    $search = 0;
+} else {
+    $search = (int)$_SESSION['search'];
+}
+?>
 
-        include ("ranksearch.tpl");
+<table cellpadding="1" cellspacing="1" id="heroes" class="row_table_data">
+    <thead>
+        <tr>
+            <th colspan="5">The most experienced heroes</th>
+        </tr>
+        <tr>
+            <td></td>
+            <td>Hero</td>
+            <td>Player</td>
+            <td>Level</td>
+            <td>Experience</td>
+        </tr>
+    </thead>
 
+    <tbody>
+    <?php
+    $rankArray = isset($ranking) ? $ranking->getRank() : array();
+
+    // ================= PAGINATION (UNCHANGED LOGIC) =================
+    if(isset($_GET['rank'])){
+        $multiplier = 1;
+
+        if(is_numeric($_GET['rank'])) {
+
+            if($_GET['rank'] > count($rankArray)) {
+                $_GET['rank'] = count($rankArray) - 1;
+            }
+
+            while($_GET['rank'] > (20 * $multiplier)) {
+                $multiplier++;
+            }
+
+            $start = 20 * $multiplier - 19;
+
+        } else {
+            $start = (isset($_SESSION['start']) ? (int)$_SESSION['start'] : 0) + 1;
+        }
+
+    } else {
+        $start = (isset($_SESSION['start']) ? (int)$_SESSION['start'] : 0) + 1;
+    }
+
+    // ================= RENDER =================
+    if(count($rankArray) > 1) {
+
+        for($i = $start; $i < $start + 20; $i++) {
+
+            if(isset($rankArray[$i]['name']) && $rankArray[$i] != "pad") {
+
+                // highlight searched
+                if($i == $search) {
+                    echo '<tr class="hl"><td class="ra fc">';
+                } else {
+                    echo '<tr><td class="ra">';
+                }
+
+                // index
+                echo $i . '.</td>';
+
+                // hero column
+                $unit = (int)$rankArray[$i]['unit'];
+                $heroName = htmlspecialchars($rankArray[$i]['name'], ENT_QUOTES, 'UTF-8');
+
+                echo '<td class="hero">';
+                echo '<img class="unit u'.$unit.'" alt="" title="" src="img/x.gif"> ';
+                echo $heroName;
+                echo '</td>';
+
+                // player
+                $uid = (int)$rankArray[$i]['uid'];
+                $owner = htmlspecialchars($rankArray[$i]['owner'], ENT_QUOTES, 'UTF-8');
+
+                echo '<td class="pla"><center><a href="spieler.php?uid='.$uid.'">'.$owner.'</a></center></td>';
+
+                // level + xp
+                echo '<td class="lev">'.(int)$rankArray[$i]['level'].'</td>';
+                echo '<td class="xp">'.(int)$rankArray[$i]['experience'].'</td>';
+
+                echo '</tr>';
+            }
+        }
+
+    } else {
+        echo '<tr><td class="none" colspan="5">No heros found</td></tr>';
+    }
+    ?>
+    </tbody>
+</table>
+
+<?php
+include("ranksearch.tpl");
 ?>

@@ -1,4 +1,19 @@
 <?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       01.09.2013 						       	 				   ##
+##  Filename       rank_search.tpl                                             ##
+##  Refactored by  Shadow					                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
+##                                                                             ##
+#################################################################################
+
 if(!isset($_GET['id'])){ $_GET['id']='1'; }
 ?>
 <table cellpadding="1" cellspacing="1" id="search_navi">

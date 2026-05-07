@@ -1,4 +1,19 @@
-    <?php
+<?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ      					       		 		  	   ##
+##  Version:       01.09.2013 						       	 				   ##
+##  Filename       player_top10.tpl                                            ##
+##  Refactored by  Shadow					                                   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2013. All rights reserved.                ##
+##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
+##                                                                             ##
+#################################################################################
+
 	$place = $place1 = $place2 = $place3 = "?";
 
 
@@ -12,7 +27,7 @@
 	<table cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
-			<th>Top 10 players<div id="submenu"><a title="Top 10" href="statistiken.php?id=7"><img class="active btn_top10" src="img/x.gif" alt="Top 10"></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender"></a><a title="attacker" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="attacker"></a></div><div id="submenu2"><a title="Romans" href="statistiken.php?id=11"><img class="btn_v1" src="img/x.gif" alt="attacker"></a><a title="Teutons" href="statistiken.php?id=12"><img class="btn_v2" src="img/x.gif" alt="attacker"></a><a title="Gauls" href="statistiken.php?id=13"><img class="btn_v3" src="img/x.gif" alt="attacker"></a></div></th>
+			<th>Top 10 players<div id="submenu"><a title="Top 10" href="statistiken.php?id=7"><img class="active btn_top10" src="img/x.gif" alt="Top 10"></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender"></a><a title="attacker" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="attacker"></a></div><div id="submenu2"></div></th>
 		</tr>
 	</thead>
 </table>
