@@ -1,4 +1,22 @@
-﻿<h3 class="pop popgreen bold">Game rules</h3> 
+﻿<?php
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       support.tpl                                                 ##
+##  Developed by:  Dzoki                                                       ##
+##  Refactored by: Shadow Incremental Refactor 			                       ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##                                                                             ##
+##  Incremental Refactor Notes:                                                ##
+##  - Preserved original HTML structure                                        ##
+##  - Added safe PHP wrapper for consistent include behavior                   ##
+##  - Kept compatibility with legacy PHP 7+                                    ##
+##                                                                             ##
+#################################################################################
+?>
+
+<h3 class="pop popgreen bold">Game rules</h3> 
 <div id="rules"> 
     <p> 
         The following set of rules are in conjunction to the General Terms and Conditions of Travian. You should familiarize yourself with the General Terms and Conditions to verify what is allowed and what is prohibited, especially in case of an account that has been banned for a rule violation. 

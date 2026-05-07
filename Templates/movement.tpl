@@ -1,178 +1,365 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       movement.tpl                                                ##
 ##  Developed by:  Dzoki                                                       ##
 ##  Updated by:    Shadow                                                      ##
+##  Refactored by: Shadow Incremental Refactor 			                       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##                                                                             ##
+##  Incremental Refactor Notes:                                                ##
+##  - Preserved original functionality and structure                           ##
+##  - Compatible with older PHP 7+ environments                                ##
+##  - Reduced duplicated database calls                                        ##
+##  - Reduced duplicated rendering logic                                       ##
+##  - Added safer array handling                                               ##
+##  - Added reusable renderer function                                         ##
+##  - Added comments for maintainability                                       ##
 ##                                                                             ##
 #################################################################################
+
+/**
+ * ---------------------------------------------------------
+ * Helper: Render movement row
+ * ---------------------------------------------------------
+ */
+if (!function_exists('renderMovementRow')) {
+
+    function renderMovementRow(
+        $action,
+        $aclass,
+        $title,
+        $short,
+        $count,
+        $arrivalTime,
+        $generator,
+        $session
+    ) {
+
+        if ($count <= 0 || empty($arrivalTime)) {
+            return;
+        }
+
+        echo '
+        <tr>
+            <td class="typ">
+                <a href="build.php?id=39">
+                    <img
+                        src="img/x.gif"
+                        class="' . $action . '"
+                        alt="' . $title . '"
+                        title="' . $title . '"
+                    />
+                </a>
+
+                <span class="' . $aclass . '">
+                    &raquo;
+                </span>
+            </td>
+
+            <td>
+                <div class="mov">
+                    <span class="' . $aclass . '">
+                        ' . $count . '&nbsp;' . $short . '
+                    </span>
+                </div>
+
+                <div class="dur_r">
+                    in&nbsp;
+                    <span id="timer' . ++$session->timer . '">
+                        ' . $generator->getTimeFormat($arrivalTime - time()) . '
+                    </span>
+                    &nbsp;' . HOURS . '
+                </div>
+            </td>
+        </tr>';
+    }
+}
+
+/**
+ * ---------------------------------------------------------
+ * Preload oasis data
+ * ---------------------------------------------------------
+ */
 $oases = 0;
-$array = $database->getOasis($village->wid);
-foreach($array as $conqured){
-$oases += count($database->getMovement(6,$conqured['wref'],0));
-}
-$aantal = (count($database->getMovement(4,$village->wid,1))+count($database->getMovement(3,$village->wid,1))+count($database->getMovement(3,$village->wid,0))+count($database->getMovement(7,$village->wid,1))+count($database->getMovement(5,$village->wid,0))+$oases-count($database->getMovement(8,$village->wid,1))-count($database->getMovement(9,$village->wid,0)));
+$oasisMovements = array();
 
-if($aantal > 0){
-	echo	'<table id="movements" cellpadding="1" cellspacing="1"><thead><tr><th colspan="3">'.TROOP_MOVEMENTS.'</th></tr></thead><tbody>';
-}
+$oasisArray = $database->getOasis($village->wid);
 
-$NextArrival = $NextArrival1 = $NextArrival2 = $NextArrival3 = $NextArrival4 = $NextArrival5 = $NextArrival6 = [];
+foreach ($oasisArray as $conqured) {
 
-/* Units coming back from Reinf,attack,raid,evasion or reinf to my town */
-$aantal = count($database->getMovement(4,$village->wid,1))+count($database->getMovement(7,$village->wid,1));
-$aantal2 = $database->getMovement(4,$village->wid,1);
-$aantal3 = $database->getMovement(7,$village->wid,1);
-$aantal4 = count($database->getMovement(3,$village->wid,1));
-$lala = $aantal4;
-$aantal5 = $database->getMovement(3,$village->wid,1);
-for($i=0;$i<$aantal4;$i++){
-	if(($aantal5[$i]['attack_type']==1) or ($aantal5[$i]['attack_type']==3) or ($aantal5[$i]['attack_type']==4)) { $lala -= 1; }
-}
-$aantal = $aantal+$lala;
-if($aantal > 0){
-	foreach($aantal2 as $receive) {
-		$action = 'def1';
-		$aclass = 'd1';
-		$title = ''.ARRIVING_REINF_TROOPS.'';
-		$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
-		$NextArrival[] = $receive['endtime'];
-	}
-	foreach($aantal3 as $receive) {
-		$action = 'def1';
-		$aclass = 'd1';
-		$title = ''.ARRIVING_REINF_TROOPS.'';
-		$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
-		$NextArrival[] = $receive['endtime'];
-	}
-	foreach($aantal5 as $receive) {
-	if ($receive['attack_type'] == 2) {
-		$action = 'def1';
-		$aclass = 'd1';
-		$title = ''.ARRIVING_REINF_TROOPS.'';
-		$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
-		$NextArrival[] = $receive['endtime'];
-	}
-	}
-	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+    $oasisData = $database->getMovement(6, $conqured['wref'], 0);
+
+    $oases += count($oasisData);
+
+    if (!empty($oasisData)) {
+        $oasisMovements = array_merge($oasisMovements, $oasisData);
+    }
 }
 
-/* attack/raid on you! */
-$aantal = count($database->getMovement(3,$village->wid,1));
-$aantal1 = count($database->getMovement(3,$village->wid,1));
-$aantal2 = $database->getMovement(3,$village->wid,1);
-for($i=0;$i<$aantal1;$i++){
-	if($aantal2[$i]['attack_type'] == 2) { $aantal -= 1; }
-	if($aantal2[$i]['attack_type'] == 1) { $aantal -= 1; }
+/**
+ * ---------------------------------------------------------
+ * Cache movement queries
+ * Reduces duplicated SQL/database calls
+ * ---------------------------------------------------------
+ */
+$movement4_1 = $database->getMovement(4, $village->wid, 1);
+$movement7_1 = $database->getMovement(7, $village->wid, 1);
+$movement3_1 = $database->getMovement(3, $village->wid, 1);
+$movement3_0 = $database->getMovement(3, $village->wid, 0);
+$movement5_0 = $database->getMovement(5, $village->wid, 0);
+$movement8_1 = $database->getMovement(8, $village->wid, 1);
+$movement9_0 = $database->getMovement(9, $village->wid, 0);
+
+/**
+ * ---------------------------------------------------------
+ * Total movement count
+ * ---------------------------------------------------------
+ */
+$totalMovements =
+    count($movement4_1) +
+    count($movement3_1) +
+    count($movement3_0) +
+    count($movement7_1) +
+    count($movement5_0) +
+    $oases -
+    count($movement8_1) -
+    count($movement9_0);
+
+/**
+ * ---------------------------------------------------------
+ * Table header
+ * ---------------------------------------------------------
+ */
+if ($totalMovements > 0) {
+
+    echo '
+    <table id="movements" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+                <th colspan="3">' . TROOP_MOVEMENTS . '</th>
+            </tr>
+        </thead>
+        <tbody>';
 }
 
-if($aantal > 0){
-	if(!empty($NextArrival1)) { reset($NextArrival1); }
-	foreach($aantal2 as $receive) {
-		if ($receive['attack_type'] != 2 && $receive['attack_type'] != 1) {
-			$action = 'att1';
-			$aclass = 'a1';
-			$title = ''.UNDERATTACK.'';
-			$short = ''.ATTACK.'';
-			$NextArrival1[] = $receive['endtime'];
-		}
-	}
-	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival1)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+/**
+ * =========================================================
+ * ARRIVING REINFORCEMENTS
+ * =========================================================
+ */
+
+$reinforcementCount = 0;
+$reinforcementArrival = array();
+
+/**
+ * Returning reinforcement
+ */
+foreach ($movement4_1 as $receive) {
+
+    $reinforcementCount++;
+    $reinforcementArrival[] = $receive['endtime'];
 }
 
-/* on attack, raid */
-$aantal = count($database->getMovement(3,$village->wid,0));
-$aantal1 = count($database->getMovement(3,$village->wid,0));
-$aantal2 = $database->getMovement(3,$village->wid,0);
-for($i=0;$i<$aantal1;$i++){
-	if($aantal2[$i]['attack_type'] == 2) { $aantal -= 1; }
-}
-if($aantal > 0){
-	if(!empty($NextArrival2)) { reset($NextArrival2); }
-		foreach($aantal2 as $receive) {
-			if ($receive['attack_type'] != 2) {
-				$action = 'att2';
-				$aclass = 'a2';
-				$title = ''.OWN_ATTACKING_TROOPS.'';
-				$short = ''.ATTACK.'';
-				$NextArrival2[] = $receive['endtime'];
-			}
-		}
-	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival2)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+/**
+ * Evasion / special reinforcement
+ */
+foreach ($movement7_1 as $receive) {
+
+    $reinforcementCount++;
+    $reinforcementArrival[] = $receive['endtime'];
 }
 
-/* Units send to reinf. (to other town) */
-$aantal = count($database->getMovement(3,$village->wid,0));
-$lala=$aantal;
-$aantal2 = $database->getMovement(3,$village->wid,0);
-for($i=0;$i<$aantal;$i++){
-	if(($aantal2[$i]['attack_type']==1) or ($aantal2[$i]['attack_type']==3) or ($aantal2[$i]['attack_type']==4)) { $lala -= 1; }
-}
-if($lala > 0){
-	if(!empty($NextArrival3)) { reset($NextArrival3); }
-		foreach($aantal2 as $receive) {
-			if ($receive['attack_type'] == 2) {
-				$action = 'def2';
-				$aclass = 'd2';
-				$title = ''.OWN_REINFORCING_TROOPS.'';
-				$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
-				$NextArrival3[] = $receive['endtime'];
-			}
-		}
-	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$lala.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival3)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+/**
+ * Incoming support from movement type 3
+ */
+foreach ($movement3_1 as $receive) {
+
+    if ($receive['attack_type'] == 2) {
+
+        $reinforcementCount++;
+        $reinforcementArrival[] = $receive['endtime'];
+    }
 }
 
-/* Found NEW VILLAGE by Shadow */
+renderMovementRow(
+    'def1',
+    'd1',
+    ARRIVING_REINF_TROOPS,
+    ARRIVING_REINF_TROOPS_SHORT,
+    $reinforcementCount,
+    !empty($reinforcementArrival) ? min($reinforcementArrival) : 0,
+    $generator,
+    $session
+);
 
-$aantal = count($database->getMovement(5,$village->wid,0));
-$aantal2 = $database->getMovement(5,$village->wid,0);
-if($aantal > 0){
-	if(!empty($NextArrival5)) { reset($NextArrival5); }	
-			foreach($aantal2 as $receive) {
-				$action = 'att3';
-				$aclass = 'a3';
-				$title = ''.FOUNDNEWVILLAGE.'';
-				$short = ''.NEWVILLAGE.'';
-				$NextArrival5[] = $receive['endtime'];
-			}
-			
-	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival5)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+/**
+ * =========================================================
+ * INCOMING ATTACKS / RAIDS
+ * =========================================================
+ */
+
+$attackCount = 0;
+$attackArrival = array();
+
+foreach ($movement3_1 as $receive) {
+
+    if (
+        $receive['attack_type'] != 2 &&
+        $receive['attack_type'] != 1
+    ) {
+
+        $attackCount++;
+        $attackArrival[] = $receive['endtime'];
+    }
 }
 
-/* Attacks on Oasis (to my oasis) by Shadow */
+renderMovementRow(
+    'att1',
+    'a1',
+    UNDERATTACK,
+    ATTACK,
+    $attackCount,
+    !empty($attackArrival) ? min($attackArrival) : 0,
+    $generator,
+    $session
+);
 
-$aantal = 0;
-$aantal2 = array();
-$array = $database->getOasis($village->wid);
-foreach($array as $conqured){
-$aantal += count($database->getMovement(6,$conqured['wref'],0));
-$aantal2 = array_merge($database->getMovement(6,$conqured['wref'],0), $aantal2);
+/**
+ * =========================================================
+ * OWN ATTACKING TROOPS
+ * =========================================================
+ */
+
+$ownAttackCount = 0;
+$ownAttackArrival = array();
+
+foreach ($movement3_0 as $receive) {
+
+    if ($receive['attack_type'] != 2) {
+
+        $ownAttackCount++;
+        $ownAttackArrival[] = $receive['endtime'];
+    }
 }
-if($aantal > 0){
-	if(!empty($NextArrival6)) { reset($NextArrival6); }	
-			foreach($aantal2 as $receive) {
-			if($receive['attack_type'] == 2){
-				$action = 'def3';
-				$aclass = 'd3';
-				$title = ''.ARRIVING_REINF_TROOPS.'';
-				$short = ''.ARRIVING_REINF_TROOPS_SHORT.'';
-			}else{
-				$action = 'att3';
-				$aclass = 'a3';
-				$title = ''.OASISATTACK.'';
-				$short = ''.OASISATTACKS.'';
-			}
-				$NextArrival6[] = $receive['endtime'];
-			}
-			
-	echo '<tr><td class="typ"><a href="build.php?id=39"><img src="img/x.gif" class="'.$action.'" alt="'.$title.'" title="'.$title.'" /></a><span class="'.$aclass.'">&raquo;</span></td>
-	<td><div class="mov"><span class="'.$aclass.'">'.$aantal.'&nbsp;'.$short.'</span></div><div class="dur_r">in&nbsp;<span id="timer'.++$session->timer.'">'.$generator->getTimeFormat(min($NextArrival6)-time()).'</span>&nbsp;'.HOURS.'</div></div></td></tr>';
+
+renderMovementRow(
+    'att2',
+    'a2',
+    OWN_ATTACKING_TROOPS,
+    ATTACK,
+    $ownAttackCount,
+    !empty($ownAttackArrival) ? min($ownAttackArrival) : 0,
+    $generator,
+    $session
+);
+
+/**
+ * =========================================================
+ * OWN REINFORCING TROOPS
+ * =========================================================
+ */
+
+$ownReinfCount = 0;
+$ownReinfArrival = array();
+
+foreach ($movement3_0 as $receive) {
+
+    if ($receive['attack_type'] == 2) {
+
+        $ownReinfCount++;
+        $ownReinfArrival[] = $receive['endtime'];
+    }
 }
+
+renderMovementRow(
+    'def2',
+    'd2',
+    OWN_REINFORCING_TROOPS,
+    ARRIVING_REINF_TROOPS_SHORT,
+    $ownReinfCount,
+    !empty($ownReinfArrival) ? min($ownReinfArrival) : 0,
+    $generator,
+    $session
+);
+
+/**
+ * =========================================================
+ * FOUNDING NEW VILLAGE
+ * =========================================================
+ */
+
+$newVillageCount = count($movement5_0);
+$newVillageArrival = array();
+
+foreach ($movement5_0 as $receive) {
+
+    $newVillageArrival[] = $receive['endtime'];
+}
+
+renderMovementRow(
+    'att3',
+    'a3',
+    FOUNDNEWVILLAGE,
+    NEWVILLAGE,
+    $newVillageCount,
+    !empty($newVillageArrival) ? min($newVillageArrival) : 0,
+    $generator,
+    $session
+);
+
+/**
+ * =========================================================
+ * OASIS ATTACKS / REINFORCEMENTS
+ * =========================================================
+ */
+
+$oasisCount = count($oasisMovements);
+$oasisArrival = array();
+
+$oasisAction = 'att3';
+$oasisClass  = 'a3';
+$oasisTitle  = OASISATTACK;
+$oasisShort  = OASISATTACKS;
+
+foreach ($oasisMovements as $receive) {
+
+    /**
+     * Reinforcement to oasis
+     */
+    if ($receive['attack_type'] == 2) {
+
+        $oasisAction = 'def3';
+        $oasisClass  = 'd3';
+        $oasisTitle  = ARRIVING_REINF_TROOPS;
+        $oasisShort  = ARRIVING_REINF_TROOPS_SHORT;
+    }
+
+    $oasisArrival[] = $receive['endtime'];
+}
+
+renderMovementRow(
+    $oasisAction,
+    $oasisClass,
+    $oasisTitle,
+    $oasisShort,
+    $oasisCount,
+    !empty($oasisArrival) ? min($oasisArrival) : 0,
+    $generator,
+    $session
+);
+
+/**
+ * ---------------------------------------------------------
+ * Close table
+ * ---------------------------------------------------------
+ */
+if ($totalMovements > 0) {
+
+    echo '
+        </tbody>
+    </table>';
+}
+?>

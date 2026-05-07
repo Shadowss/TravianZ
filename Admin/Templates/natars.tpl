@@ -251,7 +251,10 @@ $small = $database->getArtifactsBysize(1);
 // SAFE CALL 2: large + unique
 $big = $database->getArtifactsBysize(2);
 
-if(empty($small) && empty($big)){
+// SAFE CALL 3: unique artifacts (size 3)
+$unique = $database->getArtifactsBysize(3);
+
+if(empty($small) && empty($big) && empty($unique)){
     echo '<tr><td colspan="5" class="none">No artifacts found</td></tr>';
 } else {
 
@@ -259,6 +262,7 @@ if(empty($small) && empty($big)){
 
     if(is_array($small)) $all = array_merge($all, $small);
     if(is_array($big)) $all = array_merge($all, $big);
+    if(is_array($unique)) $all = array_merge($all, $unique);
 
     foreach($all as $a){
 

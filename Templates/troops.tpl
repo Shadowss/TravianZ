@@ -1,37 +1,138 @@
-<?php 
+<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       troops.tpl                                                  ##
 ##  Developed by:  Dzoki                                                       ##
+##  Refactored by: Shadow Incremental Refactor 			                       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##                                                                             ##
+##  Incremental Refactor Notes:                                                ##
+##  - Preserved original functionality                                         ##
+##  - Reduced repeated method calls for unit names                             ##
+##  - Added small safety guards for legacy PHP                                 ##
+##  - Improved readability                                                     ##
 ##                                                                             ##
 #################################################################################
 ?>
+
 <table id="troops" cellpadding="1" cellspacing="1">
-<thead><tr>
-	<th colspan="3"><?php echo TROOPS; ?></th>
-</tr></thead><tbody>
+
+<thead>
+<tr>
+    <th colspan="3">
+        <?php echo TROOPS; ?>
+    </th>
+</tr>
+</thead>
+
+<tbody>
+
 <?php
-$troops = $technology->getAllUnits($village->wid,True,1);
-$TroopsPresent = False;
-for($i=1;$i<=50;$i++) {
-	if($troops['u'.$i] > 0) {
-		echo "<tr><td class=\"ico\"><a href=\"build.php?id=39\"><img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" /></a></td>";
-		echo "<td class=\"num\">".$troops['u'.$i]."</td><td class=\"un\">".$technology->getUnitName($i)."</td></tr>";
-		$TroopsPresent = True;
-	}
+/**
+ * ---------------------------------------------------------
+ * Load all village troops
+ * ---------------------------------------------------------
+ */
+$troops = $technology->getAllUnits($village->wid, true, 1);
+
+/**
+ * Cache unit list to avoid repeated calls
+ */
+$unitNameCache = array();
+
+$troopsPresent = false;
+
+/**
+ * ---------------------------------------------------------
+ * Loop all possible units (Travian standard max 50)
+ * ---------------------------------------------------------
+ */
+for ($i = 1; $i <= 50; $i++) {
+
+    $unitKey = 'u' . $i;
+
+    if (!empty($troops[$unitKey])) {
+
+        /**
+         * Cache unit name (avoid repeated calls)
+         */
+        if (!isset($unitNameCache[$i])) {
+            $unitNameCache[$i] = $technology->getUnitName($i);
+        }
+
+        $unitName = $unitNameCache[$i];
+
+        echo '
+        <tr>
+            <td class="ico">
+                <a href="build.php?id=39">
+                    <img
+                        class="unit u' . $i . '"
+                        src="img/x.gif"
+                        alt="' . $unitName . '"
+                        title="' . $unitName . '"
+                    />
+                </a>
+            </td>
+
+            <td class="num">
+                ' . $troops[$unitKey] . '
+            </td>
+
+            <td class="un">
+                ' . $unitName . '
+            </td>
+        </tr>';
+
+        $troopsPresent = true;
+    }
 }
-if($troops['hero'] > 0) {
-		echo "<tr><td class=\"ico\"><a href=\"build.php?id=39\"><img class=\"unit uhero\" src=\"img/x.gif\" alt=\"Hero\" title=\"Hero\" /></a></td>";
-		echo "<td class=\"num\">".$troops['hero']."</td><td class=\"un\">Hero</td></tr>";
-		$TroopsPresent = True;
+
+/**
+ * ---------------------------------------------------------
+ * Hero handling
+ * ---------------------------------------------------------
+ */
+if (!empty($troops['hero'])) {
+
+    echo '
+    <tr>
+        <td class="ico">
+            <a href="build.php?id=39">
+                <img
+                    class="unit uhero"
+                    src="img/x.gif"
+                    alt="Hero"
+                    title="Hero"
+                />
+            </a>
+        </td>
+
+        <td class="num">
+            ' . (int)$troops['hero'] . '
+        </td>
+
+        <td class="un">
+            Hero
+        </td>
+    </tr>';
+
+    $troopsPresent = true;
 }
-$units = $technology->getUnitList($village->wid);
-if(!$TroopsPresent) {
-	echo "<tr><td>none</td></tr>";
+
+/**
+ * ---------------------------------------------------------
+ * Empty state
+ * ---------------------------------------------------------
+ */
+if (!$troopsPresent) {
+    echo '<tr><td>none</td></tr>';
 }
 ?>
-	</tbody></table>
+
+</tbody>
+
+</table>
 </div>

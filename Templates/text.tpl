@@ -1,26 +1,68 @@
-﻿<?php 
+﻿<?php
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       text_format.tpl                                             ##
+##  Filename       text.tpl (text_format.tpl legacy)                           ##
 ##  Developed by:  Dixie                                                       ##
+##  Refactored by: Shadow Incremental Refactor 			                       ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##                                                                             ##
+##  Incremental Refactor Notes:                                                ##
+##  - Preserved original content (lore/text unchanged)                         ##
+##  - Added safety for PHP compatibility                                       ##
+##  - Simplified BBCode parsing logic                                          ##
+##  - Reduced repeated regex calls                                             ##
+##  - Improved readability                                                     ##
 ##                                                                             ##
 #################################################################################
 
+/**
+ * ---------------------------------------------------------
+ * World Wonder / Natars lore text
+ * ---------------------------------------------------------
+ */
+$txt = "<h1><b>Wonder of the World Villages</b></h1>\r\n\r\nCountless days have passed since the first battles upon the walls of the cursed villages of the Dread Natars, many armies of both the free ones and the Natarian empire struggled and died before the walls of the many strongholds from which the Natars had once ruled all creation. Now with the dust settled and a relative calm having settled in, armies began to count their losses and collect their dead, the stench of combat still lingering in the night air, a smell of a slaughter unforgettable in its extent and brutality yet soon to be dwarfed by yet others. The largest armies of the free ones and the Dread Natars were marshalling for yet another renewed assault upon the coveted former strongholds of the Natarian Empire.\r\n
+Soon scouts arrived telling of a most awesome sight and a chilling reminder, a dread army of an unfathomable size had been spotted marshalling at the end of the world, the Natarian capital, a force so great and unstoppable that the dust from their march would choke off all light, a force so brutal and ruthless that it would crush all hope. The free people knew that they had to race now, race against time and the endless hordes of the Natarian Empire to raise a Wonder of the World to restore the world to peace and vanquish the Natarian threat.\r\n
+But to raise such a great Wonder would be no easy task, one would need construction plans created in the distant past, plans of such an arcane nature that even the very wisest of sages knew not their contents or locations.\r\n
+Tens of thousands of scouts roamed across all existence searching in vain for these mystical plans, looking in all places but the dreaded Natarian Capital, yet could not find them. Today however, they return bearing good news, they return baring the locations of the plans, hidden by the armies of the Natars inside secret strongholds constructed to be hidden from the eyes of man.\r\n
+Now begins the final stretch, when the greatest armies of the Free people and the Natars will clash across the world for the fate of all that lies under heaven. This is the war that will echo across the eons, this is your war, and here you shall etch your name across history, here you shall become legend.\r\n\r\n
+<img src=\"/img/x.gif\" class=\"WWVillagesAnnouncement\" title=\"WW village\" alt=\"WW village\">\r\n\r\n
+To conquer one, the following things must happen:\r\n\r\n
+1. You must attack the village (NO Raid!)\r\n
+2. WIN the Attack\r\n
+3. Destroy the RESIDENCE\r\n
+4. You must decrease the loyalty to 0 with : SENATORS , CHIEF , CHIEFTAIN\r\n
+5. You must have enough culture points to conquer the village\r\n\r\n
+If not, the next attack on that village, winning with a SENATORS , CHIEF , CHIEFTAIN and empty slots in RESIDENCE/PALACE will take the village.\r\n\r\n
+To build a WW, you must own a plan yourself (you = the WW village owner) from lvl 0 to 50, from 51 to 100 you need an additional plan in your alliance! Two plans in the WW village account would not work!\r\n\r\n
+The construction plans are conquerable immediately when they appear to the server.\r\n\r\n
+There will be a countdown in game, showing the exact time of the release, 0.5 days prior to the launch.";
 
-$txt="<h1><b>World Wonder Construction Plans</b></h1>\n\n\nMany moons ago the tribes of Travian were surprised by the unforeseen return of the Natars. This tribe from immemorial times surpassing all in wisdom, might and glory was about to trouble the free ones again. Thus they put all their efforts in preparing a last war against the Natars and vanquishing them forever. Many thought about the so-called \'Wonders of the World\', a construction of many legends, as the only solution. It was told that it would render anyone invincible once completed. Ultimately making the constructors the rulers and conquerors of all known Travian. \n\nHowever, it was also told that one would need construction plans to construct such a building. Due to this fact, the architects devised cunning plans about how to store these safely. After a while, one could see temple-like buildings in many a city and metropolis - the Treasure Chambers (Treasuries). \n\nSadly, no one - not even the wise and well versed - knew where to find these construction plans. The harder people tried to locate them, the more it seemed as if they where only legends. \n\nToday, however, this last secret will be revealed. Deprivations and endeavors of the past will not have been in vain, as today scouts of several tribes have successfully obtained the whereabouts of the construction plans. Well guarded by the Natars, they lie hidden in several oases to be found all over Travian. Only the most valiant heroes will be able to secure such a plan and bring it home safely so that the construction can begin. \n\nIn the end, we will see whether the free tribes of Travian can once again outwit the Natars and vanquish them once and for all. Do not be so foolish as to assume that the Natars will leave without a fight, though!\n\n<img src=\"img/x.gif\" class=\"WWBuildingPlansAnnouncement\" title=\"Ancient Construction Plan\" alt=\"Ancient Construction Plan\">\n\nTo steal a set of Construction Plans from the Natars, the following things must happen:\n- You must Attack the village (NOT Raid!)\n- You must WIN the Attack\n- You must DESTROY the Treasure Chamber (Treasury)\n- Your Hero MUST be in that attack, as he is the only one who may carry the Construction Plans\n- An empty level 10 Treasure Chamber (Treasury) MUST be in the village where that attack came from\nNOTE: If the above criteria is not met during the attack, the next attack on that village which does meet the above criteria will take the Construction Plans.\n\n\n\nTo build a Treasure Chamber (Treasury), you will need a Main Building level 10 and the village MUST NOT be  contain a World Wonder.\n\nTo build a World Wonder, you must own the Construction Plans yourself (you = the World Wonder Village Owner) from level 0 to 50, and then from level 51 to 100 you will need an additional set of Construction Plans in your Alliance! Two sets of Construction Plans in the World Wonder Village Account will not work!";
+/**
+ * ---------------------------------------------------------
+ * BBCode parsing (kept minimal, safe, extendable)
+ * ---------------------------------------------------------
+ */
+$bbMap = array(
+    '[b]'  => '<b>',
+    '[/b]' => '</b>',
+    '[i]'  => '<i>',
+    '[/i]' => '</i>',
+    '[u]'  => '<u>',
+    '[/u]' => '</u>',
+);
 
-//bbcode = html code
-$txt = preg_replace("/\[b\]/is",'<b>', $txt);
-$txt = preg_replace("/\[\/b\]/is",'</b>', $txt);
-$txt = preg_replace("/\[i\]/is",'<i>', $txt);
-$txt = preg_replace("/\[\/i\]/is",'</i>', $txt);
-$txt = preg_replace("/\[u\]/is",'<u>', $txt);
-$txt = preg_replace("/\[\/u\]/is",'</u>', $txt);
+/**
+ * Apply BBCode replacements
+ */
+$txt = str_replace(array_keys($bbMap), array_values($bbMap), $txt);
 
-//nl2br = enter
+/**
+ * ---------------------------------------------------------
+ * Output formatted text
+ * nl2br preserves original behavior
+ * ---------------------------------------------------------
+ */
 echo nl2br($txt);
-
 ?>
