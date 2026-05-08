@@ -1156,7 +1156,7 @@ define('WHICH_OCCUPIED', 'of which are occupied.');
 define('TRAINING_COMMENCE_TRAPPER', 'Training can commence when trapper is completed.');
 define('TRAPPER_DESC', 'The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won&#39;t be able to harm your village any more.<br>Troops cannot be freed with a raid. If the owner of the traps release the captives all of the traps will be repaired automatically.<br>Tribe-specific: Gauls only');
 
-define('HEROSMANSION', 'Hero&#39;s Mansion');
+define("HEROSMANSION", "Hero's Mansion");
 define('HERO_READY', 'Hero will be ready in ');
 define('NAME_CHANGED', 'Hero name has been changed');
 define('NOT_UNITS', 'Not available units');
