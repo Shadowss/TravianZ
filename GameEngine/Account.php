@@ -4,16 +4,15 @@ use App\Entity\User;
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Version:       22.06.2015                    			       ##
-##  Filename       Account.php                                                 ##
-##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
-##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		       ##
-##  Fixed by:      InCube - double troops				       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2015. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		       ##
-##  Source code:   https://github.com/Shadowss/TravianZ		               ##
+##  Project:        TravianZ                                                   ##
+##  Version:        18.05.2026                                                 ##
+##  Filename:       Account.php                                                ##
+##  Developed by:   Dzoki		                                               ##
+##  Refactored by:  Shadow                                                     ##
+##  License:        TravianZ Project                                           ##
+##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
+##  URLs:           https://travianz.org                                       ##
+##                  https://github.com/Shadowss/TravianZ                       ##
 ##                                                                             ##
 #################################################################################
 
