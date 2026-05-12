@@ -49,10 +49,6 @@ switch($_GET['f']) {
 		include("Templates/Ajax/mapscroll.tpl");
 		}
 		break;
-	case 'kp':
-		$z = preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['z']);
-		//include("Templates/Ajax/plusmap.tpl");
-		break;
 	case 'qst':
 
 	if (isset($_GET['qact'])){

@@ -1,24 +1,61 @@
 <?php
 
-/** --------------------------------------------------- **\
-| ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
-+---------------------------------------------------------+
-| Credits:     All the developers including the leaders:  |
-|              Advocaite & Dzoki & Donnchadh              |
-|														  |
-| Clean some bullshit : Shadow                            |
-|														  |
-| Copyright:   TravianZ Project All rights reserved       |
-\** --------------------------------------------------- **/
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:        TravianZ                                                   ##
+##  Version:        12.05.2026                                                 ##
+##  Filename:       Ranking.php                                                ##
+##  Developed by:   Dzoki & Dixie                                              ##
+##  Refactored by:  Shadow                                                     ##
+##  Fixed by:       InCube - double troops                                     ##
+##  Reworked/Fix:   ronix                                                      ##
+##  Thanks to:      Akakori, Elmar & Kirilloid                                 ##
+##  License:        TravianZ Project                                           ##
+##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
+##                                                                             ##
+##  URLs:           http://travian.shadowss.ro                                 ##
+##                  https://github.com/Shadowss/TravianZ                       ##
+##                                                                             ##
+#################################################################################
 
 		class Ranking {
 
 			public $rankarray = [];
 			private $rlastupdate;
 
+	/*****************************************
+	Function to get rank
+	*****************************************/	
+	
 			public function getRank() {
 				return $this->rankarray;
 			}
+			
+	/*****************************************
+	Function to finalize rank array
+	*****************************************/		
+			
+		private function finalizeRankArray(array $holder): void {
+			$this->rankarray = array_merge(["pad"], $holder);
+		}
+		
+	/*****************************************
+	Function to start by rank
+	*****************************************/
+	
+	private function setStartByRank($value, $field, $fallback = 1): void {
+    $rank = $this->searchRank($value, $field);
+    if($rank != 0) {
+        $this->getStart($rank);
+    } else {
+        $this->getStart($fallback);
+    }
+}
+		
+	/*****************************************
+	Function to get user rank
+	*****************************************/		
 
 			public function getUserRank($id) {
 				$ranking = $this->getRank();
@@ -31,90 +68,88 @@
 			}
 			return 0;
 		}
+		
+	/*****************************************
+	Function to Process Ranking Request
+	*****************************************/
 
-			public function procRankReq($get) {
-				global $village, $session;
-				if(isset($get['id'])) {
-					switch($get['id']) {
-						case 1:
-							$this->procRankArray();
-							break;
-						case 8:
-							$this->procHeroRankArray();
-							if($get['hero'] == 0) {
-								$this->getStart(1);
-							} else {
-								$this->getStart($this->searchRank($session->uid, "uid"));
-							}
-							break;
-						case 11:
-							$this->procRankRaceArray(1);
-							if($this->searchRank($session->uid, "userid") != 0){
-							$this->getStart($this->searchRank($session->uid, "userid"));
-							}else{
-							$this->getStart(1);
-							}
-							break;
-						case 12:
-							$this->procRankRaceArray(2);
-							if($this->searchRank($session->uid, "userid") != 0){
-							$this->getStart($this->searchRank($session->uid, "userid"));
-							}else{
-							$this->getStart(1);
-							}
-							break;
-						case 13:
-							$this->procRankRaceArray(3);
-							if($this->searchRank($session->uid, "userid") != 0){
-							$this->getStart($this->searchRank($session->uid, "userid"));
-							}else{
-							$this->getStart(1);
-							}
-							break;
-						case 31:
-							$this->procAttRankArray();
-							$this->getStart($this->searchRank($session->uid, "userid"));
-							break;
-						case 32:
-							$this->procDefRankArray();
-							$this->getStart($this->searchRank($session->uid, "userid"));
-							break;
-						case 2:
-							$this->procVRankArray();
-							$this->getStart($this->searchRank($village->wid, "wref"));
-							break;
-						case 4:
-							$this->procARankArray();
-							if($get['aid'] == 0) {
-								$this->getStart(1);
-							} else {
-								$this->getStart($this->searchRank($get['aid'], "id"));
-							}
-							break;
-						case 41:
-							$this->procAAttRankArray();
-							if($get['aid'] == 0) {
-								$this->getStart(1);
-							} else {
-								$this->getStart($this->searchRank($get['aid'], "id"));
-							}
-							break;
-						case 42:
-							$this->procADefRankArray();
-							if($get['aid'] == 0) {
-								$this->getStart(1);
-							} else {
-								$this->getStart($this->searchRank($get['aid'], "id"));
-							}
-							break;
-					}
-				} else {
-					$this->procRankArray();
-					$this->getStart($this->searchRank($session->uid, "userid"));
-				}
-			}
+		public function procRankReq($get) {
+			global $village, $session;
+			if(isset($get['id'])) {
+			switch($get['id']) {
+        case 1:
+            $this->procRankArray();
+        break;
+        case 8:
+            $this->procHeroRankArray();
+            if($get['hero'] == 0) {
+                $this->getStart(1);
+            } else {
+                $this->setStartByRank($session->uid, "uid");
+            }
+        break;
+        case 11:
+            $this->procRankRaceArray(1);
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 12:
+            $this->procRankRaceArray(2);
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 13:
 
-			public function procRank($post) {
+            $this->procRankRaceArray(3);
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 31:
+            $this->procAttRankArray();
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 32:
+
+            $this->procDefRankArray();
+            $this->setStartByRank($session->uid, "userid");
+        break;
+        case 2:
+            $this->procVRankArray();
+            $this->setStartByRank($village->wid, "wref");
+        break;
+        case 4:
+            $this->procARankArray();
+            if($get['aid'] == 0) {
+                $this->getStart(1);
+            } else {
+                $this->setStartByRank($get['aid'], "id");
+            }
+        break;
+        case 41:
+            $this->procAAttRankArray();
+            if($get['aid'] == 0) {
+                $this->getStart(1);
+            } else {
+                $this->setStartByRank($get['aid'], "id");
+            }
+        break;
+        case 42:
+            $this->procADefRankArray();
+            if($get['aid'] == 0) {
+                $this->getStart(1);
+            } else {
+                $this->setStartByRank($get['aid'], "id");
+            }
+        break;
+    }
+	} else {
+    $this->procRankArray();
+    $this->setStartByRank($session->uid, "userid");
+		}
+	}
+			
+	/*****************************************
+	Function to Process Ranking
+	*****************************************/
+
+		public function procRank($post) {
 				if(isset($post['ft'])) {
 					switch($post['ft']) {
 						case "r1":
@@ -152,8 +187,12 @@
 					}
 				}
 			}
+			
+	/*****************************************
+	Function to get start point
+	*****************************************/	
 
-			private function getStart($search) {
+		private function getStart($search) {
 				$multiplier = 1;
 				if(!is_numeric($search)) {
 					$_SESSION['search'] = htmlspecialchars($search);
@@ -169,28 +208,32 @@
 					$_SESSION['start'] = htmlspecialchars($start);
 				}
 			}
+			
+	/*****************************************
+	Function to get alliance rank
+	*****************************************/		
 
-			public function getAllianceRank($id) {
-				$this->procARankArray();
-				while(true) {
-					if(count($this->rankarray) > 1) {
-						$key = key($this->rankarray);
-						if(isset ($this->rankarray[$key]["id"]) && $this->rankarray[$key]["id"] === $id) {
-							return $key;
-							break;
-						} else {
-							if(!next($this->rankarray)) {
-								return false;
-								break;
-							}
-						}
-					} else {
-						return 1;
-					}
-				}
-			}
+		public function getAllianceRank($id) {
+			$this->procARankArray();
+			if(count($this->rankarray) <= 1) {
+			return 1;
+		}
+    foreach($this->rankarray as $key => $row) {
+        if($row === "pad") {
+            continue;
+        }
+        if(isset($row['id']) && $row['id'] == $id) {
+            return $key;
+        }
+    }
+    return false;
+	}
+			
+	/*****************************************
+	Function to search in rank
+	*****************************************/		
 
-			public function searchRank($name, $field) {
+		public function searchRank($name, $field) {
 				$count = count($this->rankarray);
 				for ($key = 1; $key < $count; $key++) {
 					if (!isset($this->rankarray[$key]) || $this->rankarray[$key] === "pad") {
@@ -206,8 +249,12 @@
 			}
 					return 0;
 			}
+			
+	/*****************************************
+	Function to process rank array
+	*****************************************/		
 
-			public function procRankArray() {
+		public function procRankArray() {
 				global $multisort, $database;
 				
 				if($GLOBALS['db']->countUser() > 0){
@@ -252,13 +299,15 @@
 						$holder[] = $value;
 					}
 				}
-				$newholder = ["pad"];
-				foreach($holder as $key) array_push($newholder, $key);
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			    }
 			}
+		
+	/*****************************************
+	Function to process rank race array
+	*****************************************/	
 
-			public function procRankRaceArray($race) {
+		public function procRankRaceArray($race) {
 				global $multisort, $database;
 				$race = $database->escape((int) $race);
 				$holder = array();
@@ -290,14 +339,14 @@
 					$value['totalvillage'] = "";
 					$holder[] = $value;
 				}
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
+			
+	/*****************************************
+	Function to process attack rank by array
+	*****************************************/		
 
-			public function procAttRankArray() {
+		public function procAttRankArray() {
 				global $multisort, $database;
 				$holder = array();
 			$q = "SELECT u.id AS userid, u.username, u.apall, COUNT(CASE WHEN v.type != 99 THEN v.wref END) AS totalvillages, COALESCE(SUM(v.pop),0) AS pop
@@ -318,14 +367,14 @@
 					$value['apall'] = $row['apall'];
 					$holder[] = $value;
 				}
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
+			
+	/*****************************************
+	Function to process deffence rank by array
+	*****************************************/		
 
-			public function procDefRankArray() {
+		public function procDefRankArray() {
 			    global $database;
 				$holder = array();
 			$q = "SELECT u.id AS userid, u.username, u.dpall, COUNT(CASE WHEN v.type != 99 THEN v.wref END) AS totalvillages, COALESCE(SUM(v.pop),0) AS pop
@@ -346,14 +395,14 @@
 					$value['dpall'] = $row['dpall'];
 					$holder[] = $value;
 				}
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
+			
+	/*****************************************
+	Function to process V rank array
+	*****************************************/		
 
-			public function procVRankArray() {
+		public function procVRankArray() {
 				global $multisort;
 				$array = $GLOBALS['db']->getVRanking();
 				$holder = array();
@@ -365,14 +414,14 @@
 					$holder[] = $value;
 				}
 				$holder = $multisort->sorte($holder, "x", true, 2, "y", true, 2, "pop", false, 2);
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
+			
+	/*****************************************
+	Function to process A rank array
+	*****************************************/		
 
-			public function procARankArray() {
+		public function procARankArray() {
 				global $multisort, $database;
 				$array = $GLOBALS['db']->getARanking();
 				$holder = array();
@@ -399,14 +448,14 @@
 					$holder[] = $value;
 				}
 				$holder = $multisort->sorte($holder, "totalpop", false, 2);
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
+			
+	/*****************************************
+	Function to process hero array
+	*****************************************/		
 
-			public function procHeroRankArray() {
+		public function procHeroRankArray() {
 				global $multisort;
 				$array = $GLOBALS['db']->getHeroRanking();
 				$holder = array();
@@ -418,14 +467,14 @@
 					$holder[] = $value;
 				}
 				$holder = $multisort->sorte($holder, "experience", false, 2);
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
+			
+	/*****************************************
+	Function to process ATT array
+	*****************************************/		
 
-			public function procAAttRankArray() {
+		public function procAAttRankArray() {
 				global $multisort;
 				$array = $GLOBALS['db']->getARanking();
 				$holder = array();
@@ -445,14 +494,14 @@
 					$holder[] = $value;
 				}
 				$holder = $multisort->sorte($holder, "Aap", false, 2);
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
+			
+	/*****************************************
+	Function to process DEFF array
+	*****************************************/		
 
-			public function procADefRankArray() {
+		public function procADefRankArray() {
 				global $multisort;
 				$array = $GLOBALS['db']->getARanking();
 				$holder = array();
@@ -472,11 +521,7 @@
 					$holder[] = $value;
 				}
 				$holder = $multisort->sorte($holder, "Adp", false, 2);
-				$newholder = array("pad");
-				foreach($holder as $key) {
-					array_push($newholder, $key);
-				}
-				$this->rankarray = $newholder;
+				$this->finalizeRankArray($holder);
 			}
 		}
 		;
