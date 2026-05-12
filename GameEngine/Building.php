@@ -8,9 +8,7 @@
 ##  Filename:       Building.php                                               ##
 ##  Developed by:   Dzoki & Dixie                                              ##
 ##  Refactored by:  Shadow                                                     ##
-##  Fixed by:       InCube - double troops                                     ##
 ##  Reworked/Fix:   ronix                                                      ##
-##  Thanks to:      Akakori, Elmar & Kirilloid                                 ##
 ##  License:        TravianZ Project                                           ##
 ##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
 ##                                                                             ##
