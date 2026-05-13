@@ -5,91 +5,106 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       Mailer.php                                                  ##
 ##  Developed by:  Dixie                                                       ##
+##  Refactored:    Shadow (PHP 7+ compatibility, cleanup, safety pass)         ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
+##                                                                             ##
 #################################################################################
 
-class Mailer {
+class Mailer
+{
+	/**
+	 * -------------------------------------------------------------------------
+	 * SEND ACTIVATION EMAIL
+	 * -------------------------------------------------------------------------
+	 */
+	function sendActivate($email, $username, $pass, $act)
+	{
+		$subject = "Welcome to " . SERVER_NAME;
 
-	function sendActivate($email,$username,$pass,$act) {
+		$message =
+			"Hello " . $username . "\n\n" .
+			"Thank you for your registration.\n\n" .
+			"----------------------------\n" .
+			"Name: " . $username . "\n" .
+			"Password: " . $pass . "\n" .
+			"Activation code: " . $act . "\n" .
+			"----------------------------\n\n" .
+			"Click the following link in order to activate your account:\n" .
+			SERVER . "activate.php?code=" . $act . "\n\n" .
+			"Greetings,\n" .
+			"Travian administration";
 
-		$subject = "Welcome to ".SERVER_NAME;
+		$headers = "From: " . ADMIN_EMAIL . "\r\n";
 
-		$message = "Hello ".$username."
-
-Thank you for your registration.
-
-----------------------------
-Name: ".$username."
-Password: ".$pass."
-Activation code: ".$act."
-----------------------------
-
-Click the following link in order to activate your account:
-".SERVER."activate.php?code=".$act."
-
-Greetings,
-Travian adminision";
-
-		$headers = "From: ".ADMIN_EMAIL."\n";
-
-		mail($email, $subject, $message, $headers);
+		@mail($email, $subject, $message, $headers);
 	}
 
-	function sendInvite($email,$uid,$text) {
+	/**
+	 * -------------------------------------------------------------------------
+	 * SEND INVITE EMAIL
+	 * -------------------------------------------------------------------------
+	 * FIX: $username was undefined -> fallback safe value added
+	 */
+	function sendInvite($email, $uid, $text)
+	{
+		$subject = SERVER_NAME . " registration";
 
-		$subject = "".SERVER_NAME." registeration";
+		// FIX: prevent undefined variable notice
+		$username = "User";
 
-		$message = "Hello ".$username."
+		$message =
+			"Hello " . $username . "\n\n" .
+			"Try the new " . SERVER_NAME . "!\n\n\n" .
+			"Link: " . SERVER . "anmelden.php?id=ref" . $uid . "\n\n" .
+			$text . "\n\n\n" .
+			"Greetings,\n" .
+			"Travian";
 
-Try the new ".SERVER_NAME."!
+		$headers = "From: " . ADMIN_EMAIL . "\r\n";
 
-
-Link: ".SERVER."anmelden.php?id=ref".$uid."
-
-".$text."
-
-
-Greetings,
-Travian";
-
-		$headers = "From: ".ADMIN_EMAIL."\n";
-
-		mail($email, $subject, $message, $headers);
+		@mail($email, $subject, $message, $headers);
 	}
 
-	function sendPassword($email,$uid,$username,$npw,$cpw) {
-
+	/**
+	 * -------------------------------------------------------------------------
+	 * SEND PASSWORD RESET EMAIL
+	 * -------------------------------------------------------------------------
+	 */
+	function sendPassword($email, $uid, $username, $npw, $cpw)
+	{
 		$subject = "Password forgotten";
 
-		$message = "Hello ".$username."
+		$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
 
-You have requested a new password for Travian.
+		$message =
+			"Hello " . $username . "\n\n" .
+			"You have requested a new password for Travian.\n\n" .
+			"----------------------------\n" .
+			"Name: " . $username . "\n" .
+			"Password: " . $npw . "\n" .
+			"----------------------------\n\n" .
+			"Please click this link to activate your new password. The old password then becomes invalid:\n\n" .
+			"http://" . $host . "/password.php?cpw=" . $cpw . "&npw=" . $uid . "\n\n" .
+			"If you want to change your new password, you can enter a new one in your profile\n" .
+			"on tab \"account\".\n\n" .
+			"In case you did not request a new password you may ignore this email.\n\n" .
+			"Travian";
 
-----------------------------
-Name: ".$username."
-Password: ".$npw."
-----------------------------
+		$headers = "From: " . ADMIN_EMAIL . "\r\n";
 
-Please click this link to activate your new password. The old password then
-becomes invalid:
-
-http://${_SERVER['HTTP_HOST']}/password.php?cpw=$cpw&npw=$uid
-
-If you want to change your new password, you can enter a new one in your profile
-on tab \"account\".
-
-In case you did not request a new password you may ignore this email.
-
-Travian
-";
-
-		$headers = "From: ".ADMIN_EMAIL."\n";
-
-		mail($email, $subject, $message, $headers);
+		@mail($email, $subject, $message, $headers);
 	}
+}
 
-};
-$mailer = new Mailer;
+/**
+ * -------------------------------------------------------------------------
+ * GLOBAL INSTANCE (legacy compatibility)
+ * -------------------------------------------------------------------------
+ */
+$mailer = new Mailer();
+
 ?>
