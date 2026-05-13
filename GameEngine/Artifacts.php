@@ -1,4 +1,20 @@
 <?php 
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Project:       TravianZ                                                    ##
+##  Version:       13.05.2026	           			       			   		   ##
+##  Filename       Artifacts.php                                               ##
+##  Developed by:  Dzoki							   						   ##
+##  Refactor by:   Shadow 									 		       	   ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
+##                                                                             ##
+#################################################################################
+
 class Artifacts
 {
 

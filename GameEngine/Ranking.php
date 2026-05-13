@@ -8,29 +8,28 @@
 ##  Filename:       Ranking.php                                                ##
 ##  Developed by:   Dzoki & Dixie                                              ##
 ##  Refactored by:  Shadow                                                     ##
-##  Fixed by:       InCube - double troops                                     ##
 ##  Reworked/Fix:   ronix                                                      ##
 ##  Thanks to:      Akakori, Elmar & Kirilloid                                 ##
+##                                                                             ##
 ##  License:        TravianZ Project                                           ##
 ##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
-##                                                                             ##
-##  URLs:           http://travian.shadowss.ro                                 ##
+##  URLs:           https://travianz.org                                       ##
 ##                  https://github.com/Shadowss/TravianZ                       ##
 ##                                                                             ##
 #################################################################################
 
-		class Ranking {
+	class Ranking {
 
-			public $rankarray = [];
-			private $rlastupdate;
+		public $rankarray = [];
+		private $rlastupdate;
 
 	/*****************************************
 	Function to get rank
 	*****************************************/	
 	
-			public function getRank() {
-				return $this->rankarray;
-			}
+		public function getRank() {
+		return $this->rankarray;
+		}
 			
 	/*****************************************
 	Function to finalize rank array
@@ -44,11 +43,11 @@
 	Function to start by rank
 	*****************************************/
 	
-	private function setStartByRank($value, $field, $fallback = 1): void {
-    $rank = $this->searchRank($value, $field);
-    if($rank != 0) {
-        $this->getStart($rank);
-    } else {
+		private function setStartByRank($value, $field, $fallback = 1): void {
+			$rank = $this->searchRank($value, $field);
+			if($rank != 0) {
+			$this->getStart($rank);
+			} else {
         $this->getStart($fallback);
     }
 }
@@ -57,7 +56,7 @@
 	Function to get user rank
 	*****************************************/		
 
-			public function getUserRank($id) {
+		public function getUserRank($id) {
 				$ranking = $this->getRank();
 					if(count($ranking) > 0) {
 					foreach($ranking as $key => $row) {

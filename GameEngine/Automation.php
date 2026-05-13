@@ -9,10 +9,11 @@
 ##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Fixed by:      Shadow - STARVATION , HERO FIXED COMPL.  		           ##
 ##  Fixed by:      InCube - double troops				                       ##
+##  Refactor by:   Shadow 									 		       	   ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2018. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 ##                                                                             ##
 #################################################################################
 

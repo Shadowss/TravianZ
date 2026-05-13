@@ -748,6 +748,14 @@ class Alliance {
             $newOwner = $database->getAllMember2($session->alliance);
             $newLeader = $newOwner['id'];
 
+			// Dăm permisiuni complete noului lider
+			$database->updateAlliPermissions(
+			$newFounderID,
+			(int)$session->alliance,
+			'Alliance Founder',
+			1, 1, 1, 1, 1, 1, 1, 1
+			);
+
             // Actualizăm liderul alianței (SQL mai sigur)
             $database->query(
                 "UPDATE " . TB_PREFIX . "alidata 
@@ -755,11 +763,6 @@ class Alliance {
                  WHERE id = " . (int)$session->alliance
             );
 
-            // Dăm permisiuni complete noului lider
-            $database->updateAlliPermissions(
-                $newLeader,
-                1, 1, 1, 1, 1, 1, 1, 1, 1
-            );
             Automation::updateMax($newLeader);
         }
 
@@ -851,6 +854,14 @@ class Alliance {
                 $form->addError("founder", 'Invalid founder.');
                 return;
             }
+			
+			// Dăm permisiuni complete noului lider
+			$database->updateAlliPermissions(
+			$newFounderID,
+			(int)$session->alliance,
+			'Alliance Founder',
+			1, 1, 1, 1, 1, 1, 1, 1
+			);
 
             // Actualizăm liderul alianței
             $_SESSION['alliance_user'] = 0;
@@ -858,12 +869,6 @@ class Alliance {
                 "UPDATE " . TB_PREFIX . "alidata 
                  SET leader = " . $newFounderID . " 
                  WHERE id = " . (int)$session->alliance
-            );
-
-            // Dăm permisiuni complete noului lider
-            $database->updateAlliPermissions(
-                $newFounderID,
-                1, 1, 1, 1, 1, 1, 1, 1, 1
             );
 
             Automation::updateMax($newFounderID);
