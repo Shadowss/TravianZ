@@ -7,7 +7,7 @@
 ##  Version:       13.05.2026	           			       			   		   ##
 ##  Filename       Artifacts.php                                               ##
 ##  Developed by:  Dzoki							   						   ##
-##  Refactor by:   Shadow 									 		       	   ##
+##  Refactored by: Shadow (cata7007@gmail.com)								   ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##  URLs:          https://travianz.org                                        ##

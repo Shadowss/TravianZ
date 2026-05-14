@@ -7,7 +7,7 @@
 ##  Version:        18.05.2026                                                 ##
 ##  Filename:       Generator.php                                              ##
 ##  Developed by:   Dzoki		                                               ##
-##  Refactored by:  Shadow                                                     ##
+##  Refactored by: Shadow (cata7007@gmail.com)								   ##
 ##  License:        TravianZ Project                                           ##
 ##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
 ##                                                                             ##

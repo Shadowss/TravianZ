@@ -7,7 +7,7 @@
 ##  Version:        08.05.2026                                                 ##
 ##  Filename:       Battle.php                                                 ##
 ##  Developed by:   Dzoki & Dixie                                              ##
-##  Refactored by:  Shadow                                                     ##
+##  Refactored by:  Shadow (cata7007@gmail.com)								   ##
 ##  Fixed by:       InCube - double troops                                     ##
 ##  Reworked/Fix:   ronix                                                      ##
 ##  Thanks to:      Akakori, Elmar & Kirilloid                                 ##

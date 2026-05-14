@@ -6,7 +6,7 @@
 ##  Filename       Form.php                                                    ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  Refactored by: Shadow                                                      ##
+##  Refactored by: Shadow (cata7007@gmail.com)								   ##
 ##                                                                             ##
 ##  Refactor:      Incremental cleanup (compatibility preserved)               ##
 ##  Notes:         PHP 7+ / legacy safe                                        ##

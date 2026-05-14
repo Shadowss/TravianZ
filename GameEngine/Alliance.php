@@ -7,7 +7,7 @@
 ##  Version:       30.04.2026	           			       			   		   ##
 ##  Filename       Alliance.php                                                ##
 ##  Developed by:  Dzoki							   						   ##
-##  Refactor by:   Shadow 									 		       	   ##
+##  Refactored by: Shadow (cata7007@gmail.com)								   ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##  URLs:          https://travianz.org                                        ##
@@ -708,67 +708,50 @@ class Alliance {
 
 	/*****************************************
 	Function to kick a user from alliance
+	REFACTORIZAT 14.05.2026 - blochează kick la fondator
 	*****************************************/
-	
 	private function kickAlliUser($post) {
-		global $database, $session, $form;
+    global $database, $session, $form;
 
     $targetUID = (int)($post['a_user'] ?? 0);
+    $UserData  = $database->getUserArray($targetUID, 1);
+    $allyId    = (int)$session->alliance;
 
-    // Obținem datele utilizatorului (folosit pentru username și verificări)
-    $UserData = $database->getUserArray($targetUID, 1);
-
-    // ==================== VERIFICĂRI DE PERMISIUNI ȘI VALIDĂRI ====================
+    // ==================== VERIFICĂRI ====================
     if ($this->userPermArray['opt2'] == 0) {
         $form->addError("perm", NO_PERMISSION);
-    } elseif ($database->getUserField($targetUID, "alliance", 0) != $session->alliance) {
-        $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
-    } elseif ($UserData['id'] == $session->uid) {
-        $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS); // mesajul original era CANT_EDIT_YOUR_PERMISSIONS
-    } else {
-        // ==================== EXECUTARE KICK ====================
-        $kickedUsername = $database->getUserField($targetUID, "username", 0);
-        $database->updateUserField($targetUID, 'alliance', 0, 1);
-        $database->deleteAlliPermissions($targetUID);
-
-        // !!! Comportament original - șterge alianța la fiecare kick !!!
-        $database->deleteAlliance($session->alliance);
-
-        // Log notice în alianță
-        $notice = '<a href="spieler.php?uid=' . $UserData['id'] . '">' .
-                  addslashes($kickedUsername) .
-                  '</a> has been expelled from the alliance by <a href="spieler.php?uid=' . 
-                  $session->uid . '">' .
-                  addslashes($session->username) .
-                  '</a>.';
-        $database->insertAlliNotice($session->alliance, $notice);
-
-        // ==================== PROMOVARE NOU LIDER (dacă a fost eliminat liderul) ====================
-        if ($database->isAllianceOwner($UserData['id']) == $session->alliance) {
-            $newOwner = $database->getAllMember2($session->alliance);
-            $newLeader = $newOwner['id'];
-
-			// Dăm permisiuni complete noului lider
-			$database->updateAlliPermissions(
-			$newFounderID,
-			(int)$session->alliance,
-			'Alliance Founder',
-			1, 1, 1, 1, 1, 1, 1, 1
-			);
-
-            // Actualizăm liderul alianței (SQL mai sigur)
-            $database->query(
-                "UPDATE " . TB_PREFIX . "alidata 
-                 SET leader = " . (int)$newLeader . " 
-                 WHERE id = " . (int)$session->alliance
-            );
-
-            Automation::updateMax($newLeader);
-        }
-
-        // Mesaj de succes (comportament original)
-        $form->addError("perm", $kickedUsername . ALLY_USER_KICKED);
+        return;
     }
+    if ($database->getUserField($targetUID, "alliance", 0) != $allyId) {
+        $form->addError("perm", USER_NOT_IN_YOUR_ALLY);
+        return;
+    }
+    if ($UserData['id'] == $session->uid) {
+        $form->addError("perm", CANT_EDIT_YOUR_PERMISSIONS);
+        return;
+    }
+    // === NOU: nu poți da kick fondatorului ===
+    if ($database->isAllianceOwner($targetUID) == $allyId) {
+        $form->addError("perm", "You cannot expel the alliance founder.");
+        return;
+    }
+
+    // ==================== EXECUTARE KICK ====================
+    $kickedUsername = $UserData['username'];
+
+    $database->evictUserFromAlliance($targetUID);
+    $database->deleteAlliPermissions($targetUID);
+
+    $notice = '<a href="spieler.php?uid=' . $UserData['id'] . '">' .
+              addslashes($kickedUsername) .
+              '</a> has been expelled from the alliance by <a href="spieler.php?uid=' .
+              $session->uid . '">' . addslashes($session->username) . '</a>.';
+    $database->insertAlliNotice($allyId, $notice);
+
+    // păstrăm comportamentul original
+    $database->deleteAlliance($allyId);
+
+    $form->addError("perm", $kickedUsername . ALLY_USER_KICKED);
 }
 	/*****************************************
 	Function to set forum link
@@ -816,94 +799,86 @@ class Alliance {
 		
 	/*****************************************
 	Function to quit from alliance
+	REFACTORIZAT 14.05.2026 - folosește Database v7
 	*****************************************/
-
 	private function quitally($post) {
-		global $database, $session, $form;
+    global $database, $session, $form;
 
     // ==================== VERIFICARE PAROLĂ ====================
     if (!isset($post['pw']) || $post['pw'] === '') {
         $form->addError("pw", PW_EMPTY);
-    } elseif (!password_verify($post['pw'], $session->userinfo['password'])) {
+        return;
+    }
+    if (!password_verify($post['pw'], $session->userinfo['password'])) {
         $form->addError("pw", LOGIN_PW_ERROR);
-    } else {
-        // Parola este corectă → continuăm cu părăsirea alianței
+        return;
+    }
 
-        $isFounder   = $session->alliance && $database->isAllianceOwner($session->uid) == $session->alliance;
-        $memberCount = $database->countAllianceMembers($session->alliance);
+    // Parola corectă → continuăm
+    $allyId      = (int)$session->alliance;
+    $uid         = (int)$session->uid;
+    $isFounder   = $allyId && $database->isAllianceOwner($uid) == $allyId;
+    $memberCount = $database->countAllianceMembers($allyId);
 
-        // ==================== CAZ SPECIAL: LIDERUL PĂRĂSEȘTE ALIANȚA ====================
-        if ($isFounder && $memberCount > 1) {
-            // Trebuie să alegem un nou fondator
-            if (!isset($post['new_founder'])) {
-                $form->addError("founder", 'Founder was not selected.');
-                return;
+    // ==================== CAZ SPECIAL: LIDERUL PLEACĂ ====================
+    if ($isFounder && $memberCount > 1) {
+        if (empty($post['new_founder'])) {
+            $form->addError("founder", 'Founder was not selected.');
+            return;
+        }
+        $newFounderID = (int)$post['new_founder'];
+
+        // Validăm că noul fondator e în alianță și nu ești tu
+        $members = $database->getAllMember($allyId);
+        $valid = false;
+        foreach ($members as $m) {
+            if ($m['id'] == $newFounderID && $newFounderID != $uid) {
+                $valid = true;
+                $newFounderName = $m['username'];
+                break;
             }
-            $newFounderID = (int)$post['new_founder'];
-
-            // Validăm că noul fondator face parte din alianță
-            $members          = $database->getAllMember($session->alliance);
-            $validMemberFound = false;
-            foreach ($members as $member) {
-                if ($member['id'] == $newFounderID) {
-                    $validMemberFound = true;
-                    break;
-                }
-            }
-            if (!$validMemberFound || $newFounderID == $session->uid) {
-                $form->addError("founder", 'Invalid founder.');
-                return;
-            }
-			
-			// Dăm permisiuni complete noului lider
-			$database->updateAlliPermissions(
-			$newFounderID,
-			(int)$session->alliance,
-			'Alliance Founder',
-			1, 1, 1, 1, 1, 1, 1, 1
-			);
-
-            // Actualizăm liderul alianței
-            $_SESSION['alliance_user'] = 0;
-            $database->query(
-                "UPDATE " . TB_PREFIX . "alidata 
-                 SET leader = " . $newFounderID . " 
-                 WHERE id = " . (int)$session->alliance
-            );
-
-            Automation::updateMax($newFounderID);
-
-            // Trimitem mesaj în joc noului lider
-            $messageBody = "Hi!\n\n" .
-                           "This is to inform you that the former leader of your alliance - " .
-                           "<a href=\"" . rtrim(SERVER, '/') . "/spieler.php?uid=" . (int)$session->uid . "\">" .
-                           $database->escape($session->username) .
-                           "</a>, has decided to quit and elected you as his replacement. " .
-                           "You now gain full access, administration and responsibilities to your alliance.\n\n" .
-                           "Good luck!\n\nYours sincerely,\n<i>Server Robot :)</i>";
-            $database->sendMessage(
-                $newFounderID,
-                4,
-                'You are now leader of your alliance',
-                $messageBody,
-                0, 0, 0, 0, 0,
-                true
-            );
+        }
+        if (!$valid) {
+            $form->addError("founder", 'Invalid founder.');
+            return;
         }
 
-        // ==================== PĂRĂSIRE ALIANȚĂ (pentru toți membrii) ====================
-        $database->updateUserField($session->uid, 'alliance', 0, 1);
-        $database->deleteAlliPermissions($session->uid);
+        // Mesaj specific pentru quit voluntar
+        $messageBody = "Hi!\n\n" .
+                       "This is to inform you that the former leader of your alliance - " .
+                       "<a href=\"" . rtrim(SERVER, '/') . "/spieler.php?uid=" . $uid . "\">" .
+                       $database->escape($session->username) .
+                       "</a>, has decided to quit and elected you as his replacement. " .
+                       "You now gain full access, administration and responsibilities to your alliance.\n\n" .
+                       "Good luck!\n\nYours sincerely,\n<i>Server Robot :)</i>";
 
-        // Log notice + ștergere alianță (comportament exact ca în original)
-        $database->deleteAlliance($session->alliance);
-        $notice = '<a href="spieler.php?uid=' . $session->uid . '">' .
-                  addslashes($session->username) .
-                  '</a> has quit the alliance.';
-        $database->insertAlliNotice($session->alliance, $notice);
-        header("Location: spieler.php?uid=" . $session->uid);
-        exit;
+        // Folosim metoda centralizată cu mesaj custom
+        $database->promoteNewAllianceLeader(
+            $allyId,
+            $newFounderID,
+            $uid,
+            $newFounderName,
+            ['username' => $session->username, 'id' => $uid],
+            $messageBody
+        );
+
+        $_SESSION['alliance_user'] = 0;
     }
+
+    // ==================== PĂRĂSIRE ALIANȚĂ ====================
+    $database->updateUserField($uid, 'alliance', 0, 1);
+    $database->deleteAlliPermissions($uid);
+
+    // șterge alianța dacă e goală (comportament original)
+    $database->deleteAlliance($allyId);
+
+    $notice = '<a href="spieler.php?uid=' . $uid . '">' .
+              addslashes($session->username) .
+              '</a> has quit the alliance.';
+    $database->insertAlliNotice($allyId, $notice);
+
+    header("Location: spieler.php?uid=" . $uid);
+    exit;
 }
 
 	/*****************************************

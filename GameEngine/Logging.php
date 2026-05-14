@@ -7,7 +7,7 @@
 ##  Version:        12.05.2026                                                 ##
 ##  Filename:       Logging.php                                                ##
 ##  Developed by:   Shadow		                                               ##
-##  Refactored by:  Shadow                                                     ##
+##  Refactored by:  Shadow (cata7007@gmail.com)								   ##
 ##  License:        TravianZ Project                                           ##
 ##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##
 ##                                                                             ##
