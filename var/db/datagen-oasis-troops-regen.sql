@@ -109,6 +109,32 @@ WHERE
     @natureRegTime > -1
     AND
     wref IN ( SELECT id FROM %PREFIX%oids );
+    
+
+-- ----------------------------------------------------
+-- recreate missing oasis units rows
+-- fixes empty oasis regeneration after full clear
+-- ----------------------------------------------------
+
+INSERT INTO %PREFIX%units
+(
+    vref,
+    u1,u2,u3,u4,u5,u6,u7,u8,u9,u10,
+    u11,u12,u13,u14,u15,u16,u17,u18,u19,u20,
+    u21,u22,u23,u24,u25,u26,u27,u28,u29,u30,
+    u31,u32,u33,u34,u35,u36,u37,u38,u39,u40
+)
+SELECT
+    o.wref,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0
+FROM %PREFIX%odata o
+LEFT JOIN %PREFIX%units u ON u.vref = o.wref
+WHERE
+    u.vref IS NULL
+    AND o.wref IN (SELECT id FROM %PREFIX%oids);
 
 
 -- -----------------------------------------------------------------------
