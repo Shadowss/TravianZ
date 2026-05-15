@@ -8456,22 +8456,23 @@ References: User ID/Message ID, Mode
 
 
     // 3. Reinforcements
-    $q = "SELECT COUNT(*) as num
+	$q = "SELECT COUNT(*) as num
       FROM ".TB_PREFIX."enforcement e
-      JOIN ".TB_PREFIX."vdata v ON v.wref = e.vref
-      WHERE v.owner = $uid
-      AND e.from != e.vref
+      WHERE (
+            e.from IN (SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = $uid)
+            OR
+            e.vref IN (SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = $uid)
+          )
       AND (
-            (e.u1 + e.u2 + e.u3 + e.u4 + e.u5 +
-             e.u6 + e.u7 + e.u8 + e.u9 + e.u10 +
-             e.u11 + e.u12 + e.u13 + e.u14 + e.u15 +
-             e.u16 + e.u17 + e.u18 + e.u19 + e.u20 +
-             e.u21 + e.u22 + e.u23 + e.u24 + e.u25 +
-             e.u26 + e.u27 + e.u28 + e.u29 + e.u30 +
-             e.u41 + e.u42 + e.u43 + e.u44 + e.u45 +
-             e.u46 + e.u47 + e.u48 + e.u49 + e.u50
-            ) > 0
-          )";
+            e.u1 + e.u2 + e.u3 + e.u4 + e.u5 +
+            e.u6 + e.u7 + e.u8 + e.u9 + e.u10 +
+            e.u11 + e.u12 + e.u13 + e.u14 + e.u15 +
+            e.u16 + e.u17 + e.u18 + e.u19 + e.u20 +
+            e.u21 + e.u22 + e.u23 + e.u24 + e.u25 +
+            e.u26 + e.u27 + e.u28 + e.u29 + e.u30 +
+            e.u41 + e.u42 + e.u43 + e.u44 + e.u45 +
+            e.u46 + e.u47 + e.u48 + e.u49 + e.u50
+          ) > 0";
 
     $res = mysqli_query($this->dblink,$q);
     if(!$res){ die("SQL ERROR (REINFORCEMENTS): ".mysqli_error($this->dblink)); }
