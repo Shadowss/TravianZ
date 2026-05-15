@@ -8602,10 +8602,10 @@ References: User ID/Message ID, Mode
 	$row = mysqli_fetch_assoc($res);
 	$access = (int)$row['access'];
 
-	// 0 = user, 1 = sitter, 2 = mh, 3 = admin (depinde de serverul tău)
-	if($access >= 2){
-    $errors[] = "NO_VACATION_ACCESS";
-	}
+	// 0 = BANNED, 2 = USER, 8 = MH, 9 = ADMIN
+	if($access == 8 || $access == 9){
+	$errors[] = "NO_VACATION_ACCESS";
+}
 
     return empty($errors) ? true : $errors;
 }
