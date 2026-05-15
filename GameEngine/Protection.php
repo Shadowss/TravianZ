@@ -6,7 +6,10 @@
 ##  Developed by:  SlimShady                                                   ##
 ##  Edited by:     Dzoki & Dixie                                               ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##                                                                             ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 ##                                                                             ##
 #################################################################################
 

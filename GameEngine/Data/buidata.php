@@ -5,8 +5,10 @@
 ##  Filename       buidata.php                                                 ##
 ##  Developed by:  Akakori                                                     ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2011. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##                                                                             ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 #################################################################################
 
 

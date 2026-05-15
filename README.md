@@ -1,6 +1,6 @@
 # TravianZ
 
-[![Maintenance](https://img.shields.io/maintenance/yes/2025.svg)](https://github.com/Shadowss/TravianZ)
+[![Maintenance](https://img.shields.io/maintenance/yes/2026.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub Release](https://img.shields.io/github/release/Shadowss/TravianZ/all.svg)](https://github.com/Shadowss/TravianZ)
 [![GitHub contributors](https://img.shields.io/github/contributors/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
 [![license](https://img.shields.io/github/license/Shadowss/TravianZ.svg)](https://github.com/Shadowss/TravianZ)
@@ -11,9 +11,9 @@ This repository currently targets modern local/server setups with PHP 8.x and Ma
 
 ## Project Status
 
-- Version line: `v8.3.5` (legacy naming)
+- Version line: `v9` (Incremental Refactor)
 - Stability: playable and actively maintained
-- Migration note: this is not a drop-in upgrade over older `8.3.2` deployments
+- Migration note: this is not a drop-in upgrade over older `8.3.4` deployments
 
 If you are upgrading from an older installation, do a fresh install and migrate data carefully.
 
@@ -83,8 +83,8 @@ Admin entrypoint:
 
 Recent improvements include:
 
-- Users list under the `Users` menu
-- Better null/undefined handling in admin templates
+- Full incremental refactored GameEngine and Templates folder
+- Added cache on Database.php and Automation.php and other important files
 - Dynamic table prefix support in map tile queries
 
 ## Performance Notes

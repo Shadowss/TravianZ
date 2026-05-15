@@ -9,6 +9,8 @@
 ##  Copyright:     TravianZ (c) 2013-2026. All rights reserved.                ##
 ##  Modified by:   Shadow and ronix                                            ##
 ##                                                                             ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 #################################################################################
 
 //////////////////////////////////

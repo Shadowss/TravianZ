@@ -732,7 +732,7 @@ class Alliance {
     }
     // === NOU: nu poți da kick fondatorului ===
     if ($database->isAllianceOwner($targetUID) == $allyId) {
-        $form->addError("perm", "You cannot expel the alliance founder.");
+        $form->addError("perm", CANT_REMOVE_LEADER);
         return;
     }
 
@@ -823,7 +823,7 @@ class Alliance {
     // ==================== CAZ SPECIAL: LIDERUL PLEACĂ ====================
     if ($isFounder && $memberCount > 1) {
         if (empty($post['new_founder'])) {
-            $form->addError("founder", 'Founder was not selected.');
+            $form->addError("founder", FOUNDER_LEAVE_NEW);
             return;
         }
         $newFounderID = (int)$post['new_founder'];
@@ -839,7 +839,7 @@ class Alliance {
             }
         }
         if (!$valid) {
-            $form->addError("founder", 'Invalid founder.');
+            $form->addError("founder", FOUNDER_LEAVE_INVALID);
             return;
         }
 

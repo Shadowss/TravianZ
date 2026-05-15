@@ -7,11 +7,11 @@
 ##  Version:       01.09.2013 						                           ##
 ##  Filename       process.php                                                 ##
 ##  Developed by:  Shadow			                                           ##
-##  Fixed by:      Shadow / Skype : cata7007 and Armando                       ##
+##  Fixed by:      Shadow cata7007@gmail.com                       			   ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro 				                   ##
-##  Source code:   http://github.com/Shadowss/TravianZ/         	           ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 ##                                                                             ##
 #################################################################################
 

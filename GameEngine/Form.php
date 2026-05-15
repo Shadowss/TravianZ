@@ -11,7 +11,7 @@
 ##  Refactor:      Incremental cleanup (compatibility preserved)               ##
 ##  Notes:         PHP 7+ / legacy safe                                        ##
 ##                                                                             ##
-##  URLs:          http://travian.shadowss.ro                                  ##
+##  URLs:          https://travianz.org                                        ##
 ##                 https://github.com/Shadowss/TravianZ                        ##
 ##                                                                             ##
 #################################################################################

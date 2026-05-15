@@ -7,7 +7,7 @@
 ##  Developed by:  Dixie                                                       ##
 ##  Refactored:    Shadow (PHP 7+ compatibility, cleanup, safety pass)         ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##                                                                             ##
 ##  URLs:          https://travianz.org                                        ##
 ##                 https://github.com/Shadowss/TravianZ                        ##

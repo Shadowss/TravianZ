@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jul 21, 2011 at 02:49 AM
--- Server version: 5.5.8
--- PHP Version: 5.3.5
+-- Generation Time: May 15, 2026 at 02:49 AM
+-- Server version: 9.0 INCREMENTAL REFACTOR
+-- PHP Version: 8.4
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
@@ -372,7 +372,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
  `b6` tinyint(1) NULL, 
  `b7` tinyint(1) NULL, 
  `b8` tinyint(1) NULL, 
- PRIMARY KEY (`id`)
+ PRIMARY KEY (`id`),
+  KEY `vref` (`vref`),
+  KEY `attack_type` (`attack_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -423,7 +425,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
  KEY `master` (`master`),
  KEY `timestamp` (`timestamp`),
  KEY `master-timestamp` (`master`,`timestamp`) USING BTREE,
- KEY `wid` (`wid`)
+ KEY `wid` (`wid`),
+  KEY `wid_timestamp` (`wid`,`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1110,7 +1113,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   PRIMARY KEY (`moveid`),
   KEY `ref` (`ref`),
   KEY `from-proc-sort_type` (`from`,`proc`,`sort_type`),
-  KEY `proc-sort_type-endtime` (`proc`,`sort_type`,`endtime`)
+  KEY `proc-sort_type-endtime` (`proc`,`sort_type`,`endtime`),
+  KEY `to_endtime` (`to`,`endtime`),
+  KEY `from_endtime` (`from`,`endtime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1280,7 +1285,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
  `timestamp` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`),
- KEY `timestamp` (`timestamp`)
+ KEY `timestamp` (`timestamp`),
+  UNIQUE KEY `vref_tech` (`vref`,`tech`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1673,6 +1679,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
 `evasion` tinyint(1) NULL DEFAULT '0',
 PRIMARY KEY (`wref`),
 KEY `owner-capital-pop` (`owner`,`capital`,`pop`),
+  KEY `owner_pop` (`owner`,`pop`),
 KEY `maxstore` (`maxstore`),
 KEY `maxcrop` (`maxcrop`),
 KEY `celebration` (`celebration`),
