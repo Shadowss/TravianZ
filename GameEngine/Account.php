@@ -35,6 +35,7 @@ class Account {
 	function __construct() {
 		global $session;
 		if(isset($_POST['ft'])) {
+			$_POST['ft'] = preg_replace('/[^a-z0-9]/i', '', $_POST['ft']);
 			switch($_POST['ft']) {
 				case "a1":
 				$this->Signup();
@@ -121,7 +122,9 @@ class Account {
     if ($form->returnErrors() > 0) {
         $form->addError("invt", $_POST['invited'] ?? '');
         $_SESSION['errorarray'] = $form->getErrors();
-        $_SESSION['valuearray'] = $_POST;
+        $tmp = $_POST;
+		unset($tmp['pw']); // nu salva parola
+		$_SESSION['valuearray'] = $tmp;
         header("Location: anmelden.php");
         exit;
     }
@@ -170,8 +173,8 @@ class Account {
                     $database->updateUserField($uid, 'access', ADMIN, 1);
                 }
 
-                setcookie("COOKUSR",   $_POST['name'],  time() + COOKIE_EXPIRE, COOKIE_PATH);
-                setcookie("COOKEMAIL", $_POST['email'], time() + COOKIE_EXPIRE, COOKIE_PATH);
+				setcookie("COOKUSR", rawurlencode($_POST['name']), time()+COOKIE_EXPIRE, COOKIE_PATH, '', false, true);
+				setcookie("COOKEMAIL", rawurlencode($_POST['email']), time()+COOKIE_EXPIRE, COOKIE_PATH, '', false, true);
 
                 $database->updateUserField(
                     $uid,
@@ -195,13 +198,16 @@ class Account {
     if (START_DATE < date('d.m.Y') || (START_DATE === date('d.m.Y') && START_TIME <= date('H:i'))) {
         
         // Caută codul de activare în tabela activate
-        $id   = $database->escape($_POST['id'] ?? '');
-        $q    = "SELECT act, username, password, email, tribe, location 
-                 FROM " . TB_PREFIX . "activate 
-                 WHERE act = '" . $id . "'";
-        
-        $result   = $database->query($q);
-        $dbarray  = mysqli_fetch_array($result);
+		$code = trim($_POST['id'] ?? '');
+		$stmt = $database->dblink->prepare(
+			"SELECT act, username, password, email, tribe, location 
+			FROM `".TB_PREFIX."activate` WHERE act = ? LIMIT 1"
+		);
+		$stmt->bind_param("s", $code);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$dbarray = $result->fetch_assoc();
+		$stmt->close();
 
         // Verificăm dacă am găsit exact codul trimis
         if ($dbarray && $dbarray['act'] === $_POST['id']) {
@@ -240,14 +246,19 @@ class Account {
 		global $database;
 
     // ==================== VERIFICARE ID & PAROLĂ ====================
-    $id = (int)($_POST['id'] ?? 0);
+		$id = (int)($_POST['id'] ?? 0);
 
-    $q = "SELECT password, username 
-          FROM " . TB_PREFIX . "activate 
-          WHERE id = " . $id;
-
-    $result  = $database->query($q);
-    $dbarray = mysqli_fetch_array($result);
+		$stmt = $database->dblink->prepare(
+			"SELECT password, username 
+			FROM `".TB_PREFIX."activate` 
+			WHERE id = ? 
+			LIMIT 1"
+	);
+		$stmt->bind_param("i", $id);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$dbarray = $result->fetch_assoc();
+		$stmt->close();
 
     // Verificăm dacă înregistrarea există și parola este corectă
     // (protejează împotriva notice-urilor PHP dacă nu există rândul)

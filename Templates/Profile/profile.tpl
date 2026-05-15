@@ -95,9 +95,7 @@ maxlength="4" class="text year">
 
 <!-- DESCRIPTION RIGHT -->
 <td rowspan="<?php echo 7 + count($database->getProfileVillages($session->uid)); ?>" class="desc1">
-<textarea tabindex="7" name="be1"><?php
-echo $session->userinfo['desc2'] ?? '';
-?></textarea>
+<textarea tabindex="7" name="be1"><?= htmlspecialchars($session->userinfo['desc2'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
 </td>
 </tr>
 
@@ -125,7 +123,7 @@ echo $session->userinfo['desc2'] ?? '';
 <th>Location</th>
 <td>
 <input tabindex="5" type="text" name="ort"
-value="<?php echo $session->userinfo['location'] ?? ''; ?>"
+value="<?= htmlspecialchars($session->userinfo['location'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
 maxlength="30" class="text">
 </td>
 </tr>
@@ -145,7 +143,7 @@ for ($i = 0; $i < count($varray); $i++):
 <td>
 <input tabindex="6" type="text"
 name="dname<?php echo $i; ?>"
-value="<?php echo str_replace(['<','>'], '', $varray[$i]['name']); ?>"
+value="<?= htmlspecialchars($varray[$i]['name'], ENT_QUOTES, 'UTF-8') ?>"
 maxlength="30" class="text">
 </td>
 </tr>
@@ -154,9 +152,7 @@ maxlength="30" class="text">
 <!-- DESCRIPTION LEFT -->
 <tr>
 <td colspan="2" class="desc2">
-<textarea tabindex="8" name="be2"><?php
-echo $session->userinfo['desc1'] ?? '';
-?></textarea>
+<textarea tabindex="8" name="be2"><?= htmlspecialchars($session->userinfo['desc1'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
 </td>
 </tr>
 

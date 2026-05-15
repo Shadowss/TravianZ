@@ -76,40 +76,35 @@ class Profile {
 	 * Update player profile + village names
 	 */
 	private function updateProfile($post) {
-		global $database, $session;
+    global $database, $session;
 
-		$birthday = $post['jahr'] . '-' . $post['monat'] . '-' . $post['tag'];
+    $birthday = $post['jahr'] . '-' . $post['monat'] . '-' . $post['tag'];
+    $birthday = preg_match('/^\d{4}-\d{1,2}-\d{1,2}$/', $birthday) ? $birthday : '0';
 
-		$database->submitProfile(
-			$session->uid,
-			$database->RemoveXSS($post['mw']),
-			$database->RemoveXSS($post['ort']),
-			$database->RemoveXSS($birthday),
-			$database->RemoveXSS($post['be2']),
-			$database->RemoveXSS($post['be1'])
-		);
+    $mw   = (int)($post['mw'] ?? 0);
+    $ort  = trim($post['ort'] ?? '');
+    $be2  = trim($post['be2'] ?? ''); // descrierea stânga
+    $be1  = trim($post['be1'] ?? ''); // descrierea dreapta
 
-		// Cache villages per request
-		if (!isset(self::$cache['villages'][$session->uid])) {
-			self::$cache['villages'][$session->uid] = $database->getProfileVillages($session->uid);
-		}
+    $database->submitProfile($session->uid, $mw, $ort, $birthday, $be2, $be1);
 
-		$varray = self::$cache['villages'][$session->uid];
-		$cnt = count($varray);
+    // Cache villages
+    if (!isset(self::$cache['villages'][$session->uid])) {
+        self::$cache['villages'][$session->uid] = $database->getProfileVillages($session->uid);
+    }
+    $varray = self::$cache['villages'][$session->uid];
+    $cnt = count($varray);
 
-		for ($i = 0; $i < $cnt; $i++) {
-			if (!isset($post['dname' . $i])) continue;
+    for ($i = 0; $i < $cnt; $i++) {
+        if (!isset($post['dname' . $i])) continue;
+        $newName = trim($post['dname' . $i]);
+        if ($newName === '') continue;
+        $database->setVillageName($varray[$i]['wref'], $newName);
+    }
 
-			$database->setVillageName(
-				$varray[$i]['wref'],
-				$database->RemoveXSS(trim($post['dname' . $i]))
-			);
-		}
-
-		header("Location: spieler.php?uid=" . $session->uid);
-		exit;
-	}
-
+    header("Location: spieler.php?uid=" . $session->uid);
+    exit;
+}
 	/**
 	 * Gpack settings
 	 */

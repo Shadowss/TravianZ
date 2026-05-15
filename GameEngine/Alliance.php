@@ -45,7 +45,12 @@ class Alliance {
 		public $userPermArray = [];
 		
 	public function procAlliance($get) {
-		global $session, $database;
+    global $session, $database;
+
+    // ==================== SANITIZARE GET ====================
+    $get['a'] = isset($get['a']) ? (int)$get['a'] : 0;
+    $get['o'] = isset($get['o']) ? (int)$get['o'] : 0;
+    $get['d'] = isset($get['d']) ? (int)$get['d'] : 0; // dacă folosești și 'd'
 
     // ==================== ÎNCĂRCARE DATE ALIANȚĂ SAU INVITAȚII ====================
     if ($session->alliance > 0) {
@@ -53,9 +58,6 @@ class Alliance {
         $this->allianceArray = $database->getAlliance($session->alliance);
 
         // Permissions Array
-        // [id] => id [uid] => uid [alliance] => alliance 
-        // [opt1] => X [opt2] => X [opt3] => X [opt4] => X 
-        // [opt5] => X [opt6] => X [opt7] => X [opt8] => X
         $this->userPermArray = $database->getAlliPermissions($session->uid, $session->alliance);
     } else {
         // Utilizatorul NU este într-o alianță → încarcă invitațiile primite
@@ -64,7 +66,7 @@ class Alliance {
     }
 
     // ==================== PROCESARE ACȚIUNI DIN URL (GET) ====================
-    if (isset($get['a'])) {
+    if ($get['a'] > 0) {
         switch ($get['a']) {
             case 2:
                 $this->rejectInvite($get);
@@ -74,7 +76,7 @@ class Alliance {
                 break;
         }
     }
-    if (isset($get['o'])) {
+    if ($get['o'] > 0) {
         switch ($get['o']) {
             case 4:
                 $this->delInvite($get);

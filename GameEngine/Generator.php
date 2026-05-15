@@ -192,27 +192,19 @@ class MyGenerator
 	/**
 	 * Page load start time
 	 */
-	public function pageLoadTimeStart()
-	{
-		if (isset($_SERVER["REQUEST_TIME_FLOAT"])) {
-			return $_SERVER["REQUEST_TIME_FLOAT"];
-		}
-
-		$starttime = microtime(true);
-		$startarray = explode(" ", $starttime);
-
-		return $startarray[0];
+	public function pageLoadTimeStart() {
+		
+    return $_SERVER["REQUEST_TIME_FLOAT"]?? microtime(true);
+	
 	}
 
 	/**
 	 * Page load end time
 	 */
-	public function pageLoadTimeEnd()
-	{
-		$endtime = microtime(true);
-		$endarray = explode(" ", $endtime);
-
-		return $endarray[0];
+	public function pageLoadTimeEnd() {
+		
+    return microtime(true);
+	
 	}
 }
 

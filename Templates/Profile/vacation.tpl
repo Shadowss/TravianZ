@@ -132,7 +132,10 @@ function vac_ok($key, $errors)
                 <li style="color:<?= vac_ok('ACCOUNT_DELETION',$errors) ? 'green':'red' ?>">
                     Account is not scheduled for deletion
                 </li>
-
+				
+                <li style="color:<?= vac_ok('NO_VACATION_ACCESS',$errors) ? 'green':'red' ?>">
+                    Account is Admin or MH
+                </li>
             </ul>
         </div>
 

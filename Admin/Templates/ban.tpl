@@ -12,7 +12,7 @@ $success = '';
 if(isset($_POST['action']) && $_POST['action'] == 'addBan')
 {
     $uid = isset($_POST['uid']) ? (int)$_POST['uid'] : 0;
-    $reason = $_POST['reason'] ?? '';
+    $reason = trim($_POST['reason'] ?? '');
     $time = isset($_POST['time']) ? (int)$_POST['time'] : 0;
 
     // =========================
@@ -74,24 +74,46 @@ if(isset($_POST['action']) && $_POST['action'] == 'addBan')
 			// =========================
 			// INSERT BAN (ACTIVE)
 			// =========================
-			mysqli_query($database->dblink, "
-				INSERT INTO ".TB_PREFIX."banlist
-				(uid,name,reason,time,end,admin,active)
+			$currentTime = time();
+
+			$stmt = $database->dblink->prepare("
+				INSERT INTO `".TB_PREFIX."banlist`
+				(uid, name, reason, time, end, admin, active)
 				VALUES
-				($uid,'$name','$reason',".time().",$end,0,1)
-				");
+				(?, ?, ?, ?, ?, 0, 1)
+			");
+
+			if ($stmt) {
+			// i = integer, s = string
+			$stmt->bind_param("issii", $uid, $name, $reason, $currentTime, $end);
+			$stmt->execute();
+			$stmt->close();
+			} else {
+			$error = "Database error (ban insert): " . $database->dblink->error;
+			}
 
 			// =========================
 			// BLOCK USER ACCESS
 			// =========================
-			mysqli_query($database->dblink, "
-				UPDATE ".TB_PREFIX."users
+			if (empty($error)) {
+			$stmt2 = $database->dblink->prepare("
+				UPDATE `".TB_PREFIX."users`
 				SET access = 0
-				WHERE id = $uid
+				WHERE id = ?
 				LIMIT 1
 			");
 
+			if ($stmt2) {
+			$stmt2->bind_param("i", $uid);
+			$stmt2->execute();
+			$stmt2->close();
+			} else {
+			$error = "Database error (access update): " . $database->dblink->error;
+    }
+}
+			if (empty($error)) {
 			$success = "User has been banned successfully!";
+}
             }
         }
     }

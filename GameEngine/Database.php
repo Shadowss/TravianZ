@@ -802,34 +802,73 @@ class MYSQLi_DB implements IDbConnection {
 	}
 
 	function register($username, $password, $email, $tribe, $act, $uid = 0, $desc = null) {
-        list($username, $password, $email, $tribe, $act, $uid, $desc) = $this->escape_input($username, $password, $email, (int) $tribe, $act, (int) $uid, $desc);
+    $username = trim($username);
+    $email = filter_var($email, FILTER_VALIDATE_EMAIL) ?: '';
+    $tribe = (int)$tribe;
+    $uid = (int)$uid;
+    $desc = $desc ?? '';
+    $time = time();
+    $access = USER;
+    
+    $startTime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
+    $protectionTime = $uid != 3 ? (($startTime > $time) ? $startTime : $time) + PROTECTION : 0;
 
-		$time = time();
-        $startTime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
+    // încercăm varianta cu is_bcrypt (PHP 8.3)
+    $stmt = $this->dblink->prepare(
+        "INSERT INTO `".TB_PREFIX."users` 
+        (id, username, password, access, email, timestamp, tribe, act, protect, lastupdate, regtime, desc2, is_bcrypt) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    );
+    $is_bcrypt = 1;
+    $stmt->bind_param("issisiiiiiisi", $uid, $username, $password, $access, $email, $time, $tribe, $act, $protectionTime, $time, $time, $desc, $is_bcrypt);
+    
+    if($stmt->execute()){
+        $id = $stmt->insert_id ?: $uid;
+        $stmt->close();
+        return $id;
+    }
+    $stmt->close();
 
-        //If we're registering the Natars tribe, the protection must be 0
-		$protectionTime = $uid != 3 ? (($startTime > $time) ? $stime : $time) + PROTECTION : 0;
-
-		$q = "INSERT INTO " . TB_PREFIX . "users (id, username, password, access, email, timestamp, tribe, act, protect, lastupdate, regtime, desc2, is_bcrypt) VALUES ($uid, '$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $protectionTime, $time, $time, '$desc', 1)";
-		
-		if(mysqli_query($this->dblink, $q)) return mysqli_insert_id($this->dblink);		
-		else 
-		{
-		    // if an error has occured, we probably don't have DB converted to handle bcrypt passwords yet
-		    $q = "INSERT INTO " . TB_PREFIX . "users (id, username, password, access, email, timestamp, tribe, act, protect, lastupdate, regtime, desc2) VALUES ($uid, '$username', '$password', " . USER . ", '$email', $time, $tribe, '$act', $protectionTime, $time, $time, '$desc')";
-		    if(mysqli_query($this->dblink, $q)) return mysqli_insert_id($this->dblink);	      
-		    else return false;
-		}
-	}
+    // fallback pentru DB vechi fără coloana is_bcrypt
+    $stmt2 = $this->dblink->prepare(
+        "INSERT INTO `".TB_PREFIX."users` 
+        (id, username, password, access, email, timestamp, tribe, act, protect, lastupdate, regtime, desc2) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"
+    );
+    $stmt2->bind_param("issisiiiiiis", $uid, $username, $password, $access, $email, $time, $tribe, $act, $protectionTime, $time, $time, $desc);
+    
+    if($stmt2->execute()){
+        $id = $stmt2->insert_id ?: $uid;
+        $stmt2->close();
+        return $id;
+    }
+    $stmt2->close();
+    return false;
+}
 
 	function activate($username, $password, $email, $tribe, $locate, $act, $act2) {
-        list($username, $password, $email, $tribe, $locate, $act, $act2) = $this->escape_input($username, $password, $email, $tribe, $locate, $act, $act2);
+    $username = trim($username);
+    $email = filter_var($email, FILTER_VALIDATE_EMAIL) ?: '';
+    $tribe = (int)$tribe;
+    $locate = (int)$locate;
+    $time = time();
+    $access = USER;
 
-		$time = time();
-		$q = "INSERT INTO " . TB_PREFIX . "activate (username,password,access,email,tribe,timestamp,location,act,act2) VALUES ('$username', '$password', " . USER . ", '$email', " . (int) $tribe .", $time, $locate, '$act', '$act2')";
-		if(mysqli_query($this->dblink,$q)) return mysqli_insert_id($this->dblink);
-		else return false;
-	}
+    $stmt = $this->dblink->prepare(
+        "INSERT INTO `".TB_PREFIX."activate` 
+        (username,password,access,email,tribe,timestamp,location,act,act2) 
+        VALUES (?,?,?,?,?,?,?,?,?)"
+    );
+    $stmt->bind_param("ssisiiiss", $username, $password, $access, $email, $tribe, $time, $locate, $act, $act2);
+    
+    if($stmt->execute()){
+        $id = $stmt->insert_id;
+        $stmt->close();
+        return $id;
+    }
+    $stmt->close();
+    return false;
+}
 
 	function unreg($username) {
         list($username) = $this->escape_input($username);
@@ -1223,19 +1262,23 @@ class MYSQLi_DB implements IDbConnection {
 		}
 	}
 
-	function submitProfile($uid, $gender, $location, $birthday, $des1, $des2) {
-	    // temporarily replace newlines with placeholders, so they don't get escaped and backslashed stripped out of them
-	    $des1 = str_replace(['\\r', '\\n'], ['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], $des1);
-	    $des2 = str_replace(['\\r', '\\n'], ['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], $des2);
+	function submitProfile($uid, $gender, $location, $birthday, $desc1, $desc2) {
+    $uid = (int)$uid;
+    $gender = (int)$gender;
+    $location = mb_substr(trim($location), 0, 30, 'UTF-8');
+    $birthday = trim($birthday);
+    $desc1 = trim($desc1);
+    $desc2 = trim($desc2);
 
-	    list($uid, $gender, $location, $birthday, $des1, $des2) = $this->escape_input((int) $uid, (int) $gender, $location, $birthday, $des1, $des2);
-
-	    // return new lines and return carriages to descriptions
-	    $des1 = str_replace(['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], ['\\r', '\\n'], $des1);
-	    $des2 = str_replace(['[!RETURN_CARRIAGE!]','[!NEW_LINE!]'], ['\\r', '\\n'], $des2);
-
-		$q = "UPDATE " . TB_PREFIX . "users set gender = $gender, location = '$location', birthday = '$birthday', desc1 = '$des1', desc2 = '$des2' where id = $uid";
-		return mysqli_query($this->dblink,$q);
+    $stmt = $this->dblink->prepare(
+        "UPDATE `".TB_PREFIX."users` 
+         SET gender = ?, location = ?, birthday = ?, desc1 = ?, desc2 = ?
+         WHERE id = ? LIMIT 1"
+    );
+    $stmt->bind_param("issssi", $gender, $location, $birthday, $desc1, $desc2, $uid);
+    $stmt->execute();
+    $stmt->close();
+    return true;
 	}
 
 	function gpack($uid, $gpack) {
@@ -1383,8 +1426,9 @@ class MYSQLi_DB implements IDbConnection {
 	 * @return array Returns the created villages ID
 	 */
 	
-	function generateVillages($villageArrays, $uid, $username, $troopsArray = null, $buildingsArray = null){	
-	    list($villageArrays, $uid, $username, $troopsArray, $buildingsArray) = $this->escape_input($villageArrays, (int) $uid, $username, $troopsArray, $buildingsArray);
+	function generateVillages($villageArrays, $uid, $username, $troopsArray = null, $buildingsArray = null){
+		$uid = (int)$uid;
+		$username = trim($username);
 		
 	    $wids = $takenWids = $countedWids = $generatedWids = $i = [];
 	    
@@ -1441,15 +1485,36 @@ class MYSQLi_DB implements IDbConnection {
 	 */
 	
 	function addVillage($wid, $uid, $username, $capital, $pop = 2, $villageName = null, $isNatar = 0) {
-	    list($wid, $uid, $username, $capital, $pop, $villageName, $isNatar) = $this->escape_input((int) $wid, (int) $uid, $username, (int) $capital, (int) $pop, $villageName, (int) $isNatar);
+    $wid = (int)$wid;
+    $uid = (int)$uid;
+    $capital = (int)$capital;
+    $pop = (int)$pop;
+    $isNatar = (int)$isNatar;
+    $username = trim($username);
 
-	    $total = count($this->getVillagesID($uid));
-	    if($villageName == null) $villageName = $username."\'s village ".($total >= 1 ? $total + 1 : "");
+    $total = count($this->getVillagesID($uid));
+    if (empty($villageName)) {
+        // fără backslash, fără htmlentities – doar text curat
+        $villageName = $username . "'s village" . ($total >= 1 ? " " . ($total + 1) : "");
+    }
 
-		$time = time();
-		$q = "INSERT into " . TB_PREFIX . "vdata (wref, owner, name, capital, pop, cp, celebration, wood, clay, iron, maxstore, crop, maxcrop, lastupdate, created, natar) values ($wid, $uid, '$villageName', $capital, $pop, 1, 0, 750, 750, 750, ".STORAGE_BASE.", 750, ".STORAGE_BASE.", $time, $time, $isNatar)";
-		return mysqli_query($this->dblink,$q);
-	}
+    $time = time();
+    $storage = STORAGE_BASE;
+
+    $stmt = $this->dblink->prepare(
+        "INSERT INTO `".TB_PREFIX."vdata` 
+        (wref, owner, name, capital, pop, cp, celebration, wood, clay, iron, maxstore, crop, maxcrop, lastupdate, created, natar) 
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    );
+    $cp = 1; $celebration = 0; $wood = 750; $clay = 750; $iron = 750; $crop = 750;
+    $stmt->bind_param("iisiiiiiiiiiiiii", 
+        $wid, $uid, $villageName, $capital, $pop, $cp, $celebration, 
+        $wood, $clay, $iron, $storage, $crop, $storage, $time, $time, $isNatar
+    );
+    $result = $stmt->execute();
+    $stmt->close();
+    return $result;
+}
 
 	/**
 	 * 
@@ -3928,14 +3993,20 @@ class MYSQLi_DB implements IDbConnection {
         return mysqli_query($this->dblink,$q);
     }
 
-    function setVillageName($vid, $name) {
-        list($vid, $name) = $this->escape_input((int) $vid, $name);
+	function setVillageName($vid, $name) {
+    $vid = (int)$vid;
+    $name = trim($name);
+    if ($name === '') return false;
+    $name = mb_substr($name, 0, 30, 'UTF-8');
 
-        if(!empty($name)){
-			$q = "UPDATE " . TB_PREFIX . "vdata set name = '$name' where wref = $vid";
-			return mysqli_query($this->dblink, $q);
-		}
-    }
+    $stmt = $this->dblink->prepare(
+        "UPDATE `".TB_PREFIX."vdata` SET name = ? WHERE wref = ? LIMIT 1"
+    );
+    $stmt->bind_param("si", $name, $vid);
+    $result = $stmt->execute();
+    $stmt->close();
+    return $result;
+	}
 
     function modifyPop($vid, $pop, $mode) {
         list($vid, $pop, $mode) = $this->escape_input((int) $vid, (int) $pop, $mode);
@@ -8389,7 +8460,18 @@ References: User ID/Message ID, Mode
       FROM ".TB_PREFIX."enforcement e
       JOIN ".TB_PREFIX."vdata v ON v.wref = e.vref
       WHERE v.owner = $uid
-      AND e.from != e.vref";
+      AND e.from != e.vref
+      AND (
+            (e.u1 + e.u2 + e.u3 + e.u4 + e.u5 +
+             e.u6 + e.u7 + e.u8 + e.u9 + e.u10 +
+             e.u11 + e.u12 + e.u13 + e.u14 + e.u15 +
+             e.u16 + e.u17 + e.u18 + e.u19 + e.u20 +
+             e.u21 + e.u22 + e.u23 + e.u24 + e.u25 +
+             e.u26 + e.u27 + e.u28 + e.u29 + e.u30 +
+             e.u41 + e.u42 + e.u43 + e.u44 + e.u45 +
+             e.u46 + e.u47 + e.u48 + e.u49 + e.u50
+            ) > 0
+          )";
 
     $res = mysqli_query($this->dblink,$q);
     if(!$res){ die("SQL ERROR (REINFORCEMENTS): ".mysqli_error($this->dblink)); }
@@ -8510,6 +8592,19 @@ References: User ID/Message ID, Mode
 
 	if(!empty($row['timestamp']) && $row['timestamp'] > $time){
     $errors[] = "ACCOUNT_DELETION";
+	}
+	
+	// 10. Admin / Multihunter restriction
+	$q = "SELECT access FROM ".TB_PREFIX."users WHERE id=$uid";
+	$res = mysqli_query($this->dblink,$q);
+	if(!$res){ die("SQL ERROR (ACCESS): ".mysqli_error($this->dblink)); }
+
+	$row = mysqli_fetch_assoc($res);
+	$access = (int)$row['access'];
+
+	// 0 = user, 1 = sitter, 2 = mh, 3 = admin (depinde de serverul tău)
+	if($access >= 2){
+    $errors[] = "NO_VACATION_ACCESS";
 	}
 
     return empty($errors) ? true : $errors;
