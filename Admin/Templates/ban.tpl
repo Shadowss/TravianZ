@@ -71,17 +71,27 @@ if(isset($_POST['action']) && $_POST['action'] == 'addBan')
                 $name = $user['username'];
                 $end = ($time > 0) ? (time() + $time) : 0;
 
-                // =========================
-                // INSERT BAN (ACTIVE)
-                // =========================
-                mysqli_query($database->dblink, "
-                    INSERT INTO ".TB_PREFIX."banlist
-                    (uid,name,reason,time,end,admin,active)
-                    VALUES
-                    ($uid,'$name','$reason',".time().",$end,0,1)
-                ");
+			// =========================
+			// INSERT BAN (ACTIVE)
+			// =========================
+			mysqli_query($database->dblink, "
+				INSERT INTO ".TB_PREFIX."banlist
+				(uid,name,reason,time,end,admin,active)
+				VALUES
+				($uid,'$name','$reason',".time().",$end,0,1)
+				");
 
-                $success = "User has been banned successfully!";
+			// =========================
+			// BLOCK USER ACCESS
+			// =========================
+			mysqli_query($database->dblink, "
+				UPDATE ".TB_PREFIX."users
+				SET access = 0
+				WHERE id = $uid
+				LIMIT 1
+			");
+
+			$success = "User has been banned successfully!";
             }
         }
     }
