@@ -53,7 +53,7 @@ function go_url(url) {
             <input type="hidden" name="access" value="<?php echo $user['access']; ?>">
             <?php
                 $names = [0=>'Banned', 2=>'Normal User', 8=>'Multihunter', 9=>'Admin'];
-                echo '<b style="color:#c00;">'.$names[$user['access']].'</b> - Nu îți poți modifica propriul acces';
+                echo '<b style="color:#c00;">'.$names[$user['access']].'</b> - You cannot change your own access.';
             ?>
         <?php } ?>
     </td>
