@@ -8,7 +8,7 @@
 ##  Filename       Database.php                                                ##
 ##  Developed by:  Mr.php , Advocaite , brainiacX , yi12345 , Shadow , ronix   ##
 ##  Reworked by:   martinambrus				       				   			   ##
-##  Refactored by: Shadow (cata7007@gmail.com)								   ##
+##  Refactored by: Shadow 													   ##
 ##                                                                             ##
 ##  Adăugat cache generic și contoare centralizate							   ##
 ##  Corectat mysqli_fetch_all pentru PHP 7.2+ (returnează mereu array)		   ##

@@ -7,7 +7,7 @@
 ##  Version:        12.05.2026                                                 ##
 ##  Filename:       Building.php                                               ##
 ##  Developed by:   Dzoki & Dixie                                              ##
-##  Refactored by:  Shadow (cata7007@gmail.com)								   ##
+##  Refactored by:  Shadow 													   ##
 ##  Reworked/Fix:   ronix                                                      ##
 ##  License:        TravianZ Project                                           ##
 ##  Copyright:      TravianZ (c) 2010-2026. All rights reserved.               ##

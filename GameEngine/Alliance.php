@@ -4,10 +4,10 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       30.04.2026                                                   ##
+##  Version:       30.04.2026                                                  ##
 ##  Filename       Alliance.php                                                ##
 ##  Developed by:  Dzoki                                                       ##
-##  Refactored by: Shadow (cata7007@gmail.com)                                 ##
+##  Refactored by: Shadow 					                                   ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
 ##  URLs:          https://travianz.org                                        ##
