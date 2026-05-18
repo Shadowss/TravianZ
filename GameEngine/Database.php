@@ -1213,9 +1213,9 @@ class MYSQLi_DB implements IDbConnection {
         if(!$mode) $q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref' LIMIT 1";
 		else $q = "SELECT * FROM " . TB_PREFIX . "users where id = " . (int) $ref . " LIMIT 1";
 		
-		// ACTIVAT CACHE GENERIC
-		$cacheKey = "userarray_".$ref."_".$mode;
-        self::$fieldsCache[$ref.$mode] = $this->fetchCached($cacheKey, $q, function($res){ return mysqli_fetch_array($res, MYSQLI_ASSOC); });
+		$result = mysqli_query($this->dblink,$q);
+
+        self::$fieldsCache[$ref.$mode] = mysqli_fetch_array($result);
         return self::$fieldsCache[$ref.$mode];
 	}
 
@@ -1931,9 +1931,9 @@ class MYSQLi_DB implements IDbConnection {
                     break;
         }
 
-		// ACTIVAT CACHE GENERIC
-		$cacheKey = "village_".$vid."_".$mode;
-        self::$villageFieldsCache[$vid.$mode] = $this->fetchCached($cacheKey, $q, function($res){ return mysqli_fetch_array($res, MYSQLI_ASSOC); });
+		$result = mysqli_query($this->dblink,$q);
+
+        self::$villageFieldsCache[$vid.$mode] = mysqli_fetch_array($result, MYSQLI_ASSOC);
         return self::$villageFieldsCache[$vid.$mode];
 	}
 
@@ -2112,9 +2112,7 @@ class MYSQLi_DB implements IDbConnection {
         }
 
         $q = "SELECT * FROM " . TB_PREFIX . "wdata where id IN(".implode(', ', $vid).")";
-        // ACTIVAT CACHE GENERIC
-        $cacheKey = "wdata_".md5($q);
-        $result = $this->fetchCached($cacheKey, $q, function($res){ return $this->mysqli_fetch_all($res); });
+        $result = $this->mysqli_fetch_all(mysqli_query($this->dblink,$q));
 
         // return a single value
         if (!$array_passed) {
@@ -2338,7 +2336,7 @@ class MYSQLi_DB implements IDbConnection {
 
         return self::$resourceLevelsCache;
     }
-
+	
 	function getResourceLevel($vid, $use_cache = true) {
 	    list($vid) = $this->escape_input((int) $vid);
 
@@ -2349,9 +2347,9 @@ class MYSQLi_DB implements IDbConnection {
         }
 
 		$q = "SELECT * from " . TB_PREFIX . "fdata where vref = $vid";
-		// ACTIVAT CACHE GENERIC
-		$cacheKey = "reslvl_".$vid;
-        self::$resourceLevelsCache[$vid] = $this->fetchCached($cacheKey, $q, function($res){ return mysqli_fetch_assoc($res); });
+		$result = mysqli_query($this->dblink,$q);
+
+        self::$resourceLevelsCache[$vid] = mysqli_fetch_assoc($result);
         return self::$resourceLevelsCache[$vid];
 	}
 
@@ -3840,9 +3838,8 @@ class MYSQLi_DB implements IDbConnection {
                     OR (f40t = ".$field.($lvl !== false ? ' AND f40 '.$lvlComparisonSign.' '.$lvl : '').")
                 )";
 
-	    // ACTIVAT CACHE GENERIC
-	    $cacheKey = "sftc_".$uid."_".$field."_".$lvlComparisonSign."_".($lvl===false?'x':$lvl);
-	    $row = $this->fetchCached($cacheKey, $q, function($res){ return mysqli_fetch_array($res, MYSQLI_ASSOC); });
+	    $result = mysqli_query($this->dblink,$q);
+	    $row = mysqli_fetch_array($result);
 
         self::$singleFieldTypeCountCache[$uid.$field.$lvlComparisonSign.($lvl ? 1 : 0)] = $row["Total"];
         return self::$singleFieldTypeCountCache[$uid.$field.$lvlComparisonSign.($lvl ? 1 : 0)];
@@ -7796,7 +7793,7 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
         $artifact = $this->getOwnArtifactsSum($uid);
 
         if ($artifact['totals'] < 3 || $uid == $vuid) {
-            $DefenderFields = $this->getResourceLevel( $vref );
+			$DefenderFields = $this->getResourceLevel( $vref );
             $defcanclaim    = true;
 
             for ($i = 19; $i <= 38; $i++) {
