@@ -4774,7 +4774,14 @@ References: User ID/Message ID, Mode
 		$q = "DELETE FROM ".TB_PREFIX."bdata WHERE field=$field AND wid=$wid";
 		mysqli_query($this->dblink,$q);
 		$uprequire = $building->resourceRequired($field,$village->resarray['f'.$field.'t'],0);
-		$q = "INSERT INTO ".TB_PREFIX."demolition VALUES (".$wid.",".$field.",".($fLevel-1).",".(time()+floor($uprequire['time']/2)).")";
+$newLevel = max(0, $fLevel - 1);
+
+$q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
+    ".$wid.",
+    ".$field.",
+    ".$newLevel.",
+    ".(time() + floor($uprequire['time'] / 2))."
+)";
 		mysqli_query($this->dblink,$q);
 
 		return true;

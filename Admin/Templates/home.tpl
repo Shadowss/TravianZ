@@ -71,5 +71,5 @@ if ($_SESSION['access'] == MULTIHUNTER) {
     Credits: Akakori & Elmar<br />
     Fixed, remade and new features added by <b>Dzoki</b><br />
     Reworked by <b>aggenkeech</b><br />
-    Remaked by <b>Shadow</b>
+    Refactored by <b>Shadow</b>
 </div>

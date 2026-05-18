@@ -1,35 +1,31 @@
 <?php
+// 33.tpl - PALISADE
+global $village, $building, $bid33, $id, $loopsame, $doublebuild, $master;
+
 include("next.tpl");
+
+$level = (int)$village->resarray['f'.$id];
+$current = $level > 0 ? (int)$bid33[$level]['attri'] : 0;
 ?>
 <div id="build" class="gid33">
-<h1><?php echo PALISADE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc"><?php echo PALISADE_DESC; ?></p>
+    <h1><?php echo PALISADE;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
+    <p class="build_desc"><?php echo PALISADE_DESC;?></p>
 
-<table cellpadding="1" cellspacing="1" id="build_value">
-		<tr>
-			<th><?php echo DEFENCE_NOW; ?></th>
-			<td><b><?php echo $village->resarray['f'.$id] > 0 ? $bid33[$village->resarray['f'.$id]]['attri'] : 0; ?></b> <?php echo PERCENT; ?></td>
-		</tr><tr>
-        <?php 
-        if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-			$next = $village->resarray['f'.$id] + 1 + $loopsame + $doublebuild + $master;
-		if($next <= 20){
+    <table cellpadding="1" cellspacing="1" id="build_value">
+        <tr>
+            <th><?php echo DEFENCE_NOW;?></th>
+            <td><b><?php echo $current;?></b> <?php echo PERCENT;?></td>
+        </tr>
+        <?php if (!$building->isMax($village->resarray['f'.$id.'t'], $id)):
+            $next = $level + 1 + $loopsame + $doublebuild + $master;
+            $next = $next > 20 ? 20 : $next;
         ?>
-			<th><?php echo DEFENCE_LEVEL; ?> <?php echo $next; ?>:</th>
+        <tr>
+            <th><?php echo DEFENCE_LEVEL;?> <?php echo $next;?>:</th>
+            <td><b><?php echo (int)$bid33[$next]['attri'];?></b> <?php echo PERCENT;?></td>
+        </tr>
+        <?php endif;?>
+    </table>
 
-			<td><b><?php echo $bid33[$next]['attri']; ?></b> <?php echo PERCENT; ?></td>
-            <?php
-            }else{
-		?>
-		<th><?php echo DEFENCE_LEVEL; ?> 20:</th>
-		<td><b><?php echo $bid33[20]['attri']; ?></b> <?php echo PERCENT; ?></td>
-		<?php
-			}
-			}
-            ?>
-		</tr></table>
-<?php 
-include("upgrade.tpl");
-?>
-        </p>
-         </div>
+    <?php include("upgrade.tpl");?>
+</div>

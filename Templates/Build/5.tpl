@@ -1,37 +1,47 @@
 <?php
-include("next.tpl");
-?>
-<div id="build" class="gid5"><a href="#" onClick="return Popup(5,4);" class="build_logo">
-	<img class="building g5" src="img/x.gif" alt="Sawmill" title="<?php echo SAWMILL; ?>" />
-</a>
-<h1><?php echo SAWMILL; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc"><?php echo SAWMILL_DESC; ?></p>
 
+// SAWMILL
 
-	<table cellpadding="1" cellspacing="1" id="build_value">
-		<tr>
-			<th><?php echo CURRENT_WOOD_BONUS; ?></th>
-			<td><b><?php echo $village->resarray['f'.$id] > 0 ? $bid5[$village->resarray['f'.$id]]['attri'] : 0; ?></b> <?php echo PERCENT; ?></td>
-		</tr>
-		<tr>
-		<?php 
-        if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
-		if($next<=5){
-        ?>
-			<th><?php echo WOOD_BONUS_LEVEL; ?> <?php echo $next; ?>:</th>
-			<td><b><?php echo $bid5[$next]['attri']; ?></b> <?php echo PERCENT; ?></td>
-            <?php
-            }else{
-        ?>
-			<th><?php echo WOOD_BONUS_LEVEL; ?> 5:</th>
-			<td><b><?php echo $bid5[5]['attri']; ?></b> <?php echo PERCENT; ?></td>
-            <?php
-			}}
-            ?>
-		</tr>
-	</table>
-<?php 
-include("upgrade.tpl");
+include 'next.tpl';
+
+$field         = 'f' . $id;
+$currentLevel  = (int) ($village->resarray[$field] ?? 0);
+$buildingType  = $village->resarray[$field . 't'] ?? 0;
+
+$currentBonus  = $currentLevel > 0 ? $bid5[$currentLevel]['attri'] : 0;
+
+$isMax         = $building->isMax($buildingType, $id);
+$maxLevel      = 5; // sawmill e max 5
+
+$nextLevelRaw  = $currentLevel + 1 + $loopsame + $doublebuild + $master;
+$nextLevel     = min($nextLevelRaw, $maxLevel);
+$nextBonus     = $bid5[$nextLevel]['attri'];
 ?>
-</p></div>
+<div id="build" class="gid5">
+    <a href="#" onclick="return Popup(5,4);" class="build_logo">
+        <img class="building g5" src="img/x.gif" alt="<?= SAWMILL ?>" title="<?= SAWMILL ?>">
+    </a>
+
+    <h1>
+        <?= SAWMILL ?>
+        <span class="level"><?= LEVEL ?> <?= $currentLevel ?></span>
+    </h1>
+
+    <p class="build_desc"><?= SAWMILL_DESC ?></p>
+
+    <table cellpadding="1" cellspacing="1" id="build_value">
+        <tr>
+            <th><?= CURRENT_WOOD_BONUS ?>:</th>
+            <td><b><?= $currentBonus ?></b> <?= PERCENT ?></td>
+        </tr>
+
+        <?php if (!$isMax): ?>
+        <tr>
+            <th><?= WOOD_BONUS_LEVEL ?> <?= $nextLevel ?>:</th>
+            <td><b><?= $nextBonus ?></b> <?= PERCENT ?></td>
+        </tr>
+        <?php endif; ?>
+    </table>
+
+    <?php include 'upgrade.tpl'; ?>
+</div>

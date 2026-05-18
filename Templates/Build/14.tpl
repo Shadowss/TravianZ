@@ -1,37 +1,47 @@
 <?php
-include("next.tpl");
-?>
-<div id="build" class="gid14"><a href="#" onClick="return Popup(14,4);" class="build_logo">
-	<img class="building g14" src="img/x.gif" alt="Tournament Square" title="<?php echo TOURNAMENTSQUARE; ?>" />
-</a>
-<h1><?php echo TOURNAMENTSQUARE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc"><?php echo TOURNAMENTSQUARE_DESC; ?> </p>
 
+// TOURNAMENT SQUARE
 
-	<table cellpadding="1" cellspacing="1" id="build_value">
-		<tr>
-			<th><?php echo CURRENT_SPEED; ?></th>
-			<td><b><?php echo $village->resarray['f'.$id] > 0 ? $bid14[$village->resarray['f'.$id]]['attri'] : 100; ?></b> <?php echo PERCENT; ?></td>
-		</tr>
-		<tr>
-		<?php 
-        if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
-		if($next <= 20){
-        ?>
-			<th><?php echo SPEED_LEVEL; ?> <?php echo $next; ?>:</th>
-			<td><b><?php echo $bid14[$next]['attri']; ?></b> <?php echo PERCENT; ?></td>
-            <?php
-            }else{
-        ?>
-			<th><?php echo SPEED_LEVEL; ?> 20:</th>
-			<td><b><?php echo $bid14[20]['attri']; ?></b> <?php echo PERCENT; ?></td>
-            <?php
-			}}
-            ?>
-		</tr>
-	</table>
-<?php 
-include("upgrade.tpl");
+include 'next.tpl';
+
+$field         = 'f' . $id;
+$currentLevel  = (int)($village->resarray[$field] ?? 0);
+$buildingType  = $village->resarray[$field . 't'] ?? 0;
+
+$currentSpeed  = $currentLevel > 0 ? $bid14[$currentLevel]['attri'] : 100;
+
+$isMax         = $building->isMax($buildingType, $id);
+$maxLevel      = 20;
+
+$nextLevelRaw  = $currentLevel + 1 + $loopsame + $doublebuild + $master;
+$nextLevel     = min($nextLevelRaw, $maxLevel);
+$nextSpeed     = $bid14[$nextLevel]['attri'];
 ?>
-</p></div>
+<div id="build" class="gid14">
+    <a href="#" onclick="return Popup(14,4);" class="build_logo">
+        <img class="building g14" src="img/x.gif" alt="<?= TOURNAMENTSQUARE ?>" title="<?= TOURNAMENTSQUARE ?>">
+    </a>
+
+    <h1>
+        <?= TOURNAMENTSQUARE ?>
+        <span class="level"><?= LEVEL ?> <?= $currentLevel ?></span>
+    </h1>
+
+    <p class="build_desc"><?= TOURNAMENTSQUARE_DESC ?></p>
+
+    <table cellpadding="1" cellspacing="1" id="build_value">
+        <tr>
+            <th><?= CURRENT_SPEED ?>:</th>
+            <td><b><?= $currentSpeed ?></b> <?= PERCENT ?></td>
+        </tr>
+
+        <?php if (!$isMax): ?>
+        <tr>
+            <th><?= SPEED_LEVEL ?> <?= $nextLevel ?>:</th>
+            <td><b><?= $nextSpeed ?></b> <?= PERCENT ?></td>
+        </tr>
+        <?php endif; ?>
+    </table>
+
+    <?php include 'upgrade.tpl'; ?>
+</div>

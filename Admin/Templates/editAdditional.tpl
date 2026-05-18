@@ -38,19 +38,26 @@ function go_url(url) {
 					</tr>
 				</thead>
 				<tbody>
-				<tr>
-					<td>
-					Change Access
-					</td>
-					<td>
-							<select name="access" class="dropdown">
-								<option value="0" <?php if($user['access'] == 0) { echo 'selected="selected"'; } else { echo ''; } ?>>Banned</option>
-								<option value="2" <?php if($user['access'] == 2) { echo 'selected="selected"'; } else { echo ''; } ?>>Normal User</option>
-								<option value="8" <?php if($user['access'] == 8) { echo 'selected="selected"'; } else { echo ''; } ?>>Multihunter</option>
-								<option value="9" <?php if($user['access'] == 9) { echo 'selected="selected"'; } else { echo ''; } ?>>Admin</option>
-							</select>
-					</td>
-				</tr>
+<tr>
+    <td>Change Access</td>
+    <td>
+        <?php if($id != $_SESSION['id']) { ?>
+            <select name="access" class="dropdown">
+                <option value="0" <?php if($user['access'] == 0) echo 'selected="selected"'; ?>>Banned</option>
+                <option value="2" <?php if($user['access'] == 2) echo 'selected="selected"'; ?>>Normal User</option>
+                <option value="8" <?php if($user['access'] == 8) echo 'selected="selected"'; ?>>Multihunter</option>
+                <option value="9" <?php if($user['access'] == 9) echo 'selected="selected"'; ?>>Admin</option>
+            </select>
+        <?php } else { ?>
+            <!-- nu permiți editarea propriului acces -->
+            <input type="hidden" name="access" value="<?php echo $user['access']; ?>">
+            <?php
+                $names = [0=>'Banned', 2=>'Normal User', 8=>'Multihunter', 9=>'Admin'];
+                echo '<b style="color:#c00;">'.$names[$user['access']].'</b> - Nu îți poți modifica propriul acces';
+            ?>
+        <?php } ?>
+    </td>
+</tr>
 				<tr>
 					<td>Edit Gold</td>
 					<td>

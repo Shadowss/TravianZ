@@ -241,6 +241,17 @@ if ($hour > 1759 || $hour < 500) {
             vertical-align:middle;
             position:static;
         }
+		
+		.dayNightIcon {
+			margin-top: 22px; /* aici cobori iconița */
+			text-align: center;
+	}
+
+		.dayNightIcon img {
+			width: 18px;
+			height: 18px;
+			display: inline-block;
+	}
 
         </style>
 
@@ -255,11 +266,10 @@ if ($hour > 1759 || $hour < 500) {
                     <div>
 
                         <p>
-
-                            <img src="img/x.gif"
-                                 style="display:block;margin:0 auto;vertical-align:middle;"
-                                 class="<?php echo safeHTML($dayNightImage); ?>"
-                                 alt="" />
+							
+                            <div class="dayNightIcon">
+								<img src="img/x.gif" class="<?php echo safeHTML($dayNightImage); ?>" alt="" />
+							</div>
 
                         </p>
 

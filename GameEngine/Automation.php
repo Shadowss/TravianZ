@@ -3383,11 +3383,15 @@ class Automation {
 
         $varray = $database->getDemolition();
         foreach($varray as $vil) {
+if ($vil['lvl'] < 0) {
+    $database->delDemolition($vil['vref'], true);
+    continue;
+}
             if ($vil['timetofinish'] <= time()) {
                 $type = $database->getFieldType($vil['vref'],$vil['buildnumber']);
                 $level = $database->getFieldLevel($vil['vref'],$vil['buildnumber']);
 
-                if ($level < 0) $level = 0;
+                $newLevel = max(0, $level - 1);
 
                 $buildarray = $GLOBALS["bid".$type];
 
@@ -3395,7 +3399,7 @@ class Automation {
                     $database->query("
                         UPDATE ".TB_PREFIX."vdata
                             SET
-                                `maxstore` = IF(`maxstore` - ".$buildarray[$level]['attri']." <= ".STORAGE_BASE.", ".STORAGE_BASE.", `maxstore` - ".$buildarray[$level]['attri']."),
+                                `maxstore` = IF(`maxstore` - ".$buildarray[$level]['attri']." <= ".STORAGE_BASE.", ".STORAGE_BASE.", `maxstore` - ".$buildarray[$level]['attri'].")
                             WHERE
                                 wref=".(int) $vil['vref']);
                 }
@@ -3404,7 +3408,7 @@ class Automation {
                     $database->query("
                         UPDATE ".TB_PREFIX."vdata
                             SET
-                                `maxcrop` = IF(`maxcrop` - ".$buildarray[$level]['attri']." <= ".STORAGE_BASE.", ".STORAGE_BASE.", `maxcrop` - ".$buildarray[$level]['attri']."),
+                                `maxcrop` = IF(`maxcrop` - ".$buildarray[$level]['attri']." <= ".STORAGE_BASE.", ".STORAGE_BASE.", `maxcrop` - ".$buildarray[$level]['attri'].")
                             WHERE
                                 wref=".(int) $vil['vref']);
                 }
@@ -3414,10 +3418,16 @@ class Automation {
 
                 if ($database->getVillageField($vil['vref'], 'natar') == 1 && $type == 40) $clear = ""; //fix by ronix - fixed by iopietro
 
-                $q = "UPDATE ".TB_PREFIX."fdata SET f".$vil['buildnumber']."=".(($level - 1 >= 0) ? $level - 1 : 0).$clear." WHERE vref=".(int) $vil['vref'];
+$q = "
+UPDATE ".TB_PREFIX."fdata
+SET
+    f".$vil['buildnumber']."=".$newLevel."
+    ".$clear."
+WHERE
+    vref=".(int)$vil['vref'];
                 $database->query($q);
 
-                $pop = $this->getPop($type, $level - 1);
+                $pop = $this->getPop($type, $newLevel);
                 $database->modifyPop($vil['vref'], $pop[0], 1);
                 $this->procClimbers($database->getVillageField($vil['vref'], 'owner'));
                 $database->delDemolition($vil['vref'], true);

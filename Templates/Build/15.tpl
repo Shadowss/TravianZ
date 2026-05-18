@@ -1,41 +1,52 @@
 <?php
-include("next.tpl");
-?>
-<div id="build" class="gid15"><a href="#" onClick="return Popup(15,4);" class="build_logo">
-	<img class="building g15" src="img/x.gif" alt="Main Building" title="<?php echo MAINBUILDING; ?>" />
-</a>
-<h1><?php echo MAINBUILDING; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc"><?php echo MAINBUILDING_DESC; ?></p>
 
+// MAIN BUILDING
 
-	<table cellpadding="1" cellspacing="1" id="build_value">
-		<tr>
-			<th><?php echo CURRENT_CONSTRUCTION_TIME; ?></th>
-			<td><b><?php echo $village->resarray['f'.$id] > 0 ? round($bid15[$village->resarray['f'.$id]]['attri']) : 300; ?></b> <?php echo PERCENT; ?></td>
-		</tr>
-		<tr>
-		<?php 
-        if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-		$next = $village->resarray['f'.$id] + 1 + $loopsame + $doublebuild + $master;
-		if($next <= 20){
-        ?>
-			<th><?php echo CONSTRUCTION_TIME_LEVEL; ?> <?php echo $next; ?>:</th>
-			<td><b><?php echo round($bid15[$next]['attri']); ?></b> <?php echo PERCENT; ?></td>
-            <?php
-            }else{
-        ?>
-			<th><?php echo CONSTRUCTION_TIME_LEVEL; ?> 20:</th>
-			<td><b><?php echo round($bid15[20]['attri']); ?></b> <?php echo PERCENT; ?></td>
-            <?php
-			}}
-            ?>
-		</tr>
-	</table>
-	
-<?php 
-if($village->resarray['f'.$id] >= 10){
-	include("Templates/Build/15_1.tpl");
-}
-include("upgrade.tpl");
+include 'next.tpl';
+
+$field         = 'f' . $id;
+$currentLevel  = (int)($village->resarray[$field] ?? 0);
+$buildingType  = $village->resarray[$field . 't'] ?? 0;
+
+$currentTime   = $currentLevel > 0 ? round($bid15[$currentLevel]['attri']) : 300;
+
+$isMax         = $building->isMax($buildingType, $id);
+$maxLevel      = 20;
+
+$nextLevelRaw  = $currentLevel + 1 + $loopsame + $doublebuild + $master;
+$nextLevel     = min($nextLevelRaw, $maxLevel);
+$nextTime      = round($bid15[$nextLevel]['attri']);
 ?>
-</p></div>
+<div id="build" class="gid15">
+    <a href="#" onclick="return Popup(15,4);" class="build_logo">
+        <img class="building g15" src="img/x.gif" alt="<?= MAINBUILDING ?>" title="<?= MAINBUILDING ?>">
+    </a>
+
+    <h1>
+        <?= MAINBUILDING ?>
+        <span class="level"><?= LEVEL ?> <?= $currentLevel ?></span>
+    </h1>
+
+    <p class="build_desc"><?= MAINBUILDING_DESC ?></p>
+
+    <table cellpadding="1" cellspacing="1" id="build_value">
+        <tr>
+            <th><?= CURRENT_CONSTRUCTION_TIME ?>:</th>
+            <td><b><?= $currentTime ?></b> <?= PERCENT ?></td>
+        </tr>
+
+        <?php if (!$isMax): ?>
+        <tr>
+            <th><?= CONSTRUCTION_TIME_LEVEL ?> <?= $nextLevel ?>:</th>
+            <td><b><?= $nextTime ?></b> <?= PERCENT ?></td>
+        </tr>
+        <?php endif; ?>
+    </table>
+
+    <?php
+    if ($currentLevel >= 10) {
+        include 'Templates/Build/15_1.tpl';
+    }
+    include 'upgrade.tpl';
+    ?>
+</div>

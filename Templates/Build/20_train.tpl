@@ -1,41 +1,57 @@
 <?php
+// 20_train.tpl - STABLE UNIT TRAIN
+global $session, $technology, $village, $database, $generator, $building, $bid20, $bid41, $id;
+
+$tribe = (int)$session->tribe;
+$start = ($tribe - 1) * 10 + 4 - ($tribe == 3 ? 1 : 0) + ($tribe == 2 ? 1 : 0);
+$end = $tribe * 10 - 4;
 $success = 0;
-$start = ($session->tribe - 1) * 10 + 4 - (($session->tribe == 3) ? 1 : 0) + (($session->tribe == 2) ? 1 : 0);
-$end = $session->tribe * 10 - 4;
+$horseTrough = $building->getTypeLevel(41);
 
-for($i = $start; $i <= $end; $i++) {
-	if($technology->getTech($i)) {
-    echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u$i\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
-		<a href=\"#\" onClick=\"return Popup($i,1);\">".$technology->getUnitName($i)."</a> <span class=\"info\">(".AVAILABLE.": ".$village->unitarray['u'.$i].")</span></div>";
-		if(${'u'.$i}['drinking'] <= $building->getTypeLevel(41)) {
-		        echo "<div class=\"details\">
-							<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"".LUMBER."\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"".CLAY."\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"".IRON."\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"".CROP."\" />".${'u'.$i}['crop']."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"".CROP_COM."\" />".(${'u'.$i}['pop']-1)."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />";
-}else{
-        echo "<div class=\"details\">
-							<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"".LUMBER."\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"".CLAY."\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"".IRON."\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"".CROP."\" />".${'u'.$i}['crop']."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"".CROP_COM."\" />".(${'u'.$i}['pop'])."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"".DURATION."\" />";
-}
-        $dur = $database->getArtifactsValueInfluence($session->uid, $village->wid, 5, round(${'u'.$i}['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100) * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / SPEED));
-		echo $generator->getTimeFormat($dur);
-		
-        //-- If available resources combined are not enough, remove NPC button
-        $total_required = (int)(${'u'.$i}['wood'] + ${'u'.$i}['clay'] + ${'u'.$i}['iron'] + ${'u'.$i}['crop']);
+for ($i = $start; $i <= $end; $i++) {
+    if (!$technology->getTech($i)) continue;
 
-        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required) {
-                   echo "|<a href=\"build.php?gid=17&t=3&r1=".((${'u'.$i}['wood'])*$technology->maxUnitPlus($i))."&r2=".((${'u'.$i}['clay'])*$technology->maxUnitPlus($i))."&r3=".((${'u'.$i}['iron'])*$technology->maxUnitPlus($i))."&r4=".((${'u'.$i}['crop'])*$technology->maxUnitPlus($i))."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
-                 }  
-        echo "</div></td>
-					<td class=\"val\">
-						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"10\">
-					</td>
+    $unitData = ${'u'.$i};
+    $name = $technology->getUnitName($i);
+    $maxTrain = $technology->maxUnit($i);
+    $maxPlus = $technology->maxUnitPlus($i);
+    $available = (int)($village->unitarray['u'.$i] ?? 0);
 
-					<td class=\"max\">
-						<a href=\"#\" onClick=\"document.snd.t$i.value=".$technology->maxUnit($i)."; return false;\">(".$technology->maxUnit($i).")</a>
-					</td>
-				</tr>";
-          $success += 1;
-    }
-}
-if($success == 0) {
-	echo "<tr><td colspan=\"3\"><div class=\"none\" align=\"center\">".AVAILABLE_ACADEMY."</div></td></tr>";
-}
+    $pop = (int)$unitData['pop'] - ($unitData['drinking'] <= $horseTrough ? 1 : 0);
+
+    $baseTime = $unitData['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100);
+    if ($horseTrough >= 1) $baseTime *= (1 / $bid41[$horseTrough]['attri']);
+    $dur = $database->getArtifactsValueInfluence($session->uid, $village->wid, 5, round($baseTime / SPEED));
+    $timeFormatted = $generator->getTimeFormat($dur);
+
+    $total_required = (int)($unitData['wood'] + $unitData['clay'] + $unitData['iron'] + $unitData['crop']);
+    $showNpc = $session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $total_required;
+    $success++;
 ?>
+<tr>
+    <td class="desc">
+        <div class="tit">
+            <img class="unit u<?php echo $i;?>" src="img/x.gif" alt="<?php echo htmlspecialchars($name);?>" title="<?php echo htmlspecialchars($name);?>" />
+            <a href="#" onClick="return Popup(<?php echo $i;?>,1);"><?php echo htmlspecialchars($name);?></a>
+            <span class="info">(<?php echo AVAILABLE;?>: <?php echo $available;?>)</span>
+        </div>
+        <div class="details">
+            <img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER;?>" /><?php echo (int)$unitData['wood'];?>|
+            <img class="r2" src="img/x.gif" alt="Clay" title="<?php echo CLAY;?>" /><?php echo (int)$unitData['clay'];?>|
+            <img class="r3" src="img/x.gif" alt="Iron" title="<?php echo IRON;?>" /><?php echo (int)$unitData['iron'];?>|
+            <img class="r4" src="img/x.gif" alt="Crop" title="<?php echo CROP;?>" /><?php echo (int)$unitData['crop'];?>|
+            <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM;?>" /><?php echo $pop;?>|
+            <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION;?>" /><?php echo $timeFormatted;?>
+            <?php if ($showNpc):?>
+                |<a href="build.php?gid=17&t=3&r1=<?php echo (int)$unitData['wood']*$maxPlus;?>&r2=<?php echo (int)$unitData['clay']*$maxPlus;?>&r3=<?php echo (int)$unitData['iron']*$maxPlus;?>&r4=<?php echo (int)$unitData['crop']*$maxPlus;?>" title="NPC trade"><img class="npc" src="img/x.gif" alt="NPC trade" /></a>
+            <?php endif;?>
+        </div>
+    </td>
+    <td class="val"><input type="text" class="text" name="t<?php echo $i;?>" value="0" maxlength="10"></td>
+    <td class="max"><a href="#" onClick="document.snd.t<?php echo $i;?>.value=<?php echo $maxTrain;?>; return false;">(<?php echo $maxTrain;?>)</a></td>
+</tr>
+<?php } ?>
+
+<?php if ($success === 0):?>
+<tr><td colspan="3"><div class="none" align="center"><?php echo AVAILABLE_ACADEMY;?></div></td></tr>
+<?php endif;?>

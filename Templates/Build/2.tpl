@@ -1,55 +1,48 @@
 <?php
-include("next.tpl");
+
+// CLAYPIT
+
+include 'next.tpl';
+
+// — pregătire date —
+$field         = 'f' . $id;
+$currentLevel  = (int) ($village->resarray[$field] ?? 0);
+$buildingType  = $village->resarray[$field . 't'] ?? 0;
+
+$currentProd   = $bid2[$currentLevel]['prod'] * SPEED;
+
+$isMax         = $building->isMax($buildingType, $id);
+$maxLevel      = ($village->capital == 1) ? 20 : 10;
+
+$nextLevelRaw  = $currentLevel + 1 + $loopsame + $doublebuild + $master;
+$nextLevel     = min($nextLevelRaw, $maxLevel);
+$nextProd      = $bid2[$nextLevel]['prod'] * SPEED;
 ?>
-<div id="build" class="gid2"><a href="#" onClick="return Popup(2,4);" class="build_logo">
-<img class="building g2" src="img/x.gif" alt="<?php echo CLAYPIT; ?>" title="<?php echo CLAYPIT; ?>" />
-</a>
-<h1><?php echo CLAYPIT; ?> <span class="level"><?php echo LEVEL." "; echo $village->resarray['f'.$id]; ?></span></h1>
-<p class="build_desc"><?php echo CLAYPIT_DESC; ?></p>
+<div id="build" class="gid2">
+    <a href="#" onclick="return Popup(2,4);" class="build_logo">
+        <img class="building g2" src="img/x.gif" alt="<?= CLAYPIT ?>" title="<?= CLAYPIT ?>">
+    </a>
 
-<table cellpadding="1" cellspacing="1" id="build_value">
-	<tr>
-		<th><?php echo CUR_PROD; ?>:</th>
-		<td><b><?php echo $bid2[$village->resarray['f'.$id]]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
-	</tr>
-	 <?php 
-    if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
-	$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
-	if($village->capital == 1) {
-	if($next<=20){
-    ?>
-	<tr>
-		<th><?php echo NEXT_PROD; echo $next; ?>:</th>
-		<td><b><?php echo $bid2[$next]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
-	</tr>
-    <?php 
-    }else{
-	?>
-	<tr>
-		<th><?php echo NEXT_PROD; echo 20; ?>:</th>
-		<td><b><?php echo $bid2[20]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
-	</tr>	
-	<?php
-	}}else{
-	if($next<=10){
-    ?>
-	<tr>
-		<th><?php echo NEXT_PROD; echo $next; ?>:</th>
-		<td><b><?php echo $bid2[$next]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
-	</tr>
-    <?php 
-    }else{
-	?>
-	<tr>
-		<th><?php echo NEXT_PROD; echo 10; ?>:</th>
-		<td><b><?php echo $bid2[10]['prod']* SPEED; ?></b> <?php echo PER_HR; ?></td>
-	</tr>	
-	<?php
-	}}}
-    ?>
-</table>
+    <h1>
+        <?= CLAYPIT ?>
+        <span class="level"><?= LEVEL ?> <?= $currentLevel ?></span>
+    </h1>
 
-<?php 
-include("upgrade.tpl");
-?></p></div>
+    <p class="build_desc"><?= CLAYPIT_DESC ?></p>
 
+    <table cellpadding="1" cellspacing="1" id="build_value">
+        <tr>
+            <th><?= CUR_PROD ?>:</th>
+            <td><b><?= $currentProd ?></b> <?= PER_HR ?></td>
+        </tr>
+
+        <?php if (!$isMax): ?>
+        <tr>
+            <th><?= NEXT_PROD ?> <?= $nextLevel ?>:</th>
+            <td><b><?= $nextProd ?></b> <?= PER_HR ?></td>
+        </tr>
+        <?php endif; ?>
+    </table>
+
+    <?php include 'upgrade.tpl'; ?>
+</div>
