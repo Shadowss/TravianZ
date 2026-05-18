@@ -543,18 +543,16 @@ class Battle {
 
         $involve += $datadef['involve'];
 
-        if (!empty($Defender['hero']) && !empty($defenderhero)) {
-
-            $units['Def_unit']['hero'] = $Defender['hero'];
-
-            $own_dp  += $defenderhero['di'];
-            $own_cdp += $defenderhero['dc'];
-
-            $own_dp  *= $defenderhero['db'];
-            $own_cdp *= $defenderhero['db'];
-        }
-
-        $dp  += $own_dp;
+        if(isset($Defender['hero']) && $Defender['hero'] != 0){
+			
+                $units['Def_unit']['hero'] = $Defender['hero'];
+                $own_cdp += $defenderhero['dc'];
+                $own_dp += $defenderhero['di'];
+                $own_dp *= $defenderhero['db'];
+                $own_cdp *= $defenderhero['db'];
+            }
+			
+        $dp += $own_dp;
         $cdp += $own_cdp;
     }
 
