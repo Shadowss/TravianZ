@@ -158,29 +158,62 @@ Gold
 </table>
 <br />
 
-<!-- ================= TROOPS (UNCHANGED STRUCTURE, ONLY CLEAN OUTPUT) ================= -->
+<!-- ================= TROOPS ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
 <thead>
-<tr><th colspan="6">Troops</th></tr>
 <tr>
-<td><img src="img/romenai.png"></td><td>Total</td>
-<td><img src="img/germanai.png"></td><td>Total</td>
-<td><img src="img/galai.png"></td><td>Total</td>
+    <th colspan="6">Troops</th>
+</tr>
+<tr>
+    <td><img src="img/romenai.png"></td><td>Total</td>
+    <td><img src="img/germanai.png"></td><td>Total</td>
+    <td><img src="img/galai.png"></td><td>Total</td>
 </tr>
 </thead>
+
 <tbody>
 
 <?php
-// SAFE: preload all sums once (fix performance + clean code)
-$units = [];
-$result = mysqli_query($database->dblink, "SELECT 
-    SUM(u1) AS u1, SUM(u2) AS u2, SUM(u3) AS u3, SUM(u4) AS u4, SUM(u5) AS u5,
-    SUM(u6) AS u6, SUM(u7) AS u7, SUM(u8) AS u8, SUM(u9) AS u9, SUM(u10) AS u10,
-    SUM(u11) AS u11, SUM(u12) AS u12, SUM(u13) AS u13, SUM(u14) AS u14, SUM(u15) AS u15,
-    SUM(u16) AS u16, SUM(u17) AS u17, SUM(u18) AS u18, SUM(u19) AS u19, SUM(u20) AS u20,
-    SUM(u21) AS u21, SUM(u22) AS u22, SUM(u23) AS u23, SUM(u24) AS u24, SUM(u25) AS u25,
-    SUM(u26) AS u26, SUM(u27) AS u27, SUM(u28) AS u28, SUM(u29) AS u29, SUM(u30) AS u30
-    FROM ".TB_PREFIX."units");
+// preload all troop sums once
+$units = array();
+
+$result = mysqli_query($database->dblink, "
+    SELECT 
+        SUM(u1) AS u1,
+        SUM(u2) AS u2,
+        SUM(u3) AS u3,
+        SUM(u4) AS u4,
+        SUM(u5) AS u5,
+        SUM(u6) AS u6,
+        SUM(u7) AS u7,
+        SUM(u8) AS u8,
+        SUM(u9) AS u9,
+        SUM(u10) AS u10,
+
+        SUM(u11) AS u11,
+        SUM(u12) AS u12,
+        SUM(u13) AS u13,
+        SUM(u14) AS u14,
+        SUM(u15) AS u15,
+        SUM(u16) AS u16,
+        SUM(u17) AS u17,
+        SUM(u18) AS u18,
+        SUM(u19) AS u19,
+        SUM(u20) AS u20,
+
+        SUM(u21) AS u21,
+        SUM(u22) AS u22,
+        SUM(u23) AS u23,
+        SUM(u24) AS u24,
+        SUM(u25) AS u25,
+        SUM(u26) AS u26,
+        SUM(u27) AS u27,
+        SUM(u28) AS u28,
+        SUM(u29) AS u29,
+        SUM(u30) AS u30
+
+    FROM ".TB_PREFIX."units
+");
 
 if ($result) {
     $units = mysqli_fetch_assoc($result);
@@ -192,80 +225,129 @@ function u($units, $key) {
 }
 ?>
 
-<!-- ROMANS / GAULS / TEUTONS -->
-
 <!-- ROW 1 -->
 <tr>
-<td><img src="img/x.gif" class="unit u1"></td><td><?= u($u,'u1') ?></td>
-<td><img src="img/x.gif" class="unit u11"></td><td><?= u($u,'u11') ?></td>
-<td><img src="img/x.gif" class="unit u21"></td><td><?= u($u,'u21') ?></td>
+    <td><img src="img/x.gif" class="unit u1"></td>
+    <td><?= u($units, 'u1') ?></td>
+
+    <td><img src="img/x.gif" class="unit u11"></td>
+    <td><?= u($units, 'u11') ?></td>
+
+    <td><img src="img/x.gif" class="unit u21"></td>
+    <td><?= u($units, 'u21') ?></td>
 </tr>
 
 <!-- ROW 2 -->
 <tr>
-<td><img src="img/x.gif" class="unit u2"></td><td><?= u($u,'u2') ?></td>
-<td><img src="img/x.gif" class="unit u12"></td><td><?= u($u,'u12') ?></td>
-<td><img src="img/x.gif" class="unit u22"></td><td><?= u($u,'u22') ?></td>
+    <td><img src="img/x.gif" class="unit u2"></td>
+    <td><?= u($units, 'u2') ?></td>
+
+    <td><img src="img/x.gif" class="unit u12"></td>
+    <td><?= u($units, 'u12') ?></td>
+
+    <td><img src="img/x.gif" class="unit u22"></td>
+    <td><?= u($units, 'u22') ?></td>
 </tr>
 
 <!-- ROW 3 -->
 <tr>
-<td><img src="img/x.gif" class="unit u3"></td><td><?= u($u,'u3') ?></td>
-<td><img src="img/x.gif" class="unit u13"></td><td><?= u($u,'u13') ?></td>
-<td><img src="img/x.gif" class="unit u23"></td><td><?= u($u,'u23') ?></td>
+    <td><img src="img/x.gif" class="unit u3"></td>
+    <td><?= u($units, 'u3') ?></td>
+
+    <td><img src="img/x.gif" class="unit u13"></td>
+    <td><?= u($units, 'u13') ?></td>
+
+    <td><img src="img/x.gif" class="unit u23"></td>
+    <td><?= u($units, 'u23') ?></td>
 </tr>
 
 <!-- ROW 4 -->
 <tr>
-<td><img src="img/x.gif" class="unit u4"></td><td><?= u($u,'u4') ?></td>
-<td><img src="img/x.gif" class="unit u14"></td><td><?= u($u,'u14') ?></td>
-<td><img src="img/x.gif" class="unit u24"></td><td><?= u($u,'u24') ?></td>
+    <td><img src="img/x.gif" class="unit u4"></td>
+    <td><?= u($units, 'u4') ?></td>
+
+    <td><img src="img/x.gif" class="unit u14"></td>
+    <td><?= u($units, 'u14') ?></td>
+
+    <td><img src="img/x.gif" class="unit u24"></td>
+    <td><?= u($units, 'u24') ?></td>
 </tr>
 
 <!-- ROW 5 -->
 <tr>
-<td><img src="img/x.gif" class="unit u5"></td><td><?= u($u,'u5') ?></td>
-<td><img src="img/x.gif" class="unit u15"></td><td><?= u($u,'u15') ?></td>
-<td><img src="img/x.gif" class="unit u25"></td><td><?= u($u,'u25') ?></td>
+    <td><img src="img/x.gif" class="unit u5"></td>
+    <td><?= u($units, 'u5') ?></td>
+
+    <td><img src="img/x.gif" class="unit u15"></td>
+    <td><?= u($units, 'u15') ?></td>
+
+    <td><img src="img/x.gif" class="unit u25"></td>
+    <td><?= u($units, 'u25') ?></td>
 </tr>
 
 <!-- ROW 6 -->
 <tr>
-<td><img src="img/x.gif" class="unit u6"></td><td><?= u($u,'u6') ?></td>
-<td><img src="img/x.gif" class="unit u16"></td><td><?= u($u,'u16') ?></td>
-<td><img src="img/x.gif" class="unit u26"></td><td><?= u($u,'u26') ?></td>
+    <td><img src="img/x.gif" class="unit u6"></td>
+    <td><?= u($units, 'u6') ?></td>
+
+    <td><img src="img/x.gif" class="unit u16"></td>
+    <td><?= u($units, 'u16') ?></td>
+
+    <td><img src="img/x.gif" class="unit u26"></td>
+    <td><?= u($units, 'u26') ?></td>
 </tr>
 
 <!-- ROW 7 -->
 <tr>
-<td><img src="img/x.gif" class="unit u7"></td><td><?= u($u,'u7') ?></td>
-<td><img src="img/x.gif" class="unit u17"></td><td><?= u($u,'u17') ?></td>
-<td><img src="img/x.gif" class="unit u27"></td><td><?= u($u,'u27') ?></td>
+    <td><img src="img/x.gif" class="unit u7"></td>
+    <td><?= u($units, 'u7') ?></td>
+
+    <td><img src="img/x.gif" class="unit u17"></td>
+    <td><?= u($units, 'u17') ?></td>
+
+    <td><img src="img/x.gif" class="unit u27"></td>
+    <td><?= u($units, 'u27') ?></td>
 </tr>
 
 <!-- ROW 8 -->
 <tr>
-<td><img src="img/x.gif" class="unit u8"></td><td><?= u($u,'u8') ?></td>
-<td><img src="img/x.gif" class="unit u18"></td><td><?= u($u,'u18') ?></td>
-<td><img src="img/x.gif" class="unit u28"></td><td><?= u($u,'u28') ?></td>
+    <td><img src="img/x.gif" class="unit u8"></td>
+    <td><?= u($units, 'u8') ?></td>
+
+    <td><img src="img/x.gif" class="unit u18"></td>
+    <td><?= u($units, 'u18') ?></td>
+
+    <td><img src="img/x.gif" class="unit u28"></td>
+    <td><?= u($units, 'u28') ?></td>
 </tr>
 
 <!-- ROW 9 -->
 <tr>
-<td><img src="img/x.gif" class="unit u9"></td><td><?= u($u,'u9') ?></td>
-<td><img src="img/x.gif" class="unit u19"></td><td><?= u($u,'u19') ?></td>
-<td><img src="img/x.gif" class="unit u29"></td><td><?= u($u,'u29') ?></td>
+    <td><img src="img/x.gif" class="unit u9"></td>
+    <td><?= u($units, 'u9') ?></td>
+
+    <td><img src="img/x.gif" class="unit u19"></td>
+    <td><?= u($units, 'u19') ?></td>
+
+    <td><img src="img/x.gif" class="unit u29"></td>
+    <td><?= u($units, 'u29') ?></td>
 </tr>
 
 <!-- ROW 10 -->
 <tr>
-<td><img src="img/x.gif" class="unit u10"></td><td><?= u($u,'u10') ?></td>
-<td><img src="img/x.gif" class="unit u20"></td><td><?= u($u,'u20') ?></td>
-<td><img src="img/x.gif" class="unit u30"></td><td><?= u($u,'u30') ?></td>
+    <td><img src="img/x.gif" class="unit u10"></td>
+    <td><?= u($units, 'u10') ?></td>
+
+    <td><img src="img/x.gif" class="unit u20"></td>
+    <td><?= u($units, 'u20') ?></td>
+
+    <td><img src="img/x.gif" class="unit u30"></td>
+    <td><?= u($units, 'u30') ?></td>
 </tr>
 
 </tbody>
 </table>
+
 <br />
 <!-- ================= MISC ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
