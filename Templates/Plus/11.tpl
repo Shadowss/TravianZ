@@ -14,25 +14,30 @@
 
 if($session->sit == 0) {
     $uid  = (int)$session->uid;
+    $wid  = (int)$village->wid;
     $now  = time();
     $cost = 5;
 
-    // UPDATE atomic: scade gold doar dacă ai, și prelungește b3
+    // UPDATE atomic
     $sql = "UPDATE ".TB_PREFIX."users 
             SET gold = gold - $cost,
                 b3 = IF(b3 > $now, b3 + ".PLUS_PRODUCTION.", $now + ".PLUS_PRODUCTION.")
-            WHERE id = '$uid' AND gold >= $cost";
+            WHERE id = $uid AND gold >= $cost";
 
-    mysqli_query($database->dblink, $sql) or die(mysqli_error($database->dblink));
+    mysqli_query($database->dblink, $sql);
 
     if(mysqli_affected_rows($database->dblink) == 1) {
-        // succes - update instant în sesiune
         $session->gold -= $cost;
+        $_SESSION['gold'] = $session->gold;
+        $session->b3 = ($session->b3 > $now ? $session->b3 : $now) + PLUS_PRODUCTION;
 
-        // log
-        mysqli_query($database->dblink, "INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', '+25% Production: Iron')") or die(mysqli_error($database->dblink));
+        // LOG pentru a2b2
+        mysqli_query($database->dblink,
+            "INSERT INTO ".TB_PREFIX."gold_fin_log 
+             (uid, wid, action, gold, time, details) 
+             VALUES ($uid, $wid, 'Use 5 gold for +25% Iron', -$cost, $now, '+25% Production: Iron')"
+        );
 
-        // invalidează cache v9
         if(method_exists($database, 'clearUserCache')) {
             $database->clearUserCache($uid);
         }

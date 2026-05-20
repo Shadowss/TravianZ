@@ -13,26 +13,34 @@
 #################################################################################
 
 if($session->sit == 0) {
-    $now = time();
-    $uid = (int)$session->uid;
+    $now  = time();
+    $uid  = (int)$session->uid;
+    $wid  = (int)$village->wid;
     $cost = 10;
 
-    // un singur UPDATE: scade gold DOAR dacă ai destul, și prelungește plus-ul
+    // 1. scade gold și prelungește plus-ul ATOMIC
     $sql = "UPDATE ".TB_PREFIX."users 
             SET gold = gold - $cost,
                 plus = IF(plus > $now, plus + ".PLUS_TIME.", $now + ".PLUS_TIME.")
-            WHERE id = '$uid' AND gold >= $cost";
+            WHERE id = $uid AND gold >= $cost";
 
-    mysqli_query($database->dblink, $sql) or die(mysqli_error($database->dblink));
+    mysqli_query($database->dblink, $sql);
 
     if(mysqli_affected_rows($database->dblink) == 1) {
-        // a reușit - actualizează sesiunea instant
+        // 2. update sesiune
         $session->gold -= $cost;
+        $_SESSION['gold'] = $session->gold;
+        $session->plus = ($session->plus > $now ? $session->plus : $now) + PLUS_TIME;
 
-        // log (opțional)
-        mysqli_query($database->dblink, "INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', 'Plus Account')") or die(mysqli_error($database->dblink));
-        
-        // invalidează cache v9
+        // 3. LOG pentru a2b2.php
+        $vname = mysqli_real_escape_string($database->dblink, $village->vname);
+		mysqli_query($database->dblink,
+		"INSERT INTO ".TB_PREFIX."gold_fin_log 
+		(uid, wid, action, gold, time, details) 
+		VALUES ($uid, $wid, 'Buy Travian Plus', -$cost, $now, 'Buy Travian Plus')"
+		);
+
+        // 4. curăță cache
         if(method_exists($database, 'clearUserCache')) {
             $database->clearUserCache($uid);
         }

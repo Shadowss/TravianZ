@@ -898,10 +898,16 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `wid` int(11) NULL,
- `log` text NULL,
- PRIMARY KEY (`id`)
+  id int(11) NOT NULL AUTO_INCREMENT,
+  uid int(11) NOT NULL DEFAULT 0,
+  wid int(11) NOT NULL DEFAULT 0,
+  action varchar(128) NOT NULL DEFAULT '',
+  gold int(11) NOT NULL DEFAULT 0,
+  time int(11) NOT NULL DEFAULT 0,
+  log varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY uid (uid),
+  KEY time (time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
