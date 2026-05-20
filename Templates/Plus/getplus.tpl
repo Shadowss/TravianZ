@@ -1,122 +1,82 @@
 <?php
-
-//////////////     edited by Pyrrhic of A.G.B.   /////////////////////////
-
-
 include("Templates/Plus/pmenu.tpl");
 
+$uid = (int)$session->uid;
+$plusTime = 604800; // 7 zile
 
-	echo " <br /><div align=center><h2>Get <font color=#71D000>P</font><font color=#FF6F0F>l</font><font  color=#71D000>u</font><font color=#FF6F0F>s</font></h2>";
-	echo " <br /> To enter you login then select the plus site. <br />You will be redirected to the plus site.";
-	echo " <br /> <i>The plus system will be monitored. Account name, site plus on ip, <br /> and points given are logged,<br /> if caught cheating account will be banned.</i> <br /> <br /> </div>";
+echo '<br><div align="center"><h2>Get <font color="#71D000">P</font><font color="#FF6F0F">l</font><font color="#71D000">u</font><font color="#FF6F0F">s</font></h2>';
+echo 'Exchange gold for Plus features. All actions are logged.</div><br>';
 
-if(!$_POST['plus']){
-echo <<<EOT
+if(empty($_POST['plus'])) {
+?>
 <form method="POST">
-<table border="0" width="300" align="center">
-<tr><td><b>$session->username</b></td></tr>
-<tr><td align=center><b>Select Reward: </b>
-		<select name="reward">
-			<option value="error" selected>Select reward...</option>
-			<option value="p_plus">VIP Account</option>
-			<option value="p_b1">Lumber</option>
-			<option value="p_b2">Clay</option>
-			<option value="p_b3">Iron</option>
-			<option value="p_b4">Crop </option>";
-		</select><br/><br/>
-  <input type="submit" name="plus" value="Get Now"></td></tr>
+<table width="300" align="center">
+<tr><td><b><?= $session->username ?></b> – Gold: <?= $session->gold ?></td></tr>
+<tr><td align="center"><b>Select Reward:</b>
+    <select name="reward" required>
+        <option value="">Select reward...</option>
+        <option value="plus">VIP Account (10 gold – 7 days)</option>
+        <option value="b1">Lumber +25% (5 gold)</option>
+        <option value="b2">Clay +25% (5 gold)</option>
+        <option value="b3">Iron +25% (5 gold)</option>
+        <option value="b4">Crop +25% (5 gold)</option>
+    </select><br><br>
+    <input type="submit" name="plus" value="Get Now">
+</td></tr>
 </table>
 </form>
-<br /> <br /> 
-
-EOT;
-}else{
-
-    $account = mysqli_real_escape_string($database->dblink,$_POST['username']);
-    $reward = mysqli_real_escape_string($database->dblink,$_POST['reward']);
-    $valid=TRUE;
-
-
-    if($reward == ""){
-        echo "<b>ERROR:</b><br />";
-        echo "Please select a reward.";
-        echo "<br /><br /><input type=\"button\" value=\"Back\" onclick=\"history.go(-1)\">";
-        $valid=FALSE;
-    }
-
-    if(!$valid) break;
-    $valid=TRUE; 
-/////////////////////////////////////////////////////////
-    $plusTime = 604800; // 7 days
-    $time = time();
-    $giveplus = ($time + $plustime);
-    $accountCheck = mysqli_fetch_array(mysqli_query($database->dblink,"SELECT Count(*) as Total FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'"), MYSQLI_ASSOC) or die(mysqli_error($database->dblink));
-    if($accountCheck['Total'] <= 0){
-        echo "<b>ERROR:</b><br />";
-        echo "The account name you entered does not exist.";
-        echo "<br /><br /><input type=\"button\" value=\"Back\" onclick=\"history.go(-1)\">";
-        $valid=FALSE;
-    }
-    if(!$valid) break;
-    $valid=TRUE;
-
-    $plusCheck = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-    $pluss = mysqli_fetch_array($plusCheck);
-
-    switch($reward){
-      case 'p_plus':
-        $key='plus';
-        $gldz='10';
-        $url='URL=./plus.php?id=3';
-        break;
-      case 'p_b1':
-        $key ='b1';
-        $gldz='5';
-        $url='URL=./plus.php?id=3';
-        break;
-      case 'p_b2':
-        $key ='b2';
-        $gldz='5';
-        $url='URL=./plus.php?id=3';
-        break;
-      case 'p_b3':
-        $key ='b3';
-        $gldz='5';
-        $url='URL=./plus.php?id=3';
-        break;
-      case 'p_b4':
-        $key ='b4';
-        $gldz='5';
-        $url='URL=./plus.php?id=3';
-        break;
-
-      default:
-echo' Please select the option you wish to activate or extend.<br>';
-        $valid=FALSE;
-        break;
-    }
-    if(!$valid) break;
-    $valid=TRUE;
+<?php
+} else {
+    $reward = $_POST['reward'] ?? '';
     
-
-
-    if(mysqli_num_rows($plusCheck) > 0){ 
-        if($time > $pluss[$key] ){
-            $editplus = mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` + ('".$time."'+'".$plusTime."'),  `gold` =  `gold` - {$gldz}   WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-            echo "<META HTTP-EQUIV=Refresh CONTENT=\"2; {$url}\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
-       }else
-        if($time < $pluss[$key]){
-            $editplus = mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET `{$key}`= `{$key}` +'".$plusTime."',  `gold` =  `gold` - {$gldz}  WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-            echo "<META HTTP-EQUIV=Refresh CONTENT=\"2; {$url}\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
-       
-       }
+    // whitelist
+    $map = [
+        'plus' => ['field'=>'plus','cost'=>10],
+        'b1'   => ['field'=>'b1','cost'=>5],
+        'b2'   => ['field'=>'b2','cost'=>5],
+        'b3'   => ['field'=>'b3','cost'=>5],
+        'b4'   => ['field'=>'b4','cost'=>5],
+    ];
+    
+    if(!isset($map[$reward])) {
+        die('<b>ERROR:</b> Invalid reward. <button onclick="history.back()">Back</button>');
     }
-else{
-        $insertplus = mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."users (`username`,`{$key}`, `gold`) VALUES ('".$session->username."', ('".$time."'+'".$plusTime."'),`gold` - {$gldz})") or die(mysqli_error($database->dblink));
-        echo "<META HTTP-EQUIV=Refresh CONTENT=\"3; {$url})\" ><br /><br /><div align=center><font color=green size=4><b> Your Status has been updated!</b></font></div>";
-	 }   
+    
+    $field = $map[$reward]['field'];
+    $cost = $map[$reward]['cost'];
+    $now = time();
+    
+    // 1. scade gold ATOMIC – doar dacă ai suficient
+    $goldUpd = mysqli_query($database->dblink,
+        "UPDATE ".TB_PREFIX."users SET gold = gold - $cost 
+         WHERE id = $uid AND gold >= $cost"
+    );
+    
+    if(mysqli_affected_rows($database->dblink) != 1) {
+        die('<div align="center"><font color="red"><b>Not enough gold!</b></font><br><button onclick="history.back()">Back</button></div>');
+    }
+    
+    // 2. adaugă timpul la feature
+    // dacă a expirat, setează de acum, altfel adaugă
+    mysqli_query($database->dblink,
+        "UPDATE ".TB_PREFIX."users 
+         SET `$field` = IF(`$field` < $now, $now + $plusTime, `$field` + $plusTime)
+         WHERE id = $uid"
+    );
+    
+    // 3. update sesiune
+    $session->gold -= $cost;
+    $_SESSION['gold'] = $session->gold;
+    $session->$field = max($session->$field, $now) + $plusTime;
+    
+    // 4. log
+    mysqli_query($database->dblink,
+        "INSERT INTO ".TB_PREFIX."gold_fin_log (wid, action, time) 
+         VALUES (0, 'Bought $field for $cost gold', $now)"
+    );
+    
+    echo '<meta http-equiv="refresh" content="2;url=plus.php?id=3">';
+    echo '<br><div align="center"><font color="green" size="4"><b>Your status has been updated!</b></font></div>';
 }
-
-
 ?>
 </div>

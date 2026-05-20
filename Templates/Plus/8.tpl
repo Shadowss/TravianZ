@@ -1,28 +1,43 @@
 <?php
-//////////////     made by alq0rsan, improved by evader   /////////////////////////
-if($session->gold >= 10){
-    $MyGold = mysqli_query($database->dblink,"SELECT gold, plus FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-    $golds = mysqli_fetch_array($MyGold);
-	if($session->sit == 0) {
-		if (mysqli_num_rows($MyGold) == 1) {
-			if($golds['gold'] >= 10) {
-				if($golds['plus'] == 0) {
-					mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+".PLUS_TIME." where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-				} else {
-					mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set plus = '".($golds['plus']+PLUS_TIME)."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-				}
-				$done1 = "&nbsp;&nbsp;Plus Account";
-				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set gold = ".($session->gold-10)." where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-				mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', 'Plus Account')") or die(mysqli_error($database->dblink));
-			} else {
-				$done1 = "&nbsp;&nbsp;You need more gold";
-			}
-		} else {
-			$done1 = "Failed plus attempt";
-			mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', 'Failed Plus Account')") or die(mysqli_error($database->dblink));
-		}
-	}
-	header("Location: plus.php?id=3");
-	exit;
+
+#################################################################################
+## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+## --------------------------------------------------------------------------- ##
+## Project:     TravianZ (Refactor incremental)                                ##
+## File:        8.tpl                                                  		   ##
+## Description: Plus Account			                                       ##
+## Made by:     alq0rsan													   ##
+## Improved by: evader														   ##
+## Refactor by: Shadow 														   ##
+## 				                                                               ##
+#################################################################################
+
+if($session->sit == 0) {
+    $now = time();
+    $uid = (int)$session->uid;
+    $cost = 10;
+
+    // un singur UPDATE: scade gold DOAR dacă ai destul, și prelungește plus-ul
+    $sql = "UPDATE ".TB_PREFIX."users 
+            SET gold = gold - $cost,
+                plus = IF(plus > $now, plus + ".PLUS_TIME.", $now + ".PLUS_TIME.")
+            WHERE id = '$uid' AND gold >= $cost";
+
+    mysqli_query($database->dblink, $sql) or die(mysqli_error($database->dblink));
+
+    if(mysqli_affected_rows($database->dblink) == 1) {
+        // a reușit - actualizează sesiunea instant
+        $session->gold -= $cost;
+
+        // log (opțional)
+        mysqli_query($database->dblink, "INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', 'Plus Account')") or die(mysqli_error($database->dblink));
+        
+        // invalidează cache v9
+        if(method_exists($database, 'clearUserCache')) {
+            $database->clearUserCache($uid);
+        }
+    }
 }
- ?>
+header("Location: plus.php?id=3");
+exit;
+?>

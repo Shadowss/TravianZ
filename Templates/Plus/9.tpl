@@ -1,28 +1,43 @@
 <?php
-//////////////     made by alq0rsan, improved by evader   /////////////////////////
-if($session->gold >= 5){
-    $MyGold = mysqli_query($database->dblink,"SELECT gold, b1 FROM ".TB_PREFIX."users WHERE `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-    $golds = mysqli_fetch_array($MyGold);
-	if($session->sit == 0) {
-		if (mysqli_num_rows($MyGold) == 1) {
-			if($golds['gold'] >= 5) {
-				if($golds['b1'] < time()) {
-					mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set b1 = '".(time()+PLUS_PRODUCTION)."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-				} else {
-					mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set b1 = '".($golds['b1']+PLUS_PRODUCTION)."' where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-				}
-				$done1 = "+25% Production: Lumber";
-				mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users set gold = ".($session->gold-5)." where `id`='".$session->uid."'") or die(mysqli_error($database->dblink));
-				mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', '+25%  Production: Lumber')") or die(mysqli_error($database->dblink));
-			} else {
-				$done1 = "You need more gold";
-			}
-		} else {
-			$done1 = "Failed lumber attempt";
-			mysqli_query($database->dblink,"INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', 'Failed +25%  Production: Lumber')") or die(mysqli_error($database->dblink));
-		}
-	}
-	header("Location: plus.php?id=3");
-	exit;
+
+#################################################################################
+## -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                              ##
+## --------------------------------------------------------------------------- ##
+## Project:     TravianZ (Refactor incremental)                                ##
+## File:        8.tpl                                                  		   ##
+## Description: Wood Plus 			                                           ##
+## Made by:     alq0rsan													   ##
+## Improved by: evader														   ##
+## Refactor by: Shadow 														   ##
+## 				                                                               ##
+#################################################################################
+
+if($session->sit == 0) {
+    $uid  = (int)$session->uid;
+    $now  = time();
+    $cost = 5;
+
+    // UPDATE atomic: scade gold DOAR dacă ai, și prelungește b1 într-o singură operație
+    $sql = "UPDATE ".TB_PREFIX."users 
+            SET gold = gold - $cost,
+                b1 = IF(b1 > $now, b1 + ".PLUS_PRODUCTION.", $now + ".PLUS_PRODUCTION.")
+            WHERE id = '$uid' AND gold >= $cost";
+
+    mysqli_query($database->dblink, $sql) or die(mysqli_error($database->dblink));
+
+    if(mysqli_affected_rows($database->dblink) == 1) {
+        // succes - actualizează sesiunea instant (nu mai aștepți cache-ul de 10 sec)
+        $session->gold -= $cost;
+
+        // log
+        mysqli_query($database->dblink, "INSERT INTO ".TB_PREFIX."gold_fin_log (wid,log) VALUES ('".$village->wid."', '+25% Production: Lumber')") or die(mysqli_error($database->dblink));
+
+        // invalidează cache v9
+        if(method_exists($database, 'clearUserCache')) {
+            $database->clearUserCache($uid);
+        }
+    }
 }
+header("Location: plus.php?id=3");
+exit;
 ?>

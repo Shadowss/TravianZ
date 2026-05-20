@@ -1,62 +1,16 @@
-	<div id="content"  class="plus">
-<h1>Travian <font color="#71D000">P</font><font color="#FF6F0F">l</font><font  color="#71D000">u</font><font color="#FF6F0F">s</font></h1>
+<div id="content" class="plus">
+<h1>Travian <font color="#71D000">P</font><font color="#FF6F0F">l</font><font color="#71D000">u</font><font color="#FF6F0F">s</font></h1>
 <div id="textmenu">
-   <a href="plus.php" <?php
+<?php
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$uri = basename($_SERVER['REQUEST_URI']);
 
-        if(!isset($_GET['id']) && @(basename($_SERVER['REQUEST_URI']) !== 'a2b2.php')) {
-        	echo "class=\"selected\"";
-        }
-        if(isset($_GET['id']) && (($_GET['id'] == 1) || strlen((string)$_GET['id']) === 3)) {
-        	echo "class=\"selected\"";
-        }
-
-?>>Tariffs</a>
-
- | <a href="plus.php?id=2" <?php
-
-        if(isset($_GET['id']) && $_GET['id'] == 2) {
-        	echo "class=\"selected\"";
-        }
-        if(isset($_GET['id']) && $_GET['id'] >= 6 && strlen($_GET['id']) < 3) {
-        	echo "class=\"selected\"";
-        }
-
-?>>Advantages</a>
-
- | <a href="plus.php?id=3" <?php
-
-        if(isset($_GET['id']) && $_GET['id'] == 3) {
-        	echo "class=\"selected\"";
-        }
-        if(isset($_GET['id']) && $_GET['id'] >= 6 && strlen($_GET['id']) < 3) {
-        	echo "class=\"selected\"";
-        }
-
-?>>Gold</a>
-
- | <a href="plus.php?id=4" <?php
-
-        if(isset($_GET['id']) && $_GET['id'] == 4) {
-        	echo "class=\"selected\"";
-        }
-
-?>>FAQ</a>
-
- | <a href="plus.php?id=5" <?php
-
-        if(isset($_GET['id']) && $_GET['id'] == 5) {
-        	echo "class=\"selected\"";
-        }
-        if(isset($_GET['id']) && $_GET['id'] >= 6 && strlen($_GET['id']) < 3) {
-        	echo "class=\"selected\"";
-        }
-
-?>>Earn gold</a>
-| <a href="a2b2.php" <?php
-
-        if(@(basename($_SERVER['REQUEST_URI']) === 'a2b2.php')) {
-            echo "class=\"selected\"";
-        }
-?>>Account Statement</a>
-
+function sel($cond){ return $cond ? 'class="selected"' : ''; }
+?>
+   <a href="plus.php" <?= sel($id==0 || $id==1 || $id>=100) ?>>Tariffs</a>
+ | <a href="plus.php?id=2" <?= sel($id==2) ?>>Advantages</a>
+ | <a href="plus.php?id=3" <?= sel($id==3 || ($id>=6 && $id<=15)) ?>>Gold</a>
+ | <a href="plus.php?id=4" <?= sel($id==4) ?>>FAQ</a>
+ | <a href="plus.php?id=5" <?= sel($id==5) ?>>Earn gold</a>
+ | <a href="a2b2.php" <?= sel($uri==='a2b2.php') ?>>Account Statement</a>
 </div>
