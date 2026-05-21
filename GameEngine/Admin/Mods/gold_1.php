@@ -1,39 +1,47 @@
 <?php
 #################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
-## --------------------------------------------------------------------------- ##
-##  Filename       gold_1.php                                                   ##
+##  Filename       gold_1.php                                                  ##
 ##  Developed by:  aggenkeech                                                  ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
-##                                                                             ##
+##  Refactored by: Shadow                                                      ##
 #################################################################################
 if (!isset($_SESSION)) session_start();
 if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
-include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
-$autoprefix = '';
-for ($i = 0; $i < 5; $i++) {
-    $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
-        break;
-    }
+include_once("../../config.php");
+include_once("../../Database.php");
+
+$admid  = (int)($_POST['admid'] ?? 0);
+$id     = (int)($_POST['id'] ?? 0);
+$amount = (int)($_POST['gold'] ?? 0);
+
+if($id <= 0 || $amount == 0){
+    header("Location: ../../../Admin/admin.php?p=usergold");
+    exit;
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+// verificare admin
+$check = mysqli_query($GLOBALS["link"], "SELECT access, username FROM ".TB_PREFIX."users WHERE id = $admid");
+$acc = mysqli_fetch_assoc($check);
+if(!$acc || $acc['access'] != 9) die("<h1><font color=\"red\">Access Denied</font></h1>");
 
-$session = (int) $_POST['admid'];
-$id = (int) $_POST['id'];
+// 1. UPDATE GOLD
+mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET gold = gold + $amount WHERE id = $id") or die(mysqli_error($GLOBALS["link"]));
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+// 2. ADMIN LOG
+$name = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT username FROM ".TB_PREFIX."users WHERE id = $id"))['username'];
+$name = mysqli_real_escape_string($GLOBALS["link"], $name);
+mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."admin_log VALUES (0, $admid, 'Added <b>$amount</b> gold to user <a href=\'admin.php?p=player&uid=$id\'>$name</a>', ".time().")");
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+// 3. GOLD_FIN_LOG (pentru a2b2.php)
+$vill = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = $id LIMIT 1"));
+$wid = (int)($vill['wref'] ?? 0);
+$action = $amount > 0 ? 'Admin added Gold' : 'Admin removed Gold';
+$adminName = $acc['username'];
+$details = mysqli_real_escape_string($GLOBALS["link"], 'Admin gift by '.$adminName);
+$now = time();
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET gold = gold + ".(int) $_POST['gold']." WHERE id = ".$id."");
+mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."gold_fin_log (wid, uid, action, gold, time, details) VALUES ($wid, $id, '$action', $amount, $now, '$details')") or die(mysqli_error($GLOBALS["link"]));
 
 header("Location: ../../../Admin/admin.php?p=usergold&g");
+exit;
 ?>

@@ -1748,16 +1748,18 @@ class Building {
 
     // gold update
     if ($countMasterGold || $countPlus2Gold) {
+        $spent = ($countMasterGold && $countPlus2Gold) ? 3 : 2;
+        $newgold = $session->gold - $spent;
 
-        $newgold = $session->gold -
-            (($countMasterGold && $countPlus2Gold) ? 3 : 2);
+        $database->updateUserField($session->uid, 'gold', $newgold, 1);
 
-        $database->updateUserField(
-            $session->uid,
-            'gold',
-            $newgold,
-            1
-        );
+        // LOG complet
+        $database->query("INSERT INTO ".TB_PREFIX."gold_fin_log 
+            (wid, uid, action, gold, time, details) 
+            VALUES (".$village->wid.", ".$session->uid.", 'Finish all constructions', -".$spent.", ".time().", 'Finish construction and research with gold')");
+
+        $session->gold = $newgold;
+        $_SESSION['gold'] = $newgold;
     }
 
     // un singur query

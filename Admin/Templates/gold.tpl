@@ -4,6 +4,7 @@
 ## --------------------------------------------------------------------------- ##
 ##  Filename       gold.tpl                                                    ##
 ##  Developed by:  aggenkeech                                                  ##
+##  Refactored by: Shadow                                                      ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
