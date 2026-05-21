@@ -1,73 +1,80 @@
 <?php
-  if ( !empty( $form ) && $form->valuearray ) {
-    if ( !empty( $form->valuearray['disabled'] ) ) {
-      $disabled = $form->valuearray['disabled'];
+// -- preluăm stările disabled din form (păstrăm exact valorile originale)
+$disabled = '';
+$disabledr = '';
+
+if (!empty($form) && !empty($form->valuearray)) {
+    if (!empty($form->valuearray['disabled'])) {
+        $disabled = $form->valuearray['disabled'];
     }
-
-    if ( !empty( $form->valuearray['disabledr'] ) ) {
-      $disabledr = $form->valuearray['disabledr'];
+    if (!empty($form->valuearray['disabledr'])) {
+        $disabledr = $form->valuearray['disabledr'];
     }
-  }
-?><table id="coords" cellpadding="1" cellspacing="1">
-<input type="hidden" name="disabledr" value="<?php echo (isset($disabledr) ? $disabledr : ''); ?>">
-<input type="hidden" name="disabled" value="<?php echo (isset($disabled) ? $disabled : ''); ?>">
-    <tbody><tr>
-        <td class="sel">
-
-            <label>
-                <input class="radio" name="c" <?php if ( ( !isset($disabledr) || !$disabledr ) && ( !isset($checked) || !$checked ) ) {?> checked=checked <?php }?>value="2" type="radio" <?php echo (isset($disabledr) ? $disabledr : ''); ?>>
-                Reinforcement
-            </label>
-        </td>
-        <td class="vil">
-            <span>Village:</span>
-             <input class="text" name="dname" value="<?php echo $form->getValue('dname');?>" maxlength="20" type="text" >
-        </td>
-
-    </tr>
-    <tr>
-        <td class="sel">
-            <label>
-                <input class="radio" name="c" value="3" type="radio" <?php echo $disabled; ?>>
-                Normal attack
-            </label>
-        </td>
-        <td class="or">
-
-            or        </td>
-    </tr>
-    <tr>
-        <td class="sel">
-            <label>
-                <input class="radio" name="c" <?php
-                  if ( ( isset($disabledr) && $disabledr ) && ( isset($disabled) && $disabled ) ) {
-                    $checked = ' checked="checked"';
-                  }
-                  echo ( ( isset($checked) ? $checked : '' ) );
-                ?> value="4" type="radio">
-                Raid
-            </label>
-        </td>
-
-<?php
-if(isset($_GET['z'])){
-$coor = $database->getCoor($_GET['z']);
 }
-else{
-$coor['x']=$form->getValue("x");
-$coor['y']=$form->getValue("y");
+
+// logica originală pentru checked
+$reinforcementChecked = (empty($disabledr));
+$raidChecked = (!empty($disabledr) && !empty($disabled));
+
+// dacă ambele sunt disabled, reinforcement nu mai e checked (ca în original)
+if ($raidChecked) {
+    $reinforcementChecked = false;
+}
+
+// coordonate
+if (isset($_GET['z'])) {
+    $coor = $database->getCoor($_GET['z']);
+} else {
+    $coor['x'] = $form->getValue('x');
+    $coor['y'] = $form->getValue('y');
 }
 ?>
-        <td class="target">
-            <span>x:</span>
-            <input class="text" name="x" value="<?php echo $coor['x']; ?>" maxlength="4" type="text">
-            <span>y:</span>
-            <input class="text" name="y" value="<?php echo $coor['y']; ?>" maxlength="4" type="text">
-        </td>
-    </tr>
-</tbody></table>
+<table id="coords" cellpadding="1" cellspacing="1">
+    <input type="hidden" name="disabledr" value="<?php echo htmlspecialchars($disabledr ?? '', ENT_QUOTES); ?>">
+    <input type="hidden" name="disabled" value="<?php echo htmlspecialchars($disabled ?? '', ENT_QUOTES); ?>">
+    <tbody>
+        <tr>
+            <td class="sel">
+                <label>
+                    <input class="radio" name="c" value="2" type="radio"
+                        <?php if ($reinforcementChecked) echo 'checked="checked"'; ?>
+                        <?php echo $disabledr; ?>>
+                    Reinforcement
+                </label>
+            </td>
+            <td class="vil">
+                <span>Village:</span>
+                <input class="text" name="dname" value="<?php echo htmlspecialchars($form->getValue('dname'), ENT_QUOTES); ?>" maxlength="20" type="text">
+            </td>
+        </tr>
+        <tr>
+            <td class="sel">
+                <label>
+                    <input class="radio" name="c" value="3" type="radio" <?php echo $disabled; ?>>
+                    Normal attack
+                </label>
+            </td>
+            <td class="or">or</td>
+        </tr>
+        <tr>
+            <td class="sel">
+                <label>
+                    <input class="radio" name="c" value="4" type="radio"
+                        <?php if ($raidChecked) echo 'checked="checked"'; ?>>
+                    Raid
+                </label>
+            </td>
+            <td class="target">
+                <span>x:</span>
+                <input class="text" name="x" value="<?php echo htmlspecialchars($coor['x'] ?? '', ENT_QUOTES); ?>" maxlength="4" type="text">
+                <span>y:</span>
+                <input class="text" name="y" value="<?php echo htmlspecialchars($coor['y'] ?? '', ENT_QUOTES); ?>" maxlength="4" type="text">
+            </td>
+        </tr>
+    </tbody>
+</table>
 
-       <button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();" /> Ok </button>
-    </form>
-<p class="error"><?php echo $form->getError("error"); ?></p>
+<button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();">Ok</button>
+</form>
+<p class="error"><?php echo $form->getError('error'); ?></p>
 </div>
