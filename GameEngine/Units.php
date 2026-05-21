@@ -10,8 +10,8 @@
 ##                                                                             ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:           https://travianz.org                                       ##
-##                  https://github.com/Shadowss/TravianZ                       ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 ##                                                                             ##
 #################################################################################
 
@@ -150,6 +150,7 @@ class Units {
         if($post['c'] < 2 || $post['c'] > 4) return "Invalid attack type.";
             
         //check if at least one troops has been selected
+		$selectedTroops = 0;
         for($i = 1; $i <= 11; $i++) $selectedTroops += empty($post['t'.$i]) ? 0 : $post['t'.$i];        
         if($selectedTroops == 0) return "You need to select min. one troop";
         
@@ -266,9 +267,9 @@ class Units {
             }
         }
 
-        if($data['u11'] > $village->unitarray['hero']) $form->addError("error", "You can't send more units than you have");
-        if($data['u11'] < 0) $form->addError("error", "You can't send negative units.");   
-        if($data['type'] != 1 && $post['spy'] != 0) $post['spy'] = 0;
+		if($data['u11'] > $village->unitarray['hero']) $form->addError("error", "You can't send more units than you have");
+		if($data['u11'] < 0) $form->addError("error", "You can't send negative units.");   
+		if($data['type'] != 1) $post['spy'] = 0; else $post['spy'] = $post['spy']?? 0;
         
         if($form->returnErrors() > 0){
             $_SESSION['errorarray'] = $form->getErrors();

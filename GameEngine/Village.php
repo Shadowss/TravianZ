@@ -29,7 +29,12 @@ class Village {
 	public $wid, $vname, $capital, $natar, $master;
 	public $resarray = [];
 	public $unitarray, $techarray, $unitall, $researching, $abarray = [];
-
+	public $enforcetome = [];
+	public $enforcetoyou = [];
+	public $enforceoasis = [];
+	public $currentcel = 0;
+	public $allcrop = 0;
+	public $loyalty = 0;
 	private $infoarray = [];
 	private $production = [];
 	private $oasisowned, $ocounter = [];

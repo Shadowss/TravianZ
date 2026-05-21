@@ -8286,25 +8286,25 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
                 $result = $result[0];
             }
             self::$prisonersCache[$wid[0].$mode] = (count($result) ? [$result] : []);
-        } else {
-            if ($result && count($result)) {
-                if (!isset(self::$prisonersCache[$record[($mode ? 'from' : 'wref')].$mode])) {
-                    self::$prisonersCache[$record[($mode ? 'from' : 'wref' )].$mode] = [];
-                }
-
-                foreach ($result as $record) {
-                    self::$prisonersCache[$record[($mode ? 'from' : 'wref')].$mode][] = $record;
-                }
+		} else {
+    if ($result && count($result)) {
+        foreach ($result as $record) {
+            $key = $record[($mode ? 'from' : 'wref')] . $mode;
+            if (!isset(self::$prisonersCache[$key])) {
+                self::$prisonersCache[$key] = [];
             }
-
-            // check for any missing IDs and fill them in with blanks,
-            // since no reinforcements were found for these villages
-            foreach ($wid as $key) {
-                if (!isset(self::$prisonersCache[$key.$mode])) {
-                    self::$prisonersCache[$key.$mode] = [];
-                }
-            }
+            self::$prisonersCache[$key][] = $record;
         }
+    }
+
+    // check for any missing IDs and fill them in with blanks,
+    // since no prisoners were found for these villages
+    foreach ($wid as $key) {
+        if (!isset(self::$prisonersCache[$key.$mode])) {
+            self::$prisonersCache[$key.$mode] = [];
+        }
+    }
+}
 
         return ($array_passed ? self::$prisonersCache : self::$prisonersCache[$wid[0].$mode]);
     }
@@ -8342,19 +8342,19 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
 	}
 
 	function getPrisoners3($from, $use_cache = true) {
-	    list($from) = $this->escape_input((int) $from);
-	    
-	    // first of all, check if we should be using cache and whether the field
-	    // required is already cached
-	    if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCacheByVillageAndFromIDs, $from)) && !is_null($cachedValue)) {
-	        return $cachedValue;
-	    }
-	    
-	    $q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
-	    $result = mysqli_query($this->dblink,$q);
-	    
-	    self::$prisonersCacheByVillageAndFromIDs[$wid.$from] = $this->mysqli_fetch_all($result);
-	    return self::$prisonersCacheByVillageAndFromIDs[$from];
+    list($from) = $this->escape_input((int) $from);
+    
+    // first of all, check if we should be using cache and whether the field
+    // required is already cached
+    if ($use_cache && ($cachedValue = self::returnCachedContent(self::$prisonersCacheByVillageAndFromIDs, $from)) && !is_null($cachedValue)) {
+        return $cachedValue;
+    }
+    
+    $q = "SELECT * FROM " . TB_PREFIX . "prisoners where " . TB_PREFIX . "prisoners.from = $from";
+    $result = mysqli_query($this->dblink,$q);
+    
+    self::$prisonersCacheByVillageAndFromIDs[$from] = $this->mysqli_fetch_all($result); // FIX: scos $wid
+    return self::$prisonersCacheByVillageAndFromIDs[$from];
 	}
 
 	function deletePrisoners($id) {

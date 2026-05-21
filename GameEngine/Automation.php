@@ -606,7 +606,7 @@ class Automation {
 
         $vilIDs = [];
         foreach($dataarray as $data) {
-            $vilIDs[$data['to']] = true;
+            $vilIDs[$data['wid']] = true;
             $vilIDs[$data['from']] = true;
         }
         $vilIDs = array_keys($vilIDs);
@@ -935,6 +935,8 @@ class Automation {
             // calculate battles
             foreach($dataarray as $data) {
                 //set base things
+				$totaltraped_att = 0;
+				for($i = 1; $i <= 11; $i++) ${'traped'.$i} = 0;
                 $isoasis = $data['oasistype'];
                 $AttackArrivalTime = $data['endtime'];
                 $AttackerWref = $data['from'];
@@ -4210,530 +4212,172 @@ WHERE
      *
      */
     
-    function medals(){
-        global $ranking, $database;
-
-        //we may give away ribbons
-        $giveMedal = false;
-        $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
-        $result = mysqli_query($database->dblink,$q);
-        if($result) {
-            $row = mysqli_fetch_assoc($result);
-            $stime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
-            if($row['lastgavemedal'] == 0 && $stime < time()){
-                $setDays = round(MEDALINTERVAL / 86400);
-                $newtime = $setDays < 7 ? strtotime(($setDays + 1).'day midnight') : strtotime('next monday');
-                $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal = ".(int) $newtime;
-                $database->query($q);
-            }elseif($row['lastgavemedal'] != 0){
-                $time = $row['lastgavemedal'] + MEDALINTERVAL;
-                $giveMedal = $row['lastgavemedal'] < time();
-            }
-        }
-
-        if($giveMedal && MEDALINTERVAL > 0){
-
-            //determine which week we are
-
-            $q = "SELECT week FROM ".TB_PREFIX."medal order by week DESC LIMIT 0, 1";
-            $result = mysqli_query($database->dblink,$q);
-            if(mysqli_num_rows($result)) {
-                $row=mysqli_fetch_assoc($result);
-                $week=($row['week']+1);
-            } else {
-                $week='1';
-            }
-
-            //Do same for ally week
-
-            $q = "SELECT week FROM ".TB_PREFIX."allimedal order by week DESC LIMIT 0, 1";
-            $result = mysqli_query($database->dblink,$q);
-            if(mysqli_num_rows($result)) {
-                $row=mysqli_fetch_assoc($result);
-                $allyweek=($row['week']+1);
-            } else {
-                $allyweek='1';
-            }
-
-
-            //Attackers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, ap FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY ap DESC, id DESC Limit 10");
-            $i=0;
-            while($row = mysqli_fetch_array($result)){
-                $i++;
-                $img="t2_".($i)."";
-                $quer="insert into ".TB_PREFIX."medal (userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", 1, ".($i).", ".(int) $week.", '".$row['ap']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Defender of the week
-            $result = mysqli_query($database->dblink,"SELECT id, dp FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY dp DESC, id DESC Limit 10");
-            $i=0;
-            while($row = mysqli_fetch_array($result)){
-                $i++;
-                $img="t3_".($i)."";
-                $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '2', ".($i).", '".(int) $week."', '".$row['dp']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Climbers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, Rc FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY Rc DESC, id DESC Limit 10");
-            $i=0;
-            while($row = mysqli_fetch_array($result)){
-                $i++;
-                $img="t1_".($i)."";
-                $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '3', ".($i).", '".(int) $week."', '".$row['Rc']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Rank climbers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, clp FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY clp DESC Limit 10");
-            $i=0;
-            while($row = mysqli_fetch_array($result)){
-                $i++;
-                $img="t6_".($i)."";
-                $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '10', ".($i).", '".(int) $week."', '".$row['clp']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Robbers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, RR FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY RR DESC, id DESC Limit 10");
-            $i=0;
-            while($row = mysqli_fetch_array($result)){
-                $i++;
-                $img="t4_".($i)."";
-                $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '4', ".($i).", '".(int) $week."', '".$row['RR']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Part of the bonus for top 10 attack + defense out
-            //Top10 attackers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY ap DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                //Top 10 defenders
-                $result2 = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY dp DESC, id DESC Limit 10");
-                while($row2 = mysqli_fetch_array($result2)){
-                    if($row['id']==$row2['id']){
-
-                        $query3="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 5";
-                        $result3=mysqli_query($database->dblink,$query3);
-                        $row3=mysqli_fetch_row($result3);
-
-                        //Look what color the ribbon must have
-                        if($row3[0]<='2'){
-                            $img="t22".$row3[0]."_1";
-                            switch ($row3[0]) {
-                                case "0":
-                                    $tekst="";
-                                    break;
-                                case "1":
-                                    $tekst="twice ";
-                                    break;
-                                case "2":
-                                    $tekst="three times ";
-                                    break;
-                            }
-                            $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '5', '0', '".(int) $week."', '".$tekst."', '".$img."')";
-                            $resul=mysqli_query($database->dblink,$quer);
-                        }
-                    }
-                }
-            }
-
-            //you stand for 3rd / 5th / 10th time in the top 3 strikers
-            //top10 attackers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY ap DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=3";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x at present as it is so ribbon 3rd (bronze)
-                if($row1[0]=='3'){
-                    $img="t120_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '6', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x at present as it is so 5th medal (silver)
-                if($row1[0]=='5'){
-                    $img="t121_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '6', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t122_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '6', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-
-            }
-            //you stand for 3rd / 5th / 10th time in the top 10 attackers
-            //top10 attackers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY ap DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 1 AND plaats<=10";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t130_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '12', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t131_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '12', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t132_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '12', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-
-            }
-            //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
-            //Pak de top10 verdedigers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY dp DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=3";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t140_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '7', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t141_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '7', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t142_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '7', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-
-            }
-            //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers
-            //Pak de top10 verdedigers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY dp DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 2 AND plaats<=10";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t150_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '13', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t151_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '13', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t152_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '13', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-
-            }
-
-            //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
-            //Pak de top10 klimmers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY Rc DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=3";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t100_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '8', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t101_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '8', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t102_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '8', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-            }
-            //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
-            //Pak de top10 klimmers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY Rc DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 3 AND plaats<=10";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t110_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '14', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t111_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '14', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t112_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '14', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-            }
-
-            //je staat voor 3e / 5e / 10e keer in de top 3 klimmers
-            //Pak de top3 rank climbers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY clp DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=3";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t200_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '11', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t201_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '11', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t202_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '11', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-            }
-            //je staat voor 3e / 5e / 10e keer in de top 10klimmers
-            //Pak de top3 rank climbers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY clp DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 10 AND plaats<=10";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t210_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '16', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t211_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '16', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t212_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '16', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-            }
-
-            //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
-            //Pak de top10 overvallers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY RR DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=3";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t160_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '9', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t161_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '9', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t162_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '9', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-            }
-            //je staat voor 3e / 5e / 10e keer in de top 10 overvallers
-            //Pak de top10 overvallers
-            $result = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY RR DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                $query1="SELECT Count(*) FROM ".TB_PREFIX."medal WHERE userid=".(int) $row['id']." AND categorie = 4 AND plaats<=10";
-                $result1=mysqli_query($database->dblink,$query1);
-                $row1=mysqli_fetch_row($result1);
-
-
-                //2x in gestaan, dit is 3e dus lintje (brons)
-                if($row1[0]=='3'){
-                    $img="t170_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '15', '0', '".(int) $week."', 'Three', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //4x in gestaan, dit is 5e dus lintje (zilver)
-                if($row1[0]=='5'){
-                    $img="t171_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '15', '0', '".(int) $week."', 'Five', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-                //9x at present as it is so 10th medal (gold)
-                if($row1[0]=='10'){
-                    $img="t172_1";
-                    $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '15', '0', '".(int) $week."', 'Ten', '".$img."')";
-                    $resul=mysqli_query($database->dblink,$quer);
-                }
-            }
-
-            //Put all true dens to 0
-            $query="SELECT id FROM ".TB_PREFIX."users WHERE id > 5 AND access < 8 ORDER BY id+0 DESC";
-            $result=mysqli_query($database->dblink,$query);
-            $userIDs = [];
-            for ($i=0; $row=mysqli_fetch_row($result); $i++){
-                $userIDs[] = (int) $row[0];
-            }
-
-            if (count($userIDs)) {
-                mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id IN(".implode(', ', $userIDs).")");
-            }
-
-            //Start alliance Medals wooot
-
-            //Aanvallers v/d Week
-            $result = mysqli_query($database->dblink,"SELECT id, ap FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
-            $i=0;     while($row = mysqli_fetch_array($result)){
-                $i++;    $img="a2_".($i)."";
-                $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '1', ".($i).", '".$allyweek."', '".$row['ap']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Verdediger v/d Week
-            $result = mysqli_query($database->dblink,"SELECT id, dp FROM ".TB_PREFIX."alidata ORDER BY dp DESC Limit 10");
-            $i=0;     while($row = mysqli_fetch_array($result)){
-                $i++;    $img="a3_".($i)."";
-                $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '2', ".($i).", '".$allyweek."', '".$row['dp']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Overvallers v/d Week
-            $result = mysqli_query($database->dblink,"SELECT id, RR FROM ".TB_PREFIX."alidata ORDER BY RR DESC, id DESC Limit 10");
-            $i=0;     while($row = mysqli_fetch_array($result)){
-                $i++;    $img="a4_".($i)."";
-                $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '4', ".($i).", '".$allyweek."', '".$row['RR']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            //Rank climbers of the week
-            $result = mysqli_query($database->dblink,"SELECT id, clp FROM ".TB_PREFIX."alidata ORDER BY clp DESC Limit 10");
-            $i=0;     while($row = mysqli_fetch_array($result)){
-                $i++;    $img="a1_".($i)."";
-                $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '3', ".($i).", '".$allyweek."', '".$row['clp']."', '".$img."')";
-                $resul=mysqli_query($database->dblink,$quer);
-            }
-
-            $result = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC Limit 10");
-            while($row = mysqli_fetch_array($result)){
-
-                //Pak de top10 verdedigers
-                $result2 = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC Limit 10");
-                while($row2 = mysqli_fetch_array($result2)){
-                    if($row['id']==$row2['id']){
-
-                        $query3="SELECT Count(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int) $row['id']." AND categorie = 5";
-                        $result3=mysqli_query($database->dblink,$query3);
-                        $row3=mysqli_fetch_row($result3);
-
-                        //Look what color the ribbon must have
-                        if($row3[0]<='2'){
-                            $img="t22".$row3[0]."_1";
-                            switch ($row3[0]) {
-                                case "0":
-                                    $tekst="";
-                                    break;
-                                case "1":
-                                    $tekst="twice ";
-                                    break;
-                                case "2":
-                                    $tekst="three times ";
-                                    break;
-                            }
-                            $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values(".(int) $row['id'].", '5', '0', '".$allyweek."', '".$tekst."', '".$img."')";
-                            $resul=mysqli_query($database->dblink,$quer);
-                        }
-                    }
-                }
-            }
-
-            $query="SELECT id FROM ".TB_PREFIX."alidata ORDER BY id+0 DESC";
-            $result=mysqli_query($database->dblink,$query);
-
-            $aliIDs = [];
-            for ($i=0; $row=mysqli_fetch_row($result); $i++){
-                $aliIDs[] = (int) $row[0];
-            }
-
-            if (count($aliIDs)) {
-                mysqli_query($database->dblink,"UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0,RR=0,clp=0 WHERE id IN(".implode(', ', $aliIDs).")");
-            }
-
-            $q = "UPDATE ".TB_PREFIX."config SET lastgavemedal=".$time;
-            $database->query($q);
+	function medals() {
+		global $ranking, $database;
+
+    // --- Configuration ---
+    $minUid = 5;
+    // Exclude BANNED (0), MH (8), ADMIN (9)
+    $userFilter = "id > $minUid AND access NOT IN (0,8,9)";
+
+    // Helper to insert a user medal
+    $insertMedal = function($userid, $category, $place, $week, $points, $img) use ($database) {
+        $q = "INSERT INTO ".TB_PREFIX."medal (userid, categorie, plaats, week, points, img) VALUES (".
+            (int)$userid.", ".(int)$category.", ".(int)$place.", ".(int)$week.", '".mysqli_real_escape_string($database->dblink, $points)."', '".mysqli_real_escape_string($database->dblink, $img)."')";
+        mysqli_query($database->dblink, $q);
+    };
+
+    // --- Check if we should award medals now ---
+    $giveMedal = false;
+    $q = "SELECT lastgavemedal FROM ".TB_PREFIX."config";
+    $result = mysqli_query($database->dblink, $q);
+    if ($result) {
+        $row = mysqli_fetch_assoc($result);
+        $stime = strtotime(START_DATE) - strtotime(date('d.m.Y')) + strtotime(START_TIME);
+
+        if ($row['lastgavemedal'] == 0 && $stime < time()) {
+            // First run after server start - schedule next run
+            $setDays = round(MEDALINTERVAL / 86400);
+            $newtime = $setDays < 7? strtotime(($setDays + 1).' day midnight') : strtotime('next monday');
+            $database->query("UPDATE ".TB_PREFIX."config SET lastgavemedal = ".(int)$newtime);
+        } elseif ($row['lastgavemedal']!= 0) {
+            $time = $row['lastgavemedal'] + MEDALINTERVAL;
+            $giveMedal = $row['lastgavemedal'] < time();
         }
     }
+
+    if (!($giveMedal && MEDALINTERVAL > 0)) {
+        return;
+    }
+
+    // --- Determine current week numbers ---
+    $getNextWeek = function($table) use ($database) {
+        $q = "SELECT week FROM ".TB_PREFIX."$table ORDER BY week DESC LIMIT 1";
+        $res = mysqli_query($database->dblink, $q);
+        return $res && mysqli_num_rows($res)? (mysqli_fetch_assoc($res)['week'] + 1) : 1;
+    };
+    $week = $getNextWeek('medal');
+    $allyweek = $getNextWeek('allimedal');
+
+    // --- Award top 10 for each category ---
+    $awardTop = function($field, $category, $imgPrefix) use ($database, $userFilter, $week, $insertMedal) {
+        $q = "SELECT id, $field FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY $field DESC, id DESC LIMIT 10";
+        $res = mysqli_query($database->dblink, $q);
+        $i = 0;
+        while ($row = mysqli_fetch_array($res)) {
+            $i++;
+            $insertMedal($row['id'], $category, $i, $week, $row[$field], $imgPrefix.$i);
+        }
+    };
+
+    // Attackers of the week (cat 1)
+    $awardTop('ap', 1, 't2_');
+    // Defenders of the week (cat 2)
+    $awardTop('dp', 2, 't3_');
+    // Climbers of the week (cat 3)
+    $awardTop('Rc', 3, 't1_');
+    // Rank climbers of the week (cat 10)
+    $awardTop('clp', 10, 't6_');
+    // Robbers of the week (cat 4)
+    $awardTop('RR', 4, 't4_');
+
+    // --- Bonus: player in both top10 attack AND defense (cat 5) ---
+    $topAttackers = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY ap DESC, id DESC LIMIT 10");
+    while ($a = mysqli_fetch_array($topAttackers)) {
+        $topDefenders = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY dp DESC, id DESC LIMIT 10");
+        while ($d = mysqli_fetch_array($topDefenders)) {
+            if ($a['id'] == $d['id']) {
+                $cnt = mysqli_fetch_row(mysqli_query($database->dblink, "SELECT COUNT(*) FROM ".TB_PREFIX."medal WHERE userid=".(int)$a['id']." AND categorie=5"))[0];
+                if ($cnt <= 2) {
+                    $texts = [0 => '', 1 => 'twice ', 2 => 'three times '];
+                    $insertMedal($a['id'], 5, 0, $week, $texts[$cnt], 't22'.$cnt.'_1');
+                }
+            }
+        }
+    }
+
+    // --- Milestone ribbons for 3/5/10 times in top3 or top10 ---
+    $awardMilestone = function($field, $sourceCat, $topLimit, $targetCat, $imgBase) use ($database, $userFilter, $week, $insertMedal) {
+        $res = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter ORDER BY $field DESC, id DESC LIMIT 10");
+        while ($u = mysqli_fetch_array($res)) {
+            $cnt = mysqli_fetch_row(mysqli_query($database->dblink,
+                "SELECT COUNT(*) FROM ".TB_PREFIX."medal WHERE userid=".(int)$u['id']." AND categorie=".(int)$sourceCat." AND plaats<=".(int)$topLimit))[0];
+
+            $map = ['3' => ['Three', $imgBase.'0_1'], '5' => ['Five', $imgBase.'1_1'], '10' => ['Ten', $imgBase.'2_1']];
+            if (isset($map[$cnt])) {
+                $insertMedal($u['id'], $targetCat, 0, $week, $map[$cnt][0], $map[$cnt][1]);
+            }
+        }
+    };
+
+    // Attackers milestones
+    $awardMilestone('ap', 1, 3, 6, 't12'); // top3 attackers
+    $awardMilestone('ap', 1, 10, 12, 't13'); // top10 attackers
+    // Defenders milestones
+    $awardMilestone('dp', 2, 3, 7, 't14');
+    $awardMilestone('dp', 2, 10, 13, 't15');
+    // Climbers milestones
+    $awardMilestone('Rc', 3, 3, 8, 't10');
+    $awardMilestone('Rc', 3, 10, 14, 't11');
+    // Rank climbers milestones
+    $awardMilestone('clp', 10, 3, 11, 't20');
+    $awardMilestone('clp', 10, 10, 16, 't21');
+    // Robbers milestones
+    $awardMilestone('RR', 4, 3, 9, 't16');
+    $awardMilestone('RR', 4, 10, 15, 't17');
+
+    // --- Reset weekly stats for eligible users ---
+    $ids = [];
+    $res = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."users WHERE $userFilter");
+    while ($r = mysqli_fetch_row($res)) { $ids[] = (int)$r[0]; }
+    if ($ids) {
+        mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."users SET ap=0, dp=0, Rc=0, clp=0, RR=0 WHERE id IN(".implode(',', $ids).")");
+    }
+
+    // --- Alliance medals (no user filter needed) ---
+    $insertAlly = function($allyid, $cat, $place, $week, $points, $img) use ($database) {
+        $q = "INSERT INTO ".TB_PREFIX."allimedal (allyid, categorie, plaats, week, points, img) VALUES (".(int)$allyid.", '".(int)$cat."', ".(int)$place.", '".(int)$week."', '".mysqli_real_escape_string($database->dblink, $points)."', '".mysqli_real_escape_string($database->dblink, $img)."')";
+        mysqli_query($database->dblink, $q);
+    };
+
+    $allyCats = [
+        ['ap', 1, 'a2_'],
+        ['dp', 2, 'a3_'],
+        ['RR', 4, 'a4_'],
+        ['clp', 3, 'a1_']
+    ];
+    foreach ($allyCats as [$field, $cat, $img]) {
+        $res = mysqli_query($database->dblink, "SELECT id, $field FROM ".TB_PREFIX."alidata ORDER BY $field DESC, id DESC LIMIT 10");
+        $i = 0;
+        while ($r = mysqli_fetch_array($res)) { $i++; $insertAlly($r['id'], $cat, $i, $allyweek, $r[$field], $img.$i); }
+    }
+
+    // Alliance bonus for attack+defense
+    $resA = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata ORDER BY ap DESC, id DESC LIMIT 10");
+    while ($a = mysqli_fetch_array($resA)) {
+        $resD = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata ORDER BY dp DESC, id DESC LIMIT 10");
+        while ($d = mysqli_fetch_array($resD)) {
+            if ($a['id'] == $d['id']) {
+                $cnt = mysqli_fetch_row(mysqli_query($database->dblink, "SELECT COUNT(*) FROM ".TB_PREFIX."allimedal WHERE allyid=".(int)$a['id']." AND categorie=5"))[0];
+                if ($cnt <= 2) {
+                    $texts = [0 => '', 1 => 'twice ', 2 => 'three times '];
+                    $insertAlly($a['id'], 5, 0, $allyweek, $texts[$cnt], 't22'.$cnt.'_1');
+                }
+            }
+        }
+    }
+
+    // Reset alliance stats
+    $aliIds = [];
+    $res = mysqli_query($database->dblink, "SELECT id FROM ".TB_PREFIX."alidata");
+    while ($r = mysqli_fetch_row($res)) { $aliIds[] = (int)$r[0]; }
+    if ($aliIds) {
+        mysqli_query($database->dblink, "UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id IN(".implode(',', $aliIds).")");
+    }
+
+    // --- Update last awarded time ---
+    $database->query("UPDATE ".TB_PREFIX."config SET lastgavemedal=".(int)$time);
+}
 
     private function artefactOfTheFool() {
         global $database;

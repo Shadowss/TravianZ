@@ -384,9 +384,9 @@ while ($donnees = mysqli_fetch_assoc($result2)) {
 
 	$sessionAlliance = (int)$session->alliance;
 
-	$allyCache = $database->getAllianceAlly($sessionAlliance, 1);
-	$warCache  = $database->getAllianceWar2($sessionAlliance);
-	$neutralCache = $database->getAllianceAlly($sessionAlliance, 2);
+	$allyCache = $database->getAllianceAlly($sessionAlliance, 1)?: [];
+	$warCache = $database->getAllianceWar2($sessionAlliance)?: [];
+	$neutralCache = $database->getAllianceAlly($sessionAlliance, 2)?: [];
 
 	$target = (int)$donnees["aliance_id"];
 
@@ -394,18 +394,19 @@ while ($donnees = mysqli_fetch_assoc($result2)) {
        RELATION STATUS
     ========================= */
 	
-	$friend = ($target && $sessionAlliance) ? (
-    ($allyCache[0]['alli1'] == $target || $allyCache[0]['alli2'] == $target)
-	) : 0;
+	$friend = $war = $neutral = 0;
 
-	$war = ($target && $sessionAlliance) ? (
-    ($warCache[0]['alli1'] == $target || $warCache[0]['alli2'] == $target)
-	) : 0;
-
-	$neutral = ($target && $sessionAlliance) ? (
-    ($neutralCache[0]['alli1'] == $target || $neutralCache[0]['alli2'] == $target)
-	) : 0;
-
+	if ($target && $sessionAlliance) {
+    foreach ($allyCache as $ac) {
+        if ((($ac['alli1']?? 0) == $target) || (($ac['alli2']?? 0) == $target)) { $friend = 1; break; }
+    }
+    foreach ($warCache as $wc) {
+        if ((($wc['alli1']?? 0) == $target) || (($wc['alli2']?? 0) == $target)) { $war = 1; break; }
+    }
+    foreach ($neutralCache as $nc) {
+        if ((($nc['alli1']?? 0) == $target) || (($nc['alli2']?? 0) == $target)) { $neutral = 1; break; }
+    }
+	}
 
     /* =========================
        IMAGE DECISION

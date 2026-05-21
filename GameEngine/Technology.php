@@ -155,7 +155,7 @@ class Technology {
 					array_push($listarray,$train);
 				}
 				if($type == 8 && in_array($train['unit'],$trapper)) {
-					$train['name'] = $this->unarray[$train['unit']];
+					$train['name'] = $this->unarray[$train['unit']]?? 'Trap';
 					array_push($listarray,$train);
 				}
 			}
@@ -512,7 +512,7 @@ class Technology {
 			        if($this->maxUnit($unit, $great) < $amt) $amt = 0;
 			    }else{
 			        $trainlist = $this->getTrainingList(8);
-			        
+			        $train_amt = 0;
 			        foreach($trainlist as $train) $train_amt += $train['amt'];
 			        
 			        $max = 0;

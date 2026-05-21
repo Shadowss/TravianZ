@@ -13,7 +13,7 @@ $ckey = $generator->generateRandStr(6);
  if (!isset($process['t10']) || $process['t10'] == ''){  $t10 = 0; }else{  $t10 = $process['t10']; }
  if (!isset($process['t11']) || $process['t11'] == ''){  $t11 = 0; }else{  $t11 = $process['t11']; $showhero=1; }
  
-
+$totalunits = 0;	
 for($i = 1; $i <= 11; $i++){
     $totalunits += (($i != 3 && $session->tribe == 3) ||
                     ($i != 4 && $session->tribe != 3)) ? (!empty($process['t'.$i]) ? $process['t'.$i] : 0) : 0;

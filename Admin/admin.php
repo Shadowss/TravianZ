@@ -6,14 +6,14 @@
 ## --------------------------------------------------------------------------- ##
 ##                                                                             ##
 ##  Project:       TravianZ                                                    ##
-##  Version:       05.03.2014                                                  ##
+##  Version:       05.03.2026                                                  ##
 ##  Filename:      Admin/admin.php     				                           ##
 ##  Developed by:  Dzoki                                                       ##
-##  Edited by:     Shadow and ronix                                            ##
-##  License:       Creative Commons BY-NC-SA 3.0                               ##
-##  Copyright:     TravianZ (c) 2014 - All rights reserved                     ##
-##  URLs:          http://travian.shadowss.ro                                  ##
-##  Source code:   https://github.com/Shadowss/TravianZ	                       ##
+##  Refactored by: Shadow                                                      ##
+##  License:       TravianZ Project                                            ##
+##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
+##  URLs:          https://travianz.org                                        ##
+##                 https://github.com/Shadowss/TravianZ                        ##
 ##                                                                             ##
 #################################################################################
 
@@ -507,7 +507,6 @@ if (!empty($_GET['p'])) {
 						<li><a href="<?php echo HOMEPAGE; ?>">Server Homepage</a></li>
 						<li><a href="index.php">Control Panel Home</a></li>
 						<li><a href="<?php echo rtrim(SERVER, '/'); ?>/dorf1.php">Return to the server</a></li>
-						<!--<li><a href="?p=update"><font color="Red"><b>Server Update (<?php echo $up_avl; ?>)</b></font></a></li>-->
 						<li><a href="?action=logout">Logout</a></li>
 						<li class="sub"><a href="#">Server Info</a>
 							<ul>

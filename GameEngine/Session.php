@@ -63,7 +63,7 @@ include_once("Profile.php");
 class Session {
 
     private $time;
-
+	private $populated = false;
     var $logged_in = false;
     var $referrer, $url;
     var $username, $uid, $access, $plus, $tribe, $isAdmin, $alliance, $gold, $oldrank, $gpack, $goldclub;
@@ -83,7 +83,10 @@ class Session {
     private $userarray = [];
 
     var $villages = [];
-
+	var $sit;
+	var $sit1;
+	var $sit2;
+	var $cp;
     function __construct() {
         global $database;
 

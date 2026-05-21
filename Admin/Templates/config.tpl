@@ -392,18 +392,6 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 		<td><?php echo EDIT_NEWSBOX3 ?> <em class="tooltip">?<span class="classic"><?php echo EDIT_NEWSBOX3_TOOLTIP ?></span></em></td>
 		<td><?php if(NEWSBOX3){ echo "<b><font color='Green'>Enabled</font></b>"; } elseif(!NEWSBOX3){ echo "<b><font color='Red'>Disabled</font></b>"; } ?> </td>
 	</tr>
-	<tr>
-	<!--<td>Home 1</td>
-		<td><?php if(HOME1){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(HOME1 == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?> </td>
-	</tr>
-	<tr>
-	<td>Home 2</td>
-		<td><?php if(HOME2){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(HOME2 == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?> </td>
-	</tr>
-	<tr>
-	<td>Home 3</td>
-		<td><?php if(HOME3){ echo "<b><font color='Green'>Enabled</font></b>"; } else if(HOME3 == false){ echo "<b><font color='Red'>Disabled</font></b>"; } ?> </td>
-	</tr>-->
 </table>
 
 <table id="member">

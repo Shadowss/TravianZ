@@ -146,7 +146,7 @@ class adm_DB {
     $dataarray = $$name;
 
     for ($i = 1; $i <= $lvl; $i++) {
-        $popT += $dataarray[$i]['pop'];
+        $popT += $dataarray[$i]['pop'] ?? 0;
     }
     return $popT;
   }
@@ -158,7 +158,7 @@ class adm_DB {
         $dataarray = $$name;
 
         for ($i = 1; $i <= $lvl; $i++) {
-            $popT += $dataarray[$i]['cp'];
+            $popT += $dataarray[$i]['cp'] ?? 0;
         }
         return $popT;
     }
