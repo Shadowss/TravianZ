@@ -1,299 +1,135 @@
-<?php 
-
-#################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
-## --------------------------------------------------------------------------- ##
-##  Filename       natars.tpl                                                  ##
-##  Developed by:  Shadow                                                      ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##                                                                             ##
-#################################################################################
-
+<?php
 $deletedArtifacts = $database->getDeletedArtifacts();
-
 ?>
-
 <style>
-h1 {
-    margin-top: 20px;
-    font-size: 18px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 5px;
-    font-family: Arial, sans-serif;
-}
-
-table#member,
-table#show_artefacts {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 25px;
-    background: #f9f9f9;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-}
-
-table#member th,
-table#show_artefacts th {
-    background: #333;
-    color: #fff;
-    padding: 8px;
-    font-size: 13px;
-    font-weight: normal;
-}
-
-table#member td,
-table#show_artefacts td {
-    border: 1px solid #ddd;
-    padding: 6px;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 13px;
-}
-
-.none {
-    text-align: center;
-    padding: 10px;
-    color: #777;
-}
-
-.icon img {
-    width: 24px;
-    height: 24px;
-}
-
-.bon {
-    color: #2b8a3e;
-    font-weight: bold;
-}
-
-a {
-    text-decoration: none;
-    color: #1a5fb4;
-    font-size: 13px;
-}
-
-a:hover {
-    text-decoration: underline;
-}
+.nat-wrap{max-width:1150px;margin:18px auto;font-family:Verdana;font-size:12px}
+.nat-head{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.nat-head h1{margin:0;font-size:18px;color:#2c3e50}
+.nat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+@media(max-width:950px){.nat-grid{grid-template-columns:1fr}}
+.nat-card{background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.nat-card h2{margin:0;padding:8px 12px;background:#f5f7fa;border-bottom:1px solid #ddd;font-size:13px;color:#333;display:flex;align-items:center;gap:6px}
+.nat-card.body{padding:12px}
+.nat-card input[type="number"],.nat-card input[type="text"],.nat-card select{padding:4px 6px;border:1px solid #bbb;border-radius:4px;font-size:12px}
+.nat-card button{background:#2c7be5;color:#fff;border:none;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:12px}
+.nat-card button:hover{background:#1a68d1}
+.nat-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.nat-table th{background:#34495e;color:#fff;padding:6px;text-align:left;font-weight:normal}
+.nat-table td{padding:6px;border-bottom:1px solid #eee;text-align:center}
+.nat-table tr:hover{background:#f9f9f9}
+.nat-table td.icon img{width:20px;height:20px}
+.bon{color:#27ae60;font-weight:bold}
+.none{padding:20px;text-align:center;color:#777}
 </style>
 
-<link href="../<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet">
-<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet">
+<link href="../<?php echo GP_LOCATE;?>lang/en/lang.css?f4b7d" rel="stylesheet">
+<link href="../<?php echo GP_LOCATE;?>lang/en/compact.css?f4b7i" rel="stylesheet">
 
-<h1>WW villages management</h1>
+<div class="nat-wrap">
+  <div class="nat-head">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#7f8c8d"><path d="M12 2L2 7v10l10 5 10-5V7z"/></svg>
+    <h1>Natars Management</h1>
+  </div>
 
-<form method="post" action="../Admin/admin.php?action=addWWVillages">
-<table id="show_artefacts">
-<thead>
-<tr>
-    <th colspan="2">Add WW village(s)</th>
-</tr>
-<tr>
-    <td>Number</td>
-    <td>Player id</td>
-</tr>
-</thead>
+  <div class="nat-grid">
+    <!-- WW Villages -->
+    <div class="nat-card">
+      <h2>🏰 WW Villages</h2>
+      <div class="body">
+        <form method="post" action="../Admin/admin.php?action=addWWVillages">
+          <table class="nat-table">
+            <tr><th>Number</th><th>Player ID</th><th></th></tr>
+            <tr>
+              <td><input type="number" name="numberOfVillages" value="1" min="1" max="999" style="width:60px"></td>
+              <td><input type="text" name="playerId" value="<?php echo Artifacts::NATARS_UID;?>" style="width:80px"></td>
+              <td><button onclick="this.disabled=true;this.form.submit();">Add</button></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
 
-<tbody>
-<tr>
-    <td><input type="number" name="numberOfVillages" value="1" min="1" max="999"></td>
-    <td><input type="text" name="playerId" value="<?php echo Artifacts::NATARS_UID; ?>"></td>
-</tr>
+    <!-- Artifacts -->
+    <div class="nat-card">
+      <h2>✨ Add Artifacts</h2>
+      <div class="body">
+        <form method="post" action="../Admin/admin.php?action=addArtifacts">
+          <table class="nat-table">
+            <tr><th>Icon</th><th>Type</th><th>Qty</th><th>Player</th><th></th></tr>
+            <tr>
+              <td class="icon"><img id="artifactImage" class="artefact_icon_1" src="../img/x.gif"></td>
+              <td>
+                <select name="selectedArtifact" id="selectedArtifact" onchange="changeArtifactImage()">
+                <?php
+                $artifactArrays = array_merge(Artifacts::NATARS_ARTIFACTS, Artifacts::NATARS_WW_BUILDING_PLANS);
+                foreach($artifactArrays as $desc => $artifactType){
+                    foreach($artifactType as $artifact){
+                        echo '<option value="'.$artifact['type'].':'.$artifact['size'].':'.$desc.'">'.$artifact['name'].'</option>';
+                    }
+                }
+               ?>
+                </select>
+              </td>
+              <td><input type="number" name="artifactQuantity" value="1" min="1" max="999" style="width:50px"></td>
+              <td><input type="text" name="playerId" value="<?php echo Artifacts::NATARS_UID;?>" style="width:70px"></td>
+              <td><button onclick="this.disabled=true;this.form.submit();">Add</button></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
 
-<tr>
-    <td colspan="2">
-        <button class="trav_buttons" onclick="this.disabled=true;this.form.submit();">
-            Add
-        </button>
-    </td>
-</tr>
-</tbody>
-</table>
+  <!-- Deleted Artifacts -->
+  <div class="nat-card">
+    <h2>🗑️ Deleted Artifacts</h2>
+    <div class="body" style="padding:0">
+      <table class="nat-table">
+        <tr><th></th><th></th><th>Name</th><th>Bonus</th><th>Effect</th><th>Time</th><th>Old Owner</th><th>Old Village</th></tr>
+        <?php if(empty($deletedArtifacts)){ echo '<tr><td colspan="8" class="none">No artifacts</td></tr>'; } else { foreach($deletedArtifacts as $artifact){ $info=Artifacts::getArtifactInfo($artifact);?>
+        <tr>
+          <td><a href="?action=returnArtifact&artid=<?php echo $artifact['id'];?>&del=1"><img src="../../img/admin/acc.gif" title="Restore"></a></td>
+          <td class="icon"><img class="artefact_icon_<?php echo $artifact['type'];?>" src="../img/x.gif"></td>
+          <td><?php echo $artifact['name'];?></td>
+          <td><?php echo $info['bonus'];?></td>
+          <td><?php echo $info['effectInfluence'];?></td>
+          <td><?php echo date("d.m.Y H:i:s", $artifact['conquered']);?></td>
+          <td><?php $u=$database->getUserField($artifact['owner'],"username",0); echo $u!="[?]"?'<a href="?p=player&uid='.$artifact['owner'].'">'.$u.'</a>':'<span style="color:gray">'.$u.'</span>';?></td>
+          <td><?php $v=$database->getVillageField($artifact['vref'],"name"); echo $v!="[?]"?'<a href="?p=village&did='.$artifact['vref'].'">'.$v.'</a>':'<span style="color:gray">'.$v.'</span>';?></td>
+        </tr>
+        <?php } }?>
+      </table>
+    </div>
+  </div>
 
-<h1>Artifacts management</h1>
-
-<form method="post" action="../Admin/admin.php?action=addArtifacts">
-<table id="show_artefacts">
-<thead>
-<tr>
-    <th colspan="4">Add artifact(s)</th>
-</tr>
-<tr>
-    <td>Icon</td>
-    <td>Type</td>
-    <td>Quantity</td>
-    <td>Player id</td>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-    <td class="icon">
-        <img id="artifactImage" class="artefact_icon_1" src="../img/x.gif">
-    </td>
-    <td>
-        <select name="selectedArtifact" id="selectedArtifact" onchange="changeArtifactImage()">
-        <?php 
-        $artifactArrays = array_merge(Artifacts::NATARS_ARTIFACTS, Artifacts::NATARS_WW_BUILDING_PLANS);
-
-        foreach($artifactArrays as $desc => $artifactType){
-            foreach($artifactType as $artifact){
-                echo '<option value="'.$artifact['type'].':'.$artifact['size'].':'.$desc.'">'.$artifact['name'].'</option>';
-            }
+  <!-- Overview -->
+  <div class="nat-card" style="margin-top:14px">
+    <h2>📊 Artifacts Overview</h2>
+    <div class="body" style="padding:0">
+      <table class="nat-table">
+        <tr><th>Icon</th><th>Name</th><th>Effect</th><th>Player</th><th>Alliance</th></tr>
+        <?php
+        $small=$database->getArtifactsBysize(1); $big=$database->getArtifactsBysize(2); $unique=$database->getArtifactsBysize(3);
+        if(empty($small)&&empty($big)&&empty($unique)){ echo '<tr><td colspan="5" class="none">No artifacts found</td></tr>'; }
+        else { $all=array(); if(is_array($small))$all=array_merge($all,$small); if(is_array($big))$all=array_merge($all,$big); if(is_array($unique))$all=array_merge($all,$unique);
+	foreach($all as $a){
+    $player=$database->getUserField($a['owner'],"username",0);
+    $aid=$database->getUserField($a['owner'],"alliance",0);
+    $ally=$database->getAllianceName($aid);
+    echo '<tr>
+        <td class="icon"><img src="../img/x.gif" class="artefact_icon_'.(int)$a['type'].'"></td>
+        <td>'.$a['name'].'</td>
+        <td><span class="bon">'.$a['effect'].'</span></td>
+        <td><a href="?p=player&uid='.$a['owner'].'">'.$player.'</a></td>
+        <td><a href="?p=alliance&aid='.$aid.'">'.$ally.'</a></td>
+    </tr>';
+}
         }
-        ?>
-        </select>
-    </td>
-    <td><input type="number" name="artifactQuantity" value="1" min="1" max="999"></td>
-    <td><input type="text" name="playerId" value="<?php echo Artifacts::NATARS_UID; ?>"></td>
-</tr>
-
-<tr>
-    <td colspan="4">
-        <button class="trav_buttons" onclick="this.disabled=true;this.form.submit();">
-            Add
-        </button>
-    </td>
-</tr>
-</tbody>
-</table>
-</form>
-
-<h1>Deleted artifact(s)</h1>
-
-<table id="show_artefacts">
-<thead>
-<tr>
-    <th colspan="8">Deleted artifact(s)</th>
-</tr>
-<tr>
-    <td></td>
-    <td></td>
-    <td>Name</td>
-    <td>Bonus</td>
-    <td>Effect</td>
-    <td>Time</td>
-    <td>Old owner</td>
-    <td>Old village</td>
-</tr>
-</thead>
-
-<tbody>
-<?php 
-if(empty($deletedArtifacts)){
-    echo '<tr><td colspan="8" class="none">No artifacts</td></tr>';
-} else {
-
-    foreach($deletedArtifacts as $artifact){
-        $info = Artifacts::getArtifactInfo($artifact);
-?>
-<tr>
-    <td>
-        <a href="?action=returnArtifact&artid=<?php echo $artifact['id']; ?>&del=1">
-            <img src="../../img/admin/acc.gif">
-        </a>
-    </td>
-
-    <td class="icon">
-        <img class="artefact_icon_<?php echo $artifact['type']; ?>" src="../img/x.gif">
-    </td>
-
-    <td><?php echo $artifact['name']; ?></td>
-    <td><?php echo $info['bonus']; ?></td>
-    <td><?php echo $info['effectInfluence']; ?></td>
-    <td><?php echo date("d.m.Y H:i:s", $artifact['conquered']); ?></td>
-
-    <td>
-        <?php 
-        $u = $database->getUserField($artifact['owner'], "username", 0);
-        echo ($u != "[?]")
-            ? '<a href="?p=player&uid='.$artifact['owner'].'">'.$u.'</a>'
-            : '<span style="color:gray">'.$u.'</span>';
-        ?>
-    </td>
-
-    <td>
-        <?php 
-        $v = $database->getVillageField($artifact['vref'], "name");
-        echo ($v != "[?]")
-            ? '<a href="?p=village&did='.$artifact['vref'].'">'.$v.'</a>'
-            : '<span style="color:gray">'.$v.'</span>';
-        ?>
-    </td>
-</tr>
-<?php
-    }
-}
-?>
-</tbody>
-</table>
-
-<h1>Artifacts overview</h1>
-
-<table id="show_artefacts">
-<thead>
-<tr>
-    <th>Icon</th>
-    <th>Name</th>
-    <th>Effect</th>
-    <th>Player</th>
-    <th>Alliance</th>
-</tr>
-</thead>
-
-<tbody>
-<?php
-
-// SAFE CALL 1: small
-$small = $database->getArtifactsBysize(1);
-
-// SAFE CALL 2: large + unique
-$big = $database->getArtifactsBysize(2);
-
-// SAFE CALL 3: unique artifacts (size 3)
-$unique = $database->getArtifactsBysize(3);
-
-if(empty($small) && empty($big) && empty($unique)){
-    echo '<tr><td colspan="5" class="none">No artifacts found</td></tr>';
-} else {
-
-    $all = array();
-
-    if(is_array($small)) $all = array_merge($all, $small);
-    if(is_array($big)) $all = array_merge($all, $big);
-    if(is_array($unique)) $all = array_merge($all, $unique);
-
-    foreach($all as $a){
-
-        $player = $database->getUserField($a['owner'], "username", 0);
-        $aid = $database->getUserField($a['owner'], "alliance", 0);
-        $ally = $database->getAllianceName($aid);
-
-        echo '<tr>
-            <td class="icon">
-                <img src="../img/x.gif" class="artefact_icon_'.(int)$a['type'].'">
-            </td>
-
-            <td>'.$a['name'].'</td>
-
-            <td><span class="bon">'.$a['effect'].'</span></td>
-
-            <td>
-                <a href="?p=player&uid='.$a['owner'].'">'.$player.'</a>
-            </td>
-
-            <td>
-                <a href="?p=alliance&aid='.$aid.'">'.$ally.'</a>
-            </td>
-        </tr>';
-    }
-}
-?>
-</tbody>
-</table>
-</form>
-
+       ?>
+      </table>
+    </div>
+  </div>
+</div>
 
 <script>
 function changeArtifactImage(){
