@@ -1,334 +1,154 @@
 <?php
 #################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## ban.tpl - REDESIGN 2025 ##
 #################################################################################
+if($_SESSION['access'] < ADMIN) die("Access Denied!");
 
 $error = '';
 $success = '';
 
-// =========================
-// HANDLE ADD BAN
-// =========================
-if(isset($_POST['action']) && $_POST['action'] == 'addBan')
-{
-    $uid = isset($_POST['uid']) ? (int)$_POST['uid'] : 0;
-    $reason = trim($_POST['reason'] ?? '');
-    $time = isset($_POST['time']) ? (int)$_POST['time'] : 0;
+// ========================= HANDLE ADD BAN =========================
+if(isset($_POST['action']) && $_POST['action'] == 'addBan') {
+    $uid = (int)($_POST['uid']??0);
+    $reason = trim($_POST['reason']??'');
+    $time = (int)($_POST['time']??0);
+    $blocked = [1,2,3,4,5];
 
-    // =========================
-    // ❌ BLOCK SYSTEM USERS
-    // =========================
-	
-    $blocked = array(1,2,3,4,5);
-
-    // =========================
-    // VALIDARE UID
-    // =========================
-    if($uid <= 0)
-    {
-        $error = "Invalid User ID!";
-    }
-    elseif(in_array($uid, $blocked))
-    {
-        $error = "You cannot ban system accounts (Support / Nature / Natars / Taskmaster / Multihunter)!";
-    }
-    else
-    {
-        // =========================
-        // ❌ CHECK IF USER EXISTS
-        // =========================
-        $userCheck = mysqli_query($database->dblink, "
-            SELECT id, username 
-            FROM ".TB_PREFIX."users 
-            WHERE id = $uid 
-            LIMIT 1
-        ");
-
-        if(!$userCheck || mysqli_num_rows($userCheck) == 0)
-        {
-            $error = "This user does not exist!";
-        }
-        else
-        {
-            // =========================
-            // CHECK ALREADY ACTIVE BAN
-            // =========================
-            $check = mysqli_query($database->dblink, "
-                SELECT id 
-                FROM ".TB_PREFIX."banlist 
-                WHERE uid = $uid 
-                AND active = 1 
-                LIMIT 1
-            ");
-
-            if(mysqli_num_rows($check) > 0)
-            {
-                $error = "User is already banned!";
-            }
-            else
-            {
+    if($uid <= 0) $error = "Invalid User ID!";
+    elseif(in_array($uid,$blocked)) $error = "You cannot ban system accounts!";
+    else {
+        $userCheck = mysqli_query($database->dblink,"SELECT id,username FROM ".TB_PREFIX."users WHERE id=$uid LIMIT 1");
+        if(!$userCheck || mysqli_num_rows($userCheck)==0) $error = "This user does not exist!";
+        else {
+            $check = mysqli_query($database->dblink,"SELECT id FROM ".TB_PREFIX."banlist WHERE uid=$uid AND active=1 LIMIT 1");
+            if(mysqli_num_rows($check)>0) $error = "User is already banned!";
+            else {
                 $user = mysqli_fetch_assoc($userCheck);
                 $name = $user['username'];
-                $end = ($time > 0) ? (time() + $time) : 0;
-
-			// =========================
-			// INSERT BAN (ACTIVE)
-			// =========================
-			$currentTime = time();
-
-			$stmt = $database->dblink->prepare("
-				INSERT INTO `".TB_PREFIX."banlist`
-				(uid, name, reason, time, end, admin, active)
-				VALUES
-				(?, ?, ?, ?, ?, 0, 1)
-			");
-
-			if ($stmt) {
-			// i = integer, s = string
-			$stmt->bind_param("issii", $uid, $name, $reason, $currentTime, $end);
-			$stmt->execute();
-			$stmt->close();
-			} else {
-			$error = "Database error (ban insert): " . $database->dblink->error;
-			}
-
-			// =========================
-			// BLOCK USER ACCESS
-			// =========================
-			if (empty($error)) {
-			$stmt2 = $database->dblink->prepare("
-				UPDATE `".TB_PREFIX."users`
-				SET access = 0
-				WHERE id = ?
-				LIMIT 1
-			");
-
-			if ($stmt2) {
-			$stmt2->bind_param("i", $uid);
-			$stmt2->execute();
-			$stmt2->close();
-			} else {
-			$error = "Database error (access update): " . $database->dblink->error;
-    }
-}
-			if (empty($error)) {
-			$success = "User has been banned successfully!";
-}
+                $end = $time>0 ? time()+$time : 0;
+                $stmt = $database->dblink->prepare("INSERT INTO `".TB_PREFIX."banlist` (uid,name,reason,time,end,admin,active) VALUES (?,?,?,?,?,0,1)");
+                $now = time();
+                $stmt->bind_param("issii",$uid,$name,$reason,$now,$end);
+                $stmt->execute(); $stmt->close();
+                $stmt2 = $database->dblink->prepare("UPDATE `".TB_PREFIX."users` SET access=0 WHERE id=? LIMIT 1");
+                $stmt2->bind_param("i",$uid); $stmt2->execute(); $stmt2->close();
+                $success = "User <b>$name</b> has been banned successfully!";
             }
         }
     }
 }
 
-// =========================
-// ACTIVE BANS
-// =========================
+// ========================= DATA =========================
 $bannedUsers = $admin->search_banned();
-
-// =========================
-// HISTORY (inactive bans)
-// =========================
-$banHistory = mysqli_query($database->dblink, "
-    SELECT * 
-    FROM ".TB_PREFIX."banlist 
-    WHERE active = 0 
-    ORDER BY id DESC 
-    LIMIT 50
-");
+$banHistory = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."banlist WHERE active=0 ORDER BY id DESC LIMIT 50");
 ?>
-
 <style>
-.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
-
-.errorBox {
-    background:#ffdddd;
-    border:1px solid #ff0000;
-    color:#a10000;
-    padding:10px;
-    margin:10px 0;
-    font-weight:bold;
-}
-
-.successBox {
-    background:#ddffdd;
-    border:1px solid #00aa00;
-    color:#006600;
-    padding:10px;
-    margin:10px 0;
-    font-weight:bold;
-}
+.ban-wrap{max-width:1100px;margin:20px auto;font-family:Verdana}
+.ban-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.ban-head svg{width:24px;height:24px}
+.ban-head h2{margin:0;font-size:18px}
+.alert{padding:10px 12px;border-radius:6px;margin-bottom12px;font-size:13px}
+.alert.error{background:#ffeaea;border:1px solid #e74c3c;color:#c0392b}
+.alert.success{background:#eaf1;border:1px solid #27ae60;color:#1e8449}
+.ban-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+@media(max-width:800px){.ban-grid{grid-template-columns:1fr}}
+.ban-card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.ban-card h3{margin:0 0 10px;font-size:14px;display:flex;align-items:center;gap:6px}
+.ban-form{display:flex;flex-direction:column;gap:8px}
+.ban-form .row{display:flex;gap:8px}
+.ban-form input,.ban-form select{flex:1;padding:8px 10px;border:1px solid #ccc;border-radius:6px;font-size:13px}
+.ban-form button{background:#c0392b;color:#fff;border:0;padding:9px;border-radius:6px;font-weight:bold;cursor:pointer}
+.ban-form button:hover{background:#a93226}
+.ban-list{display:grid;gap:8px;max-height:400px;overflow:auto;padding-right:4px}
+.ban-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fafafa;border:1px solid #eee;border-radius:6px;font-size:12px}
+.ban-item .user a{color:#222;text-decoration:none;font-weight:bold}
+.ban-item .user a:hover{text-decoration:underline}
+.ban-item .meta{color:#666;font-size:11px}
+.ban-item .reason{padding:2px 6px;background:#eee;border-radius:3px;font-size:10px;margin:0 6px}
+.ban-item .del{color:#c0392b;text-decoration:none;font-weight:bold;padding:2px 6px}
+.ban-item .del:hover{background:#ffeaea;border-radius:3px}
+.empty{padding:20px;text-align:center;color:#999;background:#fafafa;border:1px dashed #ddd;border-radius:6px}
 </style>
 
-<!-- =========================
-     MESSAGES
-     ========================= -->
-<?php if(!empty($error)) { ?>
-    <div class="errorBox"><?php echo $error; ?></div>
-<?php } ?>
+<div class="ban-wrap">
+  <div class="ban-head">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#c0392b"/><path d="M7 7l10 10M17 7L7 17" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+    <h2>Ban Management</h2>
+  </div>
 
-<?php if(!empty($success)) { ?>
-    <div class="successBox"><?php echo $success; ?></div>
-<?php } ?>
+  <?php if($error){?><div class="alert error"><?php echo $error;?></div><?php }?>
+  <?php if($success){?><div class="alert success"><?php echo $success;?></div><?php }?>
 
-<!-- =========================
-     BAN FORM
-     ========================= -->
-<form action="" method="post">
-    <input type="hidden" name="action" value="addBan">
+  <div class="ban-grid">
+    <!-- ADD BAN -->
+    <div class="ban-card">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#c0392b"/></svg>
+        Add New Ban
+      </h3>
+      <form method="post" class="ban-form">
+        <input type="hidden" name="action" value="addBan">
+        <div class="row">
+          <input type="number" name="uid" placeholder="User ID" required>
+          <select name="reason">
+            <?php foreach(['Pushing','Cheat','Hack','Bug','Bad Name','Multi Account','Swearing'] as $r){ echo "<option>$r</option>"; }?>
+          </select>
+        </div>
+        <div class="row">
+          <select name="time" style="flex:1">
+            <?php foreach([1,2,5,10,12] as $h) echo "<option value='".($h*3600)."'>$h hour/s</option>";
+                  foreach([1,2,5,10,30,50,90] as $d) echo "<option value='".($d*86400)."'>$d day/s</option>"; ?>
+            <option value="0">Forever</option>
+          </select>
+          <button type="submit">Ban User</button>
+        </div>
+      </form>
+    </div>
 
-    <table id="member" cellpadding="1" cellspacing="1">
-        <thead>
-            <tr>
-                <th colspan="6">Ban</th>
-            </tr>
-        </thead>
+    <!-- ACTIVE BANS -->
+    <div class="ban-card">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#e74c3c"/></svg>
+        Active Bans (<?php echo count($bannedUsers);?>)
+      </h3>
+      <div class="ban-list">
+        <?php if($bannedUsers){ foreach($bannedUsers as $b){
+            $name = $database->getUserField($b['uid'],'username',0) ?: $b['name'];
+            $end = $b['end'] ? date("d.m H:i",$b['end']) : '∞';
+        ?>
+          <div class="ban-item">
+            <div>
+              <div class="user"><a href="?p=player&uid=<?php echo $b['uid'];?>"><?php echo htmlspecialchars($name);?></a></div>
+              <div class="meta"><?php echo date("d.m H:i",$b['time']);?> → <?php echo $end;?></div>
+            </div>
+            <div>
+              <span class="reason"><?php echo htmlspecialchars($b['reason']);?></span>
+              <a class="del" href="?action=delBan&uid=<?php echo $b['uid'];?>&id=<?php echo $b['id'];?>" onclick="return confirm('Unban?')" title="Unban">✕</a>
+            </div>
+          </div>
+        <?php }} else { echo '<div class="empty">No active bans</div>'; }?>
+      </div>
+    </div>
+  </div>
 
-        <tbody>
-            <tr>
-                <td>User ID</td>
-                <td><input type="text" class="fm" name="uid"></td>
-            </tr>
-
-            <tr>
-                <td>Reason</td>
-                <td>
-                    <select name="reason" class="fm">
-                        <?php
-                        $arr = array('Pushing','Cheat','Hack','Bug','Bad Name','Multi Account','Swearing');
-                        foreach($arr as $r)
-                        {
-                            echo '<option value="'.$r.'">'.$r.'</option>';
-                        }
-                        ?>
-                    </select>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Duration</td>
-                <td>
-                    <select name="time" class="fm">
-                        <?php
-                        $arr = array(1,2,5,10,12);
-                        foreach($arr as $r)
-                        {
-                            echo '<option value="'.($r*3600).'">'.$r.' hour/s</option>';
-                        }
-
-                        $arr2 = array(1,2,5,10,30,50,90);
-                        foreach($arr2 as $r)
-                        {
-                            echo '<option value="'.($r*3600*24).'">'.$r.' day/s</option>';
-                        }
-
-                        echo '<option value="0">Forever</option>';
-                        ?>
-                    </select>
-                </td>
-            </tr>
-
-            <tr>
-                <td colspan="2" class="on">
-                    <input type="image" src="../img/admin/b/ok1.gif" value="submit">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</form>
-
-<!-- =========================
-     ACTIVE BANS
-     ========================= -->
-<table id="member" cellpadding="1" cellspacing="1">
-    <thead>
-        <tr>
-            <th colspan="6">Active Bans (<?php echo count($bannedUsers); ?>)</th>
-        </tr>
-        <tr>
-            <td><b>Username</b></td>
-            <td><b>Length</b></td>
-            <td><b>Reason</b></td>
-            <td></td>
-        </tr>
-    </thead>
-
-    <tbody>
-    <?php
-    if($bannedUsers)
-    {
-        foreach($bannedUsers as $b)
-        {
-            $name = $database->getUserField($b['uid'],'username',0);
-
-            if($name == '')
-            {
-                $name = $b['name'];
-                $link = "<span class=\"c b\">[".$name."]</span>";
-            }
-            else
-            {
-                $link = '<a href="?p=player&uid='.$b['uid'].'">'.$name.'</a>';
-            }
-
-            $end = $b['end'] ? date("d.m.y H:i",$b['end']) : '*';
-
-            echo '
-            <tr>
-                <td>'.$link.'</td>
-                <td>'.date("d.m.y H:i",$b['time']).' - '.$end.'</td>
-                <td>'.$b['reason'].'</td>
-                <td class="on">
-                    <a href="?action=delBan&uid='.$b['uid'].'&id='.$b['id'].'">
-                        <img src="../img/admin/del.gif" class="del">
-                    </a>
-                </td>
-            </tr>';
-        }
-    }
-    else
-    {
-        echo '<tr><td colspan="6">No active bans</td></tr>';
-    }
-    ?>
-    </tbody>
-</table>
-
-<br><br>
-
-<!-- =========================
-     BAN HISTORY
-     ========================= -->
-<table id="member" cellpadding="1" cellspacing="1">
-    <thead>
-        <tr>
-            <th colspan="6">Ban History (Inactive)</th>
-        </tr>
-        <tr>
-            <td><b>Username</b></td>
-            <td><b>Length</b></td>
-            <td><b>Reason</b></td>
-        </tr>
-    </thead>
-
-    <tbody>
-    <?php
-    if($banHistory && mysqli_num_rows($banHistory) > 0)
-    {
-        while($h = mysqli_fetch_assoc($banHistory))
-        {
-            $end = $h['end'] ? date("d.m.y H:i",$h['end']) : '*';
-
-            echo '
-            <tr>
-                <td>'.$h['name'].'</td>
-                <td>'.date("d.m.y H:i",$h['time']).' - '.$end.'</td>
-                <td>'.$h['reason'].'</td>
-            </tr>';
-        }
-    }
-    else
-    {
-        echo '<tr><td colspan="3">No ban history</td></tr>';
-    }
-    ?>
-    </tbody>
-</table>
+  <!-- HISTORY -->
+  <div class="ban-card">
+    <h3>
+      <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 5v7l4 2" stroke="#555" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="#555" stroke-width="2" fill="none"/></svg>
+      Ban History
+    </h3>
+    <div class="ban-list">
+      <?php if($banHistory && mysqli_num_rows($banHistory)>0){ while($h=mysqli_fetch_assoc($banHistory)){
+          $end = $h['end'] ? date("d.m H:i",$h['end']) : '∞';
+      ?>
+        <div class="ban-item" style="opacity:.7">
+          <div>
+            <div class="user"><?php echo htmlspecialchars($h['name']);?></div>
+            <div class="meta"><?php echo date("d.m H:i",$h['time']);?> → <?php echo $end;?></div>
+          </div>
+          <span class="reason"><?php echo htmlspecialchars($h['reason']);?></span>
+        </div>
+      <?php }} else { echo '<div class="empty">No history</div>'; }?>
+    </div>
+  </div>
+</div>

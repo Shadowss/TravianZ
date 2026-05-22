@@ -10,9 +10,6 @@
 ##                                                                             ##
 #################################################################################
 
-############ Check Update #############
-//copy("http://travian.gamingcrazy.net/Update/update_latest.tpl", "Templates/update_latest.tpl");
-
 ?>
 <div align="center">
 	<img src="../img/admin/admin.gif" width="468" height="60" border="0">

@@ -1,4 +1,5 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -7,186 +8,119 @@
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##  Enhanced:      aggenkeech                                                  ##
-##  Improoved by:  Shadow                                                      ##
+##  Refactored by: Shadow                                                      ##
 #################################################################################
 
+if($_SESSION['access'] < MULTIHUNTER) die("Access Denied!");
+
 function formatNum($n) {
+    $n = (int)$n;
     if ($n >= 1000000000) return round($n / 1000000000, 2).'B';
     if ($n >= 1000000) return round($n / 1000000, 2).'M';
     if ($n >= 1000) return round($n / 1000, 1).'K';
     return $n;
 }
+function q1($sql){ global $database; $r=$database->query($sql); return $r ? $r->fetch_assoc() : []; }
 
-$tribe1 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 1");
-$tribe2 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 2");
-$tribe3 = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe = 3");
-$tribes = Array(mysqli_num_rows($tribe1),mysqli_num_rows($tribe2),mysqli_num_rows($tribe3));
-$users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE tribe > 0 AND tribe < 4"));
+// ---- DATE ----
+$users = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE tribe BETWEEN 1 AND 3")['c'] ?? 0);
+$active = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."active")['c'] ?? 0);
+$online = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE timestamp > ".(time()-300)." AND tribe>0")['c'] ?? 0);
+$banned = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE access=0")['c'] ?? 0);
+$villages = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."vdata")['c'] ?? 0);
+$pop = (int)(q1("SELECT SUM(pop) s FROM ".TB_PREFIX."vdata")['s'] ?? 0);
+
+$tribes = [1=>0,2=>0,3=>0];
+for($t=1;$t<=3;$t++){ $tribes[$t] = (int)(q1("SELECT COUNT(*) c FROM ".TB_PREFIX."users WHERE tribe=$t")['c'] ?? 0); }
+
+$gold = (int)(q1("SELECT SUM(gold) s FROM ".TB_PREFIX."users")['s'] ?? 0);
+
+// ---- TRUPE ----
+$cells = ['SUM(hero) as hero'];
+for($i=1;$i<=50;$i++) $cells[] = "SUM(u$i) AS u$i";
+$uv = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."units");
+$ue = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."enforcement");
 ?>
-<br /><br /><br /><br /><br />
-	<table id="profile">
-		<thead>
-			<tr>
-				<th colspan="2">World Information</th>
-			</tr>
-		 </thead>
-		 <tbody>
-			<tr>
-				<td>Registered players</td>
-				<td><?php echo $users; ?></td>
-			</tr>
-			<tr>
-				<td>Active players</td>
-				<td><?php $result = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."active"); $num_rows = mysqli_num_rows($result); echo $num_rows; ?></td>
-			</tr>
-			<tr>
-				<td>Players online</td>
-				<td><?php $t =time();
-				$result = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE timestamp > ".($t - 300)) or die(mysqli_error($database->dblink));
-				$num_rows = mysqli_num_rows($result);
-				echo $num_rows;?>
-				</td>
-			</tr>
-			<tr>
-				<td>Players Banned</td>
-				<td><?php
-				$result = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE access = 0");
-				$num_rows = mysqli_num_rows($result);
-				echo $num_rows; ?>
-				</td>
-			</tr>
-			<tr>
-				<td>Villages settled</td>
-				<td><?php
-				$result = mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."vdata");
-				$num_rows = mysqli_fetch_array($result, MYSQLI_ASSOC)['Total'];
-				echo $num_rows;
-            ?>
-				</td>
-			</tr>
-			<tr>
-				<td>Total Population</td>
-			<td><?php $pop = mysqli_query($database->dblink,"SELECT SUM(pop) AS sumofpop FROM ".TB_PREFIX."vdata");  $getpop = mysqli_fetch_assoc($pop);  echo $getpop['sumofpop']; ?></td>
-			</tr>
-		</tbody>
-	</table>
+<style>
+.sinfo-wrap{max-width:1100px;margin:20px auto;font-family:Verdana}
+.sinfo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.scard{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.scard h3{margin:0 0 8px;font-size:13px;color:#333;border-bottom:1px solid #eee;padding-bottom:6px}
+.scard .row{display:flex;justify-content:space-between;padding:4px 0;font-size:12px;border-bottom:1px dotted #f0f0f0}
+.scard .row:last-child{border:0}
+.scard .val{font-weight:bold}
+.tribe-bar{height:8px;background:#eee;border-radius:4px;overflow:hidden;margin:4px 0}
+.tribe-bar span{display:block;height:100%}
+.romans{background:#c0392b}.teutons{background:#2980b9}.gauls{background:#27ae60}
+.troops-wrap{background:#fff;border:1px solid #ddd;border-radius:8px;padding:14px}
+.troops-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.tribe-box{border:1px solid #eee;border-radius:6px;padding:8px}
+.tribe-box h4{margin:0 0 6px;font-size:12px;text-align:center;color:#555}
+.unit{display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px dotted #f5f5f5}
+.unit img{width:16px;height:16px;margin-right:4px}
+.unit .cnt{font-weight:bold}
+@media(max-width:900px){.sinfo-grid{grid-template-columns:1fr}.troops-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
 
-	<br />
+<div class="sinfo-wrap">
 
-	<table id="profile">
-		<thead>
-			<tr><th colspan="3">Player Information</th></tr>
-			<td class="b">Tribe</td>
-			<td class="b">Registered</td>
-			<td class="b">Percent</td>
-		</thead>
-		<tbody>
-			<tr>
-				<td>Romans</td>
-				<td><?php echo $tribes[0]; ?></td>
-				<td><?php echo ($users > 0) ? ($percents[0] = round(100 * ($tribes[0] / $users), 2))."%" : "---"; ?></td>
-			</tr>
-			<tr>
-				<td>Teutons</td>
-				<td><?php echo $tribes[1]; ?></td>
-				<td><?php echo ($users > 0) ? ($percents[1] = round(100 * ($tribes[1] / $users), 2))."%" : "---"; ?></td>
-			</tr>
-			<tr>
-				<td>Gauls</td>
-				<td><?php echo $tribes[2]; ?></td>
-				<td><?php echo ($users > 0) ? (100-$percents[0]-$percents[1])."%" : "---"; ?></td>
-			</tr>
-		</tbody>
-	</table>
+<div class="sinfo-grid">
+  <div class="scard">
+    <h3>🌍 World Information</h3>
+    <div class="row"><span>Registered players</span><span class="val"><?php echo number_format($users); ?></span></div>
+    <div class="row"><span>Active players</span><span class="val"><?php echo $active; ?></span></div>
+    <div class="row"><span>Players online</span><span class="val" style="color:#27ae60"><?php echo $online; ?></span></div>
+    <div class="row"><span>Players banned</span><span class="val" style="color:#c0392b"><?php echo $banned; ?></span></div>
+    <div class="row"><span>Villages settled</span><span class="val"><?php echo number_format($villages); ?></span></div>
+    <div class="row"><span>Total population</span><span class="val"><?php echo number_format($pop); ?></span></div>
+  </div>
 
-	<br />
+  <div class="scard">
+    <h3>👥 Player Distribution</h3>
+    <?php $names=[1=>'Romans',2=>'Teutons',3=>'Gauls']; $colors=[1=>'romans',2=>'teutons',3=>'gauls'];
+    foreach($names as $id=>$name){
+        $pct = $users ? round($tribes[$id]/$users*100,1) : 0;
+        echo "<div class='row'><span>$name</span><span class='val'>{$tribes[$id]} ($pct%)</span></div>";
+        echo "<div class='tribe-bar'><span class='$colors[$id]' style='width:$pct%'></span></div>";
+    } ?>
+  </div>
 
-	<table id="profile">
-		<thead>
-		 <tr>
-			<th colspan="3">Server Information</th>
-		</tr>
-			<td class="b"></td>
-			<td class="b">Total</td>
-			<td class="b">Average</td>
-		</thead>
-		<tbody>
-			<tr>
-				<td><img src="../<?php echo GP_LOCATE; ?>img/a/gold.gif" alt="Gold" title="Gold"> Gold</td>
-				<td><?php $gold = mysqli_query($GLOBALS["link"], "SELECT SUM(gold) AS sumofgold FROM ".TB_PREFIX."users"); $getgold=mysqli_fetch_assoc($gold); echo $getgold['sumofgold']; ?></td>
-				<td><?php $gold = mysqli_query($GLOBALS["link"], "SELECT SUM(gold) AS sumofgold FROM ".TB_PREFIX."users"); $getgold=mysqli_fetch_assoc($gold); echo round($getgold['sumofgold'] / $users);?></td>
-			</tr>
-		</tbody>
-	</table>
+  <div class="scard">
+    <h3>💰 Server Economy</h3>
+    <div class="row"><span><img src="../<?php echo GP_LOCATE; ?>img/a/gold.gif"> Total Gold</span><span class="val"><?php echo number_format($gold); ?></span></div>
+    <div class="row"><span>Avg Gold/player</span><span class="val"><?php echo $users ? number_format($gold/$users,0) : 0; ?></span></div>
+    <div class="row"><span>Server started</span><span class="val"><?php echo defined('START_DATE') ? date('d.m.Y', strtotime(START_DATE)) : '-'; ?></span></div>
+    <div class="row"><span>Uptime</span><span class="val"><?php echo defined('START_DATE') ? floor((time()-strtotime(START_DATE))/86400).' days' : '-'; ?></span></div>
+  </div>
 </div>
 
-<table id="member">
-	<thead>
-		<tr>
-			<th colspan="10">Troops on the Server</th>
-		</tr>
-		<?php
-			$cells = ['SUM(hero) as hero'];
-			for($i=1; $i<51; $i++) {
-				array_push($cells, 'SUM(u'.$i.') AS u'.$i);
-			}
+<div class="troops-wrap">
+  <h3 style="margin:0 0 10px;font-size:14px">⚔️ Troops on Server (villages + reinforcements)</h3>
+  <div class="troops-grid">
+    <?php
+    $tribesUnits = [
+        'Romans' => range(1,10),
+        'Teutons' => range(11,20),
+        'Gauls' => range(21,30),
+        'Natars' => range(31,40),
+        'Other' => range(41,50)
+    ];
+    foreach($tribesUnits as $tribe=>$ids){
+        echo "<div class='tribe-box'><h4>$tribe</h4>";
+        $has=false;
+        foreach($ids as $u){
+            $total = (int)($uv["u$u"] ?? 0) + (int)($ue["u$u"] ?? 0);
+            if($total>0){ $has=true;
+                echo "<div class='unit'><span><img src='../".GP_LOCATE."img/u/$u.gif'> u$u</span><span class='cnt' title='$total'>".formatNum($total)."</span></div>";
+            }
+        }
+        if(!$has) echo "<div class='unit'><span style='color:#999'>No troops</span></div>";
+        echo "</div>";
+    }
+    $heroTotal = (int)($uv['hero'] ?? 0) + (int)($ue['hero'] ?? 0);
+    echo "<div class='tribe-box'><h4>Heroes</h4><div class='unit'><span><img src='../".GP_LOCATE."img/u/hero.gif'> Hero</span><span class='cnt'>".formatNum($heroTotal)."</span></div></div>";
+    ?>
+  </div>
+</div>
 
-			$units_villages = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."units"));
-			$units_enforcements = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT ".implode(',', $cells)." FROM ".TB_PREFIX."enforcement"));
-
-			for($i=1; $i<11; $i++) {
-				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-			}
-
-			echo '</thead><tbody>';
-			for($i=1; $i<11; $i++) {
-				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
-				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
-			}
-
-			echo "</tr>";
-			for($i=11; $i<21; $i++) {
-				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-			}
-
-			echo '</tr><tr>';
-			for($i=11; $i<21; $i++) {
-				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
-				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
-			}
-
-			echo "</tr>";
-			for($i=21; $i<31; $i++) {
-				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-			}
-
-			echo '</tr><tr>';
-			for($i=21; $i<31; $i++) {
-				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
-				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
-			}
-
-			echo "</tr>";
-			for($i=31; $i<41; $i++) {
-				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-			}
-
-			echo '</tr><tr>';
-			for($i=31; $i<41; $i++) {
-				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
-				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
-			}
-
-			echo "</tr>";
-			for($i=41; $i<51; $i++) {
-				echo '<td class="on"><img src="../'.GP_LOCATE.'img/u/'.$i.'.gif"></td>';
-			}
-
-			echo '</tr><tr>';
-			for($i=41; $i<51; $i++) {
-				$total = ($units_villages['u'.$i] + $units_enforcements['u'.$i]);
-				echo '<td class="on" title="'.$total.'">'.formatNum($total).'</td>';
-			}
-		?>
-	</tbody>
-</table>
+</div>
