@@ -3,41 +3,90 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       editUsername.php                                            ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-foreach ($_POST as $key => $value) {
-    $_POST[$key] = $database->escape($value);
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+$uid     = (int)($_POST['uid'] ?? 0);
+$session = (int)($_POST['admid'] ?? 0);
+$username = trim($_POST['username'] ?? '');
+
+if ($uid <= 0 || $session <= 0 || $username === '') {
+    header("Location: ../../../Admin/admin.php?p=player&uid=$uid&e=user");
+    exit;
 }
 
-$uid = (int) $_POST['uid'];
-$session = (int) $_POST['admid'];
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
+}
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+// ---------------------------------------------------------------------------
+// Validare username
+// ---------------------------------------------------------------------------
+if (strlen($username) < 3 || strlen($username) > 20 || !preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+    header("Location: ../../../Admin/admin.php?p=player&uid=$uid&e=invalid");
+    exit;
+}
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+// verificare duplicat
+$check = $database->query("SELECT id FROM " . TB_PREFIX . "users WHERE username = '" . $database->escape($username) . "' AND id != $uid LIMIT 1");
+if (mysqli_num_rows($check) > 0) {
+    header("Location: ../../../Admin/admin.php?p=player&uid=$uid&e=taken");
+    exit;
+}
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET username = '".$_POST['username']."' WHERE id = ".$uid."");
+$usernameEsc = $database->escape($username);
 
-header("Location: ../../../Admin/admin.php?p=player&uid=".$uid."");
+// ---------------------------------------------------------------------------
+// Update
+// ---------------------------------------------------------------------------
+$database->query("UPDATE " . TB_PREFIX . "users SET username = '$usernameEsc' WHERE id = $uid");
+
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$adminId = (int)$_SESSION['id'];
+$time = time();
+$logText = "Changed username for user $uid to '$usernameEsc'";
+$logEsc = $database->escape($logText);
+
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=player&uid=" . $uid . "&name=1");
+exit;
 ?>

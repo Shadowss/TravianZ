@@ -3,39 +3,93 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       editVillageOwner.php                                        ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-$session = (int) $_POST['admid'];
-$id = (int) $_POST['did'];
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+$session  = (int)($_POST['admid'] ?? 0);
+$did      = (int)($_POST['did'] ?? 0);
+$newowner = (int)($_POST['newowner'] ?? 0);
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+if ($did <= 0 || $session <= 0 || $newowner <= 0) {
+    header("Location: ../../../Admin/admin.php?p=admin&e=owner");
+    exit;
+}
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
+}
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."vdata SET 
-	owner = '".$_POST['newowner']."' 
-	WHERE wref = $id") or die(mysqli_error($database->dblink));
+// ---------------------------------------------------------------------------
+// Verifică sat și noul owner
+// ---------------------------------------------------------------------------
+$village = $database->getVillage($did);
+if (!$village) {
+    header("Location: ../../../Admin/admin.php?p=admin&e=novillage");
+    exit;
+}
 
-header("Location: ../../../Admin/admin.php?p=player&uid=".$_POST['newowner']."");
+$newUser = $database->getUserArray($newowner, 1);
+if (!$newUser) {
+    header("Location: ../../../Admin/admin.php?p=village&did=$did&e=nouser");
+    exit;
+}
+
+$oldOwner = (int)$village['owner'];
+
+// ---------------------------------------------------------------------------
+// Update
+// ---------------------------------------------------------------------------
+$database->query("UPDATE " . TB_PREFIX . "vdata SET owner = $newowner WHERE wref = $did");
+
+// actualizează și owner în oaze ocupate de sat (opțional dar recomandat)
+$database->query("UPDATE " . TB_PREFIX . "odata SET owner = $newowner WHERE conqured = $did");
+
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$adminId = (int)$_SESSION['id'];
+$time = time();
+$logText = "Changed owner for village <a href='admin.php?p=village&did=$did'>$did</a> from $oldOwner to <a href='admin.php?p=player&uid=$newowner'>$newowner</a>";
+$logEsc = $database->escape($logText);
+
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=player&uid=" . $newowner);
+exit;
 ?>

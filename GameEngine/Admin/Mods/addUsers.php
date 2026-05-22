@@ -1,5 +1,17 @@
 <?php
 
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       addUser.php                                                 ##
+##  Type           BACKEND                                                     ##
+##  Developed by:  Dzoki & Advocatie                                           ##
+##  License:       TravianZ Project                                            ##
+##  Reworks by:    ronix                                                       ##
+##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
+
 use App\Entity\User;
 
 // go max 5 levels up - we don't have folders that go deeper than that

@@ -3,44 +3,91 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       editResources.php                                           ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-$session = (int) $_POST['admid'];
-$id = (int) $_POST['did'];
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+$session = (int)($_POST['admid'] ?? 0);
+$id      = (int)($_POST['did'] ?? 0);
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+if ($id <= 0 || $session <= 0) {
+    header("Location: ../../../Admin/admin.php?p=admin&e=bad");
+    exit;
+}
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
+}
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."vdata SET 
-	wood  = '".(int) $_POST['wood']."', 
-	clay  = '".(int) $_POST['clay']."', 
-	iron  = '".(int) $_POST['iron']."', 
-	crop  = '".(int) $_POST['crop']."', 
-	maxstore  = '".(int) $_POST['maxstore']."', 
-	maxcrop   = '".(int) $_POST['maxcrop']."' 
-	WHERE wref = '".$id."'") or die(mysqli_error($database->dblink));
+// ---------------------------------------------------------------------------
+// Valori
+// ---------------------------------------------------------------------------
+$wood     = max(0, (int)($_POST['wood'] ?? 0));
+$clay     = max(0, (int)($_POST['clay'] ?? 0));
+$iron     = max(0, (int)($_POST['iron'] ?? 0));
+$crop     = max(0, (int)($_POST['crop'] ?? 0));
+$maxstore = max(0, (int)($_POST['maxstore'] ?? 0));
+$maxcrop  = max(0, (int)($_POST['maxcrop'] ?? 0));
 
-header("Location: ../../../Admin/admin.php?p=village&did=".$id."");
+// ---------------------------------------------------------------------------
+// Update
+// ---------------------------------------------------------------------------
+$database->query(
+    "UPDATE " . TB_PREFIX . "vdata SET 
+        wood = $wood,
+        clay = $clay,
+        iron = $iron,
+        crop = $crop,
+        maxstore = $maxstore,
+        maxcrop = $maxcrop
+     WHERE wref = $id"
+);
+
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$adminId = (int)$_SESSION['id'];
+$time = time();
+$logText = "Edited resources for village <a href='admin.php?p=village&did=$id'>$id</a> (w:$wood c:$clay i:$iron cr:$crop)";
+$logEsc = $database->escape($logText);
+
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=village&did=" . $id);
+exit;
 ?>

@@ -8,33 +8,66 @@
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
-include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/config.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-$allyid =(int)  $_POST['allyid'];
-$aid = (int) $_POST['aid'];
-$session = (int) $_POST['admid'];
+// ---------------------------------------------------------------------------
+// Input - folosim un singur ID pentru alianță
+// ---------------------------------------------------------------------------
+$aid     = (int)($_POST['aid'] ?? $_POST['allyid'] ?? 0);
+$session = (int)($_POST['admid'] ?? 0);
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+if ($aid <= 0 || $session <= 0) {
+    header("Location: ../../../Admin/admin.php?p=alliance&aid=" . $aid . "&e=bad");
+    exit;
+}
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
+}
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."allimedal set del = 1 WHERE allyid = ".$aid."");
+// ---------------------------------------------------------------------------
+// Ștergere logică - toate medaliile alianței
+// ---------------------------------------------------------------------------
+$database->query("UPDATE " . TB_PREFIX . "allimedal SET del = 1 WHERE allyid = $aid AND del = 0");
+$affected = mysqli_affected_rows($database->dblink);
 
-header("Location: ../../../Admin/admin.php?p=alliance&aid=".$aid."");
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$adminId = (int)$_SESSION['id'];
+$time = time();
+$logText = "Deleted all medals ($affected) for alliance <a href='admin.php?p=alliance&aid=$aid'>$aid</a>";
+$logEsc = $database->escape($logText);
+
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=alliance&aid=" . $aid . "&deleted=$affected");
+exit;
 ?>

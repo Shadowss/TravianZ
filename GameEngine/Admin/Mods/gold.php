@@ -3,6 +3,7 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       gold.php                                                    ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  Refactored by: Shadow                                                      ##
 ##  License:       TravianZ Project                                            ##

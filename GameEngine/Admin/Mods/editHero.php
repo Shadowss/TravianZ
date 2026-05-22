@@ -2,7 +2,8 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       addTroops.php                                               ##
+##  Filename       editHero.php                                                ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  Dzoki & Advocatie                                           ##
 ##  License:       TravianZ Project                                            ##
 ##  Reworks by:    ronix                                                       ##
@@ -10,34 +11,88 @@
 ##                                                                             ##
 #################################################################################
 
-if(!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
-include_once("../../Database.php");
-$status="&ce=1";
-
-foreach ($_POST as $key => $value) {
-    $_POST[$key] = $database->escape($value);
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
 }
 
-if(isset($_POST['id']) && isset($_POST['hid'])) {
-	$_POST['hname'] = trim(stripslashes($_POST['hname']));
-	if ($_POST['hname']=="") {
-		header("Location: ../../../Admin/admin.php?p=editHero&uid=".$_POST['id']."&e=1");
-		exit;
-	}	
-		
-	include_once("../../Data/hero_full.php"); 
-	
-	$id = (int) $_POST['id'];
-	$hid = (int) $_POST['hid'];
-	
-	$q = "UPDATE ".TB_PREFIX."hero SET unit=".(int) $_POST['hunit'].", name='".$_POST['hname']."', level=".(int) $_POST['hlvl'].", points=".(int) $_POST['exp'].", experience=".(int) $hero_levels[$_POST['hlvl']].", health='".$_POST['hhealth']."',
-		attack=".(int) $_POST['hatk'].", defence=".(int) $_POST['hdef'].", attackbonus=".(int) $_POST['hob'].", defencebonus=".(int) $_POST['hdb'].", regeneration=".(int) $_POST['hrege']." WHERE heroid = ".$hid." AND uid = ".$id;
-$return=$database->query($q);
-if($return) {
-    $database->query("Insert into ".TB_PREFIX."admin_log values (0,".(int) $_SESSION['id'].",'Changed hero info',".time().")");
-	$status="&cs=1";
-}	
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
+$autoprefix = '';
+for ($i = 0; $i < 5; $i++) {
+    $autoprefix = str_repeat('../', $i);
+    if (file_exists($autoprefix . 'autoloader.php')) {
+        break;
+    }
 }
-header("Location: ../../../Admin/admin.php?p=player&uid=".$id.$status);
+
+include_once($autoprefix . "GameEngine/config.php");
+include_once($autoprefix . "GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Data/hero_full.php");
+
+$status = "&ce=1";
+
+if (isset($_POST['id'], $_POST['hid'])) {
+    $id   = (int)$_POST['id'];
+    $hid  = (int)$_POST['hid'];
+    $hname = trim($_POST['hname'] ?? '');
+
+    if ($hname === '') {
+        header("Location: ../../../Admin/admin.php?p=editHero&uid=$id&e=1");
+        exit;
+    }
+
+    // Input curat - cast individual, NU escape global
+    $hunit   = (int)($_POST['hunit'] ?? 0);
+    $hlvl    = max(0, min(100, (int)($_POST['hlvl'] ?? 0)));
+    $exp     = (int)($_POST['exp'] ?? 0);
+    $hhealth = (float)($_POST['hhealth'] ?? 100);
+    $hatk    = (int)($_POST['hatk'] ?? 0);
+    $hdef    = (int)($_POST['hdef'] ?? 0);
+    $hob     = (int)($_POST['hob'] ?? 0);
+    $hdb     = (int)($_POST['hdb'] ?? 0);
+    $hrege   = (int)($_POST['hrege'] ?? 0);
+
+    $experience = isset($hero_levels[$hlvl]) ? (int)$hero_levels[$hlvl] : 0;
+    $hnameEsc = $database->escape($hname);
+
+    $q = "UPDATE " . TB_PREFIX . "hero SET 
+            unit = $hunit,
+            name = '$hnameEsc',
+            level = $hlvl,
+            points = $exp,
+            experience = $experience,
+            health = '$hhealth',
+            attack = $hatk,
+            defence = $hdef,
+            attackbonus = $hob,
+            defencebonus = $hdb,
+            regeneration = $hrege
+          WHERE heroid = $hid AND uid = $id";
+
+    $return = $database->query($q);
+ 
+// ---------------------------------------------------------------------------
+// Log admin - adaptat pentru tabelul tău
+// ---------------------------------------------------------------------------
+
+    if ($return) {
+        $adminId = (int)$_SESSION['id'];
+        $time = time();
+        $logText = "Changed hero info for user <a href='admin.php?p=player&uid=$id'>$id</a> (hero $hid)";
+        $logEsc = $database->escape($logText);
+
+        $database->query(
+            "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+            "VALUES (0, '$adminId', '$logEsc', $time)"
+        );
+        $status = "&cs=1";
+    }
+}
+
+header("Location: ../../../Admin/admin.php?p=player&uid=" . (int)$id . $status);
+exit;
 ?>

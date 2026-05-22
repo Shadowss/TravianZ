@@ -3,60 +3,77 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       mainteneceUnban.php                                         ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-foreach ($_POST as $key => $value) {
-    $_POST[$key] = $database->escape($value);
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$session = (int)($_POST['admid'] ?? 0);
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
 }
 
-$session = (int) $_POST['admid'];
-
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
-
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
-
-$users = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT Count(*) as Total FROM ".TB_PREFIX."users"), MYSQLI_ASSOC);
-$users = $users['Total'];
-
-$reason = $_POST['unbanreason'];
-$admin = $session;
-$active = '0';
-$access = '2';
-$actualend = time();
-
-$sql = "SELECT id FROM ".TB_PREFIX."users ORDER BY ID DESC LIMIT 1";
-$loops = mysqli_result(mysqli_query($GLOBALS["link"], $sql), 0);
-
-for($i = 0; $i < $loops + 1; $i++)
-{
-	$query = "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$i." AND access = ".$access."";
-	$result = mysqli_query($GLOBALS["link"], $query);
-	while($row = mysqli_fetch_assoc($result))
-	{
-		mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."banlist SET active = '".$active."', end = '".$actualend."' WHERE reason = '".$reason."'");
-	}
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+$reason = trim($_POST['unbanreason'] ?? '');
+if ($reason === '') {
+    header("Location: ../../../Admin/admin.php?p=ban&e=noreason");
+    exit;
 }
 
-header("Location: ../../../Admin/admin.php?p=ban");
+$reasonEsc = $database->escape($reason);
+$time = time();
+$adminId = (int)$session;
+
+// ---------------------------------------------------------------------------
+// Unban
+// ---------------------------------------------------------------------------
+$database->query(
+    "UPDATE " . TB_PREFIX . "banlist 
+     SET active = 0, end = $time 
+     WHERE reason = '$reasonEsc' AND active = 1"
+);
+
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$logText = "Mass unban for reason='$reasonEsc'";
+$logEsc = $database->escape($logText);
+
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=ban&u=1");
+exit;
 ?>

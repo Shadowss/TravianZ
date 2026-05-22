@@ -2,41 +2,75 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       editOverall.php                                                ##
+##  Filename       editOverall.php                                             ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-$session = (int) $_POST['admid'];
-$id = (int) $_POST['id'];
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+$session = (int)($_POST['admid'] ?? 0);
+$id      = (int)($_POST['id'] ?? 0);
+$off     = (int)($_POST['off'] ?? 0);
+$def     = (int)($_POST['def'] ?? 0);
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+if ($id <= 0 || $session <= 0) {
+    header("Location: ../../../Admin/admin.php?p=player&uid=$id&e=bad");
+    exit;
+}
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
+}
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
-	apall = '".(int) $_POST['off']."', 
-	dpall = '".(int) $_POST['def']."' 
-	WHERE id = $id") or die(mysqli_error($database->dblink));
+// ---------------------------------------------------------------------------
+// Update
+// ---------------------------------------------------------------------------
+$database->query("UPDATE " . TB_PREFIX . "users SET apall = $off, dpall = $def WHERE id = $id");
 
-header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$adminId = (int)$_SESSION['id'];
+$time = time();
+$logText = "Changed overall stats for user <a href='admin.php?p=player&uid=$id'>$id</a> (off=$off, def=$def)";
+$logEsc = $database->escape($logText);
+
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=player&uid=" . $id);
+exit;
 ?>

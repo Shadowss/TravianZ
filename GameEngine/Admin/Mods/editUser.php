@@ -3,48 +3,91 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       editUser.php                                                ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-foreach ($_POST as $key => $value) {
-    $_POST[$key] = $database->escape($value);
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+$session = (int)($_POST['admid'] ?? 0);
+$id      = (int)($_POST['id'] ?? 0);
+
+if ($id <= 0 || $session <= 0) {
+    header("Location: ../../../Admin/admin.php?p=player&uid=$id&e=bad");
+    exit;
 }
 
-$session = (int) $_POST['admid'];
-$id = (int) $_POST['id'];
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
+}
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+// ---------------------------------------------------------------------------
+// Câmpuri
+// ---------------------------------------------------------------------------
+$email    = $database->escape(trim($_POST['email'] ?? ''));
+$tribe    = max(1, min(5, (int)($_POST['tribe'] ?? 1)));
+$location = $database->escape(trim($_POST['location'] ?? ''));
+$desc1    = $database->escape($_POST['desc1'] ?? '');
+$desc2    = $database->escape($_POST['desc2'] ?? '');
+$quest    = $database->escape($_POST['quest'] ?? '');
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
+// ---------------------------------------------------------------------------
+// Update
+// ---------------------------------------------------------------------------
+$database->query(
+    "UPDATE " . TB_PREFIX . "users SET 
+        email = '$email',
+        tribe = $tribe,
+        location = '$location',
+        desc1 = '$desc1',
+        desc2 = '$desc2',
+        quest = '$quest'
+     WHERE id = $id"
+);
 
-mysqli_query($GLOBALS["link"], "UPDATE ".TB_PREFIX."users SET 
-	email = '".$_POST['email']."', 
-	tribe = ".(int) $_POST['tribe'].", 
-	location = '".$_POST['location']."', 
-	desc1 = '".$_POST['desc1']."', 
-	desc2 = '".$_POST['desc2']."', 
-	quest = '".$_POST['quest']."' 
-	WHERE id = $id") or die(mysqli_error($database->dblink));
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$adminId = (int)$_SESSION['id'];
+$time = time();
+$logText = "Edited profile for user <a href='admin.php?p=player&uid=$id'>$id</a>";
+$logEsc = $database->escape($logText);
 
-header("Location: ../../../Admin/admin.php?p=player&uid=".$id."");
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=player&uid=" . $id);
+exit;
 ?>
