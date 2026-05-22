@@ -5,6 +5,7 @@
 ## --------------------------------------------------------------------------- ##
 ## Project:     TravianZ (Refactor incremental)                                ##
 ## File:        additional.tpl                                                 ##
+## Type        BACKEND                                                         ##
 ## Description: Implement Gold Log			                                   ##
 ## Made by:     Shadow  													   ##
 ## License:     TravianZ Project                                               ##

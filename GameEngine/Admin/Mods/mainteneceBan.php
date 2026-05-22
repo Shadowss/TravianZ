@@ -3,69 +3,89 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
 ##  Filename       mainteneceBan.php                                           ##
+##  Type           BACKEND                                                     ##
 ##  Developed by:  aggenkeech                                                  ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
-if (!isset($_SESSION)) session_start();
-if($_SESSION['access'] < 9) die("Access Denied: You are not Admin!");
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
+    die("Access Denied: You are not Admin!");
+}
+
 include_once("../../config.php");
 
-// go max 5 levels up - we don't have folders that go deeper than that
+// ---------------------------------------------------------------------------
+// Autoloader path
+// ---------------------------------------------------------------------------
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix.'autoloader.php')) {
-        // we have our path, let's leave
+    if (file_exists($autoprefix . 'autoloader.php')) {
         break;
     }
 }
 
-include_once($autoprefix."GameEngine/Database.php");
+include_once($autoprefix . "GameEngine/Database.php");
 
-foreach ($_POST as $key => $value) {
-    $_POST[$key] = $database->escape($value);
+// ---------------------------------------------------------------------------
+// Verificare admin
+// ---------------------------------------------------------------------------
+$session = (int)($_POST['admid'] ?? 0);
+$admin = $database->getUserArray($session, 1);
+if (!$admin || (int)$admin['access'] !== 9) {
+    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
 }
 
-$session = (int) $_POST['admid'];
+// ---------------------------------------------------------------------------
+// Input
+// ---------------------------------------------------------------------------
+$duration = (int)($_POST['duration'] ?? 0) * 3600;
+$start    = trim($_POST['start'] ?? '');
+$reason   = trim($_POST['reason'] ?? 'Maintenance ban');
+$access   = 2; // jucători normali
 
-$sql = mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$session."");
-$access = mysqli_fetch_array($sql);
-$sessionaccess = $access['access'];
+$startts = $start ? strtotime($start) : time();
+if ($startts === false) $startts = time();
 
-if($sessionaccess != 9) die("<h1><font color=\"red\">Access Denied: You are not Admin!</font></h1>");
-
-$users = mysqli_num_rows(mysqli_query($GLOBALS["link"], "SELECT * FROM ".TB_PREFIX."users"));
-
-$duration = (int) $_POST['duration'] * 3600;
-$start = $_POST['start'];
-$startts = strtotime($start);
 $endts = $startts + $duration;
-$reason = $_POST['reason'];
-$admin = $session;
-$active = '1';
-$access = '2';
+if ($duration <= 0) $endts = $startts + 86400; // default 1 zi
 
-function mysqli_result($res, $row, $field=0) {
-	$res->data_seek($row);
-	$datarow = $res->fetch_array();
-	return $datarow[$field];
-}
+$reasonEsc = $database->escape($reason);
+$adminId = (int)$session;
 
-$sql = "SELECT id FROM ".TB_PREFIX."users ORDER BY ID DESC LIMIT 1";
-$loops = mysqli_result(mysqli_query($GLOBALS["link"], $sql), 0);
+// ---------------------------------------------------------------------------
+// Ban în masă – un singur query
+// ---------------------------------------------------------------------------
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "banlist (uid, name, reason, time, end, admin, active)
+     SELECT id, username, '$reasonEsc', $startts, $endts, $adminId, 1
+     FROM " . TB_PREFIX . "users
+     WHERE access = $access AND id > 3
+     ON DUPLICATE KEY UPDATE 
+        reason = VALUES(reason),
+        time = VALUES(time),
+        end = VALUES(end),
+        admin = VALUES(admin),
+        active = 1"
+);
 
-for($i = 0; $i < $loops + 1; $i++)
-{
-	$query = "SELECT * FROM ".TB_PREFIX."users WHERE id = ".$i." AND access = ".$access."";
-	$result = mysqli_query($GLOBALS["link"], $query);
-	while($row = mysqli_fetch_assoc($result))
-	{
-	    mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."banlist VALUES('', ".(int) $row['id'].", '".$row['username']."', '".$reason."', ".(int) $startts.", ".(int) $endts.", ".(int) $admin.", ".(int) $active.")");
-		##mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."banlist (`uid`, `name`, `reason`, `time`, `end`, `admin`, `active`) VALUES (".$row['id'].", '".$row['username']."' , '$reason', '$startts', '$endts', '$admin', '1')");
-	}
-}
+// ---------------------------------------------------------------------------
+// Log admin
+// ---------------------------------------------------------------------------
+$time = time();
+$logText = "Mass ban for access=$access, duration=" . ($duration/3600) . "h, reason='$reasonEsc'";
+$logEsc = $database->escape($logText);
 
-header("Location: ../../../Admin/admin.php?p=ban");
+$database->query(
+    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
+    "VALUES (0, '$adminId', '$logEsc', $time)"
+);
+
+header("Location: ../../../Admin/admin.php?p=ban&m=1");
+exit;
 ?>
