@@ -1785,3 +1785,22 @@ CREATE INDEX idx_bonus ON %PREFIX%croppers (best_oasis_bonus);
 --
 -- Dumping data for table `%prefix%croppers`
 --
+
+--
+-- Table structure for table `%PREFIX%maintenance`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%maintenance` (
+  `id` tinyint(1) NOT NULL DEFAULT 1,
+  `active` tinyint(1) NOT NULL DEFAULT 0,
+  `message` varchar(255) DEFAULT 'Server in maintenance',
+  `started_by` int(11) DEFAULT NULL,
+  `started_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `%PREFIX%maintenance`
+--
+INSERT INTO `%PREFIX%maintenance` (`id`, `active`, `message`, `started_by`, `started_at`) VALUES
+(1, 0, 'Server in maintenance', NULL, NULL);
