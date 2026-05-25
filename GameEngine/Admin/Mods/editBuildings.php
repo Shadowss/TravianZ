@@ -5,9 +5,9 @@
 ##  Filename       editBuildings.php                                           ##
 ##  Type        BACKEND                                                        ##
 ##  Developed by:  aggenkeech                                                  ##
-##  Fix by:        ronix                                                       ##
+##  Fix by:        ronix + Shadow 2026 (WW lvl 100 + auto pop)                ##
 ##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2011-2014. All rights reserved.                ##
+##  Copyright:     TravianZ (c) 2011-2026. All rights reserved.                ##
 ##                                                                             ##
 #################################################################################
 
@@ -52,16 +52,25 @@ for ($i = 1; $i <= 40; $i++) {
     $gid   = (int)($_POST["id{$i}gid"] ?? 0);
     // limităm la valori rezonabile Travian
     $level = max(0, min(20, $level));
-    $gid   = max(0, min(40, $gid));
+    $gid   = max(0, min(44, $gid)); // 44 = ziduri speciale
     $sets[] = "f{$i} = $level";
     $sets[] = "f{$i}t = $gid";
 }
 
-// câmpurile speciale f99 (capcană / zid?)
+// câmpurile speciale f99
 $level99 = (int)($_POST['id99level'] ?? 0);
 $gid99   = (int)($_POST['id99gid'] ?? 0);
-$sets[] = "f99 = " . max(0, min(20, $level99));
-$sets[] = "f99t = " . max(0, min(40, $gid99));
+
+// --- FIX WW: gid 40 = World Wonder, level maxim 100 ---
+if ($gid99 == 40) {
+    $level99 = max(0, min(100, $level99));
+} else {
+    $level99 = max(0, min(20, $level99)); // capcană, etc.
+}
+$gid99 = max(0, min(44, $gid99));
+
+$sets[] = "f99 = " . $level99;
+$sets[] = "f99t = " . $gid99;
 
 $setSql = implode(', ', $sets);
 
@@ -70,9 +79,23 @@ $setSql = implode(', ', $sets);
 // ---------------------------------------------------------------------------
 $database->query("UPDATE " . TB_PREFIX . "fdata SET $setSql WHERE vref = $id");
 
+// ---------------------------------------------------------------------------
 // recalculăm populația după editare
+// ---------------------------------------------------------------------------
 $automation = new Automation();
-$automation->recountPop($id);
+$pop = $automation->recountPop($id);
+
+// --- FIX: recountPop original nu include f99 (WW), îl adăugăm ---
+$fdata = $database->getResourceLevel($id);
+if ((int)$fdata['f99t'] === 40) {
+    $wwLevel = (int)$fdata['f99'];
+    if ($wwLevel > 0) {
+        // buildingPOP există în Automation
+        $wwPop = $automation->buildingPOP(40, $wwLevel);
+        $pop += $wwPop;
+        $database->query("UPDATE " . TB_PREFIX . "vdata SET pop = $pop WHERE wref = $id");
+    }
+}
 
 // ---------------------------------------------------------------------------
 // Log admin

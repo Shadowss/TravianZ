@@ -7,7 +7,7 @@
 ##                                                                             ##
 ##  Project:       TravianZ                                                    ##
 ##  Version:       05.03.2026                                                  ##
-##  Filename:      Admin/admin.php     				                           ##
+##  Filename:      Admin/admin.php                                             ##
 ##  Developed by:  Dzoki                                                       ##
 ##  Refactored by: Shadow                                                      ##
 ##  License:       TravianZ Project                                            ##
@@ -359,19 +359,54 @@ if (!empty($_GET['p'])) {
 		<link rel="stylesheet" type="text/css" href="../img/img.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 		<script type="text/javascript" src="jquery.cookie.js"></script>
-		<?php
-		if($not_include_mootools_js){}else{
-		?>
+		<?php if($not_include_mootools_js){}else{ ?>
 		<script type="text/javascript" src="/mt-full.js?423cb"></script>
 		<script type="text/javascript" src="ajax.js"></script>
 		<script type="text/javascript" src="../new.js?0faab"></script>
-		<?php
-		}
-		?>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<?php } ?>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<meta http-equiv="imagetoolbar" content="no">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+/* === TRAVIANZ ADMIN === */
+body{margin:0;font-family:Verdana,Arial,sans-serif}
+#ltop1{border-bottom:3px solid #f59e0b}
+.tz-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;min-height:64px}
+.tz-brand{display:flex;align-items:center;gap:12px}
+.tz-logo{width:38px;height:38px;background:#f59e0b;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:18px}
+.tz-brand h1{margin:0;font-size:20px;font-weight:700}
+.tz-brand h1 span{color:#f59e0b}
+.tz-brand .tz-sub{display:block;font-size:10px;margin-top:2px;text-transform:uppercase;letter-spacing:.7px;opacity:.7}
+.tz-user{font-size:12px}
+.tz-logout{margin-left:10px;background:#ef4444;color:#fff;padding:5px 11px;border-radius:6px;text-decoration:none;font-size:11px;font-weight:bold}
+
+/* LOGIN = header NEGRU */
+body.login{background:#0f172a;color:#e2e8f0}
+body.login #ltop1{background:#0b1220 !important;background-image:none !important}
+body.login .tz-topbar{color:#fff !important}
+body.login .tz-brand h1{color:#fff !important}
+body.login .tz-brand .tz-sub{color:#94a3b8 !important}
+
+/* APP = header ALB */
+body.app{background:#eef2f7;color:#1f2937}
+body.app #ltop1{background:#ffffff !important;background-image:none !important;border-bottom:1px solid #e5e7eb !important}
+body.app .tz-topbar{color:#1f2937 !important}
+body.app .tz-brand h1{color:#111827 !important}
+body.app .tz-brand .tz-sub{color:#6b7280 !important}
+body.app .tz-user{color:#4b5563}
+body.app #lleft{background:#ffffff!important;border-right:1px solid #e5e7eb}
+body.app #lmid1{background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.04);margin:16px;padding:20px!important}
+body.app #menu>li>a{display:block;padding:10px 16px;color:#374151!important;font-weight:600;font-size:12px;border-left:3px solid transparent;text-decoration:none}
+body.app #menu>li>a:hover,body.app #menu>li>a.active{background:#f3f4f6;border-left-color:#f59e0b;color:#111827!important}
+body.app #menu li.sub ul{background:#f9fafb}
+body.app #menu li.sub ul li a{display:block;padding:8px 16px 8px 34px;font-size:11px;color:#6b7280!important}
+body.app #menu li.sub ul li a:hover{color:#d97706!important}
+body.app #menu li a{background:#ffffff !important;color:#374151 !important;border-bottom:1px solid #f3f4f6 !important}
+body.app #menu li a:hover{background:#f9fafb !important}
+body.app #lleft{box-shadow:none !important}
+</style>
 	</head>
-	<body>
+	<body class="<?php echo $funct->CheckLogin() ? 'app' : 'login'; ?>">
     <script type="text/javascript">
                 init_local();
                 function getMouseCoords(e) {
@@ -389,28 +424,23 @@ if (!empty($_GET['p'])) {
                     }
                     return coords;
                 }
-
                 function med_mouseMoveHandler(e, desc_string){
                     var coords = getMouseCoords(e);
                     med_showDescription(coords, desc_string);
                 }
-
                 function med_closeDescription(){
                     var layer = document.getElementById("medal_mouseover");
                     layer.className = "hide";
                 }
-
                 function init_local(){
                     med_init();
                 }
-
                 function med_init(){
                     layer = document.createElement("div");
                     layer.id = "medal_mouseover";
                     layer.className = "hide";
                     document.body.appendChild(layer);
                 }
-
                 function med_showDescription(coords, desc_string){
                     var layer = document.getElementById("medal_mouseover");
                     layer.style.top = (coords.y + 25)+ "px";
@@ -422,7 +452,6 @@ if (!empty($_GET['p'])) {
 		<script language="javascript">
 			function aktiv() {this.srcElement.className='fl1'; }
 			function inaktiv() {event.srcElement.className='fl2'; }
-
 			function del(e,id){
 				if(e == 'arti'){ var conf = confirm('Dou you really want delete artifact id '+id+'?'); }
 				if(e == 'did'){ var conf = confirm('Dou you really want delete village id '+id+'?'); }
@@ -433,19 +462,10 @@ if (!empty($_GET['p'])) {
 			}
 		</script>
 		<script type="text/javascript">
-			function showStuff(id) {
-				document.getElementById(id).style.display = 'block';
-			}
-			function hideStuff(id) {
-				document.getElementById(id).style.display = 'none';
-			}
-			function go_url(url) {
-				location=url;
-				return(false);
-			}
-
+			function showStuff(id) { document.getElementById(id).style.display = 'block'; }
+			function hideStuff(id) { document.getElementById(id).style.display = 'none'; }
+			function go_url(url) { location=url; return(false); }
 		</script>
-		<!-- Start Accordeon Menu -->
 		<script type="text/javascript">
 		$(document).ready(function () {
 			var checkCookie = $.cookie("sub-nav");
@@ -462,8 +482,6 @@ if (!empty($_GET['p'])) {
 					$(this).next().slideToggle();
 				}
 				return false;
-				$('#menu li a').removeClass('active');
-				$(this).addClass('active');
 			});
 			var checkCookie = $.cookie("sub-link");
 			if (checkCookie != "") {
@@ -475,28 +493,47 @@ if (!empty($_GET['p'])) {
 				$('.sub ul li a').removeClass('active');
 				$(this).addClass('active');
 			});
-		});
+	});
 		</script>
-		<!-- End Accordeon Menu -->
+
 		<div id="ltop1">
-			<div style="position:relative; height:100px; float:left;">
-				<img src="../img/x.gif" width="1" height="1">
+			<div class="tz-topbar">
+				<div class="tz-brand">
+					<div class="tz-logo">TZ</div>
+					<div>
+						<h1>TravianZ <span>Admin Panel</span></h1>
+						<span class="tz-sub"><?php echo htmlspecialchars($subpage); ?> • v05.03.2026</span>
+					</div>
+				</div>
+				<div class="tz-user">
+					<?php if($funct->CheckLogin()){ ?>
+						<?php 
+$adminName = $database->getUserField($_SESSION['id'], 'username', 0);
+$adminAccess = $database->getUserField($_SESSION['id'], 'access', 0);
+$rank = $adminAccess == 9 ? 'Admin' : ($adminAccess == 8 ? 'MH' : 'User');
+?>
+Logged: <b><?=$adminName?></b> <span style="color:#999;font-size:11px">(<?=$rank?>)</span> 
+						<a href="?action=logout" class="tz-logout">Logout</a>
+					<?php } else { ?>
+						Not Logged in
+					<?php } ?>
+				</div>
 			</div>
-			<p class="center-img">
-				<img class="fl2" src="../img/admin/x1.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
-				<img class="fl2" src="../img/admin/x2.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
-				<img class="fl2" src="../img/admin/x3.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
-				<img class="fl2" src="../img/admin/x4.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
-				<img class="fl2" src="../img/admin/x5.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'">
-			</p>
 		</div>
+
 		<div id="lmidall">
 			<div id="lmidlc">
 				<div id="lleft">
 					<p class="center-img">
-						<a href="<?php echo HOMEPAGE; ?>"><img src="../img/en/a/travian0.gif" class="logo_plus" width="116" height="60" border="0"></a>
-					</p>
-					<!-- Start Accordeon Menu -->
+    <a href="<?php echo HOMEPAGE; ?>">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="78" height="78" style="display:block;margin:0 auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));">
+          <defs><linearGradient id="tz1" x1="128" y1="28" x2="128" y2="236"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#d97706"/></linearGradient></defs>
+          <path d="M128 28c-32 0-64 3-84 16v86c0 54 36 90 84 104 48-14 84-50 84-104V44c-20-13-52-16-84-16z" fill="url(#tz1)" stroke="#78350f" stroke-width="5"/>
+          <path d="M106 38l9-12 8 7 5-14 5 14 8-7 9 12v8c-14-4.5-30-4.5-44 0v-8z" fill="#fcd34d" stroke="#78350f" stroke-width="3"/>
+          <text x="128" y="165" font-family="Georgia" font-size="90" font-weight="700" text-anchor="middle" fill="#3c1f0a">TZ</text>
+        </svg>
+    </a>
+</p>
 					<?php
 						if($funct->CheckLogin())
 						{
@@ -537,7 +574,6 @@ if (!empty($_GET['p'])) {
 						<li class="sub"><a href="#">Ban</a>
 							<ul>
 								<li><a href="?p=ban">Ban/Unban Players</a></li>
-								<li><a href="?p=maintenance">Server Maintenance</a></li>
 								<li><a href="?p=cleanban">Clean Banlist Data</a></li>
 							</ul>
 						</li>
@@ -566,6 +602,7 @@ if (!empty($_GET['p'])) {
 							<ul>
 								<li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
 								<li><a href="?p=config">Server Settings</a></li>
+<li><a href="?p=maintenance">Server Maintenance</a></li>
 								<li><a href="?p=resetServer">Server Resetting</a></li>
 							</ul>
 						</li>
@@ -588,7 +625,6 @@ if (!empty($_GET['p'])) {
 							}
 						}
 					?>
-					<!-- End Accordeon Menu -->
 				</div>
 				<div id="lmid1">
 					<div id="lmid3">

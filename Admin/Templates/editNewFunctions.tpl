@@ -1,13 +1,24 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       editNewFunctions.tpl                                        ##
-##  Developed by:  velhbxtyrj                                                  ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2014. All rights reserved.                ##
-##                                                                             ##
+##  Filename       : editNewFunctions.tpl                                      ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : velhbxtyrj (Original)                                     ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
+
 if (!isset($_SESSION)) {
  session_start();
 }

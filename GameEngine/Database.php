@@ -3021,10 +3021,11 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "DELETE from " . TB_PREFIX . "forum_post where id = '$id'";
 		return mysqli_query($this->dblink,$q);
 	}
-
+	
 	function getAllianceName($id, $use_cache = true) {
-        // return from cache
-        return $this->getAlliance($id, $use_cache)['tag'];
+		if (!$id) return '-';
+		$alliance = $this->getAlliance($id, $use_cache);
+		return $alliance['tag'] ?? '-';
 	}
 
 	// no need to cache this method
@@ -8751,6 +8752,22 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
 					hero.wref = $wref";
     	return mysqli_query($this->dblink, $q);
     }
+
+public function getMaintenance() {
+    $q = "SELECT * FROM ".TB_PREFIX."maintenance WHERE id=1 LIMIT 1";
+    $res = $this->query_return($q);
+    return $res[0]?? ['active'=>0];
+}
+public function setMaintenance($active, $uid=0) {
+    $time = time();
+    $active = (int)$active;
+    $uid = (int)$uid;
+    // REPLACE creează rândul dacă nu există
+    return $this->query("REPLACE INTO ".TB_PREFIX."maintenance 
+        (id, active, started_by, started_at) 
+        VALUES (1, $active, $uid, $time)");
+}
+
     
     /**
      * Changed the actual capital with a new one
@@ -8766,6 +8783,7 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
     	return mysqli_query($this->dblink, $q);
     }
 };
+
 
 // database is not needed if we're displaying static pages
 $req_file = basename($_SERVER['PHP_SELF']);

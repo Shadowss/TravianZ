@@ -2,6 +2,26 @@
 #################################################################################
 ## MaintenenceResetPlusBonus.tpl - REDESIGN 2025 ##
 #################################################################################
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : maintenenceResetPlusBonus.tpl 		                       ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 ?>
 <style>
@@ -25,7 +45,7 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 <div class="resetres-wrap">
   <div class="resetres-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16v10H4z" fill="#27ae60"/><path d="M8 3v4M16 3v4" stroke="#16a085" stroke-width="2"/></svg>
-    <h2>Maintenance</h2>
+    <h2>Reset All Resource Bonuses</h2>
   </div>
 
   <div class="resetres-card">
@@ -33,7 +53,7 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
       <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
     </div>
     <h3>Reset All Resource Bonuses</h3>
-    <p>Această acțiune va dezactiva bonusul de 25% pentru TOATE resursele la toți jucătorii.</p>
+    <p>This action will disable the 25% bonus for ALL resources at all players.</p>
     
     <div class="res-icons">
       <img src="../img/admin/r/1.gif" title="Wood">
@@ -43,10 +63,10 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
     </div>
 
     <div class="danger-box">
-      ⚠️ Toate bonusurile de resurse vor fi setate la 0 zile.
+      ⚠️ All resource bonuses will be set to 0 days.
     </div>
 
-    <form action="../GameEngine/Admin/Mods/mainteneceResetPlusBonus.php" method="POST" class="resetres-form" onsubmit="return confirm('Ești SIGUR că vrei să resetezi bonusurile de resurse?');">
+    <form action="../GameEngine/Admin/Mods/mainteneceResetPlusBonus.php" method="POST" class="resetres-form" onsubmit="return confirm('Are you SURE you want to reset resource bonuses?');">
       <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
       <button type="submit">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
@@ -56,6 +76,6 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="resetres-success">✓ Bonusurile de resurse au fost resetate pentru toți jucătorii!</div>
+    <div class="resetres-success">✓ Resource bonuses have been reset for all players!</div>
   <?php } ?>
 </div>

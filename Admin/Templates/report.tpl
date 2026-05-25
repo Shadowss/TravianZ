@@ -1,16 +1,22 @@
 <?php
-
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       report.tpl                                                  ##
-##  Developed by:  Dzoki                                                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
-##  Enhanced:      aggenkeech                                                  ##
-##  Refactored by: Shadow                                                      ##
+##  Filename       : report.tpl 		                      			       ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : ronix (Original)                                          ##
+##  Refactored by  : iopietro                                                  ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
-
 if($_SESSION['access'] < MULTIHUNTER) die("Access Denied!");
 include_once("../GameEngine/Generator.php");
 include_once("../GameEngine/Technology.php");

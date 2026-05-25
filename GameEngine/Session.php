@@ -87,26 +87,41 @@ class Session {
 	var $sit1;
 	var $sit2;
 	var $cp;
-    function __construct() {
-        global $database;
+function __construct() {
+    global $database;
 
-        $this->time = time();
+    $this->time = time();
 
-        if (!isset($_SESSION)) {
-            session_start();
-        }
-
-        $this->logged_in = $this->checkLogin();
-
-        if ($this->logged_in && TRACK_USR) {
-            $database->updateActiveUser($this->username, $this->time);
-        }
-
-        $this->referrer = $_SESSION['url'] ?? "/";
-        $this->url = $_SESSION['url'] = $_SERVER['PHP_SELF'];
-
-        $this->SurfControl();
+    if (!isset($_SESSION)) {
+        session_start();
     }
+
+    $this->logged_in = $this->checkLogin();
+
+    if ($this->logged_in && TRACK_USR) {
+        $database->updateActiveUser($this->username, $this->time);
+    }
+
+    // aici se seteaza access-ul in checkLogin, dar sa fim siguri
+    if(!isset($this->access)) {
+        $this->access = $this->logged_in ? $database->getUserField($this->uid, "access", 1) : 0;
+    }
+
+    // === MAINTENANCE CHECK - DUPA ce avem access ===
+    $maint = $database->getMaintenance();
+    if($maint['active'] == 1 && $this->access < 9) {
+        // evita loop infinit
+        if(strpos($_SERVER['PHP_SELF'], 'maintenance.php') === false) {
+            header('Location: maintenance.php');
+            exit;
+        }
+    }
+
+    $this->referrer = $_SESSION['url'] ?? "/";
+    $this->url = $_SESSION['url'] = $_SERVER['PHP_SELF'];
+
+    $this->SurfControl();
+}
 
     /**
      * LOGIN USER
@@ -140,7 +155,7 @@ class Session {
                     $data = $database->getVillage($userFields["id"]);
                 }
 
-                $_SESSION['wid'] = $data['wref'];
+                $_SESSION['wid'] = isset($data['wref']) ? (int)$data['wref'] : 0;
             }
 
             $this->logged_in = true;

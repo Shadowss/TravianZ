@@ -62,7 +62,6 @@ if (isset($packages[$amount]) && $amount > 0) {
     $_SESSION['amount'] = 0;
 }
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -78,7 +77,6 @@ if (isset($packages[$amount]) && $amount > 0) {
     <script src="new.js?0faab" type="text/javascript"></script>
     <link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css" />
     <link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css" />
-
     <?php
     if ($session->gpack == null || GP_ENABLE == false) {
         echo '<link href="' . GP_LOCATE . 'travian.css?e21d2" rel="stylesheet" type="text/css" />';
@@ -91,13 +89,10 @@ if (isset($packages[$amount]) && $amount > 0) {
     <script type="text/javascript">window.addEvent('domready', start);</script>
 </head>
 <body class="v35">
-
 <div class="wrapper">
     <img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
     <div id="dynamic_header"></div>
-
     <?php include("Templates/header.tpl"); ?>
-
     <div id="mid">
         <?php include("Templates/menu.tpl"); ?>
         <?php include("Templates/Plus/pmenu.tpl"); ?>
@@ -106,7 +101,6 @@ if (isset($packages[$amount]) && $amount > 0) {
         
         <div id="products">
             <?php if ($transactionProcessed) { ?>
-                <!-- Partea de mulțumire după plată -->
                 <p>Thank you for your purchase here at <?php echo SERVER_NAME; ?>.</p>
                 <p>Below you see the entry record. Out of it, you can observe your old as well as your new account balance.</p>
                 
@@ -122,7 +116,6 @@ if (isset($packages[$amount]) && $amount > 0) {
                 </tr>
                 </thead>
                 <tbody>
-                <!-- tabelul cu old / package / new balance -->
                 <tr>
                     <td class="desc"><b>&nbsp;&nbsp;Account Balance (old)</b></td>
                     <td class="desc"><div style="text-align:center"><?php echo $oldBalance; ?></div></td>
@@ -151,9 +144,8 @@ if (isset($packages[$amount]) && $amount > 0) {
                 <p>Please mail your username, package, order time and email used to 
                 <a href="mailto:<?php echo defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com'; ?>">our billing address</a>.</p>
 
-            <?php } else { ?>
-                <!-- Partea cu istoricul normal -->
-                <?php
+            <?php } else { 
+                // --- ISTORIC NORMAL CU FILTRU ---
                 $result = mysqli_query($database->dblink, "SELECT gold FROM ".TB_PREFIX."users WHERE id = $uid LIMIT 1");
                 $golds = mysqli_fetch_assoc($result);
 
@@ -163,100 +155,126 @@ if (isset($packages[$amount]) && $amount > 0) {
                         SUM(CASE WHEN gold < 0 THEN -gold ELSE 0 END) as spent 
                     FROM ".TB_PREFIX."gold_fin_log WHERE uid = $uid
                 "));
-
                 $received = (int)($stats['received'] ?? 0);
                 $spent    = (int)($stats['spent'] ?? 0);
-                ?>
+
+                // FILTRU + PAGINARE
+                $perPage = 25;
+                $page = isset($_GET['p']) ? max(1,(int)$_GET['p']) : 1;
+                $offset = ($page-1)*$perPage;
+                $f = $_GET['f'] ?? 'all';
+
+                $where = "l.uid = $uid";
+                if($f==='in') $where .= " AND l.gold > 0";
+                elseif($f==='out') $where .= " AND l.gold < 0";
+                elseif($f==='gift') $where .= " AND (l.action LIKE '%Gift%' OR l.details LIKE '%gift%' OR l.details LIKE '%Admin%')";
+
+                $countRes = mysqli_query($database->dblink, "SELECT COUNT(*) as c FROM ".TB_PREFIX."gold_fin_log l WHERE $where");
+                $totalRows = (int)mysqli_fetch_assoc($countRes)['c'];
+                $totalPages = max(1, ceil($totalRows / $perPage));
+            ?>
                 <p>Here you can see your current account statement.</p>
                 <p>Current balance: <img src="img/x.gif" class="gold" alt="Gold" /> <b><?php echo (int)$golds['gold']; ?></b>
                 &nbsp; | &nbsp; Total received: <b style="color:#71D000;">+<?php echo $received; ?></b>
                 &nbsp; | &nbsp; Total spent: <b style="color:#FF6F0F;">-<?php echo $spent; ?></b></p>
 
-                <!-- Tabelul cu istoricul (codul tău complet) -->
-                <table class="plusFunctions" cellpadding="1" cellspacing="1">
-				    <thead>
-				<tr>
-				<th colspan="6" height="20">Gold history</th>
-				</tr>
-				<tr>
-				<td align="center">Date & Time</td>
-				<td align="center">Village</td>
-				<td align="center">Action</td>
-				<td align="center">Details</td>
-				<td align="center">
-				<img src="img/x.gif" class="gold" alt="Gold" title="Gold" />
-				</td>
-				<td align="center">Balance</td>
-				</tr>
-				</thead>
-				 <!-- AICI INCEPE PROBLEMA -->
-				   <tbody>
-    <?php
-    $q = mysqli_query(
-        $database->dblink,
-        "SELECT l.*, v.name as vname
-         FROM ".TB_PREFIX."gold_fin_log l
-         LEFT JOIN ".TB_PREFIX."vdata v ON v.wref = l.wid
-         WHERE l.uid = $uid
-         ORDER BY l.time DESC
-         LIMIT 200"
-    );
-
-    $balance = (int)$golds['gold'];
-
-    if (mysqli_num_rows($q) > 0) {
-        while ($r = mysqli_fetch_assoc($q)) {
-            $date = date('d.m.Y H:i:s', $r['time']);
-            $villageName = !empty($r['vname']) ? htmlspecialchars($r['vname'], ENT_QUOTES, 'UTF-8') : '-';
-            $action = htmlspecialchars($r['action'], ENT_QUOTES, 'UTF-8');
-            $details = htmlspecialchars(($r['details'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $gold = (int)$r['gold'];
-
-            if (stripos($details, 'Mass gift') !== false) {
-                $action = 'Admin Gift (All)';
-                $details = str_replace('Mass gift by ', 'by ', $details);
-            } elseif (stripos($details, 'gift by') !== false) {
-                $action = 'Admin Gift';
-            }
-
-            $color = $gold < 0 ? '#FF6F0F' : '#71D000';
-            $sign = $gold > 0 ? '+' : '';
-
-            echo '<tr>';
-            echo '<td class="desc"><div style="text-align:center">'.$date.'</div></td>';
-            echo '<td class="desc"><div style="text-align:center">'.$villageName.'</div></td>';
-            echo '<td class="desc"><div style="text-align:center"><b>'.$action.'</b></div></td>';
-            echo '<td class="desc"><div style="text-align:center"><span style="color:#666;font-size:11px">'.$details.'</span></div></td>';
-            echo '<td class="desc"><div style="text-align:center"><font color="'.$color.'"><b>'.$sign.$gold.'</b></font></div></td>';
-            echo '<td class="act"><div style="text-align:center">'.$balance.'</div></td>';
-            echo '</tr>';
-
-            $balance -= $gold;
-        }
-    } else {
-        echo '
-        <tr>
-            <td colspan="6" class="desc">
-                <div style="text-align:center;padding:8px;">
-                    No transactions yet.
+                <!-- BARA CU ICONITE -->
+                <div style="background:#f0f0f0; border:1px solid #d0d0d0; padding:6px 8px; margin:10px 0; border-radius:3px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+                    <div style="display:flex; gap:10px; align-items:center;">
+                        <a href="a2b2.php?f=all" style="text-decoration:none; padding:3px 8px; <?php if($f=='all') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
+                            <img src="img/x.gif" class="gold" style="vertical-align:-2px;"> Toate
+                        </a>
+                        <a href="a2b2.php?f=in" style="text-decoration:none; padding:3px 8px; color:#228B22; <?php if($f=='in') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
+                            <b style="font-size:15px;">+</b> Intrări
+                        </a>
+                        <a href="a2b2.php?f=out" style="text-decoration:none; padding:3px 8px; color:#D00000; <?php if($f=='out') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
+                            <b style="font-size:15px;">−</b> Ieșiri
+                        </a>
+                        <a href="a2b2.php?f=gift" style="text-decoration:none; padding:3px 8px; color:#0066cc; <?php if($f=='gift') echo 'background:#fff; border:1px solid #aaa; border-radius:3px; font-weight:bold;'; ?>">
+                            🎁 Cadouri
+                        </a>
+                    </div>
+                    <div>
+                        <form method="get" style="margin:0;">
+                            <input type="hidden" name="f" value="<?php echo htmlspecialchars($f); ?>">
+                            <select name="p" onchange="this.form.submit()" style="font-size:11px; padding:2px;">
+                                <?php for($i=1;$i<=$totalPages;$i++){ echo '<option value="'.$i.'"'.($i==$page?' selected':'').'>Pagina '.$i.' / '.$totalPages.'</option>'; } ?>
+                            </select>
+                        </form>
+                    </div>
                 </div>
-            </td>
-        </tr>';
-    }
-    ?>
-    </tbody>
-                <!-- AICI SE TERMINA PROBLEMA -->
+
+                <table class="plusFunctions" cellpadding="1" cellspacing="1">
+                <thead>
+                <tr><th colspan="6" height="20">Gold history (<?php echo $totalRows; ?>)</th></tr>
+                <tr>
+                    <td align="center">Date & Time</td>
+                    <td align="center">Village</td>
+                    <td align="center">Action</td>
+                    <td align="center">Details</td>
+                    <td align="center"><img src="img/x.gif" class="gold" alt="Gold" /></td>
+                    <td align="center">Balance</td>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $q = mysqli_query($database->dblink,
+                    "SELECT l.*, v.name as vname
+                     FROM ".TB_PREFIX."gold_fin_log l
+                     LEFT JOIN ".TB_PREFIX."vdata v ON v.wref = l.wid
+                     WHERE $where
+                     ORDER BY l.time DESC
+                     LIMIT $offset, $perPage");
+
+                $sumBefore = 0;
+                if($offset > 0){
+                    $sumRes = mysqli_query($database->dblink,
+                        "SELECT COALESCE(SUM(gold),0) as s FROM (
+                            SELECT gold FROM ".TB_PREFIX."gold_fin_log l WHERE $where ORDER BY l.time DESC LIMIT $offset
+                        ) t");
+                    $sumBefore = (int)mysqli_fetch_assoc($sumRes)['s'];
+                }
+                $balance = (int)$golds['gold'] - $sumBefore;
+
+                if(mysqli_num_rows($q) > 0){
+                    while($r = mysqli_fetch_assoc($q)){
+                        $date = date('d.m.Y H:i:s', $r['time']);
+                        $villageName = !empty($r['vname']) ? htmlspecialchars($r['vname'], ENT_QUOTES, 'UTF-8') : '-';
+                        $action = htmlspecialchars($r['action'], ENT_QUOTES, 'UTF-8');
+                        $details = htmlspecialchars(($r['details'] ?? ''), ENT_QUOTES, 'UTF-8');
+                        $gold = (int)$r['gold'];
+
+                        if(stripos($details,'Mass gift')!==false){ $action='Admin Gift (All)'; $details=str_replace('Mass gift by ','by ',$details); }
+                        elseif(stripos($details,'gift by')!==false){ $action='Admin Gift'; }
+
+                        $color = $gold < 0 ? '#FF6F0F' : '#71D000';
+                        $sign = $gold > 0 ? '+' : '';
+
+                        echo '<tr>';
+                        echo '<td class="desc"><div style="text-align:center">'.$date.'</div></td>';
+                        echo '<td class="desc"><div style="text-align:center">'.$villageName.'</div></td>';
+                        echo '<td class="desc"><div style="text-align:center"><b>'.$action.'</b></div></td>';
+                        echo '<td class="desc"><div style="text-align:center"><span style="color:#666;font-size:11px">'.$details.'</span></div></td>';
+                        echo '<td class="desc"><div style="text-align:center"><font color="'.$color.'"><b>'.$sign.$gold.'</b></font></div></td>';
+                        echo '<td class="act"><div style="text-align:center">'.$balance.'</div></td>';
+                        echo '</tr>';
+                        $balance -= $gold;
+                    }
+                } else {
+                    echo '<tr><td colspan="6" class="desc"><div style="text-align:center;padding:8px;">No transactions yet.</div></td></tr>';
+                }
+                ?>
+                </tbody>
                 </table>
 
                 <p>Please verify the information.<br>It will let us know if the data is incorrect.</p>
                 <p>Please mail your username, package, order time and email used to 
                 <a href="mailto:<?php echo defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'cata7007@gmail.com'; ?>">our billing address</a>.</p>
             <?php } ?>
-        </div> <!-- #products -->
-    </div> <!-- #mid -->
+        </div>
+    </div>
 
     <br /><br /><br /><br />
-
     <div id="side_info">
         <?php
         include("Templates/multivillage.tpl");
@@ -268,18 +286,15 @@ if (isset($packages[$amount]) && $amount > 0) {
         }
         ?>
     </div>
-
     <div class="clear"></div>
-</div> <!-- .wrapper -->
+</div>
 
 <div class="footer-stopper"></div>
 <div class="clear"></div>
-
 <?php
 include("Templates/footer.tpl");
-include("Templates/res.tpl");     // ← foarte important aici
+include("Templates/res.tpl");
 ?>
-
 <div id="stime">
     <div id="ltime">
         <div id="ltimeWrap">
@@ -288,7 +303,6 @@ include("Templates/res.tpl");     // ← foarte important aici
         </div>
     </div>
 </div>
-
 <div id="ce"></div>
 </body>
 </html>

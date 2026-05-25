@@ -1,6 +1,21 @@
 <?php
 #################################################################################
-## usergold.tpl - REDESIGN 2025 ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : usergold.tpl 		                                       ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 $id = $_SESSION['id'];
@@ -40,7 +55,7 @@ $id = $_SESSION['id'];
       </div>
       <div>
         <h3>Give Gold to Specific Player</h3>
-        <p>Adaugă gold doar pentru un singur cont (după ID).</p>
+        <p>Add gold only for single account (after ID).</p>
       </div>
     </div>
 
@@ -65,6 +80,6 @@ $id = $_SESSION['id'];
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="usergold-success">✓ Gold adăugat cu succes pentru user!</div>
+    <div class="usergold-success">✓ Gold successfully added for user!</div>
   <?php } ?>
 </div>

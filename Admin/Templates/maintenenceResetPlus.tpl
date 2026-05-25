@@ -1,7 +1,24 @@
 <?php
+
 #################################################################################
-## MaintenenceResetPlus.tpl - REDESIGN 2025 ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : maintenenceResetPlus.tpl 		                           ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
+
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 ?>
 <style>
@@ -23,7 +40,7 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 <div class="resetplus-wrap">
   <div class="resetplus-head">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2v10l4-4" stroke="#8e44ad" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="5" fill="#6c3483"/></svg>
-    <h2>Maintenance</h2>
+    <h2>Reset All Players Plus</h2>
   </div>
 
   <div class="resetplus-card">
@@ -31,13 +48,13 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
       <svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
     </div>
     <h3>Reset All Players Plus</h3>
-    <p>Această acțiune va dezactiva Travian Plus pentru TOȚI jucătorii.</p>
+    <p>This action will disable Travian Plus for ALL players.</p>
     
     <div class="danger-box">
-      ⚠️ Plus-ul va fi setat la 0 zile pentru toată lumea.
+      ⚠️ Plus it will be set to 0 days for everyone.
     </div>
 
-    <form action="../GameEngine/Admin/Mods/mainteneceResetPlus.php" method="POST" class="resetplus-form" onsubmit="return confirm('Ești SIGUR că vrei să resetezi Plus-ul la TOȚI jucătorii?');">
+    <form action="../GameEngine/Admin/Mods/mainteneceResetPlus.php" method="POST" class="resetplus-form" onsubmit="return confirm('Are you SURE you want to reset the Plus to ALL players?');">
       <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
       <button type="submit">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
@@ -47,6 +64,6 @@ if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="resetplus-success">✓ Plus-ul tuturor jucătorilor a fost resetat!</div>
+    <div class="resetplus-success">✓ Plus all the players have been reset!</div>
   <?php } ?>
 </div>

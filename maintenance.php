@@ -37,7 +37,9 @@ if(isset($_GET['newdid'])) {
 	exit;
 }
 
-if($_SESSION['ok'] == 2){
+// ==== NOUA VERIFICARE (in loc de $_SESSION['ok']) ====
+$maintenance = $database->getMaintenance();
+if($maintenance['active'] == 1 && $session->access < 9){
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

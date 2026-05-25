@@ -1,45 +1,63 @@
-<table id="member">
-	<thead>
-		<tr>
-			<th colspan="16">Troop Upgrades</th>
-		</tr>
-		<tr>
-			<td colspan="8">Armoury</td>
-			<td colspan="8">Blacksmith</td>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<?php
-				$tribe = $user['tribe'];
-				$img = $tribe == 1 ? "" : $tribe - 1;
-				
-				for($i = 1; $i < 9; $i++) echo '<td><center><img src="../img/un/u/'.$img.''.$i.'.gif"></center></td>';
-				for($i = 1; $i < 9; $i++) echo '<td><center><img src="../img/un/u/'.$img.''.$i.'.gif"></center></td>';
-			?>
-		</tr>
-	</tbody>
-	<tfoot>
-		<tr>
-			<?php
-				//Armoury
-				for($i = 1; $i < 9; $i++){
-					if($tribe==5) { $abtech['a'.$i]="<font color=\"grey\">?</font>"; $abtech['b'.$i]="<font color=\"grey\">?</font>";}
-					echo '<td><center>'.$abtech['a'.$i].'</center></td>';
-				}
-				
-				//Blacksmith
-				for($i = 1; $i < 9; $i++) echo '<td><center>'.$abtech['b'.$i].'</center></td>';
-			?>
-		</tr>
-	</tfoot>
-</table>
-	<?php
-	
-	if($tribe == 5) echo '<span class="none">Upgrades Troops</span>';
-	else echo '<a href="admin.php?p=addABTroops&did='.$_GET['did'].'">Upgrades Troops</a><a href="admin.php?p=techlog&did='.$_GET['did'].'" style="float: right">Research Log</a>';
+<?php
 
-	if(isset($_GET['ab'])) echo '<div align="right"><font color="Red"><b>AB Tech Troops upgrades</font></b></div>';
-	?>
-	
-	
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : troopUpgrades.tpl                           		       ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : ronix (Original)                                          ##
+##  Refactored by  : iopietro                                                  ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
+#################################################################################
+
+$tribe = (int)$user['tribe'];
+$img = $tribe==1 ? "" : $tribe-1;
+?>
+<style>
+.upg-modern{font-family:system-ui;background:#fff;border:1px solid #e5e7eb;border-top:0}
+.upg-head{display:grid;grid-template-columns:1fr 1fr;background:#f8fafc;border-bottom:1px solid #e5e7eb}
+.upg-head div{padding:6px;text-align:center;font-size:12px;font-weight:600;color:#475569;text-transform:uppercase}
+.upg-icons{display:grid;grid-template-columns:repeat(16,1fr);gap:0;background:#fff;padding:6px 4px;border-bottom:1px solid #f1f5f9}
+.upg-icons img{width:20px;height:20px;margin:0 auto;display:block;image-rendering:pixelated}
+.upg-levels{display:grid;grid-template-columns:repeat(16,1fr);gap:0;padding:4px;background:#fff}
+.upg-levels div{text-align:center;font-size:12px;font-weight:600;padding:3px 0;color:#0f172a}
+.upg-levels div.zero{color:#cbd5e1}
+.upg-foot{display:flex;justify-content:space-between;padding:6px 8px;background:#f8fafc;font-size:12.5px}
+.upg-foot a{color:#16a34a;text-decoration:none;font-weight:500}
+.upg-foot a:hover{text-decoration:underline}
+</style>
+
+<div class="upg-modern">
+  <div class="upg-head"><div>Armoury</div><div>Blacksmith</div></div>
+  <div class="upg-icons">
+    <?php for($i=1;$i<9;$i++) echo '<img src="../img/un/u/'.$img.$i.'.gif">'; for($i=1;$i<9;$i++) echo '<img src="../img/un/u/'.$img.$i.'.gif">'; ?>
+  </div>
+  <div class="upg-levels">
+    <?php
+      for($i=1;$i<9;$i++){
+        $val = $tribe==5 ? '?' : (int)$abtech['a'.$i];
+        $cls = ($val==0 || $val=='?')?'zero':'';
+        echo '<div class="'.$cls.'">'.$val.'</div>';
+      }
+      for($i=1;$i<9;$i++){
+        $val = $tribe==5 ? '?' : (int)$abtech['b'.$i];
+        $cls = ($val==0 || $val=='?')?'zero':'';
+        echo '<div class="'.$cls.'">'.$val.'</div>';
+      }
+    ?>
+  </div>
+  <div class="upg-foot">
+    <?php if($tribe==5){ echo '<span style="color:#94a3b8">Upgrades Troops</span>'; } else { echo '<a href="admin.php?p=addABTroops&did='.$_GET['did'].'">Upgrades Troops</a>'; } ?>
+    <a href="admin.php?p=techlog&did=<?=$_GET['did']?>" style="color:#64748b">Research Log</a>
+  </div>
+  <?php if(isset($_GET['ab'])) echo '<div style="text-align:right;padding:0 8px 6px;color:#dc2626;font-weight:600;font-size:12px">AB Tech updated</div>'; ?>
+</div>

@@ -1,6 +1,21 @@
 <?php
 #################################################################################
-## gold.tpl - REDESIGN 2025 ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       : gold.tpl 		                     	                   ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 if($_SESSION['access'] < ADMIN) die("Access Denied: You are not Admin!");
 $id = $_SESSION['id'];
@@ -34,7 +49,7 @@ $id = $_SESSION['id'];
       <svg viewBox="0 0 24 24"><path d="M12 2L9 8H3l5 4-2 6 6-4 6 4-2-6 5-4h-6z"/></svg>
     </div>
     <h3>Give Everyone Free Gold</h3>
-    <p>Acest gold va fi adăugat la TOȚI jucătorii activi de pe server.</p>
+    <p>This gold will be added to ALL active players on the server.</p>
 
     <form action="../GameEngine/Admin/Mods/gold.php" method="POST" class="gold-form">
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
@@ -47,6 +62,6 @@ $id = $_SESSION['id'];
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="gold-success">✓ Gold a fost adăugat cu succes la toți jucătorii!</div>
+    <div class="gold-success">✓ Gold has been successfully added to all players!</div>
   <?php } ?>
 </div>

@@ -2,169 +2,194 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       editUser.tpl                                                ##
-##  Developed by:  Dzoki                                                       ##
-##  Reworked:      aggenkeech                                                  ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
-##                                                                             ##
+##  Filename       : editUser.tpl                                              ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
-$id = $_GET['uid'];
-if(isset($id))
-{
-	$varray = $database->getProfileVillages($id);
-	$varmedal = $database->getProfileMedal($id); ?>
-
-	<style type="text/css">
-		select.dropdown
-		{
-			border: 1px solid #71D000;
-			margin: 0;
-			padding: 1px 1px;
-			width: 90%;
-		}
-	</style>
-	<form action="../GameEngine/Admin/Mods/editUser.php" method="POST">
-		<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
-		<input type="hidden" name="uid" value="<?php echo $uid; ?>" />
-		<input type="hidden" name="id" value="<?php echo $id; ?>" />
-		<table id="profile" cellpadding="1" cellspacing="1">
-			<thead>
-			<tr>
-				<th colspan="2">Player <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo $user['username']; ?></a></th>
-			</tr>
-			<tr>
-				<td>Details</td>
-				<td>Description</td>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td class="details">
-					<table cellpadding="0" cellspacing="0">
-						<tr>
-							<th>Tribe</th>
-							<td>
-								<select name="tribe" class="dropdown">
-									<option value="1" <?php if($user['tribe'] == 1) { echo "selected='selected'"; } else {} ?>>Roman</option>
-									<option value="2" <?php if($user['tribe'] == 2) { echo "selected='selected'"; } else {} ?>>Teuton</option>
-									<option value="3" <?php if($user['tribe'] == 3) { echo "selected='selected'"; } else {} ?>>Gaul</option>
-									<option value="4" <?php if($user['tribe'] == 4) { echo "selected='selected'"; } else {} ?>>Nature</option>
-									<option value="5" <?php if($user['tribe'] == 5) { echo "selected='selected'"; } else {} ?>>Natars</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-						</tr>
-
-						<tr>
-							<th>Location</th>
-							<td><input class="fm" name="location" value="<?php echo $user['location']; ?>"></td>
-						</tr>
-						<tr>
-							<th>E-mail</th><td><input class="fm" name="email" value="<?php echo $user['email']; ?>"></td></tr>
-						<tr>
-						<tr>
-							<th>Quest</th><td><input class="fm" name="quest" value="<?php echo $user['quest']; ?>"></td></tr>
-						<tr>
-							<td colspan="2" class="empty"></td>
-						</tr>
-						<tr>
-							<td colspan="2"><a href="?p=player&uid=<?php echo $user['id']; ?>"><span class="rn2" >&raquo;</span> Go back</a></td>
-						</tr>
-						<tr>
-							<td colspan="2" class="empty"></td>
-						</tr>
-						<tr>
-							<td colspan="2" class="desc2"><textarea cols="25" rows="14" tabindex="1" name="desc1"><?php echo $user['desc1']; ?></textarea></td>
-						</tr>
-					</table>
-				</td>
-				<td class="desc1">
-					<textarea tabindex="8" cols="30" rows="20" name="desc2"><?php echo $user['desc2']; ?></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2" class="empty"></td>
-			</tr>
-		</tbody>
-	</table>
-
-	<table cellspacing="1" cellpadding="2" id="member">
-		<thead>
-			<tr>
-				<th colspan="4">Medals</th>
-			</tr>
-			<tr>
-				<td>Category</td>
-				<td>Rank</td>
-				<td>Week</td>
-				<td>BB-Code</td>
-			</tr>
-		</thead>
-		<tbody>
-			<?php
-				foreach($varmedal as $medal)
-				{
-					$titel="Bonus";
-					switch ($medal['categorie'])
-					{
-						case "1":
-							$titel="Attacker of the Week";
-						break;
-						case "2":
-							$titel="Defender of the Week";
-						break;
-						case "3":
-							$titel="Climber of the week";
-						break;
-						case "4":
-							$titel="Robber of the week";
-						break;
-					}
-					echo"
-					<tr>
-						<td> ".$titel."</td>
-						<td>".$medal['plaats']."</td>
-						<td>".$medal['week']."</td>
-						<td>[#".$medal['id']."]</td>
-					</tr>";
-				}
-			?>
-			<tr>
-				<td>Beginners Protection</td>
-				<td></td>
-				<td></td>
-				<td>[#0]</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td colspan="4">
-					<center>
-						<input type="image" src="../img/admin/b/ok1.gif" value="submit">
-					</center>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
-	</form><?php
+$id = (int)$_GET['uid'];
+if(isset($id) && $id > 0) {
+    $varray = $database->getProfileVillages($id);
+    $varmedal = $database->getProfileMedal($id);
+    $uid = $id;
+?>
+<style>
+.editUser-wrap { max-width:1100px; margin:0 auto; font-family:Verdana,Arial; }
+.editUser-head {
+    background: linear-gradient(#f8f8f8,#e9e9e9);
+    border:1px solid #c0c0c0; padding:10px 14px; margin-bottom:12px;
+    border-radius:4px; display:flex; align-items:center; justify-content:space-between;
 }
-else
-{
-	echo "<br /><br />Not found. <a href=\"javascript: history.go(-1)\"> Go Back</a>";
+.editUser-head h2 { margin:0; font-size:18px; color:#333; }
+.editUser-head h2 a { color:#71D000; text-decoration:none; }
+.editUser-head .meta { font-size:12px; color:#666; }
+.editUser-grid { display:grid; grid-template-columns: 380px 1fr; gap:12px; }
+@media(max-width:900px){ .editUser-grid{grid-template-columns:1fr;} }
+
+.card { background:#fff; border:1px solid #d0d0d0; border-radius:4px; box-shadow:0 1px 2px rgba(0,0,0,.05); overflow:hidden; }
+.card h3 { margin:0; padding:8px 12px; background:#f0f0f0; border-bottom:1px solid #d0d0d0; font-size:13px; text-transform:uppercase; color:#444; letter-spacing:.5px; }
+.card .body { padding:12px; }
+
+.form-row { display:flex; margin-bottom:10px; align-items:center; }
+.form-row label { width:110px; font-size:12px; color:#333; font-weight:bold; }
+.form-row input.fm, .form-row select.dropdown { flex:1; border:1px solid #bbb; padding:5px 6px; font-size:12px; border-radius:3px; background:#fff; }
+.form-row input.fm:focus, select.dropdown:focus { border-color:#71D000; outline:none; box-shadow:0 0 3px rgba(113,208,0,.4); }
+select.dropdown { width:100%; }
+
+.username-row { background:#f9fff0; border:1px solid #d4edaa; border-radius:3px; padding:8px; margin-bottom:12px; }
+.username-row .form-row { margin-bottom:0; }
+.btn-mini { background:linear-gradient(#7ed321,#5eae0f); border:1px solid #4a8a0c; color:#fff; padding:5px 10px; font-size:11px; font-weight:bold; border-radius:3px; cursor:pointer; margin-left:6px; }
+.btn-mini:hover { filter:brightness(1.05); }
+
+.desc-box textarea { width:100%; box-sizing:border-box; border:1px solid #bbb; border-radius:3px; padding:6px; font-family:Consolas,monospace; font-size:12px; resize:vertical; }
+.desc-box textarea:focus { border-color:#71D000; outline:none; }
+
+.medals-table { width:100%; border-collapse:collapse; font-size:12px; }
+.medals-table th { background:#f5f5f5; padding:6px; border:1px solid #ddd; text-align:left; }
+.medals-table td { padding:6px; border:1px solid #eee; }
+.medals-table tr:nth-child(even){ background:#fafafa; }
+.badge { display:inline-block; padding:2px 6px; border-radius:3px; font-size:11px; color:#fff; }
+.badge.att { background:#c00; } .badge.def { background:#069; } .badge.climb { background:#e67e00; } .badge.rob { background:#6a0dad; }
+
+.actions { margin-top:14px; text-align:center; }
+.btn-save { background:linear-gradient(#7ed321,#5eae0f); border:1px solid #4a8a0c; color:#fff; padding:8px 24px; font-size:14px; font-weight:bold; border-radius:4px; cursor:pointer; text-shadow:0 -1px 0 rgba(0,0,0,.2); }
+.btn-save:hover { filter:brightness(1.05); }
+.back-link { font-size:12px; margin-left:12px; }
+.back-link a { color:#0066cc; text-decoration:none; }
+.back-link a:hover { text-decoration:underline; }
+</style>
+
+<div class="editUser-wrap">
+    <div class="editUser-head">
+        <h2>✏️ Edit Player: <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo htmlspecialchars($user['username']); ?></a></h2>
+        <div class="meta">ID: <?php echo $id; ?> | Villages: <?php echo count($varray); ?> | Gold: <?php echo $user['gold']; ?> <img src="../img/x.gif" class="gold" style="vertical-align:-2px;"></div>
+    </div>
+
+    <div class="editUser-grid">
+        <!-- LEFT: DETAILS -->
+        <div class="card">
+            <h3>👤 Account Details</h3>
+            <div class="body">
+                
+                <!-- USERNAME EDIT - NOU -->
+                <div class="username-row">
+                    <form action="../GameEngine/Admin/Mods/editUsername.php" method="POST">
+                        <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
+                        <input type="hidden" name="uid" value="<?php echo $uid; ?>">
+                        <div class="form-row">
+                            <label>👤 Username</label>
+                            <input class="fm" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" style="flex:1;">
+                            <button type="submit" class="btn-mini" title="Change Username">💾 Save</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RESTUL FORMULUI PRINCIPAL -->
+                <form action="../GameEngine/Admin/Mods/editUser.php" method="POST">
+                    <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
+                    <input type="hidden" name="uid" value="<?php echo $uid; ?>" />
+                    <input type="hidden" name="id" value="<?php echo $id; ?>" />
+
+                    <div class="form-row">
+                        <label> ⚔️ Tribe</label>
+                        <select name="tribe" class="dropdown">
+                            <option value="1" <?php if($user['tribe']==1)echo"selected"; ?>>1. Roman</option>
+                            <option value="2" <?php if($user['tribe']==2)echo"selected"; ?>>2. Teuton</option>
+                            <option value="3" <?php if($user['tribe']==3)echo"selected"; ?>>3. Gaul</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>📍 Location</label>
+                        <input class="fm" name="location" value="<?php echo htmlspecialchars($user['location']); ?>">
+                    </div>
+                    <div class="form-row">
+                        <label>✉️ E-mail</label>
+                        <input class="fm" name="email" value="<?php echo htmlspecialchars($user['email']); ?>">
+                    </div>
+                    <div class="form-row">
+                        <label>🎯 Quest</label>
+                        <input class="fm" name="quest" value="<?php echo (int)$user['quest']; ?>">
+                    </div>
+
+                    <div style="margin-top:14px; border-top:1px dashed #ddd; padding-top:10px;">
+                        <label style="font-weight:bold; font-size:12px; display:block; margin-bottom:4px;">📝 Profile Description (left)</label>
+                        <div class="desc-box">
+                            <textarea name="desc1" rows="10"><?php echo htmlspecialchars($user['desc1']); ?></textarea>
+                        </div>
+                    </div>
+                
+            </div>
+        </div>
+
+        <!-- RIGHT: DESCRIPTION -->
+        <div class="card">
+            <h3>📄 Profile Description (right)</h3>
+            <div class="body desc-box">
+                <textarea name="desc2" rows="22"><?php echo htmlspecialchars($user['desc2']); ?></textarea>
+                <div style="font-size:11px; color:#777; margin-top:4px;">Suport BBCode. Folosește Enter pentru linii noi.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MEDALS -->
+    <div class="card" style="margin-top:12px;">
+        <h3>🏅 Medals</h3>
+        <div class="body" style="padding:0;">
+            <table class="medals-table">
+                <thead>
+                    <tr>
+                        <th style="width:35%;">Category</th>
+                        <th style="width:15%;">Rank</th>
+                        <th style="width:15%;">Week</th>
+                        <th>BB-Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($varmedal as $medal){
+                    $titel="Bonus"; $class=""; $icon="⭐";
+                    switch($medal['categorie']){
+                        case "1": $titel="Attacker of the Week"; $class="att"; $icon="⚔️"; break;
+                        case "2": $titel="Defender of the Week"; $class="def"; $icon="🛡️"; break;
+                        case "3": $titel="Climber of the Week"; $class="climb"; $icon="📈"; break;
+                        case "4": $titel="Robber of the Week"; $class="rob"; $icon="💰"; break;
+                    }
+                    echo "<tr>
+                        <td><span class='badge $class'>$icon</span> $titel</td>
+                        <td>#".$medal['plaats']."</td>
+                        <td>".$medal['week']."</td>
+                        <td><code>[#".$medal['id']."]</code></td>
+                    </tr>";
+                }
+                ?>
+                <tr>
+                    <td><span class="badge" style="background:#999;">🔰</span> Beginners Protection</td>
+                    <td>-</td><td>-</td><td><code>[#0]</code></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="actions">
+        </form> <!-- închidem form-ul principal aici -->
+        <button type="submit" form="dummy" onclick="document.querySelector('form[action*=\'editUser.php\']').submit()" class="btn-save">💾 Save Changes</button>
+        <span class="back-link"><a href="?p=player&uid=<?php echo $user['id']; ?>">« Go back to player</a></span>
+    </div>
+</div>
+<?php
+} else {
+    echo "<div style='padding:20px; text-align:center;'>❌ Player not found. <a href=\"javascript:history.go(-1)\">Go Back</a></div>";
 }
 ?>

@@ -1,15 +1,25 @@
 <?php
+
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       village.php                                                 ##
-##  Developed by:  Dzoki & Advocatie                                           ##
-##  License:       TravianX Project                                            ##
-##  Thanks to:     Dzoki & itay2277(Edit some additions)                       ##
-##  Fix by:        ronix (some additions)                                      ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
-##  Improved:      aggenkeech                                                  ##
+##  Filename       : villagelog.tpl 		                                   ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki & Advocatie (Original)                              ##
+##  Thanks to      : itay2277 & ronix(Edit some additions)                     ##
+##  Redesign by    : Shadow                                                    ##
+##  Improved:      : aggenkeech                                                ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
+
 include_once("../GameEngine/Generator.php");
 
 $id = $_GET['did'];
@@ -20,7 +30,7 @@ if(isset($id)){
 	$type = $database->getVillageType($village['wref']);
 	$fdata = $database->getResourceLevel($village['wref']);
 	$units = $database->getUnit($village['wref']);
-	$abtech = $database->getABTech($id); // Armory/blacksmith level
+	$abtech = $database->getABTech($id);
 	
 	switch($type){
 	    case 1: $typ = [3, 3, 3, 9]; break;
@@ -37,369 +47,179 @@ if(isset($id)){
 	    case 12: $typ = [5, 4, 3, 6]; break;
 	}
 
-	$ocounter = [];
-	$wood = $clay = $iron =$crop = 0;
+	$ocounter = []; $wood = $clay = $iron =$crop = 0;
 	$q = "SELECT o.*, w.x, w.y FROM ".TB_PREFIX."odata AS o LEFT JOIN ".TB_PREFIX."wdata AS w ON o.wref=w.id WHERE conqured = ".(int) $village['wref'];
 	$result = $database->query_return($q);
 	if(!empty($result)){
 		    $newResult = [];
 			foreach($result as $row){
 				$type = $row['type'];
-                if ( $type == 1 ) {
-                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%';
-                    $wood        += 1;
-                } elseif ( $type == 2 ) {
-                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%';
-                    $wood        += 1;
-                } elseif ( $type == 3 ) {
-                    $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
-                    $wood        += 1;
-                    $crop        += 1;
-                } elseif ( $type == 4 ) {
-                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%';
-                    $clay        += 1;
-                } elseif ( $type == 5 ) {
-                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%';
-                    $clay        += 1;
-                } elseif ( $type == 6 ) {
-                    $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
-                    $clay        += 1;
-                    $crop        += 1;
-                } elseif ( $type == 7 ) {
-                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%';
-                    $iron        += 1;
-                } elseif ( $type == 8 ) {
-                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%';
-                    $iron        += 1;
-                } elseif ( $type == 9 ) {
-                    $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%';
-                    $iron        += 1;
-                    $crop        += 1;
-                } elseif ( $type == 10 ) {
-                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%';
-                    $crop        += 1;
-                } elseif ( $type == 11 ) {
-                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%';
-                    $crop        += 1;
-                } elseif ( $type == 12 ) {
-                    $row['type'] = '<img src="../img/admin/r/4.gif"> + 50%';
-                    $crop        += 2;
-                }
-
+                if ( $type == 1 ) { $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%'; $wood += 1; }
+                elseif ( $type == 2 ) { $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%'; $wood += 1; }
+                elseif ( $type == 3 ) { $row['type'] = '<img src="../img/admin/r/1.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $wood += 1; $crop += 1; }
+                elseif ( $type == 4 ) { $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%'; $clay += 1; }
+                elseif ( $type == 5 ) { $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%'; $clay += 1; }
+                elseif ( $type == 6 ) { $row['type'] = '<img src="../img/admin/r/2.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $clay += 1; $crop += 1; }
+                elseif ( $type == 7 ) { $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%'; $iron += 1; }
+                elseif ( $type == 8 ) { $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%'; $iron += 1; }
+                elseif ( $type == 9 ) { $row['type'] = '<img src="../img/admin/r/3.gif"> + 25%<br /><img src="../img/admin/r/4.gif"> + 25%'; $iron += 1; $crop += 1; }
+                elseif ( $type == 10 ) { $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%'; $crop += 1; }
+                elseif ( $type == 11 ) { $row['type'] = '<img src="../img/admin/r/4.gif"> + 25%'; $crop += 1; }
+                elseif ( $type == 12 ) { $row['type'] = '<img src="../img/admin/r/4.gif"> + 50%'; $crop += 2; }
                 $newResult[] = $row;
 			}
 		}
 	$ocounter = array($wood,$clay,$iron,$crop);
 	$production=$admin->calculateProduction($id,$user['id'],$user['b1'],$user['b2'],$user['b3'],$user['b4'],$fdata, $ocounter, $village['pop']);
-	$refreshiconfrm = "../img/admin/refresh.png";
-	$refreshicon  = "<img src=\"".$refreshiconfrm."\">";
 
 	if($village && $user){
-		include("search2.tpl"); ?>
-		<style>
-			.del {width:12px; height:12px; background-image: url(img/admin/icon/del.gif);}
-		</style>
-		<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
-		<br />
-
-		<table id="profile" cellpadding="1" cellspacing="1" >
-			<thead>
-				<tr>
-					<th colspan="3">Village Information</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Village owner:</td>
-					<td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>"><?php echo $user['username']; ?></a></td>
-					<td>
-						<form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" accept-charset="UTF-8">
-							<input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
-							<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
-							Owner(uid): <input class="text" type="text" name="newowner" value="<?php echo $user['id']; ?>"><input type="image" value="submit" src="../img/admin/edit.gif">
-						</form>
-					</td>
-				<tr>
-					<td>Village name:</td>
-					<form action="../GameEngine/Admin/Mods/renameVillage.php" method="POST" accept-charset="UTF-8">
-						<input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
-						<input type="hidden" name="admid" id="admid" value="<?php echo $_SESSION['id']; ?>">
-						<td colspan="2">
-							<input class="text" type="text" name="villagename" value="<?php echo $village['name']; ?>"> <input type="image" value="submit" src="../img/admin/edit.gif">
-						</td>
-					</form>
-				</tr>
-				<tr>
-					<td>Population</td>
-					<td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo $_GET['did']; ?>"><?php echo $refreshicon; ?></a></td>
-				</tr>
-				<tr>
-					<td>Coordinates:</td>
-					<td colspan="2"><a href="<?php echo HOMEPAGE ?>/karte.php?d=<?php echo $village['wref']; ?>&c=<?php echo $generator->getMapCheck($village['wref']); ?>" target="blank">(<?php echo $coor['x']."|".$coor['y']; ?>)</a></td>
-				</tr>
-				<tr>
-					<td>Village ID</td>
-					<td colspan="2"><?php echo $village['wref'];?></td>
-				</tr>
-				<tr>
-					<td>Field type</td>
-					<td colspan="2">
-						<?php
-							for ($i = 0; $i <= 3; $i++){
-								$a = $i + 1;
-								if($i != 3) echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif">| ';	
-							    else echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif"> ';
-							}
-						?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<table id="member">
-			<thead>
-				<tr>
-					<th colspan="7">Resources <a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><img src="../img/admin/edit.gif" title="Edit Resources and Capacity"></a></th>
-				</tr>
-				<tr>
-					<td>Resource</td>
-					<td colspan="2">Warehouse</td>
-					<td>Production</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><img class="r1" src="../img/x.gif"> Lumber</td>
-					<td><center><?php echo floor($village['wood']); ?></center></td>
-					<td rowspan="3"><center><?php echo $village['maxstore'];?></center></td>
-					<td><center><?php echo $production['wood'];?></td>
-				</tr>
-				</tr>
-				<tr>
-					<td><img class="r2" src="../img/x.gif"> Clay</td>
-					<td><center><?php echo floor($village['clay']); ?></center></td>
-					<td><center><?php echo $production['clay'];?></center></td>
-				</tr>
-				<tr>
-					<td><img class="r3" src="../img/x.gif"> Iron</td>
-					<td><center><?php echo floor($village['iron']); ?></center></td>
-					<td><center><?php echo $production['iron'];?></center></td>
-				</tr>
-				<tr>
-					<td><img class="r4" src="../img/x.gif"> Crop</td>
-					<td><center><?php echo floor($village['crop']); ?></center></td>
-					<td><center><?php echo $village['maxcrop'];?></center></td>
-					<td><center><?php echo $production['crop'];?></center></td>
-				</tr>
-			</tbody>
-		</table>
-
-
-		<table id="member">
-			<thead>
-				<tr>
-					<th colspan="5">Village Expansion</th>
-				</tr>
-				<tr>
-					<td class="hab">Village</td>
-					<td class="hab">Inhabitants</td>
-					<td class="hab">CP Production</td>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-					for($e = 1; $e < 4; $e++){
-						$exp = $village['exp'.$e.''];
-						if($exp == 0){
-							echo '
-								<tr>
-									<td class="hab"><center> - </center></td>
-									<td class="hab"><center> - </center></td>
-									<td class="hab"><center> - </center></td>
-								</tr>';
-						}else{
-							$vill = $database->getVillage($exp);
-							$link = '<a href="admin.php?p=village&did='.$vill['wref'].'">'.$vill['name'].'</a>';
-							echo '
-								<tr>
-									<td class="hab">'.$link.'</td>
-									<td class="ra"><center>'.$vill['pop'].'<center></td>
-									<td class="ra"><center>'.$vill['cp'].'</center></td>
-								</tr>';
-						}
-					}
-				?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-
-		<table id="member" cellpadding="1" cellspacing="1" >
-			<thead>
-				<tr>
-					<th colspan="6">Oasis</th>
-				</tr>
-				<tr>
-					<td class="ra"></td>
-					<td class="hab">Name</td>
-					<td class="hab">Coordinates</td>
-					<td class="hab">Loyalty</td>
-					<td class="hab">Resources</td>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-					if(!empty($newResult)){
-						foreach($newResult as $row){
-							echo "
-							<tr>
-								<td><a href=\"?action=delOas&oid=".$row['wref']."&did=".$_GET['did']."\" onClick=\"return del('oas',".$row['wref'].")\"><img src=\"../img/admin/del.gif\"></a></td>
-								<td class=\"hab\">".$row['name']."</td>
-								<td class=\"hab\"><a href=\"../karte.php?d=".$row['wref']."&c=".$generator->getMapCheck($row['wref'])."\" target=\"blank\">(".$row['x']."|".$row['y'].")</a></td>
-								<td class=\"hab\">".round($row['loyalty'])."%</td>
-								<td class=\"hab\">".$row['type']."</td>
-							</tr>";
-						}
-					}
-					else echo '<td colspan="5"><center>This village has no oases</center></td>';
-				?>
-			</tbody>
-		</table>
-
-		<?php
-			include('troops.tpl');
-		?>
-
-		<?php
-			include('troopUpgrades.tpl');
-		?>
-
-		<?php
-			include('artifact.tpl');
-		?>
-		
-		<a href="admin.php?p=editVillage&did=<?php echo $_GET['did']; ?>" title="Edit Village">
-		<div id="content" class="village1" style="min-height: 264px;">
-			<div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>" style="float: left;">
-				<?php
-					for($f = 1; $f < 19; $f++){
-						$gid = $fdata['f'.($f).'t'];
-						$level = $fdata['f'.($f)];
-						echo "<img src=\"../img/x.gif\" class=\"reslevel rf".$f." level".$level."\">";
-					}
-
-				?>
-			</div>
-		</div></a>
-	<?php 
-	
-	$WWLevel = $fdata['f99t'];
-	$wallLevel = $fdata['f40t'];
-	if($wallLevel == 0) $wallType = "d2_0";
-	else 
-	{
-	    switch($user['tribe']){
-	        case 1:
-	        case 5:
-	        default: $wallType = "d2_11"; break;
-	        
-	        case 2: $wallType = "d2_12"; break;
-	        case 3: $wallType = "d2_1"; break;
-	    }
-	}
-	
-	?>	
-	<div id="content" class="village2" style="padding: 0; margin-left: -20px;">
-		<h1><?php echo $village['name']; ?></h1>
-		<div id="village_map" class="<?php echo $wallType; ?>">
-			<?php
-			for($b = 1; $b < 21; $b++){
-				$gid = $fdata['f'.($b + 18).'t'];
-				if($gid > 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." g".$gid."\">";
-				elseif($gid == 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">";
-			}
-			
-			$rplevel = $fdata['f39t'];
-			
-			if($rplevel > 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16\">";
-			elseif($rplevel == 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16e\">";
-
-            $resourcearray = $database->getResourceLevel($village['wref']);
-            if($resourcearray['f99t'] == 40){
-                if($resourcearray['f99'] >= 0 && $resourcearray['f99'] <= 19) {
-                    echo '<img class="ww g40" src="img/x.gif" alt="Worldwonder">';
-                }elseif($resourcearray['f99'] >= 20 && $resourcearray['f99'] <= 39) {
-                    echo '<img class="ww g40_1" src="img/x.gif" alt="Worldwonder">'; 
-                }elseif($resourcearray['f99'] >= 40 && $resourcearray['f99'] <= 59) {
-                    echo '<img class="ww g40_2" src="img/x.gif" alt="Worldwonder">';
-                }elseif($resourcearray['f99'] >= 60 && $resourcearray['f99'] <= 79) {
-                    echo '<img class="ww g40_3" src="img/x.gif" alt="Worldwonder">';
-                }elseif($resourcearray['f99'] >= 80 && $resourcearray['f99'] <= 99) {
-                    echo '<img class="ww g40_4" src="img/x.gif" alt="Worldwonder">';
-                }elseif($resourcearray['f99'] == 100) {
-                    echo '<img class="ww g40_5" src="img/x.gif" alt="Worldwonder">';
-                }
-            }
-
-			?>
-			<div id="levels" class="on">
-				<?php
-					for($b = 1; $b < 21; $b++){
-						$level = $fdata['f'.($b + 18)];
-						if($level >0) echo "<div class=\"d$b\">$level</div>";
-					}
-					if($rplevel > 0) echo "<div class=\"l39\">".$fdata['f39']."</div>";
-					if($wallLevel > 0) echo "<div class=\"l40\">".$fdata['f40']."</div>";
-					if($WWLevel > 0) echo "<div class=\"d40\">".$fdata['f99']."</div>";
-				?>
-	</div>
-</div>
-</div>
-
-<table id="member" cellpadding="1" cellspacing="1" >
-	<thead>
-		<tr>
-			<th colspan="5">Buildings</th>
-		</tr>
-		<tr>
-			<td class="on">ID</td>
-			<td class="on">GID</td>
-			<td class="hab">Name</td>
-			<td class="on">Level</td>
-			<td class="on">Edit</td>
-		</tr>
-	</thead>
-	<tbody>
-	<?php
-	for ($i = 1; $i <= 41; $i++){
-	    if($i == 41) $i = 99;
-	    
-	    if($fdata['f'.$i.'t'] == 0) $bu = "-";
-		else $bu = $funct->procResType($fdata['f'.$i.'t']);
-		
-		echo '
-			<tr>
-				<td class="on">'.$i.'</td>
-				<td class="on">'.$fdata['f'.$i.'t'].'</td>
-				<td class="hab">'.$bu.'</td>
-				<td class="on">'.$fdata['f'.$i].'</td>
-				<td class="on"><a href="admin.php?p=editVillage&did='.$_GET['did'].'"><img src="../img/admin/edit.gif" title="Edit Building & Level"></a></td>
-			</tr>';
-	}
-	?>
-	</tbody>
-</table>
-
-<br /><br />
-
-	<a href="admin.php?p=villagelog&did=<?php echo $_GET['did']; ?>">Village Build Log</a>
-	<br />
-</div>
-<?php
-}
-else
-{
-	include("404.tpl");
-}
-}
+		include("search2.tpl"); 
+        $svgEdit = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>';
+        $svgRefresh = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>';
+        $svgDel = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2m-1 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"/></svg>';
 ?>
+<link href="../<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
+<style>
+/* COMPACT V2 - centrat */
+.village-page{font-family:system-ui;max-width:1000px;margin:0 auto;padding:0 6px}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+@media(max-width:900px){.vgrid{grid-template-columns:1fr}}
+.vcard{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:8px}
+.vhead{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:7px 10px;font-weight:600;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.vhead a{color:#93c5fd;display:inline-flex}
+.vtable{width:100%;border-collapse:collapse}
+.vtable td{padding:5px 8px;border-bottom:1px solid #f1f5f9;font-size:12.5px;color:#334155;vertical-align:middle}
+.vtable tr:last-child td{border-bottom:0}
+.vtable tr:hover td{background:#f8fafc}
+.vtable td.label{width:30%;color:#64748b;font-weight:500;background:#fcfcfd}
+.input-mini{padding:4px 6px;border:1px solid #d1d5db;border-radius:5px;font-size:12.5px}
+.btn-icon{background:none;border:0;padding:3px;cursor:pointer;color:#64748b;border-radius:4px;display:inline-flex}
+.btn-icon:hover{color:#2563eb;background:#eff6ff}
+.btn-icon.danger:hover{color:#dc2626;background:#fef2f2}
+.res-row{display:flex;align-items:center;gap:6px}
+.res-row img.r1,.res-row img.r2,.res-row img.r3,.res-row img.r4{width:14px;height:14px;background:url(../img/x.gif)}
+.badge-field img{width:13px;height:13px;vertical-align:middle}
+
+/* HĂRȚI CENTRATE PERFECT */
+.vmap-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+@media(max-width:900px){.vmap-wrap{grid-template-columns:1fr}}
+.map-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:8px;box-shadow:0 1px 4px rgba(0,0,0,.04);text-align:center}
+.map-card h3{margin:0 0 6px;font-size:12.5px;color:#0f172a;font-weight:600}
+.map-card #village_map{float:none!important;margin:0 auto!important;position:relative;left:0!important;right:0!important;display:block}
+.map-card .village1,.map-card .village2{min-height:auto!important}
+.map-card #content{padding:0!important;margin:0!important}
+</style>
+
+<div class="village-page">
+
+<div class="vgrid">
+  <div>
+    <div class="vcard">
+      <div class="vhead">Village Information</div>
+      <table class="vtable">
+        <tr><td class="label">Owner</td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo $user['username']; ?></a></td>
+          <td style="text-align:right">
+            <form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" style="display:flex;gap:4px;align-items:center;justify-content:flex-end">
+              <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
+              <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
+              <input class="input-mini" type="text" name="newowner" value="<?php echo $user['id']; ?>" style="width:65px">
+              <button class="btn-icon" title="Change"><?php echo $svgEdit; ?></button>
+            </form>
+          </td>
+        </tr>
+        <tr><td class="label">Name</td><td colspan="2">
+          <form action="../GameEngine/Admin/Mods/renameVillage.php" method="POST" style="display:flex;gap:4px">
+            <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
+            <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
+            <input class="input-mini" type="text" name="villagename" value="<?php echo $village['name']; ?>" style="flex:1">
+            <button class="btn-icon" title="Rename"><?php echo $svgEdit; ?></button>
+          </form>
+        </td></tr>
+        <tr><td class="label">Population</td><td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo $_GET['did']; ?>" class="btn-icon" style="margin-left:4px"><?php echo $svgRefresh; ?></a></td></tr>
+        <tr><td class="label">Coords</td><td colspan="2"><a href="<?php echo HOMEPAGE ?>/karte.php?d=<?php echo $village['wref']; ?>&c=<?php echo $generator->getMapCheck($village['wref']); ?>" target="_blank" style="color:#16a34a;font-weight:600">(<?php echo $coor['x']."|".$coor['y']; ?>)</a></td></tr>
+        <tr><td class="label">ID</td><td colspan="2"><?php echo $village['wref'];?></td></tr>
+        <tr><td class="label">Field</td><td colspan="2" class="badge-field"><?php for ($i = 0; $i <= 3; $i++){ $a = $i + 1; echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif">'.($i!=3?' | ':''); } ?></td></tr>
+      </table>
+    </div>
+        <div class="vcard">
+      <div class="vhead">Resources <a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><?php echo $svgEdit; ?></a></div>
+      <table class="vtable" style="text-align:center">
+        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="text-align:left">Res</td><td>Amt</td><td>Cap</td><td>Prod</td></tr>
+        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/1.gif"> Wood</td><td><?php echo floor($village['wood']); ?></td><td rowspan="3"><?php echo $village['maxstore'];?></td><td><?php echo $production['wood'];?></td></tr>
+        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/2.gif"> Clay</td><td><?php echo floor($village['clay']); ?></td><td><?php echo $production['clay'];?></td></tr>
+        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/3.gif"> Iron</td><td><?php echo floor($village['iron']); ?></td><td><?php echo $production['iron'];?></td></tr>
+        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/4.gif"> Crop</td><td><?php echo floor($village['crop']); ?></td><td><?php echo $village['maxcrop'];?></td><td><?php echo $production['crop'];?></td></tr>
+      </table>
+    </div>
+  </div>
+  <div>
+    <div class="vcard">
+      <div class="vhead">Expansion</div>
+      <table class="vtable" style="text-align:center">
+        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td>Village</td><td>Pop</td><td>CP</td></tr>
+        <?php for($e = 1; $e < 4; $e++){ $exp = $village['exp'.$e.'']; if($exp == 0){ echo '<tr><td>-</td><td>-</td><td>-</td></tr>'; }else{ $vill = $database->getVillage($exp); echo '<tr><td><a href="admin.php?p=village&did='.$vill['wref'].'" style="color:#2563eb">'.$vill['name'].'</a></td><td>'.$vill['pop'].'</td><td>'.$vill['cp'].'</td></tr>'; } } ?>
+      </table>
+    </div>
+
+    <div class="vcard">
+      <div class="vhead">Oasis</div>
+      <table class="vtable" style="text-align:center">
+        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="width:28px"></td><td>Name</td><td>Coords</td><td>Loy</td><td>Bonus</td></tr>
+        <?php if(!empty($newResult)){ foreach($newResult as $row){ echo '<tr><td><a href="?action=delOas&oid='.$row['wref'].'&did='.$_GET['did'].'" onclick="return del(\'oas\','.$row['wref'].')" class="btn-icon danger">'.$svgDel.'</a></td><td>'.$row['name'].'</td><td><a href="../karte.php?d='.$row['wref'].'&c='.$generator->getMapCheck($row['wref']).'" target="_blank" style="color:#2563eb">('.$row['x'].'|'.$row['y'].')</a></td><td>'.round($row['loyalty']).'%</td><td>'.$row['type'].'</td></tr>'; } } else { echo '<tr><td colspan="5" style="color:#94a3b8;padding:10px">No oases</td></tr>'; } ?>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="vcard"><div class="vhead">Troops</div><div style="padding:4px"><?php include('troops.tpl'); ?></div></div>
+<div class="vcard"><div class="vhead">Upgrades</div><div style="padding:4px"><?php include('troopUpgrades.tpl'); ?></div></div>
+<div class="vcard"><div class="vhead">Artifact</div><div style="padding:4px"><?php include('artifact.tpl'); ?></div></div>
+
+<div class="vmap-wrap">
+  <div class="map-card">
+    <h3>Resource Fields</h3>
+    <a href="admin.php?p=editVillage&did=<?php echo $_GET['did']; ?>">
+      <div id="content" class="village1">
+        <div id="village_map" class="f<?php echo $database->getVillageType($village['wref']); ?>">
+          <?php for($f = 1; $f < 19; $f++){ $level = $fdata['f'.($f)]; echo "<img src=\"../img/x.gif\" class=\"reslevel rf".$f." level".$level."\">"; } ?>
+        </div>
+      </div>
+    </a>
+  </div>
+  
+  <div class="map-card">
+    <h3>Village Center - <?php echo $village['name']; ?></h3>
+    <?php $WWLevel = $fdata['f99t']; $wallLevel = $fdata['f40t']; if($wallLevel == 0) $wallType = "d2_0"; else { switch($user['tribe']){ case 1: case 5: default: $wallType = "d2_11"; break; case 2: $wallType = "d2_12"; break; case 3: $wallType = "d2_1"; break; } } ?>
+    <div id="content" class="village2">
+      <div id="village_map" class="<?php echo $wallType; ?>">
+        <?php for($b = 1; $b < 21; $b++){ $gid = $fdata['f'.($b + 18).'t']; if($gid > 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." g".$gid."\">"; elseif($gid == 0) echo "<img src=\"../img/x.gif\" class=\"building d".$b." iso\">"; }
+        $rplevel = $fdata['f39t']; if($rplevel > 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16\">"; elseif($rplevel == 0) echo "<img src=\"../img/x.gif\" class=\"dx1 g16e\">";
+        $resourcearray = $database->getResourceLevel($village['wref']);
+        if($resourcearray['f99t'] == 40){
+            if($resourcearray['f99'] <= 19) echo '<img class="ww g40" src="img/x.gif">';
+            elseif($resourcearray['f99'] <= 39) echo '<img class="ww g40_1" src="img/x.gif">'; 
+            elseif($resourcearray['f99'] <= 59) echo '<img class="ww g40_2" src="img/x.gif">';
+            elseif($resourcearray['f99'] <= 79) echo '<img class="ww g40_3" src="img/x.gif">';
+            elseif($resourcearray['f99'] <= 99) echo '<img class="ww g40_4" src="img/x.gif">';
+            else echo '<img class="ww g40_5" src="img/x.gif">';
+        } ?>
+        <div id="levels" class="on">
+          <?php for($b = 1; $b < 21; $b++){ $level = $fdata['f'.($b + 18)]; if($level >0) echo "<div class=\"d$b\">$level</div>"; } if($rplevel > 0) echo "<div class=\"l39\">".$fdata['f39']."</div>"; if($wallLevel > 0) echo "<div class=\"l40\">".$fdata['f40']."</div>"; if($WWLevel > 0) echo "<div class=\"d40\">".$fdata['f99']."</div>"; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="vcard" style="margin-top:8px">
+  <div class="vhead">Buildings</div>
+  <table class="vtable" style="text-align:center">
+    <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td>ID</td><td>GID</td><td style="text-align:left">Name</td><td>Lvl</td><td>Edit</td></tr>
+    <?php for ($i = 1; $i <= 41; $i++){ if($i == 41) $i = 99; if($fdata['f'.$i.'t'] == 0) $bu = "-"; else $bu = $funct->procResType($fdata['f'.$i.'t']); echo '<tr><td>'.$i.'</td><td>'.$fdata['f'.$i.'t'].'</td><td style="text-align:left">'.$bu.'</td><td>'.$fdata['f'.$i].'</td><td><a href="admin.php?p=editVillage&did='.$_GET['did'].'" class="btn-icon">'.$svgEdit.'</a></td></tr>'; } ?>
+  </table>
+</div>
+
+<div style="text-align:center;margin:12px 0"><a href="admin.php?p=villagelog&did=<?php echo $_GET['did']; ?>" style="color:#2563eb;font-weight:500;font-size:13px">Village Build Log →</a></div>
+
+</div>
+<?php } else { include("404.tpl"); } } ?>

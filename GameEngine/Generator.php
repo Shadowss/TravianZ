@@ -115,6 +115,7 @@ class MyGenerator
 	 */
 	public function getTimeFormat($time)
 	{
+     $time = (int) $time;
 		$min = 0;
 		$hr = 0;
 
@@ -139,6 +140,7 @@ class MyGenerator
 	 */
 	public function procMtime($time, $pref = 3)
 	{
+      $time = (int) $time;
 		$time += 0; // placeholder for timezone adjustments
 
 		$today = date('d', time()) - 1;

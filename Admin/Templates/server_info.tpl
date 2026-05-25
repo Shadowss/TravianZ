@@ -3,12 +3,20 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       server_info.tpl                                             ##
-##  Developed by:  Dzoki                                                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                ##
-##  Enhanced:      aggenkeech                                                  ##
-##  Refactored by: Shadow                                                      ##
+##  Filename       : server_info.tpl 		                                   ##
+##  Type           : Admin Panel Frontend                                      ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
 if($_SESSION['access'] < MULTIHUNTER) die("Access Denied!");
@@ -102,8 +110,8 @@ $ue = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."enforcement");
         'Romans' => range(1,10),
         'Teutons' => range(11,20),
         'Gauls' => range(21,30),
-        'Natars' => range(31,40),
-        'Other' => range(41,50)
+        'Nature' => range(31,40),
+        'Natars' => range(41,50)
     ];
     foreach($tribesUnits as $tribe=>$ids){
         echo "<div class='tribe-box'><h4>$tribe</h4>";
