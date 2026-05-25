@@ -23,15 +23,15 @@ $tribe = (int)$user['tribe'];
 $img = $tribe==1 ? "" : $tribe-1;
 ?>
 <style>
-.upg-modern{font-family:system-ui;background:#fff;border:1px solid #e5e7eb;border-top:0}
+.upg-modern{font-family:system-ui;background:#fff;border:0} /* scos border dublu */
 .upg-head{display:grid;grid-template-columns:1fr 1fr;background:#f8fafc;border-bottom:1px solid #e5e7eb}
-.upg-head div{padding:6px;text-align:center;font-size:12px;font-weight:600;color:#475569;text-transform:uppercase}
-.upg-icons{display:grid;grid-template-columns:repeat(16,1fr);gap:0;background:#fff;padding:6px 4px;border-bottom:1px solid #f1f5f9}
-.upg-icons img{width:20px;height:20px;margin:0 auto;display:block;image-rendering:pixelated}
-.upg-levels{display:grid;grid-template-columns:repeat(16,1fr);gap:0;padding:4px;background:#fff}
-.upg-levels div{text-align:center;font-size:12px;font-weight:600;padding:3px 0;color:#0f172a}
-.upg-levels div.zero{color:#cbd5e1}
-.upg-foot{display:flex;justify-content:space-between;padding:6px 8px;background:#f8fafc;font-size:12.5px}
+.upg-head div{padding:6px;text-align:center;font-size:12px;font-weight:600;color:#475569;text-transform:uppercase;letter-spacing:.3px}
+.upg-icons{display:grid;grid-template-columns:repeat(16,1fr);gap:0;background:#fff;padding:8px 4px}
+.upg-icons img{width:16px;height:16px;margin:0 auto;display:block} /* ORIGINAL, nu 20px */
+.upg-levels{display:grid;grid-template-columns:repeat(16,1fr);gap:0;padding:2px 0 6px;background:#fff}
+.upg-levels div{text-align:center;font-size:12px;font-weight:600;padding:2px 0;color:#0f172a}
+.upg-levels div.zero{color:#cbd5e1;font-weight:500}
+.upg-foot{display:flex;justify-content:space-between;padding:8px 2px 2px;background:#fff;font-size:12.5px;border-top:1px solid #f1f5f9}
 .upg-foot a{color:#16a34a;text-decoration:none;font-weight:500}
 .upg-foot a:hover{text-decoration:underline}
 </style>

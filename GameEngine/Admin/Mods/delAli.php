@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Filename       editAli.php                                                 ##
+##  Filename       delAli.php                                                  ##
 ##  Type           BACKEND                                                     ##
 ##  Developed by:  Shadow (după model editUser)                                ##
 ##  License:       TravianZ Project                                            ##
@@ -33,16 +33,16 @@ include_once($autoprefix . "GameEngine/Database.php");
 // ---------------------------------------------------------------------------
 // Input
 // ---------------------------------------------------------------------------
-$admid = (int)($_POST['admid'] ?? 0);
-$aid   = (int)($_POST['aid'] ?? 0);
+$aid     = (int)($_POST['aid'] ?? 0);
+$admid   = (int)($_POST['admid'] ?? 0);
 
 if ($aid <= 0 || $admid <= 0) {
-    header("Location: ../../../Admin/admin.php?p=alliance&aid=$aid&e=bad");
+    header("Location: ../../../Admin/admin.php?p=alliance&aid=0&e=bad");
     exit;
 }
 
 // ---------------------------------------------------------------------------
-// Verificare admin - la fel ca editUser
+// Verificare admin
 // ---------------------------------------------------------------------------
 $admin = $database->getUserArray($admid, 1);
 if (!$admin || (int)$admin['access'] !== 9) {
@@ -50,35 +50,35 @@ if (!$admin || (int)$admin['access'] !== 9) {
 }
 
 // ---------------------------------------------------------------------------
-// Câmpuri
+// 1. Scoate toți membrii
 // ---------------------------------------------------------------------------
-$tag    = $database->escape(substr(trim($_POST['tag'] ?? ''), 0, 8));
-$name   = $database->escape(substr(trim($_POST['name'] ?? ''), 0, 25));
-$leader = (int)($_POST['leader'] ?? 0);
-$max    = (int)($_POST['max'] ?? 0);
-$max    = max(3, min(60, $max));
-$notice = $database->escape($_POST['notice'] ?? '');
-$desc   = $database->escape($_POST['desc'] ?? '');
+$database->query("UPDATE " . TB_PREFIX . "users SET alliance = 0 WHERE alliance = $aid");
 
 // ---------------------------------------------------------------------------
-// Update
+// 2. Șterge structura alianței
 // ---------------------------------------------------------------------------
-$database->query(
-    "UPDATE " . TB_PREFIX . "alidata SET 
-        tag = '$tag',
-        name = '$name',
-        leader = $leader,
-        `max` = $max,
-        notice = '$notice',
-        `desc` = '$desc'
-     WHERE id = $aid"
-);
+$database->query("DELETE FROM " . TB_PREFIX . "alidata WHERE id = $aid");
+$database->query("DELETE FROM " . TB_PREFIX . "ali_permission WHERE alliance = $aid");
+$database->query("DELETE FROM " . TB_PREFIX . "ali_invite WHERE alliance = $aid");
+$database->query("DELETE FROM " . TB_PREFIX . "ali_log WHERE aid = $aid");
+
+// ---------------------------------------------------------------------------
+// 3. Șterge diplomația
+// ---------------------------------------------------------------------------
+$database->query("DELETE FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $aid OR alli2 = $aid");
+
+// ---------------------------------------------------------------------------
+// 4. Șterge forumul
+// ---------------------------------------------------------------------------
+$database->query("DELETE FROM " . TB_PREFIX . "forum_cat WHERE alliance = $aid");
+$database->query("DELETE FROM " . TB_PREFIX . "forum_topic WHERE alliance = $aid");
+$database->query("DELETE FROM " . TB_PREFIX . "forum_post WHERE alliance = $aid");
 
 // ---------------------------------------------------------------------------
 // Log admin - aceeași structură ca editUser
 // ---------------------------------------------------------------------------
 $time = time();
-$logText = "Edited alliance <a href='admin.php?p=alliance&aid=$aid'>$tag</a>";
+$logText = "Deleted alliance ID $aid";
 $logEsc = $database->escape($logText);
 
 $database->query(
@@ -86,6 +86,6 @@ $database->query(
     "VALUES (0, '$admid', '$logEsc', $time)"
 );
 
-header("Location: ../../../Admin/admin.php?p=alliance&aid=$aid&edited=1");
+header("Location: ../../../Admin/admin.php?p=search&delali=1");
 exit;
 ?>

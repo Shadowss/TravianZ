@@ -112,21 +112,20 @@ if(isset($id)){
 
 <div class="village-page">
 
-<div class="vgrid">
-  <div>
-    <div class="vcard">
-      <div class="vhead">Village Information</div>
-      <table class="vtable">
-        <tr><td class="label">Owner</td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo $user['username']; ?></a></td>
-          <td style="text-align:right">
-            <form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" style="display:flex;gap:4px;align-items:center;justify-content:flex-end">
-              <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
-              <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
-              <input class="input-mini" type="text" name="newowner" value="<?php echo $user['id']; ?>" style="width:65px">
-              <button class="btn-icon" title="Change"><?php echo $svgEdit; ?></button>
-            </form>
-          </td>
-        </tr>
+<!-- 1. VILLAGE INFORMATION - FULL WIDTH -->
+<div class="vcard">
+  <div class="vhead">Village Information</div>
+  <table class="vtable">
+    <tr><td class="label">Owner</td><td><a href="admin.php?p=player&uid=<?php echo $village['owner']; ?>" style="color:#2563eb;font-weight:600"><?php echo $user['username']; ?></a></td>
+      <td style="text-align:right">
+        <form action="../GameEngine/Admin/Mods/editVillageOwner.php" method="POST" style="display:flex;gap:4px;align-items:center;justify-content:flex-end">
+          <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
+          <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
+          <input class="input-mini" type="text" name="newowner" value="<?php echo $user['id']; ?>" style="width:65px">
+          <button class="btn-icon" title="Change"><?php echo $svgEdit; ?></button>
+        </form>
+      </td>
+    </tr>
         <tr><td class="label">Name</td><td colspan="2">
           <form action="../GameEngine/Admin/Mods/renameVillage.php" method="POST" style="display:flex;gap:4px">
             <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
@@ -141,16 +140,17 @@ if(isset($id)){
         <tr><td class="label">Field</td><td colspan="2" class="badge-field"><?php for ($i = 0; $i <= 3; $i++){ $a = $i + 1; echo $typ[$i].'x <img src="../img/admin/r/'.$a.'.gif">'.($i!=3?' | ':''); } ?></td></tr>
       </table>
     </div>
-        <div class="vcard">
-      <div class="vhead">Resources <a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><?php echo $svgEdit; ?></a></div>
-      <table class="vtable" style="text-align:center">
-        <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="text-align:left">Res</td><td>Amt</td><td>Cap</td><td>Prod</td></tr>
-        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/1.gif"> Wood</td><td><?php echo floor($village['wood']); ?></td><td rowspan="3"><?php echo $village['maxstore'];?></td><td><?php echo $production['wood'];?></td></tr>
-        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/2.gif"> Clay</td><td><?php echo floor($village['clay']); ?></td><td><?php echo $production['clay'];?></td></tr>
-        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/3.gif"> Iron</td><td><?php echo floor($village['iron']); ?></td><td><?php echo $production['iron'];?></td></tr>
-        <tr><td style="text-align:left" class="res-icon"><img src="../img/admin/r/4.gif"> Crop</td><td><?php echo floor($village['crop']); ?></td><td><?php echo $village['maxcrop'];?></td><td><?php echo $production['crop'];?></td></tr>
-      </table>
-    </div>
+<!-- 2. RESOURCES - FULL WIDTH -->
+<div class="vcard">
+  <div class="vhead">Resources <a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><?php echo $svgEdit; ?></a></div>
+  <table class="vtable" style="text-align:center">
+    <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="text-align:left">Res</td><td>Amt</td><td>Cap</td><td>Prod</td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/1.gif"> Wood</td><td><?php echo floor($village['wood']); ?></td><td rowspan="3"><?php echo $village['maxstore'];?></td><td><?php echo $production['wood'];?></td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/2.gif"> Clay</td><td><?php echo floor($village['clay']); ?></td><td><?php echo $production['clay'];?></td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/3.gif"> Iron</td><td><?php echo floor($village['iron']); ?></td><td><?php echo $production['iron'];?></td></tr>
+    <tr><td style="text-align:left"><img src="../img/admin/r/4.gif"> Crop</td><td><?php echo floor($village['crop']); ?></td><td><?php echo $village['maxcrop'];?></td><td><?php echo $production['crop'];?></td></tr>
+  </table>
+</div>
   </div>
   <div>
     <div class="vcard">
@@ -186,7 +186,7 @@ if(isset($id)){
       </div>
     </a>
   </div>
-  
+  </br>
   <div class="map-card">
     <h3>Village Center - <?php echo $village['name']; ?></h3>
     <?php $WWLevel = $fdata['f99t']; $wallLevel = $fdata['f40t']; if($wallLevel == 0) $wallType = "d2_0"; else { switch($user['tribe']){ case 1: case 5: default: $wallType = "d2_11"; break; case 2: $wallType = "d2_12"; break; case 3: $wallType = "d2_1"; break; } } ?>

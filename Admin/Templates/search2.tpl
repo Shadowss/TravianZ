@@ -28,20 +28,18 @@ $totalpop = 0;
 foreach($varray as $vil) $totalpop += $vil['pop'];
 ?>
 <style>
-#member.search-modern{border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);margin-bottom:12px}
+#member.search-modern{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);margin-bottom:12px}
 #member.search-modern th{background:linear-gradient(135deg,#0f172a,#334155);color:#fff;padding:10px 12px;font-weight:600;text-align:left;font-size:13px}
 #member.search-modern th font{color:#fca5a5 !important;font-weight:500}
 
-.s-info-wrap{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:100%;margin:0 auto 15px}
-.s-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.s-info-wrap{display:flex;flex-direction:column;gap:10px;width:100%;margin:0 0 12px}
+.s-card{width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04);box-sizing:border-box}
 .s-card-title{font-size:11px;text-transform:uppercase;color:#64748b;letter-spacing:.5px;margin-bottom:4px;font-weight:600}
 .s-card-main{font-size:14px;font-weight:600;color:#0f172a}
 .s-card-main a{color:#2563eb;text-decoration:none}
 .s-card-main a:hover{text-decoration:underline}
 .s-card-sub{font-size:12px;color:#475569;margin-top:3px}
 .s-card-sub b{color:#334155;font-weight:600}
-
-@media(max-width:700px){.s-info-wrap{grid-template-columns:1fr}}
 </style>
 
 <form action="" method="post">

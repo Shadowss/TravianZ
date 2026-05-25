@@ -108,64 +108,58 @@ if($_GET['aid']) {
         </div>
     </div>
 
-    <div class="grid-2">
-        <!-- LEFT -->
-        <div>
-            <div class="card">
-                <h3>📋 Alliance Details</h3>
-                <div class="body">
-                    <table class="info-list">
-                        <tr><th>Tag</th><td><?php echo htmlspecialchars($alidata['tag']); ?></td></tr>
-                        <tr><th>Name</th><td><?php echo htmlspecialchars($alidata['name']); ?></td></tr>
-                        <tr><th>Rank</th><td><b>#<?php echo $allianceRank; ?></b></td></tr>
-                        <tr><th>Points</th><td><?php echo number_format($totalpop); ?></td></tr>
-                        <tr><th>Capacity</th><td>
-                            <?php $now=count($aliusers); $cls=$now>=$maxMembers?'full':'ok'; ?>
-                            <span class="badge-cap <?php echo $cls; ?>"><?php echo "$now/$maxMembers"; ?></span>
-                        </td></tr>
-                    </table>
+<!-- ALLIANCE DETAILS -->
+<div class="card">
+    <h3>📋 Alliance Details</h3>
+    <div class="body">
+        <table class="info-list">
+            <tr><th>Tag</th><td><?php echo htmlspecialchars($alidata['tag']); ?></td></tr>
+            <tr><th>Name</th><td><?php echo htmlspecialchars($alidata['name']); ?></td></tr>
+            <tr><th>Rank</th><td><b>#<?php echo $allianceRank; ?></b></td></tr>
+            <tr><th>Points</th><td><?php echo number_format($totalpop); ?></td></tr>
+            <tr><th>Capacity</th><td>
+                <?php $now=count($aliusers); $cls=$now>=$maxMembers?'full':'ok'; ?>
+                <span class="badge-cap <?php echo $cls; ?>"><?php echo "$now/$maxMembers"; ?></span>
+            </td></tr>
+        </table>
 
-                    <div style="margin-top:12px;">
-                        <b style="font-size:12px;">🛡️ Alliance Positions</b>
-                        <div class="positions">
-                        <?php
-                        error_reporting(0);
-                        $sql = "SELECT * FROM ".TB_PREFIX."ali_permission WHERE alliance = $aid";
-                        $result = mysqli_query($GLOBALS["link"], $sql);
-                        while($row = mysqli_fetch_assoc($result)){
-                            $player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT username FROM ".TB_PREFIX."users WHERE id = ".(int)$row['uid']));
-                            $perms = [];
-                            if($row['opt1']) $perms[]="Assign"; if($row['opt2']) $perms[]="Kick";
-                            if($row['opt3']) $perms[]="Edit Desc"; if($row['opt4']) $perms[]="Invite";
-                            if($row['opt5']) $perms[]="Forum"; if($row['opt6']) $perms[]="Diplomacy";
-                            if($row['opt7']) $perms[]="MM";
-                            echo '<div class="pos-item"><span class="name"><a href="admin.php?p=player&uid='.$row['uid'].'">'.htmlspecialchars($player['username']).'</a></span> <span class="rank">'.htmlspecialchars($row['rank']).'</span><div class="perms">'.implode(' • ', $perms).'</div></div>';
-                        }
-                        ?>
-                        </div>
-                    </div>
-
-                    <div class="btn-row">
-                        <a class="btn edit" href="?p=editAli&aid=<?php echo $alidata['id'];?>">✏️ Edit Alliance</a>
-                        <a class="btn del" href="?p=DelAli&aid=<?php echo $alidata['id'];?>" onclick="return confirm('Delete alliance?')">🗑️ Delete</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>📢 Alliance Notice</h3>
-                <div class="body"><div class="desc-box"><?php echo nl2br(htmlspecialchars($alidata['notice'])); ?></div></div>
+        <div style="margin-top:12px;">
+            <b style="font-size:12px;">🛡 Alliance Positions</b>
+            <div class="positions">
+            <?php
+            $sql = "SELECT * FROM ".TB_PREFIX."ali_permission WHERE alliance = $aid";
+            $result = mysqli_query($GLOBALS["link"], $sql);
+            while($row = mysqli_fetch_assoc($result)){
+                $player = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT username FROM ".TB_PREFIX."users WHERE id = ".(int)$row['uid']));
+                $perms = [];
+                if($row['opt1']) $perms[]="Assign"; if($row['opt2']) $perms[]="Kick";
+                if($row['opt3']) $perms[]="Edit Desc"; if($row['opt4']) $perms[]="Invite";
+                if($row['opt5']) $perms[]="Forum"; if($row['opt6']) $perms[]="Diplomacy";
+                if($row['opt7']) $perms[]="MM";
+                echo '<div class="pos-item"><span class="name"><a href="admin.php?p=player&uid='.$row['uid'].'">'.htmlspecialchars($player['username']).'</a></span> <span class="rank">'.htmlspecialchars($row['rank']).'</span><div class="perms">'.implode(' • ', $perms).'</div></div>';
+            }
+            ?>
             </div>
         </div>
 
-        <!-- RIGHT -->
-        <div>
-            <div class="card">
-                <h3>📖 Alliance Description</h3>
-                <div class="body"><div class="desc-box" style="min-height:260px;"><?php echo nl2br(htmlspecialchars($alidata['desc'])); ?></div></div>
-            </div>
+        <div class="btn-row">
+            <a class="btn edit" href="?p=editAli&aid=<?php echo $alidata['id'];?>">✏ Edit Alliance</a>
+            <a class="btn del" href="?p=DelAli&aid=<?php echo $alidata['id'];?>" onclick="return confirm('Delete alliance?')">🗑 Delete</a>
         </div>
     </div>
+</div>
+
+<!-- ALLIANCE DESCRIPTION - ACUM SUB DETAILS -->
+<div class="card">
+    <h3>📖 Alliance Description</h3>
+    <div class="body"><div class="desc-box" style="min-height:120px;"><?php echo nl2br(htmlspecialchars($alidata['desc'])); ?></div></div>
+</div>
+
+<!-- ALLIANCE NOTICE - ACUM SUB DESCRIPTION -->
+<div class="card">
+    <h3>📢 Alliance Notice</h3>
+    <div class="body"><div class="desc-box"><?php echo nl2br(htmlspecialchars($alidata['notice'])); ?></div></div>
+</div>
 
     <!-- MEMBERS -->
     <div class="card">
@@ -200,54 +194,51 @@ if($_GET['aid']) {
         </div>
     </div>
 
-    <div class="grid-2">
-        <!-- NEWS -->
-        <div class="card">
-            <h3>📰 Alliance News</h3>
-            <div class="body" style="padding:0;max-height:300px;overflow:auto;">
-                <table class="mini-table">
-                    <thead><tr><th>Event</th><th style="width:130px;">Time</th></tr></thead>
-                    <tbody>
-                    <?php
-                    $sql = "SELECT * FROM ".TB_PREFIX."ali_log WHERE aid = $aid ORDER BY date DESC LIMIT 50";
-                    $result = mysqli_query($GLOBALS["link"], $sql);
-                    while($row = mysqli_fetch_assoc($result)){
-                        // --- FIX 4: curata HTML-ul din news ---
-                        $comment = html_entity_decode($row['comment']);
-                        $comment = preg_replace('/<a href="spieler\.php\?uid=(\d+)">([^<]+)<\/a>/i', '<a href="admin.php?p=player&uid=$1">$2</a>', $comment);
-                        $comment = strip_tags($comment, '<a>'); // lasa doar linkurile curate
-                        echo '<tr><td>'.$comment.'</td><td>'.date('d.m.Y H:i', $row['date']).'</td></tr>';
-                    }
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- DIPLOMACY -->
-        <div class="card">
-            <h3>🤝 Diplomacy</h3>
-            <div class="body" style="padding:0;">
-                <table class="mini-table">
-                    <thead><tr><th>Alliance</th><th>Type</th><th style="width:60px;">Status</th></tr></thead>
-                    <tbody>
-                    <?php
-                    $sql = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = $aid OR alli2 = $aid ORDER BY accepted DESC";
-                    $result = mysqli_query($GLOBALS["link"], $sql);
-                    while($row = mysqli_fetch_assoc($result)){
-                        $other = ($row['alli1']==$aid) ? $row['alli2'] : $row['alli1'];
-                        $ally = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT tag FROM ".TB_PREFIX."alidata WHERE id = ".(int)$other));
-                        $type = $row['type']==1?'Confederation':($row['type']==2?'NAP':'War');
-                        $cls = 'diplo-'.$row['type'];
-                        $acc = $row['accepted'] ? '<img src="../../gpack/travian_default/img/a/acc.gif">' : '<img src="../../gpack/travian_default/img/a/del.gif">';
-                        echo '<tr><td><a href="admin.php?p=alliance&aid='.$other.'">'.htmlspecialchars($ally['tag']).'</a></td><td><span class="diplo-type '.$cls.'">'.$type.'</span></td><td>'.$acc.'</td></tr>';
-                    }
-                    ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<!-- NEWS - FULL WIDTH -->
+<div class="card">
+    <h3>📰 Alliance News</h3>
+    <div class="body" style="padding:0;max-height:300px;overflow:auto;">
+        <table class="mini-table">
+            <thead><tr><th>Event</th><th style="width:130px;">Time</th></tr></thead>
+            <tbody>
+            <?php
+            $sql = "SELECT * FROM ".TB_PREFIX."ali_log WHERE aid = $aid ORDER BY date DESC LIMIT 50";
+            $result = mysqli_query($GLOBALS["link"], $sql);
+            while($row = mysqli_fetch_assoc($result)){
+                $comment = html_entity_decode($row['comment']);
+                $comment = preg_replace('/<a href="spieler\.php\?uid=(\d+)">([^<]+)<\/a>/i', '<a href="admin.php?p=player&uid=$1">$2</a>', $comment);
+                $comment = strip_tags($comment, '<a>');
+                echo '<tr><td>'.$comment.'</td><td>'.date('d.m.Y H:i', $row['date']).'</td></tr>';
+            }
+            ?>
+            </tbody>
+        </table>
     </div>
+</div>
+
+<!-- DIPLOMACY - FULL WIDTH -->
+<div class="card">
+    <h3>🤝 Diplomacy</h3>
+    <div class="body" style="padding:0;">
+        <table class="mini-table">
+            <thead><tr><th>Alliance</th><th>Type</th><th style="width:60px;">Status</th></tr></thead>
+            <tbody>
+            <?php
+            $sql = "SELECT * FROM ".TB_PREFIX."diplomacy WHERE alli1 = $aid OR alli2 = $aid ORDER BY accepted DESC";
+            $result = mysqli_query($GLOBALS["link"], $sql);
+            while($row = mysqli_fetch_assoc($result)){
+                $other = ($row['alli1']==$aid) ? $row['alli2'] : $row['alli1'];
+                $ally = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT tag FROM ".TB_PREFIX."alidata WHERE id = ".(int)$other));
+                $type = $row['type']==1?'Confederation':($row['type']==2?'NAP':'War');
+                $cls = 'diplo-'.$row['type'];
+                $acc = $row['accepted'] ? '<img src="../../gpack/travian_default/img/a/acc.gif">' : '<img src="../../gpack/travian_default/img/a/del.gif">';
+                echo '<tr><td><a href="admin.php?p=alliance&aid='.$other.'">'.htmlspecialchars($ally['tag']).'</a></td><span class="diplo-type '.$cls.'">'.$type.'</span></td><td>'.$acc.'</td></tr>';
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
     <?php include("allymedals.tpl"); ?>
 </div>

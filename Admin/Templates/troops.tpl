@@ -26,7 +26,7 @@ $heroCount = $hero ? 1 : 0;
 ?>
 <style>
 .troops-modern{font-family:system-ui}
-.troops-grid{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;padding:6px;background:#fff}
+.troops-grid{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;padding:4px 2px;background:#fff}
 .troop-item{text-align:center;padding:4px 2px;border:1px solid #f1f5f9;border-radius:6px;background:#fcfdff}
 .troop-item:hover{background:#f8fafc}
 .troop-item img, .troop-item svg{width:18px;height:18px;margin:0 auto 2px;display:block}
@@ -34,8 +34,9 @@ $heroCount = $hero ? 1 : 0;
 .troop-num.zero{color:#cbd5e1}
 .troop-num.has{color:#0f172a}
 .troop-hero{background:#fffbeb!important;border-color:#fde68a!important}
-.troops-foot{display:flex;justify-content:space-between;padding:6px 8px;background:#f8fafc;border-top:1px solid #e5e7eb;font-size:12px}
+.troops-foot{display:flex;justify-content:space-between;padding:8px 2px 2px;background:transparent;font-size:12px} /* FIX: scos background și border */
 .troops-foot a{color:#2563eb;text-decoration:none;font-weight:500;display:flex;gap:4px;align-items:center}
+.troops-foot a:hover{text-decoration:underline}
 </style>
 
 <div class="troops-modern">

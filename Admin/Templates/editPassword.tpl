@@ -82,7 +82,7 @@ function genPw(){
             <div class="body">
                 <div class="warning">
                     <span>⚠️</span>
-                    <div><b>Atenție:</b> Parola se schimbă instant. Jucătorul va fi delogat. Nu se trimite email automat.</div>
+                    <div><b>WARNING:</b> The password is changed instantly. The player will be logged out. No automatic email is sent.</div>
                 </div>
 
                 <div class="form-group">
@@ -91,7 +91,7 @@ function genPw(){
                         <input type="text" id="newpw" name="newpw" value="" placeholder="Introdu parola nouă" autocomplete="new-password" required>
                         <button type="button" class="toggle-eye" onclick="togglePw()" title="Show/Hide">👁️</button>
                     </div>
-                    <button type="button" class="btn-gen" onclick="genPw()">🎲 Generează parolă sigură</button>
+                    <button type="button" class="btn-gen" onclick="genPw()">🎲 Generate secure password</button>
                 </div>
             </div>
         </div>

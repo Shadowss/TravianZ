@@ -98,7 +98,7 @@ function setDays(d){ document.getElementById('protect').value = d; }
                     <button type="button" onclick="setDays(0)">Remove</button>
                 </div>
 
-                <div class="info">💡 Pune 0 ca să scoți protecția. Protecția se adaugă de la momentul salvării.</div>
+                <div class="info">💡 Set to 0 to remove protection. Protection is added from the time of saving.</div>
             </div>
         </div>
 

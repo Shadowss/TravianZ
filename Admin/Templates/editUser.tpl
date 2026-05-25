@@ -25,20 +25,19 @@ if(isset($id) && $id > 0) {
     $uid = $id;
 ?>
 <style>
-.editUser-wrap { max-width:1100px; margin:0 auto; font-family:Verdana,Arial; }
+.editUser-wrap { max-width:1100px; margin:0 auto; font-family:system-ui; }
 .editUser-head {
-    background: linear-gradient(#f8f8f8,#e9e9e9);
-    border:1px solid #c0c0c0; padding:10px 14px; margin-bottom:12px;
-    border-radius:4px; display:flex; align-items:center; justify-content:space-between;
+    background: linear-gradient(135deg,#0f172a,#1e293b); color:#fff;
+    border:1px solid #0f172a; padding:10px 14px; margin-bottom:12px;
+    border-radius:10px; display:flex; align-items:center; justify-content:space-between;
 }
-.editUser-head h2 { margin:0; font-size:18px; color:#333; }
-.editUser-head h2 a { color:#71D000; text-decoration:none; }
-.editUser-head .meta { font-size:12px; color:#666; }
-.editUser-grid { display:grid; grid-template-columns: 380px 1fr; gap:12px; }
+.editUser-head h2 { margin:0; font-size:16px; }
+.editUser-head h2 a { color:#86efac; text-decoration:none; }
+.editUser-head .meta { font-size:12px; color:#cbd5e1; }
 @media(max-width:900px){ .editUser-grid{grid-template-columns:1fr;} }
 
-.card { background:#fff; border:1px solid #d0d0d0; border-radius:4px; box-shadow:0 1px 2px rgba(0,0,0,.05); overflow:hidden; }
-.card h3 { margin:0; padding:8px 12px; background:#f0f0f0; border-bottom:1px solid #d0d0d0; font-size:13px; text-transform:uppercase; color:#444; letter-spacing:.5px; }
+.card { background:#fff; border:1px solid #e5e7eb; border-radius:10px; overflow:hidden; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+.card h3 { margin:0; padding:9px 12px; background:#f8fafc; border-bottom:1px solid #e5e7eb; font-size:12px; text-transform:uppercase; color:#475569; letter-spacing:.5px; }
 .card .body { padding:12px; }
 
 .form-row { display:flex; margin-bottom:10px; align-items:center; }
@@ -52,7 +51,7 @@ select.dropdown { width:100%; }
 .btn-mini { background:linear-gradient(#7ed321,#5eae0f); border:1px solid #4a8a0c; color:#fff; padding:5px 10px; font-size:11px; font-weight:bold; border-radius:3px; cursor:pointer; margin-left:6px; }
 .btn-mini:hover { filter:brightness(1.05); }
 
-.desc-box textarea { width:100%; box-sizing:border-box; border:1px solid #bbb; border-radius:3px; padding:6px; font-family:Consolas,monospace; font-size:12px; resize:vertical; }
+.desc-box textarea { width:100%; box-sizing:border-box; border:1px solid #cbd5e1; border-radius:6px; padding:8px; font-family:system-ui; font-size:13px; resize:vertical; }
 .desc-box textarea:focus { border-color:#71D000; outline:none; }
 
 .medals-table { width:100%; border-collapse:collapse; font-size:12px; }

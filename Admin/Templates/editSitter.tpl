@@ -76,7 +76,7 @@ function clearSitter(n){ document.getElementById('sit'+n).value = '0'; }
         <div class="card">
             <h3>⚙️ Sitter Settings</h3>
             <div class="body">
-                <div class="info">💡 Folosește UID-ul jucătorului. Pune <b>0</b> ca să ștergi sitter-ul. Găsești UID-ul din Search.</div>
+                <div class="info">💡 Use the player's UID. Enter <b>0</b> to delete the sitter. You can find the UID in Search.</div>
                 
                 <div class="sitter-grid">
                     <div class="sitter-box">
