@@ -97,10 +97,14 @@ if($deletion){
 		include("playermedals.tpl");
 		include ("villages.tpl"); ?>
 
-		<div class="player-bottom">
-			<div><?php include ('punish.tpl'); ?></div>
-			<div><?php include ('add_village.tpl'); ?></div>
-		</div>
+<div style="display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px;width:100%">
+    <div>
+        <?php include "punish.tpl"; ?>
+    </div>
+    <div>
+        <?php include "add_village.tpl"; ?>
+    </div>
+</div>
 
 		<?php
 			$sql = "SELECT * FROM ".TB_PREFIX."banlist WHERE uid = ".(int) $id."";

@@ -1,38 +1,30 @@
-<div class="menu">
+<div class="stepper">
 <?php
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Project:       TravianZ                                                    ##
-##  Filename       menu.php                                                    ##
-##  Developed by:  Dzoki                                                       ##
-##  License:       TravianZ Project                                            ##
-##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro                		           ##
-##  Source code:   https://github.com/Shadowss/TravianZ		                   ##
-##                                                                             ##
+##  Filename       : menu.tpl                                                  ##
+##  Type           : Install Panel Frontend & Backend                          ##
+## --------------------------------------------------------------------------- ##
+##  Developed by   : Dzoki (Original)                                          ##
+##  Refactored by  : Shadow                                                    ##
+##  Redesign by    : Shadow                                                    ##
+## --------------------------------------------------------------------------- ##
+##  Contact        : cata7007@gmail.com                                        ##
+##  Project        : TravianZ                                                  ##
+##  GitHub         : https://github.com/Shadowss/TravianZ                      ##
+## --------------------------------------------------------------------------- ##
+##  License        : TravianZ Project                                          ##
+##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
+## --------------------------------------------------------------------------- ##
 #################################################################################
 
-	switch($_GET['s']) {
-		case 0:
-		echo "<li class=\"c2 f9\">Intro</li><li class=\"c1 f9\">Configuration</li><li class=\"c1 f9\">Database</li><li class= \"c1 f9\">World Data</li><li class=\"c1 f9\">Accounts</li><li class=\"c1 f9\">End</li>";
-		break;
-		case 1:
-		echo "<li class=\"c3 f9\">Intro</li><li class=\"c2 f9\">Configuration</li><li class=\"c1 f9\">Database</li><li class= \"c1 f9\">World Data</li><li class=\"c1 f9\">Accounts</li><li class=\"c1 f9\">End</li>";
-		break;
-		case 2:
-		echo "<li class=\"c3 f9\">Intro</li><li class=\"c3 f9\">Configuration</li><li class=\"c2 f9\">Database</li><li class= \"c1 f9\">World Data</li><li class=\"c1 f9\">Accounts</li><li class=\"c1 f9\">End</li>";
-		break;
-		case 3:
-		echo "<li class=\"c3 f9\">Intro</li><li class=\"c3 f9\">Configuration</li><li class=\"c3 f9\">Database</li><li class= \"c2 f9\">World Data</li><li class=\"c1 f9\">Accounts</li><li class=\"c1 f9\">End</li>";
-		break;
-		case 4:
-		echo "<li class=\"c3 f9\">Intro</li><li class=\"c3 f9\">Configuration</li><li class=\"c3 f9\">Database</li><li class= \"c3 f9\">World Data</li><li class=\"c2 f9\">Accounts</li><li class=\"c1 f9\">End</li>";
-		break;
-		case 5:
-		echo "<li class=\"c3 f9\">Intro</li><li class=\"c3 f9\">Configuration</li><li class=\"c3 f9\">Database</li><li class= \"c3 f9\">World Data</li><li class=\"c3 f9\">Accounts</li><li class=\"c2 f9\">End</li>";
-		break;
-	}
-
-?></div>
+$steps = ['Intro','Configuration','Database','World Data','Accounts','End'];
+$cur = (int)($_GET['s'] ?? 0);
+foreach($steps as $i=>$name){
+  $state = $i < $cur ? 'done' : ($i == $cur ? 'active' : '');
+  echo "<div class='step $state'><span class='num'>".($i+1)."</span><span>$name</span></div>";
+}
+?>
+</div>

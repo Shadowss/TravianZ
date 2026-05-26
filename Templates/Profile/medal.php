@@ -64,14 +64,135 @@ $profiel = preg_replace("/\[#TEAM]/is",'<img src="'.$gpack.'img/t/team.png" bord
 $profiel = preg_replace("/\[#EVENT]/is",'<img src="'.$gpack.'img/t/t10_1.jpg" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>You played on Travian Hammelburg Event. Congrats !</td></tr></table>\')">', $profiel, 1);
 }
 
-// WW Winner IMAGES - MUST TO BE SET FROM ADMIN PANEL @iopietro must code
-// Added by Shadow - cata7007@gmail.com / Skype : cata7007
-if($displayarray['username'] == "Shadow"){
-$profiel = preg_replace("/\[#WWBUILDER]/is",'<img src="'.$gpack.'img/t/builderWW.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Country:</td><td>Romania</td></tr><tr><td>Category:</td><td>World of Wonder</td></tr><tr><td>Name:</td><td>Shadow</td></tr><tr><td>Tribe:</td><td>Romans</td></tr><tr><td>WW LEVEL:</td><td>80</td></tr></table>\')">', $profiel, 1);
-$profiel = preg_replace("/\[#WINNERWW]/is",'<img src="'.$gpack.'img/t/winnerww.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Country:</td><td>Romania</td></tr><tr><td>Category:</td><td>World of Wonder</td></tr><tr><td>Name:</td><td>Shadow</td></tr><tr><td>Tribe:</td><td>Romans</td></tr><tr><td>WW LEVEL:</td><td>100</td></tr></table>\')">', $profiel, 1);
-$profiel = preg_replace("/\[#OFFENSIVE]/is",'<img src="'.$gpack.'img/t/Offensive_1.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Country:</td><td>Romania</td></tr><tr><td>Category:</td><td>Offensive</td></tr><tr><td>Name:</td><td>Shadow</td></tr><tr><td>Tribe:</td><td>Romans</td></tr><tr><td>Rank:</td><td>1</td></tr></table>\')">', $profiel, 1);
-$profiel = preg_replace("/\[#DEFENSIVE]/is",'<img src="'.$gpack.'img/t/Defensive_1.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Country:</td><td>Romania</td></tr><tr><td>Category:</td><td>Defensive</td></tr><tr><td>Name:</td><td>Shadow</td></tr><tr><td>Tribe:</td><td>Romans</td></tr><tr><td>Rank:</td><td>1</td></tr></table>\')">', $profiel, 1);
-$profiel = preg_replace("/\[#POPULATION]/is",'<img src="'.$gpack.'img/t/Population_1.png" border="0" onmouseout="med_closeDescription()" onmousemove="med_mouseMoveHandler(arguments[0],\'<table><tr><td>Country:</td><td>Romania</td></tr><tr><td>Category:</td><td>Population</td></tr><tr><td>Name:</td><td>Shadow</td></tr><tr><td>Tribe:</td><td>Romans</td></tr><tr><td>Rank:</td><td>1</td></tr></table>\')">', $profiel, 1);
+// =========================
+// NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM - DYNAMIC
+// =========================
+if(defined('NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM') && NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM){
+
+    $uid = (int)$displayarray['id'];
+    $username = htmlspecialchars($displayarray['username'], ENT_QUOTES);
+    $tribeMap = [1=>'Romans',2=>'Teutons',3=>'Gauls'];
+    $tribeName = $tribeMap[$displayarray['tribe']??0]?? 'Unknown';
+
+    // luam WW real
+	$wwLevel = 0;
+	$wwName = 'N/A';
+
+	$qww = $database->query("
+    SELECT v.name AS village, f.f99 AS lvl
+    FROM ".TB_PREFIX."vdata v
+    INNER JOIN ".TB_PREFIX."fdata f ON f.vref = v.wref
+    WHERE v.owner = $uid
+      AND f.f99t = 40 -- tipul 40 = Wonder
+      AND f.f99 > 0 -- nivel real
+    ORDER BY f.f99 DESC
+    LIMIT 1
+	");
+
+	if($qww && $row = $qww->fetch_assoc()){
+    $wwLevel = (int)$row['lvl'];
+    $wwName = htmlspecialchars($row['village'], ENT_QUOTES);
+	}
+
+	// [#ARTEFACT]
+	$profiel = preg_replace_callback("/\[#ARTEFACT\]/is", function($m) use ($database,$uid,$username,$tribeName,$gpack){
+    $q = $database->query("SELECT size, name FROM ".TB_PREFIX."artefacts WHERE owner=$uid");
+    if(!$q || !$q->num_rows) return '';
+    
+    $sizeMap = [
+        1 => 'Small (Village Effect)',
+        2 => 'Large (Account Effect)',
+        3 => 'Unique (Account Effect)'
+    ];
+    
+    $arts = '';
+    while($a = $q->fetch_assoc()){
+        $type = $sizeMap[(int)$a['size']] ?? 'Unknown';
+        $aname = htmlspecialchars($a['name'], ENT_QUOTES);
+        $arts .= "<tr><td>Type:</td><td>{$type}</td></tr><tr><td>Artefact:</td><td>{$aname}</td></tr>";
+    }
+    
+    $tip = "<table><tr><td>Name:</td><td>{$username}</td></tr><tr><td>Tribe:</td><td>{$tribeName}</td></tr><tr><td>Category:</td><td>Artefact Holder</td></tr>{$arts}</table>";
+    
+    return "<img src='{$gpack}img/gloriamedals/artifact.png' border='0' onmouseout='med_closeDescription()' onmousemove=\"med_mouseMoveHandler(arguments[0],'{$tip}')\">";
+	}, $profiel);
+
+    // [#WWBUILDER]
+	if($wwLevel > 0){
+    $tip = "<table <tr><td>Name:</td><td>{$username}</td></tr><tr><td>Tribe:</td><td>{$tribeName}</td></tr><tr><td>Category:</td><td>World Wonder</td></tr><tr><td>Village:</td><td>{$wwName}</td></tr><tr><td>WW Level:</td><td>{$wwLevel}</td></tr></table>";
+    $profiel = preg_replace("/\[#WWBUILDER\]/is","<img src='{$gpack}img/gloriamedals/ww_builder.png' border='0' onmouseout='med_closeDescription()' onmousemove=\"med_mouseMoveHandler(arguments[0],'{$tip}')\">",
+    $profiel);
+	} else {
+    $profiel = str_replace("[#WWBUILDER]", "", $profiel);
+	}
+
+    // [#WINNERWW]
+    if($wwLevel >= 100){
+        $tip = "<table><tr><td>Name:</td><td>{$username}</td></tr><tr><td>Tribe:</td><td>{$tribeName}</td></tr><tr><td>Category:</td><td>Winner</td></tr><tr><td>WW Level:</td><td>100</td></tr></table>";
+        $profiel = preg_replace("/\[#WINNERWW\]/is",
+            "<img src='{$gpack}img/gloriamedals/ww_winner.png' border='0' onmouseout='med_closeDescription()' onmousemove=\"med_mouseMoveHandler(arguments[0],'{$tip}')\">",
+        $profiel);
+    }
+	
+	//[#GREATSTORE] - DOAR Great Warehouse (38) si Great Granary (39) nivel 20
+	$hasGreatStore = false;
+	$gsVillage = '';
+	$q = $database->query("SELECT v.name, f.* FROM ".TB_PREFIX."fdata f JOIN ".TB_PREFIX."vdata v ON v.wref=f.vref WHERE v.owner=$uid");
+	if($q){
+    while($f = $q->fetch_assoc()){
+        $wh = $gr = false;
+        for($i=1; $i<=99; $i++){
+            if(!isset($f["f{$i}t"])) continue;
+            $t = (int)$f["f{$i}t"];
+            $l = (int)$f["f{$i}"];
+            if($l == 20 && $t == 38) $wh = true; // Great Warehouse
+            if($l == 20 && $t == 39) $gr = true; // Great Granary
+        }
+        if($wh && $gr){ 
+            $hasGreatStore = true; 
+            $gsVillage = htmlspecialchars($f['name'], ENT_QUOTES);
+            break; 
+        }
+    }
+	}
+
+	if($hasGreatStore){
+    $tip = "<table><tr><td>Name:</td><td>{$username}</td></tr><tr><td>Tribe:</td><td>{$tribeName}</td></tr><tr><td>Category:</td><td>Great Store</td></tr><tr><td>Village:</td><td>{$gsVillage}</td></tr><tr><td>Great Warehouse:</td><td>20</td></tr><tr><td>Great Granary:</td><td>20</td></tr></table>";
+    $profiel = str_replace("[#GREATSTORE]", "<img src='{$gpack}img/gloriamedals/greatstore.png' border='0' onmouseout='med_closeDescription()' onmousemove=\"med_mouseMoveHandler(arguments[0],'{$tip}')\">", $profiel);
+	} else {
+    $profiel = str_replace("[#GREATSTORE]", "", $profiel);
+	}
+	
+	// [#HERO100]
+	$q = $database->query("SELECT level FROM ".TB_PREFIX."hero WHERE uid=$uid AND level>=99 LIMIT 1");
+	if($q && $q->num_rows){
+    $heroLvl = (int)$q->fetch_assoc()['level'];
+    $tip = "<table><tr><td>Name:</td><td>{$username}</td></tr><tr><td>Tribe:</td><td>{$tribeName}</td></tr><tr><td>Category:</td><td>Hero Level</td></tr><tr><td>Level:</td><td>{$heroLvl}</td></tr></table>";
+    $profiel = str_replace("[#HERO100]", "<img src='{$gpack}img/gloriamedals/hero.png' border='0' onmouseout='med_closeDescription()' onmousemove=\"med_mouseMoveHandler(arguments[0],'{$tip}')\">", $profiel);
+	} else {
+    $profiel = str_replace("[#HERO100]", "", $profiel);
+	}
+	
+	// [#WALLMASTER] - 3 sate cu zid (31/32/33) nivel 20 in slotul 40
+	$wallCount = 0;
+	$q = $database->query("SELECT f.f40, f.f40t FROM ".TB_PREFIX."fdata f 
+                       JOIN ".TB_PREFIX."vdata v ON v.wref=f.vref 
+                       WHERE v.owner=$uid");
+	if($q){
+    while($r = $q->fetch_assoc()){
+        if((int)$r['f40'] == 20 && in_array((int)$r['f40t'], [31,32,33])){
+            $wallCount++;
+        }
+    }
+	}
+
+	if($wallCount >= 3){
+    $tip = "<table><tr><td>Name:</td><td>{$username}</td></tr><tr><td>Tribe:</td><td>{$tribeName}</td></tr><tr><td>Category:</td><td>Wall Master</td></tr><tr><td>Walls level 20:</td><td>{$wallCount}</td></tr></table>";
+    $profiel = str_replace("[#WALLMASTER]", "<img src='{$gpack}img/gloriamedals/wallmaster.png' border='0' onmouseout='med_closeDescription()' onmousemove=\"med_mouseMoveHandler(arguments[0],'{$tip}')\">", $profiel);
+	} else {
+    $profiel = str_replace("[#WALLMASTER]", "", $profiel);
+	}
+
 }
 
 // Added by Shadow - cata7007@gmail.com / Skype : cata7007

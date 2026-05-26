@@ -291,6 +291,107 @@ if(($session->userinfo['username'] ?? '') == "Shadow"){
     echo "<tr><td>Shadow</td><td></td><td></td>
     <td><a href='#' onclick=\"insertMedal('[#EVENT]'); return false;\">[#EVENT]</a></td></tr>";
 }
+
+// =========================
+// SPECIAL MEDALS
+// =========================
+if(defined('NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM') && NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM){
+    $uid = (int)$session->uid;
+
+    // 1. Artefact - CORECTAT coloanele (4 td-uri)
+    $arte = $database->query("SELECT 1 FROM ".TB_PREFIX."artefacts WHERE owner = $uid LIMIT 1");
+    if($arte && $arte->num_rows > 0){
+        echo "<tr>
+                <td>Artefact Holder</td>
+                <td></td>
+                <td></td>
+                <td><a href='#' onclick=\"insertMedal('[#ARTEFACT]'); return false;\">[#ARTEFACT]</a></td>
+              </tr>";
+    }
+
+    // 2. WW - CORECTAT la f99 (la tine WW e in f99, nu f40)
+    $ww = $database->query("SELECT f.f99 FROM ".TB_PREFIX."vdata v
+        INNER JOIN ".TB_PREFIX."fdata f ON f.vref = v.wref
+        WHERE v.owner = $uid AND f.f99t = 40 AND f.f99 > 0 LIMIT 1");
+    if($ww && $ww->num_rows > 0){
+        echo "<tr>
+                <td>WW Builder</td>
+                <td></td>
+                <td></td>
+                <td><a href='#' onclick=\"insertMedal('[#WWBUILDER]'); return false;\">[#WWBUILDER]</a></td>
+              </tr>";
+
+        $lvl = (int)$ww->fetch_assoc()['f99'];
+        if($lvl >= 100){
+            echo "<tr>
+                    <td>WW Winner</td>
+                    <td></td>
+                    <td></td>
+                    <td><a href='#' onclick=\"insertMedal('[#WINNERWW]'); return false;\">[#WINNERWW]</a></td>
+                  </tr>";
+        }
+    }
+
+    // 3. GREATSTORE - DOAR 38 si 39 nivel 20
+    $hasGreatStore = false;
+    $qgs = $database->query("SELECT f.* FROM ".TB_PREFIX."fdata f 
+                             JOIN ".TB_PREFIX."vdata v ON v.wref=f.vref 
+                             WHERE v.owner=$uid");
+    if($qgs){
+        while($f = $qgs->fetch_assoc()){
+            $hasWh = $hasGr = false;
+            for($i=1; $i<=99; $i++){
+                if(!isset($f["f{$i}t"])) continue;
+                $type = (int)$f["f{$i}t"];
+                $lvl  = (int)$f["f{$i}"];
+                if($type == 38 && $lvl == 20) $hasWh = true; // Great Warehouse
+                if($type == 39 && $lvl == 20) $hasGr = true; // Great Granary
+            }
+            if($hasWh && $hasGr){ $hasGreatStore = true; break; }
+        }
+    }
+    if($hasGreatStore){
+        echo "<tr>
+                <td>Great Store</td>
+                <td></td>
+                <td></td>
+                <td><a href='#' onclick=\"insertMedal('[#GREATSTORE]'); return false;\">[#GREATSTORE]</a></td>
+              </tr>";
+    }
+	
+	// 4. WALLMASTER - 5 sate cu zid 20 (31/32/33), fara f40/f99
+	
+	$wallCount = 0;
+	$qw = $database->query("SELECT f.f40, f.f40t FROM ".TB_PREFIX."fdata f 
+                        JOIN ".TB_PREFIX."vdata v ON v.wref=f.vref 
+                        WHERE v.owner=$uid");
+	if($qw){
+    while($r = $qw->fetch_assoc()){
+        if((int)$r['f40'] == 20 && in_array((int)$r['f40t'], [31,32,33])){
+            $wallCount++;
+        }
+    }
+	}
+	if($wallCount >= 3){
+    echo "<tr>
+            <td>Wall Master</td>
+            <td></td>
+            <td></td>
+            <td><a href='#' onclick=\"insertMedal('[#WALLMASTER]'); return false;\">[#WALLMASTER]</a></td>
+          </tr>";
+	}
+
+	// 5. HERO100 - erou nivel 99+
+    $h100 = $database->query("SELECT 1 FROM ".TB_PREFIX."hero WHERE uid=$uid AND level>=99 LIMIT 1");
+    if($h100 && $h100->num_rows){
+        echo "<tr>
+                <td>Hero 99+</td>
+                <td></td>
+                <td></td>
+                <td><a href='#' onclick=\"insertMedal('[#HERO100]'); return false;\">[#HERO100]</a></td>
+              </tr>";
+    }
+}
 ?>
 
 </table>
