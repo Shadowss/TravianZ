@@ -170,6 +170,15 @@ if($_SESSION['access'] < 9) die(ACCESS_DENIED_ADMIN);
 						</select>
 					</td>
 				</tr>
+					<tr>
+					<td>Special Medals<em class="tooltip">?<span class="classic">Enable (Disable) special medals (artifact, hero, ww, wall, great store, etc.)</span></em></td>
+					<td>
+						<select name="new_functions_special_medals_system">
+							<option value="True" <?php if(NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM == true) echo "selected";?>>True</option>
+							<option value="False" <?php if(NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM == false) echo "selected";?>>False</option>
+						</select>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<br />

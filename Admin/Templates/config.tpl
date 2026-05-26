@@ -120,6 +120,7 @@ em.tooltip span.classic:before{content:'';position:absolute;left:14px;top:-6px;b
     <tr><td>Medal Veteran Player <em class="tooltip">?<span class="classic">3 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_3YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
     <tr><td>Medal Veteran Player 5a <em class="tooltip">?<span class="classic">5 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_5YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
     <tr><td>Medal Veteran Player 10a <em class="tooltip">?<span class="classic">10 years</span></em></td><td><?php echo NEW_FUNCTIONS_MEDAL_10YEAR ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
+	<tr><td>Special Medals<em class="tooltip">?<span class="classic">Special Medals</span></em></td><td><?php echo NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM ? "<span class='badge green'>Enabled</span>" : "<span class='badge red'>Disabled</span>"; ?></td></tr>
   </table>
 </div>
 
