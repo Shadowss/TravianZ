@@ -17,37 +17,39 @@
 ##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
 ## --------------------------------------------------------------------------- ##
 #################################################################################
+
+// ----------------- PHP (logic unchanged, except $pixelDiv = 255) -----------------
 $check1 = $check2 = $check3 = "";
 $includeSize = true;
 $criteria = "";
 
 if (isset($_POST['show1']) || isset($_POST['show2']) || isset($_POST['show3'])) {
-    $check1 = isset($_POST['show1'])? "checked " : "";
-    $check2 = isset($_POST['show2'])? "checked " : "";
-    $check3 = isset($_POST['show3'])? "checked " : "";
-
-    if($check1!= "" && $check2 == "" && $check3 == "") {
+    $check1 = isset($_POST['show1']) ? "checked " : "";
+    $check2 = isset($_POST['show2']) ? "checked " : "";
+    $check3 = isset($_POST['show3']) ? "checked " : "";
+ 
+    if($check1 != "" && $check2 == "" && $check3 == "") {
         $criteria = " WHERE u.tribe <> 5";
         $includeSize = false;
     }
-    elseif($check1 == "" && $check2!= "" && $check3 == "") {
+    elseif($check1 == "" && $check2 != "" && $check3 == "") {
         $criteria = " WHERE u.tribe = 5 AND (v.capital = 1 OR v.natar = 1)";
         $includeSize = false;
     }
-    elseif($check1!= "" && $check2!= "" && $check3 == "") {
+    elseif($check1 != "" && $check2 != "" && $check3 == "") {
         $criteria = " WHERE u.tribe <> 5 OR (u.tribe = 5 AND (v.capital = 1 OR v.natar = 1))";
         $includeSize = false;
     }
-    elseif($check1 == "" && $check2 == "" && $check3!= "") {
+    elseif($check1 == "" && $check2 == "" && $check3 != "") {
         $criteria = " INNER JOIN ".TB_PREFIX."artefacts AS a ON a.vref = v.wref";
     }
-    elseif($check1!= "" && $check2 == "" && $check3!= ""){
+    elseif($check1 != "" && $check2 == "" && $check3 != ""){
         $criteria = " LEFT JOIN ".TB_PREFIX."artefacts AS a ON a.vref = v.wref WHERE u.tribe <> 5 OR (u.tribe = 5 AND v.capital <> 1 AND v.natar <> 1)";
     }
-    elseif($check1 == "" && $check2!= "" && $check3!= ""){
+    elseif($check1 == "" && $check2 != "" && $check3 != ""){
         $criteria = " LEFT JOIN ".TB_PREFIX."artefacts AS a ON a.vref = v.wref WHERE u.tribe = 5";
     }
-    elseif($check1!= "" && $check2!= "" && $check3!= ""){
+    elseif($check1 != "" && $check2 != "" && $check3 != ""){
         $criteria = " LEFT JOIN ".TB_PREFIX."artefacts AS a ON a.vref = v.wref";
     }
 }
@@ -57,9 +59,8 @@ if ($check1 == "" && $check2 == "" && $check3 == "") $criteria = "";
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title><?php echo SERVER_NAME;?> Map</title>
+<title><?php echo SERVER_NAME; ?> Map</title>
 <style>
-/* ===== MODERN SKIN ===== */
 body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Roboto;color:#0f172a}
 .map-wrap{max-width:1200px;margin:16px auto;padding:0 12px}
 .map-header{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
@@ -215,13 +216,13 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
 }
          ?>
         </div>
+
         <div id="tipBackdrop"></div>
         <div id="stickyTip"></div>
       </div>
-    </div>
 
-    <div>
-      <div class="legend-card">
+      <!-- LEGENDE MUTATE SUB HARTA -->
+      <div class="legend-card" style="margin-top:14px; max-width:510px;">
         <div class="legend-head">Tribes</div>
         <div class="legend-body">
           <table>
@@ -232,7 +233,8 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
             <tr><td><img src="../img/admin/map_0.gif"></td><td>Multihunters</td></tr>
           </table>
         </div>
-      <div class="legend-card">
+      </div>
+      <div class="legend-card" style="max-width:510px;">
         <div class="legend-head">Artifacts</div>
         <div class="legend-body">
           <table>
@@ -242,76 +244,210 @@ body{margin:0;background:#f1f5f9;font-family:system-ui,-apple-system,Segoe UI,Ro
           </table>
         </div>
       </div>
+
+    </div>
+
+    <div>
+      <!-- coloana dreapta acum goala -->
     </div>
   </div>
 </div>
 
+<!-- ===================== JS: crisp SVG grid + clamped pan + cursor zoom + sticky tooltip ===================== -->
 <script>
-// === JS ORIGINAL - NEMODIFICAT ===
 (function () {
-  const map = document.getElementById('map');
+  const map   = document.getElementById('map');
   const layer = document.getElementById('map_bg');
-  const grid = document.getElementById('gridSvg');
-  const zl = document.getElementById('zl'); const zr = document.getElementById('zr');
-  const zo = document.getElementById('zo'); const zb = document.getElementById('zb'); const zc = document.getElementById('zc');
-  const zoomInBtn = document.getElementById('zoomIn'); const zoomOutBtn = document.getElementById('zoomOut');
-  const zoomResetBtn = document.getElementById('zoomReset'); const zoomLabel = document.getElementById('zoomLabel');
-  const sticky = document.getElementById('stickyTip'); const stickyBackdrop = document.getElementById('tipBackdrop');
-  const WORLD_MAX = <?php echo json_encode(WORLD_MAX);?>;
-  const baseW = 510; const baseH = 510;
-  const pixelDiv = baseW / 2; const xdiv = pixelDiv / WORLD_MAX;
+  const grid  = document.getElementById('gridSvg');
+
+  const zl = document.getElementById('zl');
+  const zr = document.getElementById('zr');
+  const zo = document.getElementById('zo');
+  const zb = document.getElementById('zb');
+  const zc = document.getElementById('zc');
+
+  const zoomInBtn    = document.getElementById('zoomIn');
+  const zoomOutBtn   = document.getElementById('zoomOut');
+  const zoomResetBtn = document.getElementById('zoomReset');
+  const zoomLabel    = document.getElementById('zoomLabel');
+
+  const sticky = document.getElementById('stickyTip');
+  const stickyBackdrop = document.getElementById('tipBackdrop');
+
+  const WORLD_MAX = <?php echo json_encode(WORLD_MAX); ?>;
+
+  // Base sizes (match CSS)
+  const baseW = parseFloat(getComputedStyle(layer).getPropertyValue('--map-width'))  || 510;
+  const baseH = parseFloat(getComputedStyle(layer).getPropertyValue('--map-height')) || 510;
+
+  // World->pixel conversion (0,0 at center)
+  const pixelDiv = baseW / 2;                 // 255
+  const xdiv = pixelDiv / WORLD_MAX;          // px per world unit
+
+  // Build SVG grid (even, crisp)
   function buildGrid() {
     const MAJOR_UNIT = 10;
-    grid.setAttribute('viewBox', `0 0 ${baseW} ${baseH}`); grid.innerHTML = "";
+    grid.setAttribute('viewBox', `0 0 ${baseW} ${baseH}`);
+    grid.innerHTML = "";
+
     for (let x = -WORLD_MAX; x <= WORLD_MAX; x++) {
       const px = pixelDiv + x * xdiv;
       const v = document.createElementNS('http://www.w3.org/2000/svg','line');
-      v.setAttribute('x1',px); v.setAttribute('y1',0); v.setAttribute('x2',px); v.setAttribute('y2',baseH);
-      v.setAttribute('class', (x % MAJOR_UNIT === 0)? 'major' : 'minor'); grid.appendChild(v);
+      v.setAttribute('x1',px); v.setAttribute('y1',0);
+      v.setAttribute('x2',px); v.setAttribute('y2',baseH);
+      v.setAttribute('class', (x % MAJOR_UNIT === 0) ? 'major' : 'minor');
+      grid.appendChild(v);
     }
     for (let y = -WORLD_MAX; y <= WORLD_MAX; y++) {
       const py = pixelDiv - y * xdiv;
       const h = document.createElementNS('http://www.w3.org/2000/svg','line');
-      h.setAttribute('x1',0); h.setAttribute('y1',py); h.setAttribute('x2',baseW); h.setAttribute('y2',py);
-      h.setAttribute('class', (y % MAJOR_UNIT === 0)? 'major' : 'minor'); grid.appendChild(h);
+      h.setAttribute('x1',0); h.setAttribute('y1',py);
+      h.setAttribute('x2',baseW); h.setAttribute('y2',py);
+      h.setAttribute('class', (y % MAJOR_UNIT === 0) ? 'major' : 'minor');
+      grid.appendChild(h);
     }
   }
   buildGrid();
-  const STEP_SCALE = 1.25; const MAX_Z = 16; let MIN_Z = 0;
+
+  // Zoom levels
+  const STEP_SCALE = 1.25;
+  const MAX_Z = 16;
+  let MIN_Z = 0;
   function sFromLvl(lvl){ return Math.pow(STEP_SCALE, lvl); }
+
+  // Clamp pan to avoid blank
   function clampPan() {
-    const s = sFromLvl(zoomLevel); const scaledW = baseW * s; const scaledH = baseH * s;
-    if (scaledW <= map.clientWidth) { tx = (map.clientWidth - scaledW) / 2; } else { const minTx = map.clientWidth - scaledW; tx = Math.max(minTx, Math.min(tx, 0)); }
-    if (scaledH <= map.clientHeight) { ty = (map.clientHeight - scaledH) / 2; } else { const minTy = map.clientHeight - scaledH; ty = Math.max(minTy, Math.min(ty, 0)); }
+    const s = sFromLvl(zoomLevel);
+    const scaledW = baseW * s;
+    const scaledH = baseH * s;
+
+    if (scaledW <= map.clientWidth) {
+      tx = (map.clientWidth - scaledW) / 2;
+    } else {
+      const minTx = map.clientWidth - scaledW;
+      tx = Math.max(minTx, Math.min(tx, 0));
+    }
+
+    if (scaledH <= map.clientHeight) {
+      ty = (map.clientHeight - scaledH) / 2;
+    } else {
+      const minTy = map.clientHeight - scaledH;
+      ty = Math.max(minTy, Math.min(ty, 0));
+    }
   }
-  function applyTransform(){ clampPan(); const s = sFromLvl(zoomLevel); layer.style.setProperty('--zoom', s); layer.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`; zoomLabel.textContent = Math.round(s*100) + '%'; updateAxes(); }
-  function screenToWorld(localX, localY){ const s = sFromLvl(zoomLevel); const lx = (localX - tx) / s; const ly = (localY - ty) / s; return { x: (lx - pixelDiv) / xdiv, y: (pixelDiv - ly) / xdiv }; }
-  function updateAxes(){ const w=map.clientWidth, h=map.clientHeight; const left = screenToWorld(0,h/2).x, right = screenToWorld(w,h/2).x; const top = screenToWorld(w/2,0).y, bottom = screenToWorld(w/2,h).y; const center = screenToWorld(w/2,h/2); zl.textContent=Math.round(left); zr.textContent=Math.round(right); zo.textContent=Math.round(top); zb.textContent=Math.round(bottom); zc.textContent=`(${Math.round(center.x)},${Math.round(center.y)})`; }
-  function computeMinLevel(){ const fit = Math.max(map.clientWidth / baseW, map.clientHeight / baseH); let lvl=0, s=1; if (fit >= 1) { while (s < fit) { s *= STEP_SCALE; lvl++; } } else { while (s / STEP_SCALE >= fit) { s /= STEP_SCALE; lvl--; } } MIN_Z = lvl; }
+
+  function applyTransform(){
+    clampPan();
+    const s = sFromLvl(zoomLevel);
+    layer.style.setProperty('--zoom', s);
+    layer.style.transform = `translate(${tx}px, ${ty}px) scale(${s})`;
+    zoomLabel.textContent = Math.round(s*100) + '%';
+    updateAxes();
+  }
+
+  // Map-local px -> world coords
+  function screenToWorld(localX, localY){
+    const s = sFromLvl(zoomLevel);
+    const lx = (localX - tx) / s;
+    const ly = (localY - ty) / s;
+    return { x: (lx - pixelDiv) / xdiv, y: (pixelDiv - ly) / xdiv };
+  }
+
+  function updateAxes(){
+    const w=map.clientWidth, h=map.clientHeight;
+    const left = screenToWorld(0,h/2).x, right = screenToWorld(w,h/2).x;
+    const top  = screenToWorld(w/2,0).y, bottom = screenToWorld(w/2,h).y;
+    const center = screenToWorld(w/2,h/2);
+    zl.textContent=Math.round(left);  zr.textContent=Math.round(right);
+    zo.textContent=Math.round(top);   zb.textContent=Math.round(bottom);
+    zc.textContent=`(${Math.round(center.x)},${Math.round(center.y)})`;
+  }
+
+  function computeMinLevel(){
+    const fit = Math.max(map.clientWidth / baseW, map.clientHeight / baseH);
+    let lvl=0, s=1;
+    if (fit >= 1) { while (s < fit) { s *= STEP_SCALE; lvl++; } }
+    else { while (s / STEP_SCALE >= fit) { s /= STEP_SCALE; lvl--; } }
+    MIN_Z = lvl;
+  }
+
   function clampLevel(next){ return Math.min(MAX_Z, Math.max(MIN_Z, next)); }
+
   function toLocal(e){ const r = map.getBoundingClientRect(); return { x:e.clientX-r.left, y:e.clientY-r.top }; }
-  function zoomAt(deltaLevel, localX, localY){ const newLevel = clampLevel(zoomLevel + deltaLevel); if (newLevel === zoomLevel) return; const oldS = sFromLvl(zoomLevel), newS = sFromLvl(newLevel); const lx = (localX - tx) / oldS, ly = (localY - ty) / oldS; tx = localX - lx * newS; ty = localY - ly * newS; zoomLevel = newLevel; applyTransform(); }
+
+  // Zoom toward cursor
+  function zoomAt(deltaLevel, localX, localY){
+    const newLevel = clampLevel(zoomLevel + deltaLevel);
+    if (newLevel === zoomLevel) return;
+    const oldS = sFromLvl(zoomLevel), newS = sFromLvl(newLevel);
+    const lx = (localX - tx) / oldS, ly = (localY - ty) / oldS;
+    tx = localX - lx * newS; ty = localY - ly * newS;
+    zoomLevel = newLevel; applyTransform();
+  }
   function zoomBy(delta){ zoomAt(delta, map.clientWidth/2, map.clientHeight/2); }
+
+  // State
   let zoomLevel = 0, tx = 0, ty = 0;
-  zoomInBtn.addEventListener('click', ()=>zoomBy(+1)); zoomOutBtn.addEventListener('click', ()=>zoomBy(-1));
-  zoomResetBtn.addEventListener('click', ()=>{ computeMinLevel(); zoomLevel = MIN_Z; const s = sFromLvl(zoomLevel); tx = (map.clientWidth - baseW * s) / 2; ty = (map.clientHeight - baseH * s) / 2; applyTransform(); });
+
+  // Controls
+  zoomInBtn.addEventListener('click', ()=>zoomBy(+1));
+  zoomOutBtn.addEventListener('click', ()=>zoomBy(-1));
+  zoomResetBtn.addEventListener('click', ()=>{
+    computeMinLevel(); zoomLevel = MIN_Z;
+    const s = sFromLvl(zoomLevel);
+    tx = (map.clientWidth  - baseW * s) / 2;
+    ty = (map.clientHeight - baseH * s) / 2;
+    applyTransform();
+  });
+
+  // Wheel / dblclick
   map.addEventListener('wheel', (e)=>{ e.preventDefault(); const p=toLocal(e); zoomAt(e.deltaY<0?+1:-1, p.x,p.y); }, {passive:false});
   map.addEventListener('dblclick', (e)=>{ e.preventDefault(); const p=toLocal(e); zoomAt(e.shiftKey?-1:+1, p.x,p.y); });
+
+  // Drag pan
   let dragging=false, lastX=0, lastY=0;
   map.addEventListener('mousedown',(e)=>{ if(e.button!==0) return; dragging=true; map.classList.add('grabbing'); const p=toLocal(e); lastX=p.x; lastY=p.y; });
   window.addEventListener('mousemove',(e)=>{ if(!dragging) return; const p=toLocal(e); tx+=(p.x-lastX); ty+=(p.y-lastY); lastX=p.x; lastY=p.y; applyTransform(); });
   window.addEventListener('mouseup',()=>{ dragging=false; map.classList.remove('grabbing'); });
   map.addEventListener('mouseleave',()=>{ dragging=false; map.classList.remove('grabbing'); });
+
+  // Touch
   map.addEventListener('touchstart',(e)=>{ if(e.touches.length===1){ const t=e.touches[0], r=map.getBoundingClientRect(); dragging=true; map.classList.add('grabbing'); lastX=t.clientX-r.left; lastY=t.clientY-r.top; } }, {passive:true});
   map.addEventListener('touchmove',(e)=>{ if(dragging && e.touches.length===1){ const t=e.touches[0], r=map.getBoundingClientRect(); const x=t.clientX-r.left, y=t.clientY-r.top; tx+=(x-lastX); ty+=(y-lastY); lastX=x; lastY=y; applyTransform(); e.preventDefault(); } }, {passive:false});
   map.addEventListener('touchend',()=>{ dragging=false; map.classList.remove('grabbing'); });
-  computeMinLevel(); zoomLevel = MIN_Z; tx = (map.clientWidth - baseW) / 2; ty = (map.clientHeight - baseH) / 2; applyTransform();
+
+  // Init
+  computeMinLevel(); zoomLevel = MIN_Z;
+  tx = (map.clientWidth - baseW) / 2; ty = (map.clientHeight - baseH) / 2; applyTransform();
   window.addEventListener('resize', ()=>{ computeMinLevel(); if(zoomLevel<MIN_Z) zoomLevel=MIN_Z; applyTransform(); });
-  function openSticky(html, localX, localY){ sticky.innerHTML = html; sticky.style.display = 'block'; const rect = sticky.getBoundingClientRect(); const W = rect.width || 280, H = rect.height || 140; let left = localX + 12, top = localY + 12; left = Math.max(8, Math.min(left, map.clientWidth - W - 8)); top = Math.max(8, Math.min(top, map.clientHeight - H - 8)); sticky.style.left = left + 'px'; sticky.style.top = top + 'px'; stickyBackdrop.style.display = 'block'; }
+
+  // Sticky tooltip behavior
+  function openSticky(html, localX, localY){
+    sticky.innerHTML = html;
+    sticky.style.display = 'block';
+    const rect = sticky.getBoundingClientRect();
+    const W = rect.width || 280, H = rect.height || 140;
+    let left = localX + 12, top = localY + 12;
+    left = Math.max(8, Math.min(left, map.clientWidth  - W - 8));
+    top  = Math.max(8, Math.min(top,  map.clientHeight - H - 8));
+    sticky.style.left = left + 'px';
+    sticky.style.top  = top  + 'px';
+    stickyBackdrop.style.display = 'block';
+  }
   function closeSticky(){ sticky.style.display='none'; stickyBackdrop.style.display='none'; sticky.innerHTML=''; }
-  stickyBackdrop.addEventListener('click', closeSticky); document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeSticky(); }); sticky.addEventListener('click', (e)=> e.stopPropagation());
-  layer.addEventListener('click', (e)=>{ const marker = e.target.closest('.marker'); if(!marker) return; const html = marker.getAttribute('data-tip'); if(!html) return; const r = map.getBoundingClientRect(); openSticky(html, e.clientX - r.left, e.clientY - r.top); });
+  stickyBackdrop.addEventListener('click', closeSticky);
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeSticky(); });
+  sticky.addEventListener('click', (e)=> e.stopPropagation());
+
+  // Click marker -> sticky tooltip (uses clean HTML from data-tip)
+  layer.addEventListener('click', (e)=>{
+    const marker = e.target.closest('.marker'); if(!marker) return;
+    const html = marker.getAttribute('data-tip'); if(!html) return;
+    const r = map.getBoundingClientRect();
+    openSticky(html, e.clientX - r.left, e.clientY - r.top);
+  });
 })();
 </script>
+
 </body>
 </html>

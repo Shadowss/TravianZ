@@ -151,6 +151,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_3YEAR%'", $NEW_FUNCTIONS_MEDAL_3YEAR, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_5YEAR%'", $NEW_FUNCTIONS_MEDAL_5YEAR, $text);
 		$text = preg_replace("'%NEW_FUNCTIONS_MEDAL_10YEAR%'", $NEW_FUNCTIONS_MEDAL_10YEAR, $text);
+		$text = preg_replace("'%NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM%'", $NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM, $text);
 
 		// PLUS settings need to be kept intact
 		$text = preg_replace("'%PLUS_TIME%'", PLUS_TIME, $text);

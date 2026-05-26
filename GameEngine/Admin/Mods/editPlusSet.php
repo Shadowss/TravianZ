@@ -46,6 +46,7 @@ $fh = fopen($myFile, 'w') or die("<br/><br/><br/>Can't open file: GameEngine\con
 		$NEW_FUNCTIONS_MEDAL_3YEAR = (NEW_FUNCTIONS_MEDAL_3YEAR == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MEDAL_5YEAR = (NEW_FUNCTIONS_MEDAL_5YEAR == false ? 'false' : 'true');
 		$NEW_FUNCTIONS_MEDAL_10YEAR = (NEW_FUNCTIONS_MEDAL_10YEAR == false ? 'false' : 'true');
+		$NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM = (NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM == false ? 'false' : 'true');
 
 		// SERVER SETTINGS - we need to keep these intact
 		$text = preg_replace("'%ERRORREPORT%'", ERROR_REPORT, $text);
