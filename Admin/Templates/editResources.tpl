@@ -45,7 +45,7 @@ if($id){
 <div class="res-wrap">
   <form action="../GameEngine/Admin/Mods/editResources.php" method="POST">
     <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
-    <input type="hidden" name="did" value="<?php echo $id; ?>">
+	<input type="hidden" name="did" id="did" value="<?php echo $_GET['did']; ?>">
     
     <div class="res-card">
       <div class="res-head">Modify Resources — <?php echo $village['name']; ?> (<?php echo $coor['x']; ?>|<?php echo $coor['y']; ?>)</div>
