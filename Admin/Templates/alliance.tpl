@@ -144,7 +144,7 @@ if($_GET['aid']) {
 
         <div class="btn-row">
             <a class="btn edit" href="?p=editAli&aid=<?php echo $alidata['id'];?>">✏ Edit Alliance</a>
-            <a class="btn del" href="?p=DelAli&aid=<?php echo $alidata['id'];?>" onclick="return confirm('Delete alliance?')">🗑 Delete</a>
+            <a class="btn del" href="?p=delAli&aid=<?php echo $alidata['id'];?>" onclick="return confirm('Delete alliance?')">🗑 Delete</a>
         </div>
     </div>
 </div>
