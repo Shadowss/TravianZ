@@ -276,30 +276,41 @@ if (!empty($_GET['p'])) {
             }
             break;
 
-        case 'village':
-            if (!empty($_GET['did'])) {
-                $village = $database->getVillage($_GET['did']);
-                $user = $database->getUserArray($village['owner'],1);
-                $subpage = 'Edit Village ('.$village['name'].' &raquo; '.$user['username'].')';
-            } else {
-                $subpage = 'Edit Village (no village)';
-            }
-            break;
+		case 'village':
+			if (!empty($_GET['did'])) {
+				$did = (int)$_GET['did'];
+				$village = $database->getVillage($did);
+			if ($village) {
+				$user = $database->getUserArray($village['owner'], 1);
+				$subpage = 'Edit Village ('.$village['name'].' &raquo; '.($user['username'] ?? '?').')';
+			} else {
+				$subpage = 'Edit Village (ID '.$did.' not found)';
+				$village = null; // important, ca să nu crape template-ul mai jos
+			}
+			} else {
+				$subpage = 'Edit Village (no village)';
+			}
+			break;
 
-        case 'editResources':
-            if (!empty($_GET['did'])) {
-                $village = $database->getVillage($_GET['did']);
-                $user = $database->getUserArray($village['owner'],1);
-                $subpage = 'Edit Resources ('.$village['name'].' &raquo; '.$user['username'].')';
-            } else {
-                $subpage = 'Edit Resources (no village)';
-            }
-            break;
+		case 'editResources':
+			if (!empty($_GET['did'])) {
+				$village = $database->getVillage($_GET['did']);
+			if ($village) {
+				$user = $database->getUserArray($village['owner'], 1);
+				$subpage = 'Edit Troops ('.$village['name'].' &raquo; '.$user['username'].')';
+			} else {
+				$subpage = 'Edit Resources (ID '.$did.' not found)';
+				$village = null;
+			}	
+			} else {
+				$subpage = 'Edit Resources (no village)';
+			}
+			break;
 
         case 'addTroops':
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
-                $user = $database->getUserArray($village['owner'],1);
+                $user = $database->getUserArray($village['owner'], 1);
                 $subpage = 'Edit Troops ('.$village['name'].' &raquo; '.$user['username'].')';
             } else {
                 $subpage = 'Edit Troops (no village)';

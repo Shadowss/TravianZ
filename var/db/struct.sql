@@ -1533,6 +1533,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `username` varchar(100) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
+  `lang` varchar(5) NOT NULL DEFAULT 'en',
   `tribe` tinyint(1) DEFAULT NULL,
   `access` tinyint(1) DEFAULT '1',
   `gold` int(9) DEFAULT '0',

@@ -11,7 +11,7 @@
 ##  Fixed by:      Shadow / Skype : cata7007                                   ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  URLs:          http://travianz.org						       	 		   ##
 ##  Source code:   http://github.com/Shadowss/TravianZ-by-Shadow/	       	   ##
 ##                                                                             ##
 #################################################################################

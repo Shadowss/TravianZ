@@ -3021,11 +3021,13 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "DELETE from " . TB_PREFIX . "forum_post where id = '$id'";
 		return mysqli_query($this->dblink,$q);
 	}
-	
+
 	function getAllianceName($id, $use_cache = true) {
-		if (!$id) return '-';
-		$alliance = $this->getAlliance($id, $use_cache);
-		return $alliance['tag'] ?? '-';
+    $alliance = $this->getAlliance($id, $use_cache);
+    if (!is_array($alliance) || !isset($alliance['tag'])) {
+        return null;
+    }
+    return $alliance['tag'];
 	}
 
 	// no need to cache this method

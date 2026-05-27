@@ -9,7 +9,7 @@
 ##  Refactored by  Shadow					                                   ##
 ##  License:       TravianZ Project                                            ##
 ##  Copyright:     TravianZ (c) 2010-2026. All rights reserved.                ##
-##  URLs:          http://travian.shadowss.ro 				       	 		   ##
+##  URLs:          http://travianz.org						       	 		   ##
 ##  Source code:   http://github.com/Shadowss/TravianZ/         	       	   ##
 ##                                                                             ##
 #################################################################################
@@ -176,7 +176,7 @@ while ($data = mysqli_fetch_assoc($query)) {
 // =========================
 // USER SETTINGS SAVE
 // =========================
-if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
+if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone']) || isset($_POST['lang'])) {
 
     $v1 = isset($_POST['v1']) ? 1 : 0;
     $v2 = isset($_POST['v2']) ? 1 : 0;
@@ -189,6 +189,24 @@ if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
     $timezone = isset($_POST['timezone']) ? (int)$_POST['timezone'] : 1;
     $tformat  = isset($_POST['tformat']) ? (int)$_POST['tformat'] : 0;
 
+// =========================
+// LANGUAGE
+// =========================
+
+$lang = LANG;
+
+if(isset($_POST['lang']))
+{
+    $allowedLangs = ['en','ro','de','fr','es','it','ru','tr'];
+
+    $selectedLang = strtolower(trim($_POST['lang']));
+
+    if(in_array($selectedLang, $allowedLangs))
+    {
+        $lang = $selectedLang;
+    }
+}
+
     // update user preferences
     $database->query("
         UPDATE " . TB_PREFIX . "users SET
@@ -200,9 +218,13 @@ if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
         v5=$v5,
         v6=$v6,
         timezone=$timezone,
-        tformat=$tformat
+        tformat=$tformat,
+        lang='$lang'
         WHERE id=" . (int)$session->uid . "
     ");
+
+    // schimbare instant în sesiune
+    $_SESSION['lang'] = $lang;
 
     header("Location: spieler.php?s=2");
     exit;
@@ -467,7 +489,49 @@ if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone'])) {
 
 </tbody>
 </table>
-
+<!-- =========================
+     LANGUAGE SETTINGS
+========================= -->
+<table cellpadding="1" cellspacing="1" id="language" class="set">
+<thead>
+<tr>
+    <th colspan="2">Language settings</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <th>Game language</th>
+    <td>
+        <select name="lang" class="dropdown">
+            <option value="en" <?php if($session->userinfo['lang']=="en") echo 'selected'; ?>>
+                English
+            </option>
+            <option value="ro" <?php if($session->userinfo['lang']=="ro") echo 'selected'; ?>>
+                Romanian
+            </option>
+            <option value="de" <?php if($session->userinfo['lang']=="de") echo 'selected'; ?>>
+                German
+            </option>
+            <option value="fr" <?php if($session->userinfo['lang']=="fr") echo 'selected'; ?>>
+                French
+            </option>
+            <option value="es" <?php if($session->userinfo['lang']=="es") echo 'selected'; ?>>
+                Spanish
+            </option>
+            <option value="it" <?php if($session->userinfo['lang']=="it") echo 'selected'; ?>>
+                Italian
+            </option>
+            <option value="ru" <?php if($session->userinfo['lang']=="ru") echo 'selected'; ?>>
+                Russian
+            </option>
+            <option value="tr" <?php if($session->userinfo['lang']=="tr") echo 'selected'; ?>>
+                Turkish
+            </option>
+        </select>
+    </td>
+</tr>
+</tbody>
+</table>
 <!-- =========================
      SAVE BUTTON
 ========================= -->

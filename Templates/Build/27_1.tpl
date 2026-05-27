@@ -1,10 +1,8 @@
 <?php
 include_once("GameEngine/Artifacts.php");
 
-$ownArtifacts = $database->getOwnArtefactsInfo($session->uid);
-$wref = $village->wid;
-$coor = $database->getCoor($wref);
-
+$ownArtifacts = $database->getOwnArtefactsInfo($session->uid ?? 0);
+$wref = $village->wid ?? 0;
 ?>
 <body>
 <div class="gid27">
@@ -23,25 +21,25 @@ $coor = $database->getCoor($wref);
 
 <tbody>
 <?php
-
-if (empty($ownArtifacts)) echo '<tr><td colspan="4" class="none">'.ANY_ARTEFACTS.'</td></tr>';
-else 
-{
+if (empty($ownArtifacts)) {
+    echo '<tr><td colspan="4" class="none">'.ANY_ARTEFACTS.'</td></tr>';
+} else {
     foreach($ownArtifacts as $ownArtifact){
-        $coor2 = $database->getCoor($ownArtifact['vref']);
         $ownArtifactInfo = Artifacts::getArtifactInfo($ownArtifact);
+        $conquered = !empty($ownArtifact['conquered']) ? date("d.m.Y H:i", $ownArtifact['conquered']) : '-';
+        $villageName = $database->getVillageField($ownArtifact['vref'], "name") ?? '-';
+
         echo '<tr><td class="icon"><img class="artefact_icon_' . $ownArtifact['type'] . '" src="img/x.gif"></td>';
         echo '<td class="nam">
                 <a href="build.php?id='.$id . '&show='.$ownArtifact['id'].'">' . $ownArtifact['name'] . '</a> <span class="bon">' . $ownArtifact['effect'] . '</span>
                 <div class="info">
-                    Treasury <b>'.$ownArtifactInfo['requiredLevel'].'</b>, Effect <b>'.$ownArtifactInfo['effectInfluence'].'</b>
+                    Treasury <b>'.($ownArtifactInfo['requiredLevel'] ?? 0).'</b>, Effect <b>'.($ownArtifactInfo['effectInfluence'] ?? '').'</b>
                 </div>
               </td>';
-        echo '<td class="pla"><a href="karte.php?d=' . $ownArtifact['vref'] . '&c=' . $generator->getMapCheck($ownArtifact['vref']) . '">' . $database->getVillageField($ownArtifact['vref'], "name") . '</a></td>';
-        echo '<td class="dist">'.date("d.m.Y H:i", $ownArtifact['conquered']) . '</td></tr>';
+        echo '<td class="pla"><a href="karte.php?d=' . $ownArtifact['vref'] . '&c=' . $generator->getMapCheck($ownArtifact['vref']) . '">' . $villageName . '</a></td>';
+        echo '<td class="dist">'.$conquered.'</td></tr>';
     }
 }
-
 ?>
 </tbody>
 </table>
@@ -51,14 +49,10 @@ else
 <tr>
 <th colspan="4"><?php echo ARTEFACTS_AREA; ?></th>
 </tr>
-
 <tr>
 <td></td>
-
 <td><?php echo NAME; ?></td>
-
 <td><?php echo PLAYER; ?></td>
-
 <td><?php echo DISTANCE; ?></td>
 </tr>
 </thead>
@@ -66,37 +60,38 @@ else
 <tbody>
 <?php
 $artifacts = $database->getArtifactsBysize([1, 2, 3]);
-if(count($artifacts) == 0) echo '<td colspan="4" class="none">'.NO_ARTEFACTS_AREA.'</td>';
-else
-{
+if(count($artifacts) == 0) {
+    echo '<tr><td colspan="4" class="none">'.NO_ARTEFACTS_AREA.'</td></tr>';
+} else {
     $rows = [];
     foreach($artifacts as $artifact){
         $coordinates = $database->getCoor($artifact['vref']);
-
         $distance = $database->getDistance($village->coor['x'], $village->coor['y'], $coordinates['x'], $coordinates['y']);
-        $rows[(string)$distance] = $artifact;  
+        // cheia unică previne suprascrierea când 2 artefacte sunt la aceeași distanță
+        $rows[$distance.'_'.$artifact['id']] = ['dist' => $distance, 'data' => $artifact];
     }
 
     ksort($rows);
 
-    foreach($rows as $distance => $row) {
+    foreach($rows as $row) {
+        $distance = $row['dist'];
+        $artifact = $row['data'];
+        $artifactInfo = Artifacts::getArtifactInfo($artifact);
+        $ownerName = $database->getUserField($artifact['owner'], "username", 0) ?? 'Natars';
+
         echo '<tr>
-                <td class="icon"><img class="artefact_icon_'.$row['type'].'" src="img/x.gif" alt="" title=""></td>
+                <td class="icon"><img class="artefact_icon_'.$artifact['type'].'" src="img/x.gif" alt="" title=""></td>
                 <td class="nam">
-                <a href="build.php?id='.$id.'&show='.$row['id'].'">'.$row['name'].'</a> <span class="bon">'.$row['effect'].'</span>
-              <div class="info">';
-        
-        $artifactInfo = Artifacts::getArtifactInfo($row);
-        
-        echo '<div class="info">'.TREASURY.' <b>'.$artifactInfo['requiredLevel'] . '</b>, '.EFFECT.' <b>'.$artifactInfo['effectInfluence'].'</b>
-              </div></td><td class="pla">
-              <a href="karte.php?d='.$row['vref'].'&c='.$generator->getMapCheck($row['vref']).'">'.$database->getUserField($row['owner'], "username", 0).'</a>
-              </td>
+                    <a href="build.php?id='.$id.'&show='.$artifact['id'].'">'.$artifact['name'].'</a> <span class="bon">'.$artifact['effect'].'</span>
+                    <div class="info">'.TREASURY.' <b>'.($artifactInfo['requiredLevel'] ?? 0).'</b>, '.EFFECT.' <b>'.($artifactInfo['effectInfluence'] ?? '').'</b></div>
+                </td>
+                <td class="pla">
+                    <a href="karte.php?d='.$artifact['vref'].'&c='.$generator->getMapCheck($artifact['vref']).'">'.$ownerName.'</a>
+                </td>
                 <td class="dist">'.$distance.'</td>
               </tr>';
     }
 }
-
 ?>
 </tbody>
 </table>
