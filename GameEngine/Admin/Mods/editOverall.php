@@ -63,7 +63,12 @@ $database->query("UPDATE " . TB_PREFIX . "users SET apall = $off, dpall = $def W
 // ---------------------------------------------------------------------------
 $adminId = (int)$_SESSION['id'];
 $time = time();
-$logText = "Changed overall stats for user <a href='admin.php?p=player&uid=$id'>$id</a> (off=$off, def=$def)";
+
+// FIX: username + ID formatat
+$targetName = $database->getUserField($id, 'username', 0) ?: 'UID '.$id;
+$targetNameSafe = htmlspecialchars($targetName, ENT_QUOTES, 'UTF-8');
+
+$logText = "Changed overall stats for user <a href='admin.php?p=player&uid=$id'>$targetNameSafe</a> (off=$off, def=$def)";
 $logEsc = $database->escape($logText);
 
 $database->query(

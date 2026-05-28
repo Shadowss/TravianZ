@@ -5,7 +5,7 @@
 ## --------------------------------------------------------------------------- ##
 ## Project:     TravianZ (Refactor incremental)                                ##
 ## File:        additional.tpl                                                 ##
-## Type        BACKEND                                                         ##
+## Type         BACKEND                                                        ##
 ## Description: Implement Gold Log			                                   ##
 ## Made by:     Shadow  													   ##
 ## License:     TravianZ Project                                               ##
@@ -35,6 +35,7 @@ $dp = (int)($_POST['def']?? 0);
 $rr = (int)($_POST['res']?? 0);
 $apall = (int)($_POST['ooff']?? 0);
 $dpall = (int)($_POST['odef']?? 0);
+$vac_mode = (int)($_POST['vac_mode']?? 0);
 
 if($id <= 0) die("Invalid user");
 
@@ -42,7 +43,7 @@ if($id <= 0) die("Invalid user");
 $oldGold = (int)$database->getUserField($id, 'gold', 1);
 $diffGold = $newGold - $oldGold;
 
-// --- UPDATE USER (prepared-style, fără escape manual) ---
+// --- UPDATE USER ---
 $database->query("
     UPDATE ".TB_PREFIX."users SET
         access = $access,
@@ -55,7 +56,8 @@ $database->query("
         dp = $dp,
         RR = $rr,
         apall = $apall,
-        dpall = $dpall
+        dpall = $dpall,
+        vac_mode = $vac_mode
     WHERE id = $id
 ");
 
@@ -74,6 +76,30 @@ if($diffGold!== 0){
     ");
 }
 
+// --- LOG ADMIN (cu UID, nu nume) ---
+$adminUid = $admid > 0? $admid : (int)($_SESSION['id']?? 0); // FIX AICI
+$adminName = $database->getUserField($adminUid, 'username', 0)?: 'Admin';
+$playerName = $database->getUserField($id, 'username', 0)?: 'Unknown';
+$protectDays = (int)($_POST['protect']?? 0);
+
+$logParts = [];
+$logParts[] = "Gold: $oldGold → $newGold". ($diffGold!=0? " ($diffGold)" : "");
+$logParts[] = "VacMode: $vac_mode";
+$logParts[] = "Access: $access";
+$logParts[] = "Protect: {$protectDays}d";
+$logParts[] = "Sitters: $sit1/$sit2";
+
+$logText = "[$adminName] edited Additional for [$playerName] (UID:$id) - ". implode(' | ', $logParts);
+$logText = addslashes($logText);
+
+$now = time();
+$database->query("
+    INSERT INTO ".TB_PREFIX."admin_log
+    (`user`, `log`, `time`)
+    VALUES ('$adminUid', '$logText', $now)
+");
+
 // --- REDIRECT ---
 header("Location:../../../Admin/admin.php?p=player&uid=".$id);
 exit;
+?>

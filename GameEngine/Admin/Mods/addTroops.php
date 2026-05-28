@@ -57,7 +57,12 @@ $database->query($q);
  * --------------------------------------------------------------------------- */
 $adminId = (string)(int)$_SESSION['id'];
 $time = time();
-$logText = "Changed troop amounts in village <a href='admin.php?p=village&did=$id'>$id</a>";
+
+// FIX AICI
+$villageName = $village['name'] ?? 'Village';
+$villageNameSafe = htmlspecialchars($villageName, ENT_QUOTES, 'UTF-8');
+
+$logText = "Changed troop amounts in village <a href='admin.php?p=village&did=$id'>$villageNameSafe</a>";
 
 $adminIdEsc = $database->escape($adminId);
 $logEsc = $database->escape($logText);

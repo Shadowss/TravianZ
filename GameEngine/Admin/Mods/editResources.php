@@ -80,7 +80,13 @@ $database->query(
 // ---------------------------------------------------------------------------
 $adminId = (int)$_SESSION['id'];
 $time = time();
-$logText = "Edited resources for village <a href='admin.php?p=village&did=$id'>$id</a> (w:$wood c:$clay i:$iron cr:$crop)";
+
+// FIX: nume sat + ID formatat
+$village = $database->getVillage($id); // dacă nu e deja încărcat sus
+$villageName = $village['name'] ?? 'Village';
+$villageNameSafe = htmlspecialchars($villageName, ENT_QUOTES, 'UTF-8');
+
+$logText = "Edited resources for village <a href='admin.php?p=village&did=$id'>$villageNameSafe</a> (w:$wood c:$clay i:$iron cr:$crop)";
 $logEsc = $database->escape($logText);
 
 $database->query(

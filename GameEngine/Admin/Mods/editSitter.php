@@ -63,7 +63,15 @@ $database->query("UPDATE " . TB_PREFIX . "users SET sit1 = $sit1, sit2 = $sit2 W
 // ---------------------------------------------------------------------------
 $adminId = (int)$_SESSION['id'];
 $time = time();
-$logText = "Changed sitters for user <a href='admin.php?p=player&uid=$id'>$id</a> (sit1=$sit1, sit2=$sit2)";
+
+// FIX: username pentru target + sitteri
+$targetName = $database->getUserField($id, 'username', 0) ?: 'UID '.$id;
+$targetNameSafe = htmlspecialchars($targetName, ENT_QUOTES, 'UTF-8');
+
+$sit1Name = $sit1 > 0 ? ($database->getUserField($sit1, 'username', 0) ?: $sit1) : 'none';
+$sit2Name = $sit2 > 0 ? ($database->getUserField($sit2, 'username', 0) ?: $sit2) : 'none';
+
+$logText = "Changed sitters for user <a href='admin.php?p=player&uid=$id'>$targetNameSafe</a> (sit1=$sit1Name, sit2=$sit2Name)";
 $logEsc = $database->escape($logText);
 
 $database->query(

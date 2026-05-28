@@ -50,7 +50,13 @@ $database->query($q);
  * --------------------------------------------------------------------------- */
 $adminId = (string)(int)$_SESSION['id'];
 $time = time();
-$logText = "Changed troop upgrade levels in village <a href='admin.php?p=village&did=$id'>$id</a>";
+
+// FIX: luăm numele satului
+$village = $database->getVillage($id); // dacă nu-l ai deja sus, lasă linia asta
+$villageName = $village['name'] ?? 'Village';
+$villageNameSafe = htmlspecialchars($villageName, ENT_QUOTES, 'UTF-8');
+
+$logText = "Changed troop upgrade levels in village <a href='admin.php?p=village&did=$id'>$villageNameSafe</a>";
 
 // escapăm corect pentru coloana TEXT
 $adminIdEsc = $database->escape($adminId);

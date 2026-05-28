@@ -98,7 +98,16 @@ if(isset($id)) {
                         } ?>
                         </div>
                     </div>
-
+	
+			<div class="form-row">
+				<label>🏖 Vacation Mode</label>
+				<div class="field">
+						<select name="vac_mode">
+							<option value="0" <?php if(!$user['vac_mode']) echo 'selected'; ?>>0 - Disabled</option>
+							<option value="1" <?php if($user['vac_mode']) echo 'selected'; ?>>1 - Enabled</option>
+						</select>
+					</div>
+			</div>
                     <div class="form-row">
                         <label>💰 Gold</label>
                         <div class="field input-icon">

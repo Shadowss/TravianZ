@@ -64,7 +64,13 @@ $database->query("UPDATE " . TB_PREFIX . "users SET protect = $protection WHERE 
 // Log admin
 // ---------------------------------------------------------------------------
 $adminId = (int)$_SESSION['id'];
-$logText = "Set protection for user <a href='admin.php?p=player&uid=$id'>$id</a> to $days days";
+$time = time(); // asigură-te că $time e definit înainte
+
+// FIX: username + ID formatat
+$targetName = $database->getUserField($id, 'username', 0) ?: 'UID '.$id;
+$targetNameSafe = htmlspecialchars($targetName, ENT_QUOTES, 'UTF-8');
+
+$logText = "Set protection for user <a href='admin.php?p=player&uid=$id'>$targetNameSafe</a> to $days days";
 $logEsc = $database->escape($logText);
 
 $database->query(

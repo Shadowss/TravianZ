@@ -80,7 +80,12 @@ $database->query(
 // ---------------------------------------------------------------------------
 $adminId = (int)$_SESSION['id'];
 $time = time();
-$logText = "Edited profile for user <a href='admin.php?p=player&uid=$id'>$id</a>";
+
+// FIX: username + ID formatat
+$targetName = $database->getUserField($id, 'username', 0) ?: 'UID '.$id;
+$targetNameSafe = htmlspecialchars($targetName, ENT_QUOTES, 'UTF-8');
+
+$logText = "Edited profile for user <a href='admin.php?p=player&uid=$id'>$targetNameSafe</a>";
 $logEsc = $database->escape($logText);
 
 $database->query(

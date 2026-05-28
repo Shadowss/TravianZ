@@ -68,7 +68,12 @@ $database->query("UPDATE " . TB_PREFIX . "users SET password = '$passEsc' WHERE 
 // ---------------------------------------------------------------------------
 $adminId = (int)$_SESSION['id'];
 $time = time();
-$logText = "Changed password for user <a href='admin.php?p=player&uid=$id'>$id</a>";
+
+// FIX: luăm username în loc de ID brut
+$targetName = $database->getUserField($id, 'username', 0) ?: 'UID '.$id;
+$targetNameSafe = htmlspecialchars($targetName, ENT_QUOTES, 'UTF-8');
+
+$logText = "Changed password for user <a href='admin.php?p=player&uid=$id'>$targetNameSafe</a>";
 $logEsc = $database->escape($logText);
 
 $database->query(
