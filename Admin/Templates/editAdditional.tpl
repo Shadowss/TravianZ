@@ -35,7 +35,7 @@ if(isset($id)) {
 .editAdd-head h2 a{color:#71D000;text-decoration:none;}
 .editAdd-head .uid{font-size:12px;color:#666;}
 
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.grid-2{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(max-width:800px){.grid-2{grid-template-columns:1fr;}}
 
 .card{background:#fff;border:1px solid #d4d4d4;border-radius:4px;overflow:hidden;margin-bottom:12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}

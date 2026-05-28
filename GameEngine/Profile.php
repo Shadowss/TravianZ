@@ -219,6 +219,21 @@ class Profile {
 				$form->addError("email", EMAIL_ERROR);
 			}
 		}
+		
+		// Language change
+		if (!empty($post['sprache'])) {
+		// whitelist – pune aici limbile pe care le ai în /lang/
+		$allowed = ['en','ro','de','it','fr','es'];
+		$lang = strtolower(trim($post['sprache']));
+    
+		if (in_array($lang, $allowed, true)) {
+        $database->updateUserField($session->uid, "language", $lang, 1);
+        
+        // update sesiunea ca să se vadă imediat, fără relog
+        $_SESSION['lang'] = $lang;
+        $session->userinfo['language'] = $lang;
+		}
+		}
 
 		// Delete request cancel
 		if (!empty($post['del_pw']) && !empty($post['del'])) {

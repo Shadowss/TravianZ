@@ -282,7 +282,7 @@ if (!empty($_GET['p'])) {
 				$village = $database->getVillage($did);
 			if ($village) {
 				$user = $database->getUserArray($village['owner'], 1);
-				$subpage = 'Edit Village ('.$village['name'].' &raquo; '.($user['username'] ?? '?').')';
+				$subpage = 'Edit Village ('.$village['name'].' » '.($user['username'] ?? '?').')';
 			} else {
 				$subpage = 'Edit Village (ID '.$did.' not found)';
 				$village = null; // important, ca să nu crape template-ul mai jos
@@ -297,7 +297,7 @@ if (!empty($_GET['p'])) {
 				$village = $database->getVillage($_GET['did']);
 			if ($village) {
 				$user = $database->getUserArray($village['owner'], 1);
-				$subpage = 'Edit Troops ('.$village['name'].' &raquo; '.$user['username'].')';
+				$subpage = 'Edit Resources ('.$village['name'].' » '.$user['username'].')';
 			} else {
 				$subpage = 'Edit Resources (ID '.$did.' not found)';
 				$village = null;
@@ -311,7 +311,7 @@ if (!empty($_GET['p'])) {
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
                 $user = $database->getUserArray($village['owner'], 1);
-                $subpage = 'Edit Troops ('.$village['name'].' &raquo; '.$user['username'].')';
+                $subpage = 'Edit Troops ('.$village['name'].' » '.$user['username'].')';
             } else {
                 $subpage = 'Edit Troops (no village)';
             }
@@ -321,7 +321,7 @@ if (!empty($_GET['p'])) {
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
                 $user = $database->getUserArray($village['owner'],1);
-                $subpage = 'Upgrade Troops ('.$village['name'].' &raquo; '.$user['username'].')';
+                $subpage = 'Upgrade Troops ('.$village['name'].' » '.$user['username'].')';
             } else {
                 $subpage = 'Upgrade Troops (no village)';
             }
@@ -331,7 +331,7 @@ if (!empty($_GET['p'])) {
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
                 $user = $database->getUserArray($village['owner'],1);
-                $subpage = 'Edit Village ('.$village['name'].' &raquo; '.$user['username'].')';
+                $subpage = 'Edit Village ('.$village['name'].' » '.$user['username'].')';
             } else {
                 $subpage = 'Edit Village (no village)';
             }
@@ -341,7 +341,7 @@ if (!empty($_GET['p'])) {
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
                 $user = $database->getUserArray($village['owner'],1);
-                $subpage = 'Build Log ('.$village['name'].' &raquo; '.$user['username'].')';
+                $subpage = 'Build Log ('.$village['name'].' » '.$user['username'].')';
             } else {
                 $subpage = 'Build Log (no village)';
             }
@@ -351,7 +351,7 @@ if (!empty($_GET['p'])) {
             if (!empty($_GET['did'])) {
                 $village = $database->getVillage($_GET['did']);
                 $user = $database->getUserArray($village['owner'],1);
-                $subpage = 'Research Log ('.$village['name'].' &raquo; '.$user['username'].')';
+                $subpage = 'Research Log ('.$village['name'].' » '.$user['username'].')';
             } else {
                 $subpage = 'Research Log (no village)';
             }

@@ -45,6 +45,14 @@ class Artifacts
     NATARS_DESC = "**************************
 				[#natars]
 			**************************",
+			
+	/**
+     * @var string Default Natars' description 2
+     */
+    
+    NATARS_DESC2 = "**************************
+				[#WW]
+			**************************",
     
     /**
      * @var array Possible Natars' capital locations
@@ -204,7 +212,7 @@ class Artifacts
         
         //Register the Natars account, the Natars' password is the same as the MH's one
         $password = $database->getUserField(5, 'password', 0);
-        $database->register(TRIBE5, $password, self::NATARS_EMAIL, self::NATARS_TRIBE, null, self::NATARS_UID, self::NATARS_DESC);
+        $database->register(TRIBE5, $password, self::NATARS_EMAIL, self::NATARS_TRIBE, null, self::NATARS_UID, self::NATARS_DESC, self::NATARS_DESC2);
         
         //Convert from coordinates to village IDs
         $possibleWids = $database->getVilWrefs(self::NATARS_CAPITAL_COORDINATES);

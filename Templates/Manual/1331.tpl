@@ -16,7 +16,7 @@
 	<li><a href="manual.php?typ=11&amp;gid=23">Medal Veteran Player</a> <?php echo NEW_FUNCTIONS_MEDAL_3YEAR ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></li>
 	<li><a href="manual.php?typ=11&amp;gid=24">Medal Veteran Player 5a</a> <?php echo NEW_FUNCTIONS_MEDAL_5YEAR ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></li>
 	<li><a href="manual.php?typ=11&amp;gid=25">Medal Veteran Player 10a</a> <?php echo NEW_FUNCTIONS_MEDAL_10YEAR ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></li>
-
+	<li><a href="manual.php?typ=11&amp;gid=26">Special Medals</a> <?php echo NEW_FUNCTIONS_SPECIAL_MEDALS_SYSTEM ? "<b><font color='Green'>Enabled</font></b>" : "<b><font color='Red'>Disabled</font></b>"; ?></li>
 </ul>
 
 <map id="nav" name="nav">

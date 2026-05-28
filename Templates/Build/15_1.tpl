@@ -116,7 +116,7 @@ $inProgress =!empty($Demolition)? $Demolition[0] : null;
 
         <label style="margin:0 10px;">
             <input type="checkbox" name="instant" value="1" id="instant_demolish" <?= $session->gold < 10 ? 'disabled' : ''?>>
-            Demolare completă (10 <img src="img/x.gif" class="gold" style="vertical-align:middle">)
+            Complete demolition (10 <img src="img/x.gif" class="gold" style="vertical-align:middle">)
         </label>
 
         <input id="btn_demolish" name="demolish" class="dynamic_img" value="Demolish" type="image" src="img/x.gif" alt="Demolish" title="<?= DEMOLISH?>" onclick="return verify_demolition();">
