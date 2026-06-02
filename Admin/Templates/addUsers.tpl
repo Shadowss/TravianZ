@@ -29,13 +29,13 @@ if(isset($_GET['e'])) {
     $villages = $_GET['vi']??$villages;
     $mode     = $_GET['mo']??$mode;
     switch ($_GET['e']) {
-        case 'BN2S': $errorMsg = "Base Name prea scurt (minim 4 caractere)"; break;
-        case 'BN2L': $errorMsg = "Base Name prea lung (maxim 20 caractere)"; break;
-        case 'AMLO': $errorMsg = "Minim 1 cont"; break;
-        case 'AMHI': $errorMsg = "Maxim 200 conturi"; break;
-        case 'VILO': $errorMsg = "Minim 1 sat"; break;
-        case 'VIHI': $errorMsg = "Maxim 200 sate"; break;
-        default: $errorMsg = "Eroare necunoscută";
+        case 'BN2S': $errorMsg = "Base Name too short (minimum 4 characters)"; break;
+        case 'BN2L': $errorMsg = "Base Name too long (maximum 20 characters)"; break;
+        case 'AMLO': $errorMsg = "Minimum 1 account"; break;
+        case 'AMHI': $errorMsg = "Maximum 200 accounts"; break;
+        case 'VILO': $errorMsg = "Minimum 1 village"; break;
+        case 'VIHI': $errorMsg = "Maximum 200 villages"; break;
+        default: $errorMsg = "Unknown error";
     }
 }
 elseif(isset($_GET['g']) && $_GET['g']=='OK'){
@@ -44,13 +44,13 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
     
     if($mode==='many_accounts'){
         $amount=(int)$_GET['am'];
-        $successMsg = "Creat <b>$amount</b> conturi cu baza <b>$baseName</b>";
+        $successMsg = "Created <b>$amount</b> accounts with base <b>$baseName</b>";
     } else {
         $villages=(int)$_GET['vi'];
-        $successMsg = "Creat contul <b>$baseName</b> cu <b>$villages</b> sate";
+        $successMsg = "Created account <b>$baseName</b> with <b>$villages</b> villages";
     }
-    $successMsg .= "<br>Protecție: ".($bp?"<span style='color:#27ae60'>DA</span>":"<span style='color:#c0392b'>NU</span>")." | Trib: <b>$tribe</b>";
-    if($skipped>0) $successMsg .= "<br><span style='color:#e67e22'>$skipped nume existente - sărite</span>";
+    $successMsg .= "<br>Protection: ".($bp?"<span style='color:#27ae60'>YES</span>":"<span style='color:#c0392b'>NO</span>")." | Tribe: <b>$tribe</b>";
+    if($skipped>0) $successMsg .= "<br><span style='color:#e67e22'>$skipped existing names - skipped</span>";
 }
 ?>
 <style>
@@ -74,10 +74,10 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
 .check{margin:10px 0 12px;font-size:11px}
 .check label{display:flex;align-items:center;gap:5px}
 
-/* TRIBURI VERTICAL */
+/* TRIBES VERTICAL */
 .tribe-wrap{margin-top:8px;}
 .tribe-title{font-size:11px;font-weight:bold;margin-bottom:4px;}
-.tribe-grid{display:flex;flex-direction:column;gap:4px;width:140px; /* poti modifica */}
+.tribe-grid{display:flex;flex-direction:column;gap:4px;width:140px;}
 .tribe-grid label{display:flex;align-items:center;gap:6px;padding:4px 6px;border:1px solid #bbb;border-radius:3px;background:#fcfcfc;cursor:pointer;min-height:24px;font-size:11px;}
 .tribe-grid label:hover{background:#f0f0f0;}
 .tribe-grid input{width:12px;height:12px;margin:0;}
@@ -109,13 +109,13 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
       <?php if($successMsg){?><div class="alert alert-ok">✓ <?php echo $successMsg;?></div><?php }?>
 
       <div class="mode-box">
-        <label><input type="radio" name="mode" value="many_accounts" <?php echo $mode=='many_accounts'?'checked':'';?>><span>Multe conturi (1 sat)</span></label>
-        <label><input type="radio" name="mode" value="single_with_villages" <?php echo $mode=='single_with_villages'?'checked':'';?>><span>1 cont (multe sate)</span></label>
+        <label><input type="radio" name="mode" value="many_accounts" <?php echo $mode=='many_accounts'?'checked':'';?>><span>Many accounts (1 village)</span></label>
+        <label><input type="radio" name="mode" value="single_with_villages" <?php echo $mode=='single_with_villages'?'checked':'';?>><span>1 account (many villages)</span></label>
       </div>
 
       <div class="examples">
-        <b>Base Name</b> 4-20 caractere. Ex: Farm | 5 → Farm1..Farm5. Ex single: FarmLord | 5 sate.<br>
-        <b>Atenție:</b> valori mari pot bloca serverul!
+        <b>Base Name</b> 4-20 characters. Ex: Farm | 5 → Farm1..Farm5. Single ex: FarmLord | 5 villages.<br>
+        <b>Warning:</b> large values may freeze the server!
       </div>
 
       <div class="row">
@@ -124,23 +124,23 @@ elseif(isset($_GET['g']) && $_GET['g']=='OK'){
       </div>
 
       <div class="row" id="accRow">
-        <label>Câte conturi</label>
+        <label>How many accounts</label>
         <input type="text" name="users_amount" value="<?php echo htmlspecialchars($amount);?>" maxlength="4">
       </div>
       <div class="hint">1 - 200</div>
 
       <div class="row" id="vilRow">
-        <label>Câte sate</label>
+        <label>How many villages</label>
         <input type="text" name="villages_amount" value="<?php echo htmlspecialchars($villages);?>" maxlength="4">
       </div>
-      <div class="hint">1 - 200 (doar single)</div>
+      <div class="hint">1 - 200 (single only)</div>
 
       <div class="check">
-        <label><input type="checkbox" name="users_protection" checked> Activează protecție începători</label>
+        <label><input type="checkbox" name="users_protection" checked> Enable beginner protection</label>
       </div>
 
       <div class="tribe-wrap">
-        <div class="tribe-title">Trib</div>
+        <div class="tribe-title">Tribe</div>
         <div class="tribe-grid">
           <label><input type="radio" name="tribe" value="0" checked><span class="tribe-icon">🎲</span><span class="tribe-text"><?php echo RANDOM;?></span></label>
           <label><input type="radio" name="tribe" value="1"><span class="tribe-icon">🏛</span><span class="tribe-text"><?php echo TRIBE1;?></span></label>

@@ -56,25 +56,25 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
       </div>
       <div>
         <h3>Send Message to All Players</h3>
-        <p>Mesaj in-game pentru toti userii (ID > 5)</p>
+        <p>In-game message for all users (ID > 5)</p>
       </div>
     </div>
 
 <?php if(isset($_GET['confirm'])):?>
     <div class="massmsg-confirm">
-      <b>Confirmare:</b> Esti sigur ca vrei sa trimiti?<br>
+      <b>Confirm:</b> Are you sure you want to send?<br>
       <b>Subject:</b> <span style="color:<?=$_SESSION['mass_color']?>"><?=htmlspecialchars($_SESSION['mass_subject'])?></span>
     </div>
     <form action="../GameEngine/Admin/Mods/massmessage.php" method="POST" class="massmsg-form">
       <input type="hidden" name="admid" value="<?=$id?>">
       <input type="hidden" name="action" value="execute">
-      <button type="submit" name="confirm" value="Yes" style="background:#27ae60">✓ Yes, Trimite</button>
-      <button type="submit" name="confirm" value="No" style="background:#95a5a6;margin-top:8px">Anuleaza</button>
+      <button type="submit" name="confirm" value="Yes" style="background:#27ae60">✓ Yes, Send</button>
+      <button type="submit" name="confirm" value="No" style="background:#95a5a6;margin-top:8px">Cancel</button>
     </form>
 
 <?php elseif(isset($_GET['sending'])):?>
     <div style="text-align:center;padding:30px">
-      <div style="font-size:16px;margin-bottom:10px">Se trimit mesajele...</div>
+      <div style="font-size:16px;margin-bottom:10px">Sending messages...</div>
       <div style="color:#666"><?=$_GET['msg']?? ''?></div>
     </div>
 
@@ -85,7 +85,7 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 
       <div class="field">
         <label>Subject</label>
-        <input type="text" name="subject" placeholder="ex: Mentenanta" required maxlength="100">
+        <input type="text" name="subject" placeholder="ex: Maintenance" required maxlength="100">
       </div>
 
       <div class="field">
@@ -95,7 +95,7 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
 
       <div class="field full">
         <label>Message Content</label>
-        <textarea name="message" rows="12" placeholder="Scrie mesajul... poti folosi [url] [img]" required></textarea>
+        <textarea name="message" rows="12" placeholder="Write the message... you can use [url][img]" required></textarea>
       </div>
 
       <button type="submit">
@@ -107,6 +107,6 @@ $_SESSION['mass_color']   = $_SESSION['mass_color'] ?? 'black';
   </div>
 
   <?php if(isset($_GET['done'])){?>
-    <div class="massmsg-success">✓ Mass message trimis cu succes la toti jucatorii!</div>
+    <div class="massmsg-success">✓ Mass message successfully sent to all players!</div>
   <?php }?>
 </div>

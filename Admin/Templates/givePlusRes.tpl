@@ -58,7 +58,7 @@ $id = $_SESSION['id'];
         <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
       <h3>Give Everyone Resource Bonus</h3>
-      <p>Activează bonus 25% pentru toate resursele la TOȚI jucătorii.</p>
+      <p>Activate a 25% bonus for all resources for ALL players.</p>
     </div>
 
     <form action="../GameEngine/Admin/Mods/givePlusRes.php" method="POST" class="resbonus-form">
@@ -91,6 +91,6 @@ $id = $_SESSION['id'];
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="resbonus-success">✓ Resource bonuses au fost activate pentru toți jucătorii!</div>
+    <div class="resbonus-success">✓ Resource bonuses have been activated for all players!</div>
   <?php } ?>
 </div>

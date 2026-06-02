@@ -127,7 +127,7 @@ function logCategory($entry) {
 ?>
 <div class="log-wrap">
   <div class="log-head">
-    <h2>📋 Admin Log Unificat - ultimele 300 acțiuni</h2>
+    <h2>📋 Unified Admin Log – last 300 actions</h2>
   </div>
 
   <div class="log-filters" id="logFilters">

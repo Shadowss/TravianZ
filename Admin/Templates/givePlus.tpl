@@ -52,7 +52,7 @@ $id = $_SESSION['id'];
       <svg viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke="white" stroke-width="3" stroke-linecap="round"/></svg>
     </div>
     <h3>Give Everyone Free Plus</h3>
-    <p>Activează Travian Plus pentru TOȚI jucătorii de pe server.</p>
+    <p>Activate Travian Plus for ALL players on the server.</p>
 
     <form action="../GameEngine/Admin/Mods/givePlus.php" method="POST" class="plus-form">
       <input type="hidden" name="admid" value="<?php echo $id; ?>">
@@ -66,6 +66,6 @@ $id = $_SESSION['id'];
   </div>
 
   <?php if(isset($_GET['g'])){ ?>
-    <div class="plus-success">✓ Plus a fost activat cu succes pentru toți jucătorii!</div>
+    <div class="plus-success">✓ Plus has been successfully activated for all players!</div>
   <?php } ?>
 </div>

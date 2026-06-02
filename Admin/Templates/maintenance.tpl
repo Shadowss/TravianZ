@@ -30,15 +30,15 @@ if(isset($_SESSION['id'])) {
 
 if(isset($_POST['startMaint'])) {
     $database->setMaintenance(1, $uid);
-    $error = "Maintenance ACTIVAT";
+    $error = "Maintenance ON";
 }
 if(isset($_POST['removeMaint'])) {
     $database->setMaintenance(0, $uid);
-    $error = "Maintenance OPRIT";
+    $error = "Maintenance OFF";
 }
 $maint = $database->getMaintenance();
 
-$starterName = 'Necunoscut';
+$starterName = 'Unknow';
 if($maint['started_by'] > 0){
     $u = $database->getUserArray($maint['started_by'], 1);
     $starterName = $u['username'] ?? 'UID '.$maint['started_by'];
@@ -63,17 +63,17 @@ if($maint['started_by'] > 0){
 <div class="maint-card">
   <div class="maint-head">Server Maintenance</div>
   <div class="maint-status <?= $maint['active'] ? 'on' : 'off' ?>">
-    <?= $maint['active'] ? 'ACTIV din '.($maint['started_at'] ? date('H:i d.m.Y',$maint['started_at']) : '-') : 'INACTIV – server deschis' ?>
+    <?= $maint['active'] ? 'ACTIVE since '.($maint['started_at'] ? date('H:i d.m.Y',$maint['started_at']) : '-') : 'INACTIVE – server open' ?>
   </div>
   <?php if($maint['active']){ ?>
-    <div class="maint-info">Pornit de: <b><?= htmlspecialchars($starterName) ?></b> (UID: <?= (int)$maint['started_by'] ?>)</div>
+    <div class="maint-info">Started by: <b><?= htmlspecialchars($starterName) ?></b> (UID: <?= (int)$maint['started_by'] ?>)</div>
   <?php } ?>
   <div class="maint-row">
-    <div>Activeaza mentenanta</div>
+    <div>Enable maintenance</div>
     <button type="submit" name="startMaint" class="maint-btn start">Start</button>
   </div>
   <div class="maint-row">
-    <div>Dezactiveaza mentenanta</div>
+    <div>Disable maintenance</div>
     <button type="submit" name="removeMaint" class="maint-btn stop">Stop</button>
   </div>
 </div>
