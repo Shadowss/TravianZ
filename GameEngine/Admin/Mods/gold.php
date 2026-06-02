@@ -54,7 +54,10 @@ while($u = mysqli_fetch_assoc($users)){
     $vill = mysqli_fetch_assoc(mysqli_query($GLOBALS["link"], "SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = $uid LIMIT 1"));
     $wid = (int)($vill['wref'] ?? 0);
     
-    mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."gold_fin_log (wid, uid, action, gold, time, details) VALUES ($wid, $uid, 'Admin added Gold', $amount, $now, '$details')");
+    mysqli_query($GLOBALS["link"], 
+        "INSERT INTO ".TB_PREFIX."gold_fin_log (uid, wid, action, gold, time, log) 
+         VALUES ($uid, $wid, 'Admin added Gold', $amount, $now, '$details')"
+    ) or die(mysqli_error($GLOBALS["link"]));
 }
 
 header("Location: ../../../Admin/admin.php?p=gold&g");

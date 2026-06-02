@@ -64,8 +64,8 @@
 		    strtolower($_POST['aname']) != 'multihunter' &&
 		    strtolower($_POST['aname']) != 'support'
 		) {
-		    mysqli_query($database->dblink, "INSERT INTO " . TB_PREFIX . "users SET username = '".$database->escape($_POST['aname'])."', password = '" . password_hash($_POST['apass'], PASSWORD_BCRYPT, ['cost' => 12]) . "', email = '".$database->escape($_POST['aemail'])."', tribe = ".(int) $_POST['atribe'].", access = 9, is_bcrypt = 1") OR DIE (mysqli_error($database->dblink));
-		    $uid = mysqli_insert_id($database->dblink);
+		    mysqli_query($database->dblink, "INSERT INTO " . TB_PREFIX . "users SET username = '".$database->escape($_POST['aname'])."', password = '" . password_hash($_POST['apass'], PASSWORD_BCRYPT, ['cost' => 12]) . "', email = '".$database->escape($_POST['aemail'])."', tribe = ".(int) $_POST['atribe'].", access = 9, is_bcrypt = 1, desc1 = '[#MULTIHUNTER]', desc2 = '[#MH]\n[#TEAM]'") OR DIE (mysqli_error($database->dblink));
+			$uid = mysqli_insert_id($database->dblink);
 		    $admin_village_created = false;
 		    $xcoor = round(WORLD_MAX / 2);
             $addUnitsWrefs = [];
@@ -93,7 +93,7 @@
 
 		// set up MultiHunter
 		$password = $_POST['mhpw'];
-		mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "users SET password = '" . password_hash($password, PASSWORD_BCRYPT,['cost' => 12]) . "' WHERE username = 'Multihunter'");
+		mysqli_query($database->dblink, "UPDATE " . TB_PREFIX . "users SET password = '" . password_hash($password, PASSWORD_BCRYPT,['cost' => 12]) . "', desc1 = '[#MH]', desc2 = '[#MULTIHUNTER]' WHERE username = 'Multihunter'");
 		$wid = $admin->getWref(0, 0);
 		$uid = 5;
 		$status = $database->getVillageState($wid);

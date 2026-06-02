@@ -69,10 +69,14 @@ if($diffGold!== 0){
     $details = 'Admin adjustment by '.($session->username?? 'Admin');
     $now = time();
 
+    // folosește mysqli_real_escape_string dacă $database->query nu face escape automat
+    $action_esc = mysqli_real_escape_string($GLOBALS["link"], $action);
+    $details_esc = mysqli_real_escape_string($GLOBALS["link"], $details);
+
     $database->query("
         INSERT INTO ".TB_PREFIX."gold_fin_log
-        (wid, uid, action, gold, time, details)
-        VALUES ($wid, $id, '$action', $diffGold, $now, '$details')
+        (uid, wid, action, gold, time, log)
+        VALUES ($id, $wid, '$action_esc', $diffGold, $now, '$details_esc')
     ");
 }
 
