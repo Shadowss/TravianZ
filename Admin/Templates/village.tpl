@@ -122,7 +122,9 @@ if(isset($id)){
           <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
           <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
           <input class="input-mini" type="text" name="newowner" value="<?php echo $user['id']; ?>" style="width:65px">
-          <button class="btn-icon" title="Change"><?php echo $svgEdit; ?></button>
+          <?php if($_SESSION['access'] == ADMIN) { ?>
+		  <button class="btn-icon" title="Change"><?php echo $svgEdit; ?></button>
+		  <?php } ?>
         </form>
       </td>
     </tr>
@@ -131,7 +133,9 @@ if(isset($id)){
             <input type="hidden" name="did" value="<?php echo $_GET['did']; ?>">
             <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
             <input class="input-mini" type="text" name="villagename" value="<?php echo $village['name']; ?>" style="flex:1">
-            <button class="btn-icon" title="Rename"><?php echo $svgEdit; ?></button>
+            <?php if($_SESSION['access'] == ADMIN) { ?>
+			<button class="btn-icon" title="Rename"><?php echo $svgEdit; ?></button>
+			<?php } ?>
           </form>
         </td></tr>
         <tr><td class="label">Population</td><td colspan="2"><?php echo $village['pop'];?> <a href="admin.php?action=recountPop&did=<?php echo $_GET['did']; ?>" class="btn-icon" style="margin-left:4px"><?php echo $svgRefresh; ?></a></td></tr>
@@ -142,7 +146,8 @@ if(isset($id)){
     </div>
 <!-- 2. RESOURCES - FULL WIDTH -->
 <div class="vcard">
-  <div class="vhead">Resources <a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><?php echo $svgEdit; ?></a></div>
+  <div class="vhead">Resources<?php if($_SESSION['access'] == ADMIN) { ?><a href="admin.php?p=editResources&did=<?php echo $_GET['did']; ?>"><?php echo $svgEdit; ?></a><?php } ?>
+	</div>
   <table class="vtable" style="text-align:center">
     <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td style="text-align:left">Res</td><td>Amt</td><td>Cap</td><td>Prod</td></tr>
     <tr><td style="text-align:left"><img src="../img/admin/r/1.gif"> Wood</td><td><?php echo floor($village['wood']); ?></td><td rowspan="3"><?php echo $village['maxstore'];?></td><td><?php echo $production['wood'];?></td></tr>
@@ -215,7 +220,7 @@ if(isset($id)){
   <div class="vhead">Buildings</div>
   <table class="vtable" style="text-align:center">
     <tr style="background:#f8fafc;font-size:11px;color:#64748b"><td>ID</td><td>GID</td><td style="text-align:left">Name</td><td>Lvl</td><td>Edit</td></tr>
-    <?php for ($i = 1; $i <= 41; $i++){ if($i == 41) $i = 99; if($fdata['f'.$i.'t'] == 0) $bu = "-"; else $bu = $funct->procResType($fdata['f'.$i.'t']); echo '<tr><td>'.$i.'</td><td>'.$fdata['f'.$i.'t'].'</td><td style="text-align:left">'.$bu.'</td><td>'.$fdata['f'.$i].'</td><td><a href="admin.php?p=editVillage&did='.$_GET['did'].'" class="btn-icon">'.$svgEdit.'</a></td></tr>'; } ?>
+    <?php for ($i = 1; $i <= 41; $i++){ if($i == 41) $i = 99; if($fdata['f'.$i.'t'] == 0) $bu = "-"; else $bu = $funct->procResType($fdata['f'.$i.'t']); echo '<tr><td>'.$i.'</td><td>'.$fdata['f'.$i.'t'].'</td><td style="text-align:left">'.$bu.'</td><td>'.$fdata['f'.$i].'</td><td>'.($_SESSION['access'] == ADMIN ? '<a href="admin.php?p=editVillage&did='.$_GET['did'].'" class="btn-icon">'.$svgEdit.'</a>': '').'</td></tr>'; } ?>
   </table>
 </div>
 

@@ -126,10 +126,6 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
                 <font color="Red"><?php echo ADMIN_PANEL; ?></font>
             </a>
 
-            <a href="massmessage.php">
-                <?php echo MASS_MESSAGE; ?>
-            </a>
-
             <a href="build_croppers.php">
                 Build Cropper
             </a>
@@ -197,6 +193,12 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
          * Natars include
          */
         include("Templates/natars.tpl");
+		
+		/**
+		* Maintenance status for admins
+		*/
+		include("Templates/maintenance_status.tpl");
+
         ?>
 
     </p>

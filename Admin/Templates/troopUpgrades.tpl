@@ -55,9 +55,11 @@ $img = $tribe==1 ? "" : $tribe-1;
       }
     ?>
   </div>
+    <?php if($_SESSION['access']==ADMIN){ ?>
   <div class="upg-foot">
     <?php if($tribe==5){ echo '<span style="color:#94a3b8">Upgrades Troops</span>'; } else { echo '<a href="admin.php?p=addABTroops&did='.$_GET['did'].'">Upgrades Troops</a>'; } ?>
     <a href="admin.php?p=techlog&did=<?=$_GET['did']?>" style="color:#64748b">Research Log</a>
   </div>
   <?php if(isset($_GET['ab'])) echo '<div style="text-align:right;padding:0 8px 6px;color:#dc2626;font-weight:600;font-size:12px">AB Tech updated</div>'; ?>
+    <?php } ?>
 </div>

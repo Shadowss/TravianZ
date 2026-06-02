@@ -53,6 +53,14 @@ if (!empty($_GET['p'])) {
         case 'message':
             $subpage = 'Players Message';
             break;
+			
+		case 'massmessage':
+			$subpage = 'Mass Message';
+			break;	
+			
+		case 'sysmessage':
+			$subpage = 'System Message';
+			break;		
 
         case 'map':
             $subpage = 'Map';
@@ -578,8 +586,8 @@ Logged: <b><?=$adminName?></b> <span style="color:#999;font-size:11px">(<?=$rank
 						<li class="sub"><a href="#">Messages</a>
 							<ul>
 								<li><a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">Read In-Game Messages</a></li>
-								<li><a href="<?php echo rtrim(SERVER, '/'); ?>/massmessage.php">Create Mass Message</a></li>
-								<li><a href="<?php echo rtrim(SERVER, '/'); ?>/sysmsg.php">Create System Message</a></li>
+								<li><a href="admin.php?p=massmessage">Create Mass Message</a></li>
+								<li><a href="admin.php?p=sysmessage">Create System Message</a></li>
 							</ul>
 						</li>
 						<li class="sub"><a href="#">Ban</a>
@@ -613,7 +621,7 @@ Logged: <b><?=$adminName?></b> <span style="color:#999;font-size:11px">(<?=$rank
 							<ul>
 								<li><a href="?p=admin_log"><font color="Red"><b>Admin Log</b></font></a></li>
 								<li><a href="?p=config">Server Settings</a></li>
-<li><a href="?p=maintenance">Server Maintenance</a></li>
+								<li><a href="?p=maintenance">Server Maintenance</a></li>
 								<li><a href="?p=resetServer">Server Resetting</a></li>
 							</ul>
 						</li>

@@ -28,15 +28,20 @@
 </style>
 
 <table id="member">
-	<thead>
-		<tr>
-			<th colspan="2">Additional Information 
+<thead>
+	<tr>
+		<th colspan="2">
+			Additional Information 
+
+			<?php if($_SESSION['access'] == ADMIN) { ?>
 				<a href='admin.php?p=editAdditional&uid=<?php echo $id; ?>' class="edit-icon" title="Edit Player Additional Info">
 					<svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
 				</a>
-			</th>
-		</tr>
-	</thead>
+			<?php } ?>
+
+		</th>
+	</tr>
+</thead>
 	<tbody>
 		<tr>
 			<td>Access</td>

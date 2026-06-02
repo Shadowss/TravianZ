@@ -17,7 +17,7 @@
 ##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
 ## --------------------------------------------------------------------------- ##
 #################################################################################
-if($_SESSION['access'] < ADMIN) die("Access Denied!");
+if($_SESSION['access'] < MULTIHUNTER) die("Access Denied!");
 
 $error = '';
 $success = '';

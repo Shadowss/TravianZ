@@ -94,13 +94,13 @@
                     <tr>
                         <th>Population</th>
                         <td><?php echo number_format($totalpop,0,',','.'); ?> 
-<a href="?action=recountPopUsr&uid=<?php echo $user['id'];?>" title="Recount population" style="margin-left:6px;vertical-align:middle;display:inline-flex">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M21 12a9 9 0 1 1-3-6.7"/>
-  <path d="M21 3v6h-6"/>
-</svg>
-</a>
-</td>
+						<a href="?action=recountPopUsr&uid=<?php echo $user['id'];?>" title="Recount population" style="margin-left:6px;vertical-align:middle;display:inline-flex">
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M21 12a9 9 0 1 1-3-6.7"/>
+						<path d="M21 3v6h-6"/>
+					</svg>
+					</a>
+					</td>
                     </tr>
                     <tr>
                         <th>Age</th>
@@ -207,17 +207,17 @@
                   ?>
 
                     <tr><td colspan="2"><a href="?p=ban&uid=<?php echo $user['id'];?>">&raquo; Ban User</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=Newmessage&uid=<?php echo $user['id'];?>">&raquo; Send Message</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=editPlus&uid=<?php echo $user['id'];?>">&raquo; Edit Plus & Res Bonus</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=editSitter&uid=<?php echo $user['id'];?>">&raquo; Edit Sitters</a></td></tr>
-                    <!-- BUTON NOU ADAUGAT -->
-                    <tr><td colspan="2"><a href="?p=editProtection&uid=<?php echo $user['id'];?>">&raquo; Edit Protection</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=editPassword&uid=<?php echo $user['id'];?>">&raquo; Edit Password</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=editOverall&uid=<?php echo $user['id'];?>">&raquo; Edit Overall Off & Def</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=editWeek&uid=<?php echo $user['id'];?>">&raquo; Edit Weekly Off, Def, Raid</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=userlogin&uid=<?php echo $user['id'];?>">&raquo; User Login Log</a></td></tr>
-                    <tr><td colspan="2"><a href="?p=userillegallog&uid=<?php echo $user['id'];?>">&raquo; User Illegal Log</a></td></tr>
-
+					<tr><td colspan="2"><a href="?p=Newmessage&uid=<?php echo $user['id'];?>">&raquo; Send Message</a></td></tr>
+					<?php if($_SESSION['access'] == ADMIN) { ?>
+					<tr><td colspan="2"><a href="?p=editPlus&uid=<?php echo $user['id'];?>">&raquo; Edit Plus & Res Bonus</a></td></tr>
+					<tr><td colspan="2"><a href="?p=editSitter&uid=<?php echo $user['id'];?>">&raquo; Edit Sitters</a></td></tr>
+					<tr><td colspan="2"><a href="?p=editProtection&uid=<?php echo $user['id'];?>">&raquo; Edit Protection</a></td></tr>
+					<tr><td colspan="2"><a href="?p=editPassword&uid=<?php echo $user['id'];?>">&raquo; Edit Password</a></td></tr>
+					<tr><td colspan="2"><a href="?p=editOverall&uid=<?php echo $user['id'];?>">&raquo; Edit Overall Off & Def</a></td></tr>
+					<tr><td colspan="2"><a href="?p=editWeek&uid=<?php echo $user['id'];?>">&raquo; Edit Weekly Off, Def, Raid</a></td></tr>
+					<?php } ?>
+					<tr><td colspan="2"><a href="?p=userlogin&uid=<?php echo $user['id'];?>">&raquo; User Login Log</a></td></tr>
+					<tr><td colspan="2"><a href="?p=userillegallog&uid=<?php echo $user['id'];?>">&raquo; User Illegal Log</a></td></tr>
                     <tr>
                         <td colspan="2" class="desc2">
                             <div class="desc2div">

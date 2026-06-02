@@ -53,7 +53,7 @@ $user = $database->getUserArray($id,1);
       <div>to <a href="admin.php?p=player&uid=<?php echo $user['id']; ?>"><?php echo $user['username']; ?></a></div>
     </div>
     
-    <form method="post" action="../Admin/Mods/sendMessage.php" name="msg">
+    <form method="post" action="../GameEngine/Admin/Mods/sendMessage.php" name="msg">
       <div class="msg-body">
         <input type="hidden" name="uid" value="<?php echo $id; ?>">
         

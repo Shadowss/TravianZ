@@ -13,6 +13,7 @@
 if (!isset($_SESSION)) {
     session_start();
 }
+
 if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
     die("Access Denied: You are not Admin!");
 }
@@ -33,12 +34,19 @@ for ($i = 0; $i < 5; $i++) {
 include_once($autoprefix . "GameEngine/Database.php");
 
 // ---------------------------------------------------------------------------
-// Input
+// INPUT
 // ---------------------------------------------------------------------------
-$session = (int)($_POST['admid'] ?? 0);
+$adminId = (int)($_SESSION['id'] ?? 0);
 $uid     = (int)($_POST['uid'] ?? 0);
 $topic   = trim($_POST['topic'] ?? 'Admin Message');
 $message = trim($_POST['message'] ?? '');
+
+// ---------------------------------------------------------------------------
+// VALIDARE
+// ---------------------------------------------------------------------------
+if ($adminId <= 0) {
+    die("Invalid admin session.");
+}
 
 if ($uid <= 0 || $message === '') {
     header("Location: ../../../Admin/admin.php?p=Newmessage&uid=$uid&e=1");
@@ -46,38 +54,73 @@ if ($uid <= 0 || $message === '') {
 }
 
 // ---------------------------------------------------------------------------
-// Verificare admin
+// SANITIZARE
 // ---------------------------------------------------------------------------
-$admin = $database->getUserArray($session, 1);
-if (!$admin || (int)$admin['access'] !== 9) {
-    die('<h1><font color="red">Access Denied: You are not Admin!</font></h1>');
-}
-
-// ---------------------------------------------------------------------------
-// Insert mesaj
-// ---------------------------------------------------------------------------
-$time = time();
 $topicEsc = $database->escape($topic);
 $msgEsc   = $database->escape($message);
 
-$database->query(
-    "INSERT INTO " . TB_PREFIX . "mdata 
-    (target, owner, topic, message, viewed, time, archive) 
-    VALUES ($uid, 1, '$topicEsc', '$msgEsc', 0, $time, 0)"
-);
+$time = time();
 
 // ---------------------------------------------------------------------------
-// Log admin
+// INSERT MESAJ (FULL FIX)
 // ---------------------------------------------------------------------------
-$adminId = (int)$_SESSION['id'];
+$sql = "
+INSERT INTO " . TB_PREFIX . "mdata 
+(
+    target,
+    owner,
+    topic,
+    message,
+    viewed,
+    archived,
+    send,
+    time,
+    deltarget,
+    delowner,
+    alliance,
+    player,
+    coor,
+    report
+)
+VALUES
+(
+    $uid,
+    $adminId,
+    '$topicEsc',
+    '$msgEsc',
+    0,
+    0,
+    0,
+    $time,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+)
+";
+
+$result = $database->query($sql);
+
+if (!$result) {
+    die("Message insert failed: " . $database->getError());
+}
+
+// ---------------------------------------------------------------------------
+// LOG ADMIN ACTION
+// ---------------------------------------------------------------------------
 $logText = "Sent message to uid $uid: '$topicEsc'";
-$logEsc = $database->escape($logText);
+$logEsc  = $database->escape($logText);
 
-$database->query(
-    "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
-    "VALUES (0, '$adminId', '$logEsc', $time)"
-);
+$database->query("
+INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`)
+VALUES (0, $adminId, '$logEsc', $time)
+");
 
+// ---------------------------------------------------------------------------
+// REDIRECT SUCCESS
+// ---------------------------------------------------------------------------
 header("Location: ../../../Admin/admin.php?p=Newmessage&uid=" . $uid . "&msg=ok");
 exit;
 ?>
