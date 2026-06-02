@@ -17,6 +17,13 @@
 
 if (NEW_FUNCTIONS_VACATION) {
 
+// -----------------------------------------------------
+// Admin validation check
+// -----------------------------------------------------
+
+$isAdmin     = (isset($session->access) && $session->access == ADMIN);
+$isMH        = (isset($session->access) && $session->access == MULTIHUNTER);
+
 ?>
 
 <!-- =========================
@@ -132,10 +139,11 @@ function vac_ok($key, $errors)
                 <li style="color:<?= vac_ok('ACCOUNT_DELETION',$errors) ? 'green':'red' ?>">
                     Account is not scheduled for deletion
                 </li>
-				
-                <li style="color:<?= vac_ok('NO_VACATION_ACCESS',$errors) ? 'green':'red' ?>">
-                    Account is Admin or MH
-                </li>
+				<?php if ($isAdmin || $isMH): ?>
+				<li style="color:<?= vac_ok('NO_VACATION_ACCESS', $errors) ? 'green' : 'red' ?>">
+				Account is Admin or MH
+				</li>
+				<?php endif; ?>
             </ul>
         </div>
 

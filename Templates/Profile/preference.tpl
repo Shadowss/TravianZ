@@ -348,7 +348,14 @@ if(isset($_POST['lang']))
 ========================= -->
 <table cellpadding="1" cellspacing="1" id="completion" class="set">
 <thead>
-<tr><th colspan="2">Auto completion</th></tr>
+<tr>
+  <th colspan="2">
+    Auto completion 
+    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
+      (not coded yet)
+    </span>
+  </th>
+</tr>
 <tr><td colspan="2">Used for rally point and marketplace:</td></tr>
 </thead>
 <tbody>
@@ -376,7 +383,14 @@ if(isset($_POST['lang']))
 ========================= -->
 <table cellpadding="1" cellspacing="1" id="big_map" class="set">
 <thead>
-<tr><th colspan="2">Large map</th></tr>
+<tr>
+  <th colspan="2">
+    Large map 
+    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
+      (not coded yet)
+    </span>
+  </th>
+</tr>
 </thead>
 <tbody>
 <tr>
@@ -393,7 +407,14 @@ if(isset($_POST['lang']))
 ========================= -->
 <table cellpadding="1" cellspacing="1" id="report_filter" class="set">
 <thead>
-<tr><th colspan="2">Report filter</th></tr>
+<tr>
+  <th colspan="2">
+    Report filter
+    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
+      (not coded yet)
+    </span>
+  </th>
+</tr>
 </thead>
 <tbody>
 
@@ -420,7 +441,14 @@ if(isset($_POST['lang']))
 ========================= -->
 <table cellpadding="1" cellspacing="1" id="time" class="set">
 <thead>
-<tr><th colspan="2">Time preferences</th></tr>
+<tr>
+  <th colspan="2">
+    Time Preference
+    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
+      (not coded yet)
+    </span>
+  </th>
+</tr>
 <tr><td colspan="2">Here you can change Travian's displayed time to fit your time zone.</td></tr>
 </thead>
 <tbody>
@@ -492,7 +520,12 @@ if(isset($_POST['lang']))
 <table cellpadding="1" cellspacing="1" id="language" class="set">
 <thead>
 <tr>
-    <th colspan="2">Language settings</th>
+  <th colspan="2">
+    Language settings
+    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
+      (not coded yet)
+    </span>
+  </th>
 </tr>
 </thead>
 <tbody>
