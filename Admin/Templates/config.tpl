@@ -39,11 +39,6 @@ $editIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke=
 .config-table td.b{background:#f8fafc;font-weight:700;color:#334155;text-transform:uppercase;font-size:11px;letter-spacing:.3px;padding:4px 8px}
 .config-table td:first-child{color:#475569;width:60%}
 .config-table td:last-child{color:#0f172a;font-weight:500}
-em.tooltip{position:relative;display:inline-block;margin-left:4px;cursor:help;color:#94a3b8;font-style:normal;font-weight:700}
-em.tooltip span.classic{display:none;position:absolute;z-index:99;left:-8px;top:20px;width:220px;padding:6px 8px;background:#0f172a;color:#e2e8f0;border-radius:6px;font-size:11px;line-height:1.3;box-shadow:0 4px 12px rgba(0,0,0,.2);font-weight:400}
-em.tooltip:hover span.classic{display:block}
-em.tooltip span.classic:before{content:'';position:absolute;left:14px;top:-6px;border:6px solid transparent;border-bottom-color:#0f172a}
-.badge{display:inline-block;padding:1px 6px;border-radius:999px;font-size:11px;font-weight:600;line-height:1.3}
 .badge.green{background:#dcfce7;color:#166534}
 .badge.red{background:#fee2e2;color:#991b1b}
 .badge.blue{background:#dbeafe;color:#1e40af}
