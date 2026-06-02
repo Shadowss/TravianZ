@@ -17,11 +17,12 @@
 ##  Copyright      : TravianZ (c) 2010-2025. All rights reserved.              ##
 ## --------------------------------------------------------------------------- ##
 #################################################################################
+
 if($_SESSION['access'] < MULTIHUNTER) die("Access Denied!");
 include_once("../GameEngine/Generator.php");
 include_once("../GameEngine/Technology.php");
 include_once("../GameEngine/Message.php");
-include_once("../GameEngine/BBCode.php");
+// ATENTIE: am scos BBCode de aici, il incarcam doar cand avem nevoie
 
 $nid = isset($_GET['nid'])? (int)$_GET['nid'] : 0;
 $search = isset($_GET['q'])? $database->escape($_GET['q']) : '';
@@ -34,7 +35,7 @@ $offset = ($page-1)*$limit;
 if($nid > 0){
     $msg = $database->getMessage($nid, 3);
     if(empty($msg)) die("Message ID $nid doesn't exist!");
-   ?>
+  ?>
     <link href="../<?php echo GP_LOCATE;?>lang/en/lang.css?f4b7d" rel="stylesheet" type="text/css">
     <link href="../<?php echo GP_LOCATE;?>lang/en/compact.css?f4b7i" rel="stylesheet" type="text/css">
     <link href="../<?php echo GP_LOCATE;?>travian.css?e21d2" rel="stylesheet" type="text/css">
@@ -63,8 +64,9 @@ if($nid > 0){
             $player = $msg[0]['player'];
             $coor = $msg[0]['coor'];
             $report = $msg[0]['report'];
+            include("../GameEngine/BBCode.php"); // <-- AICI trebuie, dupa ce setam variabilele
             echo stripslashes(nl2br($bbcoded));
-           ?>
+          ?>
           </div>
         </div>
         <div id="read_foot" class="msg_foot"></div>
@@ -139,7 +141,7 @@ $msgs = $database->query("SELECT * FROM ".TB_PREFIX."mdata WHERE $where ORDER BY
         $preview = strip_tags($m['message']);
         $preview = mb_substr($preview,0,90);
         $cls = $m['owner']==0? 'system' : 'player';
-   ?>
+  ?>
     <a href="?p=msg&nid=<?php echo $m['id'];?>" style="text-decoration:none;color:inherit">
       <div class="msg-card <?php echo $cls;?>">
         <div class="msg-top">

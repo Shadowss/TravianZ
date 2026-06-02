@@ -527,11 +527,11 @@ body.app #lleft{box-shadow:none !important}
 				<div class="tz-user">
 					<?php if($funct->CheckLogin()){ ?>
 						<?php 
-$adminName = $database->getUserField($_SESSION['id'], 'username', 0);
-$adminAccess = $database->getUserField($_SESSION['id'], 'access', 0);
-$rank = $adminAccess == 9 ? 'Admin' : ($adminAccess == 8 ? 'MH' : 'User');
-?>
-Logged: <b><?=$adminName?></b> <span style="color:#999;font-size:11px">(<?=$rank?>)</span> 
+							$adminName = $database->getUserField($_SESSION['id'], 'username', 0);
+							$adminAccess = $database->getUserField($_SESSION['id'], 'access', 0);
+							$rank = $adminAccess == 9 ? 'Admin' : ($adminAccess == 8 ? 'MH' : 'User');
+						?>
+						Logged: <b><?=$adminName?></b> <span style="color:#999;font-size:11px">(<?=$rank?>)</span> 
 						<a href="?action=logout" class="tz-logout">Logout</a>
 					<?php } else { ?>
 						Not Logged in
@@ -585,7 +585,6 @@ Logged: <b><?=$adminName?></b> <span style="color:#999;font-size:11px">(<?=$rank
 						</li>
 						<li class="sub"><a href="#">Messages</a>
 							<ul>
-								<li><a href="<?php echo rtrim(SERVER, '/'); ?>/nachrichten.php">Read In-Game Messages</a></li>
 								<li><a href="admin.php?p=massmessage">Create Mass Message</a></li>
 								<li><a href="admin.php?p=sysmessage">Create System Message</a></li>
 							</ul>
