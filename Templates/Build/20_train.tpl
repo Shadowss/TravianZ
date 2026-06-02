@@ -17,7 +17,7 @@ for ($i = $start; $i <= $end; $i++) {
     $maxPlus = $technology->maxUnitPlus($i);
     $available = (int)($village->unitarray['u'.$i] ?? 0);
 
-    $pop = (int)$unitData['pop'] - ($unitData['drinking'] <= $horseTrough ? 1 : 0);
+    $pop = (int)$unitData['pop'] - (isset($unitData['drinking']) && $unitData['drinking'] <= $horseTrough? 1 : 0);
 
     $baseTime = $unitData['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100);
     if ($horseTrough >= 1) $baseTime *= (1 / $bid41[$horseTrough]['attri']);

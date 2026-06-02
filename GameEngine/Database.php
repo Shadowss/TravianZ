@@ -8068,9 +8068,14 @@ $q = "INSERT INTO ".TB_PREFIX."demolition VALUES (
 	    global $technology;
 	    
 	    $getVillage = $this->getVillage($wref);
+		
+		 // FIX: dacă satul nu există, ieși imediat
+		if (!$getVillage || !is_array($getVillage)) {
+        return;
+		}
 	    
 	    //Exlude Support, Nature, Natars, TaskMaster and Multihunter
-	    if ($getVillage['owner'] > 5){	        
+	    if (($getVillage['owner'] ?? 0) > 5){
 	        $crop = $this->getCropProdstarv($wref, false);
 	        $unitArrays = $technology->getAllUnits($wref, false, 0, false);
 	        $villageUpkeep = $getVillage['pop'] + $technology->getUpkeep($unitArrays, 0, $wref);

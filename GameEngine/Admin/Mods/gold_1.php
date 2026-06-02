@@ -48,10 +48,7 @@ $adminName = $acc['username'];
 $details = mysqli_real_escape_string($GLOBALS["link"], 'Admin gift by '.$adminName);
 $now = time();
 
-mysqli_query($GLOBALS["link"], 
-    "INSERT INTO ".TB_PREFIX."gold_fin_log (uid, wid, action, gold, time, log) 
-     VALUES ($id, $wid, '$action', $amount, $now, '$details')"
-) or die(mysqli_error($GLOBALS["link"]));
+mysqli_query($GLOBALS["link"], "INSERT INTO ".TB_PREFIX."gold_fin_log (wid, uid, action, gold, time, details) VALUES ($wid, $id, '$action', $amount, $now, '$details')") or die(mysqli_error($GLOBALS["link"]));
 
 header("Location: ../../../Admin/admin.php?p=usergold&g");
 exit;

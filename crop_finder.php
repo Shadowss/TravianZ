@@ -1,10 +1,8 @@
 <?php
-// crop_finder_fast.php  — fast crop finder using precomputed <TB_PREFIX>croppers
-// Fixes:
-//  - Uses WORLD_MIN/WORLD_MAX from config if present (works for 0..N or -W..+W)
-//  - If not defined in config, auto-detects bounds from DB
-//  - Larger window cap + extra expansion
-//  - Global fallback so it never returns only a few rows
+// crop_finder.php  — fast crop finder using precomputed <TB_PREFIX>croppers
+// Fixes PHP 8:
+//  - Defines $MIN_X/$MAX_X/$MIN_Y/$MAX_Y from WORLD_MAX or DB
+//  - Initializes $R, $tries to avoid undefined in debug panel
 
 include_once("GameEngine/Generator.php");
 $start_timer = $generator->pageLoadTimeStart();
@@ -23,6 +21,30 @@ $USERS = $TBP . 'users';
 
 $RENDER_MAX = 100;
 
+// ---------- World bounds (FIX pentru $MIN_X/$MAX_X undefined) ----------
+if (!isset($MIN_X) || !isset($MAX_X) || !isset($MIN_Y) || !isset($MAX_Y)) {
+    if (defined('WORLD_MAX')) {
+        $w = (int)WORLD_MAX;
+        $MIN_X = defined('WORLD_MIN') ? (int)WORLD_MIN : -$w;
+        $MAX_X = $w;
+        $MIN_Y = defined('WORLD_MIN') ? (int)WORLD_MIN : -$w;
+        $MAX_Y = $w;
+    } else {
+        $b = $database->query("SELECT MIN(x) AS minx, MAX(x) AS maxx, MIN(y) AS miny, MAX(y) AS maxy FROM `$VDATA`");
+        $br = $b ? $b->fetch_assoc() : null;
+        $MIN_X = (int)($br['minx'] ?? -200);
+        $MAX_X = (int)($br['maxx'] ?? 200);
+        $MIN_Y = (int)($br['miny'] ?? -200);
+        $MAX_Y = (int)($br['maxy'] ?? 200);
+    }
+}
+
+// init vars for debug safety
+$R = 0;
+$tries = 0;
+$rows = [];
+$out = [];
+
 // ---------- POST -> GET ----------
 if (!empty($_POST['type'])) {
     $x = isset($_POST['x']) ? preg_replace("/[^0-9-]/", "", $_POST['x']) : '0';
@@ -35,14 +57,10 @@ if (!empty($_POST['type'])) {
 }
 
 // ---------- Helpers ----------
-/**
- * Wrap-aware BETWEEN that works for arbitrary [min..max] (e.g. 0..49 or -300..300)
- */
 function betweenWrapFlexible($col, $center, $R, $min, $max) {
     $span = $max - $min + 1;
     $lo = $center - $R;
     $hi = $center + $R;
-    // normalize to [min,max]
     $norm = function($v) use ($min,$span) {
         $n = ($v - $min) % $span;
         if ($n < 0) $n += $span;
@@ -65,23 +83,18 @@ $startX = isset($coor2['x']) ? (int)$coor2['x'] : 0;
 $startY = isset($coor2['y']) ? (int)$coor2['y'] : 0;
 
 // ---------- UI selections ----------
-// UI selections
 $selBonus = isset($_GET['b']) ? $_GET['b'] : 'all';
 $selType  = (!empty($_GET['s'])) ? (int)$_GET['s'] : 0;
 $minBonus = ($selBonus !== 'all') ? (int)$selBonus : null;
 $fieldWhere = ($selType === 1) ? "6" : (($selType === 2) ? "1" : "1,6");
 $bonusCond  = is_null($minBonus) ? "1" : ("c.best_oasis_bonus >= ".(int)$minBonus);
 
-// Only run the queries after the user pressed Search (i.e., we have s, x, y in the URL)
-$rows = [];
-$out = [];
 $searchTriggered = isset($_GET['s']) && isset($_GET['x']) && isset($_GET['y']);
 
 if ($searchTriggered) {
-    // --- Windowed fetch with bigger cap and one more expansion ---
-    $R    = 40;         // start radius
+    $R    = 40;
     $tries= 0;
-    $CAP  = 2000;       // increased cap per window
+    $CAP  = 2000;
 
     do {
         $tries++;
@@ -102,14 +115,13 @@ if ($searchTriggered) {
             }
         }
 
-        if (count($rows) < $RENDER_MAX && $tries < 4) { // 40 -> 80 -> 160 -> 320
+        if (count($rows) < $RENDER_MAX && $tries < 4) {
             $R *= 2;
         } else {
             break;
         }
     } while (true);
 
-    // --- Global fallback if window was too sparse ---
     if (count($rows) < $RENDER_MAX) {
         $sql = "SELECT c.wref, c.x, c.y, c.fieldtype, c.best_oasis_bonus
                 FROM `$CROP_TABLE` c
@@ -125,12 +137,10 @@ if ($searchTriggered) {
         }
     }
 
-    // Sort by distance and keep first RENDER_MAX
     usort($rows, function($a,$b){ return $a['__dist'] <=> $b['__dist']; });
     $out = array_slice($rows, 0, $RENDER_MAX);
 }
 
-// Live owner info for visible rows
 $wrefs = array_map(function($r){ return (int)$r['wref']; }, $out);
 $owners = [];
 if ($wrefs) {
@@ -218,7 +228,6 @@ if ($wrefs) {
 </form>
 
 <?php
-// Debug panel (toggle with ?debug=1)
 if (!empty($_GET['debug'])) {
     echo "<div style='margin:8px 0;padding:6px 8px;background:#fffbe6;border:1px solid #ffe58f;border-radius:8px'>";
     echo "<strong>Debug:</strong> bounds=[$MIN_X..$MAX_X]x[$MIN_Y..$MAX_Y], R=$R, tries=$tries, fetched=".count($rows).", render=".count($out).", type={$selType}, minBonus=".($minBonus??'all');
@@ -272,7 +281,6 @@ if (empty($out)) {
 }
 ?>
 </tbody>
-
 </table>
 <?php } ?>
 </div>
