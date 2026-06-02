@@ -67,6 +67,7 @@ $ue = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."enforcement");
 .unit{display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px dotted #f5f5f5}
 .unit img{width:16px;height:16px;margin-right:4px}
 .unit .cnt{font-weight:bold}
+.unit svg{width:16px;height:16px;margin-right:4px;vertical-align:-3px}
 @media(max-width:900px){.sinfo-grid{grid-template-columns:1fr}.troops-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 
@@ -125,8 +126,8 @@ $ue = q1("SELECT ".implode(',',$cells)." FROM ".TB_PREFIX."enforcement");
         if(!$has) echo "<div class='unit'><span style='color:#999'>No troops</span></div>";
         echo "</div>";
     }
-    $heroTotal = (int)($uv['hero'] ?? 0) + (int)($ue['hero'] ?? 0);
-    echo "<div class='tribe-box'><h4>Heroes</h4><div class='unit'><span><img src='../".GP_LOCATE."img/u/hero.gif'> Hero</span><span class='cnt'>".formatNum($heroTotal)."</span></div></div>";
+	$heroTotal = (int)($uv['hero'] ?? 0) + (int)($ue['hero'] ?? 0);
+	echo "<div class='tribe-box'><h4>Heroes</h4><div class='unit'><span><svg viewBox='0 0 24 24' fill='#f1c40f' xmlns='http://www.w3.org/2000/svg'><path d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z'/></svg> Hero</span><span class='cnt'>".formatNum($heroTotal)."</span></div></div>";
     ?>
   </div>
 </div>
