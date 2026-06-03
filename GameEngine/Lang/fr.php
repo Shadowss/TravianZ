@@ -6,1471 +6,1714 @@
 //                                Made by: Dzoki & Dixie (TravianZ)                                 //
 //                              - TravianZ = Travian Clone Project -                                //
 //                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
-//                                Adding tasks, constructions and artifacts  by: Kotoku-SVG         //
-//                                Modified , added , fixed , implementd  by: Kotoku-SVG             //
+//                                Adding tasks, constructions and artefact  by: Armando             //
+//                                Modified , added , fixed , implementd  by: Shadow and ronix       //
+//                                                                                                  //
+//          URLs:           https://travianz.org                                                    //
+//                          https://github.com/Shadowss/TravianZ                                    //
+//                                                                                                  //
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-									//                             //
-									//         French              //
-									//      Author: Kotoku-SVG     //
-									//     Adding: Kotoku-SVG      //
-									/////////////////////////////////
+//                              //
+//          FRANÇAIS            //
+//      Author: Dzoki           //
+//     Adding: Armando          //
+//     Translation: Ferywir     //
+//////////////////////////////////
 
 //MAIN MENU
-define("TRIBE1","Romains");
-define("TRIBE2","Teutons");
-define("TRIBE3","Gaulois");
-define("TRIBE4","Nature");
-define("TRIBE5","Natars");
-define("TRIBE6","Monstres");
+define('TRIBE1', 'Romains');
+define('TRIBE2', 'Teutons');
+define('TRIBE3', 'Gaulois');
+define('TRIBE4', 'Nature');
+define('TRIBE5', 'Natars');
+define('TRIBE6', 'Monstres');
 
-define("HOME","Accueil");
-define("INSTRUCT","Instructions");
-define("ADMIN_PANEL","Panneau d'administration");
-define("MASS_MESSAGE","Message de masse");
-define("LOGOUT","Déconnexion");
-define("PROFILE","Profil");
-define("SUPPORT","Support");
-define("UPDATE_T_10","Mettre à jour le top 10");
-define("SYSTEM_MESSAGE","Messages système");
-define("TRAVIAN_PLUS","Travian <b><span class=\"plus_g\">P</span><span class=\"plus_o\">l</span><span class=\"plus_g\">u</span><span class=\"plus_o\">s</span></span></span></b>");
-define("CONTACT","Contactez-nous !");
-define("GAME_RULES","Règles du jeu");
+define('HOME', 'Accueil');
+define('INSTRUCT', 'Instructions');
+define('ADMIN_PANEL', 'Panneau d\'administration');
+define('MH_PANEL', 'Panneau Multihunter');
+define('MASS_MESSAGE', 'Message de masse');
+define('LOGOUT', 'Déconnexion');
+define('PROFILE', 'Profil');
+define('SUPPORT', 'Support');
+define('UPDATE_T_10', 'Mettre à jour le Top 10');
+define('SYSTEM_MESSAGE', 'Message système');
+define('TRAVIAN_PLUS', 'Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></span></span></b>');
+define('CONTACT', 'Contactez-nous !');
+define('GAME_RULES', 'Règles du jeu');
 
 //MENU
-define("REG","Inscription");
-define("FORUM","Forum");
-define("CHAT","Chat");
-define("IMPRINT","Mentions légales");
-define("MORE_LINKS","Plus de liens");
-define("TOUR","Visite du jeu");
+define('REG', 'Inscription');
+define('FORUM', 'Forum');
+define('CHAT', 'Chat');
+define('IMPRINT', 'Mentions légales');
+define('MORE_LINKS', 'Plus de liens');
+define('TOUR', 'Visite du jeu');
 
 
 //ERRORS
-define("USRNM_EMPTY","(Nom d'utilisateur vide)");
-define("USRNM_TAKEN","(Nom déjà pris.)");
-define("USRNM_SHORT","(min. ".USRNM_MIN_LENGTH." figure)");
-define("USRNM_CHAR","(Caractères non valides)");
-define("PW_EMPTY","(Mot de passe vide)");
-define("PW_SHORT","(min. ".PW_MIN_LENGTH." figure)");
-define("PW_INSECURE","(Mot de passe non sécurisé. Veuillez en choisir un plus sûr.)");
-define("EMAIL_EMPTY","(Adresse e-mail vide)");
-define("EMAIL_INVALID","(Adresse e-mail invalide)");
-define("EMAIL_TAKEN","(Adresse e-mail déjà utilisée)");
-define("TRIBE_EMPTY","<li>Veuillez choisir une tribu.</li>");
-define("AGREE_ERROR","<li>Vous devez accepter les règles du jeu ainsi que les conditions générales pour vous inscrire.</li>");
-define("LOGIN_USR_EMPTY","Veuillez saisir votre nom.");
-define("LOGIN_PASS_EMPTY","Veuillez saisir votre mot de passe.");
-define("EMAIL_ERROR","Les adresses e-mail ne correspondent pas");
-define("PASS_MISMATCH","Les mots de passe ne correspondent pas");
-define("ALLI_OWNER","Veuillez nommer un chef d'alliance avant la suppression");
-define("SIT_ERROR","Substitut déjà défini ou joueur introuvable");
-define("USR_NT_FOUND","Ce nom n'existe pas.");
-define("LOGIN_PW_ERROR","Mot de passe incorrect.");
-define("WEL_TOPIC","Conseils et informations utiles");
-define("ATAG_EMPTY","Tag vide");
-define("ANAME_EMPTY","Nom vide");
-define("ATAG_EXIST","Tag déjà pris");
-define("ANAME_EXIST","Nom déjà pris");
-define("ALREADY_ALLY_MEMBER","Vous faites déjà partie d'une alliance");
-define("ALLY_TOO_LOW", "vous devez avere un'ambassade di niveau 3 o superiore");
-define("USER_NOT_IN_YOUR_ALLY","Cet utilisateur ne fait pas partie de votre alliance !");
-define("CANT_EDIT_YOUR_PERMISSIONS","Vous ne pouvez pas modifier vos propres permissions !");
-define("CANT_EDIT_LEADER_PERMISSIONS","Les permissions du chef d'alliance ne peuvent pas être modifiées !");
-define("NO_PERMISSION", "Non vous avez assez autorizzazioni!");
-define("NAME_OR_DIPL_EMPTY", "Nom o diplomazia vuoti");
-define("ALLY_DOESNT_EXISTS","L'alliance n'existe pas");
-define("CANNOT_INVITE_SAME_ALLY","Vous ne pouvez pas inviter votre propre alliance");
-define("WRONG_DIPLOMACY","Vous avez fait le mauvais choix");
-define("INVITE_ALREADY_SENT","Soit vous avez déjà envoyé un pacte à cette alliance, soit elle vous en a déjà envoyé un, soit vous avez déjà un pacte avec elle");
-define("INVITE_SENT","Invitation envoyée");
-define("DECLARED_WAR_ON","a déclaré la guerre à");
-define("OFFERED_NON_AGGRESION_PACT_TO","a proposé un pacte de non-agression à");
-define("OFFERED_CONFED_TO","a proposé une confédération à");
-define("ALLY_TOO_MUCH_PACTS","Soit vous ne pouvez plus proposer de pactes de ce type, soit cette alliance a atteint sa limite pour ce type de pactes");
-define("ALLY_PERMISSIONS_UPDATED","Permissions mises à jour");
-define("ALLY_FORUM_LINK_UPDATED", "Lien du forum mis à jour");
-define("NO_FORUMS_YET","Il n'y a pas encore de forums.");
-define("ALLY_USER_KICKED"," a été expulsé de l'alliance");
-define("NOT_OPENED_YET","Le serveur n'a pas encore démarré.");
-define("REGISTER_CLOSED","Les inscriptions sont fermées. Vous ne pouvez pas vous inscrire sur ce serveur.");
-define("NAME_EMPTY","Veuillez saisir un nom");
-define("NAME_NO_EXIST","Aucun utilisateur ne porte le nom ");
-define("ID_NO_EXIST","Aucun utilisateur ne porte l'identifiant ");
-define("SAME_NAME","Vous ne pouvez pas vous inviter vous-même");
-define("ALREADY_INVITED"," déjà invité");
-define("ALREADY_IN_ALLY"," fait déjà partie de cette alliance");
-define("ALREADY_IN_AN_ALLY"," fait déjà partie d'une alliance");
-define("NAME_OR_TAG_CHANGED","Nom ou tag modifié");
-define("VAC_MODE_WRONG_DAYS","Vous avez saisi un nombre de jours incorrect");
+define('USRNM_EMPTY', '(Nom d\'utilisateur vide)');
+define('USRNM_TAKEN', '(Ce nom est déjà utilisé.)');
+define('USRNM_SHORT', '(min. '.USRNM_MIN_LENGTH.' caractères)');
+define('USRNM_CHAR', '(Caractères invalides)');
+define('PW_EMPTY', '(Mot de passe vide)');
+define('PW_SHORT', '(min. '.PW_MIN_LENGTH.' caractères)');
+define('PW_INSECURE', '(Mot de passe non sécurisé. Veuillez en choisir un plus robuste.)');
+define('EMAIL_EMPTY', '(E-mail vide)');
+define('EMAIL_INVALID', '(Adresse e-mail invalide)');
+define('EMAIL_TAKEN', '(Cet e-mail est déjà utilisé)');
+define('WINNER_ERROR', '<li>Le serveur est terminé ! Plus aucune inscription possible.</li>');
+define('TRIBE_EMPTY', '<li>Veuillez choisir une tribu.</li>');
+define('AGREE_ERROR', '<li>Vous devez accepter les règles du jeu et les conditions générales pour vous inscrire.</li>');
+define('LOGIN_USR_EMPTY', 'Veuillez saisir votre nom.');
+define('LOGIN_PASS_EMPTY', 'Veuillez saisir votre mot de passe.');
+define('LOGIN_VACATION', 'Le mode vacances est encore activé.');
+define('EMAIL_ERROR', 'Les adresses e-mail ne correspondent pas');
+define('PASS_MISMATCH', 'Les mots de passe ne correspondent pas');
+define('ALLI_OWNER', 'Veuillez désigner un chef d\'alliance avant la suppression');
+define('SIT_ERROR', 'Substitut déjà défini ou joueur introuvable');
+define('USR_NT_FOUND', 'Ce nom n\'existe pas.');
+define('LOGIN_PW_ERROR', 'Mot de passe incorrect.');
+define('WEL_TOPIC', 'Conseils et informations utiles');
+define('ATAG_EMPTY', 'Tag vide');
+define('ANAME_EMPTY', 'Nom vide');
+define('ATAG_EXIST', 'Tag déjà pris');
+define('ANAME_EXIST', 'Nom déjà pris');
+define('ALREADY_ALLY_MEMBER', 'Vous faites déjà partie d\'une alliance');
+define('ALLY_TOO_LOW', 'Vous devez avoir une ambassade de niveau 3 ou supérieur');
+define('USER_NOT_IN_YOUR_ALLY', 'Cet utilisateur ne fait pas partie de votre alliance !');
+define('CANT_EDIT_YOUR_PERMISSIONS', 'Vous ne pouvez pas modifier vos propres permissions !');
+define('CANT_EDIT_LEADER_PERMISSIONS', 'Les permissions du chef d\'alliance ne peuvent pas être modifiées !');
+define('CANT_REMOVE_LEADER', 'Vous ne pouvez pas expulser le fondateur de l\'alliance !');
+define('FOUNDER_LEAVE_NEW', 'Aucun fondateur n\'a été sélectionné !');
+define('FOUNDER_LEAVE_INVALID', 'Fondateur invalide !');
+define('NO_PERMISSION', 'Vous n\'avez pas les permissions nécessaires !');
+define('NAME_OR_DIPL_EMPTY', 'Nom ou diplomatie vide');
+define('ALLY_DOESNT_EXISTS', 'Cette alliance n\'existe pas');
+define('CANNOT_INVITE_SAME_ALLY', 'Vous ne pouvez pas inviter votre propre alliance');
+define('WRONG_DIPLOMACY', 'Choix invalide');
+define('INVITE_ALREADY_SENT', 'Soit vous avez déjà envoyé un pacte à cette alliance, soit elle vous en a envoyé un, soit vous avez déjà un pacte avec elle');
+define('INVITE_SENT', 'Invitation envoyée');
+define('DECLARED_WAR_ON', 'a déclaré la guerre à');
+define('OFFERED_NON_AGGRESION_PACT_TO', 'a proposé un pacte de non-agression à');
+define('OFFERED_CONFED_TO', 'a proposé une confédération à');
+define('ALLY_TOO_MUCH_PACTS', 'Soit vous ne pouvez plus proposer de pactes de ce type, soit cette alliance a atteint sa limite pour ce type de pactes');
+define('ALLY_PERMISSIONS_UPDATED', 'Permissions mises à jour');
+define('ALLY_FORUM_LINK_UPDATED', 'Lien du forum mis à jour');
+define('NO_FORUMS_YET', 'Il n\'y a pas encore de forums.');
+define('ALLY_USER_KICKED', ' a été expulsé de l\'alliance');
+define('NOT_OPENED_YET', 'Le serveur n\'a pas encore démarré.');
+define('REGISTER_CLOSED', 'Les inscriptions sont fermées. Vous ne pouvez pas vous inscrire sur ce serveur.');
+define('NAME_EMPTY', 'Veuillez saisir un nom');
+define('NAME_NO_EXIST', 'Aucun utilisateur ne porte le nom ');
+define('ID_NO_EXIST', 'Aucun utilisateur ne porte l\'identifiant ');
+define('SAME_NAME', 'Vous ne pouvez pas vous inviter vous-même');
+define('ALREADY_INVITED', ' a déjà été invité');
+define('ALREADY_IN_ALLY', ' fait déjà partie de cette alliance');
+define('ALREADY_IN_AN_ALLY', ' fait déjà partie d\'une alliance');
+define('NAME_OR_TAG_CHANGED', 'Nom ou tag modifié');
+define('VAC_MODE_WRONG_DAYS', 'Vous avez saisi un nombre de jours incorrect');
 
 //COPYRIGHT
-define("TRAVIAN_COPYRIGHT","TravianZ - Clone de Travian 100 % open source.");
+define('TRAVIAN_COPYRIGHT', 'TravianZ — Clone de Travian 100 % open source.');
 
 //BUILD.TPL
-define("CUR_PROD","Production actuelle");
-define("NEXT_PROD","Production au niveau ");
-define("CONSTRUCT_BUILD","Construire le bâtiment");
-
-//BUILDINGS
-define("B1","Bûcheron");
-define("B1_DESC","Le bûcheron abat les arbres pour produire du bois. Plus son niveau est élevé, plus la production de bois augmente.");
-define("B2","Carrière d'argile");
-define("B2_DESC","L'argile est produite ici. Plus son niveau est élevé, plus la production d'argile augmente.");
-define("B3","Mine de fer");
-define("B3_DESC","Les mineurs y extraient le fer. Plus le niveau de la mine augmente, plus sa production de fer augmente.");
-define("B4","Champ de céréales");
-define("B4_DESC","La nourriture de votre population est produite ici. Plus le niveau du champ augmente, plus la production de céréales progresse.");
+define('CUR_PROD', 'Production actuelle');
+define('NEXT_PROD', 'Production au niveau ');
+define('CONSTRUCT_BUILD', 'Construire le bâtiment');
 
 //DORF1
-define("LUMBER","Bois");
-define("CLAY","Argile");
-define("IRON","Fer");
-define("CROP","Céréales");
-define("LEVEL","Niveau");
-define("CROP_COM",CROP." consumo");
-define("PER_HR","par heure");
-define("PROD_HEADER","Production");
-define("MULTI_V_HEADER","Villages");
-define("ANNOUNCEMENT","Annonce");
-define("GO2MY_VILLAGE","Aller à mon village");
-define("VILLAGE_CENTER","Centre du village");
-define("FINISH_GOLD","Terminer immédiatement tous les ordres de construction et de recherche dans ce village pour 2 ors ?");
-define("WAITING_LOOP","(en attente)");
-define("CROP_NEGATIVE","Votre production de céréales est négative, vous n'atteindrez jamais la quantité de ressources requise.");
-define("HRS","(h.)");
-define("DONE_AT","terminé à");
-define("CANCEL","annuler");
-define("LOYALTY","Loyauté");
-define("CALCULATED_IN","Calculé en");
-define("SEVER_TIME","Heure du serveur :");
-define("HI","Bonjour");
-define("P_IN","dans");
+define('LUMBER', 'Bois');
+define('CLAY', 'Argile');
+define('IRON', 'Fer');
+define('CROP', 'Céréales');
+define('LEVEL', 'Niveau');
+define('CROP_COM', CROP.' consommées');
+define('PER_HR', 'par heure');
+define('PRODUCTION', 'Production');
+define('CAPITAL1', 'Capitale');
+define('VILLAGES', 'Villages');
+define('ANNOUNCEMENT', 'Annonce');
+define('GO2MY_VILLAGE', 'Aller à mon village');
+define('VILLAGE_CENTER', 'Centre du village');
+define('FINISH_GOLD', 'Terminer immédiatement toutes les constructions et recherches en cours dans ce village pour 2 ors ?');
+define('WAITING_LOOP', '(en attente)');
+define('CROP_NEGATIVE', 'Votre production de céréales est négative, vous n\'atteindrez jamais la quantité de ressources requise.');
+define('HR', 'h.');
+define('HRS', '(h.)');
+define('DONE_AT', 'terminé à');
+define('CANCEL', 'annuler');
+define('LOYALTY', 'Loyauté');
+define('CALCULATED_IN', 'Calculé en');
+define('HI', 'Bonjour');
+define('P_IN', 'dans');
+define('MS', 'ms');
+define('SERVER_TIME', 'Heure du serveur :');
+define('REMAINING_GOLD', 'Or restant');
+
+// HEADER && MENU && Messages && Reports
+define('REPORTS', 'Rapports');
+define('MESSAGES', 'Messages');
+define('PLUS_MENU', 'Menu Plus');
+define('LINKS', 'Liens');
+define('CANCEL_PROCESS', 'Annuler le processus');
+define('ACCOUNT_DELETING', 'Le compte sera supprimé dans');
+define('INBOX', 'Boîte de réception');
+define('WRITE', 'Écrire');
+define('SENT', 'Envoyés');
+define('SEND', 'Envoyer');
+define('ARCHIVE', 'Archives');
+define('NOTES', 'Notes');
+define('SUBJECT', 'Sujet');
+define('SENDER', 'Expéditeur');
+define('RECIPIENT', 'Destinataire');
+define('BACK', 'Retour');
+define('NEW', 'nouveau');
+define('UNREAD', 'non lu');
+define('NO_MESS', 'Aucun message disponible');
+define('NO_MESS_IN_ARCHIVE', NO_MESS.' dans les archives');
+define('NO_MESS_SENT', 'Aucun message envoyé');
+define('MESS_FOR_SUP', 'Message pour le Support');
+define('MESS_FOR_MH', 'Message pour le Multihunter');
+define('SEND_AS_SUP', 'Envoyer en tant que Support');
+define('SEND_AS_MH', 'Envoyer en tant que Multihunter');
+define('SAVE', 'Enregistrer');
+define('ANSWER', 'Répondre');
+define('REPLY', 'Réponse');
+define('ADDRESSBOOK', 'Carnet d\'adresses');
+define('CLOSE_ADDRESSBOOK', 'Fermer le carnet d\'adresses');
+define('ONLINE_S1', 'En ligne maintenant');
+define('ONLINE_S2', 'Hors ligne');
+define('ONLINE_S3', 'Derniers 3 jours');
+define('ONLINE_S4', 'Derniers 7 jours');
+define('ONLINE_S5', 'Inactif');
+define('WAIT_FOR_CONFIRM', 'En attente de confirmation');
+define('CONFIRM', 'Confirmer');
+define('WRITE_MESS_WARN', '<b>Attention :</b> vous ne pouvez pas utiliser les balises <b>[message]</b> ou <b>[/message]</b> dans votre message car cela peut causer des problèmes avec le système BBCode.');
+define('NO_REPORTS', 'Aucun rapport disponible');
+define('ATTACKER', 'Attaquant');
+define('NATAR_COUNTERFORCE', 'Contre-attaque Natar');
+define('FROM_THE_VILL', 'du village');
+define('CASUALTIES', 'Pertes');
+define('INFORMATION', 'Information');
+define('CARRY', 'transporte');
+define('DEFENDER', 'Défenseur');
+define('VISITED', 'visité');
+define('HIS_TROOPS', ' ses troupes');
+define('WISHES_YOU', 'vous souhaite');
+define('X_MAS', 'Joyeux Noël');
+define('NEW_YEAR', 'Bonne année');
+define('EASTER', 'Joyeuses Pâques');
+if(!defined('PEACE')) define('PEACE', 'Paix');
+
+define('GOLD', 'Or');
+define('GOLD_IMG', '<img src=\"/img/x.gif\" class=\"gold\" alt=\"'.GOLD.'\" title=\"'.GOLD.'\">');
 
 //QUEST
-define("Q_CONTINUE","Poursuivez avec la tâche suivante.");
-define("Q_REWARD","Votre récompense :");
-define("Q_BUTN","tâche terminée");
-define("Q0","Bienvenue à ");
-define("Q0_DESC","Comme je le vois, vous avez été nommé chef de ce petit village. Je serai votre conseiller pendant les premiers jours et je ne quitterai jamais votre côté (droit).");
-define("Q0_OPT1","Vers la première tâche.");
-define("Q0_OPT2","Regarder autour de moi seul.");
-define("Q0_OPT3","Ne pas faire de tâches.");
+define('Q_CONTINUE', 'Continuez avec la tâche suivante.');
+define('Q_REWARD', 'Votre récompense :');
+define('Q_BUTN', 'Tâche terminée');
+define('Q0', 'Bienvenue à ');
+define('Q0_DESC', 'Comme je le vois, vous avez été nommé chef de ce petit village. Je serai votre conseiller pendant les premiers jours et ne quitterai jamais votre côté (droit).');
+define('Q0_OPT1', 'Vers la première tâche.');
+define('Q0_OPT2', 'Regarder autour de moi seul.');
+define('Q0_OPT3', 'Ne pas faire les tâches.');
 
-define("Q1","Tâche 1 : Bûcheron");
-define("Q1_DESC","Quatre forêts verdoyantes entourent votre village. Construisez un bûcheron sur l'une d'elles. Le bois est une ressource importante pour notre nouvelle colonie.");
-define("Q1_ORDER","Ordre:<\/p>Construisez un bûcheron.");
-define("Q1_RESP","Oui, de cette façon vous gagnez plus de bois. Je vous ai donné un petit coup de pouce et j'ai terminé l'ordre instantanément.");
-define("Q1_REWARD","Bûcheron terminé immédiatement.");
+define('Q1', 'Tâche 1 : Bûcheron');
+define('Q1_DESC', 'Quatre forêts verdoyantes entourent votre village. Construisez un bûcheron sur l\'une d\'elles. Le bois est une ressource importante pour notre nouvelle colonie.');
+define('Q1_ORDER', 'Ordre :</p>Construisez un bûcheron.');
+define('Q1_RESP', 'Oui, de cette façon vous gagnerez plus de bois. Je vous ai donné un petit coup de pouce et terminé l\'ordre instantanément.');
+define('Q1_REWARD', 'Bûcheron terminé instantanément.');
 
-define("Q2","Tâche 2: Céréales");
-define("Q2_DESC","maintenant vos sujets hanno fame pour aver lavorato toute la journée. améliorer un terreno coltivato pour améliorer l'approvisionnement devos sujets. retourner ici une fois le bâtiment terminé.");
-define("Q2_ORDER","Ordre:<\/p>améliorer un terreno coltivato.");
-define("Q2_RESP","Très bien. maintenant vos sujets hanno de nouveau assez à manger...");
-define("Q2_REWARD","Il votre récompense:<\/p>1 jour Travian");
+define('Q2', 'Tâche 2 : Céréales');
+define('Q2_DESC', 'Vos sujets ont faim après avoir travaillé toute la journée. Améliorez un champ de céréales pour améliorer l\'approvisionnement de vos sujets. Revenez ici une fois le bâtiment terminé.');
+define('Q2_ORDER', 'Ordre :</p>Améliorez un champ de céréales.');
+define('Q2_RESP', 'Très bien. Vos sujets ont à nouveau de quoi manger...');
+define('Q2_REWARD', 'Votre récompense :</p>1 jour Travian');
 
-define("Q3","Tâche 3: Il Nom du votre village");
-define("Q3_DESC","Comme vous êtes créatif, vous pouvez donner à votre village le nom qui lui convient.<br \/><br \/>Cliquez sur 'Profil' dans le menu de gauche puis sélectionnez 'Modifier le profil'...");
-define("Q3_ORDER","Ordre:<\/p>Cambia il Nom du votre village in qualcosa di carino.");
-define("Q3_RESP","Wow, un beau nom pour votre village. Avrebbe potuto être il Nom du mio village!...");
+define('Q3', 'Tâche 3 : Le nom de votre village');
+define('Q3_DESC', 'Créatif comme vous l\'êtes, vous pouvez donner à votre village le nom qui lui convient.<br><br>Cliquez sur « Profil » dans le menu de gauche puis sélectionnez « Modifier le profil »...');
+define('Q3_ORDER', 'Ordre :</p>Changez le nom de votre village pour quelque chose de joli.');
+define('Q3_RESP', 'Wow, un beau nom pour votre village. Il aurait pu être le nom de mon village !...');
 
-define("Q4","Tâche 4: Autres joueurs");
-define("Q4_DESC","dans le ". SERVER_NAME ." giochi ensemble a miliardi di autres joueurs. Cliquez 'statistiques' dans le menu in élevé pour cercare il votre rang e inserirlo ici.");
-define("Q4_ORDER","Ordre:<\/p>Cerca il votre rang dans les statistiques e inseriscilo ici.");
-define("Q4_BUTN","Tâche terminé");
-define("Q4_RESP","exactement! ce è il votre rang.");
+define('Q4', 'Tâche 4 : Autres joueurs');
+define('Q4_DESC', 'Dans '.SERVER_NAME.', vous jouez avec des milliers d\'autres joueurs. Cliquez sur « Statistiques » dans le menu du haut pour chercher votre rang et le saisir ici.');
+define('Q4_ORDER', 'Ordre :</p>Cherchez votre rang dans les statistiques et saisissez-le ici.');
+define('Q4_BUTN', 'Tâche terminée');
+define('Q4_RESP', 'Exactement ! C\'est votre rang.');
 
-define("Q5","Tâche 5: Due ordini di construction");
-define("Q5_DESC","Construisez une mine de fer et une carrière d'argile. Le fer et l'argile ne sont jamais suffisants.");
-define("Q5_ORDER","Ordre:<\/p><ul><li>améliorer une miniera di fer.<\/li><li>améliorer une cava di argile.<\/li><\/ul>");
-define("Q5_RESP","comme vous avez notato, gli ordini di construction richiedono piuttosto temps. Il monde di ". SERVER_NAME ." continuerà a girare anche se sei offline. Anche tra pochi mesi ci saranno molte cose nuove da découvrir.<br \/><br \/>La cosa migliore da faire è controllare occasionalmente il votre village e dare ai soggetti nuovi compiti da svolgere.");
+define('Q5', 'Tâche 5 : Deux ordres de construction');
+define('Q5_DESC', 'Construisez une mine de fer et une carrière d\'argile. Le fer et l\'argile ne sont jamais suffisants.');
+define('Q5_ORDER', 'Ordre :</p><ul><li>Améliorez une mine de fer.</li><li>Améliorez une carrière d\'argile.</li></ul>');
+define('Q5_RESP', 'Comme vous l\'avez remarqué, les ordres de construction prennent du temps. Le monde de '.SERVER_NAME.' continuera de tourner même si vous êtes hors ligne. Même dans quelques mois, il y aura encore beaucoup de nouvelles choses à découvrir.<br><br>Le mieux est de vérifier votre village de temps en temps et de donner à vos sujets de nouvelles tâches à accomplir.');
 
-define("Q6","Tâche 6: Messaggi");
-define("Q6_DESC","Vous pouvez parler avec les autres joueurs en utilisant le système de messagerie. Je vous ai envoyé un message. Lisez-le puis revenez ici.<br \/><br \/>P.-S. N'oubliez pas : les rapports sont à gauche, les messages à droite.");
-define("Q6_ORDER","Ordre:<\/p>Leggi il votre nouveau messaggio.");
-define("Q6_RESP","Vous l'avez reçu ? Très bien.<br \/><br \/>Voici un peu d'or. Avec l'or, vous pouvez faire différentes choses, ad es. estendere il votre   dans le menu a sinistra.");
-define("Q6_RESP1","-Conta o aumenta la votre production di ressources. pour farlo clicca ");
-define("Q6_RESP2","dans le menu a sinistra.");
-define("Q6_SUBJECT","Message du surveillant");
-define("Q6_MESSAGE","Vous devez savoir qu'une belle récompense vous attend chez le surveillant.<br /><br />Suggerimento: Il messaggio è état generato automaticamente. Aucune réponse n'est nécessaire.");
+define('Q6', 'Tâche 6 : Messages');
+define('Q6_DESC', 'Vous pouvez parler avec les autres joueurs grâce au système de messagerie. Je vous ai envoyé un message. Lisez-le puis revenez ici.<br><br>P.-S. N\'oubliez pas : les rapports sont à gauche, les messages à droite.');
+define('Q6_ORDER', 'Ordre :</p>Lisez votre nouveau message.');
+define('Q6_RESP', 'Vous l\'avez reçu ? Très bien.<br><br>Voici un peu d\'or. Avec l\'or, vous pouvez faire différentes choses, par exemple étendre votre compte dans le menu de gauche.');
+define('Q6_RESP1', '-Compte ou augmenter votre production de ressources. Pour cela, cliquez ');
+define('Q6_RESP2', 'dans le menu de gauche.');
+define('Q6_SUBJECT', 'Message du surveillant');
+define('Q6_MESSAGE', 'Sachez qu\'une belle récompense vous attend chez le surveillant.<br><br>Astuce : ce message a été généré automatiquement. Aucune réponse n\'est nécessaire.');
 
-define("Q7","Tâche 7: Ognuno il son!");
-define("Q7_DESC","Nous devrions maintenant augmenter un peu votre production de ressources. Construisez un autre bûcheron, une autre carrière d'argile, une autre mine de fer et un autre champ de céréales au niveau 1.");
-define("Q7_ORDER","Ordre:<\/p>améliorer un'altra case di chaque ressource al niveau 1.");
-define("Q7_RESP","Très bien, grand sviluppo de la production di ressources.");
+define('Q7', 'Tâche 7 : Un de chaque !');
+define('Q7_DESC', 'Nous devrions maintenant augmenter un peu votre production de ressources. Construisez un autre bûcheron, une autre carrière d\'argile, une autre mine de fer et un autre champ de céréales au niveau 1.');
+define('Q7_ORDER', 'Ordre :</p>Améliorez une autre case de chaque ressource au niveau 1.');
+define('Q7_RESP', 'Très bien, votre production de ressources progresse bien.');
 
-define("Q8","Tâche 8: armée enorme!");
-define("Q8_DESC","maintenant ho une recherche très speciale pour te. Ho fame. Dammi 200 ressources di céréales!<br \/><br \/>In cambio cercherò di organizzare un enorme armée pour proteggere il votre village.");
-define("Q8_ORDER","Ordre:<\/p>envoyer 200 ressources di céréales al Sorvegliante.");
-define("Q8_BUTN","envoyer céréales");
-define("Q8_NOCROP","Non vous avez assez céréales!");
+define('Q8', 'Tâche 8 : Armée immense !');
+define('Q8_DESC', 'Maintenant j\'ai une tâche très spéciale pour vous. J\'ai faim. Donnez-moi 200 céréales !<br><br>En échange, j\'essaierai d\'organiser une immense armée pour protéger votre village.');
+define('Q8_ORDER', 'Ordre :</p>Envoyez 200 céréales au surveillant.');
+define('Q8_BUTN', 'Envoyer les céréales');
+define('Q8_NOCROP', 'Pas assez de céréales !');
 
-define("Q9","Tâche 9: tous pour 1.");
-define("Q9_DESC","In Travian c'è toujours qualcosa da faire! Mentre aspetti l'arrivée dell'enorme armée, maintenant dovremmo augmenter un po' la votre production di ressources. améliorer toutes le vos cases di ressources al niveau 1.");
-define("Q9_ORDER","Ordre:<\/p>améliorer toutes le cases ressources al niveau 1.");
-define("Q9_RESP","Très bien, la votre production di ressources prospera.<br \/><br \/>bientôt potremo commencer avec la construction di bâtiments dans le village.");
+define('Q9', 'Tâche 9 : Tout à 1.');
+define('Q9_DESC', 'Dans Travian, il y a toujours quelque chose à faire ! Pendant que vous attendez l\'arrivée de l\'immense armée, nous devrions augmenter un peu votre production de ressources. Améliorez toutes vos cases de ressources au niveau 1.');
+define('Q9_ORDER', 'Ordre :</p>Améliorez toutes les cases de ressources au niveau 1.');
+define('Q9_RESP', 'Très bien, votre production de ressources prospère.<br><br>Bientôt nous pourrons commencer la construction de bâtiments dans le village.');
 
-define("Q10","Tâche 10: Colomba de la pace");
-define("Q10_DESC","Pendant les premiers jours après votre inscription, vous êtes protégé contre les attaques des autres joueurs. Vous pouvez voir combien de temps dure cette protection en ajoutant le code <b>[#0]<\/b> al votre profilo.");
-define("Q10_ORDER","Ordre:<\/p>Écrivez le code <b>[#0]<\/b> dans votre profil en l'ajoutant à l'un des deux champs de description.");
-define("Q10_RESP","Bravo! maintenant tous peuvent vedere a quale grand guerriero si avvicina il monde.");
-define("Q10_REWARD","Il votre récompense:<\/p>2 jours Travian");
+define('Q10', 'Tâche 10 : Colombe de la paix');
+define('Q10_DESC', 'Pendant les premiers jours après votre inscription, vous êtes protégé contre les attaques des autres joueurs. Vous pouvez voir combien de temps dure cette protection en ajoutant le code <b>[#0]</b> à votre profil.');
+define('Q10_ORDER', 'Ordre :</p>Écrivez le code <b>[#0]</b> dans votre profil en l\'ajoutant à l\'un des deux champs de description.');
+define('Q10_RESP', 'Bravo ! Maintenant tout le monde peut voir quel grand guerrier rejoint le monde.');
+define('Q10_REWARD', 'Votre récompense :</p>2 jours Travian');
 
-define("Q11","Tâche 11: Vicini!");
-define("Q11_DESC","De nombreux villages différents vous entourent. L'un d'eux s'appelle. ");
-define("Q11_DESC1"," Cliquez sur 'Carte' dans le menu supérieur et cherchez ce village. Le nom des villages voisins s'affiche lorsque vous passez la souris sur l'un d'eux.");
-define("Q11_ORDER","Ordre:</p>Cerca le coordinate di ");
-define("Q11_ORDER1","e inseriscili ici.");
-define("Q11_RESP","Esatto, lì ");
-define("Q11_RESP1"," Village! Tante ressources, quante ne raggiungi su ce village. Beh, quasi altrettanto ...");
-define("Q11_BUTN","Tâche terminé");
+define('Q11', 'Tâche 11 : Voisins !');
+define('Q11_DESC', 'De nombreux villages différents vous entourent. L\'un d\'eux s\'appelle ');
+define('Q11_DESC1', '. Cliquez sur « Carte » dans le menu supérieur et cherchez ce village. Le nom des villages voisins s\'affiche en passant la souris dessus.');
+define('Q11_ORDER', 'Ordre :</p>Cherchez les coordonnées de ');
+define('Q11_ORDER1', 'et saisissez-les ici.');
+define('Q11_RESP', 'Exactement, voilà ');
+define('Q11_RESP1', ' ! Autant de ressources qu\'on peut en atteindre dans ce village. Enfin, presque autant...');
+define('Q11_BUTN', 'Tâche terminée');
 
-define("Q12","Tâche 12: Cachette");
-define("Q12_DESC","Le moment est venu de construire une cachette. Le monde de <?php echo SERVER_NAME; ?> est dangereux.<br \/><br \/>De nombreux joueurs vivent en pillant les ressources d'autres joueurs. Construisez une cachette pour dissimuler une partie de vos ressources à vos ennemis.");
-define("Q12_ORDER","Ordre:<\/p>construisez une cachette.");
-define("Q12_RESP","Bravo, il est désormais beaucoup plus difficile pour les autres joueurs de piller votre village.<br \/><br \/>En cas d'attaque, vos habitants cacheront eux-mêmes les ressources dans la cachette.");
+define('Q12', 'Tâche 12 : Cachette');
+define('Q12_DESC', 'Il est temps de construire une cachette. Le monde de '.SERVER_NAME.' est dangereux.<br><br>De nombreux joueurs vivent en pillant les ressources des autres. Construisez une cachette pour dissimuler une partie de vos ressources à vos ennemis.');
+define('Q12_ORDER', 'Ordre :</p>Construisez une cachette.');
+define('Q12_RESP', 'Bravo, il est désormais beaucoup plus difficile pour les autres joueurs de piller votre village.<br><br>En cas d\'attaque, vos habitants cacheront eux-mêmes les ressources dans la cachette.');
 
-define("Q13","Tâche 13: A due.");
-define("Q13_DESC","Dans <?php echo SERVER_NAME; ?>, il y a toujours quelque chose à faire! Améliorez un bûcheron, une carrière d'argile, une mine de fer et un champ de céréales jusqu'au niveau 2.");
-define("Q13_ORDER","Ordre:<\/p>améliorer une di chaque case ressource al niveau 2.");
-define("Q13_RESP","Très bien, votre village grandit et prospère !");
+define('Q13', 'Tâche 13 : À deux.');
+define('Q13_DESC', 'Dans '.SERVER_NAME.', il y a toujours quelque chose à faire ! Améliorez un bûcheron, une carrière d\'argile, une mine de fer et un champ de céréales au niveau 2 chacun.');
+define('Q13_ORDER', 'Ordre :</p>Améliorez une case de chaque ressource au niveau 2.');
+define('Q13_RESP', 'Très bien, votre village grandit et prospère !');
 
-define("Q14","Tâche 14: instructions");
-define("Q14_DESC","Dans les instructions du jeu, vous trouverez de courts textes informatifs sur différents bâtiments et types d'unités.<br \/><br \/>Cliquez sur 'Instructions' à gauche pour découvrir combien de bois est nécessaire pour la caserne.");
-define("Q14_ORDER","Ordre:<\/p>saisir combien costano le caserne di bois");
-define("Q14_BUTN","Tâche terminé");
-define("Q14_RESP","exactement! Le caserne costano 210 bois.");
+define('Q14', 'Tâche 14 : Instructions');
+define('Q14_DESC', 'Dans les instructions du jeu, vous trouverez de courts textes informatifs sur différents bâtiments et types d\'unités.<br><br>Cliquez sur « Instructions » à gauche pour découvrir combien de bois est nécessaire pour la caserne.');
+define('Q14_ORDER', 'Ordre :</p>Saisissez combien de bois coûte la caserne.');
+define('Q14_BUTN', 'Tâche terminée');
+define('Q14_RESP', 'Exactement ! La caserne coûte 210 bois.');
 
-define("Q15","Tâche 15: Bâtiment principal");
-define("Q15_DESC","Vos maîtres d'œuvre ont besoin d'un bâtiment principal de niveau 3 pour ériger des bâtiments importants comme le marché ou la caserne.");
-define("Q15_ORDER","Ordre:<\/p>améliorer il votre bâtiment principal al niveau 3.");
-define("Q15_RESP","Bravo. Il niveau 3 dell'bâtiment principal è état terminé.<br><br>avec ce aggiornamento i vos maestri costruttori non seulement costruiscono plus tipi di bâtiments, ma lo fanno anche plus rapidement.");
+define('Q15', 'Tâche 15 : Bâtiment principal');
+define('Q15_DESC', 'Vos maîtres d\'œuvre ont besoin d\'un bâtiment principal de niveau 3 pour ériger des bâtiments importants comme le marché ou la caserne.');
+define('Q15_ORDER', 'Ordre :</p>Améliorez votre bâtiment principal au niveau 3.');
+define('Q15_RESP', 'Bravo. Le bâtiment principal niveau 3 a été terminé.<br><br>Avec cette amélioration, vos maîtres d\'œuvre peuvent non seulement construire plus de types de bâtiments, mais aussi le faire plus rapidement.');
 
-define("Q16","Tâche 16: Avanzate!");
-define("Q16_DESC","Cerca di nouveau il votre rang dans les statistiques du joueur e goditi i vos progressi.");
-define("Q16_ORDER","Ordini:<\/p>Cerca il votre rang dans les statistiques e inseriscilo ici.");
-define("Q16_RESP","Bravo! ce è il votre rang actuelle.");
+define('Q16', 'Tâche 16 : Avancement !');
+define('Q16_DESC', 'Recherchez à nouveau votre rang dans les statistiques des joueurs et appréciez vos progrès.');
+define('Q16_ORDER', 'Ordre :</p>Cherchez votre rang dans les statistiques et saisissez-le ici.');
+define('Q16_RESP', 'Bravo ! C\'est votre rang actuel.');
 
-define("Q17","Tâche 17: Armi o Impasto");
-define("Q17_DESC","Vous devez maintenant prendre une décision: Soit commercer pacifiquement, soit devenir un guerrier redouté.<br \/><br \/>Pour le marché, un grenier est nécessaire ; pour la caserne, il faut un point de rassemblement.");
-define("Q17_BUTN","Economia");
-define("Q17_BUTN1","Militare");
+define('Q17', 'Tâche 17 : Armes ou pain');
+define('Q17_DESC', 'Vous devez maintenant prendre une décision : soit commercer pacifiquement, soit devenir un guerrier redouté.<br><br>Pour le marché, un grenier est nécessaire ; pour la caserne, il faut un point de rassemblement.');
+define('Q17_BUTN', 'Économie');
+define('Q17_BUTN1', 'Militaire');
 
-define("Q18","Tâche 18: Militare");
-define("Q18_DESC","une decisione coraggiosa. pour poter inviare troupes è nécessaire un punto di raccolta.<br \/><br \/>Il punto di raccolta deve être costruito su un cantiere specifico. Il ");
-define("Q18_DESC1"," cantiere.");
-define("Q18_DESC2"," si trova sur le lato destro dell'bâtiment principal, leggermente al di sous di esso. Il cantiere stesso è curvo.");
-define("Q18_ORDER","Ordre:<\/p>construisez un punto di raccolta.");
-define("Q18_RESP","Il votre punto di raccolta è état eretto! une buona mossa verso il dominio du monde!");
+define('Q18', 'Tâche 18 : Militaire');
+define('Q18_DESC', 'Une décision courageuse. Pour pouvoir envoyer des troupes, un point de rassemblement est nécessaire.<br><br>Le point de rassemblement doit être construit sur un emplacement spécifique. L\'emplacement ');
+define('Q18_DESC1', ' du chantier.');
+define('Q18_DESC2', ' se trouve à droite du bâtiment principal, légèrement en dessous. Le chantier lui-même est de forme courbée.');
+define('Q18_ORDER', 'Ordre :</p>Construisez un point de rassemblement.');
+define('Q18_RESP', 'Votre point de rassemblement a été érigé ! Un bon pas vers la domination mondiale !');
 
-define("Q19","Tâche 19: Caserne");
-define("Q19_DESC","maintenant vous avez un bâtiment principal di niveau 3 e un punto di raccolta. Ciò significa que tous i prerequisiti pour la construction di casernes sont stati soddisfatti.<br><br>You can use the barracks to train troops for fighting.");
-define("Q19_ORDER","Ordre:<\/p>construisez casernes.");
-define("Q19_RESP","Bravo... I migliori istruttori di tout il paese si sont riuniti pour allenare le vos abilità di combattimento maschili al maximum de la forma.");
+define('Q19', 'Tâche 19 : Caserne');
+define('Q19_DESC', 'Maintenant vous avez un bâtiment principal niveau 3 et un point de rassemblement. Tous les prérequis pour construire la caserne sont remplis.<br><br>Vous pouvez utiliser la caserne pour entraîner des troupes au combat.');
+define('Q19_ORDER', 'Ordre :</p>Construisez une caserne.');
+define('Q19_RESP', 'Bravo... Les meilleurs instructeurs de tout le pays se sont réunis pour entraîner vos hommes au combat à leur meilleur niveau.');
 
-define("Q20","Tâche 20: Treno.");
-define("Q20_DESC","maintenant que vous avez la caserne vous pouvez commencer ad addestrare le troupes. Allenane due ");
-define("Q20_ORDER","pour favore allenati 2 ");
-define("Q20_RESP","Le basi pour il votre glorioso armée sont state gettate.<br \/><br \/>avant di mandare il votre armée a saccheggiare dovresti controllare avec il.");
-define("Q20_RESP1","Simulatore di combattimento");
-define("Q20_RESP2","pour vedere quante troupes vous avez besoin pour combattere avec successo un topo senza pertes.");
+define('Q20', 'Tâche 20 : Entraînement.');
+define('Q20_DESC', 'Maintenant que vous avez la caserne, vous pouvez commencer à entraîner des troupes. Entraînez-en deux ');
+define('Q20_ORDER', 'Veuillez en entraîner 2 ');
+define('Q20_RESP', 'Les bases de votre glorieuse armée sont posées.<br><br>Avant d\'envoyer votre armée piller, vous devriez vérifier avec le ');
+define('Q20_RESP1', 'Simulateur de combat');
+define('Q20_RESP2', 'pour voir combien de troupes vous avez besoin pour battre un rat sans pertes.');
 
-define("Q21","Tâche 18: Economia");
-define("Q21_DESC","commerce & Economia è stata une votre scelta. I tempi d'oro ti aspettano di sicuro!");
-define("Q21_ORDER","Ordre:<\/p>construisez un grenier.");
-define("Q21_RESP","Bravo! avec il grenier vous pouvez immagazzinare plus céréales.");
+define('Q21', 'Tâche 18 : Économie');
+define('Q21_DESC', 'Commerce & Économie, c\'est votre choix. Des temps dorés vous attendent !');
+define('Q21_ORDER', 'Ordre :</p>Construisez un grenier.');
+define('Q21_RESP', 'Bravo ! Avec le grenier, vous pouvez stocker plus de céréales.');
 
-define("Q22","Tâche 19: Entrepôt");
-define("Q22_DESC","Noon seulement il céréales dev' être salvato.  Anche altre ressources peuvent être andare sprecate se non sont immagazzinate. construisez un entrepôt!");
-define("Q22_ORDER","Ordre:<\/p>construisez un entrepôt.");
-define("Q22_RESP",";Bravo, il votre entrepôt è terminé...&rdquo;<\/i><br \/>maintenant vous avez soddisfatto tous i prerequisiti richiesti pour construire un Marché.");
+define('Q22', 'Tâche 19 : Entrepôt');
+define('Q22_DESC', 'Pas seulement les céréales doivent être sauvegardées. Les autres ressources peuvent aussi être perdues si elles ne sont pas stockées correctement. Construisez un entrepôt !');
+define('Q22_ORDER', 'Ordre :</p>Construisez un entrepôt.');
+define('Q22_RESP', '«Bravo, votre entrepôt est terminé...»<br>Maintenant vous avez rempli tous les prérequis pour construire un marché.');
 
-define("Q23","Tâche 20: Marché.");
-define("Q23_DESC",";construisez un marché in modo da poter commercer avec i vos compagni joueurs.");
-define("Q23_ORDER","Ordre:<\/p>pour favore construisez un Marché.");
-define("Q23_RESP",";Ill Marché è état terminé. maintenant vous pouvez faire le vos offres o accettare offres esterne! quand crei le vos offres, dovresti pensare di offrire ciò di cui gli autres joueurs hanno plus besoin pour ottenere plus profitti.");
+define('Q23', 'Tâche 20 : Marché.');
+define('Q23_DESC', 'Construisez un marché afin de pouvoir commercer avec vos compagnons joueurs.');
+define('Q23_ORDER', 'Ordre :</p>Veuillez construire un marché.');
+define('Q23_RESP', 'Le marché a été terminé. Vous pouvez désormais faire vos propres offres ou accepter celles des autres ! En créant vos offres, pensez à proposer ce dont les autres joueurs ont le plus besoin pour obtenir de meilleurs profits.');
 
-define("Q24","Tâche 21: Everything to 2.");
-define("Q24_DESC","Now we should increase your resource production a bit. Build an additional woodcutter, clay pit, iron mine and cropland to level 1.");
-define("Q24_ORDER","Ordre:<\/p>améliorer toutes le vos cases al livell 2.");
-define("Q24_RESP","Félicitations ! Votre village grandit et prospère...");
+define('Q24', 'Tâche 21 : Tout au niveau 2.');
+define('Q24_DESC', 'Nous devrions maintenant augmenter un peu votre production de ressources. Construisez un autre bûcheron, carrière d\'argile, mine de fer et champ de céréales au niveau 1.');
+define('Q24_ORDER', 'Ordre :</p>Améliorez toutes les cases de ressources au niveau 2.');
+define('Q24_RESP', 'Félicitations ! Votre village grandit et prospère...');
 
-define("Q28","Tâche 22: alliances.");
-define("Q28_DESC","Il lavoro di squadra è importante in Travian. I joueurs que lavorano ensemble si organizzano in alliances. Ricevi un inivito da un'alliance dans la votre regione e unisciti a cette alliance. In alternativa, vous pouvez fonder la votre alliance. pour far ciò, è nécessaire un ambassade a niveau 3.");
-define("Q28_ORDER","Ordre:<\/p>Unisciti a un alliance o trovane une da seulement.");
-define("Q28_RESP","Va bien! maintenant que ti sei unito alla chiamata");
-define("Q28_RESP1",", e sei un membro de la leurs alliance aumenterai i vos progressi plus rapidement...");
+define('Q28', 'Tâche 22 : Alliance.');
+define('Q28_DESC', 'Le travail d\'équipe est important dans Travian. Les joueurs qui collaborent s\'organisent en alliances. Recevez une invitation d\'une alliance dans votre région et rejoignez-la. Sinon, vous pouvez fonder votre propre alliance. Pour cela, vous avez besoin d\'une ambassade de niveau 3.');
+define('Q28_ORDER', 'Ordre :</p>Rejoignez une alliance ou fondez-en une vous-même.');
+define('Q28_RESP', 'C\'est bien ! Vous voilà dans une union appelée ');
+define('Q28_RESP1', ', et vous êtes membre de leur alliance — vous progresserez d\'autant plus vite...');
 
-define("Q29","Tâche 23: bâtiment principal di niveau 5");
-define("Q29_DESC","pour poter construire un palais o une résidence, avrai besoin di un bâtiment principal al niveau 5.");
-define("Q29_ORDER","Ordre:<\/p>améliorer il votre bâtiment principal a niveau 5.");
-define("Q29_RESP","L'bâtiment principal è maintenant di niveau 5 e poi construire un palais o une résidence...");
+define('Q29', 'Tâche 23 : Bâtiment principal au niveau 5');
+define('Q29_DESC', 'Pour pouvoir construire un palais ou une résidence, vous aurez besoin d\'un bâtiment principal de niveau 5.');
+define('Q29_ORDER', 'Ordre :</p>Améliorez votre bâtiment principal au niveau 5.');
+define('Q29_RESP', 'Le bâtiment principal est niveau 5 maintenant et vous pouvez construire un palais ou une résidence...');
 
-define("Q30","Tâche 24: Grenier a niveau 3.");
-define("Q30_DESC","pour non perdere céréales, dovresti aggiornare il votre grenier.");
-define("Q30_ORDER","Ordre:<\/p>améliorer il votre grenier a niveau 3.");
-define("Q30_RESP","Il grenier è maintenant a niveau 3...");
+define('Q30', 'Tâche 24 : Grenier au niveau 3.');
+define('Q30_DESC', 'Pour ne pas perdre vos céréales, vous devriez améliorer votre grenier.');
+define('Q30_ORDER', 'Ordre :</p>Améliorez votre grenier au niveau 3.');
+define('Q30_RESP', 'Le grenier est niveau 3 maintenant...');
 
-define("Q31","Tâche 25: Entrepôt a niveau 7");
-define("Q31_DESC"," pour assicurarti que le vos ressources non trabocchino, dovresti aggiornare il votre entrepôt.");
-define("Q31_ORDER","Ordre:<\/p>améliorer il votre entrepôt al niveau 7.");
-define("Q31_RESP","Il entrepôt è état aggiornato al niveau 7...");
+define('Q31', 'Tâche 25 : Entrepôt au niveau 7');
+define('Q31_DESC', 'Pour vous assurer que vos ressources ne débordent pas, vous devriez améliorer votre entrepôt.');
+define('Q31_ORDER', 'Ordre :</p>Améliorez votre entrepôt au niveau 7.');
+define('Q31_RESP', 'L\'entrepôt a été amélioré au niveau 7...');
 
-define("Q32","Tâche 26: tous e cinque!");
-define("Q32_DESC","Avrai toujours besoin di plus ressources. Le cases ressources sont piuttosto costose, ma a lungo termine pagheranno toujours.");
-define("Q32_ORDER","Ordre:<\/p>améliorer toutes le cases ressources al niveau 5.");
-define("Q32_RESP","toutes le ressources sont maintenant a livvello 5, très bien, il votre village cresce e prospera!");
+define('Q32', 'Tâche 26 : Tout à cinq !');
+define('Q32_DESC', 'Vous aurez toujours besoin de plus de ressources. Les cases de ressources sont assez chères mais paieront toujours à long terme.');
+define('Q32_ORDER', 'Ordre :</p>Améliorez toutes les cases de ressources au niveau 5.');
+define('Q32_RESP', 'Toutes les ressources sont au niveau 5, très bien, votre village grandit et prospère !');
 
-define("Q33","Tâche 27: palais o Résidence?");
-define("Q33_DESC","pour fonder un nouveau village, avrai besoin di colons. Quelli que vous pouvez addestrare in un palais o in une résidence.");
-define("Q33_ORDER","Ordre:<\/p>construisez un palais o une résidence a niveau 10.");
-define("Q33_RESP","aveva raggiunto il niveau 10, maintenant vous pouvez addestrare i colons e fonder il votre secondo village. Notare i points culturali...");
+define('Q33', 'Tâche 27 : Palais ou résidence ?');
+define('Q33_DESC', 'Pour fonder un nouveau village, vous aurez besoin de colons. Vous pouvez les entraîner dans un palais ou une résidence.');
+define('Q33_ORDER', 'Ordre :</p>Construisez un palais ou une résidence au niveau 10.');
+define('Q33_RESP', 'A atteint le niveau 10, vous pouvez maintenant entraîner des colons et fonder votre deuxième village. Attention aux points de culture...');
 
-define("Q34","Tâche 28: 3 colons.");
-define("Q34_DESC","pour fonder un nouveau village, avrai besoin di colons. peuvent être addestrati in un palais o in une résidence.");
-define("Q34_ORDER","Ordre:<\/p>Addestra 3 colons.");
-define("Q34_RESP","3 i colons sont stati addestrati. pour fonder un nouveau village è nécessaire almeno");
-define("Q34_RESP1","points culture...");
+define('Q34', 'Tâche 28 : 3 colons.');
+define('Q34_DESC', 'Pour fonder un nouveau village, vous aurez besoin de colons. Ils peuvent être entraînés dans un palais ou une résidence.');
+define('Q34_ORDER', 'Ordre :</p>Entraînez 3 colons.');
+define('Q34_RESP', '3 colons ont été entraînés. Pour fonder un nouveau village, vous avez besoin d\'au moins ');
+define('Q34_RESP1', 'points de culture...');
 
-define("Q35","Tâche 29: Nouveau village.");
-define("Q35_DESC","Ci sont molte cases vuote sulla carte. Trova quello que fa pour te e trova un nouveau village");
-define("Q35_ORDER","Ordre:<\/p>Trovato un nouveau village.");
-define("Q35_RESP","sont fiero di te! maintenant vous avez due villages e vous avez toutes le possibilité pour construire un puissant empire. Ti auguro buona fortuna avec ce.");
+define('Q35', 'Tâche 29 : Nouveau village.');
+define('Q35_DESC', 'Il y a beaucoup de cases vides sur la carte. Trouvez celle qui vous convient et fondez-y un nouveau village.');
+define('Q35_ORDER', 'Ordre :</p>Fondez un nouveau village.');
+define('Q35_RESP', 'Je suis fier de vous ! Vous avez maintenant deux villages et toutes les possibilités pour construire un empire puissant. Je vous souhaite bonne chance.');
 
-define("Q36"," Tâche 30: construire un ");
-define("Q36_DESC","maintenant que vous avez addestrato alcuni soldati, dovresti construire un ");
-define("Q36_DESC1"," anche. Aumenta la défense di base e i vos soldati riceveranno un bonus difensivo.");
-define("Q36_ORDER","Ordre:<\/p>construisez un ");
-define("Q36_RESP","È di ce que sto parlando. UN ");
-define("Q36_RESP1"," très utile. Aumenta la défense des troupes dans le village.");
+define('Q36', ' Tâche 30 : Construire un ');
+define('Q36_DESC', 'Maintenant que vous avez entraîné quelques soldats, vous devriez construire un ');
+define('Q36_DESC1', ' aussi. Cela augmente la défense de base et vos soldats recevront un bonus défensif.');
+define('Q36_ORDER', 'Ordre :</p>Construisez un ');
+define('Q36_RESP', 'C\'est de cela que je parle. Un ');
+define('Q36_RESP1', ' très utile. Cela augmente la défense des troupes dans le village.');
 
-define("Q37","Tasks");
-define("Q37_DESC","Toutes les tâches sont terminées !");
+define('Q37', 'Tâches');
+define('Q37_DESC', 'Toutes les tâches sont terminées !');
 
-define("OPT3","Panoramica des ressources");
-define("T","Le vos consegne di ressources");
-define("T1","Consegna");
-define("T2","temps di consegna");
-define("T3","état");
-define("T4","andare a prendere");
-define("T5","pris");
-define("T6","In attesa");
-define("T7","1 jour Travian ");
-define("T8","2 jours Travian ");
+define('RESOURCES_OVERVIEW', 'Aperçu des ressources');
+define('YOUR_RES_DELIVERIES', 'Vos livraisons de ressources');
+define('DELIVERY', 'Livraison');
+define('DELIVERY_TIME', 'Temps de livraison');
+define('STATUS', 'État');
+define('FETCH', 'récupérer');
+define('FETCHED', 'récupéré');
+define('ON_HOLD', 'en attente');
+define('ONE_DAY_OF_TRAVIAN', '1 jour Travian ');
+define('TWO_DAYS_OF_TRAVIAN', '2 jours Travian ');
 
 //Quest 25
-define("Q25_7","Tâche 7: Vicinato!");
-define("Q25_7_DESC","De nombreux villages différents vous entourent. Uno di leurs è état scelto. ");
-define("Q25_7_DESC1","Cliquez 'Carte' dans le menu principal e cerca quel village. Il Nom des vos villages voisins peut être visto quand passi il mouse su uno di essi.");
-define("Q25_7_ORDER","<\/p><b>Ordre:</b><br>Cerca le coordinate di ");
-define("Q25_7_ORDER1","e inseriscili ici.");
-define("Q25_7_RESP","Esatto, lì ");
-define("Q25_7_RESP1"," Village! Tante ressources quante ne aggiungi in ce village. Beh, quasi altrettanto ...");
+define('Q25_7', 'Tâche 7 : Voisins !');
+define('Q25_7_DESC', 'De nombreux villages différents vous entourent. L\'un d\'eux s\'appelle ');
+define('Q25_7_DESC1', '. Cliquez sur « Carte » dans le menu du haut et cherchez ce village. Le nom des villages voisins s\'affiche en passant la souris dessus.');
+define('Q25_7_ORDER', '</p><b>Ordre :</b><br>Cherchez les coordonnées de ');
+define('Q25_7_ORDER1', 'et saisissez-les ici.');
+define('Q25_7_RESP', 'Exactement, voilà ');
+define('Q25_7_RESP1', ' ! Autant de ressources qu\'on peut en atteindre dans ce village. Enfin, presque autant...');
 
-define("Q25_8","Tâche 8: armée enorme!");
-define("Q25_8_DESC","maintenant ho un Tâche très speciale pour te. sont affamato. Dammi 200 ressources di céréales!<br \/><br \/>In cambio cercherò di organizzare un enorme armée pour proteggere il votre village.");
-define("Q25_8_ORDER","Ordre:<\/p>envoyer 200 colture al sorvegliante.");
-define("Q25_8_BUTN","envoyer céréales");
-define("Q25_8_NOCROP","Non vous avez assez céréales!");
+define('Q25_8', 'Tâche 8 : Armée immense !');
+define('Q25_8_DESC', 'Maintenant j\'ai une tâche très spéciale pour vous. J\'ai faim. Donnez-moi 200 céréales !<br><br>En échange, j\'essaierai d\'organiser une immense armée pour protéger votre village.');
+define('Q25_8_ORDER', 'Ordre :</p>Envoyez 200 céréales au surveillant.');
+define('Q25_8_BUTN', 'Envoyer les céréales');
+define('Q25_8_NOCROP', 'Pas assez de céréales !');
 
-define("Q25_9","Tâche 9: Uno ognuno!");
-define("Q25_9_DESC","dans le " . SERVER_NAME . " c'è toujours qualcosa da faire! Mentre aspetti il ​​votre nouveau armée,<br \/><br \/>estendere une bûcheron aggiuntiva, une cava di argile, une miniera di fer e un terreno coltivato pour niveau 1");
-define("Q25_9_ORDER","Ordre:<\/p>améliorer un'altra case di chaque ressource al niveau 1.");
-define("Q25_9_RESP","Très bien, grand sviluppo de la production di ressources.");
+define('Q25_9', 'Tâche 9 : Un de chaque !');
+define('Q25_9_DESC', 'Dans '.SERVER_NAME.', il y a toujours quelque chose à faire ! Pendant que vous attendez votre nouvelle armée,<br><br>améliorez un bûcheron, une carrière d\'argile, une mine de fer et un champ de céréales supplémentaires au niveau 1.');
+define('Q25_9_ORDER', 'Ordre :</p>Améliorez une autre case de chaque ressource au niveau 1.');
+define('Q25_9_RESP', 'Très bien, beau développement de la production de ressources.');
 
-define("Q25_10","Tâche 10: Prossimamente!");
-define("Q25_10_DESC","maintenant c'è temps pour une petite pausa finché non arriva il gigantesco armée que ti ho mandato.<br \/><br \/>jusqu'à ad alors vous pouvez esplorare la carte o estendere alcune cases ressource.");
-define("Q25_10_ORDER","Ordre:<\/p>Aspetta que arrivi l'armée du Sorvegliante");
-define("Q25_10_RESP","maintenant un enorme armée è arrivato pour proteggere il votre village");
-define("Q25_10_REWARD","Il votre récompense:<\/p>2 jours in plus in Travian");
+define('Q25_10', 'Tâche 10 : Bientôt !');
+define('Q25_10_DESC', 'Vous pouvez prendre une petite pause jusqu\'à ce que l\'armée gigantesque que je vous ai envoyée arrive.<br><br>Jusque-là, vous pouvez explorer la carte ou améliorer quelques cases de ressources.');
+define('Q25_10_ORDER', 'Ordre :</p>Attendez l\'arrivée de l\'armée du surveillant.');
+define('Q25_10_RESP', 'Maintenant une immense armée du surveillant est arrivée pour protéger votre village.');
+define('Q25_10_REWARD', 'Votre récompense :</p>2 jours de plus dans Travian');
 
-define("Q25_11","Tâche 11: rapports");
-define("Q25_11_DESC","chaque volta que succede qualcosa di importante al votre account riceverai un rapport.<br \/><br \/>vous pouvez vederli facendo clic sulla metà sinistra du 5° pulsante (da sinistra a destra). Leggi il report e retourner ici.");
-define("Q25_11_ORDER","Ordre:<\/p>Leggi il votre ultimo rapport.");
-define("Q25_11_RESP","L'vous avez ricevuto? très buona. Ecco la votre ricompensa.");
+define('Q25_11', 'Tâche 11 : Rapports');
+define('Q25_11_DESC', 'Chaque fois qu\'un événement important se produit sur votre compte, vous recevez un rapport.<br><br>Vous pouvez les consulter en cliquant sur la moitié gauche du 5e bouton (de gauche à droite). Lisez le rapport et revenez ici.');
+define('Q25_11_ORDER', 'Ordre :</p>Lisez votre dernier rapport.');
+define('Q25_11_RESP', 'Vous l\'avez reçu ? Très bien. Voici votre récompense.');
 
-define("Q25_12","Tâche 12: tous  pour 1.");
-define("Q25_12_DESC","Nous devrions maintenant augmenter un peu votre production de ressources.");
-define("Q25_12_ORDER","Ordre:<\/p>améliorer toutes le cases ressource al niveau 1.");
-define("Q25_12_RESP","Très bien, la votre production di ressources prospera.<br \/><br \/>bientôt potremo commencer avec la construction di bâtiments dans le village.");
+define('Q25_12', 'Tâche 12 : Tout à 1.');
+define('Q25_12_DESC', 'Nous devrions maintenant augmenter un peu votre production de ressources.');
+define('Q25_12_ORDER', 'Ordre :</p>Améliorez toutes les cases de ressources au niveau 1.');
+define('Q25_12_RESP', 'Très bien, votre production de ressources prospère.<br><br>Bientôt nous pourrons commencer la construction de bâtiments dans le village.');
 
-define("Q25_13","Tâche 13: Colomba de la pace");
-define("Q25_13_DESC","Pendant les premiers jours après votre inscription, vous êtes protégé contre les attaques des autres joueurs. Vous pouvez voir combien de temps dure cette protection en ajoutant le code <b>[#0]<\/b> al votre profilo.");
-define("Q25_13_ORDER","Ordre:<\/p>Écrivez le code <b>[#0]<\/b> dans votre profil en l'ajoutant à l'un des deux champs de description.");
-define("Q25_13_RESP","Bravo! maintenant tous peuvent vedere a quale grand guerriero si avvicina il monde.");
+define('Q25_13', 'Tâche 13 : Colombe de la paix');
+define('Q25_13_DESC', 'Pendant les premiers jours après votre inscription, vous êtes protégé contre les attaques des autres joueurs. Vous pouvez voir combien de temps dure cette protection en ajoutant le code <b>[#0]</b> à votre profil.');
+define('Q25_13_ORDER', 'Ordre :</p>Écrivez le code <b>[#0]</b> dans votre profil en l\'ajoutant à l\'un des deux champs de description.');
+define('Q25_13_RESP', 'Bravo ! Maintenant tout le monde peut voir quel grand guerrier rejoint le monde.');
 
-define("Q25_14","Tâche 14: Cachette");
-define("Q25_14_DESC","Le moment est venu de créer une cachette. Le monde de...<b>" . SERVER_NAME. "</b> è pericoloso.<br \/><br \/>De nombreux joueurs vivent en pillant les ressources d'autres joueurs. Construisez une cachette pour dissimuler une partie de vos ressources à vos ennemis.");
-define("Q25_14_ORDER","Ordre:<\/p>construisez une cachette.");
-define("Q25_14_RESP","Bravo, maintenant è très plus difficile pour gli autres meschini joueurs saccheggiare il votre village.<br \/><br \/>Se sous attaque, i vos habitants nasconderanno le ressources dans la cachette da soli.");
+define('Q25_14', 'Tâche 14 : Cachette');
+define('Q25_14_DESC', 'Il est temps de construire une cachette. Le monde de <b>'.SERVER_NAME.'</b> est dangereux.<br><br>De nombreux joueurs vivent en pillant les ressources des autres. Construisez une cachette pour dissimuler une partie de vos ressources à vos ennemis.');
+define('Q25_14_ORDER', 'Ordre :</p>Construisez une cachette.');
+define('Q25_14_RESP', 'Bravo, il est désormais beaucoup plus difficile pour les autres joueurs de piller votre village.<br><br>En cas d\'attaque, vos habitants cacheront eux-mêmes les ressources dans la cachette.');
 
-define("Q25_15","Tâche 15: A due.");
-define("Q25_15_DESC","In <b>" . SERVER_NAME. "</b> c'è toujours qualcosa da faire! améliorer une bûcheron, une cava di argile, une miniera di fer e un terreno coltivato al niveau 2 ciascuno.");
-define("Q25_15_ORDER","Ordre:<\/p>améliorer une di ciascuna case ressource al niveau 2.");
-define("Q25_15_RESP","Très bien, votre village grandit et prospère !");
+define('Q25_15', 'Tâche 15 : À deux.');
+define('Q25_15_DESC', 'Dans <b>'.SERVER_NAME.'</b>, il y a toujours quelque chose à faire ! Améliorez un bûcheron, une carrière d\'argile, une mine de fer et un champ de céréales au niveau 2 chacun.');
+define('Q25_15_ORDER', 'Ordre :</p>Améliorez une case de chaque ressource au niveau 2.');
+define('Q25_15_RESP', 'Très bien, votre village grandit et prospère !');
 
-define("Q25_16","Tâche 16: instructions");
-define("Q25_16_DESC","Dans les instructions du jeu, vous trouverez de courts textes informatifs sur différents bâtiments et types d'unités.<br \/><br \/>Cliquez su 'instructions' a sinistra pour sapere combien bois è nécessaire pour la caserne.");
-define("Q25_16_ORDER","Ordre:<\/p>saisir combien costano le bûcherons di bois");
-define("Q25_16_BUTN","Tâche terminé");
-define("Q25_16_RESP","exactement! Le bûcherons costano 210 bois.");
+define('Q25_16', 'Tâche 16 : Instructions');
+define('Q25_16_DESC', 'Dans les instructions du jeu, vous trouverez de courts textes informatifs sur différents bâtiments et types d\'unités.<br><br>Cliquez sur « Instructions » à gauche pour découvrir combien de bois est nécessaire pour la caserne.');
+define('Q25_16_ORDER', 'Ordre :</p>Saisissez combien de bois coûte la caserne.');
+define('Q25_16_BUTN', 'Tâche terminée');
+define('Q25_16_RESP', 'Exactement ! La caserne coûte 210 bois.');
 
-define("Q25_17","Tâche 17: Bâtiment principal");
-define("Q25_17_DESC","I vos maîtres d'œuvre hanno besoin di un bâtiment principal di niveau 3 pour erigere bâtiments importanti comme il marché o le bûcherons.");
-define("Q25_17_ORDER","Ordre:<\/p>Extend your main building to level 3.");
-define("Q25_17_RESP","Bravo. Il niveau 3 dell'bâtiment principal è état terminé.<br><br>avec ce aggiornamento i vos maestri costruttori peuvent construire plus tipi di bâtiments e anche farlo plus rapidement.");
+define('Q25_17', 'Tâche 17 : Bâtiment principal');
+define('Q25_17_DESC', 'Vos maîtres d\'œuvre ont besoin d\'un bâtiment principal de niveau 3 pour ériger des bâtiments importants comme le marché ou la caserne.');
+define('Q25_17_ORDER', 'Ordre :</p>Améliorez votre bâtiment principal au niveau 3.');
+define('Q25_17_RESP', 'Bravo. Le bâtiment principal niveau 3 a été terminé.<br><br>Avec cette amélioration, vos maîtres d\'œuvre peuvent construire plus de types de bâtiments et plus rapidement.');
 
-define("Q25_18","Tâche 18: Avanzate!");
-define("Q25_18_DESC","Cerca di nouveau il votre rang dans les statistiques du joueur e goditi i vos progressi.");
-define("Q25_18_ORDER","Ordre:<\/p>Cerca il votre rang dans les statistiques e inseriscilo ici.");
-define("Q25_18_RESP","Bravo! ce è il votre rang actuelle.");
+define('Q25_18', 'Tâche 18 : Avancement !');
+define('Q25_18_DESC', 'Recherchez à nouveau votre rang dans les statistiques des joueurs et appréciez vos progrès.');
+define('Q25_18_ORDER', 'Ordre :</p>Cherchez votre rang dans les statistiques et saisissez-le ici.');
+define('Q25_18_RESP', 'Bravo ! C\'est votre rang actuel.');
 
-define("Q25_19","Tâche 19: Bravo! ce è il votre rang actuelle");
-define("Q25_19_DESC","Vous devez maintenant prendre une décision: commercia pacificamente o diventa un temuto guerriero.<br \/><br \/>Pour le marché, un grenier est nécessaire ; pour la caserne, il faut un point de rassemblement.");
-define("Q25_19_BUTN","Economia");
-define("Q25_19_BUTN1","Militare");
+define('Q25_19', 'Tâche 19 : Armes ou pain');
+define('Q25_19_DESC', 'Vous devez maintenant prendre une décision : soit commercer pacifiquement, soit devenir un guerrier redouté.<br><br>Pour le marché, un grenier est nécessaire ; pour la caserne, il faut un point de rassemblement.');
+define('Q25_19_BUTN', 'Économie');
+define('Q25_19_BUTN1', 'Militaire');
 
-define("Q25_20","Tâche 19: Economia");
-define("Q25_20_DESC","commerce & economia è stata une votre scelta. I tempi d'oro ti aspettano di sicuro!");
-define("Q25_20_ORDER","Ordre:<\/p>construisez un grenier.");
-define("Q25_20_RESP","Bravo! avec il Grenier vous pouvez immagazzinare plus céréales.");
+define('Q25_20', 'Tâche 19 : Économie');
+define('Q25_20_DESC', 'Commerce & Économie, c\'est votre choix. Des temps dorés vous attendent !');
+define('Q25_20_ORDER', 'Ordre :</p>Construisez un grenier.');
+define('Q25_20_RESP', 'Bravo ! Avec le grenier, vous pouvez stocker plus de céréales.');
 
-define("Q25_21","Tâche 20: Entrepôt");
-define("Q25_21_DESC","Non seulement il céréales deve être salvato. Anche altre ressources peuvent andare sprecate se non sont immagazzinate correttamente. construisez un entrepôt!");
-define("Q25_21_ORDER","Ordre:<\/p>construisez entrepôt.");
-define("Q25_21_RESP",";Bravo, il votre entrepôt è completo...&rdquo;<\/i><br \/>maintenant vous avez soddisfatto tous i prerequisiti richiesti pour construire un Marketplace.");
+define('Q25_21', 'Tâche 20 : Entrepôt');
+define('Q25_21_DESC', 'Pas seulement les céréales doivent être sauvegardées. Les autres ressources peuvent aussi être perdues si elles ne sont pas stockées correctement. Construisez un entrepôt !');
+define('Q25_21_ORDER', 'Ordre :</p>Construisez un entrepôt.');
+define('Q25_21_RESP', '«Bravo, votre entrepôt est terminé...»<br>Maintenant vous avez rempli tous les prérequis pour construire un marché.');
 
-define("Q25_22","Tâche 21: Marché.");
-define("Q25_22_DESC",";construisez un marché in modo da poter commercer avec i vos compagni joueurs.");
-define("Q25_22_ORDER","Ordre:<\/p>pour favore, construisez un marché.");
-define("Q25_22_RESP","Il marché è état terminé. maintenant vous pouvez faire le vos offres e accettare offres estere! quand crei le vos offres, dovresti pensare di offrire ciò di cui gli autres joueurs hanno plus besoin pour ottenere plus profitti.");
+define('Q25_22', 'Tâche 21 : Marché.');
+define('Q25_22_DESC', 'Construisez un marché afin de pouvoir commercer avec vos compagnons joueurs.');
+define('Q25_22_ORDER', 'Ordre :</p>Veuillez construire un marché.');
+define('Q25_22_RESP', 'Le marché a été terminé. Vous pouvez désormais faire vos propres offres et accepter celles des autres ! En créant vos offres, pensez à proposer ce dont les autres joueurs ont le plus besoin pour obtenir de meilleurs profits.');
 
-define("Q25_23","Tâche 19: Militare");
-define("Q25_23_DESC","Decisione coraggiosa. pour poter inviare troupes è nécessaire un punto di raccolta.<br \/><br \/>Il punto di raccolta deve être costruito su un cantiere specifico. Il ");
-define("Q25_23_DESC1"," cantiere.");
-define("Q25_23_DESC2"," si trova sur le lato destro dell'bâtiment principal, leggermente al di sous di esso. Il cantiere stesso è curvo.");
-define("Q25_23_ORDER","Ordre:<\/p>construisez un punto di raccolta.");
-define("Q25_23_RESP","Il votre punto di raccolta è état eretto! une buona mossa verso il dominio du monde!");
+define('Q25_23', 'Tâche 19 : Militaire');
+define('Q25_23_DESC', 'Une décision courageuse. Pour pouvoir envoyer des troupes, un point de rassemblement est nécessaire.<br><br>Le point de rassemblement doit être construit sur un emplacement spécifique. L\'emplacement ');
+define('Q25_23_DESC1', ' du chantier.');
+define('Q25_23_DESC2', ' se trouve à droite du bâtiment principal, légèrement en dessous. Le chantier lui-même est de forme courbée.');
+define('Q25_23_ORDER', 'Ordre :</p>Construisez un point de rassemblement.');
+define('Q25_23_RESP', 'Votre point de rassemblement a été érigé ! Un bon pas vers la domination mondiale !');
 
-define("Q25_24","Tâche 20: Caserne");
-define("Q25_24_DESC","maintenant vous avez un bâtiment principal di niveau 3 e un punto di raccolta. Ciò significa que tous i prerequisiti pour la construction di casernes sont stati soddisfatti.<br><br>vous pouvez usare la caserne pour addestrare le troupes al combattimento.");
-define("Q25_24_ORDER","Ordre:<\/p>construisez casernes.");
-define("Q25_24_RESP","Well done... I migliori istruttori di tout il paese si sont riuniti pour addestrare i vos uomini\u2019s abilità di combattimento al top de la forma.");
+define('Q25_24', 'Tâche 20 : Caserne');
+define('Q25_24_DESC', 'Maintenant vous avez un bâtiment principal niveau 3 et un point de rassemblement. Tous les prérequis pour construire la caserne sont remplis.<br><br>Vous pouvez utiliser la caserne pour entraîner des troupes au combat.');
+define('Q25_24_ORDER', 'Ordre :</p>Construisez une caserne.');
+define('Q25_24_RESP', 'Bravo... Les meilleurs instructeurs de tout le pays se sont réunis pour entraîner vos hommes au combat à leur meilleur niveau.');
 
-define("Q25_25","Tâche 21: Treno.");
-define("Q25_25_DESC","maintenant que vous avez la caserne vous pouvez commencer ad addestrare le troupes. Allena due ");
-define("Q25_25_ORDER","Si prega di allenarsi 2 ");
-define("Q25_25_RESP","Le basi pour il votre glorioso armée sont state gettate.<br \/><br \/>avant di mandare il votre armée a saccheggiare dovresti controllare avec il");
-define("Q25_25_RESP1","Simulatore di combattimento");
-define("Q25_25_RESP2","pour vedere quante troupes vous avez besoin pour combattere avec successo un avversario senza pertes.");
+define('Q25_25', 'Tâche 21 : Entraînement.');
+define('Q25_25_DESC', 'Maintenant que vous avez la caserne, vous pouvez commencer à entraîner des troupes. Entraînez-en deux ');
+define('Q25_25_ORDER', 'Veuillez en entraîner 2 ');
+define('Q25_25_RESP', 'Les bases de votre glorieuse armée sont posées.<br><br>Avant d\'envoyer votre armée piller, vous devriez vérifier avec le ');
+define('Q25_25_RESP1', 'Simulateur de combat');
+define('Q25_25_RESP2', 'pour voir combien de troupes vous avez besoin pour battre un adversaire sans pertes.');
 
-define("Q25_26","Tâche 22: tout pour 2.");
-define("Q25_26_DESC","maintenant è di nouveau il momento di estendere le pietre miliari de la potenza e de la ricchezza! cette volta il niveau 1 non è assez... ci vorrà un po' ma alla fin ne varrà la pena. améliorer toutes le vos cases ressource al niveau 2!");
-define("Q25_26_ORDER","Ordre:<\/p>améliorer toutes le cases ressource al niveau 2.");
-define("Q25_26_RESP","Félicitations ! Votre village grandit et prospère...");
+define('Q25_26', 'Tâche 22 : Tout au niveau 2.');
+define('Q25_26_DESC', 'Il est temps d\'étendre à nouveau les fondements de la puissance et de la richesse ! Cette fois le niveau 1 ne suffit pas... cela prendra un peu de temps mais au final ça en vaudra la peine. Améliorez toutes vos cases de ressources au niveau 2 !');
+define('Q25_26_ORDER', 'Ordre :</p>Améliorez toutes les cases de ressources au niveau 2.');
+define('Q25_26_RESP', 'Félicitations ! Votre village grandit et prospère...');
 
-define("Q25_27","Tâche 23: Amici.");
-define("Q25_27_DESC","comme joueur singolo è difficile competere avec gli attaccanti. Va a votre vantaggio se piaci ai vos vicini.<br \/><br \/>È encore meglio se giochi ensemble agli amici. Lo sapevi que vous pouvez guadagnare <img src='img/x.gif' class='gold' alt='Gold' title='Gold'> invitando amici?");
-define("Q25_27_ORDER","Ordre:<\/p>combien <img src='img/x.gif' class='gold' alt='Gold' title='Gold'> guadagni pour aver invitato un amico?");
-define("Q25_27_RESP","Corretto! Ottieni 50 <img src='img/x.gif' class='gold' alt='Gold' title='Gold'> se il votre amico invitato ha 2 villages.");
+define('Q25_27', 'Tâche 23 : Amis.');
+define('Q25_27_DESC', 'En tant que joueur solitaire, il est difficile de rivaliser avec les attaquants. C\'est un avantage d\'être apprécié de vos voisins.<br><br>C\'est encore mieux si vous jouez avec des amis. Saviez-vous que vous pouvez gagner '.GOLD_IMG.' en invitant des amis ?');
+define('Q25_27_ORDER', 'Ordre :</p>Combien d\''.GOLD_IMG.' gagnez-vous en invitant un ami ?');
+define('Q25_27_RESP', 'Correct ! Vous obtenez 50 '.GOLD_IMG.' si votre ami invité possède 2 villages.');
 
-define("Q25_28","Tâche 24: construisez Ambassade.");
-define("Q25_28_DESC","Il monde di Travian è pericoloso. vous avez déjà costruito une cachette pour proteggerti dagli aggressori.<br \/><br \/>une buona alliance ti darà une protezione encore migliore.");
-define("Q25_28_ORDER","Ordre:<\/p>pour accettare inviti dalle alliances, construisez un'ambassade.");
-define("Q25_28_RESP","Oui! vous pouvez attendere l'invito da un'alliance o crearne uno votre se l'ambassade ha un niveau 3");
+define('Q25_28', 'Tâche 24 : Construire une ambassade.');
+define('Q25_28_DESC', 'Le monde de Travian est dangereux. Vous avez déjà construit une cachette pour vous protéger des attaquants.<br><br>Une bonne alliance vous donnera une protection encore meilleure.');
+define('Q25_28_ORDER', 'Ordre :</p>Pour accepter les invitations d\'alliances, construisez une ambassade.');
+define('Q25_28_RESP', 'Oui ! Vous pouvez attendre une invitation d\'une alliance ou créer la vôtre si l\'ambassade atteint le niveau 3.');
 
-define("Q25_29","Tâche 25: Alliance.");
-define("Q25_29_DESC","Il lavoro di squadra è importante in Travian. I joueurs que lavorano ensemble si organizzano in alliances. Ricevi un invito da un'alliance dans la votre regione e unisciti a cette alliance. In alternativa, vous pouvez fonder la votre alliance. pour faire ciò, vous avez besoin di un'ambassade di niveau 3.");
-define("Q25_29_ORDER","Ordre:<\/p>Unisciti a un'alliance o fonda la votre alliance.");
-define("Q25_29_RESP","Bravo! maintenant sei in un sindacato chiamato");
-define("Q25_29_RESP1",", e tu sei un membro de la leurs alliance.<br>Lavorando ensemble progredirete tous plus rapidement...");
+define('Q25_29', 'Tâche 25 : Alliance.');
+define('Q25_29_DESC', 'Le travail d\'équipe est important dans Travian. Les joueurs qui collaborent s\'organisent en alliances. Recevez une invitation d\'une alliance dans votre région et rejoignez-la. Sinon, vous pouvez fonder votre propre alliance. Pour cela, vous avez besoin d\'une ambassade de niveau 3.');
+define('Q25_29_ORDER', 'Ordre :</p>Rejoignez une alliance ou fondez la vôtre.');
+define('Q25_29_RESP', 'Bravo ! Vous voilà dans une union appelée ');
+define('Q25_29_RESP1', ', et vous êtes membre de leur alliance.<br>En collaborant, vous progresserez tous plus vite...');
 
-define("Q25_30","Tasks");
-define("Q25_30_DESC","tous tasks sont completi!");
-
+define('Q25_30', 'Tâches');
+define('Q25_30_DESC', 'Toutes les tâches sont terminées !');
 
 //======================================================//
 //================ UNITS - DO NOT EDIT! ================//
 //======================================================//
-define("U0","héros");
+define('U0', 'Héros');
 
 //ROMAN UNITS
-define("U1","légionnaire");
-define("U2","prétorien");
-define("U3","impérial");
-define("U4","Emissario a cavallo");
-define("U5","Cavalieri impériaux");
-define("U6","Cavalieri di Cesare");
-define("U7","bélier");
-define("U8","catapulte di fuoco");
-define("U9","sénateur");
-define("U10","Colonnello");
+define('U1', 'Légionnaire');
+define('U2', 'Prétorien');
+define('U3', 'Impérial');
+define('U4', 'Émissaire à cheval');
+define('U5', 'Cavalier impérial');
+define('U6', 'Cavalier de César');
+define('U7', 'Bélier');
+define('U8', 'Catapulte de feu');
+define('U9', 'Sénateur');
+define('U10', 'Colon');
 
 //TEUTON UNITS
-define("U11","Combattente");
-define("U12","Alabardiere");
-define("U13","Combattente avec ascia");
-define("U14","éclaireur");
-define("U15","paladin");
-define("U16","Cavaliere teutonico");
-define("U17","bélier");
-define("U18","catapulte");
-define("U19","Comandante");
-define("U20","colon");
+define('U11', 'Massueur');
+define('U12', 'Hallebardier');
+define('U13', 'Combattant à la hache');
+define('U14', 'Éclaireur');
+define('U15', 'Paladin');
+define('U16', 'Chevalier teutonique');
+define('U17', 'Bélier');
+define('U18', 'Catapulte');
+define('U19', 'Commandant');
+define('U20', 'Colon');
 
 //GAUL UNITS
-define("U21","Falange");
-define("U22","Combattente avec spada");
-define("U23","Ricognitore");
-define("U24","Fulmine di Teutates");
-define("U25","Cavaliere druido");
-define("U26","paladin di Haeduan");
-define("U27","bélier");
-define("U28","Trabucco");
-define("U29","Capotribù");
-define("U30","colon");
-define("U99","Trappola");
+define('U21', 'Phalange');
+define('U22', 'Combattant à l\'épée');
+define('U23', 'Éclaireur');
+define('U24', 'Foudre de Teutates');
+define('U25', 'Druide cavalier');
+define('U26', 'Haeduen');
+define('U27', 'Bélier');
+define('U28', 'Trébuchet');
+define('U29', 'Chef de tribu');
+define('U30', 'Colon');
+define('U99', 'Piège');
 
 //NATURE UNITS
-define("U31","Ratto");
-define("U32","Ragno");
-define("U33","Serpente");
-define("U34","Pipistrello");
-define("U35","Cinghiale");
-define("U36","Lupo");
-define("U37","Orso");
-define("U38","Coccodrillo");
-define("U39","Tigre");
-define("U40","Elefante");
+define('U31', 'Rat');
+define('U32', 'Araignée');
+define('U33', 'Serpent');
+define('U34', 'Chauve-souris');
+define('U35', 'Sanglier');
+define('U36', 'Loup');
+define('U37', 'Ours');
+define('U38', 'Crocodile');
+define('U39', 'Tigre');
+define('U40', 'Éléphant');
 
 //NATARS UNITS
-define("U41","Picchiere");
-define("U42","Guerriero Spinato");
-define("U43","Guardia");
-define("U44","Uccelli rapaci");
-define("U45","Cavaliere Axerider");
-define("U46","Cavaliere Natarian");
-define("U47","Elefante da guerra");
-define("U48","Ballista");
-define("U49","Imperatore Natarian");
-define("U50","colon Settler");
+define('U41', 'Piquier');
+define('U42', 'Guerrier épineux');
+define('U43', 'Garde');
+define('U44', 'Oiseaux de proie');
+define('U45', 'Cavalier à la hache');
+define('U46', 'Chevalier natarian');
+define('U47', 'Éléphant de guerre');
+define('U48', 'Baliste');
+define('U49', 'Empereur natarian');
+define('U50', 'Colon natarian');
 
 //MONSTER UNITS
-define("U51","Mostro Peon");
-define("U52","chasseur di mostri");
-define("U53","Mostro Guerriero");
-define("U54","Fantasma");
-define("U55","Destriero mostruoso");
-define("U56","Destriero da guerra mostruoso");
-define("U57","bélier mostro");
-define("U58","catapulte mostro");
-define("U59","Capo des mostri");
-define("U60","Mostro colon");
-
-// RESOURCES
-define("R1","Bois");
-define("R2","Argile");
-define("R3","Fer");
-define("R4","Céréales");
+define('U51', 'Monstre péon');
+define('U52', 'Chasseur de monstres');
+define('U53', 'Monstre guerrier');
+define('U54', 'Fantôme');
+define('U55', 'Destrier monstrueux');
+define('U56', 'Destrier de guerre monstrueux');
+define('U57', 'Bélier monstre');
+define('U58', 'Catapulte monstre');
+define('U59', 'Chef des monstres');
+define('U60', 'Monstre colon');
 
 //INDEX.php
-define("LOGIN","Login");
-define("PLAYERS","Joueurs");
-define("MODERATOR","Moderatori");
-define("ACTIVE","actifs");
-define("en ligne","en ligne");
-define("TUTORIAL","Tutorial");
-define("PLAYER_STATISTICS","statistiques des joueurs");
-define("TOTAL_PLAYERS","".PLAYERS." in total");
-define("ACTIVE_PLAYERS","Joueurs actifs");
-define("ONLINE_PLAYERS","".PLAYERS." en ligne");
-define("MP_STRATEGY_GAME","".SERVER_NAME." - il jeu di strategia multiplayer");
-define("WHAT_IS","".SERVER_NAME." è uno des giochi pour navigateur plus popolari al monde. comme joueur in ".SERVER_NAME.", costruirai il votre empire, recluterai un puissant armée e combatterai avec i vos alleati pour l'egemonia dans le monde du jeu.");
-define("REGISTER_FOR_FREE","Inscrivez-vous ici gratuitement!");
-define("LATEST_GAME_WORLD","Ultimo monde di jeu");
-define("LATEST_GAME_WORLD2","Inscrivez-vous all'ultimo<br/>monde di jeu e divertiti<br/>i vantaggi di<br/>être uno des<br/>primi joueurs.");
-define("PLAY_NOW","Jouez à ".SERVER_NAME." maintenant");
-define("LEARN_MORE","Scopri di plus <br/>di ".SERVER_NAME."!");
-define("LEARN_MORE2","maintenant avec une rivoluzionario<br>sistema server, grafica<br> completamente nouvelle<br> ce clone è The Shiz!");
-define("COMUNITY","Community");
-define("BECOME_COMUNITY","Entra a far parte de la nostra community maintenant!");
-define("BECOME_COMUNITY2","Entra a far parte de la<br>plus grand<br>comunità dans le<br>monde.");
-define("NEWS","Novità");
-define("SCREENSHOTS","Screenshots");
-define("FAQ","FAQ");
-define("SPIELREGELN","règles");
-define("AGB","Termes et conditions");
-define("LEARN1","améliorer i vos campi e le vos miniere pour augmenter la votre production di ressources. Avrai besoin di ressources pour construire bâtiments e addestrare soldati.");
-define("LEARN2","construisez ed espandi gli bâtiments dans le votre village. Gli bâtiments migliorano la votre infrastruttura complessiva, aumentano la votre production di ressources e ti consentono di ricercare, addestrare e potenziare le vos troupes.");
-define("LEARN3","Visualizza e interagisci avec l'ambiente circostante. vous pouvez faire nuove amicizie o nuovi ennemis, utilizzare le oasis vicine e osservare comme il votre empire cresce e diventa plus forte.");
-define("LEARN4","Segui i vos miglioramenti e successi e confrontati avec gli autres joueurs. Guarda le prime 10 classifiche e combatti pour vincere une medaglia settimanale.");
-define("LEARN5","Ricevi rapports dettagliati sulle vos avventure, scambi e batailles. Non dimenticare di controllare i nuovissimi rapports sugli avvenimenti que si svolgono nei vos dintorni.");
-define("LEARN6","Scambia informazioni e conduci diplomazia avec autres joueurs. Ricorda toujours que la comunicazione è la chiave pour conquistare nuovi amici e risolvere vecchi conflitti.");
-define("LOGIN_TO","Accedi a ". SERVER_NAME);
-define("REGIN_TO","Inscrivez-vous ". SERVER_NAME);
-define("P_ONLINE","Joueurs en ligne: ");
-define("P_TOTAL","Joueurs in total: ");
-define("CHOOSE","choisir un server.");
-define("STARTED"," Il server è état avviato ". round((time()-COMMENCE)/86400) ." jours fa.");
+define('LOGIN', 'Connexion');
+define('PLAYERS', 'Joueurs');
+define('MODERATOR', 'Modérateur');
+define('ACTIVE', 'Actif');
+define('ONLINE', 'En ligne');
+define('TUTORIAL', 'Tutoriel');
+if(!defined('FAQ')) define('FAQ', 'FAQ');
+if(!defined('SPIELREGELN')) define('SPIELREGELN', 'Règles du jeu');
+define('PLAYER_STATISTICS', 'Statistiques des joueurs');
+define('TOTAL_PLAYERS', PLAYERS.' au total');
+define('ACTIVE_PLAYERS', 'Joueurs actifs');
+define('ONLINE_PLAYERS', PLAYERS.' en ligne');
+define('MP_STRATEGY_GAME', SERVER_NAME.' — le jeu de stratégie multijoueur');
+define('WHAT_IS', SERVER_NAME.' est l\'un des jeux de navigateur les plus populaires au monde. En tant que joueur dans '.SERVER_NAME.', vous bâtirez votre propre empire, recruterez une puissante armée et combattrez avec vos alliés pour la suprématie dans le monde du jeu.');
+define('REGISTER_FOR_FREE', 'Inscrivez-vous gratuitement ici !');
+define('LATEST_GAME_WORLD', 'Dernier monde de jeu');
+define('LATEST_GAME_WORLD2', 'Inscrivez-vous au dernier<br>monde de jeu et profitez<br>des avantages d\'être<br>parmi les premiers<br>joueurs.');
+define('PLAY_NOW', 'Jouer à '.SERVER_NAME.' maintenant');
+define('LEARN_MORE', 'En savoir plus <br>sur '.SERVER_NAME.' !');
+define('LEARN_MORE2', 'Maintenant avec un système<br>de serveur révolutionnaire,<br>de nouveaux graphismes<br>— ce clone est extraordinaire !');
+define('COMUNITY', 'Communauté');
+define('BECOME_COMUNITY', 'Rejoignez notre communauté maintenant !');
+define('BECOME_COMUNITY2', 'Faites partie de l\'une<br>des plus grandes<br>communautés de jeu<br>au monde.');
+define('NEWS', 'Actualités');
+define('SCREENSHOTS', 'Captures d\'écran');
+if(!defined('FAQ')) define('FAQ', 'FAQ');
+if(!defined('SPIELREGELN')) define('SPIELREGELN', 'Règles');
+define('AGB', 'Conditions générales');
+define('LEARN1', 'Améliorez vos champs et vos mines pour augmenter votre production de ressources. Vous aurez besoin de ressources pour construire des bâtiments et entraîner des soldats.');
+define('LEARN2', 'Construisez et étendez les bâtiments de votre village. Les bâtiments améliorent votre infrastructure globale, augmentent votre production de ressources et vous permettent de rechercher, entraîner et améliorer vos troupes.');
+define('LEARN3', 'Observez et interagissez avec votre environnement. Vous pouvez vous faire de nouveaux amis ou de nouveaux ennemis, exploiter les oasis proches et observer votre empire grandir et devenir plus puissant.');
+define('LEARN4', 'Suivez vos progrès et vos succès et comparez-vous aux autres joueurs. Consultez les classements Top 10 et combattez pour remporter une médaille hebdomadaire.');
+define('LEARN5', 'Recevez des rapports détaillés sur vos aventures, échanges et batailles. N\'oubliez pas de consulter les nouveaux rapports sur les événements qui se déroulent dans vos environs.');
+define('LEARN6', 'Échangez des informations et menez votre diplomatie avec les autres joueurs. Souvenez-vous toujours que la communication est la clé pour gagner de nouveaux amis et résoudre d\'anciens conflits.');
+define('LOGIN_TO', 'Se connecter à '.SERVER_NAME);
+define('REGIN_TO', 'S\'inscrire à '.SERVER_NAME);
+define('P_ONLINE', 'Joueurs en ligne : ');
+define('P_TOTAL', 'Joueurs au total : ');
+define('CHOOSE', 'Veuillez choisir un serveur.');
+define('STARTED', ' Le serveur a démarré il y a '. round((time() - COMMENCE) / 86400) .' jours.');
 
 //ANMELDEN.php
-define("NICKNAME","Nickname");
-define("E-mail","E-mail");
-define("Mot de passe","Mot de passe");
-define("ROMANS","Romani");
-define("TEUTONS","Teutoni");
-define("GAULS","Galli");
-define("NW","nord ouest");
-define("NE","nord est");
-define("SW","sud ouest");
-define("SE","sud est");
-define("RANDOM","random");
-define("ACCEPT_RULES"," Accetto le règles du jeu e i termini e le condizioni generali.");
-define("ONE_PER_SERVER","chaque joueur peut possedere UN seulement account pour server.");
-define("BEFORE_REGISTER","Avant de créer un compte, vous devriez lire les <a href='../anleitung.php' target='_blank'>instructions</a> Depuis Travian RO1 : pour voir les avantages et les inconvénients spécifiques des trois tribus.");
-define("BUILDING_UPGRADING","construction:");
-define("HOURS","heures");
+define('NICKNAME', 'Pseudonyme');
+define('EMAIL', 'E-mail');
+define('PASSWORD', 'Mot de passe');
+define('NW', 'Nord-Ouest');
+define('NE', 'Nord-Est');
+define('SW', 'Sud-Ouest');
+define('SE', 'Sud-Est');
+define('RANDOM', 'Aléatoire');
+define('ACCEPT_RULES', ' J\'accepte les règles du jeu et les conditions générales.');
+define('ONE_PER_SERVER', 'Chaque joueur ne peut posséder qu\'UN seul compte par serveur.');
+define('BEFORE_REGISTER', 'Avant de créer un compte, vous devriez lire les <a href="/anleitung.php" target="_blank">instructions</a> de Travian RO1 pour voir les avantages et inconvénients spécifiques des trois tribus.');
+define('BUILDING_UPGRADING', 'Construction :');
+define('HOURS', 'heures');
 
 
 //ATTACKS ETC.
-define("TROOP_MOVEMENTS","Mouvements de troupes :");
-define("ARRIVING_REINF_TROOPS","Renforts en approche");
-define("ARRIVING_ATTACKING_TROOPS","Troupes attaquantes en approche");
-define("ARRIVING_REINF_TROOPS_SHORT","Reinf.");
-define("OWN_ATTACKING_TROOPS","Vos troupes d'attaque");
-define("ATTACK","Attaque");
-define("OWN_REINFORCING_TROOPS","Vos troupes di renfort");
-define("TROOPS_DORF","troupes:");
-define("NEWVILLAGE","Nouveau village");
-define("FOUNDNEWVILLAGE","Fondation d'un nouveau village");
-define("UNDERATTACK","Le village est attaqué");
-define("OASISATTACK","L'oasis est attaquée");
-define("OASISATTACKS","oasis Att.");
-define("RETURNFROM","retour da");
-define("REINFORCEMENTFOR","Renfort a");
-define("ATTACK_ON","Attaque a");
-define("RAID_ON","Pillage a");
-define("SCOUTING","Scouting");
-define("PRISONERS","prisonniers");
-define("PRISONERSIN","prisonniers a");
-define("PRISONERSFROM","prisonniers da");
-define("TROOPS","troupes");
-define("TROOPSFROM","troupes da");
-define("BOUNTY","Taglia");
-define("ARRIVAL","arrivée");
-define("CATAPULT_TARGET","cible catapulte");
-define("INCOMING_TROOPS","Troupes en approche");
-define("TROOPS_ON_THEIR_WAY","Troupes en approche");
-define("OWN_TROOPS","Vos troupes");
-define("ON","su");
-define("AT","a");
-define("UPKEEP","entretien");
-define("SEND_BACK","envoyer indietro");
-define("TROOPS_IN_THE_VILLAGE","Troupes dans le village");
-define("TROOPS_IN_OTHER_VILLAGE","Troupes dans un autre village");
-define("TROOPS_IN_OASIS","Troupes dans l'oasis");
-define("KILL","Uccisione");
-define("FROM","Da");
-define("SEND_TROOPS","Envoyer des troupes");
-define("TASKMASTER","Tâche");
-define("VILLAGE_OF_THE_ELDERS_TROOPS","village des troupes degli anziani");
+define('TROOP_MOVEMENTS', 'Mouvements de troupes :');
+define('ARRIVING_REINF_TROOPS', 'Renforts en approche');
+define('ARRIVING_ATTACKING_TROOPS', 'Troupes attaquantes en approche');
+define('ARRIVING_REINF_TROOPS_SHORT', 'Renf.');
+define('OWN_ATTACKING_TROOPS', 'Vos troupes d\'attaque');
+define('ATTACK', 'Attaque');
+define('OWN_REINFORCING_TROOPS', 'Vos troupes de renfort');
+define('NEWVILLAGE', 'Nouveau village.');
+define('FOUNDNEWVILLAGE', 'Fondation d\'un nouveau village');
+define('UNDERATTACK', 'Le village est attaqué');
+define('OASISATTACK', 'L\'oasis est attaquée');
+define('OASISATTACKS', 'Att. oasis');
+define('RETURNFROM', 'Retour de');
+define('REINFORCEMENTFOR', 'Renfort vers');
+define('ATTACK_ON', 'Attaque sur');
+define('RAID_ON', 'Pillage sur');
+define('SCOUTING', 'Espionnage');
+define('PRISONERS', 'Prisonniers');
+define('PRISONERSIN', 'Prisonniers à');
+define('PRISONERSFROM', 'Prisonniers de');
+define('TROOPS', 'Troupes');
+define('BOUNTY', 'Butin');
+define('ARRIVAL', 'Arrivée');
+define('CATAPULT_TARGET', 'Cible(s) de catapulte');
+define('INCOMING_TROOPS', 'Troupes en approche');
+define('TROOPS_ON_THEIR_WAY', 'Troupes en chemin');
+define('OWN_TROOPS', 'Vos troupes');
+define('ON', 'sur');
+define('AT', 'à');
+define('UPKEEP', 'Entretien');
+define('SEND_BACK', 'Renvoyer');
+define('TROOPS_IN_THE_VILLAGE', 'Troupes dans le village');
+define('TROOPS_IN_OTHER_VILLAGE', 'Troupes dans un autre village');
+define('TROOPS_IN_OASIS', 'Troupes dans l\'oasis');
+define('KILL', 'Tuer');
+define('FROM', 'De');
+define('SEND_TROOPS', 'Envoyer des troupes');
+define('TASKMASTER', 'Surveillant');
+define('TO_THE_TASK', 'Vers la tâche');
+define('VILLAGE_OF_THE_ELDERS', 'Village des anciens');
+define('VILLAGE_OF_THE_ELDERS_TROOPS', 'Troupes du village des anciens');
 
 //SEND TROOP
-define("REINFORCE","Renfort");
-define("NORMALATTACK","Attaque normale");
-define("RAID","Pillage");
-define("OR","o");
-define("SENDTROOP","Envoyer des troupes");
-define("TROOP","troupes");
-define("NOTROOP","aucune troupe");
+define('REINFORCE', 'Renfort');
+define('NORMALATTACK', 'Attaque normale');
+define('RAID', 'Pillage');
+define('OR', 'ou');
+define('SENDTROOP', 'Envoyer des troupes');
+define('NOTROOP', 'Aucune troupe');
 
 //map
-define("DETAIL","détails");
-define("ABANDVALLEY","Valle abbandonata");
-define("OCCUPIED","occupé");
-define("UNOCCUPIED","Non occupé");
-define("UNOCCUOASIS","oasis inoccupée");
-define("OCCUOASIS","oasis occupée");
-define("THERENOINFO","Non ci sont<br>informazioni disponibles.");
-define("LANDDIST","Distribuzione de la terra");
-define("TRIBE","tribu");
-define("ALLIANCE","Alliance");
-define("POP","Population");
-define("REPORT","Rapport");
-define("OPTION","options");
-define("CENTREMAP","Carte centrale");
-define("FNEWVILLAGE","Trovato nouveau village");
-define("CULTUREPOINT","points di culture");
-define("BUILDRALLY","construire un punto di raccolta");
-define("SETTLERSAVAIL","colons disponibles");
-define("BEGINPRO","protezione des principianti");
-define("SENDMERC","envoyer marchand(i)");
-define("BAN","Il joueur è banni");
-define("BUILDMARKET","construisez il marché");
-define("PERHOUR","all'maintenant");
-define("bonus","bonus");
-define("MAP","Carte");
-define("CROPFINDER","Trovato céréales");
-define("NORTH","nord");
-define("EAST","est");
-define("SOUTH","sud");
-define("WEST","ouest");
+define('DETAIL', 'Détails');
+define('ABANDVALLEY', 'Vallée abandonnée');
+define('OCCUPIED', 'Occupé');
+define('UNOCCUPIED', 'Inoccupé');
+define('UNOCCUOASIS', 'Oasis inoccupée');
+define('OCCUOASIS', 'Oasis occupée');
+define('THERENOINFO', 'Aucune information<br>disponible.');
+define('LANDDIST', 'Distribution des terres');
+define('TRIBE', 'Tribu');
+define('ALLIANCE', 'Alliance');
+define('POP', 'Population');
+define('REPORT', 'Rapport');
+define('OPTION', 'Options');
+define('CENTREMAP', 'Centrer la carte');
+define('FNEWVILLAGE', 'Fonder un nouveau village');
+define('CULTUREPOINT', 'Points de culture');
+define('BUILDRALLY', 'Construire un point de rassemblement');
+define('SETTLERSAVAIL', 'Colons disponibles');
+define('BEGINPRO', 'Protection des débutants');
+define('SENDMERC', 'Envoyer marchand(s)');
+define('BAN', 'Joueur banni');
+define('BUILDMARKET', 'Construire le marché');
+define('PERHOUR', 'par heure');
+define('BONUS', 'Bonus');
+define('MAP', 'Carte');
+define('LARGE_MAP', 'Grande carte');
+define('LARGE_MAP_DESC', 'Afficher la grande carte dans une fenêtre séparée');
+define('CROPFINDER', 'Recherche de céréales');
+define('NORTH', 'Nord');
+define('EAST', 'Est');
+define('SOUTH', 'Sud');
+define('WEST', 'Ouest');
+define('CLOSE_MAP', 'Fermer la carte');
+define('AND', 'et');
 
 //other
-define("VILLAGE","Village");
-define("OASIS","oasis");
-define("NO_OASIS", "Non sei proprietario di aucune oasis.");
-define("NO_VILLAGES", "Non ci sont villages.");
-define("PLAYER","Joueurs");
+define('VILLAGE', 'Village');
+define('STATISTICS', 'Statistiques');
+define('OASIS', 'Oasis');
+define('NO_OASIS', 'Vous ne possédez aucune oasis.');
+define('NO_VILLAGES', 'Il n\'y a pas de villages.');
+define('PLAYER', 'Joueur');
 
 //LOGIN.php
-define("COOKIES","vous devez avere i cookie abilitati pour poter accedere. Se condividi ce computer avec altre persone, dovresti disconnetterti après chaque sessione pour la votre sicurezza.");
-define("NAME","Nom");
-define("PW_FORGOTTEN","Mot de passe oublié ?");
-define("PW_REQUEST","ensuite vous pouvez richiederne une nouvelle que verrà inviato al votre indirizzo E-mail.");
-define("PW_GENERATE","Generate nouvelle Mot de passe.");
-define("EMAIL_NOT_VERIFIED","E-mail non vérifiée!");
-define("EMAIL_FOLLOW","Segui ce link pour attivare il votre account.");
-define("VERIFY_EMAIL","Vérifier E-mail.");
-define("SERVER_STARTS_IN","Server verrà avviato in: ");
-define("START_NOW","commence maintenant");
+define('COOKIES', 'Vous devez avoir les cookies activés pour pouvoir vous connecter. Si vous partagez cet ordinateur avec d\'autres personnes, vous devriez vous déconnecter après chaque session pour votre sécurité.');
+define('NAME', 'Nom');
+define('PW_FORGOTTEN', 'Mot de passe oublié ?');
+define('PW_REQUEST', 'Vous pouvez en demander un nouveau qui sera envoyé à votre adresse e-mail.');
+define('PW_GENERATE', 'Générer un nouveau mot de passe.');
+define('EMAIL_NOT_VERIFIED', 'E-mail non vérifiée !');
+define('EMAIL_FOLLOW', 'Suivez ce lien pour activer votre compte.');
+define('VERIFY_EMAIL', 'Vérifier l\'e-mail.');
+define('SERVER_STARTS_IN', 'Le serveur démarrera dans : ');
+define('START_NOW', 'COMMENCER MAINTENANT');
 
 
 //404.php
-define("NOTHING_HERE","Niente ici!");
-define("WE_LOOKED","Abbiamo déjà cercato 404 volte ma non riusciamo a trovare nulla");
-
-//TIME RELATED
-define("CALCULATED","Calculé en");
-define("SERVER_TIME","Server time:");
+define('NOTHING_HERE', 'Rien ici !');
+define('WE_LOOKED', 'Nous avons déjà cherché 404 fois mais ne trouvons rien.');
 
 //MASSMESSAGE.php
-define("MASS","Contenuto du messaggio");
-define("MASS_SUBJECT","Oggetto:");
-define("MASS_COLOR","Colore messaggio:");
-define("MASS_REQUIRED","tous i campi richiesti");
-define("MASS_UNITS","Immagini (unités):");
-define("MASS_SHOWHIDE","afficher/masquer");
-define("MASS_READ","Leggi ce: après aver aggiunto la faccina, vous devez aggiungere sinistra o destra après il numero, altrimenti l'immagine non funzionerà");
-define("MASS_CONFIRM","Conferma");
-define("MASS_REALLY","Vuoi davvero inviare MassIGM?");
-define("MASS_ABORT","Interruzione in ce momento");
-define("MASS_SENT","Mass IGM è stata inviata");
+define('MASS', 'Contenu du message');
+define('MASS_SUBJECT', 'Sujet :');
+define('MASS_COLOR', 'Couleur du message :');
+define('MASS_REQUIRED', 'Tous les champs sont requis');
+define('MASS_UNITS', 'Images (unités) :');
+define('MASS_SHOWHIDE', 'Afficher/Masquer');
+define('MASS_READ', 'Lisez ceci : après avoir ajouté une émoticône, vous devez ajouter « left » ou « right » après le numéro, sinon l\'image ne fonctionnera pas.');
+define('MASS_CONFIRM', 'Confirmation');
+define('MASS_REALLY', 'Voulez-vous vraiment envoyer le MassIGM ?');
+define('MASS_ABORT', 'Annulation immédiate');
+define('MASS_SENT', 'Le MassIGM a été envoyé');
 
 //BUILDINGS
-define("WOODCUTTER","Bûcheron");
-define("CLAYPIT","Carrière d'argile");
-define("IRONMINE","Mine de fer");
-define("CROPLAND","Champ de céréales");
+define('WOODCUTTER', 'Bûcheron');
+define('WOODCUTTER_DESC', 'Le bûcheron abat des arbres pour produire du bois. Plus son niveau est élevé, plus la production de bois augmente.<br>En construisant une scierie, vous pouvez encore augmenter la production.');
+define('CLAYPIT', 'Carrière d\'argile');
+define('CLAYPIT_DESC', 'L\'argile est produite ici. Plus son niveau est élevé, plus la production d\'argile augmente.<br>En construisant une briqueterie, vous pouvez encore augmenter la production.');
+define('IRONMINE', 'Mine de fer');
+define('IRONMINE_DESC', 'Les mineurs y extraient la précieuse ressource du fer. Plus son niveau est élevé, plus la production de fer augmente.<br>En construisant une fonderie de fer, vous pouvez encore augmenter la production.');
+define('CROPLAND', 'Champ de céréales');
+define('CROPLAND_DESC', 'La nourriture de votre population est produite ici. Plus le niveau du champ augmente, plus la production de céréales progresse.<br>En construisant un moulin à grain et une boulangerie, vous pouvez encore augmenter la production.');
 
-define("SAWMILL","Scierie");
-define("SAWMILL_DESC","ici est lavorato il bois consegnato dai vos taglialegna. In base al son niveau, la votre scierie peut augmenter la production di bois jusqu'à al 25%.");
-define("CURRENT_WOOD_BONUS","bonus bois actuelle:");
-define("WOOD_BONUS_LEVEL","bonus bois a niveau");
-define("MAX_LEVEL","Immobile déjà a niveau maximum");
-define("PERCENT","pour cento");
+define('SAWMILL', 'Scierie');
+define('SAWMILL_DESC', 'Le bois coupé par vos bûcherons est traité ici. La scierie augmente la production de bois du village. Au niveau 1, elle augmente la production de bois de 5 %, et à chaque amélioration, la production augmente de 5 % supplémentaires, pour un total de 25 % après 5 niveaux.<br>Le bonus de la scierie et de tous les bâtiments procurant des bonus de ressources ne s\'applique qu\'au village dans lequel le bâtiment est construit.<br>Notez que le bonus de la scierie ne s\'applique pas à d\'autres bonus comme le revenu des oasis ou le bonus PLUS de 10 %.<br>Il existe aussi des villages composés de 3 ou 5 champs de bois. Plus il y a de champs dans un village, plus les niveaux de scierie peuvent être efficaces.');
+define('CURRENT_WOOD_BONUS', 'Bonus bois actuel :');
+define('WOOD_BONUS_LEVEL', 'Bonus bois au niveau');
+define('MAX_LEVEL', 'Bâtiment déjà au niveau maximum');
+define('PERCENT', 'Pour cent');
 
-define("BRICKYARD","Mattone");
-define("CURRENT_CLAY_BONUS","bonus in argile actuelle:");
-define("CLAY_BONUS_LEVEL","bonus di argile a niveau");
-define("BRICKYARD_DESC","ici l'argile est trasformata in mattoni. In base al son niveau, la votre fornace peut augmenter la votre production di argile jusqu'à al 25%..");
+define('BRICKYARD', 'Briqueterie');
+define('CURRENT_CLAY_BONUS', 'Bonus argile actuel :');
+define('CLAY_BONUS_LEVEL', 'Bonus argile au niveau');
+define('BRICKYARD_DESC', 'L\'argile est transformée en briques ici. La briqueterie augmente la production d\'argile du village. Au niveau 1, elle augmente la production d\'argile de 5 %, et à chaque amélioration, la production augmente de 5 % supplémentaires, pour un total de 25 % après 5 niveaux.<br>Le bonus de la briqueterie et de tous les bâtiments procurant des bonus de ressources ne s\'applique qu\'au village dans lequel le bâtiment est construit.<br>Notez que le bonus de la briqueterie ne s\'applique pas à d\'autres bonus comme le revenu des oasis ou le bonus PLUS de 10 %.<br>Il existe aussi des villages composés de 3 ou 5 champs d\'argile. Plus il y a de champs dans un village, plus les niveaux de briqueterie peuvent être efficaces.');
 
-define("IRONFOUNDRY","Fonderie");
-define("CURRENT_IRON_BONUS","Bonus de fer actuel :");
-define("IRON_BONUS_LEVEL","Bonus de fer au niveau");
-define("IRONFOUNDRY_DESC","Il fer est fuso ici. In base al son niveau, la votre fonderie di fer peut augmenter la votre production di fer jusqu'à al 25%.");
+define('IRONFOUNDRY', 'Fonderie de fer');
+define('CURRENT_IRON_BONUS', 'Bonus fer actuel :');
+define('IRON_BONUS_LEVEL', 'Bonus fer au niveau');
+define('IRONFOUNDRY_DESC', 'Le fer est fondu ici. La fonderie augmente la production de fer du village. Au niveau 1, elle augmente la production de fer de 5 %, et à chaque amélioration, la production augmente de 5 % supplémentaires, pour un total de 25 % après 5 niveaux.<br>Le bonus de la fonderie et de tous les bâtiments procurant des bonus de ressources ne s\'applique qu\'au village dans lequel le bâtiment est construit.<br>Notez que le bonus de la fonderie ne s\'applique pas à d\'autres bonus comme le revenu des oasis ou le bonus PLUS de 10 %.<br>Il existe aussi des villages composés de 3 ou 5 champs de fer. Plus il y a de champs dans un village, plus les niveaux de fonderie peuvent être efficaces.');
 
-define("GRAINMILL","Moulin");
-define("CURRENT_CROP_BONUS","bonus céréales actuelle:");
-define("CROP_BONUS_LEVEL","bonus céréales a niveau");
-define("GRAINMILL_DESC","ici il votre céréales est macinato pour produrre farina. In base al son niveau, il votre moulin pour cereali peut augmenter la production du céréales jusqu'à al 25 percento.");
+define('GRAINMILL', 'Moulin à grain');
+define('CURRENT_CROP_BONUS', 'Bonus céréales actuel :');
+define('CROP_BONUS_LEVEL', 'Bonus céréales au niveau');
+define('GRAINMILL_DESC', 'Le grain est moulu en farine ici. Le moulin à grain augmente la production de nourriture du village. Au niveau 1, il augmente la production de 5 %, et à chaque amélioration, la production augmente de 5 % supplémentaires, pour un total de 25 % après 5 niveaux.<br>Utilisé conjointement avec la boulangerie, vous pouvez augmenter la production de céréales jusqu\'à 50 %.<br>Le bonus du moulin et de tous les bâtiments procurant des bonus de ressources ne s\'applique qu\'au village dans lequel le bâtiment est construit.<br>Notez que le bonus du moulin ne s\'applique pas à d\'autres bonus comme le revenu des oasis ou le bonus PLUS de 10 %.<br>Il existe aussi des villages composés de 9 ou 15 champs de céréales. Plus il y a de champs dans un village, plus les niveaux de moulin peuvent être efficaces.');
 
-define("BAKERY","boulangerie");
-define("BAKERY_DESC","ici la farina prodotta dans le vostro moulin est utilizzata pour cuocere il pane. Inoltre avec il moulin pour cereali l'aumento de la production agricola peut arrivare jusqu'à al 50 percento.");
+define('BAKERY', 'Boulangerie');
+define('BAKERY_DESC', 'Le pain est cuit à partir de farine ici. La boulangerie augmente la production de nourriture du village. Au niveau 1, elle augmente la production de 5 %, et à chaque amélioration, la production augmente de 5 % supplémentaires, pour un total de 25 % après 5 niveaux.<br>Utilisée conjointement avec le moulin à grain, elle peut augmenter la production de céréales jusqu\'à 50 %.<br>Le bonus de la boulangerie et de tous les bâtiments procurant des bonus de ressources ne s\'applique qu\'au village dans lequel le bâtiment est construit.<br>Notez que le bonus de la boulangerie ne s\'applique pas à d\'autres bonus comme le revenu des oasis ou le bonus PLUS de 10 %.<br>Il existe aussi des villages composés de 9 ou 15 champs de céréales. Plus il y a de champs dans un village, plus les niveaux de boulangerie peuvent être efficaces.');
 
-define("WAREHOUSE","Entrepôt");
-define("CURRENT_CAPACITY","Capacité actuelle :");
-define("CAPACITY_LEVEL","capacité a niveau");
-define("RESOURCE_UNITS","Unités de ressources");
-define("WAREHOUSE_DESC","Le ressources bois, argile e fer sont immagazzinate dans le votre Entrepôt. en augmentant il son niveau aumenterai la capacité du votre Entrepôt.");
+define('WAREHOUSE', 'Entrepôt');
+define('CURRENT_CAPACITY', 'Capacité actuelle :');
+define('CAPACITY_LEVEL', 'Capacité au niveau');
+define('RESOURCE_UNITS', 'Unités de ressources');
+define('WAREHOUSE_DESC', 'Les ressources bois, argile et fer sont stockées dans l\'entrepôt. En augmentant son niveau, vous augmentez sa capacité. Peut être construit plusieurs fois, une fois le premier au niveau maximum.');
 
-define("GRANARY","Grenier");
-define("CROP_UNITS","Unités de céréales");
-define("GRANARY_DESC","Il céréales prodotto dalle vos fattorie est immagazzinato dans le Grenier. en augmentant il son niveau aumenterai la capacité du Grenier.");
+define('GRANARY', 'Grenier');
+define('CROP_UNITS', 'Unités de céréales');
+define('GRANARY_DESC', 'Les céréales produites par vos fermes sont stockées dans le grenier. En augmentant son niveau, vous augmentez sa capacité. Peut être construit plusieurs fois, une fois le premier au niveau maximum.');
 
-define("BLACKSMITH","Forge");
-define("ACTION","Azione");
-define("UPGRADE","amélioration");
-define("UPGRADE_IN_PROGRESS","amélioration in<br>corso");
-define("UPGRADE_BLACKSMITH","amélioration<br>fabbro");
-define("UPGRADES_COMMENCE_BLACKSMITH","I miglioramenti peuvent commencer quand il fabbro è terminé.");
-define("MAXIMUM_LEVEL","maximum<br>niveau");
-define("EXPAND_WAREHOUSE","Espandi<br>entrepôt");
-define("EXPAND_GRANARY","Espandi<br>grenier");
-define("ENOUGH_RESOURCES","Ressources suffisantes");
-define("CROP_NEGATIVE ","La production des colture è negativa, ensuite non raggiungerai jamais le ressources richieste");
-define("TOO_FEW_RESOURCES","Troppo poche<br>ressources");
-define("UPGRADING","amélioration");
-define("DURATION","durée");
-define("COMPLETE","terminée");
-define("BLACKSMITH_DESC","dans les fornaci du fabbro sont potenziate le armi des vos guerrieri. en augmentant il son niveau vous pouvez ordinare la fabbricazione di armi encore migliori.");
+define('BLACKSMITH', 'Forge');
+define('ACTION', 'Action');
+define('UPGRADE', 'Améliorer');
+define('UPGRADE_IN_PROGRESS', 'Amélioration en<br>cours');
+define('UPGRADE_BLACKSMITH', 'Améliorer la<br>forge');
+define('UPGRADES_COMMENCE_BLACKSMITH', 'Les améliorations pourront commencer une fois la forge terminée.');
+define('MAXIMUM_LEVEL', 'Niveau<br>maximum');
+define('EXPAND_WAREHOUSE', 'Étendre<br>l\'entrepôt');
+define('EXPAND_GRANARY', 'Étendre<br>le grenier');
+define('ENOUGH_RESOURCES', 'Ressources suffisantes');
+define('CROP_NEGATIVE ', 'La production de céréales est négative, vous n\'atteindrez jamais les ressources requises.');
+define('TOO_FEW_RESOURCES', 'Trop peu de<br>ressources');
+define('UPGRADING', 'Amélioration');
+define('DURATION', 'Durée');
+define('COMPLETE', 'Terminé');
+define('BLACKSMITH_DESC', 'Les armes de vos guerriers sont améliorées dans les fours de la forge. En augmentant son niveau, vous pouvez ordonner la fabrication d\'armes encore meilleures.');
 
-define("ARMOURY","Armurerie");
-define("UPGRADE_ARMOURY","améliorer<br>Armurerie");
-define("UPGRADES_COMMENCE_ARMOURY","Gli aggiornamenti peuvent commencer quand l'armeria è terminée.");
-define("ARMOURY_DESC","dans les fornaci dell'armeria est potenziata l'armatura des vos guerrieri. en augmentant il son niveau vous pouvez ordinare la fabbricazione di armature encore migliori.");
+define('ARMOURY', 'Armurerie');
+define('UPGRADE_ARMOURY', 'Améliorer<br>l\'armurerie');
+define('UPGRADES_COMMENCE_ARMOURY', 'Les améliorations pourront commencer une fois l\'armurerie terminée.');
+define('ARMOURY_DESC', 'L\'armure de vos guerriers est améliorée dans les fours de l\'armurerie. En augmentant son niveau, vous pouvez ordonner la fabrication d\'armures encore meilleures.');
 
-define("TOURNAMENTSQUARE","Place du Tournoi");
-define("CURRENT_SPEED","bonus vitesse actuelle:");
-define("SPEED_LEVEL","bonus niveau vitesse");
-define("TOURNAMENTSQUARE_DESC","dans la Place du Tournoi le vos troupes peuvent allenare la leurs resistenza. plus l'bâtiment est aggiornato, plus rapidement le vos troupes superano une distanza minima di ".TS_THRESHOLD."  piazze.");
+define('TOURNAMENTSQUARE', 'Place du tournoi');
+define('CURRENT_SPEED', 'Bonus de vitesse actuel :');
+define('SPEED_LEVEL', 'Bonus de vitesse au niveau');
+define('TOURNAMENTSQUARE_DESC', 'Vos troupes peuvent augmenter leur endurance à la place du tournoi. Plus le bâtiment est amélioré, plus vos troupes sont rapides au-delà d\'une distance minimale de '.TS_THRESHOLD.' cases.');
 
-define("MAINBUILDING","Bâtiment principal");
-define("CURRENT_CONSTRUCTION_TIME","Temps de construction actuel :");
-define("CONSTRUCTION_TIME_LEVEL","Temps de construction au niveau");
-define("DEMOLITION_BUILDING","Démolition du bâtiment :</h2><p>Se non vous avez plus besoin di un bâtiment, vous pouvez ordinare la démolition dell'bâtiment.</p>");
-define("DEMOLISH","Demolire");
-define("DEMOLITION_OF","démolition di ");
-define("MAINBUILDING_DESC","Nell'bâtiment principal abitano i maîtres d'œuvre du paese. plus élevé è il son niveau, plus rapidement i vos maîtres d'œuvre completeranno la construction di nuovi bâtiments.");
+define('MAINBUILDING', 'Bâtiment principal');
+define('CURRENT_CONSTRUCTION_TIME', 'Temps de construction actuel :');
+define('CONSTRUCTION_TIME_LEVEL', 'Temps de construction au niveau');
+define('DEMOLITION_BUILDING', 'Démolition d\'un bâtiment :</h2><p>Si vous n\'avez plus besoin d\'un bâtiment, vous pouvez en ordonner la démolition.</p>');
+define('DEMOLISH', 'Démolir');
+define('DEMOLITION_OF', 'Démolition de ');
+define('MAINBUILDING_DESC', 'Les maîtres d\'œuvre du village habitent dans le bâtiment principal. Plus son niveau est élevé, plus vos maîtres d\'œuvre construisent rapidement de nouveaux bâtiments.');
 
-define("RALLYPOINT","Punto di raduno");
-define("RALLYPOINT_COMMENCE","Il movimento des troupes verrà visualizzato quand il ".RALLYPOINT." è terminé");
-define("OVERVIEW","Panoramica");
-define("REINFORCEMENT","Renfort");
-define("EVASION_SETTINGS","paramètres di evasione");
-define("SEND_TROOPS_AWAY_MAX","envoyer le troupes via un maximum di");
-define("TIMES","volte");
-define("PER_EVASION","pour evasione");
-define("RALLYPOINT_DESC","Le troupes du votre village si incontrano ici. Da ici vous pouvez inviarli a conquistare, razziare o rinforzare autres villages.");
+define('RALLYPOINT', 'Point de rassemblement');
+define('RALLYPOINT_COMMENCE', 'Les mouvements de troupes seront affichés une fois le '.RALLYPOINT.' terminé.');
+define('OVERVIEW', 'Vue d\'ensemble');
+define('REINFORCEMENT', 'Renfort');
+define('EVASION_SETTINGS', 'Paramètres d\'évasion');
+define('SEND_TROOPS_AWAY_MAX', 'Envoyer les troupes au maximum');
+define('TIMES', 'fois');
+define('PER_EVASION', 'par évasion');
+define('RALLYPOINT_DESC', 'Les troupes de votre village se rassemblent ici. De là, vous pouvez les envoyer conquérir, piller ou renforcer d\'autres villages.<br>S\'il y a moins d\'unités attaquantes que le niveau du point de rassemblement, vous pouvez voir le type d\'unité qui attaque.');
+define('COMBAT_SIMULATOR', 'Simulateur de combat');
 
-define("MARKETPLACE","Marché");
-define("MERCHANT","mercanti");
-define("OR_","o");
-define("GO","andare");
-define("UNITS_OF_RESOURCE","unités di ressources");
-define("MERCHANT_CARRY","chaque marchand peut trasportare");
-define("MERCHANT_COMING","Mercanti in arrivée");
-define("TRANSPORT_FROM","Trasporto da");
-define("ARRIVAL_IN","arrivée a");
-define("NO_COORDINATES_SELECTED","aucune coordinata selezionata");
-define("CANNOT_SEND_RESOURCES","Non vous pouvez inviare ressources allo stesso village");
-define("BANNED_CANNOT_SEND_RESOURCES","Il joueur est banni. Non vous pouvez inviargli ressources");
-define("RESOURCES_NO_SELECTED","Ressources non selezionate");
-define("ENTER_COORDINATES","saisir le coordinate o il Nom du village");
-define("TOO_FEW_MERCHANTS","Troppo pochi marchands");
-define("OWN_MERCHANTS_ONWAY","Proprio mercanti in arrivée");
-define("MERCHANTS_RETURNING","Mercanti di retour");
-define("TRANSPORT_TO","Trasporto a");
-define("I_AN_SEARCHING","sto cercando");
-define("I_AN_OFFERING","Sto offrendo");
-define("OFFERS_MARKETPLACE","offres al marché");
-define("NO_AVAILABLE_OFFERS","aucune offre sur le marché");
-define("OFFERED_TO_ME","Offerto<br>da me");
-define("WANTED_TO_ME","Voleva<br>me");
-define("NOT_ENOUGH_MERCHANTS","Mercante non assez");
-define("ACCEP_OFFER","Accettare un'offre");
-define("NO_AVALIBLE_OFFERS","Non ci sont offres disponibles sur le marché");
-define("SEARCHING","recherche");
-define("OFFERING","offre");
-define("MAX_TIME_TRANSPORT","max. temps di trasporto");
-define("OWN_ALLIANCE_ONLY","seulement la propria alliance");
-define("INVALID_OFFER","offre non valida");
-define("INVALID_MERCHANTS_REPETITION","Tasso di ripetizione des marchands invalide");
-define("USER_ON_VACATION","L'utilisateur è in modalità vacanza");
-define("NOT_ENOUGH_RESOURCES","non assez ressources");
-define("OFFER","offre");
-define("SEARCH","recherche");
-define("OWN_OFFERS","offres proprie");
-define("ALL","tous");
-define("NPC_TRADE","commerce di NPC");
-define("SUM","Somma");
-define("REST","riposo");
-define("TRADE_RESOURCES","Scambia ressources a (passaggio 2 di 2)");
-define("DISTRIBUTE_RESOURCES","Distribuisci ressources a (passaggio 1 di 2)");
-define("OF","di");
-define("NPC_COMPLETED","NPC terminé");
-define("BACK_BUILDING","retourner a construire");
-define("YOU_CAN_NAT_NPC_WW","Non vous pouvez usare il commerce di NPC dans le village di WW.");
-define("NPC_TRADING","commerce di NPC");
-define("SEND_RESOURCES","Envoyer des ressources");
-define("BUY","Acquistare");
-define("TRADE_ROUTES","Rotte commerciali");
-define("DESCRIPTION","Descrizione");
-define("TIME_LEFT","temps rimasto");
-define("START","début");
-define("NO_TRADE_ROUTES","aucune rotta commerciale attiva");
-define("TRADE_ROUTE_TO","Via commerciale verso");
-define("CHECKED","controllato");
-define("DAYS","jours");
-define("EXTEND","Estendere");
-define("EDIT","Modificare");
-define("EXTEND_TRADE_ROUTES","améliorer la rotta commerciale di <b>7</b> jours pour");
-define("CREATE_TRADE_ROUTES","créer une nouvelle rotta commerciale");
-define("DELIVERIES","Consegne");
-define("START_TIME_TRADE","maintenant di début");
-define("CREATE_TRADE_ROUTE","créer rotta commerciale");
-define("TARGET_VILLAGE","Village cible");
-define("EDIT_TRADE_ROUTES","modifier rotta commerciale");
-define("TRADE_ROUTES_DESC","La rotta commerciale ti consente di impostare percorsi pour il votre marchand que percorrerà chaque jour a une certa maintenant. <br /><br /> Standard pour cui ce vale <b>7</b> jours, ma vous pouvez prolungarlo avec <b>7</b> jours al coût di");
-define("NPC_TRADE_DESC","avec il marchand NPC vous pouvez distribuire le ressources dans le votre entrepôt comme desideri. <br /><br /> La avant riga afficher lo stock corrente. dans la seconda riga vous pouvez choisir un'altra distribuzione. La terza riga afficher la differenza tra il vecchio e il nouveau stock.");
-define("MARKETPLACE_DESC","Al Marketplace vous pouvez scambiare ressources avec autres joueurs. plus élevé è il son niveau, plus ressources peuvent être trasportate contemporaneamente.");
+define('MARKETPLACE', 'Marché');
+define('MERCHANT', 'Marchands');
+define('OR_', 'ou');
+define('GO', 'Lancer');
+define('UNITS_OF_RESOURCE', 'unités de ressources');
+define('MERCHANT_CARRY', 'Chaque marchand peut transporter');
+define('MERCHANT_COMING', 'Marchands en approche');
+define('TRANSPORT_FROM', 'Transport depuis');
+define('ARRIVAL_IN', 'Arrivée dans');
+define('NO_COORDINATES_SELECTED', 'Aucune coordonnée sélectionnée');
+define('CANNOT_SEND_RESOURCES', 'Vous ne pouvez pas envoyer de ressources vers le même village');
+define('BANNED_CANNOT_SEND_RESOURCES', 'Le joueur est banni. Vous ne pouvez pas lui envoyer de ressources.');
+define('RESOURCES_NO_SELECTED', 'Ressources non sélectionnées');
+define('ENTER_COORDINATES', 'Saisissez les coordonnées ou le nom du village');
+define('TOO_FEW_MERCHANTS', 'Trop peu de marchands');
+define('OWN_MERCHANTS_ONWAY', 'Vos marchands en chemin');
+define('MERCHANTS_RETURNING', 'Marchands en retour');
+define('TRANSPORT_TO', 'Transport vers');
+define('I_AN_SEARCHING', 'Je recherche');
+define('I_AN_OFFERING', 'J\'offre');
+define('OFFERS_MARKETPLACE', 'Offres au marché');
+define('NO_AVAILABLE_OFFERS', 'Aucune offre disponible au marché');
+define('OFFERED_TO_ME', 'Offert<br>par moi');
+define('WANTED_TO_ME', 'Demandé<br>par moi');
+define('NOT_ENOUGH_MERCHANTS', 'Pas assez de marchands');
+define('ACCEP_OFFER', 'Accepter l\'offre');
+define('NO_AVALIBLE_OFFERS', 'Il n\'y a aucune offre disponible sur le marché');
+define('SEARCHING', 'Recherche');
+define('OFFERING', 'Offre');
+define('MAX_TIME_TRANSPORT', 'Durée de transport max.');
+define('OWN_ALLIANCE_ONLY', 'Alliance personnelle uniquement');
+define('INVALID_OFFER', 'Offre invalide');
+define('INVALID_MERCHANTS_REPETITION', 'Taux de répétition des marchands invalide');
+define('USER_ON_VACATION', 'Le joueur est en mode vacances');
+define('VACATION_MODE', 'Mode vacances');
+define('VACATION_DESC', 'Si vous prévoyez d\'être absent pendant une longue période et ne souhaitez pas désigner un substitut, vous pouvez mettre votre compte en mode vacances. Pendant cette période, votre compte cessera de produire des ressources, points de culture, recherches, troupes, etc., et cessera de recevoir attaques, renforts et pillages, gelant essentiellement votre compte. Souvenez-vous que cela ne fige que votre Travian, pas le temps. Si vous êtes membre du Gold Club, il continuera à s\'écouler pendant cette période et si vous avez l\'auto-renouvellement activé, il sera annulé en mode vacances. Note : vous devez activer le mode vacances pour un minimum de 2 jours et un maximum de 14 jours.');
+define('VACATION_DESC2', 'Utilisez le mode vacances pour protéger vos villages pendant votre absence.<br>Pendant les vacances, les actions suivantes seront inactives :');
+define('VAC_OP1', 'Envoyer ou recevoir des troupes');
+define('VAC_OP2', 'Démarrer une nouvelle construction');
+define('VAC_OP3', 'Utiliser le marché');
+define('VAC_OP4', 'Entraîner de nouvelles troupes');
+define('VAC_OP5', 'Rejoindre une alliance');
+define('VAC_OP6', 'Supprimer le compte');
+define('VAC_COND1', 'Aucune troupe en mouvement');
+define('VAC_COND2', 'Aucune troupe en route vers d\'autres villages');
+define('VAC_COND3', 'Aucune troupe envoyée en renfort dans d\'autres villages');
+define('VAC_COND4', 'Aucun joueur n\'a de renforts dans vos villages');
+define('VAC_COND5', 'Aucune Merveille du monde');
+define('VAC_COND6', 'Aucun artefact');
+define('VAC_COND7', 'Vous n\'êtes plus sous protection des débutants');
+define('VAC_COND8', 'Aucune troupe dans vos pièges');
+define('VAC_COND9', 'Votre compte n\'est pas en cours de suppression');
+define('NOT_ENOUGH_RESOURCES', 'Ressources insuffisantes');
+define('OFFER', 'Offrir');
+define('SEARCH', 'Rechercher');
+define('OWN_OFFERS', 'Mes offres');
+define('ALL', 'Tout');
+define('NPC_TRADE', 'Échange PNJ');
+define('SUM', 'Somme');
+define('REST', 'Reste');
+define('TRADE_RESOURCES', 'Échanger les ressources (étape 2 sur 2)');
+define('DISTRIBUTE_RESOURCES', 'Répartir les ressources (étape 1 sur 2)');
+define('OF', 'de');
+define('NPC_COMPLETED', 'PNJ terminé');
+define('BACK_BUILDING', 'Retour à la construction');
+define('YOU_CAN_NAT_NPC_WW', 'Vous ne pouvez pas utiliser l\'échange PNJ dans un village de Merveille.');
+define('NPC_TRADING', 'Échange PNJ');
+define('SEND_RESOURCES', 'Envoyer des ressources');
+define('BUY', 'Acheter');
+define('TRADE_ROUTES', 'Routes commerciales');
+define('DESCRIPTION', 'Description');
+define('G_DESCR', 'Description générale');
+define('TIME_LEFT', 'Temps restant');
+define('START', 'Démarrer');
+define('NO_TRADE_ROUTES', 'Aucune route commerciale active');
+define('TRADE_ROUTE_TO', 'Route commerciale vers');
+define('CHECKED', 'coché');
+define('DAYS', 'jours');
+define('EXTEND', 'Étendre');
+define('EDIT', 'Modifier');
+define('EXTEND_TRADE_ROUTES', 'Étendre la route commerciale de <b>7</b> jours pour');
+define('CREATE_TRADE_ROUTES', 'Créer une nouvelle route commerciale');
+define('DELIVERIES', 'Livraisons');
+define('START_TIME_TRADE', 'Heure de départ');
+define('CREATE_TRADE_ROUTE', 'Créer une route commerciale');
+define('TARGET_VILLAGE', 'Village cible');
+define('EDIT_TRADE_ROUTES', 'Modifier la route commerciale');
+define('TRADE_ROUTES_DESC', 'Les routes commerciales vous permettent de définir des itinéraires pour vos marchands qui les parcourront chaque jour à une heure fixe.<br><br>Par défaut, cela dure <b>7</b> jours, mais vous pouvez prolonger de <b>7</b> jours pour le coût de');
+define('NPC_TRADE_DESC', 'Avec le marchand PNJ, vous pouvez répartir les ressources de votre entrepôt comme vous le souhaitez.<br><br>La première ligne affiche le stock actuel. Dans la deuxième ligne, vous pouvez choisir une autre répartition. La troisième ligne affiche la différence entre l\'ancien et le nouveau stock.');
+define('MARKETPLACE_DESC', 'Au marché, vous pouvez échanger des ressources avec d\'autres joueurs. Plus son niveau est élevé, plus vos marchands peuvent transporter de ressources en même temps.');
 
-define("EMBASSY","Ambassade");
-define("TAG","Etichetta");
-define("TO_THE_ALLIANCE","all'alliance");
-define("JOIN_ALLIANCE","unisciti all'alliance");
-define("REFUSE","refuser");
-define("ACCEPT","accepter");
-define("NO_INVITATIONS","Non ci sont inviti disponibles.");
-define("NO_CREATE_ALLIANCE","Un utilisateur banni non peut creare un alliance.");
-define("FOUND_ALLIANCE","trova alliance");
-define("EMBASSY_DESC","L'ambassade è un posto pour diplomatici. PPiù élevé è il son niveau plus options ottiene il re.");
+define('EMBASSY', 'Ambassade');
+define('TAG', 'Tag');
+define('TO_THE_ALLIANCE', 'à l\'alliance');
+define('JOIN_ALLIANCE', 'Rejoindre l\'alliance');
+define('REFUSE', 'Refuser');
+define('ACCEPT', 'Accepter');
+define('NO_INVITATIONS', 'Aucune invitation disponible.');
+define('NO_CREATE_ALLIANCE', 'Un joueur banni ne peut pas créer d\'alliance.');
+define('FOUND_ALLIANCE', 'Fonder une alliance');
+define('EMBASSY_DESC', 'L\'ambassade est un lieu pour les diplomates. Au niveau 1, vous pouvez rejoindre une alliance, et à partir du niveau 3, vous pouvez même en fonder une vous-même.<br>Le nombre maximum de membres dans une alliance est 60.');
 
-define("BARRACKS","Caserne");
-define("QUANTITY","quantité");
-define("MAX","maximum");
-define("TRAINING","entraînement");
-define("FINISHED","Finito");
-define("UNIT_FINISHED","La prossima unités sarà finitaLa prossima unités sarà finita in");
-define("AVAILABLE","disponible");
-define("TRAINING_COMMENCE_BARRACKS","L'entraînement peut commencer lorsque la caserne est terminée.");
-define("BARRACKS_DESC","tous i fanti sont addestrati in caserne. plus élevé è il niveau de la caserne, plus rapidement sont addestrate le troupes.");
+define('BARRACKS', 'Caserne');
+define('QUANTITY', 'Quantité');
+define('MAX', 'Max');
+define('TRAINING', 'Entraînement');
+define('FINISHED', 'Terminé');
+define('UNIT_FINISHED', 'La prochaine unité sera terminée dans');
+define('AVAILABLE', 'Disponible');
+define('TRAINING_COMMENCE_BARRACKS', 'L\'entraînement pourra commencer une fois la caserne terminée.');
+define('BARRACKS_DESC', 'L\'infanterie peut être entraînée à la caserne. Plus son niveau est élevé, plus rapidement les troupes sont entraînées.');
 
-define("STABLE","Écurie");
-define("AVAILABLE_ACADEMY","aucune unités disponible. recherche in académie");
-define("TRAINING_COMMENCE_STABLE","L'entraînement peut commencer lorsque l'écurie est terminée.");
-define("STABLE_DESC","La cavalleria peut être addestrata dans les scuderie. plus élevé è il son niveau, plus rapidement sont addestrate le troupes.");
+define('STABLE', 'Écurie');
+define('AVAILABLE_ACADEMY', 'Aucune unité disponible. Recherchez à l\'académie.');
+define('TRAINING_COMMENCE_STABLE', 'L\'entraînement pourra commencer une fois l\'écurie terminée.');
+define('STABLE_DESC', 'La cavalerie peut être entraînée à l\'écurie. Plus son niveau est élevé, plus rapidement les troupes sont entraînées.');
 
-define("WORKSHOP","Atelier");
-define("TRAINING_COMMENCE_WORKSHOP","L'entraînement peut commencer al termine du workshop.");
-define("WORKSHOP_DESC","In atelier peuvent être costruiti strumenti d'assedio comme catapulte e arieti. plus élevé è il son niveau, plus rapidement sont prodotte le unités.");
+define('WORKSHOP', 'Atelier');
+define('TRAINING_COMMENCE_WORKSHOP', 'L\'entraînement pourra commencer une fois l\'atelier terminé.');
+define('WORKSHOP_DESC', 'Les machines de siège, comme les catapultes et les béliers, peuvent être fabriquées à l\'atelier. Plus son niveau est élevé, plus rapidement ces unités sont produites.');
 
-define("ACADEMY","Académie");
-define("RESEARCH_AVAILABLE","Non ci sont ricerche disponibles");
-define("RESEARCH_COMMENCE_ACADEMY","La recherche peut commencer lorsque l'académie est terminée.");
-define("RESEARCH","recherche");
-define("EXPAND_WAREHOUSE1","Espandi entrepôt");
-define("EXPAND_GRANARY1","Espandi grenier");
-define("RESEARCH_IN_PROGRESS","Research in<br>progresso");
-define("RESEARCHING","recherche");
-define("PREREQUISITES","Prerequisiti");
-define("SHOW_MORE","afficher di plus");
-define("HIDE_MORE","masquer di plus");
-define("ACADEMY_DESC","Nell'académie è possible ricercare nuovi tipi di unités. en augmentant il son niveau vous pouvez ordinare la recherche di unités migliori.");
+define('ACADEMY', 'Académie');
+define('RESEARCH_AVAILABLE', 'Aucune recherche disponible');
+define('RESEARCH_COMMENCE_ACADEMY', 'La recherche pourra commencer une fois l\'académie terminée.');
+define('RESEARCH', 'Recherche');
+define('EXPAND_WAREHOUSE1', 'Étendre l\'entrepôt');
+define('EXPAND_GRANARY1', 'Étendre le grenier');
+define('RESEARCH_IN_PROGRESS', 'Recherche en<br>cours');
+define('RESEARCHING', 'Recherche');
+define('PREREQUISITES', 'Prérequis');
+define('SHOW_MORE', 'Afficher plus');
+define('HIDE_MORE', 'Masquer plus');
+define('ACADEMY_DESC', 'De nouveaux types d\'unités peuvent être recherchés à l\'académie. En augmentant son niveau, vous pouvez ordonner la recherche d\'unités meilleures.');
 
-define("CRANNY","Cachette");
-define("CURRENT_HIDDEN_UNITS","unités attualmente nascoste pour ressource:");
-define("HIDDEN_UNITS_LEVEL","unités nascoste pour ressource a niveau");
-define("UNITS","unités");
-define("CRANNY_DESC","La cachette est utilizzata pour nascondere alcune des vos ressources quand il village est attaccato. ces ressources non peuvent être rubate.");
+define('CRANNY', 'Cachette');
+define('CURRENT_HIDDEN_UNITS', 'Unités actuellement cachées par ressource :');
+define('HIDDEN_UNITS_LEVEL', 'Unités cachées par ressource au niveau');
+define('UNITS', 'unités');
+define('CRANNY_DESC', 'La cachette dissimule une partie de vos ressources en cas d\'attaque du village. Ces ressources ne peuvent pas être volées.<br>Au niveau 1, la cachette peut contenir '.(100*((int)CRANNY_CAPACITY)).' de chaque ressource. La capacité des cachettes gauloises est 1,5 fois supérieure.<br>Si un héros teuton attaque un village, les cachettes ne peuvent dissimuler que 80 % de leur capacité normale.');
 
-define("TOWNHALL","Hôtel de ville");
-define("CELEBRATIONS_COMMENCE_TOWNHALL","Les célébrations peuvent commencer lorsque l'hôtel de ville est terminé.");
-define("GREAT_CELEBRATIONS","grand fête");
-define("CULTURE_POINTS","Points de culture");
-define("HOLD","presa");
-define("CELEBRATIONS_IN_PROGRESS","célébration<br />in corso");
-define("CELEBRATIONS","Celebrazioni");
-define("TOWNHALL_DESC","vous pouvez tenere feste pompose dans le hôtel de ville. une tale célébration aumenta i vos points culture. Portare il votre hôtel de ville a un niveau plus élevé ridurrà la durée de la célébration.");
+define('TOWNHALL', 'Hôtel de ville');
+define('CELEBRATIONS_COMMENCE_TOWNHALL', 'Les célébrations pourront commencer une fois l\'hôtel de ville terminé.');
+define('GREAT_CELEBRATIONS', 'Grande célébration');
+define('CULTURE_POINTS', 'Points de culture');
+define('HOLD', 'Tenir');
+define('CELEBRATIONS_IN_PROGRESS', 'Célébration<br>en cours');
+define('CELEBRATIONS', 'Célébrations');
+define('TOWNHALL_DESC', 'Vous pouvez tenir des célébrations fastueuses à l\'hôtel de ville. Une telle célébration augmente vos points de culture.<br>Les points de culture sont nécessaires pour fonder ou conquérir de nouveaux villages. Chaque bâtiment produit des points de culture, et plus son niveau est élevé, plus il en produit.');
 
-define("RESIDENCE","Résidence");
-define("CAPITAL","cette è la votre capitale");
-define("RESIDENCE_TRAIN_DESC","pour fonder un nouveau village è nécessaire une résidence di niveau 10 o 20 e 3 colons. pour conquistare un nouveau village è nécessaire une résidence di niveau 10 o 20 e un sénateur, capo o capotribù.");
-define("PRODUCTION_POINTS","production di ce village:");
-define("PRODUCTION_ALL_POINTS","production di tous i villages:");
-define("POINTS_DAY","Points de culture al jour");
-define("VILLAGES_PRODUCED","I vostri villages hanno prodotto");
-define("POINTS_NEED","points in total. pour fonder o conquistare un nouveau village è nécessaire");
-define("POINTS","points");
-define("INHABITANTS","habitants");
-define("COORDINATES","Coordonnées");
-define("EXPANSION","Espansione");
-define("TRAIN","Treno");
-define("DATE","Data");
-define("CONQUERED_BY_VILLAGE","Borghi fondati o conquistati da ce village");
-define("NONE_CONQUERED_BY_VILLAGE","aucun altro village è état encore fondato o conquistato da ce village.");
-define("RESIDENCE_CULTURE_DESC","pour estendere il votre empire vous avez besoin di points culture. ces points culture aumentano dans le corso du temps e lo fanno plus rapidement all'augmenter des livelli di construction.");
-define("RESIDENCE_LOYALTY_DESC","Attaccando avec senatori, capi o capi, la lealtà di un village peut être ridotta. Se raggiunge lo zero, il village si unisce al regno dell'attaccante. La lealtà di ce village è attualmente a ");
-define("RESIDENCE_DESC","La résidence è un petit palais, où vive il re o la regina quand visita il village. La résidence protegge il village dai ennemis que vogliono conquistarlo.");
+define('RESIDENCE', 'Résidence');
+define('CAPITAL', 'Ceci est votre capitale');
+define('RESIDENCE_TRAIN_DESC', 'Pour fonder un nouveau village, vous avez besoin d\'une résidence de niveau 10 ou 20 et de 3 colons. Pour conquérir un nouveau village, vous avez besoin d\'une résidence de niveau 10 ou 20 et d\'un sénateur, chef ou chef de tribu.');
+define('PRODUCTION_POINTS', 'Production de ce village :');
+define('PRODUCTION_ALL_POINTS', 'Production de tous les villages :');
+define('POINTS_DAY', 'Points de culture par jour');
+define('VILLAGES_PRODUCED', 'Vos villages ont produit');
+define('POINTS_NEED', 'points au total. Pour fonder ou conquérir un nouveau village, vous avez besoin de');
+define('POINTS', 'points');
+define('INHABITANTS', 'Habitants');
+define('COORDINATES', 'Coordonnées');
+define('EXPANSION', 'Expansion');
+define('TRAIN', 'Entraîner');
+define('DATE', 'Date');
+define('CONQUERED_BY_VILLAGE', 'Villages fondés ou conquis par ce village');
+define('NONE_CONQUERED_BY_VILLAGE', 'Aucun autre village n\'a encore été fondé ou conquis par ce village.');
+define('RESIDENCE_CULTURE_DESC', 'Pour étendre votre empire, vous avez besoin de points de culture. Ces points augmentent avec le temps et plus rapidement à mesure que vos niveaux de bâtiments augmentent.');
+define('RESIDENCE_LOYALTY_DESC', 'En attaquant avec des sénateurs, chefs ou chefs de tribu, la loyauté d\'un village peut être réduite. Si elle atteint zéro, le village rejoint le royaume de l\'attaquant. La loyauté de ce village est actuellement à ');
+define('RESIDENCE_DESC', 'La résidence protège le village contre les conquêtes ennemies. Vous pouvez construire une résidence par village. Les unités capables de fonder un nouveau village ou de conquérir des villages existants peuvent y être entraînées.<br>De plus, la résidence offre un emplacement d\'expansion aux niveaux 10 et 20.');
 
-define("PALACE","palais");
-define("PALACE_CONSTRUCTION","palais in construction");
-define("PALACE_TRAIN_DESC","pour fonder un nouveau village vous avez besoin di un palais di niveau 10, 15 o 20 e 3 colons. pour conquistare un nouveau village è nécessaire un palais di niveau 10, 15 o 20 e un sénateur, capo o capotribù.");
-define("CHANGE_CAPITAL","cambiare capitale");
-define("SECURITY_CHANGE_CAPITAL","Sei sicuro di voler cambiare il votre capitale?<br /><b>Non vous pouvez annullare ce!</b><br />pour sicurezza è nécessaire saisir la Mot de passe pour confermare:<br />");
-define("PALACE_DESC","Il re o la regina dell'empire vive dans le palais. dans le votre regno peut esistere un seulement palais alla volta. vous avez besoin di un palais pour proclamare un village comme votre capitale.");
+define('PALACE', 'Palais');
+define('PALACE_CONSTRUCTION', 'Palais en construction');
+define('PALACE_TRAIN_DESC', 'Pour fonder un nouveau village, vous avez besoin d\'un palais de niveau 10, 15 ou 20 et de 3 colons. Pour conquérir un nouveau village, vous avez besoin d\'un palais de niveau 10, 15 ou 20 et d\'un sénateur, chef ou chef de tribu.');
+define('CHANGE_CAPITAL', 'Changer de capitale');
+define('SECURITY_CHANGE_CAPITAL', 'Êtes-vous sûr de vouloir changer votre capitale ?<br><b>Cette action est irréversible !</b><br>Pour des raisons de sécurité, vous devez saisir votre mot de passe pour confirmer :<br>');
+define('PALACE_DESC', 'Le palais est un bâtiment unique. Vous ne pouvez en construire qu\'un dans tout votre royaume et vous pouvez proclamer ce village comme capitale. Il protège aussi le village contre les conquêtes ennemies. Les unités capables de fonder un nouveau village ou de conquérir des villages existants peuvent y être entraînées.<br>De plus, le palais offre un emplacement d\'expansion aux niveaux 10, 15 et 20.');
 
-define("TREASURY","Tesoro");
-define("TREASURY_COMMENCE","Gli artefatti peuvent être visualizzati une volta terminée la tesoreria.");
-define("ARTIFACTS_AREA","Manufatti dans la votre zona");
-define("NO_ARTIFACTS_AREA","Non ci sont manufatti dans la votre zona.");
-define("OWN_ARTIFACTS","Propri manufatti");
-define("CONQUERED","Conquistato");
-define("DISTANCE","Distanza");
-define("EFFECT","Effetto");
-define("ACCOUNT","Account");
-define("SMALL_ARTIFACTS","Piccoli manufatti");
-define("LARGE_ARTIFACTS","grandes manufatti");
-define("NO_ARTIFACTS","Non ci sont manufatti.");
-define("ANY_ARTIFACTS","Non possiedi alcun manufatto.");
-define("OWNER","Proprietario");
-define("AREA_EFFECT","Area d'effetto");
-define("VILLAGE_EFFECT","Effetto village");
-define("ACCOUNT_EFFECT","Effetto conto");
-define("UNIQUE_EFFECT","Effetto unico");
-define("REQUIRED_LEVEL","niveau richiesto");
-define("TIME_CONQUER","temps di conquista");
-define("TIME_ACTIVATION","temps di attivazione");
-define("NEXT_EFFECT"," Prossimo effetto");
-define("FORMER_OWNER","Ex proprietario/i");
-define("BUILDING_STRONGER","construire meglio avec");
-define("BUILDING_WEAKER","Costtruire moins avec");
-define("TROOPS_FASTER","Rende le troupes plus veloci avec");
-define("TROOPS_SLOWEST","Rende le troupes plus lente avec");
-define("SPIES_INCREASE","Le spie aumentano l'abilità avec");
-define("SPIES_DECRESE","Le spie diminuiscono l'abilità avec");
-define("CONSUME_LESS","toutes le troupes consumano moins avec");
-define("CONSUME_HIGH","toutes le troupes consumano di plus avec");
-define("TROOPS_MAKE_FASTER","Le troupes sont plus veloci");
-define("TROOPS_MAKE_SLOWEST","Le troupes sont plus lente");
-define("YOU_CONSTRUCT","vous pouvez construire ");
-define("CRANNY_INCREASED","La capacité de la cachette è aumentata di");
-define("CRANNY_DECRESE","La capacité de la cachette è diminuita di");
-define("WW_BUILDING_PLAN","vous pouvez construire la Merveille du monde");
-define("NO_WW","Non ci sont meraviglie du monde");
-define("NO_PREVIOUS_OWNERS","Non ci sont precedenti proprietari.");
-define("TREASURY_DESC","Le ricchezze du votre empire sont custodite dans la tesoreria. La tesoreria ha spazio pour un tesoro. après aver catturato un manufatto, ci vogliono 24 heures su un server normale o 12 heures su un server a tre vitesse pour être efficace.");
+define('TREASURY', 'Trésorerie');
+define('TREASURY_COMMENCE', 'Les artefacts pourront être consultés une fois la trésorerie terminée.');
+define('ARTEFACTS_AREA', 'Artefacts dans votre zone');
+define('NO_ARTEFACTS_AREA', 'Il n\'y a aucun artefact dans votre zone.');
+define('OWN_ARTEFACTS', 'Mes artefacts');
+define('CONQUERED', 'Conquis');
+define('DISTANCE', 'Distance');
+define('EFFECT', 'Effet');
+define('ACCOUNT', 'Compte');
+define('SMALL_ARTEFACTS', 'Petits artefacts');
+define('LARGE_ARTEFACTS', 'Grands artefacts');
+define('NO_ARTEFACTS', 'Il n\'y a aucun artefact.');
+define('ANY_ARTEFACTS', 'Vous ne possédez aucun artefact.');
+define('OWNER', 'Propriétaire');
+define('AREA_EFFECT', 'Zone d\'effet');
+define('VILLAGE_EFFECT', 'Effet sur le village');
+define('ACCOUNT_EFFECT', 'Effet sur le compte');
+define('UNIQUE_EFFECT', 'Effet unique');
+define('REQUIRED_LEVEL', 'Niveau requis');
+define('TIME_CONQUER', 'Date de conquête');
+define('TIME_ACTIVATION', 'Date d\'activation');
+define('NEXT_EFFECT', ' Effet suivant');
+define('FORMER_OWNER', 'Ancien(s) propriétaire(s)');
+define('BUILDING_STRONGER', 'Construire plus solidement avec');
+define('BUILDING_WEAKER', 'Construire moins solidement avec');
+define('TROOPS_FASTER', 'Rendre les troupes plus rapides avec');
+define('TROOPS_SLOWEST', 'Rendre les troupes plus lentes avec');
+define('SPIES_INCREASE', 'Augmenter la capacité des espions avec');
+define('SPIES_DECRESE', 'Diminuer la capacité des espions avec');
+define('CONSUME_LESS', 'Toutes les troupes consomment moins avec');
+define('CONSUME_HIGH', 'Toutes les troupes consomment plus avec');
+define('TROOPS_MAKE_FASTER', 'Les troupes sont produites plus vite avec');
+define('TROOPS_MAKE_SLOWEST', 'Les troupes sont produites plus lentement avec');
+define('YOU_CONSTRUCT', 'Vous pouvez construire ');
+define('CRANNY_INCREASED', 'La capacité de la cachette est augmentée de');
+define('CRANNY_DECRESE', 'La capacité de la cachette est diminuée de');
+define('WW_BUILDING_PLAN', 'Vous pouvez construire la Merveille du monde');
+define('NO_WW', 'Il n\'y a aucune Merveille du monde');
+define('NO_PREVIOUS_OWNERS', 'Il n\'y a aucun propriétaire précédent.');
+define('TREASURY_DESC', 'Les richesses de votre empire sont conservées dans la trésorerie. Une trésorerie ne peut contenir qu\'un seul artefact à la fois.<br>Vous avez besoin d\'une trésorerie de niveau 10 pour un petit artefact, ou de niveau 20 pour un grand.');
 
-define("TRADEOFFICE","Ufficio commerciale");
-define("CURRENT_MERCHANT","Carico mercantile actuelle:");
-define("MERCHANT_LEVEL","Carico mercantile a niveau");
-define("TRADEOFFICE_DESC","Nell'ufficio commerciale i carri des mercanti sont migliorati e dotati di puissantes cavalli. plus élevé è il son niveau, plus i vos mercanti sont in rang di trasportare.");
+define('TRADEOFFICE', 'Bureau de commerce');
+define('CURRENT_MERCHANT', 'Charge actuelle des marchands :');
+define('MERCHANT_LEVEL', 'Charge des marchands au niveau');
+define('TRADEOFFICE_DESC', 'Au bureau de commerce, les chariots des marchands sont améliorés et équipés de chevaux plus puissants. Plus son niveau est élevé, plus vos marchands peuvent transporter.');
 
-define("GREATBARRACKS","grandes casernes");
-define("TRAINING_COMMENCE_GREATBARRACKS","L'entraînement peut commencer quand la grand caserne è terminée.");
-define("GREATBARRACKS_DESC","I fanti sont addestrati dans les grandes casernes. plus élevé è il niveau de la caserne, plus rapidement sont addestrate le troupes.");
+define('GREATBARRACKS', 'Grande caserne');
+define('TRAINING_COMMENCE_GREATBARRACKS', 'L\'entraînement pourra commencer une fois la grande caserne terminée.');
+define('GREATBARRACKS_DESC', 'La grande caserne vous permet de construire une deuxième caserne dans le même village, mais les troupes coûtent 3 fois le montant initial.<br>Combinée avec la caserne normale, vous pouvez entraîner vos troupes deux fois plus vite dans un village.');
 
-define("GREATSTABLE","grand stabile");
-define("TRAINING_COMMENCE_GREATSTABLE","L'entraînement' peut commencer quand la grand écurie è terminée.");
-define("GREATSTABLE_DESC","La cavalleria peut être addestrata dans la grand stalla. plus élevé è il son niveau, plus rapidement sont addestrate le troupes.");
+define('GREATSTABLE', 'Grande écurie');
+define('TRAINING_COMMENCE_GREATSTABLE', 'L\'entraînement pourra commencer une fois la grande écurie terminée.');
+define('GREATSTABLE_DESC', 'La grande écurie vous permet de construire une deuxième écurie dans le même village, mais les troupes coûtent 3 fois le montant initial.<br>Combinée avec l\'écurie normale, vous pouvez entraîner vos troupes deux fois plus vite dans un village.');
 
-define("CITYWALL","murailles cittadine");
-define("DEFENCE_NOW","bonus défense:");
-define("DEFENCE_LEVEL","bonus défense a niveau");
-define("CITYWALL_DESC","Costruendo une cinta muraria vous pouvez proteggere il votre village dalle orde barbariche des vos ennemis.plus élevé è il niveau du muro, maggiore sarà il bonus dato alla défense des vos forze.");
+define('CITYWALL', 'Muraille');
+define('DEFENCE_NOW', 'Bonus de défense actuel :');
+define('DEFENCE_LEVEL', 'Bonus de défense au niveau');
+define('CITYWALL_DESC', 'Fournit un bonus de défense pour vos troupes (((1,03 ^ niveau) * 100) % + 10) points défensifs par niveau à la valeur défensive de base d\'un village. Plus le niveau de la muraille est élevé, plus le bonus de défense de vos troupes est élevé.<br>Spécifique à la tribu : Romains uniquement.');
 
-define("EARTHWALL","Muro di Terra");
-define("EARTHWALL_DESC","Costruendo un muro di terra vous pouvez proteggere il votre village dalle orde barbariche des vos ennemis. plus élevé è il niveau du muro, maggiore sarà il bonus dato alla défense des vos forze.");
+define('EARTHWALL', 'Talus de terre');
+define('EARTHWALL_DESC', 'Fournit un bonus de défense pour vos troupes (((1,02 ^ niveau) * 100) % + 6) points défensifs par niveau à la valeur défensive de base d\'un village. Plus le niveau du talus est élevé, plus le bonus de défense de vos troupes est élevé.<br>Spécifique à la tribu : Teutons uniquement.');
 
-define("PALISADE","Palizzata");
-define("PALISADE_DESC","Costruendo une palizzata vous pouvez proteggere il votre village dalle orde barbariche des vos ennemis. plus élevé è il niveau du muro, maggiore sarà il bonus dato alla défense des vos forze.");
+define('PALISADE', 'Palissade');
+define('PALISADE_DESC', 'Fournit un bonus de défense pour vos troupes (((1,025 ^ niveau) * 100) % + 8) points défensifs par niveau à la valeur défensive de base d\'un village. Plus le niveau de la palissade est élevé, plus le bonus de défense de vos troupes est élevé.<br>Spécifique à la tribu : Gaulois uniquement.');
 
-define("STONEMASON","Loggia dello scalpellino");
-define("CURRENT_STABILITY","bonus di stabilità actuelle:");
-define("STABILITY_LEVEL","bonus di stabilità a niveau");
-define("STONEMASON_DESC","La Loge du tailleur de pierre abrite un expert en taille de pierre. Plus le niveau du bâtiment est élevé, plus la stabilité des bâtiments du village est grande.");
+define('STONEMASON', 'Loge du tailleur de pierre');
+define('CURRENT_STABILITY', 'Bonus de stabilité actuel :');
+define('STABILITY_LEVEL', 'Bonus de stabilité au niveau');
+define('STONEMASON_DESC', 'Le tailleur de pierre est un expert en taille de pierre. Plus le niveau de la loge est élevé, plus la stabilité des bâtiments de votre village est grande. À chaque niveau, ce bâtiment augmente la durabilité de 10 % jusqu\'à un maximum de 200 % de durabilité pour vos bâtiments.<br>Ce bâtiment ne peut être construit que dans la capitale d\'un compte.');
 
-define("BREWERY","Birrificio");
-define("CURRENT_BONUS","bonus actuelle:");
-define("BONUS_LEVEL","bonus a niveau");
-define("BREWERY_DESC","L'hydromel savoureux est produit à la brasserie, puis bu par les soldats lors des célébrations.");
+define('BREWERY', 'Brasserie');
+define('CURRENT_BONUS', 'Bonus actuel :');
+define('BONUS_LEVEL', 'Bonus au niveau');
+define('BREWERY_DESC', 'Un savoureux hydromel est brassé ici. Les boissons rendent vos soldats plus braves et plus forts lors d\'attaques (1 % par niveau de brasserie). Malheureusement, le pouvoir de persuasion des chefs est réduit de 50 % et les catapultes ne peuvent faire que des tirs aléatoires. Ne peut être construite que dans la capitale, mais affecte tous vos villages. Les festivals d\'hydromel durent toujours 72 heures.<br>Spécifique à la tribu : Teutons uniquement.');
 
-define("TRAPPER","chasseur");
-define("CURRENT_TRAPS","Massime trappole da addestrare:");
-define("TRAPS_LEVEL","Massime trappole pour allenarsi a niveau");
-define("TRAPS","Trappole");
-define("TRAP","Trappola");
-define("CURRENT_HAVE","Attualmente vous avez");
-define("WHICH_OCCUPIED","di cui sont occupati.");
-define("TRAINING_COMMENCE_TRAPPER","L'entraînement peut commencer quand il chasseur è terminé.");
-define("TRAPPER_DESC","Il chasseur protegge il votre village avec trappole ben nascoste. Ciò significa que i ennemis incauti peuvent être imprigionati e non saranno plus in rang di danneggiare il votre village.");
+define('TRAPPER', 'Trappeur');
+define('CURRENT_TRAPS', 'Pièges maximum à entraîner actuellement :');
+define('TRAPS_LEVEL', 'Pièges maximum à entraîner au niveau');
+define('TRAPS', 'Pièges');
+define('TRAP', 'Piège');
+define('CURRENT_HAVE', 'Vous avez actuellement');
+define('WHICH_OCCUPIED', 'dont sont occupés.');
+define('TRAINING_COMMENCE_TRAPPER', 'L\'entraînement pourra commencer une fois le trappeur terminé.');
+define('TRAPPER_DESC', 'Le trappeur protège votre village avec des pièges bien dissimulés. Cela signifie que les ennemis imprudents peuvent être emprisonnés et ne pourront plus nuire à votre village.<br>Les troupes ne peuvent pas être libérées par un pillage. Si le propriétaire des pièges libère les captifs, tous les pièges seront réparés automatiquement.<br>Spécifique à la tribu : Gaulois uniquement.');
 
-define("HEROSMANSION","palais dell'héros");
-define("HERO_READY","L'héros sarà pronto ");
-define("NAME_CHANGED","Il Nom dell'héros è état cambiato");
-define("NOT_UNITS","unités non disponibles");
-define("NOT","Non ");
-define("TRAIN_HERO","Addestra un nouveau héros");
-define("REVIVE","Rianima");
-define("OASES","oasis");
-define("DELETE","supprimer");
-define("RESOURCES","Ressources");
-define("OFFENCE","Offesa");
-define("DEFENCE","défense");
-define("OFF_BONUS","bonus extra");
-define("DEF_BONUS","bonus Def");
-define("REGENERATION","Rigenerazione");
-define("DAY","jour");
-define("EXPERIENCE","Esperienza");
-define("YOU_CAN","vous pouvez ");
-define("RESET","Ripristina");
-define("YOUR_POINT_UNTIL"," i vos points jusqu'à a raggiungere il niveau ");
-define("OR_LOWER"," o inferiore!");
-define("YOUR_HERO_HAS","Il votre héros ha ");
-define("OF_HIT_POINTS","des suoi points vita");
-define("ERROR_NAME_SHORT","Errore: Nom troppo corto");
-define("HEROSMANSION_DESC","dans le palais dell'héros vous pouvez addestrare il votre héros e ai livelli 10, 15 e 20 vous pouvez conquistare oasis avec l'héros dans les immediate vicinanze.");
+define("HEROSMANSION", "Palais du héros");
+define('HERO_READY', 'Le héros sera prêt dans ');
+define('NAME_CHANGED', 'Le nom du héros a été modifié');
+define('NOT_UNITS', 'Aucune unité disponible');
+define('NOT', 'Non ');
+define('TRAIN_HERO', 'Entraîner un nouveau héros');
+define('REVIVE', 'Ranimer');
+define('OASES', 'Oasis');
+define('DELETE', 'Supprimer');
+define('RESOURCES', 'Ressources');
+define('OFFENCE', 'Attaque');
+define('DEFENCE', 'Défense');
+define('OFF_BONUS', 'Bonus Off');
+define('DEF_BONUS', 'Bonus Déf');
+define('REGENERATION', 'Régénération');
+define('DAY', 'Jour');
+define('EXPERIENCE', 'Expérience');
+define('YOU_CAN', 'Vous pouvez ');
+define('RESET', 'réinitialiser');
+define('YOUR_POINT_UNTIL', ' vos points jusqu\'à atteindre le niveau ');
+define('OR_LOWER', ' ou inférieur !');
+define('YOUR_HERO_HAS', 'Votre héros a ');
+define('OF_HIT_POINTS', 'de ses points de vie');
+define('ERROR_NAME_SHORT', 'Erreur : nom trop court');
+define('HEROSMANSION_DESC', 'Le palais du héros est la demeure de votre glorieux héros.<br>Aux niveaux 10, 15 et 20 du bâtiment, vous pouvez utiliser votre héros pour annexer une oasis inoccupée à votre village, une par niveau respectivement. Selon l\'oasis, vous obtiendrez une augmentation de production d\'un certain type de ressource (voire deux ressources pour certaines oasis).');
 
-define("GREATWAREHOUSE","grand Entrepôt");
-define("GREATWAREHOUSE_DESC","bois, argile e fer sont stoccati dans le entrepôt. Il grand entrepôt ti offre plus spazio e mantiene le vos merci plus asciutte e sicure rispetto a quelle normali.");
+define('GREATWAREHOUSE', 'Grand entrepôt');
+define('GREATWAREHOUSE_DESC', 'Le grand entrepôt a 3 fois la capacité d\'un entrepôt normal.<br>Ce bâtiment ne peut être construit que dans les villages de Merveille du monde ou avec un artefact natarian spécial.');
 
-define("GREATGRANARY","grand Grenier");
-define("GREATGRANARY_DESC","Il céréales prodotto dalle vos fattorie est immagazzinato dans le grenier. Il grand grenier ti offre plus spazio e mantiene i vos raccolti plus asciutti e sicuri di quello normale.");
+define('GREATGRANARY', 'Grand grenier');
+define('GREATGRANARY_DESC', 'Le grand grenier a 3 fois la capacité d\'un grenier normal.<br>Ce bâtiment ne peut être construit que dans les villages de Merveille du monde ou avec un artefact natarian spécial.');
 
-define("WONDER","Merveille du monde");
-define("WORLD_WONDER","Merveille du monde");
-define("WONDER_DESC","La meraviglia è meravigliosa comme sembra. ce bâtiment è costruito pour vincere il server. chaque niveau de la meraviglia du monde costa centinaia di migliaia (anche milioni) di ressources pour être costruito.");
-define("WORLD_WONDER_CHANGE_NAME","vous devez avere Merveille du monde di niveau 1 pour poter cambiare il son Nom");
-define("WORLD_WONDER_NAME","Nom de la Merveille du monde");
-define("WORLD_WONDER_NOTCHANGE_NAME","Non vous pouvez cambiare il Nom de la Merveille du monde après il niveau 10");
-define("WORLD_WONDER_NAME_CHANGED","Nom cambiato");
+define('WONDER', 'Merveille du monde');
+define('WORLD_WONDER', 'Merveille du monde');
+define('WONDER_DESC', 'Une Merveille du monde (aussi appelée WW) est aussi impressionnante qu\'elle en a l\'air. Chaque niveau coûte beaucoup de ressources. Il est presque impossible pour un seul joueur de construire une WW seul. La raison est que vous n\'avez pas seulement besoin de beaucoup de ressources, mais aussi de troupes pour protéger votre précieux bâtiment.<br>Pour construire une WW, vous avez besoin d\'un plan de construction antique. Vous pouvez l\'obtenir en attaquant un village Natar avec votre héros. Vous devez avoir une trésorerie vide de niveau 10 et votre héros doit survivre. Avec ces plans et un très haut niveau de ressources, vous pouvez démarrer la merveille.<br>Une fois au niveau 50, vous aurez besoin que quelqu\'un d\'autre dans votre alliance possède un deuxième plan actif. Vous ne pouvez pas tout faire vous-même.<br>Terminer une WW niveau 100, vous gagnerez le serveur Travian et c\'est la fin d\'un monde de jeu.<br>Une fois terminé, un message s\'affichera disant qui a gagné et les statistiques. Vous ne pouvez plus construire, mais vous pouvez envoyer des messages aux gens jusqu\'au redémarrage du serveur.');
+define('WORLD_WONDER_CHANGE_NAME', 'Vous devez avoir une Merveille du monde de niveau 1 pour pouvoir changer son nom.');
+define('WORLD_WONDER_NAME', 'Nom de la Merveille du monde');
+define('WORLD_WONDER_NOTCHANGE_NAME', 'Vous ne pouvez pas changer le nom de la Merveille du monde après le niveau 10.');
+define('WORLD_WONDER_NAME_CHANGED', 'Nom modifié');
 
-define("HORSEDRINKING","Abbeveratoio pour cavalli");
-define("HORSEDRINKING_DESC","L'abbeveratoio pour cavalli des romani riduce il temps di entraînement de la cavalleria e anche il mantenimento di ces troupes.");
+define('HORSEDRINKING', 'Abreuvoir');
+define('HORSEDRINKING_DESC', 'Diminue le temps d\'entraînement et l\'entretien de la cavalerie. Peut aussi être construit dans les villages de Merveille du monde des Romains.<br>Accélère le temps d\'entraînement des unités de cavalerie de 1 % par niveau et réduit la consommation de céréales de certaines unités selon son niveau.<br>Spécifique à la tribu : Romains uniquement.');
 
-define("GREATWORKSHOP","grand Atelier");
-define("TRAINING_COMMENCE_GREATWORKSHOP","La formazione peut commencer quand il grand workshop è terminé.");
-define("GREATWORKSHOP_DESC","Macchine d'assedio comme catapulte e arieti peuvent être costruite dans la grand atelier. plus élevé è il son niveau, plus rapidement sont prodotte le unités.");
+define('GREATWORKSHOP', 'Grand atelier');
+define('TRAINING_COMMENCE_GREATWORKSHOP', 'L\'entraînement pourra commencer une fois le grand atelier terminé.');
+define('GREATWORKSHOP_DESC', 'Le grand atelier vous permet de construire un deuxième atelier dans le même village, mais les catapultes et béliers coûtent 3 fois le montant initial.<br>Combiné avec l\'atelier normal, vous pouvez entraîner vos troupes deux fois plus vite dans un village.');
 
-define("BUILDING_MAX_LEVEL_UNDER","bâtiment di niveau maximum in construction");
-define("BUILDING_BEING_DEMOLISHED","bâtiment attualmente in fase di démolition");
-define("COSTS_UPGRADING_LEVEL","coûts</b> pour l'aggiornamento al niveau");
-define("WORKERS_ALREADY_WORK","Gli operai sont déjà al lavoro.");
-define("CONSTRUCTING_MASTER_BUILDER","construire avec capomastro ");
-define("COSTS","coûts");
-define("GOLD","Oro");
-define("WORKERS_ALREADY_WORK_WAITING","Gli operai sont déjà al lavoro. (ciclo di attesa)");
-define("ENOUGH_FOOD_EXPAND_CROPLAND","Cibo insufficiente. Espandi i terreni coltivati.");
-define("UPGRADE_WAREHOUSE","améliorer il entrepôt");
-define("UPGRADE_GRANARY","améliorer il grenier");
-define("YOUR_CROP_NEGATIVE","La votre production agricola è negativa, non otterrai jamais le ressources richieste.");
-define("UPGRADE_LEVEL","Passa al niveau ");
-define("WAITING","(ciclo di attesa)");
-define("NEED_WWCONSTRUCTION_PLAN","vous avez besoin du plan de construction de la meraviglia");
-define("NEED_MORE_WWCONSTRUCTION_PLAN","vous avez besoin di plus plan de construction de la meraviglia");
-define("CONSTRUCT_NEW_BUILDING","construire nouveau bâtiment");
-define("SHOWSOON_AVAILABLE_BUILDINGS","afficher bientôt gli bâtiments disponibles");
-define("HIDESOON_AVAILABLE_BUILDINGS","nascondere bâtiments bientôt disponibles");
+define('BUILDING_MAX_LEVEL_UNDER', 'Bâtiment au niveau maximum en construction');
+define('BUILDING_BEING_DEMOLISHED', 'Bâtiment en cours de démolition');
+define('COSTS_UPGRADING_LEVEL', 'Coûts</b> pour l\'amélioration au niveau');
+define('WORKERS_ALREADY_WORK', 'Les ouvriers sont déjà au travail.');
+define('CONSTRUCTING_MASTER_BUILDER', 'Construction avec le maître d\'œuvre ');
+define('COSTS', 'Coûts');
+define('WORKERS_ALREADY_WORK_WAITING', 'Les ouvriers sont déjà au travail. (en attente)');
+define('ENOUGH_FOOD_EXPAND_CROPLAND', 'Nourriture insuffisante. Étendez les champs de céréales.');
+define('UPGRADE_WAREHOUSE', 'Améliorer l\'entrepôt');
+define('UPGRADE_GRANARY', 'Améliorer le grenier');
+define('YOUR_CROP_NEGATIVE', 'Votre production de céréales est négative, vous n\'obtiendrez jamais les ressources requises.');
+define('UPGRADE_LEVEL', 'Améliorer au niveau ');
+define('WAITING', '(en attente)');
+define('NEED_WWCONSTRUCTION_PLAN', 'Plan de construction de la Merveille nécessaire');
+define('NEED_MORE_WWCONSTRUCTION_PLAN', 'Plus de plans de construction de la Merveille nécessaires');
+define('CONSTRUCT_NEW_BUILDING', 'Construire un nouveau bâtiment');
+define('SHOWSOON_AVAILABLE_BUILDINGS', 'Afficher les bâtiments bientôt disponibles');
+define('HIDESOON_AVAILABLE_BUILDINGS', 'Masquer les bâtiments bientôt disponibles');
 
 //artefact
-define("ARCHITECTS_DESC","tous gli bâtiments nell'area d'effetto sont plus forti. Ciò significa que avrai besoin di plus catapulte pour danneggiare gli bâtiments protetti da ces poteri artefatti.");
-define("ARCHITECTS_SMALL","Gli architetti leggero segreto");
-define("ARCHITECTS_SMALLVILLAGE","Scalpello diamantato");
-define("ARCHITECTS_LARGE","Il grand segreto degli architetti");
-define("ARCHITECTS_LARGEVILLAGE","Martello di marmo gigante");
-define("ARCHITECTS_UNIQUE","Il segreto unico degli architetti");
-define("ARCHITECTS_UNIQUEVILLAGE","Rotoli di Hemon");
-define("HASTE_DESC","toutes le troupes nell'area d'effetto si muovono plus rapidement.");
-define("HASTE_SMALL","I leggeri stivali di titano");
-define("HASTE_SMALLVILLAGE","Opale en fer à cheval");
-define("HASTE_LARGE","I grandes stivali di titano");
-define("HASTE_LARGEVILLAGE","Carro d'Oro");
-define("HASTE_UNIQUE","Gli esclusivi stivali di titano");
-define("HASTE_UNIQUEVILLAGE","Sandali Fidippide");
-define("EYESIGHT_DESC","toutes le spie aumentano la leurs capacité di spionaggio. Inoltre, avec toutes le versioni di ce manufatto vous pouvez vedere il TIPO di troupes in arrivée ma non quante sont.");
-define("EYESIGHT_SMALL","Le aquile occhi leggeri");
-define("EYESIGHT_SMALLVILLAGE","Racconto di un topo");
-define("EYESIGHT_LARGE","I grandes occhi des aquile");
-define("EYESIGHT_LARGEVILLAGE","Lettera des Generali");
-define("EYESIGHT_UNIQUE","Gli occhi unici des aquile");
-define("EYESIGHT_UNIQUEVILLAGE","Diaio di Sun Tzu");
-define("DIET_DESC","toutes le troupes dans le raggio des manufatti consumano moins céréales, rendendo possible mantenere un armée plus grand.");
-define("DIET_SMALL","Leggero controllo de la dieta");
-define("DIET_SMALLVILLAGE","Piatto d'argento");
-define("DIET_LARGE","Ottimo controllo de la dieta");
-define("DIET_LARGEVILLAGE","Arco da caccia sacro");
-define("DIET_UNIQUE","Controllo de la dieta unico");
-define("DIET_UNIQUEVILLAGE","Calice di Re Arthur");
-define("ACADEMIC_DESC","Le troupes sont costruite une certa percentuale plus rapidement nell'ambito du manufatto.");
-define("ACADEMIC_SMALL","Gli allenatori poco talento");
-define("ACADEMIC_SMALLVILLAGE","Giuramento des soldati Oath");
-define("ACADEMIC_LARGE","grand talento degli allenatori");
-define("ACADEMIC_LARGEVILLAGE","Dichiarazione di guerra");
-define("ACADEMIC_UNIQUE","Il talento unico degli allenatori");
-define("ACADEMIC_UNIQUEVILLAGE","Memorie di Alessandro Magno");
-define("STORAGE_DESC","avec ce plan de construction vous pouvez construire il grand Grenier o il grand Entrepôt dans le Village avec il manufatto, o l'intero account a seconda du manufatto. Finché possiedi quell'artefatto, vous pouvez construire e ingrandire quegli bâtiments.");
-define("STORAGE_SMALL","Piano generale di stoccaggio leggero");
-define("STORAGE_SMALLVILLAGE","Schizzo des costruttori");
-define("STORAGE_LARGE","grand piano generale di archiviazione");
-define("STORAGE_LARGEVILLAGE","Tavoletta babilonese");
-define("CONFUSION_DESC","La capacité de la cachette è aumentata di une certa quantité pour chaque tipo di manufatto. Le catapulte peuvent sparare casualmente seulement sui villages all'interno di ce potere di artefatti. Le eccezioni sont la Merveille que peut toujours être presa di mira e la camera du tesoro que peut toujours être presa di mira, tranne que avec l'artefatto unico. quand si mira a un campo di ressources peuvent être colpiti seulement campi di ressources casuali, quand si mira a un bâtiment peuvent être colpiti seulement bâtiments casuali.");
-define("CONFUSION_SMALL","Rivali leggera confusione");
-define("CONFUSION_SMALLVILLAGE","Carte des caverne nascoste");
-define("CONFUSION_LARGE","Rivali grand confusione");
-define("CONFUSION_LARGEVILLAGE","Borsa senza fondo");
-define("CONFUSION_UNIQUE","Rivali confusione unica");
-define("CONFUSION_UNIQUEVILLAGE","Cavallo di Troia");
-define("FOOL_DESC","chaque 24 heures ottiene un effetto casuale, un bonus o une penalità (tous sont possibili avec l'eccezione du grand entrepôt, du grand grenier e des plans de construction de la Merveille). Cambiano effetto E portata chaque 24 heures. L'artefatto unico riceverà toujours bonus positivi.");
-define("FOOL_SMALL","Artefatto du petit sciocco");
-define("FOOL_SMALLVILLAGE","Ciondolo de la malizia");
-define("FOOL_UNIQUE","Artefatto dell'unico sciocco");
-define("FOOL_UNIQUEVILLAGE","Manoscritto proibito");
-define("WWVILLAGE","Village Merveille");
-define("ARTEFACT","<h1><b>Artefatti di Natar</b></h1>
+define('ARCHITECTS_DESC', 'Tous les bâtiments dans la zone d\'effet sont plus solides. Cela signifie que vous aurez besoin de plus de catapultes pour endommager les bâtiments protégés par les pouvoirs de cet artefact.');
+define('ARCHITECTS_SMALL', 'Le petit secret des architectes');
+define('ARCHITECTS_SMALLVILLAGE', 'Ciseau de diamant');
+define('ARCHITECTS_LARGE', 'Le grand secret des architectes');
+define('ARCHITECTS_LARGEVILLAGE', 'Marteau de marbre géant');
+define('ARCHITECTS_UNIQUE', 'Le secret unique des architectes');
+define('ARCHITECTS_UNIQUEVILLAGE', 'Parchemins d\'Hémon');
+define('HASTE_DESC', 'Toutes les troupes dans la zone d\'effet se déplacent plus rapidement.');
+define('HASTE_SMALL', 'Les petites bottes de titan');
+define('HASTE_SMALLVILLAGE', 'Fer à cheval d\'opale');
+define('HASTE_LARGE', 'Les grandes bottes de titan');
+define('HASTE_LARGEVILLAGE', 'Char d\'or');
+define('HASTE_UNIQUE', 'Les bottes uniques de titan');
+define('HASTE_UNIQUEVILLAGE', 'Sandales de Phidippide');
+define('EYESIGHT_DESC', 'Tous les espions (éclaireurs, pisteurs et Equites Legati) augmentent leur capacité d\'espionnage. De plus, avec toutes les versions de cet artefact, vous pouvez voir le TYPE de troupes entrantes mais pas leur nombre.');
+define('EYESIGHT_SMALL', 'Les petits yeux d\'aigle');
+define('EYESIGHT_SMALLVILLAGE', 'Conte d\'un rat');
+define('EYESIGHT_LARGE', 'Les grands yeux d\'aigle');
+define('EYESIGHT_LARGEVILLAGE', 'Lettre des généraux');
+define('EYESIGHT_UNIQUE', 'Les yeux uniques d\'aigle');
+define('EYESIGHT_UNIQUEVILLAGE', 'Journal de Sun Tzu');
+define('DIET_DESC', 'Toutes les troupes dans la portée de l\'artefact consomment moins de blé, ce qui permet d\'entretenir une armée plus importante.');
+define('DIET_SMALL', 'Petit contrôle alimentaire');
+define('DIET_SMALLVILLAGE', 'Plateau d\'argent');
+define('DIET_LARGE', 'Grand contrôle alimentaire');
+define('DIET_LARGEVILLAGE', 'Arc de chasse sacré');
+define('DIET_UNIQUE', 'Contrôle alimentaire unique');
+define('DIET_UNIQUEVILLAGE', 'Calice du Roi Arthur');
+define('ACADEMIC_DESC', 'Les troupes sont produites un certain pourcentage plus rapidement dans le champ d\'action de l\'artefact.');
+define('ACADEMIC_SMALL', 'Le petit talent des entraîneurs');
+define('ACADEMIC_SMALLVILLAGE', 'Serment du soldat inscrit');
+define('ACADEMIC_LARGE', 'Le grand talent des entraîneurs');
+define('ACADEMIC_LARGEVILLAGE', 'Déclaration de guerre');
+define('ACADEMIC_UNIQUE', 'Le talent unique des entraîneurs');
+define('ACADEMIC_UNIQUEVILLAGE', 'Mémoires d\'Alexandre le Grand');
+define('STORAGE_DESC', 'Avec ce plan de construction, vous pouvez construire le grand grenier ou le grand entrepôt dans le village contenant l\'artefact, ou pour tout le compte selon l\'artefact. Tant que vous possédez cet artefact, vous pouvez construire et agrandir ces bâtiments.');
+define('STORAGE_SMALL', 'Petit plan de stockage');
+define('STORAGE_SMALLVILLAGE', 'Esquisse du bâtisseur');
+define('STORAGE_LARGE', 'Grand plan de stockage');
+define('STORAGE_LARGEVILLAGE', 'Tablette babylonienne');
+define('CONFUSION_DESC', 'La capacité de la cachette est augmentée d\'une certaine quantité par type d\'artefact. Les catapultes ne peuvent tirer qu\'aléatoirement sur les villages dans le champ de ces artefacts. Les exceptions sont la Merveille qui peut toujours être ciblée et la trésorerie qui peut toujours être ciblée, sauf avec l\'artefact unique. Quand on vise un champ de ressources, seuls des champs aléatoires peuvent être touchés ; quand on vise un bâtiment, seuls des bâtiments aléatoires peuvent l\'être.');
+define('CONFUSION_SMALL', 'Petite confusion des rivaux');
+define('CONFUSION_SMALLVILLAGE', 'Carte des cavernes cachées');
+define('CONFUSION_LARGE', 'Grande confusion des rivaux');
+define('CONFUSION_LARGEVILLAGE', 'Sacoche sans fond');
+define('CONFUSION_UNIQUE', 'Confusion unique des rivaux');
+define('CONFUSION_UNIQUEVILLAGE', 'Cheval de Troie');
+define('FOOL_DESC', 'Toutes les 24 heures, il obtient un effet aléatoire, bonus ou pénalité (tout est possible sauf le grand entrepôt, le grand grenier et les plans de la Merveille). L\'effet ET la portée changent toutes les 24 heures. L\'artefact unique prendra toujours des bonus positifs.');
+define('FOOL_SMALL', 'Artefact du petit fou');
+define('FOOL_SMALLVILLAGE', 'Pendentif de malice');
+define('FOOL_UNIQUE', 'Artefact du fou unique');
+define('FOOL_UNIQUEVILLAGE', 'Manuscrit interdit');
+define('WWVILLAGE', 'Village Merveille');
+define('ARTEFACT', '<h1><b>Artefacts des Natars</b></h1>
 
-Voci sussurrate riecheggiano nei villages, condividendo leggende raccontate seulement dai migliori narratori. Si riferisce a NATARS, il guerriero plus temuto du monde TRAVIAN. La leurs uccisione è il sogno di chaque héros, lo scopo di chaque combattente. aucun sa comme i NATARS siano riusciti a ottenere un tale potere e i leurs guerrieri così crudeli. Determinati a découvrir la fonte du potere NATARS, i combattenti inviano un gruppo di spie d'élite pour spiarli. Non passo molte heures e torno avec la paura negli occhi e bilanciando teorie fantastiche: sembra que il potere naturale provenga dagli oggetti misteriosi que chiamano artefatti que hanno rubato ai nostri antenati. Cerca di rubare i leurs artefatti e potrai controllarne il potere.
+Des rumeurs murmurent à travers les villages, partageant des légendes racontées uniquement par les meilleurs conteurs. Elles parlent des NATARS, les guerriers les plus redoutés du monde de TRAVIAN. Les tuer est le rêve de tout héros, le but de tout combattant. Personne ne sait comment les NATARS ont obtenu un tel pouvoir, ni d\'où vient la cruauté de leurs guerriers. Déterminés à découvrir la source du pouvoir des NATARS, les combattants envoient un groupe d\'élite d\'espions les espionner. Peu d\'heures s\'écoulent avant qu\'ils reviennent, la peur dans les yeux, avançant des théories fantastiques : il semble que le pouvoir vienne d\'objets mystérieux appelés artefacts, dérobés à nos ancêtres. Essayez de voler ces artefacts et vous pourrez contrôler leur pouvoir.
 
-<img src=\"img/x.gif\" class=\"ArtifactsAnnouncement\">
+<img src="/img/x.gif" class="ArtefactsAnnouncement">
 
-È giunto il momento di reclamare i manufatti. Collabora avec la votre alliance e porta i vos guerrieri a ottenere ces oggetti ricercati. Tuttavia, NATARS non si arrenderà senza guerra ai manufatti ... né ai vos ennemis. Se riesci a recuperare gli artefatti e sarai in rang di respingere i ennemis, sarai in rang di rassembler le ricompense. I vos bâtiments diventeranno incredibilmente forti e puissantes, e le troupes saranno très plus veloci e consumeranno moins cibo. Cattura i manufatti, porta gloria al votre empire e diventa une nouvelle leggenda pour i vos seguaci.
+Le temps est venu de revendiquer les artefacts. Collaborez avec votre alliance et envoyez vos guerriers chercher ces objets convoités. Cependant, les NATARS ne se rendront pas sans guerre... vos ennemis non plus. Si vous parvenez à récupérer les artefacts et à repousser vos ennemis, vous pourrez collecter les récompenses. Vos bâtiments deviendront incroyablement puissants, et les troupes seront bien plus rapides et consommeront moins de nourriture. Capturez les artefacts, apportez la gloire à votre empire et devenez une nouvelle légende pour vos partisans.
 
-pour rubarne uno, devono accadere le seguenti cose:
+Pour en voler un, les conditions suivantes doivent être réunies :
 
-1. vous devez attaccare il village (Non Pillage!)
-2. VINCI l'attaque
-3. Distruggi il tesoro
-4. une tesoreria vuota di niveau 10 pour PICCOLI MANUFATTI e di niveau 20 pour grandes MANUFATTI deve trovarsi dans le village da cui proveniva l'attaque
-5. Avere un héros in un attaque
+1. Vous devez attaquer le village (PAS un pillage !)
+2. GAGNEZ l\'attaque
+3. Détruisez la trésorerie
+4. Une trésorerie vide de niveau 10 pour les PETITS ARTEFACTS et de niveau 20 pour les GRANDS ARTEFACTS doit se trouver dans le village d\'origine de l\'attaque
+5. Avoir un héros dans l\'attaque
 
-In cas contrario, il prossimo attaque a quel village, vincendo avec un héros e il tesoro vide, prenderà il manufatto.
+Sinon, la prochaine attaque sur ce village, gagnée avec un héros et une trésorerie vide, prendra l\'artefact.
 
-pour construire la Merveille, vous devez possedere tu stesso un piano (tu = il proprietario du village Merveille) dal niveau 0 al 50, dal 51 al 100 vous avez besoin di un piano aggiuntivo dans la votre alliance! Due piani nell'account du village Merveille non funzionerebbero!
+Pour construire une Merveille du monde, vous devez posséder vous-même un plan (vous = le propriétaire du village Merveille) du niveau 0 au 50, du niveau 51 au 100 vous avez besoin d\'un plan supplémentaire dans votre alliance ! Deux plans dans le compte du village Merveille ne fonctionneraient pas !
 
-I plans de construction sont conquistabili immédiatement quand compaiono sur le server. 
+Les plans de construction sont conquérables immédiatement dès qu\'ils apparaissent sur le serveur.
 
-Ci sarà un conto alla rovescia dans le jeu, que afficher l'maintenant esatta du rilascio, 5 jours avant du lancio. ");
+Un compte à rebours sera affiché dans le jeu, indiquant l\'heure exacte de la sortie, 5 jours avant le lancement.');
 
 //WW Village Release Message
-define("WWVILLAGEMSG","<h1><b>Merveille des villages du monde</b></h1>
+define('WWVILLAGEMSG', '<h1><b>Villages Merveille du monde</b></h1>
 
-sont trascorsi innumerevoli jours se sont écoulés depuis les prime batailles sulle murailles des villages maledetti des Dread Natars, nombreux armées sia di quelli libres que dell'empire Natarian hanno lottato e sont morts davanti alle murailles des numerose forteresses da cui un temps i Natar avevano gouverné tutta la création . maintenant que la poussière si era calmata e si era instaurata une relativa calme, gli armées cominciarono a contare le leurs pertes e a rassembler i leurs morts, il fetore du combattimento encore aleggiava nell'air de la nuit, un odeur di un massacre indimenticabile pour la sa estensione e brutalità que bientôt sarebbe état sminuito da autres encore. I plus grandes armées des libres e des Dread Natar si stavano se déployer pour l'ennesimo renouvelé assaut alle convoitées ex forteresses dell'empire Natarian.
-bientôt arrivèrent gli éclaireurs rapportant uno spettacolo fantastico e un ricordo agghiacciante, un terribile armée di dimensioni insondabili era état avvistato schierarsi alla fin du monde, la capitale Natarian, une forza così grand e inarrestabile que la poussière de la leurs marcia avrebbe soffocato spegnere chaque luce, une forza così brutale e spietata que avrebbe schiacciato chaque speranza. Le persone libere sapevano que dovevano correre maintenant, correre contro il temps e le infinite orde dell'empire Natarian pour sollevare une Merveille du monde pour riportare il monde alla pace e sconfiggere la minaccia Natarian.
-Ma construire une meraviglia così grand non sarebbe un Tâche facile, sarebbero nécessaires plans de construction creati in un lontano passato, piani di natura così arcana que anche il plus saggio des saggi non ne conosceva il contenuto o l'ubicazione.
-Decine di migliaia di éclaireurs hanno vagato pour tutta l'esistenza cercando invano ces piani mistici, cercando in tous i luoghi tranne la temuta capitale Natarian, ma non sont riusciti a trovarli. Oggi però tornano portando buone notizie, tornano mettendo a nudo i luoghi des piani, nascosti dagli armées des Natar all'interno di forteresses segrete costruite pour être celate agli occhi dell'uomo.
-maintenant commence il tratto finale, quand i plus grandes armées du Popolo Libero e des Natar si scontreranno in tout il monde pour il destino di tout ciò que giace sous il cielo. This is the war that will echo across the eons, this is your war, and here you shall etch your name across history, here you shall become legend.
+D\'innombrables jours se sont écoulés depuis les premières batailles aux murailles des villages maudits des terribles Natars. De nombreuses armées, tant des hommes libres que de l\'empire Natarian, ont lutté et péri devant les murs des nombreuses forteresses d\'où les Natars régnaient autrefois sur toute la création. Maintenant que la poussière retombe et qu\'un calme relatif s\'est installé, les armées commencent à compter leurs pertes et à rassembler leurs morts, l\'odeur du combat flottant encore dans l\'air nocturne, une odeur de massacre inoubliable par son ampleur et sa brutalité, qui sera bientôt éclipsée par d\'autres encore. Les plus grandes armées des hommes libres et des terribles Natars se rassemblaient pour un énième assaut renouvelé contre les ex-forteresses convoitées de l\'empire Natarian.
+Bientôt les éclaireurs arrivent annonçant une vision incroyable et un rappel glaçant : une armée terrifiante d\'une taille insondable a été repérée se rassemblant à la fin du monde, la capitale Natarian, une force si grande et inarrêtable que la poussière de leur marche étoufferait toute lumière, une force si brutale et impitoyable qu\'elle écraserait tout espoir. Les hommes libres savaient qu\'ils devaient maintenant courir, courir contre le temps et les hordes infinies de l\'empire Natarian pour ériger une Merveille du monde, ramener la paix dans le monde et vaincre la menace Natarian.
+Mais ériger une si grande Merveille ne serait pas une tâche aisée — il faudrait des plans de construction créés dans un passé lointain, des plans d\'une nature si arcane que même les plus sages des sages n\'en connaissaient ni le contenu ni l\'emplacement.
+Des dizaines de milliers d\'éclaireurs ont arpenté toute l\'existence à la recherche en vain de ces plans mystiques, cherchant partout sauf dans la redoutable capitale Natarian, sans pouvoir les trouver. Aujourd\'hui cependant, ils reviennent porteurs de bonnes nouvelles, ils reviennent avec les emplacements des plans, dissimulés par les armées des Natars dans des forteresses secrètes construites pour être cachées aux yeux des hommes.
+Maintenant commence la dernière ligne droite, où les plus grandes armées des hommes libres et des Natars s\'affronteront à travers le monde pour le destin de tout ce qui repose sous le ciel. C\'est la guerre qui résonnera à travers les âges, c\'est votre guerre, et c\'est ici que vous graverez votre nom dans l\'histoire, ici que vous deviendrez légende.
 
-<img src=\"img/x.gif\" class=\"WWVillagesAnnouncement\" title=\"".WWVILLAGE."\" alt=\"".WWVILLAGE."\">
+<img src="/img/x.gif" class="WWVillagesAnnouncement" title="'.WWVILLAGE.'" alt="'.WWVILLAGE.'">
 
-pour conquistarne uno, devono accadere le seguenti cose:
+Pour en conquérir un, les conditions suivantes doivent être réunies :
 
-1. vous devez attaccare il village (Non Pillage!)
-2. VINCI l'attaque
-3. Distruggi la résidence
-4. vous devez ridurre la lealtà a 0 avec : SENATORI , COMANDANTI , CAPI
-5. vous devez avere assez points culture pour conquistare il village
+1. Vous devez attaquer le village (PAS un pillage !)
+2. GAGNEZ l\'attaque
+3. Détruisez la RÉSIDENCE
+4. Vous devez réduire la loyauté à 0 avec : SÉNATEURS, COMMANDANTS, CHEFS
+5. Vous devez avoir assez de points de culture pour conquérir le village
 
-In cas contrario, il prossimo attaque a quel village, vincendo avec SENATORI , COMANDANTI , CAPI e gli spazi vuoti in RESIDENZEE/PALAZZI occuperanno il village.
+Sinon, la prochaine attaque sur ce village, gagnée avec un SÉNATEUR, COMMANDANT ou CHEF et des emplacements vides dans la RÉSIDENCE/PALAIS, prendra le village.
 
-pour construire une meraviglia, vous devez possedere tu stesso un piano (tu = il proprietario du village Merveille) dal niveau 0 al 50, dal 51 al 100 vous avez besoin di un piano aggiuntivo dans la votre alliance! Due piani nell'account du village Merveille non funzionerebbero!
+Pour construire une Merveille, vous devez posséder vous-même un plan (vous = le propriétaire du village Merveille) du niveau 0 au 50, du niveau 51 au 100 vous avez besoin d\'un plan supplémentaire dans votre alliance ! Deux plans dans le compte du village Merveille ne fonctionneraient pas !
 
-I plans de construction sont conquistabili immédiatement quand compaiono sur le server. 
+Les plans de construction sont conquérables immédiatement dès qu\'ils apparaissent sur le serveur.
 
-Ci sarà un conto alla rovescia dans le jeu, que afficher l'maintenant esatta du rilascio, ".(5 / SPEED)." jours avant du lancio. ");
+Un compte à rebours sera affiché dans le jeu, indiquant l\'heure exacte de la sortie, '.(5 / SPEED).' jours avant le lancement.');
 
 //Building Plans
-define("PLAN","Piano di construction antico");
-define("PLANVILLAGE","Merveille Planimetria");
-define("PLAN_DESC","avec ce antico plan de construction sarai in rang di construire une Merveille jusqu'à al niveau 50. pour construire ulteriormente, la votre alliance deve contenere almeno due piani.");
-define("PLAN_INFO","<h1><b>Piani di construction des meraviglie du monde</b></h1>
+define('WILL_SPAWN_IN', 'apparaîtra dans');
+define('PLAN', 'Plan de construction antique');
+define('PLANVILLAGE', 'Plan de la Merveille');
+define('PLAN_DESC', 'Avec ce plan de construction antique, vous pourrez construire une Merveille du monde jusqu\'au niveau 50. Pour aller plus loin, votre alliance doit détenir au moins deux plans.');
+define('PLAN_INFO', '<h1><b>Plans de construction des Merveilles du monde</b></h1>
 
 
-Molte lune fa le tribu di Travian furono sorprese dall'imprevisto retour des Natar. cette tribu da tempi immemorabili que superava tous in saggezza, potenza e gloria stava pour turbare di nouveau i libres. Così hanno messo tous i leurs sforzi dans le preparare un'ultima guerra contro i Natar e sconfiggerli pour toujours. nombreux hanno pensato alle cosiddette 'Meraviglie du monde', construction di tante leggende, comme unica soluzione. È état detto que avrebbe reso chiunque invincibile une volta terminé. Alla fin, i costruttori sont diventati i dominatori e i conquistatori di tous i Travian conosciuti.
+Il y a de nombreuses lunes, les tribus de Travian furent surprises par le retour imprévu des Natars. Cette tribu qui depuis des temps immémoriaux surpassait tous en sagesse, puissance et gloire, était sur le point de troubler à nouveau les hommes libres. Ils mirent donc toutes leurs forces dans la préparation d\'une ultime guerre contre les Natars pour les vaincre à jamais. Beaucoup pensèrent aux fameuses « Merveilles du monde », bâtiments de nombreuses légendes, comme seule solution. On disait qu\'elles rendraient quiconque invincible une fois terminées, faisant finalement de leurs constructeurs les maîtres et conquérants de tout Travian.
 
-Tuttavia, è état anche detto que sarebbero stati nécessaires plans de construction pour construire un bâtiment du genere. A causa di ce fait, gli architetti hanno escogitato piani astuti su comme conservarli in modo sicuro. après un po', si potevano vedere bâtiments simili a templi in molte città e metropoli: le Camere du Tesoro (Tesoro). 
+Cependant, on disait aussi qu\'il fallait des plans de construction pour ériger un tel bâtiment. À cause de ce fait, les architectes conçurent des plans rusés sur la façon de les conserver en sûreté. Après un certain temps, on pouvait voir des bâtiments en forme de temples dans de nombreuses villes et métropoles — les chambres du trésor (trésoreries).
 
-Purtroppo, aucun - nemmeno i saggi e gli esperti - sapeva où trovare ces plans de construction. plus le persone cercavano di localizzarli, plus sembrava que fossero seulement leggende. 
+Hélas, personne — pas même les sages et les érudits — ne savait où trouver ces plans de construction. Plus les gens essayaient de les localiser, plus ils semblaient n\'être que légendes.
 
-Oggi, però, quest'ultimo segreto verrà svelato. Le privazioni e gli sforzi du passato non saranno stati vani, poiché oggi gli éclaireurs di diverse tribu hanno ottenuto avec successo où si trovavano i plans de construction. Ben sorvegliati dai Natar, giacciono nascosti in diverse oasis que si trovano in tutta Travian. seulement gli eroi plus valorosi saranno in rang di assicurarsi un tale piano e portarlo a casa sano e salvo in modo que la construction possa commencer. 
+Aujourd\'hui cependant, ce dernier secret va être révélé. Les privations et les efforts du passé n\'auront pas été vains, car aujourd\'hui les éclaireurs de plusieurs tribus ont obtenu avec succès l\'emplacement des plans de construction. Bien gardés par les Natars, ils gisent cachés dans plusieurs oasis disséminées à travers tout Travian. Seuls les héros les plus vaillants pourront sécuriser un tel plan et le ramener à la maison sain et sauf afin que la construction puisse commencer.
 
-Alla fin, vedremo se le tribu libere di Travian potranno encore une volta superare in astuzia i Natar e sconfiggerli une volta pour toutes. Non être così sciocco da presumere que i Natar se ne andranno senza combattere!
+Au final, nous verrons si les tribus libres de Travian pourront une fois de plus déjouer les Natars et les vaincre une fois pour toutes. Ne soyez pas assez fou pour croire que les Natars partiront sans combattre !
 
-<img src=\"img/x.gif\" class=\"WWBuildingPlansAnnouncement\" title=\"".PLAN."\" alt=\"".PLAN."\">
+<img src="/img/x.gif" class="WWBuildingPlansAnnouncement" title="'.PLAN.'" alt="'.PLAN.'">
 
-pour rubare une serie di plans de construction ai Natar, devono accadere le seguenti cose:
-- vous devez attaccare il village (NON faire irruzione!)
-- VINCI l'attaque
-- vous devez DISTRUGGERE la Chambre du trésor (Tesoro)
-- Il votre héros DEVE partecipare a quell'attaque, poiché è l'unico que peut portare i plans de construction
-- une Chambre du trésor (Tesoro) di niveau 10 vuota DEVE trovarsi dans le village da cui proveniva l'attaque
-NOTA: Se i criteri di cui sopra non sont soddisfatti pendant l'attaque, il prossimo attaque a quel village que soddisfa i criteri di cui sopra prenderà i Piani di construction.
+Pour voler un jeu de plans de construction aux Natars, les conditions suivantes doivent être réunies :
+- Vous devez ATTAQUER le village (PAS un pillage !)
+- Vous devez GAGNER l\'attaque
+- Vous devez DÉTRUIRE la chambre du trésor (trésorerie)
+- Votre HÉROS DOIT être dans cette attaque, car il est le seul à pouvoir transporter les plans
+- Une chambre du trésor (trésorerie) vide de niveau 10 DOIT être dans le village d\'origine de l\'attaque
+NOTE : Si les critères ci-dessus ne sont pas remplis pendant l\'attaque, la prochaine attaque sur ce village qui remplit les critères prendra les plans de construction.
 
 
 
-pour construire une Chambre du trésor (Tesoro), avrai besoin di un bâtiment principal di niveau 10 e il village NON DEVE contenere une Merveille du monde.
+Pour construire une chambre du trésor (trésorerie), vous aurez besoin d\'un bâtiment principal de niveau 10 et le village NE DOIT PAS contenir de Merveille du monde.
 
-pour construire une meraviglia du monde, vous devez possedere tu stesso i plans de construction (tu = il proprietario du village des meraviglie du monde) dal niveau 0 al 50, ensuite dal niveau 51 al 100 avrai besoin di un set aggiuntivo di plans de construction dans la votre alliance! Due serie di plans de construction nell'account Village Merveille du monde non funzioneranno!");
+Pour construire une Merveille du monde, vous devez posséder vous-même les plans de construction (vous = le propriétaire du village Merveille) du niveau 0 au 50, puis du niveau 51 au 100 vous aurez besoin d\'un jeu supplémentaire de plans dans votre alliance ! Deux jeux de plans dans le compte du village Merveille ne fonctionneront pas !');
 
 //Admin setting - Admin/Templates/config.tpl & editServerSet.tpl
-define("EDIT_BACK","Indietro");
-define("SERV_CONFIG","Configurazione du server");
-define("SERV_SETT","paramètres du server");
-define("EDIT_SERV_SETT","modifier le paramètres du server");
-define("SERV_VARIABLE","Variabile");
-define("SERV_VALUE","valeur");
-define("CONF_SERV_NAME","Nom Server");
-define("CONF_SERV_NAME_TOOLTIP","Nom du server di jeu.");
-define("CONF_SERV_STARTED","Server avviato");
-define("CONF_SERV_STARTED_TOOLTIP","maintenant in cui è état avviato il server di jeu. ce parametro non peut être modificato sur le server di jeu installato.");
-define("CONF_SERV_TIMEZONE","Fuso orario du server");
-define("CONF_SERV_TIMEZONE_TOOLTIP","Fuso orario du server di jeu.");
-define("CONF_SERV_LANG","Lingua");
-define("CONF_SERV_LANG_TOOLTIP","La lingua utilizzata pour impostazione predefinita dans le pannello di amministrazione e pour tous sur le server di jeu.");
-define("CONF_SERV_SERVSPEED","vitesse du server");
-define("CONF_SERV_SERVSPEED_TOOLTIP","La vitesse du server di jeu. Maggiore è la vitesse du server di jeu, plus rapidement sont costruiti tous gli bâtiments, sont effettuati gli studi e i miglioramenti dans les fucine, le troupes sont costruite rapidamente e la produttività di toutes le ressources aumenta.");
-define("CONF_SERV_TROOPSPEED","vitesse des troupes");
-define("CONF_SERV_TROOPSPEED_TOOLTIP","vitesse di movimento des troupes sur le server di jeu. plus élevé è ce indicatore, plus rapidement le troupes si muovono sulla carte.");
-define("CONF_SERV_EVASIONSPEED","vitesse di retour");
-define("CONF_SERV_EVASIONSPEED_TOOLTIP","La vitesse di retour è il temps que le troupes trascorrono sulla strada pour tornare a casa après aver effettuato un attaque.");
-define("CONF_SERV_STORMULTIPLER","Multiplo di archiviazione");
-define("CONF_SERV_STORMULTIPLER_TOOLTIP","Un multiplicateur pour la capacité di stoccaggio entrepôt e grenier. Il valeur 1 è pari alla capacité di 80.000 di ciascuna ressource al niveau maximum. Se imposti il ​​valeur su 2, la capacité al niveau maximum sarà 160.000 pour chaque ressource.<br><b>Note:</b> la quantité di ressources que verranno generate dalle oasis non occupate pour il furto dipende da ce valeur. Il valeur predefinito è 800. Se si imposta il valeur su 2, il numero maximum pour ciascuna ressource generata è 1600.");
-define("CONF_SERV_TRADCAPACITY","capacité du marchand");
-define("CONF_SERV_TRADCAPACITY_TOOLTIP","Un multiplicateur pour la capacité des ressources que peuvent être trasportate da un marchand. Il valeur di 1 equivale a 500 capacité pour i Romani, 750 pour i Galli, 1000 pour i Teutoni. Se imposti il ​​valeur su 2, la capacité des ressources trasferite raddoppierà di conseguenza, 1000, 1500, 2000.");
-define("CONF_SERV_CRANCAPACITY","capacité cachette");
-define("CONF_SERV_CRANCAPACITY_TOOLTIP","Un multiplicateur pour la capacité des ressources dans la cachette, que peuvent être salvate dalla rapina. Il valeur di 1 è pari a 1000 pour Romani e Teutoni, 2000 pour Galli. Se imposti il ​​valeur su 2, la capacité de la cachette raddoppierà rispettivamente a 2000 e 4000.");
-define("CONF_SERV_TRAPCAPACITY","capacité du chasseur");
-define("CONF_SERV_TRAPCAPACITY_TOOLTIP","Un multiplicateur pour la capacité de la trappola des Galli, que peut catturare i soldati ennemis ancor avant di attaccare il village. Il valeur di 1 è pari alla capacité di 400 al niveau 20 di construction. Se imposti il ​​valeur su 2, la capacité sarà 800.");
-define("CONF_SERV_NATUNITSMULTIPLIER","multiplicateur unités natars");
-define("CONF_SERV_NATUNITSMULTIPLIER_TOOLTIP","ce parametro è responsabile du numero di troupes di natars, su artefatti e villages meraviglia dans le monde.");
-define("CONF_SERV_NATARS_SPAWN_TIME","Generazione Natar");
-define("CONF_SERV_NATARS_SPAWN_TIME_TOOLTIP","après combien temps Natar e artefatti verranno generati dalla data di début du server, in jours");
-define("CONF_SERV_NATARS_WW_SPAWN_TIME","Generazione di meraviglie du monde");
-define("CONF_SERV_NATARS_WW_SPAWN_TIME_TOOLTIP","après combien temps verranno generati i villages WW dalla data di début du server, in jours");
-define("CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME","Generazione du plan de construction WW");
-define("CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME_TOOLTIP","après combien temps verranno generati i plans de construction WW dalla data di début du server, in jours");
-define("CONF_SERV_MAPSIZE","Dimensione de la carte");
-define("CONF_SERV_MAPSIZE_TOOLTIP","La dimensione de la carte du monde di jeu. Non peut être modificato su un server di jeu déjà installato.");
-define("CONF_SERV_VILLEXPSPEED","vitesse di espansione du village");
-define("CONF_SERV_VILLEXPSPEED_TOOLTIP","vitesse, que influisce sull'espansione dell'empire. avec une vitesse lenta sont nécessaires plus points culture pour fonder un nouveau village, avec une vitesse elevata il numero richiesto di points culture è ridotto.");
-define("CONF_SERV_BEGINPROTECT","Protezione pour principianti");
-define("CONF_SERV_BEGINPROTECT_TOOLTIP","Protezione, que vieta un certo temps pour attaccare i villages di nuovi joueurs.");
-define("CONF_SERV_REGOPEN","Inscription ouverte");
-define("CONF_SERV_REGOPEN_TOOLTIP","Permette di abilitare (Vero) o désactiver (Falso) la Inscription des joueurs sur le server di jeu.");
-define("CONF_SERV_ACTIVMAIL","Attivazione Mail");
-define("CONF_SERV_ACTIVMAIL_TOOLTIP","Se abilitato (Si), in fase di Inscription sarà nécessaire confermare l'indirizzo E-mail. Se disabilitato (Non) non necessita di conferma via e-mail.");
-define("CONF_SERV_QUEST","Quest");
-define("CONF_SERV_QUEST_TOOLTIP","activer (Oui) o désactiver (Non) la missione sur le server di jeu.");
-define("CONF_SERV_QTYPE","Tipo di Quest");
-define("CONF_SERV_QTYPE_TOOLTIP","Il tipo di quest peut être ufficiale, que è un po' plus breve, ed esteso, que è plus lungo.");
-define("CONF_SERV_DLR","Demolire - niveau richiesto");
-define("CONF_SERV_DLR_TOOLTIP","Il niveau richiesto dell'bâtiment principal, sur le quale è possible eseguire la démolition di bâtiments dans le village.");
-define("CONF_SERV_WWSTATS","Merveille du monde - statistiques");
-define("CONF_SERV_WWSTATS_TOOLTIP","activer (True) o désactiver (False) la affichage dans les statistiques des villages avec une Merveille du monde.");
-define("CONF_SERV_NTRTIME","temps di rigenerazione des troupes de la natura");
-define("CONF_SERV_NTRTIME_TOOLTIP","temps attraverso il quale le troupes de la natura saranno ripristinate dans les oasis.");
-define("CONF_SERV_OASIS_WOOD_PROD_MULT","multiplicateur de la production di bois Oasis");
-define("CONF_SERV_OASIS_WOOD_PROD_MULT_TOOLTIP","La base de la production dell'oasis du bois");
-define("CONF_SERV_OASIS_CLAY_PROD_MULT","multiplicateur di production di argile Oasis");
-define("CONF_SERV_OASIS_CLAY_PROD_MULT_TOOLTIP","La production dell'oasis di argile di base");
-define("CONF_SERV_OASIS_IRON_PROD_MULT","multiplicateur de la production di fer Oasis");
-define("CONF_SERV_OASIS_IRON_PROD_MULT_TOOLTIP","La production de base de fer des oasis");
-define("CONF_SERV_OASIS_CROP_PROD_MULT","multiplicateur de la production di colture Oasis");
-define("CONF_SERV_OASIS_CROP_PROD_MULT_TOOLTIP","La production des oasis du céréales di base");
-define("CONF_SERV_MEDALINTERVAL","Intervallo medaglia");
-define("CONF_SERV_MEDALINTERVAL_TOOLTIP","L'intervallo di temps pour l'assegnazione des medaglie pour i migliori joueurs e alliances. Se ce parametro est modificato sur le server installato, l'intervallo di temps cambia après la successiva emissione des medaglie.");
-define("CONF_SERV_TOURNTHRES","Soglia di Tourn");
-define("CONF_SERV_TOURNTHRES_TOOLTIP","Il numero di cases sulla carte di jeu, dopodiché la Piazza du torneo inizierà a funzionare.");
-define("CONF_SERV_GWORKSHOP","grand Atelier");
-define("CONF_SERV_GWORKSHOP_TOOLTIP","activer (Vero) o désactiver (Falso) l'uso di une grand Atelier dans le jeu.");
-define("CONF_SERV_NATARSTAT","afficher natars dans les statistiques");
-define("CONF_SERV_NATARSTAT_TOOLTIP","activer (True) o désactiver (False) la affichage dell'account Natars dans les statistiques.");
-define("CONF_SERV_PEACESYST","Sistema di pace");
-define("CONF_SERV_PEACESYST_TOOLTIP","activer o désactiver il sistema Peace. quand il sistema di pace è attivato, i joueurs potranno attaccarsi a vicenda ma invece di qualsiasi azione nei rapports ci sarà un'iscrizione di Félicitations. Le troupes non moriranno di fame.");
-define("CONF_SERV_GRAPHICPACK","Pacchetto grafico");
-define("CONF_SERV_GRAPHICPACK_TOOLTIP","activer (Oui) o désactiver (Non) la possibilité di utilizzare il pacchetto grafico.");
-define("CONF_SERV_ERRORREPORT","Segnalazione errori");
-define("CONF_SERV_ERRORREPORT_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des rapports di errore sur le server di jeu.");
+define('EDIT_BACK', 'Retour');
+define('SERV_CONFIG', 'Configuration du serveur');
+define('SERV_SETT', 'Paramètres du serveur');
+define('EDIT_SERV_SETT', 'Modifier les paramètres du serveur');
+define('SERV_VARIABLE', 'Variable');
+define('SERV_VALUE', 'Valeur');
+define('CONF_SERV_NAME', 'Nom du serveur');
+define('CONF_SERV_NAME_TOOLTIP', 'Nom du serveur de jeu.');
+define('CONF_SERV_STARTED', 'Serveur démarré');
+define('CONF_SERV_STARTED_TOOLTIP', 'Date à laquelle le serveur de jeu a été démarré. Ce paramètre ne peut pas être modifié sur un serveur de jeu installé.');
+define('CONF_SERV_TIMEZONE', 'Fuseau horaire du serveur');
+define('CONF_SERV_TIMEZONE_TOOLTIP', 'Fuseau horaire du serveur de jeu.');
+define('CONF_SERV_LANG', 'Langue');
+define('CONF_SERV_LANG_TOOLTIP', 'La langue utilisée par défaut dans le panneau d\'administration et pour tous sur le serveur de jeu.');
+define('CONF_SERV_SERVSPEED', 'Vitesse du serveur');
+define('CONF_SERV_SERVSPEED_TOOLTIP', 'La vitesse du serveur de jeu. Plus elle est élevée, plus rapidement tous les bâtiments sont construits, les études et améliorations dans les forges sont effectuées, les troupes sont entraînées et la productivité de toutes les ressources augmente.');
+define('CONF_SERV_TROOPSPEED', 'Vitesse des troupes');
+define('CONF_SERV_TROOPSPEED_TOOLTIP', 'Vitesse de déplacement des troupes sur le serveur de jeu. Plus cet indicateur est élevé, plus les troupes se déplacent rapidement sur la carte.');
+define('CONF_SERV_EVASIONSPEED', 'Vitesse de retour');
+define('CONF_SERV_EVASIONSPEED_TOOLTIP', 'La vitesse de retour est le temps que les troupes passent sur la route pour rentrer après une attaque évitée.');
+define('CONF_SERV_STORMULTIPLER', 'Multiplicateur de stockage');
+define('CONF_SERV_STORMULTIPLER_TOOLTIP', 'Un multiplicateur pour la capacité de stockage de l\'entrepôt et du grenier. La valeur 1 équivaut à 80 000 de chaque ressource au niveau maximum. Si vous mettez 2, la capacité au niveau maximum sera de 160 000 par ressource.<br><b>Note :</b> la quantité de ressources générée par les oasis non occupées pour le pillage dépend de cette valeur. Par défaut 800. Si vous mettez 2, le maximum par ressource générée est 1600.');
+define('CONF_SERV_TRADCAPACITY', 'Capacité du marchand');
+define('CONF_SERV_TRADCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité de ressources qu\'un marchand peut transporter. La valeur 1 équivaut à 500 pour les Romains, 750 pour les Gaulois, 1000 pour les Teutons. Si vous mettez 2, la capacité transférée double : 1000, 1500, 2000.');
+define('CONF_SERV_CRANCAPACITY', 'Capacité de la cachette');
+define('CONF_SERV_CRANCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité de la cachette qui protège du pillage. La valeur 1 équivaut à 1000 pour Romains et Teutons, 2000 pour Gaulois. Si vous mettez 2, la capacité double : 2000 et 4000.');
+define('CONF_SERV_TRAPCAPACITY', 'Capacité du trappeur');
+define('CONF_SERV_TRAPCAPACITY_TOOLTIP', 'Un multiplicateur pour la capacité du piège gaulois, capable de capturer des soldats ennemis avant qu\'ils n\'attaquent. La valeur 1 équivaut à 400 au niveau 20 de construction. Si vous mettez 2, la capacité sera de 800.');
+define('CONF_SERV_NATUNITSMULTIPLIER', 'Multiplicateur d\'unités Natars');
+define('CONF_SERV_NATUNITSMULTIPLIER_TOOLTIP', 'Ce paramètre détermine le nombre de troupes Natars sur les artefacts et les villages WW.');
+define('CONF_SERV_NATARS_SPAWN_TIME', 'Apparition des Natars');
+define('CONF_SERV_NATARS_SPAWN_TIME_TOOLTIP', 'Combien de jours après le démarrage du serveur les Natars et artefacts apparaîtront.');
+define('CONF_SERV_NATARS_WW_SPAWN_TIME', 'Apparition des Merveilles');
+define('CONF_SERV_NATARS_WW_SPAWN_TIME_TOOLTIP', 'Combien de jours après le démarrage du serveur les villages WW apparaîtront.');
+define('CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME', 'Apparition des plans WW');
+define('CONF_SERV_NATARS_WW_BUILDING_PLAN_SPAWN_TIME_TOOLTIP', 'Combien de jours après le démarrage du serveur les plans WW apparaîtront.');
+define('CONF_SERV_MAPSIZE', 'Taille de la carte');
+define('CONF_SERV_MAPSIZE_TOOLTIP', 'Taille de la carte du monde de jeu. Non modifiable sur un serveur déjà installé.');
+define('CONF_SERV_VILLEXPSPEED', 'Vitesse d\'expansion des villages');
+define('CONF_SERV_VILLEXPSPEED_TOOLTIP', 'Vitesse affectant l\'expansion de l\'empire. Avec une vitesse lente, plus de points de culture sont nécessaires pour fonder un village ; avec une vitesse rapide, moins.');
+define('CONF_SERV_BEGINPROTECT', 'Protection des débutants');
+define('CONF_SERV_BEGINPROTECT_TOOLTIP', 'Protection interdisant d\'attaquer les villages des nouveaux joueurs pendant un certain temps.');
+define('CONF_SERV_REGOPEN', 'Inscriptions ouvertes');
+define('CONF_SERV_REGOPEN_TOOLTIP', 'Permet d\'activer (Vrai) ou de désactiver (Faux) l\'inscription des joueurs sur le serveur de jeu.');
+define('CONF_SERV_ACTIVMAIL', 'Activation par e-mail');
+define('CONF_SERV_ACTIVMAIL_TOOLTIP', 'Si activé (Oui), confirmation par e-mail requise à l\'inscription. Si désactivé (Non), pas de confirmation requise.');
+define('CONF_SERV_QUEST', 'Quête');
+define('CONF_SERV_QUEST_TOOLTIP', 'Activer (Oui) ou désactiver (Non) les quêtes sur le serveur.');
+define('CONF_SERV_QTYPE', 'Type de quête');
+define('CONF_SERV_QTYPE_TOOLTIP', 'Le type de quête peut être « officiel » (un peu plus court) ou « étendu » (plus long).');
+define('CONF_SERV_DLR', 'Démolition — niveau requis');
+define('CONF_SERV_DLR_TOOLTIP', 'Niveau requis du bâtiment principal pour pouvoir démolir des bâtiments dans le village.');
+define('CONF_SERV_WWSTATS', 'Merveille du monde — statistiques');
+define('CONF_SERV_WWSTATS_TOOLTIP', 'Activer (Vrai) ou désactiver (Faux) l\'affichage dans les statistiques des villages avec une Merveille du monde.');
+define('CONF_SERV_NTRTIME', 'Temps de régénération des troupes nature');
+define('CONF_SERV_NTRTIME_TOOLTIP', 'Temps après lequel les troupes nature seront restaurées dans les oasis.');
+define('CONF_SERV_OASIS_WOOD_PROD_MULT', 'Multiplicateur production bois oasis');
+define('CONF_SERV_OASIS_WOOD_PROD_MULT_TOOLTIP', 'La production de bois de base des oasis.');
+define('CONF_SERV_OASIS_CLAY_PROD_MULT', 'Multiplicateur production argile oasis');
+define('CONF_SERV_OASIS_CLAY_PROD_MULT_TOOLTIP', 'La production d\'argile de base des oasis.');
+define('CONF_SERV_OASIS_IRON_PROD_MULT', 'Multiplicateur production fer oasis');
+define('CONF_SERV_OASIS_IRON_PROD_MULT_TOOLTIP', 'La production de fer de base des oasis.');
+define('CONF_SERV_OASIS_CROP_PROD_MULT', 'Multiplicateur production céréales oasis');
+define('CONF_SERV_OASIS_CROP_PROD_MULT_TOOLTIP', 'La production de céréales de base des oasis.');
+define('CONF_SERV_MEDALINTERVAL', 'Intervalle des médailles');
+define('CONF_SERV_MEDALINTERVAL_TOOLTIP', 'Intervalle d\'attribution des médailles pour les meilleurs joueurs et alliances. Si modifié sur un serveur installé, l\'intervalle change après l\'émission suivante.');
+define('CONF_SERV_TOURNTHRES', 'Seuil du tournoi');
+define('CONF_SERV_TOURNTHRES_TOOLTIP', 'Nombre de cases sur la carte au-delà duquel la place du tournoi commence à fonctionner.');
+define('CONF_SERV_GWORKSHOP', 'Grand atelier');
+define('CONF_SERV_GWORKSHOP_TOOLTIP', 'Activer (Vrai) ou désactiver (Faux) l\'utilisation du grand atelier dans le jeu.');
+define('CONF_SERV_NATARSTAT', 'Afficher les Natars dans les statistiques');
+define('CONF_SERV_NATARSTAT_TOOLTIP', 'Activer (Vrai) ou désactiver (Faux) l\'affichage du compte Natars dans les statistiques.');
+define('CONF_SERV_PEACESYST', 'Système de paix');
+define('CONF_SERV_PEACESYST_TOOLTIP', 'Activer ou désactiver le système de paix. Quand actif, les joueurs peuvent s\'attaquer mais à la place des actions habituelles dans les rapports, une inscription de félicitations apparaît. Les troupes ne mourront pas de faim.');
+define('CONF_SERV_GRAPHICPACK', 'Pack graphique');
+define('CONF_SERV_GRAPHICPACK_TOOLTIP', 'Activer (Oui) ou désactiver (Non) la possibilité d\'utiliser le pack graphique.');
+define('CONF_SERV_ERRORREPORT', 'Rapport d\'erreurs');
+define('CONF_SERV_ERRORREPORT_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des rapports d\'erreurs sur le serveur de jeu.');
 
 //Admin setting - Admin/Templates/config.tpl & editPlusSet.tpl
-define("PLUS_CONFIGURATION","Configurazioni <b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b>");
-define("PLUS_SETT","paramètres <b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> ");
-define("EDIT_PLUS_SETT","modifier paramètres<b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b>");
-define("EDIT_PLUS_SETT1","modifier paramètres PLUS");
-define("CONF_PLUS_PAYPALEMAIL","Indirizzo<a href='https://www.paypal.com' target='_blank'>PayPal</a> E-Mail");
-define("CONF_PLUS_PAYPALEMAIL_TOOLTIP","Adresse e-mail indiquée lors de l\'inscription sur PayPal.<br><font color='red'><b>Doit être un compte Business ou Premier !</b></font>");
-define("CONF_PLUS_CURRENCY","Devise de paiement");
-define("CONF_PLUS_CURRENCY_TOOLTIP","La valuta da utilizzare pour il pagamento.");
-define("CONF_PLUS_PACKAGEGOLDA","Pacchetto \"A\" quantité d'oro");
-define("CONF_PLUS_PACKAGEGOLDA_TOOLTIP","La quantité di oro emesso pour il pagamento du pacchetto \"A\".");
-define("CONF_PLUS_PACKAGEPRICEA","Pacchetto \"A\" Importo du prezzo");
-define("CONF_PLUS_PACKAGEPRICEA_TOOLTIP","L'importo nécessaire pour pagare il coût du pacchetto \"A\".");
-define("CONF_PLUS_PACKAGEGOLDB","Pacchetto \"B\" quantité d'oro");
-define("CONF_PLUS_PACKAGEGOLDB_TOOLTIP","La quantité di oro emesso pour il pagamento du pacchetto \"B\".");
-define("CONF_PLUS_PACKAGEPRICEB","Pacchetto \"B\" Importo du prezzo");
-define("CONF_PLUS_PACKAGEPRICEB_TOOLTIP","L'importo nécessaire pour pagare il coût du pacchetto \"B\".");
-define("CONF_PLUS_PACKAGEGOLDC","Pacchetto \"C\" quantité d'oro");
-define("CONF_PLUS_PACKAGEGOLDC_TOOLTIP","La quantité di oro emesso pour il pagamento du pacchetto \"C\".");
-define("CONF_PLUS_PACKAGEPRICEC","Pacchetto \"C\" Importo du prezzo");
-define("CONF_PLUS_PACKAGEPRICEC_TOOLTIP","L'importo nécessaire pour pagare il coût du pacchetto \"C\".");
-define("CONF_PLUS_PACKAGEGOLDD","Pacchetto \"D\" quantité d'oro");
-define("CONF_PLUS_PACKAGEGOLDD_TOOLTIP","La quantité di oro emesso pour il pagamento du pacchetto \"D\".");
-define("CONF_PLUS_PACKAGEPRICED","Pacchetto \"D\" Importo du prezzo");
-define("CONF_PLUS_PACKAGEPRICED_TOOLTIP","L'importo nécessaire pour pagare il coût du pacchetto \"D\".");
-define("CONF_PLUS_PACKAGEGOLDE","Pacchetto \"E\" quantité d'oro");
-define("CONF_PLUS_PACKAGEGOLDE_TOOLTIP","La quantité di oro emesso pour il pagamento du pacchetto \"E\".");
-define("CONF_PLUS_PACKAGEPRICEE","Pacchetto \"E\" Importo du prezzo");
-define("CONF_PLUS_PACKAGEPRICEE_TOOLTIP","L'importo nécessaire pour pagare il coût du pacchetto \"E\".");
-define("CONF_PLUS_ACCDURATION","durée du conto<b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b>");
-define("CONF_PLUS_ACCDURATION_TOOLTIP","La durée de la funzione di jeu <b><font color='#71D000'>P</font><font color='#FF6F0F'>l</font><font color='#71D000'>u</font><font color='#FF6F0F'>s</font></b> pour l'account al momento dell'attivazione da parte du joueur.");
-define("CONF_PLUS_PRODUCTDURATION","+25% durée de la production");
-define("CONF_PLUS_PRODUCTDURATION_TOOLTIP","La durée de la funzione di jeu +25% de la durée di production dell'account al momento dell'attivazione da parte du joueur.");
+define('PLUS_LOGO', '<b><font color="#71D000">P</font><font color="#FF6F0F">l</font><font color="#71D000">u</font><font color="#FF6F0F">s</font></b>');
+define('PLUS_CONFIGURATION', PLUS_LOGO.' Configuration');
+define('PLUS_SETT', PLUS_LOGO.' Paramètres');
+define('EDIT_PLUS_SETT', 'Modifier les paramètres '.PLUS_LOGO);
+define('EDIT_PLUS_SETT1', 'Modifier les paramètres PLUS');
+define('CONF_PLUS_PAYPALEMAIL', 'Adresse e-mail <a href="https://www.paypal.com" target="_blank">PayPal</a>');
+define('CONF_PLUS_PAYPALEMAIL_TOOLTIP', 'L\'adresse e-mail spécifiée à l\'inscription sur PayPal.<br><font color="red"><b>Doit être un compte Business ou Premier !</b></font>');
+define('CONF_PLUS_CURRENCY', 'Devise de paiement');
+define('CONF_PLUS_CURRENCY_TOOLTIP', 'La devise à utiliser pour les paiements.');
+define('CONF_PLUS_PACKAGEGOLDA', 'Pack « A » — Quantité d\'or');
+define('CONF_PLUS_PACKAGEGOLDA_TOOLTIP', 'Quantité d\'or émise pour le paiement du pack « A ».');
+define('CONF_PLUS_PACKAGEPRICEA', 'Pack « A » — Montant du prix');
+define('CONF_PLUS_PACKAGEPRICEA_TOOLTIP', 'Montant nécessaire pour payer le pack « A ».');
+define('CONF_PLUS_PACKAGEGOLDB', 'Pack « B » — Quantité d\'or');
+define('CONF_PLUS_PACKAGEGOLDB_TOOLTIP', 'Quantité d\'or émise pour le paiement du pack « B ».');
+define('CONF_PLUS_PACKAGEPRICEB', 'Pack « B » — Montant du prix');
+define('CONF_PLUS_PACKAGEPRICEB_TOOLTIP', 'Montant nécessaire pour payer le pack « B ».');
+define('CONF_PLUS_PACKAGEGOLDC', 'Pack « C » — Quantité d\'or');
+define('CONF_PLUS_PACKAGEGOLDC_TOOLTIP', 'Quantité d\'or émise pour le paiement du pack « C ».');
+define('CONF_PLUS_PACKAGEPRICEC', 'Pack « C » — Montant du prix');
+define('CONF_PLUS_PACKAGEPRICEC_TOOLTIP', 'Montant nécessaire pour payer le pack « C ».');
+define('CONF_PLUS_PACKAGEGOLDD', 'Pack « D » — Quantité d\'or');
+define('CONF_PLUS_PACKAGEGOLDD_TOOLTIP', 'Quantité d\'or émise pour le paiement du pack « D ».');
+define('CONF_PLUS_PACKAGEPRICED', 'Pack « D » — Montant du prix');
+define('CONF_PLUS_PACKAGEPRICED_TOOLTIP', 'Montant nécessaire pour payer le pack « D ».');
+define('CONF_PLUS_PACKAGEGOLDE', 'Pack « E » — Quantité d\'or');
+define('CONF_PLUS_PACKAGEGOLDE_TOOLTIP', 'Quantité d\'or émise pour le paiement du pack « E ».');
+define('CONF_PLUS_PACKAGEPRICEE', 'Pack « E » — Montant du prix');
+define('CONF_PLUS_PACKAGEPRICEE_TOOLTIP', 'Montant nécessaire pour payer le pack « E ».');
+define('CONF_PLUS_ACCDURATION', 'Durée du compte '.PLUS_LOGO);
+define('CONF_PLUS_ACCDURATION_TOOLTIP', 'Durée de la fonction de jeu '.PLUS_LOGO.' pour le compte au moment de l\'activation par le joueur.');
+define('CONF_PLUS_PRODUCTDURATION', '+25 % durée de production');
+define('CONF_PLUS_PRODUCTDURATION_TOOLTIP', 'Durée de la fonction +25 % de production pour le compte au moment de l\'activation par le joueur.');
 
 //Admin setting - Admin/Templates/config.tpl & editLogSet.tpl
-define("LOG_SETT","Log paramètres");
-define("EDIT_LOG_SETT","modifier Log paramètres");
-define("CONF_LOG_BUILD","Log Build");
-define("CONF_LOG_BUILD_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des journaux pour la construction degli bâtiments dans le village.");
-define("CONF_LOG_TECHNOLOGY","Tecnologia du Log");
-define("CONF_LOG_TECHNOLOGY_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des journaux pour migliorare le troupes in Forge e Armurerie.");
-define("CONF_LOG_LOGIN","Log Login");
-define("CONF_LOG_LOGIN_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des journaux des joueurs que accedono al jeu.");
-define("CONF_LOG_GOLD","Log Oro");
-define("CONF_LOG_GOLD_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des journaux di utilizzo dell'oro dans le jeu da parte des joueurs.");
-define("CONF_LOG_ADMIN","Log Admin");
-define("CONF_LOG_ADMIN_TOOLTIP","Activer (Oui) ou désactiver (Non) l\'affichage des journaux pour les actions de l\'administrateur dans le panneau de contrôle.");
-define("CONF_LOG_WAR","Log Guerra");
-define("CONF_LOG_WAR_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des log degli attaques ai joueurs dans le jeu.");
-define("CONF_LOG_MARKET","Log Marché");
-define("CONF_LOG_MARKET_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des log di utilizzo du marché dans le jeu da parte des joueurs.");
-define("CONF_LOG_ILLEGAL","Log Illegali");
-define("CONF_LOG_ILLEGAL_TOOLTIP","activer (Oui) o désactiver (Non) la affichage des log illegali. (non so exactement cosa sia)");
+define('LOG_SETT', 'Paramètres des journaux');
+define('EDIT_LOG_SETT', 'Modifier les paramètres des journaux');
+define('CONF_LOG_BUILD', 'Journal de construction');
+define('CONF_LOG_BUILD_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux de construction des bâtiments dans le village.');
+define('CONF_LOG_TECHNOLOGY', 'Journal de technologie');
+define('CONF_LOG_TECHNOLOGY_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux d\'améliorations de troupes (forge et armurerie).');
+define('CONF_LOG_LOGIN', 'Journal de connexion');
+define('CONF_LOG_LOGIN_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux de connexions des joueurs.');
+define('CONF_LOG_GOLD', 'Journal d\'or');
+define('CONF_LOG_GOLD_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux d\'utilisation de l\'or par les joueurs.');
+define('CONF_LOG_ADMIN', 'Journal admin');
+define('CONF_LOG_ADMIN_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux des actions administrateur dans le panneau de contrôle.');
+define('CONF_LOG_WAR', 'Journal de guerre');
+define('CONF_LOG_WAR_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux d\'attaques entre joueurs.');
+define('CONF_LOG_MARKET', 'Journal du marché');
+define('CONF_LOG_MARKET_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux d\'utilisation du marché par les joueurs.');
+define('CONF_LOG_ILLEGAL', 'Journal illégal');
+define('CONF_LOG_ILLEGAL_TOOLTIP', 'Activer (Oui) ou désactiver (Non) l\'affichage des journaux illégaux.');
 
 //Admin setting - Admin/Templates/config.tpl & editNewsboxSet.tpl
-define("NEWSBOX_SETT","Paramètres de la boîte d\'actualités");
-define("EDIT_NEWSBOX_SETT","Modifier les paramètres des boîtes d\'actualités");
-define("EDIT_NEWSBOX1","Boîte d\'actualités 1");
-define("EDIT_NEWSBOX1_TOOLTIP","Activer o désactiver la affichage de la boîte d'actualités 1. Visualizzata dans la pagina di autorizzazione e dans les pagine di jeu.");
-define("EDIT_NEWSBOX2","Boîte d\'actualités 2");
-define("EDIT_NEWSBOX2_TOOLTIP","Activer o désactiver la affichage de la boîte d'actualités 2. Visualizzata dans la pagina di autorizzazione e dans les pagine di jeu.");
-define("EDIT_NEWSBOX3","Boîte d\'actualités 3");
-define("EDIT_NEWSBOX3_TOOLTIP","Activer o désactiver la affichage de la boîte d'actualités 3. Visualizzata dans la pagina di autorizzazione e dans les pagine di jeu.");
+define('NEWSBOX_SETT', 'Paramètres des actualités');
+define('EDIT_NEWSBOX_SETT', 'Modifier les paramètres des actualités');
+define('EDIT_NEWSBOX1', 'Actualité 1');
+define('EDIT_NEWSBOX1_TOOLTIP', 'Activer ou désactiver l\'affichage de l\'actualité 1. Affichée sur la page de connexion et les pages de jeu.');
+define('EDIT_NEWSBOX2', 'Actualité 2');
+define('EDIT_NEWSBOX2_TOOLTIP', 'Activer ou désactiver l\'affichage de l\'actualité 2.');
+define('EDIT_NEWSBOX3', 'Actualité 3');
+define('EDIT_NEWSBOX3_TOOLTIP', 'Activer ou désactiver l\'affichage de l\'actualité 3.');
 
 //Admin setting - Admin/Templates/config.tpl SQL Settings
-define("SQL_SETTINGS","paramètres SQL");
-define("CONF_SQL_HOSTNAME","Nom host");
-define("CONF_SQL_HOSTNAME_TOOLTIP","Il Nom du server su cui est avviato MySQL (di default è: localhost).");
-define("CONF_SQL_PORT","Porta");
-define("CONF_SQL_PORT_TOOLTIP","Porta MySQL pour connessione remota. La porta standard pour la connessione è: 3306.");
-define("CONF_SQL_DBUSER","DB Username");
-define("CONF_SQL_DBUSER_TOOLTIP","Il Nom utilisateur pour connettersi al database.");
-define("CONF_SQL_DBPASS","DB Mot de passe");
-define("CONF_SQL_DBPASS_TOOLTIP","Mot de passe dell'utilisateur pour connettersi al database.");
-define("CONF_SQL_DBNAME","DB Name");
-define("CONF_SQL_DBNAME_TOOLTIP","Nom du database a cui ti stai connettendo.");
-define("CONF_SQL_TBPREFIX","Prefisso tabella");
-define("CONF_SQL_TBPREFIX_TOOLTIP","Il prefisso utilizzato pour le tabelle du database.");
-define("CONF_SQL_DBTYPE","DB Type");
-define("CONF_SQL_DBTYPE_TOOLTIP","Il tipo di database utilizzato.");
+define('SQL_SETTINGS', 'Paramètres SQL');
+define('CONF_SQL_HOSTNAME', 'Hôte');
+define('CONF_SQL_HOSTNAME_TOOLTIP', 'Nom du serveur où MySQL est démarré (par défaut : localhost).');
+define('CONF_SQL_PORT', 'Port');
+define('CONF_SQL_PORT_TOOLTIP', 'Port MySQL pour la connexion distante. Port standard : 3306.');
+define('CONF_SQL_DBUSER', 'Utilisateur BDD');
+define('CONF_SQL_DBUSER_TOOLTIP', 'Nom d\'utilisateur pour se connecter à la base de données.');
+define('CONF_SQL_DBPASS', 'Mot de passe BDD');
+define('CONF_SQL_DBPASS_TOOLTIP', 'Mot de passe de l\'utilisateur pour se connecter à la base de données.');
+define('CONF_SQL_DBNAME', 'Nom BDD');
+define('CONF_SQL_DBNAME_TOOLTIP', 'Nom de la base de données à laquelle vous vous connectez.');
+define('CONF_SQL_TBPREFIX', 'Préfixe des tables');
+define('CONF_SQL_TBPREFIX_TOOLTIP', 'Préfixe utilisé pour les tables de la base de données.');
+define('CONF_SQL_DBTYPE', 'Type de BDD');
+define('CONF_SQL_DBTYPE_TOOLTIP', 'Type de base de données utilisée.');
 
 //Admin setting - Admin/Templates/config.tpl & editExtraSet.tpl
-define("EXTRA_SETT","paramètres Extra");
-define("EDIT_EXTRA_SETT","modifier paramètres Extra");
-define("CONF_EXTRA_LIMITMAIL","Limite cassetta postale");
-define("CONF_EXTRA_LIMITMAIL_TOOLTIP","activer (Oui) o désactiver (Non) il limite de la case di posta.");
-define("CONF_EXTRA_MAXMAIL","Numero maximum di mail");
-define("CONF_EXTRA_MAXMAIL_TOOLTIP","Il numero maximum di messaggi que peuvent être contenuti dans la cassetta postale.");
+define('EXTRA_SETT', 'Paramètres supplémentaires');
+define('EDIT_EXTRA_SETT', 'Modifier les paramètres supplémentaires');
+define('CONF_EXTRA_LIMITMAIL', 'Limite de la boîte mail');
+define('CONF_EXTRA_LIMITMAIL_TOOLTIP', 'Activer (Oui) ou désactiver (Non) la limite de la boîte mail.');
+define('CONF_EXTRA_MAXMAIL', 'Nombre max. de messages');
+define('CONF_EXTRA_MAXMAIL_TOOLTIP', 'Nombre maximum de messages pouvant être contenus dans la boîte mail.');
 
 //Admin setting - Admin/Templates/config.tpl & editAdminInfo.tpl
-define("ADMIN_INFO","Informations sur l\'administrateur");
-define("EDIT_ADMIN_INFO","Modifier les informations de l\'administrateur");
-define("CONF_ADMIN_NAME","Nom administrateur");
-define("CONF_ADMIN_NAME_TOOLTIP","Nom pour l'account administrateur.");
-define("CONF_ADMIN_EMAIL","Admin E-Mail");
-define("CONF_ADMIN_EMAIL_TOOLTIP","L'indirizzo e-mail dell'account administrateur.");
-define("CONF_ADMIN_SHOWSTATS","Includi l'administrateur dans les statistiques");
-define("CONF_ADMIN_SHOWSTATS_TOOLTIP","activer (True) o désactiver (False) la affichage dell'account administrateur dans les statistiques generali des joueurs.");
-define("CONF_ADMIN_SUPPMESS","Includi messaggi di supporto");
-define("CONF_ADMIN_SUPPMESS_TOOLTIP","activer (True) o désactiver (False) l'invio di messaggi alla case di posta dell'administrateur indirizzata al Supporto.");
-define("CONF_ADMIN_RAIDATT","Consenti razzia e attaque");
-define("CONF_ADMIN_RAIDATT_TOOLTIP","activer (True) o désactiver (False) la possibilité di faire irruzione e attaccare un administrateur.");
+define('ADMIN_INFO', 'Informations administrateur');
+define('EDIT_ADMIN_INFO', 'Modifier les informations administrateur');
+define('CONF_ADMIN_NAME', 'Nom administrateur');
+define('CONF_ADMIN_NAME_TOOLTIP', 'Nom pour le compte administrateur.');
+define('CONF_ADMIN_EMAIL', 'E-mail administrateur');
+define('CONF_ADMIN_EMAIL_TOOLTIP', 'Adresse e-mail du compte administrateur.');
+define('CONF_ADMIN_SHOWSTATS', 'Inclure l\'administrateur dans les statistiques');
+define('CONF_ADMIN_SHOWSTATS_TOOLTIP', 'Activer (Vrai) ou désactiver (Faux) l\'affichage du compte administrateur dans les statistiques générales.');
+define('CONF_ADMIN_SUPPMESS', 'Inclure les messages de support');
+define('CONF_ADMIN_SUPPMESS_TOOLTIP', 'Activer (Vrai) ou désactiver (Faux) l\'envoi de messages à la boîte de l\'administrateur adressée au Support.');
+define('CONF_ADMIN_RAIDATT', 'Autoriser pillage et attaque');
+define('CONF_ADMIN_RAIDATT_TOOLTIP', 'Activer (Vrai) ou désactiver (Faux) la possibilité d\'attaquer ou piller un administrateur.');
+
+// gold plus
+define('GOLD_SHOP', 'Boutique d\'or');
+define('PACKAGE_A', 'Pack A');
+define('PACKAGE_B', 'Pack B');
+define('PACKAGE_C', 'Pack C');
+define('PACKAGE_D', 'Pack D');
+define('PACKAGE_E', 'Pack E');
+define('PAYMENT_METHOD', 'Méthode de paiement');
+define('PACKAGES_NOT_REFUND', 'Aucun pack n\'est remboursable.');
+define('PLUS_FUNC', 'Fonction Plus');
+define('REMAINING', 'Restant');
+define('MINS', 'min');
+define('ACTIVATE', 'Activer');
+define('TOO_LITTLE_GOLD', 'Pas assez d\'or');
+define('GOLD_ON', 'Activé');
+define('PLUS_END', 'Votre avantage PLUS a pris fin');
+define('NPC', 'PNJ');
+define('NO_GOLD', 'Vous ne possédez actuellement pas d\'or.');
+define('GOLD_CLUB', 'Gold Club');
+define('NOW', 'maintenant');
+define('NPC_TRADE_GOLD', 'Échanger avec le marchand PNJ');
+define('COMPLETE_CONSTRUCTION_R_GOLD', 'Terminer immédiatement les ordres de construction et recherches dans ce village (ne fonctionne pas pour le palais et la résidence).');
+define('FOR_GAME_SERVER', 'Tout le round de jeu');
+define('HAVE_NO_INVITED', 'Vous n\'avez encore amené aucun nouveau joueur.');
+define('INVITE_FRIENDS_GOLD', 'Invitez des amis et recevez de l\'or gratuit');
+define('NEED_MORE_GOLD', 'Vous avez besoin de plus d\'or');
+define('ADD_PLUS_FAIL', 'Tentative Plus échouée');
+define('ADD_BONUS_LUMBER_FAIL', 'Tentative bois échouée');
+define('ADD_BONUS_CLAY_FAIL', 'Tentative argile échouée');
+define('ADD_BONUS_IRON_FAIL', 'Tentative fer échouée');
+define('ADD_BONUS_CROP_FAIL', 'Tentative céréales échouée');
+define('SELECT_GOLD_OPTION', 'Veuillez sélectionner l\'option à activer ou prolonger.');
+define('GET_NOW', 'Obtenir maintenant');
+define('BUY_NOW', 'Acheter maintenant');
+define('SELECT_REWARD', 'Sélectionner la récompense');
+define('VIP_ACCOUNT', 'Compte VIP');
+define('USER_NOT_EXISTS', 'Le nom de compte saisi n\'existe pas.');
+define('STATUS_UPDATED', 'Votre statut a été mis à jour.');
+
+// profile
+define('PREFERENCES', 'Préférences');
+define('VACATION', 'Vacances');
+define('ACTIVATE_VACATION', 'Voulez-vous activer le mode vacances ?');
+define('GRAPH_PACK', 'Pack graphique');
+define('PLAYER_PROFILE', 'Profil du joueur');
+define('CHANGE_PASSWORD', 'Changer de mot de passe');
+define('OLD_PASSWORD', 'Ancien mot de passe');
+define('NEW_PASSWORD', 'Nouveau mot de passe');
+define('CHANGE_EMAIL', 'Changer d\'e-mail');
+define('CHANGE_EMAIL2', 'Veuillez saisir vos anciennes et nouvelles adresses e-mail. Vous recevrez ensuite un code à saisir ici aux deux adresses.');
+define('OLD_EMAIL', 'Ancien e-mail');
+define('NEW_EMAIL', 'Nouvel e-mail');
+define('ACCOUNT_SITTERS', 'Substituts du compte');
+define('ACCOUNT_SITTERS2', 'Un substitut peut se connecter à votre compte avec votre nom et son propre mot de passe. Vous pouvez avoir jusqu\'à deux substituts.');
+define('SITTER_NAME', 'Nom du substitut');
+define('NO_SITTERS', 'Vous n\'avez aucun substitut.');
+define('RM_SITTER', 'Supprimer le substitut');
+define('YOU_ARE_SITTER', 'Vous avez été désigné substitut sur les comptes suivants. Vous pouvez annuler cela en cliquant sur la croix rouge.');
+define('DELETE_ACCOUNT', 'Supprimer le compte');
+define('DELETE_ACCOUNT2', 'Vous pouvez supprimer votre compte ici. Après avoir lancé l\'annulation, il faudra trois jours pour terminer la suppression du compte. Vous pouvez annuler ce processus dans les 24 premières heures.');
+define('YES', 'Oui');
+define('NO', 'Non');
+define('CONFIRM_W_PASS', 'Confirmer avec mot de passe');
+define('MEDALS', 'Médailles');
+define('PLAYER_HAS', 'Ce joueur a');
+define('HOURS_OF_BG_PROT', 'heures de protection des débutants restantes');
+define('PLAYER_WAS_REG_ON', 'Ce joueur a inscrit son compte le');
+define('NATARS_ACC', 'Compte officiel Natar');
+define('WW_V_M', 'Village officiel de la Merveille du monde');
+define('ROMAN_T_M', 'Les Romains : grâce à leur haut niveau de développement social et technologique, les Romains sont des maîtres en construction et en coordination. Leurs troupes font partie de l\'élite dans Travian. Très équilibrées, elles sont utiles tant en attaque qu\'en défense.');
+define('TEUTON_T_M', 'Les Teutons : les Teutons sont la tribu la plus agressive. Leurs troupes sont notoires et redoutées pour leur rage et leur frénésie au combat. Ils se déplacent comme une horde pillarde, sans même craindre la mort.');
+define('GAUL_T_M', 'Les Gaulois : les Gaulois sont la tribu la plus pacifique des trois dans Travian. Leurs troupes sont entraînées pour une excellente défense, mais leur capacité d\'attaque rivalise avec les deux autres tribus. Les Gaulois sont des cavaliers nés et leurs chevaux sont réputés pour leur vitesse, ce qui leur permet de frapper l\'ennemi exactement où ils peuvent causer le plus de dégâts.');
+define('ADMIN_M', 'Administrateur officiel du serveur');
+define('MH_M', 'Multihunter global officiel du serveur');
+define('MH_M2', 'Le Multihunter est un poste officiel Travian utilisé pour faire respecter les règles du jeu sur un serveur. Les Multihunters utilisent tous un compte nommé Multihunter avec son unique village situé en (0|0). Un Multihunter ne peut pas jouer sur le serveur où il est Multihunter, mais peut être joueur actif sur d\'autres serveurs.');
+define('NATURE_M2', 'Les troupes de la nature sont les animaux vivant dans les oasis inoccupées. Vous pouvez utiliser le simulateur de combat pour voir si vous avez assez de troupes pour vaincre les animaux d\'une oasis que vous voulez conquérir, mais souvenez-vous que vous ne pouvez que piller les oasis. Gardez à l\'esprit que tous les animaux au-dessus de l\'ours peuvent tuer en combat singulier l\'unité travian de niveau maximum contemporaine.');
+define('TASKMASTER_M', 'Compte du surveillant');
+define('VETERAN_P', 'Joueur vétéran');
+define('VETERAN_3_M', 'Médaille obtenue pour 3 ans de jeu à Travian');
+define('VETERAN_5_M', 'Médaille obtenue pour 5 ans de jeu à Travian');
+define('VETERAN_10_M', 'Médaille obtenue pour 10 ans de jeu à Travian');
+define('ATT_W_M', 'Attaquants de la semaine');
+define('DEF_W_M', 'Défenseurs de la semaine');
+define('POP_W_M', 'Grimpeurs de population de la semaine');
+define('ROB_W_M', 'Pilleurs de la semaine');
+define('CLIMB_W_M', 'Grimpeurs de rang de la semaine');
+define('ATT_DEF_10_W_M', 'Cette médaille indique que vous étiez dans le Top 10 des attaquants ET des défenseurs de la semaine.');
+define('ATT_3_W_M', 'Cette médaille indique que vous étiez dans le Top 3 des attaquants de la semaine.');
+define('DEF_3_W_M', 'Cette médaille indique que vous étiez dans le Top 3 des défenseurs de la semaine.');
+define('POP_3_W_M', 'Cette médaille indique que vous étiez dans le Top 3 des grimpeurs de population de la semaine.');
+define('ROB_3_W_M', 'Cette médaille indique que vous étiez dans le Top 3 des pilleurs de la semaine.');
+define('CLIMB_3_W_M', 'Cette médaille indique que vous étiez dans le Top 3 des grimpeurs de rang de la semaine.');
+define('ATT_10_W_M', 'Cette médaille indique que vous étiez dans le Top 10 des attaquants de la semaine.');
+define('DEF_10_W_M', 'Cette médaille indique que vous étiez dans le Top 10 des défenseurs de la semaine.');
+define('POP_10_W_M', 'Cette médaille indique que vous étiez dans le Top 10 des grimpeurs de population de la semaine.');
+define('ROB_10_W_M', 'Cette médaille indique que vous étiez dans le Top 10 des pilleurs de la semaine.');
+define('CLIMB_10_W_M', 'Cette médaille indique que vous étiez dans le Top 10 des grimpeurs de rang de la semaine.');
+define('RECEIVED_IN_W', 'Reçue en semaine');
+define('POINTS_M', 'Points');
+define('RANKS', 'Rangs');
+define('WEEK', 'Semaine');
+define('CATEGORY', 'Catégorie');
+define('RANK', 'Rang');
+define('BB_CODE', 'BB-Code');
+define('IN_ROW', 'd\'affilée');
+define('ADMIN1', 'Administrateur');
+define('MULTIH1', 'Multihunter');
+define('PLAYER_ADMIN', 'Ce joueur est administrateur');
+define('PLAYER_MH', 'Ce joueur est Multihunter');
+define('PLAYER_BANNED', 'Ce joueur est BANNI');
+define('PLAYER_VACATION', 'Ce joueur est en VACANCES');
+if(!defined('BANNED')) define('BANNED', 'Banni');
+define('GENDER', 'Genre');
+define('GENDER0', 'N/A');
+define('MALE0', 'h');
+define('MALE', 'Homme');
+define('FEMALE0', 'f');
+define('FEMALE', 'Femme');
+define('LOCATION', 'Localisation');
+define('DIRECT_LINKS', 'Liens directs');
+define('NUMBER0', 'N°');
+define('LINK_NAME', 'Nom du lien');
+define('LINK_TARGET', 'Cible du lien');
+define('AUTO_COMPL', 'Auto-complétion');
+define('AUTO_COMPL2', 'Utilisée pour le point de rassemblement et le marché.');
+define('OWN_VILLAGES', 'Mes villages');
+define('VILLAGES_NEAR', 'Villages des environs');
+define('VILLAGES_ALLI_PLAYERS', 'Villages des joueurs de l\'alliance');
+define('REPORT_FILTER', 'Filtre des rapports');
+define('NO_REPORTS_TO_OWN', 'Aucun rapport pour les transferts vers mes villages');
+define('NO_REPORTS_TO_OTH', 'Aucun rapport pour les transferts vers des villages étrangers');
+define('NO_REPORTS_FROM_OTH', 'Aucun rapport pour les transferts depuis des villages étrangers');
+define('CHANGE_PROFILE', 'Modifier le profil');
+define('WRITE_MESSAGE', 'Écrire un message');
+define('REPORT_PLAYER', 'Signaler un joueur');
+define('ARTEFACT1', 'Artefact');
+define('WoW1', 'WoW');
+define('VILLAGE_NAME', 'Nom du village');
+define('BDAY', 'Anniversaire');
+define('CONDITIONS', 'Conditions');
+define('TIME_PREF', 'Préférences horaires');
+define('TIME_ZONES_DESC', 'Vous pouvez modifier ici l\'heure affichée par Travian pour qu\'elle corresponde à votre fuseau horaire.');
+define('TIME_ZONE_L1', 'Europe');
+define('TIME_ZONE_L2', 'Royaume-Uni');
+define('TIME_ZONE_L3', 'Turquie');
+define('TIME_ZONE_L4', 'Asie/Kolkata');
+define('TIME_ZONE_L5', 'Asie/Bangkok');
+define('TIME_ZONE_L6', 'USA/New York');
+define('TIME_ZONE_L7', 'USA/Chicago');
+define('TIME_ZONE_L8', 'Nouvelle-Zélande');
+define('MONTH1', 'Jan');
+define('MONTH2', 'Fév');
+define('MONTH3', 'Mar');
+define('MONTH4', 'Avr');
+define('MONTH5', 'Mai');
+define('MONTH6', 'Juin');
+define('MONTH7', 'Juil');
+define('MONTH8', 'Août');
+define('MONTH9', 'Sep');
+define('MONTH10', 'Oct');
+define('MONTH11', 'Nov');
+define('MONTH12', 'Déc');
 
 /*
 |--------------------------------------------------------------------------
@@ -1478,39 +1721,38 @@ define("CONF_ADMIN_RAIDATT_TOOLTIP","activer (True) o désactiver (False) la pos
 |--------------------------------------------------------------------------
 */
 
-	   $lang['index'][0][1] = "Benvenuto in " . SERVER_NAME . "";
-	   $lang['index'][0][2] = "Manuale";
-	   $lang['index'][0][3] = "Gioca maintenant, gratis!";
-	   $lang['index'][0][4] = "Cosa è " . SERVER_NAME . "";
-	   $lang['index'][0][5] = "" . SERVER_NAME . " è un <b>navigateur game</b> fcaratterizzato da un coinvolgente monde antico avec migliaia di autres joueurs reali.</p><p>Esso è <strong>gratuit</strong> e non richiede <strong>downloads</strong>.";
-	   $lang['index'][0][6] = "Cliquez ici pour giocare " . SERVER_NAME . "";
-	   $lang['index'][0][7] = "total joueurs";
-	   $lang['index'][0][8] = "Joueurs active";
-	   $lang['index'][0][9] = "Joueurs en ligne";
-	   $lang['index'][0][10] = "À propos du jeu";
-	   $lang['index'][0][11] = "Vous commencerez comme chef d\'un minuscule village et vous vous lancerez dans une aventure passionnante.";
-	   $lang['index'][0][12] = "Construisez des villages, menez des guerres ou établissez des routes commerciales avec vos voisins.";
-	   $lang['index'][0][13] = "Jouez avec et contre des milliers d\'autres joueurs réels et partez à la conquête du monde de Travian.";
-	   $lang['index'][0][14] = "News";
-	   $lang['index'][0][15] = "FAQ";
-	   $lang['index'][0][16] = "Screenshots";
-	   $lang['forum'] = "Forum";
-	   $lang['register'] = "Inscription";
-	   $lang['login'] = "Login";
-	   $lang['screenshots']['title1']="Village";
-	   $lang['screenshots']['desc1']="construction du village";
-           $lang['screenshots']['title2']="Ressource";
-           $lang['screenshots']['desc2']="La ressource du village è il bois, l'argile, il fer e il céréales";
-           $lang['screenshots']['title3']="Carte";
-           $lang['screenshots']['desc3']="Posiziona il votre village sulla carte";
-           $lang['screenshots']['title4']="construisez bâtiment";
-           $lang['screenshots']['desc4']="comme construire un bâtiment o un niveau di ressource";
-           $lang['screenshots']['title5']="Rapport";
-           $lang['screenshots']['desc5']="Il votre rapport sull'attaque";
-           $lang['screenshots']['title6']="statistiques";
-           $lang['screenshots']['desc6']="Visualizza il votre posizionamento dans les statistiques";
-           $lang['screenshots']['title7']="Armi o pasta";
-           $lang['screenshots']['desc7']="vous pouvez choisir di giocare comme militare o economista";
-
+$lang['index'][0][1] = 'Bienvenue à '.SERVER_NAME;
+$lang['index'][0][2] = 'Manuel';
+$lang['index'][0][3] = 'Jouez maintenant, gratuitement !';
+$lang['index'][0][4] = 'Qu\'est-ce que '.SERVER_NAME.' ?';
+$lang['index'][0][5] = SERVER_NAME.' est un <b>jeu de navigateur</b> mettant en scène un monde antique captivant avec des milliers d\'autres vrais joueurs.</p><p>Il est <strong>gratuit</strong> et ne nécessite <strong>aucun téléchargement</strong>.';
+$lang['index'][0][6] = 'Cliquez ici pour jouer à '.SERVER_NAME;
+$lang['index'][0][7] = 'Joueurs au total';
+$lang['index'][0][8] = 'Joueurs actifs';
+$lang['index'][0][9] = 'Joueurs en ligne';
+$lang['index'][0][10] = 'À propos du jeu';
+$lang['index'][0][11] = 'Vous commencerez comme chef d\'un minuscule village et vous lancerez dans une aventure passionnante.';
+$lang['index'][0][12] = 'Construisez des villages, menez des guerres ou établissez des routes commerciales avec vos voisins.';
+$lang['index'][0][13] = 'Jouez avec et contre des milliers d\'autres vrais joueurs et partez à la conquête du monde de Travian.';
+$lang['index'][0][14] = 'Actualités';
+$lang['index'][0][15] = 'FAQ';
+$lang['index'][0][16] = 'Captures d\'écran';
+$lang['forum'] = 'Forum';
+$lang['register'] = 'Inscription';
+$lang['login'] = 'Connexion';
+$lang['screenshots']['title1'] = 'Village';
+$lang['screenshots']['desc1'] = 'Construction de village';
+$lang['screenshots']['title2'] = 'Ressource';
+$lang['screenshots']['desc2'] = 'Les ressources du village sont le bois, l\'argile, le fer et les céréales';
+$lang['screenshots']['title3'] = 'Carte';
+$lang['screenshots']['desc3'] = 'Localisez votre village sur la carte';
+$lang['screenshots']['title4'] = 'Construction de bâtiment';
+$lang['screenshots']['desc4'] = 'Comment construire un bâtiment ou améliorer une ressource';
+$lang['screenshots']['title5'] = 'Rapport';
+$lang['screenshots']['desc5'] = 'Votre rapport d\'attaque';
+$lang['screenshots']['title6'] = 'Statistiques';
+$lang['screenshots']['desc6'] = 'Consultez votre classement dans les statistiques';
+$lang['screenshots']['title7'] = 'Armes ou pain';
+$lang['screenshots']['desc7'] = 'Vous pouvez choisir de jouer en militaire ou en économiste';
 
 ?>
