@@ -101,6 +101,7 @@ $dbPrefix = $_SESSION['install_random_prefix'];
         <option value="7,Australia/Melbourne" <?=$tz==7?'selected':''?>>Australia</option>
         <option value="8,Europe/Bucharest" <?=$tz==8?'selected':''?>>Europe (Bucharest)</option>
         <option value="9,Europe/London" <?=$tz==9?'selected':''?>>Europe (London)</option>
+        <option value="14,Europe/Zurich" <?=$tz==14?'selected':''?>>Europe (Switzerland)</option>
         <option value="10,Europe/Bratislava" <?=$tz==10?'selected':''?>>Europe (Bratislava)</option>
         <option value="11,Indian/Maldives" <?=$tz==11?'selected':''?>>Indian</option>
         <option value="12,Pacific/Fiji" <?=$tz==12?'selected':''?>>Pacific</option>
