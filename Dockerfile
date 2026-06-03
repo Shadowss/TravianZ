@@ -23,6 +23,11 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Enable Apache modules
 RUN a2enmod rewrite headers
 
+# Use the production PHP configuration as a baseline, then apply our overrides
+# so that errors are hidden from end users and logged server-side instead.
+RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY docker/php/zz-travianz.ini "$PHP_INI_DIR/conf.d/zz-travianz.ini"
+
 # Set working directory
 WORKDIR /var/www/html
 

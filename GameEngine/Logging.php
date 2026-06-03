@@ -110,7 +110,7 @@ class Logging {
 			$log = "Finish construction and research with gold";
 			list($log) = $database->escape_input($log);
 
-			$q = "Insert into " . TB_PREFIX . "gold_fin_log values (0,$wid,'$log')";
+			$q = "INSERT INTO " . TB_PREFIX . "gold_fin_log (wid, action, time, details) VALUES ($wid, 'Finish all constructions', " . time() . ", '$log')";
 			$database->query($q);
 		}
 	}
