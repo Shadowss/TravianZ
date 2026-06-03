@@ -1,5 +1,4 @@
 <?php
-
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
@@ -58,15 +57,71 @@ body > img[src*="Travian"], img[src*="admin.gif"]{display:none !important}
 .tribes{display:flex;justify-content:center;gap:24px;margin-top:24px;opacity:.6}
 .tribe-icon{width:36px;height:36px;border-radius:50%;background:rgba(30,41,59,.8);display:flex;align-items:center;justify-content:center;font-size:18px;border:1px solid rgba(148,163,184,.2)}
 
-/* CREDIT SHADOW - ELEGANT */
-.credits{margin-top:22px;text-align:center;font-size:11px;color:#64748b;letter-spacing:.4px;opacity:.9}
-.credits .shadow{color:#38bdf8;font-weight:700;text-shadow:0 0 12px rgba(56,189,248,.45)}
-.credits a{color:#7dd3fc;text-decoration:none;border-bottom:1px solid rgba(125,211,252,.25);padding-bottom:1px;transition:all .2s}
-.credits a:hover{color:#fff;border-bottom-color:#38bdf8;text-shadow:0 0 10px rgba(56,189,248,.7)}
+/* === FOOTER SHADOW - pentru login === */
+.credits{
+  margin-top:24px !important;
+  text-align:center !important;
+  background:rgba(15,23,42,.85) !important;
+  backdrop-filter:blur(16px) !important;
+  border:1px solid rgba(239,68,68,.35) !important;
+  border-radius:14px !important;
+  padding:16px !important;
+  box-shadow:0 10px 30px rgba(0,0,0,.5), 0 0 20px rgba(239,68,68,.15) !important;
+}
+.credits .shadow-main{
+  font-size:15px !important;
+  font-weight:800 !important;
+  color:#fff !important;
+  letter-spacing:.3px !important;
+  margin-bottom:4px !important;
+}
+.credits .shadow-main span{
+  color:#ef4444 !important;
+  font-size:18px !important;
+  font-weight:900 !important;
+  text-shadow:0 0 10px rgba(239,68,68,.7) !important;
+}
+.credits .shadow-sub{
+  font-size:11px !important;
+  color:#cbd5e1 !important;
+  margin-bottom:6px !important;
+}
+.credits .shadow-old{
+  font-size:10px !important;
+  color:#64748b !important;
+  border-top:1px solid rgba(148,163,184,.12) !important;
+  padding-top:6px !important;
+  margin-top:6px !important;
+}
+
+/* === NOU: EROARE LOGIN === */
+.login-error{
+  background:rgba(220,38,38,.12);
+  border:1px solid rgba(220,38,38,.35);
+  border-left:3px solid #ef4444;
+  color:#fecaca;
+  padding:12px 16px;
+  border-radius:12px;
+  margin-bottom:18px;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  backdrop-filter:blur(12px);
+  animation:tzShake .4s ease;
+  box-shadow:0 8px 20px rgba(0,0,0,.4);
+}
+.login-error::before{content:"⚠️";font-size:16px;filter:drop-shadow(0 0 6px rgba(239,68,68,.5))}
+.login-error strong{color:#fff;font-weight:600}
+@keyframes tzShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-3px)}40%,80%{transform:translateX(3px)}}
 </style>
 
 <div class="login-page">
   <div class="login-container">
+    
+    <!-- BANNER EROARE - apare deasupra logo-ului -->
+    <div id="tz-error-holder"></div>
+
     <div class="login-header">
       <div class="travian-logo">TRA<span>VIAN</span>Z</div>
       <div class="admin-badge">
@@ -103,13 +158,37 @@ body > img[src*="Travian"], img[src*="admin.gif"]{display:none !important}
     </div>
 
     <div class="tribes">
-      <div class="tribe-icon" title="Romans">⚔️</div>
+      <div class="tribe-icon" title="Romans">⚔</div>
       <div class="tribe-icon" title="Teutons">🪓</div>
-      <div class="tribe-icon" title="Gauls">🛡️</div>
+      <div class="tribe-icon" title="Gauls">🛡</div>
     </div>
 
-    <div class="credits">
-      Admin Panel Redesigned & Refactored by <span class="shadow">Shadow</span> – <a href="https://github.com/Shadowss/TravianZ" target="_blank" rel="noopener">TravianZ Copyright</a>
-    </div>
+	<div class="credits">
+		<div class="shadow-main">⚡ ADMIN PANEL 100% REBUILT BY Shadow</div>
+		<div class="shadow-sub">Dashboard v5.0 • TravianZ 2025 • Full code, design & optimization</div>
+		<div class="shadow-old">Based on: Akakori & Elmar | Fixed by: Dzoki | Reworked by: aggenkeech</div>
+	</div>
   </div>
 </div>
+
+<script>
+// Prinde "Error" printat de admin.php și îl mută în bannerul frumos
+(function(){
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let found = false;
+  while(walker.nextNode()){
+    const n = walker.currentNode;
+    if(n.nodeValue && n.nodeValue.trim() === 'Error'){
+      n.nodeValue = '';
+      found = true;
+      break;
+    }
+  }
+  if(found || document.body.innerText.includes('Error')){
+    const holder = document.getElementById('tz-error-holder');
+    if(holder){
+      holder.innerHTML = '<div class="login-error"><div><strong>Login failed</strong> – Invalid username or password</div></div>';
+    }
+  }
+})();
+</script>

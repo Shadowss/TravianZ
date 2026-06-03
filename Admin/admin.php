@@ -293,7 +293,7 @@ if (!empty($_GET['p'])) {
 				$subpage = 'Edit Village ('.$village['name'].' » '.($user['username'] ?? '?').')';
 			} else {
 				$subpage = 'Edit Village (ID '.$did.' not found)';
-				$village = null; // important, ca să nu crape template-ul mai jos
+				$village = null;
 			}
 			} else {
 				$subpage = 'Edit Village (no village)';
@@ -399,22 +399,23 @@ body{margin:0;font-family:Verdana,Arial,sans-serif}
 .tz-user{font-size:12px}
 .tz-logout{margin-left:10px;background:#ef4444;color:#fff;padding:5px 11px;border-radius:6px;text-decoration:none;font-size:11px;font-weight:bold}
 
-/* LOGIN = header NEGRU */
 body.login{background:#0f172a;color:#e2e8f0}
 body.login #ltop1{background:#0b1220 !important;background-image:none !important}
 body.login .tz-topbar{color:#fff !important}
 body.login .tz-brand h1{color:#fff !important}
 body.login .tz-brand .tz-sub{color:#94a3b8 !important}
 
-/* APP = header ALB */
-body.app{background:#eef2f7;color:#1f2937}
-body.app #ltop1{background:#ffffff !important;background-image:none !important;border-bottom:1px solid #e5e7eb !important}
-body.app .tz-topbar{color:#1f2937 !important}
-body.app .tz-brand h1{color:#111827 !important}
-body.app .tz-brand .tz-sub{color:#6b7280 !important}
-body.app .tz-user{color:#4b5563}
-body.app #lleft{background:#ffffff!important;border-right:1px solid #e5e7eb}
-body.app #lmid1{background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.04);margin:16px;padding:20px!important}
+body.app{background:#0f172a;color:#e2e8f0}
+body.app #ltop1{background:#0b1220 !important;background-image:none !important;border-bottom:3px solid #f59e0b !important}
+body.app .tz-topbar{color:#fff !important}
+body.app .tz-brand h1{color:#fff !important}
+body.app .tz-brand .tz-sub{color:#94a3b8 !important}
+body.app .tz-user{color:#cbd5e1}
+
+body.app #lleft{background:transparent!important;border-right:none !important;padding:0 12px;}
+body.app #lleft .center-img{margin-top:20px;margin-bottom:12px}
+
+body.app #menu{background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.3);margin-top:0;}
 body.app #menu>li>a{display:block;padding:10px 16px;color:#374151!important;font-weight:600;font-size:12px;border-left:3px solid transparent;text-decoration:none}
 body.app #menu>li>a:hover,body.app #menu>li>a.active{background:#f3f4f6;border-left-color:#f59e0b;color:#111827!important}
 body.app #menu li.sub ul{background:#f9fafb}
@@ -422,7 +423,13 @@ body.app #menu li.sub ul li a{display:block;padding:8px 16px 8px 34px;font-size:
 body.app #menu li.sub ul li a:hover{color:#d97706!important}
 body.app #menu li a{background:#ffffff !important;color:#374151 !important;border-bottom:1px solid #f3f4f6 !important}
 body.app #menu li a:hover{background:#f9fafb !important}
-body.app #lleft{box-shadow:none !important}
+
+body.app #lmid1{background:#ffffff !important;margin:16px !important;padding:24px !important;border-radius:12px !important;box-shadow:0 2px 8px rgba(0,0,0,.15) !important;border:1px solid #e5e7eb !important;}
+body.app #lmid3{color:#696969 !important;}
+body.app #lmid3 h1,body.app #lmid3 h2,body.app #lmid3 h3,body.app #lmid3 h4,body.app #lmid3 b,body.app #lmid3 strong{color:#696969 !important;font-weight:700 !important;}
+body.app #lmid3 p,body.app #lmid3 span,body.app #lmid3 div,body.app #lmid3 td,body.app #lmid3 th,body.app #lmid3 li,body.app #lmid3 font{color:#696969 !important;font-weight:500 !important;}
+body.app #lmid3 [style*="color:"]{color:#696969 !important;}
+body.app #lmid3 a{color:#15803d !important;font-weight:600 !important;}
 </style>
 	</head>
 	<body class="<?php echo $funct->CheckLogin() ? 'app' : 'login'; ?>">
@@ -527,10 +534,10 @@ body.app #lleft{box-shadow:none !important}
 				<div class="tz-user">
 					<?php if($funct->CheckLogin()){ ?>
 						<?php 
-							$adminName = $database->getUserField($_SESSION['id'], 'username', 0);
-							$adminAccess = $database->getUserField($_SESSION['id'], 'access', 0);
-							$rank = $adminAccess == 9 ? 'Admin' : ($adminAccess == 8 ? 'MH' : 'User');
-						?>
+						$adminName = $database->getUserField($_SESSION['id'], 'username', 0);
+						$adminAccess = $database->getUserField($_SESSION['id'], 'access', 0);
+						$rank = $adminAccess == 9 ? 'Admin' : ($adminAccess == 8 ? 'MH' : 'User');
+					?>
 						Logged: <b><?=$adminName?></b> <span style="color:#999;font-size:11px">(<?=$rank?>)</span> 
 						<a href="?action=logout" class="tz-logout">Logout</a>
 					<?php } else { ?>
@@ -539,20 +546,16 @@ body.app #lleft{box-shadow:none !important}
 				</div>
 			</div>
 		</div>
-
+    <div style="height:20px;"></div>
 		<div id="lmidall">
 			<div id="lmidlc">
 				<div id="lleft">
+
 					<p class="center-img">
-    <a href="<?php echo HOMEPAGE; ?>">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="78" height="78" style="display:block;margin:0 auto;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25));">
-          <defs><linearGradient id="tz1" x1="128" y1="28" x2="128" y2="236"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#d97706"/></linearGradient></defs>
-          <path d="M128 28c-32 0-64 3-84 16v86c0 54 36 90 84 104 48-14 84-50 84-104V44c-20-13-52-16-84-16z" fill="url(#tz1)" stroke="#78350f" stroke-width="5"/>
-          <path d="M106 38l9-12 8 7 5-14 5 14 8-7 9 12v8c-14-4.5-30-4.5-44 0v-8z" fill="#fcd34d" stroke="#78350f" stroke-width="3"/>
-          <text x="128" y="165" font-family="Georgia" font-size="90" font-weight="700" text-anchor="middle" fill="#3c1f0a">TZ</text>
-        </svg>
-    </a>
-</p>
+			<a href="<?php echo HOMEPAGE; ?>">
+				<img src="/Admin/img/travianz_admin_logo.png" alt="TravianZ Admin Panel" style="display:block;margin:0 auto;max-width:85%;height:auto;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5));">
+			</a>
+					</p>
 					<?php
 						if($funct->CheckLogin())
 						{
