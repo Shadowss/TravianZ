@@ -101,6 +101,7 @@ $dbPrefix = $_SESSION['install_random_prefix'];
         <option value="7,Australia/Melbourne" <?=$tz==7?'selected':''?>>Australia</option>
         <option value="8,Europe/Bucharest" <?=$tz==8?'selected':''?>>Europe (Bucharest)</option>
         <option value="9,Europe/London" <?=$tz==9?'selected':''?>>Europe (London)</option>
+        <option value="14,Europe/Zurich" <?=$tz==14?'selected':''?>>Europe (Switzerland)</option>
         <option value="10,Europe/Bratislava" <?=$tz==10?'selected':''?>>Europe (Bratislava)</option>
         <option value="11,Indian/Maldives" <?=$tz==11?'selected':''?>>Indian</option>
         <option value="12,Pacific/Fiji" <?=$tz==12?'selected':''?>>Pacific</option>
@@ -120,7 +121,7 @@ $dbPrefix = $_SESSION['install_random_prefix'];
       </select>
     </div>
     <div><label>Language</label>
-      <select class="input" name="lang"><option value="en" selected>English</option><option value="es">Spanish</option><option value="rs">Serbian</option><option value="ru">Rusian</option><option value="zh_tw">Taiwanese</option></select>
+      <select class="input" name="lang"><option value="en" selected>English</option><option value="fr">French</option><option value="es">Spanish</option><option value="rs">Serbian</option><option value="ru">Rusian</option><option value="zh_tw">Taiwanese</option></select>
     </div>
     <div><label>Beginners protection</label>
       <select class="input" name="beginner">
