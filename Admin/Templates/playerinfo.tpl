@@ -163,7 +163,7 @@
 
 					<tr>
 						<?php include("playerplusbonus.tpl");?>
-					<tr>
+					</tr>
 						<th>Email</th>
 						<td><?php echo htmlspecialchars($user['email']?? '');?></td>
 					</tr>
