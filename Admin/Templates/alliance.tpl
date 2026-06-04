@@ -33,13 +33,45 @@ if($_GET['aid']) {
         }
         $founder = $database->getUserField($alidata['leader'],"username",0);
 
-        // --- FIX 1: calculeaza max membri dupa Ambasada (lvl 20 = 60) ---
-        $embassyLevel = 0;
-        $embQ = mysqli_query($GLOBALS["link"], "SELECT MAX(b.level) as lvl FROM ".TB_PREFIX."bdata b JOIN ".TB_PREFIX."vdata v ON v.wref=b.wid WHERE v.owner=".(int)$alidata['leader']." AND b.type=18");
-        if($embR = mysqli_fetch_assoc($embQ)) $embassyLevel = (int)$embR['lvl'];
-        $maxMembers = $embassyLevel * 3;
-        if($maxMembers < 3) $maxMembers = 3;
-        if((int)$alidata['max'] > 0) $maxMembers = (int)$alidata['max']; // daca e setat manual, il respectam
+		// --- FIX 1: calculeaza max membri dupa Ambasada (lvl 20 = 60) ---
+		$embassyLevel = 0;
+		$leaderId = (int)$alidata['leader'];
+
+		// 1. ia toate satele liderului din vdata
+		$villages = [];
+		$vq = mysqli_query($GLOBALS["link"], "SELECT wref FROM ".TB_PREFIX."vdata WHERE owner = $leaderId");
+		while($v = mysqli_fetch_assoc($vq)) {
+		$villages[] = (int)$v['wref'];
+	}
+
+		if(!empty($villages)) {
+		$in = implode(',', $villages);
+    
+		// 2. cauta in fdata, in TOATE coloanele *t, unde tipul = 18
+		// MODIFICARE: punem MAX in jurul GREATEST ca sa luam cel mai mare nivel din TOATE orasele
+		$sql = "SELECT MAX(
+        GREATEST(
+            IF(f1t=18,IFNULL(f1,0),0), IF(f2t=18,IFNULL(f2,0),0), IF(f3t=18,IFNULL(f3,0),0), IF(f4t=18,IFNULL(f4,0),0), IF(f5t=18,IFNULL(f5,0),0),
+            IF(f6t=18,IFNULL(f6,0),0), IF(f7t=18,IFNULL(f7,0),0), IF(f8t=18,IFNULL(f8,0),0), IF(f9t=18,IFNULL(f9,0),0), IF(f10t=18,IFNULL(f10,0),0),
+            IF(f11t=18,IFNULL(f11,0),0), IF(f12t=18,IFNULL(f12,0),0), IF(f13t=18,IFNULL(f13,0),0), IF(f14t=18,IFNULL(f14,0),0), IF(f15t=18,IFNULL(f15,0),0),
+            IF(f16t=18,IFNULL(f16,0),0), IF(f17t=18,IFNULL(f17,0),0), IF(f18t=18,IFNULL(f18,0),0), IF(f19t=18,IFNULL(f19,0),0), IF(f20t=18,IFNULL(f20,0),0),
+            IF(f21t=18,IFNULL(f21,0),0), IF(f22t=18,IFNULL(f22,0),0), IF(f23t=18,IFNULL(f23,0),0), IF(f24t=18,IFNULL(f24,0),0), IF(f25t=18,IFNULL(f25,0),0),
+            IF(f26t=18,IFNULL(f26,0),0), IF(f27t=18,IFNULL(f27,0),0), IF(f28t=18,IFNULL(f28,0),0), IF(f29t=18,IFNULL(f29,0),0), IF(f30t=18,IFNULL(f30,0),0),
+            IF(f31t=18,IFNULL(f31,0),0), IF(f32t=18,IFNULL(f32,0),0), IF(f33t=18,IFNULL(f33,0),0), IF(f34t=18,IFNULL(f34,0),0), IF(f35t=18,IFNULL(f35,0),0),
+            IF(f36t=18,IFNULL(f36,0),0), IF(f37t=18,IFNULL(f37,0),0), IF(f38t=18,IFNULL(f38,0),0), IF(f39t=18,IFNULL(f39,0),0), IF(f40t=18,IFNULL(f40,0),0),
+            IF(f99t=18,IFNULL(f99,0),0)
+        )
+		) as emb_lvl
+		FROM ".TB_PREFIX."fdata WHERE vref IN ($in)";
+
+    $embQ = mysqli_query($GLOBALS["link"], $sql);
+    if($er = mysqli_fetch_assoc($embQ)) {
+        $embassyLevel = (int)$er['emb_lvl'];
+    }
+	}
+
+		$maxMembers = $embassyLevel * 3;
+		if($maxMembers < 3) $maxMembers = 3;
 
         // --- FIX 3: calculeaza rank real dupa puncte ---
         $allianceRank = 1;
