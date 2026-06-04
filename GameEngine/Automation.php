@@ -890,13 +890,18 @@ class Automation {
         return (mysqli_affected_rows($database->dblink) === 1);
     }
 
-    private function sendunitsComplete() {
-        // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
-        // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
-        // Include: batalii, capcane, evaziune erou, distrugere cladiri, cuceriri
-        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units;
+    /**
+     * Fetch all attacks (sort_type 3, not reinforcement) that have arrived by
+     * $time, joined with their attack rows, ordered by arrival.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param int $time Current timestamp.
+     * @return array Rows of pending/completed attacks.
+     */
+    private function fetchCompletedAttacks($time) {
+        global $database;
 
-        $time = time();
+        $time = (int) $time;
         $q = "
             SELECT
                 `from`, `to`, endtime, ref, ctar1, ctar2, spy, moveid, attack_type,
@@ -915,22 +920,47 @@ class Automation {
                 AND
                 endtime < $time
             ORDER BY endtime ASC";
-        $dataarray = $database->query_return($q);
+        return $database->query_return($q);
+    }
+
+    /**
+     * Batch-preload the village / unit / tech data used by sendunitsComplete()
+     * so the per-attack loop hits the in-request cache instead of querying row
+     * by row. Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $dataarray Completed attacks (each with 'from' and 'to').
+     */
+    private function preloadBattleData(array $dataarray) {
+        global $database;
+
+        $vilIDs = [];
+        foreach ($dataarray as $data) {
+            $vilIDs[$data['from']] = true;
+            $vilIDs[$data['to']] = true;
+        }
+        $vilIDs = array_keys($vilIDs);
+
+        $database->getProfileVillages($vilIDs, 5);
+        $database->getUnit($vilIDs);
+        $database->getEnforceVillage($vilIDs, 0);
+        $database->getMovement(34, $vilIDs, 1);
+        $database->getABTech($vilIDs);
+    }
+
+    private function sendunitsComplete() {
+        // PROCESARE ATACURI COMPLETE - functie critica, pastrata 100% compatibila
+        // Aceasta functie gestioneaza toate atacurile care ajung la destinatie
+        // Include: batalii, capcane, evaziune erou, distrugere cladiri, cuceriri
+        global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units;
+
+        $time = time();
+        $dataarray = $this->fetchCompletedAttacks($time);
         $totalattackdead = $data_num = 0;
 
         if ($dataarray && count($dataarray)) {
-            // preload village data
-            $vilIDs = [];
-            foreach($dataarray as $data) {
-                $vilIDs[$data['from']] = true;
-                $vilIDs[$data['to']] = true;
-            }
-            $vilIDs = array_keys($vilIDs);
-            $database->getProfileVillages($vilIDs, 5);
-            $database->getUnit($vilIDs);
-            $database->getEnforceVillage($vilIDs, 0);
-            $database->getMovement(34, $vilIDs, 1);
-            $database->getABTech($vilIDs);
+            // preload village data (batched) so the per-attack loop hits the
+            // cache instead of querying row by row
+            $this->preloadBattleData($dataarray);
 
             // calculate battles
             foreach($dataarray as $data) {
