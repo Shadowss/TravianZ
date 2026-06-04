@@ -369,6 +369,15 @@ function __construct() {
 	}
 		$this->userarray = $this->userinfo = $_SESSION[$cacheKeyUser]['data'];
 
+        // Per-user language (issue #166): seed the session language from the
+        // player's saved preference (users.lang) the first time, e.g. right
+        // after login. Once set, the profile "save preferences" page keeps it
+        // up to date, so we don't overwrite it here (also avoids reverting to
+        // a stale value from the 30s user cache above).
+        if (empty($_SESSION['lang']) && !empty($this->userarray['lang'])) {
+            $_SESSION['lang'] = $this->userarray['lang'];
+        }
+
         $this->username = $this->userarray['username'];
         $this->uid = $_SESSION['id_user'] = $this->userarray['id'];
 
