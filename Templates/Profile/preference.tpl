@@ -196,7 +196,7 @@ if (isset($_POST['v1']) || isset($_POST['v2']) || isset($_POST['timezone']) || i
 $lang = LANG;
 if(isset($_POST['lang']))
 {
-    $allowedLangs = ['en','ro','de','fr','es','it','ru','tr'];
+    $allowedLangs = ['en','fr','it','ro','zh'];
     $selectedLang = strtolower(trim($_POST['lang']));
     if(in_array($selectedLang, $allowedLangs))
     {

@@ -143,6 +143,23 @@
 						<th>Password</th>
 						<td>•••••••</td>
 					</tr>
+					<tr>
+						<th>Language</th>
+						<td>
+					<?php
+					// map language
+					$langMap = [
+					'en' => 'English',
+					'ro' => 'Romanian',
+					'zh' => 'Chinese',
+					'fr' => 'French',
+					'it' => 'Italian',
+					];
+					$userLang = $user['lang'] ?? 'en';
+						echo htmlspecialchars($langMap[$userLang] ?? strtoupper($userLang));
+					?>
+					</td>
+					</tr>
 
 					<tr>
 						<?php include("playerplusbonus.tpl");?>
