@@ -522,9 +522,6 @@ if(isset($_POST['lang']))
 <tr>
   <th colspan="2">
     Language settings
-    <span style="color:#999; font-weight:400; font-size:0.9em; font-style:italic; opacity:0.7;">
-      (not coded yet)
-    </span>
   </th>
 </tr>
 </thead>
@@ -539,23 +536,14 @@ if(isset($_POST['lang']))
             <option value="ro" <?php if($session->userinfo['lang']=="ro") echo 'selected'; ?>>
                 Romanian
             </option>
-            <option value="de" <?php if($session->userinfo['lang']=="de") echo 'selected'; ?>>
-                German
+            <option value="zh" <?php if($session->userinfo['lang']=="zh") echo 'selected'; ?>>
+                Chinese
             </option>
             <option value="fr" <?php if($session->userinfo['lang']=="fr") echo 'selected'; ?>>
                 French
             </option>
-            <option value="es" <?php if($session->userinfo['lang']=="es") echo 'selected'; ?>>
-                Spanish
-            </option>
             <option value="it" <?php if($session->userinfo['lang']=="it") echo 'selected'; ?>>
                 Italian
-            </option>
-            <option value="ru" <?php if($session->userinfo['lang']=="ru") echo 'selected'; ?>>
-                Russian
-            </option>
-            <option value="tr" <?php if($session->userinfo['lang']=="tr") echo 'selected'; ?>>
-                Turkish
             </option>
         </select>
     </td>

@@ -121,7 +121,7 @@ $dbPrefix = $_SESSION['install_random_prefix'];
       </select>
     </div>
     <div><label>Language</label>
-      <select class="input" name="lang"><option value="en" selected>English</option><option value="fr">French</option><option value="es">Spanish</option><option value="rs">Serbian</option><option value="ro">Romanian</option><option value="zh_tw">Taiwanese</option></select>
+      <select class="input" name="lang"><option value="en" selected>English</option><option value="fr">French</option><option value="it">Italian</option><option value="ro">Romanian</option><option value="zh">Chinese</option></select>
     </div>
     <div><label>Beginners protection</label>
       <select class="input" name="beginner">
