@@ -1292,8 +1292,11 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
  `timestamp` int(11) NULL,
  PRIMARY KEY (`id`),
  KEY `vref` (`vref`),
- KEY `timestamp` (`timestamp`),
-  UNIQUE KEY `vref_tech` (`vref`,`tech`)
+ KEY `timestamp` (`timestamp`)
+ -- NOTE: no UNIQUE(vref,tech) here on purpose. The Smithy/Armoury queue stores
+ -- each queued upgrade of the SAME unit as its own row (same tech, different
+ -- timestamp). A UNIQUE(vref,tech) made the 2nd queued upgrade INSERT fail,
+ -- which under PHP 8 mysqli (exceptions on) became an uncaught HTTP 500.
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
