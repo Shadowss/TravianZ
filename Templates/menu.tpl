@@ -129,10 +129,6 @@ $idUser      = isset($_SESSION['id_user']) ? (int)$_SESSION['id_user'] : 0;
             <a href="build_croppers.php">
                 Build Cropper
             </a>
-
-            <a href="sysmsg.php">
-                <?php echo SYSTEM_MESSAGE; ?>
-            </a>
         <?php
         }
         ?>
