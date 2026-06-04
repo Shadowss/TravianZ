@@ -223,7 +223,7 @@ class Profile {
 		// Language change
 		if (!empty($post['sprache'])) {
 		// whitelist – pune aici limbile pe care le ai în /lang/
-		$allowed = ['en','ro','de','it','fr','es'];
+		$allowed = ['en','fr','it','ro','zh'];
 		$lang = strtolower(trim($post['sprache']));
     
 		if (in_array($lang, $allowed, true)) {
