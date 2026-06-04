@@ -1,535 +1,224 @@
-<div id="content"  class="map">
-<?php 
-$basearray = $database->getMInfo($_GET['d']);
-$uinfo = $database->getVillage($basearray['id']);
-$oasis1 = mysqli_query($database->dblink,'SELECT conqured, owner FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysqli_real_escape_string($database->dblink,$_GET['d']));
-$oasis = mysqli_fetch_assoc($oasis1);
-$access=$session->access;
+<div id="content" class="map">
+<?php
+// ---------- 0. SETUP ----------
+$d = isset($_GET['d'])? (int)$_GET['d'] : 0;
+$basearray = $database->getMInfo($d);
+$baseId = isset($basearray['id'])? $basearray['id'] : 0;
+$uinfo = $database->getVillage($baseId);
+$isOasis = ($basearray['fieldtype'] == 0);
+
+$oasis = array('conqured'=>0,'owner'=>0);
+if ($isOasis) {
+    $q = $database->dblink->query('SELECT conqured, owner FROM `'.TB_PREFIX.'odata` WHERE wref='.(int)$d);
+    if($q) $oasis = $q->fetch_assoc();
+}
+$access = $session->access;
 $oasislink = '';
-?>
-<h1><?php if($basearray['fieldtype']!=0){
-echo !$basearray['occupied']? ABANDVALLEY : $basearray['name']; echo " (".$basearray['x']."|".$basearray['y'].")";
-}else{
-echo !$oasis['conqured']? UNOCCUOASIS : OCCUOASIS; echo " (".$basearray['x']."|".$basearray['y'].")";
-$otext = !$oasis['conqured']? UNOCCUOASIS : OCCUOASIS;
-} ?></h1>
-<?php if($basearray['occupied'] && $basearray['capital']) { echo "<div id=\"dmain\">(capital)</div>"; }
-if($uinfo && $uinfo['owner'] == 3 && $uinfo['name'] == PLANVILLAGE){
-?>
-<img src="img/x.gif" id="detailed_map" class="f99" alt="<?php echo PLANVILLAGE;?>" />
-<?php }else{ ?>
-<img src="img/x.gif" id="detailed_map" class="<?php echo ($basearray['fieldtype'] == 0)? 'w'.$basearray['oasistype'] : 'f'.$basearray['fieldtype'] ?>" alt="<?php 
-switch($basearray['fieldtype']) {
-case 1:
-$tt =  "3-3-3-9";
-break;
-case 2:
-$tt =  "3-4-5-6";
-break;
-case 3:
-$tt =  "4-4-4-6";
-break;
-case 4:
-$tt =  "4-5-3-6";
-break;
-case 5:
-$tt =  "5-3-4-6";
-break;
-case 6:
-$tt =  "1-1-1-15";
-break;
-case 7:
-$tt =  "4-4-3-7";
-break;
-case 8:
-$tt =  "3-4-4-7";
-break;
-case 9:
-$tt =  "4-3-4-7";
-break;
-case 10:
-$tt =  "3-5-4-6";
-break;
-case 11:
-$tt =  "4-3-5-6";
-break;
-case 12:
-$tt =  "5-4-3-6";
-break;
-case 0:
-switch($basearray['oasistype']) {
-case 1:
-case 2:
-$tt =  "+25% ".LUMBER." ".PERHOUR."\" title=\"+25% ".LUMBER." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r1\" src=\"img/x.gif\" title=\"".LUMBER."\"> 25% ".LUMBER."</td>";
-break;
-case 3:
-$tt =  "+25% ".LUMBER." and +25% ".CROP." ".PERHOUR."\" title=\"+25% ".LUMBER." and +25% ".CROP." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r1\" src=\"img/x.gif\" title=\"".LUMBER."\"> 25% ".LUMBER."</td>
-		<tr><td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td></tr>";
-break;
-case 4:
-case 5:
-$tt =  "+25% ".CLAY." ".PERHOUR."\" title=\"+25% ".CLAY." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r2\" src=\"img/x.gif\" title=\"".CLAY."\"> 25% ".CLAY."</td>";
-break;
-case 6:
-$tt =  "+25% ".CLAY." and +25% ".CROP." ".PERHOUR."\" title=\"+25% ".CLAY." and +25% ".CROP." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r2\" src=\"img/x.gif\" title=\"".CLAY."\"> 25% ".CLAY."</td>
-		<tr><td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td></tr>";
-break;
-case 7:
-case 8:
-$tt =  "+25% ".IRON." ".PERHOUR."\" title=\"+25% ".IRON." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r3\" src=\"img/x.gif\" title=\"".IRON."\"> 25% ".IRON."</td>";
-break;
-case 9:
-$tt =  "+25% ".IRON." and +25% ".CROP." ".PERHOUR."\" title=\"+25% ".IRON." and +25% ".CROP." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r3\" src=\"img/x.gif\" title=\"".IRON."\"> 25% ".IRON."</td>
-		<tr><td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td></tr>";
-break;
-case 10:
-case 11:
-$tt =  "+25% ".CROP." ".PERHOUR."\" title=\"+25% ".CROP." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 25% ".CROP."</td>";
-break;
-case 12:
-$tt =  "+50% ".CROP." ".PERHOUR."\" title=\"+50% ".CROP." ".PERHOUR;
-$ttt = "<td class=\"ico\"><img class=\"r4\" src=\"img/x.gif\" title=\"".CROP."\"> 50% ".CROP."</td>";
-break;
+$coords = "(".$basearray['x']."|".$basearray['y'].")";
+$otext = $isOasis? ($oasis['conqured']? OCCUOASIS : UNOCCUOASIS) : '';
+
+// ---------- 1. FIELD ----------
+$fieldMap = array(
+    1=>'3-3-3-9', 2=>'3-4-5-6', 3=>'4-4-4-6', 4=>'4-5-3-6',
+    5=>'5-3-4-6', 6=>'1-1-1-15', 7=>'4-4-3-7', 8=>'3-4-4-7',
+    9=>'4-3-4-7', 10=>'3-5-4-6', 11=>'4-3-5-6', 12=>'5-4-3-6'
+);
+$tt = $isOasis? '' : (isset($fieldMap[$basearray['fieldtype']])? $fieldMap[$basearray['fieldtype']] : '');
+$landd = $isOasis? array() : explode('-', $tt);
+
+// ---------- 2. OASIS BONUS ----------
+$oasisBonus = array(
+    1=>array(array('r1',LUMBER,25)), 2=>array(array('r1',LUMBER,25)),
+    3=>array(array('r1',LUMBER,25),array('r4',CROP,25)),
+    4=>array(array('r2',CLAY,25)), 5=>array(array('r2',CLAY,25)),
+    6=>array(array('r2',CLAY,25),array('r4',CROP,25)),
+    7=>array(array('r3',IRON,25)), 8=>array(array('r3',IRON,25)),
+    9=>array(array('r3',IRON,25),array('r4',CROP,25)),
+    10=>array(array('r4',CROP,25)), 11=>array(array('r4',CROP,25)),
+    12=>array(array('r4',CROP,50))
+);
+$bonusData = $isOasis? (isset($oasisBonus[$basearray['oasistype']])? $oasisBonus[$basearray['oasistype']] : array()) : array();
+if ($isOasis) {
+    $parts = array_map(function($b){ return "+".$b[2]."% ".$b[1]; }, $bonusData);
+    $tt = implode(' and ', $parts).' '.PERHOUR;
 }
-break;
+
+// ---------- 3. HELPERE ----------
+function tribeName($t){
+    $m = array(1=>TRIBE1,2=>TRIBE2,3=>TRIBE3,4=>TRIBE4,5=>TRIBE5);
+    return isset($m[$t])? $m[$t] : '';
 }
-echo $tt."\"";
-$landd = explode("-",$tt);?> />
-<?php } ?>
-<div id="map_details">
-<?php 
-if($basearray['fieldtype'] == 0) {
-if($oasis['owner'] == 2){
-?>
-<table cellpadding="1" cellspacing="1" id="bonus" class="tableNone bonus">
-		<thead><tr>
-			<th><?php echo BONUS;?></th>
-		</tr></thead>
-		<tbody>
-<?php
-        echo $ttt;
-?>
-	</tbody>
-	</table>
-	
-<table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone">
-            <thead><tr>
-                <th colspan="3"><?php echo TROOPS;?>:</th>
-            </tr></thead>
-            <tbody>
-            <?php         
-        $unit = $database->getUnit($_GET['d']);
-        $unarray = array(31 => U31, U32, U33, U34, U35, U36, U37, U38, U39, U40);     
-        $troopsPresent = false;
-        for ($i = 31; $i <= 40; $i++) {
-        	if($unit['u'.$i] > 0){
-        		// assemble oasis warsim link
-        		if ($basearray['fieldtype'] == 0) {
-        			if (!$oasislink) $oasislink = rtrim(HOMEPAGE, '/').'/warsim.php?target=4';
-        			$oasislink .= '&amp;u'.$i.'='.$unit['u'.$i];
-        		}
-        		echo '<tr>';
-        		echo '<td class="ico"><img class="unit u'.$i.'" src="img/x.gif" alt="'.$unarray[$i].'" title="'.$unarray[$i].'" /></td>';
-        		echo '<td class="val">'.$unit['u'.$i].'</td>';
-        		echo '<td class="desc">'.$unarray[$i].'</td>';
-        		echo '</tr>';
-        		$troopsPresent = true;
-        	}
+function renderBonus($bonusData){
+    foreach($bonusData as $b){
+        $cls=$b[0]; $res=$b[1]; $pct=$b[2];
+        echo '<tr><td class="ico"><img class="'.$cls.'" src="img/x.gif" title="'.$res.'"> '.$pct.'% '.$res.'</td></tr>';
+    }
+}
+function renderReports($database,$generator,$session,$d,$limit,$typeMap=null){
+    $where = $session->alliance? 'ally = '.(int)$session->alliance : 'uid = '.(int)$session->uid;
+    $sql = 'SELECT ntype,id,topic,time FROM '.TB_PREFIX.'ndata WHERE ('.$limit.') AND '.$where.' AND toWref = '.(int)$d.' ORDER BY time DESC LIMIT 5';
+    $res = $database->dblink->query($sql);
+    if(!$res ||!$res->num_rows){ echo '<tr><td>'.THERENOINFO.'</td></tr>'; return; }
+    while($row=$res->fetch_assoc()){
+        $type = $row['ntype'];
+        if($typeMap && isset($typeMap[$type])) $type = $typeMap[$type];
+        if($type>=18 && $type<=22){
+            $icon = '<img src="gpack/travian_default/img/scouts/'.$type.'.gif" alt="'.$row['topic'].'" title="'.$row['topic'].'">';
+        } else {
+            $icon = '<img src="img/x.gif" class="iReport iReport'.$row['ntype'].'" title="'.$row['topic'].'">';
         }
-        if(!$troopsPresent) echo '<tr><td>'.NOTROOP.'</td></tr>';
-      ?>
-        </tbody>
-        </table>
-	
-<table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone rep">
-		<thead><tr>
-			<th><?php echo REPORT;?>:</th>
-		</tr></thead>
-		<tbody>
-		<?php
-$vilData = $database->getVillage($_GET['d']);
-if( $vilData && $session->uid == $vilData['owner'] ){
-	$limit = "ntype > 3 AND ntype < 8";
+        $date = $generator->procMtime($row['time']);
+        echo '<tr><td>'.$icon.' <a href="berichte.php?id='.$row['id'].'">'.$date[0].' '.date('H:i',$row['time']).'</a></td></tr>';
+    }
 }
-else $limit = "ntype < 8 OR ntype > 17";
-
-$toWref = $_GET['d'];
-if($session->alliance != 0){
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
-$query = mysqli_num_rows($result);
-if($query){
-while($row = mysqli_fetch_array($result)){
-	$dataarray = explode(",",$row['data']);
-	$type = $row['ntype'];
-	$topic = $row['topic'];
-	echo "<tr><td>";
-if($type >= 18 && $type <= 21){
-    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
-	}else{
-    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
-	}
-    $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
-    echo "</td></tr>";
-}
-}else{ ?>
-							<tr>
-					<td><?php echo THERENOINFO;?></td>
-				</tr>
-
-<?php }
-}else{
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
-$query = mysqli_num_rows($result);
-if($query){
-while($row = mysqli_fetch_array($result)){
-	$dataarray = explode(",",$row['data']);
-	$type = $row['ntype'];
-	$topic=$row['topic'];
-	echo "<tr><td>";
-if($type >= 18 && $type <= 21){
-    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
-	}else{
-    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
-	}
-    $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
-    echo "</td></tr>";
-}
-}else{ ?>
-							<tr>
-					<td><?php echo THERENOINFO;?></td>
-				</tr>
-<?php }} ?>
-</tbody>
-</table>
-<?php
-}else{
 ?>
-    <table cellpadding="1" cellspacing="1" id="village_info" class="tableNone">
-        <?php 
-        $uinfo = $database->getUserArray($oasis['owner'],1); ?>
-		<tbody><tr>
-			<th><?php echo TRIBE;?></th>
-			<td><?php switch($uinfo['tribe']) { case 1: echo TRIBE1; break; case 2: echo TRIBE2; break; case 3: echo TRIBE3; break; case 4: echo TRIBE4; break; case 5: echo TRIBE5; break;} ?></td>
-		</tr>
-		<tr>
-			<th><?php echo ALLIANCE;?></th>
-			<?php if($uinfo['alliance'] == 0){
-			echo '<td>-</td>';
-			} else echo '
-			<td><a href="allianz.php?aid='.$uinfo['alliance'].' ">'.$database->getUserAlliance($oasis['owner']).'</a></td>'; ?>
-		</tr>
-		<tr>
-			<th><?php echo OWNER;?></th>
-			<td><a href="spieler.php?uid=<?php echo $oasis['owner']; ?>"><?php echo $database->getUserField($oasis['owner'],'username',0); ?></a></td>
-		</tr>
-		<tr>
-			<th><?php echo VILLAGE;?></th>
-			<td><a href="karte.php?d=<?php echo $oasis['conqured'];?>&c=<?php echo $generator->getMapCheck($oasis['conqured']);?>"><?php echo $database->getVillageField($oasis['conqured'], "name");?> </a></td>
-		</tr></tbody>
-	</table>
 
-<table cellpadding="1" cellspacing="1" id="bonus" class="tableNone bonus">
-		<thead><tr>
-			<th><?php echo BONUS;?></th>
-		</tr></thead>
-		<tbody>
-<?php
-        echo $ttt;
+<h1><?php
+if(!$isOasis){
+    echo!$basearray['occupied']? ABANDVALLEY : $basearray['name'];
+} else {
+    echo $oasis['conqured']? OCCUOASIS : UNOCCUOASIS;
+}
+echo ' '.$coords;
+?></h1>
+
+<?php if($basearray['occupied'] && $basearray['capital']) echo '<div id="dmain">(capital)</div>';?>
+
+<?php if($uinfo && $uinfo['owner']==3 && $uinfo['name']==PLANVILLAGE){?>
+<img src="img/x.gif" id="detailed_map" class="f99" alt="<?php echo PLANVILLAGE;?>">
+<?php } else {
+    $mapClass = $isOasis? 'w'.$basearray['oasistype'] : 'f'.$basearray['fieldtype'];
 ?>
-	</tbody>
-	</table>
-	
-<table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone rep">
-		<thead><tr>
-			<th><?php echo REPORT;?></th>
-		</tr></thead>
-		<tbody>
-		<?php
-if($session->uid == $database->getVillage($_GET['d'])['owner']){
-	$limit = "(ntype > 3 AND ntype < 8) OR ntype = 20 OR ntype = 21";
-}
-else $limit = "ntype < 8 OR ntype > 17";
+<img src="img/x.gif" id="detailed_map" class="<?php echo $mapClass;?>" alt="<?php echo htmlspecialchars($tt);?>" title="<?php echo htmlspecialchars($tt);?>">
+<?php }?>
 
-$toWref = $_GET['d'];
-if($session->alliance != 0){
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
-$query = mysqli_num_rows($result);
-if($query){
-while($row = mysqli_fetch_array($result)){
-	$dataarray = explode(",",$row['data']);
-	$type = $row['ntype'];
-	$topic = $row['topic'];
-	echo "<tr><td>";
-if($type >= 18 && $type <= 21){
-    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
-	}else{
-    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
-	}
-    $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
-    echo "</td></tr>";
-}
-}else{ ?>
-							<tr>
-					<td><?php echo THERENOINFO;?></td>
-				</tr>
+<div id="map_details">
+<?php if($isOasis){?>
+    <?php if($oasis['owner']==2){?>
+        <table id="bonus" class="tableNone bonus"><thead><tr><th><?php echo BONUS;?></th></tr></thead><tbody>
+            <?php renderBonus($bonusData);?>
+        </tbody></table>
 
-<?php }
-}else{
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
-$query = mysqli_num_rows($result);
-if($query){
-while($row = mysqli_fetch_array($result)){
-	$dataarray = explode(",",$row['data']);
-	$type = $row['ntype'];
-	$topic = $row['topic'];
-	echo "<tr><td>";
-if($type >= 18 && $type <= 21){
-    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
-	}else{
-    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
-	}
-    $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
-    echo "</td></tr>";
-}
-}else{ ?>
-							<tr>
-					<td><?php echo THERENOINFO;?></td>
-				</tr>
-<?php }} ?>
-</tbody>
-</table>
-<?php
-}
-}else if (!$basearray['occupied']) {
-?>
-	<table cellpadding="1" cellspacing="1" id="distribution" class="tableNone">
+        <table id="troop_info" class="tableNone"><thead><tr><th colspan="3"><?php echo TROOPS;?>:</th></tr></thead><tbody>
+        <?php
+        $unit = $database->getUnit($d);
+        $unames = array(31=>U31,32=>U32,33=>U33,34=>U34,35=>U35,36=>U36,37=>U37,38=>U38,39=>U39,40=>U40);
+        $has=false;
+        for($i=31;$i<=40;$i++) if($unit['u'.$i]>0){
+            $has=true;
+            if(!$oasislink) $oasislink = rtrim(HOMEPAGE,'/').'/warsim.php?target=4';
+            $oasislink.= '&amp;u'.$i.'='.$unit['u'.$i];
+            echo '<tr><td class="ico"><img class="unit u'.$i.'" src="img/x.gif" alt="'.$unames[$i].'"></td><td class="val">'.$unit['u'.$i].'</td><td class="desc">'.$unames[$i].'</td></tr>';
+        }
+        if(!$has) echo '<tr><td>'.NOTROOP.'</td></tr>';
+       ?>
+        </tbody></table>
 
-		<thead><tr>
-			<th colspan="3"><?php echo LANDDIST;?></th>
-		</tr></thead>
-		<tbody>
-						<tr>
-				<td class="ico"><img class="r1" src="img/x.gif" alt="<?php echo LUMBER;?>" title="<?php echo LUMBER;?>" /></td>
-				<td class="val"><?php echo $landd['0']; ?></td>
-				<td class="desc"><?php echo WOODCUTTER;?></td>
+        <table class="tableNone rep"><thead><tr><th><?php echo REPORT;?>:</th></tr></thead><tbody>
+        <?php
+        $tmp = $database->getVillage($d);
+        $isOwner = $session->uid == (isset($tmp['owner'])? $tmp['owner'] : 0);
+        $limit = $isOwner? 'ntype > 3 AND ntype < 8' : 'ntype < 8 OR ntype > 17';
+        renderReports($database,$generator,$session,$d,$limit);
+       ?>
+        </tbody></table>
 
-			</tr>
-						<tr>
-				<td class="ico"><img class="r2" src="img/x.gif" alt="<?php echo CLAY;?>" title="<?php echo CLAY;?>" /></td>
-				<td class="val"><?php echo $landd['1']; ?></td>
-				<td class="desc"><?php echo CLAYPIT;?></td>
-			</tr>
-						<tr>
-				<td class="ico"><img class="r3" src="img/x.gif" alt="<?php echo IRON;?>" title="<?php echo IRON;?>" /></td>
+    <?php } else { $u = $database->getUserArray($oasis['owner'],1);?>
+        <table id="village_info" class="tableNone"><tbody>
+            <tr><th><?php echo TRIBE;?></th><td><?php echo tribeName($u['tribe']);?></td></tr>
+            <tr><th><?php echo ALLIANCE;?></th><td><?php echo $u['alliance']? '<a href="allianz.php?aid='.$u['alliance'].'">'.$database->getUserAlliance($oasis['owner']).'</a>' : '-';?></td></tr>
+            <tr><th><?php echo OWNER;?></th><td><a href="spieler.php?uid=<?php echo $oasis['owner'];?>"><?php echo $database->getUserField($oasis['owner'],'username',0);?></a></td></tr>
+            <tr><th><?php echo VILLAGE;?></th><td><a href="karte.php?d=<?php echo $oasis['conqured'];?>&c=<?php echo $generator->getMapCheck($oasis['conqured']);?>"><?php echo $database->getVillageField($oasis['conqured'],'name');?></a></td></tr>
+        </tbody></table>
+        <table id="bonus" class="tableNone bonus"><thead><tr><th><?php echo BONUS;?></th></tr></thead><tbody><?php renderBonus($bonusData);?></tbody></table>
+        <table class="tableNone rep"><thead><tr><th><?php echo REPORT;?></th></tr></thead><tbody>
+        <?php
+        $tmp = $database->getVillage($d);
+        $isOwner = $session->uid == (isset($tmp['owner'])? $tmp['owner'] : 0);
+        $limit = $isOwner? '(ntype > 3 AND ntype < 8) OR ntype = 20 OR ntype = 21' : 'ntype < 8 OR ntype > 17';
+        renderReports($database,$generator,$session,$d,$limit);
+       ?>
+        </tbody></table>
+    <?php }?>
 
-				<td class="val"><?php echo $landd['2']; ?></td>
-				<td class="desc"><?php echo IRONMINE;?></td>
-			</tr>
-						<tr>
-				<td class="ico"><img class="r4" src="img/x.gif" alt="<?php echo CROP;?>" title="<?php echo CROP;?>" /></td>
-				<td class="val"><?php echo $landd['3']; ?></td>
-				<td class="desc"><?php echo CROPLAND;?></td>
+<?php } elseif(!$basearray['occupied']){?>
+    <table id="distribution" class="tableNone"><thead><tr><th colspan="3"><?php echo LANDDIST;?></th></tr></thead><tbody>
+        <tr><td class="ico"><img class="r1" src="img/x.gif"></td><td class="val"><?php echo $landd[0];?></td><td class="desc"><?php echo WOODCUTTER;?></td></tr>
+        <tr><td class="ico"><img class="r2" src="img/x.gif"></td><td class="val"><?php echo $landd[1];?></td><td class="desc"><?php echo CLAYPIT;?></td></tr>
+        <tr><td class="ico"><img class="r3" src="img/x.gif"></td><td class="val"><?php echo $landd[2];?></td><td class="desc"><?php echo IRONMINE;?></td></tr>
+        <tr><td class="ico"><img class="r4" src="img/x.gif"></td><td class="val"><?php echo $landd[3];?></td><td class="desc"><?php echo CROPLAND;?></td></tr>
+    </tbody></table>
 
-			</tr>
-					</tbody>
-	</table>
+<?php } else { $u = $database->getUserArray($basearray['owner'],1);?>
+    <table id="village_info" class="tableNone"><tbody>
+        <tr><th><?php echo TRIBE;?></th><td><?php echo tribeName($u['tribe']);?></td></tr>
+        <tr><th><?php echo ALLIANCE;?></th><td><?php echo $u['alliance']? '<a href="allianz.php?aid='.$u['alliance'].'">'.$database->getUserAlliance($basearray['owner']).'</a>' : '-';?></td></tr>
+        <tr><th><?php echo OWNER;?></th><td><a href="spieler.php?uid=<?php echo $basearray['owner'];?>"><?php echo $database->getUserField($basearray['owner'],'username',0);?></a></td></tr>
+        <tr><th><?php echo POP;?></th><td><?php echo $basearray['pop'];?></td></tr>
+    </tbody></table>
+    <table class="tableNone rep"><thead><tr><th><?php echo REPORT;?>:</th></tr></thead><tbody>
     <?php
-    }
-    else {
-    ?>
-    <table cellpadding="1" cellspacing="1" id="village_info" class="tableNone">
-		<!--<thead>
-			<th colspan="2"><div><?php echo $basearray['name']; ?></div>&nbsp;(<?php echo $basearray['x']; ?>|<?php echo $basearray['y']; ?>)</th>
-		</tr></thead>-->
-        <?php 
-        $uinfo = $database->getUserArray($basearray['owner'],1); ?>
-		<tbody><tr>
-			<th><?php echo TRIBE;?></th>
-			<td><?php switch($uinfo['tribe']) { case 1: echo TRIBE1; break; case 2: echo TRIBE2; break; case 3: echo TRIBE3; break; case 4: echo TRIBE4; break; case 5: echo TRIBE5; break;} ?></td>
-		</tr>
-		<tr>
-			<th><?php echo ALLIANCE;?></th>
-			<?php if($uinfo['alliance'] == 0){
-			echo '<td>-</td>';
-			} else echo '
-			<td><a href="allianz.php?aid='.$uinfo['alliance'].' ">'.$database->getUserAlliance($basearray['owner']).'</a></td>'; ?>
-		</tr>
-		<tr>
-			<th><?php echo OWNER;?></th>
-			<td><a href="spieler.php?uid=<?php echo $basearray['owner']; ?>"><?php echo $database->getUserField($basearray['owner'],'username',0); ?></a></td>
-		</tr>
-		<tr>
-			<th><?php echo POP;?></th>
-			<td><?php echo $basearray['pop']; ?></td>
-		</tr></tbody>
-	</table>
- 
-<table cellpadding="1" cellspacing="1" id="troop_info" class="tableNone rep">
-		<thead><tr>
-			<th><?php echo REPORT;?>:</th>
-		</tr></thead>
-		<tbody>
-		<?php
-if($session->uid == $database->getVillage($_GET['d'])['owner']){
-	$limit = "(ntype > 3 AND ntype < 8) OR ntype = 23";
-}
-else $limit = "(ntype < 8 OR (ntype > 17 AND ntype < 22)) OR ntype = 22";
-
-$toWref = $_GET['d'];
-if($session->alliance != 0){
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND ally = ".$session->alliance." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
-$query = mysqli_num_rows($result);
-if($query){
-while($row = mysqli_fetch_array($result)){
-	$dataarray = explode(",",$row['data']);
-	$type = ($row['ntype'] == 23) ? 22 : $row['ntype'];
-	$topic = $row['topic'];
-	echo "<tr><td>";
-if($type >= 18 && $type <= 22){
-    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
-	}else{
-    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
-	}
-    $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\" title=\"".$topic."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
-    echo "</td></tr>";
-}
-}else{ ?>
-							<tr>
-					<td><?php echo THERENOINFO;?></td>
-				</tr>
-
-<?php }
-}else{
-$result = mysqli_query($database->dblink,"SELECT data, ntype, id, topic, time FROM ".TB_PREFIX."ndata WHERE ($limit) AND uid = ".$session->uid." AND toWref = ".$toWref." ORDER BY time DESC Limit 5");
-$query = mysqli_num_rows($result);
-if($query){
-while($row = mysqli_fetch_array($result)){
-	$dataarray = explode(",",$row['data']);
-	$type = $row['ntype'];
-	$topic=$row['topic'];
-	echo "<tr><td>";
-if($type >= 18 && $type <= 21){
-    echo "<img src=\"gpack/travian_default/img/scouts/$type.gif\" alt=\"".$topic."\" title=\"".$topic."\" />";
-	}else{
-    echo "<img src=\"img/x.gif\" class=\"iReport iReport".$row['ntype']."\" title=\"".$topic."\"> ";
-	}
-    $date = $generator->procMtime($row['time']);
-    echo "<a href=\"berichte.php?id=".$row['id']."&vill=".$row['id']."\">".$date[0]." ".date('H:i',$row['time'])."</a> ";
-    echo "</td></tr>";
-}
-}else{ ?>
-							<tr>
-					<td><?php echo THERENOINFO;?></td>
-				</tr>
-
-<?php }} ?>
-					</tbody>
-	</table>
-    <?php } ?>
+    $isOwner = $session->uid == $basearray['owner'];
+    $limit = $isOwner? '(ntype > 3 AND ntype < 8) OR ntype = 23' : '(ntype < 8 OR (ntype > 17 AND ntype < 22)) OR ntype = 22';
+    renderReports($database,$generator,$session,$d,$limit,array(23=>22));
+   ?>
+    </tbody></table>
+<?php }?>
 </div>
-<table cellpadding="1" cellspacing="1" id="options" class="tableNone">
-	<thead><tr>
-		<th><?php echo OPTION;?></th>
-	</tr></thead>
-	<tbody><tr>
 
-		<td><a href="karte.php?z=<?php echo $_GET['d']; ?>">&raquo; <?php echo CENTREMAP;?>.</a></td>
-	</tr>
-	<?php if(!$basearray['occupied']) { ?>
-	
-	<tr>
-		<td class="none"><?php 
-      $mode = CP; 
-      $total = count($database->getProfileVillages($session->uid)); 
-      $need_cps = ${'cp'.$mode}[$total + 1]; 
-      $cps = floor($database->getUserField($session->uid, 'cp',0));
-      $enough_cp = $cps >= $need_cps;
-      
-	
-	if($village->unitarray['u'.$session->tribe.'0'] >= 3 && $enough_cp && $village->resarray['f39'] > 0) {
-		$text = "<a href=\"a2b.php?id=".$_GET['d']."&amp;s=1\">&raquo;  ".FNEWVILLAGE."</a>";
-    } elseif($village->unitarray['u'.$session->tribe.'0'] >= 3 && !$enough_cp) {
-    	$text = "&raquo; ".FNEWVILLAGE." ($cps/$need_cps ".CULTUREPOINT.")";
-    } elseif(!$village->resarray['f39']) {
-    	$text = "&raquo; ".FNEWVILLAGE." (".BUILDRALLY.")"; 
-	} else {
-        $text = "&raquo; ".FNEWVILLAGE." (".$village->unitarray['u'.$session->tribe.'0']."/3 ".SETTLERSAVAIL.")";
-    }
- 	
- 	if ($basearray['fieldtype'] == 0) {
- 		if ($village->resarray['f39'] == 0) {
- 			if ($basearray['owner'] == $session->uid) echo "<a href=\"build.php?id=39\">&raquo; ".RAID." $otext (".BUILDRALLY.")</a>";
- 			else echo "&raquo; ".RAID." $otext (".BUILDRALLY.")";
- 		} else {
- 			echo "<a href=\"a2b.php?z=".$_GET['d']."&o\">&raquo; ".RAID." $otext</a>";
- 		}
- 		
- 		if ($oasislink) {
-?>
-		</tr>
-		<tr>
-			<td>
-				<a href="<?php echo $oasislink; ?>">&raquo; Combat Simulator</a>
-			</td>
+<table id="options" class="tableNone"><thead><tr><th><?php echo OPTION;?></th></tr></thead><tbody>
+<tr><td><a href="karte.php?z=<?php echo $d;?>">&raquo; <?php echo CENTREMAP;?>.</a></td></tr>
+<?php if(!$basearray['occupied']){?>
+<tr><td class="none">
 <?php
-		}
- 	}
- 	else echo $text;
-	?>
-		</tr>
-        <?php } 
-        else if ($basearray['occupied'] && $basearray['wref'] != $_SESSION['wid']) {?>
-        <tr>
-					<td class="none">
-          <?php 
-		  if($basearray['fieldtype'] == 0){
-          $query1 = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'odata` WHERE `wref` = ' . mysqli_escape_string($database->dblink,$_GET['d']));
-		  }else{
-          $query1 = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `wref` = ' . mysqli_real_escape_string($database->dblink,$_GET['d']));
-		  }
-          $data1 = mysqli_fetch_assoc($query1);
-          $query2 = mysqli_query($database->dblink,'SELECT * FROM `' . TB_PREFIX . 'users` WHERE `id` = ' . $data1['owner']);
-          $data2 = mysqli_fetch_assoc($query2);
-			if($data2['access'] == 0 || ($data2['access']== MULTIHUNTER && $data2['id'] == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access'] == 9)) {
-			echo "&raquo; ".SENDTROOP." (".BAN.")";
-		  } else if($data2['vac_mode']=='1') {
-			echo "&raquo; Send troops. (Vacation mode on)";
-          } else if($data2['protect'] < time()) {
-            echo $village->resarray['f39'] > 0 ? "<a href=\"a2b.php?s=2&z=".$_GET['d']."\">&raquo; ".SENDTROOP : "&raquo; ".SENDTROOP." (".BUILDRALLY.")"; 
-          } else {
-            echo "&raquo; ".SENDTROOP." (".BEGINPRO.")";
-          }
-          ?>
-          </td>
-				</tr>
-					    	<tr>
-					<td class="none">
-					<?php
-			if($data2['access']== 0 || ($data2['access'] == MULTIHUNTER && $data2['id'] == 5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $data2['access'] == 9)) {
-			echo "&raquo; ".SENDMERC." (".BAN.")";
-			} else if($data2['vac_mode']=='1') {
-			echo "&raquo; Send merchant(s). (Vacation mode on)";
-          } else {
-            echo $building->getTypeLevel(17)? "<a href=\"build.php?z=".$_GET['d']."&id=" . $building->getTypeField(17) . "\">&raquo; ".SENDMERC : "&raquo; ".SENDMERC ."(".BUILDMARKET.")"; 
-          }
-
-		  ?>
-		  </td>
-				</tr>
-                <?php } ?>
-		</tbody>
-</table>
-
+if($isOasis){
+    $canRaid = $village->resarray['f39']>0;
+    if($canRaid){
+        echo '<a href="a2b.php?z='.$d.'&o">&raquo; '.RAID.' '.$otext.'</a>';
+    } else {
+        echo '&raquo; '.RAID.' '.$otext.' ('.BUILDRALLY.')';
+    }
+    if($oasislink) echo '</td></tr><tr><td><a href="'.$oasislink.'">&raquo; Combat Simulator</a>';
+} else {
+    $total = count($database->getProfileVillages($session->uid));
+    $need = ${'cp'.CP}[$total+1];
+    $have = floor($database->getUserField($session->uid,'cp',0));
+    $settlers = $village->unitarray['u'.$session->tribe.'0'];
+    if($settlers>=3 && $have>=$need && $village->resarray['f39']>0){
+        echo '<a href="a2b.php?id='.$d.'&s=1">&raquo; '.FNEWVILLAGE.'</a>';
+    } elseif($settlers>=3 && $have<$need){
+        echo '&raquo; '.FNEWVILLAGE.' ('.$have.'/'.$need.' '.CULTUREPOINT.')';
+    } elseif(!$village->resarray['f39']){
+        echo '&raquo; '.FNEWVILLAGE.' ('.BUILDRALLY.')';
+    } else {
+        echo '&raquo; '.FNEWVILLAGE.' ('.$settlers.'/3 '.SETTLERSAVAIL.')';
+    }
+}
+?>
+</td></tr>
+<?php } elseif($basearray['occupied'] && $basearray['wref']!= $_SESSION['wid']){
+    $tbl = $isOasis? 'odata' : 'vdata';
+    $qr = $database->dblink->query('SELECT owner FROM `'.TB_PREFIX.$tbl.'` WHERE wref='.(int)$d);
+    $ownerId = $qr? $qr->fetch_assoc() : array('owner'=>0);
+    $ownerId = $ownerId['owner'];
+    $tUser = $database->dblink->query('SELECT access,id,vac_mode,protect FROM `'.TB_PREFIX.'users` WHERE id='.(int)$ownerId)->fetch_assoc();
+    $banned = $tUser['access']==0 || ($tUser['access']==MULTIHUNTER && $tUser['id']==5) || (!ADMIN_ALLOW_INCOMING_RAIDS && $tUser['access']==9);
+?>
+<tr><td class="none">
+<?php
+if($banned) echo '&raquo; '.SENDTROOP.' ('.BAN.')';
+elseif($tUser['vac_mode']=='1') echo '&raquo; Send troops. (Vacation mode on)';
+elseif($tUser['protect'] < time()) echo $village->resarray['f39']>0? '<a href="a2b.php?s=2&z='.$d.'">&raquo; '.SENDTROOP.'</a>' : '&raquo; '.SENDTROOP.' ('.BUILDRALLY.')';
+else echo '&raquo; '.SENDTROOP.' ('.BEGINPRO.')';
+?>
+</td></tr>
+<tr><td class="none">
+<?php
+if($banned) echo '&raquo; '.SENDMERC.' ('.BAN.')';
+elseif($tUser['vac_mode']=='1') echo '&raquo; Send merchant(s). (Vacation mode on)';
+else echo $building->getTypeLevel(17)? '<a href="build.php?z='.$d.'&id='.$building->getTypeField(17).'">&raquo; '.SENDMERC.'</a>' : '&raquo; '.SENDMERC.' ('.BUILDMARKET.')';
+?>
+</td></tr>
+<?php }?>
+</tbody></table>
 </div>

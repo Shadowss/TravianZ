@@ -24,23 +24,32 @@ $count = count($active);
 $tribeName = [1=>'Roman',2=>'Teuton',3=>'Gaul'];
 $tribeColor = [1=>'#c0392b',2=>'#2980b9',3=>'#27ae60'];
 $tribeImg = [1=>'',2=>'1',3=>'2'];
+
+// MAPARE ACCES -> TEXT
+$accessLabels = [
+    2 => 'Normal User',
+    8 => 'Multihunter',
+    9 => 'Administrator'
+];
+$accessColors = [
+    2 => '#7f8c8d',
+    8 => '#2980b9',
+    9 => '#c0392b'
+];
 ?>
 <style>
 .online-wrap{max-width:1100px;margin:20px auto;font-family:Verdana}
 .online-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .online-head h1{margin:0;font-size:18px}
-.online-head.count{background:#27ae60;color:#fff;padding:4px 8px;border-radius:12px;font-size:12px;font-weight:bold}
+.online-head .count{background:#27ae60;color:#fff;padding:4px 8px;border-radius:12px;font-size:12px;font-weight:bold}
 .online-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
 .user-online{background:#fff;border:1px solid #ddd;border-left:4px solid #ccc;border-radius:6px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,.05);transition:.15s}
 .user-online:hover{transform:translateY(-2px);box-shadow:0 3px 8px rgba(0,0,0,.08)}
-.user-online.roman{border-left-color:#c0392b}
-.user-online.teuton{border-left-color:#2980b9}
-.user-online.gaul{border-left-color:#27ae60}
 .uo-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .uo-name{font-weight:bold;font-size:13px}
 .uo-name a{color:#222;text-decoration:none}
 .uo-name a:hover{text-decoration:underline}
-.uo-access{font-size:10px;color:#999;margin-left:4px}
+.uo-access{font-size:10px;margin-left:4px}
 .uo-time{font-size:11px;color:#666}
 .uo-stats{display:flex;gap:12px;margin-top:6px;font-size:11px;color:#555;flex-wrap:wrap}
 .uo-stat{display:flex;align-items:center;gap:3px}
@@ -63,15 +72,18 @@ $tribeImg = [1=>'',2=>'1',3=>'2'];
         $varray = $database->getProfileVillages($uid);
         $totalpop = 0; foreach($varray as $v) $totalpop += $v['pop'];
         $tribe = (int)$u['tribe'];
-        $class = strtolower($tribeName[$tribe]?? 'roman');
+        $color = $tribeColor[$tribe] ?? '#ccc';
+        $access = (int)$u['access'];
+        $accessText = $accessLabels[$access] ?? 'Level '.$access;
+        $accessColor = $accessColors[$access] ?? '#999';
         $last = time() - $u['timestamp'];
         $mins = floor($last/60);
    ?>
-    <div class="user-online <?php echo $class;?>">
+    <div class="user-online" style="border-left:4px solid <?php echo $color;?> !important">
       <div class="uo-top">
         <div class="uo-name">
           <a href="?p=player&uid=<?php echo $uid;?>"><?php echo htmlspecialchars($u['username']);?></a>
-          <span class="uo-access">[<?php echo $u['access'];?>]</span>
+          <span class="uo-access" style="color:<?php echo $accessColor;?> !important">[<?php echo $accessText;?>]</span>
         </div>
         <img src="../gpack/travian_default/img/u/<?php echo $tribeImg[$tribe];?>9.gif" title="<?php echo $tribeName[$tribe];?>" width="16">
       </div>
@@ -79,7 +91,7 @@ $tribeImg = [1=>'',2=>'1',3=>'2'];
       <div class="uo-stats">
         <span class="uo-stat">👥 <?php echo number_format($totalpop);?></span>
         <span class="uo-stat">🏘 <?php echo count($varray);?></span>
-        <span class="uo-stat">⚔️ <?php echo $tribeName[$tribe];?></span>
+        <span class="uo-stat" style="color:<?php echo $color;?> !important">⚔ <?php echo $tribeName[$tribe];?></span>
         <span class="uo-gold"><img src="../img/admin/gold.gif" style="vertical-align:-2px"> <?php echo $u['gold'];?></span>
       </div>
     </div>
@@ -88,7 +100,4 @@ $tribeImg = [1=>'',2=>'1',3=>'2'];
   <?php }?>
 </div>
 
-<script>
-// auto-refresh la 30 secunde
-setTimeout(()=>location.reload(), 30000);
-</script>
+<script>setTimeout(()=>location.reload(),30000);</script>

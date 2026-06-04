@@ -75,7 +75,7 @@ if($diffGold!== 0){
 
     $database->query("
         INSERT INTO ".TB_PREFIX."gold_fin_log
-        (uid, wid, action, gold, time, log)
+        (uid, wid, action, gold, time, details)
         VALUES ($id, $wid, '$action_esc', $diffGold, $now, '$details_esc')
     ");
 }
