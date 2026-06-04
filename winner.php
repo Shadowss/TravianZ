@@ -15,7 +15,7 @@ $start_timer = $generator->pageLoadTimeStart();
 ## Fixed by:    Shadow  														##
 ## License:     TravianZ Project 												##
 ## Copyright:   TravianZ (c) 2010-2026. All rights reserved. 					##
-## URLs:        http://travian.shadowss.ro 										##
+## URLs:        http://travianz.org      										##
 ## Source code: https://github.com/Shadowss/TravianZ/	 						##
 ## 																				##
 #################################################################################

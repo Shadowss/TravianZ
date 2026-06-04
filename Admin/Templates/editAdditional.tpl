@@ -94,7 +94,7 @@ if(isset($id)) {
                             $names=[0=>'Banned',2=>'Normal',8=>'Multihunter',9=>'Admin'];
                             $cls=[0=>'banned',2=>'user',8=>'mh',9=>'admin'];
                             echo '<input type="hidden" name="access" value="'.$user['access'].'">';
-                            echo '<span class="badge '.$cls[$user['access']].'">'.$names[$user['access']].'</span> <span style="font-size:11px;color:#c00;">(nu-ți poți schimba propriul acces)</span>';
+                            echo '<span class="badge '.$cls[$user['access']].'">'.$names[$user['access']].'</span> <span style="font-size:11px;color:#c00;">(you cannot change your own access)</span>';
                         } ?>
                         </div>
                     </div>

@@ -74,7 +74,7 @@ function refresh(tz) {
                                 <option value="fr" <?php if (LANG=="fr") echo "selected";?>>French</option>
                                 <option value="es" <?php if (LANG=="es") echo "selected";?>>Spain</option>
                                 <option value="rs" <?php if (LANG=="rs") echo "selected";?>>Serbian</option>
-                                <option value="ru" <?php if (LANG=="ru") echo "selected";?>>Russian</option>
+                                <option value="ru" <?php if (LANG=="ro") echo "selected";?>>Romanian</option>
                                 <option value="zh_tw" <?php if (LANG=="zh_tw") echo "selected";?>>Taiwanese</option>
                             </select>
                         </td>
