@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -891,6 +891,287 @@ class Automation {
     }
 
     /**
+     * Handle hero evasion: if the defender has evasion active and can afford it,
+     * send all defender units back to base and charge 2 gold + 1 evasion charge.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data         Current movement row (needs 'to').
+     * @param int   $DefenderID   Defender's user ID.
+     * @param array $DefenderUnit Unit counts for the defending village.
+     * @param int   $targettribe  Defender's tribe (1=Roman, 2=Teuton, 3=Gaul…).
+     * @param int   $evasion      Whether evasion is enabled (1) or not (0).
+     * @param int   $maxevasion   Remaining evasion charges.
+     * @param int   $gold         Defender's current gold.
+     * @param bool  $cannotsend   True when troops are already returning and can't be re-sent.
+     * @param int   $attackType   Type of incoming attack (must be > 2 to trigger evasion).
+     */
+    private function handleEvasion(
+        array $data,
+        int   $DefenderID,
+        array $DefenderUnit,
+        int   $targettribe,
+        int   $evasion,
+        int   $maxevasion,
+        int   $gold,
+        bool  $cannotsend,
+        int   $attackType
+    ): void {
+        global $database;
+
+        if (!($evasion == 1 && $maxevasion > 0 && $gold > 1 && !$cannotsend && $attackType > 2)) {
+            return;
+        }
+
+        $playerunit  = ($targettribe - 1) * 10;
+        $totaltroops = 0;
+        $evasionUnitModifications_units   = [];
+        $evasionUnitModifications_amounts = [];
+        $evasionUnitModifications_modes   = [];
+
+        for ($i = 1; $i <= 10; $i++) {
+            $playerunit += $i;
+            $data['u' . $i] = $DefenderUnit['u' . $playerunit];
+            $evasionUnitModifications_units[]   = $playerunit;
+            $evasionUnitModifications_amounts[] = $DefenderUnit['u' . $playerunit];
+            $evasionUnitModifications_modes[]   = 0;
+            $playerunit -= $i;
+            $totaltroops += $data['u' . $i];
+        }
+
+        $data['u11'] = $DefenderUnit['hero'];
+        $totaltroops += $data['u11'];
+
+        if ($totaltroops > 0) {
+            $evasionUnitModifications_units[]   = 'hero';
+            $evasionUnitModifications_amounts[] = $DefenderUnit['hero'];
+            $evasionUnitModifications_modes[]   = 0;
+
+            $attackid = $database->addAttack($data['to'], $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            $database->addMovement(4, 0, $data['to'], $attackid, microtime(true), microtime(true) + (180 / EVASION_SPEED));
+            $database->updateUserField($DefenderID, ["gold", "maxevasion"], [$gold - 2, $maxevasion - 1], 1);
+        }
+
+        $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
+    }
+
+    /**
+     * Process senator/chief attacks: reduce loyalty and, if it hits 0, conquer the village.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $data              Current movement row.
+     * @param int   $type              Attack type (must be 3 for chiefing).
+     * @param int   $dead9             Chiefs killed in battle.
+     * @param int   $traped9           Chiefs caught in traps.
+     * @param array $from              Attacker's village info row.
+     * @param array $to                Defender's village info row.
+     * @param array $toF               Defender's village field row (has loyalty).
+     * @param int   $owntribe          Attacker's tribe.
+     * @param int   $targettribe       Defender's tribe.
+     * @param array $varray            All villages of the defender.
+     * @param array $varray1           All villages of the attacker.
+     * @param array $battlepart        Battle result.
+     * @param int   $isoasis           0 = village, non-zero = oasis.
+     * @param int   $village_destroyed Whether the village has already been destroyed.
+     * @param int   $chief_pic         Chief unit sprite ID for report strings.
+     * @return array{info_chief:string, chiefing_village:int, village_destroyed:int}
+     */
+    private function handleConquest(
+        array $data,
+        int   $type,
+        int   $dead9,
+        int   $traped9,
+        int   $targettribe,
+        array $from,
+        array $to,
+        array $toF,
+        int   $owntribe,
+        array $varray,
+        array $varray1,
+        array $battlepart,
+        int   $isoasis,
+        int   $village_destroyed,
+        int   $chief_pic
+    ): array {
+        global $database, $units;
+
+        $info_chief      = ',';
+        $chiefing_village = 0;
+
+        if (!(($data['t9'] - $dead9 - $traped9) > 0 && $isoasis == 0)) {
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        if ($type != 3) {
+            $info_chief = $chief_pic . ',Could not reduce cultural points during raid';
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        $palacelevel = $database->getResourceLevel($from['wref']);
+        $plevel      = 0;
+
+        for ($i = 1; $i <= 40; $i++) {
+            if ($palacelevel['f' . $i . 't'] == 26) $plevel = $i;
+            elseif ($palacelevel['f' . $i . 't'] == 25) $plevel = $i;
+        }
+
+        if ($palacelevel['f' . $plevel . 't'] == 26) {
+            if ($palacelevel['f' . $plevel] < 10)       $canconquer = 0;
+            elseif ($palacelevel['f' . $plevel] < 15)   $canconquer = 1;
+            elseif ($palacelevel['f' . $plevel] < 20)   $canconquer = 2;
+            else                                         $canconquer = 3;
+        } elseif ($palacelevel['f' . $plevel . 't'] == 25) {
+            if ($palacelevel['f' . $plevel] < 10)       $canconquer = 0;
+            elseif ($palacelevel['f' . $plevel] < 20)   $canconquer = 1;
+            else                                         $canconquer = 2;
+        } else {
+            $canconquer = 0;
+        }
+
+        $expArray = $database->getVillageFields($from['wref'], 'exp1, exp2, exp3');
+        $villexp  = ($expArray['exp1'] == 0) ? 0 : (($expArray['exp2'] == 0) ? 1 : (($expArray['exp3'] == 0) ? 2 : 3));
+
+        $mode     = CP;
+        $cp_mode  = $GLOBALS['cp' . $mode];
+        $need_cps = $cp_mode[count($varray1) + 1];
+        $user_cps = $database->getUserArray($from['owner'], 1)['cp'];
+
+        if ($user_cps < $need_cps) {
+            $info_chief = $chief_pic . ',Not enough culture points.';
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        if (count($varray) <= 1 || $to['capital'] == 1 || $villexp >= $canconquer) {
+            $info_chief = $chief_pic . ',You cant take over this village.';
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        if ($to['owner'] == 3 && $to['name'] == 'WW Buildingplan') {
+            $info_chief = $chief_pic . ',You cant take over this village.';
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        if ($database->getFieldLevelInVillage($data['to'], '25, 26')) {
+            $info_chief = $chief_pic . ',The Palace/Residence isn\'t destroyed!';
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        // --- Reduce loyalty ---
+        $time               = time();
+        $reducedLoyaltyTotal = 0;
+
+        for ($i = 0; $i < ($data['t9'] - $dead9 - $traped9); $i++) {
+            $reducedLoyalty = ($owntribe == 1) ? rand(20, 30) : rand(20, 25);
+
+            if ($from['celebration'] > $time && $from['type'] == 2) $reducedLoyalty += 5;
+            if ($to['celebration']   > $time && $to['type']   == 2) $reducedLoyalty -= 5;
+
+            $reducedLoyalty /= $battlepart['moralBonus'];
+
+            if ($owntribe == 2 && $this->getTypeLevel(35, $data['from']) > 0) $reducedLoyalty /= 2;
+
+            $reducedLoyaltyTotal += $reducedLoyalty;
+        }
+
+        if (($toF['loyalty'] - $reducedLoyaltyTotal) > 0) {
+            $info_chief = $chief_pic . ',The loyalty was lowered from <b>' . floor($toF['loyalty']) . '</b> to <b>' . floor($toF['loyalty'] - $reducedLoyaltyTotal) . '</b>.';
+            $database->setVillageField($data['to'], 'loyalty', ($toF['loyalty'] - $reducedLoyaltyTotal));
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        if ($village_destroyed) {
+            return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+        }
+
+        // --- Village conquered ---
+        $villname = addslashes($database->getVillageField($data['to'], 'name'));
+        $artifact = reset($database->getOwnArtefactInfo($data['to']));
+
+        $info_chief = $chief_pic . ',Inhabitants of ' . $villname . ' village decided to join your empire.';
+
+        if ($artifact['vref'] == $data['to']) {
+            $database->claimArtefact($data['to'], $data['to'], $database->getVillageField($data['from'], 'owner'));
+        }
+
+        $database->setVillageFields($data['to'], ['loyalty', 'owner'], [0, $database->getVillageField($data['from'], 'owner')]);
+
+        $database->query("DELETE FROM " . TB_PREFIX . "abdata WHERE vref = " . (int)$data['to']);
+        $database->addABTech($data['to']);
+
+        $database->query("DELETE FROM " . TB_PREFIX . "tdata WHERE vref = " . (int)$data['to']);
+        $database->addTech($data['to']);
+
+        $database->query("DELETE FROM " . TB_PREFIX . "enforcement WHERE `from` = " . (int)$data['to']);
+        $database->query("DELETE FROM " . TB_PREFIX . "route where wid = " . (int)$data['to'] . " OR `from` = " . (int)$data['to']);
+
+        $units2reset = [];
+        for ($u = 1; $u <= 50; $u++) $units2reset[] = 'u' . $u . ' = 0';
+        $units2reset[] = 'u99 = 0';
+        $units2reset[] = 'u99o = 0';
+        $units2reset[] = 'hero = 0';
+        $database->query("UPDATE " . TB_PREFIX . "units SET " . implode(',', $units2reset) . " WHERE vref = " . (int)$data['to']);
+
+        $newLevels_fieldNames  = [];
+        $newLevels_fieldValues = [];
+
+        $AttackerID = $database->getVillageField($data['from'], 'owner');
+        $DefenderID = $database->getVillageField($data['to'],  'owner');
+        $poparray   = $database->getVSumField([$AttackerID, $DefenderID], 'pop');
+        $pop1 = $poparray[0]['Total'];
+        $pop2 = $poparray[1]['Total'];
+
+        if ($pop1 > $pop2 && $targettribe != 5) {
+            $buildlevel = $database->getResourceLevel($data['to']);
+            for ($i = 1; $i <= 39; $i++) {
+                if ($buildlevel['f' . $i] != 0) {
+                    if ($buildlevel['f' . $i . 't'] != 35 && $buildlevel['f' . $i . 't'] != 36 && $buildlevel['f' . $i . 't'] != 41) {
+                        $leveldown = $buildlevel['f' . $i] - 1;
+                        $newLevels_fieldNames[]  = 'f' . $i;
+                        $newLevels_fieldValues[] = $leveldown;
+                        if (!$leveldown > 0) {
+                            $newLevels_fieldNames[]  = 'f' . $i . 't';
+                            $newLevels_fieldValues[] = 0;
+                        }
+                    } else {
+                        $newLevels_fieldNames[]  = 'f' . $i;
+                        $newLevels_fieldValues[] = 0;
+                        $newLevels_fieldNames[]  = 'f' . $i . 't';
+                        $newLevels_fieldValues[] = 0;
+                    }
+                }
+            }
+            if ($buildlevel['f99'] != 0) {
+                $newLevels_fieldNames[]  = 'f99';
+                $newLevels_fieldValues[] = $buildlevel['f99'] - 1;
+            }
+        }
+
+        // destroy wall
+        $newLevels_fieldNames[]  = 'f40';
+        $newLevels_fieldValues[] = 0;
+        $newLevels_fieldNames[]  = 'f40t';
+        $newLevels_fieldValues[] = 0;
+
+        $database->clearExpansionSlot($data['to'], 1);
+
+        $expArray2 = $database->getVillageFields($data['from'], 'exp1, exp2, exp3');
+        if ($expArray2['exp1'] == 0)      { $exp = 'exp1'; }
+        elseif ($expArray2['exp2'] == 0)  { $exp = 'exp2'; }
+        else                              { $exp = 'exp3'; }
+        $database->setVillageField($data['from'], $exp, $data['to']);
+
+        $database->deleteTradeRoutesByVillage($data['to']);
+        $database->setVillageLevel($data['to'], $newLevels_fieldNames, $newLevels_fieldValues);
+
+        $units->returnTroops($data['to'], 1);
+
+        $chiefing_village = 1;
+        $database->reassignHero($data['to']);
+        $this->recountPop($data['to'], false);
+
+        return ['info_chief' => $info_chief, 'chiefing_village' => $chiefing_village, 'village_destroyed' => $village_destroyed];
+    }
+
+    /**
      * Fetch all attacks (sort_type 3, not reinforcement) that have arrived by
      * $time, joined with their attack rows, ordered by arrival.
      * Pure behaviour-preserving extraction (refactor for issue #155).
@@ -1011,39 +1292,7 @@ class Automation {
 						}
 					}
 
-                    if($evasion == 1 && $maxevasion > 0 && $gold > 1 && !$cannotsend && $dataarray[$data_num]['attack_type'] > 2){
-                        $evaded = true;
-                        $totaltroops = 0;
-                        $evasionUnitModifications_units = [];
-                        $evasionUnitModifications_amounts = [];
-                        $evasionUnitModifications_modes = [];
-                        for($i = 1; $i <= 10; $i++){
-							$playerunit += $i;
-							$data['u' . $i] = $DefenderUnit['u' . $playerunit];
-							$evasionUnitModifications_units[] = $playerunit;
-							$evasionUnitModifications_amounts[] = $DefenderUnit['u' . $playerunit];
-							$evasionUnitModifications_modes[] = 0;
-							$playerunit -= $i;
-							$totaltroops += $data['u' . $i];
-						}
-
-                        $data['u11'] = $DefenderUnit['hero'];
-                        $totaltroops += $data['u11'];
-                        if($totaltroops > 0){
-                            $evasionUnitModifications_units[] = 'hero';
-                            $evasionUnitModifications_amounts[] = $DefenderUnit['hero'];
-                            $evasionUnitModifications_modes[] = 0;
-
-                            $attackid = $database->addAttack($data['to'], $data['u1'], $data['u2'], $data['u3'], $data['u4'], $data['u5'], $data['u6'], $data['u7'], $data['u8'], $data['u9'], $data['u10'], $data['u11'], 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-							$database->addMovement(4, 0, $data['to'], $attackid, microtime(true), microtime(true) + (180 / EVASION_SPEED));
-							$newgold = $gold - 2;
-							$newmaxevasion = $maxevasion - 1;
-							$database->updateUserField($DefenderID, ["gold", "maxevasion"], [$newgold, $newmaxevasion], 1);
-                        }
-
-                        // modify units in DB
-                        $database->modifyUnit($data['to'], $evasionUnitModifications_units, $evasionUnitModifications_amounts, $evasionUnitModifications_modes);
-                    }
+                    $this->handleEvasion($data, $DefenderID, $DefenderUnit, $targettribe, $evasion, $maxevasion, $gold, $cannotsend, $dataarray[$data_num]['attack_type']);
                     
                     //get defence units
                     $enforDefender = [];
@@ -1997,224 +2246,12 @@ class Automation {
                         }
                     }                    
 
-                    //chiefing village
-                    //there are senators
-                    if(($data['t9'] - $dead9 - $traped9) > 0 && $isoasis == 0){
-                        if ($type == 3) {
-                            $palacelevel = $database->getResourceLevel($from['wref']);
-                            
-                            for($i = 1; $i <= 40; $i++) {
-                                if($palacelevel['f'.$i.'t'] == 26) $plevel = $i;      
-                                elseif($palacelevel['f'.$i.'t'] == 25) $plevel = $i;
-                            }
-                            
-                            if($palacelevel['f'.$plevel.'t'] == 26){                            
-                                if($palacelevel['f'.$plevel] < 10) $canconquer = 0;
-                                elseif($palacelevel['f'.$plevel] < 15) $canconquer = 1;
-                                elseif($palacelevel['f'.$plevel] < 20) $canconquer = 2;
-                                else $canconquer = 3;                              
-                            }else if($palacelevel['f'.$plevel.'t'] == 25){
-                                if($palacelevel['f'.$plevel] < 10) $canconquer = 0;
-                                elseif($palacelevel['f'.$plevel] < 20) $canconquer = 1;
-                                else $canconquer = 2;
-                            }
-
-                            $expArray = $database->getVillageFields($from['wref'], 'exp1, exp2, exp3');
-                            $exp1 = $expArray['exp1'];
-                            $exp2 = $expArray['exp2'];
-                            $exp3 = $expArray['exp3'];
-
-                            if($exp1 == 0) $villexp = 0;
-                            elseif($exp2 == 0) $villexp = 1;               
-                            elseif($exp3 == 0) $villexp = 2;                       
-                            else $villexp = 3;
-                        
-                            $mode = CP;
-                            $cp_mode = $GLOBALS['cp'.$mode];
-                            $need_cps = $cp_mode[count($varray1) + 1];
-                            $user_cps = $database->getUserArray($from['owner'], 1)['cp'];
-
-                            //check for last village or capital
-                            if($user_cps >= $need_cps){
-                                if(count($varray) > 1 && $to['capital'] != 1 && $villexp < $canconquer){
-                                    if($to['owner'] != 3 || $to['name'] != 'WW Buildingplan'){
-                                        // check for standing Palace or Residence
-                                        // note: at this point, we can use cache, since we've cleared it above
-                                        if ($database->getFieldLevelInVillage($data['to'], '25, 26')) {
-                                            $nochiefing = 1;
-                                            $info_chief = "".$chief_pic.",The Palace/Residence isn\'t destroyed!";
-                                        }
-
-                                        // we can conquer this village
-                                        if(!isset($nochiefing)){
-                                            //$info_chief = "".$chief_pic.",You don't have enought CP to chief a village.";
-                                            // note: at this point, we can use cache, since we've cleared it above
-                                            $time = time();
-                                            $reducedLoyaltyTotal = $reducedLoyalty = 0;
-                                            for ($i = 0; $i < ($data['t9'] - $dead9 - $traped9); $i++){
-                                                
-                                                //Random factor, which depends on the attacking tribe
-                                                if($owntribe == 1) $reducedLoyalty = rand(20, 30);
-                                                else $reducedLoyalty = rand(20, 25);
-                                                
-                                                //If a Big Party is active in the attacking village
-                                                if($from['celebration'] > $time && $from['type'] == 2) $reducedLoyalty += 5;
-                                                
-                                                //If a Big Party is active in the target village
-                                                if($to['celebration'] > $time && $to['type'] == 2) $reducedLoyalty -= 5;
-                                                
-                                                //Moral bonus
-                                                $reducedLoyalty /= $battlepart['moralBonus'];
-                                                
-                                                //If the brewery is built (Teutons only)
-                                                if($owntribe == 2 && $this->getTypeLevel(35, $data['from']) > 0) $reducedLoyalty /= 2;
-                                                
-                                                $reducedLoyaltyTotal += $reducedLoyalty;
-                                            }                                            
-
-                                            // loyalty is more than 0
-                                            if (($toF['loyalty'] - $reducedLoyaltyTotal) > 0) {
-                                                $info_chief = "".$chief_pic.",The loyalty was lowered from <b>".floor($toF['loyalty'])."</b> to <b>".floor($toF['loyalty'] - $reducedLoyaltyTotal)."</b>.";
-                                                $database->setVillageField($data['to'], 'loyalty', ($toF['loyalty'] - $reducedLoyaltyTotal));
-                                            } else if (!$village_destroyed) {
-                                                // you took over the village
-                                                $villname = addslashes($database->getVillageField($data['to'],"name"));
-                                                $artifact = reset($database->getOwnArtefactInfo($data['to']));
-
-                                                $info_chief = "".$chief_pic.",Inhabitants of ".$villname." village decided to join your empire.";
-
-                                                if ($artifact['vref'] == $data['to']){
-                                                    $database->claimArtefact($data['to'], $data['to'], $database->getVillageField($data['from'], "owner"));
-                                                }
-
-                                                $database->setVillageFields(
-                                                    $data['to'],
-                                                    ['loyalty', 'owner'],
-                                                    [0, $database->getVillageField($data['from'],"owner")]
-                                                );
-
-                                                //delete upgrades in armory and blacksmith
-                                                $q = "DELETE FROM ".TB_PREFIX."abdata WHERE vref = ".(int) $data['to'];
-                                                $database->query($q);
-                                                $database->addABTech($data['to']);
-
-                                                //delete researches in academy
-                                                $q = "DELETE FROM ".TB_PREFIX."tdata WHERE vref = ".(int) $data['to'];
-                                                $database->query($q);
-                                                $database->addTech($data['to']);
-
-                                                //delete reinforcement
-                                                $q = "DELETE FROM ".TB_PREFIX."enforcement WHERE `from` = ".(int) $data['to'];
-                                                $database->query($q);
-                                                
-                                                //delete trade routes
-                                                $q = "DELETE FROM ".TB_PREFIX."route where wid = ".(int) $data['to']." OR `from` =".(int) $data['to'];
-                                                $database->query($q);
-
-                                                //no units can stay in the village itself
-                                                $units2reset = [];
-                                                for ($u = 1; $u <= 50; $u++) $units2reset[] = 'u'.$u.' = 0';
-
-                                                $units2reset[] = 'u99 = 0';
-                                                $units2reset[] = 'u99o = 0';
-                                                $units2reset[] = 'hero = 0';
-                                                $q = "UPDATE ".TB_PREFIX."units SET ".implode(',', $units2reset)." WHERE vref = ".(int) $data['to'];
-                                                $database->query($q);
-
-                                                // check buildings
-                                                $newLevels_fieldNames = [];
-                                                $newLevels_fieldValues = [];
-
-                                                $poparray = $database->getVSumField([$AttackerID, $DefenderID] ,"pop");
-                                                $pop1 = $poparray[0]['Total'];
-                                                $pop2 = $poparray[1]['Total'];
-                                                if($pop1 > $pop2 && $targettribe != 5){
-                                                    $buildlevel = $database->getResourceLevel($data['to']);
-                                                    for ($i = 1; $i <= 39; $i++){
-                                                        if($buildlevel['f'.$i]!=0){
-                                                            if($buildlevel['f'.$i."t"] != 35 && $buildlevel['f'.$i."t"] != 36 && $buildlevel['f'.$i."t"] != 41){
-                                                                $leveldown = $buildlevel['f'.$i]-1;
-                                                                $newLevels_fieldNames[] = "f".$i;
-                                                                $newLevels_fieldValues[] = $leveldown;
-
-                                                                // building at level 0, remove it completely
-                                                                if (!$leveldown > 0) {
-                                                                    $newLevels_fieldNames[] = "f".$i."t";
-                                                                    $newLevels_fieldValues[] = 0;
-                                                                }
-                                                            }else{
-                                                                $newLevels_fieldNames[] = "f".$i;
-                                                                $newLevels_fieldValues[] = 0;
-
-                                                                $newLevels_fieldNames[] = "f".$i."t";
-                                                                $newLevels_fieldValues[] = 0;
-                                                            }
-                                                        }
-                                                    }
-
-                                                    if ($buildlevel['f99'] != 0) {
-                                                        $leveldown = $buildlevel['f99'] - 1;
-                                                        $newLevels_fieldNames[] = "f99";
-                                                        $newLevels_fieldValues[] = $leveldown;
-                                                    }
-                                                }
-
-                                                //destroy wall
-                                                $newLevels_fieldNames[] = "f40";
-                                                $newLevels_fieldValues[] = 0;
-
-                                                $newLevels_fieldNames[] = "f40t";
-                                                $newLevels_fieldValues[] = 0;
-
-                                                //clear expansion slot in the village which founded the conquered one
-                                                $database->clearExpansionSlot($data['to'], 1);
-
-                                                $expArray = $database->getVillageFields($data['from'], 'exp1, exp2, exp3');
-                                                $exp1 = $expArray['exp1'];
-                                                $exp2 = $expArray['exp2'];
-                                                $exp3 = $expArray['exp3'];
-
-                                                if($exp1 == 0){
-                                                    $exp = 'exp1';
-                                                    $value = $data['to'];
-                                                }elseif($exp2 == 0){
-                                                    $exp = 'exp2';
-                                                    $value = $data['to'];
-                                                }else{
-                                                    $exp = 'exp3';
-                                                    $value = $data['to'];
-                                                }
-
-                                                $database->setVillageField($data['from'], $exp, $value);
-
-                                                //Remove oasis related to village
-                                                $units->returnTroops($data['to'], 1);
-                                                $chiefing_village = 1;
-                                                
-												//Remove trade routes related to village
-												$database->deleteTradeRoutesByVillage($data['to']);
-												
-                                                //Update data in the database                                            
-                                                $database->setVillageLevel($data['to'], $newLevels_fieldNames, $newLevels_fieldValues);
-                                           
-                                                //Recount the population
-                                                $pop = $this->recountPop($data['to'], false);
-                                                
-                                                //Kill and reassign the hero to the capital village, if registered in the conquered one
-                                                $database->reassignHero($data['to']);
-                                            }
-                                        }
-                                    }
-                                    else $info_chief = "".$chief_pic.",You cant take over this village.";                                                                   
-                                }
-                                else $info_chief = "".$chief_pic.",You cant take over this village.";                   
-                            }
-                            else $info_chief = "".$chief_pic.",Not enough culture points.";                       
-                            unset($plevel);
-                        }
-                        else 
-                        $info_chief = "".$chief_pic.",Could not reduce cultural points during raid";        
-                    }
+                    //chiefing village — extracted to handleConquest() [#155]
+                    if (!isset($village_destroyed)) $village_destroyed = 0;
+                    $chiefResult       = $this->handleConquest($data, $type, $dead9, $traped9, $targettribe, $from, $to, $toF, $owntribe, $varray, $varray1, $battlepart, $isoasis, $village_destroyed, $chief_pic);
+                    $info_chief        = $chiefResult['info_chief'];
+                    $chiefing_village  = $chiefResult['chiefing_village'];
+                    $village_destroyed = $chiefResult['village_destroyed'];
 
                     if(($data['t11'] - $dead11 - $traped11) > 0){ //hero
                         if ($heroxp == 0) {
