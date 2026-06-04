@@ -462,7 +462,16 @@ class MYSQLi_DB implements IDbConnection {
 	    $this->dbname   = $dbname;
 
 	    // connect to the DB
-	    if (!$this->connect()) die(mysqli_error($this->dblink));
+	    if (!$this->connect()) {
+	        // $this->dblink is FALSE here, so we cannot call mysqli_error() on it.
+	        // Use mysqli_connect_error() and show a friendly, actionable message.
+	        $error = mysqli_connect_error();
+	        die("Database connection failed: " . htmlspecialchars(
+	            $error !== null && $error !== ''
+	                ? $error
+	                : 'could not connect to the database server. Please check the host, port and credentials. (When running with Docker, the database host is usually "db", not "localhost".)'
+	        ));
+	    }
 
 		// we will operate in UTF8
 		mysqli_query($this->dblink,"SET NAMES 'UTF8'");

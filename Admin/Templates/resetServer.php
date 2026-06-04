@@ -41,7 +41,7 @@ if($keepAdmin){
 // 2. Golim tot - fără FK checks
 mysqli_query($GLOBALS["link"], "SET FOREIGN_KEY_CHECKS=0");
 
-$tables = ["a2b","abdata","activate","active","admin_log","alidata","ali_invite","ali_log","ali_permission","allimedal","artefacts","attacks","banlist","bdata","build_log","chat","deleting","demolition","diplomacy","enforcement","farmlist","fdata","forum_cat","forum_edit","forum_post","forum_survey","forum_topic","general","gold_fin_log","hero","illegal_log","links","login_log","market","market_log","mdata","medal","movement","ndata","online","odata","password","prisoners","raidlist","research","route","send","tdata","tech_log","training","units","vdata","wdata","ww_attacks","users"];
+$tables = ["a2b","abdata","activate","active","admin_log","alidata","ali_invite","ali_log","ali_permission","allimedal","artefacts","attacks","banlist","bdata","build_log","chat","deleting","demolition","diplomacy","enforcement","farmlist","fdata","forum_cat","forum_edit","forum_post","forum_survey","forum_topic","general","gold_fin_log","hero","illegal_log","links","login_log","market","market_log","mdata","medal","movement","ndata","online","odata","password","prisoners","raidlist","research","route","send","tdata","tech_log","training","units","vdata","wdata","ww_attacks","croppers","users"];
 
 foreach($tables as $t){
     mysqli_query($GLOBALS["link"], "TRUNCATE TABLE `".TB_PREFIX.$t."`");

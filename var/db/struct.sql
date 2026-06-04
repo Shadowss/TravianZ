@@ -905,6 +905,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
   gold int(11) NOT NULL DEFAULT 0,
   time int(11) NOT NULL DEFAULT 0,
   log varchar(255) DEFAULT NULL,
+  details varchar(255) DEFAULT NULL,
   PRIMARY KEY (id),
   KEY uid (uid),
   KEY time (time)
@@ -1776,12 +1777,11 @@ CREATE TABLE IF NOT EXISTS %PREFIX%croppers (
 	fieldtype TINYINT UNSIGNED NOT NULL, -- 1 = 9c, 6 = 15c
 	best_oasis_bonus TINYINT UNSIGNED NOT NULL, -- 0,25,50,75,100,125,150
 	updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-	CHECK (best_oasis_bonus IN (0,25,50,75,100,125,150))
+	CHECK (best_oasis_bonus IN (0,25,50,75,100,125,150)),
+	KEY idx_ft_bonus_xy (fieldtype, best_oasis_bonus, x, y),
+	KEY idx_xy (x, y),
+	KEY idx_bonus (best_oasis_bonus)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-CREATE INDEX idx_ft_bonus_xy ON %PREFIX%croppers (fieldtype, best_oasis_bonus, x, y);
-CREATE INDEX idx_xy ON %PREFIX%croppers (x, y);
-CREATE INDEX idx_bonus ON %PREFIX%croppers (best_oasis_bonus);
 
 --
 -- Dumping data for table `%prefix%croppers`
