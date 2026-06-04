@@ -43,8 +43,22 @@ define("START_DATE", "%SSTARTDATE%");
 define("START_TIME", "%SSTARTTIME%");
 
 // ***** Language
-// Choose your server language.
-define("LANG","%LANG%");
+// SERVER_LANG is the DEFAULT language of the server (chosen at install / in
+// the admin "Server Settings"). LANG is the EFFECTIVE display language.
+//
+// Per-user language (issue #166): if the logged-in player picked a language
+// in their profile preferences (stored in users.lang and mirrored into
+// $_SESSION['lang']), LANG becomes that language; otherwise LANG falls back
+// to SERVER_LANG.
+//
+// SECURITY: LANG is used in include("Lang/".LANG.".php"), so the value is
+// strictly sanitized to [a-z_] (no path traversal) and the target file MUST
+// exist, otherwise we fall back to the server default. This prevents Local
+// File Inclusion via a crafted session value.
+define("SERVER_LANG", "%LANG%");
+if (session_status() !== PHP_SESSION_ACTIVE) { @session_start(); }
+$__user_lang = isset($_SESSION['lang']) ? preg_replace('/[^a-z_]/', '', strtolower((string) $_SESSION['lang'])) : '';
+define("LANG", ($__user_lang !== '' && is_file(__DIR__ . "/Lang/" . $__user_lang . ".php")) ? $__user_lang : SERVER_LANG);
 
 // ***** Speed
 // Choose your server speed. NOTICE: Higher speed, more likely
