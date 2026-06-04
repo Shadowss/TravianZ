@@ -891,6 +891,39 @@ class Automation {
     }
 
     /**
+     * Fetch all attacks (sort_type 3, not reinforcement) that have arrived by
+     * $time, joined with their attack rows, ordered by arrival.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param int $time Current timestamp.
+     * @return array Rows of pending/completed attacks.
+     */
+    private function fetchCompletedAttacks($time) {
+        global $database;
+
+        $time = (int) $time;
+        $q = "
+            SELECT
+                `from`, `to`, endtime, ref, ctar1, ctar2, spy, moveid, attack_type,
+                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, (SELECT oasistype FROM ".TB_PREFIX."wdata WHERE id = `to`) as oasistype
+            FROM
+                ".TB_PREFIX."movement,
+                ".TB_PREFIX."attacks
+            WHERE
+                ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id
+                AND
+                ".TB_PREFIX."movement.proc = 0
+                AND
+                ".TB_PREFIX."movement.sort_type = 3
+                AND
+                ".TB_PREFIX."attacks.attack_type != 2
+                AND
+                endtime < $time
+            ORDER BY endtime ASC";
+        return $database->query_return($q);
+    }
+
+    /**
      * Batch-preload the village / unit / tech data used by sendunitsComplete()
      * so the per-attack loop hits the in-request cache instead of querying row
      * by row. Pure behaviour-preserving extraction (refactor for issue #155).
@@ -921,25 +954,7 @@ class Automation {
         global $bid19, $bid23, $bid34, $u99, $database, $battle, $technology, $units;
 
         $time = time();
-        $q = "
-            SELECT
-                `from`, `to`, endtime, ref, ctar1, ctar2, spy, moveid, attack_type,
-                t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, (SELECT oasistype FROM ".TB_PREFIX."wdata WHERE id = `to`) as oasistype
-            FROM
-                ".TB_PREFIX."movement,
-                ".TB_PREFIX."attacks
-            WHERE
-                ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id
-                AND
-                ".TB_PREFIX."movement.proc = 0
-                AND
-                ".TB_PREFIX."movement.sort_type = 3
-                AND
-                ".TB_PREFIX."attacks.attack_type != 2
-                AND
-                endtime < $time
-            ORDER BY endtime ASC";
-        $dataarray = $database->query_return($q);
+        $dataarray = $this->fetchCompletedAttacks($time);
         $totalattackdead = $data_num = 0;
 
         if ($dataarray && count($dataarray)) {
