@@ -102,7 +102,13 @@ if ((int)$fdata['f99t'] === 40) {
 // ---------------------------------------------------------------------------
 $adminId = (int)$_SESSION['id'];
 $time = time();
-$log = $database->escape("Edited buildings for village <a href='admin.php?p=village&did=$id'>$id</a>");
+
+// FIX: nume sat + ID formatat
+$village = $database->getVillage($id); // dacă nu e deja încărcat sus
+$villageName = $village['name'] ?? 'Village';
+$villageNameSafe = htmlspecialchars($villageName, ENT_QUOTES, 'UTF-8');
+
+$log = $database->escape("Edited buildings for village <a href='admin.php?p=village&did=$id'>$villageNameSafe</a>");
 $database->query("INSERT INTO " . TB_PREFIX . "admin_log (`id`,`user`,`log`,`time`) VALUES (0,'$adminId','$log',$time)");
 
 header("Location: ../../../Admin/admin.php?p=village&did=" . $id);
