@@ -4173,32 +4173,37 @@ class MYSQLi_DB implements IDbConnection {
      *        1 if there's the need to clear a single expansion slot of a village 
      */
     
-    function clearExpansionSlot($id, $mode = 0) {
-        list($id) = $this->escape_input((int) $id);
-
-        if(!is_array($id)) $id = [$id];
-        $ids = implode(",", $id);
-        
-        if(!$mode){ 
-            $pairs = [];
-            for($i = 1; $i <= 3; $i++) $pairs[] = 'exp'.$i.' = 0';
-            
-            $q = "UPDATE " . TB_PREFIX . "vdata SET ".implode(',', $pairs)." WHERE wref IN($ids)";
-        }else{
-            $q = "
-                UPDATE
-                    ".TB_PREFIX."vdata
-                SET
-                    exp1 = IF(exp1 IN($ids), 0, exp1),
-                    exp2 = IF(exp2 IN($ids), 0, exp2),
-                    exp3 = IF(exp3 IN($ids), 0, exp3)
-                WHERE
-                    exp1 IN($ids) OR
-                    exp2 IN($ids) OR
-                    exp3 IN($ids)";
-        }
-        mysqli_query($this->dblink, $q);
+	function clearExpansionSlot($id, $mode = 0) {
+    // acceptă int sau array, fără (int) pe array
+    if(!is_array($id)) {
+        $id = [$id];
     }
+    // curățare sigură – doar numere
+    $id = array_map('intval', $id);
+    $ids = implode(",", $id);
+    
+    if(!$ids) return;
+    
+    if(!$mode){ 
+        // ștergem sloturile DIN satul care se distruge
+        $pairs = [];
+        for($i = 1; $i <= 3; $i++) $pairs[] = 'exp'.$i.' = 0';
+        $q = "UPDATE ".TB_PREFIX."vdata SET ".implode(',', $pairs)." WHERE wref IN($ids)";
+    }else{
+        // ștergem referința DIN satul părinte
+        $q = "
+            UPDATE ".TB_PREFIX."vdata
+            SET
+                exp1 = IF(exp1 IN($ids), 0, exp1),
+                exp2 = IF(exp2 IN($ids), 0, exp2),
+                exp3 = IF(exp3 IN($ids), 0, exp3)
+            WHERE
+                exp1 IN($ids) OR
+                exp2 IN($ids) OR
+                exp3 IN($ids)";
+			}
+		mysqli_query($this->dblink, $q);
+	}
 
     // no need to cache this method
     function getInvitation($uid) {
