@@ -46,7 +46,7 @@ if($maint['started_by'] > 0){
 ?>
 <style>
 .maint-card{max-width:520px;margin:12px auto;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:system-ui}
-.maint-head{background:#0f172a;color:#fff;padding:10px 14px;font-weight:600}
+.maint-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:10px 14px;font-weight:600}
 .maint-status{padding:14px;text-align:center;font-weight:600}
 .maint-status.on{color:#dc2626;background:#fef2f2}
 .maint-status.off{color:#16a34a;background:#f0fdf4}

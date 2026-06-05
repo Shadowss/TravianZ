@@ -21,7 +21,7 @@
 <style>
 .reset-wrap{max-width:720px;margin:20px auto;font-family:Tahoma,Verdana,Arial,sans-serif;padding:0 10px;box-sizing:border-box}
 .reset-card{background:#fff;border:1px solid #bbb;border-radius:8px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
-.reset-head{background:#c0392b;color:#fff;padding:12px 16px;display:flex;align-items:center;gap:8px}
+.reset-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:8px}
 .reset-head h2{margin:0;font-size:16px;font-weight:bold}
 .reset-body{padding:24px 20px 10px;text-align:center;color:#333;font-size:13px;line-height:1.6}
 .reset-warning{background:#fff5f5;border:1px solid #e74c3c;border-left:4px solid #c0392b;padding:14px;margin:0 auto 16px;max-width:520px;border-radius:4px;color:#a93226;text-align:left}
