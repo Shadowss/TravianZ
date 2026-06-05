@@ -20,7 +20,7 @@
 ?>
 <style>
 .clean-card{max-width:480px;margin:12px auto;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:system-ui}
-.clean-head{background:#0f172a;color:#fff;padding:10px 14px;font-weight:600;font-size:14px}
+.clean-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:10px 14px;font-weight:600;font-size:14px}
 .clean-body{display:flex;justify-content:space-between;align-items:center;padding:14px}
 .clean-desc{font-size:13.5px;color:#334155}
 .clean-desc strong{color:#dc2626}
