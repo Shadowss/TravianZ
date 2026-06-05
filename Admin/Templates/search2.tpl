@@ -29,8 +29,8 @@ foreach($varray as $vil) $totalpop += $vil['pop'];
 ?>
 <style>
 #member.search-modern{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);margin-bottom:12px}
-#member.search-modern th{background:linear-gradient(135deg,#0f172a,#334155);color:#fff;padding:10px 12px;font-weight:600;text-align:left;font-size:13px}
-#member.search-modern th font{color:#fca5a5 !important;font-weight:500}
+#member.search-modern th{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:10px 12px;font-weight:600;text-align:left;font-size:13px}
+#member.search-modern th font{color:#000000 !important;font-weight:500}
 
 .s-info-wrap{display:flex;flex-direction:column;gap:10px;width:100%;margin:0 0 12px}
 .s-card{width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04);box-sizing:border-box}

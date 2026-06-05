@@ -20,7 +20,7 @@
 ?>
 <style>
 .vil-wrap{font-family:system-ui;margin-top:8px}
-.vil-head{width:100%;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:9px 12px;font-weight:600;text-align:center;font-size:14px;border:1px solid #0f172a;border-radius:10px 10px 0 0;box-sizing:border-box}
+.vil-head{width:100%;background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:9px 12px;font-weight:600;text-align:center;font-size:14px;border-radius:10px 10px 0 0;box-sizing:border-box}
 .vil-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-top:0;border-radius:0 0 10px 10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .vil-table tr:first-child td{background:#f8fafc;color:#64748b;font-size:11px;text-transform:uppercase;padding:7px 10px;font-weight:600;border-bottom:1px solid #e5e7eb;text-align:center}
 .vil-table td{padding:7px 10px;border-bottom:1px solid #f1f5f9;font-size:13px;color:#334155;text-align:center}

@@ -26,7 +26,7 @@ if(isset($_GET['uid'])) {
 ?>
 <style>
 .pw-wrap{max-width:600px;margin:0 auto;font-family:Verdana,Arial;}
-.pw-head{background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.pw-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
 .pw-head .icon{font-size:28px;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .pw-head h2{margin:0;font-size:18px;}
 .pw-head h2 a{color:#fff;text-decoration:none;}

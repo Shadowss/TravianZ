@@ -23,7 +23,7 @@ if($id){
 ?>
 <style>
 .over-wrap{max-width:700px;margin:0 auto;font-family:Verdana,Arial;}
-.over-head{background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.over-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
 .over-head .icon{font-size:28px;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .over-head h2{margin:0;font-size:18px;}
 .over-head h2 a{color:#fff;text-decoration:none;}

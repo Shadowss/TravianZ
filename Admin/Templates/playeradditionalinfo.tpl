@@ -1,10 +1,10 @@
 <style>
 #member{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);margin-top:10px;font-family:system-ui}
-#member thead th{background:linear-gradient(135deg,#0f172a,#1e293b) !important;color:#fff;padding:6px 10px;font-weight:600;text-align:left;font-size:13px;position:relative}
-#member thead th .edit-icon{float:right;display:inline-flex;opacity:.85;transition:.15s}
+#member thead th{background:linear-gradient(135deg,#66CCFF,#66CCCC) !important;color:#fff;padding:6px 10px;font-weight:600;text-align:left;font-size:13px;position:relative}
+#member thead th .edit-icon{float:right;display:inline-flex;opacity:.9;transition:.15s}
 #member thead th .edit-icon:hover{opacity:1}
-#member thead th .edit-icon svg{width:14px;height:14px;stroke:#93c5fd;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
-#member thead th .edit-icon:hover svg{stroke:#fff}
+#member thead th .edit-icon svg{width:14px;height:14px;stroke:#000000;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+#member thead th .edit-icon:hover svg{stroke:#000000}
 #member tbody td{padding:3px 8px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#334155;vertical-align:middle;line-height:1.2}
 #member tbody tr:last-child td{border-bottom:0}
 #member tbody tr:hover td{background:#f8fafc}

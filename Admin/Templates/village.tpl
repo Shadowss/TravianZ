@@ -85,7 +85,7 @@ if(isset($id)){
 .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
 @media(max-width:900px){.vgrid{grid-template-columns:1fr}}
 .vcard{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04);margin-bottom:8px}
-.vhead{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:7px 10px;font-weight:600;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.vhead{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:7px 10px;font-weight:600;font-size:13px;display:flex;justify-content:space-between;align-items:center}
 .vhead a{color:#93c5fd;display:inline-flex}
 .vtable{width:100%;border-collapse:collapse}
 .vtable td{padding:5px 8px;border-bottom:1px solid #f1f5f9;font-size:12.5px;color:#334155;vertical-align:middle}

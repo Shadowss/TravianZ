@@ -25,7 +25,7 @@ if($id){
 ?>
 <style>
 .plus-wrap{max-width:900px;margin:0 auto;font-family:Verdana,Arial;}
-.plus-head{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
+.plus-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;}
 .plus-head h2{margin:0;font-size:20px;}.plus-head h2 a{color:#fff;}
 .card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
 .card h3{margin:0;padding:10px 14px;background:#f9fafb;border-bottom:1px solid #e5e7eb;font-size:13px;text-transform:uppercase;color:#374151;}

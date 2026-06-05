@@ -30,7 +30,7 @@ if($_GET['uid']) {
 ?>
 <style>
 .del-wrap{max-width:650px;margin:0 auto;font-family:Verdana,Arial;}
-.del-head{background:linear-gradient(135deg,#dc2626,#991b1b);color:#fff;border-radius:6px;padding:18px 20px;margin-bottom:14px;text-align:center;}
+.del-head{background:linear-gradient(135deg,#FF6666,#FF9933);color:#fff;border-radius:6px;padding:18px 20px;margin-bottom:14px;text-align:center;}
 .del-head .icon{font-size:36px;margin-bottom:6px;}
 .del-head h2{margin:0;font-size:20px;}
 .del-head .warn{font-size:12px;opacity:.9;margin-top:4px;}

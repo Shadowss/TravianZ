@@ -1,6 +1,6 @@
 <style>
 .medals-wrap{font-family:system-ui;margin-top:12px}
-.medals-head{width:100%;background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:8px 12px;font-weight:600;text-align:center;font-size:13px;border:1px solid #0f172a;border-radius:10px 10px 0 0;box-sizing:border-box}
+.medals-head{width:100%;background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:8px 12px;font-weight:600;text-align:center;font-size:13px;border-radius:10px 10px 0 0;box-sizing:border-box}
 .medals-table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-top:0;border-radius:0 0 10px 10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .medals-table tr.head td{background:#f8fafc;color:#64748b;font-size:11px;text-transform:uppercase;padding:6px 8px;font-weight:600;border-bottom:1px solid #e5e7eb;text-align:center}
 .medals-table td{padding:6px 8px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#334155;text-align:center;vertical-align:middle}

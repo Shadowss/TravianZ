@@ -32,7 +32,7 @@ if(isset($id)){
 <style>
 .addtroops-wrap{max-width:600px;margin:12px auto;font-family:system-ui}
 .addtroops-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.addtroops-head{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:10px 14px;font-weight:600;font-size:14px}
+.addtroops-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:10px 14px;font-weight:600;font-size:14px}
 .addtroops-grid{display:grid;grid-template-columns:1fr;gap:0}
 .troop-row{display:grid;grid-template-columns:48px 1fr 120px;align-items:center;padding:8px 12px;border-bottom:1px solid #f1f5f9;gap:10px}
 .troop-row:last-child{border-bottom:0}

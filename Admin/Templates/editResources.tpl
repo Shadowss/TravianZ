@@ -26,7 +26,7 @@ if($id){
 <style>
 .res-wrap{font-family:system-ui;max-width:600px;margin:12px auto}
 .res-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.06)}
-.res-head{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:12px 16px;font-weight:600;font-size:14px}
+.res-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:12px 16px;font-weight:600;font-size:14px}
 .res-table{width:100%;border-collapse:collapse}
 .res-table thead td{background:#f8fafc;color:#64748b;font-size:11px;text-transform:uppercase;font-weight:600;padding:8px 12px;border-bottom:1px solid #e5e7eb}
 .res-table tbody td{padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:13px}

@@ -37,7 +37,7 @@ if ($hero !== false) {
 .hero-table th,.hero-table td{vertical-align:middle;padding:3px 8px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#1e293b;line-height:1.2}
 .hero-table thead th{background:linear-gradient(180deg,#f8fafc,#eef2f7);text-align:center;font-weight:600;color:#334155;border-bottom:1px solid #e2e8f0;padding:4px 8px}
 .hero-table tr:last-child td{border-bottom:0}
-.hero-table thead th.hero-head{background:linear-gradient(135deg,#0f172a,#1e293b) !important;color:#fff !important;padding:6px 10px !important;font-size:13px}
+.hero-table thead th.hero-head{background:linear-gradient(135deg,#66CCFF,#66CCCC) !important;color:#fff !important;padding:6px 10px !important;font-size:13px}
 .hero-sub{background:#e2e8f0 !important;font-weight:600;color:#1e293b;text-align:center;padding:3px 8px !important}
 .hero-name{font-weight:600;color:#0f172a}
 .badge{display:inline-block;padding:1px 6px;border-radius:5px;font-size:10.5px;font-weight:600}

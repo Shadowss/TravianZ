@@ -25,7 +25,7 @@ if($id){
 ?>
 <style>
 .sit-wrap{max-width:700px;margin:0 auto;font-family:Verdana,Arial;}
-.sit-head{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.sit-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;border-radius:6px;padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
 .sit-head .icon{font-size:28px;background:rgba(255,255,255,.15);width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .sit-head h2{margin:0;font-size:18px;}
 .sit-head h2 a{color:#fff;text-decoration:none;}

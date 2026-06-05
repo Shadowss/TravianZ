@@ -27,8 +27,8 @@ if(isset($id) && $id > 0) {
 <style>
 .editUser-wrap { max-width:1100px; margin:0 auto; font-family:system-ui; }
 .editUser-head {
-    background: linear-gradient(135deg,#0f172a,#1e293b); color:#fff;
-    border:1px solid #0f172a; padding:10px 14px; margin-bottom:12px;
+    background: linear-gradient(135deg,#66CCFF,#66CCCC); color:#fff;
+    padding:10px 14px; margin-bottom:12px;
     border-radius:10px; display:flex; align-items:center; justify-content:space-between;
 }
 .editUser-head h2 { margin:0; font-size:16px; }

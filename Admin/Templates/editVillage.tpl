@@ -31,7 +31,7 @@ if(isset($id)) { include("search2.tpl"); ?>
 #content.village1 #village_map {float: none !important;margin: 0 auto !important;left: 0 !important;right: 0 !important;position: relative !important;display: block;}
 .village-page{font-family:system-ui;max-width:1100px;margin:0 auto;padding:0 6px}
 .vcard{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);margin-bottom:12px}
-.vhead{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:8px 12px;font-weight:600;font-size:13px;display:flex;align-items:center}
+.vhead{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:8px 12px;font-weight:600;font-size:13px;display:flex;align-items:center}
 .vtable{width:100%;border-collapse:collapse;font-size:12.5px}
 .vtable th{background:#f8fafc;padding:6px;border-bottom:1px solid #e5e7eb;text-align:left;font-weight:600;color:#475569}
 .vtable td{padding:5px 6px;border-bottom:1px solid #f1f5f9;vertical-align:middle}

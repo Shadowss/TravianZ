@@ -33,7 +33,7 @@ if(isset($id)){
 <style>
 .ab-wrap{max-width:650px;margin:12px auto;font-family:system-ui}
 .ab-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-.ab-head{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:10px 14px;font-weight:600;font-size:14px}
+.ab-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:10px 14px;font-weight:600;font-size:14px}
 .ab-grid{display:grid;grid-template-columns:1fr}
 .ab-row{display:grid;grid-template-columns:48px 1.2fr 90px 90px;align-items:center;padding:8px 12px;border-bottom:1px solid #f1f5f9;gap:10px}
 .ab-row.header{background:#f8fafc;font-size:11px;color:#64748b;text-transform:uppercase;font-weight:600;border-bottom:1px solid #e5e7eb}

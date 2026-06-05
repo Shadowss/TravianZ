@@ -25,7 +25,7 @@ $user = $database->getUserArray($id,1);
 <style>
 .msg-wrap{font-family:system-ui;max-width:720px;margin:12px auto}
 .msg-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.06);overflow:hidden}
-.msg-head{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.msg-head{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
 .msg-head h4{margin:0;font-size:15px;font-weight:600}
 .msg-head a{color:#93c5fd;text-decoration:none}
 .msg-head a:hover{color:#fff}

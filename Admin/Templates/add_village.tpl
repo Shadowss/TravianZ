@@ -33,7 +33,7 @@
   margin-bottom:12px;
 }
 .punish-box th{
-  background:linear-gradient(135deg,#0f172a,#1e293b);
+  background:linear-gradient(135deg,#66CCFF,#66CCCC) !important;
   color:#fff;
   padding:8px 12px;
   font-weight:600;

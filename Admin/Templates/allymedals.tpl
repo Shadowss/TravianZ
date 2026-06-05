@@ -24,7 +24,7 @@ $varmedal = $database->getProfileMedalAlly($_GET['aid']);
 ?>
 <style>
 .medal-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;font-family:system-ui;margin-bottom:12px}
-.medal-head{background:#0f172a;color:#fff;padding:8px 12px;font-size:13px;font-weight:600}
+.medal-head{background:linear-gradient(135deg,#66CCFF,#66CCCC) !important;color:#fff !important;padding:6px 10px !important;font-size:13px}
 .medal-table{width:100%;border-collapse:collapse}
 .medal-table th{background:#f8fafc;padding:7px 6px;font-size:11px;color:#64748b;text-transform:uppercase;font-weight:600;border-bottom:1px solid #e5e7eb;text-align:center}
 .medal-table td{padding:8px 6px;font-size:12.5px;text-align:center;border-bottom:1px solid #f1f5f9;vertical-align:middle}

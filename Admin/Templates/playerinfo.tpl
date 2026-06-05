@@ -24,7 +24,7 @@
 <table id="profile" cellpadding="1" cellspacing="1" >
 <style>
 #profile{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.05);font-family:system-ui}
-#profile thead tr:first-child th{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:6px 10px;font-size:14px;font-weight:600;text-align:left}
+#profile thead tr:first-child th{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:6px 10px;font-size:14px;font-weight:600;text-align:left}
 #profile thead tr:first-child th a{color:#93c5fd;text-decoration:none}
 #profile thead tr:first-child th a:hover{text-decoration:underline}
 #profile thead tr:nth-child(2) td{background:#f8fafc;color:#64748b;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:4px 8px;border-bottom:1px solid #e5e7eb;font-weight:600}

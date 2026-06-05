@@ -45,7 +45,7 @@ if(isset($id))
 .player-page > br,.player-page br{display:none}
 #profile, .hero-wrap, #member, .ban-history{margin-bottom:10px !important}
 table.ban-history{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04);margin-top:10px;font-family:system-ui}
-table.ban-history thead tr:first-child th{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:6px 10px;font-weight:600;text-align:left;font-size:13px}
+table.ban-history thead tr:first-child th{background:linear-gradient(135deg,#66CCFF,#66CCCC);color:#fff;padding:6px 10px;font-weight:600;text-align:left;font-size:13px}
 table.ban-history thead tr:nth-child(2) td{background:#f8fafc;color:#64748b;font-size:11px;text-transform:uppercase;padding:4px 8px;border-bottom:1px solid #e5e7eb;font-weight:600}
 table.ban-history tbody td{padding:3px 8px;border-bottom:1px solid #f1f5f9;font-size:12px;color:#334155;line-height:1.2}
 table.ban-history tbody tr:last-child td{border-bottom:0}
