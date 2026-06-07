@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
@@ -2349,7 +2349,31 @@ class Automation {
                     if ($DefenderID == 0) $natar = 0;
 
                     if(!empty($scout)) {
-                        $info_spy = $this->buildScoutReport($data, $spy_pic, $isoasis, $targettribe, $crannySpy, $totwood, $totclay, $totiron, $totcrop);
+                        if ($data['spy'] == 1){
+                            $info_spy = "".$spy_pic.",<div class=\"res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".round($totwood)." |
+				 <img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".round($totclay)." |
+				 <img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".round($totiron)." |
+				 <img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".round($totcrop)."</div>
+				 <div class=\"carry\"><img class=\"car\" src=\"img/x.gif\" alt=\"carry\" title=\"carry\" />Total Resources: ".round($totwood+$totclay+$totiron+$totcrop)."</div>
+	";
+                        }else if($data['spy'] == 2){
+                            if ($isoasis == 0){
+                                $walllevel = $database->getFieldLevelInVillage($data['to'], '31, 32, 33');
+                                $residencelevel = $database->getFieldLevelInVillage($data['to'], 25);
+                                $palacelevel = $database->getFieldLevelInVillage($data['to'], 26);
+                                $residenceimg = "<img src=\"".GP_LOCATE."img/g/g25.gif\" height=\"20\" width=\"15\" alt=\"Residence\" title=\"Residence\" />";
+                                $palaceimg = "<img src=\"".GP_LOCATE."img/g/g26.gif\" height=\"20\" width=\"15\" alt=\"Palace\" title=\"Palace\" />";
+                                $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\" alt=\"Cranny\" title=\"Cranny\" />";
+                                $wallimg = "<img src=\"".GP_LOCATE."img/g/g3".$targettribe."Icon.gif\" height=\"20\" width=\"15\" alt=\"Wall\" title=\"Wall\" />";
+                                $info_spy = "".$spy_pic.",";
+                                if($residencelevel > 0) $info_spy .= $residenceimg." Residence level:<b>".$residencelevel."</b><br />";
+                                elseif($palacelevel > 0) $info_spy .= $palaceimg." Palace level: <b>".$palacelevel."</b><br />";
+                                
+                                if($walllevel > 0) $info_spy .= $wallimg." Wall level: <b>".$walllevel."</b><br />";
+                                $info_spy .= $crannyimg." Total crannies capacity: <b>".$crannySpy."</b>";
+                            }
+                            else $info_spy = "".$spy_pic.", There are no informations to show";                                                   
+                        }
 
                         $data2 = ''.$from['owner'].','.$from['wref'].','.$owntribe.','.$unitssend_att.','.$unitsdead_att.',0,0,0,0,0,'.$to['owner'].','.$to['wref'].','.addslashes($to['name']).',,,,'.$targettribe.','.$unitssend_def[0].','.$unitsdead_def[0].','.$rom.','.$unitssend_def[1].','.$unitsdead_def[1].','.$ger.','.$unitssend_def[2].','.$unitsdead_def[2].','.$gal.','.$unitssend_def[3].','.$unitsdead_def[3].','.$nat.','.$unitssend_def[4].','.$unitsdead_def[4].','.$natar.','.$unitssend_def[5].','.$unitsdead_def[5].','.$DefenderHeroesTot.','.$DefenderHeroesDead.','.$info_ram.','.$info_cat.','.$info_chief.','.$info_spy.','.$data['t11'].','.$dead11.','.$herosend_def.','.$deadhero.',,'.$unitstraped_att;
                     }else{
