@@ -1257,6 +1257,8 @@ class Automation {
                             else $info_spy = "".$spy_pic.", There are no informations to show";                                                   
                         }
         return $info_spy;
+    }
+
     /**
      * Distribute the battle bounty across the resources actually available in
      * the target (after cranny protection) and return how much of each is taken.
