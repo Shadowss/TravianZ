@@ -1257,6 +1257,61 @@ class Automation {
                             else $info_spy = "".$spy_pic.", There are no informations to show";                                                   
                         }
         return $info_spy;
+    /**
+     * Distribute the battle bounty across the resources actually available in
+     * the target (after cranny protection) and return how much of each is taken.
+     * Pure behaviour-preserving extraction (refactor for issue #155).
+     *
+     * @param array $available [wood, clay, iron, crop] lootable amounts.
+     * @param int   $bounty    Total carry capacity / bounty from the battle.
+     * @return array [wood, clay, iron, crop] amounts actually stolen.
+     */
+    private function applyBounty(array $available, $bounty) {
+        $avtotal = $available;
+        $steal   = [0, 0, 0, 0];
+        $btotal  = $bounty;
+        $bmod    = 0;
+
+        for ($i = 0; $i < 5; $i++) {
+            for ($j = 0; $j < 4; $j++) {
+                if (isset($avtotal[$j])) {
+                    if ($avtotal[$j] < 1) unset($avtotal[$j]);
+                }
+            }
+
+            // No resources left to take
+            if (empty($avtotal) || ($btotal < 1 && $bmod < 1)) break;
+
+            if ($btotal < 1) {
+                while ($bmod) {
+                    // random select
+                    $rs = array_rand($avtotal);
+                    if (isset($avtotal[$rs])) {
+                        $avtotal[$rs] -= 1;
+                        $steal[$rs]   += 1;
+                        $bmod         -= 1;
+                    }
+                }
+            }
+
+            // handle unbalanced amounts.
+            $btotal += $bmod;
+            $bmod    = $btotal % count($avtotal);
+            $btotal -= $bmod;
+            $bsplit  = $btotal / count($avtotal);
+
+            $max_steal = (min($avtotal) < $bsplit) ? min($avtotal) : $bsplit;
+
+            for ($j = 0; $j < 4; $j++) {
+                if (isset($avtotal[$j])) {
+                    $avtotal[$j] -= $max_steal;
+                    $steal[$j]   += $max_steal;
+                    $btotal      -= $max_steal;
+                }
+            }
+        }
+
+        return $steal;
     }
 
     private function sendunitsComplete() {
@@ -2220,62 +2275,8 @@ class Automation {
                     $avwood = ($avwood < 0) ? 0 : $avwood;
                     $avcrop = ($avcrop < 0) ? 0 : $avcrop;
 
-                    $avtotal = [$avwood, $avclay, $aviron, $avcrop];
-                    $av = $avtotal;
-
-                    // resources (wood,clay,iron,crop)
-                    $steal = [0, 0, 0, 0];
-
-                    //bounty variables
-                    $btotal = $battlepart['bounty'];
-                    $bmod = 0;
-
-                    for($i = 0; $i < 5; $i++)
-                    {
-                        for($j = 0; $j < 4; $j++)
-                        {
-                            if(isset($avtotal[$j]))
-                            {
-                                if($avtotal[$j] < 1) unset($avtotal[$j]);                           
-                            }
-                        }
-
-                        //No resources left to take
-                        if(empty($avtotal) || ($btotal < 1 && $bmod < 1)) break;
-                        
-                        if($btotal < 1)
-                        {
-                            while($bmod)
-                            {
-                                //random select
-                                $rs = array_rand($avtotal);
-                                if(isset($avtotal[$rs]))
-                                {
-                                    $avtotal[$rs] -= 1;
-                                    $steal[$rs] += 1;
-                                    $bmod -= 1;
-                                }
-                            }
-                        }
-
-                        // handle unbalanced amounts.
-                        $btotal += $bmod;
-                        $bmod = $btotal % count($avtotal);
-                        $btotal -= $bmod;
-                        $bsplit = $btotal / count($avtotal);
-                        
-                        $max_steal = (min($avtotal) < $bsplit) ? min($avtotal) : $bsplit;
-                        
-                        for($j = 0; $j < 4; $j++)
-                        {
-                            if(isset($avtotal[$j]))
-                            {
-                                $avtotal[$j] -= $max_steal;
-                                $steal[$j] += $max_steal;
-                                $btotal -= $max_steal;
-                            }
-                        }
-                    }                    
+                    // bounty distributed across the resources available after cranny protection (extracted to applyBounty() [#155])
+                    $steal = $this->applyBounty([$avwood, $avclay, $aviron, $avcrop], $battlepart['bounty']);
 
                     //chiefing village — extracted to handleConquest() [#155]
                     if (!isset($village_destroyed)) $village_destroyed = 0;
