@@ -2330,3 +2330,23 @@ define('TZ_RT_NEW_VILLAGE', "Sat nou întemeiat");
 define('TZ_RT_VALLEY_OCCUPIED', "Colonizare eșuată (vale ocupată)");
 define('TZ_NEW_VILLAGE_MSG', "Ai întemeiat un sat nou:");
 define('TZ_VALLEY_OCCUPIED_MSG', "Coloniștii tăi nu s-au putut stabili aici — valea este deja ocupată de alt jucător. Se întorc acasă.");
+
+// ===== profilul jucătorului (#189) =====
+define('AGE', 'Vârstă');
+define('CAPITAL_TAG', 'Capitală');
+define('WRITE_MESSAGE_UNAVAILABLE', 'Trimitere mesaj indisponibilă');
+define('PROFILE_FLAG_ADMIN', 'Acest jucător este Administrator.');
+define('PROFILE_FLAG_MULTIHUNTER', 'Acest jucător este Multihunter.');
+define('PROFILE_FLAG_BANNED', 'Acest jucător este BANAT.');
+define('PROFILE_FLAG_VACATION', 'Acest jucător este în VACANȚĂ.');
+
+// ===== pagina principală a manualului din joc (#189) =====
+define('BUILDINGS', 'Clădiri');
+define('INFRASTRUCTURE', 'Infrastructură');
+define('FORWARD', 'înainte');
+define('NEW_FEATURES', 'Funcții noi');
+define('NEW_WINDOW', 'fereastră nouă');
+define('MANUAL_INTRO', 'Acest ajutor din joc îți oferă posibilitatea de a consulta informații importante oricând.');
+define('MANUAL_NEW_FEATURES_DESC', "Acestea sunt funcții noi pe care nu le vei găsi în versiunea reală a jocului Travian T3.6. Aici te poți familiariza cu toate funcțiile noi în detaliu.");
+define('MANUAL_FAQ', 'Întrebări frecvente Travian');
+define('MANUAL_FAQ_DESC', "Acest ajutor din joc îți oferă doar informații scurte. Mai multe informații sunt disponibile pe");

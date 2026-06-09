@@ -2339,6 +2339,26 @@ tz_def('TZ_RT_VALLEY_OCCUPIED', "Settling failed (valley occupied)");
 tz_def('TZ_NEW_VILLAGE_MSG', "You have founded a new village:");
 tz_def('TZ_VALLEY_OCCUPIED_MSG', "Your settlers could not settle here - the valley is already occupied by another player. They are on their way back.");
 
+// ===== player profile page (#189) =====
+tz_def('AGE', 'Age');
+tz_def('CAPITAL_TAG', 'Capital');
+tz_def('WRITE_MESSAGE_UNAVAILABLE', 'Write message not available');
+tz_def('PROFILE_FLAG_ADMIN', 'This player is Admin.');
+tz_def('PROFILE_FLAG_MULTIHUNTER', 'This player is Multihunter.');
+tz_def('PROFILE_FLAG_BANNED', 'This player is BANNED.');
+tz_def('PROFILE_FLAG_VACATION', 'This player is on VACATION.');
+
+// ===== in-game manual overview page (#189) =====
+tz_def('BUILDINGS', 'Buildings');
+tz_def('INFRASTRUCTURE', 'Infrastructure');
+tz_def('FORWARD', 'forward');
+tz_def('NEW_FEATURES', 'New features');
+tz_def('NEW_WINDOW', 'new window');
+tz_def('MANUAL_INTRO', 'This ingame help offers you the chance to look up important information at any time.');
+tz_def('MANUAL_NEW_FEATURES_DESC', 'These are new features that you will not find in the real version of the game Travian T3.6. Here you can get acquainted with all new features in more detail.');
+tz_def('MANUAL_FAQ', 'Travian FAQ');
+tz_def('MANUAL_FAQ_DESC', 'This ingame help just gives you brief information. More information is available at the');
+
 // ===== display-time localization of stored report topics =====
 // Reports are generated server-side at battle resolution and stored in the DB
 // (column `topic`) with English connectors. This rewrites them to the viewing

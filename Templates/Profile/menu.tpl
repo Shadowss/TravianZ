@@ -27,7 +27,7 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
     <!-- ================= OVERVIEW ================= -->
     <a href="spieler.php?uid=<?php echo $menuUid; ?>"
        <?php echo $selectedUid ? 'class="selected"' : ''; ?>>
-        Overview
+        <?php echo OVERVIEW; ?>
     </a>
 
     |
@@ -35,7 +35,7 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
     <!-- ================= PROFILE ================= -->
     <a href="spieler.php?s=1"
        <?php echo ($sParam === 1) ? 'class="selected"' : ''; ?>>
-        Profile
+        <?php echo PROFILE; ?>
     </a>
 
     |
@@ -43,7 +43,7 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
     <!-- ================= PREFERENCES ================= -->
     <a href="spieler.php?s=2"
        <?php echo ($sParam === 2) ? 'class="selected"' : ''; ?>>
-        Preferences
+        <?php echo PREFERENCES; ?>
     </a>
 
     |
@@ -51,7 +51,7 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
     <!-- ================= ACCOUNT ================= -->
     <a href="spieler.php?s=3"
        <?php echo ($sParam === 3) ? 'class="selected"' : ''; ?>>
-        Account
+        <?php echo ACCOUNT; ?>
     </a>
 
     <?php
@@ -61,7 +61,7 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
         |
         <a href="spieler.php?s=5"
            <?php echo ($sParam === 5) ? 'class="selected"' : ''; ?>>
-            Vacation
+            <?php echo VACATION; ?>
         </a>
     <?php
     }
@@ -72,7 +72,7 @@ $sParam = isset($_GET['s']) ? (int)$_GET['s'] : null;
         |
         <a href="spieler.php?s=4"
            <?php echo ($sParam === 4) ? 'class="selected"' : ''; ?>>
-            Graphic pack
+            <?php echo GRAPH_PACK; ?>
         </a>
     <?php
     }

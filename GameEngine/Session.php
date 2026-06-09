@@ -55,6 +55,11 @@ include_once("Generator.php");
 include_once("Multisort.php");
 include_once("Ranking.php");
 include_once("Lang/" . LANG . ".php");
+// en.php is an idempotent fallback (tz_def only defines missing keys); loading
+// it after the player language guarantees every interface constant is defined,
+// so a key missing from a translation degrades to English instead of a PHP 8.3
+// "undefined constant" fatal (blank page). See issue #189.
+include_once("Lang/en.php");
 include_once("Logging.php");
 include_once("Message.php");
 include_once("Alliance.php");

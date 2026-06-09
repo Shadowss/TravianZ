@@ -2342,4 +2342,24 @@ define('TZ_RT_VALLEY_OCCUPIED', "Colonisation échouée (vallée occupée)");
 define('TZ_NEW_VILLAGE_MSG', "Vous avez fondé un nouveau village :");
 define('TZ_VALLEY_OCCUPIED_MSG', "Vos colons n'ont pas pu s'installer ici — la vallée est déjà occupée par un autre joueur. Ils sont sur le chemin du retour.");
 
+// ===== profil du joueur (#189) =====
+define('AGE', 'Âge');
+define('CAPITAL_TAG', 'Capitale');
+define('WRITE_MESSAGE_UNAVAILABLE', 'Écrire un message non disponible');
+define('PROFILE_FLAG_ADMIN', 'Ce joueur est Administrateur.');
+define('PROFILE_FLAG_MULTIHUNTER', 'Ce joueur est Multihunter.');
+define('PROFILE_FLAG_BANNED', 'Ce joueur est BANNI.');
+define('PROFILE_FLAG_VACATION', 'Ce joueur est en VACANCES.');
+
+// ===== page d'accueil du manuel en jeu (#189) =====
+define('BUILDINGS', 'Bâtiments');
+define('INFRASTRUCTURE', 'Infrastructure');
+define('FORWARD', 'suivant');
+define('NEW_FEATURES', 'Nouveautés');
+define('NEW_WINDOW', 'nouvelle fenêtre');
+define('MANUAL_INTRO', 'Cette aide en jeu vous permet de consulter des informations importantes à tout moment.');
+define('MANUAL_NEW_FEATURES_DESC', "Ce sont des nouveautés que vous ne trouverez pas dans la version originale du jeu Travian T3.6. Vous pouvez ici découvrir toutes ces nouveautés en détail.");
+define('MANUAL_FAQ', 'FAQ Travian');
+define('MANUAL_FAQ_DESC', "Cette aide en jeu ne donne que de brèves informations. Plus d'informations sont disponibles sur le");
+
 ?>

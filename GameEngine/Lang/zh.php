@@ -2323,3 +2323,23 @@ define('TZ_RT_NEW_VILLAGE', "已建立新村庄");
 define('TZ_RT_VALLEY_OCCUPIED', "拓殖失败（山谷已被占领）");
 define('TZ_NEW_VILLAGE_MSG', "你已建立一个新村庄：");
 define('TZ_VALLEY_OCCUPIED_MSG', "你的拓荒者无法在此定居——该山谷已被其他玩家占领。他们正在返回途中。");
+
+// ===== 玩家资料页 (#189) =====
+define('AGE', '年龄');
+define('CAPITAL_TAG', '首都');
+define('WRITE_MESSAGE_UNAVAILABLE', '无法发送消息');
+define('PROFILE_FLAG_ADMIN', '该玩家是管理员。');
+define('PROFILE_FLAG_MULTIHUNTER', '该玩家是多账号猎人。');
+define('PROFILE_FLAG_BANNED', '该玩家已被封禁。');
+define('PROFILE_FLAG_VACATION', '该玩家处于度假模式。');
+
+// ===== 游戏内手册首页 (#189) =====
+define('BUILDINGS', '建筑');
+define('INFRASTRUCTURE', '基础设施');
+define('FORWARD', '下一页');
+define('NEW_FEATURES', '新功能');
+define('NEW_WINDOW', '新窗口');
+define('MANUAL_INTRO', '此游戏内帮助让你随时查阅重要信息。');
+define('MANUAL_NEW_FEATURES_DESC', '这些是你在原版 Travian T3.6 游戏中找不到的新功能。你可以在此详细了解所有新功能。');
+define('MANUAL_FAQ', 'Travian 常见问题');
+define('MANUAL_FAQ_DESC', '此游戏内帮助仅提供简要信息。更多信息请访问');
