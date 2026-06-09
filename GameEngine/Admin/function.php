@@ -57,6 +57,12 @@ class funct
                 $admin->DelBan($get['uid'], $get['id']);
                 // remove ban
                 break;
+            case "delIpBan":
+                // remove IP ban (issue #185)
+                if (isset($get['id'])) {
+                    $admin->DelIpBan($get['id']);
+                }
+                break;
             case "addBan":
                 if ($get['time']) {
                     $end = time() + $get['time'];

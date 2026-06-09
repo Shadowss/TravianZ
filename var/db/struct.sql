@@ -401,6 +401,26 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%banlist` (
   KEY `active-end` (`active`,`end`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%PREFIX%banlist_ip` (issue #185 - IP bans)
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%banlist_ip` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varbinary(16) NOT NULL,
+  `ip_text` varchar(45) DEFAULT NULL,
+  `reason` varchar(100) DEFAULT NULL,
+  `time` int(11) UNSIGNED DEFAULT NULL,
+  `end` int(11) UNSIGNED DEFAULT NULL,
+  `admin` int(11) DEFAULT NULL,
+  `active` tinyint(1) UNSIGNED DEFAULT 1,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ip` (`ip`),
+  KEY `active-end` (`active`,`end`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 --
 -- Dumping data for table `%PREFIX%banlist`
 --

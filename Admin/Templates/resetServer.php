@@ -73,8 +73,9 @@ if($keepAdmin && $adminData){
     $_SESSION['id'] = 6; // actualizăm sesiunea
 }
 
-// 6. Log
-mysqli_query($GLOBALS["link"], "INSERT INTO `".TB_PREFIX."admin_log` (user, ip, time, action) VALUES (".(int)$_SESSION['id'].", '".$_SERVER['REMOTE_ADDR']."', ".time().", 'Server reset".($keepAdmin ? ' (admin kept)' : '')."')");
+// 6. Log (proxy-aware, issue #185)
+$resetIp = \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+mysqli_query($GLOBALS["link"], "INSERT INTO `".TB_PREFIX."admin_log` (user, ip, time, action) VALUES (".(int)$_SESSION['id'].", '".$resetIp."', ".time().", 'Server reset".($keepAdmin ? ' (admin kept)' : '')."')");
 
 header("Location: ../admin.php?p=resetdone");
 exit;

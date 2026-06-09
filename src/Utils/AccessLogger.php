@@ -51,9 +51,9 @@ class AccessLogger {
                     $prefix[] = date('j.m.Y H:i:s');
                 }
 
-                // add IP
+                // add IP (proxy-aware, issue #185: real client IP behind a trusted reverse proxy)
                 if (!defined('PAGE_ACCESS_LOG_IP') || (defined('PAGE_ACCESS_LOG_IP') && PAGE_ACCESS_LOG_IP)) {
-                    $prefix[] = $_SERVER['REMOTE_ADDR'];
+                    $prefix[] = IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
                 }
 
                 // add the actual file name

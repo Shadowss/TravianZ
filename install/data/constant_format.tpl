@@ -353,7 +353,19 @@ define("CFM_ADMIN_ACT",true);
 define("SERVER_WEB_ROOT",false);
 define("USRNM_SPECIAL",true);
 define("USRNM_MIN_LENGTH",3);
+define("USRNM_MAX_LENGTH",15);
 define("PW_MIN_LENGTH",4);
+
+// === IP ban (issue #185) ===
+// Master switch for IP-ban enforcement.
+define("BAN_IP_ENABLED",true);
+// Comma-separated list of trusted proxy IPs/CIDRs allowed to set the forwarded
+// header. Leave EMPTY for direct access (REMOTE_ADDR only - non-spoofable).
+// Reverse proxy example: "127.0.0.1,::1"  |  set to your proxy/Cloudflare ranges.
+define("IP_TRUSTED_PROXIES","");
+// $_SERVER key read for the real client IP when behind a trusted proxy.
+// Cloudflare: use "HTTP_CF_CONNECTING_IP".
+define("IP_FORWARDED_HEADER","HTTP_X_FORWARDED_FOR");
 define("BANNED",0);
 define("AUTH",1);
 define("USER",2);
