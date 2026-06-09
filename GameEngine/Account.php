@@ -77,9 +77,17 @@ class Account {
     } else {
         if (strlen($_POST['name']) < USRNM_MIN_LENGTH) {
             $form->addError("name", USRNM_SHORT);
+        } elseif (strlen($_POST['name']) > (defined('USRNM_MAX_LENGTH') ? USRNM_MAX_LENGTH : 15)) {
+            // Hard upper bound on the username length (issue #184).
+            $form->addError("name", USRNM_CHAR);
         } elseif (!USRNM_SPECIAL && preg_match('/[^0-9A-Za-z]/', $_POST['name'])) {
             $form->addError("name", USRNM_CHAR);
-        } elseif (USRNM_SPECIAL && preg_match("/[:,\\. \\n\\r\\t\\s\\<\\>]+/", $_POST['name'])) {
+        } elseif (USRNM_SPECIAL && !preg_match('/^[A-Za-z0-9._-]+(?: [A-Za-z0-9._-]+)*$/D', $_POST['name'])) {
+            // SECURITY (issue #184): positive ASCII allowlist instead of the old
+            // negative filter. Allows letters, digits, . _ - and single internal
+            // spaces only (no leading/trailing/double spaces, no trailing newline).
+            // Blocks & = ' " < > ; ( ) and ALL multibyte/emoji input, which were
+            // previously accepted and led to stored XSS / display corruption.
             $form->addError("name", USRNM_CHAR);
         } elseif (strtolower($_POST['name']) === 'natars') {
             $form->addError("name", USRNM_TAKEN);

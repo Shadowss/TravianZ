@@ -61,28 +61,28 @@ if(REG_OPEN == true){ ?>
 <p><?php echo BEFORE_REGISTER; ?></p>
 
 <form name="snd" method="post" action="anmelden.php">
-<input type="hidden" name="invited" value="<?php echo $invited; ?>" />
+<input type="hidden" name="invited" value="<?php echo htmlspecialchars($invited, ENT_QUOTES, 'UTF-8'); ?>" />
 <input type="hidden" name="ft" value="a1" />
 
 <table cellpadding="1" cellspacing="1" id="sign_input">
 	<tbody>
 		<tr class="top">
 			<th><?php echo NICKNAME; ?></th>
-			<td><input class="text" type="text" name="name" value="<?php echo $form->getValue('name'); ?>" maxlength="30" />
+			<td><input class="text" type="text" name="name" value="<?php echo htmlspecialchars($form->getValue('name'), ENT_QUOTES, 'UTF-8'); ?>" maxlength="30" />
 			<span class="error"><?php echo $form->getError('name'); ?></span>
 			</td>
 		</tr>
 		<tr>
 			<th><?php echo EMAIL; ?></th>
 			<td>
-				<input class="text" type="text" name="email" value="<?php echo stripslashes($form->getValue('email')); ?>" />
+				<input class="text" type="text" name="email" value="<?php echo htmlspecialchars(stripslashes($form->getValue('email')), ENT_QUOTES, 'UTF-8'); ?>" />
 				<span class="error"><?php echo $form->getError('email'); ?></span>
 				</td>
 			</tr>
 		<tr>
 			<th><?php echo PASSWORD; ?></th>
 			<td>
-				<input class="text" type="password" name="pw" value="<?php echo stripslashes($form->getValue('pw')); ?>" maxlength="100" />
+				<input class="text" type="password" name="pw" value="<?php echo htmlspecialchars(stripslashes($form->getValue('pw')), ENT_QUOTES, 'UTF-8'); ?>" maxlength="100" />
 				<span class="error"><?php echo $form->getError('pw'); ?></span>
 			</td>
 		</tr>
