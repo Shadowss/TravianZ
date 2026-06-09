@@ -30,20 +30,20 @@ $hasUid  = isset($_GET['uid']);
     |
 
     <!-- ================= DISABLED ITEMS ================= -->
-    <span class="none"><b>Profile</b></span>
+    <span class="none"><b><?php echo PROFILE; ?></b></span>
     |
-    <span class="none"><b>Preferences</b></span>
+    <span class="none"><b><?php echo PREFERENCES; ?></b></span>
     |
-    <span class="none"><b>Account</b></span>
+    <span class="none"><b><?php echo ACCOUNT; ?></b></span>
 
     <?php if (defined('NEW_FUNCTIONS_VACATION') && NEW_FUNCTIONS_VACATION) { ?>
         |
-        <span class="none"><b>Vacation</b></span>
+        <span class="none"><b><?php echo VACATION; ?></b></span>
     <?php } ?>
 
     <?php if (defined('GP_ENABLE') && GP_ENABLE) { ?>
         |
-        <span class="none"><b>Graphic pack</b></span>
+        <span class="none"><b><?php echo GRAPH_PACK; ?></b></span>
     <?php } ?>
 
 </div>

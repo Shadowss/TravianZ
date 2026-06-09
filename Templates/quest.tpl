@@ -60,9 +60,9 @@ if ($showQuest) {
         <img
             onclick="qst_handle();"
             src="<?php echo GP_LOCATE; ?>img/q/l<?php echo $tribe; ?>g.jpg"
-            title="To the task"
+            title="<?php echo TO_THE_TASK; ?>"
             style="height:174px"
-            alt="To the task"
+            alt="<?php echo TO_THE_TASK; ?>"
         />
 
     <?php } else { ?>
@@ -70,9 +70,9 @@ if ($showQuest) {
         <img
             onclick="qst_handle();"
             src="<?php echo GP_LOCATE; ?>img/q/l<?php echo $tribe; ?>.jpg"
-            title="To the task"
+            title="<?php echo TO_THE_TASK; ?>"
             style="height:174px"
-            alt="To the task"
+            alt="<?php echo TO_THE_TASK; ?>"
         />
 
     <?php } ?>

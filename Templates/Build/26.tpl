@@ -67,7 +67,7 @@ if($_POST && $_GET['action'] == 'change_capital' && !$village->capital){
 ?>
 <div id="build" class="gid26"><h1><?php echo PALACE; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 <p class="build_desc">
-        <a href="#" onClick="return Popup(26,4, 'gid');" class="build_logo"> <img class="building g26" src="img/x.gif" alt="Palace" title="<?php echo PALACE; ?>" /> </a>
+        <a href="#" onClick="return Popup(26,4, 'gid');" class="build_logo"> <img class="building g26" src="img/x.gif" alt="<?php echo PALACE; ?>" title="<?php echo PALACE; ?>" /> </a>
         <?php echo PALACE_DESC; ?></p>
 
 <?php
@@ -88,7 +88,7 @@ if($village->capital == 1) {
 <form method="post" action="build.php?id='.$building->getTypeField(26).'&action=change_capital">
 '.$_SESSION['error_p'].'
 '.PASSWORD.': <input type="password" name="pass" /><br />
-<input type="image" id="btn_ok" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" />
+<input type="image" id="btn_ok" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="'.TRAIN.'" />
 </form>
 </p>';
   }

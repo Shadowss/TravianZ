@@ -27,7 +27,7 @@ As soon as the steward of a town (senator, chief, chieftain) as been researched 
 
         <td colspan="21">
 
-            <h3>Culture points</h3>
+            <h3><?php echo CULTUREPOINT; ?></h3>
 
         </td>
 

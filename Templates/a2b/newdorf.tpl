@@ -30,7 +30,7 @@ $startUnit = ($session->tribe - 1) * 10 + 1;
 $endUnit = $session->tribe * 10;
 $hasResources = ($wood >= 750 && $clay >= 750 && $iron >= 750 && $crop >= 750);
 ?>
-<h1>Found new village</h1>
+<h1><?php echo FNEWVILLAGE; ?></h1>
 <form method="POST" action="build.php">
     <input type="hidden" name="a" value="new" />
     <input type="hidden" name="c" value="5" />
@@ -56,7 +56,7 @@ $hasResources = ($wood >= 750 && $clay >= 750 && $iron >= 750 && $crop >= 750);
                 <?php endfor; ?>
             </tr>
             <tr>
-                <th>Troops</th>
+                <th><?php echo TROOPS; ?></th>
                 <?php
                 // primele 9 unități = 0
                 for ($i = 1; $i <= 9; $i++) {
@@ -69,18 +69,18 @@ $hasResources = ($wood >= 750 && $clay >= 750 && $iron >= 750 && $crop >= 750);
         </tbody>
         <tbody class="infos">
             <tr>
-                <th>Duration</th>
-                <td colspan="10"><img class="clock" src="img/x.gif" alt="Duration" title="Duration" /> <?php echo $generator->getTimeFormat($time); ?></td>
+                <th><?php echo DURATION; ?></th>
+                <td colspan="10"><img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /> <?php echo $generator->getTimeFormat($time); ?></td>
             </tr>
         </tbody>
         <tbody class="infos">
             <tr>
-                <th>Resources</th>
+                <th><?php echo RESOURCES; ?></th>
                 <td colspan="10">
-                    <img class="r1" src="img/x.gif" alt="Lumber" title="Wood" />750 |
-                    <img class="r2" src="img/x.gif" alt="Clay" title="Clay" />750 |
-                    <img class="r3" src="img/x.gif" alt="Iron" title="Iron" />750 |
-                    <img class="r4" src="img/x.gif" alt="Crop" title="Crop" />750
+                    <img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo TZ_WOOD; ?>" />750 |
+                    <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" />750 |
+                    <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" />750 |
+                    <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" />750
                 </td>
             </tr>
         </tbody>
@@ -88,9 +88,9 @@ $hasResources = ($wood >= 750 && $clay >= 750 && $iron >= 750 && $crop >= 750);
 
     <p class="btn">
         <?php if ($hasResources): ?>
-            <button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();">Ok</button>
+            <button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();"><?php echo TZ_OK_2; ?></button>
         <?php else: ?>
-            <span class="c2"><b>Not enough resource</b></span>
+            <span class="c2"><b><?php echo TZ_NOT_ENOUGH_RESOURCE; ?></b></span>
         <?php endif; ?>
     </p>
 </form>

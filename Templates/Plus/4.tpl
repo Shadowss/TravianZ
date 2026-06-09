@@ -1,15 +1,15 @@
 <?php
 include("Templates/Plus/pmenu.tpl");
 ?>
-<p class="f10 b">How do I get Gold?</p>
-<p><a href="plus.php?id=1">Buy it in the Gold Shop</a> or ask the server owner.</p>
+<p class="f10 b"><?php echo TZ_HOW_DO_I_GET_GOLD; ?></p>
+<p><a href="plus.php?id=1"><?php echo TZ_BUY_IT_IN_THE_GOLD_SHOP; ?></a> <?php echo TZ_OR_ASK_THE_SERVER_OWNER; ?></p>
 
-<p class="f10 b">Why can't I finish some buildings with Gold?</p>
-<p>Residence, Palace and World Wonder villages are excluded for gameplay reasons.</p>
+<p class="f10 b"><?php echo TZ_WHY_CAN_T_I_FINISH_SOME_BUILDINGS; ?></p>
+<p><?php echo TZ_RESIDENCE_PALACE_AND_WORLD_WONDER; ?></p>
 
-<p class="f10 b">I activated Plus, but production did not increase.</p>
-<p>Plus does not include production bonuses. You must buy +25% for each resource separately in <a href="plus.php?id=3">Plus functions</a>.</p>
+<p class="f10 b"><?php echo TZ_I_ACTIVATED_PLUS_BUT_PRODUCTION_DI; ?></p>
+<p><?php echo TZ_PLUS_DOES_NOT_INCLUDE_PRODUCTION_B; ?> <a href="plus.php?id=3"><?php echo TZ_PLUS_FUNCTIONS; ?></a>.</p>
 
-<p class="f10 b">Do I need Plus to use other features?</p>
-<p>No. Every gold feature works standalone as long as you have enough gold.</p>
+<p class="f10 b"><?php echo TZ_DO_I_NEED_PLUS_TO_USE_OTHER_FEATUR; ?></p>
+<p><?php echo TZ_NO_EVERY_GOLD_FEATURE_WORKS_STANDA; ?></p>
 </div>

@@ -10,11 +10,11 @@
 				<td>ranks in player statistics</td>
 			</tr>
 			<tr>
-				<th>attacker</th>
+				<th><?php echo ATTACKER; ?></th>
 				<td>off points</td>
 			</tr>
 			<tr>
-				<th>defender</th>
+				<th><?php echo DEFENDER; ?></th>
 				<td>def points</td>
 			</tr>
 			<tr>
@@ -25,8 +25,8 @@
 		<p>At the end of each week the top ten players are awarded a decoration. When you edit your profile a code (e.g. [#123]) is displayed at "medals" which can be inserted where desired. Examples:</p>
 		<p class="medals"><img src="img/x.gif" class="medal t1_1" alt="" title="" /><img src="img/x.gif" class="medal t1_2" alt="" title="" /><img src="img/x.gif" class="medal t1_3" alt="" title="" /><img src="img/x.gif" class="medal t1_4" alt="" title="" /></p>
 <map id="nav" name="nav">
-	<area href="manual.php?s=1" title="Back" coords="0,0,45,18" shape="rect" alt="" />
-	<area href="manual.php?s=1" title="Overview" coords="46,0,70,18" shape="rect" alt="" />
+	<area href="manual.php?s=1" title="<?php echo BACK; ?>" coords="0,0,45,18" shape="rect" alt="" />
+	<area href="manual.php?s=1" title="<?php echo OVERVIEW; ?>" coords="46,0,70,18" shape="rect" alt="" />
 	<area href="manual.php?s=1" title="Forward" coords="71,0,116,18" shape="rect" alt="" />
 </map>
 <img usemap="#nav" src="img/x.gif" class="navi" alt="" />

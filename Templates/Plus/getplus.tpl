@@ -12,14 +12,14 @@ if(empty($_POST['plus'])) {
 <form method="POST">
 <table width="300" align="center">
 <tr><td><b><?= $session->username ?></b> – Gold: <?= $session->gold ?></td></tr>
-<tr><td align="center"><b>Select Reward:</b>
+<tr><td align="center"><b><?php echo TZ_SELECT_REWARD_2; ?></b>
     <select name="reward" required>
-        <option value="">Select reward...</option>
-        <option value="plus">VIP Account (10 gold – 7 days)</option>
-        <option value="b1">Lumber +25% (5 gold)</option>
-        <option value="b2">Clay +25% (5 gold)</option>
-        <option value="b3">Iron +25% (5 gold)</option>
-        <option value="b4">Crop +25% (5 gold)</option>
+        <option value=""><?php echo TZ_SELECT_REWARD; ?></option>
+        <option value="plus"><?php echo TZ_VIP_ACCOUNT_10_GOLD_7_DAYS; ?></option>
+        <option value="b1"><?php echo TZ_LUMBER_25_5_GOLD; ?></option>
+        <option value="b2"><?php echo TZ_CLAY_25_5_GOLD; ?></option>
+        <option value="b3"><?php echo TZ_IRON_25_5_GOLD; ?></option>
+        <option value="b4"><?php echo TZ_CROP_25_5_GOLD; ?></option>
     </select><br><br>
     <input type="submit" name="plus" value="Get Now">
 </td></tr>
@@ -39,7 +39,7 @@ if(empty($_POST['plus'])) {
     ];
     
     if(!isset($map[$reward])) {
-        die('<b>ERROR:</b> Invalid reward. <button onclick="history.back()">Back</button>');
+        die('<b>ERROR:</b> Invalid reward. <button onclick="history.back()">'.BACK.'</button>');
     }
     
     $field = $map[$reward]['field'];
@@ -53,7 +53,7 @@ if(empty($_POST['plus'])) {
     );
     
     if(mysqli_affected_rows($database->dblink) != 1) {
-        die('<div align="center"><font color="red"><b>Not enough gold!</b></font><br><button onclick="history.back()">Back</button></div>');
+        die('<div align="center"><font color="red"><b>Not enough gold!</b></font><br><button onclick="history.back()">'.BACK.'</button></div>');
     }
     
     // 2. adaugă timpul la feature

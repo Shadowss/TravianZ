@@ -4,7 +4,7 @@
                         <td class="desc"><?php echo GREATSTABLE_DESC ?></td>
                         <td rowspan="3" class="bimg">
                                 <a href="#" onClick="return Popup(30,4);">
-                                <img class="building g30" src="img/x.gif" alt="Great Stable" title="Great Stable" /></a>
+                                <img class="building g30" src="img/x.gif" alt="<?php echo GREATSTABLE; ?>" title="<?php echo GREATSTABLE; ?>" /></a>
                         </td>
                 </tr>
                 <tr>

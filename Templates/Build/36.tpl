@@ -11,7 +11,7 @@ $currentCap = $level > 0? (int)$bid36[$level]['attri'] * TRAPPER_CAPACITY : 0;
     <h1><?php echo TRAPPER;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc">
         <a href="#" onClick="return Popup(36,4,'gid');" class="build_logo">
-            <img class="building g36" src="img/x.gif" alt="Trapper" title="<?php echo TRAPPER;?>" />
+            <img class="building g36" src="img/x.gif" alt="<?php echo TRAPPER; ?>" title="<?php echo TRAPPER;?>" />
         </a>
         <?php echo TRAPPER_DESC;?>
     </p>
@@ -60,7 +60,7 @@ $currentCap = $level > 0? (int)$bid36[$level]['attri'] * TRAPPER_CAPACITY : 0;
                 <tr>
                     <td class="desc">
                         <div class="tit">
-                            <img class="unit u99" src="img/x.gif" alt="Trap" title="Trap" />
+                            <img class="unit u99" src="img/x.gif" alt="<?php echo U99; ?>" title="<?php echo U99; ?>" />
                             <a href="#" onClick="return Popup(36,4,'gid');"><?php echo TRAP;?></a>
                             <span class="info">(<?php echo AVAILABLE;?>: <?php echo (int)$village->unitarray['u99'];?>)</span>
                         </div>
@@ -78,7 +78,7 @@ $currentCap = $level > 0? (int)$bid36[$level]['attri'] * TRAPPER_CAPACITY : 0;
                 </tr>
             </tbody>
         </table>
-        <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" onclick="this.disabled=true;this.form.submit();"/></p>
+        <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="<?php echo TRAIN; ?>" onclick="this.disabled=true;this.form.submit();"/></p>
     </form>
     <?php else:?>
         <b><?php echo TRAINING_COMMENCE_TRAPPER;?></b><br />

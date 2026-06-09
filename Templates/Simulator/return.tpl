@@ -2,36 +2,36 @@
 <thead>
 					<tr>
 						<td class="role">
-							Agresor
+							<?php echo TZ_AGRESOR; ?>
 						</td><td>
-								<img src="img/x.gif" class="unit u1" title="Legionario" alt="Legionario" />
+								<img src="img/x.gif" class="unit u1" title="<?php echo U1; ?>" alt="<?php echo U1; ?>" />
 
 							</td><td>
-								<img src="img/x.gif" class="unit u2" title="Pretoriano" alt="Pretoriano" />
+								<img src="img/x.gif" class="unit u2" title="<?php echo U2; ?>" alt="<?php echo U2; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u3" title="Imperano" alt="Imperano" />
+								<img src="img/x.gif" class="unit u3" title="<?php echo U3; ?>" alt="<?php echo U3; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u4" title="Equites Legati" alt="Equites Legati" />
+								<img src="img/x.gif" class="unit u4" title="<?php echo U4; ?>" alt="<?php echo U4; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u5" title="Equites Imperatoris" alt="Equites Imperatoris" />
+								<img src="img/x.gif" class="unit u5" title="<?php echo U5; ?>" alt="<?php echo U5; ?>" />
 							</td><td>
 
-								<img src="img/x.gif" class="unit u6" title="Equites Caesaris" alt="Equites Caesaris" />
+								<img src="img/x.gif" class="unit u6" title="<?php echo U6; ?>" alt="<?php echo U6; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u7" title="Carnero" alt="Carnero" />
+								<img src="img/x.gif" class="unit u7" title="<?php echo U7; ?>" alt="<?php echo U7; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u8" title="Catapulta de fuego" alt="Catapulta de fuego" />
+								<img src="img/x.gif" class="unit u8" title="<?php echo U8; ?>" alt="<?php echo U8; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u9" title="Senador" alt="Senador" />
+								<img src="img/x.gif" class="unit u9" title="<?php echo U9; ?>" alt="<?php echo U9; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u10" title="Colono" alt="Colono" />
+								<img src="img/x.gif" class="unit u10" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" />
 
 							</td></tr>
 				</thead>
 				<tbody>
 					<tr>
 						<th>
-							Tropas
+							<?php echo TROOPS; ?>
 						</th><td>
 									1
 								</td><td class="none">
@@ -57,7 +57,7 @@
 								</td></tr>
 					<tr>
 						<th>
-							Pérdidas
+							<?php echo CASUALTIES; ?>
 						</th><td>
 									1
 								</td><td class="none">
@@ -86,36 +86,36 @@
 				<thead>
 					<tr>
 						<td class="role">
-							Defensor
+							<?php echo DEFENDER; ?>
 						</td><td>
 
-								<img src="img/x.gif" class="unit u1" title="Legionario" alt="Legionario" />
+								<img src="img/x.gif" class="unit u1" title="<?php echo U1; ?>" alt="<?php echo U1; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u2" title="Pretoriano" alt="Pretoriano" />
+								<img src="img/x.gif" class="unit u2" title="<?php echo U2; ?>" alt="<?php echo U2; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u3" title="Imperano" alt="Imperano" />
+								<img src="img/x.gif" class="unit u3" title="<?php echo U3; ?>" alt="<?php echo U3; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u4" title="Equites Legati" alt="Equites Legati" />
+								<img src="img/x.gif" class="unit u4" title="<?php echo U4; ?>" alt="<?php echo U4; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u5" title="Equites Imperatoris" alt="Equites Imperatoris" />
+								<img src="img/x.gif" class="unit u5" title="<?php echo U5; ?>" alt="<?php echo U5; ?>" />
 
 							</td><td>
-								<img src="img/x.gif" class="unit u6" title="Equites Caesaris" alt="Equites Caesaris" />
+								<img src="img/x.gif" class="unit u6" title="<?php echo U6; ?>" alt="<?php echo U6; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u7" title="Carnero" alt="Carnero" />
+								<img src="img/x.gif" class="unit u7" title="<?php echo U7; ?>" alt="<?php echo U7; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u8" title="Catapulta de fuego" alt="Catapulta de fuego" />
+								<img src="img/x.gif" class="unit u8" title="<?php echo U8; ?>" alt="<?php echo U8; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u9" title="Senador" alt="Senador" />
+								<img src="img/x.gif" class="unit u9" title="<?php echo U9; ?>" alt="<?php echo U9; ?>" />
 							</td><td>
 
-								<img src="img/x.gif" class="unit u10" title="Colono" alt="Colono" />
+								<img src="img/x.gif" class="unit u10" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" />
 							</td></tr>
 				</thead>
 				<tbody>
 					<tr>
 						<th>
-							Tropas
+							<?php echo TROOPS; ?>
 						</th><td>
 									1
 								</td><td class="none">
@@ -141,7 +141,7 @@
 								</td></tr>
 					<tr>
 						<th>
-							Pérdidas
+							<?php echo CASUALTIES; ?>
 						</th><td class="none">
 									0
 
@@ -172,36 +172,36 @@
 					<tr>
 
 						<td class="role">
-							Defensor
+							<?php echo DEFENDER; ?>
 						</td><td>
-								<img src="img/x.gif" class="unit u11" title="Luchador de Porra" alt="Luchador de Porra" />
+								<img src="img/x.gif" class="unit u11" title="<?php echo U11; ?>" alt="<?php echo U11; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u12" title="Lancero" alt="Lancero" />
+								<img src="img/x.gif" class="unit u12" title="<?php echo U12; ?>" alt="<?php echo U12; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u13" title="Luchador de Hacha" alt="Luchador de Hacha" />
+								<img src="img/x.gif" class="unit u13" title="<?php echo U13; ?>" alt="<?php echo U13; ?>" />
 							</td><td>
 
-								<img src="img/x.gif" class="unit u14" title="Emisario" alt="Emisario" />
+								<img src="img/x.gif" class="unit u14" title="<?php echo U14; ?>" alt="<?php echo U14; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u15" title="Paladín" alt="Paladín" />
+								<img src="img/x.gif" class="unit u15" title="<?php echo U15; ?>" alt="<?php echo U15; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u16" title="Jinete Teutón" alt="Jinete Teutón" />
+								<img src="img/x.gif" class="unit u16" title="<?php echo U16; ?>" alt="<?php echo U16; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u17" title="Ariete" alt="Ariete" />
+								<img src="img/x.gif" class="unit u17" title="<?php echo U17; ?>" alt="<?php echo U17; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u18" title="Catapulta" alt="Catapulta" />
+								<img src="img/x.gif" class="unit u18" title="<?php echo U18; ?>" alt="<?php echo U18; ?>" />
 
 							</td><td>
-								<img src="img/x.gif" class="unit u19" title="Cabecilla" alt="Cabecilla" />
+								<img src="img/x.gif" class="unit u19" title="<?php echo U19; ?>" alt="<?php echo U19; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u20" title="Colono" alt="Colono" />
+								<img src="img/x.gif" class="unit u20" title="<?php echo U20; ?>" alt="<?php echo U20; ?>" />
 							</td></tr>
 				</thead>
 				<tbody>
 					<tr>
 						<th>
 
-							Tropas
+							<?php echo TROOPS; ?>
 						</th><td class="none">
 									0
 								</td><td class="none">
@@ -227,7 +227,7 @@
 					<tr>
 
 						<th>
-							Pérdidas
+							<?php echo CASUALTIES; ?>
 						</th><td class="none">
 									0
 								</td><td class="none">
@@ -256,36 +256,36 @@
 				<thead>
 					<tr>
 						<td class="role">
-							Defensor
+							<?php echo DEFENDER; ?>
 						</td><td>
-								<img src="img/x.gif" class="unit u21" title="Falange" alt="Falange" />
+								<img src="img/x.gif" class="unit u21" title="<?php echo U21; ?>" alt="<?php echo U21; ?>" />
 							</td><td>
 
-								<img src="img/x.gif" class="unit u22" title="Luchador de Espada" alt="Luchador de Espada" />
+								<img src="img/x.gif" class="unit u22" title="<?php echo U22; ?>" alt="<?php echo U22; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u23" title="Batidor" alt="Batidor" />
+								<img src="img/x.gif" class="unit u23" title="<?php echo U23; ?>" alt="<?php echo U23; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u24" title="Rayo de Teutates" alt="Rayo de Teutates" />
+								<img src="img/x.gif" class="unit u24" title="<?php echo U24; ?>" alt="<?php echo U24; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u25" title="Jinete Druida" alt="Jinete Druida" />
+								<img src="img/x.gif" class="unit u25" title="<?php echo U25; ?>" alt="<?php echo U25; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u26" title="Jinete Eduo" alt="Jinete Eduo" />
+								<img src="img/x.gif" class="unit u26" title="<?php echo U26; ?>" alt="<?php echo U26; ?>" />
 
 							</td><td>
-								<img src="img/x.gif" class="unit u27" title="Carnero de madera" alt="Carnero de madera" />
+								<img src="img/x.gif" class="unit u27" title="<?php echo U27; ?>" alt="<?php echo U27; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u28" title="Catapulta de guerra" alt="Catapulta de guerra" />
+								<img src="img/x.gif" class="unit u28" title="<?php echo U28; ?>" alt="<?php echo U28; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u29" title="Cacique" alt="Cacique" />
+								<img src="img/x.gif" class="unit u29" title="<?php echo U29; ?>" alt="<?php echo U29; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u30" title="Colono" alt="Colono" />
+								<img src="img/x.gif" class="unit u30" title="<?php echo U30; ?>" alt="<?php echo U30; ?>" />
 							</td></tr>
 
 				</thead>
 				<tbody>
 					<tr>
 						<th>
-							Tropas
+							<?php echo TROOPS; ?>
 						</th><td class="none">
 									0
 								</td><td class="none">
@@ -311,7 +311,7 @@
 								</td></tr>
 					<tr>
 						<th>
-							Pérdidas
+							<?php echo CASUALTIES; ?>
 						</th><td class="none">
 									0
 								</td><td class="none">

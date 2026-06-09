@@ -1,4 +1,4 @@
-<h5><img src="img/en/t2/newsbox1.gif" alt="newsbox 1"></h5>
+<h5><img src="img/en/t2/newsbox1.gif" alt="<?php echo EDIT_NEWSBOX1; ?>"></h5>
 
 <?php
 /**
@@ -61,32 +61,32 @@ if ($top_query) {
 <table width="100%">
 
 <tr>
-<td align="left"><b>Online Users</b></td>
+<td align="left"><b><?php echo TZ_ONLINE_USERS; ?></b></td>
 <td>: <font color="Red"><b><?php echo $online_total; ?> users</b></font></td>
 </tr>
 
 <tr>
-<td><b>Server Speed</b></td>
+<td><b><?php echo CONF_SERV_SERVSPEED; ?></b></td>
 <td><b>: <font color="Red"><?php echo SPEED; ?>x</font></b></td>
 </tr>
 
 <tr>
-<td><b>Troop Speed</b></td>
+<td><b><?php echo CONF_SERV_TROOPSPEED; ?></b></td>
 <td><b>: <font color="Red"><?php echo INCREASE_SPEED; ?>x</font></b></td>
 </tr>
 
 <tr>
-<td><b>Evasion Speed</b></td>
+<td><b><?php echo CONF_SERV_EVASIONSPEED; ?></b></td>
 <td><b>: <font color="Red"><?php echo EVASION_SPEED; ?></font></b></td>
 </tr>
 
 <tr>
-<td><b>Map Size</b></td>
+<td><b><?php echo CONF_SERV_MAPSIZE; ?></b></td>
 <td><b>: <font color="Red"><?php echo WORLD_MAX; ?>x<?php echo WORLD_MAX; ?></font></b></td>
 </tr>
 
 <tr>
-<td><b>Village Exp.</b></td>
+<td><b><?php echo TZ_VILLAGE_EXP; ?></b></td>
 <td><b>: <font color="Red">
 <?php
 // păstrăm exact logica originală
@@ -100,12 +100,12 @@ if (CP == 0) {
 </tr>
 
 <tr>
-<td><b>Beginners Prot.</b></td>
-<td><b>: <font color="Red"><?php echo (PROTECTION / 3600); ?> hrs</font></b></td>
+<td><b><?php echo TZ_BEGINNERS_PROT; ?></b></td>
+<td><b>: <font color="Red"><?php echo (PROTECTION / 3600); ?> <?php echo TZ_HRS; ?></font></b></td>
 </tr>
 
 <tr>
-<td><b>Medal Interval</b></td>
+<td><b><?php echo CONF_SERV_MEDALINTERVAL; ?></b></td>
 <td><b>: <font color="Red">
 <?php
 // logică identică, doar structurată mai clar
@@ -119,12 +119,12 @@ if (MEDALINTERVAL >= 86400) {
 </tr>
 
 <tr>
-<td><b>Server Start</b></td>
+<td><b><?php echo TZ_SERVER_START; ?></b></td>
 <td><b>: <font color="Red"><?php echo START_DATE; ?></font></b></td>
 </tr>
 
 <tr>
-<td><b>Peace system</b></td>
+<td><b><?php echo CONF_SERV_PEACESYST; ?></b></td>
 <td><b>: <font color="Red">
 <?php
 // fallback safe pentru index
@@ -135,7 +135,7 @@ echo isset($peaceTypes[PEACE]) ? $peaceTypes[PEACE] : "Unknown";
 </tr>
 
 <tr>
-<td><b>Best Player</b></td>
+<td><b><?php echo TZ_BEST_PLAYER; ?></b></td>
 <td><b>: <font color="Red"><?php echo $top_username; ?></font></b></td>
 </tr>
 

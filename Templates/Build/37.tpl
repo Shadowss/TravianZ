@@ -16,7 +16,7 @@
 
 
  <div id="build" class="gid37">
-        <a href="#" onclick="return Popup(37,4, 'gid');" class="build_logo"><img class="building g37" src="img/x.gif" alt="Hero's mansion" title="<?php echo HEROSMANSION; ?>"></a>
+        <a href="#" onclick="return Popup(37,4, 'gid');" class="build_logo"><img class="building g37" src="img/x.gif" alt="<?php echo HEROSMANSION; ?>" title="<?php echo HEROSMANSION; ?>"></a>
 
         <h1><?php echo HEROSMANSION; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f' . $id]; ?></span></h1>
 

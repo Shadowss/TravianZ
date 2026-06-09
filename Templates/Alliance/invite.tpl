@@ -34,14 +34,14 @@ include("alli_menu.tpl");
 
 <thead>
 <tr>
-    <th colspan="2">Invite a player into the alliance</th>
+    <th colspan="2"><?php echo TZ_INVITE_A_PLAYER_INTO_THE_ALLIANCE; ?></th>
 </tr>
 </thead>
 
 <tbody>
 
 <tr>
-    <th>Name</th>
+    <th><?php echo NAME; ?></th>
     <td>
         <input class="name text" type="text" name="a_name" maxlength="30">
         <span class="error"></span>
@@ -58,7 +58,7 @@ include("alli_menu.tpl");
         id="btn_ok"
         class="trav_buttons"
         onclick="this.disabled=true;this.form.submit();">
-        Ok
+        <?php echo TZ_OK_2; ?>
     </button>
 </p>
 
@@ -73,7 +73,7 @@ include("alli_menu.tpl");
 
 <thead>
 <tr>
-    <th colspan="2">Invitations:</th>
+    <th colspan="2"><?php echo TZ_INVITATIONS; ?></th>
 </tr>
 </thead>
 

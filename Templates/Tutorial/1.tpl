@@ -16,24 +16,24 @@
 ##                                                                             ##
 #################################################################################
 ?>
-<h2>(1/5) Your village</h2>
+<h2><?php echo TZ_N_1_5_YOUR_VILLAGE; ?></h2>
             <table class="tutorial_table">
                 <tbody>
                     <tr>
                         <td class="visual">
                             <img src="img/en/tut/dorf_klein.jpg" alt="" />
-                            This is how you start...
+                            <?php echo TZ_THIS_IS_HOW_YOU_START; ?>
                         </td>
                         <td class="visual">
                             <img src="img/en/tut/dorf_gross.jpg" alt="" />
-                            ...and later your village could look like that.
+                            <?php echo TZ_AND_LATER_YOUR_VILLAGE_COULD_LOOK; ?>
                         </td>
                     </tr>
                     <tr>
                         <td class="beschreibung" colspan="2">
-                            In the beginning your small village will have just one building.
+                            <?php echo TZ_IN_THE_BEGINNING_YOUR_SMALL_VILLAG; ?>
                             <br /><br />
-                            We will show you how to expand your village so that it becomes a mighty and prosperous city on the next page.
+                            <?php echo TZ_WE_WILL_SHOW_YOU_HOW_TO_EXPAND_YOU; ?>
                         </td>
                     </tr>
                 </tbody>
@@ -42,10 +42,10 @@
                 <tbody>
                     <tr>
                         <td class="nav_prev">
-                            <a href="index.php" title="back">&laquo; back</a>
+                            <a href="index.php" title="<?php echo BACK; ?>">&laquo; back</a>
                         </td>
                         <td class="nav_next">
-                            <a href="tutorial.php?s=2" title="forward">forward &raquo;</a>
+                            <a href="tutorial.php?s=2" title="<?php echo TZ_FORWARD; ?>">forward &raquo;</a>
                         </td>
                     </tr>
                 </tbody>
@@ -55,13 +55,13 @@
     </div> 
     <div id="footer">
         <div class="container">
-            <a href="#" class="logo"><img src="img/x.gif" alt="Travian Games" class="logo_traviangames" /></a>
+            <a href="#" class="logo"><img src="img/x.gif" alt="<?php echo TZ_TRAVIAN_GAMES; ?>" class="logo_traviangames" /></a>
             <ul class="menu">
-                <li><a href="anleitung.php?s=3">FAQ</a>|</li>
-                <li><a href="index.php?screenshots">Screenshots</a>|</li>
-                <li><a href="spielregeln.php">Game Rules</a>|</li>
-                <li><a href="agb.php">Terms</a>|</li>
-                <li><a href="impressum.php">Imprint</a></li>
+                <li><a href="anleitung.php?s=3"><?php echo FAQ; ?></a>|</li>
+                <li><a href="index.php?screenshots"><?php echo SCREENSHOTS; ?></a>|</li>
+                <li><a href="spielregeln.php"><?php echo GAME_RULES; ?></a>|</li>
+                <li><a href="agb.php"><?php echo TZ_TERMS; ?></a>|</li>
+                <li><a href="impressum.php"><?php echo IMPRINT; ?></a></li>
                 <li class="copyright">&copy; 2010 - <?php echo date('Y') . ' ' . (defined('SERVER_NAME') ? SERVER_NAME : 'TravianZ');?> All rights reserved</li>
             </ul>
         </div>

@@ -14,17 +14,17 @@ $t = isset($_GET['t']) ? (int)$_GET['t'] : 0;
 <div id="textmenu">
 
     <!-- Inbox -->
-    <a href="nachrichten.php" <?php if ($t === 0) { echo 'class="selected"'; } ?>>Inbox</a>
+    <a href="nachrichten.php" <?php if ($t === 0) { echo 'class="selected"'; } ?>><?php echo INBOX; ?></a>
 
     |
 
     <!-- Write -->
-    <a href="nachrichten.php?t=1" <?php if ($t === 1) { echo 'class="selected"'; } ?>>Write</a>
+    <a href="nachrichten.php?t=1" <?php if ($t === 1) { echo 'class="selected"'; } ?>><?php echo WRITE; ?></a>
 
     |
 
     <!-- Sent -->
-    <a href="nachrichten.php?t=2" <?php if ($t === 2) { echo 'class="selected"'; } ?>>Sent</a>
+    <a href="nachrichten.php?t=2" <?php if ($t === 2) { echo 'class="selected"'; } ?>><?php echo SENT; ?></a>
 
     <?php
     // ======================================================
@@ -32,9 +32,9 @@ $t = isset($_GET['t']) ? (int)$_GET['t'] : 0;
     // ======================================================
     if ($session->plus) {
 
-        echo ' | <a href="nachrichten.php?t=3" ' . ($t === 3 ? 'class="selected"' : '') . '>Archive</a>';
+        echo ' | <a href="nachrichten.php?t=3" ' . ($t === 3 ? 'class="selected"' : '') . '>'.ARCHIVE.'</a>';
 
-        echo ' | <a href="nachrichten.php?t=4" ' . ($t === 4 ? 'class="selected"' : '') . '>Notes</a>';
+        echo ' | <a href="nachrichten.php?t=4" ' . ($t === 4 ? 'class="selected"' : '') . '>'.NOTES.'</a>';
     }
     ?>
 

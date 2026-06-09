@@ -77,8 +77,8 @@ $inProgress =!empty($Demolition)? $Demolition[0] : null;
         <?= DEMOLITION_OF?> <?= $building->procResType($VillageLevels['f'.$inProgress['buildnumber'].'t'])?>:
         <span id="timer1"><?= $generator->getTimeFormat($inProgress['timetofinish'] - time())?></span>
         <?php if ($session->gold >= 2):?>
-            <a href="?id=15&buildingFinish=1&ty=<?= $ty?>" onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');" title="<?= FINISH_GOLD?>">
-                <img class="clock" alt="Finish" src="img/x.gif">
+            <a href="?id=15&buildingFinish=1&ty=<?= $ty?>" onclick="return confirm('<?php echo addslashes(FINISH_GOLD); ?>');" title="<?= FINISH_GOLD?>">
+                <img class="clock" alt="<?= TZ_FINISH?>" src="img/x.gif">
             </a>
         <?php endif;?>
     </b>
@@ -87,15 +87,14 @@ $inProgress =!empty($Demolition)? $Demolition[0] : null;
 
     <?php if (isset($_GET['nodemolish']) && $_GET['nodemolish'] == 18):?>
         <p style="color:#ff0000; text-align:left">
-            Because you are the leader of your alliance, demolition of your current Embassy cannot be started,
-            since it still holds all of your <b><?= $memberCount?></b> alliance members.
+            <?= TZ_ML_LEADER_DEMOLITION_EMBASSY?> <b><?= $memberCount?></b> <?= TZ_ALLIANCE_MEMBERS?>
         </p>
     <?php endif;?>
     <?php if (isset($_GET['notenoughgold'])):?>
-        <p style="color:#ff0000">You don't have enough gold. You need 10 gold for instant demolition.</p>
+        <p style="color:#ff0000"><?= TZ_YOU_DON_T_HAVE_ENOUGH_GOLD_YOU_NEE?></p>
     <?php endif;?>
     <?php if (isset($_GET['demolished'])):?>
-        <p style="color:#008000">The building was completely demolished for 10 gold!</p>
+        <p style="color:#008000"><?= TZ_THE_BUILDING_WAS_COMPLETELY_DEMOLI?></p>
     <?php endif;?>
 
     <form action="build.php?gid=15&amp;demolish=1&amp;cancel=0&amp;c=<?= $session->mchecker?>" method="POST" style="display:inline">
@@ -116,10 +115,10 @@ $inProgress =!empty($Demolition)? $Demolition[0] : null;
 
         <label style="margin:0 10px;">
             <input type="checkbox" name="instant" value="1" id="instant_demolish" <?= $session->gold < 10 ? 'disabled' : ''?>>
-            Complete demolition (10 <img src="img/x.gif" class="gold" style="vertical-align:middle">)
+            <?= TZ_COMPLETE_DEMOLITION_10?> <img src="img/x.gif" class="gold" style="vertical-align:middle">)
         </label>
 
-        <input id="btn_demolish" name="demolish" class="dynamic_img" value="Demolish" type="image" src="img/x.gif" alt="Demolish" title="<?= DEMOLISH?>" onclick="return verify_demolition();">
+        <input id="btn_demolish" name="demolish" class="dynamic_img" value="<?= DEMOLISH?>" type="image" src="img/x.gif" alt="<?= DEMOLISH?>" title="<?= DEMOLISH?>" onclick="return verify_demolition();">
     </form>
 <?php endif;?>
 
@@ -133,14 +132,14 @@ function verify_demolition() {
     var text = dType.options[dType.selectedIndex].text;
 
     if (instant) {
-        return confirm('Surely you want to demolish COMPLETELY '+text+' for 10 GOLD?\nThe building will disappear instantly, it cannot be undone.');
+        return confirm(<?= json_encode(TZ_CONFIRM_DEMOLISH_COMPLETE_1)?>+text+<?= json_encode(TZ_CONFIRM_DEMOLISH_COMPLETE_2)?>);
     }
 
     if (warnLvl3 && text.indexOf('Embassy (lvl 3)') > -1) {
-        return confirm('WARNING!\n\nYou are about to demolish the last lvl3 Embassy!\n\nSince you are the leader of your alliance and because there are no additional members left, the alliance will be disbanded once the demolition completes.');
+        return confirm(<?= json_encode(TZ_CONFIRM_LAST_EMBASSY_L3)?>);
     }
     if (warnLvl1 && text.indexOf('Embassy (lvl 1)') > -1) {
-        return confirm('WARNING!\n\nYou are about to demolish your last Embassy!\n\nSince you are in an alliance, you will automatically quit that alliance once the demolition completes.');
+        return confirm(<?= json_encode(TZ_CONFIRM_LAST_EMBASSY_L1)?>);
     }
     return true;
 }

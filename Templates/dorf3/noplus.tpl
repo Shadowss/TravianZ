@@ -14,15 +14,15 @@
 
 <div id="textmenu">
 
-	<a href="dorf3.php" class="selected">Overview</a>
+	<a href="dorf3.php" class="selected"><?php echo OVERVIEW; ?></a>
 	|
-	<span>Resources</span>
+	<span><?php echo RESOURCES; ?></span>
 	|
-	<span>Warehouse</span>
+	<span><?php echo WAREHOUSE; ?></span>
 	|
 	<span>CP</span>
 	|
-	<span>Troops</span>
+	<span><?php echo TROOPS; ?></span>
 
 </div>
 
@@ -31,15 +31,15 @@
 <thead>
 
 <tr>
-	<th colspan="5">Overview</th>
+	<th colspan="5"><?php echo OVERVIEW; ?></th>
 </tr>
 
 <tr>
-	<td>Village</td>
-	<td>Attacks</td>
-	<td>Building</td>
-	<td>Troops</td>
-	<td>Merchants</td>
+	<td><?php echo VILLAGE; ?></td>
+	<td><?php echo TZ_ATTACKS; ?></td>
+	<td><?php echo TZ_BUILDING; ?></td>
+	<td><?php echo TROOPS; ?></td>
+	<td><?php echo MERCHANT; ?></td>
 </tr>
 
 </thead>

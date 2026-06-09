@@ -36,14 +36,14 @@ for ($i = $start; $i <= $end; $i++) {
             <span class="info">(<?php echo AVAILABLE;?>: <?php echo $available;?>)</span>
         </div>
         <div class="details">
-            <img class="r1" src="img/x.gif" alt="Wood" title="<?php echo LUMBER;?>" /><?php echo (int)$unitData['wood'];?>|
-            <img class="r2" src="img/x.gif" alt="Clay" title="<?php echo CLAY;?>" /><?php echo (int)$unitData['clay'];?>|
-            <img class="r3" src="img/x.gif" alt="Iron" title="<?php echo IRON;?>" /><?php echo (int)$unitData['iron'];?>|
-            <img class="r4" src="img/x.gif" alt="Crop" title="<?php echo CROP;?>" /><?php echo (int)$unitData['crop'];?>|
+            <img class="r1" src="img/x.gif" alt="<?php echo TZ_WOOD; ?>" title="<?php echo LUMBER;?>" /><?php echo (int)$unitData['wood'];?>|
+            <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY;?>" /><?php echo (int)$unitData['clay'];?>|
+            <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON;?>" /><?php echo (int)$unitData['iron'];?>|
+            <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP;?>" /><?php echo (int)$unitData['crop'];?>|
             <img class="r5" src="img/x.gif" alt="Crop consumption" title="<?php echo CROP_COM;?>" /><?php echo $pop;?>|
-            <img class="clock" src="img/x.gif" alt="Duration" title="<?php echo DURATION;?>" /><?php echo $timeFormatted;?>
+            <img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION;?>" /><?php echo $timeFormatted;?>
             <?php if ($showNpc):?>
-                |<a href="build.php?gid=17&t=3&r1=<?php echo (int)$unitData['wood']*$maxPlus;?>&r2=<?php echo (int)$unitData['clay']*$maxPlus;?>&r3=<?php echo (int)$unitData['iron']*$maxPlus;?>&r4=<?php echo (int)$unitData['crop']*$maxPlus;?>" title="NPC trade"><img class="npc" src="img/x.gif" alt="NPC trade" /></a>
+                |<a href="build.php?gid=17&t=3&r1=<?php echo (int)$unitData['wood']*$maxPlus;?>&r2=<?php echo (int)$unitData['clay']*$maxPlus;?>&r3=<?php echo (int)$unitData['iron']*$maxPlus;?>&r4=<?php echo (int)$unitData['crop']*$maxPlus;?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>" /></a>
             <?php endif;?>
         </div>
     </td>

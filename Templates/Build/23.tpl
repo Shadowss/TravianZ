@@ -13,7 +13,7 @@ $nextHidden = $database->getArtifactsValueInfluence($session->uid, $village->wid
 ?>
 <div id="build" class="gid23">
     <a href="#" onClick="return Popup(23,4);" class="build_logo">
-        <img class="building g23" src="img/x.gif" alt="Cranny" title="<?php echo CRANNY;?>" />
+        <img class="building g23" src="img/x.gif" alt="<?php echo CRANNY; ?>" title="<?php echo CRANNY;?>" />
     </a>
     <h1><?php echo CRANNY;?> <span class="level"><?php echo LEVEL;?> <?php echo $actualLevel;?></span></h1>
     <p class="build_desc"><?php echo CRANNY_DESC;?></p>

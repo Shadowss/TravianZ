@@ -7,7 +7,7 @@ $inAlliance = (int)$session->alliance !== 0;
 ?>
 <div id="build" class="gid18">
     <a href="#" onClick="return Popup(18,4);" class="build_logo">
-        <img class="building g18" src="img/x.gif" alt="Embassy" title="<?php echo EMBASSY;?>" />
+        <img class="building g18" src="img/x.gif" alt="<?php echo EMBASSY; ?>" title="<?php echo EMBASSY;?>" />
     </a>
     <h1><?php echo EMBASSY;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo EMBASSY_DESC;?></p>
@@ -45,7 +45,7 @@ $inAlliance = (int)$session->alliance !== 0;
                         $allyName = htmlspecialchars($database->getAllianceName($allyId));
                 ?>
                     <tr>
-                        <td class="abo"><a href="build.php?id=<?php echo (int)$id;?>&a=2&d=<?php echo $invId;?>"><img class="del" src="img/x.gif" alt="refuse" title="<?php echo REFUSE;?>" /></a></td>
+                        <td class="abo"><a href="build.php?id=<?php echo (int)$id;?>&a=2&d=<?php echo $invId;?>"><img class="del" src="img/x.gif" alt="<?php echo REFUSE; ?>" title="<?php echo REFUSE;?>" /></a></td>
                         <td class="nam"><a href="allianz.php?aid=<?php echo $allyId;?>">&nbsp;<?php echo $allyName;?></a></td>
                         <td class="acc"><a href="build.php?id=<?php echo (int)$id;?>&a=3&d=<?php echo $invId;?>">&nbsp;<?php echo ACCEPT;?></a></td>
                     </tr>

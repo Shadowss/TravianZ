@@ -128,12 +128,12 @@ if (!empty($village)) {
                 <?php
                 if ($session->gold <= 1) {
                     echo '<font color="#B3B3B3">
-                            <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="Gold" title="Gold"/>
-                            ' . $session->gold . ' Gold
+                            <img src="' . GP_LOCATE . 'img/a/gold_g.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
+                            ' . $session->gold . ' ' . GOLD . '
                           </font>';
                 } else {
-                    echo '<img src="' . GP_LOCATE . 'img/a/gold.gif" alt="Gold" title="Gold"/>
-                          ' . $session->gold . ' Gold';
+                    echo '<img src="' . GP_LOCATE . 'img/a/gold.gif" alt="' . GOLD . '" title="' . GOLD . '"/>
+                          ' . $session->gold . ' ' . GOLD;
                 }
                 ?>
             </td>

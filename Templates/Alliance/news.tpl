@@ -38,12 +38,12 @@ include("alli_menu.tpl");
 <thead>
 
 <tr>
-    <th colspan="2">Alliance events</th>
+    <th colspan="2"><?php echo TZ_ALLIANCE_EVENTS; ?></th>
 </tr>
 
 <tr>
-    <td>Event</td>
-    <td>Date</td>
+    <td><?php echo TZ_EVENT; ?></td>
+    <td><?php echo DATE; ?></td>
 </tr>
 
 </thead>

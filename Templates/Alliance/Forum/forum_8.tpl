@@ -62,7 +62,7 @@ if(!empty($forumData['display_to_users'])) $users = explode(',', $forumData['dis
 			newTD2.innerHTML = html_input_1 + 'id="users_by_name_'+num_fields+'" class="text" maxlength="15" name="users_by_name['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'users\')">';
 		}
 
-		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow(\''+element_id+'\')">';
+		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="<?php echo TZ_ADD; ?>" alt="<?php echo TZ_ADD; ?>" onclick="addRow(\''+element_id+'\')">';
     }
 
 </script>
@@ -101,17 +101,17 @@ if(!empty($forumData['display_to_users'])) $users = explode(',', $forumData['dis
 
 <table cellpadding="1" cellspacing="1" id="edit_forum"><thead>
 	<tr>
-    	<th colspan="2">edit forum</th>
+    	<th colspan="2"><?php echo TZ_EDIT_FORUM; ?></th>
 	</tr>
 	</thead><tbody>
 	<tr>
-		<th>Forum name</th>
+		<th><?php echo TZ_FORUM_NAME; ?></th>
 
 		<td><input class="text" type="text" name="u1" value="<?php echo $cat_name; ?>" maxlength="30"></td>
 	</tr>
 
 	<tr>
-		<th>Description</th>
+		<th><?php echo DESCRIPTION; ?></th>
 		<td><input class="text" type="text" name="u2" value="<?php echo $cat_des; ?>" maxlength="38"></td>
 	</tr>
 </table>
@@ -119,12 +119,12 @@ if(!empty($forumData['display_to_users'])) $users = explode(',', $forumData['dis
 <table cellpadding="1" cellspacing="1" id="ally_list"><thead>
 	<tr>
 
-        <th colspan="3">Open for more alliances</th>
+        <th colspan="3"><?php echo TZ_OPEN_FOR_MORE_ALLIANCES; ?></th>
 	</tr>
 	<tr>
-		<td>Alliance ID</td>
-		<td>Tag:</td>
-		<td>Add</td>
+		<td><?php echo TZ_ALLIANCE_ID; ?></td>
+		<td><?php echo TZ_TAG; ?></td>
+		<td><?php echo TZ_ADD_2; ?></td>
 	</tr>
 
 	</thead><tbody>
@@ -147,17 +147,17 @@ if(!empty($forumData['display_to_users'])) $users = explode(',', $forumData['dis
 			<input class="text" type="text" id="allys_by_name_<?php echo $i; ?>" name="allys_by_name[<?php echo $i; ?>]" maxlength="15" onkeyup="checkInputs(<?php echo $i; ?>,'allys');" />
 		</td>
 		<td class="ad">
-			<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow('ally_list')" />
+			<img class="add" src="img/x.gif" title="<?php echo TZ_ADD; ?>" alt="<?php echo TZ_ADD; ?>" onclick="addRow('ally_list')" />
 		</td>
 	</tr>
 </table><table cellpadding="1" cellspacing="1" id="user_list"><thead>
 	<tr>
-        <th colspan="3">Open forum for the following players</th>
+        <th colspan="3"><?php echo TZ_OPEN_FORUM_FOR_THE_FOLLOWING_PLAYE; ?></th>
 	</tr>
 	<tr>
-		<td>User ID</td>
-		<td>Name:</td>
-		<td>Add</td>
+		<td><?php echo TZ_USER_ID; ?></td>
+		<td><?php echo TZ_NAME; ?></td>
+		<td><?php echo TZ_ADD_2; ?></td>
 	</tr>
 	</thead><tbody>
 	<?php for($i = 0; $i < count($users); $i++){?>
@@ -181,7 +181,7 @@ if(!empty($forumData['display_to_users'])) $users = explode(',', $forumData['dis
 			<input class="text" type="text" id="users_by_name_<?php echo $i; ?>" maxlength="50" name="users_by_name[<?php echo $i; ?>]" onkeyup="checkInputs(<?php echo $i; ?>,'users');" />
 		</td>
 		<td class="ad">
-			<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow('user_list')" />
+			<img class="add" src="img/x.gif" title="<?php echo TZ_ADD; ?>" alt="<?php echo TZ_ADD; ?>" onclick="addRow('user_list')" />
 		</td>
 	</tr>
 </tbody></table>

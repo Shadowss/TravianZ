@@ -5,7 +5,7 @@
 include("next.tpl");
 ?>
 <div id="build" class="gid34"><a href="#" onClick="return Popup(34,4);" class="build_logo">
-	<img class="building g34" src="img/x.gif" alt="Stonemason's Lodge" title="<?php echo STONEMASON; ?>" />
+	<img class="building g34" src="img/x.gif" alt="<?php echo TZ_STONEMASON_S_LODGE; ?>" title="<?php echo STONEMASON; ?>" />
 </a>
 <h1><?php echo STONEMASON; ?> <span class="level"><?php echo LEVEL; ?> <?php echo $village->resarray['f'.$id]; ?></span></h1>
 <p class="build_desc"><?php echo STONEMASON_DESC; ?></p>

@@ -7,7 +7,7 @@
 ?>
 
 <div id="content" class="messages">
-    <h1>Messages</h1>
+    <h1><?php echo MESSAGES; ?></h1>
 
     <?php include("menu.tpl"); ?>
 
@@ -18,10 +18,10 @@
 
             <thead>
             <tr>
-                <th colspan="2">Subject</th>
-                <th>Sender</th>
+                <th colspan="2"><?php echo SUBJECT; ?></th>
+                <th><?php echo SENDER; ?></th>
                 <th class="sent">
-                    <a href="nachrichten.php?s=0&amp;t=3&amp;o=1">Sent</a>
+                    <a href="nachrichten.php?s=0&amp;t=3&amp;o=1"><?php echo SENT; ?></a>
                 </th>
             </tr>
             </thead>
@@ -33,8 +33,8 @@
                 </th>
 
                 <th colspan="2" class="buttons">
-                    <button name="delmsg" value="delete" id="btn_delete" class="trav_buttons">Delete</button>
-                    <button name="start" value="Back" id="btn_back" class="trav_buttons">Back</button>
+                    <button name="delmsg" value="delete" id="btn_delete" class="trav_buttons"><?php echo DELETE; ?></button>
+                    <button name="start" value="Back" id="btn_back" class="trav_buttons"><?php echo BACK; ?></button>
                 </th>
 
                 <th class="navi">

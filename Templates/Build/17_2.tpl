@@ -14,7 +14,7 @@ $totalMerchants = (int)$market->merchant;
 ?>
 <div id="build" class="gid17">
     <a href="#" onClick="return Popup(17,4);" class="build_logo">
-        <img class="building g17" src="img/x.gif" alt="Marketplace" title="<?php echo MARKETPLACE;?>" />
+        <img class="building g17" src="img/x.gif" alt="<?php echo MARKETPLACE; ?>" title="<?php echo MARKETPLACE;?>" />
     </a>
     <h1><?php echo MARKETPLACE;?> <span class="level"><?php echo LEVEL;?> <?php echo (int)$village->resarray['f'.$id];?></span></h1>
     <p class="build_desc"><?php echo MARKETPLACE_DESC;?></p>
@@ -76,7 +76,7 @@ $totalMerchants = (int)$market->merchant;
             <tr>
                 <td>&nbsp;</td>
                 <td><?php echo OFFER;?></td>
-                <td>ratio</td>
+                <td><?php echo TZ_RATIO; ?></td>
                 <td><?php echo SEARCH;?></td>
                 <td><?php echo MERCHANT;?></td>
                 <td><?php echo ALLIANCE;?></td>
@@ -93,7 +93,7 @@ $totalMerchants = (int)$market->merchant;
             $delLink = $session->access != BANNED ? "build.php?id=".(int)$id."&t=2&a=5&del=".$offerId : "banned.php";
         ?>
             <tr>
-                <td class="abo"><a href="<?php echo $delLink;?>"><img class="del" src="img/x.gif" alt="Delete" title="<?php echo DELETE;?>" /></a></td>
+                <td class="abo"><a href="<?php echo $delLink;?>"><img class="del" src="img/x.gif" alt="<?php echo DELETE; ?>" title="<?php echo DELETE;?>" /></a></td>
                 <td class="val">
                     <img src="img/x.gif" class="<?php echo $res[$gtype]['class'];?>" alt="<?php echo $res[$gtype]['name'];?>" title="<?php echo $res[$gtype]['name'];?>" />
                     <?php echo (int)$offer['gamt'];?>

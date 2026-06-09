@@ -59,7 +59,7 @@ if (WW == true) {
 <table cellpadding="1" cellspacing="1" id="villages" class="row_table_data">
     <thead>
         <tr>
-            <th colspan="7">Wonder of the world</th>
+            <th colspan="7"><?php echo WONDER; ?></th>
         </tr>
         <tr>
             <td></td>

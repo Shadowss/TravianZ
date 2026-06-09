@@ -20,12 +20,12 @@ $goldFeatures = [
     ['title'=>'Production bonus for clay', 'img'=>'p2_25', 'text'=>'With this Gold advantage all your villages\' clay production will be increased by 25%.<br><br>The bonus will not be added to the single resource fields but to the sum of the production.'],
     ['title'=>'Production bonus for iron', 'img'=>'p3_25', 'text'=>'With this Gold advantage all your villages\' iron production will be increased by 25%.<br><br>The bonus will not be added to the single resource fields but to the sum of the production.'],
     ['title'=>'Production bonus for crop', 'img'=>'p4_25', 'text'=>'With this Gold advantage all your villages\' crop production will be increased by 25%.<br><br>The bonus will not be added to the single resource fields but to the sum of the production.'],
-    ['title'=>'Complete construction orders & research immediately.', 'img'=>'bau0', 'text'=>'In the current village all construction orders and research in the academy as well as the blacksmith and armoury will be completed immediately.<br><br>However, the <i>buildings</i> Residence and Palace and <i>villages</i> with a wonder of the world inside them are excluded.'],
+    ['title'=>'Complete construction orders & research immediately.', 'img'=>'bau0', 'text'=>'In the current village all construction orders and research in the academy as well as the blacksmith and armoury will be completed immediately.<br><br>However, the <i>buildings</i> Residence and Palace and <i>'.VILLAGES.'</i> with a wonder of the world inside them are excluded.'],
     ['title'=>'NPC Merchant', 'img'=>'npc', 'text'=>'The NPC Merchant will exchange any desired amount of resources in a village with other resources at a ratio of 1:1.'],
 ];
 ?>
 <table id="plus_features" class="features" cellpadding="1" cellspacing="1">
-<thead><tr><th colspan="2">Features of Travian <span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></th></tr></thead>
+<thead><tr><th colspan="2"><?php echo TZ_FEATURES_OF_TRAVIAN; ?> <span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></th></tr></thead>
 <tbody>
 <tr><td colspan="2" class="empty"></td></tr>
 <?php foreach($plusFeatures as $f): ?>
@@ -39,14 +39,14 @@ $goldFeatures = [
 </tbody></table>
 
 <table id="gold_features" class="features" cellpadding="1" cellspacing="1">
-<thead><tr><th colspan="2">Features of Travian <font color="#71D000">G</font><font color="#FF6F0F">o</font><font color="#71D000">l</font><font color="#FF6F0F">d</font></th></tr></thead>
+<thead><tr><th colspan="2"><?php echo TZ_FEATURES_OF_TRAVIAN; ?> <font color="#71D000">G</font><font color="#FF6F0F">o</font><font color="#71D000">l</font><font color="#FF6F0F">d</font></th></tr></thead>
 <tbody>
 <tr><td colspan="2" class="empty"></td></tr>
 <?php foreach($goldFeatures as $f): ?>
 <tr><th colspan="2"><?= $f['title'] ?></th></tr>
 <tr>
     <td class="preview"><a href="plus.php?id=3"><img class="<?= $f['img'] ?>" src="img/x.gif" alt="<?= $f['title'] ?>" /></a></td>
-    <td class="text"><?= $f['text'] ?><br><br><span style="color:#F00">This feature is NOT included in the gold club!</span></td>
+    <td class="text"><?= $f['text'] ?><br><br><span style="color:#F00"><?php echo TZ_THIS_FEATURE_IS_NOT_INCLUDED_IN_TH; ?></span></td>
 </tr>
 <tr><td colspan="2" class="empty"></td></tr>
 <?php endforeach; ?>

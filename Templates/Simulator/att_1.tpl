@@ -1,169 +1,169 @@
 <table id="attacker" class="fill_in" cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
-			<th>Attacker</th>
+			<th><?php echo ATTACKER; ?></th>
 		</tr>
 	</thead>
 	<tbody>
 		<tr>
 
-			<th>Romans</th>
+			<th><?php echo TRIBE1; ?></th>
 		</tr>
 		<tr>
 			<td class="details">
 				<table cellpadding="1" cellspacing="1"><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u1" title="Legionnaire" alt="Legionnaire" />
+								<img src="img/x.gif" class="unit u1" title="<?php echo U1; ?>" alt="<?php echo U1; ?>" />
 							</td>
 
 							<td class="desc">
 								Legionnaire
 							</td><td class="value">
-									<input class="text" type="text" name="a1_1" value="<?php echo $form->getValue('a1_1'); ?>" maxlength="10" title="Number Legionnaire" />
+									<input class="text" type="text" name="a1_1" value="<?php echo $form->getValue('a1_1'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U1; ?>" />
 								</td>
 								<td class="research">
-									<input class="text" type="text" name="f1_1" value="<?php echo $form->getValue('f1_1'); ?>"  maxlength="2" title="Level Blacksmith Legionnaire" />
+									<input class="text" type="text" name="f1_1" value="<?php echo $form->getValue('f1_1'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U1; ?>" />
 								</td></tr><tr>
 							<td class="ico">
 
-								<img src="img/x.gif" class="unit u2" title="Praetorian" alt="Praetorian" />
+								<img src="img/x.gif" class="unit u2" title="<?php echo U2; ?>" alt="<?php echo U2; ?>" />
 							</td>
 							<td class="desc">
 								Praetorian
 							</td><td class="value">
-									<input class="text" type="text" name="a1_2" value="<?php echo $form->getValue('a1_2'); ?>" maxlength="10" title="Number Praetorian" />
+									<input class="text" type="text" name="a1_2" value="<?php echo $form->getValue('a1_2'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U2; ?>" />
 								</td>
 								<td class="research">
-									<input class="text" type="text" name="f1_2" value="<?php echo $form->getValue('f1_2'); ?>"  maxlength="2" title="Level Blacksmith Praetorian" />
+									<input class="text" type="text" name="f1_2" value="<?php echo $form->getValue('f1_2'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U2; ?>" />
 
 								</td></tr><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u3" title="Imperian" alt="Imperian" />
+								<img src="img/x.gif" class="unit u3" title="<?php echo U3; ?>" alt="<?php echo U3; ?>" />
 							</td>
 							<td class="desc">
 								Imperian
 							</td><td class="value">
-									<input class="text" type="text" name="a1_3" value="<?php echo $form->getValue('a1_3'); ?>" maxlength="10" title="Number Imperian" />
+									<input class="text" type="text" name="a1_3" value="<?php echo $form->getValue('a1_3'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U3; ?>" />
 								</td>
 
 								<td class="research">
-									<input class="text" type="text" name="f1_3" value="<?php echo $form->getValue('f1_3'); ?>"  maxlength="2" title="Level Blacksmith Imperian" />
+									<input class="text" type="text" name="f1_3" value="<?php echo $form->getValue('f1_3'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U3; ?>" />
 								</td></tr><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u4" title="Equites Legati" alt="Equites Legati" />
+								<img src="img/x.gif" class="unit u4" title="<?php echo U4; ?>" alt="<?php echo U4; ?>" />
 							</td>
 							<td class="desc">
 								Equites Legati
 							</td><td class="value">
 
-									<input class="text" type="text" name="a1_4" value="<?php echo $form->getValue('a1_4'); ?>" maxlength="10" title="Number Equites Legati" />
+									<input class="text" type="text" name="a1_4" value="<?php echo $form->getValue('a1_4'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U4; ?>" />
 								</td>
 								<td class="research">
-									<input class="text" type="text" name="f1_4" value="<?php echo $form->getValue('f1_4'); ?>"  maxlength="2" title="Level Blacksmith Equites Legati" />
+									<input class="text" type="text" name="f1_4" value="<?php echo $form->getValue('f1_4'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U4; ?>" />
 								</td></tr><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u5" title="Equites Imperatoris" alt="Equites Imperatoris" />
+								<img src="img/x.gif" class="unit u5" title="<?php echo U5; ?>" alt="<?php echo U5; ?>" />
 							</td>
 							<td class="desc">
 
 								Equites Imperatoris
 							</td><td class="value">
-									<input class="text" type="text" name="a1_5" value="<?php echo $form->getValue('a1_5'); ?>" maxlength="10" title="Number Equites Imperatoris" />
+									<input class="text" type="text" name="a1_5" value="<?php echo $form->getValue('a1_5'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U5; ?>" />
 								</td>
 								<td class="research">
-									<input class="text" type="text" name="f1_5" value="<?php echo $form->getValue('f1_5'); ?>"  maxlength="2" title="Level Blacksmith Equites Imperatoris" />
+									<input class="text" type="text" name="f1_5" value="<?php echo $form->getValue('f1_5'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U5; ?>" />
 								</td></tr><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u6" title="Equites Caesaris" alt="Equites Caesaris" />
+								<img src="img/x.gif" class="unit u6" title="<?php echo U6; ?>" alt="<?php echo U6; ?>" />
 
 							</td>
 							<td class="desc">
 								Equites Caesaris
 							</td><td class="value">
-									<input class="text" type="text" name="a1_6" value="<?php echo $form->getValue('a1_6'); ?>" maxlength="10" title="Number Equites Caesaris" />
+									<input class="text" type="text" name="a1_6" value="<?php echo $form->getValue('a1_6'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U6; ?>" />
 								</td>
 								<td class="research">
-									<input class="text" type="text" name="f1_6" value="<?php echo $form->getValue('f1_6'); ?>"  maxlength="2" title="Level Blacksmith Equites Caesaris" />
+									<input class="text" type="text" name="f1_6" value="<?php echo $form->getValue('f1_6'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U6; ?>" />
 								</td></tr><tr>
 
 							<td class="ico">
-								<img src="img/x.gif" class="unit u7" title="Battering Ram" alt="Battering Ram" />
+								<img src="img/x.gif" class="unit u7" title="<?php echo U7; ?>" alt="<?php echo U7; ?>" />
 							</td>
 							<td class="desc">
 								Battering Ram
 							</td><td class="value">
-									<input class="text" type="text" name="a1_7" value="<?php echo $form->getValue('a1_7'); ?>" maxlength="10" title="Number Battering Ram" />
+									<input class="text" type="text" name="a1_7" value="<?php echo $form->getValue('a1_7'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U7; ?>" />
 								</td>
 								<td class="research">
 
-									<input class="text" type="text" name="f1_7" value="<?php echo $form->getValue('f1_7'); ?>"  maxlength="2" title="Level Blacksmith Battering Ram" />
+									<input class="text" type="text" name="f1_7" value="<?php echo $form->getValue('f1_7'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U7; ?>" />
 								</td></tr><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u8" title="Fire Catapult" alt="Fire Catapult" />
+								<img src="img/x.gif" class="unit u8" title="<?php echo U8; ?>" alt="<?php echo U8; ?>" />
 							</td>
 							<td class="desc">
 								Fire Catapult
 							</td><td class="value">
-									<input class="text" type="text" name="a1_8" value="<?php echo $form->getValue('a1_8'); ?>" maxlength="10" title="Number Fire Catapult" />
+									<input class="text" type="text" name="a1_8" value="<?php echo $form->getValue('a1_8'); ?>" maxlength="10" title="<?php echo TZ_NUMBER; ?> <?php echo U8; ?>" />
 
 								</td>
 								<td class="research">
-									<input class="text" type="text" name="f1_8" value="<?php echo $form->getValue('f1_8'); ?>"  maxlength="2" title="Level Blacksmith Fire Catapult" />
+									<input class="text" type="text" name="f1_8" value="<?php echo $form->getValue('f1_8'); ?>"  maxlength="2" title="<?php echo LEVEL; ?> <?php echo BLACKSMITH; ?> <?php echo U8; ?>" />
 								</td></tr><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u9" title="Senator" alt="Senator" />
+								<img src="img/x.gif" class="unit u9" title="<?php echo U9; ?>" alt="<?php echo U9; ?>" />
 							</td>
 							<td class="desc">
 								Senator
 							</td><td class="value">
 
-									<input class="text" type="text" name="a1_9" value="<?php echo $form->getValue('a1_9'); ?>" maxlength="6" title="Number Senator" />
+									<input class="text" type="text" name="a1_9" value="<?php echo $form->getValue('a1_9'); ?>" maxlength="6" title="<?php echo TZ_NUMBER; ?> <?php echo U9; ?>" />
 								</td>
 								<td class="research"></td></tr><tr>
 							<td class="ico">
-								<img src="img/x.gif" class="unit u10" title="Settler" alt="Settler" />
+								<img src="img/x.gif" class="unit u10" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" />
 							</td>
 							<td class="desc">
 								Settler
 							</td><td class="value">
 
-									<input class="text" type="text" name="a1_10" value="<?php echo $form->getValue('a1_10'); ?>" maxlength="6" title="Number Settler" />
+									<input class="text" type="text" name="a1_10" value="<?php echo $form->getValue('a1_10'); ?>" maxlength="6" title="<?php echo TZ_NUMBER; ?> <?php echo U10; ?>" />
 								</td>
 								<td class="research"></td></tr></table>
 			</td>
 		</tr>
 	</tbody><tbody>
 		<tr>
-			<th>Other</th>
+			<th><?php echo TZ_OTHER; ?></th>
 
 		</tr>
 		<tr>
 			<td class="details">
 				<table cellpadding="1" cellspacing="1">
 					<tr>
-						<td class="ico"><img src="img/x.gif" class="unit uhab" alt="Population" title="Population" /></td>
-						<td class="desc">Population</td>
-						<td class="value"><input class="text" type="text" name="ew1" value="<?php echo $form->getValue('ew1')==""? 1 : $form->getValue('ew1'); ?>" maxlength="5" title="Number Population" /></td>
+						<td class="ico"><img src="img/x.gif" class="unit uhab" alt="<?php echo POP; ?>" title="<?php echo POP; ?>" /></td>
+						<td class="desc"><?php echo POP; ?></td>
+						<td class="value"><input class="text" type="text" name="ew1" value="<?php echo $form->getValue('ew1')==""? 1 : $form->getValue('ew1'); ?>" maxlength="5" title="<?php echo TZ_NUMBER; ?> <?php echo POP; ?>" /></td>
 
 						<td class="research"></td>
 					</tr>
 					<tr>
-						<td class="ico"><img src="img/x.gif" class="unit ucata" alt="catapult target" title="catapult target" /></td>
-						<td class="desc">Lvl catapult target</td>
-						<td class="value"><input class="text" type="text" name="kata" value="<?php echo $form->getValue('kata')==""? 0 : $form->getValue('kata'); ?>" maxlength="2" title="Lvl Catapult Target" /></td>
+						<td class="ico"><img src="img/x.gif" class="unit ucata" alt="<?php echo TZ_CATAPULT_TARGET; ?>" title="<?php echo TZ_CATAPULT_TARGET; ?>" /></td>
+						<td class="desc"><?php echo TZ_LVL; ?> <?php echo TZ_CATAPULT_TARGET; ?></td>
+						<td class="value"><input class="text" type="text" name="kata" value="<?php echo $form->getValue('kata')==""? 0 : $form->getValue('kata'); ?>" maxlength="2" title="<?php echo TZ_LVL; ?> <?php echo TZ_CATAPULT_TARGET; ?>" /></td>
 						<td class="research"></td>
 					</tr><tr>
 
 						                       </tr><tr>
-                            <td class="ico"><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero" /></td>
-                            <td class="desc">Hero (off bonus)</td>
-                            <td class="value"><input class="text" type="text" name="h_off_bonus" value="<?php echo $form->getValue('h_off_bonus')==""? 0 : $form->getValue('h_off_bonus'); ?>" maxlength="4" title="Hero (off bonus)" /></td>
+                            <td class="ico"><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>" alt="<?php echo U0; ?>" /></td>
+                            <td class="desc"><?php echo TZ_HERO_OFF_BONUS; ?></td>
+                            <td class="value"><input class="text" type="text" name="h_off_bonus" value="<?php echo $form->getValue('h_off_bonus')==""? 0 : $form->getValue('h_off_bonus'); ?>" maxlength="4" title="<?php echo TZ_HERO_OFF_BONUS; ?>" /></td>
                             <td class="research"></td>
                     </tr>
                     <tr>
-                            <td class="ico"><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero" /></td>
-                            <td class="desc">Hero (fighting strength)</td>
-                            <td class="value"><input class="text" type="text" name="h_off" value="<?php echo $form->getValue('h_off')==""? 0 : $form->getValue('h_off'); ?>" maxlength="5" title="Hero (fighting strength)" /></td>
+                            <td class="ico"><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>" alt="<?php echo U0; ?>" /></td>
+                            <td class="desc"><?php echo TZ_HERO_FIGHTING_STRENGTH; ?></td>
+                            <td class="value"><input class="text" type="text" name="h_off" value="<?php echo $form->getValue('h_off')==""? 0 : $form->getValue('h_off'); ?>" maxlength="5" title="<?php echo TZ_HERO_FIGHTING_STRENGTH; ?>" /></td>
                             <td class="research"></td>
                     </tr></table>
 			</td>

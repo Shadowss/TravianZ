@@ -42,7 +42,7 @@ if(isset($_GET['newdid'])) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-	<title><?php echo SERVER_NAME ?> - Reports</title>
+	<title><?php echo SERVER_NAME ?> - <?php echo REPORTS ?></title>
 	<link rel="shortcut icon" href="favicon.ico"/>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="pragma" content="no-cache" />
@@ -81,17 +81,17 @@ if(isset($_GET['newdid'])) {
 <div id="mid">
 <?php include("Templates/menu.tpl"); ?>
 		<div id="content"  class="reports">
-<h1>Reports</h1>
+<h1><?php echo REPORTS; ?></h1>
 <div id="textmenu">
-   <a href="berichte.php" <?php if (!isset($_GET['t'])) { echo "class=\"selected \""; } ?>>All</a>
- | <a href="berichte.php?t=2" <?php if (isset($_GET['t']) && $_GET['t'] == 2) { echo "class=\"selected \""; } ?>>Trade</a>
- | <a href="berichte.php?t=1" <?php if (isset($_GET['t']) && $_GET['t'] == 1) { echo "class=\"selected \""; } ?>>Reinforcement</a>
- | <a href="berichte.php?t=3" <?php if (isset($_GET['t']) && $_GET['t'] == 3) { echo "class=\"selected \""; } ?>>Attacks</a>
- | <a href="berichte.php?t=4" <?php if (isset($_GET['t']) && $_GET['t'] == 4) { echo "class=\"selected \""; } ?>>Miscellaneous</a>
+   <a href="berichte.php" <?php if (!isset($_GET['t'])) { echo "class=\"selected \""; } ?>><?php echo ALL; ?></a>
+ | <a href="berichte.php?t=2" <?php if (isset($_GET['t']) && $_GET['t'] == 2) { echo "class=\"selected \""; } ?>><?php echo TZ_TRADE; ?></a>
+ | <a href="berichte.php?t=1" <?php if (isset($_GET['t']) && $_GET['t'] == 1) { echo "class=\"selected \""; } ?>><?php echo REINFORCEMENT; ?></a>
+ | <a href="berichte.php?t=3" <?php if (isset($_GET['t']) && $_GET['t'] == 3) { echo "class=\"selected \""; } ?>><?php echo TZ_ATTACKS; ?></a>
+ | <a href="berichte.php?t=4" <?php if (isset($_GET['t']) && $_GET['t'] == 4) { echo "class=\"selected \""; } ?>><?php echo TZ_MISCELLANEOUS; ?></a>
  <?php if($session->plus) {
  echo "| <a href=\"berichte.php?t=5\"";
  if (isset($_GET['t']) && $_GET['t'] == 5) { echo "class=\"selected \""; }
- echo ">Archive</a>";
+ echo ">".ARCHIVE."</a>";
  }
  ?>
 </div>

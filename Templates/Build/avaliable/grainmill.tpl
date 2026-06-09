@@ -4,7 +4,7 @@
 			<td class="desc"><?php echo GRAINMILL_DESC ?></td>
 			<td rowspan="3" class="bimg">
 				<a href="#" onClick="return Popup(8,4);">
-				<img class="building g8" src="img/x.gif" alt="Grain Mill" title="Grain Mill" /></a>
+				<img class="building g8" src="img/x.gif" alt="<?php echo GRAINMILL; ?>" title="<?php echo GRAINMILL; ?>" /></a>
 			</td>
 		</tr>
 		<tr>

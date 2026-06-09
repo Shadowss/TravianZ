@@ -8,7 +8,7 @@ $trainlist = $technology->getTrainingList(1);
 ?>
 <div id="build" class="gid19">
     <a href="#" onClick="return Popup(19,4);" class="build_logo">
-        <img class="building g19" src="img/x.gif" alt="Barracks" title="<?php echo BARRACKS;?>" />
+        <img class="building g19" src="img/x.gif" alt="<?php echo BARRACKS; ?>" title="<?php echo BARRACKS;?>" />
     </a>
     <h1><?php echo BARRACKS;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo BARRACKS_DESC;?></p>
@@ -27,7 +27,7 @@ $trainlist = $technology->getTrainingList(1);
                     <?php include("19_train.tpl");?>
                 </tbody>
             </table>
-            <p><button type="submit" id="btn_train" class="trav_buttons" name="s1" onclick="this.disabled=true;this.form.submit();">Train</button></p>
+            <p><button type="submit" id="btn_train" class="trav_buttons" name="s1" onclick="this.disabled=true;this.form.submit();"><?php echo TRAIN; ?></button></p>
         </form>
     <?php else:?>
         <b><?php echo TRAINING_COMMENCE_BARRACKS;?></b><br />

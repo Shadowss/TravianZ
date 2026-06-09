@@ -44,7 +44,7 @@ $date = $generator->procMtime($reading['time']);
 ?>
 
 <div id="content" class="messages">
-<h1>Messages</h1>
+<h1><?php echo MESSAGES; ?></h1>
 
 <?php include("menu.tpl"); ?>
 
@@ -110,7 +110,7 @@ echo stripslashes(nl2br($bbcoded));
 <input type="hidden" name="t" value="1" />
 
 <p class="btn">
-    <button name="s1" id="btn_reply" class="trav_buttons">Answer</button>
+    <button name="s1" id="btn_reply" class="trav_buttons"><?php echo ANSWER; ?></button>
 </p>
 
 </div>

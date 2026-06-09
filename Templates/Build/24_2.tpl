@@ -8,9 +8,9 @@ if ($timeleft > time()):
 <br>
 <table cellpadding="0" cellspacing="0" id="building_contract">
     <tr>
-        <td>celebration still needs:</td>
-        <td><span id="timer<?php echo ++$session->timer;?>"><?php echo $generator->getTimeFormat($timeleft - time());?></span> hrs.</td>
-        <td>done at <?php echo date('H:i', $timeleft);?></td>
+        <td><?php echo TZ_CELEBRATION_STILL_NEEDS; ?></td>
+        <td><span id="timer<?php echo ++$session->timer;?>"><?php echo $generator->getTimeFormat($timeleft - time());?></span> <?php echo TZ_HRS_2; ?></td>
+        <td><?php echo DONE_AT; ?> <?php echo date('H:i', $timeleft);?></td>
     </tr>
 </table>
 <?php endif;?>

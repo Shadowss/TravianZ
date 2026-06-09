@@ -21,11 +21,11 @@ if(!isset($_GET['id'])){ $_GET['id']='1'; }
 						<td>
 							<form method="post" action="statistiken.php?id=<?php echo isset($_GET['id'])? $_GET['id'] : 1; ?>">	
 							<div class="search">											
-								<span>rank<input type="text" class="text ra" maxlength="5" name="rank" value="<?php echo ($search == 0)? $start : $search; ?>" /></span>
-								<span class="or">or</span>
-								<span>name<input type="text" class="text name" maxlength="30" name="name" value="<?php if(!is_numeric($search)) {echo $search; } ?>" /></span>
+								<span><?php echo RANK; ?><input type="text" class="text ra" maxlength="5" name="rank" value="<?php echo ($search == 0)? $start : $search; ?>" /></span>
+								<span class="or"><?php echo constant('OR'); ?></span>
+								<span><?php echo NAME; ?><input type="text" class="text name" maxlength="30" name="name" value="<?php if(!is_numeric($search)) {echo $search; } ?>" /></span>
                                 <input type="hidden" name="ft" value="r<?php echo isset($_GET['id'])? $_GET['id'] : 1; ?>" />
-								<button value="submit" name="submit" id="btn_ok" class="trav_buttons" alt="OK" /> Ok </button>
+								<button value="submit" name="submit" id="btn_ok" class="trav_buttons" alt="OK" /> <?php echo TZ_OK_2; ?> </button>
 							</div>
 							</form>
 							<div class="navi">

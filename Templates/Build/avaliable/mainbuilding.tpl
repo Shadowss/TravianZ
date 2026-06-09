@@ -5,7 +5,7 @@
 		<td class="desc"><?php echo MAINBUILDING_DESC ?></td>
 		<td rowspan="3" class="bimg">
 							<a href="#" onClick="return Popup(10,4);">
-				<img class="building g15" src="img/x.gif" alt="Main Building" title="Main Building" /></a>
+				<img class="building g15" src="img/x.gif" alt="<?php echo MAINBUILDING; ?>" title="<?php echo MAINBUILDING; ?>" /></a>
 					</td>
 	</tr>
 	<tr>

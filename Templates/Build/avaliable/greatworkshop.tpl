@@ -4,7 +4,7 @@
                         <td class="desc"><?php echo GREATWORKSHOP_DESC ?></td>
                         <td rowspan="3" class="bimg">
                                 <a href="#" onClick="return Popup(42,4);">
-                                <img class="building g42" src="img/x.gif" alt="Great Workshop" title="Great Workshop" /></a>
+                                <img class="building g42" src="img/x.gif" alt="<?php echo GREATWORKSHOP; ?>" title="<?php echo GREATWORKSHOP; ?>" /></a>
                         </td>
                 </tr>
                 <tr>

@@ -13,40 +13,40 @@ $act2=$database->getActivateField($_GET['id'],"act2",0);
 
 if(isset($show)){ 
 ?> 
-<h1><img src="img/x.gif" class="anmelden" alt="register for the game"></h1> 
-        <h5><img src="img/x.gif" class="img_u05" alt="registration"/></h5> 
+<h1><img src="img/x.gif" class="anmelden" alt="<?php echo TZ_REGISTER_FOR_THE_GAME; ?>"></h1> 
+        <h5><img src="img/x.gif" class="img_u05" alt="<?php echo TZ_REGISTRATION; ?>"/></h5> 
             <p> 
                 Hello <?php echo $naam; ?>, 
                 <br/> 
                 <br/> 
-                The registration was successful. In the next few minutes you will receive an email with the access information. 
+                <?php echo TZ_THE_REGISTRATION_WAS_SUCCESSFUL_IN; ?> 
 <br /><br /> 
-The email will be sent to following address: <span class="important"><?php echo $email; ?></span> 
+<?php echo TZ_THE_EMAIL_WILL_BE_SENT_TO_FOLLOWIN; ?> <span class="important"><?php echo $email; ?></span> 
             </p> 
-            <p>In order to activate your account enter the code or click on the link in your email.</p> 
+            <p><?php echo TZ_IN_ORDER_TO_ACTIVATE_YOUR_ACCOUNT; ?></p> 
             <div id="activation"> 
                 <form action="activate.php" method="post"> 
                     <p class="important"> 
-                        Activation code: 
+                        <?php echo TZ_ACTIVATION_CODE; ?> 
                     </p> 
                     <input class="text" type="text" name="id" maxlength="10" /> 
                     <p> 
-                        <input type="image" value="ok" name="s1" src="img/x.gif" id="btn_send" class="dynamic_img" alt="send"/> 
+                        <input type="image" value="ok" name="s1" src="img/x.gif" id="btn_send" class="dynamic_img" alt="<?php echo SEND; ?>"/> 
                         <input type="hidden" name="ft" value="a2" /> 
                     </p> 
                 </form> 
                 </div> 
                 <div id="no_mail"> 
                 <p> 
-                    <a href="activate.php?id=<?php echo $_GET['id']; ?>&amp;c=<?php echo $generator->encodeStr($email,5); ?>"><span class="important">No email received?</span></a>
+                    <a href="activate.php?id=<?php echo $_GET['id']; ?>&amp;c=<?php echo $generator->encodeStr($email,5); ?>"><span class="important"><?php echo TZ_NO_EMAIL_RECEIVED; ?></span></a>
                 </p> 
                 <p> 
-                    Sometimes the email is moved to the spam folder. For further help click <a href="activate.php?id=<?php echo $_GET['id']; ?>&amp;c=<?php echo $generator->encodeStr($email,5); ?>">here</a> 
+                    <?php echo TZ_SOMETIMES_THE_EMAIL_IS_MOVED_TO_TH; ?> <a href="activate.php?id=<?php echo $_GET['id']; ?>&amp;c=<?php echo $generator->encodeStr($email,5); ?>"><?php echo TZ_HERE; ?></a> 
                 </p> 
             </div> 
             </div> 
         <?php if(START_DATE > date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')){ ?> 
-<br/><center><big>Activation Availble in: </big></center>
+<br/><center><big><?php echo TZ_ACTIVATION_AVAILBLE_IN; ?> </big></center>
 <script>
 TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
 CountActive = true;
@@ -119,7 +119,7 @@ CountBack(gsecs);
                 <?php  
                 if(START_DATE > date('d.m.y') || START_DATE == date('d.m.y') && START_TIME <= date('H:i')){
 				?>
-<br/><center><big>Activation Availble in: </big></center>
+<br/><center><big><?php echo TZ_ACTIVATION_AVAILBLE_IN; ?> </big></center>
 <script language="JavaScript">
 TargetDate = "<?php echo START_DATE; ?> <?php echo START_TIME; ?>";
 CountActive = true;
@@ -192,11 +192,11 @@ CountBack(gsecs);
             <div id="activation"> 
                 <form action="activate.php" method="post"> 
                     <p class="important"> 
-                        Activation code: 
+                        <?php echo TZ_ACTIVATION_CODE; ?> 
                     </p> 
                     <input class="text" type="text" name="id" maxlength="10" /> 
                     <p> 
-                        <input type="image" value="ok" name="s1" src="img/x.gif" id="btn_send" class="dynamic_img" alt="send"/> 
+                        <input type="image" value="ok" name="s1" src="img/x.gif" id="btn_send" class="dynamic_img" alt="<?php echo SEND; ?>"/> 
                         <input type="hidden" name="ft" value="a2" /> 
                     </p> 
                      

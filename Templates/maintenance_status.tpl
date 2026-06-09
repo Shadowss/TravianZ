@@ -35,7 +35,7 @@ if($isAdmin) {
         <a href="?m=off" 
            title="Pornit de <?=htmlspecialchars($starterName)?> la <?=$started?> - Click pentru OPRIRE"
            style="color:#dc2626; font-weight:700;">
-           Maintenance ON
+           <?php echo TZ_MAINTENANCE_ON; ?>
         </a>
         <?php
     } else {
@@ -43,7 +43,7 @@ if($isAdmin) {
         <a href="?m=on" 
            title="Server deschis - Click pentru ACTIVARE"
            style="color:#16a34a; font-weight:700;">
-           Maintenance OFF
+           <?php echo TZ_MAINTENANCE_OFF; ?>
         </a>
         <?php
     }

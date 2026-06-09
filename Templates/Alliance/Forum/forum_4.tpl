@@ -19,15 +19,15 @@ $opt = $database->getAlliPermissions($session->uid, $aid);
 $ChckTopic = $database->CheckCatTopic($cat_id);
 $Topics = array_merge($database->ForumCatTopicStick($cat_id), $database->ForumCatTopic($cat_id));
 ?>
-<h4><a href="allianz.php?s=2">Alliance</a> -> <a href="allianz.php?s=2&fid=<?php echo $cat_id; ?>"><?php echo $CatName; ?></a></h4><table cellpadding="1" cellspacing="1" id="topics"><thead>
+<h4><a href="allianz.php?s=2"><?php echo ALLIANCE; ?></a> -> <a href="allianz.php?s=2&fid=<?php echo $cat_id; ?>"><?php echo $CatName; ?></a></h4><table cellpadding="1" cellspacing="1" id="topics"><thead>
 	<tr>
        <th colspan="4"><?php echo $CatName; ?></th>
 	</tr>
 	<tr>
 		<td></td>
-		<td>Threads</td>
-		<td>Replies</td>
-		<td>Last post</td>
+		<td><?php echo TZ_THREADS; ?></td>
+		<td><?php echo TZ_REPLIES; ?></td>
+		<td><?php echo TZ_LAST_POST; ?></td>
 	</tr></thead><tbody>
 <?php
 if($ChckTopic){
@@ -60,7 +60,7 @@ if($ChckTopic){
 			}else{
 				$pin = '<a class="pin" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=pin" title="Stick topic"><img src="img/x.gif" alt="Stick topic" /></a>';
 			}
-			echo $locks.'<a class="edit" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=edittopic" title="edit"><img src="img/x.gif" alt="edit" /></a><br />'.$pin.'<a class="fdel" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=deltopic" title="delete"><img src="img/x.gif" alt="delete" onClick="return confirm(\'confirm delete?\');" /></a>';
+			echo $locks.'<a class="edit" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=edittopic" title="'.EDIT.'"><img src="img/x.gif" alt="'.EDIT.'" /></a><br />'.$pin.'<a class="fdel" href="?s=2&fid='.$_GET['fid'].'&idt='.$arrs['id'].'&admin=deltopic" title="'.DELETE.'"><img src="img/x.gif" alt="'.DELETE.'" onClick="return confirm(\'confirm delete?\');" /></a>';
 		}elseif($arrs['close'] == 1){
 			echo '<img class="folder_'.($arrs['stick'] == 1 ? 'sticky_' : '').'lock" src="img/x.gif" alt="Closed Thread without new posts" title="Closed Thread without new posts" />';
 		}else{
@@ -83,7 +83,7 @@ echo '<tr>
 	<?php 
 	if($forumData['forum_area'] != 3 || ($forumData['forum_area'] == 3 && $opt['opt5'] == 1)){
 	?>
-	<a href="allianz.php?s=2&pid=<?php echo $aid; ?>&fid=<?php echo $cat_id; ?>&ac=newtopic"><img id="fbtn_post" class="dynamic_img" src="img/x.gif" alt="Post new thread" /></a> 
+	<a href="allianz.php?s=2&pid=<?php echo $aid; ?>&fid=<?php echo $cat_id; ?>&ac=newtopic"><img id="fbtn_post" class="dynamic_img" src="img/x.gif" alt="<?php echo TZ_POST_NEW_THREAD; ?>" /></a> 
 <?php
 echo '<a href="allianz.php?s=2&fid='.$cat_id.((isset($_GET['admin']) && !empty($_GET['admin']) && $_GET['admin'] == "switch_admin") ? "" : "&admin=switch_admin").'" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 	}

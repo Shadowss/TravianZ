@@ -13,7 +13,7 @@ $slots = [
     <h1><?php echo RESIDENCE;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc">
         <a href="#" onClick="return Popup(25,4, 'gid');" class="build_logo">
-            <img class="building g25" src="img/x.gif" alt="Residence" title="<?php echo RESIDENCE;?>" />
+            <img class="building g25" src="img/x.gif" alt="<?php echo RESIDENCE; ?>" title="<?php echo RESIDENCE;?>" />
         </a>
         <?php echo RESIDENCE_DESC;?>
     </p>

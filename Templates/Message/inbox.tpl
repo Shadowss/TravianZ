@@ -8,7 +8,7 @@
 ?>
 
 <div id="content" class="messages">
-    <h1>Messages</h1>
+    <h1><?php echo MESSAGES; ?></h1>
 
     <?php include("menu.tpl"); ?>
 
@@ -17,10 +17,10 @@
 
             <thead>
             <tr>
-                <th colspan="2">Subject</th>
-                <th>Sender</th>
+                <th colspan="2"><?php echo SUBJECT; ?></th>
+                <th><?php echo SENDER; ?></th>
                 <th class="sent">
-                    <a href="nachrichten.php?o=1">Sent</a>
+                    <a href="nachrichten.php?o=1"><?php echo SENT; ?></a>
                 </th>
             </tr>
             </thead>
@@ -54,12 +54,12 @@
                 </th>
 
                 <th colspan="2" class="buttons">
-                    <button name="delmsg" value="delete" id="btn_delete" class="trav_buttons">Delete</button>
+                    <button name="delmsg" value="delete" id="btn_delete" class="trav_buttons"><?php echo DELETE; ?></button>
 
                     <?php
                     // Archive only for PLUS users
                     if ($session->plus) {
-                        echo '<button name="archive" value="Archive" id="btn_archiv" class="trav_buttons">Archive</button>';
+                        echo '<button name="archive" value="Archive" id="btn_archiv" class="trav_buttons">'.ARCHIVE.'</button>';
                     }
                     ?>
 
@@ -151,9 +151,9 @@
                         $message_for_text =
                             "<input class=\"check\" type=\"checkbox\" name=\"n" . $name . "\" value=\"" . $msg['id'] . "\" />";
                     } else if ($support_messages) {
-                        $message_for_text = '<u><b title="Message for Support"><i>S</i></b></u>';
+                        $message_for_text = '<u><b title="'.MESS_FOR_SUP.'"><i>S</i></b></u>';
                     } else if ($multihunter_messages) {
-                        $message_for_text = '<u><b title="Message for Multihunter"><i>M</i></b></u>';
+                        $message_for_text = '<u><b title="'.MESS_FOR_MH.'"><i>M</i></b></u>';
                     }
 
                     echo "<td class=\"sel\">" . $message_for_text . "</td>";

@@ -26,7 +26,7 @@ $completed = isset($_GET['c']);
 ?>
 <div id="build" class="gid17">
     <a href="#" onClick="return Popup(17,4);" class="build_logo">
-        <img class="building g17" src="img/x.gif" alt="Marketplace" title="<?php echo MARKETPLACE;?>" />
+        <img class="building g17" src="img/x.gif" alt="<?php echo MARKETPLACE;?>" title="<?php echo MARKETPLACE;?>" />
     </a>
     <h1><?php echo MARKETPLACE;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo MARKETPLACE_DESC;?></p>
@@ -34,7 +34,7 @@ $completed = isset($_GET['c']);
     <?php include("17_menu.tpl");?>
 
     <?php if ($completed):?>
-        <p><b><?php echo NPC_COMPLETED;?>.</b> <?php echo COSTS;?> 3<img src="img/x.gif" class="gold" alt="Gold" title="<?php echo GOLD;?>" /></p>
+        <p><b><?php echo NPC_COMPLETED;?>.</b> <?php echo COSTS;?> 3<img src="img/x.gif" class="gold" alt="<?php echo GOLD;?>" title="<?php echo GOLD;?>" /></p>
         <a href="javascript: history.go(-2)"><?php echo BACK_BUILDING;?></a>
 
     <?php else:?>
@@ -127,9 +127,9 @@ $completed = isset($_GET['c']);
             <p id="submitButton">
                 <?php if ($session->userinfo['gold'] >= 3):?>
                     <a href="javascript:document.snd.submit();"><?php echo TRADE_RESOURCES;?></a>
-                    <span class="none">(<?php echo COSTS;?>: <img src="img/x.gif" class="gold_g" alt="Gold" title="<?php echo GOLD;?>" /><b>3</b>)</span>
+                    <span class="none">(<?php echo COSTS;?>: <img src="img/x.gif" class="gold_g" alt="<?php echo GOLD;?>" title="<?php echo GOLD;?>" /><b>3</b>)</span>
                 <?php else:?>
-                    <span class="none"><?php echo TRADE_RESOURCES;?></span> (<?php echo COSTS;?>: <img src='img/x.gif' class='gold' alt='Gold' title='<?php echo GOLD;?>' /><b>3</b>)
+                    <span class="none"><?php echo TRADE_RESOURCES;?></span> (<?php echo COSTS;?>: <img src='img/x.gif' class='gold' alt='<?php echo GOLD;?>' title='<?php echo GOLD;?>' /><b>3</b>)
                 <?php endif;?>
             </p>
             <p id="submitText"></p>

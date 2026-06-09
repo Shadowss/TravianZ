@@ -58,7 +58,7 @@ $minEmbassyLevel = 0;
 <table cellpadding="1" cellspacing="1" id="quit" class="small_option">
 <thead>
 <tr>
-    <th colspan="2">Quit alliance</th>
+    <th colspan="2"><?php echo TZ_QUIT_ALLIANCE; ?></th>
 </tr>
 </thead>
 
@@ -76,7 +76,7 @@ if ($isOwner && $membersCount > 1) {
     ?>
     <tr>
         <td colspan="2" class="info">
-            Because you are the alliance founder, you need to select a replacement founder before you leave.
+            <?php echo TZ_BECAUSE_YOU_ARE_THE_ALLIANCE_FOUND; ?>
         </td>
     </tr>
 
@@ -118,12 +118,12 @@ if ($isOwner && $membersCount > 1) {
 <tr>
     <td colspan="2" class="info">
         <br />
-        In order to quit the alliance you have to enter your password again for safety reasons.
+        <?php echo TZ_IN_ORDER_TO_QUIT_THE_ALLIANCE_YOU; ?>
     </td>
 </tr>
 
 <tr>
-    <th>password:</th>
+    <th><?php echo TZ_PASSWORD; ?></th>
     <td>
         <input class="pass text" type="password" name="pw" maxlength="20">
         <span class="error3"><?php echo $form->getError("pw"); ?></span>
@@ -138,7 +138,7 @@ if ($isOwner && $membersCount > 1) {
         <br />
         Unfortunately, there are no members of the alliance with Embassy at level
         <?php echo (int)$minEmbassyLevel; ?> or more. In this case, you will not be able to reassign the founder role.
-        You can still <a href="allianz.php?s=5">kick all members</a> and quit the alliance afterwards.
+        You can still <a href="allianz.php?s=5"><?php echo TZ_KICK_ALL_MEMBERS; ?></a> <?php echo TZ_AND_QUIT_THE_ALLIANCE_AFTERWARDS; ?>
     </span>
 <?php endif; ?>
 

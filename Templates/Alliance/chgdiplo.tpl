@@ -50,14 +50,14 @@ $allyId = (int)$session->alliance;
 
 <thead>
 <tr>
-    <th colspan="2">Alliance diplomacy</th>
+    <th colspan="2"><?php echo TZ_ALLIANCE_DIPLOMACY; ?></th>
 </tr>
 </thead>
 
 <tbody>
 
 <tr>
-    <th>Alliance</th>
+    <th><?php echo ALLIANCE; ?></th>
     <td>
         <input class="ally text" type="text" name="a_name" maxlength="15">
     </td>
@@ -66,15 +66,15 @@ $allyId = (int)$session->alliance;
 <tr><td colspan="2" class="empty"></td></tr>
 
 <tr>
-    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="1"> offer a confederation</label></td>
+    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="1"> <?php echo TZ_OFFER_A_CONFEDERATION; ?></label></td>
 </tr>
 
 <tr>
-    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="2"> offer non-aggression pact</label></td>
+    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="2"> <?php echo TZ_OFFER_NON_AGGRESSION_PACT; ?></label></td>
 </tr>
 
 <tr>
-    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="3"> declare war</label></td>
+    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="3"> <?php echo TZ_DECLARE_WAR; ?></label></td>
 </tr>
 
 </tbody>
@@ -84,14 +84,14 @@ $allyId = (int)$session->alliance;
 <table cellpadding="1" cellspacing="1" id="hint" class="infos">
 <thead>
 <tr>
-    <th colspan="2">Hint</th>
+    <th colspan="2"><?php echo TZ_HINT; ?></th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
     <td colspan="2">
-        It's part of diplomatic etiquette to talk to another alliance before sending an offer.
+        <?php echo TZ_IT_S_PART_OF_DIPLOMATIC_ETIQUETTE; ?>
     </td>
 </tr>
 </tbody>
@@ -116,7 +116,7 @@ $allyId = (int)$session->alliance;
 
 <thead>
 <tr>
-    <th colspan="3">Own offers</th>
+    <th colspan="3"><?php echo OWN_OFFERS; ?></th>
 </tr>
 </thead>
 
@@ -166,15 +166,15 @@ if (!empty($offers)) {
 <table cellpadding="1" cellspacing="1" id="tip" class="infos">
 <thead>
 <tr>
-    <th colspan="2">Tip</th>
+    <th colspan="2"><?php echo TZ_TIP; ?></th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
     <td colspan="2">
-        Use <span class="e">[diplomatie]</span>, <span class="e">[ally]</span>,
-        <span class="e">[nap]</span>, <span class="e">[war]</span> in description.
+        <?php echo TZ_USE; ?> <span class="e">[diplomatie]</span>, <span class="e">[ally]</span>,
+        <span class="e">[nap]</span>, <span class="e">[war]</span> <?php echo TZ_IN_DESCRIPTION; ?>
     </td>
 </tr>
 </tbody>
@@ -185,7 +185,7 @@ if (!empty($offers)) {
 
 <thead>
 <tr>
-    <th colspan="4">Foreign offers</th>
+    <th colspan="4"><?php echo TZ_FOREIGN_OFFERS; ?></th>
 </tr>
 </thead>
 
@@ -244,7 +244,7 @@ if (!empty($invites)) {
 
 <thead>
 <tr>
-    <th colspan="3">Existing relationships</th>
+    <th colspan="3"><?php echo TZ_EXISTING_RELATIONSHIPS; ?></th>
 </tr>
 </thead>
 

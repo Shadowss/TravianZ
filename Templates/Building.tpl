@@ -48,10 +48,10 @@ if (!function_exists('safeHTML')) {
                 ?>
                     <a href="?buildingFinish=1"
                        onclick="return confirm('Finish all construction and research orders in this village immediately for 2 Gold?');"
-                       title="Finish all construction and research orders in this village immediately for 2 Gold?">
+                       title="<?php echo FINISH_GOLD; ?>">
 
                         <img class="clock"
-                             alt="Finish all construction and research orders in this village immediately for 2 Gold?"
+                             alt="<?php echo FINISH_GOLD; ?>"
                              src="img/x.gif" />
                     </a>
                 <?php } ?>
@@ -99,8 +99,8 @@ if (!function_exists('safeHTML')) {
                 <a href="?d=<?php echo $jobId; ?>&amp;a=0&amp;c=<?php echo safeHTML($session->checker); ?>">
                     <img src="img/x.gif"
                          class="del"
-                         title="cancel"
-                         alt="cancel" />
+                         title="<?php echo CANCEL; ?>"
+                         alt="<?php echo CANCEL; ?>" />
                 </a>
             </td>
 
@@ -142,7 +142,7 @@ if (!function_exists('safeHTML')) {
                     <span id="timer<?php echo ++$session->timer; ?>">
                         <?php echo $generator->getTimeFormat($remainingTime); ?>
                     </span>
-                    hrs.
+                    <?php echo TZ_HRS_2; ?>
                 </td>
 
                 <!-- Ora finalizare -->

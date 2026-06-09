@@ -37,7 +37,7 @@ $t = isset($_GET['t']) ? (int)$_GET['t'] : 0;
 
 <div class="clear"></div>
 
-<h4 class="chartHeadline">Military events</h4>
+<h4 class="chartHeadline"><?php echo TZ_MILITARY_EVENTS; ?></h4>
 
 <div id="submenu">
 
@@ -45,14 +45,14 @@ $t = isset($_GET['t']) ? (int)$_GET['t'] : 0;
     <a href="allianz.php?s=3&f=32">
         <img src="img/x.gif"
              class="<?php echo ($f === 32 ? 'active btn_def' : 'btn_def'); ?>"
-             alt="Defender" title="Defender" />
+             alt="<?php echo DEFENDER; ?>" title="<?php echo DEFENDER; ?>" />
     </a>
 
     <!-- ATTACKER -->
     <a href="allianz.php?s=3&f=31">
         <img src="img/x.gif"
              class="<?php echo ($f === 31 ? 'active btn_off' : 'btn_off'); ?>"
-             alt="Attacker" title="Attacker" />
+             alt="<?php echo ATTACKER; ?>" title="<?php echo ATTACKER; ?>" />
     </a>
 
 </div>
@@ -189,9 +189,9 @@ if ($f === 31 || $f === 32) {
 <table cellpadding="1" cellspacing="1" id="offs">
 <thead>
 <tr>
-    <td>Player</td>
-    <td>Alliance</td>
-    <td>Date</td>
+    <td><?php echo PLAYER; ?></td>
+    <td><?php echo ALLIANCE; ?></td>
+    <td><?php echo DATE; ?></td>
 </tr>
 </thead>
 

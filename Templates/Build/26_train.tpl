@@ -56,8 +56,8 @@ if ($totalSlots > 0): ?>
                         <img class="r4" src="img/x.gif" alt="<?php echo CROP;?>" title="<?php echo CROP;?>" /><?php echo $costs['crop'];?>|
                         <img class="clock" src="img/x.gif" alt="<?php echo DURATION;?>" title="<?php echo DURATION;?>" /><?php echo $generator->getTimeFormat($duration);?>
                         <?php if ($canNpc):?>
-                        |<a href="build.php?gid=17&t=3&r1=<?php echo $costs['wood'];?>&r2=<?php echo $costs['clay'];?>&r3=<?php echo $costs['iron'];?>&r4=<?php echo $costs['crop'];?>" title="NPC trade">
-                            <img class="npc" src="img/x.gif" alt="NPC trade" title="NPC trade" />
+                        |<a href="build.php?gid=17&t=3&r1=<?php echo $costs['wood'];?>&r2=<?php echo $costs['clay'];?>&r3=<?php echo $costs['iron'];?>&r4=<?php echo $costs['crop'];?>" title="<?php echo NPC_TRADE; ?>">
+                            <img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>" title="<?php echo NPC_TRADE; ?>" />
                         </a>
                         <?php endif;?>
                     </div>
@@ -75,7 +75,7 @@ if ($totalSlots > 0): ?>
         </tbody>
     </table>
     <p>
-        <input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" />
+        <input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="<?php echo TRAIN; ?>" />
     </p>
 </form>
 <?php else: ?>

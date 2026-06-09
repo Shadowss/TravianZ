@@ -111,8 +111,8 @@ if ($hour > 1759 || $hour < 500) {
            accesskey="1">
 
             <img src="img/x.gif"
-                 title="Village overview"
-                 alt="Village overview" />
+                 title="<?php echo TZ_VILLAGE_OVERVIEW; ?>"
+                 alt="<?php echo TZ_VILLAGE_OVERVIEW; ?>" />
         </a>
 
         <!-- Village centre -->
@@ -121,8 +121,8 @@ if ($hour > 1759 || $hour < 500) {
            accesskey="2">
 
             <img src="img/x.gif"
-                 title="Village centre"
-                 alt="Village centre" />
+                 title="<?php echo VILLAGE_CENTER; ?>"
+                 alt="<?php echo VILLAGE_CENTER; ?>" />
         </a>
 
         <!-- Map -->
@@ -131,8 +131,8 @@ if ($hour > 1759 || $hour < 500) {
            accesskey="3">
 
             <img src="img/x.gif"
-                 title="Map"
-                 alt="Map" />
+                 title="<?php echo MAP; ?>"
+                 alt="<?php echo MAP; ?>" />
         </a>
 
         <!-- Statistics -->
@@ -141,8 +141,8 @@ if ($hour > 1759 || $hour < 500) {
            accesskey="4">
 
             <img src="img/x.gif"
-                 title="Statistics"
-                 alt="Statistics" />
+                 title="<?php echo STATISTICS; ?>"
+                 alt="<?php echo STATISTICS; ?>" />
         </a>
 
         <!-- Reports / Messages -->
@@ -154,8 +154,8 @@ if ($hour > 1759 || $hour < 500) {
 
                 <img src="img/x.gif"
                      class="l"
-                     title="Reports"
-                     alt="Reports" />
+                     title="<?php echo REPORTS; ?>"
+                     alt="<?php echo REPORTS; ?>" />
             </a>
 
             <!-- Messages -->
@@ -164,8 +164,8 @@ if ($hour > 1759 || $hour < 500) {
 
                 <img src="img/x.gif"
                      class="r"
-                     title="Messages"
-                     alt="Messages" />
+                     title="<?php echo MESSAGES; ?>"
+                     alt="<?php echo MESSAGES; ?>" />
             </a>
 
         </div>
@@ -192,8 +192,8 @@ if ($hour > 1759 || $hour < 500) {
             <img src="img/x.gif"
                  id="btn_plus"
                  class="<?php echo safeHTML($plusClass); ?>"
-                 title="Plus menu"
-                 alt="Plus menu" />
+                 title="<?php echo PLUS_MENU; ?>"
+                 alt="<?php echo PLUS_MENU; ?>" />
 
         </a>
 

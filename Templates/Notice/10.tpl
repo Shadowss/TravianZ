@@ -51,14 +51,14 @@ if ($fromName != "[?]") {
 <thead>
 
 <tr>
-    <th>Subject:</th>
-    <th><?php echo $message->readingNotice['topic']; ?></th>
+    <th><?php echo SUBJECT; ?>:</th>
+    <th><?php echo tz_loc_topic($message->readingNotice['topic']); ?></th>
 </tr>
 
 <tr>
     <?php $date = $generator->procMtime($message->readingNotice['time']); ?>
-    <td class="sent">Sent:</td>
-    <td>on <span><?php echo $date[0]." at ".$date[1]; ?></span> <span>hour</span></td>
+    <td class="sent"><?php echo TZ_SENT; ?></td>
+    <td><?php echo ON; ?> <span><?php echo $date[0]." at ".$date[1]; ?></span> <span><?php echo TZ_HOUR; ?></span></td>
 </tr>
 
 </thead>
@@ -74,7 +74,7 @@ if ($fromName != "[?]") {
 <tr>
     <td>&nbsp;</td>
     <td>
-        <?php echo $user_url; ?> from the village <?php echo $from_url; ?>
+        <?php echo $user_url; ?> <?php echo FROM_THE_VILL; ?> <?php echo $from_url; ?>
     </td>
 </tr>
 </thead>
@@ -82,20 +82,20 @@ if ($fromName != "[?]") {
 <tbody>
 
 <tr>
-<th>Resources</th>
+<th><?php echo RESOURCES; ?></th>
 <td>
 
     <!-- Resource display (unchanged logic) -->
-    <img class="r1" src="img/x.gif" alt="Wood" title="Wood" />
+    <img class="r1" src="img/x.gif" alt="<?php echo TZ_WOOD; ?>" title="<?php echo TZ_WOOD; ?>" />
     <?php echo $dataarray[2]; ?> |
 
-    <img class="r2" src="img/x.gif" alt="Clay" title="Clay" />
+    <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" />
     <?php echo $dataarray[3]; ?> |
 
-    <img class="r3" src="img/x.gif" alt="Iron" title="Iron" />
+    <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" />
     <?php echo $dataarray[4]; ?> |
 
-    <img class="r4" src="img/x.gif" alt="Crop" title="Crop" />
+    <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" />
     <?php echo $dataarray[5]; ?>
 
 </td>

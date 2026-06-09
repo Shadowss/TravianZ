@@ -60,25 +60,25 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	<th>
 
-	    <img src="img/un/res/1.gif" width="18" height="12" border="0" alt="lumber" />
+	    <img src="img/un/res/1.gif" width="18" height="12" border="0" alt="<?php echo LUMBER; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/2.gif" width="18" height="12" border="0" alt="clay" />
+	    <img src="img/un/res/2.gif" width="18" height="12" border="0" alt="<?php echo CLAY; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/3.gif" width="18" height="12" border="0" alt="iron" />
+	    <img src="img/un/res/3.gif" width="18" height="12" border="0" alt="<?php echo IRON; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/4.gif" width="18" height="12" border="0" alt="crop" />
+	    <img src="img/un/res/4.gif" width="18" height="12" border="0" alt="<?php echo CROP; ?>" />
 
 	</th>
 
@@ -100,7 +100,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Legionnaire</td>
+	<td class="text" width="135"><?php echo U1; ?></td>
 
 	<td width="25">40</td>
 
@@ -128,7 +128,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Praetorian</td>
+	<td class="text" width="135"><?php echo U2; ?></td>
 
 	<td width="25">30</td>
 
@@ -156,7 +156,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Imperian</td>
+	<td class="text" width="135"><?php echo U3; ?></td>
 
 	<td width="25">70</td>
 
@@ -184,7 +184,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Equites Legati</td>
+	<td class="text" width="135"><?php echo U4; ?></td>
 
 	<td width="25">0</td>
 
@@ -212,7 +212,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Equites Imperatoris</td>
+	<td class="text" width="135"><?php echo U5; ?></td>
 
 	<td width="25">120</td>
 
@@ -240,7 +240,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Equites Caesaris</td>
+	<td class="text" width="135"><?php echo U6; ?></td>
 
 	<td width="25">180</td>
 
@@ -268,7 +268,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Battering Ram</td>
+	<td class="text" width="135"><?php echo U7; ?></td>
 
 	<td width="25">60</td>
 
@@ -296,7 +296,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Fire Catapult</td>
+	<td class="text" width="135"><?php echo U8; ?></td>
 
 	<td width="25">75</td>
 
@@ -324,7 +324,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Senator</td>
+	<td class="text" width="135"><?php echo U9; ?></td>
 
 	<td width="25">50</td>
 
@@ -352,7 +352,7 @@ Because they are weak at the beginning of the game, they are a bad choice for be
 
 	</td>
 
-	<td class="text" width="135">Settler</td>
+	<td class="text" width="135"><?php echo U10; ?></td>
 
 	<td width="25">0</td>
 
@@ -454,25 +454,25 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	<th>
 
-	    <img src="img/un/res/1.gif" width="18" height="12" border="0" alt="lumber" />
+	    <img src="img/un/res/1.gif" width="18" height="12" border="0" alt="<?php echo LUMBER; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/2.gif" width="18" height="12" border="0" alt="clay" />
+	    <img src="img/un/res/2.gif" width="18" height="12" border="0" alt="<?php echo CLAY; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/3.gif" width="18" height="12" border="0" alt="iron" />
+	    <img src="img/un/res/3.gif" width="18" height="12" border="0" alt="<?php echo IRON; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/4.gif" width="18" height="12" border="0" alt="crop" />
+	    <img src="img/un/res/4.gif" width="18" height="12" border="0" alt="<?php echo CROP; ?>" />
 
 	</th>
 
@@ -494,7 +494,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Phalanx</td>
+	<td class="text" width="135"><?php echo U21; ?></td>
 
 	<td width="25">15</td>
 
@@ -522,7 +522,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Swordsman</td>
+	<td class="text" width="135"><?php echo U22; ?></td>
 
 	<td width="25">65</td>
 
@@ -550,7 +550,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Pathfinder</td>
+	<td class="text" width="135"><?php echo U23; ?></td>
 
 	<td width="25">0</td>
 
@@ -578,7 +578,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Theutates Thunder</td>
+	<td class="text" width="135"><?php echo U24; ?></td>
 
 	<td width="25">90</td>
 
@@ -606,7 +606,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Druidrider</td>
+	<td class="text" width="135"><?php echo U25; ?></td>
 
 	<td width="25">45</td>
 
@@ -634,7 +634,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Haeduan</td>
+	<td class="text" width="135"><?php echo U26; ?></td>
 
 	<td width="25">140</td>
 
@@ -662,7 +662,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Ram</td>
+	<td class="text" width="135"><?php echo U17; ?></td>
 
 	<td width="25">50</td>
 
@@ -690,7 +690,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Trebuchet</td>
+	<td class="text" width="135"><?php echo U28; ?></td>
 
 	<td width="25">70</td>
 
@@ -718,7 +718,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Chieftain</td>
+	<td class="text" width="135"><?php echo U29; ?></td>
 
 	<td width="25">40</td>
 
@@ -746,7 +746,7 @@ For beginners and those players who don't know exactly what they want to play, t
 
 	</td>
 
-	<td class="text" width="135">Settler</td>
+	<td class="text" width="135"><?php echo U10; ?></td>
 
 	<td width="25">0</td>
 
@@ -852,25 +852,25 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	<th>
 
-	    <img src="img/un/res/1.gif" width="18" height="12" border="0" alt="lumber" />
+	    <img src="img/un/res/1.gif" width="18" height="12" border="0" alt="<?php echo LUMBER; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/2.gif" width="18" height="12" border="0" alt="clay" />
+	    <img src="img/un/res/2.gif" width="18" height="12" border="0" alt="<?php echo CLAY; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/3.gif" width="18" height="12" border="0" alt="iron" />
+	    <img src="img/un/res/3.gif" width="18" height="12" border="0" alt="<?php echo IRON; ?>" />
 
 	</th>
 
 	<th>
 
-	    <img src="img/un/res/4.gif" width="18" height="12" border="0" alt="crop" />
+	    <img src="img/un/res/4.gif" width="18" height="12" border="0" alt="<?php echo CROP; ?>" />
 
 	</th>
 
@@ -892,7 +892,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Clubswinger</td>
+	<td class="text" width="135"><?php echo U11; ?></td>
 
 	<td width="25">40</td>
 
@@ -920,7 +920,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Spearman</td>
+	<td class="text" width="135"><?php echo U12; ?></td>
 
 	<td width="25">10</td>
 
@@ -948,7 +948,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Axeman</td>
+	<td class="text" width="135"><?php echo U13; ?></td>
 
 	<td width="25">60</td>
 
@@ -976,7 +976,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Scout</td>
+	<td class="text" width="135"><?php echo U14; ?></td>
 
 	<td width="25">0</td>
 
@@ -1004,7 +1004,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Paladin</td>
+	<td class="text" width="135"><?php echo U15; ?></td>
 
 	<td width="25">55</td>
 
@@ -1032,7 +1032,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Teutonic Knight</td>
+	<td class="text" width="135"><?php echo U16; ?></td>
 
 	<td width="25">150</td>
 
@@ -1060,7 +1060,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Ram</td>
+	<td class="text" width="135"><?php echo U17; ?></td>
 
 	<td width="25">65</td>
 
@@ -1088,7 +1088,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Catapult</td>
+	<td class="text" width="135"><?php echo U18; ?></td>
 
 	<td width="25">50</td>
 
@@ -1116,7 +1116,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Chief</td>
+	<td class="text" width="135"><?php echo U19; ?></td>
 
 	<td width="25">40</td>
 
@@ -1144,7 +1144,7 @@ For aggressive and experienced players the Teutons are an excellent choice!</p>
 
 	</td>
 
-	<td class="text" width="135">Settler</td>
+	<td class="text" width="135"><?php echo U10; ?></td>
 
 	<td width="25">10</td>
 

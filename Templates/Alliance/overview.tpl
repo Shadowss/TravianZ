@@ -74,11 +74,11 @@ include("alli_menu.tpl");
 <table cellpadding="1" cellspacing="1" id="profile">
 <thead>
 <tr>
-    <th colspan="2">Alliance</th>
+    <th colspan="2"><?php echo ALLIANCE; ?></th>
 </tr>
 <tr>
-    <td>Details</td>
-    <td>Description</td>
+    <td><?php echo DETAIL; ?></td>
+    <td><?php echo DESCRIPTION; ?></td>
 </tr>
 </thead>
 
@@ -91,12 +91,12 @@ include("alli_menu.tpl");
 <table cellpadding="0" cellspacing="0">
 
 <tr>
-    <th>Tag</th>
+    <th><?php echo TAG; ?></th>
     <td><?php echo htmlspecialchars($allianceinfo['tag']); ?></td>
 </tr>
 
 <tr>
-    <th>Name</th>
+    <th><?php echo NAME; ?></th>
     <td><?php echo htmlspecialchars($allianceinfo['name']); ?></td>
 </tr>
 
@@ -104,7 +104,7 @@ include("alli_menu.tpl");
 
 <!-- ========================= RANK FIX ========================= -->
 <tr>
-    <th>Rank</th>
+    <th><?php echo RANK; ?></th>
     <td>
 <?php
 // FORCE ranking initialization (TravianZ safe trigger)
@@ -127,12 +127,12 @@ echo $rankValue . ".";
 </tr>
 
 <tr>
-    <th>Points</th>
+    <th><?php echo POINTS; ?></th>
     <td><?php echo (int)$totalpop; ?></td>
 </tr>
 
 <tr>
-    <th>Members</th>
+    <th><?php echo TZ_MEMBERS; ?></th>
     <td><?php echo count($memberlist); ?></td>
 </tr>
 
@@ -180,9 +180,9 @@ if (!empty($allianceinfo['forumlink']) && $allianceinfo['forumlink'] != '0') {
 <thead>
 <tr>
     <th>&nbsp;</th>
-    <th>Player</th>
-    <th>Population</th>
-    <th>Villages</th>
+    <th><?php echo PLAYER; ?></th>
+    <th><?php echo POP; ?></th>
+    <th><?php echo VILLAGES; ?></th>
     <?php if ($aid == $session->alliance) echo "<th>&nbsp;</th>"; ?>
 </tr>
 </thead>

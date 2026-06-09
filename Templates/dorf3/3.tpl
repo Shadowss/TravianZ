@@ -18,17 +18,17 @@ include('menu.tpl');
 
 <thead>
 <tr>
-	<th colspan="7">Warehouse</th>
+	<th colspan="7"><?php echo WAREHOUSE; ?></th>
 </tr>
 
 <tr>
-	<td>Village</td>
-	<td><img class="r1" src="img/x.gif" title="Wood" alt="Wood"></td>
-	<td><img class="r2" src="img/x.gif" title="Clay" alt="Clay"></td>
-	<td><img class="r3" src="img/x.gif" title="Iron" alt="Iron"></td>
-	<td><img class="clock" src="img/x.gif" title="Clock" alt="Clock"></td>
-	<td><img class="r4" src="img/x.gif" title="Crop" alt="Crop"></td>
-	<td><img class="clock" src="img/x.gif" title="Clock" alt="Clock"></td>
+	<td><?php echo VILLAGE; ?></td>
+	<td><img class="r1" src="img/x.gif" title="<?php echo TZ_WOOD; ?>" alt="<?php echo TZ_WOOD; ?>"></td>
+	<td><img class="r2" src="img/x.gif" title="<?php echo CLAY; ?>" alt="<?php echo CLAY; ?>"></td>
+	<td><img class="r3" src="img/x.gif" title="<?php echo IRON; ?>" alt="<?php echo IRON; ?>"></td>
+	<td><img class="clock" src="img/x.gif" title="<?php echo TZ_CLOCK; ?>" alt="<?php echo TZ_CLOCK; ?>"></td>
+	<td><img class="r4" src="img/x.gif" title="<?php echo CROP; ?>" alt="<?php echo CROP; ?>"></td>
+	<td><img class="clock" src="img/x.gif" title="<?php echo TZ_CLOCK; ?>" alt="<?php echo TZ_CLOCK; ?>"></td>
 </tr>
 </thead>
 

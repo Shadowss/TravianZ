@@ -7,7 +7,7 @@
 ?>
 
 <div id="content" class="messages">
-<h1>Messages</h1>
+<h1><?php echo MESSAGES; ?></h1>
 
 <?php include("menu.tpl"); ?>
 
@@ -30,7 +30,7 @@
          (fix mic: atribut alt era invalid)
     ======================================================= -->
     <p class="btn">
-        <button id="btn_save" name="s1" class="trav_buttons">Save</button>
+        <button id="btn_save" name="s1" class="trav_buttons"><?php echo SAVE; ?></button>
         <br />&nbsp;
     </p>
 

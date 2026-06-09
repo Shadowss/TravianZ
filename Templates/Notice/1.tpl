@@ -74,13 +74,13 @@ if ($database->isVillageOases($dataarray[29])) {
 <table cellpadding="1" cellspacing="1" id="report_surround">
 <thead>
 <tr>
-    <th>Subject:</th>
-    <th><?php echo $message->readingNotice['topic']; ?></th>
+    <th><?php echo SUBJECT; ?>:</th>
+    <th><?php echo tz_loc_topic($message->readingNotice['topic']); ?></th>
 </tr>
 <tr>
     <?php $date = $generator->procMtime($message->readingNotice['time']); ?>
-    <td class="sent">Sent:</td>
-    <td>on <span><?php echo $date[0]." at ".$date[1]; ?></span> <span>hour</span></td>
+    <td class="sent"><?php echo TZ_SENT; ?></td>
+    <td><?php echo ON; ?> <span><?php echo $date[0]." at ".$date[1]; ?></span> <span><?php echo TZ_HOUR; ?></span></td>
 </tr>
 </thead>
 
@@ -91,9 +91,9 @@ if ($database->isVillageOases($dataarray[29])) {
 <table cellpadding="1" cellspacing="1" id="attacker">
 <thead>
 <tr>
-    <td class="role">Attacker</td>
+    <td class="role"><?php echo ATTACKER; ?></td>
     <td colspan="<?php echo $colspan ?>">
-        <?php echo $user_url; ?> <?php echo $from_url ? 'from the village '.$from_url : ''; ?>
+        <?php echo $user_url; ?> <?php echo $from_url ? FROM_THE_VILL.' '.$from_url : ''; ?>
     </td>
 </tr>
 </thead>
@@ -116,7 +116,7 @@ if ($hasHero) {
     echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
 }
 
-echo "</tr><tr><th>Troops</th>";
+echo "</tr><tr><th>".TROOPS."</th>";
 
 // TROOPS
 for ($i = 3; $i <= 12; $i++) {
@@ -130,7 +130,7 @@ if ($hasHero) {
 }
 
 // CASUALTIES
-echo "<tr><th>Casualties</th>";
+echo "<tr><th>".CASUALTIES."</th>";
 
 for ($i = 13; $i <= 22; $i++) {
     echo ($dataarray[$i] == 0)
@@ -145,7 +145,7 @@ if ($hasHero) {
 
 // PRISONERS (unchanged logic but safer sum)
 if (!$spy && array_sum(array_slice($dataarray, 182, 11)) > 0) {
-    echo "</tr><tr><th>Prisoners</th>";
+    echo "</tr><tr><th>".PRISONERS."</th>";
 
     for ($i = 182; $i <= 191; $i++) {
         echo ($dataarray[$i] == 0)
@@ -168,9 +168,9 @@ if (!empty($dataarray[170]) && !empty($dataarray[171])) {
 ?>
 <tbody class="goods">
 <tr>
-<th>Information</th>
+<th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[170]; ?>" src="img/x.gif" alt="Ram" title="Ram" />
+<img class="unit u<?php echo $dataarray[170]; ?>" src="img/x.gif" alt="<?php echo U17; ?>" title="<?php echo U17; ?>" />
 <?php echo $dataarray[171]; ?>
 </td>
 </tr>
@@ -181,9 +181,9 @@ if (!empty($dataarray[172]) && !empty($dataarray[173])) {
 ?>
 <tbody class="goods">
 <tr>
-<th>Information</th>
+<th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[172]; ?>" src="img/x.gif" alt="Catapult" title="Catapult" />
+<img class="unit u<?php echo $dataarray[172]; ?>" src="img/x.gif" alt="<?php echo U18; ?>" title="<?php echo U18; ?>" />
 <?php echo $dataarray[173]; ?>
 </td>
 </tr>
@@ -194,9 +194,9 @@ if (!empty($dataarray[174]) && !empty($dataarray[175])) {
 ?>
 <tbody class="goods">
 <tr>
-<th>Information</th>
+<th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[174]; ?>" src="img/x.gif" alt="Chief" title="Chief" />
+<img class="unit u<?php echo $dataarray[174]; ?>" src="img/x.gif" alt="<?php echo U19; ?>" title="<?php echo U19; ?>" />
 <?php echo $dataarray[175]; ?>
 </td>
 </tr>
@@ -207,7 +207,7 @@ if ($spy) {
 ?>
 <tbody class="goods">
 <tr>
-<th>Information</th>
+<th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
 <?php echo $dataarray[177]; ?>
 </td>
@@ -219,7 +219,7 @@ if (!empty($dataarray[193])) {
 ?>
 <tbody class="goods">
 <tr>
-<th>Information</th>
+<th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
 <?php echo $dataarray[193]; ?>
 </td>
@@ -231,9 +231,9 @@ if (!empty($dataarray[196]) && !empty($dataarray[197])) {
 ?>
 <tbody class="goods">
 <tr>
-<th>Information</th>
+<th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
-<img class="unit u<?php echo $dataarray[196]; ?>" src="img/x.gif" alt="Hero" title="Hero" />
+<img class="unit u<?php echo $dataarray[196]; ?>" src="img/x.gif" alt="<?php echo U0; ?>" title="<?php echo U0; ?>" />
 <?php echo $dataarray[197]; ?>
 </td>
 </tr>
@@ -244,7 +244,7 @@ if (!empty($dataarray[195])) {
 ?>
 <tbody class="goods">
 <tr>
-<th>Information</th>
+<th><?php echo INFORMATION; ?></th>
 <td colspan="<?php echo $colspan; ?>">
 <?php echo $dataarray[195]; ?>
 </td>
@@ -253,7 +253,7 @@ if (!empty($dataarray[195])) {
 <?php } elseif (empty($dataarray[176]) && empty($dataarray[177])) { ?>
 <tbody class="goods">
 <tr>
-<th>Bounty</th>
+<th><?php echo BOUNTY; ?></th>
 <td colspan="<?php echo $colspan; ?>">
 <div class="res">
 <img class="r1" src="img/x.gif" /><?php echo $dataarray[23]; ?> |
@@ -289,9 +289,9 @@ foreach ($defArray as $index => $value) {
 <table cellpadding="1" cellspacing="1" class="defender">
 <thead>
 <tr>
-<td class="role">Defender</td>
+<td class="role"><?php echo DEFENDER; ?></td>
 <td colspan="<?php echo (!empty($dataarray[$heroIndex])) ? 11 : 10; ?>">
-<?php echo ($index == 0) ? $defuser_url." from the village ".$deffrom_url : "Reinforcement"; ?>
+<?php echo ($index == 0) ? $defuser_url." ".FROM_THE_VILL." ".$deffrom_url : REINFORCEMENT; ?>
 </td>
 </tr>
 </thead>
@@ -310,7 +310,7 @@ if (!empty($dataarray[$heroIndex])) {
     echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" /></td>";
 }
 
-echo "</tr><tr><th>Troops</th>";
+echo "</tr><tr><th>".TROOPS."</th>";
 
 for ($i = $troopsStart; $i <= $troopsStart + 9; $i++) {
     echo ($dataarray[$i] == 0)
@@ -322,7 +322,7 @@ if (!empty($dataarray[$heroIndex])) {
     echo "<td>".$dataarray[$heroIndex]."</td>";
 }
 
-echo "<tr><th>Casualties</th>";
+echo "<tr><th>".CASUALTIES."</th>";
 
 for ($i = $troopsStart + 10; $i <= $troopsStart + 19; $i++) {
     echo ($dataarray[$i] == 0)

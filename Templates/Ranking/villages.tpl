@@ -22,7 +22,7 @@ if (!isset($_SESSION['search']) || !is_numeric($_SESSION['search'])) {
     <center>
         <font color="orange" size="2">
             <p class="error">
-                The village <b>"<?php echo htmlspecialchars($_SESSION['search'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"</b> does not exist.
+                <?php echo TZ_THE_VILLAGE; ?> <b>"<?php echo htmlspecialchars($_SESSION['search'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"</b> <?php echo TZ_DOES_NOT_EXIST; ?>
             </p>
         </font>
     </center>
@@ -36,14 +36,14 @@ if (!isset($_SESSION['search']) || !is_numeric($_SESSION['search'])) {
 <table cellpadding="1" cellspacing="1" id="villages" class="row_table_data">
     <thead>
         <tr>
-            <th colspan="5">The largest villages</th>
+            <th colspan="5"><?php echo TZ_THE_LARGEST_VILLAGES; ?></th>
         </tr>
         <tr>
             <td></td>
-            <td>Village</td>
-            <td>Player</td>
-            <td>Inhabitants</td>
-            <td>Coordinates</td>
+            <td><?php echo VILLAGE; ?></td>
+            <td><?php echo PLAYER; ?></td>
+            <td><?php echo INHABITANTS; ?></td>
+            <td><?php echo COORDINATES; ?></td>
         </tr>
     </thead>
 

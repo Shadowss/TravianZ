@@ -89,8 +89,8 @@ $total_gold = ($goldRes) ? (int)mysqli_fetch_assoc($goldRes)['totalgold'] : 0;
 <!-- ================= WORLD STATS ================= -->
 <table cellpadding="1" cellspacing="1" id="world_player" class="world">
 <thead>
-<tr><th colspan="2">World Stats</th></tr>
-<tr><td>Total Villages</td><td>Total Population</td></tr>
+<tr><th colspan="2"><?php echo TZ_WORLD_STATS; ?></th></tr>
+<tr><td><?php echo TZ_TOTAL_VILLAGES; ?></td><td><?php echo TZ_TOTAL_POPULATION; ?></td></tr>
 </thead>
 <tbody>
 <tr>
@@ -105,11 +105,11 @@ $total_gold = ($goldRes) ? (int)mysqli_fetch_assoc($goldRes)['totalgold'] : 0;
 <!-- ================= PLAYERS ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
 <thead>
-<tr><th colspan="2">Players</th></tr>
+<tr><th colspan="2"><?php echo PLAYERS; ?></th></tr>
 </thead>
 <tbody>
-<tr><th>Registered players</th><td><?= $users ?></td></tr>
-<tr><th>Active players</th><td><?= $active ?></td></tr>
+<tr><th><?php echo TZ_REGISTERED_PLAYERS; ?></th><td><?= $users ?></td></tr>
+<tr><th><?php echo ACTIVE_PLAYERS; ?></th><td><?= $active ?></td></tr>
 <tr><th>Players online</th><td><?= $online ?></td></tr>
 </tbody>
 </table>
@@ -117,8 +117,8 @@ $total_gold = ($goldRes) ? (int)mysqli_fetch_assoc($goldRes)['totalgold'] : 0;
 <!-- ================= TRIBES ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
 <thead>
-<tr><th colspan="3">Tribes</th></tr>
-<tr><td>Tribe</td><td>Registered</td><td>Percent</td></tr>
+<tr><th colspan="3"><?php echo TZ_TRIBES; ?></th></tr>
+<tr><td><?php echo TRIBE; ?></td><td><?php echo TZ_REGISTERED; ?></td><td><?php echo PERCENT; ?></td></tr>
 </thead>
 <tbody>
 
@@ -132,9 +132,9 @@ $teutonPct = ($users > 0) ? round(100 * $teuton / $users, 2) : 0;
 $gaulPct = ($users > 0) ? round(100 - $romanPct - $teutonPct, 2) : 0;
 ?>
 
-<tr><td>Romans</td><td><?= $roman ?></td><td><?= $users ? $romanPct.'%' : '---' ?></td></tr>
-<tr><td>Teutons</td><td><?= $teuton ?></td><td><?= $users ? $teutonPct.'%' : '---' ?></td></tr>
-<tr><td>Gauls</td><td><?= $gaul ?></td><td><?= $users ? $gaulPct.'%' : '---' ?></td></tr>
+<tr><td><?php echo TRIBE1; ?></td><td><?= $roman ?></td><td><?= $users ? $romanPct.'%' : '---' ?></td></tr>
+<tr><td><?php echo TRIBE2; ?></td><td><?= $teuton ?></td><td><?= $users ? $teutonPct.'%' : '---' ?></td></tr>
+<tr><td><?php echo TRIBE3; ?></td><td><?= $gaul ?></td><td><?= $users ? $gaulPct.'%' : '---' ?></td></tr>
 
 </tbody>
 </table>
@@ -151,7 +151,7 @@ Gold
 </thead>
 <tbody>
 <tr>
-<td>Gold</td>
+<td><?php echo GOLD; ?></td>
 <td><?= $total_gold ?></td>
 </tr>
 </tbody>
@@ -162,12 +162,12 @@ Gold
 <table cellpadding="1" cellspacing="1" class="world">
 <thead>
 <tr>
-    <th colspan="6">Troops</th>
+    <th colspan="6"><?php echo TROOPS; ?></th>
 </tr>
 <tr>
-    <td><img src="img/romenai.png"></td><td>Total</td>
-    <td><img src="img/germanai.png"></td><td>Total</td>
-    <td><img src="img/galai.png"></td><td>Total</td>
+    <td><img src="img/romenai.png"></td><td><?php echo TZ_TOTAL; ?></td>
+    <td><img src="img/germanai.png"></td><td><?php echo TZ_TOTAL; ?></td>
+    <td><img src="img/galai.png"></td><td><?php echo TZ_TOTAL; ?></td>
 </tr>
 </thead>
 
@@ -352,8 +352,8 @@ function u($units, $key) {
 <!-- ================= MISC ================= -->
 <table cellpadding="1" cellspacing="1" class="world">
 <thead>
-<tr><th colspan="3">Miscellaneous</th></tr>
-<tr><td>Attacks</td><td>Casualties</td><td>Date</td></tr>
+<tr><th colspan="3"><?php echo TZ_MISCELLANEOUS; ?></th></tr>
+<tr><td><?php echo TZ_ATTACKS; ?></td><td><?php echo CASUALTIES; ?></td><td><?php echo DATE; ?></td></tr>
 </thead>
 <tbody>
 

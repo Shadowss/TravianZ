@@ -17,9 +17,9 @@ $trainList = $technology->getTrainingList($unitId);
     <table cellpadding="1" cellspacing="1" class="build_details">
         <thead>
             <tr>
-                <td>Naam</td>
-                <td>Aantal</td>
-                <td>max</td>
+                <td><?php echo NAME; ?></td>
+                <td><?php echo TZ_NUMBER; ?></td>
+                <td><?php echo MAX; ?></td>
             </tr>
         </thead>
         <tbody>
@@ -31,11 +31,11 @@ $trainList = $technology->getTrainingList($unitId);
                         <span class="info">(Available: <?php echo $available;?>)</span>
                     </div>
                     <div class="details">
-                        <img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /><?php echo $costs['wood'];?>|
-                        <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $costs['clay'];?>|
-                        <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $costs['iron'];?>|
-                        <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $costs['crop'];?>|
-                        <img class="clock" src="img/x.gif" alt="duration" title="duration" /><?php echo $trainTime;?>
+                        <img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>" /><?php echo $costs['wood'];?>|
+                        <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>" /><?php echo $costs['clay'];?>|
+                        <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>" /><?php echo $costs['iron'];?>|
+                        <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>" /><?php echo $costs['crop'];?>|
+                        <img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>" /><?php echo $trainTime;?>
                     </div>
                 </td>
                 <td class="val">
@@ -49,7 +49,7 @@ $trainList = $technology->getTrainingList($unitId);
     </table>
 
     <p>
-        <input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" />
+        <input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="<?php echo TRAIN; ?>" />
     </p>
 
     <?php if (!empty($trainList)):
@@ -58,9 +58,9 @@ $trainList = $technology->getTrainingList($unitId);
     <table cellpadding="1" cellspacing="1" class="under_progress">
         <thead>
             <tr>
-                <td>Training</td>
-                <td>Duration</td>
-                <td>Finished</td>
+                <td><?php echo TRAINING; ?></td>
+                <td><?php echo DURATION; ?></td>
+                <td><?php echo FINISHED; ?></td>
             </tr>
         </thead>
         <tbody>

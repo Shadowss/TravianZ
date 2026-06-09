@@ -22,7 +22,7 @@ include('menu.tpl');
 </tr>
 
 <tr>
-	<td>Village</td>
+	<td><?php echo VILLAGE; ?></td>
 	<td><img class="r1" src="img/x.gif" alt=""></td>
 	<td><img class="r2" src="img/x.gif" alt=""></td>
 	<td><img class="r3" src="img/x.gif" alt=""></td>
@@ -106,7 +106,7 @@ foreach ($varray as $vil) {
 </tr>
 
 <tr class="sum">
-	<th>Sum</th>
+	<th><?php echo SUM; ?></th>
 
 	<td class="lum"><?php echo number_format(round($woodSUM)); ?></td>
 	<td class="clay"><?php echo number_format(round($claySUM)); ?></td>

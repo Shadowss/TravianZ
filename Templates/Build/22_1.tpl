@@ -27,7 +27,7 @@ $level = (int)$village->resarray['f'.$id];
                     <img class="r3" src="img/x.gif" title="<?php echo IRON;?>"/><?php echo (int)$res['iron'];?>|
                     <img class="r4" src="img/x.gif" title="<?php echo CROP;?>"/><?php echo (int)$res['crop'];?>|
                     <img class="clock" src="img/x.gif" title="<?php echo DURATION;?>"/><?php echo $time;?>
-                    <?php if ($showNpc):?>|<a href="build.php?gid=17&t=3&r1=<?php echo (int)$res['wood'];?>&r2=<?php echo (int)$res['clay'];?>&r3=<?php echo (int)$res['iron'];?>&r4=<?php echo (int)$res['crop'];?>" title="NPC trade"><img class="npc" src="img/x.gif"/></a><?php endif;?>
+                    <?php if ($showNpc):?>|<a href="build.php?gid=17&t=3&r1=<?php echo (int)$res['wood'];?>&r2=<?php echo (int)$res['clay'];?>&r3=<?php echo (int)$res['iron'];?>&r4=<?php echo (int)$res['crop'];?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif"/></a><?php endif;?>
                     <?php
                     if ($res['wood']>$village->maxstore||$res['clay']>$village->maxstore||$res['iron']>$village->maxstore) echo "<br><span class=\"none\">".EXPAND_WAREHOUSE1."</span>";
                     elseif ($res['crop']>$village->maxcrop) echo "<br><span class=\"none\">".EXPAND_GRANARY1."</span>";
@@ -61,28 +61,28 @@ $level = (int)$village->resarray['f'.$id];
     <thead><tr><td colspan="2"><?php echo PREREQUISITES;?></td></tr></thead>
     <tbody>
         <?php if (!$technology->meetRRequirement(2) &&!$technology->getTech(2)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u2" src="img/x.gif" alt="Praetorian"/><a onclick="return Popup(2,1);" href="#">Praetorian</a></div></td><td class="cond"><a href="#" onclick="return Popup(22,1);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 1</span><br><a href="#" onclick="return Popup(13,4);"><?php echo ARMOURY;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u2" src="img/x.gif" alt="<?php echo U2; ?>"/><a onclick="return Popup(2,1);" href="#"><?php echo U2; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(22,1);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 1</span><br><a href="#" onclick="return Popup(13,4);"><?php echo ARMOURY;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
         <?php endif;?>
         <?php if (!$technology->meetRRequirement(3) &&!$technology->getTech(3)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u3" src="img/x.gif" alt="Imperian"/><a onclick="return Popup(3,1);" href="#">Imperian</a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 5</span><br><a href="#" onclick="return Popup(12,4);"><?php echo BLACKSMITH;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u3" src="img/x.gif" alt="<?php echo U3; ?>"/><a onclick="return Popup(3,1);" href="#"><?php echo U3; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 5</span><br><a href="#" onclick="return Popup(12,4);"><?php echo BLACKSMITH;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
         <?php endif;?>
         <?php if (!$technology->meetRRequirement(4) &&!$technology->getTech(4)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u4" src="img/x.gif" alt="Equites Legati"/><a onclick="return Popup(4,1);" href="#">Equites Legati</a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 5</span><br><a href="#" onclick="return Popup(20,4);"><?php echo STABLE;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u4" src="img/x.gif" alt="<?php echo U4; ?>"/><a onclick="return Popup(4,1);" href="#"><?php echo U4; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 5</span><br><a href="#" onclick="return Popup(20,4);"><?php echo STABLE;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
         <?php endif;?>
         <?php if (!$technology->meetRRequirement(5) &&!$technology->getTech(5)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u5" src="img/x.gif" alt="Equites Imperatoris"/><a onclick="return Popup(5,1);" href="#">Equites Imperatoris</a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 5</span><br><a href="#" onclick="return Popup(20,4);"><?php echo STABLE;?></a> <span><?php echo LEVEL;?> 5</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u5" src="img/x.gif" alt="<?php echo U5; ?>"/><a onclick="return Popup(5,1);" href="#"><?php echo U5; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 5</span><br><a href="#" onclick="return Popup(20,4);"><?php echo STABLE;?></a> <span><?php echo LEVEL;?> 5</span></td></tr>
         <?php endif;?>
         <?php if (!$technology->meetRRequirement(6) &&!$technology->getTech(6)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u6" src="img/x.gif" alt="Equites Caesaris"/><a onclick="return Popup(6,1);" href="#">Equites Caesaris</a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 15</span><br><a href="#" onclick="return Popup(20,4);"><?php echo STABLE;?></a> <span><?php echo LEVEL;?> 10</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u6" src="img/x.gif" alt="<?php echo U6; ?>"/><a onclick="return Popup(6,1);" href="#"><?php echo U6; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 15</span><br><a href="#" onclick="return Popup(20,4);"><?php echo STABLE;?></a> <span><?php echo LEVEL;?> 10</span></td></tr>
         <?php endif;?>
         <?php if (!$technology->meetRRequirement(7) &&!$technology->getTech(7)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u7" src="img/x.gif" alt="Battering Ram"/><a onclick="return Popup(7,1);" href="#">Battering Ram</a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 10</span><br><a href="#" onclick="return Popup(21,4);"><?php echo WORKSHOP;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u7" src="img/x.gif" alt="<?php echo U7; ?>"/><a onclick="return Popup(7,1);" href="#"><?php echo U7; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 10</span><br><a href="#" onclick="return Popup(21,4);"><?php echo WORKSHOP;?></a> <span><?php echo LEVEL;?> 1</span></td></tr>
         <?php endif;?>
         <?php if (!$technology->meetRRequirement(8) &&!$technology->getTech(8)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u8" src="img/x.gif" alt="Fire Catapult"/><a onclick="return Popup(8,1);" href="#">Fire Catapult</a></div></td><td class="cond"><a href="#" onclick="return Popup(21,4);"><?php echo WORKSHOP;?></a> <span><?php echo LEVEL;?> 10</span><br><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 15</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u8" src="img/x.gif" alt="<?php echo U8; ?>"/><a onclick="return Popup(8,1);" href="#"><?php echo U8; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(21,4);"><?php echo WORKSHOP;?></a> <span><?php echo LEVEL;?> 10</span><br><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 15</span></td></tr>
         <?php endif;?>
         <?php if (!$technology->meetRRequirement(9) &&!$technology->getTech(9)):?>
-        <tr><td class="desc"><div class="tit"><img class="unit u9" src="img/x.gif" alt="Senator"/><a onclick="return Popup(9,1);" href="#">Senator</a></div></td><td class="cond"><a href="#" onclick="return Popup(16,4);"><?php echo RALLYPOINT;?></a> <span><?php echo LEVEL;?> 10</span><br><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 20</span></td></tr>
+        <tr><td class="desc"><div class="tit"><img class="unit u9" src="img/x.gif" alt="<?php echo U9; ?>"/><a onclick="return Popup(9,1);" href="#"><?php echo U9; ?></a></div></td><td class="cond"><a href="#" onclick="return Popup(16,4);"><?php echo RALLYPOINT;?></a> <span><?php echo LEVEL;?> 10</span><br><a href="#" onclick="return Popup(22,4);"><?php echo ACADEMY;?></a> <span><?php echo LEVEL;?> 20</span></td></tr>
         <?php endif;?>
     </tbody>
 </table>
@@ -93,7 +93,7 @@ $level = (int)$village->resarray['f'.$id];
     <thead><tr><td><?php echo RESEARCHING;?></td><td><?php echo DURATION;?></td><td><?php echo COMPLETE;?></td></tr></thead>
     <tbody>
     <?php foreach ($acares as $aca): $unit=(int)substr($aca['tech'],1,2); $name=$technology->getUnitName($unit); $date=$generator->procMtime($aca['timestamp']);?>
-        <tr><td class="desc"><img class="unit u<?php echo $unit;?>" src="img/x.gif" alt="<?php echo htmlspecialchars($name);?>"/><?php echo htmlspecialchars($name);?></td><td class="dur"><span id="timer<?php echo ++$session->timer;?>"><?php echo $generator->getTimeFormat($aca['timestamp']-time());?></span></td><td class="fin"><span><?php echo $date[1];?></span><span> hrs</span></td></tr>
+        <tr><td class="desc"><img class="unit u<?php echo $unit;?>" src="img/x.gif" alt="<?php echo htmlspecialchars($name);?>"/><?php echo htmlspecialchars($name);?></td><td class="dur"><span id="timer<?php echo ++$session->timer;?>"><?php echo $generator->getTimeFormat($aca['timestamp']-time());?></span></td><td class="fin"><span><?php echo $date[1];?></span><span> <?php echo TZ_HRS; ?></span></td></tr>
     <?php endforeach;?>
     </tbody>
 </table>

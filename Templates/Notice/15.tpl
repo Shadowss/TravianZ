@@ -54,14 +54,14 @@ if ($fromName != "[?]") {
 <thead>
 
 <tr>
-    <th>Subject:</th>
-    <th><?php echo $message->readingNotice['topic']; ?></th>
+    <th><?php echo SUBJECT; ?>:</th>
+    <th><?php echo tz_loc_topic($message->readingNotice['topic']); ?></th>
 </tr>
 
 <tr>
     <?php $date = $generator->procMtime($message->readingNotice['time']); ?>
-    <td class="sent">Sent:</td>
-    <td>on <span><?php echo $date[0]." at ".$date[1]; ?></span> <span>hour</span></td>
+    <td class="sent"><?php echo TZ_SENT; ?></td>
+    <td><?php echo ON; ?> <span><?php echo $date[0]." at ".$date[1]; ?></span> <span><?php echo TZ_HOUR; ?></span></td>
 </tr>
 
 </thead>
@@ -75,9 +75,9 @@ if ($fromName != "[?]") {
 
 <thead>
 <tr>
-    <td class="role">Defender</td>
+    <td class="role"><?php echo DEFENDER; ?></td>
     <td colspan="<?php echo $colspan; ?>">
-        <?php echo $user_url; ?> from the village <?php echo $from_url; ?>
+        <?php echo $user_url; ?> <?php echo FROM_THE_VILL; ?> <?php echo $from_url; ?>
     </td>
 </tr>
 </thead>
@@ -102,7 +102,7 @@ if ($hasHero) {
     echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
 }
 
-echo "</tr><tr><th>Troops</th>";
+echo "</tr><tr><th>".TROOPS."</th>";
 
 // ======================== TROOPS ========================
 for ($i = 4; $i <= 13; $i++) {
@@ -116,7 +116,7 @@ if ($hasHero) {
 }
 
 // ======================== CASUALTIES ========================
-echo "<tr><th>Casualties</th>";
+echo "<tr><th>".CASUALTIES."</th>";
 
 for ($i = 14; $i <= 23; $i++) {
     echo ($dataarray[$i] == 0)

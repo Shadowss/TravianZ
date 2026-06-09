@@ -6,7 +6,7 @@ $level = (int)$village->resarray['f'.$id];
 ?>
 <div id="build" class="gid30">
     <a href="#" onClick="return Popup(30,4);" class="build_logo">
-        <img class="building g30" src="img/x.gif" alt="Great Stables" title="<?php echo GREATSTABLE;?>" />
+        <img class="building g30" src="img/x.gif" alt="<?php echo TZ_GREAT_STABLES; ?>" title="<?php echo GREATSTABLE;?>" />
     </a>
     <h1><?php echo GREATSTABLE;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo GREATSTABLE_DESC;?><br /></p>
@@ -19,7 +19,7 @@ $level = (int)$village->resarray['f'.$id];
             <thead><tr><td><?php echo NAME;?></td><td><?php echo QUANTITY;?></td><td><?php echo MAX;?></td></tr></thead>
             <tbody><?php include("30_train.tpl");?></tbody>
         </table>
-        <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" /></p>
+        <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="<?php echo TRAIN; ?>" /></p>
     </form>
     <?php else:?>
         <b><?php echo TRAINING_COMMENCE_GREATSTABLE;?></b><br />

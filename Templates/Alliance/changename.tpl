@@ -40,7 +40,7 @@ include("alli_menu.tpl");
 
 <thead>
 <tr>
-    <th colspan="2">Change name</th>
+    <th colspan="2"><?php echo TZ_CHANGE_NAME; ?></th>
 </tr>
 </thead>
 
@@ -48,7 +48,7 @@ include("alli_menu.tpl");
 
 <!-- TAG -->
 <tr>
-    <th>Tag</th>
+    <th><?php echo TAG; ?></th>
     <td>
         <input class="tag text"
                name="ally1"
@@ -63,7 +63,7 @@ include("alli_menu.tpl");
 
 <!-- NAME -->
 <tr>
-    <th>Name</th>
+    <th><?php echo NAME; ?></th>
     <td>
         <input class="name text"
                name="ally2"
@@ -82,7 +82,7 @@ include("alli_menu.tpl");
 <!-- SUBMIT -->
 <p>
     <button type="submit" name="s1" id="btn_ok" class="trav_buttons">
-        Ok
+        <?php echo TZ_OK_2; ?>
     </button>
 </p>
 

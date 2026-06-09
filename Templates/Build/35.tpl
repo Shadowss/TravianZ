@@ -12,7 +12,7 @@ $current = $level > 0 ? (int)$bid35[$level]['attri'] : 0;
 ?>
 <div id="build" class="gid35">
     <a href="#" onClick="return Popup(35,4);" class="build_logo">
-        <img class="building g35" src="img/x.gif" alt="Brewery" title="<?php echo BREWERY;?>" />
+        <img class="building g35" src="img/x.gif" alt="<?php echo BREWERY; ?>" title="<?php echo BREWERY;?>" />
     </a>
     <h1><?php echo BREWERY;?> <span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo BREWERY_DESC;?></p>

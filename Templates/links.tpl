@@ -74,7 +74,7 @@ if ($query && mysqli_num_rows($query) > 0) {
 
         <tr>
             <td colspan="3">
-                <a href="spieler.php?s=2">Links:</a>
+                <a href="spieler.php?s=2"><?php echo TZ_LINKS; ?></a>
             </td>
         </tr>
 

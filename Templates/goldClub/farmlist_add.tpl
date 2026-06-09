@@ -1,5 +1,5 @@
 <div id="raidListCreate">
-    <h4>Create a new list</h4>
+    <h4><?php echo TZ_CREATE_A_NEW_LIST; ?></h4>
 
     <form action="build.php?gid=16&t=99" method="post">
 
@@ -18,14 +18,14 @@
                     <tbody>
 
                     <tr>
-                        <th>Name:</th>
+                        <th><?php echo TZ_NAME; ?></th>
                         <td>
                             <input class="text" id="name" name="name" type="text">
                         </td>
                     </tr>
 
                     <tr>
-                        <th>Village:</th>
+                        <th><?php echo TZ_VILLAGE; ?></th>
                         <td>
                             <select id="did" name="did">
 
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <button class="trav_buttons" type="submit" value="create">Create</button>
+        <button class="trav_buttons" type="submit" value="create"><?php echo TZ_CREATE; ?></button>
 
     </form>
 </div>

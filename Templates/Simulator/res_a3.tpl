@@ -5,25 +5,25 @@
 						<td class="role">
 							Attacker
 						</td><td>
-								<img src="img/x.gif" class="unit u21" title="Phalanx" alt="Phalanx" />
+								<img src="img/x.gif" class="unit u21" title="<?php echo U21; ?>" alt="<?php echo U21; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u22" title="Swordsman" alt="Swordsman" />
+								<img src="img/x.gif" class="unit u22" title="<?php echo U22; ?>" alt="<?php echo U22; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u23" title="Pathfinder" alt="Pathfinder" />
+								<img src="img/x.gif" class="unit u23" title="<?php echo U23; ?>" alt="<?php echo U23; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u24" title="Theutates Thunder" alt="Theutates Thunder" />
+								<img src="img/x.gif" class="unit u24" title="<?php echo U24; ?>" alt="<?php echo U24; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u25" title="Druidrider" alt="Druidrider" />
+								<img src="img/x.gif" class="unit u25" title="<?php echo U25; ?>" alt="<?php echo U25; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u26" title="Haeduan" alt="Haeduan" />
+								<img src="img/x.gif" class="unit u26" title="<?php echo U26; ?>" alt="<?php echo U26; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u27" title="Ram" alt="Ram" />
+								<img src="img/x.gif" class="unit u27" title="<?php echo U17; ?>" alt="<?php echo U17; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u28" title="Trebuchet" alt="Trebuchet" />
+								<img src="img/x.gif" class="unit u28" title="<?php echo U28; ?>" alt="<?php echo U28; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u29" title="Chieftain" alt="Chieftain" />
+								<img src="img/x.gif" class="unit u29" title="<?php echo U29; ?>" alt="<?php echo U29; ?>" />
 							</td><td>
-								<img src="img/x.gif" class="unit u30" title="Settler" alt="Settler" />
+								<img src="img/x.gif" class="unit u30" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" />
 							</td></tr>
 				</thead>
 				<tbody>

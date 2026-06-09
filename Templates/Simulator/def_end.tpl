@@ -1,22 +1,22 @@
 <tbody>
 		<tr>
-			<th>Other</th>
+			<th><?php echo TZ_OTHER; ?></th>
 
 		</tr>
 		<tr>
 			<td class="details">
 				<table cellpadding="1" cellspacing="1">
 					<tr>
-					    <td class="ico"><img src="img/x.gif" class="unit uhab" alt="Population" title="Population" /></td>
-					    <td class="desc">Population</td>
-					    <td class="value"><input class="text" type="text" name="ew2" value="<?php echo $form->getValue('ew2')==""? 1 : $form->getValue('ew2'); ?>" maxlength="4" title="number Population" /></td>
+					    <td class="ico"><img src="img/x.gif" class="unit uhab" alt="<?php echo POP; ?>" title="<?php echo POP; ?>" /></td>
+					    <td class="desc"><?php echo POP; ?></td>
+					    <td class="value"><input class="text" type="text" name="ew2" value="<?php echo $form->getValue('ew2')==""? 1 : $form->getValue('ew2'); ?>" maxlength="4" title="<?php echo TZ_NUMBER; ?> <?php echo POP; ?>" /></td>
 
 					    <td class="research"></td>
 				    </tr>
 					<tr>
-					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="Stonemason's Lodge" title="Stonemason's Lodge" /></td>
-					    <td class="desc" title="Stonemason's Lodge">Stonemason's Lodge</td>
-					    <td class="value"><input class="text" type="text" name="stonemason" value="<?php echo $form->getValue('stonemason')==""? 0 : $form->getValue('stonemason'); ?>" maxlength="2" title="Level Stonemason's Lodge" /></td>
+					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="<?php echo TZ_STONEMASON_S_LODGE; ?>" title="<?php echo TZ_STONEMASON_S_LODGE; ?>" /></td>
+					    <td class="desc" title="<?php echo TZ_STONEMASON_S_LODGE; ?>"><?php echo TZ_STONEMASON_S_LODGE; ?></td>
+					    <td class="value"><input class="text" type="text" name="stonemason" value="<?php echo $form->getValue('stonemason')==""? 0 : $form->getValue('stonemason'); ?>" maxlength="2" title="<?php echo LEVEL; ?> <?php echo TZ_STONEMASON_S_LODGE; ?>" /></td>
 					    <td class="research"></td>
 				    </tr>
                     <?php
@@ -63,15 +63,15 @@
                     }
                     ?>
                         <tr>
-					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="Palace" title="Palace" /></td>
-					    <td class="desc" title="Palace/Residence">Palace</td>
-					    <td class="value"><input class="text" type="text" name="palast" value="<?php echo $form->getValue('palast')==""? 0 : $form->getValue('palast'); ?>" maxlength="2" title="level Palace" /></td>
+					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="<?php echo PALACE; ?>" title="<?php echo PALACE; ?>" /></td>
+					    <td class="desc" title="<?php echo TZ_PALACE_RESIDENCE; ?>"><?php echo PALACE; ?></td>
+					    <td class="value"><input class="text" type="text" name="palast" value="<?php echo $form->getValue('palast')==""? 0 : $form->getValue('palast'); ?>" maxlength="2" title="<?php echo LEVEL; ?> <?php echo PALACE; ?>" /></td>
 					    <td class="research"></td>
 				    </tr>
 				    <tr>
-						<td class="ico"><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero" /></td>
-						<td class="desc">Hero (def bonus)</td>
-						<td class="value"><input class="text" type="text" name="h_def_bonus" value="<?php echo $form->getValue('h_def_bonus')==""? 0 : $form->getValue('h_def_bonus'); ?>" maxlength="4" title="Hero (def bonus)" /></td>
+						<td class="ico"><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>" alt="<?php echo U0; ?>" /></td>
+						<td class="desc"><?php echo TZ_HERO_DEF_BONUS; ?></td>
+						<td class="value"><input class="text" type="text" name="h_def_bonus" value="<?php echo $form->getValue('h_def_bonus')==""? 0 : $form->getValue('h_def_bonus'); ?>" maxlength="4" title="<?php echo TZ_HERO_DEF_BONUS; ?>" /></td>
 						<td class="research"></td>
 				    </tr>
 					

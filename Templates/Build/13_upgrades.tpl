@@ -46,11 +46,11 @@ $end = $session->tribe * 10 - 2;
 
                 <?php if ($current < 20 && $next):?>
                 <div class="details">
-                    <img class="r1" src="img/x.gif" alt="Lumber" title="Lumber"> <?= $next['wood']?>|
-                    <img class="r2" src="img/x.gif" alt="Clay" title="Clay"> <?= $next['clay']?>|
-                    <img class="r3" src="img/x.gif" alt="Iron" title="Iron"> <?= $next['iron']?>|
-                    <img class="r4" src="img/x.gif" alt="Crop" title="Crop"> <?= $next['crop']?>|
-                    <img class="clock" src="img/x.gif" alt="duration" title="duration">
+                    <img class="r1" src="img/x.gif" alt="<?php echo LUMBER; ?>" title="<?php echo LUMBER; ?>"> <?= $next['wood']?>|
+                    <img class="r2" src="img/x.gif" alt="<?php echo CLAY; ?>" title="<?php echo CLAY; ?>"> <?= $next['clay']?>|
+                    <img class="r3" src="img/x.gif" alt="<?php echo IRON; ?>" title="<?php echo IRON; ?>"> <?= $next['iron']?>|
+                    <img class="r4" src="img/x.gif" alt="<?php echo CROP; ?>" title="<?php echo CROP; ?>"> <?= $next['crop']?>|
+                    <img class="clock" src="img/x.gif" alt="<?php echo DURATION; ?>" title="<?php echo DURATION; ?>">
                     <?= $generator->getTimeFormat(round($next['time'] * $arAttri / SPEED))?>
 
                     <?php
@@ -58,8 +58,8 @@ $end = $session->tribe * 10 - 2;
                     $canNpc = $session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1 && $village->atotal >= $totalRequired;
                  ?>
                     <?php if ($canNpc):?>
-                        |<a href="build.php?gid=17&t=3&r1=<?= $next['wood']?>&r2=<?= $next['clay']?>&r3=<?= $next['iron']?>&r4=<?= $next['crop']?>" title="NPC trade">
-                            <img class="npc" src="img/x.gif" alt="NPC trade" title="NPC trade">
+                        |<a href="build.php?gid=17&t=3&r1=<?= $next['wood']?>&r2=<?= $next['clay']?>&r3=<?= $next['iron']?>&r4=<?= $next['crop']?>" title="<?php echo NPC_TRADE; ?>">
+                            <img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>" title="<?php echo NPC_TRADE; ?>">
                         </a>
                     <?php endif;?>
 
@@ -136,7 +136,7 @@ $end = $session->tribe * 10 - 2;
                 <?php if ($count > 1):?><span class="none"> <?= WAITING?></span><?php endif;?>
             </td>
             <td class="dur"><span id="timer<?= ++$session->timer?>"><?= $generator->getTimeFormat($arms['timestamp'] - time())?></span></td>
-            <td class="fin"><span><?= $date[1]?></span><span> hrs</span></td>
+            <td class="fin"><span><?= $date[1]?></span><span> <?php echo TZ_HRS; ?></span></td>
         </tr>
     <?php endforeach;?>
     </tbody>

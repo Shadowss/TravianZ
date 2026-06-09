@@ -28,7 +28,7 @@ $outgoing = $database->getMovement(3, $village->wid, 0);
     <tbody class="units">
         <tr><th>&nbsp;</th>
             <?php for($i=$start;$i<$start+10;$i++):?><td><img src="img/x.gif" class="unit u<?= $i?>" title="<?= $technology->getUnitName($i)?>"></td><?php endfor;?>
-            <?php if($m['t11']):?><td><img src="img/x.gif" class="unit uhero" title="Hero"></td><?php endif;?>
+            <?php if($m['t11']):?><td><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>"></td><?php endif;?>
         </tr>
         <tr><th><?= TROOPS?></th>
             <?php for($i=1;$i<($m['t11']?12:11);$i++): $v = isset($m['t'.$i])? $m['t'.$i] : 0;?><td class="<?= $v==0?'none':''?>"><?= $v?></td><?php endfor;?>

@@ -21,16 +21,16 @@ $canBeMoved = $forumData['forum_area'] == 1 && $session->access == 9;
 	<input type="hidden" name="edittopic" value="1">
 	<table cellpadding="1" cellspacing="1" id="edit_topic"><thead>
 		<tr>
-	        <td colspan="2">Edit topic</td>
+	        <td colspan="2"><?php echo TZ_EDIT_TOPIC; ?></td>
 		</tr>
 		</thead><tbody>
 		<tr>
-			<th>Thread</th>
+			<th><?php echo TZ_THREAD; ?></th>
 			<td><input class="text" type="Text" name="thema" value="<?php echo $title; ?>" maxlength="35"></td>
 		</tr>
 		<?php if($canBeMoved){?>
 		<tr>
-			<td>Move topic</td>
+			<td><?php echo TZ_MOVE_TOPIC; ?></td>
 			<td><select class="dropdown" name="fid">
 <?php
 	$show_cat = $database->ForumCat($forumData['alliance']);

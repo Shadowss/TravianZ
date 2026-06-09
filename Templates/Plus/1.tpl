@@ -14,15 +14,15 @@ $currency = defined('PAYPAL_CURRENCY') ? PAYPAL_CURRENCY : 'EUR';
 $payEmail = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
 ?>
 <table class="rate_details lang_ltr lang_de" cellpadding="1" cellspacing="1">
-	<thead><tr><th colspan="2">Gold Shop</th></tr></thead>
+	<thead><tr><th colspan="2"><?php echo GOLD_SHOP; ?></th></tr></thead>
 	<tbody>
 		<tr>
-			<td class="pic"><img src="img/bezahlung/Travian_verdienen.jpg" style="width:99px;height:99px;" alt="Gold Shop" /><div>Gold Shop</div></td>
+			<td class="pic"><img src="img/bezahlung/Travian_verdienen.jpg" style="width:99px;height:99px;" alt="<?php echo GOLD_SHOP; ?>" /><div><?php echo GOLD_SHOP; ?></div></td>
 			<td class="desc">
-				Basically, we reserve the ordered amount of gold immediately after the payment. If there are any problems, please send an email to our 
-				<a href="mailto:<?= $payEmail ?>">payment account</a>.<br><br>
-				<b>Username<br>Payment Method<br>Ordered Package<br>Date and time</b><br><br>
-				We strive to ensure speedy processing!
+				<?php echo TZ_ML_GOLD_RESERVE; ?> 
+				<a href="mailto:<?= $payEmail ?>"><?php echo TZ_PAYMENT_ACCOUNT; ?></a>.<br><br>
+				<b><?php echo TZ_USERNAME; ?><br><?php echo PAYMENT_METHOD; ?><br><?php echo TZ_ORDERED_PACKAGE; ?><br><?php echo TZ_DATE_AND_TIME; ?></b><br><br>
+				<?php echo TZ_WE_STRIVE_TO_ENSURE_SPEEDY_PROCESS; ?>
 			</td>
 		</tr>
 	</tbody>
@@ -41,6 +41,6 @@ $payEmail = defined('PAYPAL_EMAIL') ? PAYPAL_EMAIL : 'novgorodschi@icloud.com';
     </table>
 <?php endforeach; ?>
 <div class="clear"></div>
-<div style="padding:10px;font-style:italic;font-size:10px;color:#F00;"><b>None of the packages are refundable!</b></div>
+<div style="padding:10px;font-style:italic;font-size:10px;color:#F00;"><b><?php echo TZ_NONE_OF_THE_PACKAGES_ARE_REFUNDABL; ?></b></div>
 </div>
 </div>

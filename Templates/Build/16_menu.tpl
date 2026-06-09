@@ -11,6 +11,6 @@ $isGold = ($t === 99 && $session->goldclub);
     <a href="a2b.php"><?= SEND_TROOPS ?></a> |
     <a href="warsim.php"><?= Q20_RESP1 ?></a>
     <?php if ($session->goldclub == 1): ?> |
-        <a href="build.php?id=<?= $id ?>&amp;t=99" <?= $isGold ? 'class="selected"' : '' ?>>Gold Club</a>
+        <a href="build.php?id=<?= $id ?>&amp;t=99" <?= $isGold ? 'class="selected"' : '' ?>><?php echo GOLD_CLUB; ?></a>
     <?php endif; ?>
 </div>

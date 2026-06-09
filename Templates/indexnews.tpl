@@ -20,5 +20,5 @@
 #################################################################################
 
 ?>
-<p class="date">[Release by: TravianZ]</p>
-<p>Thank you for using our version!</p>
+<p class="date"><?php echo TZ_RELEASE_BY_TRAVIANZ; ?></p>
+<p><?php echo TZ_THANK_YOU_FOR_USING_OUR_VERSION; ?></p>

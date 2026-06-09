@@ -11,7 +11,7 @@ $level = (int)$village->resarray['f'.$id];
 ?>
 <div id="build" class="gid40">
     <a href="#" onClick="return Popup(40,4);" class="build_logo">
-        <img class="building g40" src="img/x.gif" alt="World Wonder" title="<?php echo WORLD_WONDER;?>" />
+        <img class="building g40" src="img/x.gif" alt="<?php echo WORLD_WONDER; ?>" title="<?php echo WORLD_WONDER;?>" />
     </a>
     <h1><?php echo WONDER;?><br /><span class="level"><?php echo LEVEL;?> <?php echo $level;?></span></h1>
     <p class="build_desc"><?php echo WONDER_DESC;?></p>
@@ -26,7 +26,7 @@ $level = (int)$village->resarray['f'.$id];
             <input class="text" name="wwname" id="wwname" <?php echo $disabled;?> value="<?php echo htmlspecialchars($wwname);?>" maxlength="20">
         </center>
         <p class="btn">
-            <button type="submit" tabindex="9" name="s1" id="btn_ok" class="trav_buttons" <?php echo $disabled;?> alt="OK">Ok</button>
+            <button type="submit" tabindex="9" name="s1" id="btn_ok" class="trav_buttons" <?php echo $disabled;?> alt="OK"><?php echo TZ_OK_2; ?></button>
         </p>
     </form>
 

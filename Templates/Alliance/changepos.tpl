@@ -80,16 +80,16 @@ include("alli_menu.tpl");
 <table cellpadding="1" cellspacing="1" id="position" class="small_option">
 <thead>
 <tr>
-    <th colspan="2">Assign to position</th>
+    <th colspan="2"><?php echo TZ_ASSIGN_TO_POSITION; ?></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-    <th>Name:</th>
+    <th><?php echo TZ_NAME; ?></th>
     <td><?php echo htmlspecialchars($playername, ENT_QUOTES, 'UTF-8');?></td>
 </tr>
 <tr>
-    <th>Position:</th>
+    <th><?php echo TZ_POSITION; ?></th>
     <td>
         <input class="name text"
                type="text"
@@ -106,7 +106,7 @@ include("alli_menu.tpl");
 <table cellpadding="1" cellspacing="1" id="rights" class="small_option">
 <thead>
 <tr>
-    <th colspan="2">Assign rights</th>
+    <th colspan="2"><?php echo TZ_ASSIGN_RIGHTS; ?></th>
 </tr>
 </thead>
 <tbody>
@@ -128,7 +128,7 @@ foreach ($map as $r) {
 </table>
 <?php } else {?>
 <!-- Liderul isi editeaza doar rank-ul -->
-<p style="margin:10px 0;color:#666;">As a leader, you can only change your title. Your rights remain at their maximum.</p>
+<p style="margin:10px 0;color:#666;"><?php echo TZ_AS_A_LEADER_YOU_CAN_ONLY_CHANGE_YO; ?></p>
 <?php
 // pastram drepturile ca hidden ca allianz.php sa nu le reseteze la 0
 foreach ($map as $r) {

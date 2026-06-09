@@ -27,21 +27,21 @@
 	<table cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
-			<th>Top 10 players<div id="submenu"><a title="Top 10" href="statistiken.php?id=7"><img class="active btn_top10" src="img/x.gif" alt="Top 10"></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender"></a><a title="attacker" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="attacker"></a></div><div id="submenu2"></div></th>
+			<th><?php echo TZ_TOP_10_PLAYERS; ?><div id="submenu"><a title="<?php echo TZ_TOP_10; ?>" href="statistiken.php?id=7"><img class="active btn_top10" src="img/x.gif" alt="<?php echo TZ_TOP_10; ?>"></a><a title="<?php echo DEFENDER; ?>" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="<?php echo DEFENDER; ?>"></a><a title="<?php echo ATTACKER; ?>" href="statistiken.php?id=31"><img class="btn_off" src="img/x.gif" alt="<?php echo ATTACKER; ?>"></a></div><div id="submenu2"></div></th>
 		</tr>
 	</thead>
 </table>
 <table cellpadding="1" cellspacing="1" id="top10_offs" class="top10 row_table_data">
 	<thead>
 		<tr>
-			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="Instructions" title="Instructions">
+			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="<?php echo INSTRUCT; ?>" title="<?php echo INSTRUCT; ?>">
 			</th>
-			<th colspan="2">Attackers of the week</th>
+			<th colspan="2"><?php echo ATT_W_M; ?></th>
 		</tr>
 		<tr>
-			<td>No.</td>
-			<td>Player</td>
-			<td>Points</td>
+			<td><?php echo TZ_NO; ?></td>
+			<td><?php echo PLAYER; ?></td>
+			<td><?php echo POINTS; ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -88,14 +88,14 @@
 <table cellpadding="1" cellspacing="1" id="top10_defs" class="top10 row_table_data">
 	<thead>
 		<tr>
-			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="Instructions" title="Instructions">
+			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="<?php echo INSTRUCT; ?>" title="<?php echo INSTRUCT; ?>">
 			</th>
-			<th colspan="2">Defenders of the week</th>
+			<th colspan="2"><?php echo DEF_W_M; ?></th>
 		</tr>
 		<tr>
-			<td>No.</td>
-			<td>Player</td>
-			<td>Points</td>
+			<td><?php echo TZ_NO; ?></td>
+			<td><?php echo PLAYER; ?></td>
+			<td><?php echo POINTS; ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -143,14 +143,14 @@
 <table cellpadding="1" cellspacing="1" id="top10_climbers" class="top10 row_table_data">
 	<thead>
 		<tr>
-			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="Instructions" title="Instructions">
+			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="<?php echo INSTRUCT; ?>" title="<?php echo INSTRUCT; ?>">
 			</th>
-			<th colspan="2">Climbers of the week</th>
+			<th colspan="2"><?php echo TZ_CLIMBERS_OF_THE_WEEK; ?></th>
 		</tr>
 		<tr>
-			<td>No.</td>
-			<td>Player</td>
-			<td>Ranks</td>
+			<td><?php echo TZ_NO; ?></td>
+			<td><?php echo PLAYER; ?></td>
+			<td><?php echo RANKS; ?></td>
 		</tr>
 	</thead>
 	<tbody>
@@ -194,14 +194,14 @@
 <table cellpadding="1" cellspacing="1" id="top10_raiders" class="top10 row_table_data">
 	<thead>
 		<tr>
-			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="Instructions" title="Instructions">
+			<th onclick="return Popup(3,5)"><img src="img/x.gif" class="help" alt="<?php echo INSTRUCT; ?>" title="<?php echo INSTRUCT; ?>">
 			</th>
-			<th colspan="2">Robbers of the week</th>
+			<th colspan="2"><?php echo ROB_W_M; ?></th>
 		</tr>
 		<tr>
-			<td>No.</td>
-			<td>Player</td>
-			<td>Resources</td>
+			<td><?php echo TZ_NO; ?></td>
+			<td><?php echo PLAYER; ?></td>
+			<td><?php echo RESOURCES; ?></td>
 		</tr>
 	</thead>
 	<tbody>

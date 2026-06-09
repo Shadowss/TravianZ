@@ -61,7 +61,7 @@ while ($row = mysqli_fetch_array($farmlists)) {
 
     <div class="listTitleText">
         <a href="build.php?gid=16&t=99&action=deleteList&lid=<?php echo $lid; ?>">
-            <img class="del" src="img/x.gif" alt="delete" title="delete">
+            <img class="del" src="img/x.gif" alt="<?php echo DELETE; ?>" title="<?php echo DELETE; ?>">
         </a>
         <?php echo $lvname; ?> - <?php echo $lname; ?>
     </div>
@@ -76,11 +76,11 @@ while ($row = mysqli_fetch_array($farmlists)) {
             <thead>
             <tr>
                 <td></td>
-                <td>Village</td>
-                <td>Pop</td>
-                <td>Distance</td>
-                <td>Troops</td>
-                <td>Last raid</td>
+                <td><?php echo VILLAGE; ?></td>
+                <td><?php echo TZ_POP; ?></td>
+                <td><?php echo DISTANCE; ?></td>
+                <td><?php echo TROOPS; ?></td>
+                <td><?php echo TZ_LAST_RAID; ?></td>
                 <td></td>
             </tr>
             </thead>
@@ -239,7 +239,7 @@ if (mysqli_num_rows($getnotice) > 0) {
 </td>
 
 <td class="action">
-    <a class="arrow" href="build.php?id=39&t=99&action=showSlot&eid=<?php echo $id; ?>">edit</a>
+    <a class="arrow" href="build.php?id=39&t=99&action=showSlot&eid=<?php echo $id; ?>"><?php echo EDIT; ?></a>
 </td>
 
 </tr>
@@ -260,18 +260,18 @@ if (mysqli_num_rows($getnotice) > 0) {
 
 <div class="markAll">
     <input type="checkbox" onclick="Allmsg(this.form);">
-    <label>Select all</label>
+    <label><?php echo TZ_SELECT_ALL; ?></label>
 </div>
 
 <div class="addSlot">
-    <button type="button" onclick="window.location.href='?gid=16&t=99&action=addraid';">Add Raid</button>
-    <button type="submit">Start Raid</button>
+    <button type="button" onclick="window.location.href='?gid=16&t=99&action=addraid';"><?php echo TZ_ADD_RAID; ?></button>
+    <button type="submit"><?php echo TZ_START_RAID; ?></button>
 </div>
 
 <?php } ?>
 
 <div class="options">
-    <a class="arrow" href="build.php?gid=16&t=99&action=addList">Create a new list</a>
+    <a class="arrow" href="build.php?gid=16&t=99&action=addList"><?php echo TZ_CREATE_A_NEW_LIST; ?></a>
 </div>
 
 </form>

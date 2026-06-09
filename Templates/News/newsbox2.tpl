@@ -42,7 +42,7 @@ $serverStart = strtotime(START_DATE);
 $total = count($spawnTimeArray);
 ?>
 
-<h5><img src="img/en/t2/newsbox2.gif" alt="newsbox 2"></h5>
+<h5><img src="img/en/t2/newsbox2.gif" alt="<?php echo EDIT_NEWSBOX2; ?>"></h5>
 
 <div class="news">
 <table width="100%">

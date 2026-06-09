@@ -31,12 +31,12 @@ foreach($posts as $pos){
 	<table cellpadding="1" cellspacing="1" id="edit_post">
 		<thead>
 			<tr>
-				<th colspan="2">Edit answer</th>
+				<th colspan="2"><?php echo TZ_EDIT_ANSWER; ?></th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<th>Thread</th>
+				<th><?php echo TZ_THREAD; ?></th>
 				<td><?php echo $title; ?></td>
 
 			</tr>
@@ -48,47 +48,47 @@ foreach($posts as $pos){
 					<div bbArea="text" id="text_container" name="text_container">
 						<div id="text_toolbar" name="text_toolbar">
 							<a href="javascript:void(0);" bbType="d" bbTag="b">
-								<div title="bold" alt="bold" class="bbButton bbBold"></div>
+								<div title="<?php echo TZ_BOLD; ?>" alt="<?php echo TZ_BOLD; ?>" class="bbButton bbBold"></div>
 							</a> <a href="javascript:void(0);" bbType="d" bbTag="i">
-								<div title="italic" alt="italic" class="bbButton bbItalic"></div>
+								<div title="<?php echo TZ_ITALIC; ?>" alt="<?php echo TZ_ITALIC; ?>" class="bbButton bbItalic"></div>
 							</a> <a href="javascript:void(0);" bbType="d" bbTag="u">
-								<div title="underlined" alt="underlined"
+								<div title="<?php echo TZ_UNDERLINED; ?>" alt="<?php echo TZ_UNDERLINED; ?>"
 									class="bbButton bbUnderscore"></div>
 							</a> <a href="javascript:void(0);" bbType="d" bbTag="alliance">
-								<div title="Alliance" alt="Alliance" class="bbButton bbAlliance"></div>
+								<div title="<?php echo ALLIANCE; ?>" alt="<?php echo ALLIANCE; ?>" class="bbButton bbAlliance"></div>
 							</a> <a href="javascript:void(0);" bbType="d" bbTag="player">
-								<div title="Player" alt="Player" class="bbButton bbPlayer"></div>
+								<div title="<?php echo PLAYER; ?>" alt="<?php echo PLAYER; ?>" class="bbButton bbPlayer"></div>
 							</a> <a href="javascript:void(0);" bbType="d" bbTag="coor">
-								<div title="Coordinates" alt="Coordinates"
+								<div title="<?php echo COORDINATES; ?>" alt="<?php echo COORDINATES; ?>"
 									class="bbButton bbCoordinate"></div>
 							</a> <a href="javascript:void(0);" bbType="d" bbTag="report">
-								<div title="Report" alt="Report" class="bbButton bbReport"></div>
+								<div title="<?php echo REPORT; ?>" alt="<?php echo REPORT; ?>" class="bbButton bbReport"></div>
 							</a> <a href="javascript:void(0);" bbWin="resources"
 								id="text_resourceButton">
-								<div title="Resources" alt="Resources"
+								<div title="<?php echo RESOURCES; ?>" alt="<?php echo RESOURCES; ?>"
 									class="bbButton bbResource"></div>
 							</a> <a href="javascript:void(0);" bbWin="smilies"
 								id="text_smilieButton">
-								<div title="Smilies" alt="Smilies" class="bbButton bbSmilie"></div>
+								<div title="<?php echo TZ_SMILIES; ?>" alt="<?php echo TZ_SMILIES; ?>" class="bbButton bbSmilie"></div>
 							</a> <a href="javascript:void(0);" bbWin="troops"
 								id="text_troopButton">
-								<div title="Troops" alt="Troops" class="bbButton bbTroop"></div>
+								<div title="<?php echo TROOPS; ?>" alt="<?php echo TROOPS; ?>" class="bbButton bbTroop"></div>
 							</a> <a href="javascript:void(0);" id="text_previewButton"
 								bbArea="text">
-								<div title="Preview" alt="Preview" class="bbButton bbPreview"></div>
+								<div title="<?php echo TZ_PREVIEW; ?>" alt="<?php echo TZ_PREVIEW; ?>" class="bbButton bbPreview"></div>
 							</a>
 
 							<div class="clear"></div>
 							<div id="text_toolbarWindows">
 								<div id="text_resources" name="text_resources">
 									<a href="javascript:void(0);" bbType="o" bbTag="lumber"><img
-										src="img/x.gif" class="r1" title="Wood" alt="Wood" /></a> <a
+										src="img/x.gif" class="r1" title="<?php echo TZ_WOOD; ?>" alt="<?php echo TZ_WOOD; ?>" /></a> <a
 										href="javascript:void(0);" bbType="o" bbTag="clay"><img
-										src="img/x.gif" class="r2" title="Clay" alt="Clay" /></a> <a
+										src="img/x.gif" class="r2" title="<?php echo CLAY; ?>" alt="<?php echo CLAY; ?>" /></a> <a
 										href="javascript:void(0);" bbType="o" bbTag="iron"><img
-										src="img/x.gif" class="r3" title="Iron" alt="Iron" /></a> <a
+										src="img/x.gif" class="r3" title="<?php echo IRON; ?>" alt="<?php echo IRON; ?>" /></a> <a
 										href="javascript:void(0);" bbType="o" bbTag="crop"><img
-										src="img/x.gif" class="r4" title="Crop" alt="Crop" /></a>
+										src="img/x.gif" class="r4" title="<?php echo CROP; ?>" alt="<?php echo CROP; ?>" /></a>
 								</div>
 								<div id="text_smilies" name="text_smilies">
 									<a href="javascript:void(0);" bbType="s" bbTag="*aha*"><img
@@ -166,123 +166,123 @@ foreach($posts as $pos){
 								</div>
 								<div id="text_troops" name="text_troops">
 									<a href="javascript:void(0);" bbType="o" bbTag="tid1"><img
-										class="unit u1" src="img/x.gif" title="Legionnaire"
-										alt="Legionnaire" /></a><a href="javascript:void(0);"
+										class="unit u1" src="img/x.gif" title="<?php echo U1; ?>"
+										alt="<?php echo U1; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid2"><img class="unit u2" src="img/x.gif"
-										title="Praetorian" alt="Praetorian" /></a><a
+										title="<?php echo U2; ?>" alt="<?php echo U2; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid3"><img
-										class="unit u3" src="img/x.gif" title="Imperian"
-										alt="Imperian" /></a><a href="javascript:void(0);" bbType="o"
+										class="unit u3" src="img/x.gif" title="<?php echo U3; ?>"
+										alt="<?php echo U3; ?>" /></a><a href="javascript:void(0);" bbType="o"
 										bbTag="tid4"><img class="unit u4" src="img/x.gif"
-										title="Equites Legati" alt="Equites Legati" /></a><a
+										title="<?php echo U4; ?>" alt="<?php echo U4; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid5"><img
-										class="unit u5" src="img/x.gif" title="Equites Imperatoris"
-										alt="Equites Imperatoris" /></a><a href="javascript:void(0);"
+										class="unit u5" src="img/x.gif" title="<?php echo U5; ?>"
+										alt="<?php echo U5; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid6"><img class="unit u6" src="img/x.gif"
-										title="Equites Caesaris" alt="Equites Caesaris" /></a><a
+										title="<?php echo U6; ?>" alt="<?php echo U6; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid7"><img
-										class="unit u7" src="img/x.gif" title="Ram" alt="Ram" /></a><a
+										class="unit u7" src="img/x.gif" title="<?php echo U17; ?>" alt="<?php echo U17; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid8"><img
-										class="unit u8" src="img/x.gif" title="Fire Catapult"
-										alt="Fire Catapult" /></a><a href="javascript:void(0);"
+										class="unit u8" src="img/x.gif" title="<?php echo U8; ?>"
+										alt="<?php echo U8; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid9"><img class="unit u9" src="img/x.gif"
-										title="Senator" alt="Senator" /></a><a
+										title="<?php echo U9; ?>" alt="<?php echo U9; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid10"><img
-										class="unit u10" src="img/x.gif" title="Settler" alt="Settler" /></a><a
+										class="unit u10" src="img/x.gif" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid11"><img
-										class="unit u11" src="img/x.gif" title="Maceman" alt="Maceman" /></a><a
+										class="unit u11" src="img/x.gif" title="<?php echo TZ_MACEMAN; ?>" alt="<?php echo TZ_MACEMAN; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid12"><img
-										class="unit u12" src="img/x.gif" title="Spearman"
-										alt="Spearman" /></a><a href="javascript:void(0);" bbType="o"
+										class="unit u12" src="img/x.gif" title="<?php echo U12; ?>"
+										alt="<?php echo U12; ?>" /></a><a href="javascript:void(0);" bbType="o"
 										bbTag="tid13"><img class="unit u13" src="img/x.gif"
-										title="Axeman" alt="Axeman" /></a><a
+										title="<?php echo U13; ?>" alt="<?php echo U13; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid14"><img
-										class="unit u14" src="img/x.gif" title="Scout" alt="Scout" /></a><a
+										class="unit u14" src="img/x.gif" title="<?php echo U14; ?>" alt="<?php echo U14; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid15"><img
-										class="unit u15" src="img/x.gif" title="Paladin" alt="Paladin" /></a><a
+										class="unit u15" src="img/x.gif" title="<?php echo U15; ?>" alt="<?php echo U15; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid16"><img
-										class="unit u16" src="img/x.gif" title="Teutonic Knight"
-										alt="Teutonic Knight" /></a><a href="javascript:void(0);"
+										class="unit u16" src="img/x.gif" title="<?php echo U16; ?>"
+										alt="<?php echo U16; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid17"><img class="unit u17" src="img/x.gif"
-										title="Ram" alt="Ram" /></a><a href="javascript:void(0);"
+										title="<?php echo U17; ?>" alt="<?php echo U17; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid18"><img class="unit u18" src="img/x.gif"
-										title="Catapult" alt="Catapult" /></a><a
+										title="<?php echo U18; ?>" alt="<?php echo U18; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid19"><img
-										class="unit u19" src="img/x.gif" title="Chieftain"
-										alt="Chieftain" /></a><a href="javascript:void(0);" bbType="o"
+										class="unit u19" src="img/x.gif" title="<?php echo U29; ?>"
+										alt="<?php echo U29; ?>" /></a><a href="javascript:void(0);" bbType="o"
 										bbTag="tid20"><img class="unit u20" src="img/x.gif"
-										title="Settler" alt="Settler" /></a><a
+										title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid21"><img
-										class="unit u21" src="img/x.gif" title="Phalanx" alt="Phalanx" /></a><a
+										class="unit u21" src="img/x.gif" title="<?php echo U21; ?>" alt="<?php echo U21; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid22"><img
-										class="unit u22" src="img/x.gif" title="Swordsman"
-										alt="Swordsman" /></a><a href="javascript:void(0);" bbType="o"
+										class="unit u22" src="img/x.gif" title="<?php echo U22; ?>"
+										alt="<?php echo U22; ?>" /></a><a href="javascript:void(0);" bbType="o"
 										bbTag="tid23"><img class="unit u23" src="img/x.gif"
-										title="Pathfinder" alt="Pathfinder" /></a><a
+										title="<?php echo U23; ?>" alt="<?php echo U23; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid24"><img
-										class="unit u24" src="img/x.gif" title="Theutates Thunder"
-										alt="Theutates Thunder" /></a><a href="javascript:void(0);"
+										class="unit u24" src="img/x.gif" title="<?php echo U24; ?>"
+										alt="<?php echo U24; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid25"><img class="unit u25" src="img/x.gif"
-										title="Druidrider" alt="Druidrider" /></a><a
+										title="<?php echo U25; ?>" alt="<?php echo U25; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid26"><img
-										class="unit u26" src="img/x.gif" title="Haeduan" alt="Haeduan" /></a><a
+										class="unit u26" src="img/x.gif" title="<?php echo U26; ?>" alt="<?php echo U26; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid27"><img
-										class="unit u27" src="img/x.gif" title="Battering Ram"
-										alt="Battering Ram" /></a><a href="javascript:void(0);"
+										class="unit u27" src="img/x.gif" title="<?php echo U7; ?>"
+										alt="<?php echo U7; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid28"><img class="unit u28" src="img/x.gif"
-										title="Trebuchet" alt="Trebuchet" /></a><a
+										title="<?php echo U28; ?>" alt="<?php echo U28; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid29"><img
-										class="unit u29" src="img/x.gif" title="Chief" alt="Chief" /></a><a
+										class="unit u29" src="img/x.gif" title="<?php echo U19; ?>" alt="<?php echo U19; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid30"><img
-										class="unit u30" src="img/x.gif" title="Settler" alt="Settler" /></a><a
+										class="unit u30" src="img/x.gif" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid31"><img
-										class="unit u31" src="img/x.gif" title="Rat" alt="Rat" /></a><a
+										class="unit u31" src="img/x.gif" title="<?php echo U31; ?>" alt="<?php echo U31; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid32"><img
-										class="unit u32" src="img/x.gif" title="Spider" alt="Spider" /></a><a
+										class="unit u32" src="img/x.gif" title="<?php echo U32; ?>" alt="<?php echo U32; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid33"><img
-										class="unit u33" src="img/x.gif" title="Snake" alt="Snake" /></a><a
+										class="unit u33" src="img/x.gif" title="<?php echo U33; ?>" alt="<?php echo U33; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid34"><img
-										class="unit u34" src="img/x.gif" title="Bat" alt="Bat" /></a><a
+										class="unit u34" src="img/x.gif" title="<?php echo U34; ?>" alt="<?php echo U34; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid35"><img
-										class="unit u35" src="img/x.gif" title="Wild Boar"
-										alt="Wild Boar" /></a><a href="javascript:void(0);" bbType="o"
+										class="unit u35" src="img/x.gif" title="<?php echo U35; ?>"
+										alt="<?php echo U35; ?>" /></a><a href="javascript:void(0);" bbType="o"
 										bbTag="tid36"><img class="unit u36" src="img/x.gif"
-										title="Wolf" alt="Wolf" /></a><a href="javascript:void(0);"
+										title="<?php echo U36; ?>" alt="<?php echo U36; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid37"><img class="unit u37" src="img/x.gif"
-										title="Bear" alt="Bear" /></a><a href="javascript:void(0);"
+										title="<?php echo U37; ?>" alt="<?php echo U37; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid38"><img class="unit u38" src="img/x.gif"
-										title="Crocodile" alt="Crocodile" /></a><a
+										title="<?php echo U38; ?>" alt="<?php echo U38; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid39"><img
-										class="unit u39" src="img/x.gif" title="Tiger" alt="Tiger" /></a><a
+										class="unit u39" src="img/x.gif" title="<?php echo U39; ?>" alt="<?php echo U39; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid40"><img
-										class="unit u40" src="img/x.gif" title="Elephant"
-										alt="Elephant" /></a><a href="javascript:void(0);" bbType="o"
+										class="unit u40" src="img/x.gif" title="<?php echo U40; ?>"
+										alt="<?php echo U40; ?>" /></a><a href="javascript:void(0);" bbType="o"
 										bbTag="tid41"><img class="unit u41" src="img/x.gif"
-										title="Pikeman" alt="Pikeman" /></a><a
+										title="<?php echo U41; ?>" alt="<?php echo U41; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid42"><img
-										class="unit u42" src="img/x.gif" title="Thorned Warrior"
-										alt="Thorned Warrior" /></a><a href="javascript:void(0);"
+										class="unit u42" src="img/x.gif" title="<?php echo U42; ?>"
+										alt="<?php echo U42; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid43"><img class="unit u43" src="img/x.gif"
-										title="Guardsman" alt="Guardsman" /></a><a
+										title="<?php echo U43; ?>" alt="<?php echo U43; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid44"><img
-										class="unit u44" src="img/x.gif" title="Birds of Prey"
-										alt="Birds of Prey" /></a><a href="javascript:void(0);"
+										class="unit u44" src="img/x.gif" title="<?php echo U44; ?>"
+										alt="<?php echo U44; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid45"><img class="unit u45" src="img/x.gif"
-										title="Axerider" alt="Axerider" /></a><a
+										title="<?php echo U45; ?>" alt="<?php echo U45; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid46"><img
-										class="unit u46" src="img/x.gif" title="Natarian Knight"
-										alt="Natarian Knight" /></a><a href="javascript:void(0);"
+										class="unit u46" src="img/x.gif" title="<?php echo U46; ?>"
+										alt="<?php echo U46; ?>" /></a><a href="javascript:void(0);"
 										bbType="o" bbTag="tid47"><img class="unit u47" src="img/x.gif"
-										title="War Elephant" alt="War Elephant" /></a><a
+										title="<?php echo U47; ?>" alt="<?php echo U47; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid48"><img
-										class="unit u48" src="img/x.gif" title="Ballista"
-										alt="Ballista" /></a><a href="javascript:void(0);" bbType="o"
+										class="unit u48" src="img/x.gif" title="<?php echo U48; ?>"
+										alt="<?php echo U48; ?>" /></a><a href="javascript:void(0);" bbType="o"
 										bbTag="tid49"><img class="unit u49" src="img/x.gif"
-										title="Natarian Emperor" alt="Natarian Emperor" /></a><a
+										title="<?php echo U49; ?>" alt="<?php echo U49; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="tid50"><img
-										class="unit u50" src="img/x.gif" title="Settler" alt="Settler" /></a><a
+										class="unit u50" src="img/x.gif" title="<?php echo U10; ?>" alt="<?php echo U10; ?>" /></a><a
 										href="javascript:void(0);" bbType="o" bbTag="hero"><img
-										class="unit uhero" src="img/x.gif" title="Hero" alt="Hero" /></a>
+										class="unit uhero" src="img/x.gif" title="<?php echo U0; ?>" alt="<?php echo U0; ?>" /></a>
 								</div>
 							</div>
 						</div>
@@ -305,6 +305,5 @@ foreach($posts as $pos){
 
 </form>
 </p>
-<span style="color: #DD0000"><b>Warning:</b> you can't use the values <b>[message]</b>
-	or <b>[/message]</b> in your post because it can cause problem with
-	bbcode system.</span>
+<span style="color: #DD0000"><b><?php echo TZ_WARNING; ?></b> <?php echo TZ_YOU_CAN_T_USE_THE_VALUES; ?> <b>[message]</b>
+	or <b>[/message]</b> <?php echo TZ_IN_YOUR_POST_BECAUSE_IT_CAN_CAUSE; ?></span>

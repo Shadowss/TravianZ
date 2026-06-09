@@ -43,7 +43,7 @@ if (isset($_GET['z'])) {
                 </label>
             </td>
             <td class="vil">
-                <span>Village:</span>
+                <span><?php echo TZ_VILLAGE; ?></span>
                 <input class="text" name="dname" value="<?php echo htmlspecialchars($form->getValue('dname'), ENT_QUOTES); ?>" maxlength="20" type="text">
             </td>
         </tr>
@@ -54,7 +54,7 @@ if (isset($_GET['z'])) {
                     Normal attack
                 </label>
             </td>
-            <td class="or">or</td>
+            <td class="or"><?php echo constant('OR'); ?></td>
         </tr>
         <tr>
             <td class="sel">
@@ -74,7 +74,7 @@ if (isset($_GET['z'])) {
     </tbody>
 </table>
 
-<button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();">Ok</button>
+<button value="ok" name="s1" id="btn_ok" class="trav_buttons" alt="OK" onclick="this.disabled=true;this.form.submit();"><?php echo TZ_OK_2; ?></button>
 </form>
 <p class="error"><?php echo $form->getError('error'); ?></p>
 </div>

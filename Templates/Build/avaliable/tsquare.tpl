@@ -4,7 +4,7 @@
 			<td class="desc"><?php echo TOURNAMENTSQUARE_DESC ?></td>
 			<td rowspan="3" class="bimg">
 				<a href="#" onClick="return Popup(14,4);">
-				<img class="building g14" src="img/x.gif" alt="Tournament Square" title="Tournament Square" /></a>
+				<img class="building g14" src="img/x.gif" alt="<?php echo TOURNAMENTSQUARE; ?>" title="<?php echo TOURNAMENTSQUARE; ?>" /></a>
 			</td>
 		</tr>
 		<tr>

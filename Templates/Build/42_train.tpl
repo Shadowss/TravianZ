@@ -46,7 +46,7 @@ for ($i = $start; $i <= $end; $i++) {
                 $r3 = $unit['iron'] * $technology->maxUnitPlus($i);
                 $r4 = $unit['crop'] * $technology->maxUnitPlus($i);
             ?>
-            |<a href="build.php?gid=17&t=3&r1=<?php echo $r1;?>&r2=<?php echo $r2;?>&r3=<?php echo $r3;?>&r4=<?php echo $r4;?>" title="NPC trade"><img class="npc" src="img/x.gif" alt="NPC trade" /></a>
+            |<a href="build.php?gid=17&t=3&r1=<?php echo $r1;?>&r2=<?php echo $r2;?>&r3=<?php echo $r3;?>&r4=<?php echo $r4;?>" title="<?php echo NPC_TRADE; ?>"><img class="npc" src="img/x.gif" alt="<?php echo NPC_TRADE; ?>" /></a>
             <?php endif;?>
         </div>
     </td>

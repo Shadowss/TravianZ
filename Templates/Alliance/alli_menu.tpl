@@ -43,7 +43,7 @@ if ($session->alliance == $aid && $session->alliance > 0) {
 
     | <!-- Attacks -->
     <a href="allianz.php?s=3" <?php if ($s === 3) { echo 'class="selected"'; } ?>>
-        Attacks
+        <?php echo TZ_ATTACKS; ?>
     </a>
 
     | <!-- News -->
@@ -63,7 +63,7 @@ if ($session->alliance == $aid && $session->alliance > 0) {
     } else {
 ?>
     | <!-- Options disabled for sitter -->
-    <span class="none"><b>Options</b></span>
+    <span class="none"><b><?php echo OPTION; ?></b></span>
 <?php
     }
 ?>

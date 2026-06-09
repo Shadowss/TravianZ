@@ -13,7 +13,7 @@ $colspan = $hasHero ? 11 : 10;
         <td><img src="img/x.gif" class="unit u<?= $i ?>" title="<?= $technology->getUnitName($i) ?>" alt="<?= $technology->getUnitName($i) ?>"></td>
     <?php endfor; ?>
     <?php if ($hasHero): ?>
-        <td><img src="img/x.gif" class="unit uhero" title="Hero" alt="Hero"></td>
+        <td><img src="img/x.gif" class="unit uhero" title="<?php echo U0; ?>" alt="<?php echo U0; ?>"></td>
     <?php endif; ?>
 </tr>
 <tr><th><?= TROOPS ?></th>
@@ -30,5 +30,5 @@ $colspan = $hasHero ? 11 : 10;
 <tbody class="infos">
     <tr>
         <th><?= UPKEEP ?></th>
-        <td colspan="<?= $colspan ?>"><?= $technology->getUpkeep($village->unitarray, 0) ?><img class="r4" src="img/x.gif" title="Crop" alt="Crop"><?= PER_HR ?></td>
+        <td colspan="<?= $colspan ?>"><?= $technology->getUpkeep($village->unitarray, 0) ?><img class="r4" src="img/x.gif" title="<?php echo CROP; ?>" alt="<?php echo CROP; ?>"><?= PER_HR ?></td>
     </tr>
