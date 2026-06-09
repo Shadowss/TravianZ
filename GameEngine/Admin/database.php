@@ -92,15 +92,17 @@ class adm_DB {
         }
 
         $username = htmlspecialchars($username);
+        // proxy-aware (issue #185): log the real client IP behind a trusted reverse proxy
+        $realIp = \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
         if ($pwOk) {
             // upgrade la bcrypt dacă e necesar
             if (!$dbarray['is_bcrypt'] &&!$bcrypted) {
                 mysqli_query($this->connection, "UPDATE ". TB_PREFIX. "users SET password = '". password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]). "'". ($bcrypt_update_done? ", is_bcrypt = 1" : ""). " WHERE id = ". (int)$dbarray['id']);
             }
-            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,'X','$username logged in (IP: <b>". $_SERVER['REMOTE_ADDR']. "</b>)',". time(). ")");
+            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,'X','$username logged in (IP: <b>". $realIp. "</b>)',". time(). ")");
             return true;
         } else {
-            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,'X','<font color=\'red\'><b>IP: ". $_SERVER['REMOTE_ADDR']. " tried to log in with username <u> $username</u> but access was denied!</font></b>',". time(). ")");
+            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,'X','<font color=\'red\'><b>IP: ". $realIp. " tried to log in with username <u> $username</u> but access was denied!</font></b>',". time(). ")");
             return false;
         }
     }
@@ -317,7 +319,9 @@ class adm_DB {
         $dbarray = mysqli_fetch_array($result);
 
         if (!$dbarray) {
-            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,'X','<font color=\'red\'><b>IP: ". $_SERVER['REMOTE_ADDR']. " tried to log in with uid $uid but access was denied!</font></b>',". time(). ")");
+            // proxy-aware (issue #185)
+            $realIp = \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
+            mysqli_query($this->connection, "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0,'X','<font color=\'red\'><b>IP: ". $realIp. " tried to log in with uid $uid but access was denied!</font></b>',". time(). ")");
             return false;
         }
 
@@ -428,6 +432,88 @@ class adm_DB {
         $name = addslashes($database->getUserField($uid, 'username', 0));
         $q = "INSERT INTO ". TB_PREFIX. "banlist (`uid`, `name`, `reason`, `time`, `end`, `admin`, `active`) VALUES ($uid, '$name', '$reason', '$time', '$end', '$admin', '1');";
         mysqli_query($this->connection, $q);
+    }
+
+    /* ---------------- IP Ban / Unban (issue #185) ---------------- */
+
+    // Lazily creates the IP ban table so existing servers do not need a manual migration.
+    function ensureIpBanTable() {
+        mysqli_query($this->connection,
+            "CREATE TABLE IF NOT EXISTS `". TB_PREFIX. "banlist_ip` (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                `ip` varbinary(16) NOT NULL,
+                `ip_text` varchar(45) DEFAULT NULL,
+                `reason` varchar(100) DEFAULT NULL,
+                `time` int(11) UNSIGNED DEFAULT NULL,
+                `end` int(11) UNSIGNED DEFAULT NULL,
+                `admin` int(11) DEFAULT NULL,
+                `active` tinyint(1) UNSIGNED DEFAULT 1,
+                PRIMARY KEY (`id`),
+                UNIQUE KEY `ip` (`ip`),
+                KEY `active-end` (`active`,`end`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+    }
+
+    // $end is an absolute UNIX timestamp (0 = permanent).
+    function AddIpBan($ip, $end, $reason) {
+        $this->ensureIpBanTable();
+
+        $ip  = trim((string)$ip);
+        $bin = @inet_pton($ip);
+        if ($bin === false) {
+            return false; // invalid IP, ignore
+        }
+
+        $reason = substr((string)$reason, 0, 100);
+        $time   = time();
+        $end    = (int)$end;
+        $admin  = (int)$_SESSION['id'];
+        $ipText = $ip;
+
+        $stmt = $this->connection->prepare(
+            "INSERT INTO `". TB_PREFIX. "banlist_ip` (ip, ip_text, reason, time, end, admin, active)
+             VALUES (?,?,?,?,?,?,1)
+             ON DUPLICATE KEY UPDATE
+                ip_text = VALUES(ip_text), reason = VALUES(reason),
+                time = VALUES(time), end = VALUES(end), admin = VALUES(admin), active = 1"
+        );
+        if (!$stmt) {
+            return false;
+        }
+        $stmt->bind_param("sssiii", $bin, $ipText, $reason, $time, $end, $admin);
+        $ok = $stmt->execute();
+        $stmt->close();
+
+        $logIp = addslashes($ipText);
+        mysqli_query($this->connection,
+            "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0, $admin, 'Banned IP <b>$logIp</b>', $time)");
+
+        return $ok;
+    }
+
+    function DelIpBan($id) {
+        $id    = (int)$id;
+        $admin = (int)$_SESSION['id'];
+
+        $stmt = $this->connection->prepare(
+            "UPDATE `". TB_PREFIX. "banlist_ip` SET active = 0 WHERE id = ?");
+        if ($stmt) {
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $stmt->close();
+        }
+
+        mysqli_query($this->connection,
+            "INSERT INTO ". TB_PREFIX. "admin_log VALUES (0, $admin, 'Removed IP ban #$id', ". time(). ")");
+    }
+
+    function search_banned_ip() {
+        $this->ensureIpBanTable();
+        $now = time();
+        $q = "SELECT * FROM ". TB_PREFIX. "banlist_ip
+              WHERE active = 1 AND (end IS NULL OR end = 0 OR end > $now) ORDER BY id DESC";
+        $result = mysqli_query($this->connection, $q);
+        return $this->mysqli_fetch_all($result);
     }
 
     /* ---------------- Căutări ---------------- */

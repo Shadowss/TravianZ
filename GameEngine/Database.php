@@ -885,6 +885,39 @@ class MYSQLi_DB implements IDbConnection {
 		$q = "DELETE from " . TB_PREFIX . "activate where username = '$username'";
 		return mysqli_query($this->dblink,$q);
 	}
+
+	/**
+	 * IP ban lookup (issue #185).
+	 * Returns the active ban row for the given packed binary IP, or false.
+	 * Uses a prepared statement and tolerates the table not existing yet
+	 * (older installs): in that case it simply reports "not banned".
+	 *
+	 * @param string $ipBinary Packed IP (inet_pton output), 4 or 16 bytes.
+	 * @return array|false
+	 */
+	function ipBanActive($ipBinary) {
+		if (!is_string($ipBinary) || $ipBinary === '') {
+			return false;
+		}
+		try {
+			$now  = time();
+			$stmt = $this->dblink->prepare(
+				"SELECT id, ip_text, reason, end FROM `".TB_PREFIX."banlist_ip`
+				 WHERE ip = ? AND active = 1 AND (end IS NULL OR end = 0 OR end > ?) LIMIT 1"
+			);
+			if (!$stmt) {
+				return false; // table missing / prepare failed (non-throwing mysqli)
+			}
+			$stmt->bind_param("si", $ipBinary, $now);
+			$stmt->execute();
+			$res = $stmt->get_result();
+			$row = $res ? $res->fetch_assoc() : null;
+			$stmt->close();
+			return $row ?: false;
+		} catch (\Throwable $e) {
+			return false; // table missing (throwing mysqli) → treat as not banned
+		}
+	}
 	function deleteReinf($id) {
 	    list($id) = $this->escape_input((int) $id);
 

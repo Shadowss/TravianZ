@@ -53,7 +53,8 @@ class Logging {
 		if (LOG_LOGIN) {
 
 			if (empty($ip)) {
-				$ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+				// proxy-aware (issue #185): real client IP behind a trusted reverse proxy
+				$ip = \App\Utils\IpResolver::getClientIp() ?? ($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
 			}
 
 			list($ip) = $database->escape_input($ip);

@@ -53,8 +53,27 @@ if(isset($_POST['action']) && $_POST['action'] == 'addBan') {
     }
 }
 
+// ========================= HANDLE ADD IP BAN (issue #185) =========================
+if(isset($_POST['action']) && $_POST['action'] == 'addIpBan') {
+    $ip     = trim($_POST['ip'] ?? '');
+    $reason = trim($_POST['reason'] ?? '');
+    $time   = (int)($_POST['time'] ?? 0);
+
+    if(@inet_pton($ip) === false) {
+        $error = "Invalid IP address!";
+    } else {
+        $end = $time > 0 ? time() + $time : 0;
+        if($admin->AddIpBan($ip, $end, $reason)) {
+            $success = "IP <b>".htmlspecialchars($ip)."</b> has been banned successfully!";
+        } else {
+            $error = "Could not ban this IP!";
+        }
+    }
+}
+
 // ========================= DATA =========================
 $bannedUsers = $admin->search_banned();
+$bannedIps   = $admin->search_banned_ip();
 $banHistory = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."banlist WHERE active=0 ORDER BY id DESC LIMIT 50");
 ?>
 <style>
@@ -142,6 +161,58 @@ $banHistory = mysqli_query($database->dblink,"SELECT * FROM ".TB_PREFIX."banlist
             </div>
           </div>
         <?php }} else { echo '<div class="empty">No active bans</div>'; }?>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== IP BANS (issue #185) ===================== -->
+  <div class="ban-grid">
+    <!-- ADD IP BAN -->
+    <div class="ban-card">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2z" fill="#c0392b"/></svg>
+        Ban IP Address
+      </h3>
+      <form method="post" class="ban-form">
+        <input type="hidden" name="action" value="addIpBan">
+        <div class="row">
+          <input type="text" name="ip" placeholder="IPv4 or IPv6" required>
+          <select name="reason">
+            <?php foreach(['Pushing','Cheat','Hack','Bug','Bad Name','Multi Account','Swearing'] as $r){ echo "<option>$r</option>"; }?>
+          </select>
+        </div>
+        <div class="row">
+          <select name="time" style="flex:1">
+            <?php foreach([1,2,5,10,12] as $h) echo "<option value='".($h*3600)."'>$h hour/s</option>";
+                  foreach([1,2,5,10,30,50,90] as $d) echo "<option value='".($d*86400)."'>$d day/s</option>"; ?>
+            <option value="0">Forever</option>
+          </select>
+          <button type="submit">Ban IP</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ACTIVE IP BANS -->
+    <div class="ban-card">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#e74c3c"/></svg>
+        Active IP Bans (<?php echo count($bannedIps);?>)
+      </h3>
+      <div class="ban-list">
+        <?php if($bannedIps){ foreach($bannedIps as $b){
+            $end = $b['end'] ? date("d.m H:i",$b['end']) : '&infin;';
+        ?>
+          <div class="ban-item">
+            <div>
+              <div class="user"><?php echo htmlspecialchars($b['ip_text']);?></div>
+              <div class="meta"><?php echo date("d.m H:i",$b['time']);?> &rarr; <?php echo $end;?></div>
+            </div>
+            <div>
+              <span class="reason"><?php echo htmlspecialchars($b['reason']);?></span>
+              <a class="del" href="?p=ban&action=delIpBan&id=<?php echo (int)$b['id'];?>" onclick="return confirm('Unban this IP?')" title="Unban IP">&#10005;</a>
+            </div>
+          </div>
+        <?php }} else { echo '<div class="empty">No active IP bans</div>'; }?>
       </div>
     </div>
   </div>
