@@ -18,15 +18,24 @@
 ## --------------------------------------------------------------------------- ##
 #################################################################################
 include_once("../GameEngine/Ranking.php");
-if($_GET['uid']) {
+
+if(isset($_GET['uid']) && (int)$_GET['uid'] > 0) {
     $uid = (int)$_GET['uid'];
+    $target = $database->getUserArray($uid, 1);
+    
+    if(!$target) {
+        include("404.tpl");
+        exit;
+    }
+
     $varray = $database->getProfileVillages($uid);
-    if($user) {
-        $totalpop = 0;
-        foreach($varray as $vil) { $totalpop += $vil['pop']; }
-        $ranking->procRankArray();
-        $rank = $ranking->getUserRank($user['id']);
-        $villages = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT COUNT(*) as Total FROM ".TB_PREFIX."vdata WHERE owner = $uid"), MYSQLI_ASSOC)['Total'];
+    $totalpop = 0;
+    foreach($varray as $vil) { $totalpop += $vil['pop']; }
+    
+    $ranking->procRankArray();
+    $rank = $ranking->getUserRank($uid);
+    
+    $villages = mysqli_fetch_array(mysqli_query($GLOBALS["link"], "SELECT COUNT(*) as Total FROM ".TB_PREFIX."vdata WHERE owner = $uid"), MYSQLI_ASSOC)['Total'];
 ?>
 <style>
 .del-wrap{max-width:650px;margin:0 auto;font-family:Verdana,Arial;}
@@ -68,28 +77,26 @@ if($_GET['uid']) {
         <div class="warn">This action cannot be undone!</div>
     </div>
 
-    <form action="" method="post" onsubmit="return confirm('ESTI SIGUR? Se va sterge tot: sate, trupe, rapoarte!')">
-        <input type="hidden" name="action" value="DelPlayer">
-        <input type="hidden" name="uid" value="<?php echo $user['id'];?>">
+    <form action="../GameEngine/Admin/Mods/delUser.php" method="post" onsubmit="return confirm('ESTI SIGUR? Se va sterge tot: sate, trupe, rapoarte!')">
+        <input type="hidden" name="uid" value="<?php echo $target['id']; ?>">
         <input type="hidden" name="admid" value="<?php echo $_SESSION['id']; ?>">
 
         <div class="card">
             <h3>🗑️ Player to delete</h3>
             
             <div class="player-info">
-                <div class="info-item"><b>Name</b><div class="val"><a href="?p=player&uid=<?php echo $user['id'];?>"><?php echo htmlspecialchars($user['username']);?></a></div></div>
-                <div class="info-item"><b>Gold</b><div class="val"><?php echo $user['gold'];?> <img src="../img/x.gif" class="gold" style="vertical-align:-2px;"></div></div>
+                <div class="info-item"><b>Name</b><div class="val"><a href="?p=player&uid=<?php echo $target['id']; ?>"><?php echo htmlspecialchars($target['username']); ?></a></div></div>
+                <div class="info-item"><b>Gold</b><div class="val"><?php echo $target['gold']; ?> <img src="../img/x.gif" class="gold" style="vertical-align:-2px;"></div></div>
                 <div class="info-item"><b>Rank</b><div class="val">#<?php echo $rank; ?></div></div>
-                <div class="info-item"><b>Population</b><div class="val"><?php echo number_format($totalpop);?></div></div>
-                <div class="info-item"><b>Villages</b><div class="val"><?php echo $villages;?></div></div>
-                <div class="info-item"><b>Plus ends</b><div class="val"><?php echo date('d.m.Y H:i',$user['plus']);?></div></div>
-                <div class="info-item" style="grid-column:1/-1;border-bottom:none;"><b>Alliance</b><div class="val"><?php echo $database->getAllianceName($user['alliance']) ?: '-';?></div></div>
+                <div class="info-item"><b>Population</b><div class="val"><?php echo number_format($totalpop); ?></div></div>
+                <div class="info-item"><b>Villages</b><div class="val"><?php echo $villages; ?></div></div>
+                <div class="info-item"><b>Plus ends</b><div class="val"><?php echo $target['plus'] > time() ? date('d.m.Y H:i',$target['plus']) : '-'; ?></div></div>
+                <div class="info-item" style="grid-column:1/-1;border-bottom:none;"><b>Alliance</b><div class="val"><?php echo $database->getAllianceName($target['alliance']) ?: '-'; ?></div></div>
             </div>
 
             <div class="danger-box">
                 <div class="icon">🚨</div>
-				<div><b>WARNING:</b> All villages (<?php echo $villages; ?>), troops, buildings, reports, messages and player statistics will be <u>permanently</u> deleted. There is no recovery!</div>
-</div>
+                <div><b>WARNING:</b> All villages (<?php echo $villages; ?>), troops, buildings, reports, messages and player statistics will be <u>permanently</u> deleted. There is no recovery!</div>
             </div>
 
             <div class="confirm-area">
@@ -98,14 +105,13 @@ if($_GET['uid']) {
             </div>
 
             <div class="actions">
-                <a href="?p=player&uid=<?php echo $uid;?>" class="btn-cancel">← Cancel</a>
+                <a href="?p=player&uid=<?php echo $uid; ?>" class="btn-cancel">← Cancel</a>
                 <button type="submit" class="btn-delete">🗑️ DELETE PLAYER</button>
             </div>
         </div>
     </form>
 </div>
 <?php
-    }
 } else {
     include("404.tpl");
 }
