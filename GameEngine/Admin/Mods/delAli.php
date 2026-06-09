@@ -33,7 +33,7 @@ $aid   = (int)($_POST['aid'] ?? 0);
 $admid = (int)($_POST['admid'] ?? 0);
 
 if ($aid <= 0 || $admid <= 0) {
-    header("Location: ../../Admin/admin.php?p=alliance&aid=0&e=bad");
+    header("Location: ../../../Admin/admin.php?p=alliance&aid=0&e=bad");
     exit;
 }
 
