@@ -85,7 +85,7 @@ if ($uid == $session->uid) {
 
 <tr>
     <th colspan="2">
-        Player <?php echo htmlspecialchars($displayarray['username'], ENT_QUOTES, 'UTF-8'); ?>
+        <?php echo PLAYER; ?> <?php echo htmlspecialchars($displayarray['username'], ENT_QUOTES, 'UTF-8'); ?>
     </th>
 </tr>
 
@@ -94,16 +94,16 @@ if ($uid == $session->uid) {
 // STATUS FLAGS
 // =========================
 if ($displayarray['access'] == ADMIN)
-    echo "<tr><th colspan='2'><font color='Red'><center><b>This player is Admin.</b></center></font></th></tr>";
+    echo "<tr><th colspan='2'><font color='Red'><center><b>".PROFILE_FLAG_ADMIN."</b></center></font></th></tr>";
 
 if ($displayarray['access'] == MULTIHUNTER)
-    echo "<tr><th colspan='2'><font color='Blue'><center><b>This player is Multihunter.</b></center></font></th></tr>";
+    echo "<tr><th colspan='2'><font color='Blue'><center><b>".PROFILE_FLAG_MULTIHUNTER."</b></center></font></th></tr>";
 
 if ($displayarray['access'] == BANNED)
-    echo "<tr><th colspan='2'><font color='Green'><center><b>This player is BANNED.</b></center></font></th></tr>";
+    echo "<tr><th colspan='2'><font color='Green'><center><b>".PROFILE_FLAG_BANNED."</b></center></font></th></tr>";
 
 if ($displayarray['vac_mode'] == 1)
-    echo "<tr><th colspan='2'><font color='Maroon'><center><b>This player is on VACATION.</b></center></font></th></tr>";
+    echo "<tr><th colspan='2'><font color='Maroon'><center><b>".PROFILE_FLAG_VACATION."</b></center></font></th></tr>";
 ?>
 
 <tr>
@@ -185,14 +185,14 @@ if (!empty($displayarray['birthday'])) {
         if (date('d') < substr($displayarray['birthday'], 8, 2)) $age--;
     }
 
-    echo "<tr><th>Age</th><td>$age</td></tr>";
+    echo "<tr><th>".AGE."</th><td>$age</td></tr>";
 }
 
 // =========================
 // GENDER
 // =========================
 if (!empty($displayarray['gender'])) {
-    $gender = ($displayarray['gender'] == 1) ? "Male" : "Female";
+    $gender = ($displayarray['gender'] == 1) ? MALE : FEMALE;
     echo "<tr><th>".GENDER."</th><td>$gender</td></tr>";
 }
 
@@ -228,9 +228,9 @@ if ($uid == $session->uid) {
     // OWN PROFILE ACTION
     // =========================
     if ($session->sit == 0) {
-        echo '<td colspan="2"><a href="spieler.php?s=1">&raquo; Change profile</a></td>';
+        echo '<td colspan="2"><a href="spieler.php?s=1">&raquo; '.CHANGE_PROFILE.'</a></td>';
     } else {
-        echo '<td colspan="2"><span class="none"><b>&raquo; Change profile</b></span></td>';
+        echo '<td colspan="2"><span class="none"><b>&raquo; '.CHANGE_PROFILE.'</b></span></td>';
     }
 
 } else {
@@ -240,11 +240,11 @@ if ($uid == $session->uid) {
     // =========================
     if ($isNatar || $isNature) {
 
-        echo '<td colspan="2"><span class="none"><b>&raquo; Write message not available</b></span></td>';
+        echo '<td colspan="2"><span class="none"><b>&raquo; '.WRITE_MESSAGE_UNAVAILABLE.'</b></span></td>';
 
     } else {
 
-        echo '<td colspan="2"><a href="nachrichten.php?t=1&amp;id=' . (int)$uid . '">&raquo; Write message</a></td>';
+        echo '<td colspan="2"><a href="nachrichten.php?t=1&amp;id=' . (int)$uid . '">&raquo; '.WRITE_MESSAGE.'</a></td>';
     }
 }
 ?>
@@ -282,7 +282,7 @@ if ($uid == $session->uid) {
 
 <tr>
     <th colspan="<?php echo (defined('NEW_FUNCTIONS_OASIS') && NEW_FUNCTIONS_OASIS) ? 4 : 3; ?>">
-        Villages
+        <?php echo VILLAGES; ?>
     </th>
 </tr>
 
@@ -312,7 +312,7 @@ foreach ($varray as $vil) {
           . htmlspecialchars($vil['name'], ENT_QUOTES, 'UTF-8') .
           "</a>";
 
-    if ($vil['capital'] == 1) echo "<span class=\"none3\"> (Capital)</span>";
+    if ($vil['capital'] == 1) echo "<span class=\"none3\"> (".CAPITAL_TAG.")</span>";
 
     if (defined('NEW_FUNCTIONS_DISPLAY_ARTIFACT') && NEW_FUNCTIONS_DISPLAY_ARTIFACT) {
         if ($hasArtifact) echo "<span class=\"none3\"> (Artifact)</span>";

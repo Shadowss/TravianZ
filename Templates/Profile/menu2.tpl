@@ -24,7 +24,7 @@ $hasUid  = isset($_GET['uid']);
     <!-- ================= OVERVIEW (ACTIVE) ================= -->
     <a href="spieler.php?uid=<?php echo $menuUid; ?>"
        <?php echo $hasUid ? 'class="selected"' : ''; ?>>
-        Overview
+        <?php echo OVERVIEW; ?>
     </a>
 
     |
