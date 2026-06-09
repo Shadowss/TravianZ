@@ -2359,6 +2359,53 @@ tz_def('MANUAL_NEW_FEATURES_DESC', 'These are new features that you will not fin
 tz_def('MANUAL_FAQ', 'Travian FAQ');
 tz_def('MANUAL_FAQ_DESC', 'This ingame help just gives you brief information. More information is available at the');
 
+// ===== manual: building pages (PR-A) =====
+tz_def('CONSTRUCTION_TIME', "construction time");
+tz_def('MANUAL_FOR_LEVEL_1', "for level 1:");
+tz_def('CROP_CONSUMPTION', "Crop consumption");
+tz_def('NONE', "none");
+tz_def('MANUAL_DESC_TRAPPER', "The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won't be able to harm your village anymore.");
+tz_def('MANUAL_ONE_TRAP_COSTS', "One trap costs");
+tz_def('MANUAL_TRAPPER_FREE', "Troops cannot be freed with a raid. When the troops get freed with a successful normal attack, 1/3 of the traps are automatically repaired. If the owner of the traps release the captives all of the traps can be repaired.");
+tz_def('MANUAL_TRAPPER_GAULS', "Note that this building can only be constructed by Gauls.");
+tz_def('MANUAL_DESC_WOODCUTTER', "The woodcutter cuts down trees in order to produce lumber. The further you extend the woodcutter the more lumber is produced by it.<br /><br />By constructing a Sawmill you can increase the production further.");
+tz_def('MANUAL_DESC_CLAYPIT', "Clay is collected from clay pits. The higher the clay pit's level, the more clay is produced.");
+tz_def('MANUAL_DESC_IRONMINE', "Here miners gather the precious resource iron. By increasing the mine's level you increase its iron production. By constructing an Iron Foundry you can increase the production further.<br /><br />");
+tz_def('MANUAL_DESC_CROPLAND', "Your population's food is produced here. By increasing the cropland's level you increase its crop production.<br /><br />By constructing a grain mill and a bakery you can increase the production further.");
+tz_def('MANUAL_DESC_SAWMILL', "Lumber cut by your woodcutters is processed here. Based on its level your sawmill can increase your wood production by up to 25 percent.");
+tz_def('MANUAL_DESC_BRICKYARD', "The brickyard converts clay into bricks. Based on its level your brickyard can increase your clay production by up to 25 percent.");
+tz_def('MANUAL_DESC_IRONFOUNDRY', "The iron foundry melts iron. Based on its level your iron foundry can increase your iron production by up to 25 percent.");
+tz_def('MANUAL_DESC_GRAINMILL', "The grain mill changes grain into flour. Based on its level your grain mill can increase your crop production by up to 25 percent.");
+tz_def('MANUAL_DESC_BAKERY', "The bakery changes flour into bread. In conjunction to the grain mill the increase in crop production can go up to 50 percent in total.");
+tz_def('MANUAL_DESC_WAREHOUSE', "The resources lumber, clay and iron are stored in the warehouse. By increasing its level you increase your warehouse's capacity.");
+tz_def('MANUAL_DESC_GRANARY', "The crop produced in your farms is stored in the granary. By increasing its level you increase the granary's capacity.");
+tz_def('MANUAL_DESC_BLACKSMITH', "Your warriors' weapons are enhanced in the blacksmith's melting furnaces. By increasing its level you can order the fabrication of even better weapons.");
+tz_def('MANUAL_DESC_ARMOURY', "Your warriors' armour is enhanced in the armoury's melting furnaces. By increasing its level you can order the fabrication of even better armour.");
+tz_def('MANUAL_DESC_MAINBUILDING', "The village's master builders live in the main building. The higher its level the faster your master builders complete the construction of new buildings.");
+tz_def('MANUAL_DESC_RALLYPOINT', "Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.<br /><br />The rally point can only be built on the green grassland below your main building and to the right.");
+tz_def('MANUAL_DESC_MARKETPLACE', "At the marketplace you can trade resources with other players. The higher its level, the more resources can be transported at the same time.");
+tz_def('MANUAL_DESC_EMBASSY', "The embassy is a place for diplomats. At level 1 you can join an alliance, after extending it to level 3 you may even found one yourself.<br /><br />The maximum number of possible members in an alliance is equal to 3 times the level of the highest level embassy within that alliance. Therefore with a level 20 embassy up to 60 players can be in the alliance.");
+tz_def('MANUAL_DESC_BARRACKS', "Infantry can be trained in the barracks. The higher its level the faster the troops are trained.");
+tz_def('MANUAL_DESC_STABLE', "Cavalry can be trained in the stable. The higher its level the faster the troops are trained.");
+tz_def('MANUAL_DESC_WORKSHOP', "Siege engines like catapults and rams can be built in the workshop. The higher its level the faster the units are produced.");
+tz_def('MANUAL_DESC_ACADEMY', "New unit types can be developed in the academy. By increasing its level you can order the research of better units.");
+tz_def('MANUAL_DESC_CRANNY', "The cranny is used to hide at least some of your resources when the village is attacked. These resources cannot be stolen.<br /><br />At level 1 the cranny holds 100 units of each resource. Gaulic crannies are twice as big as the others.<br /><br />HINTS<br />In T3 the cranny is 66% as effective against Teutons.<br />In T3.5 the cranny is 80% as effective against Teutons.");
+tz_def('MANUAL_DESC_TOWNHALL', "In the town hall you can hold pompous celebrations. Such a celebration increases your culture points.<br /><br />Culture points are necessary to found or conquer new villages. Each building produces culture points and the higher its level the more it produces. With celebrations you can increase this production for a short while.");
+tz_def('MANUAL_DESC_RESIDENCE', "The residence is a small palace where the King or Queen lives when he or she visits the village. The residence protects the village against enemies who want to conquer it.");
+tz_def('MANUAL_DESC_PALACE', "The King or Queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.<br /><br />The capital can not be conquered. Additionally, the capital is the only place where resource fields can be extended beyond level 10 and the only place where the stonemason's lodge can be built.");
+tz_def('MANUAL_DESC_TREASURY', "The riches of your empire are kept in the treasury. A treasury can only store one artefact.<br /><br />You need a treasury level 10 for a small artefact, or level 20 for a great one.");
+tz_def('MANUAL_DESC_TRADEOFFICE', "In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.");
+tz_def('MANUAL_DESC_GREATBARRACKS', "The great barracks allows you to build more units at the same time but they cost thrice the original amount.<br /><br />It cannot be built in the capital.");
+tz_def('MANUAL_DESC_GREATSTABLE', "The great stable allows you to build more units at the same time but they cost thrice the original amount.<br /><br />It cannot be built in the capital.");
+tz_def('MANUAL_DESC_STONEMASON', "The stonemason's lodge is an expert at cutting stone. The further the building is extended the higher the stability of the village's buildings.<br /><br />It can only be built in the capital.");
+tz_def('MANUAL_DESC_BREWERY', "Tasty mead is brewed in the brewery and later quaffed by the soldiers during the celebrations.<br /><br />These drinks make your soldiers braver and stronger in battles (1% per level). Unfortunately the chiefs' power of persuasion is decreased and catapults can only do random hits.<br /><br />It can only be built by Teutons and only in their capital. It affects the whole empire.");
+tz_def('MANUAL_DESC_HEROSMANSION', "In the hero's mansion you can train a hero. For this you need a normal soldier who will become the hero and therefore you need a barracks or a stable.<br /><br />When the building reaches levels 10, 15 and 20 you can annex 1, 2 and 3 unoccupied oases with your hero. Depending on the oasis you will get an increase in production for a certain resource (or even two resources for some oases).");
+tz_def('MANUAL_DESC_GREATWAREHOUSE', "The resources lumber, clay and iron are stored in your warehouse. The great warehouse offers you more space and keeps your resources drier and safer than the normal warehouse.<br /><br />This building can only be built in the old natarian villages or with special natarian artefacts.");
+tz_def('MANUAL_DESC_GREATGRANARY', "The crop produced by your farms is stored in the granary. The great granary offers you more space and keeps your crops drier and safer than the normal one.<br /><br />This building can only be built in the old natarian villages or with special natarian artefacts.");
+tz_def('MANUAL_DESC_WONDER', "The wonder of the world represents the pride of creation. Only the mightiest and richest are able to build such a masterwork and defend it against envious enemies.<br /><br />Wonders of the world can only be erected in the old natarian villages. Also a construction plan is necessary. Starting with level 50 an additional plan is needed. This one has to be owned by another player in the same alliance.");
+tz_def('MANUAL_DESC_HORSEDRINKING', "The horse drinking trough cares for the wellbeing of your horses and therefore also increases the speed of their training.<br /><br />The horse drinking trough reduces the crop usage by one for the following soldiers: Equites Legati from level 10, Equites Imperatoris from level 15 and Equites Caesaris from level 20.<br /><br />The horse drinking trough can only be built by Romans.");
+tz_def('MANUAL_DESC_GREATWORKSHOP', "In the great workshop siege engines like catapults and rams can be built, albeit at triple the cost of a standard unit. The higher its level the faster units are produced.<br /><br />It cannot be built in the capital.");
+
 // ===== display-time localization of stored report topics =====
 // Reports are generated server-side at battle resolution and stored in the DB
 // (column `topic`) with English connectors. This rewrites them to the viewing
