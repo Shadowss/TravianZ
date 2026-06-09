@@ -9,9 +9,7 @@
 ##  Copyright:     TravianZ (c) 2010-2025. All rights reserved.                 ##
 #################################################################################
 
-if (!isset($_SESSION)) {
-    session_start();
-}
+if (!isset($_SESSION)) { session_start(); }
 if (empty($_SESSION['access']) || $_SESSION['access'] < 9) {
     die("Access Denied: You are not Admin!");
 }
@@ -24,20 +22,18 @@ include_once("../../config.php");
 $autoprefix = '';
 for ($i = 0; $i < 5; $i++) {
     $autoprefix = str_repeat('../', $i);
-    if (file_exists($autoprefix . 'autoloader.php')) {
-        break;
-    }
+    if (file_exists($autoprefix . 'autoloader.php')) { break; }
 }
 include_once($autoprefix . "GameEngine/Database.php");
 
 // ---------------------------------------------------------------------------
 // Input
 // ---------------------------------------------------------------------------
-$aid     = (int)($_POST['aid'] ?? 0);
-$admid   = (int)($_POST['admid'] ?? 0);
+$aid   = (int)($_POST['aid'] ?? 0);
+$admid = (int)($_POST['admid'] ?? 0);
 
 if ($aid <= 0 || $admid <= 0) {
-    header("Location: ../../../Admin/admin.php?p=alliance&aid=0&e=bad");
+    header("Location: ../../Admin/admin.php?p=alliance&aid=0&e=bad");
     exit;
 }
 
@@ -68,19 +64,25 @@ $database->query("DELETE FROM " . TB_PREFIX . "ali_log WHERE aid = $aid");
 $database->query("DELETE FROM " . TB_PREFIX . "diplomacy WHERE alli1 = $aid OR alli2 = $aid");
 
 // ---------------------------------------------------------------------------
-// 4. Șterge forumul
+// 4. Șterge forumul - CORECTAT pentru structura ta
 // ---------------------------------------------------------------------------
-$database->query("DELETE FROM " . TB_PREFIX . "forum_cat WHERE alliance = $aid");
+// întâi posturile (prin topic)
+$database->query("DELETE p FROM " . TB_PREFIX . "forum_post p 
+    INNER JOIN " . TB_PREFIX . "forum_topic t ON p.topic = t.id 
+    WHERE t.alliance = $aid");
+
+// apoi topicurile
 $database->query("DELETE FROM " . TB_PREFIX . "forum_topic WHERE alliance = $aid");
-$database->query("DELETE FROM " . TB_PREFIX . "forum_post WHERE alliance = $aid");
+
+// apoi categoriile
+$database->query("DELETE FROM " . TB_PREFIX . "forum_cat WHERE alliance = $aid");
 
 // ---------------------------------------------------------------------------
-// Log admin - aceeași structură ca editUser
+// Log admin
 // ---------------------------------------------------------------------------
 $time = time();
 $logText = "Deleted alliance ID $aid";
 $logEsc = $database->escape($logText);
-
 $database->query(
     "INSERT INTO " . TB_PREFIX . "admin_log (`id`, `user`, `log`, `time`) " .
     "VALUES (0, '$admid', '$logEsc', $time)"
