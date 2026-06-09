@@ -193,7 +193,7 @@ Element.implement({
 		</tr>
 		<tr class="btm">
 			<th><?php echo PASSWORD; ?></th>
-			<td><input class="text" type="password" name="pw" value="<?php echo $form->getValue("pw");?>" maxlength="100" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
+			<td><input class="text" type="password" name="pw" value="<?php echo htmlspecialchars($form->getValue("pw"), ENT_QUOTES, 'UTF-8');?>" maxlength="100" autocomplete='off' /> <span class="error"><?php echo $form->getError("pw"); ?></span></td>
 		</tr>
 	</tbody>
 </table>
@@ -217,7 +217,7 @@ if($form->getError("activate") != "") {
 	echo "<p class=\"error_box\">
 	<span class=\"error\">".EMAIL_NOT_VERIFIED."</span><br>
 	".EMAIL_FOLLOW."<br>
-	<a href=\"activate.php?usr=".$form->getError("activate")."\">".VERIFY_EMAIL."</a>
+	<a href=\"activate.php?usr=".urlencode($form->getError("activate"))."\">".VERIFY_EMAIL."</a>
 	</p>";
 }
 if($form->getError("vacation") != "") {
