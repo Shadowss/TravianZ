@@ -2333,6 +2333,12 @@ tz_def('TZ_RT_REINF_IN', "Reinforcement in");
 tz_def('TZ_RT_ELDERS_REINF', "village of the elders reinforcement");
 tz_def('TZ_RT_UNOCC_OASIS', "Unoccupied Oasis");
 
+// ===== settler reports (issue #178) =====
+tz_def('TZ_RT_NEW_VILLAGE', "New village founded");
+tz_def('TZ_RT_VALLEY_OCCUPIED', "Settling failed (valley occupied)");
+tz_def('TZ_NEW_VILLAGE_MSG', "You have founded a new village:");
+tz_def('TZ_VALLEY_OCCUPIED_MSG', "Your settlers could not settle here - the valley is already occupied by another player. They are on their way back.");
+
 // ===== display-time localization of stored report topics =====
 // Reports are generated server-side at battle resolution and stored in the DB
 // (column `topic`) with English connectors. This rewrites them to the viewing
@@ -2350,6 +2356,8 @@ if (!function_exists('tz_loc_topic')) {
             ' attacks '                            => ' '.TZ_RT_ATTACKS.' ',
             ' reinforcement '                      => ' '.TZ_RT_REINFORCEMENT.' ',
             'Unoccupied Oasis'                     => TZ_RT_UNOCC_OASIS,
+            'New village founded'                  => TZ_RT_NEW_VILLAGE,
+            'Settlers returned - valley occupied'  => TZ_RT_VALLEY_OCCUPIED,
         );
         return strtr($s, $map);
     }

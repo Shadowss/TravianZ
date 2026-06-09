@@ -130,7 +130,7 @@ class Message
                     $type = [1, 2, 3, 4, 5, 6, 7];
                     break;
                 case 4:
-                    $type = [0, 18, 19, 20, 21];
+                    $type = [0, 18, 19, 20, 21, 24, 25];
                     break;
                 case 5:
                     if (!$session->plus) {
@@ -442,6 +442,11 @@ class Message
             // Festive reports
             case 23:
                 return 22;
+
+            // Settler reports: new village founded / valley occupied (issue #178)
+            case 24:
+            case 25:
+                return 24;
         }
         return $type;
     }

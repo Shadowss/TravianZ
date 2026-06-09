@@ -2990,6 +2990,10 @@ class Automation {
 				}
 				
 				$database->setVillageField($data['from'], $exp, $value);
+
+				// Report: new village founded (issue #178)
+				$ncoor = $database->getCoor($data['to']);
+				$database->addNotice($to['owner'], $data['to'], 0, 24, 'New village founded', ($ncoor['x'] ?? 0) . ',' . ($ncoor['y'] ?? 0), time());
             }else{
                 // here must come movement from returning settlers
                 $types[] = 4;
@@ -2998,6 +3002,10 @@ class Automation {
                 $refs[] = $data['ref'];
                 $times[] = $time;
                 $endtimes[] = $time + ($time - $data['starttime']);
+
+                // Report: valley already occupied, settlers returning (issue #178)
+                $fcoor = $database->getCoor($data['to']);
+                $database->addNotice($to['owner'], $data['to'], 0, 25, 'Settlers returned - valley occupied', ($fcoor['x'] ?? 0) . ',' . ($fcoor['y'] ?? 0), time());
             }
         }
 

@@ -2223,5 +2223,9 @@ define('TZ_RT_WAS_ATTACKED', "è stato attaccato");
 define('TZ_RT_REINF_IN', "Rinforzo in");
 define('TZ_RT_ELDERS_REINF', "rinforzo del villaggio degli anziani");
 define('TZ_RT_UNOCC_OASIS', "Oasi non occupata");
+define('TZ_RT_NEW_VILLAGE', "Nuovo villaggio fondato");
+define('TZ_RT_VALLEY_OCCUPIED', "Colonizzazione fallita (valle occupata)");
+define('TZ_NEW_VILLAGE_MSG', "Hai fondato un nuovo villaggio:");
+define('TZ_VALLEY_OCCUPIED_MSG', "I tuoi coloni non hanno potuto insediarsi qui — la valle è già occupata da un altro giocatore. Stanno tornando indietro.");
 
 ?>
