@@ -35,6 +35,10 @@ $noticeClass = [
     TZ_RPT_SCOUT
 ];
 
+// Settler reports (issue #178) - sparse indices 24/25
+$noticeClass[24] = TZ_RT_NEW_VILLAGE;
+$noticeClass[25] = TZ_RT_VALLEY_OCCUPIED;
+
 // ======================== GOLD CHECK (cached query) ========================
 $uid = (int)$session->uid;
 
@@ -175,6 +179,14 @@ for ($i = (1 + $s); $i <= (10 + $s); $i++) {
         } elseif ($type >= 18 && $type <= 22) {
 
             echo "<img src=\"gpack/travian_default/img/scouts/".$type.".gif\"
+                   alt=\"".$noticeClass[$type]."\"
+                   title=\"".$noticeClass[$type]."\" />";
+
+        } elseif ($type == 24 || $type == 25) {
+
+            // Settler reports (issue #178): no dedicated gpack icon, reuse an existing one
+            $iconType = ($type == 24) ? 8 : 3;
+            echo "<img src=\"img/x.gif\" class=\"iReport iReport".$iconType."\"
                    alt=\"".$noticeClass[$type]."\"
                    title=\"".$noticeClass[$type]."\" />";
 

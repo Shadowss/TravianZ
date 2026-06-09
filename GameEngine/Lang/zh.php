@@ -2319,3 +2319,7 @@ define('TZ_RT_WAS_ATTACKED', "遭到攻击");
 define('TZ_RT_REINF_IN', "增援于");
 define('TZ_RT_ELDERS_REINF', "长老村增援");
 define('TZ_RT_UNOCC_OASIS', "无人占领的绿洲");
+define('TZ_RT_NEW_VILLAGE', "已建立新村庄");
+define('TZ_RT_VALLEY_OCCUPIED', "拓殖失败（山谷已被占领）");
+define('TZ_NEW_VILLAGE_MSG', "你已建立一个新村庄：");
+define('TZ_VALLEY_OCCUPIED_MSG', "你的拓荒者无法在此定居——该山谷已被其他玩家占领。他们正在返回途中。");

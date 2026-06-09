@@ -2326,3 +2326,7 @@ define('TZ_RT_WAS_ATTACKED', "a fost atacat");
 define('TZ_RT_REINF_IN', "Întărire în");
 define('TZ_RT_ELDERS_REINF', "întărire a satului bătrânilor");
 define('TZ_RT_UNOCC_OASIS', "Oază neocupată");
+define('TZ_RT_NEW_VILLAGE', "Sat nou întemeiat");
+define('TZ_RT_VALLEY_OCCUPIED', "Colonizare eșuată (vale ocupată)");
+define('TZ_NEW_VILLAGE_MSG', "Ai întemeiat un sat nou:");
+define('TZ_VALLEY_OCCUPIED_MSG', "Coloniștii tăi nu s-au putut stabili aici — valea este deja ocupată de alt jucător. Se întorc acasă.");
